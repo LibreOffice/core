@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: number.cxx,v $
- * $Revision: 1.53.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +33,9 @@
 
 #include <string.h>
 #include <vcl/font.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
 #include <fmtornt.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
@@ -64,7 +61,7 @@
 #include <algorithm>
 // <--
 // --> OD 2008-06-06 #i89178#
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 // <--
 // --> OD 2008-07-08 #i91400#
 #include <IDocumentListsAccess.hxx>
@@ -478,7 +475,7 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
     }
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 long int SwNumRule::nInstances = 0;
 #endif
 
@@ -512,7 +509,7 @@ SwNumRule::SwNumRule( const String& rNm,
     msDefaultListId()
     // <--
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nSerial = nInstances++;
 #endif
 
@@ -632,7 +629,7 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       msDefaultListId( rNumRule.msDefaultListId )
       // <--
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     nSerial = nInstances++;
 #endif
 
@@ -1317,6 +1314,7 @@ namespace numfunc
                 @author OD
             */
             virtual void Notify( const uno::Sequence<rtl::OUString>& aPropertyNames );
+            virtual void Commit();
 
             static SwDefBulletConfig* mpInstance;
 
@@ -1487,6 +1485,10 @@ namespace numfunc
         InitFont();
     }
 
+    void SwDefBulletConfig::Commit()
+    {
+    }
+
     const String& GetDefBulletFontname()
     {
         return SwDefBulletConfig::getInstance()->GetFontname();
@@ -1562,6 +1564,7 @@ namespace numfunc
                 @author OD
             */
             virtual void Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );
+            virtual void Commit();
 
             static SwNumberingUIBehaviorConfig* mpInstance;
 
@@ -1595,6 +1598,8 @@ namespace numfunc
 
         return aPropNames;
     }
+
+    void SwNumberingUIBehaviorConfig::Commit() {}
 
     void SwNumberingUIBehaviorConfig::LoadConfig()
     {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: IDocumentMarkAccess.hxx,v $
- * $Revision: 1.4.42.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,6 +82,13 @@ class IDocumentMarkAccess
         virtual ::sw::mark::IMark* makeMark(const SwPaM& rPaM,
             const ::rtl::OUString& rProposedName,
             MarkType eMark) =0;
+
+        virtual sw::mark::IFieldmark* makeFieldBookmark( const SwPaM& rPaM,
+            const rtl::OUString& rName,
+            const rtl::OUString& rType) = 0;
+        virtual sw::mark::IFieldmark* makeNoTextFieldBookmark( const SwPaM& rPaM,
+            const rtl::OUString& rName,
+            const rtl::OUString& rType) = 0;
 
         /** Returns a mark in the document for a paragraph.
             If there is none, a mark will be created.

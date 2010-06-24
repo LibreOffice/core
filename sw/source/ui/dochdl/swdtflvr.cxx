@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swdtflvr.cxx,v $
- * $Revision: 1.120 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,20 +50,14 @@
 #include <osl/endian.h>
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _MSGBOX_HXX
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/imap.hxx>
 #include <sot/storage.hxx>
-#ifndef _GRAPH_HXX
 #include <vcl/graph.hxx>
-#endif
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xexch.hxx>
 #include <svx/xmlexchg.hxx>
@@ -75,19 +66,19 @@
 #include <sfx2/mieclip.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svtools/htmlout.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svtools/inetimg.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svx/fmview.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svtools/imapobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <unotools/streamwrap.hxx>
+#include <svtools/filter.hxx>
 
 #include <svx/unomodel.hxx>
 #include <fmturl.hxx>
@@ -107,15 +98,9 @@
 #include <swcont.hxx>
 #include <wrtsh.hxx>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <fldbas.hxx>       //DDE
 #include <swundo.hxx>       // fuer Undo-Ids
 #include <pam.hxx>
@@ -126,25 +111,19 @@
 #include <vcl/sound.hxx>
 #include <swerror.h>
 #include <SwCapObjType.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _DOCHDL_HRC
 #include <dochdl.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc> // #111827#
-#endif
 #include <sot/stg.hxx>
 
 // #108584#
 #include <svx/svditer.hxx>
 
 // #108584#
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 // #108584#
-#include <svx/fhgtitem.hxx>
+#include <editeng/fhgtitem.hxx>
 
 // #108584#
 #include <svx/svdpage.hxx>
@@ -154,9 +133,7 @@
 #include <swcrsr.hxx>
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <swserv.hxx>
@@ -345,6 +322,19 @@ SwTransferable::~SwTransferable()
 
 // -----------------------------------------------------------------------
 
+static SwDoc * lcl_GetDoc(SwDocFac & rDocFac)
+{
+    SwDoc *const pDoc = rDocFac.GetDoc();
+    ASSERT( pDoc, "Document not found" );
+    if (pDoc)
+    {
+        pDoc->SetClipBoard( true );
+    }
+    return pDoc;
+}
+
+// -----------------------------------------------------------------------
+
 void SwTransferable::ObjectReleased()
 {
     SwModule *pMod = SW_MOD();
@@ -466,9 +456,9 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         }
 
         pClpDocFac = new SwDocFac;
-        SwDoc* pTmpDoc = pClpDocFac->GetDoc();
+        SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
+        pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
@@ -553,8 +543,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 
         case SOT_FORMATSTR_ID_DRAWING:
             {
-                SwDoc *pDoc = pClpDocFac->GetDoc();
-                ASSERT( pDoc, "Document not found" );
+                SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
                 bOK = SetObject( pDoc->GetDrawModel(),
                                 SWTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
             }
@@ -562,21 +551,22 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 
         case SOT_FORMAT_STRING:
         {
-            SwDoc* pDoc = pClpDocFac->GetDoc();
-            ASSERT( pDoc, "Document not found" );
-            pDoc->SetClipBoard( true );
-            bOK = SetObject( pDoc,
-                                SWTRANSFER_OBJECTTYPE_STRING, rFlavor );
+            SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_STRING, rFlavor );
         }
         break;
         case SOT_FORMAT_RTF:
-            bOK = SetObject( pClpDocFac->GetDoc(),
-                                SWTRANSFER_OBJECTTYPE_RTF, rFlavor );
+        {
+            SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_RTF, rFlavor );
+        }
             break;
 
         case SOT_FORMATSTR_ID_HTML:
-            bOK = SetObject( pClpDocFac->GetDoc(),
-                                SWTRANSFER_OBJECTTYPE_HTML, rFlavor );
+        {
+            SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_HTML, rFlavor );
+        }
             break;
 
         case SOT_FORMATSTR_ID_SVXB:
@@ -620,7 +610,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 //      default:
             if( !aDocShellRef.Is() )
             {
-                SwDoc *pDoc = pClpDocFac->GetDoc();
+                SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
                 SwDocShell* pNewDocSh = new SwDocShell( pDoc,
                                          SFX_CREATE_MODE_EMBEDDED );
                 aDocShellRef = pNewDocSh;
@@ -828,7 +818,8 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
             pOrigGrf = pClpBitmap;
 
         pClpDocFac = new SwDocFac;
-        pWrtShell->Copy( pClpDocFac->GetDoc() );
+        SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+        pWrtShell->Copy( pDoc );
 
         if (pOrigGrf && !pOrigGrf->GetBitmap().IsEmpty())
           AddFormat( SOT_FORMATSTR_ID_SVXB );
@@ -850,7 +841,7 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
     else if ( nSelection == nsSelectionType::SEL_OLE )
     {
         pClpDocFac = new SwDocFac;
-        SwDoc *pDoc = pClpDocFac->GetDoc();
+        SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
         aDocShellRef = new SwDocShell( pDoc, SFX_CREATE_MODE_EMBEDDED);
         aDocShellRef->DoInitNew( NULL );
         pWrtShell->Copy( pDoc );
@@ -880,10 +871,9 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         if( pWrtShell->IsAddMode() && pWrtShell->SwCrsrShell::HasSelection() )
             pWrtShell->CreateCrsr();
 
-        SwDoc* pTmpDoc = pClpDocFac->GetDoc();
-        pTmpDoc->SetClipBoard( true );
+        SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
+        pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
@@ -1040,7 +1030,8 @@ int SwTransferable::CalculateAndCopy()
     String aStr( pWrtShell->Calculate() );
 
     pClpDocFac = new SwDocFac;
-    pWrtShell->Copy( pClpDocFac->GetDoc(), &aStr);
+    SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+    pWrtShell->Copy(pDoc, & aStr);
     eBufferType = TRNSFR_DOCUMENT;
     AddFormat( FORMAT_STRING );
 
@@ -1060,14 +1051,14 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     SwWait aWait( *pWrtShell->GetView().GetDocShell(), TRUE );
 
     pClpDocFac = new SwDocFac;
-    SwDoc* pCDoc = pClpDocFac->GetDoc();
+    SwDoc *const pCDoc = lcl_GetDoc(*pClpDocFac);
 
     SwNodes& rNds = pCDoc->GetNodes();
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
     SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
     SwPaM aPam( *pCNd );
 
-    pCDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
+    pCDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
     pCDoc->LockExpFlds();   // nie die Felder updaten - Text so belassen
 
     pCDoc->InsertGlossary( rGlossary, rStr, aPam, 0 );
@@ -2003,8 +1994,8 @@ int SwTransferable::_PasteTargetURL( TransferableDataHelper& rData,
             //!!! auf FileSystem abpruefen - nur dann ist es sinnvoll die
             // Grafiken zu testen !!!!
             Graphic aGrf;
-            GraphicFilter *pFlt = ::GetGrfFilter();
-            nRet = GRFILTER_OK == ::LoadGraphic( sURL, aEmptyStr, aGrf, pFlt );
+            GraphicFilter *pFlt = GraphicFilter::GetGraphicFilter();
+            nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( sURL, aEmptyStr, aGrf, pFlt );
             if( nRet )
             {
                 switch( nAction )
@@ -2234,9 +2225,9 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                 if( rWrtShell.HasSelection() )
                     rWrtShell.DelRight();
 
-                SwSection aSect( DDE_LINK_SECTION, aName );
+                SwSectionData aSect( DDE_LINK_SECTION, aName );
                 aSect.SetLinkFileName( aCmd );
-                aSect.SetProtect();
+                aSect.SetProtectFlag(true);
                 rWrtShell.InsertSection( aSect );
 
                 pDDETyp = 0;                // FeldTypen wieder entfernen
@@ -2352,8 +2343,8 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     {
         //!!! auf FileSystem abpruefen - nur dann ist es sinnvoll die
         // Grafiken zu testen !!!!
-        GraphicFilter *pFlt = ::GetGrfFilter();
-        nRet = GRFILTER_OK == ::LoadGraphic( aBkmk.GetURL(), aEmptyStr,
+        GraphicFilter *pFlt = GraphicFilter::GetGraphicFilter();
+        nRet = GRFILTER_OK == GraphicFilter::LoadGraphic( aBkmk.GetURL(), aEmptyStr,
                                             aGrf, pFlt );
         if( !nRet && SW_PASTESDR_SETATTR == nAction &&
             SOT_FORMAT_FILE == nFmt &&
@@ -2577,10 +2568,11 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                     )
                 {
     // und dann per PostUser Event den Bereich-Einfuegen-Dialog hochreissen
-                    SwSection* pSect = new SwSection( FILE_LINK_SECTION,
+                    SwSectionData * pSect = new SwSectionData(
+                                    FILE_LINK_SECTION,
                                     rSh.GetDoc()->GetUniqueSectionName() );
                     pSect->SetLinkFileName( sFileURL );
-                    pSect->SetProtect( TRUE );
+                    pSect->SetProtectFlag( true );
 
                     Application::PostUserEvent( STATIC_LINK( &rSh, SwWrtShell,
                                                 InsertRegionDialog ), pSect );
@@ -2658,7 +2650,9 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             if(pFmView) {
                 const OXFormsDescriptor &rDesc = OXFormsTransferable::extractDescriptor(rData);
                 if(0 != (pObj = pFmView->CreateXFormsControl(rDesc)))
-                    rSh.SwFEShell::Insert( *pObj, 0, 0, pDragPt );
+                {
+                    rSh.SwFEShell::InsertDrawObj( *pObj, *pDragPt );
+                }
             }
         }
         else if( nWh )
@@ -2719,7 +2713,7 @@ int SwTransferable::_PasteDBData( TransferableDataHelper& rData,
             if (pFmView && bHaveColumnDescriptor)
             {
                 if ( 0 != (pObj = pFmView->CreateFieldControl( OColumnTransferable::extractColumnDescriptor(rData) ) ) )
-                    rSh.SwFEShell::Insert( *pObj, 0, 0, pDragPt );
+                    rSh.SwFEShell::InsertDrawObj( *pObj, *pDragPt );
             }
         }
         nRet = 1;
@@ -3778,6 +3772,7 @@ BOOL SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
 
         // remove mark
         pServerObject->SetNoServer(); // this removes the connection between SwServerObject and mark
+        // N.B. ppMark was not loaded from file and cannot have xml:id
         pMarkAccess->deleteMark(ppMark);
 
         // recreate as Bookmark

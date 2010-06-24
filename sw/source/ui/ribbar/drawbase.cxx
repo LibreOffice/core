@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawbase.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +31,8 @@
 #include <tools/list.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
-#include <svtools/ptitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <svl/ptitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/bindings.hxx>
 #include <fmtclds.hxx>
@@ -344,7 +341,8 @@ BOOL SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( xRecorder.is() )
                 {
                     SfxRequest aReq(m_pSh->GetView().GetViewFrame(),FN_INSERT_FRAME);
-                        aReq.AppendItem(SfxUInt16Item( FN_INSERT_FRAME, (USHORT)FLY_AT_CNTNT ));
+                        aReq.AppendItem(SfxUInt16Item( FN_INSERT_FRAME,
+                                static_cast<USHORT>(FLY_AT_PARA) ));
                         aReq.AppendItem(SfxPointItem( FN_PARAM_1, m_pSh->GetAnchorObjDiff()));
                         aReq.AppendItem(SvxSizeItem( FN_PARAM_2, m_pSh->GetObjSize()));
                     aReq.Done();

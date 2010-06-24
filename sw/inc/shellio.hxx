@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shellio.hxx,v $
- * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SHELLIO_HXX
-#define _SHELLIO_HXX
+#ifndef SW_SHELLIO_HXX
+#define SW_SHELLIO_HXX
+
+#include <memory>
+#include <boost/utility.hpp>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -434,7 +434,9 @@ extern BOOL SetHTMLTemplate( SwDoc &rDoc ); //Fuer Vorlagen aus HTML.vor laden s
 class IDocumentSettingAccess;
 class IDocumentStylePoolAccess;
 
-class SW_DLLPUBLIC Writer : public SvRefBase
+class SW_DLLPUBLIC Writer
+    : public SvRefBase
+    , private ::boost::noncopyable
 {
     SwAsciiOptions aAscOpts;
     String          sBaseURL;
@@ -442,10 +444,10 @@ class SW_DLLPUBLIC Writer : public SvRefBase
     void _AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont );
     void _AddFontItems( SfxItemPool& rPool, USHORT nWhichId );
 
-protected:
-    Writer_Impl* pImpl;
+    ::std::auto_ptr<Writer_Impl> m_pImpl;
 
-    SvStream* pStrm;
+protected:
+
     SwPaM* pOrigPam;            // der letze zu bearbeitende Pam
     const String* pOrigFileName;
 
@@ -514,8 +516,8 @@ public:
                         SvPtrarr& rArr );
 
     // lege einen neuen PaM an der Position an
-    SwPaM* NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
-                                    BOOL bNodesArray = TRUE ) const;
+    static SwPaM* NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
+                                    BOOL bNodesArray = TRUE );
 
     // kopiere ggfs. eine lokale Datei ins Internet
     BOOL CopyLocalFileToINet( String& rFileNm );
@@ -537,12 +539,8 @@ public:
     inline SvStream& OutLong( long nVal )       { return OutLong( Strm(), nVal ); }
     inline SvStream& OutULong( ULONG nVal )     { return OutULong( Strm(), nVal ); }
 
-    void SetStrm( SvStream& rStrm ) { pStrm = &rStrm; }
-#ifdef PRODUCT
-    SvStream& Strm() { return *pStrm; }
-#else
+    void SetStream(SvStream *const pStream);
     SvStream& Strm();
-#endif
 
     void SetOrganizerMode( BOOL bSet ) { bOrganizerMode = bSet; }
 };
@@ -637,6 +635,8 @@ public:
 
 typedef Reader* (*FnGetReader)();
 typedef void (*FnGetWriter)(const String&, const String& rBaseURL, WriterRef&);
+ULONG SaveOrDelMSVBAStorage( SfxObjectShell&, SotStorage&, BOOL, const String& );
+ULONG GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
 struct SwReaderWriterEntry
 {

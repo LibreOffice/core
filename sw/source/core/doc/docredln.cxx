@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docredln.cxx,v $
- * $Revision: 1.51.122.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,12 +32,12 @@
 #include <hintids.hxx>
 #include <tools/shl.hxx>
 #ifndef _SFX_ITEMITER_HXX //autogen
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #endif
 #include <sfx2/app.hxx>
-#include <svx/colritem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -59,7 +56,7 @@ using namespace com::sun::star;
 
 TYPEINIT1(SwRedlineHint, SfxHint);
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 
     #define _CHECK_REDLINE( pDoc )
     #define _DEBUG_REDLINE( pDoc )
@@ -309,9 +306,11 @@ Verhalten von Delete-Redline:
 
 bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 {
-#ifndef PRODUCT
+#if 0
+// #i93179# disabled: ASSERT in ~SwIndexReg     #ifdef DBG_UTIL
     SwRedline aCopy( *pNewRedl );
 #endif
+    bool bError = true;
     _CHECK_REDLINE( this )
 
     if( IsRedlineOn() && !IsShowOriginal( eRedlineMode ) &&
@@ -431,6 +430,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                                 pRedlineTbl->Insert( pRedl );
                             }
 
+                            bError = false;
                             bDelete = true;
                         }
                         else if( (( POS_BEFORE == eCmpPos &&
@@ -446,6 +446,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             pRedlineTbl->Remove( n );
                             pRedlineTbl->Insert( pRedl );
 
+                            bError = false;
                             bDelete = true;
                         }
                         else if ( POS_OUTSIDE == eCmpPos )
@@ -913,17 +914,24 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
 
                         case POS_INSIDE:
                             {
-                                pNewRedl->PushData( *pRedl, FALSE );
                                 if( *pRStt == *pStt )
                                 {
-                                    pRedl->SetStart( *pEnd, pRStt );
-                                    // neu einsortieren
-                                    pRedlineTbl->Remove( n );
-                                    pRedlineTbl->Insert( pRedl, n );
-                                    bDec = true;
+                                    // --> mst 2010-05-17 #i97421#
+                                    // redline w/out extent loops
+                                    if (*pStt != *pEnd)
+                                    // <--
+                                    {
+                                        pNewRedl->PushData( *pRedl, FALSE );
+                                        pRedl->SetStart( *pEnd, pRStt );
+                                        // re-insert
+                                        pRedlineTbl->Remove( n );
+                                        pRedlineTbl->Insert( pRedl, n );
+                                        bDec = true;
+                                    }
                                 }
                                 else
                                 {
+                                    pNewRedl->PushData( *pRedl, FALSE );
                                     if( *pREnd != *pEnd )
                                     {
                                         pNew = new SwRedline( *pRedl );
@@ -1271,7 +1279,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
     }
     _CHECK_REDLINE( this )
 
-    return 0 != pNewRedl;
+    return ( 0 != pNewRedl ) || !bError;
 }
 
 void SwDoc::CompressRedlines()
@@ -1725,7 +1733,7 @@ BOOL lcl_AcceptRedline( SwRedlineTbl& rArr, USHORT& rPos,
                     rDoc.DeleteAndJoin( aPam );
                 else
                 {
-                    rDoc.Delete( aPam );
+                    rDoc.DeleteRange( aPam );
 
                     if( pCSttNd && !pCEndNd )
                     {
@@ -1835,7 +1843,7 @@ BOOL lcl_RejectRedline( SwRedlineTbl& rArr, USHORT& rPos,
                     rDoc.DeleteAndJoin( aPam );
                 else
                 {
-                    rDoc.Delete( aPam );
+                    rDoc.DeleteRange( aPam );
 
                     if( pCSttNd && !pCEndNd )
                     {
@@ -2899,10 +2907,12 @@ void SwRedlineExtraData_FmtColl::Reject( SwPaM& rPam ) const
                 // nicht angefasst.
                 SfxItemSet aTmp( *pSet );
                 aTmp.Differentiate( *pTNd->GetpSwAttrSet() );
-                pDoc->Insert( rPam, aTmp, 0 );
+                pDoc->InsertItemSet( rPam, aTmp, 0 );
             }
             else
-                pDoc->Insert( rPam, *pSet, 0 );
+            {
+                pDoc->InsertItemSet( rPam, *pSet, 0 );
+            }
         }
         rPam.DeleteMark();
     }
@@ -2964,7 +2974,10 @@ void SwRedlineExtraData_Format::Reject( SwPaM& rPam ) const
 
     // eigentlich muesste hier das Attribut zurueck gesetzt werden!!!
     for( USHORT n = 0, nEnd = aWhichIds.Count(); n < nEnd; ++n )
-        pDoc->Insert( rPam, *GetDfltAttr( aWhichIds[ n ] ), nsSetAttrMode::SETATTR_DONTEXPAND );
+    {
+        pDoc->InsertPoolItem( rPam, *GetDfltAttr( aWhichIds[ n ] ),
+                nsSetAttrMode::SETATTR_DONTEXPAND );
+    }
 
     pDoc->SetRedlineMode_intern( eOld );
 }
@@ -3359,7 +3372,8 @@ void SwRedline::MoveToSection()
             {
                 if( pCSttNd && !pCEndNd )
                     bDelLastPara = TRUE;
-                pDoc->Move( aPam, aPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
+                pDoc->MoveRange( aPam, aPos,
+                    IDocumentContentOperations::DOC_MOVEDEFAULT );
             }
         }
         else
@@ -3368,7 +3382,8 @@ void SwRedline::MoveToSection()
                                             SwNormalStartNode );
 
             SwPosition aPos( *pSttNd->EndOfSectionNode() );
-            pDoc->Move( aPam, aPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
+            pDoc->MoveRange( aPam, aPos,
+                IDocumentContentOperations::DOC_MOVEDEFAULT );
         }
         pCntntSect = new SwNodeIndex( *pSttNd );
 
@@ -3419,7 +3434,7 @@ void SwRedline::CopyToSection()
             SwNodeIndex aNdIdx( *pSttNd, 1 );
             SwTxtNode* pTxtNd = aNdIdx.GetNode().GetTxtNode();
             SwPosition aPos( aNdIdx, SwIndex( pTxtNd ));
-            pDoc->Copy( *this, aPos );
+            pDoc->CopyRange( *this, aPos, false );
 
             // JP 08.10.98: die Vorlage vom EndNode ggfs. mit uebernehmen
             //              - ist im Doc::Copy nicht erwuenscht
@@ -3444,13 +3459,13 @@ void SwRedline::CopyToSection()
             if( pCEndNd )
             {
                 SwPosition aPos( *pSttNd->EndOfSectionNode() );
-                pDoc->Copy( *this, aPos );
+                pDoc->CopyRange( *this, aPos, false );
             }
             else
             {
                 SwNodeIndex aInsPos( *pSttNd->EndOfSectionNode() );
                 SwNodeRange aRg( pStt->nNode, 0, pEnd->nNode, 1 );
-                pDoc->CopyWithFlyInFly( aRg, aInsPos );
+                pDoc->CopyWithFlyInFly( aRg, 0, aInsPos );
             }
         }
         pCntntSect = new SwNodeIndex( *pSttNd );
@@ -3488,12 +3503,17 @@ void SwRedline::DelCopyOfSection()
         }
 
         if( pCSttNd && pCEndNd )
-            pDoc->DeleteAndJoin( aPam );
+        {
+            // --> OD 2009-08-20 #i100466#
+            // force a <join next> on <delete and join> operation
+            pDoc->DeleteAndJoin( aPam, true );
+            // <--
+        }
         else if( pCSttNd || pCEndNd )
         {
             if( pCSttNd && !pCEndNd )
                 bDelLastPara = TRUE;
-            pDoc->Delete( aPam );
+            pDoc->DeleteRange( aPam );
 
             if( bDelLastPara )
             {
@@ -3534,7 +3554,9 @@ void SwRedline::DelCopyOfSection()
             }
         }
         else
-            pDoc->Delete( aPam );
+        {
+            pDoc->DeleteRange( aPam );
+        }
 
         if( pStt == GetPoint() )
             Exchange();
@@ -3617,7 +3639,10 @@ void SwRedline::MoveFromSection()
                 pDoc->AppendTxtNode( aPos );
             }
             else
-                pDoc->Move( aPam, aPos, IDocumentContentOperations::DOC_MOVEALLFLYS );
+            {
+                pDoc->MoveRange( aPam, aPos,
+                    IDocumentContentOperations::DOC_MOVEALLFLYS );
+            }
 
             SetMark();
             *GetPoint() = aPos;
@@ -3676,7 +3701,7 @@ void SwRedline::SetContentIdx( const SwNodeIndex* pIdx )
         delete pCntntSect, pCntntSect = 0;
         bIsVisible = FALSE;
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     else
         ASSERT( !this, "das ist keine gueltige Operation" );
 #endif

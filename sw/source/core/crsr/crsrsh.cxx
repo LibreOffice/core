@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: crsrsh.cxx,v $
- * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <hintids.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>
@@ -66,7 +63,7 @@
 #include <mdiexp.hxx>           // ...Percent()
 #include <fmteiro.hxx>
 #include <wrong.hxx> // SMARTTAGS
-#include <unoobj.hxx> // SMARTTAGS
+#include <unotextrange.hxx> // SMARTTAGS
 #include <vcl/svapp.hxx>
 #include <numrule.hxx>
 #include <IGrammarContact.hxx>
@@ -332,7 +329,7 @@ if( GetWin() )
 }
 
 
-#if !defined( PRODUCT )
+#if defined(DBG_UTIL)
 
 void SwCrsrShell::SttCrsrMove()
 {
@@ -395,10 +392,18 @@ BOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     else
     {
         const BOOL bSkipHidden = !GetViewOptions()->IsShowHiddenChar();
-        bRet = SetInFrontOfLabel( FALSE );
+        // --> OD 2009-12-30 #i107447#
+        // To avoid loop the reset of <bInFrontOfLabel> flag is no longer
+        // reflected in the return value <bRet>.
+        const bool bResetOfInFrontOfLabel = SetInFrontOfLabel( FALSE );
         bRet = pShellCrsr->LeftRight( bLeft, nCnt, nMode, bVisualAllowed,
-                                    bSkipHidden,
-                                   !IsOverwriteCrsr() ) || bRet;
+                                      bSkipHidden, !IsOverwriteCrsr() );
+        if ( !bRet && bLeft && bResetOfInFrontOfLabel )
+        {
+            // undo reset of <bInFrontOfLabel> flag
+            SetInFrontOfLabel( TRUE );
+        }
+        // <--
     }
 
     if( bRet )
@@ -1459,7 +1464,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 Point aCentrPt( aCharRect.Center() );
                 aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
                 pTblFrm->GetCrsrOfst( pTblCrsr->GetPoint(), aCentrPt, &aTmpState );
-#ifdef PRODUCT
+#ifndef DBG_UTIL
                 pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() );
 #else
                 if ( !pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() ) )
@@ -1773,13 +1778,6 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
         }
     }
 
-    //Ggf. gescrollten Bereicht korrigieren (Alignment).
-    //Nur wenn gescrollt wurde, und wenn keine Selektion existiert.
-    if( pFrm && Imp()->IsScrolled() &&
-            pShellCrsr->GetNext() == pShellCrsr && !pShellCrsr->HasMark() )
-        Imp()->RefreshScrolledArea( aCharRect );
-
-
     eMvState = MV_NONE;     // Status fuers Crsr-Travelling - GetCrsrOfst
 
     if( pFrm && Imp()->IsAccessible() )
@@ -2014,7 +2012,7 @@ void SwCrsrShell::Combine()
     SwCrsrSaveState aSaveState( *pCurCrsr );
     if( pCrsrStk->HasMark() )           // nur wenn GetMark gesetzt wurde
     {
-#ifdef PRODUCT
+#ifndef DBG_UTIL
         CheckNodesRange( pCrsrStk->GetMark()->nNode, pCurCrsr->GetPoint()->nNode, TRUE );
 #else
         if( !CheckNodesRange( pCrsrStk->GetMark()->nNode, pCurCrsr->GetPoint()->nNode, TRUE ))
@@ -2569,22 +2567,6 @@ void SwCrsrShell::ParkCrsr( const SwNodeIndex &rIdx )
  * Alle Ansichten eines Dokumentes stehen im Ring der Shells.
  */
 
-SwOverlayType impGetOverlayType(OutputDevice* pOut)
-{
-    if(!pOut)
-    {
-        pOut = Application::GetDefaultDevice();
-    }
-
-    if(pOut->GetSettings().GetStyleSettings().GetHighContrastMode()
-        || !pOut->supportsOperation( OutDevSupport_TransparentRect ))
-    {
-        return SW_OVERLAY_INVERT;
-    }
-
-    return SW_OVERLAY_TRANSPARENT;
-}
-
 SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     : ViewShell( rShell, pInitWin ),
     SwModify( 0 ), pCrsrStk( 0 ), pBlockCrsr( 0 ), pTblCrsr( 0 ),
@@ -2592,9 +2574,8 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     eMvState( MV_NONE ),
     // --> OD 2008-04-02 #refactorlists#
     sMarkedListId(),
-    nMarkedListLevel( 0 ),
+    nMarkedListLevel( 0 )
     // <--
-    maSwOverlayType(SW_OVERLAY_INVERT)
 {
     SET_CURR_SHELL( this );
     // Nur die Position vom aktuellen Cursor aus der Copy-Shell uebernehmen
@@ -2610,9 +2591,6 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
 //  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = rShell.IsMacroExecAllowed();
-
-    // #i88893# init cursor selection type
-    maSwOverlayType = impGetOverlayType(pInitWin);
 }
 
 
@@ -2628,9 +2606,8 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     eMvState( MV_NONE ), // state for crsr-travelling - GetCrsrOfst
     // --> OD 2008-04-02 #refactorlists#
     sMarkedListId(),
-    nMarkedListLevel( 0 ),
+    nMarkedListLevel( 0 )
     // <--
-    maSwOverlayType(SW_OVERLAY_INVERT)
 {
     SET_CURR_SHELL( this );
     /*
@@ -2658,9 +2635,6 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
 //  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = true;
-
-    // #i88893# init cursor selection type
-    maSwOverlayType = impGetOverlayType(pInitWin);
 }
 
 
@@ -3329,19 +3303,6 @@ String SwCrsrShell::GetCrsrDescr() const
     return aResult;
 }
 
-SwRect SwCrsrShell::GetRectOfCurrentChar()
-{
-    SwCntntFrm* pFrm = pCurCrsr->GetCntntNode()->GetFrm( 0, pCurCrsr->GetPoint(), FALSE );
-    SwRect aRet;
-    SwCrsrMoveState aTmpState( MV_NONE );
-    aTmpState.bRealHeight = TRUE;
-    pFrm->GetCharRect( aRet, *pCurCrsr->GetPoint(), &aTmpState );
-    //const SwTwips nRealHeight = aTmpState.aRealHeight.Y();
-    if (aTmpState.aRealHeight.X() != 0)
-        aRet.Top(aRet.Top() + aTmpState.aRealHeight.X());
-    return aRet;
-}
-
 // SMARTTAGS
 
 void lcl_FillRecognizerData( uno::Sequence< rtl::OUString >& rSmartTagTypes,
@@ -3396,8 +3357,8 @@ void lcl_FillTextRange( uno::Reference<text::XTextRange>& rRange,
     SwPosition aEndPos( aStartPos );
     aEndPos.nContent = nBegin + nLen;
 
-    uno::Reference<text::XTextRange> xRange =
-        SwXTextRange::CreateTextRangeFromPosition( rNode.GetDoc(), aStartPos, &aEndPos);
+    const uno::Reference<text::XTextRange> xRange =
+        SwXTextRange::CreateXTextRange(*rNode.GetDoc(), aStartPos, &aEndPos);
 
     rRange = xRange;
 }

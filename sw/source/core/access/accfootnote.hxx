@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accfootnote.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,9 +26,13 @@
  ************************************************************************/
 #ifndef _ACCFOOTNOTE_HXX
 #define _ACCFOOTNOTE_HXX
-#ifndef _ACCCONTEXT_HXX
-#include "acccontext.hxx"
-#endif
+
+#include <sal/types.h>
+
+#include <acccontext.hxx>
+
+class SwAccessibleMap;
+class SwFtnFrm;
 
 class SwAccessibleFootnote : public SwAccessibleContext
 {

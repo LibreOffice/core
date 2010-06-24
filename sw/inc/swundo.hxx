@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swundo.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 #ifndef _SWUNDO_HXX
 #define _SWUNDO_HXX
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 // die Ids fuer StdAktionen
 enum SwUndoId
@@ -156,7 +153,11 @@ enum SwUndoId
     UNDO_ROW_DELETE, // 109
     UNDO_RENAME_PAGEDESC, // 110
     UNDO_NUMDOWN, // 111
-    UNDO_STD_END= UNDO_NUMDOWN,
+    // --> OD 2009-07-16 #i73249#
+    UNDO_FLYFRMFMT_TITLE,           // 112
+    UNDO_FLYFRMFMT_DESCRIPTION,     // 113
+    // <--
+    UNDO_STD_END= UNDO_FLYFRMFMT_DESCRIPTION,
 
     // UI undo ID's...
     UNDO_UI_REPLACE             =  UNDO_STD_END + 1,

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewsh.cxx,v $
- * $Revision: 1.87.42.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -219,28 +216,18 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
         Imp()->StartAction();
 
     if ( Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
-        Imp()->DelRegions();
+        Imp()->DelRegion();
 
     const BOOL bExtraData = ::IsExtraData( GetDoc() );
 
     if ( !bIdleEnd )
     {
-        if ( Imp()->IsNextScroll() && !bExtraData )
-            Imp()->SetScroll();
-        else
-        {
-            if ( bExtraData )
-                Imp()->bScroll = FALSE;
-            Imp()->SetNextScroll();
-            Imp()->ResetScroll();
-        }
         SwLayAction aAction( GetLayout(), Imp() );
         aAction.SetComplete( FALSE );
         if ( nLockPaint )
             aAction.SetPaint( FALSE );
         aAction.SetInputType( INPUT_KEYBOARD );
         aAction.Action();
-        Imp()->SetScroll();
     }
 
     if ( bIsShellForCheckViewLayout )
@@ -249,8 +236,9 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     //Wenn wir selbst keine Paints erzeugen, so warten wir auf das Paint
     //vom System. Dann ist das Clipping korrekt gesetzt; Beispiel: verschieben
     //eines DrawObjektes.
-    if ( Imp()->GetRegion()     || Imp()->GetScrollRects() ||
-         aInvalidRect.HasArea() || bExtraData )
+    if ( Imp()->GetRegion()     ||
+         aInvalidRect.HasArea() ||
+         bExtraData )
     {
         if ( !nLockPaint )
         {
@@ -274,14 +262,9 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
             // Mitte eine Selektion und mit einem anderen Cursor an linken
             // rechten Rand springen. Ohne ShowCrsr verschwindet die
             // Selektion
-            BOOL bShowCrsr = (pRegion || Imp()->GetScrollRects()) &&
-                                IsA( TYPE(SwCrsrShell) );
+            BOOL bShowCrsr = pRegion && IsA( TYPE(SwCrsrShell) );
             if( bShowCrsr )
                 ((SwCrsrShell*)this)->HideCrsrs();
-
-            Scroll();
-            if ( bPaintsFromSystem && Imp()->pScrolledArea )
-                Imp()->FlushScrolledArea();
 
             if ( pRegion )
             {
@@ -376,18 +359,49 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                         // #i75172# end DrawingLayer paint
                         DLPostPaint2(true);
                     }
+
+                    // --> OD 2009-12-03 #i107365#
+                    // Direct paint has been performed. Thus, take care of
+                    // transparent child windows.
+                    if ( GetWin() )
+                    {
+                        Window& rWindow = *(GetWin());
+                        if(rWindow.IsChildTransparentModeEnabled() && rWindow.GetChildCount())
+                        {
+                            const Rectangle aRectanglePixel(rWindow.LogicToPixel(aRect.SVRect()));
+
+                            for ( sal_uInt16 a(0); a < rWindow.GetChildCount(); a++ )
+                            {
+                                Window* pCandidate = rWindow.GetChild(a);
+
+                                if ( pCandidate && pCandidate->IsPaintTransparent() )
+                                {
+                                    const Rectangle aCandidatePosSizePixel(
+                                                    pCandidate->GetPosPixel(),
+                                                    pCandidate->GetSizePixel());
+
+                                    if ( aCandidatePosSizePixel.IsOver(aRectanglePixel) )
+                                    {
+                                        pCandidate->Invalidate( INVALIDATE_NOTRANSPARENT|INVALIDATE_CHILDREN );
+                                        pCandidate->Update();
+                }
+                                }
+                            }
+                        }
+                    }
+                    // <--
                 }
 
                 delete pVout;
                 delete pRegion;
-                Imp()->DelRegions();
+                Imp()->DelRegion();
             }
             if( bShowCrsr )
                 ((SwCrsrShell*)this)->ShowCrsrs( TRUE );
         }
         else
         {
-            Imp()->DelRegions();
+            Imp()->DelRegion();
             bPaintWorks =  TRUE;
         }
     }
@@ -406,13 +420,6 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
     --nStartAction;
     UISizeNotify();
     ++nStartAction;
-
-#ifndef PRODUCT
-    // test option 'No Scroll' suppresses the automatic repair of the scrolled area
-    if ( !GetViewOptions()->IsTest8() )
-#endif
-    if ( Imp()->IsScrolled() )
-        Imp()->RestartScrollTimer();
 
     if( Imp()->IsAccessible() )
         Imp()->FireAccessibleEvents();
@@ -589,7 +596,7 @@ void ViewShell::MakeVisible( const SwRect &rRect )
                     EndAction();
                 } while( nOldH != pRoot->Frm().Height() && nLoopCnt-- );
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
             {
                 //MA: 04. Nov. 94, braucht doch keiner oder??
@@ -746,7 +753,7 @@ void ViewShell::LayoutIdle()
 
     SET_CURR_SHELL( this );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // Wenn Test5 gedrueckt ist, wird der IdleFormatierer abgeknipst.
     if( pOpt->IsTest5() )
         return;
@@ -848,21 +855,6 @@ void ViewShell::SetTabCompat( bool bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
         pIDSA->set(IDocumentSettingAccess::TAB_COMPAT, bNew );
-        const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
-        lcl_InvalidateAllCntnt( *this, nInv );
-    }
-}
-
-/*-- 29.11.2007 09:03:18---------------------------------------------------
-    //#i24363# tab stops relative to indent
-  -----------------------------------------------------------------------*/
-void ViewShell::SetTabsRelativeToIndent(bool bNew)
-{
-    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
-    if( pIDSA->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) != bNew  )
-    {
-        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
-        pIDSA->set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, bNew );
         const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
@@ -1146,7 +1138,7 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     if ( rRect == VisArea() )
         return;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if ( bInEndAction )
     {
         //Da Rescheduled doch schon wieder irgendwo einer?
@@ -1168,11 +1160,9 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
     //vom RootFrm::Paint erzeugt worden sein.
     if ( !bInEndAction &&
          Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea() )
-        Imp()->DelRegions();
+        Imp()->DelRegion();
 
     SET_CURR_SHELL( this );
-
-    //SwSaveHdl aSaveHdl( Imp() );
 
     bool bScrolled = false;
 
@@ -1226,16 +1216,23 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
 
                     SwTwips nPageLeft = 0;
                     SwTwips nPageRight = 0;
-                    if (pPage->MarginSide())
+                    switch ( pPage->SidebarPosition() )
                     {
-                        nPageLeft =  aPageRect.Left() - nBorderWidth - nSidebarWidth;
-                        nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth;
-                    }
-                    else
-                    {
-                        // OD 03.03.2003 #107927# - use correct datatype
-                        nPageLeft =  aPageRect.Left() - nBorderWidth;
-                        nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth + nSidebarWidth;
+                        case sw::sidebarwindows::SIDEBAR_LEFT:
+                        {
+                            nPageLeft =  aPageRect.Left() - nBorderWidth - nSidebarWidth;
+                            nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth;
+                        }
+                        break;
+                        case sw::sidebarwindows::SIDEBAR_RIGHT:
+                        {
+                            nPageLeft =  aPageRect.Left() - nBorderWidth;
+                            nPageRight = aPageRect.Right() + nBorderWidth + nShadowWidth + nSidebarWidth;
+                        }
+                        break;
+                        case sw::sidebarwindows::SIDEBAR_NONE:
+                            // nothing to do
+                        break;
                     }
                     if( nPageLeft < nMinLeft )
                         nMinLeft = nPageLeft;
@@ -1303,9 +1300,16 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
         Imp()->GetDrawView()->VisAreaChanged( GetWin() );
         Imp()->GetDrawView()->SetActualWin( GetWin() );
     }
-    Imp()->bPaintInScroll = TRUE;
     GetWin()->Update();
-    Imp()->bPaintInScroll = FALSE;
+
+    // --> OD 2010-02-11 #i88070#
+    if ( pPostItMgr )
+    {
+        pPostItMgr->Rescale();
+        pPostItMgr->CalcRects();
+        pPostItMgr->LayoutPostIts();
+    }
+    // <--
 
     if ( !bScrolled && pPostItMgr && pPostItMgr->HasNotes() && pPostItMgr->ShowNotes() )
         pPostItMgr->CorrectPositions();
@@ -1347,7 +1351,15 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
     // #i75172# isolated static conditions
     const bool bOnlyYScroll(!lXDiff && Abs(lYDiff) != 0 && Abs(lYDiff) < lMax);
     const bool bAllowedWithChildWindows(GetWin()->GetWindowClipRegionPixel(WINDOW_GETCLIPREGION_NOCHILDREN|WINDOW_GETCLIPREGION_NULL).IsNull());
+// --> OD 2009-08-12 #i98766# - disable smooth scrolling for Mac port builds
+#ifdef QUARTZ
+    const bool bSmoothScrollAllowed(false);
+    (void) bOnlyYScroll;
+    (void) bAllowedWithChildWindows;
+#else
     const bool bSmoothScrollAllowed(bOnlyYScroll && bEnableSmooth && GetViewOptions()->IsSmoothScroll() &&  bAllowedWithChildWindows);
+#endif
+// <-
     const bool bIAmCursorShell(ISA(SwCrsrShell));
     (void) bIAmCursorShell;
 
@@ -1697,7 +1709,8 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
                 aPageRect.SSize() = rFormatPage.Frm().SSize();
             }
 
-            const bool bSidebarRight = !static_cast<const SwPageFrm*>(pPage)->MarginSide();
+            const bool bSidebarRight =
+                static_cast<const SwPageFrm*>(pPage)->SidebarPosition() == sw::sidebarwindows::SIDEBAR_RIGHT;
             aPageRect.Pos().X() -= bSidebarRight ? 0 : nSidebarWidth;
             aPageRect.SSize().Width() += nSidebarWidth;
 
@@ -1797,9 +1810,8 @@ BOOL ViewShell::CheckInvalidForPaint( const SwRect &rRect )
         //nicht ankommen.
         //Ergo: Alles selbst machen (siehe ImplEndAction())
         if ( Imp()->GetRegion() && Imp()->GetRegion()->GetOrigin() != VisArea())
-             Imp()->DelRegions();
+             Imp()->DelRegion();
 
-        Imp()->ResetScroll();
         SwLayAction aAction( GetLayout(), Imp() );
         aAction.SetComplete( FALSE );
         // We increment the action counter to avoid a recursive call of actions
@@ -1825,7 +1837,7 @@ BOOL ViewShell::CheckInvalidForPaint( const SwRect &rRect )
             }
             if ( bStop )
             {
-                Imp()->DelRegions();
+                Imp()->DelRegion();
                 pRegion = 0;
             }
         }
@@ -1870,7 +1882,7 @@ BOOL ViewShell::CheckInvalidForPaint( const SwRect &rRect )
             }
             else
                 bRet = FALSE;
-            Imp()->DelRegions();
+            Imp()->DelRegion();
         }
         else
             bRet = FALSE;
@@ -1921,17 +1933,7 @@ void ViewShell::Paint(const Rectangle &rRect)
     {
         if( GetWin() && GetWin()->IsVisible() )
         {
-            //Wenn mit dem Paint ein Bereich betroffen ist, der vorher gescrolled
-            //wurde, so wiederholen wir das Paint mit dem Gesamtbereich. Nur so
-            //koennen wir sicherstellen, das (nicht mal kurzfristig) durch das Paint
-            //keine Alignmentfehler sichtbar werden.
             SwRect aRect( rRect );
-            if ( Imp()->IsScrolled() && Imp()->FlushScrolledArea( aRect ) )
-            {
-                GetWin()->Invalidate( aRect.SVRect() );
-                return;
-            }
-
             if ( bPaintInProgress ) //Schutz gegen doppelte Paints!
             {
                 GetWin()->Invalidate( rRect );
@@ -1971,6 +1973,11 @@ void ViewShell::Paint(const Rectangle &rRect)
                 //angemeldet hat, so muessen Repaints ausgeloest werden.
                 if ( !CheckInvalidForPaint( aRect ) )
                 {
+                    // --> OD 2009-08-12 #i101192#
+                    // start Pre/PostPaint encapsulation to avoid screen blinking
+                    const Region aRepaintRegion(aRect.SVRect());
+                    DLPrePaint2(aRepaintRegion);
+                    // <--
                     PaintDesktop( aRect );
                     //Falls sinnvoll gleich das alte InvalidRect verarbeiten bzw.
                     //vernichten.
@@ -1979,6 +1986,10 @@ void ViewShell::Paint(const Rectangle &rRect)
                     ViewShell::bLstAct = TRUE;
                     GetLayout()->Paint( aRect );
                     ViewShell::bLstAct = FALSE;
+                    // --> OD 2009-08-12 #i101192#
+                    // end Pre/PostPaint encapsulation
+                    DLPostPaint2(true);
+                    // <--
                 }
 
                 //delete pSaveHdl;
@@ -2213,12 +2224,12 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
     {
         SwViewOption aOpt( *pSh->GetViewOptions() );
         aOpt.SetFldName( rOpt.IsFldName() );
-        aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
+            aOpt.SetShowHiddenField( rOpt.IsShowHiddenField() );
         aOpt.SetShowHiddenPara( rOpt.IsShowHiddenPara() );
-        aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
-        aOpt.SetViewLayoutBookMode( rOpt.IsViewLayoutBookMode() );
-        aOpt.SetViewLayoutColumns( rOpt.GetViewLayoutColumns() );
-
+            aOpt.SetShowHiddenChar( rOpt.IsShowHiddenChar() );
+            aOpt.SetViewLayoutBookMode( rOpt.IsViewLayoutBookMode() );
+            aOpt.SetViewLayoutColumns( rOpt.GetViewLayoutColumns() );
+        aOpt.SetPostIts(rOpt.IsPostIts());
         if ( !(aOpt == *pSh->GetViewOptions()) )
             pSh->ImplApplyViewOptions( aOpt );
         pSh = (ViewShell*)pSh->GetNext();
@@ -2234,7 +2245,8 @@ void ViewShell::ApplyViewOptions( const SwViewOption &rOpt )
 
 void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
 {
-    ASSERT( !(*pOpt == rOpt), "ViewShell::ApplyViewOptions: ");
+    if (*pOpt == rOpt)
+        return;
 
     Window *pMyWin = GetWin();
     if( !pMyWin )
@@ -2581,6 +2593,15 @@ void ViewShell::InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
     }
 }
 
+SwAccessibleMap* ViewShell::GetAccessibleMap()
+{
+    if ( Imp()->IsAccessible() )
+    {
+        return &(Imp()->GetAccessibleMap());
+    }
+
+    return 0;
+}
 /* -----------------------------06.05.2002 13:23------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2668,7 +2689,7 @@ const BitmapEx& ViewShell::GetReplacementBitmap( bool bIsErrorState )
     if( !*ppRet )
     {
         USHORT nBmpResId =
-            Application::GetSettings().GetStyleSettings().GetWindowColor().IsDark()
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode()
                 ? nHCResId : nResId;
         *ppRet = new BitmapEx( SW_RES( nBmpResId ) );
     }
@@ -2721,4 +2742,3 @@ const IDocumentOutlineNodes* ViewShell::getIDocumentOutlineNodesAccess() const
     return pDoc;
 }
 // <--
-

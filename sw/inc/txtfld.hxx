@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtfld.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +41,8 @@ class SwTxtFld : public SwTxtAttr
     SwTxtNode * m_pTxtNode;
 
 public:
-    SwTxtFld( SwFmtFld& rAttr, xub_StrLen nStart );
+    SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStart,
+            bool const bInClipboard);
     virtual ~SwTxtFld();
 
     void CopyFld( SwTxtFld *pDest ) const;
@@ -64,7 +62,7 @@ public:
 
        @return position of this field. Has to be deleted explicitly.
     */
-    SwPosition * GetPosition() const;
+//    SwPosition * GetPosition() const;
 };
 
 inline SwTxtNode& SwTxtFld::GetTxtNode() const

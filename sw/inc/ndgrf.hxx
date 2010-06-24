@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ndgrf.hxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 #ifndef _NDGRF_HXX
 #define _NDGRF_HXX
 #include <sfx2/lnkbase.hxx>
-#include <goodies/grfmgr.hxx>
+#include <svtools/grfmgr.hxx>
 #include <ndnotxt.hxx>
 // --> OD, MAV 2005-08-17 #i53025#
 #include <com/sun/star/embed/XStorage.hpp>
@@ -210,10 +207,6 @@ public:
     ::sfx2::SvBaseLinkRef GetLink() const    { return refLink; }
     BOOL GetFileFilterNms( String* pFileNm, String* pFilterNm ) const;
     void ReleaseLink();
-
-        // Prioritaet beim Laden der Grafik setzen. Geht nur, wenn der Link
-        // ein FileObject gesetzt hat
-    void SetTransferPriority( USHORT nPrio );
 
     // Skalieren einer Image-Map: Die Image-Map wird um den Faktor
     // zwischen Grafik-Groesse und Rahmen-Groesse vergroessert/verkleinert

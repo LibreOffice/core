@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomod.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <swtypes.hxx>
 #include <tools/debug.hxx>
 #include <unomod.hxx>
-#include <unoobj.hxx>
+#include <unomid.h>
 #include <unoprnms.hxx>
 #include <unomap.hxx>
 #include <prtopt.hxx>
@@ -125,7 +122,10 @@ enum SwPrintSettingsPropertyHandles
     HANDLE_PRINTSET_PAPER_FROM_SETUP,
     HANDLE_PRINTSET_TABLES,
     HANDLE_PRINTSET_SINGLE_JOBS,
-    HANDLE_PRINTSET_EMPTY_PAGES
+    HANDLE_PRINTSET_EMPTY_PAGES,
+    HANDLE_PRINTSET_PROSPECT_RTL,
+    HANDLE_PRINTSET_PLACEHOLDER,
+    HANDLE_PRINTSET_HIDDEN_TEXT
 };
 
 static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
@@ -186,14 +186,17 @@ static ChainablePropertySetInfo * lcl_createPrintSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM ( "PrintControls" ),        HANDLE_PRINTSET_CONTROLS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintDrawings" ),        HANDLE_PRINTSET_DRAWINGS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintGraphics" ),        HANDLE_PRINTSET_GRAPHICS           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintHiddenText"),       HANDLE_PRINTSET_HIDDEN_TEXT        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintLeftPages" ),       HANDLE_PRINTSET_LEFT_PAGES         , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintPageBackground" ),  HANDLE_PRINTSET_PAGE_BACKGROUND    , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintProspect" ),        HANDLE_PRINTSET_PROSPECT           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintProspectRTL" ),     HANDLE_PRINTSET_PROSPECT_RTL       , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintReversed" ),        HANDLE_PRINTSET_REVERSED           , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintRightPages" ),      HANDLE_PRINTSET_RIGHT_PAGES        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintFaxName" ),         HANDLE_PRINTSET_FAX_NAME           , CPPUTYPE_OUSTRING, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintPaperFromSetup" ),  HANDLE_PRINTSET_PAPER_FROM_SETUP   , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintTables" ),          HANDLE_PRINTSET_TABLES             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PrintTextPlaceholder"),  HANDLE_PRINTSET_PLACEHOLDER        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintSingleJobs" ),      HANDLE_PRINTSET_SINGLE_JOBS        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "PrintEmptyPages" ),      HANDLE_PRINTSET_EMPTY_PAGES        , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { 0, 0, 0, CPPUTYPE_UNKNOWN, 0, 0 }
@@ -456,6 +459,24 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
                 throw lang::IllegalArgumentException();
         }
         break;
+        case HANDLE_PRINTSET_PROSPECT_RTL:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintProspect_RTL(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_PLACEHOLDER:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintTextPlaceholder(bVal);
+        }
+        break;
+        case HANDLE_PRINTSET_HIDDEN_TEXT:
+        {
+            bVal = *(sal_Bool*)rValue.getValue();
+            mpPrtOpt->SetPrintHiddenText(bVal);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -495,66 +516,75 @@ void SwXPrintSettings::_preGetValues ()
 void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
     throw(UnknownPropertyException, WrappedTargetException )
 {
-    sal_Bool bBool = TRUE;
-    sal_Bool bBoolVal;
     switch( rInfo.mnHandle )
     {
         case HANDLE_PRINTSET_LEFT_PAGES:
-            bBoolVal = mpPrtOpt->IsPrintLeftPage();
+            rValue <<= mpPrtOpt->IsPrintLeftPage();
         break;
         case HANDLE_PRINTSET_RIGHT_PAGES:
-            bBoolVal = mpPrtOpt->IsPrintRightPage();
+            rValue <<= mpPrtOpt->IsPrintRightPage();
         break;
         case HANDLE_PRINTSET_REVERSED:
-            bBoolVal = mpPrtOpt->IsPrintReverse();
+            rValue <<= mpPrtOpt->IsPrintReverse();
         break;
         case HANDLE_PRINTSET_PROSPECT:
-            bBoolVal = mpPrtOpt->IsPrintProspect();
+            rValue <<= mpPrtOpt->IsPrintProspect();
         break;
         case HANDLE_PRINTSET_GRAPHICS:
-            bBoolVal = mpPrtOpt->IsPrintGraphic();
+            rValue <<= mpPrtOpt->IsPrintGraphic();
         break;
         case HANDLE_PRINTSET_TABLES:
-            bBoolVal = mpPrtOpt->IsPrintTable();
+            rValue <<= mpPrtOpt->IsPrintTable();
         break;
         case HANDLE_PRINTSET_DRAWINGS:
-            bBoolVal = mpPrtOpt->IsPrintDraw();
+            rValue <<= mpPrtOpt->IsPrintDraw();
         break;
         case HANDLE_PRINTSET_CONTROLS:
-            bBoolVal = mpPrtOpt->IsPrintControl();
+            rValue <<= mpPrtOpt->IsPrintControl();
         break;
         case HANDLE_PRINTSET_PAGE_BACKGROUND:
-            bBoolVal = mpPrtOpt->IsPrintPageBackground();
+            rValue <<= mpPrtOpt->IsPrintPageBackground();
         break;
         case HANDLE_PRINTSET_BLACK_FONTS:
-            bBoolVal = mpPrtOpt->IsPrintBlackFont();
+            rValue <<= mpPrtOpt->IsPrintBlackFont();
         break;
         case HANDLE_PRINTSET_SINGLE_JOBS:
-            bBoolVal = mpPrtOpt->IsPrintSingleJobs();
+            rValue <<= mpPrtOpt->IsPrintSingleJobs();
         break;
         case HANDLE_PRINTSET_EMPTY_PAGES:
-            bBoolVal = mpPrtOpt->IsPrintEmptyPages();
+            rValue <<= mpPrtOpt->IsPrintEmptyPages();
         break;
         case HANDLE_PRINTSET_PAPER_FROM_SETUP:
-            bBoolVal = mpPrtOpt->IsPaperFromSetup();
+            rValue <<= mpPrtOpt->IsPaperFromSetup();
         break;
         case HANDLE_PRINTSET_ANNOTATION_MODE:
         {
-            bBool = FALSE;
             rValue <<= static_cast < sal_Int16 > ( mpPrtOpt->GetPrintPostIts() );
         }
         break;
         case HANDLE_PRINTSET_FAX_NAME :
         {
-            bBool = FALSE;
             rValue <<= mpPrtOpt->GetFaxName();
+        }
+        break;
+        case HANDLE_PRINTSET_PROSPECT_RTL:
+        {
+            rValue <<= mpPrtOpt->IsPrintProspectRTL();
+        }
+        break;
+        case HANDLE_PRINTSET_PLACEHOLDER:
+        {
+            rValue <<= mpPrtOpt->IsPrintTextPlaceholder();
+        }
+        break;
+        case HANDLE_PRINTSET_HIDDEN_TEXT:
+        {
+            rValue <<= mpPrtOpt->IsPrintHiddenText();
         }
         break;
         default:
             throw UnknownPropertyException();
     }
-    if(bBool)
-        rValue.setValue(&bBoolVal, ::getBooleanCppuType());
 }
 void SwXPrintSettings::_postGetValues ()
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
@@ -1024,3 +1054,4 @@ Sequence< OUString > SwXViewSettings::getSupportedServiceNames(void) throw( Runt
     pArray[0] = C2U("com.sun.star.text.ViewSettings");
     return aRet;
 }
+

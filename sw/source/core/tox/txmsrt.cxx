@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txmsrt.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <tools/resid.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <txtfld.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
@@ -191,7 +188,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
                 {
                     SwPosition aPos( *pNd );
                     const SwDoc& rDoc = *pNd->GetDoc();
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ),
                             "wo steht der Absatz" );
 #else
@@ -223,7 +220,7 @@ void SwTOXSortTabBase::FillText( SwTxtNode& rNd, const SwIndex& rInsPos,
 
     GetTxt( sMyTxt, sMyTxtReading );
 
-    rNd.Insert( sMyTxt, rInsPos );
+    rNd.InsertText( sMyTxt, rInsPos );
 }
 
 BOOL SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
@@ -459,7 +456,7 @@ void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) cons
     else
         GetTxt( sTmp, sTmpReading );
 
-    rNd.Insert( sTmp, rInsPos );
+    rNd.InsertText( sTmp, rInsPos );
 }
 
 
@@ -582,7 +579,7 @@ void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) co
     {
         String sTmp, sTmpReading;
         GetTxt( sTmp, sTmpReading );
-        rNd.Insert( sTmp, rInsPos );
+        rNd.InsertText( sTmp, rInsPos );
     }
 }
 
@@ -684,7 +681,7 @@ void SwTOXPara::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) const
         String sTmp, sTmpReading;
         GetTxt( sTmp, sTmpReading );
         sTmp.SearchAndReplaceAll('\t', ' ');
-        rNd.Insert( sTmp, rInsPos );
+        rNd.InsertText( sTmp, rInsPos );
     }
 }
 
@@ -718,40 +715,49 @@ String SwTOXPara::GetURL() const
         {
             const SwTxtNode * pTxtNd = static_cast<const SwTxtNode *>(pNd);
 
-            //if( MAXLEVEL >= pTxtNd->GetTxtColl()->GetOutlineLevel())  //#outline level,zhaojianwei
-            if ( pTxtNd->GetAttrOutlineLevel() > 0)  //<-end,zhaojianwei
-            {
-                aTxt = '#';
-                const SwNumRule * pRule = pTxtNd->GetNumRule();
-                if( pRule )
-                {
-                    // dann noch die rel. Nummer davor setzen
-                    const USHORT nCurrLevel = static_cast<USHORT>(pTxtNd->GetActualListLevel());
-                    if(nCurrLevel <= MAXLEVEL)
-                    {
-                        // --> OD 2005-11-02 #i51089 - TUNING#
-                        if ( pTxtNd->GetNum() )
-                        {
-                            SwNumberTree::tNumberVector aNumVector =
-                                pTxtNd->GetNumberVector();
+            // --> OD 2009-08-05 #i103265#
+//            //if( MAXLEVEL >= pTxtNd->GetTxtColl()->GetOutlineLevel())  //#outline level,zhaojianwei
+//            if ( pTxtNd->GetAttrOutlineLevel() > 0)  //<-end,zhaojianwei
+//            {
+//                aTxt = '#';
+//                const SwNumRule * pRule = pTxtNd->GetNumRule();
+//                if( pRule )
+//                {
+//                    // dann noch die rel. Nummer davor setzen
+//                    const USHORT nCurrLevel = static_cast<USHORT>(pTxtNd->GetActualListLevel());
+//                    if(nCurrLevel <= MAXLEVEL)
+//                    {
+//                        // --> OD 2005-11-02 #i51089 - TUNING#
+//                        if ( pTxtNd->GetNum() )
+//                        {
+//                            SwNumberTree::tNumberVector aNumVector =
+//                                pTxtNd->GetNumberVector();
 
-                            for( USHORT n = 0; n <= nCurrLevel; ++n )
-                            {
-                                int nNum = aNumVector[ n ];
-                                nNum -= ( pRule->Get( n ).GetStart() - 1 );
-                                ( aTxt += String::CreateFromInt32( nNum )) += '.';
-                            }
-                        }
-                        else
-                        {
-                            ASSERT( false,
-                                    "<SwTOXPara::GetURL()> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
-                        }
-                    }
-                }
-                aTxt += pTxtNd->GetExpandTxt();
-                ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
-            }
+//                            for( USHORT n = 0; n <= nCurrLevel; ++n )
+//                            {
+//                                int nNum = aNumVector[ n ];
+//                                nNum -= ( pRule->Get( n ).GetStart() - 1 );
+//                                ( aTxt += String::CreateFromInt32( nNum )) += '.';
+//                            }
+//                        }
+//                        else
+//                        {
+//                            ASSERT( false,
+//                                    "<SwTOXPara::GetURL()> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
+//                        }
+//                    }
+//                }
+//                aTxt += pTxtNd->GetExpandTxt();
+//                ( aTxt += cMarkSeperator ).AppendAscii( pMarkToOutline );
+//            }
+            SwDoc* pDoc = const_cast<SwDoc*>( pTxtNd->GetDoc() );
+            ::sw::mark::IMark const * const pMark = pDoc->getIDocumentMarkAccess()->getMarkForTxtNode(
+                                *(pTxtNd),
+                                IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK);
+            aTxt = '#';
+            const String aMarkName( pMark->GetName() );
+            aTxt += aMarkName;
+            // <--
         }
         break;
 
@@ -864,8 +870,9 @@ USHORT SwTOXAuthority::GetLevel() const
   -----------------------------------------------------------------------*/
 void SwTOXAuthority::_GetText( String& rTxt, String& )
 {
-    //
-    rTxt = m_rField.GetFld()->Expand();
+    bool const isClipBoard(
+        m_rField.GetTxtFld()->GetTxtNode().GetDoc()->IsClipBoard());
+    rTxt = m_rField.GetFld()->ExpandField(isClipBoard);
 }
 
 /* -----------------21.09.99 12:50-------------------
@@ -895,7 +902,7 @@ void    SwTOXAuthority::FillText( SwTxtNode& rNd,
     }
     else
         sText = (pField->GetFieldText((ToxAuthorityField) nAuthField));
-    rNd.Insert( sText, rInsPos );
+    rNd.InsertText( sText, rInsPos );
 }
 /* -----------------14.10.99 09:35-------------------
 
@@ -943,4 +950,3 @@ BOOL    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
     }
     return bRet;
 }
-

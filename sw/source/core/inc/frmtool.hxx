@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmtool.hxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include "frmatr.hxx"
 #include "swcache.hxx"
 // --> OD 2008-12-04 #i96772#
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 // <--
 
 class SwPageFrm;
@@ -141,7 +138,7 @@ const SwFrm * MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage );
 
 // JP 07.05.98: wird von SwCntntNode::GetFrm und von SwFlyFrm::GetFrm
 //              gerufen
-SwFrm* GetFrmOfModify( SwModify&, USHORT nFrmType, const Point* = 0,
+SwFrm* GetFrmOfModify( SwModify const&, USHORT const nFrmType, const Point* = 0,
                         const SwPosition *pPos = 0,
                         const BOOL bCalcFrm = FALSE );
 
@@ -518,21 +515,26 @@ inline BOOL SwBorderAttrs::IsLine() const
     OD 2004-03-10 #i28701#
     Values only provided for flow frames (table, section or text frames)
     Note: line spacing value is only determined for text frames
+    OD 2009-08-28 #i102458#
+    Add output parameter <obIsLineSpacingProportional>
 
-    @param _rFrm
+    @param rFrm
     input parameter - frame, for which the spacing values are determined.
 
-    @param _roPrevLowerSpacing
+    @param onPrevLowerSpacing
     output parameter - lower spacing of the frame in SwTwips
 
-    @param _roPrevLineSpacing
+    @param onPrevLineSpacing
     output parameter - line spacing of the frame in SwTwips
+
+    @param obIsLineSpacingProportional
 
     @author OD
 */
-void GetSpacingValuesOfFrm( const SwFrm& _rFrm,
-                            SwTwips& _roLowerSpacing,
-                            SwTwips& _roLineSpacing );
+void GetSpacingValuesOfFrm( const SwFrm& rFrm,
+                            SwTwips& onLowerSpacing,
+                            SwTwips& onLineSpacing,
+                            bool& obIsLineSpacingProportional );
 
 /** method to get the content of the table cell
 

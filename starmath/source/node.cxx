@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: node.cxx,v $
- * $Revision: 1.42 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -118,7 +115,7 @@ Color SmTmpDevice::Impl_GetColor( const Color& rColor )
             if (OUTDEV_WINDOW == rOutDev.GetOutDevType())
                 aBgCol = ((Window &) rOutDev).GetDisplayBackground().GetColor();
 
-            nNewCol = SM_MOD1()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+            nNewCol = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
             Color aTmpColor( nNewCol );
             if (aBgCol.IsDark() && aTmpColor.IsDark())
@@ -834,8 +831,9 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         return;
 
     // make distance depend on font size
-    long  nDist = +(rFormat.GetDistance(DIS_HORIZONTAL)
-                    * GetFont().GetSize().Height()) / 100L;
+    long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetSize().Height()) / 100L;
+    if (!IsUseExtraSpaces())
+        nDist = 0;
 
     Point   aPos;
     for (i = 0;  i < nSize;  i++)
@@ -1651,7 +1649,7 @@ void SmBraceNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
                     "Sm : unterschiedliche Fontgroessen");
         aTmpSize.Width() = Min((long) nBraceHeight * 60L / 100L,
                             rFormat.GetBaseSize().Height() * 3L / 2L);
-        // correction factor since change from StarMath to StarSymbol font
+        // correction factor since change from StarMath to OpenSymbol font
         // because of the different font width in the FontMetric
         aTmpSize.Width() *= 182;
         aTmpSize.Width() /= 267;
@@ -2694,7 +2692,7 @@ void SmMathSymbolNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocSh
 
     DBG_ASSERT(GetFont().GetCharSet() == RTL_TEXTENCODING_SYMBOL  ||
                GetFont().GetCharSet() == RTL_TEXTENCODING_UNICODE,
-        "incorrect charset for character from StarMath/StarSymbol font");
+        "incorrect charset for character from StarMath/OpenSymbol font");
 
     Flags() |= FLG_FONT | FLG_ITALIC;
 };
@@ -2806,9 +2804,9 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     SmNode::Prepare(rFormat, rDocShell);
 
     const SmSym   *pSym;
-    SmModule  *pp = SM_MOD1();
+    SmModule  *pp = SM_MOD();
 
-    if (NULL != (pSym = pp->GetSymSetManager().GetSymbolByName(GetToken().aText)))
+    if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName(GetToken().aText)))
     {
         SetText( pSym->GetCharacter() );
         GetFont() = pSym->GetFace();

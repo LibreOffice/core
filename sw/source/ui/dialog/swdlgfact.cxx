@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swdlgfact.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #endif
 
 #include "swdlgfact.hxx"
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -93,7 +90,6 @@
 #include <glossary.hxx> //add for SwGlossaryDlg
 #include <inpdlg.hxx> //add for SwFldInputDlg
 #include <insfnote.hxx> //add for SwInsFootNoteDlg
-#include <insrc.hxx> //add for SwInsRowColDlg
 #include <insrule.hxx> //add for SwInsertGrfRulerDlg
 #include <instable.hxx> //add for SwInsTableDlg
 #include <javaedit.hxx> //add for SwJavaEditDialog
@@ -570,9 +566,10 @@ void AbstractEditRegionDlg_Impl::SelectSection(const String& rSectionName)
 }
 // AbstractEditRegionDlg_Impl end
 //AbstractInsertSectionTabDialog_Impl begin
-void AbstractInsertSectionTabDialog_Impl::SetSection(const SwSection& rSect)
+void
+AbstractInsertSectionTabDialog_Impl::SetSectionData(SwSectionData const& rSect)
 {
-    pDlg->SetSection( rSect);
+    pDlg->SetSectionData(rSect);
 }
 // AbstractInsertSectionTabDialog_Impl end
 
@@ -1359,14 +1356,11 @@ AbstractInsFootNoteDlg* SwAbstractDialogFactory_Impl::CreateInsFootNoteDlg( int 
 }
 
 VclAbstractDialog * SwAbstractDialogFactory_Impl::CreateVclSwViewDialog( int nResId,
-                                            SwView& rView, BOOL bCol ) //add for SwInsRowColDlg, SwLineNumberingDlg
+                                            SwView& rView, BOOL /*bCol*/ ) //add for SwInsRowColDlg, SwLineNumberingDlg
 {
     Dialog* pDlg=NULL;
     switch ( nResId )
     {
-        case DLG_INS_ROW_COL :
-            pDlg = new SwInsRowColDlg( rView, bCol );
-            break;
         case DLG_LINE_NUMBERING :
             pDlg = new SwLineNumberingDlg( &rView );
             break;
@@ -1702,7 +1696,7 @@ CreateTabPage SwAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
             break;
         case RID_SW_TP_OPTTEST_PAGE :
         case TP_OPTTEST_PAGE :
-#ifndef  PRODUCT
+#ifdef DBG_UTIL
             pRet = SwTestTabPage::Create;
 #endif
             break;

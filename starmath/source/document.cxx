@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: document.cxx,v $
- * $Revision: 1.94.26.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,33 +52,33 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/fstathelper.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/fstathelper.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/ptitem.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/slstitm.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/undo.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/whiter.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editstat.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/unolingu.hxx>
+#include <svl/undo.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/whiter.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <ucbhelper/content.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/mapunit.hxx>
 #include <vcl/msgbox.hxx>
-
+#include <sfx2/sfx.hrc>
 #include <document.hxx>
 #include <action.hxx>
 #include <config.hxx>
@@ -97,8 +94,8 @@
 #include "mathtype.hxx"
 #include "mathmlimport.hxx"
 #include "mathmlexport.hxx"
-
-
+#include <sfx2/sfxsids.hrc>
+#include <svx/svxids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -111,16 +108,11 @@ using namespace ::com::sun::star::uno;
 
 static const char __FAR_DATA pStarMathDoc[] = "StarMathDocument";
 
-
-/**************************************************************************/
-/*
-**
-**  CLASS IMPLEMENTATION
-**
-**/
-
 #define SmDocShell
 #include "smslots.hxx"
+
+////////////////////////////////////////////////////////////
+
 
 TYPEINIT1( SmDocShell, SfxObjectShell );
 
@@ -151,8 +143,8 @@ void SmDocShell::LoadSymbols()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::LoadSymbols" );
 
-    SmModule *pp = SM_MOD1();
-    pp->GetSymSetManager().Load();
+    SmModule *pp = SM_MOD();
+    pp->GetSymbolManager().Load();
 }
 
 
@@ -282,7 +274,7 @@ void SmDocShell::ArrangeFormula()
             pOutDev = &pView->GetGraphicWindow();
         else
         {
-            pOutDev = &SM_MOD1()->GetDefaultVirtualDev();
+            pOutDev = &SM_MOD()->GetDefaultVirtualDev();
             pOutDev->SetMapMode( MapMode(MAP_100TH_MM) );
         }
     }
@@ -467,7 +459,7 @@ void SmDocShell::Draw(OutputDevice &rDev, Point &rPosition)
     ULONG nOldDrawMode = DRAWMODE_DEFAULT;
     BOOL bRestoreDrawMode = FALSE;
     if (OUTDEV_WINDOW == rDev.GetOutDevType() &&
-        ((Window &) rDev).GetDisplayBackground().GetColor().IsDark())
+        ((Window &) rDev).GetSettings().GetStyleSettings().GetHighContrastMode())
     {
         nOldDrawMode = rDev.GetDrawMode();
         rDev.SetDrawMode( DRAWMODE_DEFAULT );
@@ -616,7 +608,7 @@ Printer* SmDocShell::GetPrt()
                            SID_NO_RIGHT_SPACES, SID_NO_RIGHT_SPACES,
                            0);
 
-        SmModule *pp = SM_MOD1();
+        SmModule *pp = SM_MOD();
         pp->GetConfig()->ConfigToItemSet(*pOptions);
         pPrinter = new SfxPrinter(pOptions);
         pPrinter->SetMapMode( MapMode(MAP_100TH_MM) );
@@ -684,8 +676,8 @@ void SmDocShell::Repaint()
 }
 
 
-SmDocShell::SmDocShell(SfxObjectCreateMode eMode,const sal_Bool _bScriptSupport) :
-    SfxObjectShell(eMode),
+SmDocShell::SmDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
+    SfxObjectShell( i_nSfxCreationFlags ),
     pTree               ( 0 ),
     pEditEngineItemPool ( 0 ),
     pEditEngine         ( 0 ),
@@ -698,18 +690,13 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode,const sal_Bool _bScriptSupport)
 
     SetPool(&SFX_APP()->GetPool());
 
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
     aFormat = pp->GetConfig()->GetStandardFormat();
 
     StartListening(aFormat);
     StartListening(*pp->GetConfig());
 
-    if ( !_bScriptSupport )
-        SetHasNoBasic();
-
-    SetModel( new SmModel(this) );  //! das hier mit new erzeugte Model brauch
-                                    //! im Destruktor nicht explizit geloescht werden.
-                                    //! Dies erledigt das Sfx.
+    SetBaseModel( new SmModel(this) );
 }
 
 
@@ -718,7 +705,7 @@ SmDocShell::~SmDocShell()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::~SmDocShell" );
 
-    SmModule *pp = SM_MOD1();
+    SmModule *pp = SM_MOD();
 
     EndListening(aFormat);
     EndListening(*pp->GetConfig());
@@ -1014,7 +1001,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_AUTO_REDRAW :
         {
-            SmModule *pp = SM_MOD1();
+            SmModule *pp = SM_MOD();
             BOOL bRedraw = pp->GetConfig()->IsAutoRedraw();
             pp->GetConfig()->SetAutoRedraw(!bRedraw);
         }
@@ -1033,7 +1020,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
             // get device used to retrieve the FontList
             OutputDevice *pDev = GetPrinter();
             if (!pDev || pDev->GetDevFontCount() == 0)
-                pDev = &SM_MOD1()->GetDefaultVirtualDev();
+                pDev = &SM_MOD()->GetDefaultVirtualDev();
             DBG_ASSERT (pDev, "device for font list missing" );
 
             SmFontTypeDialog *pFontTypeDialog = new SmFontTypeDialog( NULL, pDev );
@@ -1117,7 +1104,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
                 pAlignDialog->WriteTo(aNewFormat);
 
-                SmModule *pp = SM_MOD1();
+                SmModule *pp = SM_MOD();
                 SmFormat aFmt( pp->GetConfig()->GetStandardFormat() );
                 pAlignDialog->WriteTo( aFmt );
                 pp->GetConfig()->SetStandardFormat( aFmt );
@@ -1176,9 +1163,21 @@ void SmDocShell::Execute(SfxRequest& rReq)
                     (pTmpUndoMgr->*fnDo)( 0 );
             }
             Repaint();
+            SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
+            while( pFrm )
+            {
+                SfxBindings& rBind = pFrm->GetBindings();
+                rBind.Invalidate(SID_UNDO);
+                rBind.Invalidate(SID_REDO);
+                rBind.Invalidate(SID_REPEAT);
+                rBind.Invalidate(SID_CLEARHISTORY);
+                pFrm = SfxViewFrame::GetNext( *pFrm, this );
+            }
         }
         break;
     }
+
+    rReq.Done();
 }
 
 
@@ -1202,7 +1201,7 @@ void SmDocShell::GetState(SfxItemSet &rSet)
 
         case SID_AUTO_REDRAW :
             {
-                SmModule  *pp = SM_MOD1();
+                SmModule  *pp = SM_MOD();
                 BOOL       bRedraw = pp->GetConfig()->IsAutoRedraw();
 
                 rSet.Put(SfxBoolItem(SID_AUTO_REDRAW, bRedraw));
@@ -1291,8 +1290,8 @@ void SmDocShell::SaveSymbols()
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SaveSymbols" );
 
-    SmModule *pp = SM_MOD1();
-    pp->GetSymSetManager().Save();
+    SmModule *pp = SM_MOD();
+    pp->GetSymbolManager().Save();
 }
 
 

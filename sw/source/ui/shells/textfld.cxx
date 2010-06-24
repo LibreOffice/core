@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textfld.cxx,v $
- * $Revision: 1.38.190.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,18 +35,18 @@
 #include <fmtfld.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/useroptions.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/itempool.hxx>
+#include <unotools/useroptions.hxx>
+#include <svl/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svx/postattr.hxx>
 #include <svx/hlnkitem.hxx>
 
 #include <svx/svxdlg.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <fmtinfmt.hxx>
@@ -83,8 +80,7 @@
 
 #include <app.hrc>
 
-#include "PostItMgr.hxx"
-#include "postit.hxx"
+#include <PostItMgr.hxx>
 
 using namespace nsSwDocInfoSubType;
 
@@ -318,8 +314,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
             break;
             case FN_DELETE_NOTE:
-                if ( GetView().GetPostItMgr() && GetView().GetPostItMgr()->GetActivePostIt() )
-                    GetView().GetPostItMgr()->GetActivePostIt()->Delete();
+                if ( GetView().GetPostItMgr() &&
+                     GetView().GetPostItMgr()->HasActiveSidebarWin() )
+                {
+                    GetView().GetPostItMgr()->DeleteActiveSidebarWin();
+                }
             break;
             case FN_DELETE_ALL_NOTES:
                 if ( GetView().GetPostItMgr() )
@@ -333,8 +332,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
             break;
             case FN_HIDE_NOTE:
-                if ( GetView().GetPostItMgr() && GetView().GetPostItMgr()->GetActivePostIt() )
-                    GetView().GetPostItMgr()->GetActivePostIt()->Hide();
+                if ( GetView().GetPostItMgr() &&
+                     GetView().GetPostItMgr()->HasActiveSidebarWin() )
+                {
+                    GetView().GetPostItMgr()->HideActiveSidebarWin();
+                }
             break;
             case FN_HIDE_ALL_NOTES:
                 if ( GetView().GetPostItMgr() )
@@ -382,7 +384,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         SwFmtFld* pSwFmtFld = static_cast<SwFmtFld*>(pFirst);
                         if ( pSwFmtFld->GetFld() == pPostIt )
                         {
-                            pSwFmtFld->Broadcast( SwFmtFldHint( 0, SWFMTFLD_FOCUS ) );
+                            pSwFmtFld->Broadcast( SwFmtFldHint( 0, SWFMTFLD_FOCUS, &GetView() ) );
                             break;
                         }
                         pFirst = aIter++;
@@ -402,7 +404,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     sComment = pRedline->GetComment();
                     if ( sComment == String(rtl::OUString::createFromAscii("")) )
                         GetView().GetDocShell()->Broadcast(SwRedlineHint(pRedline,SWREDLINE_INSERTED));
-                    const_cast<SwRedline*>(pRedline)->Broadcast(SwRedlineHint(pRedline,SWREDLINE_FOCUS));
+                    const_cast<SwRedline*>(pRedline)->Broadcast(SwRedlineHint(pRedline,SWREDLINE_FOCUS,&GetView()));
                 }
                 */
 
@@ -463,7 +465,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact2, "Dialogdiet fail!");
-                    AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, RID_SVXDLG_POSTIT, bTravel, TRUE );
+                    AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, bTravel, TRUE );
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     pDlg->HideAuthor();
 
@@ -630,7 +632,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                     SwPostItMgr* pPostItMgr = GetView().GetPostItMgr();
                     if ( !pPostItMgr )
                         rSet.InvalidateItem( nWhich );
-                    else if ( !pPostItMgr->GetActivePostIt() )
+                    else if ( !pPostItMgr->HasActiveSidebarWin() )
                     {
                         rSet.InvalidateItem( FN_DELETE_NOTE );
                         rSet.InvalidateItem( FN_HIDE_NOTE );

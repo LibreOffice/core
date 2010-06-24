@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtsh.hxx,v $
- * $Revision: 1.47 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <fesh.hxx>
 #include <sortopt.hxx>
 #include <swurl.hxx>
+#include <IMark.hxx>
 
 class Window;
 class OutputDevice;
@@ -49,7 +47,7 @@ class SdrView;
 class SwView;
 class SvGlobalName;
 class SwInputFieldList;
-class SwSection;
+class SwSectionData;
 class Timer;
 class SvxMacro;
 class SwFmtINetFmt;
@@ -157,12 +155,15 @@ public:
     void    SetInsMode( BOOL bOn = TRUE );
     void    ToggleInsMode() { SetInsMode( !bIns ); }
     BOOL    IsInsMode() const { return bIns; }
+    void    SetRedlineModeAndCheckInsMode( USHORT eMode );
 
     void    EnterSelFrmMode(const Point *pStartDrag = 0);
     void    LeaveSelFrmMode();
     BOOL    IsSelFrmMode() const { return bLayoutMode; }
         // Selektion von Rahmen aufheben
     void    UnSelectFrm();
+
+    void    Invalidate();
 
     // Tabellenzellen selektieren fuer Bearbeiten von Formeln in der Ribbonbar
     inline void SelTblCells( const Link &rLink, BOOL bMark = TRUE );
@@ -319,6 +320,9 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     void    InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
     BOOL    UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
 
+        //  new fields
+    BOOL    UpdateField( sw::mark::IFieldmark &fieldBM);
+
     // Numerierung und Bullets
     /**
        Turns on numbering or bullets.
@@ -456,7 +460,7 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     void AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet);
 
     // Link fuers einfuegen von Bereichen uebers Drag&Drop/Clipboard
-    DECL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSection* );
+    DECL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSectionData* );
 
 
     //ctoren, der erstere ist eine Art kontrollierter copy ctor fuer weitere

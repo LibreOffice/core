@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: breakit.hxx,v $
- * $Revision: 1.12.112.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +47,9 @@ class String;
 class SW_DLLPUBLIC SwBreakIt
 {
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xMSF;
+    mutable com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xBreak;
+    com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector > xCTLDetect;
+
 
     com::sun::star::lang::Locale * m_pLocale;
     com::sun::star::i18n::ForbiddenCharacters * m_pForbidden;
@@ -59,6 +59,9 @@ class SW_DLLPUBLIC SwBreakIt
 
     void _GetLocale( const LanguageType aLang );
     void _GetForbidden( const LanguageType  aLang );
+
+    void createBreakIterator() const;
+    void createScriptTypeDetector();
 
     // forbidden and not implemented.
     SwBreakIt();
@@ -79,13 +82,16 @@ public:
 public:
     static SwBreakIt * Get();
 
-    // @@@ backward compatibility @@@
-    com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xBreak;
-    com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector > xCTLDetect;
-
-    const com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > & GetBreakIter()
+    com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > GetBreakIter()
     {
+        createBreakIterator();
         return xBreak;
+    }
+
+    com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector > GetScriptTypeDetector()
+    {
+        createScriptTypeDetector();
+        return xCTLDetect;
     }
 
     const com::sun::star::lang::Locale& GetLocale( const LanguageType aLang )

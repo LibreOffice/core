@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: escher.hxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #define _ESCHER_HXX
 
 #ifndef _ESCHEREX_HXX
-#include <svx/escherex.hxx>
+#include <filter/msfilter/escherex.hxx>
 #endif
 
 const sal_uInt32 nInlineHack = 0x00010001;
@@ -91,14 +88,27 @@ private:
 
 };
 
+class SwEscherExGlobal : public EscherExGlobal
+{
+public:
+    explicit            SwEscherExGlobal();
+    virtual             ~SwEscherExGlobal();
+
+private:
+    /** Overloaded to create a new memory stream for picture data. */
+    virtual SvStream*   ImplQueryPictureStream();
+
+private:
+    ::std::auto_ptr< SvStream > mxPicStrm;
+};
+
 class SwBasicEscherEx : public EscherEx
 {
 private:
     void Init();
 protected:
-    SwWW8Writer& rWrt;
+    WW8Export& rWrt;
     SvStream* pEscherStrm;
-    SvStream* pPictStrm;
     long mnEmuMul, mnEmuDiv;
 
     virtual INT32 WriteFlyFrameAttr(const SwFrmFmt& rFmt, MSO_SPT eShapeType,
@@ -115,13 +125,11 @@ protected:
 
     INT32 ToFract16(INT32 nVal, UINT32 nMax) const;
 
-    SvStream* QueryPicStream();
-
     virtual void SetPicId(const SdrObject &, UINT32, EscherPropertyContainer &);
     SdrLayerID GetInvisibleHellId() const;
 
 public:
-    SwBasicEscherEx(SvStream* pStrm, SwWW8Writer& rWrt, UINT32 nDrawings = 1);
+    SwBasicEscherEx(SvStream* pStrm, WW8Export& rWrt);
     INT32 WriteGrfFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
     INT32 WriteOLEFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
     void WriteEmptyFlyFrame(const SwFrmFmt& rFmt, UINT32 nShapeId);
@@ -161,7 +169,7 @@ private:
     virtual void SetPicId(const SdrObject &rSdrObj, UINT32 nShapeId,
         EscherPropertyContainer &rPropOpt);
 public:
-    SwEscherEx( SvStream* pStrm, SwWW8Writer& rWW8Wrt );
+    SwEscherEx( SvStream* pStrm, WW8Export& rWW8Wrt );
     virtual ~SwEscherEx();
     void FinishEscher();
     virtual void WritePictures();
@@ -169,7 +177,7 @@ public:
     virtual void WriteFrmExtraData(const SwFrmFmt& rFmt);
 
     EscherExHostAppData* StartShape(const com::sun::star::uno::Reference<
-        com::sun::star::drawing::XShape > &) {return &aHostData;}
+        com::sun::star::drawing::XShape > &, const Rectangle*) {return &aHostData;}
 private:
     //No copying
     SwEscherEx(const SwEscherEx&);

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inftxt.cxx,v $
- * $Revision: 1.123.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,28 +30,28 @@
 
 
 #include <com/sun/star/uno/Sequence.h>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
 #include <hintids.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/hngpnctitem.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/splwrap.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/splwrap.hxx>
+#include <editeng/pgrditem.hxx>
 // --> OD 2008-01-17 #newlistlevelattrs#
 #ifndef _SVX_TSTPITEM_HXX
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 // <--
 
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <breakit.hxx>
-#include <svx/forbiddenruleitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
 #include <txatbase.hxx>
 #include <fmtinfmt.hxx>
 #include <swmodule.hxx>
@@ -80,7 +77,7 @@
 #include <doc.hxx>
 #include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
-
+#include <cstdio>
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
 // <--
@@ -114,13 +111,13 @@ namespace numfunc
 }
 // <--
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 // Test2: WYSIWYG++
 // Test4: WYSIWYG debug
 static sal_Bool bDbgLow = sal_False;
 #endif
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 sal_Bool SwTxtSizeInfo::IsOptCalm() const { return !GetOpt().IsTest3(); }
 
@@ -236,7 +233,7 @@ SwTxtInfo::SwTxtInfo( const SwTxtInfo &rInf )
 { }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 /*************************************************************************
  *                      ChkOutDev()
  *************************************************************************/
@@ -279,6 +276,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bFtnInside( rNew.IsFtnInside() ),
+      bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),
@@ -288,7 +286,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkOutDev( *this );
 #endif
 }
@@ -325,7 +323,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         pRef = pOut;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkOutDev( *this );
 #endif
 
@@ -376,7 +374,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     nIdx = nNewIdx;
     nLen = nNewLen;
     bNotEOL = sal_False;
-    bStopUnderFlow = bFtnInside = sal_False;
+    bStopUnderFlow = bFtnInside = bOtherThanFtnInside = sal_False;
     bMulti = bFirstMulti = bRuby = bHanging = bScriptSpace =
         bForbiddenChars = sal_False;
 
@@ -403,6 +401,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bURLNotify( rNew.URLNotify() ),
       bStopUnderFlow( rNew.StopUnderFlow() ),
       bFtnInside( rNew.IsFtnInside() ),
+      bOtherThanFtnInside( rNew.IsOtherThanFtnInside() ),
       bMulti( rNew.IsMulti() ),
       bFirstMulti( rNew.IsFirstMulti() ),
       bRuby( rNew.IsRuby() ),
@@ -412,7 +411,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       bSnapToGrid( rNew.SnapToGrid() ),
       nDirection( rNew.GetDirection() )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ChkOutDev( *this );
 #endif
     SetLen( GetMinLen( *this ) );
@@ -570,7 +569,7 @@ void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPain
     pGrammarCheckList = NULL;
     pSmartTags = NULL;  // SMARTTAGS
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     pBrushItem = 0;
 #else
     pBrushItem = ((SvxBrushItem*)-1);
@@ -1144,34 +1143,35 @@ void SwTxtPaintInfo::DrawPostIts( const SwLinePortion&, sal_Bool bScript ) const
     }
 }
 
-
 void SwTxtPaintInfo::DrawCheckBox( const SwFieldFormPortion &rPor, bool checked) const
 {
     SwRect aIntersect;
     CalcRect( rPor, &aIntersect, 0 );
-    if ( aIntersect.HasArea() ) {
-    if (OnWin()) {
-        OutputDevice* pOutDev = (OutputDevice*)GetOut();
-        pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-        pOutDev->SetLineColor( Color(220, 233, 245));
-        pOutDev->SetFillColor( Color(220, 233, 245));
-        pOutDev->DrawRect( aIntersect.SVRect() );
-        pOutDev->Pop();
-    }
-    const int delta=10;
-    Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
-    pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-    pOut->SetLineColor( Color(0, 0, 0));
-    pOut->SetFillColor();
-    pOut->DrawRect( r );
-    if (checked) {
-        pOut->DrawLine(r.TopLeft(), r.BottomRight());
-        pOut->DrawLine(r.TopRight(), r.BottomLeft());
+    if ( aIntersect.HasArea() )
+    {
+        if (OnWin() && SwViewOption::IsFieldShadings() &&
+                !GetOpt().IsPagePreview())
+        {
+            OutputDevice* pOut_ = (OutputDevice*)GetOut();
+            pOut_->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+            pOut_->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+            pOut_->SetLineColor();
+            pOut_->DrawRect( aIntersect.SVRect() );
+            pOut_->Pop();
+        }
+        const int delta=10;
+        Rectangle r(aIntersect.Left()+delta, aIntersect.Top()+delta, aIntersect.Right()-delta, aIntersect.Bottom()-delta);
+        pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
+        pOut->SetLineColor( Color(0, 0, 0));
+        pOut->SetFillColor();
+        pOut->DrawRect( r );
+        if (checked) {
+            pOut->DrawLine(r.TopLeft(), r.BottomRight());
+            pOut->DrawLine(r.TopRight(), r.BottomLeft());
+        }
         pOut->Pop();
     }
-    }
 }
-
 /*************************************************************************
  *                     SwTxtPaintInfo::DrawBackGround()
  *************************************************************************/
@@ -1223,14 +1223,22 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
                 }
             }
             bool bIsStartMark=(1==GetLen() && CH_TXT_ATR_FIELDSTART==GetTxt().GetChar(GetIdx()));
-            if(pFieldmark) OSL_TRACE("Found Fieldmark");
+            if(pFieldmark) {
+                OSL_TRACE("Found Fieldmark");
+#if DEBUG
+                rtl::OUString str = pFieldmark->ToString( );
+                fprintf( stderr, "%s\n", rtl::OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr( ) );
+#endif
+            }
             if(bIsStartMark) OSL_TRACE("Found StartMark");
-            if (OnWin() && (pFieldmark!=NULL || bIsStartMark))
+            if (OnWin() && (pFieldmark!=NULL || bIsStartMark) &&
+                    SwViewOption::IsFieldShadings() &&
+                    !GetOpt().IsPagePreview())
             {
                 OutputDevice* pOutDev = (OutputDevice*)GetOut();
                 pOutDev->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-                pOutDev->SetLineColor( Color(220, 233, 245));
-                pOutDev->SetFillColor( Color(220, 233, 245));
+                pOutDev->SetFillColor( SwViewOption::GetFieldShadingsColor() );
+                pOutDev->SetLineColor( );
                 pOutDev->DrawRect( aIntersect.SVRect() );
                 pOutDev->Pop();
             }
@@ -1281,7 +1289,8 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
             case POR_URL:
             case POR_HIDDEN:
             case POR_TOX:
-            case POR_REF :
+            case POR_REF:
+            case POR_META:
             case POR_CONTROLCHAR:
                 if ( !GetOpt().IsPagePreview() &&
                      !GetOpt().IsReadonly() &&
@@ -1318,8 +1327,8 @@ void SwTxtPaintInfo::_NotifyURL( const SwLinePortion &rPor ) const
     if( aIntersect.HasArea() )
     {
         SwTxtNode *pNd = (SwTxtNode*)GetTxtFrm()->GetTxtNode();
-        SwIndex aIndex( pNd, GetIdx() );
-        SwTxtAttr *pAttr = pNd->GetTxtAttr( aIndex, RES_TXTATR_INETFMT );
+        SwTxtAttr *const pAttr =
+            pNd->GetTxtAttrAt(GetIdx(), RES_TXTATR_INETFMT);
         if( pAttr )
         {
             const SwFmtINetFmt& rFmt = pAttr->GetINetFmt();

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: typemap.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,10 +138,10 @@
 #define SvxCellVerJustifyEnumItem SfxVoidItem
 #define SvxCellOrientationEnumItem SfxVoidItem
 #include <sfx2/msg.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/zoomitem.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 
 #define SFX_TYPEMAP
 #include "smslots.hxx"

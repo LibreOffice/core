@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtedt.cxx,v $
- * $Revision: 1.92 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,12 +38,12 @@
 #endif
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/itemiter.hxx>
-#include <svx/splwrap.hxx>
-#include <svx/langitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/hangulhanja.hxx>
+#include <svl/itemiter.hxx>
+#include <editeng/splwrap.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/hangulhanja.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -368,57 +365,6 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
     return bRet;
 }
 
-/*
- * Ein Zeichen wurde eingefuegt.
- */
-
-SwTxtNode& SwTxtNode::Insert( xub_Unicode c, const SwIndex &rIdx )
-{
-    xub_StrLen nOrigLen = m_Text.Len();
-
-    ASSERT( rIdx <= nOrigLen, "SwTxtNode::Insert: invalid index." );
-    ASSERT( nOrigLen < STRING_LEN,
-            "SwTxtNode::Insert: node text with insertion > STRING_LEN." );
-
-    if ( nOrigLen == m_Text.Insert( c, rIdx.GetIndex() ).Len() )
-        return *this;
-
-    Update(rIdx,1);
-
-    // leere Hints und Feldattribute an rIdx.GetIndex suchen
-    if ( HasHints() )
-    {
-        USHORT* pEndIdx;
-        for ( USHORT i=0; i < m_pSwpHints->Count() &&
-                rIdx >= *(*m_pSwpHints)[i]->GetStart(); ++i)
-        {
-            SwTxtAttr *pHt = m_pSwpHints->GetTextHint(i);
-            pEndIdx = pHt->GetEnd();
-            if ( pEndIdx )
-            {
-                // leere Hints an rIdx.GetIndex ?
-                BOOL bEmpty = *pEndIdx == *pHt->GetStart()
-                            && rIdx == *pHt->GetStart();
-
-                if( bEmpty )
-                {
-                    m_pSwpHints->DeleteAtPos(i);
-                    if( bEmpty )
-                        *pHt->GetStart() -= 1;
-                    else
-                        *pEndIdx -= 1;
-                    Insert(pHt);
-                }
-            }
-        }
-        TryDeleteSwpHints();
-    }
-    // den Frames Bescheid sagen
-    SwInsChr aHint( rIdx.GetIndex()-1 );
-    SwModify::Modify( 0, &aHint );
-    return *this;
-}
-
 inline BOOL InRange(xub_StrLen nIdx, xub_StrLen nStart, xub_StrLen nEnd) {
     return ((nIdx >=nStart) && (nIdx <= nEnd));
 }
@@ -454,7 +400,6 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
     USHORT i = 0;
     xub_StrLen nStt = rIdx.GetIndex();
     xub_StrLen nEnd = nStt + nLen;
-    xub_StrLen *pAttrEnd;
     xub_StrLen nAttrStart;
     SwTxtAttr *pHt;
 
@@ -479,8 +424,8 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
         pHt = m_pSwpHints->GetTextHint(i);
 
         // attributes without end stay in!
-        pAttrEnd = pHt->GetEnd();
-        if ( !pAttrEnd )
+        xub_StrLen * const pAttrEnd = pHt->GetEnd();
+        if ( !pAttrEnd /*|| pHt->HasDummyChar()*/ ) // see bInclRefToxMark
         {
             i++;
             continue;
@@ -514,8 +459,12 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
         else if ( !bInclRefToxMark )
         {
             // 3. case: Reset all attributes except from ref/toxmarks:
-            bSkipAttr = RES_TXTATR_REFMARK == pHt->Which() ||
-                        RES_TXTATR_TOXMARK == pHt->Which();
+            // skip hints with CH_TXTATR here
+            // (deleting those is ONLY allowed for UNDO!)
+            bSkipAttr = RES_TXTATR_REFMARK   == pHt->Which()
+                     || RES_TXTATR_TOXMARK   == pHt->Which()
+                     || RES_TXTATR_META      == pHt->Which()
+                     || RES_TXTATR_METAFIELD == pHt->Which();
         }
 
         if ( bSkipAttr )
@@ -547,8 +496,9 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
                     if ( pStyleHandle.get() )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nAttrStart, nAttrEnd );
-                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                                *pStyleHandle, nAttrStart, nAttrEnd );
+                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
 
                     // if the last attribute is a Field, the HintsArray is
@@ -574,8 +524,9 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
                     if ( pStyleHandle.get() && nAttrStart < nEnd )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nAttrStart, nEnd );
-                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                                *pStyleHandle, nAttrStart, nEnd );
+                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
 
                     bChanged = TRUE;
@@ -601,8 +552,9 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
                     if ( pStyleHandle.get() )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nStt, nAttrEnd );
-                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                                *pStyleHandle, nStt, nAttrEnd );
+                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
                 }
                 else if( nLen )             // Fall: 4
@@ -620,20 +572,23 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
                     if ( pStyleHandle.get() && nStt < nEnd )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( *pStyleHandle, nStt, nEnd );
-                        Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                                *pStyleHandle, nStt, nEnd );
+                        InsertHint( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
                     }
 
                     if( nEnd < nTmpEnd )
                     {
-                        SwTxtAttr* pNew = MakeTxtAttr( pHt->GetAttr(), nEnd, nTmpEnd );
+                        SwTxtAttr* pNew = MakeTxtAttr( *GetDoc(),
+                                pHt->GetAttr(), nEnd, nTmpEnd );
                         if ( pNew )
                         {
                             SwTxtCharFmt* pCharFmt = dynamic_cast<SwTxtCharFmt*>(pHt);
                             if ( pCharFmt )
                                 static_cast<SwTxtCharFmt*>(pNew)->SetSortNumber( pCharFmt->GetSortNumber() );
 
-                            Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                            InsertHint( pNew,
+                                nsSetAttrMode::SETATTR_NOHINTADJUST );
                         }
 
 
@@ -682,7 +637,7 @@ XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
         return m_Text;
 
     Boundary aBndry;
-    const uno::Reference< XBreakIterator > &rxBreak = pBreakIt->xBreak;
+    const uno::Reference< XBreakIterator > &rxBreak = pBreakIt->GetBreakIter();
     if (rxBreak.is())
     {
         sal_Int16 nWordType = WordType::DICTIONARY_WORD;
@@ -750,7 +705,7 @@ BOOL SwScanner::NextWord()
             {
                 if ( !pLanguage )
                 {
-                    const USHORT nNextScriptType = pBreakIt->xBreak->getScriptType( rText, nBegin );
+                    const USHORT nNextScriptType = pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
                     ModelToViewHelper::ModelPosition aModelBeginPos = ModelToViewHelper::ConvertToModelPosition( pConversionMap, nBegin );
                     const xub_StrLen nBeginModelPos = (xub_StrLen)aModelBeginPos.mnPos;
                     aCurrLang = rNode.GetLang( nBeginModelPos, 1, nNextScriptType );
@@ -772,7 +727,7 @@ BOOL SwScanner::NextWord()
             return FALSE;
 
         // get the word boundaries
-        aBound = pBreakIt->xBreak->getWordBoundary( rText, nBegin,
+        aBound = pBreakIt->GetBreakIter()->getWordBoundary( rText, nBegin,
                 pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
 
         //no word boundaries could be found
@@ -795,11 +750,11 @@ BOOL SwScanner::NextWord()
 
         // restrict boundaries to script boundaries and nEndPos
         const USHORT nCurrScript =
-                pBreakIt->xBreak->getScriptType( rText, nBegin );
+                pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
 
         XubString aTmpWord = rText.Copy( nBegin, static_cast<xub_StrLen>(aBound.endPos - nBegin) );
         const sal_Int32 nScriptEnd = nBegin +
-            pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
+            pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
         const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
 
         // restrict word start to last script change position
@@ -810,7 +765,7 @@ BOOL SwScanner::NextWord()
             aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
                                    static_cast<xub_StrLen>(nBegin - aBound.startPos + 1) );
             nScriptBegin = aBound.startPos +
-                pBreakIt->xBreak->beginOfScript( aTmpWord, nBegin - aBound.startPos,
+                pBreakIt->GetBreakIter()->beginOfScript( aTmpWord, nBegin - aBound.startPos,
                                                 nCurrScript );
         }
 
@@ -820,11 +775,11 @@ BOOL SwScanner::NextWord()
     else
     {
         const USHORT nCurrScript =
-                pBreakIt->xBreak->getScriptType( rText, aBound.startPos );
+                pBreakIt->GetBreakIter()->getScriptType( rText, aBound.startPos );
         XubString aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
                                          static_cast<xub_StrLen>(aBound.endPos - aBound.startPos) );
         const sal_Int32 nScriptEnd = aBound.startPos +
-            pBreakIt->xBreak->endOfScript( aTmpWord, 0, nCurrScript );
+            pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
         const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
         nBegin = (xub_StrLen)aBound.startPos;
         nLen = (xub_StrLen)(nEnd - nBegin);
@@ -1003,7 +958,7 @@ void SwTxtNode::SetLanguageAndFont( const SwPaM &rPaM,
         aSet.Put( aFontItem );
     }
 
-    GetDoc()->Insert( rPaM, aSet, 0 );
+    GetDoc()->InsertItemSet( rPaM, aSet, 0 );
     // SetAttr( aSet );    <- Does not set language attribute of empty paragraphs correctly,
     //                     <- because since there is no selection the flag to garbage
     //                     <- collect all attributes is set, and therefore attributes spanned
@@ -1066,8 +1021,8 @@ USHORT SwTxtNode::Convert( SwConversionArgs &rArgs )
         do {
             nLangFound = aIter.GetLanguage();
             sal_Bool bLangOk =  (nLangFound == rArgs.nConvSrcLang) ||
-                                (svx::HangulHanjaConversion::IsChinese( nLangFound ) &&
-                                 svx::HangulHanjaConversion::IsChinese( rArgs.nConvSrcLang ));
+                                (editeng::HangulHanjaConversion::IsChinese( nLangFound ) &&
+                                 editeng::HangulHanjaConversion::IsChinese( rArgs.nConvSrcLang ));
 
             xub_StrLen nChPos = aIter.GetChgPos();
             // the position at the end of the paragraph returns -1
@@ -1196,7 +1151,7 @@ SwRect SwTxtFrm::_AutoSpell( const SwCntntNode* pActNode, const SwViewOption& rV
 
             LanguageType eActLang = pNode->GetLang( nBegin );
             Boundary aBound =
-                pBreakIt->xBreak->getWordBoundary( pNode->GetTxt(), nBegin,
+                pBreakIt->GetBreakIter()->getWordBoundary( pNode->GetTxt(), nBegin,
                     pBreakIt->GetLocale( eActLang ),
                     WordType::DICTIONARY_WORD, TRUE );
             nBegin = xub_StrLen(aBound.startPos);
@@ -1352,8 +1307,8 @@ SwRect SwTxtFrm::SmartTagScan( SwCntntNode* /*pActNode*/, xub_StrLen /*nActPos*/
             {
                 const LanguageType aCurrLang = pNode->GetLang( nBegin );
                 const com::sun::star::lang::Locale aCurrLocale = pBreakIt->GetLocale( aCurrLang );
-                nBegin = static_cast< xub_StrLen >(pBreakIt->xBreak->beginOfSentence( rText, nBegin, aCurrLocale ));
-                nEnd = static_cast< xub_StrLen >(Min( rText.getLength(), pBreakIt->xBreak->endOfSentence( rText, nEnd, aCurrLocale ) ));
+                nBegin = static_cast< xub_StrLen >(pBreakIt->GetBreakIter()->beginOfSentence( rText, nBegin, aCurrLocale ));
+                nEnd = static_cast< xub_StrLen >(Min( rText.getLength(), pBreakIt->GetBreakIter()->endOfSentence( rText, nEnd, aCurrLocale ) ));
             }
         }
     }
@@ -1717,6 +1672,7 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
 void SwTxtNode::CountWords( SwDocStat& rStat,
                             xub_StrLen nStt, xub_StrLen nEnd ) const
 {
+    ++rStat.nAllPara; // #i93174#: count _all_ paragraphs
     if( nStt < nEnd )
     {
         if ( !IsHidden() )
@@ -1753,7 +1709,7 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
                 const bool bCount = aExpandText.getLength() > 0;
 
                 // count words in 'regular' text:
-                if( bCount && pBreakIt->xBreak.is() )
+                if( bCount && pBreakIt->GetBreakIter().is() )
                 {
                     const String aScannerText( aExpandText );
                     SwScanner aScanner( *this, aScannerText, 0, pConversionMap,

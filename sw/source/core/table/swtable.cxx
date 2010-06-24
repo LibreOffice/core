@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swtable.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,17 +36,19 @@
 #include <float.h>
 #include <hintids.hxx>
 #include <hints.hxx>    // fuer SwAttrSetChg
-#include <svx/lrspitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/colritem.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/boxitem.hxx>
 
 
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
+#include <fldbas.hxx>
+#include <fmtfld.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
 #include <docary.hxx>   // fuer RedlineTbl()
@@ -74,7 +73,7 @@
 #include <redline.hxx>
 #include <list>
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -101,6 +100,8 @@ SV_IMPL_REF( SwServerObject )
 
 #define COLFUZZY 20
 
+void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
+                    BOOL bChgAlign,ULONG nNdPos );
 //----------------------------------
 
 class SwTableBox_Impl
@@ -1090,7 +1091,7 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
         }
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     {
 // steht im tblrwcl.cxx
 extern void _CheckBoxWidth( const SwTableLine&, SwTwips );
@@ -1197,7 +1198,7 @@ static void lcl_CalcNewWidths( std::list<USHORT> &rSpanPos, ChangeList& rChanges
         USHORT nPos = (USHORT)nSum;
         while( pCurr != rChanges.end() && pCurr->first < nPos )
         {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             USHORT nTemp = pCurr->first;
             nTemp = pCurr->second;
 #endif
@@ -1297,7 +1298,7 @@ static void lcl_CalcNewWidths( std::list<USHORT> &rSpanPos, ChangeList& rChanges
 void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
     const SwTabCols &rOld, const SwTableBox *pStart, BOOL bCurRowOnly )
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     static int nCallCount = 0;
     ++nCallCount;
 #endif
@@ -2013,7 +2014,7 @@ BOOL SwTableBox::IsInHeadline( const SwTable* pTbl ) const
     return pTbl->GetTabLines()[ 0 ] == pLine;
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 ULONG SwTableBox::GetSttIdx() const
 {
@@ -2060,9 +2061,11 @@ BOOL SwTable::GetInfo( SfxPoolItem& rInfo ) const
     return TRUE;
 }
 
-SwTable* SwTable::FindTable( SwFrmFmt* pFmt )
+SwTable * SwTable::FindTable( SwFrmFmt const*const pFmt )
 {
-    return pFmt ? (SwTable*)SwClientIter( *pFmt ).First( TYPE(SwTable) ) : 0;
+    return (pFmt)
+        ? static_cast<SwTable*>(SwClientIter(*pFmt).First( TYPE(SwTable) ))
+        : 0;
 }
 
 SwTableNode* SwTable::GetTableNode() const
@@ -2087,11 +2090,16 @@ void SwTable::SetHTMLTableLayout( SwHTMLTableLayout *p )
     pHTMLLayout = p;
 }
 
-
 void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
                     BOOL bChgAlign )
 {
     ULONG nNdPos = rBox.IsValidNumTxtNd( TRUE );
+    ChgTextToNum( rBox,rTxt,pCol,bChgAlign,nNdPos);
+}
+void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
+                    BOOL bChgAlign,ULONG nNdPos )
+{
+
     if( ULONG_MAX != nNdPos )
     {
         SwDoc* pDoc = rBox.GetFrmFmt()->GetDoc();
@@ -2159,6 +2167,8 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
 
             for( n = 0; n < rOrig.Len() && '\x9' == rOrig.GetChar( n ); ++n )
                 ;
+            for( ; n < rOrig.Len() && '\x01' == rOrig.GetChar( n ); ++n )
+                ;
             SwIndex aIdx( pTNd, n );
             for( n = rOrig.Len(); n && '\x9' == rOrig.GetChar( --n ); )
                 ;
@@ -2177,8 +2187,10 @@ void ChgTextToNum( SwTableBox& rBox, const String& rTxt, const Color* pCol,
                 pDoc->DeleteRedline(aTemp, true, USHRT_MAX);
             }
 
-            pTNd->Erase( aIdx, n, INS_EMPTYEXPAND );
-            pTNd->Insert( rTxt, aIdx, INS_EMPTYEXPAND );
+            pTNd->EraseText( aIdx, n,
+                    IDocumentContentOperations::INS_EMPTYEXPAND );
+            pTNd->InsertText( rTxt, aIdx,
+                    IDocumentContentOperations::INS_EMPTYEXPAND );
 
             if( pDoc->IsRedlineOn() )
             {
@@ -2222,8 +2234,10 @@ void ChgNumToText( SwTableBox& rBox, ULONG nFmt )
                 //             zuruecksetzen, damit sie wieder aufgespannt werden
                 pTNd->DontExpandFmt( aIdx, FALSE, FALSE );
                 aIdx = 0;
-                pTNd->Erase( aIdx, STRING_LEN, INS_EMPTYEXPAND );
-                pTNd->Insert( sTmp, aIdx, INS_EMPTYEXPAND );
+                pTNd->EraseText( aIdx, STRING_LEN,
+                        IDocumentContentOperations::INS_EMPTYEXPAND );
+                pTNd->InsertText( sTmp, aIdx,
+                        IDocumentContentOperations::INS_EMPTYEXPAND );
             }
         }
 
@@ -2633,6 +2647,14 @@ ULONG SwTableBox::IsValidNumTxtNd( BOOL bCheckAttr ) const
                             *pAttr->GetStart() ||
                             *pAttr->GetAnyEnd() < rTxt.Len() )
                         {
+                            if ( pAttr->Which() == RES_TXTATR_FIELD )
+                            {
+                                const SwField* pField = pAttr->GetFld().GetFld();
+                                if ( pField && pField->GetTypeId() == TYP_SETFLD )
+                                {
+                                    continue;
+                                }
+                            }
                             nPos = ULONG_MAX;
                             break;
                         }
@@ -2687,7 +2709,7 @@ void SwTableBox::ActualiseValueBox()
 
             const String& rTxt = pSttNd->GetNodes()[ nNdPos ]->GetTxtNode()->GetTxt();
             if( rTxt != sNewTxt )
-                ChgTextToNum( *this, sNewTxt, pCol, FALSE );
+                ChgTextToNum( *this, sNewTxt, pCol, FALSE ,nNdPos);
         }
     }
 }
@@ -2704,3 +2726,160 @@ void SwTableBox_Impl::SetNewCol( Color** ppCol, const Color* pNewCol )
     }
 }
 
+struct SwTableCellInfo::Impl
+{
+    const SwTable * m_pTable;
+    const SwCellFrm * m_pCellFrm;
+    const SwTabFrm * m_pTabFrm;
+    typedef ::std::set<const SwTableBox *> TableBoxes_t;
+    TableBoxes_t m_HandledTableBoxes;
+
+public:
+    Impl()
+        : m_pTable(NULL), m_pCellFrm(NULL), m_pTabFrm(NULL)
+    {
+    }
+
+    ~Impl() {}
+
+    void setTable(const SwTable * pTable) {
+        m_pTable = pTable;
+        SwFrmFmt * pFrmFmt = m_pTable->GetFrmFmt();
+        SwClientIter aIter(*pFrmFmt);
+
+        m_pTabFrm =
+            static_cast<const SwTabFrm *>(aIter.First(TYPE(SwTabFrm)));
+
+        if (m_pTabFrm->IsFollow())
+            m_pTabFrm = m_pTabFrm->FindMaster(true);
+    }
+    const SwTable * getTable() const { return m_pTable; }
+
+    const SwCellFrm * getCellFrm() const { return m_pCellFrm; }
+
+    const SwFrm * getNextFrmInTable(const SwFrm * pFrm);
+    const SwCellFrm * getNextCellFrm(const SwFrm * pFrm);
+    const SwCellFrm * getNextTableBoxsCellFrm(const SwFrm * pFrm);
+    bool getNext();
+};
+
+const SwFrm * SwTableCellInfo::Impl::getNextFrmInTable(const SwFrm * pFrm)
+{
+    const SwFrm * pResult = NULL;
+
+    if (((! pFrm->IsTabFrm()) || pFrm == m_pTabFrm) && pFrm->GetLower())
+        pResult = pFrm->GetLower();
+    else if (pFrm->GetNext())
+        pResult = pFrm->GetNext();
+    else
+    {
+        while (pFrm->GetUpper() != NULL)
+        {
+            pFrm = pFrm->GetUpper();
+
+            if (pFrm->IsTabFrm())
+            {
+                m_pTabFrm = static_cast<const SwTabFrm *>(pFrm)->GetFollow();
+                pResult = m_pTabFrm;
+                break;
+            }
+            else if (pFrm->GetNext())
+            {
+                pResult = pFrm->GetNext();
+                break;
+            }
+        }
+    }
+
+    return pResult;
+}
+
+const SwCellFrm * SwTableCellInfo::Impl::getNextCellFrm(const SwFrm * pFrm)
+{
+    const SwCellFrm * pResult = NULL;
+
+    while ((pFrm = getNextFrmInTable(pFrm)) != NULL)
+    {
+        if (pFrm->IsCellFrm())
+        {
+            pResult = static_cast<const SwCellFrm *>(pFrm);
+            break;
+        }
+    }
+
+    return pResult;
+}
+
+const SwCellFrm * SwTableCellInfo::Impl::getNextTableBoxsCellFrm(const SwFrm * pFrm)
+{
+    const SwCellFrm * pResult = NULL;
+
+    while ((pFrm = getNextCellFrm(pFrm)) != NULL)
+    {
+        const SwCellFrm * pCellFrm = static_cast<const SwCellFrm *>(pFrm);
+        const SwTableBox * pTabBox = pCellFrm->GetTabBox();
+        TableBoxes_t::const_iterator aIt = m_HandledTableBoxes.find(pTabBox);
+
+        if (aIt == m_HandledTableBoxes.end())
+        {
+            pResult = pCellFrm;
+            m_HandledTableBoxes.insert(pTabBox);
+            break;
+        }
+    }
+
+    return pResult;
+}
+
+const SwCellFrm * SwTableCellInfo::getCellFrm() const
+{
+    return m_pImpl->getCellFrm();
+}
+
+bool SwTableCellInfo::Impl::getNext()
+{
+    if (m_pCellFrm == NULL)
+    {
+        if (m_pTabFrm != NULL)
+            m_pCellFrm = Impl::getNextTableBoxsCellFrm(m_pTabFrm);
+    }
+    else
+        m_pCellFrm = Impl::getNextTableBoxsCellFrm(m_pCellFrm);
+
+    return m_pCellFrm != NULL;
+}
+
+SwTableCellInfo::SwTableCellInfo(const SwTable * pTable)
+{
+    m_pImpl.reset(new Impl());
+    m_pImpl->setTable(pTable);
+}
+
+SwTableCellInfo::~SwTableCellInfo()
+{
+}
+
+bool SwTableCellInfo::getNext()
+{
+    return m_pImpl->getNext();
+}
+
+SwRect SwTableCellInfo::getRect() const
+{
+    SwRect aRet;
+
+    if (getCellFrm() != NULL)
+        aRet = getCellFrm()->Frm();
+
+    return aRet;
+}
+
+const SwTableBox * SwTableCellInfo::getTableBox() const
+{
+    const SwTableBox * pRet = NULL;
+
+    if (getCellFrm() != NULL)
+        pRet = getCellFrm()->GetTabBox();
+
+    return pRet;
+}

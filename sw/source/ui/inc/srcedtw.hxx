@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: srcedtw.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,8 @@
 #define _SRCEDTW_HXX
 
 #include <vcl/window.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
+#include <unotools/options.hxx>
 #include <vcl/timer.hxx>
 
 #ifndef _TABLE_HXX //autogen
@@ -45,6 +43,11 @@ class SwSrcEditWindow;
 class TextEngine;
 class ExtTextView;
 class DataChangedEvent;
+
+namespace utl
+{
+    class SourceViewConfig;
+}
 
 class TextViewOutWin : public Window
 {
@@ -69,7 +72,7 @@ public:
 
 //------------------------------------------------------------
 namespace svt{ class SourceViewConfig;}
-class SwSrcEditWindow : public Window, public SfxListener
+class SwSrcEditWindow : public Window, public SfxListener, public utl::ConfigurationListener
 {
 private:
     ExtTextView*    pTextView;
@@ -80,7 +83,7 @@ private:
                     *pVScrollbar;
 
     SwSrcView*      pSrcView;
-    svt::SourceViewConfig* pSourceViewConfig;
+    utl::SourceViewConfig* pSourceViewConfig;
 
     long            nCurTextWidth;
     USHORT          nStartLine;
@@ -114,6 +117,7 @@ protected:
     void            DoSyntaxHighlight( USHORT nPara );
 
     virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
     DECL_LINK(ScrollHdl, ScrollBar*);
 

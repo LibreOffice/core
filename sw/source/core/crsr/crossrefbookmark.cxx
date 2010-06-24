@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: crossrefbookmark.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,17 +64,12 @@ namespace sw { namespace mark
         MarkBase::SetMarkPos(rNewPos);
     }
 
-    const SwPosition& CrossRefBookmark::GetOtherMarkPos() const
+    SwPosition& CrossRefBookmark::GetOtherMarkPos() const
     {
         OSL_PRECOND(false,
             "<SwCrossRefBookmark::GetOtherMarkPos(..)>"
             " - this should never be called!");
         return *static_cast<SwPosition*>(NULL);
-    }
-
-    bool CrossRefBookmark::IsLegalName(const ::rtl::OUString& rName)
-    {
-        return CrossRefNumItemBookmark::IsLegalName(rName) || CrossRefHeadingBookmark::IsLegalName(rName);
     }
 
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,

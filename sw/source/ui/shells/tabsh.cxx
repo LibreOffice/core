@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabsh.cxx,v $
- * $Revision: 1.46.212.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,28 +31,28 @@
 
 #ifndef _ZFORLIST_HXX
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svx/rulritem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/numinf.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxdlg.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/request.hxx>
@@ -108,16 +105,12 @@
 #ifndef _TABLE_HRC
 #include <table.hrc>
 #endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#include <unoobj.hxx>
+#include <unobaseclass.hxx>
 
 #define SwTableShell
 #include <sfx2/msg.hxx>
@@ -736,7 +729,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
 
                 SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( GetView().GetWindow(),aCoreSet,
-                    pView->GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    pView->GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_DLG_SWNUMFMTDLG );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
@@ -970,13 +963,18 @@ void SwTableShell::Execute(SfxRequest &rReq)
         {
             if ( FN_TABLE_INSERT_ROW_DLG != nSlot || !rSh.IsInRepeatedHeadline())
             {
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "Dialogdiet fail!");
-                VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( DLG_INS_ROW_COL,
-                                                        GetView(), FN_TABLE_INSERT_COL_DLG == nSlot );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
-                pDlg->Execute();
-                delete pDlg;
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                ::std::auto_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( GetView().GetWindow(), nSlot == FN_TABLE_INSERT_COL_DLG, nSlot) : 0);
+
+                if( pDlg.get() && (pDlg->Execute() == 1) )
+                {
+                    USHORT nDispatchSlot = (nSlot == FN_TABLE_INSERT_COL_DLG) ? FN_TABLE_INSERT_COL : FN_TABLE_INSERT_ROW;
+                    SfxUInt16Item aCountItem( nDispatchSlot, static_cast< UINT16 >(pDlg->getInsertCount()) );
+                    SfxBoolItem  aAfter( FN_PARAM_INSERT_AFTER, !pDlg->isInsertBefore() );
+                       SfxViewFrame* pVFrame = GetView().GetViewFrame();
+                       if( pVFrame )
+                        pVFrame->GetDispatcher()->Execute( nDispatchSlot, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD, &aCountItem, &aAfter, 0L);
+                }
             }
         }
         break;

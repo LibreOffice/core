@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editsh.hxx,v $
- * $Revision: 1.70 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +30,9 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <tools/string.hxx>
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <vcl/font.hxx>
-#include <svx/swafopt.hxx>
+#include <editeng/swafopt.hxx>
 #include "swdllapi.h"
 #include <crsrsh.hxx>   // fuer Basisklasse
 #include <itabenum.hxx>
@@ -44,6 +41,7 @@
 #include <com/sun/star/linguistic2/ProofreadingResult.hpp>
 #include <fldupde.hxx>
 #include <tblenum.hxx>
+#include <IMark.hxx>
 
 #include <vector>
 #include <swundo.hxx>
@@ -58,7 +56,6 @@ class SvUShortsSort;
 class SvNumberFormatter;
 class SfxPoolItem;
 class SfxItemSet;
-class SvxLinkManager;
 class SvxAutoCorrect;
 
 class SwField;          // fuer Felder
@@ -92,6 +89,7 @@ class SwTable;
 class SwTextBlocks;     // fuer GlossaryRW
 class SwFmtFtn;
 class SwSection;
+class SwSectionData;
 class SwSectionFmt;
 class SwTOXMarks;
 class SwTOXBase;
@@ -121,7 +119,9 @@ struct SpellPortion;
 typedef std::vector<SpellPortion> SpellPortions;
 }
 
-
+namespace sfx2{
+class LinkManager;
+}
 
 #define GETSELTXT_PARABRK_TO_BLANK      0
 #define GETSELTXT_PARABRK_KEEP          1
@@ -181,7 +181,7 @@ class SW_DLLPUBLIC SwEditShell: public SwCrsrShell
 public:
     // Editieren (immer auf allen selektierten Bereichen)
     void Insert( sal_Unicode, BOOL bOnlyCurrCrsr = FALSE );
-    void Insert( const String &);
+    void Insert2( const String &, const bool bForceExpandHints = false );
     void Overwrite( const String & );
 
     // Ersetz einen selektierten Bereich in einem TextNode mit dem
@@ -201,6 +201,7 @@ public:
 
     // change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( sal_uInt32 nType );
+    void TransliterateText( const String& rModuleName );
 
     // count words in current selection
     void CountWords( SwDocStat& rStat ) const;
@@ -332,7 +333,7 @@ public:
         { return (SwCharFmt*)SwEditShell::GetFmtFromPool( nId ); }
 
     // Felder
-    void Insert(SwField&);
+    void Insert2(SwField&, const bool bForceExpandHints = false);
     SwField* GetCurFld() const;
 
     void UpdateFlds( SwField & );       // ein einzelnes Feld
@@ -414,6 +415,9 @@ public:
     USHORT              GetTOXTypeCount(TOXTypes eTyp) const;
     const SwTOXType*    GetTOXType(TOXTypes eTyp, USHORT nId) const;
     void                InsertTOXType(const SwTOXType& rTyp);
+
+    // new field stuff
+    BOOL                UpdateField(sw::mark::IFieldmark &fieldBM);
 
     //AutoMark file
     const String&   GetTOIAutoMarkURL() const;
@@ -512,9 +516,9 @@ public:
     // --> OD 2008-03-18 #refactorlists# - add output parameter <sListId>
     // in case a list style is found, <sListId> holds the list id, to which the
     // text node belongs, which applies the found list style.
-    const SwNumRule * SearchNumRule(BOOL bForward,
-                                    BOOL bNum,
-                                    BOOL bOutline,
+    const SwNumRule * SearchNumRule(const bool bForward,
+                                    const bool bNum,
+                                    const bool bOutline,
                                     int nNonEmptyAllowed,
                                     String& sListId );
     // <--
@@ -622,9 +626,9 @@ public:
                   const Graphic* pGraphic = 0,
                   const GraphicObject* pGrafObj = 0 );
 
-    // alternativen Text einer Grafik/OLe-Objectes abfragen/setzen
-    const String& GetAlternateText() const;
-    void SetAlternateText( const String& rTxt );
+//    // alternativen Text einer Grafik/OLe-Objectes abfragen/setzen
+//    const String& GetAlternateText() const;
+//    void SetAlternateText( const String& rTxt );
 
     //eindeutige Identifikation des Objektes (fuer ImageMapDlg)
     void    *GetIMapInventor() const;
@@ -741,9 +745,14 @@ public:
     bool SpellSentence(::svx::SpellPortions& rToFill, bool bIsGrammarCheck );
     // make SpellIter start with the current sentence when called next time
     void PutSpellingToSentenceStart();
+    // moves the continuation position to the end of the currently checked sentence
+    void MoveContinuationPosToEndOfCheckedSentence();
     //applies a changed sentence
-    void ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bIsGrammarCheck);
+    void ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bRecheck);
 
+
+    // check SwSpellIter data to see if the last sentence got grammar checked
+    bool HasLastSentenceGotGrammarChecked() const;
     // Is text conversion active somewhere else?
     BOOL HasConvIter() const;
     // Is hyphenation active somewhere else?
@@ -807,9 +816,8 @@ public:
         // gebe Liste aller Fussnoten und deren Anfangstexte
     USHORT GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes = false );
 
-    // SS fuer Bereiche
-    const SwSection* InsertSection( const SwSection& rNew,
-                                    const SfxItemSet* = 0 );
+    SwSection const* InsertSection(
+            SwSectionData & rNewData, SfxItemSet const*const = 0 );
     BOOL IsInsRegionAvailable() const;
     const SwSection* GetCurrSection() const;
     // liefert wie GetCurrSection() den aktuellen Bereich, allerdings geht diese Funktion
@@ -823,7 +831,8 @@ public:
     USHORT GetSectionFmtPos( const SwSectionFmt& ) const;
     const SwSectionFmt& GetSectionFmt(USHORT nFmt) const;
     void DelSectionFmt( USHORT nFmt );
-    void ChgSection( USHORT nSect, const SwSection&, const SfxItemSet* = 0 );
+    void UpdateSection(sal_uInt16 const nSect, SwSectionData &,
+            SfxItemSet const*const  = 0);
     BOOL IsAnySectionInDoc( BOOL bChkReadOnly = FALSE,
                             BOOL bChkHidden = FALSE,
                             BOOL BChkTOX = FALSE ) const;
@@ -849,8 +858,8 @@ public:
     // Optimierung UI
     void SetNewDoc(BOOL bNew = TRUE);
 
-          SvxLinkManager& GetLinkManager();
-    inline const SvxLinkManager& GetLinkManager() const;
+    sfx2::LinkManager& GetLinkManager();
+    inline const sfx2::LinkManager& GetLinkManager() const;
 
     // linken Rand ueber Objectleiste einstellen (aenhlich dem Stufen von
     // Numerierungen), optional kann man "um" den Offset stufen oder "auf"
@@ -869,7 +878,7 @@ public:
     BOOL IsGlblDocSaveLinks() const;
     USHORT GetGlobalDocContent( SwGlblDocContents& rArr ) const;
     BOOL InsertGlobalDocContent( const SwGlblDocContent& rPos,
-                                 const SwSection& rNew );
+                                 SwSectionData & rNew );
     BOOL InsertGlobalDocContent( const SwGlblDocContent& rPos,
                                  const SwTOXBase& rTOX );
     BOOL InsertGlobalDocContent( const SwGlblDocContent& rPos );
@@ -952,7 +961,7 @@ inline void SwEditShell::ApplyViewOptions( const SwViewOption &rOpt )
     SwEditShell::EndAction();
 }
 
-inline const SvxLinkManager& SwEditShell::GetLinkManager() const
+inline const sfx2::LinkManager& SwEditShell::GetLinkManager() const
 {   return ((SwEditShell*)this)->GetLinkManager();  }
 
 /*

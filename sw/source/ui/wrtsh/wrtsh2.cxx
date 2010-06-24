@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrtsh2.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +29,12 @@
 #include "precompiled_sw.hxx"
 
 #include <hintids.hxx>      // define ITEMIDs
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/frame.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/dispatch.hxx>
@@ -93,10 +90,13 @@ void SwWrtShell::Insert(SwField &rFld)
 
     StartUndo(UNDO_INSERT, &aRewriter);
 
+    bool bDeleted = false;
     if( HasSelection() )
-        DelRight();
+    {
+        bDeleted = DelRight() != 0;
+    }
 
-    SwEditShell::Insert(rFld);
+    SwEditShell::Insert2(rFld, bDeleted);
     EndUndo(UNDO_INSERT);
     EndAllAction();
 }
@@ -238,6 +238,13 @@ BOOL SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 
     return bResult;
 }
+
+BOOL SwWrtShell::UpdateField( sw::mark::IFieldmark &fieldBM )
+{
+    return SwEditShell::UpdateField(fieldBM);
+}
+
+
 
     // ein Klick aus das angegebene Feld. Der Cursor steht auf diesem.
     // Fuehre die vor definierten Aktionen aus.
@@ -461,20 +468,20 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
     }
     else
     {
-        SwSection aSection( FILE_LINK_SECTION, GetUniqueSectionName( 0 ) );
+        SwSectionData aSection( FILE_LINK_SECTION, GetUniqueSectionName( 0 ) );
         String aLinkFile( rBkmk.GetURL().GetToken(0, '#') );
         aLinkFile += sfx2::cTokenSeperator;
         aLinkFile += sfx2::cTokenSeperator;
         aLinkFile += rBkmk.GetURL().GetToken(1, '#');
         aSection.SetLinkFileName( aLinkFile );
-        aSection.SetProtect( TRUE );
+        aSection.SetProtectFlag( true );
         const SwSection* pIns = InsertSection( aSection );
         if( EXCHG_IN_ACTION_MOVE == nAction && pIns )
         {
-            aSection = *pIns;
+            aSection = SwSectionData(*pIns);
             aSection.SetLinkFileName( aEmptyStr );
             aSection.SetType( CONTENT_SECTION );
-            aSection.SetProtect( FALSE );
+            aSection.SetProtectFlag( false );
 
             // the update of content from linked section at time delete
             // the undostack. Then the change of the section dont create
@@ -482,7 +489,7 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
             BOOL bDoesUndo = DoesUndo();
             if( UNDO_INSSECTION != GetUndoIds() )
                 DoUndo( FALSE );
-            ChgSection( GetSectionFmtPos( *pIns->GetFmt() ), aSection );
+            UpdateSection( GetSectionFmtPos( *pIns->GetFmt() ), aSection );
             DoUndo( bDoesUndo );
         }
     }

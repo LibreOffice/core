@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoframe.cxx,v $
- * $Revision: 1.124 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/XClassifiedObject.hpp>
@@ -38,6 +36,8 @@
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <svx/svxids.hrc>
+#include <editeng/memberids.hrc>
 
 #include <swtypes.hxx>
 #include <cmdid.h>
@@ -45,9 +45,7 @@
 #include <memory>
 #include <hints.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX //autogen
 #include <docsh.hxx>
-#endif
 #include <editsh.hxx>
 #include <swcli.hxx>
 #include <ndindex.hxx>
@@ -62,7 +60,9 @@
 #include <ndole.hxx>
 #include <frmfmt.hxx>
 #include <frame.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
+#include <unotextcursor.hxx>
+#include <unoparagraph.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unoevent.hxx>
@@ -83,22 +83,23 @@
 #include <unostyle.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/protitem.hxx>
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/shaditem.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtfsize.hxx>
 #include <grfatr.hxx>
 #include <unoframe.hxx>
 #include <fmtanchr.hxx>
 #include <fmtclds.hxx>
+#include <fmtcntnt.hxx>
 #include <frmatr.hxx>
 #include <ndtxt.hxx>
 #include <ndgrf.hxx>
@@ -111,7 +112,7 @@
 #include <pagedesc.hxx>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <tools/urlobj.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 // DVO, OD 01.10.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 // OD 2004-05-05 #i28701#
@@ -1082,18 +1083,48 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 }
             }
         }
-        else if( FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID && eType != FLYCNTTYPE_FRM )
+        // --> OD 2009-07-13 #i73249#
+        // Attribute AlternativeText was never published.
+        // Now it has been replaced by Attribute Title - valid for all <SwXFrame> instances
+//        else if( FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID && eType != FLYCNTTYPE_FRM )
+//        {
+//            const :: SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+//            if(pIdx)
+//            {
+//                SwNodeIndex aIdx(*pIdx, 1);
+//                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
+//                OUString uTemp;
+//                aValue >>= uTemp;
+//                pNoTxt->SetAlternateText(uTemp);
+//            }
+//        }
+        // New attribute Title
+        else if( FN_UNO_TITLE == pEntry->nWID )
         {
-            const :: SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
-            if(pIdx)
-            {
-                SwNodeIndex aIdx(*pIdx, 1);
-                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-                OUString uTemp;
-                aValue >>= uTemp;
-                pNoTxt->SetAlternateText(uTemp);
-            }
+            SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
+            ASSERT( pFmt,
+                    "unexpected type of <pFmt> --> crash" );
+            OUString uTemp;
+            aValue >>= uTemp;
+            const String sTitle(uTemp);
+            // assure that <SdrObject> instance exists.
+            GetOrCreateSdrObject( pFlyFmt );
+            pFlyFmt->GetDoc()->SetFlyFrmTitle( *(pFlyFmt), sTitle );
         }
+        // New attribute Description
+        else if( FN_UNO_DESCRIPTION == pEntry->nWID )
+        {
+            SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
+            ASSERT( pFmt,
+                    "unexpected type of <pFmt> --> crash" );
+            OUString uTemp;
+            aValue >>= uTemp;
+            const String sDescription(uTemp);
+            // assure that <SdrObject> instance exists.
+            GetOrCreateSdrObject( pFlyFmt );
+            pFlyFmt->GetDoc()->SetFlyFrmDescription( *(pFlyFmt), sDescription );
+        }
+        // <--
         else if(FN_UNO_FRAME_STYLE_NAME == pEntry->nWID)
         {
             SwFrmFmt *pFrmFmt = lcl_GetFrmFmt( aValue, pFmt->GetDoc() );
@@ -1372,7 +1403,8 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         aSet.Put(aAnchor);
                     }
                 }
-                else if(aAnchor.GetAnchorId() != FLY_PAGE && !aAnchor.GetCntntAnchor())
+                else if ((aAnchor.GetAnchorId() != FLY_AT_PAGE) &&
+                         !aAnchor.GetCntntAnchor())
                 {
                     SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
                     SwPaM aPam(rNode);
@@ -1562,17 +1594,40 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         {
             aAny <<= OUString(SwStyleNameMapper::GetProgName(pFmt->DerivedFrom()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_FRMFMT ) );
         }
-        else if(eType != FLYCNTTYPE_FRM &&
-                FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID)
+        // --> OD 2009-07-13 #i73249#
+        // Attribute AlternativeText was never published.
+        // Now it has been replaced by Attribute Title - valid for all <SwXFrame> instances
+//        else if(eType != FLYCNTTYPE_FRM &&
+//                FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID)
+//        {
+//            const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+//            if(pIdx)
+//            {
+//                SwNodeIndex aIdx(*pIdx, 1);
+//                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
+//                aAny <<= OUString(pNoTxt->GetAlternateText());
+//            }
+//        }
+        else if( FN_UNO_TITLE == pEntry->nWID )
         {
-            const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
-            if(pIdx)
-            {
-                SwNodeIndex aIdx(*pIdx, 1);
-                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-                aAny <<= OUString(pNoTxt->GetAlternateText());
-            }
+            SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
+            ASSERT( pFmt,
+                    "unexpected type of <pFmt> --> crash" );
+            // assure that <SdrObject> instance exists.
+            GetOrCreateSdrObject( pFlyFmt );
+            aAny <<= OUString(pFlyFmt->GetObjTitle());
         }
+        // New attribute Description
+        else if( FN_UNO_DESCRIPTION == pEntry->nWID )
+        {
+            SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
+            ASSERT( pFmt,
+                    "unexpected type of <pFmt> --> crash" );
+            // assure that <SdrObject> instance exists.
+            GetOrCreateSdrObject( pFlyFmt );
+            aAny <<= OUString(pFlyFmt->GetObjDescription());
+        }
+        // <--
         else if(eType == FLYCNTTYPE_GRF &&
                 (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE))))
         {
@@ -1828,16 +1883,40 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                     }
                 }
             }
-            else if( eType != FLYCNTTYPE_FRM && FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID )
+            // --> OD 2009-07-13 #i73249#
+            // Attribute AlternativeText was never published.
+            // Now it has been replaced by Attribute Title - valid for all <SwXFrame> instances
+//            else if( eType != FLYCNTTYPE_FRM && FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID )
+//            {
+//                const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+//                if(pIdx)
+//                {
+//                    SwNodeIndex aIdx(*pIdx, 1);
+//                    SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
+//                    pNoTxt->SetAlternateText(aEmptyStr);
+//                }
+//            }
+            // New attribute Title
+            else if( FN_UNO_TITLE == pEntry->nWID )
             {
-                const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
-                if(pIdx)
-                {
-                    SwNodeIndex aIdx(*pIdx, 1);
-                    SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-                    pNoTxt->SetAlternateText(aEmptyStr);
-                }
+                SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
+                ASSERT( pFmt,
+                        "unexpected type of <pFmt> --> crash" );
+                // assure that <SdrObject> instance exists.
+                GetOrCreateSdrObject( pFlyFmt );
+                pFlyFmt->GetDoc()->SetFlyFrmTitle( *(pFlyFmt), aEmptyStr );
             }
+            // New attribute Description
+            else if( FN_UNO_DESCRIPTION == pEntry->nWID )
+            {
+                SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
+                ASSERT( pFmt,
+                        "unexpected type of <pFmt> --> crash" );
+                // assure that <SdrObject> instance exists.
+                GetOrCreateSdrObject( pFlyFmt );
+                pFlyFmt->GetDoc()->SetFlyFrmDescription( *(pFlyFmt), aEmptyStr );
+            }
+            // <--
             else
             {
                 SwDoc* pDoc = pFmt->GetDoc();
@@ -1946,12 +2025,12 @@ void SwXFrame::dispose(void) throw( uno::RuntimeException )
                ( pObj->GetUserCall() &&
                  !static_cast<SwContact*>(pObj->GetUserCall())->IsInDTOR() ) ) )
         {
-            if( pFmt->GetAnchor().GetAnchorId() == FLY_IN_CNTNT )
+            if (pFmt->GetAnchor().GetAnchorId() == FLY_AS_CHAR)
             {
                 const SwPosition &rPos = *(pFmt->GetAnchor().GetCntntAnchor());
                 SwTxtNode *pTxtNode = rPos.nNode.GetNode().GetTxtNode();
                 const xub_StrLen nIdx = rPos.nContent.GetIndex();
-                pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+                pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
             }
             else
                 pFmt->GetDoc()->DelLayoutFmt(pFmt);
@@ -1972,11 +2051,11 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor(void) throw( uno::Runtim
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
         // return an anchor for non-page bound frames
         // and for page bound frames that have a page no == NULL and a content position
-        if( rAnchor.GetAnchorId() != FLY_PAGE ||
+        if ((rAnchor.GetAnchorId() != FLY_AT_PAGE) ||
             (rAnchor.GetCntntAnchor() && !rAnchor.GetPageNum()))
         {
             const SwPosition &rPos = *(rAnchor.GetCntntAnchor());
-            aRef = SwXTextRange::CreateTextRangeFromPosition(pFmt->GetDoc(), rPos, 0);
+            aRef = SwXTextRange::CreateXTextRange(*pFmt->GetDoc(), rPos, 0);
         }
     }
     else
@@ -2018,7 +2097,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     {
         SwUnoInternalPaM aIntPam(*pDoc);
         //das muss jetzt sal_True liefern
-        SwXTextRange::XTextRangeToSwPaM(aIntPam, xTextRange);
+        ::sw::XTextRangeToSwPaM(aIntPam, xTextRange);
 
         SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
         SwPaM aPam(rNode);
@@ -2051,7 +2130,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         }
 
         const SfxPoolItem* pItem;
-        RndStdIds eAnchorId = FLY_AT_CNTNT;
+        RndStdIds eAnchorId = FLY_AT_PARA;
         if(SFX_ITEM_SET == aFrmSet.GetItemState(RES_ANCHOR, sal_False, &pItem) )
         {
             eAnchorId = ((const SwFmtAnchor*)pItem)->GetAnchorId();
@@ -2059,10 +2138,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 !aPam.GetNode()->FindFlyStartNode())
             {
                 //rahmengebunden geht nur dort, wo ein Rahmen ist!
-                SwFmtAnchor aAnchor(FLY_AT_CNTNT);
+                SwFmtAnchor aAnchor(FLY_AT_PARA);
                 aFrmSet.Put(aAnchor);
             }
-            else if( FLY_PAGE == eAnchorId &&
+            else if ((FLY_AT_PAGE == eAnchorId) &&
                      0 == ((const SwFmtAnchor*)pItem)->GetPageNum() )
             {
                 SwFmtAnchor aAnchor( *((const SwFmtAnchor*)pItem) );
@@ -2085,10 +2164,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 SwFmtAnchor* pAnchorItem = 0;
                 // the frame is inserted bound to page
                 // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
-                if(eAnchorId != FLY_PAGE)
+                if (eAnchorId != FLY_AT_PAGE)
                 {
                     pAnchorItem = static_cast<SwFmtAnchor*>(aFrmSet.Get(RES_ANCHOR).Clone());
-                    aFrmSet.Put( SwFmtAnchor( FLY_PAGE, 1 ));
+                    aFrmSet.Put( SwFmtAnchor( FLY_AT_PAGE, 1 ));
                 }
 
                 pFmt = pDoc->MakeFlyAndMove( *m_pCopySource, aFrmSet,
@@ -2106,8 +2185,10 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 DELETEZ( m_pCopySource );
             }
             else
-                pFmt = pDoc->MakeFlySection( FLY_AT_CNTNT, aPam.GetPoint(),
+            {
+                pFmt = pDoc->MakeFlySection( FLY_AT_PARA, aPam.GetPoint(),
                                          &aFrmSet, pParentFrmFmt );
+            }
             if(pFmt)
             {
                 pFmt->Add(this);
@@ -2194,9 +2275,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             const ::uno::Any* pAutoContour;
             if(pProps->GetProperty(FN_UNO_IS_AUTOMATIC_CONTOUR, 0, pAutoContour))
                 setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_IS_AUTOMATIC_CONTOUR)), *pAutoContour);
-            const ::uno::Any* pAltText;
-            if(pProps->GetProperty(FN_UNO_ALTERNATIVE_TEXT, 0, pAltText))
-                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ALTERNATIVE_TEXT)), *pAltText);
+//            const ::uno::Any* pAltText;
+//            if(pProps->GetProperty(FN_UNO_ALTERNATIVE_TEXT, 0, pAltText))
+//                setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ALTERNATIVE_TEXT)), *pAltText);
         }
         else
         {
@@ -2305,6 +2386,20 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         const ::uno::Any* pReplacement;
         if( pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0, pReplacement) )
             setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_GRAPHIC)), *pReplacement);
+        // --> OD 2009-07-13 #i73249#
+        // new attribute Title
+        const ::uno::Any* pTitle;
+        if ( pProps->GetProperty(FN_UNO_TITLE, 0, pTitle) )
+        {
+            setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_TITLE)), *pTitle);
+        }
+        // new attribute Description
+        const ::uno::Any* pDescription;
+        if ( pProps->GetProperty(FN_UNO_DESCRIPTION, 0, pDescription) )
+        {
+            setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_DESCRIPTION)), *pDescription);
+        }
+        // <--
     }
     else
         throw lang::IllegalArgumentException();
@@ -2334,7 +2429,7 @@ void SwXFrame::attach(const uno::Reference< text::XTextRange > & xTextRange)
         }
         SwDoc* pDoc = pFmt->GetDoc();
         SwUnoInternalPaM aIntPam(*pDoc);
-        if(SwXTextRange::XTextRangeToSwPaM(aIntPam, xTextRange))
+        if (::sw::XTextRangeToSwPaM(aIntPam, xTextRange))
         {
             SfxItemSet aSet( pDoc->GetAttrPool(),
                         RES_ANCHOR, RES_ANCHOR );
@@ -2515,7 +2610,8 @@ const SwStartNode *SwXTextFrame::GetStartNode() const
     return pSttNd;
 }
 
-uno::Reference< text::XTextCursor >   SwXTextFrame::createCursor() throw ( uno::RuntimeException)
+uno::Reference< text::XTextCursor >
+SwXTextFrame::CreateCursor() throw (uno::RuntimeException)
 {
     return createTextCursor();
 }
@@ -2556,10 +2652,11 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw(
             throw aExcept;
         }
 
-        SwXTextCursor* pXCrsr = new SwXTextCursor(this, *aPam.GetPoint(), CURSOR_FRAME, pFmt->GetDoc());
-        aRef =  (text::XWordCursor*)pXCrsr;
+        SwXTextCursor *const pXCursor = new SwXTextCursor(
+                 *pFmt->GetDoc(), this, CURSOR_FRAME, *aPam.GetPoint());
+        aRef =  static_cast<text::XWordCursor*>(pXCursor);
 #if OSL_DEBUG_LEVEL > 1
-        SwUnoCrsr*  pUnoCrsr = pXCrsr->GetCrsr();
+        SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
         (void) pUnoCrsr;
 #endif
     }
@@ -2576,7 +2673,7 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
     uno::Reference< text::XTextCursor >  aRef;
     SwFrmFmt* pFmt = GetFrmFmt();
     SwUnoInternalPaM aPam(*GetDoc());
-    if(pFmt && SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
+    if (pFmt && ::sw::XTextRangeToSwPaM(aPam, aTextPosition))
     {
         SwNode& rNode = pFmt->GetCntnt().GetCntntIdx()->GetNode();
 #if OSL_DEBUG_LEVEL > 1
@@ -2586,8 +2683,11 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursorByRange(const
         (void)p2;
 #endif
         if(aPam.GetNode()->FindFlyStartNode() == rNode.FindFlyStartNode())
-            aRef =  (text::XWordCursor*)new SwXTextCursor(this ,
-                *aPam.GetPoint(), CURSOR_FRAME, pFmt->GetDoc(), aPam.GetMark());
+        {
+            aRef = static_cast<text::XWordCursor*>(
+                    new SwXTextCursor(*pFmt->GetDoc(), this, CURSOR_FRAME,
+                        *aPam.GetPoint(), aPam.GetMark()));
+        }
     }
     else
         throw uno::RuntimeException();
@@ -2604,14 +2704,15 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void)
     if(pFmt)
     {
         SwPosition aPos(pFmt->GetCntnt().GetCntntIdx()->GetNode());
-        SwUnoCrsr* pUnoCrsr = GetDoc()->CreateUnoCrsr(aPos, sal_False);
-        pUnoCrsr->Move( fnMoveForward, fnGoNode );
+        ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
+                GetDoc()->CreateUnoCrsr(aPos, sal_False));
+        pUnoCursor->Move(fnMoveForward, fnGoNode);
 //      // no Cursor in protected sections
 //      SwCrsrSaveState aSave( *pUnoCrsr );
 //      if(pUnoCrsr->IsInProtectTable( sal_True ) ||
 //          pUnoCrsr->IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS ))
 //          throw  uno::RuntimeException() );
-        aRef = new SwXParagraphEnumeration(this, pUnoCrsr, CURSOR_FRAME);
+        aRef = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FRAME);
     }
     return aRef;
 }

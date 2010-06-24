@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rolbck.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <fmtftn.hxx>
 #include <fchrfmt.hxx>
 #include <fmtflcnt.hxx>
@@ -69,7 +66,7 @@
 #ifndef _UNDO_HRC
 #include <undo.hrc>
 #endif
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <bookmrk.hxx>
 
 SV_IMPL_PTRARR( SwpHstry, SwHistoryHintPtr)
@@ -271,8 +268,8 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
 
 SwHistorySetTxtFld::SwHistorySetTxtFld( SwTxtFld* pTxtFld, ULONG nNodePos )
     : SwHistoryHint( HSTRY_SETTXTFLDHNT )
-    , m_pFld( new SwFmtFld( *pTxtFld->GetFld().GetFld() ) )
     , m_pFldType( 0 )
+    , m_pFld( new SwFmtFld( *pTxtFld->GetFld().GetFld() ) )
 {
     // only copy if not Sys-FieldType
     SwDoc* pDoc = pTxtFld->GetTxtNode().GetDoc();
@@ -352,7 +349,7 @@ void SwHistorySetRefMark::SetInDoc( SwDoc* pDoc, bool )
 
     // if a reference mark without an end already exists here: must not insert!
     if ( m_nStart != m_nEnd ||
-         !pTxtNd->GetTxtAttr( m_nStart, RES_TXTATR_REFMARK ) )
+         !pTxtNd->GetTxtAttrForCharAt( m_nStart, RES_TXTATR_REFMARK ) )
     {
         pTxtNd->InsertItem( aRefMark, m_nStart, m_nEnd,
                             nsSetAttrMode::SETATTR_NOTXTATRCHR );
@@ -433,7 +430,7 @@ void SwHistoryResetTxt::SetInDoc( SwDoc* pDoc, bool )
     ASSERT( pTxtNd, "SwHistoryResetTxt: no TextNode" );
     if ( pTxtNd )
     {
-        pTxtNd->Delete( m_nAttr, m_nStart, m_nEnd );
+        pTxtNd->DeleteAttributes( m_nAttr, m_nStart, m_nEnd );
     }
 }
 
@@ -514,12 +511,13 @@ void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
             m_pUndo->GetHistory()->Rollback( pDoc );
         }
 
-        pTxtNd->Insert( pTxtFtn );
+        pTxtNd->InsertHint( pTxtFtn );
     }
     else
     {
-        SwTxtFtn *pFtn = const_cast<SwTxtFtn*>(
-                static_cast<const SwTxtFtn*>(pTxtNd->GetTxtAttr( m_nStart )));
+        SwTxtFtn * const pFtn =
+            const_cast<SwTxtFtn*>( static_cast<const SwTxtFtn*>(
+                pTxtNd->GetTxtAttrForCharAt( m_nStart )));
         SwFmtFtn &rFtn = const_cast<SwFmtFtn&>(pFtn->GetFtn());
         rFtn.SetNumStr( m_FootnoteNumber  );
         if ( rFtn.IsEndNote() != m_bEndNote )
@@ -615,6 +613,13 @@ SwHistoryBookmark::SwHistoryBookmark(
     {
         m_aKeycode = pBookmark->GetKeyCode();
         m_aShortName = pBookmark->GetShortName();
+
+        ::sfx2::Metadatable const*const pMetadatable(
+                dynamic_cast< ::sfx2::Metadatable const* >(pBookmark));
+        if (pMetadatable)
+        {
+            m_pMetadataUndo = pMetadatable->CreateUndo();
+        }
     }
 }
 
@@ -681,6 +686,16 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
         {
             pBookmark->SetKeyCode(m_aKeycode);
             pBookmark->SetShortName(m_aShortName);
+            if (m_pMetadataUndo)
+            {
+                ::sfx2::Metadatable * const pMeta(
+                    dynamic_cast< ::sfx2::Metadatable* >(pBookmark));
+                OSL_ENSURE(pMeta, "metadata undo, but not metadatable?");
+                if (pMeta)
+                {
+                    pMeta->RestoreMetadata(m_pMetadataUndo);
+                }
+            }
         }
     }
     pDoc->DoUndo(bDoesUndo);
@@ -814,11 +829,30 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
     , m_Array( (BYTE)rSet.Count() )
 {
     SfxItemIter aIter( rSet );
-    bool bAutoStyle = true;
+    bool bAutoStyle = false;
 
     while( TRUE )
     {
         const USHORT nWhich = aIter.GetCurItem()->Which();
+
+#ifndef PRODUCT
+        switch (nWhich)
+        {
+            case RES_TXTATR_REFMARK:
+            case RES_TXTATR_TOXMARK:
+                if (m_nStart != m_nEnd) break; // else: fall through!
+            case RES_TXTATR_FIELD:
+            case RES_TXTATR_FLYCNT:
+            case RES_TXTATR_FTN:
+            case RES_TXTATR_META:
+            case RES_TXTATR_METAFIELD:
+                ASSERT(rSet.Count() == 1,
+                    "text attribute with CH_TXTATR, but not the only one:"
+                    "\nnot such a good idea");
+                break;
+        }
+#endif
+
         // Character attribute cannot be inserted into the hints array
         // anymore. Therefore we have to treat them as one RES_TXTATR_AUTOFMT:
         if (isCHRATR(nWhich))
@@ -868,7 +902,7 @@ void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
             for ( USHORT n = m_Array.Count(); n; --n, ++pArr )
             {
                 static_cast<SwTxtNode*>(pCntntNd)->
-                    Delete( *pArr, m_nStart, m_nEnd );
+                    DeleteAttributes( *pArr, m_nStart, m_nEnd );
             }
         }
     }
@@ -884,7 +918,7 @@ SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt )
     : SwHistoryHint( HSTRY_CHGFLYANCHOR )
     , m_rFmt( rFmt )
     , m_nOldNodeIndex( rFmt.GetAnchor().GetCntntAnchor()->nNode.GetIndex() )
-    , m_nOldContentIndex( ( FLY_AUTO_CNTNT == rFmt.GetAnchor().GetAnchorId() )
+    , m_nOldContentIndex( (FLY_AT_CHAR == rFmt.GetAnchor().GetAnchorId())
             ?   rFmt.GetAnchor().GetCntntAnchor()->nContent.GetIndex()
             :   STRING_MAXLEN )
 {
@@ -1292,7 +1326,6 @@ void SwHistory::CopyAttr( SwpHints* pHts, ULONG nNodeIdx,
         switch( pHt->Which() )
         {
         case RES_TXTATR_FIELD:
-        case RES_TXTATR_HARDBLANK:
             // keine Felder, .. kopieren ??
             if( !bFields )
                 bNextAttr = TRUE;
@@ -1397,40 +1430,45 @@ void SwRegHistory::AddHint( SwTxtAttr* pHt, const bool bNew )
 }
 
 
-SwRegHistory::SwRegHistory( SwTxtNode* pTxtNode, const SfxItemSet& rSet,
-                            xub_StrLen nStart, xub_StrLen nEnd, USHORT nFlags,
-                            SwHistory* pHst )
-    : SwClient( pTxtNode )
-    , m_pHistory( pHst )
-    , m_nNodeIndex( pTxtNode->GetIndex() )
+bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
+    xub_StrLen const nStart, xub_StrLen const nEnd, SetAttrMode const nFlags )
 {
     if( !rSet.Count() )
-        return;
+        return false;
 
-    BOOL bInsert;
+    SwTxtNode * const pTxtNode =
+        dynamic_cast<SwTxtNode *>(const_cast<SwModify *>(GetRegisteredIn()));
 
-    if( pTxtNode->GetpSwpHints() && pHst )
+    ASSERT(pTxtNode, "SwRegHistory not registered at text node?");
+    if (!pTxtNode)
+        return false;
+
+    if ( pTxtNode->GetpSwpHints() && m_pHistory )
     {
         pTxtNode->GetpSwpHints()->Register( this );
-        bInsert = pTxtNode->SetAttr( rSet, nStart, nEnd, nFlags );
+    }
+
+    const bool bInserted = pTxtNode->SetAttr( rSet, nStart, nEnd, nFlags );
+
         // Achtung: Durch das Einfuegen eines Attributs kann das Array
         // geloescht werden!!! Wenn das einzufuegende zunaechst ein vorhandenes
         // loescht, selbst aber nicht eingefuegt werden braucht, weil die
         // Absatzattribute identisch sind( -> bForgetAttr in SwpHints::Insert )
-        if ( pTxtNode->GetpSwpHints() )
-            pTxtNode->GetpSwpHints()->DeRegister();
+    if ( pTxtNode->GetpSwpHints() && m_pHistory )
+    {
+        pTxtNode->GetpSwpHints()->DeRegister();
     }
-    else
-        bInsert = pTxtNode->SetAttr( rSet, nStart, nEnd, nFlags );
 
-    if( pHst && bInsert )
+    if ( m_pHistory && bInserted )
     {
         SwHistoryHint* pNewHstr = new SwHistoryResetAttrSet( rSet,
                                     pTxtNode->GetIndex(), nStart, nEnd );
         // der NodeIndex kann verschoben sein !!
 
-        pHst->m_SwpHstry.Insert( pNewHstr, pHst->Count() );
+        m_pHistory->m_SwpHstry.Insert( pNewHstr, m_pHistory->Count() );
     }
+
+    return bInserted;
 }
 
 void SwRegHistory::RegisterInModify( SwModify* pRegIn, const SwNode& rNd )

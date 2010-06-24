@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwXMLTextBlocks1.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_sw.hxx"
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <svtools/unoevent.hxx>
 #include <sfx2/docfile.hxx>
 #include <unotools/streamwrap.hxx>
@@ -40,6 +37,7 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <doc.hxx>
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
@@ -81,6 +79,21 @@ ULONG SwXMLTextBlocks::GetDoc( USHORT nIdx )
             ReadXML->SetBlockMode( sal_True );
             aReader.Read( *ReadXML );
             ReadXML->SetBlockMode( sal_False );
+            // Ole objects fails to display when inserted into document
+            // because the ObjectReplacement folder ( and contents are missing )
+            rtl::OUString sObjReplacements( RTL_CONSTASCII_USTRINGPARAM( "ObjectReplacements" ) );
+            if ( xRoot->hasByName( sObjReplacements ) )
+            {
+                uno::Reference< document::XStorageBasedDocument > xDocStor( pDoc->GetDocShell()->GetModel(), uno::UNO_QUERY_THROW );
+                uno::Reference< embed::XStorage > xStr( xDocStor->getDocumentStorage() );
+                if ( xStr.is() )
+                {
+                    xRoot->copyElementTo( sObjReplacements, xStr, sObjReplacements );
+                    uno::Reference< embed::XTransactedObject > xTrans( xStr, uno::UNO_QUERY );
+                    if ( xTrans.is() )
+                        xTrans->commit();
+                }
+            }
         }
         catch( uno::Exception& )
         {

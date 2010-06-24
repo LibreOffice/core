@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewopt.hxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +41,7 @@ class ViewShell;
 class SwDocShell;
 namespace svtools{ class ColorConfig;}
 
-#define VIEWOPT_1_IDLE          0x00000001L
+//#define VIEWOPT_1_IDLE             0x00000001L  no longer used, see new member 'bIdle'
 #define VIEWOPT_1_TAB           0x00000002L
 #define VIEWOPT_1_BLANK         0x00000004L
 #define VIEWOPT_1_HARDBLANK     0x00000008L
@@ -82,8 +79,7 @@ namespace svtools{ class ColorConfig;}
 #define VIEWOPT_CORE2_SMOOTHSCROLL      0x00000004L
 #define VIEWOPT_CORE2_CRSR_IN_PROT      0x00000008L
 #define VIEWOPT_CORE2_PDF_EXPORT        0x00000010L
-
-
+#define VIEWOPT_CORE2_PRINTING          0x00000020L
 #define VIEWOPT_CORE2_BIGMARKHDL        0x00000040L
 
 #define VIEWOPT_2_UNUSED1           0x00000100L
@@ -168,6 +164,7 @@ protected:
     BOOL            bBookview : 1;      // view mode for page preview
     BOOL            mbViewLayoutBookMode : 1; // book view mode for edit view
     sal_Bool        bShowPlaceHolderFields : 1; //only used in printing!
+    mutable bool    bIdle;
 
     // Maszstab
     USHORT          nZoom;              // Angaben in Prozent
@@ -175,7 +172,7 @@ protected:
 
     BYTE            nTblDest;           // Ziel fuer Tabellenhintergrund
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
     BOOL  bTest1        :1;     // Test-Flag  "Layout not loading"
     BOOL  bTest2        :1;     // Test-Flag  "WYSIWYG++"
@@ -206,9 +203,14 @@ public:
 ----------------------------------------------------------------------------*/
 
     inline BOOL IsIdle() const
-        { return nCoreOptions & VIEWOPT_1_IDLE ? TRUE : FALSE; }
-    inline void SetIdle( BOOL b )
-        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_IDLE ) : ( nCoreOptions &= ~VIEWOPT_1_IDLE); }
+        { return bIdle; }
+
+    // logically this is a const function since it does not modify the viewoptions
+    // but only effects idle formatting. Of course that member is already implement
+    // in the wrong place here... Also currently there are many const modifying casts in the code
+    // just to call this function on otherwise const objects. Thus declaring it as const now.
+    inline void SetIdle( BOOL b ) const
+        { bIdle = b; }
 
     inline BOOL IsTab(BOOL bHard = FALSE) const
                     {   return !bReadonly && (nCoreOptions & VIEWOPT_1_TAB) &&
@@ -381,6 +383,12 @@ public:
     inline void SetPDFExport(BOOL b)
         { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_PDF_EXPORT) : (nCore2Options &= ~VIEWOPT_CORE2_PDF_EXPORT);}
 
+    inline BOOL IsPrinting() const
+        {return nCore2Options & VIEWOPT_CORE2_PRINTING ? TRUE : FALSE;}
+
+    inline void SetPrinting(BOOL b)
+        { (b != 0) ? (nCore2Options |= VIEWOPT_CORE2_PRINTING) : (nCore2Options &= ~VIEWOPT_CORE2_PRINTING);}
+
 /*---------------------------------------------------------------------------
 
 ----------------------------------------------------------------------------*/
@@ -417,7 +425,7 @@ public:
     USHORT GetViewLayoutColumns() const { return mnViewLayoutColumns; }
     void   SetViewLayoutColumns( USHORT nNew ) { mnViewLayoutColumns = nNew; }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
     inline BOOL IsTest1() const     { return bTest1; }
     inline void SetTest1( BOOL b )  { bTest1 = b; }
@@ -450,7 +458,8 @@ public:
     SwViewOption& operator=( const SwViewOption &rOpt );
     // Vergleichsmethoden
     BOOL IsEqualFlags ( const SwViewOption &rOpt ) const;
-    inline BOOL operator==( const SwViewOption &rOpt ) const;
+    inline BOOL operator == ( const SwViewOption &rOpt ) const;
+    inline BOOL operator != ( const SwViewOption &rOpt ) const  { return !(*this == rOpt); }
 
 
 /*---------------------------------------------------------------------------

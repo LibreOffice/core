@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: actctrl.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,10 +63,8 @@ protected:
     virtual void        Modify();
 
 public:
-    NoSpaceEdit( Window* pParent, const ResId& rResId)
-        : Edit(pParent, rResId),
-        sForbiddenChars(String::CreateFromAscii(" "))
-    {}
+    NoSpaceEdit( Window* pParent, const ResId& rResId);
+    virtual ~NoSpaceEdit();
     void            SetForbiddenChars(const String& rSet){sForbiddenChars = rSet;}
     const String&   GetForbiddenChars(){return sForbiddenChars;}
 };

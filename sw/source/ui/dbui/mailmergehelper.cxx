@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mailmergehelper.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -627,8 +624,16 @@ SwMergeAddressItem   SwAddressIterator::Next()
             aRet.bIsColumn = true;
             xub_StrLen nClose = sAddress.Search('>');
             DBG_ASSERT(nClose != STRING_NOTFOUND, "closing '>' not found");
-            aRet.sText = sAddress.Copy(1, nClose - 1);
-            sAddress.Erase(0, nClose + 1);
+            if( nClose != STRING_NOTFOUND )
+            {
+                aRet.sText = sAddress.Copy(1, nClose - 1);
+                sAddress.Erase(0, nClose + 1);
+            }
+            else
+            {
+                aRet.sText = sAddress.Copy(1, 1);
+                sAddress.Erase(0, 1);
+            }
         }
         else
         {

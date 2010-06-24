@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbfld.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 
 #include <float.h>
 #include <sfx2/app.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -94,6 +91,10 @@ SwDBFieldType::SwDBFieldType(SwDoc* pDocPtr, const String& rNam, const SwDBData&
         sName += DB_DELIM;
     }
     sName += GetColumnName();
+}
+//------------------------------------------------------------------------------
+SwDBFieldType::~SwDBFieldType()
+{
 }
 //------------------------------------------------------------------------------
 

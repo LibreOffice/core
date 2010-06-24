@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtnum.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,10 +34,10 @@
 #include <vcl/msgbox.hxx>
 #endif
 #include <sfx2/request.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svx/numitem.hxx>
-#include <svx/brshitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <numrule.hxx>
 
 #include "cmdid.h"

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtfrm.cxx,v $
- * $Revision: 1.108.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,15 +29,15 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/sfxuno.hxx>
-#include <svx/langitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/pgrditem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/pgrditem.hxx>
 #include <swmodule.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <doc.hxx>      // GetDoc()
@@ -65,9 +62,7 @@
 #include <txtftn.hxx>
 #include <charatr.hxx>
 #include <ftninfo.hxx>
-#ifndef _FMTLINE_HXX
 #include <fmtline.hxx>
-#endif
 #include <txtfrm.hxx>       // SwTxtFrm
 #include <sectfrm.hxx>      // SwSectFrm
 #include <txtcfg.hxx>       // DBG_LOOP
@@ -76,9 +71,7 @@
 #include <txtcache.hxx>
 #include <fntcache.hxx>     // GetLineSpace benutzt pLastFont
 #include <SwGrammarMarkUp.hxx>
-#ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
-#endif
 #include <SwPortionHandler.hxx>
 // OD 2004-01-15 #110582#
 #include <dcontact.hxx>
@@ -100,6 +93,7 @@
 #include <txtpaint.hxx>     // DbgRect
 extern const sal_Char *GetPrepName( const enum PrepareHint ePrep );
 #endif
+
 
 TYPEINIT1( SwTxtFrm, SwCntntFrm );
 
@@ -532,7 +526,7 @@ bool lcl_HideObj( const SwTxtFrm& _rFrm,
 {
     bool bRet( true );
 
-    if ( _eAnchorType == FLY_AUTO_CNTNT )
+    if (_eAnchorType == FLY_AT_CHAR)
     {
         const IDocumentSettingAccess* pIDSA = _rFrm.GetTxtNode()->getIDocumentSettingAccess();
         if ( !pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) &&
@@ -545,26 +539,10 @@ bool lcl_HideObj( const SwTxtFrm& _rFrm,
                         _rFrm.GetTxtNode()->GetTxt().GetChar( _nObjAnchorPos );
             if ( cAnchorChar == CH_TXTATR_BREAKWORD )
             {
-                SwpHints* pHints =
-                        const_cast<SwTxtFrm&>(_rFrm).GetTxtNode()->GetpSwpHints();
-                const SwTxtAttr* pHint( 0 );
-                if( pHints )
-                {
-                    for ( USHORT i = 0; i < pHints->Count(); ++i )
-                    {
-                        SwTxtAttr* pPos = pHints->GetTextHint(i);
-                        xub_StrLen nStart = *pPos->GetStart();
-                        if ( _nObjAnchorPos < nStart )
-                            break;
-                        if ( _nObjAnchorPos == nStart && !pPos->GetEnd() )
-                        {
-                            pHint = pPos;
-                            break;
-                        }
-                    }
-                }
-                if ( pHint &&
-                     pHint->Which() == RES_TXTATR_FLYCNT )
+                const SwTxtAttr* const pHint(
+                    _rFrm.GetTxtNode()->GetTxtAttrForCharAt(_nObjAnchorPos,
+                        RES_TXTATR_FLYCNT) );
+                if ( pHint )
                 {
                     const SwFrmFmt* pFrmFmt =
                         static_cast<const SwTxtFlyCnt*>(pHint)->GetFlyCnt().GetFrmFmt();
@@ -621,8 +599,9 @@ void SwTxtFrm::HideAndShowObjects()
                 // under certain conditions
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 const xub_StrLen nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
-                if ( eAnchorType != FLY_AUTO_CNTNT ||
-                     lcl_HideObj( *this, eAnchorType, nObjAnchorPos, (*GetDrawObjs())[i] ) )
+                if ((eAnchorType != FLY_AT_CHAR) ||
+                    lcl_HideObj( *this, eAnchorType, nObjAnchorPos,
+                                 (*GetDrawObjs())[i] ))
                 {
                     pContact->MoveObjToInvisibleLayer( pObj );
                 }
@@ -649,12 +628,12 @@ void SwTxtFrm::HideAndShowObjects()
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 // <--
 
-                if ( eAnchorType == FLY_AT_CNTNT )
+                if (eAnchorType == FLY_AT_PARA)
                 {
                     pContact->MoveObjToVisibleLayer( pObj );
                 }
-                else if ( eAnchorType == FLY_AUTO_CNTNT ||
-                          eAnchorType == FLY_IN_CNTNT )
+                else if ((eAnchorType == FLY_AT_CHAR) ||
+                         (eAnchorType == FLY_AS_CHAR))
                 {
                     xub_StrLen nHiddenStart;
                     xub_StrLen nHiddenEnd;
@@ -694,23 +673,34 @@ void SwTxtFrm::HideAndShowObjects()
  *************************************************************************/
 
 xub_StrLen SwTxtFrm::FindBrk( const XubString &rTxt,
-                          const xub_StrLen nStart, const xub_StrLen nEnd ) const
+                              const xub_StrLen nStart,
+                              const xub_StrLen nEnd ) const
 {
-    xub_StrLen nFound = nStart;
+    // --> OD 2009-12-28 #i104291# - applying patch to avoid overflow.
+    unsigned long nFound = nStart;
     const xub_StrLen nEndLine = Min( nEnd, rTxt.Len() );
 
     // Wir ueberlesen erst alle Blanks am Anfang der Zeile (vgl. Bug 2235).
-    while( nFound <= nEndLine && ' ' == rTxt.GetChar( nFound ) )
-         ++nFound;
+    while( nFound <= nEndLine &&
+           ' ' == rTxt.GetChar( static_cast<xub_StrLen>(nFound) ) )
+    {
+         nFound++;
+    }
 
     // Eine knifflige Sache mit den TxtAttr-Dummy-Zeichen (hier "$"):
     // "Dr.$Meyer" am Anfang der zweiten Zeile. Dahinter ein Blank eingegeben
     // und das Wort rutscht nicht in die erste Zeile, obwohl es ginge.
     // Aus diesem Grund nehmen wir das Dummy-Zeichen noch mit.
-    while( nFound <= nEndLine && ' ' != rTxt.GetChar( nFound ) )
-        ++nFound;
+    while( nFound <= nEndLine &&
+           ' ' != rTxt.GetChar( static_cast<xub_StrLen>(nFound) ) )
+    {
+        nFound++;
+    }
 
-    return nFound;
+    return nFound <= STRING_LEN
+           ? static_cast<xub_StrLen>(nFound)
+           : STRING_LEN;
+    // <--
 }
 
 /*************************************************************************
@@ -1001,17 +991,6 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             InvalidateLineNum();
         }
         break;
-        case RES_INS_CHR:
-        {
-            nPos = ((SwInsChr*)pNew)->nPos;
-            InvalidateRange( SwCharRange( nPos, 1 ), 1 );
-            SET_WRONG( nPos, 1, true )
-            SET_SCRIPT_INVAL( nPos )
-            bSetFldsDirty = sal_True;
-            if( HasFollow() )
-                lcl_ModifyOfst( this, nPos, 1 );
-        }
-        break;
         case RES_INS_TXT:
         {
             nPos = ((SwInsTxt*)pNew)->nPos;
@@ -1085,13 +1064,20 @@ void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                 _InvalidateRange( SwCharRange( nPos, nLen) );
                 MSHORT nTmp = ((SwUpdateAttr*)pNew)->nWhichAttr;
 
-                if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT ||
+                if( ! nTmp || RES_TXTATR_CHARFMT == nTmp || RES_TXTATR_AUTOFMT == nTmp ||
                     RES_FMT_CHG == nTmp || RES_ATTRSET_CHG == nTmp )
                 {
                     SET_WRONG( nPos, nPos + nLen, false )
                     SET_SCRIPT_INVAL( nPos )
                 }
             }
+
+            // --> OD 2010-02-16 #i104008#
+            if ( GetShell() )
+            {
+                GetShell()->InvalidateAccessibleParaAttrs( *this );
+            }
+            // <--
         }
         break;
         case RES_OBJECTDYING:
@@ -1765,7 +1751,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                             // --> OD 2004-07-16 #i28701# - consider all
                             // to-character anchored objects
                             if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
-                                    == FLY_AUTO_CNTNT )
+                                    == FLY_AT_CHAR )
                             {
                                 bFormat = sal_True;
                                 break;

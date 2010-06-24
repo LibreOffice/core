@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txttab.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +29,9 @@
 #include "precompiled_sw.hxx"
 
 #include "hintids.hxx"
-#include <svx/lrspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
 #include <IDocumentSettingAccess.hxx>
 #include <frmatr.hxx>
@@ -180,6 +177,11 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             cDec = pTabStop->GetDecimal();
             eAdj = pTabStop->GetAdjustment();
             nNextPos = pTabStop->GetTabPos();
+            if(!bTabsRelativeToIndent && eAdj == SVX_TAB_ADJUST_DEFAULT && nSearchPos < 0)
+            {
+                //calculate default tab position of default tabs in negative indent
+                nNextPos = ( nSearchPos / nNextPos ) * nNextPos;
+            }
         }
         else
         {
@@ -197,13 +199,8 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             }
             SwTwips nCount = nSearchPos;
 
-            // Bei negativen Werten rundet "/" auf, "%" liefert negative Reste,
-            // bei positiven Werten rundet "/" ab, "%" liefert positvie Reste!
-            if ( nCount < 0 )
-                nCount = 0;
-
             nCount /= nDefTabDist;
-            nNextPos = ( nCount + 1 ) * nDefTabDist ;
+            nNextPos = nCount < 0 || (!nCount && nSearchPos <= 0)? nCount * nDefTabDist :( nCount + 1 ) * nDefTabDist ;
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
             const SwTwips nMinimumTabWidth = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) ? 0 : 50;
             // <--
@@ -259,8 +256,14 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         // <--
              ( ( bRTL && nCurrentAbsPos > nTabLeft - nForced ) ||
                ( !bRTL && nCurrentAbsPos < nTabLeft + nForced ) ) &&
-             nNextPos > nForced )
-        // <--
+               // --> OD 2009-07-21 #i103685#
+               //  adjust condition:
+               // - back to pre OOo 3.0 condition, if tab stops are relative to indent
+               // - further checks needed, if tab stops are not relative to indent
+               ( nNextPos > 0 &&
+               ( bTabsRelativeToIndent ||
+                 ( !pTabStop || nNextPos > nForced ) ) ) )
+               // <--
         {
             eAdj = SVX_TAB_ADJUST_DEFAULT;
             cFill = 0;
@@ -327,7 +330,7 @@ SwTabPortion::SwTabPortion( const KSHORT nTabPosition, const xub_Unicode cFillCh
     : SwFixPortion( 0, 0 ), nTabPos(nTabPosition), cFill(cFillChar)
 {
     nLineLength = 1;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if( IsFilled() )
     {
         ASSERT( ' ' != cFill, "SwTabPortion::CTOR: blanks ?!" );
@@ -562,7 +565,7 @@ sal_Bool SwTabPortion::PostFormat( SwTxtFormatInfo &rInf )
 
 void SwTabPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // Wir wollen uns die Fixbreite anzeigen
     if( rInf.OnWin() && OPTDBG( rInf ) &&
         !rInf.GetOpt().IsPagePreview() && \

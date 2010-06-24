@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docnew.cxx,v $
- * $Revision: 1.89 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #include "precompiled_sw.hxx"
 #define ROLBCK_HISTORY_ONLY     // Der Kampf gegen die CLOOK's
 #include <doc.hxx>
+#include <dcontact.hxx>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -45,14 +43,16 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
+#include <sfx2/viewfrm.hxx>
 
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <svx/svxids.hrc>
-#include <svx/linkmgr.hxx>
-#include <svx/forbiddencharacterstable.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/compatibility.hxx>
-#include <svtools/lingucfg.hxx>
+#include <svx/svdogrp.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <svl/zforlist.hxx>
+#include <unotools/compatibility.hxx>
+#include <unotools/lingucfg.hxx>
 #include <svx/svdpage.hxx>
 #include <paratr.hxx>
 #include <fchrfmt.hxx>
@@ -88,15 +88,14 @@
 #include <viewsh.hxx>
 #include <doctxm.hxx>
 #include <shellres.hxx>
-#include <unoclbck.hxx>
 #include <breakit.hxx>
 #include <laycache.hxx>
 #include <mvsave.hxx>
 #include <istyleaccess.hxx>
 #include <swstylemanager.hxx>
 #include <IGrammarContact.hxx>
+#include <tblsel.hxx>
 #include <MarkManager.hxx>
-
 #include <unochart.hxx>
 
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
@@ -121,6 +120,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <sfx2/Metadatable.hxx>
+#include <fmtmeta.hxx> // MetaFieldManager
 
 
 using namespace ::com::sun::star;
@@ -166,15 +166,33 @@ SV_IMPL_PTRARR( SwGrfFmtColls, SwGrfFmtCollPtr)
 
 void StartGrammarChecking( SwDoc &rDoc )
 {
-    uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
-    if ( xGCIterator.is() )
+    // check for a visible view
+    bool bVisible = false;
+    const SwDocShell *pDocShell = rDoc.GetDocShell();
+    SfxViewFrame    *pFrame = SfxViewFrame::GetFirst( pDocShell, sal_False );
+    while (pFrame && !bVisible)
     {
-        uno::Reference< lang::XComponent >  xDoc( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
-        uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
+        if (pFrame->IsVisible())
+            bVisible = true;
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell, sal_False );
+    }
 
-        // start automatic background checking if not active already
-        if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
-            xGCIterator->startProofreading( xDoc, xFPIP );
+    //!! only documents with visible views need to be checked
+    //!! (E.g. don't check temporary documents created for printing, see printing of notes and selections.
+    //!! Those get created on the fly and get hard deleted a bit later as well, and no one should have
+    //!! a uno reference to them)
+    if (bVisible)
+    {
+        uno::Reference< linguistic2::XProofreadingIterator > xGCIterator( rDoc.GetGCIterator() );
+        if ( xGCIterator.is() )
+        {
+            uno::Reference< lang::XComponent >  xDoc( rDoc.GetDocShell()->GetBaseModel(), uno::UNO_QUERY );
+            uno::Reference< text::XFlatParagraphIteratorProvider >  xFPIP( xDoc, uno::UNO_QUERY );
+
+            // start automatic background checking if not active already
+            if ( xFPIP.is() && !xGCIterator->isProofreading( xDoc ) )
+                xGCIterator->startProofreading( xDoc, xFPIP );
+        }
     }
 }
 
@@ -204,6 +222,7 @@ SwDoc::SwDoc() :
     aUndoNodes( this ),
     mpAttrPool(new SwAttrPool(this)),
     pMarkManager(new ::sw::mark::MarkManager(*this)),
+    m_pMetaFieldManager(new ::sw::MetaFieldManager()),
     pDfltFrmFmt( new SwFrmFmt( GetAttrPool(), sFrmFmtStr, 0 ) ),
     pEmptyPageFmt( new SwFrmFmt( GetAttrPool(), sEmptyPageStr, pDfltFrmFmt ) ),
     pColumnContFmt( new SwFrmFmt( GetAttrPool(), sColumnCntStr, pDfltFrmFmt ) ),
@@ -236,7 +255,7 @@ SwDoc::SwDoc() :
     pDocStat( new SwDocStat ),
     pDocShell( 0 ),
     pDocShRef( 0 ),
-    pLinkMgr( new SvxLinkManager( 0 ) ),
+    pLinkMgr( new sfx2::LinkManager( 0 ) ),
     pACEWord( 0 ),
     pURLStateChgd( 0 ),
     pNumberFormatter( 0 ),
@@ -255,7 +274,7 @@ SwDoc::SwDoc() :
     pStyleAccess( 0 ),
     // <--
     pLayoutCache( 0 ),
-    pUnoCallBack(new SwUnoCallBack(0)),
+    pUnoCallBack(new SwModify(0)),
     mpGrammarContact( 0 ),
     aChartDataProviderImplRef(),
     pChartControllerHelper( 0 ),
@@ -276,7 +295,6 @@ SwDoc::SwDoc() :
     mIdleBlockCount(0),
     nLockExpFld( 0 ),
     mbReadlineChecked(false),
-    mbWinEncryption(sal_False),
     // --> OD 2005-02-11 #i38810#
     mbLinksUpdated( sal_False ),
     mbClipBoard( false ),
@@ -316,7 +334,7 @@ SwDoc::SwDoc() :
     mbInsOnlyTxtGlssry =
     mbContains_MSVBasic =
     mbKernAsianPunctuation =
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     mbXMLExport =
 #endif
     // --> OD 2006-03-21 #b6375613#
@@ -1038,6 +1056,12 @@ SwDoc::GetXmlIdRegistry()
     return *m_pXmlIdRegistry;
 }
 
+::sw::MetaFieldManager &
+SwDoc::GetMetaFieldManager()
+{
+    return *m_pMetaFieldManager;
+}
+
 void SwDoc::InitTOXTypes()
 {
    ShellResource* pShellRes = ViewShell::GetShellRes();
@@ -1057,3 +1081,155 @@ void SwDoc::InitTOXTypes()
    pTOXTypes->Insert( pNew, pTOXTypes->Count() );
 }
 
+/*-- 08.05.2009 10:07:57---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
+{
+    SwDoc* pRet = new SwDoc;
+    //copy settings
+    USHORT __FAR_DATA aRangeOfDefaults[] = {
+        RES_FRMATR_BEGIN, RES_FRMATR_END-1,
+        RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+        RES_PARATR_BEGIN, RES_PARATR_END-1,
+        // --> OD 2008-02-25 #refactorlists##
+        RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END-1,
+        // <--
+        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+        0
+    };
+
+    SfxItemSet aNewDefaults( pRet->GetAttrPool(), aRangeOfDefaults );
+
+    USHORT nWhich;
+    USHORT nRange = 0;
+    while( aRangeOfDefaults[nRange] != 0)
+    {
+        for( nWhich = aRangeOfDefaults[nRange]; nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich )
+        {
+            const SfxPoolItem& rSourceAttr = mpAttrPool->GetDefaultItem( nWhich );
+            if( rSourceAttr != pRet->mpAttrPool->GetDefaultItem( nWhich ) )
+                aNewDefaults.Put( rSourceAttr );
+        }
+        nRange += 2;
+    }
+    if( aNewDefaults.Count() )
+        pRet->SetDefault( aNewDefaults );
+
+    pRet->n32DummyCompatabilityOptions1 = n32DummyCompatabilityOptions1;
+    pRet->n32DummyCompatabilityOptions2 = n32DummyCompatabilityOptions2;
+    pRet->mbParaSpaceMax                          = mbParaSpaceMax                          ;
+    pRet->mbParaSpaceMaxAtPages                   = mbParaSpaceMaxAtPages                   ;
+    pRet->mbTabCompat                             = mbTabCompat                             ;
+    pRet->mbUseVirtualDevice                      = mbUseVirtualDevice                      ;
+    pRet->mbAddExternalLeading                    = mbAddExternalLeading                    ;
+    pRet->mbOldLineSpacing                        = mbOldLineSpacing                        ;
+    pRet->mbAddParaSpacingToTableCells            = mbAddParaSpacingToTableCells            ;
+    pRet->mbUseFormerObjectPos                    = mbUseFormerObjectPos                    ;
+    pRet->mbUseFormerTextWrapping                 = mbUseFormerTextWrapping                 ;
+    pRet->mbConsiderWrapOnObjPos                  = mbConsiderWrapOnObjPos                  ;
+    pRet->mbAddFlyOffsets                         = mbAddFlyOffsets                         ;
+    pRet->mbOldNumbering                          = mbOldNumbering                          ;
+    pRet->mbUseHiResolutionVirtualDevice          = mbUseHiResolutionVirtualDevice          ;
+    pRet->mbIgnoreFirstLineIndentInNumbering      = mbIgnoreFirstLineIndentInNumbering      ;
+    pRet->mbDoNotJustifyLinesWithManualBreak      = mbDoNotJustifyLinesWithManualBreak      ;
+    pRet->mbDoNotResetParaAttrsForNumFont         = mbDoNotResetParaAttrsForNumFont         ;
+    pRet->mbOutlineLevelYieldsOutlineRule         = mbOutlineLevelYieldsOutlineRule         ;
+    pRet->mbTableRowKeep                          = mbTableRowKeep                          ;
+    pRet->mbIgnoreTabsAndBlanksForLineCalculation = mbIgnoreTabsAndBlanksForLineCalculation ;
+    pRet->mbDoNotCaptureDrawObjsOnPage            = mbDoNotCaptureDrawObjsOnPage            ;
+    pRet->mbClipAsCharacterAnchoredWriterFlyFrames= mbClipAsCharacterAnchoredWriterFlyFrames;
+    pRet->mbUnixForceZeroExtLeading               = mbUnixForceZeroExtLeading               ;
+    pRet->mbOldPrinterMetrics                     = mbOldPrinterMetrics                     ;
+    pRet->mbTabRelativeToIndent                   = mbTabRelativeToIndent                   ;
+    pRet->mbTabAtLeftIndentForParagraphsInList    = mbTabAtLeftIndentForParagraphsInList    ;
+
+    //
+    // COMPATIBILITY FLAGS END
+    //
+    pRet->ReplaceStyles( * const_cast< SwDoc*>( this ));
+    SfxObjectShellRef aDocShellRef = const_cast< SwDocShell* >( GetDocShell() );
+    pRet->SetRefForDocShell( boost::addressof(aDocShellRef) );
+    SfxObjectShellRef xRetShell = new SwDocShell( pRet, SFX_CREATE_MODE_STANDARD );
+    if( bCallInitNew )
+        xRetShell->DoInitNew();
+    //copy content
+    pRet->Paste( *this );
+    pRet->SetRefForDocShell( 0 );
+    return xRetShell;
+}
+/*-- 08.05.2009 10:52:40---------------------------------------------------
+    copy document content - code from SwFEShell::Paste( SwDoc* , BOOL  )
+  -----------------------------------------------------------------------*/
+void SwDoc::Paste( const SwDoc& rSource )
+{
+//  this has to be empty const USHORT nStartPageNumber = GetPhyPageNum();
+    // until the end of the NodesArray
+    SwNodeIndex aSourceIdx( rSource.GetNodes().GetEndOfExtras(), 2 );
+    SwPaM aCpyPam( aSourceIdx ); //DocStart
+    SwNodeIndex aTargetIdx( GetNodes().GetEndOfExtras(), 2 );
+    SwPaM aInsertPam( aTargetIdx ); //replaces PCURCRSR from SwFEShell::Paste()
+
+
+    aCpyPam.SetMark();
+    aCpyPam.Move( fnMoveForward, fnGoDoc );
+
+    this->StartUndo( UNDO_INSGLOSSARY, NULL );
+    this->LockExpFlds();
+
+    {
+        SwPosition& rInsPos = *aInsertPam.GetPoint();
+        //find out if the clipboard document starts with a table
+        bool bStartWithTable = 0 != aCpyPam.Start()->nNode.GetNode().FindTableNode();
+        SwPosition aInsertPosition( rInsPos );
+
+        {
+            SwNodeIndex aIndexBefore(rInsPos.nNode);
+
+            aIndexBefore--;
+
+            rSource.CopyRange( aCpyPam, rInsPos, true );
+
+            {
+                aIndexBefore++;
+                SwPaM aPaM(SwPosition(aIndexBefore),
+                           SwPosition(rInsPos.nNode));
+
+                MakeUniqueNumRules(aPaM);
+            }
+        }
+
+        //TODO: Is this necessary here? SaveTblBoxCntnt( &rInsPos );
+        if(/*bIncludingPageFrames && */bStartWithTable)
+        {
+            //remove the paragraph in front of the table
+            SwPaM aPara(aInsertPosition);
+            this->DelFullPara(aPara);
+        }
+        //additionally copy page bound frames
+        if( /*bIncludingPageFrames && */rSource.GetSpzFrmFmts()->Count() )
+        {
+            for ( USHORT i = 0; i < rSource.GetSpzFrmFmts()->Count(); ++i )
+            {
+                BOOL bInsWithFmt = TRUE;
+                const SwFrmFmt& rCpyFmt = *(*rSource.GetSpzFrmFmts())[i];
+                if( bInsWithFmt  )
+                {
+                    SwFmtAnchor aAnchor( rCpyFmt.GetAnchor() );
+                    if (FLY_AT_PAGE == aAnchor.GetAnchorId())
+                    {
+                        aAnchor.SetPageNum( aAnchor.GetPageNum() /*+ nStartPageNumber - */);
+                    }
+                    else
+                        continue;
+                    this->CopyLayoutFmt( rCpyFmt, aAnchor, true, true );
+                }
+            }
+        }
+    }
+
+    this->EndUndo( UNDO_INSGLOSSARY, NULL );
+
+    UnlockExpFlds();
+    UpdateFlds(NULL, false);
+}

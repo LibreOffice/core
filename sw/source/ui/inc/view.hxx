@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: view.hxx,v $
- * $Revision: 1.60 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,16 +29,18 @@
 
 #include <vcl/timer.hxx>
 #include <vcl/field.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/objsh.hxx>   // SfxObjectShellRef <-> SV_DECL_REF(SfxObjectShell)
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/zoomitem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
 #include <shellid.hxx>
 #include <layout/layout.hxx>
+#include <IMark.hxx>
 
 class SwBaseShell;
 class Button;
@@ -88,12 +87,13 @@ class SwPrtOptions;
 class SwTransferable;
 class SwMailMergeConfigItem;
 class SwTxtNode; // #i23726#
-struct SwPrintData;
+class SwPrintData;
 class SwFormatClipboard;
 struct SwConversionArgs;
 class Graphic;
 class GraphicFilter;
 class SwPostItMgr;
+class SwFieldBookmark;
 
 namespace com{ namespace sun { namespace star {
     namespace view{ class XSelectionSupplier; }
@@ -197,6 +197,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static SearchAttrItemList* pReplList;
 
 
+    SvxHtmlOptions      aHTMLOpt;
     Timer               aTimer;         //Fuer verzoegerte ChgLnks waehrend
                                         //einer Aktion
     String              aPageStr;       //Statusanzeige, aktuelle Seite
@@ -306,6 +307,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE DECL_LINK( TimeoutHdl, Timer * );
     SW_DLLPRIVATE DECL_LINK( UpdatePercentHdl, GraphicFilter* );
 
+    SW_DLLPRIVATE DECL_LINK( HtmlOptionsHdl, void * );
 
     inline long     GetXScroll() const;
     inline long     GetYScroll() const;
@@ -424,8 +426,6 @@ public:
 
     virtual USHORT          SetPrinter( SfxPrinter* pNew,
                                         USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false);
-    virtual ErrCode         DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog,
-                                     BOOL bSilent, BOOL bIsAPI );
     ShellModes              GetShellMode();
 
     com::sun::star::view::XSelectionSupplier*       GetUNOObject();
@@ -436,6 +436,12 @@ public:
     virtual String          GetSelectionText( BOOL bCompleteWords = FALSE );
     virtual USHORT          PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
     virtual void            MarginChanged();
+
+    // replace word/selection with text from the thesaurus
+    // (this code has special handling for "in word" character)
+    void                    InsertThesaurusSynonym( const String &rSynonmText, const String &rLookUpText, bool bValidSelection );
+    bool                    IsValidSelectionForThesaurus() const;
+    String                  GetThesaurusLookUpText( bool bSelection ) const;
 
     // Shell sofort wechseln ->  fuer GetSelectionObject
     void        StopShellTimer();
@@ -465,7 +471,7 @@ public:
 
     DECL_LINK( SpellError, LanguageType * );
     BOOL            ExecSpellPopup( const Point& rPt );
-
+    BOOL            ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
     // SMARTTAGS
     BOOL            ExecSmartTagPopup( const Point& rPt );
 
@@ -574,7 +580,7 @@ public:
     BOOL            HasDrwObj(SdrObject *pSdrObj) const;
     BOOL            HasOnlyObj(SdrObject *pSdrObj, UINT32 eObjInventor) const;
     BOOL            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=NULL,
-                                    Window* pWin=NULL, BOOL bIsNewObj=FALSE);
+                                    Window* pWin=NULL, bool bIsNewObj=false, bool bSetSelectionToStart=false );
 
     void            StateTabWin(SfxItemSet&);
 
@@ -599,6 +605,7 @@ public:
                  SwDocShell     *GetDocShell();
     inline const SwDocShell     *GetDocShell() const;
     inline       FmFormShell    *GetFormShell() { return pFormShell; }
+    inline const FmFormShell    *GetFormShell() const { return pFormShell; }
 
     //damit in DToren der SubShells ggf. pShell zurueckgesetzt werden kann
     void ResetSubShell()    { pShell = 0; }
@@ -631,10 +638,6 @@ public:
     void EnableMailMerge(BOOL bEnable = TRUE);
     //apply Accessiblity options
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
-
-    // get print options (SwPrtOptions)
-    static void MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
-            BOOL* pPrtProspect, BOOL* pPrtProspect_RTL, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData );
 
     SwView(SfxViewFrame* pFrame, SfxViewShell*);
     ~SwView();
@@ -692,3 +695,4 @@ SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                     BOOL bPreview);
 
 #endif
+

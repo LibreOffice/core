@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ftnfrm.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +71,7 @@ class SwFtnFrm: public SwLayoutFrm
     // --> OD 2005-05-18 #i49383# - control unlock of position of lower anchored objects.
     bool mbUnlockPosOfLowerObjs : 1;
     // <--
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 protected:
     virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
     virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
@@ -89,7 +86,7 @@ public:
 
     BOOL operator<( const SwTxtFtn* pTxtFtn ) const;
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     const SwCntntFrm *GetRef() const    { return pRef; }
          SwCntntFrm  *GetRef()          { return pRef; }
 #else

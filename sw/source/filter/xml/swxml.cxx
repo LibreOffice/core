@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swxml.cxx,v $
- * $Revision: 1.84 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,10 +52,10 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/packages/WrongPasswordException.hpp>
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <unotools/streamwrap.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
@@ -72,7 +69,7 @@
 #include <fltini.hxx>
 #include <doc.hxx>
 #include <docsh.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
 #include <swmodule.hxx>
 #include <SwXMLSectionList.hxx>
 
@@ -216,6 +213,24 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXParseException& r )
     {
+        // sax parser sends wrapped exceptions,
+        // try to find the original one
+        xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
+        sal_Bool bTryChild = sal_True;
+
+        while( bTryChild )
+        {
+            xml::sax::SAXException aTmp;
+            if ( aSaxEx.WrappedException >>= aTmp )
+                aSaxEx = aTmp;
+            else
+                bTryChild = sal_False;
+        }
+
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( aSaxEx.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
@@ -246,7 +261,10 @@ sal_Int32 ReadThroughComponent(
     }
     catch( xml::sax::SAXException& r)
     {
-        (void)r;
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( r.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+
         if( bEncrypted )
             return ERRCODE_SFX_WRONGPASSWORD;
 
@@ -255,6 +273,7 @@ sal_Int32 ReadThroughComponent(
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
+
         return ERR_SWG_READ_ERROR;
     }
     catch( packages::zip::ZipIOException& r)
@@ -766,9 +785,8 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     }
     else if( bInsertMode )
     {
-        uno::Reference<XTextRange> xInsertTextRange =
-            SwXTextRange::CreateTextRangeFromPosition( &rDoc, *rPaM.GetPoint(),
-                                                           0 );
+        const uno::Reference<text::XTextRange> xInsertTextRange =
+            SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), 0);
         OUString sTextInsertModeRange(
                 RTL_CONSTASCII_USTRINGPARAM("TextInsertModeRange"));
         xInfoSet->setPropertyValue( sTextInsertModeRange,
@@ -873,34 +891,38 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     // <--
 
     sal_uInt32 nWarnRDF = 0;
-    // RDF metadata - must be read before styles/content
-    // N.B.: embedded documents have their own manifest.rdf!
-    try
+    if ( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
+           bInsertMode) )
     {
-        const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(xModelComp,
-            uno::UNO_QUERY_THROW);
-        const uno::Reference<rdf::XURI> xBaseURI( ::sfx2::createBaseURI(
-            aContext.getUNOContext(), xStorage, aBaseURL, StreamPath) );
-        const uno::Reference<task::XInteractionHandler> xHandler(
-            pDocSh->GetMedium()->GetInteractionHandler() );
-        xDMA->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
-    }
-    catch (lang::WrappedTargetException & e)
-    {
-        ucb::InteractiveAugmentedIOException iaioe;
-        if (e.TargetException >>= iaioe)
+        // RDF metadata - must be read before styles/content
+        // N.B.: embedded documents have their own manifest.rdf!
+        try
         {
-            // import error that was not ignored by InteractionHandler!
-            nWarnRDF = ERR_SWG_READ_ERROR;
+            const uno::Reference<rdf::XDocumentMetadataAccess> xDMA(xModelComp,
+                uno::UNO_QUERY_THROW);
+            const uno::Reference<rdf::XURI> xBaseURI( ::sfx2::createBaseURI(
+                aContext.getUNOContext(), xStorage, aBaseURL, StreamPath) );
+            const uno::Reference<task::XInteractionHandler> xHandler(
+                pDocSh->GetMedium()->GetInteractionHandler() );
+            xDMA->loadMetadataFromStorage(xStorage, xBaseURI, xHandler);
         }
-        else
+        catch (lang::WrappedTargetException & e)
+        {
+            ucb::InteractiveAugmentedIOException iaioe;
+            if (e.TargetException >>= iaioe)
+            {
+                // import error that was not ignored by InteractionHandler!
+                nWarnRDF = ERR_SWG_READ_ERROR;
+            }
+            else
+            {
+                nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something wrong?
+            }
+        }
+        catch (uno::Exception &)
         {
             nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something went wrong?
         }
-    }
-    catch (uno::Exception &)
-    {
-        nWarnRDF = WARN_SWG_FEATURES_LOST; // uhh... something went wrong?
     }
 
     sal_uInt32 nWarn = 0;

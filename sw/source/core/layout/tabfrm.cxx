@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabfrm.cxx,v $
- * $Revision: 1.105.58.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,18 +45,16 @@
 #include "dbg_lay.hxx"
 
 #include <ftnidx.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <docary.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
 // --> collapsing borders FME 2005-05-27 #i29550#
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 // <--
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
 #include <fmtsrnd.hxx>
@@ -340,7 +335,7 @@ void lcl_InvalidateLowerObjs( SwLayoutFrm& _rLayoutFrm,
                     pAnchoredObj->ClearCharRectAndTopOfLine();
                     pAnchoredObj->SetCurrRelPos( Point( 0, 0 ) );
                     if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
-                            == FLY_IN_CNTNT )
+                            == FLY_AS_CHAR )
                     {
                         pAnchoredObj->AnchorFrm()
                                 ->Prepare( PREP_FLY_ATTR_CHG,
@@ -1685,62 +1680,6 @@ BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
     return bRet;
 }
 
-void MA_FASTCALL lcl_FirstTabCalc( SwTabFrm *pTab )
-{
-    SWRECTFN( pTab )
-    if ( !pTab->IsFollow() && !pTab->GetTable()->IsTblComplex() )
-    {
-        SwLayoutFrm* pRow = (SwLayoutFrm*)pTab->Lower();
-        // --> FME 2006-07-17 #134526# TabFrm without a lower? Better we check
-        // it before crashing. However, I still don't know how this can happen!
-        while ( pRow )
-        {
-            SwLayoutFrm *pCell = (SwLayoutFrm*)pRow->Lower();
-            SwFrm *pCnt = pCell->Lower();
-            // --> OD 2006-11-08 #i70641# - make code robust
-            if ( pCnt )
-            {
-                pCnt->Calc();
-                const long nCellHeight = (pCell->Frm().*fnRect->fnGetHeight)();
-                const long nCellY      = (pCell->Frm().*fnRect->fnGetTop)()-1;
-                const long nCntHeight  = (pCnt->Frm().*fnRect->fnGetHeight)();
-                const long nCntY       = (pCnt->Frm().*fnRect->fnGetTop)()-1;
-                if ( 0 != (pCell = (SwLayoutFrm*)pCell->GetNext()) )
-                {
-                    do
-                    {
-                        (pCell->Frm().*fnRect->fnSetTopAndHeight)( nCellY, nCellHeight );
-                        (pCell->Prt().*fnRect->fnSetHeight)( nCellHeight );
-                        pCell->_InvalidateAll();
-
-                        pCnt = pCell->Lower();
-                        if ( pCnt )
-                        {
-                            (pCnt->Frm().*fnRect->fnSetTopAndHeight)(nCntY, nCntHeight);
-                            (pCnt->Prt().*fnRect->fnSetHeight)( nCntHeight );
-                            pCnt->_InvalidateAll();
-                        }
-
-                        pCell = (SwLayoutFrm*)pCell->GetNext();
-                    } while ( pCell );
-                }
-
-                SwTwips nRowTop = (pRow->Frm().*fnRect->fnGetTop)();
-                SwTwips nUpBot = (pTab->GetUpper()->Frm().*fnRect->fnGetBottom)();
-                if( (*fnRect->fnYDiff)( nUpBot, nRowTop ) < 0 )
-                    break;
-            }
-            // <--
-            pRow = (SwLayoutFrm*)pRow->GetNext();
-        }
-    }
-    SwFrm *pUp = pTab->GetUpper();
-    long nBottom = (pUp->*fnRect->fnGetPrtBottom)();
-    if ( pTab->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
-        nBottom += pUp->Grow( LONG_MAX, TRUE );
-    lcl_CalcLowers( (SwLayoutFrm*)pTab->Lower(), pTab, LONG_MAX, false );
-}
-
 void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
 {
     // --> OD 2004-10-05 #i26945# - For correct appliance of the 'straightforward
@@ -2103,6 +2042,11 @@ void SwTabFrm::MakeAll()
             {
                 bMovedFwd = TRUE;
                 bCalcLowers = TRUE;
+                // --> OD 2009-08-12 #i99267#
+                // reset <bSplit> after forward move to assure that follows
+                // can be joined, if further space is available.
+                bSplit = FALSE;
+                // <--
             }
 
         Point aOldPos( (Frm().*fnRect->fnGetPos)() );
@@ -2146,17 +2090,13 @@ void SwTabFrm::MakeAll()
 
         if ( !bValidSize || !bValidPrtArea )
         {
-            // HB #i101593# no optimization as it leeds to not layouting certain nested tables
-            // const BOOL bOptLower = (Frm().*fnRect->fnGetHeight)() == 0;
-            const BOOL bOptLower = FALSE;
-
             const long nOldPrtWidth = (Prt().*fnRect->fnGetWidth)();
             const long nOldFrmWidth = (Frm().*fnRect->fnGetWidth)();
             const Point aOldPrtPos  = (Prt().*fnRect->fnGetPos)();
             Format( pAttrs );
 
             SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
-            if ( /*!bOptLower &&*/ pLayout &&
+            if ( pLayout &&
                  ((Prt().*fnRect->fnGetWidth)() != nOldPrtWidth ||
                   (Frm().*fnRect->fnGetWidth)() != nOldFrmWidth) )
             {
@@ -2167,100 +2107,8 @@ void SwTabFrm::MakeAll()
                 pAccess= new SwBorderAttrAccess( SwFrm::GetCache(), this );
                 pAttrs = pAccess->Get();
             }
-            if ( !bOptLower && aOldPrtPos != (Prt().*fnRect->fnGetPos)() )
+            if ( aOldPrtPos != (Prt().*fnRect->fnGetPos)() )
                 aNotify.SetLowersComplete( FALSE );
-
-            if ( bOptLower && Lower() )
-            {
-                //MA 24. May. 95: Optimierungsversuch!
-                //Ganz nigel nagel neu das Teil. Damit wir nicht n-fach
-                //MakeAll'en formatieren wir flugs den Inhalt.
-                //Das erste Format mussten wir allerdings abwarten, damit
-                //die Breiten Stimmen!
-                //MA: Fix, Kein Calc wenn evtl. noch Seitengebunde Flys
-                //an den Cntnt haengen (siehe frmtool.cxx, ~SwCntntNotify).
-                SwDoc *pDoc = GetFmt()->GetDoc();
-                if ( !pDoc->GetSpzFrmFmts()->Count() ||
-                     pDoc->IsLoaded() || pDoc->IsNewDoc() )
-                {
-                    //MA 28. Nov. 95: Und wieder ein Trick, gleich mal sehen
-                    //ob ein Rueckfluss lohnt.
-                    if ( bMoveable && !GetPrev() )
-                    {
-                        GetLeaf( MAKEPAGE_NONE, FALSE ); //setzt das BackMoveJump
-                        if ( SwFlowFrm::IsMoveBwdJump() )
-                        {
-                            BOOL bDummy;
-                            SwFtnBossFrm *pOldBoss = bFtnsInDoc ?
-                                FindFtnBossFrm( TRUE ) : 0;
-                            const BOOL bOldPrev = GetPrev() != 0;
-                            if ( MoveBwd( bDummy ) )
-                            {
-                                SWREFRESHFN( this )
-                                bMovedBwd = TRUE;
-                                if ( bFtnsInDoc )
-                                    MoveLowerFtns( 0, pOldBoss, 0, TRUE );
-
-                                long nOldTop = (Frm().*fnRect->fnGetTop)();
-                                MakePos();
-                                if( nOldTop != (Frm().*fnRect->fnGetTop)() )
-                                {
-                                    SwHTMLTableLayout *pHTMLLayout =
-                                        GetTable()->GetHTMLTableLayout();
-                                    if( pHTMLLayout )
-                                    {
-                                        delete pAccess;
-                                        bCalcLowers |= pHTMLLayout->Resize(
-                                            pHTMLLayout->GetBrowseWidthByTabFrm(
-                                                            *this ), FALSE );
-                                        pAccess= new SwBorderAttrAccess(
-                                                    SwFrm::GetCache(), this );
-                                        pAttrs = pAccess->Get();
-                                    }
-                                }
-
-                                if ( bOldPrev != (0 != GetPrev()) )
-                                {
-                                    //Abstand nicht vergessen!
-                                    bValidPrtArea = FALSE;
-                                    Format( pAttrs );
-                                }
-                                if ( bKeep && KEEPTAB )
-                                {
-                                    // --> OD 2005-09-28 #b6329202#
-                                    // Consider case that table is inside another
-                                    // table, because it has to be avoided, that
-                                    // superior table is formatted.
-                                    // Thus, find next content, table or section
-                                    // and, if a section is found, get its first
-                                    // content.
-//                                    SwFrm *pNxt = FindNextCnt();
-//                                    // FindNextCnt geht ggf. in einen Bereich
-//                                    // hinein, in eine Tabelle allerdings auch
-//                                    if( pNxt && pNxt->IsInTab() )
-//                                        pNxt = pNxt->FindTabFrm();
-//                                    if ( pNxt )
-//                                    {
-//                                        pNxt->Calc();
-//                                        if ( !GetNext() )
-//                                            bValidPos = FALSE;
-//                                    }
-                                    if ( 0 != lcl_FormatNextCntntForKeep( this ) &&
-                                         !GetNext() )
-                                    {
-                                        bValidPos = FALSE;
-                                    }
-                                    // <--
-                                }
-                            }
-                        }
-                    }
-                    ::lcl_FirstTabCalc( this );
-                    bValidSize = bValidPrtArea = FALSE;
-                    Format( pAttrs );
-                    aNotify.SetLowersComplete( TRUE );
-                }
-            }
         }
 
         //Wenn ich der erste einer Kette bin koennte ich mal sehen ob
@@ -2790,9 +2638,6 @@ void SwTabFrm::MakeAll()
                         }
                         else if ( GetFollow() == GetNext() )
                             ((SwTabFrm*)GetFollow())->MoveFwd( TRUE, FALSE );
-                        ViewShell *pSh;
-                        if ( 0 != (pSh = GetShell()) )
-                            pSh->Imp()->ResetScroll();
                     }
                     continue;
                 }
@@ -3645,7 +3490,7 @@ SwCntntFrm *SwTabFrm::FindLastCntnt()
             // Spalten abklappern, dies erledigt SwSectionFrm::FindLastCntnt
             if( pRet->IsColBodyFrm() )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 SwSectionFrm* pSect = pRet->FindSctFrm();
                 ASSERT( pSect, "Wo kommt denn die Spalte her?")
                 ASSERT( IsAnLower( pSect ), "Gespaltene Zelle?" );
@@ -4189,7 +4034,7 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                     // the text flow have to be considered.
                     const SwFrmFmt& rFrmFmt = pAnchoredObj->GetFrmFmt();
                     const bool bConsiderObj =
-                            rFrmFmt.GetAnchor().GetAnchorId() != FLY_IN_CNTNT &&
+                        (rFrmFmt.GetAnchor().GetAnchorId() != FLY_AS_CHAR) &&
                             pAnchoredObj->GetObjRect().Top() != WEIT_WECH &&
                             rFrmFmt.GetFollowTextFlow().GetValue() &&
                             pAnchoredObj->GetPageFrm() == pTmp->FindPageFrm();
@@ -4612,7 +4457,7 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
     {
         bValidSize = TRUE;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if ( HasFixSize() )
         {
             const SwFmtFrmSize &rFrmSize = GetFmt()->GetFrmSize();
@@ -4776,6 +4621,30 @@ void SwRowFrm::Cut()
     {
         pTab->FindMaster()->InvalidatePos();
     }
+
+    // --> OD 2010-02-17 #i103961#
+    // notification for accessibility
+    {
+        SwRootFrm *pRootFrm = FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
+        {
+            ViewShell* pVSh = pRootFrm->GetCurrShell();
+            if ( pVSh && pVSh->Imp() )
+            {
+                SwFrm* pCellFrm( GetLower() );
+                while ( pCellFrm )
+                {
+                    ASSERT( pCellFrm->IsCellFrm(),
+                            "<SwRowFrm::Cut()> - unexpected type of SwRowFrm lower." );
+                    pVSh->Imp()->DisposeAccessibleFrm( pCellFrm );
+
+                    pCellFrm = pCellFrm->GetNext();
+                }
+            }
+        }
+    }
+    // <--
+
     SwLayoutFrm::Cut();
 }
 
@@ -5219,7 +5088,7 @@ BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva )
                              !( pTabFrm->IsFollow() &&
                                 pTabFrm->FindMaster()->IsRebuildLastLine() ) &&
                              !pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
-                                                            == FLY_IN_CNTNT )
+                                                            == FLY_AS_CHAR )
                         {
                             SwPageFrm* pPageFrm = pAnchoredObj->GetPageFrm();
                             SwPageFrm* pPageOfAnchor = pFrm->FindPageFrm();
@@ -5657,15 +5526,25 @@ long SwCellFrm::GetLayoutRowSpan() const
     return  nRet;
 }
 
-/*************************************************************************
-|*
-|*    SwCellFrm::Modify()
-|*
-|*    Ersterstellung    MA 20. Dec. 96
-|*    Letzte Aenderung  MA 20. Dec. 96
-|*
-|*************************************************************************/
+// --> OD 2010-02-17 #i103961#
+void SwCellFrm::Cut()
+{
+    // notification for accessibility
+    {
+        SwRootFrm *pRootFrm = FindRootFrm();
+        if( pRootFrm && pRootFrm->IsAnyShellAccessible() )
+        {
+            ViewShell* pVSh = pRootFrm->GetCurrShell();
+            if ( pVSh && pVSh->Imp() )
+            {
+                pVSh->Imp()->DisposeAccessibleFrm( this );
+            }
+        }
+    }
 
+    SwLayoutFrm::Cut();
+}
+// <--
 
 //
 // Helper functions for repeated headlines:

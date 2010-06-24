@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textapi.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,9 +25,13 @@
  *
  ************************************************************************/
 
-#include <svx/unoedsrc.hxx>
-#include <svx/unotext.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/unoedsrc.hxx>
+#include <editeng/unotext.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unoipset.hxx>
+#include <editeng/unoprnms.hxx>
+#include <editeng/unoforou.hxx>
 
 class SwDoc;
 

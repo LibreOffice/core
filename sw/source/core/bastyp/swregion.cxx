@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swregion.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +114,7 @@ void SwRegionRects::operator-=( const SwRect &rRect )
             if ( 0 < (nTmp = aInter.Top() - aTmp.Top()) )
             {
                 const long nOldVal = aTmp.Height();
-                aTmp.SSize().Height() = nTmp;
+                aTmp.Height(nTmp);
                 InsertRect( aTmp, i, bDel );
                 aTmp.Height( nOldVal );
             }

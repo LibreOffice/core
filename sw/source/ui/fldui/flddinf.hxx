@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: flddinf.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,15 +30,16 @@
 #include <sfx2/tabdlg.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/group.hxx>
 #include <svtools/svtreebx.hxx>
 
 #include "numfmtlb.hxx"
 #include "fldpage.hxx"
 
+namespace com{namespace sun{ namespace star{ namespace beans{
+    class XPropertySet;
+}}}}
 /*--------------------------------------------------------------------
    Beschreibung:
  --------------------------------------------------------------------*/
@@ -57,7 +55,7 @@ class SwFldDokInfPage : public SwFldPage
     CheckBox            aFixedCB;
 
     SvLBoxEntry*        pSelEntry;
-    com::sun::star::uno::Sequence < ::rtl::OUString > aPropertyNames;
+    com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > xCustomPropertySet;
 
     String              aInfoStr;
 

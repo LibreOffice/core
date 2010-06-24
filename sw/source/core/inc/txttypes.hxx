@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txttypes.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,6 +61,7 @@
 #define POR_ISOTOX      0x808a
 #define POR_REF         0x808b
 #define POR_ISOREF      0x808c
+#define POR_META        0x808d
 
 #define POR_EXP         0xc080
 #define POR_BLANK       0xc081

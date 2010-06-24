@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: toxhlp.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,12 +59,12 @@ IndexEntrySupplierWrapper::IndexEntrySupplierWrapper()
         }
     }
     catch ( UNO_NMSPC::Exception&
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         e
 #endif
         )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "IndexEntrySupplierWrapper: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -88,12 +85,12 @@ String IndexEntrySupplierWrapper::GetIndexKey( const String& rTxt,
         sRet = xIES->getIndexKey( rTxt, rTxtReading, rLocale );
     }
     catch ( UNO_NMSPC::Exception&
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         e
 #endif
         )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getIndexKey: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -109,12 +106,12 @@ String IndexEntrySupplierWrapper::GetFollowingText( BOOL bMorePages ) const
         sRet = xIES->getIndexFollowPageWord( bMorePages, aLcl );
     }
     catch ( UNO_NMSPC::Exception&
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         e
 #endif
         )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getIndexFollowPageWord: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -132,12 +129,12 @@ IndexEntrySupplierWrapper::GetAlgorithmList( const STAR_NMSPC::lang::Locale& rLc
         sRet = xIES->getAlgorithmList( rLcl );
     }
     catch ( UNO_NMSPC::Exception&
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         e
 #endif
         )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "getAlgorithmList: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -155,12 +152,12 @@ sal_Bool IndexEntrySupplierWrapper::LoadAlgorithm(
         bRet = xIES->loadAlgorithm( rLcl, sSortAlgorithm, nOptions );
     }
     catch ( UNO_NMSPC::Exception&
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         e
 #endif
         )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "loadAlgorithm: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );
@@ -181,12 +178,12 @@ sal_Int16 IndexEntrySupplierWrapper::CompareIndexEntry(
                                         rTxt2, rTxtReading2, rLocale2 );
     }
     catch ( UNO_NMSPC::Exception&
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         e
 #endif
         )
     {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         ByteString aMsg( "compareIndexEntry: Exception caught\n" );
         aMsg += ByteString( String( e.Message ), RTL_TEXTENCODING_UTF8 );
         DBG_ERRORFILE( aMsg.GetBuffer() );

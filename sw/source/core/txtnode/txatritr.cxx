@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txatritr.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
 #include <tools/string.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <txatritr.hxx>
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
@@ -55,50 +52,50 @@ SwScriptIterator::SwScriptIterator( const String& rStr, xub_StrLen nStt, sal_Boo
       nCurScript( ScriptType::WEAK ),
       bForward( bFrwrd )
 {
-    if( pBreakIt->xBreak.is() )
+    if( pBreakIt->GetBreakIter().is() )
     {
         if ( ! bFrwrd && nStt )
             --nStt;
 
         xub_StrLen nPos = nStt;
-        nCurScript = pBreakIt->xBreak->getScriptType( rText, nPos );
+        nCurScript = pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
         if( ScriptType::WEAK == nCurScript )
         {
             if( nPos )
             {
-                nPos = (xub_StrLen)pBreakIt->xBreak->beginOfScript(
+                nPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfScript(
                                                 rText, nPos, nCurScript );
                 if( nPos && nPos < rText.Len() )
                 {
                     nStt = --nPos;
-                    nCurScript = pBreakIt->xBreak->getScriptType( rText,nPos);
+                    nCurScript = pBreakIt->GetBreakIter()->getScriptType( rText,nPos);
                 }
             }
         }
 
         nChgPos = bForward ?
-                  (xub_StrLen)pBreakIt->xBreak->endOfScript( rText, nStt, nCurScript ) :
-                  (xub_StrLen)pBreakIt->xBreak->beginOfScript( rText, nStt, nCurScript );
+                  (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rText, nStt, nCurScript ) :
+                  (xub_StrLen)pBreakIt->GetBreakIter()->beginOfScript( rText, nStt, nCurScript );
     }
 }
 
 sal_Bool SwScriptIterator::Next()
 {
     sal_Bool bRet = sal_False;
-    if( pBreakIt->xBreak.is() )
+    if( pBreakIt->GetBreakIter().is() )
     {
         if ( bForward && nChgPos < rText.Len() )
         {
-            nCurScript = pBreakIt->xBreak->getScriptType( rText, nChgPos );
-            nChgPos = (xub_StrLen)pBreakIt->xBreak->endOfScript(
+            nCurScript = pBreakIt->GetBreakIter()->getScriptType( rText, nChgPos );
+            nChgPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript(
                                                 rText, nChgPos, nCurScript );
             bRet = sal_True;
         }
         else if ( ! bForward && nChgPos )
         {
             --nChgPos;
-            nCurScript = pBreakIt->xBreak->getScriptType( rText, nChgPos );
-            nChgPos = (xub_StrLen)pBreakIt->xBreak->beginOfScript(
+            nCurScript = pBreakIt->GetBreakIter()->getScriptType( rText, nChgPos );
+            nChgPos = (xub_StrLen)pBreakIt->GetBreakIter()->beginOfScript(
                                                 rText, nChgPos, nCurScript );
             bRet = sal_True;
         }

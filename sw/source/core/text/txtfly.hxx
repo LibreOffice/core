@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtfly.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,7 +26,7 @@
  ************************************************************************/
 #ifndef _TXTFLY_HXX
 #define _TXTFLY_HXX
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include "swtypes.hxx"
 #include "swrect.hxx"
@@ -102,7 +99,7 @@ public:
                                        const long nXPos,
                                        const sal_Bool bRight );
     // <--
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     void ShowContour( OutputDevice* pOut, const SdrObject* pObj,
                       const Color& rClosedColor, const Color& rOpenColor );
 #endif
@@ -235,7 +232,7 @@ public:
     }
     // <--
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     void ShowContour( OutputDevice* pOut );
 #endif
 };

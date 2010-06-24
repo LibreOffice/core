@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rolbck.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +31,15 @@
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 //Nur die History anziehen, um das docnew.cxx gegen die CLOOK's zu behaupten.
+
+namespace sfx2 {
+    class MetadatableUndo;
+}
 
 class SwDoc;
 class SwFmt;
@@ -74,14 +75,6 @@ class SwCharFmt;
 
 #include <memory>
 
-
-#ifndef PRODUCT
-class Writer;
-#define OUT_HSTR_HINT( name )    \
-    friend Writer& OutUndo_Hstr_ ## name( Writer&, const SwHistoryHint& );
-#else
-#define OUT_HSTR_HINT( name )
-#endif
 
 enum HISTORY_HINT {
     HSTRY_SETFMTHNT,
@@ -126,7 +119,6 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
     virtual String GetDescription() const;
 
-    OUT_HSTR_HINT(SetFmtHnt)
 };
 
 class SwHistoryResetFmt : public SwHistoryHint
@@ -140,7 +132,6 @@ public:
     // <--
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(ResetFmtHnt)
 };
 
 class SwHistorySetTxt : public SwHistoryHint
@@ -155,13 +146,15 @@ public:
     virtual ~SwHistorySetTxt();
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(SetTxtHnt)
 };
 
 class SwHistorySetTxtFld : public SwHistoryHint
 {
-    const ::std::auto_ptr<SwFmtFld> m_pFld;
+    //!! beware of the order for the declation of the auto_ptrs.
+    //!! If they get destroyed in the wrong order sw may crash (namely mail-merge as well)
     ::std::auto_ptr<SwFieldType> m_pFldType;
+    const ::std::auto_ptr<SwFmtFld> m_pFld;
+
     ULONG m_nNodeIndex;
     xub_StrLen m_nPos;
     USHORT m_nFldWhich;
@@ -173,7 +166,6 @@ public:
 
     virtual String GetDescription() const;
 
-    OUT_HSTR_HINT(SetTxtFldHnt)
 };
 
 class SwHistorySetRefMark : public SwHistoryHint
@@ -187,7 +179,6 @@ public:
     SwHistorySetRefMark( SwTxtRefMark* pTxtHt, ULONG nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(SetRefMarkHnt)
 };
 
 class SwHistorySetTOXMark : public SwHistoryHint
@@ -204,7 +195,6 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
     int IsEqual( const SwTOXMark& rCmp ) const;
 
-    OUT_HSTR_HINT(SetToxMarkHnt)
 };
 
 class SwHistoryResetTxt : public SwHistoryHint
@@ -223,7 +213,6 @@ public:
     ULONG GetNode() const           { return m_nNodeIndex; }
     xub_StrLen GetCntnt() const     { return m_nStart; }
 
-    OUT_HSTR_HINT(ResetTxtHnt)
 };
 
 class SwHistorySetFootnote : public SwHistoryHint
@@ -242,7 +231,6 @@ public:
 
     virtual String GetDescription() const;
 
-    OUT_HSTR_HINT(SetFtnHnt)
 };
 
 class SwHistoryChangeFmtColl : public SwHistoryHint
@@ -255,7 +243,6 @@ public:
     SwHistoryChangeFmtColl( SwFmtColl* pColl, ULONG nNode, BYTE nNodeWhich );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(ChangeFmtColl)
 };
 
 class SwHistoryTxtFlyCnt : public SwHistoryHint
@@ -268,7 +255,6 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
     SwUndoDelLayFmt* GetUDelLFmt() { return m_pUndo.get(); }
 
-    OUT_HSTR_HINT(FlyCnt)
 };
 
 class SwHistoryBookmark : public SwHistoryHint
@@ -281,7 +267,6 @@ class SwHistoryBookmark : public SwHistoryHint
         bool IsEqualBookmark(const ::sw::mark::IMark& rBkmk);
         const ::rtl::OUString& GetName() const;
 
-        OUT_HSTR_HINT(Bookmark)
 
     private:
         const ::rtl::OUString m_aName;
@@ -295,6 +280,7 @@ class SwHistoryBookmark : public SwHistoryHint
         const bool m_bSaveOtherPos;
         const bool m_bHadOtherPos;
         const IDocumentMarkAccess::MarkType m_eBkmkType;
+        ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
 };
 
 class SwHistorySetAttrSet : public SwHistoryHint
@@ -308,7 +294,6 @@ public:
                          const SvUShortsSort& rSetArr );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(SetAttrSet)
 };
 
 
@@ -329,7 +314,6 @@ public:
     ULONG GetNode() const               { return m_nNodeIndex; }
     xub_StrLen GetCntnt() const         { return m_nStart; }
 
-    OUT_HSTR_HINT(ResetAttrSet)
 };
 
 class SwHistoryChangeFlyAnchor : public SwHistoryHint
@@ -364,7 +348,6 @@ public:
     SwHistoryChangeCharFmt( const SfxItemSet& rSet, const String & sFmt);
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    OUT_HSTR_HINT(SetAttrSet)
 };
 
 
@@ -446,13 +429,16 @@ public:
     // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     SwRegHistory( SwHistory* pHst );
     // <--
-    SwRegHistory( SwTxtNode* pTxtNode, const SfxItemSet& rSet,
-                xub_StrLen nStart, xub_StrLen nEnd, USHORT nFlags,
-                SwHistory* pHst );
     SwRegHistory( const SwNode& rNd, SwHistory* pHst );
     SwRegHistory( SwModify* pRegIn, const SwNode& rNd, SwHistory* pHst );
 
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+
+    /// @return true iff at least 1 item was inserted
+    bool InsertItems( const SfxItemSet& rSet,
+        xub_StrLen const nStart, xub_StrLen const nEnd,
+        SetAttrMode const nFlags );
+
     void AddHint( SwTxtAttr* pHt, const bool bNew = false );
 
     void RegisterInModify( SwModify* pRegIn, const SwNode& rNd );

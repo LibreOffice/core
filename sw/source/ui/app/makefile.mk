@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -73,6 +69,7 @@ SLOFILES = \
 EXCEPTIONSFILES= \
         $(SLO)$/docsh.obj    \
         $(SLO)$/docst.obj    \
+        $(SLO)$/docshini.obj \
         $(SLO)$/swmodule.obj \
         $(SLO)$/swmodul1.obj \
             $(SLO)$/apphdl.obj   \

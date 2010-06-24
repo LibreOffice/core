@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edglss.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 
 #include <osl/endian.h>
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <tools/cachestr.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
@@ -168,7 +165,7 @@ USHORT SwEditShell::SaveGlossaryDoc( SwTextBlocks& rBlock,
             aStt = pGDoc->GetNodes().GetEndOfExtras();
             pCntntNd = pGDoc->GetNodes().GoNext( &aStt );
             SwPosition aInsPos( aStt, SwIndex( pCntntNd ));
-            pMyDoc->Copy( aCpyPam, aInsPos );
+            pMyDoc->CopyRange( aCpyPam, aInsPos, false );
 
             nRet = rBlock.PutDoc();
         }
@@ -250,13 +247,16 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                 {
                     PCURCRSR->SetMark();
                     PCURCRSR->Move( fnMoveForward, fnGoCntnt );
-                    bRet = GetDoc()->Copy( *PCURCRSR, aPos ) || bRet;
+                    bRet = GetDoc()->CopyRange( *PCURCRSR, aPos, false )
+                        || bRet;
                     PCURCRSR->Exchange();
                     PCURCRSR->DeleteMark();
                 }
             }
             else
-                bRet = GetDoc()->Copy( *PCURCRSR, aPos ) || bRet;
+            {
+                bRet = GetDoc()->CopyRange( *PCURCRSR, aPos, false ) || bRet;
+            }
 
         FOREACHPAM_END()
         }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swthreadmanager.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,10 @@
 #include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 
+#include <boost/utility.hpp>
+#include <memory>
+
+
 class ObservableThread;
 class ThreadManager;
 
@@ -45,6 +46,7 @@ class ThreadManager;
     @author OD
 */
 class SwThreadManager
+    : private ::boost::noncopyable
 {
     public:
 
@@ -52,6 +54,9 @@ class SwThreadManager
 
         static bool ExistsThreadManager();
 
+        // private: don't call!
+        SwThreadManager();
+        // private: don't call!
         ~SwThreadManager();
 
         oslInterlockedCount AddThread( const rtl::Reference< ObservableThread >& rThread );
@@ -76,12 +81,9 @@ class SwThreadManager
         bool StartingOfThreadsSuspended();
 
     private:
-        static SwThreadManager* mpThreadManager;
-        static osl::Mutex* mpGetManagerMutex;
+        static bool mbThreadManagerInstantiated;
 
-        ThreadManager* mpThreadManagerImpl;
-
-        SwThreadManager();
+        ::std::auto_ptr<ThreadManager> mpThreadManagerImpl;
 
 };
 #endif

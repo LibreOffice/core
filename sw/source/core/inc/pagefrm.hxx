@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pagefrm.hxx,v $
- * $Revision: 1.25.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +28,12 @@
 #define _PAGEFRM_HXX
 
 
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 
 #include "ftnboss.hxx"
 #include <tools/mempool.hxx>
+
+#include <SidebarWindowsTypes.hxx>
 
 class SwFlyFrm;
 class SwFlyFrmFmt;
@@ -275,7 +274,7 @@ public:
     void SetFtnPage( BOOL b )                               { bFtnPage = b; }
     void SetEndNotePage( BOOL b )                           { bEndNotePage = b; }
 
-    inline  USHORT GetPhyPageNum() const    { return nPhyPageNum;}
+    inline  USHORT GetPhyPageNum() const        { return nPhyPageNum;}
     inline  void SetPhyPageNum( USHORT nNum )   { nPhyPageNum = nNum;}
     inline  void DecrPhyPageNum()               { --nPhyPageNum;     }
     inline  void IncrPhyPageNum()               { ++nPhyPageNum;     }
@@ -386,7 +385,7 @@ public:
     static void GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
                                              ViewShell*    _pViewShell,
                                              SwRect& _orBorderAndShadowBoundRect,
-                                             bool bRightSidebar );
+                                             const bool bRightSidebar );
 
     static void PaintNotesSidebar(const SwRect& _rPageRect, ViewShell* _pViewShell, USHORT nPageNum, bool bRight);
     static void PaintNotesSidebarArrows(const Point &aMiddleFirst, const Point &aMiddleSecond, ViewShell* _pViewShell, const Color aColorUp, const Color aColorDown);
@@ -396,7 +395,7 @@ public:
         asks the page on which side a margin should be shown, e.g for notes
         returns true for left side, false for right side
     */
-    bool MarginSide() const;
+    sw::sidebarwindows::SidebarPosition SidebarPosition() const;
 
     virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 

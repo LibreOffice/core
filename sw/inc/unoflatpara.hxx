@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoflatpara.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #define _UNOFLATPARA_HXX
 
 #include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/text/XFlatParagraph.hpp>
 #include <com/sun/star/text/XFlatParagraphIterator.hpp>
 #include <calbck.hxx>
@@ -54,9 +52,10 @@ class SwDoc;
  ******************************************************************************/
 
 class SwXFlatParagraph:
-    public ::cppu::WeakImplHelper1
+    public ::cppu::WeakImplHelper2
     <
-        css::text::XFlatParagraph
+        css::text::XFlatParagraph,
+        css::lang::XUnoTunnel
     >,
     public SwXTextMarkup
 {
@@ -87,6 +86,12 @@ public:
     virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getLanguagePortions() throw (css::uno::RuntimeException);
 
     const SwTxtNode* getTxtNode() const;
+
+    static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+
+    // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence< sal_Int8 >& rId)
+        throw (css::uno::RuntimeException);
 
 private:
     SwXFlatParagraph( const SwXFlatParagraph & ); // not defined

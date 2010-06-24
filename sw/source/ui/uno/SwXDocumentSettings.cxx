@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwXDocumentSettings.cxx,v $
- * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,16 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <vos/mutex.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <SwXDocumentSettings.hxx>
 #include <SwXPrintPreviewSettings.hxx>
-#ifndef _COMPHELPER_MASTERPROPERTSETINFO_HXX_
 #include <comphelper/MasterPropertySetInfo.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <doc.hxx>
@@ -49,8 +43,7 @@
 #include <sfx2/printer.hxx>
 #include <editsh.hxx>
 #include <drawdoc.hxx>
-#include <svtools/zforlist.hxx>
-#include <unoobj.hxx>
+#include <svl/zforlist.hxx>
 #include <unotxdoc.hxx>
 #include <cmdid.h>
 #include <svx/zoomitem.hxx>

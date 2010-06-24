@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docbm.cxx,v $
- *
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +37,7 @@
 #include <dcontact.hxx>
 #include <doc.hxx>
 #include <docary.hxx>
+#include <xmloff/odffields.hxx>
 #include <editsh.hxx>
 #include <errhdl.hxx>
 #include <fmtanchr.hxx>
@@ -57,7 +54,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sortedobjs.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <swserv.hxx>
 #include <swundo.hxx>
 #include <tools/pstm.hxx>
@@ -309,6 +306,17 @@ namespace sw { namespace mark
         : m_pDoc(&rDoc)
     { }
 
+    void MarkManager::dumpFieldmarks( ) const
+    {
+        const_iterator_t pIt = m_vFieldmarks.begin();
+        for (; pIt != m_vFieldmarks.end( ); pIt++)
+        {
+            rtl::OUString str = (*pIt)->ToString();
+            OSL_TRACE("%s\n",
+                ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr());
+        }
+    }
+
     ::sw::mark::IMark* MarkManager::makeMark(const SwPaM& rPaM,
         const ::rtl::OUString& rName,
         const IDocumentMarkAccess::MarkType eType)
@@ -412,6 +420,30 @@ namespace sw { namespace mark
         lcl_DebugMarks(m_vFieldmarks);
 #endif
         return pMark.get();
+    }
+
+    ::sw::mark::IFieldmark* MarkManager::makeFieldBookmark( const SwPaM& rPaM,
+        const rtl::OUString& rName,
+        const rtl::OUString& rType )
+    {
+        sw::mark::IMark* pMark = makeMark( rPaM, rName,
+                IDocumentMarkAccess::TEXT_FIELDMARK );
+        sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
+        pFieldMark->SetFieldname( rType );
+
+        return pFieldMark;
+    }
+
+    ::sw::mark::IFieldmark* MarkManager::makeNoTextFieldBookmark( const SwPaM& rPaM,
+        const rtl::OUString& rName,
+        const rtl::OUString& rType)
+    {
+        sw::mark::IMark* pMark = makeMark( rPaM, rName,
+                IDocumentMarkAccess::CHECKBOX_FIELDMARK );
+        sw::mark::IFieldmark* pFieldMark = dynamic_cast<sw::mark::IFieldmark*>( pMark );
+        pFieldMark->SetFieldname( rType );
+
+        return pFieldMark;
     }
 
     ::sw::mark::IMark* MarkManager::getMarkForTxtNode(const SwTxtNode& rTxtNode,
@@ -535,11 +567,11 @@ namespace sw { namespace mark
     }
 
     void MarkManager::deleteMarks(
-        const SwNodeIndex& rStt,
-        const SwNodeIndex& rEnd,
-        ::std::vector<SaveBookmark>* pSaveBkmk,
-        const SwIndex* pSttIdx,
-        const SwIndex* pEndIdx)
+            const SwNodeIndex& rStt,
+            const SwNodeIndex& rEnd,
+            ::std::vector<SaveBookmark>* pSaveBkmk,
+            const SwIndex* pSttIdx,
+            const SwIndex* pEndIdx )
     {
         vector<const_iterator_t> vMarksToDelete;
         bool isSortingNeeded = false;
@@ -574,12 +606,29 @@ namespace sw { namespace mark
                 isPosInRange = true, isOtherPosInRange = true;
             }
 
-            if(isPosInRange && isOtherPosInRange)
+            if(isPosInRange && (isOtherPosInRange || !pMark->IsExpanded()))
             {
                 // completely in range
-                if(pSaveBkmk)
-                    pSaveBkmk->push_back(SaveBookmark(true, true, *pMark, rStt, pSttIdx));
-                vMarksToDelete.push_back(ppMark);
+
+                // --> OD 2009-08-07 #i92125#
+                bool bKeepCrossRefBkmk( false );
+                {
+                    if ( rStt == rEnd &&
+                         ( IDocumentMarkAccess::GetType(*pMark) ==
+                            IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK ||
+                           IDocumentMarkAccess::GetType(*pMark) ==
+                            IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) )
+                    {
+                        bKeepCrossRefBkmk = true;
+                    }
+                }
+                if ( !bKeepCrossRefBkmk )
+                {
+                    if(pSaveBkmk)
+                        pSaveBkmk->push_back(SaveBookmark(true, true, *pMark, rStt, pSttIdx));
+                    vMarksToDelete.push_back(ppMark);
+                }
+                // <--
             }
             else if(isPosInRange ^ isOtherPosInRange)
             {
@@ -596,13 +645,24 @@ namespace sw { namespace mark
                         rEnd,
                         isPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos());
 
-                if(isPosInRange)
-                    pMark->SetMarkPos(*pNewPos);
-                else
-                    pMark->SetOtherMarkPos(*pNewPos);
+                // --> OD 2009-08-06 #i92125#
+                // no move of position for cross-reference bookmarks,
+                // if move occurs inside a certain node
+                if ( ( IDocumentMarkAccess::GetType(*pMark) !=
+                                IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK &&
+                       IDocumentMarkAccess::GetType(*pMark) !=
+                                IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK ) ||
+                     pMark->GetMarkPos().nNode != pNewPos->nNode )
+                {
+                    if(isPosInRange)
+                        pMark->SetMarkPos(*pNewPos);
+                    else
+                        pMark->SetOtherMarkPos(*pNewPos);
 
-                // illegal selection? collapse the mark and restore sorting later
-                isSortingNeeded |= lcl_FixCorrectedMark(isPosInRange, isOtherPosInRange, pMark);
+                    // illegal selection? collapse the mark and restore sorting later
+                    isSortingNeeded |= lcl_FixCorrectedMark(isPosInRange, isOtherPosInRange, pMark);
+                }
+                // <--
             }
         }
 
@@ -613,7 +673,9 @@ namespace sw { namespace mark
         for(vector<const_iterator_t>::reverse_iterator pppMark = vMarksToDelete.rbegin();
             pppMark != vMarksToDelete.rend();
             pppMark++)
+        {
             deleteMark(*pppMark);
+        }
         if(isSortingNeeded)
             sortMarks();
 #if FALSE
@@ -737,12 +799,7 @@ namespace sw { namespace mark
     {
         const_iterator_t pFieldmark = find_if(
             m_vFieldmarks.begin(),
-            // we do not need to check marks starting behind the positon
-            lower_bound(
-                m_vFieldmarks.begin(),
-                m_vFieldmarks.end(),
-                rPos,
-                bind(&IMark::StartsAfter, _1, _2)),
+            m_vFieldmarks.end( ),
             bind(&IMark::IsCoveringPosition, _1, rPos));
         if(pFieldmark == m_vFieldmarks.end()) return NULL;
         return dynamic_cast<IFieldmark*>(pFieldmark->get());
@@ -965,6 +1022,13 @@ SaveBookmark::SaveBookmark(
     {
         m_aShortName = pBookmark->GetShortName();
         m_aCode = pBookmark->GetKeyCode();
+
+        ::sfx2::Metadatable const*const pMetadatable(
+                dynamic_cast< ::sfx2::Metadatable const* >(pBookmark));
+        if (pMetadatable)
+        {
+            m_pMetadataUndo = pMetadatable->CreateUndo();
+        }
     }
     m_nNode1 = rBkmk.GetMarkPos().nNode.GetIndex();
     m_nCntnt1 = rBkmk.GetMarkPos().nContent.GetIndex();
@@ -1043,6 +1107,16 @@ void SaveBookmark::SetInDoc(
         {
             pBookmark->SetKeyCode(m_aCode);
             pBookmark->SetShortName(m_aShortName);
+            if (m_pMetadataUndo)
+            {
+                ::sfx2::Metadatable * const pMeta(
+                    dynamic_cast< ::sfx2::Metadatable* >(pBookmark));
+                OSL_ENSURE(pMeta, "metadata undo, but not metadatable?");
+                if (pMeta)
+                {
+                    pMeta->RestoreMetadata(m_pMetadataUndo);
+                }
+            }
         }
     }
 }
@@ -1211,7 +1285,6 @@ void _SaveCntntIdx(SwDoc* pDoc,
         SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
         if( pNode )
         {
-            const SwPosition* pAPos;
 
             SwFrm* pFrm = pNode->GetFrm();
 #if OSL_DEBUG_LEVEL > 1
@@ -1229,16 +1302,18 @@ void _SaveCntntIdx(SwDoc* pDoc,
                         SwAnchoredObject* pObj = rDObj[ --n ];
                         const SwFrmFmt& rFmt = pObj->GetFrmFmt();
                         const SwFmtAnchor& rAnchor = rFmt.GetAnchor();
-                        if( ( ( nSaveFly && FLY_AT_CNTNT == rAnchor.GetAnchorId() ) ||
-                              FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
-                            ( 0 != ( pAPos = rAnchor.GetCntntAnchor() ) ) )
+                        SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+                        if ( pAPos &&
+                             ( ( nSaveFly &&
+                                 FLY_AT_PARA == rAnchor.GetAnchorId() ) ||
+                               ( FLY_AT_CHAR == rAnchor.GetAnchorId() ) ) )
                         {
                             aSave.SetType( 0x2000 );
                             aSave.SetContent( pAPos->nContent.GetIndex() );
 
                             OSL_ENSURE( nNode == pAPos->nNode.GetIndex(),
                                     "_SaveCntntIdx: Wrong Node-Index" );
-                            if( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+                            if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
                             {
                                 if( nCntnt <= aSave.GetContent() )
                                 {
@@ -1273,14 +1348,14 @@ void _SaveCntntIdx(SwDoc* pDoc,
                         continue;
 
                     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
-                    if( ( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
-                            FLY_AUTO_CNTNT == rAnchor.GetAnchorId() ) &&
-                        0 != ( pAPos = rAnchor.GetCntntAnchor()) &&
-                        nNode == pAPos->nNode.GetIndex() )
+                    SwPosition const*const pAPos = rAnchor.GetCntntAnchor();
+                    if ( pAPos && ( nNode == pAPos->nNode.GetIndex() ) &&
+                         ( FLY_AT_PARA == rAnchor.GetAnchorId() ||
+                           FLY_AT_CHAR == rAnchor.GetAnchorId() ) )
                     {
                         aSave.SetType( 0x2000 );
                         aSave.SetContent( pAPos->nContent.GetIndex() );
-                        if( FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+                        if ( FLY_AT_CHAR == rAnchor.GetAnchorId() )
                         {
                             if( nCntnt <= aSave.GetContent() )
                             {
@@ -1396,11 +1471,15 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                         SwFmtAnchor aNew( rFlyAnchor );
                         SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
                         aNewPos.nNode = *pCNd;
-                        if( FLY_AUTO_CNTNT == rFlyAnchor.GetAnchorId() )
+                        if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
+                        {
                             aNewPos.nContent.Assign( pCNd,
                                                      aSave.GetContent() + nOffset );
+                        }
                         else
+                        {
                             aNewPos.nContent.Assign( 0, 0 );
+                        }
                         aNew.SetAnchor( &aNewPos );
                         pFrmFmt->SetFmtAttr( aNew );
                     }
@@ -1560,11 +1639,15 @@ void _RestoreCntntIdx(SvULongs& rSaveArr,
                         SwFmtAnchor aNew( rFlyAnchor );
                         SwPosition aNewPos( *rFlyAnchor.GetCntntAnchor() );
                         aNewPos.nNode = rNd;
-                        if( FLY_AUTO_CNTNT == rFlyAnchor.GetAnchorId() )
+                        if ( FLY_AT_CHAR == rFlyAnchor.GetAnchorId() )
+                        {
                             aNewPos.nContent.Assign( pCNd, Min(
                                                      aSave.GetContent(), nLen ) );
+                        }
                         else
+                        {
                             aNewPos.nContent.Assign( 0, 0 );
+                        }
                         aNew.SetAnchor( &aNewPos );
                         pFrmFmt->SetFmtAttr( aNew );
                     }

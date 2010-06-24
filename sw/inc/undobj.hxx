@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: undobj.hxx,v $
- * $Revision: 1.44 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,18 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _UNDOBJ_HXX
-#define _UNDOBJ_HXX
+#ifndef SW_UNDOBJ_HXX
+#define SW_UNDOBJ_HXX
+
+// --> OD 2006-11-01 #130889#
+#include <vector>
+// <--
+#include <memory>
+
+#include <boost/shared_ptr.hpp>
+
+#include <com/sun/star/uno/Sequence.h>
+
 #include <tools/mempool.hxx>
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_USHORTS
@@ -36,25 +43,19 @@
 #define _SVSTDARR_BOOLS
 #define _SVSTDARR_BYTES
 #define _SVSTDARR_USHORTSSORT
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/itemset.hxx>
-#include <com/sun/star/uno/Sequence.h>
+#include <svl/itemset.hxx>
+
+#include <svx/svdundo.hxx> // #111827#
+
 #include <numrule.hxx>
 #include <itabenum.hxx>
 #include <format.hxx>
 #include <SwRewriter.hxx>
-#include <svx/svdundo.hxx> // #111827#
-
 #include <swundo.hxx>
-
 #include <IMark.hxx>
-// --> OD 2006-11-01 #130889#
-#include <vector>
-// <--
-
-#include <boost/shared_ptr.hpp>
-#include <memory>
+#include <IDocumentContentOperations.hxx>
 
 
 class SwUndoIter;
@@ -73,8 +74,9 @@ class SwTableBox;
 struct SwSortOptions;
 class SwFrmFmt;
 class SwHistoryBookmark;
-class SwSection;
+class SwSectionData;
 class SwSectionFmt;
+class SwTOXBase;
 class SvxTabStopItem;
 class SwDDEFieldType;
 class Graphic;
@@ -113,15 +115,6 @@ namespace sfx2 {
 namespace utl {
     class TransliterationWrapper;
 }
-
-#ifndef PRODUCT
-class Writer;
-class SwUndo;
-#define OUT_UNDOBJ( name )  \
-    friend Writer& OutUndo_ ## name( Writer&, const SwUndo& );
-#else
-#define OUT_UNDOBJ( name )
-#endif
 
 
 const String UNDO_ARG1("$1", RTL_TEXTENCODING_ASCII_US);
@@ -205,6 +198,11 @@ namespace nsDelCntntType
     const DelCntntType DELCNT_CHKNOCNTNT = 0x80;
 }
 
+/// will DelCntntIndex destroy a frame anchored at character at rAnchorPos?
+bool IsDestroyFrameAnchoredAtChar(SwPosition const & rAnchorPos,
+        SwPosition const & rStart, SwPosition const & rEnd,
+        DelCntntType const nDelCntntType = nsDelCntntType::DELCNT_ALL);
+
 // diese Klasse muss in ein Undo-Object vererbt werden, wenn dieses Inhalt
 // fuers Redo/Undo ... speichert
 class SwUndoSaveCntnt
@@ -241,7 +239,6 @@ protected:
 public:
     SwUndoSaveCntnt();
     ~SwUndoSaveCntnt();
-    OUT_UNDOBJ( SaveCntnt )
 };
 
 
@@ -268,7 +265,6 @@ public:
 
     const SwHistory* GetHistory() const { return pHistory; }
           SwHistory* GetHistory()       { return pHistory; }
-    OUT_UNDOBJ( SaveSection )
 };
 
 
@@ -317,7 +313,6 @@ public:
     // Setzen vom End-Undo-Offset geschieht im Doc::EndUndo
     USHORT GetEndOffset() const { return nEndOffset; }
     void SetEndOffset( USHORT n ) { nEndOffset = n; }
-    OUT_UNDOBJ( Start )
 };
 
 class SwUndoEnd: public SwUndo
@@ -349,7 +344,6 @@ public:
     // Setzen vom Start-Undo-Offset geschieht im Doc::EndUndo
     void SetSttOffset(USHORT _nSttOffSet) { nSttOffset = _nSttOffSet; }
     USHORT GetSttOffset() const { return nSttOffset; }
-    OUT_UNDOBJ( End )
 };
 
 class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
@@ -362,6 +356,8 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
     BOOL bIsWordDelim : 1;
     BOOL bIsAppend : 1;
 
+    const IDocumentContentOperations::InsertFlags m_nInsertFlags;
+
     friend class SwDoc;     // eigentlich nur SwDoc::Insert( String )
     BOOL CanGrouping( sal_Unicode cIns );
     BOOL CanGrouping( const SwPosition& rPos );
@@ -373,6 +369,7 @@ class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 
 public:
     SwUndoInsert( const SwNodeIndex& rNode, xub_StrLen nCntnt, xub_StrLen nLen,
+                  const IDocumentContentOperations::InsertFlags nInsertFlags,
                   BOOL bWDelim = TRUE );
     SwUndoInsert( const SwNodeIndex& rNode );
     virtual ~SwUndoInsert();
@@ -395,8 +392,6 @@ public:
      */
     virtual SwRewriter GetRewriter() const;
 
-    BOOL CanGrouping( const SwPosition&, sal_Unicode cIns );
-    OUT_UNDOBJ( Insert )
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoInsert)
 };
@@ -466,8 +461,6 @@ public:
     xub_StrLen ContentStart() const { return nSttCntnt; }
     BOOL IsDelFullPara() const { return bDelFullPara; }
 
-    OUT_UNDOBJ( Delete )
-
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)
 };
 
@@ -503,7 +496,6 @@ public:
     virtual SwRewriter GetRewriter() const;
 
     BOOL CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
-    OUT_UNDOBJ( Overwrite )
 };
 
 
@@ -522,7 +514,6 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
     void SetTblFlag()       { bTblFlag = TRUE; }
-    OUT_UNDOBJ( SplitNode )
 };
 
 
@@ -557,11 +548,9 @@ public:
     ULONG GetEndNode() const        { return nEndNode; }
     ULONG GetDestSttNode() const    { return nDestSttNode; }
     xub_StrLen GetDestSttCntnt() const  { return nDestSttCntnt; }
-    void AddTblMrgFlyHstry( SwHistory& rHstr );
 
     void SetMoveRedlines( bool b )       { bMoveRedlines = b; }
 
-    OUT_UNDOBJ( Move )
 };
 
 
@@ -572,13 +561,13 @@ class SwUndoAttr : public SwUndo, private SwUndRng
     ::std::auto_ptr<SwRedlineData> m_pRedlineData;  // Redlining
     ::std::auto_ptr<SwRedlineSaveDatas> m_pRedlineSaveData;
     ULONG m_nNodeIndex;                             // Offset: for Redlining
-    const USHORT m_nInsertFlags;                    // insert flags
+    const SetAttrMode m_nInsertFlags;               // insert flags
 
     void RemoveIdx( SwDoc& rDoc );
 
 public:
-    SwUndoAttr( const SwPaM&, const SfxItemSet&, USHORT nFlags = 0  );
-    SwUndoAttr( const SwPaM&, const SfxPoolItem&, USHORT nFlags = 0 );
+    SwUndoAttr( const SwPaM&, const SfxItemSet &, const SetAttrMode nFlags );
+    SwUndoAttr( const SwPaM&, const SfxPoolItem&, const SetAttrMode nFlags );
     virtual ~SwUndoAttr();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
@@ -587,7 +576,6 @@ public:
 
     SwHistory& GetHistory() { return *m_pHistory; }
 
-    OUT_UNDOBJ( InsAttr )
 };
 
 class SwUndoResetAttr : public SwUndo, private SwUndRng
@@ -607,7 +595,6 @@ public:
 
     SwHistory& GetHistory() { return *m_pHistory; }
 
-    OUT_UNDOBJ( ResetAttr )
 };
 
 class SwUndoFmtAttr : public SwUndo
@@ -652,8 +639,6 @@ public:
     // <--
     virtual void Repeat( SwUndoIter& );
     virtual SwRewriter GetRewriter() const;
-
-    OUT_UNDOBJ( InsFmtAttr )
 
     void PutAttr( const SfxPoolItem& rItem );
     SwFmt* GetFmt( SwDoc& rDoc );   // checks if it is still in the Doc!
@@ -751,7 +736,7 @@ public:
     virtual SwRewriter GetRewriter() const;
 
     SwHistory* GetHistory() { return pHistory; }
-    OUT_UNDOBJ( SetFmtColl )
+
 };
 
 
@@ -769,7 +754,6 @@ public:
 
     SwHistory& GetHistory() { return *m_pHistory; }
 
-    OUT_UNDOBJ( MoveLeftMargin )
 };
 
 // Basis-Klasse fuer Insert von Dokument, Glossaries und Kopieren
@@ -795,21 +779,18 @@ public:
     // setze den Destination-Bereich nach dem Einlesen.
     void SetInsertRange( const SwPaM&, BOOL bScanFlys = TRUE,
                         BOOL bSttWasTxtNd = TRUE );
-    OUT_UNDOBJ( Inserts )
 };
 
 class SwUndoInsDoc : public SwUndoInserts
 {
 public:
     SwUndoInsDoc( const SwPaM& );
-    OUT_UNDOBJ( InsDoc )
 };
 
 class SwUndoCpyDoc : public SwUndoInserts
 {
 public:
     SwUndoCpyDoc( const SwPaM& );
-    OUT_UNDOBJ( Copy )
 };
 
 class SwUndoInsTbl : public SwUndo
@@ -836,7 +817,6 @@ public:
 
     virtual SwRewriter GetRewriter() const;
 
-    OUT_UNDOBJ( InsTable )
 };
 
 class SwUndoTxtToTbl : public SwUndo, public SwUndRng
@@ -861,7 +841,6 @@ public:
 
     SwHistory& GetHistory();        // wird ggfs. angelegt
     void AddFillBox( const SwTableBox& rBox );
-    OUT_UNDOBJ( TextToTable )
 };
 
 class SwUndoTblToTxt : public SwUndo
@@ -887,7 +866,6 @@ public:
     void SetRange( const SwNodeRange& );
     void AddBoxPos( SwDoc& rDoc, ULONG nNdIdx, ULONG nEndIdx,
                     xub_StrLen nCntntIdx = STRING_MAXLEN);
-    OUT_UNDOBJ( TableToText )
 };
 
 class SwUndoAttrTbl : public SwUndo
@@ -900,7 +878,6 @@ public:
     virtual ~SwUndoAttrTbl();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
-    OUT_UNDOBJ( SetTableAttr )
 };
 
 class SwUndoTblAutoFmt : public SwUndo
@@ -918,7 +895,6 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     void SaveBoxCntnt( const SwTableBox& rBox );
-    OUT_UNDOBJ( TableAutoFmt )
 };
 
 class SwUndoTblNdsChg : public SwUndo
@@ -968,7 +944,6 @@ public:
         nRelDiff = (USHORT)nRelDif;
     }
 
-    OUT_UNDOBJ( TblNodesChg )
 };
 
 class SwUndoTblMerge : public SwUndo, private SwUndRng
@@ -994,7 +969,6 @@ public:
 
     void SaveCollection( const SwTableBox& rBox );
 
-    OUT_UNDOBJ( TblMerge )
 };
 
 
@@ -1022,7 +996,6 @@ public:
     void SetNumFmt( ULONG nNewNumFmtIdx, const double& rNewNumber )
             { nFmtIdx = nNewNumFmtIdx; fNum = rNewNumber; }
     void SetBox( const SwTableBox& rBox );
-    OUT_UNDOBJ( TblNumFmt )
 };
 
 class _UndoTblCpyTbl_Entries;
@@ -1047,7 +1020,6 @@ public:
 
     BOOL IsEmpty() const;
     BOOL InsertRow( SwTable& rTbl, const SwSelBoxes& rBoxes, USHORT nCnt );
-    OUT_UNDOBJ( TblCpyTbl )
 };
 
 class SwUndoCpyTbl : public SwUndo
@@ -1061,7 +1033,6 @@ public:
     virtual void Redo( SwUndoIter& );
 
     void SetTableSttIdx( ULONG nIdx )           { nTblNode = nIdx; }
-    OUT_UNDOBJ( CpyTbl )
 };
 
 class SwUndoSplitTbl : public SwUndo
@@ -1134,22 +1105,12 @@ public:
 };
 
 
-class SwUndoDelBookmark : public SwUndoBookmark
-{
-public:
-    SwUndoDelBookmark( const ::sw::mark::IMark& );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    OUT_UNDOBJ( DelBookmark )
-};
-
 class SwUndoInsBookmark : public SwUndoBookmark
 {
 public:
     SwUndoInsBookmark( const ::sw::mark::IMark& );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
-    OUT_UNDOBJ( InsBookmark )
 };
 
 
@@ -1208,7 +1169,6 @@ public:
     void Insert( const String& rOrgPos, const String& rNewPos );
     void Insert( ULONG nOrgPos, ULONG nNewPos );
 
-    OUT_UNDOBJ( Sort )
 };
 
 
@@ -1238,7 +1198,6 @@ public:
     virtual void Undo( SwUndoIter& ) = 0;
     virtual void Redo( SwUndoIter& ) = 0;
 
-    OUT_UNDOBJ( FlyBase )
 };
 
 class SwUndoInsLayFmt : public SwUndoFlyBase
@@ -1255,7 +1214,6 @@ public:
 
     String GetComment() const;
 
-    OUT_UNDOBJ( InsLayFmt )
 };
 
 class SwUndoDelLayFmt : public SwUndoFlyBase
@@ -1272,7 +1230,6 @@ public:
 
     virtual SwRewriter GetRewriter() const;
 
-    OUT_UNDOBJ( DelLayFmt )
 };
 
 
@@ -1349,7 +1306,6 @@ public:
     BOOL IsFull() const
         { return ((USHRT_MAX / sizeof( void* )) - 50 ) < aArr.Count(); }
 
-    OUT_UNDOBJ( Replace )
 };
 
 
@@ -1366,7 +1322,6 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
-    OUT_UNDOBJ( SwUndoTblHeadline )
 };
 
 
@@ -1374,57 +1329,36 @@ public:
 
 class SwUndoInsSection : public SwUndo, private SwUndRng
 {
-    SwHistory* pHistory;
-    SwSection* pSection;
-    SwRedlineData* pRedlData;
-    SfxItemSet* pAttr;
-    ULONG nSectNodePos;
-    BOOL bSplitAtStt : 1;
-    BOOL bSplitAtEnd : 1;
-    BOOL bUpdateFtn : 1;
+private:
+    const ::std::auto_ptr<SwSectionData> m_pSectionData;
+    const ::std::auto_ptr<SwTOXBase> m_pTOXBase; /// set iff section is TOX
+    const ::std::auto_ptr<SfxItemSet> m_pAttrSet;
+    ::std::auto_ptr<SwHistory> m_pHistory;
+    ::std::auto_ptr<SwRedlineData> m_pRedlData;
+    ULONG m_nSectionNodePos;
+    bool m_bSplitAtStart : 1;
+    bool m_bSplitAtEnd : 1;
+    bool m_bUpdateFtn : 1;
 
     void Join( SwDoc& rDoc, ULONG nNode );
 
 public:
-    SwUndoInsSection( const SwPaM&, const SwSection&,
-                        const SfxItemSet* pSet );
+    SwUndoInsSection(SwPaM const&, SwSectionData const&,
+        SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase);
     virtual ~SwUndoInsSection();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
-    OUT_UNDOBJ( SwUndoInsSection )
 
-    void SetSectNdPos( ULONG nPos )         { nSectNodePos = nPos; }
-    void SaveSplitNode( SwTxtNode* pTxtNd, BOOL bAtStt );
-    void SetUpdtFtnFlag( BOOL bFlag )       { bUpdateFtn = bFlag; }
+    void SetSectNdPos(ULONG const nPos)     { m_nSectionNodePos = nPos; }
+    void SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart);
+    void SetUpdtFtnFlag(bool const bFlag)   { m_bUpdateFtn = bFlag; }
 };
 
-class SwUndoDelSection : public SwUndo
-{
-    ULONG nSttNd, nEndNd;
-    SwSection* pSection;
-    SfxItemSet* pAttr;
-public:
-    SwUndoDelSection( const SwSectionFmt& );
-    virtual ~SwUndoDelSection();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    OUT_UNDOBJ( SwUndoDelSection )
-};
+SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const&);
 
-class SwUndoChgSection : public SwUndo
-{
-    ULONG nSttNd;
-    SwSection* pSection;
-    SfxItemSet* pAttr;
-    BOOL bOnlyAttrChgd;
-public:
-    SwUndoChgSection( const SwSectionFmt&, BOOL bOnlyAttrChgd );
-    virtual ~SwUndoChgSection();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    OUT_UNDOBJ( SwUndoChgSection )
-};
+SW_DLLPRIVATE SwUndo * MakeUndoUpdateSection(SwSectionFmt const&, bool const);
+
 
 //------------ Undo von verschieben/stufen von Gliederung ----------------
 
@@ -1436,7 +1370,6 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
-    OUT_UNDOBJ( SwUndoOutlineLeftRight )
 };
 
 //--------------------------------------------------------------------
@@ -1452,7 +1385,6 @@ public:
     virtual ~SwUndoDefaultAttr();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
-    OUT_UNDOBJ( DefaultAttr )
 };
 
 //--------------------------------------------------------------------
@@ -1484,7 +1416,6 @@ public:
 
     void SetLRSpaceEndPos();
 
-    OUT_UNDOBJ( InsNum )
 };
 
 class SwUndoDelNum : public SwUndo, private SwUndRng
@@ -1503,7 +1434,6 @@ public:
     void AddNode( const SwTxtNode& rNd, BOOL bResetLRSpace );
     SwHistory* GetHistory() { return pHistory; }
 
-    OUT_UNDOBJ( DelNum )
 };
 
 class SwUndoMoveNum : public SwUndo, private SwUndRng
@@ -1516,7 +1446,6 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
     void SetStartNode( ULONG nValue ) { nNewStt = nValue; }
-    OUT_UNDOBJ( MoveNum )
 };
 
 class SwUndoNumUpDown : public SwUndo, private SwUndRng
@@ -1527,7 +1456,6 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
-    OUT_UNDOBJ( NumUpDown )
 };
 
 class SwUndoNumOrNoNum : public SwUndo
@@ -1541,7 +1469,6 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
-    OUT_UNDOBJ( NumOrNoNum )
 };
 
 class SwUndoNumRuleStart : public SwUndo
@@ -1556,7 +1483,6 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
-    OUT_UNDOBJ( NumRuleStart )
 };
 
 //--------------------------------------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomailmerge.cxx,v $
- * $Revision: 1.26.206.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <osl/mutex.hxx>
-#include <svtools/itemprop.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/shl.hxx>    // GetAppData
 #include <tools/tempfile.hxx>
@@ -429,7 +426,7 @@ SwXMailMerge::SwXMailMerge() :
     SwDocShell *pDocShell = new SwDocShell( SFX_CREATE_MODE_STANDARD );
     xDocSh = pDocShell;
     xDocSh->DoInitNew( 0 );
-    SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0, TRUE );
+    SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     SwView *pView = (SwView*) pFrame->GetViewShell();
     pView->AttrChangedNotify( &pView->GetWrtShell() );//Damit SelectShell gerufen wird.
 
@@ -627,7 +624,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         aCurSelection = aTranslated;
     }
 
-    SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh, 0, FALSE);
+    SfxViewFrame*   pFrame = SfxViewFrame::GetFirst( xCurDocSh, FALSE);
     SwView *pView = PTR_CAST( SwView, pFrame->GetViewShell() );
     if (!pView)
         throw RuntimeException();
@@ -725,6 +722,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         // when mail merge is called as command line macro
         aMergeDesc.bPrintAsync = sal_False;
         aMergeDesc.aPrintOptions = aPrintSettings;
+        aMergeDesc.bCreateSingleFile = true;
     }
     else /* FILE and MAIL*/
     {
@@ -830,9 +828,9 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     DBG_ASSERT( !pOldSrc || pOldSrc == this, "Ooops... different event source already set." );
     pMgr->SetMailMergeEvtSrc( this );   // launch events for listeners
 
-    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, xCurDocSh));
+    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), xCurDocSh));
     BOOL bSucc = pMgr->MergeNew( aMergeDesc );
-    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, xCurDocSh));
+    SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE_END), xCurDocSh));
 
     pMgr->SetMailMergeEvtSrc( pOldSrc );
 

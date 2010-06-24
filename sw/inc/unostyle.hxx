@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unostyle.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,8 @@
 #define _UNOSTYLE_HXX
 
 #include <boost/shared_ptr.hpp>
-#include <svtools/style.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/style.hxx>
+#include <svl/lstner.hxx>
 #include <unocoll.hxx>
 #include <unomap.hxx>
 #include <com/sun/star/style/XStyle.hpp>

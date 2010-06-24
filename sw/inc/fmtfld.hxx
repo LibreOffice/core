@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fmtfld.hxx,v $
- * $Revision: 1.9.118.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,15 +27,16 @@
 #ifndef _FMTFLD_HXX
 #define _FMTFLD_HXX
 
-#include <svtools/poolitem.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/smplhint.hxx>
 
 #include "swdllapi.h"
 #include <calbck.hxx>
 
 class SwField;
 class SwTxtFld;
+class SwView;
 
 // ATT_FLD ***********************************
 class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBroadcaster
@@ -103,16 +101,19 @@ class SW_DLLPUBLIC SwFmtFldHint : public SfxHint
 
     const SwFmtFld* pFld;
     sal_Int16 nWhich;
+    const SwView* pView;
 
 public:
-    SwFmtFldHint( const SwFmtFld* p, sal_Int16 n )
+    SwFmtFldHint( const SwFmtFld* p, sal_Int16 n, const SwView* pV = 0)
         : pFld(p)
         , nWhich(n)
+        , pView(pV)
     {}
 
     TYPEINFO();
     const SwFmtFld* GetField() const { return pFld; }
     sal_Int16 Which() const { return nWhich; }
+    const SwView* GetView() const { return pView; }
 };
 
 #endif

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: smmod.hxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
 #endif
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 
 #include <tools/shl.hxx>
@@ -44,11 +41,13 @@
 #include "starmath.hrc"
 #endif
 
+#include <unotools/options.hxx>
+
 class SvxErrorHandler;
 class SfxObjectFactory;
 class SmConfig;
 class SmModule;
-class SmSymSetManager;
+class SmSymbolManager;
 
 /*************************************************************************
 |*
@@ -124,7 +123,7 @@ public:
 
 /////////////////////////////////////////////////////////////////
 
-class SmModule : public SfxModule, public SfxListener
+class SmModule : public SfxModule, utl::ConfigurationListener
 {
     svtools::ColorConfig        *pColorConfig;
     SmConfig                *pConfig;
@@ -145,13 +144,12 @@ public:
     SmModule(SfxObjectFactory* pObjFact);
     virtual ~SmModule();
 
-    // SfxListener
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
 
     svtools::ColorConfig &  GetColorConfig();
 
     SmConfig *              GetConfig();
-    SmSymSetManager &       GetSymSetManager();
+    SmSymbolManager &       GetSymbolManager();
 
     SmLocalizedSymbolData &   GetLocSymbolData() const;
 
@@ -178,7 +176,6 @@ public:
 };
 
 #define SM_MOD() ( *(SmModule**) GetAppData(SHL_SM) )
-#define SM_MOD1() ( *(SmModule**) GetAppData(SHL_SM) )
 
 #endif                                 // _SDMOD_HXX
 

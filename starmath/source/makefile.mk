@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.35 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -52,33 +48,32 @@ SRC2FILES = smres.src   \
             commands.src
 
 SLO1FILES =  \
-        $(SLO)$/register.obj \
-        $(SLO)$/typemap.obj \
-        $(SLO)$/symbol.obj \
-        $(SLO)$/toolbox.obj \
-        $(SLO)$/action.obj \
         $(SLO)$/accessibility.obj \
+        $(SLO)$/edit.obj \
+        $(SLO)$/eqnolefilehdr.obj \
+        $(SLO)$/mathmlexport.obj \
+        $(SLO)$/mathmlimport.obj \
+        $(SLO)$/symbol.obj \
+        $(SLO)$/types.obj \
+        $(SLO)$/unodoc.obj \
+        $(SLO)$/action.obj \
         $(SLO)$/cfgitem.obj \
         $(SLO)$/config.obj \
         $(SLO)$/dialog.obj \
         $(SLO)$/document.obj \
-        $(SLO)$/mathtype.obj \
-        $(SLO)$/mathmlimport.obj \
-        $(SLO)$/mathmlexport.obj \
         $(SLO)$/format.obj \
+        $(SLO)$/mathtype.obj \
         $(SLO)$/node.obj \
         $(SLO)$/parse.obj \
-        $(SLO)$/utility.obj \
+        $(SLO)$/register.obj \
         $(SLO)$/smdll.obj \
+        $(SLO)$/toolbox.obj \
+        $(SLO)$/typemap.obj \
         $(SLO)$/smmod.obj \
-        $(SLO)$/types.obj \
-        $(SLO)$/view.obj \
-        $(SLO)$/viewhdl.obj \
-        $(SLO)$/edit.obj \
+        $(SLO)$/utility.obj \
         $(SLO)$/rect.obj \
         $(SLO)$/unomodel.obj \
-        $(SLO)$/unodoc.obj \
-        $(SLO)$/eqnolefilehdr.obj
+        $(SLO)$/view.obj
 
 SLO2FILES =  \
         $(SLO)$/register.obj  \
@@ -90,16 +85,18 @@ SLOFILES = \
     $(SLO2FILES)
 
 EXCEPTIONSFILES =   \
+        $(SLO)$/register.obj  \
         $(SLO)$/accessibility.obj \
         $(SLO)$/cfgitem.obj \
+        $(SLO)$/dialog.obj \
         $(SLO)$/document.obj \
         $(SLO)$/node.obj \
         $(SLO)$/parse.obj \
         $(SLO)$/mathmlimport.obj \
         $(SLO)$/mathmlexport.obj \
         $(SLO)$/mathtype.obj \
+        $(SLO)$/smdll.obj \
         $(SLO)$/view.obj \
-        $(SLO)$/viewhdl.obj \
         $(SLO)$/unomodel.obj \
         $(SLO)$/smdetect.obj \
         $(SLO)$/symbol.obj \

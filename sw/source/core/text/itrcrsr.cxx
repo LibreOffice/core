@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: itrcrsr.cxx,v $
- * $Revision: 1.81.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,10 +37,10 @@
 #include "pam.hxx"
 #include "swselectionlist.hxx"
 #include <sortedobjs.hxx>
-#include <svx/protitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <frmatr.hxx>
 #include <pagedesc.hxx> // SwPageDesc
 #include <tgrditem.hxx>
@@ -60,6 +57,9 @@
 #include "pordrop.hxx"
 #include "crstate.hxx"      // SwCrsrMoveState
 #include <pormulti.hxx>     // SwMultiPortion
+// --> OD 2010-05-05 #i111284#
+#include <numrule.hxx>
+// <--
 
 // Nicht reentrant !!!
 // wird in GetCharRect gesetzt und im UnitUp/Down ausgewertet.
@@ -146,6 +146,27 @@ void lcl_GetCharRectInsideField( SwTxtSizeInfo& rInf, SwRect& rOrig,
     }
 }
 
+// --> OD 2010-05-05 #i111284#
+namespace {
+    bool AreListLevelIndentsApplicableAndLabelAlignmentActive( const SwTxtNode& rTxtNode )
+    {
+        bool bRet( false );
+
+        if ( rTxtNode.AreListLevelIndentsApplicable() )
+        {
+            const SwNumFmt& rNumFmt =
+                    rTxtNode.GetNumRule()->Get( static_cast<USHORT>(rTxtNode.GetActualListLevel()) );
+            if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
+            {
+                bRet = true;
+            }
+        }
+
+        return bRet;
+    }
+} // end of anonymous namespace
+// <--
+
 /*************************************************************************
  *                SwTxtMargin::CtorInitTxtMargin()
  *************************************************************************/
@@ -157,8 +178,12 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
     GetInfo().SetFont( GetFnt() );
     const SwTxtNode *pNode = pFrm->GetTxtNode();
 
-    const SvxLRSpaceItem &rSpace =
-        pFrm->GetTxtNode()->GetSwAttrSet().GetLRSpace();
+    const SvxLRSpaceItem &rSpace = pFrm->GetTxtNode()->GetSwAttrSet().GetLRSpace();
+    // --> OD 2009-09-08 #i95907#, #b6879723#
+    // --> OD 2010-05-05 #i111284#
+    const bool bListLevelIndentsApplicableAndLabelAlignmentActive(
+        AreListLevelIndentsApplicableAndLabelAlignmentActive( *(pFrm->GetTxtNode()) ) );
+    // <--
 
     //
     // Carefully adjust the text formatting ranges.
@@ -181,20 +206,37 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
                 pFrm->Prt().Left() +
                 nLMWithNum -
                 pNode->GetLeftMarginWithNum( sal_False ) -
-                rSpace.GetLeft() +
-                rSpace.GetTxtLeft();
+                // --> OD 2009-09-08 #i95907#, #b6879723#
+                // --> OD 2010-05-05 #i111284#
+//                rSpace.GetLeft() +
+//                rSpace.GetTxtLeft();
+                ( bListLevelIndentsApplicableAndLabelAlignmentActive
+                  ? 0
+                  : ( rSpace.GetLeft() - rSpace.GetTxtLeft() ) );
+                // <--
     }
     else
     {
-        if ( !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        // --> OD 2009-09-08 #i95907#, #b6879723#
+        // --> OD 2010-05-05 #i111284#
+//        if ( !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        if ( bListLevelIndentsApplicableAndLabelAlignmentActive ||
+             !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        // <--
         {
             // this calculation is identical this the calculation for R2L layout - see above
             nLeft = pFrm->Frm().Left() +
                     pFrm->Prt().Left() +
                     nLMWithNum -
                     pNode->GetLeftMarginWithNum( sal_False ) -
-                    rSpace.GetLeft() +
-                    rSpace.GetTxtLeft();
+                    // --> OD 2009-09-08 #i95907#, #b6879723#
+                    // --> OD 2010-05-05 #i111284#
+//                    rSpace.GetLeft() +
+//                    rSpace.GetTxtLeft();
+                    ( bListLevelIndentsApplicableAndLabelAlignmentActive
+                      ? 0
+                      : ( rSpace.GetLeft() - rSpace.GetTxtLeft() ) );
+                    // <--
         }
         else
         {
@@ -211,7 +253,7 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
          // paras inside cells inside new documents:
         ( pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) ||
           !pFrm->IsInTab() ||
-          !nLMWithNum) )
+          !nLMWithNum ) )
          // <--
     {
         nLeft = pFrm->Prt().Left() + pFrm->Frm().Left();
@@ -223,8 +265,8 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         nFirst = nLeft;
     else
     {
-        short nFLOfst;
-        long nFirstLineOfs;
+        short nFLOfst = 0;
+        long nFirstLineOfs = 0;
         if( !pNode->GetFirstLineOfsWithNum( nFLOfst ) &&
             rSpace.IsAutoFirst() )
         {
@@ -278,8 +320,14 @@ void SwTxtMargin::CtorInitTxtMargin( SwTxtFrm *pNewFrm, SwTxtSizeInfo *pNewInf )
         else
             nFirstLineOfs = nFLOfst;
 
+        // --> OD 2009-09-08 #i95907#, #b6879723#
+        // --> OD 2010-05-05 #i111284#
+//        if ( pFrm->IsRightToLeft() ||
+//             !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
         if ( pFrm->IsRightToLeft() ||
-            !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+             bListLevelIndentsApplicableAndLabelAlignmentActive ||
+             !pNode->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING) )
+        // <--
         {
             nFirst = nLeft + nFirstLineOfs;
         }

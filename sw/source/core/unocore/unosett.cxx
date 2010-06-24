@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unosett.cxx,v $
- * $Revision: 1.59 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <svx/svxids.hrc>
+#include <editeng/memberids.hrc>
 #include <swtypes.hxx>
 #include <cmdid.h>
 #include <hintids.hxx>
@@ -51,7 +49,7 @@
 #include <docary.hxx>
 #include <docstyle.hxx>
 #include <fmtclds.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <com/sun/star/text/XFootnotesSettingsSupplier.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
@@ -61,21 +59,16 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/style/VerticalAlignment.hpp>
-#include <unoobj.hxx>
 #include <vcl/font.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <vcl/metric.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
-#include <svx/unofdesc.hxx>
+#include <editeng/unofdesc.hxx>
 #include <fmtornt.hxx>
 #include <SwStyleNameMapper.hxx>
 // --> OD 2008-01-15 #newlistlevelattrs#
@@ -1666,9 +1659,14 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
                 aPropertyValues.Insert(pData, aPropertyValues.Count());
             }
              Size aSize = rFmt.GetGraphicSize();
-            aSize.Width() = TWIP_TO_MM100( aSize.Width() );
-            aSize.Height() = TWIP_TO_MM100( aSize.Height() );
-            pData = new PropValData((void*)&aSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
+            // --> OD 2010-05-04 #i101131# - applying patch from CMC
+            // adjust conversion due to type mismatch between <Size> and <awt::Size>
+//            aSize.Width() = TWIP_TO_MM100( aSize.Width() );
+//            aSize.Height() = TWIP_TO_MM100( aSize.Height() );
+//            pData = new PropValData((void*)&aSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
+            awt::Size aAwtSize(TWIP_TO_MM100(aSize.Width()), TWIP_TO_MM100(aSize.Height()));
+            pData = new PropValData((void*)&aAwtSize, SW_PROP_NAME_STR(UNO_NAME_GRAPHIC_SIZE), ::getCppuType((const awt::Size*)0));
+            // <--
             aPropertyValues.Insert(pData, aPropertyValues.Count());
 
             const SwFmtVertOrient* pOrient = rFmt.GetGraphicOrientation();
@@ -2041,8 +2039,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                 case 15: //"BulletId",
                 {
                     sal_Int16 nSet = 0;
-                    pData->aVal >>= nSet;
-                    if(nSet < 0xff)
+                    if( pData->aVal >>= nSet )
                         aFmt.SetBulletChar(nSet);
                     else
                         bWrongArg = sal_True;

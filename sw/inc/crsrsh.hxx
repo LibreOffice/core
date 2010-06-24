@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: crsrsh.hxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,6 +26,8 @@
  ************************************************************************/
 #ifndef _CRSRSH_HXX
 #define _CRSRSH_HXX
+
+#include <com/sun/star/i18n/WordType.hpp>
 
 #include <tools/string.hxx>
 #include <tools/link.hxx>
@@ -110,7 +109,8 @@ struct SwContentAtPos
         SW_REFMARK          = 0x0100,
         SW_NUMLABEL         = 0x0200, // #i23726#
         SW_CONTENT_CHECK    = 0x0400, // --> FME 2005-05-13 #i43742# <--
-        SW_SMARTTAG         = 0x0800
+        SW_SMARTTAG         = 0x0800,
+        SW_FORMCTRL         = 0x1000
 #ifndef PRODUCT
         ,SW_CURR_ATTRS      = 0x4000        // nur zum Debuggen
         ,SW_TABLEBOXVALUE   = 0x8000        // nur zum Debuggen
@@ -122,6 +122,7 @@ struct SwContentAtPos
         const SfxPoolItem* pAttr;
         const SwRedline* pRedl;
         SwCntntNode * pNode; // #i23726#
+        const sw::mark::IFieldmark* pFldmark;
     } aFnd;
 
     int nDist; // #i23726#
@@ -149,9 +150,6 @@ const int CRSR_POSOLD = 0x01,   // Cursor bleibt an alter Doc-Position
 // Helperfunction to resolve backward references in regular expressions
 
 String *ReplaceBackReferences( const com::sun::star::util::SearchOptions& rSearchOpt, SwPaM* pPam );
-
-// #i75172#
-enum SwOverlayType { SW_OVERLAY_INVERT, SW_OVERLAY_TRANSPARENT };
 
 // die Cursor - Shell
 class SW_DLLPUBLIC SwCrsrShell : public ViewShell, public SwModify
@@ -252,9 +250,6 @@ private:
     // OD 11.02.2003 #100556# - flag to allow/avoid execution of marcos (default: true)
     bool mbMacroExecAllowed : 1;
 
-    // #i88893# the overlay type to use for cursor
-    SwOverlayType maSwOverlayType;
-
     SW_DLLPRIVATE void UpdateCrsr( USHORT eFlags
                             =SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE,
                      BOOL bIdleEnd = FALSE );
@@ -351,9 +346,6 @@ public:
     // if ExtendedSelect() is called afterwards, the whole nodes array is selected
     // only for usage in special cases allowed!
     void ExtendedSelectAll();
-
-    // #i88893# the overlay type to use for cursor
-    SwOverlayType getSwOverlayType() const { return maSwOverlayType; }
 
     SwPaM* GetCrsr( BOOL bMakeTblCrsr = TRUE ) const;
     inline SwCursor* GetSwCrsr( BOOL bMakeTblCrsr = TRUE ) const;
@@ -474,7 +466,7 @@ public:
      */
     void Combine();
 
-#if defined( PRODUCT )
+#if !defined(DBG_UTIL)
     void SttCrsrMove() { ++nCrsrMove; StartAction(); }
     void EndCrsrMove( const BOOL bIdleEnd = FALSE )
             { EndAction( bIdleEnd ); --nCrsrMove; }
@@ -756,11 +748,12 @@ public:
     BOOL GoStartSentence();
     BOOL GoEndSentence();
     BOOL SelectWord( const Point* pPt = 0 );
+    BOOL ExpandToSentenceBorders();
 
     // Position vom akt. Cursor erfragen
-    BOOL IsStartWord()const;
-    BOOL IsEndWord() const;
-    BOOL IsInWord() const;
+    BOOL IsStartWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES )const;
+    BOOL IsEndWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    BOOL IsInWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
     BOOL IsStartSentence() const;
     BOOL IsEndSentence() const;
     BOOL IsSttPara() const;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawdlg.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,7 +80,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, RID_SVXDLG_TEXT, pView );
+                SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, pView );
                 USHORT nResult = pDlg->Execute();
 
                 if (nResult == RET_OK)
@@ -111,7 +108,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( NULL,
                                                                             &aNewAttr,
                                                                             pDoc,
-                                                                            RID_SVXDLG_AREA,
                                                                             pView);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
             const SvxColorTableItem* pColorItem = (const SvxColorTableItem*)
@@ -154,7 +150,6 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
             SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( NULL,
                     &aNewAttr,
                 pDoc,
-                RID_SVXDLG_LINE,
                 pObj,
                 bHasMarked);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");

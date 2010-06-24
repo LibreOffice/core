@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtftn.cxx,v $
- * $Revision: 1.51.208.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,8 +40,8 @@
 #include <charfmt.hxx>
 #include <dflyobj.hxx>
 #include <rowfrm.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/charrotateitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/charrotateitem.hxx>
 #include <breakit.hxx>
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
@@ -106,7 +103,7 @@ SwTxtFrm *SwTxtFrm::FindFtnRef( const SwTxtFtn *pFtn )
  *                              CalcFtnFlag()
  *************************************************************************/
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 void SwTxtFrm::CalcFtnFlag()
 #else
 void SwTxtFrm::CalcFtnFlag( xub_StrLen nStop )//Fuer den Test von SplitFrm
@@ -120,7 +117,7 @@ void SwTxtFrm::CalcFtnFlag( xub_StrLen nStop )//Fuer den Test von SplitFrm
 
     const USHORT nSize = pHints->Count();
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     const xub_StrLen nEnd = GetFollow() ? GetFollow()->GetOfst() : STRING_LEN;
 #else
     const xub_StrLen nEnd = nStop != STRING_LEN ? nStop
@@ -364,7 +361,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
         SwTwips nTmp = (*fnRect->fnYDiff)( (pCont->*fnRect->fnGetPrtBottom)(),
                                            (Frm().*fnRect->fnGetTop)() );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if( nTmp < 0 )
         {
             sal_Bool bInvalidPos = sal_False;

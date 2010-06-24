@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: undo.src,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +51,7 @@ String STR_SPLITNODE_UNDO
 };
 String STR_MOVE_UNDO
 {
-    Text [ en-US ] = "Move: $1" ;
+    Text [ en-US ] = "Move" ;
 };
 String STR_INSATTR_UNDO
 {
@@ -612,7 +609,7 @@ String STR_CHART
 };
 String STR_NOTE
 {
-    Text [ en-US ] = "note";
+    Text [ en-US ] = "comment";
 };
 String STR_REFERENCE
 {
@@ -649,4 +646,12 @@ String STR_TABLE_NAME
 String STR_PARAGRAPH_UNDO
 {
     Text[ en-US ] = "paragraph";
+};
+String STR_UNDO_FLYFRMFMT_TITLE
+{
+    Text[ en-US ] = "Change object title of $1";
+};
+String STR_UNDO_FLYFRMFMT_DESCRITPTION
+{
+    Text[ en-US ] = "Change object description of $1";
 };

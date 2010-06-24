@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mvsave.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +32,13 @@
 #ifndef _KEYCOD_HXX //autogen
 #include <vcl/keycod.hxx>
 #endif
-#include <svtools/svarray.hxx>
+#include <svl/svarray.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <vector>
+
+namespace sfx2 {
+    class MetadatableUndo;
+}
 
 class SvNumberFormatter;
 class SvULongs;
@@ -80,6 +81,7 @@ namespace sw { namespace mark
             ULONG m_nNode2;
             xub_StrLen m_nCntnt1;
             xub_StrLen m_nCntnt2;
+            ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndo;
     };
 }}
 

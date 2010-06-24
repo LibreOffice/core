@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: doctxm.cxx,v $
- * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,11 +33,11 @@
 #include <hintids.hxx>
 
 #define _SVSTDARR_STRINGSSORT
-#include <svtools/svstdarr.hxx>
-#include <svx/langitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <svl/svstdarr.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <sot/clsids.hxx>
 #include <docsh.hxx>
 #include <ndole.hxx>
@@ -182,7 +179,7 @@ USHORT SwDoc::GetCurTOXMark( const SwPosition& rPos,
      Beschreibung: Marke loeschen
  --------------------------------------------------------------------*/
 
-void SwDoc::Delete( const SwTOXMark* pTOXMark )
+void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
 {
     // hole den TextNode und
     const SwTxtTOXMark* pTxtTOXMark = pTOXMark->GetTxtTOXMark();
@@ -202,12 +199,15 @@ void SwDoc::Delete( const SwTOXMark* pTOXMark )
 
         SwRegHistory aRHst( rTxtNd, &pUndo->GetHistory() );
         rTxtNd.GetpSwpHints()->Register( &aRHst );
-        rTxtNd.Delete( const_cast<SwTxtTOXMark*>( pTxtTOXMark ), TRUE );
+    }
+
+    rTxtNd.DeleteAttribute( const_cast<SwTxtTOXMark*>(pTxtTOXMark) );
+
+    if ( DoesUndo() )
+    {
         if( rTxtNd.GetpSwpHints() )
             rTxtNd.GetpSwpHints()->DeRegister();
     }
-    else
-        rTxtNd.Delete( const_cast<SwTxtTOXMark*>( pTxtTOXMark ), TRUE );
     SetModified();
 }
 
@@ -366,26 +366,23 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
 {
     StartUndo( UNDO_INSTOX, NULL );
 
-    SwTOXBaseSection* pNew = new SwTOXBaseSection( rTOX );
     String sSectNm( rTOX.GetTOXName() );
     sSectNm = GetUniqueTOXBaseName( *rTOX.GetTOXType(), &sSectNm );
-    pNew->SetTOXName(sSectNm);
-    pNew->SwSection::SetName(sSectNm);
     SwPaM aPam( rPos );
-    SwSection* pSect = Insert( aPam, *pNew, pSet, FALSE );
-    if( pSect )
+    SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
+    SwTOXBaseSection *const pNewSection = dynamic_cast<SwTOXBaseSection *>(
+        InsertSwSection( aPam, aSectionData, & rTOX, pSet, false ));
+    if (pNewSection)
     {
-        SwSectionNode* pSectNd = pSect->GetFmt()->GetSectionNode();
-        SwSection* pCl = pNew;
-        pSect->GetFmt()->Add( pCl );
-        pSectNd->SetNewSection( pNew );
+        SwSectionNode *const pSectNd = pNewSection->GetFmt()->GetSectionNode();
+        pNewSection->SetTOXName(sSectNm); // rTOX may have had no name...
 
         if( bExpand )
         {
             // OD 19.03.2003 #106329# - add value for 2nd parameter = true to
             // indicate, that a creation of a new table of content has to be performed.
             // Value of 1st parameter = default value.
-            pNew->Update( 0, true );
+            pNewSection->Update( 0, true );
         }
         else if( 1 == rTOX.GetTitle().Len() && IsInReading() )
         // insert title of TOX
@@ -396,24 +393,22 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
             SwTxtNode* pHeadNd = GetNodes().MakeTxtNode( aIdx,
                             GetTxtCollFromPool( RES_POOLCOLL_STANDARD ) );
 
-            String sNm( pNew->GetTOXName() );
+            String sNm( pNewSection->GetTOXName() );
 // ??Resource
 sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
 
-            SwSection aSect( TOX_HEADER_SECTION, sNm );
+            SwSectionData headerData( TOX_HEADER_SECTION, sNm );
 
             SwNodeIndex aStt( *pHeadNd ); aIdx--;
             SwSectionFmt* pSectFmt = MakeSectionFmt( 0 );
-            GetNodes().InsertSection( aStt, *pSectFmt, aSect, &aIdx,
-                                                TRUE, FALSE );
+            GetNodes().InsertTextSection(
+                    aStt, *pSectFmt, headerData, 0, &aIdx, true, false);
         }
     }
-    else
-        delete pNew, pNew = 0;
 
     EndUndo( UNDO_INSTOX, NULL );
 
-    return pNew;
+    return pNewSection;
 }
 
 
@@ -433,13 +428,10 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( ULONG nSttNd, ULONG nEndNd,
         pSectNd = pSectNd->StartOfSectionNode()->FindSectionNode();
     }
 
-    // create SectionNode around the Nodes
-    SwTOXBaseSection* pNew = new SwTOXBaseSection( rTOX );
-
     String sSectNm( rTOX.GetTOXName() );
     sSectNm = GetUniqueTOXBaseName(*rTOX.GetTOXType(), &sSectNm);
-    pNew->SetTOXName(sSectNm);
-    pNew->SwSection::SetName(sSectNm);
+
+    SwSectionData aSectionData( TOX_CONTENT_SECTION, sSectNm );
 
     SwNodeIndex aStt( GetNodes(), nSttNd ), aEnd( GetNodes(), nEndNd );
     SwSectionFmt* pFmt = MakeSectionFmt( 0 );
@@ -448,20 +440,18 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( ULONG nSttNd, ULONG nEndNd,
 
 //  --aEnd;     // im InsertSection ist Ende inclusive
 
-    pSectNd = GetNodes().InsertSection( aStt, *pFmt, *pNew, &aEnd );
-    if( pSectNd )
+    SwSectionNode *const pNewSectionNode =
+        GetNodes().InsertTextSection(aStt, *pFmt, aSectionData, &rTOX, &aEnd);
+    if (!pNewSectionNode)
     {
-        SwSection* pCl = pNew;
-        pFmt->Add( pCl );
-        pSectNd->SetNewSection( pNew );
-    }
-    else
-    {
-        delete pNew, pNew = 0;
         DelSectionFmt( pFmt );
+        return 0;
     }
 
-    return pNew;
+    SwTOXBaseSection *const pNewSection(
+        dynamic_cast<SwTOXBaseSection*>(& pNewSectionNode->GetSection()));
+    pNewSection->SetTOXName(sSectNm); // rTOX may have had no name...
+    return pNewSection;
 }
 
 /*--------------------------------------------------------------------
@@ -578,7 +568,7 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
            aSearchPam will contain the point where to move the cursors
            to. */
         SwPaM aSearchPam(*pMyNode->EndOfSectionNode());
-        SwPosition aEndPos(*pStartNd->EndOfSectionNode(), 0);
+        SwPosition aEndPos(*pStartNd->EndOfSectionNode());
         if (! aSearchPam.Move() /* no content node found */
             || *aSearchPam.GetPoint() >= aEndPos /* content node found
                                                     outside surrounding */
@@ -588,7 +578,7 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
                content node */
             SwPaM aTmpPam(*pMyNode);
             aSearchPam = aTmpPam;
-            SwPosition aStartPos(*pStartNd, 0);
+            SwPosition aStartPos(*pStartNd);
 
             if ( ! aSearchPam.Move(fnMoveBackward) /* no content node found */
                  || *aSearchPam.GetPoint() <= aStartPos  /* content node
@@ -599,7 +589,7 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
                 /* There is no content node in the surrounding of
                    TOX'. Append text node behind TOX' section. */
 
-                SwPosition aInsPos(*pMyNode->EndOfSectionNode(), 0);
+                SwPosition aInsPos(*pMyNode->EndOfSectionNode());
                 AppendTxtNode(aInsPos);
 
                 SwPaM aTmpPam1(aInsPos);
@@ -697,7 +687,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
         if( 0 != ( pSectNd = (*pSectionFmtTbl)[ n ]->GetSectionNode( FALSE ) )&&
              TOX_CONTENT_SECTION == (pSect = &pSectNd->GetSection())->GetType())
         {
-            const String& rNm = pSect->GetName();
+            const String& rNm = pSect->GetSectionName();
             if( rNm.Match( aName ) == nNmLen )
             {
                 // Nummer bestimmen und das Flag setzen
@@ -743,7 +733,7 @@ BOOL SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
     if(bRet)
     {
         pTOX->SetTOXName(rName);
-        pTOX->SwTOXBaseSection::SetName(rName);
+        pTOX->SetSectionName(rName);
         SetModified();
     }
     return bRet;
@@ -776,11 +766,12 @@ const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, BYTE nLvl = 0 )
      Beschreibung: Verzeichnis-Klasse
  --------------------------------------------------------------------*/
 
-SwTOXBaseSection::SwTOXBaseSection( const SwTOXBase& rBase )
-    : SwTOXBase( rBase ), SwSection( TOX_CONTENT_SECTION, aEmptyStr )
+SwTOXBaseSection::SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt)
+    : SwTOXBase( rBase )
+    , SwSection( TOX_CONTENT_SECTION, aEmptyStr, rFmt )
 {
     SetProtect( rBase.IsProtected() );
-    SwSection::SetName( GetTOXName() );
+    SetSectionName( GetTOXName() );
 }
 
 
@@ -956,18 +947,18 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
         SwTxtNode* pHeadNd = pDoc->GetNodes().MakeTxtNode( aIdx,
                                 GetTxtFmtColl( FORM_TITLE ) );
-        pHeadNd->Insert( GetTitle(), SwIndex( pHeadNd ));
+        pHeadNd->InsertText( GetTitle(), SwIndex( pHeadNd ) );
 
         String sNm( GetTOXName() );
 // ??Resource
 sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
 
-        SwSection aSect( TOX_HEADER_SECTION, sNm );
+        SwSectionData headerData( TOX_HEADER_SECTION, sNm );
 
         SwNodeIndex aStt( *pHeadNd ); aIdx--;
         SwSectionFmt* pSectFmt = pDoc->MakeSectionFmt( 0 );
-        pDoc->GetNodes().InsertSection( aStt, *pSectFmt, aSect, &aIdx,
-                                        TRUE, FALSE );
+        pDoc->GetNodes().InsertTextSection(
+                aStt, *pSectFmt, headerData, 0, &aIdx, true, false);
     }
 
     // jetzt waere ein prima Zeitpunkt, um die Numerierung zu updaten
@@ -1245,7 +1236,7 @@ void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                 {
                     // Stichwortverzeichnismarkierung
                     lang::Locale aLocale;
-                    if ( pBreakIt->xBreak.is() )
+                    if ( pBreakIt->GetBreakIter().is() )
                     {
                         aLocale = pBreakIt->GetLocale(
                                         pTOXSrc->GetLang( *pTxtMark->GetStart() ) );
@@ -1939,9 +1930,12 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                 else
                     pCharFmt = pDoc->FindCharFmtByName( aToken.sCharStyleName);
 
-                if(pCharFmt)
-                    pTOXNd->InsertItem( SwFmtCharFmt( pCharFmt ), nStartCharStyle,
-                                    rTxt.Len(), nsSetAttrMode::SETATTR_DONTEXPAND );
+                if (pCharFmt)
+                {
+                    SwFmtCharFmt aFmt( pCharFmt );
+                    pTOXNd->InsertItem( aFmt, nStartCharStyle,
+                        rTxt.Len(), nsSetAttrMode::SETATTR_DONTEXPAND );
+                }
             }
 
             aIt++; // #i21237#
@@ -2139,7 +2133,7 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                 break;
             }
         }
-    pNd->Erase(aPos, nEndPos - nStartPos + 2);
+    pNd->EraseText(aPos, nEndPos - nStartPos + 2);
 
     for( i = 1; i < rNums.Count(); ++i)
     {
@@ -2213,7 +2207,10 @@ void SwTOXBaseSection::_UpdatePageNum( SwTxtNode* pNd,
                                 GetNumType() ).GetNumStr( nBeg+nCount );
         }
     }
-    pNd->Insert( aNumStr, aPos, INS_EMPTYEXPAND );
+    pNd->InsertText( aNumStr, aPos,
+           static_cast<IDocumentContentOperations::InsertFlags>(
+               IDocumentContentOperations::INS_EMPTYEXPAND |
+               IDocumentContentOperations::INS_FORCEHINTEXPAND) );
     if(pPageNoCharFmt)
     {
         SwFmtCharFmt aCharFmt( pPageNoCharFmt );

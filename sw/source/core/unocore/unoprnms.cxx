@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoprnms.cxx,v $
- * $Revision: 1.139.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <tools/debug.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 #include <unoprnms.hxx>
 
 
@@ -778,7 +775,10 @@ const SwPropNameTab aPropNameTab = {
 /* 0733 CHAR_OVERLINE */               {MAP_CHAR_LEN("CharOverline")},
 /* 0734 CHAR_OVERLINE_COLOR */         {MAP_CHAR_LEN("CharOverlineColor")},
 /* 0735 CHAR_OVERLINE_HAS_COLOR */     {MAP_CHAR_LEN("CharOverlineHasColor")},
-/* 0736 UNO_NAME_OUTLINE_LEVEL */       {MAP_CHAR_LEN("OutlineLevel")}//#outline level,add<-zhaojianwei Outlinelevel
+/* 0736 UNO_NAME_OUTLINE_LEVEL */       {MAP_CHAR_LEN("OutlineLevel")},//#outline level,add<-zhaojianwei Outlinelevel
+/* 0737 UNO_NAME_DESCRIPTION */         {MAP_CHAR_LEN("Description")},
+/* 0738 UNO_NAME_META */        {MAP_CHAR_LEN("InContentMetadata")},
+/* 0739 UNO_NAME_NESTED_TEXT_CONTENT */ {MAP_CHAR_LEN("NestedTextContent")},
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )

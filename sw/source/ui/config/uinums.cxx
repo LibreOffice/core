@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: uinums.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,14 +32,14 @@
 
 
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/pathoptions.hxx>
 #include <tools/stream.hxx>
 #ifndef _SFX_INIMGR_HXX
 #endif
 #include <sfx2/docfile.hxx>
-#include <svtools/itemiter.hxx>
-#include <svx/brshitem.hxx>
+#include <svl/itemiter.hxx>
+#include <editeng/brshitem.hxx>
 
 
 #include <tools/resid.hxx>

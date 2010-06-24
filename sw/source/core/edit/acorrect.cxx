@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: acorrect.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,11 +35,10 @@
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <fmtinfmt.hxx>
 #include <txtatr.hxx>
 #include <txtinet.hxx>
-#include <fmthbsh.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
@@ -52,7 +48,7 @@
 #include <swundo.hxx>
 #include <viscrs.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 
 using namespace ::com::sun::star;
 
@@ -125,7 +121,9 @@ void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
         pDoc->DeleteAndJoin( rDelPam );
     }
     else
-        pDoc->Delete( rDelPam );
+    {
+        pDoc->DeleteRange( rDelPam );
+    }
 }
 
 BOOL SwAutoCorrDoc::Delete( xub_StrLen nStt, xub_StrLen nEnd )
@@ -143,7 +141,7 @@ BOOL SwAutoCorrDoc::Delete( xub_StrLen nStt, xub_StrLen nEnd )
 BOOL SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
 {
     SwPaM aPam( rCrsr.GetPoint()->nNode.GetNode(), nPos );
-    rEditSh.GetDoc()->Insert( aPam, rTxt, true );
+    rEditSh.GetDoc()->InsertString( aPam, rTxt );
     if( !bUndoIdInitialized )
     {
         bUndoIdInitialized = true;
@@ -163,23 +161,27 @@ BOOL SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
         pPam->GetPoint()->nContent = nPos;
     }
 
-    BOOL bChg = TRUE;
-    SwTxtNode* pNd = pPam->GetNode()->GetTxtNode();
-    if( pNd )
+    SwTxtNode * const pNd = pPam->GetNode()->GetTxtNode();
+    if ( !pNd )
     {
-        // TextAttribute ohne Ende duerfen nie ersetzt werden!
-        sal_Unicode cChr;
-        for( xub_StrLen n = 0, nLen = rTxt.Len(); n < nLen; ++n )
-            if( ( CH_TXTATR_BREAKWORD == (cChr = pNd->GetTxt().
-                    GetChar( n + nPos )) || CH_TXTATR_INWORD == cChr ) &&
-                pNd->GetTxtAttr( n + nPos ) )
-            {
-                bChg = FALSE;
-                break;
-            }
+        return FALSE;
     }
 
-    if( bChg )
+    // text attributes with dummy characters must not be replaced!
+    bool bDoReplace = true;
+    xub_StrLen const nLen = rTxt.Len();
+    for ( xub_StrLen n = 0; n < nLen; ++n )
+    {
+        sal_Unicode const Char = pNd->GetTxt().GetChar( n + nPos );
+        if ( ( CH_TXTATR_BREAKWORD == Char || CH_TXTATR_INWORD == Char )
+             && pNd->GetTxtAttrForCharAt( n + nPos ) )
+        {
+            bDoReplace = false;
+            break;
+        }
+    }
+
+    if ( bDoReplace )
     {
         SwDoc* pDoc = rEditSh.GetDoc();
 
@@ -190,7 +192,9 @@ BOOL SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
         if( pDoc->IsAutoFmtRedline() )
         {
             if( nPos == pNd->GetTxt().Len() )       // am Ende erfolgt ein Insert
-                pDoc->Insert( *pPam, rTxt, true );
+            {
+                pDoc->InsertString( *pPam, rTxt );
+            }
             else
             {
                 _PaMIntoCrsrShellRing aTmp( rEditSh, rCrsr, *pPam );
@@ -198,7 +202,7 @@ BOOL SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
                 pPam->SetMark();
                 pPam->GetPoint()->nContent = Min( pNd->GetTxt().Len(),
                                               xub_StrLen( nPos + rTxt.Len() ));
-                pDoc->Replace( *pPam, rTxt, FALSE );
+                pDoc->ReplaceRange( *pPam, rTxt, false );
                 pPam->Exchange();
                 pPam->DeleteMark();
             }
@@ -333,7 +337,7 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
                 '.' != pFnd->GetLong().GetChar( pFnd->GetLong().Len() - 1 ) )
             {
                 // replace the selection
-                pDoc->Replace( aPam, pFnd->GetLong(), false);
+                pDoc->ReplaceRange( aPam, pFnd->GetLong(), false);
                 bRet = TRUE;
             }
         }
@@ -374,7 +378,7 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
                 SwDontExpandItem aExpItem;
                 aExpItem.SaveDontExpandItems( *aPam.GetPoint() );
 
-                pAutoDoc->Copy( aCpyPam, *aPam.GetPoint() );
+                pAutoDoc->CopyRange( aCpyPam, *aPam.GetPoint(), false );
 
                 aExpItem.RestoreDontExpandItems( *aPam.GetPoint() );
 

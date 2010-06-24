@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edfld.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +42,7 @@
 #include <expfld.hxx>
 #include <flddat.hxx>
 #include <swundo.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <swddetbl.hxx>
 #include <hints.hxx>
 
@@ -229,11 +224,12 @@ void SwEditShell::FieldToText( SwFieldType* pType )
                                      *pFmtFld->GetTxtFld()->GetStart() );
 
                 // Feldinhalt durch Text ersetzen
-                String aEntry( pFmtFld->GetFld()->Expand() );
+                String const aEntry(
+                    pFmtFld->GetFld()->ExpandField(GetDoc()->IsClipBoard()) );
                 pPaM->SetMark();
                 pPaM->Move( fnMoveForward );
-                GetDoc()->Delete( *pPaM );
-                GetDoc()->Insert( *pPaM, aEntry, true );
+                GetDoc()->DeleteRange( *pPaM );
+                GetDoc()->InsertString( *pPaM, aEntry );
             }
             else if( bDDEFld )
             {
@@ -258,17 +254,20 @@ void SwEditShell::FieldToText( SwFieldType* pType )
 |*    Quelle:       vgl. SwEditShell::Insert( String )
 |*
 *************************************************************************/
-void SwEditShell::Insert(SwField& rFld)
+void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
 {
     SET_CURR_SHELL( this );
     StartAllAction();
     SwFmtFld aFld( rFld );
 
+    const SetAttrMode nInsertFlags = (bForceExpandHints)
+        ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
+        : nsSetAttrMode::SETATTR_DEFAULT;
+
     FOREACHPAM_START(this)                      // fuer jeden PaM
-        if( !GetDoc()->Insert( *PCURCRSR, aFld, 0 ) )
-        {
-            ASSERT( FALSE, "Doc->Insert(Field) failed")
-        }
+        bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
+        ASSERT( bSuccess, "Doc->Insert(Field) failed");
+        (void) bSuccess;
     FOREACHPAM_END()                      // fuer jeden PaM
 
     EndAllAction();
@@ -285,11 +284,11 @@ void SwEditShell::Insert(SwField& rFld)
 
 inline SwTxtFld *GetDocTxtFld( const SwPosition* pPos )
 {
-    SwTxtNode *pNode = pPos->nNode.GetNode().GetTxtNode();
-    if( pNode )
-        return pNode->GetTxtFld( pPos->nContent );
-    else
-        return 0;
+    SwTxtNode * const pNode = pPos->nNode.GetNode().GetTxtNode();
+    return (pNode)
+        ? static_cast<SwTxtFld*>( pNode->GetTxtAttrForCharAt(
+                pPos->nContent.GetIndex(), RES_TXTATR_FIELD ))
+        : 0;
 }
 
 SwField* SwEditShell::GetCurFld() const

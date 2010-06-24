@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atrstck.cxx,v $
- * $Revision: 1.30.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,35 +31,35 @@
 
 #include <errhdl.hxx>   // ASSERT
 #include <atrhndl.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <vcl/outdev.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/twolinesitem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <viewopt.hxx>
 #include <charfmt.hxx>
 #include <fchrfmt.hxx>
 #include <fmtautofmt.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -128,16 +125,16 @@ const BYTE StackPos[ static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
     35, // RES_CHRATR_OVERLINE,                  // 38
      0, // RES_CHRATR_DUMMY1,                    // 39
      0, // RES_CHRATR_DUMMY2,                    // 40
-     0, // RES_TXTATR_AUTOFMT,                   // 41
-     0, // RES_TXTATR_INETFMT                    // 42
-    36, // RES_TXTATR_REFMARK,                   // 43
-    37, // RES_TXTATR_TOXMARK,                   // 44
-     0, // RES_TXTATR_CHARFMT,                   // 45
-     0, // RES_TXTATR_DUMMY5                     // 46
-    38, // RES_TXTATR_CJK_RUBY,                  // 47
-     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 48
-     0, // RES_TXTATR_DUMMY6,                    // 49
-     0  // RES_TXTATR_DUMMY7,                    // 50
+    36, // RES_TXTATR_REFMARK,                   // 41
+    37, // RES_TXTATR_TOXMARK,                   // 42
+    38, // RES_TXTATR_META,                      // 43
+    38, // RES_TXTATR_METAFIELD,                 // 44
+     0, // RES_TXTATR_AUTOFMT,                   // 45
+     0, // RES_TXTATR_INETFMT                    // 46
+     0, // RES_TXTATR_CHARFMT,                   // 47
+    39, // RES_TXTATR_CJK_RUBY,                  // 48
+     0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 49
+     0, // RES_TXTATR_DUMMY5                     // 50
 };
 
 /*************************************************************************
@@ -523,13 +520,11 @@ void SwAttrHandler::PushAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 
 sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
 {
-    ASSERT( rItem.Which() < RES_TXTATR_WITHEND_END ||
-            RES_UNKNOWNATR_CONTAINER == rItem.Which() ,
+    ASSERT( rItem.Which() < RES_TXTATR_WITHEND_END,
             "I do not want this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
     // robust
-    if ( RES_TXTATR_WITHEND_END <= rItem.Which() ||
-         RES_UNKNOWNATR_CONTAINER == rItem.Which() )
+    if ( RES_TXTATR_WITHEND_END <= rItem.Which() )
         return sal_False;
 
     USHORT nStack = StackPos[ rItem.Which() ];
@@ -557,6 +552,9 @@ sal_Bool SwAttrHandler::Push( const SwTxtAttr& rAttr, const SfxPoolItem& rItem )
 
 void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 {
+    if ( RES_TXTATR_WITHEND_END <= rAttr.Which() )
+        return; // robust
+
     // these special attributes in fact represent a collection of attributes
     // they have to be removed from each stack they belong to
     if ( RES_TXTATR_INETFMT == rAttr.Which() ||
@@ -583,7 +581,7 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
     }
     // this is the usual case, we have a basic attribute, remove it from the
     // stack and reset the font
-    else if ( RES_UNKNOWNATR_CONTAINER != rAttr.Which() )
+    else
     {
         aAttrStack[ StackPos[ rAttr.Which() ] ].Remove( rAttr );
         // reset font according to attribute on top of stack
@@ -600,13 +598,13 @@ void SwAttrHandler::PopAndChg( const SwTxtAttr& rAttr, SwFont& rFnt )
 
 void SwAttrHandler::Pop( const SwTxtAttr& rAttr )
 {
-    ASSERT( rAttr.Which() < RES_TXTATR_WITHEND_END ||
-            RES_UNKNOWNATR_CONTAINER == rAttr.Which() ,
+    ASSERT( rAttr.Which() < RES_TXTATR_WITHEND_END,
             "I do not have this attribute, nWhich >= RES_TXTATR_WITHEND_END" );
 
-    if ( RES_UNKNOWNATR_CONTAINER != rAttr.Which() &&
-         rAttr.Which() < RES_TXTATR_WITHEND_END )
+    if ( rAttr.Which() < RES_TXTATR_WITHEND_END )
+    {
         aAttrStack[ StackPos[ rAttr.Which() ] ].Remove( rAttr );
+    }
 }
 
 /*************************************************************************
@@ -650,6 +648,10 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const USHORT nAttr )
         rFnt.GetRef()--;
     else if ( RES_TXTATR_TOXMARK == nAttr )
         rFnt.GetTox()--;
+    else if ( (RES_TXTATR_META == nAttr) || (RES_TXTATR_METAFIELD == nAttr) )
+    {
+        rFnt.GetMeta()--;
+    }
     else if ( RES_TXTATR_CJK_RUBY == nAttr )
     {
         // ruby stack has no more attributes
@@ -927,6 +929,13 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
                 rFnt.GetTox()++;
             else
                 rFnt.GetTox()--;
+            break;
+        case RES_TXTATR_META:
+        case RES_TXTATR_METAFIELD:
+            if ( bPush )
+                rFnt.GetMeta()++;
+            else
+                rFnt.GetMeta()--;
             break;
     }
 }

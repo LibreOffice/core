@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomap.cxx,v $
- * $Revision: 1.213.54.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,15 +29,9 @@
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#ifndef _COMPHELPER_TYPEGENERATION_HXX
 #include <comphelper/TypeGeneration.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PropertyAttribute_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 // --> OD 2004-08-06 #i28749#
@@ -50,12 +41,9 @@
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unomid.h>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
+#include <editeng/memberids.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -291,10 +279,11 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
         COMMON_CRSR_PARA_PROPERTIES\
         { SW_PROP_NMID(UNO_NAME_DOCUMENT_INDEX_MARK), FN_UNO_DOCUMENT_INDEX_MARK, CPPU_E2T(CPPUTYPE_REFDOCIDXMRK), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },\
         { SW_PROP_NMID(UNO_NAME_TEXT_FIELD), FN_UNO_TEXT_FIELD,      CPPU_E2T(CPPUTYPE_REFTXTFIELD),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },\
-        { SW_PROP_NMID(UNO_NAME_REFERENCE_MARK), FN_UNO_REFERENCE_MARK,  CPPU_E2T(CPPUTYPE_REFTEXTCNTNT), PropertyAttribute::MAYBEVOID ,0 },\
+        { SW_PROP_NMID(UNO_NAME_REFERENCE_MARK), FN_UNO_REFERENCE_MARK,  CPPU_E2T(CPPUTYPE_REFTEXTCNTNT), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },\
         { SW_PROP_NMID(UNO_NAME_FOOTNOTE), FN_UNO_FOOTNOTE,        CPPU_E2T(CPPUTYPE_REFFOOTNOTE),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },\
         { SW_PROP_NMID(UNO_NAME_ENDNOTE), FN_UNO_ENDNOTE,         CPPU_E2T(CPPUTYPE_REFFOOTNOTE),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },\
         { SW_PROP_NMID(UNO_NAME_HYPER_LINK_EVENTS), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_REFNMREPLACE), PropertyAttribute::MAYBEVOID, MID_URL_HYPERLINKEVENTS},\
+        { SW_PROP_NMID(UNO_NAME_NESTED_TEXT_CONTENT), FN_UNO_NESTED_TEXT_CONTENT, CPPU_E2T(CPPUTYPE_REFTEXTCNTNT), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },\
         TABSTOPS_MAP_ENTRY
 
 
@@ -309,6 +298,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
 
 // OD 18.09.2003 #i18732# - add property
 // OD 2004-05-05 #i28701# - add property 'WrapInfluenceOnObjPos'
+// OD 2009-07-13 #i73249# - add properties 'Title' and 'Description'
 #define COMMON_FRAME_PROPERTIES \
     { SW_PROP_NMID(UNO_NAME_ANCHOR_PAGE_NO), RES_ANCHOR,            CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE, MID_ANCHOR_PAGENUM       },              \
     { SW_PROP_NMID(UNO_NAME_ANCHOR_TYPE), RES_ANCHOR,           CPPU_E2T(CPPUTYPE_TXTCNTANCHOR),            PROPERTY_NONE, MID_ANCHOR_ANCHORTYPE},             \
@@ -369,6 +359,8 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
     { SW_PROP_NMID(UNO_NAME_Z_ORDER), FN_UNO_Z_ORDER,           CPPU_E2T(CPPUTYPE_INT32),       PROPERTY_NONE, 0}, \
     { SW_PROP_NMID(UNO_NAME_IS_FOLLOWING_TEXT_FLOW), RES_FOLLOW_TEXT_FLOW,     CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0}, \
     { SW_PROP_NMID(UNO_NAME_WRAP_INFLUENCE_ON_POSITION), RES_WRAP_INFLUENCE_ON_OBJPOS, CPPU_E2T(CPPUTYPE_INT8), PROPERTY_NONE, MID_WRAP_INFLUENCE}, \
+    { SW_PROP_NMID(UNO_NAME_TITLE), FN_UNO_TITLE, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0}, \
+    { SW_PROP_NMID(UNO_NAME_DESCRIPTION), FN_UNO_DESCRIPTION, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0}, \
     { SW_PROP_NMID(UNO_NAME_LAYOUT_SIZE), WID_LAYOUT_SIZE, CPPU_E2T(CPPUTYPE_AWTSIZE), PropertyAttribute::MAYBEVOID | PropertyAttribute::READONLY, 0 },
 
 
@@ -1123,7 +1115,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_FILTER), FN_UNO_GRAPHIC_FILTER,      CPPU_E2T(CPPUTYPE_OUSTRING), 0, 0 },
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC), FN_UNO_GRAPHIC, CPPU_E2T(CPPUTYPE_REFXGRAPHIC), 0, 0 },
                     { SW_PROP_NMID(UNO_NAME_ACTUAL_SIZE), FN_UNO_ACTUAL_SIZE,    CPPU_E2T(CPPUTYPE_AWTSIZE),  PropertyAttribute::READONLY, CONVERT_TWIPS},
-                    { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
+//                    { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
                     { SW_PROP_NMID(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, CPPU_E2T(CPPUTYPE_PNTSEQSEQ), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_IS_PIXEL_CONTOUR), FN_UNO_IS_PIXEL_CONTOUR, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
                     { SW_PROP_NMID(UNO_NAME_IS_AUTOMATIC_CONTOUR), FN_UNO_IS_AUTOMATIC_CONTOUR , CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
@@ -1158,7 +1150,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_URL), FN_UNO_REPLACEMENT_GRAPHIC_URL, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC), FN_UNO_REPLACEMENT_GRAPHIC, CPPU_E2T(CPPUTYPE_REFXGRAPHIC), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_COMPONENT),FN_UNO_COMPONENT, CPPU_E2T(CPPUTYPE_REFCOMPONENT), PropertyAttribute::READONLY, 0},
-                    { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
+//                    { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aEmbeddedPropertyMap_Impl;
@@ -1646,6 +1638,7 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {SW_PROP_NMID(UNO_NAME_IS_START), FN_UNO_IS_START, CPPU_E2T(CPPUTYPE_BOOLEAN),                             PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
                     //_REDLINE_PROPERTIES
                     {SW_PROP_NMID(UNO_NAME_TEXT_PORTION_TYPE), FN_UNO_TEXT_PORTION_TYPE, CPPU_E2T(CPPUTYPE_OUSTRING),                        PropertyAttribute::READONLY, 0},
+                    {SW_PROP_NMID(UNO_NAME_META), FN_UNO_META, CPPU_E2T(CPPUTYPE_REFTEXTCNTNT), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aTextPortionExtensionMap_Impl;
@@ -2246,6 +2239,8 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {SW_PROP_NMID(UNO_NAME_NAME),   FIELD_PROP_PAR4,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
+                    {SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT), FIELD_PROP_FORMAT,   CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE,    0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED_LANGUAGE), FIELD_PROP_BOOL4, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,    0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0,0,0}
                 };
@@ -2479,6 +2474,19 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                     {0,0,0,0,0,0}
                 };
                 aMapEntriesArr[nPropertyId] = aChart2DataSequenceMap;
+            }
+            break;
+            case PROPERTY_MAP_METAFIELD:
+            {
+                static SfxItemPropertyMapEntry aMetaFieldMap[] =
+                {
+                    { SW_PROP_NMID(UNO_NAME_NUMBER_FORMAT), 0,
+                        CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, 0 },
+                    { SW_PROP_NMID(UNO_NAME_IS_FIXED_LANGUAGE), 0,
+                        CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
+                    {0,0,0,0,0,0}
+                };
+                aMapEntriesArr[nPropertyId] = aMetaFieldMap;
             }
             break;
 
@@ -3086,6 +3094,12 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
             {
                 static SfxItemPropertySet aPROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM(pEntries);
                 aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM;
+            }
+            break;
+            case PROPERTY_MAP_METAFIELD:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_METAFIELD(pEntries);
+                aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_METAFIELD;
             }
             break;
         }

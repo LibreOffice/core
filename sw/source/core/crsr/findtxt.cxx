@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: findtxt.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/svapp.hxx>
 #include <txatritr.hxx>
 #include <fldbas.hxx>
@@ -51,7 +48,6 @@
 #include <swundo.hxx>
 #include <breakit.hxx>
 
-/*testarea*/
 #include <docsh.hxx>
 #include <PostItMgr.hxx>
 #include <viewsh.hxx>
@@ -126,7 +122,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
         if ( bNewHint )
         {
             const SwTxtAttr* pHt = (*pHts)[n];
-            if ( !pHt->GetEnd() && nStt >= nStart )
+            if ( pHt->HasDummyChar() && (nStt >= nStart) )
             {
                 //JP 17.05.00: Task 75806 ask for ">=" and not for ">"
                    switch( pHt->Which() )
@@ -136,7 +132,9 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                    case RES_TXTATR_FIELD:
                 case RES_TXTATR_REFMARK:
                    case RES_TXTATR_TOXMARK:
-                       {
+                case RES_TXTATR_META:
+                case RES_TXTATR_METAFIELD:
+                    {
                         // JP 06.05.98: mit Bug 50100 werden sie als Trenner erwuenscht und nicht
                         //              mehr zum Wort dazu gehoerend.
                         // MA 23.06.98: mit Bug 51215 sollen sie konsequenterweise auch am
@@ -146,7 +144,9 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                         //              Fuer das Ende merken wir uns die Ersetzungen und entferenen
                         //              hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
                            BOOL bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
-                            !((SwTxtFld*)pHt)->GetFld().GetFld()->Expand().Len();
+                            !(static_cast<SwTxtFld const*>(pHt)
+                                ->GetFld().GetFld()->ExpandField(
+                                    rNd.GetDoc()->IsClipBoard()).Len());
                         if ( bEmpty && nStart == nAkt )
                            {
                             rArr.Insert( nAkt, rArr.Count() );
@@ -161,9 +161,6 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                            }
                        }
                        break;
-                   case RES_TXTATR_HARDBLANK:
-                    rRet.SetChar( nAkt, ((SwTxtHardBlank*)pHt)->GetChar() );
-                    break;
                    default:
                     ASSERT( false, "unknown case in lcl_CleanStr" )
                     break;
@@ -338,7 +335,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::Te
 
             xub_StrLen aStart = 0;
             // do we need to finish a note?
-            if (POSTITMGR->GetActivePostIt())
+            if (POSTITMGR->HasActiveSidebarWin())
             {
                 if (bSearchInNotes)
                 {
@@ -358,7 +355,7 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes , utl::Te
                 }
                 else
                 {
-                    POSTITMGR->SetActivePostIt(0);
+                    POSTITMGR->SetActiveSidebarWin(0);
                 }
             }
 
@@ -456,7 +453,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     USHORT nCurrScript = 0;
 
     if ( SearchAlgorithms_APPROXIMATE == rSearchOpt.algorithmType &&
-         pBreakIt->xBreak.is() )
+         pBreakIt->GetBreakIter().is() )
     {
         pScriptIter = new SwScriptIterator( sCleanStr, nStart, bSrchForward );
         nSearchScript = pBreakIt->GetRealScriptOfText( rSearchOpt.searchString, 0 );
@@ -593,7 +590,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
     if( bFnd && bReplace )          // String ersetzen ??
     {
         // Replace-Methode vom SwDoc benutzen
-        int bRegExp = SearchAlgorithms_REGEXP == rSearchOpt.algorithmType;
+        const bool bRegExp(SearchAlgorithms_REGEXP == rSearchOpt.algorithmType);
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         xub_StrLen nSttCnt = rSttCntIdx.GetIndex();
         // damit die Region auch verschoben wird, in den Shell-Cursr-Ring
@@ -605,12 +602,11 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
             ((Ring*)pRegion)->MoveRingTo( &rCursor );
         }
 
-        String *pRepl = bRegExp ? ReplaceBackReferences( rSearchOpt, pCrsr ) : 0;
-        if( pRepl )
-            rCursor.GetDoc()->Replace( *pCrsr, *pRepl, bRegExp );
-        else
-            rCursor.GetDoc()->Replace( *pCrsr, rSearchOpt.replaceString, bRegExp );
-        delete pRepl;
+        ::std::auto_ptr<String> pRepl( (bRegExp)
+                ? ReplaceBackReferences( rSearchOpt, pCrsr ) : 0 );
+        rCursor.GetDoc()->ReplaceRange( *pCrsr,
+            (pRepl.get()) ? *pRepl : String(rSearchOpt.replaceString),
+            bRegExp );
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );
 
         if( bRegExp )
@@ -623,7 +619,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
                 p->MoveTo( (Ring*)pRegion );
             } while( p != pPrev );
         }
-        rSttCntIdx = nSttCnt;
+        pCrsr->Start()->nContent = nSttCnt;
         return FIND_NO_RING;
     }
     return bFnd ? FIND_FOUND : FIND_NOT_FOUND;

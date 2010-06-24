@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: guess.cxx,v $
- * $Revision: 1.50 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <ctype.h>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <tools/shl.hxx>    // needed for SW_MOD() macro
 #include <errhdl.hxx>   // ASSERTs
 #include <dlelstnr.hxx>
@@ -176,7 +173,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
     {
         nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if ( STRING_LEN != nCutPos )
         {
             rInf.GetTxtSize( &rSI, rInf.GetIdx(), nCutPos - rInf.GetIdx(),
@@ -243,7 +240,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         nBreakStart = nCutPos;
     }
-    else if( pBreakIt->xBreak.is() )
+    else if( pBreakIt->GetBreakIter().is() )
     {
         // New: We should have a look into the last portion, if it was a
         // field portion. For this, we expand the text of the field portion
@@ -366,7 +363,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
 
         // determines first possible line break from nRightPos to
         // start index of current line
-        LineBreakResults aResult = pBreakIt->xBreak->getLineBreak(
+        LineBreakResults aResult = pBreakIt->GetBreakIter()->getLineBreak(
             rInf.GetTxt(), nCutPos, aLocale,
             rInf.GetLineStart(), aHyphOpt, aUserOpt );
 
@@ -534,7 +531,7 @@ sal_Bool SwTxtGuess::AlternativeSpelling( const SwTxtFormatInfo &rInf,
     xub_StrLen nWordLen;
 
     Boundary aBound =
-        pBreakIt->xBreak->getWordBoundary( rInf.GetTxt(), nPos,
+        pBreakIt->GetBreakIter()->getWordBoundary( rInf.GetTxt(), nPos,
         pBreakIt->GetLocale( rInf.GetFont()->GetLanguage() ),
         WordType::DICTIONARY_WORD, sal_True );
     nBreakStart = (xub_StrLen)aBound.startPos;

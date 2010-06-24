@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fldfunc.cxx,v $
- * $Revision: 1.22.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -460,7 +457,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
 {
     aListItemsLB.SetUpdateMode(FALSE);
     if(pControl == &aListAddPB ||
-            pControl == &aListItemED && aListAddPB.IsEnabled())
+            (pControl == &aListItemED && aListAddPB.IsEnabled()))
     {
         String sEntry(aListItemED.GetText());
         aListItemsLB.InsertEntry(sEntry);

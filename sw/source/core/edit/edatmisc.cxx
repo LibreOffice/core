@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: edatmisc.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,7 +138,9 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, USHORT nFlags )
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && ( bIsTblMode ||
                 *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() ))
-                GetDoc()->Insert(*PCURCRSR, rHint, nFlags );
+            {
+                GetDoc()->InsertPoolItem(*PCURCRSR, rHint, nFlags );
+            }
         FOREACHPAM_END()
 
         GetDoc()->EndUndo(UNDO_INSATTR, NULL);
@@ -150,7 +149,7 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, USHORT nFlags )
     {
         if( !HasSelection() )
             UpdateAttr();
-        GetDoc()->Insert( *pCrsr, rHint, nFlags );
+        GetDoc()->InsertPoolItem( *pCrsr, rHint, nFlags );
     }
     EndAllAction();
 }
@@ -169,7 +168,9 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, USHORT nFlags )
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && ( bIsTblMode ||
                 *PCURCRSR->GetPoint() != *PCURCRSR->GetMark() ))
-                GetDoc()->Insert(*PCURCRSR, rSet, nFlags );
+            {
+                GetDoc()->InsertItemSet(*PCURCRSR, rSet, nFlags );
+            }
         FOREACHPAM_END()
 
         GetDoc()->EndUndo(UNDO_INSATTR, NULL);
@@ -178,7 +179,7 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, USHORT nFlags )
     {
         if( !HasSelection() )
             UpdateAttr();
-        GetDoc()->Insert( *pCrsr, rSet, nFlags );
+        GetDoc()->InsertItemSet( *pCrsr, rSet, nFlags );
     }
     EndAllAction();
 }

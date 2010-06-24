@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shells.src,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +95,7 @@ String STR_REDLINE_DELETED
 };
 String STR_REDLINE_AUTOFMT
 {
-        Text [ en-US ] = "AutoFormat";
+        Text [ en-US ] = "AutoCorrect";
     Text [ x-comment ] = " ";
 };
 String STR_REDLINE_FORMATED
@@ -118,12 +115,12 @@ String STR_REDLINE_FMTCOLLSET
 };
 String STR_REDLINE_TITLE
 {
-        Text [ en-US ] = "AutoFormat";
+        Text [ en-US ] = "AutoCorrect";
     Text [ x-comment ] = " ";
 };
 String STR_REDLINE_MSG
 {
-        Text [ en-US ] = "AutoFormat completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
+        Text [ en-US ] = "AutoCorrect completed.\nYou can accept or reject all changes,\nor accept or reject particular changes.";
     Text [ x-comment ] = " ";
 };
 String STR_REDLINE_ACCEPT_ALL

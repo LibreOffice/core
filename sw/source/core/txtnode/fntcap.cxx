@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fntcap.cxx,v $
- * $Revision: 1.27.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <hintids.hxx>
-#include <svx/cmapitem.hxx>
+#include <editeng/cmapitem.hxx>
 
 #ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
@@ -102,13 +99,13 @@ xub_StrLen lcl_CalcCaseMap( const SwFont& rFnt,
 
     // special case for title case:
     const bool bTitle = SVX_CASEMAP_TITEL == rFnt.GetCaseMap() &&
-                        pBreakIt->xBreak.is();
+                        pBreakIt->GetBreakIter().is();
     for ( xub_StrLen i = nOfst; i < nEnd; ++i )
     {
         XubString aTmp( rOrigString, i, 1 );
 
         if ( !bTitle ||
-             pBreakIt->xBreak->isBeginWord(
+             pBreakIt->GetBreakIter()->isBeginWord(
                  rOrigString, i,
                  pBreakIt->GetLocale( rFnt.GetLanguage() ),
                  WordType::ANYWORD_IGNOREWHITESPACES ) )
@@ -654,7 +651,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
     if( nPos < nMaxPos )
     {
-        nPos = (xub_StrLen)pBreakIt->xBreak->endOfCharBlock( rOldText, nPos,
+        nPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfCharBlock( rOldText, nPos,
             pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN )
             nPos = nOldPos;
@@ -702,12 +699,12 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             rDo.Do();
             nOldPos = nPos;
         }
-        nPos = (xub_StrLen)pBreakIt->xBreak->nextCharBlock( rOldText, nPos,
+        nPos = (xub_StrLen)pBreakIt->GetBreakIter()->nextCharBlock( rOldText, nPos,
                pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
         ASSERT( nPos, "nextCharBlock not implemented?" );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if( !nPos )
             nPos = nMaxPos;
 #endif
@@ -816,12 +813,12 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 }
             } while( nOldPos != nPos );
         }
-        nPos = (xub_StrLen)pBreakIt->xBreak->endOfCharBlock( rOldText, nPos,
+        nPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfCharBlock( rOldText, nPos,
                pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
         ASSERT( nPos, "endOfCharBlock not implemented?" );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         if( !nPos )
             nPos = nMaxPos;
 #endif

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoprnms.hxx,v $
- * $Revision: 1.129.100.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -804,7 +801,12 @@ enum SwPropNameIds
 /* 0734 */  UNO_NAME_CHAR_OVERLINE_COLOR,
 /* 0735 */  UNO_NAME_CHAR_OVERLINE_HAS_COLOR,
 /* 0736 */  UNO_NAME_OUTLINE_LEVEL,  //#outline level,add<-zhaojianwei outlinelevel
-/* 0737 */  SW_PROPNAME_END
+// --> OD 2009-07-13 #i73249#
+/* 0737 */  UNO_NAME_DESCRIPTION,
+// <--
+/* 0738 */  UNO_NAME_META,       // #i91565#
+/* 0739 */  UNO_NAME_NESTED_TEXT_CONTENT, // #i109601#
+/* 0740 */  SW_PROPNAME_END
 };
 
 

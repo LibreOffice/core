@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmliteme.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,19 +38,18 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltabe.hxx>
 #include "xmlbrshe.hxx"
-#include <svx/tstpitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <vcl/fldunit.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include "fmtornt.hxx"
-#ifndef _UNOMID_H
 #include <unomid.h>
-#endif
 #include "frmfmt.hxx"
 #include "fmtfsize.hxx"
 #include "swrect.hxx"
 #include "xmlexp.hxx"
+#include <editeng/memberids.hrc>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

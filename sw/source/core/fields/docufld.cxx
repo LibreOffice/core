@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docufld.cxx,v $
- * $Revision: 1.51.16.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,30 +44,32 @@
 #include <com/sun/star/text/UserFieldFormat.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
-#ifndef _COM_SUN_STAR_TEXT_FilenameDisplayFormat_HPP_
 #include <com/sun/star/text/FilenameDisplayFormat.hpp>
-#endif
 #include <com/sun/star/text/XDependentTextField.hpp>
 #include <com/sun/star/text/DocumentStatistic.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/Duration.hpp>
 #include <unotools/localedatawrapper.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
-#include <svtools/urihelper.hxx>
-#include <svtools/useroptions.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/useroptions.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/zforlist.hxx>
 
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Time.hpp>
 
 #include <tools/shl.hxx>
 #include <swmodule.hxx>
@@ -89,9 +88,7 @@
 #include <cntfrm.hxx>       //
 #include <pam.hxx>
 #include <viewsh.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <shellres.hxx>
 #include <docufld.hxx>
 #include <flddat.hxx>
@@ -99,19 +96,13 @@
 #include <ndtxt.hxx>
 #include <expfld.hxx>
 #include <poolfmt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _UNOFLDMID_H
 #include <unofldmid.h>
-#endif
 #include <swunohelper.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 
 #define URL_DECODE  INetURLObject::DECODE_UNAMBIGUOUS
 
@@ -931,10 +922,11 @@ SwFieldType* SwDocInfoFieldType::Copy() const
 }
 
 void lcl_GetLocalDataWrapper( ULONG nLang,
-                              LocaleDataWrapper **ppAppLocalData,
-                              LocaleDataWrapper **ppLocalData )
+                              const LocaleDataWrapper **ppAppLocalData,
+                              const LocaleDataWrapper **ppLocalData )
 {
-    *ppAppLocalData = &GetAppLocaleData();
+    SvtSysLocale aLocale;
+    *ppAppLocalData = &aLocale.GetLocaleData();
     *ppLocalData = *ppAppLocalData;
     if( nLang != SvxLocaleToLanguage( (*ppLocalData)->getLocale() ) )
         *ppLocalData = new LocaleDataWrapper(
@@ -949,7 +941,7 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
                                     sal_uInt16 nLang, const String& rName ) const
 {
     String aStr;
-    LocaleDataWrapper *pAppLocalData = 0, *pLocalData = 0;
+    const LocaleDataWrapper *pAppLocalData = 0, *pLocalData = 0;
     SwDocShell *pDocShell(GetDoc()->GetDocShell());
     DBG_ASSERT(pDocShell, "no SwDocShell");
     if (!pDocShell) { return aStr; }
@@ -1112,6 +1104,21 @@ SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const 
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
+template<class T>
+double lcl_TimeToDouble( const T& rTime )
+{
+    const double fMilliSecondsPerDay = 86400000.0;
+    return ((rTime.Hours*3600000)+(rTime.Minutes*60000)+(rTime.Seconds*1000)+(rTime.HundredthSeconds*10)) / fMilliSecondsPerDay;
+}
+
+template<class D>
+double lcl_DateToDouble( const D& rDate, const Date& rNullDate )
+{
+    long nDate = Date::DateToDays( rDate.Day, rDate.Month, rDate.Year );
+    long nNullDate = Date::DateToDays( rNullDate.GetDay(), rNullDate.GetMonth(), rNullDate.GetYear() );
+    return double( nDate - nNullDate );
+}
+
 String SwDocInfoField::Expand() const
 {
     if ( ( nSubType & 0xFF ) == DI_CUSTOM )
@@ -1143,17 +1150,42 @@ String SwDocInfoField::Expand() const
                     ::rtl::OUString sVal;
                     uno::Reference < script::XTypeConverter > xConverter( comphelper::getProcessServiceFactory()
                         ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), uno::UNO_QUERY );
-                    uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
-                    aNew >>= sVal;
+                    util::Date aDate;
+                    util::DateTime aDateTime;
+                    util::Duration aDuration;
+                    if( aAny >>= aDate)
+                    {
+                        SvNumberFormatter* pFormatter = pDocShell->GetDoc()->GetNumberFormatter();
+                        Date* pNullDate = pFormatter->GetNullDate();
+                        sVal = ExpandValue( lcl_DateToDouble<util::Date>( aDate, *pNullDate ), GetFormat(), GetLanguage());
+                    }
+                    else if( aAny >>= aDateTime )
+                    {
+                        double fDateTime = lcl_TimeToDouble<util::DateTime>( aDateTime );
+                        SvNumberFormatter* pFormatter = pDocShell->GetDoc()->GetNumberFormatter();
+                        Date* pNullDate = pFormatter->GetNullDate();
+                        fDateTime += lcl_DateToDouble<util::DateTime>( aDateTime, *pNullDate );
+                        sVal = ExpandValue( fDateTime, GetFormat(), GetLanguage());
+                    }
+                    else if( aAny >>= aDuration )
+                    {
+                        String sText(aDuration.Negative ? '-' : '+');
+                        sText += ViewShell::GetShellRes()->sDurationFormat;
+                        sText.SearchAndReplace(String::CreateFromAscii( "%1"), String::CreateFromInt32( aDuration.Years ) );
+                        sText.SearchAndReplace(String::CreateFromAscii( "%2"), String::CreateFromInt32( aDuration.Months ) );
+                        sText.SearchAndReplace(String::CreateFromAscii( "%3"), String::CreateFromInt32( aDuration.Days   ) );
+                        sText.SearchAndReplace(String::CreateFromAscii( "%4"), String::CreateFromInt32( aDuration.Hours  ) );
+                        sText.SearchAndReplace(String::CreateFromAscii( "%5"), String::CreateFromInt32( aDuration.Minutes) );
+                        sText.SearchAndReplace(String::CreateFromAscii( "%6"), String::CreateFromInt32( aDuration.Seconds) );
+                        sVal = sText;
+                    }
+                    else
+                    {
+                        uno::Any aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
+                        aNew >>= sVal;
+                    }
                     ((SwDocInfoField*)this)->aContent = sVal;
                 }
-            }
-            else
-            {
-                // property is "void" - means it has not been added until now - do it!
-                aAny <<= ::rtl::OUString(aContent);
-                uno::Reference < beans::XPropertyContainer > xCont( xSet, uno::UNO_QUERY );
-                xCont->addProperty( aName, ::com::sun::star::beans::PropertyAttribute::REMOVEABLE, aAny );
             }
         }
         catch (uno::Exception&) {}
@@ -1333,7 +1365,8 @@ BOOL SwDocInfoField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 
 SwHiddenTxtFieldType::SwHiddenTxtFieldType( sal_Bool bSetHidden )
     : SwFieldType( RES_HIDDENTXTFLD ), bHidden( bSetHidden )
-{}
+{
+}
 
 SwFieldType* SwHiddenTxtFieldType::Copy() const
 {
@@ -1875,6 +1908,11 @@ void SwPostItField::SetTextObject( OutlinerParaObject* pText )
     mpText = pText;
 }
 
+sal_uInt32 SwPostItField::GetNumberOfParagraphs() const
+{
+    return (mpText) ? mpText->Count() : 1;
+}
+
 /*-----------------05.03.98 13:42-------------------
 
 --------------------------------------------------*/
@@ -2318,7 +2356,7 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
                 {
                     // einen sdbcx::Index fuers bestimmen vom TextNode anlegen
                     SwPosition aPos( pDoc->GetNodes().GetEndOfPostIts() );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     ASSERT( GetBodyTxtNode( *pDoc, aPos, *pFrm ),
                             "wo steht das Feld" );
 #else

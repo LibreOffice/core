@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docshini.cxx,v $
- * $Revision: 1.67 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,58 +31,44 @@
 
 #include <hintids.hxx>
 
-#ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
-#endif
+#include <i18npool/mslangid.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/storage.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/lingucfg.hxx>
+#include <unotools/lingucfg.hxx>
 #include <sfx2/docfile.hxx>
-#ifndef _OFA_MISCCFG_HXX //autogen
-#include <svtools/misccfg.hxx>
-#endif
+#include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
-#include <svx/asiancfg.hxx>
-#include <svx/unolingu.hxx>
+#include <svl/asiancfg.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/intitem.hxx>
-#include <svx/adjitem.hxx>
-#ifndef _SVX_AKRNTEM_HXX
-#include <svx/akrnitem.hxx>
-#endif
+#include <svl/intitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/akrnitem.hxx>
 #include <linguistic/lngprops.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <rtl/logfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <svx/xtable.hxx>
-#ifndef _SVX_DRAWITEM_HXX //autogen
-
 #include <svx/drawitem.hxx>
-#endif
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/flstitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
-#endif
-#include <svx/langitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/svxacorr.hxx>
-
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/svxacorr.hxx>
 #include <vcl/svapp.hxx>
 #include <view.hxx>
 #include <prtopt.hxx>
 #include <fmtcol.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <docfac.hxx>
@@ -93,18 +76,12 @@
 #include <shellio.hxx>
 #include <tox.hxx>
 #include <swdtflvr.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <usrpref.hxx>
 #include <fontcfg.hxx>
 #include <poolfmt.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <ndole.hxx>
 #include <mdiexp.hxx>
 #include <unotxdoc.hxx>
@@ -112,10 +89,7 @@
 #include <swwait.hxx>
 #include <wrtsh.hxx>
 #include <swerror.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-
 
 // #i18732#
 #include <fmtfollowtextflow.hxx>
@@ -398,7 +372,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
  --------------------------------------------------------------------*/
 
 
-SwDocShell::SwDocShell( SfxObjectCreateMode eMode, sal_Bool _bScriptingSupport ) :
+SwDocShell::SwDocShell( SfxObjectCreateMode eMode ) :
     SfxObjectShell ( eMode ),
     pDoc(0),
     pFontList(0),
@@ -409,8 +383,25 @@ SwDocShell::SwDocShell( SfxObjectCreateMode eMode, sal_Bool _bScriptingSupport )
     bInUpdateFontList(false)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
-    if ( !_bScriptingSupport )
-        SetHasNoBasic();
+    Init_Impl();
+}
+
+/*--------------------------------------------------------------------
+    Beschreibung: Ctor / Dtor
+ --------------------------------------------------------------------*/
+
+
+SwDocShell::SwDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
+    SfxObjectShell ( i_nSfxCreationFlags ),
+    pDoc(0),
+    pFontList(0),
+    pView( 0 ),
+    pWrtShell( 0 ),
+    pOLEChildList( 0 ),
+    nUpdateDocMode(document::UpdateDocMode::ACCORDING_TO_CONFIG),
+    bInUpdateFontList(false)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDocShell::SwDocShell" );
     Init_Impl();
 }
 
@@ -653,7 +644,7 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
                             pDoc->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
                     }
                 }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 else
                     ASSERT( !this, "ohne Sw3Reader geht nichts" );
 #endif
@@ -791,9 +782,9 @@ void SwDocShell::SubInitNew()
 
     SvtLinguConfig().GetOptions( aLinguOpt );
 
-    sal_Int16   nVal = aLinguOpt.nDefaultLanguage,
-                eCJK = aLinguOpt.nDefaultLanguage_CJK,
-                eCTL = aLinguOpt.nDefaultLanguage_CTL;
+    sal_Int16   nVal = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN),
+                eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),
+                eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
     aDfltSet.Put( SvxLanguageItem( nVal, RES_CHRATR_LANGUAGE ) );
     aDfltSet.Put( SvxLanguageItem( eCJK, RES_CHRATR_CJK_LANGUAGE ) );
     aDfltSet.Put( SvxLanguageItem( eCTL, RES_CHRATR_CTL_LANGUAGE ) );

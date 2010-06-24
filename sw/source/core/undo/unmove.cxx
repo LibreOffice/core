@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unmove.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -207,7 +204,9 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
             SwNodeRange aRg( aIdx, aIdx );
             aRg.aEnd = nDestEndNode;
             aIdx = nInsPosNode;
-            if( !pDoc->Move( aRg, aIdx, IDocumentContentOperations::DOC_MOVEDEFAULT ) )
+            bool bSuccess = pDoc->MoveNodeRange( aRg, aIdx,
+                    IDocumentContentOperations::DOC_MOVEDEFAULT );
+            if (!bSuccess)
                 break;
         }
         else
@@ -231,7 +230,10 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
                 ((SwTxtNode*)pCNd)->ClearSwpHintsArr( false );
 
             // an der InsertPos erstmal alle Attribute entfernen,
-            if( !pDoc->Move( aPam, aPos, ( bMoveRedlines ? IDocumentContentOperations::DOC_MOVEREDLINES : IDocumentContentOperations::DOC_MOVEDEFAULT ) ) )
+            const bool bSuccess = pDoc->MoveRange( aPam, aPos, (bMoveRedlines)
+                        ? IDocumentContentOperations::DOC_MOVEREDLINES
+                        : IDocumentContentOperations::DOC_MOVEDEFAULT );
+            if (!bSuccess)
                 break;
 
             aPam.Exchange();
@@ -294,7 +296,9 @@ void SwUndoMove::Redo( SwUndoIter& rUndoIter )
     {
         // nur ein Move mit SwRange
         SwNodeRange aRg( rNds, nSttNode, rNds, nEndNode );
-        rDoc.Move( aRg, aIdx, ( bMoveRedlines ? IDocumentContentOperations::DOC_MOVEREDLINES : IDocumentContentOperations::DOC_MOVEDEFAULT ) );
+        rDoc.MoveNodeRange( aRg, aIdx, (bMoveRedlines)
+                ? IDocumentContentOperations::DOC_MOVEREDLINES
+                : IDocumentContentOperations::DOC_MOVEDEFAULT );
     }
     else
     {
@@ -310,7 +314,8 @@ void SwUndoMove::Redo( SwUndoIter& rUndoIter )
         BOOL bJoinTxt = aIdx.GetNode().IsTxtNode();
 
         aIdx--;
-        rDoc.Move( aPam, aMvPos, IDocumentContentOperations::DOC_MOVEDEFAULT );
+        rDoc.MoveRange( aPam, aMvPos,
+            IDocumentContentOperations::DOC_MOVEDEFAULT );
 
         if( nSttNode != nEndNode && bJoinTxt )
         {
@@ -347,15 +352,5 @@ void SwUndoMove::DelFtn( const SwPaM& rRange )
         if( pHistory && !pHistory->Count() )
             delete pHistory, pHistory = 0;
     }
-}
-
-void SwUndoMove::AddTblMrgFlyHstry( SwHistory& rHstr )
-{
-    if( !pHistory )
-        pHistory = new SwHistory;
-
-    USHORT nInsPos = nFtnStt;
-    nFtnStt = nFtnStt + rHstr.Count();
-    pHistory->Move( nInsPos, &rHstr );
 }
 

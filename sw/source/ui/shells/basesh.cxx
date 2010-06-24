@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: basesh.cxx,v $
- * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,45 +29,44 @@
 #include "precompiled_sw.hxx"
 #include <sot/factory.hxx>
 #include <hintids.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/languageoptions.hxx>
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/imapdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/visitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/visitem.hxx>
 #include <sfx2/objitem.hxx>
 #include <svtools/filter.hxx>
 #include <svx/gallery.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/contdlg.hxx>
 #include <vcl/graph.hxx>
-#include <svx/impgrf.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/itemiter.hxx>
-#include <svtools/stritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/sizeitem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <sfx2/objface.hxx>
 #include <fmturl.hxx>
 #include <fmthdft.hxx>
@@ -100,9 +96,7 @@
 #include <tblafmt.hxx>
 #include <caption.hxx>
 #include <swwait.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
@@ -192,7 +186,7 @@ void lcl_UpdateIMapDlg( SwWrtShell& rSh )
     void* pEditObj = GRAPHIC_NONE != nGrfType && GRAPHIC_DEFAULT != nGrfType
                         ? rSh.GetIMapInventor() : 0;
     TargetList* pList = new TargetList;
-    rSh.GetView().GetViewFrame()->GetTopFrame()->GetTargetList(*pList);
+    rSh.GetView().GetViewFrame()->GetTopFrame().GetTargetList(*pList);
 
     SfxItemSet aSet( rSh.GetAttrPool(), RES_URL, RES_URL );
     rSh.GetFlyFrmAttr( aSet );
@@ -301,11 +295,9 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             if ( rSh.HasSelection() )
             {
                 SwTransferable* pTransfer = new SwTransferable( rSh );
-/*??*/          uno::Reference<
-                    datatransfer::XTransferable > xRef(
-                                                                pTransfer );
+/*??*/          uno::Reference< datatransfer::XTransferable > xRef( pTransfer );
 
-                if ( nId == SID_CUT )
+                if ( nId == SID_CUT && !rSh.IsSelObjProtected(FLYPROTECT_CONTENT|FLYPROTECT_PARENT) )
                     pTransfer->Cut();
                 else
                 {
@@ -405,7 +397,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
             }
             break;
 
-        case FN_PASTESPECIAL:
+        case SID_PASTE_SPECIAL:
             {
                 TransferableDataHelper aDataHelper(
                         TransferableDataHelper::CreateFromSystemClipboard(
@@ -481,10 +473,10 @@ void SwBaseShell::StateClpbrd(SfxItemSet &rSet)
                 rSet.DisableItem( SID_PASTE );
             break;
 
-        case FN_PASTESPECIAL:
+        case SID_PASTE_SPECIAL:
             if( !GetView().IsPasteSpecialAllowed() )
             {
-                rSet.DisableItem( FN_PASTESPECIAL );
+                rSet.DisableItem( SID_PASTE_SPECIAL );
                 rSet.DisableItem( SID_PASTE_UNFORMATTED );
             }
             break;
@@ -519,6 +511,9 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nId, FALSE, &pItem ))
         nCnt = ((SfxUInt16Item*)pItem)->GetValue();
 
+    // #i106349#: save pointer: undo/redo may delete the shell, i.e., this!
+    SfxViewFrame *const pViewFrame( GetView().GetViewFrame() );
+
     switch( nId )
     {
         case SID_UNDO:
@@ -539,6 +534,8 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
         default:
             DBG_ERROR("falscher Dispatcher");
     }
+
+    if (pViewFrame) { pViewFrame->GetBindings().InvalidateAll(sal_False); }
 }
 
 /*--------------------------------------------------------------------
@@ -706,8 +703,9 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                     rSh.EndSelect();
                 }
                 BOOL bRet = rSh.MoveFldType(pFldType, nSlot == FN_GOTO_NEXT_MARK);
-                if (bRet)
-                    rSh.ClickToField(*rSh.GetCurFld());
+                SwField* pCurField = bRet ? rSh.GetCurFld() : 0;
+                if (pCurField)
+                    rSh.ClickToField(*pCurField);
                 rReq.SetReturnValue(SfxBoolItem( nSlot, bRet));
             }
         }
@@ -1060,14 +1058,14 @@ void SwBaseShell::Execute(SfxRequest &rReq)
         case FN_TOOL_ANKER_FRAME:
         {
             RndStdIds eSet = nSlot == FN_TOOL_ANKER_PAGE
-                                ? FLY_PAGE
+                                ? FLY_AT_PAGE
                                 : nSlot == FN_TOOL_ANKER_PARAGRAPH
-                                    ? FLY_AT_CNTNT
+                                    ? FLY_AT_PARA
                                     : nSlot == FN_TOOL_ANKER_FRAME
                                         ? FLY_AT_FLY
                                         : nSlot == FN_TOOL_ANKER_CHAR
-                                            ? FLY_IN_CNTNT
-                                            : FLY_AUTO_CNTNT;
+                                            ? FLY_AS_CHAR
+                                            : FLY_AT_CHAR;
             rSh.StartUndo();
             if( rSh.IsObjSelected() )
                 rSh.ChgAnchor( eSet );
@@ -1098,7 +1096,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                 switch( eSet )
                 {
                 case FLY_AT_FLY:
-                case FLY_PAGE:
+                case FLY_AT_PAGE:
 
                     //Durchlauf, links oder von links, oben, von oben
                     if(eSurround != SURROUND_THROUGHT)
@@ -1111,7 +1109,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                         aSet.Put(SwFmtHoriOrient(0, text::HoriOrientation::LEFT));
                     break;
 
-                case FLY_AT_CNTNT:
+                case FLY_AT_PARA:
                     //links, von links, rechts, oben, kein Uml, li+re Umlauf,
                     if(eSurround != SURROUND_LEFT || eSurround != SURROUND_RIGHT)
                         aSet.Put(SwFmtSurround(SURROUND_LEFT));
@@ -1123,7 +1121,7 @@ void SwBaseShell::Execute(SfxRequest &rReq)
                         aSet.Put(SwFmtHoriOrient(0, text::HoriOrientation::LEFT));
                     break;
 
-                case FLY_AUTO_CNTNT:
+                case FLY_AT_CHAR:
                     //links, von links, rechts, oben,  Durchlauf
                     if(eSurround != SURROUND_THROUGHT)
                         aSet.Put(SwFmtSurround(SURROUND_THROUGHT));
@@ -1621,12 +1619,17 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     else
                         rSh.GetFlyFrmAttr(aSet);
                     RndStdIds eSet = ((SwFmtAnchor&)aSet.Get(RES_ANCHOR)).GetAnchorId();
-                    BOOL bSet;
-                    bSet = (nWhich == FN_TOOL_ANKER_PAGE && eSet == FLY_PAGE) ||
-                            (nWhich == FN_TOOL_ANKER_PARAGRAPH && eSet == FLY_AT_CNTNT) ||
-                            (nWhich == FN_TOOL_ANKER_FRAME && eSet == FLY_AT_FLY) ||
-                            (nWhich == FN_TOOL_ANKER_AT_CHAR && eSet == FLY_AUTO_CNTNT) ||
-                            (nWhich == FN_TOOL_ANKER_CHAR && eSet == FLY_IN_CNTNT);
+                    const BOOL bSet =
+                           ((nWhich == FN_TOOL_ANKER_PAGE) &&
+                            (eSet == FLY_AT_PAGE))
+                        || ((nWhich == FN_TOOL_ANKER_PARAGRAPH) &&
+                            (eSet == FLY_AT_PARA))
+                        || ((nWhich == FN_TOOL_ANKER_FRAME) &&
+                            (eSet == FLY_AT_FLY))
+                        || ((nWhich == FN_TOOL_ANKER_AT_CHAR) &&
+                            (eSet == FLY_AT_CHAR))
+                        || ((nWhich == FN_TOOL_ANKER_CHAR) &&
+                            (eSet == FLY_AS_CHAR));
                     if(nWhich != FN_TOOL_ANKER)
                     {
                         USHORT nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
@@ -1643,16 +1646,16 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
 
                         switch (eSet)
                         {
-                            case FLY_PAGE:
+                            case FLY_AT_PAGE:
                                 nSlotId = FN_TOOL_ANKER_PAGE;
                             break;
-                            case FLY_AT_CNTNT:
+                            case FLY_AT_PARA:
                                 nSlotId = FN_TOOL_ANKER_PARAGRAPH;
                             break;
-                            case FLY_IN_CNTNT:
+                            case FLY_AS_CHAR:
                                 nSlotId = FN_TOOL_ANKER_CHAR;
                             break;
-                            case FLY_AUTO_CNTNT:
+                            case FLY_AT_CHAR:
                                 nSlotId = FN_TOOL_ANKER_AT_CHAR;
                             break;
                             case FLY_AT_FLY:
@@ -1702,15 +1705,18 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                     SwSurround nSurround = rWrap.GetSurround();
                     BOOL bSet = FALSE;
 
-                    BOOL bDisable = nAnchorType == - 1 || nAnchorType == FLY_IN_CNTNT;
-                    BOOL bHtmlMode = 0 != ::GetHtmlMode(GetView().GetDocShell());
+                    bool bDisable =
+                        (nAnchorType == - 1) || (nAnchorType == FLY_AS_CHAR);
+                    const bool bHtmlMode =
+                        0 != ::GetHtmlMode(GetView().GetDocShell());
 
                     switch( nWhich )
                     {
                         case FN_FRAME_NOWRAP:
                             bDisable |=
-                                ( nAnchorType != FLY_AT_CNTNT &&
-                                    nAnchorType != FLY_AUTO_CNTNT && nAnchorType != FLY_PAGE);
+                                (   (nAnchorType != FLY_AT_PARA)
+                                 && (nAnchorType != FLY_AT_CHAR)
+                                 && (nAnchorType != FLY_AT_PAGE));
                             bSet = nSurround == SURROUND_NONE;
                         break;
                         case FN_FRAME_WRAP:
@@ -1723,7 +1729,9 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                         break;
                         case FN_FRAME_WRAPTHRU:
                             bDisable |= (bHtmlMode ||
-                                (nAnchorType != FLY_AT_CNTNT&& nAnchorType != FLY_AUTO_CNTNT && nAnchorType != FLY_PAGE));
+                                (   (nAnchorType != FLY_AT_PARA)
+                                 && (nAnchorType != FLY_AT_CHAR)
+                                 && (nAnchorType != FLY_AT_PAGE)));
                             if(bObj)
                                 bSet = nSurround == SURROUND_THROUGHT && rSh.GetLayerId();
                             else
@@ -1751,16 +1759,19 @@ void SwBaseShell::GetState( SfxItemSet &rSet )
                                         rSh.GetGraphic(FALSE);  // start the loading
                                 }
                                 else if( rSh.IsFrmSelected() )
-                                    bDisable = GRAPHIC_NONE ==
-                                            rSh.GetIMapGraphic().GetType()||
-                                            nSel & nsSelectionType::SEL_FRM;
+                                {
+                                    // #i102253# applied patch from OD (see task)
+                                    bDisable =
+                                        nSel & nsSelectionType::SEL_FRM ||
+                                        GRAPHIC_NONE == rSh.GetIMapGraphic().GetType();
+                                }
                             }
                             bSet = bDisable ? FALSE : rWrap.IsContour();
 
                         break;
                         case FN_WRAP_ANCHOR_ONLY:
                             bDisable |= (bHtmlMode ||
-                                (nAnchorType != FLY_AT_CNTNT));
+                                (nAnchorType != FLY_AT_PARA));
                             bSet = rWrap.IsAnchorOnly();
                         break;
                         case FN_FRAME_WRAP_LEFT:
@@ -2545,7 +2556,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 SvxBrushItem aBrush(RES_BACKGROUND);
                 rSh.GetBoxBackground( aBrush );
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 aSet.Put( aBrush );
@@ -2564,7 +2575,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rSh.GetFlyFrmAttr( aSet );
 
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )
@@ -2579,7 +2590,7 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
                 rSh.GetCurAttr( aSet );
 
                 pDlg = pFact->CreateSfxDialog( pMDI, aSet,
-                    rView.GetViewFrame()->GetFrame()->GetFrameInterface(),
+                    rView.GetViewFrame()->GetFrame().GetFrameInterface(),
                     RC_SWDLG_BACKGROUND );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");
                 if ( pDlg->Execute() == RET_OK )

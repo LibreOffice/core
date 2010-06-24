@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh2.cxx,v $
- * $Revision: 1.103.144.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,33 +27,22 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#ifndef _COM_SUN_STAR_LANG_XMultiServiceFactory_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <comphelper/processfactory.hxx>
-#endif
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 
+#include <comphelper/processfactory.hxx>
 
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
-#include <svtools/lckbitem.hxx>
-#include <svtools/eitem.hxx>
-/*
-#include <svtools/macitem.hxx>
-*/
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/lckbitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/transfer.hxx>
 #ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/dialogs.hrc>
@@ -75,11 +61,11 @@
 #include <svx/svxids.hrc>
 #endif
 #include <svx/drawitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/fmshell.hxx>
 
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <sfx2/app.hxx>
@@ -90,51 +76,33 @@
 #include <swunodef.hxx>
 #include <fmtcol.hxx>
 #include <swevent.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>         // fuer die aktuelle Sicht
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>        // Dokumenterzeugung
-#endif
 #include <wrtsh.hxx>
 #include <fldbas.hxx>
 #include <viewopt.hxx>
-#ifndef _GLOBDOC_HXX
 #include <globdoc.hxx>
-#endif
 #include <fldwrap.hxx>
-#ifndef _REDLNDLG_HXX
 #include <redlndlg.hxx>
-#endif
 #include <docstyle.hxx>
 #include <doc.hxx>
 #include <pagedesc.hxx>
 #include <shellio.hxx>
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
-#ifndef _SRCVIEW_HXX
 #include <srcview.hxx>
-#endif
 #include <poolfmt.hxx>
 #include <usrpref.hxx>
-#ifndef _WDOCSH_HXX
 #include <wdocsh.hxx>
-#endif
 #include <unotxdoc.hxx>
 #include <acmplwrd.hxx>
 #include <swmodule.hxx>
-#include <unoobj.hxx>
+#include <unobaseclass.hxx>
 #include <swwait.hxx>
 #include <swcli.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 #include <globals.h>
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #ifndef _APP_HRC
 #include <app.hrc>
 #endif
@@ -152,7 +120,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
 
 #include <sfx2/fcontnr.hxx>
@@ -180,8 +148,6 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
                                 Window *pParent, const SfxItemSet &rSet)
 {
     SfxDocumentInfoDialog* pDlg = new SfxDocumentInfoDialog(pParent, rSet);
-//  const SfxDocumentInfoItem& rItem = (const SfxDocumentInfoItem&)rSet.Get(SID_DOCINFO);
-//  if(rItem.IsOwnFormat())
     //nur mit Statistik, wenn dieses Doc auch angezeigt wird, nicht
     //aus dem Doc-Manager
     SwDocShell* pDocSh = (SwDocShell*) SfxObjectShell::Current();
@@ -710,7 +676,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         bOnly = FALSE;
                     else if( IS_TYPE( SwPagePreView, pTmpFrm->GetViewShell()))
                     {
-                        pTmpFrm->GetFrame()->Appear();
+                        pTmpFrm->GetFrame().Appear();
                         bFound = TRUE;
                     }
                     if( bFound && !bOnly )
@@ -918,33 +884,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         if(!pBool || !pBool->GetValue())
                             break;
                     }
-                    else
-                    {
-                        // try to store the document
-                        sal_uInt32 nErrorCode = ERRCODE_NONE;
-                        try
-                        {
-                            uno::Reference< frame::XStorable > xStorable( GetModel(), uno::UNO_QUERY_THROW );
-                            xStorable->store();
-                        }
-                        catch( task::ErrorCodeIOException& aErrEx )
-                        {
-                            nErrorCode = (sal_uInt32)aErrEx.ErrCode;
-                        }
-                        catch( uno::Exception& )
-                        {
-                            nErrorCode = ERRCODE_IO_GENERAL;
-                        }
-
-                        if ( nErrorCode != ERRCODE_NONE )
-                        {
-                            // if the saving has failed show the error and break the action
-                            if ( nErrorCode != ERRCODE_ABORT )
-                                ErrorHandler::HandleError( nErrorCode );
-
-                            break;
-                        }
-                    }
                 }
 #ifdef DBG_UTIL
                 {
@@ -970,10 +909,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         bDone = TRUE;
                         SfxEventConfiguration* pEvent = SFX_APP()->GetEventConfig();
                         SvxMacro aMac(aEmptyStr, aEmptyStr, STARBASIC);
-                        pEvent->ConfigureEvent(SFX_EVENT_OPENDOC,       aMac, this);
-                        pEvent->ConfigureEvent(SFX_EVENT_CLOSEDOC,      aMac, this);
-                        pEvent->ConfigureEvent(SFX_EVENT_ACTIVATEDOC,   aMac, this);
-                        pEvent->ConfigureEvent(SFX_EVENT_DEACTIVATEDOC, aMac, this);
+                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC ), aMac, this);
+                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC ), aMac, this);
+                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC ),    aMac, this);
+                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC ), aMac, this);
                         ReloadFromHtml(aTempFile.GetURL(), pSrcView);
                         nSlot = 0;
                     }
@@ -1010,6 +949,8 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     //pSavePrinter darf nicht wieder geloescht werden
                 }
                 pViewFrm->GetBindings().SetState(SfxBoolItem(SID_SOURCEVIEW, nSlot == SID_VIEWSHELL2));
+                pViewFrm->GetBindings().Invalidate( SID_BROWSER_MODE );
+                pViewFrm->GetBindings().Invalidate( FN_PRINT_LAYOUT );
             }
             break;
             case SID_GET_COLORTABLE:
@@ -1086,7 +1027,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 else
                 {
                     // Neues Dokument erzeugen.
-                    SfxViewFrame *pFrame = SfxViewFrame::CreateViewFrame( *xDocSh, 0 );
+                    SfxViewFrame *pFrame = SfxViewFrame::LoadDocument( *xDocSh, 0 );
                     SwView      *pCurrView = (SwView*) pFrame->GetViewShell();
 
                     // Dokumenttitel setzen
@@ -1159,7 +1100,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                                                         xRef( pClipCntnr );
 
                         pClipCntnr->CopyAnyData( FORMAT_RTF, (sal_Char*)
-                                        pStrm->GetData(), pStrm->GetSize() );
+                                    pStrm->GetData(), pStrm->GetEndOfData() );
                         pClipCntnr->CopyToClipboard(
                             GetView()? (Window*)&GetView()->GetEditWin() : 0 );
                         delete pStrm;
@@ -1228,18 +1169,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
             }
             break;
 
-        case SID_MAIL_PREPAREEXPORT:
-            {
-                //pWrtShell is not set in page preview
-                if(pWrtShell)
-                    pWrtShell->StartAllAction();
-                pDoc->UpdateFlds( NULL, false );
-                pDoc->EmbedAllLinks();
-                pDoc->RemoveInvisibleContent();
-                if(pWrtShell)
-                    pWrtShell->EndAllAction();
-            }
-            break;
         case SID_MAIL_EXPORT_FINISHED:
         {
                 if(pWrtShell)
@@ -1807,7 +1736,10 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
     SwView* pTempView = _pView ? _pView : (SwView*)GetView();
     if( pTempView )
     {
-        pTempView->GetViewFrame()->GetBindings().Invalidate(FN_SHADOWCURSOR);
+        SfxBindings& rBind = pTempView->GetViewFrame()->GetBindings();
+        rBind.Invalidate(FN_SHADOWCURSOR);
+        rBind.Invalidate(SID_BROWSER_MODE);
+        rBind.Invalidate(FN_PRINT_LAYOUT);
 
         if( !GetDoc()->getPrinter( false ) )
         {
@@ -1820,17 +1752,17 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
         GetDoc()->CheckDefaultPageFmt();
         // <--
 
-        //Wenn wir die BrowseView einschalten, darf es nur diese eine
-        //Sicht auf das Dokument geben, alle anderen werden geschlossen.
-        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, 0, FALSE);
+        // Currently there can be only one view (layout) if the document is viewed in Web layout
+        // So if there are more views we are in print layout and for toggling to Web layout all other views must be closed
+        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
         do {
             if( pTmpFrm != pTempView->GetViewFrame() )
             {
                 pTmpFrm->DoClose();
-                pTmpFrm = SfxViewFrame::GetFirst(this, 0, FALSE);
+                pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
             }
             else
-                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, 0, FALSE);
+                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, FALSE);
 
         } while ( pTmpFrm );
 

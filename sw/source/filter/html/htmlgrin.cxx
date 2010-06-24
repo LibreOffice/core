@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlgrin.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,27 +30,27 @@
 
 #include "hintids.hxx"
 #include <vcl/svapp.hxx>
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
+#include <svx/svxids.hrc>
+#include <sfx2/sfx.hrc>
 #include <i18npool/mslangid.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/urihelper.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/urihelper.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
-
+#include <unotools/eventcfg.hxx>
 
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
@@ -208,7 +205,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            BOOL bDontAppend )
 {
     BOOL bMoveBackward = FALSE;
-    SwFmtAnchor aAnchor( FLY_IN_CNTNT );
+    SwFmtAnchor aAnchor( FLY_AS_CHAR );
     sal_Int16 eVertRel = text::RelOrientation::FRAME;
 
     if( text::HoriOrientation::NONE != eHoriOri )
@@ -267,14 +264,14 @@ void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
         xub_StrLen nCntnt = pPam->GetPoint()->nContent.GetIndex();
         if( nCntnt )
         {
-            aAnchor.SetType( FLY_AUTO_CNTNT );
+            aAnchor.SetType( FLY_AT_CHAR );
             bMoveBackward = TRUE;
             eVertOri = text::VertOrientation::CHAR_BOTTOM;
             eVertRel = text::RelOrientation::CHAR;
         }
         else
         {
-            aAnchor.SetType( FLY_AT_CNTNT );
+            aAnchor.SetType( FLY_AT_PARA );
             eVertOri = text::VertOrientation::TOP;
             eVertRel = text::RelOrientation::PRINT_AREA;
         }
@@ -301,7 +298,7 @@ void SwHTMLParser::RegisterFlyFrm( SwFrmFmt *pFlyFmt )
     // automatisch verankerte Rahmen muessen noch um eine Position
     // nach vorne verschoben werden.
     if( RES_DRAWFRMFMT != pFlyFmt->Which() &&
-        FLY_AT_CNTNT == pFlyFmt->GetAnchor().GetAnchorId() &&
+        (FLY_AT_PARA == pFlyFmt->GetAnchor().GetAnchorId()) &&
         SURROUND_THROUGHT == pFlyFmt->GetSurround().GetSurround() )
     {
         aMoveFlyFrms.Insert( pFlyFmt, aMoveFlyFrms.Count() );
@@ -743,7 +740,7 @@ IMAGE_SETEVENT:
     }
 
     if( sAltNm.Len() )
-        pGrfNd->SetAlternateText( sAltNm );
+        pGrfNd->SetTitle( sAltNm );
 
     if( bSetTwipSize )
         pGrfNd->SetTwipSize( aGrfSz );
@@ -778,7 +775,7 @@ IMAGE_SETEVENT:
                     aMacroItem.SetMacro( aEvents[ n ], *pMacro );
         }
 
-        if( FLY_IN_CNTNT == pFlyFmt->GetAnchor().GetAnchorId() &&
+        if ((FLY_AS_CHAR == pFlyFmt->GetAnchor().GetAnchorId()) &&
             aAttrTab.pINetFmt->GetSttPara() ==
                         pPam->GetPoint()->nNode &&
             aAttrTab.pINetFmt->GetSttCnt() ==
@@ -809,7 +806,6 @@ IMAGE_SETEVENT:
     // gleich (synchron) angepasst wird (war bug #40983#)
     if( bRequestGrfNow )
     {
-        pGrfNd->SetTransferPriority( SFX_TFPRIO_VISIBLE_LOWRES_GRAPHIC );
         pGrfNd->SwapIn();
     }
 
@@ -841,7 +837,7 @@ void SwHTMLParser::InsertBodyOptions()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        USHORT nEvent = 0;
+        rtl::OUString aEvent;
         BOOL bSetEvent = FALSE;
 
         switch( pOption->GetToken() )
@@ -872,28 +868,28 @@ void SwHTMLParser::InsertBodyOptions()
             case HTML_O_SDONLOAD:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONLOAD:
-                nEvent = SFX_EVENT_OPENDOC;
+                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC );
                 bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONUNLOAD:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONUNLOAD:
-                nEvent = SFX_EVENT_PREPARECLOSEDOC;
+                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC );
                 bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONFOCUS:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONFOCUS:
-                nEvent = SFX_EVENT_ACTIVATEDOC;
+                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC );
                 bSetEvent = TRUE;
                 break;
 
             case HTML_O_SDONBLUR:
                 eScriptType2 = STARBASIC;
             case HTML_O_ONBLUR:
-                nEvent = SFX_EVENT_DEACTIVATEDOC;
+                aEvent = GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC );
                 bSetEvent = TRUE;
                 break;
 
@@ -919,7 +915,7 @@ void SwHTMLParser::InsertBodyOptions()
         {
             const String& rEvent = pOption->GetString();
             if( rEvent.Len() )
-                InsertBasicDocEvent( nEvent, rEvent, eScriptType2,
+                InsertBasicDocEvent( aEvent, rEvent, eScriptType2,
                                      sDfltScriptType );
         }
     }
@@ -1342,20 +1338,16 @@ void SwHTMLParser::StripTrailingPara()
         {
             ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
 
-            USHORT i;
-
-            const SwFrmFmt* pFmt;
-            const SwFmtAnchor* pAnchor;
-            const SwPosition* pAPos;
             const SwSpzFrmFmts& rFrmFmtTbl = *pDoc->GetSpzFrmFmts();
 
-            for( i=0; i<rFrmFmtTbl.Count(); i++ )
+            for( USHORT i=0; i<rFrmFmtTbl.Count(); i++ )
             {
-                pFmt = rFrmFmtTbl[i];
-                pAnchor = &pFmt->GetAnchor();
-                if( 0 != ( pAPos = pAnchor->GetCntntAnchor()) &&
-                    (FLY_AT_CNTNT == pAnchor->GetAnchorId() ||
-                     FLY_AUTO_CNTNT == pAnchor->GetAnchorId()) &&
+                SwFrmFmt const*const pFmt = rFrmFmtTbl[i];
+                SwFmtAnchor const*const pAnchor = &pFmt->GetAnchor();
+                SwPosition const*const pAPos = pAnchor->GetCntntAnchor();
+                if (pAPos &&
+                    ((FLY_AT_PARA == pAnchor->GetAnchorId()) ||
+                     (FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
                     pAPos->nNode == nNodeIdx )
 
                     return;     // den Knoten duerfen wir nicht loeschen
@@ -1374,7 +1366,7 @@ void SwHTMLParser::StripTrailingPara()
                 if( pPrvNd )
                 {
                     SwIndex aSrc( pCNd, 0 );
-                    pCNd->GetTxtNode()->Cut( pPrvNd, aSrc, pCNd->Len() );
+                    pCNd->GetTxtNode()->CutText( pPrvNd, aSrc, pCNd->Len() );
                 }
             }
 
@@ -1436,9 +1428,10 @@ void SwHTMLParser::StripTrailingPara()
         xub_StrLen nPos = pPam->GetPoint()->nContent.GetIndex();
         while( bSetSmallFont && nPos>0 )
         {
-            bSetSmallFont = CH_TXTATR_BREAKWORD ==
-                                        pTxtNd->GetTxt().GetChar( --nPos ) &&
-                        0 != pTxtNd->GetTxtAttr( nPos, RES_TXTATR_FLYCNT );
+            --nPos;
+            bSetSmallFont =
+                (CH_TXTATR_BREAKWORD == pTxtNd->GetTxt().GetChar( nPos )) &&
+                (0 != pTxtNd->GetTxtAttrForCharAt( nPos, RES_TXTATR_FLYCNT ));
         }
     }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atrhndl.hxx,v $
- * $Revision: 1.5.210.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #define _ATRHNDL_HXX
 
 #define INITIAL_NUM_ATTR 3
-#define NUM_ATTRIBUTE_STACKS 39
+#define NUM_ATTRIBUTE_STACKS 40
 
 #include <txatbase.hxx>
 #include <swfntcch.hxx>

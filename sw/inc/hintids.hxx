@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hintids.hxx,v $
- * $Revision: 1.36.136.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,12 +41,8 @@
 #define CH_TXT_ATR_FIELDEND ((sal_Unicode)0x05)
 #define CH_TXT_ATR_SUBST_FIELDSTART ("[")
 #define CH_TXT_ATR_SUBST_FIELDEND ("]")
-//#define CH_TXT_ATR_FORMELEMENT ((sal_Unicode)'#')
 #define CH_TXT_ATR_FORMELEMENT ((sal_Unicode)0x06)
-/*
-#define FIELD_BOOKMARK_PREFIX "__"
-#define FIELD_FORM_BOOKMARK_PREFIX "__FORM"
-*/
+
 /*
  * Hier kommen erst mal die enums fuer die Hints
  */
@@ -112,23 +105,33 @@ enum RES_TXTATR
 {
 RES_TXTATR_BEGIN = RES_CHRATR_END,
 
-// alle TextAttribute mit einem Ende
-// JP 12.07.96: die Ids RES_TXTATR_NOLINEBREAK und RES_TXTATR_NOHYPHEN
-//              wanderten in den Bereich der CharAttr. Die Ids selbst muessen
-//              aber als Dummies noch erhalten bleiben. Der SwG-/Sw3 Reader
-//              merkt sich die Ids immer als Offset zum Start der Gruppe!!!
-// Aus dem RES_TXTATR_NOLINEBREAK ist jetzt RES_TXTATR_INETFMT geworden.
+/** text attributes with start and end.
+   #i105453#:
+   Hints (SwTxtAttr) with the same start and end position are sorted by
+   WhichId, i.e., the TXTATR constants defined here.
+   The text formatting (SwAttrIter) poses some requirements on TXTATR order:
+   - AUTOFMT must precede CHARFMT, so that auto style can overwrite char style.
+   - INETFMT must precede CHARFMT, so that link style can overwrite char style.
+     (this is actually surprising: CHARFMT hints are not split at INETFMT
+      hints on insertion, but on exporting to ODF. if CHARFMT would precede
+      INETFMT, then exporting and importing will effectively change precedence)
+
+   Nesting hints (SwTxtAttrNesting) also have requirements on TXTATR order,
+   to ensure proper nesting (because CJK_RUBY and INETFMT have no CH_TXTATR):
+   - INETFMT should precede CJK_RUBY (for UNO API it does not matter...)
+   - META and METAFIELD must precede CJK_RUBY and INETFMT
+ */
 RES_TXTATR_WITHEND_BEGIN = RES_TXTATR_BEGIN ,
-    RES_TXTATR_AUTOFMT = RES_TXTATR_WITHEND_BEGIN,  // 41
-    RES_TXTATR_INETFMT,                             // 42
-    RES_TXTATR_REFMARK,                             // 43
-    RES_TXTATR_TOXMARK,                             // 44
-    RES_TXTATR_CHARFMT,                             // 45
-    RES_TXTATR_DUMMY5,                              // 46
-    RES_TXTATR_CJK_RUBY,                            // 47
-    RES_TXTATR_UNKNOWN_CONTAINER,                   // 48
-    RES_TXTATR_DUMMY6,                              // 49
-    RES_TXTATR_DUMMY7,                              // 50
+    RES_TXTATR_REFMARK = RES_TXTATR_WITHEND_BEGIN,  // 41
+    RES_TXTATR_TOXMARK,                             // 42
+    RES_TXTATR_META,                                // 43
+    RES_TXTATR_METAFIELD,                           // 44
+    RES_TXTATR_AUTOFMT,                             // 45
+    RES_TXTATR_INETFMT,                             // 46
+    RES_TXTATR_CHARFMT,                             // 47
+    RES_TXTATR_CJK_RUBY,                            // 48
+    RES_TXTATR_UNKNOWN_CONTAINER,                   // 49
+    RES_TXTATR_DUMMY5,                              // 50
 RES_TXTATR_WITHEND_END,
 
 // alle TextAttribute ohne ein Ende
@@ -136,8 +139,8 @@ RES_TXTATR_NOEND_BEGIN = RES_TXTATR_WITHEND_END,
     RES_TXTATR_FIELD = RES_TXTATR_NOEND_BEGIN,      // 51
     RES_TXTATR_FLYCNT,                              // 52
     RES_TXTATR_FTN,                                 // 53
-    RES_TXTATR_SOFTHYPH,                            // 54
-    RES_TXTATR_HARDBLANK,                           // 55
+    RES_TXTATR_DUMMY4,                              // 54
+    RES_TXTATR_DUMMY3,                              // 55
     RES_TXTATR_DUMMY1,                              // 56
     RES_TXTATR_DUMMY2,                              // 57
 RES_TXTATR_NOEND_END,
@@ -337,7 +340,8 @@ RES_MSG_BEGIN = RES_FMT_END,
     RES_GRAPHIC_SWAPIN,
     RES_FIELD_DELETED,
     RES_NAME_CHANGED,
-    RES_ALT_TEXT_CHANGED,
+    RES_TITLE_CHANGED,
+    RES_DESCRIPTION_CHANGED,
     RES_UNOCURSOR_LEAVES_SECTION,
     RES_LINKED_GRAPHIC_STREAM_ARRIVED,
 RES_MSG_END

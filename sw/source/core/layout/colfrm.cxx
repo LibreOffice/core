@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: colfrm.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +33,8 @@
 #include "doc.hxx"
 
 #include "hintids.hxx"
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <fmtclds.hxx>
 #include <fmtfordr.hxx>
 #include <frmfmt.hxx>
@@ -213,6 +210,15 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
 {
     if ( rOld.GetNumCols() <= 1 && rNew.GetNumCols() <= 1 && !bChgFtn )
         return;
+    // --> OD 2009-08-12 #i97379#
+    // If current lower is a no text frame, then columns are not allowed
+    if ( Lower() && Lower()->IsNoTxtFrm() &&
+         rNew.GetNumCols() > 1 )
+    {
+        return;
+    }
+    // <--
+
     USHORT nNewNum, nOldNum = 1;
     if( Lower() && Lower()->IsColumnFrm() )
     {

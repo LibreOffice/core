@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swcalwrp.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,7 @@
 #include <i18npool/lang.h>
 #include <tools/string.hxx>
 #include <unotools/calendarwrapper.hxx>
+#include <salhelper/singletonref.hxx>
 
 class SwCalendarWrapper : public CalendarWrapper
 {
@@ -42,7 +40,7 @@ class SwCalendarWrapper : public CalendarWrapper
 
 public:
     SwCalendarWrapper( const ::com::sun::star::uno::Reference<
-                    ::com::sun::star::lang::XMultiServiceFactory > & xMSF )
+                    ::com::sun::star::lang::XMultiServiceFactory > & xMSF = ::comphelper::getProcessServiceFactory() )
         : CalendarWrapper( xMSF ), nLang( LANGUAGE_SYSTEM )
     {}
 
@@ -50,7 +48,7 @@ public:
 };
 
 
-extern SwCalendarWrapper* pCalendarWrapper;
+salhelper::SingletonRef<SwCalendarWrapper>* s_getCalendarWrapper();
 
 
 #endif

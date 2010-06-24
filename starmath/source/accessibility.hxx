@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: accessibility.hxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,10 +49,10 @@
 #include <cppuhelper/interfacecontainer.h>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 
-#include <svx/editeng.hxx>
-#include <svx/unoedsrc.hxx> // SvxEditSource, SvxTextForwarder, SvxViewForwarder, SvxEditViewForwarder
+#include <editeng/editeng.hxx>
+#include <editeng/unoedsrc.hxx> // SvxEditSource, SvxTextForwarder, SvxViewForwarder, SvxEditViewForwarder
 #include <svx/AccessibleTextHelper.hxx>
 #include <edit.hxx>
 
@@ -239,6 +236,7 @@ public:
     virtual SfxItemPool* GetPool() const;
 
     virtual XubString    CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor );
+    virtual void        FieldClicked(const SvxFieldItem&, USHORT, USHORT);
     virtual BOOL         IsValid() const;
 
     virtual LanguageType    GetLanguage( USHORT, USHORT ) const;
@@ -254,6 +252,8 @@ public:
     virtual sal_Bool        GetAttributeRun( USHORT& nStartIndex, USHORT& nEndIndex, USHORT nPara, USHORT nIndex ) const;
     virtual USHORT          GetLineCount( USHORT nPara ) const;
     virtual USHORT          GetLineLen( USHORT nPara, USHORT nLine ) const;
+    virtual void            GetLineBoundaries( /*out*/USHORT &rStart, /*out*/USHORT &rEnd, USHORT nParagraph, USHORT nLine ) const;
+    virtual USHORT          GetLineNumberAtIndex( USHORT nPara, USHORT nLine ) const;
     virtual sal_Bool        Delete( const ESelection& );
     virtual sal_Bool        InsertText( const String&, const ESelection& );
     virtual sal_Bool        QuickFormatDoc( BOOL bFull=FALSE );

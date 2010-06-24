@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: atrfld.cxx,v $
- * $Revision: 1.16.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <docufld.hxx>
+#include <doc.hxx>
 
 #include "reffld.hxx"
 #include "ddefld.hxx"
@@ -46,7 +44,7 @@
 #include "hints.hxx"
 #include <IDocumentFieldsAccess.hxx>
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
 TYPEINIT1(SwFmtFldHint, SfxHint);
@@ -71,7 +69,7 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
     SwClient( rFld.GetTyp() ),
     pTxtAttr( 0 )
 {
-    pField = rFld.Copy();
+    pField = rFld.CopyField();
 }
 
 // #i24434#
@@ -86,7 +84,7 @@ SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
     if(rAttr.GetFld())
     {
         rAttr.GetFld()->GetTyp()->Add(this);
-        pField = rAttr.GetFld()->Copy();
+        pField = rAttr.GetFld()->CopyField();
     }
 }
 
@@ -160,6 +158,10 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if( !pTxtAttr )
         return;
 
+    // don't do anything, especially not expand!
+    if( pNew && pNew->Which() == RES_OBJECTDYING )
+        return;
+
     SwTxtNode* pTxtNd = (SwTxtNode*)&pTxtAttr->GetTxtNode();
     ASSERT( pTxtNd, "wo ist denn mein Node?" );
     if( pNew )
@@ -190,6 +192,8 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         case RES_FMT_CHG:
                 pTxtNd->Modify( pOld, pNew );
                 return;
+        default:
+                break;
         }
     }
 
@@ -255,16 +259,23 @@ BOOL SwFmtFld::IsProtect() const
 |*
 *************************************************************************/
 
-SwTxtFld::SwTxtFld( SwFmtFld& rAttr, xub_StrLen nStartPos )
+SwTxtFld::SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStartPos,
+        bool const bInClipboard)
     : SwTxtAttr( rAttr, nStartPos )
-    , m_aExpand( rAttr.GetFld()->Expand() )
+    , m_aExpand( rAttr.GetFld()->ExpandField(bInClipboard) )
     , m_pTxtNode( 0 )
 {
     rAttr.pTxtAttr = this;
+    SetHasDummyChar(true);
 }
 
 SwTxtFld::~SwTxtFld( )
 {
+    SwFmtFld & rFmtFld( static_cast<SwFmtFld &>(GetAttr()) );
+    if (this == rFmtFld.pTxtAttr)
+    {
+        rFmtFld.pTxtAttr = 0; // #i110140# invalidate!
+    }
 }
 
 /*************************************************************************
@@ -283,7 +294,8 @@ void SwTxtFld::Expand() const
     ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
 
     const SwField* pFld = GetFld().GetFld();
-    XubString aNewExpand( pFld->Expand() );
+    XubString aNewExpand(
+        pFld->ExpandField(m_pTxtNode->GetDoc()->IsClipBoard()) );
 
     if( aNewExpand == m_aExpand )
     {
@@ -386,9 +398,4 @@ void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
     }
 }
 
-// #111840#
-SwPosition * SwTxtFld::GetPosition() const
-{
-    return GetTxtNode().GetPosition(this);
-}
 

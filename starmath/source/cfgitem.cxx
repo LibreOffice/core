@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cfgitem.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -432,7 +429,7 @@ SmMathConfig::SmMathConfig() :
     pFormat         = 0;
     pOther          = 0;
     pFontFormatList = 0;
-    pSymSetMgr      = 0;
+    pSymbolMgr      = 0;
 
     bIsOtherModified = bIsFormatModified = FALSE;
 }
@@ -444,7 +441,7 @@ SmMathConfig::~SmMathConfig()
     delete pFormat;
     delete pOther;
     delete pFontFormatList;
-    delete pSymSetMgr;
+    delete pSymbolMgr;
 }
 
 
@@ -557,14 +554,14 @@ void SmMathConfig::ReadSymbol( SmSym &rSymbol,
 }
 
 
-SmSymSetManager & SmMathConfig::GetSymSetManager()
+SmSymbolManager & SmMathConfig::GetSymbolManager()
 {
-    if (!pSymSetMgr)
+    if (!pSymbolMgr)
     {
-        pSymSetMgr = new SmSymSetManager;
-        pSymSetMgr->Load();
+        pSymbolMgr = new SmSymbolManager;
+        pSymbolMgr->Load();
     }
-    return *pSymSetMgr;
+    return *pSymbolMgr;
 }
 
 
@@ -573,23 +570,12 @@ void SmMathConfig::Commit()
     Save();
 }
 
+
 void SmMathConfig::Save()
 {
     SaveOther();
     SaveFormat();
     SaveFontFormatList();
-}
-
-
-USHORT SmMathConfig::GetSymbolCount() const
-{
-    return ((SmMathConfig *) this)->GetSymSetManager().GetSymbolCount();
-}
-
-
-const SmSym * SmMathConfig::GetSymbol( USHORT nIndex ) const
-{
-    return ((SmMathConfig *) this)->GetSymSetManager().GetSymbolByPos( nIndex );
 }
 
 
@@ -643,7 +629,7 @@ void SmMathConfig::SetSymbols( const std::vector< SmSym > &rNewSymbols )
         // Set
         pVal->Name  = aNodeNameDelim;
         pVal->Name += *pName++;
-        OUString aTmp( rSymbol.GetSetName() );
+        OUString aTmp( rSymbol.GetSymbolSetName() );
         if (rSymbol.IsPredefined())
             aTmp = GetExportSymbolSetName( aTmp );
         pVal->Value <<= aTmp;
@@ -1292,6 +1278,8 @@ void SmMathConfig::SetShowFormulaCursor( BOOL bVal )
     SetOtherIfNotEqual( pOther->bFormulaCursor, bVal );
 }
 
+void SmMathConfig::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
+{}
 
 /////////////////////////////////////////////////////////////////
 

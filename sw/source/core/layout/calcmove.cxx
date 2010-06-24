@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: calcmove.cxx,v $
- * $Revision: 1.73.252.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,12 +40,10 @@
 #include "frmtool.hxx"
 #include "txtftn.hxx"
 #include "fmtftn.hxx"
-#include <svx/ulspitem.hxx>
-#include <svx/keepitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/keepitem.hxx>
 
-#ifndef _OUTDEV_HXX //autogen
 #include <vcl/outdev.hxx>
-#endif
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <fmtclbl.hxx>
@@ -859,7 +854,7 @@ void SwPageFrm::MakeAll()
     if ( Frm() != aOldRect && GetUpper() )
         static_cast<SwRootFrm*>(GetUpper())->CheckViewLayout( 0, 0 );
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     //Der Upper (Root) muss mindestens so breit
     //sein, dass er die breiteste Seite aufnehmen kann.
     if ( GetUpper() )
@@ -1023,10 +1018,12 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                          rFmt.GetFrmSize().GetWidthPercent() )
                         continue;
 
-                    if ( FLY_IN_CNTNT == rFmt.GetAnchor().GetAnchorId() )
+                    if ( FLY_AS_CHAR == rFmt.GetAnchor().GetAnchorId() )
+                    {
                         nMinWidth = Max( nMinWidth,
                                          bFly ? rFmt.GetFrmSize().GetWidth()
                                               : pObj->GetObjRect().Width() );
+                    }
                     // <--
                 }
 
@@ -1148,7 +1145,7 @@ void SwCntntFrm::MakeAll()
     // <--
     PROTOCOL_ENTER( this, PROT_MAKEALL, 0, 0 )
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     const SwDoc *pDoc = GetAttrSet()->GetDoc();
     if( pDoc )
     {
@@ -1704,7 +1701,7 @@ void SwCntntFrm::MakeAll()
                       ( !bSct || !FindSctFrm()->IsColLocked() ) )
                     bMoveOrFit = TRUE;
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
             {
                 ASSERT( FALSE, "+TxtFrm hat WouldFit-Versprechen nicht eingehalten." );

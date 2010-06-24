@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unattr.cxx,v $
- *
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +33,9 @@
 #define _SVSTDARR_USHORTSSORT
 #include <hintids.hxx>
 #include <svx/svdmodel.hxx>
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #include <svx/svdpage.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 
 
 #include <fmtflcnt.hxx>
@@ -462,10 +458,10 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
     xub_StrLen nCntnt = 0;
     switch( rAnchor.GetAnchorId() )
     {
-    case FLY_IN_CNTNT:
-    case FLY_AUTO_CNTNT:
+    case FLY_AS_CHAR:
+    case FLY_AT_CHAR:
         nCntnt = rAnchor.GetCntntAnchor()->nContent.GetIndex();
-    case FLY_AT_CNTNT:
+    case FLY_AT_PARA:
     case FLY_AT_FLY:
         m_nNodeIndex = rAnchor.GetCntntAnchor()->nNode.GetIndex();
         break;
@@ -489,7 +485,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
         static_cast<const SwFmtAnchor&>( m_pOldSet->Get( RES_ANCHOR, FALSE ) );
 
     SwFmtAnchor aNewAnchor( rAnchor.GetAnchorId() );
-    if( FLY_PAGE != rAnchor.GetAnchorId() )
+    if (FLY_AT_PAGE != rAnchor.GetAnchorId())
     {
         SwNode* pNd = pDoc->GetNodes()[ m_nNodeIndex  ];
 
@@ -505,8 +501,8 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
         }
 
         SwPosition aPos( *pNd );
-        if( FLY_IN_CNTNT == rAnchor.GetAnchorId() ||
-            FLY_AUTO_CNTNT == rAnchor.GetAnchorId() )
+        if ((FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
+            (FLY_AT_CHAR == rAnchor.GetAnchorId()))
         {
             aPos.nContent.Assign( (SwTxtNode*)pNd, rAnchor.GetPageNum() );
             if ( aPos.nContent.GetIndex() >
@@ -549,7 +545,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
     const SwFmtAnchor &rOldAnch = pFrmFmt->GetAnchor();
     // --> OD 2006-03-13 #i54336#
     // Consider case, that as-character anchored object has moved its anchor position.
-    if ( FLY_IN_CNTNT == rOldAnch.GetAnchorId() )
+    if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
     // <--
     {
         //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
@@ -560,18 +556,17 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
         SwTxtNode *pTxtNode = (SwTxtNode*)&pPos->nNode.GetNode();
         ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
         const xub_StrLen nIdx = pPos->nContent.GetIndex();
-        SwTxtAttr * pHnt = pTxtNode->GetTxtAttr( nIdx, RES_TXTATR_FLYCNT );
-#ifndef PRODUCT
+        SwTxtAttr * const pHnt =
+            pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
         ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
         ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pFrmFmt,
                     "Wrong TxtFlyCnt-Hint." );
-#endif
         const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
         //Die Verbindung ist geloest, jetzt muss noch das Attribut vernichtet
         //werden.
-        pTxtNode->Delete( RES_TXTATR_FLYCNT, nIdx, nIdx );
+        pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
     }
 
     {
@@ -614,12 +609,13 @@ bool SwUndoFmtAttr::RestoreFlyAnchor( SwUndoIter& rIter )
             SwFmtFrmSize( ATT_VAR_SIZE, aDrawOldPt.X(), aDrawOldPt.Y() ) );
     }
 
-    if( FLY_IN_CNTNT == aNewAnchor.GetAnchorId() )
+    if (FLY_AS_CHAR == aNewAnchor.GetAnchorId())
     {
         const SwPosition* pPos = aNewAnchor.GetCntntAnchor();
         SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-        ASSERT( pTxtNd, "Kein Textnode an dieser Position" );
-        pTxtNd->InsertItem( SwFmtFlyCnt( pFrmFmt ), pPos->nContent.GetIndex(), 0 );
+        ASSERT( pTxtNd, "no Text Node at position." );
+        SwFmtFlyCnt aFmt( pFrmFmt );
+        pTxtNd->InsertItem( aFmt, pPos->nContent.GetIndex(), 0 );
     }
 
 
@@ -767,7 +763,9 @@ void SwUndoResetAttr::Redo( SwUndoIter& rUndoIter )
                 }
                 // gefunden, also loeschen
                 if( nCnt-- )
-                    rDoc.Delete( aArr[ nCnt ] );
+                {
+                    rDoc.DeleteTOXMark( aArr[ nCnt ] );
+                }
             }
         }
         break;
@@ -815,7 +813,7 @@ void SwUndoResetAttr::SetAttrs( const SvUShortsSort& rArr )
 
 
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
-                        USHORT nFlags )
+                        const SetAttrMode nFlags )
     : SwUndo( UNDO_INSATTR ), SwUndRng( rRange )
     , m_AttrSet( rRange.GetDoc()->GetAttrPool(), rAttr.Which(), rAttr.Which() )
     , m_pHistory( new SwHistory )
@@ -828,7 +826,7 @@ SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxPoolItem& rAttr,
 }
 
 SwUndoAttr::SwUndoAttr( const SwPaM& rRange, const SfxItemSet& rSet,
-                        USHORT nFlags )
+                        const SetAttrMode nFlags )
     : SwUndo( UNDO_INSATTR ), SwUndRng( rRange )
     , m_AttrSet( rSet )
     , m_pHistory( new SwHistory )
@@ -899,7 +897,7 @@ void SwUndoAttr::Undo( SwUndoIter& rUndoIter )
 
     const bool bToLast =  (1 == m_AttrSet.Count())
                        && (RES_TXTATR_FIELD <= *m_AttrSet.GetRanges())
-                       && (*m_AttrSet.GetRanges() <= RES_TXTATR_HARDBLANK);
+                       && (*m_AttrSet.GetRanges() <= RES_TXTATR_FTN);
 
     // restore old values
     m_pHistory->TmpRollback( pDoc, 0, !bToLast );
@@ -948,15 +946,15 @@ void SwUndoAttr::Repeat( SwUndoIter& rUndoIter )
     // RefMarks are not repeat capable
     if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_REFMARK, FALSE ) )
     {
-        rUndoIter.GetDoc().Insert( *rUndoIter.pAktPam,
-                                   m_AttrSet, m_nInsertFlags );
+        rUndoIter.GetDoc().InsertItemSet( *rUndoIter.pAktPam,
+                                           m_AttrSet, m_nInsertFlags );
     }
     else if ( 1 < m_AttrSet.Count() )
     {
         SfxItemSet aTmpSet( m_AttrSet );
         aTmpSet.ClearItem( RES_TXTATR_REFMARK );
-        rUndoIter.GetDoc().Insert( *rUndoIter.pAktPam,
-                                   aTmpSet, m_nInsertFlags );
+        rUndoIter.GetDoc().InsertItemSet( *rUndoIter.pAktPam,
+                                           aTmpSet, m_nInsertFlags );
     }
     rUndoIter.pLastUndoObj = this;
 }
@@ -974,7 +972,7 @@ void SwUndoAttr::Redo( SwUndoIter& rUndoIter )
         RedlineMode_t eOld = rDoc.GetRedlineMode();
         rDoc.SetRedlineMode_intern(static_cast<RedlineMode_t>(
                     eOld & ~nsRedlineMode_t::REDLINE_IGNORE));
-        rDoc.Insert( rPam, m_AttrSet, m_nInsertFlags );
+        rDoc.InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
 
         if ( ULONG_MAX != m_nNodeIndex )
         {
@@ -995,7 +993,7 @@ void SwUndoAttr::Redo( SwUndoIter& rUndoIter )
     }
     else
     {
-        rDoc.Insert( rPam, m_AttrSet, m_nInsertFlags );
+        rDoc.InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
     }
 
     rUndoIter.pLastUndoObj = 0;
@@ -1057,8 +1055,8 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
             SwTxtNode* pTxtNd = rNds[ nNode ]->GetTxtNode();
             if( pTxtNd )
             {
-                SwIndex aIdx( pTxtNd, nCntnt );
-                SwTxtAttr * pTxtHt = pTxtNd->GetTxtAttr( aIdx, RES_TXTATR_FTN );
+                SwTxtAttr *const pTxtHt =
+                    pTxtNd->GetTxtAttrForCharAt(nCntnt, RES_TXTATR_FTN);
                 if( pTxtHt )
                 {
                     // ok, dann hole mal die Werte

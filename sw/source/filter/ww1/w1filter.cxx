@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: w1filter.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,31 +31,31 @@
 
 #include <tools/solar.h>
 #include <comphelper/string.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svtools/filter.hxx>
 #ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
-#include <svx/fontitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
 #ifndef _SVX_CNTRITEM_HXX //autogen
-#include <svx/cntritem.hxx>
+#include <editeng/cntritem.hxx>
 #endif
-#include <svx/cmapitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/escpitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/escpitem.hxx>
 #ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
+#include <editeng/tstpitem.hxx>
 #endif
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <fmtfsize.hxx>
 #include <doc.hxx>
 #include <pam.hxx>
@@ -873,10 +870,10 @@ oncemore:
 
             String aName( String::CreateFromAscii(
                                         RTL_CONSTASCII_STRINGPARAM( "WW" )));
-            SwSection* pSection = new SwSection( FILE_LINK_SECTION,
+            SwSectionData * pSection = new SwSectionData( FILE_LINK_SECTION,
                 rOut.GetDoc().GetUniqueSectionName( &aStr ) );
             pSection->SetLinkFileName( aFName );
-            pSection->SetProtect( TRUE );
+            pSection->SetProtectFlag( true );
             rOut << SwFltSection( pSection );
             rOut.EndItem( RES_FLTR_SECTION );
             rOut.NextParagraph();
@@ -1899,11 +1896,11 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
                 nSize -= sizeof(BYTE);
             }
             if(rOut.Write(pBuf, padx) != padx){
-                delete pBuf;
+                delete [] pBuf;
                 goto error;
             }
         }
-        delete pBuf;
+        delete [] pBuf;
     }
 #else
     for (j=0;nSize>0&&j<maxy;j++)

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: crstrvl.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +30,11 @@
 
 
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/brkitem.hxx>
-#ifndef _SVX_SVDOBJ_HXX
+#include <svl/itemiter.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <svx/svdobj.hxx>
-#endif
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <pagefrm.hxx>
@@ -713,15 +708,17 @@ BOOL SwCrsrShell::MoveFldType( const SwFieldType* pFldType, BOOL bNext,
         SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
         ASSERT( pTNd, "Wo ist mein CntntNode?" );
 
-        SwTxtFld* pTxtFld = (SwTxtFld*)pTNd->GetTxtAttr( rPos.nContent,
-                                                        RES_TXTATR_FIELD );
+        SwTxtFld * pTxtFld = static_cast<SwTxtFld *>(
+            pTNd->GetTxtAttrForCharAt(rPos.nContent.GetIndex(),
+                RES_TXTATR_FIELD));
         BOOL bDelFld = 0 == pTxtFld;
         if( bDelFld )
         {
             SwFmtFld* pFmtFld = new SwFmtFld( SwDateTimeField(
                 (SwDateTimeFieldType*)pDoc->GetSysFldType( RES_DATETIMEFLD ) ) );
 
-            pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex() );
+            pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex(),
+                        pDoc->IsClipBoard() );
             pTxtFld->ChgTxtNode( pTNd );
         }
 
@@ -1008,9 +1005,9 @@ BOOL SwCrsrShell::IsPageAtPos( const Point &rPt ) const
 }
 
 BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
-                                        SwContentAtPos& rCntntAtPos,
-                                        BOOL bSetCrsr,
-                                        SwRect* pFldRect )
+                                   SwContentAtPos& rCntntAtPos,
+                                   BOOL bSetCrsr,
+                                   SwRect* pFldRect )
 {
     SET_CURR_SHELL( this );
     BOOL bRet = FALSE;
@@ -1124,8 +1121,8 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 if( !bRet && ( SwContentAtPos::SW_FIELD | SwContentAtPos::SW_CLICKFIELD )
                     & rCntntAtPos.eCntntAtPos && !aTmpState.bFtnNoInfo )
                 {
-                    pTxtAttr = pTxtNd->GetTxtAttr( aPos.nContent.GetIndex(),
-                                                    RES_TXTATR_FIELD );
+                    pTxtAttr = pTxtNd->GetTxtAttrForCharAt(
+                            aPos.nContent.GetIndex(), RES_TXTATR_FIELD );
                     const SwField* pFld = pTxtAttr
                                             ? pTxtAttr->GetFld().GetFld()
                                             : 0;
@@ -1175,6 +1172,17 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                     }
                 }
 
+        if( !bRet && SwContentAtPos::SW_FORMCTRL & rCntntAtPos.eCntntAtPos )
+        {
+            IDocumentMarkAccess* pMarksAccess = GetDoc()->getIDocumentMarkAccess( );
+            sw::mark::IFieldmark* pFldBookmark = pMarksAccess->getFieldmarkFor( aPos );
+            if( bCrsrFoundExact && pTxtNd && pFldBookmark) {
+                rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_FORMCTRL;
+                rCntntAtPos.aFnd.pFldmark = pFldBookmark;
+                bRet=TRUE;
+            }
+        }
+
                 if( !bRet && SwContentAtPos::SW_FTN & rCntntAtPos.eCntntAtPos )
                 {
                     if( aTmpState.bFtnNoInfo )
@@ -1190,7 +1198,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                         if( bRet )
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_FTN;
                     }
-                    else if( 0 != ( pTxtAttr = pTxtNd->GetTxtAttr(
+                    else if ( 0 != ( pTxtAttr = pTxtNd->GetTxtAttrForCharAt(
                                 aPos.nContent.GetIndex(), RES_TXTATR_FTN )) )
                     {
                         bRet = TRUE;
@@ -1234,13 +1242,27 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 {
                     pTxtAttr = 0;
                     if( SwContentAtPos::SW_TOXMARK & rCntntAtPos.eCntntAtPos )
-                        pTxtAttr = pTxtNd->GetTxtAttr( aPos.nContent,
-                                                        RES_TXTATR_TOXMARK );
+                    {
+                        ::std::vector<SwTxtAttr *> const marks(
+                            pTxtNd->GetTxtAttrsAt(
+                               aPos.nContent.GetIndex(), RES_TXTATR_TOXMARK));
+                        if (marks.size())
+                        {   // hmm... can only return 1 here
+                            pTxtAttr = *marks.begin();
+                        }
+                    }
 
                     if( !pTxtAttr &&
                         SwContentAtPos::SW_REFMARK & rCntntAtPos.eCntntAtPos )
-                        pTxtAttr = pTxtNd->GetTxtAttr( aPos.nContent,
-                                                        RES_TXTATR_REFMARK );
+                    {
+                        ::std::vector<SwTxtAttr *> const marks(
+                            pTxtNd->GetTxtAttrsAt(
+                               aPos.nContent.GetIndex(), RES_TXTATR_REFMARK));
+                        if (marks.size())
+                        {   // hmm... can only return 1 here
+                            pTxtAttr = *marks.begin();
+                        }
+                    }
 
                     if( pTxtAttr )
                     {
@@ -1285,8 +1307,8 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 if( !bRet && SwContentAtPos::SW_INETATTR & rCntntAtPos.eCntntAtPos
                     && !aTmpState.bFtnNoInfo )
                 {
-                    pTxtAttr = pTxtNd->GetTxtAttr( aPos.nContent,
-                                                    RES_TXTATR_INETFMT );
+                    pTxtAttr = pTxtNd->GetTxtAttrAt(
+                            aPos.nContent.GetIndex(), RES_TXTATR_INETFMT);
                     // nur INetAttrs mit URLs "erkennen"
                     if( pTxtAttr && pTxtAttr->GetINetFmt().GetValue().Len() )
                     {
@@ -1337,7 +1359,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
 
             if( !bRet && (
                 SwContentAtPos::SW_TABLEBOXFML & rCntntAtPos.eCntntAtPos
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 || SwContentAtPos::SW_TABLEBOXVALUE & rCntntAtPos.eCntntAtPos
 #endif
                 ))
@@ -1349,7 +1371,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 if( pSttNd && 0 != ( pTblNd = pTxtNd->FindTableNode()) &&
                     0 != ( pBox = pTblNd->GetTable().GetTblBox(
                                     pSttNd->GetIndex() )) &&
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     ( SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
                         RES_BOXATR_FORMULA, FALSE, &pItem ) ||
                       SFX_ITEM_SET == pBox->GetFrmFmt()->GetItemState(
@@ -1383,7 +1405,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                         // erzeuge aus der internen (fuer CORE)
                         // die externe (fuer UI) Formel
                         rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_TABLEBOXFML;
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                         if( RES_BOXATR_VALUE == pItem->Which() )
                             rCntntAtPos.eCntntAtPos = SwContentAtPos::SW_TABLEBOXVALUE;
                         else
@@ -1417,7 +1439,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
                 }
             }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             if( !bRet && SwContentAtPos::SW_CURR_ATTRS & rCntntAtPos.eCntntAtPos )
             {
                 xub_StrLen n = aPos.nContent.GetIndex();
@@ -1526,9 +1548,8 @@ const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
         const SwTxtNode* pTxtNd = pCursorPos->nNode.GetNode().GetTxtNode();
         if ( pTxtNd )
         {
-            SwTxtAttr* pTxtAttr =
-                        pTxtNd->GetTxtAttr( pCursorPos->nContent.GetIndex(),
-                                            RES_TXTATR_FIELD );
+            SwTxtAttr* pTxtAttr = pTxtNd->GetTxtAttrForCharAt(
+                    pCursorPos->nContent.GetIndex(), RES_TXTATR_FIELD );
             const SwField* pFld = pTxtAttr ? pTxtAttr->GetFld().GetFld() : 0;
             if ( pFld && pFld->Which()== RES_POSTITFLD )
             {
@@ -1622,8 +1643,11 @@ BOOL SwCrsrShell::SelectTxtAttr( USHORT nWhich, BOOL bExpand,
         if( !pTxtAttr )
         {
             SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-            pTxtAttr = pTxtNd ? pTxtNd->GetTxtAttr( rPos.nContent,
-                                                    nWhich, bExpand ) : 0;
+            pTxtAttr = (pTxtNd)
+                ? pTxtNd->GetTxtAttrAt(rPos.nContent.GetIndex(),
+                        static_cast<RES_TXTATR>(nWhich),
+                        (bExpand) ? SwTxtNode::EXPAND : SwTxtNode::DEFAULT)
+                : 0;
         }
 
         if( pTxtAttr )
@@ -1766,7 +1790,7 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 if( n < aFPos.nColumnCnt )
                 {
                     *pCurCrsr->GetPoint() = aPos;
-                    GetDoc()->Insert( *pCurCrsr,
+                    GetDoc()->InsertPoolItem( *pCurCrsr,
                             SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE, RES_BREAK ), 0);
                 }
             }
@@ -1792,7 +1816,7 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     if( SVX_ADJUST_LEFT != rAdj.GetAdjust() )
                         aSet.Put( SvxAdjustItem( SVX_ADJUST_LEFT, RES_PARATR_ADJUST ) );
 
-                    GetDoc()->Insert( *pCurCrsr, aSet, 0 );
+                    GetDoc()->InsertItemSet( *pCurCrsr, aSet, 0 );
                 }
                 else {
                     ASSERT( !this, "wo ist mein CntntNode?" );
@@ -1812,7 +1836,9 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                         sInsert += sSpace;
                     }
                     if( sInsert.Len() )
-                        GetDoc()->Insert( *pCurCrsr, sInsert, true );
+                    {
+                        GetDoc()->InsertString( *pCurCrsr, sInsert );
+                    }
                 }
                 // kein break - Ausrichtung muss noch gesetzt werden
             case FILL_MARGIN:
@@ -1830,7 +1856,7 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                     default:
                         break;
                     }
-                    GetDoc()->Insert( *pCurCrsr, aAdj, 0 );
+                    GetDoc()->InsertPoolItem( *pCurCrsr, aAdj, 0 );
                 }
                 break;
             }

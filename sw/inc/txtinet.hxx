@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtinet.hxx,v $
- * $Revision: 1.7.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,7 @@
 #define _TXTINET_HXX
 
 #include <txatbase.hxx>
+#include <txtatr.hxx>
 #include <calbck.hxx>
 
 class SwTxtNode;
@@ -38,7 +36,7 @@ class SwCharFmt;
 
 // ATT_INETFMT *********************************************
 
-class SW_DLLPUBLIC SwTxtINetFmt : public SwTxtAttrEnd, public SwClient
+class SW_DLLPUBLIC SwTxtINetFmt : public SwTxtAttrNesting, public SwClient
 {
     SwTxtNode * m_pTxtNode;
     bool m_bVisited         : 1; // visited link?

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: trvlreg.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -265,7 +262,7 @@ BOOL SwCursor::GotoRegion( const String& rName )
         const SwNodeIndex* pIdx;
         const SwSection* pSect;
         if( 0 != ( pSect = pFmt->GetSection() ) &&
-            pSect->GetName() == rName &&
+            pSect->GetSectionName() == rName &&
             0 != ( pIdx = pFmt->GetCntnt().GetCntntIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {

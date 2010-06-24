@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: callnk.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,12 +168,12 @@ SwCallLink::~SwCallLink()
                 }
             }
 
-            if( pBreakIt->xBreak.is() )
+            if( pBreakIt->GetBreakIter().is() )
             {
                 const String& rTxt = ((SwTxtNode*)pCNd)->GetTxt();
                 if( !nCmp ||
-                    pBreakIt->xBreak->getScriptType( rTxt, nCmp )
-                     != pBreakIt->xBreak->getScriptType( rTxt, nCmp - 1 ))
+                    pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp )
+                     != pBreakIt->GetBreakIter()->getScriptType( rTxt, nCmp - 1 ))
                 {
                     rShell.CallChgLnk();
                     return;

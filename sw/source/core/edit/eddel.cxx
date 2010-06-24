@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eddel.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -249,7 +246,8 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             bFirstMove = FALSE;
         }
 
-        if( !GetDoc()->Copy( *PCURCRSR, *pPos ))
+        const bool bSuccess( GetDoc()->CopyRange( *PCURCRSR, *pPos, false ) );
+        if (!bSuccess)
             continue;
 
         SwPaM aInsertPaM(*pPos, SwPosition(aSttNdIdx));
@@ -319,7 +317,8 @@ BOOL SwEditShell::Replace( const String& rNewStr, BOOL bRegExpRplc )
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && *PCURCRSR->GetMark() != *PCURCRSR->GetPoint() )
             {
-                bRet = GetDoc()->Replace( *PCURCRSR, rNewStr, bRegExpRplc ) || bRet;
+                bRet = GetDoc()->ReplaceRange( *PCURCRSR, rNewStr, bRegExpRplc )
+                    || bRet;
                 SaveTblBoxCntnt( PCURCRSR->GetPoint() );
             }
         FOREACHPAM_END()

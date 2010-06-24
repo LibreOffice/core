@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inputwin.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +34,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/stritem.hxx>
 
 #include "swtypes.hxx"
 #include "cmdid.h"
@@ -95,10 +92,10 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     InsertWindow( ED_FORMULA, &aEdit);
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
 
-    BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
-    SetItemImage( FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC, bDark ));
-    SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL, bDark  ));
-    SetItemImage( FN_FORMULA_APPLY, pManager->GetImage(FN_FORMULA_APPLY, bDark  ));
+    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
+    SetItemImage( FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC, bHC ));
+    SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL, bHC  ));
+    SetItemImage( FN_FORMULA_APPLY, pManager->GetImage(FN_FORMULA_APPLY, bHC  ));
 
     SetItemBits( FN_FORMULA_CALC, GetItemBits( FN_FORMULA_CALC ) | TIB_DROPDOWNONLY );
     SetDropdownClickHdl( LINK( this, SwInputWindow, DropdownClickHdl ));
@@ -156,12 +153,11 @@ void SwInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
         //      update item images
         SwModule *pMod  = SW_MOD();
         SfxImageManager *pImgMgr = SfxImageManager::GetImageManager( pMod );
-        //!! Don't use display-background to check for IsDark !!
-        BOOL bDark = GetSettings().GetStyleSettings().GetFaceColor().IsDark();
+        BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
         //
-        SetItemImage( FN_FORMULA_CALC,   pImgMgr->GetImage(FN_FORMULA_CALC,   bDark ));
-        SetItemImage( FN_FORMULA_CANCEL, pImgMgr->GetImage(FN_FORMULA_CANCEL, bDark ));
-        SetItemImage( FN_FORMULA_APPLY,  pImgMgr->GetImage(FN_FORMULA_APPLY,  bDark ));
+        SetItemImage( FN_FORMULA_CALC,   pImgMgr->GetImage(FN_FORMULA_CALC,   bHC ));
+        SetItemImage( FN_FORMULA_CANCEL, pImgMgr->GetImage(FN_FORMULA_CANCEL, bHC ));
+        SetItemImage( FN_FORMULA_APPLY,  pImgMgr->GetImage(FN_FORMULA_APPLY,  bHC ));
     }
 
     ToolBox::DataChanged( rDCEvt );
@@ -461,8 +457,8 @@ IMPL_LINK( SwInputWindow, SelTblCellsNotify, SwWrtShell *, pCaller )
             aPam.Move( fnMoveForward, fnGoSection );
 
             IDocumentContentOperations* pIDCO = pWrtShell->getIDocumentContentOperations();
-            pIDCO->Delete( aPam );
-            pIDCO->Insert( aPam, sNew, true );
+            pIDCO->DeleteRange( aPam );
+            pIDCO->InsertString( aPam, sNew );
             pWrtShell->EndAllAction();
             sOldFml = sNew;
         }
@@ -499,7 +495,7 @@ IMPL_LINK( SwInputWindow, ModifyHdl, InputEdit*, EMPTYARG )
         sNew += CH_LRE;
         sNew += aEdit.GetText();
         sNew += CH_PDF;
-        pWrtShell->SwEditShell::Insert( sNew );
+        pWrtShell->SwEditShell::Insert2( sNew );
         pWrtShell->EndAllAction();
         sOldFml = sNew;
     }

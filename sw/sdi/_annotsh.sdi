@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: _annotsh.sdi,v $
- * $Revision: 1.6.82.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -93,7 +90,6 @@ interface _Annotation
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        Volatile ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -101,7 +97,6 @@ interface _Annotation
     [
         ExecMethod = ExecClpbrd ;
         StateMethod = StateClpbrd ;
-        Volatile ;
     ]
 
     SID_PASTE   // api:
@@ -111,7 +106,7 @@ interface _Annotation
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
-    FN_PASTESPECIAL  // api:
+    SID_PASTE_SPECIAL  // api:
     [
         StateMethod = StateClpbrd ;
         ExecMethod = ExecClpbrd ;

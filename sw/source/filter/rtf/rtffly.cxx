@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rtffly.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,14 +32,14 @@
 #include <tools/list.hxx>
 #include <tools/cachestr.hxx>
 #include <svtools/rtftoken.h>
-#include <svtools/itemiter.hxx>
-#include <svx/prntitem.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <svl/itemiter.hxx>
+#include <editeng/prntitem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <fmtfsize.hxx>
 #include <fmtanchr.hxx>
 #include <fmtpdsc.hxx>
@@ -64,23 +61,18 @@
 #include <txtflcnt.hxx>
 #include <fmtflcnt.hxx>
 #include <fltini.hxx>
-#ifndef __SGI_STL_DEQUE
 #include <deque>
-#endif
-#ifndef __SGI_STL_MAP
 #include <map>
-#endif
-#ifndef __SGI_STL_UTILITY
 #include <utility>
-#endif
 // --> OD 2004-06-30 #i27767#
 #include <fmtwrapinfluenceonobjpos.hxx>
 // <--
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <fmtfollowtextflow.hxx>
 // --> OD, FLR 2006-02-16 #131205#
 #include "dcontact.hxx"
 // <--
+
 
 using namespace ::com::sun::star;
 
@@ -263,20 +255,26 @@ void SwRTFParser::SetFlysInDoc()
                 pSttNd->GetIndex() + 1 == pEndNd->GetIndex()
                 && pSttNd->GetTxt().Len()>0 /* #i38227# leave drop caps with no content as fly frames */ )
             {
+                ULONG nPos = pSttNd->GetIndex();
+                SwDoc * pDoc1 = pSttNd->GetDoc();
+
                 BOOL bJoined;
                 {
-                    SwPaM aTmp( *pEndNd, 0, *pSttNd, pSttNd->GetTxt().Len() );
-                    bJoined = pDoc->DeleteAndJoin( aTmp );
+                    SwPaM aTmp( *pSttNd, pSttNd->GetTxt().Len(), *pEndNd, 0 );
+                    bJoined = pDoc1->DeleteAndJoin( aTmp );
                 }
-                if( bJoined )
+
+                SwTxtNode * pNd = (pDoc1->GetNodes()[nPos])->GetTxtNode();
+
+                if( bJoined && pNd != NULL)
                 {
                     SwFmtDrop aDropCap;
                     aDropCap.GetLines() = (BYTE)pFlySave->nDropLines;
                     aDropCap.GetChars() = 1;
 
                     SwIndex aIdx( pEndNd );
-                    pEndNd->RstAttr( aIdx, 1, RES_CHRATR_FONTSIZE );
-                    pEndNd->SetAttr( aDropCap );
+                    pNd->RstAttr( aIdx, 1, RES_CHRATR_FONTSIZE );
+                    pNd->SetAttr( aDropCap );
                 }
                 delete pFlySave;
                 continue;
@@ -390,7 +388,8 @@ void SwRTFParser::SetFlysInDoc()
                 }
             }
             aTmpIdx = *pSttNd->EndOfSectionNode();
-            pDoc->Move( aRg, aTmpIdx, IDocumentContentOperations::DOC_MOVEDEFAULT );
+            pDoc->MoveNodeRange( aRg, aTmpIdx,
+                IDocumentContentOperations::DOC_MOVEDEFAULT );
         }
 
         // patch from cmc for #i52542#
@@ -452,7 +451,7 @@ void SwRTFParser::SetFlysInDoc()
         SwFlyFrmFmt* pFmt = pDoc->MakeFlyFrmFmt( aEmptyStr, pParent );
         pFmt->SetFmtAttr( pFlySave->aFlySet );
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-        if( FLY_IN_CNTNT != rAnchor.GetAnchorId() )
+        if (FLY_AS_CHAR != rAnchor.GetAnchorId())
         {
             // korrigiere noch den Absatz, ist immer der vorhergehende !
             // JP 20.09.95: wenn es diesen gibt! (DocAnfang!)
@@ -561,7 +560,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
     // RTF-Defaults setzen:
     // --> OD 2004-06-24 #i27767#
-    SwFmtAnchor aAnchor( FLY_AT_CNTNT );
+    SwFmtAnchor aAnchor( FLY_AT_PARA );
 
     SwFmtHoriOrient aHori( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME );
     SwFmtVertOrient aVert( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME );
@@ -837,7 +836,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                             switch( GetNextToken() )
                             {
                             case RTF_FLY_PAGE:
-                                aAnchor.SetType( FLY_PAGE );
+                                aAnchor.SetType( FLY_AT_PAGE );
                                 aAnchor.SetPageNum( USHORT(nTokenValue));
                                 aAnchor.SetAnchor( 0 );
                                 break;
@@ -847,7 +846,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                                     SwNodeIndex aIdx( pPam->GetPoint()->nNode );
                                     pDoc->GetNodes().GoPrevious( &aIdx );
                                     SwPosition aPos( aIdx );
-                                    aAnchor.SetType( FLY_AT_CNTNT );
+                                    aAnchor.SetType( FLY_AT_PARA );
                                     aAnchor.SetAnchor( &aPos );
                                 }
                                 break;
@@ -1168,10 +1167,10 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         {
 
             SwTxtNode* pTxtNd = pFlySave->nSttNd.GetNode().GetTxtNode();
-            SwTxtFlyCnt* pFlyCnt;
+            SwTxtFlyCnt* pFlyCnt = 0;
             if( 1 == pTxtNd->GetTxt().Len() &&
-                0 != ( pFlyCnt = (SwTxtFlyCnt*)pTxtNd->GetTxtAttr(
-                                                0, RES_TXTATR_FLYCNT )) &&
+                0 != (pFlyCnt = static_cast<SwTxtFlyCnt*>(
+                        pTxtNd->GetTxtAttrForCharAt(0, RES_TXTATR_FLYCNT))) &&
                 pFlyCnt->GetFlyCnt().GetFrmFmt() )
             {
                 // then move the content into the surrounded fly
@@ -1226,7 +1225,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                                 (SwTxtFmtColl*)pDoc->GetDfltTxtFmtColl() );
 
                     SwNodeIndex aTmp( pFlySave->nSttNd, +1 );
-                    pDoc->Move( aRg, aTmp, IDocumentContentOperations::DOC_MOVEDEFAULT );
+                    pDoc->MoveNodeRange( aRg, aTmp,
+                            IDocumentContentOperations::DOC_MOVEDEFAULT );
 
                     // now delete the redundant txtnode
                     pDoc->GetNodes().Delete( pFlySave->nSttNd, 1 );
@@ -1280,7 +1280,7 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
                                                 RES_VERT_ORIENT,*/ RES_ANCHOR );
         const SwPosition* pPos = pPam->GetPoint();
 
-        SwFmtAnchor aAnchor( FLY_IN_CNTNT );
+        SwFmtAnchor aAnchor( FLY_AS_CHAR );
         aAnchor.SetAnchor( pPos );
         aFlySet.Put( aAnchor );
         aFlySet.Put( SwFmtVertOrient( 0, text::VertOrientation::TOP ));

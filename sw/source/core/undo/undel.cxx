@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: undel.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/brkitem.hxx>
+#include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
@@ -56,9 +53,9 @@
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
 
-// #include <svx/svxacorr.hxx>
+// #include <editeng/svxacorr.hxx>
 // #include <comphelper/processfactory.hxx>
-// #include <svx/unolingu.hxx>
+// #include <editeng/unolingu.hxx>
 // #include <unotools/localedatawrapper.hxx>
 
 // using namespace comphelper;
@@ -81,7 +78,7 @@ void lcl_MakeAutoFrms( const SwSpzFrmFmts& rSpzArr, ULONG nMovedIndex )
         {
             pFmt = (SwFlyFrmFmt*)rSpzArr[n];
             pAnchor = &pFmt->GetAnchor();
-            if( pAnchor->GetAnchorId() == FLY_AUTO_CNTNT )
+            if (pAnchor->GetAnchorId() == FLY_AT_CHAR)
             {
                 const SwPosition* pAPos = pAnchor->GetCntntAnchor();
                 if( pAPos && nMovedIndex == pAPos->nNode.GetIndex() )
@@ -386,7 +383,7 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         // loesche jetzt noch den Text (alle Attribut-Aenderungen kommen in
         // die Undo-History
         pSttStr = (String*)new String( pSttTxtNd->GetTxt().Copy( nSttCntnt, nLen ));
-        pSttTxtNd->Erase( pStt->nContent, nLen );
+        pSttTxtNd->EraseText( pStt->nContent, nLen );
         if( pSttTxtNd->GetpSwpHints() )
             pSttTxtNd->GetpSwpHints()->DeRegister();
 
@@ -394,7 +391,9 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         bool emptied( pSttStr->Len() && !pSttTxtNd->Len() );
         if (!bOneNode || emptied) // merging may overwrite xmlids...
         {
-            m_pMetadataUndoStart = pSttTxtNd->CreateUndo( emptied );
+            m_pMetadataUndoStart = (emptied)
+                ? pSttTxtNd->CreateUndoForDelete()
+                : pSttTxtNd->CreateUndo();
         }
 
         if( bOneNode )
@@ -422,13 +421,16 @@ BOOL SwUndoDelete::SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
         // die Undo-History
         pEndStr = (String*)new String( pEndTxtNd->GetTxt().Copy( 0,
                                     pEnd->nContent.GetIndex() ));
-        pEndTxtNd->Erase( aEndIdx, pEnd->nContent.GetIndex() );
+        pEndTxtNd->EraseText( aEndIdx, pEnd->nContent.GetIndex() );
         if( pEndTxtNd->GetpSwpHints() )
             pEndTxtNd->GetpSwpHints()->DeRegister();
 
         // METADATA: store
         bool emptied( pEndStr->Len() && !pEndTxtNd->Len() );
-        m_pMetadataUndoEnd = pEndTxtNd->CreateUndo( emptied );
+
+        m_pMetadataUndoEnd = (emptied)
+            ? pEndTxtNd->CreateUndoForDelete()
+            : pEndTxtNd->CreateUndo();
     }
 
     // sind es nur zwei Nodes, dann ist schon alles erledigt.
@@ -511,7 +513,7 @@ BOOL SwUndoDelete::CanGrouping( SwDoc* pDoc, const SwPaM& rDelPam )
         nUChrPos++;
     }
     pSttStr->Insert( cDelChar, nUChrPos );
-    pDelTxtNd->Erase( pStt->nContent, 1 );
+    pDelTxtNd->EraseText( pStt->nContent, 1 );
 
     bGroup = TRUE;
     return TRUE;
@@ -632,7 +634,7 @@ void lcl_ReAnchorAtCntntFlyFrames( const SwSpzFrmFmts& rSpzArr, SwPosition &rPos
         {
             pFmt = (SwFlyFrmFmt*)rSpzArr[n];
             pAnchor = &pFmt->GetAnchor();
-            if( pAnchor->GetAnchorId() == FLY_AT_CNTNT )
+            if (pAnchor->GetAnchorId() == FLY_AT_PARA)
             {
                 pAPos =  pAnchor->GetCntntAnchor();
                 if( pAPos && nOldIdx == pAPos->nNode.GetIndex() )
@@ -711,7 +713,8 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
             }
             if( pTxtNd )
             {
-                pTxtNd->Insert( *pEndStr, aPos.nContent, INS_NOHINTEXPAND );
+                pTxtNd->InsertText( *pEndStr, aPos.nContent,
+                        IDocumentContentOperations::INS_NOHINTEXPAND );
                 // METADATA: restore
                 pTxtNd->RestoreMetadata(m_pMetadataUndoEnd);
             }
@@ -804,7 +807,8 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                 // SectionNode-Modus und von oben nach unten selektiert:
                 //  -> im StartNode steht noch der Rest vom Join => loeschen
                 aPos.nContent.Assign( pTxtNd, nSttCntnt );
-                pTxtNd->Insert( *pSttStr, aPos.nContent, INS_NOHINTEXPAND );
+                pTxtNd->InsertText( *pSttStr, aPos.nContent,
+                        IDocumentContentOperations::INS_NOHINTEXPAND );
                 // METADATA: restore
                 pTxtNd->RestoreMetadata(m_pMetadataUndoStart);
             }
@@ -864,7 +868,15 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
     SetPaM( rPam );
 
     if( pRedlSaveData )
-        rDoc.DeleteRedline( rPam, false, USHRT_MAX );
+    {
+        bool bSuccess = FillSaveData(rPam, *pRedlSaveData, TRUE);
+        OSL_ENSURE(bSuccess,
+            "SwUndoDelete::Redo: used to have redline data, but now none?");
+        if (!bSuccess)
+        {
+            delete pRedlSaveData, pRedlSaveData = 0;
+        }
+    }
 
     if( !bDelFullPara )
     {

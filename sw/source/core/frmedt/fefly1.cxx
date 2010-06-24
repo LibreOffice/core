@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fefly1.cxx,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,10 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 #include <hintids.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svtools/imapobj.hxx>
 #include <svtools/soerr.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/fmglob.hxx>
@@ -75,9 +72,11 @@
 // --> OD 2006-03-06 #125892#
 #include <HandleAnchorNodeChg.hxx>
 // <--
-
 #include <frmatr.hxx>
-
+// --> OD 2009-12-29 #i89920#
+#include <fmtsrnd.hxx>
+#include <editeng/opaqitem.hxx>
+// <--
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -113,7 +112,7 @@ sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
         const SwPageFrm *pPg = pCFrm ? pCFrm->FindPageFrm() : 0;
 
         rAnchor.SetPageNum( pPg ? pPg->GetPhyPageNum() : 1 );
-        rAnchor.SetType( FLY_PAGE );
+        rAnchor.SetType( FLY_AT_PAGE );
     }
     return bRet;
 }
@@ -130,9 +129,9 @@ BOOL lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
     Point aTmpPnt( rPt );
     switch( nNew )
     {
-    case FLY_IN_CNTNT:  // sollte der nicht auch mit hinein?
-    case FLY_AT_CNTNT:
-    case FLY_AUTO_CNTNT: // LAYER_IMPL
+    case FLY_AS_CHAR:  // sollte der nicht auch mit hinein?
+    case FLY_AT_PARA:
+    case FLY_AT_CHAR: // LAYER_IMPL
         {
             //Ausgehend von der linken oberen Ecke des Fly den
             //dichtesten CntntFrm suchen.
@@ -146,7 +145,7 @@ BOOL lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
             }
 
             SwPosition aPos( *((SwCntntFrm*)pNewAnch)->GetNode() );
-            if( FLY_AUTO_CNTNT == nNew || FLY_IN_CNTNT == nNew )
+            if ((FLY_AT_CHAR == nNew) || (FLY_AS_CHAR == nNew))
             {
                 // es muss ein TextNode gefunden werden, denn nur in diesen
                 // ist ein Inhaltsgebundene Frames zu verankern
@@ -186,10 +185,10 @@ BOOL lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
             }
         }
 
-        aNewAnch.SetType( nNew = FLY_PAGE );
+        aNewAnch.SetType( nNew = FLY_AT_PAGE );
         // no break
 
-    case FLY_PAGE:
+    case FLY_AT_PAGE:
         pNewAnch = rFrm.FindPageFrm();
         aNewAnch.SetPageNum( pNewAnch->GetPhyPageNum() );
         break;
@@ -218,9 +217,9 @@ sal_Bool lcl_ChkAndSetNewAnchor( const SwFlyFrm& rFly, SfxItemSet& rSet )
 
     SwDoc* pDoc = (SwDoc*)rFmt.GetDoc();
 
-#ifndef PRODUCT
-    ASSERT( !(nNew == FLY_PAGE &&
-        (FLY_AT_CNTNT==nOld || FLY_AUTO_CNTNT==nOld || FLY_IN_CNTNT==nOld ) &&
+#ifdef DBG_UTIL
+    ASSERT( !(nNew == FLY_AT_PAGE &&
+        (FLY_AT_PARA==nOld || FLY_AT_CHAR==nOld || FLY_AS_CHAR==nOld ) &&
         pDoc->IsInHeaderFooter( rOldAnch.GetCntntAnchor()->nNode )),
             "Unerlaubter Ankerwechsel in Head/Foot." );
 #endif
@@ -441,7 +440,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
     SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
     RndStdIds nAnchorId = rFmt.GetAnchor().GetAnchorId();
 
-    if ( FLY_IN_CNTNT == nAnchorId )
+    if ( FLY_AS_CHAR == nAnchorId )
         return aRet;
 
     sal_Bool bFlyFrame = pObj->ISA(SwVirtFlyDrawObj);
@@ -462,8 +461,10 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         pOldAnch = pFly->GetAnchorFrm();
         if( !pOldAnch )
             return aRet;
-        if( FLY_PAGE != nAnchorId )
+        if ( FLY_AT_PAGE != nAnchorId )
+        {
             pFooterOrHeader = pCntnt->FindFooterOrHeader();
+        }
     }
     // OD 26.06.2003 #108784# - set <pFooterOrHeader> also for drawing
     // objects, but not for control objects.
@@ -489,14 +490,18 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
     const SwFrm *pNewAnch;
     if( pTxtFrm )
     {
-        if( FLY_PAGE == nAnchorId )
+        if ( FLY_AT_PAGE == nAnchorId )
+        {
             pNewAnch = pTxtFrm->FindPageFrm();
+        }
         else
         {
             pNewAnch = ::FindAnchor( pTxtFrm, rAbsPos );
 
             if( FLY_AT_FLY == nAnchorId ) // LAYER_IMPL
+            {
                 pNewAnch = pNewAnch->FindFlyFrm();
+            }
         }
     }
     else
@@ -522,19 +527,19 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         {
             aRet = pNewAnch->GetFrmAnchorPos( ::HasWrap( pObj ) );
 
-            if( bMoveIt || nAnchorId == FLY_AUTO_CNTNT )
+            if ( bMoveIt || (nAnchorId == FLY_AT_CHAR) )
             {
                 SwFmtAnchor aAnch( rFmt.GetAnchor() );
                 switch ( nAnchorId )
                 {
-                    case FLY_AT_CNTNT:
+                    case FLY_AT_PARA:
                     {
                         SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
                         pPos->nNode = *pTxtFrm->GetNode();
                         pPos->nContent.Assign(0,0);
                         break;
                     }
-                    case FLY_PAGE:
+                    case FLY_AT_PAGE:
                     {
                         aAnch.SetPageNum( ((const SwPageFrm*)pNewAnch)->
                                           GetPhyPageNum() );
@@ -547,7 +552,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                         aAnch.SetAnchor( &aPos );
                         break;
                     }
-                    case FLY_AUTO_CNTNT:
+                    case FLY_AT_CHAR:
                     {
                         SwPosition *pPos = (SwPosition*)aAnch.GetCntntAnchor();
                         Point aTmpPnt( rAbsPos );
@@ -602,7 +607,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
             SwRect aTmpRect( aRet, rAbsPos );
             if( aTmpRect.HasArea() )
                 MakeVisible( aTmpRect );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             //TODO: That doesn't seem to be intended
             if( Color(COL_TRANSPARENT) != GetOut()->GetLineColor() )
             {
@@ -666,21 +671,25 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     RndStdIds eRndId = rAnch.GetAnchorId();
     switch( eRndId )
     {
-    case FLY_PAGE:
+    case FLY_AT_PAGE:
         if( !rAnch.GetPageNum() )       //HotFix: Bug in UpdateByExample
             rAnch.SetPageNum( 1 );
         break;
 
     case FLY_AT_FLY:
-    case FLY_AT_CNTNT:
-    case FLY_AUTO_CNTNT:
-    case FLY_IN_CNTNT:
+    case FLY_AT_PARA:
+    case FLY_AT_CHAR:
+    case FLY_AS_CHAR:
         if( !bAnchValid )
         {
             if( FLY_AT_FLY != eRndId )
+            {
                 rAnch.SetAnchor( &rPos );
+            }
             else if( lcl_SetNewFlyPos( rPos.nNode.GetNode(), rAnch, aPt ) )
-                eRndId = FLY_PAGE;
+            {
+                eRndId = FLY_AT_PAGE;
+            }
         }
         break;
 
@@ -698,7 +707,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
         SwFmtVertOrient aOldV;
         SwFmtHoriOrient aOldH;
 
-        if( FLY_PAGE != eRndId )
+        if ( FLY_AT_PAGE != eRndId )
         {
             // erstmal als mit Seitenbindung, Absatz/Zeichenbindung erst wenn
             // alles verschoben ist. Dann ist die Position gueltig!
@@ -706,7 +715,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
             //              umsetzen, damit diese beim Umanker NICHT
             //              korrigiert wird
             pOldAnchor = new SwFmtAnchor( rAnch );
-            ((SfxItemSet&)rSet).Put( SwFmtAnchor( FLY_PAGE, 1 ) );
+            const_cast<SfxItemSet&>(rSet).Put( SwFmtAnchor( FLY_AT_PAGE, 1 ) );
 
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == rSet.GetItemState( RES_HORI_ORIENT, sal_False, &pItem )
@@ -741,8 +750,10 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
 
                 const SwFrm* pAnch = ::FindAnchor( GetLayout(), aPt, sal_False );
                 SwPosition aPos( *((SwCntntFrm*)pAnch)->GetNode() );
-                if( FLY_IN_CNTNT == eRndId )
+                if ( FLY_AS_CHAR == eRndId )
+                {
                     aPos.nContent.Assign( ((SwCntntFrm*)pAnch)->GetNode(), 0 );
+                }
                 pOldAnchor->SetAnchor( &aPos );
 
                 // das verschieben von TabelleSelektion ist noch nicht
@@ -818,9 +829,9 @@ void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
                 SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
                 switch( pAnchor->GetAnchorId())
                 {
-                case FLY_AT_CNTNT:
-                case FLY_AUTO_CNTNT: // LAYER_IMPL
-                case FLY_IN_CNTNT:
+                case FLY_AT_PARA:
+                case FLY_AT_CHAR: // LAYER_IMPL
+                case FLY_AS_CHAR:
                     if( !pAnchor->GetCntntAnchor() )
                     {
                         pAnchor->SetAnchor( pCursor->GetPoint() );
@@ -833,7 +844,7 @@ void SwFEShell::Insert( const String& rGrfName, const String& rFltName,
                                 *pAnchor, GetCrsrDocPos() );
                     }
                     break;
-                case FLY_PAGE:
+                case FLY_AT_PAGE:
                     if( !pAnchor->GetPageNum() )
                     {
                         pAnchor->SetPageNum( pCursor->GetPageNum(
@@ -899,67 +910,50 @@ SwFlyFrmFmt* SwFEShell::InsertObject( const svt::EmbeddedObjectRef&  xObj,
 }
 
 
-void SwFEShell::Insert(  SdrObject& rDrawObj,
-                         const SfxItemSet* pFlyAttrSet,
-                         SwFrmFmt* pFrmFmt, const Point* pPt )
+void SwFEShell::InsertDrawObj( SdrObject& rDrawObj,
+                               const Point& rInsertPosition )
 {
-    SwDrawFrmFmt* pFmt = 0;
     SET_CURR_SHELL( this );
 
-    if( pPt )
-    {
-        SfxItemSet* pSet = 0;
-        const SfxPoolItem* pItem;
-        if( !pFlyAttrSet ||
-            !pFlyAttrSet->GetItemState( RES_ANCHOR, sal_False, &pItem ) ||
-            FLY_PAGE != ((SwFmtAnchor*)pItem)->GetAnchorId() )
-        {
-            pSet = new SfxItemSet( GetDoc()->GetAttrPool(), aFrmFmtSetRange );
-            pSet->Put( SwFmtAnchor( FLY_AT_CNTNT ));
-            pFlyAttrSet = pSet;
-        }
+    SfxItemSet rFlyAttrSet( GetDoc()->GetAttrPool(), aFrmFmtSetRange );
+    rFlyAttrSet.Put( SwFmtAnchor( FLY_AT_PARA ));
+    // --> OD 2009-12-29 #i89920#
+    rFlyAttrSet.Put( SwFmtSurround( SURROUND_THROUGHT ) );
+    rDrawObj.SetLayer( getIDocumentDrawModelAccess()->GetHeavenId() );
+    // <--
 
+    // find anchor position
+    SwPaM aPam( pDoc->GetNodes() );
+    {
         SwCrsrMoveState aState( MV_SETONLYTEXT );
-        SwPaM aPam( pDoc->GetNodes() );
-        Point aTmpPt( *pPt );
+        Point aTmpPt( rInsertPosition );
         getIDocumentLayoutAccess()->GetRootFrm()->GetCrsrOfst( aPam.GetPoint(), aTmpPt, &aState );
-        SwFrm* pFrm = aPam.GetCntntNode()->GetFrm( 0, 0, sal_False );
-        const Point aRelPos( pPt->X() - pFrm->Frm().Left(),
-                             pPt->Y() - pFrm->Frm().Top() );
-        // OD 2004-04-05 #i26791# - direct object positioning for <SwDoc::Insert(..)>
+        const SwFrm* pFrm = aPam.GetCntntNode()->GetFrm( 0, 0, sal_False );
+        const Point aRelPos( rInsertPosition.X() - pFrm->Frm().Left(),
+                             rInsertPosition.Y() - pFrm->Frm().Top() );
         rDrawObj.SetRelativePos( aRelPos );
-        ::lcl_FindAnchorPos( *GetDoc(), *pPt, *pFrm, *(SfxItemSet*)pFlyAttrSet );
-        pFmt = GetDoc()->Insert( aPam, rDrawObj, pFlyAttrSet, pFrmFmt );
-        if( pSet )
-            delete pSet;
+        ::lcl_FindAnchorPos( *GetDoc(), rInsertPosition, *pFrm, rFlyAttrSet );
     }
-    else
-    {
-        StartAllAction();
-            FOREACHPAM_START( this )
-                pFmt = GetDoc()->Insert(*PCURCRSR, rDrawObj,
-                                        pFlyAttrSet, pFrmFmt );
-                ASSERT( pFmt, "Doc->Insert(sdrobj) failed." );
+    // insert drawing object into the document creating a new <SwDrawFrmFmt> instance
+    SwDrawFrmFmt* pFmt = GetDoc()->Insert( aPam, rDrawObj, &rFlyAttrSet, 0 );
 
-            FOREACHPAM_END()
-        EndAllAction();
-    }
-
-    // --> OD 2005-01-07 #i40085# - follow-up of #i35635#
     // move object to visible layer
     SwContact* pContact = static_cast<SwContact*>(rDrawObj.GetUserCall());
     if ( pContact )
     {
         pContact->MoveObjToVisibleLayer( &rDrawObj );
     }
-    // <--
 
-    if( pFmt )
-        // das DrawObject selektieren
+    if ( pFmt )
+    {
+        // select drawing object
         Imp()->GetDrawView()->MarkObj( &rDrawObj, Imp()->GetPageView(),
-                                            sal_False, sal_False );
+                                       sal_False, sal_False );
+    }
     else
+    {
         GetLayout()->SetAssertFlyPages();
+    }
 }
 
 /***********************************************************************
@@ -978,8 +972,10 @@ void SwFEShell::GetPageObjs( SvPtrarr& rFillArr )
     for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->Count(); ++n )
     {
         pFmt = (const SwFrmFmt*)(*pDoc->GetSpzFrmFmts())[n];
-        if( FLY_PAGE == pFmt->GetAnchor().GetAnchorId() )
+        if (FLY_AT_PAGE == pFmt->GetAnchor().GetAnchorId())
+        {
             rFillArr.Insert( (VoidPtr)pFmt, rFillArr.Count() );
+        }
     }
 }
 
@@ -1010,7 +1006,7 @@ void SwFEShell::SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset )
         {
             // FlyFmt ist noch gueltig, also behandeln
             SwFmtAnchor aNewAnchor( pFmt->GetAnchor() );
-            if( FLY_PAGE != aNewAnchor.GetAnchorId() ||
+            if ((FLY_AT_PAGE != aNewAnchor.GetAnchorId()) ||
                 0 >= ( nNewPage = aNewAnchor.GetPageNum() + nOffset ) )
                 // chaos::Anchor wurde veraendert oder ungueltige SeitenNummer,
                 // also nicht veraendern !!
@@ -1086,12 +1082,12 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         SwFmtAnchor* pAnchor = (SwFmtAnchor*)pItem;
         RndStdIds eType = pAnchor->GetAnchorId();
 
-        if( FLY_PAGE != eType )
+        if ( FLY_AT_PAGE != eType )
         {
             // OD 12.11.2003 #i22341# - content anchor of anchor item is needed.
             // Thus, don't overwrite anchor item by default contructed anchor item.
             //rSet.Put( SwFmtAnchor( eType ) );
-            if( FLY_IN_CNTNT == eType )
+            if ( FLY_AS_CHAR == eType )
             {
                 rSet.ClearItem( RES_OPAQUE );
                 rSet.ClearItem( RES_SURROUND );
@@ -1651,8 +1647,8 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
                         Point aPt( rPt );
                         aPt -= pFly->Frm().Pos();
                         // ohne MapMode-Offset, ohne Offset, o ... !!!!!
-                        aPt = (Point&)(const Size&)GetOut()->LogicToPixel(
-                                (const Size&)aPt, MapMode( MAP_TWIP ) );
+                        aPt = GetOut()->LogicToPixel(
+                                aPt, MapMode( MAP_TWIP ) );
                         ((( *pURL += '?' ) += String::CreateFromInt32( aPt.X() ))
                                   += ',' ) += String::CreateFromInt32(aPt.Y() );
                     }
@@ -1805,11 +1801,6 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
         else
             eType = OBJCNT_FLY;
     }
-    // --> OD 2006-11-06 #130889# - make code robust
-//    else if( pInvestigatedObj->ISA( SdrObjGroup ) &&
-//             FLY_IN_CNTNT !=
-//                ((SwDrawContact*)GetUserCall(pInvestigatedObj))->GetFmt()->GetAnchor().GetAnchorId() )
-//        eType = OBJCNT_GROUPOBJ;
     else if ( pInvestigatedObj->ISA( SdrObjGroup ) )
     {
         SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(GetUserCall( pInvestigatedObj ) ) );
@@ -1828,13 +1819,12 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
                         "<SwFEShell::GetObjCntType(..)> - missing frame format" );
                 eType = OBJCNT_NONE;
             }
-            else if ( FLY_IN_CNTNT != pFrmFmt->GetAnchor().GetAnchorId() )
+            else if ( FLY_AS_CHAR != pFrmFmt->GetAnchor().GetAnchorId() )
             {
                 eType = OBJCNT_GROUPOBJ;
             }
         }
     }
-    // <--
     else
         eType = OBJCNT_SIMPLE;
     return eType;
@@ -2068,3 +2058,99 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
 
     EndAction();
 }
+
+// --> OD 2009-07-13 #i73249#
+const String SwFEShell::GetObjTitle() const
+{
+    String aTitle;
+
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            const SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            const SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                aTitle = dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjTitle();
+            }
+            else
+            {
+                aTitle = pObj->GetTitle();
+            }
+        }
+    }
+
+    return aTitle;
+}
+
+void SwFEShell::SetObjTitle( const String& rTitle )
+{
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                GetDoc()->SetFlyFrmTitle( *(dynamic_cast<SwFlyFrmFmt*>(pFmt)),
+                                          rTitle );
+            }
+            else
+            {
+                pObj->SetTitle( rTitle );
+            }
+        }
+    }
+}
+
+const String SwFEShell::GetObjDescription() const
+{
+    String aDescription;
+
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            const SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            const SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                aDescription = dynamic_cast<const SwFlyFrmFmt*>(pFmt)->GetObjDescription();
+            }
+            else
+            {
+                aDescription = pObj->GetDescription();
+            }
+        }
+    }
+
+    return aDescription;
+}
+
+void SwFEShell::SetObjDescription( const String& rDescription )
+{
+    if ( Imp()->HasDrawView() )
+    {
+        const SdrMarkList *pMrkList = &Imp()->GetDrawView()->GetMarkedObjectList();
+        if ( pMrkList->GetMarkCount() == 1 )
+        {
+            SdrObject* pObj = pMrkList->GetMark( 0 )->GetMarkedSdrObj();
+            SwFrmFmt* pFmt = FindFrmFmt( pObj );
+            if ( pFmt->Which() == RES_FLYFRMFMT )
+            {
+                GetDoc()->SetFlyFrmDescription( *(dynamic_cast<SwFlyFrmFmt*>(pFmt)),
+                                                rDescription );
+            }
+            else
+            {
+                pObj->SetDescription( rDescription );
+            }
+        }
+    }
+}
+// <--

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: node.hxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -487,15 +484,24 @@ public:
 
 class SmLineNode : public SmStructureNode
 {
+    BOOL  bUseExtraSpaces;
+
 protected:
     SmLineNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     :   SmStructureNode(eNodeType, rNodeToken)
-    {}
+    {
+        bUseExtraSpaces = TRUE;
+    }
 
 public:
     SmLineNode(const SmToken &rNodeToken)
     :   SmStructureNode(NLINE, rNodeToken)
-    {}
+    {
+        bUseExtraSpaces = TRUE;
+    }
+
+    void  SetUseExtraSpaces(BOOL bVal) { bUseExtraSpaces = bVal; }
+    BOOL  IsUseExtraSpaces() const { return bUseExtraSpaces; };
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);

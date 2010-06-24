@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editsh.cxx,v $
- * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +60,7 @@
 #include <extinput.hxx>
 #include <crsskip.hxx>
 #include <scriptinfo.hxx>
-#include <unoobj.hxx>
+#include <unocrsrhelper.hxx>
 #include <section.hxx>
 #include <unochart.hxx>
 #include <numrule.hxx>
@@ -86,10 +83,9 @@ void SwEditShell::Insert( sal_Unicode c, BOOL bOnlyCurrCrsr )
     StartAllAction();
     FOREACHPAM_START(this)
 
-        if( !GetDoc()->Insert(*PCURCRSR, c) )
-        {
-            ASSERT( FALSE, "Doc->Insert(c) failed." )
-        }
+        const bool bSuccess = GetDoc()->InsertString(*PCURCRSR, c);
+        ASSERT( bSuccess, "Doc->Insert() failed." );
+        (void) bSuccess;
 
         SaveTblBoxCntnt( PCURCRSR->GetPoint() );
         if( bOnlyCurrCrsr )
@@ -106,17 +102,24 @@ void SwEditShell::Insert( sal_Unicode c, BOOL bOnlyCurrCrsr )
  ******************************************************************************/
 
 
-void SwEditShell::Insert(const String &rStr)
+void SwEditShell::Insert2(const String &rStr, const bool bForceExpandHints )
 {
     StartAllAction();
     {
+        const enum IDocumentContentOperations::InsertFlags nInsertFlags =
+            (bForceExpandHints)
+            ? static_cast<IDocumentContentOperations::InsertFlags>(
+                    IDocumentContentOperations::INS_FORCEHINTEXPAND |
+                    IDocumentContentOperations::INS_EMPTYEXPAND)
+            : IDocumentContentOperations::INS_EMPTYEXPAND;
+
         SwPaM *_pStartCrsr = getShellCrsr( true ), *__pStartCrsr = _pStartCrsr;
         do {
             //OPT: GetSystemCharSet
-            if( !GetDoc()->Insert( *_pStartCrsr, rStr, true ) )
-            {
-                ASSERT( FALSE, "Doc->Insert(Str) failed." )
-            }
+            const bool bSuccess =
+                GetDoc()->InsertString(*_pStartCrsr, rStr, nInsertFlags);
+            ASSERT( bSuccess, "Doc->Insert() failed." );
+            (void) bSuccess;
 
             SaveTblBoxCntnt( _pStartCrsr->GetPoint() );
 
@@ -277,7 +280,7 @@ const Graphic* SwEditShell::GetGraphic( BOOL bWait ) const
             if( pGrf->IsSwapOut() ||
                 ( pGrfNode->IsLinkedFile() && GRAPHIC_DEFAULT == pGrf->GetType() ) )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
 #else
                 pGrfNode->SwapIn( bWait );
@@ -288,7 +291,7 @@ const Graphic* SwEditShell::GetGraphic( BOOL bWait ) const
         {
             if ( pGrf->IsSwapOut() && !pGrfNode->IsLinkedFile() )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 ASSERT( pGrfNode->SwapIn( bWait ) || !bWait, "Grafik konnte nicht geladen werden" );
 #else
                 pGrfNode->SwapIn( bWait );
@@ -383,27 +386,27 @@ void SwEditShell::GetGrfNms( String* pGrfName, String* pFltName,
 
 
 // alternativen Text abfragen/setzen
-const String& SwEditShell::GetAlternateText() const
-{
-    SwPaM* pCrsr = GetCrsr();
-    const SwNoTxtNode* pNd;
-    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
-        return pNd->GetAlternateText();
+//const String& SwEditShell::GetAlternateText() const
+//{
+//    SwPaM* pCrsr = GetCrsr();
+//    const SwNoTxtNode* pNd;
+//    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
+//        return pNd->GetAlternateText();
 
-    return aEmptyStr;
-}
+//    return aEmptyStr;
+//}
 
 
-void SwEditShell::SetAlternateText( const String& rTxt )
-{
-    SwPaM* pCrsr = GetCrsr();
-    SwNoTxtNode* pNd;
-    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
-    {
-        pNd->SetAlternateText( rTxt, sal_True );
-        GetDoc()->SetModified();
-    }
-}
+//void SwEditShell::SetAlternateText( const String& rTxt )
+//{
+//    SwPaM* pCrsr = GetCrsr();
+//    SwNoTxtNode* pNd;
+//    if( !pCrsr->HasMark() && 0 != ( pNd = pCrsr->GetNode()->GetNoTxtNode()) )
+//    {
+//        pNd->SetAlternateText( rTxt, sal_True );
+//        GetDoc()->SetModified();
+//    }
+//}
 
 
 const PolyPolygon *SwEditShell::GetGraphicPolygon() const
@@ -690,7 +693,7 @@ String SwEditShell::Calculate()
 }
 
 
-SvxLinkManager& SwEditShell::GetLinkManager()
+sfx2::LinkManager& SwEditShell::GetLinkManager()
 {
     return pDoc->GetLinkManager();
 }
@@ -720,7 +723,7 @@ Graphic SwEditShell::GetIMapGraphic() const
             if( rGrf.IsSwapOut() || ( ((SwGrfNode*)pNd)->IsLinkedFile() &&
                                     GRAPHIC_DEFAULT == rGrf.GetType() ) )
             {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 ASSERT( ((SwGrfNode*)pNd)->SwapIn( TRUE ) || !TRUE, "Grafik konnte nicht geladen werden" );
 #else
                 ((SwGrfNode*)pNd)->SwapIn( TRUE );
@@ -778,7 +781,7 @@ BOOL SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, BOOL 
 
         if( bInsTxt )
         {
-            Insert( rStr );
+            Insert2( rStr );
             SetMark();
             ExtendSelection( FALSE, rStr.Len() );
         }
@@ -1105,7 +1108,7 @@ String SwEditShell::DeleteExtTextInput( SwExtTextInput* pDel, BOOL bInsText )
     if( pDel )
     {
         rtl::OUString sTmp;
-        SwXTextCursor::getTextFromPam(*pDel, sTmp);
+        SwUnoCursorHelper::GetTextFromPam(*pDel, sTmp);
         sRet = sTmp;
         SET_CURR_SHELL( this );
         StartAllAction();
@@ -1159,8 +1162,7 @@ void SwEditShell::SetExtTextInputData( const CommandExtTextInputData& rData )
 
 void SwEditShell::TransliterateText( sal_uInt32 nType )
 {
-    utl::TransliterationWrapper aTrans(
-                        ::comphelper::getProcessServiceFactory(), nType );
+    utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), nType );
     StartAllAction();
     SET_CURR_SHELL( this );
 
@@ -1181,6 +1183,32 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
 
     EndAllAction();
 }
+
+void SwEditShell::TransliterateText( const String& rModuleName )
+{
+    utl::TransliterationWrapper aTrans(::comphelper::getProcessServiceFactory(), 0 );
+    aTrans.loadModuleByImplName( rModuleName, LANGUAGE_SYSTEM );
+    StartAllAction();
+    SET_CURR_SHELL( this );
+
+    SwPaM* pCrsr = GetCrsr();
+    if( pCrsr->GetNext() != pCrsr )
+    {
+        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
+        FOREACHPAM_START( this )
+
+        if( PCURCRSR->HasMark() )
+            GetDoc()->TransliterateText( *PCURCRSR, aTrans );
+
+        FOREACHPAM_END()
+        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
+    }
+    else
+        GetDoc()->TransliterateText( *pCrsr, aTrans );
+
+    EndAllAction();
+}
+
 
 void SwEditShell::CountWords( SwDocStat& rStat ) const
 {

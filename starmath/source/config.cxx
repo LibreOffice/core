@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: config.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,15 +29,15 @@
 #include "precompiled_starmath.hxx"
 
 
-#include <svtools/itemset.hxx>
-#include <svtools/hint.hxx>
-#include <svtools/smplhint.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/itemset.hxx>
+#include <svl/hint.hxx>
+#include <svl/smplhint.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <svtools/eitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <tools/stream.hxx>
 
 

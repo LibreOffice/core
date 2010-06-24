@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: select.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,19 +32,13 @@
 #include <limits.h>
 #include <hintids.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/macitem.hxx>
 #include <unotools/charclass.hxx>
-#include <svx/scripttypeitem.hxx>
-#ifndef _CMDID_H
+#include <editeng/scripttypeitem.hxx>
 #include <cmdid.h>
-#endif
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <frmatr.hxx>
 #include <initui.hxx>
@@ -72,6 +63,13 @@ using namespace ::com::sun::star::util;
 
 static long nStartDragX = 0, nStartDragY = 0;
 static BOOL  bStartDrag = FALSE;
+
+void SwWrtShell::Invalidate()
+{
+    // to avoid making the slot volatile, invalidate it everytime if something could have been changed
+    // this is still much cheaper than asking for the state every 200 ms (and avoid background processing)
+    GetView().GetViewFrame()->GetBindings().Invalidate( FN_STAT_SELMODE );
+}
 
 BOOL SwWrtShell::SelNearestWrd()
 {
@@ -140,8 +138,9 @@ long SwWrtShell::SelAll()
 {
     const BOOL bLockedView = IsViewLocked();
     LockView( TRUE );
-
     {
+        if(bBlockMode)
+            LeaveBlockMode();
         MV_KONTEXT(this);
         BOOL bMoveTable = FALSE;
         SwPosition *pStartPos = 0;
@@ -191,9 +190,7 @@ long SwWrtShell::SelAll()
         }
     }
     EndSelect();
-
     LockView( bLockedView );
-
     return 1;
 }
 
@@ -375,6 +372,7 @@ long SwWrtShell::ResetSelect(const Point *,BOOL)
         */
         GetChgLnk().Call(this);
     }
+    Invalidate();
     SwTransferable::ClearSelection( *this );
     return 1;
 }
@@ -409,6 +407,7 @@ void SwWrtShell::SttSelect()
     fnKillSel = &SwWrtShell::Ignore;
     fnSetCrsr = &SwWrtShell::SetCrsr;
     bInSelect = TRUE;
+    Invalidate();
     SwTransferable::CreateSelection( *this );
 }
 /*
@@ -577,6 +576,7 @@ void SwWrtShell::EnterStdMode()
             fnKillSel = &SwWrtShell::ResetSelect;
         }
     }
+    Invalidate();
     SwTransferable::ClearSelection( *this );
 }
 
@@ -655,6 +655,7 @@ void SwWrtShell::EnterAddMode()
     bExtMode = FALSE;
     if(SwCrsrShell::HasSelection())
         CreateCrsr();
+    Invalidate();
 }
 
 
@@ -665,6 +666,7 @@ void SwWrtShell::LeaveAddMode()
     fnKillSel = &SwWrtShell::ResetSelect;
     fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
     bAddMode = FALSE;
+    Invalidate();
 }
 
 /*
@@ -677,6 +679,7 @@ void SwWrtShell::EnterBlockMode()
     EnterStdMode();
     bBlockMode = TRUE;
     CrsrToBlockCrsr();
+    Invalidate();
 }
 
 
@@ -686,6 +689,7 @@ void SwWrtShell::LeaveBlockMode()
     bBlockMode = FALSE;
     BlockCrsrToCrsr();
     EndSelect();
+    Invalidate();
 }
 
 // Einfuegemodus
@@ -700,6 +704,14 @@ void SwWrtShell::SetInsMode( BOOL bOn )
     GetView().GetViewFrame()->GetBindings().SetState( aTmp );
     StartAction();
     EndAction();
+    Invalidate();
+}
+//Overwrite mode is incompatible with red-lining
+void SwWrtShell::SetRedlineModeAndCheckInsMode( USHORT eMode )
+{
+   SetRedlineMode( eMode );
+   if (IsRedlineOn())
+       SetInsMode( true );
 }
 
 /*
@@ -737,6 +749,7 @@ void SwWrtShell::EnterSelFrmMode(const Point *pPos)
     fnDrag          = &SwWrtShell::BeginFrmDrag;
     fnEndDrag       = &SwWrtShell::UpdateLayoutFrm;
     SwBaseShell::SetFrmMode( FLY_DRAG_START, this );
+    Invalidate();
 }
 
 
@@ -749,6 +762,7 @@ void SwWrtShell::LeaveSelFrmMode()
     bStartDrag = FALSE;
     Edit();
     SwBaseShell::SetFrmMode( FLY_DRAG_END, this );
+    Invalidate();
 }
 /*------------------------------------------------------------------------
  Beschreibung:  Rahmengebundenes Macro ausfuehren
@@ -792,6 +806,7 @@ long SwWrtShell::UpdateLayoutFrm(const Point *pPt, BOOL )
 long SwWrtShell::ToggleAddMode()
 {
     bAddMode ? LeaveAddMode(): EnterAddMode();
+    Invalidate();
     return !bAddMode;
 }
 
@@ -799,6 +814,7 @@ long SwWrtShell::ToggleAddMode()
 long SwWrtShell::ToggleBlockMode()
 {
     bBlockMode ? LeaveBlockMode(): EnterBlockMode();
+    Invalidate();
     return !bBlockMode;
 }
 
@@ -806,6 +822,7 @@ long SwWrtShell::ToggleBlockMode()
 long SwWrtShell::ToggleExtMode()
 {
     bExtMode ? LeaveExtMode() : EnterExtMode();
+    Invalidate();
     return !bExtMode;
 }
 /*

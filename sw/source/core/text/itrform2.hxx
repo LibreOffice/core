@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: itrform2.hxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +57,7 @@ class SwTxtFormatter : public SwTxtPainter
     sal_Bool bChanges : 1; // Flag, fuer die Berechnung des Repaint-Rechtecks
     sal_Bool bTruncLines : 1; // Flag, Repaint-Rechtecks ggf. erweitern
     sal_Bool bUnclipped : 1; // Flag, ob Repaint groesser als feste Zeilenhoehe
+    USHORT m_nHintEndIndex; // HACK for TryNewNoLengthPortion
     SwLinePortion *NewPortion( SwTxtFormatInfo &rInf );
     SwTxtPortion  *NewTxtPortion( SwTxtFormatInfo &rInf );
     SwLinePortion *NewExtraPortion( SwTxtFormatInfo &rInf );
@@ -75,6 +73,7 @@ class SwTxtFormatter : public SwTxtPainter
                                        SwTxtAttr *pHt ) const;
     SwLinePortion *WhichFirstPortion( SwTxtFormatInfo &rInf );
     SwTxtPortion *WhichTxtPor( SwTxtFormatInfo &rInf ) const;
+    SwExpandPortion * TryNewNoLengthPortion( SwTxtFormatInfo & rInfo );
 
     // Das Herzstueck der Formatierung
     void BuildPortions( SwTxtFormatInfo &rInf );

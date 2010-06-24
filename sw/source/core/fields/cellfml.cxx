@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellfml.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -159,13 +156,13 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
 
         // beginnt an erster Position ein "RechenFeld", dann erfrage den Wert
         // von diesem
-        sal_Unicode cChr;
-        if( nSttPos < rTxt.Len() &&
-            ( CH_TXTATR_BREAKWORD == ( cChr = rTxt.GetChar(nSttPos)) ||
-              CH_TXTATR_INWORD == cChr ))
+        sal_Unicode const Char = rTxt.GetChar(nSttPos);
+        if ( nSttPos < rTxt.Len() &&
+             ( CH_TXTATR_BREAKWORD == Char || CH_TXTATR_INWORD == Char ) )
         {
             SwIndex aIdx( pTxtNd, nSttPos );
-            SwTxtFld* pTxtFld = pTxtNd->GetTxtFld( aIdx );
+            SwTxtFld * const pTxtFld = static_cast<SwTxtFld*>(
+                pTxtNd->GetTxtAttrForCharAt(aIdx.GetIndex(), RES_TXTATR_FIELD));
             if( !pTxtFld )
                 break;
 
@@ -206,7 +203,8 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                 break;
 
             default:
-                nRet = rCalcPara.rCalc.Calculate( pFld->Expand() ).GetDouble();
+                String const value(pFld->ExpandField(pDoc->IsClipBoard()));
+                nRet = rCalcPara.rCalc.Calculate(value).GetDouble();
             }
         }
         else

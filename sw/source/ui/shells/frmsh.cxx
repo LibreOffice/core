@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: frmsh.cxx,v $
- * $Revision: 1.22.190.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,23 +30,27 @@
 
 
 #include <hintids.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svtools/imapobj.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svtools/imap.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
-#include <svtools/rectitem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/protitem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/protitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <svx/hlnkitem.hxx>
+// --> OD 2009-07-07 #i73249#
+#include <svx/svdview.hxx>
+#include <vcl/msgbox.hxx>
+// <--
 
 
 #include <fmturl.hxx>
@@ -82,6 +83,9 @@
 #include <shells.hrc>
 #include "swabstdlg.hxx"
 #include "misc.hrc"
+// --> OD 2009-07-14 #i73249#
+#include <svx/dialogs.hrc>
+// <--
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -414,8 +418,13 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 }
                 aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
                 aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
-                if(nSel & nsSelectionType::SEL_OLE)
-                    aSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, rSh.GetAlternateText()));
+                if( nSel & nsSelectionType::SEL_OLE )
+                {
+                    // --> OD 2009-07-13 #i73249#
+//                    aSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, rSh.GetAlternateText()));
+                    aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
+                    // <--
+                }
 
                 const SwRect &rPg = rSh.GetAnyCurRect(RECT_PAGE);
                 SwFmtFrmSize aFrmSize(ATT_VAR_SIZE, rPg.Width(), rPg.Height());
@@ -441,7 +450,7 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 if(pArgs && pArgs->GetItemState(FN_FORMAT_FRAME_DLG, FALSE, &pItem) == SFX_ITEM_SET)
                     nDefPage = ((SfxUInt16Item *)pItem)->GetValue();
 
-                aSet.Put(SfxFrameItem( SID_DOCFRAME, GetView().GetViewFrame()->GetTopFrame()));
+                aSet.Put(SfxFrameItem( SID_DOCFRAME, &GetView().GetViewFrame()->GetTopFrame()));
                 FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
                 SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric) ));
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -472,7 +481,10 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         }
                         if (SFX_ITEM_SET == pOutSet->GetItemState(FN_SET_FRM_ALT_NAME, TRUE, &pItem))
                         {
-                            rSh.SetAlternateText(((const SfxStringItem*)pItem)->GetValue());
+                            // --> OD 2009-07-13 #i73249#
+//                            rSh.SetAlternateText(((const SfxStringItem*)pItem)->GetValue());
+                            rSh.SetObjTitle(((const SfxStringItem*)pItem)->GetValue());
+                            // <--
                         }
                         // Vorlagen-AutoUpdate
                         SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
@@ -587,6 +599,39 @@ void SwFrameShell::Execute(SfxRequest &rReq)
             rReq.SetReturnValue(SfxBoolItem(nSlot, bMirror));
         }
         break;
+        // --> OD 2009-07-14 #i73249#
+        case FN_TITLE_DESCRIPTION_SHAPE:
+        {
+            bUpdateMgr = FALSE;
+            SdrView* pSdrView = rSh.GetDrawViewWithValidMarkList();
+            if ( pSdrView &&
+                 pSdrView->GetMarkedObjectCount() == 1 )
+            {
+                String aDescription(rSh.GetObjDescription());
+                String aTitle(rSh.GetObjTitle());
+
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                OSL_ENSURE(pFact, "Dialogdiet fail!");
+                AbstractSvxObjectTitleDescDialog* pDlg =
+                    pFact->CreateSvxObjectTitleDescDialog( NULL,
+                                                           aTitle,
+                                                           aDescription );
+                OSL_ENSURE(pDlg, "Dialogdiet fail!");
+
+                if ( pDlg->Execute() == RET_OK )
+                {
+                    pDlg->GetDescription(aDescription);
+                    pDlg->GetTitle(aTitle);
+
+                    rSh.SetObjDescription(aDescription);
+                    rSh.SetObjTitle(aTitle);
+                }
+
+                delete pDlg;
+            }
+        }
+        break;
+        // <--
         default:
             ASSERT( !this, "falscher Dispatcher" );
             return;
@@ -822,6 +867,20 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                         rSet.DisableItem( nWhich );
                 }
                 break;
+                // --> OD 2009-07-07 #i73249#
+                case FN_TITLE_DESCRIPTION_SHAPE:
+                {
+                    SwWrtShell &rWrtSh = GetShell();
+                    SdrView* pSdrView = rWrtSh.GetDrawViewWithValidMarkList();
+                    if ( !pSdrView ||
+                         pSdrView->GetMarkedObjectCount() != 1 )
+                    {
+                        rSet.DisableItem( nWhich );
+                    }
+
+                }
+                break;
+                // <--
                 default:
                     /* do nothing */;
                     break;

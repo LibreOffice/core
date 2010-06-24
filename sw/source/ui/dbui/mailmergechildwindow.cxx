@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mailmergechildwindow.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,7 +100,7 @@ SwMailMergeChildWin::SwMailMergeChildWin( SfxBindings* _pBindings,
     m_aBackTB(this, SW_RES( TB_BACK ))
 {
     m_aBackTB.SetSelectHdl(LINK(this, SwMailMergeChildWin, BackHdl));
-    sal_uInt16 nIResId =  GetSettings().GetStyleSettings().GetWindowColor().IsDark() ?
+    sal_uInt16 nIResId =  GetSettings().GetStyleSettings().GetHighContrastMode() ?
         ILIST_TBX_HC : ILIST_TBX;
     ResId aResId( nIResId, *pSwResMgr );
     ImageList aIList(aResId);
@@ -639,7 +636,7 @@ void  SwSendMailDialog::IterateMails()
     {
         if(!SwMailMergeHelper::CheckMailAddress( pCurrentMailDescriptor->sEMail ))
         {
-            ImageList& rImgLst = GetSettings().GetStyleSettings().GetWindowColor().IsDark() ?
+            ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
                                         m_aImageListHC : m_aImageList;
             Image aInsertImg =   rImgLst.GetImage( FN_FORMULA_CANCEL );
 
@@ -747,7 +744,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> xMessag
         Application::PostUserEvent( STATIC_LINK( this, SwSendMailDialog,
                                                     StopSendMails ), this );
     }
-    ImageList& rImgLst = GetSettings().GetStyleSettings().GetWindowColor().IsDark() ?
+    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
                                 m_aImageListHC : m_aImageList;
     Image aInsertImg =   rImgLst.GetImage( bResult ? FN_FORMULA_APPLY : FN_FORMULA_CANCEL );
 

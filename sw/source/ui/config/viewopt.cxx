@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewopt.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +30,13 @@
 
 
 #include <svx/htmlmode.hxx>
-#include <svx/htmlcfg.hxx>
+#include <svtools/htmlcfg.hxx>
 
 #ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
 #endif
-#include <svx/svxenum.hxx>
-#include <svx/svxacorr.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/svxacorr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #ifndef _REGION_HXX //autogen
 #include <vcl/region.hxx>
@@ -58,10 +55,11 @@
 #include <crstate.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/accessibilityoptions.hxx>
+#include <unotools/syslocale.hxx>
 
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 BOOL   SwViewOption::bTest9 = FALSE;        //DrawingLayerNotLoading
 #endif
 Color SwViewOption::aDocBoundColor(COL_LIGHTGRAY);
@@ -114,7 +112,8 @@ BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
             && bFormView == rOpt.IsFormView()
             && mbViewLayoutBookMode == rOpt.mbViewLayoutBookMode
             && bShowPlaceHolderFields == rOpt.bShowPlaceHolderFields
-#ifndef PRODUCT
+            && bIdle == rOpt.bIdle
+#ifdef DBG_UTIL
             // korrespondieren zu den Angaben in ui/config/cfgvw.src
             && bTest1 == rOpt.IsTest1()
             && bTest2 == rOpt.IsTest2()
@@ -228,7 +227,7 @@ SwViewOption::SwViewOption() :
 {
     // Initialisierung ist jetzt etwas einfacher
     // alle Bits auf 0
-    nCoreOptions =  VIEWOPT_1_IDLE | VIEWOPT_1_HARDBLANK | VIEWOPT_1_SOFTHYPH |
+    nCoreOptions =  VIEWOPT_1_HARDBLANK | VIEWOPT_1_SOFTHYPH |
                     VIEWOPT_1_REF |
                     VIEWOPT_1_GRAPHIC |
                     VIEWOPT_1_TABLE    | VIEWOPT_1_DRAW | VIEWOPT_1_CONTROL |
@@ -237,7 +236,7 @@ SwViewOption::SwViewOption() :
     nCore2Options = VIEWOPT_CORE2_BLACKFONT | VIEWOPT_CORE2_HIDDENPARA;
     nUIOptions    = VIEWOPT_2_MODIFIED | VIEWOPT_2_GRFKEEPZOOM |VIEWOPT_2_ANY_RULER;
 
-    if(MEASURE_METRIC != GetAppLocaleData().getMeasurementSystemEnum())
+    if(MEASURE_METRIC != SvtSysLocale().GetLocaleData().getMeasurementSystemEnum())
         aSnapSize.Width() = aSnapSize.Height() = 720;   // 1/2"
     else
         aSnapSize.Width() = aSnapSize.Height() = 567;   // 1 cm
@@ -245,7 +244,9 @@ SwViewOption::SwViewOption() :
 
     bSelectionInReadonly = SW_MOD()->GetAccessibilityOptions().IsSelectionInReadonly();
 
-#ifndef PRODUCT
+    bIdle = true;
+
+#ifdef DBG_UTIL
     // korrespondieren zu den Angaben in ui/config/cfgvw.src
     bTest1 = bTest2 = bTest3 = bTest4 =
              bTest5 = bTest6 = bTest7 = bTest8 = bTest10 = FALSE;
@@ -279,8 +280,9 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     bBookview       = rVOpt.bBookview;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
+    bIdle           = rVOpt.bIdle;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bTest1          = rVOpt.bTest1      ;
     bTest2          = rVOpt.bTest2      ;
     bTest3          = rVOpt.bTest3      ;
@@ -319,8 +321,9 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     bBookview       = rVOpt.bBookview;
     mbViewLayoutBookMode = rVOpt.mbViewLayoutBookMode;
     bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
+    bIdle           = rVOpt.bIdle;
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     bTest1          = rVOpt.bTest1      ;
     bTest2          = rVOpt.bTest2      ;
     bTest3          = rVOpt.bTest3      ;

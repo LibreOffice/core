@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ftnfrm.cxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -356,7 +353,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL )
     //moeglich.
     //Wenn die Seite eine spezielle Fussnotenseite ist, so nehmen wir uns auch
     //soviel Platz wie eben moeglich.
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if ( !GetUpper() || !GetUpper()->IsFtnBossFrm() )
     {   ASSERT( !this, "Keine FtnBoss." );
         return 0;
@@ -564,7 +561,7 @@ void SwFtnFrm::InvalidateNxtFtnCnts( SwPageFrm *pPage )
     }
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 SwTwips SwFtnFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
@@ -713,7 +710,7 @@ void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
         pDel->Cut();
         delete pDel;
     }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     SwDoc *pDoc = GetFmt()->GetDoc();
     if ( GetPrev() )
     {
@@ -1144,7 +1141,7 @@ SwFtnContFrm *SwFtnBossFrm::MakeFtnCont()
     //immer direkt hinter dem Bodytext.
     //Sein FrmFmt ist immer das DefaultFrmFmt.
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if ( FindFtnCont() )
     {   ASSERT( !this, "Fussnotencontainer bereits vorhanden." );
         return 0;
@@ -1173,7 +1170,7 @@ SwFtnContFrm *SwFtnBossFrm::FindFtnCont()
     while( pFrm && !pFrm->IsFtnContFrm() )
         pFrm = pFrm->GetNext();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     if ( pFrm )
     {
         SwFrm *pFtn = pFrm->GetLower();
@@ -1418,7 +1415,7 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
 
 void SwFtnBossFrm::InsertFtn( SwFtnFrm* pNew )
 {
-#if (OSL_DEBUG_LEVEL > 1) && !defined(PRODUCT)
+#if (OSL_DEBUG_LEVEL > 1) && defined(DBG_UTIL)
     static USHORT nStop = 0;
     if ( nStop == pNew->GetFrmId() )
     {
@@ -3280,7 +3277,7 @@ SwSaveFtnHeight::~SwSaveFtnHeight()
 }
 
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 //JP 15.10.2001: in a non pro version test if the attribute has the same
 //              meaning which his reference is
 

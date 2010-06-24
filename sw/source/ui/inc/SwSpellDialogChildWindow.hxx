@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SwSpellDialogChildWindow.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,8 +48,8 @@ class SwSpellDialogChildWindow
     void            LockFocusNotification(bool bLock);
 
 protected:
-    virtual svx::SpellPortions GetNextWrongSentence (void);
-    virtual void ApplyChangedSentence(const svx::SpellPortions& rChanged);
+    virtual svx::SpellPortions GetNextWrongSentence(bool bRecheck);
+    virtual void ApplyChangedSentence(const svx::SpellPortions& rChanged, bool bRecheck);
     virtual void AddAutoCorrection(const String& rOld, const String& rNew, LanguageType eLanguage);
     virtual bool HasAutoCorrection();
     virtual bool HasGrammarChecking();

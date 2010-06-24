@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shellio.cxx,v $
- * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,16 +30,14 @@
 #include <hintids.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
-#include <svtools/urihelper.hxx>
-#ifndef SVTOOLS_FSTATHELPER_HXX
-#include <svtools/fstathelper.hxx>
-#endif
-#include <svtools/moduleoptions.hxx>
+#include <svl/urihelper.hxx>
+#include <svl/fstathelper.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/paperinf.hxx>
 #include <node.hxx>
 #include <docary.hxx>
 #include <fmtanchr.hxx>
@@ -60,9 +55,7 @@
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
 #include <fltini.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <redline.hxx>
 #include <swerror.h>
 
@@ -71,6 +64,7 @@
 // --> OD 2007-03-30 #i73788#
 #include <pausethreadstarting.hxx>
 // <--
+
 
 using namespace ::com::sun::star;
 
@@ -158,7 +152,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     SwNodeIndex aSplitIdx( pDoc->GetNodes() );
 
     RedlineMode_t eOld = pDoc->GetRedlineMode();
-    pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
+    RedlineMode_t ePostReadRedlineMode( nsRedlineMode_t::REDLINE_IGNORE );
 
     // Array von FlyFormaten
     SwSpzFrmFmts aFlyFrmArr;
@@ -169,6 +163,8 @@ ULONG SwReader::Read( const Reader& rOptions )
     {
         if( bSaveUndo )
             pUndo = new SwUndoInsDoc( *pPam );
+
+        pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
 
         SwPaM* pUndoPam = 0;
         if( bDocUndo || pCrsr )
@@ -190,7 +186,14 @@ ULONG SwReader::Read( const Reader& rOptions )
         xub_StrLen nEndCntnt = pCNd ? pCNd->Len() - nSttCntnt : 0;
         SwNodeIndex aEndPos( pPam->GetPoint()->nNode, 1 );
 
+        pDoc->SetRedlineMode_intern( eOld );
+
         nError = po->Read( *pDoc, GetBaseURL(), *pPam, aFileName );
+
+        // an ODF document may contain redline mode in settings.xml; save it!
+        ePostReadRedlineMode = pDoc->GetRedlineMode();
+
+        pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
 
         if( !IsError( nError ))     // dann setzen wir das Ende mal richtig
         {
@@ -230,16 +233,30 @@ ULONG SwReader::Read( const Reader& rOptions )
                 const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
                 if( USHRT_MAX == aFlyFrmArr.GetPos( pFrmFmt) )
                 {
-                    if( FLY_PAGE == rAnchor.GetAnchorId() ||
-                        ( FLY_AT_CNTNT == rAnchor.GetAnchorId() &&
-                            rAnchor.GetCntntAnchor() &&
-                            ( pUndoPam->GetPoint()->nNode ==
-                            rAnchor.GetCntntAnchor()->nNode ||
-                            pUndoPam->GetMark()->nNode ==
-                            rAnchor.GetCntntAnchor()->nNode ) ) )
+                    SwPosition const*const pFrameAnchor(
+                            rAnchor.GetCntntAnchor());
+                    if  (   (FLY_AT_PAGE == rAnchor.GetAnchorId())
+                        ||  (   pFrameAnchor
+                            &&  (   (   (FLY_AT_PARA == rAnchor.GetAnchorId())
+                                    &&  (   (pUndoPam->GetPoint()->nNode ==
+                                             pFrameAnchor->nNode)
+                                        ||  (pUndoPam->GetMark()->nNode ==
+                                             pFrameAnchor->nNode)
+                                        )
+                                    )
+                                // #i97570# also check frames anchored AT char
+                                ||  (   (FLY_AT_CHAR == rAnchor.GetAnchorId())
+                                    &&  !IsDestroyFrameAnchoredAtChar(
+                                              *pFrameAnchor,
+                                              *pUndoPam->GetPoint(),
+                                              *pUndoPam->GetMark())
+                                    )
+                                )
+                            )
+                        )
                     {
                         if( bChkHeaderFooter &&
-                            FLY_AT_CNTNT == rAnchor.GetAnchorId() &&
+                            (FLY_AT_PARA == rAnchor.GetAnchorId()) &&
                             RES_DRAWFRMFMT == pFrmFmt->Which() )
                         {
                             // DrawObjecte in Kopf-/Fusszeilen ist nicht
@@ -263,15 +280,19 @@ ULONG SwReader::Read( const Reader& rOptions )
                                 pFrmFmt->DelFrms();
                             }
 
-                            if( FLY_PAGE == rAnchor.GetAnchorId() )
+                            if (FLY_AT_PAGE == rAnchor.GetAnchorId())
                             {
                                 if( !rAnchor.GetCntntAnchor() )
+                                {
                                     pFrmFmt->MakeFrms();
+                                }
                                 else if( pCrsr )
+                                {
                                     // seitengebundene Flys eingefuegt, dann schalte
                                     // die Optimierungs-Flags vom SwDoc ab. Sonst
                                     // werden die Flys nicht an der Position erzeugt.
                                     pDoc->SetLoaded( FALSE );
+                                }
                             }
                             else
                                 pFrmFmt->MakeFrms();
@@ -351,7 +372,9 @@ ULONG SwReader::Read( const Reader& rOptions )
         pDoc->UpdateLinks( TRUE );
         // <--
 
-    eOld = (RedlineMode_t)(pDoc->GetRedlineMode() & ~nsRedlineMode_t::REDLINE_IGNORE);
+        // not insert: set the redline mode read from settings.xml
+        eOld = static_cast<RedlineMode_t>(
+                ePostReadRedlineMode & ~nsRedlineMode_t::REDLINE_IGNORE);
 
         pDoc->SetFieldsDirty(false, NULL, 0);
     }

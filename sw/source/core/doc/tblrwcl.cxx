@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tblrwcl.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,10 +33,10 @@
 #include <hintids.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/protitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/protitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <tools/fract.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
@@ -74,7 +71,7 @@ using namespace com::sun::star::uno;
 
 using namespace ::com::sun::star;
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -197,7 +194,7 @@ BOOL lcl_DelOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
 
 typedef BOOL (*FN_lcl_SetBoxWidth)(SwTableLine*, CR_SetBoxWidth&, SwTwips, BOOL );
 
-#if !defined( PRODUCT ) || defined( JP_DEBUG )
+#if defined(DBG_UTIL) || defined( JP_DEBUG )
 
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize );
 
@@ -360,11 +357,18 @@ BOOL lcl_CopyCol( const _FndBox*& rpFndBox, void* pPara )
             SwTableBoxFmt* pNewFmt = (SwTableBoxFmt*)pBox->ClaimFrmFmt();
 
             // suche die selektierten Boxen in der Line:
-            _FndLine* pCmpLine;
+            _FndLine* pCmpLine = NULL;
             SwFmtFrmSize aFrmSz( pNewFmt->GetFrmSize() );
-            if( pBox->GetTabLines().Count() &&
-                ( pCmpLine = rpFndBox->GetLines()[ 0 ])->GetBoxes().Count()
-                    != pCmpLine->GetLine()->GetTabBoxes().Count() )
+
+            bool bDiffCount = false;
+            if( pBox->GetTabLines().Count() )
+            {
+                pCmpLine = rpFndBox->GetLines()[ 0 ];
+                if ( pCmpLine->GetBoxes().Count() != pCmpLine->GetLine()->GetTabBoxes().Count() )
+                    bDiffCount = true;
+            }
+
+            if( bDiffCount )
             {
                 // die erste Line sollte reichen
                 _FndBoxes& rFndBoxes = pCmpLine->GetBoxes();
@@ -2103,7 +2107,7 @@ BOOL lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara )
                             *rpFndBox->GetBox()->GetSttNd()->EndOfSectionNode() );
                 SwNodeIndex aInsIdx( *pBox->GetSttNd(), 1 );
 
-                pFromDoc->CopyWithFlyInFly( aCpyRg, aInsIdx, FALSE );
+                pFromDoc->CopyWithFlyInFly( aCpyRg, 0, aInsIdx, FALSE );
                 // den initialen TextNode loeschen
                 pCpyPara->pDoc->GetNodes().Delete( aInsIdx, 1 );
             }
@@ -3499,7 +3503,7 @@ void lcl_AjustLines( SwTableLine* pLine, CR_SetBoxWidth& rParam )
     }
 }
 
-#if !defined( PRODUCT ) || defined( JP_DEBUG )
+#if defined(DBG_UTIL) || defined( JP_DEBUG )
 
 void _CheckBoxWidth( const SwTableLine& rLine, SwTwips nSize )
 {

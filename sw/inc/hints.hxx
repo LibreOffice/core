@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hints.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,14 +84,6 @@ public:
     SwFmtChg( SwFmt *pFmt );
 };
 
-
-class SwInsChr: public SwMsgPoolItem
-{
-public:
-    xub_StrLen nPos;
-
-    SwInsChr( USHORT nP );
-};
 
 class SwInsTxt: public SwMsgPoolItem
 {
@@ -214,7 +203,7 @@ public:
 
     USHORT Count() const { return pChgSet->Count(); }
     void ClearItem( USHORT nWhichL = 0 )
-#ifdef PRODUCT
+#ifndef DBG_UTIL
     { pChgSet->ClearItem( nWhichL ); }
 #else
         ;
@@ -269,17 +258,6 @@ public:
 //    const SwTxtNodeTable& GetTxtNodeList() const { return aList; }
 //};
 // <--
-
-class SwNRuleLowerLevel : public SwMsgPoolItem
-{
-    const String& rName;
-    BYTE nLvl;
-public:
-    SwNRuleLowerLevel( const String& rRuleName, BYTE nLevel );
-
-    const String& GetName() const { return rName; }
-    BYTE GetLevel() const { return nLvl; }
-};
 
 class SwFindNearestNode : public SwMsgPoolItem
 {

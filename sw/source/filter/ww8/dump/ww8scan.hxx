@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8scan.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,7 @@
 
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #ifndef WW8STRUC_HXX
 #include <ww8struc.hxx>     // FIB, STSHI, STD
@@ -300,8 +297,7 @@ class WW8PLCFx              // virtueller Iterator fuer Piece Table Exceptions
 public:
     WW8PLCFx( BYTE nFibVersion, BOOL bSprm )
         { bIsSprm = bSprm; nVersion = nFibVersion; }
-
-//  virtual ~WW8PLCFx() {}
+    virtual ~WW8PLCFx() {}
     BOOL IsSprm() { return bIsSprm; }
     virtual ULONG GetIdx() const = 0;
     virtual void SetIdx( ULONG nIdx ) = 0;
@@ -811,7 +807,8 @@ public:
 
 
 
-
+/** FIB - File Information Block
+*/
 class WW8Fib
 {
 public:
@@ -1267,7 +1264,9 @@ public:
 };
 
 
-class WW8Dop            // Document Properties
+/** Document Properties
+*/
+class WW8Dop
 {
 public:
     /*

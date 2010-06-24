@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8graf.cxx,v $
- * $Revision: 1.154.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,51 +28,48 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <hintids.hxx>
 #include <osl/endian.h>
 #include <svx/fmglob.hxx>
 #include <svx/sdtaitm.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/udlnitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/udlnitem.hxx>
 #include <svx/xlineit.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/sxctitm.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdocirc.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/crsditem.hxx>
-#ifndef _SVX_CNTRITEM_HXX
-#include <svx/cntritem.hxx>
-#endif
-#include <svx/shdditem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/impgrf.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <svx/svdoattr.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/rectenum.hxx>
-#include <svx/opaqitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/outliner.hxx>         // #79453#
-#include <svx/frmdiritem.hxx>
+#include <editeng/opaqitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/outliner.hxx>         // #79453#
+#include <editeng/frmdiritem.hxx>
 #include <svx/xfltrit.hxx>
-#include <svx/msdffimp.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 #include <grfatr.hxx>           // class SwCropGrf
 #include <fmtornt.hxx>
 #include <fmtcntnt.hxx>
@@ -97,15 +91,15 @@
 #include "ww8par2.hxx"          // SwWW8StyInf
 #include "ww8graf.hxx"
 #include <fmtinfmt.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 // OD 30.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 
 #include <math.h>
 
@@ -191,13 +185,13 @@ bool SwWW8ImplReader::ReadGrafStart(void* pData, short nDataSiz,
     }
     pStrm->Read(pData, nDataSiz);
 
-    RndStdIds eAnchor = (SVBT8ToByte(pDo->by) < 2) ? FLY_PAGE : FLY_AT_CNTNT;
+    RndStdIds eAnchor = (SVBT8ToByte(pDo->by) < 2) ? FLY_AT_PAGE : FLY_AT_PARA;
     rSet.Put(SwFmtAnchor(eAnchor));
 
     nDrawXOfs2 = nDrawXOfs;
     nDrawYOfs2 = nDrawYOfs;
 
-    if( eAnchor == FLY_AT_CNTNT )
+    if (eAnchor == FLY_AT_PARA)
     {
         if( SVBT8ToByte( pDo->bx ) == 1 )       // Pos: echt links
             nDrawXOfs2 = static_cast< short >(nDrawXOfs2 - maSectionManager.GetPageLeft());
@@ -506,14 +500,15 @@ ESelection SwWW8ImplReader::GetESelection( long nCpStart, long nCpEnd )
 // ItemSet gestopft.
 void SwWW8ImplReader::InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl )
 {
-    if( nColl < nColls && pCollA[nColl].pFmt && pCollA[nColl].bColl )
+    SwWW8StyInf * pStyInf = GetStyle(nColl);
+    if( pStyInf != NULL && pStyInf->pFmt && pStyInf->bColl )
     {
         const SfxPoolItem* pItem;
         for( USHORT i = POOLATTR_BEGIN; i < POOLATTR_END; i++ )
         {
             //If we are set in the source and not set in the destination
             //then add it in.
-            if ( SFX_ITEM_SET == pCollA[nColl].pFmt->GetItemState(
+            if ( SFX_ITEM_SET == pStyInf->pFmt->GetItemState(
                 i, true, &pItem ) )
             {
                 SfxItemPool *pEditPool = rS.GetPool();
@@ -1424,7 +1419,7 @@ const WW8_BordersSO &WW8_BordersSO::Get0x01LineMatch(eBorderCode eCode)
 {
     /*
     // Linien-Defaults in Twips: fruehere Writer-Defaults,
-    //                           siehe auch <svx/boxitem.hxx>
+    //                           siehe auch <editeng/boxitem.hxx>
     #define DEF_LINE_WIDTH_0        1
     #define DEF_LINE_WIDTH_1        20
     #define DEF_LINE_WIDTH_2        50
@@ -2247,7 +2242,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 {
     ASSERT(pRecord || pFSPA, "give me something! to work with for anchoring");
     if (!pRecord && !pFSPA)
-        return FLY_PAGE;
+        return FLY_AT_PAGE;
 
     SvxMSDffImportRec aRecordFromFSPA;
     if (!pRecord)
@@ -2298,7 +2293,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     UINT32 nYRelTo = nCntRelTo > pRecord->nYRelTo ? pRecord->nYRelTo : 1;
 
     // --> OD 2005-03-03 #i43718#
-    RndStdIds eAnchor = IsInlineEscherHack() ? FLY_IN_CNTNT : FLY_AUTO_CNTNT;
+    RndStdIds eAnchor = IsInlineEscherHack() ? FLY_AS_CHAR : FLY_AT_CHAR;
     // <--
 
     SwFmtAnchor aAnchor( eAnchor );
@@ -2462,7 +2457,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
         if (
             (pFSPA->nYaTop < 0) && (eVertOri == text::VertOrientation::NONE) &&
-            ((eAnchor == FLY_AT_CNTNT) || (eAnchor == FLY_AUTO_CNTNT))
+            ((eAnchor == FLY_AT_PARA) || (eAnchor == FLY_AT_CHAR))
            )
         {
             maTracer.Log(sw::log::eNegativeVertPlacement);
@@ -2845,7 +2840,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
 SwFrmFmt *SwWW8ImplReader::AddAutoAnchor(SwFrmFmt *pFmt)
 {
-    if (pFmt && (pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT))
+    if (pFmt && (pFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR))
     {
         sal_uInt16 nTextAreaWidth = static_cast< sal_uInt16 >( maSectionManager.GetPageWidth() -
             maSectionManager.GetPageRight() - maSectionManager.GetPageLeft());
@@ -2860,8 +2855,10 @@ SwFrmFmt *SwWW8ImplReader::AddAutoAnchor(SwFrmFmt *pFmt)
      *
      * Leave to later and set the correct location then.
      */
-    if ((pFmt) && (pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT))
+    if ((pFmt) && (pFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR))
+    {
         pAnchorStck->AddAnchor(*pPaM->GetPoint(), pFmt);
+    }
     return pFmt;
 }
 
@@ -3234,7 +3231,7 @@ void SwWW8ImplReader::GrafikDtor()
 
 void SwWW8FltAnchorStack::AddAnchor(const SwPosition& rPos, SwFrmFmt *pFmt)
 {
-    ASSERT(pFmt->GetAnchor().GetAnchorId() != FLY_IN_CNTNT,
+    ASSERT(pFmt->GetAnchor().GetAnchorId() != FLY_AS_CHAR,
         "Don't use fltanchors with inline frames, slap!");
     NewAttr(rPos, SwFltAnchor(pFmt));
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shellres.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 struct SW_DLLPUBLIC ShellResource : public Resource
@@ -72,6 +69,8 @@ struct SW_DLLPUBLIC ShellResource : public Resource
     String          aStrNone;
     // fuer Felder, die Fixiert sind
     String          aFixedStr;
+    // custom fields of type css::util::Duration
+    String          sDurationFormat;
 
     //names of TOXs
     String          aTOXIndexName;

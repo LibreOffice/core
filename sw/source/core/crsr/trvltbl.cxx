@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: trvltbl.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 #include <hintids.hxx>
 
 #include <vcl/svapp.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <cntfrm.hxx>
@@ -307,7 +304,7 @@ BOOL SwCrsrShell::SelTblBox()
     const SwStartNode* pStartNode =
         pCurCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     // the old code checks whether we're in a table by asking the
     // frame. This should yield the same result as searching for the
     // table box start node, right?

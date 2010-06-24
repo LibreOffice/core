@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: txtatr.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,14 +26,13 @@
  ************************************************************************/
 #ifndef _TXTATR_HXX
 #define _TXTATR_HXX
-#include <tools/gen.hxx>
-#include <tools/color.hxx>
+
 #include <txatbase.hxx>     // SwTxtAttr/SwTxtAttrEnd
 #include <calbck.hxx>
 
+
 class SwTxtNode;    // fuer SwTxtFld
 class SwCharFmt;
-class SvxTwoLinesItem;
 
 // ATT_CHARFMT *********************************************
 
@@ -60,29 +56,36 @@ public:
     USHORT GetSortNumber() const { return m_nSortNumber; }
 };
 
-// ATT_HARDBLANK ******************************
-
-class SwTxtHardBlank : public SwTxtAttr
-{
-    sal_Unicode m_Char;
-
-public:
-    SwTxtHardBlank( const SwFmtHardBlank& rAttr, xub_StrLen nStart );
-    inline sal_Unicode GetChar() const  { return m_Char; }
-};
-
-// ATT_XNLCONTAINERITEM ******************************
-
-class SwTxtXMLAttrContainer : public SwTxtAttrEnd
-{
-public:
-    SwTxtXMLAttrContainer( const SvXMLAttrContainerItem& rAttr,
-                        xub_StrLen nStart, xub_StrLen nEnd );
-};
 
 // ******************************
 
-class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrEnd, public SwClient
+class SwTxtAttrNesting : public SwTxtAttrEnd
+{
+public:
+    SwTxtAttrNesting( SfxPoolItem & i_rAttr,
+        const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
+    virtual ~SwTxtAttrNesting();
+};
+
+class SwTxtMeta : public SwTxtAttrNesting
+{
+private:
+    SwTxtNode * m_pTxtNode;
+
+public:
+    SwTxtMeta( SwFmtMeta & i_rAttr,
+        const xub_StrLen i_nStart, const xub_StrLen i_nEnd );
+    virtual ~SwTxtMeta();
+
+    void ChgTxtNode(SwTxtNode * const pNode);
+    SwTxtNode * GetTxtNode() const { return m_pTxtNode; }
+
+};
+
+
+// ******************************
+
+class SW_DLLPUBLIC SwTxtRuby : public SwTxtAttrNesting, public SwClient
 {
     SwTxtNode* m_pTxtNode;
 
@@ -101,16 +104,7 @@ public:
 
           SwCharFmt* GetCharFmt();
     const SwCharFmt* GetCharFmt() const
-            { return ((SwTxtRuby*)this)->GetCharFmt(); }
-};
-
-// ******************************
-
-class SwTxt2Lines : public SwTxtAttrEnd
-{
-public:
-    SwTxt2Lines( const SvxTwoLinesItem& rAttr,
-                    xub_StrLen nStart, xub_StrLen nEnd );
+            { return (const_cast<SwTxtRuby*>(this))->GetCharFmt(); }
 };
 
 // --------------- Inline Implementierungen ------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ww8par6.cxx,v $
- * $Revision: 1.188.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,63 +29,55 @@
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 #include <stdlib.h>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <rtl/tencinfo.h>
 
 
 #include <hintids.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/shdditem.hxx>
-#ifndef _SVX_CNTRITEM_HXX //autogen
-#include <svx/cntritem.hxx>
-#endif
-#include <svx/crsditem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/orphitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lrspitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
-#include <svx/tstpitem.hxx>
-#endif
-#include <svx/akrnitem.hxx>
-#include <svx/paperinf.hxx>
-#ifndef _SVX_EMPHITEM_HXX //autogen
-#include <svx/emphitem.hxx>
-#endif
-#include <svx/forbiddenruleitem.hxx>
-#include <svx/twolinesitem.hxx>
-#ifndef _SVX_SCRIPSPACEITEM_HXX
-#include <svx/scriptspaceitem.hxx>
-#endif
-#include <svx/hngpnctitem.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/paravertalignitem.hxx>
-#include <svx/pgrditem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/orphitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/pgrditem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <fmtpdsc.hxx>
 #include <node.hxx>
 #include <ndtxt.hxx> // SwTxtNode, siehe unten: JoinNode()
@@ -683,7 +672,8 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
 SwSectionFmt *wwSectionManager::InsertSection(
     SwPaM& rMyPaM, wwSection &rSection)
 {
-    SwSection aSection( CONTENT_SECTION, mrReader.rDoc.GetUniqueSectionName() );
+    SwSectionData aSection( CONTENT_SECTION,
+            mrReader.rDoc.GetUniqueSectionName() );
 
     SfxItemSet aSet( mrReader.rDoc.GetAttrPool(), aFrmFmtSetRange );
 
@@ -696,9 +686,10 @@ SwSectionFmt *wwSectionManager::InsertSection(
     if (0 == mrReader.pWDop->epc)
         aSet.Put( SwFmtEndAtTxtEnd(FTNEND_ATTXTEND));
 
-    aSection.SetProtect(SectionIsProtected(rSection));
+    aSection.SetProtectFlag(SectionIsProtected(rSection));
 
-    rSection.mpSection = mrReader.rDoc.Insert( rMyPaM, aSection, &aSet );
+    rSection.mpSection =
+        mrReader.rDoc.InsertSwSection( rMyPaM, aSection, 0, & aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
         return 0;
@@ -778,6 +769,11 @@ void SwWW8ImplReader::HandleLineNumbering(const wwSection &rSection)
            )
         {
             SwFmtLineNumber aLN;
+            if (const SwFmtLineNumber* pLN
+                = (const SwFmtLineNumber*)GetFmtAttr(RES_LINENUMBER))
+            {
+                aLN.SetCountLines( pLN->IsCount() );
+            }
             aLN.SetStartValue(1 + rSection.maSep.lnnMin);
             NewAttr(aLN);
             pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LINENUMBER);
@@ -841,12 +837,12 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         pWkb->Get(nTest, pData);
         String sSectionName = mrReader.aLinkStringMap[SVBT16ToShort( ((WW8_WKB*)pData)->nLinkId) ];
         mrReader.ConvertFFileName(sSectionName, sSectionName);
-        SwSection aSection(FILE_LINK_SECTION, sSectionName);
+        SwSectionData aSection(FILE_LINK_SECTION, sSectionName);
         aSection.SetLinkFileName( sSectionName );
-        aSection.SetProtect(true);
+        aSection.SetProtectFlag(true);
         // --> CMC, OD 2004-06-18 #i19922# improvement:
         // return value of method <Insert> not used.
-        mrReader.rDoc.Insert(*mrReader.pPaM, aSection, 0 ,false);
+        mrReader.rDoc.InsertSwSection(*mrReader.pPaM, aSection, 0, 0, false);
     }
 
     wwSection aLastSection(*mrReader.pPaM->GetPoint());
@@ -1989,7 +1985,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     nYBind = (( rWW.nSp29 & 0x30 ) >> 4);
     // --> OD 2005-08-24 #i53725# - absolute positioned objects have to be
     // anchored at-paragraph to assure its correct anchor position.
-    eAnchor = FLY_AT_CNTNT;
+    eAnchor = FLY_AT_PARA;
     // <--
     switch (nYBind)
     {
@@ -2269,19 +2265,13 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
         + aSizeArray[WW8_BOT]) );
 }
 
-WW8FlySet::WW8FlySet(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
-    : SfxItemSet(rReader.rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
-{
-    Init(rReader, pPaM);
-}
-
 void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
 {
     if (!rReader.mbNewDoc)
         Reader::ResetFrmFmtAttrs(*this);  // Abstand/Umrandung raus
 
     Put(SvxLRSpaceItem(RES_LR_SPACE)); //inline writer ole2 objects start with 0.2cm l/r
-    SwFmtAnchor aAnchor(FLY_IN_CNTNT);
+    SwFmtAnchor aAnchor(FLY_AS_CHAR);
 
     aAnchor.SetAnchor(pPaM->GetPoint());
     Put(aAnchor);
@@ -2513,8 +2503,10 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
             pWWZOrder->InsertTextLayerObject(pOurNewObject);
         }
 
-        if (FLY_IN_CNTNT != pSFlyPara->eAnchor)
+        if (FLY_AS_CHAR != pSFlyPara->eAnchor)
+        {
             pAnchorStck->AddAnchor(*pPaM->GetPoint(),pSFlyPara->pFlyFmt);
+        }
 
         // merke Pos im Haupttext
         pSFlyPara->pMainTextPos = new SwPosition( *pPaM->GetPoint() );
@@ -2718,7 +2710,9 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
 #       Attribut - Verwaltung
 #**************************************************************************/
 
-void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr )
+void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
+                               const bool bFirstLineOfStSet,
+                               const bool bLeftIndentSet )
 {
     if( !bNoAttrImport ) // zum Ignorieren von Styles beim Doc-Einfuegen
     {
@@ -2728,11 +2722,31 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr )
             pAktColl->SetFmtAttr(rAttr);
         }
         else if (pAktItemSet)
+        {
             pAktItemSet->Put(rAttr);
+        }
         else if (rAttr.Which() == RES_FLTR_REDLINE)
+        {
             mpRedlineStack->open(*pPaM->GetPoint(), rAttr);
+        }
         else
+        {
             pCtrlStck->NewAttr(*pPaM->GetPoint(), rAttr);
+            // --> OD 2010-05-06 #i103711#
+            if ( bFirstLineOfStSet )
+            {
+                const SwNode* pNd = &(pPaM->GetPoint()->nNode.GetNode());
+                maTxtNodesHavingFirstLineOfstSet.insert( pNd );
+            }
+            // <--
+            // --> OD 2010-05-11 #i105414#
+            if ( bLeftIndentSet )
+            {
+                const SwNode* pNd = &(pPaM->GetPoint()->nNode.GetNode());
+                maTxtNodesHavingLeftIndentSet.insert( pNd );
+            }
+            // <--
+        }
 
         if (mpPostProcessAttrsInfo && mpPostProcessAttrsInfo->mbCopy)
             mpPostProcessAttrsInfo->mItemSet.Put(rAttr);
@@ -3200,7 +3214,7 @@ SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
     subscripting to force the graphic into a centered position on the line, so
     we must check when applying sub/super to see if it the subscript range
     contains only a single graphic, and if that graphic is anchored as
-    FLY_IN_CNTNT and then we can change its anchoring to centered in the line.
+    FLY_AS_CHAR and then we can change its anchoring to centered in the line.
     */
     SwFrmFmt *pRet=0;
     SwNodeIndex aBegin(rRegion.Start()->nNode);
@@ -3212,13 +3226,13 @@ SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
     if (
          aBegin == aEnd && nBegin == nEnd - 1 &&
          0 != (pTNd = aBegin.GetNode().GetTxtNode()) &&
-         0 != (pTFlyAttr = pTNd->GetTxtAttr(nBegin, RES_TXTATR_FLYCNT))
+         0 != (pTFlyAttr = pTNd->GetTxtAttrForCharAt(nBegin, RES_TXTATR_FLYCNT))
        )
     {
         const SwFmtFlyCnt& rFly = pTFlyAttr->GetFlyCnt();
         SwFrmFmt *pFlyFmt = rFly.GetFrmFmt();
-        if( pFlyFmt &&
-            FLY_IN_CNTNT == pFlyFmt->GetAnchor().GetAnchorId() )
+        if (pFlyFmt &&
+            (FLY_AS_CHAR == pFlyFmt->GetAnchor().GetAnchorId()))
         {
             pRet = pFlyFmt;
         }
@@ -3234,7 +3248,7 @@ bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
     subscripting to force the graphic into a centered position on the line, so
     we must check when applying sub/super to see if it the subscript range
     contains only a single graphic, and if that graphic is anchored as
-    FLY_IN_CNTNT and then we can change its anchoring to centered in the line.
+    FLY_AS_CHAR and then we can change its anchoring to centered in the line.
     */
     bool bIsGraphicPlacementHack = false;
     USHORT nPos;
@@ -3552,11 +3566,32 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
         //off the stack will keep in sync
         if (!pAktColl && IsListOrDropcap())
         {
-            if (!maFontSrcCharSets.empty())
-                eSrcCharSet = maFontSrcCharSets.top();
+            if (nWhich == RES_CHRATR_CJK_FONT)
+            {
+                if (!maFontSrcCJKCharSets.empty())
+                {
+                    eSrcCharSet = maFontSrcCJKCharSets.top();
+                }
+                else
+                {
+                    eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
+                }
+
+                maFontSrcCJKCharSets.push(eSrcCharSet);
+            }
             else
-                eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
-            maFontSrcCharSets.push(eSrcCharSet);
+            {
+                if (!maFontSrcCharSets.empty())
+                {
+                    eSrcCharSet = maFontSrcCharSets.top();
+                }
+                else
+                {
+                    eSrcCharSet = RTL_TEXTENCODING_DONTKNOW;
+                }
+
+                maFontSrcCharSets.push(eSrcCharSet);
+            }
         }
         return false;
     }
@@ -3586,7 +3621,10 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
         else if (IsListOrDropcap())
         {
             //Add character text encoding to stack
-            maFontSrcCharSets.push(eSrcCharSet);
+            if (nWhich  == RES_CHRATR_CJK_FONT)
+                maFontSrcCJKCharSets.push(eSrcCharSet);
+            else
+                maFontSrcCharSets.push(eSrcCharSet);
         }
     }
 
@@ -3600,6 +3638,13 @@ void SwWW8ImplReader::ResetCharSetVars()
     ASSERT(!maFontSrcCharSets.empty(),"no charset to remove");
     if (!maFontSrcCharSets.empty())
         maFontSrcCharSets.pop();
+}
+
+void SwWW8ImplReader::ResetCJKCharSetVars()
+{
+    ASSERT(!maFontSrcCJKCharSets.empty(),"no charset to remove");
+    if (!maFontSrcCJKCharSets.empty())
+        maFontSrcCJKCharSets.pop();
 }
 
 /*
@@ -3632,7 +3677,10 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
         if( nLen < 0 ) // Ende des Attributes
         {
             pCtrlStck->SetAttr( *pPaM->GetPoint(), nId );
-            ResetCharSetVars();
+            if (nId == RES_CHRATR_CJK_FONT)
+                ResetCJKCharSetVars();
+            else
+                ResetCharSetVars();
         }
         else
         {
@@ -3875,6 +3923,12 @@ void SwWW8ImplReader::Read_NoLineNumb(USHORT , const BYTE* pData, short nLen)
         return;
     }
     SwFmtLineNumber aLN;
+    if (const SwFmtLineNumber* pLN
+        = (const SwFmtLineNumber*)GetFmtAttr(RES_LINENUMBER))
+    {
+        aLN.SetStartValue( pLN->GetStartValue() );
+    }
+
     aLN.SetCountLines( pData && (0 == *pData) );
     NewAttr( aLN );
 }
@@ -3921,6 +3975,13 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         }
     }
 
+    // --> OD 2010-05-06 #i103711#
+    bool bFirstLinOfstSet( false );
+    // <--
+    // --> OD 2010-05-11 #i105414#
+    bool bLeftIndentSet( false );
+    // <--
+
     switch (nId)
     {
         //sprmPDxaLeft
@@ -3929,7 +3990,12 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         case 0x845E:
             aLR.SetTxtLeft( nPara );
             if (pAktColl)
+            {
                 pCollA[nAktColl].bListReleventIndentSet = true;
+            }
+            // --> OD 2010-05-11 #i105414#
+            bLeftIndentSet = true;
+            // <--
             break;
         //sprmPDxaLeft1
         case     19:
@@ -3961,7 +4027,12 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
 
             aLR.SetTxtFirstLineOfst(nPara);
             if (pAktColl)
+            {
                 pCollA[nAktColl].bListReleventIndentSet = true;
+            }
+            // --> OD 2010-05-06 #i103711#
+            bFirstLinOfstSet = true;
+            // <--
             break;
         //sprmPDxaRight
         case     16:
@@ -3973,7 +4044,10 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
             return;
     }
 
-    NewAttr(aLR);
+    // --> OD 2010-05-06 #i103711#
+    // --> OD 2010-05-11 #i105414#
+    NewAttr( aLR, bFirstLinOfstSet, bLeftIndentSet );
+    // <--
 }
 
 // Sprm 20
@@ -4627,7 +4701,7 @@ void SwWW8ImplReader::Read_ParaBackColor(USHORT, const BYTE* pData, short nLen)
 
 sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData,
     bool
-#ifndef PRODUCT
+#ifdef DBG_UTIL
         bVer67
 #endif
     )

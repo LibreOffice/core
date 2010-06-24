@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: swnewtable.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,11 +43,11 @@
 #include <set>
 #include <list>
 #include <memory>
-#include <svx/boxitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/protitem.hxx>
 #include <swtblfmt.hxx>
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
 #define CHECK_TABLE(t)
 #else
 #ifdef DEBUG
@@ -779,7 +776,7 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 
     aFndBox.MakeFrms( *this );
 //  aFndBox.RestoreChartData( *this );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     {
         const SwTableBoxes &rTabBoxes = aLines[0]->GetTabBoxes();
         long nNewWidth = 0;
@@ -909,7 +906,10 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     if( pUndo )
                         pUndo->MoveBoxCntnt( pDoc, aRg, rInsPosNd );
                     else
-                        pDoc->Move( aRg, rInsPosNd, IDocumentContentOperations::DOC_NO_DELFRMS );
+                    {
+                        pDoc->MoveNodeRange( aRg, rInsPosNd,
+                            IDocumentContentOperations::DOC_NO_DELFRMS );
+                    }
                 }
             }
             // Only the cell of the first selected column will stay alive
@@ -2144,7 +2144,7 @@ void SwTable::CleanUpBottomRowSpan( USHORT nDelLines )
     }
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 struct RowSpanCheck
 {
@@ -2178,7 +2178,7 @@ void SwTable::CheckConsistency() const
             if( nRowSp < 0 )
             {
                 ASSERT( aIter != aRowSpanCells.end(), "Missing master box" )
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 //RowSpanCheck &rCheck = *aIter;
 #endif
                 ASSERT( aIter->nLeft == nWidth && aIter->nRight == nNewWidth,

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: mmdocselectpage.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #endif
 
 
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/new.hxx>
 #include <sfx2/docfilt.hxx>
@@ -200,11 +197,11 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
 /*-- 06.04.2004 12:52:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwMailMergeDocSelectPage::commitPage( CommitPageReason _eReason )
+sal_Bool SwMailMergeDocSelectPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     sal_Bool bReturn = sal_False;
-    bool bNext = _eReason == eTravelForward;
-    if(bNext || _eReason == eValidate )
+    bool bNext = _eReason == ::svt::WizardTypes::eTravelForward;
+    if(bNext || _eReason == ::svt::WizardTypes::eValidate )
     {
         ::rtl::OUString sReloadDocument;
         bReturn = m_aCurrentDocRB.IsChecked() ||
@@ -212,7 +209,7 @@ sal_Bool SwMailMergeDocSelectPage::commitPage( CommitPageReason _eReason )
                 ((sReloadDocument = m_sLoadFileName).getLength() && m_aLoadDocRB.IsChecked() )||
                 ((sReloadDocument = m_sLoadTemplateName).getLength() && m_aLoadTemplateRB.IsChecked())||
                 (m_aRecentDocRB.IsChecked() && (sReloadDocument = m_aRecentDocLB.GetSelectEntry()).getLength());
-        if( _eReason == eValidate )
+        if( _eReason == ::svt::WizardTypes::eValidate )
             m_pWizard->SetDocumentLoad(!m_aCurrentDocRB.IsChecked());
 
         if(bNext && !m_aCurrentDocRB.IsChecked())

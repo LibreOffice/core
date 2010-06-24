@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: romenu.cxx,v $
- * $Revision: 1.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,16 +31,12 @@
 
 
 #include <tools/urlobj.hxx>
-#ifndef _GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
-#endif
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sot/formats.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/pathoptions.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/inetimg.hxx>
@@ -51,9 +44,8 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/impgrf.hxx>
 #include <svx/gallery.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 
 
 #include <swunodef.hxx>
@@ -61,30 +53,18 @@
 #include <fmturl.hxx>
 #include <fmtinfmt.hxx>
 #include <docsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <swmodule.hxx>
 #include <romenu.hxx>
 #include <pagedesc.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _DOCVW_HRC
 #include <docvw.hrc>
-#endif
-#ifndef _DOCVW_HRC
 #include <docvw.hrc>
-#endif
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
@@ -92,6 +72,7 @@
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
@@ -233,7 +214,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     else
         EnableItem( MN_READONLY_LOADGRAPHIC, FALSE );
 
-    BOOL bReloadFrame = 0 != rSh.GetView().GetViewFrame()->GetFrame()->GetParentFrame();
+    BOOL bReloadFrame = 0 != rSh.GetView().GetViewFrame()->GetFrame().GetParentFrame();
     EnableItem( MN_READONLY_RELOAD_FRAME,
             bReloadFrame );
     EnableItem( MN_READONLY_RELOAD, !bReloadFrame);
@@ -241,7 +222,6 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     Check( MN_READONLY_EDITDOC,         SID_EDITDOC,        rDis );
     Check( MN_READONLY_SELECTION_MODE,  FN_READONLY_SELECTION_MODE,    rDis );
     Check( MN_READONLY_SOURCEVIEW,      SID_SOURCEVIEW,     rDis );
-    Check( MN_READONLY_BROWSE_STOP,     SID_BROWSE_STOP,    rDis );
     Check( MN_READONLY_BROWSE_BACKWARD, SID_BROWSE_BACKWARD,rDis );
     Check( MN_READONLY_BROWSE_FORWARD,  SID_BROWSE_FORWARD, rDis );
 #ifdef WNT
@@ -333,7 +313,6 @@ void SwReadOnlyPopup::Execute( Window* pWin, USHORT nId )
             rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(SID_RELOAD);
         break;
 
-        case MN_READONLY_BROWSE_STOP:       nExecId = SID_BROWSE_STOP;    break;
         case MN_READONLY_BROWSE_BACKWARD:   nExecId = SID_BROWSE_BACKWARD;break;
         case MN_READONLY_BROWSE_FORWARD:    nExecId = SID_BROWSE_FORWARD; break;
         case MN_READONLY_SOURCEVIEW:        nExecId = SID_SOURCEVIEW;     break;
@@ -415,24 +394,15 @@ static void lcl_GetPreferedExtension( String &rExt, const Graphic &rGrf )
 
 String SwReadOnlyPopup::SaveGraphic( USHORT nId )
 {
-/*  SvtPathOptions aPathOpt;
-    String sGrfPath( aPathOpt.GetGraphicPath() );
-
-    FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
-    Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
-
-//    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
-    INetURLObject aPath;
-    aPath.SetSmartURL( sGrfPath);*/
 
     //Namen der Grafik herausfischen.
     String aName;
     if ( MN_READONLY_SAVEBACKGROUND == nId )
     {
         if ( pItem->GetGraphicLink() )
-            aName = *pItem->GetGraphicLink();
+            sGrfName = *pItem->GetGraphicLink();
         ((SvxBrushItem*)pItem)->SetDoneLink( Link() );
-        const Graphic *pGrf = pItem->GetGraphic( rView.GetDocShell() );
+        const Graphic *pGrf = pItem->GetGraphic();
         if ( pGrf )
         {
             aGraphic = *pGrf;
@@ -442,12 +412,10 @@ String SwReadOnlyPopup::SaveGraphic( USHORT nId )
         else
             return aEmptyStr;
     }
-    else
-        aName = sGrfName;
-    return ExportGraphic( aGraphic, sGrfName, aName );
+    return ExportGraphic( aGraphic, sGrfName );
 }
 
-String ExportGraphic( const Graphic &rGraphic, const String &rGrfName, const String &rName )
+String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
 {
     SvtPathOptions aPathOpt;
     String sGrfPath( aPathOpt.GetGraphicPath() );
@@ -457,18 +425,18 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName, const Str
 
 //    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
     INetURLObject aPath;
-    aPath.SetSmartURL( rName );
+    aPath.SetSmartURL( sGrfPath );
 
     //Namen der Grafik herausfischen.
     String aName = rGrfName;
 
+    aDlgHelper.SetTitle( SW_RESSTR(STR_EXPORT_GRAFIK_TITLE));
+    aDlgHelper.SetDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
     INetURLObject aURL;
     aURL.SetSmartURL( aName );
-    aPath.Append( aURL.GetName() );
-    xFP->setDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
-    xFP->setTitle( SW_RESSTR(STR_EXPORT_GRAFIK_TITLE));
+    aDlgHelper.SetFileName( aURL.GetName() );
 
-    GraphicFilter& rGF = *GetGrfFilter();
+    GraphicFilter& rGF = *GraphicFilter::GetGraphicFilter();
     const USHORT nCount = rGF.GetExportFormatCount();
 
     String aExt( aURL.GetExtension() );

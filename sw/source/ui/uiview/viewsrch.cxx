@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewsrch.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,23 +32,23 @@
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <hintids.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <svx/pageitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #ifndef _T2XTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
 #endif
-#include <svtools/itempool.hxx>
-#include <svtools/eitem.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/eitem.hxx>
+#include <svl/srchitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/srchdlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
-#include "svx/unolingu.hxx"
+#include "editeng/unolingu.hxx"
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <workctrl.hxx>
@@ -428,7 +425,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
         }
         break;
         default:
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             if(nSlot)
             {
                 ByteString sStr( "nSlot: " );
@@ -605,12 +602,12 @@ void SwView::Replace()
     }
     else
     {
-        if (GetPostItMgr()->GetActivePostIt())
+        if (GetPostItMgr()->HasActiveSidebarWin())
             GetPostItMgr()->Replace(pSrchItem);
-        pWrtShell->SwEditShell::Replace( pSrchItem->GetReplaceString(),
+        sal_Bool bReplaced = pWrtShell->SwEditShell::Replace( pSrchItem->GetReplaceString(),
                                             pSrchItem->GetRegExp());
 
-        if( pReplList && pReplList->Count() && pWrtShell->HasSelection() )
+        if( bReplaced && pReplList && pReplList->Count() && pWrtShell->HasSelection() )
         {
             SfxItemSet aReplSet( pWrtShell->GetAttrPool(),
                                     aTxtFmtCollSetRange );

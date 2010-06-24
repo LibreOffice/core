@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewimp.hxx,v $
- * $Revision: 1.36.214.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,14 +35,13 @@
 
 #include <tools/string.hxx>
 
-#include "swtypes.hxx"
-#include "swrect.hxx"
+#include <swtypes.hxx>
+#include <swrect.hxx>
 
 class ViewShell;
 class SwFlyFrm;
 class SwViewOption;
 class SwRegionRects;
-class SwScrollAreas;
 class SwFrm;
 class SwLayAction;
 class SwLayIdle;
@@ -57,17 +53,11 @@ struct SdrPaintProcRec;
 class SwAccessibleMap;
 class SdrObject;
 class Fraction;
-// OD 12.12.2002 #103492#
+class SwPrtOptions;
 class SwPagePreviewLayout;
-// OD 15.01.2003 #103492#
-#ifndef _PREVWPAGE_HXX
-#include <prevwpage.hxx>
-#endif
-// OD 15.01.2003 #103492#
+struct PrevwPage;
 #include <vector>
-// --> OD 2005-12-01 #i27138#
 class SwTxtFrm;
-// <--
 
 class SwViewImp
 {
@@ -88,8 +78,6 @@ class SwViewImp
 
     SwPageFrm     *pFirstVisPage;//Zeigt immer auf die erste sichtbare Seite.
     SwRegionRects *pRegion;      //Sammler fuer Paintrects aus der LayAction.
-    SwScrollAreas *pScrollRects; //Sammler fuer Scrollrects aus der LayAction.
-    SwScrollAreas *pScrolledArea;//Sammler der gescrollten Rechtecke.
 
     SwLayAction   *pLayAct;      //Ist gesetzt wenn ein Action-Objekt existiert
                                  //Wird vom SwLayAction-CTor ein- und vom DTor
@@ -101,17 +89,11 @@ class SwViewImp
     mutable const SdrObject * pSdrObjCached;
     mutable String sSdrObjCachedComment;
 
-    AutoTimer     aScrollTimer;  //Fuer das Aufraeumen nach dem Scrollen.
-
     BOOL bFirstPageInvalid  :1; //Pointer auf erste Seite ungueltig?
-    BOOL bNextScroll        :1; //Scroll in der folgenden EndAction erlaubt?
-    BOOL bScroll            :1; //Scroll in der aktuellen EndAction erlaubt?
-    BOOL bScrolled          :1; //Wurde gescrolled? Dann im Idle aufraeumen.
 
     //BOOL bResetXorVisibility:1; //StartAction/EndAction
     //HMHBOOL bShowHdlPaint     :1; //LockPaint/UnlockPaint
     BOOL bResetHdlHiddenPaint:1;//  -- "" --
-    BOOL bPaintInScroll     :1; //Paint (Update() im ScrollHdl der ViewShell
 
     BOOL bSmoothUpdate      :1; //Meber fuer SmoothScroll
     BOOL bStopSmooth        :1;
@@ -145,21 +127,6 @@ class SwViewImp
     void ResetStopPrt() { bStopPrt = FALSE; }
 
     void SetFirstVisPage();     //Neue Ermittlung der ersten sichtbaren Seite
-
-    void ResetNextScroll()    { bNextScroll = FALSE; }
-    void SetNextScroll()      { bNextScroll = TRUE; }
-    void SetScroll()          { bScroll = TRUE; }
-    void ResetScrolled()      { bScrolled = FALSE; }
-    void SetScrolled()        { bScrolled = TRUE; }
-
-    SwScrollAreas *GetScrollRects() { return pScrollRects; }
-    void FlushScrolledArea();
-    BOOL _FlushScrolledArea( SwRect& rRect );
-    BOOL FlushScrolledArea( SwRect& rRect )
-    { if( !pScrolledArea ) return FALSE; return _FlushScrolledArea( rRect ); }
-    void _ScrolledRect( const SwRect& rRect, long nOffs );
-    void ScrolledRect( const SwRect& rRect, long nOffs )
-    { if( pScrolledArea ) _ScrolledRect( rRect, nOffs ); }
 
     void StartAction();         //Henkel Anzeigen und verstecken.
     void EndAction();           //gerufen von ViewShell::ImplXXXAction
@@ -201,7 +168,7 @@ private:
     */
     void _InvalidateAccessibleParaTextSelection();
 
-    /** invalidate attributes for paragraphs
+    /** invalidate attributes for paragraphs and paragraph's characters
 
         OD 2009-01-06 #i88069#
         implementation for wrapper method
@@ -226,35 +193,12 @@ public:
     inline       SwPageFrm *GetFirstVisPage();
     void SetFirstVisPageInvalid() { bFirstPageInvalid = TRUE; }
 
-    //SS'en fuer Paint- und Scrollrects.
     BOOL AddPaintRect( const SwRect &rRect );
-    void AddScrollRect( const SwFrm *pFrm, const SwRect &rRect, long nOffs );
-    void MoveScrollArea();
     SwRegionRects *GetRegion()      { return pRegion; }
-    void DelRegions();                      //Loescht Scroll- und PaintRects
-
-    //Handler fuer das Refresh von gescrollten Bereichen (Korrektur des
-    //Alignments). Ruft das Refresh mit der ScrolledArea.
-    //RefreshScrolledArea kann z.B. beim Setzen des Crsr genutzt werden, es
-    //wird nur der Anteil des Rect refreshed, der mit der ScrolledArea
-    //ueberlappt. Das 'reingereichte Rechteck wird veraendert!
-    void RestartScrollTimer()            { aScrollTimer.Start(); }
-    DECL_LINK( RefreshScrolledHdl, Timer * );
-    void _RefreshScrolledArea( const SwRect &rRect );
-    void RefreshScrolledArea( SwRect &rRect );
-
-    //Wird vom Layout ggf. waehrend einer Action gerufen, wenn der
-    //Verdacht besteht, dass es etwas drunter und drueber geht.
-    void ResetScroll()        { bScroll = FALSE; }
-
-    BOOL IsNextScroll() const { return bNextScroll; }
-    BOOL IsScroll()     const { return bScroll; }
-    BOOL IsScrolled()   const { return bScrolled; }
-
-    BOOL IsPaintInScroll() const { return bPaintInScroll; }
+    void DelRegion();
 
     // neues Interface fuer StarView Drawing
-    inline BOOL HasDrawView() const { return 0 != pDrawView; }
+    inline BOOL HasDrawView()       const { return 0 != pDrawView; }
           SwDrawView* GetDrawView()       { return pDrawView; }
     const SwDrawView* GetDrawView() const { return pDrawView; }
           SdrPageView*GetPageView()       { return pSdrPageView; }
@@ -270,10 +214,11 @@ public:
     // direction at the outliner of the draw view for painting layers <hell>
     // and <heaven>.
     // OD 25.06.2003 #108784# - correct type of 1st parameter
-    void   PaintLayer  ( const SdrLayerID _nLayerID,
-                         const SwRect& _rRect,
-                         const Color* _pPageBackgrdColor = 0,
-                         const bool _bIsPageRightToLeft = false ) const;
+    void   PaintLayer( const SdrLayerID _nLayerID,
+                       const SwPrtOptions *pPrintData,
+                       const SwRect& _rRect,
+                       const Color* _pPageBackgrdColor = 0,
+                       const bool _bIsPageRightToLeft = false ) const;
 
     //wird als Link an die DrawEngine uebergeben, entscheidet was wie
     //gepaintet wird oder nicht.
@@ -364,20 +309,6 @@ public:
     // Fire all accessible events that have been collected so far
     void FireAccessibleEvents();
 };
-
-//Kann auf dem Stack angelegt werden, wenn etwas ausgegeben oder
-//gescrolled wird. Handles und sontiges vom Drawing werden im CTor
-//gehidet und im DTor wieder sichtbar gemacht.
-//AW 06-Sep99: Hiding of handles is no longer necessary, removed
-//class SwSaveHdl
-//{
-//  SwViewImp *pImp;
-//  BOOL       bXorVis;
-//public:
-//  SwSaveHdl( SwViewImp *pImp );
-//  ~SwSaveHdl();
-//};
-
 
 inline SwPageFrm *SwViewImp::GetFirstVisPage()
 {

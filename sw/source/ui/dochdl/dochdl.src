@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dochdl.src,v $
- * $Revision: 1.48.240.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,14 +72,5 @@ String STR_PRIVATEOLE
 String STR_DDEFORMAT
 {
     Text [ en-US ] = "DDE link" ;
-};
-Bitmap BMP_SW_TEAM_MUGSHOT
-{
-    File ="writerteam.bmp";
-};
-
-String STR_SW_TEAM_NAMES
-{
-    Text = "Back row: Aidan Butler, Hans-Peter Burow, Caolan McNamara, Michael Brauer, Martin Maher, Gunnar Timm\nFront row: Thomas Lange, Oliver-Rainer Duesterhoeft, Henning Brinkmann, Andreas Martens, Oliver Specht, Frank Meies, Daniel Vogelheim";
 };
 

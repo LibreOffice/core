@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: trvlfrm.cxx,v $
- * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <tools/bigint.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/protitem.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <fmtpdsc.hxx>
@@ -1286,7 +1283,7 @@ const SwCntntFrm *SwLayoutFrm::GetCntntPos( Point& rPoint,
             break;
     }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
     ASSERT( pActual, "Keinen Cntnt gefunden." );
     if ( bBodyOnly )
         ASSERT( pActual->IsInDocBody(), "Cnt nicht im Body." );

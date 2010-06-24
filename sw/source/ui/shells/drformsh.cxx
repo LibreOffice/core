@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drformsh.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,13 +33,13 @@
 #include <hintids.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svdview.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -59,7 +56,7 @@
 #include "shells.hrc"
 #include "drwbassh.hxx"
 #include "drformsh.hxx"
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <view.hxx>
 #include <sfx2/docfile.hxx>
 #include <docsh.hxx>

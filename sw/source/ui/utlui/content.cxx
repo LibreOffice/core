@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: content.cxx,v $
- * $Revision: 1.55.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +30,9 @@
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
@@ -109,7 +106,6 @@
 #include <swundo.hxx>
 #include <ndtxt.hxx>
 #include <PostItMgr.hxx>
-#include <postit.hxx>
 #include <postithelper.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
@@ -338,7 +334,8 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
                 (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                 && TOX_HEADER_SECTION != eTmpType )
                 {
-                    const String& rSectionName = pFmt->GetSection()->GetName();
+                    const String& rSectionName =
+                        pFmt->GetSection()->GetSectionName();
                     BYTE nLevel = 0;
                     SwSectionFmt* pParentFmt = pFmt->GetParent();
                     while(pParentFmt)
@@ -700,7 +697,7 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
                 (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
                 && TOX_HEADER_SECTION != eTmpType )
                 {
-                    String sSectionName = pFmt->GetSection()->GetName();
+                    String sSectionName = pFmt->GetSection()->GetSectionName();
 
                     BYTE nLevel = 0;
                     SwSectionFmt* pParentFmt = pFmt->GetParent();
@@ -906,16 +903,17 @@ SwContentTree::SwContentTree(Window* pParent, const ResId& rResId) :
         sRename(SW_RES(ST_RENAME)),
         sReadonlyIdx(SW_RES(ST_READONLY_IDX)),
         sInvisible(SW_RES(ST_INVISIBLE)),
-        sPostItShow(SW_RES(ST_POSTIT_SHOW)),
-        sPostItHide(SW_RES(ST_POSTIT_HIDE)),
-        sPostItDelete(SW_RES(ST_POSTIT_DELETE)),
+
+    sPostItShow(SW_RES(ST_POSTIT_SHOW)),
+    sPostItHide(SW_RES(ST_POSTIT_HIDE)),
+    sPostItDelete(SW_RES(ST_POSTIT_DELETE)),
 
         pHiddenShell(0),
-        pActiveShell(0),
-        pConfig(SW_MOD()->GetNavigationConfig()),
+    pActiveShell(0),
+    pConfig(SW_MOD()->GetNavigationConfig()),
 
         nActiveBlock(0),
-        nHiddenBlock(0),
+    nHiddenBlock(0),
 
         nRootType(USHRT_MAX),
         nLastSelType(USHRT_MAX),
@@ -1353,7 +1351,7 @@ void SwContentTree::Display( sal_Bool bActive )
 {
     if(!bIsImageListInitialized)
     {
-        USHORT nResId = GetDisplayBackground().GetColor().IsDark() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        USHORT nResId = GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
         aEntryImages = ImageList(SW_RES(nResId));
         bIsImageListInitialized = sal_True;
     }
@@ -2672,7 +2670,7 @@ void    SwContentTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
             break;
         case 602:
             {
-                pActiveShell->GetView().GetPostItMgr()->SetActivePostIt(0);
+                pActiveShell->GetView().GetPostItMgr()->SetActiveSidebarWin(0);
                 pActiveShell->GetView().GetPostItMgr()->Delete();
                 break;
             }
@@ -2929,11 +2927,12 @@ void SwContentTree::EditEntry(SvLBoxEntry* pEntry, sal_uInt8 nMode)
         break;
 
         case CONTENT_TYPE_POSTIT:
+            pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
             if(nMode == EDIT_MODE_DELETE)
             {
                 if (((SwPostItContent*)pCnt)->IsPostIt())
                 {
-                    pActiveShell->GetView().GetPostItMgr()->SetActivePostIt(0);
+                    pActiveShell->GetView().GetPostItMgr()->SetActiveSidebarWin(0);
                     pActiveShell->DelRight();
                 }
                 /*
@@ -3097,6 +3096,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
         }
         break;
         case CONTENT_TYPE_POSTIT:
+            pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
             if (((SwPostItContent*)pCnt)->IsPostIt())
                 pActiveShell->GotoFld(*((SwPostItContent*)pCnt)->GetPostIt());
             else
@@ -3140,7 +3140,7 @@ void SwContentTree::GotoContent(SwContent* pCnt)
     }
     SwView& rView = pActiveShell->GetView();
     rView.StopShellTimer();
-    rView.GetPostItMgr()->SetActivePostIt(0);
+    rView.GetPostItMgr()->SetActiveSidebarWin(0);
     rView.GetEditWin().GrabFocus();
 }
 /*-----------------06.02.97 19.14-------------------
@@ -3254,7 +3254,7 @@ void    SwContentTree::DataChanged( const DataChangedEvent& rDCEvt )
   if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        USHORT nResId = GetDisplayBackground().GetColor().IsDark() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        USHORT nResId = GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
         aEntryImages = ImageList(SW_RES(nResId));
         FindActiveTypeAndRemoveUserData();
         Display(sal_True);

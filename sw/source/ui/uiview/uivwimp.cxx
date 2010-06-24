@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: uivwimp.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -335,48 +332,14 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const CLIP_NMSPC::Clip
 
         SfxBindings& rBind = pView->GetViewFrame()->GetBindings();
         rBind.Invalidate( SID_PASTE );
-        rBind.Invalidate( FN_PASTESPECIAL );
+        rBind.Invalidate( SID_PASTE_SPECIAL );
         rBind.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
 }
 
 void SwClipboardChangeListener::AddRemoveListener( BOOL bAdd )
 {
-    try
-    {
-        do {
-
-#ifdef _DONT_WORD_FOR_WEBTOP_
-JP 4.7.2001: change for WebTop - get Clipboard from the Window.
-            Reference< XMultiServiceFactory > xFact(
-                                ::comphelper::getProcessServiceFactory() );
-            if( !xFact.is() )
-                break;
-            Reference< XClipboard > xClipboard( xFact->createInstance(
-                ::rtl::OUString::createFromAscii(
-                    "com.sun.star.datatransfer.clipboard.SystemClipboard" )),
-                UNO_QUERY );
-#else
-            Reference< XClipboard > xClipboard(
-                    pView->GetEditWin().GetClipboard() );
-#endif
-            if( !xClipboard.is() )
-                break;
-
-            Reference< XClipboardNotifier > xClpbrdNtfr( xClipboard, UNO_QUERY );
-            if( xClpbrdNtfr.is() )
-            {
-                Reference< XClipboardListener > xClipEvtLstnr( this );
-                if( bAdd )
-                    xClpbrdNtfr->addClipboardListener( xClipEvtLstnr );
-                else
-                    xClpbrdNtfr->removeClipboardListener( xClipEvtLstnr );
-            }
-        }  while ( FALSE );
-    }
-    catch( const uno::Exception& )
-    {
-    }
+    pView->AddRemoveClipboardListener( Reference< XClipboardListener >( this ), bAdd );
 }
 
 

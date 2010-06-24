@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fldbas.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +32,9 @@
 // #include <math.h>
 #include <float.h>
 #include <rtl/math.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svx/unolingu.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <editeng/unolingu.hxx>
 #ifndef _UNOFLDMID_H
 #include <unofldmid.h>
 #endif
@@ -167,7 +164,7 @@ SwFieldType::SwFieldType( USHORT nWhichId )
     DBG_CTOR( SwFieldType, 0 );
 }
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 
 SwFieldType::~SwFieldType()
 {
@@ -213,7 +210,7 @@ SwField::~SwField()
     Beschreibung: Statt Umweg ueber den Typ
  --------------------------------------------------------------------*/
 
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 USHORT SwField::Which() const
 {
     ASSERT(pType, "Kein Typ vorhanden");
@@ -440,6 +437,23 @@ BOOL SwField::IsFixed() const
     return bRet;
 }
 
+String SwField::ExpandField(bool const bInClipboard) const
+{
+    if (!bInClipboard) // #i85766# do not expand fields in clipboard documents
+    {
+        m_Cache = Expand();
+    }
+    return m_Cache;
+}
+
+SwField * SwField::CopyField() const
+{
+    SwField *const pNew = Copy();
+    // #i85766# cache expansion of source (for clipboard)
+    pNew->m_Cache = Expand();
+    return pNew;
+}
+
 /*--------------------------------------------------------------------
     Beschreibung: Numerierung expandieren
  --------------------------------------------------------------------*/
@@ -611,7 +625,7 @@ SwFieldType* SwValueField::ChgTyp( SwFieldType* pNewType )
 sal_uInt32 SwValueField::GetSystemFormat(SvNumberFormatter* pFormatter, sal_uInt32 nFmt)
 {
     const SvNumberformat* pEntry = pFormatter->GetEntry(nFmt);
-    USHORT nLng = SvxLocaleToLanguage( GetAppLocaleData().getLocale() );
+    USHORT nLng = SvxLocaleToLanguage( SvtSysLocale().GetLocaleData().getLocale() );
 
     if (pEntry && nLng != pEntry->GetLanguage())
     {

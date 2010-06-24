@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: smmod.cxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
@@ -47,7 +44,7 @@
 #endif
 #include <vcl/msgbox.hxx>
 #include <vcl/virdev.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <tools/rtti.hxx>
 #include "smmod.hxx"
 #include "symbol.hxx"
@@ -101,7 +98,7 @@ const String SmLocalizedSymbolData::GetUiSymbolName( const String &rExportName )
 {
     String aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
     USHORT nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
@@ -122,7 +119,7 @@ const String SmLocalizedSymbolData::GetExportSymbolName( const String &rUiName )
 {
     String aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolNamesArray();
     USHORT nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
@@ -143,7 +140,7 @@ const String SmLocalizedSymbolData::GetUiSymbolSetName( const String &rExportNam
 {
     String aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
     USHORT nCount = sal::static_int_cast< xub_StrLen >(rExportNames.Count());
@@ -164,7 +161,7 @@ const String SmLocalizedSymbolData::GetExportSymbolSetName( const String &rUiNam
 {
     String aRes;
 
-    const SmLocalizedSymbolData &rData = SM_MOD1()->GetLocSymbolData();
+    const SmLocalizedSymbolData &rData = SM_MOD()->GetLocSymbolData();
     const ResStringArray &rUiNames = rData.GetUiSymbolSetNamesArray();
     const ResStringArray &rExportNames = rData.GetExportSymbolSetNamesArray();
     USHORT nCount = sal::static_int_cast< xub_StrLen >(rUiNames.Count());
@@ -251,6 +248,8 @@ SmModule::SmModule(SfxObjectFactory* pObjFact) :
 SmModule::~SmModule()
 {
     delete pConfig;
+    if (pColorConfig)
+        pColorConfig->RemoveListener(this);
     delete pColorConfig;
     delete pLocSymbolData;
     delete pSysLocale;
@@ -295,19 +294,14 @@ svtools::ColorConfig & SmModule::GetColorConfig()
     {
         pColorConfig = new svtools::ColorConfig;
         ApplyColorConfigValues( *pColorConfig );
-        StartListening( *pColorConfig );
+        pColorConfig->AddListener(this);
     }
     return *pColorConfig;
 }
 
-void SmModule::Notify( SfxBroadcaster & /*rBC*/, const SfxHint &rHint )
+void SmModule::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
-    if (rHint.ISA(SfxSimpleHint))
-    {
-        ULONG nHintId = ((SfxSimpleHint&)rHint).GetId();
-        if (SFX_HINT_COLORS_CHANGED == nHintId)
-            ApplyColorConfigValues(*pColorConfig);
-    }
+    ApplyColorConfigValues(*pColorConfig);
 }
 
 SmConfig * SmModule::GetConfig()
@@ -317,9 +311,9 @@ SmConfig * SmModule::GetConfig()
     return pConfig;
 }
 
-SmSymSetManager & SmModule::GetSymSetManager()
+SmSymbolManager & SmModule::GetSymbolManager()
 {
-    return GetConfig()->GetSymSetManager();
+    return GetConfig()->GetSymbolManager();
 }
 
 SmLocalizedSymbolData & SmModule::GetLocSymbolData() const

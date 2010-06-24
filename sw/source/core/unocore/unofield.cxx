@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unofield.cxx,v $
- * $Revision: 1.108 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +38,10 @@
 #include <ndtxt.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
-#include <unoobj.hxx>
+#include <unotextrange.hxx>
+#include <unotextcursor.hxx>
 #include <unocoll.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <docstat.hxx>
 #include <editsh.hxx>
 #include <viewsh.hxx>
@@ -88,12 +86,13 @@
 #include <tools/urlobj.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <textapi.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <docsh.hxx>
+#include <fmtmeta.hxx> // MetaFieldManager
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -371,7 +370,7 @@ USHORT lcl_GetPropertyMapOfService( USHORT nServiceId )
     case SW_SERVICE_FIELDTYPE_DUMMY_5:
     case SW_SERVICE_FIELDTYPE_DUMMY_6:
     case SW_SERVICE_FIELDTYPE_DUMMY_7:
-    case SW_SERVICE_FIELDTYPE_DUMMY_8: nRet = PROPERTY_MAP_FLDTYP_DUMMY_0; break;
+                nRet = PROPERTY_MAP_FLDTYP_DUMMY_0; break;
     case SW_SERVICE_FIELDMASTER_USER: nRet = PROPERTY_MAP_FLDMSTR_USER; break;
     case SW_SERVICE_FIELDMASTER_DDE: nRet = PROPERTY_MAP_FLDMSTR_DDE; break;
     case SW_SERVICE_FIELDMASTER_SET_EXP: nRet = PROPERTY_MAP_FLDMSTR_SET_EXP; break;
@@ -784,24 +783,12 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
             }
             uno::Sequence<uno::Reference <text::XDependentTextField> > aRetSeq(aFldArr.Count());
             uno::Reference<text::XDependentTextField>* pRetSeq = aRetSeq.getArray();
-            SwXTextField* pInsert = 0;
             for(USHORT i = 0; i < aFldArr.Count(); i++)
             {
                 pFld = aFldArr.GetObject(i);
-                SwXTextField* pTemp = (SwXTextField*)aIter.First(TYPE(SwXTextField));
-                while(pTemp)
-                {
-                    if(pTemp->GetFldFmt() == pFld)
-                    {
-                        pInsert = pTemp;
-                        break;
-                    }
-                    pTemp = (SwXTextField*)aIter.Next();
-                }
-                if(!pInsert)
-                    pInsert = new SwXTextField( *pFld, GetDoc());
+                SwXTextField * pInsert = CreateSwXTextField(*GetDoc(), *pFld);
+
                 pRetSeq[i] = uno::Reference<text::XDependentTextField>(pInsert);
-                pInsert = 0;
             }
             aRet <<= aRetSeq;
         }
@@ -1079,6 +1066,26 @@ OUString SwXFieldMaster::LocalizeFormula(
     }
     return rFormula;
 }
+
+
+SwXTextField * CreateSwXTextField(SwDoc & rDoc, SwFmtFld const& rFmt)
+{
+    SwClientIter aIter(*rFmt.GetFld()->GetTyp());
+    SwXTextField * pField = 0;
+    SwXTextField * pTemp =
+        static_cast<SwXTextField*>(aIter.First( TYPE(SwXTextField) ));
+    while (pTemp)
+    {
+        if (pTemp->GetFldFmt() == &rFmt)
+        {
+            pField = pTemp;
+            break;
+        }
+        pTemp = static_cast<SwXTextField*>(aIter.Next());
+    }
+    return pField ? pField : new SwXTextField( rFmt, &rDoc );
+}
+
 /******************************************************************
  *
  ******************************************************************/
@@ -1295,7 +1302,7 @@ void SwXTextField::attachToRange(
     {
         SwUnoInternalPaM aPam(*pDoc);
         //das muss jetzt sal_True liefern
-        SwXTextRange::XTextRangeToSwPaM(aPam, xTextRange);
+        ::sw::XTextRangeToSwPaM(aPam, xTextRange);
         SwField* pFld = 0;
         switch(m_nServiceId)
         {
@@ -1809,8 +1816,18 @@ void SwXTextField::attachToRange(
             SwTxtAttr* pTxtAttr = 0;
             if(aPam.HasMark())
                 pDoc->DeleteAndJoin(aPam);
-            pDoc->Insert(aPam, aFmt, 10000);
-            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttr(
+
+            SwXTextCursor const*const pTextCursor(
+                    dynamic_cast<SwXTextCursor*>(pCursor));
+            const bool bForceExpandHints( (pTextCursor)
+                    ? pTextCursor->IsAtEndOfMeta() : false );
+            const SetAttrMode nInsertFlags = (bForceExpandHints)
+                ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
+                : nsSetAttrMode::SETATTR_DEFAULT;
+
+            pDoc->InsertPoolItem(aPam, aFmt, nInsertFlags);
+
+            pTxtAttr = aPam.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
                     aPam.GetPoint()->nContent.GetIndex()-1, RES_TXTATR_FIELD);
 
             // was passiert mit dem Update der Felder ? (siehe fldmgr.cxx)
@@ -1860,8 +1877,8 @@ uno::Reference< text::XTextRange >  SwXTextField::getAnchor(void) throw( uno::Ru
 
         SwPaM aPam(rTxtNode, *pTxtFld->GetStart() + 1, rTxtNode, *pTxtFld->GetStart());
 
-        aRef = SwXTextRange::CreateTextRangeFromPosition(m_pDoc,
-                                *aPam.GetPoint(), aPam.GetMark());
+        aRef = SwXTextRange::CreateXTextRange(
+                *m_pDoc, *aPam.GetPoint(), aPam.GetMark());
     }
     return aRef;
 
@@ -1971,12 +1988,12 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
 
             if (NULL != pDoc)
             {
-                SwPosition * pPos = GetPosition();
-
-                ASSERT(pPos, "no position");
-                pDoc->PutValueToField( *pPos, rValue, pEntry->nWID);
-
-                delete pPos;
+                const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+                if(!pTxtFld)
+                    throw uno::RuntimeException();
+                SwPosition aPosition( pTxtFld->GetTxtNode() );
+                aPosition.nContent = *pTxtFld->GetStart();
+                pDoc->PutValueToField( aPosition, rValue, pEntry->nWID);
             }
             // <- #111840#
         }
@@ -2172,12 +2189,11 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
                         xub_StrLen nHiddenStart;
                         xub_StrLen nHiddenEnd;
 
-                        SwPosition *pPos = pTxtFld->GetPosition();
-                        if (!pPos)
-                            throw uno::RuntimeException();
+                        SwPosition aPosition( pTxtFld->GetTxtNode() );
+                        aPosition.nContent = *pTxtFld->GetStart();
 
-                        bHidden = SwScriptInfo::GetBoundsOfHiddenRange( rTxtNode,
-                                        pPos->nContent.GetIndex(),
+                        bHidden = SwScriptInfo::GetBoundsOfHiddenRange( pTxtFld->GetTxtNode(),
+                                        *pTxtFld->GetStart(),
                                         nHiddenStart, nHiddenEnd );
                     }
 
@@ -2475,23 +2491,6 @@ const SwField*  SwXTextField::GetField() const
     if(GetRegisteredIn() && pFmtFld)
         return  pFmtFld->GetFld();
     return 0;
-}
-
-// #111840#
-SwPosition * SwXTextField::GetPosition()
-{
-    SwPosition * pResult = NULL;
-    const SwFmtFld * pFmtFld2 = GetFldFmt();
-
-    if (pFmtFld2)
-    {
-        const SwTxtFld * pTxtFld = pFmtFld2->GetTxtFld();
-
-        if (pTxtFld)
-            pResult = pTxtFld->GetPosition();
-    }
-
-    return pResult;
 }
 
 /******************************************************************
@@ -2931,6 +2930,22 @@ SwXFieldEnumeration::SwXFieldEnumeration(SwDoc* pDc) :
                 aItems.realloc( 2 * aItems.getLength() );
                 pItems = aItems.getArray();
             }
+        }
+    }
+    // now handle meta-fields, which are not SwFields
+    const ::std::vector< uno::Reference<text::XTextField> > MetaFields(
+           pDc->GetMetaFieldManager().getMetaFields() );
+    for (size_t i = 0; i < MetaFields.size(); ++i)
+    {
+        pItems[ nFillPos ] = MetaFields[i];
+        nFillPos++;
+
+        //FIXME UGLY
+        // enlarge sequence if necessary
+        if (aItems.getLength() == nFillPos)
+        {
+            aItems.realloc( 2 * aItems.getLength() );
+            pItems = aItems.getArray();
         }
     }
     // resize sequence to actual used size

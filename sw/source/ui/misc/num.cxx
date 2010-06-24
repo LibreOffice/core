@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: num.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,10 +44,9 @@
 #include <sfx2/app.hxx>
 #include <sfx2/imgmgr.hxx>
 #include <svx/gallery.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/impgrf.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/numitem.hxx>
 #include <swvset.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
@@ -93,9 +89,9 @@
 #include <SwStyleNameMapper.hxx>
 #include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
-#include <svtools/stritem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/slstitm.hxx>
 
 static BOOL bLastRelative = FALSE;
 
