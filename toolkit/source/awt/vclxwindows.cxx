@@ -42,6 +42,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/XItemList.hpp>
 #include <comphelper/componentcontext.hxx>
@@ -2163,11 +2164,29 @@ void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent ) throw 
 
     pListBox->Clear();
 
+    uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
+    bool localize = xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) );
+    uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
+    if ( xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ) )
+    {
+        xStringResourceResolver.set(
+            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ),
+            uno::UNO_QUERY
+        );
+    }
+
+
     Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
     uno::Sequence< beans::Pair< ::rtl::OUString, ::rtl::OUString > > aItems = xItemList->getAllItems();
     for ( sal_Int32 i=0; i<aItems.getLength(); ++i )
     {
-        pListBox->InsertEntry( aItems[i].First, lcl_getImageFromURL( aItems[i].Second ) );
+        ::rtl::OUString aLocalizationKey( aItems[i].First );
+        if ( xStringResourceResolver.is() && aLocalizationKey.getLength() != 0 && aLocalizationKey[0] == '&' )
+        {
+            aLocalizationKey = xStringResourceResolver->resolveString(aLocalizationKey.copy( 1 ));
+        }
+        pListBox->InsertEntry( aLocalizationKey, lcl_getImageFromURL( aItems[i].Second ) );
     }
 }
 
