@@ -409,7 +409,7 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 #define LIBRARY_CONCAT4( s1, s2, s3, s4 ) \
     s1 s2 s3 s4
 
-#if defined WIN || defined WNT || defined OS2
+#if defined WNT || defined OS2
 #define SVLIBRARY( Base ) \
     LIBRARY_CONCAT3( Base, __DLLEXTENSION, ".DLL" )
 #define SVLIBRARYLANG( Base, Lang ) \
