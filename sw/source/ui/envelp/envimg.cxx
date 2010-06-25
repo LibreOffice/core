@@ -51,7 +51,7 @@
 
 #include <unomid.h>
 
-#ifdef WIN
+#ifdef WNT
 #define NEXTLINE  UniString::CreateFromAscii("\r\n")
 #else
 #define NEXTLINE  '\n'
