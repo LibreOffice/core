@@ -473,7 +473,6 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
     const CGAffineTransform* pTransform = NULL;
 
     const bool bHasCurves = rPolygon.areControlPointsUsed();
-    bool bPendingCurve = false;
     for( int nPointIdx = 0, nPrevIdx = 0;; nPrevIdx = nPointIdx++ )
     {
         int nClosedIdx = nPointIdx;
@@ -488,7 +487,7 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
 
         ::basegfx::B2DPoint aPoint = rPolygon.getB2DPoint( nClosedIdx );
 
-        if(bPixelSnap)
+        if( bPixelSnap)
         {
             // snap device coordinates to full pixels
             aPoint.setX( basegfx::fround( aPoint.getX() ) );
@@ -498,9 +497,19 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
         if( bLineDraw )
             aPoint += aHalfPointOfs;
 
-        if( !nPointIdx )            // first point
+        if( !nPointIdx ) { // first point => just move there
             CGPathMoveToPoint( xPath, pTransform, aPoint.getX(), aPoint.getY() );
-        else if( !bPendingCurve )   // line segment
+            continue;
+        }
+
+        bool bPendingCurve = false;
+        if( bHasCurves )
+        {
+            bPendingCurve = rPolygon.isNextControlPointUsed( nPrevIdx );
+            bPendingCurve |= rPolygon.isPrevControlPointUsed( nClosedIdx );
+        }
+
+        if( !bPendingCurve )    // line segment
             CGPathAddLineToPoint( xPath, pTransform, aPoint.getX(), aPoint.getY() );
         else                        // cubic bezier segment
         {
@@ -514,9 +523,6 @@ static void AddPolygonToPath( CGMutablePathRef xPath,
             CGPathAddCurveToPoint( xPath, pTransform, aCP1.getX(), aCP1.getY(),
                 aCP2.getX(), aCP2.getY(), aPoint.getX(), aPoint.getY() );
         }
-
-        if( bHasCurves )
-            bPendingCurve = rPolygon.isNextControlPointUsed( nClosedIdx );
     }
 
     if( bClosePath )

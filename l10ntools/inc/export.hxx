@@ -461,6 +461,8 @@ public:
             bTitleFirst[ nId ] = true;
         }
      BOOL GetText( ByteString &rReturn, USHORT nTyp, const ByteString &nLangIndex, BOOL bDel = FALSE );
+     BOOL GetTransex3Text( ByteString &rReturn, USHORT nTyp, const ByteString &nLangIndex, BOOL bDel = FALSE );
+
 };
 
 //

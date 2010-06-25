@@ -38,9 +38,12 @@
 #include <uno/mapping.hxx>
 #include "provider.hxx"
 #include "renderer.hxx"
+#include "unowizard.hxx"
 
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include "comphelper/servicedecl.hxx"
+
+#include "cppuhelper/implementationentry.hxx"
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::registry;
@@ -66,6 +69,20 @@ extern sdecl::ServiceDecl const serviceDecl;
     namespace nmspe {   \
         Reference< XInterface > SAL_CALL ImplName##_CreateInstance( const Reference< XMultiServiceFactory >& ); \
     }
+
+namespace
+{
+    static struct ::cppu::ImplementationEntry s_aServiceEntries[] =
+    {
+        {
+            ::svt::uno::Wizard::Create,
+            ::svt::uno::Wizard::getImplementationName_static,
+            ::svt::uno::Wizard::getSupportedServiceNames_static,
+            ::cppu::createSingleComponentFactory, NULL, 0
+        },
+        { 0, 0, 0, 0, 0, 0 }
+    };
+}
 
 // -------------------------------------------------------------------------------------
 
@@ -126,9 +143,9 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
             xNewKey->createKey( aServices.getConstArray()[ i ] );
 
         if ( !component_writeInfoHelper( reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ), reinterpret_cast< registry::XRegistryKey* >( _pRegistryKey ), serviceDecl ) )
-                return false;
+            return false;
 
-        return sal_True;
+        return ::cppu::component_writeInfoHelper( pServiceManager, _pRegistryKey, s_aServiceEntries );
     }
     return sal_False;
 }
@@ -185,6 +202,8 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
         else
         {
             pResult =  component_getFactoryHelper( pImplementationName, reinterpret_cast< lang::XMultiServiceFactory * >( _pServiceManager ),reinterpret_cast< registry::XRegistryKey* >( pRegistryKey ), serviceDecl );
+            if ( !pResult )
+                pResult = ::cppu::component_getFactoryHelper( pImplementationName, _pServiceManager, pRegistryKey, s_aServiceEntries );
         }
 
         if ( xFactory.is() )

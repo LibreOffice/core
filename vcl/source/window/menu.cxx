@@ -32,6 +32,7 @@
 #include "vcl/salinst.hxx"
 #include "tools/list.hxx"
 #include "tools/debug.hxx"
+#include "tools/diagnose_ex.h"
 #include "vcl/svdata.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/mnemonic.hxx"
@@ -3464,6 +3465,9 @@ USHORT PopupMenu::Execute( Window* pExecWindow, const Point& rPopupPos )
 
 USHORT PopupMenu::Execute( Window* pExecWindow, const Rectangle& rRect, USHORT nFlags )
 {
+    ENSURE_OR_RETURN( pExecWindow, "PopupMenu::Execute: need a non-NULL window!", 0 );
+
+
     ULONG nPopupModeFlags = 0;
     if ( nFlags & POPUPMENU_EXECUTE_DOWN )
         nPopupModeFlags = FLOATWIN_POPUPMODE_DOWN;
