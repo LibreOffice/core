@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Module_Module,ooo))
 
-$(eval $(call gb_Module_add_targets,ooo,$(foreach module,\
+$(eval $(call gb_Module_add_moduledirs,ooo,\
     framework \
     sfx2 \
     svl \
@@ -36,6 +36,6 @@ $(eval $(call gb_Module_add_targets,ooo,$(foreach module,\
     sw \
     toolkit \
     tools \
-,$(module)/Module_$(module))))
+))
 
 # vim: set noet ts=4 sw=4:
