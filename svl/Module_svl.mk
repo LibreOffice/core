@@ -25,23 +25,18 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_read_includes,svl,\
-    lib_svl \
-    lib_fsstorage \
-    lib_passwordcontainer \
-    res_svl \
-    package_inc \
-))
+$(eval $(call gb_Module_Module,svl))
 
-$(eval $(call gb_Module_Module,svl,\
-    $(call gb_AllLangResTarget_get_target,svl) \
-    $(call gb_Library_get_target,fsstorage) \
-    $(call gb_Library_get_target,passwordcontainer) \
-    $(call gb_Library_get_target,svl) \
-    $(call gb_Package_get_target,svl_inc) \
+$(eval $(call gb_Module_add_targets,svl,\
+    AllLangResTarget_svl \
+    Library_fsstorage \
+    Library_passwordcontainer \
+    Library_svl \
+    Package_inc \
 ))
-
 
 #todo: dde platform dependent
 #todo: package_inc
 #todo: map file
+
+# vim: set noet ts=4 sw=4:

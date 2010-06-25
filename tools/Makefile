@@ -25,9 +25,13 @@
 #
 #*************************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set)
+endif
+
 GBUILDDIR := $(SOLARENV)/gbuild
 include $(GBUILDDIR)/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,$(patsubst %/,%,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))))
+$(eval $(call gb_Module_make_global_targets))
 
 # vim: set noet sw=4 ts=4:

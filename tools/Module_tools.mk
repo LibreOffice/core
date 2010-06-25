@@ -25,33 +25,30 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,svtools,\
-    $(call gb_AllLangResTarget_get_target,productregistration) \
-    $(call gb_AllLangResTarget_get_target,svt) \
-    $(call gb_Executable_get_target,bmp) \
-    $(call gb_Executable_get_target,bmpsum) \
-    $(call gb_Executable_get_target,g2g) \
-    $(call gb_Library_get_target,hatchwindowfactory) \
-    $(call gb_Library_get_target,productregistration) \
-    $(call gb_Library_get_target,svt) \
-    $(call gb_Package_get_target,svtools_inc) \
+$(eval $(call gb_Module_Module,tools))
+
+$(eval $(call gb_Module_add_targets,tools,\
+    Executable_mkunroll \
+    Executable_rscdep \
+    Executable_so_checksum \
+    Executable_sspretty \
+    Library_tl \
+    Package_inc \
 ))
 
-$(eval $(call gb_Module_read_includes,svtools,\
-    exe_bmp \
-    exe_bmpsum \
-    exe_g2g \
-    lib_hatchwindowfactory \
-    lib_productregistration \
-    lib_svt \
-    package_inc \
-    res_productregistration \
-    res_svt \
-))
+# TODO:
+#COPY tools/unxlngx6.pro/lib/atools.lib unxlngx6.pro/lib/atools.lib
+#COPY tools/unxlngx6.pro/lib/bootstrp2.lib unxlngx6.pro/lib/bootstrp2.lib
+#COPY tools/unxlngx6.pro/lib/btstrp.lib unxlngx6.pro/lib/btstrp.lib
+#COPY tools/unxlngx6.pro/lib/libatools.a unxlngx6.pro/lib/libatools.a
+#COPY tools/unxlngx6.pro/lib/libbootstrp2.a unxlngx6.pro/lib/libbootstrp2.a
+#COPY tools/unxlngx6.pro/lib/libbtstrp.a unxlngx6.pro/lib/libbtstrp.a
+#COPY tools/unxlngx6.pro/lib/libstdstrm.a unxlngx6.pro/lib/libstdstrm.a
+#COPY tools/unxlngx6.pro/lib/stdstrm.lib unxlngx6.pro/lib/stdstrm.lib
+#COPY tools/unxlngx6.pro/obj/pathutils.obj unxlngx6.pro/lib/pathutils-obj.obj
+#COPY tools/unxlngx6.pro/slo/pathutils.obj unxlngx6.pro/lib/pathutils-slo.obj
 
-#todo: javapatchres
-#todo: jpeg on mac in svtools/util/makefile.mk
-#todo: deliver errtxt.src as ehdl.srs
-#todo: nooptfiles filter, filterconfigitem, FilterConfigCache, SvFilterOptionsDialog
-#todo: map file
+#todo: link tools dynamically everywhere
+#todo: ALWAYSDBGFLAG etc.
+
 # vim: set noet sw=4 ts=4:

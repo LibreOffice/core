@@ -25,19 +25,24 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_read_includes,toolkit,\
-    lib_tk \
-    package_inc \
-    package_source \
-    package_util \
-    res_tk \
+$(eval $(call gb_Module_Module,svtools))
+
+$(eval $(call gb_Module_add_targets,svtools,\
+    AllLangResTarget_productregistration \
+    AllLangResTarget_svt \
+    Executable_bmp \
+    Executable_bmpsum \
+    Executable_g2g \
+    Library_hatchwindowfactory \
+    Library_productregistration \
+    Library_svt \
+    Package_inc \
 ))
 
-$(eval $(call gb_Module_Module,toolkit,\
-    $(call gb_AllLangResTarget_get_target,tk) \
-    $(call gb_Library_get_target,tk) \
-    $(call gb_Package_get_target,toolkit_inc) \
-    $(call gb_Package_get_target,toolkit_source) \
-    $(call gb_Package_get_target,toolkit_util) \
-))
+#todo: javapatchres
+#todo: jpeg on mac in svtools/util/makefile.mk
+#todo: deliver errtxt.src as ehdl.srs
+#todo: nooptfiles filter, filterconfigitem, FilterConfigCache, SvFilterOptionsDialog
+#todo: map file
+
 # vim: set noet sw=4 ts=4:

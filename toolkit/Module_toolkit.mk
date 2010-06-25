@@ -25,28 +25,14 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,tools))
+$(eval $(call gb_Module_Module,toolkit))
 
-$(eval $(call gb_Module_add_targets,tools,\
-    exe_mkunroll \
-    exe_rscdep \
-    exe_so_checksum \
-    exe_sspretty \
-    lib_tl \
-    package_inc \
+$(eval $(call gb_Module_add_targets,toolkit,\
+    Library_tk \
+    Package_inc \
+    Package_source \
+    Package_util \
+    AllLangResTarget_tk \
 ))
 
-# TODO:
-#COPY tools/unxlngx6.pro/lib/atools.lib unxlngx6.pro/lib/atools.lib
-#COPY tools/unxlngx6.pro/lib/bootstrp2.lib unxlngx6.pro/lib/bootstrp2.lib
-#COPY tools/unxlngx6.pro/lib/btstrp.lib unxlngx6.pro/lib/btstrp.lib
-#COPY tools/unxlngx6.pro/lib/libatools.a unxlngx6.pro/lib/libatools.a
-#COPY tools/unxlngx6.pro/lib/libbootstrp2.a unxlngx6.pro/lib/libbootstrp2.a
-#COPY tools/unxlngx6.pro/lib/libbtstrp.a unxlngx6.pro/lib/libbtstrp.a
-#COPY tools/unxlngx6.pro/lib/libstdstrm.a unxlngx6.pro/lib/libstdstrm.a
-#COPY tools/unxlngx6.pro/lib/stdstrm.lib unxlngx6.pro/lib/stdstrm.lib
-#COPY tools/unxlngx6.pro/obj/pathutils.obj unxlngx6.pro/lib/pathutils-obj.obj
-#COPY tools/unxlngx6.pro/slo/pathutils.obj unxlngx6.pro/lib/pathutils-slo.obj
-
-#todo: link tools dynamically everywhere
-#todo: ALWAYSDBGFLAG etc.
+# vim: set noet sw=4 ts=4:
