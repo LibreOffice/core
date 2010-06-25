@@ -34,10 +34,6 @@
 
 #define _SV_NOXSOUND
 
-#ifdef WIN
-    #define _MENUBTN_HXX
-#endif
-
 #define _BASE_DLGS_HXX
 #define _BIGINT_HXX
 #define _CACHESTR_HXX
