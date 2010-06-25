@@ -29,6 +29,8 @@
 # Module class
 
 gb_Module_ALLMODULES :=
+gb_Module_CURRENTMODULE :=
+gb_Module_CURRENTMODULELOCATION :=
 gb_Module_MODULELOCATIONS :=
 gb_Module_TARGETSTACK :=
 gb_Module_CLEANTARGETSTACK :=
@@ -54,7 +56,7 @@ endef
 
 # include the file and pop one target from each stack
 define gb_Module_add_target
-include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/target_$(2).mk
+include $(patsubst $(1):%,%,$(filter $(1):%,$(gb_Module_MODULELOCATIONS)))/$(2).mk
 $(call gb_Module_get_target,$(1)) : $$(firstword $$(gb_Module_TARGETSTACK))
 $(call gb_Module_get_clean_target,$(1)) : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
@@ -67,14 +69,21 @@ $(foreach target,$(2),$(call gb_Module_add_target,$(1),$(target)))
 endef
 
 define gb_Module_make_global_targets
-include $(1)/prj/target_module_$(notdir $(1)).mk
+gb_Module_CURRENTMODULELOCATION := $$(dir $$(realpath $$(firstword $(MAKEFILE_LIST))))
+ifneq ($(1),)
+gb_Module_CURRENTMODULE := $(1)
+else
+gb_Module_CURRENTMODULE := $$(notdir $$(patsubst %/,%,$$(gb_Module_CURRENTMODULELOCATION)))
+endif
+
+include $$(gb_Module_CURRENTMODULELOCATION)Module_$$(gb_Module_CURRENTMODULE).mk 
 
 .PHONY : all clean
-all : $(call gb_Module_get_target,$(notdir $(1)))
-    $(call gb_Helper_announce,Partitial build for module $* finished.)
+all : $$(call gb_Module_get_target,$$(gb_Module_CURRENTMODULE))
+    $$(call gb_Helper_announce,Build for module $$(gb_Module_CURRENTMODULE) finished (loaded modules: $$(sort $$(gb_Module_ALLMODULES))).)
 
-clean : $(call gb_Module_get_clean_target,$(notdir $(1)))
-    $(call gb_Helper_announce,Partitial cleanup for module $* finished.)
+clean : $$(call gb_Module_get_clean_target,$$(gb_Module_CURRENTMODULE))
+    $$(call gb_Helper_announce,Cleanup for module $$(gb_Module_CURRENTMODULE) finished (loaded modules: $$(sort $$(gb_Module_ALLMODULES))).)
 
 .DEFAULT_GOAL := all
 

@@ -30,7 +30,7 @@
 
 gb_CObject_REPOS := $(gb_REPOS)
 
-gb_CObject_get_source = $(1)$(2).c
+gb_CObject_get_source = $(1)/$(2).c
 # defined by platform
 #  gb_CObject__command
 #  gb_CObject__command_dep

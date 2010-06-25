@@ -14,24 +14,28 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-ifeq ($(strip $(SOLARENV)),)
-$(error No environment set)
-endif
+$(eval $(call gb_Module_Module,ooo))
 
-GBUILDDIR := $(SOLARENV)/gbuild
-include $(GBUILDDIR)/gbuild.mk
+$(eval $(call gb_Module_add_targets,ooo,$(foreach module,\
+    framework \
+    sfx2 \
+    svl \
+    svtools \
+    xmloff \
+    sw \
+    toolkit \
+    tools \
+,$(module)/Module_$(module))))
 
-$(eval $(call gb_Module_make_global_targets,ooo))
-
-# vim: set noet sw=4 ts=4:
+# vim: set noet ts=4 sw=4:
