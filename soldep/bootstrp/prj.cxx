@@ -57,7 +57,7 @@
 #endif
 #endif
 
-#if defined(DOS) || defined(WNT) || defined(OS2) || defined(WIN)
+#if defined(DOS) || defined(WNT) || defined(OS2)
 #define PATH_DELIMETER '\\'
 #else
 #ifdef UNX
