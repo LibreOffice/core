@@ -73,4 +73,6 @@ $(eval $(call gb_Executable_add_linked_libs,mkunroll,\
     dl \
 ))
 endif
+
+$(info --- $(gb_Module_TARGETSTACK))
 # vim: set noet sw=4 ts=4:

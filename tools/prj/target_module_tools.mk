@@ -25,16 +25,9 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,tools,\
-    $(call gb_Executable_get_target,mkunroll) \
-    $(call gb_Executable_get_target,rscdep) \
-    $(call gb_Executable_get_target,so_checksum) \
-    $(call gb_Executable_get_target,sspretty) \
-    $(call gb_Library_get_target,tl) \
-    $(call gb_Package_get_target,tools_inc) \
-))
+$(eval $(call gb_Module_Module,tools))
 
-$(eval $(call gb_Module_read_includes,tools,\
+$(eval $(call gb_Module_add_targets,tools,\
     exe_mkunroll \
     exe_rscdep \
     exe_so_checksum \
