@@ -53,7 +53,7 @@ class OutputDevice;
 
 #include <vos/ref.hxx>
 
-#if defined(UNX) || defined(WIN) || defined(WNT)
+#if defined(UNX) || defined(WNT)
 #define DEGREE_CHAR ((sal_Unicode)176)   /* 0xB0 = Ansi */
 #endif
 

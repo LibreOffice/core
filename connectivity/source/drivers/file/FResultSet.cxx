@@ -75,12 +75,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
 // Maximale Anzahl von Rows, die mit ORDER BY sortiert durchlaufen werden koennen:
-#if defined (WIN)
-#define MAX_KEYSET_SIZE 0x3ff0  // Etwas weniger als ein Segment, damit
-                                    // noch Platz fuer Memory Debug-Informationen
-#else
 #define MAX_KEYSET_SIZE 0x40000 // 256K
-#endif
 
 namespace
 {

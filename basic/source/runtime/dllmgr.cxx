@@ -34,7 +34,7 @@
 #include <svpm.h>
 #endif
 
-#if defined( WIN ) || defined( WNT )
+#if defined( WNT )
 #ifndef _SVWIN_H
 #undef WB_LEFT
 #undef WB_RIGHT
@@ -47,10 +47,7 @@
 #include <basic/sbxvar.hxx>
 #include <basic/sbx.hxx>
 
-#if defined(WIN)
-typedef HINSTANCE SbiDllHandle;
-typedef FARPROC SbiDllProc;
-#elif defined(WNT)
+#if defined(WNT)
 typedef HMODULE SbiDllHandle;
 typedef int(*SbiDllProc)();
 #elif defined(OS2)
@@ -72,7 +69,7 @@ typedef void* SbiDllProc;
 #endif
 
 extern "C" {
-#if defined(INTEL) && (defined(WIN) || defined(WNT))
+#if defined(INTEL) && defined(WNT)
 
 extern INT16 WINAPI CallINT( SbiDllProc, char *stack, short nstack);
 extern INT32 WINAPI CallLNG( SbiDllProc, char *stack, short nstack);
@@ -273,7 +270,7 @@ SbError SbiDllMgr::Call( const char* pProcName, const char* pDllName,
 
 void SbiDllMgr::CheckDllName( ByteString& rDllName )
 {
-#if defined(WIN) || defined(WNT) || defined(OS2)
+#if defined(WNT) || defined(OS2)
     if( rDllName.Search('.') == STRING_NOTFOUND )
         rDllName += ".DLL";
 #else
@@ -292,12 +289,7 @@ SbiDllHandle SbiDllMgr::CreateDllHandle( const ByteString& rDllName )
     SbiDllHandle hLib;
 #endif
 
-#if defined(WIN)
-    hLib = LoadLibrary( (const char*)rDllName );
-    if( (ULONG)hLib < 32 )
-        hLib = 0;
-
-#elif defined(WNT)
+#if defined(WNT)
     hLib = LoadLibrary( rDllName.GetBuffer() );
     if( !(ULONG)hLib  )
     {
@@ -318,7 +310,7 @@ SbiDllHandle SbiDllMgr::CreateDllHandle( const ByteString& rDllName )
 
 void SbiDllMgr::FreeDllHandle( SbiDllHandle hLib )
 {
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     if( hLib )
         FreeLibrary ((HINSTANCE) hLib);
 #elif defined(OS2)
@@ -354,7 +346,7 @@ SbiDllProc SbiDllMgr::GetProcAddr(SbiDllHandle hLib, const ByteString& rProcName
     strncpy( buf2, "_",  sizeof(buf2)-1 );
     strncat( buf2, buf1, sizeof(buf2)-1-strlen(buf2) );
 
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
     if( nOrd > 0 )
         pProc = (SbiDllProc)GetProcAddress( hLib, (char*)(long) nOrd );
     else
@@ -543,12 +535,7 @@ void* SbiDllMgr::CreateStack( SbxArray* pArgs, USHORT& rSize )
     char* pTop = pStack;
     USHORT nCount = pArgs->Count();
     // erstes Element ueberspringen
-#ifndef WIN
     for( USHORT nCur = 1; nCur < nCount; nCur++ )
-#else
-    // unter 16-Bit Windows anders rum (OS/2 ?????)
-    for( USHORT nCur = nCount-1; nCur >= 1; nCur-- )
-#endif
     {
         SbxVariable* pVar = pArgs->Get( nCur );
         // AB 22.1.1996, Referenz

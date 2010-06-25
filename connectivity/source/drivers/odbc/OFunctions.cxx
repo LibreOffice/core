@@ -109,10 +109,6 @@ sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath)
 
     if (bLoaded)
         return sal_True;
-#ifdef WIN
-    _rPath = ::rtl::OUString::createFromAscii("ODBC.DLL");
-
-#endif
 #ifdef WNT
     _rPath = ::rtl::OUString::createFromAscii("ODBC32.DLL");
 #endif
