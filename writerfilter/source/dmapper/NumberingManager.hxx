@@ -13,7 +13,7 @@ namespace writerfilter {
 namespace dmapper {
 
 class DomainMapper;
-struct StyleSheetEntry;
+class StyleSheetEntry;
 
 
 /** Class representing the numbering level properties.
