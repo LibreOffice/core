@@ -48,11 +48,17 @@ $(call gb_Helper_abbreviate_dirs_native,\
 
 endef
 
-$(call gb_SrsPartMergeTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartMergeTarget_TRANSEXTARGET) $(gb_SrsPartMergeTarget_TRANSEXAUXDEPS)
-    $(call gb_SrsPartMergeTarget__command,$@,$*,$<,$(SDF))
+define gb_SrsPartMergeTarget__rules
+$$(call gb_SrsPartMergeTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartMergeTarget_TRANSEXTARGET) $$(gb_SrsPartMergeTarget_TRANSEXAUXDEPS)
+    $$(call gb_SrsPartMergeTarget__command,$$@,$$*,$$<,$$(SDF))
+
+endef
+
+$(foreach repo,$(gb_SrsPartMergeTarget_REPOS),$(eval $(call gb_SrsPartMergeTarget__rules,$(repo))))
 
 # SrsPartTarget class
 
+gb_SrsPartTarget_REPOS := $(gb_REPOS)
 # defined by platform
 #  gb_SrsPartTarget_RSCTARGET
 #  gb_SrsPartTarget_RSCCOMMAND
@@ -73,21 +79,27 @@ $(call gb_Helper_abbreviate_dirs_native,\
 
 endef
 
-$(call gb_SrsPartTarget_get_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY) | $(gb_SrsPartTarget_RSCTARGET)
-    $(call gb_SrsPartTarget__command_dep,$*,$<,$(INCLUDE),$(DEFS))
-    $(call gb_SrsPartTarget__command,$@,$*,$<,$(INCLUDE),$(DEFS),$(MERGEDFILE))
+define gb_SrsPartTarget__rules
+$$(call gb_SrsPartTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartTarget_RSCTARGET)
+    $$(call gb_SrsPartTarget__command_dep,$$*,$$<,$$(INCLUDE),$$(DEFS))
+    $$(call gb_SrsPartTarget__command,$$@,$$*,$$<,$$(INCLUDE),$$(DEFS),$$(lastword $$< $$(MERGEDFILE)))
 
-$(call gb_SrsPartTarget_get_dep_target,%) : $(SRCDIR)/% $(gb_Helper_MISCDUMMY)
-    $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && \
-        echo '$(call gb_SrsPartTarget_get_target,$*) : $(gb_Helper_PHONY)' > $@)
+$$(call gb_SrsPartTarget_get_dep_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY)
+    $$(call gb_Helper_abbreviate_dirs,\
+        mkdir -p $$(dir $$@) && \
+        echo '$$(call gb_SrsPartTarget_get_target,$$*) : $$(gb_Helper_PHONY)' > $$@)
+
+endef
+
+$(foreach repo,$(gb_SrsPartTarget_REPOS),$(eval $(call gb_SrsPartTarget__rules,$(repo))))
 
 $(call gb_SrsPartTarget_get_dep_target,%) :
-    $(error unable to find resource definition file $(SRCDIR)/$*)
+    $(error unable to find resource definition file $* in repositories: $(gb_SrsPartTarget_REPOS))
+
 
 define gb_SrsPartTarget_SrsPartTarget
 ifeq ($(strip $(WITH_LANG)),)
-$(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(SRCDIR)/$(1)
+$(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := 
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
