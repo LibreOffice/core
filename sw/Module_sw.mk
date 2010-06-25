@@ -25,17 +25,18 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_PrecompiledHeader_PrecompiledHeader,precompiled_sw,$(SRCDIR)/sw/inc/pch/precompiled_sw))
+$(eval $(call gb_Module_Module,sw))
 
-$(eval $(call gb_PrecompiledHeader_set_include,precompiled_sw,\
-    $$(INCLUDE) \
-    -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc \
+$(eval $(call gb_Module_add_targets,sw,\
+    Library_sw \
+    Library_swd \
+    Library_swui \
+    Library_msword \
+    Library_vbaswobj \
+    Package_misc \
+    Package_uiconfig \
+    Package_xml \
+    AllLangResTarget_sw \
 ))
 
-$(eval $(call gb_PrecompiledHeader_set_defs,precompiled_sw,\
-    $$(DEFS) \
-    -DACCESSIBLE_LAYOUT \
-))
-
-# vim: set noet sw=4 ts=4:
+# vim: set noet ts=4 sw=4:
