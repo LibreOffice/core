@@ -84,9 +84,6 @@ public:
     css::uno::Reference<
         css::drawing::framework::XConfiguration> GetCurrentConfiguration (void) const;
 
-    css::uno::Reference<
-        css::drawing::framework::XConfiguration> GetRequestedConfiguration (void) const;
-
     friend class ConfigurationUpdaterLock;
     /** Return a lock of the called ConfigurationUpdater.  While the
         returned object exists no update of the current configuration is

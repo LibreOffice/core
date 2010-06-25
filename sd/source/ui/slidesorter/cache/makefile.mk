@@ -49,7 +49,6 @@ SLOFILES =      							\
     $(SLO)$/SlsCacheCompactor.obj			\
     $(SLO)$/SlsCacheConfiguration.obj		\
     $(SLO)$/SlsGenericPageCache.obj			\
-    $(SLO)$/SlsIdleDetector.obj				\
     $(SLO)$/SlsPageCache.obj				\
     $(SLO)$/SlsPageCacheManager.obj			\
     $(SLO)$/SlsQueueProcessor.obj			\

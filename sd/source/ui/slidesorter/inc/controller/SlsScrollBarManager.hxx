@@ -242,13 +242,6 @@ private:
     void PlaceHorizontalScrollBar (const Rectangle& aArea);
     void PlaceVerticalScrollBar (const Rectangle& aArea);
     void PlaceFiller (const Rectangle& aArea);
-
-    /** Make the height of the content window larger or smaller, so that the
-
-        content size fits exactly in.  This is achieved by changing the size
-        of the parent window and rely on the resulting resize.
-    */
-    void AdaptWindowSize (const Rectangle& rArea);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

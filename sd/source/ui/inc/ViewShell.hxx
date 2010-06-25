@@ -141,10 +141,6 @@ public:
         ::Window* pParentWindow,
         ViewShellBase& rViewShellBase,
         bool bAllowCenter = true);
-    ViewShell (
-        SfxViewFrame *pFrame,
-        ::Window* pParentWindow,
-        const ViewShell& rShell);
     virtual ~ViewShell (void);
 
     /** The Init method has to be called from the outside directly
@@ -235,7 +231,6 @@ public:
     void    InitWindows(const Point& rViewOrigin, const Size& rViewSize,
                         const Point& rWinPos, BOOL bUpdate = FALSE);
     void    InvalidateWindows();
-    void    UpdateWindows();
     /** This method is still used by the OutlineViewShell to update the
         model according to the content of the outline view.  This in turn
         updates the previews in the slide sorter.
@@ -243,8 +238,6 @@ public:
      virtual void UpdatePreview (SdPage* pPage, BOOL bInit = FALSE);
 
     void    DrawMarkRect(const Rectangle& rRect) const;
-    void    DrawFilledRect( const Rectangle& rRect, const Color& rLColor,
-                            const Color& rFColor ) const;
 
     void    ExecReq( SfxRequest &rReq );
 

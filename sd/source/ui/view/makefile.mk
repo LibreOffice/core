@@ -85,7 +85,6 @@ SLOFILES =	\
         $(SLO)$/presvish.obj \
         $(SLO)$/outlview.obj \
         $(SLO)$/tabcontr.obj \
-        $(SLO)$/showview.obj \
         $(SLO)$/bmcache.obj	\
         $(SLO)$/drbezob.obj	\
         $(SLO)$/drtxtob.obj	\

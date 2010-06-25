@@ -37,6 +37,7 @@
 
 namespace sd { namespace toolpanel {
 
+#ifdef SHOW_COLOR_MENU
 /** This factory class is used to create instances of ColorMenu.  It can be
     extended so that its constructor stores arguments that later are passed
     to new ColorMenu objects.
@@ -82,14 +83,10 @@ ColorMenu::~ColorMenu (void)
 }
 
 
-
-
 ::std::auto_ptr<ControlFactory> ColorMenu::CreateControlFactory (void)
 {
     return ::std::auto_ptr<ControlFactory>(new ColorMenuFactory());
 }
-
-
 
 
 /** The preferred size depends on the preferred number of columns, the
@@ -316,5 +313,6 @@ void ColorMenu::Fill (void)
     maSet.InsertItem (++i, rSettings.GetFontColor());
     maSet.SetItemText (i, String::CreateFromAscii("FontColor"));
 }
+#endif
 
 } } // end of namespace ::sd::toolpanel

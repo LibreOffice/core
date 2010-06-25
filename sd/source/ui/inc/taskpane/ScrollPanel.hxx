@@ -131,11 +131,6 @@ public:
         Rectangle& aRectangle,
         ::Window* pWindow);
 
-protected:
-    /** Initiate a rearrangement of the controls.
-    */
-    void ListHasChanged (void);
-
 private:
     ::Control maScrollWindow;
     ScrollBar maVerticalScrollBar;

@@ -163,7 +163,6 @@ public:
             SdOptionsLayout( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsLayout() {}
 
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsLayout& rOpt ) const;
 
     BOOL    IsRulerVisible() const { Init(); return (BOOL) bRuler; }
@@ -220,7 +219,6 @@ public:
             SdOptionsContents( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsContents() {}
 
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsContents& rOpt ) const;
 };
 
@@ -230,7 +228,6 @@ class SD_DLLPUBLIC SdOptionsContentsItem : public SfxPoolItem
 {
 public:
 
-                            SdOptionsContentsItem( USHORT nWhich);
                             SdOptionsContentsItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -301,7 +298,6 @@ public:
             SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsMisc() {}
 
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsMisc& rOpt ) const;
 
     BOOL    IsStartWithTemplate() const { Init(); return (BOOL) bStartWithTemplate; }
@@ -427,7 +423,6 @@ public:
             SdOptionsSnap( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsSnap() {}
 
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsSnap& rOpt ) const;
 
     BOOL    IsSnapHelplines() const { Init(); return (BOOL) bSnapHelplines; }
@@ -494,7 +489,6 @@ public:
             SdOptionsZoom( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsZoom() {}
 
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsZoom& rOpt ) const;
 
     void    GetScale( INT32& rX, INT32& rY ) const { Init(); rX = nX; rY = nY; }
@@ -502,23 +496,6 @@ public:
 };
 
 // -----------------------------------------------------------------------------
-
-class SdOptionsZoomItem : public SfxPoolItem
-{
-public:
-
-                            SdOptionsZoomItem( USHORT nWhich);
-                            SdOptionsZoomItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
-
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
-
-    void                    SetOptions( SdOptions* pOpts ) const;
-
-    SdOptionsZoom&          GetOptionsZoom() { return maOptionsZoom; }
-private:
-    SdOptionsZoom   maOptionsZoom;
-};
 
 // -----------------
 // - SdOptionsGrid -
@@ -569,7 +546,6 @@ class SdOptionsGridItem : public SvxGridItem
 {
 
 public:
-                            SdOptionsGridItem( USHORT nWhich );
                             SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     void                    SetOptions( SdOptions* pOpts ) const;
@@ -616,9 +592,6 @@ public:
             SdOptionsPrint( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsPrint() {}
 
-    void    SetPrinterOptions( const SdOptionsPrint* pOptions );
-
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsPrint& rOpt ) const;
 
     BOOL    IsDraw() const { Init(); return (BOOL) bDraw; }
@@ -700,7 +673,6 @@ public:
                         SdOptions( USHORT nConfigId );
                         virtual ~SdOptions();
 
-    void                SetRangeDefaults( ULONG nOptionRange );
     void                StoreConfig( ULONG nOptionRange = SD_OPTIONS_ALL );
 };
 

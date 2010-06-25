@@ -387,46 +387,6 @@ bool DefaultPageObjectProvider::operator== (const PageObjectProvider& rProvider)
 
 
 
-//===== DefaultPagePreviewProvider ============================================
-
-DefaultPagePreviewProvider::DefaultPagePreviewProvider (void)
-{
-}
-
-
-
-Image DefaultPagePreviewProvider::operator() (
-    int nWidth,
-    SdPage* pPage,
-    ::sd::PreviewRenderer& rRenderer)
-{
-    // Unused parameters.
-    (void)nWidth;
-    (void)pPage;
-    (void)rRenderer;
-
-    return Image();
-}
-
-
-
-
-int DefaultPagePreviewProvider::GetCostIndex (void)
-{
-    return 0;
-}
-
-
-
-
-bool DefaultPagePreviewProvider::NeedsPageObject (void)
-{
-    return false;
-}
-
-
-
-
 //===== ExistingPageProvider ==================================================
 
 ExistingPageProvider::ExistingPageProvider (SdPage* pPage)

@@ -65,7 +65,6 @@ SLO1FILES =      \
         $(SLO)$/unowcntr.obj	\
         $(SLO)$/unokywds.obj	\
         $(SLO)$/unopback.obj	\
-        $(SLO)$/unovwcrs.obj	\
         $(SLO)$/unodoc.obj      \
         $(SLO)$/unomodule.obj	\
         $(SLO)$/randomnode.obj

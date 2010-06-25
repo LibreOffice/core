@@ -37,6 +37,7 @@
 
 namespace sd { namespace toolpanel {
 
+#ifdef SHOW_TEST_PANEL
 /** This factory class is used to create instances of TestPanel.  It can be
     extended so that its constructor stores arguments that later are passed
     to new TestPanel objects.
@@ -163,13 +164,11 @@ TestPanel::~TestPanel (void)
 {
 }
 
-
-
-
 std::auto_ptr<ControlFactory> TestPanel::CreateControlFactory (void)
 {
     return std::auto_ptr<ControlFactory>(new TestPanelFactory());
 }
+#endif
 
 
 } } // end of namespace ::sd::toolpanel

@@ -51,12 +51,6 @@ FadeEffectLB::FadeEffectLB( Window* pParent, SdResId Id )
 {
 }
 
-FadeEffectLB::FadeEffectLB( Window* pParent, WinBits aWB )
-:   ListBox( pParent, aWB ),
-    mpImpl( new FadeEffectLBImpl )
-{
-}
-
 FadeEffectLB::~FadeEffectLB()
 {
     delete mpImpl;

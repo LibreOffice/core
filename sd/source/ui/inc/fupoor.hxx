@@ -98,7 +98,6 @@ public:
     virtual void ScrollEnd() {}     // ForceScroll aufgerufen
 
     void SetWindow(::sd::Window* pWin) { mpWindow = pWin; }
-    void WriteStatus(const String& aStr);  // Statuszeile schreiben
 
     // #97016# II
     virtual void SelectionHasChanged();
@@ -145,7 +144,6 @@ protected:
     virtual ~FuPoor (void);
 
     DECL_LINK( DelayHdl, Timer * );
-    long diffPoint (long pos1, long pos2);
 
     void ImpForceQuadratic(Rectangle& rRect);
 

@@ -77,31 +77,6 @@ void SvUnoWeakContainer::insert( uno::WeakReference< uno::XInterface > xRef ) th
     mpList->Insert( new uno::WeakReference< uno::XInterface >( xRef ) );
 }
 
-/** removes the given ref from this container */
-void SvUnoWeakContainer::remove( uno::WeakReference< uno::XInterface > xRef ) throw()
-{
-    uno::WeakReference< uno::XInterface >* pRef = mpList->First();
-    while( pRef )
-    {
-        uno::Reference< uno::XInterface > xTestRef( *pRef );
-        if(!xTestRef.is())
-        {
-            delete mpList->Remove();
-            pRef = mpList->GetCurObject();
-        }
-        else
-        {
-            if( *pRef == xRef )
-            {
-                delete mpList->Remove();
-                break;
-            }
-
-            pRef = mpList->Next();
-        }
-    }
-}
-
 /** searches the container for a ref that returns true on the given
     search function
 */

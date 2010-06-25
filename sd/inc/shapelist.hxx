@@ -62,10 +62,6 @@ namespace sd
             returns the first shape if pObj is 0 */
         SdrObject* getNextShape(SdrObject* pObj) const;
 
-        /** returns the shape prior to the given shape in the list or 0
-            returns the last shape if pObj is 0 */
-        SdrObject* getPreviousShape( SdrObject* pObj ) const;
-
         /**
         */
         SdrObject* getNextShape();

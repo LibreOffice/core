@@ -908,22 +908,6 @@ css::rendering::ViewState PresenterCanvas::MergeViewState (
 
 
 
-Reference<rendering::XCanvas> PresenterCanvas::GetSharedCanvas (void) const
-{
-    return mxSharedCanvas;
-}
-
-
-
-
-void PresenterCanvas::SetClip (const awt::Rectangle& rClipRectangle)
-{
-    maClipRectangle = rClipRectangle;
-}
-
-
-
-
 awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWindow)
 {
     mbOffsetUpdatePending = false;

@@ -67,11 +67,6 @@ public:
         ::Window* pParentWindow,
         FrameView* pFrameView = NULL);
 
-    OutlineViewShell (
-        SfxViewFrame* pFrame,
-        ::Window* pParentWindow,
-        const OutlineViewShell& rShell);
-
     virtual ~OutlineViewShell (void);
 
     virtual void Shutdown (void);
