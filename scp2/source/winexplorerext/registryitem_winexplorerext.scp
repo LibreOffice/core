@@ -35,8 +35,8 @@ RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer
     ModuleID = gid_Module_Optional_Winexplorerext;
     Styles = (X64);
     Subkey = "CLSID\{087B3AE3-E237-4467-B8DB-5A38AB959AC9}\InprocServer32";
-    Value = "[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl.dll";
-    Val64 = "[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl_x64.dll";
 End
 
 RegistryItem gid_Regitem_Clsid_087B3AE3_E237_4467_B8DB_5A38AB959AC9_InProcServer32_ThreadingModel
@@ -58,8 +58,8 @@ RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer
     ModuleID = gid_Module_Optional_Winexplorerext;
     Styles = (X64);
     Subkey = "CLSID\{3B092F0C-7696-40E3-A80F-68D74DA84210}\InprocServer32";
-    Value = "[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl.dll";
-    Val64 = "[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl_x64.dll";
 End
 
 RegistryItem gid_Regitem_Clsid_3B092F0C_7696_40E3_A80F_68D74DA84210_InProcServer32_ThreadingModel
@@ -90,8 +90,8 @@ RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer
     ModuleID = gid_Module_Optional_Winexplorerext;
     Styles = (X64);
     Subkey = "CLSID\{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}\InprocServer32";
-    Value = "[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl.dll";
-    Val64 = "[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl_x64.dll";
 End
     
 RegistryItem gid_Regitem_Clsid_C52AF81D_F7A0_4AAB_8E87_F80A60CCD396_InProcServer32_ThreadingModel
@@ -124,8 +124,8 @@ RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer
     ModuleID = gid_Module_Root;
     Subkey = "CLSID\{7BC0E710-5703-45BE-A29D-5D46D8B39262}\InprocServer32";
     Styles = (X64); // Values: X64 / X64_ONLY
-    Value = "[BASISINSTALLLOCATION]program\shlxthdl\ooofilt.dll";
-    Val64 = "[BASISINSTALLLOCATION]program\shlxthdl\ooofilt_x64.dll";
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\ooofilt.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\ooofilt_x64.dll";
 End
 
 RegistryItem gid_Regitem_Clsid_7BC0E710_5703_45BE_A29D_5D46D8B39262_InProcServer32_ThreadingModel
@@ -167,8 +167,8 @@ RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer
     ModuleID = gid_Module_Optional_Winexplorerext;
     Styles = (X64);
     Subkey = "CLSID\{63542C48-9552-494A-84F7-73AA6A7C99C1}\InprocServer32";
-    Value = "[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl.dll";
-    Val64 = "[BASISINSTALLLOCATION]program\shlxthdl\shlxthdl_x64.dll";
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\shlxthdl_x64.dll";
 End
 
 RegistryItem gid_Regitem_Clsid_63542C48_9552_494A_84F7_73AA6A7C99C1_InProcServer32_ThreadingModel
@@ -201,8 +201,8 @@ RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer
     ComponentCondition = "VersionNT >= 600";
     Styles = (X64);
     Subkey = "CLSID\{AE424E85-F6DF-4910-A6A9-438797986431}\InprocServer32";
-    Value = "[BASISINSTALLLOCATION]program\shlxthdl\propertyhdl.dll";
-    Val64 = "[BASISINSTALLLOCATION]program\shlxthdl\propertyhdl_x64.dll";
+    Value = "[INSTALLLOCATION]Basis\program\shlxthdl\propertyhdl.dll";
+    Val64 = "[INSTALLLOCATION]Basis\program\shlxthdl\propertyhdl_x64.dll";
 End
 
 RegistryItem gid_Regitem_Clsid_AE424E85_F6DF_4910_A6A9_438797986431_InProcServer32_ThreadingModel

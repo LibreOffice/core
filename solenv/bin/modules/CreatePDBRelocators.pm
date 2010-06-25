@@ -186,7 +186,7 @@ sub collect_files
         # collect all binary executables on o:
         my @bin = $self->find_binary_execs("$template/bin");
         my @bin_so = $self->find_binary_execs("$template/bin/so");
-        @$filesref = (@lib, @lib_so, @mac_lib, @mac_lib_so, @bin, @bin_so);
+        push(@$filesref, (@lib, @lib_so, @mac_lib, @mac_lib_so, @bin, @bin_so));
     }
     return 1;
 }
