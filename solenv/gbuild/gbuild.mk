@@ -211,44 +211,7 @@ include $(foreach class,\
     alllangres\
     package\
     pch\
+    module\
 ,$(GBUILDDIR)/$(class).mk)
-
-# Module class
-
-gb_Module_ALLMODULES :=
-
-.PHONY : $(call gb_Module_get_clean_target,%)
-$(call gb_Module_get_clean_target,%) :
-    $(call gb_Helper_announce,Cleaning up module $* ...)
-    -$(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_Module_get_target,$*))
-
-$(call gb_Module_get_target,%) :
-    $(call gb_Helper_announce,Completed module $* ...)
-    -$(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && \
-        touch $@)
-
-define gb_Module_Module
-$(call gb_Module_get_target,$(1)) : $(2)
-$(call gb_Module_get_clean_target,$(1)) : $$(foreach target,$(2),$(call gb_Helper_get_outdir_clean_target,$$(target)))
-gb_Module_ALLMODULES += $(1)
-
-endef
-
-define gb_Module_make_global_targets
-include $(SRCDIR)/$(1)/prj/target_module_$(1).mk
-
-.PHONY : all clean
-all : $(call gb_Module_get_target,$(1))
-clean : $(call gb_Module_get_clean_target,$(1))
-.DEFAULT_GOAL := all
-
-endef
-
-define gb_Module_read_includes
-include $$(foreach targetdef,$(2),$(SRCDIR)/$(1)/prj/target_$$(targetdef).mk)
-
-endef
 
 # vim: set noet sw=4 ts=4:

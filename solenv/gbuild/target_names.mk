@@ -119,4 +119,10 @@ gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
 gb_PackagePart_get_destinations = $(OUTDIR)/xml $(OUTDIR)/inc
 gb_ResTarget_get_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
 
+define gb_Module_register_target
+gb_Module_TARGETSTACK := $(1) $(gb_Module_TARGETSTACK)
+gb_Module_CLEANTARGETSTACK := $(2) $(gb_Module_CLEANTARGETSTACK)
+
+endef
+
 # vim: set noet sw=4 ts=4:
