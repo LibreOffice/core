@@ -60,6 +60,7 @@ SLOFILES = \
     $(SLO)$/lockfailed.obj \
     $(SLO)$/trylater.obj \
     $(SLO)$/newerverwarn.obj \
+    $(SLO)$/nameclashdlg.obj \
     $(SLO)$/passwordcontainer.obj
 
 SRS1NAME=$(TARGET)
@@ -81,6 +82,7 @@ SRC1FILES = \
     alreadyopen.src\
     lockfailed.src\
     trylater.src\
+    nameclashdlg.src\
     newerverwarn.src
 
 .INCLUDE: target.mk
