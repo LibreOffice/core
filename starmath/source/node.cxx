@@ -831,8 +831,9 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         return;
 
     // make distance depend on font size
-    long  nDist = +(rFormat.GetDistance(DIS_HORIZONTAL)
-                    * GetFont().GetSize().Height()) / 100L;
+    long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetSize().Height()) / 100L;
+    if (!IsUseExtraSpaces())
+        nDist = 0;
 
     Point   aPos;
     for (i = 0;  i < nSize;  i++)

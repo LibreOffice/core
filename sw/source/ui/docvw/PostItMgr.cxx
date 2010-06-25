@@ -1304,7 +1304,7 @@ void SwPostItMgr::Delete()
     CalcRects();
     LayoutPostIts();
 }
-
+#if 0
 void SwPostItMgr::Hide(SwPostItField* pPostItField )
 {
     for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
@@ -1323,7 +1323,7 @@ void SwPostItMgr::Hide(SwPostItField* pPostItField )
 
     LayoutPostIts();
 }
-
+#endif
 void SwPostItMgr::Hide( const String& rAuthor )
 {
     for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
@@ -1396,30 +1396,6 @@ sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const SwPostItFie
             return dynamic_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt);
     }
     return NULL;
-}
-
-bool SwPostItMgr::ShowPreview(const SwField* pFld, SwFmtFld*& pFmtFld) const
-{
-    for (unsigned long n=0;n<mPages.size();n++)
-    {
-        if (mPages[n]->mList->size()>0)
-        {
-            for(const_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
-            {
-                if ( (*i)->GetFmtFld() && ((*i)->GetFmtFld()->GetFld()==pFld) )
-                {
-                    pFmtFld = (*i)->GetFmtFld();
-                    const long aSidebarheight = mPages[n]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
-                    bool bTopPage = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y())).Y() >= (mPages[n]->mPageRect.Top()+aSidebarheight);
-                    bool bBottomPage  = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y()+(*i)->pPostIt->GetSizePixel().Height())).Y() <= (mPages[n]->mPageRect.Bottom()-aSidebarheight);
-                    const bool bTopVis = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y())).Y() > mpView->GetVisArea().Top();
-                    const bool bBottomVis  = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y()/*+(*i)->pPostIt->GetSizePixel().Height()*/)).Y() <= mpView->GetVisArea().Bottom();
-                    return !(bBottomPage && bTopPage && bBottomVis && bTopVis);
-                }
-            }
-        }
-    }
-    return false;
 }
 
 SwSidebarWin* SwPostItMgr::GetNextPostIt( USHORT aDirection,

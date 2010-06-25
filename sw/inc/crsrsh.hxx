@@ -748,6 +748,7 @@ public:
     BOOL GoStartSentence();
     BOOL GoEndSentence();
     BOOL SelectWord( const Point* pPt = 0 );
+    BOOL ExpandToSentenceBorders();
 
     // Position vom akt. Cursor erfragen
     BOOL IsStartWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES )const;

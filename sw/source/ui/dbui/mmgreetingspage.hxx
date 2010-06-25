@@ -122,7 +122,7 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
 
     virtual void    UpdatePreview();
     virtual void        ActivatePage();
-    virtual sal_Bool    commitPage( CommitPageReason _eReason );
+    virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 public:
         SwMailMergeGreetingsPage( SwMailMergeWizard* _pParent);
         ~SwMailMergeGreetingsPage();

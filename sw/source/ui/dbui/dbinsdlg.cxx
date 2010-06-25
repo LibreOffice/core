@@ -1911,7 +1911,7 @@ void SwInsertDBColAutoPilot::Load()
                 SwInsDBColumn& rSet = *aDBColumns[ n ];
                 for( USHORT m = 0; m < pNewData->aDBColumns.Count() ; ++m )
                 {
-                    const SwInsDBColumn& rGet = *pNewData->aDBColumns[ m ];
+                    SwInsDBColumn& rGet = *pNewData->aDBColumns[ m ];
                     if(rGet.sColumn == rSet.sColumn)
                     {
                         if( rGet.bHasFmt && !rGet.bIsDBFmt )
@@ -1923,8 +1923,10 @@ void SwInsertDBColAutoPilot::Load()
                             {
                                 xub_StrLen nCheckPos;
                                 short nType;
-                                rNFmtr.PutEntry( (String&)rGet.sUsrNumFmt, nCheckPos, nType,
+                                String sTmpFmt = rGet.sUsrNumFmt;
+                                rNFmtr.PutEntry( sTmpFmt, nCheckPos, nType,
                                                 rSet.nUsrNumFmt, rGet.eUsrNumFmtLng );
+                                rGet.sUsrNumFmt = sTmpFmt;
                             }
                         }
                         break;

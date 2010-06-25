@@ -1440,6 +1440,13 @@ void DocxAttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_
     OSL_TRACE( "TODO: DocxAttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )\n" );
 }
 
+void DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
+{
+#if OSL_DEBUG_LEVEL > 0
+    fprintf( stderr, "TODO: DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )\n" );
+#endif
+}
+
 void DocxAttributeOutput::TableRowEnd( sal_uInt32 /*nDepth*/ )
 {
     OSL_TRACE( "TODO: DocxAttributeOutput::TableRowEnd( sal_uInt32 nDepth = 1 )\n" );

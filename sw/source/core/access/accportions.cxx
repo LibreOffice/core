@@ -259,12 +259,6 @@ sal_Bool SwAccessiblePortionData::IsReadOnlyPortion( size_t nPortionNo ) const
     return IsPortionAttrSet(nPortionNo, PORATTR_READONLY);
 }
 
-sal_Bool SwAccessiblePortionData::IsGrayPortion( size_t nPortionNo ) const
-{
-    return IsPortionAttrSet(nPortionNo, PORATTR_GRAY);
-}
-
-
 sal_Bool SwAccessiblePortionData::IsGrayPortionType( USHORT nType ) const
 {
     // gray portions?

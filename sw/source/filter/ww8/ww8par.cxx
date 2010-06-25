@@ -573,59 +573,62 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             aSet.Put( SdrTextVertAdjustItem( eTVA ) );
             aSet.Put( SdrTextHorzAdjustItem( eTHA ) );
 
-            pObj->SetMergedItemSet(aSet);
-            pObj->SetModel(pSdrModel);
-
-            if (bVerticalText && dynamic_cast< SdrTextObj* >( pObj ) )
-                dynamic_cast< SdrTextObj* >( pObj )->SetVerticalWriting(sal_True);
-
-            if ( bIsSimpleDrawingTextBox )
+            if (pObj != NULL)
             {
-                if ( nTextRotationAngle )
+                pObj->SetMergedItemSet(aSet);
+                pObj->SetModel(pSdrModel);
+
+                if (bVerticalText && dynamic_cast< SdrTextObj* >( pObj ) )
+                    dynamic_cast< SdrTextObj* >( pObj )->SetVerticalWriting(sal_True);
+
+                if ( bIsSimpleDrawingTextBox )
                 {
-                    long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
-                        rTextRect.GetWidth() : rTextRect.GetHeight();
-                    nMinWH /= 2;
-                    Point aPivot(rTextRect.TopLeft());
-                    aPivot.X() += nMinWH;
-                    aPivot.Y() += nMinWH;
-                    double a = nTextRotationAngle * nPi180;
-                    pObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
+                    if ( nTextRotationAngle )
+                    {
+                        long nMinWH = rTextRect.GetWidth() < rTextRect.GetHeight() ?
+                            rTextRect.GetWidth() : rTextRect.GetHeight();
+                        nMinWH /= 2;
+                        Point aPivot(rTextRect.TopLeft());
+                        aPivot.X() += nMinWH;
+                        aPivot.Y() += nMinWH;
+                        double a = nTextRotationAngle * nPi180;
+                        pObj->NbcRotate(aPivot, nTextRotationAngle, sin(a), cos(a));
+                    }
                 }
-            }
 
-            if ( ( ( rObjData.nSpFlags & SP_FFLIPV ) || mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj ) )
-            {
-                SdrObjCustomShape* pCustomShape = dynamic_cast< SdrObjCustomShape* >( pObj );
-
-                double fExtraTextRotation = 0.0;
-                if ( mnFix16Angle && !( GetPropertyValue( DFF_Prop_FitTextToShape ) & 4 ) )
-                {   // text is already rotated, we have to take back the object rotation if DFF_Prop_RotateText is false
-                    fExtraTextRotation = -mnFix16Angle;
-                }
-                if ( rObjData.nSpFlags & SP_FFLIPV )    // sj: in ppt the text is flipped, whereas in word the text
-                {                                       // remains unchanged, so we have to take back the flipping here
-                    fExtraTextRotation += 18000.0;      // because our core will flip text if the shape is flipped.
-                }
-                fExtraTextRotation += nTextRotationAngle;
-                if ( !::basegfx::fTools::equalZero( fExtraTextRotation ) )
+                if ( ( ( rObjData.nSpFlags & SP_FFLIPV ) || mnFix16Angle || nTextRotationAngle ) && dynamic_cast< SdrObjCustomShape* >( pObj ) )
                 {
-                    fExtraTextRotation /= 100.0;
-                    SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                    const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
-                    com::sun::star::beans::PropertyValue aPropVal;
-                    aPropVal.Name = sTextRotateAngle;
-                    aPropVal.Value <<= fExtraTextRotation;
-                    aGeometryItem.SetPropertyValue( aPropVal );
-                    pCustomShape->SetMergedItem( aGeometryItem );
+                    SdrObjCustomShape* pCustomShape = dynamic_cast< SdrObjCustomShape* >( pObj );
+
+                    double fExtraTextRotation = 0.0;
+                    if ( mnFix16Angle && !( GetPropertyValue( DFF_Prop_FitTextToShape ) & 4 ) )
+                    {   // text is already rotated, we have to take back the object rotation if DFF_Prop_RotateText is false
+                        fExtraTextRotation = -mnFix16Angle;
+                    }
+                    if ( rObjData.nSpFlags & SP_FFLIPV )    // sj: in ppt the text is flipped, whereas in word the text
+                    {                                       // remains unchanged, so we have to take back the flipping here
+                        fExtraTextRotation += 18000.0;      // because our core will flip text if the shape is flipped.
+                    }
+                    fExtraTextRotation += nTextRotationAngle;
+                    if ( !::basegfx::fTools::equalZero( fExtraTextRotation ) )
+                    {
+                        fExtraTextRotation /= 100.0;
+                        SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
+                        const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+                        com::sun::star::beans::PropertyValue aPropVal;
+                        aPropVal.Name = sTextRotateAngle;
+                        aPropVal.Value <<= fExtraTextRotation;
+                        aGeometryItem.SetPropertyValue( aPropVal );
+                        pCustomShape->SetMergedItem( aGeometryItem );
+                    }
                 }
-            }
-            else if ( mnFix16Angle )
-            {
-                // rotate text with shape ?
-                double a = mnFix16Angle * nPi180;
-                pObj->NbcRotate( rObjData.aBoundRect.Center(), mnFix16Angle,
-                    sin( a ), cos( a ) );
+                else if ( mnFix16Angle )
+                {
+                    // rotate text with shape ?
+                    double a = mnFix16Angle * nPi180;
+                    pObj->NbcRotate( rObjData.aBoundRect.Center(), mnFix16Angle,
+                                     sin( a ), cos( a ) );
+                }
             }
         }
         else if( !pObj )
