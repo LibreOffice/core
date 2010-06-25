@@ -25,31 +25,16 @@
 #
 #*************************************************************************
 
-include $(foreach targetdef,\
-    lib_fwe \
-    lib_fwi \
-    lib_fwk \
-    lib_fwl \
-    lib_fwm \
-    package_dtd \
-    package_inc \
-    package_uiconfig \
-    package_unotypes \
-    res_fwe \
-,$(SRCDIR)/framework/prj/target_$(targetdef).mk)
+$(eval $(call gb_Module_Module,xmloff))
 
-
-$(eval $(call gb_Module_Module,framework,\
-    $(call gb_AllLangResTarget_get_target,fwe) \
-    $(call gb_Library_get_target,fwe) \
-    $(call gb_Library_get_target,fwi) \
-    $(call gb_Library_get_target,fwk) \
-    $(call gb_Library_get_target,fwl) \
-    $(call gb_Library_get_target,fwm) \
-    $(call gb_Library_get_target,fwe) \
-    $(call gb_Package_get_target,framework_dtd) \
-    $(call gb_Package_get_target,framework_inc) \
-    $(call gb_Package_get_target,framework_uiconfig) \
-    $(call gb_Package_get_target,framework_unotypes) \
+$(eval $(call gb_Module_add_targets,xmloff,\
+    Library_xo \
+    Library_xof \
+    Package_dtd \
+    Package_inc \
 ))
+
+#todo: map file
+#todo: xmlkywd.lib - built, but never used?!
+
 # vim: set noet ts=4 sw=4:

@@ -25,20 +25,19 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,xmloff,\
-    $(call gb_Library_get_target,xo) \
-    $(call gb_Library_get_target,xof) \
-    $(call gb_Package_get_target,xmloff_dtd) \
-    $(call gb_Package_get_target,xmloff_inc) \
+$(eval $(call gb_Module_Module,framework))
+
+$(eval $(call gb_Module_add_targets,framework,\
+    AllLangResTarget_fwe \
+    Library_fwe \
+    Library_fwi \
+    Library_fwk \
+    Library_fwl \
+    Library_fwm \
+    Package_dtd \
+    Package_inc \
+    Package_uiconfig \
+    Package_unotypes \
 ))
 
-$(eval $(call gb_Module_read_includes,xmloff,\
-    lib_xo \
-    lib_xof \
-    package_dtd \
-    package_inc \
-))
-
-#todo: map file
-#todo: xmlkywd.lib - built, but never used?!
-
+# vim: set noet ts=4 sw=4:

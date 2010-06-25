@@ -25,19 +25,13 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,sfx2,\
-    $(call gb_AllLangResTarget_get_target,sfx) \
-    $(call gb_Library_get_target,sfx) \
-    $(call gb_Package_get_target,sfx2_inc) \
-    $(call gb_Package_get_target,sfx2_sdi) \
-))
-#	$(call gb_Library_get_target,qstart) \
+$(eval $(call gb_Module_Module,sfx2))
 
-$(eval $(call gb_Module_read_includes,sfx2,\
-    lib_sfx2 \
-    package_inc \
-    package_sdi \
-    res_sfx2 \
+$(eval $(call gb_Module_add_targets,sfx2,\
+    AllLangResTarget_sfx2 \
+    Library_sfx2 \
+    Package_inc \
+    Package_sdi \
 ))
 #   lib_qstart \
 
