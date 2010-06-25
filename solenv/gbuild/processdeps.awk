@@ -46,23 +46,20 @@ function mangle_path(path) {
     gsub("\\\\", "/", path);
     if( path ~ /^[a-zA-Z]:/ )
         path = toupper(substr(path,0,1)) substr(path,2);
-#    gsub("//", "/", path);
     gsub(WORKDIR, "$(WORKDIR)/", path);
     gsub(OUTDIR, "$(OUTDIR)/", path);
     gsub(SRCDIR, "$(SRCDIR)/", path);
+    gsub(REPODIR, "$(REPODIR)/", path);
     if( path ~ /^[a-zA-Z]:/ )
         path = "/cygdrive/" tolower(substr(path,0,1)) substr(path,3);
-#   gsub("//", "/", path);
     return path;
 }
 
 BEGIN {
-#   WORKDIR = tolower(WORKDIR);
-#   OUTDIR = tolower(OUTDIR);
-#   SRCDIR = tolower(SRCDIR);
 #   print "# WORKDIR=" WORKDIR;
 #   print "# OUTDIR=" OUTDIR;
 #   print "# SRCDIR=" SRCDIR;
+#   print "# REPODIR=" REPODIR;
     print mangle_path(OBJECTFILE) ": \\";
 }
 

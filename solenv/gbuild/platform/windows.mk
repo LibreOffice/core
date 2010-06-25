@@ -180,11 +180,13 @@ endif
 gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR))
 gb_Helper_WORKDIR_NATIVE := $(shell cygpath -m $(WORKDIR))
 gb_Helper_OUTDIR_NATIVE := $(shell cygpath -m $(OUTDIR))
+gb_Helper_REPODIR_NATIVE := $(shell cygpath -m $(REPODIR))
 
 define gb_Helper_abbreviate_dirs_native
-S=$(gb_Helper_SRCDIR_NATIVE) && \
+R=$(gb_Helper_REPODIR_NATIVE) && \
+$(subst $(gb_Helper_REPODIR_NATIVE)/,$$R/,S=$(gb_Helper_SRCDIR_NATIVE) && \
 $(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,O=$(gb_Helper_OUTDIR_NATIVE)) && \
-$(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,$(subst $(SRCDIR)/,$$S/,$(subst $(gb_Helper_OUTDIR_NATIVE)/,$$O/,$(subst $(OUTDIR)/,$$O/,W=$(gb_Helper_WORKDIR_NATIVE) && $(subst $(gb_Helper_WORKDIR_NATIVE)/,$$W/,$(subst $(WORKDIR)/,$$W/,$(1)))))))
+$(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,$(subst $(SRCDIR)/,$$S/,$(subst $(gb_Helper_OUTDIR_NATIVE)/,$$O/,$(subst $(OUTDIR)/,$$O/,W=$(gb_Helper_WORKDIR_NATIVE) && $(subst $(gb_Helper_WORKDIR_NATIVE)/,$$W/,$(subst $(WORKDIR)/,$$W/,$(1))))))))
 endef
 
 # CObject class
@@ -216,6 +218,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v OUTDIR=$(OUTDIR)/ \
         -v WORKDIR=$(WORKDIR)/ \
         -v SRCDIR=$(SRCDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
     > $(call gb_CObject_get_dep_target,$(2)))
 endef
 
@@ -254,6 +257,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v OUTDIR=$(OUTDIR)/ \
         -v WORKDIR=$(WORKDIR)/ \
         -v SRCDIR=$(SRCDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
     > $(call gb_CxxObject_get_dep_target,$(2)))
 endef
 
@@ -290,6 +294,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v OUTDIR=$(OUTDIR)/ \
         -v WORKDIR=$(WORKDIR)/ \
         -v SRCDIR=$(SRCDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
     > $(call gb_PrecompiledHeader_get_dep_target,$(2)))
 endef
 
@@ -320,6 +325,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v OUTDIR=$(OUTDIR)/ \
         -v WORKDIR=$(WORKDIR)/ \
         -v SRCDIR=$(SRCDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
     > $(call gb_NoexPrecompiledHeader_get_dep_target,$(2)))
 endef
 
@@ -535,6 +541,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v OUTDIR=$(OUTDIR)/ \
         -v WORKDIR=$(WORKDIR)/ \
         -v SRCDIR=$(SRCDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
     > $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
 
