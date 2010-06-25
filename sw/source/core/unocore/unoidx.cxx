@@ -1625,7 +1625,9 @@ public:
             *aSwMapProvider.GetPropertySet(lcl_TypeToPropertyMap_Mark(eType)))
         , m_eTOXType(eType)
         , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
-        , m_bIsDescriptor(0 == pMark)
+// #i112513#: unxsols4 (Sun C++ 5.9 SunOS_sparc) generates wrong code for this
+//        , m_bIsDescriptor(0 == pMark)
+        , m_bIsDescriptor((0 == pMark) ? true : false)
         , m_TypeDepend(this, pType)
         , m_pTOXMark(pMark)
         , m_pDoc(pDoc)
