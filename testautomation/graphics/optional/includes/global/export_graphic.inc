@@ -119,7 +119,11 @@ testcase tEPS
                                         sleep 5
                                         hNewDocument()
                                         sleep 5
+    if ( lcase( gPlatform ) <> "osx" ) then
                                         Call hGrafikEinfuegen ( OutputGrafikTBO+sExt )
+    else
+        qaErrorLog "#i100253# crash on MacOS X 10.4"
+    endif
                                     endif
 
                                     call hCloseDocument
