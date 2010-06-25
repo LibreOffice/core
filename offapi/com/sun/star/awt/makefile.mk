@@ -328,7 +328,10 @@ IDLFILES=\
     MenuLogo.idl \
     XMenuExtended2.idl \
     XMenuBarExtended.idl \
-    XPopupMenuExtended.idl
+    XPopupMenuExtended.idl \
+    XItemList.idl \
+    XItemListListener.idl \
+    ItemListEvent.idl
 
 # ------------------------------------------------------------------
 

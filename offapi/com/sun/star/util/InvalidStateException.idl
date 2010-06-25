@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,42 +23,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XThrobber_idl__
-#define __com_sun_star_awt_XThrobber_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_util_InvalidStateException_idl__
+#define __com_sun_star_util_InvalidStateException_idl__
 
-#ifndef com_sun_star_graphic_XGraphic_idl
-#include <com/sun/star/graphic/XGraphic.idl>
-#endif
+#include <com/sun/star/uno/Exception.idl>
 
-//=============================================================================
+//==================================================================================================================
 
- module com {  module sun {  module star {  module awt {
+module com { module sun { module star { module util {
 
-//=============================================================================
+//==================================================================================================================
 
-/** Controls the animation control.
+/** is thrown when an object's state does not allow to call requested functionality.
  */
-published interface XThrobber: com::sun::star::uno::XInterface
+exception InvalidStateException : com::sun::star::uno::Exception
 {
-    //-------------------------------------------------------------------------
-
-    /** starts the animation of the control.
-     */
-    void start();
-
-    //-------------------------------------------------------------------------
-
-    /** stops the animation of the control.
-     */
-    void stop();
 };
 
-//=============================================================================
+//==================================================================================================================
 
 }; }; }; };
+
+//==================================================================================================================
 
 #endif
