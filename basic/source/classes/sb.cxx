@@ -569,11 +569,13 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
         }
     }
     SetModuleType( ModuleType::CLASS );
+    mbVBACompat = pClassModule->mbVBACompat;
 }
 
 SbClassModuleObject::~SbClassModuleObject()
 {
-    triggerTerminateEvent();
+    if( StarBASIC::IsRunning() )
+        triggerTerminateEvent();
 
     // Must be deleted by base class dtor because this data
     // is not owned by the SbClassModuleObject object

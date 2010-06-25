@@ -263,8 +263,10 @@ SbxVariable* SbiRuntime::FindElement
             pElem = pNew;
         }
         // Index-Access bei UnoObjekten beruecksichtigen
-        /*
-        else if( pElem->ISA(SbUnoProperty) )
+        // definitely we want this for VBA where properties are often
+        // collections ( which need index access ), but lets only do
+        // this if we actually have params following
+        else if( bVBAEnabled && pElem->ISA(SbUnoProperty) && pElem->GetParameters() )
         {
             // pElem auf eine Ref zuweisen, um ggf. eine Temp-Var zu loeschen
             SbxVariableRef refTemp = pElem;
@@ -274,7 +276,6 @@ SbxVariable* SbiRuntime::FindElement
             pElem->SetParameters( NULL ); // sonst bleibt Ref auf sich selbst
             pElem = pNew;
         }
-        */
     }
     return CheckArray( pElem );
 }
