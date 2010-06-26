@@ -111,8 +111,10 @@ ifeq ($(MAKECMDGOALS),clean)
 gb_FULLDEPS := $(false)
 endif
 
-include $(GBUILDDIR)/helper.mk
-include $(GBUILDDIR)/libnames.mk
+include $(GBUILDDIR)/Helper.mk
+gb_Library_NAMESCHEMES := OOO PLAIN RT RTVER STL UNO UNOVER
+gb_StaticLibrary_NAMESCHEMES := PLAIN
+include $(foreach repo,$(gb_REPOS),$(repo)/Targetnames.mk)
 gb_Library_TARGETS := $(foreach namescheme,$(gb_Library_NAMESCHEMES),$(gb_Library_$(namescheme)LIBS))
 gb_StaticLibrary_TARGETS := $(foreach namescheme,$(gb_StaticLibrary_NAMESCHEMES),$(gb_StaticLibrary_$(namescheme)LIBS))
 
@@ -192,7 +194,7 @@ endif
 
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
-include $(GBUILDDIR)/target_names.mk
+include $(GBUILDDIR)/TargetLocations.mk
 
 # static members declared here because they are used globally
 
@@ -203,15 +205,15 @@ gb_StaticLibrary_OUTDIRLOCATION := $(OUTDIR)/lib
 # We are using a set of scopes that we might as well call classes.
 
 include $(foreach class,\
-    linktarget\
-    library\
-    static_library\
-    executable\
-    sdi\
-    alllangres\
-    package\
-    pch\
-    module\
+    LinkTarget\
+    Library\
+    StaticLibrary\
+    Executable\
+    SdiTarget\
+    AllLangResTarget\
+    Package\
+    PrecompiledHeaders\
+    Module\
 ,$(GBUILDDIR)/$(class).mk)
 
 # vim: set noet sw=4 ts=4:

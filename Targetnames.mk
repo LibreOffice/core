@@ -43,9 +43,6 @@ gb_Executable_NONE := \
     bmpsum \
     g2g \
 
-
-gb_Library_NAMESCHEMES := OOO PLAIN RT RTVER STL UNO UNOVER
-
 gb_Library_OOOLIBS :=\
     avmedia \
     basegfx \
@@ -126,9 +123,6 @@ gb_Library_UNOVERLIBS :=\
     jvmfwk \
     cppu \
     sal \
-
-
-gb_StaticLibrary_NAMESCHEMES := PLAIN
 
 gb_StaticLibrary_PLAINLIBS :=\
     salcpprt \
