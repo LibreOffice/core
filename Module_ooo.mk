@@ -32,10 +32,10 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     sfx2 \
     svl \
     svtools \
-    xmloff \
     sw \
     toolkit \
     tools \
+    xmloff \
 ))
 
 # vim: set noet ts=4 sw=4:
