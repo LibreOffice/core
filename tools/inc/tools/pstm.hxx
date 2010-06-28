@@ -60,13 +60,7 @@ public:
 };
 
 /************************** S v R t t i B a s e **************************/
-/*
-#if defined (DOS) && defined (STC)
-class SvRttiBase : public SvRefBase
-#else
-class SvRttiBase : virtual public SvRefBase
-#endif
-*/
+
 class TOOLS_DLLPUBLIC SvRttiBase : public SvRefBase
 {
 public:

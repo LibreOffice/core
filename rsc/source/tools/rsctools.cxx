@@ -32,7 +32,7 @@
 // C and C++ Includes.
 #include <stdlib.h>
 #include <stdio.h>
-#if defined ( DOS ) || defined (WNT )
+#if defined (WNT )
 #include <direct.h>
 #endif
 #if defined ( OS2 ) && !defined ( GCC )
