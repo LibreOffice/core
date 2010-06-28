@@ -3574,7 +3574,7 @@ StringArray RID_PRINTUIOPTIONS
         < "Reduces or enlarges the size of the printed formula by a specified enlargement factor."; >;
         < "Miscellaneous options"; >;
         < "Ig~nore ~~ and ` at the end of the line"; >;
-        < "Specfies that these space wildcards will be removed if they are at the end of a line."; >;
+        < "Specifies that these space wildcards will be removed if they are at the end of a line."; >;
     };
 };
 
