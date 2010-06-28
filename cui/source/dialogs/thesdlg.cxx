@@ -172,12 +172,21 @@ void ReplaceEdit_Impl::SetText( const XubString& rStr, const Selection& rNewSele
 
 // class ThesaurusAlternativesCtrl_Impl ----------------------------------
 
+AlternativesString_Impl::AlternativesString_Impl(
+    ThesaurusAlternativesCtrl_Impl &rControl,
+    SvLBoxEntry* pEntry, USHORT nFlags, const String& rStr ) :
+    //
+    SvLBoxString( pEntry, nFlags, rStr ),
+    m_rControlImpl( rControl )
+{
+}
+
 void AlternativesString_Impl::Paint(
     const Point& rPos,
     SvLBox& rDev, USHORT,
     SvLBoxEntry* pEntry )
 {
-    AlternativesUserData_Impl* pData = (AlternativesUserData_Impl*)pEntry->GetUserData();
+    AlternativesExtraData* pData = m_rControlImpl.GetExtraData( pEntry );
     Point aPos( rPos );
     Font aOldFont( rDev.GetFont());
     if (pData && pData->IsHeader())
@@ -207,14 +216,40 @@ ThesaurusAlternativesCtrl_Impl::ThesaurusAlternativesCtrl_Impl(
 
 ThesaurusAlternativesCtrl_Impl::~ThesaurusAlternativesCtrl_Impl()
 {
-    ClearUserData();
+    ClearExtraData();
 }
 
 
-void ThesaurusAlternativesCtrl_Impl::ClearUserData()
+void ThesaurusAlternativesCtrl_Impl::ClearExtraData()
 {
-    for (USHORT i = 0; i < GetEntryCount(); ++i)
-        delete (AlternativesUserData_Impl*)GetEntry(i)->GetUserData();
+    UserDataMap_t   aEmpty;
+    m_aUserData.swap( aEmpty );
+}
+
+
+void ThesaurusAlternativesCtrl_Impl::SetExtraData(
+    const SvLBoxEntry *pEntry,
+    AlternativesExtraData &rData )
+{
+    if (!pEntry)
+        return;
+
+    UserDataMap_t::iterator aIt( m_aUserData.find( pEntry ) );
+    if (aIt != m_aUserData.end())
+        aIt->second = rData;
+    else
+        m_aUserData[ pEntry ] = rData;
+}
+
+
+AlternativesExtraData * ThesaurusAlternativesCtrl_Impl::GetExtraData(
+    const SvLBoxEntry *pEntry )
+{
+    AlternativesExtraData *pRes = NULL;
+    UserDataMap_t::iterator aIt( m_aUserData.find( pEntry ) );
+    if (aIt != m_aUserData.end())
+        pRes = &aIt->second;
+    return pRes;
 }
 
 
@@ -230,10 +265,9 @@ SvLBoxEntry * ThesaurusAlternativesCtrl_Impl::AddEntry( sal_Int32 nVal, const St
     pEntry->AddItem( new SvLBoxString( pEntry, 0, String() ) ); // add empty column
     aText += rText;
     pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), 0 ) );  // otherwise crash
-    pEntry->AddItem( new AlternativesString_Impl( pEntry, 0, aText ) );
+    pEntry->AddItem( new AlternativesString_Impl( *this, pEntry, 0, aText ) );
 
-    AlternativesUserData_Impl* pUserData = new AlternativesUserData_Impl( rText, bIsHeader );
-    pEntry->SetUserData( pUserData );
+    SetExtraData( pEntry, AlternativesExtraData( rText, bIsHeader ) );
     GetModel()->Insert( pEntry );
 
     if (bIsHeader)
@@ -365,7 +399,7 @@ bool SvxThesaurusDialog_Impl::UpdateAlternativesBox_Impl()
     m_pAlternativesCT->SetUpdateMode( FALSE );
 
     // clear old user data of control before creating new ones via AddEntry below
-    m_pAlternativesCT->ClearUserData();
+    m_pAlternativesCT->ClearExtraData();
 
     m_pAlternativesCT->Clear();
     for (sal_Int32 i = 0;  i < nMeanings;  ++i)
@@ -468,9 +502,9 @@ IMPL_LINK( SvxThesaurusDialog_Impl, AlternativesSelectHdl_Impl, SvxCheckListBox 
     SvLBoxEntry *pEntry = pBox ? pBox->GetCurEntry() : NULL;
     if (pEntry)
     {
-        AlternativesUserData_Impl * pData = (AlternativesUserData_Impl *) pEntry->GetUserData();
+        AlternativesExtraData * pData = m_pAlternativesCT->GetExtraData( pEntry );
         String aStr;
-        if (!pData->IsHeader())
+        if (pData && !pData->IsHeader())
         {
             aStr = pData->GetText();
             GetReplaceEditString( aStr );
@@ -486,9 +520,9 @@ IMPL_LINK( SvxThesaurusDialog_Impl, AlternativesDoubleClickHdl_Impl, SvxCheckLis
     SvLBoxEntry *pEntry = pBox ? pBox->GetCurEntry() : NULL;
     if (pEntry)
     {
-        AlternativesUserData_Impl * pData = (AlternativesUserData_Impl *) pEntry->GetUserData();
+        AlternativesExtraData * pData = m_pAlternativesCT->GetExtraData( pEntry );
         String aStr;
-        if (!pData->IsHeader())
+        if (pData && !pData->IsHeader())
         {
             aStr = pData->GetText();
             GetReplaceEditString( aStr );
@@ -509,8 +543,8 @@ IMPL_LINK( SvxThesaurusDialog_Impl, AlternativesDoubleClickHdl_Impl, SvxCheckLis
 IMPL_STATIC_LINK( SvxThesaurusDialog_Impl, SelectFirstHdl_Impl, SvxCheckListBox *, pBox )
 {
     (void) pThis;
-    if (pBox && pBox->GetEntryCount() > 0)
-        pBox->SelectEntryPos( 0 );
+    if (pBox && pBox->GetEntryCount() >= 2)
+        pBox->SelectEntryPos( 1 );  // pos 0 is a 'header' that is not selectable
     return 0;
 }
 
