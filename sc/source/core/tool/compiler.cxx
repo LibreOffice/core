@@ -5088,18 +5088,15 @@ void ScCompiler::CreateStringFromMatrix( rtl::OUStringBuffer& rBuffer,
 
             if( pMatrix->IsValue( nC, nR ) )
             {
-                ScMatValType nType;
-                const ScMatrixValue* pVal = pMatrix->Get( nC, nR, nType);
-
-                if( nType == SC_MATVAL_BOOLEAN )
-                    AppendBoolean( rBuffer, pVal->GetBoolean() );
+                if (pMatrix->IsBoolean(nC, nR))
+                    AppendBoolean(rBuffer, pMatrix->GetDouble(nC, nR) != 0.0);
                 else
                 {
-                    USHORT nErr = pVal->GetError();
-                    if( nErr )
-                        rBuffer.append( ScGlobal::GetErrorString( nErr ) );
+                    USHORT nErr = pMatrix->GetError(nC, nR);
+                    if (nErr)
+                        rBuffer.append(ScGlobal::GetErrorString(nErr));
                     else
-                        AppendDouble( rBuffer, pVal->fVal );
+                        AppendDouble(rBuffer, pMatrix->GetDouble(nC, nR));
                 }
             }
             else if( pMatrix->IsEmpty( nC, nR ) )

@@ -126,23 +126,20 @@ void ScInterpreter::ScIfJump()
                         {
                             double fVal;
                             bool bTrue;
-                            ScMatValType nType = 0;
-                            const ScMatrixValue* pMatVal = pMat->Get( nC, nR,
-                                    nType);
-                            bool bIsValue = ScMatrix::IsValueType( nType);
-                            if ( bIsValue )
+                            bool bIsValue = pMat->IsValue(nC, nR);
+                            if (bIsValue)
                             {
-                                fVal = pMatVal->fVal;
-                                bIsValue = ::rtl::math::isFinite( fVal );
+                                fVal = pMat->GetDouble(nC, nR);
+                                bIsValue = ::rtl::math::isFinite(fVal);
                                 bTrue = bIsValue && (fVal != 0.0);
-                                if ( bTrue )
+                                if (bTrue)
                                     fVal = 1.0;
                             }
                             else
                             {
                                 // Treat empty and empty path as 0, but string
                                 // as error.
-                                bIsValue = !ScMatrix::IsRealStringType( nType);
+                                bIsValue = (!pMat->IsString(nC, nR) || pMat->IsEmpty(nC, nR));
                                 bTrue = false;
                                 fVal = (bIsValue ? 0.0 : CreateDoubleError( errNoValue));
                             }
@@ -258,13 +255,10 @@ void ScInterpreter::ScChoseJump()
                         for ( SCSIZE nR=0; nR < nRows; ++nR )
                         {
                             double fVal;
-                            ScMatValType nType;
-                            const ScMatrixValue* pMatVal = pMat->Get( nC, nR,
-                                    nType);
-                            bool bIsValue = ScMatrix::IsValueType( nType);
+                            bool bIsValue = pMat->IsValue(nC, nR);
                             if ( bIsValue )
                             {
-                                fVal = pMatVal->fVal;
+                                fVal = pMat->GetDouble(nC, nR);
                                 bIsValue = ::rtl::math::isFinite( fVal );
                                 if ( bIsValue )
                                 {
