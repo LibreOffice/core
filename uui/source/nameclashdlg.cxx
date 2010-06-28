@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "vcl/msgbox.hxx"
+#include "osl/file.hxx"
 
 #include "ids.hrc"
 #include "nameclashdlg.hrc"
@@ -89,10 +90,14 @@ NameClashDialog::NameClashDialog( Window* pParent, ResMgr* pResMgr,
         maBtnOverwrite.Hide();
     }
 
+    rtl::OUString aPath;
+    if ( osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL( rTargetFolderURL, aPath ) )
+        aPath = rTargetFolderURL;
+
     maSameName = String ( ResId( STR_SAME_NAME_USED, *pResMgr ) );
 
     aInfo.SearchAndReplaceAscii( "%NAME", rClashingName );
-    aInfo.SearchAndReplaceAscii( "%FOLDER", rTargetFolderURL );
+    aInfo.SearchAndReplaceAscii( "%FOLDER", aPath );
     maFTMessage.SetText( aInfo );
     if ( rProposedNewName.getLength() )
         maEDNewName.SetText( rProposedNewName );
