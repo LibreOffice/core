@@ -474,8 +474,6 @@ void Desktop::Init()
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Init" );
     SetBootstrapStatus(BS_OK);
 
-    Sleep(10000);
-
     // create service factory...
     Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
     if( rSMgr.is() )
