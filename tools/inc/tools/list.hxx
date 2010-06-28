@@ -65,9 +65,9 @@ public:
     List&   operator =( const List& rList )
                 { Container::operator =( rList ); return *this; }
 
-    BOOL    operator ==( const List& rList ) const
+    sal_Bool    operator ==( const List& rList ) const
                 { return Container::operator ==( rList ); }
-    BOOL    operator !=( const List& rList ) const
+    sal_Bool    operator !=( const List& rList ) const
                 { return Container::operator !=( rList ); }
 };
 
@@ -119,7 +119,7 @@ public:                                                                 \
     ULONG       GetPos( const Type p ) const                            \
                     { return List::GetPos( (const void*)p ); }          \
     ULONG       GetPos( const Type p, ULONG nStartIndex,                \
-                        BOOL bForward = TRUE ) const                    \
+                        sal_Bool bForward = sal_True ) const                    \
                     { return List::GetPos( (const void*)p, nStartIndex, \
                                            bForward ); }                \
                                                                         \
@@ -134,9 +134,9 @@ public:                                                                 \
     ClassName&  operator =( const ClassName& rClassName )               \
                     { List::operator =( rClassName ); return *this; }   \
                                                                         \
-    BOOL        operator ==( const ClassName& rList ) const             \
+    sal_Bool        operator ==( const ClassName& rList ) const             \
                     { return List::operator ==( rList ); }              \
-    BOOL        operator !=( const ClassName& rList ) const             \
+    sal_Bool        operator !=( const ClassName& rList ) const             \
                     { return List::operator !=( rList ); }              \
 };
 

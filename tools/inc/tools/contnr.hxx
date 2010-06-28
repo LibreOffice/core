@@ -103,7 +103,7 @@ public:
     void*       GetObject( ULONG nIndex ) const;
     ULONG       GetPos( const void* p ) const;
     ULONG       GetPos( const void* p, ULONG nStartIndex,
-                        BOOL bForward = TRUE ) const;
+                        sal_Bool bForward = sal_True ) const;
 
     void*       Seek( ULONG nIndex );
     void*       Seek( void* p ) { return Seek( GetPos( p ) ); }
@@ -115,8 +115,8 @@ public:
 
     Container&  operator =( const Container& rContainer );
 
-    BOOL        operator ==( const Container& rContainer ) const;
-    BOOL        operator !=( const Container& rContainer ) const
+    sal_Bool        operator ==( const Container& rContainer ) const;
+    sal_Bool        operator !=( const Container& rContainer ) const
                     { return !(Container::operator==( rContainer )); }
 };
 

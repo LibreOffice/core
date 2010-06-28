@@ -117,7 +117,7 @@ USHORT WildCard::ImpMatch( const char *pWild, const char *pStr ) const
 |*
 *************************************************************************/
 
-BOOL WildCard::Matches( const String& rString ) const
+sal_Bool WildCard::Matches( const String& rString ) const
 {
     ByteString aTmpWild = aWildString;
     ByteString aString(rString, osl_getThreadTextEncoding());
@@ -130,14 +130,14 @@ BOOL WildCard::Matches( const String& rString ) const
         {
             // alle getrennten WildCard's pruefen
             if ( ImpMatch( aTmpWild.Copy( 0, nSepPos ).GetBuffer(), aString.GetBuffer() ) )
-                return TRUE;
+                return sal_True;
             aTmpWild.Erase( 0, nSepPos + 1 ); // Trennsymbol entfernen
         }
         // und noch den hinter dem letzen Trennsymbol bzw. den einzigen
     }
 
     if ( ImpMatch( aTmpWild.GetBuffer(), aString.GetBuffer() ) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }

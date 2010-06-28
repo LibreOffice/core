@@ -178,7 +178,7 @@ public:
                             ErrorContext(Window *pWin=0);
     virtual                 ~ErrorContext();
 
-    virtual BOOL            GetString( ULONG nErrId, String& rCtxStr ) = 0;
+    virtual sal_Bool            GetString( ULONG nErrId, String& rCtxStr ) = 0;
     Window*                 GetParent() { return pWin; }
 
     static ErrorContext*    GetContext();
@@ -204,12 +204,12 @@ private:
 
     static USHORT       HandleError_Impl( ULONG lId,
                       USHORT nFlags,
-                      BOOL bJustCreateString,
+                      sal_Bool bJustCreateString,
                       String & rError);
 protected:
-    virtual BOOL        CreateString( const ErrorInfo *,
+    virtual sal_Bool        CreateString( const ErrorInfo *,
                       String &, USHORT& nMask ) const = 0;
-            BOOL        ForwCreateString( const ErrorInfo*,
+            sal_Bool        ForwCreateString( const ErrorInfo*,
                       String&, USHORT& nMask ) const;
 
 public:
@@ -217,7 +217,7 @@ public:
     virtual             ~ErrorHandler();
 
     static USHORT       HandleError ( ULONG lId, USHORT nMask = USHRT_MAX );
-    static BOOL         GetErrorString( ULONG lId, String& rStr );
+    static sal_Bool         GetErrorString( ULONG lId, String& rStr );
 
     static void         RegisterDisplay( BasicDisplayErrorFunc* );
     static void         RegisterDisplay( WindowDisplayErrorFunc* );
@@ -231,7 +231,7 @@ public:
 class TOOLS_DLLPUBLIC SimpleErrorHandler : private ErrorHandler
 {
 protected:
-    virtual BOOL        CreateString( const ErrorInfo*, String &,
+    virtual sal_Bool        CreateString( const ErrorInfo*, String &,
                                       USHORT &nMask ) const;
 
 public:

@@ -34,13 +34,6 @@
 
 /*** common solar defines ***********************************/
 
-#ifndef TRUE
-#define TRUE        1
-#endif
-#ifndef FALSE
-#define FALSE       0
-#endif
-
 #ifdef _SOLAR__PRIVATE
 #undef _SOLAR__PRIVATE
 #endif
@@ -54,7 +47,6 @@
 /*   Previous typedefs from before sal convergence are in comments */
 /*   to the right of the new types.                                */
 
-typedef sal_Bool        BOOL;   /* typedef unsigned char   BOOL; */
 typedef sal_uInt8       BYTE;   /* typedef unsigned char   BYTE; */
 typedef sal_uInt16      USHORT; /* typedef unsigned short  USHORT; */
 typedef sal_uIntPtr     ULONG;  /* typedef unsigned long   ULONG; */

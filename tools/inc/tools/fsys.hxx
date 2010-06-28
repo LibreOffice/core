@@ -210,8 +210,8 @@ public:
                     FileStat();
                     FileStat( const DirEntry& rDirEntry,
                               FSysAccess nAccess = FSYS_ACCESS_FLOPPY );
-    BOOL            Update( const DirEntry& rDirEntry,
-                              BOOL bForceAccess = TRUE );
+    sal_Bool            Update( const DirEntry& rDirEntry,
+                              sal_Bool bForceAccess = sal_True );
 
     ULONG           GetError() const { return ERRCODE_TOERROR(nError); }
     ULONG           GetErrorCode() const { return nError; }
@@ -219,7 +219,7 @@ public:
     ULONG           GetSize() const { return nSize; }
 
     DirEntryKind    GetKind() const { return nKindFlags; }
-    BOOL            IsKind( DirEntryKind nKind ) const;
+    sal_Bool            IsKind( DirEntryKind nKind ) const;
 
     String          GetType() const { return aType; }
     String          GetCreator() const { return aCreator; }
@@ -230,12 +230,12 @@ public:
     Time            TimeModified() const { return aTimeModified; }
     Date            DateAccessed() const { return aDateAccessed; }
     Time            TimeAccessed() const { return aTimeAccessed; }
-    BOOL            IsYounger( const FileStat& rIsOlder ) const;
+    sal_Bool            IsYounger( const FileStat& rIsOlder ) const;
 
 #define TF_FSYS_READONLY_FLAG
-    static ULONG    SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO = TRUE );
-    static BOOL     GetReadOnlyFlag( const DirEntry &rEntry );
-    static BOOL     HasReadOnlyFlag();
+    static ULONG    SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO = sal_True );
+    static sal_Bool     GetReadOnlyFlag( const DirEntry &rEntry );
+    static sal_Bool     HasReadOnlyFlag();
 
     static ErrCode  QueryDiskSpace( const String &rPath,
                                     BigInt &rFreeBytes, BigInt &rTotalBytes );
@@ -286,13 +286,13 @@ private:
     TOOLS_DLLPRIVATE const DirEntry*    ImpGetTopPtr() const;
     TOOLS_DLLPRIVATE DirEntry*          ImpGetTopPtr();
     TOOLS_DLLPRIVATE DirEntry*          ImpGetPreTopPtr();
-    TOOLS_DLLPRIVATE BOOL               ImpToRel( String aStart );
+    TOOLS_DLLPRIVATE sal_Bool               ImpToRel( String aStart );
 
 protected:
     void                ImpTrim( FSysPathStyle eStyle );
     const ByteString&   ImpTheName() const;
     DirEntryFlag        ImpTheFlag() const { return eFlag; };
-    DirEntry*           ImpChangeParent( DirEntry* pNewParent, BOOL bNormalize = TRUE );
+    DirEntry*           ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize = sal_True );
     DirEntry*           ImpGetParent() { return pParent; }
 #ifdef FEAT_FSYS_DOUBLESPEED
     FileStat*           ImpGetStat() const { return pStat; }
@@ -313,11 +313,11 @@ public:
                                    FSysPathStyle eParser = FSYS_STYLE_HOST );
                         ~DirEntry();
 
-    BOOL                IsLongNameOnFAT() const;
-    BOOL                IsCaseSensitive (FSysPathStyle eFormatter = FSYS_STYLE_HOST) const;
+    sal_Bool                IsLongNameOnFAT() const;
+    sal_Bool                IsCaseSensitive (FSysPathStyle eFormatter = FSYS_STYLE_HOST) const;
 
     ULONG               GetError() const { return nError; }
-    BOOL                IsValid() const;
+    sal_Bool                IsValid() const;
     DirEntryFlag        GetFlag() const { return eFlag; };
 
     void                SetExtension( const String& rExt, char cSep = '.' );
@@ -333,31 +333,31 @@ public:
     DirEntry            GetDevice() const;
     String              GetVolume() const;
     String              GetFull( FSysPathStyle eFormatter = FSYS_STYLE_HOST,
-                                 BOOL bWithDelimiter = FALSE,
+                                 sal_Bool bWithDelimiter = sal_False,
                                  USHORT nMaxChars = STRING_MAXLEN ) const;
 
     DirEntry            TempName( DirEntryKind = FSYS_KIND_NONE ) const;
     static const DirEntry& SetTempNameBase( const String &rBaseName );
-    BOOL                MakeShortName( const String& rLongName,
+    sal_Bool                MakeShortName( const String& rLongName,
                                        DirEntryKind eCreateKind = FSYS_KIND_NONE,
-                                       BOOL bUseTilde = TRUE,
+                                       sal_Bool bUseTilde = sal_True,
                                        FSysPathStyle eStyle = FSYS_STYLE_DETECT );
 
     bool                IsAbs() const;
-    BOOL                ToAbs();
-    BOOL                Find( const String& rPfad, char cDelim = 0 );
-    BOOL                ToRel();
-    BOOL                ToRel( const DirEntry& rRefDir );
+    sal_Bool                ToAbs();
+    sal_Bool                Find( const String& rPfad, char cDelim = 0 );
+    sal_Bool                ToRel();
+    sal_Bool                ToRel( const DirEntry& rRefDir );
     USHORT              CutRelParents();
 
-    BOOL                SetCWD( BOOL bSloppy = FALSE ) const;
-    BOOL                MakeDir( BOOL bSloppy = FALSE ) const;
-    BOOL                Exists( FSysAccess nAccess = FSYS_ACCESS_FLOPPY ) const;
-    BOOL                First();
+    sal_Bool                SetCWD( sal_Bool bSloppy = sal_False ) const;
+    sal_Bool                MakeDir( sal_Bool bSloppy = sal_False ) const;
+    sal_Bool                Exists( FSysAccess nAccess = FSYS_ACCESS_FLOPPY ) const;
+    sal_Bool                First();
 
     USHORT              Level() const;
     const DirEntry&     operator []( USHORT nParentLevel ) const;
-    BOOL                Contains( const DirEntry &rSubEntry ) const;
+    sal_Bool                Contains( const DirEntry &rSubEntry ) const;
 
     FSysError           CopyTo( const DirEntry& rDestDir,
                                 FSysAction nActions = FSYS_ACTION_STANDARD ) const;
@@ -367,8 +367,8 @@ public:
     DirEntry&           operator =( const DirEntry& rOrigDir );
     DirEntry            operator +( const DirEntry& rSubDir ) const;
     DirEntry&           operator +=( const DirEntry& rSubDir );
-    BOOL                operator ==( const DirEntry& rAnotherDir ) const;
-    BOOL                operator !=( const DirEntry& rAnotherDir ) const
+    sal_Bool                operator ==( const DirEntry& rAnotherDir ) const;
+    sal_Bool                operator !=( const DirEntry& rAnotherDir ) const
                             { return !(DirEntry::operator==( rAnotherDir )); }
 
     StringCompare       NameCompare( const DirEntry &rWith ) const;
@@ -387,7 +387,7 @@ public:
     static FSysPathStyle GetPathStyle( const String &rDevice );
     static String       ConvertNameToSystem( const String & rName );
     static String       ConvertSystemToName( const String & rName );
-    static BOOL         IsRFSAvailable();
+    static sal_Bool         IsRFSAvailable();
 };
 
 // --------------
@@ -409,7 +409,7 @@ private:
         const DirEntry &rSource, const DirEntry &rTarget );
 
 protected:
-    virtual BOOL        Progress();
+    virtual sal_Bool        Progress();
     virtual ErrCode     Error( ErrCode eErr,
                                const DirEntry *pSource, const DirEntry *pTarget );
 
@@ -475,7 +475,7 @@ private:
 
 #ifndef _TOOLS_HXX
 protected:
-    BOOL            ImpInsertPointReached( const DirEntry& rIsSmaller,
+    sal_Bool            ImpInsertPointReached( const DirEntry& rIsSmaller,
                                            const FileStat& rNewStat,
                                            ULONG nCurPos,
                                            ULONG nSortIndex ) const;
@@ -498,8 +498,8 @@ public:
 
     void            Reset();
     USHORT          Scan( USHORT nCount = 5 );
-    USHORT          Count( BOOL bUpdated = TRUE ) const;
-    BOOL            Update();
+    USHORT          Count( sal_Bool bUpdated = sal_True ) const;
+    sal_Bool            Update();
 
     Dir&            operator +=( const Dir& rDir );
     DirEntry&       operator []( USHORT nIndex ) const;
@@ -520,7 +520,7 @@ public:
 class FSysRedirector
 {
     static FSysRedirector*  _pRedirector;
-    static BOOL             _bEnabled;
+    static sal_Bool             _bEnabled;
 
 public:
     /** This method must called with the one and only instance of the
@@ -552,9 +552,9 @@ public:
                 redirected (modified) path too, which can be of both formats
                 too.
 
-        @return BOOL<BR>
-                TRUE, if the path is redirected
-                FALSE, if the path is not redirected (unchanged)
+        @return sal_Bool<BR>
+                sal_True, if the path is redirected
+                sal_False, if the path is not redirected (unchanged)
      */
     static void             DoRedirect( String &rPath );
 };
@@ -563,7 +563,7 @@ public:
 
 //========================================================================
 
-void FSysEnableSysErrorBox( BOOL bEnable );
+void FSysEnableSysErrorBox( sal_Bool bEnable );
 
 //========================================================================
 

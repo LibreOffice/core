@@ -78,24 +78,24 @@ public:
 
     USHORT          GetDaysInMonth() const;
     USHORT          GetDaysInYear() const { return (IsLeapYear()) ? 366 : 365; }
-    BOOL            IsLeapYear() const;
-    BOOL            IsValid() const;
+    sal_Bool            IsLeapYear() const;
+    sal_Bool            IsValid() const;
 
-    BOOL            IsBetween( const Date& rFrom, const Date& rTo ) const
+    sal_Bool            IsBetween( const Date& rFrom, const Date& rTo ) const
                         { return ((nDate >= rFrom.nDate) &&
                                  (nDate <= rTo.nDate)); }
 
-    BOOL            operator ==( const Date& rDate ) const
+    sal_Bool            operator ==( const Date& rDate ) const
                         { return (nDate == rDate.nDate); }
-    BOOL            operator !=( const Date& rDate ) const
+    sal_Bool            operator !=( const Date& rDate ) const
                         { return (nDate != rDate.nDate); }
-    BOOL            operator  >( const Date& rDate ) const
+    sal_Bool            operator  >( const Date& rDate ) const
                         { return (nDate > rDate.nDate); }
-    BOOL            operator  <( const Date& rDate ) const
+    sal_Bool            operator  <( const Date& rDate ) const
                         { return (nDate < rDate.nDate); }
-    BOOL            operator >=( const Date& rDate ) const
+    sal_Bool            operator >=( const Date& rDate ) const
                         { return (nDate >= rDate.nDate); }
-    BOOL            operator <=( const Date& rDate ) const
+    sal_Bool            operator <=( const Date& rDate ) const
                         { return (nDate <= rDate.nDate); }
 
     Date&           operator =( const Date& rDate )
