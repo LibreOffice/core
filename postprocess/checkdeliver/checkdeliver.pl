@@ -165,7 +165,7 @@ sub check
     foreach ( <DELIVERLOG> ) {
         next if ( /^LINK / );
         # What's this modules' repository?
-        if ( / (\w+?)\/$module\/prj\/build.lst/ ) {
+        if ( /COPY (\w[\w\s-]*?)\/$module\/prj\/build.lst/ ) {
             $repository = $1;
         }
         # For now we concentrate on binaries, located in 'bin' or 'lib' and 'misc/build/<...>/[bin|lib]'.
