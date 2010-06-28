@@ -51,8 +51,6 @@ class PanelWrapper : public UIElementWrapperBase
         using cppu::OPropertySetHelper::disposing;
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 
-        ::rtl::OUString getResourceURL() { return m_aResourceURL; }
-
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
     //-------------------------------------------------------------------------------------------------------------
