@@ -45,7 +45,7 @@
 #define putenv(x)
 #endif
 
-#if defined(DOS) || defined(WNT) || defined(OS2)
+#if defined(WNT) || defined(OS2)
 #define LIST_DELIMETER ';'
 #else
 #ifdef UNX
@@ -57,7 +57,7 @@
 #endif
 #endif
 
-#if defined(DOS) || defined(WNT) || defined(OS2)
+#if defined(WNT) || defined(OS2)
 #define PATH_DELIMETER '\\'
 #else
 #ifdef UNX
