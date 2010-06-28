@@ -25,9 +25,9 @@
  *
  ************************************************************************/
 
-package imageManager.interfaces;
+package complex.imageManager.interfaces;
 
-import share.LogWriter;
+
 
 
 import com.sun.star.lang.XInitialization;
@@ -48,12 +48,12 @@ import lib.TestParameters;
 */
 public class _XInitialization {
 
-    LogWriter log = null;
+
     TestParameters tEnv = null;
     public static XInitialization oObj = null;
 
-    public _XInitialization(LogWriter log, TestParameters tEnv, XInitialization oObj) {
-        this.log = log;
+    public _XInitialization(TestParameters tEnv, XInitialization oObj) {
+
         this.tEnv = tEnv;
         this.oObj = oObj;
     }
@@ -75,8 +75,7 @@ public class _XInitialization {
             }
 
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured while method calling.") ;
-            e.printStackTrace((java.io.PrintWriter)log) ;
+            System.out.println("Exception occured while method calling.") ;
             result = false ;
         }
 

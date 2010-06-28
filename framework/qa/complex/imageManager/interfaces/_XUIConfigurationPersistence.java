@@ -25,26 +25,23 @@
  *
  ************************************************************************/
 
-package imageManager.interfaces;
+package complex.imageManager.interfaces;
 
 import com.sun.star.embed.XStorage;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
 import com.sun.star.ui.XUIConfigurationPersistence;
 import lib.TestParameters;
-import share.LogWriter;
+
 
 
 public class _XUIConfigurationPersistence {
 
-    LogWriter log = null;
+
     TestParameters tEnv = null;
     public XUIConfigurationPersistence oObj;
     private XStorage xStore = null;
 
-    public _XUIConfigurationPersistence(LogWriter log, TestParameters tEnv, XUIConfigurationPersistence oObj) {
-        this.log = log;
+    public _XUIConfigurationPersistence(TestParameters tEnv, XUIConfigurationPersistence oObj) {
+
         this.tEnv = tEnv;
         this.oObj = oObj;
     }
@@ -58,7 +55,7 @@ public class _XUIConfigurationPersistence {
             oObj.reload();
         }
         catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace((java.io.PrintWriter)log);
+
         }
         return true;
     }
@@ -68,7 +65,7 @@ public class _XUIConfigurationPersistence {
             oObj.store();
         }
         catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace((java.io.PrintWriter)log);
+
         }
         return true;
     }
@@ -80,7 +77,7 @@ public class _XUIConfigurationPersistence {
         }
         catch(com.sun.star.uno.Exception e) {
             result = false;
-            e.printStackTrace((java.io.PrintWriter)log);
+
         }
         return result;
     }

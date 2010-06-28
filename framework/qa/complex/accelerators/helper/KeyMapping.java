@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.accelerators;
+package complex.accelerators.helper;
 
 import java.util.HashMap;
 
@@ -70,7 +70,7 @@ public class KeyMapping
     private IdentifierHashMap aIdentifierHashMap;
     private CodeHashMap aCodeHashMap;
 
-    KeyMapping()
+    public KeyMapping()
     {
         KeyIdentifierInfo[] aInfoMap = {
             new KeyIdentifierInfo("0", new Short(com.sun.star.awt.Key.NUM0)),

@@ -25,11 +25,9 @@
  *
  ************************************************************************/
 
-package imageManager.interfaces;
+package complex.imageManager.interfaces;
 
 import com.sun.star.container.XNameContainer;
-import share.LogWriter;
-
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.XComponent;
@@ -54,7 +52,6 @@ public class _XComponent {
     private XNameContainer xContainer = null;
     private XComponent altDispose = null;
     TestParameters tEnv = null;
-    LogWriter log = null;
     boolean listenerDisposed[] = new boolean[2];
     String[] Loutput = new String[2];
 
@@ -78,8 +75,7 @@ public class _XComponent {
     XEventListener listener1 = new MyEventListener(0, "EV1");
     XEventListener listener2 = new MyEventListener(1, "EV2");
 
-    public _XComponent(LogWriter log, TestParameters tEnv, XComponent oObj) {
-        this.log = log;
+    public _XComponent(TestParameters tEnv, XComponent oObj) {
         this.tEnv = tEnv;
         this.oObj = oObj;
     }
@@ -119,10 +115,14 @@ public class _XComponent {
     * <code>dispose</code> method call.
     */
     public boolean _removeEventListener() {
-        if (disposed) return false;
+        if (disposed)
+        {
+            System.out.println("Hint: already disposed.");
+            return false;
+        }
         // the second listener should not be called
         oObj.removeEventListener( listener2 );
-        log.println(Thread.currentThread() + " is removing EL " + listener2);
+        System.out.println(Thread.currentThread() + " is removing EL " + listener2);
         return true;
     } // finished _removeEventListener()
 
@@ -142,24 +142,32 @@ public class _XComponent {
     public boolean _dispose() {
         disposed = false;
 
-        log.println( "begin dispose" + Thread.currentThread());
+        System.out.println( "begin dispose" + Thread.currentThread());
         XDesktop oDesk = (XDesktop) tEnv.get("Desktop");
         if (oDesk !=null) {
             oDesk.terminate();
         }
         else {
             if (altDispose == null)
+            {
                 oObj.dispose();
+            }
             else
+            {
                 altDispose.dispose();
+            }
         }
 
         try {
             Thread.sleep(500) ;
         } catch (InterruptedException e) {}
-        if (Loutput[0]!=null) log.println(Loutput[0]);
-        if (Loutput[1]!=null) log.println(Loutput[1]);
-        log.println( "end dispose" + Thread.currentThread());
+        if (Loutput[0]!=null){
+            System.out.println(Loutput[0]);
+        }
+        if (Loutput[1]!=null) {
+            System.out.println(Loutput[1]);
+        }
+        System.out.println( "end dispose" + Thread.currentThread());
         disposed = true;
 
         // check that dispose() works OK.

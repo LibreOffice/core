@@ -25,20 +25,18 @@
  *
  ************************************************************************/
 
-package imageManager.interfaces;
+package complex.imageManager.interfaces;
 
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.ui.XModuleUIConfigurationManagerSupplier;
+
 import com.sun.star.ui.XUIConfiguration;
 import com.sun.star.ui.XUIConfigurationListener;
 import lib.TestParameters;
-import share.LogWriter;
+
 
 
 public class _XUIConfiguration {
 
-    LogWriter log = null;
+
     TestParameters tEnv = null;
     public XUIConfiguration oObj;
     XUIConfigurationListenerImpl xListener = null;
@@ -51,8 +49,7 @@ public class _XUIConfiguration {
     }
 
 
-    public _XUIConfiguration(LogWriter log, TestParameters tEnv, XUIConfiguration oObj) {
-        this.log = log;
+    public _XUIConfiguration(TestParameters tEnv, XUIConfiguration oObj) {
         this.tEnv = tEnv;
         this.oObj = oObj;
     }

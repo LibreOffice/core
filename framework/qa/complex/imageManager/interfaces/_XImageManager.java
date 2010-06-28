@@ -24,26 +24,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package imageManager.interfaces;
+package complex.imageManager.interfaces;
 
 import com.sun.star.graphic.XGraphic;
 import com.sun.star.ui.ImageType;
 import com.sun.star.ui.XImageManager;
 import lib.TestParameters;
-import share.LogWriter;
+
 
 /**
  *
  */
 public class _XImageManager {
-    LogWriter log = null;
+
     TestParameters tEnv = null;
     String[]imageNames = null;
     XGraphic[] xGraphicArray = null;
     public XImageManager oObj;
 
-    public _XImageManager(LogWriter log, TestParameters tEnv, XImageManager oObj) {
-        this.log = log;
+    public _XImageManager( TestParameters tEnv, XImageManager oObj) {
+
         this.tEnv = tEnv;
         this.oObj = oObj;
     }
@@ -52,7 +52,9 @@ public class _XImageManager {
         short s = ImageType.COLOR_NORMAL + ImageType.SIZE_DEFAULT;
         imageNames = oObj.getAllImageNames(s);
         for (int i=0; i<(imageNames.length>10?10:imageNames.length); i++)
+        {
             System.out.println("###### Image: " + imageNames[i]);
+        }
         return imageNames != null;
     }
 
@@ -71,10 +73,11 @@ public class _XImageManager {
         short s = ImageType.COLOR_NORMAL + ImageType.SIZE_DEFAULT;
         try { // check the first image names, 10 at max
             for (int i=0; i<(imageNames.length>10?10:imageNames.length); i++)
+            {
                 result &= oObj.hasImage(s, imageNames[i]);
+            }
         }
         catch(com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace((java.io.PrintWriter)log);
             result = false;
         }
         return result;

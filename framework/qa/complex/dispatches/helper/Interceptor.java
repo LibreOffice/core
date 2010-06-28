@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.dispatches;
+package complex.dispatches.helper;
 
 // __________ Imports __________
 
@@ -32,19 +32,18 @@ package complex.dispatches;
 import com.sun.star.beans.PropertyValue;
 
 // exceptions
-import com.sun.star.uno.Exception;
-import com.sun.star.uno.RuntimeException;
+import com.sun.star.frame.DispatchDescriptor;
+import com.sun.star.frame.XDispatch;
+import com.sun.star.frame.XDispatchProvider;
+import com.sun.star.frame.XDispatchProviderInterceptor;
+import com.sun.star.frame.XInterceptorInfo;
+import com.sun.star.frame.XStatusListener;
 
 // interfaces
-import com.sun.star.frame.XDispatchProvider;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XDispatchProviderInterceptor;
-import com.sun.star.frame.XDispatchProviderInterception;
-import com.sun.star.frame.XInterceptorInfo;
+
 
 // helper
-import com.sun.star.uno.UnoRuntime;
-import share.LogWriter;
+import com.sun.star.util.URL;
 
 // others
 //import java.lang.*;
@@ -54,10 +53,10 @@ import share.LogWriter;
 /**
  * implements a configurable interceptor for dispatch events.
  */
-public class Interceptor implements com.sun.star.frame.XDispatchProvider,
-                                    com.sun.star.frame.XDispatch,
-                                    com.sun.star.frame.XDispatchProviderInterceptor,
-                                    com.sun.star.frame.XInterceptorInfo
+public class Interceptor implements XDispatchProvider,
+                                    XDispatch,
+                                    XDispatchProviderInterceptor,
+                                    XInterceptorInfo
 {
     // ____________________
 
@@ -88,8 +87,8 @@ public class Interceptor implements com.sun.star.frame.XDispatchProvider,
         The slave can be used inside queryDispatch() to forward requests,
         which are not handled by this interceptor instance.
      */
-    private com.sun.star.frame.XDispatchProvider m_xSlave  = null;
-    private com.sun.star.frame.XDispatchProvider m_xMaster = null;
+    private XDispatchProvider m_xSlave  = null;
+    private XDispatchProvider m_xMaster = null;
 
     // ____________________
 
@@ -107,20 +106,14 @@ public class Interceptor implements com.sun.star.frame.XDispatchProvider,
      */
     private boolean m_bIsRegistered = false;
 
-    // ____________________
-
-    /** used for log output.
-     */
-    private LogWriter m_aLog;
 
     // ____________________
 
     /** ctor
      *  It's initialize an object of this class with default values.
      */
-    public Interceptor(LogWriter aLog)
+    public Interceptor()
     {
-        m_aLog = aLog;
     }
 
     // ____________________
@@ -134,27 +127,27 @@ public class Interceptor implements com.sun.star.frame.XDispatchProvider,
     // ____________________
 
     /** XDispatchProviderInterceptor */
-    public synchronized com.sun.star.frame.XDispatchProvider getSlaveDispatchProvider()
+    public synchronized XDispatchProvider getSlaveDispatchProvider()
     {
-        m_aLog.println("Interceptor.getSlaveDispatchProvider() called");
+        System.out.println("Interceptor.getSlaveDispatchProvider() called");
         return m_xSlave;
     }
 
     // ____________________
 
     /** XDispatchProviderInterceptor */
-    public synchronized com.sun.star.frame.XDispatchProvider getMasterDispatchProvider()
+    public synchronized XDispatchProvider getMasterDispatchProvider()
     {
-        m_aLog.println("Interceptor.getMasterDispatchProvider() called");
+        System.out.println("Interceptor.getMasterDispatchProvider() called");
         return m_xMaster;
     }
 
     // ____________________
 
     /** XDispatchProviderInterceptor */
-    public synchronized void setSlaveDispatchProvider(com.sun.star.frame.XDispatchProvider xSlave)
+    public synchronized void setSlaveDispatchProvider(XDispatchProvider xSlave)
     {
-        m_aLog.println("Interceptor.setSlaveDispatchProvider("+xSlave+") called");
+        System.out.println("Interceptor.setSlaveDispatchProvider("+xSlave+") called");
 
         if (xSlave != null)
         {
@@ -162,7 +155,9 @@ public class Interceptor implements com.sun.star.frame.XDispatchProvider,
             m_bIsRegistered = true;
         }
         else
+        {
             m_bIsRegistered = false;
+        }
 
         m_xSlave = xSlave;
     }
@@ -170,9 +165,9 @@ public class Interceptor implements com.sun.star.frame.XDispatchProvider,
     // ____________________
 
     /** XDispatchProviderInterceptor */
-    public synchronized void setMasterDispatchProvider(com.sun.star.frame.XDispatchProvider xMaster)
+    public synchronized void setMasterDispatchProvider(XDispatchProvider xMaster)
     {
-        m_aLog.println("Interceptor.setMasterDispatchProvider("+xMaster+") called");
+        System.out.println("Interceptor.setMasterDispatchProvider("+xMaster+") called");
         m_xMaster = xMaster;
     }
 
@@ -180,25 +175,25 @@ public class Interceptor implements com.sun.star.frame.XDispatchProvider,
 
     /** XDispatchProvider
      */
-    public synchronized com.sun.star.frame.XDispatch queryDispatch(com.sun.star.util.URL aURL            ,
+    public synchronized XDispatch queryDispatch(URL aURL            ,
                                                                    String                sTargetFrameName,
                                                                    int                   nSearchFlags    )
     {
-        m_aLog.println("Interceptor.queryDispatch('"+aURL.Complete+"', '"+sTargetFrameName+"', "+nSearchFlags+") called");
+        System.out.println("Interceptor.queryDispatch('"+aURL.Complete+"', '"+sTargetFrameName+"', "+nSearchFlags+") called");
 
         if (impl_isBlockedURL(aURL.Complete))
         {
-            m_aLog.println("Interceptor.queryDispatch(): URL blocked => returns NULL");
+            System.out.println("Interceptor.queryDispatch(): URL blocked => returns NULL");
             return null;
         }
 
         if (m_xSlave != null)
         {
-            m_aLog.println("Interceptor.queryDispatch(): ask slave ...");
+            System.out.println("Interceptor.queryDispatch(): ask slave ...");
             return m_xSlave.queryDispatch(aURL, sTargetFrameName, nSearchFlags);
         }
 
-        m_aLog.println("Interceptor.queryDispatch(): no idea => returns this");
+        System.out.println("Interceptor.queryDispatch(): no idea => returns this");
         return this;
     }
 
@@ -206,12 +201,12 @@ public class Interceptor implements com.sun.star.frame.XDispatchProvider,
 
     /** XDispatchProvider
      */
-    public com.sun.star.frame.XDispatch[] queryDispatches(com.sun.star.frame.DispatchDescriptor[] lRequests)
+    public XDispatch[] queryDispatches(DispatchDescriptor[] lRequests)
     {
         int i = 0;
         int c = lRequests.length;
 
-        com.sun.star.frame.XDispatch[] lResults = new com.sun.star.frame.XDispatch[c];
+        XDispatch[] lResults = new XDispatch[c];
         for (i=0; i<c; ++i)
         {
             lResults[i] = queryDispatch(lRequests[i].FeatureURL ,
@@ -226,30 +221,30 @@ public class Interceptor implements com.sun.star.frame.XDispatchProvider,
 
     /** XDispatch
      */
-    public synchronized void dispatch(com.sun.star.util.URL              aURL      ,
-                                      com.sun.star.beans.PropertyValue[] lArguments)
+    public synchronized void dispatch(URL              aURL      ,
+                                      PropertyValue[] lArguments)
     {
-        m_aLog.println("Interceptor.dispatch('"+aURL.Complete+"') called");
+        System.out.println("Interceptor.dispatch('"+aURL.Complete+"') called");
     }
 
     // ____________________
 
     /** XDispatch
      */
-    public synchronized void addStatusListener(com.sun.star.frame.XStatusListener xListener,
+    public synchronized void addStatusListener(XStatusListener xListener,
                                                com.sun.star.util.URL              aURL     )
     {
-        m_aLog.println("Interceptor.addStatusListener(..., '"+aURL.Complete+"') called");
+        System.out.println("Interceptor.addStatusListener(..., '"+aURL.Complete+"') called");
     }
 
     // ____________________
 
     /** XDispatch
      */
-    public synchronized void removeStatusListener(com.sun.star.frame.XStatusListener xListener,
+    public synchronized void removeStatusListener(XStatusListener xListener,
                                                   com.sun.star.util.URL              aURL     )
     {
-        m_aLog.println("Interceptor.removeStatusListener(..., '"+aURL.Complete+"') called");
+        System.out.println("Interceptor.removeStatusListener(..., '"+aURL.Complete+"') called");
     }
 
     // ____________________
@@ -332,7 +327,9 @@ public class Interceptor implements com.sun.star.frame.XDispatchProvider,
         for (i=0; i<c; ++i)
         {
             if (impl_match(sURL, lBlockedURLs[i]))
+            {
                 return true;
+            }
         }
 
         return false;
