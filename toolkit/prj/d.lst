@@ -47,6 +47,7 @@ mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 ..\inc\toolkit\helper\formpdfexport.hxx %_DEST%\inc%_EXT%\toolkit\helper/formpdfexport.hxx
 ..\inc\toolkit\helper\accessiblefactory.hxx %_DEST%\inc%_EXT%\toolkit\helper\accessiblefactory.hxx
 ..\inc\toolkit\helper\fixedhyperbase.hxx %_DEST%\inc%_EXT%\toolkit\helper\fixedhyperbase.hxx
+..\inc\toolkit\helper\unopropertyarrayhelper.hxx %_DEST%\inc%_EXT%\toolkit\helper\unopropertyarrayhelper.hxx
 
 ..\inc\toolkit\helper\vclunohelper.hxx %_DEST%\inc%_EXT%\toolkit\unohlp.hxx
 ..\inc\toolkit\dllapi.h %_DEST%\inc%_EXT%\toolkit\dllapi.h

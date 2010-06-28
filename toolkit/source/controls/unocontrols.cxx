@@ -1834,7 +1834,9 @@ UnoControlListBoxModel::UnoControlListBoxModel( const UnoControlListBoxModel& i_
     ,m_aItemListListeners( GetMutex() )
 {
 }
-
+UnoControlListBoxModel::~UnoControlListBoxModel()
+{
+}
 // ---------------------------------------------------------------------------------------------------------------------
 ::rtl::OUString UnoControlListBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2674,7 +2676,14 @@ void SAL_CALL UnoListBoxControl::itemListChanged( const lang::EventObject& i_rEv
     if ( xPeerListener.is() )
         xPeerListener->itemListChanged( i_rEvent );
 }
-
+ActionListenerMultiplexer&  UnoListBoxControl::getActionListeners()
+{
+    return maActionListeners;
+}
+ItemListenerMultiplexer&    UnoListBoxControl::getItemListeners()
+{
+    return maItemListeners;
+}
 //  ----------------------------------------------------
 //  class UnoControlComboBoxModel
 //  ----------------------------------------------------

@@ -33,11 +33,12 @@
 #include <tools/table.hxx>
 
 #include <list>
+#include "toolkit/dllapi.h"
 
 //  ----------------------------------------------------
 //  class UnoPropertyArrayHelper
 //  ----------------------------------------------------
-class UnoPropertyArrayHelper : public ::cppu::IPropertyArrayHelper
+class TOOLKIT_DLLPUBLIC UnoPropertyArrayHelper : public ::cppu::IPropertyArrayHelper
 {
 private:
     Table       maIDs;

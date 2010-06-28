@@ -725,11 +725,12 @@ struct UnoControlListBoxModel_Data;
 typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
                                             ,   ::com::sun::star::awt::XItemList
                                             >   UnoControlListBoxModel_Base;
-class UnoControlListBoxModel    :public UnoControlListBoxModel_Base
+class TOOLKIT_DLLPUBLIC UnoControlListBoxModel    :public UnoControlListBoxModel_Base
 {
 public:
                         UnoControlListBoxModel();
                         UnoControlListBoxModel( const UnoControlListBoxModel& i_rSource );
+                        ~UnoControlListBoxModel();
 
     UnoControlModel*    Clone() const { return new UnoControlListBoxModel( *this ); }
 
@@ -820,7 +821,7 @@ typedef ::cppu::AggImplInheritanceHelper5   <   UnoControlBase
                                             ,   ::com::sun::star::awt::XTextLayoutConstrains
                                             ,   ::com::sun::star::awt::XItemListListener
                                             >   UnoListBoxControl_Base;
-class UnoListBoxControl : public UnoListBoxControl_Base
+class TOOLKIT_DLLPUBLIC UnoListBoxControl : public UnoListBoxControl_Base
 {
 public:
                         UnoListBoxControl();
@@ -884,6 +885,8 @@ protected:
     virtual void        ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
     virtual void        updateFromModel();
 
+    ActionListenerMultiplexer&  getActionListeners();
+    ItemListenerMultiplexer&    getItemListeners();
 private:
     ActionListenerMultiplexer   maActionListeners;
     ItemListenerMultiplexer     maItemListeners;
