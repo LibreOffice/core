@@ -17,7 +17,7 @@
 -o fwk.ServiceHandler
 -o fwk.URLTransformer
 -o fwk.MacrosMenuController
--o fwk.ModuleManager
+#i112746 -o fwk.ModuleManager
 -o fwk.UIElementFactoryManager
 -o fwk.UICommandDescription
 -o fwk.LayoutManager
