@@ -99,12 +99,18 @@ FontProperties::FontProperties(const FreetypeServerFont &font) throw()
             fItalic = false;
     }
 
-    // Get the font name.
+    // Get the font name, but prefix with file name hash in case
+    // there are 2 fonts on the system with the same face name
+    sal_Int32 nHashCode = font.GetFontFileName()->hashCode();
+    ::rtl::OUStringBuffer nHashFaceName;
+    nHashFaceName.append(nHashCode, 16);
     const sal_Unicode    * name = font.GetFontSelData().maName.GetBuffer();
-    const size_t          name_sz = std::min(sizeof szFaceName/sizeof(wchar_t)-1,
-                    size_t(font.GetFontSelData().maName.Len()));
+    nHashFaceName.append(name);
 
-    std::copy(name, name + name_sz, szFaceName);
+    const size_t name_sz = std::min(sizeof szFaceName/sizeof(wchar_t)-1,
+                    static_cast<size_t>(nHashFaceName.getLength()));
+
+    std::copy(nHashFaceName.getStr(), nHashFaceName.getStr() + name_sz, szFaceName);
     szFaceName[name_sz] = '\0';
 }
 
@@ -120,13 +126,13 @@ GraphiteFontAdaptor::GraphiteFontAdaptor(ServerFont & sfont, const sal_Int32 dpi
     mfEmUnits(static_cast<FreetypeServerFont &>(sfont).GetMetricsFT().y_ppem),
     mpFeatures(NULL)
 {
-    //std::wstring face_name(maFontProperties.szFaceName);
     const rtl::OString aLang = MsLangId::convertLanguageToIsoByteString( sfont.GetFontSelData().meLanguage );
-#ifdef DEBUG
-    printf("GraphiteFontAdaptor %lx\n", (long)this);
-#endif
     rtl::OString name = rtl::OUStringToOString(
         sfont.GetFontSelData().maTargetName, RTL_TEXTENCODING_UTF8 );
+#ifdef DEBUG
+    printf("GraphiteFontAdaptor %lx %s italic=%u bold=%u\n", (long)this, name.getStr(),
+           maFontProperties.fItalic, maFontProperties.fBold);
+#endif
     sal_Int32 nFeat = name.indexOf(grutils::GrFeatureParser::FEAT_PREFIX) + 1;
     if (nFeat > 0)
     {
@@ -259,21 +265,24 @@ const void * GraphiteFontAdaptor::getTable(gr::fontTableId32 table_id, size_t * 
 // Return the glyph's metrics in pixels.
 void GraphiteFontAdaptor::getGlyphMetrics(gr::gid16 nGlyphId, gr::Rect & aBounding, gr::Point & advances)
 {
-    // Graphite gets really confused if the glyphs have been transformed, so
-    // if orientation has been set we can't use the font's glyph cache
-    // unfortunately the font selection data, doesn't always have the orientation
-    // set, even if it was when the glyphs were cached, so we use our own cache.
+    // There used to be problems when orientation was set however, this no
+    // longer seems to be the case and the Glyph Metric cache in
+    // FreetypeServerFont is more efficient since it lasts between calls to VCL
+#if 1
+    const GlyphMetric & metric = mrFont.GetGlyphMetric(nGlyphId);
 
-//         const GlyphMetric & metric = mrFont.GetGlyphMetric(nGlyphId);
-//
-//         aBounding.right  = aBounding.left = metric.GetOffset().X();
-//         aBounding.bottom = aBounding.top  = -metric.GetOffset().Y();
-//         aBounding.right  += metric.GetSize().Width();
-//         aBounding.bottom -= metric.GetSize().Height();
-//
-//         advances.x = metric.GetDelta().X();
-//         advances.y = -metric.GetDelta().Y();
+    aBounding.right  = aBounding.left = metric.GetOffset().X();
+    aBounding.bottom = aBounding.top  = -metric.GetOffset().Y();
+    aBounding.right  += metric.GetSize().Width();
+    aBounding.bottom -= metric.GetSize().Height();
 
+    advances.x = metric.GetDelta().X();
+    advances.y = -metric.GetDelta().Y();
+
+#else
+    // The problem with the code below is that the cache only lasts
+    // as long as the life time of the GraphiteFontAdaptor, which
+    // is created once per call to X11SalGraphics::GetTextLayout
     GlyphMetricMap::const_iterator gm_itr = maGlyphMetricMap.find(nGlyphId);
     if (gm_itr != maGlyphMetricMap.end())
     {
@@ -321,6 +330,7 @@ void GraphiteFontAdaptor::getGlyphMetrics(gr::gid16 nGlyphId, gr::Rect & aBoundi
         // Now add an entry to our metrics map.
         maGlyphMetricMap[nGlyphId] = std::make_pair(aBounding, advances);
     }
+#endif
 }
 
 #endif
