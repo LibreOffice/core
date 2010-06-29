@@ -48,22 +48,24 @@ const ScMatValType SC_MATVAL_EMPTY     = SC_MATVAL_STRING | 0x04; // STRING plus
 const ScMatValType SC_MATVAL_EMPTYPATH = SC_MATVAL_EMPTY | 0x08;  // EMPTY plus flag
 const ScMatValType SC_MATVAL_NONVALUE  = SC_MATVAL_EMPTYPATH;     // mask of all non-value bits
 
-union ScMatrixValue
+struct ScMatrixValue
 {
-    double fVal;
-    const String* pS;
+    union {
+        double fVal;
+        const String* pS;
+    };
     ScMatValType nType;
 
     /// Only valid if ScMatrix methods indicate so!
-    const String& GetString() const     { return pS ? *pS : EMPTY_STRING; }
+    const String& GetString() const { return pS ? *pS : EMPTY_STRING; }
 
     /// Only valid if ScMatrix methods indicate that this is no string!
     USHORT GetError() const         { return GetDoubleErrorValue( fVal); }
 
     /// Only valid if ScMatrix methods indicate that this is a boolean
-    bool GetBoolean() const         { return fVal != 0.; }
+    bool GetBoolean() const         { return fVal != 0.0; }
 
-    ScMatrixValue() : nType(SC_MATVAL_EMPTY) {}
+    ScMatrixValue() : pS(NULL), nType(SC_MATVAL_EMPTY) {}
 
     ScMatrixValue(const ScMatrixValue& r) : nType(r.nType)
     {
