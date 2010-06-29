@@ -124,6 +124,7 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
             ScMatrixValue aVal = pMatrix->Get(nCol, nRow);
             if (nCol > 0 && aVal != aPrevVal)
             {
+                // Cell value differs.  Flush the cell content.
                 WriteCell(rExport, aPrevVal, nRepeat);
                 nRepeat = 0;
             }
