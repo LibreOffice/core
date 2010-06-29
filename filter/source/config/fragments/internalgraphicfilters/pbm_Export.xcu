@@ -1,0 +1,10 @@
+    <node oor:name="pbm_Export" oor:op="replace"  >
+        <prop oor:name="Type"><value>pbm_Portable_Bitmap</value></prop>
+        <prop oor:name="FormatName"><value>epb</value></prop>
+        <prop oor:name="RealFilterName"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PBM - Portable Bitmap</value>
+        </prop>
+        <prop oor:name="Flags"><value>EXPORT</value></prop>
+    </node>

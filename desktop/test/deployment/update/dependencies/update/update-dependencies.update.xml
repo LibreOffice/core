@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+
+  DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+
+  Copyright 2000, 2010 Oracle and/or its affiliates.
+
+  OpenOffice.org - a multi-platform office productivity suite
+
+  This file is part of OpenOffice.org.
+
+  OpenOffice.org is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License version 3
+  only, as published by the Free Software Foundation.
+
+  OpenOffice.org is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License version 3 for more details
+  (a copy is included in the LICENSE file that accompanied this code).
+
+  You should have received a copy of the GNU Lesser General Public License
+  version 3 along with OpenOffice.org.  If not, see
+  <http://www.openoffice.org/license.html>
+  for a copy of the LGPLv3 License.
+
+ ************************************************************************ -->
+<description xmlns="http://openoffice.org/extensions/update/2006"
+    xmlns:d="http://openoffice.org/extensions/description/2006"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+  <identifier value="org.openoffice/framework/desktop/test/deployment/update/dependencies/update-dependencies.oxt"/>
+  <version value="2.0"/>
+  <dependencies>
+    <dependency d:name="&amp; &lt; &gt; &apos; &quot; > ' tab&#x9;. crlf&#xD;&#xA;. em-dash&#x2014;. line-separator&#x2028;. paragraph-separator&#x2029;. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"/>
+    <dependency d:name="Dependency 1"/>
+    <dependency d:name="Dependency 2"/>
+    <dependency d:name="Dependency 3"/>
+    <dependency d:name="Dependency 4"/>
+    <dependency d:name="Dependency 5"/>
+    <dependency d:name="Dependency 6"/>
+    <dependency d:name="Dependency 7"/>
+    <dependency d:name="Dependency 8"/>
+    <dependency d:name="Dependency 9"/>
+    <dependency d:name="Dependency 10"/>
+    <dependency d:name="Dependency 11"/>
+    <dependency d:name="Dependency 12"/>
+    <dependency d:name="Dependency 13"/>
+    <dependency d:name="Dependency 14"/>
+    <dependency d:name="Dependency 15"/>
+    <dependency d:name="Dependency 16"/>
+    <dependency d:name="Dependency 17"/>
+    <dependency d:name="Dependency 18"/>
+    <dependency d:name="Dependency 19"/>
+    <dependency d:name="Dependency 20"/>
+    <dependency/>
+    <d:OpenOffice.org-minimal-version value="2.1" d:name="OpenOffice.org 2.1"/>
+  </dependencies>
+  <update-website>
+    <src xlink:href="http://nowhere.openoffice.org"/>
+    <src xlink:href="http://nowhere.openoffice.org/2"/>
+  </update-website>
+
+  <publisher>
+    <name xlink:href="http://extensions.openoffice.org/testarea/desktop/dependencies/publisher_en.html" lang="en">My Extension Company</name>
+  </publisher>
+
+  <release-notes>
+    <src xlink:href="http://extensions.openoffice.org/testarea/desktop/dependencies/release-notes_en.html" lang="en" />
+  </release-notes>
+
+</description>

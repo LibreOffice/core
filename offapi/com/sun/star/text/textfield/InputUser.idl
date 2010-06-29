@@ -1,0 +1,63 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_text_textfield_InputUser_idl__
+#define __com_sun_star_text_textfield_InputUser_idl__
+
+#include <com/sun/star/text/TextField.idl>
+
+//=============================================================================
+
+module com { module sun { module star { module text { module textfield {
+
+//=============================================================================
+/** specifies service of an input field that is used to change the content of a corresponding
+     field master of a user defined text field.
+
+    @see com::sun::star::text::TextField
+*/
+published service InputUser
+{
+    service  com::sun::star::text::TextField;
+
+    /** contains the name of the corresponding field master.
+     */
+    [optional, property] string Content;
+
+    /** contains a hint text.
+     <p> This hint may be used as help tip or as headline of a corresponding
+         dialog to edit the field content.</p>
+     */
+    [optional, property] string Hint;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
+

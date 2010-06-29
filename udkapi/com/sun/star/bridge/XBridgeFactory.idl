@@ -1,0 +1,95 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _COM_SUN_STAR_BRIDGE_XBRIDGEFACTORY_IDL_
+#define _COM_SUN_STAR_BRIDGE_XBRIDGEFACTORY_IDL_
+
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+
+#include <com/sun/star/connection/XConnection.idl>
+#include <com/sun/star/bridge/XBridge.idl>
+#include <com/sun/star/bridge/BridgeExistsException.idl>
+#include <com/sun/star/bridge/XInstanceProvider.idl>
+
+ module com {  module sun {  module star {  module bridge {
+
+/** factory to create interprocess bridges.
+ */
+published interface XBridgeFactory: com::sun::star::uno::XInterface
+{
+    /** tries to create a UNO interprocess bridge.
+
+        @param sName
+            The name of the bridge. This allows other components to reuse
+             an already created bridge (using getBridge).
+             <p>
+             If empty, an anonymous bridge is created, which cannot be retrieved with
+             getBridge(). No BridgeExistsException can be thrown in this case.
+
+        @param sProtocol
+            The protocol, that will be used on the connection (e.g., urp) plus additional
+            comma separated name=value protocol properties.
+
+        @param aConnection
+            The connection, which is used to transfer the calls. The bridge expects to
+            own the connection, thus it will close the connection, in case it does not
+            need it anymore.
+
+        @param anInstanceProvider
+            gets called, when a request from remote comes in. You can pass a null reference
+            in case you don't want to export any objects.
+
+        @throws BridgeExistsException
+            There is already a bridge registered with this name.  Use getBridge instead.
+
+        @throws IllegalArgumentException
+            The protocol is unknown or the connection is null.
+     */
+    XBridge createBridge(
+        [in] string sName,
+        [in] string sProtocol ,
+        [in] com::sun::star::connection::XConnection aConnection ,
+        [in] XInstanceProvider anInstanceProvider )
+        raises ( BridgeExistsException , com::sun::star::lang::IllegalArgumentException );
+
+
+    /** tries to get a bridge by this name.
+        <p> Cannot be retrieved, when the bridge got disposed before.
+
+        @return An existing remote bridge or a null reference.
+     */
+    XBridge getBridge( [in] string  sName );
+
+    /** returns the sequence of all named and unnamed UNO interprocess
+        bridges that are instantiated at the time the call is made.
+     */
+    sequence < XBridge > getExistingBridges( );
+};
+
+
+};};};};
+
+#endif

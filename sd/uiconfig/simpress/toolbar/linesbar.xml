@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:BezierFill" toolbar:helpid="helpid:10118"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Polygon" toolbar:helpid="helpid:10117"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal" toolbar:helpid="helpid:10394"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Freeline" toolbar:helpid="helpid:10463"  toolbar:style="radio" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:Bezier_Unfilled" toolbar:helpid="helpid:10397"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Polygon_Unfilled" toolbar:helpid="helpid:10395"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Polygon_Diagonal_Unfilled" toolbar:helpid="helpid:10396"  toolbar:style="radio" />
+ <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:helpid="helpid:10464"  toolbar:style="radio" />
+</toolbar:toolbar>

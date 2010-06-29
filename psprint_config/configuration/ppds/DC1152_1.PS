@@ -1,0 +1,476 @@
+*PPD-Adobe: "4.0"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*%Copyright 1993 Digital Equipment Corporation.
+*FileVersion: "1.2"
+*FormatVersion: "4.0"
+*LanguageVersion: English
+*PCFileName: "DC1152_1.PPD"
+*Product: "(DEClaser 1152)"
+*PSVersion: "(2011.113) 12"
+*ModelName: "Digital DEClaser 1152"
+*NickName: "Digital DEClaser 1152  17 fonts"
+
+*% === Options and Constraints =========
+*OpenGroup: InstallableOptions/Options Installed
+*OpenUI *Option1/Optional Cassette: Boolean
+*DefaultOption1: False
+*Option1 True/Installed: ""
+*Option1 False/Not Installed: ""
+*CloseUI: *Option1
+
+*OpenUI *Option2/Memory Configuration: PickOne
+*DefaultOption2: None
+*Option2 None/Standard 2 MB RAM: ""
+*Option2 4Meg/4 MB Upgrade: ""
+*CloseUI: *Option2
+*CloseGroup: InstallableOptions
+
+*UIConstraints: *Option1 False *InputSlot Lower
+
+*UIConstraints: *InputSlot Lower *PageSize A5
+*UIConstraints: *InputSlot Lower *PageSize B5
+*UIConstraints: *InputSlot Lower *PageSize C5
+*UIConstraints: *InputSlot Lower *PageSize DL
+*UIConstraints: *InputSlot Lower *PageSize Statement
+*UIConstraints: *InputSlot Lower *PageSize TwoThirdsA4
+*UIConstraints: *PageSize A5 *InputSlot Lower 
+*UIConstraints: *PageSize B5 *InputSlot Lower 
+*UIConstraints: *PageSize C5 *InputSlot Lower 
+*UIConstraints: *PageSize DL *InputSlot Lower 
+*UIConstraints: *PageSize Statement *InputSlot Lower 
+*UIConstraints: *PageSize TwoThirdsA4 *InputSlot Lower 
+
+*UIConstraints: *InputSlot Lower *PageRegion A5
+*UIConstraints: *InputSlot Lower *PageRegion B5
+*UIConstraints: *InputSlot Lower *PageRegion C5
+*UIConstraints: *InputSlot Lower *PageRegion DL
+*UIConstraints: *InputSlot Lower *PageRegion Statement
+*UIConstraints: *InputSlot Lower *PageRegion TwoThirdsA4
+*UIConstraints: *PageRegion A5 *InputSlot Lower 
+*UIConstraints: *PageRegion B5 *InputSlot Lower 
+*UIConstraints: *PageRegion C5 *InputSlot Lower 
+*UIConstraints: *PageRegion DL *InputSlot Lower 
+*UIConstraints: *PageRegion Statement *InputSlot Lower 
+*UIConstraints: *PageRegion TwoThirdsA4 *InputSlot Lower 
+
+*% ==== Device Capabilities ===============
+*LanguageLevel: "2"
+*Protocols: BCP
+*Emulators: hplj
+*StartEmulator_hplj: "currentfile /LaserJetIIP statusdict /emulate get exec "
+*StopEmulator_hplj: "<1B7F>0"
+
+*FreeVM: "284922"
+*VMOption None/Standard 2 MB RAM: "284922"
+*VMOption 4Meg/4 MB Upgrade: "2383370"
+
+*ColorDevice:  False
+*DefaultColorSpace:  Gray
+*VariablePaperSize: False
+*FileSystem: False
+
+*Throughput: "4"
+*Password: "()"
+*ExitServer: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not {
+     (WARNING: Cannot modify initial VM.) =
+     (Missing or invalid password.) =
+     (Please contact the author of this software.) = flush quit
+     } if
+"
+*End
+
+*Reset: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not {
+    (WARNING: Cannot reset printer.) =
+    (Missing or invalid password.) =
+    (Please contact the author of this software.) = flush quit
+    } if
+ systemdict /quit get exec
+ (WARNING : Printer Reset Failed.) = flush
+"
+*End
+
+*DefaultResolution: 300dpi
+*Resolution 300dpi: "1 dict dup /HWResolution [300 300] put setpagedevice"
+*?Resolution: "
+  save
+    currentpagedevice /HWResolution get
+    0 get
+    (          ) cvs print
+    (dpi)
+    = flush
+  restore
+"
+*End
+
+*% Halftone Information ===============
+*ScreenFreq: "60.0"
+*ScreenAngle: "45.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+  { abs   exch   abs   2 copy   add   1 gt   {1 sub   dup   mul   exch  
+  1 sub   dup   mul   add   1 sub  } {dup   mul   exch   dup   mul  
+  add   1 exch   sub  } ifelse  }
+"
+*End
+*ScreenProc Line: "{ pop }"
+*ScreenProc Ellipse: "{ dup 5 mul 8 div mul exch dup mul exch add sqrt 1 exch sub }"
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*% Paper Handling ===================
+
+*% Code in this section both selects a tray and sets up a frame buffer.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: Letter                                  
+*PageSize Letter: "statusdict /lettertray get exec"
+*PageSize Legal: "statusdict /legaltray get exec"
+*PageSize A4: "statusdict /a4tray get exec"
+*PageSize Executive: "statusdict /executivetray get exec"
+*PageSize Monarch/Monarch Envelope: "statusdict /3.875x7.5tray get exec"
+*PageSize Comm10/Comm10 Envelope: "statusdict /4.125x9.5tray get exec"
+*PageSize 7x9: "statusdict /7x9tray get exec"
+*PageSize A5: "statusdict /a5tray get exec"
+*PageSize B5/B5 Envelope: "statusdict /b5tray get exec"
+*PageSize C5/C5 Envelope: "statusdict /c5tray get exec"
+*PageSize DL/DL Envelope: "statusdict /envelopetray get exec dl"
+*PageSize Statement: "statusdict /halflettertray get exec"
+*PageSize TwoThirdsA4/Two Thirds A4: "statusdict /twothirdsa4tray get exec"
+*PageSize LetterSmall: "statusdict /lettertray get exec lettersmall"
+*PageSize LegalSmall: "statusdict /legaltray get exec legalsmall"
+*PageSize A4Small: "statusdict /a4tray get exec a4small"
+*?PageSize: "
+ save
+   currentpagedevice /PageSize get aload pop
+   2 copy gt {exch} if 
+   (Unknown) 
+  13 dict
+   dup [612 792] (Letter) put
+   dup [612 1008] (Legal) put
+   dup [595 842] (A4) put
+   dup [522 756] (Executive) put
+   dup [279 540] (Monarch) put
+   dup [297 684] (Comm10) put
+   dup [504 648] (7x9) put
+   dup [419 595] (A5) put
+   dup [515 728] (B5) put
+   dup [459 649] (C5) put
+   dup [311 623] (DL) put
+   dup [396 612] (Statement) put
+   dup [561 595] (TwoThirdsA4) put
+ { exch aload pop 4 index sub abs 5 le exch 
+   5 index sub abs 5 le and 
+      {exch pop exit} {pop} ifelse
+   } bind forall
+   = flush pop pop
+restore 
+"
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion:  PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter                                  
+*PageRegion Letter: "letter"
+*PageRegion Legal: "legal"
+*PageRegion A4: "a4"
+*PageRegion Executive: "executivepage"
+*PageRegion Monarch/Monarch Envelope: "3.875x7.5"
+*PageRegion Comm10/Comm10 Envelope: "4.125x9.5"
+*PageRegion 7x9: "7x9"
+*PageRegion A5: "a5"
+*PageRegion B5/B5 Envelope: "b5"
+*PageRegion C5/C5 Envelope: "c5"
+*PageRegion DL/DL Envelope: "dl"
+*PageRegion Statement: "halfletter"
+*PageRegion TwoThirdsA4/Two Thirds A4: "twothirdsa4"
+*PageRegion LetterSmall: "lettersmall"
+*PageRegion LegalSmall: "legalsmall"
+*PageRegion A4Small: "a4small"
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter                                  
+*ImageableArea Letter: "12.0 4.8001 595.68 781.2 "
+*ImageableArea Legal: "12.0 12.1201 595.68 989.88 "
+*ImageableArea A4: "12.0 12.0 580.32 835.44 "
+*ImageableArea Executive: "13.4401 9.24 512.64 749.4 "
+*ImageableArea Monarch/Monarch Envelope: "10.0801 9.12 263.52 534.96 "
+*ImageableArea Comm10/Comm10 Envelope: "12.0 10.0801 280.8 679.92 "
+*ImageableArea 7x9: "12.0 9.24 488.16 642.84 "
+*ImageableArea A5: "13.4401 7.2 405.12 587.76 "
+*ImageableArea B5/B5 Envelope: "9.12 8.1601 500.64 722.16 "
+*ImageableArea C5/C5 Envelope: "13.4401 12.0 443.52 646.32 "
+*ImageableArea DL/DL Envelope: "10.08 9.24 301.92 618.84 "
+*ImageableArea Statement: "13.4401 9.24 382.08 606.84 "
+*ImageableArea TwoThirdsA4/Two Thirds A4: "9.12 9.24 546.72 590.04 "
+*ImageableArea LetterSmall: "25.44 30.0 578.4 760.8 "
+*ImageableArea LegalSmall: "61.92 39.96 545.76 963.0 "
+*ImageableArea A4Small: "23.52 26.04 568.8 807.0 "
+*?ImageableArea: "
+ save
+   /cvp { (                ) cvs print ( ) print } bind def
+   /upperright {10000 mul floor 10000 div} bind def
+   /lowerleft {10000 mul ceiling 10000 div} bind def
+   newpath clippath pathbbox
+   4 -2 roll exch 2 {lowerleft cvp} repeat
+   exch 2 {upperright cvp} repeat flush
+ restore
+"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter                                  
+*PaperDimension Letter: "612 792"
+*PaperDimension Legal: "612 1008"
+*PaperDimension A4: "595 842"
+*PaperDimension Executive: "522 756"
+*PaperDimension Monarch/Monarch Envelope: "279 540"
+*PaperDimension Comm10/Comm10 Envelope: "297 684"
+*PaperDimension 7x9: "504 648"
+*PaperDimension A5: "419 595"
+*PaperDimension B5/B5 Envelope: "515 728"
+*PaperDimension C5/C5 Envelope: "459 649"
+*PaperDimension DL/DL Envelope: "311 623"
+*PaperDimension Statement: "396 612"
+*PaperDimension TwoThirdsA4/Two Thirds A4: "561 595"
+*PaperDimension LetterSmall: "612 792"
+*PaperDimension LegalSmall: "612 1008"
+*PaperDimension A4Small: "595 842"
+
+*RequiresPageRegion Upper: True
+*LandscapeOrientation: Plus90
+
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: Unknown
+*InputSlot  Upper/Multimedia Feeder: "
+  currentpagedevice /InputAttributes get
+  0 get dup
+  null eq {pop}
+  { dup
+    /InputAttributes
+    1 dict dup /Priority [0] put
+    put  setpagedevice
+  } ifelse "
+*End
+*InputSlot  Lower/Cassette: "
+  currentpagedevice /InputAttributes get
+  1 get dup
+  null eq {pop}
+  { dup
+    /InputAttributes
+    1 dict dup /Priority [1] put
+    put  setpagedevice
+  } ifelse "
+*End
+*?InputSlot: "
+save
+  2 dict
+  dup /0 (Upper) put
+  dup /1 (Lower) put
+  currentpagedevice /InputAttributes get
+  dup /Priority known
+  { /Priority get 0 get (      ) cvs cvn get }
+  {
+    dup length 1 eq
+    { {pop} forall (       ) cvs cvn get }
+    { pop pop (Unknown) } ifelse
+  } ifelse
+  = flush
+restore
+"
+*End
+*CloseUI: *InputSlot
+
+*DefaultOutputBin: OnlyOne
+*DefaultOutputOrder: Normal
+
+*OpenUI *ManualFeed:  Boolean
+*OrderDependency: 20 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed True: "1 dict dup /ManualFeed true put setpagedevice"
+*ManualFeed False: "1 dict dup /ManualFeed false put setpagedevice"
+*?ManualFeed: "
+  save
+    currentpagedevice /ManualFeed get
+    {(True)}{(False)}ifelse = flush
+  restore
+"
+*End
+*CloseUI: *ManualFeed
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font Courier: Standard "(002.002)" Standard
+*Font Courier-Bold: Standard "(002.002)" Standard
+*Font Courier-BoldOblique: Standard "(002.002)" Standard
+*Font Courier-Oblique: Standard "(002.002)" Standard
+*Font Helvetica: Standard "(001.002)" Standard
+*Font Helvetica-Bold: Standard "(001.002)" Standard
+*Font Helvetica-BoldOblique: Standard "(001.002)" Standard
+*Font Helvetica-Narrow: Standard "(001.002)" Standard
+*Font Helvetica-Narrow-Bold: Standard "(001.002)" Standard
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.002)" Standard
+*Font Helvetica-Narrow-Oblique: Standard "(001.002)" Standard
+*Font Helvetica-Oblique: Standard "(001.002)" Standard
+*Font Symbol: Special "(001.003)" Special
+*Font Times-Bold: Standard "(001.002)" Standard
+*Font Times-BoldItalic: Standard "(001.004)" Standard
+*Font Times-Italic: Standard "(001.002)" Standard
+*Font Times-Roman: Standard "(001.002)" Standard
+
+*?FontQuery: "
+ save
+   { count 1 gt
+      { exch dup 127 string cvs (/) print print (:) print
+        /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+      } { exit } ifelse
+   } bind loop
+   (*) = flush
+ restore
+"
+*End
+
+*?FontList: "
+save
+  (*) {cvn ==} 128 string /Font resourceforall
+  (*) = flush
+restore
+"
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ] %%)
+*Status: "initializing"
+*Status: "idle"
+*Status: "printing"
+*Status: "printing test page"
+*Status: "busy"
+*Status: "waiting"
+*Status: "resetting printer"
+*Status: "printing engine test"
+*Status: "PrinterError: beam detect error"
+*Status: "PrinterError: cover open"
+*Status: "PrinterError: no toner cartridge"
+*Status: "PrinterError: paper entry misfeed"
+*Status: "PrinterError: paper exit misfeed"
+*Status: "PrinterError: load option tray"
+*Status: "PrinterError: request manual feed of paper"
+*Status: "PrinterError: paper path 1"
+*Status: "PrinterError: paper path 3"
+*Status: "PrinterError: paper path 4"
+*Status: "PrinterError: paper path 6"
+*Status: "PrinterError: no paper tray"
+*Status: "PrinterError: out of paper"
+*Status: "PrinterError: manual feed timeout"
+*Status: "PrinterError: Service 50"
+*Status: "PrinterError: Service 51"
+*Status: "PrinterError: Service 52"
+*Status: "PrinterError: Service 57"
+*Status: "PrinterError: Service 68"
+*Status: "PrinterError: Service 80"
+*Status: "PrinterError: Service 81"
+*Status: "PrinterError: Service 82"
+*Status: "PrinterError: Service 83"
+*Status: "PrinterError: Service 84"
+*Status: "PrinterError: Service 85"
+*Status: "PrinterError: Service 86"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "Serial"
+*Source: "SerialB"
+*Source: "LocalTalk"
+*Source: "Parallel"
+*Source: "Internal"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+*PrinterError: "beam detect error"
+*PrinterError: "cover open"
+*PrinterError: "no toner cartridge"
+*PrinterError: "paper entry misfeed"
+*PrinterError: "paper exit misfeed"
+*PrinterError: "load option tray"
+*PrinterError: "request manual feed of paper"
+*PrinterError: "paper path 1"
+*PrinterError: "paper path 3"
+*PrinterError: "paper path 4"
+*PrinterError: "paper path 6"
+*PrinterError: "no paper tray"
+*PrinterError: "out of paper"
+*PrinterError: "manual feed timeout"
+*PrinterError: "Service 50"
+*PrinterError: "Service 51"
+*PrinterError: "Service 52"
+*PrinterError: "Service 57"
+*PrinterError: "Service 68"
+*PrinterError: "Service 80"
+*PrinterError: "Service 81"
+*PrinterError: "Service 82"
+*PrinterError: "Service 83"
+*PrinterError: "Service 84"
+*PrinterError: "Service 85"
+*PrinterError: "Service 86"
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi
+
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+*%  For 60 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.300dpi/60 lpi / 300 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.300dpi/60 lpi / 300 dpi: "60"
+
+*%  For 53 lpi / 300 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq CustomColor.53lpi.300dpi/53 lpi / 300 dpi: "53.033"
+*ColorSepScreenFreq ProcessCyan.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.53lpi.300dpi/53 lpi / 300 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.53lpi.300dpi/53 lpi / 300 dpi: "50.0"
+
+*% Produced by "bldppd42.ps" version 4.0 edit 11
+*% Last Edit Date: Feb 7 1996
+*% The byte count of this file should be exactly 015971 or 016447
+*% depending on the filesystem it resides in.
+*% end of PPD file for DEClaser 1152
+

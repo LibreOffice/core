@@ -1,0 +1,12 @@
+    <node oor:name="impress_StarImpress_50_packed" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.sfx2.BinaryFormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>sdp</value></prop>
+        <prop oor:name="MediaType"><value>application/vnd.stardivision.impress-packed</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>StarImpress 5.0 (packed)</value></prop>
+        <prop oor:name="UIName">
+            <value>StarImpress (packed)</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

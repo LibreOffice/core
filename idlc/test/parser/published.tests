@@ -1,0 +1,708 @@
+#*************************************************************************
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+#
+# OpenOffice.org - a multi-platform office productivity suite
+#
+# This file is part of OpenOffice.org.
+#
+# OpenOffice.org is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License version 3
+# only, as published by the Free Software Foundation.
+#
+# OpenOffice.org is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License version 3 for more details
+# (a copy is included in the LICENSE file that accompanied this code).
+#
+# You should have received a copy of the GNU Lesser General Public License
+# version 3 along with OpenOffice.org.  If not, see
+# <http://www.openoffice.org/license.html>
+# for a copy of the LGPLv3 License.
+#
+#*************************************************************************
+
+EXPECT SUCCESS "published.tests 1":
+published enum Enum { VALUE };
+published struct Struct1 { long member; };
+published struct Struct2<T> { T member; };
+published exception E1 {};
+published interface I1 {};
+published typedef long Typedef;
+published const long Constant = 1;
+published constants Constants { const long Constant = 1; };
+published service Service1: I1 {};
+published service Service2 { interface I1; };
+published singleton Singleton1: I1;
+published singleton Singleton2 { service Service2; };
+
+
+EXPECT FAILURE "published.tests 2":
+constants Constants { published const long C = 1; };
+
+
+EXPECT FAILURE "published.tests 3":
+published constants Constants { published const long C = 1; };
+
+
+EXPECT FAILURE "published.tests 4":
+published module m {};
+
+
+EXPECT SUCCESS "published.tests 5":
+interface I1;
+interface I1 {};
+
+
+EXPECT SUCCESS "published.tests 6":
+interface I1;
+published interface I1 {};
+
+
+EXPECT FAILURE "published.tests 7":
+published interface I1;
+interface I1 {};
+
+
+EXPECT SUCCESS "published.tests 8":
+published interface I1;
+published interface I1 {};
+
+
+EXPECT SUCCESS "published.tests 9":
+struct S1 { long m1; };
+struct S2: S1 { long m2; };
+
+
+EXPECT FAILURE "published.tests 10":
+struct S1 { long m1; };
+published struct S2: S1 { long m2; };
+
+
+EXPECT SUCCESS "published.tests 11":
+published struct S1 { long m1; };
+struct S2: S1 { long m2; };
+
+
+EXPECT SUCCESS "published.tests 12":
+published struct S1 { long m1; };
+published struct S2: S1 { long m2; };
+
+
+EXPECT SUCCESS "published.tests 13":
+enum E { V };
+struct S1<T> { T m1; };
+struct S2 { S1<E> m2; };
+
+
+EXPECT FAILURE "published.tests 14":
+enum E { V };
+struct S1<T> { T m1; };
+published struct S2 { S1<E> m2; };
+
+
+EXPECT SUCCESS "published.tests 15":
+enum E { V };
+published struct S1<T> { T m1; };
+struct S2 { S1<E> m2; };
+
+
+EXPECT FAILURE "published.tests 16":
+enum E { V };
+published struct S1<T> { T m1; };
+published struct S2 { S1<E> m2; };
+
+
+EXPECT SUCCESS "published.tests 17":
+published enum E { V };
+struct S1<T> { T m1; };
+struct S2 { S1<E> m2; };
+
+
+EXPECT FAILURE "published.tests 18":
+published enum E { V };
+struct S1<T> { T m1; };
+published struct S2 { S1<E> m2; };
+
+
+EXPECT SUCCESS "published.tests 19":
+published enum E { V };
+published struct S1<T> { T m1; };
+struct S2 { S1<E> m2; };
+
+
+EXPECT SUCCESS "published.tests 20":
+published enum E { V };
+published struct S1<T> { T m1; };
+published struct S2 { S1<E> m2; };
+
+
+EXPECT SUCCESS "published.tests 21":
+module com { module sun { module star { module uno {
+exception Exception {};
+exception E2: Exception {};
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 22":
+module com { module sun { module star { module uno {
+exception Exception {};
+published exception E2: Exception {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 23":
+module com { module sun { module star { module uno {
+published exception Exception {};
+exception E2: Exception {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 24":
+module com { module sun { module star { module uno {
+published exception Exception {};
+published exception E2: Exception {};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 25":
+enum E { V };
+module com { module sun { module star { module uno {
+exception Exception { E m; };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 26":
+enum E { V };
+module com { module sun { module star { module uno {
+published exception Exception { E m; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 27":
+published enum E { V };
+module com { module sun { module star { module uno {
+exception Exception { E m; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 28":
+published enum E { V };
+module com { module sun { module star { module uno {
+published exception Exception { E m; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 29":
+interface I1 {};
+interface I2: I1 {};
+
+
+EXPECT FAILURE "published.tests 30":
+interface I1 {};
+published interface I2: I1 {};
+
+
+EXPECT SUCCESS "published.tests 31":
+published interface I1 {};
+interface I2: I1 {};
+
+
+EXPECT SUCCESS "published.tests 32":
+published interface I1 {};
+published interface I2: I1 {};
+
+
+EXPECT SUCCESS "published.tests 33":
+enum E { V };
+interface I1 { [attribute] E m; };
+
+
+EXPECT FAILURE "published.tests 34":
+enum E { V };
+published interface I1 { [attribute] E m; };
+
+
+EXPECT SUCCESS "published.tests 35":
+published enum E { V };
+interface I1 { [attribute] E m; };
+
+
+EXPECT SUCCESS "published.tests 36":
+published enum E { V };
+published interface I1 { [attribute] E m; };
+
+
+EXPECT SUCCESS "published.tests 36a.1":
+module com { module sun { module star { module uno {
+exception Exception {};
+interface I1 { [attribute] long m { get raises (Exception); }; };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 36a.2":
+module com { module sun { module star { module uno {
+exception Exception {};
+published interface I1 {
+	[attribute] long m { get raises (Exception); }; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 36a.3":
+module com { module sun { module star { module uno {
+published exception Exception {};
+interface I1 { [attribute] long m { get raises (Exception); }; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 36a.4":
+module com { module sun { module star { module uno {
+published exception Exception {};
+published interface I1 {
+	 [attribute] long m { get raises (Exception); }; };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 37":
+enum E { V };
+interface I1 { E f(); };
+
+
+EXPECT FAILURE "published.tests 38":
+enum E { V };
+published interface I1 { E f(); };
+
+
+EXPECT SUCCESS "published.tests 39":
+published enum E { V };
+interface I1 { E f(); };
+
+
+EXPECT SUCCESS "published.tests 40":
+published enum E { V };
+published interface I1 { E f(); };
+
+
+EXPECT SUCCESS "published.tests 41":
+enum E { V };
+interface I1 { void f([in] E p); };
+
+
+EXPECT FAILURE "published.tests 42":
+enum E { V };
+published interface I1 { void f([in] E p); };
+
+
+EXPECT SUCCESS "published.tests 43":
+published enum E { V };
+interface I1 { void f([in] E p); };
+
+
+EXPECT SUCCESS "published.tests 44":
+published enum E { V };
+published interface I1 { void f([in] E p); };
+
+
+EXPECT SUCCESS "published.tests 45":
+module com { module sun { module star { module uno {
+exception Exception {};
+interface I1 { void f() raises (Exception); };
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 46":
+module com { module sun { module star { module uno {
+exception Exception {};
+published interface I1 { void f() raises (Exception); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 47":
+module com { module sun { module star { module uno {
+published exception Exception {};
+interface I1 { void f() raises (Exception); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 48":
+module com { module sun { module star { module uno {
+published exception Exception {};
+published interface I1 { void f() raises (Exception); };
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 49":
+interface I1 {};
+interface I2 { interface I1; };
+
+
+EXPECT FAILURE "published.tests 50":
+interface I1 {};
+published interface I2 { interface I1; };
+
+
+EXPECT SUCCESS "published.tests 51":
+published interface I1 {};
+interface I2 { interface I1; };
+
+
+EXPECT SUCCESS "published.tests 52":
+published interface I1 {};
+published interface I2 { interface I1; };
+
+
+EXPECT SUCCESS "published.tests 57":
+enum E { V };
+typedef E T;
+
+
+EXPECT FAILURE "published.tests 58":
+enum E { V };
+published typedef E T;
+
+
+EXPECT SUCCESS "published.tests 59":
+published enum E { V };
+typedef E T;
+
+
+EXPECT SUCCESS "published.tests 60":
+published enum E { V };
+published typedef E T;
+
+
+EXPECT SUCCESS "published.tests 61":
+enum E { V };
+typedef E T;
+struct S { T m; };
+
+
+EXPECT FAILURE "published.tests 62":
+enum E { V };
+typedef E T;
+published struct S { T m; };
+
+
+EXPECT FAILURE "published.tests 63":
+enum E { V };
+published typedef E T;
+struct S { T m; };
+
+
+EXPECT FAILURE "published.tests 64":
+enum E { V };
+published typedef E T;
+published struct S { T m; };
+
+
+EXPECT SUCCESS "published.tests 65":
+published enum E { V };
+typedef E T;
+struct S { T m; };
+
+
+EXPECT FAILURE "published.tests 66":
+published enum E { V };
+typedef E T;
+published struct S { T m; };
+
+
+EXPECT SUCCESS "published.tests 67":
+published enum E { V };
+published typedef E T;
+struct S { T m; };
+
+
+EXPECT SUCCESS "published.tests 68":
+published enum E { V };
+published typedef E T;
+published struct S { T m; };
+
+
+EXPECT SUCCESS "published.tests 69":
+const long C1 = 1;
+const long C2 = C1 + 1;
+
+
+EXPECT FAILURE "published.tests 70":
+const long C1 = 1;
+published const long C2 = C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 71":
+published const long C1 = 1;
+const long C2 = C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 72":
+published const long C1 = 1;
+published const long C2 = C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 73":
+constants Cs {
+	const long C1 = 1;
+	const long C2 = C1 + 1;
+};
+
+
+EXPECT SUCCESS "published.tests 74":
+published constants Cs {
+	const long C1 = 1;
+	const long C2 = C1 + 1;
+};
+
+
+EXPECT SUCCESS "published.tests 75":
+constants Cs { const long C1 = 1; };
+const long C2 = Cs::C1 + 1;
+
+
+EXPECT FAILURE "published.tests 76":
+constants Cs { const long C1 = 1; };
+published const long C2 = Cs::C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 77":
+published constants Cs { const long C1 = 1; };
+const long C2 = Cs::C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 78":
+published constants Cs { const long C1 = 1; };
+published const long C2 = Cs::C1 + 1;
+
+
+EXPECT SUCCESS "published.tests 79":
+const long C1 = 1;
+constants Cs { const long C2 = C1 + 1; };
+
+
+EXPECT FAILURE "published.tests 80":
+const long C1 = 1;
+published constants Cs { const long C2 = C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 81":
+published const long C1 = 1;
+constants Cs { const long C2 = C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 82":
+published const long C1 = 1;
+published constants Cs { const long C2 = C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 83":
+constants Cs1 { const long C1 = 1; };
+constants Cs2 { const long C2 = Cs1::C1 + 1; };
+
+
+EXPECT FAILURE "published.tests 84":
+constants Cs1 { const long C1 = 1; };
+published constants Cs2 { const long C2 = Cs1::C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 85":
+published constants Cs1 { const long C1 = 1; };
+constants Cs2 { const long C2 = Cs1::C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 86":
+published constants Cs1 { const long C1 = 1; };
+published constants Cs2 { const long C2 = Cs1::C1 + 1; };
+
+
+EXPECT SUCCESS "published.tests 87":
+typedef long T;
+const T C = 1;
+
+
+EXPECT FAILURE "published.tests 88":
+typedef long T;
+published const T C = 1;
+
+
+EXPECT SUCCESS "published.tests 89":
+published typedef long T;
+const T C = 1;
+
+
+EXPECT SUCCESS "published.tests 90":
+published typedef long T;
+published const T C = 1;
+
+
+EXPECT SUCCESS "published.tests 91":
+service S1 {};
+service S2 { service S1; };
+
+
+EXPECT FAILURE "published.tests 92":
+service S1 {};
+published service S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 93":
+published service S1 {};
+service S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 94":
+published service S1 {};
+published service S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 95":
+interface I1 {};
+service S { interface I1; };
+
+
+EXPECT FAILURE "published.tests 96":
+interface I1 {};
+published service S { interface I1; };
+
+
+EXPECT SUCCESS "published.tests 97":
+published interface I1 {};
+service S { interface I1; };
+
+
+EXPECT SUCCESS "published.tests 98":
+published interface I1 {};
+published service S { interface I1; };
+
+
+EXPECT SUCCESS "published.tests 99":
+interface I1 {};
+service S: I1;
+
+
+EXPECT FAILURE "published.tests 100":
+interface I1 {};
+published service S: I1;
+
+
+EXPECT SUCCESS "published.tests 101":
+published interface I1 {};
+service S: I1;
+
+
+EXPECT SUCCESS "published.tests 102":
+published interface I1 {};
+published service S: I1;
+
+
+EXPECT SUCCESS "published.tests 103":
+enum E { V };
+interface I1 {};
+service S: I1 {
+	f([in] E p);
+};
+
+
+EXPECT FAILURE "published.tests 104":
+enum E { V };
+published interface I1 {};
+published service S: I1 {
+	f([in] E p);
+};
+
+
+EXPECT SUCCESS "published.tests 105":
+published enum E { V };
+interface I1 {};
+service S: I1 {
+	f([in] E p);
+};
+
+
+EXPECT SUCCESS "published.tests 106":
+published enum E { V };
+published interface I1 {};
+published service S: I1 {
+	f([in] E p);
+};
+
+
+EXPECT SUCCESS "published.tests 107":
+module com { module sun { module star { module uno {
+exception Exception {};
+interface I1 {};
+service S: I1 {
+	f() raises (Exception);
+};
+}; }; }; };
+
+
+EXPECT FAILURE "published.tests 108":
+module com { module sun { module star { module uno {
+exception Exception {};
+published interface I1 {};
+published service S: I1 {
+	f() raises (Exception);
+};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 109":
+module com { module sun { module star { module uno {
+published exception Exception {};
+interface I1 {};
+service S: I1 {
+	f() raises (Exception);
+};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 110":
+module com { module sun { module star { module uno {
+published exception Exception {};
+published interface I1 {};
+published service S: I1 {
+	f() raises (Exception);
+};
+}; }; }; };
+
+
+EXPECT SUCCESS "published.tests 111":
+service S1 {};
+singleton S2 { service S1; };
+
+
+EXPECT FAILURE "published.tests 112":
+service S1 {};
+published singleton S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 113":
+published service S1 {};
+singleton S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 114":
+published service S1 {};
+published singleton S2 { service S1; };
+
+
+EXPECT SUCCESS "published.tests 115":
+interface I1 {};
+singleton S: I1;
+
+
+EXPECT FAILURE "published.tests 116":
+interface I1 {};
+published singleton S: I1;
+
+
+EXPECT SUCCESS "published.tests 117":
+published interface I1 {};
+singleton S: I1;
+
+
+EXPECT SUCCESS "published.tests 118":
+published interface I1 {};
+published singleton S: I1;

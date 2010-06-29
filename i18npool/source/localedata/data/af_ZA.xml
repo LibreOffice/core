@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.3">
+<LC_INFO>
+<Language>
+<LangID>af</LangID>
+<DefaultName>Afrikaans</DefaultName>
+</Language>
+<Country>
+<CountryID>ZA</CountryID>
+<DefaultName>South Africa</DefaultName>
+</Country>
+</LC_INFO>
+<LC_CTYPE unoid="generic">
+<Separators>
+<DateSeparator>/</DateSeparator>
+<ThousandSeparator>,</ThousandSeparator>
+<DecimalSeparator>.</DecimalSeparator>
+<TimeSeparator>:</TimeSeparator>
+<Time100SecSeparator>.</Time100SecSeparator>
+<ListSeparator>;</ListSeparator>
+<LongDateDayOfWeekSeparator> </LongDateDayOfWeekSeparator>
+<LongDateDaySeparator> </LongDateDaySeparator>
+<LongDateMonthSeparator> </LongDateMonthSeparator>
+<LongDateYearSeparator> </LongDateYearSeparator>
+</Separators>
+<Markers>
+<QuotationStart>‘</QuotationStart>
+<QuotationEnd>’</QuotationEnd>
+<DoubleQuotationStart>“</DoubleQuotationStart>
+<DoubleQuotationEnd>”</DoubleQuotationEnd>
+</Markers>
+<TimeAM>vm.</TimeAM>
+<TimePM>nm.</TimePM>
+<MeasurementSystem>metric</MeasurementSystem>
+</LC_CTYPE>
+<LC_FORMAT ref="en_ZA" replaceTo="[$R-436]"/>
+<LC_COLLATION ref="en_US"/>
+<LC_SEARCH ref="en_US"/>
+<LC_INDEX>
+<IndexKey unoid="alphanumeric" default="true" phonetic="false">A-Z</IndexKey>
+<UnicodeScript>0</UnicodeScript>
+<UnicodeScript>1</UnicodeScript>
+<FollowPageWord>bl.</FollowPageWord>
+<FollowPageWord>bl.</FollowPageWord>
+</LC_INDEX>
+<LC_CALENDAR>
+<Calendar unoid="gregorian" default="true">
+<DaysOfWeek>
+<Day>
+<DayID>sun</DayID>
+<DefaultAbbrvName>So</DefaultAbbrvName>
+<DefaultFullName>Sondag</DefaultFullName>
+</Day>
+<Day>
+<DayID>mon</DayID>
+<DefaultAbbrvName>Ma</DefaultAbbrvName>
+<DefaultFullName>Maandag</DefaultFullName>
+</Day>
+<Day>
+<DayID>tue</DayID>
+<DefaultAbbrvName>Di</DefaultAbbrvName>
+<DefaultFullName>Dinsdag</DefaultFullName>
+</Day>
+<Day>
+<DayID>wed</DayID>
+<DefaultAbbrvName>Wo</DefaultAbbrvName>
+<DefaultFullName>Woensdag</DefaultFullName>
+</Day>
+<Day>
+<DayID>thu</DayID>
+<DefaultAbbrvName>Do</DefaultAbbrvName>
+<DefaultFullName>Donderdag</DefaultFullName>
+</Day>
+<Day>
+<DayID>fri</DayID>
+<DefaultAbbrvName>Vr</DefaultAbbrvName>
+<DefaultFullName>Vrydag</DefaultFullName>
+</Day>
+<Day>
+<DayID>sat</DayID>
+<DefaultAbbrvName>Sa</DefaultAbbrvName>
+<DefaultFullName>Saterdag</DefaultFullName>
+</Day>
+</DaysOfWeek>
+<MonthsOfYear>
+<Month>
+<MonthID>jan</MonthID>
+<DefaultAbbrvName>Jan</DefaultAbbrvName>
+<DefaultFullName>Januarie</DefaultFullName>
+</Month>
+<Month>
+<MonthID>feb</MonthID>
+<DefaultAbbrvName>Feb</DefaultAbbrvName>
+<DefaultFullName>Februarie</DefaultFullName>
+</Month>
+<Month>
+<MonthID>mar</MonthID>
+<DefaultAbbrvName>Mrt</DefaultAbbrvName>
+<DefaultFullName>Maart</DefaultFullName>
+</Month>
+<Month>
+<MonthID>apr</MonthID>
+<DefaultAbbrvName>Apr</DefaultAbbrvName>
+<DefaultFullName>April</DefaultFullName>
+</Month>
+<Month>
+<MonthID>may</MonthID>
+<DefaultAbbrvName>Mei</DefaultAbbrvName>
+<DefaultFullName>Mei</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jun</MonthID>
+<DefaultAbbrvName>Jun</DefaultAbbrvName>
+<DefaultFullName>Junie</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jul</MonthID>
+<DefaultAbbrvName>Jul</DefaultAbbrvName>
+<DefaultFullName>Julie</DefaultFullName>
+</Month>
+<Month>
+<MonthID>aug</MonthID>
+<DefaultAbbrvName>Aug</DefaultAbbrvName>
+<DefaultFullName>Augustus</DefaultFullName>
+</Month>
+<Month>
+<MonthID>sep</MonthID>
+<DefaultAbbrvName>Sep</DefaultAbbrvName>
+<DefaultFullName>September</DefaultFullName>
+</Month>
+<Month>
+<MonthID>oct</MonthID>
+<DefaultAbbrvName>Okt</DefaultAbbrvName>
+<DefaultFullName>Oktober</DefaultFullName>
+</Month>
+<Month>
+<MonthID>nov</MonthID>
+<DefaultAbbrvName>Nov</DefaultAbbrvName>
+<DefaultFullName>November</DefaultFullName>
+</Month>
+<Month>
+<MonthID>dec</MonthID>
+<DefaultAbbrvName>Des</DefaultAbbrvName>
+<DefaultFullName>Desember</DefaultFullName>
+</Month>
+</MonthsOfYear>
+<Eras>
+<Era>
+<EraID>bc</EraID>
+<DefaultAbbrvName>v.C.</DefaultAbbrvName>
+<DefaultFullName>voor Christus</DefaultFullName>
+</Era>
+<Era>
+<EraID>ad</EraID>
+<DefaultAbbrvName>n.C.</DefaultAbbrvName>
+<DefaultFullName>na Christus</DefaultFullName>
+</Era>
+</Eras>
+<StartDayOfWeek>
+<DayID>sun</DayID>
+</StartDayOfWeek>
+<MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+</Calendar>
+</LC_CALENDAR>
+<LC_CURRENCY ref="en_ZA"/>
+<LC_TRANSLITERATION ref="en_US"/>
+<LC_MISC>
+<ReservedWords>
+<trueWord>waar</trueWord>
+<falseWord>vals</falseWord>
+<quarter1Word>1e kwartaal</quarter1Word>
+<quarter2Word>2e kwartaal</quarter2Word>
+<quarter3Word>3e kwartaal</quarter3Word>
+<quarter4Word>4e kwartaal</quarter4Word>
+<aboveWord>bo</aboveWord>
+<belowWord>onder</belowWord>
+<quarter1Abbreviation>K1</quarter1Abbreviation>
+<quarter2Abbreviation>K2</quarter2Abbreviation>
+<quarter3Abbreviation>K3</quarter3Abbreviation>
+<quarter4Abbreviation>K4</quarter4Abbreviation>
+</ReservedWords>
+</LC_MISC>
+<LC_NumberingLevel ref="en_US"/>
+<LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>

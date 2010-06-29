@@ -1,0 +1,10 @@
+    <node oor:name="psd_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>psd_Adobe_Photoshop</value></prop>
+        <prop oor:name="FormatName"><value>ipd</value></prop>
+        <prop oor:name="RealFilterName"><value>PSD - Adobe Photoshop</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PSD - Adobe Photoshop</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

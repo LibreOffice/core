@@ -1,0 +1,281 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SOLAR_HRC
+#include <svl/solar.hrc>
+#endif
+
+#define HID_SD_PRINT_OPTIONS       (HID_SD_START + 0)
+#define HID_SD_OPTIONS_SNAP        (HID_SD_START + 1)
+#define HID_SD_OPTIONS_VIEW        (HID_SD_START + 2)
+
+#define HID_SD_AUTOPILOT_PAGE1     (HID_SD_START + 3)
+#define HID_SD_AUTOPILOT_PAGE2     (HID_SD_START + 4)
+#define HID_SD_AUTOPILOT_PAGE3     (HID_SD_START + 5)
+#define HID_SD_AUTOPILOT_PAGE4     (HID_SD_START + 6)
+#define HID_SD_AUTOPILOT_PAGE5     (HID_SD_START + 7)
+#define HID_SD_AUTOPILOT_PAGE6     (HID_SD_START + 8)
+
+#define HID_SD_CBX_ONLYSELECTED    (HID_SD_START + 9)
+#define HID_SD_BTN_FILTERDIALOG    (HID_SD_START + 10)
+
+#define HID_SD_BTN_PAGE            (HID_SD_START + 11)
+#define HID_SD_BTN_MASTERPAGE      (HID_SD_START + 12)
+#define HID_SD_BTN_LAYER           (HID_SD_START + 13)
+
+#define HID_SD_BTN_DRAW            (HID_SD_START + 14)
+#define HID_SD_BTN_SLIDE           (HID_SD_START + 15)
+#define HID_SD_BTN_OUTLINE         (HID_SD_START + 16)
+#define HID_SD_BTN_NOTES           (HID_SD_START + 17)
+#define HID_SD_BTN_HANDOUT         (HID_SD_START + 18)
+
+#define HID_SD_WIN_DOCUMENT        (HID_SD_START + 19)
+
+#define HID_SD_OPTIONS_LAYOUT      (HID_SD_START + 20)
+#define HID_SD_OPTIONS_CONTENTS    (HID_SD_START + 21)
+#define HID_SD_OPTIONS_MISC        (HID_SD_START + 22)
+
+#define HID_SD_EFFECT_PREVIEW       (HID_SD_START + 23)
+#define HID_SD_CTL_NEWFOIL          (HID_SD_START + 24)
+#define HID_SD_NAVIGATOR_TLB        (HID_SD_START + 25)
+#define HID_SD_NAVIGATOR            (HID_SD_START + 26)
+
+#define HID_SD_CTL_EFFECTS          (HID_SD_START + 27)
+#define HID_SD_CTL_TEXT_EFFECTS     (HID_SD_START + 28)
+
+#define HID_SD_CTL_SLIDE_CHANGE     (HID_SD_START + 29)
+
+#define HID_SD_NAVIGATOR_TBX        (HID_SD_START + 30)
+#define HID_SD_NAVIGATOR_LB         (HID_SD_START + 31)
+
+#define HID_SD_NAVIGATOR_TBI_PEN    (HID_SD_START + 33)
+#define HID_SD_NAVIGATOR_TBI_FIRST  (HID_SD_START + 34)
+#define HID_SD_NAVIGATOR_TBI_PREV   (HID_SD_START + 35)
+#define HID_SD_NAVIGATOR_TBI_NEXT   (HID_SD_START + 36)
+#define HID_SD_NAVIGATOR_TBI_LAST   (HID_SD_START + 37)
+#define HID_SD_NAVIGATOR_TBI_DRAGTYPE   (HID_SD_START + 38)
+#define HID_SD_NAVIGATOR_TBI_SHAPE_FILTER (HID_SD_START + 39)
+
+// Toolboxen
+#define HID_SD_DRAW_DEFAULTTOOLBOX      (HID_SD_START + 40)
+#define HID_SD_PLUGINTOOLBOX            (HID_SD_START + 41)
+#define HID_SD_DRAW_TOOLBOX             (HID_SD_START + 42)
+#define HID_SD_SLIDE_TOOLBOX            (HID_SD_START + 43)
+#define HID_SD_OUTLINE_TOOLBOX          (HID_SD_START + 44)
+#define HID_SD_DRAW_OBJ_TOOLBOX         (HID_SD_START + 45)
+#define HID_SD_DRAW_OPTIONS_TOOLBOX     (HID_SD_START + 46)
+#define HID_SD_DRAW_COMMONTASK_TOOLBOX  (HID_SD_START + 47)
+#define HID_SD_BEZIER_TOOLBOX           (HID_SD_START + 48)
+#define HID_SD_TEXT_TOOLBOX             (HID_SD_START + 49)
+#define HID_SD_GLUEPOINTS_TOOLBOX       (HID_SD_START + 50)
+#define HID_SD_SLIDE_OBJ_TOOLBOX        (HID_SD_START + 51)
+
+// FloatingWindows
+#define HID_SD_FW_ALIGNMENT             (HID_SD_START + 52)
+#define HID_SD_FW_ZOOM                  (HID_SD_START + 53)
+#define HID_SD_FW_CHOOSE_MODE           (HID_SD_START + 54)
+#define HID_SD_FW_TEXT                  (HID_SD_START + 55)
+#define HID_SD_FW_RECTANGLES            (HID_SD_START + 56)
+#define HID_SD_FW_ELLIPSES              (HID_SD_START + 57)
+#define HID_SD_FW_LINES                 (HID_SD_START + 58)
+#define HID_SD_FW_ARROWS                (HID_SD_START + 59)
+#define HID_SD_FW_3D_OBJECTS            (HID_SD_START + 60)
+#define HID_SD_FW_CONNECTORS            (HID_SD_START + 61)
+#define HID_SD_FW_INSERT                (HID_SD_START + 62)
+#define HID_SD_FW_POSITION              (HID_SD_START + 63)
+
+#define HID_SD_BTN_PREVIEW              (HID_SD_START + 64)
+
+#define HID_SD_NAVIGATOR_MENU1          (HID_SD_START + 65)
+#define HID_SD_NAVIGATOR_MENU2          (HID_SD_START + 66)
+#define HID_SD_NAVIGATOR_MENU3          (HID_SD_START + 67)
+
+#define HID_SD_WIN_PRESENTATION         (HID_SD_START + 68)
+
+// HelpIDs fuer Vorlagen
+#define HID_STANDARD_STYLESHEET_NAME        (HID_SD_START + 70)
+#define HID_POOLSHEET_OBJWITHARROW          (HID_SD_START + 71)
+#define HID_POOLSHEET_OBJWITHSHADOW         (HID_SD_START + 72)
+#define HID_POOLSHEET_OBJWITHOUTFILL        (HID_SD_START + 73)
+#define HID_POOLSHEET_TEXT                  (HID_SD_START + 74)
+#define HID_POOLSHEET_TEXTBODY              (HID_SD_START + 75)
+#define HID_POOLSHEET_TEXTBODY_JUSTIFY      (HID_SD_START + 76)
+#define HID_POOLSHEET_TEXTBODY_INDENT       (HID_SD_START + 77)
+#define HID_POOLSHEET_TITLE                 (HID_SD_START + 78)
+#define HID_POOLSHEET_TITLE1                (HID_SD_START + 79)
+#define HID_POOLSHEET_TITLE2                (HID_SD_START + 80)
+#define HID_POOLSHEET_HEADLINE              (HID_SD_START + 81)
+#define HID_POOLSHEET_HEADLINE1             (HID_SD_START + 82)
+#define HID_POOLSHEET_HEADLINE2             (HID_SD_START + 83)
+#define HID_POOLSHEET_MEASURE               (HID_SD_START + 84)
+
+#define HID_PSEUDOSHEET_TITLE               (HID_SD_START + 85)
+#define HID_PSEUDOSHEET_OUTLINE             (HID_SD_START + 86)
+#define HID_PSEUDOSHEET_OUTLINE1            (HID_SD_START + 87)
+#define HID_PSEUDOSHEET_OUTLINE2            (HID_SD_START + 88)
+#define HID_PSEUDOSHEET_OUTLINE3            (HID_SD_START + 89)
+#define HID_PSEUDOSHEET_OUTLINE4            (HID_SD_START + 90)
+#define HID_PSEUDOSHEET_OUTLINE5            (HID_SD_START + 91)
+#define HID_PSEUDOSHEET_OUTLINE6            (HID_SD_START + 92)
+#define HID_PSEUDOSHEET_OUTLINE7            (HID_SD_START + 93)
+#define HID_PSEUDOSHEET_OUTLINE8            (HID_SD_START + 94)
+#define HID_PSEUDOSHEET_OUTLINE9            (HID_SD_START + 95)
+#define HID_PSEUDOSHEET_BACKGROUNDOBJECTS   (HID_SD_START + 96)
+#define HID_PSEUDOSHEET_BACKGROUND          (HID_SD_START + 97)
+#define HID_PSEUDOSHEET_NOTES               (HID_SD_START + 98)
+
+#define HID_DLG_DEFINE_CUSTOMSHOW           (HID_SD_START + 99)
+#define HID_DLG_DEFINE_CUSTOMSHOW_CTL       (HID_SD_START + 100)
+
+#define HID_PSEUDOSHEET_SUBTITLE            (HID_SD_START + 101)
+
+#define HID_CTL_ACTION_DLG_1                (HID_SD_START + 102)
+#define HID_CTL_ACTION_DLG_2                (HID_SD_START + 103)
+
+#define HID_SD_BTN_PRESENTATION             (HID_SD_START + 104)
+
+#define HID_SD_HTMLEXPORT_PAGE1             (HID_SD_START + 105)
+#define HID_SD_HTMLEXPORT_PAGE2             (HID_SD_START + 106)
+#define HID_SD_HTMLEXPORT_PAGE3             (HID_SD_START + 107)
+#define HID_SD_HTMLEXPORT_PAGE4             (HID_SD_START + 108)
+#define HID_SD_HTMLEXPORT_PAGE5             (HID_SD_START + 109)
+#define HID_SD_HTMLEXPORT_PAGE6             (HID_SD_START + 110)
+
+#define HID_SD_CHGFOIL_LAYOUT               (HID_SD_START + 111)
+#define HID_SD_CHGFOIL_BACKGROUND           (HID_SD_START + 112)
+#define HID_SD_CHGFOIL_OBJECTS              (HID_SD_START + 113)
+#define HID_SD_CHGFOIL_NAME                 (HID_SD_START + 114)
+
+#define HID_SD_HTMLEXPORT_DLG_DNAME         (HID_SD_START + 115)
+
+#define HID_FM_CTL_SELECTION                (HID_SD_START + 116)
+
+#define HID_SD_AUTOPILOT_REGION             (HID_SD_START + 117)
+#define HID_SD_AUTOPILOT_TEMPLATES          (HID_SD_START + 118)
+#define HID_SD_AUTOPILOT_OPEN               (HID_SD_START + 119)
+#define HID_SD_AUTOPILOT_PAGETEMPLATES      (HID_SD_START + 120)
+
+#define HID_SD_DRAW_GRAF_TOOLBOX            (HID_SD_START + 121)
+
+#define HID_SD_FW_GRAFFILTERS               (HID_SD_START + 122)
+
+#define HID_SD_TABBAR_PAGES                 (HID_SD_START + 123)
+#define HID_SD_TABBAR_LAYERS                (HID_SD_START + 124)
+
+#define HID_SD_UNDODELETEWARNING_DLG        (HID_SD_START + 125)
+#define HID_SD_UNDODELETEWARNING_CBX        (HID_SD_START + 126)
+
+#define HID_SD_PAGEOBJSTLB                  (HID_SD_START + 127)
+
+#define HID_SD_NAMEDIALOG_OBJECT            (HID_SD_START + 128)
+#define HID_SD_NAMEDIALOG_PAGE              (HID_SD_START + 129)
+#define HID_SD_NAMEDIALOG_LINEEND           (HID_SD_START + 130)
+
+#define HID_SD_DRAW_3D_TOOLBOX              (HID_SD_START + 131)
+#define HID_SD_DRAW_FONTWORK_TOOLBOX        (HID_SD_START + 132)
+
+#define HID_SD_TABPAGE_HEADERFOOTER_SLIDE           (HID_SD_START + 133)
+#define HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT    (HID_SD_START + 134)
+
+#define HID_SD_DRAW_MEDIA_TOOLBOX           (HID_SD_START + 135)
+
+#define HID_SD_TASK_PANE                    (HID_SD_START + 136)
+#define HID_SD_SLIDE_DESIGNS                (HID_SD_START + 137)
+#define HID_SD_CURRENT_MASTERS              (HID_SD_START + 138)
+#define HID_SD_RECENT_MASTERS               (HID_SD_START + 139)
+#define HID_SD_ALL_MASTERS                  (HID_SD_START + 140)
+#define HID_SD_SLIDE_LAYOUTS                (HID_SD_START + 141)
+#define HID_SD_CUSTOM_ANIMATIONS            (HID_SD_START + 142)
+#define HID_SD_SLIDE_TRANSITIONS            (HID_SD_START + 143)
+
+#define HID_SD_CUSTOMANIMATIONPANE_PB_ADD_EFFECT    (HID_SD_START + 144)
+#define HID_SD_CUSTOMANIMATIONPANE_PB_CHANGE_EFFECT (HID_SD_START + 145)
+#define HID_SD_CUSTOMANIMATIONPANE_PB_REMOVE_EFFECT (HID_SD_START + 146)
+#define HID_SD_CUSTOMANIMATIONPANE_LB_START         (HID_SD_START + 147)
+#define HID_SD_CUSTOMANIMATIONPANE_LB_PROPERTY      (HID_SD_START + 148)
+#define HID_SD_CUSTOMANIMATIONPANE_PB_PROPERTY_MORE (HID_SD_START + 149)
+#define HID_SD_CUSTOMANIMATIONPANE_CB_SPEED         (HID_SD_START + 150)
+#define HID_SD_CUSTOMANIMATIONPANE_CT_CUSTOM_ANIMATION_LIST (HID_SD_START + 151)
+#define HID_SD_CUSTOMANIMATIONPANE_PB_MOVE_UP       (HID_SD_START + 152)
+#define HID_SD_CUSTOMANIMATIONPANE_PB_MOVE_DOWN     (HID_SD_START + 153)
+#define HID_SD_CUSTOMANIMATIONPANE_PB_PLAY          (HID_SD_START + 154)
+#define HID_SD_CUSTOMANIMATIONPANE_PB_SLIDE_SHOW    (HID_SD_START + 155)
+#define HID_SD_CUSTOMANIMATIONPANE_CB_AUTOPREVIEW   (HID_SD_START + 156)
+
+#define HID_SD_ANIMATIONSCHEMESPANE_LB_ANIMATION_SCHEMES    (HID_SD_START + 157)
+#define HID_SD_ANIMATIONSCHEMESPANE_PB_APPLY_TO_ALL         (HID_SD_START + 158)
+#define HID_SD_ANIMATIONSCHEMESPANE_PB_PLAY                 (HID_SD_START + 159)
+#define HID_SD_ANIMATIONSCHEMESPANE_PB_SLIDE_SHOW           (HID_SD_START + 160)
+#define HID_SD_ANIMATIONSCHEMESPANE_CB_AUTO_PREVIEW         (HID_SD_START + 161)
+
+#define HID_SD_SLIDETRANSITIONPANE_LB_SLIDE_TRANSITIONS (HID_SD_START + 162)
+#define HID_SD_SLIDETRANSITIONPANE_LB_SPEED             (HID_SD_START + 163)
+#define HID_SD_SLIDETRANSITIONPANE_LB_SOUND             (HID_SD_START + 164)
+#define HID_SD_SLIDETRANSITIONPANE_CB_LOOP_SOUND        (HID_SD_START + 165)
+#define HID_SD_SLIDETRANSITIONPANE_RB_ADVANCE_ON_MOUSE  (HID_SD_START + 166)
+#define HID_SD_SLIDETRANSITIONPANE_RB_ADVANCE_AUTO      (HID_SD_START + 167)
+#define HID_SD_SLIDETRANSITIONPANE_MF_ADVANCE_AUTO_AFTER (HID_SD_START + 168)
+#define HID_SD_SLIDETRANSITIONPANE_PB_APPLY_TO_ALL      (HID_SD_START + 169)
+#define HID_SD_SLIDETRANSITIONPANE_PB_PLAY              (HID_SD_START + 170)
+#define HID_SD_SLIDETRANSITIONPANE_PB_SLIDE_SHOW        (HID_SD_START + 171)
+#define HID_SD_SLIDETRANSITIONPANE_CB_AUTO_PREVIEW      (HID_SD_START + 172)
+
+#define HID_SD_TASK_PANE_VIEW_MENU          (HID_SD_START + 173)
+#define HID_SD_TASK_PANE_PREVIEW_CURRENT    (HID_SD_START + 174)
+#define HID_SD_TASK_PANE_PREVIEW_RECENT     (HID_SD_START + 175)
+#define HID_SD_TASK_PANE_PREVIEW_ALL        (HID_SD_START + 176)
+#define HID_SD_TASK_PANE_PREVIEW_LAYOUTS    (HID_SD_START + 177)
+
+#define HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE           (HID_SD_START + 178)
+#define HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS           (HID_SD_START + 179)
+#define HID_SD_CUSTOMANIMATIONDIALOG_EXIT               (HID_SD_START + 180)
+#define HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH         (HID_SD_START + 181)
+#define HID_SD_CUSTOMANIMATIONDIALOG_MISCEFFECTS        (HID_SD_START + 182)
+
+#define HID_SD_CUSTOMANIMATIONPANE_PRESETPROPERTYBOX        (HID_SD_START + 183)
+#define HID_SD_CUSTOMANIMATIONPANE_COLORPROPERTYBOX         (HID_SD_START + 184)
+#define HID_SD_CUSTOMANIMATIONPANE_FONTPROPERTYBOX          (HID_SD_START + 185)
+#define HID_SD_CUSTOMANIMATIONPANE_CHARHEIGHTPROPERTYBOX    (HID_SD_START + 186)
+#define HID_SD_CUSTOMANIMATIONPANE_ROTATIONPROPERTYBOX      (HID_SD_START + 187)
+#define HID_SD_CUSTOMANIMATIONPANE_TRANSPARENCYPROPERTYBOX  (HID_SD_START + 188)
+#define HID_SD_CUSTOMANIMATIONPANE_SCALEPROPERTYBOX         (HID_SD_START + 189)
+#define HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX     (HID_SD_START + 190)
+
+#define HID_SD_SLIDESHOW_DISPLAY                            (HID_SD_START + 191)
+
+#define HID_SD_RULER_HORIZONTAL                             (HID_SD_START + 192)
+#define HID_SD_RULER_VERTICAL                               (HID_SD_START + 193)
+
+#define HID_SD_CELL_STYLE_DEFAULT                           (HID_SD_START + 194)
+#define HID_SD_CELL_STYLE_BANDED                            (HID_SD_START + 195)
+#define HID_SD_CELL_STYLE_HEADER                            (HID_SD_START + 196)
+#define HID_SD_CELL_STYLE_TOTAL                             (HID_SD_START + 197)
+#define HID_SD_CELL_STYLE_FIRST_COLUMN                      (HID_SD_START + 198)
+#define HID_SD_CELL_STYLE_LAST_COLUMN                       (HID_SD_START + 199)
+
+#define HID_SD_TABLE_DESIGN                                 (HID_SD_START + 200)
+#define HID_SD_ANNOTATIONS                                  (HID_SD_START + 201)
+

@@ -1,0 +1,5 @@
+# JobFile for rtl_crc32
+# header source sal/inc/rtl/crc.h
+
+rtl_crc32.test.rtl_crc32_001
+rtl_crc32.test.rtl_crc32_002

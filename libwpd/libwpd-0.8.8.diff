@@ -1,0 +1,908 @@
+*** misc/libwpd-0.8.8/configure	Tue Jan  9 10:35:10 2007
+--- misc/build/libwpd-0.8.8/configure	Thu Feb 21 11:37:54 2008
+***************
+*** 8089,8095 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 8089,8095 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
+*** 11808,11814 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 11808,11814 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
+*** 14978,14984 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 14978,14984 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
+*** 17346,17352 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 17346,17352 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+*** misc/libwpd-0.8.8/src/lib/WP1Heuristics.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP1Heuristics.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 27,32 ****
+--- 27,33 ----
+  #include "WP1Heuristics.h"
+  #include "WP1FileStructure.h"
+  #include "libwpd_internal.h"
++ #include <limits>
+  
+  WPDConfidence WP1Heuristics::isWP1FileFormat(WPXInputStream *input, bool partialContent)
+  {
+***************
+*** 74,81 ****
+  				//   <function code>{function length}...{function length}<function code>
+  				//   that we observed in variable length WP1 functions 
+  				
+! 				long functionLength = readU32(input, true);
+! 				long closingFunctionLength = 0;
+  				WPD_DEBUG_MSG(("WP1Heuristics functionLength = 0x%.8x\n", (unsigned int)functionLength));
+  
+  				input->seek(functionLength, WPX_SEEK_CUR);
+--- 75,84 ----
+  				//   <function code>{function length}...{function length}<function code>
+  				//   that we observed in variable length WP1 functions 
+  				
+! 				unsigned long functionLength = readU32(input, true);
+! 				if (functionLength > ((std::numeric_limits<uint32_t>::max)() / 2))
+! 					return WPD_CONFIDENCE_NONE;
+! 				unsigned long closingFunctionLength = 0;
+  				WPD_DEBUG_MSG(("WP1Heuristics functionLength = 0x%.8x\n", (unsigned int)functionLength));
+  
+  				input->seek(functionLength, WPX_SEEK_CUR);
+*** misc/libwpd-0.8.8/src/lib/WP1Part.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP1Part.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 46,51 ****
+--- 46,58 ----
+  	}
+  	else if (WP1_FUNCTION_GROUP_SIZE[readVal-0xC0] == -1)
+  	{
++ 		// Should not happen because the heuristics would not recognize this file as a well formed WP1 file,
++ 		// Nonetheless if we ever change the parts using the heuristics, this will be a check useful to have
++ 		if (!WP1VariableLengthGroup::isGroupConsistent(input, readVal))
++ 		{
++ 			WPD_DEBUG_MSG(("WordPerfect: Consistency Check (variable length) failed; ignoring this byte\n"));
++ 			return 0;
++ 		}
+  		WPD_DEBUG_MSG(("WordPerfect: constructVariableLengthGroup\n"));
+  		return WP1VariableLengthGroup::constructVariableLengthGroup(input, readVal);
+  	}
+*** misc/libwpd-0.8.8/src/lib/WP1SetTabsGroup.cpp	Fri Jan  5 10:21:16 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP1SetTabsGroup.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 39,45 ****
+  void WP1SetTabsGroup::_readContents(WPXInputStream *input)
+  {
+  	// Skip first the old condensed tab table
+! 	while (readU8(input) != 0xff)
+  		input->seek(2, WPX_SEEK_CUR);
+  
+  	// Now read the new condensed tab table
+--- 39,45 ----
+  void WP1SetTabsGroup::_readContents(WPXInputStream *input)
+  {
+  	// Skip first the old condensed tab table
+! 	while (readU8(input) != 0xff && !input->atEOS())
+  		input->seek(2, WPX_SEEK_CUR);
+  
+  	// Now read the new condensed tab table
+***************
+*** 47,54 ****
+  	float tmpTabPosition = 0.0f;
+  	WPXTabStop tmpTabStop = WPXTabStop();
+  
+! 	while ((tmpTabType = read8(input)) & 0xff != 0xff)
+  	{
+  		tmpTabPosition = (float)((double)readU16(input, true) / 72.0f);
+  
+  		if (tmpTabType < 0)
+--- 47,56 ----
+  	float tmpTabPosition = 0.0f;
+  	WPXTabStop tmpTabStop = WPXTabStop();
+  
+! 	while (((tmpTabType = read8(input)) & 0xff) != 0xff)
+  	{
++ 		if (input->atEOS())
++ 			throw FileException();
+  		tmpTabPosition = (float)((double)readU16(input, true) / 72.0f);
+  
+  		if (tmpTabType < 0)
+*** misc/libwpd-0.8.8/src/lib/WP1SubDocument.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP1SubDocument.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 26,32 ****
+  #include "WP1Parser.h"
+  #include "libwpd_internal.h"
+  
+! WP1SubDocument::WP1SubDocument(WPXInputStream *input, const int dataSize) :
+  	WPXSubDocument(input, dataSize)
+  {
+  }
+--- 26,32 ----
+  #include "WP1Parser.h"
+  #include "libwpd_internal.h"
+  
+! WP1SubDocument::WP1SubDocument(WPXInputStream *input, const unsigned dataSize) :
+  	WPXSubDocument(input, dataSize)
+  {
+  }
+*** misc/libwpd-0.8.8/src/lib/WP1SubDocument.h	Wed Jan  3 13:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP1SubDocument.h	Thu Feb 21 11:37:54 2008
+***************
+*** 32,38 ****
+  class WP1SubDocument : public WPXSubDocument
+  {
+  public:
+! 	WP1SubDocument(WPXInputStream *input, const int dataSize);
+  	void parse(WP1Listener *listener) const;
+  
+  };
+--- 32,38 ----
+  class WP1SubDocument : public WPXSubDocument
+  {
+  public:
+! 	WP1SubDocument(WPXInputStream *input, const unsigned dataSize);
+  	void parse(WP1Listener *listener) const;
+  
+  };
+*** misc/libwpd-0.8.8/src/lib/WP1VariableLengthGroup.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP1VariableLengthGroup.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 31,36 ****
+--- 31,37 ----
+  #include "WP1FootnoteEndnoteGroup.h"
+  #include "WP1FileStructure.h"
+  #include "libwpd_internal.h"
++ #include <limits>
+  
+  WP1VariableLengthGroup::WP1VariableLengthGroup(uint8_t group)
+  	: m_group(group)
+***************
+*** 60,65 ****
+--- 61,68 ----
+  	try
+  	{
+  		uint32_t size = readU32(input, true);
++ 		if (size > ((std::numeric_limits<uint32_t>::max)() / 2))
++ 			return false;
+  
+  		if (input->seek(size, WPX_SEEK_CUR) || input->atEOS())
+  		{
+***************
+*** 94,104 ****
+--- 97,114 ----
+  	WPD_DEBUG_MSG(("WordPerfect: handling a variable length group\n"));	
+  	
+  	m_size = readU32(input, true); // the length is the number of data bytes minus 4 (ie. the function codes)
++ 
++ 	if (m_size + startPosition < startPosition)
++ 		throw FileException(); 
+  	
+  	WPD_DEBUG_MSG(("WordPerfect: Read variable group header (start_position: %i, size: %i)\n", startPosition, m_size));
+  	
+  	_readContents(input);
+  	
++ 	if ((m_size + startPosition + 4 < m_size + startPosition) ||
++ 		(m_size + startPosition + 4) > ((std::numeric_limits<uint32_t>::max)() / 2))
++ 		throw FileException(); 
++ 	
+  	input->seek(startPosition + m_size + 4, WPX_SEEK_SET);
+  
+  	if (m_size != readU32(input, true))
+***************
+*** 112,117 ****
+--- 122,130 ----
+  		throw FileException();
+  	}
+  	
++ 	if ((m_size + startPosition + 9 < m_size + startPosition) ||
++ 		(m_size + startPosition + 9) > ((std::numeric_limits<uint32_t>::max)() / 2))
++ 		throw FileException(); 
+  	input->seek(startPosition + m_size + 9, WPX_SEEK_SET);
+  
+  }
+*** misc/libwpd-0.8.8/src/lib/WP3PageFormatGroup.cpp	Fri Jan  5 10:21:13 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP3PageFormatGroup.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 91,98 ****
+  
+  		m_isRelative = (readU8(input) & 0x01);
+  
+! 		while ((tmpTabType = read8(input)) & 0xff != 0xff)
+  		{
+  			tmpTabPosition = fixedPointToFloat(readU32(input, true)) / 72.0f;
+  
+  			if (tmpTabType < 0)
+--- 91,100 ----
+  
+  		m_isRelative = (readU8(input) & 0x01);
+  
+! 		while (((tmpTabType = read8(input)) & 0xff) != 0xff)
+  		{
++ 			if (input->atEOS())
++ 				throw FileException();
+  			tmpTabPosition = fixedPointToFloat(readU32(input, true)) / 72.0f;
+  
+  			if (tmpTabType < 0)
+*** misc/libwpd-0.8.8/src/lib/WP3SubDocument.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP3SubDocument.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 26,32 ****
+  #include "WP3Parser.h"
+  #include "libwpd_internal.h"
+  
+! WP3SubDocument::WP3SubDocument(WPXInputStream *input, const int dataSize) :
+  	WPXSubDocument(input, dataSize)
+  {
+  }
+--- 26,32 ----
+  #include "WP3Parser.h"
+  #include "libwpd_internal.h"
+  
+! WP3SubDocument::WP3SubDocument(WPXInputStream *input, const unsigned dataSize) :
+  	WPXSubDocument(input, dataSize)
+  {
+  }
+*** misc/libwpd-0.8.8/src/lib/WP3SubDocument.h	Wed Jan  3 13:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP3SubDocument.h	Thu Feb 21 11:37:54 2008
+***************
+*** 32,38 ****
+  class WP3SubDocument : public WPXSubDocument
+  {
+  public:
+! 	WP3SubDocument(WPXInputStream *input, const int dataSize);
+  	void parse(WP3Listener *listener) const;
+  
+  };
+--- 32,38 ----
+  class WP3SubDocument : public WPXSubDocument
+  {
+  public:
+! 	WP3SubDocument(WPXInputStream *input, const unsigned dataSize);
+  	void parse(WP3Listener *listener) const;
+  
+  };
+*** misc/libwpd-0.8.8/src/lib/WP3TablesGroup.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP3TablesGroup.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 50,59 ****
+  {
+  	// this group can contain different kinds of data, thus we need to read
+  	// the contents accordingly
+! 	uint8_t i;
+  	switch (getSubGroup())
+  	{
+  	case WP3_TABLES_GROUP_TABLE_FUNCTION:
+  		input->seek(71, WPX_SEEK_CUR);
+  		m_tableMode = readU8(input);
+  		m_offsetFromLeftEdge = readU32(input, true);
+--- 50,61 ----
+  {
+  	// this group can contain different kinds of data, thus we need to read
+  	// the contents accordingly
+! 	uint8_t i=0;
+! 	long startPosition = 0;
+  	switch (getSubGroup())
+  	{
+  	case WP3_TABLES_GROUP_TABLE_FUNCTION:
++ 		startPosition = input->tell();
+  		input->seek(71, WPX_SEEK_CUR);
+  		m_tableMode = readU8(input);
+  		m_offsetFromLeftEdge = readU32(input, true);
+***************
+*** 63,70 ****
+--- 65,76 ----
+  		m_rightGutterSpacing = readU32(input, true);
+  		input->seek(3, WPX_SEEK_CUR);
+  		m_numColumns = readU8(input);
++ 		if ((m_numColumns > 32) || ((input->tell() - startPosition + m_numColumns*10) > (getSize() - 4)))
++ 			throw FileException();
+  		for (i=0; i<m_numColumns; i++)
+  		{
++ 			if (input->atEOS())
++ 				throw FileException();
+  			m_columnMode[i] = readU8(input);
+  			m_numberFormat[i] = readU8(input);
+  			m_columnWidth[i] = readU32(input, true);
+***************
+*** 120,126 ****
+  	{
+  	case WP3_TABLES_GROUP_TABLE_FUNCTION:
+  		listener->defineTable(m_tableMode, fixedPointToWPUs(m_offsetFromLeftEdge));
+! 		for (i=0; i<m_numColumns; i++)
+  			listener->addTableColumnDefinition(fixedPointToWPUs(m_columnWidth[i]), fixedPointToWPUs(m_leftGutterSpacing),
+  								fixedPointToWPUs(m_rightGutterSpacing), 0, LEFT);
+  		listener->startTable();
+--- 126,132 ----
+  	{
+  	case WP3_TABLES_GROUP_TABLE_FUNCTION:
+  		listener->defineTable(m_tableMode, fixedPointToWPUs(m_offsetFromLeftEdge));
+! 		for (i=0; i<m_numColumns && i <= 32; i++)
+  			listener->addTableColumnDefinition(fixedPointToWPUs(m_columnWidth[i]), fixedPointToWPUs(m_leftGutterSpacing),
+  								fixedPointToWPUs(m_rightGutterSpacing), 0, LEFT);
+  		listener->startTable();
+*** misc/libwpd-0.8.8/src/lib/WP3VariableLengthGroup.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP3VariableLengthGroup.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 36,41 ****
+--- 36,42 ----
+  #include "WP3FootnoteEndnoteGroup.h"
+  #include "WP3TablesGroup.h"
+  #include "libwpd_internal.h"
++ #include <limits>
+  
+  WP3VariableLengthGroup::WP3VariableLengthGroup()
+  {
+***************
+*** 72,82 ****
+--- 73,90 ----
+  bool WP3VariableLengthGroup::isGroupConsistent(WPXInputStream *input, const uint8_t group)
+  {
+  	uint32_t startPosition = input->tell();
++ 	if (startPosition > ((std::numeric_limits<unsigned long>::max)() / 2))
++ 		return false;
+  
+  	try
+  	{
+  		uint8_t subGroup = readU8(input);
+  		uint16_t size = readU16(input, true);
++ 		if (startPosition + size < startPosition)
++ 		{
++ 			input->seek(startPosition, WPX_SEEK_SET);
++ 			return false;
++ 		}
+  
+  		if (input->seek((startPosition + size - 1 - input->tell()), WPX_SEEK_CUR) || input->atEOS())
+  		{
+*** misc/libwpd-0.8.8/src/lib/WP42SubDocument.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP42SubDocument.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 26,37 ****
+  #include "WP42Parser.h"
+  #include "libwpd_internal.h"
+  
+! WP42SubDocument::WP42SubDocument(uint8_t * streamData, const int dataSize) :
+  	WPXSubDocument(streamData, dataSize)
+  {
+  }
+  
+! WP42SubDocument::WP42SubDocument(WPXInputStream *input, const int dataSize) :
+  	WPXSubDocument(input, dataSize)
+  {
+  }
+--- 26,37 ----
+  #include "WP42Parser.h"
+  #include "libwpd_internal.h"
+  
+! WP42SubDocument::WP42SubDocument(uint8_t * streamData, const unsigned dataSize) :
+  	WPXSubDocument(streamData, dataSize)
+  {
+  }
+  
+! WP42SubDocument::WP42SubDocument(WPXInputStream *input, const unsigned dataSize) :
+  	WPXSubDocument(input, dataSize)
+  {
+  }
+*** misc/libwpd-0.8.8/src/lib/WP42SubDocument.h	Wed Jan  3 13:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP42SubDocument.h	Thu Feb 21 11:37:54 2008
+***************
+*** 32,39 ****
+  class WP42SubDocument : public WPXSubDocument
+  {
+  public:
+! 	WP42SubDocument(uint8_t * streamData, const int dataSize);
+! 	WP42SubDocument(WPXInputStream *input, const int dataSize);
+  	void parse(WP42Listener *listener) const;
+  
+  };
+--- 32,39 ----
+  class WP42SubDocument : public WPXSubDocument
+  {
+  public:
+! 	WP42SubDocument(uint8_t * streamData, const unsigned dataSize);
+! 	WP42SubDocument(WPXInputStream *input, const unsigned dataSize);
+  	void parse(WP42Listener *listener) const;
+  
+  };
+*** misc/libwpd-0.8.8/src/lib/WP5DefinitionGroup.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP5DefinitionGroup.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 26,32 ****
+  #include "WP5Listener.h"
+  #include "libwpd_internal.h"
+  
+! WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input) :
+  	WP5VariableLengthGroup_SubGroup(),
+  	m_position(0),
+  	m_numColumns(0),
+--- 26,32 ----
+  #include "WP5Listener.h"
+  #include "libwpd_internal.h"
+  
+! WP5DefinitionGroup_DefineTablesSubGroup::WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input, uint16_t subGroupSize) :
+  	WP5VariableLengthGroup_SubGroup(),
+  	m_position(0),
+  	m_numColumns(0),
+***************
+*** 34,39 ****
+--- 34,40 ----
+  	m_leftGutter(0),
+  	m_rightGutter(0)
+  {
++ 	long startPosition = input->tell();
+  	// Skip useless old values to read the old column number
+  	input->seek(2, WPX_SEEK_CUR);
+  	m_numColumns = readU16(input);
+***************
+*** 50,61 ****
+--- 51,76 ----
+  	input->seek(10, WPX_SEEK_CUR);
+  	m_leftOffset = readU16(input);
+  	int i;
++ 	if ((m_numColumns > 32) || ((input->tell() - startPosition + m_numColumns*5) > (subGroupSize - 4)))
++ 		throw FileException();
+  	for (i=0; i < m_numColumns; i++)
++ 	{
++ 		if (input->atEOS())
++ 			throw FileException();
+  		m_columnWidth[i] = readU16(input);
++ 	}
+  	for (i=0; i < m_numColumns; i++)
++ 	{
++ 		if (input->atEOS())
++ 			throw FileException();
+  		m_attributeBits[i] = readU16(input);
++ 	}
+  	for (i=0; i < m_numColumns; i++)
++ 	{
++ 		if (input->atEOS())
++ 			throw FileException();
+  		m_columnAlignment[i] = readU8(input);
++ 	}
+  }
+  
+  void WP5DefinitionGroup_DefineTablesSubGroup::parse(WP5Listener *listener)
+***************
+*** 88,94 ****
+  	switch(getSubGroup())
+  	{
+  		case WP5_TOP_DEFINITION_GROUP_DEFINE_TABLES:
+! 			m_subGroupData = new WP5DefinitionGroup_DefineTablesSubGroup(input);
+  			break;
+  		default:
+  			break;
+--- 103,109 ----
+  	switch(getSubGroup())
+  	{
+  		case WP5_TOP_DEFINITION_GROUP_DEFINE_TABLES:
+! 			m_subGroupData = new WP5DefinitionGroup_DefineTablesSubGroup(input, getSize());
+  			break;
+  		default:
+  			break;
+*** misc/libwpd-0.8.8/src/lib/WP5DefinitionGroup.h	Wed Jan  3 13:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP5DefinitionGroup.h	Thu Feb 21 11:37:54 2008
+***************
+*** 31,37 ****
+  class WP5DefinitionGroup_DefineTablesSubGroup : public WP5VariableLengthGroup_SubGroup
+  {
+  public:
+! 	WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input);
+  	void parse(WP5Listener *listener);
+  
+  private:
+--- 31,37 ----
+  class WP5DefinitionGroup_DefineTablesSubGroup : public WP5VariableLengthGroup_SubGroup
+  {
+  public:
+! 	WP5DefinitionGroup_DefineTablesSubGroup(WPXInputStream *input, uint16_t subGroupSize);
+  	void parse(WP5Listener *listener);
+  
+  private:
+***************
+*** 58,64 ****
+  
+  private:
+  	WP5VariableLengthGroup_SubGroup * m_subGroupData;
+- 
+  };
+  
+  #endif /* WP5DEFINITIONGROUP_H */
+--- 58,63 ----
+*** misc/libwpd-0.8.8/src/lib/WP5SubDocument.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP5SubDocument.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 26,32 ****
+  #include "WP5Parser.h"
+  #include "libwpd_internal.h"
+  
+! WP5SubDocument::WP5SubDocument(WPXInputStream *input, const int dataSize) :
+  	WPXSubDocument(input, dataSize)
+  {
+  }
+--- 26,32 ----
+  #include "WP5Parser.h"
+  #include "libwpd_internal.h"
+  
+! WP5SubDocument::WP5SubDocument(WPXInputStream *input, const unsigned dataSize) :
+  	WPXSubDocument(input, dataSize)
+  {
+  }
+*** misc/libwpd-0.8.8/src/lib/WP5SubDocument.h	Wed Jan  3 13:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP5SubDocument.h	Thu Feb 21 11:37:54 2008
+***************
+*** 32,38 ****
+  class WP5SubDocument : public WPXSubDocument
+  {
+  public:
+! 	WP5SubDocument(WPXInputStream *input, const int dataSize);
+  	void parse(WP5Listener *listener) const;
+  
+  };
+--- 32,38 ----
+  class WP5SubDocument : public WPXSubDocument
+  {
+  public:
+! 	WP5SubDocument(WPXInputStream *input, const unsigned dataSize);
+  	void parse(WP5Listener *listener) const;
+  
+  };
+*** misc/libwpd-0.8.8/src/lib/WP6ExtendedDocumentSummaryPacket.cpp	Fri Jan  5 10:30:07 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6ExtendedDocumentSummaryPacket.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 24,29 ****
+--- 24,30 ----
+   * Corel Corporation or Corel Corporation Limited."
+   */
+  #include <string.h>
++ #include <limits>
+  
+  #include "WP6ExtendedDocumentSummaryPacket.h"
+  #include "libwpd_internal.h"
+***************
+*** 47,52 ****
+--- 48,55 ----
+  {
+  	if (m_dataSize <= 0)
+  		return;
++ 	if (m_dataSize > ((std::numeric_limits<uint32_t>::max)() / 2))
++ 		m_dataSize = ((std::numeric_limits<uint32_t>::max)() / 2);
+  	uint8_t *streamData = new uint8_t[m_dataSize];
+  	for(unsigned i=0; i<(unsigned)m_dataSize; i++)
+  		streamData[i] = readU8(input);
+*** misc/libwpd-0.8.8/src/lib/WP6FontDescriptorPacket.cpp	Thu Jan  4 11:52:35 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6FontDescriptorPacket.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 23,29 ****
+   * Corel Corporation or Corel Corporation Limited."
+   */
+  #include <string.h>
+! 
+  #include "WP6FontDescriptorPacket.h"
+  #include "libwpd_internal.h"
+  
+--- 23,29 ----
+   * Corel Corporation or Corel Corporation Limited."
+   */
+  #include <string.h>
+! #include <limits>
+  #include "WP6FontDescriptorPacket.h"
+  #include "libwpd_internal.h"
+  
+***************
+*** 69,77 ****
+  
+     m_fontNameLength = readU16(input); 
+  
+!    // TODO: re-do sanity checking
+!    //if(m_fontNameLength < WP_FONT_NAME_MAX_LENGTH)
+!    //{	
+     if (m_fontNameLength == 0) 
+  	   {
+  		   m_fontName = new char[1];
+--- 69,77 ----
+  
+     m_fontNameLength = readU16(input); 
+  
+! 
+!    if (m_fontNameLength > ((std::numeric_limits<uint16_t>::max)() / 2))
+!        m_fontNameLength = ((std::numeric_limits<uint16_t>::max)() / 2);
+     if (m_fontNameLength == 0) 
+  	   {
+  		   m_fontName = new char[1];
+*** misc/libwpd-0.8.8/src/lib/WP6GeneralTextPacket.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6GeneralTextPacket.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 43,48 ****
+--- 43,49 ----
+  
+  void WP6GeneralTextPacket::_readContents(WPXInputStream *input)
+  {
++ 	long startPosition = input->tell();
+  	uint16_t numTextBlocks = readU16(input);
+  	input->seek(4, WPX_SEEK_CUR);
+  
+***************
+*** 53,65 ****
+  	}
+  	
+  	uint32_t *blockSizes = new uint32_t[numTextBlocks];
+! 	int totalSize = 0;
+! 	unsigned int i;
+  
+  	for(i=0; i<numTextBlocks; i++)
+  	{
+  		blockSizes[i] = readU32(input);
+! 		totalSize += blockSizes[i];
+  	}	
+  
+  	if (totalSize <= 0)
+--- 54,71 ----
+  	}
+  	
+  	uint32_t *blockSizes = new uint32_t[numTextBlocks];
+! 	unsigned int totalSize = 0;
+! 	unsigned int i = 0;
+  
+  	for(i=0; i<numTextBlocks; i++)
+  	{
++ 		if ((input->tell() - startPosition + 4) > getDataSize() || input->atEOS())
++ 			throw FileException();
+  		blockSizes[i] = readU32(input);
+! 		unsigned int newTotalSize = totalSize + blockSizes[i];
+! 		if (newTotalSize < totalSize)
+! 			throw FileException();
+! 		totalSize = newTotalSize;
+  	}	
+  
+  	if (totalSize <= 0)
+***************
+*** 73,78 ****
+--- 79,86 ----
+  	int streamPos = 0;
+  	for(i=0; i<numTextBlocks; i++) 
+  	{
++ 		if ((input->tell() - startPosition + blockSizes[i]) > getDataSize() || input->atEOS())
++ 			throw FileException();
+  		for (unsigned int j=0; j<blockSizes[i]; j++)
+  		{
+  			streamData[streamPos] = readU8(input);
+*** misc/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 35,41 ****
+  #include "libwpd.h"
+  #include "libwpd_internal.h"
+  
+! WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * /* input */)
+  {
+  }
+  
+--- 35,42 ----
+  #include "libwpd.h"
+  #include "libwpd_internal.h"
+  
+! WP6PrefixDataPacket::WP6PrefixDataPacket(WPXInputStream * /* input */) :
+! 	m_dataSize(0)
+  {
+  }
+  
+***************
+*** 74,80 ****
+  
+  void WP6PrefixDataPacket::_read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize)
+  {
+! 	if (!dataSize)
+  		return;
+  
+  	input->seek(dataOffset, WPX_SEEK_SET);
+--- 75,83 ----
+  
+  void WP6PrefixDataPacket::_read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize)
+  {
+! 	m_dataSize = dataSize;
+! 
+! 	if (!m_dataSize)
+  		return;
+  
+  	input->seek(dataOffset, WPX_SEEK_SET);
+*** misc/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.h	Wed Jan  3 13:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6PrefixDataPacket.h	Thu Feb 21 11:37:54 2008
+***************
+*** 39,50 ****
+--- 39,54 ----
+  	virtual ~WP6PrefixDataPacket() {}
+  	virtual void parse(WP6Listener * /* listener */) const {}
+  	virtual WP6SubDocument * getSubDocument() const { return 0; }
++ 	const uint32_t getDataSize() const { return m_dataSize; }
+  
+  	static WP6PrefixDataPacket * constructPrefixDataPacket(WPXInputStream * input, WP6PrefixIndice *prefixIndice);
+  
+  protected:
+  	virtual void _readContents(WPXInputStream *input) = 0;
+   	void _read(WPXInputStream *input, uint32_t dataOffset, uint32_t dataSize);
++ 
++ private:
++ 	uint32_t m_dataSize;
+  };
+  
+  #endif /* WP6PREFIXDATAPACKET_H */
+*** misc/libwpd-0.8.8/src/lib/WP6SubDocument.cpp	Wed Jan  3 13:07:55 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6SubDocument.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 26,32 ****
+  #include "WP6Parser.h"
+  #include "libwpd_internal.h"
+  
+! WP6SubDocument::WP6SubDocument(uint8_t * streamData, const int dataSize) :
+  	WPXSubDocument(streamData, dataSize)
+  {
+  }
+--- 26,32 ----
+  #include "WP6Parser.h"
+  #include "libwpd_internal.h"
+  
+! WP6SubDocument::WP6SubDocument(uint8_t * streamData, const unsigned dataSize) :
+  	WPXSubDocument(streamData, dataSize)
+  {
+  }
+*** misc/libwpd-0.8.8/src/lib/WP6SubDocument.h	Wed Jan  3 13:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WP6SubDocument.h	Thu Feb 21 11:37:54 2008
+***************
+*** 32,38 ****
+  class WP6SubDocument : public WPXSubDocument
+  {
+  public:
+! 	WP6SubDocument(uint8_t * streamData, const int dataSize);
+  	void parse(WP6Listener *listener) const;
+  };
+  #endif /* WP6SUBDOCUMENT_H */
+--- 32,38 ----
+  class WP6SubDocument : public WPXSubDocument
+  {
+  public:
+! 	WP6SubDocument(uint8_t * streamData, const unsigned dataSize);
+  	void parse(WP6Listener *listener) const;
+  };
+  #endif /* WP6SUBDOCUMENT_H */
+*** misc/libwpd-0.8.8/src/lib/WPXHeader.cpp	Wed Jan  3 16:40:14 2007
+--- misc/build/libwpd-0.8.8/src/lib/WPXHeader.cpp	Thu Feb 21 11:40:46 2008
+***************
+*** 31,36 ****
+--- 31,37 ----
+  #include "WP61Header.h"
+  #include "WPXFileStructure.h"
+  #include "libwpd_internal.h"
++ #include <string.h>
+  	
+  WPXHeader::WPXHeader(WPXInputStream * /* input */, uint32_t documentOffset, uint8_t productType,
+  			uint8_t fileType, uint8_t majorVersion, uint8_t minorVersion, uint16_t documentEncryption) :
+*** misc/libwpd-0.8.8/src/lib/WPXSubDocument.cpp	Wed Jan  3 13:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WPXSubDocument.cpp	Thu Feb 21 11:37:54 2008
+***************
+*** 32,49 ****
+  {
+  }
+  
+! WPXSubDocument::WPXSubDocument(WPXInputStream *input, const int dataSize) :
+  	m_stream(0)
+  {
+  	uint8_t *streamData = new uint8_t[dataSize];
+  	for (int i=0; i<dataSize; i++)
+  	{
+  		streamData[i] = readU8(input);
+  	}
+  	m_stream = new WPXMemoryInputStream(streamData, dataSize);
+  }
+  
+! WPXSubDocument::WPXSubDocument(uint8_t * streamData, const int dataSize) :
+  	m_stream(0)
+  {
+  	m_stream = new WPXMemoryInputStream(streamData, dataSize);
+--- 32,51 ----
+  {
+  }
+  
+! WPXSubDocument::WPXSubDocument(WPXInputStream *input, const unsigned dataSize) :
+  	m_stream(0)
+  {
+  	uint8_t *streamData = new uint8_t[dataSize];
+  	for (int i=0; i<dataSize; i++)
+  	{
++ 		if (input->atEOS())
++ 			throw FileException();
+  		streamData[i] = readU8(input);
+  	}
+  	m_stream = new WPXMemoryInputStream(streamData, dataSize);
+  }
+  
+! WPXSubDocument::WPXSubDocument(uint8_t * streamData, const unsigned dataSize) :
+  	m_stream(0)
+  {
+  	m_stream = new WPXMemoryInputStream(streamData, dataSize);
+*** misc/libwpd-0.8.8/src/lib/WPXSubDocument.h	Wed Jan  3 13:07:56 2007
+--- misc/build/libwpd-0.8.8/src/lib/WPXSubDocument.h	Thu Feb 21 11:37:54 2008
+***************
+*** 33,40 ****
+  {
+  public:
+  	WPXSubDocument();
+! 	WPXSubDocument(WPXInputStream *input, const int dataSize);
+! 	WPXSubDocument(uint8_t * streamData, const int dataSize);
+  	virtual ~WPXSubDocument();
+  	WPXMemoryInputStream *getStream() const { return m_stream;}
+  
+--- 33,40 ----
+  {
+  public:
+  	WPXSubDocument();
+! 	WPXSubDocument(WPXInputStream *input, const unsigned dataSize);
+! 	WPXSubDocument(uint8_t * streamData, const unsigned dataSize);
+  	virtual ~WPXSubDocument();
+  	WPXMemoryInputStream *getStream() const { return m_stream;}
+  
+*** misc/libwpd-0.8.8/src/lib/makefile.mk	Tue Nov 14 14:45:50 2006
+--- misc/build/libwpd-0.8.8/src/lib/makefile.mk	Thu Feb 21 11:37:54 2008
+***************
+*** 7,15 ****
+  ENABLE_EXCEPTIONS=TRUE
+  LIBTARGET=NO
+  
+- .INCLUDE :  svpre.mk
+  .INCLUDE :  settings.mk
+- .INCLUDE :  sv.mk
+  
+  .IF "$(GUI)"=="WNT"
+  CFLAGS+=-GR
+--- 7,13 ----

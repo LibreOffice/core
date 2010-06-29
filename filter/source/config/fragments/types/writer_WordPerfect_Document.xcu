@@ -1,0 +1,12 @@
+    <node oor:name="writer_WordPerfect_Document" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.Writer.WordPerfectImportFilter</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>wpd</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>true</value></prop>
+        <prop oor:name="PreferredFilter"><value>WordPerfect</value></prop>
+        <prop oor:name="UIName">
+            <value>WordPerfect Document</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"/>
+    </node>

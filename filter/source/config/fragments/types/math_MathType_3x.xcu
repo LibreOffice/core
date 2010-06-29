@@ -1,0 +1,12 @@
+    <node oor:name="math_MathType_3x" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.math.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>xxx</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>MathType 3.x</value></prop>
+        <prop oor:name="UIName">
+            <value>MathType3.x</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>DS Equation</value></prop>
+    </node>

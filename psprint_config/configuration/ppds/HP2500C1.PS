@@ -1,0 +1,1099 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*FormatVersion: "4.3"
+*FileVersion: "1.1"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "HP2500C1.PPD"
+*Product: "(HP DesignJet 2500CP)"
+*PSVersion: "(2016.104) 1"
+*ModelName: "HP DesignJet 2500CP"
+*ShortNickName: "HP DesignJet 2500CP"
+*NickName: "HP DesignJet 2500CP     v2016.104"
+*Manufacturer: "HP"
+
+*% ==== Device Capabilities ===============
+*LanguageLevel: "2"
+*Protocols:PJL TBCP
+
+*FreeVM: "7428480"
+
+*VMOption standard: "7428480"
+*VMOption 8MB: "15077208"
+*VMOption 16MB: "23542144"
+*VMOption 32MB: "39721344"
+*VMOption 48MB: "54532480"
+
+*FCacheSize standard: 1464138
+*FCacheSize 8MB: 2276368
+*FCacheSize 16MB: 3089431
+*FCacheSize 32MB: 4714724
+*FCacheSize 48MB: 31700084
+
+*OpenGroup: InstallableOptions
+*OpenUI *InstalledMemory/Installed Memory: PickOne
+*DefaultInstalledMemory: standard
+*InstalledMemory standard/Standard: " "
+*InstalledMemory 8MB/24 MB Total Memory: " "
+*InstalledMemory 16MB/32 MB Total Memory: " "
+*InstalledMemory 32MB/48 MB Total Memory: " "
+*InstalledMemory 48MB/64 MB Total Memory: " "
+*?InstalledMemory: "
+  save
+	currentsystemparams /RamSize get 
+	524288 div ceiling cvi 2 div
+	/size exch def
+	size 60 ge 
+		{(48MB)} 
+		{
+		size 44 ge 
+			{(32MB)}
+			{
+			size 28 ge
+				{(16MB)}
+                                {
+                                size 20 ge
+                                        {(8MB)}
+                                        {
+                                        size 12 ge
+                                                {(standard)}    
+		                                {(Unknown)} ifelse
+                                        } ifelse
+                                } ifelse
+			} ifelse
+		} ifelse
+	= flush
+  restore
+"
+*End
+
+*CloseUI: *InstalledMemory
+*CloseGroup: InstallableOptions
+
+*ColorDevice: True
+*DefaultColorSpace: CMYK
+*VariablePaperSize: True
+*TTRasterizer: 		Type42
+*?TTRasterizer: "
+	save
+	    42 /FontType resourcestatus
+            { pop pop (Type42)} {pop pop (None)} ifelse = flush
+            restore"
+*End
+*Throughput: "1"
+*Password: "()"
+*ExitServer: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not {
+     (WARNING: Cannot modify initial VM.) =
+     (Missing or invalid password.) =
+     (Please contact the author of this software.) = flush quit
+     } if
+"
+*End
+*Reset: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not {
+    (WARNING: Cannot reset printer.) =
+    (Missing or invalid password.) =
+    (Please contact the author of this software.) = flush quit
+    } if
+ systemdict /quit get exec
+ (WARNING : Printer Reset Failed.) = flush
+"
+*End
+
+*DefaultResolution: 600dpi
+
+*% PJL Information ===============
+*JCLBegin: "<1B>%-12345X@PJL JOB<0A>"
+*JCLToPSInterpreter: "@PJL ENTER LANGUAGE = POSTSCRIPT<0A>"
+*JCLEnd: "<1B>%-12345X@PJL EOJ<0A><1B>%-12345X"
+
+*% Halftone Information ===============
+*ScreenFreq: "60.0"
+*ScreenAngle: "0.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+{abs   exch   abs   2 copy   add   1 gt   {1 sub   dup   mul   exch
+1 sub   dup   mul   add   1 sub  } {dup   mul   exch   dup   mul
+add   1 exch   sub  } ifelse  }
+"
+*End
+*ScreenProc Line: "{ pop }"
+*ScreenProc Ellipse: "{ dup 5 mul 8 div mul exch dup mul exch add sqrt 1
+exch sub }"
+*End
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*DefaultHalftoneType: 100
+
+
+*%=============== Print Color as Gray ================
+
+*OpenUI *HPColorAsGray/Print Color as Gray: PickOne
+*OrderDependency: 5.0 AnySetup *HPColorAsGray
+*DefaultHPColorAsGray: No
+*HPColorAsGray Yes/Yes: "<< /ProcessColorModel /DeviceGray >> setpagedevice"
+*HPColorAsGray No/No: "<< /ProcessColorModel /DeviceCMYK >> setpagedevice"
+*?HPColorAsGray: "
+save
+currentpagedevice /ProcessColorModel get /DeviceGray eq
+{(Yes)}{(No)} ifelse
+= flush
+restore "
+*End
+*CloseUI: *HPColorAsGray
+
+
+*%=============== Auto-scaling Control ================
+
+*OpenUI *HPAutoScaling/Scale to: PickOne
+*OrderDependency: 20.0 AnySetup *HPAutoScaling
+*DefaultHPAutoScaling: Off
+
+*HPAutoScaling Off/No Change:" "
+
+*HPAutoScaling Letter/US Letter: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [612 792 ] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling LetterFullBleed/Full Bleed US Letter: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [777 1009 ] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling Tabloid/Tabloid: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [792 1224] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling TabloidFullBleed/Full Bleed Tabloid: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [957 1441] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling AnsiC/ANSI C: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1224 1584] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling AnsiD/ANSI D: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1584 2448] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling AnsiE/ANSI E: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [2448 3168] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling ARCHA/ARCH A: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [648 864] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling ARCHB/ARCH B: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [864 1296] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling ARCHC/ARCH C: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1296 1728] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling ARCHD/ARCH D: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1728 2592] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling ARCHE/ARCH E: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [2592 3456] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling A4/ISO A4: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [595 842] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling A4FullBleed/Full Bleed ISO A4: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [760 1059] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling A3/ISO A3: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [842 1191] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling A3FullBleed/Full Bleed ISO A3: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1007 1408] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling A2/ISO A2: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1191 1684] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling A1/ISO A1: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1684 2384] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling A0/ISO A0: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [2384 3370] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling OVERSIZEA2/Oversize A2: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1377 1772] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling OVERSIZEA1/Oversize A1: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1788 2551] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling OVERSIZEA0/Oversize A0: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [2567 3529] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling B4/JIS B4: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [729 1032] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling B3/JIS B3: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1032 1460] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling B2/JIS B2: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1460 2064] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling B1/JIS B1: "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [2064 2920] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling P24x48/24" x 48": "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1728 3456] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling P24x60/24" x 60": "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1728 4320] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling P24x72/24" x 72": "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1728 5184] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling P24x84/24" x 84": "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1728 6048] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling P24x96/24" x 96": "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1728 6912] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling P24x108/24" x 108": "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [1728 7776] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling P36x60/36" x 60": "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [2592 4320] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling P36x72/36" x 72": "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [2592 5184] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling P36x84/36" x 84": "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [2592 6048] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling P36x96/36" x 96": "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [2592 6912] exch exec
+<<>> setpagedevice"
+*End
+
+*HPAutoScaling P36x108/36" x 108": "
+/HPDict /ProcSet findresource /SetAutoScale get true exch exec /HPDict /ProcSet findresource /SetDestinationPageSize get [2592 7776] exch exec
+<<>> setpagedevice"
+*End
+
+*CloseUI: *HPAutoScaling
+
+
+*%=============== Print Quality ================
+
+*OpenUI *OutputMode/Print Quality: PickOne
+*OrderDependency: 50.0 AnySetup *OutputMode
+*DefaultOutputMode: Best
+
+*OutputMode Best/Best - 600 dpi: "
+<<	/HWResolution [600 600]
+	/PostRenderingEnhance true
+	/PostRenderingEnhanceDetails 
+	<<	/PrintQuality 3
+		/Type 11 >>
+>>	setpagedevice
+"
+*End
+
+*OutputMode Normal/Normal: "
+<<	/HWResolution [300 300]
+	/PostRenderingEnhance true
+	/PostRenderingEnhanceDetails 
+	<<	/PrintQuality 2
+		/Type 11 >>
+>>	setpagedevice
+"
+*End
+
+*OutputMode Fast/Fast: "
+<<	/HWResolution [300 300]
+	/PostRenderingEnhance true
+	/PostRenderingEnhanceDetails 
+	<<	/PrintQuality 1
+		/Type 11 >>
+>>	setpagedevice
+"
+*End
+
+*?OutputMode: "
+    save
+        3 dict
+        dup 1 (Fast) put
+        dup 2 (Normal) put
+        dup 3 (Best) put
+        currentpagedevice /PostRenderingEnhanceDetails get
+        /PrintQuality get get = flush
+    restore"
+*End
+*CloseUI: *OutputMode
+
+
+*% Mirror Print ======================
+*OpenUI *MirrorPrint/Mirror Print:  Boolean
+*OrderDependency: 50.0 AnySetup *MirrorPrint
+*DefaultMirrorPrint: False
+*MirrorPrint True: "<</MirrorPrint true>>setpagedevice"
+*MirrorPrint False: "<</MirrorPrint false>>setpagedevice"
+*?MirrorPrint: "
+save
+   currentpagedevice /MirrorPrint get
+   {(True)}{(False)}ifelse = flush
+restore
+"
+*End
+*CloseUI: *MirrorPrint
+
+
+*%=============== Transverse ================
+
+*OpenUI *HPTransverse/Rotate:  Boolean
+*OrderDependency: 50.0 AnySetup *HPTransverse
+*DefaultHPTransverse: False
+*HPTransverse True: "<< /Orientation 1 >> setpagedevice"
+*HPTransverse False: "<< /Orientation 0 >> setpagedevice"
+*?HPTransverse: "
+save
+currentpagedevice /Orientation get 0 eq
+{ (False) }
+{
+   currentpagedevice /Orientation get 1 eq
+   { (True) }   
+   { (Unknown) } ifelse
+} ifelse = flush
+restore
+"
+*End
+*CloseUI: *HPTransverse
+
+
+*%=============== HP Color Management ================
+
+*OpenUI *HPColorMan/Color management: PickOne 
+*OrderDependency: 60.0 AnySetup *HPColorMan 
+*DefaultHPColorMan: EuroScale 
+
+*HPColorMan EuroScale/EuroScale:"
+        globaldict /ColorSmartColorMatching known {
+           /EuroOffset ColorSmartColorMatching
+        <<>> setpagedevice
+        } if
+"
+*End
+
+*HPColorMan SWOP/SWOP:"
+        globaldict /ColorSmartColorMatching known {
+           /SWOP ColorSmartColorMatching
+        <<>> setpagedevice
+        } if
+"
+*End
+
+*HPColorMan Toyo/Toyo:"
+        globaldict /ColorSmartColorMatching known {
+           /JapanOffset ColorSmartColorMatching
+        <<>> setpagedevice
+        } if
+"
+*End
+
+*HPColorMan ColorSmart/ColorSmart Vivid Business Graphics:"
+        globaldict /ColorSmartColorMatching known {
+           true ColorSmartColorMatching
+           <<>> setpagedevice
+        } if
+"
+*End
+
+*HPColorMan None/No Color Adjustment - Expert users only:"
+        globaldict /ColorSmartColorMatching known {false ColorSmartColorMatching
+        <<>> setpagedevice} if
+"
+*End
+
+*?HPColorMan: "
+save
+
+userdict /ColorSmartOn known
+{
+   userdict /ColorSmartOn get
+   {(ColorSmart)}
+   {
+        userdict /ColorEmulationMode known
+        {
+            userdict /ColorEmulationMode get
+            dup 0 eq
+            {(None)}
+            {
+                 dup 1 eq
+                 {(SWOP)}
+                 {
+                      dup 2 eq
+                      {(EuroScale)}
+                      { 
+                          dup 3 eq
+                          {(Toyo)}
+                          {(Unknown)} ifelse
+                      } ifelse
+                 } ifelse
+            } ifelse exch pop
+        }
+        {(None)} ifelse
+   } ifelse
+}
+{
+   userdict /ColorEmulationMode known
+   {
+      userdict /ColorEmulationMode get
+      dup 0 eq
+      {(None)}
+      {
+           dup 1 eq
+           {(SWOP)}
+           {
+                dup 2 eq
+                {(EuroScale)}
+                { 
+                    dup 3 eq
+                    {(Toyo)}
+                    {(Unknown)} ifelse
+                } ifelse
+           } ifelse
+      } ifelse exch pop
+   }
+   {(None)} ifelse
+} ifelse
+
+= flush
+restore
+"
+*End
+
+*CloseUI: *HPColorMan
+
+
+*%=============== Brightness Control ================
+
+*OpenUI *HPBrightness/Lightness: PickOne
+*OrderDependency: 70.0 AnySetup *HPBrightness
+*DefaultHPBrightness: leveleven
+
+*HPBrightness levelm25/- 25% Lighter:" 25
+  dup dup 50 lt exch -50 gt and
+  { 0.01 mul 0.5 add ln 0.5 ln exch div }
+  { pop 1 } ifelse 1 exch div { 0 exp } dup
+  0 4 -1 roll put settransfer"
+*End
+
+*HPBrightness levelm20/- 20%:" 20
+  dup dup 50 lt exch -50 gt and
+  { 0.01 mul 0.5 add ln 0.5 ln exch div }
+  { pop 1 } ifelse 1 exch div { 0 exp } dup
+  0 4 -1 roll put settransfer"
+*End
+
+*HPBrightness levelm15/- 15%:" 15
+  dup dup 50 lt exch -50 gt and
+  { 0.01 mul 0.5 add ln 0.5 ln exch div }
+  { pop 1 } ifelse 1 exch div { 0 exp } dup
+  0 4 -1 roll put settransfer"
+*End
+
+*HPBrightness levelm10/- 10%:" 10
+  dup dup 50 lt exch -50 gt and
+  { 0.01 mul 0.5 add ln 0.5 ln exch div }
+  { pop 1 } ifelse 1 exch div { 0 exp } dup
+  0 4 -1 roll put settransfer"
+*End
+
+*HPBrightness levelm5/- 5%:" 5
+  dup dup 50 lt exch -50 gt and
+  { 0.01 mul 0.5 add ln 0.5 ln exch div }
+  { pop 1 } ifelse 1 exch div { 0 exp } dup
+  0 4 -1 roll put settransfer"
+*End
+
+*HPBrightness leveleven/0% No Change:" "
+
+*HPBrightness levelp5/+ 5%:" -5
+  dup dup 50 lt exch -50 gt and
+  { 0.01 mul 0.5 add ln 0.5 ln exch div }
+  { pop 1 } ifelse 1 exch div { 0 exp } dup
+  0 4 -1 roll put settransfer"
+*End
+
+*HPBrightness levelp10/+ 10%:" -10
+  dup dup 50 lt exch -50 gt and
+  { 0.01 mul 0.5 add ln 0.5 ln exch div }
+  { pop 1 } ifelse 1 exch div { 0 exp } dup
+  0 4 -1 roll put settransfer"
+*End
+
+*HPBrightness levelp15/+ 15%:" -15
+  dup dup 50 lt exch -50 gt and
+  { 0.01 mul 0.5 add ln 0.5 ln exch div }
+  { pop 1 } ifelse 1 exch div { 0 exp } dup
+  0 4 -1 roll put settransfer"
+*End
+
+*HPBrightness levelp20/+ 20%:" -20
+  dup dup 50 lt exch -50 gt and
+  { 0.01 mul 0.5 add ln 0.5 ln exch div }
+  { pop 1 } ifelse 1 exch div { 0 exp } dup
+  0 4 -1 roll put settransfer"
+*End
+
+*HPBrightness levelp25/+ 25% Darker:" -25
+  dup dup 50 lt exch -50 gt and
+  { 0.01 mul 0.5 add ln 0.5 ln exch div }
+  { pop 1 } ifelse 1 exch div { 0 exp } dup
+  0 4 -1 roll put settransfer"
+*End
+
+*?HPBrightness: "
+save
+11 dict
+	dup 0.415038 (levelm25)  put
+                dup 0.514573 (levelm20)  put
+                dup 0.621488 (levelm15)  put
+                dup 0.736966 (levelm10)  put
+                dup 0.862496 (levelm5)    put
+                dup 1.0           (leveleven) put
+                dup 1.152       (levelp5)     put
+                dup 1.32193   (levelp10)   put
+                dup 1.51457   (levelp15)   put
+                dup 1.73697   (levelp20)   put
+                dup 2.0           (levelp25)   put
+
+dup
+
+currenttransfer dup length 0 eq
+	{pop pop pop (Unknown)}
+	{0 get dup 1 lt
+       {1000000 mul round 1000000 div}
+       {100000  mul round 100000  div} ifelse
+	dup
+	3 1 roll
+	known 
+		{ get }
+		{ pop pop (Unknown)} ifelse
+	} ifelse
+= flush
+restore
+"
+*End
+*CloseUI: *HPBrightness
+
+
+*%=============== Allow Application Halftoning ================
+
+*OpenUI *HPAppHalftoning/Application Halftoning: Boolean 
+*OrderDependency: 80.0 AnySetup *HPAppHalftoning 
+*DefaultHPAppHalftoning: False
+*HPAppHalftoning True/Allow: "" 
+*HPAppHalftoning False/Disallow: "
+	userdict /setscreen { pop pop pop } put
+	userdict /setcolorscreen { pop pop pop pop pop pop pop pop pop pop pop pop } put
+	userdict /sethalftone{pop} put
+      <<>> setpagedevice" 
+*End
+*?HPAppHalftoning: "
+save
+2 dict begin
+	/AllSamePop {
+		dup 0 get exch true exch
+		{ 2 index ne {pop false exit} if } forall
+		exch dup /pop eq exch /pop load eq or and
+	} def
+	/Lenchk { dup type /arraytype eq
+			{dup length 3 -1 roll eq {true}{pop false}ifelse}
+			{pop pop false}
+			ifelse
+	} def
+	3 /setscreen load Lenchk {AllSamePop}{false}ifelse
+	12 /setcolorscreen load Lenchk {AllSamePop}{false}ifelse
+	1 /sethalftone load Lenchk {AllSamePop}{false}ifelse
+end
+and and not
+{(True)} {(False)} ifelse
+= flush
+restore "
+*End
+*CloseUI: *HPAppHalftoning
+
+
+*% Paper Handling ===================
+
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30.0 AnySetup *PageSize
+*DefaultPageSize: Unknown
+*PageSize Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
+*PageSize LetterFullBleed/Full Bleed US Letter: "<</PageSize[777 1009]/ImagingBBox null>>setpagedevice"
+*PageSize Tabloid/Tabloid: "<</PageSize[792 1224]/ImagingBBox null>>setpagedevice"
+*PageSize TabloidFullBleed/Full Bleed Tabloid: "<</PageSize[957 1441]/ImagingBBox null>>setpagedevice"
+*PageSize AnsiC/ANSI C: "<</PageSize[1224 1584]/ImagingBBox null>>setpagedevice"
+*PageSize AnsiD/ANSI D: "<</PageSize[1584 2448]/ImagingBBox null>>setpagedevice"
+*PageSize AnsiE/ANSI E: "<</PageSize[2448 3168]/ImagingBBox null>>setpagedevice"
+*PageSize ARCHA/ARCH A: "<</PageSize[648 864]/ImagingBBox null>>setpagedevice"
+*PageSize ARCHB/ARCH B: "<</PageSize[864 1296]/ImagingBBox null>>setpagedevice"
+*PageSize ARCHC/ARCH C: "<</PageSize[1296 1728]/ImagingBBox null>>setpagedevice"
+*PageSize ARCHD/ARCH D: "<</PageSize[1728 2592]/ImagingBBox null>>setpagedevice"
+*PageSize ARCHE/ARCH E: "<</PageSize[2592 3456]/ImagingBBox null>>setpagedevice"
+*PageSize A4/ISO A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
+*PageSize A4FullBleed/Full Bleed ISO A4: "<</PageSize[760 1059]/ImagingBBox null>>setpagedevice"
+*PageSize A3/ISO A3: "<</PageSize[842 1191]/ImagingBBox null>>setpagedevice"
+*PageSize A3FullBleed/Full Bleed ISO A3: "<</PageSize[1007 1408]/ImagingBBox null>>setpagedevice"
+*PageSize A2/ISO A2: "<</PageSize[1191 1684]/ImagingBBox null>>setpagedevice"
+*PageSize A1/ISO A1: "<</PageSize[1684 2384]/ImagingBBox null>>setpagedevice"
+*PageSize A0/ISO A0: "<</PageSize[2384 3370]/ImagingBBox null>>setpagedevice"
+*PageSize OVERSIZEA2/Oversize A2: "<</PageSize[1377 1772]/ImagingBBox null>>setpagedevice"
+*PageSize OVERSIZEA1/Oversize A1: "<</PageSize[1788 2551]/ImagingBBox null>>setpagedevice"
+*PageSize OVERSIZEA0/Oversize A0: "<</PageSize[2567 3529]/ImagingBBox null>>setpagedevice"
+*PageSize B4/JIS B4: "<</PageSize[729 1032]/ImagingBBox null>>setpagedevice"
+*PageSize B3/JIS B3: "<</PageSize[1032 1460]/ImagingBBox null>>setpagedevice"
+*PageSize B2/JIS B2: "<</PageSize[1460 2064]/ImagingBBox null>>setpagedevice"
+*PageSize B1/JIS B1: "<</PageSize[2064 2920]/ImagingBBox null>>setpagedevice"
+*PageSize P24x48/24" x 48": "<</PageSize[1728 3456]/ImagingBBox null>>setpagedevice"
+*PageSize P24x60/24" x 60": "<</PageSize[1728 4320]/ImagingBBox null>>setpagedevice"
+*PageSize P24x72/24" x 72": "<</PageSize[1728 5184]/ImagingBBox null>>setpagedevice"
+*PageSize P24x84/24" x 84": "<</PageSize[1728 6048]/ImagingBBox null>>setpagedevice"
+*PageSize P24x96/24" x 96": "<</PageSize[1728 6912]/ImagingBBox null>>setpagedevice"
+*PageSize P24x108/24" x 108": "<</PageSize[1728 7776]/ImagingBBox null>>setpagedevice"
+*PageSize P36x60/36" x 60": "<</PageSize[2592 4320]/ImagingBBox null>>setpagedevice"
+*PageSize P36x72/36" x 72": "<</PageSize[2592 5184]/ImagingBBox null>>setpagedevice"
+*PageSize P36x84/36" x 84": "<</PageSize[2592 6048]/ImagingBBox null>>setpagedevice"
+*PageSize P36x96/36" x 96": "<</PageSize[2592 6912]/ImagingBBox null>>setpagedevice"
+*PageSize P36x108/36" x 108": "<</PageSize[2592 7776]/ImagingBBox null>>setpagedevice"
+*?PageSize: "
+ save
+   currentpagedevice /PageSize get aload pop
+   2 copy gt {exch} if
+  (Unknown)
+  33 dict
+		dup [612 792]	(Letter) put
+		dup [777 1009]	(LetterFullBleed) put
+		dup [792 1224]	(Tabloid) put
+		dup [957 1441]	(TabloidFullBleed) put
+		dup [1224 1584]	(AnsiC) put
+		dup [1584 2448]	(AnsiD) put
+		dup [2448 3168]	(AnsiE) put
+		dup [648 864]	(ARCHA) put
+		dup [864 1296]	(ARCHB) put
+		dup [1296 1728]	(ARCHC) put
+		dup [1728 2592]	(ARCHD) put
+		dup [2592 3456]	(ARCHE) put
+		dup [595 842]	(A4) put
+		dup [760 1059]	(A4FullBleed) put
+		dup [842 1191]	(A3) put
+		dup [1007 1408]	(A3FullBleed) put
+		dup [1191 1684]	(A2) put
+		dup [1684 2384]	(A1) put
+		dup [2384 3370]	(A0) put
+		dup [1377 1772]	(OVERSIZEA2) put
+		dup [1788 2551]	(OVERSIZEA1) put
+		dup [2567 3529]	(OVERSIZEA0) put
+		dup [729 1032]	(B4) put
+		dup [1032 1460]	(B3) put
+		dup [1460 2064]	(B2) put
+		dup [2064 2920]	(B1) put
+		dup [1728 3456]	(P24x48) put
+		dup [1728 4320]	(P24x60) put
+		dup [1728 5184]	(P24x72) put
+		dup [1728 6048]	(P24x84) put
+		dup [1728 6912]	(P24x96) put
+		dup [1728 7776]	(P24x108) put
+		dup [2592 4320]	(P36x60) put
+		dup [2592 5184]	(P36x72) put
+		dup [2592 6048]	(P36x84) put
+		dup [2592 6912]	(P36x96) put
+		dup [2592 7776]	(P36x108) put
+   { exch aload pop 4 index sub abs 5 le exch
+   5 index sub abs 5 le and
+      {exch pop exit} {pop} ifelse
+   } bind forall
+   = flush pop pop
+restore"
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 40.0 AnySetup *PageRegion
+*DefaultPageRegion: Unknown
+*PageRegion Letter/US Letter: "<</PageSize[612 792]/ImagingBBox null>>setpagedevice"
+*PageRegion LetterFullBleed/Full Bleed US Letter: "<</PageSize[777 1009]/ImagingBBox null>>setpagedevice"
+*PageRegion Tabloid/Tabloid: "<</PageSize[792 1224]/ImagingBBox null>>setpagedevice"
+*PageRegion TabloidFullBleed/Full Bleed Tabloid: "<</PageSize[957 1441]/ImagingBBox null>>setpagedevice"
+*PageRegion AnsiC/ANSI C: "<</PageSize[1224 1584]/ImagingBBox null>>setpagedevice"
+*PageRegion AnsiD/ANSI D: "<</PageSize[1584 2448]/ImagingBBox null>>setpagedevice"
+*PageRegion AnsiE/ANSI E: "<</PageSize[2448 3168]/ImagingBBox null>>setpagedevice"
+*PageRegion ARCHA/ARCH A: "<</PageSize[648 864]/ImagingBBox null>>setpagedevice"
+*PageRegion ARCHB/ARCH B: "<</PageSize[864 1296]/ImagingBBox null>>setpagedevice"
+*PageRegion ARCHC/ARCH C: "<</PageSize[1296 1728]/ImagingBBox null>>setpagedevice"
+*PageRegion ARCHD/ARCH D: "<</PageSize[1728 2592]/ImagingBBox null>>setpagedevice"
+*PageRegion ARCHE/ARCH E: "<</PageSize[2592 3456]/ImagingBBox null>>setpagedevice"
+*PageRegion A4/ISO A4: "<</PageSize[595 842]/ImagingBBox null>>setpagedevice"
+*PageRegion A4FullBleed/Full Bleed ISO A4: "<</PageSize[760 1059]/ImagingBBox null>>setpagedevice"
+*PageRegion A3/ISO A3: "<</PageSize[842 1191]/ImagingBBox null>>setpagedevice"
+*PageRegion A3FullBleed/Full Bleed ISO A3: "<</PageSize[1007 1408]/ImagingBBox null>>setpagedevice"
+*PageRegion A2/ISO A2: "<</PageSize[1191 1684]/ImagingBBox null>>setpagedevice"
+*PageRegion A1/ISO A1: "<</PageSize[1684 2384]/ImagingBBox null>>setpagedevice"
+*PageRegion A0/ISO A0: "<</PageSize[2384 3370]/ImagingBBox null>>setpagedevice"
+*PageRegion OVERSIZEA2/Oversize A2: "<</PageSize[1377 1772]/ImagingBBox null>>setpagedevice"
+*PageRegion OVERSIZEA1/Oversize A1: "<</PageSize[1788 2551]/ImagingBBox null>>setpagedevice"
+*PageRegion OVERSIZEA0/Oversize A0: "<</PageSize[2567 3529]/ImagingBBox null>>setpagedevice"
+*PageRegion B4/JIS B4: "<</PageSize[729 1032]/ImagingBBox null>>setpagedevice"
+*PageRegion B3/JIS B3: "<</PageSize[1032 1460]/ImagingBBox null>>setpagedevice"
+*PageRegion B2/JIS B2: "<</PageSize[1460 2064]/ImagingBBox null>>setpagedevice"
+*PageRegion B1/JIS B1: "<</PageSize[2064 2920]/ImagingBBox null>>setpagedevice"
+*PageRegion P24x48/24" x 48": "<</PageSize[1728 3456]/ImagingBBox null>>setpagedevice"
+*PageRegion P24x60/24" x 60": "<</PageSize[1728 4320]/ImagingBBox null>>setpagedevice"
+*PageRegion P24x72/24" x 72": "<</PageSize[1728 5184]/ImagingBBox null>>setpagedevice"
+*PageRegion P24x84/24" x 84": "<</PageSize[1728 6048]/ImagingBBox null>>setpagedevice"
+*PageRegion P24x96/24" x 96": "<</PageSize[1728 6912]/ImagingBBox null>>setpagedevice"
+*PageRegion P24x108/24" x 108": "<</PageSize[1728 7776]/ImagingBBox null>>setpagedevice"
+*PageRegion P36x60/36" x 60": "<</PageSize[2592 4320]/ImagingBBox null>>setpagedevice"
+*PageRegion P36x72/36" x 72": "<</PageSize[2592 5184]/ImagingBBox null>>setpagedevice"
+*PageRegion P36x84/36" x 84": "<</PageSize[2592 6048]/ImagingBBox null>>setpagedevice"
+*PageRegion P36x96/36" x 96": "<</PageSize[2592 6912]/ImagingBBox null>>setpagedevice"
+*PageRegion P36x108/36" x 108": "<</PageSize[2592 7776]/ImagingBBox null>>setpagedevice"
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Unknown
+*ImageableArea Letter/US Letter: "51 77 561 715"
+*ImageableArea LetterFullBleed/Full Bleed US Letter: "51 77 726 932"
+*ImageableArea Tabloid/Tabloid: "51 77 741 1147"
+*ImageableArea TabloidFullBleed/Full Bleed Tabloid: "51 77 906 1364"
+*ImageableArea AnsiC/ANSI C: "51 77 1173 1507"
+*ImageableArea AnsiD/ANSI D: "51 77 1533 2371"
+*ImageableArea AnsiE/ANSI E: "51 77 2397 3091"
+*ImageableArea ARCHA/ARCH A: "51 77 597 787"
+*ImageableArea ARCHB/ARCH B: "51 77 813 1219"
+*ImageableArea ARCHC/ARCH C: "51 77 1245 1651"
+*ImageableArea ARCHD/ARCH D: "51 77 1677 2515"
+*ImageableArea ARCHE/ARCH E: "51 77 2541 3379"
+*ImageableArea A4/ISO A4: "51 77 544 765"
+*ImageableArea A4FullBleed/Full Bleed ISO A4: "51 77 709 982"
+*ImageableArea A3/ISO A3: "51 77 791 1114"
+*ImageableArea A3FullBleed/Full Bleed ISO A3: "51 77 956 1331"
+*ImageableArea A2/ISO A2: "51 77 1140 1607"
+*ImageableArea A1/ISO A1: "51 77 1633 2307"
+*ImageableArea A0/ISO A0: "51 77 2333 3293"
+*ImageableArea OVERSIZEA2/Oversize A2: "51 77 1326 1695"
+*ImageableArea OVERSIZEA1/Oversize A1: "51 77 1737 2474"
+*ImageableArea OVERSIZEA0/Oversize A0: "51 77 2516 3452"
+*ImageableArea B4/JIS B4: "51 77 678 955"
+*ImageableArea B3/JIS B3: "51 77 981 1383"
+*ImageableArea B2/JIS B2: "51 77 1409 1987"
+*ImageableArea B1/JIS B1: "51 77 2013 2843"
+*ImageableArea P24x48/24" x 48": "51 77 1677 3379"
+*ImageableArea P24x60/24" x 60": "51 77 1677 4243"
+*ImageableArea P24x72/24" x 72": "51 77 1677 5107"
+*ImageableArea P24x84/24" x 84": "51 77 1677 5971"
+*ImageableArea P24x96/24" x 96": "51 77 1677 6835"
+*ImageableArea P24x108/24" x 108": "51 77 1677 7699"
+*ImageableArea P36x60/36" x 60": "51 77 2541 4243"
+*ImageableArea P36x72/36" x 72": "51 77 2541 5107"
+*ImageableArea P36x84/36" x 84": "51 77 2541 5971"
+*ImageableArea P36x96/36" x 96": "51 77 2541 6835"
+*ImageableArea P36x108/36" x 108": "51 77 2541 7699"
+*?ImageableArea: "
+save
+/cvp {cvi (     ) cvs
+print ( ) print} bind def
+newpath clippath pathbbox
+4 -2 roll exch 2 {ceiling cvp} repeat
+exch 2 {floor cvp} repeat flush
+restore"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension:Unknown
+*PaperDimension Letter/US Letter: "612 792"
+*PaperDimension LetterFullBleed/Full Bleed US Letter: "777 1009"
+*PaperDimension Tabloid/Tabloid: "792 1224"
+*PaperDimension TabloidFullBleed/Full Bleed Tabloid: "957 1441"
+*PaperDimension AnsiC/ANSI C: "1224 1584"
+*PaperDimension AnsiD/ANSI D: "1584 2448"
+*PaperDimension AnsiE/ANSI E: "2448 3168"
+*PaperDimension ARCHA/ARCH A: "648 864"
+*PaperDimension ARCHB/ARCH B: "864 1296"
+*PaperDimension ARCHC/ARCH C: "1296 1728"
+*PaperDimension ARCHD/ARCH D: "1728 2592"
+*PaperDimension ARCHE/ARCH E: "2592 3456"
+*PaperDimension A4/ISO A4: "595 842"
+*PaperDimension A4FullBleed/Full Bleed ISO A4: "760 1059"
+*PaperDimension A3/ISO A3: "842 1191"
+*PaperDimension A3FullBleed/Full Bleed ISO A3: "1007 1408"
+*PaperDimension A2/ISO A2: "1191 1684"
+*PaperDimension A1/ISO A1: "1684 2384"
+*PaperDimension A0/ISO A0: "2384 3370"
+*PaperDimension OVERSIZEA2/Oversize A2: "1377 1772"
+*PaperDimension OVERSIZEA1/Oversize A1: "1788 2551"
+*PaperDimension OVERSIZEA0/Oversize A0: "2567 3529"
+*PaperDimension B4/JIS B4: "729 1032"
+*PaperDimension B3/JIS B3: "1032 1460"
+*PaperDimension B2/JIS B2: "1460 2064"
+*PaperDimension B1/JIS B1: "2064 2920"
+*PaperDimension P24x48/24" x 48": "1728 3456"
+*PaperDimension P24x60/24" x 60": "1728 4320"
+*PaperDimension P24x72/24" x 72": "1728 5184"
+*PaperDimension P24x84/24" x 84": "1728 6048"
+*PaperDimension P24x96/24" x 96": "1728 6912"
+*PaperDimension P24x108/24" x 108": "1728 7776"
+*PaperDimension P36x60/36" x 60": "2592 4320"
+*PaperDimension P36x72/36" x 72": "2592 5184"
+*PaperDimension P36x84/36" x 84": "2592 6048"
+*PaperDimension P36x96/36" x 96": "2592 6912"
+*PaperDimension P36x108/36" x 108": "2592 7776"
+
+*RequiresPageRegion All: True
+
+*OpenUI *InputSlot: PickOne
+*DefaultInputSlot: OnlyOne
+*InputSlot OnlyOne/Only One: ""
+*?InputSlot: "save (OnlyOne) = flush restore "
+*CloseUI: *InputSlot
+
+*% Custom Page Sizes ===================
+*MaxMediaWidth: "2642"
+*MaxMediaHeight: "9288"
+*HWMargins: 51 77 51 77
+*ParamCustomPageSize Width: 1 points 200 2642
+*ParamCustomPageSize Height: 2 points 200 9288
+*ParamCustomPageSize WidthOffset: 3 points 0 2642
+*ParamCustomPageSize HeightOffset: 4 points 0 9288
+*ParamCustomPageSize Orientation: 5 int 0 3
+*NonUIOrderDependency: 30.0 AnySetup *CustomPageSize
+*CustomPageSize True: "
+pop pop pop % discard orientation & offsets
+2 dict begin
+/PageSize [
+4 -2 roll
+] def
+/ImagingBBox null def
+currentdict end setpagedevice
+"
+*End
+
+*% Font Information =====================
+
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
+*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
+*Font Bookman-Light: Standard "(001.004S)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Courier-Bold: Standard "(002.004S)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
+*Font Symbol: Special "(001.007S)" Special ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
+*Font ZapfDingbats: Special "(001.004S)" Special ROM
+
+*?FontQuery: "
+ save
+   { count 1 gt
+      { exch dup 127 string cvs (/) print print (:) print
+        /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+      } { exit } ifelse
+   } bind loop
+   (*) = flush
+ restore"
+*End
+
+*?FontList: "
+save
+  (*) {cvn ==} 128 string /Font resourceforall
+  (*) = flush
+restore"
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ] %%)
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+*Status: "intializing"
+*Status: "printing test page"
+*Status: "PrinterError: needs attention"
+*Status: "PrinterError: cover open"
+*Status: "PrinterError: warming up"
+*Status: "PrinterError: resetting printer"
+*Status: "PrinterError: output bin full"
+*Status: "PrinterError: Paper Jam"
+*Status: "PrinterError: no toner cartridge"
+*Status: "PrinterError: manual feed"
+*Status: "PrinterError: out of paper"
+*Status: "PrinterError: page protect needed"
+*Status: "PrinterError: out of memory"
+*Status: "PrinterError: off line"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "Parallel"
+*Source: "OptionalIO"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+*PrinterError: "needs attention"
+*PrinterError: "cover open"
+*PrinterError: "warming up"
+*PrinterError: "resetting printer"
+*PrinterError: "output bin full"
+*PrinterError: "Paper Jam"
+*PrinterError: "no toner cartridge"
+*PrinterError: "manual feed"
+*PrinterError: "out of paper"
+*PrinterError: "page protect needed"
+*PrinterError: "out of memory"
+*PrinterError: "off line"
+
+
+*%DeviceAdjustMatrix: "[1 0 0 1 0 0]"
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.60lpi.600dpi/60 lpi / 600 dpi
+
+
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+*%  For 60 lpi / 600 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.600dpi/60 lpi / 600 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.600dpi/60 lpi / 600 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.600dpi/60 lpi / 600 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.600dpi/60 lpi / 600 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.600dpi/60 lpi / 600 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.600dpi/60 lpi / 600 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.600dpi/60 lpi / 600 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.600dpi/60 lpi / 600 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.600dpi/60 lpi / 600 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.600dpi/60 lpi / 600 dpi: "60"
+
+*%  For 53 lpi / 600 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.53lpi.600dpi/53 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.53lpi.600dpi/53 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.53lpi.600dpi/53 lpi / 600 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.53lpi.600dpi/53 lpi / 600 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.53lpi.600dpi/53 lpi / 600 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.53lpi.600dpi/53 lpi / 600 dpi: "53.033"
+*ColorSepScreenFreq CustomColor.53lpi.600dpi/53 lpi / 600 dpi: "53.033"
+*ColorSepScreenFreq ProcessCyan.53lpi.600dpi/53 lpi / 600 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.53lpi.600dpi/53 lpi / 600 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.53lpi.600dpi/53 lpi / 600 dpi: "50.0"
+
+
+*% Last Edit Date: May 9 1997
+*% End of PPD file for Canguro
+*% The byte count of this file should be exactly 038692 or 039791
+*% depending on the filesystem it resides in.
+*% end of PPD file for HP DesignJet 2500CP 

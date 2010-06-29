@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.2">
+<LC_INFO>
+<Language>
+<LangID>ta</LangID>
+<DefaultName>Tamil</DefaultName>
+</Language>
+<Country>
+<CountryID>IN</CountryID>
+<DefaultName>India</DefaultName>
+</Country>
+</LC_INFO>
+<LC_CTYPE ref="hi_IN"/>
+<LC_FORMAT ref="hi_IN" replaceTo="[$ரூ.-449]"/>
+<LC_COLLATION ref="en_US"/>
+<LC_SEARCH ref="en_US"/>
+<LC_INDEX ref="en_US"/>
+<LC_CALENDAR>
+<Calendar unoid="gregorian" default="true">
+<DaysOfWeek>
+<Day>
+<DayID>sun</DayID>
+<DefaultAbbrvName>ஞாயி\0BB1உ</DefaultAbbrvName>
+<DefaultFullName>ஞாயி\0BB1உ</DefaultFullName>
+</Day>
+<Day>
+<DayID>mon</DayID>
+<DefaultAbbrvName>திங்கள்</DefaultAbbrvName>
+<DefaultFullName>திங்கள்</DefaultFullName>
+</Day>
+<Day>
+<DayID>tue</DayID>
+<DefaultAbbrvName>ெசவ்வாய்</DefaultAbbrvName>
+<DefaultFullName>ெசவ்வாய்</DefaultFullName>
+</Day>
+<Day>
+<DayID>wed</DayID>
+<DefaultAbbrvName>புதன்</DefaultAbbrvName>
+<DefaultFullName>புதன்</DefaultFullName>
+</Day>
+<Day>
+<DayID>thu</DayID>
+<DefaultAbbrvName>வியாழன்</DefaultAbbrvName>
+<DefaultFullName>வியாழன்</DefaultFullName>
+</Day>
+<Day>
+<DayID>fri</DayID>
+<DefaultAbbrvName>ெவள்ளி.</DefaultAbbrvName>
+<DefaultFullName>ெவள்ளி</DefaultFullName>
+</Day>
+<Day>
+<DayID>sat</DayID>
+<DefaultAbbrvName>சனி</DefaultAbbrvName>
+<DefaultFullName>சனி</DefaultFullName>
+</Day>
+</DaysOfWeek>
+<MonthsOfYear>
+<Month>
+<MonthID>jan</MonthID>
+<DefaultAbbrvName>ஜநவரி.</DefaultAbbrvName>
+<DefaultFullName>ஜநவரி</DefaultFullName>
+</Month>
+<Month>
+<MonthID>feb</MonthID>
+<DefaultAbbrvName>பெவரி.</DefaultAbbrvName>
+<DefaultFullName>பெவரி</DefaultFullName>
+</Month>
+<Month>
+<MonthID>mar</MonthID>
+<DefaultAbbrvName>மாரஸீ.</DefaultAbbrvName>
+<DefaultFullName>மாரஸீ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>apr</MonthID>
+<DefaultAbbrvName>ஏப்ரல்.</DefaultAbbrvName>
+<DefaultFullName>ஏப்ரல்</DefaultFullName>
+</Month>
+<Month>
+<MonthID>may</MonthID>
+<DefaultAbbrvName>மଇ.</DefaultAbbrvName>
+<DefaultFullName>மଇ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jun</MonthID>
+<DefaultAbbrvName>ஜூந்.</DefaultAbbrvName>
+<DefaultFullName>ஜூந்</DefaultFullName>
+</Month>
+<Month>
+<MonthID>jul</MonthID>
+<DefaultAbbrvName>ஜுல்ೈ.</DefaultAbbrvName>
+<DefaultFullName>ஜுல்ೈ</DefaultFullName>
+</Month>
+<Month>
+<MonthID>aug</MonthID>
+<DefaultAbbrvName>ஆகஸ்ட.</DefaultAbbrvName>
+<DefaultFullName>ஆகஸ்ட</DefaultFullName>
+</Month>
+<Month>
+<MonthID>sep</MonthID>
+<DefaultAbbrvName>ஸெப்டஂபர்.</DefaultAbbrvName>
+<DefaultFullName>ஸெப்டஂபர்</DefaultFullName>
+</Month>
+<Month>
+<MonthID>oct</MonthID>
+<DefaultAbbrvName>அக்டபர்.</DefaultAbbrvName>
+<DefaultFullName>அக்டபர்</DefaultFullName>
+</Month>
+<Month>
+<MonthID>nov</MonthID>
+<DefaultAbbrvName>நவெஂபர்.</DefaultAbbrvName>
+<DefaultFullName>நவெஂபர்</DefaultFullName>
+</Month>
+<Month>
+<MonthID>dec</MonthID>
+<DefaultAbbrvName>டிஸெஂबºAர்.</DefaultAbbrvName>
+<DefaultFullName>டிஸெஂबºAர்</DefaultFullName>
+</Month>
+</MonthsOfYear>
+<Eras>
+<Era>
+<EraID>bc</EraID>
+<DefaultAbbrvName>வர்ஷು</DefaultAbbrvName>
+<DefaultFullName>வர்ஷು.</DefaultFullName>
+</Era>
+<Era>
+<EraID>ad</EraID>
+<DefaultAbbrvName>ஸந்.</DefaultAbbrvName>
+<DefaultFullName>ஸந்.</DefaultFullName>
+</Era>
+</Eras>
+<StartDayOfWeek>
+<DayID>sun</DayID>
+</StartDayOfWeek>
+<MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+</Calendar>
+</LC_CALENDAR>
+<LC_CURRENCY>
+<Currency default="true" usedInCompatibleFormatCodes="true">
+<CurrencyID>INR</CurrencyID>
+<CurrencySymbol>ரூ.</CurrencySymbol>
+<BankSymbol>INR</BankSymbol>
+<CurrencyName>Rupee</CurrencyName>
+<DecimalPlaces>2</DecimalPlaces>
+</Currency>
+</LC_CURRENCY>
+<LC_TRANSLITERATION ref="en_US"/>
+<LC_MISC>
+<BreakIteratorRules>
+<EditMode/>
+<DictionaryMode/>
+<WordCountMode/>
+<CharacterMode>char_in</CharacterMode>
+<LineMode/>
+</BreakIteratorRules>
+<ReservedWords>
+<trueWord>ஸரி</trueWord>
+<falseWord>தப்ப</falseWord>
+<quarter1Word>வந்ந௧  1</quarter1Word>
+<quarter2Word>ரெஂட௨ 2</quarter2Word>
+<quarter3Word>மூடு௩ 3</quarter3Word>
+<quarter4Word>நால்௪ 4</quarter4Word>
+<aboveWord>மேலெ</aboveWord>
+<belowWord>கூளெ</belowWord>
+<quarter1Abbreviation>Q1</quarter1Abbreviation>
+<quarter2Abbreviation>Q2</quarter2Abbreviation>
+<quarter3Abbreviation>Q3</quarter3Abbreviation>
+<quarter4Abbreviation>Q4</quarter4Abbreviation>
+</ReservedWords>
+</LC_MISC>
+<LC_NumberingLevel ref="en_US"/>
+<LC_OutLineNumberingLevel ref="en_US"/>
+</Locale>

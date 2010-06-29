@@ -1,0 +1,640 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*FormatVersion: "4.3"
+*FileVersion: "2.0"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "EP_STPH1.PPD"
+*Product: "(Stylus Photo)"
+*PSVersion: "(2015.802) 0"
+*ModelName: "EPSON StylusPhoto v2015.802"
+*ShortNickName: "EPSON StylusPhoto v2015.802"
+*NickName: "EPSON StylusPhoto v2015.802"
+*Manufacturer: "Epson"
+
+*% === Product Information ===========================
+
+*% ==== Device Capabilities ===============
+*ColorDevice: True
+*DefaultColorSpace: CMYK
+*FreeVM: "300000"
+*LanguageLevel: "2"
+*TTRasterizer: Type42
+*FileSystem:	True
+*?FileSystem: "
+save 
+	 false (%os%)
+	{ currentdevparams dup /Writeable known
+	   {/Writeable get {pop true} if} {pop} ifelse
+	 } 10 string /IODevice resourceforall
+	 {(True)}{(False)} ifelse = flush
+restore
+"
+*End
+*Throughput: "1"
+*Password: "0"
+*ExitServer: "
+   count 0 eq
+   { false } { true exch startjob } ifelse
+   not { (WARNING: Cannot modify initial VM.) =
+            (Missing or invalid password.) =
+            (Please contact the author of this software.) = flush quit
+          } if"
+*End
+
+*Reset: "
+   count 0 eq
+   { false } { true exch startjob } ifelse
+   not { (WARNING: Cannot reset printer.) =
+            (Missing or invalid password.) =
+            (Please contact the author of this software.) = flush quit
+          } if
+   systemdict /quit get exec
+   (WARNING : Printer Reset Failed.) = flush
+"
+*End
+
+*OpenUI *Resolution/Choose Resolution: PickOne
+*DefaultResolution: 720x720dpi
+*OrderDependency: 5 AnySetup *Resolution
+*Resolution 720x720dpi/720x720dpi: "1 dict dup /HWResolution [720 720] put setpagedevice"
+*Resolution 720x360dpi/720x360dpi: "1 dict dup /HWResolution [720 360] put setpagedevice"
+*Resolution 360x360dpi/360x360dpi: "1 dict dup /HWResolution [360 360] put setpagedevice"
+*?Resolution: "
+  save
+    currentpagedevice /HWResolution get dup
+    0 get (          ) cvs print
+    (x) print
+    1 get (          ) cvs print
+    (dpi)
+    = flush
+  restore
+"
+*End
+*CloseUI: *Resolution
+
+*% Halftone Information ===============
+*ContoneOnly: True
+*ScreenFreq: "200.0"
+*ScreenAngle: "45.0"
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*% Paper Handling ===================
+
+*LandscapeOrientation: Any
+
+*% PageSize is used to select the input slot by page size.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: A4
+*PageSize Letter: " 
+	2 dict dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Legal: " 
+	2 dict dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Executive/Executive: " 
+	2 dict dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Statement/Half Letter: " 
+	2 dict dup /PageSize [396 612] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A4: " 
+	2 dict dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize B5: " 
+	2 dict dup /PageSize [516 729] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A5: " 
+	2 dict dup /PageSize [420 595] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A6: " 
+	2 dict dup /PageSize [297 420] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Env10Rotated/#10 Envelope: " 
+	2 dict dup /PageSize [684 297] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize EnvC6Rotated/C6 Envelope: " 
+	2 dict dup /PageSize [459 323] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize EnvPRC5Rotated/DL Envelope: " 
+	2 dict dup /PageSize [624 312] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize 5x8/Index card 5x8: " 
+	2 dict dup /PageSize [360 576] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize 8x10/Index card 8x10: " 
+	2 dict dup /PageSize [576 720] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize PhotoPaper/Photo Paper 4x6: " 
+	2 dict dup /PageSize [288 432] put dup /ImagingBBox null put setpagedevice"
+*End
+
+*?PageSize: "
+ save
+   currentpagedevice /PageSize get aload pop
+   (Unknown) 
+   14 dict
+   dup [612 792] (Letter) put
+   dup [612 1008] (Legal) put
+   dup [522 756] (Executive) put
+   dup [396 612] (Statement) put
+   dup [595 842] (A4) put
+   dup [516 729] (B5) put
+   dup [420 595] (A5) put
+   dup [297 420] (A6) put
+   dup [684 297] (Env10Rotated) put
+   dup [459 323] (EnvC6Rotated) put
+   dup [624 312] (EnvPRC5Rotated) put
+   dup [360 576] (5x8) put
+   dup [576 720] (8x10) put
+   dup [288 432] (PhotoPaper) put
+ { exch aload pop 4 index sub abs 5 le exch 
+   5 index sub abs 5 le and 
+      {exch pop exit} {pop} ifelse
+   } bind forall
+   = flush pop pop
+restore
+"
+*End
+*CloseUI: *PageSize
+
+*% PageRegion is used to select page size, but without selecting the input slot. This
+*% is used when using manual feed, or there is only one input slot.
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: A4
+*PageRegion Letter: " 
+	2 dict dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Legal: " 
+	2 dict dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Executive/Executive: " 
+	2 dict dup /PageSize [522 756] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Statement/Half Letter: " 
+	2 dict dup /PageSize [396 612] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A4: " 
+	2 dict dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion B5: " 
+	2 dict dup /PageSize [516 729] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A5: " 
+	2 dict dup /PageSize [420 595] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion A6: " 
+	2 dict dup /PageSize [297 420] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion Env10Rotated/#10 Envelope: " 
+	2 dict dup /PageSize [684 297] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion EnvC6Rotated/C6 Envelope: " 
+	2 dict dup /PageSize [459 323] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion EnvPRC5Rotated/DL Envelope: " 
+	2 dict dup /PageSize [624 312] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion 5x8/Index card 5x8: " 
+	2 dict dup /PageSize [360 576] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion 8x10/Index card 8x10: " 
+	2 dict dup /PageSize [576 720] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageRegion PhotoPaper/Photo Paper 4x6: " 
+	2 dict dup /PageSize [288 432] put dup /ImagingBBox null put setpagedevice"
+*End
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter
+*ImageableArea Letter: "9 40 603 783"
+*ImageableArea Legal: "9 40 603 999"
+*ImageableArea Executive/Executive: "9 40 513 747"
+*ImageableArea Statement/Half Letter: "9 40 387 603"
+*ImageableArea A4: "9 40 586 832"
+*ImageableArea B5: "9 40 507 720"
+*ImageableArea A5: "9 40 411 586"
+*ImageableArea A6: "9 40 288 411"
+*ImageableArea Env10Rotated/#10 Envelope: "9 40 603 288"
+*ImageableArea EnvC6Rotated/C6 Envelope: "9 40 450 314"
+*ImageableArea EnvPRC5Rotated/DL Envelope: "9 40 603 303"
+*ImageableArea 5x8/Index card 5x8: "9 40 351 567"
+*ImageableArea 8x10/Index card 8x10: "9 40 567 711"
+*ImageableArea PhotoPaper/Photo Paper 4x6: "9 40 279 423"
+
+*?ImageableArea: "
+ save
+   /cvp { (                ) cvs print ( ) print } bind def
+   /upperright {10000 mul floor 10000 div} bind def
+   /lowerleft {10000 mul ceiling 10000 div} bind def
+   newpath clippath pathbbox
+   4 -2 roll exch 2 {lowerleft cvp} repeat
+   exch 2 {upperright cvp} repeat flush
+ restore
+"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: A4
+*PaperDimension Letter: "612 792"
+*PaperDimension Legal: "612 1008"
+*PaperDimension Executive/Executive: "522 756"
+*PaperDimension Statement/Half Letter: "396 612"
+*PaperDimension A4: "595 842"
+*PaperDimension B5: "516 729"
+*PaperDimension A5: "420 595"
+*PaperDimension A6: "297 420"
+*PaperDimension Env10Rotated/#10 Envelope: "684 297"
+*PaperDimension EnvC6Rotated/C6 Envelope: "459 323"
+*PaperDimension EnvPRC5Rotated/DL Envelope: "624 312"
+*PaperDimension 5x8/Index card 5x8: "360 576"
+*PaperDimension 8x10/Index card 8x10: "576 720"
+*PaperDimension PhotoPaper/Photo Paper 4x6: "288 432"
+
+*MaxMediaWidth: "684"
+*MaxMediaHeight: "1008"
+*HWMargins: 0 0 0 0
+*ParamCustomPageSize Width: 1 points 284 684
+*ParamCustomPageSize Height: 2 points 284 1008
+*ParamCustomPageSize WidthOffset: 3 points 0 684
+*ParamCustomPageSize HeightOffset: 4 points 0 1008
+*ParamCustomPageSize Orientation: 5 int 0 3
+*LeadingEdge PreferLong: ""
+*DefaultLeadingEdge: PreferLong
+*CustomPageSize True: "
+        4 dict begin
+                /Orientation exch def
+                2 array astore /Margins exch def
+                2 array astore /PageSize exch def
+                /ImagingBBox null def
+                currentdict
+        end setpagedevice
+"
+*End
+*VariablePaperSize: True
+
+*% RequiresPageRegion is used because the input slot cannot sense the page size.
+*RequiresPageRegion All: True
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 50 AnySetup *InputSlot
+*DefaultInputSlot: Cassette
+*InputSlot Cassette: ""
+*CloseUI: *InputSlot
+
+*DefaultOutputOrder: Normal
+
+*OpenGroup: MachJet
+
+*OpenUI *EPMediaQualityMode/Media(Quality): PickOne
+*OrderDependency: 10 AnySetup *EPMediaQualityMode
+*DefaultEPMediaQualityMode: SuperFinePaper
+*EPMediaQualityMode Paper_Fine/Plain Paper-360dpi:"
+	3 dict dup /HWResolution [360 360] put 
+	dup /PostRenderingEnhanceDetails currentpagedevice
+	/PostRenderingEnhanceDetails get dup /EpsonEnhance 1 put put
+	dup /PostRenderingEnhanceDetails currentpagedevice 
+	/PostRenderingEnhanceDetails get dup 
+	/MediaType (PaperE2) put put setpagedevice"
+*End
+*EPMediaQualityMode Paper_Fine_HighSpeed/Plain Paper Draft-360dpi: "
+	3 dict dup /HWResolution [360 360] put 
+	dup /PostRenderingEnhanceDetails currentpagedevice
+	/PostRenderingEnhanceDetails get dup /EpsonEnhance 3 put put
+	dup /PostRenderingEnhanceDetails currentpagedevice 
+	/PostRenderingEnhanceDetails get dup 
+	/MediaType (PaperE2) put put setpagedevice"
+*End
+*EPMediaQualityMode Paper_SuperFine/Plain Paper-720dpi: "
+	3 dict dup /HWResolution [360 360] put 
+	dup /PostRenderingEnhanceDetails currentpagedevice
+	/PostRenderingEnhanceDetails get dup /EpsonEnhance 9 put put
+	dup /PostRenderingEnhanceDetails currentpagedevice 
+	/PostRenderingEnhanceDetails get dup 
+	/MediaType (PaperE1) put put setpagedevice"
+*End
+*EPMediaQualityMode FinePaper/Ink Jet Paper-720dpi: "
+	3 dict dup /HWResolution [720 360] put 
+	dup /PostRenderingEnhanceDetails currentpagedevice
+	/PostRenderingEnhanceDetails get dup /EpsonEnhance 1 put put
+	dup /PostRenderingEnhanceDetails currentpagedevice 
+	/PostRenderingEnhanceDetails get dup 
+	/MediaType (FineE1) put put setpagedevice"
+*End
+*EPMediaQualityMode SuperFinePaper/PQ Ink Jet Paper-720dpi: "
+	3 dict dup /HWResolution [720 720] put 
+	dup /PostRenderingEnhanceDetails currentpagedevice
+	/PostRenderingEnhanceDetails get dup /EpsonEnhance 1 put put
+	dup /PostRenderingEnhanceDetails currentpagedevice 
+	/PostRenderingEnhanceDetails get dup 
+	/MediaType (SuperFineE1) put put setpagedevice"
+*End
+*EPMediaQualityMode GlossyPaper/PQ Glossy Paper-720dpi: "
+	3 dict dup /HWResolution [720 720] put 
+	dup /PostRenderingEnhanceDetails currentpagedevice
+	/PostRenderingEnhanceDetails get dup /EpsonEnhance 1 put put
+	dup /PostRenderingEnhanceDetails currentpagedevice 
+	/PostRenderingEnhanceDetails get dup 
+	/MediaType (GlossyPaperE1) put put setpagedevice"
+*End
+*EPMediaQualityMode GlossyFilm/PQ Glossy Film-720dpi: "
+	3 dict dup /HWResolution [720 720] put 
+	dup /PostRenderingEnhanceDetails currentpagedevice
+	/PostRenderingEnhanceDetails get dup /EpsonEnhance 1 put put
+	dup /PostRenderingEnhanceDetails currentpagedevice 
+	/PostRenderingEnhanceDetails get dup 
+	/MediaType (GlossyFilmE1) put put setpagedevice"
+*End
+*EPMediaQualityMode OHP/Ink Jet Transparencies-360dpi: "
+	3 dict dup /HWResolution [360 360] put 
+	dup /PostRenderingEnhanceDetails currentpagedevice
+	/PostRenderingEnhanceDetails get dup /EpsonEnhance 1 put put
+	dup /PostRenderingEnhanceDetails currentpagedevice 
+	/PostRenderingEnhanceDetails get dup 
+	/MediaType (TransE1) put put setpagedevice"
+*End
+*?EPMediaQualityMode: "
+ save
+   currentpagedevice /PostRenderingEnhanceDetails get dup
+   /MediaType get exch /EpsonEnhance get
+   (Unknown)
+        [[(Paper_Fine) (PaperE2) 1] 
+        [(Paper_Fine_HighSpeed) (PaperE2) 3]
+        [(Paper_SuperFine) (PaperE1) 9]
+        [(FinePaper) (FineE1) 1]
+        [(SuperFinePaper) (SuperFineE1) 1]
+	    [(GlossyPaper) (GlossyPaperE1) 1]
+	    [(GlossyFilm) (GlossyFilmE1) 1]
+        [(OHP) (TransE1) 1]]
+        {aload pop 4 index eq 
+          {4 index eq {exch pop exit} {pop}ifelse} 
+          {pop pop}ifelse
+        }forall
+   = flush pop pop
+restore
+"
+*End
+*CloseUI: *EPMediaQualityMode
+
+*OpenUI *ColorModel/Ink: PickOne
+*OrderDependency: 20 AnySetup *ColorModel
+*DefaultColorModel: CMYK
+*ColorModel Gray/Gray: "
+	1 dict dup /ProcessColorModel /DeviceGray put setpagedevice"
+*End
+*ColorModel CMYK: "
+	1 dict dup /ProcessColorModel /DeviceCMYK put setpagedevice"
+*End
+*?ColorModel: "
+ save
+   currentpagedevice /ProcessColorModel get 
+   /DeviceGray eq {(Gray)}{(CMYK)}ifelse
+   = flush 
+restore
+"
+*End
+*CloseUI: *ColorModel
+
+*CloseGroup: MachJet
+
+*% Font Information =====================
+
+*DefaultFont: Courier
+*Font Courier: Standard "(002.004S)" Standard Disk
+*Font Courier-Bold: Standard "(002.004S)" Standard Disk
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard Disk
+*Font Courier-Oblique: Standard "(002.004S)" Standard Disk
+*Font Helvetica: Standard "(001.006S)" Standard Disk
+*Font Helvetica-Bold: Standard "(001.007S)" Standard Disk
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard Disk
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard Disk
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard Disk
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard Disk
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard Disk
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard Disk
+*Font Symbol: Special "(001.007S)" Special Disk
+*Font Times-Bold: Standard "(001.007S)" Standard Disk
+*Font Times-BoldItalic: Standard "(001.009S)" Standard Disk
+*Font Times-Italic: Standard "(001.007S)" Standard Disk
+*Font Times-Roman: Standard "(001.007S)" Standard Disk
+*?FontQuery: "
+save  4 dict begin /sv exch def
+/str (fonts/                              ) def
+/st2 128 string def
+{
+  count 0 gt {
+    dup st2 cvs (/) print print (:) print
+    dup FontDirectory exch known {pop (Yes)}{
+     str exch st2 cvs dup length /len exch def
+     6 exch putinterval str 0 len 6 add getinterval mark exch
+     { } st2 filenameforall counttomark 0 gt {
+      cleartomark (Yes)}{cleartomark (No)}ifelse
+    }ifelse = flush
+  }{ exit } ifelse
+} bind loop 
+(*) = flush
+sv end restore
+"
+*End
+
+*?FontList: "
+save  2 dict begin /sv exch def
+/str 128 string def
+FontDirectory { pop == } bind forall flush 
+/filenameforall where { 
+ pop save (fonts/*) { 
+  dup length 6 sub 6 exch getinterval cvn ==  
+ } bind str filenameforall flush restore
+} if 
+(*) = flush
+sv end restore
+"
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ]%% )
+*Status: "initializing"
+*Status: "idle"
+*Status: "holding"
+*Status: "busy"
+*Status: "waiting"
+*Status: "printing"
+*Status: "PrinterError: timeout, clearing printer"
+*Status: "PrinterError: warming up"
+*Status: "PrinterError: service call"
+*Status: "PrinterError: out of paper"
+*Status: "PrinterError: paper entry misfeed"
+*Status: "PrinterError: offline"/Printer offline, press printer select button
+*Status: "PrinterError: no ink cartridge"/Insert ink cartridge
+*Status: "PrinterError: no color ink cartridge"/Insert color ink cartridge
+*Status: "PrinterError: no black ink cartridge"/Insert black ink cartridge
+*Status: "PrinterError: clear output tray"/Remove page from output tray, then press printer select button
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "%program link%"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+*PrinterError: "timeout, clearing printer"
+*PrinterError: "warming up"
+*PrinterError: "service call"
+*PrinterError: "out of paper"
+*PrinterError: "paper entry misfeed"
+*PrinterError: "offline"/Printer offline, press printer select button
+*PrinterError: "no ink cartridge"/Insert ink cartridge
+*PrinterError: "no color ink cartridge"/Insert color ink cartridge
+*PrinterError: "no black ink cartridge"/Insert black ink cartridge
+*PrinterError: "clear output tray"/Remove page from output tray, then press printer select button
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.60lpi.360x360dpi/60 lpi / 360x360 dpi
+
+*% For 60 lpi / 360x360 dpi=====================================================
+
+*ColorSepScreenAngle ProcessBlack.60lpi.360x360dpi/60 lpi / 360x360 dpi: "45"
+*ColorSepScreenAngle CustomColor.60lpi.360x360dpi/60 lpi / 360x360 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.60lpi.360x360dpi/60 lpi / 360x360 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.60lpi.360x360dpi/60 lpi / 360x360 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.60lpi.360x360dpi/60 lpi / 360x360 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.360x360dpi/60 lpi / 360x360 dpi: "60"
+*ColorSepScreenFreq CustomColor.60lpi.360x360dpi/60 lpi / 360x360 dpi: "60"
+*ColorSepScreenFreq ProcessCyan.60lpi.360x360dpi/60 lpi / 360x360 dpi: "60"
+*ColorSepScreenFreq ProcessMagenta.60lpi.360x360dpi/60 lpi / 360x360 dpi: "60"
+*ColorSepScreenFreq ProcessYellow.60lpi.360x360dpi/60 lpi / 360x360 dpi: "60"
+
+*% For 72 lpi / 360x360 dpi=====================================================
+
+*ColorSepScreenAngle ProcessBlack.72lpi.360x360dpi/72 lpi / 360x360 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.72lpi.360x360dpi/72 lpi / 360x360 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.72lpi.360x360dpi/72 lpi / 360x360 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.72lpi.360x360dpi/72 lpi / 360x360 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.72lpi.360x360dpi/72 lpi / 360x360 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.72lpi.360x360dpi/72 lpi / 360x360 dpi: "72.033"
+*ColorSepScreenFreq CustomColor.72lpi.360x360dpi/72 lpi / 360x360 dpi: "72.033"
+*ColorSepScreenFreq ProcessCyan.72lpi.360x360dpi/72 lpi / 360x360 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.72lpi.360x360dpi/72 lpi / 360x360 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.72lpi.360x360dpi/72 lpi / 360x360 dpi: "50.0"
+
+*% For 72 lpi / 720x360 dpi=====================================================
+
+*ColorSepScreenAngle ProcessBlack.72lpi.720x360dpi/72 lpi / 720x360 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.72lpi.720x360dpi/72 lpi / 720x360 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.72lpi.720x360dpi/72 lpi / 720x360 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.72lpi.720x360dpi/72 lpi / 720x360 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.72lpi.720x360dpi/72 lpi / 720x360 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.72lpi.720x360dpi/72 lpi / 720x360 dpi: "72.033"
+*ColorSepScreenFreq CustomColor.72lpi.720x360dpi/72 lpi / 720x360 dpi: "72.033"
+*ColorSepScreenFreq ProcessCyan.72lpi.720x360dpi/72 lpi / 720x360 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.72lpi.720x360dpi/72 lpi / 720x360 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.72lpi.720x360dpi/72 lpi / 720x360 dpi: "50.0"
+
+*% For 65 lpi / 720x360 dpi=====================================================
+
+*ColorSepScreenAngle ProcessBlack.65lpi.720x360dpi/65 lpi / 720x360 dpi: "45"
+*ColorSepScreenAngle CustomColor.65lpi.720x360dpi/65 lpi / 720x360 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.65lpi.720x360dpi/65 lpi / 720x360 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.65lpi.720x360dpi/65 lpi / 720x360 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.65lpi.720x360dpi/65 lpi / 720x360 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.65lpi.720x360dpi/65 lpi / 720x360 dpi: "65"
+*ColorSepScreenFreq CustomColor.65lpi.720x360dpi/65 lpi / 720x360 dpi: "65"
+*ColorSepScreenFreq ProcessCyan.65lpi.720x360dpi/65 lpi / 720x360 dpi: "65"
+*ColorSepScreenFreq ProcessMagenta.65lpi.720x360dpi/65 lpi / 720x360 dpi: "65"
+*ColorSepScreenFreq ProcessYellow.65lpi.720x360dpi/65 lpi / 720x360 dpi: "65"
+
+*% For 90 lpi / 720x720 dpi=====================================================
+
+*ColorSepScreenAngle ProcessBlack.90lpi.720x720dpi/90 lpi / 720x720 dpi: "45"
+*ColorSepScreenAngle CustomColor.90lpi.720x720dpi/90 lpi / 720x720 dpi: "45"
+*ColorSepScreenAngle ProcessCyan.90lpi.720x720dpi/90 lpi / 720x720 dpi: "15"
+*ColorSepScreenAngle ProcessMagenta.90lpi.720x720dpi/90 lpi / 720x720 dpi: "75"
+*ColorSepScreenAngle ProcessYellow.90lpi.720x720dpi/90 lpi / 720x720 dpi: "0"
+
+*ColorSepScreenFreq ProcessBlack.90lpi.720x720dpi/90 lpi / 720x720 dpi: "90"
+*ColorSepScreenFreq CustomColor.90lpi.720x720dpi/90 lpi / 720x720 dpi: "90"
+*ColorSepScreenFreq ProcessCyan.90lpi.720x720dpi/90 lpi / 720x720 dpi: "90"
+*ColorSepScreenFreq ProcessMagenta.90lpi.720x720dpi/90 lpi / 720x720 dpi: "90"
+*ColorSepScreenFreq ProcessYellow.90lpi.720x720dpi/90 lpi / 720x720 dpi: "90"
+
+*% For 72 lpi / 720x720 dpi=====================================================
+
+*ColorSepScreenAngle ProcessBlack.72lpi.720x720dpi/72 lpi / 720x720 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.72lpi.720x720dpi/72 lpi / 720x720 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.72lpi.720x720dpi/72 lpi / 720x720 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.72lpi.720x720dpi/72 lpi / 720x720 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.72lpi.720x720dpi/72 lpi / 720x720 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.72lpi.720x720dpi/72 lpi / 720x720 dpi: "72.033"
+*ColorSepScreenFreq CustomColor.72lpi.720x720dpi/72 lpi / 720x720 dpi: "72.033"
+*ColorSepScreenFreq ProcessCyan.72lpi.720x720dpi/72 lpi / 720x720 dpi: "47.4342"
+*ColorSepScreenFreq ProcessMagenta.72lpi.720x720dpi/72 lpi / 720x720 dpi: "47.4342"
+*ColorSepScreenFreq ProcessYellow.72lpi.720x720dpi/72 lpi / 720x720 dpi: "50.0"
+
+*% Set constraints for mediatype with resolution(720x720)========================
+*UIConstraints: *Resolution 720x720dpi *EPMediaQualityMode FinePaper
+*UIConstraints: *Resolution 720x720dpi *EPMediaQualityMode OHP
+*UIConstraints: *Resolution 720x720dpi *EPMediaQualityMode Paper_Fine
+*UIConstraints: *Resolution 720x720dpi *EPMediaQualityMode Paper_Fine_HighSpeed
+*UIConstraints: *Resolution 720x720dpi *EPMediaQualityMode Paper_SuperFine
+
+*% Set constraints for mediatype with resolution(720x360)========================
+*UIConstraints: *Resolution 720x360dpi *EPMediaQualityMode SuperFinePaper
+*UIConstraints: *Resolution 720x360dpi *EPMediaQualityMode GlossyPaper
+*UIConstraints: *Resolution 720x360dpi *EPMediaQualityMode GlossyFilm
+*UIConstraints: *Resolution 720x360dpi *EPMediaQualityMode Paper_Fine
+*UIConstraints: *Resolution 720x360dpi *EPMediaQualityMode Paper_Fine_HighSpeed
+*UIConstraints: *Resolution 720x360dpi *EPMediaQualityMode Paper_SuperFine
+*UIConstraints: *Resolution 720x360dpi *EPMediaQualityMode OHP
+
+*% Set constraints for mediatype with resolution(360x360)========================
+*UIConstraints: *Resolution 360x360dpi *EPMediaQualityMode SuperFinePaper
+*UIConstraints: *Resolution 360x360dpi *EPMediaQualityMode GlossyPaper
+*UIConstraints: *Resolution 360x360dpi *EPMediaQualityMode GlossyFilm
+*UIConstraints: *Resolution 360x360dpi *EPMediaQualityMode FinePaper
+
+*% Set constraints for resolution with mediatype========================
+
+*% for 720x720 media========================
+*UIConstraints: *EPMediaQualityMode SuperFinePaper *Resolution 720x360dpi
+*UIConstraints: *EPMediaQualityMode SuperFinePaper *Resolution 360x360dpi
+*UIConstraints: *EPMediaQualityMode GlossyPaper *Resolution 720x360dpi
+*UIConstraints: *EPMediaQualityMode GlossyPaper *Resolution 360x360dpi
+*UIConstraints: *EPMediaQualityMode GlossyFilm *Resolution 720x360dpi
+*UIConstraints: *EPMediaQualityMode GlossyFilm *Resolution 360x360dpi
+
+*% for 720x360 media========================
+*UIConstraints: *EPMediaQualityMode FinePaper *Resolution 720x720dpi
+*UIConstraints: *EPMediaQualityMode FinePaper *Resolution 360x360dpi
+
+*% for 360x360 media========================
+*UIConstraints: *EPMediaQualityMode Paper_Fine *Resolution 720x720dpi
+*UIConstraints: *EPMediaQualityMode Paper_Fine *Resolution 720x360dpi
+*UIConstraints: *EPMediaQualityMode Paper_Fine_HighSpeed *Resolution 720x720dpi
+*UIConstraints: *EPMediaQualityMode Paper_Fine_HighSpeed *Resolution 720x360dpi
+*UIConstraints: *EPMediaQualityMode Paper_SuperFine *Resolution 720x720dpi
+*UIConstraints: *EPMediaQualityMode Paper_SuperFine *Resolution 720x360dpi
+*UIConstraints: *EPMediaQualityMode OHP *Resolution 720x720dpi
+*UIConstraints: *EPMediaQualityMode OHP *Resolution 720x360dpi
+
+*% Last edited on June 5, 1997
+*% The byte count of this file should be exactly 025581 or 026221
+*% depending on the filesystem it resides in.
+*% end of PPD file for StylusPhoto(Win95)

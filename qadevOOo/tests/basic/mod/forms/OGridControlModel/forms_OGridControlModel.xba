@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="forms_OGridControlModel" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Required for XPersistObject
+Global oPersistInstance As Object
+
+' Required for XComponent
+Global oComponentInstance As Object ' it will be disposed
+
+' Requiered for  com.sun.star.container.XNameContainer
+ Global oInstance As Object 'instance to insert
+
+' Requiered for  com.sun.star.view.XSelectionSupplier
+ Global SelectableObj1 As Variant
+ Global SelectableObj2 As Variant
+
+' Requiered for  com.sun.star.container.XNameReplace
+ Global cNameToReplace As String 'name of instance to be replased
+ Global oReplaceInstance As Object 'instance, that will be inserted
+                                   'instead old one
+
+' Requiered for  com.sun.star.container.XIndexReplace
+ Global oIdxReplaceInstance As Object
+
+' Requiered for XContainer
+ Global oElementToInsert As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' forms.OGridControlModel
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean, i As Integer
+    Dim oShape As Object, oGridColumn As Object
+    
+    bOK = true
+
+    oDoc = utils.createDocument("swriter", cObjectName)
+
+    oShape = toolkittools.addControlToDefaultForm("GridControl", 1000, 1000, 3000, 3000)
+    oObj = oShape.getControl()
+    oShape = toolkittools.addControlToDefaultForm("GridControl", 1000, 5000, 500, 500)
+    oComponentInstance = oShape.getControl()
+    oShape = toolkittools.addControlToDefaultForm("GridControl", 1000, 9000, 500, 500)
+    oPersistInstance = oShape.getControl()
+
+    'insert Columns into Grid
+    for i = 0 to 10
+        oGridColumn = oObj.createColumn("TextField")
+        oGridColumn.Label = "Label" + Str(i)
+        oGridColumn.DataField = "Data" + Str(i)
+        oObj.insertByName("Field" + i , oGridColumn)
+        
+    next i
+
+    SelectableObj1 = oObj.getByName("Field" + 7)
+    SelectableObj2 = oObj.getByName("Field" + 5)
+
+    'for XNameContainer
+    oInstance = oObj.createColumn("TextField")
+    oInstance.Label = "LabelInstance"
+    oInstance.DataField = "DataInstance"
+
+    oElementToInsert = oObj.createColumn("TextField")
+    oElementToInsert.Label = "LabelInstance"
+    oElementToInsert.DataField = "DataInstance"
+
+    'for XNameReplace
+    cNameToReplace = "Field2"
+    oReplaceInstance = oObj.createColumn("TextField")
+    oReplaceInstance.Label = "LabelReplace"
+    oReplaceInstance.DataField = "LabelReplace"
+    
+    'for XIndexReplace
+    oIdxReplaceInstance = oObj.createColumn("TextField")
+    oIdxReplaceInstance.Label = "LabelIndexReplace"
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+</script:module>

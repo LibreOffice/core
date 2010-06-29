@@ -1,0 +1,40 @@
+' ***************************************************
+' **      special Slot-IDs out of the office       **
+' **                                               **
+' ***************************************************
+
+' ** to create a new document
+NeuDirekt SID_NEWDOCDIRECT
+NewDirect SID_NEWDOCDIRECT
+
+' ** slots for file import
+FileName SID_FILE_NAME
+FilterName SID_FILTER_NAME
+
+' ** slots for file printing
+PrinterName SID_PRINTER_NAME
+
+' ** to jump to a new table in calc
+GeheZuTabelle SID_CURRENTTAB
+GeheZuZelle SID_CURRENTCELL
+GeheZuDokument SID_CURRENTDOC
+GeheZuObjekt SID_CURRENTOBJECT
+GoToTable SID_CURRENTTAB
+GoToCell SID_CURRENTCELL
+GoToDocument SID_CURRENTDOC
+GoToObject SID_CURRENTOBJECT
+
+' ** activate OLE-Object
+CalcOLEAktivieren SID_OLE_ACTIVATE
+CalcOLEDeaktivieren SID_OLE_DEACTIVATE
+CalcActivateOLE SID_OLE_ACTIVATE
+CalcDeactivateOLE SID_OLE_DEACTIVATE
+
+' **  show office version
+GetVersion SID_VERSION_VISIBLE
+
+' ** Load / Save
+IsDocImageLoading SID_IMG_LOADING
+IsDocLoading SID_DOC_LOADING
+IsDocSaving SID_DOC_SAVED
+

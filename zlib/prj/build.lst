@@ -1,0 +1,2 @@
+zl	zlib	:	soltools NULL
+zl	zlib						nmake	-	all	zl_mkout NULL

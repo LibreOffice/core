@@ -1,0 +1,21 @@
+%SOLSUREPACKAGEPREFIX-ure	UNO Runtime Environment
+SUNWcar	Core Architecture, (Root)
+SUNWcsd	Core Solaris Devices
+SUNWcsl	Core Solaris, (Shared Libs)
+SUNWcsr	Core Solaris, (Root)
+SUNWcsu	Core Solaris, (Usr)
+SUNWfreetype2	FreeType2 font library
+SUNWgnome-base-libs	GNOME base GUI libraries - platform dependent files, /usr filesystem
+SUNWgnome-config	GNOME configuration framework - platform dependent files, /usr filesystem
+SUNWgnome-vfs	GNOME Virtual File System Framework and application/MIME type registry - platform dependent files, /usr filesystem
+SUNWgzip	The GNU Zip (gzip) compression utility
+SUNWmfrun	Motif RunTime Kit
+SUNWkvm	Core Architecture, (Kvm)
+SUNWlibC	Sun Workshop Compilers Bundled libC
+SUNWPython	The Python interpreter, libraries and utilities
+SUNWxwplt	X Window System platform software
+SUNWxwrtl	X Window System & Graphics Runtime Library Links in /usr/lib
+SUNWzlibr	The Zip compression library (Root)
+SUNWbtool	CCS tools bundled with SunOS
+SUNWxcu4	XCU4 Utilities
+

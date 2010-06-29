@@ -1,0 +1,70 @@
+To Do:
+	An incomplete list of missing and/or not-yet-mapped icons:
+	Most of these icons live in res/commandimagelist/
+
+* Mapping/hacking errors
+	+ 'New' button with 'database' icon (most odd)
+
+	** Optimize toolbar
+		+ 4x icons
+	** View menu
+		+ field names
+		+ field shadings
+		+ print layout
+
+* Others:
+
+* Writer:
+
+	From toolbar->Customize ...
+		+ sorted by least work to 100% first
+
+	** XML Form controls
+		+ Data navigator: lc_showdatanavigator.png
+	** Page preview
+		+ Book preview: lc_showbookview.png
+	** Picture
+		+ Graphics mode: lc_grafmode.png
+	** Table
+		+ table properties: lc_tabledialog.png
+	** Fontwork
+		+ lc_fontworksameletterheights.png
+		+ lc_fontworkcharacterspacingfloater.png
+		+ lc_fontworkalignmentfloater.png
+	** Drawing
+		+ lc_symbolshapes.smiley
+		+ lc_arrowshapes.left-right-arrow
+		+ lc_flowchartshapes.flowchart-internal-storage.png
+		+ lc_calloutshapes.round-rectangular-callout.png
+		+ lc_starshapes.star5.png
+	** 3D settings
+		lc_extrusiontiltdown.png
+		lc_extrusiontiltleft.png
+		lc_extrusiontiltright.png
+		lc_extrusiontiltup.png
+		lc_extrusiondepthfloater.png
+		lc_extrusiondirectionfloater.png
+		lc_extrusionlightingfloater.png
+		lc_extrusionsurfacefloater.png
+		lc_extrusion3dcolor.png
+
+
+** Impress
+	** Presentation
+		+ Slide layout: <?>
+	** Master View
+		lc_insertmasterpage.png
+		lc_deletemasterpage.png
+		lc_renamemasterpage.png
+	** Drawing
+		+ Arrange (?)
+		+ Insert: lc_inserttoolbox.png
+		+ Extrusion on/off: lc_extrusiontoggle.png
+		+ Custom animation: lc_customanimation.png
+		+ Interaction: lc_animationeffects.png
+		+ Animated image: lc_animationobject.png
+
+To find obsolete files:
+
+	for file in `cat ../../missing`; do foo=`md5sum default_images/$file | cut -f 1 -d ' '`; if test "z$foo" = "z36d1d1d46cdd975db0539b82ffe5ac42"; then echo "$file"; fi; done > ../../obsolete
+

@@ -1,0 +1,192 @@
+--- misc/mozilla/nsprpub/config/rules.mk	Sat May  2 01:08:01 2009
++++ misc/build/mozilla/nsprpub/config/rules.mk	Wed Nov 25 08:06:47 2009
+@@ -350,7 +350,12 @@
+ ifdef NS_USE_GCC
+ 	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
+ else
+-	$(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
++        #We remove stl from the paths to avoid that rc.exe finds the stlport of
++        #OOo. stlport includes the system stl which will fail. By removing it,
++        #rc will use the stl from the system if the path is in the INCLUDE
++        #variable.
++	INCLUDE="$(subst /stl,,$(INCLUDE))" $(RC) $(RCFLAGS) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
++
+ endif # GCC
+ 	@echo $(RES) finished
+ endif
+--- misc/mozilla/nsprpub/configure	Mon Nov 23 11:44:15 2009
++++ misc/build/mozilla/nsprpub/configure	Wed Nov 25 08:06:47 2009
+@@ -3899,7 +3899,7 @@
+     PR_MD_CSRCS=linux.c
+     MKSHLIB='$(CC) $(DSO_LDOPTS) -o $@'
+     DSO_CFLAGS=-fPIC
+-    DSO_LDOPTS='-shared -Wl,-soname -Wl,$(notdir $@)'
++    DSO_LDOPTS='-shared -Wl,-rpath,\$$ORIGIN -Wl,-soname -Wl,$(notdir $@)'
+     _OPTIMIZE_FLAGS=-O2
+     _DEBUG_FLAGS="-g -fno-inline"  # most people on linux use gcc/gdb, and that
+                                    # combo is not yet good at debugging inlined
+--- misc/mozilla/security/coreconf/Darwin.mk	Thu Jul 30 23:36:02 2009
++++ misc/build/mozilla/security/coreconf/Darwin.mk	Wed Nov 25 08:06:47 2009
+@@ -39,8 +39,12 @@
+ 
+ DEFAULT_COMPILER = cc
+ 
+-CC		= cc
+-CCC		= c++
++# CC is taken from environment automatically.
++#CC		= cc
++# Use CCC from environment.
++#CCC		= c++
++CCC		= $(CXX)
++
+ RANLIB		= ranlib
+ 
+ ifndef CPU_ARCH
+--- misc/mozilla/security/coreconf/Linux.mk	Mon Nov 23 11:06:29 2009
++++ misc/build/mozilla/security/coreconf/Linux.mk	Wed Nov 25 08:11:35 2009
+@@ -46,8 +46,11 @@
+ 	IMPL_STRATEGY = _PTH
+ endif
+ 
+-CC			= gcc
+-CCC			= g++
++# CC is taken from environment automatically.
++#CC			= gcc
++# Use CCC from environment.
++#CCC			= g++
++CCC		= $(CXX)
+ RANLIB			= ranlib
+ 
+ DEFAULT_COMPILER = gcc
+@@ -149,7 +152,7 @@
+ # incorrectly reports undefined references in the libraries we link with, so
+ # we don't use -z defs there.
+ ZDEFS_FLAG		= -Wl,-z,defs
+-DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG))
++DSO_LDOPTS		+= $(if $(findstring 2.11.90.0.8,$(shell ld -v)),,$(ZDEFS_FLAG)) '-Wl,-rpath,$$ORIGIN'
+ LDFLAGS			+= $(ARCHFLAG)
+ 
+ # INCLUDES += -I/usr/include -Y/usr/include/linux
+@@ -160,8 +163,13 @@
+ #
+ CPU_TAG = _$(CPU_ARCH)
+ 
++ifeq ($(SYSTEM_ZLIB),YES)  
++# Currently (3.12.4) only the tools modutil and signtool are linked with libz
++# If USE_SYSTEM_ZLIB is not set then the tools link statically libzlib.a which
++# is also build in nss.
+ USE_SYSTEM_ZLIB = 1
+ ZLIB_LIBS = -lz
++endif
+ 
+ # The -rpath '$$ORIGIN' linker option instructs this library to search for its
+ # dependencies in the same directory where it resides.
+--- misc/mozilla/security/coreconf/SunOS5.mk	Thu Jun 11 02:55:32 2009
++++ misc/build/mozilla/security/coreconf/SunOS5.mk	Wed Nov 25 08:06:47 2009
+@@ -89,8 +89,12 @@
+ 	    # OPTIMIZER += -mno-omit-leaf-frame-pointer -fno-omit-frame-pointer
+ 	endif
+ else
+-	CC         = cc
+-	CCC        = CC
++# CC is taken from environment automatically.
++#	CC         = cc
++# Use CXX from environment.
++#	CCC        = CC
++        CCC       = $(CXX)
++
+ 	ASFLAGS   += -Wa,-P
+ 	OS_CFLAGS += $(NOMD_OS_CFLAGS) $(ARCHFLAG)
+ 	ifndef BUILD_OPT
+--- misc/mozilla/security/coreconf/arch.mk	Fri Jun  5 04:14:49 2009
++++ misc/build/mozilla/security/coreconf/arch.mk	Wed Nov 25 08:06:47 2009
+@@ -324,7 +324,12 @@
+ # IMPL_STRATEGY may be defined too.
+ #
+ 
+-OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
++# OBJDIR_NAME is used to build the directory containing the built objects, for 
++# example mozilla/dist/Linux2.6_x86_glibc_PTH_DBG.OBJ
++# We need to deliver the contents of that folder into the solver. To make that easier
++# in the makefile we rename this directory to "out". 
++#OBJDIR_NAME = $(OS_TARGET)$(OS_RELEASE)$(CPU_TAG)$(COMPILER_TAG)$(LIBC_TAG)$(IMPL_STRATEGY)$(OBJDIR_TAG).OBJ
++OBJDIR_NAME = out
+ 
+ ifeq (,$(filter-out WIN%,$(OS_TARGET)))
+ ifndef BUILD_OPT
+--- misc/mozilla/security/coreconf/rules.mk	Tue Aug 11 05:23:39 2009
++++ misc/build/mozilla/security/coreconf/rules.mk	Wed Nov 25 08:06:47 2009
+@@ -355,7 +355,12 @@
+ ifdef NS_USE_GCC
+ 	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES:-I%=--include-dir %) -o $@ $<
+ else
+-	$(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
++        #We remove stl from the paths to avoid that rc.exe finds the stlport of
++        #OOo. stlport includes the system stl which will fail. By removing it,
++        #rc will use the stl from the system if the path is in the INCLUDE
++        #variable.
++	INCLUDE="$(subst /stl,,$(INCLUDE))" $(RC) $(filter-out -U%,$(DEFINES)) $(INCLUDES) -Fo$@ $<
++
+ endif
+ 	@echo $(RES) finished
+ endif
+--- misc/mozilla/security/nss/cmd/platlibs.mk	Thu Jun 18 01:01:48 2009
++++ misc/build/mozilla/security/nss/cmd/platlibs.mk	Wed Nov 25 08:06:47 2009
+@@ -41,12 +41,13 @@
+ ifeq ($(OS_ARCH), SunOS) 
+ ifeq ($(BUILD_SUN_PKG), 1)
+ ifeq ($(USE_64), 1)
+-EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib:/usr/lib/mps/secv1/64:/usr/lib/mps/64'
++#In OOo we would probable put the executables next to libs
++EXTRA_SHARED_LIBS += -R '$$ORIGIN'
+ else
+-EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib:/usr/lib/mps/secv1:/usr/lib/mps'
++EXTRA_SHARED_LIBS += -R '$$ORIGIN'
+ endif
+ else
+-EXTRA_SHARED_LIBS += -R '$$ORIGIN/../lib'
++EXTRA_SHARED_LIBS += -R '$$ORIGIN'
+ endif
+ endif
+ 
+@@ -53,15 +54,15 @@
+ ifeq ($(OS_ARCH), Linux)
+ ifeq ($(BUILD_SUN_PKG), 1)
+ ifeq ($(USE_64), 1)
+-EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:/opt/sun/private/lib64:$$ORIGIN/../lib'
++EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
+ else
+-EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib:/opt/sun/private/lib'
++EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
+ endif
+ else
+ ifeq ($(USE_64), 1)
+-EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib64:$$ORIGIN/../lib'
++EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
+ else
+-EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN/../lib'
++EXTRA_SHARED_LIBS += -Wl,-rpath,'$$ORIGIN'
+ endif
+ endif
+ endif
+--- misc/mozilla/security/nss/cmd/shlibsign/Makefile	Fri Aug  7 21:06:37 2009
++++ misc/build/mozilla/security/nss/cmd/shlibsign/Makefile	Fri Nov 27 13:07:52 2009
+@@ -78,10 +78,15 @@
+ 
+ # sign any and all shared libraries that contain the word freebl
+ 
+-CHECKLIBS = $(DIST)/lib/$(DLL_PREFIX)softokn3.$(DLL_SUFFIX)
+-CHECKLIBS += $(wildcard $(DIST)/lib/$(DLL_PREFIX)freebl*3.$(DLL_SUFFIX))
++# Signing causes loading of some system library which in turn loads
++# libsqlite3. Then it loads libsqulite3 from nss, which does not have the proper
++# version. Therefore signing fails.
++# We cannot build with the system sqlite3, because it is too old (SDK
++# 10.4). Otherwise one could set NSS_USE_SYSTEM_SQLITE=1 and use the system lib. 
++#CHECKLIBS = $(DIST)/lib/$(DLL_PREFIX)softokn3.$(DLL_SUFFIX)
++#CHECKLIBS += $(wildcard $(DIST)/lib/$(DLL_PREFIX)freebl*3.$(DLL_SUFFIX))
+ ifndef NSS_DISABLE_DBM
+-CHECKLIBS += $(DIST)/lib/$(DLL_PREFIX)nssdbm3.$(DLL_SUFFIX)
++#CHECKLIBS += $(DIST)/lib/$(DLL_PREFIX)nssdbm3.$(DLL_SUFFIX)
+ endif
+ CHECKLOC = $(CHECKLIBS:.$(DLL_SUFFIX)=.chk)
+ 

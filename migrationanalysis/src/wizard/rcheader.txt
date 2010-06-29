@@ -1,0 +1,17 @@
+//_START_OF_HEADER
+/////////////////////////////////////////////////////////////////////////////
+//
+// Document Analysis Wizard - Resources
+//
+
+#include "res_defines.h"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Required for Windows XP look and feel support
+//
+#define RT_MANIFEST 24
+
+1    RT_MANIFEST   "DocAnalysisWizard.exe.manifest"
+
+

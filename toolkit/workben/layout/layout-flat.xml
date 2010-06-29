@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<framewindow  xmlns="http://openoffice.org/2007/layout"
+    id="window1" title="Test-Dialog" optimumsize="true"
+    has_border="true" sizeable="true" moveable="true"
+    width="800" height="300">
+        <pushbutton label="XML Left" toggle="true" show="true"
+    x="10" y="10" width="400" height="200"/>
+        <pushbutton label="XML Right" toggle="true" show="true"
+    x="420" y="10" width="400" height="200"/>
+    <checkbox label="XML cool ?" enabled="true" show="true"
+     state="1" tristate="true" align="1"
+     x="10" y="210" width="800" height="100"/>
+</framewindow>

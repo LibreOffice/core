@@ -1,0 +1,10 @@
+# JobFile for rtl_OString
+# header source sal/inc/rtl/string.hxx
+
+rtl_OString.valueOf.valueOf_test_001
+rtl_OString.valueOf.valueOf_test_002
+rtl_OString.valueOf.valueOf_test_003
+rtl_OString.valueOf.valueOf_test_004
+rtl_OString.valueOf.valueOf_test_005
+rtl_OString.valueOf.valueOf_test_006
+rtl_OString.valueOf.valueOf_test_007

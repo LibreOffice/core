@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Locale SYSTEM 'locale.dtd'>
+<Locale versionDTD="2.0.3" allowUpdateFromCLDR="no" version="1.3">
+  <LC_INFO>
+    <Language>
+      <LangID>ja</LangID>
+      <DefaultName>Japanese</DefaultName>
+    </Language>
+    <Country>
+      <CountryID>JP</CountryID>
+      <DefaultName>Japan</DefaultName>
+    </Country>
+  </LC_INFO>
+  <LC_CTYPE>
+    <Separators>
+      <DateSeparator>/</DateSeparator>
+      <ThousandSeparator>,</ThousandSeparator>
+      <DecimalSeparator>.</DecimalSeparator>
+      <TimeSeparator>:</TimeSeparator>
+      <Time100SecSeparator>.</Time100SecSeparator>
+      <ListSeparator>;</ListSeparator>
+      <LongDateDayOfWeekSeparator>, </LongDateDayOfWeekSeparator>
+      <LongDateDaySeparator>日</LongDateDaySeparator>
+      <LongDateMonthSeparator>月</LongDateMonthSeparator>
+      <LongDateYearSeparator>年</LongDateYearSeparator>
+    </Separators>
+    <Markers>
+      <QuotationStart>‘</QuotationStart>
+      <QuotationEnd>’</QuotationEnd>
+      <DoubleQuotationStart>“</DoubleQuotationStart>
+      <DoubleQuotationEnd>”</DoubleQuotationEnd>
+    </Markers>
+    <TimeAM>午前</TimeAM>
+    <TimePM>午後</TimePM>
+    <MeasurementSystem>metric</MeasurementSystem>
+  </LC_CTYPE>
+  <LC_FORMAT>
+    <FormatElement msgid="FixedFormatskey1" default="true" type="short" usage="FIXED_NUMBER" formatindex="0">
+      <FormatCode>Standard</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey2" default="false" type="short" usage="FIXED_NUMBER" formatindex="1">
+      <FormatCode>0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey3" default="false" type="short" usage="FIXED_NUMBER" formatindex="2">
+      <FormatCode>0.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey4" default="false" type="short" usage="FIXED_NUMBER" formatindex="3">
+      <FormatCode>#,##0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey5" default="false" type="short" usage="FIXED_NUMBER" formatindex="4">
+      <FormatCode>#,##0.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="FixedFormatskey6" default="false" type="short" usage="FIXED_NUMBER" formatindex="5">
+      <FormatCode>#,###.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey1" default="true" type="long" usage="SCIENTIFIC_NUMBER" formatindex="6">
+      <FormatCode>0.00E+000</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="ScientificFormatskey2" default="true" type="medium" usage="SCIENTIFIC_NUMBER" formatindex="7">
+      <FormatCode>0.00E+00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey1" default="true" type="medium" usage="PERCENT_NUMBER" formatindex="8">
+      <FormatCode>0%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
+      <FormatCode>0.00%</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey1" default="false" type="medium" usage="CURRENCY" formatindex="12">
+      <FormatCode>[$￥-411]#,##0;-[$￥-411]#,##0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
+      <FormatCode>[$￥-411]#,##0.00;-[$￥-411]#,##0.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey3" default="true" type="medium" usage="CURRENCY" formatindex="14">
+      <FormatCode>[$￥-411]#,##0;[RED]-[$￥-411]#,##0</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey4" default="false" type="medium" usage="CURRENCY" formatindex="15">
+      <FormatCode>[$￥-411]#,##0.00;[RED]-[$￥-411]#,##0.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
+      <FormatCode>#,##0 CCC</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
+      <FormatCode>[$￥-411]#,##0.--;[RED]-[$￥-411]#,##0.--</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey1" default="false" type="medium" usage="DATE" formatindex="18">
+      <FormatCode>YY/M/D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey2" default="false" type="long" usage="DATE" formatindex="19">
+      <FormatCode>YYYY年MM月DD日（AAAA）</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey3" default="false" type="medium" usage="DATE" formatindex="20">
+      <FormatCode>YY/MM/DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey4" default="false" type="medium" usage="DATE" formatindex="21">
+      <FormatCode>YYYY/MM/DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey5" default="false" type="long" usage="DATE" formatindex="22">
+      <FormatCode>YY年M月D日</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey6" default="true" type="long" usage="DATE" formatindex="23">
+      <FormatCode>YYYY年M月D日</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey7" default="false" type="long" usage="DATE" formatindex="24">
+      <FormatCode>GGGE年M月D日</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey8" default="false" type="long" usage="DATE" formatindex="25">
+      <FormatCode>YYYY年M月D日</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey9" default="false" type="long" usage="DATE" formatindex="26">
+      <FormatCode>GGGE年M月D日（AAAA）</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey10" default="false" type="long" usage="DATE" formatindex="27">
+      <FormatCode>YY年M月D日（AAA）</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey11" default="false" type="long" usage="DATE" formatindex="28">
+      <FormatCode>GGGE年M月D日（AAA）</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="29">
+      <FormatCode>YYYY年M月D日（AAA）</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="30">
+      <FormatCode>YYYY年M月D日（AAAA）</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey14" default="false" type="medium" usage="DATE" formatindex="31">
+      <FormatCode>MM.DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey15" default="false" type="medium" usage="DATE" formatindex="32">
+      <FormatCode>GE.M.D</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey16" default="false" type="medium" usage="DATE" formatindex="33">
+      <FormatCode>GE.MM.DD</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey17" default="false" type="medium" usage="DATE" formatindex="34">
+      <FormatCode>YY/MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey18" default="true" type="medium" usage="DATE" formatindex="35">
+      <FormatCode>M月D日</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey19" default="false" type="medium" usage="DATE" formatindex="36">
+      <FormatCode>M月</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="37">
+      <FormatCode>YY年 QQ</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateFormatskey21" default="false" type="medium" usage="DATE" formatindex="38">
+      <FormatCode>WW 1</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey1" default="true" type="medium" usage="TIME" formatindex="39">
+      <FormatCode>H:MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey2" default="true" type="long" usage="TIME" formatindex="40">
+      <FormatCode>HH:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey3" default="false" type="medium" usage="TIME" formatindex="41">
+      <FormatCode>AM/PM H:MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey4" default="false" type="long" usage="TIME" formatindex="42">
+      <FormatCode>AM/PM H:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey5" default="false" type="long" usage="TIME" formatindex="43">
+      <FormatCode>[HH]:MM:SS</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey6" default="false" type="medium" usage="TIME" formatindex="44">
+      <FormatCode>MM:SS.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey7" default="false" type="long" usage="TIME" formatindex="45">
+      <FormatCode>[HH]:MM:SS.00</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey8" default="false" type="medium" usage="TIME" formatindex="52">
+      <FormatCode>H時MM分</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="TimeFormatskey9" default="false" type="long" usage="TIME" formatindex="54">
+      <FormatCode>H時MM分SS秒</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey1" default="false" type="long" usage="DATE_TIME" formatindex="46">
+      <FormatCode>YY/MM/DD HH:MM</FormatCode>
+    </FormatElement>
+    <FormatElement msgid="DateTimeFormatskey2" default="true" type="long" usage="DATE_TIME" formatindex="47">
+      <FormatCode>YYYY/M/D H:MM</FormatCode>
+    </FormatElement>
+  </LC_FORMAT>
+  <LC_COLLATION>
+    <Collator default="true" unoid="phonetic (alphanumeric first)" />
+    <Collator default="false" unoid="phonetic (alphanumeric last)" />
+    <Collator default="false" unoid="charset" />
+    <CollationOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </CollationOptions>
+  </LC_COLLATION>
+  <LC_SEARCH>
+    <SearchOptions>
+      <TransliterationModules>IGNORE_CASE</TransliterationModules>
+    </SearchOptions>
+  </LC_SEARCH>
+  <LC_INDEX>
+    <IndexKey phonetic="true" default="true" unoid="phonetic (alphanumeric first) (grouped by syllable)" />
+    <IndexKey phonetic="true" default="false" unoid="phonetic (alphanumeric first) (grouped by consonant)" />
+    <IndexKey phonetic="true" default="false" unoid="phonetic (alphanumeric last) (grouped by syllable)" />
+    <IndexKey phonetic="true" default="false" unoid="phonetic (alphanumeric last) (grouped by consonant)" />
+    <UnicodeScript>70</UnicodeScript>
+    <FollowPageWord>p.</FollowPageWord>
+    <FollowPageWord>pp.</FollowPageWord>
+  </LC_INDEX>
+  <LC_CALENDAR>
+    <Calendar unoid="gregorian" default="true">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>Sun</DefaultAbbrvName>
+          <DefaultFullName>Sunday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>Mon</DefaultAbbrvName>
+          <DefaultFullName>Monday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>Tue</DefaultAbbrvName>
+          <DefaultFullName>Tuesday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>Wed</DefaultAbbrvName>
+          <DefaultFullName>Wednesday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>Thu</DefaultAbbrvName>
+          <DefaultFullName>Thursday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>Fri</DefaultAbbrvName>
+          <DefaultFullName>Friday</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>Sat</DefaultAbbrvName>
+          <DefaultFullName>Saturday</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Jan</DefaultAbbrvName>
+          <DefaultFullName>January</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Feb</DefaultAbbrvName>
+          <DefaultFullName>February</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Mar</DefaultAbbrvName>
+          <DefaultFullName>March</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Apr</DefaultAbbrvName>
+          <DefaultFullName>April</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>May</DefaultAbbrvName>
+          <DefaultFullName>May</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Jun</DefaultAbbrvName>
+          <DefaultFullName>June</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Jul</DefaultAbbrvName>
+          <DefaultFullName>July</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Aug</DefaultAbbrvName>
+          <DefaultFullName>August</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Sep</DefaultAbbrvName>
+          <DefaultFullName>September</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Oct</DefaultAbbrvName>
+          <DefaultFullName>October</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Nov</DefaultAbbrvName>
+          <DefaultFullName>November</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Dec</DefaultAbbrvName>
+          <DefaultFullName>December</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>bc</EraID>
+          <DefaultAbbrvName>紀元前</DefaultAbbrvName>
+          <DefaultFullName>紀元前</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>ad</EraID>
+          <DefaultAbbrvName>西暦</DefaultAbbrvName>
+          <DefaultFullName>西暦</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+    <Calendar unoid="gengou" default="false">
+      <DaysOfWeek>
+        <Day>
+          <DayID>sun</DayID>
+          <DefaultAbbrvName>日</DefaultAbbrvName>
+          <DefaultFullName>日曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>mon</DayID>
+          <DefaultAbbrvName>月</DefaultAbbrvName>
+          <DefaultFullName>月曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>tue</DayID>
+          <DefaultAbbrvName>火</DefaultAbbrvName>
+          <DefaultFullName>火曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>wed</DayID>
+          <DefaultAbbrvName>水</DefaultAbbrvName>
+          <DefaultFullName>水曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>thu</DayID>
+          <DefaultAbbrvName>木</DefaultAbbrvName>
+          <DefaultFullName>木曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>fri</DayID>
+          <DefaultAbbrvName>金</DefaultAbbrvName>
+          <DefaultFullName>金曜日</DefaultFullName>
+        </Day>
+        <Day>
+          <DayID>sat</DayID>
+          <DefaultAbbrvName>土</DefaultAbbrvName>
+          <DefaultFullName>土曜日</DefaultFullName>
+        </Day>
+      </DaysOfWeek>
+      <MonthsOfYear>
+        <Month>
+          <MonthID>jan</MonthID>
+          <DefaultAbbrvName>Jan</DefaultAbbrvName>
+          <DefaultFullName>January</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>feb</MonthID>
+          <DefaultAbbrvName>Feb</DefaultAbbrvName>
+          <DefaultFullName>February</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>mar</MonthID>
+          <DefaultAbbrvName>Mar</DefaultAbbrvName>
+          <DefaultFullName>March</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>apr</MonthID>
+          <DefaultAbbrvName>Apr</DefaultAbbrvName>
+          <DefaultFullName>April</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>may</MonthID>
+          <DefaultAbbrvName>May</DefaultAbbrvName>
+          <DefaultFullName>May</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jun</MonthID>
+          <DefaultAbbrvName>Jun</DefaultAbbrvName>
+          <DefaultFullName>June</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>jul</MonthID>
+          <DefaultAbbrvName>Jul</DefaultAbbrvName>
+          <DefaultFullName>July</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>aug</MonthID>
+          <DefaultAbbrvName>Aug</DefaultAbbrvName>
+          <DefaultFullName>August</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>sep</MonthID>
+          <DefaultAbbrvName>Sep</DefaultAbbrvName>
+          <DefaultFullName>September</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>oct</MonthID>
+          <DefaultAbbrvName>Oct</DefaultAbbrvName>
+          <DefaultFullName>October</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>nov</MonthID>
+          <DefaultAbbrvName>Nov</DefaultAbbrvName>
+          <DefaultFullName>November</DefaultFullName>
+        </Month>
+        <Month>
+          <MonthID>dec</MonthID>
+          <DefaultAbbrvName>Dec</DefaultAbbrvName>
+          <DefaultFullName>December</DefaultFullName>
+        </Month>
+      </MonthsOfYear>
+      <Eras>
+        <Era>
+          <EraID>Dummy</EraID>
+          <DefaultAbbrvName>?.</DefaultAbbrvName>
+          <DefaultFullName>元号のサポート範囲外</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>Meiji</EraID>
+          <DefaultAbbrvName>明</DefaultAbbrvName>
+          <DefaultFullName>明治</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>Taisho</EraID>
+          <DefaultAbbrvName>大</DefaultAbbrvName>
+          <DefaultFullName>大正</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>Showa</EraID>
+          <DefaultAbbrvName>昭</DefaultAbbrvName>
+          <DefaultFullName>昭和</DefaultFullName>
+        </Era>
+        <Era>
+          <EraID>Heisei</EraID>
+          <DefaultAbbrvName>平</DefaultAbbrvName>
+          <DefaultFullName>平成</DefaultFullName>
+        </Era>
+      </Eras>
+      <StartDayOfWeek>
+        <DayID>sun</DayID>
+      </StartDayOfWeek>
+      <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
+    </Calendar>
+  </LC_CALENDAR>
+  <LC_CURRENCY>
+    <Currency default="true" usedInCompatibleFormatCodes="true">
+      <CurrencyID>JPY</CurrencyID>
+      <CurrencySymbol>￥</CurrencySymbol>
+      <BankSymbol>JPY</BankSymbol>
+      <CurrencyName>円</CurrencyName>
+      <DecimalPlaces>0</DecimalPlaces>
+    </Currency>
+    <Currency default="false" usedInCompatibleFormatCodes="false" legacyOnly="true">
+      <CurrencyID>JPY</CurrencyID>
+      <CurrencySymbol>¥</CurrencySymbol>
+      <BankSymbol>JPY</BankSymbol>
+      <CurrencyName>円</CurrencyName>
+      <DecimalPlaces>0</DecimalPlaces>
+    </Currency>
+  </LC_CURRENCY>
+  <LC_TRANSLITERATION>
+    <Transliteration unoid="HALFWIDTH_FULLWIDTH"/>
+    <Transliteration unoid="FULLWIDTH_HALFWIDTH"/>
+    <Transliteration unoid="KATAKANA_HIRAGANA"/>
+    <Transliteration unoid="HIRAGANA_KATAKANA"/>
+    <Transliteration unoid="FULLWIDTHKATAKANA_HALFWIDTHKATAKANA"/>
+    <Transliteration unoid="HALFWIDTHKATAKANA_FULLWIDTHKATAKANA"/>
+    <Transliteration unoid="FULLWIDTH_HALFWIDTH_LIKE_ASC"/>
+    <Transliteration unoid="HALFWIDTH_FULLWIDTH_LIKE_JIS"/>
+    <Transliteration unoid="smallToLarge_ja_JP"/>
+    <Transliteration unoid="largeToSmall_ja_JP"/>
+    <Transliteration unoid="IGNORE_WIDTH"/>
+    <Transliteration unoid="ignoreTraditionalKana_ja_JP"/>
+    <Transliteration unoid="ignoreTraditionalKanji_ja_JP"/>
+    <Transliteration unoid="IGNORE_KANA"/>
+    <Transliteration unoid="ignoreMinusSign_ja_JP"/>
+    <Transliteration unoid="ignoreIterationMark_ja_JP"/>
+    <Transliteration unoid="ignoreSeparator_ja_JP"/>
+    <Transliteration unoid="ignoreZiZu_ja_JP"/>
+    <Transliteration unoid="ignoreBaFa_ja_JP"/>
+    <Transliteration unoid="ignoreTiJi_ja_JP"/>
+    <Transliteration unoid="ignoreHyuByu_ja_JP"/>
+    <Transliteration unoid="ignoreSeZe_ja_JP"/>
+    <Transliteration unoid="ignoreIandEfollowedByYa_ja_JP"/>
+    <Transliteration unoid="ignoreKiKuFollowedBySa_ja_JP"/>
+    <Transliteration unoid="ignoreSize_ja_JP"/>
+    <Transliteration unoid="ignoreProlongedSoundMark_ja_JP"/>
+    <Transliteration unoid="ignoreMiddleDot_ja_JP"/>
+    <Transliteration unoid="ignoreSpace_ja_JP"/>
+  </LC_TRANSLITERATION>
+  <LC_MISC>
+    <ForbiddenCharacters>
+      <ForbiddenLineBeginCharacters>!%),.:;?]}¢°’”‰′″℃、。々〉》」』】〕ぁぃぅぇぉっゃゅょゎ゛゜ゝゞァィゥェォッャュョヮヵヶ・ーヽヾ！％），．：；？］｝｡｣､･ｧｨｩｪｫｬｭｮｯｰﾞﾟ¢</ForbiddenLineBeginCharacters>
+      <ForbiddenLineEndCharacters>$([¥{£¥‘“〈《「『【〔＄（［｛｢£￥</ForbiddenLineEndCharacters>
+      <LineBreakHangingCharacters>、。，．</LineBreakHangingCharacters>
+    </ForbiddenCharacters>
+    <ReservedWords>
+      <trueWord>true</trueWord>
+      <falseWord>false</falseWord>
+      <quarter1Word>第１四半期</quarter1Word>
+      <quarter2Word>第２四半期</quarter2Word>
+      <quarter3Word>第３四半期</quarter3Word>
+      <quarter4Word>第４四半期</quarter4Word>
+      <aboveWord>前述</aboveWord>
+      <belowWord>後述</belowWord>
+      <quarter1Abbreviation>Q1</quarter1Abbreviation>
+      <quarter2Abbreviation>Q2</quarter2Abbreviation>
+      <quarter3Abbreviation>Q3</quarter3Abbreviation>
+      <quarter4Abbreviation>Q4</quarter4Abbreviation>
+    </ReservedWords>
+  </LC_MISC>
+  <LC_NumberingLevel>
+    <NumberingLevel NumType="1" Prefix=" " Suffix=")"/>
+    <NumberingLevel NumType="4" Prefix=" " Suffix="."/>
+    <NumberingLevel NumType="14" Prefix=" " Suffix=" "/>
+    <NumberingLevel NumType="2" Prefix=" " Suffix="."/>
+    <NumberingLevel NumType="0" Prefix=" " Suffix=")"/>
+    <NumberingLevel NumType="21" Prefix="(" Suffix=")"/>
+    <NumberingLevel NumType="23" Prefix=" " Suffix=")"/>
+    <NumberingLevel NumType="3" Prefix=" " Suffix="."/>
+  </LC_NumberingLevel>
+  <LC_OutLineNumberingLevel>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="2" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="3" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="4" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="1" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="2" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="3" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="4" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="(" NumType="21" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="14" Suffix=" " BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="(" NumType="23" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="(" NumType="1" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix="第" NumType="4" Suffix="章" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="第" NumType="4" Suffix="節" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="第" NumType="4" Suffix="項" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix="第" NumType="15" Suffix="章" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="第" NumType="15" Suffix="節" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="第" NumType="15" Suffix="項" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="15" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix="第" NumType="20" Suffix="章" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="第" NumType="20" Suffix="節" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix="第" NumType="20" Suffix="項" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="20" Suffix=")" BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+    <OutlineStyle>
+      <OutLineNumberingLevel Prefix=" " NumType="2" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="0" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="3" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0"/>
+      <OutLineNumberingLevel Prefix=" " NumType="1" Suffix="." BulletChar="" BulletFontName="" ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0"/>
+    </OutlineStyle>
+  </LC_OutLineNumberingLevel>
+</Locale>

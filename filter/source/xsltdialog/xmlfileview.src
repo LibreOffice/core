@@ -1,0 +1,64 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "xmlfileview.hrc"
+#include "xmlfilterhelpids.hrc"
+
+#define DIALOG_WIDTH    500
+#define DIALOG_HEIGHT   400
+
+WorkWindow DLG_XML_SOURCE_FILE_DIALOG
+{
+    Size                    = MAP_APPFONT( DIALOG_WIDTH, DIALOG_HEIGHT );
+    HelpId                  = HID_XML_SOURCE_FILE_DIALOG;
+    OutputSize              = TRUE ;
+    SVLook                  = TRUE ;
+    Sizeable                = TRUE ;
+    Minable                 = TRUE ;
+    Maxable                 = TRUE ;
+    Moveable                = TRUE ;
+    Closeable               = TRUE ;
+    Text [ en-US ]      = "XML Filter output" ;
+
+    PushButton PB_VALIDATE
+    {
+        Pos                 = MAP_APPFONT ( 6 , 6 ) ;
+        Size                = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop             = TRUE ;
+        HelpId              = HID_XML_SOURCE_FILE_VALIDATE;
+        Text [ en-US ]  = "~Validate";
+    };
+};
+
+
+
+
+
+
+
+
+

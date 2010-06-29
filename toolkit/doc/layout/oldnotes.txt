@@ -1,0 +1,224 @@
+* Obsolete notes ...
+
+** Form XML format:
+
+    + from the basic editor:
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog1" dlg:left="204" dlg:top="148" dlg:width="136" dlg:height="115" dlg:closeable="true" dlg:moveable="true">
+  <dlg:bulletinboard>
+    <dlg:button dlg:id="OkButtonName" dlg:tab-index="0" dlg:left="86" dlg:top="92" dlg:width="44" dlg:height="19" dlg:value="OkButtonLabel"/>
+    <dlg:titledbox dlg:id="FrameControl1" dlg:tab-index="1" dlg:left="4" dlg:top="7" dlg:width="68" dlg:height="41">
+      <dlg:title dlg:value="FrameControl1"/>
+    </dlg:titledbox>
+    <dlg:scrollbar dlg:id="ScrollBar1" dlg:tab-index="2" dlg:left="82" dlg:top="10" dlg:width="45" dlg:height="24"/>
+    <dlg:scrollbar dlg:id="ScrollBar2" dlg:tab-index="3" dlg:left="107" dlg:top="43" dlg:width="21" dlg:height="37" dlg:align="vertical"/>
+    <dlg:timefield dlg:id="TimeField1" dlg:tab-index="4" dlg:left="4" dlg:top="92" dlg:width="28" dlg:height="19"/>
+    <dlg:text dlg:id="Label1" dlg:tab-index="5" dlg:left="22" dlg:top="61" dlg:width="44" dlg:height="15" dlg:value="Label1"/>
+  </dlg:bulletinboard>
+</dlg:window>
+
+    + code to read this & generate UIs is in:
+	+ DTD: xmlscript/dtd/dialog.dtd
+	+ xmlscript/source/xmldlg_imexp/imp_share.hxx, line 674
+	+ xmlscript/source/misc/unoservices.cxx
+		xmlscript/source/xmlflat_imexp/xmlbas_import.cxx (?)
+		"com.sun.star.comp.xmlscript.XMLBasicImporter"
+	+ the dialog piece seems separate ?
+		"importDialogModel" ...
+	+ cf. the interesting test code ...
+	+ cd xmlscript/test
+	  dmake
+	  ../unxlngi6.pro/bin/imexp /opt/OOInstall ./test.xml
+	    + generates & renders a dialog ...
+
+	+ This code has ~all we need to get a simple impl.
+	    + compatibility wrappers [!]
+
+    // first create model:
+    Reference< container::XNameContainer > xModel( xContext->getServiceManager()->createInstanceWithContext(
+	OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), xContext ), UNO_QUERY );
+    // NB. xmldlg_addfunc.cxx not xmldlg_import.cxx [!?] ;-)
+    ::xmlscript::importDialogModel( ::xmlscript::createInputStream( bytes ),
+				    xModel, xContext );
+
+    // second create view of model:
+    Reference< awt::XControl > xDlg( xMSF->createInstance(
+	OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialog" ) ) ), UNO_QUERY );
+    xDlg->setModel( Reference< awt::XControlModel >::query( xModel ) );
+
+    // third - associate toolkit / peer ...
+    Reference< awt::XToolkit> xToolkit( xMSF->createInstance(
+	OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.ExtToolkit" ) ) ), UNO_QUERY );
+    xDlg->createPeer( xToolkit, 0 );
+
+    // fourth - execute [ nasty ... ]
+    Reference< awt::XDialog > xD( xDlg, UNO_QUERY );
+    xD->execute();
+
+
+** Basic dialog editor:
+
+    + basctl/source/dlged/dlged.cxx
+	+ dialog editor (?)
+    + basctl/source/basicide/basobj3.cxx
+    + basctl/source/basicide/basides3.cxx
+	+ BasicIDEShell:CreateDlgWin ...
+
+
+** FIXME:
+	+ createPeer - when called is always passed
+	  the toplevel [ it seems ... ]
+	+ we need to pass a container instead ...
+		+ or have some separate hint / method ?
+		+ or call the 'setChild' inside the model
+		  construction bits ? [!?]
+
+UnoControlContainer::addingControl:
+	+ only caller to 'setContext'
+		+ sets the 'Parent' for peers ...
+
+Dialog is an UnoControlContainer ...
+	+ hmm ...
+	+ 'XControlContainer'
+		+ perhaps just what we need ... [!]
+	+ our VBox should be one ...
+
+	+ Other things: tab widgets are 'UnoControlContainers' ...
+		+ finally remembered: xml foo ...
+		+ 
+
+
+	+ FIXME: it -seems- that we don't store
+		 much hierarchy in the model [ any ? ]
+		+ UnoControlModel -> ?
+
+	+ UnoControlDialogModel - has an XNameContainer ...
+		+ but ... only the UnoControl-Dialog-Model has this ...
+
+
+	+ Wow - even the percieved hierarchy:
+		+ 'exportDialogModel'
+			+ achieved by 'getElementNames'
+				-> flat set of names ... [urgh]
+
+	+ So - we need to add more structure:
+		+ XNameContainers ...
+			+ that we insert into [!?]
+		+ we also need to retain order for packing.
+
+	+ need a list of sillies to reverse / revert (?) ...
+
+	+ back-compat:
+		+ kill bogus nesting eg. radiogroup ...
+			[ have a group/tag instead - or hierarchical names ? ]
+		+ ditto for 'titledbox' ...
+		+ menulists - seem rather unrelated / bogus anyway.
+		+ Add into toplevel & child ...
+
+    + copy Dialog bits into unocontrolcontainer.cxx ...
+	+ re-using unocontrolcontainer ...
+
+
+** FIXME:
+    + we need property introspection on the awt widgets:
+	+ but they have no property interfaces [!] -
+	    interestingly the UnoControl's don't either
+	    only the UnoControlModel foo ...
+	+ unocontrols.cxx:
+	    Uno
+    + source/helper/property.cxx
+	+ has all the type information ...
+	+ but no information on what properties are
+	  valid for a type ... - implicit in the UnoControlModel's
+	  code ...
+	    + ImplGetPropertyInfos ...
+
+    + add to vclxwindow.cxx:
+	+ inc/toolkit/helper/property.hxx
+	+ 'getProperties' static ...
+
+** It seems that things like UnoControlComboBoxModel are missing
+   some derived properties: EchoChar (etc.)
+    UnoControlDateFieldModel - missing ... EchoChar too (?) - deliberate ?
+    + query these ... [!?]
+
+layout container - start child 'combobox'
+   missing property 46 (EchoChar)
+   missing property 48 (HardLineBreaks)
+   missing property 12 (HScroll)
+   missing property 104 (LineEndFormat)
+   missing property 10 (MultiLine)
+   missing property 13 (VScroll)
+
+    + add regression test:
+	+ count number of properties ...
+
+
+TODO:
+	add 'XPropertySetInfo' to VCLXWindow:
+	    + trivial to implement :-)
+	    + hook it to Ricardo's parser ... [!] :-)
+
+* xmlscript
+	+ xmldlg_import.cxx - 
+	+ xml_helper/xml_impctx.cxx - foo ...
+
+
+* plan:
+	+ hard-code container hooks into the xmlscript/ parser ...
+	+ create a layout object in toolkit/
+		+ populate it with good things ...
+
+	+ coupling to toolkit - widget instantiation: how ...
+		+ ComponentInfos
+			+ vclxtoolkit.cxx:
+		+ has a 'hook function' for 'fnSvtCreateWindow'
+		  for SVT widgets :-) [ grotesque ;-]
+			+ [ wow - fetched by dlopen! ;-]
+
+	+ A little app - a-la solver: using awt (?)
+		+ XMessageBoxFactory ...
+		+ XToolkit:
+			+ CreateWindow ...
+		+ ** how does the xml code generate these guys ? **
+
+	+ what APIs does the xmlimporter use ? not 'createWindow' seemingly.
+
++ existing xml import uses: property bag a -lot-:
+	Reference< beans::XPropertySet > xProps(
+	        _pImport->_xDialogModel, UNO_QUERY_THROW );
+	* we do _xDialogModel->insertByName (new any<XControlModel>())
+		+ to build hierarchy ( cf. ~ControlImportContext )
+
+	DialogImport:
+		css::uno::Reference< css::container::XNameContainer > _xDialogModel;
+
+	Reference< container::XNameContainer > xModel( xContext->getServiceManager()->createInstanceWithContext(
+			OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ), xContext ), UNO_QUERY );
+
+	toolkit/source/controls/dialogcontrol.cxx
+		+ UnoControlButtonModel (eg.)
+		+ service 'UnoControlModel' ...
+
+	+ poke at 'titledbox' or 'radiogroup' to see how containment works there ...
+		+ how will child widget properties work ?
+		+ bug with a 'vbox' inside a 'titledbox' ...
+	+ titledbox - acts as a container (interesting)
+		- offsetting child positions
+	+ how will pseudo-containers eg. "radiogroup" cope ?
+
+	+ propose new syntax: [ with child properties a-la glade ]:
+
+	<hbox id="baa" flange="true">
+		<child padding="0" expand="false" fill="false">
+			<radio id="foo" value="..."/>
+		</child>
+		<radio id="foo" value="..."/>
+	</hbox>
+	
+	+ if 'child' element omitted - default properties used ...
+	+ if multiple elements in same 'child' set: all have the same props.
+
+

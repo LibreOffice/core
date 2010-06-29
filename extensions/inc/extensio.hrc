@@ -1,0 +1,75 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef EXTENSIONS_INC_EXTENSIO_HRC
+#define EXTENSIONS_INC_EXTENSIO_HRC
+
+#include <svl/solar.hrc>
+
+// -----------------------------------------------------------------------
+// - resource id ranges
+
+#define RID_ABP_START       ( RID_MORE_EXTENSIONS_START +   0 )
+#define RID_ABP_END         ( RID_MORE_EXTENSIONS_START +  19 )
+
+#define RID_DBP_START       ( RID_MORE_EXTENSIONS_START +  20 )
+#define RID_DBP_END         ( RID_MORE_EXTENSIONS_START +  39 )
+
+// !!! please adjust RID_LAST_EXTENSIONS_RANGE if you add new ranges here !!!
+
+#define RID_LAST_EXTENSIONS_RANGE RID_DBP_END
+
+#if RID_LAST_EXTENSIONS_RANGE > RID_MORE_EXTENSIONS_END
+    #error id range overflow
+#endif
+
+// -----------------------------------------------------------------------
+// - help id ranges
+
+#define HID_DBP_START       ( HID_EXTENSIONS_START +   0 )
+#define HID_DBP_END         ( HID_EXTENSIONS_START +  19 )
+
+#define HID_ABP_START       ( HID_EXTENSIONS_START +  20 )
+#define HID_ABP_END         ( HID_EXTENSIONS_START +  39 )
+
+#define HID_BIBLIO_START    ( HID_EXTENSIONS_START +   40 )
+#define HID_BIBLIO_END      ( HID_EXTENSIONS_START +   89 )
+
+#define HID_PROPC_START     ( HID_EXTENSIONS_START +   90 )
+#define HID_PROPC_END       ( HID_EXTENSIONS_START +  499 )
+
+#define HID_UPDATE_START    ( HID_EXTENSIONS_START +  500 )
+#define HID_UPDATE_END      ( HID_EXTENSIONS_START +  519 )
+
+// !!! please adjust HID_LAST_EXTENSIONS_RANGE if you add new ranges here !!!
+
+#define HID_LAST_EXTENSIONS_RANGE HID_UPDATE_END
+
+#if HID_LAST_EXTENSIONS_RANGE > HID_EXTENSIONS_END
+    #error id range overflow
+#endif
+
+#endif

@@ -1,0 +1,12 @@
+cu	cppu	:	sal salhelper offuh BOOST:boost NULL
+cu	cppu							usr1	-	all	cu_mkout NULL
+cu	cppu\inc						nmake	-	all	cu_inc NULL
+cu	cppu\source\uno					nmake	-	all	cu_uno cu_inc NULL
+cu	cppu\source\threadpool			nmake	-	all	cu_thpool cu_inc NULL
+cu	cppu\source\typelib				nmake	-	all	cu_typelib cu_inc NULL
+cu	cppu\source\cppu				nmake	-	all	cu_cppu cu_inc NULL
+cu	cppu\source\helper\purpenv		nmake	-	all	cu_helper_purpenv cu_inc NULL
+cu	cppu\source\UnsafeBridge	    nmake	-	all	cu_UnsafeBridge cu_inc NULL
+cu	cppu\source\AffineBridge	    nmake	-	all	cu_AffineBridge cu_inc NULL
+cu	cppu\source\LogBridge	        nmake	-	all	cu_LogBridge cu_inc NULL
+cu	cppu\util						nmake	-	all	cu_util cu_thpool cu_typelib cu_cppu cu_uno cu_helper_purpenv cu_UnsafeBridge cu_AffineBridge cu_LogBridge NULL

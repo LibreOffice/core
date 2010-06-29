@@ -1,0 +1,61 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _CUI_PASSWDOMDLG_HRC_
+#define _CUI_PASSWDOMDLG_HRC_
+
+#define FL_FILE_ENCRYPTION              10
+#define FT_PASSWD_TO_OPEN               11
+#define ED_PASSWD_TO_OPEN               12
+#define FT_REENTER_PASSWD_TO_OPEN       13
+#define ED_REENTER_PASSWD_TO_OPEN       14
+#define IMG_PASSWD_MATCH                15
+#define IMG_PASSWD_MATCH_HC             16
+#define FT_PASSWD_NOTE                  17
+#define FL_BUTTONS                      18
+#define BTN_MORE_FEWER_OPTIONS          19
+#define BTN_OK                          20
+#define BTN_CANCEL                      21
+#define FL_FILE_SHARING_OPTIONS         22
+#define FT_PASSWD_TO_MODIFY             23
+#define ED_PASSWD_TO_MODIFY             24
+#define FT_REENTER_PASSWD_TO_MODIFY     25
+#define ED_REENTER_PASSWD_TO_MODIFY     26
+#define FI_PASSWD_TO_OPEN_MATCH         27
+#define FI_PASSWD_TO_MODIFY_MATCH       28
+#define CB_OPEN_READONLY                29
+
+#define STR_MORE_OPTIONS                    51
+#define STR_FEWER_OPTIONS                   52
+#define STR_PASSWD_MUST_BE_CONFIRMED        53
+#define STR_ONE_PASSWORD_MISMATCH           54
+#define STR_TWO_PASSWORDS_MISMATCH          55
+#define STR_INVALID_STATE_FOR_OK_BUTTON     56
+#define STR_INVALID_STATE_FOR_OK_BUTTON_V2  57
+
+#endif
+

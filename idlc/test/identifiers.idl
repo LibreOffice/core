@@ -1,0 +1,22 @@
+struct Identifiers
+{
+    long onlysmallalphas;
+    long smallMixedAlphas;
+    long CapMixedAlphas;
+    long ONLYCAPS;
+    long CAPS_WITH_UNDERSCORE;
+    long CAPS_WITH_UNDERSCORE_11;
+    long CAPS_WITH_UNDERSCORE11_11TEST;
+    long CapMixed_Alphas_11;
+    long m_CapMixedAlphas_11; // should be not allowed with -cid
+    long small_get; //should be not allowed with -cid
+    long small_11; //should be not allowed with -cid
+    long small_11small; //should be not allowed with -cid
+    long mixedAlphas_11CAPS; // should be not allowed with -cid
+    long mixedAlphas_11mixedAlphas; // should be not allowed with -cid
+    long _mixedAlphas; // should be not allowed with -cid
+//     long _mixedAlphas_; // should be not allowed
+//     long CapsMixedAlphas_; // should be not allowed
+//     long _CapsMixedAlphas_; // should be not allowed
+
+};

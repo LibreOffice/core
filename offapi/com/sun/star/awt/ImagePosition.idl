@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_awt_ImagePosition_idl__
+#define __com_sun_star_awt_ImagePosition_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** specifies the position of a image, relative to another object
+
+    @see ImageAlign
+*/
+constants ImagePosition
+{
+    /** specifies that the image should be positioned at the left of, and top-aligned to, the other object
+    */
+    const short LeftTop = 0;
+
+    /** specifies that the image should be positioned at the left of, and vertically centered to, the other object
+    */
+    const short LeftCenter = 1;
+
+    /** specifies that the image should be positioned at the left of, and bottom-aligned to, the other object
+    */
+    const short LeftBottom = 2;
+
+    /** specifies that the image should be positioned at the right of, and top-aligned to, the other object
+    */
+    const short RightTop = 3;
+
+    /** specifies that the image should be positioned at the right of, and vertically centered to, the other object
+    */
+    const short RightCenter = 4;
+
+    /** specifies that the image should be positioned at the right of, and bottom-aligned to, the other object
+    */
+    const short RightBottom = 5;
+
+    /** specifies that the image should be positioned above and left-aligned to the other object
+    */
+    const short AboveLeft = 6;
+
+    /** specifies that the image should be positioned above and horizontally centered to the other object
+    */
+    const short AboveCenter = 7;
+
+    /** specifies that the image should be positioned above and right-aligned to the other object
+    */
+    const short AboveRight = 8;
+
+    /** specifies that the image should be positioned below and left-aligned to the other object
+    */
+    const short BelowLeft = 9;
+
+    /** specifies that the image should be positioned below and horizontally centered to the other object
+    */
+    const short BelowCenter = 10;
+
+    /** specifies that the image should be positioned below and right-aligned centered to the other object
+    */
+    const short BelowRight = 11;
+
+    /** specifies that the image should be horizontally and vertically centered to the other object.
+    */
+    const short Centered = 12;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

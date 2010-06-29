@@ -1,0 +1,45 @@
+# This file contains data about languages/locales etc.
+# The same data can be found in global/system/iniinfo.inc and should be in
+# sync.
+
+[english names]
+01=english
+03=portuguese
+07=russian
+31=dutch
+33=french
+34=spanish
+36=hungarian
+39=italian
+45=danish
+46=swedish
+48=polish
+49=german
+50=slovenian
+55=portuguese brazilian
+81=japanese
+82=korean
+86=chinese simplified
+88=chinese traditional
+
+# The styles and formats have been renamed with src680
+# They now sport a localized filename
+[locale_short]
+01=en-US
+03=pt
+07=ru
+31=nl
+33=fr
+34=es
+36=hu
+39=it
+45=en-US_da
+46=sv
+48=pl
+49=de
+50=sl
+55=pt-BR
+81=ja
+82=ko
+86=zh-CN
+88=zh-TW

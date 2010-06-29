@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+        xmlns:cnt="http://openoffice.org/2007/layout/container"
+        id="dialog" title="Paragraph" optimumsize="true"
+        has_border="true" sizeable="true" moveable="true">
+<vbox>
+    <tabcontrol>
+        <vbox cnt:title="Indents and Spacing">
+            <hbox cnt:expand="false">
+                 <fixedtext id="FL_INDENT" label="Indent" cnt:expand="false" />
+                 <fixedline />
+             </hbox>
+             <table columns="2" cnt:expand="false">
+                 <fixedtext id="FT_LEFTINDENT" label="Before text" />
+                 <metricfield id="ED_LEFTINDENT" spin="true" has_border="true"/>
+                 <fixedtext id="FT_RIGHTINDENT" label="After text" />
+                 <metricfield id="ED_RIGHTINDENT" spin="true" has_border="true"/>
+                 <fixedtext id="FT_FLINEINDENT" label="First line" />
+                 <metricfield id="ED_FLINEINDENT" spin="true" has_border="true" />
+                 <checkbox id="CB_AUTO" label="Automatic" cnt:col-span="2" />
+             </table>
+            <hbox cnt:expand="false">
+                 <fixedtext id="FL_DIST" label="Spacing" cnt:expand="false" />
+                 <fixedline />
+             </hbox>
+             <table columns="2" cnt:expand="false">
+                 <fixedtext id="FT_TOPDIST" label="Above paragraph" />
+                 <numericfield id="ED_TOPDIST" spin="true" has_border="true" />
+                 <fixedtext id="FT_BOTTOMDIST" label="Below paragraph" />
+                 <numericfield id="ED_BOTTOMDIST" spin="true" has_border="true" />
+             </table>
+            <hbox cnt:expand="false">
+                 <fixedtext id="FL_LINEDIST" label="Line spacing" cnt:expand="false" />
+                 <fixedline />
+             </hbox>
+            <hbox cnt:expand="false">
+                <listbox id="LB_LINEDIST" dropdown="true"
+                    string-item-list="Single:1.5 lines:Double:Proportional"
+                    cnt:expand="false"/>
+                <fixedtext id="FT_LINEDIST" label="of" cnt:expand="true" />
+                <numericfield id="ED_LINEDISTPERCENT" value="0" />
+            </hbox>
+            <hbox id="FL_REGISTER" cnt:expand="false">
+                <fixedtext label="Register-true" cnt:expand="false" />
+                <fixedline />
+            </hbox>
+             <checkbox id="CB_REGISTER" cnt:expand="false" label="Activate" />
+        </vbox>
+
+        <vbox cnt:title="Alignment">
+            <hbox cnt:expand="false">
+                <fixedtext id="FL_ALIGN" label="Options" cnt:expand="false" />
+                <fixedline />
+            </hbox>
+             <radiobutton id="BTN_LEFTALIGN" label="Left" cnt:expand="false" />
+             <radiobutton id="BTN_RIGHTALIGN" label="Right" cnt:expand="false" />
+             <radiobutton id="BTN_CENTERALIGN" label="Center" cnt:expand="false" />
+             <radiobutton id="BTN_JUSTIFYALIGN" label="Justify" cnt:expand="false" />
+            <hbox cnt:expand="false">
+                <fixedtext id="FL_ALIGN" label="Last line" cnt:expand="false" />
+                <listbox dropdown="true" string-item-list="Left:Centered:Justified"
+                          id="LB_LASTLINE" />
+            </hbox>
+        </vbox>
+    </tabcontrol>
+
+    <align cnt:expand="false">
+        <hbox cnt:expand="false" cnt:hfill="0" cnt:halign="1">
+            <pushbutton label="OK" />
+            <pushbutton label="Cancel" />
+            <pushbutton label="Help" />
+            <pushbutton label="Reset" />
+        </hbox>
+    </align>
+</vbox>
+</dialog>

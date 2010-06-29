@@ -1,0 +1,64 @@
+/*************************************************************************
+*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+************************************************************************/
+#ifndef UUI_UNKNOWNAUTH_HRC
+#define UUI_UNKNOWNAUTH_HRC
+
+#include <svtools/controldims.hrc>
+
+// local identifiers
+#define RB_ACCEPT_1             1
+#define PB_OK                   2
+#define PB_VIEW__CERTIFICATE    3
+#define PB_CANCEL               4
+#define FT_LABEL_1              5
+#define RB_DONTACCEPT_2         6
+#define IMG_WARN                7
+#define PB_HELP                 8
+#define FL_LINE                10
+
+// Dims
+
+#define DLG_WIDTH              230
+#define DLG_HEIGHT             140
+
+#define DLG_WARMIMG_HEIGHT      20
+#define DLG_WARMIMG_WIDTH       20
+
+#define DLG_TEXT_1_HEIGHT       50
+
+#define DLG_TEXT_START_X       RSC_SP_DLG_INNERBORDER_LEFT + DLG_WARMIMG_WIDTH + RSC_SP_CTRL_X
+
+#define DLG_RADIOBTN_START_Y   RSC_SP_DLG_INNERBORDER_TOP + DLG_TEXT_1_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_CTRL_GROUP_Y
+
+#define DLG_CTLBTN_START_Y     DLG_HEIGHT - RSC_SP_CTRL_X - RSC_CD_PUSHBUTTON_HEIGHT
+
+
+#define DLG_CTLBTN_OK_START_X      DLG_CTLBTN_CANCEL_START_X - RSC_CD_PUSHBUTTON_WIDTH - RSC_SP_CTRL_GROUP_X
+#define DLG_CTLBTN_CANCEL_START_X  DLG_CTLBTN_HELP_START_X - RSC_CD_PUSHBUTTON_WIDTH - RSC_SP_CTRL_GROUP_X
+#define DLG_CTLBTN_HELP_START_X    DLG_WIDTH - RSC_SP_DLG_INNERBORDER_RIGHT - RSC_CD_PUSHBUTTON_WIDTH
+
+#endif //UUI_UNKNOWNAUTH_HRC

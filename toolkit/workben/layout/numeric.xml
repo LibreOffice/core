@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<framewindow xmlns="http://openoffice.org/2007/layout"
+              xmlns:cnt="http://openoffice.org/2007/layout/container"
+              id="window1" title="Test-Dialog" optimumsize="true"
+              has_border="true" sizeable="true" moveable="true">
+                <vbox>
+            <numericfield text="5" spin="true" enforce-format="false" value-min="5.3" value-max="17.8"/>
+                        <pushbutton />
+                </vbox>
+</framewindow>

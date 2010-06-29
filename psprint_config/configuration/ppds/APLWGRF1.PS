@@ -1,0 +1,747 @@
+*PPD-Adobe: "4.2"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1994 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*FormatVersion: "4.2"
+*FileVersion: "1.0"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "APLWGRF1.PPD"
+*Product: "(LaserWriter 16/600 PS Fax)"
+*PSVersion: "(2014.106) 1"
+*ModelName: "Apple LaserWriter 16/600 PS Fax"
+*ShortNickName: "Apple LaserWriter 16/600 PS Fax"
+*NickName: "Apple LaserWriter 16/600 PS Fax v2014.106"
+
+*% === Options and Constraints =========
+*OpenGroup: InstallableOptions/Options Installed
+*OpenUI *InstalledMemory/Memory Configuration: PickOne
+*DefaultInstalledMemory: 8Meg
+*InstalledMemory 8Meg/Standard 8 MB RAM: ""
+*InstalledMemory 12Meg/12 MB Upgrade: ""
+*InstalledMemory 16Meg/16 MB Upgrade: ""
+*InstalledMemory 24Meg/24 MB Upgrade: ""
+*InstalledMemory 32Meg/32 MB Upgrade: ""
+*?InstalledMemory: "
+ currentsystemparams /RamSize get
+ 6 string dup 4 string 4 -1 roll 1048576 div cvi dup 9 gt {exch cvs 0 exch
+ putinterval dup 2}{exch cvs 0 exch putinterval dup 1}ifelse
+ (Meg) putinterval
+ =
+"
+*End
+*CloseUI: *InstalledMemory
+
+*OpenUI *Option2/Cassette (500 Sheets): PickOne
+*DefaultOption2: False
+*Option2 True/Installed: ""
+*Option2 False/Not Installed: ""
+*Option2 Preferred/Installed and Preferred: "
+   1 dict dup /InputAttributes 1 dict dup /Priority [2 0 1 3] put put
+setpagedevice"
+*End
+*?Option2: "
+ save
+ currentpagedevice
+ /InputAttributes get
+ 2 known {(True)}{(False)} ifelse = flush
+ restore "
+*End
+*CloseUI: *Option2
+
+*OpenUI *Option3/Envelope Feeder: Boolean
+*DefaultOption3: False
+*Option3 True/Installed: ""
+*Option3 False/Not Installed: ""
+*?Option3: "
+ save
+ currentpagedevice
+ /InputAttributes get
+ 3 known {(True)}{(False)} ifelse = flush
+ restore "
+*End
+*CloseUI: *Option3
+*CloseGroup: InstallableOptions
+
+*UIConstraints: *InstalledMemory 8Meg *BitsPerPixel 4
+
+*UIConstraints: *Option2 False *InputSlot Lower
+*UIConstraints: *Option3 False *InputSlot Envelope
+
+*UIConstraints: *PageSize A5 *InputSlot Upper
+*UIConstraints: *PageSize A5 *InputSlot Lower
+*UIConstraints: *PageSize Com10 *InputSlot Upper
+*UIConstraints: *PageSize Com10 *InputSlot Lower
+*UIConstraints: *PageSize Monarch *InputSlot Upper
+*UIConstraints: *PageSize Monarch *InputSlot Lower
+*UIConstraints: *PageSize C5 *InputSlot Upper
+*UIConstraints: *PageSize C5 *InputSlot Lower
+*UIConstraints: *PageSize DL *InputSlot Upper
+*UIConstraints: *PageSize DL *InputSlot Lower
+
+*UIConstraints: *PageRegion A5 *InputSlot Upper
+*UIConstraints: *PageRegion A5 *InputSlot Lower
+*UIConstraints: *PageRegion Com10 *InputSlot Upper
+*UIConstraints: *PageRegion Com10 *InputSlot Lower
+*UIConstraints: *PageRegion Monarch *InputSlot Upper
+*UIConstraints: *PageRegion Monarch *InputSlot Lower
+*UIConstraints: *PageRegion C5 *InputSlot Upper
+*UIConstraints: *PageRegion C5 *InputSlot Lower
+*UIConstraints: *PageRegion DL *InputSlot Upper
+*UIConstraints: *PageRegion DL *InputSlot Lower
+
+*UIConstraints: *InputSlot Upper *PageSize A5
+*UIConstraints: *InputSlot Lower *PageSize A5
+*UIConstraints: *InputSlot Upper *PageSize Com10
+*UIConstraints: *InputSlot Lower *PageSize Com10
+*UIConstraints: *InputSlot Upper *PageSize Monarch
+*UIConstraints: *InputSlot Lower *PageSize Monarch
+*UIConstraints: *InputSlot Upper *PageSize C5
+*UIConstraints: *InputSlot Lower *PageSize C5
+*UIConstraints: *InputSlot Upper *PageSize DL
+*UIConstraints: *InputSlot Lower *PageSize DL
+
+*UIConstraints: *InputSlot Upper *PageRegion A5
+*UIConstraints: *InputSlot Lower *PageRegion A5
+*UIConstraints: *InputSlot Upper *PageRegion Com10
+*UIConstraints: *InputSlot Lower *PageRegion Com10
+*UIConstraints: *InputSlot Upper *PageRegion Monarch
+*UIConstraints: *InputSlot Lower *PageRegion Monarch
+*UIConstraints: *InputSlot Upper *PageRegion C5
+*UIConstraints: *InputSlot Lower *PageRegion C5
+*UIConstraints: *InputSlot Upper *PageRegion DL
+*UIConstraints: *InputSlot Lower *PageRegion DL
+
+*% ==== Device Capabilities ===============
+*LanguageLevel: "2"
+*Protocols: BCP
+*Emulators: LaserJetIII
+*StartEmulator_LaserJetIII: "currentfile /LaserJetIII statusdict /emulate
+get exec "
+*End
+*StopEmulator_LaserJetIII: "<1B>E"
+*TTRasterizer: Type42
+*FaxSupport: Base
+
+*FreeVM: "1539456"
+*VMOption 8Meg: "1539456"
+*VMOption 12Meg: "1662336"
+*VMOption 16Meg: "5815680"
+*VMOption 24Meg: "14114176"
+*VMOption 32Meg: "22396288"
+*ColorDevice: False
+*DefaultColorSpace: Gray
+*VariablePaperSize: False
+*FileSystem: True
+*?FileSystem: "
+  save false
+   (%disk?%) 
+   { currentdevparams dup /Writeable known
+      { /Writeable get {pop true} if }  { pop } ifelse 
+    } 10 string /IODevice resourceforall
+    {(True)}{(False)} ifelse = flush
+ restore"
+*End
+
+*Throughput: "16"
+*Password: "()" 
+*ExitServer: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not { 
+     (WARNING: Cannot modify initial VM.) =
+     (Missing or invalid password.) =
+     (Please contact the author of this software.) = flush quit
+     } if
+"
+*End
+*Reset: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not { 
+    (WARNING: Cannot reset printer.) =
+    (Missing or invalid password.) =
+    (Please contact the author of this software.) = flush quit
+    } if
+ systemdict /quit get exec
+ (WARNING : Printer Reset Failed.) = flush
+"
+*End
+
+*DefaultResolution: 600dpi
+*?Resolution: "
+  save
+    currentpagedevice /HWResolution get
+    0 get
+    (          ) cvs print
+    (dpi)
+    = flush
+  restore
+"
+*End
+
+*SuggestedJobTimeout: "0"
+*SuggestedWaitTimeout: "300"
+*PrintPSErrors: False
+
+
+*% Halftone Information ===============
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "
+{abs   exch   abs   2 copy   add   1 gt   {1 sub   dup   mul   exch  
+1 sub   dup   mul   add   1 sub  } {dup   mul   exch   dup   mul  
+add   1 exch   sub  } ifelse  }
+"
+*End
+*ScreenProc Line: "{ pop }"
+*ScreenProc Ellipse: "{ dup 5 mul 8 div mul exch dup mul exch add sqrt 1
+exch sub }"
+*End
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*OpenUI *Smoothing/FinePrint(TM): Boolean
+*OrderDependency: 50 AnySetup *Smoothing
+*DefaultSmoothing: False
+*Smoothing True/On: "
+  2 dict dup /PostRenderingEnhance true put setpagedevice
+"
+*End
+*Smoothing False/Off: "
+  2 dict dup /PostRenderingEnhance false put setpagedevice
+"
+*End
+*?Smoothing: "
+   save currentpagedevice /PostRenderingEnhanceDetails get
+   /ActualPostRenderingEnhance get
+   {(True)}{(False)} ifelse = flush restore"
+*End
+*CloseUI: *Smoothing
+
+*OpenUI *BitsPerPixel/PhotoGrade(TM): PickOne
+*OrderDependency: 50 AnySetup *BitsPerPixel
+*DefaultBitsPerPixel: None
+*BitsPerPixel 4/On: "
+  2 dict dup /PreRenderingEnhance true put setpagedevice
+"
+*End
+*BitsPerPixel None/Off: "
+  2 dict dup /PreRenderingEnhance false put setpagedevice
+"
+*End
+*?BitsPerPixel: "
+   save currentpagedevice /PreRenderingEnhanceDetails get
+   /ActualPreRenderingEnhance get
+   {(4)}{(None)} ifelse = flush restore"
+*End
+*CloseUI: *BitsPerPixel
+
+*% Paper Handling ===================
+
+*% Code in this section both selects a tray and sets up a frame buffer.
+*OpenUI *PageSize: PickOne
+*OrderDependency: 30 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter/US Letter: "
+    2 dict dup /PageSize [612 792] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize Legal/US Legal: "
+    2 dict dup /PageSize [612 1008] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A4: "
+    2 dict dup /PageSize [595 842] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize B5: "
+    2 dict dup /PageSize [516 729] put dup /ImagingBBox null put setpagedevice"
+*End
+*PageSize A5: "
+    3 dict dup /PageSize [420 595] put dup  /ImagingBBox null put
+ dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize [420 595] put put put
+    setpagedevice "
+*End
+*PageSize LetterSmall/US Letter Small: "
+    2 dict dup /PageSize [612 792] put dup /ImagingBBox [25 25 587 767] put
+setpagedevice"
+*End
+*PageSize A4Small/A4 Small: "
+    2 dict dup /PageSize [595 842] put dup /ImagingBBox [25 25 570 817] put
+setpagedevice"
+*End
+*PageSize LegalSmall/US Legal Small: "
+    2 dict dup /PageSize [612 1008] put dup /ImagingBBox [25 25 587 983]
+put setpagedevice"
+*End
+*PageSize Monarch/Monarch Envelope: "
+   currentpagedevice /InputAttributes get 3 known {3} {1} ifelse
+   1 dict dup /InputAttributes 1 dict dup 6 -1 roll 1 dict dup /PageSize
+[279 540] put put put
+   setpagedevice
+   2 dict dup /PageSize [279 540] put dup /ImagingBBox null put setpagedevice "
+*End
+*PageSize Com10/Comm10 Envelope: " 
+   currentpagedevice /InputAttributes get 3 known {3} {1} ifelse
+   1 dict dup /InputAttributes 1 dict dup 6 -1 roll 1 dict dup /PageSize
+[297 684] put put put
+   setpagedevice
+   2 dict dup /PageSize [297 684] put dup /ImagingBBox null put setpagedevice "
+*End
+*PageSize C5/C5 Envelope: "
+   currentpagedevice /InputAttributes get 3 known {3} {1} ifelse
+   1 dict dup /InputAttributes 1 dict dup 6 -1 roll 1 dict dup /PageSize
+[459 649]  put put put
+   setpagedevice
+   2 dict dup /PageSize [459 649] put dup /ImagingBBox null put setpagedevice "
+*End
+*PageSize DL/DL Envelope: "
+   currentpagedevice /InputAttributes get 3 known {3} {1} ifelse
+   1 dict dup /InputAttributes 1 dict dup 6 -1 roll 1 dict dup /PageSize
+[312 624]put put put
+   setpagedevice
+   2 dict dup /PageSize [312 624] put dup /ImagingBBox null put setpagedevice "
+*End
+*?PageSize: "
+  save
+   currentpagedevice /PageSize get aload pop
+   2 copy gt {exch} if 
+   (Unknown) 
+  9 dict
+   dup [612 792] (Letter) put
+   dup [612 1008] (Legal) put
+   dup [595 842] (A4) put
+   dup [516 729] (B5) put
+   dup [420 595] (A5) put
+   dup [297 684] (Com10) put
+   dup [279 540] (Monarch) put
+   dup [459 649] (C5) put
+   dup [312 624] (DL) put
+ { exch aload pop 4 index sub abs 5 le exch 
+   5 index sub abs 5 le and 
+      {exch pop exit} {pop} ifelse
+   } bind forall
+   = flush pop pop
+   restore
+"
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion:  PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter/US Letter: "
+   3 dict dup /PageSize [612 792] put dup /ImagingBBox null put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize [612 792] put put
+put setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize [612 792]
+put put put  
+   setpagedevice} if "
+*End
+*PageRegion Legal/US Legal: "
+   3 dict dup /PageSize [612 1008] put dup /ImagingBBox null put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize [612 1008] put
+put put 
+   setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize [612
+1008] put put put  
+   setpagedevice} if "
+*End
+*PageRegion A4: "
+   3 dict dup /PageSize [595 842] put dup /ImagingBBox null put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize [595 842] put put
+put setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize [595 842]
+put put put  
+   setpagedevice} if "
+*End
+*PageRegion B5: "
+   3 dict dup /PageSize  [516 729] put dup /ImagingBBox null put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize  [516 729] put
+put put setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize  [516
+729] put put put  
+   setpagedevice} if "
+*End
+*PageRegion A5: " 
+   3 dict dup /PageSize  [420 595] put dup /ImagingBBox null put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize  [420 595] put
+put put setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize  [420
+595] put put put  
+   setpagedevice} if "
+*End
+*PageRegion LetterSmall/US Letter Small: "
+   3 dict dup /PageSize [612 792] put dup /ImagingBBox [25 25 587 767] put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize [612 792] put put
+put setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize [612 792]
+put put put  
+   setpagedevice} if "
+*End
+*PageRegion A4Small/A4 Small: " 
+   3 dict dup /PageSize [595 842] put dup /ImagingBBox [25 25 570 817] put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize [595 842] put put put 
+   setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize [595 842]
+put put put  
+   setpagedevice} if "
+*End
+*PageRegion LegalSmall/US Legal Small: "
+   3 dict dup /PageSize [612 1008] put dup /ImagingBBox [25 25 587 983] put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize [612 1008] put
+put put   
+   setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize [612
+1008] put put put  
+   setpagedevice} if "
+*End
+*PageRegion Monarch/Monarch Envelope: "
+   3 dict dup /PageSize [279 540] put dup /ImagingBBox null put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize [279 540] put put put 
+   setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize [279 540]
+put put put  
+   setpagedevice} if "
+*End
+*PageRegion Com10/Comm10 Envelope: " 
+   3 dict dup /PageSize [297 684] put dup /ImagingBBox null put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize [297 684] put put put 
+   setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize [297 684]
+put put put  
+   setpagedevice} if "
+*End
+*PageRegion C5/C5 Envelope: "
+   3 dict dup /PageSize [459 649] put dup /ImagingBBox null put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize [459 649] put put
+put setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize [459 649]
+put put put  
+   setpagedevice} if "
+*End
+*PageRegion DL/DL Envelope: "
+   3 dict dup /PageSize [312 624] put dup /ImagingBBox null put
+   dup /InputAttributes 1 dict dup 1 1 dict dup /PageSize [312 624] put put
+put setpagedevice 
+   currentpagedevice /InputAttributes get 3 known 
+   {1 dict dup /InputAttributes 1 dict dup 3 1 dict dup /PageSize [312 624]
+put put put  
+   setpagedevice} if "
+*End
+*CloseUI: *PageRegion
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter
+*ImageableArea Letter/US Letter: "11.52 14.1601 599.04 782.04 "
+*ImageableArea Legal/US Legal: "11.52 14.1601 599.04 998.04 "
+*ImageableArea A4: "10.68 14.1601 582.84 831.96 "
+*ImageableArea B5: "11.52 14.2201 503.04 719.1 "
+*ImageableArea A5: "10.56 14.1601 409.92 585.0 "
+*ImageableArea LetterSmall/US Letter Small: "31 31 583 761 "
+*ImageableArea A4Small/A4 Small: "29 31 567 812 "
+*ImageableArea LegalSmall/US Legal Small: "64 54 548 954 "
+*ImageableArea Com10/Comm10 Envelope: "11.4 14.1601 284.04 674.04 "
+*ImageableArea Monarch/Monarch Envelope: "10.0801 14.1601 267.36 530.04 "
+*ImageableArea C5/C5 Envelope: "11.7601 14.1601 445.68 639.0 "
+*ImageableArea DL/DL Envelope: "11.28 14.1601 299.28 614.04 "
+*?ImageableArea: "
+ save
+   /cvp { (                ) cvs print ( ) print } bind def
+   /upperright {10000 mul floor 10000 div} bind def
+   /lowerleft {10000 mul ceiling 10000 div} bind def
+   newpath clippath pathbbox
+   4 -2 roll exch 2 {lowerleft cvp} repeat
+   exch 2 {upperright cvp} repeat flush
+ restore
+"
+*End
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/US Letter: "612 792"
+*PaperDimension Legal/US Legal: "612 1008"
+*PaperDimension A4: "595 842"
+*PaperDimension B5: "516 729"
+*PaperDimension A5: "420 595"
+*PaperDimension LetterSmall/US Letter Small: "612 792"
+*PaperDimension A4Small/A4 Small: "595 842"
+*PaperDimension LegalSmall/US Legal Small: "612 1008"
+*PaperDimension Com10/Comm10 Envelope: "297 684"
+*PaperDimension Monarch/Monarch Envelope: "279 540"
+*PaperDimension C5/C5 Envelope: "459 649"
+*PaperDimension DL/DL Envelope: "312 624"
+
+*RequiresPageRegion Multipurpose: True
+*RequiresPageRegion Envelope: True
+
+*OpenUI *InputSlot: PickOne
+*OrderDependency: 20 AnySetup *InputSlot
+*DefaultInputSlot: Upper
+*InputSlot Upper/Cassette (250 Sheets): "
+  currentpagedevice /InputAttributes get 0 get 
+  dup null eq 
+  { pop } 
+  { dup length 1 add dict copy 
+    dup /InputAttributes
+    1 dict dup /Priority [0 1 2 3] put
+    put setpagedevice
+  } ifelse"
+*End
+*InputSlot Multipurpose/Multipurpose Tray: "
+  currentpagedevice /InputAttributes get 1 get 
+  dup null eq 
+  { pop } 
+  { dup length 1 add dict copy 
+    dup /InputAttributes
+    1 dict dup /Priority [1 0 2 3] put
+    put setpagedevice
+  } ifelse"
+*End
+*InputSlot Lower/Cassette (500 Sheets): "
+  currentpagedevice /InputAttributes get 2 get 
+  dup null eq 
+  { pop } 
+  { dup length 1 add dict copy 
+    dup /InputAttributes
+    1 dict dup /Priority [2 0 1 3] put
+    put setpagedevice
+  } ifelse"
+*End
+*InputSlot Envelope/Envelope Feeder: "
+  currentpagedevice /InputAttributes get 3 get 
+  dup null eq 
+  { pop } 
+  { dup length 1 add dict copy 
+    dup /InputAttributes
+    1 dict dup /Priority [3 0 1 2] put
+    put setpagedevice
+  } ifelse"
+*End
+*?InputSlot: "
+save
+  3 dict
+  dup /0 (Upper) put
+  dup /1 (Multipurpose) put
+  dup /2 (Lower) put
+  dup /3 (Envelope) put
+  currentpagedevice /InputAttributes get
+  dup /Priority known
+  { /Priority get 0 get (      ) cvs cvn get }
+  {
+    dup length 1 eq
+    { {pop} forall (       ) cvs cvn get }
+    { pop pop (Unknown) } ifelse
+  } ifelse
+  = flush
+restore
+"
+*End
+*CloseUI: *InputSlot
+
+*DefaultOutputBin:  OnlyOne
+*DefaultOutputOrder:  Normal
+
+*OpenUI *ManualFeed/Manual Feed:  Boolean
+*OrderDependency: 20 AnySetup *ManualFeed
+*DefaultManualFeed: False
+*ManualFeed True: "1 dict dup /ManualFeed true put setpagedevice"
+*ManualFeed False: "1 dict dup /ManualFeed false put setpagedevice"
+*?ManualFeed: "
+  save
+    currentpagedevice /ManualFeed get
+    {(True)}{(False)}ifelse = flush
+  restore
+"
+*End
+*CloseUI: *ManualFeed
+
+*OpenUI *TraySwitch/Tray Switch:  Boolean
+*OrderDependency: 50 AnySetup *TraySwitch
+*DefaultTraySwitch: False
+*TraySwitch True/On: "1 dict dup /TraySwitch true put setpagedevice"
+*TraySwitch False/Off: "1 dict dup /TraySwitch false put setpagedevice"
+*?TraySwitch: "
+save
+  currentpagedevice /TraySwitch get
+  {(True)}{(False)}ifelse = flush
+restore
+"
+*End
+*CloseUI: *TraySwitch
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
+*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
+*Font Bookman-Light: Standard "(001.004S)" Standard ROM
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Courier-Bold: Standard "(002.004S)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
+*Font Symbol: Standard "(001.007S)" Standard ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
+*Font ZapfDingbats: Standard "(001.004S)" Standard ROM
+
+*?FontQuery: "
+ save
+   { count 1 gt
+      { exch dup 127 string cvs (/) print print (:) print
+        /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+      } { exit } ifelse 
+   } bind loop
+   (*) = flush
+ restore
+"
+*End
+
+*?FontList: "
+save
+  (*) {cvn ==} 128 string /Font resourceforall
+  (*) = flush
+restore
+"
+*End
+
+*% Printer Messages (verbatim from printer):
+*Message: "%%[ exitserver: permanent state may be changed ]%%"
+*Message: "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message: "\FontName\ not found, using Courier"
+
+*% Status (format: %%[ status: <one of these> ] %%)
+*Status: "initializing"
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "PrinterError: cover open"
+*Status: "PrinterError: warming up"
+*Status: "PrinterError: toner cartridge missing or incorrect"
+*Status: "PrinterError: paper jam"
+*Status: "PrinterError: Cassette (250 Sheets): no paper tray"
+*Status: "PrinterError: Cassette (250 Sheets): out of paper"
+*Status: "PrinterError: Cassette (500 Sheets): no paper tray"
+*Status: "PrinterError: Cassette (500 Sheets): out of paper"
+*Status: "PrinterError: Multipurpose Tray: out of paper"
+*Status: "PrinterError: Envelope Feeder: out of paper"
+*Status: "PrinterError: waiting for manual feed"
+*Status: "PrinterError: fixing temperature malfunction"
+*Status: "PrinterError: scanner motor malfunction"
+*Status: "PrinterError: incorrect paper size setting"
+*Status: "PrinterError: Page image timeout"
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "EtherTalk"
+*Source: "RemotePrinter"
+*Source: "PrintServer"
+*Source: "LPR"
+*Source: "LocalTalk"
+*Source: "Parallel"
+
+*% Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+*PrinterError: "cover open"
+*PrinterError: "warming up"
+*PrinterError: "toner cartridge missing or incorrect"
+*PrinterError: "paper jam"
+*PrinterError: "Cassette (250 Sheets): no paper tray"
+*PrinterError: "Cassette (250 Sheets): out of paper"
+*PrinterError: "Cassette (500 Sheets): no paper tray"
+*PrinterError: "Cassette (500 Sheets): out of paper"
+*PrinterError: "Multipurpose Tray: out of paper"
+*PrinterError: "Envelope Feeder: out of paper"
+*PrinterError: "waiting for manual feed"
+*PrinterError: "fixing temperature malfunction"
+*PrinterError: "scanner motor malfunction"
+*PrinterError: "incorrect paper size setting"
+*PrinterError: "Page image timeout"
+
+*%DeviceAdjustMatrix: "[1 0 0 1 0 0]"
+
+*% Color Separation Information =====================
+
+*DefaultColorSep: ProcessBlack.85lpi.600dpi/85 lpi / 600 dpi
+
+*InkName: ProcessBlack/Process Black
+*InkName: CustomColor/Custom Color
+*InkName: ProcessCyan/Process Cyan
+*InkName: ProcessMagenta/Process Magenta
+*InkName: ProcessYellow/Process Yellow
+
+
+*%  For 85 lpi / 600 dpi  (5,5,2,6,6,2,20/3,0) =====================
+
+*ColorSepScreenAngle ProcessBlack.85lpi.600dpi/85 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.85lpi.600dpi/85 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.85lpi.600dpi/85 lpi / 600 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.85lpi.600dpi/85 lpi / 600 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.85lpi.600dpi/85 lpi / 600 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.85lpi.600dpi/85 lpi / 600 dpi: "84.8528"
+*ColorSepScreenFreq CustomColor.85lpi.600dpi/85 lpi / 600 dpi: "84.8528"
+*ColorSepScreenFreq ProcessCyan.85lpi.600dpi/85 lpi / 600 dpi: "94.8683"
+*ColorSepScreenFreq ProcessMagenta.85lpi.600dpi/85 lpi / 600 dpi: "94.8683"
+*ColorSepScreenFreq ProcessYellow.85lpi.600dpi/85 lpi / 600 dpi: "30.0"
+
+*ColorSepScreenProc ProcessYellow.85lpi.600dpi/85 lpi / 600 dpi: "
+{1 add 2 div 3 mul dup floor sub 2 mul 1 sub exch 
+1 add 2 div 3 mul dup floor sub 2 mul 1 sub exch 
+abs exch abs 2 copy add 1 gt {1 sub dup mul exch 1 sub dup mul add 1 
+sub }{dup mul exch dup mul add 1 exch sub }ifelse }"
+*End
+
+*%  For 71 lpi / 600 dpi  ===============================
+
+*ColorSepScreenAngle ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle CustomColor.71lpi.600dpi/71 lpi / 600 dpi: "45.0"
+*ColorSepScreenAngle ProcessCyan.71lpi.600dpi/71 lpi / 600 dpi: "71.5651"
+*ColorSepScreenAngle ProcessMagenta.71lpi.600dpi/71 lpi / 600 dpi: "18.4349"
+*ColorSepScreenAngle ProcessYellow.71lpi.600dpi/71 lpi / 600 dpi: "0.0"
+
+*ColorSepScreenFreq ProcessBlack.71lpi.600dpi/71 lpi / 600 dpi: "70.7107"
+*ColorSepScreenFreq CustomColor.71lpi.600dpi/71 lpi / 600 dpi: "70.7107"
+*ColorSepScreenFreq ProcessCyan.71lpi.600dpi/71 lpi / 600 dpi: "63.2456"
+*ColorSepScreenFreq ProcessMagenta.71lpi.600dpi/71 lpi / 600 dpi: "63.2456"
+*ColorSepScreenFreq ProcessYellow.71lpi.600dpi/71 lpi / 600 dpi: "66.6667"
+
+*% Produced by "bldppd42.ps" version 4.0 edit 11
+*% Last Edit Date: Aug 12 1994
+*% The byte count of this file should be exactly 025725 or 026472
+*% depending on the filesystem it resides in.
+*% end of PPD file for LaserWriter 16/600 PS Fax

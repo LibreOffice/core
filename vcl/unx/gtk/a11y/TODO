@@ -1,0 +1,49 @@
+cws 'atkbridge'
+#Issue number: i#47890#
+Submitted by: mmeeks
+
+Hacked up prototype of atk bridge
+
+
+Serious problems
+    + Threading/locking:
+	+ incoming CORBA calls & the GDK lock
+		+ how are these being processed & on what thread ?
+		+ are we holding the GDK_THREADS lock ?
+		+ can we even do that ?
+		+ is it really necessary to be thread safe ?
+		+ how does this work in combination with the (unsafe) GAIL code ?
+		+ what should incoming CORBA calls be doing ?
+			+ esp. since we can't tell if they're coming from
+			  in-proc or not either [ though this is unlikely ]
+
+
+Test:
+	+ in-line text editing, does the TEXT_CHANGED signal get it right,
+	+ why not copy/paste/delete etc. ?
+		+ check vs. writer & other bits ...
+	+ AtkSelection
+	+ AtkHyper*
+
+* At-poke
+	+ implement non-gui mode - for to-console event logging
+	+ logging
+		+ more detail from remaining events
+	+ add a Tree navigation thing instead (?)
+		+ poke a sub-child (?)
+		+ embed a tree widget inside the tree view ?
+	+ AtkHyperText testing (?)
+
+
+Known bugs:
+	+ AtkText
+		+ selection interface - multiple selections ?
+		+ word boundary issues
+			+ copy AccessibleTextImpl.java's getAfterIndex eg.
+	+ the 'getFoo' methods need to use UNO_QUERY_THROW &
+	  throw an exception to avoid null pointer dereferences.
+	+ AtkAttributeSet (etc.)
+	+ AtkEditableText
+	+ finish/test AtkTable
+	+ HyperLink 'link_activated', HyperText 'link_selected' (?)
+	+ tooltips create new toplevels with broken roles.

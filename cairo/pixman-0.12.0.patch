@@ -1,0 +1,25 @@
+--- misc/build/pixman-0.12.0/configure.orig	2008-09-17 20:14:40.000000000 +0300
++++ misc/build/pixman-0.12.0/configure	2008-11-08 21:17:00.000000000 +0200
+@@ -19740,6 +19740,13 @@
+ 
+ 
+ 
++# getisax is falsely detected when using OOo build script on Linux/FBSD...
++case "$build_os" in
++     linux-gnu*)
++	;;
++     freebsd*)
++	;;
++     *)
+ 
+ for ac_func in getisax
+ do
+@@ -19834,6 +19841,8 @@
+ fi
+ done
+ 
++	;;
++esac
+ { echo "$as_me:$LINENO: checking whether byte ordering is bigendian" >&5
+ echo $ECHO_N "checking whether byte ordering is bigendian... $ECHO_C" >&6; }
+ if test "${ac_cv_c_bigendian+set}" = set; then

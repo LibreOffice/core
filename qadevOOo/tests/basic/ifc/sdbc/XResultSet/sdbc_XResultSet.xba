@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sdbc_XResultSet" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global cXResultSetFirstRecord as String
+'       Global cXResultSetLastRecord as String
+'       Global cXResultSetRecord1 as String
+'       Global cXResultSetRecord2 as String
+'       Global cXResultSet2BeforeLastRecord as String
+
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.sdbc.XResultSet
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+
+    Out.Log("ReCreating Object, to be shure that it is in initial state.")
+
+    Test.StartMethod("beforeFirst()")
+    Test.StartMethod("isBeforeFirst()")
+    Test.StartMethod("isFirst()")
+    Test.StartMethod("first()")
+    Test.StartMethod("next()")
+
+    Test.StartMethod("afterLast()")
+    Test.StartMethod("isAfterLast()")
+    Test.StartMethod("isLast()")
+    Test.StartMethod("last()")
+    Test.StartMethod("previous()")
+
+    Test.StartMethod("getRow()")
+
+    Dim bBeforeFirst As Boolean
+    Dim bIsBeforeFirst As Boolean
+    Dim bIsBeforeFirstLoop As Boolean
+    Dim bIsFirst As Boolean
+    Dim bFirst As Boolean
+    Dim bNext As Boolean
+    Dim bAfterLast As Boolean
+    Dim bIsAfterLast As Boolean
+    Dim bIsAfterLastLoop As Boolean
+    Dim bIsLast As Boolean
+    Dim bLast As Boolean
+    Dim bPrevious As Boolean
+    Dim bGetRow As Boolean
+    Dim bLoopError as Boolean
+
+    bLoopError = false
+    bBeforeFirst = true
+    bIsBeforeFirst = true
+    bIsFirst = true
+    bFirst = true
+    bNext = true
+    bAfterLast = true
+    bIsAfterLast = true
+    bIsLast = true
+    bLast = true
+    bPrevious = true
+    bGetRow = true
+
+    oObj.beforeFirst()
+
+    Out.Log("Initially the cursor should be before first record.")
+    Out.Log("getRow(): expected : 0, actual: " + oObj.getRow())
+    if (oObj.getRow() = 0) then
+        Out.Log("isBeforeFirst(): expected: 'true', actual '" + oObj.isBeforeFirst() + "'")
+        bIsBeforeFirst = bIsBeforeFirst AND oObj.isBeforeFirst()
+    end if
+
+    Out.Log("Go to not first record...")
+    oObj.next
+    oObj.next
+    Out.Log("isBeforeFirst(): expected: 'false', actual '" + oObj.isBeforeFirst() + "'")
+    bIsBeforeFirst = bIsBeforeFirst AND NOT oObj.isBeforeFirst()
+
+    Out.Log("Go to before first record...")
+    oObj.beforeFirst()
+    Out.Log("isBeforeFirst(): expected: 'true', actual '" + oObj.isBeforeFirst() + "'")
+    bBeforeFirst = bBeforeFirst AND oObj.isBeforeFirst()
+    bIsBeforeFirst = bIsBeforeFirst AND oObj.isBeforeFirst()
+
+    Out.Log("Go to previous position")
+    oObj.previous()
+    Out.Log("isBeforeFirst(): expected: 'true', actual '" + oObj.isBeforeFirst() + "'")
+    bIsBeforeFirst = bIsBeforeFirst AND oObj.isBeforeFirst()
+    bPrevious = bPrevious AND oObj.isBeforeFirst()
+
+    Out.Log("Go to first record...")
+    oObj.first()
+    Out.Log("isBeforeFirst(): expected: 'false', actual '" + oObj.isBeforeFirst() + "'")
+    bIsBeforeFirst = bIsBeforeFirst AND NOT oObj.isBeforeFirst()
+    Out.Log("isFirst(): expected: 'true', actual '" + oObj.isFirst() + "'")
+    bIsFirst = bIsFirst AND oObj.isFirst()
+    Out.Log("getRow(): expected : 1, actual: " + oObj.getRow())
+    bIsFirst = bIsFirst AND oObj.getRow() = 1
+    Out.Log("RowDsc should contain " + cXResultSetFirstRecord)
+    Out.Log("RowDsc is '" + oObj.getString(1) + "'")
+    bFirst = bFirst AND inStr(1, oObj.getString(1), cXResultSetFirstRecord)
+
+    Out.Log("Go to previous position")
+    oObj.previous()
+    Out.Log("isBeforeFirst(): expected: 'true', actual '" + oObj.isBeforeFirst() + "'")
+    bIsBeforeFirst = bIsBeforeFirst AND oObj.isBeforeFirst()
+    bPrevious = bPrevious AND oObj.isBeforeFirst()
+    Out.Log("isFirst(): expected: 'false', actual '" + oObj.isFirst() + "'")
+    bIsFirst = bIsFirst AND NOT oObj.isFirst()
+
+    Out.Log("Go to beforeFirst()")
+    oObj.beforeFirst()
+    Out.Log("Iterate through all records form first to last")
+    Dim n As Integer
+    n = 0
+    bLoopError = false
+    bIsAfterLastLoop = oObj.isAfterLast()
+    while (n &lt; 1000 AND NOT bIsAfterLastLoop)
+        oObj.next()
+        n = n + 1
+        bIsAfterLastLoop = oObj.isAfterLast()
+        if bLoopError then
+            bLoopError = false
+            n = 1000
+        end if
+    wend
+
+    Out.Log("IsAfterLast(): expected: 'true', actual '" + oObj.IsAfterLast() + "'")
+    bIsAfterLast = bIsAfterLast AND oObj.isAfterLast()
+    Out.Log("IsLast(): expected: 'false', actual '" + oObj.IsLast() + "'")
+    bIsLast = bIsLast AND NOT oObj.isLast()
+    Out.Log("Amount of records is " + n)
+    Out.Log("Trying to go to next record")
+    oObj.next()
+    Out.Log("IsAfterLast(): expected: 'true', actual '" + oObj.IsAfterLast() + "'")
+    bIsAfterLast = bIsAfterLast AND oObj.isAfterLast()
+
+    Out.Log("Go to previous position.")
+    oObj.previous()
+    Out.Log("IsLast(): expected: 'true', actual '" + oObj.IsLast() + "'")
+    bIsLast = bIsLast AND oObj.isLast()
+    Out.Log("RowDsc should contain " + cXResultSetLastRecord)
+    Out.Log("RowDsc is '" + oObj.getString(1) + "'")
+    bIsLast = bIsLast AND inStr(1, oObj.getString(1), cXResultSetLastRecord)
+
+    Out.Log("Iterate through all records form last to first")
+    bLoopError = false
+    bIsBeforeFirstLoop = oObj.isBeforeFirst()
+    while (n &gt; 0 AND NOT bIsBeforeFirstLoop)
+        oObj.previous()
+        n = n - 1
+        bIsBeforeFirstLoop = oObj.isBeforeFirst()
+        if bLoopError then
+            bLoopError = false
+            n = 0
+        end if
+    wend
+
+    Out.Log("isBeforeFirst(): expected: 'true', actual '" + oObj.isBeforeFirst() + "'")
+    bIsBeforeFirst = bIsBeforeFirst AND oObj.isBeforeFirst()
+
+    Out.Log("Trying to go to previous record")
+    oObj.previous()
+    Out.Log("isBeforeFirst(): expected: 'true', actual '" + oObj.isBeforeFirst() + "'")
+    bIsBeforeFirst = bIsBeforeFirst AND oObj.isBeforeFirst()
+
+
+    Test.MethodTested("beforeFirst()", bBeforeFirst)
+    Test.MethodTested("isBeforeFirst()", bIsBeforeFirst)
+    Test.MethodTested("isFirst()", bIsFirst)
+    Test.MethodTested("first()", bFirst)
+    Test.MethodTested("next()", bNext)
+
+    Test.MethodTested("afterLast()", bAfterLast)
+    Test.MethodTested("isAfterLast()", bIsAfterLast)
+    Test.MethodTested("isLast()", bIsLast)
+    Test.MethodTested("last()", bLast)
+    Test.MethodTested("previous()", bPrevious)
+
+    Test.MethodTested("getRow()", bGetRow)
+
+
+    Test.StartMethod("absolute()")
+    bOK = true
+    Out.Log("Go to second record")
+    oObj.absolute(2)
+    Out.Log("RowDsc should contain " + cXResultSetRecord2)
+    Out.Log("RowDsc is '" + oObj.getString(1) + "'")
+    bOK = bOK AND inStr(1, oObj.getString(1), cXResultSetRecord2)
+    Out.Log("Go to record -1")
+    oObj.absolute(-1)
+    Out.Log("RowDsc is '" + oObj.getString(1) + "'")
+    Out.Log("IsLast(): expected: 'true', actual '" + oObj.IsLast() + "'")
+    bOK = bOK AND oObj.isLast()
+    Out.Log("Go to record -2")
+    oObj.absolute(-2)
+    Out.Log("IsLast(): expected: 'false', actual '" + oObj.IsLast() + "'")
+    bOK = bOK AND NOT oObj.isLast()
+    Out.Log("RowDsc should contain " + cXResultSet2BeforeLastRecord)
+    Out.Log("RowDsc is '" + oObj.getString(1) + "'")
+    bOK = bOK AND inStr(1, oObj.getString(1), cXResultSet2BeforeLastRecord)
+    Test.MethodTested("absolute()", bOK)
+
+    Test.StartMethod("relative()")
+    bOK = true
+    Out.Log("Go to before first record")
+    oObj.beforeFirst()
+    on error goto RelativeErrHndl
+        oObj.relative(1)
+        Out.Log("Exception expected!")
+        bOK = false
+    goto ContRelative
+    RelativeErrHndl:
+        Out.Log("Expected exception.")
+
+    ContRelative:
+    On Error Goto NewErrHndl
+    Out.Log("Go to first record and relative(1)")
+    oObj.next()
+    oObj.relative(1)
+    Out.Log("RowDsc should contain " + cXResultSetRecord2)
+    Out.Log("RowDsc is '" + oObj.getString(1) + "'")
+    bOK = bOK AND inStr(1, oObj.getString(1), cXResultSetRecord2)
+    Out.Log("Go to relative(-1)")
+    oObj.relative(-1)
+    Out.Log("RowDsc should contain " + cXResultSetRecord1)
+    Out.Log("RowDsc is '" + oObj.getString(1) + "'")
+    bOK = bOK AND inStr(1, oObj.getString(1), cXResultSetRecord1)
+    Out.Log("RowDsc is '" + oObj.getString(1) + "'")
+    Test.MethodTested("relative()", bOK)
+
+    Test.StartMethod("refreshRow()")
+    bOK = true
+    oObj.refreshRow()
+    Test.MethodTested("refreshRow()", bOK)
+
+    Test.StartMethod("rowUpdated()")
+    bOK = true
+    Out.Log("rowUpdated() is " + oObj.rowUpdated())
+    bOK = bOK AND NOT oObj.rowUpdated()
+    Test.MethodTested("rowUpdated()", bOK)
+
+    Test.StartMethod("rowInserted()")
+    bOK = true
+    Out.Log("rowInserted() is " + oObj.rowInserted())
+    bOK = bOK AND NOT oObj.rowInserted()
+    Test.MethodTested("rowInserted()", bOK)
+
+    Test.StartMethod("rowDeleted()")
+    bOK = true
+    Out.Log("rowDeleted() is " + oObj.rowDeleted())
+    bOK = bOK AND NOT oObj.rowDeleted()
+    Test.MethodTested("rowDeleted()", bOK)
+
+    Test.StartMethod("getStatement()")
+    bOK = true
+    oStatement = oObj.getStatement()
+    bOK = bOK AND NOT isNULL(oStatement)
+    Test.MethodTested("getStatement()", bOK)
+
+Exit Sub
+NewErrHndl:
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    bLoopError = true
+    resume next
+End Sub
+</script:module>

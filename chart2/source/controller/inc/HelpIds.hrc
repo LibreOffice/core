@@ -1,0 +1,182 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef CHART_HELPIDS_HRC
+#define CHART_HELPIDS_HRC
+
+#include <svl/solar.hrc>
+//next is 120
+//free: 20, 21, 22, 30, 31, 32, 33
+
+//see old chart: schhids.h
+
+/*
+#define HID_SCH_DATA_ROW            (HID_SCH_START + 0)
+#define HID_SCH_DATA_LINE           (HID_SCH_START + 1)
+#define HID_SCH_DATA_POINT          (HID_SCH_START + 2)
+#define HID_SCH_DIAGRAM_X_AXIS      (HID_SCH_START + 3)
+*/
+#define HID_SCH_ALIGNMENT           (HID_SCH_START + 4)
+#define HID_SCH_LEGEND_POS          (HID_SCH_START + 5)
+#define HID_SCH_DATA_DESCR          (HID_SCH_START + 6)
+
+#define HID_SCH_STAT                (HID_SCH_START + 8)
+#define HID_SCH_WIN_DOCUMENT        (HID_SCH_START + 9)
+#define HID_SCH_CTL_DATA            (HID_SCH_START + 10)
+
+#define HID_SCH_CT_INDICATE         (HID_SCH_START + 11)
+// #define HID_SCH_CT_REGRESS          (HID_SCH_START + 12)
+
+//for chart type dialog:
+#define HID_SCH_CTL_TYPE            (HID_SCH_START + 13)
+#define HID_SCH_CTL_VARIANT         (HID_SCH_START + 14)
+#define HID_SCH_NUM_OF_LINES        (HID_SCH_START + 43)
+#define HID_SCH_SERIES_LIST         (HID_SCH_START + 15)
+#define HID_SCH_DATA_RANGES_LIST    (HID_SCH_START + 16)
+//
+
+//#define HID_SCH_CTL_LIGHT           (HID_SCH_START + 17)
+//#define HID_SCH_CT_INDICATE2        (HID_SCH_START + 18)
+//#define HID_SCH_CT_REGRESS2         (HID_SCH_START + 19)
+
+#define HID_SCH_TBI_DATA_INSERT_ROW (HID_SCH_START + 23)
+#define HID_SCH_TBI_DATA_INSERT_COL (HID_SCH_START + 24)
+#define HID_SCH_TBI_DATA_DELETE_ROW (HID_SCH_START + 25)
+#define HID_SCH_TBI_DATA_DELETE_COL (HID_SCH_START + 26)
+#define HID_SCH_TBI_DATA_SWAP_COL   (HID_SCH_START + 27)
+#define HID_SCH_TBI_DATA_SWAP_ROW   (HID_SCH_START + 28)
+#define HID_SCH_TBI_DATA_INSERT_TEXT_COL   (HID_SCH_START + 29)
+#define HID_SCH_TBX_DATA            (HID_SCH_START + 34)
+
+#define HID_SCH_ALIGNMENT_CTR_DIAL  (HID_SCH_START + 35)
+#define HID_SCH_ALIGNMENT_STACKED   (HID_SCH_START + 36)
+#define HID_SCH_ALIGNMENT_DEGREES   (HID_SCH_START + 37)
+/*
+#define HID_SCH_LAYOUT              (HID_SCH_START + 38)
+
+#define HID_SCH_TBX_EDIT_FIELD      (HID_SCH_START + 39)
+#define HID_SCH_DIAGRAM_Y_AXIS      (HID_SCH_START + 40)//war mal 3
+
+#define HID_SCH_DEF_COLOR           (HID_SCH_START + 41)
+*/
+#define HID_SCH_TP_AXIS_LABEL       (HID_SCH_START + 42)
+
+#define HID_SCH_CHART_AUTO_FORMAT   (HID_SCH_START + 44)
+#define HID_SCH_LB_BAR_GEOMETRY     (HID_SCH_START + 45)
+#define HID_SCH_DLG_SPLINE_PROPERTIES    (HID_SCH_START + 46)
+#define HID_SCH_DLG_RANGES          (HID_SCH_START + 47)
+
+#define HID_SCH_CB_XAXIS          (HID_SCH_START + 48)
+#define HID_SCH_CB_YAXIS          (HID_SCH_START + 49)
+#define HID_SCH_CB_ZAXIS          (HID_SCH_START + 50)
+#define HID_SCH_CB_SECONDARY_XAXIS          (HID_SCH_START + 51)
+#define HID_SCH_CB_SECONDARY_YAXIS          (HID_SCH_START + 52)
+#define HID_SCH_CB_SECONDARY_ZAXIS          (HID_SCH_START + 53)
+
+#define HID_SCH_CB_XGRID          (HID_SCH_START + 54)
+#define HID_SCH_CB_YGRID          (HID_SCH_START + 55)
+#define HID_SCH_CB_ZGRID          (HID_SCH_START + 56)
+#define HID_SCH_CB_SECONDARY_XGRID          (HID_SCH_START + 57)
+#define HID_SCH_CB_SECONDARY_YGRID          (HID_SCH_START + 58)
+#define HID_SCH_CB_SECONDARY_ZGRID          (HID_SCH_START + 59)
+
+#define HID_SCH_LEGEND_POS_LEFT     (HID_SCH_START + 60)
+#define HID_SCH_LEGEND_POS_TOP      (HID_SCH_START + 61)
+#define HID_SCH_LEGEND_POS_RIGHT    (HID_SCH_START + 62)
+#define HID_SCH_LEGEND_POS_BOTTOM   (HID_SCH_START + 63)
+
+#define HID_SCH_STATISTIK_MEANVALUE         (HID_SCH_START + 64)
+#define HID_SCH_STATISTIK_NO_ERROR          (HID_SCH_START + 65)
+#define HID_SCH_STATISTIK_VARIANT           (HID_SCH_START + 66)
+#define HID_SCH_STATISTIK_SIGMA             (HID_SCH_START + 67)
+#define HID_SCH_STATISTIK_PERCENT           (HID_SCH_START + 68)
+#define HID_SCH_STATISTIK_BIGERROR          (HID_SCH_START + 69)
+#define HID_SCH_STATISTIK_CONSTERROR        (HID_SCH_START + 70)
+#define HID_SCH_STATISTIK_PERCENT_VALUE     (HID_SCH_START + 71)
+#define HID_SCH_STATISTIK_BIGERROR_VALUE    (HID_SCH_START + 72)
+#define HID_SCH_STATISTIK_PLUS_VALUE        (HID_SCH_START + 73)
+#define HID_SCH_STATISTIK_MINUS_VALUE       (HID_SCH_START + 74)
+
+#define HID_SCH_DATALABEL_VALUE     (HID_SCH_START + 75)
+#define HID_SCH_DATALABEL_NUMBER    (HID_SCH_START + 76)
+#define HID_SCH_DATALABEL_PERCENT   (HID_SCH_START + 77)
+#define HID_SCH_DATALABEL_TEXT      (HID_SCH_START + 78)
+#define HID_SCH_DATALABEL_SYMBOL    (HID_SCH_START + 79)
+#define HID_SCH_PB_NUMBERFORMAT     (HID_SCH_START + 88)
+#define HID_SCH_PB_PERCENT_NUMBERFORMAT     (HID_SCH_START + 89)
+#define HID_SCH_DATALABEL_SEPARATOR         (HID_SCH_START + 90)
+#define HID_SCH_DATALABEL_PLACEMENT         (HID_SCH_START + 91)
+#define HID_SCH_TEXTDIRECTION               (HID_SCH_START + 115)
+#define HID_SCH_TEXTDIRECTION_TITLE         (HID_SCH_START + 116)
+#define HID_SCH_TEXTDIRECTION_EQUATION      (HID_SCH_START + 117)
+#define HID_SCH_DATALABEL_ROTATION_KNOB     (HID_SCH_START + 118)
+#define HID_SCH_DATALABEL_ROTATION_EDIT     (HID_SCH_START + 119)
+
+#define HID_SCH_TITLE_MAIN  (HID_SCH_START + 80)
+#define HID_SCH_TITLE_SUB   (HID_SCH_START + 81)
+#define HID_SCH_TITLE_X     (HID_SCH_START + 82)
+#define HID_SCH_TITLE_Y     (HID_SCH_START + 83)
+#define HID_SCH_TITLE_Z     (HID_SCH_START + 84)
+#define HID_SCH_TITLE_SECONDARY_X     (HID_SCH_START + 92)
+#define HID_SCH_TITLE_SECONDARY_Y     (HID_SCH_START + 93)
+
+#define HID_SCH_WIZARD_ROADMAP     (HID_SCH_START + 85)
+#define HID_SCH_LEGEND_SHOW        (HID_SCH_START + 86)
+#define HID_SCH_DATA_SERIES_LABEL  (HID_SCH_START + 87)
+
+#define HID_SCH_STARTING_ANGLE_DIAL (HID_SCH_START + 94)
+
+#define HID_SCH_TRENDLINE_RB_NONE         (HID_SCH_START +  95)
+#define HID_SCH_TRENDLINE_RB_LINEAR       (HID_SCH_START +  96)
+#define HID_SCH_TRENDLINE_RB_LOGARITHMIC  (HID_SCH_START +  97)
+#define HID_SCH_TRENDLINE_RB_EXPONENTIAL  (HID_SCH_START +  98)
+#define HID_SCH_TRENDLINE_RB_POWER        (HID_SCH_START +  99)
+#define HID_SCH_TRENDLINE_SHOW_EQUATION   (HID_SCH_START + 100)
+#define HID_SCH_TRENDLINE_SHOW_R_SQUARED  (HID_SCH_START + 101)
+
+#define HID_SCH_STATISTIK_FUNCTION                  (HID_SCH_START + 102)
+#define HID_SCH_STATISTIK_RANGE                     (HID_SCH_START + 103)
+#define HID_SCH_STATISTIK_FUNCTION_LB               (HID_SCH_START + 104)
+#define HID_SCH_STATISTIK_POSITIVE_VALUE            (HID_SCH_START + 105)
+#define HID_SCH_STATISTIK_POSITIVE_RANGE            (HID_SCH_START + 106)
+#define HID_SCH_STATISTIK_POSITIVE_RANGE_CHOOSER    (HID_SCH_START + 107)
+#define HID_SCH_STATISTIK_NEGATIVE_VALUE            (HID_SCH_START + 108)
+#define HID_SCH_STATISTIK_NEGATIVE_RANGE            (HID_SCH_START + 109)
+#define HID_SCH_STATISTIK_NEGATIVE_RANGE_CHOOSER    (HID_SCH_START + 110)
+#define HID_SCH_STATISTIK_SAME_FOR_BOTH             (HID_SCH_START + 111)
+#define HID_SCH_STATISTIK_SHOW_BOTH                 (HID_SCH_START + 112)
+#define HID_SCH_STATISTIK_SHOW_POSITIVE             (HID_SCH_START + 113)
+#define HID_SCH_STATISTIK_SHOW_NEGATIVE             (HID_SCH_START + 114)
+
+
+// HID_SCH_START should be 63280 (checked 25.Nov 2002)
+
+// 453 == SCH_IF_CHARTVIEWSHELL, da SFX_INTERFACE_LIB kein
+// Define sondern neuerdings ein Enum ist
+//#define HID_SCH_VIEWSHELL_DOCUMENT    (453)
+
+
+#endif

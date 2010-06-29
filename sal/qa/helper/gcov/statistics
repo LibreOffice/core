@@ -1,0 +1,20 @@
+#!/bin/bash
+# $Id: statistics,v 1.3 2003-06-11 16:38:03 vg Exp $
+
+./gcov_filter.pl -i ../../../util/sal.map --showallfunc FOO | sort | uniq >exportedfunctions.txt
+
+# gives the number off all files.
+./gcov_filter.pl -i ../../../util/sal.map --allfuncinfo FOO
+
+./gcov_all --no-percentage | sort | uniq >allchecked.txt
+
+# gives the number of all testable functions
+echo -n "    testable functions: "
+cat allchecked.txt | wc -l
+
+# gives a list of all checked functions within gcov.
+./gcov_all | sort +1 | uniq >realallchecked.txt
+
+# output all functions, which are not tested by gcov -f, due to the fact, that they where not found
+comm -3 exportedfunctions.txt allchecked.txt >notfound.txt
+

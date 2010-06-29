@@ -1,0 +1,3204 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+
+
+*% All Rights Reserved. 
+
+*% Permission is granted for redistribution of this file as
+
+*% long as this copyright notice is intact and the contents
+
+*% of the file is not altered in any way from its original form.
+
+*% End of Copyright statement
+
+*%
+
+*% Creation Date Apr. 18, 1996; By: Berthold Giess, Linotype-Hell AG
+
+*%
+
+
+
+*% ----- Basic Capabilities -----
+
+*FormatVersion: "4.3"
+
+*FileVersion: "1.0"
+
+*LanguageEncoding: ISOLatin1
+
+*LanguageVersion: English
+
+*PSVersion: "(2013.114) 9"
+
+*Product: "(Linotype)"
+
+*Manufacturer: "LHAG Linotype-Hell"
+
+*% 31 Chars  *******************************
+
+*ModelName: "Lino Quasar IS V 3.3 J"
+
+*ShortNickName: "Lino Quasar IS V 3.3 J"
+
+*NickName: "Lino Quasar IS V 3.3 J"
+
+*PCFileName: "LHQUSIJ4.PPD"
+
+
+
+*% ----- General Information and Defaults -----
+
+*FreeVM: "5242880"
+
+*PrintPSErrors: False
+
+*LanguageLevel: "2"
+
+*ColorDevice: True
+
+*DefaultColorSpace: Gray
+
+*DefaultHalftoneType: 1
+
+*Throughput: "1"
+
+*VariablePaperSize: True
+
+*FileSystem: True
+
+
+
+*?FileSystem: "
+
+save
+
+ statusdict /diskonline get exec {(True)}{(False)} ifelse = flush
+
+restore
+
+"
+
+*End
+
+
+
+*Password: "0"
+
+*ExitServer: "
+
+ count 0 eq { % is the password on the stack?
+
+ true
+
+ }{
+
+ dup % potential password
+
+ statusdict /checkpassword get exec not
+
+ } ifelse
+
+ { % if no password or not valid
+
+ (WARNING : Cannot perform the exitserver command.) =
+
+ (Password supplied is not valid.) =
+
+ (Please contact the author of this software.) = flush
+
+ quit
+
+ } if
+
+ serverdict /exitserver get exec
+
+"
+
+*End
+
+
+
+*Reset: "
+
+ count 0 eq { % is the password on the stack?
+
+ true
+
+ }{
+
+ dup % potential password
+
+ statusdict /checkpassword get exec not
+
+ } ifelse
+
+ { % if no password or not valid
+
+ (WARNING : Cannot reset printer.) =
+
+ (Password supplied is not valid.) =
+
+ (Please contact the author of this software.) = flush
+
+ quit
+
+ } if
+
+ serverdict /exitserver get exec
+
+ systemdict /quit get exec
+
+ (WARNING : Printer Reset Failed.) = flush
+
+"
+
+*End
+
+
+
+*DefaultResolution: 2540dpi
+
+
+
+*?Resolution: "
+
+ save 
+
+ 72 72 matrix defaultmatrix dtransform
+
+ pop abs round cvi =print (dpi\n) print
+
+ restore 
+
+"
+
+*End
+
+
+
+*% Halftone Information ===============
+
+*ScreenFreq: "150"
+
+*ScreenAngle: "45"
+
+*AccurateScreensSupport: True
+
+*DefaultScreenProc: Euclidean
+
+
+
+*ScreenProc Euclidean: "
+
+{
+
+ abs exch abs 2 copy add 1 gt
+
+ {1 sub dup mul exch 1 sub dup mul add 1 sub}
+
+ { dup mul exch dup mul add 1 exch sub}
+
+ ifelse
+
+}
+
+"
+
+*End
+
+
+
+*ScreenProc Round: "
+
+{
+
+ dup mul exch dup mul add 1 exch sub
+
+} 
+
+"
+
+*End
+
+
+
+*ScreenProc Square: "
+
+{
+
+ abs exch abs add 1 exch sub
+
+} 
+
+"
+
+*End
+
+
+
+*ScreenProc HeavyEllipse: "
+
+{ %Copyright Linotype-Hell AG 1996
+
+ exch 
+
+ abs exch abs 2 copy 0.80 mul add 0.80 lt { 
+
+ exch 0.80 div
+
+ dup dup mul exch 2 mul 3 sub mul exch
+
+ dup dup mul exch 2 mul 3 sub mul add 0.80 mul 1 add 
+
+ } { 
+
+ 2 copy 0.80 mul add 1 gt {
+
+ 1 sub exch 1 sub 0.80 div 
+
+ dup dup mul exch 2 mul 3 add mul exch
+
+ dup dup mul exch 2 mul 3 add mul add 0.80 mul 1 sub 
+
+ } { 
+
+ 0.80 mul add 2 mul neg 1 add 0.80 add   
+
+ } ifelse
+
+ } ifelse
+
+} 
+
+"
+
+*End
+
+
+
+*ScreenProc Ellipse: "
+
+{ %Copyright Linotype-Hell AG 1996
+
+ exch 
+
+ abs exch abs 2 copy 0.85 mul add 0.85 lt { 
+
+ exch 0.85 div
+
+ dup dup mul exch 2 mul 3 sub mul exch
+
+ dup dup mul exch 2 mul 3 sub mul add 0.85 mul 1 add 
+
+ } { 
+
+ 2 copy 0.85 mul add 1 gt { 
+
+ 1 sub exch 1 sub 0.85 div 
+
+ dup dup mul exch 2 mul 3 add mul exch
+
+ dup dup mul exch 2 mul 3 add mul add 0.85 mul 1 sub 
+
+ } { 
+
+ 0.85 mul add 2 mul neg 1 add 0.85 add   
+
+ } ifelse
+
+ } ifelse
+
+} 
+
+"
+
+*End
+
+
+
+*ScreenProc LightEllipse: "
+
+{ %Copyright Linotype-Hell AG 1996
+
+ exch 
+
+ abs exch abs 2 copy 0.90 mul add 0.90 lt { 
+
+ exch 0.90 div
+
+ dup dup mul exch 2 mul 3 sub mul exch
+
+ dup dup mul exch 2 mul 3 sub mul add 0.90 mul 1 add 
+
+ } { 
+
+ 2 copy 0.90 mul add 1 gt { 
+
+ 1 sub exch 1 sub 0.90 div 
+
+ dup dup mul exch 2 mul 3 add mul exch
+
+ dup dup mul exch 2 mul 3 add mul add 0.90 mul 1 sub 
+
+ } { 
+
+ 0.90 mul add 2 mul neg 1 add 0.90 add   
+
+ } ifelse
+
+ } ifelse
+
+} 
+
+"
+
+*End
+
+
+
+*ScreenProc LineX: "
+
+{ %Copyright Linotype-Hell AG 1996
+
+ abs exch 0.9 mul 0.01 sub abs exch
+
+ 0.003 mul add 1 exch sub
+
+} 
+
+"
+
+*End
+
+
+
+*ScreenProc LineY: "
+
+{ %Copyright Linotype-Hell AG 1996
+
+ 0.9 mul 0.01 sub abs exch abs
+
+ 0.003 mul add 1 exch sub
+
+} 
+
+"
+
+*End
+
+
+
+*ScreenProc Grid: "
+
+{ %Copyright Linotype-Hell AG 1996
+
+ 0.9 mul 0.01 sub abs exch
+
+ 0.9 mul 0.01 sub abs exch
+
+ 2 copy lt { 0.003 mul add } { exch 0.003 mul add } ifelse
+
+ 1 exch sub
+
+} 
+
+"
+
+*End
+
+
+
+*DefaultTransfer: Null
+
+*Transfer Null: "{ }"
+
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+
+
+*% Paper Handling ===================
+
+*% Use these entries to set paper size most of the time, unless there is
+
+*% specific reason to use PageRegion.
+
+*OpenUI *PageSize: PickOne
+
+*OrderDependency: 20 AnySetup *PageSize
+
+
+
+*DefaultPageSize: Letter
+
+*PageSize Letter: "<</PageSize [612 792] /Orientation 1>> setpagedevice"
+
+*PageSize Letter.Extra: "<</PageSize [684 864] /Orientation 1>> setpagedevice"
+
+*PageSize Letter.Transverse: "<</PageSize [612 792] /Orientation 0>> setpagedevice"
+
+*PageSize Letter.Extra.Transverse: "<</PageSize [684 864] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize Legal: "<</PageSize [612 1008] /Orientation 1>> setpagedevice"
+
+*PageSize Legal.Extra: "<</PageSize [684 1080] /Orientation 1>> setpagedevice"
+
+*PageSize Legal.Transverse: "<</PageSize [612 1008] /Orientation 0>> setpagedevice"
+
+*PageSize Legal.Extra.Transverse: "<</PageSize [684 1080] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize Tabloid: "<</PageSize [792 1224] /Orientation 1>> setpagedevice"
+
+*PageSize Tabloid.Extra: "<</PageSize [864 1296] /Orientation 1>> setpagedevice"
+
+*PageSize Tabloid.Transverse: "<</PageSize [792 1224] /Orientation 0>> setpagedevice"
+
+*PageSize Tabloid.Extra.Transverse:"<</PageSize [864 1296] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize A3: "<</PageSize [842 1191] /Orientation 1>> setpagedevice"
+
+*PageSize A3.Extra: "<</PageSize [914 1263] /Orientation 1>> setpagedevice"
+
+*PageSize A3.Transverse: "<</PageSize [842 1191] /Orientation 0>> setpagedevice"
+
+*PageSize A3.Extra.Transverse: "<</PageSize [914 1262] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize A4: "<</PageSize [595 842] /Orientation 1>> setpagedevice"
+
+*PageSize A4.Extra: "<</PageSize [667 914] /Orientation 1>> setpagedevice"
+
+*PageSize A4.Transverse: "<</PageSize [595 842] /Orientation 0>> setpagedevice"
+
+*PageSize A4.Extra.Transverse: "<</PageSize [667 914] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize A5: "<</PageSize [420 595] /Orientation 1>> setpagedevice"
+
+*PageSize A5.Extra: "<</PageSize [492 667] /Orientation 1>> setpagedevice"
+
+*PageSize A5.Transverse: "<</PageSize [420 595] /Orientation 0>> setpagedevice"
+
+*PageSize A5.Extra.Transverse: "<</PageSize [492 667] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize B3: "<</PageSize [1032 1460] /Orientation 1>> setpagedevice"
+
+*PageSize B3.Transverse: "<</PageSize [1032 1460] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize B4: "<</PageSize [729 1032] /Orientation 1>> setpagedevice"
+
+*PageSize B4.Extra: "<</PageSize [801 1104] /Orientation 1>> setpagedevice"
+
+*PageSize B4.Transverse: "<</PageSize [729 1032] /Orientation 0>> setpagedevice"
+
+*PageSize B4.Extra.Transverse: "<</PageSize [801 1104] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize B5: "<</PageSize [516 729] /Orientation 1>> setpagedevice"
+
+*PageSize B5.Extra: "<</PageSize [588 801] /Orientation 1>> setpagedevice"
+
+*PageSize B5.Transverse: "<</PageSize [516 729] /Orientation 0>> setpagedevice"
+
+*PageSize B5.Extra.Transverse: "<</PageSize [588 801] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize ISOB3: "<</PageSize [1001 1417] /Orientation 1>> setpagedevice"
+
+*PageSize ISOB3.Transverse: "<</PageSize [1001 1417] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize ISOB4: "<</PageSize [709 1001] /Orientation 1>> setpagedevice"
+
+*PageSize ISOB4.Extra: "<</PageSize [781 1073] /Orientation 1>> setpagedevice"
+
+*PageSize ISOB4.Transverse: "<</PageSize [709 1001] /Orientation 0>> setpagedevice"
+
+*PageSize ISOB4.Extra.Transverse: "<</PageSize [781 1073] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize ISOB5: "<</PageSize [499 709] /Orientation 1>> setpagedevice"
+
+*PageSize ISOB5.Extra: "<</PageSize [569.7 782] /Orientation 1>> setpagedevice"
+
+*PageSize ISOB5.Transverse: "<</PageSize [499 709] /Orientation 0>> setpagedevice"
+
+*PageSize ISOB5.Extra.Transverse: "<</PageSize [569.7 782] /Orientation 0>> setpagedevice"
+
+
+
+*PageSize MaxPage: "<</PageSize [1431 1488] /Orientation 1>> setpagedevice"
+
+
+
+*?PageSize: "
+
+save
+
+	mark 
+
+	currentpagedevice /PageSize get aload pop
+
+	2 copy gt {exch} if 
+
+	(Unknown)
+
+	37 dict
+
+	dup [612 792] (Letter) put
+
+	dup [684 864] (Letter.Extra) put
+
+	
+
+	dup [612 1008] (Legal) put
+
+	dup [684 1080] (Legal.Extra) put
+
+	
+
+	dup [792 1224] (Tabloid) put
+
+	dup [864 1296] (Tabloid.Extra) put
+
+ 
+
+	dup [1684 2384] (A1) put
+
+	dup [1756 2456] (A1.Extra) put
+
+	
+
+	dup [1191 1684] (A2) put
+
+	dup [1263 1756] (A2.Extra) put
+
+	
+
+	dup [842 1191] (A3) put
+
+	dup [914 1263] (A3.Extra) put
+
+	
+
+	dup [595 842] (A4) put
+
+	dup [667 914] (A4.Extra) put
+
+	
+
+	dup [420 595] (A5) put
+
+	dup [492 667] (A5.Extra) put
+
+	
+
+	dup [2064 2920] (B1) put
+
+	dup [2136 2992] (B1.Extra) put
+
+	
+
+	dup [1460 2064] (B2) put
+
+	dup [1532 2136] (B2.Extra) put
+
+	
+
+	dup [1032 1460] (B3) put
+
+	dup [1104 1532] (B3.Extra) put
+
+	
+
+	dup [729 1032] (B4) put
+
+	dup [801 1104] (B4.Extra) put
+
+	
+
+	dup [516 729] (B5) put
+
+	dup [588 801] (B5.Extra) put
+
+	
+
+	dup [2004 2835] (ISOB1) put
+
+	dup [2076 2907] (ISOB1.Extra) put
+
+	
+
+	dup [1417 2004] (ISOB2) put
+
+	dup [1489 2076] (ISOB2.Extra) put
+
+	
+
+	dup [1001 1417] (ISOB3) put
+
+	dup [1073 1489] (ISOB3.Extra) put
+
+	
+
+	dup [709 1001] (ISOB4) put
+
+	dup [781 1073] (ISOB4.Extra) put
+
+	
+
+	dup [499 709] (ISOB5) put
+
+	dup [571 781] (ISOB5.Extra) put
+
+	
+
+	dup [1431 1488] (MaxPage) put
+
+	
+
+	{ 
+
+		exch aload pop 4 index sub abs 5 le exch 
+
+ 5 index sub abs 5 le and 
+
+ {exch pop exit} {pop} ifelse
+
+	} bind forall
+
+	
+
+	= flush
+
+	cleartomark
+
+	
+
+restore
+
+"
+
+*End
+
+*CloseUI: *PageSize
+
+
+
+*% These entries will set up the frame buffer. Usually used with manual feed.
+
+*OpenUI *PageRegion: PickOne
+
+*OrderDependency: 10 AnySetup *PageRegion
+
+
+
+*DefaultPageRegion: Letter
+
+*PageRegion Letter: "<</PageSize [612 792] /Orientation 1>> setpagedevice"
+
+*PageRegion Letter.Extra: "<</PageSize [684 864] /Orientation 1>> setpagedevice"
+
+*PageRegion Letter.Transverse: "<</PageSize [612 792] /Orientation 0>> setpagedevice"
+
+*PageRegion Letter.Extra.Transverse:"<</PageSize [684 864] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion Legal: "<</PageSize [612 1008] /Orientation 1>> setpagedevice"
+
+*PageRegion Legal.Extra: "<</PageSize [684 1080] /Orientation 1>> setpagedevice"
+
+*PageRegion Legal.Transverse: "<</PageSize [612 1008] /Orientation 0>> setpagedevice"
+
+*PageRegion Legal.Extra.Transverse: "<</PageSize [684 1080] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion Tabloid: "<</PageSize [792 1224] /Orientation 1>> setpagedevice"
+
+*PageRegion Tabloid.Extra: "<</PageSize [864 1296] /Orientation 1>> setpagedevice"
+
+*PageRegion Tabloid.Transverse: "<</PageSize [792 1224] /Orientation 0>> setpagedevice"
+
+*PageRegion Tabloid.Extra.Transverse:"<</PageSize [864 1296] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion A3: "<</PageSize [842 1191] /Orientation 1>> setpagedevice"
+
+*PageRegion A3.Extra: "<</PageSize [914 1263] /Orientation 1>> setpagedevice"
+
+*PageRegion A3.Transverse: "<</PageSize [842 1191] /Orientation 0>> setpagedevice"
+
+*PageRegion A3.Extra.Transverse: "<</PageSize [914 1262] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion A4: "<</PageSize [595 842] /Orientation 1>> setpagedevice"
+
+*PageRegion A4.Extra: "<</PageSize [667 914] /Orientation 1>> setpagedevice"
+
+*PageRegion A4.Transverse: "<</PageSize [595 842] /Orientation 0>> setpagedevice"
+
+*PageRegion A4.Extra.Transverse: "<</PageSize [667 914] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion A5: "<</PageSize [420 595] /Orientation 1>> setpagedevice"
+
+*PageRegion A5.Extra: "<</PageSize [492 667] /Orientation 1>> setpagedevice"
+
+*PageRegion A5.Transverse: "<</PageSize [420 595] /Orientation 0>> setpagedevice"
+
+*PageRegion A5.Extra.Transverse: "<</PageSize [492 667] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion B3: "<</PageSize [1032 1460] /Orientation 1>> setpagedevice"
+
+*PageRegion B3.Transverse: "<</PageSize [1032 1460] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion B4: "<</PageSize [729 1032] /Orientation 1>> setpagedevice"
+
+*PageRegion B4.Extra: "<</PageSize [801 1104] /Orientation 1>> setpagedevice"
+
+*PageRegion B4.Transverse: "<</PageSize [729 1032] /Orientation 0>> setpagedevice"
+
+*PageRegion B4.Extra.Transverse: "<</PageSize [801 1104] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion B5: "<</PageSize [516 729] /Orientation 1>> setpagedevice"
+
+*PageRegion B5.Extra: "<</PageSize [588 801] /Orientation 1>> setpagedevice"
+
+*PageRegion B5.Transverse: "<</PageSize [516 729] /Orientation 0>> setpagedevice"
+
+*PageRegion B5.Extra.Transverse: "<</PageSize [588 801] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion ISOB3: "<</PageSize [1001 1417] /Orientation 1>> setpagedevice"
+
+*PageRegion ISOB3.Transverse: "<</PageSize [1001 1417] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion ISOB4: "<</PageSize [709 1001] /Orientation 1>> setpagedevice"
+
+*PageRegion ISOB4.Extra: "<</PageSize [781 1073] /Orientation 1>> setpagedevice"
+
+*PageRegion ISOB4.Transverse: "<</PageSize [709 1001] /Orientation 0>> setpagedevice"
+
+*PageRegion ISOB4.Extra.Transverse: "<</PageSize [781 1073] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion ISOB5: "<</PageSize [499 709] /Orientation 1>> setpagedevice"
+
+*PageRegion ISOB5.Extra: "<</PageSize [569.7 782] /Orientation 1>> setpagedevice"
+
+*PageRegion ISOB5.Transverse: "<</PageSize [499 709] /Orientation 0>> setpagedevice"
+
+*PageRegion ISOB5.Extra.Transverse: "<</PageSize [569.7 782] /Orientation 0>> setpagedevice"
+
+
+
+*PageRegion MaxPage: "<</PageSize [1431 1488] /Orientation 1>> setpagedevice"
+
+
+
+*CloseUI: *PageRegion
+
+
+
+*% The following entries provide information about specific paper keywords.
+
+*DefaultImageableArea: Letter
+
+
+
+*ImageableArea Letter: "0.0 0.0 612.0 792.0"
+
+*ImageableArea Letter.Extra: "0.0 0.0 684.0 864.0"
+
+*ImageableArea Letter.Transverse: "0.0 0.0 612.0 791.0"
+
+*ImageableArea Letter.Extra.Transverse: "0.0 0.0 684.0 863.0"
+
+
+
+*ImageableArea Legal: "0.0 0.0 612.0 1008.0"
+
+*ImageableArea Legal.Extra: "0.0 0.0 684.0 1080.0"
+
+*ImageableArea Legal.Transverse: "0.0 0.0 612.0 1007.0"
+
+*ImageableArea Legal.Extra.Transverse: "0.0 0.0 684.0 1079.0"
+
+
+
+*ImageableArea Tabloid: "0.0 0.0 792.0 1224.0"
+
+*ImageableArea Tabloid.Extra: "0.0 0.0 864.0 1296.0"
+
+*ImageableArea Tabloid.Transverse: "0.0 0.0 792.0 1223.0"
+
+*ImageableArea Tabloid.Extra.Transverse:"0.0 0.0 864.0 1295.0"
+
+
+
+*ImageableArea A3: "0.0 0.0 842.0 1191.0"
+
+*ImageableArea A3.Extra: "0.0 0.0 914.0 1263.0"
+
+*ImageableArea A3.Transverse: "0.0 0.0 842.0 1190.0"
+
+*ImageableArea A3.Extra.Transverse: "0.0 0.0 914.0 1262.0"
+
+
+
+*ImageableArea A4: "0.0 0.0 595.0 842.0"
+
+*ImageableArea A4.Extra: "0.0 0.0 667.0 914.0"
+
+*ImageableArea A4.Transverse: "0.0 0.0 595.0 841.0"
+
+*ImageableArea A4.Extra.Transverse: "0.0 0.0 667.0 913.0"
+
+
+
+*ImageableArea A5: "0.0 0.0 420.0 595.0"
+
+*ImageableArea A5.Extra: "0.0 0.0 492.0 667.0"
+
+*ImageableArea A5.Transverse: "0.0 0.0 420.0 594.0"
+
+*ImageableArea A5.Extra.Transverse: "0.0 0.0 492.0 666.0"
+
+
+
+*ImageableArea B3: "0.0 0.0 1032.0 1460.0"
+
+*ImageableArea B3.Transverse: "0.0 0.0 1032.0 1459.0"
+
+
+
+*ImageableArea B4: "0.0 0.0 729.0 1032.0"
+
+*ImageableArea B4.Extra: "0.0 0.0 801.0 1104.0"
+
+*ImageableArea B4.Transverse: "0.0 0.0 729.0 1031.0"
+
+*ImageableArea B4.Extra.Transverse: "0.0 0.0 801.0 1103.0"
+
+
+
+*ImageableArea B5: "0.0 0.0 516.0 729.0"
+
+*ImageableArea B5.Extra: "0.0 0.0 588.0 801.0"
+
+*ImageableArea B5.Transverse: "0.0 0.0 516.0 728.0"
+
+*ImageableArea B5.Extra.Transverse: "0.0 0.0 588.0 800.0"
+
+
+
+*ImageableArea ISOB3: "0.0 0.0 1001.0 1417.0"
+
+*ImageableArea ISOB3.Transverse: "0.0 0.0 1001.0 1416.0"
+
+
+
+*ImageableArea ISOB4: "0.0 0.0 709.0 1001.0"
+
+*ImageableArea ISOB4.Extra: "0.0 0.0 781.0 1073.0"
+
+*ImageableArea ISOB4.Transverse: "0.0 0.0 709.0 1000.0"
+
+*ImageableArea ISOB4.Extra.Transverse: "0.0 0.0 781.0 1072.0"
+
+
+
+*ImageableArea ISOB5: "0.0 0.0 499.0 709.0"
+
+*ImageableArea ISOB5.Extra: "0.0 0.0 569.7 782.0"
+
+*ImageableArea ISOB5.Transverse: "0.0 0.0 499.0 708.0"
+
+*ImageableArea ISOB5.Extra.Transverse: "0.0 0.0 569.7 781.0"
+
+
+
+*ImageableArea MaxPage: "0.0 0.0 1431.0 1488.0"
+
+
+
+*?ImageableArea: "
+
+ save 
+
+ initclip clippath pathbbox 
+
+ 4 -2 roll exch round cvr =print ( ) print round cvr =print ( ) print
+
+  exch round cvr =print ( ) print round cvr =print (\n) print flush
+
+ restore
+
+"
+
+*End
+
+
+
+*% These provide the physical dimensions of the paper (by keyword)
+
+*DefaultPaperDimension: Letter
+
+
+
+*PaperDimension Letter: "612.0 792.0"
+
+*PaperDimension Letter.Extra: "684.0 864.0"
+
+*PaperDimension Letter.Transverse: "612.0 791.0"
+
+*PaperDimension Letter.Extra.Transverse: "684.0 863.0"
+
+
+
+*PaperDimension Legal: "612.0 1008.0"
+
+*PaperDimension Legal.Extra: "684.0 1080.0"
+
+*PaperDimension Legal.Transverse: "612.0 1007.0"
+
+*PaperDimension Legal.Extra.Transverse: "684.0 1079.0"
+
+
+
+*PaperDimension Tabloid: "792.0 1224.0"
+
+*PaperDimension Tabloid.Extra: "864.0 1296.0"
+
+*PaperDimension Tabloid.Transverse: "792.0 1223.0"
+
+*PaperDimension Tabloid.Extra.Transverse: "864.0 1295.0"
+
+
+
+*PaperDimension A3: "842.0 1191.0"
+
+*PaperDimension A3.Extra: "914.0 1263.0"
+
+*PaperDimension A3.Transverse: "842.0 1190.0"
+
+*PaperDimension A3.Extra.Transverse: "914.0 1262.0"
+
+
+
+*PaperDimension A4: "595.0 842.0"
+
+*PaperDimension A4.Extra: "667.0 914.0"
+
+*PaperDimension A4.Transverse: "595.0 841.0"
+
+*PaperDimension A4.Extra.Transverse: "667.0 913.0"
+
+
+
+*PaperDimension A5: "420.0 595.0"
+
+*PaperDimension A5.Extra: "492.0 667.0"
+
+*PaperDimension A5.Transverse: "420.0 594.0"
+
+*PaperDimension A5.Extra.Transverse: "492.0 666.0"
+
+
+
+*PaperDimension B3: "1032.0 1460.0"
+
+*PaperDimension B3.Transverse: "1032.0 1459.0"
+
+
+
+*PaperDimension B4: "729.0 1032.0"
+
+*PaperDimension B4.Extra: "801.0 1104.0"
+
+*PaperDimension B4.Transverse: "729.0 1031.0"
+
+*PaperDimension B4.Extra.Transverse: "801.0 1103.0"
+
+
+
+*PaperDimension B5: "516.0 729.0"
+
+*PaperDimension B5.Extra: "588.0 801.0"
+
+*PaperDimension B5.Transverse: "516.0 728.0"
+
+*PaperDimension B5.Extra.Transverse: "588.0 800.0"
+
+
+
+*PaperDimension ISOB3: "1001.0 1417.0"
+
+*PaperDimension ISOB3.Transverse: "1001.0 1416.0"
+
+
+
+*PaperDimension ISOB4: "709.0 1001.0"
+
+*PaperDimension ISOB4.Extra: "781.0 1073.0"
+
+*PaperDimension ISOB4.Transverse: "709.0 1000.0"
+
+*PaperDimension ISOB4.Extra.Transverse: "781.0 1072.0"
+
+
+
+*PaperDimension ISOB5: "499.0 709.0"
+
+*PaperDimension ISOB5.Extra: "569.7 782.0"
+
+*PaperDimension ISOB5.Transverse: "499.0 708.0"
+
+*PaperDimension ISOB5.Extra.Transverse: "569.7 781.0"
+
+
+
+*PaperDimension MaxPage: "1431.0 1488.0"
+
+
+
+*%=== Custom Page Sizes ==================================
+
+
+
+*% These entries provide the code and parameter ranges for a user
+
+*% to set up a custom page size.
+
+*%CustomPageSize
+
+
+
+*CustomPageSize True: "
+
+	% B. Giess 960228
+
+	% params order: Width (FastScan); Height (SlowScan); WidthOffset; foo; Orientation
+
+	%
+
+	exch pop statusdict /setpageparams get exec
+
+"
+
+*End
+
+
+
+*DefaultLeadingEdge: PreferLong
+
+*LeadingEdge: PreferLong
+
+
+
+*ParamCustomPageSize Width: 1 points 72.0 1431.0
+
+*ParamCustomPageSize Height: 2 points 72.0 1488.0
+
+*ParamCustomPageSize WidthOffset/Margins: 3 points 0.0 1431.0
+
+*ParamCustomPageSize HeightOffset: 4 points 0.0 0.0
+
+*ParamCustomPageSize Orientation: 5 int 0 3
+
+*CenterRegistered: False
+
+
+
+*MaxMediaWidth: "1431.0"
+
+*MaxMediaHeight: "1488.0"
+
+
+
+*?CurrentMediaWidth: "
+
+ save
+
+ currentpagedevice /OutputDevice get cvlit /OutputDevice findresource
+
+ /PageSize get 0 get dup length 2 sub 0 add get cvr = flush
+
+ restore
+
+ "
+
+*End
+
+
+
+*?CurrentMediaHeight: "
+
+ save
+
+ currentpagedevice /OutputDevice get cvlit /OutputDevice findresource
+
+ /PageSize get 0 get dup length 2 sub 1 add get cvr = flush
+
+ restore
+
+ "
+
+*End
+
+
+
+*% === Imagesetter Information ===========================
+
+*OpenGroup: Imagesetter
+
+
+
+*OpenUI *MirrorPrint/Mirror: Boolean
+
+*OrderDependency: 30 DocumentSetup *MirrorPrint
+
+*DefaultMirrorPrint: False
+
+
+
+*MirrorPrint True: " <</MirrorPrint true>> setpagedevice "
+
+*MirrorPrint False: " <</MirrorPrint false>> setpagedevice "
+
+*?MirrorPrint: "
+
+ currentpagedevice /MirrorPrint get {(True)}{(False)} ifelse = flush
+
+"
+
+*End
+
+*CloseUI: *MirrorPrint
+
+
+
+*OpenUI *NegativePrint/Negative: Boolean
+
+*OrderDependency: 40 DocumentSetup *NegativePrint
+
+*DefaultNegativePrint: False
+
+
+
+*NegativePrint True: " <</NegativePrint true>> setpagedevice "
+
+*NegativePrint False: " <</NegativePrint false>> setpagedevice "
+
+*?NegativePrint: "
+
+ currentpagedevice /NegativePrint get {(True)}{(False)}ifelse = flush
+
+"
+
+*End
+
+*CloseUI: *NegativePrint
+
+
+
+*CloseGroup: Imagesetter
+
+
+
+*DefaultOutputOrder: Normal
+
+*RequiresPageRegion All: False
+
+
+
+*% Font Information =====================
+
+*DefaultFont: Courier
+
+*Font AvantGarde-Book: Standard "(001.001)" Standard Disk
+
+*Font AvantGarde-BookOblique: Standard "(001.001)" Standard Disk
+
+*Font AvantGarde-Demi: Standard "(001.001)" Standard Disk
+
+*Font AvantGarde-DemiOblique: Standard "(001.001)" Standard Disk
+
+*Font Bookman-Demi: Standard "(001.001)" Standard Disk
+
+*Font Bookman-DemiItalic: Standard "(001.001)" Standard Disk
+
+*Font Bookman-Light: Standard "(001.001)" Standard Disk
+
+*Font Bookman-LightItalic: Standard "(001.001)" Standard Disk
+
+*Font Courier: Standard "(002.002)" Standard ROM
+
+*Font Courier-Bold: Standard "(002.002)" Standard ROM
+
+*Font Courier-BoldOblique: Standard "(002.002)" Standard ROM
+
+*Font Courier-Oblique: Standard "(002.002)" Standard ROM
+
+*Font Helvetica: Standard "(001.006)" Standard ROM
+
+*Font Helvetica-Bold: Standard "(001.007)" Standard ROM
+
+*Font Helvetica-BoldOblique: Standard "(001.007)" Standard ROM
+
+*Font Helvetica-Narrow: Standard "(001.006)" Standard ROM
+
+*Font Helvetica-Narrow-Bold: Standard "(001.007)" Standard ROM
+
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007)" Standard ROM
+
+*Font Helvetica-Narrow-Oblique: Standard "(001.006)" Standard ROM
+
+*Font Helvetica-Oblique: Standard "(001.006)" Standard ROM
+
+*Font NewCenturySchlbk-Bold: Standard "(001.002)" Standard Disk
+
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.001)" Standard Disk
+
+*Font NewCenturySchlbk-Italic: Standard "(001.001)" Standard Disk
+
+*Font NewCenturySchlbk-Roman: Standard "(001.002)" Standard Disk
+
+*Font Palatino-Bold: Standard "(001.000)" Standard Disk
+
+*Font Palatino-BoldItalic: Standard "(001.000)" Standard Disk
+
+*Font Palatino-Italic: Standard "(001.000)" Standard Disk
+
+*Font Palatino-Roman: Standard "(001.000)" Standard Disk
+
+*Font Symbol: Special "(001.003)" Standard ROM
+
+*Font Times-Bold: Standard "(001.007)" Standard ROM
+
+*Font Times-BoldItalic: Standard "(001.009)" Standard ROM
+
+*Font Times-Italic: Standard "(001.007)" Standard ROM
+
+*Font Times-Roman: Standard "(001.007)" Standard ROM
+
+*Font ZapfChancery-MediumItalic: Standard "(001.002)" Standard Disk
+
+*Font ZapfDingbats: Special "(001.000)" Standard Disk
+
+
+
+*Font FutoGoB101-Bold-Add-H: JIS "(003.000)" Add Disk
+
+*Font FutoGoB101-Bold-Add-RKSJ-H: RKSJ "(003.000)" Add Disk
+
+*Font FutoGoB101-Bold-Add-RKSJ-V: RKSJ "(003.000)" Add Disk
+
+*Font FutoGoB101-Bold-Add-V: JIS "(003.000)" Add Disk
+
+*Font FutoGoB101-Bold-EUC-H: EUC "(003.000)" JIS-83 Disk
+
+*Font FutoGoB101-Bold-EUC-V: EUC "(003.000)" JIS-83 Disk
+
+*Font FutoGoB101-Bold-Ext-H: JIS "(003.000)" Ext Disk
+
+*Font FutoGoB101-Bold-Ext-RKSJ-H: RKSJ "(003.000)" Ext Disk
+
+*Font FutoGoB101-Bold-Ext-RKSJ-V: RKSJ "(003.000)" Ext Disk
+
+*Font FutoGoB101-Bold-Ext-V: JIS "(003.000)" Ext Disk
+
+*Font FutoGoB101-Bold-H: JIS "(003.000)" JIS-83 Disk
+
+*Font FutoGoB101-Bold-NWP-H: JIS "(003.000)" NWP Disk
+
+*Font FutoGoB101-Bold-NWP-V: JIS "(003.000)" NWP Disk
+
+*Font FutoGoB101-Bold-RKSJ-H: RKSJ "(003.000)" JIS-83 Disk
+
+*Font FutoGoB101-Bold-RKSJ-UserGaiji: Special "(003.000)" Special Disk
+
+*Font FutoGoB101-Bold-RKSJ-V: RKSJ "(003.000)" JIS-83 Disk
+
+*Font FutoGoB101-Bold-V: JIS "(003.000)" JIS-83 Disk
+
+*Font FutoGoB101-Bold.Oubun: Special "(003.000)" Special Disk
+
+*Font FutoGoB101-Bold.Roman: Special "(003.000)" Special Disk
+
+*Font FutoGoB101-Bold.Roman83pv: Special "(003.000)" Special Disk
+
+*Font FutoGoB101-Bold.WP-Symbol: Special "(003.000)" Special Disk
+
+*Font FutoMinA101-Bold-83pv-RKSJ-H: RKSJ "(003.000)" 83pv Disk
+
+*Font FutoMinA101-Bold-Add-H: JIS "(003.000)" Add Disk
+
+*Font FutoMinA101-Bold-Add-RKSJ-H: RKSJ "(003.000)" Add Disk
+
+*Font FutoMinA101-Bold-Add-RKSJ-V: RKSJ "(003.000)" Add Disk
+
+*Font FutoMinA101-Bold-Add-V: JIS "(003.000)" Add Disk
+
+*Font FutoMinA101-Bold-EUC-H: EUC "(003.000)" JIS-83 Disk
+
+*Font FutoMinA101-Bold-EUC-V: EUC "(003.000)" JIS-83 Disk
+
+*Font FutoMinA101-Bold-Ext-H: JIS "(003.000)" Ext Disk
+
+*Font FutoMinA101-Bold-Ext-RKSJ-H: RKSJ "(003.000)" Ext Disk
+
+*Font FutoMinA101-Bold-Ext-RKSJ-V: RKSJ "(003.000)" Ext Disk
+
+*Font FutoMinA101-Bold-Ext-V: JIS "(003.000)" Ext Disk
+
+*Font FutoMinA101-Bold-H: JIS "(003.000)" JIS-83 Disk
+
+*Font FutoMinA101-Bold-NWP-H: JIS "(003.000)" NWP Disk
+
+*Font FutoMinA101-Bold-NWP-V: JIS "(003.000)" NWP Disk
+
+*Font FutoMinA101-Bold-RKSJ-H: RKSJ "(003.000)" JIS-83 Disk
+
+*Font FutoMinA101-Bold-RKSJ-UserGaiji: Special "(003.000)" Special Disk
+
+*Font FutoMinA101-Bold-RKSJ-V: RKSJ "(003.000)" JIS-83 Disk
+
+*Font FutoMinA101-Bold-V: JIS "(003.000)" JIS-83 Disk
+
+*Font FutoMinA101-Bold.Oubun: Special "(003.000)" Special Disk
+
+*Font FutoMinA101-Bold.Roman: Special "(003.000)" Special Disk
+
+*Font FutoMinA101-Bold.Roman83pv: Special "(003.000)" Special Disk
+
+*Font FutoMinA101-Bold.WP-Symbol: Special "(003.000)" Special Disk
+
+*Font GothicBBB-Medium-83pv-RKSJ-H: RKSJ "(003.001)" 83pv Disk
+
+*Font GothicBBB-Medium-Add-H: JIS "(003.001)" Add Disk
+
+*Font GothicBBB-Medium-Add-RKSJ-H: RKSJ "(003.001)" Add Disk
+
+*Font GothicBBB-Medium-Add-RKSJ-V: RKSJ "(003.001)" Add Disk
+
+*Font GothicBBB-Medium-Add-V: JIS "(003.001)" Add Disk
+
+*Font GothicBBB-Medium-EUC-H: EUC "(003.001)" JIS-83 Disk
+
+*Font GothicBBB-Medium-EUC-V: EUC "(003.001)" JIS-83 Disk
+
+*Font GothicBBB-Medium-Ext-H: JIS "(003.001)" Ext Disk
+
+*Font GothicBBB-Medium-Ext-RKSJ-H: RKSJ "(003.001)" Ext Disk
+
+*Font GothicBBB-Medium-Ext-RKSJ-V: RKSJ "(003.001)" Ext Disk
+
+*Font GothicBBB-Medium-Ext-V: JIS "(003.001)" Ext Disk
+
+*Font GothicBBB-Medium-H: JIS "(003.001)" JIS-83 Disk
+
+*Font GothicBBB-Medium-NWP-H: JIS "(003.001)" NWP Disk
+
+*Font GothicBBB-Medium-NWP-V: JIS "(003.001)" NWP Disk
+
+*Font GothicBBB-Medium-RKSJ-H: RKSJ "(003.001)" JIS-83 Disk
+
+*Font GothicBBB-Medium-RKSJ-UserGaiji: Special "(003.000)" Special Disk
+
+*Font GothicBBB-Medium-RKSJ-V: RKSJ "(003.001)" JIS-83 Disk
+
+*Font GothicBBB-Medium-V: JIS "(003.001)" JIS-83 Disk
+
+*Font GothicBBB-Medium.Oubun: Special "(003.001)" Special Disk
+
+*Font GothicBBB-Medium.Roman: Special "(003.001)" Special Disk
+
+*Font GothicBBB-Medium.Roman83pv: Special "(003.001)" Special Disk
+
+*Font GothicBBB-Medium.WP-Symbol: Special "(003.001)" Special Disk
+
+*Font Jun101-Light-83pv-RKSJ-H: RKSJ "(003.000)" 83pv Disk
+
+*Font Jun101-Light-Add-H: JIS "(003.000)" Add Disk
+
+*Font Jun101-Light-Add-RKSJ-H: RKSJ "(003.000)" Add Disk
+
+*Font Jun101-Light-Add-RKSJ-V: RKSJ "(003.000)" Add Disk
+
+*Font Jun101-Light-Add-V: JIS "(003.000)" Add Disk
+
+*Font Jun101-Light-EUC-H: EUC "(003.000)" JIS-83 Disk
+
+*Font Jun101-Light-EUC-V: EUC "(003.000)" JIS-83 Disk
+
+*Font Jun101-Light-Ext-H: JIS "(003.000)" Ext Disk
+
+*Font Jun101-Light-Ext-RKSJ-H: RKSJ "(003.000)" Ext Disk
+
+*Font Jun101-Light-Ext-RKSJ-V: RKSJ "(003.000)" Ext Disk
+
+*Font Jun101-Light-Ext-V: JIS "(003.000)" Ext Disk
+
+*Font Jun101-Light-H: JIS "(003.000)" JIS-83 Disk
+
+*Font Jun101-Light-NWP-H: JIS "(003.000)" NWP Disk
+
+*Font Jun101-Light-NWP-V: JIS "(003.000)" NWP Disk
+
+*Font Jun101-Light-RKSJ-H: RKSJ "(003.000)" JIS-83 Disk
+
+*Font Jun101-Light-RKSJ-UserGaiji: Special "(003.000)" Special Disk
+
+*Font Jun101-Light-RKSJ-V: RKSJ "(003.000)" JIS-83 Disk
+
+*Font Jun101-Light-V: JIS "(003.000)" JIS-83 Disk
+
+*Font Jun101-Light.Oubun: Special "(003.000)" Special Disk
+
+*Font Jun101-Light.Roman: Special "(003.000)" Special Disk
+
+*Font Jun101-Light.Roman83pv: Special "(003.000)" Special Disk
+
+*Font Jun101-Light.WP-Symbol: Special "(003.000)" Special Disk
+
+*Font Ryumin-Light-83pv-RKSJ-H: RKSJ "(003.000)" 83pv Disk
+
+*Font Ryumin-Light-Add-H: JIS "(003.000)" Add Disk
+
+*Font Ryumin-Light-Add-RKSJ-H: RKSJ "(003.000)" Add Disk
+
+*Font Ryumin-Light-Add-RKSJ-V: RKSJ "(003.000)" Add Disk
+
+*Font Ryumin-Light-Add-V: JIS "(003.000)" Add Disk
+
+*Font Ryumin-Light-EUC-H: EUC "(003.000)" JIS-83 Disk
+
+*Font Ryumin-Light-EUC-V: EUC "(003.000)" JIS-83 Disk
+
+*Font Ryumin-Light-Ext-H: JIS "(003.000)" Ext Disk
+
+*Font Ryumin-Light-Ext-RKSJ-H: RKSJ "(003.000)" Ext Disk
+
+*Font Ryumin-Light-Ext-RKSJ-V: RKSJ "(003.000)" Ext Disk
+
+*Font Ryumin-Light-Ext-V: JIS "(003.000)" Ext Disk
+
+*Font Ryumin-Light-H: JIS "(003.000)" JIS-83 Disk
+
+*Font Ryumin-Light-NWP-H: JIS "(003.000)" NWP Disk
+
+*Font Ryumin-Light-NWP-V: JIS "(003.000)" NWP Disk
+
+*Font Ryumin-Light-RKSJ-H: RKSJ "(003.000)" JIS-83 Disk
+
+*Font Ryumin-Light-RKSJ-UserGaiji: Special "(003.000)" Special Disk
+
+*Font Ryumin-Light-RKSJ-V: RKSJ "(003.000)" JIS-83 Disk
+
+*Font Ryumin-Light-V: JIS "(003.000)" JIS-83 Disk
+
+*Font Ryumin-Light.Oubun: Special "(003.000)" Special Disk
+
+*Font Ryumin-Light.Roman: Special "(003.000)" Special Disk
+
+*Font Ryumin-Light.Roman83pv: Special "(003.000)" Special Disk
+
+*Font Ryumin-Light.WP-Symbol: Special "(003.000)" Special Disk
+
+
+
+*?FontQuery: "
+
+save
+
+ /str 100 string dup 0 (fonts/) putinterval def
+
+ {
+
+ count 1 gt
+
+ {
+
+ exch dup str 6 94 getinterval cvs
+
+ (/) print dup print (:) print exch
+
+ FontDirectory exch known
+
+ { pop (Yes) }
+
+ {
+
+ length 6 add str 0 3 -1 roll getinterval
+
+ mark exch status
+
+ {cleartomark (Yes)}{cleartomark (No)} ifelse
+
+ } ifelse =
+
+ }
+
+ {exit} ifelse
+
+ }bind loop
+
+ (*) = flush
+
+restore
+
+"
+
+*End
+
+
+
+*?FontList: "
+
+save
+
+ FontDirectory { pop == } bind forall flush
+
+ /filenameforall where
+
+ {
+
+ pop (fonts/*)
+
+ { dup length 6 sub 6 exch getinterval cvn == } bind
+
+ 128 string filenameforall flush
+
+ } if
+
+ (*) = flush
+
+restore
+
+"
+
+*End
+
+
+
+*% Printer Messages (verbatim from printer):
+
+*Message: "%%[exitserver: permanent state may be changed ]%%"
+
+*Message: "%%[Flushing: rest of job (to end-of-file) will be ignored ]%%"
+
+*Message: "\FontName\ not found, using Courier"
+
+
+
+*% Status (format: %%[status: <one of these> ]%% )
+
+*Status: "idle"
+
+*Status: "busy"
+
+*Status: "waiting"
+
+*Status: "printing"
+
+*Status: "PrinterError: recorder offline or film problem"
+
+*Status: "PrinterError: "
+
+
+
+*% Input Sources (format: %%[status: <stat>; source: <one of these> ]%% )
+
+*Source: "userjob"
+
+*Source: "other"
+
+
+
+*% Printer Error (format: %%[PrinterError: <one of these> ]%%)
+
+*PrinterError: "recorder offline or film problem"
+
+*PrinterError: " "
+
+
+
+*%DeviceAdjustMatrix: "[1 0 0 1 0 0]"
+
+
+
+*% Color Separation Information =====================
+
+
+
+*DefaultColorSep: ProcessBlack.150lpi.2540dpi/150 lpi / 2540 dpi
+
+
+
+*OpenUI *Separations/InRIP Color Separation: Boolean
+
+*OrderDependency: 60 DocumentSetup *Separations
+
+
+
+*DefaultSeparations: False
+
+*Separations True: "
+
+ <<
+
+ /Separations true
+
+ /ProcessColorModel /DeviceCMYK
+
+ /SeparationColorNames [/Cyan /Magenta /Yellow /Black]
+
+ /SeparationOrder [/Cyan /Magenta /Yellow /Black]
+
+ >> setpagedevice
+
+"
+
+*End
+
+
+
+*Separations False: "
+
+ <<
+
+ /Separations false
+
+ /ProcessColorModel /DeviceGray
+
+ >> setpagedevice
+
+"
+
+*End
+
+
+
+*?Separations: "
+
+ save
+
+ currentpagedevice /Separations get 
+
+ currentpagedevice /ProcessColorModel get /DeviceGray ne and
+
+ {(True)}{(False)} ifelse = flush
+
+ restore
+
+"
+
+*End
+
+*CloseUI: *Separations
+
+
+
+*% For 50 lpi / 1270 dpi
+
+*ColorSepScreenAngle CustomColor.50lpi.1270dpi/50 lpi / 1270 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.50lpi.1270dpi/50 lpi / 1270 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.50lpi.1270dpi/50 lpi / 1270 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.50lpi.1270dpi/50 lpi / 1270 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.50lpi.1270dpi/50 lpi / 1270 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.50lpi.1270dpi/50 lpi / 1270 dpi:"50"
+
+*ColorSepScreenFreq ProcessCyan.50lpi.1270dpi/50 lpi / 1270 dpi:"50"
+
+*ColorSepScreenFreq ProcessMagenta.50lpi.1270dpi/50 lpi / 1270 dpi:"50"
+
+*ColorSepScreenFreq ProcessYellow.50lpi.1270dpi/50 lpi / 1270 dpi:"50"
+
+*ColorSepScreenFreq ProcessBlack.50lpi.1270dpi/50 lpi / 1270 dpi:"50"
+
+
+
+*% For 60 lpi / 1270 dpi
+
+*ColorSepScreenAngle CustomColor.60lpi.1270dpi/60 lpi / 1270 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.60lpi.1270dpi/60 lpi / 1270 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.60lpi.1270dpi/60 lpi / 1270 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.60lpi.1270dpi/60 lpi / 1270 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.60lpi.1270dpi/60 lpi / 1270 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.60lpi.1270dpi/60 lpi / 1270 dpi:"60"
+
+*ColorSepScreenFreq ProcessCyan.60lpi.1270dpi/60 lpi / 1270 dpi:"60"
+
+*ColorSepScreenFreq ProcessMagenta.60lpi.1270dpi/60 lpi / 1270 dpi:"60"
+
+*ColorSepScreenFreq ProcessYellow.60lpi.1270dpi/60 lpi / 1270 dpi:"60"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.1270dpi/60 lpi / 1270 dpi:"60"
+
+
+
+*% For 75 lpi / 1270 dpi
+
+*ColorSepScreenAngle CustomColor.75lpi.1270dpi/75 lpi / 1270 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.75lpi.1270dpi/75 lpi / 1270 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.75lpi.1270dpi/75 lpi / 1270 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.75lpi.1270dpi/75 lpi / 1270 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.75lpi.1270dpi/75 lpi / 1270 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.75lpi.1270dpi/75 lpi / 1270 dpi:"75"
+
+*ColorSepScreenFreq ProcessCyan.75lpi.1270dpi/75 lpi / 1270 dpi:"75"
+
+*ColorSepScreenFreq ProcessMagenta.75lpi.1270dpi/75 lpi / 1270 dpi:"75"
+
+*ColorSepScreenFreq ProcessYellow.75lpi.1270dpi/75 lpi / 1270 dpi:"75"
+
+*ColorSepScreenFreq ProcessBlack.75lpi.1270dpi/75 lpi / 1270 dpi:"75"
+
+
+
+*% For 85 lpi / 1270 dpi
+
+*ColorSepScreenAngle CustomColor.85lpi.1270dpi/85 lpi / 1270 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.85lpi.1270dpi/85 lpi / 1270 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.85lpi.1270dpi/85 lpi / 1270 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.85lpi.1270dpi/85 lpi / 1270 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.85lpi.1270dpi/85 lpi / 1270 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.85lpi.1270dpi/85 lpi / 1270 dpi:"85"
+
+*ColorSepScreenFreq ProcessCyan.85lpi.1270dpi/85 lpi / 1270 dpi:"85"
+
+*ColorSepScreenFreq ProcessMagenta.85lpi.1270dpi/85 lpi / 1270 dpi:"85"
+
+*ColorSepScreenFreq ProcessYellow.85lpi.1270dpi/85 lpi / 1270 dpi:"85"
+
+*ColorSepScreenFreq ProcessBlack.85lpi.1270dpi/85 lpi / 1270 dpi:"85"
+
+
+
+*% For 100 lpi / 1270 dpi
+
+*ColorSepScreenAngle CustomColor.100lpi.1270dpi/100 lpi / 1270 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.100lpi.1270dpi/100 lpi / 1270 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.100lpi.1270dpi/100 lpi / 1270 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.100lpi.1270dpi/100 lpi / 1270 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.100lpi.1270dpi/100 lpi / 1270 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.100lpi.1270dpi/100 lpi / 1270 dpi:"100"
+
+*ColorSepScreenFreq ProcessCyan.100lpi.1270dpi/100 lpi / 1270 dpi:"100"
+
+*ColorSepScreenFreq ProcessMagenta.100lpi.1270dpi/100 lpi / 1270 dpi:"100"
+
+*ColorSepScreenFreq ProcessYellow.100lpi.1270dpi/100 lpi / 1270 dpi:"100"
+
+*ColorSepScreenFreq ProcessBlack.100lpi.1270dpi/100 lpi / 1270 dpi:"100"
+
+
+
+*% For 50 lpi / 1693 dpi
+
+*ColorSepScreenAngle CustomColor.50lpi.1693dpi/50 lpi / 1693 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.50lpi.1693dpi/50 lpi / 1693 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.50lpi.1693dpi/50 lpi / 1693 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.50lpi.1693dpi/50 lpi / 1693 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.50lpi.1693dpi/50 lpi / 1693 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.50lpi.1693dpi/50 lpi / 1693 dpi:"50"
+
+*ColorSepScreenFreq ProcessCyan.50lpi.1693dpi/50 lpi / 1693 dpi:"50"
+
+*ColorSepScreenFreq ProcessMagenta.50lpi.1693dpi/50 lpi / 1693 dpi:"50"
+
+*ColorSepScreenFreq ProcessYellow.50lpi.1693dpi/50 lpi / 1693 dpi:"50"
+
+*ColorSepScreenFreq ProcessBlack.50lpi.1693dpi/50 lpi / 1693 dpi:"50"
+
+
+
+*% For 60 lpi / 1693 dpi
+
+*ColorSepScreenAngle CustomColor.60lpi.1693dpi/60 lpi / 1693 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.60lpi.1693dpi/60 lpi / 1693 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.60lpi.1693dpi/60 lpi / 1693 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.60lpi.1693dpi/60 lpi / 1693 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.60lpi.1693dpi/60 lpi / 1693 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.60lpi.1693dpi/60 lpi / 1693 dpi:"60"
+
+*ColorSepScreenFreq ProcessCyan.60lpi.1693dpi/60 lpi / 1693 dpi:"60"
+
+*ColorSepScreenFreq ProcessMagenta.60lpi.1693dpi/60 lpi / 1693 dpi:"60"
+
+*ColorSepScreenFreq ProcessYellow.60lpi.1693dpi/60 lpi / 1693 dpi:"60"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.1693dpi/60 lpi / 1693 dpi:"60"
+
+
+
+*% For 75 lpi / 1693 dpi
+
+*ColorSepScreenAngle CustomColor.75lpi.1693dpi/75 lpi / 1693 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.75lpi.1693dpi/75 lpi / 1693 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.75lpi.1693dpi/75 lpi / 1693 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.75lpi.1693dpi/75 lpi / 1693 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.75lpi.1693dpi/75 lpi / 1693 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.75lpi.1693dpi/75 lpi / 1693 dpi:"75"
+
+*ColorSepScreenFreq ProcessCyan.75lpi.1693dpi/75 lpi / 1693 dpi:"75"
+
+*ColorSepScreenFreq ProcessMagenta.75lpi.1693dpi/75 lpi / 1693 dpi:"75"
+
+*ColorSepScreenFreq ProcessYellow.75lpi.1693dpi/75 lpi / 1693 dpi:"75"
+
+*ColorSepScreenFreq ProcessBlack.75lpi.1693dpi/75 lpi / 1693 dpi:"75"
+
+
+
+*% For 85 lpi / 1693 dpi
+
+*ColorSepScreenAngle CustomColor.85lpi.1693dpi/85 lpi / 1693 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.85lpi.1693dpi/85 lpi / 1693 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.85lpi.1693dpi/85 lpi / 1693 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.85lpi.1693dpi/85 lpi / 1693 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.85lpi.1693dpi/85 lpi / 1693 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.85lpi.1693dpi/85 lpi / 1693 dpi:"85"
+
+*ColorSepScreenFreq ProcessCyan.85lpi.1693dpi/85 lpi / 1693 dpi:"85"
+
+*ColorSepScreenFreq ProcessMagenta.85lpi.1693dpi/85 lpi / 1693 dpi:"85"
+
+*ColorSepScreenFreq ProcessYellow.85lpi.1693dpi/85 lpi / 1693 dpi:"85"
+
+*ColorSepScreenFreq ProcessBlack.85lpi.1693dpi/85 lpi / 1693 dpi:"85"
+
+
+
+*% For 100 lpi / 1693 dpi
+
+*ColorSepScreenAngle CustomColor.100lpi.1693dpi/100 lpi / 1693 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.100lpi.1693dpi/100 lpi / 1693 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.100lpi.1693dpi/100 lpi / 1693 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.100lpi.1693dpi/100 lpi / 1693 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.100lpi.1693dpi/100 lpi / 1693 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.100lpi.1693dpi/100 lpi / 1693 dpi:"100"
+
+*ColorSepScreenFreq ProcessCyan.100lpi.1693dpi/100 lpi / 1693 dpi:"100"
+
+*ColorSepScreenFreq ProcessMagenta.100lpi.1693dpi/100 lpi / 1693 dpi:"100"
+
+*ColorSepScreenFreq ProcessYellow.100lpi.1693dpi/100 lpi / 1693 dpi:"100"
+
+*ColorSepScreenFreq ProcessBlack.100lpi.1693dpi/100 lpi / 1693 dpi:"100"
+
+
+
+*% For 120 lpi / 1693 dpi
+
+*ColorSepScreenAngle CustomColor.120lpi.1693dpi/120 lpi / 1693 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.120lpi.1693dpi/120 lpi / 1693 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.120lpi.1693dpi/120 lpi / 1693 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.120lpi.1693dpi/120 lpi / 1693 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.120lpi.1693dpi/120 lpi / 1693 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.120lpi.1693dpi/120 lpi / 1693 dpi:"120"
+
+*ColorSepScreenFreq ProcessCyan.120lpi.1693dpi/120 lpi / 1693 dpi:"120"
+
+*ColorSepScreenFreq ProcessMagenta.120lpi.1693dpi/120 lpi / 1693 dpi:"120"
+
+*ColorSepScreenFreq ProcessYellow.120lpi.1693dpi/120 lpi / 1693 dpi:"120"
+
+*ColorSepScreenFreq ProcessBlack.120lpi.1693dpi/120 lpi / 1693 dpi:"120"
+
+
+
+*% For 133 lpi / 1693 dpi
+
+*ColorSepScreenAngle CustomColor.133lpi.1693dpi/133 lpi / 1693 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.133lpi.1693dpi/133 lpi / 1693 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.133lpi.1693dpi/133 lpi / 1693 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.133lpi.1693dpi/133 lpi / 1693 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.133lpi.1693dpi/133 lpi / 1693 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.133lpi.1693dpi/133 lpi / 1693 dpi:"133"
+
+*ColorSepScreenFreq ProcessCyan.133lpi.1693dpi/133 lpi / 1693 dpi:"133"
+
+*ColorSepScreenFreq ProcessMagenta.133lpi.1693dpi/133 lpi / 1693 dpi:"133"
+
+*ColorSepScreenFreq ProcessYellow.133lpi.1693dpi/133 lpi / 1693 dpi:"133"
+
+*ColorSepScreenFreq ProcessBlack.133lpi.1693dpi/133 lpi / 1693 dpi:"133"
+
+*% For 50 lpi / 2032 dpi
+
+*ColorSepScreenAngle CustomColor.50lpi.2032dpi/50 lpi / 2032 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.50lpi.2032dpi/50 lpi / 2032 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.50lpi.2032dpi/50 lpi / 2032 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.50lpi.2032dpi/50 lpi / 2032 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.50lpi.2032dpi/50 lpi / 2032 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.50lpi.2032dpi/50 lpi / 2032 dpi:"50"
+
+*ColorSepScreenFreq ProcessCyan.50lpi.2032dpi/50 lpi / 2032 dpi:"50"
+
+*ColorSepScreenFreq ProcessMagenta.50lpi.2032dpi/50 lpi / 2032 dpi:"50"
+
+*ColorSepScreenFreq ProcessYellow.50lpi.2032dpi/50 lpi / 2032 dpi:"50"
+
+*ColorSepScreenFreq ProcessBlack.50lpi.2032dpi/50 lpi / 2032 dpi:"50"
+
+
+
+*% For 60 lpi / 2032 dpi
+
+*ColorSepScreenAngle CustomColor.60lpi.2032dpi/60 lpi / 2032 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.60lpi.2032dpi/60 lpi / 2032 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.60lpi.2032dpi/60 lpi / 2032 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.60lpi.2032dpi/60 lpi / 2032 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.60lpi.2032dpi/60 lpi / 2032 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.60lpi.2032dpi/60 lpi / 2032 dpi:"60"
+
+*ColorSepScreenFreq ProcessCyan.60lpi.2032dpi/60 lpi / 2032 dpi:"60"
+
+*ColorSepScreenFreq ProcessMagenta.60lpi.2032dpi/60 lpi / 2032 dpi:"60"
+
+*ColorSepScreenFreq ProcessYellow.60lpi.2032dpi/60 lpi / 2032 dpi:"60"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.2032dpi/60 lpi / 2032 dpi:"60"
+
+
+
+*% For 75 lpi / 2032 dpi
+
+*ColorSepScreenAngle CustomColor.75lpi.2032dpi/75 lpi / 2032 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.75lpi.2032dpi/75 lpi / 2032 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.75lpi.2032dpi/75 lpi / 2032 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.75lpi.2032dpi/75 lpi / 2032 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.75lpi.2032dpi/75 lpi / 2032 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.75lpi.2032dpi/75 lpi / 2032 dpi:"75"
+
+*ColorSepScreenFreq ProcessCyan.75lpi.2032dpi/75 lpi / 2032 dpi:"75"
+
+*ColorSepScreenFreq ProcessMagenta.75lpi.2032dpi/75 lpi / 2032 dpi:"75"
+
+*ColorSepScreenFreq ProcessYellow.75lpi.2032dpi/75 lpi / 2032 dpi:"75"
+
+*ColorSepScreenFreq ProcessBlack.75lpi.2032dpi/75 lpi / 2032 dpi:"75"
+
+
+
+*% For 85 lpi / 2032 dpi
+
+*ColorSepScreenAngle CustomColor.85lpi.2032dpi/85 lpi / 2032 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.85lpi.2032dpi/85 lpi / 2032 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.85lpi.2032dpi/85 lpi / 2032 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.85lpi.2032dpi/85 lpi / 2032 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.85lpi.2032dpi/85 lpi / 2032 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.85lpi.2032dpi/85 lpi / 2032 dpi:"85"
+
+*ColorSepScreenFreq ProcessCyan.85lpi.2032dpi/85 lpi / 2032 dpi:"85"
+
+*ColorSepScreenFreq ProcessMagenta.85lpi.2032dpi/85 lpi / 2032 dpi:"85"
+
+*ColorSepScreenFreq ProcessYellow.85lpi.2032dpi/85 lpi / 2032 dpi:"85"
+
+*ColorSepScreenFreq ProcessBlack.85lpi.2032dpi/85 lpi / 2032 dpi:"85"
+
+
+
+*% For 100 lpi / 2032 dpi
+
+*ColorSepScreenAngle CustomColor.100lpi.2032dpi/100 lpi / 2032 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.100lpi.2032dpi/100 lpi / 2032 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.100lpi.2032dpi/100 lpi / 2032 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.100lpi.2032dpi/100 lpi / 2032 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.100lpi.2032dpi/100 lpi / 2032 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.100lpi.2032dpi/100 lpi / 2032 dpi:"100"
+
+*ColorSepScreenFreq ProcessCyan.100lpi.2032dpi/100 lpi / 2032 dpi:"100"
+
+*ColorSepScreenFreq ProcessMagenta.100lpi.2032dpi/100 lpi / 2032 dpi:"100"
+
+*ColorSepScreenFreq ProcessYellow.100lpi.2032dpi/100 lpi / 2032 dpi:"100"
+
+*ColorSepScreenFreq ProcessBlack.100lpi.2032dpi/100 lpi / 2032 dpi:"100"
+
+
+
+*% For 120 lpi / 2032 dpi
+
+*ColorSepScreenAngle CustomColor.120lpi.2032dpi/120 lpi / 2032 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.120lpi.2032dpi/120 lpi / 2032 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.120lpi.2032dpi/120 lpi / 2032 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.120lpi.2032dpi/120 lpi / 2032 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.120lpi.2032dpi/120 lpi / 2032 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.120lpi.2032dpi/120 lpi / 2032 dpi:"120"
+
+*ColorSepScreenFreq ProcessCyan.120lpi.2032dpi/120 lpi / 2032 dpi:"120"
+
+*ColorSepScreenFreq ProcessMagenta.120lpi.2032dpi/120 lpi / 2032 dpi:"120"
+
+*ColorSepScreenFreq ProcessYellow.120lpi.2032dpi/120 lpi / 2032 dpi:"120"
+
+*ColorSepScreenFreq ProcessBlack.120lpi.2032dpi/120 lpi / 2032 dpi:"120"
+
+
+
+*% For 133 lpi / 2032 dpi
+
+*ColorSepScreenAngle CustomColor.133lpi.2032dpi/133 lpi / 2032 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.133lpi.2032dpi/133 lpi / 2032 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.133lpi.2032dpi/133 lpi / 2032 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.133lpi.2032dpi/133 lpi / 2032 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.133lpi.2032dpi/133 lpi / 2032 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.133lpi.2032dpi/133 lpi / 2032 dpi:"133"
+
+*ColorSepScreenFreq ProcessCyan.133lpi.2032dpi/133 lpi / 2032 dpi:"133"
+
+*ColorSepScreenFreq ProcessMagenta.133lpi.2032dpi/133 lpi / 2032 dpi:"133"
+
+*ColorSepScreenFreq ProcessYellow.133lpi.2032dpi/133 lpi / 2032 dpi:"133"
+
+*ColorSepScreenFreq ProcessBlack.133lpi.2032dpi/133 lpi / 2032 dpi:"133"
+
+
+
+*% For 165 lpi / 2032 dpi
+
+*ColorSepScreenAngle CustomColor.165lpi.2032dpi/165 lpi / 2032 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.165lpi.2032dpi/165 lpi / 2032 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.165lpi.2032dpi/165 lpi / 2032 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.165lpi.2032dpi/165 lpi / 2032 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.165lpi.2032dpi/165 lpi / 2032 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.165lpi.2032dpi/165 lpi / 2032 dpi:"165"
+
+*ColorSepScreenFreq ProcessCyan.165lpi.2032dpi/165 lpi / 2032 dpi:"165"
+
+*ColorSepScreenFreq ProcessMagenta.165lpi.2032dpi/165 lpi / 2032 dpi:"165"
+
+*ColorSepScreenFreq ProcessYellow.165lpi.2032dpi/165 lpi / 2032 dpi:"165"
+
+*ColorSepScreenFreq ProcessBlack.165lpi.2032dpi/165 lpi / 2032 dpi:"165"
+
+
+
+*% For 50 lpi / 2540 dpi
+
+*ColorSepScreenAngle CustomColor.50lpi.2540dpi/50 lpi / 2540 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.50lpi.2540dpi/50 lpi / 2540 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.50lpi.2540dpi/50 lpi / 2540 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.50lpi.2540dpi/50 lpi / 2540 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.50lpi.2540dpi/50 lpi / 2540 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.50lpi.2540dpi/50 lpi / 2540 dpi:"50"
+
+*ColorSepScreenFreq ProcessCyan.50lpi.2540dpi/50 lpi / 2540 dpi:"50"
+
+*ColorSepScreenFreq ProcessMagenta.50lpi.2540dpi/50 lpi / 2540 dpi:"50"
+
+*ColorSepScreenFreq ProcessYellow.50lpi.2540dpi/50 lpi / 2540 dpi:"50"
+
+*ColorSepScreenFreq ProcessBlack.50lpi.2540dpi/50 lpi / 2540 dpi:"50"
+
+
+
+*% For 60 lpi / 2540 dpi
+
+*ColorSepScreenAngle CustomColor.60lpi.2540dpi/60 lpi / 2540 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.60lpi.2540dpi/60 lpi / 2540 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.60lpi.2540dpi/60 lpi / 2540 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.60lpi.2540dpi/60 lpi / 2540 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.60lpi.2540dpi/60 lpi / 2540 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.60lpi.2540dpi/60 lpi / 2540 dpi:"60"
+
+*ColorSepScreenFreq ProcessCyan.60lpi.2540dpi/60 lpi / 2540 dpi:"60"
+
+*ColorSepScreenFreq ProcessMagenta.60lpi.2540dpi/60 lpi / 2540 dpi:"60"
+
+*ColorSepScreenFreq ProcessYellow.60lpi.2540dpi/60 lpi / 2540 dpi:"60"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.2540dpi/60 lpi / 2540 dpi:"60"
+
+
+
+*% For 75 lpi / 2540 dpi
+
+*ColorSepScreenAngle CustomColor.75lpi.2540dpi/75 lpi / 2540 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.75lpi.2540dpi/75 lpi / 2540 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.75lpi.2540dpi/75 lpi / 2540 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.75lpi.2540dpi/75 lpi / 2540 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.75lpi.2540dpi/75 lpi / 2540 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.75lpi.2540dpi/75 lpi / 2540 dpi:"75"
+
+*ColorSepScreenFreq ProcessCyan.75lpi.2540dpi/75 lpi / 2540 dpi:"75"
+
+*ColorSepScreenFreq ProcessMagenta.75lpi.2540dpi/75 lpi / 2540 dpi:"75"
+
+*ColorSepScreenFreq ProcessYellow.75lpi.2540dpi/75 lpi / 2540 dpi:"75"
+
+*ColorSepScreenFreq ProcessBlack.75lpi.2540dpi/75 lpi / 2540 dpi:"75"
+
+
+
+*% For 85 lpi / 2540 dpi
+
+*ColorSepScreenAngle CustomColor.85lpi.2540dpi/85 lpi / 2540 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.85lpi.2540dpi/85 lpi / 2540 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.85lpi.2540dpi/85 lpi / 2540 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.85lpi.2540dpi/85 lpi / 2540 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.85lpi.2540dpi/85 lpi / 2540 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.85lpi.2540dpi/85 lpi / 2540 dpi:"85"
+
+*ColorSepScreenFreq ProcessCyan.85lpi.2540dpi/85 lpi / 2540 dpi:"85"
+
+*ColorSepScreenFreq ProcessMagenta.85lpi.2540dpi/85 lpi / 2540 dpi:"85"
+
+*ColorSepScreenFreq ProcessYellow.85lpi.2540dpi/85 lpi / 2540 dpi:"85"
+
+*ColorSepScreenFreq ProcessBlack.85lpi.2540dpi/85 lpi / 2540 dpi:"85"
+
+
+
+*% For 100 lpi / 2540 dpi
+
+*ColorSepScreenAngle CustomColor.100lpi.2540dpi/100 lpi / 2540 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.100lpi.2540dpi/100 lpi / 2540 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.100lpi.2540dpi/100 lpi / 2540 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.100lpi.2540dpi/100 lpi / 2540 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.100lpi.2540dpi/100 lpi / 2540 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.100lpi.2540dpi/100 lpi / 2540 dpi:"100"
+
+*ColorSepScreenFreq ProcessCyan.100lpi.2540dpi/100 lpi / 2540 dpi:"100"
+
+*ColorSepScreenFreq ProcessMagenta.100lpi.2540dpi/100 lpi / 2540 dpi:"100"
+
+*ColorSepScreenFreq ProcessYellow.100lpi.2540dpi/100 lpi / 2540 dpi:"100"
+
+*ColorSepScreenFreq ProcessBlack.100lpi.2540dpi/100 lpi / 2540 dpi:"100"
+
+
+
+*% For 120 lpi / 2540 dpi
+
+*ColorSepScreenAngle CustomColor.120lpi.2540dpi/120 lpi / 2540 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.120lpi.2540dpi/120 lpi / 2540 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.120lpi.2540dpi/120 lpi / 2540 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.120lpi.2540dpi/120 lpi / 2540 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.120lpi.2540dpi/120 lpi / 2540 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.120lpi.2540dpi/120 lpi / 2540 dpi:"120"
+
+*ColorSepScreenFreq ProcessCyan.120lpi.2540dpi/120 lpi / 2540 dpi:"120"
+
+*ColorSepScreenFreq ProcessMagenta.120lpi.2540dpi/120 lpi / 2540 dpi:"120"
+
+*ColorSepScreenFreq ProcessYellow.120lpi.2540dpi/120 lpi / 2540 dpi:"120"
+
+*ColorSepScreenFreq ProcessBlack.120lpi.2540dpi/120 lpi / 2540 dpi:"120"
+
+
+
+*% For 133 lpi / 2540 dpi
+
+*ColorSepScreenAngle CustomColor.133lpi.2540dpi/133 lpi / 2540 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.133lpi.2540dpi/133 lpi / 2540 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.133lpi.2540dpi/133 lpi / 2540 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.133lpi.2540dpi/133 lpi / 2540 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.133lpi.2540dpi/133 lpi / 2540 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.133lpi.2540dpi/133 lpi / 2540 dpi:"133"
+
+*ColorSepScreenFreq ProcessCyan.133lpi.2540dpi/133 lpi / 2540 dpi:"133"
+
+*ColorSepScreenFreq ProcessMagenta.133lpi.2540dpi/133 lpi / 2540 dpi:"133"
+
+*ColorSepScreenFreq ProcessYellow.133lpi.2540dpi/133 lpi / 2540 dpi:"133"
+
+*ColorSepScreenFreq ProcessBlack.133lpi.2540dpi/133 lpi / 2540 dpi:"133"
+
+
+
+*% For 150 lpi / 2540 dpi
+
+*ColorSepScreenAngle CustomColor.150lpi.2540dpi/150 lpi / 2540 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.150lpi.2540dpi/150 lpi / 2540 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.150lpi.2540dpi/150 lpi / 2540 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.150lpi.2540dpi/150 lpi / 2540 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.150lpi.2540dpi/150 lpi / 2540 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.150lpi.2540dpi/150 lpi / 2540 dpi:"150"
+
+*ColorSepScreenFreq ProcessCyan.150lpi.2540dpi/150 lpi / 2540 dpi:"150"
+
+*ColorSepScreenFreq ProcessMagenta.150lpi.2540dpi/150 lpi / 2540 dpi:"150"
+
+*ColorSepScreenFreq ProcessYellow.150lpi.2540dpi/150 lpi / 2540 dpi:"150"
+
+*ColorSepScreenFreq ProcessBlack.150lpi.2540dpi/150 lpi / 2540 dpi:"150"
+
+
+
+*% For 175 lpi / 2540 dpi
+
+*ColorSepScreenAngle CustomColor.175lpi.2540dpi/175 lpi / 2540 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.175lpi.2540dpi/175 lpi / 2540 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.175lpi.2540dpi/175 lpi / 2540 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.175lpi.2540dpi/175 lpi / 2540 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.175lpi.2540dpi/175 lpi / 2540 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.175lpi.2540dpi/175 lpi / 2540 dpi:"175"
+
+*ColorSepScreenFreq ProcessCyan.175lpi.2540dpi/175 lpi / 2540 dpi:"175"
+
+*ColorSepScreenFreq ProcessMagenta.175lpi.2540dpi/175 lpi / 2540 dpi:"175"
+
+*ColorSepScreenFreq ProcessYellow.175lpi.2540dpi/175 lpi / 2540 dpi:"175"
+
+*ColorSepScreenFreq ProcessBlack.175lpi.2540dpi/175 lpi / 2540 dpi:"175"
+
+
+
+*% For 200 lpi / 2540 dpi
+
+*ColorSepScreenAngle CustomColor.200lpi.2540dpi/200 lpi / 2540 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.200lpi.2540dpi/200 lpi / 2540 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.200lpi.2540dpi/200 lpi / 2540 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.200lpi.2540dpi/200 lpi / 2540 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.200lpi.2540dpi/200 lpi / 2540 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.200lpi.2540dpi/200 lpi / 2540 dpi:"200"
+
+*ColorSepScreenFreq ProcessCyan.200lpi.2540dpi/200 lpi / 2540 dpi:"200"
+
+*ColorSepScreenFreq ProcessMagenta.200lpi.2540dpi/200 lpi / 2540 dpi:"200"
+
+*ColorSepScreenFreq ProcessYellow.200lpi.2540dpi/200 lpi / 2540 dpi:"200"
+
+*ColorSepScreenFreq ProcessBlack.200lpi.2540dpi/200 lpi / 2540 dpi:"200"
+
+
+
+*% For 50 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.50lpi.3386dpi/50 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.50lpi.3386dpi/50 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.50lpi.3386dpi/50 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.50lpi.3386dpi/50 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.50lpi.3386dpi/50 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.50lpi.3386dpi/50 lpi / 3386 dpi:"50"
+
+*ColorSepScreenFreq ProcessCyan.50lpi.3386dpi/50 lpi / 3386 dpi:"50"
+
+*ColorSepScreenFreq ProcessMagenta.50lpi.3386dpi/50 lpi / 3386 dpi:"50"
+
+*ColorSepScreenFreq ProcessYellow.50lpi.3386dpi/50 lpi / 3386 dpi:"50"
+
+*ColorSepScreenFreq ProcessBlack.50lpi.3386dpi/50 lpi / 3386 dpi:"50"
+
+
+
+*% For 60 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.60lpi.3386dpi/60 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.60lpi.3386dpi/60 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.60lpi.3386dpi/60 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.60lpi.3386dpi/60 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.60lpi.3386dpi/60 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.60lpi.3386dpi/60 lpi / 3386 dpi:"60"
+
+*ColorSepScreenFreq ProcessCyan.60lpi.3386dpi/60 lpi / 3386 dpi:"60"
+
+*ColorSepScreenFreq ProcessMagenta.60lpi.3386dpi/60 lpi / 3386 dpi:"60"
+
+*ColorSepScreenFreq ProcessYellow.60lpi.3386dpi/60 lpi / 3386 dpi:"60"
+
+*ColorSepScreenFreq ProcessBlack.60lpi.3386dpi/60 lpi / 3386 dpi:"60"
+
+
+
+*% For 75 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.75lpi.3386dpi/75 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.75lpi.3386dpi/75 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.75lpi.3386dpi/75 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.75lpi.3386dpi/75 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.75lpi.3386dpi/75 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.75lpi.3386dpi/75 lpi / 3386 dpi:"75"
+
+*ColorSepScreenFreq ProcessCyan.75lpi.3386dpi/75 lpi / 3386 dpi:"75"
+
+*ColorSepScreenFreq ProcessMagenta.75lpi.3386dpi/75 lpi / 3386 dpi:"75"
+
+*ColorSepScreenFreq ProcessYellow.75lpi.3386dpi/75 lpi / 3386 dpi:"75"
+
+*ColorSepScreenFreq ProcessBlack.75lpi.3386dpi/75 lpi / 3386 dpi:"75"
+
+
+
+*% For 85 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.85lpi.3386dpi/85 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.85lpi.3386dpi/85 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.85lpi.3386dpi/85 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.85lpi.3386dpi/85 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.85lpi.3386dpi/85 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.85lpi.3386dpi/85 lpi / 3386 dpi:"85"
+
+*ColorSepScreenFreq ProcessCyan.85lpi.3386dpi/85 lpi / 3386 dpi:"85"
+
+*ColorSepScreenFreq ProcessMagenta.85lpi.3386dpi/85 lpi / 3386 dpi:"85"
+
+*ColorSepScreenFreq ProcessYellow.85lpi.3386dpi/85 lpi / 3386 dpi:"85"
+
+*ColorSepScreenFreq ProcessBlack.85lpi.3386dpi/85 lpi / 3386 dpi:"85"
+
+
+
+*% For 100 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.100lpi.3386dpi/100 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.100lpi.3386dpi/100 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.100lpi.3386dpi/100 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.100lpi.3386dpi/100 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.100lpi.3386dpi/100 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.100lpi.3386dpi/100 lpi / 3386 dpi:"100"
+
+*ColorSepScreenFreq ProcessCyan.100lpi.3386dpi/100 lpi / 3386 dpi:"100"
+
+*ColorSepScreenFreq ProcessMagenta.100lpi.3386dpi/100 lpi / 3386 dpi:"100"
+
+*ColorSepScreenFreq ProcessYellow.100lpi.3386dpi/100 lpi / 3386 dpi:"100"
+
+*ColorSepScreenFreq ProcessBlack.100lpi.3386dpi/100 lpi / 3386 dpi:"100"
+
+
+
+*% For 120 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.120lpi.3386dpi/120 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.120lpi.3386dpi/120 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.120lpi.3386dpi/120 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.120lpi.3386dpi/120 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.120lpi.3386dpi/120 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.120lpi.3386dpi/120 lpi / 3386 dpi:"120"
+
+*ColorSepScreenFreq ProcessCyan.120lpi.3386dpi/120 lpi / 3386 dpi:"120"
+
+*ColorSepScreenFreq ProcessMagenta.120lpi.3386dpi/120 lpi / 3386 dpi:"120"
+
+*ColorSepScreenFreq ProcessYellow.120lpi.3386dpi/120 lpi / 3386 dpi:"120"
+
+*ColorSepScreenFreq ProcessBlack.120lpi.3386dpi/120 lpi / 3386 dpi:"120"
+
+
+
+*% For 133 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.133lpi.3386dpi/133 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.133lpi.3386dpi/133 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.133lpi.3386dpi/133 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.133lpi.3386dpi/133 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.133lpi.3386dpi/133 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.133lpi.3386dpi/133 lpi / 3386 dpi:"133"
+
+*ColorSepScreenFreq ProcessCyan.133lpi.3386dpi/133 lpi / 3386 dpi:"133"
+
+*ColorSepScreenFreq ProcessMagenta.133lpi.3386dpi/133 lpi / 3386 dpi:"133"
+
+*ColorSepScreenFreq ProcessYellow.133lpi.3386dpi/133 lpi / 3386 dpi:"133"
+
+*ColorSepScreenFreq ProcessBlack.133lpi.3386dpi/133 lpi / 3386 dpi:"133"
+
+
+
+*% For 150 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.150lpi.3386dpi/150 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.150lpi.3386dpi/150 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.150lpi.3386dpi/150 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.150lpi.3386dpi/150 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.150lpi.3386dpi/150 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.150lpi.3386dpi/150 lpi / 3386 dpi:"150"
+
+*ColorSepScreenFreq ProcessCyan.150lpi.3386dpi/150 lpi / 3386 dpi:"150"
+
+*ColorSepScreenFreq ProcessMagenta.150lpi.3386dpi/150 lpi / 3386 dpi:"150"
+
+*ColorSepScreenFreq ProcessYellow.150lpi.3386dpi/150 lpi / 3386 dpi:"150"
+
+*ColorSepScreenFreq ProcessBlack.150lpi.3386dpi/150 lpi / 3386 dpi:"150"
+
+
+
+*% For 165 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.165lpi.3386dpi/165 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.165lpi.3386dpi/165 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.165lpi.3386dpi/165 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.165lpi.3386dpi/165 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.165lpi.3386dpi/165 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.165lpi.3386dpi/165 lpi / 3386 dpi:"165"
+
+*ColorSepScreenFreq ProcessCyan.165lpi.3386dpi/165 lpi / 3386 dpi:"165"
+
+*ColorSepScreenFreq ProcessMagenta.165lpi.3386dpi/165 lpi / 3386 dpi:"165"
+
+*ColorSepScreenFreq ProcessYellow.165lpi.3386dpi/165 lpi / 3386 dpi:"165"
+
+*ColorSepScreenFreq ProcessBlack.165lpi.3386dpi/165 lpi / 3386 dpi:"165"
+
+
+
+*% For 175 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.175lpi.3386dpi/175 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.175lpi.3386dpi/175 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.175lpi.3386dpi/175 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.175lpi.3386dpi/175 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.175lpi.3386dpi/175 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.175lpi.3386dpi/175 lpi / 3386 dpi:"175"
+
+*ColorSepScreenFreq ProcessCyan.175lpi.3386dpi/175 lpi / 3386 dpi:"175"
+
+*ColorSepScreenFreq ProcessMagenta.175lpi.3386dpi/175 lpi / 3386 dpi:"175"
+
+*ColorSepScreenFreq ProcessYellow.175lpi.3386dpi/175 lpi / 3386 dpi:"175"
+
+*ColorSepScreenFreq ProcessBlack.175lpi.3386dpi/175 lpi / 3386 dpi:"175"
+
+
+
+*% For 200 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.200lpi.3386dpi/200 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.200lpi.3386dpi/200 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.200lpi.3386dpi/200 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.200lpi.3386dpi/200 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.200lpi.3386dpi/200 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.200lpi.3386dpi/200 lpi / 3386 dpi:"200"
+
+*ColorSepScreenFreq ProcessCyan.200lpi.3386dpi/200 lpi / 3386 dpi:"200"
+
+*ColorSepScreenFreq ProcessMagenta.200lpi.3386dpi/200 lpi / 3386 dpi:"200"
+
+*ColorSepScreenFreq ProcessYellow.200lpi.3386dpi/200 lpi / 3386 dpi:"200"
+
+*ColorSepScreenFreq ProcessBlack.200lpi.3386dpi/200 lpi / 3386 dpi:"200"
+
+
+
+*% For 225 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.225lpi.3386dpi/225 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.225lpi.3386dpi/225 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.225lpi.3386dpi/225 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.225lpi.3386dpi/225 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.225lpi.3386dpi/225 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.225lpi.3386dpi/225 lpi / 3386 dpi:"225"
+
+*ColorSepScreenFreq ProcessCyan.225lpi.3386dpi/225 lpi / 3386 dpi:"225"
+
+*ColorSepScreenFreq ProcessMagenta.225lpi.3386dpi/225 lpi / 3386 dpi:"225"
+
+*ColorSepScreenFreq ProcessYellow.225lpi.3386dpi/225 lpi / 3386 dpi:"225"
+
+*ColorSepScreenFreq ProcessBlack.225lpi.3386dpi/225 lpi / 3386 dpi:"225"
+
+
+
+*% For 275 lpi / 3386 dpi
+
+*ColorSepScreenAngle CustomColor.275lpi.3386dpi/275 lpi / 3386 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.275lpi.3386dpi/275 lpi / 3386 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.275lpi.3386dpi/275 lpi / 3386 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.275lpi.3386dpi/275 lpi / 3386 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.275lpi.3386dpi/275 lpi / 3386 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.275lpi.3386dpi/275 lpi / 3386 dpi:"275"
+
+*ColorSepScreenFreq ProcessCyan.275lpi.3386dpi/275 lpi / 3386 dpi:"275"
+
+*ColorSepScreenFreq ProcessMagenta.275lpi.3386dpi/275 lpi / 3386 dpi:"275"
+
+*ColorSepScreenFreq ProcessYellow.275lpi.3386dpi/275 lpi / 3386 dpi:"275"
+
+*ColorSepScreenFreq ProcessBlack.275lpi.3386dpi/275 lpi / 3386 dpi:"275"
+
+
+
+*% For 75 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.75lpi.4064dpi/75 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.75lpi.4064dpi/75 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.75lpi.4064dpi/75 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.75lpi.4064dpi/75 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.75lpi.4064dpi/75 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.75lpi.4064dpi/75 lpi / 4064 dpi:"75"
+
+*ColorSepScreenFreq ProcessCyan.75lpi.4064dpi/75 lpi / 4064 dpi:"75"
+
+*ColorSepScreenFreq ProcessMagenta.75lpi.4064dpi/75 lpi / 4064 dpi:"75"
+
+*ColorSepScreenFreq ProcessYellow.75lpi.4064dpi/75 lpi / 4064 dpi:"75"
+
+*ColorSepScreenFreq ProcessBlack.75lpi.4064dpi/75 lpi / 4064 dpi:"75"
+
+
+
+*% For 85 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.85lpi.4064dpi/85 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.85lpi.4064dpi/85 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.85lpi.4064dpi/85 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.85lpi.4064dpi/85 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.85lpi.4064dpi/85 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.85lpi.4064dpi/85 lpi / 4064 dpi:"85"
+
+*ColorSepScreenFreq ProcessCyan.85lpi.4064dpi/85 lpi / 4064 dpi:"85"
+
+*ColorSepScreenFreq ProcessMagenta.85lpi.4064dpi/85 lpi / 4064 dpi:"85"
+
+*ColorSepScreenFreq ProcessYellow.85lpi.4064dpi/85 lpi / 4064 dpi:"85"
+
+*ColorSepScreenFreq ProcessBlack.85lpi.4064dpi/85 lpi / 4064 dpi:"85"
+
+
+
+*% For 100 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.100lpi.4064dpi/100 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.100lpi.4064dpi/100 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.100lpi.4064dpi/100 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.100lpi.4064dpi/100 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.100lpi.4064dpi/100 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.100lpi.4064dpi/100 lpi / 4064 dpi:"100"
+
+*ColorSepScreenFreq ProcessCyan.100lpi.4064dpi/100 lpi / 4064 dpi:"100"
+
+*ColorSepScreenFreq ProcessMagenta.100lpi.4064dpi/100 lpi / 4064 dpi:"100"
+
+*ColorSepScreenFreq ProcessYellow.100lpi.4064dpi/100 lpi / 4064 dpi:"100"
+
+*ColorSepScreenFreq ProcessBlack.100lpi.4064dpi/100 lpi / 4064 dpi:"100"
+
+
+
+*% For 120 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.120lpi.4064dpi/120 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.120lpi.4064dpi/120 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.120lpi.4064dpi/120 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.120lpi.4064dpi/120 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.120lpi.4064dpi/120 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.120lpi.4064dpi/120 lpi / 4064 dpi:"120"
+
+*ColorSepScreenFreq ProcessCyan.120lpi.4064dpi/120 lpi / 4064 dpi:"120"
+
+*ColorSepScreenFreq ProcessMagenta.120lpi.4064dpi/120 lpi / 4064 dpi:"120"
+
+*ColorSepScreenFreq ProcessYellow.120lpi.4064dpi/120 lpi / 4064 dpi:"120"
+
+*ColorSepScreenFreq ProcessBlack.120lpi.4064dpi/120 lpi / 4064 dpi:"120"
+
+
+
+*% For 133 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.133lpi.4064dpi/133 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.133lpi.4064dpi/133 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.133lpi.4064dpi/133 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.133lpi.4064dpi/133 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.133lpi.4064dpi/133 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.133lpi.4064dpi/133 lpi / 4064 dpi:"133"
+
+*ColorSepScreenFreq ProcessCyan.133lpi.4064dpi/133 lpi / 4064 dpi:"133"
+
+*ColorSepScreenFreq ProcessMagenta.133lpi.4064dpi/133 lpi / 4064 dpi:"133"
+
+*ColorSepScreenFreq ProcessYellow.133lpi.4064dpi/133 lpi / 4064 dpi:"133"
+
+*ColorSepScreenFreq ProcessBlack.133lpi.4064dpi/133 lpi / 4064 dpi:"133"
+
+
+
+*% For 150 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.150lpi.4064dpi/150 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.150lpi.4064dpi/150 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.150lpi.4064dpi/150 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.150lpi.4064dpi/150 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.150lpi.4064dpi/150 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.150lpi.4064dpi/150 lpi / 4064 dpi:"150"
+
+*ColorSepScreenFreq ProcessCyan.150lpi.4064dpi/150 lpi / 4064 dpi:"150"
+
+*ColorSepScreenFreq ProcessMagenta.150lpi.4064dpi/150 lpi / 4064 dpi:"150"
+
+*ColorSepScreenFreq ProcessYellow.150lpi.4064dpi/150 lpi / 4064 dpi:"150"
+
+*ColorSepScreenFreq ProcessBlack.150lpi.4064dpi/150 lpi / 4064 dpi:"150"
+
+
+
+*% For 165 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.165lpi.4064dpi/165 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.165lpi.4064dpi/165 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.165lpi.4064dpi/165 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.165lpi.4064dpi/165 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.165lpi.4064dpi/165 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.165lpi.4064dpi/165 lpi / 4064 dpi:"165"
+
+*ColorSepScreenFreq ProcessCyan.165lpi.4064dpi/165 lpi / 4064 dpi:"165"
+
+*ColorSepScreenFreq ProcessMagenta.165lpi.4064dpi/165 lpi / 4064 dpi:"165"
+
+*ColorSepScreenFreq ProcessYellow.165lpi.4064dpi/165 lpi / 4064 dpi:"165"
+
+*ColorSepScreenFreq ProcessBlack.165lpi.4064dpi/165 lpi / 4064 dpi:"165"
+
+
+
+*% For 175 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.175lpi.4064dpi/175 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.175lpi.4064dpi/175 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.175lpi.4064dpi/175 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.175lpi.4064dpi/175 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.175lpi.4064dpi/175 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.175lpi.4064dpi/175 lpi / 4064 dpi:"175"
+
+*ColorSepScreenFreq ProcessCyan.175lpi.4064dpi/175 lpi / 4064 dpi:"175"
+
+*ColorSepScreenFreq ProcessMagenta.175lpi.4064dpi/175 lpi / 4064 dpi:"175"
+
+*ColorSepScreenFreq ProcessYellow.175lpi.4064dpi/175 lpi / 4064 dpi:"175"
+
+*ColorSepScreenFreq ProcessBlack.175lpi.4064dpi/175 lpi / 4064 dpi:"175"
+
+
+
+*% For 200 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.200lpi.4064dpi/200 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.200lpi.4064dpi/200 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.200lpi.4064dpi/200 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.200lpi.4064dpi/200 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.200lpi.4064dpi/200 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.200lpi.4064dpi/200 lpi / 4064 dpi:"200"
+
+*ColorSepScreenFreq ProcessCyan.200lpi.4064dpi/200 lpi / 4064 dpi:"200"
+
+*ColorSepScreenFreq ProcessMagenta.200lpi.4064dpi/200 lpi / 4064 dpi:"200"
+
+*ColorSepScreenFreq ProcessYellow.200lpi.4064dpi/200 lpi / 4064 dpi:"200"
+
+*ColorSepScreenFreq ProcessBlack.200lpi.4064dpi/200 lpi / 4064 dpi:"200"
+
+
+
+*% For 225 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.225lpi.4064dpi/225 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.225lpi.4064dpi/225 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.225lpi.4064dpi/225 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.225lpi.4064dpi/225 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.225lpi.4064dpi/225 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.225lpi.4064dpi/225 lpi / 4064 dpi:"225"
+
+*ColorSepScreenFreq ProcessCyan.225lpi.4064dpi/225 lpi / 4064 dpi:"225"
+
+*ColorSepScreenFreq ProcessMagenta.225lpi.4064dpi/225 lpi / 4064 dpi:"225"
+
+*ColorSepScreenFreq ProcessYellow.225lpi.4064dpi/225 lpi / 4064 dpi:"225"
+
+*ColorSepScreenFreq ProcessBlack.225lpi.4064dpi/225 lpi / 4064 dpi:"225"
+
+
+
+*% For 250 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.250lpi.4064dpi/250 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.250lpi.4064dpi/250 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.250lpi.4064dpi/250 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.250lpi.4064dpi/250 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.250lpi.4064dpi/250 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.250lpi.4064dpi/250 lpi / 4064 dpi:"250"
+
+*ColorSepScreenFreq ProcessCyan.250lpi.4064dpi/250 lpi / 4064 dpi:"250"
+
+*ColorSepScreenFreq ProcessMagenta.250lpi.4064dpi/250 lpi / 4064 dpi:"250"
+
+*ColorSepScreenFreq ProcessYellow.250lpi.4064dpi/250 lpi / 4064 dpi:"250"
+
+*ColorSepScreenFreq ProcessBlack.250lpi.4064dpi/250 lpi / 4064 dpi:"250"
+
+
+
+*% For 275 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.275lpi.4064dpi/275 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.275lpi.4064dpi/275 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.275lpi.4064dpi/275 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.275lpi.4064dpi/275 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.275lpi.4064dpi/275 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.275lpi.4064dpi/275 lpi / 4064 dpi:"275"
+
+*ColorSepScreenFreq ProcessCyan.275lpi.4064dpi/275 lpi / 4064 dpi:"275"
+
+*ColorSepScreenFreq ProcessMagenta.275lpi.4064dpi/275 lpi / 4064 dpi:"275"
+
+*ColorSepScreenFreq ProcessYellow.275lpi.4064dpi/275 lpi / 4064 dpi:"275"
+
+*ColorSepScreenFreq ProcessBlack.275lpi.4064dpi/275 lpi / 4064 dpi:"275"
+
+
+
+*% For 300 lpi / 4064 dpi
+
+*ColorSepScreenAngle CustomColor.300lpi.4064dpi/300 lpi / 4064 dpi:"45"
+
+*ColorSepScreenAngle ProcessCyan.300lpi.4064dpi/300 lpi / 4064 dpi:"15"
+
+*ColorSepScreenAngle ProcessMagenta.300lpi.4064dpi/300 lpi / 4064 dpi:"75"
+
+*ColorSepScreenAngle ProcessYellow.300lpi.4064dpi/300 lpi / 4064 dpi:"0"
+
+*ColorSepScreenAngle ProcessBlack.300lpi.4064dpi/300 lpi / 4064 dpi:"45"
+
+
+
+*ColorSepScreenFreq CustomColor.300lpi.4064dpi/300 lpi / 4064 dpi:"300"
+
+*ColorSepScreenFreq ProcessCyan.300lpi.4064dpi/300 lpi / 4064 dpi:"300"
+
+*ColorSepScreenFreq ProcessMagenta.300lpi.4064dpi/300 lpi / 4064 dpi:"300"
+
+*ColorSepScreenFreq ProcessYellow.300lpi.4064dpi/300 lpi / 4064 dpi:"300"
+
+*ColorSepScreenFreq ProcessBlack.300lpi.4064dpi/300 lpi / 4064 dpi:"300"
+
+
+
+*% The byte count of this file should be exactly 074889 or 078093
+*% depending on the filesystem it resides in.
+*% end of PPD file for Linotype
+
+*% Last edited JUL 26, 1996-Hell Quasar IS
+
+
+
+
+

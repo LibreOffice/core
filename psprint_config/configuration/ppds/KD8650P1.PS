@@ -1,0 +1,946 @@
+*PPD-Adobe: "4.2"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*%Version Number:                  "1"
+*%Revision Number:                 "9"
+*%Platform Supported:              "PC"
+*%Localized To:                    "US"
+*%Modifier:                        ""
+*%Support Number:                  "US          1-800-344-0006"
+*%Support Number:                  "UK          44-044261122 Ext. 44239"
+*%Support Number:                  "Belgium     32-02/2632400"
+*%Support Number:                  "Denmark     45-43/717111"
+*%Support Number:                  "Finland     358-90/87071"
+*%Support Number:                  "France      33-1/4989-0083"
+*%Support Number:                  "Germany     49-0711/406-5561"
+*%Support Number:                  "Italy       39-02/66028454"
+*%Support Number:                  "Netherlands 31-03405/99704"
+*%Support Number:                  "Norway      47-02/818181"
+*%Support Number:                  "Spain       34-91/6267100"
+*%Support Number:                  "Sweden      46-08/58023663"
+*%------------------------------------------------------------------
+*FormatVersion: "4.2"
+*FileVersion: "1.0"
+*LanguageEncoding: ISOLatin1
+*LanguageVersion: English
+*PCFileName: "KD8650P1.PPD"
+*Product: "(KODAK DS 8650 PS)"
+*PSVersion: "(2014.108) 1"
+*ModelName: "DS 8650 PS"
+*NickName: "KODAK DS 8650 PS"
+*LanguageLevel: "2"
+
+*OpenGroup: InstallableOptions/Options Installed
+*OpenUI *InstalledMemory/Memory Installed: PickOne
+*DefaultInstalledMemory: 32MB
+*InstalledMemory 32MB/Standard 32MB Total: ""
+*InstalledMemory 48MB/16 MB Upgrade 48MB Total: ""
+*InstalledMemory 64MB/32 MB Upgrade 64MB Total: ""
+*?InstalledMemory : "
+  save
+     3 dict
+     dup 33554432 (32MB) put
+     dup 50331648 (48MB) put
+     dup 67108864 (64MB) put
+     currentsystemparams /RamSize get {get} stopped { pop pop (Unknown) } if
+     == flush
+  restore
+  "
+*End
+*CloseUI: *InstalledMemory
+*CloseGroup: InstallableOptions
+
+*% === Constraints =========
+*% Prevent CMYK ribbon when user indicates printer has only 32 MB memory
+*UIConstraints: *InstalledMemory 32MB     *ColorModel CMYK
+
+*% Prevent Black ribbon prints with Commercial paper
+*UIConstraints: *ColorModel Gray              *MediaColor commercial
+*UIConstraints: *MediaColor commercial        *ColorModel Gray
+
+*% Prevent CMY ribbon with Commercial paper
+*UIConstraints: *ColorModel RGB               *MediaColor commercial
+*UIConstraints: *MediaColor commercial        *ColorModel RGB
+
+*% Prevent transparency for CMYK ribbon and certain page sizes
+*UIConstraints: *ColorModel CMYK              *MediaType transparency
+*UIConstraints: *MediaType transparency       *ColorModel CMYK
+*UIConstraints: *MediaType transparency       *PageRegion DS8650.241.358
+*UIConstraints: *PageRegion DS8650.241.358    *MediaType transparency
+*UIConstraints: *MediaType transparency       *PageSize DS8650.241.358
+*UIConstraints: *PageSize DS8650.241.358      *MediaType transparency
+
+*% Prevent MediaColor commercial paper on all
+*% PageSizes and PageRegions except DS8650.241.358
+
+*UIConstraints: *PageSize Letter               *MediaColor commercial
+*UIConstraints: *PageSize DS8650.LegalXtra     *MediaColor commercial
+*UIConstraints: *PageSize A4                   *MediaColor commercial
+*UIConstraints: *PageSize DS8650.216.307       *MediaColor commercial
+*UIConstraints: *PageSize DS8650.210.307       *MediaColor commercial
+*UIConstraints: *PageSize DS8650.210.358       *MediaColor commercial
+*UIConstraints: *PageRegion Letter             *MediaColor commercial
+*UIConstraints: *PageRegion DS8650.LegalXtra   *MediaColor commercial
+*UIConstraints: *PageRegion A4                 *MediaColor commercial
+*UIConstraints: *PageRegion DS8650.216.307     *MediaColor commercial
+*UIConstraints: *PageRegion DS8650.210.307     *MediaColor commercial
+*UIConstraints: *PageRegion DS8650.210.358     *MediaColor commercial
+*UIConstraints: *MediaColor commercial         *PageSize Letter
+*UIConstraints: *MediaColor commercial         *PageSize DS8650.LegalXtra
+*UIConstraints: *MediaColor commercial         *PageSize A4
+*UIConstraints: *MediaColor commercial         *PageSize DS8650.216.307
+*UIConstraints: *MediaColor commercial         *PageSize DS8650.210.307
+*UIConstraints: *MediaColor commercial         *PageSize DS8650.210.358
+*UIConstraints: *MediaColor commercial         *PageRegion Letter
+*UIConstraints: *MediaColor commercial         *PageRegion DS8650.LegalXtra
+*UIConstraints: *MediaColor commercial         *PageRegion A4
+*UIConstraints: *MediaColor commercial         *PageRegion DS8650.216.307
+*UIConstraints: *MediaColor commercial         *PageRegion DS8650.210.307
+*UIConstraints: *MediaColor commercial         *PageRegion DS8650.210.358
+
+*% Prevent draft mode transparency with CMYK ribbon
+*UIConstraints: *OutputMode DraftQualityTransparency *ColorModel CMYK
+*UIConstraints: *ColorModel CMYK  *OutputMode DraftQualityTransparency
+
+
+*% ==== Device Capabilities ===============
+*% Removed TBCP to "fix" Adobe bug 27.
+*Protocols: BCP
+*FreeVM: "4880552"
+*VMOption 32MB: "4880552"
+*VMOption 48MB: "12384404"
+*VMOption 64MB: "28932248"
+*ColorDevice: True
+*DefaultColorSpace: RGB
+*VariablePaperSize: False
+*TTRasterizer: Type42
+*?TTRasterizer: "
+  save
+  42 /FontType resourcestatus
+  { pop pop (Type 42) } { (No Type 42) } ifelse = flush
+  restore
+"
+*End
+*SuggestedJobTimeout: "0"
+*SuggestedWaitTimeout: "70"
+*PrintPSErrors: False
+*Throughput: "1"
+*Password: "()"
+
+*FileSystem: True
+*?FileSystem: "
+ save
+   [ (*)
+     { dup dup (%disk) search
+       { pop pop pop
+         length string copy dup currentdevparams /Writeable get
+         {/Writeabledev Writeabledev 1 add def} if
+       }{
+         pop pop pop
+       } ifelse }
+     50 string /IODevice resourceforall
+   ]
+   length 1 ge {(True)}{(False)}ifelse = flush
+ restore
+ "
+*End
+
+*ExitServer: "
+ count 0 eq
+ { false } { true exch startjob } ifelse
+ not {
+     (WARNING: Cannot modify initial VM.) =
+     (Missing or invalid password.) =
+     (Please contact the author of this software.) = flush quit
+     } if
+     "
+*End
+
+*Reset: "
+  count 0 eq {false}{true exch startjob} ifelse
+  {
+    systemdict /quit get exec
+  }{
+    (WARNING: Cannot modify initial VM.) =
+    (Missing or invalid password.) =
+    (Please contact the author of this software.) = flush quit
+  } ifelse
+  "
+*End
+
+*DefaultResolution: 300dpi
+*Resolution 300dpi: " "
+*?Resolution: "
+ save
+   currentpagedevice /HWResolution get
+   0 get (          ) cvs print (dpi) = flush
+ restore
+ "
+*End
+
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*Transfer Null.Inverse: "{ 1 exch sub }"
+
+*JobPatchFile 1: "
+userdict begin
+  /KDKColorDict << /CurrentRed 0.0   /CurrentGreen 0.0   /CurrentBlue 0.0
+                   /CurrentCyan 0.0  /CurrentMagenta 0.0 /CurrentYellow 0.0
+                   /CurrentBlack 1.0 /CurrentHue 0.0     /CurrentSaturation 0.0
+                   /CurrentBrightness 0.0  /CurrentGray 0.0  /FeaturesLevel 2
+                   /NComp  3 >> def
+  /KDKl2 { KDKColorDict /FeaturesLevel get 2 eq } bind def
+  /NOTCMYK { currentpagedevice /ProcessColorModel get /DeviceCMYK ne } bind def
+  /setcolor {KDKl2
+    {/CIEBasedABC currentcolorspace 0 get ne
+      {
+        /CIEBasedABC
+          << /DecodeLMN {1.8 exp}bind dup dup 3 array astore
+             /MatrixLMN 0.5243 0.2852 0.0294
+                        0.3084 0.6553 0.1377
+                        0.1316 0.0594 0.6581 9 array astore
+             /WhitePoint 0.9643 1 0.8251 3 array astore
+          >> 2 array astore setcolorspace
+      }if
+    }if
+    setcolor
+  } bind def
+  /image { dup type /dicttype eq KDKl2 and
+    {
+      dup  /Decode get length  2 div dup dup
+      1 eq { /CIEBasedA
+             << /WhitePoint 0.9505 1.0 1.0890 3 array astore
+                /MatrixA 0.9643 1 0.8251 3 array astore
+                /RangeLMN 0 0.9643 0 1 0 0.8251 6 array astore
+             >> 2 array astore
+              3 1 roll } if
+      3 eq { /CIEBasedABC
+             << /DecodeLMN {1.8 exp}bind dup dup 3 array astore
+                /MatrixLMN 0.5243 0.2852 0.0294
+                           0.3084 0.6553 0.1377
+                           0.1316 0.0594 0.6581 9 array astore
+                /WhitePoint 0.9643 1 0.8251 3 array astore
+             >> 2 array astore
+              exch } if
+      4 eq { /DeviceCMYK 1 array astore } if
+      dup 0 get currentcolorspace 0 get ne
+      { setcolorspace }{ pop }ifelse
+    }if  % if image operator had dicttype param and we are level 2
+    image  % call the original image operator
+  } bind def
+  /_updatergb
+  {
+    currentrgbcolor
+    KDKColorDict /CurrentBlue  3 -1 roll put
+    KDKColorDict /CurrentGreen 3 -1 roll put
+    KDKColorDict /CurrentRed   3 -1 roll put
+  } bind def
+  /_updatecmyk {
+    currentcmykcolor
+    KDKColorDict /CurrentBlack
+    3 -1 roll put
+    KDKColorDict /CurrentYellow  3 -1 roll put
+    KDKColorDict /CurrentMagenta 3 -1 roll put
+    KDKColorDict /CurrentCyan    3 -1 roll put
+  }bind def
+  /_updatehsb {
+    currenthsbcolor
+    KDKColorDict /CurrentBrightness 3 -1 roll put
+    KDKColorDict /CurrentSaturation 3 -1 roll put
+    KDKColorDict /CurrentHue        3 -1 roll put
+  } bind def
+  /_updategray { currentgray KDKColorDict /CurrentGray 3 -1 roll put }bind def
+  /_getrgb{
+      KDKColorDict /CurrentRed get
+      KDKColorDict /CurrentGreen get
+      KDKColorDict /CurrentBlue get
+  }bind def
+  /colorimage { KDKl2
+    {
+      KDKColorDict exch /NComp exch put
+      9 dict begin
+        /ImageType 1 def
+        /MultipleDataSources exch def
+        MultipleDataSources { KDKColorDict /NComp get array astore } if
+        /DataSource exch def /ImageMatrix exch def /BitsPerComponent exch def
+        /Height exch def /Width exch def
+        KDKColorDict /NComp get  4 eq { /Decode [0 1 0 1 0 1 0 1] def } if
+        KDKColorDict /NComp get  3 eq { /Decode [0 1 0 1 0 1] def } if
+        KDKColorDict /NComp get  1 eq { /Decode [0 1] def } if
+        /Interpolate true def
+        currentdict
+      end
+      image
+   }{ colorimage} ifelse
+  } bind def
+  /setrgbcolor { KDKl2
+    { KDKColorDict /CurrentRed 4 index put
+      KDKColorDict /CurrentGreen 3 index put
+      KDKColorDict /CurrentBlue 2 index put
+      gsave setrgbcolor _updatecmyk _updatehsb _updategray grestore
+      _getrgb setcolor
+    }{setrgbcolor}ifelse
+  } bind def
+  /setcmykcolor { NOTCMYK
+    { KDKl2
+      { KDKColorDict /CurrentCyan 5 index put
+        KDKColorDict /CurrentMagenta 4 index put
+        KDKColorDict /CurrentYellow 3 index put
+        KDKColorDict /CurrentBlack 2 index put
+        gsave setcmykcolor _updatergb _updatehsb _updategray grestore
+        _getrgb setcolor
+      }{
+        setcmykcolor
+      }ifelse
+    }{
+      setcmykcolor
+    } ifelse
+  } bind def
+  /sethsbcolor { KDKl2
+    { KDKColorDict /CurrentHue 4 index put
+      KDKColorDict /CurrentSaturation 3 index put
+      KDKColorDict /CurrentBrightness 2 index put
+      gsave sethsbcolor _updatergb _updatecmyk _updategray grestore
+      _getrgb setcolor
+    }{sethsbcolor}ifelse
+  } bind def
+  /setgray { KDKl2
+      { KDKColorDict /CurrentGray 2 index put
+        gsave setgray _updatergb _updatecmyk _updatehsb grestore
+        _getrgb setcolor
+      }
+      { setgray } ifelse
+  } bind def
+  /currentrgbcolor { KDKl2 { _getrgb }{ currentrgbcolor}ifelse } bind def
+  /currentcmykcolor { NOTCMYK
+    { KDKl2
+      { KDKColorDict /CurrentCyan get
+        KDKColorDict /CurrentMagenta get
+        KDKColorDict /CurrentYellow get
+        KDKColorDict /CurrentBlack get
+      }{ currentcmykcolor} ifelse
+    }
+    { currentcmykcolor } ifelse
+  } bind def
+  /currenthsbcolor { KDKl2
+    { KDKColorDict /CurrentHue get
+      KDKColorDict /CurrentSaturation get
+      KDKColorDict /CurrentBrightness get
+    }{ currenthsbcolor } ifelse
+  } bind def
+  /currentgray { KDKl2 {KDKColorDict /CurrentGray get}
+                 {currentgray}ifelse} bind def
+end
+"
+*End
+
+
+*OpenUI *KDUltraColor/UltraColor:  Boolean
+*DefaultKDUltraColor: True
+*OrderDependency: 50 AnySetup *KDUltraColor
+*KDUltraColor True/On: "
+  KDKColorDict/FeaturesLevel 2 put
+  "
+*End
+*KDUltraColor False/Off: "
+  KDKColorDict/FeaturesLevel 1 put /DeviceRGB setcolorspace
+ "
+*End
+*?KDUltraColor: "
+  save
+    /CIEBasedABC currentcolorspace 0 get eq
+    {(True)}{(False)}ifelse = flush
+  restore
+  "
+*End
+*CloseUI: *KDUltraColor
+
+
+*OpenUI *MediaType/Paper Type:  PickOne
+*OrderDependency: 10 AnySetup *MediaType
+*DefaultMediaType: reflection
+*% reflection media type must always turn off DraftTransparencyMode
+*MediaType reflection/Paper: "
+  currenttransfer
+  2 dict
+  dup /MediaType (reflection) put
+  dup /OutputType () put
+  setpagedevice
+  settransfer
+  "
+*End
+*MediaType transparency/Transparency: "
+  currenttransfer
+  1 dict
+  dup /MediaType (transparency) put
+  setpagedevice
+  settransfer
+  "
+*End
+*?MediaType: "
+  save
+    currentpagedevice /MediaType {get} stopped
+    {pop pop (Unknown)} {dup null eq {pop (Unknown)} if} ifelse
+    = flush
+  restore
+  "
+*End
+*CloseUI: *MediaType
+
+*OpenUI *MediaColor/Paper Grade:  PickOne
+*OrderDependency: 10 AnySetup *MediaColor
+*DefaultMediaColor: standard
+*MediaColor standard/Photographic: "
+  currenttransfer
+  1 dict
+  dup /MediaColor (standard) put
+  setpagedevice
+  settransfer
+  "
+*End
+*MediaColor commercial/Commercial: "
+  currenttransfer
+  1 dict
+  dup /MediaColor (commercial) put
+  setpagedevice
+  settransfer
+  "
+*End
+*?MediaColor: "
+  save
+    currentpagedevice /MediaColor {get} stopped
+    {
+      pop pop (Unknown)
+    }
+    {
+      dup null eq {pop (Unknown)} if
+    } ifelse
+    = flush
+  restore
+  "
+*End
+*CloseUI: *MediaColor
+
+*OpenUI *KDLaminate/XtraLife for CMY and Paper: Boolean
+*%
+*% The PPD file controls the XtraLife laminate as follows:
+*%
+*% o For CMY, the PPD allows invocation of the XtraLife laminate
+*%   feature on all reflection media of a size that corresponds to an
+*%   availiable size of XtraLife ribbon.  The PPD disallows the invocation
+*%   of XtraLife laminate through PPD constraints.
+*%
+*% o For black ribbon, the user has no control of the XtraLife lamination
+*%   it will be on for reflection media, off for transparency media.
+*%
+*OrderDependency: 30 AnySetup *KDLaminate
+*DefaultKDLaminate: True
+*KDLaminate True/On: "
+  save
+    currentpagedevice /OutputDevice get (PrinterRGB) eq
+    currentpagedevice /MediaType get  (reflection) eq
+    and exch
+  restore
+  {
+    currenttransfer
+    1 dict dup /Laminate true put setpagedevice
+    settransfer
+  }if
+  "
+*End
+*KDLaminate False/Off: "
+  save
+    currentpagedevice /OutputDevice get (PrinterRGB) eq exch
+  restore
+  {
+    currenttransfer
+    1 dict dup /Laminate false put setpagedevice
+    settransfer
+  } if
+  "
+*End
+*?KDLaminate: "
+  save
+    currentpagedevice /Laminate get {(True)}{(False)}ifelse = flush
+  restore
+  "
+*End
+*CloseUI: *KDLaminate
+
+*OpenUI *ColorModel/Ribbon Type: PickOne
+*OrderDependency: 20 AnySetup *ColorModel
+*DefaultColorModel: RGB
+*ColorModel RGB/Three Color (CMY): "
+  currenttransfer
+    1 dict dup /OutputDevice (PrinterRGB) put setpagedevice
+  settransfer
+  "
+*End
+*ColorModel CMYK/Four Color (CMYK): "
+  currenttransfer
+    2 dict dup dup
+    /Laminate false put
+    /OutputDevice (PrinterCMYK) put
+    setpagedevice
+  settransfer
+  "
+*End
+
+
+*ColorModel Gray/Black: "
+  currenttransfer
+  1 dict dup /OutputDevice (PrinterGray) put setpagedevice
+  1 dict dup /Laminate
+  save
+    currentpagedevice /MediaType get (reflection) eq exch
+  restore
+  put
+  setpagedevice
+  settransfer
+  "
+*End
+
+*?ColorModel: "
+  save
+    (Unknown)
+    currentpagedevice /OutputDevice get dup dup
+    (PrinterRGB) eq
+    {
+      pop pop pop (RGB)
+    }{
+      (PrinterGray) eq
+      {
+        pop pop (Gray)
+      }{
+        (PrinterCMYK) eq
+        {
+          pop (CMYK)
+        } if
+      } ifelse
+    } ifelse
+    = flush
+  restore
+  "
+*End
+*CloseUI: *ColorModel
+
+
+
+*OpenUI *OutputMode/Fast Transparencies: PickOne
+*%
+*% This PPD permits the setting of Transparency Quality OutputMode without
+*% any regard for Media type (i.e., no UI constraints).  Output mode only
+*% has usability with transparency media.  We do not attempt to constrain
+*% the Transparency Quality output mode for use exclusively with transparency
+*% media, thus there exist no UI constraints for OutputMode.  The printer
+*% logic will fail, however, unless we "soft constrain"  (with PS code) the
+*% DraftQuality transparency mode when selecting reflection media type.
+*%
+*OrderDependency: 5 AnySetup *OutputMode
+*DefaultOutputMode: FullQualityTransparency
+*OutputMode FullQualityTransparency/Off: "
+  currenttransfer
+    1 dict dup /OutputType () put setpagedevice
+  settransfer
+  "
+*End
+*OutputMode DraftQualityTransparency/On: "
+  currenttransfer
+    1 dict dup /OutputType (draft) put setpagedevice
+  settransfer
+  "
+*End
+*?OutputMode: "
+  save
+    (Unknown)
+    currentpagedevice
+    /OutputType {get} stopped
+    {
+      pop (FullQualityTransparency)
+    }
+    {
+      (draft) eq
+      {
+        pop (DraftQualityTransparency)
+      }
+      {
+        pop (FullQualityTransparency)
+      }ifelse
+    }ifelse
+    = flush
+  restore
+  "
+*End
+*CloseUI: *OutputMode
+
+*OpenUI *Smoothing/Anti-aliasing: Boolean
+*OrderDependency: 50 AnySetup *Smoothing
+*DefaultSmoothing: False
+*Smoothing True/On: "
+  currenttransfer
+  1 dict dup /PostRenderingEnhance true put setpagedevice
+  settransfer
+  "
+*End
+*Smoothing False/Off: "
+  currenttransfer
+  1 dict dup /PostRenderingEnhance false put setpagedevice
+  settransfer
+  "
+*End
+*?Smoothing: "
+  save
+    currentpagedevice /PostRenderingEnhance get {(True)}{(False)}ifelse = flush
+  restore
+  "
+*End
+*CloseUI: *Smoothing
+
+*% Paper Handling ===================
+*LandscapeOrientation: Any
+*% Code in this section both selects a tray and sets up a frame buffer.
+
+*OpenUI *PageSize: PickOne
+*% Entire UI Code Verified on Strider
+*OrderDependency: 40 AnySetup *PageSize
+*DefaultPageSize: Letter
+*PageSize Letter: "
+    currenttransfer
+    2 dict
+    dup /PageSize [612 792] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageSize A4: "
+    currenttransfer
+    2 dict
+    dup /PageSize [595 842] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageSize DS8650.LegalXtra/8.5 x 14 in: "
+    currenttransfer
+    2 dict
+    dup /PageSize [612 1014] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageSize DS8650.216.307/8.5 x 12 in (216 x 307 mm): "
+    currenttransfer
+    2 dict
+    dup /PageSize [612 870] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageSize DS8650.241.358/9.5 x 14 in (241 x 358 mm): "
+    currenttransfer
+    2 dict
+    dup /PageSize [684 1014] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageSize DS8650.210.307/210 x 307 mm:"
+    currenttransfer
+    2 dict
+    dup /PageSize [595 870] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageSize DS8650.210.358/210 x 358 mm: "
+    currenttransfer
+    2 dict
+    dup /PageSize [595 1014] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*?PageSize: "
+save
+   currentpagedevice /PageSize get aload pop
+   2 copy gt {exch} if
+   (Unknown)
+   7 dict
+   dup [612 792] (Letter) put
+   dup [612 1014] (DS8650.LegalXtra) put
+   dup [595 842] (A4) put
+   dup [612 870] (DS8650.216.307) put
+   dup [684 1014] (DS8650.241.358) put
+   dup [595 870] (DS8650.210.307) put
+   dup [595 1014] (DS8650.210.358) put
+   {
+     exch aload pop
+     4 index sub abs 5 le exch
+     5 index sub abs 5 le and
+     {
+       exch pop exit
+     }{
+       pop
+     } ifelse
+   } bind forall
+   = flush pop pop
+   restore
+   "
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion: PickOne
+*OrderDependency: 40 AnySetup *PageRegion
+*DefaultPageRegion: Letter
+*PageRegion Letter: "
+    currenttransfer
+    2 dict
+    dup /PageSize [612 792] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageRegion A4: "
+    currenttransfer
+    2 dict
+    dup /PageSize [595 842] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageRegion DS8650.LegalXtra/8.5 x 14 in: "
+    currenttransfer
+    3 dict
+    dup /PageSize [612 1014] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageRegion DS8650.216.307/8.5 x 12 in (216 x 307 mm): "
+    currenttransfer
+    2 dict
+    dup /PageSize [612 870] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageRegion DS8650.241.358/9.5 x 14 in (241 x 358 mm): "
+    currenttransfer
+    2 dict
+    dup /PageSize [684 1014] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageRegion DS8650.210.307/210 x 307 mm: "
+    currenttransfer
+    2 dict
+    dup /PageSize [595 870] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*PageRegion DS8650.210.358/210 x 358 mm: "
+    currenttransfer
+    2 dict
+    dup /PageSize [595 1014] put
+    dup /ImagingBBox null put
+    setpagedevice
+    settransfer
+    "
+*End
+*CloseUI: *PageRegion
+
+
+*%  The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter
+*ImageableArea Letter:                                      "18.2401 74.7601 594.24 717.96 "
+*ImageableArea DS8650.LegalXtra/8.5 x 14 in:                "18.2401 76.9200 594.24 940.92 "
+*ImageableArea A4:                                          "9.6001  74.2800 585.60 767.88 "
+*ImageableArea DS8650.216.307/8.5 x 12 in (216 x 307 mm):   "18.2401 76.4400 594.24 796.44 "
+*ImageableArea DS8650.241.358/9.5 x 14 in (241 x 358 mm):   "36.0    76.92   648.48 940.92 "
+*ImageableArea DS8650.210.307/210 x 307 mm:                 "9.6001  76.4400 585.60 796.44 "
+*ImageableArea DS8650.210.358/210 x 358 mm:                 "9.6001  76.9200 585.60 940.92 "
+*?ImageableArea: "
+  save
+    /cvp { (                ) cvs print ( ) print } bind def
+    /upperright {10000 mul floor 10000 div} bind def
+    /lowerleft {10000 mul ceiling 10000 div} bind def
+    newpath clippath pathbbox
+    4 -2 roll exch 2 {lowerleft cvp} repeat
+    exch 2 {upperright cvp} repeat flush
+  restore
+  "
+*End
+
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter:                                     "612 792 "
+*PaperDimension DS8650.LegalXtra/8.5 x 14 in:               "612 1014 "
+*PaperDimension A4:                                         "595 842 "
+*PaperDimension DS8650.216.307/8.5 x 12 in (216 x 307 mm):  "612 870 "
+*PaperDimension DS8650.241.358/9.5 x 14 in (241 x 358 mm):  "684 1014 "
+*PaperDimension DS8650.210.307/210 x 307 mm:                "595 870 "
+*PaperDimension DS8650.210.358/210 x 358 mm:                "595 1014 "
+
+*OpenUI *InputSlot: PickOne
+*DefaultInputSlot: Cassette
+*% The product name known to users for Kodak's Cassette is a paper tray
+*InputSlot Cassette/Paper Tray: ""
+*?InputSlot: "save (Cassette) = flush restore"
+*CloseUI: *InputSlot
+
+*RequiresPageRegion All: True
+
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard ROM
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard ROM
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard ROM
+*Font Bookman-Demi: Standard "(001.004S)" Standard ROM
+*Font Bookman-DemiItalic: Standard "(001.004S)" Standard ROM
+*Font Bookman-Light: Standard "(001.004S)" Standard ROM
+*Font Bookman-LightItalic: Standard "(001.004S)" Standard ROM
+*Font Courier: Standard "(002.004S)" Standard ROM
+*Font Courier-Bold: Standard "(002.004S)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.004S)" Standard ROM
+*Font Courier-Oblique: Standard "(002.004S)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard ROM
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard ROM
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard ROM
+*Font Palatino-Bold: Standard "(001.005S)" Standard ROM
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Italic: Standard "(001.005S)" Standard ROM
+*Font Palatino-Roman: Standard "(001.005S)" Standard ROM
+*Font Symbol: Special "(001.007S)" Special ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard ROM
+*Font ZapfDingbats: Special "(001.004S)" Special ROM
+
+*?FontQuery: "
+ save
+   { count 1 gt
+      { exch dup 127 string cvs (/) print print (:) print
+        /Font resourcestatus {pop pop (Yes)} {(No)} ifelse =
+      } { exit } ifelse
+   } bind loop
+   (*) = flush
+ restore"
+*End
+
+*?FontList: "
+save
+  (*) {cvn ==} 128 string /Font resourceforall
+  (*) = flush
+restore"
+*End
+
+*%  Printer Messages (verbatim from printer):
+*Message:  "%%[ exitserver: permanent state may be changed ]%%"
+*Message:  "%%[ Flushing: rest of job (to end-of-file) will be ignored ]%%"
+*Message:  "\FontName\ not found, using Courier"
+
+*%  Status (format: %%[ status: <one of these> ] %%)
+*Status: "idle"
+*Status: "busy"
+*Status: "waiting"
+*Status: "initializing"
+*Status: "holding"
+*Status: "PrinterError: requires service - \ServiceCodeNumber\"
+*Status: "PrinterError: paper tray needs attention"
+*Status: "PrinterError: cover is open"
+*Status: "PrinterError: print ribbon needs to be changed"
+*Status: "PrinterError: print ribbon is jammed"
+*Status: "PrinterError: paper is jammed"
+*Status: "PrinterError: requires 8.5 x 11 in, Paper"
+*Status: "PrinterError: requires A4, Paper"
+*Status: "PrinterError: requires 8.5 x 12 in, Paper"
+*Status: "PrinterError: requires 210 x 307 mm, Paper"
+*Status: "PrinterError: requires 8.5 x 14 in, Paper"
+*Status: "PrinterError: requires 210 x 358 mm, Paper"
+*Status: "PrinterError: requires 9.5 x 14 in, Paper"
+*Status: "PrinterError: requires 8.5 x 11 in, Transparency"
+*Status: "PrinterError: requires A4, Transparency"
+*Status: "PrinterError: requires 8.5 x 12 in, Transparency"
+*Status: "PrinterError: requires 210 x 307 mm, Transparency"
+*Status: "PrinterError: requires 8.5 x 14 in, Transparency"
+*Status: "PrinterError: requires 210 x 358 mm, Transparency"
+*Status: "PrinterError: requires KODAK EKTATHERM Three-Color Ribbon/XtraLife Media/CMY"
+*Status: "PrinterError: requires KODAK EKTATHERM Three-Color Ribbon/CMY"
+*Status: "PrinterError: requires KODAK EKTATHERM Black Ribbon/XtraLife Media"
+*Status: "PrinterError: requires KODAK EKTATHERM Oversize Three-Color Ribbon/CMY"
+*Status: "PrinterError: requires KODAK EKTATHERM Oversize Three-Color Ribbon/XtraLife Media/CMY"
+*Status: "PrinterError: requires KODAK EKTATHERM Four-Color Ribbon/CMYK"
+
+*%  Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "LocalTalk"
+*Source: "Parallel"
+*Source: "EtherTalk"
+*Source: "IPX"
+*Source: "TcpIp"
+
+*%  Printer Error (format: %%[ PrinterError: <one of these> ]%%)
+*PrinterError: "requires service - \ServiceCodeNumber\"
+*PrinterError: "paper tray needs attention"
+*PrinterError: "cover is open"
+*PrinterError: "print ribbon needs to be changed"
+*PrinterError: "print ribbon is jammed"
+*PrinterError: "paper is jammed"
+*PrinterError: "requires 8.5 x 11 in, Paper"
+*PrinterError: "requires A4, Paper"
+*PrinterError: "requires 8.5 x 12 in, Paper"
+*PrinterError: "requires 210 x 307 mm, Paper"
+*PrinterError: "requires 8.5 x 14 in, Paper"
+*PrinterError: "requires 210 x 358 mm, Paper"
+*PrinterError: "requires 9.5 x 14 in, Paper"
+*PrinterError: "requires 8.5 x 11 in, Transparency"
+*PrinterError: "requires A4, Transparency"
+*PrinterError: "requires 8.5 x 12 in, Transparency"
+*PrinterError: "requires 210 x 307 mm, Transparency"
+*PrinterError: "requires 8.5 x 14 in, Transparency"
+*PrinterError: "requires 210 x 358 mm, Transparency"
+*PrinterError: "requires KODAK EKTATHERM Three-Color Ribbon/XtraLife Media/CMY"
+*PrinterError: "requires KODAK EKTATHERM Three-Color Ribbon/CMY"
+*PrinterError: "requires KODAK EKTATHERM Black Ribbon/XtraLife Media"
+*PrinterError: "requires KODAK EKTATHERM Oversize Three-Color Ribbon/CMY"
+*PrinterError: "requires KODAK EKTATHERM Oversize Three-Color Ribbon/XtraLife Media/CMY"
+*PrinterError: "requires KODAK EKTATHERM Four-Color Ribbon/CMYK"
+
+*% Last Edit Date: Mar 26 1996
+*% The byte count of this file should be exactly 029391 or 030337
+*% depending on the filesystem it resides in.
+*% end of PPD file for Kodak DS 8650 PS
+

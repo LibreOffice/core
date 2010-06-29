@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sheet_XRecentFunctions" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global AllFunctions As Variant
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.sheet.XRecentFunctions
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim recentFunctions As Variant
+    Dim i, j As Integer
+    Dim props As Variant
+
+
+    Test.StartMethod("getRecentFunctionIds()")
+    bOK = true
+    recentFunctions = oObj.getRecentFunctionIds()
+    bOK = bOK AND NOT isNULL(recentFunctions)
+    bOK = bOK AND ubound(recentFunctions) &lt;= oObj.getMaxRecentFunctions
+    for i = 0 to ubound(recentFunctions) - 1
+        for j = i + 1 to ubound(recentFunctions)
+            if recentFunctions(i) = recentFunctions(j) then bOK = false
+        next j
+    next i
+    Test.MethodTested("getRecentFunctionIds()", bOK)
+
+    Test.StartMethod("setRecentFunctionIds()")
+    bOK = true
+    Dim Max As Integer
+    Max = oObj.getMaxRecentFunctions
+    Dim newList(Max) As Integer
+
+    for i = 0 to ubound(newList())
+        props = AllFunctions.getByIndex(i)
+        for j = 0 to ubound(props())
+            if props(j).Name = "Id" then
+                newList(i) = props(j).Value
+                exit for
+            end if
+        next j
+    next i
+
+    oObj.setRecentFunctionIds(newList())
+    bOK = bOK AND (Max = oObj.getMaxRecentFunctions)
+    Test.MethodTested("setRecentFunctionIds()", bOK)
+
+    Test.StartMethod("getMaxRecentFunctions()")
+    bOK = true
+    Max = oObj.getMaxRecentFunctions
+    Out.Log("MaxRecentFunctions = " &amp; Max)
+    bOK = bOK AND Max &gt; 0
+    Test.MethodTested("getMaxRecentFunctions()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

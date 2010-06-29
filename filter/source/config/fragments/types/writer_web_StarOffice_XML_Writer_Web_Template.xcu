@@ -1,0 +1,12 @@
+    <node oor:name="writer_web_StarOffice_XML_Writer_Web_Template" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.text.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>stw</value></prop>
+        <prop oor:name="MediaType"/>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>writer_web_StarOffice_XML_Writer_Web_Template</value></prop>
+        <prop oor:name="UIName">
+            <value>Writer/Web 6.0 Template</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Writer/Web 6.0</value></prop>
+    </node>

@@ -1,0 +1,81 @@
+<project default="build">
+
+  <!-- =================== Global Properties ============================= -->
+  <property environment="env"/>
+  <property name="macroname" value="ScriptSelector"/>
+  <property name="unopkgfile" value="${basedir}/${macroname}.uno.pkg"/>
+
+  <!-- ==================== intialise properties ========================= -->
+  <target name="checksdk">
+    <condition property="UsingSDK">
+      <available file="${env.OFFICE_PROGRAM_PATH}"/>
+    </condition>
+  </target>
+
+  <target name="initsdk" if="UsingSDK">
+    <property name="opp" value="${env.OFFICE_PROGRAM_PATH}"/>
+  </target>
+
+  <target name="initnosdk" unless="UsingSDK">
+    <fail unless="opp" message="Path to Office install not set"/>
+  </target>
+
+  <!-- ==================== classpath setting ============================ -->
+  <target name="init" depends="checksdk,initsdk,initnosdk">
+    <path id="scriptclasspath">
+      <pathelement location="${opp}/classes/unoil.jar"/>
+      <pathelement location="${opp}/classes/ridl.jar"/>
+      <pathelement location="${opp}/classes/jurt.jar"/>
+      <pathelement location="${opp}/classes/juh.jar"/>
+      <pathelement location="${opp}/classes/ScriptFramework.jar"/>
+    </path>
+  </target>
+
+  <!-- ====================== Clean Generated Files ===================== -->
+  <target name="clean">
+    <delete>
+      <fileset dir=".">
+        <include name="**/*.class"/>
+        <include name="**/*.jar"/>
+        <include name="**/*.uno.pkg"/>
+      </fileset>
+    </delete>
+  </target>
+
+  <!-- ===================== Compile the script ========================= -->
+  <target name="compile" depends="init">
+    <javac srcdir="${macroname}" destdir="${macroname}"
+           includes="**/*.java" classpathref="scriptclasspath"
+           debug="on" optimize="on" deprecation="on"/>
+  </target>
+
+  <!-- ====================== Build UNO Package ========================= -->
+  <target name="build" depends="compile">
+    <delete file="${unopkgfile}"/>
+
+    <jar jarfile="${macroname}/${macroname}.jar"
+         basedir="${macroname}" includes="*.class,*.gif">
+    </jar>
+
+    <zip zipfile="${unopkgfile}">
+      <fileset dir="${basedir}">
+        <include name="**/*.jar"/>
+        <include name="**/parcel-descriptor.xml"/>
+        <include name="**/manifest.xml"/>
+      </fileset>
+    </zip>
+  </target>
+
+  <!-- ====================== Deploy Generated Files ==================== -->
+  <target name="deploy" depends="build">
+    <exec executable="${opp}/unopkg">
+      <arg line="add"/>
+      <arg line="--force"/>
+      <arg path="${unopkgfile}"/>
+    </exec>
+  </target>
+
+  <!-- ========================= All In One Build ======================= -->
+  <target name="all" depends="clean,build,deploy"/>
+
+</project>

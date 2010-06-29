@@ -1,0 +1,53 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define DLG_VECTORIZE       654
+
+#define BTN_OK              1
+#define BTN_CANCEL          1
+#define BTN_HELP            1
+
+#define BTN_PREVIEW         1
+
+#define GRP_SETTINGS        1
+#define GRP_PRGS            2
+
+#define CTL_BMP             1
+#define CTL_WMF             2
+#define WND_PRGS            3
+
+#define FT_LAYERS           1
+#define FT_REDUCE           3
+#define FT_FILLHOLES        4
+#define FT_ORIGINAL         5
+#define FT_VECTORIZED       6
+
+#define NM_LAYERS           1
+#define MT_REDUCE           3
+#define MT_FILLHOLES        4
+
+#define CB_FILLHOLES        1

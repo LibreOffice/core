@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+OpenIDE-Module: org.openoffice.netbeans.modules.office/1
+OpenIDE-Module-Name: Office Support
+OpenIDE-Module-Short-Description: Scripting Support for Office Documents
+OpenIDE-Module-Localizing-Bundle: org/openoffice/netbeans/modules/office/Bundle.properties
+OpenIDE-Module-Specification-Version: 0.2
+OpenIDE-Module-Implementation-Version: 0.2
+OpenIDE-Module-Install: org/openoffice/netbeans/modules/office/utils/OfficeModule.class
+OpenIDE-Module-Layer: org/openoffice/netbeans/modules/office/resources/layer.xml
+
+Name: org/openoffice/netbeans/modules/office/loader/OfficeDocumentDataLoader.class
+OpenIDE-Module-Class: Loader
+
+Name: org/openoffice/netbeans/modules/office/loader/ParcelDataLoader.class
+OpenIDE-Module-Class: Loader
+
+Name: org/openoffice/netbeans/modules/office/loader/ParcelDescriptorDataLoader.class
+Install-Before: org.openide.loaders.XMLDataObject, org.netbeans.modules.xml.core.XMLDataObject
+OpenIDE-Module-Class: Loader
+
+Name: org/openoffice/netbeans/modules/office/loader/ParcelFolderDataLoader.class
+Install-Before: org.openoffice.netbeans.modules.office.loader.ParcelDescriptorDataLoader
+OpenIDE-Module-Class: Loader
+
+Name: org/openoffice/netbeans/modules/office/loader/ParcelContentsFolderDataLoader.class
+OpenIDE-Module-Class: Loader

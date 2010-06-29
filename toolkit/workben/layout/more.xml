@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<modaldialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             id="RID_SVXDLG_MORE" _title="Test More" optimumsize="true"
+         help-id="SID_ATTR_RESTORE"
+             has_border="true" sizeable="true" moveable="true">
+    <vbox spacing="5" border="5" width="640">
+    <fixedtext id="FT_ONE" _label="One"/>
+    <fixedtext id="FT_TWO" _label="Two"/>
+    <hbox border="5">
+        <flow/>
+        <morebutton id="PB_MORE" cnt:expand="false" _label="More..."/>
+    </hbox>
+    <fixedtext id="FT_THREE" _label="Three"/>
+    <fixedtext id="FT_FOUR" _label="Four"/>
+    </vbox>
+</modaldialog>
+

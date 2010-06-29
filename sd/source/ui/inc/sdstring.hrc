@@ -1,0 +1,35 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <sfx2/sfx.hrc>
+#define SID_SD_STRING_START         RID_APP_START+300
+
+// Texts for search and replace info and question boxes.
+#define STR_SAR_NOT_FOUND           SID_SD_STRING_START+23
+#define STR_SAR_WRAP_FORWARD        SID_SD_STRING_START+24
+#define STR_SAR_WRAP_BACKWARD       SID_SD_STRING_START+25
+#define STR_SAR_WRAP_FORWARD_DRAW   SID_SD_STRING_START+26
+#define STR_SAR_WRAP_BACKWARD_DRAW  SID_SD_STRING_START+27

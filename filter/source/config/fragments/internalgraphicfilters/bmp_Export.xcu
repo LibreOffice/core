@@ -1,0 +1,10 @@
+    <node oor:name="bmp_Export" oor:op="replace"  >
+        <prop oor:name="Type"><value>bmp_MS_Windows</value></prop>
+        <prop oor:name="FormatName"><value>SVBMP</value></prop>
+        <prop oor:name="RealFilterName"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">BMP - Windows Bitmap</value>
+        </prop>
+        <prop oor:name="Flags"><value>EXPORT</value></prop>
+    </node>

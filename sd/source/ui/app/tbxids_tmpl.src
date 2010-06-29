@@ -1,0 +1,536 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _TBXIDS_SRC
+#define _TBXIDS_SRC
+#define SEPARATOR       ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
+#define TBI(x)          ToolBoxItem { x };
+ //
+ // Werkzeugleiste
+ //
+#define TBI_OBJECT_SELECT \
+    ToolBoxItem\
+    {\
+        Identifier = SID_OBJECT_SELECT ; \
+        HelpID = SID_OBJECT_SELECT ; \
+        RadioCheck = TRUE ; \
+        Checkable = TRUE ; \
+    };
+
+#define TBI_ZOOM_TOOLBOX \
+    ToolBoxItem\
+    {\
+        Identifier = SID_ZOOM_TOOLBOX ; \
+        HelpID = SID_ZOOM_TOOLBOX ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_OBJECT_CHOOSE_MODE \
+    ToolBoxItem\
+    {\
+        Identifier = SID_OBJECT_CHOOSE_MODE ; \
+        HelpID = SID_OBJECT_CHOOSE_MODE ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_OBJECT_ALIGN \
+    ToolBoxItem\
+    {\
+        Identifier = SID_OBJECT_ALIGN ; \
+        HelpID = SID_OBJECT_ALIGN ; \
+        DropDown = TRUE ; \
+    };
+
+#define TBI_POSITION \
+    ToolBoxItem\
+    {\
+        Identifier = SID_POSITION ; \
+        HelpID = SID_POSITION ; \
+        DropDown = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_TEXT \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_TEXT ; \
+        HelpID = SID_DRAWTBX_TEXT ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_RECTANGLES \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_RECTANGLES ; \
+        HelpID = SID_DRAWTBX_RECTANGLES ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_ELLIPSES \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_ELLIPSES ; \
+        HelpID = SID_DRAWTBX_ELLIPSES ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_LINES \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_LINES ; \
+        HelpID = SID_DRAWTBX_LINES ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_ARROWS \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_ARROWS ; \
+        HelpID = SID_DRAWTBX_ARROWS ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_FONTWORK_GALLERY_FLOATER \
+    ToolBoxItem\
+    {\
+        Identifier = SID_FONTWORK_GALLERY_FLOATER ; \
+        HelpID = SID_FONTWORK_GALLERY_FLOATER ; \
+        DropDown = FALSE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_CS_BASIC \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_CS_BASIC ; \
+        HelpID = SID_DRAWTBX_CS_BASIC ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_CS_SYMBOL \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_CS_SYMBOL ; \
+        HelpID = SID_DRAWTBX_CS_SYMBOL ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_CS_ARROW \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_CS_ARROW ; \
+        HelpID = SID_DRAWTBX_CS_ARROW ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_CS_FLOWCHART \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_CS_FLOWCHART ; \
+        HelpID = SID_DRAWTBX_CS_FLOWCHART ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_CS_CALLOUT \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_CS_CALLOUT ; \
+        HelpID = SID_DRAWTBX_CS_CALLOUT ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_CS_STAR \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_CS_STAR ; \
+        HelpID = SID_DRAWTBX_CS_STAR ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_3D_OBJECTS \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_3D_OBJECTS ; \
+        HelpID = SID_DRAWTBX_3D_OBJECTS ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+        Hide = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_CONNECTORS \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_CONNECTORS ; \
+        HelpID = SID_DRAWTBX_CONNECTORS ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_DRAWTBX_INSERT \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DRAWTBX_INSERT ; \
+        HelpID = SID_DRAWTBX_INSERT ; \
+        DropDown = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_PRESENTATION \
+    ToolBoxItem\
+    {\
+        Identifier = SID_PRESENTATION ; \
+        HelpID = SID_PRESENTATION ; \
+    };
+
+#define TBI_EFFECT_WIN \
+    ToolBoxItem\
+    {\
+        Identifier = SID_CUSTOM_ANIMATION_PANEL ; \
+        HelpID = SID_CUSTOM_ANIMATION_PANEL ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_ANIMATION_EFFECTS \
+    ToolBoxItem\
+    {\
+        Identifier = SID_ANIMATION_EFFECTS ; \
+        HelpID = SID_ANIMATION_EFFECTS ; \
+    };
+
+#define TBI_ANIMATION_OBJECTS \
+    ToolBoxItem\
+    {\
+        Identifier = SID_ANIMATION_OBJECTS ; \
+        HelpID = SID_ANIMATION_OBJECTS ; \
+        AutoCheck = TRUE ; \
+        Hide = TRUE; \
+    };
+
+#define TBI_3D_WIN \
+    ToolBoxItem\
+    {\
+        Identifier = SID_3D_WIN ; \
+        HelpID = SID_3D_WIN ; \
+        AutoCheck = TRUE ; \
+        Hide = TRUE; \
+    };
+
+ //
+ // Objektleiste
+ //
+#define TBI_FORMAT_BEZIER_EDIT_RC \
+    ToolBoxItem\
+    {\
+        ITEM_FORMAT_BEZIER_EDIT\
+        AutoCheck = TRUE ; \
+        Checkable = TRUE ; \
+        RadioCheck = TRUE ; \
+    };
+
+#define TBI_ATTR_FILL_SHADOW \
+    ToolBoxItem\
+    {\
+        Identifier = SID_ATTR_FILL_SHADOW ; \
+        HelpID = SID_ATTR_FILL_SHADOW ; \
+    };
+
+#define TBI_TOGGLECOMMONTASKBAR \
+    ToolBoxItem\
+    {\
+        Identifier = SID_TOGGLECOMMONTASKBAR ; \
+        HelpID = SID_TOGGLECOMMONTASKBAR ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_IMAGEMAP \
+    ToolBoxItem\
+    {\
+        Identifier = SID_IMAP ; \
+        HelpID = SID_IMAP; \
+        Hide = TRUE; \
+    };
+
+#define TBI_ZOOM_IN \
+    ToolBoxItem\
+    {\
+        Identifier = SID_ZOOM_IN ; \
+        HelpID = SID_ZOOM_IN; \
+        Hide = TRUE; \
+    };
+
+#define TBI_ZOOM_OUT \
+    ToolBoxItem\
+    {\
+        Identifier = SID_ZOOM_OUT ; \
+        HelpID = SID_ZOOM_OUT; \
+        Hide = TRUE; \
+    };
+
+#define TBI_ATTR_TRANSFORM \
+    ToolBoxItem\
+    {\
+        Identifier = SID_ATTR_TRANSFORM; \
+        HelpID = SID_ATTR_TRANSFORM; \
+        Hide = TRUE; \
+    };
+
+#define TBI_MIRROR \
+    ToolBoxItem\
+    {\
+        Identifier = SID_OBJECT_MIRROR; \
+        HelpID = SID_OBJECT_MIRROR; \
+        Hide = TRUE; \
+    };
+
+#define TBI_TRANSPARENCE \
+    ToolBoxItem\
+    {\
+        Identifier = SID_OBJECT_TRANSPARENCE; \
+        HelpID = SID_OBJECT_TRANSPARENCE; \
+        Hide = TRUE; \
+    };
+
+#define TBI_GRADIENT \
+    ToolBoxItem\
+    {\
+        Identifier = SID_OBJECT_GRADIENT; \
+        HelpID = SID_OBJECT_GRADIENT; \
+        Hide = TRUE; \
+    };
+
+#define TBI_CONVERT \
+    ToolBoxItem\
+    {\
+        Identifier = SID_CONVERT;\
+        HelpID = SID_CONVERT;\
+        Hide = TRUE; \
+    };
+
+#define TBI_LSPACE_10 \
+    ToolBoxItem \
+    {\
+        Identifier = SID_ATTR_PARA_LINESPACE_10; \
+        HelpID = SID_ATTR_PARA_LINESPACE_10; \
+        Hide = TRUE; \
+    };
+
+#define TBI_LSPACE_15 \
+    ToolBoxItem \
+    {\
+        Identifier = SID_ATTR_PARA_LINESPACE_15; \
+        HelpID = SID_ATTR_PARA_LINESPACE_15; \
+        Hide = TRUE; \
+    };
+
+#define TBI_LSPACE_20 \
+    ToolBoxItem \
+    {\
+        Identifier = SID_ATTR_PARA_LINESPACE_20; \
+        HelpID = SID_ATTR_PARA_LINESPACE_20; \
+        Hide = TRUE; \
+    };
+
+
+
+ //
+ // Optionsleiste
+ //
+#define TBI_FORMAT_BEZIER_EDIT \
+    ToolBoxItem\
+    {\
+        ITEM_FORMAT_BEZIER_EDIT\
+        AutoCheck = TRUE ; \
+        Checkable = TRUE ; \
+    };
+
+#define TBI_GLUE_EDITMODE \
+    ToolBoxItem\
+    {\
+        Checkable = TRUE ; \
+        AutoCheck = TRUE ; \
+        Identifier = SID_GLUE_EDITMODE ; \
+        HelpID = SID_GLUE_EDITMODE ; \
+    };
+
+#define TBI_CLICK_CHANGE_ROTATION \
+    ToolBoxItem\
+    {\
+        Identifier = SID_CLICK_CHANGE_ROTATION ; \
+        HelpID = SID_CLICK_CHANGE_ROTATION ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_GRID_VISIBLE \
+    ToolBoxItem\
+    {\
+        Identifier = SID_GRID_VISIBLE ; \
+        HelpID = SID_GRID_VISIBLE ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_HELPLINES_VISIBLE \
+    ToolBoxItem\
+    {\
+        Identifier = SID_HELPLINES_VISIBLE ; \
+        HelpID = SID_HELPLINES_VISIBLE ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_HELPLINES_MOVE \
+    ToolBoxItem\
+    {\
+        Identifier = SID_HELPLINES_MOVE ; \
+        HelpID = SID_HELPLINES_MOVE ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_GRID_USE \
+    ToolBoxItem\
+    {\
+        Identifier = SID_GRID_USE ; \
+        HelpID = SID_GRID_USE ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_HELPLINES_USE \
+    ToolBoxItem\
+    {\
+        Identifier = SID_HELPLINES_USE ; \
+        HelpID = SID_HELPLINES_USE ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_SNAP_BORDER \
+    ToolBoxItem\
+    {\
+        Identifier = SID_SNAP_BORDER ; \
+        HelpID = SID_SNAP_BORDER ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_SNAP_FRAME \
+    ToolBoxItem\
+    {\
+        Identifier = SID_SNAP_FRAME ; \
+        HelpID = SID_SNAP_FRAME ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_SNAP_POINTS \
+    ToolBoxItem\
+    {\
+        Identifier = SID_SNAP_POINTS ; \
+        HelpID = SID_SNAP_POINTS ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_QUICKEDIT \
+    ToolBoxItem\
+    {\
+        Identifier = SID_QUICKEDIT ; \
+        HelpID = SID_QUICKEDIT ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_PICK_THROUGH \
+    ToolBoxItem\
+    {\
+        Identifier = SID_PICK_THROUGH ; \
+        HelpID = SID_PICK_THROUGH ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_DOUBLECLICK_TEXTEDIT \
+    ToolBoxItem\
+    {\
+        Identifier = SID_DOUBLECLICK_TEXTEDIT ; \
+        HelpID = SID_DOUBLECLICK_TEXTEDIT ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_HANDLES_DRAFT \
+    ToolBoxItem\
+    {\
+        Identifier = SID_HANDLES_DRAFT ; \
+        HelpID = SID_HANDLES_DRAFT ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_BIG_HANDLES \
+    ToolBoxItem\
+    {\
+        Identifier = SID_BIG_HANDLES ; \
+        HelpID = SID_BIG_HANDLES ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_SOLID_CREATE \
+    ToolBoxItem\
+    {\
+        Identifier = SID_SOLID_CREATE ; \
+        HelpID = SID_SOLID_CREATE ; \
+        AutoCheck = TRUE ; \
+    };
+
+#define TBI_LEAVE_ALL_GROUPS \
+    ToolBoxItem\
+    {\
+        Identifier = SID_LEAVE_ALL_GROUPS ; \
+        HelpID = SID_LEAVE_ALL_GROUPS ; \
+        AutoCheck = TRUE ; \
+    };
+
+#endif // _TBXIDS_SRC

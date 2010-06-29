@@ -1,0 +1,5 @@
+#!/bin/bash
+
+TEMP=`mktemp -t cleanupresources`
+xsltproc tidyxmi.xsl resources.xmi | xmllint --format - > $TEMP
+mv $TEMP resources.xmi

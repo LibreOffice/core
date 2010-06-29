@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <toolbar:toolbaritem xlink:href=".uno:ZoomPlus" toolbar:helpid="10097"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomMinus" toolbar:helpid="10098"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Zoom100Percent" toolbar:helpid="10099"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomPrevious" toolbar:visible="false" toolbar:helpid="10403"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomNext" toolbar:visible="false" toolbar:helpid="10402"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomPage" toolbar:helpid="10100"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomPageWidth" toolbar:helpid="27098"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomOptimal" toolbar:helpid="10101"/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomObjects" toolbar:helpid="27099"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ZoomPanning" toolbar:helpid="27017"/>
+</toolbar:toolbar>

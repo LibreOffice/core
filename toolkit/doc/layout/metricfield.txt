@@ -1,0 +1,57 @@
+** MetricField:
+    + in vcl: 
+class VCL_DLLPUBLIC CurrencyField : public SpinField, public CurrencyFormatter
+class VCL_DLLPUBLIC CurrencyFormatter : public NumericFormatter
+class VCL_DLLPUBLIC MetricFormatter : public NumericFormatter
+class VCL_DLLPUBLIC NumericFormatter : public FormatterBase
+
+MetricFormatter - very simple sal_Int64 wrapping ...
+    + no doubles ...
+    + *Could* replicate this with the same interface:
+	+ prolly easier / better to add an XMetricField interface.
+
+vcl's MetricField - itself does a load of (double) casting ...
+    + to get the value it wants :-)
+    + Urgh ! ...
+
+** Can we just twist VCLXCurrencyField to this purpose ?
+    + what differences would we want ?
+    + LongCurrencyFormatter -> 'MetricFormatter' ...
+
+** Interesting !
+    + VCLXCurrencyField is based on 'LongCurrencyField' not CurrencyField ...
+	+ this is really based on 'BigInt' [ curious ] - so even more precision loss.
+
+    + So ... cut/paste VCLXCurencyField -> VCLXMetricField 
+
+	    + Look at 'VCLXNumericField' interface ...
+		+ Use 'XNumericField' instead (?)
+		    + why does this just not "just work" ?
+
+    + The 'MetricField' (is also a MetricFormatter)
+	+ MetricFormatter [ unusually ] has 'Unit' support
+	    + API grep shows:
+		+ a) requires 'fieldunit'
+		+ b) has "UserValue"
+		+ c) => new IDL interface required ...
+		+ sub-set / expand NumericField ?
+
+	    + add 'CustomConvert' ?
+	    + add '[SG]etFirst'/Last
+	    + Properties:
+	        + 'Unit' 
+		+ 'CustomUnitText'
+	    + 'spin-size' -> 'value-step'
+	    + 'BaseValue' ...
+	    + sal_Int64 ... [!?] ...
+	    + CorrectedValue
+	    + Want properties for the UI designer (?)
+		+ move that stuff out into there ?
+    + FIXME:
+	+ rationalise the 'Modify' event crud ...
+	    + share the code in a base-class ...
+
+    + Wrapper:
+        + need to have static methods 'ConvertDoubleValue' etc.
+	+ also 'ConvertValue' etc.
+	+ GetCorrectedValue - never used ...

@@ -1,0 +1,10 @@
+    <node oor:name="png_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>png_Portable_Network_Graphic</value></prop>
+        <prop oor:name="FormatName"><value>SVIPNG</value></prop>
+        <prop oor:name="RealFilterName"><value>PNG - Portable Network Graphic</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PNG - Portable Network Graphic</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

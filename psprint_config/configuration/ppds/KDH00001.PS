@@ -1,0 +1,1533 @@
+*PPD-Adobe: "4.3"
+*% Adobe Systems PostScript(R) Printer Description File
+*% Copyright 1987-1995 Adobe Systems Incorporated. 
+*% All Rights Reserved. 
+*% Permission is granted for redistribution of this file as
+*% long as this copyright notice is intact and the contents
+*% of the file is not altered in any way from its original form.
+*% End of Copyright statement
+*%
+*%   KODAK 70cp Series II
+*% End of Copyright statement.
+*%
+*FormatVersion: "4.3"
+*FileVersion: "1.0"
+*% InternalVersion: "2.40"
+*% place internal version number in translation string for *KDHDict Option Yes
+*PCFileName: "KDH00001.PPD"
+*LanguageVersion: English
+*Product: "(KODAK IMAGESOURCE 70cp Series II Copier-Printer)"
+*PSVersion: "(2015.131) 41"
+*ModelName: "KODAK 70cp Series II PPD"
+*ShortNickName: "KODAK 70cp Series II PPD"
+*NickName: "KODAK 70cp Series II PPD"
+*Manufacturer: "Kodak"
+*LanguageEncoding: ISOLatin1
+*% General Information and Defaults ===============
+*ColorDevice: True
+*DefaultColorSpace: Gray
+*DefaultInstalledMemory: 32MB
+*FreeVM: "4194304"
+*LanguageLevel: "2"
+*FileSystem: True
+*Throughput: "70"
+*Password: "()"
+*Protocols: BCP TBCP
+*TTRasterizer: Type42
+*?TTRasterizer: "(Type42) = flush"
+
+
+*% The following LandscapeOrientation keyword and value places
+*% applications and drivers on notice that the
+*% Kodak IS 70cp Series II printer requires landscape documents
+*% to have an orientation of minus 90 degrees (90 degrees
+*% clockwise) compared to portrait orientation.  If an
+*% application and/or driver fail to deliver page images in the
+*% required landscape orientation, certain finishing features of
+*% the printer will not work correctly.  For example, staples
+*% and/or folding may occur in undesired locations relative to
+*% the image on the paper.
+*%
+*% The *KD04FinishingOrientation (Finishing Orientation) feature
+*% of the PPD allows you to help correct for applications and
+*% drivers that fail to recognize the *LandscapeOrientation
+*% keyword and value.
+*%
+*LandscapeOrientation: Minus90
+
+*%  The following section includes all of the options which a user can
+*%  install on their Kodak Model H printer.  Customer choices will then
+*%  allow the driver to gray out options which do not make sense with
+*%  the respective installed options.
+
+*OpenGroup: InstallableOptions/Options Installed
+
+*OpenUI *KD27Finisher/Post Processing Device: Boolean
+*OrderDependency:   9 DocumentSetup *KD27Finisher
+*DefaultKD27Finisher: True
+*KD27Finisher True/Finisher: "
+(Post Processing Device)(Finisher)KDHDict/KFSet get exec
+countdictstack [{KDHDict/bSimpleStapler false put}KDHDict/KFC get exec"
+*End
+*KD27Finisher False/Stapler: "
+(Post Processing Device)(Stapler)KDHDict/KFSet get exec
+countdictstack [{KDHDict/bSimpleStapler true put}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD27Finisher
+
+*% Must have a finisher to do certain staples
+*UIConstraints: *KD27Finisher False           *KD04Staple 1.Bottom.Left.90
+*UIConstraints: *KD27Finisher False           *KD04Staple 2.Left.90
+*UIConstraints: *KD27Finisher False           *KD04Staple 3.Left.90
+*UIConstraints: *KD27Finisher False           *KD04Staple Saddle
+*UIConstraints: *KD04Staple 1.Bottom.Left.90  *KD27Finisher False
+*UIConstraints: *KD04Staple 2.Left.90         *KD27Finisher False
+*UIConstraints: *KD04Staple 3.Left.90         *KD27Finisher False
+*UIConstraints: *KD04Staple Saddle            *KD27Finisher False
+*% Must have a finisher to ZFold
+*UIConstraints: *KD27Finisher False           *KD05ZFold True
+*UIConstraints: *KD05ZFold True               *KD27Finisher False
+
+
+
+*OpenUI *KD28HDict/Driver Resource Version: PickOne
+*OrderDependency:   1 DocumentSetup *KD28HDict
+*DefaultKD28HDict: Yes
+*KD28HDict Yes/2.40: "
+%%BeginResource: procset KDHDict 1 26
+userdict/KDHDebug false put save userdict begin/setpagedevice where{pop
+/_spd/setpagedevice load def/_cpd/currentpagedevice load def}{/_spd{}bind
+def/_cpd{}bind def}ifelse/_~1{currentscreen currenttransfer}bind def
+/_~2{settransfer setscreen}bind def/_~3{/70cpProcs/ProcSet findresource}bind
+def/_~4(   %%[ KDH: Using ProcSet KDDict 1 26 ]%%)def end userdict
+/KDHDict known userdict/KDHDict 75 dict put KDHDict begin/_CM()def
+/_FCM()def/_BCM()def/bFront true def/bSimpleStapler false def/SigSize
+15 def/PWait 5 def/_GF(Generic Feature)def/_GO(Generic Option)def/bJD
+true def/bJT false def/bFS false def/bPamphlet false def/iMaxPamphletSheets
+0 def/TonerColor[(Auto)(Red)(Green)(Blue)(Yellow)(Black)] def/SPDMapKey
+[(MapRed)(MapGreen)(MapBlue)(MapCyan)(MapMagenta)(MapYellow)(MapBlack)(MapImages)]
+def/DisplayMap [ 0 0 0 0 0 0 0 0 ] def/PLook{dup KDHDict/KDHPCat get
+exch known{KDHDict/KDHPCat get exch get aload pop}{pop [612 792] null
+null null false}ifelse}bind def/LMC{KDHDict/PLook get exec KDHDict
+/MediaChange get exec}bind def/FrontCoverMode{KDHDict/_FCM 3 -1 roll
+put}bind def/BackCoverMode{KDHDict/_BCM 3 -1 roll put}bind def/LC{dup
+KDHDict exch{/_FCM}{/_BCM}ifelse get dup dup(None)eq exch(InsertTray)eq
+or{KDHDict/KDCover get exec pop}{3 -1 roll KDHDict/PLook get exec 7
+5 roll KDHDict/KDCover get exec}ifelse}bind def/LFC{true KDHDict/LC
+get exec}bind def/LRC{false KDHDict/LC get exec}bind def/SSP{KDHDict
+/SPK 3 -1 roll put}bind def/SetSPM{dup(None)ne{KDHDict/SPK known{KDHDict
+/SPK get KDHDict/PLook get exec}{[612 792] null null null false}ifelse
+6 -1 roll}if KDHDict/KDStatusPage get exec}bind def/LSetSeps{KDHDict
+/PLook get exec true KDHDict/KDSeparators get exec}bind def/KDColorMapping{[
+exch{dup 65 eq{0 exch}if dup 82 eq{1 exch}if dup 71 eq{2 exch}if dup
+66 eq{3 exch}if dup 89 eq{4 exch}if 75 eq{5}if}forall ] dup type/arraytype
+ne{kill}if dup length 8 ne{kill}if KDHDict/DisplayMap 3 -1 roll put
+_cpd/OutputDevice get(                         )cvs(PrinterAccentColor)eq{_~1
+KDHDict/ObjectIndex 0 put KDHDict/DisplayMap get{dup KDHDict/TonerColorIndex
+3 -1 roll put 0 ne{1 dict dup/DeviceRenderingInfo 2 dict dup/Type 13
+put dup KDHDict/SPDMapKey get KDHDict/ObjectIndex get get cvn KDHDict
+/TonerColor get KDHDict/TonerColorIndex get get put put _spd}if KDHDict
+/ObjectIndex get 1 add KDHDict/ObjectIndex 3 -1 roll put}forall _~2}if}bind
+def/KDFreeformColor{_~1 1 dict dup/OutputDevice 8 -1 roll{/PrinterAccentColor}{
+/PrinterGray}ifelse put _spd _~2}bind def/KDCopies{_~1 1 dict dup
+/NumCopies 8 -1 roll put _spd _~2}bind def/Collate{_~1 1 dict dup
+/Collate 8 -1 roll put _spd _~2}bind def/KDChargeNo{_~3/setchargenumber
+get exec}bind def/KDOpMsg{_~3/setoperatormessage get exec}bind def
+/KDDeliverTo{_~3/setusername get exec}bind def/KDStatusPage{_~1 _cpd
+6 -1 roll dup(None)eq{0 exch pop()}if dup(Always)eq{1 exch pop()}if
+dup(OnlyOnError)eq{2 exch pop()}if dup(PageOneOnly)eq{3 exch pop()}if()ne{kill}if
+dup 0 ne{11 6 roll pop 5 -1 roll 5 -1 roll aload pop 6 2 roll}if _~3
+/settrailerpage get exec _spd _~2}bind def/KDSeparators{{pop _~1 _cpd
+9 -1 roll aload pop 10 -3 roll _~3/setseparator get exec _spd _~2}if}bind
+def/KDMismatch{_~4 = flush dup(AutomaticallySubstitute)eq{0 exch pop()}if
+dup(NotifyThenSubstitute)eq{2 exch pop()}if dup(NotifyThenCancel)eq{1
+exch pop()}if()ne{kill}if _~3/setconfirmationstrategy get exec}bind
+def/KDProofSet{_~1 5 -1 roll dup(Off)eq{1 dict dup/CollateDetails 2
+dict dup/Type 2 put dup/ProofSetPauseTime 0 put put _spd pop()}if dup(OnPrint)eq{1
+dict dup/CollateDetails 3 dict dup/Type 2 put dup/ProofSetTimeoutAction(Print)put
+dup/ProofSetPauseTime 12 -1 roll 60 mul put put _spd pop()}if dup(OnCancel)eq{1
+dict dup/CollateDetails 3 dict dup/Type 2 put dup/ProofSetTimeoutAction(Cancel)put
+dup/ProofSetPauseTime 12 -1 roll 60 mul put put _spd pop()}if pop _~2}bind
+def/Jog{_~1 3 dict dup/Jog 7 index{3}{0}ifelse put 6 -1 roll{dup/JogDetails
+2 dict dup/JogPosition(Alternate)put dup/Type 1 put put}if _spd _~2}bind
+def/KDFold{_~1 5 -1 roll dup(None)eq{1 dict dup/Fold 0 put _spd pop()}if
+dup(ZFold)eq{5 dict dup/Fold 4 put dup/FoldDetails 2 dict dup/Type
+1 put dup/FoldType(ZFold)put put _spd pop()}if dup(Saddle)eq{5 dict
+dup/Fold 3 put dup/FoldDetails 2 dict dup/Type 1 put dup/FoldType(Saddle)put
+put _spd pop()}if pop _~2}bind def/KDStaple{_~1 5 -1 roll dup(None)eq{1
+dict dup/Staple 0 put _spd pop()}if dup(Top)eq{2 dict dup/Staple 3
+put dup/StapleDetails 3 dict dup/Type 2 put dup/HeadCount 1 put dup
+/StapleLocation [ 3 dict dup/XAxis(Left)put dup/YAxis(Top)put dup
+/Orientation KDHDict/bSimpleStapler get{0}{45}ifelse put ] put put
+_spd pop()}if dup(Bottom)eq{2 dict dup/Staple 3 put dup/StapleDetails
+3 dict dup/Type 2 put dup/HeadCount 1 put dup/StapleLocation [ 3 dict
+dup/XAxis(Left)put dup/YAxis(Bottom)put dup/Orientation 45 put ] put
+put _spd pop()}if dup(2LeftEdge)eq{2 dict dup/Staple 3 put dup/StapleDetails
+3 dict dup/Type 2 put dup/HeadCount 2 put dup/StapleLocation [ 3 dict
+dup/XAxis(Left)put dup/YAxis(Top)put dup/Orientation 45 put 3 dict
+dup/XAxis(Left)put dup/YAxis(Bottom)put dup/Orientation 45 put ] put
+put _spd pop()}if dup(3LeftEdge)eq{2 dict dup/Staple 3 put dup/StapleDetails
+3 dict dup/Type 2 put dup/HeadCount 3 put dup/StapleLocation [ 3 dict
+dup/XAxis(Left)put dup/YAxis(Top)put dup/Orientation 45 put 3 dict
+dup/XAxis(Left)put dup/YAxis(Middle)put dup/Orientation 45 put 3 dict
+dup/XAxis(Left)put dup/YAxis(Bottom)put dup/Orientation 45 put ] put
+put _spd pop()}if dup(Saddle)eq{5 dict dup/Fold 3 put dup/FoldDetails
+2 dict dup/Type 1 put dup/FoldType(Saddle)put put dup/Staple 3 put
+dup/StapleDetails 3 dict dup/Type 2 put dup/HeadCount 2 put dup/StapleLocation
+[ 3 dict dup/XAxis(Middle)put dup/YAxis(OneThird)put dup/Orientation
+0 put 3 dict dup/XAxis(Middle)put dup/YAxis(TwoThirds)put dup/Orientation
+0 put ] put put _spd pop()}if pop _~2}bind def/KDCover{KDHDict/_CM
+3 -1 roll put KDHDict/bFront 3 -1 roll put KDHDict/_CM get dup(InsertTray)eq
+exch(None)eq or{_~1 _cpd KDHDict/_CM get(InsertTray)eq{3}{0}ifelse
+_~3 KDHDict/bFront get{/setfrontcover}{/setbackcover}ifelse get exec
+_spd _~2}if KDHDict/_CM get dup(Printed)eq exch(Blank)eq or{5 -1 roll
+aload pop 6 2 roll not 3 index dup null eq{pop 75}if 120 le and KDHDict
+/bJD get and{(Duplex)}{(Simplex)}ifelse KDHDict/_CM get(Printed)eq{1}{2}ifelse
+_~1 _cpd 12 5 roll _~3 KDHDict/bFront get{/setfrontcover}{/setbackcover}ifelse
+get exec _spd _~2}if}bind def/KDBooklet{_cpd/Duplex get{KDHDict/iMaxPamphletSheets
+3 -1 roll put _~1 10 dict dup/Signature true put dup/Collate true put
+dup/ImagingBBox [ 0 0 _cpd/PageSize get aload pop 2 idiv exch ] put
+dup/SignatureDetails 2 dict dup/Type 1 put dup/SignatureSheets KDHDict
+/iMaxPamphletSheets get put put _spd _~2}{pop}ifelse}bind def/KDDuplex{dup(Simplex)eq{false
+exch false exch}if dup(DuplexNoTumble)eq{true exch false exch}if(DuplexTumble)eq{true
+true}if 2 copy KDHDict/bJT 3 -1 roll put KDHDict/bJD 3 -1 roll put
+_~1 2 dict dup/Tumble 8 -1 roll put dup/Duplex 8 -1 roll put _spd _~2}bind
+def/KDInterleave{_cpd/PageSize get aload pop null null(plain)6 -1 roll{2}{1}ifelse
+_~3/setinterleavedetails get exec}bind def/KFSet{KDHDict/_GF 4 -1 roll
+put KDHDict/_GO 3 -1 roll put}bind def/KFC{KDHDebug{exec cleartomark
+pop}{stopped{(%%[ KDH:  Feature: )print KDHDict/_GF get print(; Option: )print
+KDHDict/_GO get print(; failed ]%%)= flush}{(   %%[ KDH:  Feature: )print
+KDHDict/_GF get print(; Option: )print KDHDict/_GO get print(; succeeded ]%%)=
+flush}ifelse cleartomark countdictstack exch sub dup 0 gt{{end}repeat}{pop}ifelse}ifelse}bind
+def/R180{_~1 1 dict dup/Orientation 2 put _spd _~2}bind def/MediaChange{KDHDict
+/bFS 3 -1 roll put 30 dict dup/MediaType 4 -1 roll put dup/MediaColor
+4 -1 roll put dup/MediaWeight 4 -1 roll put dup/PageSize 4 -1 roll
+put dup/PageSize get exch dup/ImagingBBox [ 0 0 7 -1 roll aload pop
+] put _~1 5 -1 roll _spd _cpd/Duplex get _cpd/MediaWeight get dup null
+eq{pop 75}if 120 gt and KDHDict/bFS get or{1 dict dup/Duplex false
+put _spd}{2 dict dup/Duplex KDHDict/bJD get put dup/Tumble KDHDict
+/bJT get put _spd}ifelse _~2}bind def/Insert{gsave pop 4 -1 roll aload
+pop 5 -3 roll 1 _~3/setinsert get exec grestore}bind def/KDColorBoost{dscInfo
+/Creator known{mark dscInfo/Creator get(Microsoft Word)search{pop
+pop(LaserWriter)search{/:FNew/:F load def/:F{3 copy dup 3 -1 roll eq
+3 -2 roll eq and not{3{3 -1 roll .30 gt{1}{0}ifelse}repeat}if :FNew}bind
+def}if}if cleartomark}if}def end{(   %%[ KDH: Second copy of KDHDict detected; restoring VM ]%% )=
+flush restore}{pop}            ifelse
+%%EndResource
+"
+*End
+*CloseUI: *KD28HDict
+
+
+*OpenUI *KD30HPCat/Paper Catalog Version: PickOne
+*OrderDependency:   2 DocumentSetup *KD30HPCat
+*DefaultKD30HPCat: Yes
+*KD30HPCat Yes/1.9: "
+%%BeginResource: procset KDHPCat 1 9
+  % US and European paper catalog
+  /KDHDict where
+  {
+    pop
+    KDHDict/KDHPCat known not
+    {
+      KDHDict begin
+      /KDHPCat 30 dict def
+      KDHPCat
+      dup /Letter     [[612  792] null null (plain)        false] put
+      dup /A4         [[595  842] null null (plain)        false] put
+      dup /Tabloid    [[792 1224] null null (plain)        false] put
+      dup /A3         [[842 1191] null null (plain)        false] put
+      dup /Cover      [[612  792] null null (cover)        true ] put
+      dup /A4Cover    [[595  842] null null (cover)        true ] put
+      dup /Color      [[612  792] null null (color)        false] put
+      dup /A4Color    [[595  842] null null (color)        false] put
+      dup /TabloidClr [[792 1224] null null (color)        false] put
+      dup /A3Color    [[842 1191] null null (color)        false] put
+      dup /Legal      [[612 1008] null null (plain)        false] put
+      dup /Tab        [[648  792] null null (plain)        false] put
+      dup /A4Tab      [[638  842] null null (plain)        false] put
+      dup /Insert     [[612  792] null null (inserttray)   false] put
+      dup /A4Insert   [[595  842] null null (inserttray)   false] put
+      dup /TabloidIns [[792 1224] null null (inserttray)   false] put
+      dup /A3Insert   [[842 1191] null null (inserttray)   false] put
+      dup /Trans      [[612  792] null null (transparency) true ] put
+      dup /A4Trans    [[595  842] null null (transparency) true ] put
+      pop
+      end
+    }if
+  }if
+%%EndResource
+"
+*End
+*CloseUI: *KD30HPCat
+
+
+*CloseGroup: InstallableOptions
+
+*DefaultResolution: 406dpi
+
+*% Halftone Information ===============
+*DefaultHalftoneType: 1
+*ScreenFreq: "71.7"
+*ScreenAngle: "45.0"
+*DefaultScreenProc: Dot
+*ScreenProc Dot: "{dup mul exch dup mul add 1.0 exch sub }"
+*ScreenProc Line: "{ pop }"
+*ScreenProc Ellipse: "{ dup 5 mul 8 div mul exch dup mul exch add sqrt 1 exch sub }"
+*DefaultTransfer: Null
+*Transfer Null: "{ }"
+*% Specifically disable inverse printing on Accent Color Printers
+*% You can set it in drivers and applications but you won't get it.
+*Transfer Null.Inverse: "{}"
+
+*% Paper Handling ===================
+*% Code in this section both selects a tray and sets up a frame buffer.
+
+*OpenUI *KD01BodyPaper/Body Paper: PickOne
+*DefaultKD01BodyPaper: Letter
+*OrderDependency:  50 DocumentSetup *KD01BodyPaper
+*KD01BodyPaper Letter: "
+(KDBodyPaper)(Letter)KDHDict/KFSet get exec
+countdictstack [{/Letter KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper A4: "
+(KDBodyPaper)(A4)KDHDict/KFSet get exec
+countdictstack [{/A4 KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper Tabloid: "
+(KDBodyPaper)(Tabloid)KDHDict/KFSet get exec
+countdictstack [{/Tabloid KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper A3/A3: "
+(KDBodyPaper)(A3)KDHDict/KFSet get exec
+countdictstack [{/A3 KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper Cover: "
+(KDBodyPaper)(Cover)KDHDict/KFSet get exec
+countdictstack [ {/Cover KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper A4Cover: "
+(KDBodyPaper)(A4Cover)KDHDict/KFSet get exec
+countdictstack [ {/A4Cover KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper Color: "
+(KDBodyPaper)(Color)KDHDict/KFSet get exec
+countdictstack [ {/Color KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper A4Color: "
+(KDBodyPaper)(A4Color)KDHDict/KFSet get exec
+countdictstack [ {/A4Color KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper TabloidClr: "
+(KDBodyPaper)(TabloidClr)KDHDict/KFSet get exec
+countdictstack [ {/TabloidClr KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper A3Color: "
+(KDBodyPaper)(A3Color)KDHDict/KFSet get exec
+countdictstack [ {/A3Color KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper Legal: "
+(KDBodyPaper)(Legal)KDHDict/KFSet get exec
+countdictstack [ {/Legal KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper Tab: "
+(KDBodyPaper)(Tab)KDHDict/KFSet get exec
+countdictstack [ {/Tab KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper A4Tab: "
+(KDBodyPaper)(A4Tab)KDHDict/KFSet get exec
+countdictstack [ {/A4Tab KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper Insert: "
+(KDBodyPaper)(Insert)KDHDict/KFSet get exec
+countdictstack [ {/Insert KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper A4Insert: "
+(KDBodyPaper)(A4Insert)KDHDict/KFSet get exec
+countdictstack [ {/A4Insert KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End               
+*KD01BodyPaper TabloidIns: "
+(KDBodyPaper)(TabloidIns)KDHDict/KFSet get exec
+countdictstack [ {/TabloidIns KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End
+*KD01BodyPaper A3Insert: "
+(KDBodyPaper)(A3Insert)KDHDict/KFSet get exec
+countdictstack [ {/A3Insert KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End               
+*KD01BodyPaper Trans: "
+(KDBodyPaper)(Trans)KDHDict/KFSet get exec
+countdictstack [ {/Trans KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End               
+*KD01BodyPaper A4Trans: "
+(KDBodyPaper)(A4Trans)KDHDict/KFSet get exec
+countdictstack [ {/A4Trans KDHDict/LMC get exec}KDHDict/KFC get exec"
+*End               
+*CloseUI: *KD01BodyPaper
+
+
+*OpenUI *PageSize: PickOne
+*DefaultPageSize: Letter
+*OrderDependency:  50 DocumentSetup *PageSize
+*PageSize Letter/US Letter: "
+(PageSize)(Letter)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageSize Legal/US Legal: "
+(PageSize)(Legal)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageSize A4: "
+(PageSize)(A4)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageSize A3: "
+(PageSize)(A3)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageSize Tabloid: "
+(PageSize)(Tabloid)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageSize 9x11/Lettertab: "
+(PageSize)(9x11)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageSize A4Tab: "
+(PageSize)(A4Tab)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageSize Statement: "
+(PageSize)(Statement)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageSize HalfLegal/Half Legal: "
+(PageSize)(HalfLegal)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageSize A5: "
+(PageSize)(A5)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*CloseUI: *PageSize
+
+*OpenUI *PageRegion: PickOne
+*DefaultPageRegion: Letter
+*OrderDependency:  50 DocumentSetup *PageRegion
+*PageRegion Letter/US Letter: "
+(PageRegion)(Letter)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageRegion Legal/US Legal: "
+(PageRegion)(Legal)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageRegion A4: "
+(PageRegion)(A4)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageRegion A3: "
+(PageRegion)(A3)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageRegion Tabloid: "
+(PageRegion)(Tabloid)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageRegion 9x11/Lettertab: "
+(PageRegion)(9X11)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageRegion A4Tab: "
+(PageRegion)(A4Tab)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageRegion Statement: "
+(PageRegion)(Statement)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageRegion HalfLegal/Half Legal: "
+(PageRegion)(HalfLegal)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*PageRegion A5: "
+(PageRegion)(A5)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*CloseUI: *PageRegion
+
+*OpenUI *KD02Accent/Free-Form Color: Boolean
+*DefaultKD02Accent: True
+*OrderDependency:   7 DocumentSetup *KD02Accent
+*KD02Accent True/Yes: "(KDAccent)(True)KDHDict/KFSet get exec
+countdictstack [{true KDHDict/KDFreeformColor get exec}KDHDict/KFC get exec"
+*End
+*KD02Accent False/No: "(KDAccent)(False)KDHDict/KFSet get exec
+countdictstack [{false KDHDict/KDFreeformColor get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD02Accent
+
+*OpenUI *KD02FFCB/MacWord FFC Boost: Boolean
+*DefaultKD02FFCB: False
+*OrderDependency: 160 DocumentSetup *KD02FFCB
+*KD02FFCB True/On:"
+(KDMacWordColorBoost)(On)KDHDict/KFSet get exec
+countdictstack [{KDHDict/KDColorBoost get exec}KDHDict/KFC get exec"
+*End
+*KD02FFCB False/Off:"
+(KDMacWordColorBoost)(Off)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD02FFCB
+
+*OpenUI *KD03Duplex/Printing Mode:  PickOne
+*DefaultKD03Duplex: None
+*OrderDependency:   8 DocumentSetup *KD03Duplex
+*KD03Duplex None/One-Sided: "(KDDuplex)(Simplex)KDHDict/KFSet get exec
+countdictstack [ {(Simplex)KDHDict/KDDuplex get exec}KDHDict/KFC get exec"
+*End
+*KD03Duplex DuplexNoTumble/Two-sided Flip on Long Edge: "(KDDuplex)(DuplexNoTumble)KDHDict/KFSet
+get exec countdictstack [ {(DuplexNoTumble)KDHDict/KDDuplex get exec
+}KDHDict/KFC get exec"
+*End
+*KD03Duplex DuplexTumble/Two-sided Flip on Short Edge: "(KDDuplex)(DuplexTumble)KDHDict/KFSet
+get exec countdictstack [ {(DuplexTumble)KDHDict/KDDuplex get exec
+}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD03Duplex
+
+*% Can't do interleaves with duplex of any kind
+*UIConstraints: *KD03Duplex DuplexNoTumble   *KD09Interleaves Printed
+*UIConstraints: *KD03Duplex DuplexNoTumble   *KD09Interleaves Blank
+*UIConstraints: *KD03Duplex DuplexTumble     *KD09Interleaves Blank
+*UIConstraints: *KD03Duplex DuplexTumble     *KD09Interleaves Printed
+*UIConstraints: *KD09Interleaves Printed     *KD03Duplex DuplexNoTumble
+*UIConstraints: *KD09Interleaves Blank       *KD03Duplex DuplexNoTumble
+*UIConstraints: *KD09Interleaves Blank       *KD03Duplex DuplexTumble
+*UIConstraints: *KD09Interleaves Printed     *KD03Duplex DuplexTumble
+
+*OpenUI *KD04Booklet/Pamphlets: Boolean
+*DefaultKD04Booklet: False
+*OrderDependency: 100 DocumentSetup *KD04Booklet
+*KD04Booklet False/No: "
+(KDBooklet)(Off)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*KD04Booklet True/Yes: "
+(KDBooklet)(On)KDHDict/KFSet get exec
+countdictstack [{
+KDHDict/SigSize get KDHDict/KDBooklet get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD04Booklet
+
+*% Pamphlets require DuplexNoTumble
+*UIConstraints: *KD04Booklet True    *KD03Duplex None
+*UIConstraints: *KD04Booklet True    *KD03Duplex DuplexTumble
+*UIConstraints: *KD03Duplex None         *KD04Booklet True
+*UIConstraints: *KD03Duplex DuplexTumble *KD04Booklet True
+
+*% Pamphlets cannot have a back cover (front is back cover)
+*UIConstraints: *KD07BackCoverMode Printed     *KD04Booklet True
+*UIConstraints: *KD07BackCoverMode Non-printed       *KD04Booklet True
+*UIConstraints: *KD07BackCoverMode InsertTray  *KD04Booklet True
+*UIConstraints: *KD04Booklet True              *KD07BackCoverMode Printed
+*UIConstraints: *KD04Booklet True              *KD07BackCoverMode Non-printed
+*UIConstraints: *KD04Booklet True              *KD07BackCoverMode InsertTray
+
+*% Pamphlets cannot be done with any kind of interleaves
+*UIConstraints: *KD04Booklet True        *KD09Interleaves Printed
+*UIConstraints: *KD04Booklet True        *KD09Interleaves Blank
+*UIConstraints: *KD09Interleaves Printed *KD04Booklet True
+*UIConstraints: *KD09Interleaves Blank   *KD04Booklet True 
+
+
+*OpenUI *KD04FinishingOrientation/Finishing Orientation: PickOne
+*DefaultKD04FinishingOrientation: NoRotate
+*OrderDependency: 50 DocumentSetup *KD04FinishingOrientation
+*KD04FinishingOrientation NoRotate/Standard: "
+(KDFinishingOrientation)(NoRotate)KDHDict/KFSet get exec
+countdictstack [{} KDHDict/KFC get exec"
+*End
+*KD04FinishingOrientation Rotate180/Rotated 180 degrees: "
+(KDFinishingOrientation)(Rotate180)KDHDict/KFSet get exec
+countdictstack [{KDHDict/R180 get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD04FinishingOrientation
+
+
+*OpenUI *KD04Staple/Stapling:  PickOne
+*DefaultKD04Staple: None
+*OrderDependency:  50 DocumentSetup *KD04Staple
+*KD04Staple None: "(KDStaple)(None)KDHDict/KFSet get exec
+countdictstack [{(None)KDHDict/KDStaple get exec}KDHDict/KFC get exec"
+*End
+*KD04Staple 1.Top.Left.90/Top: "(KDStaple)(Top)KDHDict/KFSet get exec
+countdictstack [{(Top)KDHDict/KDStaple get exec}KDHDict/KFC get exec"
+*End
+*KD04Staple 1.Bottom.Left.90/Bottom: "(KDStaple)(Bottom)KDHDict/KFSet get exec
+countdictstack [{(Bottom)KDHDict/KDStaple get exec}KDHDict/KFC get exec"
+*End
+*KD04Staple 2.Left.90/2 Left Edge: "(KDStaple)(2LeftEdge)KDHDict/KFSet get exec
+countdictstack [{(2LeftEdge)KDHDict/KDStaple get exec}KDHDict/KFC get exec"
+*End 
+*KD04Staple 3.Left.90/3 Left Edge: "(KDStaple)(3LeftEdge)KDHDict/KFSet get exec
+countdictstack [{(3LeftEdge)KDHDict/KDStaple get exec}KDHDict/KFC get exec"
+*End 
+*KD04Staple Saddle/Saddle Stitch and Fold: "(KDStaple)(Saddle Stitch & Fold)KDHDict/KFSet get exec
+countdictstack [{(Saddle)KDHDict/KDStaple get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD04Staple
+
+
+*% Can't saddle stitch with any Slip Sheets (Set Separators)
+*UIConstraints: *KD10SlipSheet Letter      *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet A4          *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet Tabloid     *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet A3          *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet Cover       *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet A4Cover     *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet Color       *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet A4Color     *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet TabloidClr  *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet A3Color     *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet Legal       *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet Tab         *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet A4Tab       *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet Insert      *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet A4Insert    *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet TabloidIns  *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet A3Insert    *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet Trans       *KD04Staple Saddle
+*UIConstraints: *KD10SlipSheet A4Trans     *KD04Staple Saddle
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet Letter
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet A4
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet Tabloid
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet A3
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet Cover
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet A4Cover
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet Color
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet A4Color
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet TabloidClr
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet A3Color
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet Legal
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet Tab
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet A4Tab
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet Insert
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet A4Insert
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet TabloidIns
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet A3Insert
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet Trans
+*UIConstraints: *KD04Staple Saddle         *KD10SlipSheet A4Trans
+
+*OpenUI *KD05ZFold/Z-Folding: Boolean
+*DefaultKD05ZFold: False
+*OrderDependency:  49 DocumentSetup *KD05ZFold
+*KD05ZFold False/No: "(KDZFold)(False)KDHDict/KFSet get exec
+countdictstack [{(None)KDHDict/KDFold get exec}KDHDict/KFC get exec"
+*End
+*KD05ZFold True/Yes: "(KDZFold)(True)KDHDict/KFSet get exec
+countdictstack [{(ZFold)KDHDict/KDFold get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD05ZFold
+
+*% Cannot Z-Fold when Saddle Stapling and Folding
+*UIConstraints: *KD04Staple Saddle    *KD05ZFold True
+*UIConstraints: *KD05ZFold True       *KD04Staple Saddle
+
+*OpenUI  *KD06FrontCoverMode/Front Cover: PickOne
+*DefaultKD06FrontCoverMode: None
+*OrderDependency: 149 DocumentSetup *KD06FrontCoverMode
+*KD06FrontCoverMode None: "
+countdictstack [{(KDFrontCoverMode)(None)KDHDict/KFSet get exec
+(None) KDHDict/FrontCoverMode get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverMode Printed: "
+(KDFrontCoverMode)(Printed)KDHDict/KFSet get exec
+countdictstack [{(Printed) KDHDict/FrontCoverMode get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverMode Non-printed: "
+(KDFrontCoverMode)(Non-printed)KDHDict/KFSet get exec
+countdictstack [{(Blank) KDHDict/FrontCoverMode get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverMode InsertTray/Insert Tray: "
+(KDFrontCoverMode)(InsertTray)KDHDict/KFSet get exec
+countdictstack [{(InsertTray) KDHDict/FrontCoverMode get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD06FrontCoverMode
+
+*OpenUI *KD06FrontCoverPaper/Front Cover Paper: PickOne
+*DefaultKD06FrontCoverPaper: Letter
+*OrderDependency: 150 DocumentSetup *KD06FrontCoverPaper
+*KD06FrontCoverPaper Letter: "(KDFrontCoverPaper)(Letter)KDHDict/KFSet get exec
+countdictstack [{/Letter KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper A4: "(KDFrontCoverPaper)(A4)KDHDict/KFSet get exec
+countdictstack [{/A4 KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper Tabloid: "(KDFrontCoverPaper)(Tabloid)KDHDict/KFSet get exec
+countdictstack [{/Tabloid KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper A3: "(KDFrontCoverPaper)(A3)KDHDict/KFSet get exec
+countdictstack [{/A3 KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper Cover: "(KDFrontCoverPaper)(Cover)KDHDict/KFSet get exec
+countdictstack [{/Cover KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper A4Cover: "(KDFrontCoverPaper)(A4Cover)KDHDict/KFSet get exec
+countdictstack [{/A4Cover KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper Color: "(KDFrontCoverPaper)(Color)KDHDict/KFSet get exec
+countdictstack [{/Color KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper A4Color: "(KDFrontCoverPaper)(A4Color)KDHDict/KFSet get exec
+countdictstack [{/A4Color KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper TabloidClr: "(KDFrontCoverPaper)(TabloidClr)KDHDict/KFSet get exec
+countdictstack [{/TabloidClr KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper A3Color: "(KDFrontCoverPaper)(A3Color)KDHDict/KFSet get exec
+countdictstack [{/A3Color KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper Legal: "(KDFrontCoverPaper)(Legal)KDHDict/KFSet get exec
+countdictstack [{/Legal KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper Tab: "(KDFrontCoverPaper)(Tab)KDHDict/KFSet get exec
+countdictstack [{/Tab KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper A4Tab: "(KDFrontCoverPaper)(A4Tab)KDHDict/KFSet get exec
+countdictstack [{/A4Tab KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper Insert: "(KDFrontCoverPaper)(Insert)KDHDict/KFSet get exec
+countdictstack [{/Insert KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper A4Insert: "(KDFrontCoverPaper)(A4Insert)KDHDict/KFSet get exec
+countdictstack [{/A4Insert KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper TabloidIns: "(KDFrontCoverPaper)(TabloidIns)KDHDict/KFSet get exec
+countdictstack [{/TabloidIns KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper A3Insert: "(KDFrontCoverPaper)(A3Insert)KDHDict/KFSet get exec
+countdictstack [{/A3Insert KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper Trans: "(KDFrontCoverPaper)(Trans)KDHDict/KFSet get exec
+countdictstack [{/Trans KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*KD06FrontCoverPaper A4Trans: "(KDFrontCoverPaper)(A4Trans)KDHDict/KFSet get exec
+countdictstack [{/A4Trans KDHDict/LFC get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD06FrontCoverPaper
+
+*OpenUI  *KD07BackCoverMode/Back Cover: PickOne
+*DefaultKD07BackCoverMode: None
+*OrderDependency: 149 DocumentSetup *KD07BackCoverMode
+*KD07BackCoverMode None: "
+countdictstack [{(KDBackCoverMode)(None)KDHDict/KFSet get exec
+(None) KDHDict/BackCoverMode get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverMode Printed: "
+(KDBackCoverMode)(Printed)KDHDict/KFSet get exec
+countdictstack [{(Printed) KDHDict/BackCoverMode get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverMode Non-printed: "
+(KDBackCoverMode)(Non-printed)KDHDict/KFSet get exec
+countdictstack [{(Blank) KDHDict/BackCoverMode get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverMode InsertTray/Insert Tray: "
+(KDBackCoverMode)(InsertTray)KDHDict/KFSet get exec
+countdictstack [{(InsertTray) KDHDict/BackCoverMode get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD07BackCoverMode
+
+*OpenUI *KD07BackCoverPaper/Back CoverPaper: PickOne
+*DefaultKD07BackCoverPaper: Letter
+*OrderDependency: 150 DocumentSetup *KD07BackCoverPaper
+*KD07BackCoverPaper Letter: "(KDBackCoverPaper)(Letter)KDHDict/KFSet get exec
+countdictstack [{/Letter KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper A4: "(KDBackCoverPaper)(A4)KDHDict/KFSet get exec
+countdictstack [{/A4 KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper Tabloid: "(KDBackCoverPaper)(Tabloid)KDHDict/KFSet get exec
+countdictstack [{/Tabloid KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper A3: "(KDBackCoverPaper)(A3)KDHDict/KFSet get exec
+countdictstack [{/A3 KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper Cover: "(KDBackCoverPaper)(Cover)KDHDict/KFSet get exec
+countdictstack [{/Cover KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper A4Cover: "(KDBackCoverPaper)(A4Cover)KDHDict/KFSet get exec
+countdictstack [{/A4Cover KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper Color: "(KDBackCoverPaper)(Color)KDHDict/KFSet get exec
+countdictstack [{/Color KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper A4Color: "(KDBackCoverPaper)(A4Color)KDHDict/KFSet get exec
+countdictstack [{/A4Color KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper TabloidClr: "(KDBackCoverPaper)(TabloidClr)KDHDict/KFSet get exec
+countdictstack [{/TabloidClr KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper A3Color: "(KDBackCoverPaper)(A3Color)KDHDict/KFSet get exec
+countdictstack [{/A3Color KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper Legal: "(KDBackCoverPaper)(Legal)KDHDict/KFSet get exec
+countdictstack [{/Legal KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper Tab: "(KDBackCoverPaper)(Tab)KDHDict/KFSet get exec
+countdictstack [{/Tab KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper A4Tab: "(KDBackCoverPaper)(A4Tab)KDHDict/KFSet get exec
+countdictstack [{/A4Tab KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper Insert: "(KDBackCoverPaper)(Insert)KDHDict/KFSet get exec
+countdictstack [{/Insert KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper A4Insert: "(KDBackCoverPaper)(A4Insert)KDHDict/KFSet get exec
+countdictstack [{/A4Insert KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper TabloidIns: "(KDBackCoverPaper)(TabloidIns)KDHDict/KFSet get exec
+countdictstack [{/TabloidIns KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper A3Insert: "(KDBackCoverPaper)(A3Insert)KDHDict/KFSet get exec
+countdictstack [{/A3Insert KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper Trans: "(KDBackCoverPaper)(Trans)KDHDict/KFSet get exec
+countdictstack [{/Trans KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*KD07BackCoverPaper A4Trans: "(KDBackCoverPaper)(A4Trans)KDHDict/KFSet get exec
+countdictstack [{/A4Trans KDHDict/LRC get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD07BackCoverPaper
+
+*OpenUI *KD08ProofSet/Print Proof and Wait: PickOne
+*DefaultKD08ProofSet: None
+*OrderDependency: 100 DocumentSetup *KD08ProofSet
+*KD08ProofSet None/No: "(KDProofSet)(Off)KDHDict/KFSet get exec
+countdictstack [{(Off)KDHDict/KDProofSet get exec}KDHDict/KFC get exec"
+*End
+*KD08ProofSet PrintJobAfterTimeout/Print after Timeout: "
+(KDProofSet)(OnPrint)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait get(OnPrint)KDHDict/KDProofSet get exec
+}KDHDict/KFC get exec"
+*End
+*KD08ProofSet CancelJobafterTimeout/Cancel after Timeout: "
+(KDProofSet)(OnCancel)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait get(OnCancel)KDHDict/KDProofSet get exec
+}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD08ProofSet
+
+*% Proof set requires KD10Collate true
+*UIConstraints: *KD08ProofSet PrintJobAfterTimeout  *KD10Collate False
+*UIConstraints: *KD10Collate False *KD08ProofSet PrintJobAfterTimeout
+*UIConstraints: *KD08ProofSet CancelJobafterTimeout  *KD10Collate False
+*UIConstraints: *KD10Collate False *KD08ProofSet CancelJobafterTimeout
+
+*OpenUI *KD09Interleaves/Transparency Interleaves: PickOne
+*DefaultKD09Interleaves: None
+*OrderDependency:  50 DocumentSetup *KD09Interleaves
+*KD09Interleaves None/No: "(KDInterleaves)(None)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*KD09Interleaves Printed: "(KDInterleaves)(Print)KDHDict/KFSet get exec
+countdictstack [{true KDHDict/KDInterleave get exec}KDHDict/KFC get exec"
+*End
+*KD09Interleaves Blank: "
+(KDInterleaves)(NoPrint)KDHDict/KFSet get exec
+countdictstack [{false KDHDict/KDInterleave get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD09Interleaves
+
+*% No interleaves(printed or blank) with front covers
+*UIConstraints: *KD06FrontCoverMode Printed     *KD09Interleaves Printed
+*UIConstraints: *KD06FrontCoverMode Non-printed       *KD09Interleaves Printed
+*UIConstraints: *KD06FrontCoverMode InsertTray  *KD09Interleaves Printed
+*UIConstraints: *KD09Interleaves Printed *KD06FrontCoverMode Printed
+*UIConstraints: *KD09Interleaves Printed *KD06FrontCoverMode Non-printed
+*UIConstraints: *KD09Interleaves Printed *KD06FrontCoverMode InsertTray
+*UIConstraints: *KD06FrontCoverMode Printed    *KD09Interleaves Blank
+*UIConstraints: *KD06FrontCoverMode Non-printed      *KD09Interleaves Blank
+*UIConstraints: *KD06FrontCoverMode InsertTray *KD09Interleaves Blank
+*UIConstraints: *KD09Interleaves Blank *KD06FrontCoverMode Printed
+*UIConstraints: *KD09Interleaves Blank *KD06FrontCoverMode Non-printed
+*UIConstraints: *KD09Interleaves Blank *KD06FrontCoverMode InsertTray
+
+*% No interleaves(printed or blank) with back covers
+*UIConstraints: *KD07BackCoverMode Printed     *KD09Interleaves Printed
+*UIConstraints: *KD07BackCoverMode Non-printed       *KD09Interleaves Printed
+*UIConstraints: *KD07BackCoverMode InsertTray  *KD09Interleaves Printed
+*UIConstraints: *KD09Interleaves Printed *KD07BackCoverMode Printed
+*UIConstraints: *KD09Interleaves Printed *KD07BackCoverMode Non-printed
+*UIConstraints: *KD09Interleaves Printed *KD07BackCoverMode InsertTray
+*UIConstraints: *KD07BackCoverMode Printed     *KD09Interleaves Blank
+*UIConstraints: *KD07BackCoverMode Non-printed       *KD09Interleaves Blank
+*UIConstraints: *KD07BackCoverMode InsertTray  *KD09Interleaves Blank
+*UIConstraints: *KD09Interleaves Blank *KD07BackCoverMode Printed
+*UIConstraints: *KD09Interleaves Blank *KD07BackCoverMode Non-printed
+*UIConstraints: *KD09Interleaves Blank *KD07BackCoverMode InsertTray
+
+
+
+*OpenUI *KD10Collate/Collate: Boolean
+*DefaultKD10Collate: True
+*OrderDependency:  50 DocumentSetup *KD10Collate
+*KD10Collate True/Yes: "(KDCollate)(True)KDHDict/KFSet get exec
+countdictstack [{true KDHDict/Collate get exec}KDHDict/KFC get exec"
+*End
+*KD10Collate False/No: "(KDCollate)(False)KDHDict/KFSet get exec
+countdictstack [{false KDHDict/Collate get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD10Collate
+
+*OpenUI *KD10SlipSheet/Set Separators: PickOne
+*DefaultKD10SlipSheet: None
+*OrderDependency: 100 DocumentSetup *KD10SlipSheet
+*KD10SlipSheet None/No: "(KDSlipSheet)(None)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet Letter: "(KDSlipSheet)(Letter)KDHDict/KFSet get exec
+countdictstack [{/Letter KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet A4: "(KDSlipSheet)(A4)KDHDict/KFSet get exec
+countdictstack [{/A4 KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet Tabloid: "(KDSlipSheet)(Tabloid)KDHDict/KFSet get exec
+countdictstack [{/Tabloid KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet A3: "(KDSlipSheet)(A3)KDHDict/KFSet get exec
+countdictstack [{/A3 KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet Cover: "(KDSlipSheet)(Cover)KDHDict/KFSet get exec
+countdictstack [{/Cover KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet A4Cover: "(KDSlipSheet)(A4Cover)KDHDict/KFSet get exec
+countdictstack [{/A4Cover KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet Color: "(KDSlipSheet)(Color)KDHDict/KFSet get exec
+countdictstack [{/Color KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet A4Color: "(KDSlipSheet)(A4Color)KDHDict/KFSet get exec
+countdictstack [{/A4Color KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet TabloidClr: "(KDSlipSheet)(TabloidClr)KDHDict/KFSet get exec
+countdictstack [{/TabloidClr KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet A3Color: "(KDSlipSheet)(A3Color)KDHDict/KFSet get exec
+countdictstack [{/A3Color KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet Legal: "(KDSlipSheet)(Legal)KDHDict/KFSet get exec
+countdictstack [{/Legal KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet Tab: "(KDSlipSheet)(Tab)KDHDict/KFSet get exec
+countdictstack [{/Tab KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet A4Tab: "(KDSlipSheet)(A4Tab)KDHDict/KFSet get exec
+countdictstack [{/A4Tab KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet Insert: "(KDSlipSheet)(Insert)KDHDict/KFSet get exec
+countdictstack [{/Insert KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet A4Insert: "(KDSlipSheet)(A4Insert)KDHDict/KFSet get exec
+countdictstack [{/A4Insert KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet TabloidIns: "(KDSlipSheet)(TabloidIns)KDHDict/KFSet get exec
+countdictstack [{/TabloidIns KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet A3Insert: "(KDSlipSheet)(A3Insert)KDHDict/KFSet get exec
+countdictstack [{/A3Insert KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet Trans: "(KDSlipSheet)(Trans)KDHDict/KFSet get exec
+countdictstack [{/Trans KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*KD10SlipSheet A4Trans: "(KDSlipSheet)(A4Trans)KDHDict/KFSet get exec
+countdictstack [{/A4Trans KDHDict/LSetSeps get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD10SlipSheet
+
+
+*% Uncomment and edit the following options as necessary
+*% *OpenUI *KD11ChargeNumber/Charge Number: PickOne
+*% *DefaultKD11ChargeNumber: None
+*% *OrderDependency:  50 DocumentSetup *KD11ChargeNumber
+*% *KD11ChargeNumber None/No: "
+*% (KDChargeNo)(***NO CHARGE NUMBER***)KDHDict/KFSet get exec
+*% countdictstack [{}KDHDict/KFC get exec"
+*% *End
+*% *KD11ChargeNumber 1: " 
+*% (KDChargeNo)(1)KDHDict/KFSet get exec
+*% countdictstack [{(1)KDHDict/KDChargeNo get exec}KDHDict/KFC get exec"
+*% *End
+*% *KD11ChargeNumber 2: "
+*% (KDChargeNo)(2)KDHDict/KFSet get exec
+*% countdictstack [{(2)KDHDict/KDChargeNo get exec}KDHDict/KFC get exec"
+*% *End
+*% *CloseUI: *KD11ChargeNumber
+
+*OpenUI *KD11Jog/Stacking:  Boolean
+*DefaultKD11Jog: True
+*OrderDependency:  50 DocumentSetup *KD11Jog
+*KD11Jog True/Offset: "(KDJog)(Offset)KDHDict/KFSet get exec
+countdictstack [{true KDHDict/Jog get exec}KDHDict/KFC get exec"
+*End
+*KD11Jog False/Straight: "(KDJog)(Straight)KDHDict/KFSet get exec
+countdictstack [{false KDHDict/Jog get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD11Jog
+
+*% Uncomment and edit the following options as necessary
+*% *OpenUI *KD12OpMsg/Operator Message: PickOne
+*% *DefaultKD12OpMsg: None
+*% *OrderDependency:  50 DocumentSetup *KD12OpMsg
+*% *KD12OpMsg None/No: "
+*% (KDOpMsg)(***No Operator Message***)KDHDict/KFSet get exec
+*% countdictstack [{}KDHDict/KFC get exec"
+*% *End
+*% *KD12OpMsg Msg1: "
+*% (KDOpMsg)(Msg1)KDHDict/KFSet get exec
+*% countdictstack [{(Msg1)KDHDict/KDOpMsg get exec}KDHDict/KFC get exec"
+*% *End
+*% *KD12OpMsg Msg2: "
+*% (KDOpMsg)(Msg2)KDHDict/KFSet get exec
+*% countdictstack [{(Msg2)KDHDict/KDOpMsg get exec}KDHDict/KFC get exec"
+*% *End
+*% *CloseUI: *KD12OpMsg
+
+*% Uncomment and edit the following options as necessary
+*% *OpenUI *KD13DeliverTo/DeliverTo: PickOne
+*% *DefaultKD13DeliverTo: None
+*% *OrderDependency:  50 DocumentSetup *KD13DeliverTo
+*% *KD13DeliverTo None/No: "
+*% (KDDeliverTo)(***NO DELIVER TO MESSAGE***)KDHDict/KFSet get exec
+*% countdictstack [{}KDHDict/KFC get exec"
+*% *End
+*% *KD13DeliverTo Me: "
+*% (KDDeliverTo)(Me)KDHDict/KFSet get exec
+*% countdictstack [{(Me)KDHDict/KDDeliverTo get exec}KDHDict/KFC get exec"
+*% *End
+*% *KD13DeliverTo DelMsg2: "
+*% (KDDeliverTo)(DelMsg2)KDHDict/KFSet get exec
+*% countdictstack [{(DelMsg2)KDHDict/KDDeliverTo get exec}KDHDict/KFC get exec"
+*% *End
+*% *CloseUI: *KD13DeliverTo
+
+*OpenUI *KD14Mismatch/Mismatch Handling: PickOne
+*DefaultKD14Mismatch: TrustMe
+*OrderDependency:   6 DocumentSetup *KD14Mismatch
+*KD14Mismatch TrustMe/Auto Substitute: "
+(   %%[ PPD:  USING KDH00001.PPD VER. 2.40 ]%%) = flush
+(KDMismatch)(AutomaticallySubstitute)KDHDict/KFSet get exec
+countdictstack [{(AutomaticallySubstitute)KDHDict/KDMismatch get exec
+}KDHDict/KFC get exec"
+*End
+*KD14Mismatch Substitute/Notify then Substitute: "
+(   %%[ PPD:  USING KDH00001.PPD VER. 2.40 ]%%) = flush
+(KDMismatch)(NotifyThenSubstitute)KDHDict/KFSet get exec
+countdictstack [{(NotifyThenSubstitute)KDHDict/KDMismatch get exec
+}KDHDict/KFC get exec"
+*End
+*KD14Mismatch Cancel/Notify then Cancel: "
+(   %%[ PPD:  USING KDH00001.PPD VER. 2.40 ]%%) = flush
+(KDMismatch)(NotifyThenCancel)KDHDict/KFSet get exec
+countdictstack [{(NotifyThenCancel)KDHDict/KDMismatch get exec
+}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD14Mismatch
+
+*OpenUI *KD15Wait/Timeout For Proof Set: PickOne
+*DefaultKD15Wait: 5Minutes
+*OrderDependency:  50 DocumentSetup *KD15Wait
+*KD15Wait  1Minute/1 Minute: "(KDWait)(1)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 1 put}KDHDict/KFC get exec"
+*End
+*KD15Wait  2Minutes/2 Minutes: "(KDWait)(2)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 2 put}KDHDict/KFC get exec"
+*End
+*KD15Wait  3Minutes/3 Minutes: "(KDWait)(3)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 3 put}KDHDict/KFC get exec"
+*End
+*KD15Wait  4Minutes/4 Minutes: "(KDWait)(4)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 5 put}KDHDict/KFC get exec"
+*End
+*KD15Wait 5Minutes/5 Minutes: "(KDWait)(5)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 5 put}KDHDict/KFC get exec"
+*End
+*KD15Wait 6Minutes/6 Minutes: "(KDWait)(6)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 6 put}KDHDict/KFC get exec"
+*End
+*KD15Wait 7Minutes/7 Minutes: "(KDWait)(7)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 7 put}KDHDict/KFC get exec"
+*End
+*KD15Wait 8Minutes/8 Minutes: "(KDWait)(8)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 8 put}KDHDict/KFC get exec"
+*End
+*KD15Wait 9Minutes/9 Minutes: "(KDWait)(9)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 9 put}KDHDict/KFC get exec"
+*End
+*KD15Wait 10Minutes/10 Minutes: "(KDWait)(10)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 10 put}KDHDict/KFC get exec"
+*End
+*KD15Wait 20Minutes/20 Minutes: "(KDWait)(20)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 20 put}KDHDict/KFC get exec"
+*End
+*KD15Wait 30Minutes/30 Minutes: "(KDWait)(30)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 30 put}KDHDict/KFC get exec"
+*End
+*KD15Wait 60Minutes/60 Minutes: "(KDWait)(60)KDHDict/KFSet get exec
+countdictstack [{KDHDict/PWait 60 put}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD15Wait
+
+*OpenUI *KD16StatusPage/Status Pages: PickOne
+*DefaultKD16StatusPage: Always
+*OrderDependency:   5 DocumentSetup *KD16StatusPage
+*KD16StatusPage None: "(KDStatusPageMode)(None)KDHDict/KFSet get exec
+countdictstack [{(None)KDHDict/SetSPM get exec}KDHDict/KFC get exec"
+*End
+*KD16StatusPage OnlyOnError/Only On Error: "
+(KDStatusPageMode)(OnlyOnError)KDHDict/KFSet get exec
+countdictstack [{(OnlyOnError)KDHDict/SetSPM get exec}KDHDict/KFC get exec"
+*End
+*KD16StatusPage Always/Always: "
+(KDStatusPageMode)(Always)KDHDict/KFSet get exec
+countdictstack [{(Always)KDHDict/SetSPM get exec}KDHDict/KFC get exec"
+*End
+*KD16StatusPage PageOneOnly/Always-1st Page Only: "
+(KDStatusPageMode)(PageOneOnlyMode)KDHDict/KFSet get exec
+countdictstack [{(PageOneOnly)KDHDict/SetSPM get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD16StatusPage
+
+*OpenUI *KD17StatusPagePaper/Paper for Status Pages: PickOne
+*OrderDependency:   4 DocumentSetup *KD17StatusPagePaper
+*DefaultKD17StatusPagePaper: Letter
+*KD17StatusPagePaper Letter: "(KDStatusPagePaper)(Letter)KDHDict/KFSet get exec
+countdictstack [{/Letter KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper A4: "(KDStatusPagePaper)(A4)KDHDict/KFSet get exec
+countdictstack [{/A4 KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper Tabloid: "(KDStatusPagePaper)(Tabloid)KDHDict/KFSet get exec
+countdictstack [{/Tabloid KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper A3: "(KDStatusPagePaper)(A3)KDHDict/KFSet get exec
+countdictstack [{/A3 KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper Cover: "(KDStatusPagePaper)(Cover)KDHDict/KFSet get exec
+countdictstack [{/Cover KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper A4Cover: "(KDStatusPagePaper)(A4Cover)KDHDict/KFSet get exec
+countdictstack [{/A4Cover KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper Color: "(KDStatusPagePaper)(Color)KDHDict/KFSet get exec
+countdictstack [{/Color KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper A4Color: "(KDStatusPagePaper)(A4Color)KDHDict/KFSet get exec
+countdictstack [{/A4Color KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper TabloidClr: "(KDStatusPagePaper)(TabloidClr)KDHDict/KFSet get exec
+countdictstack [{/TabloidClr KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper A3Color: "(KDStatusPagePaper)(A3Color)KDHDict/KFSet get exec
+countdictstack [{/A3Color KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper Legal: "(KDStatusPagePaper)(Legal)KDHDict/KFSet get exec
+countdictstack [{/Legal KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper Tab: "(KDStatusPagePaper)(Tab)KDHDict/KFSet get exec
+countdictstack [{/Tab KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper A4Tab: "(KDStatusPagePaper)(A4Tab)KDHDict/KFSet get exec
+countdictstack [{/A4Tab KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper Insert: "(KDStatusPagePaper)(Insert)KDHDict/KFSet get exec
+countdictstack [{/Insert KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper A4Insert: "(KDStatusPagePaper)(A4Insert)KDHDict/KFSet get exec
+countdictstack [{/A4Insert KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper TabloidIns: "(KDStatusPagePaper)(TabloidIns)KDHDict/KFSet get exec
+countdictstack [{/TabloidIns KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper A3Insert: "(KDStatusPagePaper)(A3Insert)KDHDict/KFSet get exec
+countdictstack [{/A3Insert KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper Trans: "(KDStatusPagePaper)(Trans)KDHDict/KFSet get exec
+countdictstack [{/Trans KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*KD17StatusPagePaper A4Trans: "(KDStatusPagePaper)(A4Trans)KDHDict/KFSet get exec
+countdictstack [{/A4Trans KDHDict/SSP get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD17StatusPagePaper
+
+*OpenUI *KD18SigSize/Pamphlet Signatures: PickOne
+*DefaultKD18SigSize: Sign60
+*OrderDependency:  50 DocumentSetup *KD18SigSize
+*KD18SigSize Sign04/4 Pages (1 Sheet): "(KDSigSize)(1)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 1 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign08/8 Pages (2 Sheets): "(KDSigSize)(2)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 2 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign12/12 Pages (3 Sheets): "(KDSigSize)(3)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 3 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign16/16 Pages (4 Sheets): "(KDSigSize)(4)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 4 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign20/20 Pages (5 Sheets): "(KDSigSize)(5)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 5 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign24/24 Pages (6 Sheets): "(KDSigSize)(6)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 6 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign28/28 Pages (7 Sheets): "(KDSigSize)(7)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 7 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign32/32 Pages (8 Sheets): "(KDSigSize)(8)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 8 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign36/36 Pages (9 Sheets): "(KDSigSize)(9)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 9 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign40/40 Pages (10 Sheets): "(KDSigSize)(10)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 10 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign44/44 Pages (11 Sheets): "(KDSigSize)(11)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 11 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign48/48 Pages (12 Sheets): "(KDSigSize)(12)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 12 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign52/52 Pages (13 Sheets): "(KDSigSize)(13)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 13 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign56/56 Pages (14 Sheets): "(KDSigSize)(14)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 14 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign60/60 Pages (15 Sheets): "(KDSigSize)(15)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 15 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign64/64 Pages (16 Sheets): "(KDSigSize)(16)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 16 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign68/68 Pages (17 Sheets): "(KDSigSize)(17)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 17 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign72/72 Pages (18 Sheets): "(KDSigSize)(18)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 18 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign76/76 Pages (19 Sheets): "(KDSigSize)(19)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 19 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign80/80 Pages (20 Sheets): "(KDSigSize)(20)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 20 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign84/84 Pages (21 Sheets): "(KDSigSize)(21)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 21 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign88/88 Pages (22 Sheets): "(KDSigSize)(22)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 22 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign92/92 Pages (23 Sheets): "(KDSigSize)(23)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 23 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign96/96 Pages (24 Sheets): "(KDSigSize)(24)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 24 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign100/100 Pages (25 Sheets): "(KDSigSize)(25)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 25 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign104/104 Pages (26 Sheets): "(KDSigSize)(26)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 26 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign108/108 Pages (27 Sheets): "(KDSigSize)(27)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 27 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign112/112 Pages (28 Sheets): "(KDSigSize)(28)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 28 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign116/116 Pages (29 Sheets): "(KDSigSize)(29)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 29 put}KDHDict/KFC get exec"
+*End
+*KD18SigSize Sign120/120 Pages (30 Sheets): "(KDSigSize)(30)KDHDict/KFSet get exec
+countdictstack [{KDHDict/SigSize 30 put}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD18SigSize
+
+*OpenUI *KD19ImageMapping/Map All Bitmaps: PickOne
+*DefaultKD19ImageMapping: Auto
+*OrderDependency: 150 DocumentSetup *KD19ImageMapping
+*KD19ImageMapping Auto/Automatic: "(KDImageMapping)(Automatic)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*KD19ImageMapping Red/To Red: "(KDImageMapping)(To Red)KDHDict/KFSet get exec
+countdictstack [{(AAAAAAAR)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD19ImageMapping Green/To Green: "(KDImageMapping)(To Green)KDHDict/KFSet get exec
+countdictstack [{(AAAAAAAG)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD19ImageMapping Blue/To Blue: "(KDImageMapping)(To Blue)KDHDict/KFSet get exec
+countdictstack [{(AAAAAAAB)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD19ImageMapping Yellow/To Yellow: "(KDImageMapping)(To Yellow)KDHDict/KFSet get exec
+countdictstack [{(AAAAAAAY)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD19ImageMapping Black/To Black: "(KDImageMapping)(To Blank)KDHDict/KFSet get exec
+countdictstack [{(AAAAAAAK)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD19ImageMapping
+
+*OpenUI *KD20BlackMapping/Map Black: PickOne
+*DefaultKD20BlackMapping: Auto
+*OrderDependency: 150 DocumentSetup *KD20BlackMapping
+*KD20BlackMapping Auto/Automatic: "(KDBlackMapping)(Automatic)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*KD20BlackMapping Red/To Red: "(KDBlackMapping)(To Red)KDHDict/KFSet get exec
+countdictstack [{(AAAAAARA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD20BlackMapping Green/To Green: "(KDBlackMapping)(To Green)KDHDict/KFSet get exec
+countdictstack [{(AAAAAAGA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD20BlackMapping Blue/To Blue: "(KDBlackMapping)(To Blue)KDHDict/KFSet get exec
+countdictstack [{(AAAAAABA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD20BlackMapping Yellow/To Yellow: "(KDBlackMapping)(To Yellow)KDHDict/KFSet get exec
+countdictstack [{(AAAAAAYA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD20BlackMapping Black/To Black: "(KDBlackMapping)(To Black)KDHDict/KFSet get exec
+countdictstack [{(AAAAAAKA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD20BlackMapping
+
+*OpenUI *KD21RedMapping/Map Red: PickOne
+*DefaultKD21RedMapping: Auto
+*OrderDependency: 150 DocumentSetup *KD21RedMapping
+*KD21RedMapping Auto/Automatic: "(KDRedMapping)(Automatic)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*KD21RedMapping Red/To Red: "(KDRedMapping)(To Red)KDHDict/KFSet get exec
+countdictstack [{(RAAAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD21RedMapping Green/To Green: "(KDRedMapping)(To Green)KDHDict/KFSet get exec
+countdictstack [{(GAAAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD21RedMapping Blue/To Blue: "(KDRedMapping)(To Blue)KDHDict/KFSet get exec
+countdictstack [{(BAAAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD21RedMapping Yellow/To Yellow: "(KDRedMapping)(To Yellow)KDHDict/KFSet get exec
+countdictstack [{(YAAAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD21RedMapping Black/To Black: "(KDRedMapping)(To Black)KDHDict/KFSet get exec
+countdictstack [{(KAAAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD21RedMapping
+
+*OpenUI *KD22GreenMapping/Map Green: PickOne
+*DefaultKD22GreenMapping: Auto
+*OrderDependency: 150 DocumentSetup *KD22GreenMapping
+*KD22GreenMapping Auto/Automatic: "(KDGreenMapping)(Automatic)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*KD22GreenMapping Red/To Red: "(KDGreenMapping)(To Red)KDHDict/KFSet get exec
+countdictstack [{(ARAAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD22GreenMapping Green/To Green: "(KDGreenMapping)(To Green)KDHDict/KFSet get exec
+countdictstack [{(AGAAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD22GreenMapping Blue/To Blue: "(KDGreenMapping)(To Blue)KDHDict/KFSet get exec
+countdictstack [{(ABAAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD22GreenMapping Yellow/To Yellow: "(KDGreenMapping)(To Yellow)KDHDict/KFSet get exec
+countdictstack [{(AYAAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD22GreenMapping Black/To Black: "(KDGreenMapping)(To Black)KDHDict/KFSet get exec
+countdictstack [{(AKAAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD22GreenMapping
+
+*OpenUI *KD23BlueMapping/Map Blue: PickOne
+*DefaultKD23BlueMapping: Auto
+*OrderDependency: 150 DocumentSetup *KD23BlueMapping
+*KD23BlueMapping Auto/Automatic: "(KDBlueMapping)(Automatic)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*KD23BlueMapping Red/To Red: "(KDBlueMapping)(To Red)KDHDict/KFSet get exec
+countdictstack [{(AARAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD23BlueMapping Green/To Green: "(KDBlueMapping)(To Green)KDHDict/KFSet get exec
+countdictstack [{(AAGAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD23BlueMapping Blue/To Blue: "(KDBlueMapping)(To Blue)KDHDict/KFSet get exec
+countdictstack [{(AABAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD23BlueMapping Yellow/To Yellow: "(KDBlueMapping)(To Yellow)KDHDict/KFSet get exec
+countdictstack [{(AAYAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD23BlueMapping Black/To Black: "(KDBlueMapping)(To Black)KDHDict/KFSet get exec
+countdictstack [{(AAKAAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD23BlueMapping
+
+*OpenUI *KD24CyanMapping/Map Cyan: PickOne
+*DefaultKD24CyanMapping: Auto
+*OrderDependency: 150 DocumentSetup *KD24CyanMapping
+*KD24CyanMapping Auto/Automatic: "(KDCyanMapping)(Automatic)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*KD24CyanMapping Red/To Red: "(KDCyanMapping)(To Red)KDHDict/KFSet get exec
+countdictstack [{(AAARAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD24CyanMapping Green/To Green: "(KDCyanMapping)(To Green)KDHDict/KFSet get exec
+countdictstack [{(AAAGAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD24CyanMapping Blue/To Blue: "(KDCyanMapping)(To Blue)KDHDict/KFSet get exec
+countdictstack [{(AAABAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD24CyanMapping Yellow/To Yellow: "(KDCyanMapping)(To Yellow)KDHDict/KFSet get exec
+countdictstack [{(AAAYAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD24CyanMapping Black/To Black: "(KDCyanMapping)(To Black)KDHDict/KFSet get exec
+countdictstack [{(AAAKAAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD24CyanMapping
+
+*OpenUI *KD25MagentaMapping/Map Magenta: PickOne
+*DefaultKD25MagentaMapping: Auto
+*OrderDependency: 150 DocumentSetup *KD25MagentaMapping
+*KD25MagentaMapping Auto/Automatic: "(KDMagentaMapping)(Automatic)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*KD25MagentaMapping Red/To Red: "(KDMagentaMapping)(To Red)KDHDict/KFSet get exec
+countdictstack [{(AAAARAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD25MagentaMapping Green/To Green: "(KDMagentaMapping)(To Green)KDHDict/KFSet get exec
+countdictstack [{(AAAAGAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD25MagentaMapping Blue/To Blue: "(KDMagentaMapping)(To Blue)KDHDict/KFSet get exec
+countdictstack [{(AAAABAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD25MagentaMapping Yellow/To Yellow: "(KDMagentaMapping)(To Yellow)KDHDict/KFSet get exec
+countdictstack [{(AAAAYAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD25MagentaMapping Black/To Black: "(KDMagentaMapping)(To Black)KDHDict/KFSet get exec
+countdictstack [{(AAAAKAAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD25MagentaMapping
+
+*OpenUI *KD26YellowMapping/Map Yellow: PickOne
+*DefaultKD26YellowMapping: Auto
+*OrderDependency: 150 DocumentSetup *KD26YellowMapping
+*KD26YellowMapping Auto/Automatic: "(KDYellowMapping)(Automatic)KDHDict/KFSet get exec
+countdictstack [{}KDHDict/KFC get exec"
+*End
+*KD26YellowMapping Red/To Red: "(KDYellowMapping)(To Red)KDHDict/KFSet get exec
+countdictstack [{(AAAAARAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD26YellowMapping Green/To Green: "(KDYellowMapping)(To Green)KDHDict/KFSet get exec
+countdictstack [{(AAAAAGAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD26YellowMapping Blue/To Blue: "(KDYellowMapping)(To Blue)KDHDict/KFSet get exec
+countdictstack [{(AAAAABAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD26YellowMapping Yellow/To Yellow: "(KDYellowMapping)(To Yellow)KDHDict/KFSet get exec
+countdictstack [{(AAAAAYAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*KD26YellowMapping Black/To Black: "(KDYellowMapping)(To Black)KDHDict/KFSet get exec
+countdictstack [{(AAAAAKAA)KDHDict/KDColorMapping get exec}KDHDict/KFC get exec"
+*End
+*CloseUI: *KD26YellowMapping
+
+
+
+*% The following entries provide information about specific paper keywords.
+*DefaultImageableArea: Letter
+*ImageableArea Letter/US Letter:     "0 0 612  792 "
+*ImageableArea Legal/US Legal:       "0 0 612 1008 "
+*ImageableArea A4:                   "0 0 595  842 "
+*ImageableArea A3:                   "0 0 842 1191 "
+*ImageableArea Tabloid:              "0 0 792 1224 "
+*ImageableArea 9x11/Lettertab:       "0 0 648  792 "
+*ImageableArea A4Tab:                "0 0 638  842 "
+*ImageableArea Statement:            "0 0 396  612 "
+*ImageableArea HalfLegal/Half Legal: "0 0 504  612 "
+*ImageableArea A5:                   "0 0 420  595 "
+
+*% These provide the physical dimensions of the paper (by keyword)
+*DefaultPaperDimension: Letter
+*PaperDimension Letter/US Letter:     "612  792"
+*PaperDimension Legal/US Legal:       "612 1008"
+*PaperDimension A4:                   "595  842"
+*PaperDimension A3:                   "842 1191"
+*PaperDimension Tabloid:              "792 1224"
+*PaperDimension 9x11/Lettertab:       "648  792"
+*PaperDimension A4Tab:                "638  842"
+*PaperDimension Statement:            "396  612"
+*PaperDimension HalfLegal/Half Legal: "504  612"
+*PaperDimension A5:                   "420  595"
+
+*RequiresPageRegion All: True
+
+*DefaultInputSlot: AutoSelect
+*InputSlot AutoSelect/Auto Select: ""
+
+*DefaultOutputOrder:  Normal
+*OutputOrder Normal: " "
+
+
+
+
+*% Font Information =====================
+*DefaultFont: Courier
+*Font AvantGarde-Book: Standard "(001.006S)" Standard Disk
+*Font AvantGarde-BookOblique: Standard "(001.006S)" Standard Disk
+*Font AvantGarde-Demi: Standard "(001.007S)" Standard Disk
+*Font AvantGarde-DemiOblique: Standard "(001.007S)" Standard Disk
+*Font Bookman-Demi: Standard "(001.003S)" Standard Disk
+*Font Bookman-DemiItalic: Standard "(001.003S)" Standard Disk
+*Font Bookman-Light: Standard "(001.003S)" Standard Disk
+*Font Bookman-LightItalic: Standard "(001.003S)" Standard Disk
+*Font Courier: Standard "(002.005)" Standard ROM
+*Font Courier-Bold: Standard "(002.005)" Standard ROM
+*Font Courier-BoldOblique: Standard "(002.005)" Standard ROM
+*Font Courier-Oblique: Standard "(002.005)" Standard ROM
+*Font Helvetica: Standard "(001.006S)" Standard ROM
+*Font Helvetica-Bold: Standard "(001.007S)" Standard ROM
+*Font Helvetica-BoldOblique: Standard "(001.007S)" Standard ROM
+*Font Helvetica-Condensed: Standard "(001.001)" Standard Disk
+*Font Helvetica-Condensed-Bold: Standard "(001.002)" Standard Disk
+*Font Helvetica-Condensed-BoldObl: Standard "(001.002)" Standard Disk
+*Font Helvetica-Condensed-Oblique: Standard "(001.001)" Standard Disk
+*Font Helvetica-Narrow: Standard "(001.006S)" Standard Disk
+*Font Helvetica-Narrow-Bold: Standard "(001.007S)" Standard Disk
+*Font Helvetica-Narrow-BoldOblique: Standard "(001.007S)" Standard Disk
+*Font Helvetica-Narrow-Oblique: Standard "(001.006S)" Standard Disk
+*Font Helvetica-Oblique: Standard "(001.006S)" Standard ROM
+*Font NewCenturySchlbk-Bold: Standard "(001.009S)" Standard Disk
+*Font NewCenturySchlbk-BoldItalic: Standard "(001.007S)" Standard Disk
+*Font NewCenturySchlbk-Italic: Standard "(001.006S)" Standard Disk
+*Font NewCenturySchlbk-Roman: Standard "(001.007S)" Standard Disk
+*Font Palatino-Bold: Standard "(001.005S)" Standard Disk
+*Font Palatino-BoldItalic: Standard "(001.005S)" Standard Disk
+*Font Palatino-Italic: Standard "(001.005S)" Standard Disk
+*Font Palatino-Roman: Standard "(001.005S)" Standard Disk
+*Font Symbol: Special "(001.007S)" Special ROM
+*Font Times-Bold: Standard "(001.007S)" Standard ROM
+*Font Times-BoldItalic: Standard "(001.009S)" Standard ROM
+*Font Times-Italic: Standard "(001.007S)" Standard ROM
+*Font Times-Roman: Standard "(001.007S)" Standard ROM
+*Font ZapfChancery-MediumItalic: Standard "(001.007S)" Standard Disk
+*Font ZapfDingbats: Special "(001.004S)" Special Disk
+
+*% Input Sources (format: %%[ status: <stat>; source: <one of these> ]%% )
+*Source: "LPD-Ethernet"
+*Source: "RPrinter-Ethernet"
+*Source: "EtherTalk"
+*Source: "Parallel"
+*Source: "DQP-Ethernet"
+
+
+*% Last Edit:  11/11/96 Linda Crandall, S. Rogers Eastman Kodak Co.
+*% The byte count of this file should be exactly 070026 or 071559
+*% depending on the filesystem it resides in.
+*% end of PPD file for KODAK 70cp Series II Printer

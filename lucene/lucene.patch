@@ -1,0 +1,12 @@
+--- lucene-2.3.2/common-build.xml	2008-05-01 22:28:56.000000000 +0200
++++ misc/build/lucene-2.3.2/common-build.xml	2008-06-16 16:01:28.812500000 +0200
+@@ -280 +280 @@
+-		           value="${version} ${svnversion} - ${user.name} - ${DSTAMP} ${TSTAMP}"/>
++		           value="${version}"/>
+@@ -297,6 +296,0 @@
+-      <!-- If possible, include the svnversion -->
+-      <exec dir="." executable="svnversion"
+-            outputproperty="svnversion" failifexecutionfails="false">
+-        <arg line="."/>
+-      </exec>
+-      

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>reportbuilder</module-name>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>com.sun.star.report.comp.ReportDesign</name>
+        <description>Represents the report design.</description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.report.ReportDesign</supported-service>
+    </component-description>
+</module-description>

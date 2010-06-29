@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Hierarchy" oor:package="org.openoffice.ucb" xml:lang="en-US"> <info>
+		<author>ABI</author>
+		<desc >Contains components and templates used by UCB's Hierarchy Content Provider (HCP). </desc>
+	</info>
+	<templates>
+		<group oor:name="Entry">
+			<info>
+				<desc>Specifies an entry of the hierarchy. There are two types of entries: folders and links. Folders are containers for other hierarchy elements. Links are pointers to any other resource. </desc>
+			</info>
+			<prop oor:name="Title" oor:type="xs:string">
+				<info>
+					<desc>Specifies the title of an entry of the hierarchy.</desc>
+				</info>
+			</prop>
+			<prop oor:name="TargetURL" oor:type="xs:string">
+				<info>
+					<desc>Specifies the target URL of the entry of the hierarchy.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Type" oor:type="xs:int">
+				<info>
+					<desc>Specifies the type of the hierarchy entry. Currently supported: Link (0) and Folder (1).</desc>
+				</info>
+			</prop>
+			<set oor:name="Children" oor:node-type="Entry">
+				<info>
+					<desc>Specifies the children (other hierarchy entries) of the item.</desc>
+				</info>
+			</set>
+		</group>
+	</templates>
+	<component>
+		<set oor:name="Root" oor:node-type="Entry">
+			<info>
+				<desc>Contains a set of top-level entries of the hierarchy.</desc>
+			</info>
+		</set>
+	</component>
+</oor:component-schema>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
