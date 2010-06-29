@@ -60,8 +60,6 @@ public:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
 private:
-    void UpdateImages();
-
     ViewShellBase& mrBase;
     ULONG mnUpdateTagsEvent;
 
