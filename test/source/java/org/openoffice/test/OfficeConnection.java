@@ -31,6 +31,7 @@ import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.connection.NoConnectException;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.DisposedException;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import java.io.IOException;
@@ -103,23 +104,31 @@ public final class OfficeConnection {
         throws InterruptedException, com.sun.star.uno.Exception
     {
         boolean desktopTerminated = true;
-        if (context != null) {
-            XDesktop desktop = UnoRuntime.queryInterface(
-                XDesktop.class,
-                context.getServiceManager().createInstanceWithContext(
-                    "com.sun.star.frame.Desktop", context));
-            context = null;
-            try {
-                desktopTerminated = desktop.terminate();
-            } catch (DisposedException e) {}
-                // it appears that DisposedExceptions can already happen while
-                // receiving the response of the terminate call
-            desktop = null;
-        } else if (process != null) {
+        if (context != null)
+        {
+            XMultiComponentFactory xMSF = context.getServiceManager();
+            if (xMSF != null)
+            {
+                XDesktop desktop = UnoRuntime.queryInterface(
+                    XDesktop.class,
+                    xMSF.createInstanceWithContext(
+                        "com.sun.star.frame.Desktop", context));
+                context = null;
+                try {
+                    desktopTerminated = desktop.terminate();
+                } catch (DisposedException e) {}
+                    // it appears that DisposedExceptions can already happen while
+                    // receiving the response of the terminate call
+                desktop = null;
+            }
+        }
+        else if (process != null)
+        {
             process.destroy();
         }
         int code = 0;
-        if (process != null) {
+        if (process != null)
+        {
             code = process.waitFor();
         }
         boolean outTerminated = outForward == null || outForward.terminated();

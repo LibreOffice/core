@@ -32,6 +32,7 @@ TARGET = java
 PACKAGE = org/openoffice/test
 JAVAFILES = \
     Argument.java \
+    FileHelper.java \
     OfficeConnection.java \
     OfficeFileUrl.java \
     TestArgument.java
