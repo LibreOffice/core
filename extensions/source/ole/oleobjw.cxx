@@ -1231,7 +1231,9 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
     }
     catch (BridgeRuntimeError & e)
     {
-         throw RuntimeException(e.message, Reference<XInterface>());
+        // #i110821 Hot Fix: Fails for some objects that have
+        // worked before, will be evaluated in follow up issue.
+        //throw RuntimeException(e.message, Reference<XInterface>());
     }
     catch( Exception& e)
     {
