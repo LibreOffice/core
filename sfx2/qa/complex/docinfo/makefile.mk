@@ -45,7 +45,7 @@ JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
 EXTRAJARFILES = $(OOO_JUNIT_JAR)
 
 # Sample how to debug
-JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
+# JAVAIFLAGS=-Xdebug  -Xrunjdwp:transport=dt_socket,server=y,address=9003,suspend=y
 
 .END
 

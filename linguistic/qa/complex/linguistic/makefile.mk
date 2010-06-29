@@ -27,7 +27,6 @@
 
 .IF "$(OOO_SUBSEQUENT_TESTS)" == ""
 nothing .PHONY:
-    @echo "OOO_SUBSEQUENT_TESTS not set, do nothing."
 .ELSE
 
 PRJ = ../../..
