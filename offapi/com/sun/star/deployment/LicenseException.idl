@@ -41,20 +41,19 @@ exception LicenseException : com::sun::star::uno::Exception
 {
     /** name of the extension.
 
-        Contains the file name only.
+        The display name of the extension.
+        See <member>XPackage::getDisplayName</member>
      */
     string ExtensionName;
     /** contains the text of the license.
     */
     string Text;
 
-    /** indicates if the user can prevent to show the license
-
-    Represents the attribute value
-    /description/registration/simple-license/@suppress-if-required
+    /** contains the value of the attribute
+    /description/registration/simple-license/@accept-by
     from the description.xml
     */
-    boolean SuppressIfRequired;
+    string AcceptBy;
 };
 
 }; }; }; };

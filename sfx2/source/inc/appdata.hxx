@@ -82,6 +82,9 @@ class SfxBasicManagerCreationListener;
 
 namespace sfx2 { namespace appl { class ImeStatusWindow; } }
 
+typedef Link* LinkPtr;
+SV_DECL_PTRARR(SfxInitLinkList, LinkPtr, 4, 4)
+
 //=========================================================================
 // SfxAppData_Impl
 //=========================================================================

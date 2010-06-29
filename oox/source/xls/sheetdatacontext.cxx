@@ -364,6 +364,10 @@ void OoxSheetDataContext::importCell( const AttributeList& rAttribs )
     maCurrCell.mnXfId         = rAttribs.getInteger( XML_s, -1 );
     maCurrCell.mbShowPhonetic = rAttribs.getBool( XML_ph, false );
     mxInlineStr.reset();
+
+    // update used area of the sheet
+    if( maCurrCell.mxCell.is() )
+        extendUsedArea( maCurrCell.maAddress );
 }
 
 void OoxSheetDataContext::importFormula( const AttributeList& rAttribs )
@@ -396,6 +400,10 @@ void OoxSheetDataContext::importCellHeader( RecordInputStream& rStrm, CellType e
     maCurrCell.mxCell         = getCell( maCurrPos, &maCurrCell.maAddress );
     maCurrCell.mnXfId         = extractValue< sal_Int32 >( nXfId, 0, 24 );
     maCurrCell.mbShowPhonetic = getFlag( nXfId, OOBIN_CELL_SHOWPHONETIC );
+
+    // update used area of the sheet
+    if( maCurrCell.mxCell.is() )
+        extendUsedArea( maCurrCell.maAddress );
 }
 
 void OoxSheetDataContext::importCellBool( RecordInputStream& rStrm, CellType eCellType )
@@ -701,6 +709,9 @@ void BiffSheetDataContext::setCurrCell( const BinAddress& rAddr )
 {
     maCurrCell.reset();
     maCurrCell.mxCell = getCell( rAddr, &maCurrCell.maAddress );
+    // update used area of the sheet
+    if( maCurrCell.mxCell.is() )
+        extendUsedArea( maCurrCell.maAddress );
 }
 
 void BiffSheetDataContext::importXfId( bool bBiff2 )

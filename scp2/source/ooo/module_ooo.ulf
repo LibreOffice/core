@@ -43,5 +43,200 @@ en-US = "Optional Components"
 [STR_DESC_MODULE_OPTIONAL]
 en-US = "Common components and additional programs shared by all %PRODUCTNAME programs."
 
+[STR_NAME_MODULE_DICTIONARIES]
+en-US = "Dictionaries"
 
+[STR_DESC_MODULE_DICTIONARIES]
+en-US = "Spelling and hyphenation dictionaries and thesauri."
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_AF]
+en-US = "Afrikaans"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_AF]
+en-US = "Afrikaans spell checker"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_CA]
+en-US = "Catalan"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_CA]
+en-US = "Spelling and hyphenation dictionaries and thesaurus for Catalan language (general)"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_CS]
+en-US = "Czech"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_CS]
+en-US = "Czech thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_DA]
+en-US = "Danish"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_DA]
+en-US = "Spelling and hyphenation dictionary for Danish"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_DE_AT]
+en-US = "German (Austria)"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_DE_AT]
+en-US = "German (AT-frami) spelling, hyphenation, thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_DE_CH]
+en-US = "German (Switzerland)"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_DE_CH]
+en-US = "German (CH-frami) spelling, hyphenation, thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_DE_DE]
+en-US = "German (Germany)"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_DE_DE]
+en-US = "German (DE-frami) spelling, hyphenation, thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_EN]
+en-US = "English"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_EN]
+en-US = "English spelling and hyphenation dictionaries and thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_ES]
+en-US = "Spanish"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_ES]
+en-US = "Spanish spelling dictionary"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_ET]
+en-US = "Estonian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_ET]
+en-US = "Estonian spelling and hyphenation dictionaries"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_FR]
+en-US = "French"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_FR]
+en-US = "French 'Classic and Reform 1990' spelling, thesaurus and hyphenation"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_GL]
+en-US = "Galician"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_GL]
+en-US = "Galician spellchecker dictionary for OpenOffice.org"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_HE]
+en-US = "Hebrew"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_HE]
+en-US = "Hebrew spell check dictionary"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_HU]
+en-US = "Hungarian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_HU]
+en-US = "Hungarian spelling dictionary, hyphenation patterns, and thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_IT]
+en-US = "Italian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_IT]
+en-US = "Italian spelling and hyphenation dictionaries and thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_KU_TR]
+en-US = "Kurdish (Turkey)"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_KU_TR]
+en-US = "Kurdish (Turkey) spell check dictionary"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_LT]
+en-US = "Lithuanian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_LT]
+en-US = "Lithuanian spelling and hyphenation dictionaries"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_NE]
+en-US = "Nepali"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_NE]
+en-US = "Nepali spelling dictionary and thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_NL]
+en-US = "Dutch"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_NL]
+en-US = "Dutch spelling and hyphenation dictionaries"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_NO]
+en-US = "Norwegian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_NO]
+en-US = "Norwegian dictionaries (Nynorsk and Bokmal)"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_PL]
+en-US = "Polish"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_PL]
+en-US = "Polish spell check dictionary, hyphenation rules and thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_PT]
+en-US = "Brazilian Portuguese"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_PT]
+en-US = "Brazilian Portuguese Spelling Dictionary - 1990 Spelling Agreement"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_RO]
+en-US = "Romanian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_RO]
+en-US = "Romanian Dictionaries"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_RU]
+en-US = "Russian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_RU]
+en-US = "Russian hyphenation dictionary and thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_SK]
+en-US = "Slovak"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_SK]
+en-US = "Slovak spell check dictionary, hyphenation rules and thesaurus"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_SL]
+en-US = "Slovenian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_SL]
+en-US = "Slovenian dictionary pack"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_SR]
+en-US = "Serbian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_SR]
+en-US = "Serbian spelling and hyphenation dictionaries"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_SV]
+en-US = "Swedish"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_SV]
+en-US = "Swedish Dictionary"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_SW]
+en-US = "Swahili"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_SW]
+en-US = "Swahili spelling dictionary"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_TH]
+en-US = "Thai"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_TH]
+en-US = "Thai spelling dictionary"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_VI]
+en-US = "Vietnamese"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_VI]
+en-US = "Vietnamese spellchecker dictionary"
+
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_ZU]
+en-US = "Zulu"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_ZU]
+en-US = "Zulu hyphenation dictionary"

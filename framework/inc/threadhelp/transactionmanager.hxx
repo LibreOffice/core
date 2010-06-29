@@ -93,7 +93,6 @@ class TransactionManager : public  ITransactionManager
         virtual sal_Bool           isCallRejected               ( ERejectReason& eReason                       ) const;
         virtual void               registerTransaction          ( EExceptionMode eMode, ERejectReason& eReason ) throw( css::uno::RuntimeException, css::lang::DisposedException );
         virtual void               unregisterTransaction        (                                              ) throw( css::uno::RuntimeException, css::lang::DisposedException );
-        static TransactionManager& getGlobalTransactionManager  (                                              );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods

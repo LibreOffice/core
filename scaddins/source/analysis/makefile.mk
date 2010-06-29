@@ -73,7 +73,8 @@ UNOTYPES=\
     com.sun.star.uno.XComponentContext \
     com.sun.star.util.Date \
     com.sun.star.util.XNumberFormatter \
-    com.sun.star.util.XNumberFormatTypes
+    com.sun.star.util.XNumberFormatTypes \
+    com.sun.star.sheet.NoConvergenceException
 
 # --- Files -------------------------------------
 

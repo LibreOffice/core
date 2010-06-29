@@ -47,14 +47,14 @@ $(MINGWGXXDLL) :
 
 .EXPORT : CC
 
-all .SEQUENTIAL : $(LB)$/libstdc++.so.$(SHORTSTDCPP3) $(LB)$/libgcc_s.so.1
+all .SEQUENTIAL : $(LB)$/libstdc++.so.$(SHORTSTDCPP3) $(LB)$/libgcc_s.so.$(SHORTSTDC3)
 
 
 $(LB)$/libstdc++.so.$(SHORTSTDCPP3) :
-       $(GCCINSTLIB) libstdc++.so.$(SHORTSTDCPP3) $(LB)
+    $(GCCINSTLIB) libstdc++.so.$(SHORTSTDCPP3) $(LB)
 
-$(LB)$/libgcc_s.so.1 :
-       $(GCCINSTLIB) libgcc_s.so.1 $(LB)
+$(LB)$/libgcc_s.so.$(SHORTSTDC3) :
+    $(GCCINSTLIB) libgcc_s.so.$(SHORTSTDC3) $(LB)
 
 .ENDIF
 .ENDIF 

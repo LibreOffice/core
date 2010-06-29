@@ -28,6 +28,7 @@
 #if ! defined INCLUDED_DP_UCB_H
 #define INCLUDED_DP_UCB_H
 
+#include <list>
 #include "rtl/byteseq.hxx"
 #include "rtl/instance.hxx"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
@@ -78,6 +79,12 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 bool readLine( ::rtl::OUString * res, ::rtl::OUString const & startingWith,
                ::ucbhelper::Content & ucb_content, rtl_TextEncoding textenc );
+
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+bool readProperties( ::std::list< ::std::pair< ::rtl::OUString, ::rtl::OUString> > & out_result,
+                ::ucbhelper::Content & ucb_content);
+
+
 
 }
 

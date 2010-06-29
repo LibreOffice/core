@@ -1162,7 +1162,8 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const rtl::OUString& ja
 
 Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
     ( const rtl::OUString& jar, const rtl::OUString& Language,
-      const rtl::OUString& path, rtl::OUString* o_pExtensionPath )
+      const rtl::OUString& path, rtl::OUString* o_pExtensionPath,
+      rtl::OUString* o_pExtensionRegistryPath )
 {
     Reference< XHierarchicalNameAccess > xNA;
     if( ! jar.getLength() ||
@@ -1174,7 +1175,7 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
     JarFileIterator aJarFileIt( m_xContext, *this, jar, Language );
     Reference< XHierarchicalNameAccess > xTestNA;
     Reference< deployment::XPackage > xParentPackageBundle;
-    while( (xTestNA = aJarFileIt.nextJarFile( xParentPackageBundle, o_pExtensionPath )).is() )
+    while( (xTestNA = aJarFileIt.nextJarFile( xParentPackageBundle, o_pExtensionPath, o_pExtensionRegistryPath )).is() )
     {
         if( xTestNA.is() && xTestNA->hasByHierarchicalName( path ) )
         {
@@ -1510,8 +1511,10 @@ void ExtensionIteratorBase::init()
 
     m_bUserPackagesLoaded = false;
     m_bSharedPackagesLoaded = false;
+    m_bBundledPackagesLoaded = false;
     m_iUserPackage = 0;
     m_iSharedPackage = 0;
+    m_iBundledPackage = 0;
 }
 
 Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromPackage
@@ -1622,13 +1625,43 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextSharedHelpPa
 
     if( m_iSharedPackage == m_aSharedPackagesSeq.getLength() )
     {
-        m_eState = END_REACHED;
+        m_eState = BUNDLED_EXTENSIONS;
     }
     else
     {
         const Reference< deployment::XPackage >* pSharedPackages = m_aSharedPackagesSeq.getConstArray();
         Reference< deployment::XPackage > xPackage = pSharedPackages[ m_iSharedPackage++ ];
         VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextSharedHelpPackage(): Invalid package" );
+        xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
+    }
+
+    return xHelpPackage;
+}
+
+Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpPackage
+    ( Reference< deployment::XPackage >& o_xParentPackageBundle )
+{
+    Reference< deployment::XPackage > xHelpPackage;
+
+    if( !m_bBundledPackagesLoaded )
+    {
+        Reference< XPackageManager > xBundledManager =
+            thePackageManagerFactory::get( m_xContext )->getPackageManager( rtl::OUString::createFromAscii("bundled") );
+        m_aBundledPackagesSeq = xBundledManager->getDeployedPackages
+            ( Reference< task::XAbortChannel >(), Reference< ucb::XCommandEnvironment >() );
+        m_bBundledPackagesLoaded = true;
+    }
+
+    if( m_iBundledPackage == m_aBundledPackagesSeq.getLength() )
+    {
+        m_eState = END_REACHED;
+    }
+    else
+    {
+        const Reference< deployment::XPackage >* pBundledPackages =
+            m_aBundledPackagesSeq.getConstArray();
+        Reference< deployment::XPackage > xPackage = pBundledPackages[ m_iBundledPackage++ ];
+        VOS_ENSURE( xPackage.is(), "ExtensionIteratorBase::implGetNextBundledHelpPackage(): Invalid package" );
         xHelpPackage = implGetHelpPackageFromPackage( xPackage, o_xParentPackageBundle );
     }
 
@@ -1646,7 +1679,7 @@ rtl::OUString ExtensionIteratorBase::implGetFileFromPackage(
     for( sal_Int32 iPass = 0 ; iPass < 2 ; ++iPass )
     {
         rtl::OUStringBuffer aStrBuf;
-        aStrBuf.append( xPackage->getURL() );
+        aStrBuf.append( xPackage->getRegistrationDataURL().Value);
         aStrBuf.append( aSlash );
         aStrBuf.append( aLanguage );
         if( !bLangFolderOnly )
@@ -1720,7 +1753,7 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< ::r
 //===================================================================
 // class DataBaseIterator
 
-Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath )
+Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath )
 {
     Db* pRetDb = NULL;
 
@@ -1743,7 +1776,7 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath )
                 Reference< deployment::XPackage > xHelpPackage = implGetNextUserHelpPackage( xParentPackageBundle );
                 if( !xHelpPackage.is() )
                     break;
-                pRetDb = implGetDbFromPackage( xHelpPackage, o_pExtensionPath );
+                pRetDb = implGetDbFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
                 break;
             }
 
@@ -1754,9 +1787,21 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath )
                 if( !xHelpPackage.is() )
                     break;
 
-                pRetDb = implGetDbFromPackage( xHelpPackage, o_pExtensionPath );
+                pRetDb = implGetDbFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
                 break;
             }
+
+               case BUNDLED_EXTENSIONS:
+            {
+                Reference< deployment::XPackage > xParentPackageBundle;
+                Reference< deployment::XPackage > xHelpPackage = implGetNextBundledHelpPackage( xParentPackageBundle );
+                if( !xHelpPackage.is() )
+                    break;
+
+                pRetDb = implGetDbFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
+                break;
+            }
+
             case END_REACHED:
                 VOS_ENSURE( false, "DataBaseIterator::nextDb(): Invalid case END_REACHED" );
                 break;
@@ -1767,38 +1812,55 @@ Db* DataBaseIterator::nextDb( rtl::OUString* o_pExtensionPath )
 }
 
 Db* DataBaseIterator::implGetDbFromPackage( Reference< deployment::XPackage > xPackage,
-                                            rtl::OUString* o_pExtensionPath )
+            rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath )
 {
-    rtl::OUString aExtensionPath = xPackage->getURL();
-    //if( o_pExtensionPath )
-        //*o_pExtensionPath = aExtensionPath;
-    aExtensionPath += aSlash;
 
-    rtl::OUString aUsedLanguage = m_aLanguage;
-    Db* pRetDb = m_rDatabases.getBerkeley( aHelpFilesBaseName, aUsedLanguage,
-        m_bHelpText, &aExtensionPath );
-
-    // Language fallback
-    if( !pRetDb )
+    beans::Optional< ::rtl::OUString> optRegData;
+    try
     {
-        ::std::vector< ::rtl::OUString > av;
-        implGetLanguageVectorFromPackage( av, xPackage );
-        ::std::vector< ::rtl::OUString >::const_iterator pFound = av.end();
-        try
-        {
-            pFound = ::comphelper::Locale::getFallback( av, m_aLanguage );
-        }
-        catch( ::comphelper::Locale::MalFormedLocaleException& )
-        {}
-        if( pFound != av.end() )
-        {
-            aUsedLanguage = *pFound;
-            pRetDb = m_rDatabases.getBerkeley( aHelpFilesBaseName, aUsedLanguage, m_bHelpText, &aExtensionPath );
-        }
+        optRegData = xPackage->getRegistrationDataURL();
+    }
+    catch ( deployment::ExtensionRemovedException&)
+    {
+        return NULL;
     }
 
-    if( o_pExtensionPath )
-        *o_pExtensionPath = aExtensionPath + aUsedLanguage;
+    Db* pRetDb = NULL;
+    if (optRegData.IsPresent && optRegData.Value.getLength() > 0)
+    {
+        rtl::OUString aRegDataUrl(optRegData.Value);
+        aRegDataUrl += aSlash;
+
+        rtl::OUString aUsedLanguage = m_aLanguage;
+        pRetDb = m_rDatabases.getBerkeley(
+            aHelpFilesBaseName, aUsedLanguage, m_bHelpText, &aRegDataUrl);
+
+        // Language fallback
+        if( !pRetDb )
+        {
+            ::std::vector< ::rtl::OUString > av;
+            implGetLanguageVectorFromPackage( av, xPackage );
+            ::std::vector< ::rtl::OUString >::const_iterator pFound = av.end();
+            try
+            {
+                pFound = ::comphelper::Locale::getFallback( av, m_aLanguage );
+            }
+            catch( ::comphelper::Locale::MalFormedLocaleException& )
+            {}
+            if( pFound != av.end() )
+            {
+                aUsedLanguage = *pFound;
+                pRetDb = m_rDatabases.getBerkeley(
+                    aHelpFilesBaseName, aUsedLanguage, m_bHelpText, &aRegDataUrl);
+            }
+        }
+
+        if( o_pExtensionPath )
+            *o_pExtensionPath = aRegDataUrl + aUsedLanguage;
+
+        if( o_pExtensionRegistryPath )
+            *o_pExtensionRegistryPath = xPackage->getURL() + aSlash + aUsedLanguage;
+    }
 
     return pRetDb;
 }
@@ -1853,6 +1915,19 @@ rtl::OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
                 o_rbExtension = true;
                 break;
             }
+
+            case BUNDLED_EXTENSIONS:
+            {
+                Reference< deployment::XPackage > xParentPackageBundle;
+                Reference< deployment::XPackage > xHelpPackage = implGetNextBundledHelpPackage( xParentPackageBundle );
+                if( !xHelpPackage.is() )
+                    break;
+
+                aRetFile = implGetDbFileFromPackage( xHelpPackage );
+                o_rbExtension = true;
+                break;
+            }
+
             case END_REACHED:
                 VOS_ENSURE( false, "DataBaseIterator::nextDbFile(): Invalid case END_REACHED" );
                 break;
@@ -1879,7 +1954,8 @@ rtl::OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
 // class JarFileIterator
 
 Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
-    ( Reference< deployment::XPackage >& o_xParentPackageBundle, rtl::OUString* o_pExtensionPath )
+    ( Reference< deployment::XPackage >& o_xParentPackageBundle,
+        rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath )
 {
     Reference< XHierarchicalNameAccess > xNA;
 
@@ -1902,7 +1978,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
                 if( !xHelpPackage.is() )
                     break;
 
-                xNA = implGetJarFromPackage( xHelpPackage, o_pExtensionPath );
+                xNA = implGetJarFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
                 break;
             }
 
@@ -1912,9 +1988,20 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
                 if( !xHelpPackage.is() )
                     break;
 
-                xNA = implGetJarFromPackage( xHelpPackage, o_pExtensionPath );
+                xNA = implGetJarFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
                 break;
             }
+
+            case BUNDLED_EXTENSIONS:
+            {
+                Reference< deployment::XPackage > xHelpPackage = implGetNextBundledHelpPackage( o_xParentPackageBundle );
+                if( !xHelpPackage.is() )
+                    break;
+
+                xNA = implGetJarFromPackage( xHelpPackage, o_pExtensionPath, o_pExtensionRegistryPath );
+                break;
+            }
+
             case END_REACHED:
                 VOS_ENSURE( false, "JarFileIterator::nextJarFile(): Invalid case END_REACHED" );
                 break;
@@ -1925,7 +2012,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
 }
 
 Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
-    ( Reference< deployment::XPackage > xPackage, rtl::OUString* o_pExtensionPath )
+( Reference< deployment::XPackage > xPackage, rtl::OUString* o_pExtensionPath, rtl::OUString* o_pExtensionRegistryPath )
 {
     Reference< XHierarchicalNameAccess > xNA;
 
@@ -1970,6 +2057,15 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
         sal_Int32 nLastSlash = zipFile.lastIndexOf( '/' );
         if( nLastSlash != -1 )
             *o_pExtensionPath = zipFile.copy( 0, nLastSlash );
+
+        if( o_pExtensionRegistryPath != NULL )
+        {
+            rtl::OUString& rPath = *o_pExtensionPath;
+            sal_Int32 nLastSlashInPath = rPath.lastIndexOf( '/', rPath.getLength() - 1 );
+
+            *o_pExtensionRegistryPath = xPackage->getURL();
+            *o_pExtensionRegistryPath += rPath.copy( nLastSlashInPath);
+        }
     }
 
     return xNA;
@@ -2026,6 +2122,19 @@ rtl::OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o
                 o_rbExtension = true;
                 break;
             }
+
+            case BUNDLED_EXTENSIONS:
+            {
+                Reference< deployment::XPackage > xParentPackageBundle;
+                Reference< deployment::XPackage > xHelpPackage = implGetNextBundledHelpPackage( xParentPackageBundle );
+                if( !xHelpPackage.is() )
+                    break;
+
+                aIndexFolder = implGetIndexFolderFromPackage( o_rbTemporary, xHelpPackage );
+                o_rbExtension = true;
+                break;
+            }
+
             case END_REACHED:
                 VOS_ENSURE( false, "IndexFolderIterator::nextIndexFolder(): Invalid case END_REACHED" );
                 break;

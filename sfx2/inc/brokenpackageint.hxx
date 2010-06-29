@@ -36,7 +36,9 @@ using namespace ::framework;
 typedef ContinuationBase< ::com::sun::star::task::XInteractionApprove > SfxContinuationApprove;
 typedef ContinuationBase< ::com::sun::star::task::XInteractionDisapprove > SfxContinuationDisapprove;
 
-class SFX2_DLLPUBLIC RequestPackageReparation : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class SFX2_DLLPUBLIC RequestPackageReparation :
+        public ::com::sun::star::task::XInteractionRequest,
+        public ::cppu::OWeakObject
 {
     ::com::sun::star::uno::Any m_aRequest;
 
@@ -50,6 +52,11 @@ class SFX2_DLLPUBLIC RequestPackageReparation : public ::cppu::WeakImplHelper1< 
 public:
     RequestPackageReparation( ::rtl::OUString aName );
 
+    // XInterface / OWeakObject
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw ();
+    virtual void SAL_CALL release(  ) throw ();
+
     sal_Bool    isApproved() { return m_pApprove->isSelected(); }
 
     virtual ::com::sun::star::uno::Any SAL_CALL getRequest()
@@ -61,7 +68,9 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
-class SFX2_DLLPUBLIC NotifyBrokenPackage : public ::cppu::WeakImplHelper1< ::com::sun::star::task::XInteractionRequest >
+class SFX2_DLLPUBLIC NotifyBrokenPackage :
+    public ::com::sun::star::task::XInteractionRequest,
+    public ::cppu::OWeakObject
 {
     ::com::sun::star::uno::Any m_aRequest;
 
@@ -73,6 +82,11 @@ class SFX2_DLLPUBLIC NotifyBrokenPackage : public ::cppu::WeakImplHelper1< ::com
 
 public:
     NotifyBrokenPackage( ::rtl::OUString aName );
+
+    // XInterface / OWeakObject
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw ();
+    virtual void SAL_CALL release(  ) throw ();
 
     sal_Bool    isAborted() { return m_pAbort->isSelected(); }
 

@@ -284,7 +284,8 @@ removeSpoolDir (const rtl::OUString& rSpoolDir)
     nChar  = psp::appendStr ("rm -rf ",     pSystem);
     nChar += psp::appendStr (aSysPathByte.getStr(), pSystem + nChar);
 
-    system (pSystem);
+    if (system (pSystem) == -1)
+        OSL_ENSURE( 0, "psprint: couldn't remove spool directory" );
 }
 
 /* creates a spool directory with a "pidgin random" value based on

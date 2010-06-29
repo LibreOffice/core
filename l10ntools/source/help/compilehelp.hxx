@@ -72,6 +72,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     const rtl::OUString& aExtensionName,
     const rtl::OUString& aExtensionLanguageRoot,
     sal_Int32 nXhpFileCount, const rtl::OUString* pXhpFiles,
+    const rtl::OUString& aDestination,
     HelpProcessingErrorInfo& o_rHelpProcessingErrorInfo
 );
 

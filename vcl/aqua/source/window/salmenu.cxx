@@ -370,6 +370,10 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     displayPopupFrame.origin.y = pWin->ImplGetFrame()->maGeometry.nY - pParentAquaSalFrame->maGeometry.nY + offset;
     pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
 
+    // #i111992# if this menu was opened due to a key event, prevent dispatching that yet again
+    if( [pParentNSView respondsToSelector: @selector(clearLastEvent)] )
+        [pParentNSView performSelector:@selector(clearLastEvent)];
+
     // open popup menu
     NSPopUpButtonCell * pPopUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
     [pPopUpButtonCell setMenu: pCopyMenu];

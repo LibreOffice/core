@@ -1789,7 +1789,7 @@ bool BasicManager::GetGlobalUNOConstant( const sal_Char* _pAsciiName, ::com::sun
 {
     bool bRes = false;
     StarBASIC* pStandardLib = GetStdLib();
-    OSL_PRECOND( pStandardLib, "BasicManager::SetGlobalUNOConstant: no lib to insert into!" );
+    OSL_PRECOND( pStandardLib, "BasicManager::GetGlobalUNOConstant: no lib to read from!" );
     if ( pStandardLib )
         bRes = pStandardLib->GetUNOConstant( _pAsciiName, aOut );
     return bRes;

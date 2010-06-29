@@ -57,7 +57,6 @@ sub LoadIncludeFiles
    use "global\tools\includes\optional\t_security_tools.inc"
    use "global\tools\includes\optional\t_listfuncs.inc"
 
-   use "framework\tools\includes\apicalls.inc"
    use "framework\tools\includes\template_tools.inc"
 
    gApplication = "WRITER"

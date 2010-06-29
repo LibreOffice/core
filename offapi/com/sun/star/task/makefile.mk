@@ -42,7 +42,9 @@ IDLFILES=\
     ClassifiedInteractionRequest.idl\
     DocumentMacroConfirmationRequest.idl\
     DocumentPasswordRequest.idl\
+    DocumentPasswordRequest2.idl\
     DocumentMSPasswordRequest.idl\
+    DocumentMSPasswordRequest2.idl\
     ErrorCodeRequest.idl\
     ErrorCodeIOException.idl\
     FutureDocumentVersionProductUpdateRequest.idl\
@@ -57,6 +59,7 @@ IDLFILES=\
     PasswordContainerInteractionHandler.idl\
     PasswordRequest.idl\
     PasswordRequestMode.idl\
+    OfficeRestartManager.idl\
     UnsupportedOverwriteRequest.idl\
     UrlRecord.idl\
     UserRecord.idl\
@@ -65,12 +68,14 @@ IDLFILES=\
     XInteractionAskLater.idl\
     XInteractionDisapprove.idl\
     XInteractionPassword.idl\
+    XInteractionPassword2.idl\
     XJob.idl\
     XJobExecutor.idl\
     XJobListener.idl\
     XMasterPasswordHandling.idl\
     XMasterPasswordHandling2.idl\
     XPasswordContainer.idl\
+    XRestartManager.idl\
     XStatusIndicator.idl\
     XStatusIndicatorFactory.idl\
     XStatusIndicatorSupplier.idl\

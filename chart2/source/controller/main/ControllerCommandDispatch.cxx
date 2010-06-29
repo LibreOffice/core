@@ -528,6 +528,23 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
     bool bShapeContext = ( m_pChartController ? m_pChartController->isShapeContext() : false );
 
+    bool bDisableDataTableDialog = false;
+    if ( m_xController.is() )
+    {
+        Reference< beans::XPropertySet > xProps( m_xController->getModel(), uno::UNO_QUERY );
+        if ( xProps.is() )
+        {
+            try
+            {
+                xProps->getPropertyValue( C2U( "DisableDataTableDialog" ) ) >>= bDisableDataTableDialog;
+            }
+            catch( uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
+        }
+    }
+
     // edit commands
     m_aCommandAvailability[ C2U(".uno:Cut")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsDeleteableObjectSelected;
     m_aCommandAvailability[ C2U(".uno:Copy")] = bControllerStateIsValid && m_apControllerState->bHasSelectedObject;
@@ -595,7 +612,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
     // depending on own data
     m_aCommandAvailability[ C2U(".uno:DataRanges")] = bIsWritable && bModelStateIsValid && (! m_apModelState->bHasOwnData);
-    m_aCommandAvailability[ C2U(".uno:DiagramData")] = bIsWritable && bModelStateIsValid &&  m_apModelState->bHasOwnData;
+    m_aCommandAvailability[ C2U(".uno:DiagramData")] = bIsWritable && bModelStateIsValid &&  m_apModelState->bHasOwnData && !bDisableDataTableDialog;
 
     // titles
     m_aCommandAvailability[ C2U(".uno:MainTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainTitle;
@@ -631,9 +648,9 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
     // series arrangement
     m_aCommandAvailability[ C2U(".uno:Forward")] = ( bShapeContext ? isShapeControllerCommandAvailable( C2U( ".uno:Forward" ) ) :
-        ( bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesForward ) );
+        ( bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesForward && !bDisableDataTableDialog ) );
     m_aCommandAvailability[ C2U(".uno:Backward")] = ( bShapeContext ? isShapeControllerCommandAvailable( C2U( ".uno:Backward" ) ) :
-        ( bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesBackward ) );
+        ( bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesBackward && !bDisableDataTableDialog ) );
 
     m_aCommandAvailability[ C2U(".uno:InsertDataLabels")] = bIsWritable;
     m_aCommandAvailability[ C2U(".uno:InsertDataLabel")] = bIsWritable;

@@ -31,6 +31,8 @@
 #include "address.hxx"
 #include "ftools.hxx"
 
+class SfxObjectShell;
+
 // BIFF versions ==============================================================
 
 #define DBG_ERROR_BIFF()        DBG_ERRORFILE( "Unknown BIFF type!" )
@@ -229,13 +231,24 @@ public:
     /** Skips a substream (BOF/EOF record block). Includes all embedded substreams. */
     static void         SkipSubStream( XclImpStream& rStrm );
 
-    // ------------------------------------------------------------------------
+    // Basic macro names ------------------------------------------------------
+
+    /** Returns the full StarBasic macro URL from an Excel macro name. */
+    static ::rtl::OUString GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell = 0 );
+    /** Returns the full StarBasic macro URL from an Excel module and macro name. */
+    static ::rtl::OUString GetSbMacroUrl( const String& rModuleName, const String& rMacroName, SfxObjectShell* pDocShell = 0 );
+    /** Returns the Excel macro name from a full StarBasic macro URL. */
+    static String       GetXclMacroName( const ::rtl::OUString& rSbMacroUrl );
+
+// ------------------------------------------------------------------------
 private:
-    static const String maDefNamePrefix;        /// Prefix for built-in defined names.
-    static const String maStyleNamePrefix1;     /// Prefix for built-in cell style names.
-    static const String maStyleNamePrefix2;     /// Prefix for built-in cell style names from OOX filter.
-    static const String maCFStyleNamePrefix1;   /// Prefix for cond. formatting style names.
-    static const String maCFStyleNamePrefix2;   /// Prefix for cond. formatting style names from OOX filter.
+    static const String maDefNamePrefix;            /// Prefix for built-in defined names.
+    static const String maStyleNamePrefix1;         /// Prefix for built-in cell style names.
+    static const String maStyleNamePrefix2;         /// Prefix for built-in cell style names from OOX filter.
+    static const String maCFStyleNamePrefix1;       /// Prefix for cond. formatting style names.
+    static const String maCFStyleNamePrefix2;       /// Prefix for cond. formatting style names from OOX filter.
+    static const ::rtl::OUString maSbMacroPrefix;   /// Prefix for StarBasic macros.
+    static const ::rtl::OUString maSbMacroSuffix;   /// Suffix for StarBasic macros.
 };
 
 // read/write colors ----------------------------------------------------------

@@ -170,74 +170,35 @@ int VBA_Impl::ReadVBAProject(const SvStorageRef &rxVBAStorage)
         return 0;
     }
 
-    static const sal_uInt8 aOffice2003LE_2[] =
-    {
-        0x79, 0x00, 0x00, 0x01, 0x00, 0xFF
-    };
+    static const sal_uInt8 aOffice2007LE[]   = { 0x88, 0x00, 0x00, 0x01, 0x00, 0xFF };
+    static const sal_uInt8 aOffice2003LE_2[] = { 0x79, 0x00, 0x00, 0x01, 0x00, 0xFF };
+    static const sal_uInt8 aOffice2003LE[]   = { 0x76, 0x00, 0x00, 0x01, 0x00, 0xFF };
+    static const sal_uInt8 aOfficeXPLE[]     = { 0x73, 0x00, 0x00, 0x01, 0x00, 0xFF };
+    static const sal_uInt8 aOfficeXPBE[]     = { 0x63, 0x00, 0x00, 0x0E, 0x00, 0xFF };
+    static const sal_uInt8 aOffice2000LE[]   = { 0x6D, 0x00, 0x00, 0x01, 0x00, 0xFF };
+    static const sal_uInt8 aOffice98BE[]     = { 0x60, 0x00, 0x00, 0x0E, 0x00, 0xFF };
+    static const sal_uInt8 aOffice97LE[]     = { 0x5E, 0x00, 0x00, 0x01, 0x00, 0xFF };
 
-    static const sal_uInt8 aOffice2003LE[] =
-    {
-        0x76, 0x00, 0x00, 0x01, 0x00, 0xFF
-    };
-
-    static const sal_uInt8 aOfficeXPLE[] =
-    {
-        0x73, 0x00, 0x00, 0x01, 0x00, 0xFF
-    };
-
-    static const sal_uInt8 aOfficeXPBE[] =
-    {
-        0x63, 0x00, 0x00, 0x0E, 0x00, 0xFF
-    };
-
-    static const sal_uInt8 aOffice2000LE[] =
-    {
-        0x6D, 0x00, 0x00, 0x01, 0x00, 0xFF
-    };
-    static const sal_uInt8 aOffice98BE[] =
-    {
-        0x60, 0x00, 0x00, 0x0E, 0x00, 0xFF
-    };
-    static const sal_uInt8 aOffice97LE[] =
-    {
-        0x5E, 0x00, 0x00, 0x01, 0x00, 0xFF
-    };
     sal_uInt8 aProduct[6];
     xVBAProject->Read( aProduct, sizeof(aProduct) );
 
     bool bIsUnicode;
-    if (!(memcmp(aProduct, aOffice2003LE, sizeof(aProduct))) ||
-        !(memcmp(aProduct, aOffice2003LE_2, sizeof(aProduct))) )
+    if (!(memcmp(aProduct, aOffice2007LE,   sizeof(aProduct))) ||
+        !(memcmp(aProduct, aOffice2003LE,   sizeof(aProduct))) ||
+        !(memcmp(aProduct, aOffice2003LE_2, sizeof(aProduct))) ||
+        !(memcmp(aProduct, aOfficeXPLE,     sizeof(aProduct))) ||
+        !(memcmp(aProduct, aOffice2000LE,   sizeof(aProduct))) ||
+        !(memcmp(aProduct, aOffice97LE,     sizeof(aProduct))) )
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
         bIsUnicode = true;
     }
-    else if (!(memcmp(aProduct, aOfficeXPLE, sizeof(aProduct))))
-    {
-        xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-        bIsUnicode = true;
-    }
-    else if (!(memcmp(aProduct, aOfficeXPBE, sizeof(aProduct))))
+    else if (!(memcmp(aProduct, aOfficeXPBE, sizeof(aProduct))) ||
+             !(memcmp(aProduct, aOffice98BE, sizeof(aProduct))) )
     {
         xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
         mbMac = true;
         bIsUnicode = false;
-    }
-    else if (!(memcmp(aProduct, aOffice2000LE, sizeof(aProduct))))
-    {
-        xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-        bIsUnicode = true;
-    }
-    else if (!(memcmp(aProduct, aOffice98BE, sizeof(aProduct))))
-    {
-        xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-        mbMac = true;
-        bIsUnicode = false;
-    }
-    else if (!(memcmp(aProduct, aOffice97LE, sizeof(aProduct))))
-    {
-        xVBAProject->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
-        bIsUnicode = true;
     }
     else
     {

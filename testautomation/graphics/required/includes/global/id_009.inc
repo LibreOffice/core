@@ -29,14 +29,7 @@
 '*
 '* short description : Testcases to test the Help-Menu.
 '*
-'***********************************************************************************
-' #1 tmHelpHelpAgent
-' #1 tmHelpTips
-' #1 tmHelpExtendedTips
-' #1 tmHelpAboutStarOffice
-' #1 tmHelpContents
-' #1 tCheckIfTheHelpExists
-'\**********************************************************************************
+'\******************************************************************************
 '
 testcase tmHelpHelpAgent
 

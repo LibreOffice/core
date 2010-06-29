@@ -52,6 +52,7 @@ my @exceptionmodlist = (
                         "postprocess",
                         "instset.*native",
                         "smoketest.*native",
+                        "testautomation",
                         "testgraphical"
                        ); # modules not yet delivered
 
@@ -151,6 +152,11 @@ sub check
         return 1;
     }
 
+    if ( -z $listname ) {
+        print_logged( "Warning: empty deliver log file \'$listname\'. Module '$module' not delivered correctly?\n\n" );
+        return 0;
+    }
+
     # read deliver log file
     if ( ! open( DELIVERLOG, "< $listname" ) ) {
         print_logged( "Error: cannot open file \'$listname\'\n$!" );
@@ -159,7 +165,7 @@ sub check
     foreach ( <DELIVERLOG> ) {
         next if ( /^LINK / );
         # What's this modules' repository?
-        if ( / (\w+?)\/$module\/prj\/build.lst/ ) {
+        if ( /COPY (\w[\w\s-]*?)\/$module\/prj\/build.lst/ ) {
             $repository = $1;
         }
         # For now we concentrate on binaries, located in 'bin' or 'lib' and 'misc/build/<...>/[bin|lib]'.
@@ -177,7 +183,7 @@ sub check
     close( DELIVERLOG );
 
     if ( ! $repository ) {
-        print_logged( "Error parsing \'$listname\': cannot determine repository\n");
+        print_logged( "Error parsing \'$listname\': cannot determine repository. Module '$module' not delivered correctly?\n\n" );
         $error ++;
         return $error;
     }

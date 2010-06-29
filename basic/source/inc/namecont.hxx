@@ -35,6 +35,7 @@
 #include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/script/XLibraryContainerExport.hpp>
+#include <com/sun/star/script/XLibraryContainer3.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
@@ -57,8 +58,7 @@
 #include <com/sun/star/deployment/XPackage.hpp>
 
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/compbase6.hxx>
-#include <cppuhelper/compbase7.hxx>
+#include <cppuhelper/compbase8.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <com/sun/star/script/XVBACompat.hpp>
 
@@ -67,11 +67,12 @@ class BasicManager;
 namespace basic
 {
 
-typedef ::cppu::WeakComponentImplHelper7<
+typedef ::cppu::WeakComponentImplHelper8<
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::script::XStorageBasedLibraryContainer,
     ::com::sun::star::script::XLibraryContainerPassword,
     ::com::sun::star::script::XLibraryContainerExport,
+    ::com::sun::star::script::XLibraryContainer3,
     ::com::sun::star::container::XContainer,
     ::com::sun::star::script::XVBACompat,
     ::com::sun::star::lang::XServiceInfo > LibraryContainerHelper;
@@ -284,14 +285,17 @@ protected:
     virtual bool SAL_CALL isLibraryElementValid( ::com::sun::star::uno::Any aElement ) const = 0;
     virtual void SAL_CALL writeLibraryElement
     (
-        ::com::sun::star::uno::Any aElement,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
         const ::rtl::OUString& aElementName,
-        ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > xOutput
+        const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& xOutput
     )
         throw(::com::sun::star::uno::Exception) = 0;
 
     virtual ::com::sun::star::uno::Any SAL_CALL importLibraryElement
-        ( const ::rtl::OUString& aFile,
+    (
+        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& xLibrary,
+        const ::rtl::OUString& aElementName,
+        const ::rtl::OUString& aFile,
         const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xElementStream ) = 0;
     virtual void SAL_CALL importFromOldStorage( const ::rtl::OUString& aFile ) = 0;
 
@@ -408,6 +412,12 @@ public:
     virtual ::com::sun::star::uno::Any SAL_CALL getRootLocation() throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getContainerLocationName() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL storeLibraries(  ) throw (::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    //Methods XLibraryContainer3
+    virtual ::rtl::OUString SAL_CALL getOriginalLibraryLinkURL( const ::rtl::OUString& Name )
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::container::NoSuchElementException,
+               ::com::sun::star::uno::RuntimeException);
 
     // Methods XLibraryContainer2 (base of XPersistentLibraryContainer)
     virtual sal_Bool SAL_CALL isLibraryLink( const ::rtl::OUString& Name )
@@ -548,6 +558,8 @@ private:
     ::rtl::OUString maLibInfoFileURL;
     ::rtl::OUString maStorageURL;
     ::rtl::OUString maUnexpandedStorageURL;
+    ::rtl::OUString maOrignialStorageURL;
+
     sal_Bool mbLink;
     sal_Bool mbReadOnly;
     sal_Bool mbReadOnlyLink;
@@ -696,6 +708,7 @@ enum IteratorState
 {
     USER_EXTENSIONS,
     SHARED_EXTENSIONS,
+    BUNDLED_EXTENSIONS,
     END_REACHED
 };
 
@@ -715,6 +728,8 @@ protected:
         implGetNextUserScriptPackage( bool& rbPureDialogLib );
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
         implGetNextSharedScriptPackage( bool& rbPureDialogLib );
+    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
+        implGetNextBundledScriptPackage( bool& rbPureDialogLib );
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >    m_xContext;
 
@@ -728,8 +743,16 @@ protected:
         < com::sun::star::deployment::XPackage > >                              m_aSharedPackagesSeq;
     bool                                                                        m_bSharedPackagesLoaded;
 
+      com::sun::star::uno::Sequence< com::sun::star::uno::Reference
+        < com::sun::star::deployment::XPackage > >                              m_aBundledPackagesSeq;
+    bool                                                                        m_bBundledPackagesLoaded;
+
+
     int                                                                         m_iUserPackage;
     int                                                                         m_iSharedPackage;
+       int                                                                          m_iBundledPackage;
+
+
 
     ScriptSubPackageIterator*                                                   m_pScriptSubPackageIterator;
 

@@ -159,6 +159,10 @@ class ICEConnectionObserver
     static int nWakeupFiles[2];
     static oslMutex ICEMutex;
     static oslThread ICEThread;
+#ifdef USE_SM_EXTENSION
+    static IceIOErrorHandler origIOErrorHandler;
+    static IceErrorHandler origErrorHandler;
+#endif
 public:
 
     static void activate();
@@ -178,6 +182,19 @@ int                 ICEConnectionObserver::nConnections             = 0;
 oslMutex            ICEConnectionObserver::ICEMutex                 = NULL;
 oslThread           ICEConnectionObserver::ICEThread                = NULL;
 int                 ICEConnectionObserver::nWakeupFiles[2]          = { 0, 0 };
+
+#ifdef USE_SM_EXTENSION
+IceIOErrorHandler ICEConnectionObserver::origIOErrorHandler = NULL;
+IceErrorHandler ICEConnectionObserver::origErrorHandler = NULL;
+
+static void IgnoreIceErrors(IceConn, Bool, int, unsigned long, int, int, IcePointer)
+{
+}
+
+static void IgnoreIceIOErrors(IceConn)
+{
+}
+#endif
 
 // HACK
 bool SessionManagerClient::bDocSaveDone = false;
@@ -591,6 +608,12 @@ void ICEConnectionObserver::activate()
         ICEMutex = osl_createMutex();
         bIsWatching = TRUE;
 #ifdef USE_SM_EXTENSION
+        /*
+         * Default handlers call exit, we don't care that strongly if something
+         * happens to fail
+         */
+        origIOErrorHandler = IceSetIOErrorHandler( IgnoreIceIOErrors );
+        origErrorHandler = IceSetErrorHandler( IgnoreIceErrors );
         IceAddConnectionWatch( ICEWatchProc, NULL );
 #endif
     }
@@ -604,6 +627,8 @@ void ICEConnectionObserver::deactivate()
         bIsWatching = FALSE;
 #ifdef USE_SM_EXTENSION
         IceRemoveConnectionWatch( ICEWatchProc, NULL );
+        IceSetErrorHandler( origErrorHandler );
+        IceSetIOErrorHandler( origIOErrorHandler );
 #endif
         nConnections = 0;
         if( ICEThread )

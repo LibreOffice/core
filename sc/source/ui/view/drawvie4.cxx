@@ -282,8 +282,8 @@ void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
     pDoc->GetTableArea( nTab, nEndCol, nEndRow );
     if (nEndCol<20)
         nEndCol = 20;
-    if (nEndRow<20)
-        nEndRow = 20;
+    if (nEndRow<1000)
+        nEndRow = 1000;
 
     Fraction aZoom(1,1);
     ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev, aZoom,aZoom,

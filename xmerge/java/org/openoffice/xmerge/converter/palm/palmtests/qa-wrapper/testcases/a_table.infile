@@ -1,5 +1,0 @@
-#testing table contents conversion 
-# 
-TEST||QUICKWORD|a_table
-#ENTER_STRING_AT_LOCATION|LEFT|42|This is also in standard style\n
-SLEEP|10

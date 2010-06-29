@@ -76,8 +76,9 @@ inline sal_Int32 lclConvertScreenPixelToHmm( double fPixel, double fPixelPerHmm 
 
 // ============================================================================
 
-GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalFactory, const Reference< XFrame >& rxTargetFrame ) :
+GraphicHelper::GraphicHelper( const Reference< XMultiServiceFactory >& rxGlobalFactory, const Reference< XFrame >& rxTargetFrame, const StorageRef& rxStorage ) :
     mxGraphicProvider( rxGlobalFactory->createInstance( CREATE_OUSTRING( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY ),
+    mxStorage( rxStorage ),
     maGraphicObjScheme( CREATE_OUSTRING( "vnd.sun.star.GraphicObject:" ) )
 {
     ::comphelper::ComponentContext aContext( rxGlobalFactory );
@@ -149,6 +150,8 @@ GraphicHelper::~GraphicHelper()
 {
 }
 
+// System colors and predefined colors ----------------------------------------
+
 sal_Int32 GraphicHelper::getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb ) const
 {
     return ContainerHelper::getMapElement( maSystemPalette, nToken, nDefaultRgb );
@@ -165,6 +168,8 @@ sal_Int32 GraphicHelper::getPaletteColor( sal_Int32 /*nPaletteIdx*/ ) const
     OSL_ENSURE( false, "GraphicHelper::getPaletteColor - palette colors not implemented" );
     return API_RGB_TRANSPARENT;
 }
+
+// Device info and device dependent unit conversion ---------------------------
 
 const DeviceInfo& GraphicHelper::getDeviceInfo() const
 {
@@ -267,6 +272,8 @@ Size GraphicHelper::convertHmmToAppFont( const Size& rHmm ) const
     return Size( 0, 0 );
 }
 
+// Graphics and graphic objects  ----------------------------------------------
+
 Reference< XGraphic > GraphicHelper::importGraphic( const Reference< XInputStream >& rxInStrm ) const
 {
     Reference< XGraphic > xGraphic;
@@ -290,6 +297,25 @@ Reference< XGraphic > GraphicHelper::importGraphic( const StreamDataSequence& rG
     {
         Reference< XInputStream > xInStrm( new ::comphelper::SequenceInputStream( rGraphicData ) );
         xGraphic = importGraphic( xInStrm );
+    }
+    return xGraphic;
+}
+
+Reference< XGraphic > GraphicHelper::importEmbeddedGraphic( const OUString& rStreamName ) const
+{
+    Reference< XGraphic > xGraphic;
+    OSL_ENSURE( rStreamName.getLength() > 0, "GraphicHelper::importEmbeddedGraphic - empty stream name" );
+    if( rStreamName.getLength() > 0 )
+    {
+        EmbeddedGraphicMap::const_iterator aIt = maEmbeddedGraphics.find( rStreamName );
+        if( aIt == maEmbeddedGraphics.end() )
+        {
+            xGraphic = importGraphic( mxStorage->openInputStream( rStreamName ) );
+            if( xGraphic.is() )
+                maEmbeddedGraphics[ rStreamName ] = xGraphic;
+        }
+        else
+            xGraphic = aIt->second;
     }
     return xGraphic;
 }
@@ -318,6 +344,12 @@ OUString GraphicHelper::importGraphicObject( const Reference< XInputStream >& rx
 OUString GraphicHelper::importGraphicObject( const StreamDataSequence& rGraphicData ) const
 {
     return createGraphicObject( importGraphic( rGraphicData ) );
+}
+
+OUString GraphicHelper::importEmbeddedGraphicObject( const OUString& rStreamName ) const
+{
+    Reference< XGraphic > xGraphic = importEmbeddedGraphic( rStreamName );
+    return xGraphic.is() ? createGraphicObject( xGraphic ) : OUString();
 }
 
 // ============================================================================

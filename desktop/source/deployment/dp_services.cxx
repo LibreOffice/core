@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
-#define COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS 11
+#define COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS 12
 #include "comphelper/servicedecl.hxx"
 
 using namespace com::sun::star;
@@ -69,13 +69,11 @@ namespace factory {
 extern sdecl::ServiceDecl const serviceDecl;
 bool singleton_entries( uno::Reference<registry::XRegistryKey> const& );
 }
+extern sdecl::ServiceDecl const serviceDecl;
+bool singleton_entries( uno::Reference<registry::XRegistryKey> const& );
 }
 
 namespace dp_log {
-extern sdecl::ServiceDecl const serviceDecl;
-}
-
-namespace dp_migration {
 extern sdecl::ServiceDecl const serviceDecl;
 }
 
@@ -108,10 +106,11 @@ sal_Bool SAL_CALL component_writeInfo(
         dp_registry::backend::executable::serviceDecl,
         dp_manager::factory::serviceDecl,
         dp_log::serviceDecl,
-        dp_migration::serviceDecl,
-        dp_info::serviceDecl ) &&
+        dp_info::serviceDecl,
+        dp_manager::serviceDecl) &&
         dp_manager::factory::singleton_entries( pRegistryKey ) &&
-        dp_info::singleton_entries( pRegistryKey );
+        dp_info::singleton_entries( pRegistryKey ) &&
+        dp_manager::singleton_entries( pRegistryKey);
 }
 
 void * SAL_CALL component_getFactory(
@@ -129,8 +128,8 @@ void * SAL_CALL component_getFactory(
         dp_registry::backend::executable::serviceDecl,
         dp_manager::factory::serviceDecl,
         dp_log::serviceDecl,
-        dp_migration::serviceDecl,
-        dp_info::serviceDecl );
+        dp_info::serviceDecl,
+        dp_manager::serviceDecl);
 }
 
 } // extern "C"

@@ -29,17 +29,6 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiToolsSpellchecking
-' #1 tiToolsSpellcheckingAutomatic
-' #1 tiToolsThesaurus
-' #1 tiToolsHyphenation
-' #1 tiToolsAutoCorrect
-' #1 tChineseTranslation
-' #1 tiToolsMacro
-' #1 tiToolsGallery
-' #1 tiToolsEyedropper
-' #1 tiToolsOptions
 '\**********************************************************************************
 
 '------------------------------------------------------------------------------
@@ -206,7 +195,52 @@ testcase tiToolsThesaurus
     if Thesaurus.Exists(3) then
         Thesaurus.Cancel
     else
-        warnlog "the thesaurus does not appear"
+        sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odg"))
+    end if
+    if FileExists ( sFileName ) = FALSE then
+        warnlog "The language-file was not found or accessible! The test ends."
+        goto endsub
+    end if
+    Call hFileOpen (sFileName)
+        
+        sleep (2)
+    
+        hTypeKeys "<TAB><RETURN>"
+        hTypeKeys "<END><SHIFT HOME>"
+    
+        '   Call hTextrahmenErstellen ("SimpleTest" + "<Mod1 Shift left>", 10, 10, 30, 40)
+        try
+            '/// Tools->Thesaurus ///'
+            ExtrasThesaurusDraw
+            Kontext "Thesaurus"
+                Call DialogTest ( Thesaurus )
+                '/// click button 'language' ///'
+                Sprache.Click
+                Kontext "SpracheAuswaehlen"
+                    Call DialogTest ( SpracheAuswaehlen )
+                    '/// cancel dialog 'select language' ///'
+                    SpracheAuswaehlen.cancel
+            Kontext "Thesaurus"
+                '/// click button 'search' ///'
+                Nachschlagen.Click
+                kontext
+                '/// if messagebox exist, say OK; (word not found) ///'
+                if Messagebox.exists (5) then
+                    printlog "Messagebox: word not in thesaurus: '"+Messagebox.gettext+"'"
+                    Messagebox.ok
+                end if
+                sleep 1
+                Kontext "Thesaurus"
+                    '/// cancel dialog 'Thesaurus' ///'
+                    Thesaurus.Cancel
+        catch
+            warnlog "Thesaurus didn't work :-("
+        endcatch
+        sleep 1
+        '/// close application ///'
+        Call hCloseDocument
+    else
+        goto endsub
     endif
     Call hCloseDocument
 

@@ -60,7 +60,7 @@ void lclMapShapesById( RefMap< OUString, ShapeType >& orMap, const RefVector< Sh
 
 // ============================================================================
 
-ShapeContainer::ShapeContainer( const Drawing& rDrawing ) :
+ShapeContainer::ShapeContainer( Drawing& rDrawing ) :
     mrDrawing( rDrawing )
 {
 }

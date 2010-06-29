@@ -207,7 +207,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     // row heights ------------------------------------------------------------
 
     // #i54252# set default row height
-    rDoc.SetRowHeightRange( 0, MAXROW, nScTab, mnDefHeight );
+    rDoc.SetRowHeightOnly( 0, MAXROW, nScTab, mnDefHeight );
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_UNSYNCED ) )
         // first access to row flags, do not ask for old flags
         rDoc.SetRowFlags( 0, MAXROW, nScTab, CR_MANUALSIZE );
@@ -258,7 +258,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
         {
             DBG_ASSERT( (nScRow == 0) || (nFirstScRow >= 0), "XclImpColRowSettings::Convert - algorithm error" );
             if( nScRow > 0 )
-                rDoc.SetRowHeightRange( nFirstScRow, nScRow - 1, nScTab, nLastHeight );
+                rDoc.SetRowHeightOnly( nFirstScRow, nScRow - 1, nScTab, nLastHeight );
 
             nFirstScRow = nScRow;
             nLastHeight = nHeight;
@@ -267,7 +267,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
 
     // set row height of last portion
     if( mnLastScRow >= 0 )
-        rDoc.SetRowHeightRange( nFirstScRow, mnLastScRow, nScTab, nLastHeight );
+        rDoc.SetRowHeightOnly( nFirstScRow, mnLastScRow, nScTab, nLastHeight );
 
     // ------------------------------------------------------------------------
 
@@ -307,7 +307,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
             rDoc.ShowRow( nScRow, nScTab, FALSE );
             // #i38093# rows hidden by filter need extra flag
             if( (nFirstFilterScRow <= nScRow) && (nScRow <= nLastFilterScRow) )
-                rDoc.SetRowFlags( nScRow, nScTab, rDoc.GetRowFlags( nScRow, nScTab ) | CR_FILTERED );
+                rDoc.SetRowFiltered(nScRow, nScRow, nScTab, true);
         }
     }
 

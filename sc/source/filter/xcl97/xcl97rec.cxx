@@ -1354,9 +1354,10 @@ void XclExpWriteAccess::WriteBody( XclExpStream& rStrm )
 
 // ============================================================================
 
-XclExpFileSharing::XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash ) :
+XclExpFileSharing::XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash, bool bRecommendReadOnly ) :
     XclExpRecord( EXC_ID_FILESHARING ),
-    mnPasswordHash( nPasswordHash )
+    mnPasswordHash( nPasswordHash ),
+    mbRecommendReadOnly( bRecommendReadOnly )
 {
     if( rRoot.GetBiff() <= EXC_BIFF5 )
         maUserName.AssignByte( rRoot.GetUserName(), rRoot.GetTextEncoding(), EXC_STR_8BITLENGTH );
@@ -1366,13 +1367,13 @@ XclExpFileSharing::XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPassw
 
 void XclExpFileSharing::Save( XclExpStream& rStrm )
 {
-    if( mnPasswordHash != 0 )
+    if( (mnPasswordHash != 0) || mbRecommendReadOnly )
         XclExpRecord::Save( rStrm );
 }
 
 void XclExpFileSharing::WriteBody( XclExpStream& rStrm )
 {
-    rStrm << sal_uInt16( 0 ) << mnPasswordHash << maUserName;
+    rStrm << sal_uInt16( mbRecommendReadOnly ? 1 : 0 ) << mnPasswordHash << maUserName;
 }
 
 // ============================================================================

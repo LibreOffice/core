@@ -46,7 +46,6 @@
 
 #include "com/sun/star/awt/XWindow.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
-#include "com/sun/star/deployment/XPackageManager.hpp"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/ui/dialogs/XExecutableDialog.hpp"
 #include "com/sun/star/util/XModifyListener.hpp"
@@ -82,16 +81,16 @@ public:
     virtual void    updateProgress( const long nProgress ) = 0;
 
     virtual void    updatePackageInfo( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage ) = 0;
-    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
-                                      const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > & ) = 0;
+    virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
+                                      bool bLicenseMissing = false ) = 0;
 
-    virtual void    prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager ) = 0;
+    virtual void    prepareChecking() = 0;
     virtual void    checkEntries() = 0;
 
     static ResId    getResId( USHORT nId );
     static String   getResourceString( USHORT id );
-    static bool     IsSharedPkgMgr( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &);
-    static bool     continueOnSharedExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &,
+    static bool     IsSharedPkgMgr( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &);
+    static bool     continueOnSharedExtension( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
                                                Window *pParent,
                                                const USHORT nResID,
                                                bool &bHadWarning );
@@ -160,19 +159,17 @@ public:
 
     void            setGetExtensionsURL( const ::rtl::OUString &rURL );
     virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
-                                      const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > & );
-    bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
+                                      bool bLicenseMissing = false );
+    bool enablePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
                         bool bEnable );
-    bool removePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
-    bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    bool removePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    bool updatePackage(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+    bool acceptLicense(const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
-    virtual void    prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+    virtual void    prepareChecking();
     virtual void    checkEntries();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > raiseAddPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > raiseAddPicker();
 };
 
 //==============================================================================
@@ -235,17 +232,14 @@ public:
 
     void            selectEntry( long nPos );
     virtual long    addPackageToList( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &,
-                                      const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > & );
-    bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
-                        bool bEnable );
-    bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
+                                      bool bLicenseMissing = false );
+    bool enablePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage, bool bEnable );
+    bool updatePackage( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
-    virtual void    prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+    virtual void    prepareChecking();
     virtual void    checkEntries();
 
-    ::com::sun::star::uno::Sequence< ::rtl::OUString > raiseAddPicker( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > raiseAddPicker();
 
     bool            installForAllUsers( bool &bInstallForAll ) const;
     bool            installExtensionWarn( const ::rtl::OUString &rExtensionURL ) const;

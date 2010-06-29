@@ -108,7 +108,7 @@ APP5RPATH=BRAND
 APP5OBJS=$(OBJ)$/copyright_ascii_ooo.obj $(OBJ)$/main.obj
 APP5STDLIBS = $(SALLIB) $(SOFFICELIB)
 .IF "$(OS)" == "LINUX"
-APP5STDLIBS+= -lXext
+APP5STDLIBS+= -lXext -lX11
 #APP5STDLIBS+= -lXext -lSM -lICE
 .ENDIF # LINUX
 

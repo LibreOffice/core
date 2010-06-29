@@ -53,4 +53,13 @@ foreach $Src (@CopySrc) {
     system ("/bin/cp $Src $Dest") && die "copy failed: $!";
 }
 
+
+foreach $File (@ARGV) {
+    #https://bugzilla.redhat.com/show_bug.cgi?id=149465
+    printf "unprelinking $Dest/$File\n";
+    #If it's already unprelinked .i.e. no .gnu.prelink_undo section, that's fine
+    #If prelink is not installed, it's massively unlikely that it's prelinked
+    system ("prelink -u $Dest/$File > /dev/null 2>&1");
+}
+
 exit (0);

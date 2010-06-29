@@ -99,7 +99,7 @@ public:
     BOOL TestComma();               // Komma oder EOLN?
     void TestEoln();                // EOLN?
 
-    void Symbol();                  // Let oder Call
+    void Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo = NULL );  // Let oder Call
     void ErrorStmnt();              // ERROR n
     void NotImp();                  // nicht implementiert
     void BadBlock();                // LOOP/WEND/NEXT
@@ -119,6 +119,7 @@ public:
     void If();                      // IF
     void Implements();              // IMPLEMENTS
     void Input();                   // INPUT, INPUT #
+    void Line();                    // LINE -> LINE INPUT [#] (#i92642)
     void LineInput();               // LINE INPUT, LINE INPUT #
     void LSet();                    // LSET
     void Name();                    // NAME .. AS ..

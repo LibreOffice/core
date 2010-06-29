@@ -255,25 +255,21 @@ Reference<XAccessibleStateSet> SAL_CALL
 
     if (mxParent.is())
     {
-        // SELECTABLE
+        // Unconditional states.
         pStateSet->AddState(AccessibleStateType::SELECTABLE);
-
-        // SELECTED
-        if (mrSlideSorter.GetController().GetPageSelector().IsPageSelected(mnPageNumber))
-            pStateSet->AddState(AccessibleStateType::SELECTED);
-
-        // FOCUSABLE
         pStateSet->AddState(AccessibleStateType::FOCUSABLE);
-
-        // FOCUSED
-        if (mrSlideSorter.GetController().GetFocusManager().GetFocusedPageIndex() == mnPageNumber)
-            if (mrSlideSorter.GetController().GetFocusManager().IsFocusShowing())
-                pStateSet->AddState(AccessibleStateType::FOCUSED);
-
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::VISIBLE);
         pStateSet->AddState(AccessibleStateType::SHOWING);
         pStateSet->AddState(AccessibleStateType::ACTIVE);
+        pStateSet->AddState(AccessibleStateType::SENSITIVE);
+
+        // Conditional states.
+        if (mrSlideSorter.GetController().GetPageSelector().IsPageSelected(mnPageNumber))
+            pStateSet->AddState(AccessibleStateType::SELECTED);
+        if (mrSlideSorter.GetController().GetFocusManager().GetFocusedPageIndex() == mnPageNumber)
+            if (mrSlideSorter.GetController().GetFocusManager().IsFocusShowing())
+                pStateSet->AddState(AccessibleStateType::FOCUSED);
     }
 
     return pStateSet;

@@ -72,6 +72,7 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         ItemList [ en-US ] =
         {
+            < "Default" ; > ;
             < "1" ; > ;
             < "2" ; > ;
             < "3" ; > ;

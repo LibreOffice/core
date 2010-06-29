@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextCopy.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XRelativeTextContentInsert.hpp>
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
@@ -62,6 +63,7 @@ class SwXText
     , public ::com::sun::star::lang::XUnoTunnel
     , public ::com::sun::star::beans::XPropertySet
     , public ::com::sun::star::text::XTextAppendAndConvert
+    , public ::com::sun::star::text::XTextCopy
     , public ::com::sun::star::text::XTextRangeCompare
     , public ::com::sun::star::text::XRelativeTextContentInsert
     , public ::com::sun::star::text::XRelativeTextContentRemove
@@ -333,6 +335,11 @@ public:
         throw (::com::sun::star::lang::IllegalArgumentException,
                 ::com::sun::star::uno::RuntimeException);
 
+    // XTextCopy
+    virtual void SAL_CALL copyText(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::text::XTextCopy >& xSource )
+        throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif // SW_UNOTEXT_HXX

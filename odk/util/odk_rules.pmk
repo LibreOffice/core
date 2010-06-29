@@ -28,15 +28,15 @@
 
 $(DESTDIRDOCU)/%.html : $(PRJ)/docs/%.html
     @@-rm -f $@
-    $(MY_TEXTCOPY) $< $@
+    tr -d "\015" < $< |  sed -e 's/%PRODUCT_RELEASE%/$(PRODUCT_RELEASE)/g' > $@
 
 $(DESTDIREXAMPLES)/%.html : $(PRJ)/examples/%.html
     @@-rm -f $@
-    $(MY_TEXTCOPY) $< $@
+    tr -d "\015" < $< |  sed -e 's/%PRODUCT_RELEASE%/$(PRODUCT_RELEASE)/g' > $@
 
 $(DESTDIR)/index.html : $(PRJ)/index.html
     @@-rm -f $@
-    $(MY_TEXTCOPY) $< $@
+    tr -d "\015" < $< |  sed -e 's/%PRODUCT_RELEASE%/$(PRODUCT_RELEASE)/g' > $@
 
 $(DESTDIRDOCU)/%.css : $(PRJ)/docs/%.css
     @@-rm -f $@

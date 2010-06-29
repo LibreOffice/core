@@ -355,22 +355,26 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
 
     case OWN_ATTR_OLEMODEL:
     case OWN_ATTR_OLE_EMBEDDED_OBJECT:
+    case OWN_ATTR_OLE_EMBEDDED_OBJECT_NONEWCLIENT:
     {
         SdrOle2Obj* pObj = dynamic_cast<SdrOle2Obj*>( mpObj.get() );
         if( pObj )
         {
             uno::Reference < embed::XEmbeddedObject > xObj( pObj->GetObjRef() );
             if ( xObj.is()
-              && ( pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT || svt::EmbeddedObjectRef::TryRunningState( xObj ) ) )
+              && ( pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT_NONEWCLIENT || svt::EmbeddedObjectRef::TryRunningState( xObj ) ) )
             {
                 // Discussed with CL fue to the before GetPaintingPageView
                 // usage. Removed it, former fallback is used now
+                if ( pProperty->nWID == OWN_ATTR_OLEMODEL || pProperty->nWID == OWN_ATTR_OLE_EMBEDDED_OBJECT )
+                {
 #ifdef DBG_UTIL
-                const sal_Bool bSuccess(pObj->AddOwnLightClient());
-                OSL_ENSURE( bSuccess, "An object without client is provided!" );
+                    const sal_Bool bSuccess(pObj->AddOwnLightClient());
+                    OSL_ENSURE( bSuccess, "An object without client is provided!" );
 #else
-                pObj->AddOwnLightClient();
+                    pObj->AddOwnLightClient();
 #endif
+                }
 
                 if ( pProperty->nWID == OWN_ATTR_OLEMODEL )
                     rValue <<= pObj->GetObjRef()->getComponent();

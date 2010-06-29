@@ -253,20 +253,13 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         eCharSet = ScGlobal::GetCharsetValue( aToken );
     }
 
-    // Language
-    if (nCount >= 4)
-    {
-        aToken = rString.GetToken(3, ',');
-        eLang = static_cast<LanguageType>(aToken.ToInt32());
-    }
-
         //
         //  Startzeile
         //
 
-    if ( nCount >= 5 )
+    if ( nCount >= 4 )
     {
-        aToken = rString.GetToken(4,',');
+        aToken = rString.GetToken(3,',');
         nStartRow = aToken.ToInt32();
     }
 
@@ -274,12 +267,12 @@ void ScAsciiOptions::ReadFromString( const String& rString )
         //  Spalten-Infos
         //
 
-    if ( nCount >= 6 )
+    if ( nCount >= 5 )
     {
         delete[] pColStart;
         delete[] pColFormat;
 
-        aToken = rString.GetToken(5,',');
+        aToken = rString.GetToken(4,',');
         nSub = aToken.GetTokenCount('/');
         nInfoCount = nSub / 2;
         if (nInfoCount)
@@ -297,6 +290,13 @@ void ScAsciiOptions::ReadFromString( const String& rString )
             pColStart = NULL;
             pColFormat = NULL;
         }
+    }
+
+    // Language
+    if (nCount >= 6)
+    {
+        aToken = rString.GetToken(5, ',');
+        eLang = static_cast<LanguageType>(aToken.ToInt32());
     }
 
     // Import quoted field as text.
@@ -362,10 +362,6 @@ String ScAsciiOptions::WriteToString() const
         aOutStr += ScGlobal::GetCharsetString( eCharSet );
     aOutStr += ',';                 // Token-Ende
 
-    // Language
-    aOutStr += String::CreateFromInt32(eLang);
-    aOutStr += ',';
-
         //
         //  Startzeile
         //
@@ -387,6 +383,13 @@ String ScAsciiOptions::WriteToString() const
         aOutStr += String::CreateFromInt32(pColFormat[nInfo]);
     }
 
+    // #i112025# the options string is used in macros and linked sheets,
+    // so new options must be added at the end, to remain compatible
+
+    aOutStr += ',';
+
+    // Language
+    aOutStr += String::CreateFromInt32(eLang);
     aOutStr += ',';
 
     // Import quoted field as text.

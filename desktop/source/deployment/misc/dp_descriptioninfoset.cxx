@@ -35,6 +35,7 @@
 
 #include "comphelper/sequence.hxx"
 #include "comphelper/makesequence.hxx"
+#include "comphelper/processfactory.hxx"
 #include "boost/optional.hpp"
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
@@ -47,17 +48,23 @@
 #include "com/sun/star/xml/dom/DOMException.hpp"
 #include "com/sun/star/xml/dom/XNode.hpp"
 #include "com/sun/star/xml/dom/XNodeList.hpp"
+#include "com/sun/star/xml/dom/XDocumentBuilder.hpp"
 #include "com/sun/star/xml/xpath/XXPathAPI.hpp"
+#include "com/sun/star/ucb/InteractiveAugmentedIOException.hpp"
 #include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/weak.hxx"
+#include "cppuhelper/exc_hlp.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
-
+#include "ucbhelper/content.hxx"
 
 namespace {
 
 namespace css = ::com::sun::star;
+using css::uno::Reference;
+using ::rtl::OUString;
 
 class EmptyNodeList: public ::cppu::WeakImplHelper1< css::xml::dom::XNodeList >
 {
@@ -110,9 +117,250 @@ css::uno::Reference< css::xml::dom::XNode > EmptyNodeList::item(::sal_Int32)
     }
 }
 
+/**The class uses the UCB to access the description.xml file in an
+   extension. The UCB must have been initialized already. It also
+   requires that the extension has already be unzipped to a particular
+   location.
+ */
+class ExtensionDescription
+{
+public:
+    /**throws an exception if the description.xml is not
+        available, cannot be read, does not contain the expected data,
+        or any other error occured. Therefore it shoult only be used with
+        new extensions.
+
+        Throws com::sun::star::uno::RuntimeException,
+        com::sun::star::deployment::DeploymentException,
+        dp_registry::backend::bundle::NoDescriptionException.
+     */
+    ExtensionDescription(
+        const css::uno::Reference<css::uno::XComponentContext>& xContext,
+        const ::rtl::OUString& installDir,
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
+
+    ~ExtensionDescription();
+
+    css::uno::Reference<css::xml::dom::XNode> getRootElement() const
+    {
+        return m_xRoot;
+    }
+
+    ::rtl::OUString getExtensionRootUrl() const
+    {
+        return m_sExtensionRootUrl;
+    }
+
+
+private:
+    css::uno::Reference<css::xml::dom::XNode> m_xRoot;
+    ::rtl::OUString m_sExtensionRootUrl;
+};
+
+class NoDescriptionException
+{
+};
+
+class FileDoesNotExistFilter
+    : public ::cppu::WeakImplHelper2< css::ucb::XCommandEnvironment,
+                                      css::task::XInteractionHandler >
+
+{
+    //css::uno::Reference<css::task::XInteractionHandler> m_xHandler;
+    bool m_bExist;
+    css::uno::Reference< css::ucb::XCommandEnvironment > m_xCommandEnv;
+
+public:
+    virtual ~FileDoesNotExistFilter();
+    FileDoesNotExistFilter(
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
+
+    bool exist();
+    // XCommandEnvironment
+    virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
+    getInteractionHandler() throw (css::uno::RuntimeException);
+    virtual css::uno::Reference<css::ucb::XProgressHandler >
+    SAL_CALL getProgressHandler() throw (css::uno::RuntimeException);
+
+    // XInteractionHandler
+    virtual void SAL_CALL handle(
+        css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
+        throw (css::uno::RuntimeException);
+};
+
+ExtensionDescription::ExtensionDescription(
+    const Reference<css::uno::XComponentContext>& xContext,
+    const OUString& installDir,
+    const Reference< css::ucb::XCommandEnvironment >& xCmdEnv)
+{
+    try {
+        m_sExtensionRootUrl = installDir;
+        //may throw ::com::sun::star::ucb::ContentCreationException
+        //If there is no description.xml then ucb will start an interaction which
+        //brings up a dialog.We want to prevent this. Therefore we wrap the xCmdEnv
+        //and filter the respective exception out.
+        OUString sDescriptionUri(installDir + OUSTR("/description.xml"));
+        Reference<css::ucb::XCommandEnvironment> xFilter =
+            static_cast<css::ucb::XCommandEnvironment*>(
+                new FileDoesNotExistFilter(xCmdEnv));
+        ::ucbhelper::Content descContent(sDescriptionUri, xFilter);
+
+        //throws an com::sun::star::uno::Exception if the file is not available
+        Reference<css::io::XInputStream> xIn;
+        try
+        {   //throws com.sun.star.ucb.InteractiveAugmentedIOException
+            xIn = descContent.openStream();
+        }
+        catch (css::uno::Exception& )
+        {
+            if ( ! static_cast<FileDoesNotExistFilter*>(xFilter.get())->exist())
+                throw NoDescriptionException();
+            throw;
+        }
+        if (!xIn.is())
+        {
+            throw css::uno::Exception(
+                OUSTR("Could not get XInputStream for description.xml of extension ") +
+                sDescriptionUri, 0);
+        }
+
+        //get root node of description.xml
+        Reference<css::xml::dom::XDocumentBuilder> xDocBuilder(
+            xContext->getServiceManager()->createInstanceWithContext(
+                OUSTR("com.sun.star.xml.dom.DocumentBuilder"),
+                xContext ), css::uno::UNO_QUERY);
+        if (!xDocBuilder.is())
+            throw css::uno::Exception(OUSTR(" Could not create service com.sun.star.xml.dom.DocumentBuilder"), 0);
+
+        if (xDocBuilder->isNamespaceAware() == sal_False)
+        {
+            throw css::uno::Exception(
+                OUSTR("Service com.sun.star.xml.dom.DocumentBuilder is not namespace aware."), 0);
+        }
+
+        Reference<css::xml::dom::XDocument> xDoc = xDocBuilder->parse(xIn);
+        if (!xDoc.is())
+        {
+            throw css::uno::Exception(sDescriptionUri + OUSTR(" contains data which cannot be parsed. "), 0);
+        }
+
+        //check for proper root element and namespace
+        Reference<css::xml::dom::XElement> xRoot = xDoc->getDocumentElement();
+        if (!xRoot.is())
+        {
+            throw css::uno::Exception(
+                sDescriptionUri + OUSTR(" contains no root element."), 0);
+        }
+
+        if ( ! xRoot->getTagName().equals(OUSTR("description")))
+        {
+            throw css::uno::Exception(
+                sDescriptionUri + OUSTR(" does not contain the root element <description>."), 0);
+        }
+
+        m_xRoot = Reference<css::xml::dom::XNode>(
+            xRoot, css::uno::UNO_QUERY_THROW);
+        OUString nsDescription = xRoot->getNamespaceURI();
+
+        //check if this namespace is supported
+        if ( ! nsDescription.equals(OUSTR("http://openoffice.org/extensions/description/2006")))
+        {
+            throw css::uno::Exception(sDescriptionUri + OUSTR(" contains a root element with an unsupported namespace. "), 0);
+        }
+    } catch (css::uno::RuntimeException &) {
+        throw;
+    } catch (css::deployment::DeploymentException &) {
+        throw;
+    } catch (css::uno::Exception & e) {
+        css::uno::Any a(cppu::getCaughtException());
+        throw css::deployment::DeploymentException(
+            e.Message, Reference< css::uno::XInterface >(), a);
+    }
+}
+
+ExtensionDescription::~ExtensionDescription()
+{
+}
+
+//======================================================================
+FileDoesNotExistFilter::FileDoesNotExistFilter(
+    const Reference< css::ucb::XCommandEnvironment >& xCmdEnv):
+    m_bExist(true), m_xCommandEnv(xCmdEnv)
+{}
+
+FileDoesNotExistFilter::~FileDoesNotExistFilter()
+{
+};
+
+bool FileDoesNotExistFilter::exist()
+{
+    return m_bExist;
+}
+    // XCommandEnvironment
+Reference<css::task::XInteractionHandler >
+    FileDoesNotExistFilter::getInteractionHandler() throw (css::uno::RuntimeException)
+{
+    return static_cast<css::task::XInteractionHandler*>(this);
+}
+
+Reference<css::ucb::XProgressHandler >
+    FileDoesNotExistFilter::getProgressHandler() throw (css::uno::RuntimeException)
+{
+    return m_xCommandEnv.is()
+        ? m_xCommandEnv->getProgressHandler()
+        : Reference<css::ucb::XProgressHandler>();
+}
+
+// XInteractionHandler
+//If the interaction was caused by a non-existing file which is specified in the ctor
+//of FileDoesNotExistFilter, then we do nothing
+void  FileDoesNotExistFilter::handle(
+        Reference<css::task::XInteractionRequest > const & xRequest )
+        throw (css::uno::RuntimeException)
+{
+    css::uno::Any request( xRequest->getRequest() );
+
+    css::ucb::InteractiveAugmentedIOException ioexc;
+    if ((request>>= ioexc) && ioexc.Code == css::ucb::IOErrorCode_NOT_EXISTING )
+    {
+        m_bExist = false;
+        return;
+    }
+    Reference<css::task::XInteractionHandler> xInteraction;
+    if (m_xCommandEnv.is()) {
+        xInteraction = m_xCommandEnv->getInteractionHandler();
+    }
+    if (xInteraction.is()) {
+        xInteraction->handle(xRequest);
+    }
+}
+
 }
 
 namespace dp_misc {
+
+DescriptionInfoset getDescriptionInfoset(OUString const & sExtensionFolderURL)
+{
+    Reference< css::xml::dom::XNode > root;
+    Reference<css::uno::XComponentContext> context =
+        comphelper_getProcessComponentContext();
+    OSL_ASSERT(context.is());
+    try {
+        root =
+            ExtensionDescription(
+                context, sExtensionFolderURL,
+                Reference< css::ucb::XCommandEnvironment >()).
+            getRootElement();
+    } catch (NoDescriptionException &) {
+    } catch (css::deployment::DeploymentException & e) {
+        throw css::uno::RuntimeException(
+            (OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.deployment.DeploymentException: ")) +
+             e.Message), 0);
+    }
+    return DescriptionInfoset(context, root);
+}
 
 DescriptionInfoset::DescriptionInfoset(
     css::uno::Reference< css::uno::XComponentContext > const & context,

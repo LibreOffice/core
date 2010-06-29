@@ -65,23 +65,23 @@
     <FormatElement msgid="PercentFormatskey2" default="true" type="long" usage="PERCENT_NUMBER" formatindex="9">
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY" formatindex="12">
-      <FormatCode># ##0[$Ls-64B];-# ##0[$Ls-64B]</FormatCode>
+    <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
+      <FormatCode>[$Ls-64B] # ##0;[$Ls-64B] -# ##0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY" formatindex="13">
-      <FormatCode># ##0,00[$Ls-64B];-# ##0,00[$Ls-64B]</FormatCode>
+    <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
+      <FormatCode>[$Ls-64B] # ##0,00;[$Ls-64B] -# ##0,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY" formatindex="14">
-      <FormatCode># ##0[$Ls-64B];[RED]-# ##0[$Ls-64B]</FormatCode>
+    <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
+      <FormatCode>[$Ls-64B] # ##0;[RED][$Ls-64B] -# ##0</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY" formatindex="15">
-      <FormatCode># ##0,00[$Ls-64B];[RED]-# ##0,00[$Ls-64B]</FormatCode>
+    <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
+      <FormatCode>[$Ls-64B] # ##0,00;[RED][$Ls-64B] -# ##0,00</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY" formatindex="16">
+    <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
       <FormatCode># ##0,00 CCC</FormatCode>
     </FormatElement>
-    <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY" formatindex="17">
-      <FormatCode># ##0,--[$Ls-64B];[RED]-# ##0,--[$Ls-64B]</FormatCode>
+    <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
+      <FormatCode>[$Ls-64B] # ##0,--;[RED][$Ls-64B] -# ##0,--</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey11" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D.MM.YY</FormatCode>

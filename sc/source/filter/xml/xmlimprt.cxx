@@ -645,6 +645,8 @@ const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
             { XML_NAMESPACE_TABLE,  XML_SCENARIO,                   XML_TOK_TABLE_SCENARIO      },
             { XML_NAMESPACE_TABLE,  XML_SHAPES,                     XML_TOK_TABLE_SHAPES        },
             { XML_NAMESPACE_OFFICE, XML_FORMS,                      XML_TOK_TABLE_FORMS         },
+            { XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS,            XML_TOK_TABLE_EVENT_LISTENERS },
+            { XML_NAMESPACE_OFFICE_EXT, XML_EVENT_LISTENERS,        XML_TOK_TABLE_EVENT_LISTENERS_EXT },
             XML_TOKEN_MAP_END
         };
 
@@ -698,12 +700,12 @@ const SvXMLTokenMap& ScXMLImport::GetTableAttrTokenMap()
     {
         static __FAR_DATA SvXMLTokenMapEntry aTableAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAME,                        XML_TOK_TABLE_NAME              },
-            { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                  XML_TOK_TABLE_STYLE_NAME        },
-            { XML_NAMESPACE_TABLE, XML_PROTECTED,                   XML_TOK_TABLE_PROTECTION        },
-            { XML_NAMESPACE_TABLE, XML_PRINT_RANGES,                XML_TOK_TABLE_PRINT_RANGES      },
-            { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY,              XML_TOK_TABLE_PASSWORD          },
-            { XML_NAMESPACE_TABLE, XML_PRINT,                       XML_TOK_TABLE_PRINT             },
+            { XML_NAMESPACE_TABLE,     XML_NAME,           XML_TOK_TABLE_NAME          },
+            { XML_NAMESPACE_TABLE,     XML_STYLE_NAME,     XML_TOK_TABLE_STYLE_NAME    },
+            { XML_NAMESPACE_TABLE,     XML_PROTECTED,      XML_TOK_TABLE_PROTECTION    },
+            { XML_NAMESPACE_TABLE,     XML_PRINT_RANGES,   XML_TOK_TABLE_PRINT_RANGES  },
+            { XML_NAMESPACE_TABLE,     XML_PROTECTION_KEY, XML_TOK_TABLE_PASSWORD      },
+            { XML_NAMESPACE_TABLE,     XML_PRINT,          XML_TOK_TABLE_PRINT         },
             XML_TOKEN_MAP_END
         };
 
@@ -2216,10 +2218,11 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
         if (xMultiServiceFactory.is())
         {
             sal_Int32 nCount(aConfigProps.getLength());
-            rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("TrackedChangesProtectionKey"));
+            rtl::OUString sCTName(RTL_CONSTASCII_USTRINGPARAM("TrackedChangesProtectionKey"));
+            rtl::OUString sSCName(RTL_CONSTASCII_USTRINGPARAM("ScriptConfiguration"));
             for (sal_Int32 i = nCount - 1; i >= 0; --i)
             {
-                if (aConfigProps[i].Name == sName)
+                if (aConfigProps[i].Name == sCTName)
                 {
                     rtl::OUString sKey;
                     if (aConfigProps[i].Value >>= sKey)
@@ -2237,6 +2240,28 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                                 pTrack->SetProtection(aPass);
                                 pDoc->SetChangeTrack(pTrack);
                             }
+                        }
+                    }
+                }
+                else if (aConfigProps[i].Name == sSCName)
+                {
+                    uno::Type aType = aConfigProps[i].Value.getValueType();
+                    uno::Reference<beans::XPropertySet> xImportInfo =
+                        getImportInfo();
+
+                    if (xImportInfo.is() &&
+                        (aType.equals(getCppuType(
+                          (uno::Reference<container::XNameContainer> *)0 ) ) ||
+                        aType.equals(getCppuType(
+                          (uno::Reference<container::XNameAccess> *)0 ) ) ) )
+                    {
+                        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo =
+                            xImportInfo->getPropertySetInfo();
+                        if (xPropertySetInfo.is() &&
+                            xPropertySetInfo->hasPropertyByName(sSCName) )
+                        {
+                            xImportInfo->setPropertyValue(sSCName,
+                                    aConfigProps[i].Value );
                         }
                     }
                 }

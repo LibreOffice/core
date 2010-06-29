@@ -52,7 +52,7 @@
 #include "markarr.hxx"
 #include "rechead.hxx"
 #include "globstr.hrc"
-
+#include "segmenttree.hxx"
 
 #undef DBG_INVALIDATE
 #define DBGOUTPUT(s) \
@@ -1727,8 +1727,7 @@ SCsROW ScAttrArray::GetNextUnprotected( SCsROW nRow, BOOL bUp ) const
     return nRet;
 }
 
-
-void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset )
+void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset )
 {
     SCROW nStart = 0;
     SCSIZE nPos = 0;
@@ -1740,7 +1739,7 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pU
 //          for (SCROW nRow = nStart; nRow <= nEnd; nRow++)
 //              pUsed[nRow] = TRUE;
 
-            memset( &pUsed[nStart], TRUE, nEnd-nStart+1 );
+            rUsedRows.setTrue(nStart, nEnd);
 
             if (bReset)
             {

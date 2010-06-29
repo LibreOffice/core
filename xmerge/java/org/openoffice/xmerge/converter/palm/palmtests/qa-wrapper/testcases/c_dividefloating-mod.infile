@@ -1,8 +1,0 @@
-# 
-# Spreadsheet - dividing floating points.
-# 
-TEST||MINICALC|c_dividefloating
-MINICALC_ENTER_CELL|3|0|=-(12.2)/(5-1)\n
-SLEEP|3
-MINICALC_ENTER_CELL|1|1|=(12.2)/(5-1)\n
-SLEEP|5

@@ -666,7 +666,7 @@ void ScTabView::MakeVisible( const Rectangle& rHMMRect )
         if (nScrollY > 0)
             while (nScrollY > 0 && nPosY < MAXROW)
             {
-                nScrollY -= (long) ( pDoc->FastGetRowHeight(nPosY, nTab) * nPPTY );
+                nScrollY -= (long) ( pDoc->GetRowHeight(nPosY, nTab) * nPPTY );
                 ++nPosY;
                 ++nLinesY;
             }
@@ -674,7 +674,7 @@ void ScTabView::MakeVisible( const Rectangle& rHMMRect )
             while (nScrollY < 0 && nPosY > 0)
             {
                 --nPosY;
-                nScrollY += (long) ( pDoc->FastGetRowHeight(nPosY, nTab) * nPPTY );
+                nScrollY += (long) ( pDoc->GetRowHeight(nPosY, nTab) * nPPTY );
                 --nLinesY;
             }
 

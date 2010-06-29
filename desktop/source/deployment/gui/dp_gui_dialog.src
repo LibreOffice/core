@@ -72,6 +72,11 @@ String RID_STR_DISABLING_PACKAGES
     Text [ en-US ] = "Disabling %EXTENSION_NAME";
 };
 
+String RID_STR_ACCEPT_LICENSE
+{
+    Text [ en-US ] = "Accept license for %EXTENSION_NAME";
+};
+
 String RID_STR_INSTALL_FOR_ALL
 {
     Text [ en-US ] = "~For all users";
@@ -109,6 +114,11 @@ String RID_STR_ERROR_MISSING_DEPENDENCIES
     Text [ en-US ] = "The extension cannot be enabled as the following system dependencies are not fulfilled:";
 };
 
+String RID_STR_ERROR_MISSING_LICENSE
+{
+    Text [ en-US ] = "This extension is disabled because you haven't accepted the license yet.\n";
+};
+
 // Dialog layout
 // ---------------------------------------------------
 //  row 1 | multi line edit
@@ -131,7 +141,7 @@ String RID_STR_ERROR_MISSING_DEPENDENCIES
 #define ROW1_Y RSC_SP_DLG_INNERBORDER_TOP
 #define ROW1_HEIGHT 16*RSC_CD_FIXEDTEXT_HEIGHT
 #define ROW2_Y  ROW1_Y+ROW1_HEIGHT+RSC_SP_CTRL_GROUP_Y
-#define ROW2_HEIGHT 2*RSC_CD_FIXEDTEXT_HEIGHT
+#define ROW2_HEIGHT 3*RSC_CD_FIXEDTEXT_HEIGHT
 #define ROW3_Y ROW2_Y+ROW2_HEIGHT+RSC_SP_CTRL_GROUP_Y
 #define ROW3_HEIGHT 3*RSC_CD_FIXEDTEXT_HEIGHT
 #define ROW4_Y ROW3_Y+ROW3_HEIGHT+RSC_SP_CTRL_GROUP_Y
@@ -281,14 +291,6 @@ ModalDialog RID_DLG_LICENSE
 };
 
 
-
-WarningBox WARNINGBOX_NOSHAREDALLOWED
-{
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK;
-    Message[ en-US ] ="The extension \'%NAME\' cannot be installed under \"%PRODUCTNAME Extensions\", because "
-        "every user has to agree to the license agreement of the extension. The extension will not be installed.";
-};
 
 WarningBox RID_WARNINGBOX_INSTALL_EXTENSION {
     Buttons = WB_OK_CANCEL;

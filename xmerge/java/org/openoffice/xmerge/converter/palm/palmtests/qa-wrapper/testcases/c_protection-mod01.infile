@@ -1,6 +1,0 @@
-# 
-# Spreadsheet change protection test.
-# 
-TEST||MINICALC|c_protection
-MINICALC_ENTER_CELL|0|0| 1\n
-SLEEP|5

@@ -27,22 +27,18 @@
 #ifndef __ooo_vba_excel_XWindow_idl__
 #define __ooo_vba_excel_XWindow_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 //=============================================================================
 
 module ooo {  module vba {  module excel {
 
 //=============================================================================
+
 interface XRange;
 interface XWorksheet;
 interface XPane;
+
 interface XWindow : com::sun::star::uno::XInterface
 {
     [attribute] any Caption;
@@ -61,6 +57,7 @@ interface XWindow : com::sun::star::uno::XInterface
     [attribute] any ScrollColumn;
     [attribute] any ScrollRow;
     [attribute] any View;
+    [attribute, readonly] XRange VisibleRange;
     [attribute] any WindowState;
     [attribute] any Zoom;
     any SelectedSheets( [in] any aIndex );
@@ -71,6 +68,7 @@ interface XWindow : com::sun::star::uno::XInterface
         void Close([in] any SaveChanges, [in] any FileName, [in] any RouteWorkBook);
     XRange ActiveCell() raises(com::sun::star::script::BasicErrorException);
     any Selection() raises(com::sun::star::script::BasicErrorException);
+    XRange RangeSelection() raises(com::sun::star::script::BasicErrorException);
     long PointsToScreenPixelsX([in] long Points) raises(com::sun::star::script::BasicErrorException);
     long PointsToScreenPixelsY([in] long Points) raises(com::sun::star::script::BasicErrorException);
     void PrintOut([in] /*optional short*/ any From,

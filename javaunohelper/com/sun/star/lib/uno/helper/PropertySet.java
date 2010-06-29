@@ -836,7 +836,6 @@ XMultiPropertySet
      *  @return The value of the property.
      */
     protected Object getPropertyValue(Property property)
-    throws com.sun.star.lang.WrappedTargetException
     {
         Object ret= null;
         try
@@ -853,9 +852,13 @@ XMultiPropertySet
                     ret= propField.get(this);
             }
         }
-        catch(java.lang.Exception e)
+        catch(java.lang.NoSuchFieldException e)
         {
-            throw new WrappedTargetException("PropertySet.setPropertyValue_NoBroadcast", this, e);
+            throw new java.lang.RuntimeException(e);
+        }
+        catch(java.lang.IllegalAccessException e)
+        {
+            throw new java.lang.RuntimeException(e);
         }
         return ret;
     }
@@ -1001,7 +1004,7 @@ XMultiPropertySet
                     {
                        value= getPropertyValue(prop);
                     }
-                    catch(WrappedTargetException e)
+                    catch(Exception e)
                     {
                         continue;
                     }

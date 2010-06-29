@@ -27,6 +27,7 @@
 
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
@@ -170,7 +171,7 @@ BlipContext::BlipContext( ContextHandler& rParent,
         // internal picture URL
         OUString aFragmentPath = getFragmentPathFromRelId( aAttribs.getString( R_TOKEN( embed ), OUString() ) );
         if( aFragmentPath.getLength() > 0 )
-            mrBlipProps.mxGraphic = getFilter().importEmbeddedGraphic( aFragmentPath );
+            mrBlipProps.mxGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic( aFragmentPath );
     }
     else if( aAttribs.hasAttribute( R_TOKEN( link ) ) )
     {

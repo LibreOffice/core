@@ -53,17 +53,17 @@ class ImplPropertyTable;
 //  class UnoControlModel
 //  ----------------------------------------------------
 
-class UnoControlModel : public ::com::sun::star::awt::XControlModel,
-                        public ::com::sun::star::beans::XPropertyState,
-                        public ::com::sun::star::io::XPersistObject,
-                        public ::com::sun::star::lang::XComponent,
-                        public ::com::sun::star::lang::XServiceInfo,
-                        public ::com::sun::star::lang::XTypeProvider,
-                        public ::com::sun::star::lang::XUnoTunnel,
-                        public ::com::sun::star::util::XCloneable,
-                        public MutexAndBroadcastHelper,
-                        public ::cppu::OPropertySetHelper,
-                        public ::cppu::OWeakAggObject
+class TOOLKIT_DLLPUBLIC UnoControlModel :   public ::com::sun::star::awt::XControlModel,
+                                            public ::com::sun::star::beans::XPropertyState,
+                                            public ::com::sun::star::io::XPersistObject,
+                                            public ::com::sun::star::lang::XComponent,
+                                            public ::com::sun::star::lang::XServiceInfo,
+                                            public ::com::sun::star::lang::XTypeProvider,
+                                            public ::com::sun::star::lang::XUnoTunnel,
+                                            public ::com::sun::star::util::XCloneable,
+                                            public MutexAndBroadcastHelper,
+                                            public ::cppu::OPropertySetHelper,
+                                            public ::cppu::OWeakAggObject
 {
 private:
     ImplPropertyTable*          mpData;

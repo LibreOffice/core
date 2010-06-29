@@ -110,7 +110,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 nXT += pDoc->GetColWidth(i,nTab);
             if (pDoc->IsNegativePage(nTab))
                 nXT = -nXT;
-            ULONG nYT = pDoc->FastGetRowHeight( 0, nPosY-1, nTab);
+            ULONG nYT = pDoc->GetRowHeight( 0, nPosY-1, nTab);
             aPos = Point( (long)(nXT * HMM_PER_TWIPS), (long)(nYT * HMM_PER_TWIPS) );
         }
     }

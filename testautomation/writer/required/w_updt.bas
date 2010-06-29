@@ -42,6 +42,7 @@ sub main
     use "writer\required\includes\w_002_.inc"
     use "writer\required\includes\w_003_.inc"
     use "writer\required\includes\w_004_.inc"
+    use "writer\required\includes\w_004b_.inc"
     use "writer\required\includes\w_005_.inc"
     use "writer\required\includes\w_005b_.inc"
     use "writer\required\includes\w_006_.inc"
@@ -64,6 +65,7 @@ sub main
     Call w_002_              ' Menu Edit
     Call w_003_              ' Menu View
     Call w_004_              ' Menu Insert
+    Call w_004b_             ' Menu Insert
     Call w_005_              ' Menu Format
     Call w_005b_             ' Menu Format (2)
     Call w_006_              ' Menu Table

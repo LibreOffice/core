@@ -27,14 +27,17 @@
 #include "vbacomment.hxx"
 
 #include <ooo/vba/excel/XlCreator.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
+#include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/text/XText.hpp>
 
+#include <vbahelper/vbashape.hxx>
 #include "vbaglobals.hxx"
 #include "vbacomments.hxx"
 
@@ -42,8 +45,14 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaComment::ScVbaComment( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ) throw( lang::IllegalArgumentException )
-: ScVbaComment_BASE( xParent, xContext ), mxRange( xRange )
+ScVbaComment::ScVbaComment(
+        const uno::Reference< XHelperInterface >& xParent,
+        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< frame::XModel >& xModel,
+        const uno::Reference< table::XCellRange >& xRange ) throw( lang::IllegalArgumentException ) :
+    ScVbaComment_BASE( xParent, xContext ),
+    mxModel( xModel, uno::UNO_SET_THROW ),
+    mxRange( xRange )
 {
     if  ( !xRange.is() )
         throw lang::IllegalArgumentException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "range is not set " ) ), uno::Reference< uno::XInterface >() , 1 );
@@ -100,7 +109,7 @@ ScVbaComment::getCommentByIndex( sal_Int32 Index ) throw (uno::RuntimeException)
 {
     uno::Reference< container::XIndexAccess > xIndexAccess( getAnnotations(), uno::UNO_QUERY_THROW );
     // parent is sheet ( parent of the range which is the parent of the comment )
-    uno::Reference< XCollection > xColl(  new ScVbaComments( getParent()->getParent(), mxContext, xIndexAccess ) );
+    uno::Reference< XCollection > xColl(  new ScVbaComments( getParent()->getParent(), mxContext, mxModel, xIndexAccess ) );
 
     return uno::Reference< excel::XComment > ( xColl->Item( uno::makeAny( Index ), uno::Any() ), uno::UNO_QUERY_THROW );
  }
@@ -117,6 +126,17 @@ void SAL_CALL
 ScVbaComment::setAuthor( const rtl::OUString& /*_author*/ ) throw (uno::RuntimeException)
 {
     // #TODO #FIXME  implementation needed
+}
+
+uno::Reference< msforms::XShape > SAL_CALL
+ScVbaComment::getShape() throw (uno::RuntimeException)
+{
+    uno::Reference< sheet::XSheetAnnotationShapeSupplier > xAnnoShapeSupp( getAnnotation(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), uno::UNO_SET_THROW );
+    uno::Reference< sheet::XSheetCellRange > xCellRange( mxRange, uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupp( xCellRange->getSpreadsheet(), uno::UNO_QUERY_THROW );
+    uno::Reference< drawing::XShapes > xShapes( xDrawPageSupp->getDrawPage(), uno::UNO_QUERY_THROW );
+    return new ScVbaShape( this, mxContext, xAnnoShape, xShapes, mxModel, office::MsoShapeType::msoComment );
 }
 
 sal_Bool SAL_CALL
@@ -186,12 +206,15 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
 
             uno::Reference< text::XTextRange > xRange( xTextCursor, uno::UNO_QUERY_THROW );
             xAnnoText->insertString( xRange, sText, bOverwrite );
+            return xAnnoText->getString();
         }
-        else
-            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScVbaComment::Text - bad Start value " ) ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScVbaComment::Text - bad Start value " ) ), uno::Reference< uno::XInterface >() );
     }
     else if ( aText.hasValue() )
+    {
         xAnnoText->setString( sText );
+        return sText;
+    }
 
     return sAnnoText;
 }

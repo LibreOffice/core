@@ -1,524 +1,309 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE Readme SYSTEM "../readme.dtd"><!-- A paragraph id has to be unique within one section -->
-<Readme name="ooo_readme" col-span="0">
-
-	<Section id="Welcome"> <!-- ALL PLATFORMS -->
-	
-		<Paragraph id="Welcome" style="H1">
-			<Text id="a" xml:lang="en-US">Welcome</Text>
-		</Paragraph>
-
-		<Paragraph id="ReadMeTitle" style="H1">
-			<Text id="a" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</Text>
-		</Paragraph>
-
-		<Paragraph id="LaterstUpdates">
-			<Text id="a" xml:lang="en-US" url="ahead">For latest updates to this readme file, see </Text>
-			<Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/welcome/readme.html</Text>
-		</Paragraph>
-
-		<Paragraph id="A5">
-			<Text id="c" xml:lang="en-US">Dear User</Text>
-		</Paragraph>
-
-		<Paragraph id="A6">
-			<Text id="d" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</Text>
-		</Paragraph>
-
-		<Paragraph id="A7">
-			<Text id="a" xml:lang="en-US" url="ahead">The OpenOffice.org Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the ${PRODUCTNAME} site with helpful user information at </Text>
-		</Paragraph>
-
-		<Paragraph id="A8">
-			<Text id="empty" xml:lang="en-US"/>
-			<Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/about_us/introduction.html </Text>
-		</Paragraph>
-
-		<Paragraph id="A9">
-			<Text id="empty" xml:lang="en-US"/>
-			<Text id="c" xml:lang="en-US">Also read the sections below about getting involved in the OpenOffice.org project. </Text>
-		</Paragraph>
-
-		<Paragraph id="A10" style="H3">
-			<Text id="c" xml:lang="en-US">Is ${PRODUCTNAME} really free for any user? </Text>
-		</Paragraph>
-
-		<Paragraph id="A11">
-			<Text id="empty" xml:lang="en-US"/>
-			<Text id="a" xml:lang="en-US" url="ahead">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text delivered together with ${PRODUCTNAME} or </Text>
-			<Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/license.html </Text>
-			<Text id="d" xml:lang="en-US"></Text>
-		</Paragraph>
-	
-		<Paragraph id="A12" style="H3">
-			<Text id="A12a" xml:lang="en-US">Why is ${PRODUCTNAME} free for any user?</Text> 
-		</Paragraph>
-		
-		<Paragraph id="A13">
-		  <Text id="empty" xml:lang="en-US"/>
-			<Text id="A13a" xml:lang="en-US">
-			You can use this copy of ${PRODUCTNAME} today free of charge because individual contributors and corporate sponsors have designed, developed, tested, translated, documented, supported, marketed, and helped in many other ways to make ${PRODUCTNAME} what it is today - the world's leading open-source office software.</Text>
-			<Text id="A13b" xml:lang="en-US" url="ahead">If you appreciate their efforts, and would like to ensure OpenOffice.org continues into the future, please consider contributing to the project - see </Text>
-			<Text id="A13c" xml:lang="en-US" url="true">http://contributing.openoffice.org</Text>
-			<Text id="A13d" xml:lang="en-US"> for details. Everyone has a contribution to make.</Text>
-		</Paragraph> 
-		
-	</Section>
-
-	<Section id="Installation">
-
-		<Paragraph id="Header" style="H2">
-			<Text id="rr3fgf42r" xml:lang="en-US">Notes on Installation</Text>
-		</Paragraph>
-
-		<Paragraph id="All">
-			<Text id="sdfsdfgf42r" xml:lang="en-US">System Requirements:</Text>
-		</Paragraph>
-
-			<Paragraph id="MacX_INTEL" os="MACOSX" cpuname="INTEL"><!-- MAC -->
-			<List>
-				<Text id="macxiOSX" xml:lang="en-US">MacOSX 10.4 (Tiger) or higher</Text>
-				<Text id="macxicpu" xml:lang="en-US">Intel processor</Text>
-				<Text id="macxiRAM" xml:lang="en-US">512 MB RAM</Text>
-				<Text id="macxHardDiksSpace" xml:lang="en-US">500 MB available hard disk space</Text>
-				<Text id="macxHardDiksSpaceCJK" xml:lang="en-US">Chinese, Japanese and Korean versions: 600 MB (multi-language version:  800 MB) available hard disk space)</Text> 
-				<Text id="macxivideo" xml:lang="en-US">1024 x 768 graphic device with 256 colors (higher resolution recommended)</Text>
-			</List>
-		</Paragraph>
-		
-		<Paragraph id="WNT2" os="WNT"><!-- WINDOWS -->
-			<List>
-				<Text id="s2s3sdf2" xml:lang="en-US">Microsoft Windows 2000 (Service Pack 4 or higher), XP, or Vista</Text>
-				<Text id="utzu6" xml:lang="en-US">Pentium compatible PC (Pentium III or Athlon recommended)</Text>
-				<Text id="ghuj67" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</Text>
-				<Text id="jzjtzu6" xml:lang="en-US">370 MB available hard disk space</Text>
-				<Text id="WinHDCJK" xml:lang="en-US">Chinese, Japanese and Korean versions: 650 MB available hard disk space</Text>
-				<Text id="jtzu56" xml:lang="en-US">1024x768 resolution (higher resolution recommended), at least 256 colors</Text>
-			</List>
-		</Paragraph>
-		
-		<Paragraph id="Sols2" os="SOLARIS" cpuname="SPARC"><!-- SOLARIS SPARC-->
-			<List>
-				<Text id="s2335" xml:lang="en-US">Solaris 10 operating system (SPARC platform) or higher</Text>
-				<Text id="s253" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</Text>
-				<Text id="s23seg" xml:lang="en-US">480 MB available hard disk space</Text>
-				<Text id="SolsHDCJK" xml:lang="en-US">Chinese, Japanese and Korean versions: 480 MB available hard disk space</Text>
-				<Text id="s2s43gfe" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</Text>
-				<Text id="n4234rw" xml:lang="en-US">Window Manager</Text>
-				<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</Text>
-			</List>
-		</Paragraph>
-
-		<Paragraph id="Solia2" os="SOLARIS" cpuname="INTEL"><!-- SOLARIS INTEL -->
-			<List>
-				<Text id="s23h" xml:lang="en-US">Solaris 10 operating system (x86 platform) or higher</Text>
-				<Text id="s24f" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</Text>
-				<Text id="fgheg" xml:lang="en-US">480 MB available hard disk space</Text>
-				<Text id="SoliHDCJK" xml:lang="en-US">Chinese, Japanese and Korean versions: 480 MB available hard disk space</Text>
-				<Text id="fghfgh" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</Text>
-				<Text id="mgjfg" xml:lang="en-US">Window Manager</Text>
-				<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</Text>
-			</List>
-		</Paragraph>
-		
-		<Paragraph id="Linuxi2" os="LINUX" cpuname="INTEL"><!-- LINUX -->
-			<List>
-				<Text id="s2we35" xml:lang="en-US">Linux Kernel version 2.4 or higher</Text>
-				<Text id="s253we" xml:lang="en-US">glibc2 version 2.3.2 or higher</Text>
-				<Text id="s256we" xml:lang="en-US">gtk version 2.2.0 or higher</Text>
-				<Text id="s2etfseg" xml:lang="en-US">Pentium compatible PC (Pentium III or Athlon recommended)</Text>
-				<Text id="s2ssdfe" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</Text>
-				<Text id="n42dfgf" xml:lang="en-US">440 MB available hard disk space</Text>
-				<Text id="LinHDCJK" xml:lang="en-US">Chinese, Japanese and Korean versions: 440 MB available hard disk space</Text>
-				<Text id="ghjhhr" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</Text>
-				<Text id="fhrtz5" xml:lang="en-US">Window Manager</Text>
-				<Text id="wd2dff" xml:lang="en-US">Gnome 2.6 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</Text>
-			</List>
-		</Paragraph>
-		
-		<Paragraph id="Linuxi3" os="LINUX">
-			<Text id="Linuxi3a" xml:lang="en-US">There is a wide variety of Linux distributions, and even within the same distribution there may be different installation options (KDE vs Gnome, etc.). Some distributions ship with their own ‘native’ version of ${PRODUCTNAME}, which may have different features from this Community ${PRODUCTNAME}. Sometimes you can install the Community ${PRODUCTNAME} alongside the ‘native’ version. However, it’s usually safer to remove the ‘native’ version before installing this Community version. Consult the documentation for your distribution for details of how to do this. </Text>
-		</Paragraph>
-		
-		<Paragraph id="Linuxi4" os="LINUX">
-			<Text id="Linuxi4a" xml:lang="en-US">It is recommended that you always backup your system before you remove or install software.</Text>
-		</Paragraph>
-		
-		<Paragraph id="MSOReg" os="WNT">
-			<Text id="MSOReg1" xml:lang="en-US">Registration of ${PRODUCTNAME} as default application for Microsoft Office formats can be forced or suppressed by using the following command line switches with the installer:</Text>
-			<List>
-				<Text id="MSOReg2" xml:lang="en-US">/msoreg=1 will force registration of ${PRODUCTNAME} as default application for Microsoft Office formats.</Text>
-				<Text id="MSOReg3" xml:lang="en-US">/msoreg=0 will suppress registration of ${PRODUCTNAME} as default application for Microsoft Office formats.</Text>
-			</List>
-		</Paragraph>
-		
-		<Paragraph id="DLLA" os="WNT">
-			<Text id="DLLA1" xml:lang="en-US" url="ahead">If you perform an administrative installation using setup /a, you need to make sure that the file msvc90.dll is installed on the system. This file is required for ${PRODUCTNAME} to start after an administrative installation. You can get the file from </Text>
-			<Text id="DLLA2" xml:lang="en-US" url="true">http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF </Text>
-			<Text id="DLLA3" xml:lang="en-US"></Text>
-		</Paragraph>
-		
-	<Section id="BerkeleyDB">
-	<Paragraph id="BDB1" style="H2">
-			<Text id="BDB11" xml:lang="en-US">Extension Database Incompatibility</Text>
-		</Paragraph>
-	</Section>
-	
-	<Paragraph id="BDB2">
-		<Text id="BDB2a" xml:lang="en-US">The Berkeley database engine has been upgraded in this version of ${PRODUCTNAME}. The database engine upgrade introduces an incompatibility with user data for installed extensions for ${PRODUCTNAME} versions prior to 3.2 that may require your action if you downgrade your version of ${PRODUCTNAME}.</Text>
-	</Paragraph>
-
-	<Paragraph id="BDB3">
-		<Text id="BDB3a" xml:lang="en-US">This version of ${PRODUCTNAME} will convert your extension database to the new Berkeley database format when extensions are installed or removed. After this conversion, the database can no longer be read by earlier versions of ${PRODUCTNAME}. Downgrading to an earlier version may result in a dysfunctional installation.</Text>
-	</Paragraph>
-
-	<Paragraph id="BDB4">
-		<Text id="BDB4a" xml:lang="en-US">If you downgrade to an earlier version of ${PRODUCTNAME}, you must remove the user data directory {user data}/uno_packages, for example ~/.openoffice.org/3/user/uno_packages, and reinstall all extensions.</Text>
-	</Paragraph>
-		
-		
-		<Paragraph id="StartupProblemsHeader" style="H2" os="all">
-			<Text id="naso" xml:lang="en-US">Problems During Program Startup</Text>
-		</Paragraph>
-
-		<Paragraph id="GnomeStartupProblems" os="LINUX">
-			<Text id="naso2" xml:lang="en-US">If you experience ${PRODUCTNAME} startup problems (most notably while using Gnome) please &apos;unset&apos; the SESSION_MANAGER environment variable inside the shell you use to start ${PRODUCTNAME}. This can be done by adding the line &quot;unset SESSION_MANAGER&quot; to the beginning of the soffice shell script found in the &quot;[office folder]/program&quot; directory.</Text>
-		</Paragraph>
-
-		<Paragraph id="GraphicsCardDriverWIN" os="WNT">
-			<Text id="abcdef" xml:lang="en-US">Difficulties starting ${PRODUCTNAME} (e.g. applications hang) as well as problems with the screen display are often caused by the graphics card driver. If these problems occur, please update your graphics card driver or try using the graphics driver delivered with your operating system. Difficulties displaying 3D objects can often be solved by deactivating the option &quot;Use OpenGL&quot; under &apos;Tools - Options - ${PRODUCTNAME} - View - 3D view&apos;.</Text>
-		</Paragraph>
-
-		<Paragraph id="GraphicsCardDriver" os="LINUX">
-			<Text id="abcdef" xml:lang="en-US">Difficulties starting ${PRODUCTNAME} (e.g. applications hang) as well as problems with the screen display are often caused by the graphics card driver. If these problems occur, please update your graphics card driver or try using the graphics driver delivered with your operating system. Difficulties displaying 3D objects can often be solved by deactivating the option &quot;Use OpenGL&quot; under &apos;Tools - Options - ${PRODUCTNAME} - View - 3D view&apos;.</Text>
-		</Paragraph>
-
-		<!--
-		<Paragraph id="PatchSolaris" os="SOLARIS">
-			<Text id="ghtz5" xml:lang="en-US">Before installing ${PRODUCTNAME}, one or more operating system patches from SUN Microsystems must be installed. You can find them on the program CD in the following directories or download them at http://sunsolve.sun.com</Text>
-		</Paragraph>
-    
-		<Paragraph id="ListOfPatchesSolaris" os="SOLARIS">
-			<Text id="dfg4tr" xml:lang="en-US">Operating system patches required:</Text>
-		</Paragraph>
-
-		<Paragraph id="SolS_PatchList" os="SOLARIS" cpuname="SPARC">
-			<List>
-				<Text id="SPatches2" xml:lang="en-US">for Solaris 9: 111711-04, 111712-10 (64 bit), and 113713-03</Text>
-			</List>
-		</Paragraph>
-
-		<Paragraph id="SolI_PatchList" os="SOLARIS" cpuname="INTEL">
-			<List>
-				<Text id="IPatches2" xml:lang="en-US">for Solaris 9: 111713-02, 114568-02</Text>
-			</List>
-		</Paragraph>
-
-		<Paragraph id="SOLPatch_Note" os="SOLARIS">
-			<Text id="Note" xml:lang="en-US">The versions mentioned above are the minimum requirements, newer (higher) version numbers are also allowed.</Text>
-		</Paragraph>
-
-		//-->
-		
-		<!--
-		<Paragraph id="ParallelInstall" os="WNT">
-			<Text id="Parallel" xml:lang="en-US">You can install ${PRODUCTNAME} ${PRODUCTVERSION} alongside of an older version of ${PRODUCTNAME}. If you later choose to deinstall the older version of ${PRODUCTNAME}, you must call the installation program of the newer version and choose &apos;Repair&apos;. This ensures that the new version is correctly registered in your system.</Text>
-		</Paragraph>
-    //-->
-		
-		<Paragraph id="CopyProblem">
-			<Text id="CopyProblemsV1toV2" xml:lang="en-US">Please note that copy and paste via clipboard between ${PRODUCTNAME} 1.x and ${PRODUCTNAME} ${PRODUCTVERSION} might not work in OpenOffice.org format. If that happens, choose &apos;Edit - Paste Special&apos; and choose a format other than ${PRODUCTNAME}, or open the document in ${PRODUCTNAME} ${PRODUCTVERSION} directly.</Text>
-		</Paragraph>
-
-		<Paragraph id="GlobalPrecautions">
-			<Text id="Precautions" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system and that read, write and run access rights have been granted. Close all other programs before starting the installation.</Text>
-		</Paragraph>
-
-		<Paragraph id="AdminNeededWIN" os="WNT">
-			<Text id="AdminNeeded" xml:lang="en-US">Note: Please be aware that administrator rights are needed for the installation process.</Text>
-		</Paragraph>
-	
-		</Section>
-
-	<Section id="Scroll">
-
-		<Paragraph id="F1a" style="H2" gui="WNT">
-			<Text id="naso" xml:lang="en-US">ALPS/Synaptics notebook touchpads in Windows</Text>
-		</Paragraph>
-
-		<Paragraph id="F1b" gui="WNT">
-			<Text id="naso2" xml:lang="en-US">Due to a Windows driver issue, you cannot scroll through ${PRODUCTNAME} documents when you slide your finger across an ALPS/Synaptics touchpad.</Text>
-		</Paragraph>
-
-		<Paragraph id="F1c" gui="WNT">
-			<Text id="naso2" xml:lang="en-US">To enable touchpad scrolling, add the following lines to the &quot;C:\Program Files\Synaptics\SynTP\SynTPEnh.ini&quot; configuration file, and restart your computer:</Text>
-		</Paragraph>
-
-		<Paragraph id="F1d" gui="WNT">
-			<Text id="naso2" xml:lang="en-US">[${PRODUCTNAME}]</Text>
-			<Text id="naso3" xml:lang="en-US">FC = &quot;SALFRAME&quot;</Text>
-			<Text id="naso4" xml:lang="en-US">SF = 0x10000000</Text>
-			<Text id="naso5" xml:lang="en-US">SF |= 0x00004000</Text>
-		</Paragraph>
-
-		<Paragraph id="F1e" gui="WNT">
-			<Text id="naso2" xml:lang="en-US">Note: The location of the configuration file might vary on different versions of Windows.</Text>
-		</Paragraph>
-	</Section>
-
-	<Section id="NetscapeAdressBook">
-
-		<Paragraph id="AdressBookHeader" style="H2" os="SOLARIS">
-			<Text id="sdfsd32asrc" xml:lang="en-US">Mozilla Address Book Driver</Text>
-		</Paragraph>
-
-		<Paragraph id="AdressBookDriver" os="SOLARIS">
-			<Text id="sdcc32asrc" xml:lang="en-US">The Mozilla address book driver requires the SUNWzlib package. This package is not part of the minimum Solaris operating system  installation. If you require access to the Mozilla address book, then add this package to your Solaris operating system using the command &quot;pkgadd&quot; from the installation CD.</Text>
-		</Paragraph>
-	</Section>
-
-	<Section id="Keyboard">
-
-		<Paragraph id="abc2" style="H2">
-			<Text id="awe1" xml:lang="en-US">Shortcut Keys</Text>
-		</Paragraph>
-
-		<Paragraph id="abc12">
-			<Text id="w32e1" xml:lang="en-US">Only shortcut keys (key combinations) not used by the operating system can be used in ${PRODUCTNAME}. If a key combination in ${PRODUCTNAME} does not work as described in the ${PRODUCTNAME} Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in ${PRODUCTNAME}. For more information on this topic, refer to the ${PRODUCTNAME} Help or the Help documentation of your operating system.</Text>
-		</Paragraph>
-
-		<Paragraph id="MACKeysBETA" os="MACOSX">
-			<Text id="mackeys1" xml:lang="en-US">The application help of ${PRODUCTNAME} may use shortcut combinations for PC keyboards only.</Text>
-		</Paragraph>
-		
-		<Paragraph id="KeysChanged">
-			<Text id="KeysChanged1" xml:lang="en-US">Due to a conflict with input method switching on multiple platforms, the following shortcut keys required to be changed at last minute:</Text>
-		</Paragraph>
-		
-		<Paragraph id="KeysChangedMAC" os="MACOSX">
-			<List>
-				<Text id="KeysChangedMAC2" xml:lang="en-US">Cmd-Space is now Cmd-Shift-Space</Text>
-				<Text id="KeysChangedMAC3" xml:lang="en-US">Cmd-Shift-Space is now Cmd-M</Text>
-			</List>
-		</Paragraph>
-		
-		<Paragraph id="KeysChangedWNT" os="WNT">
-			<List>
-				<Text id="KeysChangedWNT2" xml:lang="en-US">Ctrl-Space is now Ctrl-Shift-Space</Text>
-				<Text id="KeysChangedWNT3" xml:lang="en-US">Ctrl-Shift-Space is now Ctrl-M</Text>
-			</List>
-		</Paragraph>
-		
-		<Paragraph id="KeysChangedLIN" os="LINUX">
-			<List>
-				<Text id="KeysChangedLIN2" xml:lang="en-US">Ctrl-Space is now Ctrl-Shift-Space</Text>
-				<Text id="KeysChangedLIN" xml:lang="en-US">Ctrl-Shift-Space is now Ctrl-M</Text>
-			</List>
-		</Paragraph>
-		
-		<Paragraph id="KeysChangedSOL" os="SOLARIS">
-			<List>
-				<Text id="KeysChangedSOL2" xml:lang="en-US">Ctrl-Space is now Ctrl-Shift-Space</Text>
-				<Text id="KeysChangedSOL3" xml:lang="en-US">Ctrl-Shift-Space is now Ctrl-M</Text>
-			</List>
-		</Paragraph>
-		
-	</Section>
-
-	<Section id="FileLocking">
-
-		<Paragraph id="G1" style="H2" gui="UNX">
-			<Text id="gfh6w" xml:lang="en-US">File Locking</Text>
-		</Paragraph>
-
-		<Paragraph id="G2" gui="UNX">
-			<Text id="pji76w" xml:lang="en-US">In the default setting, file locking is turned on in ${PRODUCTNAME}. To deactivate it, you have to set the appropriate environment variables SAL_ENABLE_FILE_LOCKING=0 and export SAL_ENABLE_FILE_LOCKING. These entries are already in enabled form in the soffice script file.</Text>
-		</Paragraph>
-
-		<Paragraph id="G3" gui="UNX">
-			<Text id="pji76wsdf" xml:lang="en-US">Warning: The activated file locking feature can cause problems with Solaris 2.5.1 and 2.7 used in conjunction with Linux NFS 2.0. If your system environment has these parameters, we strongly recommend that you avoid using the file locking feature. Otherwise, ${PRODUCTNAME} will hang when you try to open a file from a NFS mounted directory from a Linux computer.</Text>
-		</Paragraph>
-	</Section>
-
-	<Section id="Mapi">
-
-		<Paragraph id="G1a" style="H2" gui="WNT">
-			<Text id="gfh6w" xml:lang="en-US">Problems When Sending Documents as E-mails From ${PRODUCTNAME}</Text>
-		</Paragraph>
-
-		<Paragraph id="G2a" gui="WNT">
-			<Text id="pji76w" xml:lang="en-US">When sending a document via &apos;File - Send - Document as E-mail&apos; or &apos;Document as PDF Attachment&apos; problems might occur (program crashes or hangs). This is due to the Windows system file &quot;Mapi&quot; (Messaging Application Programming Interface) which causes problems in some file versions. Unfortunately, the problem cannot be narrowed down to a certain version number. For more information visit http://www.microsoft.com to search the Microsoft Knowledge Base for &quot;mapi dll&quot;.</Text>
-		</Paragraph>
-	</Section>
-
-	<Section id="A11y">
-		<Paragraph id="aw44" style="H2">
-			<Text id="aw22" xml:lang="en-US">Important Accessibility Notes</Text>
-		</Paragraph>
-
-		<Paragraph id="F2c" os="all">
-			<Text id="access7" xml:lang="en-US">For information on the accessibility features in ${PRODUCTNAME}, see </Text>
-			<Text id="abdfs2b" url="true" xml:lang="en-US">http://www.openoffice.org/access/</Text>
-			<Text id="abdfs2c" xml:lang="en-US">.</Text>
-		</Paragraph>
-	
-	</Section>
-	
-	<Section id="Registration"> <!-- ALL PLATFORMS -->
-
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">Registration </Text>
-		</Paragraph>
-
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US" url="ahead">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the community to make an even better software suite and address user needs directly. Through its Privacy Policy, the ${PRODUCTNAME} Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at by choosing "Help > Registration" from the main menu.</Text>
-		</Paragraph>
-	</Section>
-
-	<Section id="UserSurvey">
-
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">User Survey </Text>
-		</Paragraph>
-
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">There is also a User Survey located online which we encourage you to fill out. The User Survey results will help ${PRODUCTNAME} move more rapidly in setting new standards for the creation of the next-generation office suite. Through its Privacy Policy, the ${PRODUCTNAME} Community takes every precaution to safeguard your personal data.</Text>
-		</Paragraph>
-	</Section>
-
-	<Section id="UserSupport"> <!-- ALL PLATFORMS -->
-
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">User Support</Text>
-		</Paragraph>
-
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US" url="ahead">The main support page </Text>
-			<Text id="b" xml:lang="en-US" url="true">http://support.openoffice.org/</Text>
-			<Text id="c" xml:lang="en-US" url="ahead">offers various possibilities for help with ${PRODUCTNAME}. Your question may have already been answered - check the Community Forum.</Text>
-			<Text id="d" xml:lang="en-US" url="true">http://user.services.openoffice.org</Text>
-			<Text id="e" xml:lang="en-US" url="ahead"> or search the archives of the 'users@openoffice.org' mailing list at </Text>
-			<Text id="f" xml:lang="en-US" url="true">http://www.openoffice.org/mail_list.html</Text>
-			<Text id="g" xml:lang="en-US" url="ahead">. Alternatively, you can send in your questions to </Text>
-			<Text id="h" xml:lang="en-US" url="true">users@openoffice.org</Text>
-			<Text id="i" xml:lang="en-US" url="ahead">. How to subscribe to the list (to get an email response) is explained on this page: </Text>
-			<Text id="j" xml:lang="en-US" url="true">http://wiki.services.openoffice.org/wiki/Website/Content/help/mailinglists</Text>
-			<Text id="k" xml:lang="en-US">.</Text>
-		</Paragraph>
-
-		<Paragraph id="A3">
-			<Text id="a" xml:lang="en-US" url="ahead">Also check the FAQ section at </Text>
-			<Text id="b" xml:lang="en-US" url="true">http://wiki.services.openoffice.org/wiki/Documentation/FAQ</Text>
-			<Text id="c" xml:lang="en-US">.</Text>
-		</Paragraph>
-	</Section>
-	
-	<Section id="ReportBugsIssues"> <!-- ALL PLATFORMS -->
-
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">Report Bugs &amp; Issues </Text>
-		</Paragraph>
-
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">The ${PRODUCTNAME} Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the user community can make to the ongoing development and improvement of the suite. </Text>
-		</Paragraph>
-	</Section>
-
-	<Section id="GettingInvolved"> <!-- ALL PLATFORMS -->
-
-		<Paragraph id="A1" style="H2">
-			<Text id="a" xml:lang="en-US">Getting Involved </Text>
-		</Paragraph>
-
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">The ${PRODUCTNAME} Community would very much benefit from your active participation in the development of this important open source project.</Text>
-		</Paragraph>
-
-		<Paragraph id="A3">
-			<Text id="a" xml:lang="en-US" url="ahead">As a user, you are already a valuable part of the suite&apos;s development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the user page at: </Text>
-			<Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org </Text>
-		</Paragraph>
-
-		<Paragraph id="emptyparagraph" localized="false" />
-
-		<Paragraph id="A4" style="H3">
-			<Text id="a" xml:lang="en-US">Way to Start</Text>
-		</Paragraph>
-
-		<Paragraph id="A5">
-			<Text id="a" xml:lang="en-US" url="ahead">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the ${PRODUCTNAME} source code was released back in October 2000. When you&apos;re comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at </Text>
-			<Text id="b" xml:lang="en-US" url="true">http://development.openoffice.org/todo.html</Text>
-			<Text id="c" xml:lang="en-US">.</Text>
-		</Paragraph>
-
-	
-		<Paragraph id="A6" style="H3">
-			<Text id="a" xml:lang="en-US">Subscribe</Text>
-		</Paragraph>
-
-		<Paragraph id="A7">
-			<Text id="a" xml:lang="en-US" url="ahead">Here are a few of the Project mailing lists to which you can subscribe at </Text>
-			<Text id="b" xml:lang="en-US" url="true">http://www.openoffice.org/mail_list.html</Text>
-		</Paragraph>
-
-		<Paragraph id="A8">
-			<List>
-				<Text id="a" xml:lang="en-US">News: announce@openoffice.org *recommended to all users* (light traffic) </Text>
-				<Text id="c" xml:lang="en-US">Main user forum: user@openoffice.org *easy way to lurk on discussions* (heavy traffic) </Text>
-				<Text id="d" xml:lang="en-US">Marketing project: dev@marketing.openoffice.org *beyond development* (getting heavy) </Text>
-				<Text id="e" xml:lang="en-US">General code contributor list: dev@openoffice.org (moderate/heavy) </Text>
-			</List>
-		</Paragraph>
-
-	
-		<Paragraph id="A9" style="H3">
-			<Text id="a" xml:lang="en-US">Join one or more Projects</Text>
-		</Paragraph>
-
-		<Paragraph id="A10">
-			<Text id="a" xml:lang="en-US">You can make major contributions to this important open source project even if you have limited software design or coding experience. Yes, you!</Text>
-		</Paragraph>
-
-		<Paragraph id="A11">
-			<Text id="a" xml:lang="en-US" url="ahead">At </Text>
-			<Text id="b" xml:lang="en-US" url="true">http://projects.openoffice.org/index.html</Text>
-			<Text id="c" xml:lang="en-US"> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerrilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</Text>
-		</Paragraph>
-
-		<Paragraph id="A12">
-			<Text id="a" xml:lang="en-US" url="ahead">You can help by joining the Marketing Communications &amp; Information Network here: </Text>
-			<Text id="b" xml:lang="en-US" url="true">http://marketing.openoffice.org/contacts.html </Text>
-			<Text id="c" xml:lang="en-US"> where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</Text>
-		</Paragraph>
-	</Section>
-	
-
-	<Section id="Credits"> <!-- ALL PLATFORMS -->
-
-		<Paragraph id="emptyparagraph" localized="false" />
-
-		<Paragraph id="A1">
-			<Text id="a" xml:lang="en-US">We hope you enjoy working with the new ${PRODUCTNAME} ${PRODUCTVERSION} and will join us online.</Text>
-		</Paragraph>
-
-		<Paragraph id="A2">
-			<Text id="a" xml:lang="en-US">The OpenOffice.org Community</Text>
-		</Paragraph>
-
-		<Paragraph id="A3" localized="false">
-			<Text id="a" xml:lang="en-US" />
-			<Text id="b" xml:lang="en-US" />
-		</Paragraph>
-	</Section>
-
-	<Section id="ModifiedSourceCode"> <!-- ALL PLATFORMS -->
-
-		<Paragraph id="HH1" style="H2">
-			<Text id="sdffd23r3cefwefew" xml:lang="en-US">Used / Modified Source Code</Text>
-		</Paragraph>
-
-		<Paragraph id="HH2">
-			<Text id="sdffd23red32efew" xml:lang="en-US">Portions Copyright 1998, 1999 James Clark. Portions Copyright 1996, 1998 Netscape Communications Corporation.</Text>
-		</Paragraph>
-	</Section>
-</Readme>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+
+		<title id="title" xml:lang="en-US">${PRODUCTNAME} Readme File</title>
+
+		<style type="text/css">
+			#Copyright_Trademark * {font-size: .7em;}
+			.note {border: 1px solid #993333; padding: 3px;}
+			p { margin-top: .1em; margin-bottom: .1em;}
+			.code {font-family: monospace;}
+		</style>
+	</head>
+
+	<body>
+		<div id="Intro">
+			<h1 id="Welcome" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</h1>
+			<p id="LatestUpdates" xml:lang="en-US">For latest updates to this readme file, see <a href="http://www.openoffice.org/welcome/readme.html">http://www.openoffice.org/welcome/readme.html</a></p>
+			<p id="A6" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</p>
+			<p id="A7" xml:lang="en-US">The OpenOffice.org Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the ${PRODUCTNAME} site with helpful user information at <a href="http://www.openoffice.org/about_us/introduction.html">http://www.openoffice.org/about_us/introduction.html</a></p>
+			<p id="A9" xml:lang="en-US">Also read the sections below about getting involved in the OpenOffice.org project.</p>
+			<h3 id="A10" xml:lang="en-US">Is ${PRODUCTNAME} really free for any user? </h3>
+			<p id="A11" xml:lang="en-US">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text delivered together with ${PRODUCTNAME} or <a href="http://www.openoffice.org/license.html">http://www.openoffice.org/license.html</a></p>
+			<h3 id="A12" xml:lang="en-US">Why is ${PRODUCTNAME} free for any user?</h3>
+			<p id="A13" xml:lang="en-US">You can use this copy of ${PRODUCTNAME} today free of charge because individual contributors and corporate sponsors have designed, developed, tested, translated, documented, supported, marketed, and helped in many other ways to make ${PRODUCTNAME} what it is today - the world's leading open-source office software.</p>
+			<p id="A13b" xml:lang="en-US">If you appreciate their efforts, and would like to ensure OpenOffice.org continues into the future, please consider contributing to the project - see <a href="http://contributing.openoffice.org">http://contributing.openoffice.org</a> for details. Everyone has a contribution to make.</p>
+		</div>
+
+		<div id="Installation">
+			<h2 id="rr3fgf42r" xml:lang="en-US">Notes on Installation</h2>
+			<h3 id="sdfsdfgf42r" xml:lang="en-US">System Requirements</h3>
+			<div class="MAC" id="SystemRequirements_OSX">
+				<ul>
+					<li>
+						<p id="macxiOSX" xml:lang="en-US">MacOSX 10.4 (Tiger) or higher</p>
+					</li>
+
+					<li>
+						<p id="macxicpu" xml:lang="en-US">Intel processor</p>
+					</li>
+
+					<li>
+						<p id="macxiRAM" xml:lang="en-US">512 MB RAM</p>
+					</li>
+
+					<li>
+						<p id="macxHardDiksSpace" xml:lang="en-US">Up to 1.5 GB available hard disk space</p>
+					</li>
+
+					<li>
+						<p id="macxivideo" xml:lang="en-US">1024 x 768 graphic device with 256 colors (higher resolution recommended)</p>
+					</li>
+				</ul>
+			</div>
+			<div class="WIN" id="SystemRequirements_WIN">
+				<ul>
+					<li>
+						<p id="s2s3sdf2" xml:lang="en-US">Microsoft Windows 2000 (Service Pack 4 or higher), XP, Vista, or Windows 7</p>
+					</li>
+
+					<li>
+						<p id="utzu6" xml:lang="en-US">Pentium compatible PC (Pentium III or Athlon recommended)</p>
+					</li>
+
+					<li>
+						<p id="ghuj67" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</p>
+					</li>
+
+					<li>
+						<p id="jzjtzu6" xml:lang="en-US">Up to 1.5 GB available hard disk space</p>
+					</li>
+
+					<li>
+						<p id="jtzu56" xml:lang="en-US">1024x768 resolution (higher resolution recommended), at least 256 colors</p>
+					</li>
+				</ul>
+				<p class="note" id="edssc3d" xml:lang="en-US">Please be aware that administrator rights are needed for the installation process.</p>
+				<p id="MSOReg1" xml:lang="en-US">Registration of ${PRODUCTNAME} as default application for Microsoft Office formats can be forced or suppressed by using the following command line switches with the installer:</p>
+				<ul>
+					<li>
+						<p id="MSOReg2" xml:lang="en-US"><tt>/msoreg=1</tt> will force registration of ${PRODUCTNAME} as default application for Microsoft Office formats.</p>
+					</li>
+
+					<li>
+						<p id="MSOReg3" xml:lang="en-US"><tt>/msoreg=0</tt> will suppress registration of ${PRODUCTNAME} as default application for Microsoft Office formats.</p>
+					</li>
+				</ul>
+				<p id="DLLA1" xml:lang="en-US">If you perform an administrative installation using setup /a, you need to make sure that the file msvc90.dll is installed on the system. This file is required for ${PRODUCTNAME} to start after an administrative installation. You can get the file from <a href="http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF">http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF</a></p>
+				<p class="note" id="AdminNeeded" xml:lang="en-US">Please be aware that administrator rights are needed for the installation process.</p>
+			</div>
+			<div class="SOLSPARC" id="Sols2">
+				<ul>
+					<li>
+						<p id="s2335" xml:lang="en-US">Solaris 10 operating system (SPARC platform) or higher</p>
+					</li>
+
+					<li>
+						<p id="s253" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</p>
+					</li>
+
+					<li>
+						<p id="s23seg" xml:lang="en-US">Up to 1.55 GB available hard disk space</p>
+					</li>
+
+					<li>
+						<p id="s2s43gfe" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</p>
+					</li>
+
+					<li>
+						<p id="n4234rw" xml:lang="en-US">Window Manager</p>
+					</li>
+
+					<li>
+						<p id="wd2dff2" xml:lang="en-US">Gnome 2.6 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</p>
+					</li>
+				</ul>
+			</div>
+			<div class="SOLX86" id="Solia2">
+				<ul>
+					<li>
+						<p id="s23h" xml:lang="en-US">Solaris 10 operating system (x86 platform) or higher</p>
+					</li>
+
+					<li>
+						<p id="s24f" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</p>
+					</li>
+
+					<li>
+						<p id="fgheg" xml:lang="en-US">Up to 1.55 GB available hard disk space</p>
+					</li>
+
+					<li>
+						<p id="fghfgh" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</p>
+					</li>
+
+					<li>
+						<p id="mgjfg" xml:lang="en-US">Window Manager</p>
+					</li>
+
+					<li>
+						<p id="wd2dff1" xml:lang="en-US">Gnome 2.6 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</p>
+					</li>
+				</ul>
+			</div>
+			<div class="LINUX" id="Linuxi2">
+				<ul>
+					<li>
+						<p id="s2we35" xml:lang="en-US">Linux Kernel version 2.6.18 or higher</p>
+					</li>
+
+					<li>
+						<p id="s253we" xml:lang="en-US">glibc2 version 2.5 or higher</p>
+					</li>
+
+					<li>
+						<p id="s256we" xml:lang="en-US">gtk version 2.10.4 or higher</p>
+					</li>
+
+					<li>
+						<p id="s2etfseg" xml:lang="en-US">Pentium compatible PC (Pentium III or Athlon recommended)</p>
+					</li>
+
+					<li>
+						<p id="s2ssdfe" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</p>
+					</li>
+
+					<li>
+						<p id="n42dfgf" xml:lang="en-US">Up to 1.55 GB available hard disk space</p>
+					</li>
+
+					<li>
+						<p id="ghjhhr" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</p>
+					</li>
+
+					<li>
+						<p id="fhrtz5" xml:lang="en-US">Window Manager</p>
+					</li>
+
+					<li>
+						<p id="wd2dff" xml:lang="en-US">Gnome 2.16 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</p>
+					</li>
+				</ul>
+				<p id="Linuxi3a" xml:lang="en-US">There is a wide variety of Linux distributions, and even within the same distribution there may be different installation options (KDE vs Gnome, etc.). Some distributions ship with their own ‘native’ version of ${PRODUCTNAME}, which may have different features from this Community ${PRODUCTNAME}. Sometimes you can install the Community ${PRODUCTNAME} alongside the ‘native’ version. However, it’s usually safer to remove the ‘native’ version before installing this Community version. Consult the documentation for your distribution for details of how to do this.</p>
+				<p class="note" id="Linuxi4a" xml:lang="en-US">It is recommended that you always backup your system before you remove or install software.</p>
+			</div>
+			<p id="Precautions" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system and that read, write and run access rights have been granted. Close all other programs before starting the installation.</p>
+		</div>
+
+		<div id="BerkeleyDB">
+			<h2 id="BDB11" xml:lang="en-US">Extension Database Incompatibility</h2>
+			<p id="BDB2a" xml:lang="en-US">The Berkeley database engine has been upgraded in this version of ${PRODUCTNAME}. The database engine upgrade introduces an incompatibility with user data for installed extensions for ${PRODUCTNAME} versions prior to 3.2 that may require your action if you downgrade your version of ${PRODUCTNAME}.</p>
+			<p id="BDB3a" xml:lang="en-US">This version of ${PRODUCTNAME} will convert your extension database to the new Berkeley database format when extensions are installed or removed. After this conversion, the database can no longer be read by earlier versions of ${PRODUCTNAME}. Downgrading to an earlier version may result in a dysfunctional installation.</p>
+			<p id="BDB4a" xml:lang="en-US">If you downgrade to an earlier version of ${PRODUCTNAME}, you must remove the user data directory <tt>{user data}/uno_packages</tt>, for example <tt>~/.openoffice.org/3/user/uno_packages</tt>, and reinstall all extensions.</p>
+		</div>
+
+		<div class="LINUX WIN" id="StartupProblems">
+			<h2 id="naso01" xml:lang="en-US">Problems During Program Startup</h2>
+			<div class="LINUX" id="GnomeStartupProblems">
+				<p id="naso02" xml:lang="en-US">If you experience ${PRODUCTNAME} startup problems (most notably while using Gnome) please 'unset' the <tt>SESSION_MANAGER</tt> environment variable inside the shell you use to start ${PRODUCTNAME}. This can be done by adding the line "<tt>unset SESSION_MANAGER</tt>" to the beginning of the soffice shell script found in the "<tt>[office folder]/program</tt>" directory.</p>
+			</div>
+			<p id="abcdef" xml:lang="en-US">Difficulties starting ${PRODUCTNAME} (e.g. applications hang) as well as problems with the screen display are often caused by the graphics card driver. If these problems occur, please update your graphics card driver or try using the graphics driver delivered with your operating system. Difficulties displaying 3D objects can often be solved by deactivating the option "Use OpenGL" under 'Tools - Options - ${PRODUCTNAME} - View - 3D view'.</p>
+		</div>
+
+		<div class="WIN" id="Scroll">
+			<h2 id="naso" xml:lang="en-US">ALPS/Synaptics notebook touchpads in Windows</h2>
+			<p id="naso2" xml:lang="en-US">Due to a Windows driver issue, you cannot scroll through ${PRODUCTNAME} documents when you slide your finger across an ALPS/Synaptics touchpad.</p>
+			<p id="naso6" xml:lang="en-US">To enable touchpad scrolling, add the following lines to the "<tt>C:\Program Files\Synaptics\SynTP\SynTPEnh.ini</tt>" configuration file, and restart your computer:</p>
+			<p class="code" id="naso7">[${PRODUCTNAME}]</p>
+			<p class="code" id="naso3">FC = "SALFRAME"</p>
+			<p class="code" id="naso4">SF = 0x10000000</p>
+			<p class="code" id="naso5">SF |= 0x00004000</p>
+			<p class="note" id="naso8" xml:lang="en-US">The location of the configuration file might vary on different versions of Windows.</p>
+		</div>
+
+		<div class="SOLSPARC SOLX86" id="NetscapeAdressBook">
+			<h2 id="sdfsd32asrc" xml:lang="en-US">Mozilla Address Book Driver</h2>
+			<p id="sdcc32asrc" xml:lang="en-US">The Mozilla address book driver requires the <tt>SUNWzlib</tt> package. This package is not part of the minimum Solaris operating system installation. If you require access to the Mozilla address book, then add this package to your Solaris operating system using the command "<tt>pkgadd</tt>" from the installation CD.</p>
+		</div>
+
+		<div id="Keyboard">
+			<h2 id="awe1" xml:lang="en-US">Shortcut Keys</h2>
+			<p id="w32e1" xml:lang="en-US">Only shortcut keys (key combinations) not used by the operating system can be used in ${PRODUCTNAME}. If a key combination in ${PRODUCTNAME} does not work as described in the ${PRODUCTNAME} Help, check if that shortcut is already used by the operating system. To rectify such conflicts, you can change the keys assigned by your operating system. Alternatively, you can change almost any key assignment in ${PRODUCTNAME}. For more information on this topic, refer to the ${PRODUCTNAME} Help or the Help documention of your operating system.</p>
+			<div class="MAC" id="MACKeysBETA">
+				<p id="mackeys1" xml:lang="en-US">The application help of ${PRODUCTNAME} may use shortcut combinations for PC keyboards only.</p>
+			</div>
+		</div>
+
+		<div class="LINUX MAC SOLSPARC SOLX86" id="FileLocking">
+			<h2 id="gfh6w" xml:lang="en-US">File Locking</h2>
+			<p id="pji76w" xml:lang="en-US">File locking is enabled by default in ${PRODUCTNAME}. On a network that uses the Network File System protocol (NFS), the locking daemon for NFS clients must be active. To disable file locking, edit the <tt>soffice</tt> script and change the line "<tt>export SAL_ENABLE_FILE_LOCKING</tt>" to "<tt># export SAL_ENABLE_FILE_LOCKING</tt>". If you disable file locking, the write access of a document is not restricted to the user who first opens the document.</p>
+			<p class="note" id="pji76wsdf" xml:lang="en-US">Warning: The activated file locking feature can cause problems with Solaris 2.5.1 and 2.7 used in conjunction with Linux NFS 2.0. If your system environment has these parameters, we strongly recommend that you avoid using the file locking feature. Otherwise, ${PRODUCTNAME} will hang when you try to open a file from a NFS mounted directory from a Linux computer.</p>
+		</div>
+
+		<div class="WIN" id="Mapi">
+			<h2 id="gfh6w1" xml:lang="en-US">Problems When Sending Documents as E-mails From ${PRODUCTNAME}</h2>
+			<p id="pji76w1" xml:lang="en-US">When sending a document via 'File - Send - Document as E-mail' or 'Document as PDF Attachment' problems might occur (program crashes or hangs). This is due to the Windows system file "Mapi" (Messaging Application Programming Interface) which causes problems in some file versions. Unfortunately, the problem cannot be narrowed down to a certain version number. For more information visit <a href="http://www.microsoft.com">http://www.microsoft.com</a> to search the Microsoft Knowledge Base for "mapi dll".</p>
+		</div>
+
+		<div id="A11y">
+			<h2 id="aw22" xml:lang="en-US">Important Accessibility Notes</h2>
+			<p id="access7" xml:lang="en-US">For more information on the accessibility features in ${PRODUCTNAME}, see <a href="http://www.openoffice.org/access/">http://www.openoffice.org/access/</a></p>
+		</div>
+
+		<div id="Registration">
+			<h2 id="reg1" xml:lang="en-US">Registration </h2>
+			<p id="reg2" xml:lang="en-US">Please take a little time to complete the minimal Product Registration process when you install the software. While registration is optional, we encourage you to register, since the information enables the community to make an even better software suite and address user needs directly. Through its Privacy Policy, the ${PRODUCTNAME} Community takes every precaution to safeguard your personal data. If you missed the registration at installation, you can return and register at any time at by choosing "Help - Registration" from the main menu.</p>
+		</div>
+
+		<div id="UserSurvey">
+			<h2 id="survey" xml:lang="en-US">User Survey</h2>
+			<p id="survey1" xml:lang="en-US">There is also a User Survey located online which we encourage you to fill out. The User Survey results will help ${PRODUCTNAME} move more rapidly in setting new standards for the creation of the next-generation office suite. Through its Privacy Policy, the ${PRODUCTNAME} Community takes every precaution to safeguard your personal data.</p>
+		</div>
+
+		<div id="UserSupport">
+			<h2 id="support" xml:lang="en-US">User Support</h2>
+			<p id="support1" xml:lang="en-US">The main support page <a href="http://support.openoffice.org/">http://support.openoffice.org/</a> offers various possibilities for help with ${PRODUCTNAME}. Your question may have already been answered - check the Community Forum at <a href="http://user.services.openoffice.org">http://user.services.openoffice.org</a> or search the archives of the 'users@openoffice.org' mailing list at <a href="http://www.openoffice.org/mail_list.html">http://www.openoffice.org/mail_list.html</a>. Alternatively, you can send in your questions to <a href="mailto:users@openoffice.org">users@openoffice.org</a>. How to subscribe to the list (to get an email response) is explained on this page: <a href="http://wiki.services.openoffice.org/wiki/Website/Content/help/mailinglists">http://wiki.services.openoffice.org/wiki/Website/Content/help/mailinglists</a>.</p>
+			<p id="faq" url="ahead" xml:lang="en-US">Also check the FAQ section at <a href="http://wiki.services.openoffice.org/wiki/Documentation/FAQ">http://wiki.services.openoffice.org/wiki/Documentation/FAQ.</a></p>
+		</div>
+
+		<div id="ReportBugsIssues">
+			<h2 id="reportbugs" xml:lang="en-US">Reporting Bugs &amp; Issues</h2>
+			<p id="reportbugs1" xml:lang="en-US">The ${PRODUCTNAME} Web site hosts IssueZilla, our mechanism for reporting, tracking and solving bugs and issues. We encourage all users to feel entitled and welcome to report issues that may arise on your particular platform. Energetic reporting of issues is one of the most important contributions that the user community can make to the ongoing development and improvement of the suite.</p>
+		</div>
+
+		<div id="GettingInvolved">
+			<h2 id="gettinginvolved1" xml:lang="en-US">Getting Involved</h2>
+			<p id="gettinginvolved2" xml:lang="en-US">The ${PRODUCTNAME} Community would very much benefit from your active participation in the development of this important open source project.</p>
+			<p id="gettingimvolved3" xml:lang="en-US">As a user, you are already a valuable part of the suite's development process and we would like to encourage you to take an even more active role with a view to being a long-term contributor to the community. Please join and check out the user page at <a href="http://www.openoffice.org">http://www.openoffice.org</a></p>
+			<h3 id="howtostart" xml:lang="en-US">How to Start</h3>
+			<p id="howtostart1" xml:lang="en-US">The best way to start contributing is to subscribe to one or more of the mailing lists, lurk for a while, and gradually use the mail archives to familiarize yourself with many of the topics covered since the ${PRODUCTNAME} source code was released back in October 2000. When you're comfortable, all you need to do is send an email self-introduction and jump right in. If you are familiar with Open Source Projects, check out our To-Dos list and see if there is anything you would like to help with at <a href="http://development.openoffice.org/todo.html">http://development.openoffice.org/todo.html</a>.</p>
+			<h3 id="subscribe" xml:lang="en-US">Subscribe</h3>
+			<p id="subscribe1" xml:lang="en-US">Here are a few of the Project mailing lists to which you can subscribe at <a href="http://www.openoffice.org/mail_list.html">http://www.openoffice.org/mail_list.html</a></p>
+			<ul>
+				<li>
+					<p id="subscribelist1" xml:lang="en-US">News: announce@openoffice.org *recommended to all users* (light traffic)</p>
+				</li>
+
+				<li>
+					<p id="subscribelist2" xml:lang="en-US">Main user forum: user@openoffice.org *easy way to lurk on discussions* (heavy traffic)</p>
+				</li>
+
+				<li>
+					<p id="subscribelist3" xml:lang="en-US">Marketing project: dev@marketing.openoffice.org *beyond development* (getting heavy)</p>
+				</li>
+
+				<li>
+					<p id="subscribelist4" xml:lang="en-US">General code contributor list: dev@openoffice.org (moderate/heavy)</p>
+				</li>
+			</ul>
+			<h3 xml:lang="en-US">Joining one or more Projects</h3>
+			<p id="joining" xml:lang="en-US">You can make major contributions to this important open source project even if you have limited software design or coding experience. Yes, you!</p>
+			<p id="joining1" url="ahead" xml:lang="en-US">At <a href="http://projects.openoffice.org/index.html">http://projects.openoffice.org/index.html</a> you will find projects ranging from Localization, Porting and Groupware to some real core coding projects. If you are not a developer, try the Documentation or the Marketing Project. The OpenOffice.org Marketing Project is applying both guerilla and traditional commercial techniques to marketing open source software, and we are doing it across language and cultural barriers, so you can help just by spreading the word and telling a friend about this office suite.</p>
+			<p id="joining3" xml:lang="en-US">You can help by joining the Marketing Communications &amp; Information Network on <a href="http://marketing.openoffice.org/contacts.html">http://marketing.openoffice.org/contacts.html</a> where you can provide point communication contact with press, media, government agencies, consultants, schools, Linux Users Groups and developers in your country and local community.</p>
+		</div>
+
+		<div id="Credits">
+			<p id="credits" xml:lang="en-US">We hope you enjoy working with the new ${PRODUCTNAME} ${PRODUCTVERSION} and will join us online.</p>
+			<p id="credits2" xml:lang="en-US">The OpenOffice.org Community</p>
+		</div>
+
+		<div id="ModifiedSourceCode">
+			<h2 id="sdffd23r3cefwefew" xml:lang="en-US">Used / Modified Source Code</h2>
+			<p id="sdffd23red32efew">Portions Copyright 1998, 1999 James Clark. Portions Copyright 1996, 1998 Netscape Communications Corporation.</p>
+		</div>
+	</body>
+</html>

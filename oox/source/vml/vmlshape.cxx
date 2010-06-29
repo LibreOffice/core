@@ -36,6 +36,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include "properties.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -99,7 +100,7 @@ Reference< XShape > lclCreateXShape( const XmlFilterBase& rFilter, const OUStrin
     Reference< XShape > xShape;
     try
     {
-        Reference< XMultiServiceFactory > xFactory( rFilter.getModel(), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( rFilter.getModelFactory(), UNO_SET_THROW );
         xShape.set( xFactory->createInstance( rService ), UNO_QUERY_THROW );
     }
     catch( Exception& )
@@ -165,7 +166,7 @@ void ShapeTypeModel::assignUsed( const ShapeTypeModel& rSource )
 
 // ----------------------------------------------------------------------------
 
-ShapeType::ShapeType( const Drawing& rDrawing ) :
+ShapeType::ShapeType( Drawing& rDrawing ) :
     mrDrawing( rDrawing )
 {
 }
@@ -237,7 +238,7 @@ ShapeClientData& ShapeModel::createClientData()
 
 // ----------------------------------------------------------------------------
 
-ShapeBase::ShapeBase( const Drawing& rDrawing ) :
+ShapeBase::ShapeBase( Drawing& rDrawing ) :
     ShapeType( rDrawing )
 {
 }
@@ -270,7 +271,14 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
         Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
         // convert the shape, if the calculated rectangle is not empty
         if( ((aShapeRect.Width > 0) || (aShapeRect.Height > 0)) && rxShapes.is() )
+        {
             xShape = implConvertAndInsert( rxShapes, aShapeRect );
+            /*  Notify the drawing that a new shape has been inserted (but not
+                for children of group shapes). For convenience, pass the
+                rectangle that contains position and size of the shape. */
+            if( !pParentAnchor && xShape.is() )
+                mrDrawing.notifyShapeInserted( xShape, aShapeRect );
+        }
     }
     return xShape;
 }
@@ -318,7 +326,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
 
 // ============================================================================
 
-SimpleShape::SimpleShape( const Drawing& rDrawing, const OUString& rService ) :
+SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
     ShapeBase( rDrawing ),
     maService( rService )
 {
@@ -333,21 +341,21 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
 
 // ============================================================================
 
-RectangleShape::RectangleShape( const Drawing& rDrawing ) :
+RectangleShape::RectangleShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.RectangleShape" ) )
 {
 }
 
 // ============================================================================
 
-EllipseShape::EllipseShape( const Drawing& rDrawing ) :
+EllipseShape::EllipseShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.EllipseShape" ) )
 {
 }
 
 // ============================================================================
 
-PolyLineShape::PolyLineShape( const Drawing& rDrawing ) :
+PolyLineShape::PolyLineShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.PolyLineShape" ) )
 {
 }
@@ -372,7 +380,7 @@ Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShape
 
 // ============================================================================
 
-CustomShape::CustomShape( const Drawing& rDrawing ) :
+CustomShape::CustomShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, CREATE_OUSTRING( "com.sun.star.drawing.CustomShape" ) )
 {
 }
@@ -397,7 +405,7 @@ Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes 
 
 // ============================================================================
 
-ComplexShape::ComplexShape( const Drawing& rDrawing ) :
+ComplexShape::ComplexShape( Drawing& rDrawing ) :
     CustomShape( rDrawing )
 {
 }
@@ -424,7 +432,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
                 // set the replacement graphic
                 if( aGraphicPath.getLength() > 0 )
                 {
-                    Reference< XGraphic > xGraphic = rFilter.importEmbeddedGraphic( aGraphicPath );
+                    Reference< XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath );
                     if( xGraphic.is() )
                         aOleProps[ PROP_Graphic ] <<= xGraphic;
                 }
@@ -471,7 +479,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         Reference< XShape > xShape = lclCreateAndInsertXShape( rFilter, rxShapes, CREATE_OUSTRING( "com.sun.star.drawing.GraphicObjectShape" ), rShapeRect );
         if( xShape.is() )
         {
-            OUString aGraphicUrl = rFilter.importEmbeddedGraphicObject( aGraphicPath );
+            OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( aGraphicPath );
             if( aGraphicUrl.getLength() > 0 )
             {
                 PropertySet aPropSet( xShape );
@@ -487,7 +495,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
 
 // ============================================================================
 
-GroupShape::GroupShape( const Drawing& rDrawing ) :
+GroupShape::GroupShape( Drawing& rDrawing ) :
     ShapeBase( rDrawing ),
     mxChildren( new ShapeContainer( rDrawing ) )
 {

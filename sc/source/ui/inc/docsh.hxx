@@ -125,7 +125,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     SC_DLLPRIVATE void          InitItems();
     SC_DLLPRIVATE void          DoEnterHandler();
-    SC_DLLPRIVATE void          InitOptions();
+    SC_DLLPRIVATE void          InitOptions(bool bForLoading);
     SC_DLLPRIVATE void          ResetDrawObjectShell();
 
     // SUNWS needs a forward declared friend, otherwise types and members
@@ -418,7 +418,19 @@ public:
     sal_Bool        AcceptStateUpdate() const;
     //-->Added by PengYunQuan for Validity Cell Range Picker
     ScSheetSaveData* GetSheetSaveData();
+
+    // passwword protection for Calc (derived from SfxObjectShell)
+    // see also:    FID_CHG_RECORD, SID_CHG_PROTECT
+    virtual bool    IsChangeRecording() const;
+    virtual bool    HasChangeRecordProtection() const;
+    virtual void    SetChangeRecording( bool bActivate );
+    virtual bool    SetProtectionPassword( const String &rPassword );
+    virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
 };
+
+
+void UpdateAcceptChangesDialog();
+
 
 SO2_DECL_REF(ScDocShell)
 SO2_IMPL_REF(ScDocShell)

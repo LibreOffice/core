@@ -29,25 +29,6 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tdModifyFlipVertikal
-' #1 tdModifyFlipHorizontal
-' #1 tdContextConvertIntoCurve
-' #1 tdContextConvertIntoPolygon
-' #1 tdContextConvertIntoContour
-' #1 tdContextConvertInto3D
-' #1 tdContextConvertIntoRotationObject
-' #1 tdContextConvertIntoBitmap
-' #1 tdContextConvertIntoMetaFile
-' #1 tdModifyArrange
-' #1 tdModifyArrangeObjects
-' #1 tdModifyAlignment
-' #1 tdContextDistribution
-' #1 tdContextDescriptionObject
-' #1 tdContextNameObject
-' #1 tdModifyConnectBreak
-' #1 tdModifyShapes
-' #1 tdModifyCombineSplit
 '\**********************************************************************************
 
 testcase tdModifyFlipVertikal

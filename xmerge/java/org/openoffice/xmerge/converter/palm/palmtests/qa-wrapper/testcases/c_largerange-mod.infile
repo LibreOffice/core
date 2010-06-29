@@ -1,6 +1,0 @@
-# 
-# Spreadsheet large range test
-# 
-TEST||MINICALC|c_largerange
-MINICALC_ENTER_CELL|2|1|=SUM(E7:G10)\n
-SLEEP|5

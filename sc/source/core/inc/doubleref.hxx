@@ -47,11 +47,10 @@ struct ScQueryParamBase;
 class ScDBRangeBase
 {
 public:
-    enum RefType { INTERNAL, EXTERNAL };
+    enum RefType { INTERNAL, EXTERNAL }; // TODO: We may not need this after all... (kohei)
 
     virtual ~ScDBRangeBase() = 0;
 
-    RefType getType() const;
     bool fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const;
 
     virtual SCCOL getColSize() const = 0;

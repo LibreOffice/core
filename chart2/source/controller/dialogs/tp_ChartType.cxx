@@ -853,15 +853,35 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
 
     bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
 
+    bool bDisableComplexChartTypes = false;
+    uno::Reference< beans::XPropertySet > xProps( m_xChartModel, uno::UNO_QUERY );
+    if ( xProps.is() )
+    {
+        try
+        {
+            xProps->getPropertyValue( C2U( "DisableComplexChartTypes" ) ) >>= bDisableComplexChartTypes;
+        }
+        catch( uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+    }
+
     m_aChartTypeDialogControllerList.push_back(new ColumnChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new BarChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new PieChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new AreaChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new LineChartDialogController() );
-    m_aChartTypeDialogControllerList.push_back(new XYChartDialogController() );
-    m_aChartTypeDialogControllerList.push_back(new BubbleChartDialogController() );
+    if ( !bDisableComplexChartTypes )
+    {
+        m_aChartTypeDialogControllerList.push_back(new XYChartDialogController() );
+        m_aChartTypeDialogControllerList.push_back(new BubbleChartDialogController() );
+    }
     m_aChartTypeDialogControllerList.push_back(new NetChartDialogController() );
-    m_aChartTypeDialogControllerList.push_back(new StockChartDialogController() );
+    if ( !bDisableComplexChartTypes )
+    {
+        m_aChartTypeDialogControllerList.push_back(new StockChartDialogController() );
+    }
     m_aChartTypeDialogControllerList.push_back(new CombiColumnLineChartDialogController() );
 
     ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();

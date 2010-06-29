@@ -286,6 +286,12 @@ public:
     virtual void GetInputString( String& rString ) const = 0;
 };
 
+class AbstractScTabBgColorDlg : public VclAbstractDialog  //add for ScTabBgColorDlg
+{
+public:
+    virtual void GetSelectedColor( Color& rColor ) const = 0;
+};
+
 class AbstractScImportOptionsDlg : public VclAbstractDialog  //add for ScImportOptionsDlg
 {
 public:
@@ -435,6 +441,14 @@ public:
                                                                 const String& rDefault,
                                                                 ULONG nHelpId ,
                                                                 int nId ) = 0;
+
+    virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  Window* pParent, //add for ScTabBgColorDlg
+                                                                const String& rTitle, //Dialog Title
+                                                                const String& rTabBgColorNoColorText, //Label for no tab color
+                                                                const Color& rDefaultColor, //Currently selected Color
+                                                                ULONG nHelpId ,
+                                                                int nId ) = 0;
+
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( Window*                 pParent, //add for ScImportOptionsDlg
                                                                     int nId,
                                                                     BOOL                    bAscii = TRUE,

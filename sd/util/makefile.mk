@@ -230,7 +230,7 @@ SHL4OBJS += $(SLO)$/pchname.obj \
 .ENDIF # "$(GUI)$(COM)" == "WNTMSC"
 
 # $(ISDLIB) is build in SHL1TARGET
-.IF "$(GUI)" == "UNX"
+.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
 SHL4DEPN=$(SHL1TARGETN)
 SHL5DEPN=$(SHL1TARGETN)
 .ELSE

@@ -173,6 +173,7 @@
 #define SC_UNONAME_COPYFORM         "CopyFormulas"
 #define SC_UNONAME_TABLAYOUT        "TableLayout"
 #define SC_UNONAME_AUTOPRINT        "AutomaticPrintArea"
+#define SC_UNONAME_TABCOLOR         "TabColor"
 
 //  LinkTarget
 #define SC_UNO_LINKDISPBIT          "LinkDisplayBitmap"
@@ -527,6 +528,7 @@
 #define SC_UNO_ZOOMTYPE             "ZoomType"
 #define SC_UNO_ZOOMVALUE            "ZoomValue"
 #define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
+
 /*Stampit enable/disable print cancel */
 #define SC_UNO_ALLOWPRINTJOBCANCEL  "AllowPrintJobCancel"
 
@@ -612,6 +614,7 @@
 // --> PB 2004-08-23 #i33095# Security Options
 #define SC_UNO_LOADREADONLY         "LoadReadonly"
 // <--
+#define SC_UNO_MODIFYPASSWORDINFO   "ModifyPasswordInfo"
 
 // FormulaParser
 #define SC_UNO_COMPILEENGLISH       "CompileEnglish"
@@ -631,6 +634,11 @@
 #define SC_UNONAME_TIMEOUT          "Timeout"
 
 #define SC_UNO_SHAREDOC             "IsDocumentShared"
+
+// EventDescriptor
+
+#define SC_UNO_EVENTTYPE            "EventType"
+#define SC_UNO_SCRIPT               "Script"
 
 #endif
 

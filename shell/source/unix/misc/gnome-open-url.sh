@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# use gnome-open utility coming with libgnome if available
-gnome-open "$1" 2>/dev/null || "$0.bin" $1
+# use xdg-open or gnome-open if available
+xdg-open "$1" 2>/dev/null || gnome-open "$1" 2>/dev/null || "$0.bin" $1
 
 exit 0

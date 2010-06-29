@@ -1185,9 +1185,9 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
             Reference<beans::XPropertySet> xPropSet(xSource, UNO_QUERY);
             if (xPropSet.is())
             {
-                sal_Int32 nDataFieldCount = 0;
-                Any any = xPropSet->getPropertyValue(rtl::OUString::createFromAscii("DataFieldCount"));
-                if ((any >>= nDataFieldCount) && nDataFieldCount > 0)
+                sal_Int32 nDataFieldCount = ScUnoHelpFunctions::GetLongProperty( xPropSet,
+                                            rtl::OUString::createFromAscii(SC_UNO_DATAFIELDCOUNT) );
+                if (nDataFieldCount > 0)
                     aResData.DataFieldIndex = (nRow - nDataStartRow) % nDataFieldCount;
             }
 
@@ -1267,9 +1267,9 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
     if (!xPropSet.is())
         return false;
 
-    sal_Int32 nDataFieldCount = 0;
-    Any any = xPropSet->getPropertyValue(rtl::OUString::createFromAscii("DataFieldCount"));
-    if (!(any >>= nDataFieldCount) || nDataFieldCount == 0)
+    sal_Int32 nDataFieldCount = ScUnoHelpFunctions::GetLongProperty( xPropSet,
+                                rtl::OUString::createFromAscii(SC_UNO_DATAFIELDCOUNT) );
+    if (nDataFieldCount == 0)
         // No data field is present in this datapilot table.
         return false;
 

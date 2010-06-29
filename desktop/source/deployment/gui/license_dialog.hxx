@@ -48,6 +48,7 @@ class LicenseDialog
 {
     Reference<XComponentContext> const m_xComponentContext;
     Reference<awt::XWindow> /* const */ m_parent;
+    OUString m_sExtensionName;
     OUString /* const */ m_sLicenseText;
     OUString m_initialTitle;
 

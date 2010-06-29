@@ -232,8 +232,6 @@ class SvxSecurityTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
-public:
-    enum RedliningMode  { RL_NONE, RL_WRITER, RL_CALC };
 
 private:
     FixedLine           maSecurityOptionsFL;
@@ -251,17 +249,10 @@ private:
     FixedInfo           maMacroSecFI;
     PushButton          maMacroSecPB;
 
-    FixedLine           maFilesharingFL;
-    CheckBox            maRecommReadOnlyCB;
-    CheckBox            maRecordChangesCB;
-    PushButton          maProtectRecordsPB;
 
     SvtSecurityOptions*         mpSecOptions;
     svx::SecurityOptionsDialog* mpSecOptDlg;
 
-    RedliningMode       meRedlingMode;
-    String              msProtectRecordsStr;
-    String              msUnprotectRecordsStr;
     String              msPasswordStoringDeactivateStr;
 
     DECL_LINK(          SecurityOptionsHdl, PushButton* );
@@ -270,10 +261,7 @@ private:
     DECL_LINK(          MasterPasswordCBHdl, void* );
     DECL_LINK(          ShowPasswordsHdl, PushButton* );
     DECL_LINK(          MacroSecPBHdl, void* );
-    DECL_LINK(          RecordChangesCBHdl, void* );
-    DECL_LINK(          ProtectRecordsPBHdl, void* );
 
-    void                CheckRecordChangesState( void );
     void                InitControls();
 
                 SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet );

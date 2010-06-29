@@ -214,10 +214,6 @@ private:
         +---+---+
      */
 
-    /* TODO: When going for 1M rows this will definitely need some change, or
-     * with lots of referred sheets even the reservation of NULL pointers would
-     * be a memory hog. */
-
     class TableSlots
     {
         public:
@@ -227,7 +223,8 @@ private:
 
             /**
                 Obtain slot pointer, no check on validity! It is assumed that
-                all calls are made with the result of ComputeSlotOfsset()
+                all calls are made with the results of ComputeSlotOffset(),
+                ComputeAreaPoints() and ComputeNextSlot()
               */
             inline ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) { return *(ppSlots + nOff); }
 

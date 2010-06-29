@@ -158,7 +158,7 @@ public:
 
     bool                IsDocumentEncrypted() const;
 
-    const String        GetPassword() const;
+    String              GetPassword() const;
 
 private:
 

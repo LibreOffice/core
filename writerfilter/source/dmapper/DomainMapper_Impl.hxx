@@ -45,8 +45,7 @@
 #include <DomainMapperTableManager.hxx>
 #include <PropertyMap.hxx>
 #include <FontTable.hxx>
-#include <ListTable.hxx>
-#include <LFOTable.hxx>
+#include <NumberingManager.hxx>
 #include <StyleSheetTable.hxx>
 #include <SettingsTable.hxx>
 #include <ThemeTable.hxx>
@@ -296,15 +295,15 @@ private:
     _PageMar                                                                        m_aPageMargins;
 
 
-    DomainMapperTableManager m_TableManager;
+    // TableManagers are stacked: one for each stream to avoid any confusion
+    std::stack< boost::shared_ptr< DomainMapperTableManager > > m_aTableManagers;
 
     //each context needs a stack of currently used attributes
     FIB                     m_aFIB;
     PropertyStack           m_aPropertyStacks[NUMBER_OF_CONTEXTS];
     ContextStack            m_aContextStack;
     FontTablePtr            m_pFontTable;
-    ListTablePtr            m_pListTable;
-    LFOTablePtr             m_pLFOTable;
+    ListsManager::Pointer   m_pListTable;
     StyleSheetTablePtr      m_pStyleSheetTable;
     ThemeTablePtr           m_pThemeTable;
     SettingsTablePtr        m_pSettingsTable;
@@ -312,6 +311,7 @@ private:
 
 
     PropertyMapPtr                  m_pTopContext;
+    PropertyMapPtr           m_pLastSectionContext;
 
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
     sal_uInt32                      m_nCurrentTabStopIndex;
@@ -333,6 +333,8 @@ private:
     RedlineParamsPtr                m_pParaRedline;
     bool                            m_bIsParaChange;
 
+    bool                            m_bParaChanged;
+    bool                            m_bIsLastParaInSection;
 
     //annotation import
     uno::Reference< beans::XPropertySet >                                      m_xAnnotationField;
@@ -354,6 +356,11 @@ public:
             SourceDocumentType eDocumentType );
     DomainMapper_Impl();
     virtual ~DomainMapper_Impl();
+
+    SectionPropertyMap* GetLastSectionContext( )
+    {
+        return dynamic_cast< SectionPropertyMap* >( m_pLastSectionContext.get( ) );
+    }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetPageStyles();
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >               GetBodyText();
@@ -379,6 +386,9 @@ public:
 
     void StartParaChange( );
     void EndParaChange( );
+
+    void RemoveLastParagraph( );
+    void SetIsLastParagraphInSection( bool bIsLast );
 
     void deferBreak( BreakType deferredBreakType );
     bool isBreakDeferred( BreakType deferredBreakType );
@@ -421,13 +431,7 @@ public:
             m_pStyleSheetTable.reset(new StyleSheetTable( m_rDMapper, m_xTextDocument ));
         return m_pStyleSheetTable;
     }
-    ListTablePtr GetListTable();
-    LFOTablePtr GetLFOTable()
-    {
-        if(!m_pLFOTable)
-            m_pLFOTable.reset( new LFOTable );
-        return m_pLFOTable;
-    }
+    ListsManager::Pointer GetListTable();
     ThemeTablePtr GetThemeTable()
     {
         if(!m_pThemeTable)
@@ -494,7 +498,24 @@ public:
 
     void AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId );
 
-    DomainMapperTableManager& getTableManager() { return m_TableManager; }
+    DomainMapperTableManager& getTableManager()
+    {
+        boost::shared_ptr< DomainMapperTableManager > pMngr = m_aTableManagers.top();
+        return *pMngr.get( );
+    }
+
+    void appendTableManager( )
+    {
+        boost::shared_ptr< DomainMapperTableManager > pMngr(
+                new DomainMapperTableManager( m_eDocumentType == DOCUMENT_OOXML ) );
+        m_aTableManagers.push( pMngr );
+    }
+
+    void popTableManager( )
+    {
+        if ( m_aTableManagers.size( ) > 0 )
+            m_aTableManagers.pop( );
+    }
 
     void SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn );
     bool IsLineNumberingSet() const {return m_bLineNumberingSet;}

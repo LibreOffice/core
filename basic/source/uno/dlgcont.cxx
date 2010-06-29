@@ -187,12 +187,13 @@ bool writeOasis2OOoLibraryElement(
 
 void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
 (
-    Any aElement,
-    const OUString& /*aElementName*/,
-    Reference< XOutputStream > xOutput
+    const Reference < XNameContainer >& xLib,
+    const OUString& aElementName,
+    const Reference< XOutputStream >& xOutput
 )
     throw(Exception)
 {
+    Any aElement = xLib->getByName( aElementName );
     Reference< XInputStreamProvider > xISP;
     aElement >>= xISP;
     if( !xISP.is() )
@@ -256,7 +257,9 @@ void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< e
 
 
 Any SAL_CALL SfxDialogLibraryContainer::importLibraryElement
-    ( const OUString& aFile, const uno::Reference< io::XInputStream >& xElementStream )
+    ( const Reference < XNameContainer >& /*xLib*/,
+      const OUString& /*aElementName */, const OUString& aFile,
+      const uno::Reference< io::XInputStream >& xElementStream )
 {
     Any aRetAny;
 

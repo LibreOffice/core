@@ -33,7 +33,9 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/document/XEmbeddedScripts.hpp> //Michael E. Bohn
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <ooo/vba/XVBADocService.hpp>
 
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
@@ -179,14 +181,14 @@ void
 VbaDocumentBase::setSaved( sal_Bool bSave ) throw (uno::RuntimeException)
 {
     uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );
-    xModifiable->setModified( bSave );
+    xModifiable->setModified( !bSave );
 }
 
 sal_Bool
 VbaDocumentBase::getSaved() throw (uno::RuntimeException)
 {
     uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY_THROW );
-    return xModifiable->isModified();
+    return !xModifiable->isModified();
 }
 
 void
@@ -203,6 +205,40 @@ VbaDocumentBase::Activate() throw (uno::RuntimeException)
     uno::Reference< frame::XFrame > xFrame( getModel()->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
     xFrame->activate();
 }
+
+// ---- Michael E.Bohn  Start-----
+
+uno::Any SAL_CALL
+VbaDocumentBase::getVBProject() throw (uno::RuntimeException)
+
+{
+    uno::Any aAny;
+    uno::Reference< ::lang::XMultiComponentFactory > xServiceManager = mxContext->getServiceManager();
+    try
+      {
+        uno::Reference < ::uno::XInterface > xInterface =  xServiceManager->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBADocService" )),mxContext);
+        uno::Reference < ::ooo::vba::XVBADocService > xVBADocService (xInterface, ::uno::UNO_QUERY_THROW );
+        if (xVBADocService.is()){
+            uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
+            uno::Reference< document::XEmbeddedScripts > xEnbeddedScripts ( xModel, uno::UNO_QUERY_THROW );
+            uno::Reference< script::XStorageBasedLibraryContainer >  xMacroStorageBasedLibraryContainer =  xEnbeddedScripts->getBasicLibraries();
+            uno::Reference< script::XStorageBasedLibraryContainer >  xDialogStorageBasedLibraryContainer = xEnbeddedScripts->getDialogLibraries();
+            uno::Reference< script::XLibraryContainer > xMacroLibraryContainer ( xMacroStorageBasedLibraryContainer, uno::UNO_QUERY_THROW );
+            uno::Reference< script::XLibraryContainer > xDialogLibraryContainer( xDialogStorageBasedLibraryContainer, uno::UNO_QUERY_THROW );
+
+            return xVBADocService->getVBProject( this, mxContext, xModel, xMacroLibraryContainer, xDialogLibraryContainer );
+          }
+
+        }catch(uno::Exception* e)
+        {
+        }
+    return aAny;
+
+}
+
+
+// ---- Michael E.Bohn  End -----
+
 
 rtl::OUString&
 VbaDocumentBase::getServiceImplName()

@@ -268,11 +268,6 @@ ScDBRangeBase::~ScDBRangeBase()
 {
 }
 
-ScDBRangeBase::RefType ScDBRangeBase::getType() const
-{
-    return meType;
-}
-
 bool ScDBRangeBase::fillQueryEntries(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef) const
 {
     if (!pDBRef)

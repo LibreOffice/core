@@ -180,8 +180,7 @@ void ImportLotus::Hiddencolumn( UINT16 nRecLen )
         {
             Read( nCol );
 
-            pD->SetColFlags( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), pD->GetColFlags( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab) ) | CR_HIDDEN );
-
+            pD->SetColHidden(static_cast<SCCOL>(nCol), static_cast<SCCOL>(nCol), static_cast<SCTAB>(nLTab), true);
             nCnt--;
         }
     }

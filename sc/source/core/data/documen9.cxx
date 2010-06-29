@@ -67,7 +67,7 @@
 #include "charthelper.hxx"
 
 using namespace ::com::sun::star;
-
+#include <stdio.h>
 // -----------------------------------------------------------------------
 
 
@@ -722,7 +722,19 @@ void ScDocument::UpdateFontCharSet()
     }
 }
 
-void ScDocument::SetImportingXML( BOOL bVal )
+void ScDocument::SetLoadingMedium( bool bVal )
+{
+    bLoadingMedium = bVal;
+    for (SCTAB nTab = 0; nTab <= MAXTAB; ++nTab)
+    {
+        if (!pTab[nTab])
+            return;
+
+        pTab[nTab]->SetLoadingMedium(bVal);
+    }
+}
+
+void ScDocument::SetImportingXML( bool bVal )
 {
     bImportingXML = bVal;
     if (pDrawLayer)
@@ -739,6 +751,8 @@ void ScDocument::SetImportingXML( BOOL bVal )
                 SetLayoutRTL( nTab, TRUE );             // includes mirroring; bImportingXML must be cleared first
             }
     }
+
+    SetLoadingMedium(bVal);
 }
 
 void ScDocument::SetXMLFromWrapper( BOOL bVal )

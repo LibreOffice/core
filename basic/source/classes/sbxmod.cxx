@@ -190,6 +190,11 @@ SbModule::SbModule( const String& rName,  BOOL bVBACompat )
     SetName( rName );
     SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
     SetModuleType( script::ModuleType::NORMAL );
+
+    // #i92642: Set name property to intitial name
+    SbxVariable* pNameProp = pProps->Find( String( RTL_CONSTASCII_USTRINGPARAM("Name") ), SbxCLASS_PROPERTY );
+    if( pNameProp != NULL )
+        pNameProp->PutString( GetName() );
 }
 
 SbModule::~SbModule()
@@ -366,7 +371,7 @@ SbxVariable* SbModule::Find( const XubString& rName, SbxClassType t )
 {
     // make sure a search in an uninstatiated class module will fail
     SbxVariable* pRes = SbxObject::Find( rName, t );
-    if ( bIsProxyModule )
+    if ( bIsProxyModule && !GetSbData()->bRunInit )
         return NULL;
     if( !pRes && pImage )
     {
@@ -452,7 +457,19 @@ void SbModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
             }
         }
         else
-            SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+        {
+            // #i92642: Special handling for name property to avoid
+            // side effects when using name as variable implicitely
+            bool bForwardToSbxObject = true;
+
+            ULONG nId = pHint->GetId();
+            if( (nId == SBX_HINT_DATAWANTED || nId == SBX_HINT_DATACHANGED) &&
+                pVar->GetName().EqualsIgnoreCaseAscii( "name" ) )
+                    bForwardToSbxObject = false;
+
+            if( bForwardToSbxObject )
+                SbxObject::SFX_NOTIFY( rBC, rBCType, rHint, rHintType );
+        }
     }
 }
 
@@ -646,7 +663,7 @@ void ClearUnoObjectsInRTL_Impl( StarBASIC* pBasic )
     if( ((StarBASIC*)p) != pBasic )
         ClearUnoObjectsInRTL_Impl_Rek( (StarBASIC*)p );
 }
-BOOL SbModule::IsVBACompat()
+BOOL SbModule::IsVBACompat() const
 {
     return mbVBACompat;
 }
@@ -1710,18 +1727,20 @@ public:
 };
 
 SbUserFormModule::SbUserFormModule( const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsCompat )
-    :SbObjModule( rName, mInfo, bIsCompat ), mbInit( false )
+    : SbObjModule( rName, mInfo, bIsCompat )
+    , m_mInfo( mInfo )
+    , mbInit( false )
 {
-        m_xModel.set( mInfo.ModuleObject, uno::UNO_QUERY_THROW );
+    m_xModel.set( mInfo.ModuleObject, uno::UNO_QUERY_THROW );
 }
 
 void SbUserFormModule::ResetApiObj()
 {
-        if (  m_xDialog.is() ) // probably someone close the dialog window
+    if (  m_xDialog.is() ) // probably someone close the dialog window
     {
-            triggerTerminateEvent();
-        }
-        pDocObject = NULL;
+        triggerTerminateEvent();
+    }
+    pDocObject = NULL;
     m_xDialog = NULL;
 }
 
@@ -1806,6 +1825,33 @@ void SbUserFormModule::triggerTerminateEvent( void )
     triggerMethod( aTermMethodName );
     mbInit=false;
 }
+
+SbUserFormModuleInstance* SbUserFormModule::CreateInstance()
+{
+    SbUserFormModuleInstance* pInstance = new SbUserFormModuleInstance( this, GetName(), m_mInfo, IsVBACompat() );
+    return pInstance;
+}
+
+SbUserFormModuleInstance::SbUserFormModuleInstance( SbUserFormModule* pParentModule,
+    const String& rName, const com::sun::star::script::ModuleInfo& mInfo, bool bIsVBACompat )
+        : SbUserFormModule( rName, mInfo, bIsVBACompat )
+        , m_pParentModule( pParentModule )
+{
+}
+
+BOOL SbUserFormModuleInstance::IsClass( const XubString& rName ) const
+{
+    BOOL bParentNameMatches = m_pParentModule->GetName().EqualsIgnoreCaseAscii( rName );
+    BOOL bRet = bParentNameMatches || SbxObject::IsClass( rName );
+    return bRet;
+}
+
+SbxVariable* SbUserFormModuleInstance::Find( const XubString& rName, SbxClassType t )
+{
+    SbxVariable* pVar = m_pParentModule->Find( rName, t );
+    return pVar;
+}
+
 
 void SbUserFormModule::load()
 {

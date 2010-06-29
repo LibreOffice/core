@@ -41,10 +41,11 @@
 #include "global.hxx"
 #include "rechead.hxx"
 #include "address.hxx"
+#include "table.hxx"
 
 //------------------------------------------------------------------------
 
-ScOutlineEntry::ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, BOOL bNewHidden ) :
+ScOutlineEntry::ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, bool bNewHidden ) :
     nStart  ( nNewStart ),
     nSize   ( nNewSize ),
     bHidden ( bNewHidden ),
@@ -93,12 +94,12 @@ void ScOutlineEntry::SetPosSize( SCCOLROW nNewPos, SCSIZE nNewSize )
     SetSize( nNewSize );
 }
 
-void ScOutlineEntry::SetHidden( BOOL bNewHidden )
+void ScOutlineEntry::SetHidden( bool bNewHidden )
 {
     bHidden = bNewHidden;
 }
 
-void ScOutlineEntry::SetVisible( BOOL bNewVisible )
+void ScOutlineEntry::SetVisible( bool bNewVisible )
 {
     bVisible = bNewVisible;
 }
@@ -637,10 +638,9 @@ BOOL ScOutlineArray::DeleteSpace( SCCOLROW nStartPos, SCSIZE nSize )
     return bNeedSave;
 }
 
-BOOL ScOutlineArray::ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos,
-        BOOL bShow, const ScBitMaskCompressedArray< SCCOLROW, BYTE>& rHiddenFlags )
+bool ScOutlineArray::ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos, bool bShow, ScTable& rTable, bool bCol )
 {
-    BOOL bModified = FALSE;
+    bool bModified = false;
     ScSubOutlineIterator aIter( this );
     ScOutlineEntry* pEntry;
     while((pEntry=aIter.GetNext())!=NULL)
@@ -654,18 +654,16 @@ BOOL ScOutlineArray::ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos,
             {
                 //  #i12341# hide if all columns/rows are hidden, show if at least one
                 //  is visible
-
-                SCCOLROW nEnd = rHiddenFlags.GetBitStateEnd( nEntryStart,
-                        CR_HIDDEN, CR_HIDDEN);
-                BOOL bAllHidden = (nEntryEnd <= nEnd && nEnd <
+                SCCOLROW nEnd = rTable.LastHiddenColRow(nEntryStart, bCol);
+                bool bAllHidden = (nEntryEnd <= nEnd && nEnd <
                         ::std::numeric_limits<SCCOLROW>::max());
 
-                BOOL bToggle = ( bShow != bAllHidden );
+                bool bToggle = ( bShow != bAllHidden );
                 if ( bToggle )
                 {
                     pEntry->SetHidden( !bShow );
                     SetVisibleBelow( aIter.LastLevel(), aIter.LastEntry(), bShow, bShow );
-                    bModified = TRUE;
+                    bModified = true;
                 }
             }
         }

@@ -39,7 +39,8 @@ sub Usage()
         "\n",
         "langid - a hackish utility to lookup lang.h language defines and LangIDs,\n",
         "isolang.cxx ISO639/ISO3166 mapping, locale data files, langtab.src language\n",
-        "listbox entries, postset.mk and file_ooo.scp registry name.\n\n",
+        "listbox entries, postset.mk, file_ooo.scp registry name, globals.pm and\n",
+        "msi-encodinglist.txt\n\n",
 
         "Usage: $0 [--single] {language string} | {LangID} | {primarylanguage sublanguage} | {language-country}\n\n",
 
@@ -105,7 +106,8 @@ sub grepFile($$$$@)
     my( $regex, $path, $module, $name, @addregex) = @_;
     my @result;
     my $found = 0;
-    my $arefound = '';
+    my $areopen = 0;
+    my $arecloser = '';
     my $file;
     # Try module under current working directory first to catch local
     # modifications. A Not yet delivered lang.h is a special case.
@@ -145,17 +147,22 @@ sub grepFile($$$$@)
                 print "$line\n";
                 push( @result, $line);
             }
-            else
+            elsif (@addregex)
             {
-                for my $re (@addregex)
+                # By convention first element is opener, second element is closer.
+                if (!$areopen)
                 {
-                    if ($re ne $arefound && $line =~ /$re/)
+                    if ($line =~ /$addregex[0]/)
                     {
-                        if ($arefound eq '')
-                        {
-                            $arefound = $re;
-                        }
-                        else
+                        $areopen = 1;
+                        $arecloser = $addregex[1];
+                    }
+                }
+                if ($areopen)
+                {
+                    for (my $i = 2; $i < @addregex; ++$i)
+                    {
+                        if ($line =~ /$addregex[$i]/)
                         {
                             if (!$found)
                             {
@@ -167,13 +174,19 @@ sub grepFile($$$$@)
                             push( @result, $line);
                         }
                     }
+                    if ($line =~ /$arecloser/)
+                    {
+                        $areopen = 0;
+                    }
                 }
             }
         }
         close( IN);
     }
     if (!$found) {
-        print "Not found in $file\n"; }
+        print "Not found in $file\n";
+        #print "Not found in $file for $regex @addregex\n";
+    }
     return @result;
 }
 
@@ -317,13 +330,13 @@ sub main()
                 if ($coun)
                 {
                     $loca = $lang . "_" . $coun;
-                    push( @langcoungreplist, $lang . '(-' . $coun . ')?');
+                    push( @langcoungreplist, '\b' . $lang . '\b(-' . $coun . ')?');
                 }
                 else
                 {
                     $loca = $lang;
                     $coun = "";
-                    push( @langcoungreplist, $lang);
+                    push( @langcoungreplist, '\b' . $lang . '\b');
                 }
                 my $file = "$SRC_ROOT/i18npool/source/localedata/data/$loca.xml";
                 my $found;
@@ -385,12 +398,24 @@ sub main()
             grepFile(
                 '^\s*Name\s*\(' . $langcoun . '\)\s*=',
                 "$SRC_ROOT", "scp2", "source/ooo/file_ooo.scp", ());
+
             # completelangiso=af ar as-IN ... zu
             grepFile(
-                '^\s*completelangiso\s*[= ](.{2,3}(-..)?)*' . $langcoun . '',
+                '^\s*completelangiso\s*=\s*(\s*([a-z]{2,3})(-[A-Z][A-Z])?)*' . $langcoun . '',
                 "$SRC_ROOT", "solenv", "inc/postset.mk",
                 # needs a duplicated pair of backslashes to produce a literal \\
-                ('^\s*completelangiso\s*=', '^\s*' . $langcoun . '\s*\\\\*$'));
+                ('^\s*completelangiso\s*=', '^\s*$', '^\s*' . $langcoun . '\s*\\\\*$'));
+
+            # @noMSLocaleLangs = ( "br", "bs", ... )
+            grepFile(
+                '^\s*@noMSLocaleLangs\s*=\s*\(\s*(\s*"([a-z]{2,3})(-[A-Z][A-Z])?"\s*,?)*' . $langcoun . '',
+                "$SRC_ROOT", "solenv", "bin/modules/installer/globals.pm",
+                ('^\s*@noMSLocaleLangs\s*=', '\)\s*$', '"' . $langcoun . '"'));
+
+            # af    1252  1078   # Afrikaans
+            grepFile(
+                '^\s*' . $langcoun . '',
+                "$SRC_ROOT", "setup_native", "source/win32/msi-encodinglist.txt", ());
         }
     }
     return 0;

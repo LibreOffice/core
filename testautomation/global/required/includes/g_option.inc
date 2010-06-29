@@ -209,21 +209,6 @@ testcase tToolsOptionsStarOffice
                 endif
 
                 Kontext "TabSecurity"
-                if Protect.isEnabled then
-                    Protect.click()
-                    Kontext "PasswordDLG"
-                    call DialogTest( PasswordDLG )
-                    PasswordDLG.cancel()
-                else
-                    select case uCase(gApplication)
-                    case "WRITER","MASTERDOCUMENT"
-                        WarnLog "Protect-Button is disabled."
-                    case "MATH","IMPRESS","DRAW","HTML","CALC"
-                        PrintLog "Protect-Button is disabled."
-                    end select
-                endif
-                
-                Kontext "TabSecurity"
                 if ( TabSecurity.exists( 1 ) ) then
                     Options.click
                     Kontext "TabSecurityOptionsAndWarnings"

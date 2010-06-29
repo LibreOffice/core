@@ -323,7 +323,7 @@ void PspGraphics::drawPolyPolygon( sal_uInt32           nPoly,
     m_pPrinterGfx->DrawPolyPolygon (nPoly, pPoints, (const Point**)pPtAry);
 }
 
-bool PspGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& /*rLineWidths*/, basegfx::B2DLineJoin /*eJoin*/ )
+bool PspGraphics::drawPolyLine( const ::basegfx::B2DPolygon&, double /*fTransparency*/, const ::basegfx::B2DVector& /*rLineWidths*/, basegfx::B2DLineJoin /*eJoin*/ )
 {
         // TODO: implement and advertise OutDevSupport_B2DDraw support
         return false;

@@ -166,9 +166,10 @@ testcase tToolsMacro
     printlog " Close Select Certificate' dialog with 'Cancel'"
     SelectCertificate.Cancel
     Kontext "DigitalSignature"
+    add.click
     '/// Close 'Digital Signatures' dialog with 'Cancel'
     printlog " Close 'Digital Signatures' dialog with 'Cancel'"
-    DigitalSignature.Cancel
+    DigitalSignature.ok
     '/// Open 'Macro Organizer' by 'Tools – Macro – Organize Dialogs'
     printlog " Open 'Macro Organizer' by 'Tools – Macro – Organize Dialogs'"
     ToolsMacrosOrganizeDialogs

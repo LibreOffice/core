@@ -24,18 +24,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include<com/sun/star/table/CellRangeAddress.hpp>
-#include<vbapane.hxx>
+
+#include "vbapane.hxx"
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/table/CellRangeAddress.hpp>
+#include "vbarange.hxx"
 
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-/*
-ScVbaPane::ScVbaPane( uno::Reference< uno::XComponentContext > xContext, uno::Refrence< sheet::XViewPane > xViewPane )
-        : m_xContext( xContext ), m_xViewPane( xViewPane )
+ScVbaPane::ScVbaPane(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const uno::Reference< uno::XComponentContext >& xContext,
+        const uno::Reference< frame::XModel >& xModel,
+        const uno::Reference< sheet::XViewPane > xViewPane ) throw (uno::RuntimeException) :
+    ScVbaPane_BASE( xParent, xContext ),
+    m_xModel( xModel, uno::UNO_SET_THROW ),
+    m_xViewPane( xViewPane, uno::UNO_SET_THROW )
 {
 }
-*/
 
 sal_Int32 SAL_CALL
 ScVbaPane::getScrollColumn() throw (uno::RuntimeException)
@@ -71,6 +79,19 @@ ScVbaPane::setScrollRow( sal_Int32 _scrollrow ) throw (uno::RuntimeException)
     m_xViewPane->setFirstVisibleRow( _scrollrow - 1 );
 }
 
+uno::Reference< excel::XRange > SAL_CALL
+ScVbaPane::getVisibleRange() throw (uno::RuntimeException)
+{
+    // TODO: Excel includes partly visible rows/columns, Calc does not
+    table::CellRangeAddress aRangeAddr = m_xViewPane->getVisibleRange();
+    uno::Reference< sheet::XSpreadsheetDocument > xDoc( m_xModel, uno::UNO_QUERY_THROW );
+    uno::Reference< container::XIndexAccess > xSheetsIA( xDoc->getSheets(), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XSpreadsheet > xSheet( xSheetsIA->getByIndex( aRangeAddr.Sheet ), uno::UNO_QUERY_THROW );
+    uno::Reference< table::XCellRange > xRange( xSheet->getCellRangeByPosition( aRangeAddr.StartColumn, aRangeAddr.StartRow, aRangeAddr.EndColumn, aRangeAddr.EndRow ), uno::UNO_SET_THROW );
+    // TODO: getParent() returns the window, Range needs the worksheet
+    return new ScVbaRange( getParent(), mxContext, xRange );
+}
+
 //Method
 void SAL_CALL
 ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft ) throw (uno::RuntimeException)
@@ -83,54 +104,34 @@ ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
     if( Down.hasValue() )
     {
         sal_Int32 down = 0;
-        try
-        {
-            Down >>= down;
+        if( Down >>= down )
             downRows += down;
-        }
-        catch ( uno::Exception )
-        {
+        else
             messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: Down\n" );
-        }
     }
     if( Up.hasValue() )
     {
         sal_Int32 up = 0;
-        try
-        {
-            Up >>= up;
+        if( Up >>= up )
             downRows -= up;
-        }
-        catch ( uno::Exception )
-        {
+        else
             messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: Up\n" );
-        }
     }
     if( ToRight.hasValue() )
     {
         sal_Int32 right = 0;
-        try
-        {
-            ToRight >>= right;
+        if( ToRight >>= right )
             rightCols += right;
-        }
-        catch ( uno::Exception )
-        {
+        else
             messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: ToRight\n" );
-        }
     }
     if( ToLeft.hasValue() )
     {
         sal_Int32 left = 0;
-        try
-        {
-            ToLeft >>= left;
+        if( ToLeft >>= left )
             rightCols -= left;
-        }
-        catch ( uno::Exception )
-        {
+        else
             messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: ToLeft\n" );
-        }
     }
     if( messageBuffer.getLength() > 0 )
         throw(uno::RuntimeException( messageBuffer, uno::Reference< uno::XInterface >() ) );
@@ -158,56 +159,35 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
     if( Down.hasValue() )
     {
         sal_Int32 down = 0;
-        try
-        {
-            Down >>= down;
+        if( Down >>= down )
             downPages += down;
-        }
-        catch ( uno::Exception )
-        {
+        else
             messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: Down\n" );
-        }
     }
     if( Up.hasValue() )
     {
         sal_Int32 up = 0;
-        try
-        {
-            Up >>= up;
+        if( Up >>= up )
             downPages -= up;
-        }
-        catch ( uno::Exception )
-        {
+        else
             messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: Up\n" );
-        }
     }
     if( ToRight.hasValue() )
     {
         sal_Int32 right = 0;
-        try
-        {
-            ToRight >>= right;
+        if( ToRight >>= right )
             acrossPages += right;
-        }
-        catch ( uno::Exception )
-        {
+        else
             messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: ToRight\n" );
-        }
     }
     if( ToLeft.hasValue() )
     {
         sal_Int32 left = 0;
-        try
-        {
-            ToLeft >>= left;
+        if( ToLeft >>= left )
             acrossPages -= left;
-        }
-        catch ( uno::Exception )
-        {
+        else
             messageBuffer += rtl::OUString::createFromAscii( "Error getting parameter: ToLeft\n" );
-        }
     }
-
     if( messageBuffer.getLength() > 0 )
         throw(uno::RuntimeException( messageBuffer, uno::Reference< uno::XInterface >() ) );
 
@@ -220,3 +200,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
     m_xViewPane->setFirstVisibleRow( newStartRow );
     m_xViewPane->setFirstVisibleColumn( newStartCol );
 }
+
+// XHelperInterface
+
+VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaPane, "ooo.vba.excel.Pane" )

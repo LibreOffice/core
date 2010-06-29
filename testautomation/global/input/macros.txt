@@ -1,5 +1,5 @@
 # This is a collection of BASIC macros that can cause Syntax errors, Exceptions, 
-# Runtime Errors.
+# Runtime Errors. They are loaded in the test framework/optional/f_basic_issues.bas
 
 # ---------------------------------------------------------------------------- #
 
@@ -39,7 +39,7 @@ end function
 '# TTMacro1: This is a short testscript for automated testing!
 sub main
 
-    print( "Hello" )
+    print( "TTMacro1" )
 
 end sub
 
@@ -163,7 +163,7 @@ End Sub
 # ---------------------------------------------------------------------------- #
 
 [i86265]
-' There should be no "Paramtheses do not match" warning
+' There should be no "Parantheses do not match" warning
 OPTION EXPLICIT
 Public Const cMAX = 256
 

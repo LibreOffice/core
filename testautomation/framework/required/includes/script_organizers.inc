@@ -37,39 +37,32 @@ testcase tUpdtScriptCount
     printlog( "Resource test for macros and scripts / related dialogs" )
 
     const SCRIPTING_DIALOGS = 5
+
     dim aScriptCount( SCRIPTING_DIALOGS )
-        ' JavaScript
-        aScriptCount( 1 ) = 10
-        ' BeanShell
-        aScriptCount( 2 ) = 14
-        if ( lcase( gPlatform ) = "osx" ) then
-           ' Python
-           aScriptCount( 3 ) = 8 
-        else
-           ' Python
-           aScriptCount( 3 ) = 10 
-        endif
-        if ( lcase( gPlatform ) = "osx" ) then
-            ' Run Macro
-            aScriptCount( 5 ) = 600 
-        else
-            ' Run Macro
-            aScriptCount( 5 ) = 602 
-        endif
-        if ( gOOo ) then
-            ' Makro Organizer
-            aScriptCount( 4 ) = 585
-            ' Run Macro
-            aScriptCount( 5 ) = aScriptCount( 5 ) - 1 
-        else            
-            ' Makro Organizer
-            aScriptCount( 4 ) = 586
-        endif
+    
+    aScriptCount( 1 ) = 10 ' JavaScript
+    aScriptCount( 2 ) = 14 ' BeanShell
+
+    if ( lcase( gPlatform ) = "osx" ) then
+        aScriptCount( 3 ) = 8 ' Python
+        aScriptCount( 5 ) = 600 ' Run Macro
+    else
+        aScriptCount( 3 ) = 10 ' Python
+        aScriptCount( 5 ) = 602 ' Run Macro
+    endif
+
+    if ( gOOo ) then
+        aScriptCount( 4 ) = 585 ' Makro Organizer
+        aScriptCount( 5 ) = aScriptCount( 5 ) - 1 ' Run Macro
+    else
+        ' Makro Organizer
+        aScriptCount( 4 ) = 586
+    endif
 
     dim iCurrentDialog as integer
     dim iCurrentScriptCount as integer
     
-    hInitSingleDoc()       
+    hInitSingleDoc()
 
     for iCurrentDialog = 1 to SCRIPTING_DIALOGS
 
@@ -104,7 +97,7 @@ testcase tUpdtScriptCount
                 ScriptSelector.cancel()                
         end select
 
-        printlog sDialog
+        printlog( sDialog )
         
         if ( aScriptCount( iCurrentDialog ) <> iCurrentScriptCount ) then
             warnlog( "Incorrect number of scripts for this dialog: '" + sDialog + "' expected:" + aScriptCount( iCurrentDialog ) + ", but is:" & iCurrentScriptCount )
@@ -122,13 +115,13 @@ endcase
 
 function hGetScriptCount( oTree as object, oList as object ) as integer
 
-    dim iTreeItem as integer
-    dim iScript as integer : iScript = 0
+    dim iCurrentTreeItem as integer
+    dim iScriptCount as integer : iScriptCount = 0
     
-    for iTreeItem = 1 to oTree.getItemCount()
-        oTree.select( iTreeItem )
-        iScript = iScript + oList.getItemCount()
-    next iTreeItem
-    hGetScriptCount() = iScript
+    for iCurrentTreeItem = 1 to oTree.getItemCount()
+        oTree.select( iCurrentTreeItem )
+        iScriptCount = iScriptCount + oList.getItemCount()
+    next iCurrentTreeItem
+    hGetScriptCount() = iScriptCount
     
 end function

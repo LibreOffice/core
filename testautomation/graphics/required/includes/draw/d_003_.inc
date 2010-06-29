@@ -31,6 +31,15 @@
 '*
 '\*****************************************************************
 
+sub d_003
+
+    call tdViewPagePane()
+    call tdViewSlide()
+
+end sub
+
+'*******************************************************************************
+
 testcase tdViewPagePane
 
     printlog " open application "

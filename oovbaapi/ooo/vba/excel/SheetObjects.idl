@@ -1,0 +1,150 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __ooo_vba_excel_SheetObjects_idl__
+#define __ooo_vba_excel_SheetObjects_idl__
+
+#include <ooo/vba/XCollection.idl>
+
+//=============================================================================
+
+/*  Note: This file collects all compatibility interfaces for collections of
+    drawing objects and drawing controls embedded in sheets. All these symbols
+    are deprecated in VBA and kept for compatibility with old VBA scripts. */
+
+//=============================================================================
+
+module ooo {  module vba { module excel {
+
+//=============================================================================
+
+/** Collections that implement this interface provide access to a specific type
+    of drawing objects in a single sheet.
+
+    <p>The following sheet symbols represent collections of graphic objects,
+    and therefore implement this interface:</p>
+    <ul><li>Buttons: push button (command button) controls,</li>
+    <li>ChartObjects: chart objects embedded in the sheet,</li>
+    <li>CheckBoxes: check box controls,</li>
+    <li>DropDowns: drop-down listbox controls,</li>
+    <li>EditBoxes: text edit controls (dialog sheets only),</li>
+    <li>GroupBoxes: group frame controls,</li>
+    <li>GroupObjects: group objects containing other child objects,</li>
+    <li>Labels: fixed text controls,</li>
+    <li>ListBoxes: plain listbox controls,</li>
+    <li>OptionButtons: option button (radio button) controls,</li>
+    <li>Ovals: simple ovals and circles,</li>
+    <li>Pictures: picture objects,</li>
+    <li>Rectangles: simple rectangle objects,</li>
+    <li>ScrollBars: scrollbar controls,</li>
+    <li>Spinners: spinner (spin button) controls,</li>
+    <li>TextBoxes: rectangle objects with embedded text.</li></ul>
+
+    <p>These symbols are now deprecated in VBA but kept for compatibility with
+    old VBA scripts. All symbols representing collections of form controls do
+    NOT belong to ActiveX form controls but to the old-style drawing controls.
+    </p>
+ */
+interface XGraphicObjects : com::sun::star::uno::XInterface
+{
+    /** Adds a new graphic object to the sheet this collection belongs to. The
+        type of the object is determined by the type of the collection.
+
+        @param fLeft  Position of the left border in points (1/72 inch).
+        @param fTop  Position of the top border in points (1/72 inch).
+        @param fWidth  Width of the object in points (1/72 inch).
+        @param fHeight  Height of the object in points (1/72 inch).
+
+        @return  The created graphic object.
+     */
+    any Add( [in] any fLeft, [in] any fTop, [in] any fWidth, [in] any fHeight );
+};
+
+//=============================================================================
+
+/** Collections that implement this interface provide access to a specific type
+    of drawing objects in a single sheet.
+
+    <p>The following sheet symbols represent collections of line objects, and
+    therefore implement this interface:</p>
+    <ul><li>Arcs: arc objects, and</li>
+    <li>Lines: straight line ojects.</li></ul>
+
+    <p>These symbols are now deprecated in VBA but kept for compatibility with
+    old VBA scripts.</p>
+ */
+interface XLineObjects : com::sun::star::uno::XInterface
+{
+    /** Adds a new line object to the sheet this collection belongs to. The
+        type of the object is determined by the type of the collection.
+
+        @param fX1  Position of the first X coordinate in points (1/72 inch).
+        @param fY1  Position of the first Y coordinate in points (1/72 inch).
+        @param fX2  Position of the last X coordinate in points (1/72 inch).
+        @param fY2  Position of the last Y coordinate in points (1/72 inch).
+
+        @return  The created line object.
+     */
+    any Add( [in] any fX1, [in] any fY1, [in] any fX2, [in] any fY2 );
+};
+
+//=============================================================================
+
+/** A collection providing access to all polygon objects in a single sheet.
+
+    <p>This symbol is now deprecated in VBA but kept for compatibility with old
+    VBA scripts.</p>
+ */
+interface XDrawings : com::sun::star::uno::XInterface
+{
+    /** Adds a new polygon object to the sheet this collection belongs to.
+
+        @param fX1  Position of the first X coordinate in points (1/72 inch).
+        @param fY1  Position of the first Y coordinate in points (1/72 inch).
+        @param fX2  Position of the last X coordinate in points (1/72 inch).
+        @param fY2  Position of the last Y coordinate in points (1/72 inch).
+        @param bClosed  True = outline closed (last and first point connected).
+
+        @return  The created polygon object.
+     */
+    any Add( [in] any fX1, [in] any fY1, [in] any fX2, [in] any fY2, [in] any bClosed );
+};
+
+//=============================================================================
+
+/** Represents the collection of drawing button controls in a spreadsheet. */
+service Buttons
+{
+    interface ooo::vba::XCollection;
+    interface XGraphicObjects;
+};
+
+//=============================================================================
+
+}; }; };
+
+#endif

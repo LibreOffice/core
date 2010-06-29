@@ -108,6 +108,7 @@
 -(MacOSBOOL)sendKeyToFrameDirect: (USHORT)nKeyCode character: (sal_Unicode)aChar modifiers: (unsigned int)nMod;
 -(MacOSBOOL)sendSingleCharacter:(NSEvent*)pEvent;
 -(MacOSBOOL)handleKeyDownException:(NSEvent*)pEvent;
+-(void)clearLastEvent;
 /*
     text action methods
 */

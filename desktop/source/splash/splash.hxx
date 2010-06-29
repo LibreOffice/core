@@ -91,6 +91,7 @@ private:
     Color           _cProgressBarColor;
     bool            _bNativeProgress;
     OUString        _sAppName;
+    OUString        _sProgressText;
     std::vector< FullScreenProgressRatioValue > _sFullScreenProgressRatioValues;
 
     sal_Int32   _iMax;

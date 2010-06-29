@@ -69,8 +69,6 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_treelist_tools.inc"
     use "global\tools\includes\optional\t_listfuncs.inc"
-
-    use "framework\tools\includes\signature_tools.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

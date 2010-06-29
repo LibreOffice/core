@@ -135,6 +135,7 @@ private:
                          m_apRangeSelectionHelper;
     Edit *               m_pCurrentRangeChoosingField;
     bool                 m_bHasInternalDataProvider;
+    bool                 m_bDisableDataTableDialog;
 
     DECL_LINK( CategoryChosen, void * );
     DECL_LINK( SynchronizePosAndNeg, void * );

@@ -36,9 +36,6 @@
 #endif
 #include <classes/framelistanalyzer.hxx>
 
-#ifndef __FRAMEWORK_CONSTANT_FILTER_HXX_
-#include <constant/filter.hxx>
-#endif
 #include <dispatch/interaction.hxx>
 
 #ifndef __FRAMEWORK_CONSTANT_FRAMELOADER_HXX_
@@ -1774,7 +1771,10 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
             ::comphelper::ConfigurationHelper::E_READONLY);
         a >>= bForceFrontAndFocus;
 
-        pWindow->Show(sal_True, (bForceFrontAndFocus || bForceToFront) ? SHOW_FOREGROUNDTASK : 0 );
+        if( pWindow->IsVisible() && (bForceFrontAndFocus || bForceToFront) )
+            pWindow->ToTop();
+        else
+            pWindow->Show(sal_True, (bForceFrontAndFocus || bForceToFront) ? SHOW_FOREGROUNDTASK : 0 );
     }
 
 /* #i19976#

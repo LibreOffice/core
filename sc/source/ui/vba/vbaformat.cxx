@@ -40,6 +40,7 @@
 
 #include <rtl/math.hxx>
 
+#include "excelvbahelper.hxx"
 #include "vbaborders.hxx"
 #include "vbapalette.hxx"
 #include "vbafont.hxx"

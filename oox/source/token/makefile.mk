@@ -51,6 +51,7 @@ $(MISC)$/tokens.gperf $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx $(INCCOM)$
     @@noop $(assign do_phony:=.PHONY)
 
 $(MISC)$/do_tokens $(do_phony) : tokens.txt gentoken.pl $(MISC)$/tokens.gperf $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx
+    @@-$(RM) $@
     $(PERL) gentoken.pl tokens.txt $(INCCOM)$/tokens.hxx $(INCCOM)$/tokenwords.inc $(MISC)$/tokens.gperf && $(TOUCH) $@
 
 $(INCCOM)$/oox:
@@ -60,6 +61,7 @@ $(INCCOM)$/oox$/core: $(INCCOM)$/oox
     $(MKDIR) $(INCCOM)$/oox$/core
 
 $(MISC)$/do_namespaces $(do_phony) : namespaces.txt gennamespaces.pl
+    @@-$(RM) $@
     $(MKDIRHIER) $(INCCOM)$/oox$/core
     $(PERL) gennamespaces.pl namespaces.txt $(INCCOM)$/oox$/core$/namespaces.hxx && $(TOUCH) $@
 
@@ -69,7 +71,8 @@ $(INCCOM)$/tokens.inc : $(MISC)$/tokens.gperf $(MISC)$/do_tokens
 $(SLO)$/tokenmap.obj : $(INCCOM)$/tokens.inc $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx $(INCCOM)$/oox$/core$/namespaces.hxx $(MISC)$/do_tokens $(MISC)$/do_namespaces
 
 $(MISC)$/do_properties $(do_phony) : properties.txt genproperties.pl $(INCCOM)$/properties.hxx $(INCCOM)$/propertywords.inc
-        $(PERL) genproperties.pl properties.txt $(INCCOM)$/properties.hxx $(INCCOM)$/propertywords.inc && $(TOUCH) $@
+    @@-$(RM) $@
+    $(PERL) genproperties.pl properties.txt $(INCCOM)$/properties.hxx $(INCCOM)$/propertywords.inc && $(TOUCH) $@
 
 $(SLO)$/propertylist.obj : $(INCCOM)$/propertywords.inc $(INCCOM)$/properties.hxx $(MISC)$/do_properties
 

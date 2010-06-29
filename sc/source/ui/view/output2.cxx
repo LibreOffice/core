@@ -114,6 +114,7 @@ class ScDrawStringsVars
     long                nMaxDigitWidth;
     long                nSignWidth;
     long                nDotWidth;
+    long                nExpWidth;
 
     ScBaseCell*         pLastCell;
     ULONG               nValueFormat;
@@ -173,6 +174,7 @@ private:
     long        GetMaxDigitWidth();
     long        GetSignWidth();
     long        GetDotWidth();
+    long        GetExpWidth();
     void        TextChanged();
     long        ConvertWidthLogicToPixel( long nWidth ) const;
 };
@@ -193,6 +195,7 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     nMaxDigitWidth( 0 ),
     nSignWidth( 0 ),
     nDotWidth( 0 ),
+    nExpWidth( 0 ),
     pLastCell   ( NULL ),
     nValueFormat( 0 ),
     bLineBreak  ( FALSE ),
@@ -262,6 +265,7 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
     nMaxDigitWidth = 0;
     nSignWidth     = 0;
     nDotWidth      = 0;
+    nExpWidth      = 0;
 
     pPattern = pNew;
     pCondSet = pSet;
@@ -417,6 +421,7 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     nMaxDigitWidth = 0;
     nSignWidth     = 0;
     nDotWidth      = 0;
+    nExpWidth      = 0;
     //  wird gerufen, wenn sich die Font-Variablen nicht aendern (!StringDiffer)
 
     pPattern = pNew;
@@ -547,7 +552,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
         // Failed to get output string.  Bail out.
         return;
 
-    sal_uInt8 nSignCount = 0, nDecimalCount = 0;
+    sal_uInt8 nSignCount = 0, nDecimalCount = 0, nExpCount = 0;
     xub_StrLen nLen = aString.Len();
     sal_Unicode cDecSep = ScGlobal::GetpLocaleData()->getLocaleItem().decimalSeparator.getStr()[0];
     for (xub_StrLen i = 0; i < nLen; ++i)
@@ -557,13 +562,17 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
             ++nSignCount;
         else if (c == cDecSep)
             ++nDecimalCount;
+        else if (c == sal_Unicode('E'))
+            ++nExpCount;
     }
     if (nDecimalCount)
         nWidth += (nMaxDigit - GetDotWidth()) * nDecimalCount;
     if (nSignCount)
         nWidth += (nMaxDigit - GetSignWidth()) * nSignCount;
+    if (nExpCount)
+        nWidth += (nMaxDigit - GetExpWidth()) * nExpCount;
 
-    if (nDecimalCount || nSignCount)
+    if (nDecimalCount || nSignCount || nExpCount)
     {
         // Re-calculate.
         nNumDigits = static_cast<sal_uInt16>(nWidth / nMaxDigit);
@@ -656,6 +665,17 @@ long ScDrawStringsVars::GetDotWidth()
     if (bPixelToLogic)
         nDotWidth = ConvertWidthLogicToPixel(nDotWidth);
     return nDotWidth;
+}
+
+long ScDrawStringsVars::GetExpWidth()
+{
+    if (nExpWidth > 0)
+        return nExpWidth;
+
+    nExpWidth = pOutput->pFmtDevice->GetTextWidth(String('E'));
+    if (bPixelToLogic)
+        nExpWidth = ConvertWidthLogicToPixel(nExpWidth);
+    return nExpWidth;
 }
 
 void ScDrawStringsVars::TextChanged()
@@ -844,7 +864,7 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     while (bHOver)              // nY konstant
     {
         --rOverX;
-        bHidden = ( (pDoc->GetColFlags(rOverX,nTab) & CR_HIDDEN) != 0 );
+        bHidden = pDoc->ColHidden(rOverX, nTab);
         if ( !bDoMerge && !bHidden )
             return FALSE;
 
@@ -868,7 +888,7 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     while (bVOver)
     {
         --rOverY;
-        bHidden = ( (pDoc->GetRowFlags(rOverY,nTab) & CR_HIDDEN) != 0 );
+        bHidden = pDoc->RowHidden(rOverY, nTab);
         if ( !bDoMerge && !bHidden )
             return FALSE;
 
@@ -876,8 +896,8 @@ BOOL ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
             --nArrY;                        // lokale Kopie !
 
         if (rOverX >= nX1 && rOverY >= nY1 &&
-            (pDoc->GetColFlags(rOverX,nTab) & CR_HIDDEN) == 0 &&
-            (pDoc->GetRowFlags(rOverY,nTab) & CR_HIDDEN) == 0 &&
+            !pDoc->ColHidden(rOverX, nTab) &&
+            !pDoc->RowHidden(rOverY, nTab) &&
             pRowInfo[nArrY].nRowNo == rOverY)
         {
 //          rVirtPosY -= pRowInfo[nArrY].nHeight;
@@ -2176,7 +2196,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                     if (bDoCell)
                     {
                         if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 &&
-                             (pDoc->GetColFlags(nCellX,nTab) & CR_HIDDEN) == 0 )
+                             !pDoc->ColHidden(nCellX, nTab) )
                         {
                             CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nCellX+1];
                             pPattern = rCellInfo.pPatternAttr;

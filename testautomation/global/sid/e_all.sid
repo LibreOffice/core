@@ -545,6 +545,7 @@ FormatSheetHide FID_TABLE_HIDE
 FormatSheetShow FID_TABLE_SHOW
 FormatSheetRename FID_TAB_MENU_RENAME FID_TAB_RENAME
 FormatSheetRightToLeft .uno:SheetRightToLeft
+FormatSheetTabColor .uno:SetTabBgColor
 FormatMergeCells .uno:ToggleMergeCells
 FormatPrintRangesRemove SID_DELETE_PRINTAREA
 FormatPrintRangesEdit SID_OPENDLG_EDIT_PRINTAREA

@@ -79,6 +79,7 @@ namespace svt { namespace table
         ::com::sun::star::uno::Sequence< ::rtl::OUString > m_aText;
         Link m_aSelectHdl;
         bool m_bSelectionChanged;
+        bool m_bTooltip;
     public:
         ::std::auto_ptr< AccessibleTableControl_Impl > m_pAccessTable;
 
@@ -217,12 +218,13 @@ namespace svt { namespace table
     virtual sal_Bool isAccessibleAlive( ) const;
     virtual void commitGridControlEvent( sal_Int16 _nEventId, const com::sun::star::uno::Any& _rNewValue, const com::sun::star::uno::Any& _rOldValue );
     virtual void RemoveSelectedRow(RowPos _nRowPos);
-    virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos);
+    virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const;
     ::com::sun::star::uno::Sequence< sal_Int32 >& getColumnsForTooltip();
     ::com::sun::star::uno::Sequence< ::rtl::OUString >& getTextForTooltip();
     void setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aText, const ::com::sun::star::uno::Sequence< sal_Int32 >& nCols);
     void clearSelection();
     void selectionChanged(bool _bChanged);
+    bool isTooltip();
 
     protected:
     /// retrieves the XAccessible implementation associated with the GridControl instance

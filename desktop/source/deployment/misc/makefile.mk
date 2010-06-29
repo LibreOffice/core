@@ -65,7 +65,8 @@ SHL1OBJS = \
         $(SLO)$/dp_version.obj \
         $(SLO)$/dp_descriptioninfoset.obj \
         $(SLO)$/dp_dependencies.obj \
-        $(SLO)$/dp_platform.obj
+        $(SLO)$/dp_platform.obj \
+        $(SLO)$/dp_update.obj
         
 SHL1STDLIBS = \
     $(BERKELEYLIB) \
@@ -75,7 +76,8 @@ SHL1STDLIBS = \
     $(TOOLSLIB) \
     $(UCBHELPERLIB) \
     $(UNOTOOLSLIB) \
-    $(XMLSCRIPTLIB)
+    $(XMLSCRIPTLIB) \
+    $(COMPHELPERLIB)
 .IF "$(GUI)"=="OS2"
 SHL1IMPLIB = ideploymentmisc$(DLLPOSTFIX)
 LIB1TARGET = $(SLB)$/_deplmisc.lib

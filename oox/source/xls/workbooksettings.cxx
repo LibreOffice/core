@@ -26,9 +26,9 @@
  ************************************************************************/
 
 #include "oox/xls/workbooksettings.hxx"
+#include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include <com/sun/star/sheet/XCalculatable.hpp>
 #include <comphelper/mediadescriptor.hxx>
 #include "properties.hxx"
 #include "oox/helper/attributelist.hxx"
@@ -39,11 +39,16 @@
 #include "oox/xls/unitconverter.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::sheet::XCalculatable;
+using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::util::Date;
 using ::com::sun::star::util::XNumberFormatsSupplier;
-using ::com::sun::star::sheet::XCalculatable;
+using ::comphelper::MediaDescriptor;
 using ::oox::core::CodecHelper;
 
 namespace oox {
@@ -191,23 +196,6 @@ void WorkbookSettings::setSaveExtLinkValues( bool bSaveExtLinks )
     maBookSettings.mbSaveExtLinkValues = bSaveExtLinks;
 }
 
-void WorkbookSettings::importFileSharing( BiffInputStream& rStrm )
-{
-    maFileSharing.mbRecommendReadOnly = rStrm.readuInt16() != 0;
-    rStrm >> maFileSharing.mnPasswordHash;
-    if( getBiff() == BIFF8 )
-    {
-        sal_uInt16 nStrLen = rStrm.readuInt16();
-        // there is no string flags field if string is empty
-        if( nStrLen > 0 )
-            maFileSharing.maUserName = rStrm.readUniStringBody( nStrLen );
-    }
-    else
-    {
-        maFileSharing.maUserName = rStrm.readByteStringUC( false, getTextEncoding() );
-    }
-}
-
 void WorkbookSettings::importBookBool( BiffInputStream& rStrm )
 {
     // value of 0 means save external values, value of 1 means strip external values
@@ -239,6 +227,23 @@ void WorkbookSettings::importDateMode( BiffInputStream& rStrm )
 void WorkbookSettings::importDelta( BiffInputStream& rStrm )
 {
     rStrm >> maCalcSettings.mfIterateDelta;
+}
+
+void WorkbookSettings::importFileSharing( BiffInputStream& rStrm )
+{
+    maFileSharing.mbRecommendReadOnly = rStrm.readuInt16() != 0;
+    rStrm >> maFileSharing.mnPasswordHash;
+    if( getBiff() == BIFF8 )
+    {
+        sal_uInt16 nStrLen = rStrm.readuInt16();
+        // there is no string flags field if string is empty
+        if( nStrLen > 0 )
+            maFileSharing.maUserName = rStrm.readUniStringBody( nStrLen );
+    }
+    else
+    {
+        maFileSharing.maUserName = rStrm.readByteStringUC( false, getTextEncoding() );
+    }
 }
 
 void WorkbookSettings::importHideObj( BiffInputStream& rStrm )
@@ -293,10 +298,21 @@ void WorkbookSettings::finalizeImport()
     }
 
     // write protection
-    if( maFileSharing.mbRecommendReadOnly || (maFileSharing.mnPasswordHash != 0) )
+    if( maFileSharing.mbRecommendReadOnly || (maFileSharing.mnPasswordHash != 0) ) try
+    {
         getBaseFilter().getMediaDescriptor()[ CREATE_OUSTRING( "ReadOnly" ) ] <<= true;
-    if( maFileSharing.mnPasswordHash != 0 )
-        aPropSet.setProperty( PROP_WriteProtectionPassword, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
+
+        Reference< XPropertySet > xDocumentSettings( getDocumentFactory()->createInstance(
+            CREATE_OUSTRING( "com.sun.star.document.Settings" ) ), UNO_QUERY_THROW );
+        PropertySet aSettingsProp( xDocumentSettings );
+        if( maFileSharing.mbRecommendReadOnly )
+            aSettingsProp.setProperty( PROP_LoadReadonly, true );
+//        if( maFileSharing.mnPasswordHash != 0 )
+//            aSettingsProp.setProperty( PROP_ModifyPasswordHash, static_cast< sal_Int32 >( maFileSharing.mnPasswordHash ) );
+    }
+    catch( Exception& )
+    {
+    }
 
     // calculation settings
     Date aNullDate = getNullDate();

@@ -74,6 +74,7 @@
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
 #include <tools/urlobj.hxx>
@@ -2731,6 +2732,24 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                     uno::Reference< uno::XInterface >() );
         }
 
+        sal_uInt32 nModifyPasswordHash = 0;
+        uno::Sequence< beans::PropertyValue > aModifyPasswordInfo;
+        SFX_ITEMSET_ARG( aParams, pModifyPasswordInfoItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, sal_False );
+        if ( pModifyPasswordInfoItem )
+        {
+            // it contains either a simple hash or a set of PropertyValues
+            // TODO/LATER: the sequence of PropertyValue should replace the hash completely in future
+            sal_Int32 nMPHTmp = 0;
+            pModifyPasswordInfoItem->GetValue() >>= nMPHTmp;
+            nModifyPasswordHash = (sal_uInt32)nMPHTmp;
+            pModifyPasswordInfoItem->GetValue() >>= aModifyPasswordInfo;
+        }
+        aParams->ClearItem( SID_MODIFYPASSWORDINFO );
+        sal_uInt32 nOldModifyPasswordHash = m_pData->m_pObjectShell->GetModifyPasswordHash();
+        m_pData->m_pObjectShell->SetModifyPasswordHash( nModifyPasswordHash );
+        uno::Sequence< beans::PropertyValue > aOldModifyPasswordInfo = m_pData->m_pObjectShell->GetModifyPasswordInfo();
+        m_pData->m_pObjectShell->SetModifyPasswordInfo( aModifyPasswordInfo );
+
         // since saving a document modifies its DocumentInfo, the current
         // DocumentInfo must be saved on "SaveTo", so it can be restored
         // after saving
@@ -2809,10 +2828,15 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
             if ( !bSaveTo )
             {
                 m_pData->m_aPreusedFilterName = GetMediumFilterName_Impl();
+                m_pData->m_pObjectShell->SetModifyPasswordEntered();
+
                 SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVEASDOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVEASDOCDONE), m_pData->m_pObjectShell ) );
             }
             else
             {
+                m_pData->m_pObjectShell->SetModifyPasswordHash( nOldModifyPasswordHash );
+                m_pData->m_pObjectShell->SetModifyPasswordInfo( aOldModifyPasswordInfo );
+
                 SFX_APP()->NotifyEvent( SfxEventHint( SFX_EVENT_SAVETODOCDONE, GlobalEventConfig::GetEventName(STR_EVENT_SAVETODOCDONE), m_pData->m_pObjectShell ) );
             }
         }
@@ -2821,6 +2845,10 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
             // let the logring be stored to the related file
             m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Storing failed!" ) ) );
             m_pData->m_pObjectShell->StoreLog();
+
+            m_pData->m_pObjectShell->SetModifyPasswordHash( nOldModifyPasswordHash );
+            m_pData->m_pObjectShell->SetModifyPasswordInfo( aOldModifyPasswordInfo );
+
 
             SFX_APP()->NotifyEvent( SfxEventHint( bSaveTo ? SFX_EVENT_SAVETODOCFAILED : SFX_EVENT_SAVEASDOCFAILED, GlobalEventConfig::GetEventName( bSaveTo ? STR_EVENT_SAVETODOCFAILED : STR_EVENT_SAVEASDOCFAILED),
                                                     m_pData->m_pObjectShell ) );

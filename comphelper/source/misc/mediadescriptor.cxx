@@ -30,47 +30,21 @@
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/stillreadwriteinteraction.hxx>
 
-//_______________________________________________
-// includes
-
-#ifndef __COM_SUN_STAR_UCB_XCONTENT_HPP__
 #include <com/sun/star/ucb/XContent.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP__
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP__
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_IO_XSTREAM_HPP__
 #include <com/sun/star/io/XStream.hpp>
-#endif
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
-
-#ifndef __COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP__
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-
-#ifndef __COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP__
 #include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_UCB_COMMANDFAILEDEXCEPTION_HPP__
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#include <com/sun/star/ucb/UnsupportedDataSinkException.hpp>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP__
+#include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#endif
-
-#ifndef __COM_SUN_STAR_URI_XURIREFERENCE_HPP__
 #include <com/sun/star/uri/XUriReference.hpp>
-#endif
 #include <com/sun/star/ucb/PostCommandArgument2.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
@@ -81,11 +55,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
 
-#if OSL_DEBUG_LEVEL>0
-    #ifndef _RTL_USTRBUF_HXX_
-    #include <rtl/ustrbuf.hxx>
-    #endif
-#endif
+#include <rtl/ustrbuf.hxx>
 
 //_______________________________________________
 // namespace
@@ -501,6 +471,61 @@ sal_Bool MediaDescriptor::isStreamReadOnly() const
         {}
 
     return bReadOnly;
+}
+
+// ----------------------------------------------------------------------------
+
+css::uno::Any MediaDescriptor::getComponentDataEntry( const ::rtl::OUString& rName ) const
+{
+    SequenceAsHashMap aCompDataMap( getUnpackedValueOrDefault( PROP_COMPONENTDATA(), ComponentDataSequence() ) );
+    SequenceAsHashMap::iterator aIt = aCompDataMap.find( rName );
+    return (aIt == aCompDataMap.end()) ? css::uno::Any() : aIt->second;
+}
+
+void MediaDescriptor::setComponentDataEntry( const ::rtl::OUString& rName, const css::uno::Any& rValue )
+{
+    if( rValue.hasValue() )
+    {
+        // get or craete the 'ComponentData' property entry
+        css::uno::Any& rCompDataAny = operator[]( PROP_COMPONENTDATA() );
+        // check type, insert the value
+        OSL_ENSURE( !rCompDataAny.hasValue() || rCompDataAny.has< ComponentDataSequence >(),
+            "MediaDescriptor::setComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
+        if( !rCompDataAny.hasValue() || rCompDataAny.has< ComponentDataSequence >() )
+        {
+            // insert or overwrite the passed value
+            SequenceAsHashMap aCompDataMap( rCompDataAny );
+            aCompDataMap[ rName ] = rValue;
+            // write back the sequence (sal_False = use NamedValue instead of PropertyValue)
+            rCompDataAny = aCompDataMap.getAsConstAny( sal_False );
+        }
+    }
+    else
+    {
+        // if an empty Any is passed, clear the entry
+        clearComponentDataEntry( rName );
+    }
+}
+
+void MediaDescriptor::clearComponentDataEntry( const ::rtl::OUString& rName )
+{
+    SequenceAsHashMap::iterator aPropertyIter = find( PROP_COMPONENTDATA() );
+    if( aPropertyIter != end() )
+    {
+        OSL_ENSURE( aPropertyIter->second.has< ComponentDataSequence >(),
+            "MediaDescriptor::clearComponentDataEntry - incompatible 'ComponentData' property in media descriptor" );
+        if( aPropertyIter->second.has< ComponentDataSequence >() )
+        {
+            // remove the value with the passed name
+            SequenceAsHashMap aCompDataMap( aPropertyIter->second );
+            aCompDataMap.erase( rName );
+            // write back the sequence, or remove it completely if it is empty
+            if( aCompDataMap.empty() )
+                erase( aPropertyIter );
+            else
+                aPropertyIter->second = aCompDataMap.getAsConstAny( sal_False );
+        }
+    }
 }
 
 /*-----------------------------------------------

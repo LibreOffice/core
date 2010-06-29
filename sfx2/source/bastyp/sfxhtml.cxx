@@ -62,11 +62,7 @@ sal_Char __FAR_DATA sHTML_MIME_application[] = "application/";
 sal_Char __FAR_DATA sHTML_MIME_experimental[] = "x-";
 
 // <INPUT TYPE=xxx>
-#ifdef __MINGW32__ // for runtime pseudo reloc
-static HTMLOptionEnum aAreaShapeOptEnums[] =
-#else
 static HTMLOptionEnum __READONLY_DATA aAreaShapeOptEnums[] =
-#endif
 {
     { OOO_STRING_SVTOOLS_HTML_SH_rect,      IMAP_OBJ_RECTANGLE  },
     { OOO_STRING_SVTOOLS_HTML_SH_rectangle, IMAP_OBJ_RECTANGLE  },

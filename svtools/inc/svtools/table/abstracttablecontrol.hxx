@@ -116,6 +116,7 @@ namespace svt { namespace table
     /** returns selection engine*/
     virtual SelectionEngine* getSelEngine() = 0;
     virtual void setCursorAtCurrentCell(const Point& rPoint) = 0;
+    virtual bool isTooltipActive() = 0;
     virtual rtl::OUString& setTooltip(const Point& rPoint ) = 0;
     virtual RowPos getCurrentRow(const Point& rPoint ) = 0;
     virtual void resizeColumn(const Point& rPoint ) = 0;

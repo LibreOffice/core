@@ -53,7 +53,6 @@ SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 
 SHL1LIBS = \
     $(SLB)$/deployment_manager.lib \
-    $(SLB)$/deployment_migration.lib \
     $(SLB)$/deployment_registry.lib \
     $(SLB)$/deployment_registry_executable.lib \
     $(SLB)$/deployment_registry_component.lib \

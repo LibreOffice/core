@@ -523,6 +523,18 @@ RTLFUNC(WaitUntil)
     Wait_Impl( true, rPar );
 }
 
+RTLFUNC(DoEvents)
+{
+    (void)pBasic;
+    (void)bWrite;
+    (void)rPar;
+    Timer aTimer;
+    aTimer.SetTimeout( 1 );
+    aTimer.Start();
+    while ( aTimer.IsActive() )
+        Application::Yield();
+}
+
 RTLFUNC(GetGUIVersion)
 {
     (void)pBasic;
@@ -622,8 +634,7 @@ RTLFUNC(FreeLibrary)
 
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-    ByteString aByteDLLName( rPar.Get(1)->GetString(), gsl_getSystemTextEncoding() );
-    pINST->GetDllMgr()->FreeDll( aByteDLLName );
+    pINST->GetDllMgr()->FreeDll( rPar.Get(1)->GetString() );
 }
 bool IsBaseIndexOne()
 {

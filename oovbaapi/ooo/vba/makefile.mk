@@ -1,4 +1,4 @@
-#*************************************************************************
+ #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
@@ -62,7 +62,8 @@ IDLFILES=\
     XDialogsBase.idl\
     XDialogBase.idl\
     XPageSetupBase.idl  \
-
+    XVBAAppService.idl\
+    XVBADocService.idl\
 # ------------------------------------------------------------------
 .ENDIF
 .INCLUDE :  target.mk

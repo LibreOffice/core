@@ -128,6 +128,7 @@ const sal_uInt32 AX_IMAGE_DEFFLAGS          = 0x0000001B;
 const sal_uInt32 AX_MORPHDATA_DEFFLAGS      = 0x2C80081B;
 const sal_uInt32 AX_SPINBUTTON_DEFFLAGS     = 0x0000001B;
 const sal_uInt32 AX_SCROLLBAR_DEFFLAGS      = 0x0000001B;
+const sal_uInt32 AX_TABSTRIP_DEFFLAGS       = 0x0000001B;
 
 const sal_uInt16 AX_POS_TOPLEFT             = 0;
 const sal_uInt16 AX_POS_TOP                 = 1;
@@ -186,6 +187,10 @@ const sal_Int32 AX_ORIENTATION_HORIZONTAL   = 1;
 const sal_Int32 AX_PROPTHUMB_ON             = -1;
 const sal_Int32 AX_PROPTHUMB_OFF            = 0;
 
+const sal_uInt32 AX_TABSTRIP_TABS           = 0;
+const sal_uInt32 AX_TABSTRIP_BUTTONS        = 1;
+const sal_uInt32 AX_TABSTRIP_NONE           = 2;
+
 const sal_uInt32 AX_CONTAINER_ENABLED       = 0x00000004;
 const sal_uInt32 AX_CONTAINER_HASDESIGNEXT  = 0x00004000;
 const sal_uInt32 AX_CONTAINER_NOCLASSTABLE  = 0x00008000;
@@ -231,20 +236,20 @@ ControlConverter::~ControlConverter()
 
 // Generic conversion ---------------------------------------------------------
 
-void ControlConverter::convertSize( PropertyMap& rPropMap, const AxPairData& rSize ) const
-{
-    // size is given in 1/100 mm, UNO needs AppFont units
-    Size aAppFontSize = mrGraphicHelper.convertHmmToAppFont( Size( rSize.first, rSize.second ) );
-    rPropMap.setProperty( PROP_Width, aAppFontSize.Width );
-    rPropMap.setProperty( PROP_Height, aAppFontSize.Height );
-}
-
 void ControlConverter::convertPosition( PropertyMap& rPropMap, const AxPairData& rPos ) const
 {
     // position is given in 1/100 mm, UNO needs AppFont units
     Point aAppFontPos = mrGraphicHelper.convertHmmToAppFont( Point( rPos.first, rPos.second ) );
     rPropMap.setProperty( PROP_PositionX, aAppFontPos.X );
     rPropMap.setProperty( PROP_PositionY, aAppFontPos.Y );
+}
+
+void ControlConverter::convertSize( PropertyMap& rPropMap, const AxPairData& rSize ) const
+{
+    // size is given in 1/100 mm, UNO needs AppFont units
+    Size aAppFontSize = mrGraphicHelper.convertHmmToAppFont( Size( rSize.first, rSize.second ) );
+    rPropMap.setProperty( PROP_Width, aAppFontSize.Width );
+    rPropMap.setProperty( PROP_Height, aAppFontSize.Height );
 }
 
 void ControlConverter::convertColor( PropertyMap& rPropMap, sal_Int32 nPropId, sal_uInt32 nOleColor ) const
@@ -687,11 +692,11 @@ void AxFontDataModel::importProperty( sal_Int32 nPropId, const OUString& rValue 
 {
     switch( nPropId )
     {
-        case XML_FontName:          maFontData.maFontName = rValue;                                     break;
-        case XML_FontEffects:       maFontData.mnFontEffects = AttributeList::decodeUnsigned( rValue ); break;
-        case XML_FontHeight:        maFontData.mnFontHeight = AttributeList::decodeInteger( rValue );   break;
-        case XML_FontCharSet:       maFontData.mnFontCharSet = AttributeList::decodeInteger( rValue );  break;
-        case XML_ParagraphAlign:    maFontData.mnHorAlign = AttributeList::decodeInteger( rValue );     break;
+        case XML_FontName:          maFontData.maFontName = rValue;                                             break;
+        case XML_FontEffects:       maFontData.mnFontEffects = AttributeConversion::decodeUnsigned( rValue );   break;
+        case XML_FontHeight:        maFontData.mnFontHeight = AttributeConversion::decodeInteger( rValue );     break;
+        case XML_FontCharSet:       maFontData.mnFontCharSet = AttributeConversion::decodeInteger( rValue );    break;
+        case XML_ParagraphAlign:    maFontData.mnHorAlign = AttributeConversion::decodeInteger( rValue );       break;
         default:                    AxControlModelBase::importProperty( nPropId, rValue );
     }
 }
@@ -757,12 +762,12 @@ void AxCommandButtonModel::importProperty( sal_Int32 nPropId, const OUString& rV
 {
     switch( nPropId )
     {
-        case XML_Caption:               maCaption = rValue;                                             break;
-        case XML_ForeColor:             mnTextColor = AttributeList::decodeUnsigned( rValue );          break;
-        case XML_BackColor:             mnBackColor = AttributeList::decodeUnsigned( rValue );          break;
-        case XML_VariousPropertyBits:   mnFlags = AttributeList::decodeUnsigned( rValue );              break;
-        case XML_PicturePosition:       mnPicturePos = AttributeList::decodeUnsigned( rValue );         break;
-        case XML_TakeFocusOnClick:      mbFocusOnClick = AttributeList::decodeInteger( rValue ) != 0;   break;
+        case XML_Caption:               maCaption = rValue;                                                 break;
+        case XML_ForeColor:             mnTextColor = AttributeConversion::decodeUnsigned( rValue );        break;
+        case XML_BackColor:             mnBackColor = AttributeConversion::decodeUnsigned( rValue );        break;
+        case XML_VariousPropertyBits:   mnFlags = AttributeConversion::decodeUnsigned( rValue );            break;
+        case XML_PicturePosition:       mnPicturePos = AttributeConversion::decodeUnsigned( rValue );       break;
+        case XML_TakeFocusOnClick:      mbFocusOnClick = AttributeConversion::decodeInteger( rValue ) != 0; break;
         default:                        AxFontDataModel::importProperty( nPropId, rValue );
     }
 }
@@ -828,12 +833,12 @@ void AxLabelModel::importProperty( sal_Int32 nPropId, const OUString& rValue )
     switch( nPropId )
     {
         case XML_Caption:               maCaption = rValue;                                             break;
-        case XML_ForeColor:             mnTextColor = AttributeList::decodeUnsigned( rValue );          break;
-        case XML_BackColor:             mnBackColor = AttributeList::decodeUnsigned( rValue );          break;
-        case XML_VariousPropertyBits:   mnFlags = AttributeList::decodeUnsigned( rValue );              break;
-        case XML_BorderColor:           mnBorderColor = AttributeList::decodeUnsigned( rValue );        break;
-        case XML_BorderStyle:           mnBorderStyle = AttributeList::decodeInteger( rValue );         break;
-        case XML_SpecialEffect:         mnSpecialEffect = AttributeList::decodeInteger( rValue );       break;
+        case XML_ForeColor:             mnTextColor = AttributeConversion::decodeUnsigned( rValue );    break;
+        case XML_BackColor:             mnBackColor = AttributeConversion::decodeUnsigned( rValue );    break;
+        case XML_VariousPropertyBits:   mnFlags = AttributeConversion::decodeUnsigned( rValue );        break;
+        case XML_BorderColor:           mnBorderColor = AttributeConversion::decodeUnsigned( rValue );  break;
+        case XML_BorderStyle:           mnBorderStyle = AttributeConversion::decodeInteger( rValue );   break;
+        case XML_SpecialEffect:         mnSpecialEffect = AttributeConversion::decodeInteger( rValue ); break;
         default:                        AxFontDataModel::importProperty( nPropId, rValue );
     }
 }
@@ -892,14 +897,14 @@ void AxImageModel::importProperty( sal_Int32 nPropId, const OUString& rValue )
 {
     switch( nPropId )
     {
-        case XML_BackColor:             mnBackColor = AttributeList::decodeUnsigned( rValue );      break;
-        case XML_VariousPropertyBits:   mnFlags = AttributeList::decodeUnsigned( rValue );          break;
-        case XML_BorderColor:           mnBorderColor = AttributeList::decodeUnsigned( rValue );    break;
-        case XML_BorderStyle:           mnBorderStyle = AttributeList::decodeInteger( rValue );     break;
-        case XML_SpecialEffect:         mnSpecialEffect = AttributeList::decodeInteger( rValue );   break;
-        case XML_SizeMode:              mnPicSizeMode = AttributeList::decodeInteger( rValue );     break;
-        case XML_PictureAlignment:      mnPicAlign = AttributeList::decodeInteger( rValue );        break;
-        case XML_PictureTiling:         mbPicTiling = AttributeList::decodeInteger( rValue ) != 0;  break;
+        case XML_BackColor:             mnBackColor = AttributeConversion::decodeUnsigned( rValue );      break;
+        case XML_VariousPropertyBits:   mnFlags = AttributeConversion::decodeUnsigned( rValue );          break;
+        case XML_BorderColor:           mnBorderColor = AttributeConversion::decodeUnsigned( rValue );    break;
+        case XML_BorderStyle:           mnBorderStyle = AttributeConversion::decodeInteger( rValue );     break;
+        case XML_SpecialEffect:         mnSpecialEffect = AttributeConversion::decodeInteger( rValue );   break;
+        case XML_SizeMode:              mnPicSizeMode = AttributeConversion::decodeInteger( rValue );     break;
+        case XML_PictureAlignment:      mnPicAlign = AttributeConversion::decodeInteger( rValue );        break;
+        case XML_PictureTiling:         mbPicTiling = AttributeConversion::decodeInteger( rValue ) != 0;  break;
         default:                        AxControlModelBase::importProperty( nPropId, rValue );
     }
 }
@@ -973,24 +978,24 @@ void AxMorphDataModelBase::importProperty( sal_Int32 nPropId, const OUString& rV
 {
     switch( nPropId )
     {
-        case XML_Caption:               maCaption = rValue;                                         break;
-        case XML_Value:                 maValue = rValue;                                           break;
-        case XML_GroupName:             maGroupName = rValue;                                       break;
-        case XML_ForeColor:             mnTextColor = AttributeList::decodeUnsigned( rValue );      break;
-        case XML_BackColor:             mnBackColor = AttributeList::decodeUnsigned( rValue );      break;
-        case XML_VariousPropertyBits:   mnFlags = AttributeList::decodeUnsigned( rValue );          break;
-        case XML_PicturePosition:       mnPicturePos = AttributeList::decodeUnsigned( rValue );     break;
-        case XML_BorderColor:           mnBorderColor = AttributeList::decodeUnsigned( rValue );    break;
-        case XML_BorderStyle:           mnBorderStyle = AttributeList::decodeInteger( rValue );     break;
-        case XML_SpecialEffect:         mnSpecialEffect = AttributeList::decodeInteger( rValue );   break;
-        case XML_DisplayStyle:          mnDisplayStyle = AttributeList::decodeInteger( rValue );    break;
-        case XML_MultiSelect:           mnMultiSelect = AttributeList::decodeInteger( rValue );     break;
-        case XML_ScrollBars:            mnScrollBars = AttributeList::decodeInteger( rValue );      break;
-        case XML_MatchEntry:            mnMatchEntry = AttributeList::decodeInteger( rValue );      break;
-        case XML_ShowDropButtonWhen:    mnShowDropButton = AttributeList::decodeInteger( rValue );  break;
-        case XML_MaxLength:             mnMaxLength = AttributeList::decodeInteger( rValue );       break;
-        case XML_PasswordChar:          mnPasswordChar = AttributeList::decodeInteger( rValue );    break;
-        case XML_ListRows:              mnListRows = AttributeList::decodeInteger( rValue );        break;
+        case XML_Caption:               maCaption = rValue;                                             break;
+        case XML_Value:                 maValue = rValue;                                               break;
+        case XML_GroupName:             maGroupName = rValue;                                           break;
+        case XML_ForeColor:             mnTextColor = AttributeConversion::decodeUnsigned( rValue );    break;
+        case XML_BackColor:             mnBackColor = AttributeConversion::decodeUnsigned( rValue );    break;
+        case XML_VariousPropertyBits:   mnFlags = AttributeConversion::decodeUnsigned( rValue );        break;
+        case XML_PicturePosition:       mnPicturePos = AttributeConversion::decodeUnsigned( rValue );   break;
+        case XML_BorderColor:           mnBorderColor = AttributeConversion::decodeUnsigned( rValue );  break;
+        case XML_BorderStyle:           mnBorderStyle = AttributeConversion::decodeInteger( rValue );   break;
+        case XML_SpecialEffect:         mnSpecialEffect = AttributeConversion::decodeInteger( rValue ); break;
+        case XML_DisplayStyle:          mnDisplayStyle = AttributeConversion::decodeInteger( rValue );  break;
+        case XML_MultiSelect:           mnMultiSelect = AttributeConversion::decodeInteger( rValue );   break;
+        case XML_ScrollBars:            mnScrollBars = AttributeConversion::decodeInteger( rValue );    break;
+        case XML_MatchEntry:            mnMatchEntry = AttributeConversion::decodeInteger( rValue );    break;
+        case XML_ShowDropButtonWhen:    mnShowDropButton = AttributeConversion::decodeInteger( rValue );break;
+        case XML_MaxLength:             mnMaxLength = AttributeConversion::decodeInteger( rValue );     break;
+        case XML_PasswordChar:          mnPasswordChar = AttributeConversion::decodeInteger( rValue );  break;
+        case XML_ListRows:              mnListRows = AttributeConversion::decodeInteger( rValue );      break;
         default:                        AxFontDataModel::importProperty( nPropId, rValue );
     }
 }
@@ -1225,15 +1230,15 @@ void AxSpinButtonModel::importProperty( sal_Int32 nPropId, const OUString& rValu
 {
     switch( nPropId )
     {
-        case XML_ForeColor:             mnArrowColor = AttributeList::decodeUnsigned( rValue ); break;
-        case XML_BackColor:             mnBackColor = AttributeList::decodeUnsigned( rValue );  break;
-        case XML_VariousPropertyBits:   mnFlags = AttributeList::decodeUnsigned( rValue );      break;
-        case XML_Orientation:           mnOrientation = AttributeList::decodeInteger( rValue ); break;
-        case XML_Min:                   mnMin = AttributeList::decodeInteger( rValue );         break;
-        case XML_Max:                   mnMax = AttributeList::decodeInteger( rValue );         break;
-        case XML_Position:              mnPosition = AttributeList::decodeInteger( rValue );    break;
-        case XML_SmallChange:           mnSmallChange = AttributeList::decodeInteger( rValue ); break;
-        case XML_Delay:                 mnDelay = AttributeList::decodeInteger( rValue );       break;
+        case XML_ForeColor:             mnArrowColor = AttributeConversion::decodeUnsigned( rValue );   break;
+        case XML_BackColor:             mnBackColor = AttributeConversion::decodeUnsigned( rValue );    break;
+        case XML_VariousPropertyBits:   mnFlags = AttributeConversion::decodeUnsigned( rValue );        break;
+        case XML_Orientation:           mnOrientation = AttributeConversion::decodeInteger( rValue );   break;
+        case XML_Min:                   mnMin = AttributeConversion::decodeInteger( rValue );           break;
+        case XML_Max:                   mnMax = AttributeConversion::decodeInteger( rValue );           break;
+        case XML_Position:              mnPosition = AttributeConversion::decodeInteger( rValue );      break;
+        case XML_SmallChange:           mnSmallChange = AttributeConversion::decodeInteger( rValue );   break;
+        case XML_Delay:                 mnDelay = AttributeConversion::decodeInteger( rValue );         break;
         default:                        AxControlModelBase::importProperty( nPropId, rValue );
     }
 }
@@ -1303,17 +1308,17 @@ void AxScrollBarModel::importProperty( sal_Int32 nPropId, const OUString& rValue
 {
     switch( nPropId )
     {
-        case XML_ForeColor:             mnArrowColor = AttributeList::decodeUnsigned( rValue ); break;
-        case XML_BackColor:             mnBackColor = AttributeList::decodeUnsigned( rValue );  break;
-        case XML_VariousPropertyBits:   mnFlags = AttributeList::decodeUnsigned( rValue );      break;
-        case XML_Orientation:           mnOrientation = AttributeList::decodeInteger( rValue ); break;
-        case XML_ProportionalThumb:     mnPropThumb = AttributeList::decodeInteger( rValue );   break;
-        case XML_Min:                   mnMin = AttributeList::decodeInteger( rValue );         break;
-        case XML_Max:                   mnMax = AttributeList::decodeInteger( rValue );         break;
-        case XML_Position:              mnPosition = AttributeList::decodeInteger( rValue );    break;
-        case XML_SmallChange:           mnSmallChange = AttributeList::decodeInteger( rValue ); break;
-        case XML_LargeChange:           mnLargeChange = AttributeList::decodeInteger( rValue ); break;
-        case XML_Delay:                 mnDelay = AttributeList::decodeInteger( rValue );       break;
+        case XML_ForeColor:             mnArrowColor = AttributeConversion::decodeUnsigned( rValue );   break;
+        case XML_BackColor:             mnBackColor = AttributeConversion::decodeUnsigned( rValue );    break;
+        case XML_VariousPropertyBits:   mnFlags = AttributeConversion::decodeUnsigned( rValue );        break;
+        case XML_Orientation:           mnOrientation = AttributeConversion::decodeInteger( rValue );   break;
+        case XML_ProportionalThumb:     mnPropThumb = AttributeConversion::decodeInteger( rValue );     break;
+        case XML_Min:                   mnMin = AttributeConversion::decodeInteger( rValue );           break;
+        case XML_Max:                   mnMax = AttributeConversion::decodeInteger( rValue );           break;
+        case XML_Position:              mnPosition = AttributeConversion::decodeInteger( rValue );      break;
+        case XML_SmallChange:           mnSmallChange = AttributeConversion::decodeInteger( rValue );   break;
+        case XML_LargeChange:           mnLargeChange = AttributeConversion::decodeInteger( rValue );   break;
+        case XML_Delay:                 mnDelay = AttributeConversion::decodeInteger( rValue );         break;
         default:                        AxControlModelBase::importProperty( nPropId, rValue );
     }
 }
@@ -1362,7 +1367,69 @@ void AxScrollBarModel::convertProperties( PropertyMap& rPropMap, const ControlCo
 
 // ============================================================================
 
-AxContainerModelBase::AxContainerModelBase() :
+AxTabStripModel::AxTabStripModel() :
+    AxFontDataModel( false ),   // no support for Align property
+    mnBackColor( AX_SYSCOLOR_BUTTONFACE ),
+    mnTextColor( AX_SYSCOLOR_BUTTONTEXT ),
+    mnFlags( AX_TABSTRIP_DEFFLAGS ),
+    mnSelectedTab( -1 ),
+    mnTabStyle( AX_TABSTRIP_TABS ),
+    mnTabFlagCount( 0 )
+{
+}
+
+bool AxTabStripModel::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    AxBinaryPropertyReader aReader( rInStrm );
+    aReader.readIntProperty< sal_Int32 >( mnSelectedTab );
+    aReader.readIntProperty< sal_uInt32 >( mnBackColor );
+    aReader.readIntProperty< sal_uInt32 >( mnTextColor );
+    aReader.skipUndefinedProperty();
+    aReader.readPairProperty( maSize );
+    aReader.readStringArrayProperty( maCaptions );
+    aReader.skipIntProperty< sal_uInt8 >(); // mouse pointer
+    aReader.skipUndefinedProperty();
+    aReader.skipIntProperty< sal_uInt32 >(); // tab orientation
+    aReader.readIntProperty< sal_uInt32 >( mnTabStyle );
+    aReader.skipBoolProperty(); // multiple rows
+    aReader.skipIntProperty< sal_uInt32 >(); // fixed width
+    aReader.skipIntProperty< sal_uInt32 >(); // fixed height
+    aReader.skipBoolProperty(); // tooltips
+    aReader.skipUndefinedProperty();
+    aReader.skipStringArrayProperty(); // tooltip strings
+    aReader.skipUndefinedProperty();
+    aReader.skipStringArrayProperty(); // tab names
+    aReader.readIntProperty< sal_uInt32 >( mnFlags );
+    aReader.skipBoolProperty(); // new version
+    aReader.skipIntProperty< sal_uInt32 >(); // tabs allocated
+    aReader.skipStringArrayProperty(); // tags
+    aReader.readIntProperty< sal_uInt32 >( mnTabFlagCount );
+    aReader.skipStringArrayProperty(); // accelerators
+    aReader.skipPictureProperty(); // mouse icon
+    return aReader.finalizeImport() && AxFontDataModel::importBinaryModel( rInStrm );
+}
+
+ApiControlType AxTabStripModel::getControlType() const
+{
+    return API_CONTROL_TABSTRIP;
+}
+
+void AxTabStripModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
+{
+    rPropMap.setProperty( PROP_Decoration, mnTabStyle != AX_TABSTRIP_NONE );
+    rPropMap.setProperty( PROP_MultiPageValue, mnSelectedTab );
+    rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
+    AxFontDataModel::convertProperties( rPropMap, rConv );
+}
+
+OUString AxTabStripModel::getCaption( sal_Int32 nIndex ) const
+{
+    return ContainerHelper::getVectorElement( maCaptions, nIndex, OUString() );
+}
+
+// ============================================================================
+
+AxContainerModelBase::AxContainerModelBase( bool bFontSupport ) :
     AxFontDataModel( false ),   // no support for Align property
     maLogicalSize( AX_CONTAINER_DEFWIDTH, AX_CONTAINER_DEFHEIGHT ),
     maScrollPos( 0, 0 ),
@@ -1376,7 +1443,8 @@ AxContainerModelBase::AxContainerModelBase() :
     mnSpecialEffect( AX_SPECIALEFFECT_FLAT ),
     mnPicAlign( AX_PICALIGN_CENTER ),
     mnPicSizeMode( AX_PICSIZE_CLIP ),
-    mbPicTiling( false )
+    mbPicTiling( false ),
+    mbFontSupport( bFontSupport )
 {
     setAwtModelMode();
     // different default size for frame
@@ -1423,6 +1491,15 @@ bool AxContainerModelBase::importBinaryModel( BinaryInputStream& rInStrm )
     return aReader.finalizeImport();
 }
 
+void AxContainerModelBase::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
+{
+    if( mbFontSupport )
+    {
+        rConv.convertColor( rPropMap, PROP_TextColor, mnTextColor );
+        AxFontDataModel::convertProperties( rPropMap, rConv );
+    }
+}
+
 bool AxContainerModelBase::importClassTable( BinaryInputStream& rInStrm, AxClassTable& orClassTable )
 {
     bool bValid = true;
@@ -1457,7 +1534,8 @@ bool AxContainerModelBase::importClassTable( BinaryInputStream& rInStrm, AxClass
 
 // ============================================================================
 
-AxFrameModel::AxFrameModel()
+AxFrameModel::AxFrameModel() :
+    AxContainerModelBase( true )
 {
 }
 
@@ -1471,6 +1549,49 @@ void AxFrameModel::convertProperties( PropertyMap& rPropMap, const ControlConver
     rPropMap.setProperty( PROP_Label, maCaption );
     rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
     AxContainerModelBase::convertProperties( rPropMap, rConv );
+}
+
+// ============================================================================
+
+AxFormPageModel::AxFormPageModel()
+{
+}
+
+ApiControlType AxFormPageModel::getControlType() const
+{
+    return API_CONTROL_PAGE;
+}
+
+void AxFormPageModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
+{
+    rPropMap.setProperty( PROP_Title, maCaption );
+    rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
+    rConv.convertColor( rPropMap, PROP_BackgroundColor, mnBackColor );
+    AxContainerModelBase::convertProperties( rPropMap, rConv );
+}
+
+// ============================================================================
+
+AxMultiPageModel::AxMultiPageModel()
+{
+}
+
+ApiControlType AxMultiPageModel::getControlType() const
+{
+    return API_CONTROL_MULTIPAGE;
+}
+
+void AxMultiPageModel::convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const
+{
+    rPropMap.setProperty( PROP_Enabled, getFlag( mnFlags, AX_CONTAINER_ENABLED ) );
+    if( mxTabStrip.get() )
+        mxTabStrip->convertProperties( rPropMap, rConv );
+    AxContainerModelBase::convertProperties( rPropMap, rConv );
+}
+
+void AxMultiPageModel::setTabStripModel( const AxTabStripModelRef& rxTabStrip )
+{
+    mxTabStrip = rxTabStrip;
 }
 
 // ============================================================================

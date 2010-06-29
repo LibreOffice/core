@@ -45,13 +45,16 @@ interface XControl
 {
     interface ::ooo::vba::XHelperInterface;
     void SetFocus();
+    void Move( [in] double Left, [in] double Top, [in] any Width, [in] any Height );
+
     [attribute, readonly ] com::sun::star::uno::XInterface Object;
     [attribute] string ControlSource;
     [attribute] string RowSource;
     [attribute] boolean Enabled;
     [attribute] boolean Visible;
     //Size. there are some defferent between Mso and OOo.
-    //Mso use double but OOo use long. OOo 1 =  1/100mm but Mso use pt
+    //Mso use double but OOo use long. OOo 1 =  1/100mm but Mso use pt.
+    //in Dialogs Mso uses pixels
     [attribute] double Height;
     [attribute] double Width;
     //Postion
@@ -59,6 +62,7 @@ interface XControl
     [attribute] double  Top;
     [attribute] string Name;
     [attribute] string ControlTipText;
+    [attribute] string Tag;
 };
 
 //=============================================================================

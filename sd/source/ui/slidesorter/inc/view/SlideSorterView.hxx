@@ -219,6 +219,21 @@ public:
     */
     void AddSdrObject (SdrObject& rObject);
 
+    /** Add a listener that is called when the set of visible slides.
+        @param rListener
+            When this method is called multiple times for the same listener
+            the second and all following calls are ignored.  Each listener
+            is added only once.
+    */
+    void AddVisibilityChangeListener (const Link& rListener);
+
+    /** Remove a listener that is called when the set of visible slides changes.
+        @param rListener
+            It is save to pass a listener that was not added or has been
+            removed previously.  Such calls are ignored.
+    */
+    void RemoveVisibilityChangeListener (const Link& rListener);
+
 protected:
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 
@@ -252,6 +267,8 @@ private:
     SvBorder maModelBorder;
 
     Orientation meOrientation;
+
+    ::std::vector<Link> maVisibilityChangeListeners;
 
     /** Adapt the coordinates of the given bounding box according to the
         other parameters.

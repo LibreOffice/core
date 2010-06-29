@@ -33,6 +33,7 @@
 #include <unotools/saveopt.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
 #include "xecontent.hxx"
 #include "xltracer.hxx"
@@ -247,24 +248,16 @@ bool XclExpRoot::IsDocumentEncrypted() const
     return false;
 }
 
-const String XclExpRoot::GetPassword() const
+String XclExpRoot::GetPassword() const
 {
-    SfxItemSet* pSet = GetMedium().GetItemSet();
-    if (!pSet)
-        return String();
-
-    const SfxPoolItem* pItem = NULL;
-    if (SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, sal_True, &pItem))
+    if( SfxItemSet* pItemSet = GetMedium().GetItemSet() )
     {
-        const SfxStringItem* pStrItem = dynamic_cast<const SfxStringItem*>(pItem);
-        if (pStrItem)
-        {
-            // Password from the save dialog.
-            return pStrItem->GetValue();
-        }
+        const SfxPoolItem* pItem = 0;
+        if( pItemSet->GetItemState( SID_PASSWORD, TRUE, &pItem ) == SFX_ITEM_SET )
+            if( const SfxStringItem* pStrItem = dynamic_cast< const SfxStringItem* >( pItem ) )
+                return pStrItem->GetValue();
     }
-
-    return String();
+    return String::EmptyString();
 }
 
 XclExpRootData::XclExpLinkMgrRef XclExpRoot::GetLocalLinkMgrRef() const

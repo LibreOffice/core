@@ -33,30 +33,9 @@
 
 testcase tBasicSpecTemplate
 
-    qaerrorlog( "#i89554# Macro dialog not displayed / document not loaded" )
-    goto endsub
-
-    
     const cFile = "http://specs.openoffice.org/collaterals/template/2.0/OpenOffice-org-Specification-Template.ott"
-    dim brc as boolean
-    dim cProxy as string
-    dim cPort as string
-    
-    dim cWorkFile as string
-    
-    cWorkFile = hGetWorkPath() & "SpecTemplate" & hGetSuffix( "current" )
+    dim cWorkFile as string : cWorkFile = hGetWorkPath() & "SpecTemplate" & hGetSuffix( "current" )
 
-
-    hGetPrivateHttpServer( cProxy, cPort )
-
-    printlog( "Init: Set proxy (requires private environment to be set)" )
-    hSetProxies( cProxy, cPort, "", "", "" )
-    if ( WaitSlot() <> WSFinished ) then
-        warnlog( "Slot not finished after 1000 msec." )
-    else
-        printlog( "Slot free in less than 1000 msec." )
-    endif
-    
     printlog( "FileOpen" )
     hFileOpen( cFile )
     
@@ -68,26 +47,26 @@ testcase tBasicSpecTemplate
         kontext "OeffnenDlg"
         if ( OeffnenDlg.exists( 1 ) ) then
             printlog( "Recovering - closing File Open dialog" )
-            OeffnenDlg.cancel()
+            hCloseDialog( OeffnenDlg, "cancel" )
         endif
         
         goto endsub
     endif
     
     printlog( "Accept to execute macros" )
-    brc = hAllowMacroExecution()
-    if ( not brc ) then 
-        warnlog( "Missing Macro execution dialog. Please check the file/security settings" )
+    if ( not hAllowMacroExecution() ) then
+        warnlog( "Missing Macro execution dialog. Aborting test" )
+        goto endsub
     endif
-    
+
     kontext "Active"
-    if ( Active.exists( 5 ) ) then
+    if ( Active.exists( 10 ) ) then
         warnlog( "Fatal: Unexpected active: " & Active.getText() )
         active.ok
         
         kontext "OeffnenDlg"
         if ( OeffnenDlg.exists( 2 ) ) then
-            OeffnenDlg.close()
+            hCloseDialog( OeffnenDlg, "close" )
             goto endsub
         endif
     endif
@@ -101,22 +80,23 @@ testcase tBasicSpecTemplate
     hUseMenu()
     hMenuSelectNr( 10 )
     hMenuSelectNr( 2 )
-    
-    
+
+    ' This one is required as the document is rendering for a while and we cannot 
+    ' tell when it is finished (WaitSlot does not work here)
+    wait( 5000 )
+
+    printlog( "Save the file, overwriting" )
     hFileSaveAsKill( cWorkFile )
-    
+
+    printlog( "Close the document" )
     hDestroyDocument()
-    
+
+    printlog( "Load the file again" )
     hFileOpen( cWorkFile )
-    
     hAllowMacroExecution()
     
-    printlog( "Cleanup: Close the document" )
+    printlog( "Cleanup: Close the document and delete the file" )
     hDestroyDocument()
-    
-    printlog( "Cleanup: Delete proxy settings" )
-    hSetProxies( "", "", "", "", "" )
-    
     hDeleteFile( cWorkFile )
 
 endcase

@@ -37,6 +37,8 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/graph.hxx>
 
+#include <sfx2/sfxsids.hrc>
+#include <svx/svxids.hrc>
 #include <svx/dialogs.hrc>
 #include "hdft.hrc"
 #include <svl/intitem.hxx>

@@ -1,0 +1,5 @@
+mkdir: %_DEST%\inc%_EXT%\mdds
+
+..\%__SRC%\inc\mdds\* %_DEST%\inc%_EXT%\mdds
+
+

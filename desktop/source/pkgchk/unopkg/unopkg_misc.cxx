@@ -48,6 +48,7 @@
 #include "unotools/configmgr.hxx"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "cppuhelper/bootstrap.hxx"
+#include "comphelper/sequence.hxx"
 #include <stdio.h>
 
 using ::rtl::OUString;
@@ -317,7 +318,10 @@ void printf_package(
             xPackage->getBundle( Reference<task::XAbortChannel>(), xCmdEnv ) );
         printf_space( level + 1 );
         dp_misc::writeConsole("bundled Packages: {\n");
-        printf_packages( seq, xCmdEnv, level + 2 );
+        ::std::vector<Reference<deployment::XPackage> >vec_bundle;
+        ::comphelper::sequenceToContainer(vec_bundle, seq);
+        printf_packages( vec_bundle, ::std::vector<bool>(vec_bundle.size()),
+                         xCmdEnv, level + 2 );
         printf_space( level + 1 );
         dp_misc::writeConsole("}\n");
     }
@@ -325,22 +329,44 @@ void printf_package(
 
 } // anon namespace
 
+void printf_unaccepted_licenses(
+    Reference<deployment::XPackage> const & ext)
+{
+        OUString id(
+            dp_misc::getIdentifier(ext) );
+        printf_line( OUSTR("Identifier"), id, 0 );
+        printf_space(1);
+        dp_misc::writeConsole(OUSTR("License not accepted\n\n"));
+}
+
 //==============================================================================
 void printf_packages(
-    Sequence< Reference<deployment::XPackage> > const & seq,
+    ::std::vector< Reference<deployment::XPackage> > const & allExtensions,
+    ::std::vector<bool> const & vecUnaccepted,
     Reference<XCommandEnvironment> const & xCmdEnv, sal_Int32 level )
 {
-    sal_Int32 len = seq.getLength();
-    Reference< deployment::XPackage > const * p = seq.getConstArray();
-    if (len == 0) {
+    OSL_ASSERT(allExtensions.size() == vecUnaccepted.size());
+
+    if (allExtensions.size() == 0)
+    {
         printf_space( level );
         dp_misc::writeConsole("<none>\n");
     }
-    else {
-        for ( sal_Int32 pos = 0; pos < len; ++pos )
-            printf_package( p[ pos ], xCmdEnv, level );
+    else
+    {
+        typedef ::std::vector< Reference<deployment::XPackage> >::const_iterator I_EXT;
+        int index = 0;
+        for (I_EXT i = allExtensions.begin(); i != allExtensions.end(); i++, index++)
+        {
+            if (vecUnaccepted[index])
+                printf_unaccepted_licenses(*i);
+            else
+                printf_package( *i, xCmdEnv, level );
+            dp_misc::writeConsole(OUSTR("\n"));
+        }
     }
 }
+
 
 //##############################################################################
 

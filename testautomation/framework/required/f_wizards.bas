@@ -75,9 +75,7 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_accels.inc"
 
     use "framework\tools\includes\wizards.inc"
-    use "framework\tools\includes\init_tools.inc"
     use "framework\tools\includes\template_tools.inc"
-    use "framework\tools\includes\performance.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

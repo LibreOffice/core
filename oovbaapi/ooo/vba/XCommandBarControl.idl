@@ -48,6 +48,7 @@ interface XCommandBarControl
     [attribute] boolean Visible;
     [attribute, readonly] long Type;
     [attribute] boolean Enabled;
+    [attribute] boolean BeginGroup;
 
     void Delete() raises ( com::sun::star::script::BasicErrorException );
     any Controls( [in] any Index ) raises ( com::sun::star::script::BasicErrorException );

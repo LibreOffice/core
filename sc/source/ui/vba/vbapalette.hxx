@@ -24,19 +24,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SC_VBAPALETTE_HXX
 #define SC_VBAPALETTE_HXX
 
-#include "excelvbahelper.hxx"
-#include <document.hxx>
-#include <com/sun/star/container/XIndexAccess.hpp>
+#include <vbahelper/vbahelper.hxx>
+
+namespace com { namespace sun { namespace star {
+    namespace container { class XIndexAccess; }
+    namespace frame { class XModel; }
+} } }
+
+class SfxObjectShell;
 
 class ScVbaPalette
 {
 private:
     SfxObjectShell* m_pShell;
 public:
-    ScVbaPalette(  SfxObjectShell* pShell = NULL ) : m_pShell( pShell ){}
+    ScVbaPalette( SfxObjectShell* pShell = 0 ) : m_pShell( pShell ) {}
+    ScVbaPalette( const css::uno::Reference< css::frame::XModel >& rxModel );
     // if no palette available e.g. because the document doesn't have a
     // palette defined then a default palette will be returned.
     css::uno::Reference< css::container::XIndexAccess > getPalette() const;

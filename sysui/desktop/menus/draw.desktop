@@ -9,3 +9,4 @@ MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opend
 Name=%PRODUCTNAME Draw
 GenericName=Drawing Program
 Comment=Create and edit drawings, flow charts, and logos by using Draw.
+InitialPreference=5

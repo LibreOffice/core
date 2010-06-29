@@ -172,6 +172,7 @@ ADDDEPS+=hack_msitemplates
 .ENDIF
 
 $(foreach,i,$(alllangiso) openoffice_$i) : $(ADDDEPS)
+openoffice_$(defaultlangiso).archive : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) openofficedev_$i) : $(ADDDEPS)
 

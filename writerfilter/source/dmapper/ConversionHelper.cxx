@@ -553,26 +553,104 @@ sal_Int16 ConvertNumberingType(sal_Int32 nNFC)
     switch(nNFC)
     {
         case NS_ooxml::LN_Value_ST_NumberFormat_decimal:
-        case 0: nRet = style::NumberingType::ARABIC;                break;
+        case 0:
+            nRet = style::NumberingType::ARABIC;
+            break;
         case NS_ooxml::LN_Value_ST_NumberFormat_upperRoman:
-        case 1: nRet = style::NumberingType::ROMAN_UPPER;           break;
+        case 1:
+            nRet = style::NumberingType::ROMAN_UPPER;
+            break;
         case NS_ooxml::LN_Value_ST_NumberFormat_lowerRoman:
-        case 2: nRet = style::NumberingType::ROMAN_LOWER;           break;
-        case 3: nRet = style::NumberingType::CHARS_UPPER_LETTER_N;  break;
-        case 4: nRet = style::NumberingType::CHARS_LOWER_LETTER_N;  break;
-        case 5: nRet = style::NumberingType::ARABIC;                break;//ORDINAL
+        case 2:
+            nRet = style::NumberingType::ROMAN_LOWER;
+            break;
+        case 3:
+            nRet = style::NumberingType::CHARS_UPPER_LETTER_N;
+            break;
+        case 4:
+            nRet = style::NumberingType::CHARS_LOWER_LETTER_N;
+            break;
+        case 5:
+            nRet = style::NumberingType::ARABIC;
+            break;//ORDINAL
         case NS_ooxml::LN_Value_ST_NumberFormat_bullet:
         case 23:
         case 25:
             nRet = style::NumberingType::CHAR_SPECIAL;
         break;
-        case 255: nRet = style::NumberingType::NUMBER_NONE; break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_none:
+        case 255:
+            nRet = style::NumberingType::NUMBER_NONE;
+            break;
         case NS_ooxml::LN_Value_ST_NumberFormat_upperLetter:
             nRet = style::NumberingType::CHARS_UPPER_LETTER;
-        break;
+            break;
         case  NS_ooxml::LN_Value_ST_NumberFormat_lowerLetter:
             nRet = style::NumberingType::CHARS_LOWER_LETTER;
-        break;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_iroha:
+            nRet = style::NumberingType::IROHA_HALFWIDTH_JA;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_irohaFullWidth:
+            nRet = style::NumberingType::IROHA_FULLWIDTH_JA;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_aiueo:
+            nRet = style::NumberingType::AIU_HALFWIDTH_JA;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_aiueoFullWidth:
+            nRet = style::NumberingType::AIU_FULLWIDTH_JA;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_hebrew2:
+            nRet = style::NumberingType::CHARS_HEBREW;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_thaiLetters:
+            nRet = style::NumberingType::CHARS_THAI;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_russianLower:
+            nRet = style::NumberingType::CHARS_CYRILLIC_LOWER_LETTER_RU;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_russianUpper:
+            nRet = style::NumberingType::CHARS_CYRILLIC_UPPER_LETTER_RU;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedCircleChinese:
+        case NS_ooxml::LN_Value_ST_NumberFormat_ideographEnclosedCircle:
+            nRet = style::NumberingType::CIRCLE_NUMBER;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_ideographTraditional:
+            nRet = style::NumberingType::TIAN_GAN_ZH;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_ideographZodiac:
+            nRet = style::NumberingType::DI_ZI_ZH;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_ganada:
+            nRet = style::NumberingType::HANGUL_SYLLABLE_KO;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_chosung:
+            nRet = style::NumberingType::HANGUL_JAMO_KO;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital:
+        case NS_ooxml::LN_Value_ST_NumberFormat_koreanCounting:
+        case NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital2:
+            nRet = style::NumberingType::NUMBER_HANGUL_KO;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_ideographLegalTraditional:
+            nRet = style::NumberingType::NUMBER_UPPER_ZH_TW;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_arabicAlpha:
+            nRet = style::NumberingType::CHARS_ARABIC;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_hindiVowels:
+            nRet = style::NumberingType::CHARS_NEPALI;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_japaneseLegal:
+            nRet = style::NumberingType::NUMBER_TRADITIONAL_JA;
+            break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_chineseCounting:
+        case NS_ooxml::LN_Value_ST_NumberFormat_japaneseCounting:
+        case NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseCounting:
+        case NS_ooxml::LN_Value_ST_NumberFormat_ideographDigital:
+            nRet = style::NumberingType::NUMBER_LOWER_ZH;
+            break;
         default: nRet = style::NumberingType::ARABIC;
     }
 /*  TODO: Lots of additional values are available - some are supported in the I18 framework
@@ -581,53 +659,27 @@ sal_Int16 ConvertNumberingType(sal_Int32 nNFC)
     NS_ooxml::LN_Value_ST_NumberFormat_ordinalText = 91684;
     NS_ooxml::LN_Value_ST_NumberFormat_hex = 91685;
     NS_ooxml::LN_Value_ST_NumberFormat_chicago = 91686;
-    NS_ooxml::LN_Value_ST_NumberFormat_ideographDigital = 91687;
-    NS_ooxml::LN_Value_ST_NumberFormat_japaneseCounting = 91688;
-    NS_ooxml::LN_Value_ST_NumberFormat_aiueo = 91689;
-    NS_ooxml::LN_Value_ST_NumberFormat_iroha = 91690;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth = 91691;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalHalfWidth = 91692;
-    NS_ooxml::LN_Value_ST_NumberFormat_japaneseLegal = 91693;
     NS_ooxml::LN_Value_ST_NumberFormat_japaneseDigitalTenThousand = 91694;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedCircle = 91695;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth2 = 91696;
-    NS_ooxml::LN_Value_ST_NumberFormat_aiueoFullWidth = 91697;
-    NS_ooxml::LN_Value_ST_NumberFormat_irohaFullWidth = 91698;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalZero = 91699;
-    NS_ooxml::LN_Value_ST_NumberFormat_ganada = 91701;
-    NS_ooxml::LN_Value_ST_NumberFormat_chosung = 91702;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedFullstop = 91703;
     NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedParen = 91704;
-    NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedCircleChinese = 91705;
-    NS_ooxml::LN_Value_ST_NumberFormat_ideographEnclosedCircle = 91706;
-    NS_ooxml::LN_Value_ST_NumberFormat_ideographTraditional = 91707;
-    NS_ooxml::LN_Value_ST_NumberFormat_ideographZodiac = 91708;
     NS_ooxml::LN_Value_ST_NumberFormat_ideographZodiacTraditional = 91709;
-    NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseCounting = 91710;
-    NS_ooxml::LN_Value_ST_NumberFormat_ideographLegalTraditional = 91711;
     NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseCountingThousand = 91712;
     NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseDigital = 91713;
-    NS_ooxml::LN_Value_ST_NumberFormat_chineseCounting = 91714;
     NS_ooxml::LN_Value_ST_NumberFormat_chineseLegalSimplified = 91715;
     NS_ooxml::LN_Value_ST_NumberFormat_chineseCountingThousand = 91716;
-    NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital = 91717;
-    NS_ooxml::LN_Value_ST_NumberFormat_koreanCounting = 91718;
     NS_ooxml::LN_Value_ST_NumberFormat_koreanLegal = 91719;
-    NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital2 = 91720;
     NS_ooxml::LN_Value_ST_NumberFormat_vietnameseCounting = 91721;
-    NS_ooxml::LN_Value_ST_NumberFormat_russianLower = 91722;
-    NS_ooxml::LN_Value_ST_NumberFormat_russianUpper = 91723;
-    NS_ooxml::LN_Value_ST_NumberFormat_none = 91724;
     NS_ooxml::LN_Value_ST_NumberFormat_numberInDash = 91725;
+    NS_ooxml::LN_Value_ST_NumberFormat_arabicAbjad:
     NS_ooxml::LN_Value_ST_NumberFormat_hebrew1 = 91726;
-    NS_ooxml::LN_Value_ST_NumberFormat_hebrew2 = 91727;
-    NS_ooxml::LN_Value_ST_NumberFormat_arabicAlpha = 91728;
-    NS_ooxml::LN_Value_ST_NumberFormat_arabicAbjad = 91729;
-    NS_ooxml::LN_Value_ST_NumberFormat_hindiVowels = 91730;
     NS_ooxml::LN_Value_ST_NumberFormat_hindiConsonants = 91731;
     NS_ooxml::LN_Value_ST_NumberFormat_hindiNumbers = 91732;
     NS_ooxml::LN_Value_ST_NumberFormat_hindiCounting = 91733;
-    NS_ooxml::LN_Value_ST_NumberFormat_thaiLetters = 91734;
     NS_ooxml::LN_Value_ST_NumberFormat_thaiNumbers = 91735;
     NS_ooxml::LN_Value_ST_NumberFormat_thaiCounting = 91736;*/
     return nRet;

@@ -289,7 +289,7 @@ sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
                     SCROW nRow(pRange->aStart.Row());
                     while (!bSubTotal && nRow <= nRowEnd)
                     {
-                        if (pDoc->IsFiltered(nRow, nTab))
+                        if (pDoc->RowFiltered(nRow, nTab))
                             bSubTotal = sal_True;
                         else
                             ++nRow;

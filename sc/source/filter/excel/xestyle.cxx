@@ -74,6 +74,7 @@ sal_uInt32 lclGetWeighting( XclExpColorType eType )
         case EXC_COLOR_CELLTEXT:
         case EXC_COLOR_CHARTTEXT:
         case EXC_COLOR_CTRLTEXT:    return 10;
+        case EXC_COLOR_TABBG:
         case EXC_COLOR_CELLAREA:    return 20;
         case EXC_COLOR_GRID:        return 50;
         default:    DBG_ERRORFILE( "lclGetWeighting - unknown color type" );

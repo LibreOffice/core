@@ -1123,6 +1123,14 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Rename Sheet" ;
     };
+    String STR_UNDO_SET_TAB_BG_COLOR
+    {
+        Text [ en-US ] = "Color Tab" ;
+    };
+    String STR_UNDO_SET_MULTI_TAB_BG_COLOR
+    {
+        Text [ en-US ] = "Color Tabs" ;
+    };
     String STR_UNDO_MOVE_TAB
     {
         Text [ en-US ] = "Move Sheets" ;

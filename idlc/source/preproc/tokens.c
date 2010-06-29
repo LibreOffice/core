@@ -474,7 +474,8 @@ void
 
         if (wbp >= &wbuf[OBS])
         {
-            write(1, wbuf, OBS);
+            if (write(1, wbuf, OBS) != OBS)
+                error(ERROR, "short write!");
             if (wbp > &wbuf[OBS])
                 memcpy(wbuf, wbuf + OBS, wbp - &wbuf[OBS]);
             wbp -= OBS;
@@ -490,7 +491,8 @@ void
 {
     if (wbp > wbuf)
     {
-        write(1, wbuf, wbp - wbuf);
+        if (write(1, wbuf, wbp - wbuf) != wbp - wbuf)
+            error(ERROR, "short write!");
         wbp = wbuf;
     }
 }

@@ -39,7 +39,7 @@ TARGET=wordbookall
 
 ZIP1TARGET      = $(WORDBOOK_ALL_TARGET)
 
-ZIP1LIST        = sun.dic
+ZIP1LIST        = oracle.dic
 
 
 ZIP2TARGET      = $(WORDBOOK_USER_TARGET)

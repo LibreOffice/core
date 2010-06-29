@@ -46,6 +46,7 @@
 #define HID_DOCINFODESC                             (HID_SFX_START +   8)
 #define HID_DOCINFODOC                              (HID_SFX_START +   9)
 #define HID_DOCINFOUSER                             (HID_SFX_START +  10)
+#define HID_DOCINFOSECURITY                         (HID_SFX_START +  11)
 #define HID_BOOKMARKPROPS                           (HID_SFX_START +  14)
 #define HID_BOOKGROUPPROPS                          (HID_SFX_START +  15)
 #define HID_BOOKFILEPROPS                           (HID_SFX_START +  16)
@@ -346,7 +347,15 @@
 #define HID_CTRL_CUSTOMPROPS_YES_NO                 (HID_SFX_START + 326)
 #define HID_DLG_CUSTOMPROPS_DURATION                (HID_SFX_START + 327)
 
-#define ACT_SFX_HID_END HID_DLG_CUSTOMPROPS_DURATION
+#define HID_SECURITYTAB_PASSWORD_TO_OPEN            (HID_SFX_START + 328)
+#define HID_SECURITYTAB_CONFIRM_PASSWORD_TO_OPEN    (HID_SFX_START + 329)
+#define HID_SECURITYTAB_PASSWORD_TO_MODIFY          (HID_SFX_START + 330)
+#define HID_SECURITYTAB_CONFIRM_PASSWORD_TO_MODIFY  (HID_SFX_START + 331)
+#define HID_SECURITYTAB_OPEN_FILE_READONLY          (HID_SFX_START + 332)
+#define HID_SECURITYTAB_RECORD_CHANGES              (HID_SFX_START + 333)
+#define HID_SECURITYTAB_PROTECTION                  (HID_SFX_START + 334)
+
+#define ACT_SFX_HID_END HID_SECURITYTAB_PROTECTION
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 

@@ -39,9 +39,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/mediadescriptor.hxx>
+#include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/helper.hxx"
 #include "oox/helper/storagebase.hxx"
-#include "oox/helper/binaryinputstream.hxx"
 
 #define OOX_INCLUDE_DUMPER (OSL_DEBUG_LEVEL > 0)
 

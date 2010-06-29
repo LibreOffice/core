@@ -345,32 +345,8 @@ ScVbaWorkbook::getServiceNames()
 ::rtl::OUString SAL_CALL
 ScVbaWorkbook::getCodeName() throw (css::uno::RuntimeException)
 {
-#ifdef VBA_OOBUILD_HACK
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
-    ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
-    ScExtDocOptions* pExtOptions = pDoc->GetExtDocOptions();
-    ScExtDocSettings pExtSettings = pExtOptions->GetDocSettings();
-    ::rtl::OUString sGlobCodeName = pExtSettings.maGlobCodeName;
-    return sGlobCodeName;
-#else
-    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-#endif
-}
-#ifdef VBA_OOBUILD_HACK
-void SAL_CALL
-ScVbaWorkbook::setCodeName( const ::rtl::OUString& sGlobCodeName ) throw (css::uno::RuntimeException)
-{
-    uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
-    ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
-    ScExtDocOptions* pExtOptions = pDoc->GetExtDocOptions();
-    ScExtDocSettings pExtSettings = pExtOptions->GetDocSettings();
-    pExtSettings.maGlobCodeName = sGlobCodeName;
-#else
-void SAL_CALL
-ScVbaWorkbook::setCodeName( const ::rtl::OUString& ) throw (css::uno::RuntimeException)
-{
-    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
-#endif
+    uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY_THROW );
+    return xModelProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CodeName" ) ) ).get< ::rtl::OUString >();
 }
 
 namespace workbook

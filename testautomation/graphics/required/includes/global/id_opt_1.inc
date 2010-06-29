@@ -29,12 +29,7 @@
 '*
 '* short description :
 '*
-'**************************************************************************************
-' #1 tToolsOptionsDrawGeneral 'wrn:1
-' #1 tToolsOptionsDrawView
-' #1 tToolsOptionsDrawGrid
-' #1 tToolsOptionsDrawPrint
-'\*************************************************************************************
+'\******************************************************************************
 
 testcase tToolsOptionsDrawGeneral (sApplication as string)
    dim irgendwas(9) as boolean

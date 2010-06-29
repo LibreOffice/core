@@ -694,6 +694,9 @@ ULONG RefreshDPObject( ScDPObject *pDPObj, ScDocument *pDoc, ScDocShell *pDocSh,
     if( !pDPObj )
         return STR_PIVOT_NOTFOUND;
 
+    if ( pDocSh && !pDoc )
+        pDoc = pDocSh->GetDocument();
+
     if( !pDoc  )
         return static_cast<ULONG>(-1);
 

@@ -163,7 +163,7 @@ private:
 };
 
 PptGraphicHelper::PptGraphicHelper( const PowerPointImport& rFilter ) :
-    GraphicHelper( rFilter.getGlobalFactory(), rFilter.getTargetFrame() ),
+    GraphicHelper( rFilter.getGlobalFactory(), rFilter.getTargetFrame(), rFilter.getStorage() ),
     mrFilter( rFilter )
 {
 }

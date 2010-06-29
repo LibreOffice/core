@@ -1,5 +1,5 @@
 <node oor:name="MS Excel 97 Vorlage/Template" oor:op="replace">
-    <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN TEMPLATE TEMPLATEPATH</value></prop>
+    <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN TEMPLATE TEMPLATEPATH ENCRYPTION PASSWORDTOMODIFY</value></prop>
     <prop oor:name="UIComponent"/>
     <prop oor:name="FilterService"/>
     <prop oor:name="UserData"/>

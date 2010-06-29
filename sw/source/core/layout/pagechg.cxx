@@ -1385,11 +1385,15 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
     return pPage;
 }
 
-// false = right, true = left
 sw::sidebarwindows::SidebarPosition SwPageFrm::SidebarPosition() const
 {
-    if (!GetShell() || GetShell()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE))
-        return sw::sidebarwindows::SIDEBAR_NONE;
+    if ( !GetShell() ||
+         GetShell()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
+    {
+        // --> OD 2010-06-03 #i111964# - provide default sidebar position
+        return sw::sidebarwindows::SIDEBAR_RIGHT;
+        // <--
+    }
     else
     {
         const bool bLTR = GetUpper() ? static_cast<const SwRootFrm*>(GetUpper())->IsLeftToRightViewLayout() : true;

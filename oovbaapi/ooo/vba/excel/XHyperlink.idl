@@ -27,31 +27,38 @@
 #ifndef __ooo_vba_excel_XHyperlink_idl__
 #define __ooo_vba_excel_XHyperlink_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
 #include <ooo/vba/XHelperInterface.idl>
-#endif
 
 //=============================================================================
+
+module ooo {  module vba {  module msforms {
+    interface XShape;
+}; }; };
 
 module ooo {  module vba {  module excel {
 
-//=============================================================================
 interface XRange;
+
+//=============================================================================
+
 interface XHyperlink
 {
     interface ::ooo::vba::XHelperInterface;
 
-    [attribute] string Address;
     [attribute] string Name;
+    [attribute] string Address;
+    [attribute] string SubAddress;
+    [attribute] string ScreenTip;
     [attribute] string TextToDisplay;
-
-    XRange Range();
+    [attribute, readonly] long Type;
+    [attribute, readonly] XRange Range;
+    [attribute, readonly] ooo::vba::msforms::XShape Shape;
 };
 
+//=============================================================================
+
 }; }; };
+
+//=============================================================================
 
 #endif

@@ -52,6 +52,7 @@ interface XCollection
     interface ::com::sun::star::container::XEnumerationAccess;
 
     [attribute, readonly] long Count;
+
     any  Item( [in] any Index1, [in] any Index2 );
 };
 

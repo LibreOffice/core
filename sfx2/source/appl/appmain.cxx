@@ -93,9 +93,6 @@ static SfxItemInfo __READONLY_DATA aItemInfos[] =
 
 //===================================================================
 
-typedef Link* LinkPtr;
-SV_DECL_PTRARR(SfxInitLinkList, LinkPtr, 4, 4)
-
 TYPEINIT2(SfxApplication,SfxShell,SfxBroadcaster);
 
 //--------------------------------------------------------------------

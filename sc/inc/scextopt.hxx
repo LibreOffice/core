@@ -38,7 +38,6 @@
 /** Extended settings for the document, used in import/export filters. */
 struct ScExtDocSettings
 {
-    ScRange             maOleSize;          /// Visible range if embedded.
     String              maGlobCodeName;     /// Global codename (VBA module name).
     double              mfTabBarWidth;      /// Width of the tabbar, relative to frame window width (0.0 ... 1.0).
     sal_uInt32          mnLinkCnt;          /// Recursive counter for loading external documents.

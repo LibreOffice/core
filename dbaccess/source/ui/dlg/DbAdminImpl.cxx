@@ -47,6 +47,7 @@
 #include "optionalboolitem.hxx"
 #include "propertysetitem.hxx"
 #include "stringlistitem.hxx"
+#include "OAuthenticationContinuation.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -54,23 +55,32 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/XDriver.hpp>
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
+#include <com/sun/star/ucb/AuthenticationRequest.hpp>
 /** === end UNO includes === **/
 
+#include <comphelper/interaction.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/guarding.hxx>
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/itempool.hxx>
-#include <svtools/logindlg.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/stritem.hxx>
+#include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <typelib/typedescription.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/waitobj.hxx>
+#include <vos/mutex.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -81,6 +91,8 @@ namespace dbaui
 using namespace ::dbtools;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
+using namespace com::sun::star::ucb;
+using namespace com::sun::star::task;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::lang;
@@ -256,35 +268,73 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
         {
             SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pName, SfxStringItem, DSID_NAME, sal_True);
 
-            ::svt::LoginDialog aDlg(m_pParent,
-                LF_NO_PATH | LF_NO_ACCOUNT | LF_NO_ERRORTEXT | LF_USERNAME_READONLY,
-                String(), NULL);
+            Reference< XModel > xModel( getDataSourceOrModel( m_xDatasource ), UNO_QUERY_THROW );
+            ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
+            Reference< XInteractionHandler > xHandler( aArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
 
-            aDlg.SetName(pUser ? pUser->GetValue() : String());
-            aDlg.ClearPassword();  // this will give the password field the focus
+            if ( !xHandler.is() )
+            {
+                // instantiate the default SDB interaction handler
+                xHandler = Reference< XInteractionHandler >( m_xORB->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
+                if ( !xHandler.is() )
+                    ShowServiceNotAvailableError(m_pParent->GetParent(), String(SERVICE_TASK_INTERACTION_HANDLER), sal_True);
+            }
 
             String sName = pName ? pName->GetValue() : String();
             String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
             ::rtl::OUString sTemp = sName;
             sName = ::dbaui::getStrippedDatabaseName(NULL,sTemp);
             if ( sName.Len() )
-                   sLoginRequest.SearchAndReplaceAscii("$name$", sName);
+                sLoginRequest.SearchAndReplaceAscii("$name$", sName);
             else
             {
                 sLoginRequest.SearchAndReplaceAscii("\"$name$\"", String());
                 sLoginRequest.SearchAndReplaceAscii("$name$", String()); // just to be sure that in other languages the string will be deleted
             }
-            aDlg.SetLoginRequestText(sLoginRequest);
 
-            aDlg.SetSavePasswordText(ModuleRes(STR_REMEMBERPASSWORD_SESSION));
-            aDlg.SetSavePassword(sal_True);
+            // the request
+            AuthenticationRequest aRequest;
+            aRequest.ServerName = sName;
+            aRequest.Diagnostic = sLoginRequest;
+            aRequest.HasRealm   = aRequest.HasAccount = sal_False;
+            // aRequest.Realm
+            aRequest.HasUserName = pUser != 0;
+            aRequest.UserName    = pUser ? rtl::OUString(pUser->GetValue()) : ::rtl::OUString();
+            aRequest.HasPassword = sal_True;
+            //aRequest.Password
+            aRequest.HasAccount  = sal_False;
+            // aRequest.Account
 
-            sal_Int32 nResult = aDlg.Execute();
-            if (nResult != RET_OK)
+            comphelper::OInteractionRequest* pRequest = new comphelper::OInteractionRequest(makeAny(aRequest));
+            uno::Reference< XInteractionRequest > xRequest(pRequest);
+
+            // build an interaction request
+            // two continuations (Ok and Cancel)
+            ::rtl::Reference< comphelper::OInteractionAbort > pAbort = new comphelper::OInteractionAbort;
+            ::rtl::Reference< dbaccess::OAuthenticationContinuation > pAuthenticate = new dbaccess::OAuthenticationContinuation;
+            pAuthenticate->setCanChangeUserName( sal_False );
+            pAuthenticate->setRememberPassword( RememberAuthentication_SESSION );
+
+            // some knittings
+            pRequest->addContinuation(pAbort.get());
+            pRequest->addContinuation(pAuthenticate.get());
+
+            // handle the request
+            try
+            {
+                ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+                // release the mutex when calling the handler, it may need to lock the SolarMutex
+                xHandler->handle(xRequest);
+            }
+            catch(Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            if (!pAuthenticate->wasSelected())
                 return sal_False;
 
-            sPassword = aDlg.GetPassword();
-            if (aDlg.IsSavePassword())
+            sPassword = pAuthenticate->getPassword();
+            if (pAuthenticate->getRememberPassword())
                 m_pItemSetHelper->getWriteOutputSet()->Put(SfxStringItem(DSID_PASSWORD, sPassword));
         }
 

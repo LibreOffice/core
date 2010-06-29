@@ -457,3 +457,29 @@ String RID_SVXSTR_EVENT_LAYOUT_FINISHED
 {
     Text [ en-US ] = "Document layout finished" ;
 };
+
+String RID_SVXSTR_EVENT_SELECTIONCHANGED
+{
+    Text [ en-US ] = "Selection changed" ;
+};
+
+String RID_SVXSTR_EVENT_DOUBLECLICK
+{
+    Text [ en-US ] = "Double click" ;
+};
+
+String RID_SVXSTR_EVENT_RIGHTCLICK
+{
+    Text [ en-US ] = "Right click" ;
+};
+
+String RID_SVXSTR_EVENT_CALCULATE
+{
+    Text [ en-US ] = "Formulas calculated" ;
+};
+
+String RID_SVXSTR_EVENT_CONTENTCHANGED
+{
+    Text [ en-US ] = "Content changed" ;
+};
+

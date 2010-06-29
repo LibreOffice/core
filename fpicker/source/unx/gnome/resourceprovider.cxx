@@ -168,8 +168,6 @@ public:
         String   aResString;
         OUString aResOUString;
 
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
-
         try
         {
             OSL_ASSERT( m_ResMgr && m_OtherResMgr );

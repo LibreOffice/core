@@ -3757,8 +3757,21 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
     if (xText.is())
     {
         sal_uInt32 nPosition = xText->getCaretPosition();
-    xText->deleteText(nPosition + offset, nPosition + offset + nchars);
-    return TRUE;
+        // --> OD 2010-06-04 #i111768# - apply patch from kstribley:
+        // range checking
+//        xText->deleteText(nPosition + offset, nPosition + offset + nchars);
+        sal_Int32 nDeletePos = nPosition + offset;
+        sal_Int32 nDeleteEnd = nDeletePos + nchars;
+        if (nDeletePos < 0)
+            nDeletePos = 0;
+        if (nDeleteEnd < 0)
+            nDeleteEnd = 0;
+        if (nDeleteEnd > xText->getCharacterCount())
+            nDeleteEnd = xText->getCharacterCount();
+
+        xText->deleteText(nDeletePos, nDeleteEnd);
+        // <--
+        return TRUE;
     }
 
     return FALSE;

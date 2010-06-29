@@ -27,9 +27,7 @@
 #ifndef __com_sun_star_helper_XPane_idl__
 #define __com_sun_star_helper_XPane_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
-#endif
 
 //============================================================================
 
@@ -37,10 +35,13 @@ module ooo { module vba { module excel {
 
 //============================================================================
 
-interface XPane: com::sun::star::uno::XInterface
+interface XRange;
+
+interface XPane : com::sun::star::uno::XInterface
 {
     [attribute] long ScrollColumn;
     [attribute] long ScrollRow;
+    [attribute, readonly] XRange VisibleRange;
 
     void SmallScroll([in] /*Optional*/ any Down, [in] /*Optional*/ any Up, [in] /*Optional*/ any ToRight, [in] /*Optional*/ any ToLeft);
     void LargeScroll([in] /*Optional*/ any Down, [in] /*Optional*/ any Up, [in] /*Optional*/ any ToRight, [in] /*Optional*/ any ToLeft);

@@ -449,6 +449,12 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
     if (nYBottom > MAXROW) nYBottom = MAXROW;
 
+    // Store the current visible range.
+    maVisibleRange.mnCol1 = nPosX;
+    maVisibleRange.mnCol2 = nXRight;
+    maVisibleRange.mnRow1 = nPosY;
+    maVisibleRange.mnRow2 = nYBottom;
+
     if (nX1 > nXRight || nY1 > nYBottom)
         return;                                         // unsichtbar
     if (nX2 > nXRight) nX2 = nXRight;
@@ -1086,7 +1092,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     if ( nBreak >= nX1 && nBreak <= nX2+1 )
                     {
                         //! hidden suchen
-                        if ( pDoc->GetColFlags( nBreak, nTab ) & CR_MANUALBREAK )
+                        if (pDoc->HasColBreak(nBreak, nTab) & BREAK_MANUAL)
                             pContentDev->SetFillColor( aManual );
                         else
                             pContentDev->SetFillColor( aAutomatic );
@@ -1105,7 +1111,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     if ( nBreak >= nY1 && nBreak <= nY2+1 )
                     {
                         //! hidden suchen
-                        if ( pDoc->GetRowFlags( nBreak, nTab ) & CR_MANUALBREAK )
+                        if (pDoc->HasRowBreak(nBreak, nTab) & BREAK_MANUAL)
                             pContentDev->SetFillColor( aManual );
                         else
                             pContentDev->SetFillColor( aAutomatic );
@@ -1374,7 +1380,7 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
     const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(pDoc->GetAttr( nCol,nRow,nTab, ATTR_MERGE ));
     if ( pMerge->GetColMerge() > 1 )
         nNextCol = nCol + pMerge->GetColMerge();    // next cell after the merged area
-    while ( nNextCol <= MAXCOL && (pDoc->GetColFlags( nNextCol, nTab ) & CR_HIDDEN) )
+    while ( nNextCol <= MAXCOL && pDoc->ColHidden(nNextCol, nTab) )
         ++nNextCol;
     BOOL bNextCell = ( nNextCol <= MAXCOL );
     if ( bNextCell )
@@ -1577,7 +1583,7 @@ void ScGridWindow::InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                         if ( pMergeFlag->IsVerOverlapped() && ( bDoHidden || bFirstRow ) )
                         {
                             while ( pMergeFlag->IsVerOverlapped() && nThisY > 0 &&
-                                        ( (pDoc->GetRowFlags( nThisY-1, nTab ) & CR_HIDDEN) || bFirstRow ) )
+                                    (pDoc->RowHidden(nThisY-1, nTab) || bFirstRow) )
                             {
                                 --nThisY;
                                 pPattern = pDoc->GetPattern( nX, nThisY, nTab );
@@ -1764,7 +1770,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                         if ( pMergeFlag->IsVerOverlapped() && ( bDoHidden || bFirstRow ) )
                         {
                             while ( pMergeFlag->IsVerOverlapped() && nThisY > 0 &&
-                                        ( (pDoc->GetRowFlags( nThisY-1, nTab ) & CR_HIDDEN) || bFirstRow ) )
+                                    (pDoc->RowHidden(nThisY-1, nTab) || bFirstRow) )
                             {
                                 --nThisY;
                                 pPattern = pDoc->GetPattern( nX, nThisY, nTab );

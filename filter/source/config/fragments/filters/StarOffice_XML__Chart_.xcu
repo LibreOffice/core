@@ -1,5 +1,5 @@
     <node oor:name="StarOffice XML (Chart)" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT EXPORT OWN ALIEN NOTINFILEDIALOG NOTINCHOOSER</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT OWN ALIEN NOTINFILEDIALOG NOTINCHOOSER ENCRYPTION</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"><value>com.sun.star.comp.chart2.XMLFilter</value></prop>
         <prop oor:name="UserData"><value>XML</value></prop>

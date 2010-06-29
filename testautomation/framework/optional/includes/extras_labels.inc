@@ -33,38 +33,36 @@
 
 testcase tLabelTypes()
 
+    printlog( "Verify presence of labels and brands" )
+
+    ' If you want to use this test for other languages, remove the following
+    ' if() block and create the reference files by running this test once.
+    ' Follow the instructions emitted by hManagaComparisionList() from the log.
+    
     if ( gIsoLang <> "en-US" ) then
         printlog( "No testing for non-en_US languages" )
         goto endsub
     endif
 
+    const NO_DELTA = 0
+    const MAX_LABEL_COUNT = 1600
+    const RELATIVE_PATH = "framework\optional\input\extras_formats\"
     
     dim iBrandCount as integer
     dim iCurrentBrand as integer
     dim cBrandName as string
-    
-    dim iTypeCount as integer
-    dim iCurrentType as integer
-    dim cTypeName as string
-    
+    dim iCurrentType as integer    
     dim cBrandType as string
     
-    dim al_UI_Labels( 1600 ) as string
-        al_UI_Labels( 0 ) = "0"
+    dim al_UI_Labels( MAX_LABEL_COUNT ) as string : al_UI_Labels( 0 ) = "0"
         
     dim irc as integer
     
-    dim sFile as string
-        sFile = "Labels_" & gISOLang & ".txt"
-
-    dim sFileIn as string
-        sFileIn = gTesttoolPath & "framework\optional\input\extras_formats\" & sFile
-        sFileIn = convertpath( sFileIn )
-
-    dim sFileOut as string
-        sFileOut = hGetWorkPath() & sFile
+    dim sFile as string    : sFile    = "Labels_" & gISOLang & ".txt"
+    dim sFileIn as string  : sFileIn  = convertpath( gTesttoolPath & RELATIVE_PATH & sFile )
+    dim sFileOut as string : sFileOut = hGetWorkPath() & sFile
        
-    
+    printlog( "Open labels dialog, retrieve all label names" )
     hCreateLabels()
 
     kontext
@@ -75,33 +73,25 @@ testcase tLabelTypes()
     iBrandCount = Marke.getItemCount()
 
     for iCurrentBrand = 1 to iBrandCount
-    
+
         Marke.select( iCurrentBrand )
-        
         cBrandName = Marke.getSelText()
-        
-        iTypeCount = Typ.getItemCount()
-        
-        for iCurrentType = 1 to iTypeCount
-        
+
+        for iCurrentType = 1 to Typ.getItemCount()
+
             Typ.select( iCurrentType )
-        
-            cTypeName = Typ.getSelText()
-            
-            cBrandType = cBrandName & ":" & cTypeName
+            cBrandType = cBrandName & ":" & Typ.getSelText()
             ListAppend( al_UI_Labels() , cBrandType )
-            
+
         next iCurrentType
-    
+
     next iCurrentBrand
 
+    printlog( "Close labels dialog" )
     TabEtiketten.Cancel()
 
+    printlog( "Compare to reference (or create new reference, if none found)" )
     irc = hManageComparisionList( sFileIn, sFileOut, al_UI_Labels() )
-    if ( irc <> 0 ) then
-        warnlog( "The list of labels (Brand/Types) has changed, please review." )
-    else
-        printlog( "The lists of labels are unchanged. Good." )
-    endif
+    hListResultEvaluation( irc , NO_DELTA )
     
 endcase

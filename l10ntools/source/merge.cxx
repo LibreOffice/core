@@ -351,7 +351,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
         sLID = pResData->sId;
     pResData->sGId = sGID;
     pResData->sId = sLID;
-
+    //printf("MergeData:: Search gid=%s lid=%s filename=%s \n", pResData->sGId.GetBuffer(),pResData->sId.GetBuffer(),pResData->sFilename.GetBuffer()  );
     ByteString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename , bCaseSensitive );
 
     //printf("DBG: Searching [%s]\n",sKey.GetBuffer());
@@ -361,6 +361,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
         //printf("DBG: Found[%s]\n",sKey.GetBuffer());
         return aMap[ sKey ];
     }
+    //Dump();
     pResData->sGId = sOldG;
     pResData->sId = sOldL;
     //printf("DBG: Found[%s]\n",sKey.GetBuffer());

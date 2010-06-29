@@ -39,6 +39,8 @@
 #include <vcl/edit.hxx>
 #include "svtaccessiblefactory.hxx"
 
+#include <limits>
+
 // =======================================================================
 
 #define TABBAR_OFFSET_X         7
@@ -62,6 +64,10 @@ struct ImplTabBarItem
     BOOL            mbShort;
     BOOL            mbSelect;
     BOOL            mbEnable;
+    Color           maTabBgColor;
+    bool            IsDefaultTabBgColor() const { return maTabBgColor == Color(COL_AUTO) ? TRUE : FALSE; };
+    Color           maTabTextColor;
+    bool            IsDefaultTabTextColor() const { return maTabTextColor == Color(COL_AUTO) ? TRUE : FALSE; };
 
                     ImplTabBarItem( USHORT nItemId, const XubString& rText,
                                     TabBarPageBits nPageBits ) :
@@ -74,6 +80,8 @@ struct ImplTabBarItem
                         mbShort  = FALSE;
                         mbSelect = FALSE;
                         mbEnable = TRUE;
+                        maTabBgColor = Color( COL_AUTO );
+                        maTabTextColor = Color( COL_AUTO );
                     }
 };
 
@@ -347,6 +355,9 @@ struct TabBar_Impl
 };
 
 // =======================================================================
+
+const sal_uInt16 TabBar::APPEND         = ::std::numeric_limits<sal_uInt16>::max();
+const sal_uInt16 TabBar::PAGE_NOT_FOUND = ::std::numeric_limits<sal_uInt16>::max();
 
 void TabBar::ImplInit( WinBits nWinStyle )
 {
@@ -1046,7 +1057,8 @@ void TabBar::Paint( const Rectangle& )
     // Font selektieren
     Font aFont = GetFont();
     Font aLightFont = aFont;
-    aLightFont.SetWeight( WEIGHT_LIGHT );
+    //aLightFont.SetWeight( WEIGHT_LIGHT ); //TODO Make font weight light on custom color only?
+    aLightFont.SetWeight( WEIGHT_NORMAL );
 
     // #i36013# exclude push buttons from painting area
     Rectangle aClipRect( Point( mnOffX, 0 ), Point( mnLastOffX, GetOutputHeightPixel() - 1 ) );
@@ -1120,15 +1132,23 @@ void TabBar::Paint( const Rectangle& )
                     SetFont( aLightFont );
 
                 // Je nach Status die richtige FillInBrush setzen
+                // Set the correct FillInBrush depending upon status
                 if ( pItem->mbSelect || (pItem->mnId == mnCurPageId) )
                 {
+                    // Currently selected Tab
                     SetFillColor( aSelectColor );
                     SetTextColor( aSelectTextColor );
                 }
                 else
                 {
-                    SetFillColor( aFaceColor );
-                    SetTextColor( aFaceTextColor );
+                    if ( !pItem->IsDefaultTabBgColor() && !rStyleSettings.GetHighContrastMode() )
+                    {
+                        SetFillColor( pItem->maTabBgColor );
+                        SetTextColor( pItem->maTabTextColor );
+                    } else {
+                        SetFillColor( aFaceColor );
+                        SetTextColor( aFaceTextColor );
+                    }
                 }
 
                 // Muss Font Kursiv geschaltet werden
@@ -1160,21 +1180,38 @@ void TabBar::Paint( const Rectangle& )
                 long    nTextHeight = GetTextHeight();
                 Point   aTxtPos( aRect.Left()+(aRectSize.Width()-nTextWidth)/2,
                                  (aRectSize.Height()-nTextHeight)/2 );
-                if ( !pItem->mbEnable )
-                    DrawCtrlText( aTxtPos, aText, 0, STRING_LEN, (TEXT_DRAW_DISABLE | TEXT_DRAW_MNEMONIC) );
-                else
-                    DrawText( aTxtPos, aText );
-
+                if ( pItem->IsDefaultTabBgColor() || (!pItem->mbSelect) )
+                {
+                     if ( !pItem->mbEnable )
+                         DrawCtrlText( aTxtPos, aText, 0, STRING_LEN, (TEXT_DRAW_DISABLE | TEXT_DRAW_MNEMONIC) );
+                    else
+                         DrawText( aTxtPos, aText );
+                }
                 // Jetzt im Inhalt den 3D-Effekt ausgeben
                 aPos0.X()++;
                 aPos1.X()++;
                 aPos2.X()--;
                 aPos3.X()--;
-                SetLineColor( rStyleSettings.GetLightColor() );
+
+                // If this is the current tab, draw the left inner shadow the default color,
+                // otherwise make it the same as the custom background color
+                if ( pItem->mbSelect || (pItem->mnId == mnCurPageId) ) {
+                    SetLineColor( rStyleSettings.GetLightColor() );
+                } else {
+                    if ( !pItem->IsDefaultTabBgColor() && ! rStyleSettings.GetHighContrastMode() )
+                    {
+                        SetLineColor( pItem->maTabBgColor );
+                    } else {
+                        SetLineColor( rStyleSettings.GetLightColor() );
+                    }
+                }
+                // Draw the left side of the tab
                 DrawLine( aPos0, aPos1 );
 
                 if ( !pItem->mbSelect && (pItem->mnId != mnCurPageId) )
                 {
+                    // Draw the top inner shadow
+                    // ToDo: Change from this static color to tab custom bg color
                     DrawLine( Point( aPos0.X(), aPos0.Y()+1 ),
                                 Point( aPos3.X(), aPos3.Y()+1 ) );
                 }
@@ -1184,7 +1221,26 @@ void TabBar::Paint( const Rectangle& )
                 aPos1.X()--;
                 aPos1.Y()--;
                 aPos2.Y()--;
+                if ( !pItem->IsDefaultTabBgColor() && ( pItem->mbSelect || (pItem->mnId == mnCurPageId) ) )
+                {
+                    SetLineColor( pItem->maTabBgColor );
+                    DrawLine( Point(aPos1.X()-1, aPos1.Y()-1), Point(aPos2.X(), aPos2.Y()-1) );
+                }
                 DrawLine( aPos1, aPos2 );
+
+                // draw a small 2px sliver of the original background color at the bottom of the selected tab
+
+                if ( !pItem->IsDefaultTabBgColor() )
+                {
+                    if ( pItem->mbSelect || (pItem->mnId == mnCurPageId) || rStyleSettings.GetHighContrastMode() ) {
+                        SetLineColor( pItem->maTabBgColor );
+                        DrawLine( Point(aPos1.X()-1, aPos1.Y()-1), Point(aPos2.X(), aPos2.Y()-1) );
+                        if ( !pItem->mbEnable )
+                            DrawCtrlText( aTxtPos, aText, 0, STRING_LEN, (TEXT_DRAW_DISABLE | TEXT_DRAW_MNEMONIC) );
+                        else
+                            DrawText( aTxtPos, aText );
+                    }
+                }
 
                 // Da etwas uebermalt werden konnte, muessen wir die Polygon-
                 // umrandung nocheinmal ausgeben
@@ -1540,7 +1596,7 @@ void TabBar::InsertPage( USHORT nPageId, const XubString& rText,
                          TabBarPageBits nBits, USHORT nPos )
 {
     DBG_ASSERT( nPageId, "TabBar::InsertPage(): PageId == 0" );
-    DBG_ASSERT( GetPagePos( nPageId ) == TABBAR_PAGE_NOTFOUND,
+    DBG_ASSERT( GetPagePos( nPageId ) == PAGE_NOT_FOUND,
                 "TabBar::InsertPage(): PageId already exists" );
     DBG_ASSERT( nBits <= TPB_SPECIAL, "TabBar::InsertPage(): nBits is wrong" );
 
@@ -1562,12 +1618,47 @@ void TabBar::InsertPage( USHORT nPageId, const XubString& rText,
 
 // -----------------------------------------------------------------------
 
+Color TabBar::GetTabBgColor( USHORT nPageId ) const
+{
+    USHORT nPos = GetPagePos( nPageId );
+
+    if ( nPos != PAGE_NOT_FOUND )
+        return mpItemList->GetObject( nPos )->maTabBgColor;
+    else
+        return Color( COL_AUTO );
+}
+
+void TabBar::SetTabBgColor( USHORT nPageId, const Color& aTabBgColor )
+{
+    USHORT nPos = GetPagePos( nPageId );
+    ImplTabBarItem* pItem;
+    if ( nPos != PAGE_NOT_FOUND )
+    {
+        pItem = mpItemList->GetObject( nPos );
+        if ( aTabBgColor != Color( COL_AUTO )  )
+        {
+            pItem->maTabBgColor = aTabBgColor;
+            if ( aTabBgColor.GetLuminance() <= 128 ) //Do not use aTabBgColor.IsDark(), because that threshold is way too low...
+                pItem->maTabTextColor = Color( COL_WHITE );
+            else
+                pItem->maTabTextColor = Color( COL_BLACK );
+        }
+        else
+        {
+            pItem->maTabBgColor = Color( COL_AUTO );
+            pItem->maTabTextColor = Color( COL_AUTO );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void TabBar::RemovePage( USHORT nPageId )
 {
     USHORT nPos = GetPagePos( nPageId );
 
     // Existiert Item
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         if ( mnCurPageId == nPageId )
             mnCurPageId = 0;
@@ -1602,7 +1693,7 @@ void TabBar::MovePage( USHORT nPageId, USHORT nNewPos )
         return;
 
     // Existiert Item
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         // TabBar-Item in der Liste verschieben
         ImplTabBarItem* pItem = mpItemList->Remove( nPos );
@@ -1640,7 +1731,7 @@ void TabBar::Clear()
     if ( IsReallyVisible() && IsUpdateMode() )
         Invalidate();
 
-    CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, (void*) TABBAR_PAGE_NOTFOUND );
+    CallEventListeners( VCLEVENT_TABBAR_PAGEREMOVED, (void*) PAGE_NOT_FOUND );
 }
 
 // -----------------------------------------------------------------------
@@ -1649,7 +1740,7 @@ void TabBar::EnablePage( USHORT nPageId, BOOL bEnable )
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
 
@@ -1672,7 +1763,7 @@ BOOL TabBar::IsPageEnabled( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->mbEnable;
     else
         return FALSE;
@@ -1684,7 +1775,7 @@ void TabBar::SetPageBits( USHORT nPageId, TabBarPageBits nBits )
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
 
@@ -1705,7 +1796,7 @@ TabBarPageBits TabBar::GetPageBits( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->mnBits;
     else
         return FALSE;
@@ -1742,7 +1833,7 @@ USHORT TabBar::GetPagePos( USHORT nPageId ) const
         pItem = mpItemList->Next();
     }
 
-    return TABBAR_PAGE_NOTFOUND;
+    return PAGE_NOT_FOUND;
 }
 
 // -----------------------------------------------------------------------
@@ -1767,7 +1858,7 @@ Rectangle TabBar::GetPageRect( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->maRect;
     else
         return Rectangle();
@@ -1780,7 +1871,7 @@ void TabBar::SetCurPageId( USHORT nPageId )
     USHORT nPos = GetPagePos( nPageId );
 
     // Wenn Item nicht existiert, dann nichts machen
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         // Wenn sich aktuelle Page nicht geaendert hat, dann muessen wir
         // jetzt nichts mehr machen
@@ -1872,7 +1963,7 @@ void TabBar::MakeVisible( USHORT nPageId )
     USHORT nPos = GetPagePos( nPageId );
 
     // Wenn Item nicht existiert, dann nichts machen
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         if ( nPos < mnFirstPos )
             SetFirstPageId( nPageId );
@@ -1921,7 +2012,7 @@ void TabBar::SetFirstPageId( USHORT nPageId )
     USHORT nPos = GetPagePos( nPageId );
 
     // Wenn Item nicht existiert, dann FALSE zurueckgeben
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         if ( nPos != mnFirstPos )
         {
@@ -1955,7 +2046,7 @@ void TabBar::SelectPage( USHORT nPageId, BOOL bSelect )
 {
     USHORT nPos = GetPagePos( nPageId );
 
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
 
@@ -2036,7 +2127,7 @@ USHORT TabBar::GetSelectPageCount() const
 BOOL TabBar::IsPageSelected( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->mbSelect;
     else
         return FALSE;
@@ -2047,7 +2138,7 @@ BOOL TabBar::IsPageSelected( USHORT nPageId ) const
 BOOL TabBar::StartEditMode( USHORT nPageId )
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( mpEdit || (nPos == TABBAR_PAGE_NOTFOUND) || (mnLastOffX < 8) )
+    if ( mpEdit || (nPos == PAGE_NOT_FOUND) || (mnLastOffX < 8) )
         return FALSE;
 
     mnEditId = nPageId;
@@ -2268,7 +2359,7 @@ void TabBar::SetSelectTextColor( const Color& rColor )
 void TabBar::SetPageText( USHORT nPageId, const XubString& rText )
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         mpItemList->GetObject( nPos )->maText = rText;
         mbSizeFormat = TRUE;
@@ -2286,7 +2377,7 @@ void TabBar::SetPageText( USHORT nPageId, const XubString& rText )
 XubString TabBar::GetPageText( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->maText;
     else
         return XubString();
@@ -2297,7 +2388,7 @@ XubString TabBar::GetPageText( USHORT nPageId ) const
 void TabBar::SetHelpText( USHORT nPageId, const XubString& rText )
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         mpItemList->GetObject( nPos )->maHelpText = rText;
 }
 
@@ -2306,7 +2397,7 @@ void TabBar::SetHelpText( USHORT nPageId, const XubString& rText )
 XubString TabBar::GetHelpText( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
     {
         ImplTabBarItem* pItem = mpItemList->GetObject( nPos );
         if ( !pItem->maHelpText.Len() && pItem->mnHelpId )
@@ -2327,7 +2418,7 @@ XubString TabBar::GetHelpText( USHORT nPageId ) const
 void TabBar::SetHelpId( USHORT nPageId, ULONG nHelpId )
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         mpItemList->GetObject( nPos )->mnHelpId = nHelpId;
 }
 
@@ -2336,7 +2427,7 @@ void TabBar::SetHelpId( USHORT nPageId, ULONG nHelpId )
 ULONG TabBar::GetHelpId( USHORT nPageId ) const
 {
     USHORT nPos = GetPagePos( nPageId );
-    if ( nPos != TABBAR_PAGE_NOTFOUND )
+    if ( nPos != PAGE_NOT_FOUND )
         return mpItemList->GetObject( nPos )->mnHelpId;
     else
         return 0;
@@ -2483,9 +2574,12 @@ USHORT TabBar::ShowDropPos( const Point& rPos )
             nX--;
         else
             nX++;
+        if ( !pItem->IsDefaultTabBgColor() && !pItem->mbSelect)
+            SetLineColor( pItem->maTabTextColor );
         DrawLine( Point( nX, nY ), Point( nX, nY ) );
         DrawLine( Point( nX+1, nY-1 ), Point( nX+1, nY+1 ) );
         DrawLine( Point( nX+2, nY-2 ), Point( nX+2, nY+2 ) );
+        SetLineColor( aBlackColor );
     }
     if ( (mnDropPos > 0) && (mnDropPos < nItemCount+1) )
     {
@@ -2493,6 +2587,8 @@ USHORT TabBar::ShowDropPos( const Point& rPos )
         nX = pItem->maRect.Right()-TABBAR_OFFSET_X;
         if ( mnDropPos == nCurPos )
             nX++;
+        if ( !pItem->IsDefaultTabBgColor() && !pItem->mbSelect)
+            SetLineColor( pItem->maTabTextColor );
         DrawLine( Point( nX, nY ), Point( nX, nY ) );
         DrawLine( Point( nX-1, nY-1 ), Point( nX-1, nY+1 ) );
         DrawLine( Point( nX-2, nY-2 ), Point( nX-2, nY+2 ) );

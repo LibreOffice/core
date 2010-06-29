@@ -51,7 +51,6 @@ SLOFILES= \
         $(SLO)$/cexports.obj \
         $(SLO)$/basicmigration.obj \
         $(SLO)$/wordbookmigration.obj \
-        $(SLO)$/extensionmigration.obj \
         $(SLO)$/autocorrmigration.obj \
         $(SLO)$/oo3extensionmigration.obj \
         $(SLO)$/cexportsoo3.obj
@@ -61,7 +60,6 @@ SHL1OBJS= \
         $(SLO)$/cexports.obj \
         $(SLO)$/basicmigration.obj \
         $(SLO)$/wordbookmigration.obj \
-        $(SLO)$/extensionmigration.obj \
         $(SLO)$/autocorrmigration.obj
 
 SHL1TARGET=$(TARGET)

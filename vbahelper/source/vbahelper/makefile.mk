@@ -65,7 +65,6 @@ SLOFILES=\
     $(SLO)$/vbashaperange.obj \
     $(SLO)$/vbatextframe.obj \
     $(SLO)$/vbapagesetupbase.obj \
-
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk

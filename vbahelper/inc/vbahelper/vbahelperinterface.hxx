@@ -115,4 +115,57 @@ public:
     InheritedHelperInterfaceImpl1< Ifc1 > ( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : Base( xParent, xContext ) {}
 
 };
+
+// ============================================================================
+
+/** Helper macro to implement the method 'getServiceImplName()' of the
+    'ooo.vba.XHelperInterface' interface. Will return the class name as service
+    implementation name.
+ */
+#define VBAHELPER_IMPL_GETSERVICEIMPLNAME( classname ) \
+::rtl::OUString& classname::getServiceImplName() \
+{ \
+    static ::rtl::OUString saImplName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( #classname ) ); \
+    return saImplName; \
+}
+
+// ----------------------------------------------------------------------------
+
+/** Helper macro to implement the method 'getServiceNames()' for a single
+    service name.
+ */
+#define VBAHELPER_IMPL_GETSERVICENAMES( classname, servicename ) \
+css::uno::Sequence< ::rtl::OUString > classname::getServiceNames() \
+{ \
+    static css::uno::Sequence< ::rtl::OUString > saServiceNames; \
+    if( saServiceNames.getLength() == 0 ) \
+    { \
+        saServiceNames.realloc( 1 ); \
+        saServiceNames[ 0 ] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( servicename ) ); \
+    } \
+    return saServiceNames; \
+}
+
+// ----------------------------------------------------------------------------
+
+/** Helper macro to declare the methods 'getServiceImplName()' and
+    'getServiceNames()' of the 'ooo.vba.XHelperInterface' interface in a class
+    declaration.
+ */
+#define VBAHELPER_DECL_XHELPERINTERFACE \
+    virtual ::rtl::OUString& getServiceImplName(); \
+    virtual css::uno::Sequence< ::rtl::OUString > getServiceNames();
+
+// ----------------------------------------------------------------------------
+
+/** Helper macro to implement the methods 'getServiceImplName()' and
+    'getServiceNames()' of the 'ooo.vba.XHelperInterface' interface. Will
+    return the class name as service implementation name.
+ */
+#define VBAHELPER_IMPL_XHELPERINTERFACE( classname, servicename ) \
+VBAHELPER_IMPL_GETSERVICEIMPLNAME( classname ) \
+VBAHELPER_IMPL_GETSERVICENAMES( classname, servicename )
+
+// ============================================================================
+
 #endif

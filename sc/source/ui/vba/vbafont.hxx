@@ -46,7 +46,12 @@ class ScVbaFont : public ScVbaFont_BASE
     ScCellRangeObj* mpRangeObj;
     SfxItemSet*  GetDataSet();
 public:
-    ScVbaFont( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const ScVbaPalette& dPalette, css::uno::Reference< css::beans::XPropertySet > xPropertySet, ScCellRangeObj* pRangeObj = NULL ) throw ( css::uno::RuntimeException );
+    ScVbaFont(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const ScVbaPalette& dPalette,
+        const css::uno::Reference< css::beans::XPropertySet >& xPropertySet,
+        ScCellRangeObj* pRangeObj = 0, bool bFormControl = false ) throw ( css::uno::RuntimeException );
     virtual ~ScVbaFont();// {}
 
     // Attributes
