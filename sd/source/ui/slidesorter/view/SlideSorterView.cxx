@@ -432,10 +432,15 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
 
             // Tell the listeners that the visibility of some objects has changed.
             ::std::vector<Link> aChangeListeners (maVisibilityChangeListeners);
-            BOOST_FOREACH(Link& rLink, aChangeListeners)
-                rLink.Call(NULL);
+            for (::std::vector<Link>::const_iterator
+                    iListener=aChangeListeners.begin(),
+                    iEnd=aChangeListeners.end();
+                iListener!=iEnd;
+                ++iListener)
+            {
+                iListener->Call(NULL);
+            }
         }
-
     }
 }
 
