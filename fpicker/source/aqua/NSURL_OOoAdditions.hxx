@@ -29,15 +29,20 @@
 #define _NSURL_OOOADDITIONS_HXX_
 
 #include <premac.h>
-#include <Foundation/Foundation.h>
+#include <CoreFoundation/CoreFoundation.h>
 #include <postmac.h>
 #include "CFStringUtilities.hxx"
 #include <rtl/ustring.hxx>
 
-// #include <sal/types.h>
-
 @interface NSURL (OOoAdditions)
 - (rtl::OUString) OUStringForInfo:(InfoType)info;
 @end
+
+/*
+    returns the resolved string if there was an alias
+    if there was no alias, nil is returned
+*/
+
+NSString* resolveAlias( NSString* i_pSystemPath );
 
 #endif

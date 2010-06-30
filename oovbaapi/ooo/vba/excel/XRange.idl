@@ -98,6 +98,7 @@ interface XRange
     [attribute, readonly ] any Left;
     [attribute] any PageBreak;
     [attribute, readonly] XValidation Validation;
+    [attribute, readonly] any PrefixCharacter;
     [attribute] any Style;
     [attribute] any AddIndent;
     [attribute] any ShowDetail;
@@ -164,7 +165,7 @@ interface XRange
     void RemoveSubtotal() raises ( com::sun::star::script::BasicErrorException );
     void    Subtotal( [in] long GroupBy, [in] long Function, [in]  /*Optional*/ sequence<long> TotalList, [in]  /*Optional*/ any Replace, [in]  /*Optional*/ any PageBreaks, [in] any SummaryBelowData ) raises ( com::sun::star::script::BasicErrorException );
     XRange MergeArea( ) raises ( com::sun::star::script::BasicErrorException );
-
+    any Hyperlinks( [in] any aIndex );
 };
 
 //=============================================================================
