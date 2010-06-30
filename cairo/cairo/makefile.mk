@@ -70,11 +70,9 @@ cairo_CPPFLAGS+=$(INCLUDE)
 .IF "$(OS)"=="WNT"
 # --------- Windows -------------------------------------------------
 .IF "$(COM)"=="GCC"
-cairo_CFLAGS+=-D_MT
 cairo_LDFLAGS+=-no-undefined -L$(ILIB:s/;/ -L/)
 cairo_CPPFLAGS+=-nostdinc
-cairo_CC=$(CC)
-cairo_LIBS+=-lmingwthrd
+cairo_CC=$(CC) -mthreads
 
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 cairo_CC+=-shared-libgcc
