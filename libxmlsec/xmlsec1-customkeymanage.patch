@@ -445,7 +445,7 @@
 +
 --- misc/xmlsec1-1.2.14/src/mscrypto/akmngr.c	2009-09-21 14:07:19.078910929 +0200
 +++ misc/build/xmlsec1-1.2.14/src/mscrypto/akmngr.c	2009-09-21 14:02:48.531281225 +0200
-@@ -1 +1,235 @@
+@@ -1 +1,236 @@
 -dummy
 +/** 
 + * XMLSec library
@@ -459,6 +459,7 @@
 +
 +#include <xmlsec/xmlsec.h>
 +#include <xmlsec/keys.h>
++#include <xmlsec/keysmngr.h>
 +#include <xmlsec/transforms.h>
 +#include <xmlsec/errors.h>
 +
