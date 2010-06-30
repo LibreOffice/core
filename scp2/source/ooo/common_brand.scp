@@ -79,6 +79,8 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Lib_Msvcr80,
              gid_Brand_File_Lib_Msvcp80,
              gid_Brand_File_Lib_Msvcm80,
+			 gid_Brand_File_Lib_Oirm,
+			 gid_Brand_File_Lib_Oirm2,
              gid_Brand_File_Msvcm80crt_Manifest,
              gid_Brand_File_Lib_Npsoplugin,
              gid_Brand_File_Lib_Subscrib_C05,
@@ -90,9 +92,11 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_Draw,
              gid_Brand_File_Share_Xdg_Extension,
              gid_Brand_File_Share_Xdg_Impress,
+             gid_Brand_File_Share_Xdg_JavaFilter,
              gid_Brand_File_Share_Xdg_Math,
              gid_Brand_File_Share_Xdg_Printeradmin,
              gid_Brand_File_Share_Xdg_QStart,
+             gid_Brand_File_Share_Xdg_StartCenter,
              gid_Brand_File_Share_Xdg_Writer);
     Unixlinks = (gid_Brand_Unixlink_BasisLink,
                  gid_Brand_Unixlink_Program,
@@ -118,6 +122,7 @@ Module gid_Module_Langpack_Brand_Template
             gid_Brand_Dir_Share_Readme);
     Files = (gid_Brand_File_Res_Iso,
              gid_Brand_File_Res_Ooo,
+             gid_Brand_File_Res_Oirm,
              gid_Brand_File_Help_C05_Sdatabase_Zip,
              gid_Brand_File_Help_C05_Scalc_Zip,
              gid_Brand_File_Help_C05_Sdraw_Zip,
@@ -736,6 +741,25 @@ File gid_Brand_File_Share_Xdg_Writer
     Styles = (PACKED,SCPZIP_REPLACE);
 End
 #endif
+
+#if defined UNX && ! defined MACOSX
+File gid_Brand_File_Share_Xdg_StartCenter
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Name = "startcenter.desktop";
+    Styles = (PACKED,SCPZIP_REPLACE);
+End
+#endif
+
+#if defined UNX && ! defined MACOSX
+File gid_Brand_File_Share_Xdg_JavaFilter
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Name = "javafilter.desktop";
+    Styles = (PACKED,SCPZIP_REPLACE);
+End
+#endif
+
 
 #if defined WNT && defined(_gcc3)
 File gid_Brand_File_Lib_Mingwm10
