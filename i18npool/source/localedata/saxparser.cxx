@@ -125,13 +125,14 @@ Reference< XInputStream > createStreamFromFile(
 
     if( f ) {
         fseek( f , 0 , SEEK_END );
-        int nLength = ftell( f );
+        size_t nLength = ftell( f );
         fseek( f , 0 , SEEK_SET );
 
         Sequence<sal_Int8> seqIn(nLength);
-        fread( seqIn.getArray() , nLength , 1 , f );
-
-        r = Reference< XInputStream > ( new OInputStream( seqIn ) );
+        if (fread( seqIn.getArray() , nLength , 1 , f ) == 1)
+            r = Reference< XInputStream > ( new OInputStream( seqIn ) );
+        else
+            fprintf(stderr, "failure reading %s\n", pcFile);
         fclose( f );
     }
     return r;

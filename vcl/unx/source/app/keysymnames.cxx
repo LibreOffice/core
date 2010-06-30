@@ -637,6 +637,7 @@ const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
                         }
                     }
                 }
+                close(kbd);
             }
         }
 #else
