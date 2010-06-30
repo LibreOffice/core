@@ -55,6 +55,31 @@ end sub
 '
 '-------------------------------------------------------------------------------
 '
+function IsItLoaded as boolean
+    '/// IsItLoaded
+    '/// Wait until document is loaded
+    Dim iLoop as integer
+
+    IsItLoaded = FALSE
+    sleep(3)
+    for iLoop =1 to 20
+        try
+            'Calling slot 'IsDocLoading'
+            IsItLoaded = IsDocLoading
+        catch
+            IsItLoaded = FALSE
+        endcatch
+
+        if IsItLoaded = TRUE then
+            exit for
+        end if
+        sleep(1)
+    next iLoop
+    sleep(2)
+end function
+'
+'-------------------------------------------------------------------------------
+'
 testcase tLoadSpreadsheetDocument (SourceFile)
     Dim sOnlyFileName as string
     Dim sOnlyFileExtension as string
@@ -115,7 +140,7 @@ function fCalcFileOpen (sDocName as string, optional bLinked as boolean) as bool
     sSourceFile = ConvertPath ( sDocName )
 
     fCalcFileOpen = TRUE
-    if hFileExists (sSourceFile) = FALSE then
+    if FileExists (sSourceFile) = FALSE then
         warnlog "fCalcFileOpen: '" + sSourceFile + "' does not exists!"
         fCalcFileOpen = FALSE
     else
