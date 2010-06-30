@@ -59,8 +59,6 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_accels.inc"
 
-    use "framework\tools\includes\tabpages.inc"
-   
     gApplication = "WRITER"
     Call GetUseFiles
 

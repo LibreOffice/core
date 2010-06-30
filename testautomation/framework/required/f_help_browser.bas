@@ -38,6 +38,8 @@ sub main
    call hStatusIn( "framework", "f_help_browser.bas" )
    call tHelp_DialogTest()
    call tHelp_ToolBar()
+   call tHelp_Registration()
+
    call hStatusOut()
 
 end sub

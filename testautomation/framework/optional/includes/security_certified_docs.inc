@@ -52,14 +52,14 @@ testcase tLoadCertifiedFile( cBuildID as string )
         sFileOut = hGetWorkPath() & "certificate_data.txt"
 
     ' Variable to store boolean returncodes from functions
-    dim brc as boolean
-        brc = true
+    dim brc as boolean : brc = true
+    dim irc as boolean : irc = 0
 
     ' the number of certificates attached to the current document        
     dim iCertCount as integer
 
     printlog( "Load the file" )
-    brc = hFileOpen( cFile )
+    hFileOpen( cFile )
     brc = hHandleActivesOnLoad( 0 , 2 )
     
     ' in case the file did not get loaded, handle the problem by aborting the test
@@ -122,12 +122,8 @@ testcase tLoadCertifiedFile( cBuildID as string )
     kontext "TabXMLSecDetails"
     hGetListItems( XMLSecDetailsListBox, sCertData() ) 
 
-    brc = hManageComparisionList( sFileIn, sFileOut, sCertData() )
-    if ( not brc ) then
-        warnlog( "The data of the certificate appears to be incorrect" )
-    else
-        printlog( "Verification of the certificate succeeded" )
-    endif
+    irc = hManageComparisionList( sFileIn, sFileOut, sCertData() )
+    hListResultEvaluation( irc , 0 )
 
     SkipEditBrowseBox:
 

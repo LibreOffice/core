@@ -33,21 +33,23 @@
 
 testcase tScripting
 
+    printlog( "Verify that the nodes <My Macros> and <OOo Macros> are present" )
     
     const ORGANIZER_ITEMS = 2
+    const MAX_DIALOG_DELAY = 5
     
-    hInitBackingMode()
+    hFileCloseAll()
 
     ToolsMacrosOrganizeMacrosBeanShell
     
     Kontext "ScriptOrganizer"
-    if ( ScriptOrganizer.exists( 5 ) ) then
+    if ( ScriptOrganizer.exists( MAX_DIALOG_DELAY ) ) then
         printlog( "Beanshell Script Organizer is present. Good" )
         if ( ScriptTreeList.getItemCount() <> ORGANIZER_ITEMS ) then
             warnlog( "The Treelist does not contain the expected number " & _
-            "of items. Please verify that exactly three top-nodes exist" )
+            "of items. Please verify that exactly " & ORGANIZER_ITEMS & " top-nodes exist" )
         endif
-        ScriptOrganizer.cancel()
+        hCloseDialog( ScriptOrganizer, "cancel" )
     else
         warnlog( "Script Organizer for Beanshell is missing" )
     endif
@@ -55,17 +57,16 @@ testcase tScripting
     ToolsMacrosOrganizeMacrosJavaScript
     
     Kontext "ScriptOrganizer"
-    if ( ScriptOrganizer.exists( 5 ) ) then
+    if ( ScriptOrganizer.exists( MAX_DIALOG_DELAY ) ) then
         printlog( "JavaScript Script Organizer is present. Good" )
         if ( ScriptTreeList.getItemCount() <> ORGANIZER_ITEMS ) then
             warnlog( "The Treelist does not contain the expected number " & _
-            "of items. Please verify that exactly three top-nodes exist" )
+            "of items. Please verify that exactly " & ORGANIZER_ITEMS & " top-nodes exist" )
         endif
-        ScriptOrganizer.cancel()
+        hCloseDialog( ScriptOrganizer, "cancel" )
     else
         warnlog( "Script Organizer for JavaScript is missing" )
     endif
-    
     
 endcase
     

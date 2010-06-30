@@ -89,7 +89,7 @@ testcase tUpdtWizardLetter
         kontext "AutopilotLetter"
         LetterHead.Check()
 
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotLetter"
         call DialogTest( AutopilotLetter, 2 )
@@ -123,7 +123,7 @@ testcase tUpdtWizardLetter
             warnlog( "FooterHeight should not be enabled in this configuration" )
         endif
         
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotLetter"
         call DialogTest( AutopilotLetter, 3 )    
@@ -136,11 +136,11 @@ testcase tUpdtWizardLetter
         
         printlog( "   * change Complimentary Close to second entry" )
         ListGreetings.select( 2 )
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotLetter"
         call DialogTest( AutopilotLetter, 4 )
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotLetter"
         call DialogTest( AutopilotLetter, 5 )    
@@ -150,7 +150,7 @@ testcase tUpdtWizardLetter
         
         printlog( "   * check Include only on second ..." )
         IncludeFromPage2.check()
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotLetter"
         call DialogTest( AutopilotLetter, 6 )   
@@ -178,9 +178,7 @@ testcase tUpdtWizardLetter
         endif
         
         brc = hDestroyDocument()
-        if ( not brc ) then
-            qaerrorlog( "#i59233# The wizard does not display the new template" )
-        endif   
+        if ( not brc ) then qaerrorlog( "#i59233# The wizard does not display the new template" )
     else
         warnlog( "Autopilot Letter not open/exceeded timeout" )
     endif
@@ -192,9 +190,7 @@ testcase tUpdtWizardLetter
         printlog( "Unexpectedly deleted user template(s), please check")
     endif
     
-    do while( getDocumentCount() > 0 )
-        call hCloseDocument()
-    loop
+    hFileCloseAll()
 
 endcase
 
