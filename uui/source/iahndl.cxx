@@ -1338,7 +1338,7 @@ UUIInteractionHelper::handleGenericErrorRequest(
             {
                 uno::Any aProductNameAny =
                     ::utl::ConfigManager::GetConfigManager()
-                        ->GetDirectConfigProperty(
+                        .GetDirectConfigProperty(
                            ::utl::ConfigManager::PRODUCTNAME );
                 aProductNameAny >>= aTitle;
             }
@@ -1552,10 +1552,10 @@ UUIInteractionHelper::handleBrokenPackageRequest(
         return;
 
     uno::Any aProductNameAny =
-        ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+        ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
             ::utl::ConfigManager::PRODUCTNAME );
     uno::Any aProductVersionAny =
-        ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+        ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
             ::utl::ConfigManager::PRODUCTVERSION );
     ::rtl::OUString aProductName, aProductVersion;
     if ( !( aProductNameAny >>= aProductName ) )
