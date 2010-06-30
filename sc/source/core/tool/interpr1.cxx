@@ -930,22 +930,25 @@ ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
             pResMat = GetNewMat( nC, nR);
             if ( !pResMat )
                 return NULL;
-            SCSIZE n = nC * nR;
-            for ( SCSIZE j=0; j<n; j++ )
+
+            for (SCSIZE j = 0; j < nC; ++j)
             {
-                if ( pMat[i]->IsValue(j) )
+                for (SCSIZE k = 0; k < nR; ++k)
                 {
-                    aComp.bVal[i] = TRUE;
-                    aComp.nVal[i] = pMat[i]->GetDouble(j);
-                    aComp.bEmpty[i] = FALSE;
+                    if ( pMat[i]->IsValue(j,k) )
+                    {
+                        aComp.bVal[i] = TRUE;
+                        aComp.nVal[i] = pMat[i]->GetDouble(j,k);
+                        aComp.bEmpty[i] = FALSE;
+                    }
+                    else
+                    {
+                        aComp.bVal[i] = FALSE;
+                        *aComp.pVal[i] = pMat[i]->GetString(j,k);
+                        aComp.bEmpty[i] = pMat[i]->IsEmpty(j,k);
+                    }
+                    pResMat->PutDouble( CompareFunc(aComp, pOptions), j, k);
                 }
-                else
-                {
-                    aComp.bVal[i] = FALSE;
-                    *aComp.pVal[i] = pMat[i]->GetString(j);
-                    aComp.bEmpty[i] = pMat[i]->IsEmpty(j);
-                }
-                pResMat->PutDouble( CompareFunc( aComp, pOptions ), j );
             }
         }
     }
@@ -2430,9 +2433,9 @@ short ScInterpreter::IsEven()
                 ;   // nothing
             else if ( !pJumpMatrix )
             {
-                nRes = pMat->IsValue( 0 );
+                nRes = pMat->IsValue( 0, 0);
                 if ( nRes )
-                    fVal = pMat->GetDouble( 0 );
+                    fVal = pMat->GetDouble( 0, 0);
             }
             else
             {
@@ -4052,11 +4055,54 @@ void ScInterpreter::ScTable()
     }
 }
 
+namespace {
+
+class VectorMatrixAccessor
+{
+public:
+    VectorMatrixAccessor(const ScMatrix& rMat, bool bColVec) :
+        mrMat(rMat), mbColVec(bColVec) {}
+
+    bool IsEmpty(SCSIZE i) const
+    {
+        return mbColVec ? mrMat.IsEmpty(0, i) : mrMat.IsEmpty(i, 0);
+    }
+
+    bool IsEmptyPath(SCSIZE i) const
+    {
+        return mbColVec ? mrMat.IsEmptyPath(0, i) : mrMat.IsEmptyPath(i, 0);
+    }
+
+    bool IsValue(SCSIZE i) const
+    {
+        return mbColVec ? mrMat.IsValue(0, i) : mrMat.IsValue(i, 0);
+    }
+
+    bool IsString(SCSIZE i) const
+    {
+        return mbColVec ? mrMat.IsString(0, i) : mrMat.IsString(i, 0);
+    }
+
+    double GetDouble(SCSIZE i) const
+    {
+        return mbColVec ? mrMat.GetDouble(0, i) : mrMat.GetDouble(i, 0);
+    }
+
+    const String& GetString(SCSIZE i) const
+    {
+        return mbColVec ? mrMat.GetString(0, i) : mrMat.GetString(i, 0);
+    }
+
+private:
+    const ScMatrix& mrMat;
+    bool mbColVec;
+};
+
 /** returns -1 when the matrix value is smaller than the query value, 0 when
     they are equal, and 1 when the matrix value is larger than the query
     value. */
-static sal_Int32 lcl_CompareMatrix2Query( SCSIZE i, const ScMatrix& rMat,
-        const ScQueryEntry& rEntry)
+static sal_Int32 lcl_CompareMatrix2Query(
+    SCSIZE i, const VectorMatrixAccessor& rMat, const ScQueryEntry& rEntry)
 {
     if (rMat.IsEmpty(i))
     {
@@ -4096,7 +4142,7 @@ static sal_Int32 lcl_CompareMatrix2Query( SCSIZE i, const ScMatrix& rMat,
 
 /** returns the last item with the identical value as the original item
     value. */
-static void lcl_GetLastMatch( SCSIZE& rIndex, const ScMatrix& rMat,
+static void lcl_GetLastMatch( SCSIZE& rIndex, const VectorMatrixAccessor& rMat,
         SCSIZE nMatCount, bool bReverse)
 {
     if (rMat.IsValue(rIndex))
@@ -4146,6 +4192,8 @@ static void lcl_GetLastMatch( SCSIZE& rIndex, const ScMatrix& rMat,
     {
         DBG_ERRORFILE("lcl_GetLastMatch: unhandled matrix type");
     }
+}
+
 }
 
 void ScInterpreter::ScMatch()
@@ -4320,6 +4368,7 @@ void ScInterpreter::ScMatch()
                     return;
                 }
                 SCSIZE nMatCount = (nC == 1) ? nR : nC;
+                VectorMatrixAccessor aMatAcc(*pMatSrc, nC == 1);
 
                 // simple serial search for equality mode (source data doesn't
                 // need to be sorted).
@@ -4328,7 +4377,7 @@ void ScInterpreter::ScMatch()
                 {
                     for (SCSIZE i = 0; i < nMatCount; ++i)
                     {
-                        if (lcl_CompareMatrix2Query( i, *pMatSrc, rEntry) == 0)
+                        if (lcl_CompareMatrix2Query( i, aMatAcc, rEntry) == 0)
                         {
                             PushDouble(i+1); // found !
                             return;
@@ -4346,11 +4395,11 @@ void ScInterpreter::ScMatch()
                 for (SCSIZE nLen = nLast-nFirst; nLen > 0; nLen = nLast-nFirst)
                 {
                     SCSIZE nMid = nFirst + nLen/2;
-                    sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, *pMatSrc, rEntry);
+                    sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, aMatAcc, rEntry);
                     if (nCmp == 0)
                     {
                         // exact match.  find the last item with the same value.
-                        lcl_GetLastMatch( nMid, *pMatSrc, nMatCount, !bAscOrder);
+                        lcl_GetLastMatch( nMid, aMatAcc, nMatCount, !bAscOrder);
                         PushDouble( nMid+1);
                         return;
                     }
@@ -4382,7 +4431,7 @@ void ScInterpreter::ScMatch()
 
                 if (nHitIndex == nMatCount-1) // last item
                 {
-                    sal_Int32 nCmp = lcl_CompareMatrix2Query( nHitIndex, *pMatSrc, rEntry);
+                    sal_Int32 nCmp = lcl_CompareMatrix2Query( nHitIndex, aMatAcc, rEntry);
                     if ((bAscOrder && nCmp <= 0) || (!bAscOrder && nCmp >= 0))
                     {
                         // either the last item is an exact match or the real
@@ -5337,6 +5386,8 @@ void ScInterpreter::ScLookup()
             pDataMat2 = pTempMat;
         }
 
+        VectorMatrixAccessor aMatAcc2(*pDataMat2, bVertical);
+
         // binary search for non-equality mode (the source data is
         // assumed to be sorted in ascending order).
 
@@ -5346,11 +5397,11 @@ void ScInterpreter::ScLookup()
         for (SCSIZE nLen = nLast-nFirst; nLen > 0; nLen = nLast-nFirst)
         {
             SCSIZE nMid = nFirst + nLen/2;
-            sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, *pDataMat2, rEntry);
+            sal_Int32 nCmp = lcl_CompareMatrix2Query( nMid, aMatAcc2, rEntry);
             if (nCmp == 0)
             {
                 // exact match.  find the last item with the same value.
-                lcl_GetLastMatch( nMid, *pDataMat2, nLenMajor, false);
+                lcl_GetLastMatch( nMid, aMatAcc2, nLenMajor, false);
                 nDelta = nMid;
                 bFound = true;
                 break;
@@ -5372,7 +5423,7 @@ void ScInterpreter::ScLookup()
 
         if (nDelta == static_cast<SCCOLROW>(nLenMajor-2)) // last item
         {
-            sal_Int32 nCmp = lcl_CompareMatrix2Query(nDelta+1, *pDataMat2, rEntry);
+            sal_Int32 nCmp = lcl_CompareMatrix2Query(nDelta+1, aMatAcc2, rEntry);
             if (nCmp <= 0)
             {
                 // either the last item is an exact match or the real
