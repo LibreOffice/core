@@ -37,7 +37,6 @@ namespace com { namespace sun { namespace star {
     namespace beans { class XPropertySet; }
     namespace lang { class XMultiServiceFactory; }
 } } }
-class SfxApplication;
 
 namespace sfx2 { namespace appl {
 
@@ -56,10 +55,7 @@ ImeStatusWindow_Impl;
 class ImeStatusWindow: private ImeStatusWindow_Impl
 {
 public:
-    ImeStatusWindow(SfxApplication & rApplication,
-                    com::sun::star::uno::Reference<
-                            com::sun::star::lang::XMultiServiceFactory > const &
-                        rServiceFactory);
+    ImeStatusWindow( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > const& rServiceFactory );
 
     /** Set up VCL according to the configuration.
 
@@ -115,7 +111,6 @@ private:
     com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >
     getConfig();
 
-    SfxApplication & m_rApplication;
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         m_xServiceFactory;
 

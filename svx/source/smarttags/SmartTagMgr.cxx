@@ -35,8 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/smarttags/XSmartTagRecognizer.hpp>
 #include <com/sun/star/smarttags/XSmartTagAction.hpp>
-#include <com/sun/star/deployment/XPackageManagerFactory.hpp>
-#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/text/XTextMarkup.hpp>
 #include <com/sun/star/smarttags/SmartTagRecognizerMode.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -472,11 +471,9 @@ void SmartTagMgr::RegisterListener()
     // register as listener at package manager
     try
     {
-        Reference<deployment::XPackageManagerFactory> xPackageManagerFactory(
-                deployment::thePackageManagerFactory::get( mxContext ) );
-        Reference<deployment::XPackageManager> xPackageManager(
-                 xPackageManagerFactory->getPackageManager( C2U("user" ) ) );
-        Reference< util::XModifyBroadcaster > xMB ( xPackageManager, UNO_QUERY_THROW );
+        Reference<deployment::XExtensionManager> xExtensionManager(
+                deployment::ExtensionManager::get( mxContext ) );
+        Reference< util::XModifyBroadcaster > xMB ( xExtensionManager, UNO_QUERY_THROW );
 
         Reference< util::XModifyListener > xListener( this );
         xMB->addModifyListener( xListener );

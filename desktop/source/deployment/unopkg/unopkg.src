@@ -27,15 +27,10 @@
 
 #include "deployment.hrc"
 
-String RID_STR_UNOPKG_NO_SHARED_ALLOWED
-{
-    Text [ en-US ] = "The option \"--shared\" cannot be used to install the extension \'%NAME\', "
-        "because every user has to agree to the license agreement of the extension. The extension will not be installed.";
-};
 
 String RID_STR_UNOPKG_ACCEPT_LIC_1
 {
-    Text [ en-US ] = "Extension License Agreement:";
+    Text [ en-US ] = "Extension Software License Agreement of $NAME:";
 };
 
 String RID_STR_UNOPKG_ACCEPT_LIC_2
