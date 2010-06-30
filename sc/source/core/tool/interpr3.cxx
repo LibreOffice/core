@@ -3918,24 +3918,26 @@ void ScInterpreter::ScProbability()
             double fRes = 0.0;
             BOOL bStop = FALSE;
             double fP, fW;
-            SCSIZE nCount1 = nC1 * nR1;
-            for ( SCSIZE i = 0; i < nCount1 && !bStop; i++ )
+            for ( SCSIZE i = 0; i < nC1 && !bStop; i++ )
             {
-                if (pMatP->IsValue(i) && pMatW->IsValue(i))
+                for (SCSIZE j = 0; j < nR1 && !bStop; ++j )
                 {
-                    fP = pMatP->GetDouble(i);
-                    fW = pMatW->GetDouble(i);
-                    if (fP < 0.0 || fP > 1.0)
-                        bStop = TRUE;
-                    else
+                    if (pMatP->IsValue(i,j) && pMatW->IsValue(i,j))
                     {
-                        fSum += fP;
-                        if (fW >= fLo && fW <= fUp)
-                            fRes += fP;
+                        fP = pMatP->GetDouble(i,j);
+                        fW = pMatW->GetDouble(i,j);
+                        if (fP < 0.0 || fP > 1.0)
+                            bStop = TRUE;
+                        else
+                        {
+                            fSum += fP;
+                            if (fW >= fLo && fW <= fUp)
+                                fRes += fP;
+                        }
                     }
+                    else
+                        SetError( errIllegalArgument);
                 }
-                else
-                    SetError( errIllegalArgument);
             }
             if (bStop || fabs(fSum -1.0) > 1.0E-7)
                 PushNoValue();

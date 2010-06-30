@@ -4093,6 +4093,13 @@ public:
         return mbColVec ? mrMat.GetString(0, i) : mrMat.GetString(i, 0);
     }
 
+    SCSIZE GetElementCount() const
+    {
+        SCSIZE nC, nR;
+        mrMat.GetDimensions(nC, nR);
+        return mbColVec ? nR : nC;
+    }
+
 private:
     const ScMatrix& mrMat;
     bool mbColVec;
@@ -5444,11 +5451,12 @@ void ScInterpreter::ScLookup()
 
         if (bFound)
         {
+            VectorMatrixAccessor aMatAcc(*pDataMat, bVertical);
             SCCOLROW i = nDelta;
-            SCSIZE n = pDataMat->GetElementCount();
+            SCSIZE n = aMatAcc.GetElementCount();
             if (static_cast<SCSIZE>(i) >= n)
                 i = static_cast<SCCOLROW>(n);
-            if (bool(rEntry.bQueryByString) == bool(pDataMat->IsValue(i)))
+            if (static_cast<bool>(rEntry.bQueryByString) == aMatAcc.IsValue(i))
                 bFound = false;
         }
 
@@ -5462,16 +5470,17 @@ void ScInterpreter::ScLookup()
 
         if (pResMat)
         {
+            VectorMatrixAccessor aResMatAcc(*pResMat, bVertical);
             // result array is matrix.
-            if (static_cast<SCSIZE>(nDelta) >= pResMat->GetElementCount())
+            if (static_cast<SCSIZE>(nDelta) >= aResMatAcc.GetElementCount())
             {
                 PushNA();
                 return;
             }
-            if (pResMat->IsValue(nDelta))
-                PushDouble(pResMat->GetDouble(nDelta));
+            if (aResMatAcc.IsValue(nDelta))
+                PushDouble(aResMatAcc.GetDouble(nDelta));
             else
-                PushString(pResMat->GetString(nDelta));
+                PushString(aResMatAcc.GetString(nDelta));
         }
         else if (nParamCount == 3)
         {
@@ -5556,11 +5565,12 @@ void ScInterpreter::ScLookup()
 
     if (pResMat)
     {
+        VectorMatrixAccessor aResMatAcc(*pResMat, bVertical);
         // Use the matrix result array.
-        if (pResMat->IsValue(nDelta))
-            PushDouble(pResMat->GetDouble(nDelta));
+        if (aResMatAcc.IsValue(nDelta))
+            PushDouble(aResMatAcc.GetDouble(nDelta));
         else
-            PushString(pResMat->GetString(nDelta));
+            PushString(aResMatAcc.GetString(nDelta));
     }
     else if (nParamCount == 3)
     {

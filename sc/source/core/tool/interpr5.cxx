@@ -182,21 +182,23 @@ void ScInterpreter::ScGCD()
                             SetError(errIllegalArgument);
                         else
                         {
-                            SCSIZE nCount = nC * nR;
-                            for ( SCSIZE j = 0; j < nCount; j++ )
+                            for ( SCSIZE j = 0; j < nC; j++ )
                             {
-                                if (!pMat->IsValue(j))
+                                for (SCSIZE k = 0; k < nR; ++k)
                                 {
-                                    PushIllegalArgument();
-                                    return;
+                                    if (!pMat->IsValue(j,k))
+                                    {
+                                        PushIllegalArgument();
+                                        return;
+                                    }
+                                    fx = ::rtl::math::approxFloor( pMat->GetDouble(j,k));
+                                    if (fx < 0.0)
+                                    {
+                                        PushIllegalArgument();
+                                        return;
+                                    }
+                                    fy = ScGetGCD(fx, fy);
                                 }
-                                fx = ::rtl::math::approxFloor( pMat->GetDouble(j));
-                                if (fx < 0.0)
-                                {
-                                    PushIllegalArgument();
-                                    return;
-                                }
-                                fy = ScGetGCD(fx, fy);
                             }
                         }
                     }
@@ -274,24 +276,26 @@ void ScInterpreter:: ScLCM()
                             SetError(errIllegalArgument);
                         else
                         {
-                            SCSIZE nCount = nC * nR;
-                            for ( SCSIZE j = 0; j < nCount; j++ )
+                            for ( SCSIZE j = 0; j < nC; j++ )
                             {
-                                if (!pMat->IsValue(j))
+                                for (SCSIZE k = 0; k < nR; ++k)
                                 {
-                                    PushIllegalArgument();
-                                    return;
+                                    if (!pMat->IsValue(j,k))
+                                    {
+                                        PushIllegalArgument();
+                                        return;
+                                    }
+                                    fx = ::rtl::math::approxFloor( pMat->GetDouble(j,k));
+                                    if (fx < 0.0)
+                                    {
+                                        PushIllegalArgument();
+                                        return;
+                                    }
+                                    if (fx == 0.0 || fy == 0.0)
+                                        fy = 0.0;
+                                    else
+                                        fy = fx * fy / ScGetGCD(fx, fy);
                                 }
-                                fx = ::rtl::math::approxFloor( pMat->GetDouble(j));
-                                if (fx < 0.0)
-                                {
-                                    PushIllegalArgument();
-                                    return;
-                                }
-                                if (fx == 0.0 || fy == 0.0)
-                                    fy = 0.0;
-                                else
-                                    fy = fx * fy / ScGetGCD(fx, fy);
                             }
                         }
                     }
