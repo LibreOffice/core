@@ -1,0 +1,131 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __ooo_vba_excel_SheetObject_idl__
+#define __ooo_vba_excel_SheetObject_idl__
+
+#include <ooo/vba/excel/XCharacters.idl>
+
+//=============================================================================
+
+/*  Note: This file collects all compatibility interfaces for drawing objects
+    and drawing controls embedded in sheets. All these symbols are deprecated
+    in VBA and kept for compatibility with old VBA scripts. */
+
+//=============================================================================
+
+module ooo {  module vba { module excel {
+
+//=============================================================================
+
+/** Base interface for graphic objects and drawing controls in a single sheet.
+
+    <p>The objects supporting this interface are now deprecated in VBA in
+    favour of the Shapes and OLEObjects collections, but are kept for
+    compatibility with old VBA scripts. All form control objects do NOT belong
+    to ActiveX form controls but to the old-style drawing controls.</p>
+ */
+interface XSheetObject : ooo::vba::XHelperInterface
+{
+    /** Left coordinate of the drawing object, in points. */
+    [attribute] double Left;
+
+    /** Top coordinate of the drawing object, in points. */
+    [attribute] double Top;
+
+    /** Width of the drawing object, in points. */
+    [attribute] double Width;
+
+    /** Height of the drawing object, in points. */
+    [attribute] double Height;
+
+    /** The name of the drawing object, used as collection key. */
+    [attribute] string Name;
+
+    /** Name of a macro that will be executed when the drawing object is clicked. */
+    [attribute] string OnAction;
+
+    /** Anchor mode of the object (fixed or variable position and size). Must
+        be a value from <type>ooo::vba::excel::XlPlacement</type>. */
+    [attribute] long Placement;
+
+    /** True = print object, false = skip object on printing. */
+    [attribute] boolean PrintObject;
+};
+
+//=============================================================================
+
+/** Additional attributes for all drawing controls (this interface does not
+    belong to ActiveX form controls).
+ */
+interface XControlObject : com::sun::star::uno::XInterface
+{
+    [attribute] boolean AutoSize;
+};
+
+//=============================================================================
+
+/** Additional attributes for a push button drawing control (this interface
+    does not belong to ActiveX form controls).
+ */
+interface XButton : com::sun::star::uno::XInterface
+{
+    /** Visible caption of the button. */
+    [attribute] string Caption;
+
+    /** Font settings for the entire caption text. */
+    [attribute] XFont Font;
+
+    /** Horizontal alignment of the caption. */
+    [attribute] long HorizontalAlignment;
+
+    /** Vertical alignment of the caption. */
+    [attribute] long VerticalAlignment;
+
+    /** Orientation (rotation) of the text. Must be a value from
+        <type>ooo::vba::excel::XlOrientation</type>. */
+    [attribute] long Orientation;
+
+    /** Access to text and text formatting of the button caption. */
+    XCharacters Characters( [in] any aStart, [in] any aLength );
+};
+
+//=============================================================================
+
+/** Represents a drawing button control in a spreadsheet. */
+service Button
+{
+    interface XSheetObject;
+    interface XControlObject;
+    interface XButton;
+};
+
+//=============================================================================
+
+}; }; };
+
+#endif

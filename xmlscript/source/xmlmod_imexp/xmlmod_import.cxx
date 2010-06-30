@@ -188,11 +188,14 @@ Reference< xml::input::XElement > ModuleImport::startRootElement(
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("module") ))
     {
         mrModuleDesc.aName = xAttributes->getValueByUidName(
-            XMLNS_LIBRARY_UID,
+            XMLNS_SCRIPT_UID,
             OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) );
         mrModuleDesc.aLanguage = xAttributes->getValueByUidName(
-            XMLNS_XLINK_UID,
+            XMLNS_SCRIPT_UID,
             OUString( RTL_CONSTASCII_USTRINGPARAM("language") ) );
+        mrModuleDesc.aModuleType = xAttributes->getValueByUidName(
+            XMLNS_SCRIPT_UID,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("moduleType") ) );
 
         return new ModuleElement( rLocalName, xAttributes, 0, this );
     }
