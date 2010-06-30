@@ -48,10 +48,8 @@
 #define IMPLEMENTATION_NAME L"test.com.sun.star.comp.extensions.stm.Pipe"
 #define SERVICE_NAME        L"test.com.sun.star.io.Pipe"
 
-#ifndef _VOS_NO_NAMESPACE
 using namespace vos;
 using namespace usr;
-#endif
 
 class WriteToStreamThread :
         public OThread
