@@ -733,6 +733,7 @@ usage()
             pprogname);
 }
 
+#ifdef WNT
 /* my very simple minded implementation of getopt()
  * it's to sad that getopt() is not available everywhere
  * note: this is not a full POSIX conforming getopt()
@@ -770,6 +771,7 @@ int simple_getopt(char *pargv[], const char *poptstring)
     }
     return -1;
 }
+#endif
 
 int CDECL
 main(int argc, char *argv[])
