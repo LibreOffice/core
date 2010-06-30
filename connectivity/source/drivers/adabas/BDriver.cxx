@@ -48,9 +48,7 @@
 #include <memory>
 #include <sys/stat.h>
 
-#if defined(MAC)
-const char sNewLine = '\015';
-#elif defined(UNX)
+#if defined(UNX)
 const char sNewLine = '\012';
 #else
 const char sNewLine[] = "\015\012"; // \015\012 and not \n
