@@ -43,7 +43,6 @@ LIBSALCPPRT=$(0)
 OBJFILES=   \
             $(OBJ)$/cpp.obj	\
             $(OBJ)$/eval.obj	\
-            $(OBJ)$/getopt.obj	\
             $(OBJ)$/include.obj	\
             $(OBJ)$/lex.obj	\
             $(OBJ)$/macro.obj	\
@@ -63,6 +62,12 @@ APP1OBJS=$(OBJ)$/cpp.obj
 .ENDIF
 
 APP1LIBS= $(LB)$/idlcpp.lib
+
+.IF "$(HAVE_GETOPT)" != "YES"
+.IF "$(GUI)" == "WNT"
+APP1STDLIBS=gnu_getopt.lib
+.ENDIF
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 

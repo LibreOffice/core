@@ -223,14 +223,13 @@ extern "C" BOOL WINAPI DllMain( HMODULE hModule, DWORD dwReason, LPVOID )
     {
     case DLL_PROCESS_ATTACH:
         UWINAPI_BaseAddress = hModule;
+#ifdef __MINGW32__
+        return TRUE;
+#else
         return DisableThreadLibraryCalls( hModule );
+#endif
     default:
         return TRUE;
     }
 
 }
-
-
-
-
-
