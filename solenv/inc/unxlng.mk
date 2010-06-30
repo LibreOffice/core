@@ -151,7 +151,7 @@ LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
 LINKFLAGSRUNPATH_SDK=-Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\'
 LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
-LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../../../../basis-link/program'\'
+LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\'
 LINKFLAGSRUNPATH_NONE=
 LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)
 .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
