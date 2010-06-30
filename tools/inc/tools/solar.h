@@ -383,7 +383,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 
 // -----------------------------------------------------------------------
 
-#define NOOLDSTRING
 #ifndef NOREPLACESTRING
 #define UniString       String
 #define XubString       String
