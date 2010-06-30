@@ -25,41 +25,28 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_COM_SUN_STAR_DEPLOYMENT_VERSIONEXCEPTION_IDL
-#define INCLUDED_COM_SUN_STAR_DEPLOYMENT_VERSIONEXCEPTION_IDL
+#ifndef __com_sun_star_sheet_NoConvergenceException_idl__
+#define __com_sun_star_sheet_NoConvergenceException_idl__
 
-#include "com/sun/star/uno/Exception.idl"
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
+#endif
 
-module com { module sun { module star { module deployment {
+//=============================================================================
 
-interface XPackage;
+module com { module sun { module star { module sheet {
 
-/**
-   describes version clashes of a deployment unit.
+//=============================================================================
 
-   <p>This exception is intended to be used with an
-   <type scope="com::sun::star::task">XInteractionHandler</type>.</p>
+/** Thrown by a Calc Add-In function this exception indicates the
+    function's algorithm did not converge to a meaningful result.
 
-   @since OOo 2.1
-*/
-exception VersionException: com::sun::star::uno::Exception {
-    /**
-       the version of the extension which is being installed.
-    */
-    string NewVersion;
-    /**
-       the display name of the extension which is being installed.
-    */
-    string NewDisplayName;
+    @since OOo 3.3
+ */
+exception NoConvergenceException : ::com::sun::star::uno::Exception{};
 
-    /**
-       represents the already installed version of the deployment unit.
-
-       <p>Must not be <NULL/>.</p>
-    */
-    XPackage Deployed;
-};
-
+//=============================================================================
 }; }; }; };
+//=============================================================================
 
 #endif

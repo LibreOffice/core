@@ -45,10 +45,14 @@ service LicenseDialog : com::sun::star::ui::dialogs::XExecutableDialog
 
         @param xParent
                parent window
+
+        @param extensionName
+               the display name of the extension
         @param licenseText
                text to be displayed
     */
     create( [in] com::sun::star::awt::XWindow xParent,
+            [in] string extensionName,
             [in] string licenseText );
 };
 

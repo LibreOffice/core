@@ -25,34 +25,24 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_com_sun_star_deployment_LicenseIndividualAgreementException_idl
-#define INCLUDED_com_sun_star_deployment_LicenseIndividualAgreementException_idl
+#if ! defined INCLUDED_com_sun_star_deployment_ExtensionManagerFactory_idl
+#define INCLUDED_com_sun_star_deployment_ExtensionManagerFactory_idl
 
-#include <com/sun/star/uno/Exception.idl>
+#include <com/sun/star/deployment/XExtensionManager.idl>
 
 
 module com { module sun { module star { module deployment {
 
-/** The exception signals that an extension is about to be installed for more than
-    one user, allthough every user needs to agree to the license.
+/** the ExtensionManager service.
 
-    @since OOo 2.0.6
- */
-exception LicenseIndividualAgreementException : com::sun::star::uno::Exception
-{
-    /** name of the extension.
+    The component context entry is
+    <code>
+    /singletons/com.sun.star.deployment.ExtensionManager
+    </code>.
 
-        Contains the file name only.
-     */
-    string ExtensionName;
-    /** indicates if the user can prevent to show the license
-
-    Represents the attribute value
-    /description/registration/simple-license/@suppress-if-required
-    from the description.xml
-    */
-    boolean SuppressIfRequired;
-};
+    @since OOo 3.3.0
+*/
+singleton ExtensionManager : XExtensionManager;
 
 }; }; }; };
 
