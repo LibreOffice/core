@@ -58,9 +58,6 @@
 #endif
 
 #include <math.h>
-#ifdef MAC
-#include <stdlib.h>
-#endif
 #include <float.h>
 
 using namespace ::com::sun::star;
