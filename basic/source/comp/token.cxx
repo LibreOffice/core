@@ -185,6 +185,7 @@ static TokenTable aTokTable_Basic [] = {        // Token-Tabelle:
     { WEND,     "Wend" },
     { WHILE,    "While" },
     { WITH,     "With" },
+    { WITHEVENTS,   "WithEvents" },
     { WRITE,    "Write" },              // auch WRITE #
     { XOR,      "Xor" },
     { NIL,      "" }
@@ -353,6 +354,29 @@ TokenTable aTokTable_Java [] = {        // Token-Tabelle:
 };
 */
 
+// #i109076
+TokenLabelInfo::TokenLabelInfo( void )
+{
+    m_pTokenCanBeLabelTab = new bool[VBASUPPORT+1];
+    for( int i = 0 ; i <= VBASUPPORT ; ++i )
+        m_pTokenCanBeLabelTab[i] = false;
+
+    // Token accepted as label by VBA
+    SbiToken eLabelToken[] = { ACCESS, ALIAS, APPEND, BASE, BINARY, CLASSMODULE,
+        COMPARE, COMPATIBLE, DEFERR, _ERROR_, EXPLICIT, LIB, LINE, LPRINT, NAME,
+        TOBJECT, OUTPUT, PROPERTY, RANDOM, READ, STEP, STOP, TEXT, VBASUPPORT, NIL };
+    SbiToken* pTok = eLabelToken;
+    SbiToken eTok;
+    for( pTok = eLabelToken ; (eTok = *pTok) != NIL ; ++pTok )
+        m_pTokenCanBeLabelTab[eTok] = true;
+}
+
+TokenLabelInfo::~TokenLabelInfo()
+{
+    delete[] m_pTokenCanBeLabelTab;
+}
+
+
 // Der Konstruktor ermittelt die Laenge der Token-Tabelle.
 
 SbiTokenizer::SbiTokenizer( const ::rtl::OUString& rSrc, StarBASIC* pb )
@@ -371,7 +395,8 @@ SbiTokenizer::SbiTokenizer( const ::rtl::OUString& rSrc, StarBASIC* pb )
 }
 
 SbiTokenizer::~SbiTokenizer()
-{}
+{
+}
 
 // Wiederablage (Pushback) eines Tokens. (Bis zu 2 Tokens)
 
@@ -513,7 +538,8 @@ SbiToken SbiTokenizer::Next()
             tp = &pTokTable[ lb + delta ];
             StringCompare res = aSym.CompareIgnoreCaseToAscii( tp->s );
             // Gefunden?
-            if( res == COMPARE_EQUAL ) goto special;
+            if( res == COMPARE_EQUAL )
+                goto special;
             // Groesser? Dann untere Haelfte
             if( res == COMPARE_LESS )
             {
@@ -534,24 +560,14 @@ SbiToken SbiTokenizer::Next()
         return eCurTok = SYMBOL;
     }
 special:
-    // LINE INPUT
-    if( tp->t == LINE )
-    {
-        short nC1 = nCol1;
-        String aOldSym = aSym;
-        eCurTok = Peek();
-        if( eCurTok == INPUT )
-        {
-            Next();
-            nCol1 = nC1;
-            return eCurTok = LINEINPUT;
-        }
-        else
-        {
-            aSym = aOldSym;
-            return eCurTok = LINE;
-        }
-    }
+    // #i92642
+    if( eCurTok != NIL && eCurTok != REM && eCurTok != EOLN && (tp->t == NAME || tp->t == LINE) )
+        return eCurTok = SYMBOL;
+    else if( tp->t == TEXT )
+        return eCurTok = SYMBOL;
+
+    // #i92642: Special LINE token handling -> SbiParser::Line()
+
     // END IF, CASE, SUB, DEF, FUNCTION, TYPE, CLASS, WITH
     if( tp->t == END )
     {
@@ -639,7 +655,7 @@ special:
 
 BOOL SbiTokenizer::MayBeLabel( BOOL bNeedsColon )
 {
-    if( eCurTok == SYMBOL )
+    if( eCurTok == SYMBOL || m_aTokenLabelInfo.canTokenBeLabel( eCurTok ) )
         return bNeedsColon ? DoesColonFollow() : TRUE;
     else
         return BOOL( eCurTok == NUMBER

@@ -449,6 +449,7 @@ OSL_TRACE("column type: %c",aDBFColumn.db_typ);
         Reference< XPropertySet> xCol = new sdbcx::OColumn(aColumnName,
                                                     aTypeName,
                                                     ::rtl::OUString(),
+                                                    ::rtl::OUString(),
                                                     ColumnValue::NULLABLE,
                                                     nPrecision,
                                                     aDBFColumn.db_dez,

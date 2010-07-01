@@ -130,7 +130,6 @@ namespace svx
         SID_ATTR_LRSPACE,           /* 48 */
         SID_ATTR_ULSPACE,           /* 49 */
         SID_ATTR_CHAR_AUTOKERN,
-        SID_ATTR_CHAR_OVERLINE,
         SID_SET_SUPER_SCRIPT,
         SID_SET_SUB_SCRIPT,
         SID_CHAR_DLG,
@@ -141,6 +140,7 @@ namespace svx
         SID_ATTR_CHAR_RELIEF,
         SID_ATTR_PARA_LEFT_TO_RIGHT,    /* 950 */
         SID_ATTR_PARA_RIGHT_TO_LEFT,
+        SID_ATTR_CHAR_OVERLINE,
         0
     };
 

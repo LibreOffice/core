@@ -45,6 +45,10 @@ SHL1TARGET= svxcore$(DLLPOSTFIX)
 SHL1IMPLIB= isvxcore
 SHL1USE_EXPORTS=name
 
+SHL1OBJS= \
+    $(SLO)$/coreservices.obj
+
+
 SHL1LIBS= \
     $(SLB)$/animation.lib \
     $(SLB)$/attribute.lib \

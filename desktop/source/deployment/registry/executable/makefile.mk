@@ -36,7 +36,8 @@ ENABLE_EXCEPTIONS = TRUE
 INCPRE += ..$/..$/inc
 
 SLOFILES = \
-        $(SLO)$/dp_executable.obj
+        $(SLO)$/dp_executable.obj \
+        $(SLO)$/dp_executablebackenddb.obj
         
 .INCLUDE : ..$/..$/target.pmk
 .INCLUDE : target.mk

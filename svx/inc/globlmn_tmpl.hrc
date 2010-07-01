@@ -1332,17 +1332,38 @@
             {\
                 MenuItem\
                 {\
-                    Identifier = SID_TRANSLITERATE_UPPER ; \
-                    Command = ".uno:ChangeCaseToUpper" ; \
-                    HelpID = SID_TRANSLITERATE_UPPER ; \
-                    Text [ en-US ] = "~Uppercase";\
+                    Identifier = SID_TRANSLITERATE_SENTENCE_CASE; \
+                    Command = ".uno:ChangeCaseToSentenceCase" ; \
+                    HelpID = SID_TRANSLITERATE_SENTENCE_CASE; \
+                    Text [ en-US ] = "~Sentence case";\
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_TRANSLITERATE_LOWER; \
                     Command = ".uno:ChangeCaseToLower" ; \
                     HelpID = SID_TRANSLITERATE_LOWER; \
-                    Text [ en-US ] = "~Lowercase";\
+                    Text [ en-US ] = "~lowercase";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_TRANSLITERATE_UPPER ; \
+                    Command = ".uno:ChangeCaseToUpper" ; \
+                    HelpID = SID_TRANSLITERATE_UPPER ; \
+                    Text [ en-US ] = "~UPPERCASE";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_TRANSLITERATE_TITLE_CASE; \
+                    Command = ".uno:ChangeCaseToTitleCase" ; \
+                    HelpID = SID_TRANSLITERATE_TITLE_CASE; \
+                    Text [ en-US ] = "~Capitalize Every Word";\
+                };\
+                MenuItem\
+                {\
+                    Identifier = SID_TRANSLITERATE_TOGGLE_CASE; \
+                    Command = ".uno:ChangeCaseToToggleCase" ; \
+                    HelpID = SID_TRANSLITERATE_TOGGLE_CASE; \
+                    Text [ en-US ] = "~tOGGLE cASE";\
                 };\
                 MenuItem\
                 {\

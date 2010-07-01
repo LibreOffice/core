@@ -381,15 +381,16 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
     // SQL like
     else if( SQL_ISRULE( parseTree, like_predicate ) )
     {
-        ENSURE_OR_THROW( parseTree->count() >= 4, "unexpected like_predicate structure" );
+        ENSURE_OR_THROW( parseTree->count() == 2, "unexpected like_predicate structure" );
+        const OSQLParseNode* pPart2 = parseTree->getChild(1);
 
         if( ! SQL_ISRULE( parseTree->getChild( 0 ), column_ref) )
             m_pConnection->throwGenericSQLException(STR_QUERY_INVALID_LIKE_COLUMN,*this);
 
         ::rtl::OUString aColumnName( impl_getColumnRefColumnName_throw( *parseTree->getChild( 0 ) ) );
 
-        OSQLParseNode *pAtom      = parseTree->getChild( parseTree->count() - 2 );     // Match String
-        bool bNotLike             = parseTree->count() == 5;
+        OSQLParseNode *pAtom      = pPart2->getChild( pPart2->count() - 2 );     // Match String
+        bool bNotLike             = pPart2->getChild(0)->isToken();
 
         if( !( pAtom->getNodeType() == SQL_NODE_STRING ||
                pAtom->getNodeType() == SQL_NODE_NAME ||

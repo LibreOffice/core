@@ -1,0 +1,52 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _SECURITYPAGE_HRC_
+#define _SECURITYPAGE_HRC_
+
+
+#define PASSWORD_TO_OPEN_FL                 1
+#define PASSWORD_TO_OPEN_FT                 2
+#define PASSWORD_TO_OPEN_ED                 3
+#define CONFIRM_PASSWORD_TO_OPEN_FT         4
+#define CONFIRM_PASSWORD_TO_OPEN_ED         5
+#define PASSWORD_INFO_FT                    6
+#define PASSWORD_TO_MODIFY_FL               7
+#define PASSWORD_TO_MODIFY_FT               8
+#define PASSWORD_TO_MODIFY_ED               9
+#define CONFIRM_PASSWORD_TO_MODIFY_FT       10
+#define CONFIRM_PASSWORD_TO_MODIFY_ED       11
+#define OPTIONS_FL                          12
+#define OPEN_READONLY_CB                    13
+#define RECORD_CHANGES_CB                   14
+#define CHANGE_PROTECTION_PB                15
+
+#define STR_PROTECT                         101
+#define STR_UNPROTECT                       102
+#define STR_END_REDLINING_WARNING           103
+
+#endif
+

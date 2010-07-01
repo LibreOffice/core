@@ -69,15 +69,19 @@ protected:
         @return
             returns an empty vector if no error could be found
     */
-    virtual SpellPortions GetNextWrongSentence (void) = 0;
+    virtual SpellPortions GetNextWrongSentence (bool bRecheck) = 0;
 
     /** This abstract method applies the changes made in the spelling dialog
      to the document.
      The dialog always updates its settings when it gets the focus. The document
      can rely on the fact that the methods ApplyChangedSentence() is called for the
      position that the last GetNextWrongSentence() returned.
+     If 'bRecheck' is set to true then the same sentence should be rechecked once from
+     the start. This should be used too find errors that the user has introduced by
+     manual changes in the edit field, and in order to not miss the still following errors
+     in that sentence.
     */
-    virtual void ApplyChangedSentence(const SpellPortions& rChanged) = 0;
+    virtual void ApplyChangedSentence(const SpellPortions& rChanged, bool bRecheck ) = 0;
     /** This methods determines whether the application supports AutoCorrection
      */
     virtual bool HasAutoCorrection();

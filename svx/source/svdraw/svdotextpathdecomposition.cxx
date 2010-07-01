@@ -107,15 +107,13 @@ namespace
             maLocale(rInfo.mpLocale ? *rInfo.mpLocale : ::com::sun::star::lang::Locale()),
             mbRTL(rInfo.mrFont.IsVertical() ? false : rInfo.IsRTL())
         {
-            if(mnTextLength)
+            if(mnTextLength && rInfo.mpDXArray)
             {
                 maDblDXArray.reserve(mnTextLength);
-                const sal_Int32 nFontWidth(0L == maFont.GetWidth() ? maFont.GetHeight() : maFont.GetWidth());
-                const double fScaleFactor(0L != nFontWidth ? 1.0 / (double)nFontWidth : 1.0);
 
                 for(xub_StrLen a(0); a < mnTextLength; a++)
                 {
-                    maDblDXArray.push_back((double)rInfo.mpDXArray[a] * fScaleFactor);
+                    maDblDXArray.push_back((double)rInfo.mpDXArray[a]);
                 }
             }
         }
@@ -291,7 +289,8 @@ namespace
             const double fPolyLength(basegfx::tools::getLength(aPolygonCandidate));
             double fPolyEnd(fPolyLength);
             double fPolyStart(0.0);
-            double fScaleFactor(1.0);
+            double fAutosizeScaleFactor(1.0);
+            bool bAutosizeScale(false);
 
             if(maSdrFormTextAttribute.getFormTextMirror())
             {
@@ -352,7 +351,8 @@ namespace
                     // if scale, prepare scale factor between curve length and text length
                     if(0.0 != fParagraphTextLength)
                     {
-                        fScaleFactor = (fPolyEnd - fPolyStart) / fParagraphTextLength;
+                        fAutosizeScaleFactor = (fPolyEnd - fPolyStart) / fParagraphTextLength;
+                        bAutosizeScale = true;
                     }
                 }
             }
@@ -382,10 +382,10 @@ namespace
                         // prepare portion length. Takes RTL sections into account.
                         double fPortionLength(pCandidate->getDisplayLength(nUsedTextLength, nNextGlyphLen));
 
-                        if(XFT_AUTOSIZE == maSdrFormTextAttribute.getFormTextAdjust())
+                        if(bAutosizeScale)
                         {
-                            // when scaling, expand portion length
-                            fPortionLength *= fScaleFactor;
+                            // when autosize scaling, expand portion length
+                            fPortionLength *= fAutosizeScaleFactor;
                         }
 
                         // create transformation
@@ -397,10 +397,10 @@ namespace
                         aNewTransformA.scale(aFontScaling.getX(), aFontScaling.getY());
 
                         // prepare scaling of text primitive
-                        if(XFT_AUTOSIZE == maSdrFormTextAttribute.getFormTextAdjust())
+                        if(bAutosizeScale)
                         {
-                            // when scaling, expand text primitive scaling
-                            aNewTransformA.scale(fScaleFactor, fScaleFactor);
+                            // when autosize scaling, expand text primitive scaling to it
+                            aNewTransformA.scale(fAutosizeScaleFactor, fAutosizeScaleFactor);
                         }
 
                         // eventually create shadow primitives from aDecomposition and add to rDecomposition
@@ -497,17 +497,42 @@ namespace
                             aNewTransformB.translate(aPerpendicular.getX(), aPerpendicular.getY());
                         }
 
-                        // shadow primitive creation
-                        if(bShadow)
+                        if(pCandidate->getText().Len() && nNextGlyphLen)
                         {
-                            if(pCandidate->getText().Len() && nNextGlyphLen)
+                            const xub_StrLen nPortionIndex(pCandidate->getPortionIndex(nUsedTextLength, nNextGlyphLen));
+                            ::std::vector< double > aNewDXArray;
+
+                            if(nNextGlyphLen > 1 && pCandidate->getDoubleDXArray().size())
                             {
+                                // copy DXArray for portion
+                                aNewDXArray.insert(
+                                    aNewDXArray.begin(),
+                                    pCandidate->getDoubleDXArray().begin() + nPortionIndex,
+                                    pCandidate->getDoubleDXArray().begin() + (nPortionIndex + nNextGlyphLen));
+
+                                if(nPortionIndex > 0)
+                                {
+                                    // adapt to portion start
+                                    double fDXOffset= *(pCandidate->getDoubleDXArray().begin() + (nPortionIndex - 1));
+                                    ::std::transform(
+                                        aNewDXArray.begin(), aNewDXArray.end(),
+                                        aNewDXArray.begin(), ::std::bind2nd(::std::minus<double>(), fDXOffset));
+                                }
+
+                                if(bAutosizeScale)
+                                {
+                                    // when autosize scaling, adapt to DXArray, too
+                                    ::std::transform(
+                                        aNewDXArray.begin(), aNewDXArray.end(),
+                                        aNewDXArray.begin(), ::std::bind2nd(::std::multiplies<double>(), fAutosizeScaleFactor));
+                                }
+                            }
+
+                            if(bShadow)
+                            {
+                                // shadow primitive creation
                                 const Color aShadowColor(maSdrFormTextAttribute.getFormTextShdwColor());
                                 const basegfx::BColor aRGBShadowColor(aShadowColor.getBColor());
-                                const xub_StrLen nPortionIndex(pCandidate->getPortionIndex(nUsedTextLength, nNextGlyphLen));
-                                const ::std::vector< double > aNewDXArray(
-                                    pCandidate->getDoubleDXArray().begin() + nPortionIndex,
-                                    pCandidate->getDoubleDXArray().begin() + nPortionIndex + nNextGlyphLen);
 
                                 drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pNew =
                                     new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
@@ -522,30 +547,25 @@ namespace
 
                                 mrShadowDecomposition.push_back(pNew);
                             }
-                        }
 
-                        // primitive creation
-                        if(pCandidate->getText().Len() && nNextGlyphLen)
-                        {
-                            const Color aColor(pCandidate->getFont().GetColor());
-                            const basegfx::BColor aRGBColor(aColor.getBColor());
-                            const xub_StrLen nPortionIndex(pCandidate->getPortionIndex(nUsedTextLength, nNextGlyphLen));
-                            const ::std::vector< double > aNewDXArray(
-                                pCandidate->getDoubleDXArray().begin() + nPortionIndex,
-                                pCandidate->getDoubleDXArray().begin() + nPortionIndex + nNextGlyphLen);
+                            {
+                                // primitive creation
+                                const Color aColor(pCandidate->getFont().GetColor());
+                                const basegfx::BColor aRGBColor(aColor.getBColor());
 
-                            drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pNew =
-                                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                    aNewTransformB * aNewTransformA,
-                                    pCandidate->getText(),
-                                    nPortionIndex,
-                                    nNextGlyphLen,
-                                    aNewDXArray,
-                                    aCandidateFontAttribute,
-                                    pCandidate->getLocale(),
-                                    aRGBColor);
+                                drawinglayer::primitive2d::TextSimplePortionPrimitive2D* pNew =
+                                    new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                        aNewTransformB * aNewTransformA,
+                                        pCandidate->getText(),
+                                        nPortionIndex,
+                                        nNextGlyphLen,
+                                        aNewDXArray,
+                                        aCandidateFontAttribute,
+                                        pCandidate->getLocale(),
+                                        aRGBColor);
 
-                            mrDecomposition.push_back(pNew);
+                                mrDecomposition.push_back(pNew);
+                            }
                         }
 
                         // consume from portion // no += here, xub_StrLen is USHORT and the compiler will gererate a warning here

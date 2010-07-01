@@ -36,10 +36,6 @@ TARGET=intro
 
 RSCLOCINC!:=$(RSCLOCINC);$(PRJ)$/RES
 
-# setting the compiled by $user$ string in the About box
-OOO_VENDOR*=$(USER)$(USERNAME)
-RSCDEFS+=-DOOO_VENDOR="$(OOO_VENDOR)"
-
 # --- Allgemein -----------------------------------------------------------
 
 LOCALIZE_ME=intro_tmpl.hrc

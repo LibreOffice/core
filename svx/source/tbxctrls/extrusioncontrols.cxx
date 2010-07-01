@@ -32,9 +32,14 @@
 
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 
-#ifndef _TOOLBOX_HXX //autogen
+#include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/awt/MenuItemStyle.hpp>
+#include <com/sun/star/awt/XPopupMenuExtended.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+
+#include <vos/mutex.hxx>
+
 #include <vcl/toolbox.hxx>
-#endif
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
@@ -42,30 +47,35 @@
 #include <vcl/settings.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/colritem.hxx>
-#include "chrtitem.hxx"
 #include <tools/urlobj.hxx>
 
 #include <svx/dialogs.hrc>
-#include "helpid.hrc"
-
 #include <svx/svdtrans.hxx>
+#include <svx/sdasitm.hxx>
 #include <svx/dialmgr.hxx>
+#include "svx/extrusioncolorcontrol.hxx"
+
+//#include "chrtitem.hxx"
+#include "helpid.hrc"
 #include "extrusioncontrols.hxx"
 #include "extrusioncontrols.hrc"
-#include <svx/sdasitm.hxx>
-#include "toolbarmenu.hxx"
 #include "colorwindow.hxx"
-
-#include <svx/tbxcolorupdate.hxx>
+#include "extrusiondepthdialog.hxx"
 
 ////////////
 
-using namespace svx;
+using ::rtl::OUString;
+using ::svtools::ToolbarMenu;
+
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::graphic;
 
-SFX_IMPL_TOOLBOX_CONTROL( ExtrusionDirectionControl, SfxBoolItem );
+namespace svx
+{
 
 /*************************************************************************
 |*
@@ -75,43 +85,17 @@ SFX_IMPL_TOOLBOX_CONTROL( ExtrusionDirectionControl, SfxBoolItem );
 
 static sal_Int32 gSkewList[] = { 135, 90, 45, 180, 0, -360, -135, -90, -45 };
 
-ExtrusionDirectionWindow::ExtrusionDirectionWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
-    SfxPopupWindow( nId,
-                    rFrame,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION )),
-    mxFrame( rFrame ),
-    maImgPerspective( SVX_RES( IMG_PERSPECTIVE ) ),
-    maImgPerspectiveH( SVX_RES( IMG_PERSPECTIVE_H ) ),
-    maImgParallel( SVX_RES( IMG_PARALLEL ) ),
-    maImgParallelH( SVX_RES( IMG_PARALLEL_H ) ),
-    mbPopupMode     ( TRUE )
+ExtrusionDirectionWindow::ExtrusionDirectionWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow )
+: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION ))
+, mrController( rController )
+, maImgPerspective( SVX_RES( IMG_PERSPECTIVE ) )
+, maImgPerspectiveH( SVX_RES( IMG_PERSPECTIVE_H ) )
+, maImgParallel( SVX_RES( IMG_PARALLEL ) )
+, maImgParallelH( SVX_RES( IMG_PARALLEL_H ) )
+, msExtrusionDirection( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDirection" ) )
+, msExtrusionProjection( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionProjection" ) )
 {
-    implInit();
-}
-
-ExtrusionDirectionWindow::ExtrusionDirectionWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    Window* pParentWindow ) :
-    SfxPopupWindow( nId,
-                    rFrame,
-                    pParentWindow,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_DIRECTION )),
-    mxFrame( rFrame ),
-    maImgPerspective( SVX_RES( IMG_PERSPECTIVE ) ),
-    maImgPerspectiveH( SVX_RES( IMG_PERSPECTIVE_H ) ),
-    maImgParallel( SVX_RES( IMG_PARALLEL ) ),
-    maImgParallelH( SVX_RES( IMG_PARALLEL_H ) ),
-    mbPopupMode     ( TRUE )
-{
-    implInit();
-}
-
-void ExtrusionDirectionWindow::implInit()
-{
-    SetHelpId( HID_POPUP_EXTRUSION_DIRECTION );
+    SetHelpId( HID_MENU_EXTRUSION_DIRECTION );
 
     USHORT i;
     for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
@@ -120,16 +104,10 @@ void ExtrusionDirectionWindow::implInit()
         maImgDirectionH[i] = Image( SVX_RES( IMG_DIRECTION_H + i ) );
     }
 
-//  mpDirectionForewarder = new SfxStatusForwarder( SID_EXTRUSION_DIRECTION, *this );
-//  mpProjectionForewarder = new SfxStatusForwarder( SID_EXTRUSION_PROJECTION, *this );
-
-    mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_DIRECTION );
-    mpMenu->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
-    mpDirectionSet = new ValueSet( mpMenu, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+    SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
+    mpDirectionSet = createEmptyValueSetControl();
     mpDirectionSet->SetHelpId( HID_VALUESET_EXTRUSION_DIRECTION );
 
-    mpDirectionSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
     mpDirectionSet->SetSelectHdl( LINK( this, ExtrusionDirectionWindow, SelectHdl ) );
     mpDirectionSet->SetColCount( 3 );
     mpDirectionSet->EnableFullItemMode( FALSE );
@@ -144,51 +122,35 @@ void ExtrusionDirectionWindow::implInit()
 
     mpDirectionSet->SetOutputSizePixel( Size( 72, 72 ) );
 
-    mpMenu->appendEntry( 2, mpDirectionSet );
-    mpMenu->appendSeparator();
-    mpMenu->appendEntry( 0, String( SVX_RES( STR_PERSPECTIVE ) ), bHighContrast ? maImgPerspectiveH : maImgPerspective );
-    mpMenu->appendEntry( 1, String( SVX_RES( STR_PARALLEL ) ), bHighContrast ? maImgParallelH : maImgParallel );
+    appendEntry( 2, mpDirectionSet );
+    appendSeparator();
+    appendEntry( 0, String( SVX_RES( STR_PERSPECTIVE ) ), bHighContrast ? maImgPerspectiveH : maImgPerspective );
+    appendEntry( 1, String( SVX_RES( STR_PARALLEL ) ), bHighContrast ? maImgParallelH : maImgParallel );
 
-    SetOutputSizePixel( mpMenu->getMenuSize() );
-    mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
-
-    mpMenu->Show();
+    SetOutputSizePixel( getMenuSize() );
 
     FreeResource();
 
-    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDirection" )));
-    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionProjection" )));
-}
-
-SfxPopupWindow* ExtrusionDirectionWindow::Clone() const
-{
-    return new ExtrusionDirectionWindow( GetId(), mxFrame );
+    AddStatusListener( msExtrusionDirection );
+    AddStatusListener( msExtrusionProjection );
 }
 
 void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    SfxPopupWindow::DataChanged( rDCEvt );
+    ToolbarMenu::DataChanged( rDCEvt );
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
         bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-        USHORT i;
-        for( i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
+        for( USHORT i = DIRECTION_NW; i <= DIRECTION_SE; i++ )
         {
             mpDirectionSet->SetItemImage( i+1, bHighContrast ? maImgDirectionH[ i ] : maImgDirection[ i ] );
         }
 
-        mpMenu->setEntryImage( 0, bHighContrast ? maImgPerspectiveH : maImgPerspective );
-        mpMenu->setEntryImage( 1, bHighContrast ? maImgParallelH : maImgParallel );
+        setEntryImage( 0, bHighContrast ? maImgPerspectiveH : maImgPerspective );
+        setEntryImage( 1, bHighContrast ? maImgParallelH : maImgParallel );
     }
-}
-
-// -----------------------------------------------------------------------
-
-ExtrusionDirectionWindow::~ExtrusionDirectionWindow()
-{
-    delete mpMenu;
 }
 
 // -----------------------------------------------------------------------
@@ -213,58 +175,47 @@ void ExtrusionDirectionWindow::implSetDirection( sal_Int32 nSkew, bool bEnabled 
             mpDirectionSet->SetNoSelection();
         }
     }
-    if( mpMenu )
-    {
-        mpMenu->enableEntry( 2, bEnabled );
-    }
+    enableEntry( 2, bEnabled );
 }
 
 // -----------------------------------------------------------------------
 
 void ExtrusionDirectionWindow::implSetProjection( sal_Int32 nProjection, bool bEnabled )
 {
-    if( mpMenu )
-    {
-        mpMenu->checkEntry( 0, (nProjection == 0) && bEnabled );
-        mpMenu->checkEntry( 1, (nProjection == 1 ) && bEnabled );
-        mpMenu->enableEntry( 0, bEnabled );
-        mpMenu->enableEntry( 1, bEnabled );
-    }
+    checkEntry( 0, (nProjection == 0) && bEnabled );
+    checkEntry( 1, (nProjection == 1 ) && bEnabled );
+    enableEntry( 0, bEnabled );
+    enableEntry( 1, bEnabled );
 }
 
 // -----------------------------------------------------------------------
 
-void ExtrusionDirectionWindow::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SAL_CALL ExtrusionDirectionWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    switch( nSID )
+    if( Event.FeatureURL.Main.equals( msExtrusionDirection ) )
     {
-        case SID_EXTRUSION_DIRECTION:
+        if( !Event.IsEnabled )
         {
-            if( eState == SFX_ITEM_DISABLED )
-            {
-                implSetDirection( -1, false );
-            }
-            else
-            {
-                const SfxInt32Item* pStateItem = PTR_CAST( SfxInt32Item, pState );
-                if( pStateItem )
-                    implSetDirection( pStateItem->GetValue(), true );
-            }
-            break;
+            implSetDirection( -1, false );
         }
-        case SID_EXTRUSION_PROJECTION:
+        else
         {
-            if( eState == SFX_ITEM_DISABLED )
-            {
-                implSetProjection( -1, false );
-            }
-            else
-            {
-                const SfxInt32Item* pStateItem = PTR_CAST( SfxInt32Item, pState );
-                if( pStateItem )
-                    implSetProjection( pStateItem->GetValue(), true );
-            }
-            break;
+            sal_Int32 nValue = 0;
+            if( Event.State >>= nValue )
+                implSetDirection( nValue, true );
+        }
+    }
+    else if( Event.FeatureURL.Main.equals( msExtrusionProjection ) )
+    {
+        if( !Event.IsEnabled )
+        {
+            implSetProjection( -1, false );
+        }
+        else
+        {
+            sal_Int32 nValue = 0;
+            if( Event.State >>= nValue )
+                implSetProjection( nValue, true );
         }
     }
 }
@@ -276,48 +227,24 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
     if ( IsInPopupMode() )
         EndPopupMode();
 
-//  SfxDispatcher* pDisp = GetBindings().GetDispatcher();
-
     if( pControl == mpDirectionSet )
     {
-        sal_Int32 nSkew = gSkewList[mpDirectionSet->GetSelectItemId()-1];
-
-        SfxInt32Item    aItem( SID_EXTRUSION_DIRECTION, nSkew );
-        rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDirection" ));
-
-        Any a;
-        INetURLObject aObj( aCommand );
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = aObj.GetURLPath();
-        aItem.QueryValue( a );
-        aArgs[0].Value = a;
+        aArgs[0].Name = msExtrusionDirection.copy(5);
+        aArgs[0].Value <<= (sal_Int32)gSkewList[mpDirectionSet->GetSelectItemId()-1];
 
-        SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >(
-                                     mxFrame->getController(), UNO_QUERY ),
-                                     aCommand,
-                                     aArgs );
-
-//      pDisp->Execute( SID_EXTRUSION_DIRECTION, SFX_CALLMODE_RECORD, &aItem, 0L , 0L );
+        mrController.dispatchCommand( msExtrusionDirection, aArgs );
     }
     else
     {
-        int nProjection = mpMenu->getSelectedEntryId();
+        int nProjection = getSelectedEntryId();
         if( (nProjection >= 0) && (nProjection < 2 ) )
         {
-            SfxInt32Item    aItem( SID_EXTRUSION_PROJECTION, nProjection );
-            rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionProjection" ));
-
-            Any a;
-            INetURLObject aObj( aCommand );
             Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = aObj.GetURLPath();
-            aItem.QueryValue( a );
-            aArgs[0].Value = a;
+            aArgs[0].Name = msExtrusionProjection.copy(5);
+            aArgs[0].Value <<= (sal_Int32)nProjection;
 
-            SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >(
-                                        mxFrame->getController(), UNO_QUERY ),
-                                        aCommand,
-                                        aArgs );
+            mrController.dispatchCommand( msExtrusionProjection, aArgs );
             implSetProjection( nProjection, true );
         }
     }
@@ -325,94 +252,59 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+// =======================================================================
+// ExtrusionDirectionControl
+// =======================================================================
 
-void ExtrusionDirectionWindow::FillValueSet()
+ExtrusionDirectionControl::ExtrusionDirectionControl( const Reference< lang::XMultiServiceFactory >& rServiceManager )
+: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDirectionFloater" ) ) )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void ExtrusionDirectionWindow::StartSelection()
+::Window* ExtrusionDirectionControl::createPopupWindow( ::Window* pParent )
 {
-    mpDirectionSet->StartSelection();
+    return new ExtrusionDirectionWindow( *this, m_xFrame, pParent );
 }
 
 // -----------------------------------------------------------------------
-
-BOOL ExtrusionDirectionWindow::Close()
-{
-    return SfxPopupWindow::Close();
-}
-
+// XServiceInfo
 // -----------------------------------------------------------------------
 
-void ExtrusionDirectionWindow::PopupModeEnd()
+OUString SAL_CALL ExtrusionDirectionControl_getImplementationName()
 {
-    if ( IsVisible() )
-    {
-        mbPopupMode = FALSE;
-    }
-    SfxPopupWindow::PopupModeEnd();
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.ExtrusionDirectionController" ));
 }
 
-// -----------------------------------------------------------------------
+// --------------------------------------------------------------------
 
-void ExtrusionDirectionWindow::GetFocus (void)
+Sequence< OUString > SAL_CALL ExtrusionDirectionControl_getSupportedServiceNames() throw( RuntimeException )
 {
-    SfxPopupWindow::GetFocus();
-    // Grab the focus to the line ends value set so that it can be controlled
-    // with the keyboard.
-    if( mpDirectionSet )
-        mpDirectionSet->GrabFocus();
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    return aSNS;
 }
 
-/*************************************************************************
-|*
-|* SvxLineEndToolBoxControl
-|*
-\************************************************************************/
+// --------------------------------------------------------------------
 
-ExtrusionDirectionControl::ExtrusionDirectionControl(
-    USHORT nSlotId, USHORT  nId, ToolBox &rTbx )
-: SfxToolBoxControl( nSlotId, nId, rTbx )
+Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDirectionControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+    return *new ExtrusionDirectionControl( rSMgr );
 }
 
-// -----------------------------------------------------------------------
+// --------------------------------------------------------------------
 
-ExtrusionDirectionControl::~ExtrusionDirectionControl()
+OUString SAL_CALL ExtrusionDirectionControl::getImplementationName(  ) throw (RuntimeException)
 {
+    return ExtrusionDirectionControl_getImplementationName();
 }
 
-// -----------------------------------------------------------------------
+// --------------------------------------------------------------------
 
-SfxPopupWindowType ExtrusionDirectionControl::GetPopupWindowType() const
+Sequence< OUString > SAL_CALL ExtrusionDirectionControl::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    return SFX_POPUPWINDOW_ONCLICK;
-}
-
-// -----------------------------------------------------------------------
-
-SfxPopupWindow* ExtrusionDirectionControl::CreatePopupWindow()
-{
-    ExtrusionDirectionWindow* pWin = new ExtrusionDirectionWindow( GetId(), m_xFrame, &GetToolBox() );
-    pWin->StartPopupMode( &GetToolBox(), TRUE );
-    pWin->StartSelection();
-    SetPopupWindow( pWin );
-    return pWin;
-}
-
-// -----------------------------------------------------------------------
-
-void ExtrusionDirectionControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
-{
-    USHORT nId = GetId();
-    ToolBox& rTbx = GetToolBox();
-
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+    return ExtrusionDirectionControl_getSupportedServiceNames();
 }
 
 // ####################################################################
@@ -444,135 +336,66 @@ double ExtrusionDepthDialog::getDepth() const
 
 // ####################################################################
 
-SFX_IMPL_TOOLBOX_CONTROL( ExtrusionDepthControl, SfxBoolItem );
+double aDepthListInch[] = { 0, 1270,2540,5080,10160 };
+double aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
 
-ExtrusionDepthWindow::ExtrusionDepthWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
-    SfxPopupWindow( nId,
-                    rFrame,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH )),
-    maImgDepth0( SVX_RES( IMG_DEPTH_0 ) ),
-    maImgDepth1( SVX_RES( IMG_DEPTH_1 ) ),
-    maImgDepth2( SVX_RES( IMG_DEPTH_2 ) ),
-    maImgDepth3( SVX_RES( IMG_DEPTH_3 ) ),
-    maImgDepth4( SVX_RES( IMG_DEPTH_4 ) ),
-    maImgDepthInfinity( SVX_RES( IMG_DEPTH_INFINITY ) ),
-    maImgDepth0h( SVX_RES( IMG_DEPTH_0_H ) ),
-    maImgDepth1h( SVX_RES( IMG_DEPTH_1_H ) ),
-    maImgDepth2h( SVX_RES( IMG_DEPTH_2_H ) ),
-    maImgDepth3h( SVX_RES( IMG_DEPTH_3_H ) ),
-    maImgDepth4h( SVX_RES( IMG_DEPTH_4_H ) ),
-    maImgDepthInfinityh( SVX_RES( IMG_DEPTH_INFINITY_H ) ),
-    mxFrame( rFrame ),
-    mbPopupMode     ( true ),
-    mfDepth( -1.0 ),
-    mbEnabled( false )
+ExtrusionDepthWindow::ExtrusionDepthWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow )
+: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH ))
+, mrController( rController )
+, maImgDepth0( SVX_RES( IMG_DEPTH_0 ) )
+, maImgDepth1( SVX_RES( IMG_DEPTH_1 ) )
+, maImgDepth2( SVX_RES( IMG_DEPTH_2 ) )
+, maImgDepth3( SVX_RES( IMG_DEPTH_3 ) )
+, maImgDepth4( SVX_RES( IMG_DEPTH_4 ) )
+, maImgDepthInfinity( SVX_RES( IMG_DEPTH_INFINITY ) )
+, maImgDepth0h( SVX_RES( IMG_DEPTH_0_H ) )
+, maImgDepth1h( SVX_RES( IMG_DEPTH_1_H ) )
+, maImgDepth2h( SVX_RES( IMG_DEPTH_2_H ) )
+, maImgDepth3h( SVX_RES( IMG_DEPTH_3_H ) )
+, maImgDepth4h( SVX_RES( IMG_DEPTH_4_H ) )
+, maImgDepthInfinityh( SVX_RES( IMG_DEPTH_INFINITY_H ) )
+, mfDepth( -1.0 )
+, msExtrusionDepth( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepth" ) )
+, msMetricUnit( RTL_CONSTASCII_USTRINGPARAM( ".uno:MetricUnit" ) )
 {
-    implInit();
-}
+    SetHelpId( HID_MENU_EXTRUSION_DEPTH );
 
-ExtrusionDepthWindow::ExtrusionDepthWindow( USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    Window* pParentWindow ) :
-    SfxPopupWindow( nId,
-                    rFrame,
-                    pParentWindow,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_DEPTH )),
-    maImgDepth0( SVX_RES( IMG_DEPTH_0 ) ),
-    maImgDepth1( SVX_RES( IMG_DEPTH_1 ) ),
-    maImgDepth2( SVX_RES( IMG_DEPTH_2 ) ),
-    maImgDepth3( SVX_RES( IMG_DEPTH_3 ) ),
-    maImgDepth4( SVX_RES( IMG_DEPTH_4 ) ),
-    maImgDepthInfinity( SVX_RES( IMG_DEPTH_INFINITY ) ),
-    maImgDepth0h( SVX_RES( IMG_DEPTH_0_H ) ),
-    maImgDepth1h( SVX_RES( IMG_DEPTH_1_H ) ),
-    maImgDepth2h( SVX_RES( IMG_DEPTH_2_H ) ),
-    maImgDepth3h( SVX_RES( IMG_DEPTH_3_H ) ),
-    maImgDepth4h( SVX_RES( IMG_DEPTH_4_H ) ),
-    maImgDepthInfinityh( SVX_RES( IMG_DEPTH_INFINITY_H ) ),
-    mxFrame( rFrame ),
-    mbPopupMode     ( true ),
-    mfDepth( -1.0 ),
-    mbEnabled( false )
-{
-    implInit();
-}
-
-void ExtrusionDepthWindow::implInit()
-{
-    SetHelpId( HID_POPUP_EXTRUSION_DEPTH );
-
-//  mpDepthForewarder = new SfxStatusForwarder( SID_EXTRUSION_DEPTH, *this );
-//  mpMetricForewarder = new SfxStatusForwarder( SID_ATTR_METRIC, *this );
-
-    mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_DEPTH );
-
-    mpMenu->SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
+    SetSelectHdl( LINK( this, ExtrusionDepthWindow, SelectHdl ) );
 
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     String aEmpty;
-    mpMenu->appendEntry( 0, aEmpty, bHighContrast ? maImgDepth0h : maImgDepth0 );
-    mpMenu->appendEntry( 1, aEmpty, bHighContrast ? maImgDepth1h : maImgDepth1 );
-    mpMenu->appendEntry( 2, aEmpty, bHighContrast ? maImgDepth2h : maImgDepth2 );
-    mpMenu->appendEntry( 3, aEmpty, bHighContrast ? maImgDepth3h : maImgDepth3 );
-    mpMenu->appendEntry( 4, aEmpty, bHighContrast ? maImgDepth4h : maImgDepth4 );
-    mpMenu->appendEntry( 5, String( SVX_RES( STR_INFINITY ) ), bHighContrast ? maImgDepthInfinityh : maImgDepthInfinity );
-    mpMenu->appendEntry( 6, String( SVX_RES( STR_CUSTOM ) ) );
+    appendEntry( 0, aEmpty, bHighContrast ? maImgDepth0h : maImgDepth0 );
+    appendEntry( 1, aEmpty, bHighContrast ? maImgDepth1h : maImgDepth1 );
+    appendEntry( 2, aEmpty, bHighContrast ? maImgDepth2h : maImgDepth2 );
+    appendEntry( 3, aEmpty, bHighContrast ? maImgDepth3h : maImgDepth3 );
+    appendEntry( 4, aEmpty, bHighContrast ? maImgDepth4h : maImgDepth4 );
+    appendEntry( 5, String( SVX_RES( STR_INFINITY ) ), bHighContrast ? maImgDepthInfinityh : maImgDepthInfinity );
+    appendEntry( 6, String( SVX_RES( STR_CUSTOM ) ) );
 
-    SetOutputSizePixel( mpMenu->getMenuSize() );
-    mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
-
-    mpMenu->Show();
+    SetOutputSizePixel( getMenuSize() );
 
     FreeResource();
 
-    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepth" )));
-    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:MetricUnit" )));
-//  rBindings.Update( SID_ATTR_METRIC );
-//  rBindings.Update( SID_EXTRUSION_DEPTH );
-}
-
-SfxPopupWindow* ExtrusionDepthWindow::Clone() const
-{
-    return new ExtrusionDepthWindow( GetId(), mxFrame );
+    AddStatusListener( msExtrusionDepth );
+    AddStatusListener( msMetricUnit );
 }
 
 // -----------------------------------------------------------------------
 
-ExtrusionDepthWindow::~ExtrusionDepthWindow()
+void ExtrusionDepthWindow::implSetDepth( double fDepth )
 {
-//  delete mpDepthForewarder;
-//  delete mpMetricForewarder;
-
-    delete mpMenu;
-}
-
-// -----------------------------------------------------------------------
-
-double aDepthListInch[] = { 0, 1270,2540,5080,10160 };
-double aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
-
-void ExtrusionDepthWindow::implSetDepth( double fDepth, bool bEnabled )
-{
-    mbEnabled = bEnabled;
     mfDepth = fDepth;
-    if( mpMenu )
+    int i;
+    for( i = 0; i < 7; i++ )
     {
-        int i;
-        for( i = 0; i < 7; i++ )
+        if( i == 5 )
         {
-            if( i == 5 )
-            {
-                mpMenu->checkEntry( i, (fDepth >= 338666) && bEnabled );
-            }
-            else if( i != 6 )
-            {
-                mpMenu->checkEntry( i, (fDepth == (IsMetric( meUnit ) ? aDepthListMM[i] : aDepthListInch[i]) && bEnabled ) );
-            }
-            mpMenu->enableEntry( i, bEnabled );
+            checkEntry( i, fDepth >= 338666 );
+        }
+        else if( i != 6 )
+        {
+            checkEntry( i, (fDepth == (IsMetric( meUnit ) ? aDepthListMM[i] : aDepthListInch[i]) ) );
         }
     }
 }
@@ -587,38 +410,37 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
     for( int i = 0; i < 5; i++ )
     {
         String aStr( SVX_RES( nResource + i ) );
-        mpMenu->setEntryText( i, aStr );
+        setEntryText( i, aStr );
     };
 }
 
 // -----------------------------------------------------------------------
 
-void ExtrusionDepthWindow::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SAL_CALL ExtrusionDepthWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    switch( nSID )
+    if( Event.FeatureURL.Main.equals( msExtrusionDepth ) )
     {
-        case SID_EXTRUSION_DEPTH:
+        if( !Event.IsEnabled )
         {
-            if( eState == SFX_ITEM_DISABLED )
-            {
-                implSetDepth( 0, false );
-            }
-            else
-            {
-                const SvxDoubleItem* pStateItem = PTR_CAST( SvxDoubleItem, pState );
-                if( pStateItem )
-                    implSetDepth( pStateItem->GetValue(), true );
-            }
-            break;
+            implSetDepth( 0 );
         }
-        case SID_ATTR_METRIC:
+        else
         {
-            const SfxUInt16Item* pStateItem = PTR_CAST( SfxUInt16Item, pState );
-            if( pStateItem )
+            double fValue = 0.0;
+            if( Event.State >>= fValue )
+                implSetDepth( fValue );
+        }
+    }
+    else if( Event.FeatureURL.Main.equals( msMetricUnit ) )
+    {
+        if( Event.IsEnabled )
+        {
+            sal_Int32 nValue = 0;
+            if( Event.State >>= nValue )
             {
-                implFillStrings( (FieldUnit)pStateItem->GetValue() );
+                implFillStrings( static_cast<FieldUnit>(nValue) );
                 if( mfDepth >= 0.0 )
-                    implSetDepth( mfDepth, mbEnabled );
+                    implSetDepth( mfDepth );
             }
         }
     }
@@ -628,18 +450,18 @@ void ExtrusionDepthWindow::StateChanged( USHORT nSID, SfxItemState eState, const
 
 void ExtrusionDepthWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    SfxPopupWindow::DataChanged( rDCEvt );
+    ToolbarMenu::DataChanged( rDCEvt );
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
         bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-        mpMenu->setEntryImage( 0, bHighContrast ? maImgDepth0h : maImgDepth0 );
-        mpMenu->setEntryImage( 1, bHighContrast ? maImgDepth1h : maImgDepth1 );
-        mpMenu->setEntryImage( 2, bHighContrast ? maImgDepth2h : maImgDepth2 );
-        mpMenu->setEntryImage( 3, bHighContrast ? maImgDepth3h : maImgDepth3 );
-        mpMenu->setEntryImage( 4, bHighContrast ? maImgDepth4h : maImgDepth4 );
-        mpMenu->setEntryImage( 5, bHighContrast ? maImgDepthInfinityh : maImgDepthInfinity );
+        setEntryImage( 0, bHighContrast ? maImgDepth0h : maImgDepth0 );
+        setEntryImage( 1, bHighContrast ? maImgDepth1h : maImgDepth1 );
+        setEntryImage( 2, bHighContrast ? maImgDepth2h : maImgDepth2 );
+        setEntryImage( 3, bHighContrast ? maImgDepth3h : maImgDepth3 );
+        setEntryImage( 4, bHighContrast ? maImgDepth4h : maImgDepth4 );
+        setEntryImage( 5, bHighContrast ? maImgDepthInfinityh : maImgDepthInfinity );
     }
 }
 
@@ -648,9 +470,7 @@ void ExtrusionDepthWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, EMPTYARG )
 {
-//  SfxDispatcher* pDisp = GetBindings().GetDispatcher();
-
-    int nSelected = mpMenu->getSelectedEntryId();
+    int nSelected = getSelectedEntryId();
     if( nSelected != -1 )
     {
         if( nSelected == 6 )
@@ -658,24 +478,16 @@ IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, EMPTYARG )
             if ( IsInPopupMode() )
                 EndPopupMode();
 
-            SvxDoubleItem aDepthItem( mfDepth, SID_EXTRUSION_DEPTH );
-            SfxUInt16Item aMetricItem(
-                SID_ATTR_METRIC, sal::static_int_cast< UINT16 >( meUnit ) );
-            rtl::OUString aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepthDialog" ));
+            const rtl::OUString aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepthDialog" ));
 
             Any a;
             Sequence< PropertyValue > aArgs( 2 );
             aArgs[0].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Depth" ));
-            aDepthItem.QueryValue( a );
-            aArgs[0].Value = a;
+            aArgs[0].Value <<= mfDepth;
             aArgs[1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Metric" ));
-            aMetricItem.QueryValue( a );
-            aArgs[1].Value = a;
+            aArgs[1].Value <<= static_cast<sal_Int32>( meUnit );
 
-            SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >(
-                                         mxFrame->getController(), UNO_QUERY ),
-                                         aCommand,
-                                         aArgs );
+            mrController.dispatchCommand( aCommand, aArgs );
         }
         else
         {
@@ -690,21 +502,12 @@ IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, EMPTYARG )
                 fDepth = IsMetric( meUnit ) ? aDepthListMM[nSelected] : aDepthListInch[nSelected];
             }
 
-            SvxDoubleItem aItem( fDepth, SID_EXTRUSION_DEPTH );
-            rtl::OUString aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepth" ));
-
-            Any a;
-            INetURLObject aObj( aCommand );
             Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = aObj.GetURLPath();
-            aItem.QueryValue( a );
-            aArgs[0].Value = a;
+            aArgs[0].Name = msExtrusionDepth.copy(5);
+            aArgs[0].Value <<= fDepth;
 
-            SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >(
-                                         mxFrame->getController(), UNO_QUERY ),
-                                         aCommand,
-                                         aArgs );
-            implSetDepth( fDepth, true );
+            mrController.dispatchCommand( msExtrusionDepth,  aArgs );
+            implSetDepth( fDepth );
 
             if ( IsInPopupMode() )
                 EndPopupMode();
@@ -713,143 +516,83 @@ IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, EMPTYARG )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+// =======================================================================
+// ExtrusionDirectionControl
+// =======================================================================
 
-void ExtrusionDepthWindow::StartSelection()
+ExtrusionDepthController::ExtrusionDepthController( const Reference< lang::XMultiServiceFactory >& rServiceManager )
+: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDepthFloater" ) ) )
 {
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ExtrusionDepthWindow::Close()
+::Window* ExtrusionDepthController::createPopupWindow( ::Window* pParent )
 {
-    return SfxPopupWindow::Close();
+    return new ExtrusionDepthWindow( *this, m_xFrame, pParent );
 }
+
 
 // -----------------------------------------------------------------------
-
-void ExtrusionDepthWindow::PopupModeEnd()
-{
-    if ( IsVisible() )
-    {
-        mbPopupMode = FALSE;
-    }
-    SfxPopupWindow::PopupModeEnd();
-}
-
+// XServiceInfo
 // -----------------------------------------------------------------------
 
-void ExtrusionDepthWindow::GetFocus (void)
+OUString SAL_CALL ExtrusionDepthController_getImplementationName()
 {
-    SfxPopupWindow::GetFocus();
-    // Grab the focus to the line ends value set so that it can be controlled
-    // with the keyboard.
-    if( mpMenu )
-        mpMenu->GrabFocus();
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.ExtrusionDepthController" ));
 }
 
-// ========================================================================
+// --------------------------------------------------------------------
 
-ExtrusionDepthControl::ExtrusionDepthControl(
-    USHORT nSlotId, USHORT nId, ToolBox &rTbx )
-: SfxToolBoxControl( nSlotId, nId, rTbx )
+Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames() throw( RuntimeException )
 {
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.PopupMenuController" ));
+    return aSNS;
 }
 
-// -----------------------------------------------------------------------
+// --------------------------------------------------------------------
 
-ExtrusionDepthControl::~ExtrusionDepthControl()
+Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDepthController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
+    return *new ExtrusionDepthController( rSMgr );
 }
 
-// -----------------------------------------------------------------------
+// --------------------------------------------------------------------
 
-SfxPopupWindowType ExtrusionDepthControl::GetPopupWindowType() const
+OUString SAL_CALL ExtrusionDepthController::getImplementationName(  ) throw (RuntimeException)
 {
-    return SFX_POPUPWINDOW_ONCLICK;
+    return ExtrusionDepthController_getImplementationName();
 }
 
-// -----------------------------------------------------------------------
+// --------------------------------------------------------------------
 
-SfxPopupWindow* ExtrusionDepthControl::CreatePopupWindow()
+Sequence< OUString > SAL_CALL ExtrusionDepthController::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    ExtrusionDepthWindow* pWin = new ExtrusionDepthWindow( GetId(), m_xFrame, &GetToolBox() );
-    pWin->StartPopupMode( &GetToolBox(), TRUE );
-    pWin->StartSelection();
-    SetPopupWindow( pWin );
-    return pWin;
+    return ExtrusionDepthController_getSupportedServiceNames();
 }
 
-// -----------------------------------------------------------------------
-
-void ExtrusionDepthControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
-{
-    USHORT nId = GetId();
-    ToolBox& rTbx = GetToolBox();
-
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
-}
 
 // ####################################################################
 
-SFX_IMPL_TOOLBOX_CONTROL( ExtrusionLightingControl, SfxBoolItem );
+// -------------------------------------------------------------------------
 
-ExtrusionLightingWindow::ExtrusionLightingWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
-    SfxPopupWindow( nId,
-                    rFrame,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_LIGHTING ) ),
-    maImgBright( SVX_RES( IMG_LIGHTING_BRIGHT ) ),
-    maImgNormal( SVX_RES( IMG_LIGHTING_NORMAL ) ),
-    maImgDim( SVX_RES( IMG_LIGHTING_DIM ) ),
-    maImgBrighth( SVX_RES( IMG_LIGHTING_BRIGHT_H ) ),
-    maImgNormalh( SVX_RES( IMG_LIGHTING_NORMAL_H ) ),
-    maImgDimh( SVX_RES( IMG_LIGHTING_DIM_H ) ),
-    mxFrame( rFrame ),
-    mbPopupMode( true ),
-    mnLevel( 0 ),
-    mbLevelEnabled( false ),
-    mnDirection( FROM_FRONT ),
-    mbDirectionEnabled( false )
+ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow )
+: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_LIGHTING ))
+, mrController( rController )
+, maImgBright( SVX_RES( IMG_LIGHTING_BRIGHT ) )
+, maImgNormal( SVX_RES( IMG_LIGHTING_NORMAL ) )
+, maImgDim( SVX_RES( IMG_LIGHTING_DIM ) )
+, maImgBrighth( SVX_RES( IMG_LIGHTING_BRIGHT_H ) )
+, maImgNormalh( SVX_RES( IMG_LIGHTING_NORMAL_H ) )
+, maImgDimh( SVX_RES( IMG_LIGHTING_DIM_H ) )
+, mnLevel( 0 )
+, mbLevelEnabled( false )
+, mnDirection( FROM_FRONT )
+, mbDirectionEnabled( false )
+, msExtrusionLightingDirection( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingDirection" ))
+, msExtrusionLightingIntensity( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingIntensity" ))
 {
-    implInit();
-}
-
-// -----------------------------------------------------------------------
-
-ExtrusionLightingWindow::ExtrusionLightingWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    Window* pParentWindow ) :
-    SfxPopupWindow( nId,
-                    rFrame,
-                    pParentWindow,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_LIGHTING ) ),
-    maImgBright( SVX_RES( IMG_LIGHTING_BRIGHT ) ),
-    maImgNormal( SVX_RES( IMG_LIGHTING_NORMAL ) ),
-    maImgDim( SVX_RES( IMG_LIGHTING_DIM ) ),
-    maImgBrighth( SVX_RES( IMG_LIGHTING_BRIGHT_H ) ),
-    maImgNormalh( SVX_RES( IMG_LIGHTING_NORMAL_H ) ),
-    maImgDimh( SVX_RES( IMG_LIGHTING_DIM_H ) ),
-    mxFrame( rFrame ),
-    mbPopupMode( true ),
-    mnLevel( 0 ),
-    mbLevelEnabled( false ),
-    mnDirection( FROM_FRONT ),
-    mbDirectionEnabled( false )
-{
-    implInit();
-}
-
-// -----------------------------------------------------------------------
-
-void ExtrusionLightingWindow::implInit()
-{
-    SetHelpId( HID_POPUP_EXTRUSION_LIGHTING );
-
     USHORT i;
     for( i = FROM_TOP_LEFT; i <= FROM_BOTTOM_RIGHT; i++ )
     {
@@ -864,17 +607,12 @@ void ExtrusionLightingWindow::implInit()
         maImgLightingPreviewh[i] = Image( SVX_RES( IMG_LIGHT_PREVIEW_H + i ) );
     }
 
-//  mpLightingDirectionForewarder = new SfxStatusForwarder( SID_EXTRUSION_LIGHTING_DIRECTION, *this );
-//  mpLightingIntensityForewarder = new SfxStatusForwarder( SID_EXTRUSION_LIGHTING_INTENSITY, *this );
+    SetHelpId( HID_MENU_EXTRUSION_LIGHTING );
+    SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
 
-    mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_LIGHTING );
-    mpMenu->SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
-
-    mpLightingSet = new ValueSet( mpMenu, WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT );
+    mpLightingSet = createEmptyValueSetControl();
     mpLightingSet->SetHelpId( HID_VALUESET_EXTRUSION_LIGHTING );
 
-    mpLightingSet->SetHelpId( HID_POPUP_LINEEND_CTRL );
     mpLightingSet->SetSelectHdl( LINK( this, ExtrusionLightingWindow, SelectHdl ) );
     mpLightingSet->SetColCount( 3 );
     mpLightingSet->EnableFullItemMode( FALSE );
@@ -894,35 +632,18 @@ void ExtrusionLightingWindow::implInit()
     }
     mpLightingSet->SetOutputSizePixel( Size( 72, 72 ) );
 
-    mpMenu->appendEntry( 3, mpLightingSet );
-    mpMenu->appendSeparator();
-    mpMenu->appendEntry( 0, String( SVX_RES( STR_BRIGHT ) ), bHighContrast ? maImgBrighth : maImgBright );
-    mpMenu->appendEntry( 1, String( SVX_RES( STR_NORMAL ) ), bHighContrast ? maImgNormalh : maImgNormal );
-    mpMenu->appendEntry( 2, String( SVX_RES( STR_DIM ) ), bHighContrast ? maImgDimh : maImgDim );
+    appendEntry( 3, mpLightingSet );
+    appendSeparator();
+    appendEntry( 0, String( SVX_RES( STR_BRIGHT ) ), bHighContrast ? maImgBrighth : maImgBright );
+    appendEntry( 1, String( SVX_RES( STR_NORMAL ) ), bHighContrast ? maImgNormalh : maImgNormal );
+    appendEntry( 2, String( SVX_RES( STR_DIM ) ), bHighContrast ? maImgDimh : maImgDim );
 
-    SetOutputSizePixel( mpMenu->getMenuSize() );
-    mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
-
-    mpMenu->Show();
+    SetOutputSizePixel( getMenuSize() );
 
     FreeResource();
 
-    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingDirection" )));
-    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingIntensity" )));
-}
-
-// -----------------------------------------------------------------------
-
-SfxPopupWindow* ExtrusionLightingWindow::Clone() const
-{
-    return new ExtrusionLightingWindow( GetId(), mxFrame );
-}
-
-// -----------------------------------------------------------------------
-
-ExtrusionLightingWindow::~ExtrusionLightingWindow()
-{
-    delete mpMenu;
+    AddStatusListener( msExtrusionLightingDirection );
+    AddStatusListener( msExtrusionLightingIntensity );
 }
 
 // -----------------------------------------------------------------------
@@ -934,8 +655,8 @@ void ExtrusionLightingWindow::implSetIntensity( int nLevel, bool bEnabled )
     int i = 0;
     for( i = 0; i < 3; i++ )
     {
-        mpMenu->checkEntry( i, (i == nLevel) && bEnabled );
-        mpMenu->enableEntry( i, bEnabled );
+        checkEntry( i, (i == nLevel) && bEnabled );
+        enableEntry( i, bEnabled );
     }
 }
 
@@ -971,42 +692,37 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
         }
     }
 
-    mpMenu->enableEntry( 3, bEnabled );
+    enableEntry( 3, bEnabled );
 }
 
 // -----------------------------------------------------------------------
 
-void ExtrusionLightingWindow::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SAL_CALL ExtrusionLightingWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    switch( nSID )
+    if( Event.FeatureURL.Main.equals( msExtrusionLightingIntensity ) )
     {
-        case SID_EXTRUSION_LIGHTING_INTENSITY:
+        if( !Event.IsEnabled )
         {
-            if( eState == SFX_ITEM_DISABLED )
-            {
-                implSetIntensity( 0, false );
-            }
-            else
-            {
-                const SfxInt32Item* pStateItem = PTR_CAST( SfxInt32Item, pState );
-                if( pStateItem )
-                    implSetIntensity( pStateItem->GetValue(), true );
-            }
-            break;
+            implSetIntensity( 0, false );
         }
-        case SID_EXTRUSION_LIGHTING_DIRECTION:
+        else
         {
-            if( eState == SFX_ITEM_DISABLED )
-            {
-                implSetDirection( 0, false );
-            }
-            else
-            {
-                const SfxInt32Item* pStateItem = PTR_CAST( SfxInt32Item, pState );
-                if( pStateItem )
-                    implSetDirection( pStateItem->GetValue(), true );
-            }
-            break;
+            sal_Int32 nValue = 0;
+            if( Event.State >>= nValue )
+                implSetIntensity( nValue, true );
+        }
+    }
+    else if( Event.FeatureURL.Main.equals( msExtrusionLightingDirection ) )
+    {
+        if( !Event.IsEnabled )
+        {
+            implSetDirection( 0, false );
+        }
+        else
+        {
+            sal_Int32 nValue = 0;
+            if( Event.State >>= nValue )
+                implSetDirection( nValue, true );
         }
     }
 }
@@ -1015,16 +731,16 @@ void ExtrusionLightingWindow::StateChanged( USHORT nSID, SfxItemState eState, co
 
 void ExtrusionLightingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
-    SfxPopupWindow::DataChanged( rDCEvt );
+    ToolbarMenu::DataChanged( rDCEvt );
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
         bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
         implSetDirection( mnDirection, mbDirectionEnabled );
-        mpMenu->setEntryImage( 0, bHighContrast ? maImgBrighth : maImgBright );
-        mpMenu->setEntryImage( 1, bHighContrast ? maImgNormalh : maImgNormal );
-        mpMenu->setEntryImage( 2, bHighContrast ? maImgDimh : maImgDim );
+        setEntryImage( 0, bHighContrast ? maImgBrighth : maImgBright );
+        setEntryImage( 1, bHighContrast ? maImgNormalh : maImgNormal );
+        setEntryImage( 2, bHighContrast ? maImgDimh : maImgDim );
     }
 }
 
@@ -1035,31 +751,19 @@ IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
     if ( IsInPopupMode() )
         EndPopupMode();
 
-//  SfxDispatcher* pDisp = GetBindings().GetDispatcher();
-
-    if( pControl == mpMenu )
+    if( pControl == this )
     {
-        int nLevel = mpMenu->getSelectedEntryId();
+        int nLevel = getSelectedEntryId();
         if( nLevel >= 0 )
         {
             if( nLevel != 3 )
             {
-                SfxInt32Item    aItem( SID_EXTRUSION_LIGHTING_INTENSITY, nLevel );
-                rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingIntensity" ));
-
-                Any a;
-                INetURLObject aObj( aCommand );
                 Sequence< PropertyValue > aArgs( 1 );
-                aArgs[0].Name = aObj.GetURLPath();
-                aItem.QueryValue( a );
-                aArgs[0].Value = a;
+                aArgs[0].Name = msExtrusionLightingIntensity.copy(5);
+                aArgs[0].Value <<= (sal_Int32)nLevel;
 
-                SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >(
-                                             mxFrame->getController(), UNO_QUERY ),
-                                             aCommand,
-                                             aArgs );
+                mrController.dispatchCommand( msExtrusionLightingIntensity, aArgs );
 
-//              pDisp->Execute( SID_EXTRUSION_LIGHTING_INTENSITY, SFX_CALLMODE_RECORD, &aItem, 0L , 0L );
                 implSetIntensity( nLevel, true );
             }
         }
@@ -1072,21 +776,11 @@ IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
         {
             nDirection--;
 
-            SfxInt32Item    aItem( SID_EXTRUSION_LIGHTING_DIRECTION, nDirection );
-            rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionLightingDirection" ));
-
-            Any a;
-            INetURLObject aObj( aCommand );
             Sequence< PropertyValue > aArgs( 1 );
-            aArgs[0].Name = aObj.GetURLPath();
-            aItem.QueryValue( a );
-            aArgs[0].Value = a;
+            aArgs[0].Name = msExtrusionLightingDirection.copy(5);
+            aArgs[0].Value <<= (sal_Int32)nDirection;
 
-            SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >(
-                                         mxFrame->getController(), UNO_QUERY ),
-                                         aCommand,
-                                         aArgs );
-//          pDisp->Execute( SID_EXTRUSION_LIGHTING_DIRECTION, SFX_CALLMODE_RECORD, &aItem, 0L , 0L );
+            mrController.dispatchCommand( msExtrusionLightingDirection, aArgs );
 
             implSetDirection( nDirection, true );
         }
@@ -1096,229 +790,122 @@ IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
-void ExtrusionLightingWindow::StartSelection()
-{
-}
-
-// -----------------------------------------------------------------------
-
-BOOL ExtrusionLightingWindow::Close()
-{
-    return SfxPopupWindow::Close();
-}
-
-// -----------------------------------------------------------------------
-
-void ExtrusionLightingWindow::PopupModeEnd()
-{
-    if ( IsVisible() )
-    {
-        mbPopupMode = FALSE;
-    }
-    SfxPopupWindow::PopupModeEnd();
-}
-
-// -----------------------------------------------------------------------
-
-void ExtrusionLightingWindow::GetFocus (void)
-{
-    SfxPopupWindow::GetFocus();
-    // Grab the focus to the line ends value set so that it can be controlled
-    // with the keyboard.
-    if( mpMenu )
-        mpMenu->GrabFocus();
-}
-
 // ========================================================================
 
-ExtrusionLightingControl::ExtrusionLightingControl( USHORT nSlotId, USHORT nId, ToolBox &rTbx )
-: SfxToolBoxControl( nSlotId, nId, rTbx )
-{
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-}
-
-// -----------------------------------------------------------------------
-
-ExtrusionLightingControl::~ExtrusionLightingControl()
+ExtrusionLightingControl::ExtrusionLightingControl( const Reference< lang::XMultiServiceFactory >& rServiceManager )
+: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionDirectionFloater" ) ) )
 {
 }
 
 // -----------------------------------------------------------------------
 
-SfxPopupWindowType ExtrusionLightingControl::GetPopupWindowType() const
+::Window* ExtrusionLightingControl::createPopupWindow( ::Window* pParent )
 {
-    return SFX_POPUPWINDOW_ONCLICK;
+    return new ExtrusionLightingWindow( *this, m_xFrame, pParent );
 }
 
 // -----------------------------------------------------------------------
-
-SfxPopupWindow* ExtrusionLightingControl::CreatePopupWindow()
-{
-    ExtrusionLightingWindow* pWin = new ExtrusionLightingWindow( GetId(), m_xFrame, &GetToolBox() );
-    pWin->StartPopupMode( &GetToolBox(), TRUE );
-    pWin->StartSelection();
-    SetPopupWindow( pWin );
-    return pWin;
-}
-
+// XServiceInfo
 // -----------------------------------------------------------------------
 
-void ExtrusionLightingControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
+OUString SAL_CALL ExtrusionLightingControl_getImplementationName()
 {
-    USHORT nId = GetId();
-    ToolBox& rTbx = GetToolBox();
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.ExtrusionLightingController" ));
+}
 
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+// --------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL ExtrusionLightingControl_getSupportedServiceNames() throw( RuntimeException )
+{
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    return aSNS;
+}
+
+// --------------------------------------------------------------------
+
+Reference< XInterface > SAL_CALL SAL_CALL ExtrusionLightingControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
+{
+    return *new ExtrusionLightingControl( rSMgr );
+}
+
+// --------------------------------------------------------------------
+
+OUString SAL_CALL ExtrusionLightingControl::getImplementationName(  ) throw (RuntimeException)
+{
+    return ExtrusionLightingControl_getImplementationName();
+}
+
+// --------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL ExtrusionLightingControl::getSupportedServiceNames(  ) throw (RuntimeException)
+{
+    return ExtrusionLightingControl_getSupportedServiceNames();
 }
 
 // ####################################################################
 
-SFX_IMPL_TOOLBOX_CONTROL( ExtrusionSurfaceControl, SfxBoolItem );
-
-ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
-
-    SfxPopupWindow( nId,
-                    rFrame,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_SURFACE )),
-    maImgSurface1( SVX_RES( IMG_WIRE_FRAME ) ),
-    maImgSurface2( SVX_RES( IMG_MATTE ) ),
-    maImgSurface3( SVX_RES( IMG_PLASTIC ) ),
-    maImgSurface4( SVX_RES( IMG_METAL ) ),
-    maImgSurface1h( SVX_RES( IMG_WIRE_FRAME_H ) ),
-    maImgSurface2h( SVX_RES( IMG_MATTE_H ) ),
-    maImgSurface3h( SVX_RES( IMG_PLASTIC_H ) ),
-    maImgSurface4h( SVX_RES( IMG_METAL_H ) ),
-    mxFrame( rFrame ),
-    mbPopupMode( true )
+ExtrusionSurfaceWindow::ExtrusionSurfaceWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow )
+: ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_SURFACE ))
+, mrController( rController )
+, maImgSurface1( SVX_RES( IMG_WIRE_FRAME ) )
+, maImgSurface2( SVX_RES( IMG_MATTE ) )
+, maImgSurface3( SVX_RES( IMG_PLASTIC ) )
+, maImgSurface4( SVX_RES( IMG_METAL ) )
+, maImgSurface1h( SVX_RES( IMG_WIRE_FRAME_H ) )
+, maImgSurface2h( SVX_RES( IMG_MATTE_H ) )
+, maImgSurface3h( SVX_RES( IMG_PLASTIC_H ) )
+, maImgSurface4h( SVX_RES( IMG_METAL_H ) )
+, msExtrusionSurface( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionSurface" ))
 {
-    implInit();
-}
-
-ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
-    USHORT nId,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    Window* pParentWindow ) :
-
-    SfxPopupWindow( nId,
-                    rFrame,
-                    pParentWindow,
-                    SVX_RES( RID_SVXFLOAT_EXTRUSION_SURFACE )),
-    maImgSurface1( SVX_RES( IMG_WIRE_FRAME ) ),
-    maImgSurface2( SVX_RES( IMG_MATTE ) ),
-    maImgSurface3( SVX_RES( IMG_PLASTIC ) ),
-    maImgSurface4( SVX_RES( IMG_METAL ) ),
-    maImgSurface1h( SVX_RES( IMG_WIRE_FRAME_H ) ),
-    maImgSurface2h( SVX_RES( IMG_MATTE_H ) ),
-    maImgSurface3h( SVX_RES( IMG_PLASTIC_H ) ),
-    maImgSurface4h( SVX_RES( IMG_METAL_H ) ),
-    mxFrame( rFrame ),
-    mbPopupMode( true )
-{
-    implInit();
-}
-
-// -----------------------------------------------------------------------
-
-void ExtrusionSurfaceWindow::implInit()
-{
-    SetHelpId( HID_POPUP_EXTRUSION_SURFACE );
-
     bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-//  mpSurfaceForewarder = new SfxStatusForwarder( SID_EXTRUSION_SURFACE, *this );
+    SetHelpId( HID_MENU_EXTRUSION_SURFACE );
+    SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );
 
-    mpMenu = new ToolbarMenu( this, WB_CLIPCHILDREN );
-    mpMenu->SetHelpId( HID_MENU_EXTRUSION_SURFACE );
-    mpMenu->SetSelectHdl( LINK( this, ExtrusionSurfaceWindow, SelectHdl ) );
+    appendEntry( 0, String( SVX_RES( STR_WIREFRAME ) ), bHighContrast ? maImgSurface1h : maImgSurface1 );
+    appendEntry( 1, String( SVX_RES( STR_MATTE ) ), bHighContrast ? maImgSurface2h : maImgSurface2 );
+    appendEntry( 2, String( SVX_RES( STR_PLASTIC ) ), bHighContrast ? maImgSurface3h : maImgSurface3 );
+    appendEntry( 3, String( SVX_RES( STR_METAL ) ), bHighContrast ? maImgSurface4h : maImgSurface4 );
 
-    mpMenu->appendEntry( 0, String( SVX_RES( STR_WIREFRAME ) ), bHighContrast ? maImgSurface1h : maImgSurface1 );
-    mpMenu->appendEntry( 1, String( SVX_RES( STR_MATTE ) ), bHighContrast ? maImgSurface2h : maImgSurface2 );
-    mpMenu->appendEntry( 2, String( SVX_RES( STR_PLASTIC ) ), bHighContrast ? maImgSurface3h : maImgSurface3 );
-    mpMenu->appendEntry( 3, String( SVX_RES( STR_METAL ) ), bHighContrast ? maImgSurface4h : maImgSurface4 );
-
-    SetOutputSizePixel( mpMenu->getMenuSize() );
-    mpMenu->SetOutputSizePixel( GetOutputSizePixel() );
-
-    mpMenu->Show();
+    SetOutputSizePixel( getMenuSize() );
 
     FreeResource();
 
-    AddStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionSurface" )));
-//  rBindings.Update( SID_EXTRUSION_SURFACE );
-}
-
-// -----------------------------------------------------------------------
-
-SfxPopupWindow* ExtrusionSurfaceWindow::Clone() const
-{
-    return new ExtrusionSurfaceWindow( GetId(), mxFrame );
-}
-
-// -----------------------------------------------------------------------
-
-ExtrusionSurfaceWindow::~ExtrusionSurfaceWindow()
-{
-//  delete mpSurfaceForewarder;
-    delete mpMenu;
+    AddStatusListener( msExtrusionSurface );
 }
 
 // -----------------------------------------------------------------------
 
 void ExtrusionSurfaceWindow::implSetSurface( int nSurface, bool bEnabled )
 {
-    if( mpMenu )
+//  if( mpMenu )
     {
         int i;
         for( i = 0; i < 4; i++ )
         {
-            mpMenu->checkEntry( i, (i == nSurface) && bEnabled );
-            mpMenu->enableEntry( i, bEnabled );
+            checkEntry( i, (i == nSurface) && bEnabled );
+            enableEntry( i, bEnabled );
         }
     }
 }
 
 // -----------------------------------------------------------------------
 
-void ExtrusionSurfaceWindow::StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+void SAL_CALL ExtrusionSurfaceWindow::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    switch( nSID )
+    if( Event.FeatureURL.Main.equals( msExtrusionSurface ) )
     {
-        case SID_EXTRUSION_SURFACE:
+        if( !Event.IsEnabled )
         {
-            if( eState == SFX_ITEM_DISABLED )
-            {
-                implSetSurface( 0, false );
-            }
-            else
-            {
-                const SfxInt32Item* pStateItem = PTR_CAST( SfxInt32Item, pState );
-                if( pStateItem )
-                    implSetSurface( pStateItem->GetValue(), true );
-            }
-            break;
+            implSetSurface( 0, false );
         }
-    }
-}
-
-// -----------------------------------------------------------------------
-
-void ExtrusionSurfaceWindow::DataChanged( const DataChangedEvent& rDCEvt )
-{
-    SfxPopupWindow::DataChanged( rDCEvt );
-
-    if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
-    {
-        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-        mpMenu->appendEntry( 0, String( SVX_RES( STR_WIREFRAME ) ), bHighContrast ? maImgSurface1h : maImgSurface1 );
-        mpMenu->appendEntry( 1, String( SVX_RES( STR_MATTE ) ), bHighContrast ? maImgSurface2h : maImgSurface2 );
-        mpMenu->appendEntry( 2, String( SVX_RES( STR_PLASTIC ) ), bHighContrast ? maImgSurface3h : maImgSurface3 );
-        mpMenu->appendEntry( 3, String( SVX_RES( STR_METAL ) ), bHighContrast ? maImgSurface4h : maImgSurface4 );
+        else
+        {
+            sal_Int32 nValue = 0;
+            if( Event.State >>= nValue )
+                implSetSurface( nValue, true );
+        }
     }
 }
 
@@ -1329,26 +916,14 @@ IMPL_LINK( ExtrusionSurfaceWindow, SelectHdl, void *, EMPTYARG )
     if ( IsInPopupMode() )
         EndPopupMode();
 
-//  SfxDispatcher* pDisp = GetBindings().GetDispatcher();
-
-    sal_Int32 nSurface = mpMenu->getSelectedEntryId();
+    sal_Int32 nSurface = getSelectedEntryId();
     if( nSurface >= 0 )
     {
-        SfxInt32Item    aItem( SID_EXTRUSION_SURFACE, nSurface );
-        rtl::OUString   aCommand( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionSurface" ));
-
-        Any a;
-        INetURLObject aObj( aCommand );
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = aObj.GetURLPath();
-        aItem.QueryValue( a );
-        aArgs[0].Value = a;
+        aArgs[0].Name = msExtrusionSurface.copy(5);
+        aArgs[0].Value <<= (sal_Int32)nSurface;
 
-        SfxToolBoxControl::Dispatch( Reference< ::com::sun::star::frame::XDispatchProvider >(
-                                     mxFrame->getController(), UNO_QUERY ),
-                                     aCommand,
-                                     aArgs );
-//      pDisp->Execute( SID_EXTRUSION_SURFACE, SFX_CALLMODE_RECORD, &aItem, 0L , 0L );
+        mrController.dispatchCommand( msExtrusionSurface, aArgs );
 
         implSetSurface( nSurface, true );
     }
@@ -1356,83 +931,57 @@ IMPL_LINK( ExtrusionSurfaceWindow, SelectHdl, void *, EMPTYARG )
     return 0;
 }
 
-// -----------------------------------------------------------------------
-
-void ExtrusionSurfaceWindow::StartSelection()
-{
-}
-
-// -----------------------------------------------------------------------
-
-BOOL ExtrusionSurfaceWindow::Close()
-{
-    return SfxPopupWindow::Close();
-}
-
-// -----------------------------------------------------------------------
-
-void ExtrusionSurfaceWindow::PopupModeEnd()
-{
-    if ( IsVisible() )
-    {
-        mbPopupMode = FALSE;
-    }
-    SfxPopupWindow::PopupModeEnd();
-}
-
-// -----------------------------------------------------------------------
-
-void ExtrusionSurfaceWindow::GetFocus (void)
-{
-    SfxPopupWindow::GetFocus();
-    // Grab the focus to the line ends value set so that it can be controlled
-    // with the keyboard.
-    if( mpMenu )
-        mpMenu->GrabFocus();
-}
-
 // ========================================================================
 
-ExtrusionSurfaceControl::ExtrusionSurfaceControl(
-    USHORT nSlotId, USHORT nId, ToolBox &rTbx )
-: SfxToolBoxControl( nSlotId, nId, rTbx )
-{
-    rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
-}
-
-// -----------------------------------------------------------------------
-
-ExtrusionSurfaceControl::~ExtrusionSurfaceControl()
+ExtrusionSurfaceControl::ExtrusionSurfaceControl( const Reference< lang::XMultiServiceFactory >& rServiceManager )
+: svt::PopupWindowController( rServiceManager, Reference< frame::XFrame >(), OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExtrusionSurfaceFloater" ) ) )
 {
 }
 
 // -----------------------------------------------------------------------
 
-SfxPopupWindowType ExtrusionSurfaceControl::GetPopupWindowType() const
+::Window* ExtrusionSurfaceControl::createPopupWindow( ::Window* pParent )
 {
-    return SFX_POPUPWINDOW_ONCLICK;
+    return new ExtrusionSurfaceWindow( *this, m_xFrame, pParent );
 }
 
 // -----------------------------------------------------------------------
-
-SfxPopupWindow* ExtrusionSurfaceControl::CreatePopupWindow()
-{
-    ExtrusionSurfaceWindow* pWin = new ExtrusionSurfaceWindow( GetId(), m_xFrame, &GetToolBox() );
-    pWin->StartPopupMode( &GetToolBox(), TRUE );
-    pWin->StartSelection();
-    SetPopupWindow( pWin );
-    return pWin;
-}
-
+// XServiceInfo
 // -----------------------------------------------------------------------
 
-void ExtrusionSurfaceControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
+OUString SAL_CALL ExtrusionSurfaceControl_getImplementationName()
 {
-    USHORT nId = GetId();
-    ToolBox& rTbx = GetToolBox();
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.ExtrusionSurfaceController" ));
+}
 
-    rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-    rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+// --------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL ExtrusionSurfaceControl_getSupportedServiceNames() throw( RuntimeException )
+{
+    Sequence< OUString > aSNS( 1 );
+    aSNS.getArray()[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    return aSNS;
+}
+
+// --------------------------------------------------------------------
+
+Reference< XInterface > SAL_CALL SAL_CALL ExtrusionSurfaceControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
+{
+    return *new ExtrusionSurfaceControl( rSMgr );
+}
+
+// --------------------------------------------------------------------
+
+OUString SAL_CALL ExtrusionSurfaceControl::getImplementationName(  ) throw (RuntimeException)
+{
+    return ExtrusionSurfaceControl_getImplementationName();
+}
+
+// --------------------------------------------------------------------
+
+Sequence< OUString > SAL_CALL ExtrusionSurfaceControl::getSupportedServiceNames(  ) throw (RuntimeException)
+{
+    return ExtrusionSurfaceControl_getSupportedServiceNames();
 }
 
 //========================================================================
@@ -1497,4 +1046,6 @@ void ExtrusionColorControl::StateChanged( USHORT nSID, SfxItemState eState, cons
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
     rTbx.SetItemState( nId, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+}
+
 }

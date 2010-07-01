@@ -32,7 +32,7 @@
 //  my own includes
 //_________________________________________________________________________________________________________________
 
-#include <helper/popupmenucontrollerbase.hxx>
+#include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
@@ -51,14 +51,17 @@
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
+#include <svtools/popupmenucontrollerbase.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <cppuhelper/weak.hxx>
 #include <rtl/ustring.hxx>
 
 namespace framework
 {
-    class FontSizeMenuController :  public PopupMenuControllerBase
+    class FontSizeMenuController :  public svt::PopupMenuControllerBase
     {
+        using svt::PopupMenuControllerBase::disposing;
+
         public:
             FontSizeMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
             virtual ~FontSizeMenuController();

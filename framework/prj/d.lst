@@ -5,8 +5,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\toolbar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\accelerator
-mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\accelerator\en-US
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
@@ -47,7 +45,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar
 
 ..\uiconfig\startmodule\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\menubar\*.xml
 ..\uiconfig\startmodule\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\toolbar\*.xml
-..\uiconfig\startmodule\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\accelerator\en-US\*.xml
 ..\uiconfig\startmodule\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\StartModule\statusbar\*.xml
 
 ..\source\unotypes\fw?.xml %_DEST%\xml%_EXT%\*.xml
