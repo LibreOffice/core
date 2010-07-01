@@ -226,13 +226,10 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OListComboWizard::onFinish(sal_Int32 _nResult)
+    sal_Bool OListComboWizard::onFinish()
     {
-        if (!OControlWizard::onFinish(_nResult))
+        if ( !OControlWizard::onFinish() )
             return sal_False;
-
-        if (RET_OK != _nResult)
-            return sal_True;
 
         implApplySettings();
         return sal_True;
@@ -362,14 +359,14 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OContentTableSelection::commitPage( CommitPageReason _eReason )
+    sal_Bool OContentTableSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;
 
         OListComboSettings& rSettings = getSettings();
         rSettings.sListContentTable = m_aSelectTable.GetSelectEntry();
-        if (!rSettings.sListContentTable.Len() && (eTravelBackward != _eReason))
+        if (!rSettings.sListContentTable.Len() && (::svt::WizardTypes::eTravelBackward != _eReason))
             // need to select a table
             return sal_False;
 
@@ -440,7 +437,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OContentFieldSelection::commitPage( CommitPageReason _eReason )
+    sal_Bool OContentFieldSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;
@@ -518,7 +515,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OLinkFieldsPage::commitPage( CommitPageReason _eReason )
+    sal_Bool OLinkFieldsPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
             return sal_False;

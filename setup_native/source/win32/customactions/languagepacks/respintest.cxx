@@ -88,7 +88,7 @@ namespace
 
 extern "C" UINT __stdcall GetUserInstallMode(MSIHANDLE handle)
 {
-    string sOfficeInstallPath = GetMsiProperty(handle, TEXT("OFFICEINSTALLLOCATION"));
+    string sOfficeInstallPath = GetMsiProperty(handle, TEXT("INSTALLLOCATION"));
 
     // MessageBox(NULL, sOfficeInstallPath.c_str(), "DEBUG", MB_OK);
 

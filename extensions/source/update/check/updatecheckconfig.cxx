@@ -398,7 +398,7 @@ UpdateCheckConfig::storeLocalFileName(const rtl::OUString& rLocalFileName, sal_I
         if( m_xContainer->hasByName(aNameList[i]) )
             m_xContainer->replaceByName(aNameList[i], aValueList[i]);
         else
-            m_xContainer->insertByName(aNameList[i],aValueList[i]);
+            m_xContainer->insertByName(aNameList[i], aValueList[i]);
     }
 
     commitChanges();
