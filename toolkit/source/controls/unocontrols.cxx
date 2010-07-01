@@ -80,6 +80,18 @@ using ::com::sun::star::graphic::XGraphic;
 using ::com::sun::star::uno::Reference;
 using namespace ::toolkit;
 
+#define IMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
+    ::rtl::OUString SAL_CALL ImplName::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii( "stardiv.Toolkit." #ImplName ); } \
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ImplName::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException) \
+                            { \
+                                ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = BaseClass::getSupportedServiceNames( ); \
+                                aNames.realloc( aNames.getLength() + 1 ); \
+                                aNames[ aNames.getLength() - 1 ] = ::rtl::OUString::createFromAscii( ServiceName ); \
+                                return aNames; \
+                            } \
+
+
+
 //  ----------------------------------------------------
 //  class UnoControlEditModel
 //  ----------------------------------------------------
@@ -1844,6 +1856,7 @@ UnoControlListBoxModel::UnoControlListBoxModel( const UnoControlListBoxModel& i_
 UnoControlListBoxModel::~UnoControlListBoxModel()
 {
 }
+IMPL_SERVICEINFO_DERIVED( UnoControlListBoxModel, UnoControlModel, szServiceName2_UnoControlListBoxModel )
 // ---------------------------------------------------------------------------------------------------------------------
 ::rtl::OUString UnoControlListBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2276,6 +2289,7 @@ UnoListBoxControl::UnoListBoxControl()
 {
     return ::rtl::OUString::createFromAscii( "listbox" );
 }
+IMPL_SERVICEINFO_DERIVED( UnoListBoxControl, UnoControlBase, szServiceName2_UnoControlListBox )
 
 void UnoListBoxControl::dispose() throw(uno::RuntimeException)
 {
@@ -2697,6 +2711,9 @@ UnoControlComboBoxModel::UnoControlComboBoxModel() : UnoControlListBoxModel(true
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXComboBox );
 }
+
+IMPL_SERVICEINFO_DERIVED( UnoControlComboBoxModel, UnoControlModel, szServiceName2_UnoControlComboBoxModel )
+
 uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -2772,6 +2789,7 @@ UnoComboBoxControl::UnoComboBoxControl()
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 12;
 }
+IMPL_SERVICEINFO_DERIVED( UnoComboBoxControl, UnoEditControl, szServiceName2_UnoControlComboBox )
 
 ::rtl::OUString UnoComboBoxControl::GetComponentServiceName()
 {
