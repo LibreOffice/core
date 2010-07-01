@@ -76,6 +76,7 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/stl_types.hxx>
 #include <cppuhelper/implbase1.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <set>
 

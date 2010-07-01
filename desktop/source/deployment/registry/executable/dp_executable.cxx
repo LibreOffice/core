@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include "dp_misc.h"
 #include "dp_backend.h"
 #include "dp_ucb.h"
 #include "dp_interact.h"
@@ -37,10 +38,12 @@
 #include "comphelper/servicedecl.hxx"
 #include "svl/inettype.hxx"
 #include "cppuhelper/implbase1.hxx"
+#include "dp_executablebackenddb.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
+using namespace dp_misc;
 using ::rtl::OUString;
 
 namespace dp_registry {
@@ -62,19 +65,20 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         virtual void processPackage_(
             ::osl::ResettableMutexGuard & guard,
             bool registerPackage,
+            bool startup,
             ::rtl::Reference<dp_misc::AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv );
 
         bool getFileAttributes(sal_uInt64& out_Attributes);
         bool isUrlTargetInExtension();
-
     public:
         inline ExecutablePackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
             OUString const & url, OUString const & name,
-            Reference<deployment::XPackageTypeInfo> const & xPackageType)
+            Reference<deployment::XPackageTypeInfo> const & xPackageType,
+            bool bRemoved, OUString const & identifier)
             : Package( myBackend, url, name, name /* display-name */,
-                       xPackageType ) //,
+                       xPackageType, bRemoved, identifier)
             {}
     };
     friend class ExecutablePackageImpl;
@@ -84,11 +88,15 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     // PackageRegistryBackend
     virtual Reference<deployment::XPackage> bindPackage_(
-        OUString const & url, OUString const & mediaType,
-        Reference<XCommandEnvironment> const & xCmdEnv );
+        OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
+        OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv );
+
+    void addDataToDb(OUString const & url);
+    bool isRegisteredInDb(OUString const & url);
+    void deleteDataFromDb(OUString const & url);
 
     Reference<deployment::XPackageTypeInfo> m_xExecutableTypeInfo;
-
+    std::auto_ptr<ExecutableBackendDb> m_backendDb;
 public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
@@ -112,7 +120,32 @@ BackendImpl::BackendImpl(
                                 RID_IMG_COMPONENT,
                                 RID_IMG_COMPONENT_HC ) )
 {
+    if (!transientMode())
+    {
+        OUString dbFile = makeURL(getCachePath(), OUSTR("backenddb.xml"));
+        m_backendDb.reset(
+            new ExecutableBackendDb(getComponentContext(), dbFile));
+   }
+}
 
+void BackendImpl::addDataToDb(OUString const & url)
+{
+    if (m_backendDb.get())
+        m_backendDb->addEntry(url);
+}
+
+bool BackendImpl::isRegisteredInDb(OUString const & url)
+{
+    bool ret = false;
+    if (m_backendDb.get())
+        ret = m_backendDb->getEntry(url);
+    return ret;
+}
+
+void BackendImpl::deleteDataFromDb(OUString const & url)
+{
+    if (m_backendDb.get())
+        m_backendDb->removeEntry(url);
 }
 
 // XPackageRegistry
@@ -125,8 +158,8 @@ BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 
 // PackageRegistryBackend
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
-    OUString const & url, OUString const & mediaType,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
+    OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
 {
     if (mediaType.getLength() == 0)
     {
@@ -141,13 +174,18 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     {
         if (type.EqualsIgnoreCaseAscii("application"))
         {
-            ::ucbhelper::Content ucbContent( url, xCmdEnv );
-            const OUString name( ucbContent.getPropertyValue(
-                dp_misc::StrTitle::get() ).get<OUString>() );
+            OUString name;
+            if (!bRemoved)
+            {
+                ::ucbhelper::Content ucbContent( url, xCmdEnv );
+                name = ucbContent.getPropertyValue(
+                    dp_misc::StrTitle::get() ).get<OUString>();
+            }
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.executable"))
             {
                 return new BackendImpl::ExecutablePackageImpl(
-                    this, url, name,  m_xExecutableTypeInfo);
+                    this, url, name,  m_xExecutableTypeInfo, bRemoved,
+                    identifier);
             }
         }
     }
@@ -179,23 +217,17 @@ BackendImpl::ExecutablePackageImpl::isRegistered_(
     ::rtl::Reference<dp_misc::AbortChannel> const &,
     Reference<XCommandEnvironment> const & )
 {
-    //We must return Optional.isPresent = true, otherwise
-    //processPackage is not called.
-    //The user shall not be able to enable/disable the executable. This is not needed since
-    //the executable does not affect the office. The best thing is to show no
-    //status at all. See also BackendImpl::PackageImpl::isRegistered_ (dp_package.cxx)
-    //On Windows there is no executable file attribute. One has to use security API for this.
-    //However, on Windows we do not have the problem, that after unzipping the file cannot be
-    //executed.
+    bool registered = getMyBackend()->isRegisteredInDb(getURL());
     return beans::Optional< beans::Ambiguous<sal_Bool> >(
             sal_True /* IsPresent */,
                 beans::Ambiguous<sal_Bool>(
-                   sal_True, sal_True /* IsAmbiguous */ ) );
+                    registered, sal_False /* IsAmbiguous */ ) );
 }
 
 void BackendImpl::ExecutablePackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
+    bool /*startup*/,
     ::rtl::Reference<dp_misc::AbortChannel> const & abortChannel,
     Reference<XCommandEnvironment> const & /*xCmdEnv*/ )
 {
@@ -216,19 +248,27 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
             else if (getMyBackend()->m_context.equals(OUSTR("shared")))
                 attributes |= (osl_File_Attribute_OwnExe | osl_File_Attribute_GrpExe
                                | osl_File_Attribute_OthExe);
-            else
+            else if (!getMyBackend()->m_context.equals(OUSTR("bundled")))
+                //Bundled extension are required to be in the properly
+                //installed. That is an executable must have the right flags
                 OSL_ASSERT(0);
 
             //This won't have affect on Windows
-            if (osl::File::E_None != osl::File::setAttributes(
-                    dp_misc::expandUnoRcUrl(m_url), attributes))
-                OSL_ENSURE(0, "Extension Manager: Could not set executable file attribute.");
+            osl::File::setAttributes(
+                    dp_misc::expandUnoRcUrl(m_url), attributes);
         }
+        getMyBackend()->addDataToDb(getURL());
+    }
+    else
+    {
+        getMyBackend()->deleteDataFromDb(getURL());
     }
 }
 
-//We currently cannot check if this XPackage represents a content of a particular exension
+//We currently cannot check if this XPackage represents a content of a particular extension
 //But we can check if we are within $UNO_USER_PACKAGES_CACHE etc.
+//Done for security reasons. For example an extension manifest could contain a path to
+//an executable outside the extension.
 bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
 {
     bool bSuccess = false;
@@ -237,6 +277,8 @@ bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
         sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$UNO_USER_PACKAGES_CACHE"));
     else if (getMyBackend()->m_context.equals(OUSTR("shared")))
         sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$UNO_SHARED_PACKAGES_CACHE"));
+    else if (getMyBackend()->m_context.equals(OUSTR("bundled")))
+        sExtensionDir = dp_misc::expandUnoRcTerm(OUSTR("$BUNDLED_EXTENSIONS"));
     else
         OSL_ASSERT(0);
     //remove file ellipses

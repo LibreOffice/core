@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description
+    xmlns="http://openoffice.org/extensions/description/2006"
+    xmlns:d="http://openoffice.org/extensions/description/2006"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+
+  <identifier value="UPDATED_IDENTIFIER"/>
+  <version value="0.1" />
+  <platform value="UPDATED_SUPPORTED_PLATFORM" />
+  <display-name>
+    <name>Custom Tool Panel Example</name>
+  </display-name>
+  <dependencies>
+    <OpenOffice.org-minimal-version value="3.3" d:name="OpenOffice.org 3.3"/>
+  </dependencies>
+</description>

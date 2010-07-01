@@ -39,6 +39,7 @@
 #include "recoveryui.hxx"
 #include "xmlgrhlp.hxx"
 #include "tbunocontroller.hxx"
+#include "tbunosearchcontrollers.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -233,9 +234,7 @@ uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( con
 // export this service
 //
 
-#ifndef SVX_LIGHT
 #include "UnoGraphicExporter.hxx"
-#endif
 #include "unogalthemeprovider.hxx"
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include "sal/types.h"
@@ -243,6 +242,15 @@ uno::Reference< uno::XInterface > SAL_CALL create_EnhancedCustomShapeEngine( con
 #include "cppuhelper/factory.hxx"
 #include "uno/lbnames.h"
 #include <svx/sdr/primitive2d/primitiveFactory2d.hxx>
+
+/*
+namespace svx
+{
+extern OUString SAL_CALL ExtrusionDepthController_getImplementationName();
+extern uno::Reference< uno::XInterface > SAL_CALL ExtrusionDepthController_createInstance(const uno::Reference< lang::XMultiServiceFactory > &)  throw( uno::RuntimeException );
+extern uno::Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames() throw( uno::RuntimeException );
+}
+*/
 
 extern "C"
 {
@@ -279,10 +287,14 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
             writeInfo( pKey, SvxUnoColorTable::getImplementationName_Static(), SvxUnoColorTable::getSupportedServiceNames_Static() );
             writeInfo( pKey, EnhancedCustomShapeEngine_getImplementationName(), EnhancedCustomShapeEngine_getSupportedServiceNames() );
             writeInfo( pKey, svx::RecoveryUI::st_getImplementationName(), svx::RecoveryUI::st_getSupportedServiceNames() );
-#ifndef SVX_LIGHT
             writeInfo( pKey, svx::GraphicExporter_getImplementationName(), svx::GraphicExporter_getSupportedServiceNames() );
-#endif
             writeInfo( pKey, svx::FontHeightToolBoxControl::getImplementationName_Static(), svx::FontHeightToolBoxControl::getSupportedServiceNames_Static() );
+
+            writeInfo( pKey, svx::FindTextToolbarController::getImplementationName_Static(), svx::FindTextToolbarController::getSupportedServiceNames_Static() );
+            writeInfo( pKey, svx::DownSearchToolboxController::getImplementationName_Static(), svx::DownSearchToolboxController::getSupportedServiceNames_Static() );
+            writeInfo( pKey, svx::UpSearchToolboxController::getImplementationName_Static(), svx::UpSearchToolboxController::getSupportedServiceNames_Static() );
+            writeInfo( pKey, svx::FindbarDispatcher::getImplementationName_Static(), svx::FindbarDispatcher::getSupportedServiceNames_Static() );
+
             writeInfo( pKey, ::unogallery::GalleryThemeProvider_getImplementationName(),::unogallery::GalleryThemeProvider_getSupportedServiceNames() );
 
             // XPrimitiveFactory2D
@@ -292,6 +304,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
 
             writeInfo( pKey, ::svx::SvXMLGraphicImportHelper_getImplementationName(),::svx::SvXMLGraphicImportHelper_getSupportedServiceNames() );
             writeInfo( pKey, ::svx::SvXMLGraphicExportHelper_getImplementationName(),::svx::SvXMLGraphicExportHelper_getSupportedServiceNames() );
+//          writeInfo( pKey, ::svx::ExtrusionDepthController_getImplementationName(),::svx::ExtrusionDepthController_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -338,7 +351,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
                 svx::RecoveryUI::st_createInstance,
                 svx::RecoveryUI::st_getSupportedServiceNames() );
         }
-#ifndef SVX_LIGHT
         else if( svx::GraphicExporter_getImplementationName().equalsAscii( pImplName ) )
         {
             xFactory = ::cppu::createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
@@ -346,13 +358,40 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
                 svx::GraphicExporter_createInstance,
                 svx::GraphicExporter_getSupportedServiceNames() );
         }
-#endif
         else if ( svx::FontHeightToolBoxControl::getImplementationName_Static().equalsAscii( pImplName ) )
         {
             xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
                 svx::FontHeightToolBoxControl::getImplementationName_Static(),
                 svx::FontHeightToolBoxControl_createInstance,
                 svx::FontHeightToolBoxControl::getSupportedServiceNames_Static() );
+        }
+        else if ( svx::FindTextToolbarController::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::FindTextToolbarController::getImplementationName_Static(),
+                svx::FindTextToolbarController_createInstance,
+                svx::FindTextToolbarController::getSupportedServiceNames_Static() );
+        }
+        else if ( svx::DownSearchToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::DownSearchToolboxController::getImplementationName_Static(),
+                svx::DownSearchToolboxController_createInstance,
+                svx::DownSearchToolboxController::getSupportedServiceNames_Static() );
+        }
+        else if ( svx::UpSearchToolboxController::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::UpSearchToolboxController::getImplementationName_Static(),
+                svx::UpSearchToolboxController_createInstance,
+                svx::UpSearchToolboxController::getSupportedServiceNames_Static() );
+        }
+        else if ( svx::FindbarDispatcher::getImplementationName_Static().equalsAscii( pImplName ) )
+        {
+            xFactory = createSingleFactory( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                svx::FindbarDispatcher::getImplementationName_Static(),
+                svx::FindbarDispatcher_createInstance,
+                svx::FindbarDispatcher::getSupportedServiceNames_Static() );
         }
         else if( ::unogallery::GalleryThemeProvider_getImplementationName().equalsAscii( pImplName ) )
         {
@@ -385,7 +424,16 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
                 ::svx::SvXMLGraphicExportHelper_createInstance,
                 ::svx::SvXMLGraphicExportHelper_getSupportedServiceNames() );
         }
-
+/*
+        else if( ::svx::ExtrusionDepthController_getImplementationName().equalsAscii( pImplName ) )
+        {
+            xFactory = ::cppu::createSingleFactory(
+                reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ),
+                ::svx::ExtrusionDepthController_getImplementationName(),
+                ::svx::ExtrusionDepthController_createInstance,
+                ::svx::ExtrusionDepthController_getSupportedServiceNames() );
+        }
+*/
         if( xFactory.is())
         {
             xFactory->acquire();

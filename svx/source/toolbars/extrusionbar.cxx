@@ -53,7 +53,8 @@
 #include "chrtitem.hxx"
 
 #include <svx/extrusionbar.hxx>
-#include "extrusioncontrols.hxx"
+#include "extrusiondepthdialog.hxx"
+
 
 using namespace ::svx;
 using namespace ::rtl;

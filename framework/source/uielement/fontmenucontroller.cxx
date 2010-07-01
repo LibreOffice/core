@@ -59,6 +59,7 @@
 #include <vcl/mnemonic.hxx>
 #endif
 #include <dispatch/uieventloghelper.hxx>
+#include <vos/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -91,7 +92,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   FontMenuController                  
 DEFINE_INIT_SERVICE                     (   FontMenuController, {} )
 
 FontMenuController::FontMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    PopupMenuControllerBase( xServiceManager )
+    svt::PopupMenuControllerBase( xServiceManager )
 {
 }
 
@@ -145,7 +146,7 @@ void SAL_CALL FontMenuController::disposing( const EventObject& ) throw ( Runtim
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xFontListDispatch.clear();
@@ -164,12 +165,12 @@ void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event 
 
     if ( Event.State >>= aFontDescriptor )
     {
-        ResetableGuard aLock( m_aLock );
+        osl::MutexGuard aLock( m_aMutex );
         m_aFontFamilyName = aFontDescriptor.Name;
     }
     else if ( Event.State >>= aFontNameSeq )
     {
-        ResetableGuard aLock( m_aLock );
+        osl::MutexGuard aLock( m_aMutex );
         if ( m_xPopupMenu.is() )
             fillPopupMenu( aFontNameSeq, m_xPopupMenu );
     }
@@ -192,7 +193,7 @@ void FontMenuController::impl_select(const Reference< XDispatch >& _xDispatch,co
 
 void SAL_CALL FontMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
 
     if ( m_xPopupMenu.is() )
     {
@@ -241,14 +242,14 @@ void FontMenuController::impl_setPopupMenu()
 
 void SAL_CALL FontMenuController::updatePopupMenu() throw ( ::com::sun::star::uno::RuntimeException )
 {
-    PopupMenuControllerBase::updatePopupMenu();
+    svt::PopupMenuControllerBase::updatePopupMenu();
 
-    ResetableGuard aLock( m_aLock );
+    osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< XDispatch > xDispatch( m_xFontListDispatch );
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FontNameList" ));
     m_xURLTransformer->parseStrict( aTargetURL );
-    aLock.unlock();
+    aLock.clear();
 
     if ( xDispatch.is() )
     {

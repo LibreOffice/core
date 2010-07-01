@@ -58,7 +58,11 @@
 #include <com/sun/star/frame/XToolbarController.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
+#include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
 
+//shizhoubo
+#include <com/sun/star/frame/XToolbarController.hpp>
+//end
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
@@ -67,6 +71,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 
 #include <vcl/toolbox.hxx>
+#include <vcl/accel.hxx>
 
 namespace com
 {
@@ -183,6 +188,9 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropsForCommand( const ::rtl::OUString& rCmdURL );
         void CreateControllers();
         void UpdateControllers();
+        //for update controller via Support Visiable by shizhoubo
+        void UpdateController( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XToolbarController > xController);
+        //end
         void AddFrameActionListener();
         void AddImageOrientationListener();
         void UpdateImageOrientation();
@@ -195,6 +203,9 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         long HandleClick(void ( SAL_CALL ::com::sun::star::frame::XToolbarController::*_pClick )(  ));
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
         void impl_elementChanged(bool _bRemove,const ::com::sun::star::ui::ConfigurationEvent& Event );
+
+        static bool impl_RetrieveShortcutsFromConfiguration( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >& rAccelCfg, const rtl::OUString& rCommand, rtl::OUString& rShortCut );
+        bool RetrieveShortcut( const rtl::OUString& rCommandURL, rtl::OUString& rShortCut );
 
     protected:
         typedef ::std::hash_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerMap;
@@ -235,6 +246,10 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         Timer                                                                                  m_aAsyncUpdateControllersTimer;
         sal_Int16                                                                              m_nSymbolsStyle;
         MenuDescriptionMap m_aMenuMap;
+        sal_Bool                                                                               m_bAcceleratorCfg;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
 };
 
 }

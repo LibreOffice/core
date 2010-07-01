@@ -1225,17 +1225,16 @@ namespace drawinglayer
                 {
                     // need to handle PolyPolygonHatchPrimitive2D here to support XPATHFILL_SEQ_BEGIN/XPATHFILL_SEQ_END
                     SvtGraphicFill* pSvtGraphicFill = 0;
+                    const primitive2d::PolyPolygonHatchPrimitive2D& rHatchCandidate = static_cast< const primitive2d::PolyPolygonHatchPrimitive2D& >(rCandidate);
+                    const attribute::FillHatchAttribute& rFillHatchAttribute = rHatchCandidate.getFillHatch();
+                    basegfx::B2DPolyPolygon aLocalPolyPolygon(rHatchCandidate.getB2DPolyPolygon());
+                    aLocalPolyPolygon.transform(maCurrentTransformation);
 
                     if(!mnSvtGraphicFillCount)
                     {
-                        const primitive2d::PolyPolygonHatchPrimitive2D& rHatchCandidate = static_cast< const primitive2d::PolyPolygonHatchPrimitive2D& >(rCandidate);
-                        basegfx::B2DPolyPolygon aLocalPolyPolygon(rHatchCandidate.getB2DPolyPolygon());
-                        aLocalPolyPolygon.transform(maCurrentTransformation);
-
                         if(aLocalPolyPolygon.count())
                         {
                             // re-create a VCL hatch as base data
-                            const attribute::FillHatchAttribute& rFillHatchAttribute = rHatchCandidate.getFillHatch();
                             SvtGraphicFill::HatchType eHatch(SvtGraphicFill::hatchSingle);
 
                             switch(rFillHatchAttribute.getStyle())
@@ -1289,9 +1288,22 @@ namespace drawinglayer
 
                     // Do use decomposition; encapsulate with SvtGraphicFill
                     impStartSvtGraphicFill(pSvtGraphicFill);
-                    process(rCandidate.get2DDecomposition(getViewInformation2D()));
-                    impEndSvtGraphicFill(pSvtGraphicFill);
 
+                    // #i111954# do NOT use decomposition, but use direct VCL-command
+                    // process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    const PolyPolygon aToolsPolyPolygon(aLocalPolyPolygon);
+                    const HatchStyle aHatchStyle(
+                        attribute::HATCHSTYLE_SINGLE == rFillHatchAttribute.getStyle() ? HATCH_SINGLE :
+                        attribute::HATCHSTYLE_DOUBLE == rFillHatchAttribute.getStyle() ? HATCH_DOUBLE :
+                        HATCH_TRIPLE);
+
+                    mpOutputDevice->DrawHatch(aToolsPolyPolygon,
+                        Hatch(aHatchStyle,
+                            Color(rFillHatchAttribute.getColor()),
+                            basegfx::fround(rFillHatchAttribute.getDistance()),
+                            basegfx::fround(rFillHatchAttribute.getAngle() / F_PI1800)));
+
+                    impEndSvtGraphicFill(pSvtGraphicFill);
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
@@ -1429,7 +1441,11 @@ namespace drawinglayer
                             {
                                 // there is already a clip polygon set; build clipped union of
                                 // current mask polygon and new one
-                                maClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(aMask, maClipPolyPolygon, false, false);
+                                maClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(
+                                    aMask,
+                                    maClipPolyPolygon,
+                                    true, // #i106516# we want the inside of aMask, not the outside
+                                    false);
                             }
                             else
                             {

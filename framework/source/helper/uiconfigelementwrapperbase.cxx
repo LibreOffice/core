@@ -45,7 +45,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/ui/XUIConfiguration.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -548,6 +547,25 @@ Reference< XIndexAccess > SAL_CALL UIConfigElementWrapperBase::getSettings( sal_
         return Reference< XIndexAccess >( static_cast< OWeakObject * >( new RootItemContainer( m_xConfigData ) ), UNO_QUERY );
 
     return m_xConfigData;
+}
+
+Reference< XFrame > SAL_CALL UIConfigElementWrapperBase::getFrame() throw (RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+    Reference< XFrame > xFrame( m_xWeakFrame );
+    return xFrame;
+}
+
+::rtl::OUString SAL_CALL UIConfigElementWrapperBase::getResourceURL() throw (RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+    return m_aResourceURL;
+}
+
+::sal_Int16 SAL_CALL UIConfigElementWrapperBase::getType() throw (RuntimeException)
+{
+    ResetableGuard aLock( m_aLock );
+    return m_nType;
 }
 
 }

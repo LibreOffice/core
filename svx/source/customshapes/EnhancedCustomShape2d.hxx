@@ -67,6 +67,10 @@ class SvxMSDffAdjustmentHandle;
 #define HANDLE_FLAGS_RANGE_Y_MAXIMUM        0x0100
 #define HANDLE_FLAGS_RADIUS_RANGE_MINIMUM   0x0200
 #define HANDLE_FLAGS_RADIUS_RANGE_MAXIMUM   0x0400
+#define HANDLE_FLAGS_REFX                   0x0800
+#define HANDLE_FLAGS_REFY                   0x1000
+#define HANDLE_FLAGS_REFANGLE               0x2000
+#define HANDLE_FLAGS_REFR                   0x4000
 
 // MSDFF_HANDLE_FLAGS_RANGE_Y seems to be not defined in
 // escher, but we are using it internally in to differentiate
@@ -145,12 +149,20 @@ class EnhancedCustomShape2d : public SfxItemSet
             com::sun::star::drawing::EnhancedCustomShapeParameterPair   aPosition;
             com::sun::star::drawing::EnhancedCustomShapeParameterPair   aPolar;
 
+            sal_Int32   nRefX;
+            sal_Int32   nRefY;
+            sal_Int32   nRefAngle;
+            sal_Int32   nRefR;
+
             com::sun::star::drawing::EnhancedCustomShapeParameter       aRadiusRangeMinimum;
             com::sun::star::drawing::EnhancedCustomShapeParameter       aRadiusRangeMaximum;
             com::sun::star::drawing::EnhancedCustomShapeParameter       aXRangeMinimum;
             com::sun::star::drawing::EnhancedCustomShapeParameter       aXRangeMaximum;
             com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMinimum;
             com::sun::star::drawing::EnhancedCustomShapeParameter       aYRangeMaximum;
+
+            Handle() : bMirroredX ( sal_False ), bMirroredY ( sal_False ), bSwitched( sal_False ),
+                nRefX( -1 ), nRefY( -1 ), nRefAngle( -1 ), nRefR( -1 ) {};
         };
 
         sal_Bool                    IsFlipVert() { return bFlipV; };

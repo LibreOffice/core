@@ -44,6 +44,20 @@ namespace dp_misc
 
 //==============================================================================
 void xml_parse(
+    Reference<xml::input::XRoot> const & xRoot,
+    ::ucbhelper::Content & ucb_content,
+    Reference<XComponentContext> const & xContext )
+{
+    const Any arg(xRoot);
+    const Reference<xml::sax::XDocumentHandler> xDocHandler(
+        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            OUSTR("com.sun.star.xml.input.SaxDocumentHandler"),
+            Sequence<Any>( &arg, 1 ), xContext ), UNO_QUERY_THROW );
+    xml_parse( xDocHandler, ucb_content, xContext );
+ }
+
+//==============================================================================
+void xml_parse(
     Reference<xml::sax::XDocumentHandler> const & xDocHandler,
     ::ucbhelper::Content & ucb_content,
     Reference<XComponentContext> const & xContext )
@@ -59,201 +73,6 @@ void xml_parse(
     source.aInputStream = ucb_content.openStream();
     source.sSystemId = ucb_content.getURL();
     xParser->parseStream( source );
-}
-
-//==============================================================================
-void xml_parse(
-    Reference<xml::input::XRoot> const & xRoot,
-    ::ucbhelper::Content & ucb_content,
-    Reference<XComponentContext> const & xContext )
-{
-    const Any arg(xRoot);
-    const Reference<xml::sax::XDocumentHandler> xDocHandler(
-        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            OUSTR("com.sun.star.xml.input.SaxDocumentHandler"),
-            Sequence<Any>( &arg, 1 ), xContext ), UNO_QUERY_THROW );
-    xml_parse( xDocHandler, ucb_content, xContext );
-}
-
-//##############################################################################
-
-//______________________________________________________________________________
-XmlRootElement::XmlRootElement(
-    OUString const & uri, OUString const & localname )
-    : m_uri( uri )
-{
-    m_localname = localname;
-}
-
-//______________________________________________________________________________
-XmlRootElement::~XmlRootElement()
-{
-}
-
-// XRoot
-//______________________________________________________________________________
-void XmlRootElement::startDocument(
-    Reference<xml::input::XNamespaceMapping> const & xMapping )
-    throw (xml::sax::SAXException, RuntimeException)
-{
-    m_xNamespaceMapping = xMapping;
-
-    try {
-        m_uid = m_xNamespaceMapping->getUidByUri( m_uri );
-    }
-    catch (container::NoSuchElementException & exc) {
-        throw xml::sax::SAXException(
-            exc.Message, static_cast<OWeakObject *>(this), Any(exc) );
-    }
-}
-
-//______________________________________________________________________________
-void XmlRootElement::endDocument()
-    throw (xml::sax::SAXException, RuntimeException)
-{
-}
-
-//______________________________________________________________________________
-void XmlRootElement::processingInstruction(
-    OUString const &, OUString const & )
-    throw (xml::sax::SAXException, RuntimeException)
-{
-}
-
-//______________________________________________________________________________
-void XmlRootElement::setDocumentLocator(
-    Reference<xml::sax::XLocator> const & )
-    throw (xml::sax::SAXException, RuntimeException)
-{
-}
-
-//______________________________________________________________________________
-Reference<xml::input::XElement> XmlRootElement::startRootElement(
-    sal_Int32 uid, OUString const & localname,
-    Reference<xml::input::XAttributes> const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException)
-{
-    check_xmlns( uid );
-    if (! localname.equals( m_localname )) {
-        throw xml::sax::SAXException(
-            OUSTR("unexpected root element ") + localname,
-            static_cast<OWeakObject *>(this), Any() );
-    }
-    m_xAttributes = xAttributes;
-
-    return this;
-}
-
-//##############################################################################
-
-//______________________________________________________________________________
-XmlElement::~XmlElement()
-{
-}
-
-//______________________________________________________________________________
-void XmlElement::check_xmlns( sal_Int32 uid ) const
-    throw (xml::sax::SAXException)
-{
-    if (uid != m_uid)
-    {
-        ::rtl::OUStringBuffer buf;
-        buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("illegal xml namespace uri=\"") );
-        try {
-            buf.append( m_xNamespaceMapping->getUriByUid( uid ) );
-        }
-        catch (container::NoSuchElementException & exc) {
-            throw xml::sax::SAXException(
-                exc.Message, static_cast<OWeakObject *>(
-                    const_cast<XmlElement *>(this) ), Any(exc) );
-        }
-        buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\"!") );
-        throw xml::sax::SAXException(
-            buf.makeStringAndClear(),
-            static_cast<OWeakObject *>( const_cast<XmlElement *>(this) ),
-            Any() );
-    }
-}
-
-// XElement
-//______________________________________________________________________________
-Reference<xml::input::XElement> XmlElement::getParent()
-    throw (RuntimeException)
-{
-    return m_xParent;
-}
-
-//______________________________________________________________________________
-OUString XmlElement::getLocalName()
-    throw (RuntimeException)
-{
-    return m_localname;
-}
-
-//______________________________________________________________________________
-sal_Int32 XmlElement::getUid()
-    throw (RuntimeException)
-{
-    return m_uid;
-}
-
-//______________________________________________________________________________
-Reference<xml::input::XAttributes> XmlElement::getAttributes()
-    throw (RuntimeException)
-{
-    return m_xAttributes;
-}
-
-//______________________________________________________________________________
-void XmlElement::ignorableWhitespace(
-    OUString const & )
-    throw (xml::sax::SAXException, RuntimeException)
-{
-}
-
-//______________________________________________________________________________
-void XmlElement::characters( OUString const & chars )
-    throw (xml::sax::SAXException, RuntimeException)
-{
-    m_characters += chars;
-}
-
-//______________________________________________________________________________
-void XmlElement::processingInstruction(
-    OUString const &, OUString const & )
-    throw (xml::sax::SAXException, RuntimeException)
-{
-}
-
-//______________________________________________________________________________
-void XmlElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException)
-{
-    m_got_endElement = true;
-}
-
-//______________________________________________________________________________
-Reference<xml::input::XElement> XmlElement::startChildElement(
-    sal_Int32 uid, OUString const & localName,
-    Reference<xml::input::XAttributes> const & )
-    throw (xml::sax::SAXException, RuntimeException)
-{
-    ::rtl::OUStringBuffer buf;
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("unexpected element "
-                                                "{ tag=\"") );
-    buf.append( localName );
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\", uri=\"") );
-    try {
-        buf.append( m_xNamespaceMapping->getUriByUid( uid ) );
-    }
-    catch (container::NoSuchElementException & exc) {
-        throw xml::sax::SAXException(
-            exc.Message, static_cast<OWeakObject *>(this), Any(exc) );
-    }
-    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\" }!") );
-    throw xml::sax::SAXException(
-        buf.makeStringAndClear(), static_cast<OWeakObject *>(this), Any() );
 }
 
 }

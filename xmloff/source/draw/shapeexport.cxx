@@ -83,6 +83,8 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     // #88546# init to FALSE
     mbHandleProgressBar( sal_False ),
     msZIndex( RTL_CONSTASCII_USTRINGPARAM("ZOrder") ),
+    msPrintable( RTL_CONSTASCII_USTRINGPARAM("Printable") ),
+    msVisible( RTL_CONSTASCII_USTRINGPARAM("Visible") ),
     msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
     msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
     msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
@@ -471,6 +473,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
             break;
         }
+        case XmlShapeTypePresTableShape:
         case XmlShapeTypeDrawTableShape:
         {
             try
@@ -704,6 +707,39 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
     }
 
+    // export draw:display (do not export in ODF 1.2 or older)
+    if( xSet.is() && ( mrExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012 ) )
+    {
+        if( aShapeInfo.meShapeType != XmlShapeTypeDrawPageShape && aShapeInfo.meShapeType != XmlShapeTypePresPageShape &&
+            aShapeInfo.meShapeType != XmlShapeTypeHandoutShape )
+
+        try
+        {
+            sal_Bool bVisible = sal_True;
+            sal_Bool bPrintable = sal_True;
+
+            xSet->getPropertyValue(msVisible) >>= bVisible;
+            xSet->getPropertyValue(msPrintable) >>= bPrintable;
+
+            XMLTokenEnum eDisplayToken = XML_TOKEN_INVALID;
+            const unsigned short nDisplay = (bVisible ? 2 : 0) | (bPrintable ? 1 : 0);
+            switch( nDisplay )
+            {
+            case 0: eDisplayToken = XML_NONE; break;
+            case 1: eDisplayToken = XML_PRINTER; break;
+            case 2: eDisplayToken = XML_SCREEN; break;
+            // case 3: eDisplayToken = XML_ALWAYS break; this is the default
+            }
+
+            if( eDisplayToken != XML_TOKEN_INVALID )
+                mrExport.AddAttribute(XML_NAMESPACE_DRAW_EXT, XML_DISPLAY, eDisplayToken );
+        }
+        catch( uno::Exception& )
+        {
+            DBG_ERROR( "XMLShapeExport::exportShape(), exception caught!" );
+        }
+    }
+
     // #82003# test export count
     // #91587# ALWAYS increment since now ALL to be exported shapes are counted.
     if(mrExport.GetShapeExport()->IsHandleProgressBarEnabled())
@@ -797,6 +833,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
+        case XmlShapeTypePresTableShape:
         case XmlShapeTypeDrawTableShape:
         {
             ImpExportTableShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
@@ -866,6 +903,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             break;
         }
 
+        case XmlShapeTypePresMediaShape:
         case XmlShapeTypeDrawMediaShape:
         {
             ImpExportMediaShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
@@ -1125,7 +1163,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                     // get info about presentation shape
                     uno::Reference <beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
 
-                    if(xPropSet.is())
+                    if(xPropSet.is()) try
                     {
                         rtl::OUString sCLSID;
                         if(xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) >>= sCLSID)
@@ -1137,16 +1175,22 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                             }
                         }
                     }
+                    catch( uno::Exception& )
+                    {
+                        DBG_ERROR( "XMLShapeExport::ImpCalcShapeType(), expected ole shape to have the CLSID property?" );
+                    }
                 }
                 else if(aType.EqualsAscii("Chart", 26, 5)) { eShapeType = XmlShapeTypePresChartShape;  }
                 else if(aType.EqualsAscii("OrgChart", 26, 8)) { eShapeType = XmlShapeTypePresOrgChartShape;  }
-                else if(aType.EqualsAscii("TableShape", 26, 10)) { eShapeType = XmlShapeTypePresSheetShape; }
+                else if(aType.EqualsAscii("CalcShape", 26, 9)) { eShapeType = XmlShapeTypePresSheetShape; }
+                else if(aType.EqualsAscii("TableShape", 26, 10)) { eShapeType = XmlShapeTypePresTableShape; }
                 else if(aType.EqualsAscii("Notes", 26, 5)) { eShapeType = XmlShapeTypePresNotesShape;  }
                 else if(aType.EqualsAscii("HandoutShape", 26, 12)) { eShapeType = XmlShapeTypeHandoutShape; }
                 else if(aType.EqualsAscii("HeaderShape", 26, 11)) { eShapeType = XmlShapeTypePresHeaderShape; }
                 else if(aType.EqualsAscii("FooterShape", 26, 11)) { eShapeType = XmlShapeTypePresFooterShape; }
                 else if(aType.EqualsAscii("SlideNumberShape", 26, 16)) { eShapeType = XmlShapeTypePresSlideNumberShape; }
                 else if(aType.EqualsAscii("DateTimeShape", 26, 13)) { eShapeType = XmlShapeTypePresDateTimeShape; }
+                else if(aType.EqualsAscii("MediaShape", 26, 10)) { eShapeType = XmlShapeTypePresMediaShape; }
             }
         }
     }
