@@ -1644,10 +1644,25 @@ ImplDevFontListData* ImplDevFontList::ImplFindBySubstFontAttr( const utl::FontNa
 
         pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
-            break;
+            return pFoundData;
     }
 
-    return pFoundData;
+    // use known attributes from the configuration to find a matching substitute
+    const ULONG nSearchType = rFontAttr.Type;
+    if( nSearchType != 0 )
+    {
+        const FontWeight eSearchWeight = rFontAttr.Weight;
+        const FontWidth  eSearchWidth  = rFontAttr.Width;
+        const FontItalic eSearchSlant  = ITALIC_DONTKNOW;
+        const FontFamily eSearchFamily = FAMILY_DONTKNOW;
+        const String aSearchName;
+        pFoundData = ImplFindByAttributes( nSearchType,
+            eSearchWeight, eSearchWidth, eSearchFamily, eSearchSlant, aSearchName );
+        if( pFoundData )
+            return pFoundData;
+    }
+
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
