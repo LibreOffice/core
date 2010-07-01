@@ -28,6 +28,7 @@
 #ifndef _SB_SBMOD_HXX
 #define _SB_SBMOD_HXX
 
+#include <com/sun/star/script/XInvocation.hpp>
 #include <basic/sbdef.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
@@ -57,6 +58,7 @@ class SbModule : public SbxObject
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
 
 protected:
+    com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
     ::rtl::OUString     aOUSource;
     String              aComment;
     SbiImage*           pImage;        // the Image
@@ -131,6 +133,7 @@ public:
     INT32 GetModuleType() { return mnType; }
     void SetModuleType( INT32 nType ) { mnType = nType; }
     bool GetIsProxyModule() { return bIsProxyModule; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
 };
 

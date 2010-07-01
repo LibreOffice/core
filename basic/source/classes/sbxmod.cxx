@@ -76,7 +76,20 @@ using namespace com::sun::star;
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
+#include <map>
+#include <com/sun/star/reflection/XProxyFactory.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <basic/sbobjmod.hxx>
+#include <com/sun/star/uno/XAggregation.hpp>
+#include <map>
+#include <com/sun/star/script/XInvocation.hpp>
+
  using namespace ::com::sun::star;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::reflection;
+using namespace com::sun::star::beans;
+using namespace com::sun::star::script;
+
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -85,6 +98,340 @@ using namespace com::sun::star;
 #include <com/sun/star/awt/XControl.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/anytostring.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
+typedef ::cppu::WeakImplHelper1< XInvocation > DocObjectWrapper_BASE;
+typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
+::com::sun::star::uno::Any sbxToUnoValue( SbxVariable* pVar );
+void unoToSbxValue( SbxVariable* pVar, const ::com::sun::star::uno::Any& aValue );
+
+class DocObjectWrapper : public DocObjectWrapper_BASE
+{
+    Reference< XAggregation >  m_xAggProxy;
+    Reference< XInvocation >  m_xAggInv;
+    Reference< XTypeProvider > m_xAggregateTypeProv;
+    Sequence< Type >           m_Types;
+    SbModule*                m_pMod;
+    SbMethodRef getMethod( const rtl::OUString& aName ) throw (RuntimeException);
+    SbPropertyRef getProperty( const rtl::OUString& aName ) throw (RuntimeException);
+    String mName; // for debugging
+
+public:
+    DocObjectWrapper( SbModule* pMod );
+    ~DocObjectWrapper();
+
+    virtual void SAL_CALL acquire() throw();
+    virtual void SAL_CALL release() throw();
+
+    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId()
+        throw ( com::sun::star::uno::RuntimeException )
+    {
+        return m_xAggregateTypeProv->getImplementationId();
+
+    }
+
+    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw (RuntimeException);
+
+    virtual Any SAL_CALL invoke( const ::rtl::OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException);
+    virtual void SAL_CALL setValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException);
+    virtual Any SAL_CALL getValue( const ::rtl::OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasMethod( const ::rtl::OUString& aName ) throw (RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasProperty( const ::rtl::OUString& aName ) throw (RuntimeException);
+    virtual  Any SAL_CALL queryInterface( const Type& aType ) throw ( RuntimeException );
+
+    virtual Sequence< Type > SAL_CALL getTypes() throw ( RuntimeException );
+};
+
+DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pVar->GetName() )
+{
+    SbObjModule* pMod = PTR_CAST(SbObjModule,pVar);
+    if ( pMod )
+    {
+        sal_Int16 nType = pMod->GetModuleType();
+        if ( pMod->GetModuleType() == ModuleType::DOCUMENT )
+        {
+            Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+            // Use proxy factory service to create aggregatable proxy.
+            SbUnoObject* pUnoObj = PTR_CAST(SbUnoObject,pMod->GetObject() );
+            Reference< XInterface > xIf;
+            if ( pUnoObj )
+            {
+                   Any aObj = pUnoObj->getUnoAny();
+                   aObj >>= xIf;
+                   if ( xIf.is() )
+                   {
+                       m_xAggregateTypeProv.set( xIf, UNO_QUERY );
+                       m_xAggInv.set( xIf, UNO_QUERY );
+                   }
+            }
+            if ( xIf.is() )
+            {
+                try
+                {
+                    Reference< XMultiComponentFactory > xMFac( xFactory, UNO_QUERY_THROW );
+                    Reference< XPropertySet> xPSMPropertySet( xMFac, UNO_QUERY_THROW );
+                    Reference< XComponentContext >  xCtx;
+                    xPSMPropertySet->getPropertyValue(
+                    String( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xCtx;
+                    Reference< XProxyFactory > xProxyFac( xMFac->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.reflection.ProxyFactory" ) ), xCtx  ), UNO_QUERY_THROW );
+                    m_xAggProxy = xProxyFac->createProxy( xIf );
+                }
+                catch(  Exception& )
+                {
+                    OSL_ENSURE( false, "DocObjectWrapper::DocObjectWrapper: Caught exception!" );
+                }
+            }
+
+            if ( m_xAggProxy.is() )
+            {
+                osl_incrementInterlockedCount( &m_refCount );
+
+                /* i35609 - Fix crash on Solaris. The setDelegator call needs
+                    to be in its own block to ensure that all temporary Reference
+                    instances that are acquired during the call are released
+                    before m_refCount is decremented again */
+                {
+                    m_xAggProxy->setDelegator( static_cast< cppu::OWeakObject * >( this ) );
+                }
+
+                 osl_decrementInterlockedCount( &m_refCount );
+            }
+        }
+    }
+}
+
+void SAL_CALL
+DocObjectWrapper::acquire() throw ()
+{
+    osl_incrementInterlockedCount( &m_refCount );
+    OSL_TRACE("DocObjectWrapper::acquire(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
+}
+void SAL_CALL
+DocObjectWrapper::release() throw ()
+{
+    if ( osl_decrementInterlockedCount( &m_refCount ) == 0 )
+    {
+        OSL_TRACE("DocObjectWrapper::release(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
+        delete this;
+    }
+    else
+        OSL_TRACE("DocObjectWrapper::release(%s) 0x%x refcount is now %d", rtl::OUStringToOString( mName, RTL_TEXTENCODING_UTF8 ).getStr(), this, m_refCount );
+}
+
+DocObjectWrapper::~DocObjectWrapper()
+{
+}
+
+Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
+    throw ( RuntimeException )
+{
+    if ( m_Types.getLength() == 0 )
+    {
+        Sequence< Type > sTypes;
+        if ( m_xAggregateTypeProv.is() )
+            sTypes = m_xAggregateTypeProv->getTypes();
+        m_Types.realloc( sTypes.getLength() + 1 );
+        Type* pPtr = m_Types.getArray();
+        for ( int i=0; i<m_Types.getLength(); ++i, ++pPtr )
+        {
+            if ( i == 0 )
+                *pPtr = XInvocation::static_type( NULL );
+            else
+                *pPtr = sTypes[ i - 1 ];
+        }
+    }
+    return m_Types;
+}
+
+Reference< XIntrospectionAccess > SAL_CALL
+DocObjectWrapper::getIntrospection(  ) throw (RuntimeException)
+{
+    return NULL;
+}
+
+Any SAL_CALL
+DocObjectWrapper::invoke( const ::rtl::OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException)
+{
+    if ( m_xAggInv.is() &&  m_xAggInv->hasMethod( aFunctionName ) )
+            return m_xAggInv->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
+    SbMethodRef pMethod = getMethod( aFunctionName );
+    if ( !pMethod )
+        throw RuntimeException();
+    // check number of parameters
+    sal_Int32 nParamsCount = aParams.getLength();
+    SbxInfo* pInfo = pMethod->GetInfo();
+    if ( pInfo )
+    {
+        sal_Int32 nSbxOptional = 0;
+        USHORT n = 1;
+        for ( const SbxParamInfo* pParamInfo = pInfo->GetParam( n ); pParamInfo; pParamInfo = pInfo->GetParam( ++n ) )
+        {
+            if ( ( pParamInfo->nFlags & SBX_OPTIONAL ) != 0 )
+                ++nSbxOptional;
+            else
+                nSbxOptional = 0;
+        }
+        sal_Int32 nSbxCount = n - 1;
+        if ( nParamsCount < nSbxCount - nSbxOptional )
+        {
+            throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "wrong number of parameters!" ) ), Reference< XInterface >() );
+        }
+    }
+    // set parameters
+    SbxArrayRef xSbxParams;
+    if ( nParamsCount > 0 )
+    {
+        xSbxParams = new SbxArray;
+        const Any* pParams = aParams.getConstArray();
+        for ( sal_Int32 i = 0; i < nParamsCount; ++i )
+        {
+            SbxVariableRef xSbxVar = new SbxVariable( SbxVARIANT );
+            unoToSbxValue( static_cast< SbxVariable* >( xSbxVar ), pParams[i] );
+            xSbxParams->Put( xSbxVar, static_cast< USHORT >( i ) + 1 );
+
+            // Enable passing by ref
+            if ( xSbxVar->GetType() != SbxVARIANT )
+                xSbxVar->SetFlag( SBX_FIXED );
+        }
+    }
+    if ( xSbxParams.Is() )
+        pMethod->SetParameters( xSbxParams );
+
+    // call method
+    SbxVariableRef xReturn = new SbxVariable;
+    ErrCode nErr = SbxERR_OK;
+
+    nErr = pMethod->Call( xReturn );
+    Any aReturn;
+    // get output parameters
+    if ( xSbxParams.Is() )
+    {
+        SbxInfo* pInfo_ = pMethod->GetInfo();
+        if ( pInfo_ )
+        {
+            OutParamMap aOutParamMap;
+            for ( USHORT n = 1, nCount = xSbxParams->Count(); n < nCount; ++n )
+            {
+                const SbxParamInfo* pParamInfo = pInfo_->GetParam( n );
+                if ( pParamInfo && ( pParamInfo->eType & SbxBYREF ) != 0 )
+                {
+                    SbxVariable* pVar = xSbxParams->Get( n );
+                    if ( pVar )
+                    {
+                        SbxVariableRef xVar = pVar;
+                        aOutParamMap.insert( OutParamMap::value_type( n - 1, sbxToUnoValue( xVar ) ) );
+                    }
+                }
+            }
+            sal_Int32 nOutParamCount = aOutParamMap.size();
+            aOutParamIndex.realloc( nOutParamCount );
+            aOutParam.realloc( nOutParamCount );
+            sal_Int16* pOutParamIndex = aOutParamIndex.getArray();
+            Any* pOutParam = aOutParam.getArray();
+            for ( OutParamMap::iterator aIt = aOutParamMap.begin(); aIt != aOutParamMap.end(); ++aIt, ++pOutParamIndex, ++pOutParam )
+            {
+                *pOutParamIndex = aIt->first;
+                *pOutParam = aIt->second;
+            }
+        }
+    }
+
+    // get return value
+    aReturn = sbxToUnoValue( xReturn );
+
+    pMethod->SetParameters( NULL );
+
+    return aReturn;
+}
+
+void SAL_CALL
+DocObjectWrapper::setValue( const ::rtl::OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException)
+{
+    if ( m_xAggInv.is() &&  m_xAggInv->hasProperty( aPropertyName ) )
+            return m_xAggInv->setValue( aPropertyName, aValue );
+
+    SbPropertyRef pProperty = getProperty( aPropertyName );
+    if ( !pProperty.Is() )
+       throw UnknownPropertyException();
+    unoToSbxValue( (SbxVariable*) pProperty, aValue );
+}
+
+Any SAL_CALL
+DocObjectWrapper::getValue( const ::rtl::OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException)
+{
+    if ( m_xAggInv.is() &&  m_xAggInv->hasProperty( aPropertyName ) )
+            return m_xAggInv->getValue( aPropertyName );
+
+    SbPropertyRef pProperty = getProperty( aPropertyName );
+    if ( !pProperty.Is() )
+       throw UnknownPropertyException();
+
+    SbxVariable* pProp = ( SbxVariable* ) pProperty;
+    if ( pProp->GetType() == SbxEMPTY )
+        pProperty->Broadcast( SBX_HINT_DATAWANTED );
+
+    Any aRet = sbxToUnoValue( pProp );
+    return aRet;
+}
+
+::sal_Bool SAL_CALL
+DocObjectWrapper::hasMethod( const ::rtl::OUString& aName ) throw (RuntimeException)
+{
+    if ( m_xAggInv.is() && m_xAggInv->hasMethod( aName ) )
+        return sal_True;
+    return getMethod( aName ).Is();
+}
+
+::sal_Bool SAL_CALL
+DocObjectWrapper::hasProperty( const ::rtl::OUString& aName ) throw (RuntimeException)
+{
+    sal_Bool bRes = sal_False;
+    if ( m_xAggInv.is() && m_xAggInv->hasProperty( aName ) )
+        bRes = sal_True;
+    else bRes = getProperty( aName ).Is();
+    return bRes;
+}
+
+Any SAL_CALL DocObjectWrapper::queryInterface( const Type& aType )
+    throw ( RuntimeException )
+{
+    Any aRet = DocObjectWrapper_BASE::queryInterface( aType );
+    if ( aRet.hasValue() )
+        return aRet;
+    else if ( m_xAggProxy.is() )
+        aRet = m_xAggProxy->queryAggregation( aType );
+    return aRet;
+}
+
+SbMethodRef DocObjectWrapper::getMethod( const rtl::OUString& aName ) throw (RuntimeException)
+{
+    SbMethodRef pMethod = NULL;
+    if ( m_pMod )
+    {
+        USHORT nSaveFlgs = m_pMod->GetFlags();
+        // Limit search to this module
+        m_pMod->ResetFlag( SBX_GBLSEARCH );
+        pMethod = (SbMethod*) m_pMod->SbModule::Find( aName,  SbxCLASS_METHOD );
+        m_pMod->SetFlags( nSaveFlgs );
+    }
+
+    return pMethod;
+}
+
+SbPropertyRef DocObjectWrapper::getProperty( const rtl::OUString& aName ) throw (RuntimeException)
+{
+    SbPropertyRef pProperty = NULL;
+    if ( m_pMod )
+    {
+        USHORT nSaveFlgs = m_pMod->GetFlags();
+        // Limit search to this module.
+        m_pMod->ResetFlag( SBX_GBLSEARCH );
+        pProperty = (SbProperty*)m_pMod->SbModule::Find( aName,  SbxCLASS_PROPERTY );
+        m_pMod->SetFlag( nSaveFlgs );
+    }
+
+    return pProperty;
+}
 
 TYPEINIT1(SbModule,SbxObject)
 TYPEINIT1(SbMethod,SbxMethod)
@@ -199,12 +546,24 @@ SbModule::SbModule( const String& rName,  BOOL bVBACompat )
 
 SbModule::~SbModule()
 {
+    OSL_TRACE("Module named %s is destructing", rtl::OUStringToOString( GetName(), RTL_TEXTENCODING_UTF8 ).getStr() );
     if( pImage )
         delete pImage;
     if( pBreaks )
         delete pBreaks;
     if( pClassData )
         delete pClassData;
+        mxWrapper = NULL;
+}
+
+uno::Reference< script::XInvocation >
+SbModule::GetUnoModule()
+{
+    if ( !mxWrapper.is() )
+        mxWrapper = new DocObjectWrapper( this );
+
+    OSL_TRACE("Module named %s returning wrapper mxWrapper (0x%x)", rtl::OUStringToOString( GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), mxWrapper.get() );
+    return mxWrapper;
 }
 
 BOOL SbModule::IsCompiled() const
