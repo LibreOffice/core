@@ -106,7 +106,7 @@ class ImpTwain : public ::cppu::WeakImplHelper1< util::XCloseListener >
     TW_IDENTITY                                 aSrcIdent;
     Link                                        aNotifyLink;
     DSMENTRYPROC                                pDSM;
-    NAMESPACE_VOS( OModule )*                   pMod;
+    vos:: OModule *                 pMod;
     ULONG                                       nCurState;
     HWND                                        hTwainWnd;
     HHOOK                                       hTwainHook;

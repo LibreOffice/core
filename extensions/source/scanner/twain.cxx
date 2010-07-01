@@ -239,7 +239,7 @@ void ImpTwain::ImplOpenSourceManager()
 {
     if( 1 == nCurState )
     {
-        pMod = new NAMESPACE_VOS( OModule )();
+        pMod = new vos:: OModule ();
 
         if( pMod->load( TWAIN_LIBNAME ) )
         {
