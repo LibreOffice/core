@@ -32,7 +32,6 @@
 #define SC_TABBGCOLORDLG_HXX
 
 #include <vcl/dialog.hxx>
-#include <vcl/fixed.hxx>
 #include <vcl/imagebtn.hxx>
 #include <svtools/valueset.hxx>
 
@@ -63,7 +62,6 @@ private:
 
     Control                 aBorderWin;
     ScTabBgColorValueSet    aTabBgColorSet;
-    FixedLine               aTabBgColorBox;
     OKButton                aBtnOk;
     CancelButton            aBtnCancel;
     HelpButton              aBtnHelp;
