@@ -3061,6 +3061,19 @@ void ScDocument::CalcAfterLoad()
     bCalcingAfterLoad = FALSE;
 
     SetDetectiveDirty(FALSE);   // noch keine wirklichen Aenderungen
+
+    // #i112436# If formula cells are already dirty, they don't broadcast further changes.
+    // So the source ranges of charts must be interpreted even if they are not visible,
+    // similar to ScMyShapeResizer::CreateChartListener for loading own files (i104899).
+    if (pChartListenerCollection)
+    {
+        sal_uInt16 nChartCount = pChartListenerCollection->GetCount();
+        for ( sal_uInt16 nIndex = 0; nIndex < nChartCount; nIndex++ )
+        {
+            ScChartListener* pChartListener = static_cast<ScChartListener*>(pChartListenerCollection->At(nIndex));
+            InterpretDirtyCells(*pChartListener->GetRangeList());
+        }
+    }
 }
 
 
