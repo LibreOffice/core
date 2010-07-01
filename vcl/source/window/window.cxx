@@ -8650,7 +8650,10 @@ Reference< XClipboard > Window::GetClipboard()
 
                 if( xFactory.is() )
                 {
-                    mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
+                    mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboardExt" ) ), UNO_QUERY );
+
+                    if( !mpWindowImpl->mpFrameData->mxClipboard.is() )
+                        mpWindowImpl->mpFrameData->mxClipboard = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), UNO_QUERY );
 
 #if defined(UNX) && !defined(QUARTZ)          // unix clipboard needs to be initialized
                     if( mpWindowImpl->mpFrameData->mxClipboard.is() )
@@ -8711,6 +8714,9 @@ Reference< XClipboard > Window::GetPrimarySelection()
                     OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ), aArgumentList ), UNO_QUERY );
 #   else
                     static Reference< XClipboard >  s_xSelection;
+
+                    if ( !s_xSelection.is() )
+                         s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboardExt" ) ), UNO_QUERY );
 
                     if ( !s_xSelection.is() )
                          s_xSelection = Reference< XClipboard >( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.GenericClipboard" ) ), UNO_QUERY );
