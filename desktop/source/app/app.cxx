@@ -28,6 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include <cstdlib>
+#include <vector>
+
 #include <memory>
 #include <unistd.h>
 #include "app.hxx"
@@ -154,6 +157,11 @@
 #include <unotools/regoptions.hxx>
 
 #include "langselect.hxx"
+
+#if defined MACOSX
+#include <errno.h>
+#include <sys/wait.h>
+#endif
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 #define U2S(STRING)                                ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
@@ -1101,28 +1109,79 @@ sal_Bool Desktop::SaveTasks()
         sal_False);
 }
 
-#ifdef MACOSX
-static void DoRestart()
-{
-    oslProcess      process;
-    oslProcessError error;
-    OUString    sExecutableFile;
+namespace {
 
-    osl_getExecutableFile( &sExecutableFile.pData );
-
-    error = osl_executeProcess(
-        sExecutableFile.pData,
-        NULL,
-        0,
-        0,
-        NULL,
-        NULL,
-        NULL,
-        0,
-        &process
-        );
-}
+void restartOnMac(bool passArguments) {
+#if defined MACOSX
+    OfficeIPCThread::DisableOfficeIPCThread();
+    rtl::OUString execUrl;
+    OSL_VERIFY(osl_getExecutableFile(&execUrl.pData) == osl_Process_E_None);
+    rtl::OUString execPath;
+    rtl::OString execPath8;
+    if ((osl::FileBase::getSystemPathFromFileURL(execUrl, execPath)
+         != osl::FileBase::E_None) ||
+        !execPath.convertToString(
+            &execPath8, osl_getThreadTextEncoding(),
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+             RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+    {
+        std::abort();
+    }
+    std::vector< rtl::OString > args;
+    args.push_back(execPath8);
+    bool wait = false;
+    if (passArguments) {
+        sal_uInt32 n = osl_getCommandArgCount();
+        for (sal_uInt32 i = 0; i < n; ++i) {
+            rtl::OUString arg;
+            OSL_VERIFY(osl_getCommandArg(i, &arg.pData) == osl_Process_E_None);
+            if (arg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("-accept="))) {
+                wait = true;
+            }
+            rtl::OString arg8;
+            if (!arg.convertToString(
+                    &arg8, osl_getThreadTextEncoding(),
+                    (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+                     RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)))
+            {
+                std::abort();
+            }
+            args.push_back(arg8);
+        }
+    }
+    std::vector< char const * > argPtrs;
+    for (std::vector< rtl::OString >::iterator i(args.begin()); i != args.end();
+         ++i)
+    {
+        argPtrs.push_back(i->getStr());
+    }
+    argPtrs.push_back(0);
+    execv(execPath8.getStr(), const_cast< char ** >(&argPtrs[0]));
+    if (errno == ENOTSUP) { // happens when multithreaded on OS X < 10.6
+        pid_t pid = fork();
+        if (pid == 0) {
+            execv(execPath8.getStr(), const_cast< char ** >(&argPtrs[0]));
+        } else if (pid > 0) {
+            // Two simultaneously running soffice processes lead to two dock
+            // icons, so avoid waiting here unless it must be assumed that the
+            // process invoking soffice itself wants to wait for soffice to
+            // finish:
+            if (!wait) {
+                return;
+            }
+            int stat;
+            if (waitpid(pid, &stat, 0) == pid && WIFEXITED(stat)) {
+                _exit(WEXITSTATUS(stat));
+            }
+        }
+    }
+    std::abort();
+#else
+    (void) passArguments; // avoid warnings
 #endif
+}
+
+}
 
 USHORT Desktop::Exception(USHORT nError)
 {
@@ -1193,9 +1252,7 @@ USHORT Desktop::Exception(USHORT nError)
                 OfficeIPCThread::DisableOfficeIPCThread();
                 if( pSignalHandler )
                     DELETEZ( pSignalHandler );
-#ifdef MACOSX
-                DoRestart();
-#endif
+                restartOnMac(false);
                 _exit( ExitHelper::E_CRASH_WITH_RESTART );
             }
             else
@@ -1693,9 +1750,7 @@ void Desktop::Main()
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "FINISHED WITH Destop::Main" );
     if ( bRestartRequested )
     {
-#ifdef MACOSX
-        DoRestart();
-#endif
+        restartOnMac(true);
         // wouldn't the solution be more clean if SalMain returns the exit code to the system?
         _exit( ExitHelper::E_NORMAL_RESTART );
     }
