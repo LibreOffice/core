@@ -3744,7 +3744,7 @@ BasicAllListener_Impl::~BasicAllListener_Impl()
 
 void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet )
 {
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     if( xSbxObj.Is() )
     {
@@ -3809,7 +3809,7 @@ Any BasicAllListener_Impl::approveFiring( const AllEventObject& Event ) throw ( 
 // Methoden von XEventListener
 void BasicAllListener_Impl ::disposing(const EventObject& ) throw ( RuntimeException )
 {
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     xSbxObj.Clear();
 }

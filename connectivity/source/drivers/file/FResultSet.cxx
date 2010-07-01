@@ -1044,7 +1044,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
 //
     INT32 nTempPos = m_nRowPos;
     // exclusiver zugriff auf die Tabelle
-    //  NAMESPACE_VOS(OGuard)* pGuard = m_pTable->Lock();
+    //  vos::OGuard* pGuard = m_pTable->Lock();
 
     if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT &&
         !isCount())
@@ -1402,7 +1402,7 @@ BOOL OResultSet::OpenImpl()
     m_nRowCountResult = -1;
 
     // exclusiver zugriff auf die Tabelle
-    //  NAMESPACE_VOS(OGuard)* pGuard = pTable->Lock();
+    //  vos::OGuard* pGuard = pTable->Lock();
     m_nLastVisitedPos = m_pTable->getCurrentLastPos();
 
     switch(m_aSQLIterator.getStatementType())
