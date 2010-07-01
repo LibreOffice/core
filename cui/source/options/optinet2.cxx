@@ -1329,17 +1329,10 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     ,maMacroSecFL       ( this, CUI_RES( FL_SEC_MACROSEC ) )
     ,maMacroSecFI       ( this, CUI_RES( FI_SEC_MACROSEC ) )
     ,maMacroSecPB       ( this, CUI_RES( PB_SEC_MACROSEC ) )
-    ,maFilesharingFL    ( this, CUI_RES( FL_SEC_FILESHARING ) )
-    ,maRecommReadOnlyCB ( this, CUI_RES( CB_SEC_RECOMMREADONLY ) )
-    ,maRecordChangesCB  ( this, CUI_RES( CB_SEC_RECORDCHANGES ) )
-    ,maProtectRecordsPB ( this, CUI_RES( PB_SEC_PROTRECORDS ) )
 
     ,mpSecOptions       ( new SvtSecurityOptions )
     ,mpSecOptDlg        ( NULL )
-    ,meRedlingMode      ( RL_NONE )
 
-    ,msProtectRecordsStr(               CUI_RES( STR_SEC_PROTRECORDS ) )
-    ,msUnprotectRecordsStr(             CUI_RES( STR_SEC_UNPROTRECORDS ) )
     ,msPasswordStoringDeactivateStr(    CUI_RES( STR_SEC_NOPASSWDSAVE ) )
 
 {
@@ -1353,8 +1346,6 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     maMasterPasswordCB.SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordCBHdl ) );
     maShowConnectionsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
     maMacroSecPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
-    maProtectRecordsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ProtectRecordsPBHdl ) );
-    maRecordChangesCB.SetClickHdl( LINK( this, SvxSecurityTabPage, RecordChangesCBHdl ) );
 
     ActivatePage( rSet );
 }
@@ -1524,127 +1515,6 @@ IMPL_LINK( SvxSecurityTabPage, MacroSecPBHdl, void*, EMPTYARG )
     return 0;
 }
 
-namespace
-{
-    enum RedlineFunc    { RF_ON, RF_PROTECT };
-
-    const SfxBoolItem* ExecuteRecordChangesFunc( SvxSecurityTabPage::RedliningMode _eMode, RedlineFunc _eFunc, BOOL _bVal, Window* _pParent = NULL )
-    {
-        const SfxBoolItem* pRet = NULL;
-
-        if( _eMode != SvxSecurityTabPage::RL_NONE )
-        {
-            USHORT nSlot;
-            if ( _eMode == SvxSecurityTabPage::RL_WRITER )
-                nSlot = ( _eFunc == RF_ON )? FN_REDLINE_ON : FN_REDLINE_PROTECT;
-            else
-                nSlot = ( _eFunc == RF_ON )? FID_CHG_RECORD : SID_CHG_PROTECT;
-
-            // execute
-            SfxViewShell* pViewSh = SfxViewShell::Current();
-            if( pViewSh )
-            {
-                bool bNeedItem = ( _eMode == SvxSecurityTabPage::RL_WRITER || _eFunc != RF_ON );
-                SfxBoolItem* pItem = bNeedItem ? new SfxBoolItem( nSlot, _bVal ) : NULL;
-                SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-                if ( _pParent )
-                {
-                    OfaPtrItem aParentItem( SID_ATTR_PARENTWINDOW, _pParent );
-                    pRet = static_cast< const SfxBoolItem* >(
-                        pDisp->Execute( nSlot, SFX_CALLMODE_SYNCHRON, &aParentItem, pItem, 0L ) );
-                }
-                else
-                    pRet = static_cast< const SfxBoolItem* >(
-                        pDisp->Execute( nSlot, SFX_CALLMODE_SYNCHRON, pItem, 0L ) );
-                delete pItem;
-            }
-        }
-
-        return pRet;
-    }
-
-    bool QueryState( USHORT _nSlot, bool& _rValue )
-    {
-        bool bRet = false;
-
-        SfxViewShell* pViewSh = SfxViewShell::Current();
-        if( pViewSh )
-        {
-            const SfxPoolItem* pItem;
-            SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-            bRet = SFX_ITEM_AVAILABLE <= pDisp->QueryState( _nSlot, pItem );
-            if( bRet )
-                _rValue = ( static_cast< const SfxBoolItem* >( pItem ) )->GetValue();
-        }
-
-        return bRet;
-    }
-
-    bool QueryRecordChangesProtectionState( SvxSecurityTabPage::RedliningMode _eMode, bool& _rValue )
-    {
-        bool bRet = false;
-
-        if( _eMode != SvxSecurityTabPage::RL_NONE )
-        {
-            USHORT nSlot = ( _eMode == SvxSecurityTabPage::RL_WRITER )? FN_REDLINE_PROTECT : SID_CHG_PROTECT;
-            bRet = QueryState( nSlot, _rValue );
-        }
-
-        return bRet;
-    }
-
-    bool QueryRecordChangesState( SvxSecurityTabPage::RedliningMode _eMode, bool& _rValue )
-    {
-        bool bRet = false;
-
-        if( _eMode != SvxSecurityTabPage::RL_NONE )
-        {
-            USHORT nSlot = ( _eMode == SvxSecurityTabPage::RL_WRITER )? FN_REDLINE_ON : FID_CHG_RECORD;
-            bRet = QueryState( nSlot, _rValue );
-        }
-
-        return bRet;
-    }
-}
-
-IMPL_LINK( SvxSecurityTabPage, RecordChangesCBHdl, void*, EMPTYARG )
-{
-    ExecuteRecordChangesFunc( meRedlingMode, RF_ON, maRecordChangesCB.IsChecked(), this );
-    CheckRecordChangesState();
-    return 0;
-}
-
-IMPL_LINK( SvxSecurityTabPage, ProtectRecordsPBHdl, void*, EMPTYARG )
-{
-    bool bProt;
-    QueryRecordChangesProtectionState( meRedlingMode, bProt );
-    ExecuteRecordChangesFunc( meRedlingMode, RF_PROTECT, !bProt, this );
-    CheckRecordChangesState();
-
-    if ( QueryRecordChangesProtectionState( meRedlingMode, bProt ) )
-    {
-        // RecordChangesCB is enabled if protection is off
-        maRecordChangesCB.Enable( !bProt );
-        // toggle text of button "Protect" <-> "Unprotect"
-        String sNewText = bProt ? msUnprotectRecordsStr : msProtectRecordsStr;
-        maProtectRecordsPB.SetText( sNewText );
-    }
-    return 0;
-}
-
-void SvxSecurityTabPage::CheckRecordChangesState( void )
-{
-    bool bVal;
-    if( QueryRecordChangesState( meRedlingMode, bVal ) )
-    {
-        maRecordChangesCB.Enable();
-        maRecordChangesCB.Check( bVal );
-    }
-    else
-        maRecordChangesCB.Disable();        // because now we don't know the state!
-
-    maProtectRecordsPB.Enable( QueryRecordChangesProtectionState( meRedlingMode, bVal ) );
-}
 
 void SvxSecurityTabPage::InitControls()
 {
@@ -1661,30 +1531,13 @@ void SvxSecurityTabPage::InitControls()
         maMacroSecFL.Hide();
         maMacroSecFI.Hide();
         maMacroSecPB.Hide();
-
-        // rearrange the following controls
-        Point aNewPos = maFilesharingFL.GetPosPixel();
-        long nDelta = aNewPos.Y() - maMacroSecFL.GetPosPixel().Y();
-
-        Window* pWins[] =
-        {
-            &maFilesharingFL, &maRecommReadOnlyCB, &maRecordChangesCB, &maProtectRecordsPB
-        };
-        Window** pCurrent = pWins;
-        const sal_Int32 nCount = sizeof( pWins ) / sizeof( pWins[ 0 ] );
-        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
-        {
-            aNewPos = (*pCurrent)->GetPosPixel();
-            aNewPos.Y() -= nDelta;
-            (*pCurrent)->SetPosPixel( aNewPos );
-        }
     }
 
     // one button too small for its text?
     sal_Int32 i = 0;
     long nBtnTextWidth = 0;
     Window* pButtons[] = { &maSecurityOptionsPB, &maMasterPasswordPB,
-                            &maShowConnectionsPB, &maMacroSecPB, &maProtectRecordsPB };
+                           &maShowConnectionsPB, &maMacroSecPB };
     Window** pButton = pButtons;
     const sal_Int32 nBCount = sizeof( pButtons ) / sizeof( pButtons[ 0 ] );
     for ( ; i < nBCount; ++i, ++pButton )
@@ -1724,8 +1577,7 @@ void SvxSecurityTabPage::InitControls()
         }
 
         Window* pControls[] = { &maSecurityOptionsFI, &maSavePasswordsCB,
-                                &maMasterPasswordFI, &maMacroSecFI,
-                                &maRecommReadOnlyCB, &maRecordChangesCB };
+                                &maMasterPasswordFI, &maMacroSecFI };
         Window** pControl = pControls;
         const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[ 0 ] );
         for ( i = 0; i < nCCount; ++i, ++pControl )
@@ -1844,15 +1696,6 @@ BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& )
         CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_CTRLCLICK_HYPERLINK, mpSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
     }
 
-    // document options
-    SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
-    if( pCurDocShell )
-    {
-        if( pCurDocShell->HasSecurityOptOpenReadOnly() )
-            pCurDocShell->SetSecurityOptOpenReadOnly( maRecommReadOnlyCB.IsChecked() );
-
-    }
-
     return bModified;
 }
 
@@ -1860,65 +1703,10 @@ BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& )
 
 void SvxSecurityTabPage::Reset( const SfxItemSet& )
 {
-    String sNewText = msProtectRecordsStr;
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
     if( pCurDocShell )
     {
-        bool bIsHTMLDoc = false;
-        SfxViewShell* pViewSh = SfxViewShell::Current();
-        if( pViewSh )
-        {
-            const SfxPoolItem* pItem;
-            SfxDispatcher* pDisp = pViewSh->GetDispatcher();
-            if ( SFX_ITEM_AVAILABLE <= pDisp->QueryState( SID_HTML_MODE, pItem ) )
-            {
-                USHORT nMode = static_cast< const SfxUInt16Item* >( pItem )->GetValue();
-                bIsHTMLDoc = ( ( nMode & HTMLMODE_ON ) != 0 );
-            }
-        }
-
-        sal_Bool bIsReadonly = pCurDocShell->IsReadOnly();
-        if( pCurDocShell->HasSecurityOptOpenReadOnly() && !bIsHTMLDoc )
-        {
-            maRecommReadOnlyCB.Check( pCurDocShell->IsSecurityOptOpenReadOnly() );
-            maRecommReadOnlyCB.Enable( !bIsReadonly );
-        }
-        else
-            maRecommReadOnlyCB.Disable();
-
-        bool bVal;
-        if ( QueryRecordChangesState( RL_WRITER, bVal ) && !bIsHTMLDoc )
-            meRedlingMode = RL_WRITER;
-        else if( QueryRecordChangesState( RL_CALC, bVal ) )
-            meRedlingMode = RL_CALC;
-        else
-            meRedlingMode = RL_NONE;
-
-        if ( meRedlingMode != RL_NONE )
-        {
-            maRecordChangesCB.Check( bVal );
-            maRecordChangesCB.Enable( !bVal && !bIsReadonly );
-            maProtectRecordsPB.Enable(
-                QueryRecordChangesProtectionState( meRedlingMode, bVal ) && !bIsReadonly );
-            // set the right text
-            if ( bVal )
-                sNewText = msUnprotectRecordsStr;
-        }
-        else
-        {
-            // only Writer and Calc support redlining
-            maRecordChangesCB.Disable();
-            maProtectRecordsPB.Disable();
-        }
     }
-    else
-    {   // no doc -> hide document settings
-        maRecommReadOnlyCB.Disable();
-        maRecordChangesCB.Disable();
-        maProtectRecordsPB.Disable();
-    }
-
-    maProtectRecordsPB.SetText( sNewText );
 }
 
 //added by jmeng begin
