@@ -42,3 +42,5 @@ fl  filter\source\config\cache              nmake   -   all fl_config           
 fl  filter\source\config\fragments\types    nmake   -   all fl_fcfg_fragments_types  fl_inc NULL
 fl  filter\source\config\fragments\filters  nmake   -   all fl_fcfg_fragments_filters  fl_inc NULL
 fl  filter\source\config\fragments          nmake   -   all fl_fcfg_fragments fl_fcfg_fragments_filters fl_inc NULL
+
+fl filter\qa\complex\filter\misc nmake - all fl_qa_complex NULL
