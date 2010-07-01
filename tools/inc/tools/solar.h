@@ -275,42 +275,6 @@ template<typename T> inline T Abs(T a) { return (a>=0?a:-a); }
 
 /* dll file extensions *******************************************************/
 
-/* many of these platforms are historic */
-#define SYSTEM_WINMSCI       1
-#define SYSTEM_WNTMSCI       2
-#define SYSTEM_WNTMSCA       3
-#define SYSTEM_WNTMSCP       4
-#define SYSTEM_WNTMSCM       5
-#define SYSTEM_OS2BLCI       6
-#define SYSTEM_OS2ICCI       7
-#define SYSTEM_OS2ICCI3      8
-#define SYSTEM_UNXLNXI       9
-#define SYSTEM_UNXSOLS      10
-#define SYSTEM_UNXBSDI      11
-#define SYSTEM_UNXBSDA      12
-#define SYSTEM_UNXSCOI      13
-#define SYSTEM_UNXAIXP      14
-#define SYSTEM_UNXHPXR      15
-#define SYSTEM_UNXSNIM      16
-#define SYSTEM_UNXMVSG      17
-#define SYSTEM_UNXIRXM      18
-// #define SYSTEM_MACOSP        19
-#define SYSTEM_UNXFBSDI     20
-#define SYSTEM_UNXSOLI      21
-#define SYSTEM_WINBLCI      22
-#define SYSTEM_UNXMACXP     23
-#define SYSTEM_UNXLNXP      24
-#define SYSTEM_UNXBSDS      25
-#define SYSTEM_UNXLNXR      26
-#define SYSTEM_UNXLNX3      28
-#define SYSTEM_UNXLNXS      29
-#define SYSTEM_UNXLNXX      30
-#define SYSTEM_UNXSOGS      31
-#define SYSTEM_UNXSOGI      32
-#define SYSTEM_UNXMACXI     33
-#define SYSTEM_OS2GCCI      34
-#define SYSTEM_WNTGCCI      99
-
 #if defined WNT
 #if defined(__MINGW32__)
   #define __DLLEXTENSION    "gi"
