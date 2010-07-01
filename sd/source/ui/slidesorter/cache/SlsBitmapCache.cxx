@@ -184,14 +184,6 @@ void BitmapCache::Clear (void)
 
 
 
-bool BitmapCache::IsEmpty (void) const
-{
-    return mpBitmapContainer->empty();
-}
-
-
-
-
 bool BitmapCache::IsFull (void) const
 {
     return mbIsFull;
@@ -283,21 +275,6 @@ Bitmap BitmapCache::GetMarkedBitmap (const CacheKey& rKey)
 
 
 
-void BitmapCache::ReleaseBitmap (const CacheKey& rKey)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    CacheBitmapContainer::iterator aIterator (mpBitmapContainer->find(rKey));
-    if (aIterator != mpBitmapContainer->end())
-    {
-        UpdateCacheSize(aIterator->second, REMOVE);
-        mpBitmapContainer->erase(aIterator);
-    }
-}
-
-
-
-
 bool BitmapCache::InvalidateBitmap (const CacheKey& rKey)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -383,20 +360,6 @@ void BitmapCache::SetMarkedBitmap (
         iEntry->second.SetAccessTime(mnCurrentAccessTime++);
         UpdateCacheSize(iEntry->second, ADD);
     }
-}
-
-
-
-
-bool BitmapCache::IsPrecious (const CacheKey& rKey)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    CacheBitmapContainer::iterator aIterator (mpBitmapContainer->find(rKey));
-    if (aIterator != mpBitmapContainer->end())
-        return aIterator->second.IsPrecious();
-    else
-        return false;
 }
 
 

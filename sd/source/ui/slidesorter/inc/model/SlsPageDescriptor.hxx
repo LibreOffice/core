@@ -90,14 +90,7 @@ public:
     */
     css::uno::Reference<css::drawing::XDrawPage> GetXDrawPage (void) const;
 
-    /** Returns the index of the page as it is displayed in the view as page
-        number.  The value may differ from the index returned by the
-        XDrawPage when there are hidden slides and the XIndexAccess used to
-        access the model filters them out.
-    */
-    sal_Int32 GetPageIndex (void) const;
     void SetPageIndex (const sal_Int32 nIndex);
-
     bool UpdateMasterPage (void);
 
     enum State { ST_Visible, ST_Selected, ST_WasSelected,

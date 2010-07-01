@@ -334,11 +334,6 @@ Layouter::Layouter (
 
 Layouter::~Layouter (void)
 {
-}
-
-
-
-
 ::boost::shared_ptr<PageObjectLayouter> Layouter::GetPageObjectLayouter (void) const
 {
     return mpImplementation->mpPageObjectLayouter;

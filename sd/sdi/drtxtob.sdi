@@ -202,5 +202,11 @@ shell TextObjectBar
         ExecMethod = Execute;
         StateMethod = GetAttrState;
     ]
+    SID_THES
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetAttrState ;
+    ]
+
 
 }

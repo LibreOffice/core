@@ -166,7 +166,7 @@ Image PreviewRenderer::RenderPage (
         }
         catch (const com::sun::star::uno::Exception&)
         {
-            OSL_TRACE("PreviewRenderer::RenderPage: caught exception");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -228,7 +228,7 @@ Image PreviewRenderer::RenderSubstitution (
     }
     catch (const com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("PreviewRenderer::RenderPage: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return aPreview;
@@ -345,7 +345,7 @@ void PreviewRenderer::PaintPage (
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("PreviewRenderer::PaintPage: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     // Restore the previous online spelling and redlining states.

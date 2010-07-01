@@ -56,6 +56,30 @@ ScrollPanel::ScrollPanel (
       mnVerticalGap(3),
       mnHorizontalBorder(2)
 {
+    Construct();
+}
+
+ScrollPanel::ScrollPanel (
+    ::Window& i_rParentWindow)
+    : Control (&i_rParentWindow, WB_DIALOGCONTROL),
+      TreeNode(NULL),
+      maScrollWindow(this, WB_DIALOGCONTROL),
+      maVerticalScrollBar(this, WB_VERT),
+      maHorizontalScrollBar(this, WB_HORZ),
+      maScrollBarFiller(this),
+      maScrollWindowFiller(&maScrollWindow),
+      mbIsRearrangePending(true),
+      mbIsLayoutPending(true),
+      mnChildrenWidth(0),
+      mnVerticalBorder(2),
+      mnVerticalGap(3),
+      mnHorizontalBorder(2)
+{
+    Construct();
+}
+
+void ScrollPanel::Construct()
+{
     SetAccessibleName (
         ::rtl::OUString::createFromAscii("Sub Task Panel"));
     mpControlContainer->SetMultiSelection (true);
@@ -95,7 +119,7 @@ ScrollPanel::~ScrollPanel (void)
         // control instead of pNode directly.
         TitledControl* pTitledControl = static_cast<TitledControl*>(pNode);
         if (pTitledControl != NULL)
-            pControl = pTitledControl->GetControl(false);
+            pControl = pTitledControl->GetControl();
 
         // Remove this object as listener from the control.
         if (pControl != NULL && pControl->GetWindow()!=NULL)
@@ -105,15 +129,6 @@ ScrollPanel::~ScrollPanel (void)
         }
     }
     mpControlContainer->DeleteChildren();
-}
-
-
-
-
-void ScrollPanel::ListHasChanged (void)
-{
-    mpControlContainer->ListHasChanged ();
-    RequestResize ();
 }
 
 

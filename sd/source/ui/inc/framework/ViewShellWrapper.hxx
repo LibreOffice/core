@@ -35,17 +35,17 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <osl/mutex.hxx>
 #include <cppuhelper/compbase4.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 #include <boost/shared_ptr.hpp>
 
 namespace {
 
-typedef ::cppu::WeakComponentImplHelper4 <
-      ::com::sun::star::drawing::framework::XView,
-      ::com::sun::star::lang::XUnoTunnel,
-      ::com::sun::star::awt::XWindowListener,
-      ::com::sun::star::drawing::framework::XRelocatableResource
-    > ViewShellWrapperInterfaceBase;
+typedef ::cppu::WeakComponentImplHelper4    <   ::com::sun::star::lang::XUnoTunnel
+                                            ,   ::com::sun::star::awt::XWindowListener
+                                            ,   ::com::sun::star::drawing::framework::XRelocatableResource
+                                            ,   ::com::sun::star::drawing::framework::XView
+                                            >   ViewShellWrapperInterfaceBase;
 
 } // end of anonymous namespace.
 
@@ -57,9 +57,8 @@ namespace sd { namespace framework {
     Most importantly it provides a tunnel to the ViewShell implementation.
     Then it forwards size changes of the pane window to the view shell.
 */
-class ViewShellWrapper
-    : private sd::MutexOwner,
-      public ViewShellWrapperInterfaceBase
+class ViewShellWrapper  :private sd::MutexOwner
+                        ,public ViewShellWrapperInterfaceBase
 {
 public:
     /** Create a new ViewShellWrapper object that wraps the given ViewShell
@@ -90,22 +89,10 @@ public:
     */
     ::boost::shared_ptr<ViewShell> GetViewShell (void);
 
-    /** Returns whether there is exactly one reference to the called
-        ViewShellWrapper object (the number of references to the wrapped
-        ViewShell object is not taken into account).  This method is
-        typically used by the owner of a ViewShellWrapper object to verify
-        that, at the end of the ViewShellWrapper object's lifetime, the
-        owner holds the last reference and by releasing it will destroy the
-        object.
-    */
-    bool IsUnique (void);
-
-
     // XUnoTunnel
 
     virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
         throw (com::sun::star::uno::RuntimeException);
-
 
     // XResource
 
@@ -151,10 +138,9 @@ public:
         throw (com::sun::star::uno::RuntimeException);
 
 private:
-    ::boost::shared_ptr<ViewShell> mpViewShell;
-    const ::com::sun::star::uno::Reference<
-        com::sun::star::drawing::framework::XResourceId> mxViewId;
-    ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow> mxWindow;
+    ::boost::shared_ptr< ViewShell >                                                            mpViewShell;
+    const ::com::sun::star::uno::Reference< com::sun::star::drawing::framework::XResourceId >   mxViewId;
+    ::com::sun::star::uno::Reference<com::sun::star::awt::XWindow >                             mxWindow;
 };
 
 } } // end of namespace sd::framework

@@ -62,13 +62,6 @@ public:
 
     virtual void SAL_CALL disposing (void);
 
-
-    /** Create an UnknownPropertyException, but do not yet throw it.  This
-        method fills in the fields of the exception.
-    */
-    css::beans::UnknownPropertyException CreateUnknownPropertyException (
-        const rtl::OUString& rsPropertyName);
-
     // XPropertySet
 
     virtual css::uno::Reference<css::beans::XPropertySetInfo>

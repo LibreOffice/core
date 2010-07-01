@@ -34,10 +34,12 @@
 #include "ViewShellBase.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <cppuhelper/compbase1.hxx>
+#include <tools/diagnose_ex.h>
 #include "slideshow.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::rtl::OUString;
@@ -154,7 +156,7 @@ PresentationFactory::PresentationFactory (
     }
     catch (RuntimeException&)
     {
-        OSL_ASSERT(false);
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -180,7 +182,7 @@ void SAL_CALL PresentationFactory::disposing (void)
 
 Reference<XResource> SAL_CALL PresentationFactory::createResource (
     const Reference<XResourceId>& rxViewId)
-    throw (RuntimeException)
+    throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
 {
     ThrowIfDisposed();
 
@@ -308,7 +310,7 @@ void SAL_CALL PresentationFactoryProvider::initialize(
         }
         catch (RuntimeException&)
         {
-            OSL_ASSERT(false);
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }

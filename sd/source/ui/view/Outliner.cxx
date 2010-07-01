@@ -57,6 +57,8 @@
 #include <vcl/metric.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svtools/langtab.hxx>
+#include <tools/diagnose_ex.h>
+
 #include "strings.hrc"
 #include "sdstring.hrc"
 #include "eetext.hxx"
@@ -424,23 +426,6 @@ BOOL Outliner::SpellNextDocument (void)
     return mbEndOfSearch ? FALSE : TRUE;
 
 }
-
-void Outliner::HandleOutsideChange (ChangeHint eHint)
-{
-    switch (eHint)
-    {
-        case CH_VIEW_SHELL_INVALID:
-            EndSpelling();
-            mbPrepareSpellingPending = true;
-            mbViewShellValid = false;
-            break;
-
-        case CH_VIEW_SHELL_VALID:
-            mbViewShellValid = true;
-            break;
-    }
-}
-
 
 
 /*************************************************************************
@@ -984,7 +969,7 @@ void Outliner::ProvideNextTextObject (void)
     }
     catch (::com::sun::star::uno::Exception e)
     {
-        OSL_TRACE ("Outliner %p: caught exception while ending text edit mode", this);
+        DBG_UNHANDLED_EXCEPTION();
     }
     SetUpdateMode(FALSE);
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
@@ -1085,23 +1070,6 @@ void Outliner::EndOfSearch (void)
         }
     }
 }
-
-
-
-
-void Outliner::InitPage (USHORT nPageIndex)
-{
-    (void)nPageIndex;
-
-    ::sd::outliner::IteratorPosition aPosition (*maObjectIterator);
-    if (aPosition.meEditMode == EM_PAGE)
-        mnPageCount = mpDrawDocument->GetSdPageCount(aPosition.mePageKind);
-    else
-        mnPageCount = mpDrawDocument->GetMasterSdPageCount(aPosition.mePageKind);
-}
-
-
-
 
 void Outliner::ShowEndOfSearchDialog (void)
 {
@@ -1483,36 +1451,6 @@ bool Outliner::HandleFailedSearch (void)
 
     return bContinueSearch;
 }
-
-
-#if ENABLE_LAYOUT
-#define SvxSearchDialog Window
-#endif
-
-/** See task #95227# for discussion about correct parent for dialogs/info boxes.
-*/
-::Window* Outliner::GetParentForDialog (void)
-{
-    ::Window* pParent = NULL;
-
-    if (meMode == SEARCH)
-        pParent = static_cast<SvxSearchDialog*>(
-            SfxViewFrame::Current()->GetChildWindow(
-                SvxSearchDialogWrapper::GetChildWindowId())->GetWindow());
-
-    if (pParent == NULL)
-        pParent = mpViewShell->GetActiveWindow();
-
-    if (pParent == NULL)
-        pParent = Application::GetDefDialogParent();
-    //1.30->1.31 of sdoutl.cxx        pParent = Application::GetDefModalDialogParent();
-
-    return pParent;
-}
-
-#if ENABLE_LAYOUT
-#undef SvxSearchDialog
-#endif
 
 
 SdrObject* Outliner::SetObject (

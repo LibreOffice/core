@@ -78,9 +78,11 @@
 #include <canvas/elapsedtime.hxx>
 
 //#define DEBUG_TIMING
+#include <svl/itempool.hxx>
 #ifdef DEBUG_TIMING
 #include <vector>
 #endif
+#include <boost/foreach.hpp>
 
 
 using namespace std;

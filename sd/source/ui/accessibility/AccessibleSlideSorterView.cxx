@@ -65,7 +65,7 @@ namespace accessibility {
 /** Inner implementation class of the AccessibleSlideSorterView.
 
     Note that some event broadcasting is done asynchronously because
-    otherwise it could lead to deadlocks on (at lease) some Solaris
+    otherwise it could lead to deadlocks on (at least) some Solaris
     machines.  Probably (but unverified) this can happen on all GTK based
     systems.  The asynchronous broadcasting is just a workaround for a
     poorly understood problem.

@@ -64,7 +64,6 @@ public:
     void FuTemporary (SfxRequest& rRequest);
     void FuPermanent (SfxRequest& rRequest);
     void FuSupport (SfxRequest& rRequest);
-    void GetCtrlState (SfxItemSet &rSet);
     void GetMenuState (SfxItemSet &rSet);
     void GetClipboardState (SfxItemSet &rSet);
     void GetStatusBarState (SfxItemSet& rSet);
@@ -111,8 +110,6 @@ private:
     void InsertSlide (SfxRequest& rRequest);
 
     void DuplicateSelectedSlides (SfxRequest& rRequest);
-
-    void AssignTransitionEffect (void);
 
     /** Use one of several ways to determine where to insert a new page.
         This can be the current selection or the insertion indicator.

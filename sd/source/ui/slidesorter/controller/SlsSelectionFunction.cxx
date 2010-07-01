@@ -53,7 +53,6 @@
 #include "view/SlsPageObjectLayouter.hxx"
 #include "view/SlsButtonBar.hxx"
 #include "framework/FrameworkHelper.hxx"
-#include "showview.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawController.hxx"
 #include "Window.hxx"

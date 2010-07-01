@@ -204,15 +204,9 @@ SlideSorterController::~SlideSorterController (void)
 
 
 void SlideSorterController::Dispose (void)
-{
     mpInsertionIndicatorHandler->End(Animator::AM_Immediate);
     mpSelectionManager.reset();
     mpAnimator->Dispose();
-}
-
-
-
-
 SlideSorter& SlideSorterController::GetSlideSorter (void) const
 {
     return mrSlideSorter;
@@ -867,43 +861,6 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
     }
 
     return aNewContentArea;
-}
-
-
-
-
-void SlideSorterController::SetZoom (long int nZoom)
-{
-    SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
-    long int nCurrentZoom ((long int)(
-        pWindow->GetMapMode().GetScaleX().operator double() * 100));
-
-    if (nZoom > nCurrentZoom)
-    {
-        Size aPageSize (mrView.GetLayouter().GetPageObjectSize());
-        Size aWindowSize (pWindow->PixelToLogic(
-            pWindow->GetOutputSizePixel()));
-
-        // The zoom factor must not grow by more then the ratio of the
-        // widths of the output window and the page objects.
-        long nMaxFactor
-            = nCurrentZoom * aWindowSize.Width() / aPageSize.Width();
-        // Apply rounding, so that a current zoom factor of 1 is still
-        // increased.
-        nMaxFactor = (nCurrentZoom * 18 + 5) / 10;
-        nZoom = Min(nMaxFactor, nZoom);
-    }
-    if (nZoom < 1)
-        nZoom = 1;
-
-    {
-        SlideSorterView::DrawLock aLock (mrSlideSorter);
-        mrView.GetLayouter()._SetZoom(nZoom/100.0);
-        mrView.Layout();
-        GetScrollBarManager().UpdateScrollBars (false);
-        mrView.GetPreviewCache()->InvalidateCache();
-        mrView.RequestRepaint();
-    }
 }
 
 

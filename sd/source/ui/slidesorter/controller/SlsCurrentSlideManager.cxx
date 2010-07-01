@@ -303,19 +303,4 @@ IMPL_LINK(CurrentSlideManager, SwitchPageCallback, void*, EMPTYARG)
     return 1;
 }
 
-
-
-
-SdPage* GetCurrentSdPage (SlideSorter& rSlideSorter)
-{
-    SharedPageDescriptor pDescriptor (
-        rSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
-    if (pDescriptor.get() == NULL)
-        return NULL;
-    else
-        return pDescriptor->GetPage();
-}
-
-
-
 } } } // end of namespace ::sd::slidesorter::controller

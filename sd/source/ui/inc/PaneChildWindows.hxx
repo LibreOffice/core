@@ -29,6 +29,7 @@
 #define SD_PANE_CHILD_WINDOWS_HXX
 
 #include <sfx2/childwin.hxx>
+#include <sfx2/taskpane.hxx>
 
 namespace sd {
 
@@ -41,8 +42,8 @@ public:
         USHORT nId,
         SfxBindings* pBindings,
         SfxChildWinInfo* pInfo,
-        const ResId& rResId,
-        const ::rtl::OUString& rsTitle,
+        const USHORT nDockWinTitleResId,
+        const USHORT nTitleBarResId,
         SfxChildAlignment eAlignment);
     virtual ~PaneChildWindow (void);
 };
@@ -74,16 +75,24 @@ public:
 
 
 
-class RightPaneChildWindow
-    : public PaneChildWindow
+//======================================================================================================================
+//= ToolPanelChildWindow
+//======================================================================================================================
+class ToolPanelChildWindow  :public PaneChildWindow
+                            ,public ::sfx2::ITaskPaneToolPanelAccess
 {
 public:
-    RightPaneChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
+    ToolPanelChildWindow(
+        ::Window* i_pParentWindow,
+        USHORT i_nId,
+        SfxBindings* i_pBindings,
+        SfxChildWinInfo* i_pChildWindowInfo );
 
-    SFX_DECL_CHILDWINDOW(RightPaneChildWindow);
+    SFX_DECL_CHILDWINDOW( ToolPanelChildWindow );
+
+    // ::sfx2::ITaskPaneToolPanelAccess
+    virtual void ActivateToolPanel( const ::rtl::OUString& i_rPanelURL );
 };
-
-
 
 
 } // end of namespace ::sd

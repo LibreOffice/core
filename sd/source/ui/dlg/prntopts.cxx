@@ -41,15 +41,6 @@
 #include "app.hrc"
 #include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
-// STATIC DATA -----------------------------------------------------------
-
-static USHORT pPrintOptRanges[] =
-{
-    ATTR_OPTIONS_PRINT,
-    ATTR_OPTIONS_PRINT,
-    0
-};
-
 
 /*************************************************************************
 |*
@@ -232,13 +223,6 @@ SfxTabPage* SdPrintOptions::Create( Window* pWindow,
                 const SfxItemSet& rOutAttrs )
 {
     return( new SdPrintOptions( pWindow, rOutAttrs ) );
-}
-
-//-----------------------------------------------------------------------
-
-USHORT* SdPrintOptions::GetRanges()
-{
-    return pPrintOptRanges;
 }
 
 //-----------------------------------------------------------------------

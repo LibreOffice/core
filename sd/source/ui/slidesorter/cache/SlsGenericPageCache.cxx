@@ -263,11 +263,6 @@ bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
         return mpBitmapCache->InvalidateBitmap(mpCacheContext->GetPage(aKey));
     else
         return false;
-}
-
-
-
-
 void GenericPageCache::ReleasePreviewBitmap (const CacheKey aKey)
 {
     if (mpBitmapCache.get() != NULL)
@@ -351,17 +346,6 @@ void GenericPageCache::SetPreciousFlag (
     }
 
     mpBitmapCache->SetPrecious(mpCacheContext->GetPage(aKey), bIsPrecious);
-}
-
-
-
-
-bool GenericPageCache::IsEmpty (void) const
-{
-    if (mpBitmapCache.get() != NULL)
-        return mpBitmapCache->IsEmpty();
-    else
-        return true;
 }
 
 

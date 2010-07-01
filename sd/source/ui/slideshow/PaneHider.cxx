@@ -42,6 +42,8 @@
 #include <com/sun/star/drawing/framework/XConfiguration.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 
+#include <tools/diagnose_ex.h>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 using ::sd::framework::FrameworkHelper;
@@ -88,7 +90,7 @@ PaneHider::PaneHider (const ViewShell& rViewShell, SlideshowImpl* pSlideShow)
     }
     catch (RuntimeException&)
     {
-        DBG_ASSERT(false, "caught exception in PaneHider constructor");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

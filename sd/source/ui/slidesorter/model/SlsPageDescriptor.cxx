@@ -93,14 +93,6 @@ Reference<drawing::XDrawPage> PageDescriptor::GetXDrawPage (void) const
 
 
 
-sal_Int32 PageDescriptor::GetPageIndex (void) const
-{
-    return mnIndex;
-}
-
-
-
-
 void PageDescriptor::SetPageIndex (const sal_Int32 nNewIndex)
 {
     mnIndex = nNewIndex;

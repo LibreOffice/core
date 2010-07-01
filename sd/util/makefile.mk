@@ -125,7 +125,8 @@ LIB3FILES=      \
             $(SLB)$/cgm.lib			\
             $(SLB)$/uitable.lib		\
             $(SLB)$/uiannotations.lib\
-            $(SLB)$/grf.lib
+            $(SLB)$/grf.lib \
+            $(SLB)$/controller.lib
 
 LIB5TARGET=$(SLB)$/sdraw3_2.lib
 LIB5FILES=      \
@@ -230,7 +231,7 @@ SHL4OBJS += $(SLO)$/pchname.obj \
 .ENDIF # "$(GUI)$(COM)" == "WNTMSC"
 
 # $(ISDLIB) is build in SHL1TARGET
-.IF "$(GUI)" == "UNX"
+.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
 SHL4DEPN=$(SHL1TARGETN)
 SHL5DEPN=$(SHL1TARGETN)
 .ELSE

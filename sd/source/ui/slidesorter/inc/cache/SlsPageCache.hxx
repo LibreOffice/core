@@ -68,18 +68,11 @@ class RequestData;
     bitmaps and throw.</li>
     </p>
 
-    <p>There are three somewhat similar methods for requesting new previews:
-    a) GetPreviewBitmap() schedules a re-rendering (when necessary) and
+    <p>There is another somewhat similar methods for requesting new previews:
+    GetPreviewBitmap() schedules a re-rendering (when necessary) and
     returns the preview what is currently available, either as a preview of
     the preview or, when nothing has changed since the last call, as the
     final thing.
-    b) RequestPreviewBitmap() schedules, like GetPreviewBitmap(), a
-    re-rendering when the currently available preview is not up-to-date.  It
-    does not, however, return anything.  Use this if you can wait for the
-    preview.
-    c) InvalidatePreviewBitmap() does not schedule a re-rendering, but
-    remembers that one is necessary when one of the other two methods is
-    called.
     </p>
 */
 class PageCache

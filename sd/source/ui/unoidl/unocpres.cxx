@@ -493,24 +493,3 @@ SdCustomShow * SdXCustomPresentationAccess::getSdCustomShow( const OUString& Nam
     }
     return NULL;
 }
-
-sal_Int32 SdXCustomPresentationAccess::getSdCustomShowIdx( const OUString& Name ) const throw()
-{
-    sal_Int32 nIdx = 0;
-
-    List* pList = GetCustomShowList();
-    const sal_Int32 nCount = pList?pList->Count():0;
-
-    const String aName( Name );
-
-    while( nIdx < nCount )
-    {
-        SdCustomShow* pShow = (SdCustomShow*)pList->GetObject(nIdx);
-        if( pShow->GetName() == aName )
-            return nIdx;
-        nIdx++;
-    }
-    return -1;
-}
-
-

@@ -50,7 +50,6 @@ class SD_DLLPUBLIC FadeEffectLB : public ListBox
 {
 public:
                                 FadeEffectLB( Window* pParent, SdResId Id );
-                                FadeEffectLB( Window* pParent, WinBits aWB );
                                 ~FadeEffectLB();
     virtual void                Fill();
 

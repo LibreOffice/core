@@ -70,6 +70,7 @@
 #include "Window.hxx"
 #include "drawview.hxx"
 #include "sdresid.hxx"
+#include "undo/undoobjects.hxx"
 
 using ::rtl::OUString;
 using namespace ::sd;
@@ -147,21 +148,48 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             nRows = pDlg->getRows();
         }
 
-        Size aSize( 14100, 200 );
+        Rectangle aRect;
 
-        Point aPos;
-        Rectangle aWinRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
-        aPos = aWinRect.Center();
-        aPos = GetActiveWindow()->PixelToLogic(aPos);
-        aPos.X() -= aSize.Width() / 2;
-        aPos.Y() -= aSize.Height() / 2;
-        Rectangle aRect (aPos, aSize);
+        SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_TABLE );
+        if( pPickObj )
+        {
+            aRect = pPickObj->GetLogicRect();
+            aRect.setHeight( 200 );
+        }
+        else
+        {
+            Size aSize( 14100, 200 );
+
+            Point aPos;
+            Rectangle aWinRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
+            aPos = aWinRect.Center();
+            aPos = GetActiveWindow()->PixelToLogic(aPos);
+            aPos.X() -= aSize.Width() / 2;
+            aPos.Y() -= aSize.Height() / 2;
+            aRect = Rectangle(aPos, aSize);
+        }
 
         ::sdr::table::SdrTableObj* pObj = new ::sdr::table::SdrTableObj( GetDoc(), aRect, nColumns, nRows );
         pObj->NbcSetStyleSheet( GetDoc()->GetDefaultStyleSheet(), sal_True );
         apply_table_style( pObj, GetDoc(), sTableStyle );
         SdrPageView* pPV = mpView->GetSdrPageView();
-        mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER);
+
+        // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
+        if( pPickObj )
+        {
+            SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
+            if(pPage && pPage->IsPresObj(pPickObj))
+            {
+                pObj->SetUserCall( pPickObj->GetUserCall() );
+                pPage->InsertPresObj( pObj, PRESOBJ_TABLE );
+            }
+        }
+
+        if( pPickObj )
+            mpView->ReplaceObjectAtView(pPickObj, *pPV, pObj, TRUE );
+        else
+            mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER);
+
         Invalidate(SID_DRAWTBX_INSERT);
         rReq.Ignore();
         break;

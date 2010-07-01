@@ -294,6 +294,26 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     GetMenuStateSel(rSet);
 
+    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ASSIGN_LAYOUT))
+    {
+        bool bDisable = true;
+        if( pPageView )
+        {
+            SdPage* pPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
+
+            if( pPage )
+            {
+                rSet.Put( SfxUInt32Item( SID_ASSIGN_LAYOUT, static_cast< sal_uInt32 >(pPage->GetAutoLayout()) ) );
+                bDisable = false;
+            }
+        }
+
+        if(bDisable)
+        {
+            rSet.DisableItem(SID_EXPAND_PAGE);
+        }
+    }
+
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_EXPAND_PAGE))
     {
         bool bDisable = true;
@@ -339,6 +359,26 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         if(bDisable)
         {
             rSet.DisableItem(SID_SUMMARY_PAGE);
+        }
+    }
+
+    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ASSIGN_LAYOUT))
+    {
+        bool bDisable = true;
+        if( pPageView )
+        {
+            SdPage* pPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
+
+            if( pPage && !pPage->IsMasterPage() )
+            {
+                rSet.Put( SfxUInt32Item(SID_ASSIGN_LAYOUT, pPage->GetAutoLayout()) );
+                bDisable = false;
+            }
+        }
+
+        if(bDisable)
+        {
+            rSet.DisableItem(SID_ASSIGN_LAYOUT);
         }
     }
 

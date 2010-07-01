@@ -122,7 +122,7 @@ namespace {
 
         sal_Int32 GetHandoutPageCount (void) const
         {
-            sal_uInt32 nIndex = static_cast<sal_Int32>(mrProperties.getIntValue("SlidesPerPage", sal_Int32(4)));
+            sal_uInt32 nIndex = static_cast<sal_Int32>(mrProperties.getIntValue("SlidesPerPage", sal_Int32(0)));
             if (nIndex<maSlidesPerPage.size())
                 return maSlidesPerPage[nIndex];
             else if ( ! maSlidesPerPage.empty())
@@ -464,7 +464,7 @@ namespace {
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES_HELP),
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "SlidesPerPage" ) ),
                                     GetSlidesPerPageSequence(),
-                                    4,
+                                    0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
                                     aContentOpt
                                     )
@@ -672,7 +672,8 @@ namespace {
             const Sequence<rtl::OUString> aChoice (
                 CreateChoice(_STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES));
             maSlidesPerPage.clear();
-            for (sal_Int32 nIndex=0,nCount=aChoice.getLength(); nIndex<nCount; ++nIndex)
+            maSlidesPerPage.push_back(0); // first is using the default
+            for (sal_Int32 nIndex=1,nCount=aChoice.getLength(); nIndex<nCount; ++nIndex)
                 maSlidesPerPage.push_back(aChoice[nIndex].toInt32());
             return aChoice;
         }
@@ -1528,6 +1529,7 @@ private:
         AutoLayout eLayout = AUTOLAYOUT_HANDOUT6;
         switch (nSlidesPerHandout)
         {
+            case 0: eLayout = AUTOLAYOUT_NONE; break; // AUTOLAYOUT_HANDOUT1; break;
             case 1: eLayout = AUTOLAYOUT_HANDOUT1; break;
             case 2: eLayout = AUTOLAYOUT_HANDOUT2; break;
             case 3: eLayout = AUTOLAYOUT_HANDOUT3; break;

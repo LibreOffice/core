@@ -57,10 +57,10 @@
 #include <svx/f3dchild.hxx>
 #include <svx/grafctrl.hxx>
 #include <svx/tbxcustomshapes.hxx>
-#include <svx/fontworkgallery.hxx>
 #include <svx/lboxctrl.hxx>
 #include <svx/clipboardctl.hxx>
-#include <svx/extrusioncontrols.hxx>
+#include <svx/extrusioncolorcontrol.hxx>
+#include <svx/fontworkgallery.hxx>
 #include <svx/tbxcolor.hxx>
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>
@@ -76,10 +76,7 @@
 #include "AnimationChildWindow.hxx"
 #include "animobjs.hxx"
 #include "NavigatorChildWindow.hxx"
-#ifndef SD_LAZER_DIALOG_CHILD_WINDOW_HXX
 #include "LayerDialogChildWindow.hxx"
-#endif
-//#include "3dchld.hxx"
 #include "app.hrc"
 #include "SpellDialogChildWindow.hxx"
 #include "DrawViewShell.hxx"
@@ -121,10 +118,6 @@ void SdDLL::RegisterControllers()
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_FLOWCHART, pMod );
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_CALLOUT, pMod );
     SvxTbxCtlCustomShapes::RegisterControl( SID_DRAWTBX_CS_STAR, pMod );
-//  SdTbxCtlDiaEffect::RegisterControl(0, pMod);
-//  SdTbxCtlDiaSpeed::RegisterControl(0, pMod);
-//  SdTbxCtlDiaAuto::RegisterControl(0, pMod);
-//  SdTbxCtlDiaTime::RegisterControl(0, pMod);
 
     SdTbxCtlDiaPages::RegisterControl( SID_PAGES_PER_ROW, pMod );
     SdTbxCtlGlueEscDir::RegisterControl( SID_GLUE_ESCDIR, pMod );
@@ -133,15 +126,7 @@ void SdDLL::RegisterControllers()
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::DrawViewShell::GetInterfaceId(), pMod );
     ::sd::NavigatorChildWindow::RegisterChildWindowContext( (sal_uInt16) ::sd::GraphicViewShell::GetInterfaceId(), pMod );
     ::sd::LayerDialogChildWindow::RegisterChildWindow(0, pMod);
-    //Sd3DChildWindow::RegisterChildWindow(0, pMod);
-/*
-    SvxChildWinCustomShapesBasic::RegisterChildWindow( 0, pMod );
-    SvxChildWinCustomShapesSymbol::RegisterChildWindow( 0, pMod );
-    SvxChildWinCustomShapesArrow::RegisterChildWindow( 0, pMod );
-    SvxChildWinCustomShapesFlowChart::RegisterChildWindow( 0, pMod );
-    SvxChildWinCustomShapesCallout::RegisterChildWindow( 0, pMod );
-    SvxChildWinCustomShapesStar::RegisterChildWindow( 0, pMod );
-*/
+
     Svx3DChildWindow::RegisterChildWindow(0, pMod);
     SvxFontWorkChildWindow::RegisterChildWindow(0, pMod);
     SvxColorChildWindow::RegisterChildWindow(0, pMod, SFX_CHILDWIN_TASK);
@@ -155,7 +140,7 @@ void SdDLL::RegisterControllers()
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
     ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(0, pMod);
     ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(0, pMod);
-    ::sd::RightPaneChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::ToolPanelChildWindow::RegisterChildWindow(0, pMod);
 
     SvxFillToolBoxControl::RegisterControl(0, pMod);
     SvxLineStyleToolBoxControl::RegisterControl(0, pMod);
@@ -210,15 +195,9 @@ void SdDLL::RegisterControllers()
 
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
 
-    svx::ExtrusionDepthControl::RegisterControl( SID_EXTRUSION_DEPTH_FLOATER, pMod );
-    svx::ExtrusionDirectionControl::RegisterControl( SID_EXTRUSION_DIRECTION_FLOATER, pMod );
-    svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
-    svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
-
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
-    svx::FontWorkAlignmentControl::RegisterControl( SID_FONTWORK_ALIGNMENT_FLOATER, pMod );
-    svx::FontWorkCharacterSpacingControl::RegisterControl( SID_FONTWORK_CHARACTER_SPACING_FLOATER, pMod );
+
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
     SdTemplateControl::RegisterControl( SID_STATUS_LAYOUT, pMod );
@@ -227,4 +206,7 @@ void SdDLL::RegisterControllers()
     SvxFrameLineColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
     SvxSubToolBoxControl::RegisterControl(SID_OPTIMIZE_TABLE, pMod);
+
+//  SdLayoutControl::RegisterControl( SID_ASSIGN_LAYOUT, pMod );
+//  SdLayoutControl::RegisterControl( SID_INSERTPAGE, pMod );
 }
