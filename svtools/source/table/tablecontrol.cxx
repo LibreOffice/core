@@ -70,12 +70,18 @@ namespace svt { namespace table
         :Control( _pParent, _nStyle )
         ,m_pImpl( new TableControl_Impl( *this ) )
         ,m_bSelectionChanged(false)
+        ,m_bTooltip(false)
     {
         TableDataWindow* aTableData = m_pImpl->getDataWindow();
         aTableData->SetMouseButtonDownHdl( LINK( this, TableControl, ImplMouseButtonDownHdl ) );
         aTableData->SetMouseButtonUpHdl( LINK( this, TableControl, ImplMouseButtonUpHdl ) );
         aTableData->SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );
         m_pAccessTable.reset(new ::svt::table::AccessibleTableControl_Impl());
+
+        // by default, use the background as determined by the style settings
+        const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
+        SetBackground( Wallpaper( aWindowColor ) );
+        SetFillColor( aWindowColor );
     }
 
     //--------------------------------------------------------------------
@@ -120,6 +126,39 @@ namespace svt { namespace table
             }
         }
     }
+
+
+    //--------------------------------------------------------------------
+    void TableControl::StateChanged( StateChangedType i_nStateChange )
+    {
+        Control::StateChanged( i_nStateChange );
+
+        // forward certain settings to the data window
+        switch ( i_nStateChange )
+        {
+        case STATE_CHANGE_CONTROLBACKGROUND:
+            if ( IsControlBackground() )
+                getDataWindow()->SetControlBackground( GetControlBackground() );
+            else
+                getDataWindow()->SetControlBackground();
+            break;
+
+        case STATE_CHANGE_CONTROLFOREGROUND:
+            if ( IsControlForeground() )
+                getDataWindow()->SetControlForeground( GetControlForeground() );
+            else
+                getDataWindow()->SetControlForeground();
+            break;
+
+        case STATE_CHANGE_CONTROLFONT:
+            if ( IsControlFont() )
+                getDataWindow()->SetControlFont( GetControlFont() );
+            else
+                getDataWindow()->SetControlFont();
+            break;
+        }
+    }
+
     //--------------------------------------------------------------------
     void TableControl::Resize()
     {
@@ -173,6 +212,11 @@ namespace svt { namespace table
     sal_Bool TableControl::GoToCell(sal_Int32 _nColPos, sal_Int32 _nRowPos)
     {
         return m_pImpl->goTo( _nColPos, _nRowPos );
+    }
+    //--------------------------------------------------------------------
+    void TableControl::clearSelection()
+    {
+        m_pImpl->clearSelection();
     }
     //--------------------------------------------------------------------
     void TableControl::InvalidateDataWindow(RowPos _nRowStart, RowPos _nRowEnd, bool _bRemoved)
@@ -263,7 +307,7 @@ namespace svt { namespace table
                 aRetText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnHeaderBar" ) );
                 break;
             case TCTYPE_TABLECELL:
-                aRetText = GetRowName(_nRow);
+                aRetText = GetAccessibleCellText(_nRow, _nCol);
                 break;
             case TCTYPE_ROWHEADERCELL:
                 aRetText = GetRowName(_nRow);
@@ -346,9 +390,9 @@ namespace svt { namespace table
 }
 // -----------------------------------------------------------------------------
 
-::rtl::OUString TableControl::GetAccessibleCellText( sal_Int32 _nRowPos, sal_Int32 _nColPos)
+::rtl::OUString TableControl::GetAccessibleCellText( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
 {
-    ::com::sun::star::uno::Any cellContent = GetCellContent(_nRowPos, _nColPos);
+    const ::com::sun::star::uno::Any cellContent = GetCellContent(_nRowPos, _nColPos);
     return m_pImpl->convertToString(cellContent);
 }
 // -----------------------------------------------------------------------------
@@ -401,7 +445,7 @@ void TableControl::FillAccessibleStateSet(
     }
 }
 
-Rectangle TableControl::GetWindowExtentsRelative( Window *pRelativeWindow )
+Rectangle TableControl::GetWindowExtentsRelative( Window *pRelativeWindow ) const
 {
     return Control::GetWindowExtentsRelative( pRelativeWindow );
 }
@@ -546,11 +590,17 @@ void TableControl::setTooltip(const ::com::sun::star::uno::Sequence< ::rtl::OUSt
 {
     m_aText = aText;
     m_nCols = nCols;
+    m_bTooltip = true;
 }
 // -----------------------------------------------------------------------
 void TableControl::selectionChanged(bool _bChanged)
 {
     m_bSelectionChanged = _bChanged;
+}
+// -----------------------------------------------------------------------
+bool TableControl::isTooltip()
+{
+    return m_bTooltip;
 }
 // -----------------------------------------------------------------------
 IMPL_LINK( TableControl, ImplSelectHdl, void*, EMPTYARG )

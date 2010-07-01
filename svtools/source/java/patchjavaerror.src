@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 
 WarningBox WARNINGBOX_JAVANOTFOUND
 {

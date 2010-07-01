@@ -39,6 +39,7 @@
 #include <vcl/mapmod.hxx>
 #include <vcl/wall.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/salnativewidgets.hxx>
 #include <tools/poly.hxx>
 #include <basegfx/vector/b2enums.hxx>
 #include <com/sun/star/uno/Reference.h>
@@ -1177,6 +1178,49 @@ public:
     BitmapEx            GetDownsampledBitmapEx( const Size& rDstSz,
                                                 const Point& rSrcPt, const Size& rSrcSz,
                                                 const BitmapEx& rBmpEx, long nMaxBmpDPIX, long nMaxBmpDPIY );
+
+    //-------------------------------------
+    //  Native Widget Rendering functions
+    //-------------------------------------
+
+    // These all just call through to the private mpGraphics functions of the same name.
+
+    // Query the platform layer for control support
+    BOOL                IsNativeControlSupported( ControlType nType, ControlPart nPart );
+
+    // Query the native control to determine if it was acted upon
+    BOOL                HitTestNativeControl(   ControlType nType,
+                                                ControlPart nPart,
+                                                const Region& rControlRegion,
+                                                const Point& aPos,
+                                                BOOL& rIsInside );
+
+    // Request rendering of a particular control and/or part
+    BOOL                DrawNativeControl(  ControlType nType,
+                                            ControlPart nPart,
+                                            const Region& rControlRegion,
+                                            ControlState nState,
+                                            const ImplControlValue& aValue,
+                                            ::rtl::OUString aCaption );
+
+     // Request rendering of a caption string for a control
+    BOOL                DrawNativeControlText(  ControlType nType,
+                                                ControlPart nPart,
+                                                const Region& rControlRegion,
+                                                ControlState nState,
+                                                const ImplControlValue& aValue,
+                                                ::rtl::OUString aCaption );
+
+    // Query the native control's actual drawing region (including adornment)
+    BOOL                GetNativeControlRegion( ControlType nType,
+                                                ControlPart nPart,
+                                                const Region& rControlRegion,
+                                                ControlState nState,
+                                                const ImplControlValue& aValue,
+                                                ::rtl::OUString aCaption,
+                                                Region &rNativeBoundingRegion,
+                                                Region &rNativeContentRegion );
+
 };
 
 #endif // _SV_OUTDEV_HXX

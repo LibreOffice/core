@@ -40,6 +40,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/extract.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <rtl/string.hxx>
 #if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>
@@ -60,9 +62,8 @@ namespace utl
     //= OConfigurationNode
     //========================================================================
     //------------------------------------------------------------------------
-    OConfigurationNode::OConfigurationNode(const Reference< XInterface >& _rxNode, const Reference< XMultiServiceFactory >& _rxProvider)
-        :m_xProvider(_rxProvider)
-        ,m_bEscapeNames(sal_False)
+    OConfigurationNode::OConfigurationNode(const Reference< XInterface >& _rxNode )
+        :m_bEscapeNames(sal_False)
     {
         OSL_ENSURE(_rxNode.is(), "OConfigurationNode::OConfigurationNode: invalid node interface!");
         if (_rxNode.is())
@@ -98,7 +99,6 @@ namespace utl
         ,m_xDirectAccess(_rSource.m_xDirectAccess)
         ,m_xReplaceAccess(_rSource.m_xReplaceAccess)
         ,m_xContainerAccess(_rSource.m_xContainerAccess)
-        ,m_xProvider(_rSource.m_xProvider)
         ,m_bEscapeNames(_rSource.m_bEscapeNames)
         ,m_sCompletePath(_rSource.m_sCompletePath)
     {
@@ -116,7 +116,6 @@ namespace utl
         m_xDirectAccess = _rSource.m_xDirectAccess;
         m_xContainerAccess = _rSource.m_xContainerAccess;
         m_xReplaceAccess = _rSource.m_xReplaceAccess;
-        m_xProvider = _rSource.m_xProvider;
         m_bEscapeNames = _rSource.m_bEscapeNames;
         m_sCompletePath = _rSource.m_sCompletePath;
 
@@ -150,6 +149,22 @@ namespace utl
             DBG_UNHANDLED_EXCEPTION();
         }
         return sLocalName;
+    }
+
+    //------------------------------------------------------------------------
+    ::rtl::OUString OConfigurationNode::getNodePath() const
+    {
+        ::rtl::OUString sNodePath;
+        try
+        {
+            Reference< XHierarchicalName > xNamed( m_xDirectAccess, UNO_QUERY_THROW );
+            sNodePath = xNamed->getHierarchicalName();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return sNodePath;
     }
 
     //------------------------------------------------------------------------
@@ -244,7 +259,7 @@ namespace utl
                 ::rtl::OUString sName = normalizeName(_rName, NO_CALLER);
                 m_xContainerAccess->insertByName(sName, makeAny(_xNode));
                 // if we're here, all was ok ...
-                return OConfigurationNode(_xNode, m_xProvider);
+                return OConfigurationNode( _xNode );
             }
             catch(const Exception&)
             {
@@ -308,7 +323,7 @@ namespace utl
                     OSL_ENSURE(sal_False, "OConfigurationNode::openNode: could not open the node!");
             }
             if (xNode.is())
-                return OConfigurationNode(xNode, m_xProvider);
+                return OConfigurationNode( xNode );
         }
         catch(NoSuchElementException& e)
         {
@@ -470,38 +485,6 @@ namespace utl
     }
 
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot OConfigurationNode::cloneAsRoot() const throw()
-    {
-        OSL_ENSURE(m_xHierarchyAccess.is(), "OConfigurationNode::cloneAsRoot: object is invalid!");
-        if (m_xHierarchyAccess.is())
-        {
-            // first get the complete path of the node we represent
-            ::rtl::OUString sCompletePath;
-            Reference< XHierarchicalName > xNodeNameAccess(m_xHierarchyAccess, UNO_QUERY);
-            if (xNodeNameAccess.is())
-            {
-                try
-                {
-                    sCompletePath = xNodeNameAccess->getHierarchicalName();
-                    OSL_ENSURE(sCompletePath.getLength(), "OConfigurationNode::cloneAsRoot: invalid path retrieved!");
-                }
-                catch(Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION();
-                }
-            }
-
-            // then create a new tree root object with that path and our provider
-            OSL_ENSURE(m_xProvider.is(), "OConfigurationNode::cloneAsRoot: have an invalid provider!");
-            if (sCompletePath.getLength() && m_xProvider.is())
-            {
-                return OConfigurationTreeRoot::createWithProvider(m_xProvider, sCompletePath, -1, isReadonly() ? OConfigurationTreeRoot::CM_READONLY : OConfigurationTreeRoot::CM_PREFER_UPDATABLE);
-            }
-        }
-        return OConfigurationTreeRoot();
-    }
-
-    //------------------------------------------------------------------------
     void OConfigurationNode::clear() throw()
     {
         m_xHierarchyAccess.clear();
@@ -511,19 +494,103 @@ namespace utl
     }
 
     //========================================================================
+    //= helper
+    //========================================================================
+    namespace
+    {
+        //--------------------------------------------------------------------
+        static const ::rtl::OUString& lcl_getProviderServiceName( )
+        {
+            static ::rtl::OUString s_sProviderServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
+            return s_sProviderServiceName;
+        }
+
+        //--------------------------------------------------------------------
+        Reference< XMultiServiceFactory > lcl_getConfigProvider( const ::comphelper::ComponentContext& i_rContext )
+        {
+            try
+            {
+                Reference< XMultiServiceFactory > xProvider( i_rContext.createComponent( lcl_getProviderServiceName() ), UNO_QUERY_THROW );
+                return xProvider;
+            }
+            catch ( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            return NULL;
+        }
+
+        //--------------------------------------------------------------------
+        Reference< XInterface > lcl_createConfigurationRoot( const Reference< XMultiServiceFactory >& i_rxConfigProvider,
+            const ::rtl::OUString& i_rNodePath, const bool i_bUpdatable, const sal_Int32 i_nDepth, const bool i_bLazyWrite )
+        {
+            ENSURE_OR_RETURN( i_rxConfigProvider.is(), "invalid provider", NULL );
+            try
+            {
+                ::comphelper::NamedValueCollection aArgs;
+                aArgs.put( "nodepath", i_rNodePath );
+                aArgs.put( "lazywrite", i_bLazyWrite );
+                aArgs.put( "depth", i_nDepth );
+
+                ::rtl::OUString sAccessService = ::rtl::OUString::createFromAscii(
+                        i_bUpdatable
+                    ? "com.sun.star.configuration.ConfigurationUpdateAccess"
+                    : "com.sun.star.configuration.ConfigurationAccess" );
+
+                Reference< XInterface > xRoot(
+                    i_rxConfigProvider->createInstanceWithArguments( sAccessService, aArgs.getWrappedPropertyValues() ),
+                    UNO_SET_THROW
+                );
+                return xRoot;
+            }
+            catch ( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            return NULL;
+        }
+    }
+    //========================================================================
     //= OConfigurationTreeRoot
     //========================================================================
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot::OConfigurationTreeRoot(const Reference< XChangesBatch >& _rxRootNode, const Reference< XMultiServiceFactory >& _rxProvider)
-        :OConfigurationNode(_rxRootNode.get(), _rxProvider)
+    OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference< XChangesBatch >& _rxRootNode )
+        :OConfigurationNode( _rxRootNode.get() )
         ,m_xCommitter(_rxRootNode)
     {
     }
 
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot::OConfigurationTreeRoot(const Reference< XInterface >& _rxRootNode, const Reference< XMultiServiceFactory >& _rxProvider)
-        :OConfigurationNode(_rxRootNode.get(), _rxProvider)
+    OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference< XInterface >& _rxRootNode )
+        :OConfigurationNode( _rxRootNode )
+        ,m_xCommitter( _rxRootNode, UNO_QUERY )
     {
+    }
+
+    //------------------------------------------------------------------------
+    OConfigurationTreeRoot::OConfigurationTreeRoot( const ::comphelper::ComponentContext& i_rContext, const sal_Char* i_pAsciiNodePath, const bool i_bUpdatable )
+        :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext.getLegacyServiceFactory() ),
+            ::rtl::OUString::createFromAscii( i_pAsciiNodePath ), i_bUpdatable, -1, false ).get() )
+        ,m_xCommitter()
+    {
+        if ( i_bUpdatable )
+        {
+            m_xCommitter.set( getUNONode(), UNO_QUERY );
+            OSL_ENSURE( m_xCommitter.is(), "OConfigurationTreeRoot::OConfigurationTreeRoot: could not create an updatable node!" );
+        }
+    }
+
+    //------------------------------------------------------------------------
+    OConfigurationTreeRoot::OConfigurationTreeRoot( const ::comphelper::ComponentContext& i_rContext, const ::rtl::OUString& i_rNodePath, const bool i_bUpdatable )
+        :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext.getLegacyServiceFactory() ),
+            i_rNodePath, i_bUpdatable, -1, false ).get() )
+        ,m_xCommitter()
+    {
+        if ( i_bUpdatable )
+        {
+            m_xCommitter.set( getUNONode(), UNO_QUERY );
+            OSL_ENSURE( m_xCommitter.is(), "OConfigurationTreeRoot::OConfigurationTreeRoot: could not create an updatable node!" );
+        }
     }
 
     //------------------------------------------------------------------------
@@ -555,117 +622,20 @@ namespace utl
         return sal_False;
     }
 
-    namespace
-    {
-        static const ::rtl::OUString& lcl_getProviderServiceName( )
-        {
-            static ::rtl::OUString s_sProviderServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
-            return s_sProviderServiceName;
-        }
-    }
-
     //------------------------------------------------------------------------
     OConfigurationTreeRoot OConfigurationTreeRoot::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider, const ::rtl::OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, sal_Bool _bLazyWrite)
     {
-        OSL_ENSURE(_rxConfProvider.is(), "OConfigurationTreeRoot::createWithProvider: invalid provider!");
-
-#ifdef DBG_UTIL
-        if (_rxConfProvider.is())
-        {
-            try
-            {
-                Reference< XServiceInfo > xSI(_rxConfProvider, UNO_QUERY);
-                if (!xSI.is())
-                {
-                    OSL_ENSURE(sal_False, "OConfigurationTreeRoot::createWithProvider: no XServiceInfo interface on the provider!");
-                }
-                else
-                {
-                    OSL_ENSURE(xSI->supportsService( lcl_getProviderServiceName( ) ),
-                        "OConfigurationTreeRoot::createWithProvider: sure this is a provider? Missing the ConfigurationProvider service!");
-                }
-            }
-            catch(const Exception&)
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-        }
-#endif
-
-        sal_Bool bTryAgain(sal_False);
-        do
-        {
-            if (_rxConfProvider.is())
-            {
-                try
-                {
-                    Sequence< Any > aCreationArgs(3);
-                    aCreationArgs[0] = makeAny(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), 0, makeAny(_rPath), PropertyState_DIRECT_VALUE));
-                    aCreationArgs[1] = makeAny(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("depth")), 0, makeAny((sal_Int32)_nDepth), PropertyState_DIRECT_VALUE));
-                    aCreationArgs[2] = makeAny(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")), 0, ::cppu::bool2any(_bLazyWrite), PropertyState_DIRECT_VALUE));
-
-                    ::rtl::OUString sAccessService = ::rtl::OUString::createFromAscii(CM_READONLY == _eMode
-                        ? "com.sun.star.configuration.ConfigurationAccess"
-                        : "com.sun.star.configuration.ConfigurationUpdateAccess");
-
-                    Reference< XInterface > xRoot = _rxConfProvider->createInstanceWithArguments(sAccessService, aCreationArgs);
-                    if (!xRoot.is())
-                    {
-                        OSL_ENSURE(sal_False, "OConfigurationTreeRoot::createWithProvider: could not create the node access!");
-                    }
-                    else if (CM_READONLY == _eMode)
-                    {
-                        return OConfigurationTreeRoot(xRoot, _rxConfProvider);
-                    }
-                    else
-                    {   // get the changes batch interface
-                        Reference< XChangesBatch > xCommitter(xRoot, UNO_QUERY);
-                        if (xCommitter.is())
-                            return OConfigurationTreeRoot(xCommitter, _rxConfProvider);
-                        else
-                            OSL_ENSURE(sal_False, "OConfigurationTreeRoot::createWithProvider: invalid root object (missing interface XChangesBatch)!");
-
-                        // dispose the object if it is already created, but unusable
-                        Reference< XComponent > xComp(xRoot, UNO_QUERY);
-                        if (xComp.is())
-                            try { xComp->dispose(); } catch(Exception&) { }
-                    }
-                }
-                catch(const Exception&)
-                {
-                    DBG_UNHANDLED_EXCEPTION();
-                }
-            }
-            bTryAgain = CM_PREFER_UPDATABLE == _eMode;
-            if (bTryAgain)
-                _eMode = CM_READONLY;
-        }
-        while (bTryAgain);
-
+        Reference< XInterface > xRoot( lcl_createConfigurationRoot(
+            _rxConfProvider, _rPath, _eMode != CM_READONLY, _nDepth, _bLazyWrite ) );
+        if ( xRoot.is() )
+            return OConfigurationTreeRoot( xRoot );
         return OConfigurationTreeRoot();
     }
 
     //------------------------------------------------------------------------
-    OConfigurationTreeRoot OConfigurationTreeRoot::createWithServiceFactory(const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, sal_Bool _bLazyWrite)
+    OConfigurationTreeRoot OConfigurationTreeRoot::createWithServiceFactory( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, sal_Bool _bLazyWrite )
     {
-        OSL_ENSURE(_rxORB.is(), "OConfigurationTreeRoot::createWithServiceFactory: invalid service factory!");
-        if (_rxORB.is())
-        {
-            try
-            {
-                Reference< XInterface > xProvider = _rxORB->createInstance( lcl_getProviderServiceName( ) );
-                OSL_ENSURE(xProvider.is(), "OConfigurationTreeRoot::createWithServiceFactory: could not instantiate the config provider service!");
-                Reference< XMultiServiceFactory > xProviderAsFac(xProvider, UNO_QUERY);
-                OSL_ENSURE(xProviderAsFac.is() || !xProvider.is(), "OConfigurationTreeRoot::createWithServiceFactory: the provider is missing an interface!");
-                if (xProviderAsFac.is())
-                    return createWithProvider(xProviderAsFac, _rPath, _nDepth, _eMode, _bLazyWrite);
-            }
-            catch(const Exception&)
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-        }
-        return OConfigurationTreeRoot();
+        return createWithProvider( lcl_getConfigProvider( _rxORB ), _rPath, _nDepth, _eMode, _bLazyWrite );
     }
 
     //------------------------------------------------------------------------
@@ -681,9 +651,9 @@ namespace utl
                 if ( xConfigFactory.is() )
                     return createWithProvider( xConfigFactory, _rPath, _nDepth, _eMode, _bLazyWrite );
             }
-            catch(Exception&)
+            catch(const Exception&)
             {
-                // silent this, 'cause the contract of this method states "no assertions"
+                // silence this, 'cause the contract of this method states "no assertions"
             }
         }
         return OConfigurationTreeRoot();

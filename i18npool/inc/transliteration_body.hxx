@@ -90,6 +90,31 @@ public:
 };
 #endif
 
+
+#if defined( TRANSLITERATION_ALL )
+class Transliteration_togglecase : public Transliteration_body
+{
+public:
+    Transliteration_togglecase();
+};
+
+class Transliteration_titlecase : public Transliteration_body
+{
+public:
+    Transliteration_titlecase();
+
+    virtual rtl::OUString SAL_CALL transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException);
+};
+
+class Transliteration_sentencecase : public Transliteration_body
+{
+public:
+    Transliteration_sentencecase();
+
+    virtual rtl::OUString SAL_CALL transliterate( const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset  ) throw(com::sun::star::uno::RuntimeException);
+};
+#endif
+
 } } } }
 
 #endif

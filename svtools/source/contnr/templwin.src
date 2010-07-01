@@ -30,7 +30,7 @@
 #include "templwin.hrc"
 #include "controldims.hrc"
 #include <svtools/helpid.hrc>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 
 // Magenta and Grey as mask colors
 #define MASK_COL_MAGENTA    Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };

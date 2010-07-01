@@ -194,7 +194,7 @@ protected:
     virtual void        drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
     virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry );
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin);
+    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin );
     virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
@@ -228,15 +228,15 @@ protected:
 
     // native widget rendering methods that require mirroring
     virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                              const Point& aPos, SalControlHandle& rControlHandle, BOOL& rIsInside );
+                                              const Point& aPos, BOOL& rIsInside );
     virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                           ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                           ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
     virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               SalControlHandle& rControlHandle, const rtl::OUString& aCaption );
+                                               const rtl::OUString& aCaption );
     virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, const rtl::OUString& aCaption,
+                                                const ImplControlValue& aValue, const rtl::OUString& aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 
     virtual bool        drawAlphaBitmap( const SalTwoRect&,

@@ -32,6 +32,7 @@
 
 #include <sal/types.h>
 
+#include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/util/MeasureUnit.hpp>
 
 

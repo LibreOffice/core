@@ -99,7 +99,7 @@ public:
             AccessibleTableControlObjType eObjType ) const= 0;
 
     // Window
-    virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) = 0;
+    virtual Rectangle GetWindowExtentsRelative( Window *pRelativeWindow ) const = 0;
     virtual void GrabFocus()= 0;
     virtual XACC GetAccessible( BOOL bCreate = TRUE )= 0;
     virtual Window* GetAccessibleParentWindow() const= 0;
@@ -124,7 +124,7 @@ public:
     virtual ::com::sun::star::uno::Any GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
     virtual std::vector<sal_Int32>& GetSelectedRows() = 0;
     virtual void RemoveSelectedRow(sal_Int32 _nRowPos) = 0;
-    virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) = 0;
+    virtual ::rtl::OUString GetAccessibleCellText(sal_Int32 _nRowPos, sal_Int32 _nColPos) const = 0;
 };
 
 // ----------------------------------------------------------------------------

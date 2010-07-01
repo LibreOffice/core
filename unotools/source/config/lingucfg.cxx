@@ -1406,21 +1406,72 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
 }
 
 
-bool SvtLinguConfig::HasAnyVendorImages() const
+::rtl::OUString SvtLinguConfig::GetThesaurusDialogImage(
+    const ::rtl::OUString &rServiceImplName,
+    bool bHighContrast ) const
+{
+    rtl::OUString   aRes;
+    if (rServiceImplName.getLength() > 0)
+    {
+        rtl::OUString aImageName( A2OU( bHighContrast ? "ThesaurusDialogImage_HC" : "ThesaurusDialogImage" ));
+        rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
+        aRes = aPath;
+    }
+    return aRes;
+}
+
+
+::rtl::OUString SvtLinguConfig::GetSynonymsContextImage(
+    const ::rtl::OUString &rServiceImplName,
+    bool bHighContrast ) const
+{
+    rtl::OUString   aRes;
+    if (rServiceImplName.getLength() > 0)
+    {
+        rtl::OUString aImageName( A2OU( bHighContrast ? "SynonymsContextMenuImage_HC" : "SynonymsContextMenuImage" ));
+        rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
+        aRes = aPath;
+    }
+    return aRes;
+}
+
+
+bool SvtLinguConfig::HasVendorImages( const char *pImageName ) const
 {
     bool bRes = false;
-    try
+    if (pImageName)
     {
-        uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("Images") ), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( A2OU("VendorImages") ), uno::UNO_QUERY_THROW );
+        try
+        {
+            uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+            xNA.set( xNA->getByName( A2OU("Images") ), uno::UNO_QUERY_THROW );
+            xNA.set( xNA->getByName( A2OU("VendorImages") ), uno::UNO_QUERY_THROW );
 
-        uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
-        bRes = aElementNames.getLength() > 0;
-    }
-    catch (uno::Exception &)
-    {
-        DBG_ASSERT( 0, "exception caught. HasAnyVendorImages failed" );
+            uno::Sequence< rtl::OUString > aElementNames( xNA->getElementNames() );
+            sal_Int32 nVendors = aElementNames.getLength();
+            const rtl::OUString *pVendor = aElementNames.getConstArray();
+            for (sal_Int32 i = 0;  i < nVendors;  ++i)
+            {
+                uno::Reference< container::XNameAccess > xNA2( xNA->getByName( pVendor[i] ), uno::UNO_QUERY_THROW  );
+                uno::Sequence< rtl::OUString > aPropNames( xNA2->getElementNames() );
+                sal_Int32 nProps = aPropNames.getLength();
+                const rtl::OUString *pPropNames = aPropNames.getConstArray();
+                for (sal_Int32 k = 0;  k < nProps;  ++k)
+                {
+                    // for a quicker check we ignore the HC image names here
+                    const OUString &rName = pPropNames[k];
+                    if (rName.equalsAscii( pImageName ))
+                    {
+                        bRes = true;
+                        break;
+                    }
+                }
+            }
+        }
+        catch (uno::Exception &)
+        {
+            DBG_ASSERT( 0, "exception caught. HasVendorImages failed" );
+        }
     }
     return bRes;
 }

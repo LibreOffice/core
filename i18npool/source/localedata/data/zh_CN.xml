@@ -415,16 +415,19 @@
 <!--more currency should be put here -->
 </LC_CURRENCY>
 <LC_TRANSLITERATION>
-<Transliteration unoid="UPPERCASE_LOWERCASE"/>
-<Transliteration unoid="LOWERCASE_UPPERCASE"/>
-<Transliteration unoid="HALFWIDTH_FULLWIDTH"/>
-<Transliteration unoid="FULLWIDTH_HALFWIDTH"/>
-<Transliteration unoid="NumToTextLower_zh_CN"/>
-<Transliteration unoid="NumToTextUpper_zh_CN"/>
-<Transliteration unoid="NumToCharLower_zh_CN"/>
-<Transliteration unoid="NumToCharUpper_zh_CN"/>
-<Transliteration unoid="IGNORE_CASE"/>
-<Transliteration unoid="IGNORE_WIDTH"/>
+    <Transliteration unoid="SENTENCE_CASE"/>
+    <Transliteration unoid="LOWERCASE_UPPERCASE"/>
+    <Transliteration unoid="UPPERCASE_LOWERCASE"/>
+    <Transliteration unoid="TITLE_CASE"/>
+    <Transliteration unoid="TOGGLE_CASE"/>
+    <Transliteration unoid="NumToTextLower_zh_CN"/>
+    <Transliteration unoid="NumToTextUpper_zh_CN"/>
+    <Transliteration unoid="NumToCharLower_zh_CN"/>
+    <Transliteration unoid="NumToCharUpper_zh_CN"/>
+    <Transliteration unoid="HALFWIDTH_FULLWIDTH"/>
+    <Transliteration unoid="FULLWIDTH_HALFWIDTH"/>
+    <Transliteration unoid="IGNORE_CASE"/>
+    <Transliteration unoid="IGNORE_WIDTH"/>
 </LC_TRANSLITERATION>
 <LC_MISC>
 <ForbiddenCharacters>

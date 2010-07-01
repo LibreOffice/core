@@ -191,7 +191,7 @@ public:
     virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
-    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin);
+    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin );
 
     // CopyArea --> No RasterOp, but ClipRegion
     virtual void        copyArea( long nDestX, long nDestY, long nSrcX, long nSrcY, long nSrcWidth,
@@ -230,15 +230,15 @@ public:
     CGPoint*                makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry);
     // native widget rendering methods that require mirroring
     virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                              const Point& aPos, SalControlHandle& rControlHandle, BOOL& rIsInside );
+                                              const Point& aPos, BOOL& rIsInside );
     virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
-                                           ControlState nState, const ImplControlValue& aValue, SalControlHandle& rControlHandle,
+                                           ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
     virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
-                                               SalControlHandle& rControlHandle, const rtl::OUString& aCaption );
+                                               const rtl::OUString& aCaption );
     virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
-                                                const ImplControlValue& aValue, SalControlHandle& rControlHandle, const rtl::OUString& aCaption,
+                                                const ImplControlValue& aValue, const rtl::OUString& aCaption,
                                                 Region &rNativeBoundingRegion, Region &rNativeContentRegion );
 
     // get device resolution

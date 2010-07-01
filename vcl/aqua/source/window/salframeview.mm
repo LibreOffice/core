@@ -1516,6 +1516,11 @@ private:
     mbKeyHandled = true;
 }
 
+-(void)clearLastEvent
+{
+    mpLastEvent = nil;
+}
+
 - (NSRect)firstRectForCharacterRange:(NSRange)theRange
 {
     SalExtTextInputPosEvent aPosEvent;

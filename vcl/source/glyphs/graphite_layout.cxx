@@ -353,6 +353,46 @@ std::pair<float,float> GraphiteLayout::Glyphs::appendCluster(gr::Segment & rSeg,
     assert(size() < rGlyph2Char.size());
     rChar2Base[nFirstCharInCluster-rArgs.mnMinCharPos] = size();
     rGlyph2Char[size()] = nFirstCharInCluster;
+
+    // can we break before this cluster?
+    // Glyphs may have either a positive or negative breakWeight refering to
+    // the position after or before the glyph respectively
+    int nPrevBreakWeight = 0;
+    if (nFirstGlyphInCluster > 0)
+    {
+        nPrevBreakWeight = (iGlyphs.first + (nFirstGlyphInCluster - 1))->breakweight();
+    }
+    int nBreakWeight = aFirstGlyph.breakweight();
+    if (nBreakWeight < 0)
+    {
+        // negative means it applies to the position before the glyph's character
+        nBreakWeight *= -1;
+        if (nPrevBreakWeight > 0 && nPrevBreakWeight < nBreakWeight)
+        {
+            // prevBreakWeight wins
+            nBreakWeight = nPrevBreakWeight;
+        }
+    }
+    else
+    {
+        nBreakWeight = 0;
+        // positive means break after
+        if (nPrevBreakWeight > 0)
+            nBreakWeight = nPrevBreakWeight;
+    }
+    if (nBreakWeight > gr::klbNoBreak/*0*/ &&
+        // nBreakWeight <= gr::klbHyphenBreak) // uses Graphite hyphenation
+        nBreakWeight <= gr::klbLetterBreak) // Needed for issue 111272
+    {
+        if (nBreakWeight < gr::klbHyphenBreak)
+            rChar2Base[nFirstCharInCluster-rArgs.mnMinCharPos] |= WORD_BREAK_BEFORE;
+        else
+            rChar2Base[nFirstCharInCluster-rArgs.mnMinCharPos] |= HYPHEN_BREAK_BEFORE;
+    }
+    // always allow a break before a space even if graphite doesn't
+    if (rArgs.mpStr[nFirstCharInCluster] == 0x20)
+        rChar2Base[nFirstCharInCluster-rArgs.mnMinCharPos] |= WORD_BREAK_BEFORE;
+
     bool bBaseGlyph = true;
     for (int j = nFirstGlyphInCluster;
         j != nNextGlyph; j += nDelta)
@@ -409,7 +449,7 @@ std::pair<float,float> GraphiteLayout::Glyphs::appendCluster(gr::Segment & rSeg,
         }
     }
 #ifdef GRLAYOUT_DEBUG
-    fprintf(grLog(),"Cluster g[%d-%d) c[%d-%d)%x x%ld y%f\n", nFirstGlyphInCluster, nNextGlyph, nFirstCharInCluster, nNextChar, rArgs.mpStr[nFirstCharInCluster], nXPos, aFirstGlyph.yOffset());
+    fprintf(grLog(),"Cluster g[%d-%d) c[%d-%d)%x x%ld y%f bw%d\n", nFirstGlyphInCluster, nNextGlyph, nFirstCharInCluster, nNextChar, rArgs.mpStr[nFirstCharInCluster], nXPos, aFirstGlyph.yOffset(), nBreakWeight);
 #endif
     return aBounds;
 }
@@ -641,6 +681,19 @@ gr::Segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
         if (bRtl && (mrFont.getSupportedScriptDirections() & gr::kfsdcHorizRtl))
             maLayout.setRightToLeft(bRtl);
 
+        // Context is often needed beyond the specified end, however, we don't
+        // want it if there has been a direction change, since it is hard
+        // to tell between reordering within one direction and multi-directional
+        // text. Extra context, can also cause problems with ligatures stradling
+        // a hyphenation point, so disable if CTL is disabled.
+        const int  nSegCharLimit = min(rArgs.mnLength, mnEndCharPos + EXTRA_CONTEXT_LENGTH);
+        int limit = rArgs.mnEndCharPos;
+        if ((nSegCharLimit > limit) && !(SAL_LAYOUT_COMPLEX_DISABLED & rArgs.mnFlags))
+        {
+            limit += findSameDirLimit(rArgs.mpStr + rArgs.mnEndCharPos,
+                nSegCharLimit - rArgs.mnEndCharPos, bRtl);
+        }
+
 #ifdef GRCACHE
         GrFontHasher hasher(mrFont);
         sal_Int32 aFontHash = hasher.hashCode(mpFeatures);
@@ -648,7 +701,7 @@ gr::Segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
             (GraphiteCacheHandler::instance).getCache(aFontHash);
         if (pCache)
         {
-            *pSegRecord = pCache->getSegment(rArgs, bRtl);
+            *pSegRecord = pCache->getSegment(rArgs, bRtl, nSegCharLimit);
             if (*pSegRecord)
             {
                 pSegment = (*pSegRecord)->getSegment();
@@ -666,18 +719,6 @@ gr::Segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
             }
         }
 #endif
-
-        // Context is often needed beyond the specified end, however, we don't
-        // want it if there has been a direction change, since it is hard
-        // to tell between reordering within one direction and multi-directional
-        // text.
-        const int  segCharLimit = min(rArgs.mnLength, mnEndCharPos + EXTRA_CONTEXT_LENGTH);
-        int limit = rArgs.mnEndCharPos;
-        if (segCharLimit > limit)
-        {
-            limit += findSameDirLimit(rArgs.mpStr + rArgs.mnEndCharPos,
-                segCharLimit - rArgs.mnEndCharPos, bRtl);
-        }
 
         // Create a new TextSource object for the engine.
         mpTextSrc = new TextSourceAdaptor(rArgs, limit);
@@ -795,27 +836,35 @@ bool GraphiteLayout::LayoutGlyphs(ImplLayoutArgs& rArgs, gr::Segment * pSegment)
 
 int GraphiteLayout::GetTextBreak(long maxmnWidth, long char_extra, int factor) const
 {
-    // Adjust maxmnWidth so FindNextBreakPoint returns a sensible answer.
-    maxmnWidth -= (mnEndCharPos-mnMinCharPos-1)*char_extra;  // extra character spacing.
-    maxmnWidth /= factor;                                    // scaling factor.
+#ifdef GRLAYOUT_DEBUG
+    fprintf(grLog(),"Gr::GetTextBreak c[%d-%d) maxWidth %ld char extra %ld factor %d\n",
+        mnMinCharPos, mnEndCharPos, maxmnWidth, char_extra, factor);
+#endif
 
-    // Ask the segment for the nearest whole letter break for the width.
-    //float width;
-    float targetWidth = maxmnWidth/mfScaling;
     // return quickly if this segment is narrower than the target width
-    // (sometimes graphite doesn't seem to realise this!)
-    if (targetWidth > mnWidth)
+    if (maxmnWidth > mnWidth * factor + char_extra * (mnEndCharPos - mnMinCharPos - 1))
         return STRING_LEN;
-    //int    nBreak = mpSegment->findNextBreakPoint(mnMinCharPos,
-    //        gr::klbWordBreak, gr::klbLetterBreak, targetWidth, &width);
 
-    // LineFillSegment seems to give better results that findNextBreakPoint
-    // though it may be slower
-    gr::LayoutEnvironment aLE;
-    gr::LineFillSegment lineSeg(const_cast<gr::Font *>(&mrFont), mpTextSrc, &aLE,
-                                mnMinCharPos, mpTextSrc->getContextLength(),
-                                targetWidth);
-    int nBreak = lineSeg.stopCharacter();
+    long nWidth = mvCharDxs[0] * factor;
+    int nLastBreak = -1;
+    for (size_t i = 1; i < mvCharDxs.size(); i++)
+    {
+        nWidth += char_extra;
+        if (nWidth > maxmnWidth) break;
+        if (mvChar2BaseGlyph[i] != -1)
+        {
+            if (mvChar2BaseGlyph[i] & (WORD_BREAK_BEFORE | HYPHEN_BREAK_BEFORE))
+                nLastBreak = static_cast<int>(i);
+        }
+        nWidth += (mvCharDxs[i] - mvCharDxs[i-1]) * factor;
+    }
+    int nBreak = mnMinCharPos;
+    if (nLastBreak > -1)
+        nBreak += nLastBreak;
+
+#ifdef GRLAYOUT_DEBUG
+    fprintf(grLog(), "Gr::GetTextBreak break after %d\n", nBreak - mnMinCharPos);
+#endif
 
     if (nBreak > mnEndCharPos) nBreak = STRING_LEN;
     else if (nBreak < mnMinCharPos) nBreak = mnMinCharPos;
@@ -833,9 +882,10 @@ long GraphiteLayout::FillDXArray( sal_Int32* pDXArray ) const
     {
         for (size_t i = 0; i < mvCharDxs.size(); i++)
         {
-            assert((mvChar2BaseGlyph[i] >= -1) && (mvChar2BaseGlyph[i] < (signed)mvGlyphs.size()));
+            assert( (mvChar2BaseGlyph[i] == -1) ||
+                ((signed)(mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK) < (signed)mvGlyphs.size()));
             if (mvChar2BaseGlyph[i] != -1 &&
-                mvGlyphs[mvChar2BaseGlyph[i]].mnGlyphIndex == GF_DROPPED)
+                mvGlyphs[mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK].mnGlyphIndex == GF_DROPPED)
             {
                 // when used in MultiSalLayout::GetTextBreak dropped glyphs
                 // must have zero width
@@ -865,7 +915,6 @@ long GraphiteLayout::FillDXArray( sal_Int32* pDXArray ) const
 void  GraphiteLayout::AdjustLayout(ImplLayoutArgs& rArgs)
 {
     SalLayout::AdjustLayout(rArgs);
-
     if(rArgs.mpDXArray)
     {
         std::vector<int> vDeltaWidths(mvGlyphs.size(), 0);
@@ -894,8 +943,75 @@ void  GraphiteLayout::AdjustLayout(ImplLayoutArgs& rArgs)
             }
         }
     }
+    else if (rArgs.mnLayoutWidth > 0)
+    {
+#ifdef GRLAYOUT_DEBUG
+        fprintf(grLog(), "AdjustLayout width %ld=>%ld\n", mnWidth, rArgs.mnLayoutWidth);
+#endif
+        expandOrCondense(rArgs);
+    }
 }
 
+void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
+{
+    int nDeltaWidth = rArgs.mnLayoutWidth - mnWidth;
+    if (nDeltaWidth > 0) // expand, just expand between clusters
+    {
+        int nClusterCount = 0;
+        for (size_t j = 0; j < mvGlyphs.size(); j++)
+        {
+            if (mvGlyphs[j].IsClusterStart())
+            {
+                ++nClusterCount;
+            }
+        }
+        if (nClusterCount > 1)
+        {
+            float fExtraPerCluster = static_cast<float>(nDeltaWidth) / static_cast<float>(nClusterCount - 1);
+            int nCluster = 0;
+            int nOffset = 0;
+            for (size_t i = 0; i < mvGlyphs.size(); i++)
+            {
+                if (mvGlyphs[i].IsClusterStart())
+                {
+                    nOffset = fExtraPerCluster * nCluster;
+                    size_t nCharIndex = mvGlyph2Char[i];
+                    mvCharDxs[nCharIndex] += nOffset;
+                    // adjust char dxs for rest of characters in cluster
+                    while (++nCharIndex < mvGlyph2Char.size())
+                    {
+                        int nChar2Base = (mvChar2BaseGlyph[nCharIndex] == -1)? -1 : mvChar2BaseGlyph[nCharIndex] & GLYPH_INDEX_MASK;
+                        if (nChar2Base == -1 || nChar2Base == static_cast<int>(i))
+                            mvCharDxs[nCharIndex] += nOffset;
+                    }
+                    ++nCluster;
+                }
+                mvGlyphs[i].maLinearPos.X() += nOffset;
+            }
+        }
+    }
+    else // condense - apply a factor to all glyph positions
+    {
+        if (mvGlyphs.size() == 0) return;
+        Glyphs::iterator iLastGlyph = mvGlyphs.begin() + (mvGlyphs.size() - 1);
+        // position last glyph using original width
+        float fXFactor = static_cast<float>(rArgs.mnLayoutWidth - iLastGlyph->mnOrigWidth) / static_cast<float>(iLastGlyph->maLinearPos.X());
+#ifdef GRLAYOUT_DEBUG
+        fprintf(grLog(), "Condense by factor %f\n", fXFactor);
+#endif
+        iLastGlyph->maLinearPos.X() = rArgs.mnLayoutWidth - iLastGlyph->mnOrigWidth;
+        Glyphs::iterator iGlyph = mvGlyphs.begin();
+        while (iGlyph != iLastGlyph)
+        {
+            iGlyph->maLinearPos.X() = static_cast<float>(iGlyph->maLinearPos.X()) * fXFactor;
+            ++iGlyph;
+        }
+        for (size_t i = 0; i < mvCharDxs.size(); i++)
+        {
+            mvCharDxs[i] = fXFactor * static_cast<float>(mvCharDxs[i]);
+        }
+    }
+}
 
 void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDeltaWidth)
 {
@@ -917,37 +1033,39 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
     int nPrevClusterLastChar = -1;
     for (size_t i = 0; i < nChars; i++)
     {
-        if (mvChar2BaseGlyph[i] > -1 && mvChar2BaseGlyph[i] != nPrevClusterGlyph)
+        int nChar2Base = (mvChar2BaseGlyph[i] == -1)? -1 : mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK;
+        if ((nChar2Base > -1) && (nChar2Base != nPrevClusterGlyph))
         {
-            assert((mvChar2BaseGlyph[i] > -1) && (mvChar2BaseGlyph[i] < (signed)mvGlyphs.size()));
-            GlyphItem & gi = mvGlyphs[mvChar2BaseGlyph[i]];
+            assert((nChar2Base > -1) && (nChar2Base < (signed)mvGlyphs.size()));
+            GlyphItem & gi = mvGlyphs[nChar2Base];
             if (!gi.IsClusterStart())
                 continue;
 
             // find last glyph of this cluster
             size_t j = i + 1;
             int nLastChar = i;
-            int nLastGlyph = mvChar2BaseGlyph[i];
+            int nLastGlyph = nChar2Base;
             for (; j < nChars; j++)
             {
-                assert((mvChar2BaseGlyph[j] >= -1) && (mvChar2BaseGlyph[j] < (signed)mvGlyphs.size()));
-                if (mvChar2BaseGlyph[j] != -1 && mvGlyphs[mvChar2BaseGlyph[j]].IsClusterStart())
+                int nChar2BaseJ = (mvChar2BaseGlyph[j] == -1)? -1 : mvChar2BaseGlyph[j] & GLYPH_INDEX_MASK;
+                assert((nChar2BaseJ >= -1) && (nChar2BaseJ < (signed)mvGlyphs.size()));
+                if (nChar2BaseJ != -1 && mvGlyphs[nChar2BaseJ].IsClusterStart())
                 {
-                    nLastGlyph = mvChar2BaseGlyph[j] + ((bRtl)? 1 : -1);
+                    nLastGlyph = nChar2BaseJ + ((bRtl)? 1 : -1);
                     nLastChar = j - 1;
                     break;
                 }
             }
             if (nLastGlyph < 0)
             {
-                nLastGlyph = mvChar2BaseGlyph[i];
+                nLastGlyph = nChar2Base;
             }
             // Its harder to find the last glyph rtl, since the first of
             // cluster is still on the left so we need to search towards
             // the previous cluster to the right
             if (bRtl)
             {
-                nLastGlyph = mvChar2BaseGlyph[i];
+                nLastGlyph = nChar2Base;
                 while (nLastGlyph + 1 < (signed)mvGlyphs.size() &&
                        !mvGlyphs[nLastGlyph+1].IsClusterStart())
                 {
@@ -983,7 +1101,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
             // update glyph positions
             if (bRtl)
             {
-                for (int n = mvChar2BaseGlyph[i]; n <= nLastGlyph; n++)
+                for (int n = nChar2Base; n <= nLastGlyph; n++)
                 {
                     assert((n > - 1) && (n < (signed)mvGlyphs.size()));
                     mvGlyphs[n].maLinearPos.X() += -nDGlyphOrigin + nXOffset;
@@ -991,17 +1109,17 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
             }
             else
             {
-                for (int n = mvChar2BaseGlyph[i]; n <= nLastGlyph; n++)
+                for (int n = nChar2Base; n <= nLastGlyph; n++)
                 {
                     assert((n > - 1) && (n < (signed)mvGlyphs.size()));
                     mvGlyphs[n].maLinearPos.X() += nDGlyphOrigin + nXOffset;
                 }
             }
-            rDeltaWidth[mvChar2BaseGlyph[i]] = nDWidth;
+            rDeltaWidth[nChar2Base] = nDWidth;
 #ifdef GRLAYOUT_DEBUG
-            fprintf(grLog(),"c%d g%d-%d dW%ld-%ld=%ld dX%ld x%ld\t", (int)i, mvChar2BaseGlyph[i], nLastGlyph, nNewClusterWidth, nOrigClusterWidth, nDWidth, nDGlyphOrigin, mvGlyphs[mvChar2BaseGlyph[i]].maLinearPos.X());
+            fprintf(grLog(),"c%d g%d-%d dW%ld-%ld=%ld dX%ld x%ld\t", (int)i, nChar2Base, nLastGlyph, nNewClusterWidth, nOrigClusterWidth, nDWidth, nDGlyphOrigin, mvGlyphs[nChar2Base].maLinearPos.X());
 #endif
-            nPrevClusterGlyph = mvChar2BaseGlyph[i];
+            nPrevClusterGlyph = nChar2Base;
             nPrevClusterLastChar = nLastChar;
             i = nLastChar;
         }
@@ -1043,7 +1161,7 @@ void GraphiteLayout::kashidaJustify(std::vector<int>& rDeltaWidths, sal_GlyphId 
             continue;
         }
         // calculate gap, ignore if too small
-        int nGapWidth = rDeltaWidths[nOrigGlyphIndex];;
+        int nGapWidth = rDeltaWidths[nOrigGlyphIndex];
         // worst case is one kashida even for mini-gaps
         if( 3 * nGapWidth < nKashidaWidth )
         {
@@ -1104,13 +1222,14 @@ void GraphiteLayout::GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray 
     {
         if (mvChar2BaseGlyph[nCharSlot] != -1)
         {
-            assert((mvChar2BaseGlyph[nCharSlot] > -1) && (mvChar2BaseGlyph[nCharSlot] < (signed)mvGlyphs.size()));
-            GlyphItem gi = mvGlyphs[mvChar2BaseGlyph[nCharSlot]];
+            int nChar2Base = mvChar2BaseGlyph[nCharSlot] & GLYPH_INDEX_MASK;
+            assert((mvChar2BaseGlyph[nCharSlot] > -1) && (nChar2Base < (signed)mvGlyphs.size()));
+            GlyphItem gi = mvGlyphs[nChar2Base];
             if (gi.mnGlyphIndex == GF_DROPPED)
             {
                 continue;
             }
-            int nCluster = mvChar2BaseGlyph[nCharSlot];
+            int nCluster = nChar2Base;
             long origClusterWidth = gi.mnNewWidth;
             long nMin = gi.maLinearPos.X();
             long nMax = gi.maLinearPos.X() + gi.mnNewWidth;
@@ -1135,7 +1254,7 @@ void GraphiteLayout::GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray 
                 pCaretXArray[i] = nMin;
                 pCaretXArray[i+1] = nMax;
             }
-            prevBase = mvChar2BaseGlyph[nCharSlot];
+            prevBase = nChar2Base;
             prevClusterWidth = origClusterWidth;
         }
         else if (prevBase > -1)
@@ -1268,7 +1387,7 @@ int GraphiteLayout::GetNextGlyphs( int length, sal_GlyphId * glyph_out,
 
 #ifdef GRLAYOUT_DEBUG
     fprintf(grLog(),"GetNextGlyphs g%d c%d x%ld,%ld adv%ld, pos %ld,%ld\n", glyph_slot - 1,
-            mvGlyph2Char[glyph_slot-1], glyph_itr->maLinearPos.X(), glyph_itr->maLinearPos.Y(), nGlyphAdvance,
+            GLYPH_INDEX_MASK&mvGlyph2Char[glyph_slot-1], glyph_itr->maLinearPos.X(), glyph_itr->maLinearPos.Y(), nGlyphAdvance,
             aPosOut.X(), aPosOut.Y());
 #endif
 

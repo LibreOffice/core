@@ -426,11 +426,19 @@ void DockingManager::SetFloatingMode( const Window *pWindow, BOOL bFloating )
         pWrapper->SetFloatingMode( bFloating );
 }
 
-void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const Window *pWindow )
+void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const Window *pWindow, ULONG nFlags )
 {
     ImplDockingWindowWrapper* pWrapper = GetDockingWindowWrapper( pWindow );
     if( pWrapper )
-        pWrapper->StartPopupMode( pParentToolBox );
+        pWrapper->StartPopupMode( pParentToolBox, nFlags );
+}
+
+void DockingManager::StartPopupMode( ToolBox *pParentToolBox, const Window *pWindow )
+{
+    StartPopupMode( pParentToolBox, pWindow, FLOATWIN_POPUPMODE_ALLOWTEAROFF         |
+                    FLOATWIN_POPUPMODE_NOFOCUSCLOSE         |
+                    FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE  |
+                    FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );
 }
 
 BOOL DockingManager::IsInPopupMode( const Window *pWindow )
@@ -441,6 +449,17 @@ BOOL DockingManager::IsInPopupMode( const Window *pWindow )
     else
         return FALSE;
 }
+
+// -----------------------------------------------------------------------
+
+void DockingManager::EndPopupMode( const Window *pWin )
+{
+    ImplDockingWindowWrapper *pWrapper = GetDockingWindowWrapper( pWin );
+    if( pWrapper && pWrapper->GetFloatingWindow() && pWrapper->GetFloatingWindow()->IsInPopupMode() )
+        pWrapper->GetFloatingWindow()->EndPopupMode();
+}
+
+// -----------------------------------------------------------------------
 
 void DockingManager::AddWindow( const Window *pWindow )
 {
@@ -515,12 +534,15 @@ private:
     ImplDockingWindowWrapper*   mpDockingWin;
     BOOL                        mbHighlight;
     BOOL                        mbMoving;
+    bool                        mbTrackingEnabled;
     Point                       maDelta;
     Point                       maTearOffPosition;
+    bool                        mbGripAtBottom;
+    bool                        mbHasGrip;
     void                        ImplSetBorder();
 
 public:
-    ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper* pDockingWin );
+    ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip );
     ~ImplPopupFloatWin();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
@@ -537,9 +559,11 @@ public:
     Point               GetTearOffPosition() const;
     void                DrawGrip();
     void                DrawBorder();
+
+    bool                hasGrip() const { return mbHasGrip; }
 };
 
-ImplPopupFloatWin::ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper* pDockingWin ) :
+ImplPopupFloatWin::ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper* pDockingWin, bool bHasGrip ) :
     FloatingWindow( pParent, WB_NOBORDER | WB_SYSTEMWINDOW | WB_NOSHADOW)
 {
     mpWindowImpl->mbToolbarFloatingWindow = TRUE;   // indicate window type, required for accessibility
@@ -547,6 +571,9 @@ ImplPopupFloatWin::ImplPopupFloatWin( Window* pParent, ImplDockingWindowWrapper*
     mpDockingWin = pDockingWin;
     mbHighlight = FALSE;
     mbMoving = FALSE;
+    mbTrackingEnabled = FALSE;
+    mbGripAtBottom = TRUE;
+    mbHasGrip = bHasGrip;
 
     ImplSetBorder();
 }
@@ -582,7 +609,9 @@ void ImplPopupFloatWin::ImplSetBorder()
     //  we're using a special border for the grip
     // by setting those members the method SetOutputSizePixel() can
     //  be used to set the proper window size
-    mpWindowImpl->mnTopBorder     = 1 + POPUP_DRAGHEIGHT+2;
+    mpWindowImpl->mnTopBorder     = 1;
+    if( hasGrip() )
+        mpWindowImpl->mnTopBorder += POPUP_DRAGHEIGHT+2;
     mpWindowImpl->mnBottomBorder  = 1;
     mpWindowImpl->mnLeftBorder    = 1;
     mpWindowImpl->mnRightBorder   = 1;
@@ -596,13 +625,25 @@ void ImplPopupFloatWin::Resize()
 
 Rectangle ImplPopupFloatWin::GetDragRect() const
 {
-    return Rectangle( 1, 1, GetOutputSizePixel().Width()-1, 2+POPUP_DRAGHEIGHT );
+    Rectangle aRect;
+    if( hasGrip() )
+    {
+        aRect = Rectangle( 1,1, GetOutputSizePixel().Width()-1, 2+POPUP_DRAGHEIGHT );
+        if( mbGripAtBottom )
+        {
+            int height = GetOutputSizePixel().Height();
+            aRect.Top() = height - 3 - POPUP_DRAGHEIGHT;
+            aRect.Bottom() = aRect.Top() + 1 + POPUP_DRAGHEIGHT;
+        }
+    }
+    return aRect;
 }
 
 Point ImplPopupFloatWin::GetToolboxPosition() const
 {
     // return inner position where a toolbox could be placed
-    Point aPt( 1, 1+GetDragRect().getHeight() );    // grip + border
+    Point aPt( 1, 1 + ((mbGripAtBottom || !hasGrip()) ? 0 : GetDragRect().getHeight()) );    // grip + border
+
     return aPt;
 }
 
@@ -616,7 +657,6 @@ Point ImplPopupFloatWin::GetTearOffPosition() const
 void ImplPopupFloatWin::DrawBorder()
 {
     SetFillColor();
-    SetLineColor( GetSettings().GetStyleSettings().GetShadowColor() );
     Point aPt;
     Rectangle aRect( aPt, GetOutputSizePixel() );
 
@@ -626,9 +666,16 @@ void ImplPopupFloatWin::DrawBorder()
     if( !aItemClipRect.IsEmpty() )
     {
         aItemClipRect.SetPos( AbsoluteScreenToOutputPixel( aItemClipRect.TopLeft() ) );
+
+        // draw the excluded border part with the background color of a toolbox
+        SetClipRegion( Region( aItemClipRect ) );
+        SetLineColor( GetSettings().GetStyleSettings().GetFaceColor() );
+        DrawRect( aRect );
+
         aClipRgn.Exclude( aItemClipRect );
         SetClipRegion( aClipRgn );
     }
+    SetLineColor( GetSettings().GetStyleSettings().GetShadowColor() );
     DrawRect( aRect );
     SetClipRegion( oldClipRgn );
 }
@@ -724,7 +771,8 @@ void ImplPopupFloatWin::Paint( const Rectangle& )
     Rectangle aRect( aPt, GetOutputSizePixel() );
     DrawWallpaper( aRect, Wallpaper( GetSettings().GetStyleSettings().GetFaceGradientColor() ) );
     DrawBorder();
-    DrawGrip();
+    if( hasGrip() )
+        DrawGrip();
 }
 
 void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
@@ -733,7 +781,7 @@ void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
 
     if( !ToolBox::AlwaysLocked() )  // no tear off if locking is enabled
     {
-        if( rMEvt.IsLeft() && GetDragRect().IsInside( aMousePos ) )
+        if( mbTrackingEnabled && rMEvt.IsLeft() && GetDragRect().IsInside( aMousePos ) )
         {
             // start window move
             mbMoving = TRUE;
@@ -755,6 +803,7 @@ void ImplPopupFloatWin::MouseMove( const MouseEvent& rMEvt )
 
 void ImplPopupFloatWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
+    mbTrackingEnabled = false;
     FloatingWindow::MouseButtonUp( rMEvt );
 }
 
@@ -769,6 +818,11 @@ void ImplPopupFloatWin::MouseButtonDown( const MouseEvent& rMEvt )
             ImplMirrorFramePos(aState.maPos);
         maTearOffPosition = GetWindow( WINDOW_BORDER )->GetPosPixel();
         maDelta = aState.maPos - maTearOffPosition;
+        mbTrackingEnabled = true;
+    }
+    else
+    {
+        mbTrackingEnabled = false;
     }
 }
 
@@ -1187,7 +1241,7 @@ BOOL ImplDockingWindowWrapper::IsTitleButtonVisible( USHORT nButton ) const
 
 // -----------------------------------------------------------------------
 
-void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox )
+void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox, ULONG nFlags )
 {
     // do nothing if window is floating
     if( IsFloatingMode() )
@@ -1202,7 +1256,7 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox )
         mpOldBorderWin = NULL;  // no border window found
 
     // the new parent for popup mode
-    ImplPopupFloatWin* pWin = new ImplPopupFloatWin( mpParent, this );
+    ImplPopupFloatWin* pWin = new ImplPopupFloatWin( mpParent, this, (nFlags & FLOATWIN_POPUPMODE_ALLOWTEAROFF) != 0 );
 
     pWin->SetPopupModeEndHdl( LINK( this, ImplDockingWindowWrapper, PopupModeEnd ) );
     pWin->SetText( GetWindow()->GetText() );
@@ -1231,12 +1285,6 @@ void ImplDockingWindowWrapper::StartPopupMode( ToolBox *pParentToolBox )
     // set mpFloatWin not until all window positioning is done !!!
     // (SetPosPixel etc. check for valid mpFloatWin pointer)
     mpFloatWin = pWin;
-
-    ULONG nFlags =  FLOATWIN_POPUPMODE_ALLOWTEAROFF         |
-                    FLOATWIN_POPUPMODE_NOFOCUSCLOSE         |
-                    FLOATWIN_POPUPMODE_ALLMOUSEBUTTONCLOSE  |
-                    FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE;
-//                    |FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE;
 
     // if the subtoolbar was opened via keyboard make sure that key events
     // will go into subtoolbar
@@ -1339,7 +1387,7 @@ void ImplDockingWindowWrapper::SetFloatingMode( BOOL bFloatMode )
                 aSettings.SetStyleSettings( aStyleSettings );
                 pWin->SetSettings( aSettings );*/
 
-                mpFloatWin      = pWin;
+//                mpFloatWin      = pWin;
 
 
                 GetWindow()->mpWindowImpl->mpBorderWindow  = NULL;
@@ -1373,6 +1421,8 @@ void ImplDockingWindowWrapper::SetFloatingMode( BOOL bFloatMode )
                 pWin->SetRollUpOutputSizePixel( maRollUpOutSize );
                 pWin->SetMinOutputSizePixel( maMinOutSize );
                 pWin->SetMaxOutputSizePixel( maMaxOutSize );
+
+                mpFloatWin      = pWin;
 
                 if ( bVisible )
                     GetWindow()->Show( TRUE, SHOW_NOFOCUSCHANGE | SHOW_NOACTIVATE );

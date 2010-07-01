@@ -130,6 +130,7 @@ public:
 
     virtual USHORT      GetEntryPos( const XubString& rStr ) const;
     virtual USHORT      GetEntryPos( const void* pData ) const;
+            Image       GetEntryImage( USHORT nPos ) const;
     virtual XubString   GetEntry( USHORT nPos ) const;
     virtual USHORT      GetEntryCount() const;
 
