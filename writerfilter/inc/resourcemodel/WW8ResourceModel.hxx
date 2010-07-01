@@ -208,6 +208,8 @@ public:
      */
     virtual void endParagraphGroup() = 0;
 
+    virtual void markLastParagraphInSection( ) { };
+
     /**
        Receives start mark for group with the same character properties.
      */

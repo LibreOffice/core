@@ -618,7 +618,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const ::rtl::OUString& aChars )
                         case XML_bstr|NMSP_VT:
                         case XML_lpstr|NMSP_VT:
                         case XML_lpwstr|NMSP_VT:
-                            AddCustomProperty( uno::makeAny( AttributeList::decodeXString( aChars ) ) ); // the property has string type
+                            AddCustomProperty( uno::makeAny( AttributeConversion::decodeXString( aChars ) ) ); // the property has string type
                             break;
 
                         case XML_date|NMSP_VT:

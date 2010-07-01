@@ -29,11 +29,12 @@
  ************************************************************************/
 
 #include <resourcemodel/ResourceModelHelper.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 #include <SettingsTable.hxx>
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <stdio.h>
-#include <ListTable.hxx>
 #include <ConversionHelper.hxx>
 #include <rtl/ustring.hxx>
 
@@ -53,8 +54,6 @@ struct SettingsTable_Impl
 {
     DomainMapper&       m_rDMapper;
     const uno::Reference< lang::XMultiServiceFactory > m_xTextFactory;
-
-    ListTablePtr        m_pListTable;
 
     ::rtl::OUString     m_sCharacterSpacing;
     ::rtl::OUString     m_sDecimalSymbol;
@@ -98,14 +97,6 @@ struct SettingsTable_Impl
     , m_nCryptAlgorithmType(NS_ooxml::LN_Value_wordprocessingml_ST_AlgType_typeAny)
     , m_nCryptSpinCount(0)
     {}
-
-    ListTablePtr GetListTable()
-    {
-    if(!m_pListTable)
-        m_pListTable.reset(
-                   new ListTable( m_rDMapper, m_xTextFactory ));
-    return m_pListTable;
-    }
 };
 
 SettingsTable::SettingsTable(DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory) :
@@ -194,14 +185,6 @@ void SettingsTable::sprm(Sprm& rSprm)
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
         pProperties->resolve(*this);
-    }
-    break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-    case NS_ooxml::LN_CT_Numbering_num: // 92613;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-    case NS_ooxml::LN_CT_Numbering_abstractNum: //  92612;
-    {
-        m_pImpl->GetListTable()->sprm( rSprm );
     }
     break;
     /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */

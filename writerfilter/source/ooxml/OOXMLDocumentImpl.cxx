@@ -51,7 +51,7 @@ using namespace ::std;
 
 OOXMLDocumentImpl::OOXMLDocumentImpl
 (OOXMLStream::Pointer_t pStream)
-: mpStream(pStream), mXNoteType(0)
+: mpStream(pStream), mXNoteType(0), mbIsSubstream( false )
 {
 }
 
@@ -141,6 +141,7 @@ OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
     writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream) );
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
+    pTemp->setIsSubstream( true );
     return pRet;
 }
 
@@ -324,6 +325,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         pDocHandler->setStream(&rStream);
         pDocHandler->setDocument(this);
         pDocHandler->setXNoteId(msXNoteId);
+        pDocHandler->setIsSubstream( mbIsSubstream );
         uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler
             (pDocHandler);
         uno::Reference < xml::sax::XFastTokenHandler > xTokenHandler
@@ -331,9 +333,9 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 
         resolveFastSubStream(rStream, OOXMLStream::SETTINGS);
         resolveFastSubStream(rStream, OOXMLStream::THEME);
-        resolveFastSubStream(rStream, OOXMLStream::NUMBERING);
         resolveFastSubStream(rStream, OOXMLStream::FONTTABLE);
         resolveFastSubStream(rStream, OOXMLStream::STYLES);
+        resolveFastSubStream(rStream, OOXMLStream::NUMBERING);
 
         xParser->setFastDocumentHandler( xDocumentHandler );
         xParser->setTokenHandler( xTokenHandler );

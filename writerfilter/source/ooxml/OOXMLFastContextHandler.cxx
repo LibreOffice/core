@@ -227,10 +227,6 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     snprintf(buffer, sizeof(buffer), "%ld: startFastElement", mnInstanceNumber);
     logger("MEMORY", buffer);
 #endif
-
-#if DEBUG
-    clog << "Token: " << fastTokenToId(Element) << endl;
-#endif
     attributes(Attribs);
     lcl_startFastElement(Element, Attribs);
 }
@@ -734,6 +730,7 @@ void OOXMLFastContextHandler::setLastParagraphInSection()
 #endif
 
     mpParserState->setLastParagraphInSection(true);
+    mpStream->markLastParagraphInSection( );
 }
 
 void OOXMLFastContextHandler::newProperty

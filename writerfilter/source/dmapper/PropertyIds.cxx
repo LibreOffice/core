@@ -317,10 +317,13 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_INDENT_AT :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IndentAt")); break;
             case PROP_FIRST_LINE_INDENT :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstLineIndent")); break;
             case PROP_NUMBERING_STYLE_NAME  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyleName")); break;
+            case PROP_OUTLINE_LEVEL  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutlineLevel")); break;
             case PROP_LISTTAB_STOP_POSITION :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ListtabStopPosition")); break;
             case PROP_POSITION_AND_SPACE_MODE :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionAndSpaceMode")); break;
             case PROP_PARA_SPLIT:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaSplit")); break;
             case PROP_HELP:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Help")); break;
+            case PROP_HEADING_STYLE_NAME:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName")); break;
+//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
