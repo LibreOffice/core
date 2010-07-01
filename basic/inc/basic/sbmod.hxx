@@ -40,6 +40,7 @@ class SbiBreakpoints;
 class SbiImage;
 class SbProcedureProperty;
 class SbIfaceMapperMethod;
+class SbClassModuleObject;
 
 struct SbClassData;
 class SbModuleImpl;
@@ -125,11 +126,12 @@ public:
     BOOL LoadBinaryData( SvStream& );
     BOOL ExceedsLegacyModuleSize();
     void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
-        BOOL IsVBACompat();
-        void SetVBACompat( BOOL bCompat );
-        INT32 GetModuleType() { return mnType; }
-        void SetModuleType( INT32 nType ) { mnType = nType; }
+    BOOL IsVBACompat() const;
+    void SetVBACompat( BOOL bCompat );
+    INT32 GetModuleType() { return mnType; }
+    void SetModuleType( INT32 nType ) { mnType = nType; }
     bool GetIsProxyModule() { return bIsProxyModule; }
+    bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
 };
 
 #ifndef __SB_SBMODULEREF_HXX

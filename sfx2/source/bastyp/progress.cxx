@@ -706,7 +706,7 @@ SfxProgress* SfxProgress::GetActiveProgress
 */
 
 {
-    if ( !SfxApplication::Is_Impl() )
+    if ( !SfxApplication::Get() )
         return 0;
 
     SfxProgress *pProgress = 0;

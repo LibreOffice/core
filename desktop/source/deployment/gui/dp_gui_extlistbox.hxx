@@ -38,7 +38,6 @@
 #include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/lang/XEventListener.hpp"
 #include "com/sun/star/deployment/XPackage.hpp"
-#include "com/sun/star/deployment/XPackageManager.hpp"
 
 #include <boost/shared_ptr.hpp>
 
@@ -65,13 +64,16 @@ typedef ::boost::shared_ptr< Entry_Impl > TEntry_Impl;
 
 struct Entry_Impl
 {
-    bool            m_bActive;
-    bool            m_bLocked;
-    bool            m_bHasOptions;
-    bool            m_bShared;
-    bool            m_bNew;
-    bool            m_bChecked;
-    bool            m_bMissingDeps;
+    bool            m_bActive       :1;
+    bool            m_bLocked       :1;
+    bool            m_bHasOptions   :1;
+    bool            m_bUser         :1;
+    bool            m_bShared       :1;
+    bool            m_bNew          :1;
+    bool            m_bChecked      :1;
+    bool            m_bMissingDeps  :1;
+    bool            m_bHasButtons   :1;
+    bool            m_bMissingLic   :1;
     PackageState    m_eState;
     String          m_sTitle;
     String          m_sVersion;
@@ -84,11 +86,9 @@ struct Entry_Impl
     svt::FixedHyperlink *m_pPublisher;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> m_xPackage;
-    ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager> m_xPackageManager;
 
     Entry_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
-                const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager,
-                PackageState eState );
+                const PackageState eState, const bool bReadOnly );
    ~Entry_Impl();
 
     StringCompare CompareTo( const CollatorWrapper *pCollator, const TEntry_Impl pEntry ) const;
@@ -207,11 +207,11 @@ public:
     //-----------------
     virtual void    selectEntry( const long nPos );
     long            addEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage,
-                              const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageManager );
+                              bool bLicenseMissing = false );
     void            updateEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
     void            removeEntry( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage > &xPackage );
 
-    void            prepareChecking( const ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManager > &xPackageMgr );
+    void            prepareChecking();
     void            checkEntries();
 
     TheExtensionManager*    getExtensionManager() const { return m_pManager; }
