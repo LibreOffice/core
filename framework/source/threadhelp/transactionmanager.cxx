@@ -319,42 +319,6 @@ sal_Bool  TransactionManager::isCallRejected( ERejectReason& eReason ) const
 }
 
 /*-****************************************************************************************************//**
-    @short      return a reference to a static manager
-    @descr      Sometimes we need the global member! (e.g. in our own static methods)
-                We create our own "class global static" member threadsafe.
-                It will be created at first call only!
-                All other requests use these created one then directly.
-
-    @seealso    -
-
-    @param      -
-    @return     A reference to a static member.
-
-    @onerror    No error should occure.
-*//*-*****************************************************************************************************/
-TransactionManager& TransactionManager::getGlobalTransactionManager()
-{
-    // Initialize static member only for one time!
-    static TransactionManager* pManager = NULL;
-    // If these method first called (member not already exist!) ...
-    if( pManager == NULL )
-    {
-        // ... we must create a new one. Protect follow code with the global mutex -
-        // It must be - we create a static variable!
-        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        // We must check our pointer again - because ... another instance of ouer class could be faster then these one!
-        if( pManager == NULL )
-        {
-            // Create the new manager and set it for return on static variable.
-            static TransactionManager aManager;
-            pManager = &aManager;
-        }
-    }
-    // Return new created or already existing object.
-    return *pManager;
-}
-
-/*-****************************************************************************************************//**
     @short      throw any exceptions for rejected calls
     @descr      If user whish to use our automaticly exception mode we use this impl-method.
                 We check all combinations of eReason and eExceptionMode and throw right exception with some

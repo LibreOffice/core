@@ -9,3 +9,4 @@ MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.o
 Name=%PRODUCTNAME Impress
 GenericName=Presentation
 Comment=Create and edit presentations for slideshows, meeting and Web pages by using Impress.
+InitialPreference=5
