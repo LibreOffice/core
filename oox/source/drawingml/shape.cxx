@@ -260,6 +260,7 @@ Reference< XShape > Shape::createAndInsert(
     OUString aServiceName = rServiceName;
     if( mxCreateCallback.get() )
         aServiceName = mxCreateCallback->onCreateXShape( aServiceName, awt::Rectangle( aPosition.X / 360, aPosition.Y / 360, aSize.Width / 360, aSize.Height / 360 ) );
+    sal_Bool bIsCustomShape = aServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" );
 
     basegfx::B2DHomMatrix aTransformation;
     if( aSize.Width != 1 || aSize.Height != 1)
@@ -279,7 +280,7 @@ Reference< XShape > Shape::createAndInsert(
         // center object at origin
         aTransformation.translate( -aCenter.getX(), -aCenter.getY() );
 
-        if( mbFlipH || mbFlipV)
+        if( !bIsCustomShape && ( mbFlipH || mbFlipV ) )
         {
             // mirror around object's center
             aTransformation.scale( mbFlipH ? -1.0 : 1.0, mbFlipV ? -1.0 : 1.0 );
@@ -469,8 +470,14 @@ Reference< XShape > Shape::createAndInsert(
         if( aServiceName != OUString::createFromAscii( "com.sun.star.drawing.GroupShape" ) )
             aPropSet.setProperties( aShapeProperties );
 
-        if( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" ) )
+        if( bIsCustomShape )
+        {
+            if ( mbFlipH )
+                mpCustomShapePropertiesPtr->setMirroredX( sal_True );
+            if ( mbFlipV )
+                mpCustomShapePropertiesPtr->setMirroredY( sal_True );
             mpCustomShapePropertiesPtr->pushToPropSet( rFilterBase, xSet, mxShape );
+        }
 
         // in some cases, we don't have any text body.
         if( getTextBody() )
