@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
+#include "oox/helper/attributelist.hxx"
 #include "oox/ppt/pptshape.hxx"
 #include "oox/ppt/pptshapecontext.hxx"
 #include "oox/ppt/pptshapepropertiescontext.hxx"
@@ -104,9 +105,13 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
         //  case NMSP_PPT|XML_drElemPr:
         //      break;
         case NMSP_PPT|XML_cNvPr:
+        {
+            AttributeList aAttribs( xAttribs );
+            mpShapePtr->setHidden( aAttribs.getBool( XML_hidden, false ) );
             mpShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
             mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
             break;
+        }
         case NMSP_PPT|XML_ph:
         {
             sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
@@ -140,7 +145,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                                   nSecondPlaceholder = XML_body;
                               break;
 
-                              case XML_dt :         // slide/layout/master/notes/notesmaster/handoutmaster
+                            case XML_dt :           // slide/layout/master/notes/notesmaster/handoutmaster
                               case XML_sldNum :     // slide/layout/master/notes/notesmaster/handoutmaster
                               case XML_ftr :            // slide/layout/master/notes/notesmaster/handoutmaster
                               case XML_hdr :            // notes/notesmaster/handoutmaster
@@ -179,6 +184,7 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
                           }
                     }
                   }
+
               }
               break;
         }

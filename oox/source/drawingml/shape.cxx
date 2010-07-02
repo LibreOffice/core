@@ -374,8 +374,8 @@ Reference< XShape > Shape::createAndInsert(
 
         if ( mbHidden )
         {
-            const OUString sHidden( CREATE_OUSTRING( "NumberingLevel" ) );
-            xSet->setPropertyValue( sHidden, Any( mbHidden ) );
+            const OUString sHidden( CREATE_OUSTRING( "Visible" ) );
+            xSet->setPropertyValue( sHidden, Any( !mbHidden ) );
         }
 
         Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
