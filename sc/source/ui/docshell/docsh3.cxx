@@ -424,7 +424,7 @@ double ScDocShell::GetOutputFactor() const
 
 //---------------------------------------------------------------------
 
-void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
+void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and Load
 {
     //  Einstellungen aus dem SpellCheckCfg kommen in Doc- und ViewOptions
 
@@ -439,6 +439,14 @@ void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
 
     // zweistellige Jahreszahleneingabe aus Extras->Optionen->Allgemein->Sonstiges
     aDocOpt.SetYear2000( sal::static_int_cast<USHORT>( ::utl::MiscCfg().GetYear2000() ) );
+
+    if (bForLoading)
+    {
+        // #i112123# No style:decimal-places attribute means automatic decimals, not the configured default,
+        // so it must not be taken from the global options.
+        // Calculation settings are handled separately in ScXMLBodyContext::EndElement.
+        aDocOpt.SetStdPrecision( SvNumberFormatter::UNLIMITED_PRECISION );
+    }
 
     aDocument.SetDocOptions( aDocOpt );
     aDocument.SetViewOptions( aViewOpt );

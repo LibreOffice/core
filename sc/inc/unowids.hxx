@@ -78,7 +78,8 @@
 #define SC_WID_UNO_AUTOPRINT        ( SC_WID_UNO_START + 38 )
 #define SC_WID_UNO_ABSNAME          ( SC_WID_UNO_START + 39 )
 #define SC_WID_UNO_CODENAME         ( SC_WID_UNO_START + 40 )
-#define SC_WID_UNO_END              ( SC_WID_UNO_START + 40 )
+#define SC_WID_UNO_TABCOLOR         ( SC_WID_UNO_START + 41 )
+#define SC_WID_UNO_END              ( SC_WID_UNO_START + 41 )
 
 
 inline BOOL IsScUnoWid( USHORT nWid )

@@ -51,6 +51,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/sheet/XCompatibilityNames.hpp>
+#include <com/sun/star/sheet/NoConvergenceException.hpp>
 
 #include "addincol.hxx"
 #include "addinhelpid.hxx"
@@ -1582,9 +1583,13 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
             if ( rWrapped.TargetException.getValueType().equals(
                     getCppuType( (lang::IllegalArgumentException*)0 ) ) )
                 nErrCode = errIllegalArgument;
+            else if ( rWrapped.TargetException.getValueType().equals(
+                    getCppuType( (sheet::NoConvergenceException*)0 ) ) )
+                nErrCode = errNoConvergence;
             else
                 nErrCode = errNoValue;
         }
+
         catch(uno::Exception&)
         {
             nErrCode = errNoValue;

@@ -66,6 +66,7 @@
 #include "compiler.hxx"         // ScTokenArray GetCodeLen
 #include "dbcolect.hxx"
 #include "fillinfo.hxx"
+#include "segmenttree.hxx"
 
 #include <math.h>
 
@@ -760,8 +761,8 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
 {
     ScAttrIterator aIter( pAttrArray, nStartRow, nEndRow );
 
-    SCROW nStart;
-    SCROW nEnd;
+    SCROW nStart = -1;
+    SCROW nEnd = -1;
     SCROW nEditPos = 0;
     SCROW nNextEnd = 0;
 
@@ -1407,11 +1408,11 @@ BOOL ScColumn::GetPrevDataPos(SCROW& rRow) const
     return bFound;
 }
 
-BOOL ScColumn::GetNextDataPos(SCROW& rRow) const        // groesser als rRow
+BOOL ScColumn::GetNextDataPos(SCROW& rRow) const        // greater than rRow
 {
     SCSIZE nIndex;
     if (Search( rRow, nIndex ))
-        ++nIndex;                   // naechste Zelle
+        ++nIndex;                   // next cell
 
     BOOL bMore = ( nIndex < nCount );
     if ( bMore )
@@ -1782,7 +1783,7 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
 //  Mehrfachselektion:
 void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
                                         ScFunctionData& rData,
-                                        const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
+                                        ScFlatBoolRowSegments& rHiddenRows,
                                         BOOL bDoExclude, SCROW nExStartRow, SCROW nExEndRow )
 {
     SCSIZE nIndex;
@@ -1790,7 +1791,8 @@ void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
     while (aDataIter.Next( nIndex ))
     {
         SCROW nRow = pItems[nIndex].nRow;
-        if ( !pRowFlags || !( pRowFlags->GetValue(nRow) & CR_HIDDEN ) )
+        bool bRowHidden = rHiddenRows.getValue(nRow);
+        if ( !bRowHidden )
             if ( !bDoExclude || nRow < nExStartRow || nRow > nExEndRow )
                 lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
     }
@@ -1798,7 +1800,7 @@ void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
 
 //  bei bNoMarked die Mehrfachselektion weglassen
 void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
-                                    const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
+                                   ScFlatBoolRowSegments& rHiddenRows,
                                     SCROW nStartRow, SCROW nEndRow )
 {
     SCSIZE nIndex;
@@ -1806,7 +1808,8 @@ void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
     while ( nIndex<nCount && pItems[nIndex].nRow<=nEndRow )
     {
         SCROW nRow = pItems[nIndex].nRow;
-        if ( !pRowFlags || !( pRowFlags->GetValue(nRow) & CR_HIDDEN ) )
+        bool bRowHidden = rHiddenRows.getValue(nRow);
+        if ( !bRowHidden )
             lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
         ++nIndex;
     }

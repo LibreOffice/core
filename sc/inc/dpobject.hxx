@@ -276,6 +276,7 @@ public:
     virtual ScDataObject*   Clone() const;
 
     ScDPObject* operator[](USHORT nIndex) const {return (ScDPObject*)At(nIndex);}
+    ScDPObject* GetByName(const String& rName) const;
 
     void        DeleteOnTab( SCTAB nTab );
     void        UpdateReference( UpdateRefMode eUpdateRefMode,

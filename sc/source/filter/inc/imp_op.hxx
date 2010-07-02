@@ -97,6 +97,7 @@ protected:
     XclImpStream&           aIn;                // input stream
 
     ScfUInt32Vec            maSheetOffsets;
+    ScRange                 maScOleSize;        /// Visible range if embedded.
 
     NameBuffer*             pExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
     ExcelToSc*              pFormConv;          // Formel-Konverter

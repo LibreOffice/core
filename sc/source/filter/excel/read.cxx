@@ -986,10 +986,10 @@ FltError ImportExcel8::Read( void )
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34    ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
-                    case 0xD3:  bHasBasic = true; break;
+                    case 0xD3:  SetHasBasic(); break;
                     case 0xDE:  Olesize(); break;
-                    case 0x01BA: Codename( TRUE ); break;
 
+                    case EXC_ID_CODENAME:       ReadCodeName( aIn, true );          break;
                     case EXC_ID_USESELFS:       ReadUsesElfs();                     break;
 
                     case EXC_ID2_FONT:          rFontBfr.ReadFont( maStrm );        break;
@@ -1082,6 +1082,8 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID2_DIMENSIONS:
                     case EXC_ID3_DIMENSIONS:    ReadDimensions();                       break;
 
+                    case EXC_ID_CODENAME:       ReadCodeName( aIn, false );             break;
+
                     case 0x0A:                          // EOF          [ 2345   ]
                         eAkt = EXC_STATE_SHEET;
                         aIn.SeekGlobalPosition();         // und zurueck an alte Position
@@ -1097,7 +1099,6 @@ FltError ImportExcel8::Read( void )
                     case 0x9B:  FilterMode(); break;    // FILTERMODE
                     case 0x9D:  AutoFilterInfo(); break;// AUTOFILTERINFO
                     case 0x9E:  AutoFilter(); break;    // AUTOFILTER
-                    case 0x01BA: Codename( FALSE ); break;
                     case 0x0208: Row34(); break;        // ROW          [  34    ]
                     case 0x0021:
                     case 0x0221: Array34(); break;      // ARRAY        [  34    ]
@@ -1192,6 +1193,7 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_SXDI:           rPTableMgr.ReadSxdi( maStrm );      break;
                     case EXC_ID_SXVDEX:         rPTableMgr.ReadSxvdex( maStrm );    break;
                     case EXC_ID_SXEX:           rPTableMgr.ReadSxex( maStrm );      break;
+                    case EXC_ID_SHEETEXT:       rTabViewSett.ReadTabBgColor( maStrm, rPal );    break;
                     case EXC_ID_SXVIEWEX9:      rPTableMgr.ReadSxViewEx9( maStrm ); break;
                 }
             }

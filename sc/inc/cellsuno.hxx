@@ -90,6 +90,7 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 
@@ -1002,7 +1003,8 @@ class ScTableSheetObj : public ScCellRangeObj,
                         public com::sun::star::util::XProtectable,
                         public com::sun::star::sheet::XScenario,
                         public com::sun::star::sheet::XScenarioEnhanced,
-                        public com::sun::star::sheet::XExternalSheetName
+                        public com::sun::star::sheet::XExternalSheetName,
+                        public com::sun::star::document::XEventsSupplier
 {
     friend class ScTableSheetsObj;      // fuer insertByName()
 
@@ -1206,6 +1208,10 @@ public:
     virtual void SAL_CALL   setExternalName( const ::rtl::OUString& aUrl, const ::rtl::OUString& aSheetName )
                                 throw (::com::sun::star::container::ElementExistException,
                                        ::com::sun::star::uno::RuntimeException);
+
+                            // XEventsSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents()
+                                throw (::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet ueberladen wegen Sheet-Properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
