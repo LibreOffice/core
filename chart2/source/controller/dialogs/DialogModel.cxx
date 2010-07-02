@@ -41,6 +41,7 @@
 #include "CommonFunctors.hxx"
 #include "ControllerLockGuard.hxx"
 #include "ChartTypeHelper.hxx"
+#include "ThreeDHelper.hxx"
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -694,14 +695,19 @@ bool DialogModel::setData(
             m_xTemplate->getDataInterpreter());
         if( xInterpreter.is())
         {
+            Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram() );
+            ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
+
             ::std::vector< Reference< XDataSeries > > aSeriesToReUse(
-                DiagramHelper::getDataSeriesFromDiagram( m_xChartDocument->getFirstDiagram()));
+                DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
             applyInterpretedData(
                 xInterpreter->interpretDataSource(
                     xDataSource, rArguments,
                     ContainerToSequence( aSeriesToReUse )),
                 aSeriesToReUse,
                 true /* bSetStyles */);
+
+            ThreeDHelper::setScheme( xDiagram, e3DScheme );
         }
     }
     catch( uno::Exception & ex )
