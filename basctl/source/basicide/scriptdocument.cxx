@@ -1016,8 +1016,11 @@ namespace basctl
 
                 ::rtl::OUString aSearchURL1( RTL_CONSTASCII_USTRINGPARAM( "share/basic" ) );
                 ::rtl::OUString aSearchURL2( RTL_CONSTASCII_USTRINGPARAM( "share/uno_packages" ) );
-                if( aCanonicalFileURL.indexOf( aSearchURL1 ) != -1 || aCanonicalFileURL.indexOf( aSearchURL2 ) != -1 )
-                    bIsShared = true;
+                ::rtl::OUString aSearchURL3( RTL_CONSTASCII_USTRINGPARAM( "share/extensions" ) );
+                if( aCanonicalFileURL.indexOf( aSearchURL1 ) != -1 ||
+                    aCanonicalFileURL.indexOf( aSearchURL2 ) != -1 ||
+                    aCanonicalFileURL.indexOf( aSearchURL3 ) != -1 )
+                        bIsShared = true;
             }
         }
         catch( const Exception& )
