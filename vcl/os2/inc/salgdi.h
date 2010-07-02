@@ -162,7 +162,7 @@ protected:
     virtual void        drawPolygon( ULONG nPoints, const SalPoint* pPtAry );
     virtual void        drawPolyPolygon( ULONG nPoly, const ULONG* pPoints, PCONSTSALPOINT* pPtAry );
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin);
+    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin );
     virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry );
     virtual sal_Bool    drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry );
