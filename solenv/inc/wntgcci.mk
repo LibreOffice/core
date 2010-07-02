@@ -110,7 +110,7 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 CYGLIB=$(LIB:s/;/ -L/)
-LINKFLAGS=-nostdlib -Wl,--enable-stdcall-fixup,--enable-runtime-pseudo-reloc -L$(CYGLIB)
+LINKFLAGS=-nostdlib -Wl,--enable-stdcall-fixup,--enable-runtime-pseudo-reloc-v2 -L$(CYGLIB)
 .IF "$(USE_MINGW)"=="cygwin"
 MINGWLIBDIR=$(COMPATH)$/lib$/mingw
 .ELSE
