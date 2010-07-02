@@ -119,6 +119,8 @@ function hIsNamedDocLoaded( cFileName as string ) as boolean
 
     if ( hUseAsyncSlot( "FileProperties" ) <> RC_FAILURE ) then
 
+        kontext
+        active.setpage(tabdokument)
         kontext "TabDokument"
         if ( TabDokument.exists( 2 ) ) then
 
