@@ -1,4 +1,4 @@
- /*************************************************************************
+/*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -30,6 +30,8 @@
 #include <basic/sbx.hxx>
 #include "sbcomp.hxx"
 
+SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
+
 // Deklaration einer Variablen
 // Bei Fehlern wird bis zum Komma oder Newline geparst.
 // Returnwert: eine neue Instanz, die eingefuegt und dann geloescht wird.
@@ -37,6 +39,12 @@
 
 SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, BOOL bStatic, BOOL bConst )
 {
+    bool bWithEvents = false;
+    if( Peek() == WITHEVENTS )
+    {
+        Next();
+        bWithEvents = true;
+    }
     if( !TestSymbol() ) return NULL;
     SbxDataType t = eScanType;
     SbiSymDef* pDef = bConst ? new SbiConstDef( aSym ) : new SbiSymDef( aSym );
@@ -47,6 +55,8 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, BOOL bStatic, BOOL bConst )
     pDef->SetType( t );
     if( bStatic )
         pDef->SetStatic();
+    if( bWithEvents )
+        pDef->SetWithEvents();
     TypeDecl( *pDef );
     if( !ppDim && pDim )
     {
@@ -107,8 +117,10 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
                         Next();
                         SbiConstExpression aSize( this );
                         nSize = aSize.GetShortValue();
-                        if( nSize < 0 )
+                        if( nSize < 0 || (bVBASupportOn && nSize <= 0) )
                             Error( SbERR_OUT_OF_RANGE );
+                        else
+                            rDef.SetFixedStringLength( nSize );
                     }
                 }
                 break;
@@ -209,7 +221,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
 
     // #110004 It can also be a sub/function
     if( !bConst && (eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ||
-                    eCurTok == STATIC || eCurTok == ENUM || eCurTok == DECLARE) )
+                    eCurTok == STATIC || eCurTok == ENUM || eCurTok == DECLARE || eCurTok == TYPE) )
     {
         // Next token is read here, because !bConst
         bool bPrivate = ( eFirstTok == PRIVATE );
@@ -242,6 +254,13 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         {
             Next();
             DefDeclare( bPrivate );
+            return;
+        }
+        // #i109049
+        else if( eCurTok == TYPE )
+        {
+            Next();
+            DefType( bPrivate );
             return;
         }
     }
@@ -349,9 +368,15 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                                 break;
                 default:        eOp2 = _LOCAL;
             }
-            aGen.Gen(
-                eOp2, pDef->GetId(),
-                sal::static_int_cast< UINT16 >( pDef->GetType() ) );
+            UINT32 nOpnd2 = sal::static_int_cast< UINT16 >( pDef->GetType() );
+            if( pDef->IsWithEvents() )
+                nOpnd2 |= SBX_TYPE_WITH_EVENTS_FLAG;
+
+            short nFixedStringLength = pDef->GetFixedStringLength();
+            if( nFixedStringLength >= 0 )
+                nOpnd2 |= (SBX_FIXED_LEN_STRING_FLAG + (UINT32(nFixedStringLength) << 17));     // len = all bits above 0x10000
+
+            aGen.Gen( eOp2, pDef->GetId(), nOpnd2 );
         }
 
         // Initialisierung fuer selbstdefinierte Datentypen
@@ -473,7 +498,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         // d.h. pPool muss immer am Schleifen-Ende zurueckgesetzt werden.
         // auch bei break
         pPool = pOldPool;
-        continue;       // MyBreak Ã¼berspingen
+        continue;       // MyBreak überspingen
     MyBreak:
         pPool = pOldPool;
         break;
@@ -506,18 +531,7 @@ void SbiParser::Erase()
 {
     while( !bAbort )
     {
-        if( !TestSymbol() ) return;
-        String aName( aSym );
-        SbxDataType eType = eScanType;
-        SbiSymDef* pDef = pPool->Find( aName );
-        if( !pDef )
-        {
-            if( bExplicit )
-                Error( SbERR_UNDEF_VAR, aName );
-            pDef = pPool->AddSym( aName );
-            pDef->SetType( eType );
-        }
-        SbiExpression aExpr( this, *pDef );
+        SbiExpression aExpr( this, SbLVALUE );
         aExpr.Gen();
         aGen.Gen( _ERASE );
         if( !TestComma() ) break;
@@ -576,12 +590,14 @@ void SbiParser::DefType( BOOL bPrivate )
         }
         if( pElem )
         {
-            SbxArray *pTypeMembers = pType -> GetProperties();
-            if (pTypeMembers -> Find (pElem->GetName(),SbxCLASS_DONTCARE))
+            SbxArray *pTypeMembers = pType->GetProperties();
+            String aElemName = pElem->GetName();
+            if( pTypeMembers->Find( aElemName, SbxCLASS_DONTCARE) )
                 Error (SbERR_VAR_DEFINED);
             else
             {
-                SbxProperty *pTypeElem = new SbxProperty (pElem->GetName(),pElem->GetType());
+                SbxDataType eElemType = pElem->GetType();
+                SbxProperty *pTypeElem = new SbxProperty( aElemName, eElemType );
                 if( pDim )
                 {
                     SbxDimArray* pArray = new SbxDimArray( pElem->GetType() );
@@ -617,6 +633,21 @@ void SbiParser::DefType( BOOL bPrivate )
                     pTypeElem->ResetFlag( SBX_FIXED );
                     pTypeElem->PutObject( pArray );
                     pTypeElem->SetFlags( nSavFlags );
+                }
+                // Nested user type?
+                if( eElemType == SbxOBJECT )
+                {
+                    USHORT nElemTypeId = pElem->GetTypeId();
+                    if( nElemTypeId != 0 )
+                    {
+                        String aTypeName( aGblStrings.Find( nElemTypeId ) );
+                        SbxObject* pTypeObj = static_cast< SbxObject* >( rTypeArray->Find( aTypeName, SbxCLASS_OBJECT ) );
+                        if( pTypeObj != NULL )
+                        {
+                            SbxObject* pCloneObj = cloneTypeObjectImpl( *pTypeObj );
+                            pTypeElem->PutObject( pCloneObj );
+                        }
+                    }
                 }
                 delete pDim;
                 pTypeMembers->Insert( pTypeElem, pTypeMembers->Count() );

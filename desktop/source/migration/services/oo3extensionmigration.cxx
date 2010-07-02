@@ -43,8 +43,6 @@
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 
-#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
-#include <com/sun/star/deployment/XPackageManagerFactory.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
@@ -52,6 +50,8 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -332,18 +332,17 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
 
 bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir )
 {
-    if ( !m_xPackageManager.is() )
+    if ( !m_xExtensionManager.is() )
     {
         try
         {
-            m_xPackageManager = deployment::thePackageManagerFactory::get( m_ctx )->getPackageManager(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "user" )) );
+            m_xExtensionManager = deployment::ExtensionManager::get( m_ctx );
         }
         catch ( ucb::CommandFailedException & ){}
         catch ( uno::RuntimeException & ) {}
     }
 
-    if ( m_xPackageManager.is() )
+    if ( m_xExtensionManager.is() )
     {
         try
         {
@@ -353,7 +352,9 @@ bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir 
                 static_cast< cppu::OWeakObject* >( pCmdEnv ), uno::UNO_QUERY );
             uno::Reference< task::XAbortChannel > xAbortChannel;
             uno::Reference< deployment::XPackage > xPackage =
-                m_xPackageManager->addPackage( sSourceDir, ::rtl::OUString(), xAbortChannel, xCmdEnv );
+                m_xExtensionManager->addExtension(
+                    sSourceDir, uno::Sequence<beans::NamedValue>(),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), xAbortChannel, xCmdEnv );
 
             if ( xPackage.is() )
                 return true;

@@ -131,6 +131,8 @@ public:
     , m_bResizeNoScale( sal_False )
     {}
 
+    ~SfxInPlaceClient_Impl();
+
     void SizeHasChanged();
     DECL_LINK           (TimerHdl, Timer*);
     uno::Reference < frame::XFrame > GetFrame() const;
@@ -167,6 +169,10 @@ public:
     virtual void SAL_CALL stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException);
 };
+
+SfxInPlaceClient_Impl::~SfxInPlaceClient_Impl()
+{
+}
 
 void SAL_CALL SfxInPlaceClient_Impl::changingState(
     const ::com::sun::star::lang::EventObject& /*aEvent*/,
@@ -645,6 +651,7 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, Window *pDraw, sal
     m_pViewSh( pViewShell ),
     m_pEditWin( pDraw )
 {
+    m_pImp->acquire();
     m_pImp->m_pClient = this;
     m_pImp->m_nAspect = nAspect;
     m_pImp->m_aScaleWidth = m_pImp->m_aScaleHeight = Fraction(1,1);
@@ -668,6 +675,7 @@ SfxInPlaceClient::~SfxInPlaceClient()
 
     // the next call will destroy m_pImp if no other reference to it exists
     m_pImp->m_xClient = uno::Reference < embed::XEmbeddedClient >();
+    m_pImp->release();
 
     // TODO/LATER:
     // the class is not intended to be used in multithreaded environment;

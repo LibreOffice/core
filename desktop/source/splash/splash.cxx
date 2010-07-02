@@ -135,14 +135,21 @@ void SAL_CALL SplashScreen::reset()
     }
 }
 
-void SAL_CALL SplashScreen::setText(const OUString&)
+void SAL_CALL SplashScreen::setText(const OUString& rText)
     throw (RuntimeException)
 {
-    if (_bVisible && !_bProgressEnd) {
-        if ( _eBitmapMode == BM_FULLSCREEN )
-            ShowFullScreenMode( TRUE );
-        Show();
-        Flush();
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    if ( _sProgressText != rText )
+    {
+        _sProgressText = rText;
+
+        if (_bVisible && !_bProgressEnd)
+        {
+            if ( _eBitmapMode == BM_FULLSCREEN )
+                ShowFullScreenMode( TRUE );
+            Show();
+            updateStatus();
+        }
     }
 }
 
@@ -647,7 +654,7 @@ void SplashScreen::Paint( const Rectangle&)
         }
 
         if( (bNativeOK = DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
-                                                     CTRL_STATE_ENABLED, aValue, rtl::OUString() )) != FALSE )
+                                            CTRL_STATE_ENABLED, aValue, _sProgressText )) != FALSE )
         {
             return;
         }
@@ -668,10 +675,8 @@ void SplashScreen::Paint( const Rectangle&)
         _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth, _tly+_barheight));
         _vdev.SetFillColor( _cProgressBarColor );
         _vdev.SetLineColor();
-        Rectangle aRect(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace);
-        _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace,
-            _tlx+_barspace+length, _tly+_barheight-_barspace));
-
+        _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace));
+        _vdev.DrawText( Rectangle(_tlx, _tly+_barheight+5, _tlx+_barwidth, _tly+_barheight+5+20), _sProgressText, TEXT_DRAW_CENTER );
     }
     Size aSize =  GetOutputSizePixel();
     Size bSize =  _vdev.GetOutputSizePixel();

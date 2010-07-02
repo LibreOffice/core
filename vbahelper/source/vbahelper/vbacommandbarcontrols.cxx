@@ -34,10 +34,10 @@ typedef ::cppu::WeakImplHelper1< container::XEnumeration > CommandBarControlEnum
 class CommandBarControlEnumeration : public CommandBarControlEnumeration_BASE
 {
     //uno::Reference< uno::XComponentContext > m_xContext;
-    ScVbaCommandBarControls* m_pCommandBarControls;
+    CommandBarControls_BASE* m_pCommandBarControls;
     sal_Int32 m_nCurrentPosition;
 public:
-    CommandBarControlEnumeration( ScVbaCommandBarControls* pCommandBarControls ) : m_pCommandBarControls( pCommandBarControls ), m_nCurrentPosition( 0 ) {}
+    CommandBarControlEnumeration( CommandBarControls_BASE* pCommandBarControls ) : m_pCommandBarControls( pCommandBarControls ), m_nCurrentPosition( 0 ) {}
     virtual sal_Bool SAL_CALL hasMoreElements() throw ( uno::RuntimeException )
     {
         if( m_nCurrentPosition < m_pCommandBarControls->getCount() )
@@ -140,7 +140,7 @@ ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*
     {
         rtl::OUString sName;
         aIndex >>= sName;
-        nPosition = VbaCommandBarHelper::findControlByName( m_xIndexAccess, sName );
+        nPosition = VbaCommandBarHelper::findControlByName( m_xIndexAccess, sName, m_bIsMenu );
     }
     else
     {
@@ -246,3 +246,75 @@ ScVbaCommandBarControls::getServiceNames()
     return aServiceNames;
 }
 
+// ============================================================================
+
+class VbaDummyIndexAccess : public ::cppu::WeakImplHelper1< container::XIndexAccess >
+{
+public:
+    inline VbaDummyIndexAccess() {}
+    // XIndexAccess
+    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
+        { return 0; }
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 /*Index*/ ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
+        { throw lang::IndexOutOfBoundsException(); }
+    // XElementAccess
+    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
+        { return XCommandBarControl::static_type( 0 ); }
+    virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException)
+        { return false; }
+};
+
+// ----------------------------------------------------------------------------
+
+VbaDummyCommandBarControls::VbaDummyCommandBarControls(
+        const uno::Reference< XHelperInterface >& xParent,
+        const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException) :
+    CommandBarControls_BASE( xParent, xContext, new VbaDummyIndexAccess )
+{
+}
+
+// XEnumerationAccess
+uno::Type SAL_CALL VbaDummyCommandBarControls::getElementType() throw ( uno::RuntimeException )
+{
+    return XCommandBarControl::static_type( 0 );
+}
+
+uno::Reference< container::XEnumeration > VbaDummyCommandBarControls::createEnumeration() throw ( uno::RuntimeException )
+{
+    return uno::Reference< container::XEnumeration >( new CommandBarControlEnumeration( this ) );
+}
+
+uno::Any VbaDummyCommandBarControls::createCollectionObject( const uno::Any& /*aSource*/ )
+{
+    return uno::Any( uno::Reference< XCommandBarControl >() );
+}
+
+// Methods
+uno::Any SAL_CALL VbaDummyCommandBarControls::Item( const uno::Any& /*aIndex*/, const uno::Any& /*aIndex*/ ) throw (uno::RuntimeException)
+{
+    return uno::Any( uno::Reference< XCommandBarControl >() );
+}
+
+uno::Reference< XCommandBarControl > SAL_CALL VbaDummyCommandBarControls::Add(
+        const uno::Any& /*Type*/, const uno::Any& /*Id*/, const uno::Any& /*Parameter*/, const uno::Any& /*Before*/, const uno::Any& /*Temporary*/ ) throw (script::BasicErrorException, uno::RuntimeException)
+{
+    return uno::Reference< XCommandBarControl >();
+}
+
+// XHelperInterface
+rtl::OUString& VbaDummyCommandBarControls::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaDummyCommandBarControls") );
+    return sImplName;
+}
+
+uno::Sequence<rtl::OUString> VbaDummyCommandBarControls::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.CommandBarControls" ) );
+    }
+    return aServiceNames;
+}
