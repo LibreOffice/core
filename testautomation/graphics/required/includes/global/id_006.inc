@@ -31,7 +31,6 @@
 '*
 '\**********************************************************************************
 
-'------------------------------------------------------------------------------
 sub id_Tools
     printLog "---------    id_006    ----------"
     call tiToolsSpellchecking
@@ -199,10 +198,8 @@ testcase tiToolsThesaurus
     end if
     if FileExists ( sFileName ) = FALSE then
         warnlog "The language-file was not found or accessible! The test ends."
-        goto endsub
-    end if
-    Call hFileOpen (sFileName)
-        
+    else
+        Call hFileOpen (sFileName)
         sleep (2)
     
         hTypeKeys "<TAB><RETURN>"
@@ -239,11 +236,8 @@ testcase tiToolsThesaurus
         sleep 1
         '/// close application ///'
         Call hCloseDocument
-    else
-        goto endsub
     endif
     Call hCloseDocument
-
 endcase
 '-------------------------------------------------------------------------------
 testcase tiToolsHyphenation
@@ -519,4 +513,4 @@ testcase tiToolsEyedropper
     '/// close application ///'
     Call hCloseDocument
 endcase
-'-------------------------------------------------------------------------------
+
