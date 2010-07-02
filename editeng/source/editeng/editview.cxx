@@ -1265,7 +1265,6 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             String aDicName ( pInsertMenu->GetItemText(nId) );
 
             uno::Reference< linguistic2::XDictionary >      xDic;
-            uno::Reference< linguistic2::XDictionaryList >  xDicList( SvxGetDictionaryList() );
             if (xDicList.is())
                 xDic = xDicList->getDictionaryByName( aDicName );
 
