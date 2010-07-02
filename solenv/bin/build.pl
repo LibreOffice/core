@@ -1132,6 +1132,7 @@ sub get_commands {
     while ($arg = pop(@dmake_args)) {
         $dmake .= ' '.$arg;
     };
+    $dmake .= ' verbose=true' if ($html);
 };
 
 #
