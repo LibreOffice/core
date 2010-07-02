@@ -1202,10 +1202,10 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
             if( it != lang->second.aSubstAttributes.end())
             {
                 const FontNameAttr& rFoundAttr = *it;
-        // a search for "abcblack" may match with an entry for "abc"
-        // the reverse is not a good idea (e.g. #i112731# alba->albani)
-                if( rFoundAttr.Name.Len() < aSearchFont.Len() )
-                    if( aSearchFont.CompareTo( rFoundAttr.Name, aSearchFont.Len() ) == COMPARE_EQUAL )
+                // a search for "abcblack" may match with an entry for "abc"
+                // the reverse is not a good idea (e.g. #i112731# alba->albani)
+                if( rFoundAttr.Name.Len() <= aSearchFont.Len() )
+                    if( aSearchFont.CompareTo( rFoundAttr.Name, rFoundAttr.Name.Len() ) == COMPARE_EQUAL )
                         return &rFoundAttr;
             }
         }
