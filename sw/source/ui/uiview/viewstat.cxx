@@ -269,12 +269,10 @@ void SwView::GetState(SfxItemSet &rSet)
             }
             break;
             case FN_REDLINE_ON:
-                rSet.Put( SfxBoolItem( nWhich, (pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0 ) );
-                break;
+                rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording() ) );
+            break;
             case FN_REDLINE_PROTECT :
-            {
-                rSet.Put( SfxBoolItem( nWhich, pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0 ) );
-            }
+                rSet.Put( SfxBoolItem( nWhich, GetDocShell()->HasChangeRecordProtection() ) );
             break;
             case FN_REDLINE_SHOW:
             {
