@@ -106,21 +106,19 @@ public final class OfficeConnection {
         boolean desktopTerminated = true;
         if (context != null)
         {
-            XMultiComponentFactory xMSF = context.getServiceManager();
-            if (xMSF != null)
-            {
-                XDesktop desktop = UnoRuntime.queryInterface(
-                    XDesktop.class,
-                    xMSF.createInstanceWithContext(
-                        "com.sun.star.frame.Desktop", context));
-                context = null;
-                try {
-                    desktopTerminated = desktop.terminate();
-                } catch (DisposedException e) {}
-                    // it appears that DisposedExceptions can already happen while
-                    // receiving the response of the terminate call
-                desktop = null;
-            }
+            final XMultiComponentFactory xMSF = context.getServiceManager();
+            assertNotNull("Can't get ServiceManager.", xMSF);
+            XDesktop desktop = UnoRuntime.queryInterface(
+                XDesktop.class,
+                xMSF.createInstanceWithContext(
+                    "com.sun.star.frame.Desktop", context));
+            context = null;
+            try {
+                desktopTerminated = desktop.terminate();
+            } catch (DisposedException e) {}
+                // it appears that DisposedExceptions can already happen while
+                // receiving the response of the terminate call
+            desktop = null;
         }
         else if (process != null)
         {

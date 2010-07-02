@@ -27,7 +27,7 @@
 
 package org.openoffice.test;
 
-final public class Argument {
+public final class Argument {
     public static String get(String name) {
         return System.getProperty("org.openoffice.test.arg." + name);
     }

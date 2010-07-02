@@ -30,8 +30,7 @@
 package org.openoffice.test;
 
 /**
- *
- * @author ll93751
+ * Helper Functions for File handling
  */
 public class FileHelper
 {
