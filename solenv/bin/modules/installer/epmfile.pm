@@ -2308,6 +2308,54 @@ sub determine_rpm_version
     return $rpmversion;
 }
 
+####################################################
+# Writing some info about rpm into the log file
+####################################################
+
+sub log_rpm_info
+{
+    my $systemcall = "";
+    my $infoline = "";
+
+    $infoline = "\nLogging rpmrc content using --showrc\n\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ( $installer::globals::rpm ne "" )
+    {
+        $systemcall = "$installer::globals::rpm --showrc |";
+    }
+    else
+    {
+        $systemcall = "rpm --showrc |";
+    }
+
+    my @fullrpmout = ();
+
+    open (RPM, "$systemcall");
+    while (<RPM>) {push(@fullrpmout, $_); }
+    close (RPM);
+
+    if ( $#fullrpmout > -1 )
+    {
+        for ( my $i = 0; $i <= $#fullrpmout; $i++ )
+        {
+            my $rpmout = $fullrpmout[$i];
+            $rpmout =~ s/\s*$//g;
+
+            $infoline = "$rpmout\n";
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+    else
+    {
+        $infoline = "Problem in systemcall: $systemcall : No return value\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    $infoline = "End of logging rpmrc\n\n";
+    push( @installer::globals::logfileinfo, $infoline);
+}
+
 #################################################
 # Systemcall to start the packaging process
 #################################################
@@ -2558,6 +2606,12 @@ sub create_packages_without_epm
             my $buildroot = $dir . "/" . $epmdir . "buildroot/";
             $buildrootstring = "--buildroot=$buildroot";
             mkdir($buildroot = $dir . "/" . $epmdir . "BUILD/");
+        }
+
+        if ( ! $installer::globals::rpminfologged )
+        {
+            log_rpm_info();
+            $installer::globals::rpminfologged = 1;
         }
 
         my $systemcall = "$rpmcommand -bb --define \"_unpackaged_files_terminate_build  0\" $specfilename --target $target $buildrootstring 2\>\&1 |";
