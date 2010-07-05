@@ -257,6 +257,8 @@ MaxFieldCount
 MaxTextLen
 MediaType
 MinorTickmarks
+MirroredX
+MirroredY
 MissingValueTreatment
 Model
 MultiLine
