@@ -690,13 +690,13 @@ void SalGraphics::mirror( ControlType , const ImplControlValue& rVal, const Outp
     {
         case CTRL_SLIDER:
         {
-            SliderValue* pSlVal = reinterpret_cast<SliderValue*>(const_cast<ImplControlValue*>(&rVal));
+            SliderValue* pSlVal = static_cast<SliderValue*>(const_cast<ImplControlValue*>(&rVal));
             mirror(pSlVal->maThumbRect,pOutDev,bBack);
         }
         break;
         case CTRL_SCROLLBAR:
         {
-            ScrollbarValue* pScVal = reinterpret_cast<ScrollbarValue*>(const_cast<ImplControlValue*>(&rVal));
+            ScrollbarValue* pScVal = static_cast<ScrollbarValue*>(const_cast<ImplControlValue*>(&rVal));
             mirror(pScVal->maThumbRect,pOutDev,bBack);
             mirror(pScVal->maButton1Rect,pOutDev,bBack);
             mirror(pScVal->maButton2Rect,pOutDev,bBack);
@@ -705,14 +705,14 @@ void SalGraphics::mirror( ControlType , const ImplControlValue& rVal, const Outp
         case CTRL_SPINBOX:
         case CTRL_SPINBUTTONS:
         {
-            SpinbuttonValue* pSpVal = reinterpret_cast<SpinbuttonValue*>(const_cast<ImplControlValue*>(&rVal));
+            SpinbuttonValue* pSpVal = static_cast<SpinbuttonValue*>(const_cast<ImplControlValue*>(&rVal));
             mirror(pSpVal->maUpperRect,pOutDev,bBack);
             mirror(pSpVal->maLowerRect,pOutDev,bBack);
         }
         break;
         case CTRL_TOOLBAR:
         {
-            ToolbarValue* pTVal = reinterpret_cast<ToolbarValue*>(const_cast<ImplControlValue*>(&rVal));
+            ToolbarValue* pTVal = static_cast<ToolbarValue*>(const_cast<ImplControlValue*>(&rVal));
             mirror(pTVal->maGripRect,pOutDev,bBack);
         }
         break;
