@@ -684,7 +684,7 @@ BOOL SalGraphics::HitTestNativeControl( ControlType nType, ControlPart nPart, co
         return hitTestNativeControl( nType, nPart, rControlRegion, aPos, rIsInside );
 }
 
-void SalGraphics::mirror( ControlType nType, const ImplControlValue& rVal, const OutputDevice* pOutDev, bool bBack ) const
+void SalGraphics::mirror( ControlType , const ImplControlValue& rVal, const OutputDevice* pOutDev, bool bBack ) const
 {
     switch( rVal.getType() )
     {
