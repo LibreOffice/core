@@ -481,6 +481,9 @@ void ToolbarMenu::implInit(const Reference< XFrame >& rFrame)
 {
     mpImpl = new ToolbarMenu_Impl( *this, rFrame );
 
+    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+    SetControlBackground( rStyleSettings.GetMenuColor() );
+
     initWindow();
 
     Window* pWindow = GetTopMostParentSystemWindow( this );
@@ -637,8 +640,6 @@ const Image& ToolbarMenu::getEntryImage( int nEntryId ) const
 void ToolbarMenu::initWindow()
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-
-    SetControlBackground( GetSettings().GetStyleSettings().GetFaceGradientColor() );
 
     SetPointFont( rStyleSettings.GetMenuFont() );
     SetBackground( Wallpaper( GetControlBackground() ) );

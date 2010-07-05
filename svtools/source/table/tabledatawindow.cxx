@@ -58,14 +58,33 @@ namespace svt { namespace table
     {
         m_rTableControl.doPaintContent( rUpdateRect );
     }
-
+    //--------------------------------------------------------------------
+    void TableDataWindow::SetBackground( const Wallpaper& rColor )
+    {
+        Window::SetBackground( rColor );
+    }
+    //--------------------------------------------------------------------
+    void TableDataWindow::SetControlBackground( const Color& rColor )
+    {
+        Window::SetControlBackground( rColor );
+    }
+    //--------------------------------------------------------------------
+    void TableDataWindow::SetBackground()
+    {
+        Window::SetBackground();
+    }
+    //--------------------------------------------------------------------
+    void TableDataWindow::SetControlBackground()
+    {
+        Window::SetControlBackground();
+    }
     //--------------------------------------------------------------------
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )
     {
         Point aPoint = rMEvt.GetPosPixel();
         if ( !m_rTableControl.getInputHandler()->MouseMove( m_rTableControl, rMEvt ) )
         {
-            if(m_rTableControl.getCurrentRow(aPoint)>=0 )
+            if(m_rTableControl.getCurrentRow(aPoint)>=0 && m_rTableControl.isTooltipActive() )
             {
                 SetPointer(POINTER_ARROW);
                 rtl::OUString& rHelpText = m_rTableControl.setTooltip(aPoint);
@@ -102,12 +121,9 @@ namespace svt { namespace table
                     m_nRowAlreadySelected = nCurRow;
                     m_aSelectHdl.Call( NULL );
                 }
-                else
-                    m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
             }
-            else
-                m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
         }
+        m_aMouseButtonDownHdl.Call((MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().LoseFocus();
     }
     //--------------------------------------------------------------------
@@ -115,8 +131,7 @@ namespace svt { namespace table
     {
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
             Window::MouseButtonUp( rMEvt );
-        else
-            m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
+        m_aMouseButtonUpHdl.Call((MouseEvent*) &rMEvt);
         m_rTableControl.getAntiImpl().GetFocus();
     }
     //--------------------------------------------------------------------

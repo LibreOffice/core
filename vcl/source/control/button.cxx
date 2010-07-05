@@ -1187,7 +1187,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
             aSize.Width()      -= ( 5 + nSymbolSize );
 
             ImplDrawAlignedImage( pDev, aPos, aSize, bLayout,
-                                  1, nDrawFlags, nTextStyle );
+                                  1, nDrawFlags, nTextStyle, NULL, (GetStyle() & WB_FLATBUTTON) != 0 );
         }
         else
             ImplCalcSymbolRect( aInRect );
@@ -3688,11 +3688,14 @@ void CheckBox::ImplCheck()
     else
         eNewState = STATE_NOCHECK;
     meState = eNewState;
-    ImplInvalidateOrDrawCheckBoxState();
 
     ImplDelData aDelData;
     ImplAddDel( &aDelData );
-    Toggle();
+    if( (GetStyle() & WB_EARLYTOGGLE) )
+        Toggle();
+    ImplInvalidateOrDrawCheckBoxState();
+    if( ! (GetStyle() & WB_EARLYTOGGLE) )
+        Toggle();
     if ( aDelData.IsDelete() )
         return;
     ImplRemoveDel( &aDelData );
