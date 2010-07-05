@@ -372,12 +372,12 @@ class VCL_DLLPUBLIC TabitemValue : public ImplControlValue
         };
         virtual ~TabitemValue();
 
-        BOOL isLeftAligned()  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
-        BOOL isRightAligned() { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
-        BOOL isBothAligned()  { return isLeftAligned() && isRightAligned(); }
-        BOOL isNotAligned()   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
-        BOOL isFirst()        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
-        BOOL isLast()         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
+        BOOL isLeftAligned() const  { return (mnAlignment & TABITEM_LEFTALIGNED) != 0; }
+        BOOL isRightAligned() const { return (mnAlignment & TABITEM_RIGHTALIGNED) != 0; }
+        BOOL isBothAligned() const  { return isLeftAligned() && isRightAligned(); }
+        BOOL isNotAligned() const   { return (mnAlignment & (TABITEM_LEFTALIGNED | TABITEM_RIGHTALIGNED)) == 0; }
+        BOOL isFirst() const        { return (mnAlignment & TABITEM_FIRST_IN_GROUP) != 0; }
+        BOOL isLast() const         { return (mnAlignment & TABITEM_LAST_IN_GROUP) != 0; }
 };
 
 /* SpinbuttonValue:
