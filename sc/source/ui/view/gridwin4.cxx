@@ -1208,14 +1208,14 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /*nY1*/, SCCOL nX2, SCROW /*nY2
 {
     aComboButton.SetOutputDevice( pContentDev );
 
-    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY());
+    ScDocument* pDoc = pViewData->GetDocument();
+    ScDPFieldButton aCellBtn(pContentDev, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY(), pDoc);
 
     SCCOL nCol;
     SCROW nRow;
     SCSIZE nArrY;
     SCSIZE nQuery;
     SCTAB           nTab = pViewData->GetTabNo();
-    ScDocument*     pDoc = pViewData->GetDocument();
     ScDBData*       pDBData = NULL;
     ScQueryParam*   pQueryParam = NULL;
 
