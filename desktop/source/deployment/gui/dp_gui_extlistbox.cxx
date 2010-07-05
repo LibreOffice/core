@@ -44,6 +44,10 @@
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
+#define USER_PACKAGE_MANAGER    OUSTR("user")
+#define SHARED_PACKAGE_MANAGER  OUSTR("shared")
+#define BUNDLED_PACKAGE_MANAGER OUSTR("bundled")
+
 using namespace ::com::sun::star;
 
 namespace dp_gui {
@@ -52,19 +56,20 @@ namespace dp_gui {
 //                          struct Entry_Impl
 //------------------------------------------------------------------------------
 Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
-                        const uno::Reference< deployment::XPackageManager > &xPackageManager,
-                        PackageState eState ) :
+                        const PackageState eState, const bool bReadOnly ) :
     m_bActive( false ),
-    m_bLocked( false ),
+    m_bLocked( bReadOnly ),
     m_bHasOptions( false ),
+    m_bUser( false ),
     m_bShared( false ),
     m_bNew( false ),
     m_bChecked( false ),
     m_bMissingDeps( false ),
+    m_bHasButtons( false ),
+    m_bMissingLic( false ),
     m_eState( eState ),
     m_pPublisher( NULL ),
-    m_xPackage( xPackage ),
-    m_xPackageManager( xPackageManager )
+    m_xPackage( xPackage )
 {
     m_sTitle = xPackage->getDisplayName();
     m_sVersion = xPackage->getVersion();
@@ -85,8 +90,6 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
     else
         m_aIconHC = m_aIcon;
 
-    m_bLocked = m_xPackageManager->isReadOnly();
-
     if ( eState == AMBIGUOUS )
         m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
     else if ( eState == NOT_REGISTERED )
@@ -106,14 +109,11 @@ StringCompare Entry_Impl::CompareTo( const CollatorWrapper *pCollator, const TEn
         eCompare = m_sVersion.CompareTo( pEntry->m_sVersion );
         if ( eCompare == COMPARE_EQUAL )
         {
-            if ( m_xPackageManager != pEntry->m_xPackageManager )
-            {
-                sal_Int32 nCompare = m_xPackageManager->getContext().compareTo( pEntry->m_xPackageManager->getContext() );
-                if ( nCompare < 0 )
-                    eCompare = COMPARE_LESS;
-                else if ( nCompare > 0 )
-                    eCompare = COMPARE_GREATER;
-            }
+            sal_Int32 nCompare = m_xPackage->getRepositoryName().compareTo( pEntry->m_xPackage->getRepositoryName() );
+            if ( nCompare < 0 )
+                eCompare = COMPARE_LESS;
+            else if ( nCompare > 0 )
+                eCompare = COMPARE_GREATER;
         }
     }
     return eCompare;
@@ -373,6 +373,8 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     aSize.Height() = 10000;
 
     rtl::OUString aText( m_vEntries[ nPos ]->m_sErrorText );
+    if ( aText.getLength() )
+        aText += OUSTR("\n");
     aText += m_vEntries[ nPos ]->m_sDescription;
 
     Rectangle aRect = GetTextRect( Rectangle( Point(), aSize ), aText,
@@ -382,7 +384,10 @@ void ExtensionBox_Impl::CalcActiveHeight( const long nPos )
     if ( aTextHeight < m_nStdHeight )
         aTextHeight = m_nStdHeight;
 
-    m_nActiveHeight = aTextHeight + m_nExtraHeight;
+    if ( m_vEntries[ nPos ]->m_bHasButtons )
+        m_nActiveHeight = aTextHeight + m_nExtraHeight;
+    else
+        m_nActiveHeight = aTextHeight + 2;
 }
 
 //------------------------------------------------------------------------------
@@ -599,7 +604,12 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     aPos.Y() += aTextHeight;
     if ( pEntry->m_bActive )
     {
-        DrawText( Rectangle( aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - m_nExtraHeight ),
+        long nExtraHeight = 0;
+
+        if ( pEntry->m_bHasButtons )
+            nExtraHeight = m_nExtraHeight;
+
+        DrawText( Rectangle( aPos.X(), aPos.Y(), rRect.Right(), rRect.Bottom() - nExtraHeight ),
                   sDescription, TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
     }
     else
@@ -619,7 +629,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     }
 
     // Draw status icons
-    if ( pEntry->m_bShared )
+    if ( !pEntry->m_bUser )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SMALL_ICON_SIZE), TOP_OFFSET );
         if ( pEntry->m_bLocked )
@@ -627,7 +637,7 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
         else
             DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aSharedImageHC : m_aSharedImage );
     }
-    if ( ( pEntry->m_eState == AMBIGUOUS ) || pEntry->m_bMissingDeps )
+    if ( ( pEntry->m_eState == AMBIGUOUS ) || pEntry->m_bMissingDeps || pEntry->m_bMissingLic )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2*SMALL_ICON_SIZE), TOP_OFFSET );
         DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aWarningImageHC : m_aWarningImage );
@@ -946,29 +956,24 @@ bool ExtensionBox_Impl::FindEntryPos( const TEntry_Impl pEntry, const long nStar
 
 //------------------------------------------------------------------------------
 long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &xPackage,
-                                  const uno::Reference< deployment::XPackageManager > &xPackageManager )
+                                  bool bLicenseMissing )
 {
-    long nPos = 0;
+    long         nPos = 0;
     PackageState eState = m_pManager->getPackageState( xPackage );
+    bool         bLocked = m_pManager->isReadOnly( xPackage );
 
-    TEntry_Impl pEntry( new Entry_Impl( xPackage, xPackageManager, eState ) );
+    TEntry_Impl pEntry( new Entry_Impl( xPackage, eState, bLocked ) );
     xPackage->addEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
     if ( m_vEntries.empty() )
     {
-        pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-        pEntry->m_bShared     = ( m_pManager->getSharedPkgMgr() == xPackageManager );
-        pEntry->m_bNew        = m_bInCheckMode;
         m_vEntries.push_back( pEntry );
     }
     else
     {
         if ( !FindEntryPos( pEntry, 0, m_vEntries.size()-1, nPos ) )
         {
-            pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
-            pEntry->m_bShared     = ( m_pManager->getSharedPkgMgr() == xPackageManager );
-            pEntry->m_bNew        = m_bInCheckMode;
             m_vEntries.insert( m_vEntries.begin()+nPos, pEntry );
         }
         else if ( !m_bInCheckMode )
@@ -976,6 +981,16 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
             OSL_ENSURE( 0, "ExtensionBox_Impl::addEntry(): Will not add duplicate entries"  );
         }
     }
+
+    pEntry->m_bHasOptions = m_pManager->supportsOptions( xPackage );
+    pEntry->m_bUser       = xPackage->getRepositoryName().equals( USER_PACKAGE_MANAGER );
+    pEntry->m_bShared     = xPackage->getRepositoryName().equals( SHARED_PACKAGE_MANAGER );
+    pEntry->m_bNew        = m_bInCheckMode;
+    pEntry->m_bMissingLic = bLicenseMissing;
+
+    if ( bLicenseMissing )
+        pEntry->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_MISSING_LICENSE );
+
     //access to m_nActive must be guarded
     if ( !m_bInCheckMode && m_bHasActive && ( m_nActive >= nPos ) )
         m_nActive += 1;
@@ -1005,9 +1020,12 @@ void ExtensionBox_Impl::updateEntry( const uno::Reference< deployment::XPackage 
             (*iIndex)->m_sVersion = xPackage->getVersion();
             (*iIndex)->m_sDescription = xPackage->getDescription();
 
+            if ( eState == REGISTERED )
+                (*iIndex)->m_bMissingLic = false;
+
             if ( eState == AMBIGUOUS )
                 (*iIndex)->m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
-            else
+            else if ( ! (*iIndex)->m_bMissingLic )
                 (*iIndex)->m_sErrorText = String();
 
             if ( IsReallyVisible() )
@@ -1091,16 +1109,13 @@ void ExtensionBox_Impl::RemoveUnlocked()
 }
 
 //------------------------------------------------------------------------------
-void ExtensionBox_Impl::prepareChecking( const uno::Reference< deployment::XPackageManager > &xPackageMgr )
+void ExtensionBox_Impl::prepareChecking()
 {
     m_bInCheckMode = true;
     typedef std::vector< TEntry_Impl >::iterator ITER;
     for ( ITER iIndex = m_vEntries.begin(); iIndex < m_vEntries.end(); ++iIndex )
     {
-        if ( (*iIndex)->m_xPackageManager == xPackageMgr )
-            (*iIndex)->m_bChecked = false;
-        else
-            (*iIndex)->m_bChecked = true;
+        (*iIndex)->m_bChecked = false;
         (*iIndex)->m_bNew = false;
     }
 }
@@ -1119,17 +1134,30 @@ void ExtensionBox_Impl::checkEntries()
     {
         if ( (*iIndex)->m_bChecked == false )
         {
+            (*iIndex)->m_bChecked = true;
             bNeedsUpdate = true;
             nPos = iIndex-m_vEntries.begin();
             if ( (*iIndex)->m_bNew )
-            {
+            { // add entry to list and correct active pos
                 if ( nNewPos == - 1)
                     nNewPos = nPos;
                 if ( nPos <= m_nActive )
                     m_nActive += 1;
+                iIndex++;
+            }
+            else
+            {   // remove entry from list
+                if ( nPos < m_nActive )
+                    m_nActive -= 1;
+                else if ( ( nPos == m_nActive ) && ( nPos == (long) m_vEntries.size() - 1 ) )
+                    m_nActive -= 1;
+                m_vRemovedEntries.push_back( *iIndex );
+                m_vEntries.erase( iIndex );
+                iIndex = m_vEntries.begin() + nPos;
             }
         }
-        iIndex++;
+        else
+            iIndex++;
     }
     guard.clear();
 

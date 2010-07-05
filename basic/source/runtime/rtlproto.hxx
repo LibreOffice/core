@@ -166,6 +166,7 @@ extern RTLFUNC(RmDir); // JSM
 extern RTLFUNC(SendKeys); // JSM
 extern RTLFUNC(DimArray);
 extern RTLFUNC(Dir);
+extern RTLFUNC(DoEvents);
 extern RTLFUNC(Exp);
 extern RTLFUNC(FileLen);
 extern RTLFUNC(Fix);
