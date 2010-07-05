@@ -177,6 +177,11 @@ public:
     virtual void        convertControlClientData(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
                             const ::oox::vml::ShapeClientData& rClientData ) const;
+
+    /** Updates the bounding box covering all shapes of this drawing. */
+    virtual void        notifyShapeInserted(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect );
 };
 
 // ============================================================================

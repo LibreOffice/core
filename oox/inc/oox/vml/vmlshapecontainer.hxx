@@ -56,7 +56,7 @@ struct ShapeParentAnchor
 class ShapeContainer
 {
 public:
-    explicit            ShapeContainer( const Drawing& rDrawing );
+    explicit            ShapeContainer( Drawing& rDrawing );
                         ~ShapeContainer();
 
     /** Creates and returns a new shape template object. */
@@ -101,7 +101,7 @@ private:
     typedef RefMap< ::rtl::OUString, ShapeType >    ShapeTypeMap;
     typedef RefMap< ::rtl::OUString, ShapeBase >    ShapeMap;
 
-    const Drawing&      mrDrawing;          /// The VML drawing page that contains this shape.
+    Drawing&            mrDrawing;          /// The VML drawing page that contains this shape.
     ShapeTypeVector     maTypes;            /// All shape templates.
     ShapeVector         maShapes;           /// All shape definitions.
     ShapeTypeMap        maTypesById;        /// All shape templates mapped by identifier.

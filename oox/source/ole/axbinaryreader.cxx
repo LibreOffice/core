@@ -156,6 +156,30 @@ bool AxFontData::importGuidAndFont( BinaryInputStream& rInStrm )
 
 // ============================================================================
 
+namespace {
+
+bool lclReadString( AxAlignedInputStream& rInStrm, OUString& rValue, sal_uInt32 nSize, bool bArrayString )
+{
+    bool bCompressed = getFlag( nSize, AX_STRING_COMPRESSED );
+    sal_uInt32 nBufSize = nSize & AX_STRING_SIZEMASK;
+    // Unicode: simple strings store byte count, array strings store char count
+    sal_Int32 nChars = static_cast< sal_Int32 >( nBufSize / ((bCompressed || bArrayString) ? 1 : 2) );
+    bool bValidChars = nChars <= 65536;
+    OSL_ENSURE( bValidChars, "lclReadString - string too long" );
+    sal_Int64 nEndPos = rInStrm.tell() + nChars * (bCompressed ? 1 : 2);
+    nChars = ::std::min< sal_Int32 >( nChars, 65536 );
+    rValue = bCompressed ?
+        // ISO-8859-1 maps all byte values xx to the same Unicode code point U+00xx
+        rInStrm.readCharArrayUC( nChars, RTL_TEXTENCODING_ISO_8859_1 ) :
+        rInStrm.readUnicodeArray( nChars );
+    rInStrm.seek( nEndPos );
+    return bValidChars;
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
 AxBinaryPropertyReader::ComplexProperty::~ComplexProperty()
 {
 }
@@ -168,19 +192,22 @@ bool AxBinaryPropertyReader::PairProperty::readProperty( AxAlignedInputStream& r
 
 bool AxBinaryPropertyReader::StringProperty::readProperty( AxAlignedInputStream& rInStrm )
 {
-    bool bCompressed = getFlag( mnSize, AX_STRING_COMPRESSED );
-    sal_uInt32 nBufSize = mnSize & AX_STRING_SIZEMASK;
-    sal_Int64 nEndPos = rInStrm.tell() + nBufSize;
-    sal_Int32 nChars = static_cast< sal_Int32 >( nBufSize / (bCompressed ? 1 : 2) );
-    bool bValidChars = nChars <= 65536;
-    OSL_ENSURE( bValidChars, "StringProperty::readProperty - string too long" );
-    nChars = ::std::min< sal_Int32 >( nChars, 65536 );
-    mrValue = bCompressed ?
-        // ISO-8859-1 maps all byte values xx to the same Unicode code point U+00xx
-        rInStrm.readCharArrayUC( nChars, RTL_TEXTENCODING_ISO_8859_1 ) :
-        rInStrm.readUnicodeArray( nChars );
-    rInStrm.seek( nEndPos );
-    return bValidChars;
+    return lclReadString( rInStrm, mrValue, mnSize, false );
+}
+
+bool AxBinaryPropertyReader::StringArrayProperty::readProperty( AxAlignedInputStream& rInStrm )
+{
+    sal_Int64 nEndPos = rInStrm.tell() + mnSize;
+    while( rInStrm.tell() < nEndPos )
+    {
+        OUString aString;
+        if( !lclReadString( rInStrm, aString, rInStrm.readuInt32(), true ) )
+            return false;
+        mrArray.push_back( aString );
+        // every array string is aligned on 4 byte boundries
+        rInStrm.align( 4 );
+    }
+    return true;
 }
 
 bool AxBinaryPropertyReader::GuidProperty::readProperty( AxAlignedInputStream& rInStrm )
@@ -235,6 +262,15 @@ void AxBinaryPropertyReader::readStringProperty( OUString& orValue )
     {
         sal_uInt32 nSize = maInStrm.readAligned< sal_uInt32 >();
         maLargeProps.push_back( ComplexPropVector::value_type( new StringProperty( orValue, nSize ) ) );
+    }
+}
+
+void AxBinaryPropertyReader::readStringArrayProperty( AxStringArray& orArray )
+{
+    if( startNextProperty() )
+    {
+        sal_uInt32 nSize = maInStrm.readAligned< sal_uInt32 >();
+        maLargeProps.push_back( ComplexPropVector::value_type( new StringArrayProperty( orArray, nSize ) ) );
     }
 }
 

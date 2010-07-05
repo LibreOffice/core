@@ -179,15 +179,24 @@ public:
 
     /** Imports the workbookView element containing workbook view settings. */
     void                importWorkbookView( const AttributeList& rAttribs );
+    /** Imports the oleSize element containing the visible size of the workbook. */
+    void                importOleSize( const AttributeList& rAttribs );
     /** Imports the WORKBOOKVIEW record containing workbook view settings. */
     void                importWorkbookView( RecordInputStream& rStrm );
+    /** Imports the OLESIZE record containing the visible size of the workbook. */
+    void                importOleSize( RecordInputStream& rStrm );
     /** Imports the WINDOW1 record containing workbook view settings. */
     void                importWindow1( BiffInputStream& rStrm );
+    /** Imports the OLESIZE record containing the visible size of the workbook. */
+    void                importOleSize( BiffInputStream& rStrm );
 
     /** Stores converted view settings for a specific worksheet. */
     void                setSheetViewSettings( sal_Int16 nSheet,
                             const SheetViewModelRef& rxSheetView,
                             const ::com::sun::star::uno::Any& rProperties );
+    /** Stores the used area for a specific worksheet. */
+    void                setSheetUsedArea(
+                            const ::com::sun::star::table::CellRangeAddress& rUsedArea );
 
     /** Converts all imported document view settings. */
     void                finalizeImport();
@@ -199,13 +208,18 @@ private:
     WorkbookViewModel&  createWorkbookView();
 
 private:
-    typedef RefVector< WorkbookViewModel >                      WorkbookViewModelVec;
-    typedef RefMap< sal_Int16, SheetViewModel >                 SheetViewModelMap;
-    typedef ::std::map< sal_Int16, ::com::sun::star::uno::Any > SheetPropertiesMap;
+    typedef RefVector< WorkbookViewModel >                                      WorkbookViewModelVec;
+    typedef RefMap< sal_Int16, SheetViewModel >                                 SheetViewModelMap;
+    typedef ::std::map< sal_Int16, ::com::sun::star::uno::Any >                 SheetPropertiesMap;
+    typedef ::std::map< sal_Int16, ::com::sun::star::table::CellRangeAddress >  SheetUsedAreaMap;
 
     WorkbookViewModelVec maBookViews;       /// Workbook view models.
     SheetViewModelMap   maSheetViews;       /// Active view model for each sheet.
     SheetPropertiesMap  maSheetProps;       /// Converted property sequences for each sheet.
+    SheetUsedAreaMap    maSheetUsedAreas;   /// Used area (cell range) of every sheet.
+    ::com::sun::star::table::CellRangeAddress
+                        maOleSize;          /// Visible area if this is an embedded OLE object.
+    bool                mbValidOleSize;     /// True = imported OLE size is a valid cell range.
 };
 
 // ============================================================================
