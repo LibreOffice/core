@@ -823,7 +823,6 @@ void SwSpellPopup::Execute( USHORT nId )
     else if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
     {
             OUString aWord( xSpellAlt->getWord() );
-            USHORT nDicIdx = nId - MN_DICTIONARIES_START;
             DBG_ASSERT( nDicIdx < aDics.getLength(), "dictionary index out of range" );
 
             PopupMenu *pMenu = GetPopupMenu(MN_ADD_TO_DIC);
