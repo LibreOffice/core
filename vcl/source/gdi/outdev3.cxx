@@ -1907,7 +1907,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( ULONG nSearchType,
         if( (rSearchFamilyName.Len() >= 4) && (pData->maMatchFamilyName.Len() >= 4)
         &&    ((rSearchFamilyName.Search( pData->maMatchFamilyName ) != STRING_NOTFOUND)
             || (pData->maMatchFamilyName.Search( rSearchFamilyName ) != STRING_NOTFOUND)) )
-                    nTestMatch += 100000*2;
+                    nTestMatch += 5000;
 
         // test SERIF attribute
         if( nSearchType & IMPL_FONT_ATTR_SERIF )
