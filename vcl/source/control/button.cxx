@@ -83,6 +83,7 @@ class ImplCommonButtonData
 {
 public:
     Rectangle       maFocusRect;
+    Rectangle       maSymbolRect;
     USHORT          mnButtonState;
     BOOL            mbSmallSymbol;
 
@@ -330,6 +331,18 @@ void Button::SetFocusRect( const Rectangle& rFocusRect )
 const Rectangle& Button::GetFocusRect() const
 {
     return ImplGetFocusRect();
+}
+
+// -----------------------------------------------------------------------
+
+const Rectangle& Button::ImplGetSymbolRect() const
+{
+    return mpButtonData->maSymbolRect;
+}
+
+void Button::ImplSetSymbolRect( const Rectangle& i_rRect )
+{
+    mpButtonData->maSymbolRect = i_rRect;
 }
 
 // -----------------------------------------------------------------------
@@ -1176,6 +1189,9 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
     Size aSize = rRect.GetSize();
     Point aPos = rRect.TopLeft();
 
+    ULONG nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
+    if( nImageSep < 1 )
+        nImageSep = 1;
     if ( mnDDStyle == PUSHBUTTON_DROPDOWN_MENUBUTTON )
     {
         if ( aText.Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
@@ -1186,8 +1202,8 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
             aInRect.Left()      = aInRect.Right() - nSymbolSize;
             aSize.Width()      -= ( 5 + nSymbolSize );
 
-            ImplDrawAlignedImage( pDev, aPos, aSize, bLayout,
-                                  1, nDrawFlags, nTextStyle, NULL, (GetStyle() & WB_FLATBUTTON) != 0 );
+            ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep,
+                                  nDrawFlags, nTextStyle, NULL, (GetStyle() & WB_FLATBUTTON) != 0 );
         }
         else
             ImplCalcSymbolRect( aInRect );
@@ -1195,15 +1211,19 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
         if( ! bLayout )
         {
             DecorationView aDecoView( pDev );
+            long nDistance = (aInRect.GetHeight() > 10) ? 2 : 1;
+            long nX = aInRect.Left() - 2*nDistance;;
+            Point aStartPt( nX, aInRect.Top()+nDistance );
+            Point aEndPt( nX, aInRect.Bottom()-nDistance );
+            aDecoView.DrawSeparator( aStartPt, aEndPt );
             aDecoView.DrawSymbol( aInRect, SYMBOL_SPIN_DOWN, aColor, nStyle );
+            aInRect.Left() -= 2*nDistance;
+            ImplSetSymbolRect( aInRect );
         }
     }
     else
     {
         Rectangle aSymbolRect;
-        ULONG nImageSep = 1 + (pDev->GetTextHeight()-10)/2;
-        if( nImageSep < 1 )
-            nImageSep = 1;
         // FIXME: (GetStyle() & WB_FLATBUTTON) != 0 is preliminary
         // in the next major this should be replaced by "true"
         ImplDrawAlignedImage( pDev, aPos, aSize, bLayout, nImageSep, nDrawFlags,
@@ -1213,6 +1233,7 @@ void PushButton::ImplDrawPushButtonContent( OutputDevice* pDev, ULONG nDrawFlags
         {
             DecorationView aDecoView( pDev );
             aDecoView.DrawSymbol( aSymbolRect, meSymbol, aColor, nStyle );
+            ImplSetSymbolRect( aSymbolRect );
         }
 
         if ( mnDDStyle == PUSHBUTTON_DROPDOWN_TOOLBOX && !bLayout )
@@ -1998,6 +2019,8 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
             aSize = Size( 16, 12 );
         else
             aSize = Size( 26, 24 );
+        if( mnDDStyle == PUSHBUTTON_DROPDOWN_MENUBUTTON )
+            aSize.Width() += 4;
     }
     else if ( IsImage() && ! (ImplGetButtonState() & BUTTON_DRAW_NOIMAGE) )
         aSize = GetModeImage().GetSizePixel();
