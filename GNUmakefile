@@ -32,7 +32,7 @@ endif
 GBUILDDIR := $(SOLARENV)/gbuild
 include $(GBUILDDIR)/gbuild.mk
 
-$(eval $(call gb_Module_make_global_targets,ooo))
+$(eval $(call gb_Module_make_global_targets,Module_ooo.mk))
 
 include $(foreach repo,$(filter-out $(SRCDIR),$(gb_REPOS)),$(repo)/$(notdir $(firstword $(MAKEFILE_LIST))))
 

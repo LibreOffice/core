@@ -84,9 +84,6 @@ gb_Library_PLAINLIBS_URE :=\
 gb_Library_PLAINLIBS_OOO :=\
     icuuc \
 
-gb_Library_PLAINLIBS := \
-    $(gb_Library_PLAINLIBS_URE) \
-    $(gb_Library_PLAINLIBS_OOO) \
 
 # => OOOLIB
 gb_Library_RTLIBS :=\
@@ -114,9 +111,6 @@ gb_Library_UNOLIBS_OOO := \
     productregistration \
     vbaswobj \
 
-gb_Library_UNOLIBS := \
-    $(gb_Library_UNOLIBS_URE) \
-    $(gb_Library_UNOLIBS_OOO) \
 
 # => URELIB
 gb_Library_UNOVERLIBS :=\

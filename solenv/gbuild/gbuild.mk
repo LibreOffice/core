@@ -115,6 +115,14 @@ include $(GBUILDDIR)/Helper.mk
 gb_Library_NAMESCHEMES := OOO PLAIN RT RTVER STL UNO UNOVER
 gb_StaticLibrary_NAMESCHEMES := PLAIN
 include $(foreach repo,$(gb_REPOS),$(repo)/Targetnames.mk)
+gb_Library_PLAINLIBS := \
+    $(gb_Library_PLAINLIBS_URE) \
+    $(gb_Library_PLAINLIBS_OOO) \
+
+gb_Library_UNOLIBS := \
+    $(gb_Library_UNOLIBS_URE) \
+    $(gb_Library_UNOLIBS_OOO) \
+
 gb_Library_TARGETS := $(foreach namescheme,$(gb_Library_NAMESCHEMES),$(gb_Library_$(namescheme)LIBS))
 gb_StaticLibrary_TARGETS := $(foreach namescheme,$(gb_StaticLibrary_NAMESCHEMES),$(gb_StaticLibrary_$(namescheme)LIBS))
 
