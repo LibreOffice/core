@@ -29,11 +29,10 @@
 # Module class
 
 gb_Module_ALLMODULES :=
-gb_Module_CURRENTMODULE :=
-gb_Module_CURRENTMODULELOCATION :=
 gb_Module_MODULELOCATIONS :=
 gb_Module_TARGETSTACK :=
 gb_Module_CLEANTARGETSTACK :=
+gb_Module_CURRENTBASEDIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 .PHONY : $(call gb_Module_get_clean_target,%)
 $(call gb_Module_get_clean_target,%) :
@@ -46,6 +45,15 @@ $(call gb_Module_get_target,%) :
     -$(call gb_Helper_abbreviate_dirs,\
         mkdir -p $(dir $@) && \
         touch $@)
+
+all : 
+    $(call gb_Helper_announce,Build for modules $(foreach module,$^,$(notdir $(module))) finished (loaded modules: $(sort $(gb_Module_ALLMODULES))).)
+
+clean : 
+    $(call gb_Helper_announce,Cleanup for modules $(foreach module,$^,$(notdir $(module))) finished (loaded modules: $(sort $(gb_Module_ALLMODULES))).)
+
+.PHONY : all clean
+.DEFAULT_GOAL := all
 
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
@@ -76,24 +84,32 @@ define gb_Module_add_moduledirs
 $(foreach target,$(2),$(call gb_Module_add_moduledir,$(1),$(target)))
 endef
 
+define gb_Module_set_current_repo
+gb_Module_CURRENTBASEDIR := $$(dir $$(realpath $$(lastword $$(MAKEFILE_LIST))))
+endef
+
+
 define gb_Module_make_global_targets
-gb_Module_CURRENTMODULELOCATION := $$(dir $$(realpath $$(firstword $(MAKEFILE_LIST))))
-ifneq ($(1),)
-gb_Module_CURRENTMODULE := $(1)
-else
-gb_Module_CURRENTMODULE := $$(notdir $$(patsubst %/,%,$$(gb_Module_CURRENTMODULELOCATION)))
+ifneq ($$(gb_Module_TARGETSTACK),)
+$$(warn corrupted module target stack!)
 endif
 
-include $$(gb_Module_CURRENTMODULELOCATION)Module_$$(gb_Module_CURRENTMODULE).mk 
+$(call gb_Module__add_toplevel_module,$$(firstword $(1) $$(notdir $$(patsubst %/,%,$$(gb_Module_CURRENTBASEDIR)))))
+include $$(gb_Module_CURRENTBASEDIR)Module_$$(firstword $(1) $$(notdir $$(patsubst %/,%,$$(gb_Module_CURRENTBASEDIR)))).mk
 
-.PHONY : all clean
-all : $$(call gb_Module_get_target,$$(gb_Module_CURRENTMODULE))
-    $$(call gb_Helper_announce,Build for module $$(gb_Module_CURRENTMODULE) finished (loaded modules: $$(sort $$(gb_Module_ALLMODULES))).)
+all : $$(firstword $$(gb_Module_TARGETSTACK))
+clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
 
-clean : $$(call gb_Module_get_clean_target,$$(gb_Module_CURRENTMODULE))
-    $$(call gb_Helper_announce,Cleanup for module $$(gb_Module_CURRENTMODULE) finished (loaded modules: $$(sort $$(gb_Module_ALLMODULES))).)
+ifneq ($$(words $$(gb_Module_TARGETSTACK)),1)
+$$(warn corrupted module target stack!)
+endif
 
-.DEFAULT_GOAL := all
+gb_Module_TARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_TARGETSTACK)),$$(gb_Module_TARGETSTACK))
+gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTACK)),$$(gb_Module_CLEANTARGETSTACK))
+
+ifneq ($$(gb_Module_TARGETSTACK),)
+$$(warn corrupted module target stack!)
+endif
 
 endef
 
