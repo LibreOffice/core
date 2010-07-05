@@ -2144,6 +2144,11 @@ SfxViewShell* SfxViewFrame::LoadViewIntoFrame_Impl( const SfxObjectShell& i_rDoc
         aTransformLoadArgs.remove( "Hidden" );
 
     ::rtl::OUString sURL( RTL_CONSTASCII_USTRINGPARAM( "private:object" ) );
+<<<<<<< local
+    if ( !sURL.getLength() )
+        sURL = i_rDoc.GetFactory().GetFactoryURL();
+=======
+>>>>>>> other
 
     Reference< XComponentLoader > xLoader( i_rFrame, UNO_QUERY_THROW );
     xLoader->loadComponentFromURL( sURL, ::rtl::OUString::createFromAscii( "_self" ), 0,
