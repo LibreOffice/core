@@ -229,7 +229,7 @@ void ThesaurusAlternativesCtrl_Impl::ClearExtraData()
 
 void ThesaurusAlternativesCtrl_Impl::SetExtraData(
     const SvLBoxEntry *pEntry,
-    AlternativesExtraData &rData )
+    const AlternativesExtraData &rData )
 {
     if (!pEntry)
         return;

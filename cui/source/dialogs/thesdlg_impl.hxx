@@ -160,7 +160,7 @@ public:
     SvLBoxEntry *   AddEntry( sal_Int32 nVal, const String &rText, bool bIsHeader );
 
     void            ClearExtraData();
-    void            SetExtraData( const SvLBoxEntry *pEntry, AlternativesExtraData &rData );
+    void            SetExtraData( const SvLBoxEntry *pEntry, const AlternativesExtraData &rData );
     AlternativesExtraData * GetExtraData( const SvLBoxEntry *pEntry );
 
     virtual void    KeyInput( const KeyEvent& rKEvt );
