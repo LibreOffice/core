@@ -33,6 +33,7 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
+#include <vector>
 
 class SbMethod;
 class SbProperty;
@@ -56,6 +57,7 @@ class SbModule : public SbxObject
     friend class    SbClassModuleObject;
 
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
+    std::vector< String > mModuleVariableNames;
 
 protected:
     com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
@@ -133,7 +135,8 @@ public:
     INT32 GetModuleType() { return mnType; }
     void SetModuleType( INT32 nType ) { mnType = nType; }
     bool GetIsProxyModule() { return bIsProxyModule; }
-    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
+    void AddVarName( const String& aName );
+    void RemoveVars();  ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
 };
 

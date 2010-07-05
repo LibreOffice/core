@@ -131,6 +131,7 @@ BOOL SbModule::Compile()
     if( bRet )
     {
         pBasic->ClearAllModuleVars();
+        RemoveVars(); // remove 'this' Modules variables
         // clear all method statics
         for( USHORT i = 0; i < pMethods->Count(); i++ )
         {

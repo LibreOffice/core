@@ -147,6 +147,7 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
     SbObjModule* pMod = PTR_CAST(SbObjModule,pVar);
     if ( pMod )
     {
+        sal_Int16 nType = pMod->GetModuleType();
         if ( pMod->GetModuleType() == ModuleType::DOCUMENT )
         {
             Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
@@ -1242,6 +1243,33 @@ void SbModule::RunInit()
 }
 
 // Mit private/dim deklarierte Variablen loeschen
+
+void SbModule::AddVarName( const String& aName )
+{
+    // see if the name is added allready
+    std::vector< String >::iterator it_end = mModuleVariableNames.end();
+    for ( std::vector< String >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
+    {
+        if ( aName == *it )
+            return;
+    }
+    mModuleVariableNames.push_back( aName );
+}
+
+void SbModule::RemoveVars()
+{
+    std::vector< String >::iterator it_end = mModuleVariableNames.end();
+    for ( std::vector< String >::iterator it = mModuleVariableNames.begin(); it != it_end; ++it )
+    {
+    // We don't want a Find being called in a derived class ( e.g.
+    // SbUserform because it could trigger say an initialise event
+    // which would cause basic to be re-run in the middle of the init ( and remember RemoveVars is called from compile and we don't want code to run as part of the compile )
+    SbxVariableRef p = SbModule::Find( *it, SbxCLASS_PROPERTY );
+    if( p.Is() )
+        Remove (p);
+    }
+}
+
 void SbModule::ClearPrivateVars()
 {
     for( USHORT i = 0 ; i < pProps->Count() ; i++ )

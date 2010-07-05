@@ -1158,15 +1158,26 @@ void SbiRuntime::StepGLOBAL( UINT32 nOp1, UINT32 nOp2 )
         StepPUBLIC_Impl( nOp1, nOp2, true );
 
     String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    SbxDataType t = (SbxDataType)(SbxDataType)(nOp2 & 0xffff);;
-    BOOL bFlag = rBasic.IsSet( SBX_NO_MODIFY );
+    SbxDataType t = (SbxDataType)(nOp2 & 0xffff);;
+
+    // Store module scope variables at module scope
+    // in non vba mode these are stored at the library level :/
+    // not sure if this really should not be enabled for ALL basic
+    SbxObject* pStorage = &rBasic;
+    if ( SbiRuntime::isVBAEnabled() )
+    {
+        pStorage = pMod;
+        pMod->AddVarName( aName );
+    }
+
+    BOOL bFlag = pStorage->IsSet( SBX_NO_MODIFY );
     rBasic.SetFlag( SBX_NO_MODIFY );
-    SbxVariableRef p = rBasic.Find( aName, SbxCLASS_PROPERTY );
+    SbxVariableRef p = pStorage->Find( aName, SbxCLASS_PROPERTY );
     if( p.Is() )
-        rBasic.Remove (p);
-    p = rBasic.Make( aName, SbxCLASS_PROPERTY, t );
+        pStorage->Remove (p);
+    p = pStorage->Make( aName, SbxCLASS_PROPERTY, t );
     if( !bFlag )
-        rBasic.ResetFlag( SBX_NO_MODIFY );
+        pStorage->ResetFlag( SBX_NO_MODIFY );
     if( p )
     {
         p->SetFlag( SBX_DONTSTORE );
