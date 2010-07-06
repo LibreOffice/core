@@ -48,7 +48,6 @@ SLOFILES = \
     $(SLO)$/masterpasscrtdlg.obj \
     $(SLO)$/openlocked.obj \
     $(SLO)$/passworddlg.obj \
-    $(SLO)$/passcrtdlg.obj \
     $(SLO)$/fltdlg.obj \
     $(SLO)$/interactionhandler.obj \
     $(SLO)$/requeststringresolver.obj \
@@ -72,7 +71,6 @@ SRC1FILES = \
     masterpasscrtdlg.src \
     openlocked.src \
     passworddlg.src \
-    passcrtdlg.src \
     passworderrs.src \
     fltdlg.src \
     unknownauthdlg.src\
