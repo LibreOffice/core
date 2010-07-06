@@ -1976,12 +1976,11 @@ BOOL GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
                                         const ImplControlValue& aValue,
                                         const OUString& rCaption )
 {
-    OSL_ASSERT( aValue.getType() == CTRL_SPINBUTTONS );
     GdkPixmap   *       pixmap;
     Rectangle           pixmapRect;
     GtkStateType        stateType;
     GtkShadowType       shadowType;
-    const SpinbuttonValue * pSpinVal = static_cast<const SpinbuttonValue *>(&aValue);
+    const SpinbuttonValue * pSpinVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&aValue) : NULL;
     Rectangle           upBtnRect;
     ControlPart     upBtnPart = PART_BUTTON_UP;
     ControlState        upBtnState = CTRL_STATE_ENABLED;
