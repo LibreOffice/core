@@ -25,11 +25,14 @@
 #
 #*************************************************************************
 
-include $(dir $(firstword $MAKEFILE_LIST))/SourcePaths.mk
-include $(GBUILDDIR)/gbuild.mk
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set)
+endif
+ifeq ($(OS),WNT)
+SRCDIR := $(shell cygpath -u $(SRCDIR))
+else
+SRCDIR := $(SOLARSRC)
+endif
+CURRENTREPO := $(SRCDIR)
 
-$(eval $(call gb_Module_make_global_targets,$(SRCDIR)/Module_ooo.mk))
-
-include $(foreach repo,$(filter-out $(SRCDIR),$(gb_REPOS)),$(repo)/$(notdir $(firstword $(MAKEFILE_LIST))))
-
-# vim: set noet sw=4 ts=4:
+GBUILDDIR := $(SOLARENV)/gbuild

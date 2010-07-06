@@ -32,7 +32,6 @@ gb_Module_ALLMODULES :=
 gb_Module_MODULELOCATIONS :=
 gb_Module_TARGETSTACK :=
 gb_Module_CLEANTARGETSTACK :=
-gb_Module_CURRENTREPO := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
 .PHONY : $(call gb_Module_get_clean_target,%)
 $(call gb_Module_get_clean_target,%) :
@@ -84,16 +83,12 @@ define gb_Module_add_moduledirs
 $(foreach target,$(2),$(call gb_Module_add_moduledir,$(1),$(target)))
 endef
 
-define gb_Module_set_current_repo
-gb_Module_CURRENTREPO := $$(firstword $(1) $$(dir $$(realpath $$(lastword $$(MAKEFILE_LIST)))))
-endef
-
 define gb_Module_make_global_targets
 ifneq ($$(gb_Module_TARGETSTACK),)
 $$(warn corrupted module target stack!)
 endif
 
-include $(gb_Module_CURRENTREPO)/$(1)
+include $(1)
 
 all : $$(firstword $$(gb_Module_TARGETSTACK))
 clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))

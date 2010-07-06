@@ -57,16 +57,14 @@ endif
 # extend for JDK include (seems only needed in setsolar env?)
 SOLARINC += $(JDKINCS)
 
-SRCDIR := $(SOLARSRC)
 OUTDIR := $(SOLARVERSION)/$(INPATH)
 WORKDIR := $(SOLARVERSION)/$(INPATH)/workdir
 ifeq ($(strip $(gb_REPOS)),)
-gb_REPOS := $(SOLARSRC)
+gb_REPOS := $(SRCDIR)
 endif
 
 # HACK
 ifeq ($(OS),WNT)
-SRCDIR := $(shell cygpath -u $(SRCDIR))
 WORKDIR := $(shell cygpath -u $(WORKDIR))
 OUTDIR := $(shell cygpath -u $(OUTDIR))
 gb_REPOS := $(shell cygpath -u $(gb_REPOS))
