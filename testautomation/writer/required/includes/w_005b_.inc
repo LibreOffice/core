@@ -176,7 +176,7 @@ testcase tFormatArrange
 
     printlog " Insert a graphic from file '..\writer\required\input\graphics\jolink.jpg'"
     Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
-
+    sleep(2)
     try
         printlog " Format / Arrange / Bring to front"
         FormatArrangeBringToFrontCalc
@@ -219,12 +219,12 @@ testcase tFormatAlignment
     Call hNewDocument
     printlog " Insert a graphic from file '..\writer\required\input\graphics\jolink.jpg'"
     Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
-
+    sleep(2)
     if ( gApplication = "HTML" ) then
         printlog " Format / Anchor / to Page"
         hUseAsyncSlot( "FormatAnchorToPage" )
     end if
-
+    
     try
         printlog " Format / Alignment / Left"
         FormatAlignmentLeft
