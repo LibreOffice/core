@@ -140,7 +140,7 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
         OUString systemPath;
         osl_getSystemPathFromFileURL( fileUrl.pData, &(systemPath.pData) );
         bufPYTHONPATH.append( systemPath );
-        bufPYTHONPATH.append( SAL_PATHSEPARATOR );
+        bufPYTHONPATH.append( static_cast<sal_Unicode>(SAL_PATHSEPARATOR) );
         if( nNew == -1 )
             break;
         nIndex = nNew + 1;
