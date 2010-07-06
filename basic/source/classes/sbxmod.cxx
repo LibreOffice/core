@@ -147,7 +147,6 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar ), mName( pV
     SbObjModule* pMod = PTR_CAST(SbObjModule,pVar);
     if ( pMod )
     {
-        sal_Int16 nType = pMod->GetModuleType();
         if ( pMod->GetModuleType() == ModuleType::DOCUMENT )
         {
             Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
