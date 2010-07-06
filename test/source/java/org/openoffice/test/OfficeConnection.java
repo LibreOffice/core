@@ -104,13 +104,12 @@ public final class OfficeConnection {
         throws InterruptedException, com.sun.star.uno.Exception
     {
         boolean desktopTerminated = true;
-        if (context != null)
-        {
-            final XMultiComponentFactory xMSF = context.getServiceManager();
-            assertNotNull("Can't get ServiceManager.", xMSF);
+        if (context != null) {
+            XMultiComponentFactory factory = context.getServiceManager();
+            assertNotNull(factory);
             XDesktop desktop = UnoRuntime.queryInterface(
                 XDesktop.class,
-                xMSF.createInstanceWithContext(
+                factory.createInstanceWithContext(
                     "com.sun.star.frame.Desktop", context));
             context = null;
             try {
@@ -119,14 +118,11 @@ public final class OfficeConnection {
                 // it appears that DisposedExceptions can already happen while
                 // receiving the response of the terminate call
             desktop = null;
-        }
-        else if (process != null)
-        {
+        } else if (process != null) {
             process.destroy();
         }
         int code = 0;
-        if (process != null)
-        {
+        if (process != null) {
             code = process.waitFor();
         }
         boolean outTerminated = outForward == null || outForward.terminated();
