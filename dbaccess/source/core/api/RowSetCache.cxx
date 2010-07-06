@@ -167,8 +167,9 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         m_pCacheSet->construct(_xRs,i_sRowSetFilter);
         return;
     }
-    catch(const Exception&)
+    catch(const Exception& ex)
     {
+        (void)ex;
     }
     _xRs->beforeFirst();
 

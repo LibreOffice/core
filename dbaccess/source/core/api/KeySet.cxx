@@ -358,15 +358,17 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
     xTableProp->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
     ::std::vector< ::rtl::OUString> aBestRowColumnNames;
+    /* doesn't work with hsqldb
     Reference<XResultSet> xBestRes(xMeta->getBestRowIdentifier(aCatalog,sSchema,sTable,0,sal_False));
     Reference<XRow> xBestRow(xBestRes,uno::UNO_QUERY);
     while ( xBestRes->next() )
     {
         aBestRowColumnNames.push_back(xBestRow->getString(2));
     }
-
+    */
     Sequence< ::rtl::OUString> aBestColumnNames;
     if ( !aBestRowColumnNames.empty() )
+
     {
         aBestColumnNames = Sequence< ::rtl::OUString>(&aBestRowColumnNames[0],aBestRowColumnNames.size());
         ::dbaccess::getColumnPositions(xSup->getColumns(),aBestColumnNames,m_sUpdateTableName,(*m_pKeyColumnNames));

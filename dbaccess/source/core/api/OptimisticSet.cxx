@@ -1303,13 +1303,14 @@ void OptimisticSet::findTableColumnsMatching_throw(const Any& i_aTable
 
     // first ask the database itself for the best columns which can be used
     ::std::vector< ::rtl::OUString> aBestRowColumnNames;
+    /*
     Reference<XResultSet> xBestRes(i_xMeta->getBestRowIdentifier(aCatalog,sSchema,sTable,0,sal_False));
     Reference<XRow> xBestRow(xBestRes,uno::UNO_QUERY);
     while ( xBestRes->next() )
     {
         aBestRowColumnNames.push_back(xBestRow->getString(2));
     }
-
+    */
     Sequence< ::rtl::OUString> aBestColumnNames;
     if ( aBestRowColumnNames.empty() )
     {
