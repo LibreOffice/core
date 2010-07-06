@@ -100,6 +100,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/script/vba/XCoreEventProcessor.hpp>
 
 #include "helpid.hrc"
 
@@ -489,6 +490,22 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
         case SID_SAVEASDOC:
         case SID_SAVEDOC:
         {
+            // ask VBA emulation at document model whether to save the document
+            if( nId == SID_SAVEDOC || nId == SID_SAVEASDOC ) try
+            {
+                Reference< script::vba::XCoreEventProcessor > xEventProcessor( GetModel(), UNO_QUERY_THROW );
+                xEventProcessor->processCoreVbaEvent( nId );
+            }
+            catch( util::VetoException& )
+            {
+                // VBA event handler indicates to cancel saving the document
+                rReq.SetReturnValue( SfxBoolItem( 0, TRUE ) );
+                return;
+            }
+            catch( Exception& )
+            {
+            }
+
             //!! detaillierte Auswertung eines Fehlercodes
             SfxObjectShellRef xLock( this );
 
@@ -893,6 +910,13 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
     // Ignore()-Zweige haben schon returnt
     rReq.Done();
+}
+
+//-------------------------------------------------------------------------
+
+sal_Bool SfxObjectShell::IsInPrepareClose() const
+{
+    return pImp->bInPrepareClose;
 }
 
 //--------------------------------------------------------------------

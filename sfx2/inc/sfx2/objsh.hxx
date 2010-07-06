@@ -292,6 +292,7 @@ public:
     sal_Bool                    IsReadOnlyUI() const;
     void                        SetNoName();
     sal_Bool                    IsInModalMode() const;
+    sal_Bool                    IsInPrepareClose() const;
     //<!--Added by PengYunQuan for Validity Cell Range Picker
     virtual sal_Bool            AcceptStateUpdate() const;
     //-->Added by PengYunQuan for Validity Cell Range Picker
