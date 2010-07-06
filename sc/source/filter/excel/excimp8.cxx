@@ -56,7 +56,6 @@
 #include <svx/xflclit.hxx>
 #include <filter/msfilter/svxmsbas.hxx>
 #include <basic/basmgr.hxx>
-#include <oox/xls/excelvbaproject.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -292,8 +291,6 @@ void ImportExcel8::PostDocLoad( void )
 
     // read doc info (no docshell while pasting from clipboard)
     LoadDocumentProperties();
-    // attach document events to VBA macros
-    AttachDocumentEvents();
 
     // #i45843# Pivot tables are now handled outside of PostDocLoad, so they are available
     // when formula cells are calculated, for the GETPIVOTDATA function.
@@ -314,21 +311,6 @@ void ImportExcel8::LoadDocumentProperties()
         }
         catch( uno::Exception& )
         {
-        }
-    }
-}
-
-void ImportExcel8::AttachDocumentEvents()
-{
-    SfxObjectShell* pShell = GetDocShell();
-    if( HasBasic() && pShell )
-    {
-        uno::Reference< lang::XMultiServiceFactory > xGlobalFactory = ::comphelper::getProcessServiceFactory();
-        uno::Reference< sheet::XSpreadsheetDocument > xDocument( pShell->GetModel(), uno::UNO_QUERY );
-        if( xGlobalFactory.is() && xDocument.is() )
-        {
-            ::oox::xls::VbaProject aVbaProject( xGlobalFactory, xDocument );
-            aVbaProject.attachToEvents();
         }
     }
 }

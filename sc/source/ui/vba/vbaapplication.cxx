@@ -117,7 +117,8 @@ public:
 ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
     ScVbaApplication_BASE( xContext ),
     m_xCalculation( excel::XlCalculation::xlCalculationAutomatic ),
-    m_xDisplayAlerts( sal_True)
+    m_bDisplayAlerts( sal_True ),
+    m_bEnableEvents( sal_True )
 {
 }
 
@@ -708,14 +709,27 @@ ScVbaApplication::getName() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaApplication::setDisplayAlerts(sal_Bool displayAlerts) throw (uno::RuntimeException)
 {
-    m_xDisplayAlerts = displayAlerts;
+    m_bDisplayAlerts = displayAlerts;
 }
 
 sal_Bool SAL_CALL
 ScVbaApplication::getDisplayAlerts() throw (uno::RuntimeException)
 {
-    return m_xDisplayAlerts;
+    return m_bDisplayAlerts;
 }
+
+void SAL_CALL
+ScVbaApplication::setEnableEvents(sal_Bool bEnable) throw (uno::RuntimeException)
+{
+    m_bEnableEvents = bEnable;
+}
+
+sal_Bool SAL_CALL
+ScVbaApplication::getEnableEvents() throw (uno::RuntimeException)
+{
+    return m_bEnableEvents;
+}
+
 void SAL_CALL
 ScVbaApplication::Calculate() throw(  script::BasicErrorException , uno::RuntimeException )
 {

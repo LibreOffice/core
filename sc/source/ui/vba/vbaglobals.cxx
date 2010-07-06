@@ -233,6 +233,7 @@ ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.excel.Worksheet" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.excel.Application" ) ),
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ooo.vba.excel.Hyperlink" ) ),
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.script.vba.SpreadsheetEventProcessor" ) )
           };
         sal_Int32 nExcelServices = ( sizeof( names )/ sizeof( names[0] ) );
         sal_Int32 startIndex = serviceNames.getLength();

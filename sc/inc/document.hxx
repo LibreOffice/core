@@ -159,6 +159,9 @@ namespace com { namespace sun { namespace star {
     namespace embed {
         class XEmbeddedObject;
     }
+    namespace script { namespace vba {
+        class XEventProcessor;
+    } }
 } } }
 
 #include <svl/zforlist.hxx>
@@ -328,6 +331,10 @@ private:
     ScAddress           aVisSpellPos;                   // within aVisSpellRange (see nVisSpellState)
 
     Timer               aTrackTimer;
+
+    // mutable for lazy construction
+    mutable com::sun::star::uno::Reference< com::sun::star::script::vba::XEventProcessor >
+                        mxVbaEvents;
 
 public:
     ScTabOpList         aTableOpList;                   // list of ScInterpreterTableOpParams currently in use
@@ -733,7 +740,8 @@ public:
 
     const ScSheetEvents* GetSheetEvents( SCTAB nTab ) const;
     void            SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew );
-    bool            HasSheetEventScript( sal_Int32 nEvent ) const;  // on any sheet
+    bool            HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVbaEvents = false ) const;
+    bool            HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents = false ) const;  // on any sheet
 
     BOOL            HasCalcNotification( SCTAB nTab ) const;
     void            SetCalcNotification( SCTAB nTab );
@@ -1750,6 +1758,9 @@ public:
                         { bStyleSheetUsageInvalid = TRUE; }
     void GetSortParam( ScSortParam& rParam, SCTAB nTab );
     void SetSortParam( ScSortParam& rParam, SCTAB nTab );
+
+    com::sun::star::uno::Reference< com::sun::star::script::vba::XEventProcessor >
+                    GetVbaEventProcessor() const;
 
     /** Should only be GRAM_PODF or GRAM_ODFF. */
     void                SetStorageGrammar( formula::FormulaGrammar::Grammar eGrammar );

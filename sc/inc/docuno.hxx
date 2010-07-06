@@ -53,6 +53,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/XCellRangesAccess.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
+#include <com/sun/star/script/vba/XCoreEventProcessor.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -88,6 +89,7 @@ class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public com::sun::star::view::XRenderable,
                     public com::sun::star::document::XLinkTargetSupplier,
                     public com::sun::star::beans::XPropertySet,
+                    public com::sun::star::script::vba::XCoreEventProcessor,
                     public SvxFmMSFactory,  // derived from XMultiServiceFactory
                     public com::sun::star::lang::XServiceInfo,
                     public ::com::sun::star::util::XChangesNotifier
@@ -321,6 +323,13 @@ public:
     virtual void SAL_CALL removeChangesListener( const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::util::XChangesListener >& aListener )
                                 throw (::com::sun::star::uno::RuntimeException);
+
+                            // XCoreEventProcessor
+    virtual void SAL_CALL processCoreVbaEvent( sal_Int32 nSlotId )
+                                throw (::com::sun::star::lang::IllegalArgumentException,
+                                        ::com::sun::star::script::provider::ScriptFrameworkErrorException,
+                                        ::com::sun::star::util::VetoException,
+                                        ::com::sun::star::uno::RuntimeException);
 };
 
 

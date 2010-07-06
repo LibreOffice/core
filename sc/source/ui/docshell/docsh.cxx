@@ -29,14 +29,10 @@
 #include "precompiled_sc.hxx"
 // System - Includes -----------------------------------------------------
 
-
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/algitem.hxx>
-
-
 
 #include <sot/clsids.hxx>
 #include <unotools/securityoptions.hxx>
@@ -68,7 +64,10 @@
 #include "chgviset.hxx"
 #include <sfx2/request.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
-
+#include <com/sun/star/script/vba/EventIdentifier.hpp>
+#include <com/sun/star/script/vba/XEventProcessor.hpp>
+#include <basic/sbstar.hxx>
+#include <basic/basmgr.hxx>
 
 #include "scabstdlg.hxx" //CHINA001
 #include <sot/formats.hxx>
@@ -123,8 +122,9 @@
 #include <rtl/logfile.hxx>
 
 #include <comphelper/processfactory.hxx>
-#include <basic/sbstar.hxx>
-#include <basic/basmgr.hxx>
+#include "uiitems.hxx"
+#include "cellsuno.hxx"
+
 using namespace com::sun::star;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -272,6 +272,11 @@ void ScDocShell::BeforeXMLLoading()
 {
     aDocument.DisableIdle( TRUE );
 
+    // suppress VBA events when loading the xml
+    uno::Reference< script::vba::XEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
+    if( xVbaEvents.is() )
+        xVbaEvents->setIgnoreEvents( sal_True );
+
     // prevent unnecessary broadcasts and updates
     DBG_ASSERT(pModificator == NULL, "The Modificator should not exist");
     pModificator = new ScDocShellModificator( *this );
@@ -377,6 +382,12 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
         BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
         if ( pAppMgr )
             pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
+#if 0 // this should be controlled by a compatibility mode
+        // suppress VBA events when loading the xml
+        uno::Reference< script::vba::XEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
+        if( xVbaEvents.is() )
+            xVbaEvents->setIgnoreEvents( sal_False );
+#endif
 #endif
     aDocument.SetImportingXML( FALSE );
     aDocument.EnableExecuteLink( true );
@@ -499,9 +510,70 @@ BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
     return bRet;
 }
 
-
 void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
+    uno::Reference< script::vba::XEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
+    if ( xVbaEvents.is() ) try
+    {
+        using namespace ::com::sun::star::script::vba::EventIdentifier;
+        if (rHint.ISA(ScTablesHint) )
+        {
+            const ScTablesHint& rScHint = static_cast< const ScTablesHint& >( rHint );
+            if (rScHint.GetId() == SC_TAB_INSERTED)
+            {
+                uno::Sequence< uno::Any > aArgs( 1 );
+                aArgs[0] <<= rScHint.GetTab1();
+                xVbaEvents->processVbaEvent( WORKBOOK_NEWSHEET, aArgs );
+            }
+        }
+        else if ( rHint.ISA( SfxEventHint ) )
+        {
+            ULONG nEventId = static_cast< const SfxEventHint& >( rHint ).GetEventId();
+            switch ( nEventId )
+            {
+                case SFX_EVENT_ACTIVATEDOC:
+                {
+                    uno::Sequence< uno::Any > aArgs;
+                    xVbaEvents->processVbaEvent( WORKBOOK_ACTIVATE, aArgs );
+                }
+                break;
+                case SFX_EVENT_DEACTIVATEDOC:
+                {
+                    uno::Sequence< uno::Any > aArgs;
+                    xVbaEvents->processVbaEvent( WORKBOOK_DEACTIVATE, aArgs );
+                }
+                break;
+                case SFX_EVENT_OPENDOC:
+                {
+                    uno::Sequence< uno::Any > aArgs;
+                    xVbaEvents->processVbaEvent( WORKBOOK_OPEN, aArgs );
+                }
+                break;
+                case SFX_EVENT_SAVEDOCDONE:
+                case SFX_EVENT_SAVEASDOCDONE:
+                case SFX_EVENT_SAVETODOCDONE:
+                {
+                    uno::Sequence< uno::Any > aArgs( 1 );
+                    aArgs[ 0 ] <<= true;
+                    xVbaEvents->processVbaEvent( WORKBOOK_AFTERSAVE, aArgs );
+                }
+                break;
+                case SFX_EVENT_SAVEASDOCFAILED:
+                case SFX_EVENT_SAVEDOCFAILED:
+                case SFX_EVENT_SAVETODOCFAILED:
+                {
+                    uno::Sequence< uno::Any > aArgs( 1 );
+                    aArgs[ 0 ] <<= false;
+                    xVbaEvents->processVbaEvent( WORKBOOK_AFTERSAVE, aArgs );
+                }
+                break;
+            }
+        }
+    }
+    catch( uno::Exception& )
+    {
+    }
+
     if (rHint.ISA(SfxSimpleHint))                               // ohne Parameter
     {
         ULONG nSlot = ((const SfxSimpleHint&)rHint).GetId();
@@ -2196,6 +2268,26 @@ USHORT __EXPORT ScDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     }
 
     DoEnterHandler();
+
+    // start 'Workbook_BeforeClose' VBA event handler for possible veto
+    if( !IsInPrepareClose() )
+    {
+        try
+        {
+            uno::Reference< script::vba::XEventProcessor > xVbaEvents( aDocument.GetVbaEventProcessor(), uno::UNO_SET_THROW );
+            uno::Sequence< uno::Any > aArgs;
+            xVbaEvents->processVbaEvent( script::vba::EventIdentifier::WORKBOOK_BEFORECLOSE, aArgs );
+        }
+        catch( util::VetoException& )
+        {
+            // if event processor throws VetoException, macro has vetoed close
+            return sal_False;
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+    // end handler code
 
     USHORT nRet = SfxObjectShell::PrepareClose( bUI, bForBrowsing );
     if (nRet == TRUE)                       // TRUE = schliessen
