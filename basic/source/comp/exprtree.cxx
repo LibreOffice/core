@@ -971,11 +971,16 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bStandaloneExpression, BOOL bPa
         else
         {
             bool bByVal = false;
+            bool bByValBlockLValueError = false;
             if( eTok == BYVAL )
             {
                 bByVal = true;
                 pParser->Next();
                 eTok = pParser->Peek();
+
+                // Special handling for VBA function "StrPtr" that's accepted as lvalue
+                if( eTok == SYMBOL && pParser->GetSym().EqualsIgnoreCaseAscii( "StrPtr" ) )
+                    bByValBlockLValueError = true;
             }
 
             if( bAssumeExprLParenMode )
@@ -1011,7 +1016,7 @@ SbiParameters::SbiParameters( SbiParser* p, BOOL bStandaloneExpression, BOOL bPa
 
             if( bByVal )
             {
-                if( !pExpr->IsLvalue() )
+                if( !pExpr->IsLvalue() && !bByValBlockLValueError )
                     pParser->Error( SbERR_LVALUE_EXPECTED );
                 else
                     pExpr->SetByVal();
