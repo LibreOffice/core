@@ -137,22 +137,23 @@ void OfficeConnection::setUp() {
 }
 
 void OfficeConnection::tearDown() {
-    if (context_.is()) {
-        css::uno::Reference< css::frame::XDesktop > desktop(
-            context_->getServiceManager()->createInstanceWithContext(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),
-                context_),
-            css::uno::UNO_QUERY_THROW);
-        context_.clear();
-        try {
-            CPPUNIT_ASSERT(desktop->terminate());
-            desktop.clear();
-        } catch (css::lang::DisposedException &) {}
-            // it appears that DisposedExceptions can already happen while
-            // receiving the response of the terminate call
-    }
     if (process_ != 0) {
+        if (context_.is()) {
+            css::uno::Reference< css::frame::XDesktop > desktop(
+                context_->getServiceManager()->createInstanceWithContext(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.frame.Desktop")),
+                    context_),
+                css::uno::UNO_QUERY_THROW);
+            context_.clear();
+            try {
+                CPPUNIT_ASSERT(desktop->terminate());
+                desktop.clear();
+            } catch (css::lang::DisposedException &) {}
+                // it appears that DisposedExceptions can already happen while
+                // receiving the response of the terminate call
+        }
         CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, osl_joinProcess(process_));
         oslProcessInfo info;
         info.Size = sizeof info;

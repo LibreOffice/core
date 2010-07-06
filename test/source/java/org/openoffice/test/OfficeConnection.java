@@ -104,22 +104,24 @@ public final class OfficeConnection {
         throws InterruptedException, com.sun.star.uno.Exception
     {
         boolean desktopTerminated = true;
-        if (context != null) {
-            XMultiComponentFactory factory = context.getServiceManager();
-            assertNotNull(factory);
-            XDesktop desktop = UnoRuntime.queryInterface(
-                XDesktop.class,
-                factory.createInstanceWithContext(
-                    "com.sun.star.frame.Desktop", context));
-            context = null;
-            try {
-                desktopTerminated = desktop.terminate();
-            } catch (DisposedException e) {}
-                // it appears that DisposedExceptions can already happen while
-                // receiving the response of the terminate call
-            desktop = null;
-        } else if (process != null) {
-            process.destroy();
+        if (process != null) {
+            if (context != null) {
+                XMultiComponentFactory factory = context.getServiceManager();
+                assertNotNull(factory);
+                XDesktop desktop = UnoRuntime.queryInterface(
+                    XDesktop.class,
+                    factory.createInstanceWithContext(
+                        "com.sun.star.frame.Desktop", context));
+                context = null;
+                try {
+                    desktopTerminated = desktop.terminate();
+                } catch (DisposedException e) {}
+                    // it appears that DisposedExceptions can already happen
+                    // while receiving the response of the terminate call
+                desktop = null;
+            } else {
+                process.destroy();
+            }
         }
         int code = 0;
         if (process != null) {
