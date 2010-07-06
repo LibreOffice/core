@@ -1193,52 +1193,67 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
 
     aArguments[1] >>= m_bOriginalDispatch;
     aArguments[2] >>= m_seqTypes;
+
+    ITypeInfo* pType = NULL;
     try
     {
-        ITypeInfo* pType= getTypeInfo();
-        // Get Default member
-        CComBSTR defaultMemberName;
-        if ( SUCCEEDED( pType->GetDocumentation(0, &defaultMemberName, 0, 0, 0 ) ) )
+        // a COM object implementation that has no TypeInfo is still a legal COM object;
+        // such objects can at least be transported through UNO using the bridge
+        // so we should allow to create wrappers for them as well
+        pType = getTypeInfo();
+    }
+    catch( BridgeRuntimeError& )
+    {}
+    catch( Exception& )
+    {}
+
+    if ( pType )
+    {
+        try
         {
-            OUString usName(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(defaultMemberName)));
-            FuncDesc aDescGet(pType);
-            FuncDesc aDescPut(pType);
-            VarDesc aVarDesc(pType);
-            // see if this is a property first ( more likely to be a property then a method )
-            getPropDesc( usName, & aDescGet, & aDescPut, & aVarDesc);
-
-            if ( !aDescGet && !aDescPut )
+            // Get Default member
+            CComBSTR defaultMemberName;
+            if ( SUCCEEDED( pType->GetDocumentation(0, &defaultMemberName, 0, 0, 0 ) ) )
             {
-                getFuncDesc( usName, &aDescGet );
-                if ( !aDescGet )
-                    throw BridgeRuntimeError( OUSTR("[automation bridge]IUnknownWrapper_Impl::initialize() Failed to get Function or Property desc. for " ) + usName );
-            }
-            // now for some funny heuristics to make basic understand what to do
-            // a single aDescGet ( that doesn't take any params ) would be
-            // a read only ( defaultmember ) property e.g. this object
-            // should implement XDefaultProperty
-            // a single aDescGet ( that *does* ) take params is basically a
-            // default method e.g. implement XDefaultMethod
+                OUString usName(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(defaultMemberName)));
+                FuncDesc aDescGet(pType);
+                FuncDesc aDescPut(pType);
+                VarDesc aVarDesc(pType);
+                // see if this is a property first ( more likely to be a property then a method )
+                getPropDesc( usName, & aDescGet, & aDescPut, & aVarDesc);
 
-            // a DescPut ( I guess we only really support a default param with '1' param ) as a setValue ( but I guess we can leave it through, the object will fail if we don't get it right anyway )
-            if ( aDescPut || ( aDescGet && aDescGet->cParams == 0 ) )
-                m_bHasDfltProperty = true;
-            if ( aDescGet->cParams > 0 )
-                m_bHasDfltMethod = true;
-            if ( m_bHasDfltProperty || m_bHasDfltMethod )
-                m_sDefaultMember = usName;
+                if ( !aDescGet && !aDescPut )
+                {
+                    getFuncDesc( usName, &aDescGet );
+                    if ( !aDescGet )
+                        throw BridgeRuntimeError( OUSTR("[automation bridge]IUnknownWrapper_Impl::initialize() Failed to get Function or Property desc. for " ) + usName );
+                }
+                // now for some funny heuristics to make basic understand what to do
+                // a single aDescGet ( that doesn't take any params ) would be
+                // a read only ( defaultmember ) property e.g. this object
+                // should implement XDefaultProperty
+                // a single aDescGet ( that *does* ) take params is basically a
+                // default method e.g. implement XDefaultMethod
+
+                // a DescPut ( I guess we only really support a default param with '1' param ) as a setValue ( but I guess we can leave it through, the object will fail if we don't get it right anyway )
+                if ( aDescPut || ( aDescGet && aDescGet->cParams == 0 ) )
+                    m_bHasDfltProperty = true;
+                if ( aDescGet->cParams > 0 )
+                    m_bHasDfltMethod = true;
+                if ( m_bHasDfltProperty || m_bHasDfltMethod )
+                    m_sDefaultMember = usName;
+            }
         }
-    }
-    catch (BridgeRuntimeError & e)
-    {
-        // #i110821 Hot Fix: Fails for some objects that have
-        // worked before, will be evaluated in follow up issue.
-        //throw RuntimeException(e.message, Reference<XInterface>());
-    }
-    catch( Exception& e)
-    {
-        throw RuntimeException(OUSTR("[automation bridge] unexpected exception in IUnknownWrapper_Impl::initialiase() error message: \n") +
-                               e.Message, Reference<XInterface>());
+        catch ( BridgeRuntimeError & e )
+        {
+            throw RuntimeException( e.message, Reference<XInterface>() );
+        }
+        catch( Exception& e )
+        {
+            throw RuntimeException(
+                    OUSTR("[automation bridge] unexpected exception in IUnknownWrapper_Impl::initialiase() error message: \n") + e.Message,
+                    Reference<XInterface>() );
+        }
     }
 }
 
