@@ -53,6 +53,7 @@
 #include <basic/basrdll.hxx>
 #include <vos/mutex.hxx>
 #include <basic/sbobjmod.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XVBACompat.hpp>
@@ -95,6 +96,7 @@ using namespace com::sun::star::script;
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XDialogProvider.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
+#include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/anytostring.hxx>
@@ -1985,9 +1987,9 @@ SbObjModule::Find( const XubString& rName, SbxClassType t )
     return pVar;
 }
 
-typedef ::cppu::WeakImplHelper1< awt::XTopWindowListener > EventListener_BASE;
+typedef ::cppu::WeakImplHelper2< awt::XTopWindowListener, awt::XWindowListener > FormObjEventListener_BASE;
 
-class FormObjEventListenerImpl : public EventListener_BASE
+class FormObjEventListenerImpl : public FormObjEventListener_BASE
 {
     SbUserFormModule* mpUserForm;
     uno::Reference< lang::XComponent > mxComponent;
@@ -1997,39 +1999,57 @@ class FormObjEventListenerImpl : public EventListener_BASE
     sal_Bool mbShowing;
     FormObjEventListenerImpl(); // not defined
     FormObjEventListenerImpl(const FormObjEventListenerImpl&); // not defined
+
 public:
-    FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent ) : mpUserForm( pUserForm ), mxComponent( xComponent) , mbDisposed( false ), mbOpened( sal_False ), mbActivated( sal_False ), mbShowing( sal_False )
+    FormObjEventListenerImpl( SbUserFormModule* pUserForm, const uno::Reference< lang::XComponent >& xComponent ) :
+        mpUserForm( pUserForm ), mxComponent( xComponent) ,
+        mbDisposed( false ), mbOpened( sal_False ), mbActivated( sal_False ), mbShowing( sal_False )
     {
         if ( mxComponent.is() )
         {
-        uno::Reference< awt::XTopWindow > xList( mxComponent, uno::UNO_QUERY_THROW );;
-            OSL_TRACE("*********** Registering the listener");
-            xList->addTopWindowListener( this );
+            OSL_TRACE("*********** Registering the listeners");
+            try
+            {
+                uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->addTopWindowListener( this );
+            }
+            catch( uno::Exception& ) {}
+            try
+            {
+                uno::Reference< awt::XWindow >( mxComponent, uno::UNO_QUERY_THROW )->addWindowListener( this );
+            }
+            catch( uno::Exception& ) {}
         }
     }
 
-    ~FormObjEventListenerImpl()
+    virtual ~FormObjEventListenerImpl()
     {
         removeListener();
     }
-    sal_Bool isShowing() { return mbShowing; }
+
+    sal_Bool isShowing() const { return mbShowing; }
+
     void removeListener()
     {
-        try
+        if ( mxComponent.is() && !mbDisposed )
         {
-            if ( mxComponent.is() && !mbDisposed )
+            OSL_TRACE("*********** Removing the listeners");
+            try
             {
-                uno::Reference< awt::XTopWindow > xList( mxComponent, uno::UNO_QUERY_THROW );;
-                OSL_TRACE("*********** Removing the listener");
-                xList->removeTopWindowListener( this );
-                mxComponent = NULL;
+                uno::Reference< awt::XTopWindow >( mxComponent, uno::UNO_QUERY_THROW )->removeTopWindowListener( this );
             }
+            catch( uno::Exception& ) {}
+            try
+            {
+                uno::Reference< awt::XWindow >( mxComponent, uno::UNO_QUERY_THROW )->removeWindowListener( this );
+            }
+            catch( uno::Exception& ) {}
         }
-        catch( uno::Exception& ) {}
+        mxComponent.clear();
     }
+
     virtual void SAL_CALL windowOpened( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
-        if ( mpUserForm  )
+        if ( mpUserForm )
         {
             mbOpened = sal_True;
             mbShowing = sal_True;
@@ -2076,12 +2096,23 @@ public:
     }
     //liuchen 2009-7-21
 
-    virtual void SAL_CALL windowClosed( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException) { mbOpened = sal_False; mbShowing = sal_False; }
-    virtual void SAL_CALL windowMinimized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException) {}
-    virtual void SAL_CALL windowNormalized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException){}
+    virtual void SAL_CALL windowClosed( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+        mbOpened = sal_False;
+        mbShowing = sal_False;
+    }
+
+    virtual void SAL_CALL windowMinimized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+    }
+
+    virtual void SAL_CALL windowNormalized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+    }
+
     virtual void SAL_CALL windowActivated( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
-        if ( mpUserForm  )
+        if ( mpUserForm )
         {
             mbActivated = sal_True;
             if ( mbOpened )
@@ -2094,18 +2125,38 @@ public:
 
     virtual void SAL_CALL windowDeactivated( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
     {
-        if ( mpUserForm  )
-            mpUserForm->triggerDeActivateEvent();
+        if ( mpUserForm )
+            mpUserForm->triggerDeactivateEvent();
     }
 
+    virtual void SAL_CALL windowResized( const awt::WindowEvent& /*e*/ ) throw (uno::RuntimeException)
+    {
+        if ( mpUserForm )
+        {
+            mpUserForm->triggerResizeEvent();
+            mpUserForm->triggerLayoutEvent();
+        }
+    }
 
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw (uno::RuntimeException)
+    virtual void SAL_CALL windowMoved( const awt::WindowEvent& /*e*/ ) throw (uno::RuntimeException)
+    {
+        if ( mpUserForm )
+            mpUserForm->triggerLayoutEvent();
+    }
+
+    virtual void SAL_CALL windowShown( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+    }
+
+    virtual void SAL_CALL windowHidden( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException)
+    {
+    }
+
+    virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
     {
         OSL_TRACE("** Userform/Dialog disposing");
         mbDisposed = true;
-        uno::Any aSource;
-        aSource <<= Source;
-        mxComponent = NULL;
+        mxComponent.clear();
         if ( mpUserForm )
             mpUserForm->ResetApiObj();
     }
@@ -2117,6 +2168,10 @@ SbUserFormModule::SbUserFormModule( const String& rName, const com::sun::star::s
     , mbInit( false )
 {
     m_xModel.set( mInfo.ModuleObject, uno::UNO_QUERY_THROW );
+}
+
+SbUserFormModule::~SbUserFormModule()
+{
 }
 
 void SbUserFormModule::ResetApiObj()
@@ -2181,23 +2236,22 @@ void SbUserFormModule::triggerMethod( const String& aMethodToRun, Sequence< Any 
 
 void SbUserFormModule::triggerActivateEvent( void )
 {
-        OSL_TRACE("**** entering SbUserFormModule::triggerActivate");
-    triggerMethod( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserForm_activate") ) );
-        OSL_TRACE("**** leaving SbUserFormModule::triggerActivate");
+    OSL_TRACE("**** entering SbUserFormModule::triggerActivate");
+    triggerMethod( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("UserForm_Activate") ) );
+    OSL_TRACE("**** leaving SbUserFormModule::triggerActivate");
 }
 
-void SbUserFormModule::triggerDeActivateEvent( void )
+void SbUserFormModule::triggerDeactivateEvent( void )
 {
-        OSL_TRACE("**** SbUserFormModule::triggerDeActivate");
-    triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_DeActivate") ) );
+    OSL_TRACE("**** SbUserFormModule::triggerDeactivate");
+    triggerMethod( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Userform_Deactivate") ) );
 }
 
 void SbUserFormModule::triggerInitializeEvent( void )
-
 {
     if ( mbInit )
         return;
-        OSL_TRACE("**** SbUserFormModule::triggerInitializeEvent");
+    OSL_TRACE("**** SbUserFormModule::triggerInitializeEvent");
     static String aInitMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Initialize") );
     triggerMethod( aInitMethodName );
     mbInit = true;
@@ -2205,10 +2259,22 @@ void SbUserFormModule::triggerInitializeEvent( void )
 
 void SbUserFormModule::triggerTerminateEvent( void )
 {
-       OSL_TRACE("**** SbUserFormModule::triggerTerminateEvent");
+    OSL_TRACE("**** SbUserFormModule::triggerTerminateEvent");
     static String aTermMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Terminate") );
     triggerMethod( aTermMethodName );
     mbInit=false;
+}
+
+void SbUserFormModule::triggerLayoutEvent( void )
+{
+    static String aMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Layout") );
+    triggerMethod( aMethodName );
+}
+
+void SbUserFormModule::triggerResizeEvent( void )
+{
+    static String aMethodName( RTL_CONSTASCII_USTRINGPARAM("Userform_Resize") );
+    triggerMethod( aMethodName );
 }
 
 SbUserFormModuleInstance* SbUserFormModule::CreateInstance()
@@ -2238,7 +2304,7 @@ SbxVariable* SbUserFormModuleInstance::Find( const XubString& rName, SbxClassTyp
 }
 
 
-void SbUserFormModule::load()
+void SbUserFormModule::Load()
 {
     OSL_TRACE("** load() ");
     // forces a load
@@ -2276,21 +2342,20 @@ void SbUserFormModule::Unload()
     if( pMeth )
     {
         OSL_TRACE("Attempting too run the UnloadObjectMethod");
-                m_xDialog = NULL; //release ref to the uno object
+        m_xDialog.clear(); //release ref to the uno object
         SbxValues aVals;
-               FormObjEventListenerImpl* pFormListener = dynamic_cast< FormObjEventListenerImpl* >( m_DialogListener.get() );
         bool bWaitForDispose = true; // assume dialog is showing
-                if ( pFormListener )
+        if ( m_DialogListener.get() )
         {
-            bWaitForDispose = pFormListener->isShowing();
+            bWaitForDispose = m_DialogListener->isShowing();
             OSL_TRACE("Showing %d", bWaitForDispose );
         }
         pMeth->Get( aVals);
-                if ( !bWaitForDispose )
-                {
-                    // we've either already got a dispose or we'er never going to get one
+        if ( !bWaitForDispose )
+        {
+            // we've either already got a dispose or we'er never going to get one
             ResetApiObj();
-                } // else wait for dispose
+        } // else wait for dispose
         OSL_TRACE("UnloadObject completed ( we hope )");
     }
 }
@@ -2328,9 +2393,8 @@ void SbUserFormModule::InitObject()
             pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.UserForm")), aArgs  ) ) );
             uno::Reference< lang::XComponent > xComponent( aArgs[ 1 ], uno::UNO_QUERY_THROW );
             // remove old listener if it exists
-            FormObjEventListenerImpl* pFormListener = dynamic_cast< FormObjEventListenerImpl* >( m_DialogListener.get() );
-            if ( pFormListener )
-                pFormListener->removeListener();
+            if ( m_DialogListener.get() )
+                m_DialogListener->removeListener();
             m_DialogListener = new FormObjEventListenerImpl( this, xComponent );
 
             triggerInitializeEvent();
