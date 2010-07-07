@@ -87,11 +87,11 @@ constants EventIdentifier
     const long WORKBOOK_DEACTIVATE                  = 2002;
     /** Document opened (loaded). No arguments. */
     const long WORKBOOK_OPEN                        = 2003;
-    /** Document about to be closed. No arguments. Cancellable. */
+    /** Document about to be closed. Arguments: [out] boolean bCancel. */
     const long WORKBOOK_BEFORECLOSE                 = 2004;
-    /** Document about to be printed. No arguments. Cancellable. */
+    /** Document about to be printed. Arguments: [out] boolean bCancel. */
     const long WORKBOOK_BEFOREPRINT                 = 2005;
-    /** Document about to be saved. Arguments: boolean bSaveAs. Cancellable. */
+    /** Document about to be saved. Arguments: boolean bSaveAs, [out] boolean bCancel. */
     const long WORKBOOK_BEFORESAVE                  = 2006;
     /** Document has been saved. Arguments: boolean bSuccess. */
     const long WORKBOOK_AFTERSAVE                   = 2007;
@@ -111,9 +111,9 @@ constants EventIdentifier
     const long WORKSHEET_ACTIVATE                   = 2101;
     /** Worksheet has been activated (made visible). Arguments: short nSheet. */
     const long WORKSHEET_DEACTIVATE                 = 2102;
-    /** Double click in the sheet. Arguments: XRange/XSheetCellRangeContainer aRange. */
+    /** Double click in the sheet. Arguments: XRange/XSheetCellRangeContainer aRange. [out] boolean bCancel. */
     const long WORKSHEET_BEFOREDOUBLECLICK          = 2103;
-    /** Right click in the sheet. Arguments: XRange/XSheetCellRangeContainer aRange. */
+    /** Right click in the sheet. Arguments: XRange/XSheetCellRangeContainer aRange. [out] boolean bCancel. */
     const long WORKSHEET_BEFORERIGHTCLICK           = 2104;
     /** Cells in sheet have been recalculated. Arguments: short nSheet. */
     const long WORKSHEET_CALCULATE                  = 2105;
