@@ -299,6 +299,7 @@ Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
         m_aSubGridProperties(),
         m_xTitle()
 {
+    osl_incrementInterlockedCount(&m_refCount);
     setFastPropertyValue_NoBroadcast(
         ::chart::LineProperties::PROP_LINE_COLOR, uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) );  // gray30
 
@@ -308,6 +309,7 @@ Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
         ModifyListenerHelper::addListener( m_aScaleData.Categories, m_xModifyEventForwarder );
 
     AllocateSubGrids();
+    osl_decrementInterlockedCount(&m_refCount);
 }
 
 Axis::Axis( const Axis & rOther ) :
@@ -365,28 +367,44 @@ Axis::~Axis()
 
 void Axis::AllocateSubGrids()
 {
-    sal_Int32 nNewSubIncCount = m_aScaleData.IncrementData.SubIncrements.getLength();
-    sal_Int32 nOldSubIncCount = m_aSubGridProperties.getLength();
-
-    if( nOldSubIncCount > nNewSubIncCount )
+    Reference< util::XModifyListener > xModifyEventForwarder;
+    Reference< lang::XEventListener > xEventListener;
+    std::vector< Reference< beans::XPropertySet > > aOldBroadcasters;
+    std::vector< Reference< beans::XPropertySet > > aNewBroadcasters;
     {
-        // remove superfluous entries
-        for( sal_Int32 i = nNewSubIncCount; i < nOldSubIncCount; ++i )
-            ModifyListenerHelper::removeListener( m_aSubGridProperties[ i ], m_xModifyEventForwarder );
-        m_aSubGridProperties.realloc( nNewSubIncCount );
-    }
-    else if( nOldSubIncCount < nNewSubIncCount )
-    {
-        m_aSubGridProperties.realloc( nNewSubIncCount );
+        MutexGuard aGuard( m_aMutex );
+        xModifyEventForwarder = m_xModifyEventForwarder;
+        xEventListener = this;
 
-        // allocate new entries
-        for( sal_Int32 i = nOldSubIncCount; i < nNewSubIncCount; ++i )
+        sal_Int32 nNewSubIncCount = m_aScaleData.IncrementData.SubIncrements.getLength();
+        sal_Int32 nOldSubIncCount = m_aSubGridProperties.getLength();
+
+        if( nOldSubIncCount > nNewSubIncCount )
         {
-            m_aSubGridProperties[ i ] = new GridProperties();
-            LineProperties::SetLineInvisible( m_aSubGridProperties[ i ] );
-            ModifyListenerHelper::addListener( m_aSubGridProperties[ i ], m_xModifyEventForwarder );
+            // remove superfluous entries
+            for( sal_Int32 i = nNewSubIncCount; i < nOldSubIncCount; ++i )
+                aOldBroadcasters.push_back( m_aSubGridProperties[ i ] );
+            m_aSubGridProperties.realloc( nNewSubIncCount );
+        }
+        else if( nOldSubIncCount < nNewSubIncCount )
+        {
+            m_aSubGridProperties.realloc( nNewSubIncCount );
+
+            // allocate new entries
+            for( sal_Int32 i = nOldSubIncCount; i < nNewSubIncCount; ++i )
+            {
+                m_aSubGridProperties[ i ] = new GridProperties();
+                LineProperties::SetLineInvisible( m_aSubGridProperties[ i ] );
+                aNewBroadcasters.push_back( m_aSubGridProperties[ i ] );
+            }
         }
     }
+    //don't keep the mutex locked while calling out
+    std::vector< Reference< beans::XPropertySet > >::iterator aBroadcaster = aOldBroadcasters.begin();
+    for( ;aBroadcaster != aOldBroadcasters.end(); ++aBroadcaster )
+        ModifyListenerHelper::removeListener( *aBroadcaster, xModifyEventForwarder );
+    for( aBroadcaster = aNewBroadcasters.begin(); aBroadcaster != aNewBroadcasters.end(); ++aBroadcaster )
+        ModifyListenerHelper::addListener( *aBroadcaster, xModifyEventForwarder );
 }
 
 // --------------------------------------------------------------------------------
@@ -395,20 +413,29 @@ void Axis::AllocateSubGrids()
 void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
     throw (uno::RuntimeException)
 {
+    Reference< util::XModifyListener > xModifyEventForwarder;
+    Reference< lang::XEventListener > xEventListener;
+    Reference< chart2::data::XLabeledDataSequence > xOldCategories;
+    Reference< chart2::data::XLabeledDataSequence > xNewCategories = rScaleData.Categories;
     {
-        // /--
         MutexGuard aGuard( m_aMutex );
-        if( m_aScaleData.Categories.is())
-        {
-            ModifyListenerHelper::removeListener( m_aScaleData.Categories, m_xModifyEventForwarder );
-            EventListenerHelper::removeListener( m_aScaleData.Categories, this );
-        }
+        xModifyEventForwarder = m_xModifyEventForwarder;
+        xEventListener = this;
+        xOldCategories = m_aScaleData.Categories;
         m_aScaleData = rScaleData;
-        ModifyListenerHelper::addListener( m_aScaleData.Categories, m_xModifyEventForwarder );
-        EventListenerHelper::addListener( m_aScaleData.Categories, this );
+    }
+    AllocateSubGrids();
 
-        AllocateSubGrids();
-        // \--
+    //don't keep the mutex locked while calling out
+    if( xOldCategories.is() && xOldCategories != xNewCategories )
+    {
+        ModifyListenerHelper::removeListener( xOldCategories, xModifyEventForwarder );
+        EventListenerHelper::removeListener( xOldCategories, xEventListener );
+    }
+    if( xNewCategories.is() && xOldCategories != xNewCategories )
+    {
+        ModifyListenerHelper::addListener( xNewCategories, m_xModifyEventForwarder );
+        EventListenerHelper::addListener( xNewCategories, xEventListener );
     }
     fireModifyEvent();
 }
@@ -457,19 +484,23 @@ Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
     // \--
 }
 
-void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& Title )
+void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle )
     throw (uno::RuntimeException)
 {
+    Reference< util::XModifyListener > xModifyEventForwarder;
+    Reference< chart2::XTitle > xOldTitle;
     {
-        // /--
         MutexGuard aGuard( GetMutex() );
-        if( m_xTitle.is())
-            ModifyListenerHelper::removeListener( m_xTitle, m_xModifyEventForwarder );
-        m_xTitle = Title;
-        if( m_xTitle.is())
-            ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
-        // \--
+        xOldTitle = m_xTitle;
+        xModifyEventForwarder = m_xModifyEventForwarder;
+        m_xTitle = xNewTitle;
     }
+
+    //don't keep the mutex locked while calling out
+    if( xOldTitle.is() && xOldTitle != xNewTitle )
+        ModifyListenerHelper::removeListener( xOldTitle, xModifyEventForwarder );
+    if( xNewTitle.is() && xOldTitle != xNewTitle )
+        ModifyListenerHelper::addListener( xNewTitle, xModifyEventForwarder );
     fireModifyEvent();
 }
 

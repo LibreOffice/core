@@ -568,6 +568,8 @@ void ScUndoPageBreak::DoChange( BOOL bInsertP ) const
             pViewShell->InsertPageBreak(bColumn, FALSE);
         else
             pViewShell->DeletePageBreak(bColumn, FALSE);
+
+        pDocShell->GetDocument()->InvalidatePageBreaks(nTab);
     }
 }
 

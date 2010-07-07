@@ -410,7 +410,7 @@ void ScDPObject::CreateOutput()
                 nNewRow = 0;
 
             ScAddress aStart( aOutRange.aStart );
-            aStart.SetRow( (USHORT) nNewRow );
+            aStart.SetRow(nNewRow);
             pOutput->SetPosition( aStart );
 
             //! modify aOutRange?
@@ -621,6 +621,11 @@ void ScDPObject::RefreshAfterLoad()
 void ScDPObject::BuildAllDimensionMembers()
 {
     if (!pSaveData)
+        return;
+
+    // #i111857# don't always create empty mpTableData for external service.
+    // Ideally, xSource should be used instead of mpTableData.
+    if (pServDesc)
         return;
 
     pSaveData->BuildAllDimensionMembers(GetTableData());
@@ -2427,6 +2432,14 @@ void ScDPCollection::WriteRefsTo( ScDPCollection& r ) const
         }
         DBG_ASSERT( nCount == r.nCount, "WriteRefsTo: couldn't restore all entries" );
     }
+}
+
+ScDPObject* ScDPCollection::GetByName(const String& rName) const
+{
+    for (USHORT i=0; i<nCount; i++)
+        if (static_cast<const ScDPObject*>(pItems[i])->GetName() == rName)
+            return static_cast<ScDPObject*>(pItems[i]);
+    return NULL;
 }
 
 String ScDPCollection::CreateNewName( USHORT nMin ) const

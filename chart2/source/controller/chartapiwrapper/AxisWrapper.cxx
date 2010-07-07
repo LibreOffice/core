@@ -149,43 +149,43 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "AutoMax" ),
                   PROP_AXIS_AUTO_MAX,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "AutoMin" ),
                   PROP_AXIS_AUTO_MIN,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "AutoStepMain" ),
                   PROP_AXIS_AUTO_STEPMAIN,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "AutoStepHelp" ),
                   PROP_AXIS_AUTO_STEPHELP,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "Logarithmic" ),
                   PROP_AXIS_LOGARITHMIC,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "ReverseDirection" ),
                   PROP_AXIS_REVERSEDIRECTION,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     //todo: this property is missing in the API
     rOutProperties.push_back(
@@ -219,8 +219,8 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "AutoOrigin" ),
                   PROP_AXIS_AUTO_ORIGIN,
                   ::getBooleanCppuType(),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     //Properties for interval marks:
     rOutProperties.push_back(
@@ -312,15 +312,15 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "Overlap" ),
                   PROP_AXIS_OVERLAP,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( C2U( "GapWidth" ),
                   PROP_AXIS_GAP_WIDTH,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
-                  beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 const Sequence< Property > & lcl_GetPropertySequence()

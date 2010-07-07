@@ -183,16 +183,15 @@ const ScOutlineEntry* ScOutlineWindow::GetOutlineEntry( size_t nLevel, size_t nE
 
 bool ScOutlineWindow::IsHidden( SCCOLROW nColRowIndex ) const
 {
-    sal_uInt8 nFlags = mbHoriz ?
-        GetDoc().GetColFlags( static_cast<SCCOL>(nColRowIndex), GetTab() ) :
-        GetDoc().GetRowFlags( static_cast<SCROW>(nColRowIndex), GetTab() );
-    return (nFlags & CR_HIDDEN) != 0;
+    return mbHoriz ?
+        GetDoc().ColHidden(static_cast<SCCOL>(nColRowIndex), GetTab()) :
+        GetDoc().RowHidden(static_cast<SCROW>(nColRowIndex), GetTab());
 }
 
 bool ScOutlineWindow::IsFiltered( SCCOLROW nColRowIndex ) const
 {
     // columns cannot be filtered
-    return !mbHoriz && GetDoc().IsFiltered( static_cast<SCROW>(nColRowIndex), GetTab() );
+    return !mbHoriz && GetDoc().RowFiltered( static_cast<SCROW>(nColRowIndex), GetTab() );
 }
 
 bool ScOutlineWindow::IsFirstVisible( SCCOLROW nColRowIndex ) const

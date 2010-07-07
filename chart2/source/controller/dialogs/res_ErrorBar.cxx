@@ -37,6 +37,7 @@
 #include "RangeSelectionHelper.hxx"
 // for RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR
 #include "TabPageNotifiable.hxx"
+#include "macros.hxx"
 
 #include <rtl/math.hxx>
 #include <vcl/dialog.hxx>
@@ -147,7 +148,8 @@ ErrorBarResources::ErrorBarResources( Window* pParent, Dialog * pParentDialog,
         m_pParentWindow( pParent ),
         m_pParentDialog( pParentDialog ),
         m_pCurrentRangeChoosingField( 0 ),
-        m_bHasInternalDataProvider( true )
+        m_bHasInternalDataProvider( true ),
+        m_bDisableDataTableDialog( false )
 {
     if( m_bNoneAvailable )
         m_aRbNone.SetClickHdl( LINK( this, ErrorBarResources, CategoryChosen ));
@@ -197,7 +199,21 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
     const uno::Reference< chart2::XChartDocument > & xChartDocument )
 {
     if( xChartDocument.is())
+    {
         m_bHasInternalDataProvider = xChartDocument->hasInternalDataProvider();
+        uno::Reference< beans::XPropertySet > xProps( xChartDocument, uno::UNO_QUERY );
+        if ( xProps.is() )
+        {
+            try
+            {
+                xProps->getPropertyValue( C2U( "DisableDataTableDialog" ) ) >>= m_bDisableDataTableDialog;
+            }
+            catch( uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
+        }
+    }
     m_apRangeSelectionHelper.reset( new RangeSelectionHelper( xChartDocument ));
 
     // has internal data provider => rename "cell range" to "from data"
@@ -240,6 +256,7 @@ void ErrorBarResources::UpdateControlStates()
     m_aLbFunction.Enable( bIsFunction );
 
     // range buttons
+    m_aRbRange.Enable( !m_bHasInternalDataProvider || !m_bDisableDataTableDialog );
     bool bShowRange = ( m_aRbRange.IsChecked());
     bool bCanChooseRange =
         ( bShowRange &&

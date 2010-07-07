@@ -1601,8 +1601,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     mnWidth = XclTools::GetXclColumnWidth( nScWidth, GetCharWidth() );
 
     // column flags
-    BYTE nScColFlags = rDoc.GetColFlags( nScCol, nScTab );
-    ::set_flag( mnFlags, EXC_COLINFO_HIDDEN, (nScColFlags & CR_HIDDEN) != 0 );
+    ::set_flag( mnFlags, EXC_COLINFO_HIDDEN, rDoc.ColHidden(nScCol, nScTab) );
 
     // outline data
     rOutlineBfr.Update( nScCol );
@@ -1827,23 +1826,17 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt16 nXclRow,
 
     BYTE nRowFlags = GetDoc().GetRowFlags( nScRow, nScTab );
     bool bUserHeight = ::get_flag< BYTE >( nRowFlags, CR_MANUALSIZE );
-    bool bHidden = ::get_flag< BYTE >( nRowFlags, CR_HIDDEN );
+    bool bHidden = GetDoc().RowHidden(nScRow, nScTab);
     ::set_flag( mnFlags, EXC_ROW_UNSYNCED, bUserHeight );
     ::set_flag( mnFlags, EXC_ROW_HIDDEN, bHidden );
 
     // *** Row height *** -----------------------------------------------------
 
-    USHORT nScHeight = GetDoc().GetRowHeight( nScRow, nScTab );
-    if( nScHeight == 0 )
-    {
-        ::set_flag( mnFlags, EXC_ROW_HIDDEN );
-        mnHeight = EXC_ROW_DEFAULTHEIGHT;
-    }
+    if (bUserHeight)
+        mnHeight = GetDoc().GetRowHeight(nScRow, nScTab, false);
     else
-    {
-        // Calc and Excel use twips
-        mnHeight = static_cast< sal_uInt16 >( nScHeight );
-    }
+        mnHeight = EXC_ROW_DEFAULTHEIGHT;
+
     // #76250# not usable in Applix
 //    ::set_flag( mnHeight, EXC_ROW_FLAGDEFHEIGHT, !bUserHeight );
 

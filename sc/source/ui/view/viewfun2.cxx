@@ -86,6 +86,7 @@
 #include "funcdesc.hxx"
 #include "docuno.hxx"
 #include "charthelper.hxx"
+#include "tabbgcolor.hxx"
 
 #include <basic/sbstar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -2201,6 +2202,8 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
                 pUndoDoc->SetActiveScenario( nTab, bActive );
             }
             pUndoDoc->SetVisible( nTab, pDoc->IsVisible( nTab ) );
+            pUndoDoc->SetTabBgColor( nTab, pDoc->GetTabBgColor(nTab) );
+            pUndoDoc->SetSheetEvents( nTab, pDoc->GetSheetEvents( nTab ) );
 
             if ( pDoc->IsTabProtected( nTab ) )
                 pUndoDoc->SetTabProtection(nTab, pDoc->GetTabProtection(nTab));
@@ -2288,6 +2291,28 @@ BOOL ScViewFunc::RenameTable( const String& rName, SCTAB nTab )
     return bSuccess;
 }
 
+
+//----------------------------------------------------------------------------
+
+bool ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
+{
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( nTab, rColor, TRUE, FALSE );
+    if (bSuccess)
+    {
+        GetViewData()->GetViewShell()->UpdateInputHandler();
+    }
+    return bSuccess;
+}
+
+bool ScViewFunc::SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList )
+{
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, TRUE, FALSE );
+    if (bSuccess)
+    {
+        GetViewData()->GetViewShell()->UpdateInputHandler();
+    }
+    return bSuccess;
+}
 
 //----------------------------------------------------------------------------
 

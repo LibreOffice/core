@@ -169,11 +169,6 @@ void ScDPFieldButton::getPopupBoundingBox(Point& rPos, Size& rSize) const
     rSize.setHeight(nH);
 }
 
-bool ScDPFieldButton::isPopupButton() const
-{
-    return mbPopupButton;
-}
-
 void ScDPFieldButton::drawPopupButton()
 {
     Point aPos;
@@ -730,27 +725,6 @@ ScMenuFloatingWindow* ScMenuFloatingWindow::getSubMenuWindow(size_t nPos) const
         return NULL;
 
     return maMenuItems[nPos].mpSubMenuWin.get();
-}
-
-size_t ScMenuFloatingWindow::getMenuItemCount() const
-{
-    return maMenuItems.size();
-}
-
-OUString ScMenuFloatingWindow::getMenuItemName(size_t nPos) const
-{
-    if (maMenuItems.size() <= nPos)
-        return ScGlobal::GetEmptyString();
-
-    return maMenuItems[nPos].maText;
-}
-
-bool ScMenuFloatingWindow::isMenuItemEnabled(size_t nPos) const
-{
-    if (maMenuItems.size() <= nPos)
-        return false;
-
-    return maMenuItems[nPos].mbEnabled;
 }
 
 bool ScMenuFloatingWindow::isMenuItemSelected(size_t nPos) const

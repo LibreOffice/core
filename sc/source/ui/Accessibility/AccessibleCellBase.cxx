@@ -92,10 +92,12 @@ sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
     sal_Bool bVisible(sal_True);
     if (mpDoc)
     {
-        BYTE nColFlags = mpDoc->GetColFlags(maCellAddress.Col(), maCellAddress.Tab());
-        BYTE nRowFlags = mpDoc->GetRowFlags(maCellAddress.Row(), maCellAddress.Tab());
-        if (((nColFlags & CR_HIDDEN) == CR_HIDDEN) || ((nColFlags & CR_FILTERED) == CR_FILTERED) ||
-            ((nRowFlags & CR_HIDDEN) == CR_HIDDEN) || ((nRowFlags & CR_FILTERED) == CR_FILTERED))
+        bool bColHidden = mpDoc->ColHidden(maCellAddress.Col(), maCellAddress.Tab());
+        bool bRowHidden = mpDoc->RowHidden(maCellAddress.Row(), maCellAddress.Tab());
+        bool bColFiltered = mpDoc->ColFiltered(maCellAddress.Col(), maCellAddress.Tab());
+        bool bRowFiltered = mpDoc->RowFiltered(maCellAddress.Row(), maCellAddress.Tab());
+
+        if (bColHidden || bColFiltered || bRowHidden || bRowFiltered)
             bVisible = sal_False;
     }
     return bVisible;

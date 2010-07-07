@@ -535,7 +535,7 @@ private:
 class XclExpFileSharing : public XclExpRecord
 {
 public:
-    explicit            XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash );
+    explicit            XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash, bool bRecommendReadOnly );
 
     virtual void        Save( XclExpStream& rStrm );
 
@@ -545,6 +545,7 @@ private:
 private:
     XclExpString        maUserName;
     sal_uInt16          mnPasswordHash;
+    bool                mbRecommendReadOnly;
 };
 
 // ============================================================================

@@ -59,7 +59,7 @@ public:
     virtual ~TitlesAndObjectsTabPage();
 
     virtual void        initializePage();
-    virtual sal_Bool    commitPage( CommitPageReason eReason );
+    virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason eReason );
     virtual bool        canAdvance() const;
 
 protected:

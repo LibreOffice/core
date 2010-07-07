@@ -194,13 +194,17 @@ ImplObjectHierarchy::ImplObjectHierarchy(
 
 void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartDocument )
 {
+    m_aChildMap = tChildMap();//clear tree
+
     if( !xChartDocument.is() )
         return;
 
     //@todo: change ObjectIdentifier to take an XChartDocument rather than XModel
     Reference< frame::XModel > xModel( xChartDocument, uno::UNO_QUERY );
     Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( xChartDocument ) );
-    ObjectHierarchy::tOID aDiaOID( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram, xModel ) ) );
+    ObjectHierarchy::tOID aDiaOID;
+    if( xDiagram.is() )
+        aDiaOID = ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifierForObject( xDiagram, xModel ) );
     ObjectHierarchy::tChildContainer aTopLevelContainer;
 
     // First Level
@@ -209,9 +213,12 @@ void ImplObjectHierarchy::createTree( const Reference< XChartDocument >& xChartD
     if( m_bOrderingForElementSelector )
     {
         aTopLevelContainer.push_back( ObjectIdentifier( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, OUString() ) ) );
-        aTopLevelContainer.push_back( aDiaOID );
-        createWallAndFloor( aTopLevelContainer, xDiagram );
-        createLegendTree( aTopLevelContainer, xChartDocument, xDiagram  );
+        if( xDiagram.is() )
+        {
+            aTopLevelContainer.push_back( aDiaOID );
+            createWallAndFloor( aTopLevelContainer, xDiagram );
+            createLegendTree( aTopLevelContainer, xChartDocument, xDiagram  );
+        }
     }
 
     // Main Title

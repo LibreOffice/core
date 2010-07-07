@@ -41,6 +41,7 @@ LIBTARGET=NO
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES= \
+    $(SLO)$/tbinsert.obj	\
     $(SLO)$/tbzoomsliderctrl.obj \
     $(SLO)$/dpcontrol.obj
 

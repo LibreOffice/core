@@ -160,73 +160,6 @@ public:
     }
 };
 
-void
-dispatchRequests (uno::Reference< frame::XModel>& xModel,rtl::OUString & aUrl, uno::Sequence< beans::PropertyValue >& sProps )
-{
-
-    util::URL  url ;
-    url.Complete = aUrl;
-    rtl::OUString emptyString = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" ));
-    uno::Reference<frame::XController> xController = xModel->getCurrentController();
-    uno::Reference<frame::XFrame> xFrame = xController->getFrame();
-    uno::Reference<frame::XDispatchProvider> xDispatchProvider (xFrame,uno::UNO_QUERY_THROW);
-    try
-    {
-        uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        uno::Reference<uno::XComponentContext > xContext( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW  );
-        if ( !xContext.is() )
-        {
-            return ;
-        }
-
-        uno::Reference<lang::XMultiComponentFactory > xServiceManager(
-                xContext->getServiceManager() );
-        if ( !xServiceManager.is() )
-        {
-            return ;
-        }
-        uno::Reference<util::XURLTransformer> xParser( xServiceManager->createInstanceWithContext(     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) )
-            ,xContext), uno::UNO_QUERY_THROW );
-        if (!xParser.is())
-            return;
-        xParser->parseStrict (url);
-    }
-    catch ( uno::Exception & /*e*/ )
-    {
-        return ;
-    }
-
-    uno::Reference<frame::XDispatch> xDispatcher = xDispatchProvider->queryDispatch(url,emptyString,0);
-
-    uno::Sequence<beans::PropertyValue> dispatchProps(1);
-
-    sal_Int32 nProps = sProps.getLength();
-    beans::PropertyValue* pDest = dispatchProps.getArray();
-    if ( nProps )
-    {
-        dispatchProps.realloc( nProps + 1 );
-        // need to reaccquire pDest after realloc
-        pDest = dispatchProps.getArray();
-        beans::PropertyValue* pSrc = sProps.getArray();
-        for ( sal_Int32 index=0; index<nProps; ++index, ++pSrc, ++pDest )
-            *pDest = *pSrc;
-    }
-
-    (*pDest).Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Silent" ));
-    (*pDest).Value <<= (sal_Bool)sal_True;
-
-    if (xDispatcher.is())
-        xDispatcher->dispatch( url, dispatchProps );
-}
-
-void
-dispatchRequests (uno::Reference< frame::XModel>& xModel,rtl::OUString & aUrl)
-{
-    uno::Sequence<beans::PropertyValue> dispatchProps;
-    dispatchRequests( xModel, aUrl, dispatchProps );
-}
-
-
 void dispatchExecute(css::uno::Reference< css::frame::XModel>& xModel, USHORT nSlot, SfxCallMode nCall)
 {
     ScTabViewShell* pViewShell = getBestViewShell( xModel );
@@ -821,7 +754,5 @@ ScVbaCellRangeAccess::GetDataSet( ScCellRangeObj* pRangeObj )
 
 }
 
-} // openoffice
-} //org
-=======
->>>>>>> other
+} // vba
+} // ooo

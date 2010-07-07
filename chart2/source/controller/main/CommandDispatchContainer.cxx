@@ -72,7 +72,7 @@ void CommandDispatchContainer::setModel(
     m_aCachedDispatches.clear();
     DisposeHelper::DisposeAllElements( m_aToBeDisposedDispatches );
     m_aToBeDisposedDispatches.clear();
-    m_xModel.set( xModel );
+    m_xModel = xModel;
 }
 
 // void CommandDispatchContainer::setUndoManager(
@@ -102,33 +102,33 @@ Reference< frame::XDispatch > CommandDispatchContainer::getDispatchForURL(
     }
     else
     {
-        if( rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" ))
-            || rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Redo" )))
+        uno::Reference< frame::XModel > xModel( m_xModel );
+
+        if( xModel.is() && (rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Undo" ))
+            || rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Redo" ))) )
         {
-            CommandDispatch * pDispatch = new UndoCommandDispatch( m_xContext, m_xModel );
+            CommandDispatch * pDispatch = new UndoCommandDispatch( m_xContext, xModel );
             xResult.set( pDispatch );
             pDispatch->initialize();
             m_aCachedDispatches[ C2U(".uno:Undo") ].set( xResult );
             m_aCachedDispatches[ C2U(".uno:Redo") ].set( xResult );
             m_aToBeDisposedDispatches.push_back( xResult );
         }
-        else if( rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Context" ))
-                 || rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ModifiedStatus" )))
+        else if( xModel.is() && (rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Context" ))
+                 || rURL.Path.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ModifiedStatus" ))) )
         {
-            Reference< view::XSelectionSupplier > xSelSupp;
-            if( m_xModel.is())
-                xSelSupp.set( m_xModel->getCurrentController(), uno::UNO_QUERY );
-            CommandDispatch * pDispatch = new StatusBarCommandDispatch( m_xContext, m_xModel, xSelSupp );
+            Reference< view::XSelectionSupplier > xSelSupp( xModel->getCurrentController(), uno::UNO_QUERY );
+            CommandDispatch * pDispatch = new StatusBarCommandDispatch( m_xContext, xModel, xSelSupp );
             xResult.set( pDispatch );
             pDispatch->initialize();
             m_aCachedDispatches[ C2U(".uno:Context") ].set( xResult );
             m_aCachedDispatches[ C2U(".uno:ModifiedStatus") ].set( xResult );
             m_aToBeDisposedDispatches.push_back( xResult );
         }
-        else if( m_xModel.is() &&
+        else if( xModel.is() &&
                  (m_aContainerDocumentCommands.find( rURL.Path ) != m_aContainerDocumentCommands.end()) )
         {
-            xResult.set( getContainerDispatchForURL( m_xModel->getCurrentController(), rURL ));
+            xResult.set( getContainerDispatchForURL( xModel->getCurrentController(), rURL ));
             // ToDo: can those dispatches be cached?
             m_aCachedDispatches[ rURL.Complete ].set( xResult );
         }

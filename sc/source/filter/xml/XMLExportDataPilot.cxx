@@ -880,8 +880,8 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_NAME, rtl::OUString(pServSource->aParSource));
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OBJECT_NAME, rtl::OUString(pServSource->aParName));
                             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USER_NAME, rtl::OUString(pServSource->aParUser));
-                            // How to write the Passwort? We must know, whether the passwort shoulb be written encrypted and how or not
-                            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PASSWORT, rtl::OUString(pServSource->aParPass));
+                            // #i111754# leave out password attribute as long as DataPilotSource doesn't specify the content
+                            // rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PASSWORD, rtl::OUString(pServSource->aParPass));
                             SvXMLElementExport aElemSD(rExport, XML_NAMESPACE_TABLE, XML_SOURCE_SERVICE, sal_True, sal_True);
                             rExport.CheckAttrList();
                         }

@@ -72,7 +72,8 @@ private:
     ScTempDocCache  aDocCache;
     ScDocOptions*   pOptions;
     SfxItemPropertyMap aPropertyMap;
-    BOOL            bInvalid;
+    bool            mbArray;
+    bool            mbValid;
 
 public:
                             ScFunctionAccess();
