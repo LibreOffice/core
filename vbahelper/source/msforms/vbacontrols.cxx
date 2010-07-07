@@ -349,13 +349,16 @@ void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
     }
     catch( uno::RuntimeException& )
     {
-        throw;
+        // the exceptions are not rethrown, impossibility to find or remove the control is currently not reported
+        // since in most cases it means just that the controls is already not there, the VBA seems to do it in the same way
+
+        // throw;
     }
     catch( uno::Exception& e )
     {
-        throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not create AXControl!" ) ),
-                uno::Reference< uno::XInterface >(),
-                uno::makeAny( e ) );
+        // throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not create AXControl!" ) ),
+        //         uno::Reference< uno::XInterface >(),
+        //         uno::makeAny( e ) );
     }
 }
 
