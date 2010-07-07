@@ -254,7 +254,7 @@ function hUpdtToolsCustomizeToolbars()
     const MENUITEM_DELETE = 2
     const MENUITEM_MODIFY = 4
 
-    const DIALOG_DELAY = 2
+    const DIALOG_DELAY = 1
 
     dim brc as boolean
     dim iCurrentItem as integer
@@ -366,6 +366,7 @@ function hUpdtToolsCustomizeToolbars()
 
         printlog( CFN & "Command button clicked successfully" )
         kontext "CustomizeToolbarsRename"
+        UseBindings
         wait( 100 )
         if ( CustomizeToolbarsRename.exists( DIALOG_DELAY ) ) then
 
@@ -455,7 +456,7 @@ function hUpdtToolsCustomizeToolbars()
     waitslot
     kontext "TabCustomizeToolbars"
     printlog( CFN & "Click the Modify-button" )
-    if ( not hClickCommandButton( 3 ) ) then
+    if ( hClickCommandButton( 3 ) ) then
         printlog( CFN & "Successfully selected modify-item on the command button" )
     else
         warnlog( CFN & "Something went wrong when accessing the command button" )
