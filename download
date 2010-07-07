@@ -22,7 +22,7 @@ COMPONENTS="artwork base bootstrap calc components extensions extras filters
 help impress l10n libs-core libs-extern libs-extern-sys libs-gui ooo-build
 postprocess sdk testing ure writer"
 
-ORIGIN=`git remote show -n origin | grep URL: | sed 's#^[[:space:]]*URL: ##'`
+ORIGIN=`git remote show -n origin | grep 'Fetch URL:' | sed 's#^[[:space:]]*Fetch URL: ##'`
 
 SKIP=
 REPO=`echo "$ORIGIN" | sed 's#/[^/]\+/\?$##'`
