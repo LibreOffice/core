@@ -25,14 +25,11 @@
 #
 #*************************************************************************
 
-ifeq ($(strip $(SOLARENV)),)
-$(error No environment set)
-endif
+CURRENTREPO := $(patsubst %/,%,$(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 ifeq ($(OS),WNT)
-SRCDIR := $(shell cygpath -u $(SRCDIR))
-else
-SRCDIR := $(SOLARSRC)
+CURRENTREPO := $(shell cygpath -u $(CURRENTREPO))
 endif
-CURRENTREPO := $(SRCDIR)
 
-GBUILDDIR := $(SOLARENV)/gbuild
+SRCDIR := $(CURRENTREPO)
+
+# vim: set noet sw=4 ts=4:

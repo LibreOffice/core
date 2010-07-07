@@ -168,7 +168,7 @@ $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) 
     $(call gb_LinkTarget__command_dep,$(call gb_LinkTarget_get_dep_target,$*),$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
     $(call gb_LinkTarget__command,$@,$*,$(TARGETTYPE_FLAGS) $(LDFLAGS),$(LINKED_LIBS),$(LINKED_STATIC_LIBS),$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
 
-$(call gb_LinkTarget_get_dep_target,%) : $(call gb_LinkTarget_get_headers_target,%)
+$(call gb_LinkTarget_get_dep_target,%) : | $(call gb_LinkTarget_get_headers_target,%)
     $(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
 
 define gb_LinkTarget__get_external_headers_check
