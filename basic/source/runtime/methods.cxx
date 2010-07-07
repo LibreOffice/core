@@ -4134,8 +4134,7 @@ RTLFUNC(Load)
     {
         if( pObj->IsA( TYPE( SbUserFormModule ) ) )
         {
-            SbUserFormModule* pFormModule = ( SbUserFormModule* )pObj;
-            pFormModule->load();
+            ((SbUserFormModule*)pObj)->Load();
         }
         else if( pObj->IsA( TYPE( SbxObject ) ) )
         {

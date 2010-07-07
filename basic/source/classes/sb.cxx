@@ -339,27 +339,18 @@ SbxBase* SbFormFactory::Create( UINT16, UINT32 )
 
 SbxObject* SbFormFactory::CreateObject( const String& rClassName )
 {
-    static String aLoadMethodName( RTL_CONSTASCII_USTRINGPARAM("load") );
-
-    SbxObject* pRet = NULL;
-    SbModule* pMod = pMOD;
-    if( pMod )
+    if( SbModule* pMod = pMOD )
     {
-        SbxVariable* pVar = pMod->Find( rClassName, SbxCLASS_OBJECT );
-        if( pVar )
+        if( SbxVariable* pVar = pMod->Find( rClassName, SbxCLASS_OBJECT ) )
         {
-            SbxBase* pObj = pVar->GetObject();
-            SbUserFormModule* pFormModule = PTR_CAST( SbUserFormModule, pObj );
-
-            if( pFormModule != NULL )
+            if( SbUserFormModule* pFormModule = PTR_CAST( SbUserFormModule, pVar->GetObject() ) )
             {
-                pFormModule->load();
-                SbUserFormModuleInstance* pFormInstance = pFormModule->CreateInstance();
-                pRet = pFormInstance;
+                pFormModule->Load();
+                return pFormModule->CreateInstance();
             }
         }
     }
-    return pRet;
+    return 0;
 }
 
 
