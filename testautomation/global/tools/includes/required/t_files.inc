@@ -114,13 +114,28 @@ function hIsNamedDocLoaded( cFileName as string ) as boolean
 
     dim cDocumentName as string
     dim iDocumentNameLength as integer
+    dim bTemplateDocument as boolean
 
     hIsNamedDocLoaded() = false
+
+    ' If the requested document is a template, we cannot use its filename to
+    ' identify the document as it is named "Untitled 1" or "Untitled" in the
+    ' FileSave dialog and the document properties dialog. The string is locale
+    ' dependent. So we do a shortcut here, the calling tests fail at a later
+    ' point if this function does not work properly
+    
+    select case( right( cFileName, 4 ) )
+    case ".vor", ".dot", ".sti", ".pot", ".std", ".xlt", ".stc", ".ots", "xltm", "xltx"
+        if ( GVERBOSE ) then printlog( CFN & "Template document filtered" )
+        hIsNamedDocLoaded() = true
+        exit function
+    end select
 
     if ( hUseAsyncSlot( "FileProperties" ) <> RC_FAILURE ) then
 
         kontext
         active.setpage(tabdokument)
+
         kontext "TabDokument"
         if ( TabDokument.exists( 2 ) ) then
 
