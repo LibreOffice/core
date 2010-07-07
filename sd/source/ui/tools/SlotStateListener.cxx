@@ -45,16 +45,6 @@ using namespace ::rtl;
 namespace sd { namespace tools {
 
 
-SlotStateListener::SlotStateListener (void)
-    : SlotStateListenerInterfaceBase(maMutex),
-      maCallback(),
-      mxDispatchProviderWeak(NULL)
-{
-}
-
-
-
-
 SlotStateListener::SlotStateListener (
     Link& rCallback,
     const uno::Reference<frame::XDispatchProvider>& rxDispatchProvider,
@@ -120,14 +110,6 @@ void SlotStateListener::ObserveSlot (const ::rtl::OUString& rSlotName)
             xDispatch->addStatusListener(this,aURL);
         }
     }
-}
-
-
-
-
-bool SlotStateListener::IsValid (void) const
-{
-    return maRegisteredURLList.size() > 0;
 }
 
 

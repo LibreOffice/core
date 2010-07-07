@@ -631,18 +631,6 @@ void SlideSorterService::Resize (void)
 
 
 
-void SlideSorterService::Rearrange (void)
-{
-    if (mxParentWindow.is())
-    {
-        awt::Rectangle aWindowBox = mxParentWindow->getPosSize();
-        mpSlideSorter->GetController().Rearrange();
-    }
-}
-
-
-
-
 void SlideSorterService::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
 {

@@ -91,12 +91,6 @@ public:
         const ::com::sun::star::uno::Reference<
             com::sun::star::frame::XStatusListener>& rxListener);
 
-    /** Remove the given listener.
-    */
-    void RemoveStatusListener (
-        const ::com::sun::star::uno::Reference<
-            com::sun::star::frame::XStatusListener>& rxListener);
-
     // XEventListener
 
     virtual void SAL_CALL disposing (

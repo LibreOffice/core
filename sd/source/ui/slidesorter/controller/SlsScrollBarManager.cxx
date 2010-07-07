@@ -219,26 +219,6 @@ void ScrollBarManager::PlaceFiller (const Rectangle& aArea)
 
 
 
-void ScrollBarManager::AdaptWindowSize (const Rectangle& rArea)
-{
-    Size aPixelContentSize (mpContentWindow->LogicToPixel(
-        mrSlideSorter.GetView().GetLayouter().GetPageBox (
-            mrSlideSorter.GetModel().GetPageCount()).GetSize()));
-    int nHeightDifference = aPixelContentSize.Height() - rArea.GetHeight();
-    ::Window* pParentWindow = mpContentWindow->GetParent();
-    Size aNewWindowSize (pParentWindow->GetSizePixel());
-    if (nHeightDifference != 0)
-    {
-        aNewWindowSize.Height() += nHeightDifference;
-        pParentWindow->SetPosSizePixel(
-            pParentWindow->GetPosPixel(),
-            aNewWindowSize);
-    }
-}
-
-
-
-
 void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScrolling)
 {
     Rectangle aModelArea (mrSlideSorter.GetView().GetModelArea());

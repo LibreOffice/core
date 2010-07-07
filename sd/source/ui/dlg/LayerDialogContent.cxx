@@ -86,14 +86,6 @@ LayerDialogContent::~LayerDialogContent (void)
 
 
 
-LayerTabBar& LayerDialogContent::GetLayerTabBar (void)
-{
-    return maLayerTabBar;
-}
-
-
-
-
 BOOL LayerDialogContent::Close (void)
 {
     return SfxDockingWindow::Close();

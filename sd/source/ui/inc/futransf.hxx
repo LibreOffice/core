@@ -51,8 +51,6 @@ private:
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
-
-    Point   GetPoint( Rectangle aRect, RECT_POINT eRP );
 };
 
 } // end of namespace sd

@@ -56,37 +56,7 @@ public:
 
 };
 
-class TemplateCacheInfo
-{
-private:
-    DateTime    m_aDateTime;
-    String      m_aFile;
-    BOOL        m_bImpress;
-    BOOL        m_bValid;
-    BOOL        m_bModified;
-
-public:
-    TemplateCacheInfo();
-    TemplateCacheInfo( const String& rFile, const DateTime& rDateTime, BOOL bImpress );
-
-    BOOL IsValid() const { return m_bValid; }
-    void SetValid( BOOL bValid = TRUE ) { m_bValid = bValid; }
-
-    BOOL IsImpress() const { return m_bImpress; }
-    void SetImpress( BOOL bImpress = TRUE ) { m_bImpress = bImpress; }
-
-    const String& GetFile() const { return m_aFile; }
-    void SetFile( const String& rFile ) { m_aFile = rFile; }
-
-    const DateTime& GetDateTime() const { return m_aDateTime; }
-    void SetDateTime( const DateTime& rDateTime ) { m_aDateTime = rDateTime; }
-
-    BOOL IsModified() const { return m_bModified; }
-    void SetModified( BOOL bModified = TRUE ) { m_bModified = bModified; }
-
-    friend SvStream& operator >> (SvStream& rIn, TemplateCacheInfo& rInfo);
-    friend SvStream& operator << (SvStream& rOut, const TemplateCacheInfo& rInfo);
-};
+class TemplateCacheInfo;
 
 DECLARE_LIST( TemplateCacheInfoList, TemplateCacheInfo * )
 
@@ -98,22 +68,3 @@ public:
 };
 
 DECLARE_LIST( TemplateCacheDirEntryList, TemplateCacheDirEntry * )
-
-class TemplateCache
-{
-private:
-    TemplateCacheDirEntryList   m_aDirs;
-    TemplateCacheDirEntry* GetDirEntry( const String& rPath );
-    void Clear();
-public:
-    TemplateCache();
-    ~TemplateCache();
-
-    void Load();
-    void Save();
-
-    TemplateCacheInfo* GetFileInfo( const String& rPath );
-    TemplateCacheInfo* AddFileInfo( const String& rPath );
-
-    BOOL ClearInvalidEntrys();
-};

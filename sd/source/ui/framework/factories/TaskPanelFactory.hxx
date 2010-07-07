@@ -89,8 +89,6 @@ public:
 
 private:
     ViewShellBase* mpViewShellBase;
-
-    void ThrowIfDisposed (void) const throw (css::lang::DisposedException);
 };
 
 } } // end of namespace sd::framework
