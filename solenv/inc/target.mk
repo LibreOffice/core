@@ -2043,6 +2043,7 @@ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid.lst .PHONY :
 
 .INCLUDE : tg_merge.mk
 .INCLUDE : tg_propmerge.mk
+.INCLUDE : tg_xtxmerge.mk
 
 wordcount:
     wc *.* >> $(TMP)/wc.lst
