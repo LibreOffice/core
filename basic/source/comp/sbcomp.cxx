@@ -67,7 +67,7 @@ void dbg_SaveDisassembly( SbModule* pModule )
                 ( OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
             if( xSFI.is() )
             {
-                String aFile( RTL_CONSTASCII_USTRINGPARAM("file:///d:/BasicAsm_") );
+                String aFile( RTL_CONSTASCII_USTRINGPARAM("file:///d:/zBasic.Asm/Asm_") );
                 StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
                 if( pBasic )
                 {

@@ -153,6 +153,7 @@ static const char* pOp3[] = {
     "DCREATE_REDIMP",   // Change dimensions of a user defined Object-Array (+StringId+StringId)
     "FIND_CM",          // Search inside a class module (CM) to enable global search in time
     "PUBLIC_P",         // Module global Variable (persisted between calls)(+StringID+Typ)
+    "FIND_STATIC",      // local static var lookup (+StringID+Typ)
 };
 
 static const char** pOps[3] = { pOp1, pOp2, pOp3 };
@@ -220,6 +221,7 @@ static const Func pOperand3[] = {
     &SbiDisas::Str2Op,     // Redimensionate User defined Object-Array (+StringId+StringId)
     &SbiDisas::VarOp,    // FIND_CM
     &SbiDisas::VarDefOp, // PUBLIC_P
+    &SbiDisas::VarOp,    // FIND_STATIC
 };
 
 // TODO: Why as method? Isn't a simple define sufficient?
