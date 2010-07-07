@@ -83,7 +83,7 @@ namespace abp
     protected:
         // OWizardPage overridables
         virtual void        initializePage();
-        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
         // TabDialog overridables
         virtual void        ActivatePage();

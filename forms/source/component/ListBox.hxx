@@ -134,6 +134,9 @@ protected:
     // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
 
+    // OPropertyChangeListener
+    virtual void    _propertyChanged( const ::com::sun::star::beans::PropertyChangeEvent& _rEvt ) throw ( ::com::sun::star::uno::RuntimeException );
+
     // prevent method hiding
     using OBoundControlModel::getFastPropertyValue;
     using OBoundControlModel::setPropertyValues;

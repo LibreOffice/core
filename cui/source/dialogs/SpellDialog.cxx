@@ -389,14 +389,14 @@ void SpellDialog::UpdateBoxes_Impl()
 }
 // -----------------------------------------------------------------------
 
-void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence)
+void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrentError )
 {
     //initially or after the last error of a sentence MarkNextError will fail
     //then GetNextSentence() has to be called followed again by MarkNextError()
     //MarkNextError is not initally called if the UndoEdit mode is active
     bool bNextSentence = false;
-    if((!aSentenceED.IsUndoEditMode() && aSentenceED.MarkNextError()) ||
-            true == ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence) && aSentenceED.MarkNextError()))
+    if((!aSentenceED.IsUndoEditMode() && aSentenceED.MarkNextError( bIgnoreCurrentError )) ||
+            true == ( bNextSentence = GetNextSentence_Impl(bUseSavedSentence, aSentenceED.IsUndoEditMode()) && aSentenceED.MarkNextError( false )))
     {
         const SpellErrorDescription* pSpellErrorDescription = aSentenceED.GetAlternatives();
         if( pSpellErrorDescription )
@@ -795,14 +795,12 @@ IMPL_LINK( SpellDialog, IgnoreHdl, Button *, EMPTYARG )
     }
     else
     {
-        //in case the error has been changed manually it has to be restored
+        //in case the error has been changed manually it has to be restored,
+        // since the users choice now was to ignore the error
         aSentenceED.RestoreCurrentError();
-        rParent.ApplyChangedSentence(aSentenceED.CreateSpellPortions(true));
-        aSentenceED.ResetModified();
 
         // the word is being ignored
-        SpellContinue_Impl();
-        bModified = false;
+        SpellContinue_Impl( false, true );
     }
     return 1;
 }
@@ -1074,11 +1072,8 @@ IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
   -----------------------------------------------------------------------*/
 IMPL_LINK(SpellDialog, CancelHdl, Button *, EMPTYARG )
 {
-    //apply changes first - if there are any
-    if(aSentenceED.IsModified())
-    {
-        rParent.ApplyChangedSentence(aSentenceED.CreateSpellPortions(false));
-    }
+    //apply changes and ignored text parts first - if there are any
+    rParent.ApplyChangedSentence(aSentenceED.CreateSpellPortions(true), false);
     Close();
     return 0;
 }
@@ -1158,15 +1153,17 @@ void SpellDialog::InvalidateDialog()
 /*-- 10.09.2003 08:35:56---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence)
+bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
 {
     bool bRet = false;
-    if(!bUseSavedSentence && aSentenceED.IsModified())
+    if(!bUseSavedSentence /*&& aSentenceED.IsModified()*/)
     {
-        rParent.ApplyChangedSentence(aSentenceED.CreateSpellPortions(false));
+        //apply changes and ignored text parts
+        rParent.ApplyChangedSentence(aSentenceED.CreateSpellPortions(true), bRecheck);
     }
+    aSentenceED.ResetIgnoreErrorsAt();
     aSentenceED.ResetModified();
-    SpellPortions aSentence = bUseSavedSentence ? m_aSavedSentence : rParent.GetNextWrongSentence();
+    SpellPortions aSentence = bUseSavedSentence ? m_aSavedSentence : rParent.GetNextWrongSentence( bRecheck );
     if(!bUseSavedSentence)
         m_aSavedSentence = aSentence;
     bool bHasReplaced = false;
@@ -1177,8 +1174,8 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence)
 
         if(!ApplyChangeAllList_Impl(aSentence, bHasReplaced))
         {
-            rParent.ApplyChangedSentence(aSentence);
-            aSentence = rParent.GetNextWrongSentence();
+            rParent.ApplyChangedSentence(aSentence, bRecheck);
+            aSentence = rParent.GetNextWrongSentence( bRecheck );
         }
         else
             break;
@@ -1642,8 +1639,10 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 /*-- 10.09.2003 13:38:14---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-bool SentenceEditWindow_Impl::MarkNextError()
+bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
 {
+    if (bIgnoreCurrentError)
+        m_aIgnoreErrorsAt.insert( m_nErrorStart );
     ExtTextEngine* pTextEngine = GetTextEngine();
     USHORT nTextLen = pTextEngine->GetTextLen(0);
     if(m_nErrorEnd >= nTextLen - 1)
@@ -1981,7 +1980,8 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
                 aPortion1.eLanguage = eLang;
                 aPortion1.sText = pTextEngine->GetText(
                             TextSelection(TextPaM(0, nStart), TextPaM(0, aStart->nPosition)));
-                if( bSetIgnoreFlag && m_nErrorStart == nStart  )
+                bool bIsIgnoreError = m_aIgnoreErrorsAt.find( nStart ) != m_aIgnoreErrorsAt.end();
+                if( bSetIgnoreFlag && bIsIgnoreError /*m_nErrorStart == nStart*/ )
                 {
                     aPortion1.bIgnoreThisError = true;
                 }

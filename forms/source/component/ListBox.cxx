@@ -174,6 +174,8 @@ namespace frm
         m_eListSourceType = ListSourceType_VALUELIST;
         m_aBoundColumn <<= (sal_Int16)1;
         initValueProperty( PROPERTY_SELECT_SEQ, PROPERTY_ID_SELECT_SEQ);
+
+        startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
     }
 
     //------------------------------------------------------------------
@@ -191,6 +193,8 @@ namespace frm
         ,m_nBoundColumnType( DataType::SQLNULL )
     {
         DBG_CTOR(OListBoxModel,NULL);
+
+        startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
     }
 
     //------------------------------------------------------------------
@@ -450,6 +454,22 @@ namespace frm
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
             DECL_PROP1(STRINGITEMLIST,      Sequence< ::rtl::OUString >,    BOUND);
         END_DESCRIBE_PROPERTIES();
+    }
+
+    //------------------------------------------------------------------------------
+    void OListBoxModel::_propertyChanged( const PropertyChangeEvent& i_rEvent ) throw ( RuntimeException )
+    {
+        if ( i_rEvent.PropertyName == PROPERTY_STRINGITEMLIST )
+        {
+            ControlModelLock aLock( *this );
+            // SYNCHRONIZED ----->
+            // our aggregate internally changed its StringItemList property - reflect this in our "overridden"
+            // version of the property
+            setNewStringItemList( i_rEvent.NewValue, aLock );
+            // <----- SYNCHRONIZED
+            return;
+        }
+        OBoundControlModel::_propertyChanged( i_rEvent );
     }
 
     //------------------------------------------------------------------------------
