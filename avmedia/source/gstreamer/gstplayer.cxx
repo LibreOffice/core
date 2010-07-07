@@ -279,49 +279,50 @@ double SAL_CALL Player::getMediaTime()
 void SAL_CALL Player::setStopTime( double /* fTime */ )
      throw( uno::RuntimeException )
 {
+    OSL_TRACE( "GStreamer method avmedia::gst::Player::setStopTime needs to be implemented" );
+
+    /*  Currently no need for implementation since higher levels of code don't use this method at all
+        !!! TODO: needs to be implemented if this functionality is needed at a later point of time
     if( implInitPlayer() )
     {
-        // TBD!!!
     }
+
+     */
 }
 
 // ------------------------------------------------------------------------------
 double SAL_CALL Player::getStopTime()
      throw( uno::RuntimeException )
 {
-    double fRet = 0.0;
+    /*
+        Currently no need for implementation since higher levels of code don't set a stop time ATM
+        !!! TODO: needs to be fully implemented if this functionality is needed at a later point of time
+    */
 
-    if( implInitPlayer() )
-    {
-        // TBD!!!
-        fRet = getDuration();
-    }
-
-    return( fRet );
+    return( getDuration() );
 }
 
 // ------------------------------------------------------------------------------
 void SAL_CALL Player::setRate( double /* fRate */ )
      throw( uno::RuntimeException )
 {
-    if( implInitPlayer() )
-    {
-        // TBD!!!
-    }
+    OSL_TRACE( "GStreamer method avmedia::gst::Player::setRate needs to be implemented" );
+
+    /*  Currently no need for implementation since higher levels of code don't use this method at all
+        !!! TODO: needs to be implemented if this functionality is needed at a later point of time
+    */
 }
 
 // ------------------------------------------------------------------------------
 double SAL_CALL Player::getRate()
      throw( uno::RuntimeException )
 {
-    double fRet = 1.0;
+    /*
+        Currently no need for implementation since higher levels of code don't set a different rate than 1 ATM
+        !!! TODO: needs to be fully implemented if this functionality is needed at a later point of time
+    */
 
-    if( implInitPlayer() )
-    {
-        // TBD!!!;
-    }
-
-    return( fRet );
+    return( 1.0 );
 }
 
 // ------------------------------------------------------------------------------
@@ -443,14 +444,13 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow(
         }
         else
         {
-            GstElement* pVideoSink = gst_element_factory_make( "xvimagesink", NULL );
+            // try to use gconf user configurable video sink first
+            GstElement* pVideoSink = gst_element_factory_make( "gconfvideosink", NULL );
 
-            if( !pVideoSink )
-            {
-                pVideoSink = gst_element_factory_make( "ximagesink", NULL );
-            }
-
-            if( pVideoSink )
+            if( ( NULL != pVideoSink ) ||
+                ( NULL != ( pVideoSink = gst_element_factory_make( "autovideosink", NULL ) ) ) ||
+                ( NULL != ( pVideoSink = gst_element_factory_make( "xvimagesink", NULL ) ) ) ||
+                ( NULL != ( pVideoSink = gst_element_factory_make( "ximagesink", NULL ) ) ) )
             {
                 GstState aOldState = GST_STATE_NULL;
 
