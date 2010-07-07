@@ -1295,7 +1295,7 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
 
 uno::Reference< script::vba::XEventProcessor > ScDocument::GetVbaEventProcessor() const
 {
-    if( !mxVbaEvents.is() && pShell && ooo::vba::isAlienExcelDoc( *pShell ) )
+    if( !mxVbaEvents.is() && pShell && IsInVBAMode() )
     {
         try
         {
