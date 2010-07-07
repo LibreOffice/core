@@ -191,10 +191,10 @@ void  SwMailMergePrepareMergePage::ActivatePage()
 /*-- 13.05.2004 15:38:32---------------------------------------------------
     merge the data into a new file
   -----------------------------------------------------------------------*/
-sal_Bool  SwMailMergePrepareMergePage::commitPage( CommitPageReason _eReason )
+sal_Bool  SwMailMergePrepareMergePage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    if(eTravelForward == _eReason && !rConfigItem.IsMergeDone())
+    if(::svt::WizardTypes::eTravelForward == _eReason && !rConfigItem.IsMergeDone())
     {
         m_pWizard->CreateTargetDocument();
         m_pWizard->SetRestartPage(MM_MERGEPAGE);

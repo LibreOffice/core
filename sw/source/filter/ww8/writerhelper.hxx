@@ -663,6 +663,7 @@ namespace sw
         */
         Frames GetFramesInNode(const Frames &rFrames, const SwNode &rNode);
 
+#if 0
         /** Get the Frames anchored for all nodes between two points
 
             Given a container of frames, find the ones anchored to the nodes
@@ -685,7 +686,7 @@ namespace sw
         */
         Frames GetFramesBetweenNodes(const Frames &rFrames,
                 const SwNode &rStart, const SwNode &rEnd);
-
+#endif
         /** Get the Numbering Format used on a paragraph
 
             There are two differing types of numbering formats that may be on a

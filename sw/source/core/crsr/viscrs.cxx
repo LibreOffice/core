@@ -666,16 +666,6 @@ void SwSelPaintRects::Paint( const Rectangle& /*rRect*/ )
     // nothing to do with overlays
 }
 
-/*
- * Rectangle ist in Dokument-Koordianten !!
- * pWin != 0 ->  auch wirklich malen
- *      == 0 ->  nur testen, ob es gemalt werden kann
- */
-
-void SwSelPaintRects::Paint( const SwRect& /*rRect*/ )
-{
-    // nothing to do with overlays
-}
 
 // check current MapMode of the shell and set possibly the static members.
 // Optional set the parameters pX, pY
