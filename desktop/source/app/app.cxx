@@ -1335,6 +1335,9 @@ void Desktop::Main()
     std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
     std::auto_ptr<SvtPathOptions> pPathOptions;
 
+    sal_Bool bRestartRequested( sal_False );
+    sal_Bool bUseSystemFileDialog(sal_True);
+    int      nAcquireCount( 0 );
     Reference < css::document::XEventListener > xGlobalBroadcaster;
     try
     {
@@ -1528,58 +1531,80 @@ void Desktop::Main()
         impl_checkRecoveryState(bCrashed, bExistsRecoveryData, bExistsSessionData);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} impl_checkRecoveryState" );
 
-        if (
-            (pCmdLineArgs->IsEmptyOrAcceptOnly()                                   ) &&
-            (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
-            (!bExistsRecoveryData                                                  ) &&
-            (!bExistsSessionData                                                   ) &&
-            (!Application::AnyInput( INPUT_APPEVENT )                              )
-           )
+        Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
         {
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
-            Reference< XFrame > xDesktopFrame( xSMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
-            if (xDesktopFrame.is())
+            ::comphelper::ComponentContext aContext( xSMgr );
+            xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
+        }
+
+        // check whether the shutdown is caused by restart
+        bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+
+        if ( pCmdLineArgs->IsHeadless() )
+        {
+            // Ensure that we use not the system file dialogs as
+            // headless mode relies on Application::EnableHeadlessMode()
+            // which does only work for VCL dialogs!!
+            SvtMiscOptions aMiscOptions;
+            bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
+            aMiscOptions.SetUseSystemFileDialog( sal_False );
+        }
+
+        if ( !bRestartRequested )
+        {
+            if (
+                (pCmdLineArgs->IsEmptyOrAcceptOnly()                                   ) &&
+                (SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE)) &&
+                (!bExistsRecoveryData                                                  ) &&
+                (!bExistsSessionData                                                   ) &&
+                (!Application::AnyInput( INPUT_APPEVENT )                              )
+               )
             {
-//                SetSplashScreenProgress(60);
-                Reference< XFrame > xBackingFrame;
-                Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
-
-                xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
-                if (xBackingFrame.is())
-                    xContainerWindow = xBackingFrame->getContainerWindow();
-                if (xContainerWindow.is())
+                RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
+                Reference< XFrame > xDesktopFrame( xSMgr->createInstance(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
+                if (xDesktopFrame.is())
                 {
-                    // set the WB_EXT_DOCUMENT style. Normally, this is done by the TaskCreator service when a "_blank"
-                    // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
-                    // otherwise documents loaded into this frame will later on miss functionality depending on the style.
-                    Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
-                    OSL_ENSURE( pContainerWindow, "Desktop::Main: no implementation access to the frame's container window!" );
-                    pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
+    //                SetSplashScreenProgress(60);
+                    Reference< XFrame > xBackingFrame;
+                    Reference< ::com::sun::star::awt::XWindow > xContainerWindow;
 
-                    SetSplashScreenProgress(75);
-                    Sequence< Any > lArgs(1);
-                    lArgs[0] <<= xContainerWindow;
-
-                    Reference< XController > xBackingComp(
-                        xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
-                        UNO_QUERY);
-//                    SetSplashScreenProgress(80);
-                    if (xBackingComp.is())
+                    xBackingFrame = xDesktopFrame->findFrame(OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0);
+                    if (xBackingFrame.is())
+                        xContainerWindow = xBackingFrame->getContainerWindow();
+                    if (xContainerWindow.is())
                     {
-                        Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
-                        // Attention: You MUST(!) call setComponent() before you call attachFrame().
-                        // Because the backing component set the property "IsBackingMode" of the frame
-                        // to true inside attachFrame(). But setComponent() reset this state everytimes ...
-                        xBackingFrame->setComponent(xBackingWin, xBackingComp);
-                        SetSplashScreenProgress(100);
-                        xBackingComp->attachFrame(xBackingFrame);
-                        CloseSplashScreen();
-                        xContainerWindow->setVisible(sal_True);
+                        // set the WB_EXT_DOCUMENT style. Normally, this is done by the TaskCreator service when a "_blank"
+                        // frame/window is created. Since we do not use the TaskCreator here, we need to mimic its behavior,
+                        // otherwise documents loaded into this frame will later on miss functionality depending on the style.
+                        Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+                        OSL_ENSURE( pContainerWindow, "Desktop::Main: no implementation access to the frame's container window!" );
+                        pContainerWindow->SetExtendedStyle( pContainerWindow->GetExtendedStyle() | WB_EXT_DOCUMENT );
+
+                        SetSplashScreenProgress(75);
+                        Sequence< Any > lArgs(1);
+                        lArgs[0] <<= xContainerWindow;
+
+                        Reference< XController > xBackingComp(
+                            xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
+                            UNO_QUERY);
+    //                    SetSplashScreenProgress(80);
+                        if (xBackingComp.is())
+                        {
+                            Reference< ::com::sun::star::awt::XWindow > xBackingWin(xBackingComp, UNO_QUERY);
+                            // Attention: You MUST(!) call setComponent() before you call attachFrame().
+                            // Because the backing component set the property "IsBackingMode" of the frame
+                            // to true inside attachFrame(). But setComponent() reset this state everytimes ...
+                            xBackingFrame->setComponent(xBackingWin, xBackingComp);
+                            SetSplashScreenProgress(100);
+                            xBackingComp->attachFrame(xBackingFrame);
+                            CloseSplashScreen();
+                            xContainerWindow->setVisible(sal_True);
+                        }
                     }
                 }
+                RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create BackingComponent" );
             }
-            RTL_LOGFILE_CONTEXT_TRACE( aLog, "} create BackingComponent" );
         }
     }
     catch ( com::sun::star::lang::WrappedTargetException& wte )
@@ -1614,107 +1639,82 @@ void Desktop::Main()
     aOptions.SetVCLSettings();
 //    SetSplashScreenProgress(60);
 
-    Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
-
-    sal_Bool bTerminateRequested = sal_False;
-
-    // Preload function depends on an initialized sfx application!
-    SetSplashScreenProgress(75);
-
-    sal_Bool bUseSystemFileDialog(sal_True);
-    if ( pCmdLineArgs->IsHeadless() )
+    if ( !bRestartRequested )
     {
-        // Ensure that we use not the system file dialogs as
-        // headless mode relies on Application::EnableHeadlessMode()
-        // which does only work for VCL dialogs!!
-        SvtMiscOptions aMiscOptions;
-        bUseSystemFileDialog = aMiscOptions.UseSystemFileDialog();
-        aMiscOptions.SetUseSystemFileDialog( sal_False );
-    }
+        Application::SetFilterHdl( LINK( this, Desktop, ImplInitFilterHdl ) );
 
-    // use system window dialogs
-    Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
+        sal_Bool bTerminateRequested = sal_False;
 
-//    SetSplashScreenProgress(80);
+        // Preload function depends on an initialized sfx application!
+        SetSplashScreenProgress(75);
 
-    if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() &&
-         !pCmdLineArgs->IsNoQuickstart() )
-        InitializeQuickstartMode( xSMgr );
+        // use system window dialogs
+        Application::SetSystemWindowMode( SYSTEMWINDOW_MODE_DIALOG );
 
-    RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.frame.Desktop" );
-    try
-    {
-        Reference< XDesktop > xDesktop( xSMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
-        if ( xDesktop.is() )
-            xDesktop->addTerminateListener( new OfficeIPCThreadController );
-        SetSplashScreenProgress(100);
-    }
-    catch ( com::sun::star::uno::Exception& e )
-    {
-        FatalError( MakeStartupErrorMessage(e.Message) );
-        return;
-    }
-    /*
-    catch ( ... )
-    {
-        FatalError( MakeStartupErrorMessage(
-            OUString::createFromAscii(
-            "Unknown error during startup (TD/Desktop service).\nInstallation could be damaged.")));
-        return;
-    }
-    */
+    //    SetSplashScreenProgress(80);
 
-    // Release solar mutex just before we wait for our client to connect
-    int nAcquireCount = 0;
-    ::vos::IMutex& rMutex = Application::GetSolarMutex();
-    if ( rMutex.tryToAcquire() )
-        nAcquireCount = Application::ReleaseSolarMutex() - 1;
+        if ( !bTerminateRequested && !pCmdLineArgs->IsInvisible() &&
+             !pCmdLineArgs->IsNoQuickstart() )
+            InitializeQuickstartMode( xSMgr );
 
-    // Post user event to startup first application component window
-    // We have to send this OpenClients message short before execute() to
-    // minimize the risk that this message overtakes type detection contruction!!
-    Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
+        RTL_LOGFILE_CONTEXT( aLog2, "desktop (cd100003) createInstance com.sun.star.frame.Desktop" );
+        try
+        {
+            Reference< XDesktop > xDesktop( xSMgr->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY );
+            if ( xDesktop.is() )
+                xDesktop->addTerminateListener( new OfficeIPCThreadController );
+            SetSplashScreenProgress(100);
+        }
+        catch ( com::sun::star::uno::Exception& e )
+        {
+            FatalError( MakeStartupErrorMessage(e.Message) );
+            return;
+        }
+        /*
+        catch ( ... )
+        {
+            FatalError( MakeStartupErrorMessage(
+                OUString::createFromAscii(
+                "Unknown error during startup (TD/Desktop service).\nInstallation could be damaged.")));
+            return;
+        }
+        */
 
-    // Post event to enable acceptors
-    Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
+        // Post user event to startup first application component window
+        // We have to send this OpenClients message short before execute() to
+        // minimize the risk that this message overtakes type detection contruction!!
+        Application::PostUserEvent( LINK( this, Desktop, OpenClients_Impl ) );
 
-    // The configuration error handler currently is only for startup
-    aConfigErrHandler.deactivate();
+        // Post event to enable acceptors
+        Application::PostUserEvent( LINK( this, Desktop, EnableAcceptors_Impl) );
 
-   // Acquire solar mutex just before we enter our message loop
-    if ( nAcquireCount )
-        Application::AcquireSolarMutex( nAcquireCount );
+        // The configuration error handler currently is only for startup
+        aConfigErrHandler.deactivate();
 
-    // call Application::Execute to process messages in vcl message loop
-    RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Application::Execute()" );
+        // call Application::Execute to process messages in vcl message loop
+        RTL_LOGFILE_PRODUCT_TRACE( "PERFORMANCE - enter Application::Execute()" );
 
-    Reference< ::com::sun::star::task::XRestartManager > xRestartManager;
-    try
-    {
-        // The JavaContext contains an interaction handler which is used when
-        // the creation of a Java Virtual Machine fails
-        com::sun::star::uno::ContextLayer layer2(
-            new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
+        try
+        {
+            // The JavaContext contains an interaction handler which is used when
+            // the creation of a Java Virtual Machine fails
+            com::sun::star::uno::ContextLayer layer2(
+                new svt::JavaContext( com::sun::star::uno::getCurrentContext() ) );
 
-        ::comphelper::ComponentContext aContext( xSMgr );
-        xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
-        if ( !xRestartManager.is() || !xRestartManager->isRestartRequested( sal_True ) )
             Execute();
+        }
+        catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
+        {
+            OfficeIPCThread::SetDowning();
+            FatalError( MakeStartupErrorMessage(exFilterCfg.Message) );
+        }
+        catch(const com::sun::star::configuration::CorruptedConfigurationException& exAnyCfg)
+        {
+            OfficeIPCThread::SetDowning();
+            FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
+        }
     }
-    catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
-    {
-        OfficeIPCThread::SetDowning();
-        FatalError( MakeStartupErrorMessage(exFilterCfg.Message) );
-    }
-    catch(const com::sun::star::configuration::CorruptedConfigurationException& exAnyCfg)
-    {
-        OfficeIPCThread::SetDowning();
-        FatalError( MakeStartupErrorMessage(exAnyCfg.Message) );
-    }
-
-    // check whether the shutdown is caused by restart
-    sal_Bool bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
 
     if (xGlobalBroadcaster.is())
     {
