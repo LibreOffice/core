@@ -25,7 +25,8 @@
 #
 #*************************************************************************
 
-include $(dir $(firstword $(MAKEFILE_LIST)))/../SourcePaths.mk
+include $(dir $(firstword $(MAKEFILE_LIST)))/../SourcePath.mk
+GBUILDDIR := $(SOLARENV)/gbuild
 include $(GBUILDDIR)/gbuild.mk
 
 $(eval $(call gb_Module_make_global_targets,$(foreach module,$(lastword $(subst /, ,$(dir $(realpath $(firstword $(MAKEFILE_LIST)))))),$(CURRENTREPO)/$(module)/Module_$(module).mk)))
