@@ -125,9 +125,9 @@ sub GetIniInformation
     if (gPrivateEnvironmentLocation <> "" AND gPrivateEnvironmentLocation <> ".") then
         if NOT fileExists(gPrivateEnvironmentLocation) then
             qaErrorLog "[PrivateEnvironment] defined in: '"+gTesttoolIni+"', but the path '"+gPrivateEnvironmentLocation+"'does not exist!"
-        else
             gPrivateEnvironmentLocation = ""
         end if
+    else
        gPrivateEnvironmentLocation = ""
    end if
 end sub

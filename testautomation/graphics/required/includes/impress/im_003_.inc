@@ -132,31 +132,23 @@ testcase tiViewPanes
 endcase 'tiViewPanes
 '---------------------------------------------------------
 testcase tiViewMasterView
-
     printlog "open application"
     Call hNewDocument
-
     printlog "View->Master View->Drawing View"
     hUseAsyncSlot( "ViewWorkspaceDrawingView" )
-
     printlog "View->Master View->Outline View "
     hUseAsyncSlot( "ViewWorkspaceOutlineView" )
-
     printlog "View->Master View->Slides View "
-    hUseAsyncSlot( "ViewWorkspaceSlidesView" )
-
+    ViewWorkspaceSlidesView
+    sleep 1
     printlog "View->Master View->Notes View "
     hUseAsyncSlot( "ViewWorkspaceNotesView" )
-
     printlog "View->Master View->Handout View "
     hUseAsyncSlot( "ViewWorkspaceHandoutView" )
-
     printlog "View->Master View->Drawing View "
     hUseAsyncSlot( "ViewWorkspaceDrawingView" )
-
     printlog "close application "
     Call hCloseDocument
-
 endcase 'tiViewMasterView
 '---------------------------------------------------------
 testcase tiViewSlideMaster
