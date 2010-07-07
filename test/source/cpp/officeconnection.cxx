@@ -40,6 +40,7 @@
 #include "test/getargument.hxx"
 #include "test/officeconnection.hxx"
 #include "test/toabsolutefileurl.hxx"
+#include "test/uniquepipename.hxx"
 
 namespace {
 
@@ -61,13 +62,9 @@ void OfficeConnection::setUp() {
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")),
             &argSoffice));
     if (argSoffice.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("path:"))) {
-        oslProcessInfo info;
-        info.Size = sizeof info;
-        CPPUNIT_ASSERT_EQUAL(
-            osl_Process_E_None,
-            osl_getProcessInfo(0, osl_Process_IDENTIFIER, &info));
-        desc = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pipe,name=oootest")) +
-            rtl::OUString::valueOf(static_cast< sal_Int64 >(info.Ident));
+        desc = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pipe,name=")) +
+            uniquePipeName(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oootest")));
         rtl::OUString noquickArg(
             RTL_CONSTASCII_USTRINGPARAM("-quickstart=no"));
         rtl::OUString nofirstArg(
