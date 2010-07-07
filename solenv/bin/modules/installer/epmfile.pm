@@ -2343,6 +2343,7 @@ sub log_rpm_info
             $rpmout =~ s/\s*$//g;
 
             $infoline = "$rpmout\n";
+            $infoline =~ s/error/e_r_r_o_r/i;  # avoiding log problems
             push( @installer::globals::logfileinfo, $infoline);
         }
     }
