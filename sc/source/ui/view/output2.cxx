@@ -565,6 +565,12 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
         else if (c == sal_Unicode('E'))
             ++nExpCount;
     }
+
+    // #i112250# A small value might be formatted as "0" when only counting the digits,
+    // but fit into the column when considering the smaller width of the decimal separator.
+    if (aString.EqualsAscii("0") && fVal != 0.0)
+        nDecimalCount = 1;
+
     if (nDecimalCount)
         nWidth += (nMaxDigit - GetDotWidth()) * nDecimalCount;
     if (nSignCount)
@@ -594,6 +600,7 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScBaseCell* pCell, long nWidth )
     }
 
     TextChanged();
+    pLastCell = NULL;   // #i113022# equal cell and format in another column may give different string
 }
 
 void ScDrawStringsVars::SetAutoText( const String& rAutoText )
