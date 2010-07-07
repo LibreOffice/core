@@ -241,7 +241,7 @@ sub remove_office_start_language_files
         else
         {
             my $infoline = "INFO: Flag SET_OFFICE_LANGUAGE \-\> Removing $oneitem->{'gid'} from file list.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            push( @installer::globals::logfileinfo, $infoline);
         }
     }
 
@@ -540,18 +540,6 @@ sub set_global_directory_hostnames
             $installer::globals::officedirhostname = $onedir->{'HostName'};
             $installer::globals::officedirgid = $onedir->{'gid'};
             $allvariables->{'OFFICEDIRECTORYHOSTNAME'} = $installer::globals::officedirhostname;
-        }
-        if ( $styles =~ /\bBASISDIRECTORY\b/ )
-        {
-            $installer::globals::basisdirhostname = $onedir->{'HostName'};
-            $installer::globals::basisdirgid = $onedir->{'gid'};
-            $allvariables->{'BASISDIRECTORYHOSTNAME'} = $installer::globals::basisdirhostname;
-        }
-        if ( $styles =~ /\bUREDIRECTORY\b/ )
-        {
-            $installer::globals::uredirhostname = $onedir->{'HostName'};
-            $installer::globals::uredirgid = $onedir->{'gid'};
-            $allvariables->{'UREDIRECTORYHOSTNAME'} = $installer::globals::uredirhostname;
         }
         if ( $styles =~ /\bSUNDIRECTORY\b/ )
         {

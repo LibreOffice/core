@@ -35,7 +35,7 @@ Directory gid_Dir_Brand_Root
   #else
     HostName = "${UNIXPRODUCTNAME}${BRANDPACKAGEVERSION}";
   #endif
-    Styles = (OFFICEDIRECTORY);
+    Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION);
 End
 #endif
 

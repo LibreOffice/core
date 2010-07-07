@@ -1030,6 +1030,12 @@ File gid_File_Lm_Yiddish_Utf
     Styles = (PACKED);
 End
 
+File gid_File_Lm_Zulu
+    TXT_FILE_BODY;
+    Name = "zulu.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
 
 
 
@@ -1893,7 +1899,7 @@ End
 File gid_File_Extension_Dictionary_Da
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-da.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -1902,7 +1908,7 @@ End
 File gid_File_Extension_Dictionary_De_AT
 	Dir = gid_Brand_Dir_Share_Extension_Install;
     Name = "dict-de-AT.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -1911,7 +1917,7 @@ End
 File gid_File_Extension_Dictionary_De_CH
     Dir = gid_Brand_Dir_Share_Extension_Install;
     Name = "dict-de-CH.oxt";
-    Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+    Styles = (PACKED, FORCELANGUAGEPACK);
     UnixRights = 444;
 End
 #endif
@@ -1920,7 +1926,7 @@ End
 File gid_File_Extension_Dictionary_De_DE
     Dir = gid_Brand_Dir_Share_Extension_Install;
     Name = "dict-de-DE.oxt";
-    Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+    Styles = (PACKED, FORCELANGUAGEPACK);
     UnixRights = 444;
 End
 #endif
@@ -1929,7 +1935,7 @@ End
 File gid_File_Extension_Dictionary_En
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-en.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -1947,7 +1953,7 @@ End
 File gid_File_Extension_Dictionary_Et
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-et.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -1956,7 +1962,7 @@ End
 File gid_File_Extension_Dictionary_Fr
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-fr.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -1983,7 +1989,7 @@ End
 File gid_File_Extension_Dictionary_Hu
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-hu.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -1992,7 +1998,7 @@ End
 File gid_File_Extension_Dictionary_It
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-it.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2001,7 +2007,7 @@ End
 File gid_File_Extension_Dictionary_Ku_Tr
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-ku-TR.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2037,7 +2043,7 @@ End
 File gid_File_Extension_Dictionary_No
     Dir = gid_Brand_Dir_Share_Extension_Install;
     Name = "dict-no.oxt";
-    Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+    Styles = (PACKED, FORCELANGUAGEPACK);
     UnixRights = 444;
 End
 #endif
@@ -2046,7 +2052,7 @@ End
 File gid_File_Extension_Dictionary_Pl
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-pl.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2055,7 +2061,7 @@ End
 File gid_File_Extension_Dictionary_Pt
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-pt.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2064,7 +2070,7 @@ End
 File gid_File_Extension_Dictionary_Ro
     Dir = gid_Brand_Dir_Share_Extension_Install;
     Name = "dict-ro.oxt";
-    Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+    Styles = (PACKED, FORCELANGUAGEPACK);
     UnixRights = 444;
 End
 #endif
@@ -2082,7 +2088,7 @@ End
 File gid_File_Extension_Dictionary_Sk
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-sk.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2091,7 +2097,7 @@ End
 File gid_File_Extension_Dictionary_Sl
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-sl.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
@@ -2109,7 +2115,7 @@ End
 File gid_File_Extension_Dictionary_Sv
 	Dir = gid_Brand_Dir_Share_Extension_Install;
 	Name = "dict-sv.oxt";
-	Styles = (PACKED, PATCH, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK);
 	UnixRights = 444;
 End
 #endif
