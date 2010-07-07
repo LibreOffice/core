@@ -74,8 +74,18 @@ namespace core {
 
 namespace {
 
+struct UrlPool
+{
+    ::osl::Mutex        maMutex;
+    ::std::set< OUString > maUrls;
+};
+
+struct StaticUrlPool : public ::rtl::Static< UrlPool, StaticUrlPool > {};
+
+// ----------------------------------------------------------------------------
+
 /** This guard prevents recursive loading/saving of the same document. */
-class DocumentOpenedGuard : public ::osl::Mutex
+class DocumentOpenedGuard
 {
 public:
     explicit            DocumentOpenedGuard( const OUString& rUrl );
@@ -87,31 +97,28 @@ private:
                         DocumentOpenedGuard( const DocumentOpenedGuard& );
     DocumentOpenedGuard& operator=( const DocumentOpenedGuard& );
 
-    typedef ::std::set< OUString > UrlSet;
-    struct UrlPool : public ::rtl::Static< UrlSet, UrlPool > {};
-
-    UrlSet&             mrUrls;
     OUString            maUrl;
     bool                mbValid;
 };
 
-DocumentOpenedGuard::DocumentOpenedGuard( const OUString& rUrl ) :
-    mrUrls( UrlPool::get() )
+DocumentOpenedGuard::DocumentOpenedGuard( const OUString& rUrl )
 {
-    ::osl::MutexGuard aGuard( *this );
-    mbValid = (rUrl.getLength() == 0) || (mrUrls.count( rUrl ) == 0);
+    UrlPool& rUrlPool = StaticUrlPool::get();
+    ::osl::MutexGuard aGuard( rUrlPool.maMutex );
+    mbValid = (rUrl.getLength() == 0) || (rUrlPool.maUrls.count( rUrl ) == 0);
     if( mbValid && (rUrl.getLength() > 0) )
     {
-        mrUrls.insert( rUrl );
+        rUrlPool.maUrls.insert( rUrl );
         maUrl = rUrl;
     }
 }
 
 DocumentOpenedGuard::~DocumentOpenedGuard()
 {
-    ::osl::MutexGuard aGuard( *this );
+    UrlPool& rUrlPool = StaticUrlPool::get();
+    ::osl::MutexGuard aGuard( rUrlPool.maMutex );
     if( maUrl.getLength() > 0 )
-        mrUrls.erase( maUrl );
+        rUrlPool.maUrls.erase( maUrl );
 }
 
 } // namespace
@@ -594,4 +601,3 @@ GraphicHelper* FilterBase::implCreateGraphicHelper() const
 
 } // namespace core
 } // namespace oox
-
