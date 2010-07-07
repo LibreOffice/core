@@ -40,6 +40,7 @@
 #include "vcl/fontcache.hxx"
 #include "vcl/fontcache.hxx"
 #include "vcl/fontsubset.hxx"
+#include "vcl/impfont.hxx"
 #include "vcl/strhelper.hxx"
 #include "vcl/ppdparser.hxx"
 #include "vcl/svdata.hxx"
@@ -3794,6 +3795,35 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
                     rWidths[i] = pMetrics[i].adv;
                 free( pMetrics );
                 rUnicodeEnc.clear();
+            }
+
+            // fill the unicode map
+            // TODO: isn't this map already available elsewhere in the fontmanager?
+            const sal_uInt8* pCmapData = NULL;
+            int nCmapSize = 0;
+            if( GetSfntTable( pTTFont, O_cmap, &pCmapData, &nCmapSize ) )
+            {
+                CmapResult aCmapResult;
+                if( ParseCMAP( pCmapData, nCmapSize, aCmapResult ) )
+                {
+                    const ImplFontCharMap aCharMap( aCmapResult );
+                    for( sal_uInt32 cOld = 0;;)
+                    {
+                        // get next unicode covered by font
+                        const sal_uInt32 c = aCharMap.GetNextChar( cOld );
+                        if( c == cOld )
+                            break;
+                        cOld = c;
+#if 1 // TODO: remove when sal_Unicode covers all of unicode
+                        if( c > (sal_Unicode)~0 )
+                            break;
+#endif
+                        // get the matching glyph index
+                        const sal_uInt32 nGlyphId = aCharMap.GetGlyphIndex( c );
+                        // update the requested map
+                        rUnicodeEnc[ (sal_Unicode)c ] = nGlyphId;
+                    }
+                }
             }
         }
         CloseTTFont( pTTFont );

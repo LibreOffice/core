@@ -364,7 +364,8 @@ namespace basegfx
                                         if(fTools::moreOrEqual(fCutB, fZero) && fTools::less(fCutB, fOne))
                                         {
                                             // cut is in both ranges. Add points for A and B
-                                            if(fTools::equalZero(fCutA))
+                                            // #i111715# use fTools::equal instead of fTools::equalZero for better accuracy
+                                            if(fTools::equal(fCutA, fZero))
                                             {
                                                 // ignore for start point in first edge; this is handled
                                                 // by outer methods and would just produce a double point
@@ -379,7 +380,8 @@ namespace basegfx
                                                 rTempPointsA.push_back(temporaryPoint(aCutPoint, a, fCutA));
                                             }
 
-                                            if(fTools::equalZero(fCutB))
+                                            // #i111715# use fTools::equal instead of fTools::equalZero for better accuracy
+                                            if(fTools::equal(fCutB, fZero))
                                             {
                                                 // ignore for start point in first edge; this is handled
                                                 // by outer methods and would just produce a double point

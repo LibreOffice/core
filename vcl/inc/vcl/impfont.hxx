@@ -177,7 +177,8 @@ class CmapResult;
 class VCL_DLLPUBLIC ImplFontCharMap
 {
 public:
-   explicit             ImplFontCharMap( const CmapResult& );
+    explicit             ImplFontCharMap( const CmapResult& );
+    virtual              ~ImplFontCharMap();
 
     static ImplFontCharMap* GetDefaultMap( bool bSymbols=false);
 
@@ -201,7 +202,6 @@ public:
     int                 GetGlyphIndex( sal_uInt32 ) const;
 
 private:
-    /*virtual*/         ~ImplFontCharMap();
     int                 ImplFindRangeIndex( sal_uInt32 ) const;
 
     // prevent assignment and copy construction

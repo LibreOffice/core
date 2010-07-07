@@ -1353,15 +1353,11 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             //
             // i.e. having a time < that of the toplevel frame means that the toplevel frame gets unfocused.
             // awesome.
-            bool bMetaCity = getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity");
-            if( nUserTime == 0 &&
-               ( bMetaCity ||
-                 (
-                    getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz") &&
-                    (m_nStyle & (SAL_FRAME_STYLE_OWNERDRAWDECORATION))
-                 )
-               )
-              )
+            bool bHack =
+                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") ||
+                getDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("compiz")
+                ;
+            if( nUserTime == 0 && bHack )
             {
                 /* #i99360# ugly workaround an X11 library bug */
                 nUserTime= getDisplay()->GetLastUserEventTime( true );
@@ -1369,7 +1365,7 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             }
             lcl_set_user_time( GTK_WIDGET(m_pWindow)->window, nUserTime );
 
-            if( bMetaCity && ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
+            if( bHack && ! bNoActivate && (m_nStyle & SAL_FRAME_STYLE_TOOLWINDOW) )
                 m_bSetFocusOnMap = true;
 
             gtk_widget_show( m_pWindow );
@@ -3240,7 +3236,8 @@ GtkSalFrame::IMHandler::IMHandler( GtkSalFrame* pFrame )
 : m_pFrame(pFrame),
   m_nPrevKeyPresses( 0 ),
   m_pIMContext( NULL ),
-  m_bFocused( true )
+  m_bFocused( true ),
+  m_bPreeditJustChanged( false )
 {
     m_aInputEvent.mpTextAttr = NULL;
     createIMContext();
@@ -3415,6 +3412,8 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
         if( aDel.isDeleted() )
             return true;
 
+        m_bPreeditJustChanged = false;
+
         if( bResult )
             return true;
         else
@@ -3443,6 +3442,8 @@ bool GtkSalFrame::IMHandler::handleKeyEvent( GdkEventKey* pEvent )
 
         if( aDel.isDeleted() )
             return true;
+
+        m_bPreeditJustChanged = false;
 
         std::list<PreviousKeyPress>::iterator    iter     = m_aPrevKeyPresses.begin();
         std::list<PreviousKeyPress>::iterator    iter_end = m_aPrevKeyPresses.end();
@@ -3507,8 +3508,6 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
     {
         GTK_YIELD_GRAB();
 
-        bool bWasPreedit = (pThis->m_aInputEvent.mpTextAttr != 0);
-
         pThis->m_aInputEvent.mnTime             = 0;
         pThis->m_aInputEvent.mpTextAttr         = 0;
         pThis->m_aInputEvent.maText             = String( pText, RTL_TEXTENCODING_UTF8 );
@@ -3532,6 +3531,9 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
          *  or because there never was a preedit.
          */
         bool bSingleCommit = false;
+        bool bWasPreedit =
+            (pThis->m_aInputEvent.mpTextAttr != 0) ||
+            pThis->m_bPreeditJustChanged;
         if( ! bWasPreedit
             && pThis->m_aInputEvent.maText.Len() == 1
             && ! pThis->m_aPrevKeyPresses.empty()
@@ -3546,7 +3548,6 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
                 bSingleCommit = true;
             }
         }
-
         if( ! bSingleCommit )
         {
             pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pThis->m_aInputEvent);
@@ -3593,6 +3594,8 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
             return;
         }
     }
+
+    pThis->m_bPreeditJustChanged = true;
 
     bool bEndPreedit = (!pText || !*pText) && pThis->m_aInputEvent.mpTextAttr != NULL;
     pThis->m_aInputEvent.mnTime             = 0;
@@ -3677,6 +3680,8 @@ void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext*, gpointer im_hand
     GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
     GTK_YIELD_GRAB();
 
+    pThis->m_bPreeditJustChanged = true;
+
     vcl::DeletionListener aDel( pThis->m_pFrame );
     pThis->doCallEndExtTextInput();
     if( ! aDel.isDeleted() )
@@ -3752,8 +3757,21 @@ gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint 
     if (xText.is())
     {
         sal_uInt32 nPosition = xText->getCaretPosition();
-    xText->deleteText(nPosition + offset, nPosition + offset + nchars);
-    return TRUE;
+        // --> OD 2010-06-04 #i111768# - apply patch from kstribley:
+        // range checking
+//        xText->deleteText(nPosition + offset, nPosition + offset + nchars);
+        sal_Int32 nDeletePos = nPosition + offset;
+        sal_Int32 nDeleteEnd = nDeletePos + nchars;
+        if (nDeletePos < 0)
+            nDeletePos = 0;
+        if (nDeleteEnd < 0)
+            nDeleteEnd = 0;
+        if (nDeleteEnd > xText->getCharacterCount())
+            nDeleteEnd = xText->getCharacterCount();
+
+        xText->deleteText(nDeletePos, nDeleteEnd);
+        // <--
+        return TRUE;
     }
 
     return FALSE;

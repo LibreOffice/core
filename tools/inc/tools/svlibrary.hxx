@@ -24,34 +24,19 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef _SVLIBRARY_HXX
+#define _SVLIBRARY_HXX
 
+#include "tools/toolsdllapi.h"
 
-#ifndef _SVTOOLS_LOGINDLG_HRC_
-#define _SVTOOLS_LOGINDLG_HRC_
+#include <osl/module.hxx>
+#include <rtl/ustring.hxx>
 
-//============================================================================
-#define INFO_LOGIN_ERROR        10
-#define GB_LOGIN_ERROR          11
+class TOOLS_DLLPUBLIC SvLibrary
+{
+public:
+    static bool LoadModule( osl::Module&, const rtl::OUString& rLibName, ::oslGenericFunction baseModule, ::sal_Int32 mode = SAL_LOADMODULE_DEFAULT );
+};
 
-#define INFO_LOGIN_REQUEST      20
-#define FT_LOGIN_PATH           21
-#define ED_LOGIN_PATH           22
-#define INFO_LOGIN_PATH         23
-#define BTN_LOGIN_PATH          24
-#define FT_LOGIN_USERNAME       25
-#define ED_LOGIN_USERNAME       26
-#define INFO_LOGIN_USERNAME     27
-#define FT_LOGIN_PASSWORD       28
-#define ED_LOGIN_PASSWORD       29
-#define FT_LOGIN_ACCOUNT        30
-#define ED_LOGIN_ACCOUNT        31
-#define CB_LOGIN_SAVEPASSWORD   32
-#define GB_LOGIN_LOGIN          33
+#endif
 
-#define BTN_LOGIN_OK            50
-#define BTN_LOGIN_CANCEL        51
-#define BTN_LOGIN_HELP          52
-
-#define STR_LOGIN_AT            60
-
-#endif // _SVTOOLS_LOGINDLG_HRC_
