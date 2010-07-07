@@ -466,6 +466,7 @@ namespace {
                                     GetSlidesPerPageSequence(),
                                     4,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                    Sequence< sal_Bool >(),
                                     aContentOpt
                                     )
                                 );
@@ -479,6 +480,7 @@ namespace {
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_ORDER_CHOICES),
                                     0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                    Sequence< sal_Bool >(),
                                     aSlidesPerPageOpt )
                                 );
             }
@@ -554,6 +556,7 @@ namespace {
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES),
                                     0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                    Sequence< sal_Bool >(),
                                     aPageOptionsOpt
                                     )
                                 );
@@ -569,6 +572,7 @@ namespace {
                                     CreateChoice(_STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_DRAW),
                                     0,
                                     OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                    Sequence< sal_Bool >(),
                                     aPageOptionsOpt
                                     )
                                 );
@@ -600,6 +604,7 @@ namespace {
                                 CreateChoice(_STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST),
                                 0,
                                 OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                Sequence< sal_Bool >(),
                                 aIncludeOpt
                                 )
                             );
