@@ -133,6 +133,10 @@ class Desktop : public Application
         static sal_Bool         IsFirstStartWizardNeeded();
         static sal_Bool         CheckExtensionDependencies();
 
+        void                    SynchronizeExtensionRepositories();
+        void                    SetSplashScreenText( const ::rtl::OUString& rText );
+        void                    SetSplashScreenProgress( sal_Int32 );
+
     private:
         // Bootstrap methods
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > CreateApplicationServiceManager();
@@ -164,7 +168,6 @@ class Desktop : public Application
 
         Reference<XStatusIndicator> m_rSplashScreen;
         void                    OpenSplashScreen();
-        void                    SetSplashScreenProgress(sal_Int32);
         void                    CloseSplashScreen();
 
         void                    EnableOleAutomation();

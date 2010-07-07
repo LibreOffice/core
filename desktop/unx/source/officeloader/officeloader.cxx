@@ -93,7 +93,7 @@ SAL_IMPLEMENT_MAIN()
             if ( info.Fields & osl_Process_EXITCODE )
             {
                 exitcode = info.Code;
-                bRestart = (ExitHelper::E_CRASH_WITH_RESTART == exitcode);
+                bRestart = (ExitHelper::E_CRASH_WITH_RESTART == exitcode || ExitHelper::E_NORMAL_RESTART == exitcode);
             }
             else
                 break;

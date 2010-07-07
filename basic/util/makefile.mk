@@ -59,6 +59,7 @@ SHL1STDLIBS= \
             $(VCLLIB) \
             $(VOSLIB) \
             $(SALLIB) \
+            $(SALHELPERLIB) \
             $(COMPHELPERLIB) \
             $(UNOTOOLSLIB) \
             $(SOTLIB) \

@@ -119,7 +119,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 using ::com::sun::star::util::DateTime;
 using namespace ::com::sun::star::ucb;
-
+using namespace ::com::sun::star;
 using ::comphelper::UStringLess;
 
 
@@ -1823,8 +1823,28 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     Reference<XTextContent> xTextContent(xTmp, UNO_QUERY);
                     if (m_pImpl->m_xText.is() && xRange.is())
                     {
-                        m_pImpl->m_xText->insertTextContent(
-                            xRange, xTextContent, sal_True);
+                        // #i107225# the combined characters need to be inserted first
+                        // the selected text has to be removed afterwards
+                        m_pImpl->m_xText->insertTextContent( xRange->getStart(), xTextContent, sal_True );
+
+                        if( xRange->getString().getLength() )
+                        {
+                            try
+                            {
+                                uno::Reference< text::XTextCursor > xCrsr = xRange->getText()->createTextCursorByRange( xRange->getStart() );
+                                xCrsr->goLeft( 1, true );
+                                uno::Reference< beans::XPropertySet> xCrsrProperties( xCrsr, uno::UNO_QUERY_THROW );
+                                //the hard properties of the removed text need to be applied to the combined characters field
+                                pStyle->FillPropertySet( xCrsrProperties );
+                                xCrsr->collapseToEnd();
+                                xCrsr->gotoRange( xRange->getEnd(), true );
+                                xCrsr->setString( ::rtl::OUString() );
+                            }
+                            catch( const uno::Exception& rEx )
+                            {
+                                (void)rEx;
+                            }
+                        }
                     }
                 }
             }

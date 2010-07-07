@@ -141,6 +141,22 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeExcep
     }
 }
 
+::sal_Bool SAL_CALL
+ScVbaCommandBarControl::getBeginGroup() throw (css::uno::RuntimeException)
+{
+    // TODO: need to check if the item before this item is of type 'separator'
+    return sal_False;
+}
+
+void SAL_CALL
+ScVbaCommandBarControl::setBeginGroup( ::sal_Bool _begin ) throw (css::uno::RuntimeException)
+{
+    if( getBeginGroup() != _begin )
+    {
+        // TODO: need to insert or remove an item of type 'separator' before this item
+    }
+}
+
 void SAL_CALL
 ScVbaCommandBarControl::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
