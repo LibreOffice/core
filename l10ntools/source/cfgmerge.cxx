@@ -247,7 +247,7 @@ extern FILE *GetCfgFile()
         if ( !pFile ){
             fprintf( stderr, "Error: Could not open file %s\n",
                 sInputFileName.GetBuffer());
-            exit( 13 );
+            exit( -13 );
         }
         else {
             // this is a valid file which can be opened, so
@@ -264,8 +264,6 @@ extern FILE *GetCfgFile()
 //          printf("sFullEntry = %s\n",sFullEntry.GetBuffer());
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 //            printf("sActFileName = %s\n",sActFileName.GetBuffer());
-            if( !bQuiet )
-                fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
 
@@ -615,7 +613,7 @@ CfgOutputParser::CfgOutputParser( const ByteString &rOutputFile )
         Error( sError );
         delete pOutputStream;
         pOutputStream = NULL;
-        exit( 13 );
+        exit( -13 );
     }
 }
 

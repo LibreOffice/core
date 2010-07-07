@@ -252,8 +252,6 @@ extern FILE *GetXrmFile()
             // (e.g.: source\ui\src\menue.src)
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 
-            if( !bQuiet )
-                fprintf( stdout, "\nProcessing File %s ...\n", sInputFileName.GetBuffer());
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
 

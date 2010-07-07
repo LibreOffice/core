@@ -282,7 +282,6 @@ extern FILE *GetNextFile()
             // (e.g.: source\ui\src\menue.src)
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 
-            if( !bQuiet ) fprintf( stdout, "\nProcessing File %s ...\n", sOrigFile.GetBuffer());
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
             sFile = sActFileName;

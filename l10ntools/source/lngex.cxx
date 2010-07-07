@@ -170,7 +170,6 @@ BOOL ParseCommandLine( int argc, char* argv[])
 void Help()
 /*****************************************************************************/
 {
-    //fprintf( stdout, "Syntax:ULFEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-e][-b][-u][-NOUTF8][-ULF][-L l1,l2,...]\n" );
     fprintf( stdout, "Syntax:ULFEX[-p Prj][-r PrjRoot]-i FileIn -o FileOut[-m DataBase][-L l1,l2,...]\n" );
     fprintf( stdout, " Prj:      Project\n" );
     fprintf( stdout, " PrjRoot:  Path to project root (..\\.. etc.)\n" );
@@ -199,15 +198,8 @@ int _cdecl main( int argc, char *argv[] )
         Help();
         return 1;
     }
-    if( !bQuiet ){
-        fprintf( stdout, "\nUlfEx 1 Copyright 2000, 2010 Oracle and/or its affiliates. All Rights Reserved.\n" );
-        fprintf( stdout, "=================================================================================\n" );
-        fprintf( stdout, "\nProcessing File %s ...\n", sInputFile.GetBuffer());
-    }else
-    {
         fprintf(stdout, ".");
         fflush( stdout );
-    }
 
     if ( sOutputFile.Len()) {
         LngParser aParser( sInputFile, bUTF8, bULF , bQuiet );
@@ -216,8 +208,6 @@ int _cdecl main( int argc, char *argv[] )
         else
             aParser.CreateSDF( sOutputFile, sPrj, sPrjRoot );
     }
-
-    if( !bQuiet ) fprintf( stdout, "\n=================================================\n\n" );
 
     return 0;
 }
