@@ -68,8 +68,8 @@ namespace connectivity
                     m_xInputStream->closeInput();
                     m_xInputStream.clear();
                 }
-                /* this is done implicity by the closing of the input stream
-                if ( m_xOutputStream.is() )
+                // this is done implicity by the closing of the input stream
+                else if ( m_xOutputStream.is() )
                 {
                     m_xOutputStream->closeOutput();
                     try
@@ -86,7 +86,6 @@ namespace connectivity
                     }
                     m_xOutputStream.clear();
                 }
-                */
             }
             catch(Exception& ex)
             {
