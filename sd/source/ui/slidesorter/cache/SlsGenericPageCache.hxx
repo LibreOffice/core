@@ -111,9 +111,14 @@ public:
         const CacheKey aKey,
         const bool bMayBeUpToDate = true);
 
+    /** Tell the cache to replace the bitmap associated with the given
+        request data with a new one that reflects recent changes in the
+        content of the page object.
         @return
             When the key is kown then return <TRUE/>.
+    */
     bool InvalidatePreviewBitmap (const CacheKey aKey);
+
     /** Call this method when a view-object-contact object is being deleted
         and does not need (a) its current bitmap in the cache and (b) a
         requested a new bitmap.

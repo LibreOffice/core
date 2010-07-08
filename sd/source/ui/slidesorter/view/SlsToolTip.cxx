@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include "precompiled_sd.hxx"
+
 #include "view/SlsToolTip.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"

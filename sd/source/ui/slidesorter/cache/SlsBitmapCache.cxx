@@ -275,6 +275,21 @@ Bitmap BitmapCache::GetMarkedBitmap (const CacheKey& rKey)
 
 
 
+void BitmapCache::ReleaseBitmap (const CacheKey& rKey)
+{
+    ::osl::MutexGuard aGuard (maMutex);
+
+    CacheBitmapContainer::iterator aIterator (mpBitmapContainer->find(rKey));
+    if (aIterator != mpBitmapContainer->end())
+    {
+        UpdateCacheSize(aIterator->second, REMOVE);
+        mpBitmapContainer->erase(aIterator);
+    }
+}
+
+
+
+
 bool BitmapCache::InvalidateBitmap (const CacheKey& rKey)
 {
     ::osl::MutexGuard aGuard (maMutex);

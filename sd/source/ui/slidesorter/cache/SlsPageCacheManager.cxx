@@ -430,7 +430,7 @@ void PageCacheManager::InvalidateAllCaches (void)
 void PageCacheManager::ReleasePreviewBitmap (const SdrPage* pPage)
 {
     PageCacheContainer::iterator iCache;
-    for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end();  ++iCache)
+    for (iCache=mpPageCaches->begin(); iCache!=mpPageCaches->end(); ++iCache)
         iCache->second->ReleaseBitmap(pPage);
 }
 

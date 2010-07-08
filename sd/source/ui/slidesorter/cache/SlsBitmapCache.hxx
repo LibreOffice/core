@@ -112,6 +112,11 @@ public:
     */
     Bitmap GetMarkedBitmap (const CacheKey& rKey);
 
+    /** Release the reference to the preview bitmap that is associated with
+        the given key.
+    */
+    void ReleaseBitmap (const CacheKey& rKey);
+
     /** Mark the specified preview bitmap as not being up-to-date
         anymore.
         @return

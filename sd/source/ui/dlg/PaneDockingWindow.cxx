@@ -67,7 +67,7 @@ void PaneDockingWindow::StateChanged( StateChangedType nType )
     {
         case STATE_CHANGE_INITSHOW:
             Resize();
-            mpContentWindow->SetStyle(mpContentWindow->GetStyle() | WB_DIALOGCONTROL);
+            GetContentWindow().SetStyle(GetContentWindow().GetStyle() | WB_DIALOGCONTROL);
             break;
 
         case STATE_CHANGE_VISIBLE:
@@ -89,15 +89,15 @@ void PaneDockingWindow::StateChanged( StateChangedType nType )
 
 void PaneDockingWindow::MouseButtonDown (const MouseEvent& rEvent)
 {
-    if (rEvent.GetButtons() == MOUSE_LEFT && mpContentWindow)
+    if (rEvent.GetButtons() == MOUSE_LEFT)
     {
         // For some strange reason we have to set the WB_DIALOGCONTROL at
         // the content window in order to have it pass focus to its content
         // window.  Without setting this flag here that works only on views
         // that have not been taken from the cash and relocated to this pane
         // docking window.
-        mpContentWindow->SetStyle(mpContentWindow->GetStyle() | WB_DIALOGCONTROL);
-        mpContentWindow->GrabFocus();
+        GetContentWindow().SetStyle(GetContentWindow().GetStyle() | WB_DIALOGCONTROL);
+        GetContentWindow().GrabFocus();
     }
     SfxDockingWindow::MouseButtonDown(rEvent);
 }
@@ -118,9 +118,10 @@ void PaneDockingWindow::SetValidSizeRange (const Range aValidSizeRange)
         const USHORT nSetId (pSplitWindow->GetSet(nId));
         // Because the PaneDockingWindow paints its own decoration, we have
         // to compensate the valid size range for that.
+        const SvBorder aBorder (GetDecorationBorder());
         sal_Int32 nCompensation (pSplitWindow->IsHorizontal()
-            ? mnTitleBarHeight + maBorder.Top() + maBorder.Bottom()
-            : maBorder.Left() + maBorder.Right());
+            ? mnTitleBarHeight + aBorder.Top() + aBorder.Bottom()
+            : aBorder.Left() + aBorder.Right());
         pSplitWindow->SetItemSizeRange(
             nSetId,
             Range(

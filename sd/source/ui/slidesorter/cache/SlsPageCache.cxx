@@ -107,10 +107,22 @@ void PageCache::SetMarkedPreviewBitmap (
 void PageCache::RequestPreviewBitmap (const CacheKey aKey)
 {
     return mpImplementation->RequestPreviewBitmap(aKey);
+}
+
+
+
+
+void PageCache::InvalidatePreviewBitmap (
     const CacheKey aKey,
     const bool bRequestPreview)
+{
     if (mpImplementation->InvalidatePreviewBitmap(aKey) && bRequestPreview)
         RequestPreviewBitmap(aKey);
+}
+
+
+
+
 void PageCache::ReleasePreviewBitmap (const CacheKey aKey)
 {
     mpImplementation->ReleasePreviewBitmap(aKey);

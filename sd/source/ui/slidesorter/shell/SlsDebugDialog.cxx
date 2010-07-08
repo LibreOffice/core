@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include "precompiled_sd.hxx"
+
 #include "SlsDebugDialog.hxx"
 #include "view/SlideSorterView.hxx"
 #include "view/SlsTheme.hxx"

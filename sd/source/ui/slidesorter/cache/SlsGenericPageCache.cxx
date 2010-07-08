@@ -24,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sd.hxx"
 
 #include "precompiled_sd.hxx"
 
@@ -263,6 +261,11 @@ bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
         return mpBitmapCache->InvalidateBitmap(mpCacheContext->GetPage(aKey));
     else
         return false;
+}
+
+
+
+
 void GenericPageCache::ReleasePreviewBitmap (const CacheKey aKey)
 {
     if (mpBitmapCache.get() != NULL)

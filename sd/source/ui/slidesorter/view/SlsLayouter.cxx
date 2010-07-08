@@ -334,6 +334,11 @@ Layouter::Layouter (
 
 Layouter::~Layouter (void)
 {
+}
+
+
+
+
 ::boost::shared_ptr<PageObjectLayouter> Layouter::GetPageObjectLayouter (void) const
 {
     return mpImplementation->mpPageObjectLayouter;
@@ -357,23 +362,6 @@ void Layouter::SetBorders (
     if (nBottomBorder >= 0)
         mpImplementation->mnRequestedBottomBorder = nBottomBorder;
 }
-
-
-
-
-void Layouter::SetGaps (
-    sal_Int32 nHorizontalGap,
-    sal_Int32 nVerticalGap)
-{
-    const sal_Int32 nFocusIndicatorWidth (
-        mpImplementation->mpTheme->GetIntegerValue(Theme::Integer_FocusIndicatorWidth));
-
-    if (nHorizontalGap >= 0)
-        mpImplementation->mnHorizontalGap = nHorizontalGap - 2*nFocusIndicatorWidth;
-    if (nVerticalGap >= 0)
-        mpImplementation->mnVerticalGap = nVerticalGap - 2*nFocusIndicatorWidth;
-}
-
 
 
 
@@ -465,14 +453,6 @@ sal_Int32 Layouter::GetColumn (const sal_Int32 nIndex) const
 sal_Int32 Layouter::GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const
 {
     return mpImplementation->GetIndex(nRow,nColumn,true);
-}
-
-
-
-
-bool Layouter::IsColumnCountFixed (void) const
-{
-    return mpImplementation->mnMinimalColumnCount == mpImplementation->mnMaximalColumnCount;
 }
 
 

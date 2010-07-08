@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include "precompiled_sd.hxx"
+
 #include "view/SlsTheme.hxx"
 #include "SlsResource.hxx"
 #include "controller/SlsProperties.hxx"

@@ -204,12 +204,10 @@ SlideSorterController::~SlideSorterController (void)
 
 
 void SlideSorterController::Dispose (void)
+{
     mpInsertionIndicatorHandler->End(Animator::AM_Immediate);
     mpSelectionManager.reset();
     mpAnimator->Dispose();
-SlideSorter& SlideSorterController::GetSlideSorter (void) const
-{
-    return mrSlideSorter;
 }
 
 
