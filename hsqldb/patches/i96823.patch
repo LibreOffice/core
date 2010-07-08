@@ -9,10 +9,9 @@
 +                return buf.toString();
  
              case COUNT :
--                buf.append(' ').append(Token.T_COUNT).append('(');
+                 buf.append(' ').append(Token.T_COUNT).append('(');
 -                break;
-+                buf.append(' ').append(Token.T_COUNT).append(left);
-+                return buf.toString();
++                if ( "(*)".equals(left))buf.append('*');else   buf.append(left);   buf.append(')');   return buf.toString();
  
              case SUM :
                  buf.append(' ').append(Token.T_SUM).append('(');
