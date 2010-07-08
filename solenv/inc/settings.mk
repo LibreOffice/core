@@ -397,9 +397,11 @@ COMPILER_WARN_ERRORS=TRUE
 rsc_once*=$(RSC_ONCE)
 .ENDIF
 
-.IF "$(COMMON_BUILD)"!=""
-common_build*=$(COMMON_BUILD)
-.ENDIF
+#.IF "$(COMMON_BUILD)"!=""
+#common_build*=$(COMMON_BUILD)
+#.ENDIF
+common_build:=
+COMMON_BUILD:=
 
 .IF "$(USE_SHL_VERSIONS)"!=""
 use_shl_versions*=$(USE_SHL_VERSIONS)
@@ -584,24 +586,24 @@ PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && pwd $(PWDFLAGS))/, $(PWD))
 PATH_IN_MODULE:=
 .ENDIF			# "$(PRJ)"!="."
 
-# common output tree
-.IF "$(common_build)"!=""
-COMMON_OUTDIR*=common
-.IF "$(no_common_build_reslib)"==""
-common_build_reslib=true
-.ENDIF			# "$(no_common_build_reslib)"==""
-.IF "$(no_common_build_zip)"==""
-common_build_zip=true
-.ENDIF			# "$(no_common_build_zip)"==""
-.IF "$(no_common_build_sign_jar)"==""
-common_build_sign_jar=true
-.ENDIF			# "$(no_common_build_sign_jar)"==""
-.IF "$(no_common_build_srs)"==""
-common_build_srs=true
-.ENDIF			# "$(no_common_build_srs)"==""
-.ELSE			# "$(common_build)"!=""
+## common output tree
+#.IF "$(common_build)"!=""
+#COMMON_OUTDIR*=common
+#.IF "$(no_common_build_reslib)"==""
+#common_build_reslib=true
+#.ENDIF			# "$(no_common_build_reslib)"==""
+#.IF "$(no_common_build_zip)"==""
+#common_build_zip=true
+#.ENDIF			# "$(no_common_build_zip)"==""
+#.IF "$(no_common_build_sign_jar)"==""
+#common_build_sign_jar=true
+#.ENDIF			# "$(no_common_build_sign_jar)"==""
+#.IF "$(no_common_build_srs)"==""
+#common_build_srs=true
+#.ENDIF			# "$(no_common_build_srs)"==""
+#.ELSE			# "$(common_build)"!=""
 COMMON_OUTDIR:=$(OUTPATH)
-.ENDIF			# "$(common_build)"!=""
+#.ENDIF			# "$(common_build)"!=""
 
 LOCAL_OUT:=$(OUT)
 LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
