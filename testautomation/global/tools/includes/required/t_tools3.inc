@@ -1108,7 +1108,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
     iTime = iRetries * DELAY
 
     ' Timeout is -1
-    if ( iRetries = MAX_RETRIES ) then iTime = RC_TIMEOUT
+    if ( iRetries >= MAX_RETRIES ) then iTime = RC_TIMEOUT
 
     if ( GVERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
     hUseAsyncSlot() = iTime
