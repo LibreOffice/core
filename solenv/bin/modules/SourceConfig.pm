@@ -38,7 +38,7 @@ package SourceConfig;
 use strict;
 
 use constant SOURCE_CONFIG_FILE_NAME => 'source_config';
-use constant SOURCE_CONFIG_VERSION => 2;
+use constant SOURCE_CONFIG_VERSION => 3;
 
 use Carp;
 use Cwd;
@@ -95,14 +95,10 @@ sub new {
     $self->{WARNINGS} = [];
     $self->{REPORT_MESSAGES} = [];
     $self->{CONFIG_FILE_CONTENT} = [];
-    $self->{DEFAULT_REPOSITORY} = undef;
-    if (defined $self->{USER_SOURCE_ROOT}) {
-        ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
-        $self->{DEFAULT_REPOSITORY} = File::Basename::basename($self->{USER_SOURCE_ROOT});
-    };
     $self->{SOURCE_CONFIG_FILE} = get_config_file($self->{SOURCE_ROOT}) if (!defined $self->{SOURCE_CONFIG_FILE});
     $self->{SOURCE_CONFIG_DEFAULT} = $self->{SOURCE_ROOT} .'/'.SOURCE_CONFIG_FILE_NAME;
     read_config_file($self);
+       get_module_paths($self);
     bless($self, $class);
     return $self;
 }
@@ -119,6 +115,19 @@ sub get_repositories
     return sort keys %{$self->{REPOSITORIES}};
 }
 
+sub add_repository
+{
+    my $self        = shift;
+    my $new_rep_path = shift;
+    $new_rep_path = Cwd::realpath($new_rep_path);
+    my $new_rep_name = File::Basename::basename($new_rep_path);
+    if (defined ${$self->{REPOSITORIES}}{$new_rep_name}) {
+        croak("Repository $new_rep_name is already defined!!");
+    };
+    ${$self->{REPOSITORIES}}{$new_rep_name} = $new_rep_path;
+    $self -> get_repository_module_paths($new_rep_name);
+}
+
 sub get_config_file_default_path {
     my $self        = shift;
     return $self->{SOURCE_CONFIG_DEFAULT};
@@ -132,7 +141,6 @@ sub get_config_file_path {
 sub get_module_repository {
     my $self = shift;
     my $module = shift;
-    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
     if (defined ${$self->{MODULE_REPOSITORY}}{$module}) {
         return ${$self->{MODULE_REPOSITORY}}{$module};
     } else {
@@ -144,7 +152,6 @@ sub get_module_repository {
 sub get_module_path {
     my $self = shift;
     my $module = shift;
-    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
     if (defined ${$self->{MODULE_PATHS}}{$module}) {
         return ${$self->{MODULE_PATHS}}{$module};
     } else {
@@ -156,10 +163,17 @@ sub get_module_path {
 sub get_module_build_list {
     my $self = shift;
     my $module = shift;
-    $self -> get_buildlist_paths() if (!scalar keys %{$self->{MODULE_BUILD_LIST_PATHS}});
     if (defined ${$self->{MODULE_BUILD_LIST_PATHS}}{$module}) {
         return ${$self->{MODULE_BUILD_LIST_PATHS}}{$module};
     } else {
+        my @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
+        foreach (@possible_build_lists) {
+            my $possible_path = ${$self->{MODULE_PATHS}}{$module} . "/prj/$_";
+            if (-e $possible_path) {
+                ${$self->{MODULE_BUILD_LIST_PATHS}}{$module} = $possible_path;
+                return $possible_path;
+            };
+        };
         Carp::cluck("No build list in module $module found!!\n") if ($self->{DEBUG});
         return undef;
     };
@@ -169,7 +183,6 @@ sub get_all_modules
 {
     my $self = shift;
     my $module = shift;
-    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
     return sort keys %{$self->{MODULE_PATHS}};
 };
 
@@ -179,7 +192,6 @@ sub get_active_modules
     if (scalar keys %{$self->{ACTIVATED_MODULES}}) {
         return sort keys %{$self->{ACTIVATED_MODULES}};
     }
-    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
        return sort keys %{$self->{REAL_MODULES}};
 }
 
@@ -190,49 +202,42 @@ sub is_active
     if (scalar keys %{$self->{ACTIVATED_MODULES}}) {
         return exists ($self->{ACTIVATED_MODULES}{$module});
     }
-       $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
     return exists ($self->{REAL_MODULES}{$module});
 }
 
 ##### private methods #####
 
-sub get_buildlist_paths {
+sub get_repository_module_paths {
     my $self        = shift;
-    $self -> get_module_paths() if (!scalar keys %{$self->{MODULE_PATHS}});
-    my @possible_build_lists = ('build.lst', 'build.xlist'); # build lists names
-    foreach my $module (keys %{$self->{MODULE_PATHS}}) {
-        foreach (@possible_build_lists) {
-            my $possible_path = ${$self->{MODULE_PATHS}}{$module} . "/prj/$_";
-            ${$self->{MODULE_BUILD_LIST_PATHS}}{$module} = $possible_path if (-e $possible_path);
+    my $repository        = shift;
+    my $repository_path = ${$self->{REPOSITORIES}}{$repository};
+    if (opendir DIRHANDLE, $repository_path) {
+        foreach my $module (readdir(DIRHANDLE)) {
+            next if (($module =~ /^\.+/) || (!-d "$repository_path/$module"));
+            my $module_entry = $module;
+            if (($module !~ s/\.lnk$//) && ($module !~ s/\.link$//)) {
+                $self->{REAL_MODULES}{$module}++;
+            }
+            my $possible_path = "$repository_path/$module_entry";
+            if (-d $possible_path) {
+                if (defined ${$self->{MODULE_PATHS}}{$module}) {
+                    close DIRHANDLE;
+                    croak("Ambiguous paths for module $module: $possible_path and " . ${$self->{MODULE_PATHS}}{$module});
+                };
+                ${$self->{MODULE_PATHS}}{$module} = $possible_path;
+                ${$self->{MODULE_REPOSITORY}}{$module} = $repository;
+            }
         };
+        close DIRHANDLE;
+    } else {
+        croak("Cannot read $repository_path repository content");
     };
 };
 
 sub get_module_paths {
     my $self        = shift;
     foreach my $repository (keys %{$self->{REPOSITORIES}}) {
-        my $repository_path = ${$self->{REPOSITORIES}}{$repository};
-        if (opendir DIRHANDLE, $repository_path) {
-            foreach my $module (readdir(DIRHANDLE)) {
-                next if (($module =~ /^\.+/) || (!-d "$repository_path/$module"));
-                my $module_entry = $module;
-                if (($module !~ s/\.lnk$//) && ($module !~ s/\.link$//)) {
-                    $self->{REAL_MODULES}{$module}++;
-                }
-                my $possible_path = "$repository_path/$module_entry";
-                if (-d $possible_path) {
-                    if (defined ${$self->{MODULE_PATHS}}{$module}) {
-                        close DIRHANDLE;
-                        croak("Ambiguous paths for module $module: $possible_path and " . ${$self->{MODULE_PATHS}}{$module});
-                    };
-                    ${$self->{MODULE_PATHS}}{$module} = $possible_path;
-                    ${$self->{MODULE_REPOSITORY}}{$module} = $repository;
-                }
-            };
-            close DIRHANDLE;
-        } else {
-            croak("Cannot read $_ repository content");
-        };
+        get_repository_module_paths($self, $repository);
     };
     my @false_actives = ();
     foreach (keys %{$self->{ACTIVATED_MODULES}}) {
@@ -249,32 +254,22 @@ sub get_config_file {
     return '';
 };
 
-sub get_repository_root {
+#
+# Fallback - default repository is based on the object initialization parameter...
+#
+sub get_fallback_repository {
     my $self = shift;
-    return $self->{USER_SOURCE_ROOT} if (defined $self->{USER_SOURCE_ROOT});
-    my $hg_root;
-    if (open(COMMAND, "hg root 2>&1 |")) {
-        foreach (<COMMAND>) {
-            next if (/^Not trusting file/);
-            chomp;
-            $hg_root = $_;
-            last;
-        };
-        close COMMAND;
-        chomp $hg_root;
-        if ($hg_root !~ /There is no Mercurial repository here/) {
-            return $hg_root;
-        };
+    if (defined $self->{USER_SOURCE_ROOT}) {
+        ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
+        return;
     };
-    Carp::cluck('Cannot open/find source_config and/or determine hg root directory for ' . cwd() . ". Taking $ENV{SOLARSRC} as default repository\n\n");
-    return $ENV{SOLARSRC};
+    croak('Cannot determine repository. Please make your checks!!');
 };
 
 sub read_config_file {
     my $self = shift;
     if (!$self->{SOURCE_CONFIG_FILE}) {
-        my $repository_root = get_repository_root($self);
-        ${$self->{REPOSITORIES}}{File::Basename::basename($repository_root)} = $repository_root;
+        get_fallback_repository($self);
         return;
     };
     my $repository_section = 0;
@@ -307,11 +302,6 @@ sub read_config_file {
                     if (defined $ENV{UPDMINOREXT}) {
                         $repository_source_path .= $ENV{UPDMINOREXT};
                     };
-                    if ((defined $self->{DEFAULT_REPOSITORY}) && (${$self->{REPOSITORIES}}{$self->{DEFAULT_REPOSITORY}} eq $repository_source_path)) {
-                        delete ${$self->{REPOSITORIES}}{$self->{DEFAULT_REPOSITORY}};
-                        $self->{DEFAULT_REPOSITORY} = undef;
-
-                    };
                     ${$self->{REPOSITORIES}}{$1} = $repository_source_path;
                     ${$self->{ACTIVATED_REPOSITORIES}}{$1}++;
                     next;
@@ -325,9 +315,7 @@ sub read_config_file {
         };
         close SOURCE_CONFIG_FILE;
         if (!scalar keys %{$self->{REPOSITORIES}}) {
-            # Fallback - default repository is the directory where is our module...
-            my $hg_root = get_repository_root($self);
-            ${$self->{REPOSITORIES}}{File::Basename::basename($hg_root)} = $hg_root;
+            get_fallback_repository($self);
         };
     } else {
         croak('Cannot open ' . $self->{SOURCE_CONFIG_FILE} . 'for reading');
@@ -381,15 +369,18 @@ sub remove_activated_modules {
 sub add_active_repositories {
     my $self = shift;
     $self->{NEW_REPOSITORIES} = shift;
-    croak('Empty module list passed for adding to source_config') if (!scalar @{$self->{NEW_REPOSITORIES}});
+    croak('Empty repository list passed for addition to source_config') if (!scalar @{$self->{NEW_REPOSITORIES}});
     $self->{VERBOSE} = shift;
+    foreach (@{$self->{NEW_REPOSITORIES}}) {
+        $self->add_repository($_);
+    };
     generate_config_file($self);
 };
 
 sub add_active_modules {
     my $self = shift;
     $self->{NEW_MODULES} = shift;
-    croak('Empty module list passed for adding to source_config') if (!scalar @{$self->{NEW_MODULES}});
+    croak('Empty module list passed for addition to source_config') if (!scalar @{$self->{NEW_MODULES}});
     $self->{VERBOSE} = shift;
     generate_config_file($self);
 };
@@ -537,6 +528,8 @@ SourceConfig - Perl extension for parsing general info databases
     # Get repositories for the actual workspace:
     $a->get_repositories();
 
+    # Add a repository new_repository for the actual workspace (via full path):
+    $a->add_repository(/DEV300/new_repository);
 
 =head1 DESCRIPTION
 
@@ -559,6 +552,11 @@ Returns version number of the module. Can't fail.
 SourceConfig::get_repositories()
 
 Returns sorted list of active repositories for the actual workspace
+
+
+SourceConfig::add_repository(REPOSITORY_PATH)
+
+Adds a repository to the list of active repositories
 
 
 SourceConfig::get_active_modules()
@@ -624,6 +622,7 @@ Removes all activated repositories from the source_config file
 SourceConfig::new()
 SourceConfig::get_version()
 SourceConfig::get_repositories()
+SourceConfig::add_repository()
 SourceConfig::get_active_modules()
 SourceConfig::get_all_modules()
 SourceConfig::get_module_path($module)
