@@ -469,14 +469,14 @@ testcase tFormatWrapObject
     if ( hUseAsyncSlot( "FormatWrapContour" ) = -1 ) then
         printlog( "Format / Wrap / Contour disabled. Good." )
     else
-        warnlog( "#i90964# Format / Wrap / Contour should not be enabled for frames" )
+        warnlog( "Format / Wrap / Contour should not be enabled for frames" )
     end if
 
     printlog " Format / Wrap / Edit Contour"
     if ( hUseAsyncSlot( "FormatWrapEditContour" ) = -1 ) then
         printlog( "Format / Wrap / Edit Contour disabled. Good." )
     else
-        Warnlog( "#i90964# Wrap / Edit Contour should not be enabled for frames" )
+        Warnlog( "Wrap / Edit Contour should not be enabled for frames" )
 
         Kontext "KonturEditor"
         if ( KonturEditor.exists( 2 ) ) then
