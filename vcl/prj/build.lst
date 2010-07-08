@@ -52,5 +52,6 @@ vc	vcl\workben								nmake	-	all	vc_wrkb vc_util vc_salmain NULL
 # memCheck works only within unix
 # memCheck is not right yet
 # vc      vcl\qa\complex\memCheck                  nmake - u   vc_qa_complex vc_util NULL
-vc      vcl\qa\complex\persistent_window_states  nmake - all vc_qa_complex vc_util NULL
+# GPF
+# vc      vcl\qa\complex\persistent_window_states  nmake - all vc_qa_complex vc_util NULL
 
