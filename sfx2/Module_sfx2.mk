@@ -33,7 +33,13 @@ $(eval $(call gb_Module_add_targets,sfx2,\
     Package_inc \
     Package_sdi \
 ))
-#   lib_qstart \
+
+
+# HACK to create a dummy quickstart lib
+$(call gb_Module_get_target,sfx2) : $(call gb_Library_get_target,qstart_gtk)
+
+$(call gb_Library_get_target,qstart_gtk) :
+    touch $@
 
 #todo: map file?
 #todo: source/appl ohne Optimierung?
@@ -44,3 +50,5 @@ $(eval $(call gb_Module_add_targets,sfx2,\
 #todo: ENABLE_LAYOUT
 #todo: quickstarter
 #todo: link against cocoa on Mac
+
+# vim: set noet sw=4 ts=4:
