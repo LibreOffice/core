@@ -57,6 +57,7 @@ gb_Library_OOOLIBS :=\
     lng \
     msfilter \
     msword \
+    qstart_gtk \
     sax \
     sb \
     sfx \
