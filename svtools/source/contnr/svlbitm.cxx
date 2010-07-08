@@ -406,7 +406,7 @@ BOOL SvLBoxButton::ClickHdl( SvLBox*, SvLBoxEntry* pEntry )
 }
 
 void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
-                            SvLBoxEntry* pEntry )
+                            SvLBoxEntry* /*pEntry*/ )
 {
     DBG_CHKTHIS(SvLBoxButton,0);
     USHORT nIndex = eKind == SvLBoxButtonKind_staticImage
