@@ -74,12 +74,20 @@ private:
 public:
     ControlArrayWrapper( const uno::Reference< awt::XControl >& xDialog )
     {
-        mxDialog.set( xDialog, uno::UNO_QUERY_THROW );
-        uno::Sequence< uno::Reference< awt::XControl > > sXControls = mxDialog->getControls();
+        try
+        {
+            mxDialog.set( xDialog, uno::UNO_QUERY_THROW );
+            uno::Sequence< uno::Reference< awt::XControl > > sXControls = mxDialog->getControls();
 
-        msNames.realloc( sXControls.getLength() );
-        for ( sal_Int32 i = 0; i < sXControls.getLength(); ++i )
-            SetArrayElementTo( sXControls[ i ], i );
+            msNames.realloc( sXControls.getLength() );
+            for ( sal_Int32 i = 0; i < sXControls.getLength(); ++i )
+                SetArrayElementTo( sXControls[ i ], i );
+        }
+        catch( uno::Exception& )
+        {
+            // accept the case when the dialog already does not exist
+            // in this case the wrapper should work in dummy mode
+        }
     }
 
     static rtl::OUString getControlName( const uno::Reference< awt::XControl >& xCtrl )
@@ -186,7 +194,7 @@ ScVbaControls::ScVbaControls( const uno::Reference< XHelperInterface >& xParent,
                 const css::uno::Reference< awt::XControl >& xDialog )
             : ControlsImpl_BASE( xParent, xContext, lcl_controlsWrapper( xDialog  ) )
 {
-    mxDialog.set( xDialog, uno::UNO_QUERY_THROW );
+    mxDialog.set( xDialog, uno::UNO_QUERY );
 }
 
 uno::Reference< container::XEnumeration >
