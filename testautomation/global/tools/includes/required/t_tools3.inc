@@ -1142,7 +1142,7 @@ function hClickButton( oButton as object ) as integer
     ' Total time used
     iTime = iRetries * DELAY
 
-    if ( iRetries = MAX_RETRIES ) then iTime = RC_TIMEOUT
+    if ( iRetries >= MAX_RETRIES ) then iTime = RC_TIMEOUT
 
     if ( GVERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
     hClickButton() = iTime

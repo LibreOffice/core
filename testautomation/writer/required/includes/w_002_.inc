@@ -948,8 +948,9 @@ testcase tEditHyperlink
         PrintLog "Click 'Apply'"
         Uebernehmen.Click
 
+        kontext "HyperlinkDialog"
         PrintLog "Close Hyperlink dialog"
-        hCloseDialog( Hyperlink, "close" )
+        hClickButton( CloseButton )
     else
         warnlog( "Dialog <Hyperlink> did not open" )
         hCloseDocument()
@@ -972,8 +973,8 @@ testcase tEditHyperlink
 
     PrintLog "Edit / Hyperlink has to be enabled"
     if ( hUseAsyncSlot( "EditHyperlink" ) > -1 ) then
-        Kontext "Hyperlink"
-        hCloseDialog( Hyperlink, "close" )
+        kontext "HyperlinkDialog"
+        hClickButton( CloseButton )
     else
         warnlog( "Slot <EditHyperlink> could not be called" )
     endif
