@@ -258,6 +258,7 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
                 (*this) = getAny();
                 break;
             default:
+                (*this) = getAny();
                 OSL_ENSURE(0,"ORowSetValue:operator==(): UNSPUPPORTED TYPE!");
         }
     }
@@ -340,6 +341,12 @@ void ORowSetValue::free()
             case DataType::BLOB:
             case DataType::CLOB:
             case DataType::OBJECT:
+                delete (Any*)m_aValue.m_pValue;
+                TRACE_FREE( Any )
+                m_aValue.m_pValue = NULL;
+                break;
+            default:
+                OSL_ENSURE(m_aValue.m_pString,"String pointer is null!");
                 delete (Any*)m_aValue.m_pValue;
                 TRACE_FREE( Any )
                 m_aValue.m_pValue = NULL;
@@ -849,7 +856,9 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
             bRet = false;
             break;
         default:
+            bRet = false;
             OSL_ENSURE(0,"ORowSetValue::operator==(): UNSPUPPORTED TYPE!");
+            break;
     }
     return bRet;
 }
@@ -942,6 +951,8 @@ Any ORowSetValue::makeAny() const
                 break;
             default:
                 OSL_ENSURE(0,"ORowSetValue::makeAny(): UNSPUPPORTED TYPE!");
+                rValue = getAny();
+                break;
         }
     }
     return rValue;
@@ -1032,6 +1043,12 @@ Any ORowSetValue::makeAny() const
                     }
                 }
                 break;
+            default:
+                {
+                    Any aValue = getAny();
+                    aValue >>= aRet;
+                    break;
+                }
         }
     }
     return aRet;
@@ -1104,8 +1121,11 @@ sal_Bool ORowSetValue::getBool()    const
                 bRet = m_bSigned ? (m_aValue.m_nInt32 != 0) : (*static_cast<sal_Int64*>(m_aValue.m_pValue) != sal_Int64(0));
                 break;
             default:
-                OSL_ENSURE(0,"Illegal conversion!");
-                break;
+                {
+                    Any aValue = getAny();
+                    aValue >>= bRet;
+                    break;
+                }
         }
     }
     return bRet;
@@ -1174,8 +1194,11 @@ sal_Int8 ORowSetValue::getInt8()    const
                     nRet = static_cast<sal_Int8>(*static_cast<sal_Int64*>(m_aValue.m_pValue));
                 break;
             default:
-                OSL_ENSURE(0,"Illegal conversion!");
-                break;
+                {
+                    Any aValue = getAny();
+                    aValue >>= nRet;
+                    break;
+                }
         }
     }
     return nRet;
@@ -1244,8 +1267,11 @@ sal_Int16 ORowSetValue::getInt16()  const
                     nRet = static_cast<sal_Int16>(*static_cast<sal_Int64*>(m_aValue.m_pValue));
                 break;
             default:
-                OSL_ENSURE(0,"Illegal conversion!");
-                break;
+                {
+                    Any aValue = getAny();
+                    aValue >>= nRet;
+                    break;
+                }
         }
     }
     return nRet;
@@ -1314,8 +1340,11 @@ sal_Int32 ORowSetValue::getInt32()  const
                     nRet = static_cast<sal_Int32>(*static_cast<sal_Int64*>(m_aValue.m_pValue));
                 break;
             default:
-                OSL_ENSURE(0,"Illegal conversion!");
-                break;
+                {
+                    Any aValue = getAny();
+                    aValue >>= nRet;
+                    break;
+                }
         }
     }
     return nRet;
@@ -1384,8 +1413,11 @@ sal_Int64 ORowSetValue::getLong()   const
                     nRet = *(sal_Int64*)m_aValue.m_pValue;
                 break;
             default:
-                OSL_ENSURE(0,"Illegal conversion!");
-                break;
+                {
+                    Any aValue = getAny();
+                    aValue >>= nRet;
+                    break;
+                }
         }
     }
     return nRet;
@@ -1458,8 +1490,11 @@ float ORowSetValue::getFloat()  const
                     nRet = float(*(sal_Int64*)m_aValue.m_pValue);
                 break;
             default:
-                OSL_ENSURE(0,"Illegal conversion!");
-                break;
+                {
+                    Any aValue = getAny();
+                    aValue >>= nRet;
+                    break;
+                }
         }
     }
     return nRet;
@@ -1534,8 +1569,11 @@ double ORowSetValue::getDouble()    const
                     nRet = double(*(sal_Int64*)m_aValue.m_pValue);
                 break;
             default:
-                OSL_ENSURE(0,"Illegal conversion!");
-                break;
+                {
+                    Any aValue = getAny();
+                    aValue >>= nRet;
+                    break;
+                }
         }
     }
     return nRet;
@@ -1626,6 +1664,11 @@ void ORowSetValue::setFromDouble(const double& _rVal,sal_Int32 _nDatatype)
                 TRACE_ALLOC( sal_Int64 )
             }
             break;
+            default:
+                {
+                    m_aValue.m_pValue = new Any(_rVal);
+                    break;
+                }
     }
     m_eTypeKind = _nDatatype;
 }
@@ -1692,7 +1735,11 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 aSeq = *static_cast< Sequence<sal_Int8>*>(m_aValue.m_pValue);
                 break;
             default:
-                ;
+                {
+                    Any aValue = getAny();
+                    aValue >>= aSeq;
+                    break;
+                }
         }
     }
     return aSeq;
@@ -1734,8 +1781,11 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 }
                 break;
             default:
-                OSL_ENSURE(0,"Illegal conversion!");
-                break;
+                {
+                    Any aAnyValue = getAny();
+                    aAnyValue >>= aValue;
+                    break;
+                }
         }
     }
     return aValue;
@@ -1776,8 +1826,11 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 aValue = *static_cast< ::com::sun::star::util::Time*>(m_aValue.m_pValue);
                 break;
             default:
-                OSL_ENSURE(0,"Illegal conversion!");
-                break;
+                {
+                    Any aAnyValue = getAny();
+                    aAnyValue >>= aValue;
+                    break;
+                }
         }
     }
     return aValue;
@@ -1826,8 +1879,11 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
                 aValue = *static_cast< ::com::sun::star::util::DateTime*>(m_aValue.m_pValue);
                 break;
             default:
-                OSL_ENSURE(0,"Illegal conversion!");
-                break;
+                {
+                    Any aAnyValue = getAny();
+                    aAnyValue >>= aValue;
+                    break;
+                }
         }
     }
     return aValue;
@@ -2094,7 +2150,7 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, sal_Bool _bNullable, const
         break;
     default:
         OSL_ENSURE( false, "ORowSetValue::fill: unsupported type!" );
-        bReadData = false;
+        (*this) = _rValueSource.getObject();
         break;
     }
     if ( bReadData && _bNullable && _rValueSource.wasNull() )
