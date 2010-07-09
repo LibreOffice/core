@@ -2605,7 +2605,6 @@ uno::Reference< uno::XInterface > GetDocModuleObject( SfxObjectShell& rDocSh, St
 
 script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule )
 {
-    ::rtl::OUString sVbaOption( RTL_CONSTASCII_USTRINGPARAM( "Rem Attribute VBA_ModuleType=VBADocumentModule\nOption VBASupport 1\n" ));
     script::ModuleInfo sModuleInfo;
     sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
     sModuleInfo.ModuleObject = GetDocModuleObject( rDocSh, sModule );
