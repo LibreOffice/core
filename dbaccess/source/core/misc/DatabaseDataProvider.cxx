@@ -204,6 +204,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
     if ( createDataSourcePossible(_aArguments) )
     {
         sal_Bool bHasCategories = sal_True;
+        uno::Sequence< uno::Sequence< ::rtl::OUString > > aColumnNames;
         const beans::PropertyValue* pArgIter = _aArguments.getConstArray();
         const beans::PropertyValue* pArgEnd  = pArgIter + _aArguments.getLength();
         for(;pArgIter != pArgEnd;++pArgIter)
@@ -211,7 +212,11 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             if ( pArgIter->Name.equalsAscii("HasCategories") )
             {
                 pArgIter->Value >>= bHasCategories;
-                break;
+
+            }
+            else if ( pArgIter->Name.equalsAscii("ComplexColumnDescriptions") )
+            {
+                pArgIter->Value >>= aColumnNames;
             }
         }
         bool bRet = false;
@@ -221,7 +226,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             {
                 impl_fillRowSet_throw();
                 impl_executeRowSet_throw(aClearForNotifies);
-                impl_fillInternalDataProvider_throw(bHasCategories);
+                impl_fillInternalDataProvider_throw(bHasCategories,aColumnNames);
                 bRet = true;
             }
             catch(const uno::Exception& /*e*/)
@@ -574,7 +579,7 @@ void DatabaseDataProvider::impl_executeRowSet_throw(::osl::ResettableMutexGuard&
         m_xRowSet->execute();
 }
 // -----------------------------------------------------------------------------
-void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories)
+void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCategories,const uno::Sequence< uno::Sequence< ::rtl::OUString > >& i_aColumnNames)
 {
     // clear the data before fill the new one
     uno::Reference< chart::XChartDataArray> xChartData(m_xInternal,uno::UNO_QUERY);
@@ -586,11 +591,30 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
             m_xInternal->deleteSequence(0);
     }
 
-    uno::Sequence< ::rtl::OUString > aColumns;
     uno::Reference< sdbcx::XColumnsSupplier> xColSup(m_xRowSet,uno::UNO_QUERY_THROW);
     uno::Reference< container::XNameAccess > xColumns = xColSup->getColumns();
-    if ( xColumns.is() )
+    uno::Sequence< ::rtl::OUString > aColumns;
+    if ( i_aColumnNames.getLength() )
+    {
+        if ( _bHasCategories )
+        {
+            aColumns.realloc(1);
+            aColumns[0] = xColumns->getElementNames()[0];
+        }
+        for(sal_Int32 i = 0 ; i < i_aColumnNames.getLength();++i)
+        {
+            if ( i_aColumnNames[i].getLength() )
+            {
+                sal_Int32 nCount = aColumns.getLength();
+                aColumns.realloc(nCount+1);
+                aColumns[nCount] = i_aColumnNames[i][0];
+            }
+        }
+    }
+    else
+    {
         aColumns = xColumns->getElementNames();
+    }
     // fill the data
     uno::Reference< sdbc::XResultSet> xRes(m_xRowSet,uno::UNO_QUERY_THROW);
     uno::Reference< sdbc::XRow> xRow(m_xRowSet,uno::UNO_QUERY_THROW);
