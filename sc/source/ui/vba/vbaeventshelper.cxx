@@ -269,7 +269,7 @@ void SAL_CALL ScVbaWindowListener::windowResized(  const awt::WindowEvent& /*aEv
     mbWindowResized = true;
     if( mbBorderChanged )
     {
-        if( Window* pWindow = VCLUnoHelper::GetWindow( getContainerWindow() ) )
+        if( /*Window* pWindow =*/ VCLUnoHelper::GetWindow( getContainerWindow() ) )
         {
             mbBorderChanged = mbWindowResized = false;
             acquire(); // ensure we don't get deleted before the event is handled
@@ -318,7 +318,7 @@ void SAL_CALL ScVbaWindowListener::borderWidthsChanged( const uno::Reference< un
     mbBorderChanged = true;
     if( mbWindowResized )
     {
-        if( Window* pWindow = VCLUnoHelper::GetWindow( getContainerWindow() ) )
+        if( /*Window* pWindow =*/ VCLUnoHelper::GetWindow( getContainerWindow() ) )
         {
             mbWindowResized = mbBorderChanged = false;
             acquire(); // ensure we don't get deleted before the timer fires.
@@ -365,7 +365,7 @@ bool ScVbaWindowListener::isMouseReleased()
     return false;
 }
 
-IMPL_LINK( ScVbaWindowListener, fireResizeMacro, void*, EMPTY_ARGS )
+IMPL_LINK( ScVbaWindowListener, fireResizeMacro, void*, EMPTYARG )
 {
     if( mpVbaEvents && isMouseReleased() )
         processWindowResizeMacro();
