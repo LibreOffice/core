@@ -345,11 +345,18 @@ void ORowSetValue::free()
                 TRACE_FREE( Any )
                 m_aValue.m_pValue = NULL;
                 break;
+            case DataType::BIT:
+            case DataType::TINYINT:
+            case DataType::SMALLINT:
+            case DataType::BOOLEAN:
+                break;
             default:
-                OSL_ENSURE(m_aValue.m_pString,"String pointer is null!");
-                delete (Any*)m_aValue.m_pValue;
-                TRACE_FREE( Any )
-                m_aValue.m_pValue = NULL;
+                if ( m_aValue.m_pValue )
+                {
+                    delete (Any*)m_aValue.m_pValue;
+                    TRACE_FREE( Any )
+                    m_aValue.m_pValue = NULL;
+                }
                 break;
 
         }
