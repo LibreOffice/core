@@ -750,6 +750,15 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( !bLogicText )
         aOutputData.DrawStrings(FALSE);     // in pixel MapMode
 
+    // edit cells and printer-metrics text must be before the buttons
+    // (DataPilot buttons contain labels in UI font)
+
+    pContentDev->SetMapMode(pViewData->GetLogicMode(eWhich));
+    if ( bLogicText )
+        aOutputData.DrawStrings(TRUE);      // in logic MapMode if bTextWysiwyg is set
+    aOutputData.DrawEdit(TRUE);
+    pContentDev->SetMapMode(MAP_PIXEL);
+
         // Autofilter- und Pivot-Buttons
 
     DrawButtons( nX1, nY1, nX2, nY2, aTabInfo, pContentDev );          // Pixel
@@ -759,14 +768,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( rOpts.GetOption( VOPT_NOTES ) )
         aOutputData.DrawNoteMarks();
 
-        // Edit-Zellen
-
-    pContentDev->SetMapMode(pViewData->GetLogicMode(eWhich));
-    if ( bLogicText )
-        aOutputData.DrawStrings(TRUE);      // in logic MapMode if bTextWysiwyg is set
-    aOutputData.DrawEdit(TRUE);
-
-    pContentDev->SetMapMode(MAP_PIXEL);
     if ( !bGridFirst && ( bGrid || bPage ) )
     {
         aOutputData.DrawGrid( bGrid, bPage );
