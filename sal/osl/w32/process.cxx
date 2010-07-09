@@ -415,7 +415,9 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 
 oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *ustrValue)
 {
-    if (SetEnvironmentVariableW(ustrVar->buffer, ustrValue->buffer))
+    LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
+    LPCWSTR lpValue = reinterpret_cast<LPCWSTR>(ustrValue->buffer);
+    if (SetEnvironmentVariableW(lpName, lpValue))
         return osl_Process_E_None;
     return osl_Process_E_Unknown;
 }
@@ -424,7 +426,8 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
 {
     //If the second parameter is NULL, the variable is deleted from the current
     //process's environment.
-    if (SetEnvironmentVariableW(ustrVar->buffer, NULL))
+    LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
+    if (SetEnvironmentVariableW(lpName, NULL))
         return osl_Process_E_None;
     return osl_Process_E_Unknown;
 }
