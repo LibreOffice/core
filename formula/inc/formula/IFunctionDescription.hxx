@@ -92,7 +92,7 @@ namespace formula
         virtual void fillVisibleArgumentMapping(::std::vector<USHORT>& _rArguments) const = 0;
         virtual void initArgumentInfo() const = 0;
         virtual ::rtl::OUString getSignature() const = 0;
-        virtual long getHelpId() const = 0;
+        virtual rtl::OString getHelpId() const = 0;
 
         // parameter
         virtual sal_uInt32 getParameterCount() const = 0;

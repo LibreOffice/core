@@ -423,10 +423,8 @@ void SvxLineEndWindow::implInit()
     SfxObjectShell*     pDocSh  = SfxObjectShell::Current();
     const SfxPoolItem*  pItem   = NULL;
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_POPUP_LINEEND*/ );
-    // FIXME: HELPID
-    aLineEndSet.SetHelpId( ""/*HID_POPUP_LINEEND_CTRL*/ );
+    SetHelpId( HID_POPUP_LINEEND );
+    aLineEndSet.SetHelpId( HID_POPUP_LINEEND_CTRL );
 
     if ( pDocSh )
     {

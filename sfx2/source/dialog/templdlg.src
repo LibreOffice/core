@@ -57,7 +57,7 @@ ImageList IMG_LST_STYLE_DESIGNER_HC
  // RID_STYLECATALOG ------------------------------------------------------
 ModalDialog RID_STYLECATALOG
 {
-    HelpId = SID_STYLE_CATALOG ;
+    HelpId = CMD_SID_STYLE_CATALOG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 181 , 134 ) ;
@@ -146,7 +146,7 @@ DockingWindow DLG_STYLE_DESIGNER
 {
     Text [ en-US ] = "Styles and Formatting" ;
 
-    HelpId = SID_STYLE_DESIGNER ;
+    HelpId = CMD_SID_STYLE_DESIGNER ;
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;

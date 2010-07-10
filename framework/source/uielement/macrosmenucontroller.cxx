@@ -48,6 +48,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <dispatch/uieventloghelper.hxx>
 #include "helper/mischelper.hxx"
+#include "helpid.hrc"
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -97,9 +98,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     String aDisplayName = RetrieveLabelFromCommand( aCommand );
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
-    //pPopupMenu->SetHelpId( 2, HID_SVX_BASIC_MACRO_ORGANIZER );
-    // FIXME: HELPID
-    pPopupMenu->SetHelpId( 2, ""/*40012*/ );
+    pPopupMenu->SetHelpId( 2, ".uno:MacroDialog" );
 
     // insert providers but not basic or java
     addScriptItems( pPopupMenu, 4);
@@ -219,9 +218,7 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startIt
                     aDisplayName.Append( ellipsis );
                     pPopupMenu->InsertItem( itemId, aDisplayName );
                     pPopupMenu->SetItemCommand( itemId, aCommand );
-                    //pPopupMenu->SetHelpId( itemId, HID_SVX_COMMON_MACRO_ORGANIZER );
-                    // FIXME: HELPID
-                    pPopupMenu->SetHelpId( itemId, ""/*40014*/ );
+                    pPopupMenu->SetHelpId( itemId, rtl::OString( aCommand.GetBuffer(), aCommand.Len(), RTL_TEXTENCODING_UTF8 ) );
                     itemId++;
                     break;
                 }

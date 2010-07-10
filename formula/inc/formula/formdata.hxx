@@ -81,7 +81,6 @@ private:
     USHORT              nEdFocus;
     String              aUndoStr;
     BOOL                bMatrix;
-    // FIXME: HELPID
     rtl::OString        aUniqueId;
     Selection           aSelection;
 };

@@ -528,8 +528,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     }
 
     // set help ID for our canvas
-    // FIXME: HELPID
-    pWindow->SetHelpId(""/*HID_BACKINGWINDOW*/);
+    pWindow->SetHelpId(HID_BACKINGWINDOW);
 
     // inform BackingWindow about frame
     BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow );

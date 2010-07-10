@@ -37,7 +37,7 @@
 
 ModalDialog DLG_ORGANIZE
 {
-    HelpId = SID_ORGANIZER ;
+    HelpId = CMD_SID_ORGANIZER ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 271 , 162 ) ;

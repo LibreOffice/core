@@ -82,7 +82,6 @@ private:
                     m_pFunctionManager;
 
     ::std::vector< TFunctionDesc >  aLRUList;
-    // FIXME: HELPID
     rtl::OString    m_aHelpId;
 
 

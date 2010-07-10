@@ -137,8 +137,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
                     pStatusBarManager = new StatusBarManager( m_xServiceFactory, xFrame, m_aResourceURL, pStatusBar );
                     ((FrameworkStatusBar*)pStatusBar)->SetStatusBarManager( pStatusBarManager );
                     m_xStatusBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pStatusBarManager ), UNO_QUERY );
-                    // FIXME: HELPID
-                    pStatusBar->SetUniqueId( ""/*HID_STATUSBAR*/ );
+                    pStatusBar->SetUniqueId( HID_STATUSBAR );
                 }
             }
 

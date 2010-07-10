@@ -218,55 +218,55 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
 {
     //!!! todo: cache the help strings (here or TRA)
 
-    ULONG nHelpId = 0;
+    rtl::OString sHelpId;
     // mapping from element id -> help id
     switch ( aEvent.ElementId )
     {
         case ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION :
-            nHelpId = HID_FILESAVE_AUTOEXTENSION;
+            sHelpId = HID_FILESAVE_AUTOEXTENSION;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_PASSWORD :
-            nHelpId = HID_FILESAVE_SAVEWITHPASSWORD;
+            sHelpId = HID_FILESAVE_SAVEWITHPASSWORD;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS :
-            nHelpId = HID_FILESAVE_CUSTOMIZEFILTER;
+            sHelpId = HID_FILESAVE_CUSTOMIZEFILTER;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_READONLY :
-            nHelpId = HID_FILEOPEN_READONLY;
+            sHelpId = HID_FILEOPEN_READONLY;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_LINK :
-            nHelpId = HID_FILEDLG_LINK_CB;
+            sHelpId = HID_FILEDLG_LINK_CB;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_PREVIEW :
-            nHelpId = HID_FILEDLG_PREVIEW_CB;
+            sHelpId = HID_FILEDLG_PREVIEW_CB;
             break;
 
         case ExtendedFilePickerElementIds::PUSHBUTTON_PLAY :
-            nHelpId = HID_FILESAVE_DOPLAY;
+            sHelpId = HID_FILESAVE_DOPLAY;
             break;
 
         case ExtendedFilePickerElementIds::LISTBOX_VERSION_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_VERSION :
-            nHelpId = HID_FILEOPEN_VERSION;
+            sHelpId = HID_FILEOPEN_VERSION;
             break;
 
         case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_TEMPLATE :
-            nHelpId = HID_FILESAVE_TEMPLATE;
+            sHelpId = HID_FILESAVE_TEMPLATE;
             break;
 
         case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE_LABEL :
         case ExtendedFilePickerElementIds::LISTBOX_IMAGE_TEMPLATE :
-            nHelpId = HID_FILEOPEN_IMAGE_TEMPLATE;
+            sHelpId = HID_FILEOPEN_IMAGE_TEMPLATE;
             break;
 
         case ExtendedFilePickerElementIds::CHECKBOX_SELECTION :
-            nHelpId = HID_FILESAVE_SELECTION;
+            sHelpId = HID_FILESAVE_SELECTION;
             break;
 
         default:
@@ -276,8 +276,7 @@ OUString FileDialogHelper_Impl::handleHelpRequested( const FilePickerEvent& aEve
     OUString aHelpText;
     Help* pHelp = Application::GetHelp();
     if ( pHelp )
-        // FIXME: HELPID
-        aHelpText = String( pHelp->GetHelpText( String()/*nHelpId*/, NULL ) );
+        aHelpText = String( pHelp->GetHelpText( String( ByteString(sHelpId), RTL_TEXTENCODING_UTF8), NULL ) );
     return aHelpText;
 }
 
@@ -1223,7 +1222,7 @@ void SAL_CALL PickerThread_Impl::run()
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId )
+void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId )
 {
     DBG_ASSERT( _pControlId && _pHelpId, "FileDialogHelper_Impl::setControlHelpIds: invalid array pointers!" );
     if ( !_pControlId || !_pHelpId )
@@ -1239,10 +1238,8 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
         {
             while ( *_pControlId )
             {
-                // calc the help id of the element
                 ::rtl::OUString sId( sHelpIdPrefix );
-                sId += ::rtl::OUString::valueOf( *_pHelpId );
-                // set the help id
+                sId += ::rtl::OUString( *_pHelpId, strlen( *_pHelpId ), RTL_TEXTENCODING_UTF8 );
                 xControlAccess->setValue( *_pControlId, ControlActions::SET_HELP_URL, makeAny( sId ) );
 
                 ++_pControlId; ++_pHelpId;
@@ -1256,7 +1253,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::setDialogHelpId( const sal_Int32 _nHelpId )
+void FileDialogHelper_Impl::setDialogHelpId( sal_Int32 _nHelpId )
 {
     svt::SetDialogHelpId( mxFileDlg, _nHelpId );
 }
@@ -2458,7 +2455,7 @@ void FileDialogHelper::CreateMatcher( const String& rFactory )
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper::SetControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId )
+void FileDialogHelper::SetControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId )
 {
     mpImp->setControlHelpIds( _pControlId, _pHelpId );
 }

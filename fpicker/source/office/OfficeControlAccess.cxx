@@ -205,32 +205,26 @@ namespace svt
     {
         String sHelpURL( _rURL );
         if ( COMPARE_EQUAL == sHelpURL.CompareIgnoreCaseToAscii( "HID:", sizeof( "HID:" ) - 1 ) )
-        {
-            // FIXME: HELPID
-            rtl::OString sID( rtl::OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
-            if ( _bFileView )
-                // the file view "overloaded" the SetHelpId
-                static_cast< SvtFileView* >( _pControl )->SetHelpId( sID );
-            else
-                _pControl->SetHelpId( sID );
-        }
+            sHelpURL = sHelpURL.Copy( sizeof( "HID:" ) - 1 );
+
+        // URLs should always be UTF8 encoded and escaped
+        rtl::OString sID( rtl::OUStringToOString( sHelpURL, RTL_TEXTENCODING_UTF8 ) );
+        if ( _bFileView )
+            // the file view "overloaded" the SetHelpId
+            static_cast< SvtFileView* >( _pControl )->SetHelpId( sID );
         else
-        {
-            DBG_ERRORFILE( "OControlAccess::setHelpURL: unsupported help URL type!" );
-        }
+            _pControl->SetHelpId( sID );
     }
 
     //---------------------------------------------------------------------
     ::rtl::OUString OControlAccess::getHelpURL( Window* _pControl, sal_Bool _bFileView )
     {
-        // FIXME: HELPID
         rtl::OString aHelpId = _pControl->GetHelpId();
         if ( _bFileView )
             // the file view "overloaded" the SetHelpId
             aHelpId = static_cast< SvtFileView* >( _pControl )->GetHelpId( );
 
         rtl::OUString sHelpURL( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
-
         return sHelpURL;
     }
 

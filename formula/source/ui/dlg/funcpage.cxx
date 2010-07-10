@@ -190,18 +190,14 @@ IMPL_LINK( FuncPage, SelHdl, ListBox*, pLb )
         const IFunctionDescription* pDesc = GetFuncDesc( GetFunction() );
         if ( pDesc )
         {
-            // FIXME: HELPID
-            #if 0
-            const long nHelpId = pDesc->getHelpId();
-            if ( nHelpId )
-                aLbFunction.SetSmartHelpId(SmartId(nHelpId));
-            #endif
+            const rtl::OString sHelpId = pDesc->getHelpId();
+            if ( sHelpId.getLength() )
+                aLbFunction.SetHelpId(sHelpId);
         }
         aSelectionLink.Call(this);
     }
     else
     {
-        // FIXME: HELPID
         aLbFunction.SetHelpId(m_aHelpId);
         UpdateFunctionList();
     }

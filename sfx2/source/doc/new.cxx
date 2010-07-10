@@ -177,8 +177,7 @@ SfxPreviewWin::SfxPreviewWin(
     Window* pParent, const ResId& rResId, SfxObjectShellLock &rDocSh )
     : Window(pParent, rResId), rDocShell( rDocSh )
 {
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_PREVIEW_FRAME*/ );
+    SetHelpId( HID_PREVIEW_FRAME );
 
     // adjust contrast mode initially
     bool bUseContrast = UseHighContrastSetting();

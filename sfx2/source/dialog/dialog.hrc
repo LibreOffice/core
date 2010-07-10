@@ -76,7 +76,6 @@
 #define CB_URL                          ( RC_DIALOG_BEGIN + 64 )
 
 #define STR_INTERNET                    ( RC_DIALOG_BEGIN + 65 )
-#define RID_AUTOHIDE                    ( RC_DIALOG_BEGIN + 66 )
 
 #define DLG_ONLINE_REGISTER             ( RC_DIALOG_BEGIN + 68 )
 #define DLG_VERSIONS                    ( RC_DIALOG_BEGIN + 69 )

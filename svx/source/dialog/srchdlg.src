@@ -29,6 +29,7 @@
 
 #include <svx/dialogs.hrc>
 #include "srchdlg.hrc"
+#include <sfx2/sfxcommands.h>
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
 
@@ -51,7 +52,7 @@ String RID_SVXSTR_REPLACE
 
 ModelessDialog RID_SVXDLG_SEARCH
 {
-    HelpId = SID_SEARCH_DLG ;
+    HelpId = CMD_SID_SEARCH_DLG ;
     OutputSize = TRUE ;
     Hide = TRUE ;
     SvLook = TRUE ;

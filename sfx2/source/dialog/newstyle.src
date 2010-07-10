@@ -28,10 +28,11 @@
 #include <sfx2/sfx.hrc>
 #include "dialog.hrc"
 #include "newstyle.hrc"
+#include "sfx2/sfxcommands.h"
 
 ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
 {
-    HelpId = SID_STYLE_NEW_BY_EXAMPLE ;
+    HelpId = CMD_SID_STYLE_NEW_BY_EXAMPLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 177 , 112 ) ;

@@ -104,8 +104,7 @@ FmFieldWinListBox::FmFieldWinListBox( FmFieldWin* pParent )
     ,pTabWin( pParent )
 {
     DBG_CTOR(FmFieldWinListBox,NULL);
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_FIELD_SEL*/ );
+    SetHelpId( HID_FIELD_SEL );
 
     SetHighlightRange( );
 }
@@ -193,8 +192,7 @@ FmFieldWin::FmFieldWin(SfxBindings* _pBindings, SfxChildWindow* _pMgr, Window* _
             ,m_pChangeListener(NULL)
 {
     DBG_CTOR(FmFieldWin,NULL);
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_FIELD_SEL_WIN*/ );
+    SetHelpId( HID_FIELD_SEL_WIN );
 
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
     pListBox = new FmFieldWinListBox( this );

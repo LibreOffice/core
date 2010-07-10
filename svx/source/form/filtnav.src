@@ -34,25 +34,21 @@ Menu RID_FM_FILTER_MENU
         MenuItem
         {
             Identifier = SID_FM_DELETE ;
-            HelpID = SID_FM_DELETE ;
             Text [ en-US ] = "~Delete" ;
         };
         MenuItem
         {
             Identifier = SID_FM_FILTER_EDIT ;
-            HelpID = SID_FM_FILTER_EDIT ;
             Text [ en-US ] = "~Edit" ;
         };
         MenuItem
         {
             Identifier = SID_FM_FILTER_IS_NULL ;
-            HelpID = SID_FM_FILTER_IS_NULL ;
             Text [ en-US ] = "~Is Null" ;
         };
         MenuItem
         {
             Identifier = SID_FM_FILTER_IS_NOT_NULL ;
-            HelpID = SID_FM_FILTER_IS_NOT_NULL ;
             Text [ en-US ] = "I~s not Null" ;
         };
     };

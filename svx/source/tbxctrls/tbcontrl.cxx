@@ -905,10 +905,8 @@ SvxColorWindow_Impl::SvxColorWindow_Impl( const OUString&            rCommand,
 
     lcl_CalcSizeValueSet( *this, aColorSet, aSize12 );
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_POPUP_COLOR*/ );
-    // FIXME: HELPID
-    aColorSet.SetHelpId( ""/*HID_POPUP_COLOR_CTRL*/ );
+    SetHelpId( HID_POPUP_COLOR );
+    aColorSet.SetHelpId( HID_POPUP_COLOR_CTRL );
 
     SetText( rWndTitle );
     aColorSet.Show();
@@ -1092,8 +1090,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >&
 
     lcl_CalcSizeValueSet( *this, aFrameSet,Size( 20, 20 ));
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_POPUP_FRAME*/ );
+    SetHelpId( HID_POPUP_FRAME );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME) );
     aFrameSet.Show();
 }
@@ -1353,8 +1350,7 @@ SvxLineWindow_Impl::SvxLineWindow_Impl( USHORT nId, const Reference< XFrame >& r
 
     lcl_CalcSizeValueSet( *this, aLineSet, aBmpSize );
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_POPUP_LINE*/ );
+    SetHelpId( HID_POPUP_LINE );
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME_STYLE) );
     aLineSet.Show();
 }

@@ -883,15 +883,13 @@ void ToolBarManager::CreateControllers()
         if ( nId == 0 )
             continue;
 
-        // FIXME: HELPID
-        // What ? A width initalized with a help id ? Should we perhaps add two bananas and a coconut to it ?
-        // sal_Int16                    nWidth( sal_Int16( m_pToolBar->GetHelpId( nId )));
-        sal_Int16                    nWidth( nId );
         rtl::OUString                aLoadURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:OpenUrl" ));
         rtl::OUString                aCommandURL( m_pToolBar->GetItemCommand( nId ));
         sal_Bool                     bInit( sal_True );
         sal_Bool                     bCreate( sal_True );
         Reference< XStatusListener > xController;
+        CommandToInfoMap::iterator pCommandIter = m_aCommandMap.find( aCommandURL );
+        sal_Int32 nWidth = ( pCommandIter != m_aCommandMap.end() ? pCommandIter->second.nWidth : 0 );
 
         svt::ToolboxController* pController( 0 );
 
@@ -1188,7 +1186,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         rtl::OUString               aHelpURL;
         rtl::OUString               aTooltip;
         sal_uInt16                  nType( ::com::sun::star::ui::ItemType::DEFAULT );
-        sal_uInt16                  nWidth( 0 );
+        sal_uInt32                  nWidth( 0 );
         sal_Bool                    bIsVisible( sal_True );
         sal_uInt32                  nStyle( 0 );
 
@@ -1277,16 +1275,13 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     if ( pIter == m_aCommandMap.end())
                     {
                         aCmdInfo.nId = nId;
+                        aCmdInfo.nWidth = nWidth;
                         m_aCommandMap.insert( CommandToInfoMap::value_type( aCommandURL, aCmdInfo ));
                     }
                     else
                     {
                         pIter->second.aIds.push_back( nId );
                     }
-
-                    // Add additional information for the controller to the obsolete help id
-                    // FIXME: HELPID
-                    m_pToolBar->SetHelpId( ""/*ULONG( nWidth )*/);
 
                     if ( !bIsVisible )
                         m_pToolBar->HideItem( nId );

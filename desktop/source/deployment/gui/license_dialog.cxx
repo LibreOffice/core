@@ -221,8 +221,7 @@ LicenseDialogImpl::LicenseDialogImpl(
 
     FreeResource();
 
-    // FIXME: HELPID
-    m_acceptButton.SetUniqueId(""/*UID_BTN_LICENSE_ACCEPT*/);
+    m_acceptButton.SetUniqueId(UID_BTN_LICENSE_ACCEPT);
     m_fiArrow1.Show(true);
     m_fiArrow2.Show(false);
     m_mlLicense.SetText(sLicenseText);

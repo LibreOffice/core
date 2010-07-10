@@ -61,8 +61,7 @@ GalleryPreview::GalleryPreview( GalleryBrowser2* pParent, GalleryTheme* pTheme )
     DragSourceHelper( this ),
     mpTheme( pTheme )
 {
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_GALLERY_WINDOW*/ );
+    SetHelpId( HID_GALLERY_WINDOW );
     InitSettings();
 }
 
@@ -74,8 +73,7 @@ GalleryPreview::GalleryPreview( Window* pParent, const ResId & rResId  ) :
     DragSourceHelper( this ),
     mpTheme( NULL )
 {
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_GALLERY_PREVIEW*/ );
+    SetHelpId( HID_GALLERY_PREVIEW );
     InitSettings();
 }
 
@@ -311,8 +309,7 @@ GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme
 {
     EnableFullItemMode( FALSE );
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_GALLERY_WINDOW*/ );
+    SetHelpId( HID_GALLERY_WINDOW );
     InitSettings();
     SetExtraSpacing( 2 );
     SetItemWidth( S_THUMB + 6 );
@@ -478,8 +475,7 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
     mnCurRow( 0 ),
     mbInit( FALSE )
 {
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_GALLERY_WINDOW*/ );
+    SetHelpId( HID_GALLERY_WINDOW );
 
     InitSettings();
 

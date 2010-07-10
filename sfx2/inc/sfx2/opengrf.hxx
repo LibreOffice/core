@@ -55,7 +55,7 @@ public:
     void                    SetCurrentFilter(const String&);
 
     /// Set dialog help id at FileDlgHelper
-    void                    SetControlHelpIds( const INT16* _pControlId, const INT32* _pHelpId );
+    void                    SetControlHelpIds( const INT16* _pControlId, const char** _pHelpId );
     /// Set control help ids at FileDlgHelper
     void                    SetDialogHelpId( const INT32 _nHelpId );
 private:

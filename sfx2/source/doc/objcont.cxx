@@ -365,17 +365,6 @@ void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2, USHORT)
     {
         SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
         SetOrganizerSearchMask(pStylePool);
-#ifdef WIR_KOENNEN_WIEDER_HILFE_FUER_STYLESHEETS
-        SfxStyleSheetBase *pStyle = (*pStylePool)[nIdx2];
-        if(pStyle)
-        {
-            String aHelpFile;
-            ULONG nHelpId=pStyle->GetHelpId(aHelpFile);
-            SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-            if ( pHelpPI && nHelpId )
-                pHelpPI->LoadTopic( nHelpId );
-        }
-#endif
     }
 }
 

@@ -28,10 +28,11 @@
 #include <sfx2/sfx.hrc>
 #include "doc.hrc"
 #include "doctdlg.hrc"
+#include <sfx2/sfxcommands.h>
 
 ModalDialog DLG_DOC_TEMPLATE
 {
-    HelpId = SID_DOCTEMPLATE ;
+    HelpId = CMD_SID_DOCTEMPLATE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 128 ) ;

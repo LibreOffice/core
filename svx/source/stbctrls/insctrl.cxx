@@ -57,8 +57,6 @@ SvxInsertStatusBarControl::SvxInsertStatusBarControl( USHORT _nSlotId,
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     bInsert( TRUE )
 {
-    // FIXME: HELPID
-    rStb.SetHelpId( _nId, ""/*_nSlotId*/ );
 }
 
 // -----------------------------------------------------------------------

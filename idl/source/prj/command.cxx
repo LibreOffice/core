@@ -276,6 +276,8 @@ SvCommand::SvCommand( int argc, char ** argv )
                 if( 's' == aFirstChar )
                 { // Name der Slot-Ausgabe
                     aSlotMapFile = aName;
+                    aName += String::CreateFromAscii(".csv");
+                    aCSVFile = aName;
                 }
                 else if( 'l' == aFirstChar )
                 { // Name der Listing

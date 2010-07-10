@@ -1977,10 +1977,7 @@ void FmXGridPeer::setProperty( const ::rtl::OUString& PropertyName, const Any& V
         String sPattern;
         sPattern.AssignAscii("HID:");
         if (sHelpURL.Equals(sPattern, 0, sPattern.Len()))
-        {
-            // FIXME: HELPID
-            pGrid->SetHelpId(rtl::OUStringToOString(sHelpURL, RTL_TEXTENCODING_UTF8));
-        }
+              pGrid->SetHelpId(rtl::OUStringToOString(sHelpURL, RTL_TEXTENCODING_UTF8));
     }
     else if ( 0 == PropertyName.compareTo( FM_PROP_DISPLAYSYNCHRON ) )
     {

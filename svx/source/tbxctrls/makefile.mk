@@ -74,7 +74,6 @@ SRC1FILES = \
         lboxctrl.src			\
         linectrl.src			\
         tbcontrl.src			\
-        tbxdraw.src				\
         grafctrl.src
 
 # --- Targets -------------------------------------------------------

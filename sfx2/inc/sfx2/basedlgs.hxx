@@ -69,15 +69,12 @@ class SFX2_DLLPUBLIC SfxModalDialog: public ModalDialog
 {
     sal_uInt32              nUniqId;
     String                  aExtraData;
-    Timer                   aTimer;
     const SfxItemSet*       pInputSet;
     SfxItemSet*             pOutputSet;
 
 private:
     SAL_DLLPRIVATE SfxModalDialog(SfxModalDialog &); // not defined
     SAL_DLLPRIVATE void operator =(SfxModalDialog &); // not defined
-
-    DECL_DLLPRIVATE_LINK( TimerHdl_Impl, Timer* );
 
     SAL_DLLPRIVATE void SetDialogData_Impl();
     SAL_DLLPRIVATE void GetDialogData_Impl();

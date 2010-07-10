@@ -47,7 +47,7 @@ Menu RID_FM_TEXTATTRIBUTE_MENU
         MenuItem
         {
             Identifier = MENU_FM_TEXTATTRIBITES_STYLE;
-            HelpID = MENU_FM_TEXTATTRIBITES_STYLE;
+//            HelpID = MENU_FM_TEXTATTRIBITES_STYLE;
             Text [ en-US ] = "St~yle";
             SubMenu = Menu
             {
@@ -96,7 +96,7 @@ Menu RID_FM_TEXTATTRIBUTE_MENU
         MenuItem
         {
             Identifier = MENU_FM_TEXTATTRIBITES_ALIGNMENT;
-            HelpID = MENU_FM_TEXTATTRIBITES_ALIGNMENT;
+//            HelpID = MENU_FM_TEXTATTRIBITES_ALIGNMENT;
             Text [ en-US ] = "~Alignment";
             RadioCheck = TRUE;
             SubMenu = Menu
@@ -129,7 +129,7 @@ Menu RID_FM_TEXTATTRIBUTE_MENU
         MenuItem
         {
             Identifier = MENU_FM_TEXTATTRIBITES_SPACING;
-            HelpID = MENU_FM_TEXTATTRIBITES_SPACING;
+//            HelpID = MENU_FM_TEXTATTRIBITES_SPACING;
             Text [ en-US ] = "~Line Spacing";
             _MenuItemFlags = MIB_RADIOCHECK;
             SubMenu = Menu

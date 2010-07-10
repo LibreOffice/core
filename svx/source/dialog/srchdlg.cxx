@@ -427,7 +427,7 @@ void lcl_MoveDown( Window& rWindow, sal_Int32 nOffset )
 void SvxSearchDialog::Construct_Impl()
 {
 #if ENABLE_LAYOUT
-    SetHelpId (SID_SEARCH_DLG);
+    SetHelpId (".uno:SearchDialog");
 #endif /* ENABLE_LAYOUT */
 
     // temporary to avoid incompatibility

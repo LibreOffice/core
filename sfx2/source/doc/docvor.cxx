@@ -245,9 +245,8 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
             // * always work with an own instance, even if we get only NULL in this ctor
     }
 
-    // FIXME: HELPID
-    aLeftLb.SetHelpId( ""/*HID_CTL_ORGANIZER_LEFT*/ );
-    aRightLb.SetHelpId( ""/*HID_CTL_ORGANIZER_RIGHT*/ );
+    aLeftLb.SetHelpId( HID_CTL_ORGANIZER_LEFT );
+    aRightLb.SetHelpId( HID_CTL_ORGANIZER_RIGHT );
 
     String aWorkPath = SvtPathOptions().GetWorkPath();
     if ( aWorkPath.Len() )

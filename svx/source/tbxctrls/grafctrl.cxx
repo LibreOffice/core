@@ -316,7 +316,7 @@ public:
 
 // -----------------------------------------------------------------------------
 
-ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame ) :
+ImplGrafControl::ImplGrafControl( Window* pParent, USHORT, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame ) :
     Control( pParent, WB_TABSTOP ),
     maImage     ( this ),
     maField     ( this, rCmd, rFrame )
@@ -353,9 +353,6 @@ ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OU
 
     maImage.Show();
 
-    // FIXME: HELPID
-        (void)nSlotId;
-    // maField.SetHelpId( nSlotId );
     maField.SetHelpId( rtl::OUStringToOString( rCmd, RTL_TEXTENCODING_UTF8 ) );
     maField.Show();
 }

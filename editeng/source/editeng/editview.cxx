@@ -1083,11 +1083,9 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             String aParaStr( EditResId( RID_STR_PARAGRAPH ) );
             aParaStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%x" ) ), aTmpPara );
             aPopupMenu.InsertItem( MN_WORDLANGUAGE, aWordStr );
-            // FIXME: HELPID
-            aPopupMenu.SetHelpId( MN_WORDLANGUAGE, ""/*HID_EDITENG_SPELLER_WORDLANGUAGE*/ );
+            aPopupMenu.SetHelpId( MN_WORDLANGUAGE, HID_EDITENG_SPELLER_WORDLANGUAGE );
             aPopupMenu.InsertItem( MN_PARALANGUAGE, aParaStr );
-            // FIXME: HELPID
-            aPopupMenu.SetHelpId( MN_PARALANGUAGE, ""/*HID_EDITENG_SPELLER_PARALANGUAGE*/ );
+            aPopupMenu.SetHelpId( MN_PARALANGUAGE, HID_EDITENG_SPELLER_PARALANGUAGE );
         }
 
         // ## Create mnemonics here

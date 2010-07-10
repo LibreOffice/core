@@ -183,14 +183,10 @@ ExtBoxWithBtns_Impl::ExtBoxWithBtns_Impl( ExtMgrDialog* pParent, TheExtensionMan
     m_pEnableBtn = new PushButton( this, WB_TABSTOP );
     m_pRemoveBtn = new PushButton( this, WB_TABSTOP );
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_EXTENSION_MANAGER_LISTBOX*/ );
-    // FIXME: HELPID
-    m_pOptionsBtn->SetHelpId( ""/*HID_EXTENSION_MANAGER_LISTBOX_OPTIONS*/ );
-    // FIXME: HELPID
-    m_pEnableBtn->SetHelpId( ""/*HID_EXTENSION_MANAGER_LISTBOX_DISABLE*/ );
-    // FIXME: HELPID
-    m_pRemoveBtn->SetHelpId( ""/*HID_EXTENSION_MANAGER_LISTBOX_REMOVE*/ );
+    SetHelpId( HID_EXTENSION_MANAGER_LISTBOX );
+    m_pOptionsBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_OPTIONS );
+    m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
+    m_pRemoveBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_REMOVE );
 
     m_pOptionsBtn->SetClickHdl( LINK( this, ExtBoxWithBtns_Impl, HandleOptionsBtn ) );
     m_pEnableBtn->SetClickHdl( LINK( this, ExtBoxWithBtns_Impl, HandleEnableBtn ) );
@@ -298,14 +294,12 @@ void ExtBoxWithBtns_Impl::SetButtonStatus( const TEntry_Impl pEntry )
     if ( ( pEntry->m_eState == REGISTERED ) || ( pEntry->m_eState == NOT_AVAILABLE ) )
     {
         m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_DISABLE ) );
-        // FIXME: HELPID
-        m_pEnableBtn->SetHelpId( ""/*HID_EXTENSION_MANAGER_LISTBOX_DISABLE*/ );
+        m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_DISABLE );
     }
     else
     {
         m_pEnableBtn->SetText( DialogHelper::getResourceString( RID_CTX_ITEM_ENABLE ) );
-        // FIXME: HELPID
-        m_pEnableBtn->SetHelpId( ""/*HID_EXTENSION_MANAGER_LISTBOX_ENABLE*/ );
+        m_pEnableBtn->SetHelpId( HID_EXTENSION_MANAGER_LISTBOX_ENABLE );
     }
 
     if ( ( pEntry->m_eState == NOT_AVAILABLE ) || pEntry->m_bMissingDeps )

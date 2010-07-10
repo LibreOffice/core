@@ -664,8 +664,7 @@ void SfxTabDialog::Init_Impl( BOOL bFmtFlag, const String* pUserButtonText )
     aCancelBtn.Show();
     aHelpBtn.Show();
     aResetBtn.Show();
-    // FIXME: HELPID
-    aResetBtn.SetHelpId( ""/*HID_TABDLG_RESET_BTN*/ );
+    aResetBtn.SetHelpId( HID_TABDLG_RESET_BTN );
 
     if ( pUserBtn )
     {
@@ -681,8 +680,7 @@ void SfxTabDialog::Init_Impl( BOOL bFmtFlag, const String* pUserButtonText )
         String aStd( SfxResId( STR_STANDARD_SHORTCUT ) );
         aBaseFmtBtn.SetText( aStd );
         aBaseFmtBtn.SetClickHdl( LINK( this, SfxTabDialog, BaseFmtHdl ) );
-        // FIXME: HELPID
-        aBaseFmtBtn.SetHelpId( ""/*HID_TABDLG_STANDARD_BTN*/ );
+        aBaseFmtBtn.SetHelpId( HID_TABDLG_STANDARD_BTN );
 
         // bFmt = tempor"ares Flag im Ctor() "ubergeben,
         // wenn bFmt == 2, dann auch TRUE,
@@ -789,8 +787,7 @@ void SfxTabDialog::EnableApplyButton(BOOL bEnable)
         pImpl->pApplyButton->SetText( String( SfxResId( STR_APPLY ) ) );
         pImpl->pApplyButton->Show();
 
-        // FIXME: HELPID
-        pImpl->pApplyButton->SetHelpId( ""/*HID_TABDLG_APPLY_BTN*/ );
+        pImpl->pApplyButton->SetHelpId( HID_TABDLG_APPLY_BTN );
     }
     else
     {
@@ -1783,16 +1780,15 @@ long SfxTabDialog::Notify( NotifyEvent& rNEvt )
         if ( pViewFrame )
         {
             Window* pWindow = rNEvt.GetWindow();
-            ULONG nHelpId  = 0;
-            while ( !nHelpId && pWindow )
+            rtl::OString sHelpId;
+            while ( !sHelpId.getLength() && pWindow )
             {
-                // FIXME: HELPID
-                // nHelpId = pWindow->GetHelpId();
+                sHelpId = pWindow->GetHelpId();
                 pWindow = pWindow->GetParent();
             }
 
-            if ( nHelpId )
-                SfxHelp::OpenHelpAgent( &pViewFrame->GetFrame(), nHelpId );
+            if ( sHelpId.getLength() )
+                SfxHelp::OpenHelpAgent( &pViewFrame->GetFrame(), sHelpId );
         }
     }
 

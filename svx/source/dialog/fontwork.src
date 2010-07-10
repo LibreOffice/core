@@ -34,7 +34,7 @@
  // RID_SVXDLG_FONTWORK ---------------------------------------------------
 DockingWindow RID_SVXDLG_FONTWORK
 {
-    HelpId = SID_FONTWORK ;
+    HelpId = CMD_SID_FONTWORK ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;

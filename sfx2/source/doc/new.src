@@ -28,12 +28,14 @@
 #include <sfx2/sfx.hrc>
 #include "doc.hrc"
 #include "new.hrc"
+#include <sfx2/sfxcommands.h>
+
  // pragma ----------------------------------------------------------------
 
  // DLG_NEW_FILE ----------------------------------------------------------
 ModalDialog DLG_NEW_FILE
 {
-    HelpId = SID_NEWDOC ;
+    HelpId = CMD_SID_NEWDOC ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 336 , 96 ) ;

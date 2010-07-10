@@ -297,25 +297,19 @@ void ParaWin::SetFunctionDesc(const IFunctionDescription* pFDesc)
         nArgs = pFuncDesc->getSuppressedArgumentCount();
         pFuncDesc->fillVisibleArgumentMapping(aVisibleArgMapping);
         aSlider.Hide();
-        // FIXME: HELPID
-        #if 0
-        long nHelpId = pFuncDesc->getHelpId();
-        SetHelpId( nHelpId );
-        aEdArg1.SetHelpId( nHelpId );
-        aEdArg2.SetHelpId( nHelpId );
-        aEdArg3.SetHelpId( nHelpId );
-        aEdArg4.SetHelpId( nHelpId );
-        #endif
+        rtl::OString sHelpId = pFuncDesc->getHelpId();
+        SetHelpId( sHelpId );
+        aEdArg1.SetHelpId( sHelpId );
+        aEdArg2.SetHelpId( sHelpId );
+        aEdArg3.SetHelpId( sHelpId );
+        aEdArg4.SetHelpId( sHelpId );
 
         //  Unique-IDs muessen gleich bleiben fuer Automatisierung
-        // FIXME: HELPID
-        #if 0
-        SetUniqueId( ""/*HID_FORMULA_FAP_PAGE*/ );
+        SetUniqueId( HID_FORMULA_FAP_PAGE );
         aEdArg1.SetUniqueId( HID_FORMULA_FAP_EDIT1 );
         aEdArg2.SetUniqueId( HID_FORMULA_FAP_EDIT2 );
         aEdArg3.SetUniqueId( HID_FORMULA_FAP_EDIT3 );
         aEdArg4.SetUniqueId( HID_FORMULA_FAP_EDIT4 );
-        #endif
         SetActiveLine(0);
     }
     else

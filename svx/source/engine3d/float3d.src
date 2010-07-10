@@ -27,6 +27,8 @@
 
 #include <svx/dialogs.hrc>
 #include "float3d.hrc"
+#include <svx/svxcommands.h>
+
 #define WIDTH               158
 #define HEIGHT              209
 #define BORDER              3
@@ -64,7 +66,7 @@
 
 DockingWindow RID_SVXFLOAT_3D
 {
-    HelpID = SID_3D_WIN ;
+    HelpID = CMD_SID_3D_WIN ;
     Border = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;

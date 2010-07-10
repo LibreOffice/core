@@ -305,7 +305,7 @@ public:
             Pointer to an array of help ids. For each element in _pControlId, there must be
             a corresponding element herein.
     */
-    void                    SetControlHelpIds( const sal_Int16* _pControlId, const sal_Int32* _pHelpId );
+    void                    SetControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId );
     void                    SetDialogHelpId( const sal_Int32 _nHelpId );
     void                    CreateMatcher( const String& rName );
 

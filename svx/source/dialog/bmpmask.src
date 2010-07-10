@@ -37,7 +37,7 @@
  // RID_SVXDLG_BMPMASK ----------------------------------------------------
 DockingWindow RID_SVXDLG_BMPMASK
 {
-    HelpId = SID_BMPMASK ;
+    HelpId = CMD_SID_BMPMASK ;
     OutputSize = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
