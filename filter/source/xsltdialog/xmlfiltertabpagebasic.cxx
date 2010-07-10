@@ -50,10 +50,8 @@ XMLFilterTabPageBasic::XMLFilterTabPageBasic( Window* pParent, ResMgr& rResMgr )
     maFTDescription( this, ResId( FT_XML_DESCRIPTION, rResMgr ) ),
     maEDDescription( this, ResId( ED_XML_DESCRIPTION, rResMgr ) )
 {
-    // FIXME: HELPID
-    maCBApplication.SetHelpId( ""/*HID_XML_FILTER_APPLICATION*/ );
-    // FIXME: HELPID
-    maEDDescription.SetHelpId( ""/*HID_XML_FILTER_DESCRIPTION*/ );
+    maCBApplication.SetHelpId( HID_XML_FILTER_APPLICATION );
+    maEDDescription.SetHelpId( HID_XML_FILTER_DESCRIPTION );
 
     FreeResource();
 

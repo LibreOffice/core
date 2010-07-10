@@ -91,8 +91,7 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
     mpFilterListBox->SetSelectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     mpFilterListBox->SetDeselectHdl( LINK( this, XMLFilterSettingsDialog, SelectionChangedHdl_Impl ) );
     mpFilterListBox->SetDoubleClickHdl( LINK( this, XMLFilterSettingsDialog, DoubleClickHdl_Impl ) );
-    // FIXME: HELPID
-    mpFilterListBox->SetHelpId( ""/*HID_XML_FILTER_LIST*/ );
+    mpFilterListBox->SetHelpId( HID_XML_FILTER_LIST );
 
     maPBNew.SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );
     maPBEdit.SetClickHdl(LINK( this, XMLFilterSettingsDialog, ClickHdl_Impl ) );

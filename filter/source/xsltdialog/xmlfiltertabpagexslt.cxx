@@ -91,14 +91,10 @@ XMLFilterTabPageXSLT::XMLFilterTabPageXSLT( Window* pParent, ResMgr& rResMgr, co
     maPBImportXSLT.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
     maPBImportTemplate.SetClickHdl( LINK ( this, XMLFilterTabPageXSLT, ClickBrowseHdl_Impl ) );
 
-    // FIXME: HELPID
-    maEDDTDSchema.SetHelpId( ""/*HID_XML_FILTER_DTD*/ );
-    // FIXME: HELPID
-    maEDExportXSLT.SetHelpId( ""/*HID_XML_FILTER_EXPORT_XSLT*/ );
-    // FIXME: HELPID
-    maEDImportXSLT.SetHelpId( ""/*HID_XML_FILTER_IMPORT_XSLT*/ );
-    // FIXME: HELPID
-    maEDImportTemplate.SetHelpId( ""/*HID_XML_FILTER_IMPORT_TEMPLATE*/ );
+    maEDDTDSchema.SetHelpId( HID_XML_FILTER_DTD );
+    maEDExportXSLT.SetHelpId( HID_XML_FILTER_EXPORT_XSLT );
+    maEDImportXSLT.SetHelpId( HID_XML_FILTER_IMPORT_XSLT );
+    maEDImportTemplate.SetHelpId( HID_XML_FILTER_IMPORT_TEMPLATE );
 }
 
 XMLFilterTabPageXSLT::~XMLFilterTabPageXSLT()
