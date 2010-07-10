@@ -128,7 +128,7 @@ TestPanel::TestPanel (TreeNode* pParent)
         ::std::auto_ptr<TreeNode>(new Wrapper (
             pScrollPanel, Size (200,300), pBox, true)),
         String::CreateFromAscii ("First ListBox"),
-        0);
+        "");
 
     pBox = new ListBox (pScrollPanel->GetWindow());
     for (i=1; i<=20; i++)
@@ -142,7 +142,7 @@ TestPanel::TestPanel (TreeNode* pParent)
         ::std::auto_ptr<TreeNode>(new Wrapper (
             pScrollPanel, Size (200,300), pBox, true)),
         String::CreateFromAscii ("Second ListBox"),
-        0);
+        "");
 
     AddControl (::std::auto_ptr<TreeNode>(pScrollPanel));
 
@@ -152,7 +152,7 @@ TestPanel::TestPanel (TreeNode* pParent)
         ::std::auto_ptr<TreeNode>(new Wrapper (
             this, Size (100,30), pButton, false)),
         String::CreateFromAscii ("Button Area"),
-        0);
+        "");
 }
 
 

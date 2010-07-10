@@ -362,8 +362,7 @@ TaskPaneViewShell::TaskPaneViewShell (
     GetParentWindow()->SetBackground(Wallpaper());
     mpContentWindow->SetBackground(Wallpaper());
 
-    // FIXME: HELPID
-    GetParentWindow()->SetHelpId(""/*HID_SD_TASK_PANE*/);
+    GetParentWindow()->SetHelpId(HID_SD_TASK_PANE);
 
     PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(GetDockingWindow());
     if (pDockingWindow != NULL)

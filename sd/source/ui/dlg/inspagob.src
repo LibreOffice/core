@@ -30,7 +30,7 @@
 
 ModalDialog DLG_INSERT_PAGES_OBJS
 {
-    HelpID = DLG_INSERT_PAGES_OBJS ;
+    HelpID = HID_DLG_INSERT_PAGES_OBJS ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 128 ) ;

@@ -27,9 +27,11 @@
 
 #include "app.hrc"
 #include "sdpreslt.hrc"
+#include "sdcommands.h"
+
 ModalDialog DLG_PRESLT
 {
-    HelpID = SID_PRESENTATION_LAYOUT ;
+    HelpID = CMD_SID_PRESENTATION_LAYOUT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 212 , 185 ) ;

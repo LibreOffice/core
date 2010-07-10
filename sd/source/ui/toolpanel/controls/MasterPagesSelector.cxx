@@ -791,7 +791,6 @@ void MasterPagesSelector::SetHelpId( const rtl::OString& aId )
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    // FIXME: HELPID
     mpPageSet->SetHelpId( aId );
 }
 

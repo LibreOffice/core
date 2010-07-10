@@ -79,7 +79,7 @@ public:
     sal_uInt32 AddControl (
         ::std::auto_ptr<ControlFactory> pControlFactory,
         const String& rTitle,
-        ULONG nHelpId,
+        const rtl::OString& sHelpId,
         const TitledControl::ClickHandler& rClickHandler);
 
     virtual void Resize (void);

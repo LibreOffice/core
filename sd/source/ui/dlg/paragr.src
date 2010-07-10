@@ -27,6 +27,7 @@
 
 #include <svx/dialogs.hrc>
 #include "glob.hrc"
+#include "helpids.h"
 #include "paragr.hrc"
 
 TabDialog TAB_PARAGRAPH
@@ -105,7 +106,7 @@ TabDialog TAB_PARAGRAPH
 
 TabPage RID_TABPAGE_PARA_NUMBERING
 {
-    HelpId = RID_TABPAGE_PARA_NUMBERING ;
+    HelpId = HID_TABPAGE_PARA_NUMBERING ;
     Hide = TRUE ;
     Text = "Numbering" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;

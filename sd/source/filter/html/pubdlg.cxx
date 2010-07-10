@@ -81,7 +81,7 @@ const UINT16 nMagic = (UINT16)0x1977;
 #define KEY_QUALITY     "JPG-EXPORT-QUALITY"
 
 // Die Help Ids der einzelnen Seiten
-ULONG aPageHelpIds[NOOFPAGES] =
+const char* aPageHelpIds[NOOFPAGES] =
 {
     HID_SD_HTMLEXPORT_PAGE1,
     HID_SD_HTMLEXPORT_PAGE2,
@@ -478,8 +478,7 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 
     SetDefaults();
 
-    // FIXME: HELPID
-    SetHelpId(""/*aPageHelpIds[0]*/);
+    SetHelpId(aPageHelpIds[0]);
 
     aNextPageButton.GrabFocus();
 }
@@ -1287,9 +1286,7 @@ IMPL_LINK( SdPublishingDlg, FinishHdl, OKButton *, EMPTYARG )
 void SdPublishingDlg::ChangePage()
 {
     int nPage = aAssistentFunc.GetCurrentPage();
-    // FIXME: HELPID
-    (void)nPage;
-    SetHelpId(""/*aPageHelpIds[nPage-1]*/);
+    SetHelpId(aPageHelpIds[nPage-1]);
 
     UpdatePage();
 

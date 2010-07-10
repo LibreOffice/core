@@ -28,9 +28,11 @@
 #include "app.hrc"
 #include "res_bmp.hrc"
 #include "dlgsnap.hrc"
+#include "helpids.h"
+
 ModalDialog DLG_SNAPLINE
 {
-    HelpID = SID_CAPTUREPOINT ;
+    HelpID = CMD_SID_CAPTUREPOINT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 140 , 125 ) ;

@@ -28,6 +28,7 @@
 
 #include "app.hrc"
 #include "vectdlg.hrc"
+#include "helpids.h"
 
 /******************************************************************************
 |*
@@ -37,7 +38,7 @@
 
 ModalDialog DLG_VECTORIZE
 {
-    HelpID = SID_VECTORIZE;
+    HelpID = HID_VECTORIZE_DLG;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200, 237 ) ;

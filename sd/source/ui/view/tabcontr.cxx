@@ -102,8 +102,7 @@ TabControl::TabControl(DrawViewShell* pViewSh, Window* pParent) :
     EnableEditMode();
     SetSizePixel(Size(0, 0));
     SetMaxPageWidth( 150 );
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_SD_TABBAR_PAGES*/ );
+    SetHelpId( HID_SD_TABBAR_PAGES );
 }
 
 /*************************************************************************

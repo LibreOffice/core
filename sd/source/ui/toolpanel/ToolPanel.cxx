@@ -75,7 +75,7 @@ ToolPanel::~ToolPanel (void)
 sal_uInt32 ToolPanel::AddControl (
     ::std::auto_ptr<ControlFactory> pControlFactory,
     const String& rTitle,
-    ULONG nHelpId,
+    const rtl::OString& sHelpId,
     const TitledControl::ClickHandler& rClickHandler)
 {
     TitledControl* pTitledControl = new TitledControl (
@@ -117,9 +117,7 @@ sal_uInt32 ToolPanel::AddControl (
         rFocusManager.RegisterLink(pChild->GetWindow(),pFirst, KEY_DOWN);
     }
 
-    // FIXME: HELPID
-    pTitledControl->GetWindow()->SetHelpId(""/*nHelpId*/);
-    (void)nHelpId;
+    pTitledControl->GetWindow()->SetHelpId(sHelpId);
 
     return mpControlContainer->AddControl (pChild);
 }

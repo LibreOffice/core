@@ -27,6 +27,8 @@
 
 #include "app.hrc"
 #include "morphdlg.hrc"
+#include "helpids.h"
+
 /******************************************************************************
 |*
 |*
@@ -34,7 +36,8 @@
 \******************************************************************************/
 ModalDialog DLG_MORPH
 {
-    HelpID = SID_POLYGON_MORPHING ;
+    HelpID = CMD_SID_POLYGON_MORPHING ;
+    HelpID = ".uno:Morphing" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 196 , 68 ) ;

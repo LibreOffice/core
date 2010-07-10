@@ -98,7 +98,7 @@ void SubToolPanel::ListHasChanged (void)
 void SubToolPanel::AddControl (
     ::std::auto_ptr<TreeNode> pControl,
     const String& rTitle,
-    ULONG nHelpId)
+    const rtl::OString& sHelpId)
 {
     pControl->GetWindow()->AddEventListener (
         LINK(this,SubToolPanel,WindowEventListener));
@@ -112,9 +112,7 @@ void SubToolPanel::AddControl (
         TitledControlStandardClickHandler(GetControlContainer(), ControlContainer::ES_TOGGLE),
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
     pTitledControl->GetWindow()->SetParent(this);
-    // FIXME: HELPID
-    pTitledControl->GetWindow()->SetHelpId(""/*nHelpId*/);
-    (void)nHelpId;
+    pTitledControl->GetWindow()->SetHelpId(sHelpId);
     ::std::auto_ptr<TreeNode> pChild (pTitledControl);
 
     // Add a down link only for the first control so that when

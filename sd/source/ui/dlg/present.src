@@ -33,7 +33,7 @@
 
 ModalDialog DLG_START_PRESENTATION
 {
-    HelpID = SID_PRESENTATION ;
+    HelpID = CMD_SID_PRESENTATION ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 256, 205 ) ;

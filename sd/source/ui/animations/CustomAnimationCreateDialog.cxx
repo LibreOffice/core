@@ -542,24 +542,19 @@ CustomAnimationCreateDialog::CustomAnimationCreateDialog( Window* pParent, Custo
 
     const CustomAnimationPresets& rPresets = CustomAnimationPresets::getCustomAnimationPresets();
     mpTabPages[ENTRANCE] = new CustomAnimationCreateTabPage( mpTabControl, this, ENTRANCE, rPresets.getEntrancePresets(), bHasText );
-    // FIXME: HELPID
-    mpTabPages[ENTRANCE]->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE*/ );
+    mpTabPages[ENTRANCE]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_ENTRANCE );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_ENTRANCE, mpTabPages[ENTRANCE] );
     mpTabPages[EMPHASIS] = new CustomAnimationCreateTabPage( mpTabControl, this, EMPHASIS, rPresets.getEmphasisPresets(), bHasText );
-    // FIXME: HELPID
-    mpTabPages[EMPHASIS]->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS*/ );
+    mpTabPages[EMPHASIS]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EMPHASIS );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_EMPHASIS, mpTabPages[EMPHASIS] );
     mpTabPages[EXIT] = new CustomAnimationCreateTabPage( mpTabControl, this, EXIT, rPresets.getExitPresets(), bHasText );
-    // FIXME: HELPID
-    mpTabPages[EXIT]->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONDIALOG_EXIT*/ );
+    mpTabPages[EXIT]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_EXIT );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_EXIT, mpTabPages[EXIT] );
     mpTabPages[MOTIONPATH] = new CustomAnimationCreateTabPage( mpTabControl, this, MOTIONPATH, rPresets.getMotionPathsPresets(), bHasText );
-    // FIXME: HELPID
-    mpTabPages[MOTIONPATH]->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH*/ );
+    mpTabPages[MOTIONPATH]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MOTIONPATH );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_MOTIONPATH, mpTabPages[MOTIONPATH] );
     mpTabPages[MISCEFFECTS] = new CustomAnimationCreateTabPage( mpTabControl, this, MISCEFFECTS, rPresets.getMiscPresets(), bHasText );
-    // FIXME: HELPID
-    mpTabPages[MISCEFFECTS]->SetHelpId( ""/*HID_SD_CUSTOMANIMATIONDIALOG_MISCEFFECTS*/ );
+    mpTabPages[MISCEFFECTS]->SetHelpId( HID_SD_CUSTOMANIMATIONDIALOG_MISCEFFECTS );
     mpTabControl->SetTabPage( RID_TP_CUSTOMANIMATION_MISCEFFECTS, mpTabPages[MISCEFFECTS] );
 
     getCurrentPage()->setDuration( mfDuration );

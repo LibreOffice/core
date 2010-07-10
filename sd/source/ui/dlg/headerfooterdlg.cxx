@@ -240,8 +240,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     maTabCtrl.Show();
 
     mpSlideTabPage = new HeaderFooterTabPage( this, &maTabCtrl, pDoc, pSlide, false );
-    // FIXME: HELPID
-    mpSlideTabPage->SetHelpId( ""/*HID_SD_TABPAGE_HEADERFOOTER_SLIDE*/ );
+    mpSlideTabPage->SetHelpId( HID_SD_TABPAGE_HEADERFOOTER_SLIDE );
     maTabCtrl.SetTabPage( RID_SD_TABPAGE_HEADERFOOTER_SLIDE, mpSlideTabPage );
 
     Size aSiz = mpSlideTabPage->GetSizePixel();
@@ -254,8 +253,7 @@ HeaderFooterDialog::HeaderFooterDialog( ViewShell* pViewShell, ::Window* pParent
     }
 
     mpNotesHandoutsTabPage = new HeaderFooterTabPage( this, &maTabCtrl, pDoc, pNotes, true );
-    // FIXME: HELPID
-    mpNotesHandoutsTabPage->SetHelpId( ""/*HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT*/ );
+    mpNotesHandoutsTabPage->SetHelpId( HID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT );
     maTabCtrl.SetTabPage( RID_SD_TABPAGE_HEADERFOOTER_NOTESHANDOUT, mpNotesHandoutsTabPage );
 
     aSiz = mpNotesHandoutsTabPage->GetSizePixel();

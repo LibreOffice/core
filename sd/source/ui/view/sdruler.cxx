@@ -113,14 +113,12 @@ Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, USH
     if ( nWinStyle & WB_HSCROLL )
     {
         bHorz = TRUE;
-        // FIXME: HELPID
-        SetHelpId( ""/*HID_SD_RULER_HORIZONTAL*/ );
+        SetHelpId( HID_SD_RULER_HORIZONTAL );
     }
     else
     {
         bHorz = FALSE;
-        // FIXME: HELPID
-        SetHelpId( ""/*HID_SD_RULER_VERTICAL*/ );
+        SetHelpId( HID_SD_RULER_VERTICAL );
     }
 }
 

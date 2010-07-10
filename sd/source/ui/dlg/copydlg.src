@@ -28,9 +28,11 @@
 #include "app.hrc"
 #include "res_bmp.hrc"
 #include "copydlg.hrc"
+#include "helpids.h"
+
 ModalDialog DLG_COPY
 {
-    HelpID = SID_COPYOBJECTS ;
+    HelpID = CMD_SID_COPYOBJECTS ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 204 , 177 ) ;

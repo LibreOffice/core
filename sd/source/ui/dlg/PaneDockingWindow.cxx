@@ -271,7 +271,7 @@ void PaneDockingWindow::InitializeTitleToolBox (void)
 
 USHORT PaneDockingWindow::AddMenu (
     const String& rsMenuName,
-    ULONG nHelpId,
+    const rtl::OString& rHelpId,
     const Link& rCallback)
 {
     // Add the menu before the closer button.
@@ -282,9 +282,7 @@ USHORT PaneDockingWindow::AddMenu (
         rsMenuName,
         TIB_DROPDOWNONLY,
         nItemCount>0 ? nItemCount-1 : (USHORT)-1);
-    // FIXME: HELPID
-    mpTitleToolBox->SetHelpId( nItemId, ""/*nHelpId*/ );
-    (void)nHelpId;
+    mpTitleToolBox->SetHelpId( nItemId, rHelpId );
     mpTitleToolBox->SetClickHdl (rCallback);
     mpTitleToolBox->SetDropdownClickHdl (rCallback);
 

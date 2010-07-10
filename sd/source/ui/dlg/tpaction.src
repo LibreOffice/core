@@ -32,7 +32,7 @@
 
 TabPage TP_ANIMATION
 {
-    HelpID = SID_ANIMATION_EFFECTS ;
+    HelpID = CMD_SID_ANIMATION_EFFECTS ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 260 , 164 ) ;
     Hide = TRUE;

@@ -66,10 +66,9 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         rBase,
         pContainer));
     pSelector->LateInit();
-    // FIXME: HELPID
-    pSelector->SetHelpId( ""/*HID_SD_TASK_PANE_PREVIEW_CURRENT*/ );
+    pSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_CURRENT );
     GetShellManager()->AddSubShell(
-        HID_SD_TASK_PANE_PREVIEW_CURRENT,
+        SHELLID_SD_TASK_PANE_PREVIEW_CURRENT,
         pSelector.get(),
         pSelector->GetWindow());
     pTitledControl = AddControl (
@@ -84,10 +83,9 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         rBase,
         pContainer));
     pSelector->LateInit();
-    // FIXME: HELPID
-    pSelector->SetHelpId( ""/*HID_SD_TASK_PANE_PREVIEW_RECENT*/ );
+    pSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_RECENT );
     GetShellManager()->AddSubShell(
-        HID_SD_TASK_PANE_PREVIEW_RECENT,
+        SHELLID_SD_TASK_PANE_PREVIEW_RECENT,
         pSelector.get(),
         pSelector->GetWindow());
     pTitledControl = AddControl (
@@ -103,10 +101,9 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
         *pDrawViewShell,
         pContainer));
     pSelector->LateInit();
-    // FIXME: HELPID
-    pSelector->SetHelpId( ""/*HID_SD_TASK_PANE_PREVIEW_ALL*/ );
+    pSelector->SetHelpId( HID_SD_TASK_PANE_PREVIEW_ALL );
     GetShellManager()->AddSubShell(
-        HID_SD_TASK_PANE_PREVIEW_ALL,
+        SHELLID_SD_TASK_PANE_PREVIEW_ALL,
         pSelector.get(),
         pSelector->GetWindow());
     pTitledControl = AddControl (

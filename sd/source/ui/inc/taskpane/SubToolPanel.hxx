@@ -79,7 +79,7 @@ public:
     void AddControl (
         ::std::auto_ptr<TreeNode> pControl,
         const String& rTitle,
-        ULONG nHelpId);
+        const rtl::OString& sHelpId);
     void AddControl (::std::auto_ptr<TreeNode> pControl);
 
     virtual void Paint (const Rectangle& rRect);

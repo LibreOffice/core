@@ -169,7 +169,7 @@ class AbstractSdInsertLayerDlg_Impl : public AbstractSdInsertLayerDlg
     DECL_ABSTDLG_BASE(AbstractSdInsertLayerDlg_Impl,SdInsertLayerDlg)
     virtual void    GetAttr( SfxItemSet& rOutAttrs ) ;
     //from class Window
-    virtual void    SetHelpId( ULONG nHelpId ) ;
+    virtual void    SetHelpId( const rtl::OString& rHelpId ) ;
 };
 
 // add for SdInsertPasteDlg

@@ -91,7 +91,7 @@ public:
             callback to the value of GetCurItemId() when called at the given
             tool box.
     */
-    USHORT AddMenu (const String& rsMenuName, ULONG nHelpId, const Link& rCallback);
+    USHORT AddMenu (const String& rsMenuName, const rtl::OString& rHelpId, const Link& rCallback);
 
     /** Set the title of the docking window to the given string.  Use this
         method when the title is not yet known at the time of construction

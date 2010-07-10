@@ -76,7 +76,7 @@ public:
     TitledControl* AddControl (
         ::std::auto_ptr<TreeNode> pControl,
         const String& rTitle,
-        ULONG nHelpId);
+        const rtl::OString& sHelpId);
 
     /** Add a control to the sub panel without a title bar.
     */

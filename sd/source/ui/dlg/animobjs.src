@@ -28,6 +28,8 @@
 #include "res_bmp.hrc"
 #include "app.hrc"
 #include "animobjs.hrc"
+#include "helpids.h"
+
 #define BUTTON_WIDTH 16
 #define BUTTON_HEIGHT 14
 #define BUTTON_SIZE MAP_APPFONT( BUTTON_WIDTH, BUTTON_HEIGHT );
@@ -36,7 +38,7 @@
 #define MIN_BUTTON_SIZE MAP_APPFONT( MIN_BUTTON_WIDTH, MIN_BUTTON_HEIGHT );
 DockingWindow FLT_WIN_ANIMATION
 {
-    HelpID = SID_ANIMATION_OBJECTS ;
+    HelpID = CMD_SID_ANIMATION_OBJECTS ;
     Border = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;

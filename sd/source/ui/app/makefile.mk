@@ -50,7 +50,6 @@ SRC1FILES =	\
         toolbox.src			\
         strings.src 		\
         res_bmp.src 		\
-        tbx_ww.src			\
         popup.src			\
         sdstring.src
 

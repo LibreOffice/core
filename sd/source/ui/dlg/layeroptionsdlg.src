@@ -27,10 +27,11 @@
 
 #include "app.hrc"
 #include "layeroptionsdlg.hrc"
+#include "helpids.h"
 
 ModalDialog DLG_INSERT_LAYER
 {
-    HelpID = SID_INSERTLAYER ;
+    HelpID = CMD_SID_INSERTLAYER ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 172 ) ;

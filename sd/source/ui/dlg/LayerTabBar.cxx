@@ -71,8 +71,7 @@ LayerTabBar::LayerTabBar(DrawViewShell* pViewSh, Window* pParent)
     EnableEditMode();
     SetSizePixel(Size(0, 0));
     SetMaxPageWidth( 150 );
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_SD_TABBAR_LAYERS*/ );
+    SetHelpId( HID_SD_TABBAR_LAYERS );
 }
 
 

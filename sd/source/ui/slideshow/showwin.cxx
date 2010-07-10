@@ -76,10 +76,8 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
     SetMapMode(aMap);
 
     // HelpId setzen
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_SD_WIN_PRESENTATION*/ );
-    // FIXME: HELPID
-    SetUniqueId( ""/*HID_SD_WIN_PRESENTATION*/ );
+    SetHelpId( HID_SD_WIN_PRESENTATION );
+    SetUniqueId( HID_SD_WIN_PRESENTATION );
 
     maPauseTimer.SetTimeoutHdl( LINK( this, ShowWindow, PauseTimeoutHdl ) );
     maPauseTimer.SetTimeout( 1000 );
