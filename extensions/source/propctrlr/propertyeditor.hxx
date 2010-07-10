@@ -97,7 +97,7 @@ namespace pcr
         void                        SetHelpText( const ::rtl::OUString& _rHelpText );
         void                        SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines );
 
-        // FIXME: HELPID
+        void                        SetHelpId( const rtl::OString& sHelpId );
         sal_uInt16                  AppendPage( const String& r, const rtl::OString& _rHelpId );
         void                        SetPage( sal_uInt16 );
         void                        RemovePage(sal_uInt16 nID);

@@ -511,12 +511,9 @@ namespace svx
     }
     void SuggestionDisplay::SetHelpIds()
     {
-        // FIXME: HELPID
-        this->SetHelpId( ""/*HID_HANGULDLG_SUGGESTIONS*/ );
-        // FIXME: HELPID
-        m_aValueSet.SetHelpId( ""/*HID_HANGULDLG_SUGGESTIONS_GRID*/ );
-        // FIXME: HELPID
-        m_aListBox.SetHelpId( ""/*HID_HANGULDLG_SUGGESTIONS_LIST*/ );
+        this->SetHelpId( HID_HANGULDLG_SUGGESTIONS );
+        m_aValueSet.SetHelpId( HID_HANGULDLG_SUGGESTIONS_GRID );
+        m_aListBox.SetHelpId( HID_HANGULDLG_SUGGESTIONS_LIST );
     }
 
     //=========================================================================
@@ -622,20 +619,13 @@ namespace svx
         // initial control values
         m_aSimpleConversion.Check();
 
-        // FIXME: HELPID
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eClose     )->SetHelpId(""/*HID_HANGULDLG_BUTTON_CLOSE*/    );
-        // FIXME: HELPID
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eIgnore    )->SetHelpId(""/*HID_HANGULDLG_BUTTON_IGNORE*/   );
-        // FIXME: HELPID
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eIgnoreAll )->SetHelpId(""/*HID_HANGULDLG_BUTTON_IGNOREALL*/);
-        // FIXME: HELPID
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eChange    )->SetHelpId(""/*HID_HANGULDLG_BUTTON_CHANGE*/   );
-        // FIXME: HELPID
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eChangeAll )->SetHelpId(""/*HID_HANGULDLG_BUTTON_CHANGEALL*/);
-        // FIXME: HELPID
-        m_pPlayground->GetButton(SvxCommonLinguisticControl::eOptions   )->SetHelpId(""/*HID_HANGULDLG_BUTTON_OPTIONS*/  );
-        // FIXME: HELPID
-        m_pPlayground->GetWordInputControl().SetHelpId(""/*HID_HANGULDLG_EDIT_NEWWORD*/);
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eClose     )->SetHelpId(HID_HANGULDLG_BUTTON_CLOSE    );
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eIgnore    )->SetHelpId(HID_HANGULDLG_BUTTON_IGNORE   );
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eIgnoreAll )->SetHelpId(HID_HANGULDLG_BUTTON_IGNOREALL);
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eChange    )->SetHelpId(HID_HANGULDLG_BUTTON_CHANGE   );
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eChangeAll )->SetHelpId(HID_HANGULDLG_BUTTON_CHANGEALL);
+        m_pPlayground->GetButton(SvxCommonLinguisticControl::eOptions   )->SetHelpId(HID_HANGULDLG_BUTTON_OPTIONS  );
+        m_pPlayground->GetWordInputControl().SetHelpId(HID_HANGULDLG_EDIT_NEWWORD);
 
         FreeResource();
 

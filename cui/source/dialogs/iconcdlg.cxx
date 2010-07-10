@@ -300,8 +300,7 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     maIconCtrl.Show();
     maIconCtrl.SetChoiceWithCursor ( TRUE );
     maIconCtrl.SetSelectionMode( SINGLE_SELECTION );
-    // FIXME: HELPID
-    maIconCtrl.SetHelpId( ""/*HID_ICCDIALOG_CHOICECTRL*/ );
+    maIconCtrl.SetHelpId( HID_ICCDIALOG_CHOICECTRL );
 
     // ItemSet
     if ( pSet )
@@ -312,14 +311,11 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
 
     // Buttons
     aOKBtn.SetClickHdl   ( LINK( this, IconChoiceDialog, OkHdl ) );
-    // FIXME: HELPID
-    aOKBtn.SetHelpId( ""/*HID_ICCDIALOG_OK_BTN*/ );
-    // FIXME: HELPID
-    aCancelBtn.SetHelpId( ""/*HID_ICCDIALOG_CANCEL_BTN*/ );
+    aOKBtn.SetHelpId( HID_ICCDIALOG_OK_BTN );
+    aCancelBtn.SetHelpId( HID_ICCDIALOG_CANCEL_BTN );
     aResetBtn.SetClickHdl( LINK( this, IconChoiceDialog, ResetHdl ) );
     aResetBtn.SetText( CUI_RESSTR(RID_SVXSTR_ICONCHOICEDLG_RESETBUT) );
-    // FIXME: HELPID
-    aResetBtn.SetHelpId( ""/*HID_ICCDIALOG_RESET_BTN*/ );
+    aResetBtn.SetHelpId( HID_ICCDIALOG_RESET_BTN );
     aOKBtn.Show();
     aCancelBtn.Show();
     aHelpBtn.Show();

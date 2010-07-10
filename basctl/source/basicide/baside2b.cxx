@@ -177,8 +177,7 @@ EditorWindow::EditorWindow( Window* pParent ) :
         Wallpaper(GetSettings().GetStyleSettings().GetFieldColor()));
     SetPointer( Pointer( POINTER_TEXT ) );
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_BASICIDE_EDITORWINDOW*/ );
+    SetHelpId( HID_BASICIDE_EDITORWINDOW );
     pSourceViewConfig->AddListener(this);
 }
 
@@ -949,8 +948,7 @@ BreakPointWindow::BreakPointWindow( Window* pParent ) :
     // Falls in EditEngine autom. gescrollt wurde, wuesste ich sonst nicht,
     // wo ich gerade stehe.
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_BASICIDE_BREAKPOINTWINDOW*/ );
+    SetHelpId( HID_BASICIDE_BREAKPOINTWINDOW );
 }
 
 
@@ -1189,8 +1187,7 @@ WatchWindow::WatchWindow( Window* pParent ) :
     nVirtToolBoxHeight = aXEdit.GetSizePixel().Height() + 7;
     nHeaderBarHeight = 16;
 
-    // FIXME: HELPID
-    aTreeListBox.SetHelpId(""/*HID_BASICIDE_WATCHWINDOW_LIST*/);
+    aTreeListBox.SetHelpId(HID_BASICIDE_WATCHWINDOW_LIST);
     aTreeListBox.EnableInplaceEditing( TRUE );
     aTreeListBox.SetSelectHdl( LINK( this, WatchWindow, TreeListHdl ) );
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight + nHeaderBarHeight ) );
@@ -1242,8 +1239,7 @@ WatchWindow::WatchWindow( Window* pParent ) :
 
     SetText( String( IDEResId( RID_STR_WATCHNAME ) ) );
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_BASICIDE_WATCHWINDOW*/ );
+    SetHelpId( HID_BASICIDE_WATCHWINDOW );
 
     // make watch window keyboard accessible
     GetSystemWindow()->GetTaskPaneList()->AddWindow( this );
@@ -1526,8 +1522,7 @@ StackWindow::StackWindow( Window* pParent ) :
     aGotoCallButton( this, IDEResId( RID_IMGBTN_GOTOCALL ) ),
     aStackStr( IDEResId( RID_STR_STACK ) )
 {
-    // FIXME: HELPID
-    aTreeListBox.SetHelpId(""/*HID_BASICIDE_STACKWINDOW_LIST*/);
+    aTreeListBox.SetHelpId(HID_BASICIDE_STACKWINDOW_LIST);
     aTreeListBox.SetPosPixel( Point( DWBORDER, nVirtToolBoxHeight ) );
     aTreeListBox.SetHighlightRange();
     aTreeListBox.SetSelectionMode( NO_SELECTION );
@@ -1536,8 +1531,7 @@ StackWindow::StackWindow( Window* pParent ) :
 
     SetText( String( IDEResId( RID_STR_STACKNAME ) ) );
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_BASICIDE_STACKWINDOW*/ );
+    SetHelpId( HID_BASICIDE_STACKWINDOW );
 
     aGotoCallButton.SetClickHdl( LINK( this, StackWindow, ButtonHdl ) );
     aGotoCallButton.SetPosPixel( Point( DWBORDER, 2 ) );

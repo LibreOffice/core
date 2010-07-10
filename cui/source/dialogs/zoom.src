@@ -28,11 +28,12 @@
 #include <cuires.hrc>
 #include "zoom.hrc"
 #include <svx/dialogs.hrc> // for RID_SVXDLG_ZOOM
+#include "helpid.hrc"
 
  // RID_SVXDLG_ZOOM -------------------------------------------------------
 ModalDialog RID_SVXDLG_ZOOM
 {
-    HelpId = SID_ATTR_ZOOM ;
+    HelpId = CMD_SID_ATTR_ZOOM;
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 242 , 112 ) ;

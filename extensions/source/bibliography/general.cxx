@@ -245,8 +245,7 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     pDatMan(pMan)
 {
     aControlParentWin.Show();
-    // FIXME: HELPID
-    aControlParentWin.SetHelpId(""/*HID_BIB_CONTROL_PARENT*/);
+    aControlParentWin.SetHelpId(HID_BIB_CONTROL_PARENT);
     aStdSize = GetOutputSizePixel();
 
     aBibTypeArr[0] = String(BibResId(ST_TYPE_ARTICLE));
@@ -464,12 +463,12 @@ void BibGeneralPage::CommitActiveControl()
 }
 //-----------------------------------------------------------------------------
 void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::Point& rPos, const ::Size& rSize,
-                                String& rErrorString, String aColumnUIName, sal_uInt16 nHelpId, sal_uInt16 nIndexInFTArray )
+                                String& rErrorString, String aColumnUIName, const rtl::OString& sHelpId, sal_uInt16 nIndexInFTArray )
 {
     // adds also the XControl and creates a map entry in nFT2CtrlMap[] for mapping between control and FT
 
     INT16                                   nIndex = -1;
-    uno::Reference< awt::XControlModel >    xTmp = AddXControl(rColumnName, rPos, rSize, nHelpId, nIndex );
+    uno::Reference< awt::XControlModel >    xTmp = AddXControl(rColumnName, rPos, rSize, sHelpId, nIndex );
     if( xTmp.is() )
     {
         DBG_ASSERT( nIndexInFTArray < FIELD_COUNT, "*BibGeneralPage::AddControlWithError(): wrong array index!" );
@@ -488,7 +487,7 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::P
 //-----------------------------------------------------------------------------
 uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
         const String& rName,
-        ::Point rPos, ::Size rSize, sal_uInt16 nHelpId, INT16& rIndex )
+        ::Point rPos, ::Size rSize, const rtl::OString& sHelpId, INT16& rIndex )
 {
     uno::Reference< awt::XControlModel >  xCtrModel;
     try
@@ -510,11 +509,9 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                 rtl::OUString uProp(C2U("HelpURL"));
                 if(xPropInfo->hasPropertyByName(uProp))
                 {
-                    String sId(C2S("HID:"));
-                    sId += String::CreateFromInt32(nHelpId);
-                    rtl::OUString uId(sId) ;
-                    uno::Any aVal; aVal <<= uId;
-                    xPropSet->setPropertyValue(uProp, aVal);
+                    ::rtl::OUString sId = ::rtl::OUString::createFromAscii( "HID:" );
+                    sId += ::rtl::OUString( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
+                    xPropSet->setPropertyValue( uProp, makeAny( sId ) );
                 }
 
                 if(bTypeListBox)

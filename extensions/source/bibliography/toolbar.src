@@ -27,6 +27,7 @@
 #include <svx/svxids.hrc>
 #include "bibliography.hrc"
 #include "toolbar.hrc"
+#include "svx/svxcommands.h"
 
 #define MASKCOLOR   MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
 
@@ -46,7 +47,6 @@ ToolBox RID_BIB_TOOLBAR
         ToolBoxItem
         {
             Identifier = TBC_FT_SOURCE;
-            //HelpID = SID_SBA_BRW_INSERT ;
             Text [ en-US ] = "Table";
         };
         ToolBoxItem
@@ -63,7 +63,6 @@ ToolBox RID_BIB_TOOLBAR
         ToolBoxItem
         {
             Identifier = TBC_FT_QUERY;
-            //HelpID = SID_SBA_BRW_INSERT ;
             Text [ en-US ] = "Search Key";
         };
         ToolBoxItem
@@ -90,7 +89,6 @@ ToolBox RID_BIB_TOOLBAR
         ToolBoxItem
         {
             Identifier = TBC_BT_FILTERCRIT ;
-            HelpID = SID_FM_FILTERCRIT ;
 //            ItemBitmap = Bitmap { File = "sc10715.bmp" ; };
 //            Text [ de ] = "Standard Filter" ;
             Command = ".uno:Bib/standardFilter" ;
@@ -100,7 +98,6 @@ ToolBox RID_BIB_TOOLBAR
         ToolBoxItem
         {
             Identifier = TBC_BT_REMOVEFILTER ;
-            HelpID = SID_FM_REMOVE_FILTER_SORT ;
 //            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Command = ".uno:Bib/removeFilter" ;
             Text [ en-US ] = "Remove Filter";
@@ -122,78 +119,6 @@ ToolBox RID_BIB_TOOLBAR
             Checkable=TRUE;
             Text [ en-US ] = "Data Source";
         };
-/*
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_NEWCARD ;
-            //HelpID = SID_FM_REMOVE_FILTER_SORT ;
-            Command = ".uno:Bib/newEntry" ;
-            ItemBitmap = Bitmap { File = "newcard.bmp" ; };
-            Text [ en-US ] = "New Address";
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_EDITCARD ;
-            //HelpID = SID_FM_REMOVE_FILTER_SORT ;
-            Command = ".uno:Bib/changeEntry" ;
-            ItemBitmap = Bitmap { File = "modcard.bmp" ; };
-            Text [ en-US ] = "Edit Address";
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_REMOVECARD ;
-            //HelpID = SID_FM_REMOVE_FILTER_SORT ;
-            Command = ".uno:Bib/removeEntry" ;
-            ItemBitmap = Bitmap { File = "remcard.bmp" ; };
-            Text [ en-US ] = "Remove Address";
-        };
-
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_INSERT ;
-            HelpID = SID_SBA_BRW_INSERT ;
-            ItemBitmap = Bitmap { File = "sc12202.bmp" ; };
-            Text [ en-US ] = "Data into Text";
-        };
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_UPDATE ;
-            HelpID = SID_SBA_BRW_UPDATE ;
-            ItemBitmap = Bitmap { File = "sc12201.bmp" ; };
-            Text = "Daten in Felder" ;
-        };
-
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_MAIL ;
-            //HelpID = HID_ADDRPI_AUTOMAIL ;
-            ItemBitmap = Bitmap { File = "sc06305.bmp" ; };
-            Text [ en-US ] = "AutoMail";
-        };
-        ToolBoxItem
-        {
-            Identifier = TBC_BT_URL ;
-            //HelpID = HID_ADDRPI_AUTOBROWSE ;
-            ItemBitmap = Bitmap { File = "sc06304.bmp" ; };
-            Text [ en-US ] = "AutoBrowse";
-        };*/
     };
     Scroll = TRUE ;
 };

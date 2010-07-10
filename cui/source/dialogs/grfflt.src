@@ -37,7 +37,7 @@
 
 ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
 {
-    HelpID = SID_GRFFILTER_MOSAIC;
+    HelpID = CMD_SID_GRFFILTER_MOSAIC;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
@@ -141,7 +141,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
 
 ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
 {
-    HelpID = SID_GRFFILTER_SOLARIZE;
+    HelpID = CMD_SID_GRFFILTER_SOLARIZE;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
@@ -218,7 +218,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
 
 ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
 {
-    HelpID = SID_GRFFILTER_SEPIA;
+    HelpID = CMD_SID_GRFFILTER_SEPIA;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
@@ -290,7 +290,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
 
 ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
 {
-    HelpID = SID_GRFFILTER_POSTER;
+    HelpID = CMD_SID_GRFFILTER_POSTER;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;
@@ -365,7 +365,7 @@ TabPage RID_SVX_GRFFILTER_DLG_EMBOSS_TAB
 
 ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
 {
-    HelpID = SID_GRFFILTER_EMBOSS;
+    HelpID = CMD_SID_GRFFILTER_EMBOSS;
     OutputSize = TRUE ;
     Moveable = TRUE ;
     SVLook = TRUE ;

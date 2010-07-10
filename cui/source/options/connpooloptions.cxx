@@ -114,10 +114,8 @@ namespace offapp
     {
         SetStyle((GetStyle() & ~WB_HSCROLL) | WB_AUTOHSCROLL);
 
-        // FIXME: HELPID
-        SetUniqueId(""/*UID_OFA_CONNPOOL_DRIVERLIST_BACK*/);
-        // FIXME: HELPID
-        GetDataWindow().SetHelpId(""/*HID_OFA_CONNPOOL_DRIVERLIST*/);
+        SetUniqueId(UID_OFA_CONNPOOL_DRIVERLIST_BACK);
+        GetDataWindow().SetHelpId(HID_OFA_CONNPOOL_DRIVERLIST);
     }
 
     //--------------------------------------------------------------------

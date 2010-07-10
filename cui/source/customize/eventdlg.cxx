@@ -89,8 +89,7 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     // must be done after FreeResource is called
     InitResources();
 
-    // FIXME: HELPID
-    mpImpl->pEventLB->GetListBox().SetHelpId( ""/*HID_SVX_MACRO_LB_EVENT*/ );
+    mpImpl->pEventLB->GetListBox().SetHelpId( HID_SVX_MACRO_LB_EVENT );
 
     aSaveInListBox.SetSelectHdl( LINK( this, SvxEventConfigPage,
                 SelectHdl_Impl ) );

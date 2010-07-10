@@ -247,7 +247,7 @@ TabPage RID_OFAPAGE_AUTOFMT_APPLY
 
 ModalDialog RID_OFADLG_PRCNT_SET
 {
-    HelpID = SID_AUTOFORMAT ;
+    HelpID = CMD_SID_AUTOFORMAT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 155 , 43 ) ;

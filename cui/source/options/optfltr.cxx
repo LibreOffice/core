@@ -164,8 +164,7 @@ OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
     aCheckLB.InsertHeaderEntry( sHeader, HEADERBAR_APPEND,
                     HIB_CENTER | HIB_VCENTER | HIB_FIXEDPOS | HIB_FIXED );
 
-    // FIXME: HELPID
-    aCheckLB.SetHelpId( ""/*HID_OFAPAGE_MSFLTR2_CLB*/ );
+    aCheckLB.SetHelpId( HID_OFAPAGE_MSFLTR2_CLB );
     aCheckLB.SetWindowBits( WB_HSCROLL| WB_VSCROLL );
 }
 

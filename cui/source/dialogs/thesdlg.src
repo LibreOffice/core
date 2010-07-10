@@ -35,7 +35,7 @@
  // RID_SVXDLG_THES -------------------------------------------------------
 ModalDialog RID_SVXDLG_THESAURUS
 {
-    HelpId = SID_THESAURUS ;
+    HelpId = CMD_SID_THESAURUS ;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 285 , 116 ) ;
     Text [ en-US ] = "Thesaurus" ;

@@ -106,16 +106,11 @@ namespace abp
             WZS_INVALID_STATE
         );
 
-        // FIXME: HELPID
-        m_pPrevPage->SetHelpId(""/*HID_ABSPILOT_PREVIOUS*/);
-        // FIXME: HELPID
-        m_pNextPage->SetHelpId(""/*HID_ABSPILOT_NEXT*/);
-        // FIXME: HELPID
-        m_pCancel->SetHelpId(""/*HID_ABSPILOT_CANCEL*/);
-        // FIXME: HELPID
-        m_pFinish->SetHelpId(""/*HID_ABSPILOT_FINISH*/);
-        // FIXME: HELPID
-        m_pHelp->SetUniqueId(""/*UID_ABSPILOT_HELP*/);
+        m_pPrevPage->SetHelpId(HID_ABSPILOT_PREVIOUS);
+        m_pNextPage->SetHelpId(HID_ABSPILOT_NEXT);
+        m_pCancel->SetHelpId(HID_ABSPILOT_CANCEL);
+        m_pFinish->SetHelpId(HID_ABSPILOT_FINISH);
+        m_pHelp->SetUniqueId(UID_ABSPILOT_HELP);
 
         m_pCancel->SetClickHdl( LINK( this, OAddessBookSourcePilot, OnCancelClicked) );
 

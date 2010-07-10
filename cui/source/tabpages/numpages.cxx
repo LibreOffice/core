@@ -243,8 +243,7 @@ SvxSingleNumPickTabPage::SvxSingleNumPickTabPage(Window* pParent,
     SetExchangeSupport();
     pExamplesVS->SetSelectHdl(LINK(this, SvxSingleNumPickTabPage, NumSelectHdl_Impl));
     pExamplesVS->SetDoubleClickHdl(LINK(this, SvxSingleNumPickTabPage, DoubleClickHdl_Impl));
-    // FIXME: HELPID
-    pExamplesVS->SetHelpId(""/*HID_VALUESET_SINGLENUM*/ );
+    pExamplesVS->SetHelpId(HID_VALUESET_SINGLENUM );
 
     Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
     if(xDefNum.is())
@@ -473,8 +472,7 @@ SvxBulletPickTabPage::SvxBulletPickTabPage(Window* pParent,
     SetExchangeSupport();
     pExamplesVS->SetSelectHdl(LINK(this, SvxBulletPickTabPage, NumSelectHdl_Impl));
     pExamplesVS->SetDoubleClickHdl(LINK(this, SvxBulletPickTabPage, DoubleClickHdl_Impl));
-    // FIXME: HELPID
-    pExamplesVS->SetHelpId(""/*HID_VALUESET_BULLET*/    );
+    pExamplesVS->SetHelpId(HID_VALUESET_BULLET    );
 
 }
 /*-----------------07.02.97 12.10-------------------
@@ -677,8 +675,7 @@ SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
 
     pExamplesVS->SetSelectHdl(LINK(this, SvxNumPickTabPage, NumSelectHdl_Impl));
     pExamplesVS->SetDoubleClickHdl(LINK(this, SvxNumPickTabPage, DoubleClickHdl_Impl));
-    // FIXME: HELPID
-    pExamplesVS->SetHelpId(""/*HID_VALUESET_NUM*/       );
+    pExamplesVS->SetHelpId(HID_VALUESET_NUM       );
 
     Reference<XDefaultNumberingProvider> xDefNum = lcl_GetNumberingProvider();
     if(xDefNum.is())
@@ -994,8 +991,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
     // Grafiknamen ermitteln
 
     GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
-    // FIXME: HELPID
-    pExamplesVS->SetHelpId(""/*HID_VALUESET_NUMBMP*/    );
+    pExamplesVS->SetHelpId(HID_VALUESET_NUMBMP    );
     for(USHORT i = 0; i < aGrfNames.Count(); i++)
     {
         pExamplesVS->InsertItem( i + 1, i);

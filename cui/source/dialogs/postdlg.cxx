@@ -89,14 +89,10 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
 {
     if (bRedline)   // HelpIDs fuer Redlining
     {
-        // FIXME: HELPID
-        SetHelpId(""/*HID_REDLINING_DLG*/);
-        // FIXME: HELPID
-        aEditED.SetHelpId(""/*HID_REDLINING_EDIT*/);
-        // FIXME: HELPID
-        aPrevBtn.SetHelpId(""/*HID_REDLINING_PREV*/);
-        // FIXME: HELPID
-        aNextBtn.SetHelpId(""/*HID_REDLINING_NEXT*/);
+        SetHelpId(HID_REDLINING_DLG);
+        aEditED.SetHelpId(HID_REDLINING_EDIT);
+        aPrevBtn.SetHelpId(HID_REDLINING_PREV);
+        aNextBtn.SetHelpId(HID_REDLINING_NEXT);
     }
 
     aPrevBtn.SetClickHdl( LINK( this, SvxPostItDialog, PrevHdl ) );

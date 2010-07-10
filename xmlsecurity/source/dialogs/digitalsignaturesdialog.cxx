@@ -210,8 +210,7 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
     ,m_bWarningShowSignMacro(false)
 {
     // --> PB #i48253 the tablistbox needs its own unique id
-    // FIXME: HELPID
-    maSignaturesLB.Window::SetUniqueId( ""/*HID_XMLSEC_TREE_SIGNATURESDLG*/ );
+    maSignaturesLB.Window::SetUniqueId( HID_XMLSEC_TREE_SIGNATURESDLG );
     // <--
     static long nTabs[] = { 4, 0, 6*DS_LB_WIDTH/100, 36*DS_LB_WIDTH/100, 74*DS_LB_WIDTH/100 };
     maSignaturesLB.SetTabs( &nTabs[ 0 ] );

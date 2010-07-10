@@ -66,14 +66,10 @@ namespace dbp
     {
         initControlSettings(&m_aSettings);
 
-        // FIXME: HELPID
-        m_pPrevPage->SetHelpId(""/*HID_GROUPWIZARD_PREVIOUS*/);
-        // FIXME: HELPID
-        m_pNextPage->SetHelpId(""/*HID_GROUPWIZARD_NEXT*/);
-        // FIXME: HELPID
-        m_pCancel->SetHelpId(""/*HID_GROUPWIZARD_CANCEL*/);
-        // FIXME: HELPID
-        m_pFinish->SetHelpId(""/*HID_GROUPWIZARD_FINISH*/);
+        m_pPrevPage->SetHelpId(HID_GROUPWIZARD_PREVIOUS);
+        m_pNextPage->SetHelpId(HID_GROUPWIZARD_NEXT);
+        m_pCancel->SetHelpId(HID_GROUPWIZARD_CANCEL);
+        m_pFinish->SetHelpId(HID_GROUPWIZARD_FINISH);
     }
 
     //---------------------------------------------------------------------

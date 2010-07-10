@@ -236,7 +236,6 @@ namespace pcr
         pPage->getListBox().SetObserver(m_pObserver);
         pPage->getListBox().EnableHelpSection( m_bHasHelpSection );
         pPage->getListBox().SetHelpLineLimites( m_nMinHelpLines, m_nMaxHelpLines );
-        // FIXME: HELPID
         pPage->SetHelpId( _rHelpId );
 
         // immediately activate the page
@@ -246,20 +245,12 @@ namespace pcr
         return nId;
     }
 
-// FIXME: HELPID
-#if 0
     //------------------------------------------------------------------
-    void OPropertyEditor::SetHelpId( sal_uInt32 nHelpId )
+    void OPropertyEditor::SetHelpId( const rtl::OString& rHelpId )
     {
         Control::SetHelpId("");
-        // FIXME: HELPID
-        #if 0
-        m_aTabControl.SetHelpId(nHelpId);
-        #else
-        (void)nHelpId;
-        #endif
+        m_aTabControl.SetHelpId(rHelpId);
     }
-#endif
 
     //------------------------------------------------------------------
     void OPropertyEditor::RemovePage(sal_uInt16 nID)

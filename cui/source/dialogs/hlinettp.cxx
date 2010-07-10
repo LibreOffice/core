@@ -83,8 +83,7 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maCbbTarget.SetPosSizePixel ( LogicToPixel( Point( COL_2, 25 ), MAP_APPFONT ),
                                   LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
     maCbbTarget.Show();
-    // FIXME: HELPID
-    maCbbTarget.SetHelpId( ""/*HID_HYPERDLG_INET_PATH*/ );
+    maCbbTarget.SetHelpId( HID_HYPERDLG_INET_PATH );
 
     // Find Path to Std-Doc
     String aStrBasePaths( SvtPathOptions().GetTemplatePath() );

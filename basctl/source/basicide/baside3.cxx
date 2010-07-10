@@ -124,8 +124,7 @@ DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, St
     pEditor->GetModel()->SetNotifyUndoActionHdl(
         LINK(this, DialogWindow, NotifyUndoActionHdl));
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_BASICIDE_DIALOGWINDOW*/ );
+    SetHelpId( HID_BASICIDE_DIALOGWINDOW );
 
     // set readonly mode for readonly libraries
     ::rtl::OUString aOULibName( aLibName );

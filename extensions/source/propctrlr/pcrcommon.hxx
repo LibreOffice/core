@@ -77,9 +77,8 @@ namespace pcr
     class HelpIdUrl
     {
     public:
-        // FIXME: HELPID
         static rtl::OString getHelpId( const ::rtl::OUString& _rHelpURL );
-        static ::rtl::OUString getHelpURL( sal_uInt32 _nHelpId );
+        static ::rtl::OUString getHelpURL( const rtl::OString& );
     };
 
     //====================================================================

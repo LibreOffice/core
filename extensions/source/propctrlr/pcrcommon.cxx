@@ -53,23 +53,19 @@ namespace pcr
     //------------------------------------------------------------------------
     rtl::OString HelpIdUrl::getHelpId( const ::rtl::OUString& _rHelpURL )
     {
-    // FIXME: HELPID
-        #if 0
-        SmartId aSmartHelpId( _rHelpURL );
+        rtl::OString aHelpId( _rHelpURL, _rHelpURL.getLength(), RTL_TEXTENCODING_UTF8 );
         if ( 0 == _rHelpURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "HID:" ) ) )
-            aSmartHelpId = SmartId( _rHelpURL.copy( sizeof( "HID:" ) - 1 ).toInt32() );
-        return aSmartHelpId;
-        #else
-        return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
-        #endif
+            aHelpId = aHelpId.copy( sizeof( "HID:" ) - 1 );
+        return aHelpId;
     }
 
     //------------------------------------------------------------------------
-    ::rtl::OUString HelpIdUrl::getHelpURL( sal_uInt32 _nHelpId )
+    ::rtl::OUString HelpIdUrl::getHelpURL( const rtl::OString& sHelpId )
     {
         ::rtl::OUStringBuffer aBuffer;
+        ::rtl::OUString aTmp( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
         aBuffer.appendAscii( "HID:" );
-        aBuffer.append( (sal_Int32)_nHelpId );
+        aBuffer.append( aTmp.getStr() );
         return aBuffer.makeStringAndClear();
     }
 //............................................................................
