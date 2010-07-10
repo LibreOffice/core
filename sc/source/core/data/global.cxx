@@ -1138,7 +1138,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
 {
     rbSuppressed = (bool)GetNum();
     pDesc->nCategory = GetNum();
-    pDesc->nHelpId = GetNum() + 32768;      //! Hack, see scfuncs.src
+    pDesc->sHelpId = ReadByteStringRes();       //! Hack, see scfuncs.src
     pDesc->nArgCount = GetNum();
     USHORT nArgs = pDesc->nArgCount;
     if (nArgs >= VAR_ARGS)
@@ -1428,7 +1428,6 @@ ScFuncDesc::ScFuncDesc() :
         nFIndex         (0),
         nCategory       (0),
         nArgCount       (0),
-        nHelpId         (0),
         bIncomplete     (false),
         bHasSuppressedArgs(false)
 {}
@@ -1470,7 +1469,7 @@ void ScFuncDesc::Clear()
 
     nFIndex = 0;
     nCategory = 0;
-    nHelpId = 0;
+    sHelpId = "";
     bIncomplete = false;
     bHasSuppressedArgs = false;
 }
@@ -1704,9 +1703,9 @@ void ScFuncDesc::initArgumentInfo()  const
     return GetSignature();
 }
 // -----------------------------------------------------------------------------
-long ScFuncDesc::getHelpId() const
+rtl::OString ScFuncDesc::getHelpId() const
 {
-    return nHelpId;
+    return sHelpId;
 }
 // -----------------------------------------------------------------------------
 

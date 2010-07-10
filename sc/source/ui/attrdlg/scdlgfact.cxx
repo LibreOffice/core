@@ -597,9 +597,9 @@ USHORT  AbstractScShowTabDlg_Impl::GetSelectEntryCount() const
 }
 void    AbstractScShowTabDlg_Impl::SetDescription(
                 const String& rTitle, const String& rFixedText,
-                ULONG nDlgHelpId, ULONG nLbHelpId )
+                const rtl::OString& sDlgHelpId, const rtl::OString& sLbHelpId )
 {
-    pDlg->SetDescription( rTitle, rFixedText,nDlgHelpId, nLbHelpId );
+    pDlg->SetDescription( rTitle, rFixedText, sDlgHelpId, sLbHelpId );
 }
 USHORT  AbstractScShowTabDlg_Impl::GetSelectEntryPos(USHORT nPos) const
 {
@@ -1274,14 +1274,14 @@ AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg ( Window
                                                                 const String& rTitle,
                                                                 const String& rEditTitle,
                                                                 const String& rDefault,
-                                                                ULONG nHelpId ,
+                                                                const rtl::OString& sHelpId, const rtl::OString& sEditHelpId,
                                                                 int nId )
 {
     ScStringInputDlg * pDlg=NULL;
     switch ( nId )
     {
         case RID_SCDLG_STRINPUT :
-            pDlg = new ScStringInputDlg( pParent, rTitle, rEditTitle,rDefault, nHelpId );
+            pDlg = new ScStringInputDlg( pParent, rTitle, rEditTitle, rDefault, sHelpId, sEditHelpId );
             break;
         default:
             break;

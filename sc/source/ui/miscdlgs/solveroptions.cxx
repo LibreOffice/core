@@ -146,8 +146,7 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
     maBtnEdit.SetClickHdl( LINK( this, ScSolverOptionsDialog, ButtonHdl ) );
 
     maLbSettings.SetWindowBits( WB_CLIPCHILDREN|WB_FORCE_MAKEVISIBLE );
-    // FIXME: HELPID
-    maLbSettings.SetHelpId( ""/*HID_SC_SOLVEROPTIONS_LB*/ );
+    maLbSettings.SetHelpId( HID_SC_SOLVEROPTIONS_LB );
     maLbSettings.SetHighlightRange();
 
     maLbSettings.SetSelectHdl( LINK( this, ScSolverOptionsDialog, SettingsSelHdl ) );

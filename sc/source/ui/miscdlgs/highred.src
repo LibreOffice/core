@@ -29,7 +29,7 @@
 ModelessDialog RID_SCDLG_HIGHLIGHT_CHANGES
 {
     OutputSize = TRUE ;
-    HelpId = FID_CHG_ACCEPT ;
+    HelpId = CMD_FID_CHG_ACCEPT ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 318 , 148 ) ;

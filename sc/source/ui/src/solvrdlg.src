@@ -29,7 +29,7 @@
 ModelessDialog RID_SCDLG_SOLVER
 {
     OutputSize = TRUE ;
-    HelpId = SID_OPENDLG_SOLVE ;
+    HelpId = CMD_SID_OPENDLG_SOLVE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 222 , 64 ) ;

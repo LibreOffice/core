@@ -225,10 +225,8 @@ ScScenarioWindow::ScScenarioWindow( Window* pParent,const String& aQH_List,
     aEdComment.SetFont( aFont );
     aEdComment.SetMaxTextLen( 512 );
     aLbScenario.SetPosPixel( Point(0,0) );
-    // FIXME: HELPID
-    aLbScenario.SetHelpId(""/*HID_SC_SCENWIN_TOP*/);
-    // FIXME: HELPID
-    aEdComment.SetHelpId(""/*HID_SC_SCENWIN_BOTTOM*/);
+    aLbScenario.SetHelpId(HID_SC_SCENWIN_TOP);
+    aEdComment.SetHelpId(HID_SC_SCENWIN_BOTTOM);
     aLbScenario.Show();
     aEdComment.Show();
 

@@ -28,7 +28,7 @@
 ModelessDialog RID_SCDLG_DBNAMES
 {
     OutputSize = TRUE ;
-    HelpId = SID_DEFINE_DBNAME ;
+    HelpId = CMD_SID_DEFINE_DBNAME ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 222 , 142 ) ;

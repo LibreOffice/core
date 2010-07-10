@@ -88,22 +88,15 @@ SchAxisDlg::SchAxisDlg( Window* pWindow
     FreeResource();
     if(!bAxisDlg)
     {
-        // FIXME: HELPID
-        SetHelpId( ""/*SID_INSERT_GRIDS*/ );
+        SetHelpId( HID_INSERT_GRIDS );
         SetText( ObjectNameProvider::getName(OBJECTTYPE_GRID,true) );
 
-        // FIXME: HELPID
-        aCbPrimaryX.SetHelpId( ""/*HID_SCH_CB_XGRID*/ );
-        // FIXME: HELPID
-        aCbPrimaryY.SetHelpId( ""/*HID_SCH_CB_YGRID*/ );
-        // FIXME: HELPID
-        aCbPrimaryZ.SetHelpId( ""/*HID_SCH_CB_ZGRID*/ );
-        // FIXME: HELPID
-        aCbSecondaryX.SetHelpId( ""/*HID_SCH_CB_SECONDARY_XGRID*/ );
-        // FIXME: HELPID
-        aCbSecondaryY.SetHelpId( ""/*HID_SCH_CB_SECONDARY_YGRID*/ );
-        // FIXME: HELPID
-        aCbSecondaryZ.SetHelpId( ""/*HID_SCH_CB_SECONDARY_ZGRID*/ );
+        aCbPrimaryX.SetHelpId( HID_SCH_CB_XGRID );
+        aCbPrimaryY.SetHelpId( HID_SCH_CB_YGRID );
+        aCbPrimaryZ.SetHelpId( HID_SCH_CB_ZGRID );
+        aCbSecondaryX.SetHelpId( HID_SCH_CB_SECONDARY_XGRID );
+        aCbSecondaryY.SetHelpId( HID_SCH_CB_SECONDARY_YGRID );
+        aCbSecondaryZ.SetHelpId( HID_SCH_CB_SECONDARY_ZGRID );
 
         aFlPrimary.Hide();
         aFlSecondary.Hide();

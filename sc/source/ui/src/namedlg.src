@@ -29,7 +29,7 @@
 ModelessDialog RID_SCDLG_NAMES
 {
     OutputSize = TRUE ;
-    HelpId = FID_DEFINE_NAME ;
+    HelpId = CMD_FID_DEFINE_NAME ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 222 , 142 ) ;

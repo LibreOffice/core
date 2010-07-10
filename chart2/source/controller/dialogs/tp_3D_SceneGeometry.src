@@ -28,6 +28,7 @@
 #include "tp_3D_SceneGeometry.hrc"
 #include "dlg_View3D.hrc"
 #include "SchSlotIds.hxx"
+#include "HelpIds.hrc"
 
 #ifndef _SVT_CONTROLDIMS_HRC_
 #include <svtools/controldims.hrc>
@@ -68,7 +69,7 @@ CustomUnitText [ en-US ] = " degrees" ;
 
 TabPage TP_3D_SCENEGEOMETRY
 {
-    HelpID = SID_3D_VIEW ;
+    HelpID = HID_3D_VIEW ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Hide = TRUE ;

@@ -187,8 +187,7 @@ DataSourceDialog::DataSourceDialog(
 
     m_pTabControl->SelectTabPage( m_nLastPageId );
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_SCH_DLG_RANGES*/ );
+    SetHelpId( HID_SCH_DLG_RANGES );
 }
 
 DataSourceDialog::~DataSourceDialog()

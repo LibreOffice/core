@@ -30,7 +30,7 @@
 ModalDialog RID_SCDLG_SHAREDOCUMENT
 {
     OutputSize = TRUE ;
-    HelpId = SID_SHARE_DOC ;
+    HelpId = CMD_SID_SHARE_DOC ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 204 , 186 ) ;
     Text [ en-US ] = "Share Document" ;

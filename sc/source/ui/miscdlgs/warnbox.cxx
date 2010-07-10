@@ -70,8 +70,7 @@ void ScCbWarningBox::DisableDialog()
 ScReplaceWarnBox::ScReplaceWarnBox( Window* pParent ) :
     ScCbWarningBox( pParent, String( ScResId( STR_REPLCELLSWARN ) ), true )
 {
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_SC_REPLCELLSWARN*/ );
+    SetHelpId( HID_SC_REPLCELLSWARN );
 }
 
 bool ScReplaceWarnBox::IsDialogEnabled()

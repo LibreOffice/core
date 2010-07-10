@@ -241,8 +241,7 @@ SeriesHeader::SeriesHeader( Window * pParent ) :
     m_spSeriesName->EnableUpdateData( 4 * EDIT_UPDATEDATA_TIMEOUT ); // define is in vcl/edit.hxx
     m_spSeriesName->SetUpdateDataHdl( LINK( this, SeriesHeader, SeriesNameChanged ));
     m_spSeriesName->SetModifyHdl( LINK( this, SeriesHeader, SeriesNameEdited ));
-    // FIXME: HELPID
-    m_spSeriesName->SetHelpId( ""/*HID_SCH_DATA_SERIES_LABEL*/ );
+    m_spSeriesName->SetHelpId( HID_SCH_DATA_SERIES_LABEL );
     Show();
 }
 

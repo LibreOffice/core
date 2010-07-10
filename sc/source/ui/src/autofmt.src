@@ -30,7 +30,7 @@
 ModalDialog RID_SCDLG_AUTOFORMAT
 {
     OutputSize = TRUE ;
-    HelpId = SID_AUTOFORMAT ;
+    HelpId = CMD_SID_AUTOFORMAT ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 312 , 121 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? AutoFormat : Autoformat */

@@ -157,7 +157,6 @@ public:
                     ScModule( SfxObjectFactory* pFact );
     virtual         ~ScModule();
 
-    virtual void        FillStatusBar(StatusBar &rBar);
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual void        ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
     void                DeleteCfg();

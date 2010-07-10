@@ -30,7 +30,6 @@
 TabPage TP_OPTIONS
 {
     Hide = TRUE ;
-//    HelpID = HID_LAYOUT ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine 1

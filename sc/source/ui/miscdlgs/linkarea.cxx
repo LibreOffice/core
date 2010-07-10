@@ -76,8 +76,7 @@ ScLinkedAreaDlg::ScLinkedAreaDlg( Window* pParent ) :
 {
     FreeResource();
 
-    // FIXME: HELPID
-    aCbUrl.SetHelpId( ""/*HID_SCDLG_LINKAREAURL*/ );    // SvtURLBox ctor always sets SID_OPENURL
+    aCbUrl.SetHelpId( HID_SCDLG_LINKAREAURL );  // SvtURLBox ctor always sets SID_OPENURL
     aCbUrl.SetSelectHdl( LINK( this, ScLinkedAreaDlg, FileHdl ) );
     aBtnBrowse.SetClickHdl( LINK( this, ScLinkedAreaDlg, BrowseHdl ) );
     aLbRanges.SetSelectHdl( LINK( this, ScLinkedAreaDlg, RangeHdl ) );

@@ -28,7 +28,7 @@
 ModelessDialog RID_SCDLG_FILTER
 {
     OutputSize = TRUE ;
-    HelpId = SID_FILTER ;
+    HelpId = CMD_SID_FILTER ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 279 , 121 ) ;
@@ -423,7 +423,7 @@ ModelessDialog RID_SCDLG_FILTER
 ModelessDialog RID_SCDLG_SPEC_FILTER
 {
     OutputSize = TRUE ;
-    HelpId = SID_SPECIAL_FILTER ;
+    HelpId = CMD_SID_SPECIAL_FILTER ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 278 , 83 ) ;

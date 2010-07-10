@@ -62,16 +62,12 @@ ScShowTabDlg::ScShowTabDlg( Window* pParent ) :
 
 void ScShowTabDlg::SetDescription(
         const String& rTitle, const String& rFixedText,
-        ULONG nDlgHelpId, ULONG nLbHelpId )
+        const rtl::OString& rDlgHelpId, const rtl::OString& sLbHelpId )
 {
     SetText( rTitle );
     aFtLbTitle.SetText( rFixedText );
-    // FIXME: HELPID
-    SetHelpId( ""/*nDlgHelpId*/ );
-    (void)nDlgHelpId;
-    // FIXME: HELPID
-    aLb.SetHelpId( ""/*nLbHelpId*/ );
-    (void)nLbHelpId;
+    SetHelpId( rDlgHelpId );
+    aLb.SetHelpId( sLbHelpId );
 }
 
 void ScShowTabDlg::Insert( const String& rString, BOOL bSelected )

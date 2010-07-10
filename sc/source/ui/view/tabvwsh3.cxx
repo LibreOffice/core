@@ -44,7 +44,7 @@
 #include <svl/ptitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
-
+#include <sfx2/objface.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/vclenum.hxx>
 
@@ -818,7 +818,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 pDlg->SetDescription(
                     String( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
                     String( ScResId( STR_DLG_SELECTTABLES_LBNAME ) ),
-                    SID_SELECT_TABLES, HID_SELECTTABLES );
+                    GetStaticInterface()->GetSlot(SID_SELECT_TABLES)->GetCommand(), HID_SELECTTABLES );
 
                 // fill all table names with selection state
                 String aTabName;
@@ -1015,10 +1015,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         pDlg = new SfxPasswordDialog(   GetDialogParent(), &aText );
                         pDlg->SetText( ScResId(SCSTR_UNPROTECTDOC) );
                         pDlg->SetMinLen( 0 );
-                        // FIXME: HELPID
-                        pDlg->SetHelpId( ""/*FID_PROTECT_DOC*/ );
-                        // FIXME: HELPID
-                        pDlg->SetEditHelpId( ""/*HID_PASSWD_DOC*/ );
+                        pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
+                        pDlg->SetEditHelpId( HID_PASSWD_DOC );
 
                         if (pDlg->Execute() == RET_OK)
                             aPassword = pDlg->GetPassword();
@@ -1040,10 +1038,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     pDlg = new SfxPasswordDialog(   GetDialogParent(), &aText );
                     pDlg->SetText( ScResId(SCSTR_PROTECTDOC) );
                     pDlg->SetMinLen( 0 );
-                    // FIXME: HELPID
-                    pDlg->SetHelpId( ""/*FID_PROTECT_DOC*/ );
-                    // FIXME: HELPID
-                    pDlg->SetEditHelpId( ""/*HID_PASSWD_DOC*/ );
+                    pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_DOC)->GetCommand() );
+                    pDlg->SetEditHelpId( HID_PASSWD_DOC );
                     pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
 
                     if (pDlg->Execute() == RET_OK)
@@ -1093,7 +1089,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     auto_ptr<SfxPasswordDialog> pDlg(new SfxPasswordDialog(GetDialogParent(), &aText));
                     pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
                     pDlg->SetMinLen( 0 );
-                    pDlg->SetHelpId( FID_PROTECT_TABLE );
+                    pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand() );
                     pDlg->SetEditHelpId( HID_PASSWD_TABLE );
 
                     if (pDlg->Execute() == RET_OK)
@@ -1165,10 +1161,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     pDlg.reset(new SfxPasswordDialog(GetDialogParent(), &aText));
                     pDlg->SetText( ScResId(SCSTR_UNPROTECTTAB) );
                     pDlg->SetMinLen( 0 );
-                    // FIXME: HELPID
-                    pDlg->SetHelpId( ""/*FID_PROTECT_TABLE*/ );
-                    // FIXME: HELPID
-                    pDlg->SetEditHelpId( ""/*HID_PASSWD_TABLE*/ );
+                    pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand() );
+                    pDlg->SetEditHelpId( HID_PASSWD_TABLE );
 
                     if (pDlg->Execute() == RET_OK)
                         aPassword = pDlg->GetPassword();
@@ -1189,10 +1183,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 pDlg.reset(new SfxPasswordDialog(GetDialogParent(), &aText));
                 pDlg->SetText( ScResId(SCSTR_PROTECTTAB) );
                 pDlg->SetMinLen( 0 );
-                // FIXME: HELPID
-                pDlg->SetHelpId( ""/*FID_PROTECT_TABLE*/ );
-                // FIXME: HELPID
-                pDlg->SetEditHelpId( ""/*HID_PASSWD_TABLE*/ );
+                pDlg->SetHelpId( GetStaticInterface()->GetSlot(FID_PROTECT_TABLE)->GetCommand() );
+                pDlg->SetEditHelpId( HID_PASSWD_TABLE );
                 pDlg->ShowExtras( SHOWEXTRAS_CONFIRM );
 
                 if (pDlg->Execute() == RET_OK)

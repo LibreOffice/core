@@ -425,10 +425,8 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
     EnableChildTransparentMode();
     SetDialogControlFlags( WINDOW_DLGCTRL_RETURN | WINDOW_DLGCTRL_WANTFOCUS );
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_SC_WIN_GRIDWIN*/ );
-    // FIXME: HELPID
-    SetUniqueId( ""/*HID_SC_WIN_GRIDWIN*/ );
+    SetHelpId( HID_SC_WIN_GRIDWIN );
+    SetUniqueId( HID_SC_WIN_GRIDWIN );
 
     SetDigitLanguage( SC_MOD()->GetOptDigitLanguage() );
     EnableRTL( FALSE );

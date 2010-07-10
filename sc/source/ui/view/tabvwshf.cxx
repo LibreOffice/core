@@ -40,7 +40,7 @@
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
-
+#include <sfx2/objface.hxx>
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 #include "docsh.hxx"
@@ -411,26 +411,23 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     String      aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
                     String      aName;
                     String      aDlgTitle;
+                    const sal_Char* pHelpId = 0;
 
                     switch ( nSlot )
                     {
                         case FID_TAB_APPEND:
                             aDlgTitle = String(ScResId(SCSTR_APDTABLE));
                             pDoc->CreateValidTabName( aName );
+                            pHelpId = HID_SC_APPEND_NAME;
                             break;
 
                         case FID_TAB_RENAME:
                             aDlgTitle = String(ScResId(SCSTR_RENAMETAB));
                             pDoc->GetName( pViewData->GetTabNo(), aName );
+                            pHelpId = HID_SC_RENAME_NAME;
                             break;
                     }
 
-//CHINA001                  ScStringInputDlg* pDlg =
-//CHINA001                  new ScStringInputDlg( GetDialogParent(),
-//CHINA001                  aDlgTitle,
-//CHINA001                  String(ScResId(SCSTR_NAME)),
-//CHINA001                  aName,
-//CHINA001                  nSlot );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
@@ -438,7 +435,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                                                                     aDlgTitle,
                                                                                     String(ScResId(SCSTR_NAME)),
                                                                                     aName,
-                                                                                    nSlot,RID_SCDLG_STRINPUT);
+                                                                                    GetStaticInterface()->GetSlot(nSlot)->GetCommand(), pHelpId, RID_SCDLG_STRINPUT);
                     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                     while ( !bDone && nRet == RET_OK )

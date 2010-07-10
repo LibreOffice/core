@@ -325,7 +325,7 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg  //add for ScShowT
     DECL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl,ScShowTabDlg)
     virtual void    Insert( const String& rString, BOOL bSelected );
     virtual USHORT  GetSelectEntryCount() const;
-    virtual void SetDescription(const String& rTitle, const String& rFixedText,ULONG nDlgHelpId, ULONG nLbHelpId );
+    virtual void SetDescription(const String& rTitle, const String& rFixedText, const rtl::OString& sDlgHelpId, const rtl::OString& sLbHelpId );
     virtual String  GetSelectEntry(USHORT nPos) const;
     virtual USHORT  GetSelectEntryPos(USHORT nPos) const;
 };
@@ -517,7 +517,7 @@ public:
                                                                 const String& rTitle,
                                                                 const String& rEditTitle,
                                                                 const String& rDefault,
-                                                                ULONG nHelpId ,
+                                                                const rtl::OString& sHelpId, const rtl::OString& sEditHelpId,
                                                                 int nId );
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( Window*                 pParent, //add for ScImportOptionsDlg
                                                                     int nId,

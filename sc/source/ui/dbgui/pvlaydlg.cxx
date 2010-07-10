@@ -332,16 +332,11 @@ void __EXPORT ScDPLayoutDlg::Init()
         aBtnDrillDown.Check();
     }
 
-    // FIXME: HELPID
-    aWndPage.SetHelpId( ""/*HID_SC_DPLAY_PAGE*/ );
-    // FIXME: HELPID
-    aWndCol.SetHelpId( ""/*HID_SC_DPLAY_COLUMN*/ );
-    // FIXME: HELPID
-    aWndRow.SetHelpId( ""/*HID_SC_DPLAY_ROW*/ );
-    // FIXME: HELPID
-    aWndData.SetHelpId( ""/*HID_SC_DPLAY_DATA*/ );
-    // FIXME: HELPID
-    aWndSelect.SetHelpId( ""/*HID_SC_DPLAY_SELECT*/ );
+    aWndPage.SetHelpId( HID_SC_DPLAY_PAGE );
+    aWndCol.SetHelpId( HID_SC_DPLAY_COLUMN );
+    aWndRow.SetHelpId( HID_SC_DPLAY_ROW );
+    aWndData.SetHelpId( HID_SC_DPLAY_DATA );
+    aWndSelect.SetHelpId( HID_SC_DPLAY_SELECT );
 
     InitFocus();
 

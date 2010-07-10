@@ -68,8 +68,7 @@ SchAlignmentTabPage::SchAlignmentTabPage(Window* pWindow,
         aFtTextDirection.SetPosPixel( aFtTextDirection.GetPosPixel() + aMove );
         aLbTextDirection.SetPosPixel( aLbTextDirection.GetPosPixel() + aMove );
 
-        // FIXME: HELPID
-        aLbTextDirection.SetHelpId( ""/*HID_SCH_TEXTDIRECTION_EQUATION*/ );
+        aLbTextDirection.SetHelpId( HID_SCH_TEXTDIRECTION_EQUATION );
     }
 }
 

@@ -28,7 +28,7 @@
 ModelessDialog RID_SCDLG_CONSOLIDATE
 {
     OutputSize = TRUE ;
-    HelpId = SID_OPENDLG_CONSOLIDATE ;
+    HelpId = CMD_SID_OPENDLG_CONSOLIDATE ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 154 ) ;

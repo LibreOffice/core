@@ -30,7 +30,7 @@
 ModelessDialog RID_SCDLG_PIVOT_LAYOUT
 {
     OutputSize = TRUE ;
-    HelpId = SID_OPENDLG_PIVOTTABLE ;
+    HelpId = CMD_SID_OPENDLG_PIVOTTABLE ;
     Size = MAP_APPFONT ( 336 , 190 ) ;
     Hide = TRUE ;
     SVLook = TRUE ;
