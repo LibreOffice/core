@@ -2045,7 +2045,12 @@ rtl::OString Menu::GetHelpId( USHORT nItemId ) const
     MenuItemData* pData = pItemList->GetData( nItemId );
 
     if ( pData )
-        aRet = pData->aHelpId;
+    {
+        if ( pData->aHelpId.getLength() )
+            aRet = pData->aHelpId;
+        else
+            aRet = ::rtl::OUStringToOString( pData->aCommandStr, RTL_TEXTENCODING_UTF8 );
+    }
 
     return aRet;
 }

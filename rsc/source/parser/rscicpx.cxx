@@ -297,7 +297,7 @@ RscTop * RscTypCont::InitClassWindow( RscTop * pSuper, RscEnum * pMapUnit,
     InsWinBit( pClassWindow, "DialogControl", nTabControlId );
 
     nId = aNmTb.Put( "HelpID", VARNAME );
-    pClassWindow->SetVariable( nId, &aString, NULL, 0, WINDOW_HELPID );
+    pClassWindow->SetVariable( nId, &aStringLiteral, NULL, 0, WINDOW_HELPID );
 
 
     nRsc_XYMAPMODEId = nId = aNmTb.Put( "_XYMapMode", VARNAME );
@@ -1201,7 +1201,7 @@ RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper,
     pClassMenuItem->SetVariable( nId, &aLangString, NULL, 0,
                                  RSC_MENUITEM_HELPTEXT );
     nId = aNmTb.Put( "HelpID", VARNAME );
-    pClassMenuItem->SetVariable( nId, &aString, NULL, 0,
+    pClassMenuItem->SetVariable( nId, &aStringLiteral, NULL, 0,
                                  RSC_MENUITEM_HELPID );
     nId = aNmTb.Put( "AccelKey", VARNAME );
     pClassMenuItem->SetVariable( nId, pClassKeyCode, NULL, 0,
@@ -1276,7 +1276,7 @@ RscTop * RscTypCont::InitClassMessBox( RscTop * pSuper,
     nId = aNmTb.Put( "DefButton", VARNAME );
     pClassMessBox->SetVariable( nId, pMessDefButton );
     nId = aNmTb.Put( "HelpID", VARNAME );
-    pClassMessBox->SetVariable( nId, &aString );
+    pClassMessBox->SetVariable( nId, &aStringLiteral );
     nId = aNmTb.Put( "SysModal", VARNAME );
     pClassMessBox->SetVariable( nId, &aBool );
     nId = aNmTb.Put( "Title", VARNAME );
@@ -2015,7 +2015,7 @@ RscTop * RscTypCont::InitClassToolBoxItem( RscTop * pSuper,
         pClassToolBoxItem->SetVariable( nId, pClient, NULL, VAR_NODATAINST, 0, l_nVarId );
     }
     nId = aNmTb.Put( "HelpID", VARNAME );
-    pClassToolBoxItem->SetVariable( nId, &aString, NULL, 0,
+    pClassToolBoxItem->SetVariable( nId, &aStringLiteral, NULL, 0,
                                     RSC_TOOLBOXITEM_HELPID  );
     nId = aNmTb.Put( "Text", VARNAME );
     pClassToolBoxItem->SetVariable( nId, &aLangString, NULL, 0,

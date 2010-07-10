@@ -1708,7 +1708,15 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             ::rtl::OUString aURL;
             if ( Value >>= aURL )
             {
-                pWindow->SetHelpId( rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ) );
+                String aHelpURL(  aURL );
+                String aPattern( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
+                if ( aHelpURL.CompareIgnoreCaseToAscii( aPattern, aPattern.Len() ) == COMPARE_EQUAL )
+                {
+                    String aID = aHelpURL.Copy( aPattern.Len() );
+                    pWindow->SetHelpId( rtl::OUStringToOString( aID, RTL_TEXTENCODING_UTF8 ) );
+                }
+                else
+                    pWindow->SetHelpId( rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ) );
             }
         }
         break;

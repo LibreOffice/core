@@ -62,7 +62,7 @@ Help::~Help()
 
 // -----------------------------------------------------------------------
 
-void Help::OpenHelpAgent( const String& )
+void Help::OpenHelpAgent( const rtl::OString& )
 {
 }
 

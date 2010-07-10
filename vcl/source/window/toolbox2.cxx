@@ -1936,7 +1936,12 @@ rtl::OString ToolBox::GetHelpId( USHORT nItemId ) const
     ImplToolItem* pItem = ImplGetItem( nItemId );
 
     if ( pItem )
-        aRet = pItem->maHelpId;
+    {
+        if ( pItem->maHelpId.getLength() )
+            aRet = pItem->maHelpId;
+        else
+            aRet = ::rtl::OUStringToOString( pItem->maCommandStr, RTL_TEXTENCODING_UTF8 );
+    }
 
     return aRet;
 }

@@ -346,8 +346,7 @@ SvtIconWindow_Impl::SvtIconWindow_Impl( Window* pParent ) :
     aDummyHeaderBar.Show();
 
     aIconCtrl.SetAccessibleName( String( RTL_CONSTASCII_USTRINGPARAM("Groups") ) );
-    // FIMXE: HELPID
-      aIconCtrl.SetHelpId( "" /*HID_TEMPLATEDLG_ICONCTRL*/ );
+      aIconCtrl.SetHelpId( HID_TEMPLATEDLG_ICONCTRL );
     aIconCtrl.SetChoiceWithCursor( TRUE );
     aIconCtrl.SetSelectionMode( SINGLE_SELECTION );
     aIconCtrl.Show();
@@ -610,8 +609,7 @@ SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent ) :
 
 {
     aFileView.SetStyle( aFileView.GetStyle() | WB_DIALOGCONTROL | WB_TABSTOP );
-    // FIXME: HELPID
-    aFileView.SetHelpId( "" /*HID_TEMPLATEDLG_FILEVIEW*/ );
+    aFileView.SetHelpId( HID_TEMPLATEDLG_FILEVIEW );
     aFileView.Show();
     aFileView.SetPosPixel( Point( 0, 0 ) );
     aFileView.EnableAutoResize();

@@ -609,8 +609,7 @@ void AssignmentPersistentData::Commit()
                 m_pImpl->pFields[row * 2 + column]->SetDropDownLineCount(15);
                 m_pImpl->pFields[row * 2 + column]->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnFieldSelect));
 
-                // FIXME: HELPID
-                m_pImpl->pFields[row * 2 + column]->SetHelpId( "" /*HID_ADDRTEMPL_FIELD_ASSIGNMENT*/);
+                m_pImpl->pFields[row * 2 + column]->SetHelpId(HID_ADDRTEMPL_FIELD_ASSIGNMENT);
             }
         }
 
