@@ -134,8 +134,7 @@ namespace dbmm
         m_aSaveAsLocation.SetModifyHdl( LINK( this, SaveDBDocPage, OnLocationModified ) );
         m_aSaveAsLocation.SetDropDownLineCount( 20 );
 
-        // FIXME: HELPID
-        m_aSaveAsLocation.SetHelpId( ""/*HID_MACRO_MIGRATION_BACKUP_LOCATION*/ );
+        m_aSaveAsLocation.SetHelpId( HID_MACRO_MIGRATION_BACKUP_LOCATION );
 
         impl_updateLocationDependentItems();
     }

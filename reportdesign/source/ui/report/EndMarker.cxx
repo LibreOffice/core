@@ -44,8 +44,7 @@ OEndMarker::OEndMarker(Window* _pParent ,const ::rtl::OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
 {
     DBG_CTOR( rpt_OEndMarker,NULL);
-    // FIXME: HELPID
-    SetUniqueId(""/*HID_RPT_ENDMARKER*/);
+    SetUniqueId(HID_RPT_ENDMARKER);
     ImplInitSettings();
     SetPaintTransparent(TRUE);
 }

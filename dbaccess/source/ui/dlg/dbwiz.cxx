@@ -145,16 +145,11 @@ ODbTypeWizDialog::ODbTypeWizDialog(Window* _pParent
     enableButtons(WZB_FINISH, sal_False);
     enableAutomaticNextButtonState( true );
 
-    // FIXME: HELPID
-    m_pPrevPage->SetHelpId(""/*HID_DBWIZ_PREVIOUS*/);
-    // FIXME: HELPID
-    m_pNextPage->SetHelpId(""/*HID_DBWIZ_NEXT*/);
-    // FIXME: HELPID
-    m_pCancel->SetHelpId(""/*HID_DBWIZ_CANCEL*/);
-    // FIXME: HELPID
-    m_pFinish->SetHelpId(""/*HID_DBWIZ_FINISH*/);
-    // FIXME: HELPID
-    m_pHelp->SetUniqueId(""/*UID_DBWIZ_HELP*/);
+    m_pPrevPage->SetHelpId(HID_DBWIZ_PREVIOUS);
+    m_pNextPage->SetHelpId(HID_DBWIZ_NEXT);
+    m_pCancel->SetHelpId(HID_DBWIZ_CANCEL);
+    m_pFinish->SetHelpId(HID_DBWIZ_FINISH);
+    m_pHelp->SetUniqueId(UID_DBWIZ_HELP);
     // no local resources needed anymore
 
     DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));

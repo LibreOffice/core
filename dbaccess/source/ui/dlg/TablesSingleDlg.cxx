@@ -34,9 +34,6 @@
 #ifndef _DBAUI_DBADMINIMPL_HXX_
 #include "DbAdminImpl.hxx"
 #endif
-#ifndef _DBA_DBACCESS_HELPID_HRC_
-#include "dbaccess_helpid.hrc"
-#endif
 #ifndef _DBAUI_TABLESPAGE_HXX_
 #include "tablespage.hxx"
 #endif
@@ -50,6 +47,8 @@
 #ifndef _DBAUI_PROPERTYSETITEM_HXX_
 #include "propertysetitem.hxx"
 #endif
+
+#include "dbu_dlg.hrc"
 
 //.........................................................................
 namespace dbaui
@@ -69,7 +68,7 @@ OTableSubscriptionDialog::OTableSubscriptionDialog(Window* pParent
             ,SfxItemSet* _pItems
             ,const Reference< XMultiServiceFactory >& _rxORB
             ,const ::com::sun::star::uno::Any& _aDataSourceName)
-    :SfxSingleTabDialog(pParent,UID_DLG_TABLE_FILTER,_pItems)
+    :SfxSingleTabDialog(pParent,DLG_TABLE_FILTER,_pItems)
     ,m_pImpl( new ODbDataSourceAdministrationHelper( _rxORB, pParent, this ) )
     ,m_bStopExecution(sal_False)
     ,m_pOutSet(_pItems)

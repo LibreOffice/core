@@ -62,8 +62,7 @@ OFieldDescGenWin::OFieldDescGenWin( Window* pParent, OTableDesignHelpBar* pHelp 
 {
     DBG_CTOR(OFieldDescGenWin,NULL);
     m_pFieldControl = new OTableFieldControl(this,pHelp);
-    // FIXME: HELPID
-    m_pFieldControl->SetHelpId(""/*HID_TAB_DESIGN_FIELDCONTROL*/);
+    m_pFieldControl->SetHelpId(HID_TAB_DESIGN_FIELDCONTROL);
     m_pFieldControl->Show();
 }
 //------------------------------------------------------------------------------

@@ -240,8 +240,7 @@ NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
 
     m_pSelectionListener = new OSelectionChangeMultiplexer(this,&m_rController);
 
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_REPORT_NAVIGATOR_TREE*/ );
+    SetHelpId( HID_REPORT_NAVIGATOR_TREE );
 
     m_aNavigatorImages = ImageList( ModuleRes( RID_SVXIMGLIST_RPTEXPL ) );
     m_aNavigatorImagesHC = ImageList( ModuleRes( RID_SVXIMGLIST_RPTEXPL_HC ) );

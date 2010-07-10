@@ -35,6 +35,7 @@
 #include "dbaccess_helpid.hrc"
 #endif
 
+#include "dbaccess_slotid.hrc"
 
 #define WINDOW_SIZE_X   276
 #define WINDOW_SIZE_Y   185
@@ -308,7 +309,7 @@ Menu RID_SBA_RTF_PKEYPOPUP
         MenuItem
         {
             Identifier      = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
-            HelpID          = SID_TABLEDESIGN_TABED_PRIMARYKEY ;
+            HelpID          = HID_TABLEDESIGN_TABED_PRIMARYKEY ;
             Checkable       = TRUE ;
             Text [ en-US ] = "Primary Key" ;
         };

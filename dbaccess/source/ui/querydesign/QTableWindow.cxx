@@ -119,8 +119,7 @@ OQueryTableWindow::OQueryTableWindow( Window* pParent, const TTableWindowData::v
     if (m_strInitialAlias == pTabWinData->GetTableName())
         m_strInitialAlias = ::rtl::OUString();
 
-    // FIXME: HELPID
-    SetHelpId(""/*HID_CTL_QRYDGNTAB*/);
+    SetHelpId(HID_CTL_QRYDGNTAB);
 }
 
 //------------------------------------------------------------------------------

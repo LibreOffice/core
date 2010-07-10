@@ -1387,9 +1387,9 @@ void OGenericUnoController::openHelpAgent(rtl::OUString const& _suHelpStringURL 
     openHelpAgent( aURL );
 }
 
-void OGenericUnoController::openHelpAgent(sal_Int32 _nHelpId)
+void OGenericUnoController::openHelpAgent(const rtl::OString& _sHelpId)
 {
-    openHelpAgent( createHelpAgentURL( lcl_getModuleHelpModuleName( getFrame() ), _nHelpId ) );
+    openHelpAgent( createHelpAgentURL( lcl_getModuleHelpModuleName( getFrame() ), _sHelpId ) );
 }
 
 void OGenericUnoController::openHelpAgent( const URL& _rURL )

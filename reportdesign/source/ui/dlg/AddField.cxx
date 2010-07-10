@@ -117,8 +117,7 @@ OAddFieldWindowListBox::OAddFieldWindowListBox( OAddFieldWindow* _pParent )
     ,m_pTabWin( _pParent )
 {
     DBG_CTOR( rpt_OAddFieldWindowListBox,NULL);
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_RPT_FIELD_SEL*/ );
+    SetHelpId( HID_RPT_FIELD_SEL );
     SetSelectionMode(MULTIPLE_SELECTION);
     SetDragDropMode( 0xFFFF );
     SetHighlightRange( );
@@ -178,8 +177,7 @@ OAddFieldWindow::OAddFieldWindow(Window* pParent
             ,m_pContainerListener(NULL)
 {
     DBG_CTOR( rpt_OAddFieldWindow,NULL);
-    // FIXME: HELPID
-    SetHelpId( ""/*HID_RPT_FIELD_SEL_WIN*/ );
+    SetHelpId( HID_RPT_FIELD_SEL_WIN );
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
     SetMinOutputSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
 

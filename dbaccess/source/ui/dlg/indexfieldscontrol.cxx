@@ -128,10 +128,8 @@ DBG_NAME(IndexFieldsControl)
     {
         DBG_CTOR(IndexFieldsControl,NULL);
 
-        // FIXME: HELPID
-        SetUniqueId( ""/*UID_DLGINDEX_INDEXDETAILS_BACK*/ );
-        // FIXME: HELPID
-        GetDataWindow().SetUniqueId( ""/*UID_DLGINDEX_INDEXDETAILS_MAIN*/ );
+        SetUniqueId( UID_DLGINDEX_INDEXDETAILS_BACK );
+        GetDataWindow().SetUniqueId( UID_DLGINDEX_INDEXDETAILS_MAIN );
     }
 
     //------------------------------------------------------------------
@@ -292,10 +290,8 @@ DBG_NAME(IndexFieldsControl)
         m_pSortingCell->InsertEntry(m_sAscendingText);
         m_pSortingCell->InsertEntry(m_sDescendingText);
 
-        // FIXME: HELPID
-        m_pFieldNameCell->SetHelpId( ""/*HID_DLGINDEX_INDEXDETAILS_FIELD*/ );
-        // FIXME: HELPID
-        m_pSortingCell->SetHelpId( ""/*HID_DLGINDEX_INDEXDETAILS_SORTORDER*/ );
+        m_pFieldNameCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_FIELD );
+        m_pSortingCell->SetHelpId( HID_DLGINDEX_INDEXDETAILS_SORTORDER );
     }
 
     //------------------------------------------------------------------

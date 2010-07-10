@@ -93,13 +93,11 @@ OTableFieldDescWin::OTableFieldDescWin( Window* pParent)
     //////////////////////////////////////////////////////////////////////
     // HelpBar
     m_pHelpBar = new OTableDesignHelpBar( this );
-    // FIXME: HELPID
-    m_pHelpBar->SetHelpId(""/*HID_TAB_DESIGN_HELP_TEXT_FRAME*/);
+    m_pHelpBar->SetHelpId(HID_TAB_DESIGN_HELP_TEXT_FRAME);
     m_pHelpBar->Show();
 
     m_pGenPage = new OFieldDescGenWin( this, m_pHelpBar );
-    // FIXME: HELPID
-    getGenPage()->SetHelpId( ""/*HID_TABLE_DESIGN_TABPAGE_GENERAL*/ );
+    getGenPage()->SetHelpId( HID_TABLE_DESIGN_TABPAGE_GENERAL );
     getGenPage()->Show();
 }
 

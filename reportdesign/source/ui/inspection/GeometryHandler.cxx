@@ -777,12 +777,12 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             break;
         case PROPERTY_ID_INITIALFORMULA:
         case PROPERTY_ID_FORMULA:
-            aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_FORMULA);
             aOut.HasPrimaryButton = sal_True;
             aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::MultiLineTextField , sal_False);
             break;
         case PROPERTY_ID_CONDITIONALPRINTEXPRESSION:
-            aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_FORMULA);
             aOut.HasPrimaryButton = sal_True;
             aOut.Control = _xControlFactory->createPropertyControl(inspection::PropertyControlType::MultiLineTextField , sal_False);
             break;
@@ -797,7 +797,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
 
                 if ( m_nDataFieldType == DATA_OR_FORMULA )
                 {
-                    aOut.PrimaryButtonId = UID_RPT_PROP_FORMULA;
+                    aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_PROP_FORMULA);
                     aOut.HasPrimaryButton = sal_True;
                 }
 
@@ -824,12 +824,12 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::ColorListBox, sal_False );
             break;
         case PROPERTY_ID_FONT:
-            aOut.PrimaryButtonId = UID_RPT_RPT_PROP_DLG_FONT_TYPE;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_RPT_PROP_DLG_FONT_TYPE);
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, sal_True );
             aOut.HasPrimaryButton = sal_True;
             break;
         case PROPERTY_ID_AREA:
-            aOut.PrimaryButtonId = UID_RPT_RPT_PROP_DLG_AREA;
+            aOut.PrimaryButtonId = rtl::OUString::createFromAscii(UID_RPT_RPT_PROP_DLG_AREA);
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, sal_True );
             aOut.HasPrimaryButton = sal_True;
             break;

@@ -101,8 +101,7 @@ OReportSection::OReportSection(OSectionWindow* _pParent,const uno::Reference< re
 {
     DBG_CTOR( rpt_OReportSection,NULL);
     EnableChildTransparentMode();
-    // FIXME: HELPID
-    SetHelpId(""/*HID_REPORTSECTION*/);
+    SetHelpId(HID_REPORTSECTION);
     SetMapMode( MapMode( MAP_100TH_MM ) );
 
     try

@@ -221,9 +221,9 @@ void FunctionDescription::initArgumentInfo()  const
     return m_xFunctionDescription->getSignature();
 }
 // -----------------------------------------------------------------------------
-long FunctionDescription::getHelpId() const
+rtl::OString FunctionDescription::getHelpId() const
 {
-    return 0;
+    return rtl::OString();
 }
 // -----------------------------------------------------------------------------
 sal_uInt32 FunctionDescription::getParameterCount() const

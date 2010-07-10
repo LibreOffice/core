@@ -101,8 +101,7 @@ ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pV
 
 {
     DBG_CTOR(ORelationTableView,NULL);
-    // FIXME: HELPID
-    SetHelpId(""/*HID_CTL_RELATIONTAB*/);
+    SetHelpId(HID_CTL_RELATIONTAB);
 }
 
 //------------------------------------------------------------------------

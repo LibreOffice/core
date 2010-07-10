@@ -173,8 +173,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
                    ,m_bInUndoMode(sal_False)
 {
     DBG_CTOR(OSelectionBrowseBox,NULL);
-    // FIXME: HELPID
-    SetHelpId(""/*HID_CTL_QRYDGNCRIT*/);
+    SetHelpId(HID_CTL_QRYDGNCRIT);
 
     m_nMode =       BROWSER_COLUMNSELECTION | BROWSER_HIDESELECT
                 |   BROWSER_KEEPSELECTION   | BROWSER_HIDECURSOR
@@ -189,16 +188,11 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
     m_pOrderCell    = new ListBoxControl(&GetDataWindow());
     m_pFunctionCell = new ListBoxControl(&GetDataWindow());     m_pFunctionCell->SetDropDownLineCount( 20 );
 
-    // FIXME: HELPID
-    m_pVisibleCell->SetHelpId(""/*HID_QRYDGN_ROW_VISIBLE*/);
-    // FIXME: HELPID
-    m_pTableCell->SetHelpId(""/*HID_QRYDGN_ROW_TABLE*/);
-    // FIXME: HELPID
-    m_pFieldCell->SetHelpId(""/*HID_QRYDGN_ROW_FIELD*/);
-    // FIXME: HELPID
-    m_pOrderCell->SetHelpId(""/*HID_QRYDGN_ROW_ORDER*/);
-    // FIXME: HELPID
-    m_pFunctionCell->SetHelpId(""/*HID_QRYDGN_ROW_FUNCTION*/);
+    m_pVisibleCell->SetHelpId(HID_QRYDGN_ROW_VISIBLE);
+    m_pTableCell->SetHelpId(HID_QRYDGN_ROW_TABLE);
+    m_pFieldCell->SetHelpId(HID_QRYDGN_ROW_FIELD);
+    m_pOrderCell->SetHelpId(HID_QRYDGN_ROW_ORDER);
+    m_pFunctionCell->SetHelpId(HID_QRYDGN_ROW_FUNCTION);
 
     //////////////////////////////////////////////////////////////////////
     // TriState der ::com::sun::star::form::CheckBox abschalten
@@ -2706,7 +2700,7 @@ void OSelectionBrowseBox::enableControl(const OTableFieldDescRef& _rEntry,Window
     _pControl->EnableInput(bEnable);
 }
 // -----------------------------------------------------------------------------
-void OSelectionBrowseBox::setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,ULONG _nHelpId)
+void OSelectionBrowseBox::setTextCellContext(const OTableFieldDescRef& _rEntry,const String& _sText,const rtl::OString& _sHelpId)
 {
     m_pTextCell->SetText(_sText);
     m_pTextCell->ClearModifyFlag();
@@ -2715,15 +2709,10 @@ void OSelectionBrowseBox::setTextCellContext(const OTableFieldDescRef& _rEntry,c
 
     enableControl(_rEntry,m_pTextCell);
 
-    // FIXME: HELPID
-    #if 0
-    if (m_pTextCell->GetHelpId() != _nHelpId)
+    if (m_pTextCell->GetHelpId() != _sHelpId)
         // da TextCell in verschiedenen Kontexten verwendet wird, muss ich den gecachten HelpText loeschen
         m_pTextCell->SetHelpText(String());
-    m_pTextCell->SetHelpId(_nHelpId);
-    #else
-    (void)_nHelpId;
-    #endif
+    m_pTextCell->SetHelpId(_sHelpId);
 }
 // -----------------------------------------------------------------------------
 void OSelectionBrowseBox::invalidateUndoRedo()

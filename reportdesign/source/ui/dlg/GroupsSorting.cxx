@@ -366,8 +366,7 @@ void OFieldExpressionControl::lateInit()
 
         m_pComboCell = new ComboBoxControl( &GetDataWindow() );
         m_pComboCell->SetSelectHdl(LINK(this,OFieldExpressionControl,CBChangeHdl));
-        // FIXME: HELPID
-        m_pComboCell->SetHelpId(""/*HID_RPT_FIELDEXPRESSION*/);
+        m_pComboCell->SetHelpId(HID_RPT_FIELDEXPRESSION);
 
         Control* pControls[] = {m_pComboCell};
         for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)

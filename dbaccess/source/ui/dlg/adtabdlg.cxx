@@ -360,13 +360,10 @@ OAddTableDlg::OAddTableDlg( Window* pParent, IAddTableDialogContext& _rContext )
     // der Close-Button hat schon einen Standard-Help-Text, den ich aber hier nicht haben moechte, also den Text ruecksetzen
     // und eine neue ID verteilen
     aCloseButton.SetHelpText(String());
-    // FIXME: HELPID
-    aCloseButton.SetHelpId(""/*HID_JOINSH_ADDTAB_CLOSE*/);
+    aCloseButton.SetHelpId(HID_JOINSH_ADDTAB_CLOSE);
 
-    // FIXME: HELPID
-    m_aTableList.SetHelpId( ""/*HID_JOINSH_ADDTAB_TABLELIST*/ );
-    // FIXME: HELPID
-    m_aQueryList.SetHelpId( ""/*HID_JOINSH_ADDTAB_QUERYLIST*/ );
+    m_aTableList.SetHelpId( HID_JOINSH_ADDTAB_TABLELIST );
+    m_aQueryList.SetHelpId( HID_JOINSH_ADDTAB_QUERYLIST );
 
     //////////////////////////////////////////////////////////////////////
     m_aCaseTables.SetClickHdl( LINK( this, OAddTableDlg, OnTypeSelected ) );

@@ -338,18 +338,18 @@ namespace dbaui
     {
         DBG_CHKTHIS(ORelationControl,NULL);
 
-        ULONG nHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
+        rtl::OString sHelpId( HID_RELATIONDIALOG_LEFTFIELDCELL );
 
         Reference< XPropertySet> xDef;
         switch ( getColumnIdent(nColumnId) )
         {
             case SOURCE_COLUMN:
                 xDef    = m_xSourceDef;
-                nHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
+                sHelpId = HID_RELATIONDIALOG_LEFTFIELDCELL;
                 break;
             case DEST_COLUMN:
                 xDef    = m_xDestDef;
-                nHelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL;
+                sHelpId = HID_RELATIONDIALOG_RIGHTFIELDCELL;
                 break;
             default:
                 //  ?????????
@@ -367,10 +367,7 @@ namespace dbaui
                 m_pListCell->SelectEntry( sName );
             }
 
-            // FIXME: HELPID
-            #if 0
-            m_pListCell->SetHelpId(nHelpId);
-            #endif
+            m_pListCell->SetHelpId(sHelpId);
         }
     }
 
@@ -508,8 +505,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
      , m_pParentDialog(_pParentDialog)
     {
         m_pRC_Tables = new ORelationControl( this,m_pTableMap );
-        // FIXME: HELPID
-        m_pRC_Tables->SetHelpId(""/*HID_RELDLG_KEYFIELDS*/);
+        m_pRC_Tables->SetHelpId(HID_RELDLG_KEYFIELDS);
         m_pRC_Tables->Init( );
         m_pRC_Tables->SetZOrder(&m_lmbRightTable, WINDOW_ZORDER_BEHIND);
 

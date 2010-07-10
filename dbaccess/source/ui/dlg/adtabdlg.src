@@ -38,7 +38,7 @@ ModelessDialog DLG_JOIN_TABADD
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = DLG_JOIN_TABADD ;
+    HelpID = HID_DLG_JOIN_TABADD ;
     Size = MAP_APPFONT ( 178 , 147 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;

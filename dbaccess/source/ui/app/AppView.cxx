@@ -138,12 +138,10 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
     m_pPanel->SetBorderStyle(WINDOW_BORDER_MONO);
     OApplicationSwapWindow* pSwap = new OApplicationSwapWindow( m_pPanel, *this );
     pSwap->Show();
-    // FIXME: HELPID
-    pSwap->SetUniqueId(""/*UID_APP_SWAP_VIEW*/);
+    pSwap->SetUniqueId(UID_APP_SWAP_VIEW);
 
     m_pPanel->setChildWindow(pSwap);
-    // FIXME: HELPID
-    m_pPanel->SetUniqueId(""/*UID_APP_DATABASE_VIEW*/);
+    m_pPanel->SetUniqueId(UID_APP_DATABASE_VIEW);
     m_pPanel->Show();
 
     m_pDetailView = new OApplicationDetailView(*this,_ePreviewMode);
@@ -286,8 +284,7 @@ OApplicationView::OApplicationView( Window* pParent
     }
 
     m_pWin = new OAppBorderWindow(this,_ePreviewMode);
-    // FIXME: HELPID
-    m_pWin->SetUniqueId(""/*UID_APP_VIEW_BORDER_WIN*/);
+    m_pWin->SetUniqueId(UID_APP_VIEW_BORDER_WIN);
     m_pWin->Show();
 
     ImplInitSettings();

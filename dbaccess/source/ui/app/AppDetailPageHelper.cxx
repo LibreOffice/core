@@ -307,29 +307,23 @@ OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _r
 
     m_aTBPreview.SetOutStyle(TOOLBOX_STYLE_FLAT);
     m_aTBPreview.InsertItem(SID_DB_APP_DISABLE_PREVIEW,m_aMenu->GetItemText(SID_DB_APP_DISABLE_PREVIEW),TIB_LEFT|TIB_DROPDOWN|TIB_AUTOSIZE|TIB_RADIOCHECK);
-    // FIXME: HELPID
-    m_aTBPreview.SetHelpId(""/*HID_APP_VIEW_PREVIEW_CB*/);
+    m_aTBPreview.SetHelpId(HID_APP_VIEW_PREVIEW_CB);
     m_aTBPreview.SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
     m_aTBPreview.EnableMenuStrings();
     m_aTBPreview.Enable(TRUE);
 
-    // FIXME: HELPID
-    m_aBorder.SetUniqueId(""/*UID_APP_VIEW_PREVIEW_1*/);
+    m_aBorder.SetUniqueId(UID_APP_VIEW_PREVIEW_1);
 
-    // FIXME: HELPID
-    m_aPreview.SetHelpId(""/*HID_APP_VIEW_PREVIEW_1*/);
+    m_aPreview.SetHelpId(HID_APP_VIEW_PREVIEW_1);
 
     m_pTablePreview = new OTablePreviewWindow(&m_aBorder,WB_READONLY | WB_DIALOGCONTROL );
-    // FIXME: HELPID
-    m_pTablePreview->SetHelpId(""/*HID_APP_VIEW_PREVIEW_2*/);
+    m_pTablePreview->SetHelpId(HID_APP_VIEW_PREVIEW_2);
 
-    // FIXME: HELPID
-    m_aDocumentInfo.SetHelpId(""/*HID_APP_VIEW_PREVIEW_3*/);
+    m_aDocumentInfo.SetHelpId(HID_APP_VIEW_PREVIEW_3);
 
     m_xWindow = VCLUnoHelper::GetInterface( m_pTablePreview );
 
-    // FIXME: HELPID
-    SetUniqueId(""/*UID_APP_DETAILPAGE_HELPER*/);
+    SetUniqueId(UID_APP_DETAILPAGE_HELPER);
     for (int i=0; i < E_ELEMENT_TYPE_COUNT; ++i)
         m_pLists[i] = NULL;
     ImplInitSettings();
@@ -709,8 +703,7 @@ void OAppDetailPageHelper::createTablesPage(const Reference< XConnection>& _xCon
                                                             ,getBorderWin().getView()->getORB()
                                                             ,WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP
                                                             ,sal_False);
-        // FIXME: HELPID
-        pTreeView->SetHelpId(""/*HID_APP_TABLE_TREE*/);
+        pTreeView->SetHelpId(HID_APP_TABLE_TREE);
         m_pLists[E_TABLE] = pTreeView;
 
         ImageProvider aImageProvider( _xConnection );
@@ -760,23 +753,24 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
 {
     OSL_ENSURE(E_TABLE != _eType,"E_TABLE isn't allowed.");
 
-    USHORT nHelpId = 0, nImageId = 0, nImageIdH = 0;
+    USHORT nImageId = 0, nImageIdH = 0;
+    rtl::OString sHelpId;
     ImageProvider aImageProvider;
     Image aFolderImage, aFolderImageHC;
     switch( _eType )
     {
         case E_FORM:
-            nHelpId = HID_APP_FORM_TREE;
+            sHelpId = HID_APP_FORM_TREE;
             aFolderImage = aImageProvider.getFolderImage( DatabaseObject::FORM, false );
             aFolderImageHC = aImageProvider.getFolderImage( DatabaseObject::FORM, true );
             break;
         case E_REPORT:
-            nHelpId = HID_APP_REPORT_TREE;
+            sHelpId = HID_APP_REPORT_TREE;
             aFolderImage = aImageProvider.getFolderImage( DatabaseObject::REPORT, false );
             aFolderImageHC = aImageProvider.getFolderImage( DatabaseObject::REPORT, true );
             break;
         case E_QUERY:
-            nHelpId = HID_APP_QUERY_TREE;
+            sHelpId = HID_APP_QUERY_TREE;
             aFolderImage = aImageProvider.getFolderImage( DatabaseObject::QUERY, false );
             aFolderImageHC = aImageProvider.getFolderImage( DatabaseObject::QUERY, true );
             break;
@@ -787,7 +781,7 @@ void OAppDetailPageHelper::createPage(ElementType _eType,const Reference< XNameA
 
     if ( !m_pLists[_eType] )
     {
-        m_pLists[_eType] = createSimpleTree( nHelpId, aFolderImage, aFolderImageHC );
+        m_pLists[_eType] = createSimpleTree( sHelpId, aFolderImage, aFolderImageHC );
     }
 
     if ( m_pLists[_eType] )
@@ -885,15 +879,10 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
     }
 }
 // -----------------------------------------------------------------------------
-DBTreeListBox* OAppDetailPageHelper::createSimpleTree( ULONG _nHelpId, const Image& _rImage, const Image& _rImageHC )
+DBTreeListBox* OAppDetailPageHelper::createSimpleTree( const rtl::OString& _sHelpId, const Image& _rImage, const Image& _rImageHC )
 {
     DBTreeListBox* pTreeView = new DBTreeListBox(this,getBorderWin().getView()->getORB(),WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
-    // FIXME: HELPID
-    #if 0
-    pTreeView->SetHelpId(_nHelpId);
-    #else
-    (void)_nHelpId;
-    #endif
+    pTreeView->SetHelpId( _sHelpId );
     return createTree( pTreeView, _rImage, _rImageHC );
 }
 
