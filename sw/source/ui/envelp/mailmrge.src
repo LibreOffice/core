@@ -41,7 +41,7 @@ ModalDialog DLG_MAILMERGE
     _MAIL_MERGE_STRING_
     Moveable = TRUE ;
     Sizeable = TRUE;
-    HelpID = FN_QRY_MERGE ;
+    HelpID = CMD_FN_QRY_MERGE ;
     Window WIN_BEAMER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;

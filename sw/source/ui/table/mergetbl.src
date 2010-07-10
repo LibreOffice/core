@@ -31,7 +31,7 @@
 #include "helpid.h"
 ModalDialog DLG_MERGE_TABLE
 {
-    HelpID = FN_TABLE_MERGE_TABLE ;
+    HelpID = CMD_FN_TABLE_MERGE_TABLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 207 , 57 ) ;

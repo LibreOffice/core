@@ -283,7 +283,7 @@ class AbstractInsFootNoteDlg_Impl : public AbstractInsFootNoteDlg
     virtual BOOL            IsEndNote();
     virtual String          GetStr();
     //from class Window
-    virtual void    SetHelpId( ULONG nHelpId );
+    virtual void    SetHelpId( const rtl::OString& sHelpId );
     virtual void    SetText( const XubString& rStr );
 };
 //for SwInsFootNoteDlg end

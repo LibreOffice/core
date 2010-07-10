@@ -499,8 +499,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     aLbLevel.SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
     aEdDelim.SetText( sDelim );
 
-    // FIXME: HELPID
-    aCheckLB.SetHelpId(""/*HID_OPTCAPTION_CLB*/);
+    aCheckLB.SetHelpId(HID_OPTCAPTION_CLB);
 
     FreeResource();
 

@@ -143,8 +143,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
     FreeResource();
 
     GetOKButton().SetText(String(SW_RES(STR_BTN_NEW_DOC)));
-    // FIXME: HELPID
-    GetOKButton().SetHelpId(""/*HID_LABEL_INSERT*/);
+    GetOKButton().SetHelpId(HID_LABEL_INSERT);
     GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
 
     AddTabPage(TP_LAB_LAB, m_bLabel ? sFormat : sMedium ,SwLabPage   ::Create, 0, sal_False, 0);
@@ -346,16 +345,11 @@ void lcl_ChgYPos(Window& rWin, long nDiff)
 
 void SwLabPage::SetToBusinessCard()
 {
-    // FIXME: HELPID
-    SetHelpId(""/*HID_BUSINESS_FMT_PAGE*/);
-    // FIXME: HELPID
-    aContButton.SetHelpId(""/*HID_BUSINESS_FMT_PAGE_CONT*/);
-    // FIXME: HELPID
-    aSheetButton.SetHelpId(""/*HID_BUSINESS_FMT_PAGE_SHEET*/);
-    // FIXME: HELPID
-    aMakeBox.SetHelpId(""/*HID_BUSINESS_FMT_PAGE_BRAND*/);
-    // FIXME: HELPID
-    aTypeBox.SetHelpId(""/*HID_BUSINESS_FMT_PAGE_TYPE*/);
+    SetHelpId(HID_BUSINESS_FMT_PAGE);
+    aContButton.SetHelpId(HID_BUSINESS_FMT_PAGE_CONT);
+    aSheetButton.SetHelpId(HID_BUSINESS_FMT_PAGE_SHEET);
+    aMakeBox.SetHelpId(HID_BUSINESS_FMT_PAGE_BRAND);
+    aTypeBox.SetHelpId(HID_BUSINESS_FMT_PAGE_TYPE);
     m_bLabel = sal_False;
     aWritingText.Hide();
     aAddrBox.Hide();
@@ -733,8 +727,7 @@ SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) 
     aAutoTextLB.SetWindowBits( WB_HSCROLL );
     aAutoTextLB.SetSpaceBetweenEntries(0);
     aAutoTextLB.SetSelectionMode( SINGLE_SELECTION );
-    // FIXME: HELPID
-    aAutoTextLB.SetHelpId(""/*HID_BUSINESS_CARD_CONTENT*/);
+    aAutoTextLB.SetHelpId(HID_BUSINESS_CARD_CONTENT);
 
     SetExchangeSupport();
     aAutoTextLB.SetSelectHdl(LINK(this, SwVisitingCardPage, AutoTextSelectHdl));

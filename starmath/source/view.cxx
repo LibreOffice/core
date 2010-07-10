@@ -111,10 +111,8 @@ SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell):
 
     SetTotalSize();
 
-    // FIXME: HELPID
-    SetHelpId(""/*HID_SMA_WIN_DOCUMENT*/);
-    // FIXME: HELPID
-    SetUniqueId(""/*HID_SMA_WIN_DOCUMENT*/);
+    SetHelpId(HID_SMA_WIN_DOCUMENT);
+    SetUniqueId(HID_SMA_WIN_DOCUMENT);
 }
 
 SmGraphicWindow::~SmGraphicWindow()

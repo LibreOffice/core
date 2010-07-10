@@ -124,7 +124,7 @@
 #include <view.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
-
+#include <sfx2/objface.hxx>
 #include <langhelper.hxx>
 
 using namespace ::com::sun::star;
@@ -274,14 +274,11 @@ short lcl_AskRedlineMode(Window *pWin)
                         BUTTONDIALOG_FOCUSBUTTON;
 
     aQBox.AddButton(String(SW_RES(STR_REDLINE_ACCEPT_ALL)), RET_OK, nBtnFlags);
-    // FIXME: HELPID
-    aQBox.GetPushButton( RET_OK )->SetHelpId(""/*HID_AUTOFORMAT_ACCEPT*/);
+    aQBox.GetPushButton( RET_OK )->SetHelpId(HID_AUTOFORMAT_ACCEPT);
     aQBox.AddButton(String(SW_RES(STR_REDLINE_REJECT_ALL)), RET_CANCEL, BUTTONDIALOG_CANCELBUTTON);
-    // FIXME: HELPID
-    aQBox.GetPushButton( RET_CANCEL )->SetHelpId(""/*HID_AUTOFORMAT_REJECT*/  );
+    aQBox.GetPushButton( RET_CANCEL )->SetHelpId(HID_AUTOFORMAT_REJECT  );
     aQBox.AddButton(String(SW_RES(STR_REDLINE_EDIT)), 2, 0);
-    // FIXME: HELPID
-    aQBox.GetPushButton( 2 )->SetHelpId(""/*HID_AUTOFORMAT_EDIT_CHG*/);
+    aQBox.GetPushButton( 2 )->SetHelpId(HID_AUTOFORMAT_EDIT_CHG);
     aQBox.SetButtonHelpText( RET_OK, aEmptyStr );
 
     return aQBox.Execute();
@@ -441,7 +438,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             AbstractInsFootNoteDlg* pDlg = pFact->CreateInsFootNoteDlg( DLG_INS_FOOTNOTE,
                                                         GetView().GetWindow(), rWrtSh, FALSE );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
-            pDlg->SetHelpId(nSlot);
+            pDlg->SetHelpId(GetStaticInterface()->GetSlot(nSlot)->GetCommand());
             if ( pDlg->Execute() == RET_OK )
             {
                 USHORT nId = pDlg->IsEndNote() ? FN_INSERT_ENDNOTE : FN_INSERT_FOOTNOTE;

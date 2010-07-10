@@ -31,7 +31,7 @@
 #include "helpid.h"
 ModalDialog DLG_INSERT_BOOKMARK
 {
-    HelpID = FN_INSERT_BOOKMARK ;
+    HelpID = CMD_FN_INSERT_BOOKMARK ;
     OUTPUTSIZE = TRUE ;
     Size = MAP_APPFONT ( 179 , 96 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Textmarke einfügen : Textmarke einf³gen */

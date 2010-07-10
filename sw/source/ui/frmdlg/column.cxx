@@ -505,8 +505,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     FreeResource();
     SetExchangeSupport();
 
-    // FIXME: HELPID
-    aDefaultVS.SetHelpId(""/*HID_COLUMN_VALUESET*/);
+    aDefaultVS.SetHelpId(HID_COLUMN_VALUESET);
     aDefaultVS.SetColCount( 5 );
     aDefaultVS.SetStyle(  aDefaultVS.GetStyle()
                             | WB_ITEMBORDER

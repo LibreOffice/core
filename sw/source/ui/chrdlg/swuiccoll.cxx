@@ -114,8 +114,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
     aTbLinks.Resize();  // OS: Hack fuer richtige Selektion
     aTbLinks.SetSpaceBetweenEntries( 0 );
-    // FIXME: HELPID
-    aTbLinks.SetHelpId(""/*HID_COND_COLL_TABLIST*/);
+    aTbLinks.SetHelpId(HID_COND_COLL_TABLIST);
 
     SfxStyleFamilies aFamilies(SW_RES(DLG_STYLE_DESIGNER));
     const SfxStyleFamilyItem* pFamilyItem = 0;

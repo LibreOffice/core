@@ -239,8 +239,7 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
     // <--
     PushButton* pUserButton = GetUserButton();
     pUserButton->SetText(SW_RES(ST_FORM));
-    // FIXME: HELPID
-    pUserButton->SetHelpId(""/*HID_OUTLINE_FORM*/);
+    pUserButton->SetHelpId(HID_OUTLINE_FORM);
     pUserButton->SetClickHdl(LINK(this, SwOutlineTabDialog, FormHdl));
 
     FreeResource();

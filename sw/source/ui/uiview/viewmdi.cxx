@@ -343,15 +343,12 @@ void SwView::CreatePageButtons(BOOL bShow)
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
     pPageUpBtn      = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEUP ), TRUE );
-    // FIXME: HELPID
-    pPageUpBtn->SetHelpId(""/*HID_SCRL_PAGEUP*/);
+    pPageUpBtn->SetHelpId(HID_SCRL_PAGEUP);
     pPageDownBtn    = new SwHlpImageButton(pMDI, SW_RES( BTN_PAGEDOWN ), FALSE );
-    // FIXME: HELPID
-    pPageDownBtn->SetHelpId(""/*HID_SCRL_PAGEDOWN*/);
+    pPageDownBtn->SetHelpId(HID_SCRL_PAGEDOWN);
     Reference< XFrame > xFrame = GetViewFrame()->GetFrame().GetFrameInterface();
     pNaviBtn = new SwNaviImageButton(pMDI, xFrame );
-    // FIXME: HELPID
-    pNaviBtn->SetHelpId(""/*HID_SCRL_NAVI*/);
+    pNaviBtn->SetHelpId(HID_SCRL_NAVI);
     Link aLk( LINK( this, SwView, BtnPage ) );
     pPageUpBtn->SetClickHdl( aLk );
     pPageDownBtn->SetClickHdl( aLk );

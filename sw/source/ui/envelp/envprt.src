@@ -49,32 +49,32 @@ TabPage TP_ENV_PRT
             ToolBoxItem
             {
                 Identifier = ITM_HOR_LEFT ;
-                HelpID = ITM_HOR_LEFT ;
+                HelpID = HID_ITM_HOR_LEFT ;
             };
             ToolBoxItem
             {
                 Identifier = ITM_HOR_CNTR ;
-                HelpID = ITM_HOR_CNTR ;
+                HelpID = HID_ITM_HOR_CNTR ;
             };
             ToolBoxItem
             {
                 Identifier = ITM_HOR_RGHT ;
-                HelpID = ITM_HOR_RGHT ;
+                HelpID = HID_ITM_HOR_RGHT ;
             };
             ToolBoxItem
             {
                 Identifier = ITM_VER_LEFT ;
-                HelpID = ITM_VER_LEFT ;
+                HelpID = HID_ITM_VER_LEFT ;
             };
             ToolBoxItem
             {
                 Identifier = ITM_VER_CNTR ;
-                HelpID = ITM_VER_CNTR ;
+                HelpID = HID_ITM_VER_CNTR ;
             };
             ToolBoxItem
             {
                 Identifier = ITM_VER_RGHT ;
-                HelpID = ITM_VER_RGHT ;
+                HelpID = HID_ITM_VER_RGHT ;
             };
         };
     };

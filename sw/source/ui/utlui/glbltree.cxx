@@ -117,7 +117,7 @@ using ::rtl::OUString;
 #define  GLBL_TABPOS_SUB 5
 
 const SfxObjectShell* SwGlobalTree::pShowShell = 0;
-static const USHORT __FAR_DATA aHelpForMenu[] =
+static const char* __FAR_DATA aHelpForMenu[] =
 {
     0,                          //
     HID_GLBLTREE_UPDATE,        //CTX_UPDATE
@@ -206,8 +206,7 @@ SwGlobalTree::SwGlobalTree(Window* pParent, const ResId& rResId) :
     {
         aContextStrings[i] = SW_RESSTR(i+ ST_GLOBAL_CONTEXT_FIRST);
     }
-    // FIXME: HELPID
-    SetHelpId(""/*HID_NAVIGATOR_GLOB_TREELIST*/);
+    SetHelpId(HID_NAVIGATOR_GLOB_TREELIST);
     SelectHdl();
     SetDoubleClickHdl(LINK(this, SwGlobalTree, DoubleClickHdl));
     EnableContextMenuHandling();
@@ -382,44 +381,34 @@ PopupMenu* SwGlobalTree::CreateContextMenu()
         for (USHORT i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
         {
             pSubPop2->InsertItem( i, aContextStrings[ST_UPDATE_SEL - ST_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
-            // FIXME: HELPID
-            pSubPop2->SetHelpId(i, ""/*aHelpForMenu[i]*/);
+            pSubPop2->SetHelpId(i, aHelpForMenu[i]);
         }
         pSubPop2->EnableItem(CTX_UPDATE_SEL, 0 != (nEnableFlags & ENABLE_UPDATE_SEL));
 
         pSubPop1->InsertItem(CTX_INSERT_ANY_INDEX, aContextStrings[ST_INDEX  - ST_GLOBAL_CONTEXT_FIRST]);
-        // FIXME: HELPID
-        pSubPop1->SetHelpId(CTX_INSERT_ANY_INDEX, ""/*aHelpForMenu[CTX_INSERT_ANY_INDEX]*/);
+        pSubPop1->SetHelpId(CTX_INSERT_ANY_INDEX, aHelpForMenu[CTX_INSERT_ANY_INDEX]);
         pSubPop1->InsertItem(CTX_INSERT_FILE, aContextStrings[ST_FILE   - ST_GLOBAL_CONTEXT_FIRST]);
-        // FIXME: HELPID
-        pSubPop1->SetHelpId(CTX_INSERT_FILE, ""/*aHelpForMenu[CTX_INSERT_FILE]*/);
+        pSubPop1->SetHelpId(CTX_INSERT_FILE, aHelpForMenu[CTX_INSERT_FILE]);
         pSubPop1->InsertItem(CTX_INSERT_NEW_FILE, aContextStrings[ST_NEW_FILE   - ST_GLOBAL_CONTEXT_FIRST]);
-        // FIXME: HELPID
-        pSubPop1->SetHelpId(CTX_INSERT_NEW_FILE, ""/*aHelpForMenu[CTX_INSERT_NEW_FILE]*/);
+        pSubPop1->SetHelpId(CTX_INSERT_NEW_FILE, aHelpForMenu[CTX_INSERT_NEW_FILE]);
         pSubPop1->InsertItem(CTX_INSERT_TEXT, aContextStrings[ST_TEXT   - ST_GLOBAL_CONTEXT_FIRST]);
-        // FIXME: HELPID
-        pSubPop1->SetHelpId(CTX_INSERT_TEXT, ""/*aHelpForMenu[CTX_INSERT_TEXT]*/);
+        pSubPop1->SetHelpId(CTX_INSERT_TEXT, aHelpForMenu[CTX_INSERT_TEXT]);
 
 
         pPop->InsertItem(CTX_UPDATE, aContextStrings[ST_UPDATE - ST_GLOBAL_CONTEXT_FIRST]);
-        // FIXME: HELPID
-        pPop->SetHelpId(CTX_UPDATE, ""/*aHelpForMenu[CTX_UPDATE]*/);
+        pPop->SetHelpId(CTX_UPDATE, aHelpForMenu[CTX_UPDATE]);
         pPop->InsertItem(CTX_EDIT, aContextStrings[ST_EDIT_CONTENT - ST_GLOBAL_CONTEXT_FIRST]);
-        // FIXME: HELPID
-        pPop->SetHelpId(CTX_EDIT, ""/*aHelpForMenu[CTX_EDIT]*/);
+        pPop->SetHelpId(CTX_EDIT, aHelpForMenu[CTX_EDIT]);
         if(nEnableFlags&ENABLE_EDIT_LINK)
         {
             pPop->InsertItem(CTX_EDIT_LINK, aContextStrings[ST_EDIT_LINK - ST_GLOBAL_CONTEXT_FIRST]);
-            // FIXME: HELPID
-            pPop->SetHelpId(CTX_EDIT_LINK, ""/*aHelpForMenu[CTX_EDIT_LINK]*/);
+            pPop->SetHelpId(CTX_EDIT_LINK, aHelpForMenu[CTX_EDIT_LINK]);
         }
         pPop->InsertItem(CTX_INSERT, aContextStrings[ST_INSERT - ST_GLOBAL_CONTEXT_FIRST]);
-        // FIXME: HELPID
-        pPop->SetHelpId(CTX_INSERT, ""/*aHelpForMenu[CTX_INSERT]*/);
+        pPop->SetHelpId(CTX_INSERT, aHelpForMenu[CTX_INSERT]);
         pPop->InsertSeparator() ;
         pPop->InsertItem(CTX_DELETE, aContextStrings[ST_DELETE - ST_GLOBAL_CONTEXT_FIRST]);
-        // FIXME: HELPID
-        pPop->SetHelpId(CTX_DELETE, ""/*aHelpForMenu[CTX_DELETE]*/);
+        pPop->SetHelpId(CTX_DELETE, aHelpForMenu[CTX_DELETE]);
 
         //evtl. disablen
         pSubPop1->EnableItem(CTX_INSERT_ANY_INDEX,  0 != (nEnableFlags & ENABLE_INSERT_IDX ));
@@ -450,8 +439,7 @@ void SwGlobalTree::TbxMenuHdl(USHORT nTbxId, ToolBox* pBox)
         for (USHORT i = CTX_INSERT_ANY_INDEX; i <= CTX_INSERT_TEXT; i++)
         {
             pMenu->InsertItem( i, aContextStrings[ST_INDEX  - ST_GLOBAL_CONTEXT_FIRST - CTX_INSERT_ANY_INDEX + i] );
-            // FIXME: HELPID
-            pMenu->SetHelpId(i, ""/*aHelpForMenu[i]*/ );
+            pMenu->SetHelpId(i, aHelpForMenu[i] );
         }
         pMenu->EnableItem(CTX_INSERT_ANY_INDEX, 0 != (nEnableFlags & ENABLE_INSERT_IDX ));
 //      pMenu->EnableItem(CTX_INSERT_CNTIDX,    0 != (nEnableFlags & ENABLE_INSERT_IDX ));
@@ -471,8 +459,7 @@ void SwGlobalTree::TbxMenuHdl(USHORT nTbxId, ToolBox* pBox)
         for (USHORT i = CTX_UPDATE_SEL; i <= CTX_UPDATE_ALL; i++)
         {
             pMenu->InsertItem( i, aContextStrings[ST_UPDATE_SEL - ST_GLOBAL_CONTEXT_FIRST - CTX_UPDATE_SEL+ i] );
-            // FIXME: HELPID
-            pMenu->SetHelpId(i, ""/*aHelpForMenu[i]*/ );
+            pMenu->SetHelpId(i, aHelpForMenu[i] );
         }
         pMenu->EnableItem(CTX_UPDATE_SEL, 0 != (nEnableFlags & ENABLE_UPDATE_SEL));
         pMenu->SetSelectHdl(LINK(this, SwGlobalTree, PopupHdl));

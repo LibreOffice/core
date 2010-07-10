@@ -32,7 +32,7 @@
  // #define DLG_BREAK 256
 ModalDialog DLG_BREAK
 {
-    HelpID = FN_INSERT_BREAK_DLG ;
+    HelpID = CMD_FN_INSERT_BREAK_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 161 , 114 ) ;

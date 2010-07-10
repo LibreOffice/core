@@ -454,7 +454,7 @@ static USHORT __READONLY_DATA aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_TABLE_FORMULA_ERROR,
     NID_NEXT
 };
-static USHORT __READONLY_DATA aNavigationHelpIds[ NAVI_ENTRIES ] =
+static const char* __READONLY_DATA aNavigationHelpIds[ NAVI_ENTRIES ] =
 {
     // -- first line
     HID_NID_TBL,
@@ -492,8 +492,7 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId, const Reference< XFrame >& rFr
 {
     USHORT i;
 
-    // FIXME: HELPID
-    aToolBox.SetHelpId(""/*HID_NAVI_VS*/);
+    aToolBox.SetHelpId(HID_NAVI_VS);
     aToolBox.SetLineCount( 2 );
     aToolBox.SetOutStyle(TOOLBOX_STYLE_FLAT);
     for( i = 0; i < NID_COUNT; i++)
@@ -509,8 +508,7 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId, const Reference< XFrame >& rFr
             nTbxBits = TIB_CHECKABLE;
         }
         aToolBox.InsertItem(nNaviId, sText, nTbxBits);
-        // FIXME: HELPID
-        aToolBox.SetHelpId( nNaviId, ""/*aNavigationHelpIds[i]*/ );
+        aToolBox.SetHelpId( nNaviId, aNavigationHelpIds[i] );
     }
     ApplyImageList();
     aToolBox.InsertBreak(NID_COUNT/2);

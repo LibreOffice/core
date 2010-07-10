@@ -728,8 +728,7 @@ SwPagePreViewWin::SwPagePreViewWin( Window *pParent, SwPagePreView& rPView )
     maPaintedPreviewDocRect( Rectangle(0,0,0,0) )
 {
     SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW ); //#106611#
-    // FIXME: HELPID
-    SetHelpId(""/*HID_PAGEPREVIEW*/);
+    SetHelpId(HID_PAGEPREVIEW);
     SetFillColor( GetBackground().GetColor() );
     SetLineColor( GetBackground().GetColor());
     SetMapMode( MapMode(MAP_TWIP) );
@@ -1938,11 +1937,9 @@ int SwPagePreView::_CreateScrollbar( BOOL bHori )
     {
 
         pPageUpBtn      = new ImageButton(pMDI, SW_RES( BTN_PAGEUP ) );
-        // FIXME: HELPID
-        pPageUpBtn->SetHelpId(""/*FN_PAGEUP*/);
+        pPageUpBtn->SetHelpId(GetStaticInterface()->GetSlot(FN_PAGEUP)->GetCommand());
         pPageDownBtn    = new ImageButton(pMDI, SW_RES( BTN_PAGEDOWN ) );
-        // FIXME: HELPID
-        pPageDownBtn->SetHelpId(""/*FN_PAGEDOWN*/);
+        pPageDownBtn->SetHelpId(GetStaticInterface()->GetSlot(FN_PAGEDOWN)->GetCommand());
         Link aLk( LINK( this, SwPagePreView, BtnPage ) );
         pPageUpBtn->SetClickHdl( aLk );
         pPageDownBtn->SetClickHdl( aLk );

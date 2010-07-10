@@ -1064,8 +1064,7 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
 {
     FreeResource();
     GetUserButton()->SetText(sRemoveText);
-    // FIXME: HELPID
-    GetUserButton()->SetHelpId(""/*HID_NUM_RESET*/);
+    GetUserButton()->SetHelpId(HID_NUM_RESET);
     GetUserButton()->SetClickHdl(LINK(this, SwSvxNumBulletTabDialog, RemoveNumberingHdl));
     if(!rWrtSh.GetCurNumRule())
         GetUserButton()->Enable(FALSE);

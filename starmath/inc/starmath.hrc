@@ -456,298 +456,298 @@
 
 #define MN_SUB_SENDTO                   (RID_APP_START + 3120)
 
-#define HID_SMA_OPTIONSDIALOG           (HID_SMA_START + 1)
-#define HID_SMA_FONTDIALOG              (HID_SMA_START + 2)
-#define HID_SMA_FONTSIZEDIALOG          (HID_SMA_START + 3)
-#define HID_SMA_FONTTYPEDIALOG          (HID_SMA_START + 4)
-#define HID_SMA_DISTANCEDIALOG          (HID_SMA_START + 5)
-#define HID_SMA_ALIGNDIALOG             (HID_SMA_START + 6)
-#define HID_SMA_PRINTOPTIONPAGE         (HID_SMA_START + 7)
-#define HID_SMA_SYMBOLDIALOG            (HID_SMA_START + 8)
-#define HID_SMA_SYMDEFINEDIALOG         (HID_SMA_START + 9)
-#define HID_SMA_EXTRAOPTIONPAGE         (HID_SMA_START + 10)
-#define HID_SMA_DOCSAVEQUERY            (HID_SMA_START + 11)
-#define HID_SMA_OBJECTSAVEQUERY         (HID_SMA_START + 12)
-#define HID_SMA_DEFAULTSAVEQUERY        (HID_SMA_START + 13)
-#define HID_SMA_ILLEGALOBJECTERROR      (HID_SMA_START + 14)
-#define HID_SMA_ILLEGALFILEERROR        (HID_SMA_START + 15)
-#define HID_SMA_WRITESYMBOLERROR        (HID_SMA_START + 16)
-#define HID_SMA_READSYMBOLERROR         (HID_SMA_START + 17)
-#define HID_SMA_NOMATHTYPEFACEWARNING   (HID_SMA_START + 18)
-#define HID_SMA_OBJECTNAME              (HID_SMA_START + 19)
-#define HID_SMA_VIEWNAME                (HID_SMA_START + 20)
-#define HID_SMA_UNDOEDITNAME            (HID_SMA_START + 21)
-#define HID_SMA_UNDOFORMATNAME          (HID_SMA_START + 22)
-#define HID_SMA_APPICO                  (HID_SMA_START + 23)
-#define HID_SMA_DOCICO                  (HID_SMA_START + 24)
-#define HID_SMA_TMPICO                  (HID_SMA_START + 25)
-#define HID_SMA_COMMANDMENU             (HID_SMA_START + 26)
-#define HID_SMA_VIEWMENU                (HID_SMA_START + 27)
-#define HID_SMA_DISTANCEMENU            (HID_SMA_START + 28)
-#define HID_SMA_FONTMENU                (HID_SMA_START + 29)
-#define HID_SMA_STARTUPWINDOW           (HID_SMA_START + 30)
-#define HID_SMA_TOOLBOXWINDOW           (HID_SMA_START + 31)
-#define HID_SMA_CMDBOXWINDOW            (HID_SMA_START + 32)
-#define HID_SMA_UPDATEOBJECT            (HID_SMA_START + 33)
-#define HID_SMA_FONTREGULAR             (HID_SMA_START + 34)
-#define HID_SMA_FONTITALIC              (HID_SMA_START + 35)
-#define HID_SMA_FONTBOLD                (HID_SMA_START + 36)
-#define HID_SMA_PRINTOPTION             (HID_SMA_START + 37)
-#define HID_SMA_DOCUMENTSTR             (HID_SMA_START + 38)
-#define HID_SMA_SYMBOLFILESSTR          (HID_SMA_START + 39)
-#define HID_SMA_ALLFILESSTR             (HID_SMA_START + 40)
-#define HID_SMA_CREATORSTR              (HID_SMA_START + 41)
-#define HID_SMA_FILESMFTYP              (HID_SMA_START + 42)
-#define HID_SMA_FILESYMTYP              (HID_SMA_START + 43)
-#define HID_SMA_WIN_DOCUMENT            (HID_SMA_START + 44)
-#define HID_SMA_COMMAND_WIN_EDIT        (HID_SMA_START + 45)
+#define HID_SMA_OPTIONSDIALOG                             "STARMATH_HID_SMA_OPTIONSDIALOG"
+#define HID_SMA_FONTDIALOG                                "STARMATH_HID_SMA_FONTDIALOG"
+#define HID_SMA_FONTSIZEDIALOG                            "STARMATH_HID_SMA_FONTSIZEDIALOG"
+#define HID_SMA_FONTTYPEDIALOG                            "STARMATH_HID_SMA_FONTTYPEDIALOG"
+#define HID_SMA_DISTANCEDIALOG                            "STARMATH_HID_SMA_DISTANCEDIALOG"
+#define HID_SMA_ALIGNDIALOG                               "STARMATH_HID_SMA_ALIGNDIALOG"
+#define HID_SMA_PRINTOPTIONPAGE                           "STARMATH_HID_SMA_PRINTOPTIONPAGE"
+#define HID_SMA_SYMBOLDIALOG                              "STARMATH_HID_SMA_SYMBOLDIALOG"
+#define HID_SMA_SYMDEFINEDIALOG                           "STARMATH_HID_SMA_SYMDEFINEDIALOG"
+#define HID_SMA_EXTRAOPTIONPAGE                           "STARMATH_HID_SMA_EXTRAOPTIONPAGE"
+#define HID_SMA_DOCSAVEQUERY                              "STARMATH_HID_SMA_DOCSAVEQUERY"
+#define HID_SMA_OBJECTSAVEQUERY                           "STARMATH_HID_SMA_OBJECTSAVEQUERY"
+#define HID_SMA_DEFAULTSAVEQUERY                          "STARMATH_HID_SMA_DEFAULTSAVEQUERY"
+#define HID_SMA_ILLEGALOBJECTERROR                        "STARMATH_HID_SMA_ILLEGALOBJECTERROR"
+#define HID_SMA_ILLEGALFILEERROR                          "STARMATH_HID_SMA_ILLEGALFILEERROR"
+#define HID_SMA_WRITESYMBOLERROR                          "STARMATH_HID_SMA_WRITESYMBOLERROR"
+#define HID_SMA_READSYMBOLERROR                           "STARMATH_HID_SMA_READSYMBOLERROR"
+#define HID_SMA_NOMATHTYPEFACEWARNING                     "STARMATH_HID_SMA_NOMATHTYPEFACEWARNING"
+#define HID_SMA_OBJECTNAME                                "STARMATH_HID_SMA_OBJECTNAME"
+#define HID_SMA_VIEWNAME                                  "STARMATH_HID_SMA_VIEWNAME"
+#define HID_SMA_UNDOEDITNAME                              "STARMATH_HID_SMA_UNDOEDITNAME"
+#define HID_SMA_UNDOFORMATNAME                            "STARMATH_HID_SMA_UNDOFORMATNAME"
+#define HID_SMA_APPICO                                    "STARMATH_HID_SMA_APPICO"
+#define HID_SMA_DOCICO                                    "STARMATH_HID_SMA_DOCICO"
+#define HID_SMA_TMPICO                                    "STARMATH_HID_SMA_TMPICO"
+#define HID_SMA_COMMANDMENU                               "STARMATH_HID_SMA_COMMANDMENU"
+#define HID_SMA_VIEWMENU                                  "STARMATH_HID_SMA_VIEWMENU"
+#define HID_SMA_DISTANCEMENU                              "STARMATH_HID_SMA_DISTANCEMENU"
+#define HID_SMA_FONTMENU                                  "STARMATH_HID_SMA_FONTMENU"
+#define HID_SMA_STARTUPWINDOW                             "STARMATH_HID_SMA_STARTUPWINDOW"
+#define HID_SMA_TOOLBOXWINDOW                             "STARMATH_HID_SMA_TOOLBOXWINDOW"
+#define HID_SMA_CMDBOXWINDOW                              "STARMATH_HID_SMA_CMDBOXWINDOW"
+#define HID_SMA_UPDATEOBJECT                              "STARMATH_HID_SMA_UPDATEOBJECT"
+#define HID_SMA_FONTREGULAR                               "STARMATH_HID_SMA_FONTREGULAR"
+#define HID_SMA_FONTITALIC                                "STARMATH_HID_SMA_FONTITALIC"
+#define HID_SMA_FONTBOLD                                  "STARMATH_HID_SMA_FONTBOLD"
+#define HID_SMA_PRINTOPTION                               "STARMATH_HID_SMA_PRINTOPTION"
+#define HID_SMA_DOCUMENTSTR                               "STARMATH_HID_SMA_DOCUMENTSTR"
+#define HID_SMA_SYMBOLFILESSTR                            "STARMATH_HID_SMA_SYMBOLFILESSTR"
+#define HID_SMA_ALLFILESSTR                               "STARMATH_HID_SMA_ALLFILESSTR"
+#define HID_SMA_CREATORSTR                                "STARMATH_HID_SMA_CREATORSTR"
+#define HID_SMA_FILESMFTYP                                "STARMATH_HID_SMA_FILESMFTYP"
+#define HID_SMA_FILESYMTYP                                "STARMATH_HID_SMA_FILESYMTYP"
+#define HID_SMA_WIN_DOCUMENT                              "STARMATH_HID_SMA_WIN_DOCUMENT"
+#define HID_SMA_COMMAND_WIN_EDIT                          "STARMATH_HID_SMA_COMMAND_WIN_EDIT"
 
-#define HID_SMA_PLUSX               (HID_SMA_START + 50)
-#define HID_SMA_MINUSX              (HID_SMA_START + 51)
-#define HID_SMA_PLUSMINUSX          (HID_SMA_START + 52)
-#define HID_SMA_MINUSPLUSX          (HID_SMA_START + 53)
-#define HID_SMA_NEGX                (HID_SMA_START + 54)
-#define HID_SMA_XPLUSY              (HID_SMA_START + 55)
-#define HID_SMA_XMINUSY             (HID_SMA_START + 56)
-#define HID_SMA_XCDOTY              (HID_SMA_START + 57)
-#define HID_SMA_XTIMESY             (HID_SMA_START + 58)
-#define HID_SMA_XSYMTIMESY          (HID_SMA_START + 59)
-#define HID_SMA_XSYMDIVIDEY         (HID_SMA_START + 60)
-#define HID_SMA_XDIVY               (HID_SMA_START + 61)
-#define HID_SMA_XOVERY              (HID_SMA_START + 62)
-#define HID_SMA_XODIVIDEY           (HID_SMA_START + 63)
-#define HID_SMA_XODOTY              (HID_SMA_START + 64)
-#define HID_SMA_XOMINUSY            (HID_SMA_START + 65)
-#define HID_SMA_XOPLUSY             (HID_SMA_START + 66)
-#define HID_SMA_XOTIMESY            (HID_SMA_START + 67)
-#define HID_SMA_XANDY               (HID_SMA_START + 68)
-#define HID_SMA_XORY                (HID_SMA_START + 69)
-#define HID_SMA_XEQY                (HID_SMA_START + 70)
-#define HID_SMA_XNEQY               (HID_SMA_START + 71)
-#define HID_SMA_XLTY                (HID_SMA_START + 72)
-#define HID_SMA_XGTY                (HID_SMA_START + 73)
-#define HID_SMA_XLEY                (HID_SMA_START + 74)
-#define HID_SMA_XGEY                (HID_SMA_START + 75)
-#define HID_SMA_XLESLANTY           (HID_SMA_START + 76)
-#define HID_SMA_XGESLANTY           (HID_SMA_START + 77)
-#define HID_SMA_XLLY                (HID_SMA_START + 78)
-#define HID_SMA_XGGY                (HID_SMA_START + 79)
-#define HID_SMA_XDEFY               (HID_SMA_START + 80)
-#define HID_SMA_XEQUIVY             (HID_SMA_START + 81)
-#define HID_SMA_XAPPROXY            (HID_SMA_START + 82)
-#define HID_SMA_XSIMY               (HID_SMA_START + 83)
-#define HID_SMA_XSIMEQY             (HID_SMA_START + 84)
-#define HID_SMA_XPROPY              (HID_SMA_START + 85)
-#define HID_SMA_XORTHOY             (HID_SMA_START + 86)
-#define HID_SMA_XPARALLELY          (HID_SMA_START + 87)
-#define HID_SMA_XTOWARDY            (HID_SMA_START + 88)
-#define HID_SMA_XTRANSLY            (HID_SMA_START + 89)
-#define HID_SMA_XTRANSRY            (HID_SMA_START + 90)
-#define HID_SMA_XINY                (HID_SMA_START + 91)
-#define HID_SMA_XNOTINY             (HID_SMA_START + 92)
-#define HID_SMA_XOWNSY              (HID_SMA_START + 93)
-#define HID_SMA_XUNIONY             (HID_SMA_START + 94)
-#define HID_SMA_XINTERSECTIONY      (HID_SMA_START + 95)
-#define HID_SMA_XSETMINUSY          (HID_SMA_START + 96)
-#define HID_SMA_XSLASHY             (HID_SMA_START + 97)
-#define HID_SMA_XSUBSETY            (HID_SMA_START + 98)
-#define HID_SMA_XSUBSETEQY          (HID_SMA_START + 99)
-#define HID_SMA_XSUPSETY            (HID_SMA_START + 100)
-#define HID_SMA_XSUPSETEQY          (HID_SMA_START + 101)
-#define HID_SMA_XNSUBSETY           (HID_SMA_START + 102)
-#define HID_SMA_XNSUBSETEQY         (HID_SMA_START + 103)
-#define HID_SMA_XNSUPSETY           (HID_SMA_START + 104)
-#define HID_SMA_XNSUPSETEQY         (HID_SMA_START + 105)
-#define HID_SMA_ABSX                (HID_SMA_START + 106)
-#define HID_SMA_FACTX               (HID_SMA_START + 107)
-#define HID_SMA_SQRTX               (HID_SMA_START + 108)
-#define HID_SMA_NROOTXY             (HID_SMA_START + 109)
-#define HID_SMA_EX                  (HID_SMA_START + 110)
-#define HID_SMA_EXPX                (HID_SMA_START + 111)
-#define HID_SMA_LNX                 (HID_SMA_START + 112)
-#define HID_SMA_LOGX                (HID_SMA_START + 113)
-#define HID_SMA_SINX                (HID_SMA_START + 114)
-#define HID_SMA_COSX                (HID_SMA_START + 115)
-#define HID_SMA_TANX                (HID_SMA_START + 116)
-#define HID_SMA_COTX                (HID_SMA_START + 117)
-#define HID_SMA_ARCSINX             (HID_SMA_START + 118)
-#define HID_SMA_ARCCOSX             (HID_SMA_START + 119)
-#define HID_SMA_ARCTANX             (HID_SMA_START + 120)
-#define HID_SMA_ARCCOTX             (HID_SMA_START + 121)
-#define HID_SMA_SINHX               (HID_SMA_START + 122)
-#define HID_SMA_COSHX               (HID_SMA_START + 123)
-#define HID_SMA_TANHX               (HID_SMA_START + 124)
-#define HID_SMA_COTHX               (HID_SMA_START + 125)
-#define HID_SMA_ARSINHX             (HID_SMA_START + 126)
-#define HID_SMA_ARCOSHX             (HID_SMA_START + 127)
-#define HID_SMA_ARTANHX             (HID_SMA_START + 128)
-#define HID_SMA_ARCOTHX             (HID_SMA_START + 129)
-#define HID_SMA_SUMX                (HID_SMA_START + 130)
-#define HID_SMA_PRODX               (HID_SMA_START + 131)
-#define HID_SMA_COPRODX             (HID_SMA_START + 132)
-#define HID_SMA_LIMX                (HID_SMA_START + 133)
-#define HID_SMA_LIMINFX             (HID_SMA_START + 134)
-#define HID_SMA_LIMSUPX             (HID_SMA_START + 135)
-#define HID_SMA_EXISTS              (HID_SMA_START + 136)
-#define HID_SMA_FORALL              (HID_SMA_START + 137)
-#define HID_SMA_NABLA               (HID_SMA_START + 138)
-#define HID_SMA_INTX                (HID_SMA_START + 139)
-#define HID_SMA_IINTX               (HID_SMA_START + 140)
-#define HID_SMA_IIINTX              (HID_SMA_START + 141)
-#define HID_SMA_LINTX               (HID_SMA_START + 142)
-#define HID_SMA_LLINTX              (HID_SMA_START + 143)
-#define HID_SMA_LLLINTX             (HID_SMA_START + 144)
-#define HID_SMA_FROMX               (HID_SMA_START + 145)
-#define HID_SMA_TOX                 (HID_SMA_START + 146)
-#define HID_SMA_FROMXTOY            (HID_SMA_START + 147)
-#define HID_SMA_XCIRCY              (HID_SMA_START + 148)
-#define HID_SMA_XDIVIDESY           (HID_SMA_START + 149)
-#define HID_SMA_XNDIVIDESY          (HID_SMA_START + 150)
-#define HID_SMA_DLARROW             (HID_SMA_START + 151)
-#define HID_SMA_DLRARROW            (HID_SMA_START + 152)
-#define HID_SMA_DRARROW             (HID_SMA_START + 153)
+#define HID_SMA_PLUSX                                     "STARMATH_HID_SMA_PLUSX"
+#define HID_SMA_MINUSX                                    "STARMATH_HID_SMA_MINUSX"
+#define HID_SMA_PLUSMINUSX                                "STARMATH_HID_SMA_PLUSMINUSX"
+#define HID_SMA_MINUSPLUSX                                "STARMATH_HID_SMA_MINUSPLUSX"
+#define HID_SMA_NEGX                                      "STARMATH_HID_SMA_NEGX"
+#define HID_SMA_XPLUSY                                    "STARMATH_HID_SMA_XPLUSY"
+#define HID_SMA_XMINUSY                                   "STARMATH_HID_SMA_XMINUSY"
+#define HID_SMA_XCDOTY                                    "STARMATH_HID_SMA_XCDOTY"
+#define HID_SMA_XTIMESY                                   "STARMATH_HID_SMA_XTIMESY"
+#define HID_SMA_XSYMTIMESY                                "STARMATH_HID_SMA_XSYMTIMESY"
+#define HID_SMA_XSYMDIVIDEY                               "STARMATH_HID_SMA_XSYMDIVIDEY"
+#define HID_SMA_XDIVY                                     "STARMATH_HID_SMA_XDIVY"
+#define HID_SMA_XOVERY                                    "STARMATH_HID_SMA_XOVERY"
+#define HID_SMA_XODIVIDEY                                 "STARMATH_HID_SMA_XODIVIDEY"
+#define HID_SMA_XODOTY                                    "STARMATH_HID_SMA_XODOTY"
+#define HID_SMA_XOMINUSY                                  "STARMATH_HID_SMA_XOMINUSY"
+#define HID_SMA_XOPLUSY                                   "STARMATH_HID_SMA_XOPLUSY"
+#define HID_SMA_XOTIMESY                                  "STARMATH_HID_SMA_XOTIMESY"
+#define HID_SMA_XANDY                                     "STARMATH_HID_SMA_XANDY"
+#define HID_SMA_XORY                                      "STARMATH_HID_SMA_XORY"
+#define HID_SMA_XEQY                                      "STARMATH_HID_SMA_XEQY"
+#define HID_SMA_XNEQY                                     "STARMATH_HID_SMA_XNEQY"
+#define HID_SMA_XLTY                                      "STARMATH_HID_SMA_XLTY"
+#define HID_SMA_XGTY                                      "STARMATH_HID_SMA_XGTY"
+#define HID_SMA_XLEY                                      "STARMATH_HID_SMA_XLEY"
+#define HID_SMA_XGEY                                      "STARMATH_HID_SMA_XGEY"
+#define HID_SMA_XLESLANTY                                 "STARMATH_HID_SMA_XLESLANTY"
+#define HID_SMA_XGESLANTY                                 "STARMATH_HID_SMA_XGESLANTY"
+#define HID_SMA_XLLY                                      "STARMATH_HID_SMA_XLLY"
+#define HID_SMA_XGGY                                      "STARMATH_HID_SMA_XGGY"
+#define HID_SMA_XDEFY                                     "STARMATH_HID_SMA_XDEFY"
+#define HID_SMA_XEQUIVY                                   "STARMATH_HID_SMA_XEQUIVY"
+#define HID_SMA_XAPPROXY                                  "STARMATH_HID_SMA_XAPPROXY"
+#define HID_SMA_XSIMY                                     "STARMATH_HID_SMA_XSIMY"
+#define HID_SMA_XSIMEQY                                   "STARMATH_HID_SMA_XSIMEQY"
+#define HID_SMA_XPROPY                                    "STARMATH_HID_SMA_XPROPY"
+#define HID_SMA_XORTHOY                                   "STARMATH_HID_SMA_XORTHOY"
+#define HID_SMA_XPARALLELY                                "STARMATH_HID_SMA_XPARALLELY"
+#define HID_SMA_XTOWARDY                                  "STARMATH_HID_SMA_XTOWARDY"
+#define HID_SMA_XTRANSLY                                  "STARMATH_HID_SMA_XTRANSLY"
+#define HID_SMA_XTRANSRY                                  "STARMATH_HID_SMA_XTRANSRY"
+#define HID_SMA_XINY                                      "STARMATH_HID_SMA_XINY"
+#define HID_SMA_XNOTINY                                   "STARMATH_HID_SMA_XNOTINY"
+#define HID_SMA_XOWNSY                                    "STARMATH_HID_SMA_XOWNSY"
+#define HID_SMA_XUNIONY                                   "STARMATH_HID_SMA_XUNIONY"
+#define HID_SMA_XINTERSECTIONY                            "STARMATH_HID_SMA_XINTERSECTIONY"
+#define HID_SMA_XSETMINUSY                                "STARMATH_HID_SMA_XSETMINUSY"
+#define HID_SMA_XSLASHY                                   "STARMATH_HID_SMA_XSLASHY"
+#define HID_SMA_XSUBSETY                                  "STARMATH_HID_SMA_XSUBSETY"
+#define HID_SMA_XSUBSETEQY                                "STARMATH_HID_SMA_XSUBSETEQY"
+#define HID_SMA_XSUPSETY                                  "STARMATH_HID_SMA_XSUPSETY"
+#define HID_SMA_XSUPSETEQY                                "STARMATH_HID_SMA_XSUPSETEQY"
+#define HID_SMA_XNSUBSETY                                 "STARMATH_HID_SMA_XNSUBSETY"
+#define HID_SMA_XNSUBSETEQY                               "STARMATH_HID_SMA_XNSUBSETEQY"
+#define HID_SMA_XNSUPSETY                                 "STARMATH_HID_SMA_XNSUPSETY"
+#define HID_SMA_XNSUPSETEQY                               "STARMATH_HID_SMA_XNSUPSETEQY"
+#define HID_SMA_ABSX                                      "STARMATH_HID_SMA_ABSX"
+#define HID_SMA_FACTX                                     "STARMATH_HID_SMA_FACTX"
+#define HID_SMA_SQRTX                                     "STARMATH_HID_SMA_SQRTX"
+#define HID_SMA_NROOTXY                                   "STARMATH_HID_SMA_NROOTXY"
+#define HID_SMA_EX                                        "STARMATH_HID_SMA_EX"
+#define HID_SMA_EXPX                                      "STARMATH_HID_SMA_EXPX"
+#define HID_SMA_LNX                                       "STARMATH_HID_SMA_LNX"
+#define HID_SMA_LOGX                                      "STARMATH_HID_SMA_LOGX"
+#define HID_SMA_SINX                                      "STARMATH_HID_SMA_SINX"
+#define HID_SMA_COSX                                      "STARMATH_HID_SMA_COSX"
+#define HID_SMA_TANX                                      "STARMATH_HID_SMA_TANX"
+#define HID_SMA_COTX                                      "STARMATH_HID_SMA_COTX"
+#define HID_SMA_ARCSINX                                   "STARMATH_HID_SMA_ARCSINX"
+#define HID_SMA_ARCCOSX                                   "STARMATH_HID_SMA_ARCCOSX"
+#define HID_SMA_ARCTANX                                   "STARMATH_HID_SMA_ARCTANX"
+#define HID_SMA_ARCCOTX                                   "STARMATH_HID_SMA_ARCCOTX"
+#define HID_SMA_SINHX                                     "STARMATH_HID_SMA_SINHX"
+#define HID_SMA_COSHX                                     "STARMATH_HID_SMA_COSHX"
+#define HID_SMA_TANHX                                     "STARMATH_HID_SMA_TANHX"
+#define HID_SMA_COTHX                                     "STARMATH_HID_SMA_COTHX"
+#define HID_SMA_ARSINHX                                   "STARMATH_HID_SMA_ARSINHX"
+#define HID_SMA_ARCOSHX                                   "STARMATH_HID_SMA_ARCOSHX"
+#define HID_SMA_ARTANHX                                   "STARMATH_HID_SMA_ARTANHX"
+#define HID_SMA_ARCOTHX                                   "STARMATH_HID_SMA_ARCOTHX"
+#define HID_SMA_SUMX                                      "STARMATH_HID_SMA_SUMX"
+#define HID_SMA_PRODX                                     "STARMATH_HID_SMA_PRODX"
+#define HID_SMA_COPRODX                                   "STARMATH_HID_SMA_COPRODX"
+#define HID_SMA_LIMX                                      "STARMATH_HID_SMA_LIMX"
+#define HID_SMA_LIMINFX                                   "STARMATH_HID_SMA_LIMINFX"
+#define HID_SMA_LIMSUPX                                   "STARMATH_HID_SMA_LIMSUPX"
+#define HID_SMA_EXISTS                                    "STARMATH_HID_SMA_EXISTS"
+#define HID_SMA_FORALL                                    "STARMATH_HID_SMA_FORALL"
+#define HID_SMA_NABLA                                     "STARMATH_HID_SMA_NABLA"
+#define HID_SMA_INTX                                      "STARMATH_HID_SMA_INTX"
+#define HID_SMA_IINTX                                     "STARMATH_HID_SMA_IINTX"
+#define HID_SMA_IIINTX                                    "STARMATH_HID_SMA_IIINTX"
+#define HID_SMA_LINTX                                     "STARMATH_HID_SMA_LINTX"
+#define HID_SMA_LLINTX                                    "STARMATH_HID_SMA_LLINTX"
+#define HID_SMA_LLLINTX                                   "STARMATH_HID_SMA_LLLINTX"
+#define HID_SMA_FROMX                                     "STARMATH_HID_SMA_FROMX"
+#define HID_SMA_TOX                                       "STARMATH_HID_SMA_TOX"
+#define HID_SMA_FROMXTOY                                  "STARMATH_HID_SMA_FROMXTOY"
+#define HID_SMA_XCIRCY                                    "STARMATH_HID_SMA_XCIRCY"
+#define HID_SMA_XDIVIDESY                                 "STARMATH_HID_SMA_XDIVIDESY"
+#define HID_SMA_XNDIVIDESY                                "STARMATH_HID_SMA_XNDIVIDESY"
+#define HID_SMA_DLARROW                                   "STARMATH_HID_SMA_DLARROW"
+#define HID_SMA_DLRARROW                                  "STARMATH_HID_SMA_DLRARROW"
+#define HID_SMA_DRARROW                                   "STARMATH_HID_SMA_DRARROW"
 
-#define HID_SMA_MISC_CAT            (HID_SMA_START + 154)
-#define HID_SMA_UNBINOPS_CAT        (HID_SMA_START + 155)
-#define HID_SMA_RELATIONS_CAT       (HID_SMA_START + 156)
-#define HID_SMA_SETOPERATIONS_CAT   (HID_SMA_START + 157)
-#define HID_SMA_FUNCTIONS_CAT       (HID_SMA_START + 158)
-#define HID_SMA_OPERATORS_CAT       (HID_SMA_START + 159)
-#define HID_SMA_ATTRIBUTES_CAT      (HID_SMA_START + 160)
-#define HID_SMA_BRACKETS_CAT        (HID_SMA_START + 161)
-#define HID_SMA_FORMAT_CAT          (HID_SMA_START + 162)
+#define HID_SMA_MISC_CAT                                  "STARMATH_HID_SMA_MISC_CAT"
+#define HID_SMA_UNBINOPS_CAT                              "STARMATH_HID_SMA_UNBINOPS_CAT"
+#define HID_SMA_RELATIONS_CAT                             "STARMATH_HID_SMA_RELATIONS_CAT"
+#define HID_SMA_SETOPERATIONS_CAT                         "STARMATH_HID_SMA_SETOPERATIONS_CAT"
+#define HID_SMA_FUNCTIONS_CAT                             "STARMATH_HID_SMA_FUNCTIONS_CAT"
+#define HID_SMA_OPERATORS_CAT                             "STARMATH_HID_SMA_OPERATORS_CAT"
+#define HID_SMA_ATTRIBUTES_CAT                            "STARMATH_HID_SMA_ATTRIBUTES_CAT"
+#define HID_SMA_BRACKETS_CAT                              "STARMATH_HID_SMA_BRACKETS_CAT"
+#define HID_SMA_FORMAT_CAT                                "STARMATH_HID_SMA_FORMAT_CAT"
 
-#define HID_SMA_OPERATOR_WIN        (HID_SMA_START + 163)
-#define HID_SMA_UNBINOPS_TBX        (HID_SMA_START + 164)
-#define HID_SMA_RELATIONS_TBX       (HID_SMA_START + 165)
-#define HID_SMA_SETOPERATIONS_TBX   (HID_SMA_START + 166)
-#define HID_SMA_FUNCTIONS_TBX       (HID_SMA_START + 167)
-#define HID_SMA_OPERATORS_TBX       (HID_SMA_START + 168)
-#define HID_SMA_ATTRIBUTES_TBX      (HID_SMA_START + 169)
-#define HID_SMA_BRACKETS_TBX        (HID_SMA_START + 170)
-#define HID_SMA_FORMAT_TBX          (HID_SMA_START + 171)
-#define HID_SMA_SELECTION_TBX       (HID_SMA_START + 172)
-#define HID_SMA_COMMAND_WIN         (HID_SMA_START + 173)
-#define HID_SMA_MISC_MENU           (HID_SMA_START + 174)
-#define HID_SMA_FUNCTIONSOTHER1_MENU    (HID_SMA_START + 175)
+#define HID_SMA_OPERATOR_WIN                              "STARMATH_HID_SMA_OPERATOR_WIN"
+#define HID_SMA_UNBINOPS_TBX                              "STARMATH_HID_SMA_UNBINOPS_TBX"
+#define HID_SMA_RELATIONS_TBX                             "STARMATH_HID_SMA_RELATIONS_TBX"
+#define HID_SMA_SETOPERATIONS_TBX                         "STARMATH_HID_SMA_SETOPERATIONS_TBX"
+#define HID_SMA_FUNCTIONS_TBX                             "STARMATH_HID_SMA_FUNCTIONS_TBX"
+#define HID_SMA_OPERATORS_TBX                             "STARMATH_HID_SMA_OPERATORS_TBX"
+#define HID_SMA_ATTRIBUTES_TBX                            "STARMATH_HID_SMA_ATTRIBUTES_TBX"
+#define HID_SMA_BRACKETS_TBX                              "STARMATH_HID_SMA_BRACKETS_TBX"
+#define HID_SMA_FORMAT_TBX                                "STARMATH_HID_SMA_FORMAT_TBX"
+#define HID_SMA_SELECTION_TBX                             "STARMATH_HID_SMA_SELECTION_TBX"
+#define HID_SMA_COMMAND_WIN                               "STARMATH_HID_SMA_COMMAND_WIN"
+#define HID_SMA_MISC_MENU                                 "STARMATH_HID_SMA_MISC_MENU"
+#define HID_SMA_FUNCTIONSOTHER1_MENU                      "STARMATH_HID_SMA_FUNCTIONSOTHER1_MENU"
 
-#define HID_SMA_ACUTEX              (HID_SMA_START + 180)
-#define HID_SMA_BARX                (HID_SMA_START + 181)
-#define HID_SMA_BREVEX              (HID_SMA_START + 182)
-#define HID_SMA_CHECKX              (HID_SMA_START + 183)
-#define HID_SMA_CIRCLEX             (HID_SMA_START + 184)
-#define HID_SMA_DOTX                (HID_SMA_START + 185)
-#define HID_SMA_DDOTX               (HID_SMA_START + 186)
-#define HID_SMA_DDDOTX              (HID_SMA_START + 187)
-#define HID_SMA_GRAVEX              (HID_SMA_START + 188)
-#define HID_SMA_HATX                (HID_SMA_START + 189)
-#define HID_SMA_TILDEX              (HID_SMA_START + 190)
-#define HID_SMA_VECX                (HID_SMA_START + 191)
-#define HID_SMA_UNDERLINEX          (HID_SMA_START + 192)
-#define HID_SMA_OVERLINEX           (HID_SMA_START + 193)
-#define HID_SMA_OVERSTRIKEX         (HID_SMA_START + 194)
-#define HID_SMA_PHANTOMX            (HID_SMA_START + 195)
-#define HID_SMA_BOLDX               (HID_SMA_START + 196)
-#define HID_SMA_ITALX               (HID_SMA_START + 197)
-#define HID_SMA_SIZEXY              (HID_SMA_START + 198)
-#define HID_SMA_FONTXY              (HID_SMA_START + 199)
-#define HID_SMA_COLORX              (HID_SMA_START + 200)
-#define HID_SMA_LRGROUPX            (HID_SMA_START + 201)
-#define HID_SMA_LRPARENTX           (HID_SMA_START + 202)
-#define HID_SMA_LRBRACKETX          (HID_SMA_START + 203)
-#define HID_SMA_LRBRACEX            (HID_SMA_START + 204)
-#define HID_SMA_LRANGLEX            (HID_SMA_START + 205)
-#define HID_SMA_LRCEILX             (HID_SMA_START + 206)
-#define HID_SMA_LRFLOORX            (HID_SMA_START + 207)
-#define HID_SMA_LRLINEX             (HID_SMA_START + 208)
-#define HID_SMA_LRDLINEX            (HID_SMA_START + 209)
-#define HID_SMA_SLRPARENTX          (HID_SMA_START + 210)
-#define HID_SMA_SLRBRACKETX         (HID_SMA_START + 211)
-#define HID_SMA_SLRBRACEX           (HID_SMA_START + 212)
-#define HID_SMA_SLRANGLEX           (HID_SMA_START + 213)
-#define HID_SMA_SLRCEILX            (HID_SMA_START + 214)
-#define HID_SMA_SLRFLOORX           (HID_SMA_START + 215)
-#define HID_SMA_SLRLINEX            (HID_SMA_START + 216)
-#define HID_SMA_SLRDLINEX           (HID_SMA_START + 217)
-#define HID_SMA_RSUBX               (HID_SMA_START + 218)
-#define HID_SMA_RSUPX               (HID_SMA_START + 219)
-#define HID_SMA_LSUBX               (HID_SMA_START + 220)
-#define HID_SMA_LSUPX               (HID_SMA_START + 221)
-#define HID_SMA_SBLANK              (HID_SMA_START + 222)
-#define HID_SMA_BLANK               (HID_SMA_START + 223)
-#define HID_SMA_NEWLINE             (HID_SMA_START + 224)
-#define HID_SMA_BINOMXY             (HID_SMA_START + 225)
-#define HID_SMA_STACK               (HID_SMA_START + 226)
-#define HID_SMA_MATRIX              (HID_SMA_START + 227)
-#define HID_SMA_ALIGNLX             (HID_SMA_START + 228)
-#define HID_SMA_ALIGNCX             (HID_SMA_START + 229)
-#define HID_SMA_ALIGNRX             (HID_SMA_START + 230)
-#define HID_SMA_ALEPH               (HID_SMA_START + 231)
-#define HID_SMA_EMPTYSET            (HID_SMA_START + 232)
-#define HID_SMA_RE                  (HID_SMA_START + 233)
-#define HID_SMA_IM                  (HID_SMA_START + 234)
-#define HID_SMA_INFINITY            (HID_SMA_START + 235)
-#define HID_SMA_PARTIAL             (HID_SMA_START + 236)
-#define HID_SMA_WP                  (HID_SMA_START + 237)
-#define HID_SMA_DOTSAXIS            (HID_SMA_START + 238)
-#define HID_SMA_DOTSUP              (HID_SMA_START + 239)
-#define HID_SMA_DOTSDOWN            (HID_SMA_START + 240)
-#define HID_SMA_DOTSLOW             (HID_SMA_START + 241)
-#define HID_SMA_DOTSVERT            (HID_SMA_START + 242)
+#define HID_SMA_ACUTEX                                    "STARMATH_HID_SMA_ACUTEX"
+#define HID_SMA_BARX                                      "STARMATH_HID_SMA_BARX"
+#define HID_SMA_BREVEX                                    "STARMATH_HID_SMA_BREVEX"
+#define HID_SMA_CHECKX                                    "STARMATH_HID_SMA_CHECKX"
+#define HID_SMA_CIRCLEX                                   "STARMATH_HID_SMA_CIRCLEX"
+#define HID_SMA_DOTX                                      "STARMATH_HID_SMA_DOTX"
+#define HID_SMA_DDOTX                                     "STARMATH_HID_SMA_DDOTX"
+#define HID_SMA_DDDOTX                                    "STARMATH_HID_SMA_DDDOTX"
+#define HID_SMA_GRAVEX                                    "STARMATH_HID_SMA_GRAVEX"
+#define HID_SMA_HATX                                      "STARMATH_HID_SMA_HATX"
+#define HID_SMA_TILDEX                                    "STARMATH_HID_SMA_TILDEX"
+#define HID_SMA_VECX                                      "STARMATH_HID_SMA_VECX"
+#define HID_SMA_UNDERLINEX                                "STARMATH_HID_SMA_UNDERLINEX"
+#define HID_SMA_OVERLINEX                                 "STARMATH_HID_SMA_OVERLINEX"
+#define HID_SMA_OVERSTRIKEX                               "STARMATH_HID_SMA_OVERSTRIKEX"
+#define HID_SMA_PHANTOMX                                  "STARMATH_HID_SMA_PHANTOMX"
+#define HID_SMA_BOLDX                                     "STARMATH_HID_SMA_BOLDX"
+#define HID_SMA_ITALX                                     "STARMATH_HID_SMA_ITALX"
+#define HID_SMA_SIZEXY                                    "STARMATH_HID_SMA_SIZEXY"
+#define HID_SMA_FONTXY                                    "STARMATH_HID_SMA_FONTXY"
+#define HID_SMA_COLORX                                    "STARMATH_HID_SMA_COLORX"
+#define HID_SMA_LRGROUPX                                  "STARMATH_HID_SMA_LRGROUPX"
+#define HID_SMA_LRPARENTX                                 "STARMATH_HID_SMA_LRPARENTX"
+#define HID_SMA_LRBRACKETX                                "STARMATH_HID_SMA_LRBRACKETX"
+#define HID_SMA_LRBRACEX                                  "STARMATH_HID_SMA_LRBRACEX"
+#define HID_SMA_LRANGLEX                                  "STARMATH_HID_SMA_LRANGLEX"
+#define HID_SMA_LRCEILX                                   "STARMATH_HID_SMA_LRCEILX"
+#define HID_SMA_LRFLOORX                                  "STARMATH_HID_SMA_LRFLOORX"
+#define HID_SMA_LRLINEX                                   "STARMATH_HID_SMA_LRLINEX"
+#define HID_SMA_LRDLINEX                                  "STARMATH_HID_SMA_LRDLINEX"
+#define HID_SMA_SLRPARENTX                                "STARMATH_HID_SMA_SLRPARENTX"
+#define HID_SMA_SLRBRACKETX                               "STARMATH_HID_SMA_SLRBRACKETX"
+#define HID_SMA_SLRBRACEX                                 "STARMATH_HID_SMA_SLRBRACEX"
+#define HID_SMA_SLRANGLEX                                 "STARMATH_HID_SMA_SLRANGLEX"
+#define HID_SMA_SLRCEILX                                  "STARMATH_HID_SMA_SLRCEILX"
+#define HID_SMA_SLRFLOORX                                 "STARMATH_HID_SMA_SLRFLOORX"
+#define HID_SMA_SLRLINEX                                  "STARMATH_HID_SMA_SLRLINEX"
+#define HID_SMA_SLRDLINEX                                 "STARMATH_HID_SMA_SLRDLINEX"
+#define HID_SMA_RSUBX                                     "STARMATH_HID_SMA_RSUBX"
+#define HID_SMA_RSUPX                                     "STARMATH_HID_SMA_RSUPX"
+#define HID_SMA_LSUBX                                     "STARMATH_HID_SMA_LSUBX"
+#define HID_SMA_LSUPX                                     "STARMATH_HID_SMA_LSUPX"
+#define HID_SMA_SBLANK                                    "STARMATH_HID_SMA_SBLANK"
+#define HID_SMA_BLANK                                     "STARMATH_HID_SMA_BLANK"
+#define HID_SMA_NEWLINE                                   "STARMATH_HID_SMA_NEWLINE"
+#define HID_SMA_BINOMXY                                   "STARMATH_HID_SMA_BINOMXY"
+#define HID_SMA_STACK                                     "STARMATH_HID_SMA_STACK"
+#define HID_SMA_MATRIX                                    "STARMATH_HID_SMA_MATRIX"
+#define HID_SMA_ALIGNLX                                   "STARMATH_HID_SMA_ALIGNLX"
+#define HID_SMA_ALIGNCX                                   "STARMATH_HID_SMA_ALIGNCX"
+#define HID_SMA_ALIGNRX                                   "STARMATH_HID_SMA_ALIGNRX"
+#define HID_SMA_ALEPH                                     "STARMATH_HID_SMA_ALEPH"
+#define HID_SMA_EMPTYSET                                  "STARMATH_HID_SMA_EMPTYSET"
+#define HID_SMA_RE                                        "STARMATH_HID_SMA_RE"
+#define HID_SMA_IM                                        "STARMATH_HID_SMA_IM"
+#define HID_SMA_INFINITY                                  "STARMATH_HID_SMA_INFINITY"
+#define HID_SMA_PARTIAL                                   "STARMATH_HID_SMA_PARTIAL"
+#define HID_SMA_WP                                        "STARMATH_HID_SMA_WP"
+#define HID_SMA_DOTSAXIS                                  "STARMATH_HID_SMA_DOTSAXIS"
+#define HID_SMA_DOTSUP                                    "STARMATH_HID_SMA_DOTSUP"
+#define HID_SMA_DOTSDOWN                                  "STARMATH_HID_SMA_DOTSDOWN"
+#define HID_SMA_DOTSLOW                                   "STARMATH_HID_SMA_DOTSLOW"
+#define HID_SMA_DOTSVERT                                  "STARMATH_HID_SMA_DOTSVERT"
 
-#define HID_SMA_SETN                (HID_SMA2_START + 1)
-#define HID_SMA_SETZ                (HID_SMA2_START + 2)
-#define HID_SMA_SETQ                (HID_SMA2_START + 3)
-#define HID_SMA_SETR                (HID_SMA2_START + 4)
-#define HID_SMA_SETC                (HID_SMA2_START + 5)
-#define HID_SMA_WIDEHATX            (HID_SMA2_START + 6)
-#define HID_SMA_WIDETILDEX          (HID_SMA2_START + 7)
-#define HID_SMA_WIDEVECX            (HID_SMA2_START + 8)
-#define HID_SMA_CSUBX               (HID_SMA2_START + 9)
-#define HID_SMA_CSUPX               (HID_SMA2_START + 10)
-#define HID_SMA_HBAR                (HID_SMA2_START + 11)
-#define HID_SMA_LAMBDABAR           (HID_SMA2_START + 12)
-#define HID_SMA_LEFTARROW           (HID_SMA2_START + 13)
-#define HID_SMA_RIGHTARROW          (HID_SMA2_START + 14)
-#define HID_SMA_UPARROW             (HID_SMA2_START + 15)
-#define HID_SMA_DOWNARROW           (HID_SMA2_START + 16)
+#define HID_SMA_SETN                                      "STARMATH_HID_SMA_SETN"
+#define HID_SMA_SETZ                                      "STARMATH_HID_SMA_SETZ"
+#define HID_SMA_SETQ                                      "STARMATH_HID_SMA_SETQ"
+#define HID_SMA_SETR                                      "STARMATH_HID_SMA_SETR"
+#define HID_SMA_SETC                                      "STARMATH_HID_SMA_SETC"
+#define HID_SMA_WIDEHATX                                  "STARMATH_HID_SMA_WIDEHATX"
+#define HID_SMA_WIDETILDEX                                "STARMATH_HID_SMA_WIDETILDEX"
+#define HID_SMA_WIDEVECX                                  "STARMATH_HID_SMA_WIDEVECX"
+#define HID_SMA_CSUBX                                     "STARMATH_HID_SMA_CSUBX"
+#define HID_SMA_CSUPX                                     "STARMATH_HID_SMA_CSUPX"
+#define HID_SMA_HBAR                                      "STARMATH_HID_SMA_HBAR"
+#define HID_SMA_LAMBDABAR                                 "STARMATH_HID_SMA_LAMBDABAR"
+#define HID_SMA_LEFTARROW                                 "STARMATH_HID_SMA_LEFTARROW"
+#define HID_SMA_RIGHTARROW                                "STARMATH_HID_SMA_RIGHTARROW"
+#define HID_SMA_UPARROW                                   "STARMATH_HID_SMA_UPARROW"
+#define HID_SMA_DOWNARROW                                 "STARMATH_HID_SMA_DOWNARROW"
 
-#define HID_SMA_DEFAULT_DIST        (HID_SMA2_START + 17)
-#define HID_SMA_LINE_DIST           (HID_SMA2_START + 18)
-#define HID_SMA_ROOT_DIST           (HID_SMA2_START + 19)
-#define HID_SMA_SUP_DIST            (HID_SMA2_START + 20)
-#define HID_SMA_SUB_DIST            (HID_SMA2_START + 21)
-#define HID_SMA_NUMERATOR_DIST      (HID_SMA2_START + 22)
-#define HID_SMA_DENOMINATOR_DIST    (HID_SMA2_START + 23)
-#define HID_SMA_FRACLINE_EXCWIDTH   (HID_SMA2_START + 24)
-#define HID_SMA_FRACLINE_LINEWIDTH  (HID_SMA2_START + 25)
-#define HID_SMA_UPPERLIMIT_DIST     (HID_SMA2_START + 26)
-#define HID_SMA_LOWERLIMIT_DIST     (HID_SMA2_START + 27)
-#define HID_SMA_BRACKET_EXCHEIGHT   (HID_SMA2_START + 28)
-#define HID_SMA_BRACKET_DIST        (HID_SMA2_START + 29)
-#define HID_SMA_MATRIXROW_DIST      (HID_SMA2_START + 30)
-#define HID_SMA_MATRIXCOL_DIST      (HID_SMA2_START + 31)
-#define HID_SMA_ATTRIBUT_DIST       (HID_SMA2_START + 32)
-#define HID_SMA_INTERATTRIBUT_DIST  (HID_SMA2_START + 33)
-#define HID_SMA_OPERATOR_EXCHEIGHT  (HID_SMA2_START + 34)
-#define HID_SMA_OPERATOR_DIST       (HID_SMA2_START + 35)
-#define HID_SMA_LEFTBORDER_DIST     (HID_SMA2_START + 36)
-#define HID_SMA_RIGHTBORDER_DIST    (HID_SMA2_START + 37)
-#define HID_SMA_UPPERBORDER_DIST    (HID_SMA2_START + 38)
-#define HID_SMA_LOWERBORDER_DIST    (HID_SMA2_START + 39)
-#define HID_SMA_SCALE_ALL_BRACKETS  (HID_SMA2_START + 40)
-#define HID_SMA_BRACKET_EXCHEIGHT2  (HID_SMA2_START + 41)
-#define HID_SMA_LMRANGLEXY          (HID_SMA2_START + 42)
-#define HID_SMA_SLMRANGLEXY         (HID_SMA2_START + 43)
-#define HID_SMA_XWIDESLASHY         (HID_SMA2_START + 44)
-#define HID_SMA_XWIDEBSLASHY        (HID_SMA2_START + 45)
-#define HID_SMA_XOVERBRACEY         (HID_SMA2_START + 46)
-#define HID_SMA_XUNDERBRACEY        (HID_SMA2_START + 47)
-#define HID_SMA_LRDBRACKETX         (HID_SMA2_START + 48)
-#define HID_SMA_SLRDBRACKETX        (HID_SMA2_START + 49)
+#define HID_SMA_DEFAULT_DIST                              "STARMATH_HID_SMA_DEFAULT_DIST"
+#define HID_SMA_LINE_DIST                                 "STARMATH_HID_SMA_LINE_DIST"
+#define HID_SMA_ROOT_DIST                                 "STARMATH_HID_SMA_ROOT_DIST"
+#define HID_SMA_SUP_DIST                                  "STARMATH_HID_SMA_SUP_DIST"
+#define HID_SMA_SUB_DIST                                  "STARMATH_HID_SMA_SUB_DIST"
+#define HID_SMA_NUMERATOR_DIST                            "STARMATH_HID_SMA_NUMERATOR_DIST"
+#define HID_SMA_DENOMINATOR_DIST                          "STARMATH_HID_SMA_DENOMINATOR_DIST"
+#define HID_SMA_FRACLINE_EXCWIDTH                         "STARMATH_HID_SMA_FRACLINE_EXCWIDTH"
+#define HID_SMA_FRACLINE_LINEWIDTH                        "STARMATH_HID_SMA_FRACLINE_LINEWIDTH"
+#define HID_SMA_UPPERLIMIT_DIST                           "STARMATH_HID_SMA_UPPERLIMIT_DIST"
+#define HID_SMA_LOWERLIMIT_DIST                           "STARMATH_HID_SMA_LOWERLIMIT_DIST"
+#define HID_SMA_BRACKET_EXCHEIGHT                         "STARMATH_HID_SMA_BRACKET_EXCHEIGHT"
+#define HID_SMA_BRACKET_DIST                              "STARMATH_HID_SMA_BRACKET_DIST"
+#define HID_SMA_MATRIXROW_DIST                            "STARMATH_HID_SMA_MATRIXROW_DIST"
+#define HID_SMA_MATRIXCOL_DIST                            "STARMATH_HID_SMA_MATRIXCOL_DIST"
+#define HID_SMA_ATTRIBUT_DIST                             "STARMATH_HID_SMA_ATTRIBUT_DIST"
+#define HID_SMA_INTERATTRIBUT_DIST                        "STARMATH_HID_SMA_INTERATTRIBUT_DIST"
+#define HID_SMA_OPERATOR_EXCHEIGHT                        "STARMATH_HID_SMA_OPERATOR_EXCHEIGHT"
+#define HID_SMA_OPERATOR_DIST                             "STARMATH_HID_SMA_OPERATOR_DIST"
+#define HID_SMA_LEFTBORDER_DIST                           "STARMATH_HID_SMA_LEFTBORDER_DIST"
+#define HID_SMA_RIGHTBORDER_DIST                          "STARMATH_HID_SMA_RIGHTBORDER_DIST"
+#define HID_SMA_UPPERBORDER_DIST                          "STARMATH_HID_SMA_UPPERBORDER_DIST"
+#define HID_SMA_LOWERBORDER_DIST                          "STARMATH_HID_SMA_LOWERBORDER_DIST"
+#define HID_SMA_SCALE_ALL_BRACKETS                        "STARMATH_HID_SMA_SCALE_ALL_BRACKETS"
+#define HID_SMA_BRACKET_EXCHEIGHT2                        "STARMATH_HID_SMA_BRACKET_EXCHEIGHT2"
+#define HID_SMA_LMRANGLEXY                                "STARMATH_HID_SMA_LMRANGLEXY"
+#define HID_SMA_SLMRANGLEXY                               "STARMATH_HID_SMA_SLMRANGLEXY"
+#define HID_SMA_XWIDESLASHY                               "STARMATH_HID_SMA_XWIDESLASHY"
+#define HID_SMA_XWIDEBSLASHY                              "STARMATH_HID_SMA_XWIDEBSLASHY"
+#define HID_SMA_XOVERBRACEY                               "STARMATH_HID_SMA_XOVERBRACEY"
+#define HID_SMA_XUNDERBRACEY                              "STARMATH_HID_SMA_XUNDERBRACEY"
+#define HID_SMA_LRDBRACKETX                               "STARMATH_HID_SMA_LRDBRACKETX"
+#define HID_SMA_SLRDBRACKETX                              "STARMATH_HID_SMA_SLRDBRACKETX"
 
-#define HID_SMA_CONTROL_SYMBOLSET_VIEW  (HID_SMA2_START + 50)
-#define HID_SMA_CONTROL_FONTCHAR_VIEW   (HID_SMA2_START + 51)
+#define HID_SMA_CONTROL_SYMBOLSET_VIEW                    "STARMATH_HID_SMA_CONTROL_SYMBOLSET_VIEW"
+#define HID_SMA_CONTROL_FONTCHAR_VIEW                     "STARMATH_HID_SMA_CONTROL_FONTCHAR_VIEW"
 
 #define BMP_ARROW_RIGHT     1
 

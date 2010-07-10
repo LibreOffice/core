@@ -236,8 +236,7 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
     bShowColumns    (bShowCol),
     pImpl(new SwDBTreeList_Impl(pSh))
 {
-    // FIXME: HELPID
-    SetHelpId(""/*HID_DB_SELECTION_TLB*/);
+    SetHelpId(HID_DB_SELECTION_TLB);
 
     if (IsVisible())
         InitTreeList();

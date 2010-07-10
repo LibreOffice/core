@@ -31,7 +31,7 @@
 #include "helpid.h"
 ModalDialog DLG_CONV_TEXT_TABLE
 {
-    HelpID = FN_CONVERT_TEXT_TABLE ;
+    HelpID = CMD_FN_CONVERT_TEXT_TABLE ;
     OUTPUTSIZE = TRUE ;
     Size = MAP_APPFONT ( 203 , 169 ) ;
     Text [ en-US ] = "Convert Table to Text" ;

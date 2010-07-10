@@ -32,7 +32,7 @@
  // #define DLG_GLOSSARY 256
 ModalDialog DLG_GLOSSARY
 {
-    HelpID = FN_GLOSSARY_DLG ;
+    HelpID = CMD_FN_GLOSSARY_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 375 , 164 ) ;

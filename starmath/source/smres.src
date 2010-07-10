@@ -31,6 +31,7 @@
 #include "starmath.hrc"
 #include "dialog.hrc"
 #include "toolbox.hrc"
+#include "smcommands.h"
 
 #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
 #define IMAGE_STDBTN_COLOR_HC IMAGE_STDBTN_COLOR
@@ -109,7 +110,7 @@ ModalDialog RID_FONTSIZEDIALOG
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = SID_FONTSIZE ;
+    HelpId = CMD_SID_FONTSIZE ;
     Size = MAP_APPFONT ( 171 , 120 ) ;
     Text [ en-US ] = "Font Sizes" ;
     FixedText 1
@@ -269,7 +270,7 @@ ModalDialog RID_FONTTYPEDIALOG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = SID_FONT ;
+    HelpId = CMD_SID_FONT ;
     Size = MAP_APPFONT ( 282 , 153 ) ;
     Text [ en-US ] = "Fonts" ;
     Moveable = TRUE ;
@@ -425,7 +426,7 @@ ModalDialog RID_DISTANCEDIALOG
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = SID_DISTANCE ;
+    HelpId = CMD_SID_DISTANCE ;
     Size = MAP_APPFONT ( 240 , 90 ) ;
     Text [ en-US ] = "Spacing" ;
     FixedText 1
@@ -919,7 +920,7 @@ ModalDialog RID_ALIGNDIALOG
     Moveable = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    HelpID = SID_ALIGN ;
+    HelpId = CMD_SID_ALIGN ;
     Size = MAP_APPFONT ( 139 , 66 ) ;
     Text [ en-US ] = "Alignment" ;
     RadioButton 1
@@ -1402,37 +1403,37 @@ Menu RID_VIEWMENU
         MenuItem
         {
             Identifier = SID_VIEW050 ;
-            HelpID = SID_VIEW050 ;
+            HelpId = CMD_SID_VIEW050 ;
             Text [ en-US ] = "~View 50%" ;
         };
         MenuItem
         {
             Identifier = SID_VIEW100 ;
-            HelpID = SID_VIEW100 ;
+            HelpId = CMD_SID_VIEW100 ;
             Text [ en-US ] = "View ~100%" ;
         };
         MenuItem
         {
             Identifier = SID_VIEW200 ;
-            HelpID = SID_VIEW200 ;
+            HelpId = CMD_SID_VIEW200 ;
             Text [ en-US ] = "View ~200%" ;
         };
         MenuItem
         {
             Identifier = SID_ZOOMIN ;
-            HelpID = SID_ZOOMIN ;
+            HelpId = CMD_SID_ZOOMIN ;
             Text [ en-US ] = "~Zoom In" ;
         };
         MenuItem
         {
             Identifier = SID_ZOOMOUT ;
-            HelpID = SID_ZOOMOUT ;
+            HelpId = CMD_SID_ZOOMOUT ;
             Text [ en-US ] = "Zoom ~Out" ;
         };
         MenuItem
         {
             Identifier = SID_ADJUST ;
-            HelpID = SID_ADJUST ;
+            HelpId = CMD_SID_ADJUST ;
             Text [ en-US ] = "~Display All" ;
         };
         MenuItem
@@ -1442,7 +1443,7 @@ Menu RID_VIEWMENU
         MenuItem
         {
             Identifier = SID_DRAW ;
-            HelpID = SID_DRAW ;
+            HelpId = CMD_SID_DRAW ;
             Text [ en-US ] = "U~pdate" ;
         };
     };
@@ -3476,76 +3477,6 @@ String RID_ERR_RPARENTEXPECTED
 String RID_ERR_RIGHTEXPECTED
 {
     Text [ en-US ] = "'RIGHT' expected" ;
-};
-
-#include "menu.src"
-
-ToolBox RID_MATH_TOOLBOX
-{
-    HelpId = RID_MATH_TOOLBOX ;
-    Customize = TRUE ;
-    LineSpacing = TRUE ;
-    Dockable = TRUE ;
-    Moveable = TRUE ;
-    Sizeable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    Scroll = TRUE ;
-    HideWhenDeactivate = TRUE ;
-    Border = TRUE ;
-    SVLook = TRUE ;
-    Align = BOXALIGN_LEFT ;
-    Size = MAP_APPFONT ( 0 , 0 ) ;
-    MenuStrings = TRUE ;
-    ItemList =
-    {
-        ToolBoxItem
-        {
-            Identifier = SID_ZOOMIN ;
-            HelpID = SID_ZOOMIN ;
-            Text [ en-US ] = "Zoom In" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ZOOMOUT ;
-            HelpID = SID_ZOOMOUT ;
-            Text [ en-US ] = "Zoom Out" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_VIEW100 ;
-            HelpID = SID_VIEW100 ;
-            Text [ en-US ] = "Zoom 100%" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_ADJUST ;
-            HelpID = SID_ADJUST ;
-            Text [ en-US ] = "Entire Formula" ;
-        };
-        ToolBoxItem
-        {
-            Type = TOOLBOXITEM_SEPARATOR ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_DRAW ;
-            HelpID = SID_DRAW ;
-            Text [ en-US ] = "Refresh" ;
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_FORMULACURSOR ;
-            HelpID = SID_FORMULACURSOR ;
-            Text [ en-US ] = "Formula Cursor";
-        };
-        ToolBoxItem
-        {
-            Identifier = SID_SYMBOLS_CATALOGUE ;
-            HelpID = SID_SYMBOLS_CATALOGUE ;
-            Text [ en-US ] = "Symbols" ;
-        };
-    };
 };
 
 String RID_MATH_TOOLBOX

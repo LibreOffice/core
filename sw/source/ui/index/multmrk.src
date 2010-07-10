@@ -31,7 +31,7 @@
 #include "helpid.h"
 ModalDialog DLG_MULTMRK
 {
-    HelpID = FN_EDIT_IDX_ENTRY_DLG ;
+    HelpID = CMD_FN_EDIT_IDX_ENTRY_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 95 ) ;

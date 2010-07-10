@@ -32,7 +32,7 @@
 
 ModalDialog DLG_SORTING
 {
-    HelpID = FN_SORTING_DLG ;
+    HelpID = CMD_FN_SORTING_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 268 , 193 ) ;

@@ -77,8 +77,7 @@ SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     // Grafiknamen ermitteln
     GalleryExplorer::BeginLocking(GALLERY_THEME_RULERS);
     GalleryExplorer::FillObjList( GALLERY_THEME_RULERS, aGrfNames );
-    // FIXME: HELPID
-    pExampleVS->SetHelpId(""/*HID_VS_RULER*/);
+    pExampleVS->SetHelpId(HID_VS_RULER);
     Color aColor(COL_WHITE);
     pExampleVS->InsertItem( 1, 1);
     pExampleVS->SetItemText( 1, sSimple);

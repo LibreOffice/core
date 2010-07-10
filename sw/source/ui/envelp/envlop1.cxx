@@ -173,14 +173,12 @@ SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
     FreeResource();
 
     GetOKButton().SetText(String(SW_RES(STR_BTN_NEWDOC)));
-    // FIXME: HELPID
-    GetOKButton().SetHelpId(""/*HID_ENVELOP_PRINT*/);
+    GetOKButton().SetHelpId(HID_ENVELOP_PRINT);
     GetOKButton().SetHelpText(aEmptyStr);   // Damit generierter Hilfetext verwendet wird
     if (GetUserButton())
     {
         GetUserButton()->SetText(bInsert ? sInsert : sChange);
-        // FIXME: HELPID
-        GetUserButton()->SetHelpId(""/*HID_ENVELOP_INSERT*/);
+        GetUserButton()->SetHelpId(HID_ENVELOP_INSERT);
     }
 
     AddTabPage(TP_ENV_ENV, SwEnvPage   ::Create, 0);

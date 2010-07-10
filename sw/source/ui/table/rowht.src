@@ -31,7 +31,7 @@
 #include "helpid.h"
 ModalDialog DLG_ROW_HEIGHT
 {
-    HelpID = FN_TABLE_SET_ROW_HEIGHT ;
+    HelpID = CMD_FN_TABLE_SET_ROW_HEIGHT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 157 , 60 ) ;

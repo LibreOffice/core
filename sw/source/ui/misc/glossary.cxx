@@ -293,8 +293,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     if( bIsDocReadOnly )
         aInsertBtn.Enable(sal_False);
     aNameED.GrabFocus();
-    // FIXME: HELPID
-    aCategoryBox.SetHelpId(""/*HID_MD_GLOS_CATEGORY*/);
+    aCategoryBox.SetHelpId(HID_MD_GLOS_CATEGORY);
     aCategoryBox.SetWindowBits(WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
     aCategoryBox.GetModel()->SetSortMode(SortAscending);
     aCategoryBox.SetHighlightRange();   // ueber volle Breite selektieren
