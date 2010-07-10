@@ -32,16 +32,16 @@
 
 typedef InheritedHelperInterfaceImpl1< ov::XGlobalsBase > Globals_BASE;
 class VBAHELPER_DLLPUBLIC VbaGlobalsBase : public Globals_BASE
-
 {
 protected:
+    rtl::OUString msDocCtxName;
 
     bool hasServiceName( const rtl::OUString& serviceName );
     void init(  const css::uno::Sequence< css::beans::PropertyValue >& aInitArgs );
 
 public:
     VbaGlobalsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const rtl::OUString& sDocCtxName );
-    virtual ~VbaGlobalsBase(){};
+    virtual ~VbaGlobalsBase();
     // XMultiServiceFactory
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (css::uno::Exception, css::uno::RuntimeException);
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const ::rtl::OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) throw (css::uno::Exception, css::uno::RuntimeException);

@@ -182,7 +182,6 @@ VbaApplicationBase::VbaApplicationBase( const uno::Reference< uno::XComponentCon
 
 VbaApplicationBase::~VbaApplicationBase()
 {
-    m_pImpl = 0;
     delete m_pImpl;
 }
 
