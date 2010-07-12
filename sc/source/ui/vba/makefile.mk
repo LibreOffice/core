@@ -78,28 +78,31 @@ SLOFILES= \
         $(SLO)$/vbaborders.obj \
         $(SLO)$/vbacharacters.obj \
         $(SLO)$/vbavalidation.obj \
-                $(SLO)$/vbaoleobject.obj \
-                $(SLO)$/vbaoleobjects.obj \
-                $(SLO)$/vbatextboxshape.obj \
-                $(SLO)$/vbapane.obj \
-                $(SLO)$/vbatextframe.obj \
-                $(SLO)$/vbacharttitle.obj \
-                $(SLO)$/vbacharts.obj \
-                $(SLO)$/vbaaxistitle.obj \
-                $(SLO)$/vbaaxes.obj \
-                $(SLO)$/vbaaxis.obj \
-                $(SLO)$/vbaformat.obj \
-                $(SLO)$/vbacondition.obj \
-                $(SLO)$/vbaformatcondition.obj \
-                $(SLO)$/vbaformatconditions.obj \
-                $(SLO)$/vbastyle.obj \
-                $(SLO)$/vbastyles.obj \
-                $(SLO)$/vbaassistant.obj \
-                $(SLO)$/vbahyperlink.obj \
-                $(SLO)$/vbapagesetup.obj \
-                $(SLO)$/vbapagebreak.obj \
-                $(SLO)$/vbapagebreaks.obj \
-                $(SLO)$/service.obj
+        $(SLO)$/vbasheetobject.obj \
+        $(SLO)$/vbasheetobjects.obj \
+        $(SLO)$/vbaoleobject.obj \
+        $(SLO)$/vbaoleobjects.obj \
+        $(SLO)$/vbatextboxshape.obj \
+        $(SLO)$/vbapane.obj \
+        $(SLO)$/vbatextframe.obj \
+        $(SLO)$/vbacharttitle.obj \
+        $(SLO)$/vbacharts.obj \
+        $(SLO)$/vbaaxistitle.obj \
+        $(SLO)$/vbaaxes.obj \
+        $(SLO)$/vbaaxis.obj \
+        $(SLO)$/vbaformat.obj \
+        $(SLO)$/vbacondition.obj \
+        $(SLO)$/vbaformatcondition.obj \
+        $(SLO)$/vbaformatconditions.obj \
+        $(SLO)$/vbastyle.obj \
+        $(SLO)$/vbastyles.obj \
+        $(SLO)$/vbaassistant.obj \
+        $(SLO)$/vbahyperlink.obj \
+        $(SLO)$/vbahyperlinks.obj \
+        $(SLO)$/vbapagesetup.obj \
+        $(SLO)$/vbapagebreak.obj \
+        $(SLO)$/vbapagebreaks.obj \
+        $(SLO)$/service.obj
 .ENDIF
 # --- Targets ------------------------------------------------------
 

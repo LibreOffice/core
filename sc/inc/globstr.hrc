@@ -571,9 +571,13 @@
 #define STR_STYLE_FAMILY_PAGE       434
 
 #define STR_ERR_DATAPILOTSOURCE     435
-#define STR_PIVOT_FIRSTROWEMPTYERR  436
+#define STR_PIVOT_FIRSTROWEMPTYERR      436
 #define STR_PIVOT_ONLYONEROWERR     437
-#define STR_COUNT                   438
+
+#define STR_UNDO_SET_TAB_BG_COLOR       438
+#define STR_UNDO_SET_MULTI_TAB_BG_COLOR 439
+
+#define STR_COUNT                       440
 
 #endif
 

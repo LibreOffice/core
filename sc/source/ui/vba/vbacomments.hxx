@@ -40,7 +40,11 @@ typedef CollTestImplHelper< ov::excel::XComments > ScVbaComments_BASE;
 class ScVbaComments : public ScVbaComments_BASE
 {
 public:
-    ScVbaComments( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    ScVbaComments(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext > & xContext,
+        const css::uno::Reference< css::frame::XModel >& xModel,
+        const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     virtual ~ScVbaComments() {}
 
@@ -53,6 +57,8 @@ public:
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
+private:
+    css::uno::Reference< css::frame::XModel > mxModel;
 };
 
 #endif /* SC_VBA_COMMENTS_HXX */

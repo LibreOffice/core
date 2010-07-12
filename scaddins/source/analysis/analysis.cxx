@@ -915,21 +915,21 @@ double SAL_CALL AnalysisAddIn::getLcm( constREFXPS& xOpt, const SEQSEQ( double )
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesseli( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBesseli( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
 {
     double fRet = sca::analysis::BesselI( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesselj( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBesselj( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
 {
     double fRet = sca::analysis::BesselJ( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
 {
     if( nOrder < 0 || fNum <= 0.0 )
         THROW_IAE;
@@ -939,7 +939,7 @@ double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROW
 }
 
 
-double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
 {
     if( nOrder < 0 || fNum <= 0.0 )
         THROW_IAE;

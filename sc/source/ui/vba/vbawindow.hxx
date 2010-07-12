@@ -26,6 +26,7 @@
  ************************************************************************/
 #ifndef SC_VBA_WINDOW_HXX
 #define SC_VBA_WINDOW_HXX
+
 #include <cppuhelper/implbase1.hxx>
 #include <ooo/vba/excel/XWindow.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -40,7 +41,6 @@
 #include <vbahelper/vbawindowbase.hxx>
 #include "vbaworkbook.hxx"
 
-//typedef InheritedHelperInterfaceImpl1<ov::excel::XWindow > WindowImpl_BASE;
 typedef cppu::ImplInheritanceHelper1< VbaWindowBase, ov::excel::XWindow > WindowImpl_BASE;
 
 class ScVbaWindow : public WindowImpl_BASE
@@ -96,6 +96,7 @@ public:
     virtual void SAL_CALL setScrollColumn( const css::uno::Any& _scrollcolumn ) throw (css::uno::RuntimeException) ;
     virtual css::uno::Any SAL_CALL getView() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setView( const css::uno::Any& _view ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getVisibleRange() throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getWindowState() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setWindowState( const css::uno::Any& _windowstate ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getZoom() throw (css::uno::RuntimeException);
@@ -108,11 +109,12 @@ public:
     virtual void SAL_CALL ScrollWorkbookTabs( const css::uno::Any& Sheets, const css::uno::Any& Position ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Activate(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& FileName, const css::uno::Any& RouteWorkBook ) throw (css::uno::RuntimeException);
-     virtual css::uno::Any SAL_CALL Selection(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-     virtual sal_Int32 SAL_CALL PointsToScreenPixelsX(sal_Int32 _points) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-     virtual sal_Int32 SAL_CALL PointsToScreenPixelsY(sal_Int32 _points) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-     virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any&To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
-     virtual void SAL_CALL PrintPreview( const css::uno::Any& EnableChanges ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Selection(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL RangeSelection() throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL PointsToScreenPixelsX(sal_Int32 _points) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL PointsToScreenPixelsY(sal_Int32 _points) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any&To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual void SAL_CALL PrintPreview( const css::uno::Any& EnableChanges ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
