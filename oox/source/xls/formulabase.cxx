@@ -1262,6 +1262,11 @@ bool OpCodeProviderImpl::initFuncOpCode( FunctionInfo& orFuncInfo, const ApiToke
                 maParserMap.push_back( aEntry );
             }
         }
+        else
+        {
+            // ignore entries for functions unknown by Calc *and* by Excel
+            bIsValid = orFuncInfo.maOoxFuncName.getLength() == 0;
+        }
     }
     else if( orFuncInfo.mnBiffFuncId == BIFF_FUNC_EXTERNCALL )
     {

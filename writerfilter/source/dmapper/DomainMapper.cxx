@@ -29,6 +29,7 @@
 #include <dmapper/DomainMapper.hxx>
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
+#include <NumberingManager.hxx>
 #include <ThemeTable.hxx>
 #include <ModelEventListener.hxx>
 #include <MeasureHandler.hxx>
@@ -1627,7 +1628,9 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_TabStop_val:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             if (sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_TabJc_clear)
+            {
                 m_pImpl->m_aCurrentTabStop.bDeleted = true;
+            }
             else
             {
                 m_pImpl->m_aCurrentTabStop.bDeleted = false;
@@ -1754,8 +1757,11 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_Ind_hanging:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             if (m_pImpl->GetTopContext())
+            {
+                sal_Int32 nValue = ConversionHelper::convertTwipToMM100( nIntValue );
                 m_pImpl->GetTopContext()->Insert(
-                    PROP_PARA_FIRST_LINE_INDENT, true, uno::makeAny( - ConversionHelper::convertTwipToMM100(nIntValue ) ));
+                    PROP_PARA_FIRST_LINE_INDENT, true, uno::makeAny( - nValue ));
+            }
             break;
         case NS_ooxml::LN_CT_Ind_firstLine:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
@@ -2250,20 +2256,26 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         /* WRITERFILTERSTATUS: comment:  */
         {
             //convert the ListTable entry to a NumberingRules propery and apply it
-            sal_Int32 nListId = m_pImpl->GetLFOTable()->GetListID( nIntValue );
-            if(nListId >= 0)
+            ListsManager::Pointer pListTable = m_pImpl->GetListTable();
+            ListDef::Pointer pList = pListTable->GetList( nIntValue );
+            if( pList.get( ) )
             {
-                ListTablePtr pListTable = m_pImpl->GetListTable();
                 if( m_pImpl->IsStyleSheetImport() )
                 {
                     //style sheets cannot have a numbering rule attached
                     StyleSheetPropertyMap* pStyleSheetPropertyMap = dynamic_cast< StyleSheetPropertyMap* >( rContext.get() );
-                    pStyleSheetPropertyMap->SetListId( nListId );
+                    pStyleSheetPropertyMap->SetListId( nIntValue );
                 }
                 else
-                    rContext->Insert( PROP_NUMBERING_RULES, true,
-                                  uno::makeAny(pListTable->GetNumberingRules(nListId)));
-                //TODO: Merge overwrittern numbering levels from LFO table
+                {
+                    uno::Any aRules = uno::makeAny( pList->GetNumberingRules( ) );
+                    rContext->Insert( PROP_NUMBERING_RULES, true, aRules );
+                }
+            }
+            else if ( !m_pImpl->IsStyleSheetImport( ) )
+            {
+                rtl::OUString sNone;
+                rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny( sNone ) );
             }
         }
         break;
@@ -3926,7 +3938,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 
         if( pStyleSheetProperties && pStyleSheetProperties->GetListId() >= 0 )
             rContext->Insert( PROP_NUMBERING_STYLE_NAME, true, uno::makeAny(
-                        m_pImpl->GetListTable( )->GetStyleName( pStyleSheetProperties->GetListId( ) ) ), false);
+                        ListDef::GetStyleName( pStyleSheetProperties->GetListId( ) ) ), false);
 
         if( pStyleSheetProperties && pStyleSheetProperties->GetListLevel() >= 0 )
             rContext->Insert( PROP_NUMBERING_LEVEL, true, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
@@ -4111,9 +4123,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     /* WRITERFILTERSTATUS: done: 0, planned: 4, spent: 0 */
     case NS_ooxml::LN_object:
     {
-#if DEBUG
-        clog << "DomainMapper: LN_object" << endl;
-#endif
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get( ) )
         {
@@ -4152,10 +4161,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     break;
     case NS_ooxml::LN_EG_SectPrContents_formProt: //section protection, only form editing is enabled - unsupported
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-    break;
-    case NS_ooxml::LN_CT_Lvl_pStyle:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-        //TODO: numbering style should apply current numbering level - not yet supported
     break;
     default:
         {
@@ -4247,38 +4252,6 @@ void DomainMapper::startParagraphGroup()
 -----------------------------------------------------------------------*/
 void DomainMapper::endParagraphGroup()
 {
-    //handle unprocessed deferred breaks
-    PropertyMapPtr pParaProperties = m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH);
-    if( pParaProperties->hasEmptyPropertyValues() )
-    {
-        PropertyMap::const_iterator aIter = pParaProperties->find(PropertyDefinition( PROP_BREAK_TYPE , false ) );
-        if( aIter != pParaProperties->end() )
-        {
-            style::BreakType eType;
-            aIter->second >>= eType;
-            bool bPage = false;
-            bool bColumn = false;
-            if( eType == style::BreakType_PAGE_BEFORE )
-                bPage = true;
-            else if( eType == style::BreakType_COLUMN_BEFORE )
-                 bColumn = true;
-
-            if( bPage || bColumn )
-            {
-                try
-                {
-                        uno::Reference< beans::XPropertySet > xRangeProperties( m_pImpl->GetTopTextAppend()->getEnd(), uno::UNO_QUERY_THROW );
-                        xRangeProperties->setPropertyValue(
-                            PropertyNameSupplier::GetPropertyNameSupplier().GetName(PROP_BREAK_TYPE),
-                                                    uno::makeAny( bPage ? style::BreakType_PAGE_BEFORE : style::BreakType_COLUMN_BEFORE));
-                }
-                catch( const uno::Exception& )
-                {
-                }
-            }
-        }
-    }
-
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
     m_pImpl->getTableManager().endParagraphGroup();
     //frame conversion has to be executed after table conversion
@@ -4286,6 +4259,14 @@ void DomainMapper::endParagraphGroup()
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement("paragraph");
 #endif
+}
+
+void DomainMapper::markLastParagraphInSection( )
+{
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->element( "markLastParagraphInSection" );
+#endif
+    m_pImpl->SetIsLastParagraphInSection( true );
 }
 
 void DomainMapper::startShape( uno::Reference< drawing::XShape > xShape )
@@ -4590,9 +4571,12 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
         }
         break;
     case NS_rtf::LN_LFOTABLE:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-
-        ref->resolve( *m_pImpl->GetLFOTable() );
+        {
+            m_pImpl->GetListTable( )->SetLFOImport( true );
+            ref->resolve( *m_pImpl->GetListTable() );
+            m_pImpl->GetListTable( )->CreateNumberingRules( );
+            m_pImpl->GetListTable( )->SetLFOImport( false );
+        }
         break;
     case NS_ooxml::LN_THEMETABLE:
         ref->resolve ( *m_pImpl->GetThemeTable() );
@@ -4619,6 +4603,7 @@ void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointe
     dmapper_logger->startElement("substream");
 #endif
 
+    m_pImpl->appendTableManager( );
     m_pImpl->getTableManager().startLevel();
 
     //->debug
@@ -4688,6 +4673,7 @@ void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointe
     }
 
     m_pImpl->getTableManager().endLevel();
+    m_pImpl->popTableManager( );
 
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->endElement("substream");
@@ -4854,6 +4840,7 @@ com::sun::star::style::TabAlign DomainMapper::getTabAlignFromValue(const sal_Int
     {
     case 0:
     case 4: // bar not supported
+    case 5: // num not supported
         return com::sun::star::style::TabAlign_LEFT;
     case 1:
         return com::sun::star::style::TabAlign_CENTER;
@@ -4861,8 +4848,6 @@ com::sun::star::style::TabAlign DomainMapper::getTabAlignFromValue(const sal_Int
         return com::sun::star::style::TabAlign_RIGHT;
     case 3:
         return com::sun::star::style::TabAlign_DECIMAL;
-    default:
-        return com::sun::star::style::TabAlign_DEFAULT;
     }
     return com::sun::star::style::TabAlign_LEFT;
 }
@@ -4902,10 +4887,6 @@ uno::Reference < lang::XMultiServiceFactory > DomainMapper::GetTextFactory() con
 /*-- 12.11.2007 10:41:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void  DomainMapper::AddListIDToLFOTable( sal_Int32 nAbstractNumId )
-{
-    m_pImpl->GetLFOTable()->AddListID( nAbstractNumId );
-}
 /*-- 31.01.2008 18:19:44---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -4921,6 +4902,16 @@ uno::Reference< text::XTextRange > DomainMapper::GetCurrentTextRange()
 {
     StyleSheetTablePtr pStyleSheets = m_pImpl->GetStyleSheetTable();
     return pStyleSheets->getOrCreateCharStyle( rCharProperties );
+}
+
+ListsManager::Pointer DomainMapper::GetListTable( )
+{
+    return m_pImpl->GetListTable( );
+}
+
+StyleSheetTablePtr DomainMapper::GetStyleSheetTable( )
+{
+    return m_pImpl->GetStyleSheetTable( );
 }
 
 } //namespace dmapper
