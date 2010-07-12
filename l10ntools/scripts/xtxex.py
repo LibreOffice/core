@@ -36,13 +36,21 @@ class xtxex(abstractL10nTool):
     def __init__(self):
         abstractL10nTool.__init__(self)
         
-    def merge_file(self, inputfilename, outputfilename, parsed_file_ref, lang,is_forced_lang, sdfdata):
-        print "merge_file lang " + lang +" file " + outputfilename
+    def merge_file(self, inputfilename, outputfilename, parsed_file_ref, lang, is_forced_lang, sdfdata): 
+        # Special handling for en-US files
+        if lang == "en-US":             
+            mod_outputfilename = outputfilename.replace("_en-US",'')
+            #print "DBG: merge_file lang " + lang +" file " + mod_outputfilename
+            self.copy_file(inputfilename, mod_outputfilename)
+            return
+        
+        # merge usual lang
         sdfline = self.prepare_sdf_line(inputfilename,lang)
         if sdfdata.has_key(sdfline.get_id()):
             line = sdfdata[sdfline.get_id()].text.replace("\\n", '\n')
             self.make_dirs(outputfilename)
             try:
+                #print "DBG: merge_file lang " + lang +" file " + outputfilename
                 f = open(outputfilename, "w+")
                 f.write(line)
             except IOError:
@@ -51,12 +59,19 @@ class xtxex(abstractL10nTool):
             else:
                 f.close()
             return
+        
+        # no sdf data found then copy en-US source file
         if is_forced_lang:
-            try:
-                shutil.copy(inputfilename, outputfilename)
-            except IOError:
-                print "ERROR: Can not copy file '" + inputfilename + "' to " + "'" + outputfilename + "'"
-                sys.exit(-1)
+            #print "DBG: merge_file lang " + lang +" file " + outputfilename
+            self.copy_file(inputfilename, outputfilename)
+            
+    def copy_file(self, inputfilename, outputfilename):
+        try:
+            #print "DBG: copy " + inputfilename + " to " + outputfilename
+            shutil.copy(inputfilename, outputfilename)
+        except IOError:
+            print "ERROR: Can not copy file '" + inputfilename + "' to " + "'" + outputfilename + "'"
+            sys.exit(-1)
             
     ##### Extract a single File
     def extract_file(self, inputfile):

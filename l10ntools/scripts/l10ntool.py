@@ -27,7 +27,7 @@
 
 from optparse import OptionParser
 from sdf import SdfData
-import string , sys , os
+import sys , os
 
 class abstractL10nTool:
     _options            = {}
@@ -184,5 +184,5 @@ class abstractL10nTool:
     def get_filename_string(self, inputfile):
         absfile = os.path.realpath(os.path.abspath(inputfile))
         absroot = os.path.realpath(os.path.abspath(self._options.project_root)) 
-        return absfile[len(absroot):].replace('/','\\')
+        return absfile[len(absroot)+1:].replace('/','\\')
     

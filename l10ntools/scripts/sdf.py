@@ -25,8 +25,6 @@
 #
 #*************************************************************************
 
-import string
-
 class MyOrderedDict(dict):
     _keylist        = []
     _valuelist      = []
