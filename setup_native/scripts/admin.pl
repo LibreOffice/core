@@ -43,6 +43,7 @@ BEGIN
     $msiinfo_available = 0;
     $path_displayed = 0;
     $localmsidbpath = "";
+    $bundleddir = "";
 
     $plat = $^O;
 
@@ -761,6 +762,7 @@ sub create_directory_tree
             # Create the directory
             my $newdir = $fulldir . $separator . $dirname;
             if ( ! -f $newdir ) { mkdir $newdir; }
+            if (( $bundleddir eq "" ) && ( $newdir =~ /\Wbundled\s*$/ )) { $bundleddir = $newdir; }
             # Saving in collector
             $pathcollector->{$dir} = $newdir;
             # Iteration
@@ -1020,12 +1022,12 @@ sub get_temppath
 }
 
 ####################################################################################
-# Registering one extension
+# Registering extensions
 ####################################################################################
 
-sub register_one_extension
+sub do_register_extensions
 {
-    my ($unopkgfile, $extension, $temppath) = @_;
+    my ($unopkgfile, $extension, $localtemppath) = @_;
 
     my $from = cwd();
 
@@ -1045,8 +1047,8 @@ sub register_one_extension
         $path_displayed = 1;
     }
 
-    $temppath =~ s/\\/\//g;
-    $temppath = "/".$temppath;
+    $localtemppath =~ s/\\/\//g;
+    $localtemppath = "/".$localtemppath;
 
     # Converting path of $extension for cygwin
 
@@ -1060,7 +1062,7 @@ sub register_one_extension
         $executable = "./" . $executable;
     }
 
-    my $systemcall = $executable . " add --shared --verbose --suppress-license " . "\"" . $localextension . "\"" . " -env:UserInstallation=file://" . $temppath . " 2\>\&1 |";
+    my $systemcall = $executable . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $bundleddir . "\"" . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
 
     print "... $systemcall\n";
 
@@ -1100,7 +1102,7 @@ sub register_extensions
         }
         else
         {
-            foreach $extension ( @{$extensions} ) { register_one_extension($unopkgfile, $extension, $temppath); }
+            do_register_extensions($unopkgfile, $extension, $temppath); }
             remove_complete_directory($temppath, 1)
         }
     }
