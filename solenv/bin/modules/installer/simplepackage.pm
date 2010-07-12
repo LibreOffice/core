@@ -82,7 +82,7 @@ sub get_extensions_dir
 
 sub register_extensions
 {
-    my ($officedir, $languagestringref, $presetsdir) = @_;
+    my ($officedir, $languagestringref, $bundleddir) = @_;
 
     my $programdir = $officedir . $installer::globals::separator;
     if ( $installer::globals::officedirhostname ne "" ) { $programdir = $programdir . $installer::globals::officedirhostname . $installer::globals::separator; }
@@ -128,7 +128,7 @@ sub register_extensions
             $localtemppath = "/".$localtemppath;
         }
 
-        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=file://" . $presetsdir . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
+        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $bundleddir . "\"" . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
 
         print "... $systemcall ...\n";
 
@@ -628,7 +628,7 @@ sub create_simple_package
     installer::logger::print_message( "... creating directories ...\n" );
     installer::logger::include_header_into_logfile("Creating directories:");
 
-    my $presetsdir = "";
+    my $bundleddir = "";
 
     for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
     {
@@ -637,7 +637,7 @@ sub create_simple_package
         if ( $onedir->{'HostName'} )
         {
             my $destdir = $subfolderdir . $installer::globals::separator . $onedir->{'HostName'};
-            if ( $destdir =~ /\Wpresets\s*$/ ) { $presetsdir = $destdir; }
+            if ( $destdir =~ /\Wbundled\s*$/ ) { $bundleddir = $destdir; }
 
             if ( ! -d $destdir )
             {
@@ -774,7 +774,7 @@ sub create_simple_package
 
     installer::logger::print_message( "... registering extensions ...\n" );
     installer::logger::include_header_into_logfile("Registering extensions:");
-    register_extensions($subfolderdir, $languagestringref, $presetsdir);
+    register_extensions($subfolderdir, $languagestringref, $bundleddir);
 
     if ( $installer::globals::compiler =~ /^unxmacx/ )
     {

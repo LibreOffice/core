@@ -462,3 +462,12 @@ ProfileItem gid_Basis_Profileitem_Version_Ooopackageversion
     Value = "${OOOPACKAGEVERSION}";
 End
 
+// Basis layer: gid_Profile_Version_Ini_Basis
+
+ProfileItem gid_Basis_Profileitem_Bundled_Buildid
+    ProfileID = gid_Profile_Bundled_Ini_Basis;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Key = "buildid";
+    Value = "<buildid>";
+End
