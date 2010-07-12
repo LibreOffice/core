@@ -59,12 +59,7 @@ public:
 
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint);
 
-    static BitmapEx maLargeButtonImages[BMP_PLACEHOLDER_LARGE_END - BMP_PLACEHOLDER_LARGE_START];
-    static BitmapEx maSmallButtonImages[BMP_PLACEHOLDER_SMALL_END - BMP_PLACEHOLDER_SMALL_START];
-
 private:
-    void UpdateImages();
-
     ViewShellBase& mrBase;
     ULONG mnUpdateTagsEvent;
 
