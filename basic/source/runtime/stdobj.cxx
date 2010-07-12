@@ -221,6 +221,7 @@ static Methods aMethods[] = {
   { "FileSpec",     SbxSTRING, 0,NULL,0 },
   { "DumpAll",      SbxINTEGER,       _OPT, NULL,0 },
 
+{ "Empty",        SbxVARIANT,        _CPROP,    RTLNAME(Empty),0         },
 { "EqualUnoObjects",SbxBOOL,      2 | _FUNCTION, RTLNAME(EqualUnoObjects),0 },
   { "Variant",      SbxVARIANT, 0,NULL,0 },
   { "Variant",      SbxVARIANT, 0,NULL,0 },
