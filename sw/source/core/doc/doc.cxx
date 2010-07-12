@@ -2725,7 +2725,7 @@ void SwDoc::ChkCondColls()
 }
 
 #ifdef FUTURE_VBA
-uno::Reference< script::vba::XEventProcessor >
+uno::Reference< script::vba::XVBAEventProcessor >
 SwDoc::GetVbaEventProcessor()
 {
     if( !mxVbaEvents.is() && pDocShell && ooo::vba::isAlienWordDoc( *pDocShell ) )
@@ -2735,7 +2735,7 @@ SwDoc::GetVbaEventProcessor()
             uno::Reference< frame::XModel > xModel( pDocShell->GetModel(), uno::UNO_SET_THROW );
             uno::Sequence< uno::Any > aArgs(1);
             aArgs[0] <<= xModel;
-            mxVbaEvents.set( ooo::vba::createVBAUnoAPIServiceWithArgs( pDocShell, "com.sun.star.script.vba.TextEventProcessor" , aArgs ), uno::UNO_QUERY_THROW );
+            mxVbaEvents.set( ooo::vba::createVBAUnoAPIServiceWithArgs( pDocShell, "com.sun.star.script.vba.VBATextEventProcessor" , aArgs ), uno::UNO_QUERY_THROW );
         }
         catch( uno::Exception& )
         {

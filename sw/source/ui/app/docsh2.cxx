@@ -120,8 +120,8 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #ifdef FUTURE_VBA
-#include <com/sun/star/script/vba/XEventProcessor.hpp>
-#include <com/sun/star/script/vba/EventIdentifier.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
 #endif
 #include <editeng/acorrcfg.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -191,9 +191,9 @@ void SwDocShell::DoFlushDocInfo()
 }
 
 #ifdef FUTURE_VBA
-void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XEventProcessor >& xVbaEvents, const SfxHint& rHint )
+void lcl_processCompatibleSfxHint( const uno::Reference< script::vba::XVBAEventProcessor >& xVbaEvents, const SfxHint& rHint )
 {
-    using namespace com::sun::star::script::vba::EventIdentifier;
+    using namespace com::sun::star::script::vba::VBAEventId;
     if ( rHint.ISA( SfxEventHint ) )
     {
         uno::Sequence< uno::Any > aArgs;
@@ -225,7 +225,7 @@ void SwDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 
 #ifdef FUTURE_VBA
-    uno::Reference< script::vba::XEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
+    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
     if( xVbaEvents.is() )
         lcl_processCompatibleSfxHint( xVbaEvents, rHint );
 #endif
@@ -314,10 +314,10 @@ USHORT SwDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 #ifdef FUTURE_VBA
     if( pDoc && IsInPrepareClose() )
     {
-        uno::Reference< script::vba::XEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
+        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
         if( xVbaEvents.is() )
         {
-            using namespace com::sun::star::script::vba::EventIdentifier;
+            using namespace com::sun::star::script::vba::VBAEventId;
             uno::Sequence< uno::Any > aArgs;
             xVbaEvents->processVbaEvent( DOCUMENT_CLOSE, aArgs );
         }

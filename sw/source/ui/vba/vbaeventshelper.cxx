@@ -26,11 +26,11 @@
  ************************************************************************/
 
 #include "vbaeventshelper.hxx"
-#include <com/sun/star/script/vba/EventIdentifier.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <vbahelper/helperdecl.hxx>
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::script::vba::EventIdentifier;
+using namespace ::com::sun::star::script::vba::VBAEventId;
 using namespace ::ooo::vba;
 
 // ============================================================================
@@ -102,7 +102,7 @@ sdecl::class_<SwVbaEventsHelper, sdecl::with_args<true> > serviceImpl;
 extern sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "SwVbaEventsHelper",
-    "com.sun.star.document.vba.TextEventProcessor" );
+    "com.sun.star.document.vba.VBATextEventProcessor" );
 }
 
 // ============================================================================
