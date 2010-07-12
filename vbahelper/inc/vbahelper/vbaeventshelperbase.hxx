@@ -29,7 +29,7 @@
 #define VBAHELPER_VBAEVENTSHELPERBASE_HXX
 
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/script/vba/XEventProcessor.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <map>
 #include <deque>
@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star {
 
 // ============================================================================
 
-typedef ::cppu::WeakImplHelper2< css::script::vba::XEventProcessor, css::lang::XEventListener > VbaEventsHelperBase_BASE;
+typedef ::cppu::WeakImplHelper2< css::script::vba::XVBAEventProcessor, css::lang::XEventListener > VbaEventsHelperBase_BASE;
 
 class VBAHELPER_DLLPUBLIC VbaEventsHelperBase : public VbaEventsHelperBase_BASE
 {
@@ -51,7 +51,7 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~VbaEventsHelperBase();
 
-    // XEventProcessor
+    // XVBAEventProcessor
     virtual void SAL_CALL setIgnoreEvents( sal_Bool bIgnoreEvents ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getIgnoreEvents() throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasVbaEventHandler( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
