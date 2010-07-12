@@ -114,6 +114,8 @@ sub register_extensions
 
         my $localtemppath = installer::systemactions::create_directories("uno", $languagestringref);
 
+        my $slash = "";
+
         if ( $installer::globals::iswindowsbuild )
         {
             if ( $^O =~ /cygwin/i )
@@ -122,15 +124,11 @@ sub register_extensions
                 $bundleddir = qx{cygpath -m "$bundleddir"};
                 chomp($bundleddir);
             }
-            else
-            {
-                $windowsslash = "\/";
-            }
             $localtemppath =~ s/\\/\//g;
-            $localtemppath = "/".$localtemppath;
+            $slash = "/"; # Third slash for Windows. Other OS pathes already start with "/"
         }
 
-        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file:///" . $bundleddir . "\"" . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
+        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $slash . $bundleddir . "\"" . " -env:UserInstallation=file://" . $slash . $localtemppath . " 2\>\&1 |";
 
         print "... $systemcall ...\n";
 
