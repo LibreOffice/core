@@ -295,7 +295,6 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         for( i = 0; i < nSize; i++ )
         {
             typelib_TypeDescriptionReference * pTDR = ppTDR[i];
-            sal_Int32 nStaticCounts = pTDR->nStaticRefCount;
             OSL_ASSERT( pTDR->nRefCount > pTDR->nStaticRefCount );
             pTDR->nRefCount -= pTDR->nStaticRefCount;
 
