@@ -405,6 +405,7 @@ void    SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight, cons
 }
 bool SalGraphics::drawPolyLine(
     const basegfx::B2DPolygon& /*rPolyPolygon*/,
+    double /*fTransparency*/,
     const basegfx::B2DVector& /*rLineWidths*/,
     basegfx::B2DLineJoin /*eLineJoin*/)
 {
@@ -536,7 +537,7 @@ sal_Bool SalGraphics::DrawPolyPolygonBezier( sal_uInt32 i_nPoly, const sal_uInt3
     return bRet;
 }
 
-bool SalGraphics::DrawPolyLine( const ::basegfx::B2DPolygon& i_rPolygon,
+bool SalGraphics::DrawPolyLine( const ::basegfx::B2DPolygon& i_rPolygon, double fTransparency,
     const ::basegfx::B2DVector& i_rLineWidth, basegfx::B2DLineJoin i_eLineJoin,
     const OutputDevice* i_pOutDev )
 {
@@ -544,10 +545,10 @@ bool SalGraphics::DrawPolyLine( const ::basegfx::B2DPolygon& i_rPolygon,
     if( (m_nLayout & SAL_LAYOUT_BIDI_RTL) )
     {
         basegfx::B2DPolygon aMirror( mirror( i_rPolygon, i_pOutDev ) );
-        bRet = drawPolyLine( aMirror, i_rLineWidth, i_eLineJoin );
+        bRet = drawPolyLine( aMirror, fTransparency, i_rLineWidth, i_eLineJoin );
     }
     else
-        bRet = drawPolyLine( i_rPolygon, i_rLineWidth, i_eLineJoin );
+        bRet = drawPolyLine( i_rPolygon, fTransparency, i_rLineWidth, i_eLineJoin );
     return bRet;
 }
 

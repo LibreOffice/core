@@ -319,6 +319,10 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Sardinian, Logudorese" ; LANGUAGE_USER_SARDINIAN_LOGUDORESE ; > ;
         < "Sardinian, Sassarese" ; LANGUAGE_USER_SARDINIAN_SASSARESE ; > ;
         < "Bafia" ; LANGUAGE_USER_BAFIA ; > ;
+        < "Gikuyu" ; LANGUAGE_USER_GIKUYU ; > ;
+        < "Yoruba" ; LANGUAGE_YORUBA ; > ;
+        < "Rusyn (Ukraine)" ; LANGUAGE_USER_RUSYN_UKRAINE ; > ;
+        < "Rusyn (Slovakia)" ; LANGUAGE_USER_RUSYN_SLOVAKIA ; > ;
     };
 };
 
