@@ -119,6 +119,8 @@ sub register_extensions
             if ( $^O =~ /cygwin/i )
             {
                 $localtemppath = $installer::globals::cyg_temppath;
+                $bundleddir = qx{cygpath -m "$bundleddir"};
+                chomp($bundleddir);
             }
             else
             {
