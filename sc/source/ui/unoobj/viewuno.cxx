@@ -29,8 +29,8 @@
 #include "precompiled_sc.hxx"
 
 #include <com/sun/star/awt/MouseButton.hpp>
-#include <com/sun/star/script/vba/EventIdentifier.hpp>
-#include <com/sun/star/script/vba/XEventProcessor.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 
 #include <editeng/outliner.hxx>
@@ -561,7 +561,7 @@ void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, sal_Int32 nEvent )
     // execute VBA event handlers
     try
     {
-        uno::Reference< script::vba::XEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
+        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
         // the parameter is the clicked object, as in the mousePressed call above
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[ 0 ] <<= nTab;
@@ -1338,7 +1338,7 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
         // execute VBA event handler
         if (!bReturn && xTarget.is()) try
         {
-            uno::Reference< script::vba::XEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
+            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
             // the parameter is the clicked object, as in the mousePressed call above
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= xTarget;
@@ -1851,7 +1851,7 @@ void ScTabViewObj::SelectionChanged()
     // execute VBA event handler
     try
     {
-        uno::Reference< script::vba::XEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
+        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
         // the parameter is the clicked object, as in the mousePressed call above
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[ 0 ] <<= getSelection();

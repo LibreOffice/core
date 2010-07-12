@@ -51,7 +51,7 @@
 #include <tools/list.hxx>
 #include <rtl/crc.h>
 #include <basic/basmgr.hxx>
-#include <com/sun/star/script/vba/XEventProcessor.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <vbahelper/vbaaccesshelper.hxx>
 
 #include "document.hxx"
@@ -1293,7 +1293,7 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
     }
 }
 
-uno::Reference< script::vba::XEventProcessor > ScDocument::GetVbaEventProcessor() const
+uno::Reference< script::vba::XVBAEventProcessor > ScDocument::GetVbaEventProcessor() const
 {
     if( !mxVbaEvents.is() && pShell && IsInVBAMode() )
     {
@@ -1302,7 +1302,7 @@ uno::Reference< script::vba::XEventProcessor > ScDocument::GetVbaEventProcessor(
             uno::Reference< frame::XModel > xModel( pShell->GetModel(), uno::UNO_QUERY_THROW );
             uno::Sequence< uno::Any > aArgs(1);
             aArgs[0] <<= xModel;
-            mxVbaEvents.set( ooo::vba::createVBAUnoAPIServiceWithArgs( pShell, "com.sun.star.script.vba.SpreadsheetEventProcessor" , aArgs ), uno::UNO_QUERY_THROW );
+            mxVbaEvents.set( ooo::vba::createVBAUnoAPIServiceWithArgs( pShell, "com.sun.star.script.vba.VBASpreadsheetEventProcessor" , aArgs ), uno::UNO_QUERY_THROW );
         }
         catch( uno::Exception& )
         {

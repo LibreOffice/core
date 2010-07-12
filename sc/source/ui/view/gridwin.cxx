@@ -69,8 +69,8 @@
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
-#include <com/sun/star/script/vba/EventIdentifier.hpp>
-#include <com/sun/star/script/vba/XEventProcessor.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 
 #include "gridwin.hxx"
 #include "tabvwsh.hxx"
@@ -2132,7 +2132,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
             ScGlobal::OpenURL( aUrl, aTarget );
 
             // fire worksheet_followhyperlink event
-            uno::Reference< script::vba::XEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
+            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = pDoc->GetVbaEventProcessor();
             if( xVbaEvents.is() ) try
             {
                 Point aPos = rMEvt.GetPosPixel();
@@ -2147,7 +2147,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                     uno::Reference< table::XCell > xCell( new ScCellObj( pViewData->GetDocShell(), aCellPos ) );
                     uno::Sequence< uno::Any > aArgs(1);
                     aArgs[0] <<= xCell;
-                    xVbaEvents->processVbaEvent( script::vba::EventIdentifier::WORKSHEET_FOLLOWHYPERLINK, aArgs );
+                    xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKSHEET_FOLLOWHYPERLINK, aArgs );
                 }
             }
             catch( uno::Exception& )

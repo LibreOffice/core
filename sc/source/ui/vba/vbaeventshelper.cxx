@@ -30,7 +30,7 @@
 #include <com/sun/star/awt/XWindowListener.hpp>
 #include <com/sun/star/frame/XBorderResizeListener.hpp>
 #include <com/sun/star/frame/XControllerBorder.hpp>
-#include <com/sun/star/script/vba/EventIdentifier.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -51,7 +51,7 @@
 #include "convuno.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::com::sun::star::script::vba::EventIdentifier;
+using namespace ::com::sun::star::script::vba::VBAEventId;
 using namespace ::ooo::vba;
 
 // ============================================================================
@@ -769,7 +769,7 @@ sdecl::class_<ScVbaEventsHelper, sdecl::with_args<true> > serviceImpl;
 extern sdecl::ServiceDecl const serviceDecl(
     serviceImpl,
     "ScVbaEventsHelper",
-    "com.sun.star.script.vba.SpreadsheetEventProcessor" );
+    "com.sun.star.script.vba.VBASpreadsheetEventProcessor" );
 }
 
 // ============================================================================

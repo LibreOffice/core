@@ -160,7 +160,7 @@ namespace com { namespace sun { namespace star {
         class XEmbeddedObject;
     }
     namespace script { namespace vba {
-        class XEventProcessor;
+        class XVBAEventProcessor;
     } }
 } } }
 
@@ -333,7 +333,7 @@ private:
     Timer               aTrackTimer;
 
     // mutable for lazy construction
-    mutable com::sun::star::uno::Reference< com::sun::star::script::vba::XEventProcessor >
+    mutable com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
                         mxVbaEvents;
 
 public:
@@ -1759,7 +1759,7 @@ public:
     void GetSortParam( ScSortParam& rParam, SCTAB nTab );
     void SetSortParam( ScSortParam& rParam, SCTAB nTab );
 
-    com::sun::star::uno::Reference< com::sun::star::script::vba::XEventProcessor >
+    com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
                     GetVbaEventProcessor() const;
 
     /** Should only be GRAM_PODF or GRAM_ODFF. */

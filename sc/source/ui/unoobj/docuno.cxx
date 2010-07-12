@@ -60,8 +60,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
-#include <com/sun/star/script/vba/EventIdentifier.hpp>
-#include <com/sun/star/script/vba/XEventProcessor.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <comphelper/processfactory.hxx>
@@ -2079,25 +2079,25 @@ void SAL_CALL ScModelObj::processCoreVbaEvent( sal_Int32 nSlotId )
 {
     using namespace ::com::sun::star::script::vba;
 
-    sal_Int32 nVbaEventId = EventIdentifier::NO_EVENT;
+    sal_Int32 nVbaEventId = VBAEventId::NO_EVENT;
     uno::Sequence< uno::Any > aArgs;
     switch( nSlotId )
     {
         case SID_SAVEDOC:
         case SID_SAVEASDOC:
-            nVbaEventId = EventIdentifier::WORKBOOK_BEFORESAVE;
+            nVbaEventId = VBAEventId::WORKBOOK_BEFORESAVE;
             aArgs.realloc( 1 );
             aArgs[ 0 ] <<= (nSlotId == SID_SAVEASDOC);
         break;
         case SID_PRINTDOC:
         case SID_PRINTDOCDIRECT:
-            nVbaEventId = EventIdentifier::WORKBOOK_BEFOREPRINT;
+            nVbaEventId = VBAEventId::WORKBOOK_BEFOREPRINT;
         break;
         default:
             throw lang::IllegalArgumentException();
     }
 
-    uno::Reference< XEventProcessor > xEventProcessor( GetDocument()->GetVbaEventProcessor(), uno::UNO_QUERY );
+    uno::Reference< XVBAEventProcessor > xEventProcessor( GetDocument()->GetVbaEventProcessor(), uno::UNO_QUERY );
     if( !xEventProcessor.is() )
         throw script::provider::ScriptFrameworkErrorException();
 
@@ -2350,7 +2350,7 @@ void ScModelObj::HandleCalculateEvents()
 
                     try
                     {
-                        uno::Reference< script::vba::XEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
+                        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
                         uno::Sequence< uno::Any > aArgs( 1 );
                         aArgs[ 0 ] <<= nTab;
                         xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( SC_SHEETEVENT_CALCULATE ), aArgs );

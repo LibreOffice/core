@@ -30,7 +30,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <com/sun/star/script/vba/XEventProcessor.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include "scitems.hxx"
 #include <editeng/langitem.hxx>
 #include <svl/srchitem.hxx>
@@ -503,7 +503,7 @@ bool ScDocument::HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVb
         // check if VBA event handlers exist
         if (bWithVbaEvents)
         {
-            uno::Reference< script::vba::XEventProcessor > xVbaEvents = GetVbaEventProcessor();
+            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = GetVbaEventProcessor();
             if ( xVbaEvents.is() ) try
             {
                 uno::Sequence< uno::Any > aArgs( 1 );

@@ -64,8 +64,8 @@
 #include "chgviset.hxx"
 #include <sfx2/request.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
-#include <com/sun/star/script/vba/EventIdentifier.hpp>
-#include <com/sun/star/script/vba/XEventProcessor.hpp>
+#include <com/sun/star/script/vba/VBAEventId.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 
@@ -273,7 +273,7 @@ void ScDocShell::BeforeXMLLoading()
     aDocument.DisableIdle( TRUE );
 
     // suppress VBA events when loading the xml
-    uno::Reference< script::vba::XEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
+    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
     if( xVbaEvents.is() )
         xVbaEvents->setIgnoreEvents( sal_True );
 
@@ -384,7 +384,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
             pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
 #if 0 // this should be controlled by a compatibility mode
         // suppress VBA events when loading the xml
-        uno::Reference< script::vba::XEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
+        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
         if( xVbaEvents.is() )
             xVbaEvents->setIgnoreEvents( sal_False );
 #endif
@@ -512,10 +512,10 @@ BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
 
 void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    uno::Reference< script::vba::XEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
+    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
     if ( xVbaEvents.is() ) try
     {
-        using namespace ::com::sun::star::script::vba::EventIdentifier;
+        using namespace ::com::sun::star::script::vba::VBAEventId;
         if (rHint.ISA(ScTablesHint) )
         {
             const ScTablesHint& rScHint = static_cast< const ScTablesHint& >( rHint );
@@ -2274,9 +2274,9 @@ USHORT __EXPORT ScDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
     {
         try
         {
-            uno::Reference< script::vba::XEventProcessor > xVbaEvents( aDocument.GetVbaEventProcessor(), uno::UNO_SET_THROW );
+            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( aDocument.GetVbaEventProcessor(), uno::UNO_SET_THROW );
             uno::Sequence< uno::Any > aArgs;
-            xVbaEvents->processVbaEvent( script::vba::EventIdentifier::WORKBOOK_BEFORECLOSE, aArgs );
+            xVbaEvents->processVbaEvent( script::vba::VBAEventId::WORKBOOK_BEFORECLOSE, aArgs );
         }
         catch( util::VetoException& )
         {
