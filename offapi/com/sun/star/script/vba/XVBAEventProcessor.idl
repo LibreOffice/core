@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_script_vba_XEventProcessor_idl__
-#define __com_sun_star_script_vba_XEventProcessor_idl__
+#ifndef __com_sun_star_script_vba_XVBAEventProcessor_idl__
+#define __com_sun_star_script_vba_XVBAEventProcessor_idl__
 
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/script/provider/ScriptFrameworkErrorException.idl>
@@ -40,7 +40,7 @@ module com {  module sun {  module star {  module script { module vba {
 
 /** Executes VBA event handlers.
  */
-interface XEventProcessor
+interface XVBAEventProcessor
 {
     //-------------------------------------------------------------------------
 
@@ -53,8 +53,7 @@ interface XEventProcessor
     /** Returns whether a VBA event handler exists.
 
         @param nEventId
-            The identifier of the event. Must be a constant from <type>
-            EventIdentifier</type>.
+            The identifier of the event. Must be a constant from <type>VBAEventId</type>.
 
         @param aArgs
             Additional arguments needed to identify some event handlers, e.g. a
@@ -75,8 +74,7 @@ interface XEventProcessor
     /** Executes a VBA event handler.
 
         @param nEventId
-            The identifier of the event. Must be a constant from <type>
-            EventIdentifier</type>.
+            The identifier of the event. Must be a constant from <type>VBAEventId</type>.
 
         @param aArgs
             The input arguments needed to create the argument list of the VBA

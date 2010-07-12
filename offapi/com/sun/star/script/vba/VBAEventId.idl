@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_script_vba_EventIdentifier_idl__
-#define __com_sun_star_script_vba_EventIdentifier_idl__
+#ifndef __com_sun_star_script_vba_VBAEventId_idl__
+#define __com_sun_star_script_vba_VBAEventId_idl__
 
 //=============================================================================
 
@@ -40,11 +40,11 @@ module com {  module sun {  module star { module script { module vba {
     document code module will be executed.</p>
 
     <p>Each event expects some specific arguments to be passed to
-    <member>XEventProcessor::processVbaEvent</member>.</p>
+    <member>XVBAEventProcessor::processVbaEvent</member>.</p>
 
-    @see XEventProcessor
+    @see XVBAEventProcessor
  */
-constants EventIdentifier
+constants VBAEventId
 {
     //=========================================================================
 
@@ -111,9 +111,9 @@ constants EventIdentifier
     const long WORKSHEET_ACTIVATE                   = 2101;
     /** Worksheet has been activated (made visible). Arguments: short nSheet. */
     const long WORKSHEET_DEACTIVATE                 = 2102;
-    /** Double click in the sheet. Arguments: XRange/XSheetCellRangeContainer aRange. [out] boolean bCancel. */
+    /** Double click in the sheet. Arguments: XRange/XSheetCellRangeContainer aRange, [out] boolean bCancel. */
     const long WORKSHEET_BEFOREDOUBLECLICK          = 2103;
-    /** Right click in the sheet. Arguments: XRange/XSheetCellRangeContainer aRange. [out] boolean bCancel. */
+    /** Right click in the sheet. Arguments: XRange/XSheetCellRangeContainer aRange, [out] boolean bCancel. */
     const long WORKSHEET_BEFORERIGHTCLICK           = 2104;
     /** Cells in sheet have been recalculated. Arguments: short nSheet. */
     const long WORKSHEET_CALCULATE                  = 2105;

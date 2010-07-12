@@ -38,12 +38,12 @@ PACKAGE=com$/sun$/star$/script$/vba
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    EventIdentifier.idl \
-    EventProcessor.idl \
-    SpreadsheetEventProcessor.idl \
-    TextEventProcessor.idl \
+    VBAEventId.idl \
+    VBAEventProcessor.idl \
+    VBASpreadsheetEventProcessor.idl \
+    VBATextEventProcessor.idl \
     XCoreEventProcessor.idl \
-    XEventProcessor.idl
+    XVBAEventProcessor.idl
 
 # ------------------------------------------------------------------
 
