@@ -130,7 +130,7 @@ sub register_extensions
             $localtemppath = "/".$localtemppath;
         }
 
-        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $bundleddir . "\"" . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
+        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file:///" . $bundleddir . "\"" . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
 
         print "... $systemcall ...\n";
 
