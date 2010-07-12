@@ -49,7 +49,7 @@ extern "C" {
 typedef struct _rtl_Locale
 {
     /**
-         Lowercase two-letter ISO-639 code.
+         Lowercase two-letter ISO 639-1 or three-letter ISO 639-3 code.
      */
     rtl_uString *   Language;
     /**
@@ -72,7 +72,7 @@ typedef struct _rtl_Locale
 
 /**
     Register a locale from language, country and variant.
-    @param language lowercase two-letter ISO-639 code.
+    @param language lowercase two-letter ISO 639-1 or three-letter ISO 639-3 code.
     @param country uppercase two-letter ISO-3166 code. May be null.
     @param variant vendor and browser specific code. May be null.
  */
@@ -95,7 +95,7 @@ rtl_Locale * SAL_CALL rtl_locale_getDefault();
     Sets the default.
     Normally set once at the beginning of applet or application,
     then never reset. <code>setDefault</code> does not reset the host locale.
-    @param language lowercase two-letter ISO-639 code.
+    @param language lowercase two-letter ISO 639-1 or three-letter ISO 639-3 code.
     @param country uppercase two-letter ISO-3166 code.
     @param variant vendor and browser specific code. See class description.
  */
@@ -103,7 +103,7 @@ void SAL_CALL rtl_locale_setDefault( const sal_Unicode * language, const sal_Uni
 
 /**
     Getter for programmatic name of field,
-    an lowercased two-letter ISO-639 code.
+    a lowercased two-letter ISO 639-1 or three-letter ISO 639-3 code.
     @see #getDisplayLanguage
  */
 rtl_uString * SAL_CALL rtl_locale_getLanguage( rtl_Locale * This );
