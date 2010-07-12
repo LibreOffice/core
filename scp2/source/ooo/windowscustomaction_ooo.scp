@@ -199,6 +199,16 @@ WindowsCustomAction gid_Customaction_Shellextensionsdll7
 	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "InstallValidate");
 End
 
+WindowsCustomAction gid_Customaction_Register_Extensions
+	Name = "RegisterExtensions";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "RegisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+End
+
 WindowsCustomAction gid_Customaction_Set_Admininstall
 	Name = "SetAdminInstallProperty";
 	Typ = "65";
@@ -285,6 +295,16 @@ WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed", "behind_InstallFinalize");
 	Assignment2 = ("AdminExecuteSequence", "", "behind_InstallFinalize");
+End
+
+WindowsCustomAction gid_Customaction_Langpack_Register_Extensions
+	Name = "RegisterExtensions";
+	Typ = "65";
+	Source = "lngpckinsthlp.dll";
+	Target = "RegisterExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "", "end");
+	Assignment2 = ("AdminExecuteSequence", "", "end");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetFeatureState
