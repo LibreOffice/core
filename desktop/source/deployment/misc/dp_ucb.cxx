@@ -271,4 +271,50 @@ bool readLine( OUString * res, OUString const & startingWith,
     return false;
 }
 
+bool readProperties( ::std::list< ::std::pair< ::rtl::OUString, ::rtl::OUString> > & out_result,
+                     ::ucbhelper::Content & ucb_content )
+{
+    // read whole file:
+    ::rtl::ByteSequence bytes( readFile( ucb_content ) );
+    OUString file( reinterpret_cast<sal_Char const *>(bytes.getConstArray()),
+                   bytes.getLength(), RTL_TEXTENCODING_UTF8);
+    sal_Int32 pos = 0;
+
+    for (;;)
+    {
+
+        ::rtl::OUStringBuffer buf;
+        sal_Int32 start = pos;
+
+        bool bEOF = false;
+        pos = file.indexOf( LF, pos );
+        if (pos < 0) { // EOF
+            buf.append( file.copy( start ) );
+            bEOF = true;
+        }
+        else
+        {
+            if (pos > 0 && file[ pos - 1 ] == CR)
+                // consume extra CR
+                buf.append( file.copy( start, pos - start - 1 ) );
+            else
+                buf.append( file.copy( start, pos - start ) );
+            pos++;
+        }
+        OUString aLine = buf.makeStringAndClear();
+
+        sal_Int32 posEqual = aLine.indexOf('=');
+        if (posEqual > 0 && (posEqual + 1) <  aLine.getLength())
+        {
+            OUString name = aLine.copy(0, posEqual);
+            OUString value = aLine.copy(posEqual + 1);
+            out_result.push_back(::std::make_pair(name, value));
+        }
+
+        if (bEOF)
+            break;
+    }
+    return false;
+}
+
 }

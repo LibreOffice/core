@@ -230,8 +230,6 @@ class SbxValueImpl;
 
 class SbxValue : public SbxBase
 {
-    friend class SbiDllMgr; // BASIC-Runtime must access aData
-
     SbxValueImpl* mpSbxValueImplImpl;   // Impl data
 
     // #55226 Transport additional infos
@@ -288,6 +286,8 @@ public:
     BOOL GetNoBroadcast( SbxValues& );
     const SbxValues& GetValues_Impl() const { return aData; }
     virtual BOOL Put( const SbxValues& );
+
+    inline SbxValues * data() { return &aData; }
 
     SbxINT64 GetCurrency() const;
     SbxINT64 GetLong64() const;
@@ -447,6 +447,9 @@ class SbxVariable : public SbxValue
     String           maName;            // Name, if available
     SbxArrayRef      mpPar;             // Parameter-Array, if set
     USHORT           nHash;             // Hash-ID for search
+
+    SbxVariableImpl* getImpl( void );
+
 protected:
     SbxInfoRef  pInfo;              // Probably called information
     sal_uIntPtr nUserData;          // User data for Call()
@@ -491,6 +494,10 @@ public:
     inline const SbxObject* GetParent() const { return pParent; }
     inline SbxObject* GetParent() { return pParent; }
     virtual void SetParent( SbxObject* );
+
+    const String& GetDeclareClassName( void );
+    void SetDeclareClassName( const String& );
+    void SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener );
 
     static USHORT MakeHashCode( const String& rName );
 };

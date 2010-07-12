@@ -115,6 +115,30 @@ void SbiParser::Write()
         aGen.Gen( _CHAN0 );
 }
 
+
+// #i92642 Handle LINE keyword outside ::Next()
+void SbiParser::Line()
+{
+    // #i92642: Special handling to allow name as symbol
+    if( Peek() == INPUT )
+    {
+        Next();
+        LineInput();
+    }
+    else
+    {
+        aGen.Statement();
+
+        KeywordSymbolInfo aInfo;
+        aInfo.m_aKeywordSymbol = String( RTL_CONSTASCII_USTRINGPARAM( "line" ) );
+        aInfo.m_eSbxDataType = GetType();
+        aInfo.m_eTok = SYMBOL;
+
+        Symbol( &aInfo );
+    }
+}
+
+
 // LINE INPUT [prompt], var$
 
 void SbiParser::LineInput()
@@ -288,6 +312,19 @@ void SbiParser::Open()
 
 void SbiParser::Name()
 {
+    // #i92642: Special handling to allow name as symbol
+    if( Peek() == EQ )
+    {
+        aGen.Statement();
+
+        KeywordSymbolInfo aInfo;
+        aInfo.m_aKeywordSymbol = String( RTL_CONSTASCII_USTRINGPARAM( "name" ) );
+        aInfo.m_eSbxDataType = GetType();
+        aInfo.m_eTok = SYMBOL;
+
+        Symbol( &aInfo );
+        return;
+    }
     SbiExpression aExpr1( this );
     TestToken( AS );
     SbiExpression aExpr2( this );

@@ -39,14 +39,19 @@ typedef CollTestImplHelper< ov::msforms::XControls > ControlsImpl_BASE;
 class ScVbaControls : public ControlsImpl_BASE
 {
     css::uno::Reference< css::awt::XControl > mxDialog;
+
 protected:
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+
 public:
     ScVbaControls( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::awt::XControl >& xDialog );
     // XControls
-     virtual void SAL_CALL Move( double cx, double cy ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL Move( double cx, double cy ) throw (css::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL Add( const ::com::sun::star::uno::Any& Object, const ::com::sun::star::uno::Any& StringKey, const ::com::sun::star::uno::Any& Before, const ::com::sun::star::uno::Any& After ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL Remove( const ::com::sun::star::uno::Any& StringKeyOrIndex ) throw (::com::sun::star::uno::RuntimeException);
+
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);

@@ -259,7 +259,7 @@ public:
     void                        ResetLastDir();
 
 //#if 0 // _SOLAR__PRIVATE
-    SAL_DLLPRIVATE static SfxApplication* Is_Impl() { return pApp;}
+    SAL_DLLPRIVATE static SfxApplication* Get() { return pApp;}
     SAL_DLLPRIVATE SfxDispatcher* GetAppDispatcher_Impl();
     SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl();
 
