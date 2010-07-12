@@ -587,6 +587,15 @@ extern "C" int unopkg_main()
             xDialog->startExecuteModal(xListener);
             dialogEnded.wait();
         }
+        else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("sync")))
+        {
+            //This sub command may be removed later and is only there to have a
+            //possibility to start extension synching without any output.
+            //This is just here so we do not get an error, because of an unknown
+            //sub-command. We do synching before
+            //the sub-commands are processed.
+
+        }
         else
         {
             dp_misc::writeConsoleError(
