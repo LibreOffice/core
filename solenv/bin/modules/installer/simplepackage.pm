@@ -82,10 +82,9 @@ sub get_extensions_dir
 
 sub register_extensions
 {
-    my ($officedir, $languagestringref) = @_;
+    my ($officedir, $languagestringref, $presetsdir) = @_;
 
     my $programdir = $officedir . $installer::globals::separator;
-    # if ( $installer::globals::sundirhostname ne "" ) { $programdir = $programdir . $installer::globals::sundirhostname . $installer::globals::separator; }
     if ( $installer::globals::officedirhostname ne "" ) { $programdir = $programdir . $installer::globals::officedirhostname . $installer::globals::separator; }
     $programdir = $programdir . "program";
 
@@ -93,9 +92,6 @@ sub register_extensions
     chdir($programdir);
 
     my $infoline = "";
-
-    # my $unopkgfile = $officedir . $installer::globals::separator . "program" .
-    #               $installer::globals::separator . $installer::globals::unopkgfile;
 
     my $unopkgfile = $installer::globals::unopkgfile;
 
@@ -107,87 +103,64 @@ sub register_extensions
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    # my $extensiondir = $officedir . $installer::globals::separator . "share" .
-    #           $installer::globals::separator . "extension" .
-    #           $installer::globals::separator . "install";
-
-    my $extensiondir = ".." . $installer::globals::separator . "share" . $installer::globals::separator . "extension" . $installer::globals::separator . "install";
-
-    my $allextensions = installer::systemactions::find_file_with_file_extension("oxt", $extensiondir);
-
-    if (( $#{$allextensions} > -1 ) && ( $unopkgexists ))
+    if ( $unopkgexists )
     {
         my $currentdir = cwd();
         print "... current dir: $currentdir ...\n";
         $infoline = "Current dir: $currentdir\n";
         push( @installer::globals::logfileinfo, $infoline);
 
-        for ( my $i = 0; $i <= $#{$allextensions}; $i++ )
+        if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
+
+        my $localtemppath = installer::systemactions::create_directories("uno", $languagestringref);
+
+        if ( $installer::globals::iswindowsbuild )
         {
-            my $oneextension = $extensiondir . $installer::globals::separator . ${$allextensions}[$i];
-
-            # my $systemcall = $unopkgfile . " add --shared --suppress-license " . "\"" . $oneextension . "\"";
-
-            if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
-            if ( ! -f $oneextension ) { installer::exiter::exit_program("ERROR: $oneextension not found!", "register_extensions"); }
-
-            my $localtemppath = installer::systemactions::create_directories("uno", $languagestringref);
-
-            if ( $installer::globals::iswindowsbuild )
+            if ( $^O =~ /cygwin/i )
             {
-                if ( $^O =~ /cygwin/i )
-                {
-                    $localtemppath = $installer::globals::cyg_temppath;
-                }
-                else
-                {
-                    $windowsslash = "\/";
-                }
-                $localtemppath =~ s/\\/\//g;
-                $localtemppath = "/".$localtemppath;
-            }
-            my $systemcall = $unopkgfile . " add --shared --suppress-license --verbose " . $oneextension . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
-
-            print "... $systemcall ...\n";
-
-            $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
-
-            my @unopkgoutput = ();
-
-            open (UNOPKG, $systemcall);
-            while (<UNOPKG>)
-            {
-                my $lastline = $_;
-                push(@unopkgoutput, $lastline);
-            }
-            close (UNOPKG);
-
-            my $returnvalue = $?;   # $? contains the return value of the systemcall
-
-            if ($returnvalue)
-            {
-                # Writing content of @unopkgoutput only in the error case into the log file. Sometimes it
-                # contains strings like "Error" even in the case of success. This causes a packaging error
-                # when the log file is analyzed at the end, even if there is no real error.
-                for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
-
-                $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
+                $localtemppath = $installer::globals::cyg_temppath;
             }
             else
             {
-                $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-                push( @installer::globals::logfileinfo, $infoline);
+                $windowsslash = "\/";
             }
+            $localtemppath =~ s/\\/\//g;
+            $localtemppath = "/".$localtemppath;
         }
-    }
-    else
-    {
-        if ( ! ( $#{$allextensions} > -1 ))
+
+        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=file://" . $presetsdir . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
+
+        print "... $systemcall ...\n";
+
+        $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        my @unopkgoutput = ();
+
+        open (UNOPKG, $systemcall);
+        while (<UNOPKG>)
         {
-            $infoline = "No extensions located in directory $extensiondir.\n";
+            my $lastline = $_;
+            push(@unopkgoutput, $lastline);
+        }
+        close (UNOPKG);
+
+        my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+        if ($returnvalue)
+        {
+            # Writing content of @unopkgoutput only in the error case into the log file. Sometimes it
+            # contains strings like "Error" even in the case of success. This causes a packaging error
+            # when the log file is analyzed at the end, even if there is no real error.
+            for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
+
+            $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
+        }
+        else
+        {
+            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
     }
@@ -655,6 +628,8 @@ sub create_simple_package
     installer::logger::print_message( "... creating directories ...\n" );
     installer::logger::include_header_into_logfile("Creating directories:");
 
+    my $presetsdir = "";
+
     for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
     {
         my $onedir = ${$dirsref}[$i];
@@ -662,6 +637,8 @@ sub create_simple_package
         if ( $onedir->{'HostName'} )
         {
             my $destdir = $subfolderdir . $installer::globals::separator . $onedir->{'HostName'};
+            if ( $destdir =~ /\Wpresets\s*$/ ) { $presetsdir = $destdir; }
+
             if ( ! -d $destdir )
             {
                 if ( $^O =~ /cygwin/i ) # Cygwin performance check
@@ -787,18 +764,17 @@ sub create_simple_package
         system($localcall);
     }
 
-    # Registering the extensions
-
-    # installer::logger::print_message( "... registering extensions ...\n" );
-    # installer::logger::include_header_into_logfile("Registering extensions:");
-    # register_extensions($subfolderdir, $languagestringref);
-
     installer::logger::print_message( "... removing superfluous directories ...\n" );
     installer::logger::include_header_into_logfile("Removing superfluous directories:");
 
     my $extensionfolder = get_extensions_dir($subfolderdir);
-
     installer::systemactions::remove_empty_dirs_in_folder($extensionfolder);
+
+    # Registering the extensions
+
+    installer::logger::print_message( "... registering extensions ...\n" );
+    installer::logger::include_header_into_logfile("Registering extensions:");
+    register_extensions($subfolderdir, $languagestringref, $presetsdir);
 
     if ( $installer::globals::compiler =~ /^unxmacx/ )
     {
