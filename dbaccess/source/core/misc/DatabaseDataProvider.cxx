@@ -596,11 +596,8 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(sal_Bool _bHasCat
     uno::Sequence< ::rtl::OUString > aColumns;
     if ( i_aColumnNames.getLength() )
     {
-        if ( _bHasCategories )
-        {
-            aColumns.realloc(1);
-            aColumns[0] = xColumns->getElementNames()[0];
-        }
+        aColumns.realloc(1);
+        aColumns[0] = xColumns->getElementNames()[0];
         for(sal_Int32 i = 0 ; i < i_aColumnNames.getLength();++i)
         {
             if ( i_aColumnNames[i].getLength() )
