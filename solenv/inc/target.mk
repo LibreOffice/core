@@ -1461,6 +1461,7 @@ COMPVTMP:=$(mktmp iii)
     @echo COMID:=$(COMID) >> $(COMPVTMP)
 .IF "$(COM)"=="GCC"
     @echo SHORTSTDCPP3:=$(SHORTSTDCPP3) >> $(COMPVTMP)
+    @echo SHORTSTDC3:=$(SHORTSTDC3) >> $(COMPVTMP)
 .ENDIF
     @echo CCNUMVER:=$(CCNUMVER) >> $(COMPVTMP)
     @echo CCVER:=$(CCVER:s/-/ /:1) >> $(COMPVTMP)
@@ -2041,6 +2042,7 @@ $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/hid.lst .PHONY :
 .ENDIF          # "$(SOLAR_JAVA)"!=""
 
 .INCLUDE : tg_merge.mk
+.INCLUDE : tg_propmerge.mk
 
 wordcount:
     wc *.* >> $(TMP)/wc.lst
