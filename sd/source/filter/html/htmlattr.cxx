@@ -100,15 +100,3 @@ void SdHtmlAttrPreview::SetColors( Color& aBack, Color& aText, Color& aLink,
     m_aVLinkColor = aVLink;
     m_aALinkColor = aALink;
 }
-
-// =====================================================================
-// =====================================================================
-void SdHtmlAttrPreview::GetColors( Color& aBack, Color& aText, Color& aLink,
-                                   Color& aVLink, Color& aALink ) const
-{
-    aBack = m_aBackColor;
-    aText = m_aTextColor;
-    aLink = m_aLinkColor;
-    aVLink = m_aVLinkColor;
-    aALink = m_aALinkColor;
-}

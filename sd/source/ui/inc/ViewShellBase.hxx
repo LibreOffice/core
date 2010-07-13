@@ -28,6 +28,8 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #define SD_VIEW_SHELL_BASE_HXX
 
+#include <com/sun/star/frame/XFrame.hpp>
+
 #include "ViewShell.hxx"
 
 #include "glob.hxx"
@@ -55,7 +57,6 @@ class ToolBarManager;
 class UpdateLockManager;
 class ViewShell;
 class ViewShellManager;
-class CustomHandleManager;
 
 /** SfxViewShell descendant that the stacked Draw/Impress shells are
     based on.
@@ -110,10 +111,6 @@ public:
     DrawDocShell* GetDocShell (void) const;
     SdDrawDocument* GetDocument (void) const;
 
-    /** Callback function for retrieving item values related to menu entries.
-    */
-    void GetMenuState (SfxItemSet& rSet);
-
     /** Callback function for general slot calls.  At the moment these are
         slots for switching the pane docking windows on and off.
     */
@@ -162,12 +159,6 @@ public:
         SfxPrinter *pPrinter,
         PrintDialog *pPrintDialog,
         BOOL bSilent, BOOL bIsAPI );
-
-    /// Forwarded to the print manager.
-    USHORT SetPrinterOptDlg (
-        SfxPrinter* pNewPrinter,
-        USHORT nDiffFlags = SFX_PRINTER_ALL,
-        BOOL _bShowDialog = TRUE);
 
     virtual void PreparePrint (PrintDialog* pPrintDialog);
 
@@ -259,8 +250,6 @@ public:
     */
     ::Window* GetViewWindow (void);
 
-    CustomHandleManager& getCustomHandleManager() const;
-
     /** returns the ui descriptive name for the given uno slot. The result is taken from the configuration
         and not cached, so do not use it excessive (f.e. in status updates) */
     ::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const;
@@ -291,22 +280,6 @@ class ICustomhandleSupplier
 {
 public:
     virtual void addCustomHandler( SdrView& rSourceView, ViewShell::ShellType eShellType, SdrHdlList& rHandlerList ) = 0;
-};
-
-class CustomHandleManager : public ICustomhandleSupplier
-{
-public:
-    CustomHandleManager( ViewShellBase& rViewShellBase  );
-    virtual ~CustomHandleManager();
-
-    void registerSupplier( ICustomhandleSupplier* pSupplier );
-    void unRegisterSupplier( ICustomhandleSupplier* pSupplier );
-
-    virtual void addCustomHandler( SdrView& rSourceView, ViewShell::ShellType eShellType, SdrHdlList& rHandlerList );
-
-private:
-    ViewShellBase& mrViewShellBase;
-    std::set< ICustomhandleSupplier* > maSupplier;
 };
 
 } // end of namespace sd

@@ -187,15 +187,6 @@ MasterPageObserver::~MasterPageObserver (void)
 
 
 
-MasterPageObserver::MasterPageNameSet MasterPageObserver::GetMasterPageNames (
-    SdDrawDocument& rDocument)
-{
-    return mpImpl->GetMasterPageNames (rDocument);
-}
-
-
-
-
 //===== MasterPageObserver::Implementation ====================================
 
 void MasterPageObserver::Implementation::RegisterDocument (

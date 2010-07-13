@@ -199,15 +199,6 @@ void GenericPageCache::RequestPreviewBitmap (
 
 
 
-void GenericPageCache::InvalidatePreviewBitmap (CacheKey aKey)
-{
-    if (mpBitmapCache.get() != NULL)
-        mpBitmapCache->InvalidateBitmap(mpCacheContext->GetPage(aKey));
-}
-
-
-
-
 void GenericPageCache::ReleasePreviewBitmap (CacheKey aKey)
 {
     if (mpBitmapCache.get() != NULL)
@@ -289,17 +280,6 @@ void GenericPageCache::SetPreciousFlag (CacheKey aKey, bool bIsPrecious)
     }
 
     mpBitmapCache->SetPrecious(mpCacheContext->GetPage(aKey), bIsPrecious);
-}
-
-
-
-
-bool GenericPageCache::IsEmpty (void) const
-{
-    if (mpBitmapCache.get() != NULL)
-        return mpBitmapCache->IsEmpty();
-    else
-        return true;
 }
 
 

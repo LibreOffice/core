@@ -4391,7 +4391,7 @@ SfxVoidItem ModifyPage SID_MODIFYPAGE
     GroupId = GID_MODIFY;
 ]
 
-SfxVoidItem AssignLayout SID_ASSIGN_LAYOUT
+SfxUInt32Item AssignLayout SID_ASSIGN_LAYOUT
 (SfxUInt32Item WhatPage ID_VAL_WHATPAGE, SfxUInt32Item WhatLayout ID_VAL_WHATLAYOUT)
 [
     /* flags: */
@@ -7243,32 +7243,6 @@ SfxBoolItem LeftPaneDraw SID_LEFT_PANE_DRAW
     GroupId = GID_MODIFY;
 ]
 
-SfxBoolItem RightPane SID_RIGHT_PANE
-
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    Readonly = FALSE,
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MODIFY;
-]
-
 SfxVoidItem NotesChildWindow SID_NOTES_WINDOW
 
 [
@@ -7347,7 +7321,7 @@ SfxBoolItem SlideSorterMultiPaneGUI SID_SLIDE_SORTER_MULTI_PANE_GUI
     GroupId = GID_MODIFY;
 ]
 
-SfxVoidItem TaskPaneShowPanel SID_TASK_PANE (
+SfxVoidItem TaskPaneShowPanel SID_SHOW_TOOL_PANEL (
     SfxBoolItem IsPanelVisible ID_VAL_ISVISIBLE,
     SfxUInt32Item PanelId ID_VAL_PANEL_INDEX)
 [

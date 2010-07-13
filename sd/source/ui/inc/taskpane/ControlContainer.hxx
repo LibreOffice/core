@@ -28,7 +28,6 @@
 #ifndef SD_TOOLPANEL_CONTROL_CONTAINER_HXX
 #define SD_TOOLPANEL_CONTROL_CONTAINER_HXX
 
-#include "TitleBar.hxx"
 #include <osl/mutex.hxx>
 
 #include <vector>

@@ -41,7 +41,7 @@ interface ViewShellBaseView
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_RIGHT_PANE
+    SID_TASKPANE
     [
         ExecMethod = Execute;
         StateMethod = GetState;
@@ -86,7 +86,7 @@ interface ViewShellBaseView
         ExecMethod = Execute;
         StateMethod = GetState;
     ]
-    SID_TASK_PANE
+    SID_SHOW_TOOL_PANEL
     [
         ExecMethod = Execute;
         StateMethod = GetState;

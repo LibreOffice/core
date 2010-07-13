@@ -134,7 +134,6 @@ public:
             given position.
     */
     sal_Int32 GetPageIndexAtPoint (const Point& rPosition) const;
-    sal_Int32 GetFadePageIndexAtPoint (const Point& rPosition) const;
 
     view::Layouter& GetLayouter (void);
 
@@ -206,8 +205,6 @@ public:
     */
     void SetSelectionRectangleVisibility (bool bVisible);
 
-    ::sdr::contact::ObjectContact& GetObjectContact (void) const;
-
     typedef ::std::pair<sal_Int32,sal_Int32> PageRange;
     /** Return the range of currently visible page objects including the
         first and last one in that range.
@@ -217,20 +214,25 @@ public:
     */
     PageRange GetVisiblePageRange (void);
 
-    /** Return the size of the area where the page numbers are displayed.
-        @return
-            The returned size is given in model coordinates.
-    */
-    Size GetPageNumberAreaModelSize (void) const;
-
-    /** Return the size of the border around the original SdrPageObj.
-    */
-    SvBorder GetModelBorder (void) const;
-
     /** Add a shape to the page.  Typically used from inside
         PostModelChange().
     */
     void AddSdrObject (SdrObject& rObject);
+
+    /** Add a listener that is called when the set of visible slides.
+        @param rListener
+            When this method is called multiple times for the same listener
+            the second and all following calls are ignored.  Each listener
+            is added only once.
+    */
+    void AddVisibilityChangeListener (const Link& rListener);
+
+    /** Remove a listener that is called when the set of visible slides changes.
+        @param rListener
+            It is save to pass a listener that was not added or has been
+            removed previously.  Such calls are ignored.
+    */
+    void RemoveVisibilityChangeListener (const Link& rListener);
 
 protected:
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
@@ -265,6 +267,8 @@ private:
     SvBorder maModelBorder;
 
     Orientation meOrientation;
+
+    ::std::vector<Link> maVisibilityChangeListeners;
 
     /** Adapt the coordinates of the given bounding box according to the
         other parameters.

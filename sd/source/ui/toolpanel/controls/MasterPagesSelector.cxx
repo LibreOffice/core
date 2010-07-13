@@ -41,7 +41,6 @@
 #include "app.hrc"
 #include "res_bmp.hrc"
 #include "strings.hrc"
-#include "showview.hxx"
 #include "DrawViewShell.hxx"
 #include "DrawController.hxx"
 #include "SlideSorterViewShell.hxx"
@@ -699,21 +698,6 @@ void MasterPagesSelector::RemoveTokenToIndexEntry (
 
 
 
-void MasterPagesSelector::InvalidatePreview (MasterPageContainer::Token aToken)
-{
-    const ::osl::MutexGuard aGuard (maMutex);
-
-    int nIndex (GetIndexForToken(aToken));
-    if (nIndex > 0)
-    {
-        mpContainer->InvalidatePreview(aToken);
-        mpContainer->RequestPreview(aToken);
-    }
-}
-
-
-
-
 void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
 {
     const ::osl::MutexGuard aGuard (maMutex);
@@ -733,20 +717,6 @@ void MasterPagesSelector::InvalidatePreview (const SdPage* pPage)
         }
     }
 }
-
-
-
-
-void MasterPagesSelector::InvalidateAllPreviews (void)
-{
-    const ::osl::MutexGuard aGuard (maMutex);
-
-    for (USHORT nIndex=1; nIndex<=mpPageSet->GetItemCount(); nIndex++)
-        InvalidatePreview(nIndex);
-}
-
-
-
 
 void MasterPagesSelector::UpdateAllPreviews (void)
 {

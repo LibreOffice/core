@@ -55,22 +55,6 @@ TreeNode::~TreeNode (void)
 
 
 
-bool TreeNode::IsLeaf (void)
-{
-    return (mpControlContainer.get()==NULL);
-}
-
-
-
-
-bool TreeNode::IsRoot (void)
-{
-    return (mpParent==NULL);
-}
-
-
-
-
 void TreeNode::SetParentNode (TreeNode* pNewParent)
 {
     mpParent = pNewParent;
@@ -117,17 +101,6 @@ sal_Int32 TreeNode::GetMinimumWidth (void)
     }
 
     return nTotalMinimumWidth;;
-}
-
-
-
-
-ObjectBarManager* TreeNode::GetObjectBarManager (void)
-{
-    if (mpParent != NULL)
-        return mpParent->GetObjectBarManager();
-    else
-        return NULL;
 }
 
 
@@ -283,18 +256,6 @@ void TreeNode::AddStateChangeListener (const Link& rListener)
     {
         maStateChangeListeners.push_back(rListener);
     }
-}
-
-
-
-
-void TreeNode::RemoveStateChangeListener (const Link& rListener)
-{
-    maStateChangeListeners.erase (
-        ::std::find (
-            maStateChangeListeners.begin(),
-            maStateChangeListeners.end(),
-            rListener));
 }
 
 

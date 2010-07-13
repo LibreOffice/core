@@ -28,6 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#include <comphelper/serviceinfohelper.hxx>
+
 #include "SdUnoOutlineView.hxx"
 
 #include "DrawController.hxx"
@@ -237,6 +239,8 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
                 aValue <<= pPage->getUnoPage();
         }
         break;
+        case DrawController::PROPERTY_VIEWOFFSET:
+            break;
 
         default:
             throw beans::UnknownPropertyException();
@@ -246,6 +250,22 @@ Any SAL_CALL SdUnoOutlineView::getFastPropertyValue (
 }
 
 
+// XServiceInfo
+OUString SAL_CALL SdUnoOutlineView::getImplementationName(  ) throw (RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sd.SdUnoOutlineView") );
+}
 
+sal_Bool SAL_CALL SdUnoOutlineView::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+{
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+}
+
+Sequence< OUString > SAL_CALL SdUnoOutlineView::getSupportedServiceNames(  ) throw (RuntimeException)
+{
+    OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.OutlineView") );
+    uno::Sequence< OUString > aSeq( &aSN, 1 );
+    return aSeq;
+}
 
 } // end of namespace sd

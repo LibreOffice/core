@@ -62,6 +62,8 @@
 #include <svtools/cliplistener.hxx>
 #include <svx/float3d.hxx>
 #include "helpids.h"
+
+#include "view/viewoverlaymanager.hxx"
 #include "app.hrc"
 #include "helpids.h"
 #include "strings.hrc"
@@ -150,28 +152,14 @@ DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBas
 
 /*************************************************************************
 |*
-|* Copy-Konstruktor
-|*
-\************************************************************************/
-
-DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ::Window* pParentWindow, const DrawViewShell& rShell )
-: ViewShell(pFrame, pParentWindow, rShell)
-, maTabControl(this, pParentWindow)
-, mbIsInSwitchPage(false)
-{
-    mpFrameView = new FrameView(GetDoc());
-    Construct (GetDocSh(), PK_STANDARD);
-}
-
-/*************************************************************************
-|*
 |* Destruktor
 |*
 \************************************************************************/
 
 DrawViewShell::~DrawViewShell()
 {
-    mpAnnotationManager.release();
+    mpAnnotationManager.reset();
+    mpViewOverlayManager.reset();
 
     OSL_ASSERT (GetViewShell()!=NULL);
 
@@ -416,6 +404,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     }
 
     mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );
+    mpViewOverlayManager.reset( new ViewOverlayManager( GetViewShellBase() ) );
 }
 
 

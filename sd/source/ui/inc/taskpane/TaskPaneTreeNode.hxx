@@ -53,9 +53,9 @@ enum TreeNodeStateChangeEventId {
 
 
 /** Base class for all members of the object hierarchy that makes up the
-    tool panel.  There are usually at least three levels.  At the top level
-    is the ToolPanel with one instance: the root of the tree.  At the
-    middle level there are SubToolPanels and Window/Control objects.  At the
+    tool panel. In the task pane, there are multiple hierarchies of such nodes,
+    with every panel having an own tree. The pane node is the root of the tree, below
+    that there are SubToolPanels and Window/Control objects. At the
     lowest level there are only Window or Control objects.
 
     This class provides the means of communication between objects on
@@ -68,15 +68,6 @@ class TreeNode
 public:
     TreeNode (TreeNode* pParent);
     virtual ~TreeNode (void);
-
-    /** Returns <TRUE/> if the node has no children, i.e. is a leaf of a
-        tree.  In this case mpControlContainer is NULL.
-    */
-    bool IsLeaf (void);
-
-    /** Returns true if the node has no parent, i.e. is the root of a tree.
-    */
-    bool IsRoot (void);
 
     void SetParentNode (TreeNode* pNewParent);
     TreeNode* GetParentNode (void);
@@ -93,14 +84,6 @@ public:
         the minimum widths.
     */
     virtual sal_Int32 GetMinimumWidth (void);
-
-    /** Give each node access to the object bar manager of the tool panel.
-
-        At least the root node has to overwrite this method since the
-        default implementation simply returns the object bar manager of the
-        parent.
-    */
-    virtual ObjectBarManager* GetObjectBarManager (void);
 
     /** The default implementaion always returns <FALSE/>
     */
@@ -151,7 +134,7 @@ public:
     ControlContainer& GetControlContainer (void);
 
     /** Give each node access to a shell manage.  This usually is the shell
-        manager of the TaskPaneViewShell.
+        manager of the ToolPanelViewShell.
 
         At least the root node has to overwrite this method since the
         default implementation simply returns the shell manager of its
@@ -186,14 +169,6 @@ public:
         Multiple calls are ignored.  Each listener is added only once.
     */
     void AddStateChangeListener (const Link& rListener);
-
-    /** Remove the listener form the list of state change listeners.
-        @param rListener
-            It is OK to specify a listener that is not currently
-            registered.  Only when the listener is registered it is
-            removed.  Otherwise the call is ignored.
-    */
-    void RemoveStateChangeListener (const Link& rListener);
 
     /** Call the state change listeners and pass a state change event with
         the specified event id.  The source field is set to this.

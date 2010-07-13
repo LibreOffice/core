@@ -160,10 +160,7 @@ public:
 
     void                    SetMarkedOriginalSize();
 
-    VirtualDevice*          CreatePageVDev(USHORT nSdPage, PageKind ePageKind, ULONG nWidthPixel);
-
     void                    LockRedraw(BOOL bLock);
-    bool IsRedrawLocked (void) const;
 
     BOOL                    IsMorphingAllowed() const;
     BOOL                    IsVectorizeAllowed() const;
@@ -208,6 +205,7 @@ public:
     void SetMarkedPointsSmoothPossible( bool bSet ) { bSetMarkedPointsSmoothPossible = bSet; }
     void SetMarkedSegmentsKindPossible( bool bSet ) { bSetMarkedSegmentsKindPossible = bSet; }
 
+    SdrObject* GetEmptyPresentationObject( PresObjKind eKind );
 protected:
     DECL_LINK( OnParagraphInsertedHdl, ::Outliner * );
     DECL_LINK( OnParagraphRemovingHdl, ::Outliner * );

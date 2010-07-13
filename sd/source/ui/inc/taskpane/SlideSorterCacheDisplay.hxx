@@ -54,7 +54,6 @@ class Window;
 
 namespace sd { namespace toolpanel {
 
-class ControlFactory;
 class TreeNode;
 
 /** This panel demonstrates how to create a panel for the task pane.
@@ -70,8 +69,6 @@ public:
 
     virtual void Paint (const Rectangle& rBoundingBox);
     virtual void Resize (void);
-
-    static std::auto_ptr<ControlFactory> CreateControlFactory (const SdDrawDocument* pDocument);
 
     static SlideSorterCacheDisplay* Instance (const SdDrawDocument* pDocument);
 

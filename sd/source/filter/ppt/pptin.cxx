@@ -2431,7 +2431,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                                 case PPT_PLACEHOLDER_MEDIACLIP :
                                 case PPT_PLACEHOLDER_OBJECT : ePresObjKind = PRESOBJ_OBJECT; break;
                                 case PPT_PLACEHOLDER_GRAPH : ePresObjKind = PRESOBJ_CHART; break;
-                                case PPT_PLACEHOLDER_TABLE : ePresObjKind = PRESOBJ_TABLE; break;
+                                case PPT_PLACEHOLDER_TABLE : ePresObjKind = PRESOBJ_CALC; break;
                                 case PPT_PLACEHOLDER_CLIPART : ePresObjKind = PRESOBJ_GRAPHIC; break;
                                 case PPT_PLACEHOLDER_ORGANISZATIONCHART : ePresObjKind = PRESOBJ_ORGCHART; break;
                             }

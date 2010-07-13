@@ -90,23 +90,6 @@ public:
         ViewShell* pViewShell,
         const SharedShellFactory& rpFactory);
 
-    /** Create a new (or possibly recycle an existing) instance of a view
-        shell that is specified by the given id.  When called multiple times
-        with the same id then multiple instances of the associated view
-        shell are created.  Use the returned pointer to distinguish between
-        these.
-        @param nId
-            The id of the shell to activate.
-        @return
-            A pointer to the activated shell is returned.  Use this pointer
-            to identify the shell in other method calls.  When an activation
-            is not possible then NULL is returned.
-    */
-    ViewShell* ActivateViewShell (
-        ShellId nId,
-        ::Window* pParentWindow,
-        FrameView* pFrameView);
-
     /** Activate the given view shell.
     */
     void ActivateViewShell (ViewShell* pViewShell);
@@ -156,10 +139,6 @@ public:
     */
     void DeactivateSubShell (const ViewShell& rParentShell, ShellId nId);
 
-    /** Deactivate all sub shells of the given view shell.
-    */
-    void DeactivateAllSubShells (const ViewShell& rParentShell);
-
     /** Move the specified sub shells to the top position among the sub
         shells of the parent view shell.  The rest of the SFX shell stack
         does not change (but the all shells above the sub shells have to be
@@ -172,14 +151,6 @@ public:
     */
     void InvalidateAllSubShells (
         ViewShell* pViewShell);
-
-    /** Call this method to when a 'secondary' shell is moved to or from the
-        stack, e.g. an object bar.  As a result a pending
-        TakeShellsFromStack() is executed and at the next UnlockUpdate() to
-        lock level 0 the shells are asked about their secondary shells to
-        push on the shell stack.
-    */
-    void InvalidateShellStack (const SfxShell* pShell);
 
     /** Move the specified view shell to the top most position on the stack
         of view shells in relation to the other view shells.  After this the
@@ -210,20 +181,6 @@ public:
         whether that is a view shell or a sub shell.
     */
     SfxShell* GetTopShell (void) const;
-
-    /** Return the id of the given shell.
-    */
-    ShellId GetShellId (const SfxShell* pShell) const;
-
-    /** Replace the references to one SfxUndoManager to that of another at all
-        shells on the SFX shell stack.  Call this method when an undo
-        manager is about to be destroyed.
-        @param pManager
-            The undo manager to be replaced.
-        @param pReplacement
-            The undo manager that replaces pManager.
-    */
-    void ReplaceUndoManager (SfxUndoManager* pManager, SfxUndoManager* pReplacement);
 
     /** Use this class to safely lock updates of the view shell stack.
     */

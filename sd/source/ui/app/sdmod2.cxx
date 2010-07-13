@@ -171,9 +171,10 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
         ::sd::DrawDocShell*     pDocShell = NULL;
         SdDrawDocument* pDoc = 0;
 
-        if( pInfo->GetOutliner() )
+        SdrOutliner* pSdrOutliner = dynamic_cast< SdrOutliner* >( pInfo->GetOutliner() );
+        if( pSdrOutliner )
         {
-            const SdrTextObj* pTextObj = static_cast< SdrOutliner* >( pInfo->GetOutliner() )->GetTextObj();
+            const SdrTextObj* pTextObj = pSdrOutliner->GetTextObj();
 
             if( pTextObj )
                 pDoc = dynamic_cast< SdDrawDocument* >( pTextObj->GetModel() );
