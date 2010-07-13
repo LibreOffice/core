@@ -1318,8 +1318,12 @@ void SwEditShell::MoveContinuationPosToEndOfCheckedSentence()
 
 void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions, bool bRecheck)
 {
+    // Note: rNewPortions.size() == 0 is valid and happens when the whole
+    // sentence got removed in the dialog
+
     ASSERT(  pSpellIter, "SpellIter missing" );
-    if(pSpellIter)
+    if(pSpellIter &&
+       pSpellIter->GetLastPortions().size() > 0)    // no portions -> no text to be changed
     {
         const SpellPortions& rLastPortions = pSpellIter->GetLastPortions();
         const SpellContentPositions  rLastPositions = pSpellIter->GetLastPositions();
@@ -1329,9 +1333,6 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
 
         // iterate over the new portions, beginning at the end to take advantage of the previously
         // saved content positions
-
-        if(!rLastPortions.size())
-            return;
 
         pDoc->StartUndo( UNDO_OVERWRITE, NULL );
         StartAction();
@@ -1344,6 +1345,10 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         sal_uInt32 nRedlinePortions = lcl_CountRedlines(rLastPortions);
         if((rLastPortions.size() - nRedlinePortions) == rNewPortions.size())
         {
+            DBG_ASSERT( rNewPortions.size() > 0, "rNewPortions should not be empty here" );
+            DBG_ASSERT( rLastPortions.size() > 0, "rLastPortions should not be empty here" );
+            DBG_ASSERT( rLastPositions.size() > 0, "rLastPositions should not be empty here" );
+
             //the simple case: the same number of elements on both sides
             //each changed element has to be applied to the corresponding source element
             svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.end();
@@ -1357,8 +1362,17 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                 //jump over redline portions
                 while(aCurrentOldPortion->bIsHidden)
                 {
-                    --aCurrentOldPortion;
-                    --aCurrentOldPosition;
+                    if (aCurrentOldPortion  != rLastPortions.begin() &&
+                        aCurrentOldPosition != rLastPositions.begin())
+                    {
+                        --aCurrentOldPortion;
+                        --aCurrentOldPosition;
+                    }
+                    else
+                    {
+                        DBG_ASSERT( 0, "ApplyChangedSentence: iterator positions broken" );
+                        break;
+                    }
                 }
                 if ( !pCrsr->HasMark() )
                     pCrsr->SetMark();
@@ -1398,6 +1412,8 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         }
         else
         {
+            DBG_ASSERT( rLastPositions.size() > 0, "rLastPositions should not be empty here" );
+
             //select the complete sentence
             SpellContentPositions::const_iterator aCurrentEndPosition = rLastPositions.end();
             --aCurrentEndPosition;
