@@ -62,15 +62,25 @@ OUT2LIB = libssl.*
 OUT2LIB += libcrypto.*
 OUT2INC += include/openssl/*
 
+UNAME=$(shell uname)
+
 .IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
     PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
         libcrypto_OOo_0_9_8l.map \
         libssl_OOo_0_9_8l.map
     .IF "$(CPU)" == "I"
-        CONFIGURE_ACTION=Configure linux-elf
+        .IF "$(UNAME)" == "GNU/kFreeBSD"
+            CONFIGURE_ACTION=Configure debian-kfreebsd-i386
+        .ELSE
+            CONFIGURE_ACTION=Configure linux-elf
+        .ENDIF
     .ELIF "$(BUILD64)" == "1"
-        CONFIGURE_ACTION=Configure linux-generic64
+        .IF "$(UNAME)" == "GNU/kFreeBSD"
+            CONFIGURE_ACTION=Configure debian-kfreebsd-amd64
+        .ELSE
+            CONFIGURE_ACTION=Configure linux-generic64
+        .ENDIF
     .ELSE
         CONFIGURE_ACTION=Configure linux-generic32
     .ENDIF

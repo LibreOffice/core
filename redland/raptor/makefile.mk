@@ -68,11 +68,11 @@ BUILD_DIR=$(CONFIGURE_DIR)$/src
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OOO_PATCH_FILES+=$(TARFILE_NAME).patch.mingw
-raptor_CC=$(CC)
+raptor_CC=$(CC) -mthreads
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 raptor_CC+=-shared-libgcc
 .ENDIF
-raptor_LIBS=-lmingwthrd
+raptor_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 raptor_LIBS+=-lstdc++_s
 .ENDIF
@@ -80,7 +80,7 @@ raptor_LIBS+=-lstdc++_s
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
 # do not enable grddl parser (#i93768#)
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(raptor_CC)" CFLAGS=-D_MT CPPFLAGS="-nostdinc $(INCLUDE)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc,--export-all-symbols  -L$(ILIB:s/;/ -L/)" LIBS="$(raptor_LIBS)" OBJDUMP="$(WRAPCMD) objdump" LIBXML2LIB=$(LIBXML2LIB) XSLTLIB="$(XSLTLIB)"
+CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --enable-parsers="rdfxml ntriples turtle trig guess rss-tag-soup" --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(raptor_CC)" CPPFLAGS="-nostdinc $(INCLUDE)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2,--export-all-symbols  -L$(ILIB:s/;/ -L/)" LIBS="$(raptor_LIBS)" OBJDUMP="$(WRAPCMD) objdump" LIBXML2LIB=$(LIBXML2LIB) XSLTLIB="$(XSLTLIB)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)

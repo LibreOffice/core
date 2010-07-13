@@ -22,7 +22,7 @@ for details.
 
 There is a flag XMLSEC_KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS that can be set
 in a xmlSecKeyInfoCtx (see function xmlSecNssKeyDataX509XmlRead, in file
-src/nss/x509.c), which indicates that one can turn of the validation. However,
+src/nss/x509.c), which indicates that one can turn off the validation. However,
 setting it will cause that the validation key is not found. If the flag is set,
 then the key is not extracted from the certificate store which contains all the
 certificates of the X509Data elements. In other words, the certificates which

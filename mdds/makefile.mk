@@ -25,10 +25,10 @@
 #
 #*************************************************************************
 
-PRJ=..
+PRJ=.
 
-PRJNAME=external
-TARGET=getopt
+PRJNAME=mdds
+TARGET=mdds
 
 # --- Settings -----------------------------------------------------
 
@@ -36,35 +36,31 @@ TARGET=getopt
 
 # --- Files --------------------------------------------------------
 
-.IF "$(HAVE_GETOPT)" != "YES" || "$(HAVE_READDIR_R)" != "YES"
-TARFILE_NAME=glibc-2.1.3-stub
-TARFILE_MD5=4a660ce8466c9df01f19036435425c3a
-TARFILE_ROOTDIR=glibc-2.1.3
-ADDITIONAL_FILES=posix$/makefile.mk posix$/config.h
-.IF "$(HAVE_READDIR_R)" != "YES"
-ADDITIONAL_FILES += posix$/readdir_r.c
-.ENDIF
+TARFILE_NAME=mdds_0.3.0
+TARFILE_MD5=cf8a6967f7de535ae257fa411c98eb88
+PATCH_FILES=
 
-PATCH_FILES=$(PRJ)$/glibc-2.1.3.patch
-
-#CONFIGURE_DIR=glibc-2.1.3/posix
+CONFIGURE_DIR=
 CONFIGURE_ACTION=
 
-BUILD_DIR=posix
-BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
-
-OUT2INC= \
-    posix/getopt.h \
-    posix/config.h
-
-.ELSE
-@all:
-    @echo "Nothing to do here."
-.ENDIF
+BUILD_DIR=
+BUILD_ACTION=
+BUILD_FLAGS=
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE : set_ext.mk
-.INCLUDE : target.mk
-.INCLUDE : tg_ext.mk
+.INCLUDE :	set_ext.mk
+.INCLUDE :	target.mk
+.INCLUDE :	tg_ext.mk
+
+# --- post-build ---------------------------------------------------
+
+NORMALIZE_FLAG_FILE=so_normalized_$(TARGET)
+
+$(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
+    -@$(MKDIRHIER) $(INCCOM)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/inc$/mdds $(INCCOM)
+    @$(TOUCH) $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
+
+$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
 
