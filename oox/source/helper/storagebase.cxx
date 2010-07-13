@@ -29,11 +29,14 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <rtl/ustrbuf.hxx>
+#include "oox/helper/binaryinputstream.hxx"
+#include "oox/helper/binaryoutputstream.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::embed::XStorage;
 using ::com::sun::star::embed::XTransactedObject;
 using ::com::sun::star::io::XInputStream;
@@ -66,24 +69,25 @@ void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, const OUS
 
 StorageBase::StorageBase( const Reference< XInputStream >& rxInStream, bool bBaseStreamAccess ) :
     mxInStream( rxInStream ),
-    mpParentStorage( 0 ),
-    mbBaseStreamAccess( bBaseStreamAccess )
+    mbBaseStreamAccess( bBaseStreamAccess ),
+    mbReadOnly( true )
 {
     OSL_ENSURE( mxInStream.is(), "StorageBase::StorageBase - missing base input stream" );
 }
 
 StorageBase::StorageBase( const Reference< XStream >& rxOutStream, bool bBaseStreamAccess ) :
     mxOutStream( rxOutStream ),
-    mpParentStorage( 0 ),
-    mbBaseStreamAccess( bBaseStreamAccess )
+    mbBaseStreamAccess( bBaseStreamAccess ),
+    mbReadOnly( false )
 {
     OSL_ENSURE( mxOutStream.is(), "StorageBase::StorageBase - missing base output stream" );
 }
 
-StorageBase::StorageBase( const StorageBase& rParentStorage, const OUString& rStorageName ) :
+StorageBase::StorageBase( const StorageBase& rParentStorage, const OUString& rStorageName, bool bReadOnly ) :
+    maParentPath( rParentStorage.getPath() ),
     maStorageName( rStorageName ),
-    mpParentStorage( &rParentStorage ),
-    mbBaseStreamAccess( false )
+    mbBaseStreamAccess( false ),
+    mbReadOnly( bReadOnly )
 {
 }
 
@@ -94,6 +98,16 @@ StorageBase::~StorageBase()
 bool StorageBase::isStorage() const
 {
     return implIsStorage();
+}
+
+bool StorageBase::isRootStorage() const
+{
+    return implIsStorage() && (maStorageName.getLength() == 0);
+}
+
+bool StorageBase::isReadOnly() const
+{
+    return mbReadOnly;
 }
 
 Reference< XStorage > StorageBase::getXStorage() const
@@ -108,9 +122,7 @@ const OUString& StorageBase::getName() const
 
 OUString StorageBase::getPath() const
 {
-    OUStringBuffer aBuffer;
-    if( mpParentStorage )
-        aBuffer.append( mpParentStorage->getPath() );
+    OUStringBuffer aBuffer( maParentPath );
     if( aBuffer.getLength() > 0 )
         aBuffer.append( sal_Unicode( '/' ) );
     aBuffer.append( maStorageName );
@@ -123,15 +135,19 @@ void StorageBase::getElementNames( ::std::vector< OUString >& orElementNames ) c
     implGetElementNames( orElementNames );
 }
 
-StorageRef StorageBase::openSubStorage( const OUString& rStorageName, bool bCreate )
+StorageRef StorageBase::openSubStorage( const OUString& rStorageName, bool bCreateMissing )
 {
     StorageRef xSubStorage;
-    OUString aElement, aRemainder;
-    lclSplitFirstElement( aElement, aRemainder, rStorageName );
-    if( aElement.getLength() > 0 )
-        xSubStorage = getSubStorage( aElement, bCreate );
-    if( xSubStorage.get() && (aRemainder.getLength() > 0) )
-        xSubStorage = xSubStorage->openSubStorage( aRemainder, bCreate );
+    OSL_ENSURE( !bCreateMissing || !mbReadOnly, "StorageBase::openSubStorage - cannot create substorage in read-only mode" );
+    if( !bCreateMissing || !mbReadOnly )
+    {
+        OUString aElement, aRemainder;
+        lclSplitFirstElement( aElement, aRemainder, rStorageName );
+        if( aElement.getLength() > 0 )
+            xSubStorage = getSubStorage( aElement, bCreateMissing );
+        if( xSubStorage.get() && (aRemainder.getLength() > 0) )
+            xSubStorage = xSubStorage->openSubStorage( aRemainder, bCreateMissing );
+    }
     return xSubStorage;
 }
 
@@ -163,47 +179,96 @@ Reference< XInputStream > StorageBase::openInputStream( const OUString& rStreamN
 Reference< XOutputStream > StorageBase::openOutputStream( const OUString& rStreamName )
 {
     Reference< XOutputStream > xOutStream;
-    OUString aElement, aRemainder;
-    lclSplitFirstElement( aElement, aRemainder, rStreamName );
-    if( aElement.getLength() > 0 )
+    OSL_ENSURE( !mbReadOnly, "StorageBase::openOutputStream - cannot create output stream in read-only mode" );
+    if( !mbReadOnly )
     {
-        if( aRemainder.getLength() > 0 )
+        OUString aElement, aRemainder;
+        lclSplitFirstElement( aElement, aRemainder, rStreamName );
+        if( aElement.getLength() > 0 )
         {
-            StorageRef xSubStorage = getSubStorage( aElement, true );
-            if( xSubStorage.get() )
-                xOutStream = xSubStorage->openOutputStream( aRemainder );
+            if( aRemainder.getLength() > 0 )
+            {
+                StorageRef xSubStorage = getSubStorage( aElement, true );
+                if( xSubStorage.get() )
+                    xOutStream = xSubStorage->openOutputStream( aRemainder );
+            }
+            else
+            {
+                xOutStream = implOpenOutputStream( aElement );
+            }
         }
-        else
+        else if( mbBaseStreamAccess )
         {
-            xOutStream = implOpenOutputStream( aElement );
+            xOutStream = mxOutStream->getOutputStream();
         }
-    }
-    else if( mbBaseStreamAccess )
-    {
-        xOutStream = mxOutStream->getOutputStream();
     }
     return xOutStream;
 }
 
-StorageRef StorageBase::getSubStorage( const OUString& rElementName, bool bCreate )
+void StorageBase::copyToStorage( StorageBase& rDestStrg, const OUString& rElementName )
 {
-    SubStorageMap::iterator aIt = maSubStorages.find( rElementName );
-    return (aIt == maSubStorages.end()) ?
-        (maSubStorages[ rElementName ] = implOpenSubStorage( rElementName, bCreate )) : aIt->second;
+    OSL_ENSURE( rDestStrg.isStorage() && !rDestStrg.isReadOnly(), "StorageBase::copyToStorage - invalid destination" );
+    OSL_ENSURE( rElementName.getLength() > 0, "StorageBase::copyToStorage - invalid element name" );
+    if( rDestStrg.isStorage() && !rDestStrg.isReadOnly() && (rElementName.getLength() > 0) )
+    {
+        StorageRef xSubStrg = openSubStorage( rElementName, false );
+        if( xSubStrg.get() )
+        {
+            StorageRef xDestSubStrg = rDestStrg.openSubStorage( rElementName, true );
+            if( xDestSubStrg.get() )
+                xSubStrg->copyStorageToStorage( *xDestSubStrg );
+        }
+        else
+        {
+            Reference< XInputStream > xInStrm = openInputStream( rElementName );
+            if( xInStrm.is() )
+            {
+                Reference< XOutputStream > xOutStrm = rDestStrg.openOutputStream( rElementName );
+                if( xOutStrm.is() )
+                {
+                    BinaryXInputStream aInStrm( xInStrm, true );
+                    BinaryXOutputStream aOutStrm( xOutStrm, true );
+                    aInStrm.copyToStream( aOutStrm );
+                }
+            }
+        }
+    }
+}
+
+void StorageBase::copyStorageToStorage( StorageBase& rDestStrg )
+{
+    OSL_ENSURE( rDestStrg.isStorage() && !rDestStrg.isReadOnly(), "StorageBase::copyToStorage - invalid destination" );
+    if( rDestStrg.isStorage() && !rDestStrg.isReadOnly() )
+    {
+        ::std::vector< OUString > aElements;
+        getElementNames( aElements );
+        for( ::std::vector< OUString >::iterator aIt = aElements.begin(), aEnd = aElements.end(); aIt != aEnd; ++aIt )
+            copyToStorage( rDestStrg, *aIt );
+    }
 }
 
 void StorageBase::commit()
 {
-    for( SubStorageMap::iterator aIt = maSubStorages.begin(); aIt != maSubStorages.end(); aIt ++ )
-        aIt->second->commit();
+    OSL_ENSURE( !mbReadOnly, "StorageBase::commit - cannot commit in read-only mode" );
+    if( !mbReadOnly )
+    {
+        // commit all open substorages
+        maSubStorages.forEachMem( &StorageBase::commit );
+        // commit this storage
+        implCommit();
+    }
+}
 
-    Reference< XTransactedObject > xTransactedObj( getXStorage(), UNO_QUERY );
+// private --------------------------------------------------------------------
 
-    if( xTransactedObj.is() )
-        xTransactedObj->commit();
+StorageRef StorageBase::getSubStorage( const OUString& rElementName, bool bCreateMissing )
+{
+    StorageRef& rxSubStrg = maSubStorages[ rElementName ];
+    if( !rxSubStrg )
+        rxSubStrg = implOpenSubStorage( rElementName, bCreateMissing );
+    return rxSubStrg;
 }
 
 // ============================================================================
 
 } // namespace oox
-

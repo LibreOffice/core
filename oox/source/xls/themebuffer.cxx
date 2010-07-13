@@ -27,6 +27,7 @@
 
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/stylesbuffer.hxx"
+#include "tokens.hxx"
 
 using ::oox::drawingml::ClrScheme;
 

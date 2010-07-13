@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #include "oox/core/binaryfilterbase.hxx"
-#include "oox/helper/olestorage.hxx"
+#include "oox/ole/olestorage.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Reference;
@@ -52,12 +52,12 @@ BinaryFilterBase::~BinaryFilterBase()
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return StorageRef( new OleStorage( getGlobalFactory(), rxInStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), rxInStream, true ) );
 }
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
 {
-    return StorageRef( new OleStorage( getGlobalFactory(), rxOutStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), rxOutStream, true ) );
 }
 
 // ============================================================================

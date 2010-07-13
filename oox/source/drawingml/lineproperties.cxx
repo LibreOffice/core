@@ -37,10 +37,10 @@
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include "properties.hxx"
 #include "tokens.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/helper/modelobjecthelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 
@@ -52,7 +52,6 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::awt::Point;
 using ::com::sun::star::container::XNameContainer;
-using ::oox::core::FilterBase;
 
 namespace oox {
 namespace drawingml {
@@ -395,8 +394,8 @@ void LineProperties::assignUsed( const LineProperties& rSourceProps )
     moLineJoint.assignIfUsed( rSourceProps.moLineJoint );
 }
 
-void LineProperties::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFilter,
-        ModelObjectHelper& rModelObjHelper, const LinePropertyIds& rPropIds, sal_Int32 nPhClr ) const
+void LineProperties::pushToPropMap( PropertyMap& rPropMap, ModelObjectHelper& rModelObjHelper,
+        const GraphicHelper& rGraphicHelper, const LinePropertyIds& rPropIds, sal_Int32 nPhClr ) const
 {
     // line fill type must exist, otherwise ignore other properties
     if( maLineFill.moFillType.has() )
@@ -453,7 +452,7 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFi
         Color aLineColor = maLineFill.getBestSolidColor();
         if( aLineColor.isUsed() )
         {
-            rPropMap.setProperty( rPropIds[ LineColorId ], aLineColor.getColor( rFilter, nPhClr ) );
+            rPropMap.setProperty( rPropIds[ LineColorId ], aLineColor.getColor( rGraphicHelper, nPhClr ) );
             if( aLineColor.hasTransparence() )
                 rPropMap.setProperty( rPropIds[ LineTransparenceId ], aLineColor.getTransparence() );
         }
@@ -464,11 +463,11 @@ void LineProperties::pushToPropMap( PropertyMap& rPropMap, const FilterBase& rFi
     }
 }
 
-void LineProperties::pushToPropSet( PropertySet& rPropSet, const FilterBase& rFilter,
-    ModelObjectHelper& rModelObjHelper, const LinePropertyIds& rPropIds, sal_Int32 nPhClr ) const
+void LineProperties::pushToPropSet( PropertySet& rPropSet, ModelObjectHelper& rModelObjHelper,
+        const GraphicHelper& rGraphicHelper, const LinePropertyIds& rPropIds, sal_Int32 nPhClr ) const
 {
     PropertyMap aPropMap;
-    pushToPropMap( aPropMap, rFilter, rModelObjHelper, rPropIds, nPhClr );
+    pushToPropMap( aPropMap, rModelObjHelper, rGraphicHelper, rPropIds, nPhClr );
     rPropSet.setProperties( aPropMap );
 }
 

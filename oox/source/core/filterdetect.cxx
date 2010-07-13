@@ -35,12 +35,13 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
-#include "oox/helper/olestorage.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/core/fasttokenhandler.hxx"
 #include "oox/core/namespaces.hxx"
+#include "oox/ole/olestorage.hxx"
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
@@ -474,9 +475,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
             return xInStrm;
 
         // check if a temporary file is passed in the 'ComponentData' property
-        Sequence< NamedValue > aCompData = rMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_COMPONENTDATA(), Sequence< NamedValue >() );
-        SequenceAsHashMap aCompDataMap( aCompData );
-        Reference< XStream > xDecrypted = aCompDataMap.getUnpackedValueOrDefault( CREATE_OUSTRING( "DecryptedPackage" ), Reference< XStream >() );
+        Reference< XStream > xDecrypted( rMediaDesc.getComponentDataEntry( CREATE_OUSTRING( "DecryptedPackage" ) ), UNO_QUERY );
         if( xDecrypted.is() )
         {
             Reference< XInputStream > xDecrInStrm = xDecrypted->getInputStream();
@@ -485,7 +484,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
         }
 
         // try to decrypt an encrypted OLE package
-        OleStorage aOleStorage( mxFactory, xInStrm, false );
+        ::oox::ole::OleStorage aOleStorage( mxFactory, xInStrm, false );
         if( aOleStorage.isStorage() ) try
         {
             // open the required input streams in the encrypted package
@@ -559,10 +558,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     aDecryptedPackage.seekToStart();
 
                     // store temp file in media descriptor to keep it alive
-                    Sequence< NamedValue > aPropSeq( 1 );
-                    aPropSeq[ 0 ].Name = CREATE_OUSTRING( "DecryptedPackage" );
-                    aPropSeq[ 0 ].Value <<= xTempFile;
-                    rMediaDesc[ MediaDescriptor::PROP_COMPONENTDATA() ] <<= aPropSeq;
+                    rMediaDesc.setComponentDataEntry( CREATE_OUSTRING( "DecryptedPackage" ), Any( xTempFile ) );
 
                     Reference< XInputStream > xDecrInStrm = xTempFile->getInputStream();
                     if( lclIsZipPackage( mxFactory, xDecrInStrm ) )

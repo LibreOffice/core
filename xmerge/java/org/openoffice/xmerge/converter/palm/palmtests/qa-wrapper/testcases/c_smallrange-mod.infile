@@ -1,6 +1,0 @@
-# 
-# Spreadsheet smallrange test.
-# 
-TEST||MINICALC|c_smallrange
-MINICALC_ENTER_CELL|2|1|=AVERAGE(A1:B2)\n
-SLEEP|5

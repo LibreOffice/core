@@ -120,6 +120,8 @@ public:
     void                importPassword( BiffInputStream& rStrm );
     /** Imports protection settings from the SHEETPROTECTION record. */
     void                importSheetProtection( BiffInputStream& rStrm );
+    /** Imports the VBA code module name from the CODENAME record. */
+    void                importCodeName( BiffInputStream& rStrm );
     /** Imports phonetic settings from the PHONETICPR record. */
     void                importPhoneticPr( BiffInputStream& rStrm );
 

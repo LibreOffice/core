@@ -31,7 +31,7 @@
 #include "oox/drawingml/diagram/datamodelcontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "diagramdefinitioncontext.hxx"
-
+#include "tokens.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::xml::sax;

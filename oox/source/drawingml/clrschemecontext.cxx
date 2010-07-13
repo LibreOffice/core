@@ -73,7 +73,7 @@ clrSchemeColorContext::clrSchemeColorContext( ContextHandler& rParent, ClrScheme
 
 clrSchemeColorContext::~clrSchemeColorContext()
 {
-    mrClrScheme.setColor( mnColorToken, getColor( getFilter() ) );
+    mrClrScheme.setColor( mnColorToken, getColor( getFilter().getGraphicHelper() ) );
 }
 
 clrSchemeContext::clrSchemeContext( ContextHandler& rParent, ClrScheme& rClrScheme ) :

@@ -43327,6 +43327,408 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTFAutofit-->
+        <!--SPRM sprmTPc-->
+        <UML:Class xmi.id="sprmTPc" name="sprmTPc">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8resource"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>0x360D</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmcode"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>rtf:sprmTPc</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:Classifier.feature>
+            <UML:Attribute name="padding">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue/>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="comment"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="offset"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>4</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="shift"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0xf0</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="mask"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>4</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="bits"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:padding</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref="U8"/>
+              </UML:StructuralFeature.type>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+          <UML:Classifier.feature>
+            <UML:Attribute name="pcVert">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue/>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="comment"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="offset"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="shift"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0xc</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="mask"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="bits"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:pcVert</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref="U8"/>
+              </UML:StructuralFeature.type>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+          <UML:Classifier.feature>
+            <UML:Attribute name="pcHorz">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue/>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="comment"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="offset"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="shift"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>0x3</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="mask"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>2</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="bits"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:pcHorz</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:StructuralFeature.type>
+                <UML:DataType xmi.idref="U8"/>
+              </UML:StructuralFeature.type>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+        </UML:Class>
+        <UML:Generalization isSpecification="false" xmi.id="sprmTPc-Properties">
+          <UML:Generalization.child>
+            <UML:Class xmi.idref="sprmTPc"/>
+          </UML:Generalization.child>
+          <UML:Generalization.parent>
+            <UML:Class xmi.idref="Properties"/>
+          </UML:Generalization.parent>
+        </UML:Generalization>
+        <!--SPRM sprmTPc-->
+        <!--SPRM sprmTDyaAbs-->
+        <UML:Class xmi.id="sprmTDyaAbs" name="sprmTDyaAbs">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>0x940F</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmcode"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>rtf:sprmTDyaAbs</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        </UML:Class>
+        <!--SPRM sprmTDyaAbs-->
+        <!--SPRM sprmTDxaFromText-->
+        <UML:Class xmi.id="sprmTDxaFromText" name="sprmTDxaFromText">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>0x9410</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmcode"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>rtf:sprmTDxaFromText</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        </UML:Class>
+        <!--SPRM sprmTDxaFromText-->
+        <!--SPRM sprmTDyaFromText-->
+        <UML:Class xmi.id="sprmTDyaFromText" name="sprmTDyaFromText">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>0x9411</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmcode"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>rtf:sprmTDyaFromText</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        </UML:Class>
+        <!--SPRM sprmTDyaFromText-->
+        <!--SPRM sprmTDxaFromTextRight-->
+        <UML:Class xmi.id="sprmTDxaFromTextRight" name="sprmTDxaFromTextRight">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>0x941E</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmcode"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>rtf:sprmTDxaFromTextRight</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        </UML:Class>
+        <!--SPRM sprmTDxaFromTextRight-->
+        <!--SPRM sprmTDyaFromTextBottom-->
+        <UML:Class xmi.id="sprmTDyaFromTextBottom" name="sprmTDyaFromTextBottom">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>0x941F</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmcode"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>rtf:sprmTDyaFromTextBottom</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        </UML:Class>
+        <!--SPRM sprmTDyaFromTextBottom-->
+        <!--SPRM sprmTFNoAllowOverlap-->
+        <UML:Class xmi.id="sprmTFNoAllowOverlap" name="sprmTFNoAllowOverlap">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>0x3465</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmcode"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>rtf:sprmTFNoAllowOverlap</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        </UML:Class>
+        <!--SPRM sprmTFNoAllowOverlap-->
         <!--SPRMS-->
         <!--DFFS-->
         <!--DFF UDefProp-->

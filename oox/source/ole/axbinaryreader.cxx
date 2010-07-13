@@ -89,31 +89,136 @@ void AxAlignedInputStream::align( size_t nSize )
 
 // ============================================================================
 
+AxFontData::AxFontData() :
+    mnFontEffects( 0 ),
+    mnFontHeight( 160 ),
+    mnFontCharSet( WINDOWS_CHARSET_DEFAULT ),
+    mnHorAlign( AX_FONTDATA_LEFT )
+{
+}
+
+sal_Int16 AxFontData::getHeightPoints() const
+{
+    /*  MSO uses weird font sizes:
+        1pt->30, 2pt->45, 3pt->60, 4pt->75, 5pt->105, 6pt->120, 7pt->135,
+        8pt->165, 9pt->180, 10pt->195, 11pt->225, ... */
+    return getLimitedValue< sal_Int16, sal_Int32 >( (mnFontHeight + 10) / 20, 1, SAL_MAX_INT16 );
+}
+
+void AxFontData::setHeightPoints( sal_Int16 nPoints )
+{
+    mnFontHeight = getLimitedValue< sal_Int32, sal_Int32 >( ((nPoints * 4 + 1) / 3) * 15, 30, 4294967 );
+}
+
+bool AxFontData::importBinaryModel( BinaryInputStream& rInStrm )
+{
+    AxBinaryPropertyReader aReader( rInStrm );
+    aReader.readStringProperty( maFontName );
+    aReader.readIntProperty< sal_uInt32 >( mnFontEffects );
+    aReader.readIntProperty< sal_Int32 >( mnFontHeight );
+    aReader.skipIntProperty< sal_Int32 >(); // font offset
+    aReader.readIntProperty< sal_uInt8 >( mnFontCharSet );
+    aReader.skipIntProperty< sal_uInt8 >(); // font pitch/family
+    aReader.readIntProperty< sal_uInt8 >( mnHorAlign );
+    aReader.skipIntProperty< sal_uInt16 >(); // font weight
+    return aReader.finalizeImport();
+}
+
+bool AxFontData::importStdFont( BinaryInputStream& rInStrm )
+{
+    StdFontInfo aFontInfo;
+    if( OleHelper::importStdFont( aFontInfo, rInStrm, false ) )
+    {
+        maFontName = aFontInfo.maName;
+        mnFontEffects = 0;
+        setFlag( mnFontEffects, AX_FONTDATA_BOLD,      aFontInfo.mnWeight >= OLE_STDFONT_BOLD );
+        setFlag( mnFontEffects, AX_FONTDATA_ITALIC,    getFlag( aFontInfo.mnFlags, OLE_STDFONT_ITALIC ) );
+        setFlag( mnFontEffects, AX_FONTDATA_UNDERLINE, getFlag( aFontInfo.mnFlags, OLE_STDFONT_UNDERLINE ) );
+        setFlag( mnFontEffects, AX_FONTDATA_STRIKEOUT, getFlag( aFontInfo.mnFlags,OLE_STDFONT_STRIKE ) );
+        // StdFont stores font height in 1/10,000 of points
+        setHeightPoints( getLimitedValue< sal_Int16, sal_Int32 >( aFontInfo.mnHeight / 10000, 0, SAL_MAX_INT16 ) );
+        mnFontCharSet = aFontInfo.mnCharSet;
+        mnHorAlign = AX_FONTDATA_LEFT;
+        return true;
+    }
+    return false;
+}
+
+bool AxFontData::importGuidAndFont( BinaryInputStream& rInStrm )
+{
+    OUString aGuid = OleHelper::importGuid( rInStrm );
+    if( aGuid.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "{AFC20920-DA4E-11CE-B943-00AA006887B4}" ) ) )
+        return importBinaryModel( rInStrm );
+    if( aGuid.equalsAscii( OLE_GUID_STDFONT ) )
+        return importStdFont( rInStrm );
+    return false;
+}
+
+// ============================================================================
+
+namespace {
+
+bool lclReadString( AxAlignedInputStream& rInStrm, OUString& rValue, sal_uInt32 nSize, bool bArrayString )
+{
+    bool bCompressed = getFlag( nSize, AX_STRING_COMPRESSED );
+    sal_uInt32 nBufSize = nSize & AX_STRING_SIZEMASK;
+    // Unicode: simple strings store byte count, array strings store char count
+    sal_Int32 nChars = static_cast< sal_Int32 >( nBufSize / ((bCompressed || bArrayString) ? 1 : 2) );
+    bool bValidChars = nChars <= 65536;
+    OSL_ENSURE( bValidChars, "lclReadString - string too long" );
+    sal_Int64 nEndPos = rInStrm.tell() + nChars * (bCompressed ? 1 : 2);
+    nChars = ::std::min< sal_Int32 >( nChars, 65536 );
+    rValue = bCompressed ?
+        // ISO-8859-1 maps all byte values xx to the same Unicode code point U+00xx
+        rInStrm.readCharArrayUC( nChars, RTL_TEXTENCODING_ISO_8859_1 ) :
+        rInStrm.readUnicodeArray( nChars );
+    rInStrm.seek( nEndPos );
+    return bValidChars;
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
 AxBinaryPropertyReader::ComplexProperty::~ComplexProperty()
 {
 }
 
 bool AxBinaryPropertyReader::PairProperty::readProperty( AxAlignedInputStream& rInStrm )
 {
-    rInStrm >> mrnValue1 >> mrnValue2;
+    rInStrm >> mrPairData.first >> mrPairData.second;
     return true;
 }
 
 bool AxBinaryPropertyReader::StringProperty::readProperty( AxAlignedInputStream& rInStrm )
 {
-    bool bCompressed = getFlag( mnSize, AX_STRING_COMPRESSED );
-    sal_uInt32 nBufSize = mnSize & AX_STRING_SIZEMASK;
-    sal_Int64 nEndPos = rInStrm.tell() + nBufSize;
-    sal_Int32 nChars = static_cast< sal_Int32 >( nBufSize / (bCompressed ? 1 : 2) );
-    bool bValidChars = nChars <= 65536;
-    OSL_ENSURE( bValidChars, "StringProperty::readProperty - string too long" );
-    nChars = ::std::min< sal_Int32 >( nChars, 65536 );
-    mrValue = bCompressed ?
-        // ISO-8859-1 maps all byte values xx to the same Unicode code point U+00xx
-        rInStrm.readCharArrayUC( nChars, RTL_TEXTENCODING_ISO_8859_1 ) :
-        rInStrm.readUnicodeArray( nChars );
-    rInStrm.seek( nEndPos );
-    return bValidChars;
+    return lclReadString( rInStrm, mrValue, mnSize, false );
+}
+
+bool AxBinaryPropertyReader::StringArrayProperty::readProperty( AxAlignedInputStream& rInStrm )
+{
+    sal_Int64 nEndPos = rInStrm.tell() + mnSize;
+    while( rInStrm.tell() < nEndPos )
+    {
+        OUString aString;
+        if( !lclReadString( rInStrm, aString, rInStrm.readuInt32(), true ) )
+            return false;
+        mrArray.push_back( aString );
+        // every array string is aligned on 4 byte boundries
+        rInStrm.align( 4 );
+    }
+    return true;
+}
+
+bool AxBinaryPropertyReader::GuidProperty::readProperty( AxAlignedInputStream& rInStrm )
+{
+    mrGuid = OleHelper::importGuid( rInStrm );
+    return true;
+}
+
+bool AxBinaryPropertyReader::FontProperty::readProperty( AxAlignedInputStream& rInStrm )
+{
+    return mrFontData.importGuidAndFont( rInStrm );
 }
 
 bool AxBinaryPropertyReader::PictureProperty::readProperty( AxAlignedInputStream& rInStrm )
@@ -145,10 +250,10 @@ void AxBinaryPropertyReader::readBoolProperty( bool& orbValue, bool bReverse )
     orbValue = startNextProperty() != bReverse;
 }
 
-void AxBinaryPropertyReader::readPairProperty( sal_Int32& ornValue1, sal_Int32& ornValue2 )
+void AxBinaryPropertyReader::readPairProperty( AxPairData& orPairData )
 {
     if( startNextProperty() )
-        maLargeProps.push_back( ComplexPropVector::value_type( new PairProperty( ornValue1, ornValue2 ) ) );
+        maLargeProps.push_back( ComplexPropVector::value_type( new PairProperty( orPairData ) ) );
 }
 
 void AxBinaryPropertyReader::readStringProperty( OUString& orValue )
@@ -157,6 +262,31 @@ void AxBinaryPropertyReader::readStringProperty( OUString& orValue )
     {
         sal_uInt32 nSize = maInStrm.readAligned< sal_uInt32 >();
         maLargeProps.push_back( ComplexPropVector::value_type( new StringProperty( orValue, nSize ) ) );
+    }
+}
+
+void AxBinaryPropertyReader::readStringArrayProperty( AxStringArray& orArray )
+{
+    if( startNextProperty() )
+    {
+        sal_uInt32 nSize = maInStrm.readAligned< sal_uInt32 >();
+        maLargeProps.push_back( ComplexPropVector::value_type( new StringArrayProperty( orArray, nSize ) ) );
+    }
+}
+
+void AxBinaryPropertyReader::readGuidProperty( ::rtl::OUString& orGuid )
+{
+    if( startNextProperty() )
+        maLargeProps.push_back( ComplexPropVector::value_type( new GuidProperty( orGuid ) ) );
+}
+
+void AxBinaryPropertyReader::readFontProperty( AxFontData& orFontData )
+{
+    if( startNextProperty() )
+    {
+        sal_Int16 nData = maInStrm.readAligned< sal_Int16 >();
+        if( ensureValid( nData == -1 ) )
+            maStreamProps.push_back( ComplexPropVector::value_type( new FontProperty( orFontData ) ) );
     }
 }
 

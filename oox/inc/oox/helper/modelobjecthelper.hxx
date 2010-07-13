@@ -53,7 +53,7 @@ class ModelObjectHelper
 {
 public:
     explicit            ModelObjectHelper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory );
 
     /** Returns true, if the model contains a line marker with the passed name. */
     bool                hasLineMarker( const ::rtl::OUString& rMarkerName ) const;

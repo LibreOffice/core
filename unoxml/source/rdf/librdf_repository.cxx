@@ -64,6 +64,19 @@
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/sequenceasvector.hxx>
 #include <comphelper/makesequence.hxx>
+#include <librdf.h>
+#include <libxslt/security.h>
+
+#include <boost/utility.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/shared_array.hpp>
+#include <boost/bind.hpp>
+
+#include <map>
+#include <functional>
+#include <algorithm>
+
+#include <string.h>
 
 
 /**
@@ -1889,7 +1902,15 @@ librdf_world *librdf_TypeConverter::createWorld() const
             m_rRep);
     }
     //FIXME logger, digest, features?
+    xsltSecurityPrefsPtr origprefs = xsltGetDefaultSecurityPrefs();
     librdf_world_open(pWorld);
+    xsltSecurityPrefsPtr newprefs = xsltGetDefaultSecurityPrefs();
+    if (newprefs != origprefs) {
+        // #i110523# restore libxslt global configuration
+        // (gratuitously overwritten by raptor_init_parser_grddl_common)
+        // (this is the only reason unordf is linked against libxslt)
+        xsltSetDefaultSecurityPrefs(origprefs);
+    }
     return pWorld;
 }
 
