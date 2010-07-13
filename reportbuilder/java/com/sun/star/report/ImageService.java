@@ -26,8 +26,9 @@
  ************************************************************************/
 package com.sun.star.report;
 
-import java.io.InputStream;
 import java.awt.Dimension;
+
+import java.io.InputStream;
 
 /**
  *

@@ -27,8 +27,9 @@
 package com.sun.star.report.pentaho.parser.stylemapper.style;
 
 import com.sun.star.report.pentaho.parser.stylemapper.OneOfConstantsMapper;
-import org.jfree.layouting.input.style.keys.text.TextStyleKeys;
+
 import org.jfree.layouting.input.style.keys.text.TextDecorationStyle;
+import org.jfree.layouting.input.style.keys.text.TextStyleKeys;
 
 public class TextUnderlineStyleMapper extends OneOfConstantsMapper
 {

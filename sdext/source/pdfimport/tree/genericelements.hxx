@@ -32,6 +32,7 @@
 #include "treevisiting.hxx"
 
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <rtl/ustring.hxx>
@@ -56,12 +57,15 @@ namespace pdfi
             ImageContainer&                          _rImages,
             PDFIProcessor&                           _rProcessor,
             const com::sun::star::uno::Reference<
-            com::sun::star::task::XStatusIndicator>& _xStatusIndicator ) :
+            com::sun::star::task::XStatusIndicator>& _xStatusIndicator,
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  xContext)
+        :
             rEmitter(_rEmitter),
             rStyles(_rStyles),
             rImages(_rImages),
             rProcessor(_rProcessor),
-            xStatusIndicator(_xStatusIndicator)
+            xStatusIndicator(_xStatusIndicator),
+        m_xContext(xContext)
         {}
 
         XmlEmitter&     rEmitter;
@@ -70,6 +74,8 @@ namespace pdfi
         PDFIProcessor&  rProcessor;
         com::sun::star::uno::Reference<
             com::sun::star::task::XStatusIndicator> xStatusIndicator;
+        com::sun::star::uno::Reference<
+            com::sun::star::uno::XComponentContext >  m_xContext;
     };
 
     struct Element : public ElementTreeVisitable
@@ -178,7 +184,7 @@ namespace pdfi
     {
         friend class ElementFactory;
     protected:
-        ParagraphElement( Element* pParent ) : Element( pParent ), Type( Normal ) {}
+        ParagraphElement( Element* pParent ) : Element( pParent ), Type( Normal ), bRtl( false ) {}
 
     public:
         // ElementTreeVisitable
@@ -194,6 +200,7 @@ namespace pdfi
 
         enum ParagraphType { Normal, Headline };
         ParagraphType       Type;
+    bool bRtl;
     };
 
     struct PolyPolyElement : public DrawElement

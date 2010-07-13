@@ -26,9 +26,10 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
+import com.sun.star.report.OutputRepository;
+
 import java.io.IOException;
 
-import com.sun.star.report.OutputRepository;
 
 public class DefaultNameGenerator
 {

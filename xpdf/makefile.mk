@@ -88,6 +88,8 @@ CXXFLAGS+=-malign-natural
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE
 .IF "$(COM)"=="GCC"
+LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
+.EXPORT : LDFLAGS
 CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions LIBS=-lgdi32
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE

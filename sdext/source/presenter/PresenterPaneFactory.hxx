@@ -99,7 +99,7 @@ public:
         SAL_CALL createResource (
             const ::com::sun::star::uno::Reference<
                 com::sun::star::drawing::framework::XResourceId>& rxPaneId)
-        throw (::com::sun::star::uno::RuntimeException);
+        throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException);
 
     virtual void SAL_CALL
         releaseResource (

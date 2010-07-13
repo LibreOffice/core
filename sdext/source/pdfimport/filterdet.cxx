@@ -736,10 +736,12 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                         break;
                                     }
 
+                                    rtl::OUString aDocName( rInPDFFileURL.copy( rInPDFFileURL.lastIndexOf( sal_Unicode('/') )+1 ) );
+
                                     bool bEntered = false;
                                     do
                                     {
-                                        bEntered = getPassword( xIntHdl, io_rPwd, ! bEntered );
+                                        bEntered = getPassword( xIntHdl, io_rPwd, ! bEntered, aDocName );
                                         rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                                        RTL_TEXTENCODING_ISO_8859_1 );
                                         bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );

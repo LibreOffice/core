@@ -70,6 +70,10 @@
 
 #include <hash_map>
 #include <string.h>
+#ifdef WNT
+#include <stdlib.h>
+#include <ctype.h>
+#endif
 
 #include "rtl/bootstrap.h"
 
@@ -180,6 +184,10 @@ class Parser
     void                 readLink();
     void                 readMaskedImage();
     void                 readSoftMaskedImage();
+    int          parseFontCheckForString( const sal_Unicode* pCopy, const char* str, sal_Int32& nLen,
+                    FontAttributes& aResult, bool bItalic, bool bBold);
+    int          parseFontRemoveSuffix( const sal_Unicode* pCopy, const char* s, sal_Int32& nLen);
+
 
 public:
     Parser( const ContentSinkSharedPtr&                   rSink,
@@ -455,6 +463,35 @@ rendering::ARGBColor Parser::readColor()
     return aRes;
 }
 
+int Parser::parseFontCheckForString( const sal_Unicode* pCopy, const char* s, sal_Int32& nLen,
+        FontAttributes& aResult, bool bItalic, bool bBold)
+{
+    int l = strlen(s);
+    if (nLen < l)
+        return 0;
+    for (int i = 0; i < l; i++)
+        if (tolower(pCopy[i]) != s[i]
+            && toupper(pCopy[i]) != s[i])
+            return 0;
+    aResult.isItalic = bItalic;
+    aResult.isBold = bBold;
+        nLen -= l;
+        pCopy += l;
+    return l;
+}
+
+int Parser::parseFontRemoveSuffix( const sal_Unicode* pCopy, const char* s, sal_Int32& nLen)
+{
+    int l = strlen(s);
+    if (nLen < l)
+        return 0;
+    for (int i = 0; i < l; i++)
+        if ( pCopy[nLen - l + i] != s[i] )
+            return 0;
+        nLen -= l;
+    return l;
+}
+
 void Parser::parseFontFamilyName( FontAttributes& aResult )
 {
     rtl::OUStringBuffer aNewFamilyName( aResult.familyName.getLength() );
@@ -470,39 +507,17 @@ void Parser::parseFontFamilyName( FontAttributes& aResult )
 
     while( nLen )
     {
-        if( nLen > 5 &&
-            ( *pCopy == 'i' || *pCopy == 'I' ) &&
-            pCopy[1] == 't' &&
-            pCopy[2] == 'a' &&
-            pCopy[3] == 'l' &&
-            pCopy[4] == 'i' &&
-            pCopy[5] == 'c' )
-        {
-            aResult.isItalic = true;
-            nLen -=6;
-            pCopy += 6;
-        }
-        else if( nLen > 3 &&
-                 ( *pCopy == 'B' || *pCopy == 'b' ) &&
-                 pCopy[1] == 'o' &&
-                 pCopy[2] == 'l' &&
-                 pCopy[3] == 'd' )
-        {
-            aResult.isBold = true;
-            nLen -=4;
-            pCopy += 4;
-        }
-        else if( nLen > 5 &&
-                 *pCopy == '-' &&
-                 ( pCopy[1] == 'R' || pCopy[1] == 'r' ) &&
-                 pCopy[2] == 'o' &&
-                 pCopy[3] == 'm' &&
-                 pCopy[4] == 'a' &&
-                 pCopy[5] == 'n' )
-        {
-            nLen -= 6;
-            pCopy += 6;
-        }
+    if (parseFontRemoveSuffix( pCopy, "PSMT", nLen)) {}
+    else if (parseFontRemoveSuffix( pCopy, "MT", nLen)) {}
+
+    if (parseFontCheckForString( pCopy, "Italic", nLen, aResult, true, false)) {}
+    else if (parseFontCheckForString( pCopy, "-Bold", nLen, aResult, false, true)) {}
+    else if (parseFontCheckForString( pCopy, "Bold", nLen, aResult, false, true)) {}
+    else if (parseFontCheckForString( pCopy, "-Roman", nLen, aResult, false, false)) {}
+    else if (parseFontCheckForString( pCopy, "-LightOblique", nLen, aResult, true, false)) {}
+    else if (parseFontCheckForString( pCopy, "-BoldOblique", nLen, aResult, true, true)) {}
+    else if (parseFontCheckForString( pCopy, "-Light", nLen, aResult, false, false)) {}
+    else if (parseFontCheckForString( pCopy, "-Reg", nLen, aResult, false, false)) {}
         else
         {
             if( *pCopy != '-' )
@@ -557,7 +572,6 @@ void Parser::readFont()
 
     // extract textual attributes (bold, italic in the name, etc.)
     parseFontFamilyName(aResult);
-
     // need to read font file?
     if( nFileLen )
     {
@@ -582,6 +596,7 @@ void Parser::readFont()
                 if( aRes >>= aFD )
                 {
                     aResult.familyName  = aFD.Name;
+                parseFontFamilyName(aResult);
                     aResult.isBold      = (aFD.Weight > 100.0);
                     aResult.isItalic    = (aFD.Slant == awt::FontSlant_OBLIQUE ||
                                            aFD.Slant == awt::FontSlant_ITALIC );
@@ -602,7 +617,6 @@ void Parser::readFont()
         }
 
     }
-
     m_aFontMap[nFontID] = aResult;
 
     aResult.size = nSize;
@@ -875,7 +889,8 @@ oslFileError readLine( oslFileHandle pFile, ::rtl::OStringBuffer& line )
 static bool checkEncryption( const rtl::OUString&                               i_rPath,
                              const uno::Reference< task::XInteractionHandler >& i_xIHdl,
                              rtl::OUString&                                     io_rPwd,
-                             bool&                                              o_rIsEncrypted
+                             bool&                                              o_rIsEncrypted,
+                             const rtl::OUString&                               i_rDocName
                              )
 {
     bool bSuccess = false;
@@ -908,7 +923,7 @@ static bool checkEncryption( const rtl::OUString&                               
                         bool bEntered = false;
                         do
                         {
-                            bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered );
+                            bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered, i_rDocName );
                             rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                            RTL_TEXTENCODING_ISO_8859_1 );
                             bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
@@ -937,11 +952,12 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
     ::rtl::OUString aSysUPath;
     if( osl_getSystemPathFromFileURL( rURL.pData, &aSysUPath.pData ) != osl_File_E_None )
         return false;
+    rtl::OUString aDocName( rURL.copy( rURL.lastIndexOf( sal_Unicode('/') )+1 ) );
 
     // check for encryption, if necessary get password
     rtl::OUString aPwd( rPwd );
     bool bIsEncrypted = false;
-    if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted ) == false )
+    if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) == false )
         return false;
 
     rtl::OUStringBuffer converterURL = rtl::OUString::createFromAscii("xpdfimport");

@@ -27,6 +27,7 @@
 package com.sun.star.report.pentaho.parser.table;
 
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
+
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 

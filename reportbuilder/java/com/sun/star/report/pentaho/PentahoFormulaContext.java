@@ -26,6 +26,7 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
+import org.pentaho.reporting.libraries.base.config.Configuration;
 import org.pentaho.reporting.libraries.formula.ContextEvaluationException;
 import org.pentaho.reporting.libraries.formula.FormulaContext;
 import org.pentaho.reporting.libraries.formula.LocalizationContext;
@@ -33,7 +34,6 @@ import org.pentaho.reporting.libraries.formula.function.FunctionRegistry;
 import org.pentaho.reporting.libraries.formula.operators.OperatorFactory;
 import org.pentaho.reporting.libraries.formula.typing.Type;
 import org.pentaho.reporting.libraries.formula.typing.TypeRegistry;
-import org.pentaho.reporting.libraries.base.config.Configuration;
 
 /**
  *
