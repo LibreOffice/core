@@ -33,12 +33,14 @@
 sub db_hsqldb
 
     call tGeneral
+    call ExitRestartTheOffice
     call tRenameTable
     call tOpenDatabaseWithViews
     call tRenameTableWhichUsedInViews
     
     call tQueryOpenInSQLMode
-                    
+    call ExitRestartTheOffice
+    
     app.FileCopy gTesttoolPath + ConvertPath("dbaccess/optional/input/hsql_datasource/TT_hsqldb.odb") , gOfficePath + ConvertPath("user/work/TT_hsqldb.odb")            
     call db_Query(gOfficePath + "user/work/TT_hsqldb.odb" ,"hsqldb")
    
