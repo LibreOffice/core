@@ -1723,10 +1723,10 @@ BOOL ScViewFunc::MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,
         BOOL bIncludeFiltered = bCut;
         if ( !bIncludeFiltered )
         {
-            //  manually find number of non-filtered rows
-            SCROW nPastedCount = pDocSh->GetDocument()->GetRowFlagsArray(
-                    rSource.aStart.Tab()).CountForCondition(
-                    rSource.aStart.Row(), rSource.aEnd.Row(), CR_FILTERED, 0);
+            // find number of non-filtered rows
+            SCROW nPastedCount = pDocSh->GetDocument()->CountNonFilteredRows(
+                rSource.aStart.Row(), rSource.aEnd.Row(), rSource.aStart.Tab());
+
             if ( nPastedCount == 0 )
                 nPastedCount = 1;
             aDestEnd.SetRow( rDestPos.Row() + nPastedCount - 1 );

@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: sheetdata.hxx,v $
+ * $Revision: 1.16.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,29 +28,38 @@
  *
  ************************************************************************/
 
-#ifndef SC_TEAMDLG_HXX
-#define SC_TEAMDLG_HXX
+#ifndef SC_SHEETEVENTS_HXX
+#define SC_SHEETEVENTS_HXX
 
+#include <rtl/ustring.hxx>
 
-#include <vcl/floatwin.hxx>
-#include <vcl/fixed.hxx>
+#define SC_SHEETEVENT_FOCUS         0
+#define SC_SHEETEVENT_UNFOCUS       1
+#define SC_SHEETEVENT_SELECT        2
+#define SC_SHEETEVENT_DOUBLECLICK   3
+#define SC_SHEETEVENT_RIGHTCLICK    4
+#define SC_SHEETEVENT_CHANGE        5
+#define SC_SHEETEVENT_CALCULATE     6
+#define SC_SHEETEVENT_COUNT         7
 
-
-//========================================================================
-
-class ScTeamDlg : public FloatingWindow
+class ScSheetEvents
 {
+    rtl::OUString** mpScriptNames;
+
+    void        Clear();
+
 public:
-            ScTeamDlg( Window* pParent );
-            ~ScTeamDlg();
+                ScSheetEvents();
+                ScSheetEvents(const ScSheetEvents& rOther);
+                ~ScSheetEvents();
 
-    virtual BOOL    Close();
-    void            Center();
+    const ScSheetEvents&    operator= (const ScSheetEvents& rOther);
 
-private:
-    FixedBitmap aBmpTeam;
+    const rtl::OUString*    GetScript(sal_Int32 nEvent) const;
+    void                    SetScript(sal_Int32 nEvent, const rtl::OUString* pNew);
+
+    static rtl::OUString    GetEventName(sal_Int32 nEvent);
 };
-
 
 #endif
 

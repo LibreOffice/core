@@ -221,10 +221,10 @@ void RangeChooserTabPage::DeactivatePage()
 
 void RangeChooserTabPage::commitPage()
 {
-    commitPage(eFinish);
+    commitPage(::svt::WizardTypes::eFinish);
 }
 
-sal_Bool RangeChooserTabPage::commitPage( CommitPageReason /*eReason*/ )
+sal_Bool RangeChooserTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
     //ranges may have been edited in the meanwhile (dirty is true in that case here)
     if( isValid() )

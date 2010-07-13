@@ -146,7 +146,7 @@ void XclExpDffSheetAnchor::ImplSetFlags( const SdrObject& rSdrObj )
 
 void XclExpDffSheetAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUnit eMapUnit )
 {
-    maAnchor.SetRect( GetDoc(), mnScTab, rRect, eMapUnit );
+    maAnchor.SetRect( GetRoot(), mnScTab, rRect, eMapUnit );
 }
 
 // ----------------------------------------------------------------------------
@@ -175,7 +175,7 @@ void XclExpDffEmbeddedAnchor::ImplCalcAnchorRect( const Rectangle& rRect, MapUni
 XclExpDffNoteAnchor::XclExpDffNoteAnchor( const XclExpRoot& rRoot, const Rectangle& rRect ) :
     XclExpDffAnchorBase( rRoot, EXC_ESC_ANCHOR_SIZELOCKED )
 {
-    maAnchor.SetRect( GetDoc(), rRoot.GetCurrScTab(), rRect, MAP_100TH_MM );
+    maAnchor.SetRect( rRoot, rRoot.GetCurrScTab(), rRect, MAP_100TH_MM );
 }
 
 // ----------------------------------------------------------------------------
@@ -956,8 +956,8 @@ XclExpChartObj::XclExpChartObj( XclExpObjectManager& rObjMgr, Reference< XShape 
     aShapeProp.GetProperty( xModel, CREATE_OUSTRING( "Model" ) );
     ::com::sun::star::awt::Rectangle aBoundRect;
     aShapeProp.GetProperty( aBoundRect, CREATE_OUSTRING( "BoundRect" ) );
-    Size aSize( aBoundRect.Width, aBoundRect.Height );
-    mxChart.reset( new XclExpChart( GetRoot(), xModel, aSize ) );
+    Rectangle aChartRect( Point( aBoundRect.X, aBoundRect.Y ), Size( aBoundRect.Width, aBoundRect.Height ) );
+    mxChart.reset( new XclExpChart( GetRoot(), xModel, aChartRect ) );
 }
 
 XclExpChartObj::~XclExpChartObj()

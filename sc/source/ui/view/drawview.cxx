@@ -187,7 +187,7 @@ void ScDrawView::AddCustomHdl()
             if(nCol > 0)
                 --nCol;
 
-            SCROW nRow = nPosY <= 0 ? 0 : pDoc->FastGetRowForHeight( nTab,
+            SCROW nRow = nPosY <= 0 ? 0 : pDoc->GetRowForHeight( nTab,
                     (ULONG) nPosY);
             if(nRow > 0)
                 --nRow;
@@ -376,8 +376,8 @@ void ScDrawView::RecalcScale()
     pDoc->GetTableArea( nTab, nEndCol, nEndRow );
     if (nEndCol<20)
         nEndCol = 20;
-    if (nEndRow<20)
-        nEndRow = 20;
+    if (nEndRow<1000)
+        nEndRow = 1000;
 
     ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev,aZoomX,aZoomY,nPPTX,nPPTY,
                             aScaleX,aScaleY );
@@ -397,13 +397,13 @@ void ScDrawView::MarkListHasChanged()
 
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
-    if (!bInConstruct)          // nicht wenn die View gerade angelegt wird
+    // #i110829# remove the cell selection only if drawing objects are selected
+    if ( !bInConstruct && GetMarkedObjectList().GetMarkCount() )
     {
-        pViewSh->Unmark();      // Selektion auff'm Doc entfernen
+        pViewSh->Unmark();      // remove cell selection
 
         //  #65379# end cell edit mode if drawing objects are selected
-        if ( GetMarkedObjectList().GetMarkCount() )
-            SC_MOD()->InputEnterHandler();
+        SC_MOD()->InputEnterHandler();
     }
 
     //  IP deaktivieren

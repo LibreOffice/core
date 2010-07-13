@@ -98,7 +98,6 @@
 #include "msgpool.hxx"
 #include "scresid.hxx"
 #include "anyrefdg.hxx"
-#include "teamdlg.hxx"
 #include "dwfunctr.hxx"
 #include "formdata.hxx"
 //CHINA001 #include "tpview.hxx"
@@ -142,7 +141,6 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pSelTransfer( NULL ),
     pMessagePool( NULL ),
     pRefInputHandler( NULL ),
-    pTeamDlg( NULL ),
     pViewCfg( NULL ),
     pDocCfg( NULL ),
     pAppCfg( NULL ),
@@ -1445,11 +1443,6 @@ void ScModule::ViewShellGone( ScTabViewShell* pViewSh )
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)
         pHdl->ViewShellGone( pViewSh );
-
-    //  Team dialog is opened with the window from a view as parent
-    //  -> close it if any view is closed
-    if (pTeamDlg)
-        pTeamDlg->Close();          // resets variable pTeamDlg
 }
 
 void ScModule::SetRefInputHdl( ScInputHandler* pNew )
@@ -1571,21 +1564,6 @@ void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
         SfxApplication* pSfxApp = SFX_APP();
         pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
     }
-}
-
-void ScModule::OpenTeamDlg()
-{
-    if ( !pTeamDlg )
-    {
-        //  team dialog needs an existing parent window
-        //  -> use window from active view (dialog is closed in ViewShellGone)
-
-        ScTabViewShell* pShell = ScTabViewShell::GetActiveViewShell();
-        if (pShell)
-            pTeamDlg = new ScTeamDlg( pShell->GetActiveWin() );
-    }
-    else
-        pTeamDlg->Center();
 }
 
 SfxChildWindow* lcl_GetChildWinFromAnyView( USHORT nId )
@@ -1868,21 +1846,19 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
-        if ( pDoc->IsLoadingDone() )
-        {
-            BOOL bLinks = pDoc->IdleCheckLinks();
-            BOOL bWidth = pDoc->IdleCalcTextWidth();
-            BOOL bSpell = pDoc->ContinueOnlineSpelling();
-            if ( bSpell )
-                aSpellTimer.Start();                    // da ist noch was
 
-            bMore = bLinks || bWidth || bSpell;         // ueberhaupt noch was?
+        BOOL bLinks = pDoc->IdleCheckLinks();
+        BOOL bWidth = pDoc->IdleCalcTextWidth();
+        BOOL bSpell = pDoc->ContinueOnlineSpelling();
+        if ( bSpell )
+            aSpellTimer.Start();                    // da ist noch was
 
-            //  While calculating a Basic formula, a paint event may have occured,
-            //  so check the bNeedsRepaint flags for this document's views
-            if (bWidth)
-                lcl_CheckNeedsRepaint( pDocSh );
-        }
+        bMore = bLinks || bWidth || bSpell;         // ueberhaupt noch was?
+
+        //  While calculating a Basic formula, a paint event may have occured,
+        //  so check the bNeedsRepaint flags for this document's views
+        if (bWidth)
+            lcl_CheckNeedsRepaint( pDocSh );
     }
 
     ULONG nOldTime = aIdleTimer.GetTimeout();
@@ -2152,9 +2128,6 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
     return 0;
 }
 
-
-
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 BOOL ScModule::RegisterRefWindow( USHORT nSlotId, Window *pWnd )
 {
     std::list<Window*> & rlRefWindow = m_mapRefWindow[nSlotId];
@@ -2204,10 +2177,13 @@ BOOL  ScModule::IsAliveRefDlg( USHORT nSlotId, Window *pWnd )
 
 Window *  ScModule::Find1RefWindow( USHORT nSlotId, Window *pWndAncestor )
 {
+    if (!pWndAncestor)
+        return NULL;
+
     std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
 
     if( iSlot == m_mapRefWindow.end() )
-        return FALSE;
+        return NULL;
 
     std::list<Window*> & rlRefWindow = iSlot->second;
 
@@ -2222,6 +2198,9 @@ Window *  ScModule::Find1RefWindow( USHORT nSlotId, Window *pWndAncestor )
 
 Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
 {
+    if (!pWndAncestor)
+        return NULL;
+
     while( Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
 
     for( std::map<USHORT, std::list<Window*> >::iterator i = m_mapRefWindow.begin();
@@ -2232,4 +2211,4 @@ Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
 
     return NULL;
 }
-//<!--Added by PengYunQuan for Validity Cell Range Picker
+

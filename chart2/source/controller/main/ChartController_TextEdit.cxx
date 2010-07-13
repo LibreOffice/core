@@ -80,7 +80,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     if(!pTextObj)
         return;
 
-    m_xUndoManager->preAction( m_aModel->getModel());
+    m_xUndoManager->preAction( getModel());
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
     //pOutliner->SetRefDevice(m_pChartWindow);
     //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);
@@ -159,7 +159,7 @@ bool ChartController::EndTextEdit()
                 ObjectIdentifier::getObjectPropertySet( aObjectCID, getModel() );
 
             // lock controllers till end of block
-            ControllerLockGuard aCLGuard( m_aModel->getModel());
+            ControllerLockGuard aCLGuard( getModel() );
 
             TitleHelper::setCompleteString( aString, uno::Reference<
                 ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );

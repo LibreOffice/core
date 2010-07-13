@@ -87,27 +87,6 @@ const USHORT nGridWhichPairs[] =
     0
 };
 
-const USHORT nChartWhichPairs[] =
-{
-    SCHATTR_STYLE_START,SCHATTR_STYLE_END,          //    59 -    68  sch/schattr.hxx
-    0
-};
-
-const USHORT nDiagramAreaWhichPairs[] =
-{
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
-    0
-};
-
-const USHORT nAreaAndChartWhichPairs[] =   // pairs for chart AND area
-{
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
-    SCHATTR_STYLE_START,SCHATTR_STYLE_END,          //    59 -    68  sch/schattr.hxx
-    0
-};
-
 const USHORT nLegendWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx

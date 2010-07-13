@@ -86,7 +86,15 @@
 #include "funcdesc.hxx"
 #include "docuno.hxx"
 #include "charthelper.hxx"
+#include "tabbgcolor.hxx"
 
+#include <basic/sbstar.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+using namespace com::sun::star;
+
+// helper func defined in docfunc.cxx
+void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName );
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -2141,6 +2149,7 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
 {
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = pDocSh->GetDocument();
+    BOOL bVbaEnabled = pDoc ? pDoc->IsInVBAMode() : FALSE;
     SCTAB       nNewTab = TheTabs[0];
     int         i;
     WaitObject aWait( GetFrameWin() );
@@ -2193,6 +2202,8 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
                 pUndoDoc->SetActiveScenario( nTab, bActive );
             }
             pUndoDoc->SetVisible( nTab, pDoc->IsVisible( nTab ) );
+            pUndoDoc->SetTabBgColor( nTab, pDoc->GetTabBgColor(nTab) );
+            pUndoDoc->SetSheetEvents( nTab, pDoc->GetSheetEvents( nTab ) );
 
             if ( pDoc->IsTabProtected( nTab ) )
                 pUndoDoc->SetTabProtection(nTab, pDoc->GetTabProtection(nTab));
@@ -2212,9 +2223,18 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
 
     for(i=TheTabs.Count()-1;i>=0;i--)
     {
+        String sCodeName;
+        BOOL bHasCodeName = pDoc->GetCodeName( TheTabs[sal::static_int_cast<USHORT>(i)], sCodeName );
         if (pDoc->DeleteTab( TheTabs[sal::static_int_cast<USHORT>(i)], pUndoDoc ))
         {
             bDelDone = TRUE;
+            if( bVbaEnabled )
+            {
+                if( bHasCodeName )
+                {
+                    VBA_DeleteModule( *pDocSh, sCodeName );
+                }
+            }
             pDocSh->Broadcast( ScTablesHint( SC_TAB_DELETED, TheTabs[sal::static_int_cast<USHORT>(i)] ) );
         }
     }
@@ -2271,6 +2291,28 @@ BOOL ScViewFunc::RenameTable( const String& rName, SCTAB nTab )
     return bSuccess;
 }
 
+
+//----------------------------------------------------------------------------
+
+bool ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
+{
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( nTab, rColor, TRUE, FALSE );
+    if (bSuccess)
+    {
+        GetViewData()->GetViewShell()->UpdateInputHandler();
+    }
+    return bSuccess;
+}
+
+bool ScViewFunc::SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList )
+{
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, TRUE, FALSE );
+    if (bSuccess)
+    {
+        GetViewData()->GetViewShell()->UpdateInputHandler();
+    }
+    return bSuccess;
+}
 
 //----------------------------------------------------------------------------
 

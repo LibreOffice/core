@@ -57,8 +57,10 @@ SLOFILES =  \
 
 EXCEPTIONSFILES= \
     $(SLO)$/drwtrans.obj \
+    $(SLO)$/scdll.obj  \
     $(SLO)$/scmod2.obj \
     $(SLO)$/scmod.obj \
+    $(SLO)$/typemap.obj  \
     $(SLO)$/client.obj \
     $(SLO)$/inputwin.obj
 

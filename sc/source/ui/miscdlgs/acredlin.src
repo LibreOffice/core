@@ -170,7 +170,6 @@ Menu RID_POPUP_CHANGES
         MenuItem
         {
             Identifier = SC_SUB_SORT ;
-            RadioCheck = TRUE ;
             SubMenu = Menu
             {
                 ItemList =

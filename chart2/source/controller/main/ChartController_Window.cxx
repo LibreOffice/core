@@ -255,7 +255,7 @@ const short HITPIX=2; //hit-tolerance in pixel
         if( bIsEmbedded )
         {
             //change map mode to fit new size
-            awt::Size aModelPageSize = ChartModelHelper::getPageSize( m_aModel->getModel() );
+            awt::Size aModelPageSize = ChartModelHelper::getPageSize( getModel() );
             sal_Int32 nScaleXNumerator = aLogicSize.Width();
             sal_Int32 nScaleXDenominator = aModelPageSize.Width;
             sal_Int32 nScaleYNumerator = aLogicSize.Height();
@@ -292,7 +292,7 @@ const short HITPIX=2; //hit-tolerance in pixel
         else
         {
             //change visarea
-            ChartModelHelper::setPageSize( awt::Size( aLogicSize.Width(), aLogicSize.Height() ), m_aModel->getModel() );
+            ChartModelHelper::setPageSize( awt::Size( aLogicSize.Width(), aLogicSize.Height() ), getModel() );
             pWindow->SetPosSizePixel( X, Y, Width, Height, Flags );
         }
         pWindow->Invalidate();
@@ -507,6 +507,11 @@ void ChartController::execute_Paint( const Rectangle& rRect )
 {
     try
     {
+        uno::Reference< frame::XModel > xModel( getModel() );
+        //DBG_ASSERT( xModel.is(), "ChartController::execute_Paint: have no model to paint");
+        if( !xModel.is() )
+            return;
+
         //better performance for big data
         uno::Reference< beans::XPropertySet > xProp( m_xChartView, uno::UNO_QUERY );
         if( xProp.is() )
@@ -693,7 +698,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         m_aSelection.adaptSelectionToNewPos( aMPos, pDrawViewWrapper
             , rMEvt.IsRight(), m_bWaitingForDoubleClick );
 
-        if( !m_aSelection.isRotateableObjectSelected( m_aModel->getModel() ) )
+        if( !m_aSelection.isRotateableObjectSelected( getModel() ) )
         {
                 m_eDragMode = SDRDRAG_MOVE;
                 pDrawViewWrapper->SetDragMode(m_eDragMode);
@@ -726,14 +731,14 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
                     else if( eKind==HDL_UPLFT || eKind==HDL_UPRGT || eKind==HDL_LWLFT || eKind==HDL_LWRGT )
                         eRotationDirection = DragMethod_RotateDiagram::ROTATIONDIRECTION_Z;
                 }
-                pDragMethod = new DragMethod_RotateDiagram( *pDrawViewWrapper, m_aSelection.getSelectedCID(), m_aModel->getModel(), eRotationDirection );
+                pDragMethod = new DragMethod_RotateDiagram( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getModel(), eRotationDirection );
             }
         }
         else
         {
             rtl::OUString aDragMethodServiceName( ObjectIdentifier::getDragMethodServiceName( m_aSelection.getSelectedCID() ) );
             if( aDragMethodServiceName.equals( ObjectIdentifier::getPieSegmentDragMethodServiceName() ) )
-                pDragMethod = new DragMethod_PieSegment( *pDrawViewWrapper, m_aSelection.getSelectedCID(), m_aModel->getModel() );
+                pDragMethod = new DragMethod_PieSegment( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getModel() );
         }
         pDrawViewWrapper->SdrView::BegDragObj(aMPos, NULL, pHitSelectionHdl, nDrgLog, pDragMethod);
     }
@@ -773,7 +778,7 @@ void ChartController::execute_Tracking( const TrackingEvent& /* rTEvt */ )
 
 void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 {
-    ControllerLockGuard aCLGuard( m_aModel->getModel());
+    ControllerLockGuard aCLGuard( getModel() );
     bool bMouseUpWithoutMouseDown = !m_bWaitingForMouseUp;
     m_bWaitingForMouseUp = false;
     bool bNotifySelectionChange = false;
@@ -797,6 +802,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         if ( m_eDrawMode == CHARTDRAW_INSERT && pDrawViewWrapper->IsCreateObj() )
         {
             pDrawViewWrapper->EndCreateObj( SDRCREATE_FORCEEND );
+            impl_switchDiagramPositioningToExcludingPositioning();
             if ( pDrawViewWrapper->AreObjectsMarked() )
             {
                 if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT )
@@ -833,7 +839,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             if( pChartDragMethod )
             {
                 UndoGuard aUndoGuard( pChartDragMethod->getUndoDescription(),
-                        m_xUndoManager, m_aModel->getModel() );
+                        m_xUndoManager, getModel() );
 
                 if( pDrawViewWrapper->EndDragObj(false) )
                 {
@@ -851,7 +857,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                     if( pObj )
                     {
                         Rectangle aObjectRect = pObj->GetSnapRect();
-                        awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel() ) );
+                        awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
                         Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
                         const E3dObject* pE3dObject = dynamic_cast< const E3dObject*>( pObj );
@@ -866,12 +872,11 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                             ActionDescriptionProvider::createDescription(
                                 eActionType,
                                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() ))),
-                            m_xUndoManager, m_aModel->getModel() );
+                            m_xUndoManager, getModel() );
                         bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
-                                        , m_aModel->getModel()
+                                        , getModel()
                                         , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
-                                        , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight())
-                                        , m_xChartView );
+                                        , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
                         if( bChanged )
                         {
                             bDraggingDone = true;
@@ -890,7 +895,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             if( !bDraggingDone ) //mouse wasn't moved while dragging
             {
                 bool bClickedTwiceOnDragableObject = SelectionHelper::isDragableObjectHitTwice( aMPos, m_aSelection.getSelectedCID(), *pDrawViewWrapper );
-                bool bIsRotateable = m_aSelection.isRotateableObjectSelected( m_aModel->getModel() );
+                bool bIsRotateable = m_aSelection.isRotateableObjectSelected( getModel() );
 
                 //toggel between move and rotate
                 if( bIsRotateable && bClickedTwiceOnDragableObject && SDRDRAG_MOVE==m_eDragMode )
@@ -1030,7 +1035,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
             {
                 sal_Int16 nUniqueId = 1;
                 ObjectType eObjectType = ObjectIdentifier::getObjectType( m_aSelection.getSelectedCID() );
-                Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( m_aModel->getModel() );
+                Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram( getModel() );
 
                 OUString aFormatCommand( lcl_getFormatCommandForObjectCID( m_aSelection.getSelectedCID() ) );
                 lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, aFormatCommand );
@@ -1040,7 +1045,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 if( OBJECTTYPE_DATA_SERIES == eObjectType || OBJECTTYPE_DATA_POINT == eObjectType )
                 {
                     bool bIsPoint = ( OBJECTTYPE_DATA_POINT == eObjectType );
-                    uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
+                    uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() );
                     uno::Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
                     Reference< chart2::XRegressionCurve > xTrendline( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ) );
                     bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline );
@@ -1205,7 +1210,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 //-----
                 else if( OBJECTTYPE_AXIS  == eObjectType || OBJECTTYPE_GRID == eObjectType || OBJECTTYPE_SUBGRID == eObjectType )
                 {
-                    Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), m_aModel->getModel() );
+                    Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getModel() );
                     if( xAxis.is() && xDiagram.is() )
                     {
                         sal_Int32 nDimensionIndex = -1;
@@ -1349,7 +1354,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
     if( ! bReturn )
     {
         // Natvigation (Tab/F3/Home/End)
-        uno::Reference< XChartDocument > xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
+        uno::Reference< XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
         ObjectKeyNavigation aObjNav( m_aSelection.getSelectedOID(), xChartDoc, ExplicitValueProvider::getExplicitValueProvider( m_xChartView ));
         awt::KeyEvent aKeyEvent( ::svt::AcceleratorExecute::st_VCLKey2AWTKey( aKeyCode ));
         bReturn = aObjNav.handleKeyEvent( aKeyEvent );
@@ -1361,7 +1366,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
             {
                 aNewSelection = aNewOID.getAny();
             }
-            if ( m_eDragMode == SDRDRAG_ROTATE && !SelectionHelper::isRotateableObject( aNewOID.getObjectCID(), m_aModel->getModel() ) )
+            if ( m_eDragMode == SDRDRAG_ROTATE && !SelectionHelper::isRotateableObject( aNewOID.getObjectCID(), getModel() ) )
             {
                 m_eDragMode = SDRDRAG_MOVE;
             }
@@ -1494,7 +1499,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                         {
                             awt::Point aPos( xShape->getPosition() );
                             awt::Size aSize( xShape->getSize() );
-                            awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel() ) );
+                            awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
                             aPos.X = static_cast< long >( static_cast< double >( aPos.X ) + fShiftAmountX );
                             aPos.Y = static_cast< long >( static_cast< double >( aPos.Y ) + fShiftAmountY );
                             if( aPos.X + aSize.Width > aPageSize.Width )
@@ -1582,7 +1587,7 @@ bool ChartController::requestQuickHelp(
 {
     uno::Reference< frame::XModel > xChartModel;
     if( m_aModel.is())
-        xChartModel.set( m_aModel->getModel());
+        xChartModel.set( getModel() );
     if( !xChartModel.is())
         return false;
 
@@ -1743,7 +1748,7 @@ bool ChartController::impl_moveOrResizeObject(
     bool bNeedShift = true;
     bool bNeedResize = ( eType == CENTERED_RESIZE_OBJECT );
 
-    uno::Reference< frame::XModel > xChartModel( m_aModel->getModel());
+    uno::Reference< frame::XModel > xChartModel( getModel() );
     uno::Reference< beans::XPropertySet > xObjProp(
         ObjectIdentifier::getObjectPropertySet( rCID, xChartModel ));
     if( xObjProp.is())
@@ -1825,7 +1830,7 @@ bool ChartController::impl_DragDataPoint( const ::rtl::OUString & rCID, double f
 
     sal_Int32 nDataPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( rCID );
     uno::Reference< chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID( rCID, m_aModel->getModel()));
+        ObjectIdentifier::getDataSeriesForCID( rCID, getModel() ));
     if( xSeries.is())
     {
         try
@@ -1996,7 +2001,7 @@ void ChartController::impl_SetMousePointer( const MouseEvent & rEvent )
             {
                 if( (m_eDragMode == SDRDRAG_ROTATE)
                     && SelectionHelper::isRotateableObject( aHitObjectCID
-                        , m_aModel->getModel() ) )
+                        , getModel() ) )
                     pWindow->SetPointer( Pointer( POINTER_ROTATE ) );
                 else
                 {

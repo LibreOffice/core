@@ -36,6 +36,8 @@
 
 #include <memory>
 
+#include <set>
+
 class ScDocument;
 class ScBaseCell;
 class ScPatternAttr;
@@ -206,8 +208,6 @@ private:
     ::std::auto_ptr<ScDBQueryParamBase> mpParam;
     ::std::auto_ptr<DataAccess>         mpData;
 
-    bool            GetThis(Value& rValue);
-
 public:
                     ScDBQueryDataIterator(ScDocument* pDocument, ScDBQueryParamBase* pParam);
     /// Does NOT reset rValue if no value found!
@@ -305,7 +305,6 @@ public:
     ScBaseCell*     GetNext();
     SCCOL           GetCol() { return nCol; }
     SCROW           GetRow() { return nRow; }
-    ULONG           GetNumberFormat();
 
                     // setzt alle Entry.nField einen weiter, wenn Spalte
                     // wechselt, fuer ScInterpreter ScHLookup()
@@ -512,6 +511,23 @@ public:
     SCROW                   GetRow() const          { return nFoundRow; }
     const ScPatternAttr*    GetPattern() const      { return pFoundPattern; }
     const ScBaseCell*       GetCell() const         { return pFoundCell; }
+};
+
+// ============================================================================
+
+class ScRowBreakIterator
+{
+public:
+    static SCROW NOT_FOUND;
+
+    explicit ScRowBreakIterator(::std::set<SCROW>& rBreaks);
+    SCROW first();
+    SCROW next();
+
+private:
+    ::std::set<SCROW>& mrBreaks;
+    ::std::set<SCROW>::const_iterator maItr;
+    ::std::set<SCROW>::const_iterator maEnd;
 };
 
 #endif

@@ -429,7 +429,9 @@ ScInputHandler::ScInputHandler()
         pColumnData( NULL ),
         pFormulaData( NULL ),
         pFormulaDataPara( NULL ),
+        pTipVisibleParent( NULL ),
         nTipVisible( 0 ),
+        pTipVisibleSecParent( NULL ),
         nTipVisibleSec( 0 ),
         nAutoPos( SCPOS_INVALID ),
         bUseTab( FALSE ),
@@ -691,12 +693,29 @@ void ScInputHandler::GetFormulaData()
     }
 }
 
+IMPL_LINK( ScInputHandler, ShowHideTipVisibleParentListener, VclWindowEvent*, pEvent )
+{
+    if( pEvent->GetId() == VCLEVENT_OBJECT_DYING || pEvent->GetId() == VCLEVENT_WINDOW_HIDE )
+        HideTip();
+    return 0;
+}
+
+IMPL_LINK( ScInputHandler, ShowHideTipVisibleSecParentListener, VclWindowEvent*, pEvent )
+{
+    if( pEvent->GetId() == VCLEVENT_OBJECT_DYING || pEvent->GetId() == VCLEVENT_WINDOW_HIDE )
+        HideTipBelow();
+    return 0;
+}
+
 void ScInputHandler::HideTip()
 {
     if ( nTipVisible )
     {
+        if (pTipVisibleParent)
+            pTipVisibleParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
         Help::HideTip( nTipVisible );
         nTipVisible = 0;
+        pTipVisibleParent = NULL;
     }
     aManualTip.Erase();
 }
@@ -704,8 +723,11 @@ void ScInputHandler::HideTipBelow()
 {
     if ( nTipVisibleSec )
     {
+        if (pTipVisibleSecParent)
+            pTipVisibleSecParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
         Help::HideTip( nTipVisibleSec );
         nTipVisibleSec = 0;
+        pTipVisibleSecParent = NULL;
     }
     aManualTip.Erase();
 }
@@ -897,15 +919,16 @@ void ScInputHandler::ShowTip( const String& rText )
     if (pActiveView)
     {
         Point aPos;
-        Window* pWin = pActiveView->GetWindow();
+        pTipVisibleParent = pActiveView->GetWindow();
         Cursor* pCur = pActiveView->GetCursor();
         if (pCur)
-            aPos = pWin->LogicToPixel( pCur->GetPos() );
-        aPos = pWin->OutputToScreenPixel( aPos );
+            aPos = pTipVisibleParent->LogicToPixel( pCur->GetPos() );
+        aPos = pTipVisibleParent->OutputToScreenPixel( aPos );
         Rectangle aRect( aPos, aPos );
 
         USHORT nAlign = QUICKHELP_LEFT|QUICKHELP_BOTTOM;
-        nTipVisible = Help::ShowTip(pWin, aRect, rText, nAlign);
+        nTipVisible = Help::ShowTip(pTipVisibleParent, aRect, rText, nAlign);
+        pTipVisibleParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
     }
 }
 
@@ -917,18 +940,19 @@ void ScInputHandler::ShowTipBelow( const String& rText )
     if ( pActiveView )
     {
         Point aPos;
-        Window* pWin = pActiveView->GetWindow();
+        pTipVisibleSecParent = pActiveView->GetWindow();
         Cursor* pCur = pActiveView->GetCursor();
         if ( pCur )
         {
             Point aLogicPos = pCur->GetPos();
             aLogicPos.Y() += pCur->GetHeight();
-            aPos = pWin->LogicToPixel( aLogicPos );
+            aPos = pTipVisibleSecParent->LogicToPixel( aLogicPos );
         }
-        aPos = pWin->OutputToScreenPixel( aPos );
+        aPos = pTipVisibleSecParent->OutputToScreenPixel( aPos );
         Rectangle aRect( aPos, aPos );
-        USHORT nAlign = QUICKHELP_LEFT | QUICKHELP_TOP;
-        nTipVisibleSec = Help::ShowTip(pWin, aRect, rText, nAlign);
+        USHORT nAlign = QUICKHELP_LEFT | QUICKHELP_TOP | QUICKHELP_NOEVADEPOINTER;
+        nTipVisibleSec = Help::ShowTip(pTipVisibleSecParent, aRect, rText, nAlign);
+        pTipVisibleSecParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
     }
 }
 
@@ -2690,6 +2714,7 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
     delete pObject;
 
     HideTip();
+    HideTipBelow();
 
     nFormSelStart = nFormSelEnd = 0;
     aFormText.Erase();

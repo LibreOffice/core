@@ -329,5 +329,8 @@
 #define CMD_SID_MARKARRAYFORMULA                    ".uno:SelectArrayFormula"
 #define CMD_FID_TAB_RTL                             ".uno:SheetRightToLeft"
 #define CMD_SID_SHARE_DOC                           ".uno:ShareDocument"
+#define CMD_FID_TAB_EVENTS                          ".uno:TableEvents"
+#define CMD_FID_TAB_MENU_SET_TAB_BG_COLOR           ".uno:SetTabBgColor"
+#define CMD_FID_TAB_SET_TAB_BG_COLOR                ".uno:TabBgColor"
 
 #endif

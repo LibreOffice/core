@@ -48,6 +48,8 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/datatransfer/XTransferableSupplier.hpp>
 
+#include "address.hxx"
+
 class ScTabViewShell;
 
 #define SC_VIEWPANE_ACTIVE  0xFFFF
@@ -195,6 +197,7 @@ private:
     XViewPropertyChangeListenerArr_Impl     aPropertyChgListeners;
     XMouseClickHandlerArr_Impl              aMouseClickHandlers;
     XActivationEventListenerArr_Impl        aActivationListeners;
+    SCTAB                                   nPreviousTab;
     sal_Bool                                bDrawSelModeSet;
 
     ScViewPaneObj*          GetObjectByIndex_Impl(USHORT nIndex) const;
@@ -223,7 +226,7 @@ public:
     void                    SelectionChanged();
     void                    VisAreaChanged();
     void                    SheetChanged();
-    sal_Bool                IsMouseListening() { return aMouseClickHandlers.Count() > 0; }
+    bool                    IsMouseListening() const;
     sal_Bool                MousePressed( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool                MouseReleased( const ::com::sun::star::awt::MouseEvent& e ) throw (::com::sun::star::uno::RuntimeException);
 

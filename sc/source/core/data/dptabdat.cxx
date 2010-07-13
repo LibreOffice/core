@@ -169,13 +169,19 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTab
     // page dimensions
     GetItemData(rCacheTable, nRow, rInfo.aPageDims, rData.aPageData);
 
+    long nCacheColumnCount = rCacheTable.GetCache()->GetColumnCount();
     sal_Int32 n = rInfo.aDataSrcCols.size();
     for (sal_Int32 i = 0; i < n; ++i)
     {
         long nDim = rInfo.aDataSrcCols[i];
         rData.aValues.push_back( ScDPValueData() );
-        ScDPValueData& rVal = rData.aValues.back();
-        rCacheTable.getValue( rVal, static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), false);
+        // #i111435# GetItemData needs dimension indexes including groups,
+        // so the index must be checked here (groups aren't useful as data fields).
+        if ( nDim < nCacheColumnCount )
+        {
+            ScDPValueData& rVal = rData.aValues.back();
+            rCacheTable.getValue( rVal, static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), false);
+        }
     }
 }
 

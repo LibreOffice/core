@@ -68,8 +68,6 @@
 
 #define FRAME_OFFSET 4
 
-BOOL bIsOlk = FALSE;
-
 
 //CHINA001 //========================================================================
 //CHINA001 // AutoFormat-Dialog:
@@ -508,8 +506,6 @@ ScAutoFmtPreview::ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocume
         pNumFmt         ( new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), ScGlobal::eLnge ) )
 {
     Init();
-    if( bIsOlk )
-        ((String&)aStrMar).AssignAscii(RTL_CONSTASCII_STRINGPARAM( "Olk" ));
 }
 
 //------------------------------------------------------------------------

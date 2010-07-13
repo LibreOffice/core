@@ -53,6 +53,7 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/formsimp.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/XMLEventsImportContext.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
@@ -98,21 +99,27 @@ static bool lcl_isExternalRefCache(const rtl::OUString& rName, rtl::OUString& rU
         const sal_Unicode c = p[i];
         if (i <= 7)
         {
+            // Checking the prefix 'file://'.
             if (c != aPrefix[i])
                 return false;
         }
-        else if (c == '#')
-        {
-            if (cPrev != '\'')
-                return false;
-
-            rUrl = aUrlBuf.makeStringAndClear();
-            rUrl = rUrl.copy(0, rUrl.getLength()-1); // remove the trailing single-quote.
-            bInUrl = false;
-        }
         else if (bInUrl)
-            aUrlBuf.append(c);
+        {
+            // parsing file URL
+            if (c == '#')
+            {
+                if (cPrev != '\'')
+                    return false;
+
+                rUrl = aUrlBuf.makeStringAndClear();
+                rUrl = rUrl.copy(0, rUrl.getLength()-1); // remove the trailing single-quote.
+                bInUrl = false;
+            }
+            else
+                aUrlBuf.append(c);
+        }
         else
+            // parsing sheet name.
             aTabNameBuf.append(c);
 
         cPrev = c;
@@ -206,6 +213,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                 ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
                 pExternalRefInfo->mnFileId = pRefMgr->getExternalFileId(aExtUrl);
                 pExternalRefInfo->mpCacheTable = pRefMgr->getCacheTable(pExternalRefInfo->mnFileId, aExtTabName, true);
+                pExternalRefInfo->mpCacheTable->setWholeTableCached();
             }
         }
         else
@@ -314,6 +322,14 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
             GetScImport().GetFormImport()->startPage(GetScImport().GetTables().GetCurrentXDrawPage());
             bStartFormPage = sal_True;
             pContext = GetScImport().GetFormImport()->createOfficeFormsContext( GetScImport(), nPrefix, rLName );
+        }
+        break;
+    case XML_TOK_TABLE_EVENT_LISTENERS:
+    case XML_TOK_TABLE_EVENT_LISTENERS_EXT:
+        {
+            // use XEventsSupplier interface of the sheet
+            uno::Reference<document::XEventsSupplier> xSupplier( GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY );
+            pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName, xSupplier );
         }
         break;
     default:

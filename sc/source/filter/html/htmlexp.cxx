@@ -148,8 +148,6 @@ const sal_Char __FAR_DATA ScHTMLExport::sIndentSource[nIndentMax+1] =
 #define OUT_SP_CSTR_ASS( s )    rStrm << ' ' << s << '='
 #define APPEND_SPACE( s )   s.AppendAscii(" ")
 
-extern BOOL bOderSo;
-
 #define GLOBSTR(id) ScGlobal::GetRscString( id )
 
 
@@ -233,30 +231,6 @@ void lcl_AppendHTMLColorTripel( ByteString& rStr, const Color& rColor )
     rResult = '<'; rResult += rTag; rResult += '>';
 }
 */
-
-bool SC_DLLPUBLIC ScGetWriteTeamInfo();
-
-void lcl_WriteTeamInfo( SvStream& rStrm, rtl_TextEncoding eDestEnc )
-{
-    if ( !ScGetWriteTeamInfo() ) return;
-    lcl_OUT_LF();
-    lcl_OUT_COMMENT( CREATE_STRING( "Sascha Ballach                     " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Michael Daeumling (aka Bitsau)     " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Michael Hagen                      " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Roland Jakobs                      " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Andreas Krebs                      " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "John Marmion                       " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Niklas Nebel                       " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Jacques Nietsch                    " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Marcus Olk                         " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Eike Rathke                        " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Daniel Rentz                       " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Stephan Templin                    " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Gunnar Timm                        " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "*** Man kann nicht ALLES haben! ***" ) );
-    lcl_OUT_LF();
-}
-
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -416,8 +390,6 @@ void ScHTMLExport::WriteHeader()
             OUT_COMMENT( aStrOut );
         }
         //----------------------------------------------------------
-
-        lcl_WriteTeamInfo( rStrm, eDestEnc );
     }
     OUT_LF();
 
@@ -746,7 +718,7 @@ void ScHTMLExport::WriteTables()
         SCCOL nCol;
         for ( nCol=nStartCol; nCol<=nEndCol; nCol++ )
         {
-            if ( !(pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN) )
+            if ( !pDoc->ColHidden(nCol, nTab) )
                 ++nColCnt;
         }
         (((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += '=') += ByteString::CreateFromInt32( nColCnt );
@@ -767,7 +739,7 @@ void ScHTMLExport::WriteTables()
         aByteStr += '=';
         for ( nCol=nStartCol; nCol<=nEndCol; nCol++ )
         {
-            if ( pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN )
+            if ( pDoc->ColHidden(nCol, nTab) )
                 continue;   // for
 
             aByteStrOut  = aByteStr;
@@ -782,14 +754,12 @@ void ScHTMLExport::WriteTables()
         // At least old (3.x, 4.x?) Netscape doesn't follow <TABLE COLS=n> and
         // <COL WIDTH=x> specified, but needs a width at every column.
         bTableDataWidth = TRUE;     // widths in first row
-        bool bHasHiddenRows = pDoc->GetRowFlagsArray( nTab).HasCondition(
-                nStartRow, nEndRow, CR_HIDDEN, CR_HIDDEN);
+        bool bHasHiddenRows = pDoc->HasHiddenRows(nStartRow, nEndRow, nTab);
         for ( SCROW nRow=nStartRow; nRow<=nEndRow; nRow++ )
         {
-            if ( bHasHiddenRows && (pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN) )
+            if ( bHasHiddenRows && pDoc->RowHidden(nRow, nTab) )
             {
-                nRow = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition(
-                        nRow+1, nEndRow, CR_HIDDEN, 0);
+                nRow = pDoc->FirstVisibleRow(nRow+1, nEndRow, nTab);
                 --nRow;
                 continue;   // for
             }
@@ -798,7 +768,7 @@ void ScHTMLExport::WriteTables()
             bTableDataHeight = TRUE;  // height at every first cell of each row
             for ( SCCOL nCol2=nStartCol; nCol2<=nEndCol; nCol2++ )
             {
-                if ( pDoc->GetColFlags( nCol2, nTab ) & CR_HIDDEN )
+                if ( pDoc->ColHidden(nCol2, nTab) )
                     continue;   // for
 
                 if ( nCol2 == nEndCol )

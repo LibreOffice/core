@@ -33,6 +33,7 @@
 #include "tabprotection.hxx"
 #include "tools/debug.hxx"
 #include "svl/PasswordHelper.hxx"
+#include <comphelper/docpasswordhelper.hxx>
 #include "document.hxx"
 
 #define DEBUG_TAB_PROTECTION 0
@@ -75,40 +76,6 @@ ScPassHashProtectable::~ScPassHashProtectable()
 
 // ============================================================================
 
-static sal_uInt16 lcl_getXLHashFromChar(const sal_Char* szPassword)
-{
-    sal_uInt16 cchPassword = static_cast< sal_uInt16 >( strlen(szPassword) );
-    sal_uInt16 wPasswordHash = 0;
-    if (!cchPassword)
-        return wPasswordHash;
-
-    const char* pch = &szPassword[cchPassword];
-    while (pch-- != szPassword)
-    {
-        wPasswordHash = ((wPasswordHash >> 14) & 0x01) |
-                        ((wPasswordHash << 1) & 0x7fff);
-        wPasswordHash ^= *pch;
-    }
-
-    wPasswordHash = ((wPasswordHash >> 14) & 0x01) |
-                    ((wPasswordHash << 1) & 0x7fff);
-
-    wPasswordHash ^= (0x8000 | ('N' << 8) | 'K');
-    wPasswordHash ^= cchPassword;
-
-    return wPasswordHash;
-}
-
-static Sequence<sal_Int8> lcl_getXLHash(const String& aPassText)
-{
-    const sal_Char* szBuf = OUStringToOString(OUString(aPassText), RTL_TEXTENCODING_UTF8).getStr();
-    sal_uInt16 nHash = lcl_getXLHashFromChar(szBuf);
-    Sequence<sal_Int8> aHash(2);
-    aHash[0] = (nHash >> 8) & 0xFF;
-    aHash[1] = nHash & 0xFF;
-    return aHash;
-}
-
 class ScTableProtectionImpl
 {
 public:
@@ -146,7 +113,7 @@ Sequence<sal_Int8> ScTableProtectionImpl::hashPassword(const String& aPassText, 
     switch (eHash)
     {
         case PASSHASH_XL:
-            aHash = lcl_getXLHash(aPassText);
+            aHash = ::comphelper::DocPasswordHelper::GetXLHashAsSequence( aPassText, RTL_TEXTENCODING_UTF8 );
         break;
         case PASSHASH_OOO:
         default:

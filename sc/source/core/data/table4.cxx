@@ -586,13 +586,13 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         //  Attributierung uebertragen
 
         const ScPatternAttr* pSrcPattern = NULL;
+        const ScStyleSheet* pStyleSheet = NULL;
         ULONG nAtSrc = nISrcStart;
         ScPatternAttr* pNewPattern = NULL;
         BOOL bGetPattern = TRUE;
         rInner = nIStart;
         while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
         {
-            const ScStyleSheet* pStyleSheet = NULL;
             if ( bGetPattern )
             {
                 if ( pNewPattern )

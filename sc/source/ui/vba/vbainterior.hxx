@@ -36,6 +36,8 @@
 #include <com/sun/star/script/XInvocation.hpp>
 #include <vbahelper/vbahelperinterface.hxx>
 
+#include <tools/color.hxx>
+
 class ScDocument;
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XInterior > ScVbaInterior_BASE;

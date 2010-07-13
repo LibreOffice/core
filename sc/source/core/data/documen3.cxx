@@ -83,6 +83,7 @@
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
+#include "sheetevents.hxx"
 
 #include <memory>
 
@@ -285,6 +286,26 @@ void ScDocument::SetScenarioData( SCTAB nTab, const String& rComment,
     }
 }
 
+Color ScDocument::GetTabBgColor( SCTAB nTab ) const
+{
+    if (ValidTab(nTab) && pTab[nTab])
+        return pTab[nTab]->GetTabBgColor();
+    return Color(COL_AUTO);
+}
+
+void ScDocument::SetTabBgColor( SCTAB nTab, const Color& rColor )
+{
+    if (ValidTab(nTab) && pTab[nTab])
+        pTab[nTab]->SetTabBgColor(rColor);
+}
+
+bool ScDocument::IsDefaultTabBgColor( SCTAB nTab ) const
+{
+    if (ValidTab(nTab) && pTab[nTab])
+        return pTab[nTab]->GetTabBgColor() == COL_AUTO;
+    return true;
+}
+
 void ScDocument::GetScenarioData( SCTAB nTab, String& rComment,
                                         Color& rColor, USHORT& rFlags ) const
 {
@@ -465,11 +486,8 @@ void ScDocument::MarkUsedExternalReferences()
     // Charts.
     bool bAllMarked = pExternalRefMgr->markUsedByLinkListeners();
     // Formula cells.
-    for (SCTAB nTab = 0; !bAllMarked && nTab < nMaxTableNumber; ++nTab)
-    {
-        if (pTab[nTab])
-            bAllMarked = pTab[nTab]->MarkUsedExternalReferences();
-    }
+    bAllMarked = pExternalRefMgr->markUsedExternalRefCells();
+
     /* NOTE: Conditional formats and validation objects are marked when
      * collecting them during export. */
 }
@@ -479,6 +497,52 @@ ScFormulaParserPool& ScDocument::GetFormulaParserPool() const
     if( !mxFormulaParserPool.get() )
         mxFormulaParserPool.reset( new ScFormulaParserPool( *this ) );
     return *mxFormulaParserPool;
+}
+
+const ScSheetEvents* ScDocument::GetSheetEvents( SCTAB nTab ) const
+{
+    if (VALIDTAB(nTab) && pTab[nTab])
+        return pTab[nTab]->GetSheetEvents();
+    return NULL;
+}
+
+void ScDocument::SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew )
+{
+    if (VALIDTAB(nTab) && pTab[nTab])
+        pTab[nTab]->SetSheetEvents( pNew );
+}
+
+bool ScDocument::HasSheetEventScript( sal_Int32 nEvent ) const
+{
+    for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+        if (pTab[nTab])
+        {
+            const ScSheetEvents* pEvents = pTab[nTab]->GetSheetEvents();
+            if ( pEvents && pEvents->GetScript( nEvent ) )
+                return true;
+        }
+    return false;
+}
+
+BOOL ScDocument::HasCalcNotification( SCTAB nTab ) const
+{
+    if (VALIDTAB(nTab) && pTab[nTab])
+        return pTab[nTab]->GetCalcNotification();
+    return FALSE;
+}
+
+void ScDocument::SetCalcNotification( SCTAB nTab )
+{
+    // set only if not set before
+    if (VALIDTAB(nTab) && pTab[nTab] && !pTab[nTab]->GetCalcNotification())
+        pTab[nTab]->SetCalcNotification(TRUE);
+}
+
+void ScDocument::ResetCalcNotifications()
+{
+    for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+        if (pTab[nTab] && pTab[nTab]->GetCalcNotification())
+            pTab[nTab]->SetCalcNotification(FALSE);
 }
 
 ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, BOOL bCreate )
@@ -1126,15 +1190,6 @@ BOOL ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
     return bFound;
 }
 
-BOOL ScDocument::IsFiltered( SCROW nRow, SCTAB nTab ) const
-{
-    if (VALIDTAB(nTab))
-        if (pTab[nTab])
-            return pTab[nTab]->IsFiltered( nRow );
-    DBG_ERROR("Falsche Tabellennummer");
-    return 0;
-}
-
 //  Outline anpassen
 
 BOOL ScDocument::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, BOOL bShow )
@@ -1547,46 +1602,43 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect )
     nTwips = (long) (aPosRect.Top() / HMM_PER_TWIPS);
 
     SCROW nY1 = 0;
-    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-            *(pTable->GetRowFlagsArray()), nY1, MAXROW, CR_HIDDEN, 0,
-            *(pTable->GetRowHeightArray()));
     bEnd = FALSE;
-    while (!bEnd && aIter)
+    for (SCROW i = nY1; i <= MAXROW && !bEnd; ++i)
     {
-        nY1 = aIter.GetPos();
-        nAdd = (long) *aIter;
+        if (pTable->RowHidden(i))
+            continue;
+
+        nY1 = i;
+        nAdd = static_cast<long>(pTable->GetRowHeight(i));
         if (nSize+nAdd <= nTwips+1 && nY1<MAXROW)
         {
             nSize += nAdd;
             ++nY1;
-            ++aIter;
         }
         else
             bEnd = TRUE;
     }
-    if (!aIter)
-        nY1 = aIter.GetIterEnd();   // all hidden down to the bottom
+    if (!bEnd)
+        nY1 = MAXROW;   // all hidden down to the bottom
 
     nTwips = (long) (aPosRect.Bottom() / HMM_PER_TWIPS);
 
     SCROW nY2 = nY1;
-    aIter.NewLimits( nY2, MAXROW);
     bEnd = FALSE;
-    while (!bEnd && aIter)
+    for (SCROW i = nY2; i <= MAXROW && !bEnd; ++i)
     {
-        nY2 = aIter.GetPos();
-        nAdd = (long) *aIter;
+        nY2 = i;
+        nAdd = static_cast<long>(pTable->GetRowHeight(i));
         if (nSize+nAdd < nTwips && nY2<MAXROW)
         {
             nSize += nAdd;
             ++nY2;
-            ++aIter;
         }
         else
             bEnd = TRUE;
     }
-    if (!aIter)
-        nY2 = aIter.GetIterEnd();   // all hidden down to the bottom
+    if (!bEnd)
+        nY2 = MAXROW;   // all hidden down to the bottom
 
     return ScRange( nX1,nY1,nTab, nX2,nY2,nTab );
 }
@@ -1624,24 +1676,33 @@ void lcl_SnapVer( ScTable* pTable, long& rVal, SCROW& rStartRow )
     SCROW nRow = 0;
     long nTwips = (long) (rVal / HMM_PER_TWIPS);
     long nSnap = 0;
-    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-            *(pTable->GetRowFlagsArray()), nRow, MAXROW, CR_HIDDEN, 0,
-            *(pTable->GetRowHeightArray()));
-    while ( aIter )
+
+    bool bFound = false;
+    for (SCROW i = nRow; i <= MAXROW; ++i)
     {
-        nRow = aIter.GetPos();
-        long nAdd = *aIter;
+        SCROW nLastRow;
+        if (pTable->RowHidden(i, NULL, &nLastRow))
+        {
+            i = nLastRow;
+            continue;
+        }
+
+        nRow = i;
+        long nAdd = pTable->GetRowHeight(i);
         if ( nSnap + nAdd/2 < nTwips || nRow < rStartRow )
         {
             nSnap += nAdd;
             ++nRow;
-            ++aIter;
         }
         else
+        {
+            bFound = true;
             break;
+        }
     }
-    if (!aIter)
+    if (!bFound)
         nRow = MAXROW;  // all hidden down to the bottom
+
     rVal = (long) ( nSnap * HMM_PER_TWIPS );
     rStartRow = nRow;
 }
@@ -1799,14 +1860,14 @@ Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow,
 
     for (i=0; i<nStartCol; i++)
         aRect.Left() += GetColWidth(i,nTab);
-    aRect.Top() += FastGetRowHeight( 0, nStartRow-1, nTab);
+    aRect.Top() += GetRowHeight( 0, nStartRow-1, nTab);
 
     aRect.Right()  = aRect.Left();
     aRect.Bottom() = aRect.Top();
 
     for (i=nStartCol; i<=nEndCol; i++)
         aRect.Right() += GetColWidth(i,nTab);
-    aRect.Bottom() += FastGetRowHeight( nStartRow, nEndRow, nTab);
+    aRect.Bottom() += GetRowHeight( nStartRow, nEndRow, nTab);
 
     aRect.Left()    = (long)(aRect.Left()   * HMM_PER_TWIPS);
     aRect.Right()   = (long)(aRect.Right()  * HMM_PER_TWIPS);

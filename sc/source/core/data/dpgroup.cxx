@@ -1324,13 +1324,9 @@ void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion
 
 void ScDPGroupTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
 {
-    // This CalcInfo instance is used only to retrive data from the original
-    // data source.
-    CalcInfo aInfoSrc = rInfo;
-    CopyFields(rInfo.aColLevelDims, aInfoSrc.aColLevelDims);
-    CopyFields(rInfo.aRowLevelDims, aInfoSrc.aRowLevelDims);
-    CopyFields(rInfo.aPageDims,     aInfoSrc.aPageDims);
-    CopyFields(rInfo.aDataSrcCols,  aInfoSrc.aDataSrcCols);
+    // #i111435# Inside FillRowDataFromCacheTable/GetItemData, virtual methods
+    // getIsDataLayoutDimension and GetSourceDim are used, so it has to be called
+    // with original rInfo, containing dimension indexes of the grouped data.
 
     const ScDPCacheTable& rCacheTable = pSourceData->GetCacheTable();
     sal_Int32 nRowSize = rCacheTable.getRowSize();
@@ -1340,7 +1336,7 @@ void ScDPGroupTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
             continue;
 
         CalcRowData aData;
-        FillRowDataFromCacheTable(nRow, rCacheTable, aInfoSrc, aData);
+        FillRowDataFromCacheTable(nRow, rCacheTable, rInfo, aData);
 
         if ( !rInfo.aColLevelDims.empty() )
             FillGroupValues(&aData.aColData[0], rInfo.aColLevelDims.size(), &rInfo.aColLevelDims[0]);
@@ -1356,35 +1352,6 @@ void ScDPGroupTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
 const ScDPCacheTable& ScDPGroupTableData::GetCacheTable() const
 {
     return pSourceData->GetCacheTable();
-}
-
-void ScDPGroupTableData::CopyFields(const vector<long>& rFieldDims, vector<long>& rNewFieldDims)
-{
-    size_t nCount = rFieldDims.size();
-    if (!nCount)
-        return;
-
-    long nGroupedColumns = aGroups.size();
-
-    rNewFieldDims.clear();
-    rNewFieldDims.reserve(nCount);
-    for (size_t i = 0; i < nCount; ++i)
-    {
-        if ( rFieldDims[i] >= nSourceCount )
-        {
-            if ( rFieldDims[i] == nSourceCount + nGroupedColumns )
-                // data layout in source
-                rNewFieldDims.push_back(nSourceCount);
-            else
-            {
-                // original dimension
-                long n = rFieldDims[i] - nSourceCount;
-                rNewFieldDims.push_back(aGroups[n].GetSourceDim());
-            }
-        }
-        else
-            rNewFieldDims.push_back(rFieldDims[i]);
-    }
 }
 
 void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pItemDataIndex, long nCount, const long* pDims )

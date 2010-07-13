@@ -1439,7 +1439,7 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, BOOL bUpdBars )
     SCsCOL nDir = ( nDeltaX > 0 ) ? 1 : -1;
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
-    while ( ( pDoc->GetColFlags( nNewX, nTab ) & CR_HIDDEN ) &&
+    while ( pDoc->ColHidden(nNewX, nTab) &&
             nNewX+nDir >= 0 && nNewX+nDir <= MAXCOL )
         nNewX = sal::static_int_cast<SCsCOL>( nNewX + nDir );
 
@@ -1528,7 +1528,7 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, BOOL bUpdBars )
     SCsROW nDir = ( nDeltaY > 0 ) ? 1 : -1;
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
-    while ( ( pDoc->GetRowFlags( nNewY, nTab ) & CR_HIDDEN ) &&
+    while ( pDoc->RowHidden(nNewY, nTab) &&
             nNewY+nDir >= 0 && nNewY+nDir <= MAXROW )
         nNewY += nDir;
 
@@ -1615,7 +1615,7 @@ SCROW lcl_LastVisible( ScViewData& rViewData )
     SCTAB nTab = rViewData.GetTabNo();
 
     SCROW nVis = MAXROW;
-    while ( nVis > 0 && pDoc->FastGetRowHeight( nVis, nTab ) == 0 )
+    while ( nVis > 0 && pDoc->GetRowHeight( nVis, nTab ) == 0 )
         --nVis;
     return nVis;
 }

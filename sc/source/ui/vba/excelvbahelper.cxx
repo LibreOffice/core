@@ -208,12 +208,11 @@ getViewFrame( const uno::Reference< frame::XModel >& xModel )
 }
 
 SfxItemSet*
-ScVbaCellRangeAccess::GetDataSet( ScCellRangeObj* pRangeObj )
+ScVbaCellRangeAccess::GetDataSet( ScCellRangesBase* pRangeObj )
 {
-    SfxItemSet* pDataSet = pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : NULL ;
-    return pDataSet;
-
+    return pRangeObj ? pRangeObj->GetCurrentDataSet( true ) : 0;
 }
+
 } //excel
 } //vba
 } //ooo

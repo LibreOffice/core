@@ -65,6 +65,8 @@
 #include <memory>
 #include <algorithm>
 
+#include <boost/scoped_ptr.hpp>
+
 using ::std::auto_ptr;
 using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
@@ -135,6 +137,69 @@ private:
     ScExternalRefManager::LinkUpdateType meType;
 };
 
+struct UpdateFormulaCell : public unary_function<ScFormulaCell*, void>
+{
+    void operator() (ScFormulaCell* pCell) const
+    {
+        // Check to make sure the cell really contains ocExternalRef.
+        // External names, external cell and range references all have a
+        // ocExternalRef token.
+        const ScTokenArray* pCode = pCell->GetCode();
+        if (!pCode->HasOpCode( ocExternalRef))
+            return;
+
+        ScTokenArray* pArray = pCell->GetCode();
+        if (pArray)
+            // Clear the error code, or a cell with error won't get re-compiled.
+            pArray->SetCodeError(0);
+
+        pCell->SetCompile(true);
+        pCell->CompileTokenArray();
+        pCell->SetDirty();
+    }
+};
+
+class RemoveFormulaCell : public unary_function<pair<const sal_uInt16, ScExternalRefManager::RefCellSet>, void>
+{
+public:
+    explicit RemoveFormulaCell(ScFormulaCell* p) : mpCell(p) {}
+    void operator() (pair<const sal_uInt16, ScExternalRefManager::RefCellSet>& r) const
+    {
+        r.second.erase(mpCell);
+    }
+private:
+    ScFormulaCell* mpCell;
+};
+
+class ConvertFormulaToStatic : public unary_function<ScFormulaCell*, void>
+{
+public:
+    explicit ConvertFormulaToStatic(ScDocument* pDoc) : mpDoc(pDoc) {}
+    void operator() (ScFormulaCell* pCell) const
+    {
+        ScAddress aPos = pCell->aPos;
+
+        // We don't check for empty cells because empty external cells are
+        // treated as having a value of 0.
+
+        if (pCell->IsValue())
+        {
+            // Turn this into value cell.
+            double fVal = pCell->GetValue();
+            mpDoc->PutCell(aPos, new ScValueCell(fVal));
+        }
+        else
+        {
+            // string cell otherwise.
+            String aVal;
+            pCell->GetString(aVal);
+            mpDoc->PutCell(aPos, new ScStringCell(aVal));
+        }
+    }
+private:
+    ScDocument* mpDoc;
+};
+
 }
 
 // ============================================================================
@@ -170,7 +235,7 @@ bool ScExternalRefCache::Table::isReferenced() const
     return meReferenced != UNREFERENCED;
 }
 
-void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex)
+void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex, bool bSetCacheRange)
 {
     using ::std::pair;
     RowsDataType::iterator itrRow = maRows.find(nRow);
@@ -193,6 +258,8 @@ void ScExternalRefCache::Table::setCell(SCCOL nCol, SCROW nRow, TokenRef pToken,
     aCell.mxToken = pToken;
     aCell.mnFmtIndex = nFmtIndex;
     rRow.insert(RowDataType::value_type(nCol, aCell));
+    if (bSetCacheRange)
+        setCachedCell(nCol, nRow);
 }
 
 ScExternalRefCache::TokenRef ScExternalRefCache::Table::getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex) const
@@ -201,7 +268,7 @@ ScExternalRefCache::TokenRef ScExternalRefCache::Table::getCell(SCCOL nCol, SCRO
     if (itrTable == maRows.end())
     {
         // this table doesn't have the specified row.
-        return TokenRef();
+        return getEmptyOrNullToken(nCol, nRow);
     }
 
     const RowDataType& rRowData = itrTable->second;
@@ -209,7 +276,7 @@ ScExternalRefCache::TokenRef ScExternalRefCache::Table::getCell(SCCOL nCol, SCRO
     if (itrRow == rRowData.end())
     {
         // this row doesn't have the specified column.
-        return TokenRef();
+        return getEmptyOrNullToken(nCol, nRow);
     }
 
     const Cell& rCell = itrRow->second;
@@ -225,13 +292,14 @@ bool ScExternalRefCache::Table::hasRow( SCROW nRow ) const
     return itrRow != maRows.end();
 }
 
-void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows) const
+void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows, SCROW nLow, SCROW nHigh) const
 {
     vector<SCROW> aRows;
     aRows.reserve(maRows.size());
     RowsDataType::const_iterator itr = maRows.begin(), itrEnd = maRows.end();
     for (; itr != itrEnd; ++itr)
-        aRows.push_back(itr->first);
+        if (nLow <= itr->first && itr->first <= nHigh)
+            aRows.push_back(itr->first);
 
     // hash map is not ordered, so we need to explicitly sort it.
     ::std::sort(aRows.begin(), aRows.end());
@@ -258,7 +326,7 @@ void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows) const
     return aRange;
 }
 
-void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols) const
+void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols, SCCOL nLow, SCCOL nHigh) const
 {
     RowsDataType::const_iterator itrRow = maRows.find(nRow);
     if (itrRow == maRows.end())
@@ -270,7 +338,8 @@ void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols) con
     aCols.reserve(rRowData.size());
     RowDataType::const_iterator itrCol = rRowData.begin(), itrColEnd = rRowData.end();
     for (; itrCol != itrColEnd; ++itrCol)
-        aCols.push_back(itrCol->first);
+        if (nLow <= itrCol->first && itrCol->first <= nHigh)
+            aCols.push_back(itrCol->first);
 
     // hash map is not ordered, so we need to explicitly sort it.
     ::std::sort(aCols.begin(), aCols.end());
@@ -317,6 +386,54 @@ void ScExternalRefCache::Table::getAllNumberFormats(vector<sal_uInt32>& rNumFmts
             rNumFmts.push_back(rCell.mnFmtIndex);
         }
     }
+}
+
+const ScRangeList& ScExternalRefCache::Table::getCachedRanges() const
+{
+    return maCachedRanges;
+}
+
+bool ScExternalRefCache::Table::isRangeCached(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
+{
+    return maCachedRanges.In(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
+}
+
+void ScExternalRefCache::Table::setCachedCell(SCCOL nCol, SCROW nRow)
+{
+    setCachedCellRange(nCol, nRow, nCol, nRow);
+}
+
+void ScExternalRefCache::Table::setCachedCellRange(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+{
+    ScRange aRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
+    if (!maCachedRanges.Count())
+        maCachedRanges.Append(aRange);
+    else
+        maCachedRanges.Join(aRange);
+
+    String aStr;
+    maCachedRanges.Format(aStr, SCA_VALID);
+}
+
+void ScExternalRefCache::Table::setWholeTableCached()
+{
+    setCachedCellRange(0, 0, MAXCOL, MAXROW);
+}
+
+bool ScExternalRefCache::Table::isInCachedRanges(SCCOL nCol, SCROW nRow) const
+{
+    return maCachedRanges.In(ScRange(nCol, nRow, 0, nCol, nRow, 0));
+}
+
+ScExternalRefCache::TokenRef ScExternalRefCache::Table::getEmptyOrNullToken(
+    SCCOL nCol, SCROW nRow) const
+{
+    if (isInCachedRanges(nCol, nRow))
+    {
+        TokenRef p(new ScEmptyCellToken(false, false));
+        return p;
+    }
+    return TokenRef();
 }
 
 // ----------------------------------------------------------------------------
@@ -383,8 +500,7 @@ const String* ScExternalRefCache::getRealRangeName(sal_uInt16 nFileId, const Str
 }
 
 ScExternalRefCache::TokenRef ScExternalRefCache::getCellData(
-    sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow,
-    bool bEmptyCellOnNull, bool bWriteEmpty, sal_uInt32* pnFmtIndex)
+    sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex)
 {
     DocDataType::const_iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
@@ -409,18 +525,11 @@ ScExternalRefCache::TokenRef ScExternalRefCache::getCellData(
         return TokenRef();
     }
 
-    TokenRef pToken = pTableData->getCell(nCol, nRow, pnFmtIndex);
-    if (!pToken && bEmptyCellOnNull)
-    {
-        pToken.reset(new ScEmptyCellToken(false, false));
-        if (bWriteEmpty)
-            pTableData->setCell(nCol, nRow, pToken);
-    }
-    return pToken;
+    return pTableData->getCell(nCol, nRow, pnFmtIndex);
 }
 
 ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
-    sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull, bool bWriteEmpty)
+    sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange)
 {
     DocDataType::iterator itrDoc = maDocs.find(nFileId);
     if (itrDoc == maDocs.end())
@@ -450,13 +559,14 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
         return TokenArrayRef();
 
     ScRange aCacheRange( nCol1, nRow1, static_cast<SCTAB>(nTabFirstId), nCol2, nRow2, static_cast<SCTAB>(nTabLastId));
+
     RangeArrayMap::const_iterator itrRange = rDoc.maRangeArrays.find( aCacheRange);
     if (itrRange != rDoc.maRangeArrays.end())
-    {
+        // Cache hit!
         return itrRange->second;
-    }
 
-    TokenArrayRef pArray(new ScTokenArray);
+    ::boost::scoped_ptr<ScRange> pNewRange;
+    TokenArrayRef pArray;
     bool bFirstTab = true;
     for (size_t nTab = nTabFirstId; nTab <= nTabLastId; ++nTab)
     {
@@ -464,27 +574,72 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
         if (!pTab.get())
             return TokenArrayRef();
 
-        ScMatrixRef xMat = new ScMatrix(
-            static_cast<SCSIZE>(nCol2-nCol1+1), static_cast<SCSIZE>(nRow2-nRow1+1));
+        SCCOL nDataCol1 = nCol1, nDataCol2 = nCol2;
+        SCROW nDataRow1 = nRow1, nDataRow2 = nRow2;
 
-        for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+        if (!pTab->isRangeCached(nDataCol1, nDataRow1, nDataCol2, nDataRow2))
         {
-            for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+            // specified range is not entirely within cached ranges.
+            return TokenArrayRef();
+        }
+
+        ScMatrixRef xMat = new ScMatrix(
+            static_cast<SCSIZE>(nDataCol2-nDataCol1+1), static_cast<SCSIZE>(nDataRow2-nDataRow1+1));
+
+#if 0
+        // TODO: Switch to this code block once we have support for sparsely-filled
+        // matrices in ScMatrix.
+
+        // Only fill non-empty cells, for better performance.
+        vector<SCROW> aRows;
+        pTab->getAllRows(aRows, nDataRow1, nDataRow2);
+        for (vector<SCROW>::const_iterator itr = aRows.begin(), itrEnd = aRows.end(); itr != itrEnd; ++itr)
+        {
+            SCROW nRow = *itr;
+            vector<SCCOL> aCols;
+            pTab->getAllCols(nRow, aCols, nDataCol1, nDataCol2);
+            for (vector<SCCOL>::const_iterator itrCol = aCols.begin(), itrColEnd = aCols.end(); itrCol != itrColEnd; ++itrCol)
             {
+                SCCOL nCol = *itrCol;
                 TokenRef pToken = pTab->getCell(nCol, nRow);
                 if (!pToken)
-                {
-                    if (bEmptyCellOnNull)
-                    {
-                        pToken.reset(new ScEmptyCellToken(false, false));
-                        if (bWriteEmpty)
-                            pTab->setCell(nCol, nRow, pToken);
-                    }
-                    else
-                        return TokenArrayRef();
-                }
+                    // This should never happen!
+                    return TokenArrayRef();
 
+                SCSIZE nC = nCol - nDataCol1, nR = nRow - nDataRow1;
+                switch (pToken->GetType())
+                {
+                    case svDouble:
+                        xMat->PutDouble(pToken->GetDouble(), nC, nR);
+                    break;
+                    case svString:
+                        xMat->PutString(pToken->GetString(), nC, nR);
+                    break;
+                    default:
+                        ;
+                }
+            }
+        }
+#else
+        vector<SCROW> aRows;
+        pTab->getAllRows(aRows, nDataRow1, nDataRow2);
+        if (aRows.empty())
+            // Cache is empty.
+            return TokenArrayRef();
+        else
+            // Trim the column below the last non-empty row.
+            nDataRow2 = aRows.back();
+
+        // Empty all matrix elements first, and fill only non-empty elements.
+        for (SCROW nRow = nDataRow1; nRow <= nDataRow2; ++nRow)
+        {
+            for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
+            {
+                TokenRef pToken = pTab->getCell(nCol, nRow);
                 SCSIZE nC = nCol - nCol1, nR = nRow - nRow1;
+                if (!pToken)
+                    return TokenArrayRef();
+
                 switch (pToken->GetType())
                 {
                     case svDouble:
@@ -498,17 +653,27 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                 }
             }
         }
+#endif
 
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);
 
         ScMatrix* pMat2 = xMat;
         ScMatrixToken aToken(pMat2);
+        if (!pArray)
+            pArray.reset(new ScTokenArray);
         pArray->AddToken(aToken);
 
         bFirstTab = false;
+
+        if (!pNewRange)
+            pNewRange.reset(new ScRange(nDataCol1, nDataRow1, 0, nDataCol2, nDataRow2, 0));
+        else
+            pNewRange->ExtendTo(ScRange(nDataCol1, nDataRow1, 0, nDataCol2, nDataRow2, 0));
     }
-    rDoc.maRangeArrays.insert( RangeArrayMap::value_type( aCacheRange, pArray));
+
+    if (pNewRange)
+        rDoc.maRangeArrays.insert( RangeArrayMap::value_type(*pNewRange, pArray));
     return pArray;
 }
 
@@ -539,7 +704,7 @@ void ScExternalRefCache::setRangeNameTokens(sal_uInt16 nFileId, const String& rN
     pDoc->maRealRangeNameMap.insert(NamePairMap::value_type(aUpperName, rName));
 }
 
-void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const String& rTabName, SCROW nRow, SCCOL nCol,
+void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow,
                                      TokenRef pToken, sal_uInt32 nFmtIndex)
 {
     if (!isDocInitialized(nFileId))
@@ -564,6 +729,7 @@ void ScExternalRefCache::setCellData(sal_uInt16 nFileId, const String& rTabName,
         pTableData.reset(new Table);
 
     pTableData->setCell(nCol, nRow, pToken, nFmtIndex);
+    pTableData->setCachedCell(nCol, nRow);
 }
 
 void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRange, const vector<SingleRangeData>& rData,
@@ -609,20 +775,27 @@ void ScExternalRefCache::setCellRangeData(sal_uInt16 nFileId, const ScRange& rRa
                 SCSIZE nC = nCol - nCol1, nR = nRow - nRow1;
                 TokenRef pToken;
                 const ScMatrixRef& pMat = itrData->mpRangeData;
+                if (pMat->IsEmpty(nC, nR))
+                    // Don't cache empty cells.
+                    continue;
+
                 if (pMat->IsValue(nC, nR))
                     pToken.reset(new formula::FormulaDoubleToken(pMat->GetDouble(nC, nR)));
                 else if (pMat->IsString(nC, nR))
                     pToken.reset(new formula::FormulaStringToken(pMat->GetString(nC, nR)));
-                else
-                    pToken.reset(new ScEmptyCellToken(false, false));
 
-                pTabData->setCell(nCol, nRow, pToken);
+                if (pToken)
+                    // Don't mark this cell 'cached' here, for better performance.
+                    pTabData->setCell(nCol, nRow, pToken, 0, false);
             }
         }
+        // Mark the whole range 'cached'.
+        pTabData->setCachedCellRange(nCol1, nRow1, nCol2, nRow2);
     }
 
     size_t nTabLastId = nTabFirstId + rRange.aEnd.Tab() - rRange.aStart.Tab();
     ScRange aCacheRange( nCol1, nRow1, static_cast<SCTAB>(nTabFirstId), nCol2, nRow2, static_cast<SCTAB>(nTabLastId));
+
     rDoc.maRangeArrays.insert( RangeArrayMap::value_type( aCacheRange, pArray));
 }
 
@@ -1019,6 +1192,9 @@ ScExternalRefCache::TableTypeRef ScExternalRefCache::getCacheTable(sal_uInt16 nF
     {
         // specified table found.
         if( pnIndex ) *pnIndex = nIndex;
+        if (bCreateNew && !rDoc.maTables[nIndex])
+            rDoc.maTables[nIndex].reset(new Table);
+
         return rDoc.maTables[nIndex];
     }
 
@@ -1186,11 +1362,11 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
     return NULL;
 }
 
-static ScTokenArray* lcl_convertToTokenArray(ScDocument* pSrcDoc, const ScRange& rRange,
+static ScTokenArray* lcl_convertToTokenArray(ScDocument* pSrcDoc, ScRange& rRange,
                                              vector<ScExternalRefCache::SingleRangeData>& rCacheData)
 {
-    const ScAddress& s = rRange.aStart;
-    const ScAddress& e = rRange.aEnd;
+    ScAddress& s = rRange.aStart;
+    ScAddress& e = rRange.aEnd;
 
     SCTAB nTab1 = s.Tab(), nTab2 = e.Tab();
     SCCOL nCol1 = s.Col(), nCol2 = e.Col();
@@ -1204,19 +1380,35 @@ static ScTokenArray* lcl_convertToTokenArray(ScDocument* pSrcDoc, const ScRange&
         // range to it.
         return NULL;
 
+    ::boost::scoped_ptr<ScRange> pUsedRange;
+
     auto_ptr<ScTokenArray> pArray(new ScTokenArray);
     bool bFirstTab = true;
     vector<ScExternalRefCache::SingleRangeData>::iterator
         itrCache = rCacheData.begin(), itrCacheEnd = rCacheData.end();
+
     for (SCTAB nTab = nTab1; nTab <= nTab2 && itrCache != itrCacheEnd; ++nTab, ++itrCache)
     {
-        ScMatrixRef xMat = new ScMatrix(
-            static_cast<SCSIZE>(nCol2-nCol1+1),
-            static_cast<SCSIZE>(nRow2-nRow1+1));
+        // Only loop within the data area.
+        SCCOL nDataCol1 = nCol1, nDataCol2 = nCol2;
+        SCROW nDataRow1 = nRow1, nDataRow2 = nRow2;
+        if (!pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2))
+            // no data within specified range.
+            continue;
 
-        for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+        if (pUsedRange.get())
+            // Make sure the used area only grows, not shrinks.
+            pUsedRange->ExtendTo(ScRange(nDataCol1, nDataRow1, 0, nDataCol2, nDataRow2, 0));
+        else
+            pUsedRange.reset(new ScRange(nDataCol1, nDataRow1, 0, nDataCol2, nDataRow2, 0));
+
+        ScMatrixRef xMat = new ScMatrix(
+            static_cast<SCSIZE>(nDataCol2-nDataCol1+1),
+            static_cast<SCSIZE>(nDataRow2-nDataRow1+1));
+
+        for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
         {
-            for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
+            for (SCROW nRow = nDataRow1; nRow <= nDataRow2; ++nRow)
             {
                 SCSIZE nC = nCol - nCol1, nR = nRow - nRow1;
                 ScBaseCell* pCell;
@@ -1283,12 +1475,38 @@ static ScTokenArray* lcl_convertToTokenArray(ScDocument* pSrcDoc, const ScRange&
 
         bFirstTab = false;
     }
+
+    if (!pUsedRange.get())
+        return NULL;
+
+    s.SetCol(pUsedRange->aStart.Col());
+    s.SetRow(pUsedRange->aStart.Row());
+    e.SetCol(pUsedRange->aEnd.Col());
+    e.SetRow(pUsedRange->aEnd.Row());
+
+    return pArray.release();
+}
+
+static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
+{
+    SCSIZE nC = static_cast<SCSIZE>(rRange.aEnd.Col()-rRange.aStart.Col()+1);
+    SCSIZE nR = static_cast<SCSIZE>(rRange.aEnd.Row()-rRange.aStart.Row()+1);
+    ScMatrixRef xMat = new ScMatrix(nC, nR);
+    for (SCSIZE i = 0; i < nC; ++i)
+        for (SCSIZE j = 0; j < nR; ++j)
+            xMat->PutEmpty(i, j);
+
+    ScMatrix* pMat2 = xMat;
+    ScMatrixToken aToken(pMat2);
+    auto_ptr<ScTokenArray> pArray(new ScTokenArray);
+    pArray->AddToken(aToken);
     return pArray.release();
 }
 
 ScExternalRefManager::ScExternalRefManager(ScDocument* pDoc) :
     mpDoc(pDoc),
-    bInReferenceMarking(false)
+    mbInReferenceMarking(false),
+    mbUserInteractionEnabled(true)
 {
     maSrcDocTimer.SetTimeoutHdl( LINK(this, ScExternalRefManager, TimeOutHdl) );
     maSrcDocTimer.SetTimeout(SRCDOC_SCAN_INTERVAL);
@@ -1316,236 +1534,28 @@ ScExternalRefCache::TableTypeRef ScExternalRefManager::getCacheTable(sal_uInt16 
 
 // ============================================================================
 
-ScExternalRefManager::RefCells::TabItem::TabItem(SCTAB nIndex) :
-    mnIndex(nIndex)
-{
-}
-
-ScExternalRefManager::RefCells::TabItem::TabItem(const TabItem& r) :
-    mnIndex(r.mnIndex),
-    maCols(r.maCols)
-{
-}
-
-ScExternalRefManager::RefCells::RefCells()
-{
-}
-
-ScExternalRefManager::RefCells::~RefCells()
-{
-}
-
-list<ScExternalRefManager::RefCells::TabItemRef>::iterator ScExternalRefManager::RefCells::getTabPos(SCTAB nTab)
-{
-    list<TabItemRef>::iterator itr = maTables.begin(), itrEnd = maTables.end();
-    for (; itr != itrEnd; ++itr)
-        if ((*itr)->mnIndex >= nTab)
-            return itr;
-    // Not found.  return the end position.
-    return itrEnd;
-}
-
-void ScExternalRefManager::RefCells::insertCell(const ScAddress& rAddr)
-{
-    SCTAB nTab = rAddr.Tab();
-    SCCOL nCol = rAddr.Col();
-    SCROW nRow = rAddr.Row();
-
-    // Search by table index.
-    list<TabItemRef>::iterator itrTab = getTabPos(nTab);
-    TabItemRef xTabRef;
-    if (itrTab == maTables.end())
-    {
-        // All previous tables come before the specificed table.
-        xTabRef.reset(new TabItem(nTab));
-        maTables.push_back(xTabRef);
-    }
-    else if ((*itrTab)->mnIndex > nTab)
-    {
-        // Insert at the current iterator position.
-        xTabRef.reset(new TabItem(nTab));
-        maTables.insert(itrTab, xTabRef);
-    }
-    else if ((*itrTab)->mnIndex == nTab)
-    {
-        // The table found.
-        xTabRef = *itrTab;
-    }
-    ColSet& rCols = xTabRef->maCols;
-
-    // Then by column index.
-    ColSet::iterator itrCol = rCols.find(nCol);
-    if (itrCol == rCols.end())
-    {
-        RowSet aRows;
-        pair<ColSet::iterator, bool> r = rCols.insert(ColSet::value_type(nCol, aRows));
-        if (!r.second)
-            // column insertion failed.
-            return;
-        itrCol = r.first;
-    }
-    RowSet& rRows = itrCol->second;
-
-    // Finally, insert the row index.
-    rRows.insert(nRow);
-}
-
-void ScExternalRefManager::RefCells::removeCell(const ScAddress& rAddr)
-{
-    SCTAB nTab = rAddr.Tab();
-    SCCOL nCol = rAddr.Col();
-    SCROW nRow = rAddr.Row();
-
-    // Search by table index.
-    list<TabItemRef>::iterator itrTab = getTabPos(nTab);
-    if (itrTab == maTables.end() || (*itrTab)->mnIndex != nTab)
-        // No such table.
-        return;
-
-    ColSet& rCols = (*itrTab)->maCols;
-
-    // Then by column index.
-    ColSet::iterator itrCol = rCols.find(nCol);
-    if (itrCol == rCols.end())
-        // No such column
-        return;
-
-    RowSet& rRows = itrCol->second;
-    rRows.erase(nRow);
-}
-
-void ScExternalRefManager::RefCells::moveTable(SCTAB nOldTab, SCTAB nNewTab, bool bCopy)
-{
-    if (nOldTab == nNewTab)
-        // Nothing to do here.
-        return;
-
-    list<TabItemRef>::iterator itrOld = getTabPos(nOldTab);
-    if (itrOld == maTables.end() || (*itrOld)->mnIndex != nOldTab)
-        // No table to move or copy.
-        return;
-
-    list<TabItemRef>::iterator itrNew = getTabPos(nNewTab);
-    if (bCopy)
-    {
-        // Simply make a duplicate of the original table, insert it at the
-        // new tab position, and increment the table index for all tables
-        // that come after that inserted table.
-
-        TabItemRef xNewTab(new TabItem(*(*itrOld)));
-        xNewTab->mnIndex = nNewTab;
-        maTables.insert(itrNew, xNewTab);
-        list<TabItemRef>::iterator itr = itrNew, itrEnd = maTables.end();
-        if (itr != itrEnd)  // #i99807# check that itr is not at end already
-            for (++itr; itr != itrEnd; ++itr)
-                (*itr)->mnIndex += 1;
-    }
-    else
-    {
-        if (itrOld == itrNew)
-        {
-            // No need to move the table.  Just update the table index.
-            (*itrOld)->mnIndex = nNewTab;
-            return;
-        }
-
-        if (nOldTab < nNewTab)
-        {
-            // Iterate from the old tab position to the new tab position (not
-            // inclusive of the old tab itself), and decrement their tab
-            // index by one.
-            list<TabItemRef>::iterator itr = itrOld;
-            for (++itr; itr != itrNew; ++itr)
-                (*itr)->mnIndex -= 1;
-
-            // Insert a duplicate of the original table.  This does not
-            // invalidate the iterators.
-            (*itrOld)->mnIndex = nNewTab - 1;
-            if (itrNew == maTables.end())
-                maTables.push_back(*itrOld);
-            else
-                maTables.insert(itrNew, *itrOld);
-
-            // Remove the original table.
-            maTables.erase(itrOld);
-        }
-        else
-        {
-            // nNewTab < nOldTab
-
-            // Iterate from the new tab position to the one before the old tab
-            // position, and increment their tab index by one.
-            list<TabItemRef>::iterator itr = itrNew;
-            for (++itr; itr != itrOld; ++itr)
-                (*itr)->mnIndex += 1;
-
-            (*itrOld)->mnIndex = nNewTab;
-            maTables.insert(itrNew, *itrOld);
-
-            // Remove the original table.
-            maTables.erase(itrOld);
-        }
-    }
-}
-
-void ScExternalRefManager::RefCells::insertTable(SCTAB nPos)
-{
-    TabItemRef xNewTab(new TabItem(nPos));
-    list<TabItemRef>::iterator itr = getTabPos(nPos);
-    if (itr == maTables.end())
-        maTables.push_back(xNewTab);
-    else
-        maTables.insert(itr, xNewTab);
-}
-
-void ScExternalRefManager::RefCells::removeTable(SCTAB nPos)
-{
-    list<TabItemRef>::iterator itr = getTabPos(nPos);
-    if (itr == maTables.end())
-        // nothing to remove.
-        return;
-
-    maTables.erase(itr);
-}
-
-void ScExternalRefManager::RefCells::refreshAllCells(ScExternalRefManager& rRefMgr)
-{
-    // Get ALL the cell positions for re-compilation.
-    for (list<TabItemRef>::iterator itrTab = maTables.begin(), itrTabEnd = maTables.end();
-          itrTab != itrTabEnd; ++itrTab)
-    {
-        SCTAB nTab = (*itrTab)->mnIndex;
-        ColSet& rCols = (*itrTab)->maCols;
-        for (ColSet::iterator itrCol = rCols.begin(), itrColEnd = rCols.end();
-              itrCol != itrColEnd; ++itrCol)
-        {
-            SCCOL nCol = itrCol->first;
-            RowSet& rRows = itrCol->second;
-            RowSet aNewRows;
-            for (RowSet::iterator itrRow = rRows.begin(), itrRowEnd = rRows.end();
-                  itrRow != itrRowEnd; ++itrRow)
-            {
-                SCROW nRow = *itrRow;
-                ScAddress aCell(nCol, nRow, nTab);
-                if (rRefMgr.compileTokensByCell(aCell))
-                    // This cell still contains an external refernce.
-                    aNewRows.insert(nRow);
-            }
-            // Update the rows so that cells with no external references are
-            // no longer tracked.
-            rRows.swap(aNewRows);
-        }
-    }
-}
-
-// ----------------------------------------------------------------------------
-
 ScExternalRefManager::LinkListener::LinkListener()
 {
 }
 
 ScExternalRefManager::LinkListener::~LinkListener()
 {
+}
+
+// ----------------------------------------------------------------------------
+
+ScExternalRefManager::ApiGuard::ApiGuard(ScDocument* pDoc) :
+    mpMgr(pDoc->GetExternalRefManager()),
+    mbOldInteractionEnabled(mpMgr->mbUserInteractionEnabled)
+{
+    // We don't want user interaction handled in the API.
+    mpMgr->mbUserInteractionEnabled = false;
+}
+
+ScExternalRefManager::ApiGuard::~ApiGuard()
+{
+    // Restore old value.
+    mpMgr->mbUserInteractionEnabled = mbOldInteractionEnabled;
 }
 
 // ----------------------------------------------------------------------------
@@ -1595,9 +1605,22 @@ bool ScExternalRefManager::markUsedByLinkListeners()
     return bAllMarked;
 }
 
-bool ScExternalRefManager::setCacheDocReferenced( sal_uInt16 nFileId )
+bool ScExternalRefManager::markUsedExternalRefCells()
 {
-    return maRefCache.setCacheDocReferenced( nFileId);
+    RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        RefCellSet::iterator itrCell = itr->second.begin(), itrCellEnd = itr->second.end();
+        for (; itrCell != itrCellEnd; ++itrCell)
+        {
+            ScFormulaCell* pCell = *itrCell;
+            bool bUsed = pCell->MarkUsedExternalReferences();
+            if (bUsed)
+                // Return true when at least one cell references external docs.
+                return true;
+        }
+    }
+    return false;
 }
 
 bool ScExternalRefManager::setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets )
@@ -1617,7 +1640,7 @@ void ScExternalRefManager::setCacheTableReferencedPermanently( sal_uInt16 nFileI
 
 void ScExternalRefManager::setAllCacheTableReferencedStati( bool bReferenced )
 {
-    bInReferenceMarking = !bReferenced;
+    mbInReferenceMarking = !bReferenced;
     maRefCache.setAllCacheTableReferencedStati( bReferenced );
 }
 
@@ -1642,20 +1665,13 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     if (pFmt)
         pFmt->mbIsSet = false;
 
-    bool bLoading = mpDoc->IsImportingXML();
-
     // Check if the given table name and the cell position is cached.
-    // #i101304# When loading a file, the saved cache (hidden sheet)
-    // is assumed to contain all data for the loaded formulas.
-    // No cache entries are created from empty cells in the saved sheet,
-    // so they have to be created here (bWriteEmpty parameter).
-    // Otherwise, later interpretation of the loaded formulas would
-    // load the source document even if the user didn't want to update.
     sal_uInt32 nFmtIndex = 0;
     ScExternalRefCache::TokenRef pToken = maRefCache.getCellData(
-        nFileId, rTabName, rCell.Col(), rCell.Row(), bLoading, bLoading, &nFmtIndex);
+        nFileId, rTabName, rCell.Col(), rCell.Row(), &nFmtIndex);
     if (pToken)
     {
+        // Cache hit !
         if (pFmt)
         {
             short nFmtType = mpDoc->GetFormatTable()->GetType(nFmtIndex);
@@ -1673,11 +1689,8 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     ScDocument* pSrcDoc = getSrcDocument(nFileId);
     if (!pSrcDoc)
     {
-        // Source document is not reachable.  Try to get data from the cache
-        // once again, but this time treat a non-cached cell as an empty cell
-        // as long as the table itself is cached.
-        pToken = maRefCache.getCellData(
-            nFileId, rTabName, rCell.Col(), rCell.Row(), true, false, &nFmtIndex);
+        // Source document not reachable.  Throw a reference error.
+        pToken.reset(new FormulaErrorToken(errNoRef));
         return pToken;
     }
 
@@ -1686,11 +1699,29 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
     if (!pSrcDoc->GetTable(rTabName, nTab))
     {
         // specified table name doesn't exist in the source document.
-        return ScExternalRefCache::TokenRef();
+        pToken.reset(new FormulaErrorToken(errNoRef));
+        return pToken;
     }
 
     if (pTab)
         *pTab = nTab;
+
+    SCCOL nDataCol1 = 0, nDataCol2 = MAXCOL;
+    SCROW nDataRow1 = 0, nDataRow2 = MAXROW;
+    pSrcDoc->ShrinkToDataArea(nTab, nDataCol1, nDataRow1, nDataCol2, nDataRow2);
+    if (rCell.Col() < nDataCol1 || nDataCol2 < rCell.Col() || rCell.Row() < nDataRow1 || nDataRow2 < rCell.Row())
+    {
+        // requested cell is outside the data area.  Don't even bother caching
+        // this data, but add it to the cached range to prevent accessing the
+        // source document time and time again.
+        ScExternalRefCache::TableTypeRef pCacheTab =
+            maRefCache.getCacheTable(nFileId, rTabName, true, NULL);
+        if (pCacheTab)
+            pCacheTab->setCachedCell(rCell.Col(), rCell.Row());
+
+        pToken.reset(new ScEmptyCellToken(false, false));
+        return pToken;
+    }
 
     pSrcDoc->GetCell(rCell.Col(), rCell.Row(), nTab, pCell);
     ScExternalRefCache::TokenRef pTok(lcl_convertToToken(pCell));
@@ -1714,39 +1745,45 @@ ScExternalRefCache::TokenRef ScExternalRefManager::getSingleRefToken(
         pTok.reset( new FormulaErrorToken( errNoValue));
     }
 
-    // Now, insert the token into cache table.
-    maRefCache.setCellData(nFileId, rTabName, rCell.Row(), rCell.Col(), pTok, nFmtIndex);
+    // Now, insert the token into cache table but don't cache empty cells.
+    if (pTok->GetType() != formula::svEmptyCell)
+        maRefCache.setCellData(nFileId, rTabName, rCell.Col(), rCell.Row(), pTok, nFmtIndex);
+
     return pTok;
 }
 
-ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, const ScAddress* pCurPos)
+ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(
+    sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, const ScAddress* pCurPos)
 {
     if (pCurPos)
         insertRefCell(nFileId, *pCurPos);
 
     maybeLinkExternalFile(nFileId);
 
-    bool bLoading = mpDoc->IsImportingXML();
-
     // Check if the given table name and the cell position is cached.
-    // #i101304# When loading, put empty cells into cache, see getSingleRefToken.
-    ScExternalRefCache::TokenArrayRef p = maRefCache.getCellRangeData(nFileId, rTabName, rRange, bLoading, bLoading);
-    if (p.get())
-        return p;
+    ScExternalRefCache::TokenArrayRef pArray =
+        maRefCache.getCellRangeData(nFileId, rTabName, rRange);
+    if (pArray)
+        // Cache hit !
+        return pArray;
 
     ScDocument* pSrcDoc = getSrcDocument(nFileId);
     if (!pSrcDoc)
     {
-        // Source document is not reachable.  Try to get data from the cache
-        // once again, but this time treat non-cached cells as empty cells as
-        // long as the table itself is cached.
-        return maRefCache.getCellRangeData(nFileId, rTabName, rRange, true, false);
+        // Source document is not reachable.  Throw a reference error.
+        pArray.reset(new ScTokenArray);
+        pArray->AddToken(FormulaErrorToken(errNoRef));
+        return pArray;
     }
 
     SCTAB nTab1;
     if (!pSrcDoc->GetTable(rTabName, nTab1))
+    {
         // specified table name doesn't exist in the source document.
-        return ScExternalRefCache::TokenArrayRef();
+        pArray.reset(new ScTokenArray);
+        pArray->AddToken(FormulaErrorToken(errNoRef));
+        return pArray;
+    }
 
     ScRange aRange(rRange);
     SCTAB nTabSpan = aRange.aEnd.Tab() - aRange.aStart.Tab();
@@ -1770,12 +1807,24 @@ ScExternalRefCache::TokenArrayRef ScExternalRefManager::getDoubleRefTokens(sal_u
     aRange.aStart.SetTab(nTab1);
     aRange.aEnd.SetTab(nTab1 + nTabSpan);
 
-    ScExternalRefCache::TokenArrayRef pArray;
     pArray.reset(lcl_convertToTokenArray(pSrcDoc, aRange, aCacheData));
 
     if (pArray)
         // Cache these values.
-        maRefCache.setCellRangeData(nFileId, rRange, aCacheData, pArray);
+        maRefCache.setCellRangeData(nFileId, aRange, aCacheData, pArray);
+    else
+    {
+        // Array is empty.  Fill it with an empty matrix of the required size.
+        pArray.reset(lcl_fillEmptyMatrix(rRange));
+
+        // Make sure to set this range 'cached', to prevent unnecessarily
+        // accessing the src document time and time again.
+        ScExternalRefCache::TableTypeRef pCacheTab =
+            maRefCache.getCacheTable(nFileId, rTabName, true, NULL);
+        if (pCacheTab)
+            pCacheTab->setCachedCellRange(
+                rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+    }
 
     return pArray;
 }
@@ -1858,8 +1907,8 @@ void ScExternalRefManager::refreshAllRefCells(sal_uInt16 nFileId)
     if (itrFile == maRefCells.end())
         return;
 
-    RefCells& rRefCells = itrFile->second;
-    rRefCells.refreshAllCells(*this);
+    RefCellSet& rRefCells = itrFile->second;
+    for_each(rRefCells.begin(), rRefCells.end(), UpdateFormulaCell());
 
     ScViewData* pViewData = ScDocShell::GetViewData();
     if (!pViewData)
@@ -1880,7 +1929,7 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
     RefCellMap::iterator itr = maRefCells.find(nFileId);
     if (itr == maRefCells.end())
     {
-        RefCells aRefCells;
+        RefCellSet aRefCells;
         pair<RefCellMap::iterator, bool> r = maRefCells.insert(
             RefCellMap::value_type(nFileId, aRefCells));
         if (!r.second)
@@ -1889,7 +1938,10 @@ void ScExternalRefManager::insertRefCell(sal_uInt16 nFileId, const ScAddress& rC
 
         itr = r.first;
     }
-    itr->second.insertCell(rCell);
+
+    ScBaseCell* pCell = mpDoc->GetCell(rCell);
+    if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
+        itr->second.insert(static_cast<ScFormulaCell*>(pCell));
 }
 
 ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
@@ -1902,6 +1954,12 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
 
     if (itr != itrEnd)
     {
+        // document already loaded.
+
+        // TODO: Find out a way to access a document that's already open in
+        // memory and re-use that instance, instead of loading it from the
+        // disk again.
+
         SfxObjectShell* p = itr->second.maShell;
         itr->second.maLastAccess = Time();
         return static_cast<ScDocShell*>(p)->GetDocument();
@@ -1996,7 +2054,8 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
     if (pMedium->GetError() != ERRCODE_NONE)
         return NULL;
 
-    pMedium->UseInteractionHandler(false);
+    // To load encrypted documents with password, user interaction needs to be enabled.
+    pMedium->UseInteractionHandler(mbUserInteractionEnabled);
 
     ScDocShell* pNewShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
     SfxObjectShellRef aRef = pNewShell;
@@ -2005,6 +2064,10 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
     ScExtDocOptions* pExtOpt = mpDoc->GetExtDocOptions();
     sal_uInt32 nLinkCount = pExtOpt ? pExtOpt->GetDocSettings().mnLinkCnt : 0;
     ScDocument* pSrcDoc = pNewShell->GetDocument();
+    pSrcDoc->EnableExecuteLink(false); // to prevent circular access of external references.
+    pSrcDoc->EnableUndo(false);
+    pSrcDoc->EnableAdjustHeight(false);
+
     ScExtDocOptions* pExtOptNew = pSrcDoc->GetExtDocOptions();
     if (!pExtOptNew)
     {
@@ -2080,35 +2143,6 @@ void ScExternalRefManager::maybeCreateRealFileName(sal_uInt16 nFileId)
         return;
 
     maSrcFiles[nFileId].maybeCreateRealFileName(getOwnDocumentName());
-}
-
-bool ScExternalRefManager::compileTokensByCell(const ScAddress& rCell)
-{
-    ScBaseCell* pCell;
-    mpDoc->GetCell(rCell.Col(), rCell.Row(), rCell.Tab(), pCell);
-
-    if (!pCell || pCell->GetCellType() != CELLTYPE_FORMULA)
-        return false;
-
-    ScFormulaCell* pFC = static_cast<ScFormulaCell*>(pCell);
-
-    // Check to make sure the cell really contains ocExternalRef.
-    // External names, external cell and range references all have a
-    // ocExternalRef token.
-    const ScTokenArray* pCode = pFC->GetCode();
-    if (!pCode->HasOpCode( ocExternalRef))
-        return false;
-
-    ScTokenArray* pArray = pFC->GetCode();
-    if (pArray)
-        // Clear the error code, or a cell with error won't get re-compiled.
-        pArray->SetCodeError(0);
-
-    pFC->SetCompile(true);
-    pFC->CompileTokenArray();
-    pFC->SetDirty();
-
-    return true;
 }
 
 const String& ScExternalRefManager::getOwnDocumentName() const
@@ -2222,6 +2256,18 @@ void ScExternalRefManager::refreshNames(sal_uInt16 nFileId)
 
 void ScExternalRefManager::breakLink(sal_uInt16 nFileId)
 {
+    // Turn all formula cells referencing this external document into static
+    // cells.
+    RefCellMap::iterator itrRefs = maRefCells.find(nFileId);
+    if (itrRefs != maRefCells.end())
+    {
+        // Make a copy because removing the formula cells below will modify
+        // the original container.
+        RefCellSet aSet = itrRefs->second;
+        for_each(aSet.begin(), aSet.end(), ConvertFormulaToStatic(mpDoc));
+        maRefCells.erase(nFileId);
+    }
+
     lcl_removeByFileId(nFileId, maDocShells);
 
     if (maDocShells.empty())
@@ -2293,32 +2339,9 @@ void ScExternalRefManager::resetSrcFileData(const String& rBaseFileUrl)
     }
 }
 
-void ScExternalRefManager::updateRefCell(const ScAddress& rOldPos, const ScAddress& rNewPos, bool bCopy)
+void ScExternalRefManager::removeRefCell(ScFormulaCell* pCell)
 {
-    for (RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end(); itr != itrEnd; ++itr)
-    {
-        if (!bCopy)
-            itr->second.removeCell(rOldPos);
-        itr->second.insertCell(rNewPos);
-    }
-}
-
-void ScExternalRefManager::updateRefMoveTable(SCTAB nOldTab, SCTAB nNewTab, bool bCopy)
-{
-    for (RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end(); itr != itrEnd; ++itr)
-        itr->second.moveTable(nOldTab, nNewTab, bCopy);
-}
-
-void ScExternalRefManager::updateRefInsertTable(SCTAB nPos)
-{
-    for (RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end(); itr != itrEnd; ++itr)
-        itr->second.insertTable(nPos);
-}
-
-void ScExternalRefManager::updateRefDeleteTable(SCTAB nPos)
-{
-    for (RefCellMap::iterator itr = maRefCells.begin(), itrEnd = maRefCells.end(); itr != itrEnd; ++itr)
-        itr->second.removeTable(nPos);
+    for_each(maRefCells.begin(), maRefCells.end(), RemoveFormulaCell(pCell));
 }
 
 void ScExternalRefManager::addLinkListener(sal_uInt16 nFileId, LinkListener* pListener)
