@@ -135,7 +135,10 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
 
             if ( (bCtrl && bAlt && KEY_F == nCode) || KEY_ESCAPE == nCode )
+            {
+                nRet = 1;
                 GrabFocusToDocument();
+            }
 
             if ( KEY_RETURN == nCode )
             {
@@ -154,6 +157,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                     lArgs[1].Value <<= sal_False;
 
                 impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
+                nRet = 1;
             }
             break;
         }
