@@ -2205,7 +2205,6 @@ sub is_output_tree {
     };
     return '';
 };
-
 sub get_tmp_dir {
     my $tmp_dir;
     if( defined($ENV{TMPDIR}) ) {
@@ -2221,7 +2220,6 @@ sub get_tmp_dir {
     };
     return $tmp_dir;
 };
-
 
 sub retrieve_build_list {
     my $module = shift;

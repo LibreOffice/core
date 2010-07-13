@@ -402,11 +402,6 @@ sub create_installation_directory
     else
     {
         $installdir = installer::systemactions::create_directories("install", $languageref);
-        if ( $installer::globals::localinstalldir )
-        {
-            $installdir = $installer::globals::localinstalldir;
-            $installer::globals::localinstalldirset = 1;
-        }
         installer::logger::print_message( "... creating installation set in $installdir ...\n" );
         remove_old_installation_sets($installdir);
         my $inprogressinstalldir = $installdir . "_inprogress";
@@ -1059,8 +1054,7 @@ sub write_content_into_inf_file
                 if ( $registryitem->{'Value'} ) { $value = $registryitem->{'Value'}; }
                 if ( $value =~ /\<progpath\>/ ) { $value =~ s/\\\"/\"\"/g; } # Quoting for INF is done by double ""
                 $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
-                $value =~ s/\<progpath\>/\%OFFICEINSTALLLOCATION\%/g;
-                # $value =~ s/\%OFFICEINSTALLLOCATION\%\\/\%OFFICEINSTALLLOCATION\%/g;      # removing "\" after "%OFFICEINSTALLLOCATION%"
+                $value =~ s/\<progpath\>/\%INSTALLLOCATION\%/g;
                 if ( $value ne "" ) { $value = "\"" . $value . "\""; }
 
                 my $oneline = $regroot . "," . $subkey . "," . $valueentryname . "," . $flag . "," . $value . "\n";

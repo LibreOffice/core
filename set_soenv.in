@@ -302,6 +302,47 @@ elsif ( $platform =~ m/netbsd/ )
       $OS             = "NETBSD";
       $PATH_SEPERATOR = $ps;
 }
+elsif ( $platform =~ m/kfreebsd/ ) 
+{
+# General GNU/kFreeBSD settings:
+      $CVER           = "C341";
+      $BIG_SVX        = "TRUE";
+      $COM            = "GCC";
+      $COMPATH        = '@COMPATH@'; 
+      $GLIBC          = "2REDHAT60";
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GVER           = "VCL";
+      $OS             = "LINUX";
+      $PATH_SEPERATOR = $ps;
+
+#Set platform specific values: 
+   if ($platform =~ m/^i[3456]86/)
+   {  print "Setting GNU/kFreeBSD x86 specific values... ";
+      $outfile        = "GNUkFreeBSDX86Env.Set"; 
+      $CPU            = "I";
+      $CPUNAME        = "INTEL";
+      $OUTPATH        = "unxkfgi6";
+      
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+
+   }
+   elsif ($platform =~ m/^x86_64/)
+   {  print "Setting GNU/kFreeBSD x86-64 specific values... ";
+      $outfile        = "GNUkFreeBSDX86-64Env.Set";
+      $CPU            = "X";
+      $CPUNAME        = "X86_64";
+      $OUTPATH        = "unxkfgx6";
+
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+   }
+
+   $INPATH         = $OUTPATH.$PROEXT;
+}
 elsif ( $platform =~ m/freebsd/ ) 
 {     $BIG_SVX        = "TRUE";
       $COM            = "GCC";
@@ -1621,6 +1662,7 @@ ToFile( "MOC4",              "@MOC4@",             "e" );
 ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
+ToFile( "nodep",             "@nodep@",          "e" );
 ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
 ToFile( "DO_FETCH_TARBALLS", "@DO_FETCH_TARBALLS@",  "e" );
 #
@@ -1855,6 +1897,7 @@ ToFile( "SYSTEM_CURL",       "@SYSTEM_CURL@",      "e" );
 ToFile( "CURL_CFLAGS",       "@CURL_CFLAGS@",      "e" );
 ToFile( "CURL_LIBS",         "@CURL_LIBS@",        "e" );
 ToFile( "SYSTEM_BOOST",      "@SYSTEM_BOOST@",     "e" );
+ToFile( "SYSTEM_MDDS",       "@SYSTEM_MDDS@",      "e" );
 ToFile( "SYSTEM_VIGRA",      "@SYSTEM_VIGRA@",     "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
 ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );
@@ -1875,9 +1918,14 @@ ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
 ToFile( "HUNSPELL_LIBS",     "@HUNSPELL_LIBS@",    "e" );
 ToFile( "SYSTEM_LPSOLVE",    "@SYSTEM_LPSOLVE@",   "e" );
+ToFile( "HAVE_GETOPT",       "@HAVE_GETOPT@",      "e" );
+ToFile( "HAVE_READDIR_R",    "@HAVE_READDIR_R@",   "e" );
+ToFile( "SYSTEM_LIBC",       "@SYSTEM_LIBC@",      "e" );
 ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
 ToFile( "HYPHEN_LIB",        "@HYPHEN_LIB@",       "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
+ToFile( "MYTHES_CFLAGS",     "@MYTHES_CFLAGS@",    "e" );
+ToFile( "MYTHES_LIBS",       "@MYTHES_LIBS@",      "e" );
 ToFile( "PAM",               "@PAM@",              "e" );
 ToFile( "NEW_SHADOW_API",    "@NEW_SHADOW_API@",   "e" );
 ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );

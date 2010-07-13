@@ -62,6 +62,21 @@ sub check_simple_packager_project
 }
 
 ####################################################
+# Detecting the directory with extensions
+####################################################
+
+sub get_extensions_dir
+{
+    my ( $subfolderdir ) = @_;
+
+    my $extensiondir = $subfolderdir . $installer::globals::separator;
+    if ( $installer::globals::officedirhostname ne "" ) { $extensiondir = $extensiondir . $installer::globals::officedirhostname . $installer::globals::separator; }
+    $extensiondir = $extensiondir . "share" . $installer::globals::separator . "extensions";
+
+    return $extensiondir;
+}
+
+####################################################
 # Registering extensions
 ####################################################
 
@@ -148,12 +163,15 @@ sub register_extensions
             }
             close (UNOPKG);
 
-            for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
-
             my $returnvalue = $?;   # $? contains the return value of the systemcall
 
             if ($returnvalue)
             {
+                # Writing content of @unopkgoutput only in the error case into the log file. Sometimes it
+                # contains strings like "Error" even in the case of success. This causes a packaging error
+                # when the log file is analyzed at the end, even if there is no real error.
+                for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
+
                 $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
@@ -771,9 +789,16 @@ sub create_simple_package
 
     # Registering the extensions
 
-    installer::logger::print_message( "... registering extensions ...\n" );
-    installer::logger::include_header_into_logfile("Registering extensions:");
-    register_extensions($subfolderdir, $languagestringref);
+    # installer::logger::print_message( "... registering extensions ...\n" );
+    # installer::logger::include_header_into_logfile("Registering extensions:");
+    # register_extensions($subfolderdir, $languagestringref);
+
+    installer::logger::print_message( "... removing superfluous directories ...\n" );
+    installer::logger::include_header_into_logfile("Removing superfluous directories:");
+
+    my $extensionfolder = get_extensions_dir($subfolderdir);
+
+    installer::systemactions::remove_empty_dirs_in_folder($extensionfolder);
 
     if ( $installer::globals::compiler =~ /^unxmacx/ )
     {
