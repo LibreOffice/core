@@ -144,7 +144,7 @@ RTTI::~RTTI() SAL_THROW( () )
 //__________________________________________________________________________________________________
 type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THROW( () )
 {
-    type_info * rtti;
+    type_info * rtti = NULL;
 
     OUString const & unoName = *(OUString const *)&pTypeDescr->aBase.pTypeName;
 

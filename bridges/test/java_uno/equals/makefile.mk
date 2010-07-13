@@ -50,7 +50,7 @@ SLOFILES = $(SLO)$/testequals.obj
 SHL1TARGET = testequals.uno
 SHL1OBJS = $(SLOFILES)
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
-SHL1VERSIONMAP = testequals.map
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 SHL1IMPLIB = itestequals
 
 JAVAFILES = TestEquals.java
@@ -58,7 +58,7 @@ JARFILES = juh.jar jurt.jar ridl.jar
 
 .INCLUDE: target.mk
 
-ALLTAR: $(BIN)$/testequals$(SCRIPTEXT)
+ALLTAR: $(BIN)$/testequals
 
 .IF "$(GUI)" == "WNT"
 GIVE_EXEC_RIGHTS = @echo
@@ -81,7 +81,7 @@ $(MISC)$/$(TARGET).rdb: types.idl
 
 $(SLOFILES) $(JAVACLASSFILES): $(MISC)$/$(TARGET).rdb
 
-$(BIN)$/testequals$(SCRIPTEXT): $(BIN)$/testequals_services.rdb
+$(BIN)$/testequals: $(BIN)$/testequals_services.rdb
     echo '$(AUGMENT_LIBRARY_PATH)' java -classpath \
         ..$/class$/test$(PATH_SEPERATOR)..$/class$(PATH_SEPERATOR)\
 ..$/class$/java_uno.jar$(PATH_SEPERATOR)$(EXEC_CLASSPATH) \

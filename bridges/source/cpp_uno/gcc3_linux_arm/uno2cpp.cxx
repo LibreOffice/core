@@ -105,50 +105,94 @@ using namespace ::com::sun::star::uno;
 
 namespace arm
 {
-    enum armlimits { MAX_GPR_REGS = 4 };
+    bool is_complex_struct(const typelib_TypeDescription * type)
+    {
+        const typelib_CompoundTypeDescription * p
+            = reinterpret_cast< const typelib_CompoundTypeDescription * >(type);
+        for (sal_Int32 i = 0; i < p->nMembers; ++i)
+        {
+            if (p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_STRUCT ||
+                p->ppTypeRefs[i]->eTypeClass == typelib_TypeClass_EXCEPTION)
+            {
+                typelib_TypeDescription * t = 0;
+                TYPELIB_DANGER_GET(&t, p->ppTypeRefs[i]);
+                bool b = is_complex_struct(t);
+                TYPELIB_DANGER_RELEASE(t);
+                if (b) {
+                    return true;
+                }
+            }
+            else if (!bridges::cpp_uno::shared::isSimpleType(p->ppTypeRefs[i]->eTypeClass))
+                return true;
+        }
+        if (p->pBaseTypeDescription != 0)
+            return is_complex_struct(&p->pBaseTypeDescription->aBase);
+        return false;
+    }
+
+    bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef )
+    {
+        if (bridges::cpp_uno::shared::isSimpleType(pTypeRef))
+            return false;
+        else if (pTypeRef->eTypeClass == typelib_TypeClass_STRUCT || pTypeRef->eTypeClass == typelib_TypeClass_EXCEPTION)
+        {
+            typelib_TypeDescription * pTypeDescr = 0;
+            TYPELIB_DANGER_GET( &pTypeDescr, pTypeRef );
+
+            //A Composite Type not larger than 4 bytes is returned in r0
+            bool bRet = pTypeDescr->nSize > 4 || is_complex_struct(pTypeDescr);
+
+            TYPELIB_DANGER_RELEASE( pTypeDescr );
+            return bRet;
+        }
+        return true;
+    }
 }
 
-void MapReturn(long r0, long r1, typelib_TypeClass eReturnType, void *pRegisterReturn)
+void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * pReturnType, sal_uInt32* pRegisterReturn)
 {
 #if !defined(__ARM_EABI__) && !defined(__SOFTFP__)
     register float fret asm("f0");
     register double dret asm("f0");
 #endif
 
-    switch( eReturnType )
+    switch( pReturnType->eTypeClass )
     {
         case typelib_TypeClass_HYPER:
         case typelib_TypeClass_UNSIGNED_HYPER:
-            ((long*)pRegisterReturn)[1] = r1;
+            pRegisterReturn[1] = r1;
         case typelib_TypeClass_LONG:
         case typelib_TypeClass_UNSIGNED_LONG:
         case typelib_TypeClass_ENUM:
-            ((long*)pRegisterReturn)[0] = r0;
-            break;
         case typelib_TypeClass_CHAR:
         case typelib_TypeClass_SHORT:
         case typelib_TypeClass_UNSIGNED_SHORT:
-            *(unsigned short*)pRegisterReturn = (unsigned short)r0;
-            break;
         case typelib_TypeClass_BOOLEAN:
         case typelib_TypeClass_BYTE:
-            *(unsigned char*)pRegisterReturn = (unsigned char)r0;
+            pRegisterReturn[0] = r0;
             break;
         case typelib_TypeClass_FLOAT:
 #if defined(__ARM_EABI__) || defined(__SOFTFP__)
-            ((long*)pRegisterReturn)[0] = r0;
+            pRegisterReturn[0] = r0;
 #else
             *(float*)pRegisterReturn = fret;
 #endif
         break;
         case typelib_TypeClass_DOUBLE:
 #if defined(__ARM_EABI__) || defined(__SOFTFP__)
-            ((long*)pRegisterReturn)[1] = r1;
-            ((long*)pRegisterReturn)[0] = r0;
+            pRegisterReturn[1] = r1;
+            pRegisterReturn[0] = r0;
 #else
             *(double*)pRegisterReturn = dret;
 #endif
             break;
+        case typelib_TypeClass_STRUCT:
+        case typelib_TypeClass_EXCEPTION:
+        {
+            if (!arm::return_in_hidden_param(pReturnType))
+                pRegisterReturn[0] = r0;
+            break;
+        }
         default:
             break;
     }
@@ -162,7 +206,7 @@ void callVirtualMethod(
     void * pThis,
     sal_Int32 nVtableIndex,
     void * pRegisterReturn,
-    typelib_TypeClass eReturnType,
+    typelib_TypeDescriptionReference * pReturnType,
     sal_uInt32 *pStack,
     sal_uInt32 nStack,
     sal_uInt32 *pGPR,
@@ -172,7 +216,7 @@ void callVirtualMethod(
     void * pThis,
     sal_Int32 nVtableIndex,
     void * pRegisterReturn,
-    typelib_TypeClass eReturnType,
+    typelib_TypeDescriptionReference * pReturnType,
     sal_uInt32 *pStack,
     sal_uInt32 nStack,
     sal_uInt32 *pGPR,
@@ -201,23 +245,10 @@ void callVirtualMethod(
     typedef void (*FunctionCall )( sal_uInt32, sal_uInt32, sal_uInt32, sal_uInt32);
     FunctionCall pFunc = (FunctionCall)pMethod;
 
-    // fill registers
-    __asm__ __volatile__ (
-        "ldr r0, [%0, #0]\n\t"
-        "ldr r1, [%0, #4]\n\t"
-        "ldr r2, [%0, #8]\n\t"
-        "ldr r3, [%0, #12]\n\t"
-        : : "r" (pGPR)
-        : "r0", "r1", "r2", "r3"
-    );
+    (*pFunc)(pGPR[0], pGPR[1], pGPR[2], pGPR[3]);
 
-    // tell gcc that r0 to r3 are not available to it
-    register sal_uInt32 r0 asm("r0");
-    register sal_uInt32 r1 asm("r1");
-    register sal_uInt32 r2 asm("r2");
-    register sal_uInt32 r3 asm("r3");
-
-    (*pFunc)(r0, r1, r2, r3);
+    sal_uInt32 r0;
+    sal_uInt32 r1;
 
     // get return value
     __asm__ __volatile__ (
@@ -225,7 +256,7 @@ void callVirtualMethod(
         "mov %1, r1\n\t"
         : "=r" (r0), "=r" (r1) : );
 
-    MapReturn(r0, r1, eReturnType, pRegisterReturn);
+    MapReturn(r0, r1, pReturnType, (sal_uInt32*)pRegisterReturn);
 }
 }
 
@@ -312,14 +343,14 @@ static void cpp_call(
     void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
 
     bool bOverFlow = false;
-
+    bool bSimpleReturn = true;
     if (pReturnTypeDescr)
     {
+        if (arm::return_in_hidden_param( pReturnTypeRef ) )
+            bSimpleReturn = false;
 
-        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
-        {
+        if (bSimpleReturn)
             pCppReturn = pUnoReturn; // direct way for simple types
-        }
         else
         {
             // complex return via ptr
@@ -390,6 +421,8 @@ static void cpp_call(
             case typelib_TypeClass_DOUBLE:
                 INSERT_DOUBLE( pCppArgs[nPos], nGPR, pGPR, pStack, pStackStart, bOverFlow );
                 break;
+            default:
+                break;
             }
             // no longer needed
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
@@ -431,7 +464,7 @@ static void cpp_call(
     {
         callVirtualMethod(
             pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr->eTypeClass,
+            pCppReturn, pReturnTypeRef,
             pStackStart,
             (pStack - pStackStart),
             pGPR, nGPR);
@@ -504,15 +537,19 @@ void unoInterfaceProxyDispatch(
     // is my surrogate
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
           = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * >(pUnoI);
+#if OSL_DEBUG_LEVEL > 0
     typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
+#endif
 
     switch (pMemberDescr->eTypeClass)
     {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
     {
+#if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
         OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+#endif
 
         VtableSlot aVtableSlot(
             getVtableSlot(
@@ -557,9 +594,11 @@ void unoInterfaceProxyDispatch(
     }
     case typelib_TypeClass_INTERFACE_METHOD:
     {
+#if OSL_DEBUG_LEVEL > 0
         // determine vtable call index
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberDescr)->nPosition;
         OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
+#endif
 
         VtableSlot aVtableSlot(
             getVtableSlot(

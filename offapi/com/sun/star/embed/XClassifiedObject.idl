@@ -43,7 +43,7 @@
 //============================================================================
 /** represents common functionality for embedded objects
  */
-interface XClassifiedObject: com::sun::star::uno::XInterface
+published interface XClassifiedObject: com::sun::star::uno::XInterface
 {
     // -----------------------------------------------------------------------
     /** retrieves class ID of the object.

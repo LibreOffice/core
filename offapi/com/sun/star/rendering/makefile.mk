@@ -104,7 +104,6 @@ IDLFILES=\
     XIntegerReadOnlyBitmap.idl \
     XLinePolyPolygon2D.idl \
     XParametricPolyPolygon2D.idl \
-    XParametricPolyPolygon2DFactory.idl \
     XPolyPolygon2D.idl \
     XSimpleCanvas.idl \
     XSprite.idl \

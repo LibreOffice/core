@@ -51,6 +51,10 @@
 #include <com/sun/star/task/XStatusIndicator.idl>
 #endif
 
+#ifndef __com_sun_star_frame_XFrame_idl__
+#include <com/sun/star/frame/XFrame.idl>
+#endif
+
 //=============================================================================
 
 module com { module sun { module star { module document {
@@ -136,6 +140,11 @@ published service MediaDescriptor
         This is a parameter that can be used for any properties specific
         for a special component type. Format of that depends from real
         type of adressed component.
+        </p>
+
+        <p>
+        For extensibility, it is recommended to use values of type
+        sequence<com.sun.star.beans.PropertyValue> with this property.
         </p>
      */
     [optional,property] any ComponentData;
@@ -594,6 +603,11 @@ published service MediaDescriptor
         @since OOo 3.0
      */
     [optional,property] string ViewControllerName;
+    //-------------------------------------------------------------------------
+
+    /** specifies the frame containing the document. May be empty.
+     */
+    [optional,property] com::sun::star::frame::XFrame Frame;
 };
 
 //=============================================================================

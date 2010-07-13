@@ -169,8 +169,7 @@ namespace /* private */
         {
             rtl::OUString env_var = rtl::OUString(env_vars[i]);
 
-            if ((env_var.getLength() == 0) ||
-                (env_var.indexOf(NAME_VALUE_SEPARATOR) == -1))
+            if (env_var.getLength() == 0)
                 return false;
 
             iterator_pair_t iter_pair = std::equal_range(
@@ -179,10 +178,17 @@ namespace /* private */
                 env_var,
                 less_environment_variable());
 
-            if (iter_pair.first != iter_pair.second) // found
-                *iter_pair.first = env_var;
-            else // not found
-                merged_env->insert(iter_pair.first, env_var);
+            if (env_var.indexOf(NAME_VALUE_SEPARATOR) == -1)
+            {
+                merged_env->erase(iter_pair.first, iter_pair.second);
+            }
+            else
+            {
+                if (iter_pair.first != iter_pair.second) // found
+                    *iter_pair.first = env_var;
+                else // not found
+                    merged_env->insert(iter_pair.first, env_var);
+            }
         }
         return true;
     }
@@ -198,9 +204,9 @@ namespace /* private */
         if (!create_merged_environment(environment_vars, n_environment_vars, &merged_env))
             return false;
 
-        // reserve enough space for the '\0'-separated environment strings and
+        // allocate enough space for the '\0'-separated environment strings and
         // a final '\0'
-        environment.reserve(calc_sum_of_string_lengths(merged_env) + 1);
+        environment.resize(calc_sum_of_string_lengths(merged_env) + 1);
 
         string_container_const_iterator_t iter = merged_env.begin();
         string_container_const_iterator_t iter_end = merged_env.end();

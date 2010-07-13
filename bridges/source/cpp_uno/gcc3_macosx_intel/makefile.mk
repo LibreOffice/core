@@ -72,8 +72,5 @@ SHL1STDLIBS= \
 .INCLUDE :  target.mk
 
 $(SLO)$/%.obj: %.s
-#cmc: Ideally --noexecstack would be in operations, but with #i51385# pyuno
-#remote bridgeing breaks
-#    $(CC) -Wa,--noexecstack -c -o $(SLO)$/$(@:b).o $<
     $(CC) -c -o $(SLO)$/$(@:b).o $<
     touch $@

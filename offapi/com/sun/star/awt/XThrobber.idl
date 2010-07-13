@@ -43,7 +43,7 @@
 
 /** Controls the animation control.
  */
-interface XThrobber: com::sun::star::uno::XInterface
+published interface XThrobber: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 

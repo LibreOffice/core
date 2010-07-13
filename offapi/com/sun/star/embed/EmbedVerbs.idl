@@ -37,7 +37,7 @@ module com { module sun { module star { module embed {
 
     @see XEmbeddedObject
 */
-constants EmbedVerbs
+published constants EmbedVerbs
 {
     //------------------------------------------------------------------------
     /** lets the object do default activation, as by doubleclick.

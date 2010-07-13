@@ -75,7 +75,7 @@
     of a parent storage.
     </p>
  */
-service Storage
+published service Storage
 {
     // -----------------------------------------------------------------------
     /** This service describes the base functionality of storages.

@@ -32,6 +32,10 @@
 #include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
 
+#ifndef __com_sun_star_container_XChild_idl__
+#include <com/sun/star/container/XChild.idl>
+#endif
+
 #ifndef __com_sun_star_text_TextField_idl__
 #include <com/sun/star/text/TextField.idl>
 #endif
@@ -77,6 +81,13 @@ service MetadataField
     /** The <type scope="com::sun::star::text">TextContent</type>s that are
         contained in the <type>MetadataField</type> can be enumerated. */
     interface com::sun::star::container::XEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+    /** The <type scope="com::sun::star::text">TextContent</type>
+        that is the parent of this <type>MetadataField</type>.
+        @since OOo 3.3
+     */
+    interface com::sun::star::container::XChild;
 
     //-------------------------------------------------------------------------
     /** this is the number format for this field.

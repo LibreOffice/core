@@ -10,7 +10,7 @@
 #pragma warning(disable:4273)       // inconsistent dll linkage
 #endif
 
-#if _MSC_VER < 1300
+#if (defined(_MSC_VER) && (_MSC_VER < 1300)) || (defined(__MINGW32_VERSION) && ((__MINGW32_MAJOR_VERSION < 3)||((__MINGW32_MAJOR_VERSION == 3)&&(__MINGW32_MINOR_VERSION < 18))))
 
 /*  The non-debug versions of _vscprintf/_scprintf are just calls
     to _vsprintf/_sprintf with string buffer pointer set to NULL,

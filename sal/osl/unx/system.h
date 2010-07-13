@@ -123,6 +123,11 @@
 #   define  NO_PTHREAD_PRIORITY
 #   define  PTHREAD_SIGACTION           pthread_sigaction
 #endif
+
+#   ifndef ETIME
+#       define ETIME ETIMEDOUT
+#   endif
+
 #endif
 
 #ifdef NETBSD

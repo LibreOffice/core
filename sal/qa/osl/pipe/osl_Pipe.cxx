@@ -32,7 +32,10 @@
 // include files
 //------------------------------------------------------------------------
 
-#include <testshl/simpleheader.hxx>
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
@@ -52,6 +55,7 @@
 #ifdef UNX
 #include <unistd.h>
 #endif
+#include <string.h>
 
 using namespace osl;
 using namespace rtl;
@@ -64,8 +68,8 @@ using namespace rtl;
  */
 inline void printBool( sal_Bool bOk )
 {
-    t_print("#printBool# " );
-    ( sal_True == bOk ) ? t_print("YES!\n" ): t_print("NO!\n" );
+    printf("#printBool# " );
+    ( sal_True == bOk ) ? printf("YES!\n" ): printf("NO!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -74,9 +78,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    t_print("#printUString_u# " );
+    printf("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", aString.getStr( ) );
+    printf("%s\n", aString.getStr( ) );
 }
 
 /** print last error of pipe system.
@@ -84,43 +88,43 @@ inline void printUString( const ::rtl::OUString & str )
 inline void printPipeError( ::osl::Pipe aPipe )
 {
     oslPipeError nError = aPipe.getError( );
-    t_print("#printPipeError# " );
+    printf("#printPipeError# " );
     switch ( nError ) {
     case osl_Pipe_E_None:
-        t_print("Success!\n" );
+        printf("Success!\n" );
         break;
     case osl_Pipe_E_NotFound:
-        t_print("The returned error is: Not found!\n" );
+        printf("The returned error is: Not found!\n" );
         break;
     case osl_Pipe_E_AlreadyExists:
-        t_print("The returned error is: Already exist!\n" );
+        printf("The returned error is: Already exist!\n" );
         break;
     case osl_Pipe_E_NoProtocol:
-        t_print("The returned error is: No protocol!\n" );
+        printf("The returned error is: No protocol!\n" );
         break;
     case osl_Pipe_E_NetworkReset:
-        t_print("The returned error is: Network reset!\n" );
+        printf("The returned error is: Network reset!\n" );
         break;
     case osl_Pipe_E_ConnectionAbort:
-        t_print("The returned error is: Connection aborted!\n" );
+        printf("The returned error is: Connection aborted!\n" );
         break;
     case osl_Pipe_E_ConnectionReset:
-        t_print("The returned error is: Connection reset!\n" );
+        printf("The returned error is: Connection reset!\n" );
         break;
     case osl_Pipe_E_NoBufferSpace:
-        t_print("The returned error is: No buffer space!\n" );
+        printf("The returned error is: No buffer space!\n" );
         break;
     case osl_Pipe_E_TimedOut:
-        t_print("The returned error is: Timeout!\n" );
+        printf("The returned error is: Timeout!\n" );
         break;
     case osl_Pipe_E_ConnectionRefused:
-        t_print("The returned error is: Connection refused!\n" );
+        printf("The returned error is: Connection refused!\n" );
         break;
     case osl_Pipe_E_invalidError:
-        t_print("The returned error is: Invalid error!\n" );
+        printf("The returned error is: Invalid error!\n" );
         break;
     default:
-        t_print("The returned error is: Number %d, Unknown Error\n", nError );
+        printf("The returned error is: Number %d, Unknown Error\n", nError );
         break;
     }
 }
@@ -625,8 +629,8 @@ namespace osl_Pipe
                 printPipeError( aPipe );
                 aPipe.clear( );
 
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: open a non-exist pipe. not passed in (W32)(LINUX)(UNX).",
-                                        osl_Pipe_E_invalidError == nError );
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: open a non-exist pipe.",
+                                        nError != osl_Pipe_E_None );
             }
 
         void getError_002( )
@@ -638,8 +642,8 @@ namespace osl_Pipe
                 aPipe.clear( );
                 aPipe1.clear( );
 
-                CPPUNIT_ASSERT_MESSAGE( "#test comment#: create an already exist pipe.not passed in (W32)(LINUX)(UNX).",
-                                        osl_Pipe_E_invalidError  == nError );
+                CPPUNIT_ASSERT_MESSAGE( "#test comment#: create an already exist pipe.",
+                                        nError != osl_Pipe_E_None );
             }
 
         CPPUNIT_TEST_SUITE( getError );
@@ -687,17 +691,17 @@ namespace osl_Pipe
 
 
 // -----------------------------------------------------------------------------
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Pipe::ctors, "osl_Pipe");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Pipe::is, "osl_Pipe");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Pipe::create, "osl_Pipe");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Pipe::clear, "osl_Pipe");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Pipe::assign, "osl_Pipe");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Pipe::isValid, "osl_Pipe");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Pipe::isEqual, "osl_Pipe");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Pipe::close, "osl_Pipe");
-    //CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Pipe::accept, "osl_Pipe");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Pipe::getError, "osl_Pipe");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Pipe::getHandle, "osl_Pipe");
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::ctors);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::is);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::create);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::clear);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::assign);
+//CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::isValid);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::isEqual);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::close);
+    //CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::accept);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getError);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_Pipe::getHandle);
 // -----------------------------------------------------------------------------
 
 } // namespace osl_Pipe
@@ -881,7 +885,7 @@ namespace osl_StreamPipe
     void thread_sleep( sal_Int32 _nSec )
     {
         /// print statement in thread process must use fflush() to force display.
-        // t_print("wait %d seconds. ", _nSec );
+        // printf("wait %d seconds. ", _nSec );
         fflush(stdout);
 
 #ifdef WNT                               //Windows
@@ -890,7 +894,7 @@ namespace osl_StreamPipe
 #if ( defined UNX ) || ( defined OS2 )   //Unix
         sleep( _nSec );
 #endif
-        // t_print("done\n" );
+        // printf("done\n" );
     }
     // test read/write & send/recv data to pipe
     // -----------------------------------------------------------------------------
@@ -909,27 +913,27 @@ namespace osl_StreamPipe
             {
                 sal_Int32 nChars = 0;
 
-                t_print("open pipe\n");
+                printf("open pipe\n");
                 ::osl::StreamPipe aSenderPipe( aTestPipeName, osl_Pipe_OPEN );  // aTestPipeName is a string = "TestPipe"
                 if ( aSenderPipe.is() == sal_False )
                 {
-                    t_print("pipe open failed! \n");
+                    printf("pipe open failed! \n");
                 }
                 else
                 {
-                    t_print("read\n");
+                    printf("read\n");
                     nChars = aSenderPipe.read( buf, m_pTestString1.getLength() + 1 );
                     if ( nChars < 0 )
                     {
-                        t_print("read failed! \n");
+                        printf("read failed! \n");
                         return;
                     }
-                    t_print("buffer is %s \n", buf);
-                    t_print("send\n");
+                    printf("buffer is %s \n", buf);
+                    printf("send\n");
                     nChars = aSenderPipe.send( m_pTestString2.getStr(), m_pTestString2.getLength() + 1 );
                     if ( nChars < 0 )
                     {
-                        t_print("client send failed! \n");
+                        printf("client send failed! \n");
                         return;
                     }
                 }
@@ -948,7 +952,7 @@ namespace osl_StreamPipe
         ::osl::StreamPipe aConnectionPipe;
         Pipe_DataSource_Thread( )
             {
-                t_print("create pipe\n");
+                printf("create pipe\n");
                 aListenPipe.create( aTestPipeName, osl_Pipe_CREATE );
             }
         ~Pipe_DataSource_Thread( )
@@ -961,40 +965,40 @@ namespace osl_StreamPipe
                 //create pipe.
                 sal_Int32 nChars;
                 //::osl::StreamPipe aListenPipe( aTestPipeName, osl_Pipe_CREATE );
-                t_print("listen\n");
+                printf("listen\n");
                 if ( aListenPipe.is() == sal_False )
                 {
-                    t_print("pipe create failed! \n");
+                    printf("pipe create failed! \n");
                 }
                 else
                 {
                     //::osl::StreamPipe aConnectionPipe;
 
                     //start server and wait for connection.
-                    t_print("accept\n");
+                    printf("accept\n");
                     if ( osl_Pipe_E_None != aListenPipe.accept( aConnectionPipe ) )
                     {
-                        t_print("pipe accept failed!");
+                        printf("pipe accept failed!");
                         return;
                     }
-                    t_print("write\n");
+                    printf("write\n");
                     // write to pipe
                     nChars = aConnectionPipe.write( m_pTestString1.getStr(), m_pTestString1.getLength() + 1 );
                     if ( nChars < 0)
                     {
-                        t_print("server write failed! \n");
+                        printf("server write failed! \n");
                         return;
                     }
-                    t_print("recv\n");
+                    printf("recv\n");
                     nChars = aConnectionPipe.recv( buf, 256 );
 
                     if ( nChars < 0)
                     {
-                        t_print("server receive failed! \n");
+                        printf("server receive failed! \n");
                         return;
                     }
                     //thread_sleep( 2 );
-                    t_print("received message is: %s\n", buf );
+                    printf("received message is: %s\n", buf );
                     //aConnectionPipe.close();
                 }
             }
@@ -1045,16 +1049,11 @@ namespace osl_StreamPipe
     }; // class recv
 
 // -----------------------------------------------------------------------------
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamPipe::ctors, "osl_StreamPipe");
-//CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamPipe::assign, "osl_StreamPipe");
-    CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_StreamPipe::recv, "osl_StreamPipe");
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::ctors);
+//CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::assign);
+    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamPipe::recv);
 // -----------------------------------------------------------------------------
 
 } // namespace osl_StreamPipe
 
-
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();

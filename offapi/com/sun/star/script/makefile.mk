@@ -43,11 +43,16 @@ IDLFILES=\
     LibraryNotLoadedException.idl\
     XLibraryContainer.idl\
     XLibraryContainer2.idl\
+        XLibraryContainer3.idl\
     XLibraryContainerPassword.idl\
     XLibraryContainerExport.idl\
     XPersistentLibraryContainer.idl\
     XStorageBasedLibraryContainer.idl\
     ModuleSizeExceededRequest.idl\
+    XVBACompat.idl\
+        XVBAModuleInfo.idl\
+    ModuleInfo.idl\
+    ModuleType.idl\
 
 # ------------------------------------------------------------------
 

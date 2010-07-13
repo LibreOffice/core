@@ -61,7 +61,7 @@
     This interface provides user with full control over object creation.
     </p>
  */
-interface XEmbedObjectFactory: com::sun::star::uno::XInterface
+published interface XEmbedObjectFactory: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /** creates a new object and transport parameters for persistent
