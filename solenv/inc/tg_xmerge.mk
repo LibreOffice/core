@@ -33,7 +33,6 @@ ALLTAR : $(MISC)/$(TARGET).xtx.pmerge.mk $(XTXFILES)
 L10NEXT:=.txt
 .ENDIF
 
-
 $(MISC)/$(TARGET).xtx.pmerge.mk :  $(XTXFILES)
 
 $(XTXFILES) : $(LOCALIZESDF)
@@ -62,14 +61,11 @@ $(MISC)/$(TARGET).xtx.pmerge.mk : $(PMERGELIST)
 # - no empty lines
 # $(uniq ...) to workaround $assign adding the value twice...
     @noop $(assign PMERGEFILELIST:=$(uniq $(PMERGELIST)))
-#    $(COMMAND_ECHO) 
-    $(SOLARBINDIR)/xtxex -p $(PRJNAME) -r $(PRJ) -o $(PDESTDIR) -i @$(mktmp $(PMERGEFILELIST:t"\n":s/ //)) -l $(alllangiso:s/ /,/) -f $(alllangiso:s/ /,/) -m $(LOCALIZESDF) -s"[path]/[fileNoExt]_[language]$(L10NEXT)" 
-
+    $(COMMAND_ECHO) $(SOLARBINDIR)/xtxex -p $(PRJNAME) -r $(PRJ) -o $(PDESTDIR) -i @$(mktmp $(PMERGEFILELIST:t"\n":s/ //)) -l $(alllangiso:s/ /,/) -f $(alllangiso:s/ /,/) -m $(LOCALIZESDF) -s"[path]/[fileNoExt]_[language]$(L10NEXT)" 
 .ENDIF          # "$(WITH_LANG)"!=""
 
     @-$(RM) $@
     $(COMMAND_ECHO)echo last_merge=$(alllangiso) > $@
-
 .ENDIF          # "$(XTXFILES)"!=""
 
 .IF "$(XHTFILES)"!=""
@@ -103,14 +99,11 @@ $(MISC)/$(TARGET).xht.pmerge.mk : $(PMERGELIST1)
 # - no empty lines
 # $(uniq ...) to workaround $assign adding the value twice...
     @noop $(assign PMERGEFILELIST1:=$(uniq $(PMERGELIST1)))
-#    $(COMMAND_ECHO) 
-# filename,fileNoExt,language,extension,pathPrefix,pathPostFix,path
-    $(SOLARBINDIR)/xhtex -p $(PRJNAME) -r $(PRJ) -o $(PDESTDIR1) -i @$(mktmp $(PMERGEFILELIST1:t"\n":s/ //)) -l $(alllangiso:s/ /,/) -f $(alllangiso:s/ /,/) -m $(LOCALIZESDF) -s"[path]/[language]/[fileNoExt].tree" 
+# Variables for the pattern filename,fileNoExt,language,extension,pathPrefix,pathPostFix,path
+    $(COMMAND_ECHO) $(SOLARBINDIR)/xhtex -p $(PRJNAME) -r $(PRJ) -o $(PDESTDIR1) -i @$(mktmp $(PMERGEFILELIST1:t"\n":s/ //)) -l $(alllangiso:s/ /,/) -f $(alllangiso:s/ /,/) -m $(LOCALIZESDF) -s"[path]/[language]/[fileNoExt].tree" 
 .ENDIF          # "$(WITH_LANG)"!=""
-
     @-$(RM) $@
     $(COMMAND_ECHO)echo last_merge=$(alllangiso) > $@
-
 .ENDIF          # "$(XHTFILES)"!=""
 
 
