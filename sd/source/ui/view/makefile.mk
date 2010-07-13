@@ -85,7 +85,6 @@ SLOFILES =	\
         $(SLO)$/presvish.obj \
         $(SLO)$/outlview.obj \
         $(SLO)$/tabcontr.obj \
-        $(SLO)$/showview.obj \
         $(SLO)$/bmcache.obj	\
         $(SLO)$/drbezob.obj	\
         $(SLO)$/drtxtob.obj	\
@@ -114,7 +113,8 @@ SLOFILES =	\
         $(SLO)$/ViewShellManager.obj			\
         $(SLO)$/ViewShellHint.obj				\
         $(SLO)$/ViewTabBar.obj					\
-        $(SLO)$/WindowUpdater.obj
+        $(SLO)$/WindowUpdater.obj				\
+        $(SLO)$/viewoverlaymanager.obj
 
 
 # --- Tagets -------------------------------------------------------

@@ -50,8 +50,6 @@ public:
         ViewShellBase& rBase);
     virtual ~LayerDialogContent (void);
 
-    LayerTabBar& GetLayerTabBar (void);
-
 protected:
     virtual BOOL Close (void);
     virtual void Resize (void);

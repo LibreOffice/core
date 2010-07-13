@@ -42,7 +42,7 @@
 #include <hash_map>
 
 #undef VERBOSE
-#define VERBOSE 2
+//#define VERBOSE 2
 
 namespace sd {
 
@@ -124,10 +124,6 @@ public:
     void RemoveShellFactory (
         const SfxShell* pViewShell,
         const SharedShellFactory& rpFactory);
-    ViewShell* ActivateViewShell (
-        ShellId nId,
-        ::Window* pParentWindow,
-        FrameView* pFrameView);
     void ActivateViewShell (
         ViewShell* pViewShell);
     void DeactivateViewShell (const ViewShell& rShell);
@@ -137,13 +133,10 @@ public:
     void SetFormShell (const ViewShell* pViewShell, FmFormShell* pFormShell, bool bAbove);
     void ActivateSubShell (const SfxShell& rParentShell, ShellId nId);
     void DeactivateSubShell (const SfxShell& rParentShell, ShellId nId);
-    void DeactivateAllSubShells (const SfxShell& rViewShell);
     void MoveSubShellToTop (const SfxShell& rParentShell, ShellId nId);
     void MoveToTop (const SfxShell& rParentShell);
     SfxShell* GetShell (ShellId nId) const;
     SfxShell* GetTopShell (void) const;
-    ShellId GetShellId (const SfxShell* pShell) const;
-    void ReplaceUndoManager (SfxUndoManager* pManager, SfxUndoManager* pReplacement);
     void Shutdown (void);
     void InvalidateAllSubShells (const SfxShell* pParentShell);
 
@@ -235,7 +228,6 @@ private:
 
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
 
-    void DumpActiveShell (const ActiveShellList& rList);
     void DumpShellStack (const ShellStack& rStack);
     void DumpSfxShellStack (void);
 
@@ -246,10 +238,6 @@ private:
     */
     void Deactivate (SfxShell* pShell);
 
-    ShellDescriptor CreateViewShell (
-        ShellId nShellId,
-        ::Window* pParentWindow,
-        FrameView* pFrameView);
     ShellDescriptor CreateSubShell (
         SfxShell* pShell,
         ShellId nShellId,
@@ -299,20 +287,6 @@ void ViewShellManager::RemoveSubShellFactory (
 {
     if (mbValid)
         mpImpl->RemoveShellFactory(pViewShell, rpFactory);
-}
-
-
-
-
-ViewShell* ViewShellManager::ActivateViewShell (
-    ShellId nShellId,
-    ::Window* pParentWindow,
-    FrameView* pFrameView)
-{
-    if (mbValid)
-        return mpImpl->ActivateViewShell(nShellId,pParentWindow,pFrameView);
-    else
-        return NULL;
 }
 
 
@@ -377,15 +351,6 @@ void ViewShellManager::DeactivateSubShell (const ViewShell& rViewShell, ShellId 
 
 
 
-void ViewShellManager::DeactivateAllSubShells (const ViewShell& rViewShell)
-{
-    if (mbValid)
-        mpImpl->DeactivateAllSubShells(rViewShell);
-}
-
-
-
-
 void ViewShellManager::InvalidateAllSubShells (ViewShell* pViewShell)
 {
     if (mbValid)
@@ -408,15 +373,6 @@ void ViewShellManager::DeactivateShell (const SfxShell* pShell)
 {
     if (mbValid && pShell!=NULL)
         mpImpl->DeactivateShell(*pShell);
-}
-
-
-
-
-void ViewShellManager::InvalidateShellStack (const SfxShell* pShell)
-{
-    if (mbValid)
-        mpImpl->TakeShellsFromStack(pShell);
 }
 
 
@@ -448,26 +404,6 @@ SfxShell* ViewShellManager::GetTopShell (void) const
         return mpImpl->GetTopShell();
     else
         return NULL;
-}
-
-
-
-
-ShellId ViewShellManager::GetShellId (const SfxShell* pShell) const
-{
-    if (mbValid)
-        return mpImpl->GetShellId(pShell);
-    else
-        return snInvalidShellId;
-}
-
-
-
-
-void ViewShellManager::ReplaceUndoManager (SfxUndoManager* pManager, SfxUndoManager* pReplacement)
-{
-    if (mbValid)
-        mpImpl->ReplaceUndoManager(pManager,pReplacement);
 }
 
 
@@ -567,24 +503,6 @@ void ViewShellManager::Implementation::RemoveShellFactory (
             maShellFactories.erase(iFactory);
             break;
         }
-}
-
-
-
-
-ViewShell* ViewShellManager::Implementation::ActivateViewShell (
-    ShellId nShellId,
-    ::Window* pParentWindow,
-    FrameView* pFrameView)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    // Create a new shell or recycle on in the cache.
-    ShellDescriptor aDescriptor (CreateViewShell(nShellId, pParentWindow, pFrameView));
-
-    ActivateShell(aDescriptor);
-
-    return dynamic_cast<ViewShell*>(aDescriptor.mpShell);
 }
 
 
@@ -953,66 +871,6 @@ SfxShell* ViewShellManager::Implementation::GetTopShell (void) const
 
 
 
-ShellId ViewShellManager::Implementation::GetShellId (const SfxShell* pShell) const
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    ShellId nId = snInvalidShellId;
-
-    // First search the active view shells.
-    const ViewShell* pViewShell = dynamic_cast<const ViewShell*>(pShell);
-    if (pShell != NULL)
-    {
-        ActiveShellList::const_iterator iShell (
-            ::std::find_if (
-                maActiveViewShells.begin(),
-                maActiveViewShells.end(),
-                IsShell(pViewShell)));
-        if (iShell != maActiveViewShells.end())
-            nId = iShell->mnId;
-    }
-    if (nId == snInvalidShellId)
-    {
-        // Now search the active sub shells of every active view shell.
-        SubShellList::const_iterator iList;
-        for (iList=maActiveSubShells.begin(); iList!=maActiveSubShells.end(); ++iList)
-        {
-            const SubShellSubList& rList (iList->second);
-            SubShellSubList::const_iterator iSubShell(
-                ::std::find_if(rList.begin(),rList.end(), IsShell(pShell)));
-            if (iSubShell != rList.end())
-            {
-                nId = iSubShell->mnId;
-                break;
-            }
-        }
-    }
-
-    return nId;
-}
-
-
-
-
-void ViewShellManager::Implementation::ReplaceUndoManager (
-    SfxUndoManager* pManager,
-    SfxUndoManager* pReplacement)
-{
-    for (USHORT i=0; ;++i)
-    {
-        SfxShell* pShell = mrBase.GetSubShell(i);
-        if (pShell == NULL)
-            break;
-        if (pShell->GetUndoManager() == pManager)
-            pShell->SetUndoManager(pReplacement);
-    }
-}
-
-
-
-
-
-
 void ViewShellManager::Implementation::LockUpdate (void)
 {
     mnUpdateLockCount++;
@@ -1333,44 +1191,6 @@ IMPL_LINK(ViewShellManager::Implementation, WindowEventHandler, VclWindowEvent*,
 
 
 
-ShellDescriptor ViewShellManager::Implementation::CreateViewShell (
-    ShellId nShellId,
-    ::Window* pParentWindow,
-    FrameView* pFrameView)
-{
-    ShellDescriptor aResult;
-
-    if (pParentWindow != NULL)
-    {
-        ShellDescriptor aDescriptor (
-            CreateSubShell(NULL,nShellId,pParentWindow,pFrameView));
-        aResult.mpShell = dynamic_cast<ViewShell*>(aDescriptor.mpShell);
-        aResult.mpFactory = aDescriptor.mpFactory;
-        aResult.mnId = aDescriptor.mnId;
-
-        // Register as window listener so that the shells of the current
-        // window can be moved to the top of the shell stack.
-        if (aResult.mpShell != NULL)
-        {
-            ::Window* pWindow = aResult.GetWindow();
-            if (pWindow != NULL)
-                pWindow->AddEventListener(
-                    LINK(this, ViewShellManager::Implementation, WindowEventHandler));
-            else
-            {
-                DBG_ASSERT (false,
-                    "ViewShellManager::ActivateViewShell: "
-                    "new view shell has no active window");
-            }
-        }
-    }
-
-    return aResult;
-}
-
-
-
-
 ShellDescriptor ViewShellManager::Implementation::CreateSubShell (
     SfxShell* pParentShell,
     ShellId nShellId,
@@ -1499,15 +1319,6 @@ void ViewShellManager::Implementation::Shutdown (void)
 
 
 
-void ViewShellManager::Implementation::DumpActiveShell (const ActiveShellList& rList)
-{
-    for (ActiveShellList::const_iterator aI=rList.begin(); aI!=rList.end(); ++aI)
-        OSL_TRACE ("    %d %p\r", aI->mnId, aI->mpShell);
-}
-
-
-
-
 void ViewShellManager::Implementation::DumpShellStack (const ShellStack& rStack)
 {
     ShellStack::const_reverse_iterator iEntry;
@@ -1575,24 +1386,6 @@ void ViewShellManager::Implementation::SetFormShell (
     mpFormShellParent = pFormShellParent;
     mpFormShell = pFormShell;
     mbFormShellAboveParent = bFormShellAboveParent;
-}
-
-
-
-
-void ViewShellManager::Implementation::DeactivateAllSubShells (
-    const SfxShell& rViewShell)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    SubShellList::iterator iList (maActiveSubShells.find(&rViewShell));
-    if (iList != maActiveSubShells.end())
-    {
-        SubShellSubList& rList (iList->second);
-        UpdateLock aLock (*this);
-        while ( ! rList.empty())
-            DeactivateSubShell(rViewShell, rList.front().mnId);
-    }
 }
 
 

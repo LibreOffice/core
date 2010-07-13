@@ -57,6 +57,7 @@ class LayerTabBar;
 class Ruler;
 class SdUnoDrawView;
 class AnnotationManager;
+class ViewOverlayManager;
 
 #define CHECK_RANGE(nMin, nValue, nMax) ((nValue >= nMin) && (nValue <= nMax))
 
@@ -92,11 +93,6 @@ public:
         ::Window* pParentWindow,
         PageKind ePageKind = PK_STANDARD,
         FrameView* pFrameView = NULL);
-
-    DrawViewShell(
-        SfxViewFrame* pFrame,
-        ::Window* pParentWindow,
-        const DrawViewShell& rShell);
 
     virtual ~DrawViewShell (void);
 
@@ -197,9 +193,6 @@ public:
 
     void            ExecFormText(SfxRequest& rReq);
     void            GetFormTextState(SfxItemSet& rSet);
-
-    void            ExecObjPalette(SfxRequest& rReq);
-    void            GetObjPaletteState(SfxItemSet& rSet);
 
     void            ExecAnimationWin(SfxRequest& rReq);
     void            GetAnimationWinState(SfxItemSet& rSet);
@@ -496,6 +489,7 @@ private:
     using ViewShell::Notify;
 
     ::std::auto_ptr< AnnotationManager > mpAnnotationManager;
+    ::std::auto_ptr< ViewOverlayManager > mpViewOverlayManager;
 };
 
 

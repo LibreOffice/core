@@ -64,8 +64,8 @@ public:
     // @@@ copy ctor, but no copy assignment? @@@
     SdCustomShow( const SdCustomShow& rShow );
 
-    void   SetName(const String& rName) { aName = rName; }
-    String GetName() const              { return aName; }
+    void   SetName(const String& rName);
+    String GetName() const;
 
     SdDrawDocument* GetDoc() const { return pDoc; }
 

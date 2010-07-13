@@ -34,7 +34,7 @@
 #include "GraphicViewShellBase.hxx"
 
 #include <sfx2/viewfrm.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <com/sun/star/lang/Locale.hpp>
 #include <svtools/svtdata.hxx>
 #include <utility>
@@ -70,7 +70,6 @@
 #endif
 #include "DrawViewShell.hxx"
 #include "OutlineViewShell.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "drawview.hxx"
 
 #include "sdattr.hxx"
@@ -81,6 +80,7 @@
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
 #include "FrameView.hxx"
+#include "framework/FrameworkHelper.hxx"
 #include "optsitem.hxx"
 #include "sdresid.hxx"
 
@@ -247,6 +247,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     const SfxItemSet* pArgs = rRequest.GetArgs();
     if (! pArgs)
     {
+/*
         // Make the layout menu visible in the tool pane.
         const ViewShellBase& rBase (GetViewShellBase());
         if (rBase.GetMainViewShell()!=NULL
@@ -254,8 +255,9 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_DRAW)
         {
             framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
-            framework::FrameworkHelper::msLayoutTaskPanelURL);
+                framework::FrameworkHelper::msLayoutTaskPanelURL);
         }
+*/
 
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
@@ -264,23 +266,31 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         if (pTemplatePage != NULL)
         {
             eStandardLayout = pTemplatePage->GetAutoLayout();
+            if( eStandardLayout == AUTOLAYOUT_TITLE )
+                eStandardLayout = AUTOLAYOUT_ENUM;
+
             SdPage* pNotesTemplatePage = static_cast<SdPage*>(pDocument->GetPage(pTemplatePage->GetPageNum()+1));
             if (pNotesTemplatePage != NULL)
                 eNotesLayout = pNotesTemplatePage->GetAutoLayout();
         }
     }
-    else if (pArgs->Count () != 4)
+    else if (pArgs->Count() == 1)
     {
-        Cancel();
-
-        if(HasCurrentFunction(SID_BEZIER_EDIT) )
-            GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-
-        StarBASIC::FatalError (SbERR_WRONG_ARGS);
-        rRequest.Ignore ();
-        return NULL;
+        pDocument->StopWorkStartupDelay();
+        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
+        if( pLayout )
+        {
+            if (ePageKind == PK_NOTES)
+            {
+                eNotesLayout   = (AutoLayout) pLayout->GetValue ();
+            }
+            else
+            {
+                eStandardLayout   = (AutoLayout) pLayout->GetValue ();
+            }
+        }
     }
-    else
+    else if (pArgs->Count() == 4)
     {
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
@@ -317,6 +327,17 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             rRequest.Ignore ();
             return NULL;
         }
+    }
+    else
+    {
+        Cancel();
+
+        if(HasCurrentFunction(SID_BEZIER_EDIT) )
+            GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+
+        StarBASIC::FatalError (SbERR_WRONG_ARGS);
+        rRequest.Ignore ();
+        return NULL;
     }
 
     // 2. Create a new page or duplicate an existing one.

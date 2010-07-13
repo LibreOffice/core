@@ -116,14 +116,3 @@ void SdUndoGroup::AddAction(SdUndoAction* pAction)
 {
     aCtn.Insert(pAction, CONTAINER_APPEND);
 }
-
-/*************************************************************************
-|*
-|* Zeiger auf eine Aktion liefern
-|*
-\************************************************************************/
-
-SdUndoAction* SdUndoGroup::GetAction(ULONG nAction) const
-{
-    return (SdUndoAction*)aCtn.GetObject(nAction);
-}

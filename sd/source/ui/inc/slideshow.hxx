@@ -173,7 +173,6 @@ public:
     ShowWindow* getShowWindow();                        // a.k.a. FuSlideShow::GetShowWindow()
     int getAnimationMode();                             // a.k.a. FuSlideShow::GetAnimationMode()
     sal_Int32 getCurrentPageNumber();                   // a.k.a. FuSlideShow::GetCurrentPage()
-    sal_Int32 getCurrentPageIndex();
     sal_Int32 getFirstPageNumber();
     sal_Int32 getLastPageNumber();
     bool isEndless();

@@ -75,7 +75,6 @@ private:
     com::sun::star::uno::Sequence< sal_Int8 >* mpImplementationId;
 
 public:
-    SdXShape() throw();
     SdXShape(SvxShape* pShape, SdXImpressDocument* pModel) throw();
     virtual ~SdXShape() throw();
 

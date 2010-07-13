@@ -69,8 +69,6 @@ public:
 
     SdrPageObj& GetPageObject (void) const;
 
-    Rectangle GetPageObjectBoundingBox (void) const;
-
     virtual void ActionChanged (void);
 
 protected:

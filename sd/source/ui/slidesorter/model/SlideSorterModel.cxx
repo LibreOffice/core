@@ -50,6 +50,8 @@
 #include "sdpage.hxx"
 #include "FrameView.hxx"
 
+#include <tools/diagnose_ex.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -114,30 +116,6 @@ bool SlideSorterModel::SetEditMode (EditMode eEditMode)
         bEditModeChanged = true;
     }
     return bEditModeChanged;
-}
-
-
-
-
-bool SlideSorterModel::SetEditModeFromController (void)
-{
-    bool bIsMasterPageMode = false;
-    // Get the edit mode from the controller.
-    try
-    {
-        Reference<beans::XPropertySet> xSet (mrSlideSorter.GetXController(), UNO_QUERY_THROW);
-        Any aValue (xSet->getPropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsMasterPageMode"))));
-        aValue >>= bIsMasterPageMode;
-    }
-    catch (RuntimeException&)
-    {
-        // When the property is not supported then the master
-        // page mode is not supported, too.
-        bIsMasterPageMode = false;
-    }
-
-    return SetEditMode(bIsMasterPageMode ? EM_MASTERPAGE : EM_PAGE);
 }
 
 
@@ -225,13 +203,9 @@ sal_Int32 SlideSorterModel::GetIndex (const Reference<drawing::XDrawPage>& rxSli
                 return nNumber;
             }
         }
-        catch (beans::UnknownPropertyException&)
+        catch (uno::Exception&)
         {
-            OSL_ASSERT(false);
-        }
-        catch (lang::DisposedException&)
-        {
-            OSL_ASSERT(false);
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -312,27 +286,6 @@ void SlideSorterModel::SynchronizeDocumentSelection (void)
         pDescriptor->GetPage()->SetSelected (pDescriptor->IsSelected());
     }
 }
-
-
-
-
-void SlideSorterModel::SynchronizeModelSelection (void)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    PageEnumeration aAllPages (PageEnumerationProvider::CreateAllPagesEnumeration(*this));
-    while (aAllPages.HasMoreElements())
-    {
-        SharedPageDescriptor pDescriptor (aAllPages.GetNextElement());
-        if (pDescriptor->GetPage()->IsSelected())
-            pDescriptor->Select ();
-        else
-            pDescriptor->Deselect ();
-    }
-}
-
-
-
 
 void SlideSorterModel::SetPageObjectFactory(
     ::std::auto_ptr<controller::PageObjectFactory> pPageObjectFactory)

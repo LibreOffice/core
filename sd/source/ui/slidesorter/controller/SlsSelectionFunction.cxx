@@ -47,7 +47,6 @@
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
 #include "framework/FrameworkHelper.hxx"
-#include "showview.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawController.hxx"
 #include <vcl/sound.hxx>
@@ -136,26 +135,6 @@ private:
 };
 
 
-class SelectionFunction::InsertionIndicatorHandler
-{
-public:
-    InsertionIndicatorHandler (SlideSorter& rSlideSorter);
-    ~InsertionIndicatorHandler (void);
-
-    /** Show the insertion marker at the given coordinates.
-    */
-    void Start (const Point& rMouseModelPosition);
-
-    void UpdatePosition (const Point& rMouseModelPosition);
-
-    /** Hide the insertion marker.
-    */
-    void End (void);
-
-private:
-    SlideSorter& mrSlideSorter;
-};
-
 class SelectionFunction::EventDescriptor
 {
 public:
@@ -188,8 +167,7 @@ SelectionFunction::SelectionFunction (
       mbDragSelection(false),
       maInsertionMarkerBox(),
       mbProcessingMouseButtonDown(false),
-      mpSubstitutionHandler(new SubstitutionHandler(mrSlideSorter)),
-      mpInsertionIndicatorHandler(new InsertionIndicatorHandler(mrSlideSorter))
+      mpSubstitutionHandler(new SubstitutionHandler(mrSlideSorter))
 {
     //af    aDelayToScrollTimer.SetTimeout(50);
     aDragTimer.SetTimeoutHdl( LINK( this, SelectionFunction, DragSlideHdl ) );
@@ -705,20 +683,6 @@ void SelectionFunction::GotoNextPage (int nOffset)
             OSL_ASSERT(pNextPageDescriptor.get() != NULL);
         }
     }
-}
-
-
-
-
-void SelectionFunction::ClearOverlays (void)
-{
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-
-    rOverlay.GetSubstitutionOverlay().setVisible(false);
-    rOverlay.GetSubstitutionOverlay().Clear();
-
-    mpInsertionIndicatorHandler->End();
-    rOverlay.GetMouseOverIndicatorOverlay().SetSlideUnderMouse(model::SharedPageDescriptor());
 }
 
 
@@ -1348,57 +1312,6 @@ bool SelectionFunction::SubstitutionHandler::IsSubstitutionInsertionNonTrivial (
     while (false);
 
     return bIsNonTrivial;
-}
-
-
-
-
-//===== InsertionIndicatorHandler =============================================
-
-SelectionFunction::InsertionIndicatorHandler::InsertionIndicatorHandler (
-    SlideSorter& rSlideSorter)
-    : mrSlideSorter(rSlideSorter)
-{
-}
-
-
-
-
-SelectionFunction::InsertionIndicatorHandler::~InsertionIndicatorHandler (void)
-{
-}
-
-
-
-
-void SelectionFunction::InsertionIndicatorHandler::Start (const Point& rMouseModelPosition)
-{
-    if (mrSlideSorter.GetController().GetProperties()->IsUIReadOnly())
-        return;
-
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    rOverlay.GetInsertionIndicatorOverlay().SetPosition(rMouseModelPosition);
-    rOverlay.GetInsertionIndicatorOverlay().setVisible(true);
-}
-
-
-
-
-void SelectionFunction::InsertionIndicatorHandler::UpdatePosition (const Point& rMouseModelPosition)
-{
-    if (mrSlideSorter.GetController().GetProperties()->IsUIReadOnly())
-        return;
-
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    rOverlay.GetInsertionIndicatorOverlay().SetPosition(rMouseModelPosition);
-}
-
-
-
-
-void SelectionFunction::InsertionIndicatorHandler::End (void)
-{
-    mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay().setVisible(false);
 }
 
 } } } // end of namespace ::sd::slidesorter::controller

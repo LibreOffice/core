@@ -29,6 +29,7 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawController.hxx"
+#include "DrawDocShell.hxx"
 
 #include "DrawSubController.hxx"
 #include "sdpage.hxx"
@@ -54,6 +55,7 @@
 #include <svx/fmshell.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <boost/shared_ptr.hpp>
 
 using namespace ::std;
 using ::rtl::OUString;
@@ -163,6 +165,16 @@ void SAL_CALL DrawController::dispose (void)
         if( !mbDisposing )
         {
             mbDisposing = true;
+
+            boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
+            if ( pViewShell )
+            {
+                pViewShell->DeactivateCurrentFunction();
+                DrawDocShell* pDocShell = pViewShell->GetDocSh();
+                if ( pDocShell != NULL )
+                    pDocShell->SetDocShellFunction(0);
+            }
+            pViewShell.reset();
 
             // When the controller has not been detached from its view
             // shell, i.e. mpViewShell is not NULL, then tell PaneManager
@@ -363,18 +375,6 @@ void  SAL_CALL
             }
         }
     }
-}
-
-
-
-
-::awt::Rectangle DrawController::GetVisArea (void) const
-{
-    return awt::Rectangle(
-        maLastVisArea.Left(),
-        maLastVisArea.Top(),
-        maLastVisArea.GetWidth(),
-        maLastVisArea.GetHeight());
 }
 
 
@@ -699,6 +699,11 @@ void DrawController::FillPropertyTable (
             PROPERTY_VIEWOFFSET,
             ::getCppuType((const ::com::sun::star::awt::Point*)0),
             beans::PropertyAttribute::BOUND ));
+    rProperties.push_back(
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("DrawViewMode") ),
+            PROPERTY_DRAWVIEWMODE,
+            ::getCppuType((const ::com::sun::star::awt::Point*)0),
+            beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID ));
 }
 
 
@@ -927,4 +932,5 @@ void DrawController::ThrowIfDisposed (void) const
 
 
 } // end of namespace sd
+
 

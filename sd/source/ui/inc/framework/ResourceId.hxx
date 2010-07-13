@@ -236,8 +236,6 @@ private:
         const ::std::vector<rtl::OUString>& rResourceURLs,
         css::drawing::framework::AnchorBindingMode eMode) const;
 
-    bool IsValid (void) const;
-
     void ParseResourceURL (void);
 };
 

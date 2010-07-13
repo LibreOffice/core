@@ -104,6 +104,7 @@ FuPoor::FuPoor (
       bNoScrollUntilInside (TRUE),
       bScrollable (FALSE),
       bDelayActive (FALSE),
+      bFirstMouseMove (FALSE),
       // #95491# remember MouseButton state
       mnCode(0)
 {
@@ -243,16 +244,6 @@ IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
-
-/*************************************************************************
-|*
-|* String in Applikations-Statuszeile ausgeben
-|*
-\************************************************************************/
-
-void FuPoor::WriteStatus(const String& )
-{
-}
 
 /*************************************************************************
 |*
@@ -1116,18 +1107,6 @@ void FuPoor::StartDelayToScrollTimer ()
 {
     bDelayActive = TRUE;
     aDelayToScrollTimer.Start ();
-}
-
-/*************************************************************************
-|*
-|* Handler fuer Maustaste
-|*
-\************************************************************************/
-
-long FuPoor::diffPoint (long pos1, long pos2)
-{
-    return (pos1 > pos2) ? pos1 - pos2
-                         : pos2 - pos1;
 }
 
 /*************************************************************************

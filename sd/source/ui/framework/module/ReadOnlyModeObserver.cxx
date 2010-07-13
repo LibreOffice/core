@@ -145,17 +145,6 @@ void ReadOnlyModeObserver::AddStatusListener (
 
 
 
-void ReadOnlyModeObserver::RemoveStatusListener (
-    const Reference<frame::XStatusListener>& rxListener)
-{
-    mpBroadcaster->removeListener(
-        getCppuType((Reference<frame::XStatusListener>*)NULL),
-        rxListener);
-}
-
-
-
-
 bool ReadOnlyModeObserver::ConnectToDispatch (void)
 {
     if ( ! mxDispatch.is())

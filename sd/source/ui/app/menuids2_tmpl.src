@@ -983,40 +983,5 @@
         Text [ en-US ] = "Pre~view Mode" ; \
     };
 
-#define MN_MULTI_PANE_GUI \
-    MenuItem\
-    {\
-        Identifier = SID_MULTI_PANE_GUI ; \
-        HelpID = SID_MULTI_PANE_GUI ; \
-        Text = "Multi Pane GUI" ; \
-        SubMenu = Menu \
-        {\
-            ItemList =\
-            {\
-                MenuItem\
-                {\
-                    Identifier = SID_TOOLPANEL ; \
-                    HelpID = SID_TOOLPANEL ; \
-                    Check = TRUE ; \
-                    Text = "Tool Panel" ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = SID_SLIDE_BROWSER ; \
-                    HelpID = SID_SLIDE_BROWSER ; \
-                    Check = TRUE ; \
-                    Text = "Slide Browser" ; \
-                };\
-                MenuItem\
-                {\
-                    Identifier = SID_NOTES_WINDOW ; \
-                    HelpID = SID_NOTES_WINDOW ; \
-                    Check = TRUE ; \
-                    Text = "Notes Window" ; \
-                };\
-            };\
-        };\
-    };
-
 #endif // _MENUIDS2_SRC
 

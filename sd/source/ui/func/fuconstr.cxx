@@ -72,13 +72,6 @@ FuConstruct::FuConstruct (
 {
 }
 
-FunctionReference FuConstruct::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
-{
-    FunctionReference xFunc( new FuConstruct( pViewSh, pWin, pView, pDoc, rReq ) );
-    xFunc->DoExecute(rReq);
-    return xFunc;
-}
-
 void FuConstruct::DoExecute( SfxRequest& rReq )
 {
     FuDraw::DoExecute( rReq );

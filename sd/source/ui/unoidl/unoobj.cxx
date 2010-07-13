@@ -311,14 +311,6 @@ typedef SORT*       PSORT;
 
 extern "C" int __LOADONCALLAPI SortFunc( const void* p1, const void* p2 );
 
-SdXShape::SdXShape() throw()
-:   mpPropSet(lcl_GetEmpty_SdXShapePropertySet_Impl()),
-    mpMap(lcl_GetEmpty_SdXShapePropertyMap_Impl()),
-    mpModel(NULL),
-    mpImplementationId(NULL)
-{
-}
-
 SdXShape::SdXShape( SvxShape* pShape, SdXImpressDocument* pModel) throw()
 :   mpShape( pShape ),
     mpPropSet( pModel?
@@ -737,22 +729,6 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 aAny <<= aName;
             }
         }
-        else if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_zorder ) ) )
-        {
-            SdrObject* pObj = mpShape->GetSdrObject();
-            SdPage* pPage = pObj ? (SdPage*)pObj->GetPage() : NULL;
-            if( pPage && pPage == pObj->GetObjList() && pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD )
-            {
-                sal_Int32 nOrdNum;
-                if( aAny >>= nOrdNum )
-                {
-                    // if this is a masterpage, there is always a background shape with the ord num 0
-                    // so we add one to the api ordnum to hide the background shape over the api
-                    nOrdNum++;
-                    aAny <<= nOrdNum;
-                }
-            }
-        }
 
         mpShape->_setPropertyValue(aPropertyName, aAny);
     }
@@ -910,30 +886,6 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 aRet <<= aName;
             }
         }
-        else if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_zorder ) ) )
-        {
-            SdrObject* pObj = mpShape->GetSdrObject();
-            SdPage* pPage = pObj ? (SdPage*)pObj->GetPage() : NULL;
-            if( pPage && pPage == pObj->GetObjList() && pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD )
-            {
-                sal_Int32 nOrdNum;
-                if( aRet >>= nOrdNum )
-                {
-                    // if this is a masterpage, there is always a background shape with the ord num 0
-                    // so we add one to the api ordnum to hide the background shape over the api
-                    if( nOrdNum > 0 )
-                    {
-                        nOrdNum--;
-                        aRet <<= nOrdNum;
-                    }
-                    else
-                    {
-                        DBG_ERROR( "Masterpage without a background shape, ZOrder property will be corrupt!" );
-                    }
-                }
-            }
-        }
-
     }
 
     return aRet;
