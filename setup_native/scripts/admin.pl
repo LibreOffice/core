@@ -1094,6 +1094,13 @@ sub register_extensions_sync
 {
     my ($unopkgfile, $localtemppath) = @_;
 
+    if ( $bundleddir eq "" )
+    {
+        my $logtext = "ERROR: Failed to determine directory \"bundled\" in \"presets\" folder for extension registration! Please check your installation set.";
+        print $logtext . "\n";
+        exit_program($logtext);
+    }
+
     my $from = cwd();
 
     my $path = $unopkgfile;
