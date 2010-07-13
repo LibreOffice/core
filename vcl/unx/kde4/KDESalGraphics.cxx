@@ -80,15 +80,13 @@ QStyle::State vclStateValue2StateFlag( ControlState nControlState,
 }
 
 /**
- Convert VCL Region to QRect.
- @param rControlRegion The region to convert.
- @return The bounding box of the region.
+ Convert VCL Rectangle to QRect.
+ @param rControlRegion The Rectangle to convert.
+ @return The matching QRect
 */
-QRect region2QRect( const Region& rControlRegion )
+QRect region2QRect( const Rectangle& rControlRegion )
 {
-    Rectangle aRect = rControlRegion.GetBoundRect();
-
-    return QRect(aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
+    return QRect(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
 }
 
 KDESalGraphics::KDESalGraphics() :
@@ -157,7 +155,7 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
 }
 
 BOOL KDESalGraphics::hitTestNativeControl( ControlType, ControlPart,
-                                           const Region&, const Point&,
+                                           const Rectangle&, const Point&,
                                            BOOL& )
 {
     return FALSE;
@@ -235,7 +233,7 @@ namespace
 }
 
 BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
-                                        const Region& rControlRegion, ControlState nControlState,
+                                        const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& value,
                                         const OUString& )
 {
@@ -252,7 +250,8 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         type = CTRL_SPINBUTTONS;
     if( type == CTRL_SPINBUTTONS )
     {
-        SpinbuttonValue* pSpinVal = (SpinbuttonValue *)(value.getOptionalVal());
+        OSL_ASSERT( value.getType() != CTRL_SPINBUTTONS );
+        const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue *>(&value);
         Rectangle aButtonRect( pSpinVal->maUpperRect);
         aButtonRect.Union( pSpinVal->maLowerRect );;
         widgetRect = QRect( aButtonRect.Left(), aButtonRect.Top(),
@@ -425,7 +424,8 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         if ((part == PART_DRAW_BACKGROUND_VERT) || (part == PART_DRAW_BACKGROUND_HORZ))
         {
             QStyleOptionSlider option;
-            ScrollbarValue* sbVal = static_cast<ScrollbarValue *> ( value.getOptionalVal() );
+            OSL_ASSERT( value.getType() == CTRL_SCROLLBAR );
+            const ScrollbarValue* sbVal = static_cast<const ScrollbarValue *>(&value);
 
             //if the scroll bar is active (aka not degenrate...allow for hover events
             if (sbVal->mnVisibleSize < sbVal->mnMax)
@@ -461,9 +461,9 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         QStyleOptionSpinBox option;
 
         // determine active control
-        SpinbuttonValue* pSpinVal = (SpinbuttonValue *)(value.getOptionalVal());
-        if( pSpinVal )
+        if( value.getType() == CTRL_SPINBUTTONS )
         {
+            const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue *>(&value);
             if( (pSpinVal->mnUpperState & CTRL_STATE_PRESSED) )
                 option.activeSubControls |= QStyle::SC_SpinBoxUp;
             if( (pSpinVal->mnLowerState & CTRL_STATE_PRESSED) )
@@ -536,7 +536,8 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA))
     {
-        SliderValue* slVal = static_cast<SliderValue *> ( value.getOptionalVal() );
+        OSL_ASSERT( value.getType() == CTRL_SLIDER );
+        const SliderValue* slVal = static_cast<const SliderValue *>(&value);
         QStyleOptionSlider option;
 
         option.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
@@ -589,10 +590,10 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 }
 
 BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
-                                             const Region& controlRegion, ControlState controlState,
+                                             const Rectangle& controlRegion, ControlState controlState,
                                              const ImplControlValue& val,
                                              const OUString&,
-                                             Region &nativeBoundingRegion, Region &nativeContentRegion )
+                                             Rectangle &nativeBoundingRegion, Rectangle &nativeContentRegion )
 {
     bool retVal = false;
 
@@ -892,12 +893,12 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         // Bounding region
         Point aBPoint( boundingRect.x(), boundingRect.y() );
         Size aBSize( boundingRect.width(), boundingRect.height() );
-        nativeBoundingRegion = Region( Rectangle( aBPoint, aBSize ) );
+        nativeBoundingRegion = Rectangle( aBPoint, aBSize );
 
         // Region of the content
         Point aPoint( contentRect.x(), contentRect.y() );
         Size  aSize( contentRect.width(), contentRect.height() );
-        nativeContentRegion = Region( Rectangle( aPoint, aSize ) );
+        nativeContentRegion = Rectangle( aPoint, aSize );
     }
 
     return retVal;

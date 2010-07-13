@@ -379,13 +379,13 @@ BOOL AquaSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart n
  *  aPos was or was not inside the native widget specified by the
  *  nType/nPart combination.
  */
-BOOL AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+BOOL AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                         const Point& rPos, BOOL& rIsInside )
 {
     if ( nType == CTRL_SCROLLBAR )
     {
         Rectangle aRect;
-        bool bValid = AquaGetScrollRect( /* TODO: m_nScreen */ nPart, rControlRegion.GetBoundRect(), aRect );
+        bool bValid = AquaGetScrollRect( /* TODO: m_nScreen */ nPart, rControlRegion, aRect );
         rIsInside = bValid ? aRect.IsInside( rPos ) : FALSE;
         if( GetSalData()->mbIsScrollbarDoubleMax )
         {
@@ -472,7 +472,7 @@ UInt32 AquaSalGraphics::getTrackState( ControlState nState )
  */
 BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                     ControlPart nPart,
-                    const Region& rControlRegion,
+                    const Rectangle& rControlRegion,
                     ControlState nState,
                     const ImplControlValue& aValue,
                     const rtl::OUString& aCaption )
@@ -484,7 +484,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
 
     CGContextSaveGState( mrContext );
 
-    Rectangle buttonRect = rControlRegion.GetBoundRect();
+    Rectangle buttonRect = rControlRegion;
     HIRect rc = ImplGetHIRectFromRectangle(buttonRect);
 
     /** Scrollbar parts code equivalent **
@@ -621,7 +621,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             // no animation
             aPushInfo.animation.time.start = 0;
             aPushInfo.animation.time.current = 0;
-            PushButtonValue* pPBVal = (PushButtonValue*)aValue.getOptionalVal();
+            PushButtonValue* pPBVal = aValue.getType() == CTRL_PUSHBUTTON ? (PushButtonValue*)&aValue : NULL;
             int nPaintHeight = static_cast<int>(rc.size.height);
 
             if( pPBVal && pPBVal->mbBevelButton )
@@ -790,7 +790,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_SLIDER:
         {
-            SliderValue* pSLVal = (SliderValue*)aValue.getOptionalVal();
+            SliderValue* pSLVal = (SliderValue*)&aValue;
 
             HIThemeTrackDrawInfo aTrackDraw;
             aTrackDraw.kind = kThemeSliderMedium;
@@ -820,7 +820,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
 
     case CTRL_SCROLLBAR:
         {
-            ScrollbarValue* pScrollbarVal = (ScrollbarValue *)(aValue.getOptionalVal());
+            ScrollbarValue* pScrollbarVal = (ScrollbarValue *)&aValue;
 
             if( nPart == PART_DRAW_BACKGROUND_VERT ||
                 nPart == PART_DRAW_BACKGROUND_HORZ )
@@ -962,7 +962,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             //first, last or middle tab
             aTabItemDrawInfo.position=kHIThemeTabPositionMiddle;
 
-            TabitemValue* pTabValue = (TabitemValue *) aValue.getOptionalVal();
+            TabitemValue* pTabValue = (TabitemValue *) &aValue;
             unsigned int nAlignment = pTabValue->mnAlignment;
             //TABITEM_LEFTALIGNED (and TABITEM_RIGHTALIGNED) for the leftmost (or rightmost) tab
             //when there are several lines of tabs because there is only one first tab and one
@@ -1089,7 +1089,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                 if(nState & CTRL_STATE_FOCUSED) HIThemeDrawFocusRect(&rc, true, mrContext, kHIThemeOrientationNormal);
 
                 //buttons:
-                SpinbuttonValue* pSpinButtonVal = (SpinbuttonValue *)(aValue.getOptionalVal());
+                SpinbuttonValue* pSpinButtonVal = (SpinbuttonValue *)&aValue;
                 ControlState nUpperState = CTRL_STATE_ENABLED;//state of the upper button
                 ControlState nLowerState = CTRL_STATE_ENABLED;//and of the lower button
                 if(pSpinButtonVal) {//pSpinButtonVal is sometimes null
@@ -1228,7 +1228,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
  *  aValue:     An optional value (tristate/numerical/string)
  *  aCaption:   A caption or title string (like button text etc)
  */
-BOOL AquaSalGraphics::drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+BOOL AquaSalGraphics::drawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                const rtl::OUString& aCaption )
 {
@@ -1249,14 +1249,14 @@ BOOL AquaSalGraphics::drawNativeControlText( ControlType nType, ControlPart nPar
  *  aValue:     An optional value (tristate/numerical/string)
  *  aCaption:       A caption or title string (like button text etc)
  */
-BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
+BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                const ImplControlValue& aValue, const rtl::OUString& aCaption,
-                                                Region &rNativeBoundingRegion, Region &rNativeContentRegion )
+                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion )
 
 {
     BOOL toReturn = FALSE;
 
-    Rectangle aCtrlBoundRect( rControlRegion.GetBoundRect() );
+    Rectangle aCtrlBoundRect( rControlRegion );
     short x = aCtrlBoundRect.Left();
     short y = aCtrlBoundRect.Top();
     short w, h;
@@ -1271,14 +1271,14 @@ BOOL AquaSalGraphics::getNativeControlRegion( ControlType nType, ControlPart nPa
                 {
                     w = 19; // taken from HIG
                     h = aCtrlBoundRect.GetHeight();
-                    rNativeBoundingRegion = rNativeContentRegion = Region( Rectangle( Point( x, y ), Size( w, h ) ) );
+                    rNativeBoundingRegion = rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     toReturn = true;
                 }
                 else if( nPart == PART_THUMB_VERT )
                 {
                     w = aCtrlBoundRect.GetWidth();
                     h = 18; // taken from HIG
-                    rNativeBoundingRegion = rNativeContentRegion = Region( Rectangle( Point( x, y ), Size( w, h ) ) );
+                    rNativeBoundingRegion = rNativeContentRegion = Rectangle( Point( x, y ), Size( w, h ) );
                     toReturn = true;
                 }
             }
