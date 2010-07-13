@@ -38,5 +38,6 @@ TARGET=checkdeliver
 ALLTAR : $(MISC)$/checkdeliver.done
 
 $(MISC)$/checkdeliver.done .PHONY:
-    $(PERL) checkdeliver.pl > $@ || cat $@
+    @-$(RM) $(MISC)$/checkdeliver_log.txt
+    $(PERL) checkdeliver.pl  -l $(MISC)$/checkdeliver_log.txt && $(TOUCH) $@
 
