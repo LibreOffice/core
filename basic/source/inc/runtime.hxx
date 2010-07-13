@@ -219,6 +219,8 @@ public:
 
     void Error( SbError );                      // trappable Error
     void Error( SbError, const String& rMsg );  // trappable Error mit Message
+    void ErrorVB( sal_Int32 nVBNumber, const String& rMsg );
+    void setErrorVB( sal_Int32 nVBNumber, const String& rMsg );
     void FatalError( SbError );                 // non-trappable Error
     void FatalError( SbError, const String& );  // non-trappable Error
     void Abort();                               // Abbruch mit aktuellem Fehlercode
@@ -405,7 +407,7 @@ class SbiRuntime
     void StepPRINTF(),  StepWRITE(),    StepRENAME(),   StepPROMPT();
     void StepRESTART(), StepEMPTY(),    StepLEAVE();
     void StepLSET(),    StepRSET(),     StepREDIMP_ERASE(),     StepERASE_CLEAR();
-    void StepARRAYACCESS();
+    void StepARRAYACCESS(), StepBYVAL();
     // Alle Opcodes mit einem Operanden
     void StepLOADNC( UINT32 ),  StepLOADSC( UINT32 ),   StepLOADI( UINT32 );
     void StepARGN( UINT32 ),    StepBASED( UINT32 ),    StepPAD( UINT32 );
@@ -414,7 +416,7 @@ class SbiRuntime
     void StepGOSUB( UINT32 ),   StepRETURN( UINT32 );
     void StepTESTFOR( UINT32 ), StepCASETO( UINT32 ),   StepERRHDL( UINT32 );
     void StepRESUME( UINT32 ),  StepSETCLASS( UINT32 ), StepVBASETCLASS( UINT32 ),  StepTESTCLASS( UINT32 ), StepLIB( UINT32 );
-    bool checkClass_Impl( const SbxVariableRef& refVal, const String& aClass, bool bRaiseErrors );
+    bool checkClass_Impl( const SbxVariableRef& refVal, const String& aClass, bool bRaiseErrors, bool bDefault = true );
     void StepCLOSE( UINT32 ),   StepPRCHAR( UINT32 ),   StepARGTYP( UINT32 );
     // Alle Opcodes mit zwei Operanden
     void StepRTL( UINT32, UINT32 ),     StepPUBLIC( UINT32, UINT32 ),   StepPUBLIC_P( UINT32, UINT32 );
@@ -432,8 +434,9 @@ class SbiRuntime
     void StepDCREATE_REDIMP(UINT32,UINT32), StepDCREATE_IMPL(UINT32,UINT32);
     void StepFIND_CM( UINT32, UINT32 );
     void StepFIND_STATIC( UINT32, UINT32 );
+    void implCreateFixedString( SbxVariable* pStrVar, UINT32 nOp2 );
 public:
-    void          SetVBAEnabled( bool bEnabled ) { bVBAEnabled = bEnabled; };
+    void          SetVBAEnabled( bool bEnabled );
     USHORT      GetImageFlag( USHORT n ) const;
     USHORT      GetBase();
     xub_StrLen  nLine,nCol1,nCol2;  // aktuelle Zeile, Spaltenbereich
@@ -441,10 +444,11 @@ public:
 
     SbiRuntime( SbModule*, SbMethod*, UINT32 );
    ~SbiRuntime();
-    void Error( SbError );                      // Fehler setzen, falls != 0
+    void Error( SbError, bool bVBATranslationAlreadyDone = false );     // Fehler setzen, falls != 0
     void Error( SbError, const String& );       // Fehler setzen, falls != 0
     void FatalError( SbError );                 // Fehlerbehandlung=Standard, Fehler setzen
     void FatalError( SbError, const String& );  // Fehlerbehandlung=Standard, Fehler setzen
+    static sal_Int32 translateErrorToVba( SbError nError, String& rMsg );
     void DumpPCode();
     BOOL Step();                    // Einzelschritt (ein Opcode)
     void Stop()            { bRun = FALSE;   }

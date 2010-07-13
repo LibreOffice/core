@@ -69,8 +69,8 @@ SetNode::SetNode(
     templateName_(templateName), mandatory_(Data::NO_LAYER)
 {}
 
-rtl::Reference< Node > SetNode::clone() const {
-    return new SetNode(*this);
+rtl::Reference< Node > SetNode::clone(bool keepTemplateName) const {
+    return new SetNode(*this, keepTemplateName);
 }
 
 NodeMap & SetNode::getMembers() {
@@ -105,12 +105,15 @@ bool SetNode::isValidTemplate(rtl::OUString const & templateName) const {
          additionalTemplateNames_.end());
 }
 
-SetNode::SetNode(SetNode const & other):
+SetNode::SetNode(SetNode const & other, bool keepTemplateName):
     Node(other), defaultTemplateName_(other.defaultTemplateName_),
     additionalTemplateNames_(other.additionalTemplateNames_),
-    templateName_(other.templateName_), mandatory_(other.mandatory_)
+    mandatory_(other.mandatory_)
 {
     cloneNodeMap(other.members_, &members_);
+    if (keepTemplateName) {
+        templateName_ = other.templateName_;
+    }
 }
 
 SetNode::~SetNode() {}

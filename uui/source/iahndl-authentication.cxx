@@ -26,18 +26,23 @@
  ************************************************************************/
 
 #include "com/sun/star/task/DocumentPasswordRequest.hpp"
+#include "com/sun/star/task/DocumentPasswordRequest2.hpp"
 #include "com/sun/star/task/DocumentMSPasswordRequest.hpp"
+#include "com/sun/star/task/DocumentMSPasswordRequest2.hpp"
 #include "com/sun/star/task/MasterPasswordRequest.hpp"
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionPassword.hpp"
+#include "com/sun/star/task/XInteractionPassword2.hpp"
 #include "com/sun/star/task/XInteractionRetry.hpp"
 #include "com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp"
 #include "com/sun/star/ucb/URLAuthenticationRequest.hpp"
 
+#include "osl/diagnose.h"
 #include "rtl/digest.h"
 #include "vos/mutex.hxx"
 #include "tools/errcode.hxx"
 #include "vcl/msgbox.hxx"
+#include "vcl/abstdlg.hxx"
 #include "vcl/svapp.hxx"
 
 #include "ids.hrc"
@@ -67,10 +72,8 @@ executeLoginDialog(
     {
         vos::OGuard aGuard(Application::GetSolarMutex());
 
-        bool bAccount = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT)
-                            != 0;
-        bool bSavePassword = rInfo.GetIsPersistentPassword()
-                             || rInfo.GetIsSavePassword();
+        bool bAccount = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT) != 0;
+        bool bSavePassword   = rInfo.GetCanRememberPassword();
         bool bCanUseSysCreds = rInfo.GetCanUseSystemCredentials();
 
         sal_uInt16 nFlags = 0;
@@ -89,15 +92,10 @@ executeLoginDialog(
         if (!bCanUseSysCreds)
             nFlags |= LF_NO_USESYSCREDS;
 
-        std::auto_ptr< ResMgr > xManager(
-            ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        std::auto_ptr< ResMgr > xManager( ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         UniString aRealm(rRealm);
         std::auto_ptr< LoginDialog > xDialog(
-            new LoginDialog(pParent,
-                            nFlags,
-                            rInfo.GetServer(),
-                            &aRealm,
-                            xManager.get()));
+                new LoginDialog( pParent, nFlags, rInfo.GetServer(), &aRealm, xManager.get()));
         if (rInfo.GetErrorText().Len() != 0)
             xDialog->SetErrorText(rInfo.GetErrorText());
         xDialog->SetName(rInfo.GetUserName());
@@ -109,24 +107,24 @@ executeLoginDialog(
 
         if (bSavePassword)
         {
-            xDialog->
-                SetSavePasswordText(ResId(rInfo.GetIsPersistentPassword() ?
-                                              RID_SAVE_PASSWORD :
-                                              RID_KEEP_PASSWORD,
-                                          *xManager.get()));
-            xDialog->SetSavePassword(rInfo.GetIsSavePassword());
+            xDialog->SetSavePasswordText(
+                ResId(rInfo.GetIsRememberPersistent()
+                          ? RID_SAVE_PASSWORD
+                          : RID_KEEP_PASSWORD,
+                      *xManager.get()));
+
+            xDialog->SetSavePassword(rInfo.GetIsRememberPassword());
         }
 
         if ( bCanUseSysCreds )
-            xDialog->SetUseSystemCredentials(
-                rInfo.GetIsUseSystemCredentials() );
+            xDialog->SetUseSystemCredentials( rInfo.GetIsUseSystemCredentials() );
 
         rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
                                                        ERRCODE_BUTTON_CANCEL);
         rInfo.SetUserName(xDialog->GetName());
         rInfo.SetPassword(xDialog->GetPassword());
         rInfo.SetAccount(xDialog->GetAccount());
-        rInfo.SetSavePassword(xDialog->IsSavePassword());
+        rInfo.SetIsRememberPassword(xDialog->IsSavePassword());
 
         if ( bCanUseSysCreds )
           rInfo.SetIsUseSystemCredentials( xDialog->IsUseSystemCredentials() );
@@ -136,6 +134,60 @@ executeLoginDialog(
         throw uno::RuntimeException(
                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
                   uno::Reference< uno::XInterface >());
+    }
+}
+
+void getRememberModes(
+    uno::Sequence< ucb::RememberAuthentication > const & rRememberModes,
+    ucb::RememberAuthentication & rPreferredMode,
+    ucb::RememberAuthentication & rAlternateMode )
+{
+    sal_Int32 nCount = rRememberModes.getLength();
+    OSL_ENSURE( (nCount > 0) && (nCount < 4),
+                "ucb::RememberAuthentication sequence size mismatch!" );
+    if ( nCount == 1 )
+    {
+        rPreferredMode = rAlternateMode = rRememberModes[ 0 ];
+        return;
+    }
+    else
+    {
+        //bool bHasRememberModeNo = false;
+        bool bHasRememberModeSession = false;
+        bool bHasRememberModePersistent = false;
+
+        for (sal_Int32 i = 0; i < nCount; ++i)
+        {
+            switch ( rRememberModes[i] )
+            {
+            case ucb::RememberAuthentication_NO:
+                //bHasRememberModeNo = true;
+                break;
+            case ucb::RememberAuthentication_SESSION:
+                bHasRememberModeSession = true;
+                break;
+            case ucb::RememberAuthentication_PERSISTENT:
+                bHasRememberModePersistent = true;
+                break;
+            default:
+                OSL_TRACE( "Unsupported RememberAuthentication value" );
+                break;
+            }
+        }
+
+        if (bHasRememberModePersistent)
+        {
+            rPreferredMode = ucb::RememberAuthentication_PERSISTENT;
+            if (bHasRememberModeSession)
+                rAlternateMode = ucb::RememberAuthentication_SESSION;
+            else
+                rAlternateMode = ucb::RememberAuthentication_NO;
+        }
+        else
+        {
+            rPreferredMode = ucb::RememberAuthentication_SESSION;
+            rAlternateMode = ucb::RememberAuthentication_NO;
+        }
     }
 }
 
@@ -161,7 +213,7 @@ handleAuthenticationRequest_(
         xSupplyAuthentication2.set(xSupplyAuthentication, uno::UNO_QUERY);
 
     //////////////////////////
-    // First, try to obatin credentials from password container service.
+    // First, try to obtain credentials from password container service.
     uui::PasswordContainerHelper aPwContainerHelper(xServiceFactory);
     if (aPwContainerHelper.handleAuthenticationRequest(rRequest,
                                                        xSupplyAuthentication,
@@ -174,26 +226,20 @@ handleAuthenticationRequest_(
 
     //////////////////////////
     // Second, try to obtain credentials from user via password dialog.
-    bool bRemember;
-    bool bRememberPersistent;
+    ucb::RememberAuthentication eDefaultRememberMode
+        = ucb::RememberAuthentication_SESSION;
+    ucb::RememberAuthentication ePreferredRememberMode
+        = eDefaultRememberMode;
+    ucb::RememberAuthentication eAlternateRememberMode
+        = ucb::RememberAuthentication_NO;
+
     if (xSupplyAuthentication.is())
     {
-        ucb::RememberAuthentication eDefault;
-        uno::Sequence< ucb::RememberAuthentication >
-            aModes(xSupplyAuthentication->getRememberPasswordModes(eDefault));
-        bRemember = eDefault != ucb::RememberAuthentication_NO;
-        bRememberPersistent = false;
-        for (sal_Int32 i = 0; i < aModes.getLength(); ++i)
-            if (aModes[i] == ucb::RememberAuthentication_PERSISTENT)
-            {
-                bRememberPersistent = true;
-                break;
-            }
-    }
-    else
-    {
-        bRemember = false;
-        bRememberPersistent = false;
+        getRememberModes(
+            xSupplyAuthentication->getRememberPasswordModes(
+                eDefaultRememberMode),
+            ePreferredRememberMode,
+            eAlternateRememberMode);
     }
 
     sal_Bool bCanUseSystemCredentials;
@@ -220,8 +266,14 @@ handleAuthenticationRequest_(
     if (rRequest.HasPassword)
         aInfo.SetPassword(rRequest.Password);
     aInfo.SetErrorText(rRequest.Diagnostic);
-    aInfo.SetPersistentPassword(bRememberPersistent);
-    aInfo.SetSavePassword(bRemember);
+
+    aInfo.SetCanRememberPassword(
+        ePreferredRememberMode != eAlternateRememberMode);
+    aInfo.SetIsRememberPassword(
+        eDefaultRememberMode != ucb::RememberAuthentication_NO);
+    aInfo.SetIsRememberPersistent(
+        ePreferredRememberMode == ucb::RememberAuthentication_PERSISTENT);
+
     aInfo.SetCanUseSystemCredentials(bCanUseSystemCredentials);
     aInfo.SetIsUseSystemCredentials( bDefaultUseSystemCredentials );
     aInfo.SetModifyAccount(rRequest.HasAccount
@@ -242,13 +294,24 @@ handleAuthenticationRequest_(
                 xSupplyAuthentication->setUserName(aInfo.GetUserName());
             if (xSupplyAuthentication->canSetPassword())
                 xSupplyAuthentication->setPassword(aInfo.GetPassword());
-            xSupplyAuthentication->
-                setRememberPassword(
-                    aInfo.GetIsSavePassword() ?
-                       bRememberPersistent ?
-                       ucb::RememberAuthentication_PERSISTENT :
-                           ucb::RememberAuthentication_SESSION :
-                               ucb::RememberAuthentication_NO);
+
+            if (ePreferredRememberMode != eAlternateRememberMode)
+            {
+                // user had te choice.
+                if (aInfo.GetIsRememberPassword())
+                    xSupplyAuthentication->setRememberPassword(
+                        ePreferredRememberMode);
+                else
+                    xSupplyAuthentication->setRememberPassword(
+                        eAlternateRememberMode);
+            }
+            else
+            {
+                // user had no choice.
+                xSupplyAuthentication->setRememberPassword(
+                    ePreferredRememberMode);
+            }
+
             if (rRequest.HasRealm)
             {
                 if (xSupplyAuthentication->canSetRealm())
@@ -267,38 +330,76 @@ handleAuthenticationRequest_(
         //////////////////////////
         // Third, store credentials in password container.
 
-        if ( aInfo.GetIsUseSystemCredentials() )
-        {
-            if (aInfo.GetIsSavePassword())
-            {
-                aPwContainerHelper.addRecord(
-                    rURL.getLength() ? rURL : rRequest.ServerName,
-                    rtl::OUString(), // empty u/p -> sys creds
-                    uno::Sequence< rtl::OUString >(),
-                    xIH,
-                    bRememberPersistent);
-            }
-        }
-        // Empty user name can not be valid:
-        else if (aInfo.GetUserName().Len() != 0)
-        {
-            if (aInfo.GetIsSavePassword())
-            {
-                uno::Sequence< rtl::OUString >
-                    aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
-                aPassList[0] = aInfo.GetPassword();
-                if (aInfo.GetAccount().Len() != 0)
-                    aPassList[1] = aInfo.GetAccount();
+          if ( aInfo.GetIsUseSystemCredentials() )
+          {
+              if (aInfo.GetIsRememberPassword())
+              {
+                  if (!aPwContainerHelper.addRecord(
+                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          rtl::OUString(), // empty u/p -> sys creds
+                          uno::Sequence< rtl::OUString >(),
+                          xIH,
+                          ePreferredRememberMode
+                              == ucb::RememberAuthentication_PERSISTENT))
+                  {
+                      xSupplyAuthentication->setRememberPassword(
+                          ucb::RememberAuthentication_NO);
+                  }
+              }
+              else if (eAlternateRememberMode
+                           == ucb::RememberAuthentication_SESSION)
+              {
+                  if (!aPwContainerHelper.addRecord(
+                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          rtl::OUString(), // empty u/p -> sys creds
+                          uno::Sequence< rtl::OUString >(),
+                          xIH,
+                          false /* SESSION */))
+                  {
+                      xSupplyAuthentication->setRememberPassword(
+                          ucb::RememberAuthentication_NO);
+                  }
+              }
+          }
+          // Empty user name can not be valid:
+          else if (aInfo.GetUserName().Len() != 0)
+          {
+              uno::Sequence< rtl::OUString >
+                  aPassList(aInfo.GetAccount().Len() == 0 ? 1 : 2);
+              aPassList[0] = aInfo.GetPassword();
+              if (aInfo.GetAccount().Len() != 0)
+                  aPassList[1] = aInfo.GetAccount();
 
-                aPwContainerHelper.addRecord(
-                    rURL.getLength() ? rURL : rRequest.ServerName,
-                    aInfo.GetUserName(),
-                    aPassList,
-                    xIH,
-                    bRememberPersistent);
-            }
-        }
-        break;
+              if (aInfo.GetIsRememberPassword())
+              {
+                  if (!aPwContainerHelper.addRecord(
+                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          aInfo.GetUserName(),
+                          aPassList,
+                          xIH,
+                          ePreferredRememberMode
+                              == ucb::RememberAuthentication_PERSISTENT))
+                  {
+                      xSupplyAuthentication->setRememberPassword(
+                          ucb::RememberAuthentication_NO);
+                  }
+              }
+              else if (eAlternateRememberMode
+                           == ucb::RememberAuthentication_SESSION)
+              {
+                  if (!aPwContainerHelper.addRecord(
+                          rURL.getLength() ? rURL : rRequest.ServerName,
+                          aInfo.GetUserName(),
+                          aPassList,
+                          xIH,
+                          false /* SESSION */))
+                  {
+                      xSupplyAuthentication->setRememberPassword(
+                          ucb::RememberAuthentication_NO);
+                  }
+              }
+          }
+          break;
 
     case ERRCODE_BUTTON_RETRY:
         if (xRetry.is())
@@ -418,7 +519,8 @@ executePasswordDialog(
     LoginErrorInfo & rInfo,
     task::PasswordRequestMode nMode,
     ::rtl::OUString aDocName,
-    bool bMSCryptoMode)
+    bool bMSCryptoMode,
+    bool bIsPasswordToModify )
        SAL_THROW((uno::RuntimeException))
 {
     try
@@ -429,23 +531,25 @@ executePasswordDialog(
             ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
         if( nMode == task::PasswordRequestMode_PASSWORD_CREATE )
         {
-            std::auto_ptr< PasswordCreateDialog > xDialog(
-                new PasswordCreateDialog(pParent,
-                                         xManager.get(),
-                                         bMSCryptoMode));
+            const sal_uInt16 nMaxPasswdLen = bMSCryptoMode ? 15 : 0;   // 0 -> allow any length
 
-            rInfo.SetResult(xDialog->Execute()
-                == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
-            rInfo.SetPassword( xDialog->GetPassword() );
+            VclAbstractDialogFactory * pFact = VclAbstractDialogFactory::Create();
+            AbstractPasswordToOpenModifyDialog *pTmp = pFact->CreatePasswordToOpenModifyDialog( pParent, 0, nMaxPasswdLen, bIsPasswordToModify );
+            std::auto_ptr< AbstractPasswordToOpenModifyDialog > pDialog( pTmp );
+
+            rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
+            rInfo.SetPassword( pDialog->GetPasswordToOpen() );
+            rInfo.SetPasswordToModify( pDialog->GetPasswordToModify() );
+            rInfo.SetRecommendToOpenReadonly( pDialog->IsRecommendToOpenReadonly() );
         }
         else
         {
-            std::auto_ptr< PasswordDialog > xDialog(
-                new PasswordDialog(pParent, nMode, xManager.get(), aDocName));
+            std::auto_ptr< PasswordDialog > pDialog(
+                new PasswordDialog( pParent, nMode, xManager.get(), aDocName, bIsPasswordToModify ) );
 
-            rInfo.SetResult(xDialog->Execute()
-                == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL);
-            rInfo.SetPassword( xDialog->GetPassword() );
+            rInfo.SetResult( pDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK : ERRCODE_BUTTON_CANCEL );
+            rInfo.SetPassword( bIsPasswordToModify ? String() : pDialog->GetPassword() );
+            rInfo.SetPasswordToModify( bIsPasswordToModify ? pDialog->GetPassword() : String() );
         }
     }
     catch (std::bad_alloc const &)
@@ -463,26 +567,36 @@ handlePasswordRequest_(
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations,
     ::rtl::OUString aDocumentName,
-    bool bMSCryptoMode )
+    bool bMSCryptoMode,
+    bool bIsPasswordToModify )
     SAL_THROW((uno::RuntimeException))
 {
     uno::Reference< task::XInteractionRetry > xRetry;
     uno::Reference< task::XInteractionAbort > xAbort;
     uno::Reference< task::XInteractionPassword > xPassword;
-    getContinuations(rContinuations, &xRetry, &xAbort, &xPassword);
+    uno::Reference< task::XInteractionPassword2 > xPassword2;
+    getContinuations(rContinuations, &xRetry, &xAbort, &xPassword2, &xPassword);
+
+    if ( xPassword2.is() && !xPassword.is() )
+        xPassword.set( xPassword2, uno::UNO_QUERY_THROW );
+
     LoginErrorInfo aInfo;
 
-    executePasswordDialog(pParent,
-                          aInfo,
-                          nMode,
-                          aDocumentName,
-                          bMSCryptoMode);
+    executePasswordDialog( pParent, aInfo, nMode,
+            aDocumentName, bMSCryptoMode, bIsPasswordToModify );
 
     switch (aInfo.GetResult())
     {
     case ERRCODE_BUTTON_OK:
+        OSL_ENSURE( !bIsPasswordToModify || xPassword2.is(), "PasswordToModify is requested, but there is no Interaction!" );
         if (xPassword.is())
         {
+            if (xPassword2.is())
+            {
+                xPassword2->setPasswordToModify( aInfo.GetPasswordToModify() );
+                xPassword2->setRecommendReadOnly( aInfo.IsRecommendToOpenReadonly() );
+            }
+
             xPassword->setPassword(aInfo.GetPassword());
             xPassword->select();
         }
@@ -558,28 +672,81 @@ UUIInteractionHelper::handlePasswordRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
     SAL_THROW((uno::RuntimeException))
 {
+    // parameters to be filled for the call to handlePasswordRequest_
+    Window * pParent = getParentProperty();
+    task::PasswordRequestMode nMode = task::PasswordRequestMode_PASSWORD_ENTER;
+    uno::Sequence< uno::Reference< task::XInteractionContinuation > > const & rContinuations = rRequest->getContinuations();
+    ::rtl::OUString aDocumentName;
+    bool bMSCryptoMode          = false;
+    bool bIsPasswordToModify    = false;
+
+    bool bDoHandleRequest = false;
+
     uno::Any aAnyRequest(rRequest->getRequest());
 
-    task::DocumentPasswordRequest aDocumentPasswordRequest;
-    if (aAnyRequest >>= aDocumentPasswordRequest)
+    task::DocumentPasswordRequest2 aDocumentPasswordRequest2;
+    if (!bDoHandleRequest && (aAnyRequest >>= aDocumentPasswordRequest2))
     {
-        handlePasswordRequest_(getParentProperty(),
-                               aDocumentPasswordRequest.Mode,
-                               rRequest->getContinuations(),
-                               aDocumentPasswordRequest.Name,
-                               false /* bool bMSCryptoMode */);
-        return true;
+        nMode               = aDocumentPasswordRequest2.Mode;
+        aDocumentName       = aDocumentPasswordRequest2.Name;
+        OSL_ENSURE( bMSCryptoMode == false, "bMSCryptoMode should be false" );
+        bIsPasswordToModify = aDocumentPasswordRequest2.IsRequestPasswordToModify;
+
+        bDoHandleRequest = true;
+    }
+
+    task::DocumentPasswordRequest aDocumentPasswordRequest;
+    if (!bDoHandleRequest && (aAnyRequest >>= aDocumentPasswordRequest))
+    {
+        nMode               = aDocumentPasswordRequest.Mode;
+        aDocumentName       = aDocumentPasswordRequest.Name;
+        OSL_ENSURE( bMSCryptoMode == false, "bMSCryptoMode should be false" );
+        OSL_ENSURE( bIsPasswordToModify == false, "bIsPasswordToModify should be false" );
+
+        bDoHandleRequest = true;
+    }
+
+    task::DocumentMSPasswordRequest2 aDocumentMSPasswordRequest2;
+    if (!bDoHandleRequest && (aAnyRequest >>= aDocumentMSPasswordRequest2))
+    {
+        nMode               = aDocumentMSPasswordRequest2.Mode;
+        aDocumentName       = aDocumentMSPasswordRequest2.Name;
+        bMSCryptoMode       = true;
+        bIsPasswordToModify = aDocumentMSPasswordRequest2.IsRequestPasswordToModify;
+
+        bDoHandleRequest = true;
     }
 
     task::DocumentMSPasswordRequest aDocumentMSPasswordRequest;
-    if (aAnyRequest >>= aDocumentMSPasswordRequest)
+    if (!bDoHandleRequest && (aAnyRequest >>= aDocumentMSPasswordRequest))
     {
-        handlePasswordRequest_(getParentProperty(),
-                               aDocumentMSPasswordRequest.Mode,
-                               rRequest->getContinuations(),
-                               aDocumentMSPasswordRequest.Name,
-                               true /* bool bMSCryptoMode */);
+        nMode               = aDocumentMSPasswordRequest.Mode;
+        aDocumentName       = aDocumentMSPasswordRequest.Name;
+        bMSCryptoMode       = true;
+        OSL_ENSURE( bIsPasswordToModify == false, "bIsPasswordToModify should be false" );
+
+        bDoHandleRequest = true;
+    }
+
+    if (bDoHandleRequest)
+    {
+        handlePasswordRequest_( pParent, nMode, rContinuations,
+                aDocumentName, bMSCryptoMode, bIsPasswordToModify );
         return true;
     }
+
+    task::PasswordRequest aPasswordRequest;
+    if( aAnyRequest >>= aPasswordRequest )
+    {
+        handlePasswordRequest_(getParentProperty(),
+                               aPasswordRequest.Mode,
+                               rRequest->getContinuations(),
+                               rtl::OUString(),
+                               false /* bool bMSCryptoMode */,
+                               false /* bool bIsPasswordToModify */);
+        return true;
+    }
+
     return false;
 }
+

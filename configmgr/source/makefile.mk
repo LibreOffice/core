@@ -34,7 +34,7 @@ VISIBILITY_HIDDEN = TRUE
 
 .INCLUDE: settings.mk
 
-CDEFS += -DOOO_DLLIMPLEMENTATION_CONFIGMGR
+DLLPRE =
 
 SLOFILES = \
     $(SLO)/access.obj \
@@ -77,7 +77,7 @@ SHL1STDLIBS = \
     $(CPPULIB) \
     $(SALHELPERLIB) \
     $(SALLIB)
-SHL1TARGET = configmgr
+SHL1TARGET = configmgr.uno
 SHL1USE_EXPORTS = name
 DEF1NAME = $(SHL1TARGET)
 

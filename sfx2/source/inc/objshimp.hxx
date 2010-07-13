@@ -149,6 +149,10 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 
     sal_Bool                m_bIncomplEncrWarnShown;
 
+    // TODO/LATER: m_aModifyPasswordInfo should completely replace m_nModifyPasswordHash in future
+    sal_uInt32              m_nModifyPasswordHash;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > m_aModifyPasswordInfo;
+    sal_Bool                m_bModifyPasswordEntered;
 
     SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
     virtual ~SfxObjectShell_Impl();

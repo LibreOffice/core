@@ -61,6 +61,7 @@
 #endif
 
 #include <vcl/jobset.hxx>
+#include <basic/sbobjmod.hxx>
 
 #include "sbintern.hxx"
 #include "runtime.hxx"
@@ -522,6 +523,18 @@ RTLFUNC(WaitUntil)
     Wait_Impl( true, rPar );
 }
 
+RTLFUNC(DoEvents)
+{
+    (void)pBasic;
+    (void)bWrite;
+    (void)rPar;
+    Timer aTimer;
+    aTimer.SetTimeout( 1 );
+    aTimer.Start();
+    while ( aTimer.IsActive() )
+        Application::Yield();
+}
+
 RTLFUNC(GetGUIVersion)
 {
     (void)pBasic;
@@ -621,8 +634,7 @@ RTLFUNC(FreeLibrary)
 
     if ( rPar.Count() != 2 )
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
-    ByteString aByteDLLName( rPar.Get(1)->GetString(), gsl_getSystemTextEncoding() );
-    pINST->GetDllMgr()->FreeDll( aByteDLLName );
+    pINST->GetDllMgr()->FreeDll( rPar.Get(1)->GetString() );
 }
 bool IsBaseIndexOne()
 {
@@ -2594,14 +2606,16 @@ RTLFUNC(Me)
 
     SbModule* pActiveModule = pINST->GetActiveModule();
     SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pActiveModule);
+    SbxVariableRef refVar = rPar.Get(0);
     if( pClassModuleObject == NULL )
     {
-        StarBASIC::Error( SbERR_INVALID_USAGE_OBJECT );
+        SbObjModule* pMod = PTR_CAST(SbObjModule,pActiveModule);
+        if ( pMod )
+            refVar->PutObject( pMod );
+        else
+            StarBASIC::Error( SbERR_INVALID_USAGE_OBJECT );
     }
     else
-    {
-        SbxVariableRef refVar = rPar.Get(0);
         refVar->PutObject( pClassModuleObject );
-    }
 }
 

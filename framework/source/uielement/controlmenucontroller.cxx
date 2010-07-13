@@ -61,6 +61,7 @@
 #include <vcl/image.hxx>
 #include <svtools/menuoptions.hxx>
 #include <dispatch/uieventloghelper.hxx>
+#include <vos/mutex.hxx>
 
 // Copied from svx
 // Function-Id's
@@ -213,7 +214,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   ControlMenuController               
 DEFINE_INIT_SERVICE                     (   ControlMenuController, {} )
 
 ControlMenuController::ControlMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    PopupMenuControllerBase( xServiceManager ),
+    svt::PopupMenuControllerBase( xServiceManager ),
     m_pResPopupMenu( 0 )
 {
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
@@ -272,7 +273,7 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( Run
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
-    ResetableGuard aLock( m_aLock );
+    osl::ResettableMutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xServiceManager.clear();
@@ -286,7 +287,7 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( Run
 // XStatusListener
 void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::ResettableMutexGuard aLock( m_aMutex );
 
     USHORT nMenuId = 0;
     for (sal_uInt32 i=0; i < sizeof(aCommands)/sizeof(aCommands[0]); ++i)
@@ -351,7 +352,7 @@ void ControlMenuController::impl_select(const Reference< XDispatch >& /*_xDispat
 
 void SAL_CALL ControlMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::ResettableMutexGuard aLock( m_aMutex );
 
     if ( m_xPopupMenu.is() )
     {
@@ -404,10 +405,9 @@ void ControlMenuController::impl_setPopupMenu()
 
 void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::ResettableMutexGuard aLock( m_aMutex );
 
-    if ( m_bDisposed )
-        throw DisposedException();
+    throwIfDisposed();
 
     if ( m_xFrame.is() && m_xPopupMenu.is() )
     {
@@ -435,8 +435,8 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::
 // XInitialization
 void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
-    PopupMenuControllerBase::initialize(aArguments);
+    osl::ResettableMutexGuard aLock( m_aMutex );
+    svt::PopupMenuControllerBase::initialize(aArguments);
     m_aBaseURL = ::rtl::OUString();
 }
 

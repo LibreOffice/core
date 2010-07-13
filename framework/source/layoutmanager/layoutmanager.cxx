@@ -4707,6 +4707,14 @@ throw (RuntimeException)
 
             impl_setDockingWindowVisibility( xSMGR, xFrame, aElementName, true );
         }
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolpanel" ))
+        {
+            ReadGuard aReadGuard( m_aLock );
+            css::uno::Reference< css::frame::XFrame > xFrame( m_xFrame );
+            aReadGuard.unlock();
+
+            ActivateToolPanel( m_xFrame, aName );
+        }
     }
 
     if ( bNotify )

@@ -149,11 +149,12 @@ bool Components::allLocales(rtl::OUString const & locale) {
 }
 
 rtl::Reference< Node > Components::resolvePathRepresentation(
-    rtl::OUString const & pathRepresentation, Path * path,
-    int * finalizedLayer) const
+    rtl::OUString const & pathRepresentation,
+    rtl::OUString * canonicRepresentation, Path * path, int * finalizedLayer)
+    const
 {
     return data_.resolvePathRepresentation(
-        pathRepresentation, path, finalizedLayer);
+        pathRepresentation, canonicRepresentation, path, finalizedLayer);
 }
 
 rtl::Reference< Node > Components::getTemplate(
@@ -368,22 +369,22 @@ Components::Components(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "$BRAND_BASE_DIR/share/registry/modules"))));
-    parseXcsXcuLayer( //TODO: migrate
+    parseXcsXcuIniLayer(
         7,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
-                    ":UNO_SHARED_PACKAGES_CACHE}/registry/"
+                    ":BUNDLED_EXTENSIONS_USER}/registry/"
                     "com.sun.star.comp.deployment.configuration."
-                    "PackageRegistryBackend/registry"))));
+                    "PackageRegistryBackend/configmgr.ini"))));
     parseXcsXcuIniLayer(
         9,
         expand(
             rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
                     "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("uno")
-                    ":UNO_SHARED_PACKAGES_CACHE}/registry/"
+                    ":SHARED_EXTENSIONS_USER}/registry/"
                     "com.sun.star.comp.deployment.configuration."
                     "PackageRegistryBackend/configmgr.ini"))));
     parseXcsXcuLayer( //TODO: migrate
@@ -494,12 +495,10 @@ void Components::parseFileList(
             try {
                 (*parseFile)(url, layer, data_, 0, 0);
             } catch (css::container::NoSuchElementException & e) {
-                throw css::uno::RuntimeException(
-                    (rtl::OUString(
-                        RTL_CONSTASCII_USTRINGPARAM(
-                            "stat'ed file does not exist: ")) +
-                     e.Message),
-                    css::uno::Reference< css::uno::XInterface >());
+                OSL_TRACE(
+                    "configmgr file does not exist: %s",
+                    rtl::OUStringToOString(
+                        e.Message, RTL_TEXTENCODING_UTF8).getStr());
             }
         }
         if (i == -1) {

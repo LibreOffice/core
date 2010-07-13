@@ -49,7 +49,7 @@
 #include "com/sun/star/deployment/PlatformException.hpp"
 #include "com/sun/star/i18n/XCollator.hpp"
 #include "com/sun/star/i18n/CollatorOptions.hpp"
-#include "com/sun/star/deployment/LicenseIndividualAgreementException.hpp"
+
 #include <stdio.h>
 #include "deployment.hrc"
 #include "dp_version.hxx"
@@ -85,13 +85,12 @@ class CommandEnvironmentImpl
     sal_Int32 m_logLevel;
     bool m_option_force_overwrite;
     bool m_option_verbose;
-    bool m_option_bundled;
-    bool m_option_suppressLicense;
     Reference< XComponentContext > m_xComponentContext;
     Reference< XProgressHandler > m_xLogFile;
 
     void update_( Any const & Status ) throw (RuntimeException);
-    void printLicense(const OUString& sLicense, bool & accept, bool & decline);
+    void printLicense(const OUString & sName,const OUString& sLicense,
+                      bool & accept, bool & decline);
 
 public:
     virtual ~CommandEnvironmentImpl();
@@ -99,9 +98,7 @@ public:
         Reference<XComponentContext> const & xComponentContext,
         OUString const & log_file,
         bool option_force_overwrite,
-        bool option_verbose,
-        bool option_bundled,
-        bool option_suppressLicense);
+        bool option_verbose);
 
     // XCommandEnvironment
     virtual Reference< task::XInteractionHandler > SAL_CALL
@@ -120,19 +117,16 @@ public:
     virtual void SAL_CALL pop() throw (RuntimeException);
 };
 
+
 //______________________________________________________________________________
 CommandEnvironmentImpl::CommandEnvironmentImpl(
     Reference<XComponentContext> const & xComponentContext,
     OUString const & log_file,
     bool option_force_overwrite,
-    bool option_verbose,
-    bool option_bundled,
-    bool option_suppressLicense)
+    bool option_verbose)
     : m_logLevel(0),
       m_option_force_overwrite( option_force_overwrite ),
       m_option_verbose( option_verbose ),
-      m_option_bundled( option_bundled),
-      m_option_suppressLicense( option_suppressLicense),
       m_xComponentContext(xComponentContext)
 {
     if (log_file.getLength() > 0) {
@@ -162,10 +156,13 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
 }
 
 //May throw exceptions
-void CommandEnvironmentImpl::printLicense(const OUString& sLicense, bool & accept, bool &decline)
+void CommandEnvironmentImpl::printLicense(
+    const OUString & sName, const OUString& sLicense, bool & accept, bool &decline)
 {
     ResMgr * pResMgr = DeploymentResMgr::get();
-    OUString s1 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_1, *pResMgr));
+    String s1tmp(ResId(RID_STR_UNOPKG_ACCEPT_LIC_1, *pResMgr));
+    s1tmp.SearchAndReplaceAllAscii( "$NAME", sName );
+    OUString s1(s1tmp);
     OUString s2 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_2, *pResMgr));
     OUString s3 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_3, *pResMgr));
     OUString s4 = String(ResId(RID_STR_UNOPKG_ACCEPT_LIC_4, *pResMgr));
@@ -246,7 +243,6 @@ void CommandEnvironmentImpl::handle(
     lang::WrappedTargetException wtExc;
     deployment::LicenseException licExc;
     deployment::InstallException instExc;
-    deployment::LicenseIndividualAgreementException licAgreementExc;
     deployment::PlatformException platExc;
     deployment::VersionException verExc;
 
@@ -281,27 +277,9 @@ void CommandEnvironmentImpl::handle(
             update_( wtExc.TargetException );
         }
     }
-    else if (request >>= licAgreementExc)
-    {
-        if (m_option_suppressLicense && licAgreementExc.SuppressIfRequired)
-        {
-            approve = true;
-        }
-        else
-        {
-            String sResMsg( ResId( RID_STR_UNOPKG_NO_SHARED_ALLOWED, *DeploymentResMgr::get() ) );
-            sResMsg.SearchAndReplaceAllAscii( "%NAME", licAgreementExc.ExtensionName );
-            dp_misc::writeConsole(OUSTR("\n") + sResMsg + OUSTR("\n\n"));
-            abort = true;
-        }
-    }
     else if (request >>= licExc)
     {
-        bLicenseException = true;
-        if (m_option_suppressLicense && licExc.SuppressIfRequired)
-            approve = true;
-        else
-            printLicense(licExc.Text, approve, abort);
+        printLicense(licExc.ExtensionName, licExc.Text, approve, abort);
     }
        else if (request >>= instExc)
     {
@@ -320,7 +298,7 @@ void CommandEnvironmentImpl::handle(
         deployment::VersionException nc_exc;
         if (request >>= nc_exc) {
             approve = m_option_force_overwrite ||
-                (::dp_misc::comparePackageVersions(nc_exc.New, nc_exc.Deployed)
+                (::dp_misc::compareVersions(nc_exc.NewVersion, nc_exc.Deployed->getVersion())
                  == ::dp_misc::GREATER);
             abort = !approve;
         }
@@ -436,6 +414,7 @@ void CommandEnvironmentImpl::pop() throw (RuntimeException)
         m_xLogFile->pop();
 }
 
+
 } // anon namespace
 
 namespace unopkg {
@@ -445,14 +424,10 @@ Reference< XCommandEnvironment > createCmdEnv(
     Reference< XComponentContext > const & xContext,
     OUString const & logFile,
     bool option_force_overwrite,
-    bool option_verbose,
-    bool option_bundled,
-    bool option_suppressLicense)
+    bool option_verbose)
 {
     return new CommandEnvironmentImpl(
-        xContext, logFile, option_force_overwrite, option_verbose, option_bundled,
-        option_suppressLicense);
+        xContext, logFile, option_force_overwrite, option_verbose);
 }
-
 } // unopkg
 

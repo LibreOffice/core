@@ -48,7 +48,7 @@ public:
         int layer, Type staticType, bool nillable,
         com::sun::star::uno::Any const & value, bool extension);
 
-    virtual rtl::Reference< Node > clone() const;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const;
 
     Type getStaticType() const;
 

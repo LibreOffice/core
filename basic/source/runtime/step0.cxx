@@ -30,6 +30,7 @@
 #include <vcl/msgbox.hxx>
 #include <tools/fsys.hxx>
 
+#include "errobject.hxx"
 #include "runtime.hxx"
 #include "sbintern.hxx"
 #include "iosys.hxx"
@@ -41,6 +42,9 @@
 #include <com/sun/star/util/SearchOptions.hdl>
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>
+
+Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::OUString& aVBAType,
+                                           const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj );
 
 #include <algorithm>
 
@@ -514,7 +518,28 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                 }
             }
 
+            // Handle withevents
+            BOOL bWithEvents = refVar->IsSet( SBX_WITH_EVENTS );
+            Reference< XInterface > xComListener;
+            if( bWithEvents )
+            {
+                SbxBase* pObj = refVal->GetObject();
+                SbUnoObject* pUnoObj = (pObj != NULL) ? PTR_CAST(SbUnoObject,pObj) : NULL;
+                if( pUnoObj != NULL )
+                {
+                    Any aControlAny = pUnoObj->getUnoAny();
+                    String aDeclareClassName = refVar->GetDeclareClassName();
+                    ::rtl::OUString aVBAType = aDeclareClassName;
+                    ::rtl::OUString aPrefix = refVar->GetName();
+                    SbxObjectRef xScopeObj = refVar->GetParent();
+                    xComListener = createComListener( aControlAny, aVBAType, aPrefix, xScopeObj );
+                }
+            }
+
             *refVar = *refVal;
+
+            if( bWithEvents )
+                refVar->SetComListener( xComListener );     // Hold reference
 
             // lhs is a property who's value is currently (Empty e.g. no broadcast yet)
             // in this case if there is a default prop involved the value of the
@@ -907,6 +932,19 @@ void SbiRuntime::StepARRAYACCESS()
     PushVar( CheckArray( refVar ) );
 }
 
+void SbiRuntime::StepBYVAL()
+{
+    // Copy variable on stack to break call by reference
+    SbxVariableRef pVar = PopVar();
+    SbxDataType t = pVar->GetType();
+
+    SbxVariable* pCopyVar = new SbxVariable( t );
+    pCopyVar->SetFlag( SBX_READWRITE );
+    *pCopyVar = *pVar;
+
+    PushVar( pCopyVar );
+}
+
 // Einrichten eines Argvs
 // nOp1 bleibt so -> 1. Element ist Returnwert
 
@@ -1116,6 +1154,7 @@ void SbiRuntime::StepSTDERROR()
     pInst->nErr = 0L;
     pInst->nErl = 0;
     nError = 0L;
+    SbxErrObject::getUnoErrObject()->Clear();
 }
 
 void SbiRuntime::StepNOERROR()
@@ -1124,6 +1163,7 @@ void SbiRuntime::StepNOERROR()
     pInst->nErr = 0L;
     pInst->nErl = 0;
     nError = 0L;
+    SbxErrObject::getUnoErrObject()->Clear();
     bError = FALSE;
 }
 
@@ -1132,6 +1172,9 @@ void SbiRuntime::StepNOERROR()
 void SbiRuntime::StepLEAVE()
 {
     bRun = FALSE;
+        // If VBA and we are leaving an ErrorHandler then clear the error ( it's been processed )
+    if ( bInError && pError )
+        SbxErrObject::getUnoErrObject()->Clear();
 }
 
 void SbiRuntime::StepCHANNEL()      // TOS = Kanalnummer
@@ -1265,6 +1308,9 @@ void SbiRuntime::StepERROR()
     SbxVariableRef refCode = PopVar();
     USHORT n = refCode->GetUShort();
     SbError error = StarBASIC::GetSfxFromVBError( n );
-    Error( error );
+    if ( bVBAEnabled )
+        pInst->Error( error );
+    else
+        Error( error );
 }
 

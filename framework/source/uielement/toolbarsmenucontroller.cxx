@@ -58,7 +58,6 @@
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -167,7 +166,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   ToolbarsMenuController              
 DEFINE_INIT_SERVICE                     (   ToolbarsMenuController, {} )
 
 ToolbarsMenuController::ToolbarsMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    PopupMenuControllerBase( xServiceManager ),
+    svt::PopupMenuControllerBase( xServiceManager ),
     m_aPropUIName( RTL_CONSTASCII_USTRINGPARAM( "UIName" )),
     m_aPropResourceURL( RTL_CONSTASCII_USTRINGPARAM( "ResourceURL" )),
     m_bModuleIdentified( sal_False ),
@@ -563,7 +562,7 @@ void SAL_CALL ToolbarsMenuController::disposing( const EventObject& ) throw ( Ru
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xDocCfgMgr.clear();
@@ -584,9 +583,9 @@ void SAL_CALL ToolbarsMenuController::statusChanged( const FeatureStateEvent& Ev
     sal_Bool bSetCheckmark      = sal_False;
     sal_Bool bCheckmark         = sal_False;
 
-    ResetableGuard aLock( m_aLock );
+    osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< css::awt::XPopupMenu > xPopupMenu( m_xPopupMenu );
-    aLock.unlock();
+    aLock.clear();
 
     if ( xPopupMenu.is() )
     {
@@ -633,13 +632,13 @@ void SAL_CALL ToolbarsMenuController::select( const css::awt::MenuEvent& rEvent 
     Reference< XFrame >                 xFrame;
     Reference< XNameAccess >            xPersistentWindowState;
 
-    ResetableGuard aLock( m_aLock );
+    osl::ClearableMutexGuard aLock( m_aMutex );
     xPopupMenu             = m_xPopupMenu;
     xServiceManager        = m_xServiceManager;
     xURLTransformer        = m_xURLTransformer;
     xFrame                 = m_xFrame;
     xPersistentWindowState = m_xPersistentWindowState;
-    aLock.unlock();
+    aLock.clear();
 
     if ( xPopupMenu.is() )
     {
@@ -792,7 +791,7 @@ void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& ) thr
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     Reference< XURLTransformer >   xURLTransformer( m_xURLTransformer );
     {
-        ResetableGuard aLock( m_aLock );
+        osl::MutexGuard aLock( m_aMutex );
         fillPopupMenu( m_xPopupMenu );
         aCmdVector = m_aCommandVector;
     }
@@ -829,10 +828,9 @@ void SAL_CALL ToolbarsMenuController::activate( const css::awt::MenuEvent& ) thr
 // XPopupMenuController
 void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
 
-    if ( m_bDisposed )
-        throw DisposedException();
+    throwIfDisposed();
 
     if ( m_xFrame.is() && !m_xPopupMenu.is() )
     {
@@ -848,11 +846,11 @@ void SAL_CALL ToolbarsMenuController::setPopupMenu( const Reference< css::awt::X
 // XInitialization
 void SAL_CALL ToolbarsMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     sal_Bool bInitalized( m_bInitialized );
     if ( !bInitalized )
     {
-        PopupMenuControllerBase::initialize(aArguments);
+        svt::PopupMenuControllerBase::initialize(aArguments);
 
         if ( m_bInitialized )
         {

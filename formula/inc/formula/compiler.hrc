@@ -393,12 +393,8 @@
 #define SC_OPCODE_LAST_OPCODE_ID    394      /* last OpCode */
 
 /*** Interna ***/
-#define SC_OPCODE_INTERNAL_BEGIN   9995
-#define SC_OPCODE_GAME             9995
-#define SC_OPCODE_SPEW             9996
-#define SC_OPCODE_TTT              9997
-#define SC_OPCODE_TEAM             9998
-#define SC_OPCODE_ANSWER           9999
+#define SC_OPCODE_INTERNAL_BEGIN   9999
+#define SC_OPCODE_TTT              9999
 #define SC_OPCODE_INTERNAL_END     9999
 
 /*** from here on ExtraData contained ***/

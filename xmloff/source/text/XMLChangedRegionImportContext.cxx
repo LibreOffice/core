@@ -68,6 +68,7 @@ void XMLChangedRegionImportContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
     // process attributes: id
+    bool bHaveXmlId( false );
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
@@ -77,11 +78,19 @@ void XMLChangedRegionImportContext::StartElement(
                               &sLocalName );
 
         const OUString sValue = xAttrList->getValueByIndex(nAttr);
-        if ( XML_NAMESPACE_TEXT == nPrefix )
+        if (XML_NAMESPACE_XML == nPrefix)
         {
-            if( IsXMLToken( sLocalName, XML_ID ) )
+            if (IsXMLToken(sLocalName, XML_ID))
             {
                 sID = sValue;
+                bHaveXmlId = true;
+            }
+        }
+        else if (XML_NAMESPACE_TEXT == nPrefix)
+        {
+            if (IsXMLToken(sLocalName, XML_ID))
+            {
+                if (!bHaveXmlId) { sID = sValue; }
             }
             else if( IsXMLToken( sLocalName, XML_MERGE_LAST_PARAGRAPH ) )
             {

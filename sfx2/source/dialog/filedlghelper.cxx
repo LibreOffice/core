@@ -57,6 +57,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/stillreadwriteinteraction.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -80,11 +81,13 @@
 #include <svtools/helpid.hrc>
 #include <svl/pickerhelper.hxx>
 #include <comphelper/docpasswordrequest.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfac.hxx>
 #include "openflag.hxx"
@@ -464,31 +467,6 @@ sal_Bool FileDialogHelper_Impl::isInOpenMode() const
 
 // ------------------------------------------------------------------------
 
-namespace {
-
-bool lclCheckODFPasswordCapability( const SfxFilter* pFilter )
-{
-    return pFilter && pFilter->IsOwnFormat() && pFilter->UsesStorage() && (pFilter->GetVersion() >= SOFFICE_FILEFORMAT_60);
-}
-
-bool lclCheckMSPasswordCapability( const SfxFilter* pFilter )
-{
-    // TODO #i105076# this should be in the filter configuration!!!
-    return pFilter && CheckMSPasswordCapabilityForExport( pFilter->GetFilterName() );
-}
-
-bool lclCheckPasswordCapability( const SfxFilter* pFilter )
-{
-    return
-        lclCheckODFPasswordCapability( pFilter ) ||
-        // TODO #i105076# this should be in the filter configuration!!!
-        lclCheckMSPasswordCapability( pFilter );
-}
-
-}
-
-// ------------------------------------------------------------------------
-
 void FileDialogHelper_Impl::updateFilterOptionsBox()
 {
     if ( !m_bHaveFilterOptions )
@@ -542,11 +520,11 @@ void FileDialogHelper_Impl::updateExportButton()
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::updateSelectionBox()
 {
-    if ( !mbExport )
+    if ( !mbHasSelectionBox )
         return;
 
     // Does the selection box exist?
-    bool bSelectionBoxFound = false;
+    sal_Bool bSelectionBoxFound = sal_False;
     uno::Reference< XControlInformation > xCtrlInfo( mxFileDlg, UNO_QUERY );
     if ( xCtrlInfo.is() )
     {
@@ -555,7 +533,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
         for ( sal_uInt32 nCtrl = 0; nCtrl < nCount; ++nCtrl )
             if ( aCtrlList[ nCtrl ].equalsAscii("SelectionBox") )
             {
-                bSelectionBoxFound = true;
+                bSelectionBoxFound = sal_False;
                 break;
             }
     }
@@ -563,7 +541,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
     if ( bSelectionBoxFound )
     {
         const SfxFilter* pFilter = getCurentSfxFilter();
-        updateExtendedControl(
+        mbSelectionFltrEnabled = updateExtendedControl(
             ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
             ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 ) );
         uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
@@ -579,9 +557,10 @@ void FileDialogHelper_Impl::enablePasswordBox( sal_Bool bInit )
 
     sal_Bool bWasEnabled = mbIsPwdEnabled;
 
+    const SfxFilter* pCurrentFilter = getCurentSfxFilter();
     mbIsPwdEnabled = updateExtendedControl(
         ExtendedFilePickerElementIds::CHECKBOX_PASSWORD,
-        lclCheckPasswordCapability( getCurentSfxFilter() )
+        pCurrentFilter && ( pCurrentFilter->GetFilterFlags() & SFX_FILTER_ENCRYPTION )
     );
 
     if( bInit )
@@ -956,6 +935,8 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
     mbPwdCheckBoxState      = sal_False;
     mbSelection             = sal_False;
     mbSelectionEnabled      = sal_True;
+    mbHasSelectionBox       = sal_False;
+    mbSelectionFltrEnabled  = sal_False;
 
     // default settings
     m_nDontFlags = SFX_FILTER_INTERNAL | SFX_FILTER_NOTINFILEDLG | SFX_FILTER_NOTINSTALLED;
@@ -1025,6 +1006,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 nTemplateDescription = TemplateDescription::FILESAVE_AUTOEXTENSION_SELECTION;
                 mbHasAutoExt = sal_True;
                 mbIsSaveDlg = sal_True;
+                mbHasSelectionBox = sal_True;
                 if ( mbExport && !mxFilterCFG.is() && xFactory.is() )
                 {
                     mxFilterCFG = uno::Reference< XNameAccess >(
@@ -1548,6 +1530,10 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         {
             SFX_ITEMSET_ARG( rpSet, pPassItem, SfxStringItem, SID_PASSWORD, FALSE );
             mbPwdCheckBoxState = ( pPassItem != NULL );
+
+            // in case the document has password to modify, the dialog should be shown
+            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, FALSE );
+            mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue().hasValue() );
         }
 
         SFX_ITEMSET_ARG( rpSet, pSelectItem, SfxBoolItem, SID_SELECTION, FALSE );
@@ -1558,6 +1544,9 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
 
         // the password will be set in case user decide so
         rpSet->ClearItem( SID_PASSWORD );
+        rpSet->ClearItem( SID_RECOMMENDREADONLY );
+        rpSet->ClearItem( SID_MODIFYPASSWORDINFO );
+
     }
 
     if ( mbHasPassword && !mbPwdCheckBoxState )
@@ -1634,13 +1623,15 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         // set the filter
         getRealFilter( rFilter );
 
+        const SfxFilter* pCurrentFilter = getCurentSfxFilter();
+
         // fill the rpURLList
-        implGetAndCacheFiles(mxFileDlg, rpURLList, getCurentSfxFilter());
+        implGetAndCacheFiles( mxFileDlg, rpURLList, pCurrentFilter );
         if ( rpURLList == NULL || rpURLList->GetObject(0) == NULL )
             return ERRCODE_ABORT;
 
         // check, wether or not we have to display a password box
-        if ( mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
+        if ( pCurrentFilter && mbHasPassword && mbIsPwdEnabled && xCtrlAccess.is() )
         {
             try
             {
@@ -1654,18 +1645,38 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                     if( xInteractionHandler.is() )
                     {
                         // TODO: need a save way to distinguish MS filters from other filters
-                        bool bMSType = CheckMSPasswordCapabilityForExport( rFilter );
+                        // for now MS-filters are the only alien filters that support encryption
+                        sal_Bool bMSType = !pCurrentFilter->IsOwnFormat();
                         ::comphelper::DocPasswordRequestType eType = bMSType ?
                             ::comphelper::DocPasswordRequestType_MS :
                             ::comphelper::DocPasswordRequestType_STANDARD;
 
-                        ::comphelper::DocPasswordRequest* pPasswordRequest = new ::comphelper::DocPasswordRequest(
-                            eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)) );
+                        ::rtl::Reference< ::comphelper::DocPasswordRequest > pPasswordRequest( new ::comphelper::DocPasswordRequest( eType, ::com::sun::star::task::PasswordRequestMode_PASSWORD_CREATE, *(rpURLList->GetObject(0)), ( pCurrentFilter->GetFilterFlags() & SFX_FILTER_PASSWORDTOMODIFY ) != 0 ) );
 
-                        uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest );
+                        uno::Reference< com::sun::star::task::XInteractionRequest > rRequest( pPasswordRequest.get() );
                         xInteractionHandler->handle( rRequest );
                         if ( pPasswordRequest->isPassword() )
-                            rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                        {
+                            if ( pPasswordRequest->getPassword().getLength() )
+                                rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+
+                            if ( pPasswordRequest->getRecommendReadOnly() )
+                                rpSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );
+
+                            if ( bMSType )
+                            {
+                                // the empty password has 0 as Hash
+                                sal_Int32 nHash = SfxMedium::CreatePasswordToModifyHash( pPasswordRequest->getPasswordToModify(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ).equals( pCurrentFilter->GetServiceName() ) );
+                                if ( nHash )
+                                    rpSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( nHash ) ) );
+                            }
+                            else
+                            {
+                                uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( pPasswordRequest->getPasswordToModify() );
+                                if ( aModifyPasswordInfo.getLength() )
+                                    rpSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( aModifyPasswordInfo ) ) );
+                            }
+                        }
                         else
                             return ERRCODE_ABORT;
                     }
@@ -2071,6 +2082,21 @@ void FileDialogHelper_Impl::saveConfig()
             }
         }
 
+        if( mbHasSelectionBox && mbSelectionFltrEnabled )
+        {
+            try
+            {
+                aValue = xDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0 );
+                sal_Bool bSelection = sal_True;
+                aValue >>= bSelection;
+                if ( aUserData.GetTokenCount(' ') < 3 )
+                    aUserData.Append(' ');
+                aUserData.SetToken( 2, ' ', String::CreateFromInt32( (sal_Int32) bSelection ) );
+                bWriteConfig = sal_True;
+            }
+            catch( IllegalArgumentException ){}
+        }
+
         if ( bWriteConfig )
             aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( aUserData ) ) );
     }
@@ -2200,6 +2226,17 @@ void FileDialogHelper_Impl::loadConfig()
             try
             {
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION, 0, aValue );
+            }
+            catch( IllegalArgumentException ){}
+        }
+
+        if( mbHasSelectionBox )
+        {
+            sal_Int32 nFlag = aUserData.GetToken( 2, ' ' ).ToInt32();
+            aValue <<= (sal_Bool) nFlag;
+            try
+            {
+                xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, aValue );
             }
             catch( IllegalArgumentException ){}
         }
@@ -2662,10 +2699,12 @@ static int impl_isFolder( const OUString& rPath )
     {
     }
 
+    ::rtl::Reference< ::comphelper::StillReadWriteInteraction > aHandler = new ::comphelper::StillReadWriteInteraction( xHandler );
+
     try
     {
         ::ucbhelper::Content aContent(
-            rPath, new ::ucbhelper::CommandEnvironment( xHandler, uno::Reference< ucb::XProgressHandler >() ) );
+            rPath, new ::ucbhelper::CommandEnvironment( static_cast< task::XInteractionHandler* > ( aHandler.get() ), uno::Reference< ucb::XProgressHandler >() ) );
         if ( aContent.isFolder() )
             return 1;
 

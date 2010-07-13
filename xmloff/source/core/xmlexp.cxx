@@ -387,7 +387,7 @@ void SvXMLExport::_InitCtor()
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OOOC),  GetXMLToken(XML_N_OOOC),    XML_NAMESPACE_OOOC );
         mpNamespaceMap->Add( GetXMLToken(XML_NP_OF),    GetXMLToken(XML_N_OF),      XML_NAMESPACE_OF );
 
-        if (getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+        if (getDefaultVersion() > SvtSaveOptions::ODFVER_012)
         {
             mpNamespaceMap->Add(
                 GetXMLToken(XML_NP_TABLE_EXT), GetXMLToken(XML_N_TABLE_EXT), XML_NAMESPACE_TABLE_EXT);
@@ -2532,6 +2532,22 @@ SvtSaveOptions::ODFDefaultVersion SvXMLExport::getDefaultVersion() const
 ::rtl::OUString SvXMLExport::GetStreamName() const
 {
     return mpImpl->mStreamName;
+}
+
+void
+SvXMLExport::AddAttributeIdLegacy(
+        sal_uInt16 const nLegacyPrefix, ::rtl::OUString const& rValue)
+{
+    switch (getDefaultVersion()) {
+        case SvtSaveOptions::ODFVER_011: // fall thru
+        case SvtSaveOptions::ODFVER_010: break;
+        default: // ODF 1.2: xml:id
+            AddAttribute(XML_NAMESPACE_XML, XML_ID, rValue);
+    }
+    // in ODF 1.1 this was form:id, anim:id, draw:id, or text:id
+    // backward compatibility: in ODF 1.2 write _both_ id attrs
+    AddAttribute(nLegacyPrefix, XML_ID, rValue);
+    // FIXME: this function simply assumes that rValue is unique
 }
 
 void

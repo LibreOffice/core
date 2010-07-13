@@ -280,6 +280,7 @@
 #define HID_SVX_SENDMENU_SIGNANDENCRYPT                       "SVX_HID_SVX_SENDMENU_SIGNANDENCRYPT"
 #define HID_SVX_TP_APPEARANCE                                 "SVX_HID_SVX_TP_APPEARANCE"
 #define HID_SVX_TP_DESKTOP                                    "SVX_HID_SVX_TP_DESKTOP"
+#define HID_CT_THES_ALTERNATIVES                              "SVX_HID_CT_THES_ALTERNATIVES"
 
 #endif
 

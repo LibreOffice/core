@@ -78,19 +78,19 @@ void merge(
         case Node::KIND_LOCALIZED_VALUE:
             break; //TODO: merge certain parts?
         case Node::KIND_GROUP:
-            if (dynamic_cast< GroupNode * >(original.get())->isExtensible()) {
-                for (NodeMap::iterator i2(update->getMembers().begin());
-                     i2 != update->getMembers().end(); ++i2)
-                {
-                    NodeMap::iterator i1(
-                        original->getMembers().find(i2->first));
-                    if (i1 == original->getMembers().end()) {
-                        if (i2->second->kind() == Node::KIND_PROPERTY) {
-                            original->getMembers().insert(*i2);
-                        }
-                    } else if (i2->second->kind() == i1->second->kind()) {
-                        merge(i1->second, i2->second);
+            for (NodeMap::iterator i2(update->getMembers().begin());
+                 i2 != update->getMembers().end(); ++i2)
+            {
+                NodeMap::iterator i1(original->getMembers().find(i2->first));
+                if (i1 == original->getMembers().end()) {
+                    if (i2->second->kind() == Node::KIND_PROPERTY &&
+                        dynamic_cast< GroupNode * >(
+                            original.get())->isExtensible())
+                    {
+                        original->getMembers().insert(*i2);
                     }
+                } else if (i2->second->kind() == i1->second->kind()) {
+                    merge(i1->second, i2->second);
                 }
             }
             break;
@@ -456,7 +456,7 @@ void XcsParser::handleNodeRef(XmlReader & reader) {
              reader.getUrl()),
             css::uno::Reference< css::uno::XInterface >());
     }
-    rtl::Reference< Node > node(tmpl->clone());
+    rtl::Reference< Node > node(tmpl->clone(false));
     node->setLayer(valueParser_.getLayer());
     elements_.push(Element(node, name));
 }

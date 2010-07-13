@@ -41,7 +41,6 @@ dummy:
 .INCLUDE :  settings.mk
 
 SLOFILES=\
-    $(SLO)$/msvbahelper.obj \
     $(SLO)$/vbahelper.obj \
     $(SLO)$/vbapropvalue.obj \
     $(SLO)$/vbacommandbars.obj \
@@ -66,7 +65,6 @@ SLOFILES=\
     $(SLO)$/vbashaperange.obj \
     $(SLO)$/vbatextframe.obj \
     $(SLO)$/vbapagesetupbase.obj \
-
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk

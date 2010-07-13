@@ -43,8 +43,6 @@
 #include <comphelper/processfactory.hxx>
 #include <ucbhelper/content.hxx>
 
-#include <com/sun/star/deployment/thePackageManagerFactory.hpp>
-#include <com/sun/star/deployment/XPackageManagerFactory.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
@@ -52,6 +50,8 @@
 #include <com/sun/star/ucb/NameClash.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/xml/xpath/XXPathAPI.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/deployment/ExtensionManager.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -139,17 +139,7 @@ OO3ExtensionMigration::~OO3ExtensionMigration()
     }
 }
 
-void OO3ExtensionMigration::registerConfigurationPackage( const uno::Reference< deployment::XPackage > & xPkg)
-{
-    const ::rtl::OUString sMediaType = xPkg->getPackageType()->getMediaType();
-    if ( (sMediaType.equals(sConfigurationDataType) || sMediaType.equals(sConfigurationSchemaType) ) )
-    {
-        xPkg->revokePackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
-        xPkg->registerPackage(uno::Reference< task::XAbortChannel >(), uno::Reference< ucb::XCommandEnvironment> ());
-    }
-}
-
- void OO3ExtensionMigration::scanUserExtensions( const ::rtl::OUString& sSourceDir, TStringVector& aMigrateExtensions )
+void OO3ExtensionMigration::scanUserExtensions( const ::rtl::OUString& sSourceDir, TStringVector& aMigrateExtensions )
 {
     osl::Directory    aScanRootDir( sSourceDir );
     osl::FileStatus   fs(FileStatusMask_Type | FileStatusMask_FileURL);
@@ -342,18 +332,17 @@ bool OO3ExtensionMigration::scanDescriptionXml( const ::rtl::OUString& sDescript
 
 bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir )
 {
-    if ( !m_xPackageManager.is() )
+    if ( !m_xExtensionManager.is() )
     {
         try
         {
-            m_xPackageManager = deployment::thePackageManagerFactory::get( m_ctx )->getPackageManager(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "user" )) );
+            m_xExtensionManager = deployment::ExtensionManager::get( m_ctx );
         }
         catch ( ucb::CommandFailedException & ){}
         catch ( uno::RuntimeException & ) {}
     }
 
-    if ( m_xPackageManager.is() )
+    if ( m_xExtensionManager.is() )
     {
         try
         {
@@ -363,7 +352,9 @@ bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir 
                 static_cast< cppu::OWeakObject* >( pCmdEnv ), uno::UNO_QUERY );
             uno::Reference< task::XAbortChannel > xAbortChannel;
             uno::Reference< deployment::XPackage > xPackage =
-                m_xPackageManager->addPackage( sSourceDir, ::rtl::OUString(), xAbortChannel, xCmdEnv );
+                m_xExtensionManager->addExtension(
+                    sSourceDir, uno::Sequence<beans::NamedValue>(),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), xAbortChannel, xCmdEnv );
 
             if ( xPackage.is() )
                 return true;
@@ -380,35 +371,6 @@ bool OO3ExtensionMigration::migrateExtension( const ::rtl::OUString& sSourceDir 
     }
 
     return false;
-}
-
-bool OO3ExtensionMigration::copy( const ::rtl::OUString& sSourceDir, const ::rtl::OUString& sTargetDir )
-{
-    bool bRet = false;
-
-    INetURLObject aSourceObj( sSourceDir );
-    INetURLObject aDestObj( sTargetDir );
-    String aName = aDestObj.getName();
-    aDestObj.removeSegment();
-    aDestObj.setFinalSlash();
-
-    try
-    {
-        ::ucbhelper::Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
-        uno::Reference< ucb::XCommandInfo > xInfo = aDestPath.getCommands();
-        ::rtl::OUString aTransferName = ::rtl::OUString::createFromAscii( "transfer" );
-        if ( xInfo->hasCommandByName( aTransferName ) )
-        {
-            aDestPath.executeCommand( aTransferName, uno::makeAny(
-                ucb::TransferInfo( sal_False, aSourceObj.GetMainURL( INetURLObject::NO_DECODE ), aName, ucb::NameClash::OVERWRITE ) ) );
-            bRet = true;
-        }
-    }
-    catch( uno::Exception& )
-    {
-    }
-
-    return bRet;
 }
 
 
@@ -496,32 +458,6 @@ TStringVectorPtr getContent( const ::rtl::OUString& rBaseURL )
     return aResult;
 }
 
-// -----------------------------------------------------------------------------
-// XJob
-// -----------------------------------------------------------------------------
-
-void OO3ExtensionMigration::copyConfig( const ::rtl::OUString& sSourceDir, const ::rtl::OUString& sTargetDir )
-{
-    ::rtl::OUString sEx1( m_sSourceDir );
-    sEx1 += sExcludeDir1;
-    ::rtl::OUString sEx2( m_sSourceDir );
-    sEx2 += sExcludeDir2;
-
-    TStringVectorPtr aList = getContent( sSourceDir );
-    TStringVector::const_iterator aI = aList->begin();
-    while ( aI != aList->end() )
-    {
-        ::rtl::OUString sSourceLocalName = aI->copy( sSourceDir.getLength() );
-        ::rtl::OUString aTemp = aI->copy( m_sSourceDir.getLength() );
-        if ( aTemp != sExcludeDir1 && aTemp != sExcludeDir2 )
-        {
-            ::rtl::OUString sTargetName = sTargetDir + sSourceLocalName;
-            copy( (*aI), sTargetName );
-        }
-        ++aI;
-    }
-}
-
 Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
     throw (lang::IllegalArgumentException, Exception, RuntimeException)
 {
@@ -556,12 +492,6 @@ Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
 // -----------------------------------------------------------------------------
 
 TmpRepositoryCommandEnv::TmpRepositoryCommandEnv()
-{
-}
-
-TmpRepositoryCommandEnv::TmpRepositoryCommandEnv(
-    uno::Reference< task::XInteractionHandler> const & handler)
-    : m_forwardHandler(handler)
 {
 }
 

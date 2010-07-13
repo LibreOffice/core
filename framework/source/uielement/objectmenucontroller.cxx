@@ -59,6 +59,7 @@
 #include <tools/urlobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <dispatch/uieventloghelper.hxx>
+#include <vos/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -83,7 +84,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   ObjectMenuController                
 DEFINE_INIT_SERVICE                     (   ObjectMenuController, {} )
 
 ObjectMenuController::ObjectMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    PopupMenuControllerBase( xServiceManager )
+    svt::PopupMenuControllerBase( xServiceManager )
 {
 }
 
@@ -128,7 +129,7 @@ void SAL_CALL ObjectMenuController::disposing( const EventObject& ) throw ( Runt
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xObjectUpdateDispatch.clear();
@@ -145,7 +146,7 @@ void SAL_CALL ObjectMenuController::statusChanged( const FeatureStateEvent& Even
     Sequence < com::sun::star::embed::VerbDescriptor > aVerbCommandSeq;
     if ( Event.State >>= aVerbCommandSeq )
     {
-        ResetableGuard aLock( m_aLock );
+        osl::MutexGuard aLock( m_aMutex );
         if ( m_xPopupMenu.is() )
             fillPopupMenu( aVerbCommandSeq, m_xPopupMenu );
     }

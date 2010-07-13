@@ -92,6 +92,9 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
         virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
 
         // XUIElement
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL getFrame() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::rtl::OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
+        virtual ::sal_Int16 SAL_CALL getType() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException) = 0;
 
     //-------------------------------------------------------------------------------------------------------------

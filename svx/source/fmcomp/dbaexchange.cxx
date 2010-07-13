@@ -135,30 +135,19 @@ namespace svx
         {
             try
             {
-                // need a query composer for this
-                Reference< XSQLQueryComposerFactory > xComposerFac;
-                _rxForm->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xComposerFac;
-                Reference< XSQLQueryComposer > xComposer;
-                if (xComposerFac.is())
-                    xComposer = xComposerFac->createQueryComposer();
+                Reference< XTablesSupplier > xSupTab;
+                _rxForm->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SingleSelectQueryComposer"))) >>= xSupTab;
 
-                if (xComposer.is())
+                if(xSupTab.is())
                 {
-                    ::rtl::OUString sActiveCommand;
-                    _rxForm->getPropertyValue(FM_PROP_ACTIVECOMMAND) >>= sActiveCommand;
-                    xComposer->setQuery(sActiveCommand);
-                    Reference< XTablesSupplier > xSupTab(xComposer, UNO_QUERY);
-                    if(xSupTab.is())
+                    Reference< XNameAccess > xNames = xSupTab->getTables();
+                    if (xNames.is())
                     {
-                        Reference< XNameAccess > xNames = xSupTab->getTables();
-                        if (xNames.is())
+                        Sequence< ::rtl::OUString > aTables = xNames->getElementNames();
+                        if (1 == aTables.getLength())
                         {
-                            Sequence< ::rtl::OUString > aTables = xNames->getElementNames();
-                            if (1 == aTables.getLength())
-                            {
-                                sCommand        = aTables[0];
-                                nCommandType    = CommandType::TABLE;
-                            }
+                            sCommand        = aTables[0];
+                            nCommandType    = CommandType::TABLE;
                         }
                     }
                 }
@@ -457,34 +446,10 @@ namespace svx
         String sObjectKind = (CommandType::TABLE == nObjectType) ? String('1') : String('0');
 
         // check if the SQL-statement is modified
-        sal_Bool bHasFilterOrSort(sal_False);
         ::rtl::OUString sCompleteStatement;
         try
         {
-            ::rtl::OUString sFilter, sSort;
-            if (::cppu::any2bool(_rxLivingForm->getPropertyValue(FM_PROP_APPLYFILTER)))
-                _rxLivingForm->getPropertyValue(FM_PROP_FILTER) >>= sFilter;
-            _rxLivingForm->getPropertyValue(FM_PROP_SORT) >>= sSort;
-            bHasFilterOrSort = (sFilter.getLength()>0) || (sSort.getLength()>0);
-
             _rxLivingForm->getPropertyValue(FM_PROP_ACTIVECOMMAND) >>= sCompleteStatement;
-
-            // create a composer
-            Reference< XSQLQueryComposerFactory > xFactory( xConnection, UNO_QUERY );
-            Reference< XSQLQueryComposer > xComposer;
-            if (xFactory.is())
-                xComposer = xFactory->createQueryComposer();
-
-            // let the composer compose
-            if (xComposer.is())
-            {
-                xComposer->setQuery(sCompleteStatement);
-                xComposer->setFilter(sFilter);
-                xComposer->setOrder(sSort);
-                sCompleteStatement = xComposer->getComposedQuery();
-            }
-            // Usually, I would expect the result of the composing to be the same as the ActiveCommand property
-            // But this code here is pretty old, and I don't know wha the side effects are if I remove it now ...
         }
         catch(Exception&)
         {
@@ -496,7 +461,7 @@ namespace svx
                     ,sConnectionResource
                     ,nObjectType
                     ,sObjectName,xConnection
-                    ,!((CommandType::QUERY == nObjectType) && !bHasFilterOrSort)
+                    ,!((CommandType::QUERY == nObjectType))
                     ,sCompleteStatement);
     }
 

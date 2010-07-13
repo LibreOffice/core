@@ -395,7 +395,8 @@ void XcuParser::handleItem(XmlReader & reader) {
     rtl::OUString path(xmldata::convertFromUtf8(attrPath));
     int finalizedLayer;
     rtl::Reference< Node > node(
-        data_.resolvePathRepresentation(path, &path_, &finalizedLayer));
+        data_.resolvePathRepresentation(
+            path, 0, &path_, &finalizedLayer));
     if (!node.is()) {
         OSL_TRACE(
             "configmgr unknown item %s in %s",
@@ -1056,7 +1057,7 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
         if (state_.top().locked || finalizedLayer < valueParser_.getLayer()) {
             state_.push(State(true)); // ignored
         } else {
-            rtl::Reference< Node > member(tmpl->clone());
+            rtl::Reference< Node > member(tmpl->clone(true));
             member->setLayer(valueParser_.getLayer());
             member->setFinalized(finalizedLayer);
             member->setMandatory(mandatoryLayer);
@@ -1070,7 +1071,7 @@ void XcuParser::handleSetNode(XmlReader & reader, SetNode * set) {
             {
                 state_.push(State(true)); // ignored
             } else {
-                rtl::Reference< Node > member(tmpl->clone());
+                rtl::Reference< Node > member(tmpl->clone(true));
                 member->setLayer(valueParser_.getLayer());
                 member->setFinalized(finalizedLayer);
                 member->setMandatory(mandatoryLayer);

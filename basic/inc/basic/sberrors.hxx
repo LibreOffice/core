@@ -287,6 +287,8 @@ typedef ULONG SbError;
 #define ERRCODE_BASIC_LOOP_NOT_INIT         ((LAST_SBX_ERROR_ID+109UL) | ERRCODE_AREA_SBX | \
                                             ERRCODE_CLASS_COMPILER)             // For loop not initialized
 
+#define ERRCODE_BASIC_COMPAT                ((LAST_SBX_ERROR_ID+103UL)| ERRCODE_AREA_SBX | ERRCODE_CLASS_RUNTIME)
+
 // Map old codes to new codes
 #define SbERR_SYNTAX                        ERRCODE_BASIC_SYNTAX
 #define SbERR_NO_GOSUB                      ERRCODE_BASIC_NO_GOSUB
@@ -410,6 +412,7 @@ typedef ULONG SbError;
 #define SbERR_PROG_TOO_LARGE                ERRCODE_BASIC_PROG_TOO_LARGE
 #define SbERR_NO_STRINGS_ARRAYS             ERRCODE_BASIC_NO_STRINGS_ARRAYS
 #define SbERR_BASIC_EXCEPTION               ERRCODE_BASIC_EXCEPTION
+#define SbERR_BASIC_COMPAT                  ERRCODE_BASIC_COMPAT
 #define SbERR_BASIC_ARRAY_FIX               ERRCODE_BASIC_ARRAY_FIX
 #define SbERR_BASIC_STRING_OVERFLOW         ERRCODE_BASIC_STRING_OVERFLOW
 #define SbERR_BASIC_EXPR_TOO_COMPLEX        ERRCODE_BASIC_EXPR_TOO_COMPLEX

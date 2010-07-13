@@ -31,9 +31,7 @@
 #include <basic/sbdef.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
-#ifndef _RTL_USTRING_HXX
 #include <rtl/ustring.hxx>
-#endif
 
 class SbMethod;
 class SbProperty;
@@ -42,6 +40,7 @@ class SbiBreakpoints;
 class SbiImage;
 class SbProcedureProperty;
 class SbIfaceMapperMethod;
+class SbClassModuleObject;
 
 struct SbClassData;
 class SbModuleImpl;
@@ -63,6 +62,10 @@ protected:
     SbiImage*           pImage;        // the Image
     SbiBreakpoints*     pBreaks;       // Breakpoints
     SbClassData*        pClassData;
+    BOOL mbVBACompat;
+    INT32 mnType;
+    SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
+    bool    bIsProxyModule;
 
     void            StartDefinitions();
     SbMethod*       GetMethod( const String&, SbxDataType );
@@ -87,7 +90,7 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
     TYPEINFO();
-                    SbModule( const String& );
+                    SbModule( const String&, BOOL bCompat = FALSE );
     virtual void    SetParent( SbxObject* );
     virtual void    Clear();
 
@@ -123,6 +126,12 @@ public:
     BOOL LoadBinaryData( SvStream& );
     BOOL ExceedsLegacyModuleSize();
     void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
+    BOOL IsVBACompat() const;
+    void SetVBACompat( BOOL bCompat );
+    INT32 GetModuleType() { return mnType; }
+    void SetModuleType( INT32 nType ) { mnType = nType; }
+    bool GetIsProxyModule() { return bIsProxyModule; }
+    bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
 };
 
 #ifndef __SB_SBMODULEREF_HXX

@@ -47,7 +47,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/awt/MenuItemStyle.hpp>
 #include <com/sun/star/util/XStringWidth.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -64,6 +63,7 @@
 #include <osl/file.hxx>
 //#include <tools/solar.hrc>
 #include <dispatch/uieventloghelper.hxx>
+#include <vos/mutex.hxx>
 
 //_________________________________________________________________________________________________________________
 //  Defines
@@ -105,7 +105,7 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   RecentFilesMenuController           
 DEFINE_INIT_SERVICE                     (   RecentFilesMenuController, {} )
 
 RecentFilesMenuController::RecentFilesMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    PopupMenuControllerBase( xServiceManager ),
+    svt::PopupMenuControllerBase( xServiceManager ),
     m_bDisabled( sal_False )
 {
 }
@@ -245,11 +245,11 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
     Reference< XDispatchProvider >    xDispatchProvider;
     Reference< XMultiServiceFactory > xServiceManager;
 
-    ResetableGuard aLock( m_aLock );
+    osl::ClearableMutexGuard aLock( m_aMutex );
     xPopupMenu          = m_xPopupMenu;
     xDispatchProvider   = Reference< XDispatchProvider >( m_xFrame, UNO_QUERY );
     xServiceManager     = m_xServiceManager;
-    aLock.unlock();
+    aLock.clear();
 
     css::util::URL            aTargetURL;
     Sequence< PropertyValue > aArgsList;
@@ -312,7 +312,7 @@ void SAL_CALL RecentFilesMenuController::disposing( const EventObject& ) throw (
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
 
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     m_xFrame.clear();
     m_xDispatch.clear();
     m_xServiceManager.clear();
@@ -325,7 +325,7 @@ void SAL_CALL RecentFilesMenuController::disposing( const EventObject& ) throw (
 // XStatusListener
 void SAL_CALL RecentFilesMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     m_bDisabled = !Event.IsEnabled;
 }
 
@@ -336,11 +336,11 @@ void SAL_CALL RecentFilesMenuController::select( const css::awt::MenuEvent& rEve
     Reference< XDispatchProvider >    xDispatchProvider;
     Reference< XMultiServiceFactory > xServiceManager;
 
-    ResetableGuard aLock( m_aLock );
+    osl::ClearableMutexGuard aLock( m_aMutex );
     xPopupMenu          = m_xPopupMenu;
     xDispatchProvider   = Reference< XDispatchProvider >( m_xFrame, UNO_QUERY );
     xServiceManager     = m_xServiceManager;
-    aLock.unlock();
+    aLock.clear();
 
     css::util::URL aTargetURL;
     Sequence< PropertyValue > aArgsList;
@@ -355,7 +355,7 @@ void SAL_CALL RecentFilesMenuController::select( const css::awt::MenuEvent& rEve
 
 void SAL_CALL RecentFilesMenuController::activate( const css::awt::MenuEvent& ) throw (RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
     impl_setPopupMenu();
 }
 
@@ -368,17 +368,16 @@ void RecentFilesMenuController::impl_setPopupMenu()
 
 void SAL_CALL RecentFilesMenuController::updatePopupMenu() throw (RuntimeException)
 {
-    ResetableGuard aLock( m_aLock );
+    osl::ClearableMutexGuard aLock( m_aMutex );
 
-    if ( m_bDisposed )
-        throw DisposedException();
+    throwIfDisposed();
 
     Reference< XStatusListener > xStatusListener( static_cast< OWeakObject* >( this ), UNO_QUERY );
     Reference< XDispatch > xDispatch( m_xDispatch );
     com::sun::star::util::URL aTargetURL;
     aTargetURL.Complete = m_aCommandURL;
     m_xURLTransformer->parseStrict( aTargetURL );
-    aLock.unlock();
+    aLock.clear();
 
     // Add/remove status listener to get a status update once
     if ( xDispatch.is() )
@@ -395,10 +394,9 @@ Reference< XDispatch > SAL_CALL RecentFilesMenuController::queryDispatch(
     sal_Int32 /*nFlags*/ )
 throw( RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
 
-    if ( m_bDisposed )
-        throw DisposedException();
+    throwIfDisposed();
 
     if ( aURL.Complete.indexOf( m_aBaseURL ) == 0 )
         return Reference< XDispatch >( static_cast< OWeakObject* >( this ), UNO_QUERY );
@@ -412,10 +410,9 @@ void SAL_CALL RecentFilesMenuController::dispatch(
     const Sequence< PropertyValue >& /*seqProperties*/ )
 throw( RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
 
-    if ( m_bDisposed )
-        throw DisposedException();
+    throwIfDisposed();
 
     if ( aURL.Complete.indexOf( m_aBaseURL ) == 0 )
     {
@@ -448,12 +445,11 @@ void SAL_CALL RecentFilesMenuController::addStatusListener(
     const URL& aURL )
 throw( RuntimeException )
 {
-    ResetableGuard aLock( m_aLock );
+    osl::MutexGuard aLock( m_aMutex );
 
-    if ( m_bDisposed )
-        throw DisposedException();
+    throwIfDisposed();
 
-    PopupMenuControllerBase::addStatusListener( xControl, aURL );
+    svt::PopupMenuControllerBase::addStatusListener( xControl, aURL );
 }
 
 void SAL_CALL RecentFilesMenuController::removeStatusListener(
@@ -461,7 +457,7 @@ void SAL_CALL RecentFilesMenuController::removeStatusListener(
     const URL& aURL )
 throw( RuntimeException )
 {
-    PopupMenuControllerBase::removeStatusListener( xControl, aURL );
+    svt::PopupMenuControllerBase::removeStatusListener( xControl, aURL );
 }
 
 IMPL_STATIC_LINK_NOINSTANCE( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile*, pLoadRecentFile )

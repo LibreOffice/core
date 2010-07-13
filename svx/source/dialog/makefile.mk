@@ -74,6 +74,7 @@ SRC2FILES =  \
 LIB1TARGET=$(SLB)$/$(TARGET)-core.lib
 
 LIB1OBJFILES= \
+        $(SLO)$/checklbx.obj \
         $(SLO)$/dialmgr.obj\
         $(SLO)$/dlgutil.obj \
         $(SLO)$/framelink.obj\
@@ -86,7 +87,6 @@ LIB2TARGET=$(SLB)$/$(TARGET).lib
 
 LIB2OBJFILES= \
         $(SLO)$/charmap.obj \
-        $(SLO)$/checklbx.obj \
         $(SLO)$/connctrl.obj \
         $(SLO)$/contwnd.obj \
         $(SLO)$/ctredlin.obj \

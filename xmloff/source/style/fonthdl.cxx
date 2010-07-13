@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 #include <fonthdl.hxx>
-#endif
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <rtl/ustrbuf.hxx>

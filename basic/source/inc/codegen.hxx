@@ -44,6 +44,7 @@ class SbiCodeGen {              // Code-Erzeugung:
 public:
     SbiCodeGen( SbModule&, SbiParser*, short );
     SbiParser* GetParser() { return pParser; }
+    SbModule& GetModule() { return rMod; }
     UINT32 Gen( SbiOpcode );
     UINT32 Gen( SbiOpcode, UINT32 );
     UINT32 Gen( SbiOpcode, UINT32, UINT32 );

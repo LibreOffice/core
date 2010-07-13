@@ -27,7 +27,7 @@
 #include "vbacommandbarcontrol.hxx"
 #include "vbacommandbarcontrols.hxx"
 #include <vbahelper/vbahelper.hxx>
-#include <vbahelper/msvbahelper.hxx>
+#include <filter/msfilter/msvbahelper.hxx>
 
 using namespace com::sun::star;
 using namespace ooo::vba;
@@ -138,6 +138,22 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeExcep
     {
         // emulated with Visible
         setVisible( _enabled );
+    }
+}
+
+::sal_Bool SAL_CALL
+ScVbaCommandBarControl::getBeginGroup() throw (css::uno::RuntimeException)
+{
+    // TODO: need to check if the item before this item is of type 'separator'
+    return sal_False;
+}
+
+void SAL_CALL
+ScVbaCommandBarControl::setBeginGroup( ::sal_Bool _begin ) throw (css::uno::RuntimeException)
+{
+    if( getBeginGroup() != _begin )
+    {
+        // TODO: need to insert or remove an item of type 'separator' before this item
     }
 }
 

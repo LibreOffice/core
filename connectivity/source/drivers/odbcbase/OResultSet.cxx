@@ -162,7 +162,7 @@ OResultSet::OResultSet(SQLHANDLE _pStatementHandle ,OStatement_Base* pStmt) :   
 // -------------------------------------------------------------------------
 OResultSet::~OResultSet()
 {
-    delete m_pRowStatusArray;
+    delete [] m_pRowStatusArray;
     delete m_pSkipDeletedSet;
 }
 // -----------------------------------------------------------------------------

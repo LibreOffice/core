@@ -119,7 +119,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::xmloff::token;
 using ::com::sun::star::util::DateTime;
 using namespace ::com::sun::star::ucb;
-
+using namespace ::com::sun::star;
 using ::comphelper::UStringLess;
 
 
@@ -343,11 +343,11 @@ static __FAR_DATA SvXMLTokenMapEntry aTextPAttrTokenMap[] =
     { XML_NAMESPACE_XHTML, XML_PROPERTY,    XML_TOK_TEXT_P_PROPERTY },
     { XML_NAMESPACE_XHTML, XML_CONTENT,     XML_TOK_TEXT_P_CONTENT },
     { XML_NAMESPACE_XHTML, XML_DATATYPE,    XML_TOK_TEXT_P_DATATYPE },
+    { XML_NAMESPACE_TEXT, XML_ID,           XML_TOK_TEXT_P_TEXTID },
     { XML_NAMESPACE_TEXT, XML_STYLE_NAME,   XML_TOK_TEXT_P_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_COND_STYLE_NAME,
                                             XML_TOK_TEXT_P_COND_STYLE_NAME },
     { XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL,XML_TOK_TEXT_P_LEVEL },
-    { XML_NAMESPACE_TEXT, XML_ID,           XML_TOK_TEXT_P_ID },
     { XML_NAMESPACE_TEXT, XML_IS_LIST_HEADER,XML_TOK_TEXT_P_IS_LIST_HEADER },
     { XML_NAMESPACE_TEXT, XML_RESTART_NUMBERING,XML_TOK_TEXT_P_RESTART_NUMBERING },
     { XML_NAMESPACE_TEXT, XML_START_VALUE,XML_TOK_TEXT_P_START_VALUE },
@@ -1823,8 +1823,28 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     Reference<XTextContent> xTextContent(xTmp, UNO_QUERY);
                     if (m_pImpl->m_xText.is() && xRange.is())
                     {
-                        m_pImpl->m_xText->insertTextContent(
-                            xRange, xTextContent, sal_True);
+                        // #i107225# the combined characters need to be inserted first
+                        // the selected text has to be removed afterwards
+                        m_pImpl->m_xText->insertTextContent( xRange->getStart(), xTextContent, sal_True );
+
+                        if( xRange->getString().getLength() )
+                        {
+                            try
+                            {
+                                uno::Reference< text::XTextCursor > xCrsr = xRange->getText()->createTextCursorByRange( xRange->getStart() );
+                                xCrsr->goLeft( 1, true );
+                                uno::Reference< beans::XPropertySet> xCrsrProperties( xCrsr, uno::UNO_QUERY_THROW );
+                                //the hard properties of the removed text need to be applied to the combined characters field
+                                pStyle->FillPropertySet( xCrsrProperties );
+                                xCrsr->collapseToEnd();
+                                xCrsr->gotoRange( xRange->getEnd(), true );
+                                xCrsr->setString( ::rtl::OUString() );
+                            }
+                            catch( const uno::Exception& rEx )
+                            {
+                                (void)rEx;
+                            }
+                        }
                     }
                 }
             }
