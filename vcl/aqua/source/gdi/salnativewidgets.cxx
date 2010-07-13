@@ -962,17 +962,19 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             //first, last or middle tab
             aTabItemDrawInfo.position=kHIThemeTabPositionMiddle;
 
-            TabitemValue *aTabValue=(TabitemValue *) aValue.getOptionalVal();
-            unsigned int nAlignement=aTabValue->mnAlignment;
+            TabitemValue* pTabValue = (TabitemValue *) aValue.getOptionalVal();
+            unsigned int nAlignment = pTabValue->mnAlignment;
             //TABITEM_LEFTALIGNED (and TABITEM_RIGHTALIGNED) for the leftmost (or rightmost) tab
             //when there are several lines of tabs because there is only one first tab and one
             //last tab and TABITEM_FIRST_IN_GROUP (and TABITEM_LAST_IN_GROUP) because when the
             //line width is different from window width, there may not be TABITEM_RIGHTALIGNED
-            if((nAlignement & TABITEM_LEFTALIGNED)&&(nAlignement & TABITEM_RIGHTALIGNED)) //tab alone
+            if( ( (nAlignment & TABITEM_LEFTALIGNED)&&(nAlignment & TABITEM_RIGHTALIGNED) ) ||
+                ( (nAlignment & TABITEM_FIRST_IN_GROUP)&&(nAlignment & TABITEM_LAST_IN_GROUP) )
+               ) //tab alone
                 aTabItemDrawInfo.position=kHIThemeTabPositionOnly;
-            else if((nAlignement & TABITEM_LEFTALIGNED)||(nAlignement & TABITEM_FIRST_IN_GROUP))
+            else if((nAlignment & TABITEM_LEFTALIGNED)||(nAlignment & TABITEM_FIRST_IN_GROUP))
                 aTabItemDrawInfo.position=kHIThemeTabPositionFirst;
-            else if((nAlignement & TABITEM_RIGHTALIGNED)||(nAlignement & TABITEM_LAST_IN_GROUP))
+            else if((nAlignment & TABITEM_RIGHTALIGNED)||(nAlignment & TABITEM_LAST_IN_GROUP))
                 aTabItemDrawInfo.position=kHIThemeTabPositionLast;
 
             //support for RTL
