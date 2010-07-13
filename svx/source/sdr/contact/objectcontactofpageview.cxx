@@ -241,7 +241,7 @@ namespace sdr
                 aViewRange,
                 GetXDrawPageForSdrPage(GetSdrPage()),
                 fCurrentTime,
-                0);
+                uno::Sequence<beans::PropertyValue>());
             updateViewInformation2D(aNewViewInformation2D);
 
             // get whole Primitive2DSequence; this will already make use of updated ViewInformation2D

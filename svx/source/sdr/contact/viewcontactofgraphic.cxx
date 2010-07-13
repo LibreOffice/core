@@ -296,7 +296,7 @@ namespace sdr
 
                     // decompose immediately with neutral ViewInformation. This will
                     // layout the text to more simple TextPrimitives from drawinglayer
-                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
                     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
                         xRetval,
