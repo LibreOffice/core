@@ -846,7 +846,7 @@ function writeBatFile(fdir, file)
 		"REM if exist \"%OO_SDK_HOME%\\windows\\lib\\stlport_vc71_stldebug.lib\". (\n" +
 		"REM   set STLDEBUG=_stldebug\n" +
 		"REM )\n\n" +
-        "REM Check installation path for the StarOffice Development Kit.\n" +
+        "REM Check installation path for the Office Development Kit.\n" +
         "if not defined OO_SDK_HOME (\n" +
         "   echo Error: the variable OO_SDK_HOME is missing!\n" +
         "   goto :error\n" +

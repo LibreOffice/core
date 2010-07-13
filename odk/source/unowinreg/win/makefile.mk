@@ -42,7 +42,6 @@ USE_DEFFILE=TRUE
 JAVA_INCLUDES:= -I$(JAVA_HOME)/include
 
 # values taken from set_soenv.in
-.IF "$(JDK)" != "gcj"
 .IF "$(OS)" == "LINUX"
 JAVA_INCLUDES+= -I$(JAVA_HOME)/include/linux
 .ELIF "$(OS)" == "FREEBSD"
@@ -51,7 +50,6 @@ JAVA_INCLUDES+= -I$(JAVA_HOME)/include/bsd
 JAVA_INCLUDES+= -I$(JAVA_HOME)/include/linux
 .ELIF "$(OS)" == "NETBSD"
 JAVA_INCLUDES+= -I$(JAVA_HOME)/include/netbsd
-.ENDIF
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"==""

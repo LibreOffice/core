@@ -443,12 +443,12 @@ SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
 
-SALDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_sal.dylib.3:$(OO_SDK_URE_LIB_DIR)/libuno_sal.dylib
-CPPUDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppu.dylib.3:$(OO_SDK_URE_LIB_DIR)/libuno_cppu.dylib
-CPPUHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3:$(OO_SDK_URE_LIB_DIR)/libuno_cppuhelper$(COMID).dylib
-SALHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3:$(OO_SDK_URE_LIB_DIR)/libuno_salhelper$(COMID).dylib
-REGDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libreg.dylib.3:$(OO_SDK_URE_LIB_DIR)/libreg.dylib
-STOREDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libstore.dylib.3:$(OO_SDK_URE_LIB_DIR)/libstore.dylib
+SALDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_sal.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_sal.dylib'
+CPPUDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppu.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_cppu.dylib'
+CPPUHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_cppuhelper'$(COMID).dylib.3:$(OO_SDK_URE_LIB_DIR)/libuno_cppuhelper$(COMID).dylib'
+SALHELPERDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3:'$(OO_SDK_URE_LIB_DIR)/libuno_salhelper$(COMID).dylib'
+REGDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libreg.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libreg.dylib'
+STOREDYLIB=-Wl,-dylib_file,@__________________________________________________URELIB/libstore.dylib.3:'$(OO_SDK_URE_LIB_DIR)/libstore.dylib'
 
 INSTALL_NAME_URELIBS=install_name_tool -change @__________________________________________________URELIB/libuno_sal.dylib.3 @executable_path/urelibs/libuno_sal.dylib.3 -change  @__________________________________________________URELIB/libuno_cppu.dylib.3 @executable_path/urelibs/libuno_cppu.dylib.3 -change @__________________________________________________URELIB/libuno_cppuhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_cppuhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libuno_salhelper$(COMID).dylib.3 @executable_path/urelibs/libuno_salhelper$(COMID).dylib.3 -change @__________________________________________________URELIB/libreg.dylib.3 @executable_path/urelibs/libreg.dylib.3 -change @__________________________________________________URELIB/libstore.dylib.3 @executable_path/urelibs/libstore.dylib.3
 
@@ -498,13 +498,37 @@ ifneq (,$(findstring freebsd,$(PLATFORM)))
 
 PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 
-# Default is freebsd on a intel machine    
+ifeq (kfreebsd,$(findstring kfreebsd,$(PLATFORM)))
+PLATFORM=kfreebsd
+ifeq "$(PROCTYPE)" "x86_64"
+PACKAGE_LIB_DIR=kfreebsd_x86_64.plt
+UNOPKG_PLATFORM=kFreeBSD_x86_64
+else
+PACKAGE_LIB_DIR=kfreebsd_x86.plt
+UNOPKG_PLATFORM=kFreeBSD_x86
+endif
+else
 PLATFORM=freebsd
+ifeq "$(PROCTYPE)" "x86_64"
+PACKAGE_LIB_DIR=freebsd_x86_64.plt
+UNOPKG_PLATFORM=FreeBSD_x86_64
+else
 PACKAGE_LIB_DIR=freebsd_x86.plt
 UNOPKG_PLATFORM=FreeBSD_x86
-JAVA_PROC_TYPE=i386
+endif
+endif
 
+ifeq "$(PROCTYPE)" "x86_64"
+JAVA_PROC_TYPE=amd64
+else
+JAVA_PROC_TYPE=i386
+endif
+
+ifeq (kfreebsd,$(findstring kfreebsd,$(PLATFORM)))
+OS=LINUX
+else
 OS=FREEBSD
+endif
 PS=/
 ICL=\$$
 CC=gcc
@@ -520,13 +544,8 @@ SHAREDLIB_OUT=$(OUT_LIB)
 
 GCC_VERSION=$(shell $(CC) -dumpversion)
 
-ifeq "$(shell echo $(GCC_VERSION) | cut -c 1)" "3"
 COMID=gcc3
 CPPU_ENV=gcc3
-else
-COMID=GCC
-CPPU_ENV=gcc2
-endif
 
 OSEP=\<
 CSEP=\>

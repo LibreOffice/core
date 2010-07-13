@@ -37,6 +37,7 @@ if ( $main::operatingSystem =~ m/darwin/ )
 } else {
     $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../../ure && pwd`;
 }
+chomp($main::OO_SDK_URE_HOME);
 
 $main::OO_SDK_MAKE_HOME = "";
 $main::makeName = "make";
@@ -625,6 +626,9 @@ sub searchMacOffice
     if (-d "/Applications/OpenOffice.org.app" ) {
         return "/Applications/OpenOffice.org.app"
     }
+    if (-d "/Applications/Oracle Open Office.app" ) {
+        return "/Applications/Oracle Open Office.app";
+    }
     if (-d "/Applications/StarOffice.app" ) {
         return "/Applications/StarOffice.app";
     }
@@ -650,6 +654,16 @@ sub searchoffice
         return $officepath;
     }
     # fallback
+    my $tmpversion = $main::OO_MAJORVERSION;
+#   if ( $main::OO_MINORVERSION > 0) {
+#       $tmpversion = "$tmpversion.$main::OO_MINORVERSION";
+#   }
+
+    $officepath = "$tmpOffice/oracle_open_office$tmpversion";
+    if (-d $officepath && -e "$officepath/program/soffice") {
+        return $officepath;
+    }
+
     my $tmpversion = $main::OO_MAJORVERSION + 6;
     if ( $main::OO_MINORVERSION > 0) {
         $tmpversion = "$tmpversion.$main::OO_MINORVERSION";
