@@ -1055,7 +1055,7 @@ void SwPagePreViewWin::Command( const CommandEvent& rCEvt )
             if( pData )
             {
                 const CommandWheelData aDataNew(pData->GetDelta(),pData->GetNotchDelta(),COMMAND_WHEEL_PAGESCROLL,
-                    pData->GetMode(),pData->GetModifier(),pData->IsHorz());
+                    pData->GetMode(),pData->GetModifier(),pData->IsHorz(), pData->IsDeltaPixel());
                 const CommandEvent aEvent( rCEvt.GetMousePosPixel(),rCEvt.GetCommand(),rCEvt.IsMouseEvent(),&aDataNew);
                     bCallBase = !mrView.HandleWheelCommands( aEvent );
             }

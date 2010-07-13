@@ -34,9 +34,9 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-#define PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D              (PRIMITIVE2D_ID_RANGE_SW| 0)
-#define PRIMITIVE2D_ID_SWPOSTITANKORPRIMITIVE                   (PRIMITIVE2D_ID_RANGE_SW| 1)
-#define PRIMITIVE2D_ID_SWPOSTITSHADOWPRIMITIVE                  (PRIMITIVE2D_ID_RANGE_SW| 2)
+#define PRIMITIVE2D_ID_SWVIRTFLYDRAWOBJPRIMITIVE2D  (PRIMITIVE2D_ID_RANGE_SW| 0)
+#define PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE     (PRIMITIVE2D_ID_RANGE_SW| 1)
+#define PRIMITIVE2D_ID_SWSIDEBARSHADOWPRIMITIVE     (PRIMITIVE2D_ID_RANGE_SW| 2)
 
 //////////////////////////////////////////////////////////////////////////////
 

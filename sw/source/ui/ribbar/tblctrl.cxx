@@ -36,7 +36,6 @@
 
 #include "cmdid.h"
 #include "swtypes.hxx"
-#include "tbxmgr.hxx"
 #include "tblctrl.hxx"
 #include "tblctrl.hrc"
 

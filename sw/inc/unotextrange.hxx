@@ -60,12 +60,12 @@ class SwUnoInternalPaM
 
 private:
     SwUnoInternalPaM(const SwUnoInternalPaM&);
-    SwUnoInternalPaM& operator=(const SwPaM& rPaM);
 
 public:
     SwUnoInternalPaM(SwDoc& rDoc);
     virtual ~SwUnoInternalPaM();
 
+    SwUnoInternalPaM& operator=(const SwPaM& rPaM);
 };
 
 

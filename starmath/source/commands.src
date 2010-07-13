@@ -223,6 +223,7 @@ String RID_LEFTARROW        { Text = "leftarrow " ; };
 String RID_RIGHTARROW       { Text = "rightarrow " ; };
 String RID_UPARROW          { Text = "uparrow " ; };
 String RID_DOWNARROW        { Text = "downarrow " ; };
+String RID_NOSPACE          { Text = "nospace {<?>} " ; };
 
 
 //////////////////////////////////////////
@@ -1324,6 +1325,12 @@ Menu RID_COMMANDMENU
                         Identifier = RID_BLANK;
                         HelpId = HID_SMA_BLANK;
                         Text [ en-US ] = "Gap";
+                    };
+                    MenuItem
+                    {
+                        Identifier = RID_NOSPACE;
+                        HelpId = HID_SMA_NOSPACE;
+                        Text [ en-US ] = "nospace {...}";
                     };
                     MenuItem
                     {

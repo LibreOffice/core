@@ -90,7 +90,6 @@ class SwAccessiblePortionData : public SwPortionHandler
     sal_Bool IsPortionAttrSet( size_t nPortionNo, sal_uInt8 nAttr ) const;
     sal_Bool IsSpecialPortion( size_t nPortionNo ) const;
     sal_Bool IsReadOnlyPortion( size_t nPortionNo ) const;
-    sal_Bool IsGrayPortion( size_t nPortionNo ) const;
     sal_Bool IsGrayPortionType( USHORT nType ) const;
 
     // helper method for GetEditableRange(...):

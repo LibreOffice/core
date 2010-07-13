@@ -55,6 +55,7 @@
 #include <editeng/langitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <svtools/xwindowitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -125,7 +126,6 @@
 #include <dbmgr.hxx>
 
 #include <PostItMgr.hxx>
-#include <postit.hxx>
 
 #include <ndtxt.hxx> //#outline level,added by zhaojianwei
 
@@ -539,11 +539,12 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     // xmlsec05:    new password dialog
                     Window* pParent;
                     const SfxPoolItem* pParentItem;
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                        pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                        pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
                     else
                         pParent = &GetViewFrame()->GetWindow();
                     SfxPasswordDialog aPasswdDlg( pParent );
+                    aPasswdDlg.SetMinLen( 1 );
                     //#i69751# the result of Execute() can be ignored
                     aPasswdDlg.Execute();
                     String sNewPasswd( aPasswdDlg.GetPassword() );
@@ -575,11 +576,12 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             //              message box for wrong password
             Window* pParent;
             const SfxPoolItem* pParentItem;
-            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
             else
                 pParent = &GetViewFrame()->GetWindow();
             SfxPasswordDialog aPasswdDlg( pParent );
+            aPasswdDlg.SetMinLen( 1 );
             if(!aPasswd.getLength())
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
             if (aPasswdDlg.Execute())
@@ -1369,12 +1371,12 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                 {
                                     ASSERT( !this,
                                         "was ist das fuer ein Verzeichnis?" );
-                                    sStr = pCurrSect->GetName();
+                                    sStr = pCurrSect->GetSectionName();
                                 }
                             }
                             break;
                         default:
-                            sStr = pCurrSect->GetName();
+                            sStr = pCurrSect->GetSectionName();
                             break;
                         }
                     }
@@ -1760,8 +1762,10 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         break;
         case SID_ATTR_INSERT:
             SwPostItMgr* pMgr = GetPostItMgr();
-            if (pMgr && pMgr->GetActivePostIt())
-                pMgr->GetActivePostIt()->ToggleInsMode();
+            if ( pMgr && pMgr->HasActiveSidebarWin() )
+            {
+                pMgr->ToggleInsModeOnActiveSidebarWin();
+            }
             else
                 rSh.ToggleInsMode();
             bUp = TRUE;
@@ -1775,9 +1779,6 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
         rBnd.Update(nWhich);
     }
 }
-
-
-
 
 void SwView::InsFrmMode(USHORT nCols)
 {

@@ -28,95 +28,141 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <accfrmobjmap.hxx>
+#include <accframe.hxx>
+#include <accmap.hxx>
+#include <acccontext.hxx>
 
+#include <viewsh.hxx>
 #include <doc.hxx>
 #include <frmfmt.hxx>
 #include <pagefrm.hxx>
 #include <txtfrm.hxx>
 #include <node.hxx>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
 
-#ifndef _ACCFFRMOBJMAP_HXX
-#include <accfrmobjmap.hxx>
-#endif
+#include <svx/svdobj.hxx>
 
-::std::pair< SwFrmOrObjMap::iterator, bool > SwFrmOrObjMap::insert(
-        sal_uInt32 nPos, const SwFrmOrObj& rLower )
+using namespace sw::access;
+
+SwAccessibleChildMap::SwAccessibleChildMap( const SwRect& rVisArea,
+                                            const SwFrm& rFrm,
+                                            SwAccessibleMap& rAccMap )
+    : nHellId( rAccMap.GetShell()->GetDoc()->GetHellId() )
+    , nControlsId( rAccMap.GetShell()->GetDoc()->GetControlsId() )
 {
-    SwFrmOrObjMapKey aKey( SwFrmOrObjMapKey::TEXT, nPos );
-    value_type aEntry( aKey, rLower );
-    return _SwFrmOrObjMap::insert( aEntry );
-}
-
-::std::pair< SwFrmOrObjMap::iterator, bool > SwFrmOrObjMap::insert(
-        const SdrObject *pObj, const SwFrmOrObj& rLower, const SwDoc *pDoc )
-{
-    if( !bLayerIdsValid )
-    {
-        nHellId = pDoc->GetHellId();
-        nControlsId = pDoc->GetControlsId();
-        bLayerIdsValid = sal_True;
-    }
-
-    SdrLayerID nLayer = pObj->GetLayer();
-    SwFrmOrObjMapKey::LayerId eLayerId = (nHellId == nLayer)
-                    ? SwFrmOrObjMapKey::HELL
-                    : ((nControlsId == nLayer) ? SwFrmOrObjMapKey::CONTROLS
-                                               : SwFrmOrObjMapKey::HEAVEN);
-    SwFrmOrObjMapKey aKey( eLayerId, pObj->GetOrdNum() );
-    value_type aEntry( aKey, rLower );
-    return _SwFrmOrObjMap::insert( aEntry );
-}
-
-SwFrmOrObjMap::SwFrmOrObjMap(
-        const SwRect& rVisArea, const SwFrm *pFrm ) :
-    bLayerIdsValid( sal_False )
-{
-    SwFrmOrObj aFrm( pFrm );
-    sal_Bool bVisibleOnly = aFrm.IsVisibleChildrenOnly();
+    const bool bVisibleChildrenOnly = SwAccessibleChild( &rFrm ).IsVisibleChildrenOnly();
 
     sal_uInt32 nPos = 0;
-    SwFrmOrObj aLower( pFrm->GetLower() );
+    SwAccessibleChild aLower( rFrm.GetLower() );
     while( aLower.GetSwFrm() )
     {
-        if( !bVisibleOnly || aLower.GetBox().IsOver( rVisArea ) )
-            insert( nPos++, aLower );
+        if ( !bVisibleChildrenOnly ||
+             aLower.AlwaysIncludeAsChild() ||
+             aLower.GetBox( rAccMap ).IsOver( rVisArea ) )
+        {
+            insert( nPos++, SwAccessibleChildMapKey::TEXT, aLower );
+        }
 
         aLower = aLower.GetSwFrm()->GetNext();
     }
 
-    if( pFrm->IsPageFrm() )
+    if ( rFrm.IsPageFrm() )
     {
-        ASSERT( bVisibleOnly, "page frame within tab frame???" );
+        ASSERT( bVisibleChildrenOnly, "page frame within tab frame???" );
         const SwPageFrm *pPgFrm =
-            static_cast< const SwPageFrm * >( pFrm );
+            static_cast< const SwPageFrm * >( &rFrm );
         const SwSortedObjs *pObjs = pPgFrm->GetSortedObjs();
-        if( pObjs )
+        if ( pObjs )
         {
-            const SwDoc *pDoc = pPgFrm->GetFmt()->GetDoc();
             for( sal_uInt16 i=0; i<pObjs->Count(); i++ )
             {
                 aLower = (*pObjs)[i]->GetDrawObj();
-                if( aLower.GetBox().IsOver( rVisArea ) )
-                    insert( aLower.GetSdrObject(), aLower, pDoc );
+                if ( aLower.GetBox( rAccMap ).IsOver( rVisArea ) )
+                {
+                    insert( aLower.GetDrawObject(), aLower );
+                }
             }
         }
     }
-    else if( pFrm->IsTxtFrm() )
+    else if( rFrm.IsTxtFrm() )
     {
-        const SwDoc *pDoc = static_cast< const SwTxtFrm * >( pFrm )->GetNode()
-                                                                   ->GetDoc();
-        const SwSortedObjs *pObjs = pFrm->GetDrawObjs();
-        if( pObjs )
+        const SwSortedObjs *pObjs = rFrm.GetDrawObjs();
+        if ( pObjs )
         {
             for( sal_uInt16 i=0; i<pObjs->Count(); i++ )
             {
                 aLower = (*pObjs)[i]->GetDrawObj();
-                if( aLower.IsBoundAsChar() &&
-                    (!bVisibleOnly || aLower.GetBox().IsOver( rVisArea )) )
-                    insert( aLower.GetSdrObject(), aLower, pDoc );
+                if ( aLower.IsBoundAsChar() &&
+                     ( !bVisibleChildrenOnly ||
+                       aLower.AlwaysIncludeAsChild() ||
+                       aLower.GetBox( rAccMap ).IsOver( rVisArea ) ) )
+                {
+                    insert( aLower.GetDrawObject(), aLower );
+                }
+            }
+        }
+
+        {
+            ::vos::ORef < SwAccessibleContext > xAccImpl =
+                                rAccMap.GetContextImpl( &rFrm, sal_False );
+            if( xAccImpl.isValid() )
+            {
+                SwAccessibleContext* pAccImpl = xAccImpl.getBodyPtr();
+                if ( pAccImpl &&
+                     pAccImpl->HasAdditionalAccessibleChildren() )
+                {
+                    std::vector< Window* >* pAdditionalChildren =
+                                                new std::vector< Window* >();
+                    pAccImpl->GetAdditionalAccessibleChildren( pAdditionalChildren );
+
+                    sal_Int32 nCounter( 0 );
+                    for ( std::vector< Window* >::iterator aIter = pAdditionalChildren->begin();
+                          aIter != pAdditionalChildren->end();
+                          ++aIter )
+                    {
+                        aLower = (*aIter);
+                        insert( ++nCounter, SwAccessibleChildMapKey::XWINDOW, aLower );
+                    }
+
+                    delete pAdditionalChildren;
+                }
             }
         }
     }
+}
+
+::std::pair< SwAccessibleChildMap::iterator, bool > SwAccessibleChildMap::insert(
+                                                const sal_uInt32 nPos,
+                                                const SwAccessibleChildMapKey::LayerId eLayerId,
+                                                const SwAccessibleChild& rLower )
+{
+    SwAccessibleChildMapKey aKey( eLayerId, nPos );
+    value_type aEntry( aKey, rLower );
+    return _SwAccessibleChildMap::insert( aEntry );
+}
+
+::std::pair< SwAccessibleChildMap::iterator, bool > SwAccessibleChildMap::insert(
+                                                const SdrObject *pObj,
+                                                const SwAccessibleChild& rLower )
+{
+    const SdrLayerID nLayer = pObj->GetLayer();
+    SwAccessibleChildMapKey::LayerId eLayerId =
+                    (nHellId == nLayer)
+                    ? SwAccessibleChildMapKey::HELL
+                    : ( (nControlsId == nLayer)
+                        ? SwAccessibleChildMapKey::CONTROLS
+                        : SwAccessibleChildMapKey::HEAVEN );
+    SwAccessibleChildMapKey aKey( eLayerId, pObj->GetOrdNum() );
+    value_type aEntry( aKey, rLower );
+    return _SwAccessibleChildMap::insert( aEntry );
+}
+
+/* static */ sal_Bool SwAccessibleChildMap::IsSortingRequired( const SwFrm& rFrm )
+{
+    return ( rFrm.IsPageFrm() &&
+             static_cast< const SwPageFrm& >( rFrm ).GetSortedObjs() ) ||
+           ( rFrm.IsTxtFrm() &&
+             rFrm.GetDrawObjs() );
 }

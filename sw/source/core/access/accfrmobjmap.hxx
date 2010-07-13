@@ -26,79 +26,71 @@
  ************************************************************************/
 #ifndef _ACCFRMOBJMAP_HXX
 #define _ACCFRMOBJMAP_HXX
+
 #include <accfrmobj.hxx>
+
+#include <svx/svdtypes.hxx>
 
 #include <map>
 
+class SwAccessibleMap;
 class SwDoc;
+class SwRect;
+class SwFrm;
+class SdrObject;
 
-class SwFrmOrObjMapKey
+class SwAccessibleChildMapKey
 {
 public:
-    enum LayerId { INVALID, HELL, TEXT, HEAVEN, CONTROLS };
+    enum LayerId { INVALID, HELL, TEXT, HEAVEN, CONTROLS, XWINDOW };
+
+    inline SwAccessibleChildMapKey()
+        : eLayerId( INVALID )
+        , nOrdNum( 0 )
+    {}
+
+    inline SwAccessibleChildMapKey( LayerId eId, sal_uInt32 nOrd )
+        : eLayerId( eId )
+        , nOrdNum( nOrd )
+    {}
+
+    inline bool operator()( const SwAccessibleChildMapKey& r1,
+                            const SwAccessibleChildMapKey& r2 ) const
+    {
+        return (r1.eLayerId == r2.eLayerId)
+               ? (r1.nOrdNum < r2.nOrdNum)
+               : (r1.eLayerId < r2.eLayerId);
+    }
+
 private:
 
     LayerId eLayerId;
     sal_uInt32 nOrdNum;
 
-public:
-
-    inline SwFrmOrObjMapKey();
-    inline SwFrmOrObjMapKey( LayerId eId, sal_uInt32 nOrd );
-
-    inline sal_Bool operator()( const SwFrmOrObjMapKey& r1,
-                                 const SwFrmOrObjMapKey& r2 ) const;
 };
 
-typedef ::std::map < SwFrmOrObjMapKey, SwFrmOrObj, SwFrmOrObjMapKey >
-    _SwFrmOrObjMap;
+typedef ::std::map < SwAccessibleChildMapKey, sw::access::SwAccessibleChild, SwAccessibleChildMapKey >
+    _SwAccessibleChildMap;
 
-class SwFrmOrObjMap : public _SwFrmOrObjMap
+class SwAccessibleChildMap : public _SwAccessibleChildMap
 {
-    SdrLayerID nHellId;
-    SdrLayerID nControlsId;
-    sal_Bool bLayerIdsValid;
+    const SdrLayerID nHellId;
+    const SdrLayerID nControlsId;
 
-    ::std::pair< iterator, bool > insert( sal_uInt32 nPos,
-                                          const SwFrmOrObj& rLower );
-    ::std::pair< iterator, bool > insert( const SdrObject *pObj,
-                                              const SwFrmOrObj& rLower,
-                                             const SwDoc *pDoc  );
+    ::std::pair< iterator, bool > insert( const sal_uInt32 nPos,
+                                          const SwAccessibleChildMapKey::LayerId eLayerId,
+                                          const sw::access::SwAccessibleChild& rLower );
+    ::std::pair< iterator, bool > insert( const SdrObject* pObj,
+                                          const sw::access::SwAccessibleChild& rLower );
 
 public:
 
-    SwFrmOrObjMap( const SwRect& rVisArea, const SwFrm *pFrm );
+    SwAccessibleChildMap( const SwRect& rVisArea,
+                          const SwFrm& rFrm,
+                          SwAccessibleMap& rAccMap );
 
-    inline static sal_Bool IsSortingRequired( const SwFrm *pFrm );
+    static sal_Bool IsSortingRequired( const SwFrm& rFrm );
 };
-
-inline SwFrmOrObjMapKey::SwFrmOrObjMapKey() :
-    eLayerId( INVALID ),
-    nOrdNum( 0 )
-{
-}
-
-inline SwFrmOrObjMapKey::SwFrmOrObjMapKey(
-        LayerId eId, sal_uInt32 nOrd ) :
-    eLayerId( eId ),
-    nOrdNum( nOrd )
-{
-}
-
-inline sal_Bool SwFrmOrObjMapKey::operator()(
-        const SwFrmOrObjMapKey& r1,
-        const SwFrmOrObjMapKey& r2 ) const
-{
-    return (r1.eLayerId == r2.eLayerId) ? (r1.nOrdNum < r2.nOrdNum) :
-           (r1.eLayerId < r2.eLayerId);
-}
-
-inline sal_Bool SwFrmOrObjMap::IsSortingRequired( const SwFrm *pFrm )
-{
-    return ( pFrm->IsPageFrm() &&
-             static_cast< const SwPageFrm * >( pFrm )->GetSortedObjs() ) ||
-            (pFrm->IsTxtFrm() && pFrm->GetDrawObjs() );
-}
 
 #endif
 

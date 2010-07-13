@@ -31,14 +31,10 @@
 
 #include <hintids.hxx>
 
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <editeng/lrspitem.hxx>
 #include <editeng/scripttypeitem.hxx>
-#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
-#endif
 #include <txatbase.hxx>
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
@@ -230,8 +226,8 @@ BOOL SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
     if( !pTxtNd )
         return FALSE;
 
-    SwTxtAttr *pFtn = pTxtNd->GetTxtAttr( pCrsr->GetPoint()->nContent,
-                                            RES_TXTATR_FTN );
+    SwTxtAttr *const pFtn = pTxtNd->GetTxtAttrForCharAt(
+        pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
     if( pFtn && pFillFtn )
     {
         // Daten vom Attribut uebertragen
@@ -461,7 +457,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
                 const SwField* const pFld = pAttr->GetFld().GetFld();
                 if (pFld)
                 {
-                    sExp += pFld->Expand();
+                    sExp += pFld->ExpandField(rTNd.GetDoc()->IsClipBoard());
                 }
             }
         }

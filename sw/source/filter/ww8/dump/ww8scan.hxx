@@ -297,8 +297,7 @@ class WW8PLCFx              // virtueller Iterator fuer Piece Table Exceptions
 public:
     WW8PLCFx( BYTE nFibVersion, BOOL bSprm )
         { bIsSprm = bSprm; nVersion = nFibVersion; }
-
-//  virtual ~WW8PLCFx() {}
+    virtual ~WW8PLCFx() {}
     BOOL IsSprm() { return bIsSprm; }
     virtual ULONG GetIdx() const = 0;
     virtual void SetIdx( ULONG nIdx ) = 0;

@@ -28,85 +28,84 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <hintids.hxx>
+#include "SwRewriter.hxx"
+#include "chrdlg.hrc"
+#include "cmdid.h"
+#include "comcore.hrc"
+#include "crsskip.hxx"
+#include "doc.hxx"
+#include "docsh.hxx"        //CheckSpellChanges
+#include "edtwin.hxx"
+#include "helpid.h"
+#include "hintids.hxx"
+#include "langhelper.hxx"
+#include "ndtxt.hxx"
+#include "olmenu.hrc"
+#include "olmenu.hxx"
+#include "swabstdlg.hxx"
+#include "swmodule.hxx"
+#include "swtypes.hxx"
+#include "swundo.hxx"
+#include "uitool.hxx"
+#include "undobj.hxx"
+#include "unomid.h"
+#include "view.hxx"
+#include "viewopt.hxx"
+#include "wrtsh.hxx"
+#include "wview.hxx"
+#include "swabstdlg.hxx"
+#include "chrdlg.hrc"
+
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 #endif
-#include <unotools/lingucfg.hxx>
-#include <unotools/linguprops.hxx>
-#include <svtools/filter.hxx>
-#include <editeng/svxacorr.hxx>
-#include <sfx2/dispatch.hxx>
-#include <sfx2/imagemgr.hxx>
-#include <osl/file.hxx>
-#include <rtl/string.hxx>
 
+#include <comphelper/processfactory.hxx>
+#include <editeng/acorrcfg.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/splwrap.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/unolingu.hxx>
 #include <i18npool/mslangid.hxx>
 #include <linguistic/lngprops.hxx>
 #include <linguistic/misc.hxx>
-#include <comphelper/processfactory.hxx>
-#include <editeng/unolingu.hxx>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
-#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
-#include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <osl/file.hxx>
+#include <rtl/string.hxx>
+#include <svtools/filter.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/imagemgr.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/sfxdlg.hxx>
+#include <svl/itemset.hxx>
+#include <svl/languageoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svtools/filter.hxx>
+#include <svtools/langtab.hxx>
+#include <svx/dlgutil.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/svapp.hxx>
+
+#include <map>
+
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/ScriptType.hpp>
-#include <svx/dlgutil.hxx>
-#include <svl/itemset.hxx>
-#include <editeng/langitem.hxx>
-#include <editeng/splwrap.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/settings.hxx>
-#include <unotools/lingucfg.hxx>
-#include <editeng/acorrcfg.hxx>
-#include <swmodule.hxx>
-#include <cmdid.h>
-#include <helpid.h>
-#include <swtypes.hxx>
-#include <wrtsh.hxx>
-#include <view.hxx>
-#include <docsh.hxx>        //CheckSpellChanges
-#include <olmenu.hxx>
-#include <swundo.hxx>
-#include <crsskip.hxx>
-#include <ndtxt.hxx>
-#include <olmenu.hrc>
-#include <doc.hxx>
-
-// -> #111827#
-#include <SwRewriter.hxx>
-#include <comcore.hrc>
-#include <undobj.hxx>
-// <- #111827#
-
-#include <unomid.h>
-#include <svl/languageoptions.hxx>
-#include <map>
-#include <svtools/langtab.hxx>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
-#include <edtwin.hxx>
-#include <sfx2/sfxdlg.hxx>
-#include "swabstdlg.hxx"
-#include "chrdlg.hrc"
-#include <editeng/brshitem.hxx>
-#include <svl/stritem.hxx>
-#include <viewopt.hxx>
-#include <uitool.hxx>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/linguistic2/SingleProofreadingError.hpp>
+#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
+#include <com/sun/star/linguistic2/XSpellChecker1.hpp>
+#include <com/sun/star/uno/Any.hxx>
 
-#include <wview.hxx>
-#include <sfx2/request.hxx>
-
-#include <vcl/msgbox.hxx>
-
-#include <langhelper.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -214,63 +213,59 @@ inline bool lcl_checkScriptType( sal_Int16 nScriptType, LanguageType nLang )
     return 0 != (nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
 }
 
-USHORT SwSpellPopup::fillLangPopupMenu(
+void SwSpellPopup::fillLangPopupMenu(
     PopupMenu *pPopupMenu,
-    USHORT Lang_Start,
-    uno::Sequence< ::rtl::OUString > aSeq,
+    USHORT nLangItemIdStart,
+    uno::Sequence< OUString > aSeq,
     SwWrtShell* pWrtSh,
-    USHORT nLangTable )
+    std::map< sal_Int16, ::rtl::OUString > &rLangTable )
 {
     if (!pPopupMenu)
-        return 0;
-
-    //Reference< awt::XMenuExtended > m_xMenuExtended( m_xPopupMenu, UNO_QUERY );
-    std::map< ::rtl::OUString, ::rtl::OUString > LangItems;
+        return;
 
     SvtLanguageTable    aLanguageTable;
-    USHORT nItemId              = Lang_Start;
-    rtl::OUString curLang       = aSeq[0];
-    USHORT nScriptType          = static_cast< sal_Int16 >(aSeq[1].toInt32());
-    rtl::OUString keyboardLang  = aSeq[2];
-    rtl::OUString guessLang     = aSeq[3];
 
-    //1--add current language
-    if(curLang!=OUString::createFromAscii(""))
-    {
-        LangItems[curLang]=curLang;
-    }
+    // set of languages to be displayed in the sub menus
+    std::set< OUString > aLangItems;
 
-    SvtLanguageTable aLangTable;
+    OUString    aCurLang( aSeq[0] );
+    USHORT      nScriptType = static_cast< sal_Int16 >(aSeq[1].toInt32());
+    OUString    aKeyboardLang( aSeq[2] );
+    OUString    aGuessedTextLang( aSeq[3] );
+
+    if (aCurLang != OUString() &&
+        LANGUAGE_DONTKNOW != aLanguageTable.GetType( aCurLang ))
+        aLangItems.insert( aCurLang );
+
     //2--System
-    const AllSettings& rAllSettings=Application::GetSettings();
+    const AllSettings& rAllSettings = Application::GetSettings();
     LanguageType rSystemLanguage = rAllSettings.GetLanguage();
-    if(rSystemLanguage!=LANGUAGE_DONTKNOW)
+    if (rSystemLanguage != LANGUAGE_DONTKNOW)
     {
-        if (lcl_checkScriptType(nScriptType,rSystemLanguage ))
-            LangItems[OUString(aLangTable.GetString(rSystemLanguage))]=OUString(aLangTable.GetString(rSystemLanguage));
+        if (lcl_checkScriptType( nScriptType, rSystemLanguage ))
+            aLangItems.insert( aLanguageTable.GetString(rSystemLanguage) );
     }
 
     //3--UI
     LanguageType rUILanguage = rAllSettings.GetUILanguage();
-    if(rUILanguage!=LANGUAGE_DONTKNOW)
+    if (rUILanguage != LANGUAGE_DONTKNOW)
     {
         if (lcl_checkScriptType(nScriptType, rUILanguage ))
-            LangItems[OUString(aLangTable.GetString(rUILanguage))]=OUString(aLangTable.GetString(rUILanguage));
+            aLangItems.insert( aLanguageTable.GetString(rUILanguage) );
     }
 
     //4--guessed language
-    if(guessLang!=OUString::createFromAscii(""))
+    if (aGuessedTextLang.getLength() > 0)
     {
-        if (lcl_checkScriptType(nScriptType, aLanguageTable.GetType(guessLang)))
-            LangItems[guessLang]=guessLang;
+        if (lcl_checkScriptType(nScriptType, aLanguageTable.GetType(aGuessedTextLang)))
+            aLangItems.insert( aGuessedTextLang );
     }
 
-
     //5--keyboard language
-    if(keyboardLang!=OUString::createFromAscii(""))
+    if (aKeyboardLang.getLength() > 0)
     {
-        if (lcl_checkScriptType(nScriptType, aLanguageTable.GetType(keyboardLang)))
-            LangItems[keyboardLang]=keyboardLang;
+        if (lcl_checkScriptType(nScriptType, aLanguageTable.GetType(aKeyboardLang)))
+            aLangItems.insert( aKeyboardLang );
     }
 
     //6--all languages used in current document
@@ -278,68 +273,57 @@ USHORT SwSpellPopup::fillLangPopupMenu(
     uno::Reference< com::sun::star::frame::XController > xController( pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController(), uno::UNO_QUERY );
     if ( xController.is() )
         xModel = xController->getModel();
-
     uno::Reference< document::XDocumentLanguages > xDocumentLanguages( xModel, uno::UNO_QUERY );
-    /*the description of nScriptType
-      LATIN : 1
-      ASIAN : 2
-      COMPLEX:4
-      LATIN  + ASIAN : 3
-      LATIN  + COMPLEX : 5
-      ASIAN + COMPLEX : 6
-      LATIN + ASIAN + COMPLEX : 7
+    /*the description of nScriptType flags
+      LATIN :   0x0001
+      ASIAN :   0x0002
+      COMPLEX:  0x0004
     */
-
-    sal_Int16 nCount=7;
-    if(xDocumentLanguages.is())
+    const sal_Int16 nMaxCount = 7;
+    if (xDocumentLanguages.is())
     {
-        uno::Sequence< lang::Locale > rLocales(xDocumentLanguages->getDocumentLanguages(nScriptType,nCount));
-        if(rLocales.getLength()>0)
+        uno::Sequence< lang::Locale > rLocales( xDocumentLanguages->getDocumentLanguages( nScriptType, nMaxCount ) );
+        if (rLocales.getLength() > 0)
         {
-            for(USHORT i = 0; i<rLocales.getLength();++i)
+            for (USHORT i = 0; i < rLocales.getLength(); ++i)
             {
-                if (LangItems.size()==7)
+                if (aLangItems.size() == (size_t)nMaxCount)
                     break;
-                const lang::Locale& rLocale=rLocales[i];
-                if(lcl_checkScriptType(nScriptType, aLanguageTable.GetType(rLocale.Language)))
-                    LangItems[ rtl::OUString(rLocale.Language)]=OUString(rLocale.Language);
+                const lang::Locale& rLocale = rLocales[i];
+                if (lcl_checkScriptType( nScriptType, aLanguageTable.GetType( rLocale.Language )))
+                    aLangItems.insert( rLocale.Language );
             }
         }
     }
 
-    for (std::map< rtl::OUString, rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it)
-    {
-        rtl::OUString aEntryTxt( it->first );
-        if (aEntryTxt != rtl::OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
-            aEntryTxt != rtl::OUString::createFromAscii("*") &&
-            aEntryTxt.getLength() > 0)
-        {
-            ++nItemId;
-            if (nLangTable == 0)        // language for selection
-                aLangTable_Text[nItemId]      = aEntryTxt;
-            else if (nLangTable == 1)   // language for paragraph
-                aLangTable_Paragraph[nItemId] = aEntryTxt;
-            else if (nLangTable == 2)   // language for document
-                aLangTable_Document[nItemId]  = aEntryTxt;
 
+    USHORT nItemId = nLangItemIdStart;
+    const OUString sAsterix(RTL_CONSTASCII_USTRINGPARAM("*"));  // multiple languages in current selection
+    const OUString sEmpty;  // 'no language found' from language guessing
+    std::set< OUString >::const_iterator it;
+    for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
+    {
+        OUString aEntryTxt( *it );
+        if (aEntryTxt != OUString( aLanguageTable.GetString( LANGUAGE_NONE ) )&&
+            aEntryTxt != sAsterix &&
+            aEntryTxt != sEmpty)
+        {
+            DBG_ASSERT( nLangItemIdStart <= nItemId && nItemId <= nLangItemIdStart + MN_MAX_NUM_LANG,
+                    "nItemId outside of expected range!" );
             pPopupMenu->InsertItem( nItemId, aEntryTxt, MIB_RADIOCHECK );
-            if (aEntryTxt == curLang)
+            if (aEntryTxt == aCurLang)
             {
                 //make a check mark for the current language
                 pPopupMenu->CheckItem( nItemId, TRUE );
             }
+            rLangTable[ nItemId ] = aEntryTxt;
+            ++nItemId;
         }
     }
 
-    //7--none
-    nItemId++;
-    pPopupMenu->InsertItem( nItemId, String(SW_RES( STR_LANGSTATUS_NONE )), MIB_RADIOCHECK );
-
-    //More...
-    nItemId++;
-    pPopupMenu->InsertItem( nItemId, String(SW_RES( STR_LANGSTATUS_MORE )), MIB_RADIOCHECK );
-
-    return nItemId - Lang_Start;    // return number of inserted entries
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_NONE_OFFSET,  String(SW_RES( STR_LANGSTATUS_NONE )), MIB_RADIOCHECK );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_RESET_OFFSET, String(SW_RES( STR_RESET_TO_DEFAULT_LANGUAGE )), MIB_RADIOCHECK );
+    pPopupMenu->InsertItem( nLangItemIdStart + MN_MORE_OFFSET,  String(SW_RES( STR_LANGSTATUS_MORE )), MIB_RADIOCHECK );
 }
 
 
@@ -362,22 +346,22 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
 }
 
 
-::rtl::OUString RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL )
+OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
 {
-    ::rtl::OUString aLabel;
+    OUString aLabel;
     if ( aCmdURL.getLength() )
     {
         try
         {
-            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+            uno::Reference< container::XNameAccess > xNameAccess( ::comphelper::getProcessServiceFactory()->createInstance( OUString::createFromAscii("com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
             if ( xNameAccess.is() )
             {
                 uno::Reference< container::XNameAccess > xUICommandLabels;
-                const ::rtl::OUString aModule( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) );
+                const OUString aModule( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) );
                 uno::Any a = xNameAccess->getByName( aModule );
                 uno::Reference< container::XNameAccess > xUICommands;
                 a >>= xUICommandLabels;
-                rtl::OUString aStr;
+                OUString aStr;
                 uno::Sequence< beans::PropertyValue > aPropSeq;
                 a = xUICommandLabels->getByName( aCmdURL );
                 if ( a >>= aPropSeq )
@@ -442,25 +426,28 @@ bGrammarResults(false)
 
         InsertSeparator(0);
         bEnable = sal_True;
-        for( sal_uInt16 i = 0, nPos = 1, nId = MN_AUTOCORR_START + 1;
-            i < nStringCount; ++i, ++nPos, ++nId )
+        USHORT nAutoCorrItemId  = MN_AUTOCORR_START;
+        USHORT nItemId          = MN_SUGGESTION_START;
+        for (USHORT i = 0; i < nStringCount; ++i)
         {
             const String aEntry = aSuggestions[ i ];
-            InsertItem( nPos, aEntry, 0, i );
-            SetHelpId( nPos, HID_LINGU_REPLACE);
-
+            InsertItem( nItemId, aEntry, 0, i );
+            SetHelpId( nItemId, HID_LINGU_REPLACE);
             if (aSuggestionImageUrl.getLength() > 0)
-                SetItemImage( nPos, aImage );
+                SetItemImage( nItemId, aImage );
 
-            pMenu->InsertItem( nId, aEntry );
-            pMenu->SetHelpId( nPos, HID_LINGU_AUTOCORR);
+            pMenu->InsertItem( nAutoCorrItemId, aEntry );
+            pMenu->SetHelpId( nAutoCorrItemId, HID_LINGU_AUTOCORR);
+
+            ++nAutoCorrItemId;
+            ++nItemId;
         }
     }
 
     OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( C2U(".uno:SpellingAndGrammarDialog") );
-    SetItemText( MN_SPELLING, aSpellingAndGrammar );
-    USHORT nItemPos = GetItemPos( MN_IGNORE );
+    SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
+    USHORT nItemPos = GetItemPos( MN_IGNORE_WORD );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
     SetHelpId( MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
 
@@ -483,11 +470,9 @@ bGrammarResults(false)
             nGuessLangPara = nGuessLangWord;
     }
 
-    pMenu = GetPopupMenu(MN_INSERT);
-
-    bEnable = FALSE;    // enable MN_INSERT?
-
+    pMenu = GetPopupMenu(MN_ADD_TO_DIC);
     pMenu->CreateAutoMnemonics();
+    bEnable = FALSE;    // enable MN_ADD_TO_DIC?
     uno::Reference< linguistic2::XDictionaryList >    xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
     {
@@ -502,6 +487,7 @@ bGrammarResults(false)
         const uno::Reference< linguistic2::XDictionary >  *pDic = aDics.getConstArray();
         USHORT nDicCount = static_cast< USHORT >(aDics.getLength());
 
+        USHORT nItemId = MN_DICTIONARIES_START;
         for( USHORT i = 0; i < nDicCount; i++ )
         {
             uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
@@ -517,8 +503,7 @@ bGrammarResults(false)
             {
                 // the extra 1 is because of the (possible) external
                 // linguistic entry above
-                USHORT nPos = MN_INSERT_START + i + 1;
-                pMenu->InsertItem( nPos, xDicTmp->getName() );
+                pMenu->InsertItem( nItemId, xDicTmp->getName() );
                 bEnable = sal_True;
 
                 uno::Reference< lang::XServiceInfo > xSvcInfo( xDicTmp, uno::UNO_QUERY );
@@ -529,18 +514,20 @@ bGrammarResults(false)
                     if (aDictionaryImageUrl.getLength() > 0)
                     {
                         Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
-                        pMenu->SetItemImage( nPos, aImage );
+                        pMenu->SetItemImage( nItemId, aImage );
                     }
                 }
+
+                ++nItemId;
             }
         }
     }
-    EnableItem( MN_INSERT, bEnable );
+    EnableItem( MN_ADD_TO_DIC, bEnable );
 
     //ADD NEW LANGUAGE MENU ITEM
     ///////////////////////////////////////////////////////////////////////////
     String aScriptTypesInUse( String::CreateFromInt32( pWrtSh->GetScriptType() ) );
-    SvtLanguageTable aLangTable;
+    SvtLanguageTable aLanguageTable;
 
     // get keyboard language
     String aKeyboardLang;
@@ -548,39 +535,40 @@ bGrammarResults(false)
     SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
     nLang = rEditWin.GetInputLanguage();
     if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
-        aKeyboardLang = aLangTable.GetString( nLang );
+        aKeyboardLang = aLanguageTable.GetString( nLang );
 
     // get the language that is in use
     const String aMultipleLanguages = String::CreateFromAscii("*");
     String aCurrentLang = aMultipleLanguages;
     nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
-        aCurrentLang = aLangTable.GetString( nLang );
+        aCurrentLang = aLanguageTable.GetString( nLang );
 
     // build sequence for status value
-    uno::Sequence< ::rtl::OUString > aSeq( 4 );
+    uno::Sequence< OUString > aSeq( 4 );
     aSeq[0] = aCurrentLang;
     aSeq[1] = aScriptTypesInUse;
     aSeq[2] = aKeyboardLang;
-    aSeq[3] = aLangTable.GetString(nGuessLangWord);
+    aSeq[3] = aLanguageTable.GetString(nGuessLangWord);
 
-    pMenu = GetPopupMenu(MN_LANGUAGE_SELECTION);
-    nNumLanguageTextEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_SELECTION_START, aSeq, pWrtSh, 0 );
-    EnableItem( MN_LANGUAGE_SELECTION, true );
+    pMenu = GetPopupMenu(MN_SET_LANGUAGE_SELECTION);
+    fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_SELECTION_START, aSeq, pWrtSh, aLangTable_Text );
+    EnableItem( MN_SET_LANGUAGE_SELECTION, true );
 
-    pMenu = GetPopupMenu(MN_LANGUAGE_PARAGRAPH);
-    nNumLanguageParaEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_PARAGRAPH_START, aSeq, pWrtSh, 1 );
-    EnableItem( MN_LANGUAGE_PARAGRAPH, true );
+    pMenu = GetPopupMenu(MN_SET_LANGUAGE_PARAGRAPH);
+    fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_PARAGRAPH_START, aSeq, pWrtSh, aLangTable_Paragraph );
+    EnableItem( MN_SET_LANGUAGE_PARAGRAPH, true );
 /*
-    pMenu = GetPopupMenu(MN_LANGUAGE_ALL_TEXT);
-    nNumLanguageDocEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, 2 );
-    EnableItem( MN_LANGUAGE_ALL_TEXT, true );
+    pMenu = GetPopupMenu(MN_SET_LANGUAGE_ALL_TEXT);
+    fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, aLangTable_Document );
+    EnableItem( MN_SET_LANGUAGE_ALL_TEXT, true );
 */
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
-            ::rtl::OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
+            OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
-    SetItemImage( MN_SPELLING, rImg );
+    SetItemImage( MN_SPELLING_DLG, rImg );
+
     //////////////////////////////////////////////////////////////////////////////////
 
     RemoveDisabledEntries( TRUE, TRUE );
@@ -595,7 +583,7 @@ SwSpellPopup::SwSpellPopup(
     SwWrtShell *pWrtSh,
     const linguistic2::ProofreadingResult &rResult,
     sal_Int32 nErrorInResult,
-    const uno::Sequence< rtl::OUString > &rSuggestions,
+    const uno::Sequence< OUString > &rSuggestions,
     const String &rParaText ) :
 PopupMenu( SW_RES(MN_SPELL_POPUP) ),
 pSh( pWrtSh ),
@@ -605,13 +593,11 @@ aInfo16( SW_RES(IMG_INFO_16) )
 {
     nCheckedLanguage = SvxLocaleToLanguage( rResult.aLocale );
 
-    sal_Int16 nItemId = 1;
-    sal_Int16 nPos    = 0;
+    USHORT nPos = 0;
     OUString aMessageText( rResult.aErrors[ nErrorInResult ].aShortComment );
     InsertSeparator( nPos++ );
-    InsertItem( nItemId, aMessageText, MIB_NOSELECT, nPos++ );
-    SetItemImage( nItemId, aInfo16 );
-    ++nItemId;
+    InsertItem( MN_SHORT_COMMENT, aMessageText, MIB_NOSELECT, nPos++ );
+    SetItemImage( MN_SHORT_COMMENT, aInfo16 );
 
     CreateAutoMnemonics();
 
@@ -628,12 +614,12 @@ aInfo16( SW_RES(IMG_INFO_16) )
             aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
         }
 
+        USHORT nItemId = MN_SUGGESTION_START;
         for (sal_uInt16 i = 0;  i < nStringCount;  ++i)
         {
             const String aEntry = aSuggestions[ i ];
             InsertItem( nItemId, aEntry, 0, nPos++ );
             SetHelpId( nItemId, HID_LINGU_REPLACE );
-
             if (aSuggestionImageUrl.getLength() > 0)
                 SetItemImage( nItemId, aImage );
 
@@ -644,8 +630,8 @@ aInfo16( SW_RES(IMG_INFO_16) )
 
     OUString aIgnoreSelection( String( SW_RES( STR_IGNORE_SELECTION ) ) );
     OUString aSpellingAndGrammar = RetrieveLabelFromCommand( C2U(".uno:SpellingAndGrammarDialog") );
-    SetItemText( MN_SPELLING, aSpellingAndGrammar );
-    USHORT nItemPos = GetItemPos( MN_IGNORE );
+    SetItemText( MN_SPELLING_DLG, aSpellingAndGrammar );
+    USHORT nItemPos = GetItemPos( MN_IGNORE_WORD );
     InsertItem( MN_IGNORE_SELECTION, aIgnoreSelection, 0, nItemPos );
     SetHelpId( MN_IGNORE_SELECTION, HID_LINGU_IGNORE_SELECTION);
 
@@ -668,13 +654,13 @@ aInfo16( SW_RES(IMG_INFO_16) )
             nGuessLangPara = nGuessLangWord;
     }
 
-    EnableItem( MN_IGNORE, false );
-    EnableItem( MN_INSERT, false );
+    EnableItem( MN_IGNORE_WORD, false );
+    EnableItem( MN_ADD_TO_DIC, false );
 
     //ADD NEW LANGUAGE MENU ITEM
     ///////////////////////////////////////////////////////////////////////////
     String aScriptTypesInUse( String::CreateFromInt32( pWrtSh->GetScriptType() ) );
-    SvtLanguageTable aLangTable;
+    SvtLanguageTable aLanguageTable;
 
     // get keyboard language
     String aKeyboardLang;
@@ -682,39 +668,39 @@ aInfo16( SW_RES(IMG_INFO_16) )
     SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
     nLang = rEditWin.GetInputLanguage();
     if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
-        aKeyboardLang = aLangTable.GetString( nLang );
+        aKeyboardLang = aLanguageTable.GetString( nLang );
 
     // get the language that is in use
     const String aMultipleLanguages = String::CreateFromAscii("*");
     String aCurrentLang = aMultipleLanguages;
     nLang = SwLangHelper::GetCurrentLanguage( *pWrtSh );
     if (nLang != LANGUAGE_DONTKNOW)
-        aCurrentLang = aLangTable.GetString( nLang );
+        aCurrentLang = aLanguageTable.GetString( nLang );
 
     // build sequence for status value
-    uno::Sequence< ::rtl::OUString > aSeq( 4 );
+    uno::Sequence< OUString > aSeq( 4 );
     aSeq[0] = aCurrentLang;
     aSeq[1] = aScriptTypesInUse;
     aSeq[2] = aKeyboardLang;
-    aSeq[3] = aLangTable.GetString(nGuessLangWord);
+    aSeq[3] = aLanguageTable.GetString(nGuessLangWord);
 
-    PopupMenu *pMenu = GetPopupMenu(MN_LANGUAGE_SELECTION);
-    nNumLanguageTextEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_SELECTION_START, aSeq, pWrtSh, 0 );
-    EnableItem( MN_LANGUAGE_SELECTION, true );
+    PopupMenu *pMenu = GetPopupMenu(MN_SET_LANGUAGE_SELECTION);
+    fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_SELECTION_START, aSeq, pWrtSh, aLangTable_Text );
+    EnableItem( MN_SET_LANGUAGE_SELECTION, true );
 
-    pMenu = GetPopupMenu(MN_LANGUAGE_PARAGRAPH);
-    nNumLanguageParaEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_PARAGRAPH_START, aSeq, pWrtSh, 1 );
-    EnableItem( MN_LANGUAGE_PARAGRAPH, true );
+    pMenu = GetPopupMenu(MN_SET_LANGUAGE_PARAGRAPH);
+    fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_PARAGRAPH_START, aSeq, pWrtSh, aLangTable_Paragraph );
+    EnableItem( MN_SET_LANGUAGE_PARAGRAPH, true );
 /*
-    pMenu = GetPopupMenu(MN_LANGUAGE_ALL_TEXT);
-    nNumLanguageDocEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, 2 );
-    EnableItem( MN_LANGUAGE_ALL_TEXT, true );
+    pMenu = GetPopupMenu(MN_SET_LANGUAGE_ALL_TEXT);
+    fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, aLangTable_Document );
+    EnableItem( MN_SET_LANGUAGE_ALL_TEXT, true );
 */
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
-            ::rtl::OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
+            OUString::createFromAscii(".uno:SpellingAndGrammarDialog"), sal_False,
             Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
-    SetItemImage( MN_SPELLING, rImg );
+    SetItemImage( MN_SPELLING_DLG, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////
 
@@ -737,25 +723,23 @@ sal_uInt16  SwSpellPopup::Execute( const Rectangle& rWordPos, Window* pWin )
   -----------------------------------------------------------------------*/
 void SwSpellPopup::Execute( USHORT nId )
 {
-    if (bGrammarResults && nId == 1)
+    if (nId == USHRT_MAX)
+        return;
+
+    if (/*bGrammarResults && */nId == MN_SHORT_COMMENT)
         return;     // nothing to do since it is the error message (short comment)
 
-    sal_Bool bAutoCorr = sal_False;
-    if( nId > MN_AUTOCORR_START && nId < MN_LANGUAGE_SELECTION_START && nId != USHRT_MAX )
+    if ((MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ||
+        (MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END))
     {
-        nId -= MN_AUTOCORR_START;
-        bAutoCorr = sal_True;
-    }
-
-    if( nId && nId != USHRT_MAX)
-    {
-        int nAltIdx = bGrammarResults ? nId - 2 : nId - 1;
-        if ( nAltIdx >= 0 && nAltIdx < aSuggestions.getLength() && (bGrammarResults || xSpellAlt.is()) )
+        sal_Int32 nAltIdx = (MN_SUGGESTION_START <= nId && nId <= MN_SUGGESTION_END) ?
+                nId - MN_SUGGESTION_START : nId - MN_AUTOCORR_START;
+        DBG_ASSERT( 0 <= nAltIdx && nAltIdx < aSuggestions.getLength(), "index out of range" );
+        if (0 <= nAltIdx && nAltIdx < aSuggestions.getLength() && (bGrammarResults || xSpellAlt.is()))
         {
             sal_Bool bOldIns = pSh->IsInsMode();
             pSh->SetInsMode( sal_True );
 
-            DBG_ASSERT( 0 <= nAltIdx && nAltIdx <= aSuggestions.getLength(), "index out of range");
             String aTmp( aSuggestions[ nAltIdx ] );
             String aOrig( bGrammarResults ? OUString() : xSpellAlt->getWord() );
 
@@ -774,40 +758,30 @@ void SwSpellPopup::Execute( USHORT nId )
             aRewriter.AddRule(UNDO_ARG1, pSh->GetCrsrDescr());
             aRewriter.AddRule(UNDO_ARG2, String(SW_RES(STR_YIELDS)));
 
-            {
-                String aTmpStr;
-
-                aTmpStr += String(SW_RES(STR_START_QUOTE));
-                aTmpStr += aTmp;
-                aTmpStr += String(SW_RES(STR_END_QUOTE));
-                aRewriter.AddRule(UNDO_ARG3, aTmpStr);
-            }
+            String aTmpStr( SW_RES(STR_START_QUOTE) );
+            aTmpStr += aTmp;
+            aTmpStr += String(SW_RES(STR_END_QUOTE));
+            aRewriter.AddRule(UNDO_ARG3, aTmpStr);
 
             pSh->StartUndo(UNDO_UI_REPLACE, &aRewriter);
             pSh->StartAction();
             pSh->DelLeft();
 
             pSh->Insert( aTmp );
+
             /* #102505# EndAction/EndUndo moved down since insertion
                of temporary auto correction is now undoable two and
                must reside in the same undo group.*/
-
 
             // nur aufnehmen, wenn es NICHT schon in der Autokorrektur vorhanden ist
             SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get()->GetAutoCorrect();
 
             String aOrigWord( bGrammarResults ? OUString() : xSpellAlt->getWord() ) ;
-            String aNewWord;
-            if( nId )
-                aNewWord = aSuggestions[ nAltIdx ];
-            else
-                aNewWord = aOrigWord;
+            String aNewWord( aSuggestions[ nAltIdx ] );
             SvxPrepareAutoCorrect( aOrigWord, aNewWord );
 
-            if( bAutoCorr )
-            {
+            if (MN_AUTOCORR_START <= nId && nId <= MN_AUTOCORR_END)
                 pACorr->PutText( aOrigWord, aNewWord, nCheckedLanguage );
-            }
 
             /* #102505# EndAction/EndUndo moved down since insertion
                of temporary auto correction is now undoable two and
@@ -817,180 +791,140 @@ void SwSpellPopup::Execute( USHORT nId )
 
             pSh->SetInsMode( bOldIns );
         }
-        else
+    }
+    else if (nId == MN_SPELLING_DLG)
+    {
+        if (bGrammarResults)
         {
-            if (nId < MN_LANGUAGE_SELECTION_START)
+            SvtLinguConfig().SetProperty( A2OU( UPN_IS_GRAMMAR_INTERACTIVE ), uno::makeAny( sal_True ));
+        }
+        pSh->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
+        {
+            uno::Reference<linguistic2::XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
+            SvxDicListChgClamp aClamp( xDictionaryList );
+            pSh->GetView().GetViewFrame()->GetDispatcher()->
+                Execute( FN_SPELL_GRAMMAR_DIALOG, SFX_CALLMODE_ASYNCHRON );
+        }
+    }
+    else if (nId == MN_IGNORE_SELECTION)
+    {
+        SwPaM *pPaM = pSh->GetCrsr();
+        if (pPaM)
+            pSh->IgnoreGrammarErrorAt( *pPaM );
+    }
+    else if (nId == MN_IGNORE_WORD)
+    {
+        uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
+        linguistic::AddEntryToDic( xDictionary,
+                xSpellAlt->getWord(), sal_False, aEmptyStr, LANGUAGE_NONE );
+    }
+    else if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
+    {
+            OUString aWord( xSpellAlt->getWord() );
+            USHORT nDicIdx = nId - MN_DICTIONARIES_START;
+            DBG_ASSERT( nDicIdx < aDics.getLength(), "dictionary index out of range" );
+
+            if (nDicIdx < aDics.getLength())
             {
-                switch( nId )
+                uno::Reference< linguistic2::XDictionary > xDic = aDics.getConstArray()[nDicIdx];
+                INT16 nAddRes = linguistic::AddEntryToDic( xDic, aWord, FALSE, aEmptyStr, LANGUAGE_NONE );
+                // save modified user-dictionary if it is persistent
+                uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
+                if (xSavDic.is())
+                    xSavDic->store();
+
+                if (DIC_ERR_NONE != nAddRes
+                    && !xDic->getEntry( aWord ).is())
                 {
-                    case MN_SPELLING:
-                    {
-                        if (bGrammarResults)
-                        {
-                            SvtLinguConfig().SetProperty( A2OU( UPN_IS_GRAMMAR_INTERACTIVE ), uno::makeAny( sal_True ));
-                        }
-                        pSh->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
-                        {
-                            uno::Reference<linguistic2::XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
-                            SvxDicListChgClamp aClamp( xDictionaryList );
-                            pSh->GetView().GetViewFrame()->GetDispatcher()->
-                                Execute( FN_SPELL_GRAMMAR_DIALOG, SFX_CALLMODE_ASYNCHRON );
-                        }
-                    }
-                    break;
-                    case MN_IGNORE_SELECTION :
-                    {
-                        SwPaM *pPaM = pSh->GetCrsr();
-                        if (pPaM)
-                            pSh->IgnoreGrammarErrorAt( *pPaM );
-                    }
-                    break;
-                    case MN_IGNORE :
-                    {
-                        uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
-                        linguistic::AddEntryToDic(
-                                xDictionary,
-                                xSpellAlt->getWord(), sal_False,
-                                aEmptyStr, LANGUAGE_NONE );
-                    }
-                    break;
-                    case MN_INSERT:
-                        DBG_ERROR("geht noch nicht!");
-                    break;
-                    case MN_LANGUAGE_WORD:
-                    case MN_LANGUAGE_PARA:
-                    {
-                        pSh->StartAction();
-
-                        if( MN_LANGUAGE_PARA == nId )
-                        {
-                            if( !pSh->IsSttPara() )
-                                pSh->MovePara( fnParaCurr, fnParaStart );
-                            pSh->SwapPam();
-                            if( !pSh->IsEndPara() )
-                                pSh->MovePara( fnParaCurr,  fnParaEnd );
-                        }
-
-                        LanguageType nLangToUse = (MN_LANGUAGE_PARA == nId) ? nGuessLangPara : nGuessLangWord;
-                        sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
-                        USHORT nResId = 0;
-                        switch (nScriptType)
-                        {
-                            case SCRIPTTYPE_COMPLEX     : nResId = RES_CHRATR_CTL_LANGUAGE; break;
-                            case SCRIPTTYPE_ASIAN       : nResId = RES_CHRATR_CJK_LANGUAGE; break;
-                            default /*SCRIPTTYPE_LATIN*/: nResId = RES_CHRATR_LANGUAGE; break;
-                        }
-                        SfxItemSet aSet(pSh->GetAttrPool(), nResId, nResId );
-                        aSet.Put( SvxLanguageItem( nLangToUse, nResId ) );
-                        pSh->SetAttr( aSet );
-
-                        pSh->EndAction();
-                    }
-                    break;
-                    default:
-                        if(nId >= MN_INSERT_START )
-                        {
-                            OUString aWord( xSpellAlt->getWord() );
-                            INT32 nDicIdx = nId - MN_INSERT_START - 1;
-                            DBG_ASSERT( nDicIdx < aDics.getLength(),
-                                        "dictionary index out of range" );
-                            uno::Reference< linguistic2::XDictionary > xDic =
-                                aDics.getConstArray()[nDicIdx];
-                            INT16 nAddRes = linguistic::AddEntryToDic( xDic,
-                                aWord, FALSE, aEmptyStr, LANGUAGE_NONE );
-                            // save modified user-dictionary if it is persistent
-                            uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
-                            if (xSavDic.is())
-                                xSavDic->store();
-
-                            if (DIC_ERR_NONE != nAddRes
-                                && !xDic->getEntry( aWord ).is())
-                            {
-                                SvxDicError(
-                                    &pSh->GetView().GetViewFrame()->GetWindow(),
-                                    nAddRes );
-                            }
-                        }
+                    SvxDicError(
+                        &pSh->GetView().GetViewFrame()->GetWindow(),
+                        nAddRes );
                 }
             }
-            else
+    }
+    else
+    {
+        // Set language for selection or for paragraph...
+
+        SfxItemSet aCoreSet( pSh->GetView().GetPool(),
+                    RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
+                    RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
+                    RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
+                    0 );
+        String aNewLangTxt;
+
+        if (MN_SET_LANGUAGE_SELECTION_START <= nId && nId <= MN_SET_LANGUAGE_SELECTION_END)
+        {
+            //Set language for current selection
+            aNewLangTxt = aLangTable_Text[nId];
+            SwLangHelper::SetLanguage( *pSh, aNewLangTxt, true, aCoreSet );
+        }
+        else if (nId == MN_SET_SELECTION_NONE)
+        {
+            //Set Language_None for current selection
+            SwLangHelper::SetLanguage_None( *pSh, true, aCoreSet );
+        }
+        else if (nId == MN_SET_SELECTION_RESET)
+        {
+            //reset languages for current selection
+            SwLangHelper::ResetLanguages( *pSh, true );
+        }
+        else if (nId == MN_SET_SELECTION_MORE)
+        {
+            //Open Format/Character Dialog
+            lcl_CharDialog( *pSh, true, nId, 0, 0 );
+        }
+        else if (MN_SET_LANGUAGE_PARAGRAPH_START <= nId && nId <= MN_SET_LANGUAGE_PARAGRAPH_END)
+        {
+            //Set language for current paragraph
+            aNewLangTxt = aLangTable_Paragraph[nId];
+            pSh->Push();        // save cursor
+            SwLangHelper::SelectCurrentPara( *pSh );
+            SwLangHelper::SetLanguage( *pSh, aNewLangTxt, true, aCoreSet );
+            pSh->Pop( FALSE );  // restore cursor
+        }
+        else if (nId == MN_SET_PARA_NONE)
+        {
+            //Set Language_None for current paragraph
+            pSh->Push();        // save cursor
+            SwLangHelper::SelectCurrentPara( *pSh );
+            SwLangHelper::SetLanguage_None( *pSh, true, aCoreSet );
+            pSh->Pop( FALSE );  // restore cursor
+        }
+        else if (nId == MN_SET_PARA_RESET)
+        {
+            //reset languages for current paragraph
+            pSh->Push();        // save cursor
+            SwLangHelper::SelectCurrentPara( *pSh );
+            SwLangHelper::ResetLanguages( *pSh, true );
+            pSh->Pop( FALSE );  // restore cursor
+        }
+        else if (nId == MN_SET_PARA_MORE)
+        {
+            pSh->Push();        // save cursor
+            SwLangHelper::SelectCurrentPara( *pSh );
+            //Open Format/Character Dialog
+            lcl_CharDialog( *pSh, true, nId, 0, 0 );
+            pSh->Pop( FALSE );  // restore cursor
+        }
+#if 0
+        else if (nId == MN_SET_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries - 1)
+        {
+            //Set Language_None as the default language
+            SwLangHelper::SetLanguage_None( *pSh, false, aCoreSet );
+        }
+        else if (nId == MN_SET_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries)
+        {
+            // open the dialog "Tools/Options/Language Settings - Language"
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            if (pFact)
             {
-                SfxItemSet aCoreSet( pSh->GetView().GetPool(),
-                            RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
-                            RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
-                            RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
-                            0 );
-                String aNewLangTxt;
-
-//              pSh->StartAction();
-
-                if (nId >= MN_LANGUAGE_SELECTION_START && nId < MN_LANGUAGE_SELECTION_START + nNumLanguageTextEntries - 1)
-                {
-                    //Set language for current selection
-                    aNewLangTxt=aLangTable_Text[nId];
-                    SwLangHelper::SetLanguage( *pSh, aNewLangTxt, true, aCoreSet );
-                }
-                else if (nId == MN_LANGUAGE_SELECTION_START + nNumLanguageTextEntries - 1)
-                {
-                    //Set Language_None for current selection
-                    SwLangHelper::SetLanguage_None( *pSh, true, aCoreSet );
-                }
-                else if (nId == MN_LANGUAGE_SELECTION_START + nNumLanguageTextEntries)
-                {
-                    //Open Format/Character Dialog
-                    lcl_CharDialog( *pSh, true, nId, 0, 0 );
-                }
-                else if (nId >= MN_LANGUAGE_PARAGRAPH_START && nId < MN_LANGUAGE_PARAGRAPH_START + nNumLanguageParaEntries - 1)
-                {
-                    //Set language for current paragraph
-                    aNewLangTxt=aLangTable_Paragraph[nId];
-                    pSh->Push();        // save cursor
-                    SwLangHelper::SelectCurrentPara( *pSh );
-                    SwLangHelper::SetLanguage( *pSh, aNewLangTxt, true, aCoreSet );
-                    pSh->Pop( FALSE );  // restore cursor
-                }
-                else if (nId == MN_LANGUAGE_PARAGRAPH_START + nNumLanguageParaEntries - 1)
-                {
-                    //Set Language_None for current paragraph
-                    pSh->Push();        // save cursor
-                    SwLangHelper::SelectCurrentPara( *pSh );
-                    SwLangHelper::SetLanguage_None( *pSh, true, aCoreSet );
-                    pSh->Pop( FALSE );  // restore cursor
-                }
-                else if (nId == MN_LANGUAGE_PARAGRAPH_START + nNumLanguageParaEntries)
-                {
-                    pSh->Push();        // save cursor
-                    SwLangHelper::SelectCurrentPara( *pSh );
-                    //Open Format/Character Dialog
-                    lcl_CharDialog( *pSh, true, nId, 0, 0 );
-                    pSh->Pop( FALSE );  // restore cursor
-                }
-                else if (nId >= MN_LANGUAGE_ALL_TEXT_START && nId < MN_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries - 1)
-                {
-                    //Set selected language as the default language
-                    aNewLangTxt=aLangTable_Document[nId];
-                    SwLangHelper::SetLanguage( *pSh, aNewLangTxt, false, aCoreSet );
-                }
-                else if (nId == MN_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries - 1)
-                {
-                    //Set Language_None as the default language
-                    SwLangHelper::SetLanguage_None( *pSh, false, aCoreSet );
-                }
-                else if (nId == MN_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries)
-                {
-                    // open the dialog "Tools/Options/Language Settings - Language"
-                    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-                    if (pFact)
-                    {
-                        VclAbstractDialog* pDlg = pFact->CreateVclDialog( pSh->GetView().GetWindow(), SID_LANGUAGE_OPTIONS );
-                        pDlg->Execute();
-                        delete pDlg;
-                    }
-                }
-
-//              pSh->EndAction();
+                VclAbstractDialog* pDlg = pFact->CreateVclDialog( pSh->GetView().GetWindow(), SID_LANGUAGE_OPTIONS );
+                pDlg->Execute();
+                delete pDlg;
             }
         }
+#endif
     }
 
     pSh->EnterStdMode();

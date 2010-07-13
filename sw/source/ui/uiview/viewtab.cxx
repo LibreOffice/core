@@ -422,7 +422,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 ::ResizeFrameCols(aCols, aSectRect.Width(), aSectRect.Width() - nDiffWidth, nLeftDiff );
                 aSet.Put( aCols );
             }
-            rSh.ChgSection( rSh.GetSectionFmtPos(*pSectFmt), *pCurrSect, &aSet );
+            SwSectionData aData(*pCurrSect);
+            rSh.UpdateSection(rSh.GetSectionFmtPos(*pSectFmt), aData, &aSet);
         }
         else
         {   // Seitenraender einstellen
@@ -511,8 +512,8 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                 ::ResizeFrameCols(aCols, aSectRect.Height(), aSectRect.Height() - nDiffWidth, nLeftDiff );
                 aSet.Put( aCols );
             }
-            rSh.ChgSection( rSh.GetSectionFmtPos(*pSectFmt), *pCurrSect, &aSet );
-
+            SwSectionData aData(*pCurrSect);
+            rSh.UpdateSection(rSh.GetSectionFmtPos(*pSectFmt), aData, &aSet);
         }
         else
         {   SwPageDesc aDesc( rDesc );

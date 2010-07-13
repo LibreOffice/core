@@ -25,19 +25,19 @@
  *
  ************************************************************************/
 
-#ifndef _NDARR_HXX
-#define _NDARR_HXX
+#ifndef SW_NDARR_HXX
+#define SW_NDARR_HXX
+
+#include <vector>
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#include <svl/svarray.hxx>
 
-#ifndef _BPARR_HXX
+#include <svl/svarray.hxx>
+#include <svtools/embedhlp.hxx>
+
 #include <bparr.hxx>
-#endif
 #include <ndtyp.hxx>
 
-#include <svtools/embedhlp.hxx>
-#include <vector>
 
 class Graphic;
 class GraphicObject;
@@ -55,8 +55,9 @@ class SwNodeRange;
 class SwOLENode;
 class SwOutlineNodes;
 class SwPaM;
-class SwSection;
+class SwSectionData;
 class SwSectionFmt;
+class SwTOXBase;
 class SwSectionNode;
 class SwStartNode;
 class SwTableBoxFmt;
@@ -133,6 +134,9 @@ protected:
 
 public:
     ~SwNodes();
+
+    typedef ::std::vector<SwNodeRange> NodeRanges_t;
+    typedef ::std::vector<NodeRanges_t> TableRanges_t;
 
     SwNodePtr operator[]( ULONG n ) const
         { return (SwNodePtr)BigPtrArray::operator[] ( n ); }
@@ -275,8 +279,11 @@ public:
                                 SwTableBoxFmt* pBoxFmt,
                                 SwTxtFmtColl* pTxtColl,
                                 SwUndoTxtToTbl* pUndo = 0 );
+
+    SwNodeRange * ExpandRangeForTableBox(const SwNodeRange & rRange);
+
     //create a table from a vector of NodeRanges - API support
-    SwTableNode* TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes,
+    SwTableNode* TextToTable( const TableRanges_t& rTableNodes,
                                 SwTableFmt* pTblFmt,
                                 SwTableLineFmt* pLineFmt,
                                 SwTableBoxFmt* pBoxFmt,
@@ -310,12 +317,13 @@ public:
                     USHORT nMode = 0, SwHistory* pHistory = 0 );
 
         // fuege eine neue SwSection ein
-    SwSectionNode* InsertSection( const SwNodeIndex& rNdIdx,
+    SwSectionNode* InsertTextSection(SwNodeIndex const& rNdIdx,
                                 SwSectionFmt& rSectionFmt,
-                                const SwSection&,
-                                const SwNodeIndex* pEnde,
-                                BOOL bInsAtStart = TRUE,
-                                BOOL bCreateFrms = TRUE );
+                                SwSectionData const&,
+                                SwTOXBase const*const pTOXBase,
+                                SwNodeIndex const*const pEnde,
+                                bool const bInsAtStart = true,
+                                bool const bCreateFrms = true);
 
         // in welchem Doc steht das Nodes-Array ?
             SwDoc* GetDoc()         { return pMyDoc; }

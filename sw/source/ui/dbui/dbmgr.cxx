@@ -1255,6 +1255,9 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 nEndRow = pImpl->pMergeData ? pImpl->pMergeData->xResultSet->getRow() : 0;
             } while( !bCancel &&
                 (bSynchronizedDoc && (nStartRow != nEndRow)? ExistsNextRecord() : ToNextMergeRecord()));
+
+            aPrtMonDlg.Show( FALSE );
+
             // save the single output document
             if(rMergeDescriptor.bCreateSingleFile || bAsSingleFile)
             {
@@ -2904,9 +2907,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             }
             else
             {
-                SwDoc* pNewDoc = rSourceView.GetDocShell()->GetDoc()->CreateCopy();
-                xWorkDocSh = new SwDocShell( pNewDoc, SFX_CREATE_MODE_STANDARD );
-                xWorkDocSh->DoInitNew();
+                xWorkDocSh = rSourceView.GetDocShell()->GetDoc()->CreateCopy(true);
             }
             //create a ViewFrame
             SwView* pWorkView = static_cast< SwView* >( SfxViewFrame::LoadHiddenDocument( *xWorkDocSh, 0 )->GetViewShell() );
@@ -3029,8 +3030,9 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         pTargetShell->SttDoc();
         //
     }
-    catch( Exception& )
+    catch( Exception& rEx)
     {
+        (void)rEx;
         DBG_ERROR("exception caught in SwNewDBMgr::MergeDocuments");
     }
     DELETEZ(pImpl->pMergeData);

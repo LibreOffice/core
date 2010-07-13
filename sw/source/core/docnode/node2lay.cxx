@@ -233,8 +233,8 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
             {
                 // #137684#: pFrm could be a "dummy"-section
                 if( ((SwSectionFrm*)pFrm)->GetSection() &&
-                    ((SwSectionNode*)pNode)->GetSection() ==
-                    *((SwSectionFrm*)pFrm)->GetSection() )
+                    (&((SwSectionNode*)pNode)->GetSection() ==
+                     ((SwSectionFrm*)pFrm)->GetSection()) )
                 {
                     // OD 2004-06-02 #i22922# - consider columned sections
                     // 'Go down' the section frame as long as the layout frame

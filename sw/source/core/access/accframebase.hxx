@@ -26,13 +26,15 @@
  ************************************************************************/
 #ifndef _ACCFRAMEBASE_HXX
 #define _ACCFRAMEBASE_HXX
-#ifndef _ACCCONTEXT_HXX
-#include "acccontext.hxx"
-#endif
+
+#include <acccontext.hxx>
+
+#include <calbck.hxx>
 
 class SwFlyFrm;
 
-class SwAccessibleFrameBase : public SwAccessibleContext, public SwClient
+class SwAccessibleFrameBase : public SwAccessibleContext,
+                              public SwClient
 {
     sal_Bool    bIsSelected;    // protected by base class mutex
 

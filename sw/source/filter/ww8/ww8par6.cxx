@@ -672,7 +672,8 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
 SwSectionFmt *wwSectionManager::InsertSection(
     SwPaM& rMyPaM, wwSection &rSection)
 {
-    SwSection aSection( CONTENT_SECTION, mrReader.rDoc.GetUniqueSectionName() );
+    SwSectionData aSection( CONTENT_SECTION,
+            mrReader.rDoc.GetUniqueSectionName() );
 
     SfxItemSet aSet( mrReader.rDoc.GetAttrPool(), aFrmFmtSetRange );
 
@@ -685,10 +686,10 @@ SwSectionFmt *wwSectionManager::InsertSection(
     if (0 == mrReader.pWDop->epc)
         aSet.Put( SwFmtEndAtTxtEnd(FTNEND_ATTXTEND));
 
-    aSection.SetProtect(SectionIsProtected(rSection));
+    aSection.SetProtectFlag(SectionIsProtected(rSection));
 
     rSection.mpSection =
-        mrReader.rDoc.InsertSwSection( rMyPaM, aSection, &aSet );
+        mrReader.rDoc.InsertSwSection( rMyPaM, aSection, 0, & aSet );
     ASSERT(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
         return 0;
@@ -836,12 +837,12 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         pWkb->Get(nTest, pData);
         String sSectionName = mrReader.aLinkStringMap[SVBT16ToShort( ((WW8_WKB*)pData)->nLinkId) ];
         mrReader.ConvertFFileName(sSectionName, sSectionName);
-        SwSection aSection(FILE_LINK_SECTION, sSectionName);
+        SwSectionData aSection(FILE_LINK_SECTION, sSectionName);
         aSection.SetLinkFileName( sSectionName );
-        aSection.SetProtect(true);
+        aSection.SetProtectFlag(true);
         // --> CMC, OD 2004-06-18 #i19922# improvement:
         // return value of method <Insert> not used.
-        mrReader.rDoc.InsertSwSection(*mrReader.pPaM, aSection, 0, false);
+        mrReader.rDoc.InsertSwSection(*mrReader.pPaM, aSection, 0, 0, false);
     }
 
     wwSection aLastSection(*mrReader.pPaM->GetPoint());
@@ -2264,12 +2265,6 @@ WW8FlySet::WW8FlySet( SwWW8ImplReader& rReader, const SwPaM* pPaM,
         + aSizeArray[WW8_BOT]) );
 }
 
-WW8FlySet::WW8FlySet(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
-    : SfxItemSet(rReader.rDoc.GetAttrPool(),RES_FRMATR_BEGIN,RES_FRMATR_END-1)
-{
-    Init(rReader, pPaM);
-}
-
 void WW8FlySet::Init(const SwWW8ImplReader& rReader, const SwPaM* pPaM)
 {
     if (!rReader.mbNewDoc)
@@ -2715,7 +2710,9 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
 #       Attribut - Verwaltung
 #**************************************************************************/
 
-void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr )
+void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
+                               const bool bFirstLineOfStSet,
+                               const bool bLeftIndentSet )
 {
     if( !bNoAttrImport ) // zum Ignorieren von Styles beim Doc-Einfuegen
     {
@@ -2725,11 +2722,31 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr )
             pAktColl->SetFmtAttr(rAttr);
         }
         else if (pAktItemSet)
+        {
             pAktItemSet->Put(rAttr);
+        }
         else if (rAttr.Which() == RES_FLTR_REDLINE)
+        {
             mpRedlineStack->open(*pPaM->GetPoint(), rAttr);
+        }
         else
+        {
             pCtrlStck->NewAttr(*pPaM->GetPoint(), rAttr);
+            // --> OD 2010-05-06 #i103711#
+            if ( bFirstLineOfStSet )
+            {
+                const SwNode* pNd = &(pPaM->GetPoint()->nNode.GetNode());
+                maTxtNodesHavingFirstLineOfstSet.insert( pNd );
+            }
+            // <--
+            // --> OD 2010-05-11 #i105414#
+            if ( bLeftIndentSet )
+            {
+                const SwNode* pNd = &(pPaM->GetPoint()->nNode.GetNode());
+                maTxtNodesHavingLeftIndentSet.insert( pNd );
+            }
+            // <--
+        }
 
         if (mpPostProcessAttrsInfo && mpPostProcessAttrsInfo->mbCopy)
             mpPostProcessAttrsInfo->mItemSet.Put(rAttr);
@@ -3958,6 +3975,13 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         }
     }
 
+    // --> OD 2010-05-06 #i103711#
+    bool bFirstLinOfstSet( false );
+    // <--
+    // --> OD 2010-05-11 #i105414#
+    bool bLeftIndentSet( false );
+    // <--
+
     switch (nId)
     {
         //sprmPDxaLeft
@@ -3966,7 +3990,12 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         case 0x845E:
             aLR.SetTxtLeft( nPara );
             if (pAktColl)
+            {
                 pCollA[nAktColl].bListReleventIndentSet = true;
+            }
+            // --> OD 2010-05-11 #i105414#
+            bLeftIndentSet = true;
+            // <--
             break;
         //sprmPDxaLeft1
         case     19:
@@ -3998,7 +4027,12 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
 
             aLR.SetTxtFirstLineOfst(nPara);
             if (pAktColl)
+            {
                 pCollA[nAktColl].bListReleventIndentSet = true;
+            }
+            // --> OD 2010-05-06 #i103711#
+            bFirstLinOfstSet = true;
+            // <--
             break;
         //sprmPDxaRight
         case     16:
@@ -4010,7 +4044,10 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
             return;
     }
 
-    NewAttr(aLR);
+    // --> OD 2010-05-06 #i103711#
+    // --> OD 2010-05-11 #i105414#
+    NewAttr( aLR, bFirstLinOfstSet, bLeftIndentSet );
+    // <--
 }
 
 // Sprm 20

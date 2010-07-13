@@ -32,6 +32,7 @@
 #include <fmtfld.hxx>
 #include <txtfld.hxx>
 #include <docufld.hxx>
+#include <doc.hxx>
 
 #include "reffld.hxx"
 #include "ddefld.hxx"
@@ -68,7 +69,7 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
     SwClient( rFld.GetTyp() ),
     pTxtAttr( 0 )
 {
-    pField = rFld.Copy();
+    pField = rFld.CopyField();
 }
 
 // #i24434#
@@ -83,7 +84,7 @@ SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
     if(rAttr.GetFld())
     {
         rAttr.GetFld()->GetTyp()->Add(this);
-        pField = rAttr.GetFld()->Copy();
+        pField = rAttr.GetFld()->CopyField();
     }
 }
 
@@ -157,14 +158,16 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     if( !pTxtAttr )
         return;
 
+    // don't do anything, especially not expand!
+    if( pNew && pNew->Which() == RES_OBJECTDYING )
+        return;
+
     SwTxtNode* pTxtNd = (SwTxtNode*)&pTxtAttr->GetTxtNode();
     ASSERT( pTxtNd, "wo ist denn mein Node?" );
     if( pNew )
     {
         switch( pNew->Which() )
         {
-        case RES_OBJECTDYING:
-                return; // don't do anything, especially not expand!
         case RES_TXTATR_FLDCHG:
                 // "Farbe hat sich geaendert !"
                 // this, this fuer "nur Painten"
@@ -189,6 +192,8 @@ void SwFmtFld::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         case RES_FMT_CHG:
                 pTxtNd->Modify( pOld, pNew );
                 return;
+        default:
+                break;
         }
     }
 
@@ -254,9 +259,10 @@ BOOL SwFmtFld::IsProtect() const
 |*
 *************************************************************************/
 
-SwTxtFld::SwTxtFld( SwFmtFld& rAttr, xub_StrLen nStartPos )
+SwTxtFld::SwTxtFld(SwFmtFld & rAttr, xub_StrLen const nStartPos,
+        bool const bInClipboard)
     : SwTxtAttr( rAttr, nStartPos )
-    , m_aExpand( rAttr.GetFld()->Expand() )
+    , m_aExpand( rAttr.GetFld()->ExpandField(bInClipboard) )
     , m_pTxtNode( 0 )
 {
     rAttr.pTxtAttr = this;
@@ -265,6 +271,11 @@ SwTxtFld::SwTxtFld( SwFmtFld& rAttr, xub_StrLen nStartPos )
 
 SwTxtFld::~SwTxtFld( )
 {
+    SwFmtFld & rFmtFld( static_cast<SwFmtFld &>(GetAttr()) );
+    if (this == rFmtFld.pTxtAttr)
+    {
+        rFmtFld.pTxtAttr = 0; // #i110140# invalidate!
+    }
 }
 
 /*************************************************************************
@@ -283,7 +294,8 @@ void SwTxtFld::Expand() const
     ASSERT( m_pTxtNode, "SwTxtFld: where is my TxtNode?" );
 
     const SwField* pFld = GetFld().GetFld();
-    XubString aNewExpand( pFld->Expand() );
+    XubString aNewExpand(
+        pFld->ExpandField(m_pTxtNode->GetDoc()->IsClipBoard()) );
 
     if( aNewExpand == m_aExpand )
     {

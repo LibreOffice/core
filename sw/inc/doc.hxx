@@ -164,6 +164,7 @@ class SwRubyList;
 class SwRubyListEntry;
 class SwSectionFmt;
 class SwSectionFmts;
+class SwSectionData;
 class SwSelBoxes;
 class SwSpzFrmFmts;
 class SwTOXBase;
@@ -715,6 +716,7 @@ private:
      bool DeleteAndJoinImpl(SwPaM&, const bool);
      bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);
      bool DeleteRangeImpl(SwPaM&, const bool unused = false);
+     bool DeleteRangeImplImpl(SwPaM &);
      bool ReplaceRangeImpl(SwPaM&, String const&, const bool);
 
 public:
@@ -1803,8 +1805,9 @@ public:
     inline const Link& GetOle2Link() const {return aOle2Link;}
 
     // insert section (the ODF kind of section, not the nodesarray kind)
-    SwSection* InsertSwSection( const SwPaM& rRange, const SwSection& rNew,
-                    const SfxItemSet* pAttr = 0, bool bUpdate = true);
+    SwSection * InsertSwSection(SwPaM const& rRange, SwSectionData &,
+            SwTOXBase const*const pTOXBase = 0,
+            SfxItemSet const*const pAttr = 0, bool const bUpdate = true);
     sal_uInt16 IsInsRegionAvailable( const SwPaM& rRange,
                                 const SwNode** ppSttNd = 0 ) const;
     SwSection* GetCurrSection( const SwPosition& rPos ) const;
@@ -1812,7 +1815,8 @@ public:
     const SwSectionFmts& GetSections() const { return *pSectionFmtTbl; }
     SwSectionFmt *MakeSectionFmt( SwSectionFmt *pDerivedFrom );
     void DelSectionFmt( SwSectionFmt *pFmt, sal_Bool bDelNodes = sal_False );
-    void ChgSection( sal_uInt16 nSect, const SwSection&, const SfxItemSet* = 0, sal_Bool bPreventLinkUpdate = FALSE);
+    void UpdateSection(sal_uInt16 const nSect, SwSectionData &,
+            SfxItemSet const*const = 0, bool const bPreventLinkUpdate = false);
     String GetUniqueSectionName( const String* pChkStr = 0 ) const;
 
     /* @@@MAINTAINABILITY-HORROR@@@
@@ -2127,7 +2131,7 @@ public:
 
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
-    SwDoc* CreateCopy() const;
+    SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 };
 
 

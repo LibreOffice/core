@@ -76,8 +76,6 @@
 #include <stdlib.h>
 
 #include <iostream>
-
-
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -276,6 +274,10 @@ SwXText::queryInterface(const uno::Type& rType) throw (uno::RuntimeException)
     else if (rType == text::XTextContentAppend::static_type())
     {
         aRet <<= uno::Reference< text::XTextContentAppend >(this);
+    }
+    else if(rType == text::XTextCopy::static_type())
+    {
+        aRet <<= uno::Reference< text::XTextCopy >( this );
     }
     return aRet;
 }
@@ -1860,6 +1862,32 @@ static bool lcl_SimilarPosition( const sal_Int32 nPos1, const sal_Int32 nPos2 )
     return abs( nPos1 - nPos2 ) < COL_POS_FUZZY;
 }
 
+void SwXText::copyText(
+    const uno::Reference< text::XTextCopy >& xSource )
+        throw ( uno::RuntimeException )
+{
+    uno::Reference< lang::XUnoTunnel > xTTunnel( xSource, uno::UNO_QUERY_THROW );
+    SwXText* pText = 0;
+    pText = reinterpret_cast< SwXText* >(
+                   sal::static_int_cast< sal_IntPtr >( xTTunnel->getSomething( SwXText::getUnoTunnelId()) ));
+
+    uno::Reference< text::XText > xText( xSource, uno::UNO_QUERY_THROW );
+    uno::Reference< text::XTextCursor > xCursor = xText->createTextCursor( );
+    xCursor->gotoEnd( sal_True );
+
+    uno::Reference< lang::XUnoTunnel > xTunnel( xCursor, uno::UNO_QUERY_THROW );
+
+    OTextCursorHelper* pCursor = 0;
+    pCursor = reinterpret_cast< OTextCursorHelper* >(
+                   sal::static_int_cast< sal_IntPtr >( xTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
+    if ( pCursor )
+    {
+        SwNodeIndex rNdIndex( *GetStartNode( ), 1 );
+        SwPosition rPos( rNdIndex );
+        m_pImpl->m_pDoc->CopyRange( *pCursor->GetPaM( ), rPos, false );
+    }
+}
+
 void SwXText::Impl::ConvertCell(
     const bool bFirstCell,
     const uno::Sequence< uno::Reference< text::XTextRange > > & rCell,
@@ -1885,6 +1913,26 @@ void SwXText::Impl::ConvertCell(
     {
         throw lang::IllegalArgumentException();
     }
+
+    SwNodeRange aTmpRange(aStartCellPam.Start()->nNode,
+                          aEndCellPam.End()->nNode);
+    SwNodeRange * pCorrectedRange =
+        m_pDoc->GetNodes().ExpandRangeForTableBox(aTmpRange);
+
+    if (pCorrectedRange != NULL)
+    {
+        SwPaM aNewStartPaM(pCorrectedRange->aStart, 0);
+        aStartCellPam = aNewStartPaM;
+
+        xub_StrLen nEndLen = 0;
+        SwTxtNode * pTxtNode = pCorrectedRange->aEnd.GetNode().GetTxtNode();
+        if (pTxtNode != NULL)
+            nEndLen = pTxtNode->Len();
+
+        SwPaM aNewEndPaM(pCorrectedRange->aEnd, nEndLen);
+        aEndCellPam = aNewEndPaM;
+    }
+
     /** check the nodes between start and end
         it is allowed to have pairs of StartNode/EndNodes
      */

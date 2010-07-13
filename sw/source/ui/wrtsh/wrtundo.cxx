@@ -39,7 +39,7 @@
 #include <swdtflvr.hxx>
 #include <svl/svtools.hrc>
 #include <svtools/svtdata.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include <wrtsh.hrc>
 #include <sfx2/sfx.hrc>

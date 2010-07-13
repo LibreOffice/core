@@ -31,7 +31,7 @@ interface Annotation : _Annotation
 ]
 {
 
-    FN_THESAURUS_DLG // api:
+    SID_THESAURUS // api:
     [
         ExecMethod = ExecLingu ;
         StateMethod = GetLinguState ;
@@ -175,6 +175,27 @@ interface Annotation : _Annotation
     SID_CTLFONT_STATE
     [
         StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_SENTENCE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_TITLE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_TRANSLITERATE_TOGGLE_CASE
+    [
+        ExecMethod = ExecTransliteration;
+        StateMethod = NoState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
@@ -342,6 +363,13 @@ interface Annotation : _Annotation
         ExecMethod = ExecLingu ;
         StateMethod = GetLinguState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    SID_THES
+    [
+        ExecMethod = ExecLingu ;
+        StateMethod = GetLinguState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
     ]
 
 }

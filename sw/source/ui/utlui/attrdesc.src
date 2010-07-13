@@ -148,15 +148,15 @@ String STR_FRM_MINHEIGHT
     /* ### ACHTUNG: Neuer Text in Resource? min. Höhe: : min. H÷he: */
     Text [ en-US ] = "Min. height:" ;
 };
-String STR_FLY_AT_CNTNT
+String STR_FLY_AT_PARA
 {
     Text [ en-US ] = "to paragraph" ;
 };
-String STR_FLY_IN_CNTNT
+String STR_FLY_AS_CHAR
 {
     Text [ en-US ] = "to character" ;
 };
-String STR_FLY_PAGE
+String STR_FLY_AT_PAGE
 {
     Text [ en-US ] = "to page" ;
 };

@@ -63,7 +63,7 @@ class SW_DLLPUBLIC SwIndex
     void Remove();                  // Ausketten
 
 public:
-    SwIndex( SwIndexReg * pReg, xub_StrLen nIdx = 0 );
+    explicit SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx = 0);
     SwIndex( const SwIndex & );
     SwIndex( const SwIndex &, short nDiff );
     ~SwIndex() { Remove(); }

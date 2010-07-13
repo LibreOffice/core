@@ -47,6 +47,7 @@
 #include <rtl/ustring.hxx>
 #include <vcl/virdev.hxx>
 #include <svl/itemiter.hxx>
+#include <svl/poolitem.hxx>
 #include <unotools/syslocale.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/keepitem.hxx>
@@ -55,9 +56,11 @@
 #include <sfx2/linkmgr.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svx/svdmodel.hxx>
+#include <editeng/pbinitem.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/localedatawrapper.hxx>
 
+#include <swatrset.hxx>
 #include <swmodule.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
@@ -473,6 +476,16 @@ void SwDoc::setPrinter(/*[in]*/ SfxPrinter *pP,/*[in]*/ bool bDeleteOld,/*[in]*/
         if ( bDeleteOld )
             delete pPrt;
         pPrt = pP;
+
+        // our printer should always use TWIP. Don't rely on this being set in ViewShell::InitPrt, there
+        // are situations where this isn't called.
+        // #i108712# / 2010-02-26 / frank.schoenheit@sun.com
+        if ( pPrt )
+        {
+            MapMode aMapMode( pPrt->GetMapMode() );
+            aMapMode.SetMapUnit( MAP_TWIP );
+            pPrt->SetMapMode( aMapMode );
+        }
 
         if ( pDrawModel && !get( IDocumentSettingAccess::USE_VIRTUAL_DEVICE ) )
             pDrawModel->SetRefDevice( pPrt );
@@ -1177,6 +1190,23 @@ static void lcl_FormatPostIt(
 }
 
 
+// provide the paper tray to use according to the page style in use,
+// but do that only if the respective item is NOT just the default item
+static sal_Int32 lcl_GetPaperBin( const SwPageFrm *pStartFrm )
+{
+    sal_Int32 nRes = -1;
+
+    const SwFrmFmt &rFmt = pStartFrm->GetPageDesc()->GetMaster();
+    const SfxPoolItem *pItem = NULL;
+    SfxItemState eState = rFmt.GetItemState( RES_PAPER_BIN, FALSE, &pItem );
+    const SvxPaperBinItem *pPaperBinItem = dynamic_cast< const SvxPaperBinItem * >(pItem);
+    if (eState > SFX_ITEM_DEFAULT && pPaperBinItem)
+        nRes = pPaperBinItem->GetValue();
+
+    return nRes;
+}
+
+
 void SwDoc::CalculatePagesForPrinting(
     /* out */ SwRenderData &rData,
     const SwPrintUIOptions &rOptions,
@@ -1187,11 +1217,15 @@ void SwDoc::CalculatePagesForPrinting(
     if (!pLayout)
         return;
 
+    const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
+    const bool bPrintSelection = nContent == 2;
+
     // properties to take into account when calcualting the set of pages
     // (PDF export UI does not allow for selecting left or right pages only)
     bool bPrintLeftPages    = bIsPDFExport ? true : rOptions.IsPrintLeftPages();
     bool bPrintRightPages   = bIsPDFExport ? true : rOptions.IsPrintRightPages();
-    bool bPrintEmptyPages   = rOptions.IsPrintEmptyPages( bIsPDFExport );
+    // #i103700# printing selections should not allow for automatic inserting empty pages
+    bool bPrintEmptyPages   = bPrintSelection ? false : rOptions.IsPrintEmptyPages( bIsPDFExport );
 
     Range aPages( 1, nDocPageCount );
 
@@ -1253,6 +1287,7 @@ void SwDoc::CalculatePagesForPrinting(
 
         nPageNo = nFirstPageNo;
 
+        std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
         std::set< sal_Int32 > &rValidPages = rData.GetValidPagesSet();
         std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms = rData.GetValidStartFrames();
         rValidPages.clear();
@@ -1268,9 +1303,10 @@ void SwDoc::CalculatePagesForPrinting(
                 if ( bPrintEmptyPages || pStPage->Frm().Height() )
                 // <--
                 {
-                    // pStPage->GetUpper()->Paint( pStPage->Frm() );
                     rValidPages.insert( nPageNo );
                     rValidStartFrms[ nPageNo ] = pStPage;
+
+                    rPrinterPaperTrays[ nPageNo ] = lcl_GetPaperBin( pStPage );
                 }
             }
 
@@ -1306,7 +1342,6 @@ void SwDoc::CalculatePagesForPrinting(
         // 0 -> print all pages (default if aPageRange is empty)
         // 1 -> print range according to PageRange
         // 2 -> print selection
-        const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
         if (1 == nContent)
             aPageRange = rOptions.getStringValue( "PageRange", OUString() );
         if (2 == nContent)
@@ -1526,8 +1561,9 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     const SwPrintUIOptions &rOptions,
     sal_Int32 nDocPageCount )
 {
-    std::set< sal_Int32 > &rValidPagesSet   = rData.GetValidPagesSet();
-    std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms  = rData.GetValidStartFrames();
+    std::map< sal_Int32, sal_Int32 > &rPrinterPaperTrays = rData.GetPrinterPaperTrays();
+    std::set< sal_Int32 > &rValidPagesSet = rData.GetValidPagesSet();
+    std::map< sal_Int32, const SwPageFrm * > &rValidStartFrms = rData.GetValidStartFrames();
     std::vector< std::pair< sal_Int32, sal_Int32 > > &rPagePairs = rData.GetPagePairsForProspectPrinting();
 
     rPagePairs.clear();
@@ -1535,6 +1571,18 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
     rValidStartFrms.clear();
 
     rtl::OUString aPageRange = rOptions.getStringValue( "PageRange", rtl::OUString() );
+    // PageContent :
+    // 0 -> print all pages (default if aPageRange is empty)
+    // 1 -> print range according to PageRange
+    // 2 -> print selection
+    const sal_Int32 nContent = rOptions.getIntValue( "PrintContent", 0 );
+    if (0 == nContent)
+    {
+        // set page range to print to 'all pages'
+        aPageRange = OUString::valueOf( (sal_Int32)1 );
+        aPageRange += OUString::valueOf( (sal_Unicode)'-');
+        aPageRange += OUString::valueOf( nDocPageCount );
+    }
     StringRangeEnumerator aRange( aPageRange, 1, nDocPageCount, 0 );
 
     DBG_ASSERT( pLayout, "no layout present" );
@@ -1559,6 +1607,8 @@ void SwDoc::CalculatePagePairsForProspectPrinting(
         rValidPagesSet.insert( nPageNum );
         rValidStartFrms[ nPageNum ] = pPageFrm;
         pPageFrm = (SwPageFrm*)pPageFrm->GetNext();
+
+        rPrinterPaperTrays[ nPageNum ] = lcl_GetPaperBin( pStPage );
     }
     DBG_ASSERT( nPageNum == nDocPageCount, "unexpected number of pages" );
 
@@ -2283,11 +2333,10 @@ BOOL SwDoc::RemoveInvisibleContent()
             }
             if( pSect->GetCondition().Len() )
             {
-                SwSection aSect( pSect->GetType(), pSect->GetName() );
-                aSect = *pSect;
-                aSect.SetCondition( aEmptyStr );
-                aSect.SetHidden( FALSE );
-                ChgSection( n, aSect );
+                SwSectionData aSectionData( *pSect );
+                aSectionData.SetCondition( aEmptyStr );
+                aSectionData.SetHidden( false );
+                UpdateSection( n, aSectionData );
             }
         }
 

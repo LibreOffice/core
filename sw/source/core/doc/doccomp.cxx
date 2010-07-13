@@ -1412,7 +1412,7 @@ void SwCompareData::ShowDelete( const CompareData& rData, ULONG nStt,
         if( *pCorr->GetPoint() == *pTmp->GetPoint() )
         {
             SwNodeIndex aTmpPos( pTmp->GetMark()->nNode, -1 );
-            *pCorr->GetPoint() = SwPosition( aTmpPos, 0 );
+            *pCorr->GetPoint() = SwPosition( aTmpPos );
         }
     }
 }
@@ -1480,6 +1480,17 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo )
                 pTmp->GetPoint()->nNode++;
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
+            // --> mst 2010-05-17 #i101009#
+            // prevent redlines that end on structural end node
+            if (& rDoc.GetNodes().GetEndOfContent() ==
+                & pTmp->GetPoint()->nNode.GetNode())
+            {
+                pTmp->GetPoint()->nNode--;
+                SwCntntNode *const pContentNode( pTmp->GetCntntNode() );
+                pTmp->GetPoint()->nContent.Assign( pContentNode,
+                        (pContentNode) ? pContentNode->Len() : 0 );
+            }
+            // <--
 
             rDoc.DeleteRedline( *pTmp, false, USHRT_MAX );
 
@@ -1499,6 +1510,17 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo )
                 pTmp->GetPoint()->nNode++;
                 pTmp->GetPoint()->nContent.Assign( pTmp->GetCntntNode(), 0 );
             }
+            // --> mst 2010-05-17 #i101009#
+            // prevent redlines that end on structural end node
+            if (& rDoc.GetNodes().GetEndOfContent() ==
+                & pTmp->GetPoint()->nNode.GetNode())
+            {
+                pTmp->GetPoint()->nNode--;
+                SwCntntNode *const pContentNode( pTmp->GetCntntNode() );
+                pTmp->GetPoint()->nContent.Assign( pContentNode,
+                        (pContentNode) ? pContentNode->Len() : 0 );
+            }
+            // <--
         } while( pInsRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
         SwRedlineData aRedlnData( nsRedlineType_t::REDLINE_INSERT, nAuthor, aTimeStamp,
                                     aEmptyStr, 0, 0 );

@@ -717,7 +717,6 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
  --------------------------------------------------------------------*/
 
 #define FN_LINE_NUMBERING_DLG       (FN_EXTRA + 2 )   /* Zeilennumerierung */
-#define FN_THESAURUS_DLG            (FN_EXTRA + 3 )   /* Thesaurus */
 #define FN_HYPHENATE_OPT_DLG        (FN_EXTRA + 5 )   /* Silbentrennung */
 #define FN_ADD_UNKNOWN              (FN_EXTRA + 6 )   /* Woerter lernen */
 #define FN_DICTIONARY_DLG           (FN_EXTRA + 8 )   /* Woerterbuecher */
@@ -907,6 +906,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_PARA_NUM_STRING              (FN_EXTRA2 + 110)
 #define FN_UNO_TABLE_NAME                   (FN_EXTRA2 + 111)
 #define FN_UNO_META                         (FN_EXTRA2 + 112)
+#define FN_UNO_NESTED_TEXT_CONTENT          (FN_EXTRA2 + 113)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe

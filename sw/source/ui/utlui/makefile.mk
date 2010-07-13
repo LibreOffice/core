@@ -51,15 +51,15 @@ SRC1FILES =  \
 
 EXCEPTIONSFILES= \
         $(SLO)$/bookctrl.obj \
+        $(SLO)$/glbltree.obj \
         $(SLO)$/navipi.obj \
         $(SLO)$/unotools.obj    \
+        $(SLO)$/content.obj \
         $(SLO)$/swrenamexnameddlg.obj
 
 SLOFILES =  $(EXCEPTIONSFILES) \
         $(SLO)$/condedit.obj \
-        $(SLO)$/content.obj \
         $(SLO)$/gloslst.obj \
-        $(SLO)$/glbltree.obj \
         $(SLO)$/initui.obj \
         $(SLO)$/navicfg.obj \
         $(SLO)$/numfmtlb.obj \

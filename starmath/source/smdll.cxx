@@ -40,6 +40,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/taskpane.hxx>
 
 #ifndef _SMDLL_HXX
 #include <smdll.hxx>
@@ -75,7 +76,7 @@ void SmDLL::Init()
     SmModule** ppShlPtr = (SmModule**) GetAppData(SHL_SM);
     *ppShlPtr = new SmModule( &rFactory );
 
-    SfxModule *p = SM_MOD1();
+    SfxModule *p = SM_MOD();
     SmModule *pp = (SmModule *) p;
 
     rFactory.SetDocumentServiceName( String::CreateFromAscii("com.sun.star.formula.FormulaProperties") );
@@ -94,6 +95,8 @@ void SmDLL::Init()
 
     SmToolBoxWrapper::RegisterChildWindow(TRUE);
     SmCmdBoxWrapper::RegisterChildWindow(TRUE);
+
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE, pp );
 }
 
 /*************************************************************************

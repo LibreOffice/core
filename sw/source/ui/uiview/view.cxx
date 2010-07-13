@@ -212,7 +212,7 @@ void SwView::GotFocus() const
         SwAnnotationShell* pAsAnnotationShell = PTR_CAST( SwAnnotationShell, pTopShell );
         if ( pAsAnnotationShell )
         {
-            mpPostItMgr->SetActivePostIt(0);
+            mpPostItMgr->SetActiveSidebarWin(0);
             const_cast< SwView* >( this )->AttrChangedNotify( pWrtShell );
         }
     }
@@ -1398,11 +1398,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             {
                pValue->Value >>= bSelectedFrame;
                bGotIsSelectedFrame = sal_True;
-            }
-            else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsSelectedFrame" ) ) )
-            {
-                pValue->Value >>= bSelectedFrame;
-                bGotIsSelectedFrame = sal_True;
             }
             pValue++;
         }

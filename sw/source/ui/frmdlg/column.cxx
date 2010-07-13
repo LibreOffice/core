@@ -354,7 +354,8 @@ IMPL_LINK(SwColumnDlg, OkHdl, OKButton*, EMPTYARG)
         const SwSection* pCurrSection = rWrtShell.GetCurrSection();
         const SwSectionFmt* pFmt = pCurrSection->GetFmt();
         USHORT nNewPos = rWrtShell.GetSectionFmtPos( *pFmt );
-        rWrtShell.ChgSection( nNewPos, *pCurrSection, pSectionSet );
+        SwSectionData aData(*pCurrSection);
+        rWrtShell.UpdateSection( nNewPos, aData, pSectionSet );
     }
 
     if(pSectionSet && pSectionSet->Count() && bSelSectionChanged )

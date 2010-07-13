@@ -1556,7 +1556,7 @@ FloatingWindow RID_TOOLBOXWINDOW
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 0 , 0 ) ;
-    Text [ en-US ] = "Formula Elements" ;
+    Text [ en-US ] = "Elements" ;
 
     ToolBox 1
     {
@@ -3557,7 +3557,7 @@ StringArray RID_PRINTUIOPTIONS
     {
         < "%PRODUCTNAME %s"; >;
         < "Contents"; >;
-        < "~Title row"; >;
+        < "~Title"; >;
         < "Specifies whether you want the name of the document to be included in the printout"; >;
         < "~Formula text"; >;
         < "Specifies whether to include the contents of the 'Commands' window at the bottom of the printout."; >;

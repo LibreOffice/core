@@ -96,7 +96,7 @@ class SwTOXBaseSection : public SwTOXBase, public SwSection
     SwTxtFmtColl* GetTxtFmtColl( USHORT nLevel );
 
 public:
-    SwTOXBaseSection( const SwTOXBase& rBase );
+    SwTOXBaseSection(SwTOXBase const& rBase, SwSectionFmt & rFmt);
     virtual ~SwTOXBaseSection();
 
     // OD 19.03.2003 #106329# - add parameter <_bNewTOX> in order to distinguish

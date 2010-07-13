@@ -28,26 +28,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <rtl/uri.hxx>
 
-
-
-#include "hintids.hxx"
-
-#ifndef _APP_HXX //autogen
+#include <svl/urihelper.hxx>
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
 #include <editeng/adjitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <svtools/htmltokn.h>
-#ifndef _HTMLKYWD_H
 #include <svtools/htmlkywd.hxx>
-#endif
 #include <sfx2/linkmgr.hxx>
-#include <rtl/uri.hxx>
+
+#include "hintids.hxx"
 #include <fmtornt.hxx>
 #include <fmthdft.hxx>
 #include <fmtcntnt.hxx>
@@ -69,7 +62,6 @@
 #include "viewsh.hxx"
 #include "swcss1.hxx"
 #include "swhtml.hxx"
-#include <svl/urihelper.hxx>
 
 #define CONTEXT_FLAGS_MULTICOL (HTML_CNTXT_STRIP_PARA |  \
                                 HTML_CNTXT_KEEP_NUMRULE | \
@@ -321,12 +313,12 @@ void SwHTMLParser::NewDivision( int nToken )
             aHRef = aURL;
         }
 
-        SwSection aSection( aHRef.Len() ? FILE_LINK_SECTION
+        SwSectionData aSection( (aHRef.Len()) ? FILE_LINK_SECTION
                                         : CONTENT_SECTION, aName );
         if( aHRef.Len() )
         {
             aSection.SetLinkFileName( aHRef );
-            aSection.SetProtect();
+            aSection.SetProtectFlag(true);
         }
 
         SfxItemSet aFrmItemSet( pDoc->GetAttrPool(),
@@ -348,7 +340,7 @@ void SwHTMLParser::NewDivision( int nToken )
             aItemSet.ClearItem( RES_FRAMEDIR );
         }
 
-        pDoc->InsertSwSection( *pPam, aSection, &aFrmItemSet, false );
+        pDoc->InsertSwSection( *pPam, aSection, 0, &aFrmItemSet, false );
 
         // ggfs. einen Bereich anspringen
         if( JUMPTO_REGION == eJumpTo && aName == sJmpMark )
@@ -708,7 +700,7 @@ void SwHTMLParser::NewMultiCol()
 
         // Make section name unique.
         String aName( pDoc->GetUniqueSectionName( aId.Len() ? &aId : 0 ) );
-        SwSection aSection( CONTENT_SECTION, aName );
+        SwSectionData aSection( CONTENT_SECTION, aName );
 
         SfxItemSet aFrmItemSet( pDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
@@ -743,7 +735,7 @@ void SwHTMLParser::NewMultiCol()
             aFrmItemSet.Put( *pItem );
             aItemSet.ClearItem( RES_FRAMEDIR );
         }
-        pDoc->InsertSwSection( *pPam, aSection, &aFrmItemSet, false );
+        pDoc->InsertSwSection( *pPam, aSection, 0, &aFrmItemSet, false );
 
         // Jump to section, if this is requested.
         if( JUMPTO_REGION == eJumpTo && aName == sJmpMark )

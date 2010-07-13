@@ -39,6 +39,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <editeng/adjitem.hxx>
 #include <basic/sbx.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -69,7 +70,6 @@
 #include <view.hxx>         // fuer die aktuelle Sicht
 #include <edtwin.hxx>
 #include <PostItMgr.hxx>
-#include <postit.hxx>
 #include <wrtsh.hxx>        // Verbindung zur Core
 #include <docsh.hxx>        // Dokumenterzeugung
 #include <basesh.hxx>
@@ -102,7 +102,6 @@
 #include <cmdid.h>
 #include <globals.hrc>
 #include <app.hrc>
-#include "warnpassword.hxx"
 
 #include <cfgid.h>
 #include <unotools/moduleoptions.hxx>
@@ -429,8 +428,12 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         pView->GetEditWin().StopQuickHelp();
 
     //#i91811# mod if we have an active margin window, write back the text
-    if (pView && pView->GetPostItMgr() && pView->GetPostItMgr()->GetActivePostIt())
-        pView->GetPostItMgr()->GetActivePostIt()->UpdateData();
+    if ( pView &&
+         pView->GetPostItMgr() &&
+         pView->GetPostItMgr()->HasActiveSidebarWin() )
+    {
+        pView->GetPostItMgr()->UpdateDataOnActiveSidebarWin();
+    }
 
     if( pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) &&
         !pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS) )
@@ -575,8 +578,12 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
         pView->GetEditWin().StopQuickHelp();
 
     //#i91811# mod if we have an active margin window, write back the text
-    if (pView && pView->GetPostItMgr() && pView->GetPostItMgr()->GetActivePostIt())
-        pView->GetPostItMgr()->GetActivePostIt()->UpdateData();
+    if ( pView &&
+         pView->GetPostItMgr() &&
+         pView->GetPostItMgr()->HasActiveSidebarWin() )
+    {
+        pView->GetPostItMgr()->UpdateDataOnActiveSidebarWin();
+    }
 
     ULONG nVBWarning = 0;
 
@@ -1361,3 +1368,79 @@ const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
 {
     return pDoc ? &pDoc->GetXmlIdRegistry() : 0;
 }
+
+
+bool SwDocShell::IsChangeRecording() const
+{
+    return (pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0;
+}
+
+
+bool SwDocShell::HasChangeRecordProtection() const
+{
+    return pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0;
+}
+
+
+void SwDocShell::SetChangeRecording( bool bActivate )
+{
+    USHORT nOn = bActivate ? nsRedlineMode_t::REDLINE_ON : 0;
+    USHORT nMode = pWrtShell->GetRedlineMode();
+    pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+}
+
+
+bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
+{
+    const SfxAllItemSet aSet( GetPool() );
+    const SfxItemSet*   pArgs = &aSet;
+    const SfxPoolItem*  pItem = NULL;
+
+    IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
+    Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
+    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
+        && ((SfxBoolItem*)pItem)->GetValue() == aPasswd.getLength() > 0)
+        return false;
+
+    bool bRes = false;
+
+    if (rNewPassword.Len())
+    {
+        // when password protection is applied change tracking must always be active
+        SetChangeRecording( true );
+
+        Sequence< sal_Int8 > aNewPasswd;
+        SvPasswordHelper::GetHashPassword( aNewPasswd, rNewPassword );
+        pIDRA->SetRedlinePassword( aNewPasswd );
+        bRes = true;
+    }
+    else
+    {
+        pIDRA->SetRedlinePassword( Sequence< sal_Int8 >() );
+        bRes = true;
+    }
+
+    return bRes;
+}
+
+
+bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
+{
+    bool bRes = false;
+
+    const SfxAllItemSet aSet( GetPool() );
+    const SfxItemSet*   pArgs = &aSet;
+    const SfxPoolItem*  pItem = NULL;
+
+    IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
+    Sequence< sal_Int8 > aPasswdHash( pIDRA->GetRedlinePassword() );
+    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
+        && ((SfxBoolItem*)pItem)->GetValue() == (aPasswdHash.getLength() != 0))
+        return false;
+    rPasswordHash = aPasswdHash;
+    bRes = true;
+
+    return bRes;
+}
+
+

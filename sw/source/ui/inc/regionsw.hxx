@@ -61,91 +61,11 @@ namespace sfx2
     class FileDialogHelper;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-class SectRepr
-{
-    SwSection               aSection;
-    SwFmtCol                aCol;
-    SvxBrushItem            aBrush;
-    SwFmtFtnAtTxtEnd        aFtnNtAtEnd;
-    SwFmtEndAtTxtEnd        aEndNtAtEnd;
-    SwFmtNoBalancedColumns  aBalance;
-    SvxFrameDirectionItem   aFrmDirItem;
-    SvxLRSpaceItem          aLRSpaceItem;
-    USHORT                  nArrPos;
-    USHORT                  nColumn;
-    BOOL                    bContent    : 1; //zeigt an, ob evtl. Textinhalt im Bereich ist
-    BOOL                    bSelected   : 1; //fuer Multiselektion erst markieren, dann mit der TreeListBox arbeiten!
-    ::com::sun::star::uno::Sequence <sal_Int8 >     aTempPasswd;
-public:
-    SectRepr(USHORT nPos, SwSection& rSect);
-    BOOL    operator ==(SectRepr& rSectRef) const
-            {return nArrPos==rSectRef.GetArrPos();}
-
-    BOOL    operator <(SectRepr& rSectRef) const
-            {return nArrPos<rSectRef.GetArrPos();}
-
-    SwSection&          GetSection()        { return aSection; }
-    SwFmtCol&           GetCol()            { return aCol; }
-    SvxBrushItem&       GetBackground()     { return aBrush; }
-    SwFmtFtnAtTxtEnd&   GetFtnNtAtEnd()     { return aFtnNtAtEnd; }
-    SwFmtEndAtTxtEnd&   GetEndNtAtEnd()     { return aEndNtAtEnd; }
-    SwFmtNoBalancedColumns& GetBalance()        { return aBalance; }
-    SvxFrameDirectionItem&  GetFrmDir()         { return aFrmDirItem; }
-    SvxLRSpaceItem&         GetLRSpace()        { return aLRSpaceItem; }
-
-    USHORT              GetArrPos() const {return nArrPos;}
-    const String&       GetCondition() const {return aSection.GetCondition();}
-    const String&       GetName() const { return aSection.GetName(); }
-    String              GetFile() const;
-    String              GetSubRegion() const;
-    void                SetFile( const String& rFile );
-    void                SetFilter( const String& rFilter );
-    void                SetSubRegion( const String& rSubRegion );
-
-    void                SetFilePasswd( const String& rPasswd )
-                        { aSection.SetLinkFilePassWd( rPasswd ); }
-    void                SetCondition( const String& rString )
-                        {aSection.SetCondition( rString);}
-    BOOL                IsCondHidden()const
-                        {return aSection.IsCondHidden();}
-    BOOL                IsHidden()const
-                        {return aSection.IsHidden();}
-    BOOL                IsProtect()const
-                        {return aSection.IsProtect();}
-    // --> FME 2004-06-22 #114856# edit in readonly sections
-    BOOL                 IsEditInReadonly()const
-                        {return aSection.IsEditInReadonly();}
-    void                SetEditInReadonly(BOOL bFlag = TRUE)
-                        {aSection.SetEditInReadonly(bFlag);}
-    // <--
-    void                SetHidden(BOOL bFlag = TRUE)
-                        {aSection.SetHidden(bFlag);}
-    void                SetCondHidden(BOOL bFlag = TRUE)
-                        {aSection.SetCondHidden(bFlag);}
-    void                SetProtect(BOOL bFlag = TRUE)
-                        {aSection.SetProtect(bFlag);}
-    BOOL                IsContent(){return bContent;}
-    void                SetContent(BOOL bValue){bContent = bValue;}
-    void                SetSectionType(SectionType eSectionType) {aSection.SetType(eSectionType);}
-    SectionType         GetSectionType(){return aSection.GetType();}
-
-    void                SetSelected(){bSelected = TRUE;}
-    BOOL                IsSelected() const {return bSelected;}
-
-
-    const ::com::sun::star::uno::Sequence <sal_Int8 >& GetPasswd() const {return aSection.GetPasswd();}
-    ::com::sun::star::uno::Sequence <sal_Int8 >&    GetTempPasswd() {return aTempPasswd;}
-    void                                            SetTempPasswd(const ::com::sun::star::uno::Sequence <sal_Int8 >& aPasswd)    {aTempPasswd = aPasswd;}
-};
-
 /*************************************************************************
     Dialog "Bereiche bearbeiten"
 *************************************************************************/
 
+class SectRepr;
 typedef SectRepr* SectReprPtr;
 SV_DECL_PTRARR_SORT( SectReprArr, SectReprPtr, 0, 4 )
 
@@ -385,7 +305,8 @@ public:
 class SwInsertSectionTabDialog : public SfxTabDialog
 {
     SwWrtShell&     rWrtSh;
-    SwSection*      pToInsertSection;
+    ::std::auto_ptr<SwSectionData> m_pSectionData;
+
 protected:
     virtual void    PageCreated( USHORT nId, SfxTabPage &rPage );
     virtual short   Ok();
@@ -393,8 +314,8 @@ public:
     SwInsertSectionTabDialog(Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh);
     virtual ~SwInsertSectionTabDialog();
 
-    void        SetSection(const SwSection& rSect);
-    SwSection*  GetSection() { return pToInsertSection;}
+    void        SetSectionData(SwSectionData const& rSect);
+    SwSectionData * GetSectionData() { return m_pSectionData.get(); }
 };
 
 /* -----------------21.05.99 13:07-------------------

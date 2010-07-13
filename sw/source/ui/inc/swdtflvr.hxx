@@ -26,12 +26,10 @@
  ************************************************************************/
 #ifndef _SWDTFLVR_HXX
 #define _SWDTFLVR_HXX
-#ifndef _TRANSFER_HXX
 
 #include <sfx2/objsh.hxx>
 
 #include <svtools/transfer.hxx>
-#endif
 #include <vcl/graph.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -93,6 +91,7 @@ class SwTransferable : public TransferableHelper
     void DeleteSelection();
 
     // helper methods for the paste
+    static SwTransferable* GetSwTransferable( const TransferableDataHelper& rData );
     static void SetSelInShell( SwWrtShell& , BOOL , const Point* );
     static BOOL _CheckForURLOrLNKFile( TransferableDataHelper& rData,
                                 String& rFileName, String* pTitle = 0 );

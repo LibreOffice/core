@@ -300,9 +300,7 @@ SwTransferable::~SwTransferable()
     SwModule* pMod = SW_MOD();
     if(pMod)
     {
-        if ( pMod->pClipboard == this )
-            pMod->pClipboard = 0;
-        else if ( pMod->pDragDrop == this )
+        if ( pMod->pDragDrop == this )
             pMod->pDragDrop = 0;
         else if ( pMod->pXSelection == this )
             pMod->pXSelection = 0;
@@ -322,12 +320,23 @@ SwTransferable::~SwTransferable()
 
 // -----------------------------------------------------------------------
 
+static SwDoc * lcl_GetDoc(SwDocFac & rDocFac)
+{
+    SwDoc *const pDoc = rDocFac.GetDoc();
+    ASSERT( pDoc, "Document not found" );
+    if (pDoc)
+    {
+        pDoc->SetClipBoard( true );
+    }
+    return pDoc;
+}
+
+// -----------------------------------------------------------------------
+
 void SwTransferable::ObjectReleased()
 {
     SwModule *pMod = SW_MOD();
-    if( this == pMod->pClipboard )
-        pMod->pClipboard = 0;
-    else if( this == pMod->pDragDrop )
+    if( this == pMod->pDragDrop )
         pMod->pDragDrop = 0;
     else if( this == pMod->pXSelection )
         pMod->pXSelection = 0;
@@ -443,7 +452,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         }
 
         pClpDocFac = new SwDocFac;
-        SwDoc* pTmpDoc = pClpDocFac->GetDoc();
+        SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
         pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
@@ -530,8 +539,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 
         case SOT_FORMATSTR_ID_DRAWING:
             {
-                SwDoc *pDoc = pClpDocFac->GetDoc();
-                ASSERT( pDoc, "Document not found" );
+                SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
                 bOK = SetObject( pDoc->GetDrawModel(),
                                 SWTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
             }
@@ -539,21 +547,22 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 
         case SOT_FORMAT_STRING:
         {
-            SwDoc* pDoc = pClpDocFac->GetDoc();
-            ASSERT( pDoc, "Document not found" );
-            pDoc->SetClipBoard( true );
-            bOK = SetObject( pDoc,
-                                SWTRANSFER_OBJECTTYPE_STRING, rFlavor );
+            SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_STRING, rFlavor );
         }
         break;
         case SOT_FORMAT_RTF:
-            bOK = SetObject( pClpDocFac->GetDoc(),
-                                SWTRANSFER_OBJECTTYPE_RTF, rFlavor );
+        {
+            SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_RTF, rFlavor );
+        }
             break;
 
         case SOT_FORMATSTR_ID_HTML:
-            bOK = SetObject( pClpDocFac->GetDoc(),
-                                SWTRANSFER_OBJECTTYPE_HTML, rFlavor );
+        {
+            SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+            bOK = SetObject( pDoc, SWTRANSFER_OBJECTTYPE_HTML, rFlavor );
+        }
             break;
 
         case SOT_FORMATSTR_ID_SVXB:
@@ -597,7 +606,7 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
 //      default:
             if( !aDocShellRef.Is() )
             {
-                SwDoc *pDoc = pClpDocFac->GetDoc();
+                SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
                 SwDocShell* pNewDocSh = new SwDocShell( pDoc,
                                          SFX_CREATE_MODE_EMBEDDED );
                 aDocShellRef = pNewDocSh;
@@ -805,7 +814,8 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
             pOrigGrf = pClpBitmap;
 
         pClpDocFac = new SwDocFac;
-        pWrtShell->Copy( pClpDocFac->GetDoc() );
+        SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+        pWrtShell->Copy( pDoc );
 
         if (pOrigGrf && !pOrigGrf->GetBitmap().IsEmpty())
           AddFormat( SOT_FORMATSTR_ID_SVXB );
@@ -827,7 +837,7 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
     else if ( nSelection == nsSelectionType::SEL_OLE )
     {
         pClpDocFac = new SwDocFac;
-        SwDoc *pDoc = pClpDocFac->GetDoc();
+        SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
         aDocShellRef = new SwDocShell( pDoc, SFX_CREATE_MODE_EMBEDDED);
         aDocShellRef->DoInitNew( NULL );
         pWrtShell->Copy( pDoc );
@@ -857,8 +867,7 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         if( pWrtShell->IsAddMode() && pWrtShell->SwCrsrShell::HasSelection() )
             pWrtShell->CreateCrsr();
 
-        SwDoc* pTmpDoc = pClpDocFac->GetDoc();
-        pTmpDoc->SetClipBoard( true );
+        SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
         pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
@@ -1000,7 +1009,6 @@ int SwTransferable::Copy( BOOL bIsCut )
     int nRet = PrepareForCopy( bIsCut );
     if ( nRet )
     {
-        SW_MOD()->pClipboard = this;
         CopyToClipboard( &pWrtShell->GetView().GetEditWin() );
     }
     return nRet;
@@ -1017,11 +1025,11 @@ int SwTransferable::CalculateAndCopy()
     String aStr( pWrtShell->Calculate() );
 
     pClpDocFac = new SwDocFac;
-    pWrtShell->Copy( pClpDocFac->GetDoc(), &aStr);
+    SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
+    pWrtShell->Copy(pDoc, & aStr);
     eBufferType = TRNSFR_DOCUMENT;
     AddFormat( FORMAT_STRING );
 
-    SW_MOD()->pClipboard = this;
     CopyToClipboard( &pWrtShell->GetView().GetEditWin() );
 
     return 1;
@@ -1037,7 +1045,7 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     SwWait aWait( *pWrtShell->GetView().GetDocShell(), TRUE );
 
     pClpDocFac = new SwDocFac;
-    SwDoc* pCDoc = pClpDocFac->GetDoc();
+    SwDoc *const pCDoc = lcl_GetDoc(*pClpDocFac);
 
     SwNodes& rNds = pCDoc->GetNodes();
     SwNodeIndex aNodeIdx( *rNds.GetEndOfContent().StartOfSectionNode() );
@@ -1072,7 +1080,6 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     PrepareOLE( aObjDesc );
     AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
 
-    SW_MOD()->pClipboard = this;
     CopyToClipboard( &pWrtShell->GetView().GetEditWin() );
 
     return 1;
@@ -1090,20 +1097,14 @@ BOOL SwTransferable::IsPaste( const SwWrtShell& rSh,
     // Check the common case first: We can always paste our own data!
     // #106503#: If _only_ the internal format can be pasted, this check will
     // yield 'true', while the one below would give a (wrong) result 'false'.
-    bool bIsPaste = ( SW_MOD()->pClipboard != NULL );
+
+    bool bIsPaste = ( GetSwTransferable( rData ) != NULL );
 
     // if it's not our own data, we need to have a closer look:
     if( ! bIsPaste )
     {
         // determine the proper paste action, and return true if we find one
         uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
-        uno::Reference<XUnoTunnel> xTunnel( xTransferable, UNO_QUERY );
-        if ( xTunnel.is() )
-        {
-            sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
-            if ( nHandle )
-                return TRUE;
-        }
 
         USHORT nDestination = SwTransferable::GetSotDestination( rSh );
         USHORT nSourceOptions =
@@ -1139,36 +1140,27 @@ int SwTransferable::Paste( SwWrtShell& rSh, TransferableDataHelper& rData )
            nDestination = SwTransferable::GetSotDestination( rSh );
     ULONG nFormat = 0;
 
-    if( SW_MOD()->pClipboard )
+    if( GetSwTransferable( rData ) )
+    {
         nAction = EXCHG_OUT_ACTION_INSERT_PRIVATE;
+    }
     else
     {
-        uno::Reference<XUnoTunnel> xTunnel( rData.GetTransferable(), UNO_QUERY );
-        if ( xTunnel.is() )
-        {
-            sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
-            if ( nHandle )
-                nAction = EXCHG_OUT_ACTION_INSERT_PRIVATE;
-        }
-
-        if ( !nAction )
-        {
-            USHORT nSourceOptions =
-                        (( EXCHG_DEST_DOC_TEXTFRAME == nDestination ||
-                        EXCHG_DEST_SWDOC_FREE_AREA == nDestination ||
-                        EXCHG_DEST_DOC_TEXTFRAME_WEB == nDestination ||
-                        EXCHG_DEST_SWDOC_FREE_AREA_WEB == nDestination )
-                                        ? EXCHG_IN_ACTION_COPY
-                                        : EXCHG_IN_ACTION_MOVE);
-            uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
-            nAction = SotExchange::GetExchangeAction(
-                                        rData.GetDataFlavorExVector(),
-                                        nDestination,
-                                        nSourceOptions,             /* ?? */
-                                        EXCHG_IN_ACTION_DEFAULT,    /* ?? */
-                                        nFormat, nEventAction, 0,
-                                        lcl_getTransferPointer ( xTransferable ) );
-        }
+        USHORT nSourceOptions =
+                    (( EXCHG_DEST_DOC_TEXTFRAME == nDestination ||
+                    EXCHG_DEST_SWDOC_FREE_AREA == nDestination ||
+                    EXCHG_DEST_DOC_TEXTFRAME_WEB == nDestination ||
+                    EXCHG_DEST_SWDOC_FREE_AREA_WEB == nDestination )
+                                    ? EXCHG_IN_ACTION_COPY
+                                    : EXCHG_IN_ACTION_MOVE);
+        uno::Reference<XTransferable> xTransferable( rData.GetXTransferable() );
+        nAction = SotExchange::GetExchangeAction(
+                                    rData.GetDataFlavorExVector(),
+                                    nDestination,
+                                    nSourceOptions,             /* ?? */
+                                    EXCHG_IN_ACTION_DEFAULT,    /* ?? */
+                                    nFormat, nEventAction, 0,
+                                    lcl_getTransferPointer ( xTransferable ) );
     }
 
     // special case for tables from draw application
@@ -1231,7 +1223,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
             }
         }
     }
-    else if( ( !pMod->pClipboard || bIsPasteFmt ) &&
+    else if( ( !GetSwTransferable( rData ) || bIsPasteFmt ) &&
             !rSh.IsTableMode() && rSh.HasSelection() )
     {
         // dann die Selektionen loeschen
@@ -1259,14 +1251,14 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
             // <--
     }
 
-    SwTransferable *pTrans=0, *pTunneledTrans=0;
-    uno::Reference<XUnoTunnel> xTunnel( rData.GetTransferable(), UNO_QUERY );
-    if ( xTunnel.is() )
-    {
-        sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
-        if ( nHandle )
-            pTunneledTrans = (SwTransferable*) (sal_IntPtr) nHandle;
-    }
+    SwTransferable *pTrans=0, *pTunneledTrans=GetSwTransferable( rData );
+//    uno::Reference<XUnoTunnel> xTunnel( rData.GetTransferable(), UNO_QUERY );
+//    if ( xTunnel.is() )
+//    {
+//        sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
+//        if ( nHandle )
+//            pTunneledTrans = (SwTransferable*) (sal_IntPtr) nHandle;
+//    }
 
     if( pPt && ( bPasteSelection ? 0 != ( pTrans = pMod->pXSelection )
                                  : 0 != ( pTrans = pMod->pDragDrop) ))
@@ -1275,7 +1267,7 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
         nRet = pTrans->PrivateDrop( rSh, *pPt, DND_ACTION_MOVE == nDropAction,
                                     bPasteSelection );
     }
-    else if( !pPt && ( pTunneledTrans || 0 != ( pTunneledTrans = pMod->pClipboard ) ) &&
+    else if( !pPt && pTunneledTrans &&
             EXCHG_OUT_ACTION_INSERT_PRIVATE == nAction )
     {
         // then internal paste
@@ -2211,9 +2203,9 @@ int SwTransferable::_PasteDDE( TransferableDataHelper& rData,
                 if( rWrtShell.HasSelection() )
                     rWrtShell.DelRight();
 
-                SwSection aSect( DDE_LINK_SECTION, aName );
+                SwSectionData aSect( DDE_LINK_SECTION, aName );
                 aSect.SetLinkFileName( aCmd );
-                aSect.SetProtect();
+                aSect.SetProtectFlag(true);
                 rWrtShell.InsertSection( aSect );
 
                 pDDETyp = 0;                // FeldTypen wieder entfernen
@@ -2554,10 +2546,11 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                     )
                 {
     // und dann per PostUser Event den Bereich-Einfuegen-Dialog hochreissen
-                    SwSection* pSect = new SwSection( FILE_LINK_SECTION,
+                    SwSectionData * pSect = new SwSectionData(
+                                    FILE_LINK_SECTION,
                                     rSh.GetDoc()->GetUniqueSectionName() );
                     pSect->SetLinkFileName( sFileURL );
-                    pSect->SetProtect( TRUE );
+                    pSect->SetProtectFlag( true );
 
                     Application::PostUserEvent( STATIC_LINK( &rSh, SwWrtShell,
                                                 InsertRegionDialog ), pSect );
@@ -2801,7 +2794,7 @@ int SwTransferable::PasteFormat( SwWrtShell& rSh,
     int nRet = 0;
 
     ULONG nPrivateFmt = FORMAT_PRIVATE;
-    SwTransferable *pClipboard = SW_MOD()->pClipboard;
+    SwTransferable *pClipboard = GetSwTransferable( rData );
     if( pClipboard &&
         ((TRNSFR_DOCUMENT|TRNSFR_GRAPHIC|TRNSFR_OLE) & pClipboard->eBufferType ))
         nPrivateFmt = SOT_FORMATSTR_ID_EMBED_SOURCE;
@@ -2897,7 +2890,7 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh, TransferableDataHelper& rData
 
     USHORT nDest = SwTransferable::GetSotDestination( rSh );
 
-    SwTransferable *pClipboard = SW_MOD()->pClipboard;
+    SwTransferable *pClipboard = GetSwTransferable( rData );
     if( pClipboard )
     {
         aDesc = pClipboard->aObjDesc;
@@ -2963,7 +2956,8 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
                                 SvxClipboardFmtItem & rToFill )
 {
     USHORT nDest = SwTransferable::GetSotDestination( rSh );
-    SwTransferable *pClipboard = SW_MOD()->pClipboard;
+
+    SwTransferable *pClipboard = GetSwTransferable( rData );
     if( pClipboard )
     {
         USHORT nResId;
@@ -3617,6 +3611,22 @@ sal_Int64 SwTransferable::getSomething( const Sequence< sal_Int8 >& rId ) throw(
     else
         nRet = TransferableHelper::getSomething(rId);
     return nRet;
+}
+
+SwTransferable* SwTransferable::GetSwTransferable( const TransferableDataHelper& rData )
+{
+    SwTransferable* pSwTransferable = NULL;
+
+    uno::Reference<XUnoTunnel> xTunnel( rData.GetTransferable(), UNO_QUERY );
+    if ( xTunnel.is() )
+    {
+        sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
+        if ( nHandle )
+            pSwTransferable = (SwTransferable*) (sal_IntPtr) nHandle;
+    }
+
+    return pSwTransferable;
+
 }
 
 /*  */

@@ -430,7 +430,7 @@ void SwViewImp::DisposeAccessible( const SwFrm *pFrm,
     do
     {
         if( pTmp->Imp()->IsAccessible() )
-            pTmp->Imp()->GetAccessibleMap().Dispose( pFrm, pObj, bRecursive );
+            pTmp->Imp()->GetAccessibleMap().Dispose( pFrm, pObj, 0, bRecursive );
         pTmp = (ViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );
 }
@@ -444,7 +444,7 @@ void SwViewImp::MoveAccessible( const SwFrm *pFrm, const SdrObject *pObj,
     do
     {
         if( pTmp->Imp()->IsAccessible() )
-            pTmp->Imp()->GetAccessibleMap().InvalidatePosOrSize( pFrm, pObj,
+            pTmp->Imp()->GetAccessibleMap().InvalidatePosOrSize( pFrm, pObj, 0,
                                                                  rOldFrm );
         pTmp = (ViewShell *)pTmp->GetNext();
     } while ( pTmp != pVSh );

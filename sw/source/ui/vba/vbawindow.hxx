@@ -39,7 +39,6 @@ class SwVbaWindow : public WindowImpl_BASE
 {
 public:
     SwVbaWindow( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel );
-    SwVbaWindow( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext > const& xContext );
 
 
     // Attributes

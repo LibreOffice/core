@@ -377,7 +377,7 @@ class SwInsertSectionTabDialog;
 class AbstractInsertSectionTabDialog_Impl : public AbstractInsertSectionTabDialog
 {
     DECL_ABSTDLG_BASE(AbstractInsertSectionTabDialog_Impl,SwInsertSectionTabDialog)
-    virtual void        SetSection(const SwSection& rSect);
+    virtual void        SetSectionData(SwSectionData const& rSect);
 };
 //for SwInsertSectionTabDialog end
 

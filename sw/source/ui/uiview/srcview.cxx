@@ -49,7 +49,7 @@
 #include <svl/whiter.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/transfer.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include <svx/svxids.hrc>
 #include <svtools/htmlcfg.hxx>
@@ -601,15 +601,11 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             break;
             case SID_PASTE:
             {
-                BOOL bDisable = 0 == SW_MOD()->pClipboard;
-                if( bDisable  )
-                {
-                    TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard(
-                                                            &aEditWin) );
-                    bDisable = !aDataHelper.GetXTransferable().is() ||
-                                0 == aDataHelper.GetFormatCount();
-                }
+                TransferableDataHelper aDataHelper(
+                    TransferableDataHelper::CreateFromSystemClipboard(
+                                                        &aEditWin) );
+                BOOL bDisable = !aDataHelper.GetXTransferable().is() ||
+                            0 == aDataHelper.GetFormatCount();
                 if( bDisable )
                     rSet.DisableItem(nWhich);
             }

@@ -164,21 +164,6 @@ SwUndoInsert::SwUndoInsert( const SwNodeIndex& rNd )
 // werden kann. Wenn ja, dann aender die Laenge und die InsPos.
 // Dann wird von SwDoc::Insert kein neues Object in die Undoliste gestellt.
 
-BOOL SwUndoInsert::CanGrouping( const SwPosition& rInsPos, sal_Unicode cIns )
-{
-    BOOL bRet = FALSE;
-    if( !bIsAppend )
-    {
-        ++nCntnt;
-        bRet = CanGrouping( rInsPos );
-        --nCntnt;
-        if( bRet )
-            bRet = CanGrouping( cIns );
-    }
-    return bRet;
-}
-
-
 BOOL SwUndoInsert::CanGrouping( sal_Unicode cIns )
 {
     if( !bIsAppend && bIsWordDelim ==

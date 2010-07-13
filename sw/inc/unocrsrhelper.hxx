@@ -55,6 +55,9 @@ namespace com{ namespace sun{ namespace star{
     namespace beans{
         struct PropertyValue;
     }
+    namespace text {
+        class XTextContent;
+    }
 }}}
 
 /* -----------------03.12.98 12:16-------------------
@@ -83,6 +86,10 @@ namespace SwUnoCursorHelper
             void    SetValue( USHORT nWhichId, USHORT nMemberId, const com::sun::star::uno::Any& rAny );
             bool    FillValue( USHORT nWhichId, USHORT nMemberId, const com::sun::star::uno::Any*& pAny );
     };
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >
+        GetNestedTextContent(SwTxtNode & rTextNode, xub_StrLen const nIndex,
+            bool const bParent);
 
     sal_Bool                    getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , SwPaM& rPam

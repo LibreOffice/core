@@ -35,6 +35,7 @@
 #include <vcl/print.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
+#include <sfx2/docfile.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <cmdid.h>
@@ -113,6 +114,8 @@
 #include <drawdoc.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <osl/file.hxx>
+#include <comphelper/storagehelper.hxx>
+
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
@@ -2709,6 +2712,8 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             const TypeId aSwViewTypeId = TYPE(SwView);
             if (pView->IsA(aSwViewTypeId))
             {
+                if (m_pRenderData && m_pRenderData->NeedNewViewOptionAdjust( *pWrtShell ) )
+                    m_pRenderData->ViewOptionAdjustStop();
                 if (m_pRenderData && !m_pRenderData->IsViewOptionAdjust())
                     m_pRenderData->ViewOptionAdjustStart( *pWrtShell, *pWrtShell->GetViewOptions() );
             }
@@ -2811,6 +2816,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     m_pPrintUIOptions->processProperties( rxOptions );
     const bool bPrintProspect    = m_pPrintUIOptions->getBoolValue( "PrintProspect", false );
     const bool bIsSkipEmptyPages = !m_pPrintUIOptions->IsPrintEmptyPages( bIsPDFExport );
+    const bool bPrintPaperFromSetup = m_pPrintUIOptions->getBoolValue( "PrintPaperFromSetup", false );
 
     SwDoc *pDoc = GetRenderDoc( pView, rSelection, bIsPDFExport );
     DBG_ASSERT( pDoc && pView, "doc or view shell missing!" );
@@ -2838,7 +2844,21 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     uno::Sequence< beans::PropertyValue > aRenderer;
     if (m_pRenderData)
     {
+        const USHORT nPage = nRenderer + 1;
+
+        // get paper tray to use ...
+        sal_Int32 nPrinterPaperTray = -1;
+        if (! bPrintPaperFromSetup)
+        {
+            // ... from individual page style (see the page tab in Format/Page dialog)
+            const std::map< sal_Int32, sal_Int32 > &rPaperTrays = m_pRenderData->GetPrinterPaperTrays();
+            std::map< sal_Int32, sal_Int32 >::const_iterator aIt( rPaperTrays.find( nPage ) );
+            if (aIt != rPaperTrays.end())
+                nPrinterPaperTray = aIt->second;
+        }
+
         awt::Size aPageSize;
+        awt::Size aPreferredPageSize;
         Size aTmpSize;
         if (bIsSwSrcView || bPrintProspect)
         {
@@ -2856,36 +2876,49 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
             Printer *pPrinter = dynamic_cast< Printer * >(lcl_GetOutputDevice( *m_pPrintUIOptions ));
             if (pPrinter)
             {
+                // HTML source view and prospect adapt to the printer's paper size
+                aTmpSize = pPrinter->GetPaperSize();
+                aTmpSize = pPrinter->LogicToLogic( aTmpSize,
+                            pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
+                aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
                 if (bPrintProspect)
                 {
-                    aTmpSize = pDoc->GetPageSize( USHORT(nRenderer + 1), bIsSkipEmptyPages );
                     // we just state what output size we would need
-                    // the rest is nowadays up to vcl
-                    aPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
-                                            TWIP_TO_MM100( aTmpSize.Height() ));
-                }
-                else
-                {
-                    // printing HTML source view
-                    aTmpSize = pPrinter->GetPaperSize();
-                    aTmpSize = pPrinter->LogicToLogic( aTmpSize,
-                                pPrinter->GetMapMode(), MapMode( MAP_100TH_MM ));
-                    aPageSize = awt::Size( aTmpSize.Width(), aTmpSize.Height() );
+                    // which may cause vcl to set that page size on the printer
+                    // (if available and not overriden by the user)
+                    aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
+                    aPreferredPageSize = awt::Size ( TWIP_TO_MM100( 2 * aTmpSize.Width() ),
+                                                     TWIP_TO_MM100( aTmpSize.Height() ));
                 }
             }
         }
         else
         {
-            aTmpSize = pDoc->GetPageSize( USHORT(nRenderer + 1), bIsSkipEmptyPages );
+            aTmpSize = pDoc->GetPageSize( nPage, bIsSkipEmptyPages );
             aPageSize = awt::Size ( TWIP_TO_MM100( aTmpSize.Width() ),
                                     TWIP_TO_MM100( aTmpSize.Height() ));
         }
 
+        sal_Int32 nLen = 2;
         aRenderer.realloc(2);
         aRenderer[0].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) );
         aRenderer[0].Value <<= aPageSize;
         aRenderer[1].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageIncludesNonprintableArea" ) );
         aRenderer[1].Value <<= sal_True;
+        if (aPreferredPageSize.Width && aPreferredPageSize.Height)
+        {
+            ++nLen;
+            aRenderer.realloc( nLen );
+            aRenderer[ nLen - 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferredPageSize" ) );
+            aRenderer[ nLen - 1 ].Value <<= aPreferredPageSize;
+        }
+        if (nPrinterPaperTray >= 0)
+        {
+            ++nLen;
+            aRenderer.realloc( nLen );
+            aRenderer[ nLen - 1 ].Name  = OUString( RTL_CONSTASCII_USTRINGPARAM( "PrinterPaperTray" ) );
+            aRenderer[ nLen - 1 ].Value <<= nPrinterPaperTray;
+        }
     }
 
     m_pPrintUIOptions->appendPrintUIOptions( aRenderer );
@@ -3073,6 +3106,12 @@ void SAL_CALL SwXTextDocument::render(
                         {
                             lcl_DisposeView( m_pHiddenViewFrame, pDocShell );
                             m_pHiddenViewFrame = 0;
+
+                            // prevent crash described in #i108805
+                            SwDocShell *pRenderDocShell = pDoc->GetDocShell();
+                            SfxItemSet *pSet = pRenderDocShell->GetMedium()->GetItemSet();
+                            pSet->Put( SfxBoolItem( SID_HIDDEN, sal_False ) );
+
                         }
                     }
                 }
@@ -3115,16 +3154,13 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::
     if(!IsValid())
         throw RuntimeException();
     //create a new document - hidden - copy the storage and return it
-    SwDoc* pCopyDoc = pDocShell->GetDoc()->CreateCopy();
-    SfxObjectShell* pShell = new SwDocShell( pCopyDoc, SFX_CREATE_MODE_STANDARD );
-    pShell->DoInitNew();
-
-    uno::Reference< embed::XStorage > xSourceStorage = getDocumentStorage();
+    SfxObjectShell* pShell = pDocShell->GetDoc()->CreateCopy(false);
     uno::Reference< frame::XModel > xNewModel = pShell->GetModel();
-    //copy this storage
+    uno::Reference< embed::XStorage > xNewStorage = ::comphelper::OStorageHelper::GetTemporaryStorage( );
+    uno::Sequence< beans::PropertyValue > aTempMediaDescriptor;
+    storeToStorage( xNewStorage, aTempMediaDescriptor );
     uno::Reference< document::XStorageBasedDocument > xStorageDoc( xNewModel, uno::UNO_QUERY );
-    uno::Reference< embed::XStorage > xNewStorage = xStorageDoc->getDocumentStorage();
-    xSourceStorage->copyToStorage( xNewStorage );
+    xStorageDoc->loadFromStorage( xNewStorage, aTempMediaDescriptor );
     return uno::Reference< util::XCloneable >( xNewModel, UNO_QUERY );
 }
 /* -----------------------------20.06.00 09:54--------------------------------

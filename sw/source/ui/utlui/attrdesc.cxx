@@ -683,13 +683,13 @@ SfxItemPresentation SwFmtAnchor::GetPresentation
             switch ( GetAnchorId() )
             {
                 case FLY_AT_PARA:
-                    nId = STR_FLY_AT_CNTNT;
+                    nId = STR_FLY_AT_PARA;
                     break;
                 case FLY_AS_CHAR:
-                    nId = STR_FLY_IN_CNTNT;
+                    nId = STR_FLY_AS_CHAR;
                     break;
                 case FLY_AT_PAGE:
-                    nId = STR_FLY_PAGE;
+                    nId = STR_FLY_AT_PAGE;
                     break;
                 default:;//prevent warning
             }

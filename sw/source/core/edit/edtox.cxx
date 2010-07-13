@@ -135,10 +135,9 @@ void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, BOOL bReadonly)
     ((SwTOXBase&)rTOXBase).SetProtected(bReadonly);
     ASSERT( rTOXSect.SwSection::GetType() == TOX_CONTENT_SECTION, "not a TOXContentSection" );
 
-    SwSection aSect(TOX_CONTENT_SECTION, rTOXSect.GetName());
-    aSect = rTOXSect;
-    aSect.SetProtect(bReadonly);
-    ChgSection( GetSectionFmtPos( *rTOXSect.GetFmt()  ), aSect, 0 );
+    SwSectionData aSectionData(rTOXSect);
+    aSectionData.SetProtectFlag(bReadonly);
+    UpdateSection( GetSectionFmtPos( *rTOXSect.GetFmt()  ), aSectionData, 0 );
 }
 
 /* -----------------02.09.99 07:47-------------------

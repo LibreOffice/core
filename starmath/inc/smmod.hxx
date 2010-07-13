@@ -47,7 +47,7 @@ class SvxErrorHandler;
 class SfxObjectFactory;
 class SmConfig;
 class SmModule;
-class SmSymSetManager;
+class SmSymbolManager;
 
 /*************************************************************************
 |*
@@ -149,7 +149,7 @@ public:
     svtools::ColorConfig &  GetColorConfig();
 
     SmConfig *              GetConfig();
-    SmSymSetManager &       GetSymSetManager();
+    SmSymbolManager &       GetSymbolManager();
 
     SmLocalizedSymbolData &   GetLocSymbolData() const;
 
@@ -176,7 +176,6 @@ public:
 };
 
 #define SM_MOD() ( *(SmModule**) GetAppData(SHL_SM) )
-#define SM_MOD1() ( *(SmModule**) GetAppData(SHL_SM) )
 
 #endif                                 // _SDMOD_HXX
 

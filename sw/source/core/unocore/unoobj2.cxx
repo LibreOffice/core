@@ -1934,8 +1934,8 @@ lcl_FillFrame(SwClient & rEnum, SwUnoCrsr& rUnoCrsr,
 {
     // search for objects at the cursor - anchored at/as char
     SwTxtAttr const*const pTxtAttr =
-        rUnoCrsr.GetNode()->GetTxtNode()->GetTxtAttr(
-                    rUnoCrsr.GetPoint()->nContent, RES_TXTATR_FLYCNT);
+        rUnoCrsr.GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
+            rUnoCrsr.GetPoint()->nContent.GetIndex(), RES_TXTATR_FLYCNT);
     if (pTxtAttr)
     {
         const SwFmtFlyCnt& rFlyCnt = pTxtAttr->GetFlyCnt();

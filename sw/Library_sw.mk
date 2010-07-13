@@ -109,6 +109,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/access/acctable \
     sw/source/core/access/acctextframe \
     sw/source/core/access/textmarkuphelper \
+    sw/source/core/access/parachangetrackinginfo \
     sw/source/core/attr/calbck \
     sw/source/core/attr/cellatr \
     sw/source/core/attr/fmtfollowtextflow \
@@ -244,6 +245,8 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/edit/edtox \
     sw/source/core/edit/edundo \
     sw/source/core/edit/edws \
+    sw/source/core/except/dbgloop \
+    sw/source/core/except/errhdl \
     sw/source/core/fields/authfld \
     sw/source/core/fields/cellfml \
     sw/source/core/fields/chpfld \
@@ -278,6 +281,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/layout/atrfrm \
     sw/source/core/layout/calcmove \
     sw/source/core/layout/colfrm \
+    sw/source/core/layout/dbg_lay \
     sw/source/core/layout/findfrm \
     sw/source/core/layout/flowfrm \
     sw/source/core/layout/fly \
@@ -366,6 +370,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/text/txtftn \
     sw/source/core/text/txthyph \
     sw/source/core/text/txtinit \
+    sw/source/core/text/txtio \
     sw/source/core/text/txtpaint \
     sw/source/core/text/txttab \
     sw/source/core/text/widorp \
@@ -453,6 +458,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/unocore/unotext \
     sw/source/core/unocore/unotextmarkup \
     sw/source/core/view/pagepreviewlayout \
+    sw/source/core/view/printdata \
     sw/source/core/view/vdraw \
     sw/source/core/view/viewimp \
     sw/source/core/view/viewpg \
@@ -566,12 +572,20 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/dialog/swwrtshitem \
     sw/source/ui/dochdl/gloshdl \
     sw/source/ui/dochdl/swdtflvr \
+    sw/source/ui/docvw/AnchorOverlayObject \
+    sw/source/ui/docvw/AnnotationMenuButton \
+    sw/source/ui/docvw/AnnotationWin \
     sw/source/ui/docvw/PostItMgr \
+    sw/source/ui/docvw/ShadowOverlayObject \
+    sw/source/ui/docvw/SidebarTxtControl \
+    sw/source/ui/docvw/SidebarTxtControlAcc \
+    sw/source/ui/docvw/SidebarWin \
+    sw/source/ui/docvw/SidebarWinAcc \
     sw/source/ui/docvw/edtdd \
     sw/source/ui/docvw/edtwin \
     sw/source/ui/docvw/edtwin2 \
     sw/source/ui/docvw/edtwin3 \
-    sw/source/ui/docvw/postit \
+    sw/source/ui/docvw/frmsidebarwincontainer \
     sw/source/ui/docvw/romenu \
     sw/source/ui/docvw/srcedtw \
     sw/source/ui/envelp/envimg \
@@ -674,7 +688,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/uno/unomodule \
     sw/source/ui/uno/unotxdoc \
     sw/source/ui/uno/unotxvw \
-    sw/source/ui/uno/warnpassword \
     sw/source/ui/utlui/attrdesc \
     sw/source/ui/utlui/bookctrl \
     sw/source/ui/utlui/condedit \
@@ -711,10 +724,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/wrtsh/wrtsh3 \
     sw/source/ui/wrtsh/wrtsh4 \
     sw/source/ui/wrtsh/wrtundo \
-    sw/source/core/except/errhdl \
-    sw/source/core/except/dbgloop \
-    sw/source/core/layout/dbg_lay \
-    sw/source/core/text/txtio \
 ))
 
 ifeq ($(OS),LINUX)

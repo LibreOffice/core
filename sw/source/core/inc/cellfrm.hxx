@@ -51,6 +51,10 @@ public:
     virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
     virtual void CheckDirection( BOOL bVert );
 
+    // --> OD 2010-02-17 #i103961#
+    virtual void Cut();
+    // <--
+
     const SwTableBox *GetTabBox() const { return pTabBox; }
 
     // used for breaking table rows:
