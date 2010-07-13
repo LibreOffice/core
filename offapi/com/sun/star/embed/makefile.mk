@@ -57,6 +57,7 @@ IDLFILES=\
     Storage.idl\
     StorageStream.idl\
     StorageFactory.idl\
+    StorageFormats.idl\
     VerbAttributes.idl\
     VisualRepresentation.idl\
     VerbDescriptor.idl\

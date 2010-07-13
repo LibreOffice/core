@@ -43,7 +43,7 @@ module com { module sun { module star { module embed {
 
     @see <type>XStorage</type>
 */
-constants ElementModes
+published constants ElementModes
 {
     //------------------------------------------------------------------------
     /** specifies opening of an element for reading.

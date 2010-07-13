@@ -25,10 +25,20 @@
  *
  ************************************************************************/
 
+#include "jni.h"
 #include "osl/security.h"
 #include <osl/pipe.h>
 
-#include "com_sun_star_lib_connections_pipe_PipeConnection.h"
+/* On Windows, jpipe.dll must not have dependencies on any other URE DLLs, as
+   Java System.LoadLibrary could otherwise not load it.  Therefore, on Windows,
+   this code goes into a jpipx.dll that the jpipe.dll wrapper loads with
+   LoadLibraryEx(LOAD_WITH_ALTERED_SEARCH_PATH).  The function names in this
+   wrapped code are truncated from the long JNICALL names, as JNICALL causes
+   some "@N" with different numeric values for N (and probably different across
+   32 and 64 bit) to be added to the symbol names, which the calls to
+   GetProcAddress in wrapper/wrapper.c would otheriwse have to take into
+   account.
+*/
 
 /*****************************************************************************/
 /* exception macros */
@@ -100,7 +110,12 @@ static rtl_uString * jstring2ustring(JNIEnv * env, jstring jstr)
  * Method:    connect
  * Signature: (Lcom/sun/star/beans/NativeService;)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
+SAL_DLLPUBLIC_EXPORT void
+#if defined WNT
+PipeConnection_create
+#else
+JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
+#endif
   (JNIEnv * env, jobject obj_this, jstring name)
 {
     enum {
@@ -234,7 +249,12 @@ JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_cre
  * Method:    closeJNI
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_closeJNI
+SAL_DLLPUBLIC_EXPORT void
+#if defined WNT
+PipeConnection_close
+#else
+JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_closeJNI
+#endif
   (JNIEnv * env, jobject obj_this)
 {
     enum {
@@ -315,7 +335,12 @@ JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_clo
  * Method:    readJNI
  * Signature: ([[BI)I
  */
-JNIEXPORT jint JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_readJNI
+SAL_DLLPUBLIC_EXPORT jint
+#if defined WNT
+PipeConnection_read
+#else
+JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_readJNI
+#endif
   (JNIEnv * env, jobject obj_this, jobjectArray buffer, jint len)
 {
     enum {
@@ -430,7 +455,12 @@ JNIEXPORT jint JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_rea
  * Method:    writeJNI
  * Signature: ([B)V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_writeJNI
+SAL_DLLPUBLIC_EXPORT void
+#if defined WNT
+PipeConnection_write
+#else
+JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_writeJNI
+#endif
   (JNIEnv * env, jobject obj_this, jbyteArray buffer)
 {
     enum {
@@ -522,7 +552,12 @@ JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_wri
  * Method:    flushJNI
  * Signature: ()V
  */
-JNIEXPORT void JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_flushJNI
+SAL_DLLPUBLIC_EXPORT void
+#if defined WNT
+PipeConnection_flush
+#else
+JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_flushJNI
+#endif
   (JNIEnv * env, jobject obj_this)
 {
     (void) env; /* not used */

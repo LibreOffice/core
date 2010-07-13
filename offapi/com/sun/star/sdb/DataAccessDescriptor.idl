@@ -49,7 +49,7 @@ module com {  module sun {  module star {  module sdb {
 /** descriptor for accessing basic data access objects.
 
     <p>Various components interacting with the database access world require to specify (or provide themself) an object
-    such as a query, a table, a result set, a connection to a data source, a column within a table, and so on.</br>
+    such as a query, a table, a result set, a connection to a data source, a column within a table, and so on.<br/>
     All of these objects are usually not specified with a single property, but with a set of properties, and for
     various objects, various (but not always different) properties are needed.<br/>
     The <code>DataAccessDescriptor</code> describes the super set of the properties for the most common
@@ -199,7 +199,7 @@ published service DataAccessDescriptor
         has access to an already existent result set, it can pass it along for reusage. This is encouraged
         to increase performance.</p>
 
-        <p>The object will at least support the <type scope="com::sun::star::sdbc">ResultSet</type>.</p>
+        <p>The object will at least support the <type scope="com::sun::star::sdbc">ResultSet</type> service.</p>
 
         <p>Note that any superservices of <type scope="com::sun::star::sdbc">ResultSet</type>
         are also allowed. Especially, this member can denote an instance of the

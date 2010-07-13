@@ -848,7 +848,7 @@ void SAL_CALL UNO_proxy_dispatch(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg2(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg2.getStr() );
+        OSL_TRACE( "%s", cstr_msg2.getStr() );
 #endif
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)

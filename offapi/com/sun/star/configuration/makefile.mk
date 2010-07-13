@@ -65,6 +65,8 @@ IDLFILES=\
     PropertyHierarchy.idl\
     XTemplateContainer.idl\
     XTemplateInstance.idl\
+    Update.idl \
+    XUpdate.idl
 
 # ------------------------------------------------------------------
 

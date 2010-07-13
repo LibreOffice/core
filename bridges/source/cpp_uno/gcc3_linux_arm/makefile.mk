@@ -80,5 +80,5 @@ SHL1STDLIBS= \
 
 .INCLUDE :  target.mk
 
-$(SLO)$/%.obj: %.s
+$(SLO)$/%.obj: %.S
        $(CXX) -c -o $(SLO)$/$(@:b).o $< -fPIC ; touch $@

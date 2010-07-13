@@ -42,7 +42,7 @@
 //=============================================================================
 /** allows to convert file system folder tree in to a package.
  */
-interface XPackageStructureCreator: com::sun::star::uno::XInterface
+published interface XPackageStructureCreator: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** converts file system folder tree in to a package.

@@ -42,7 +42,7 @@
 /** This exception can be thrown in case provided stream is not a raw stream
     representing encrypted package stream.
  */
-exception NoRawFormatException: com::sun::star::io::IOException
+published exception NoRawFormatException: com::sun::star::io::IOException
 {
 };
 
