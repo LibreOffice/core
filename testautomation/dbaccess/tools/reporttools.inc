@@ -138,23 +138,23 @@ function fSaveReport( sReportName as string, optional bCloseReport as boolean )
         hMenuSelectNr(6) ' the Save
 
     Kontext "ReportSaveDialog"
-        if ReportSaveDialog.exists(3) then
-            ReportName.setText(sReportName)
+        if FormSaveDialog.exists(3) then
+            FormName.setText(sReportName)
             SaveBtn.Click
             'click yes in the overwrite messages box
             Kontext "MessageBox"
                 if MessageBox.exists(1) then
                     MessageBox.Yes
                 endif
-            fSaveReport = true    
+            fSaveReport = true
         else
-            fSaveFrom = false
+            fSaveReport = false
         end if
      
      if ( IsMissing( bCloseReport ) ) then
         ' nothing
      else
-        call fCloseReport()
+        call fCloseReportDesign()
      end if
      
 end function
@@ -167,7 +167,7 @@ function fOpenReport(sReportName as string)
     if ( fFindReport(sReportName) = true ) then
         printlog "Report found -> open"    
         Kontext "ContainerView"
-            OpenReport ' uno-Slot .uno:DB/Open
+            OpenForm ' uno-Slot .uno:DB/Open
             sleep(1)
         fOpenReport = true
     else

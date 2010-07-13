@@ -49,31 +49,41 @@ public final class OfficeConnection {
     /** Start up an OOo instance.
     */
     public void setUp() throws Exception {
-        description = "pipe,name=oootest" + UUID.randomUUID();
-        ProcessBuilder pb = new ProcessBuilder(
-            getArgument("path"), "-quickstart=no", "-nofirststartwizard",
-            "-norestore", "-accept=" + description + ";urp",
-            "-env:UserInstallation=" + getArgument("user"),
-            "-env:UNO_JAVA_JFW_ENV_JREHOME=true",
-            "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");
-        String envArg = getArgument("env");
-        if (envArg != null) {
-            Map<String, String> env = pb.environment();
-            int i = envArg.indexOf("=");
-            if (i == -1) {
-                env.remove(envArg);
-            } else {
-                env.put(envArg.substring(0, i), envArg.substring(i + 1));
+        String sofficeArg = getArgument("soffice");
+        if (sofficeArg.startsWith("path:")) {
+            description = "pipe,name=oootest" + UUID.randomUUID();
+            ProcessBuilder pb = new ProcessBuilder(
+                sofficeArg.substring("path:".length()), "-quickstart=no",
+                "-nofirststartwizard", "-norestore",
+                "-accept=" + description + ";urp",
+                "-env:UserInstallation=" + getArgument("user"),
+                "-env:UNO_JAVA_JFW_ENV_JREHOME=true",
+                "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true");
+            String envArg = getArgument("env");
+            if (envArg != null) {
+                Map<String, String> env = pb.environment();
+                int i = envArg.indexOf("=");
+                if (i == -1) {
+                    env.remove(envArg);
+                } else {
+                    env.put(envArg.substring(0, i), envArg.substring(i + 1));
+                }
             }
+            process = pb.start();
+            outForward = new Forward(process.getInputStream(), System.out);
+            outForward.start();
+            errForward = new Forward(process.getErrorStream(), System.err);
+            errForward.start();
+        } else if (sofficeArg.startsWith("connect:")) {
+            description = sofficeArg.substring("connect:".length());
+        } else {
+            fail(
+                "\"soffice\" argument \"" + sofficeArg +
+                " starts with neither \"path:\" nor \"connect:\"");
         }
-        process = pb.start();
-        outForward = new Forward(process.getInputStream(), System.out);
-        outForward.start();
-        errForward = new Forward(process.getErrorStream(), System.err);
-        errForward.start();
         XUnoUrlResolver resolver = UnoUrlResolver.create(
             Bootstrap.createInitialComponentContext(null));
-        for (int i = 0;; ++i) {
+        for (;;) {
             try {
                 factory = UnoRuntime.queryInterface(
                     XMultiServiceFactory.class,
@@ -82,7 +92,9 @@ public final class OfficeConnection {
                         ";urp;StarOffice.ServiceManager"));
                 break;
             } catch (NoConnectException e) {}
-            assertNull(waitForProcess(process, 1000)); // 1 sec
+            if (process != null) {
+                assertNull(waitForProcess(process, 1000)); // 1 sec
+            }
         }
     }
 
@@ -103,6 +115,8 @@ public final class OfficeConnection {
                 // it appears that DisposedExceptions can already happen while
                 // receiving the response of the terminate call
             desktop = null;
+        } else if (process != null) {
+            process.destroy();
         }
         int code = 0;
         if (process != null) {
@@ -194,9 +208,9 @@ public final class OfficeConnection {
             return done;
         }
 
-        InputStream in;
-        PrintStream out;
-        boolean done = false;
+        private final InputStream in;
+        private final PrintStream out;
+        private boolean done = false;
     }
 
     private String description;

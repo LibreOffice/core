@@ -29,18 +29,8 @@
 '*
 '* short description : test the Main Application Window
 '*
-'************************************************************************
-'*
-' #1 tMainApp
-' #1 tMainMenuBar
-' #1 tDatabaseProperties    
-' #1 tTableView
-' #1 tPreview    
-' #1 tTableFilters
-' #1 tRegisterDatabaseDialog
-' #1 tDatabaseBeamer
-'*
-'\***********************************************************************************
+'\******************************************************************************
+
 sub MainApp
 
     printlog "------------------ MainApp.inc ---------------------"
@@ -299,7 +289,7 @@ testcase tMainMenuBar
         hMenuSelectNr(1) ' FILE/NEW menu        
         iCount = hMenuItemGetCount()        
         if (iCount <> 12) then
-            warnlog "There should 12 items in the FILE/NEW menu but there are " + iCount + " items."
+            warnlog "#i112496# - There should 12 items in the FILE/NEW menu but there are " + iCount + " items."
         end if        
         call hMenuClose() ' close the FILE menu
         
@@ -608,7 +598,10 @@ endcase
 '-------------------------------------------------------------------------
 function getMenuItemCount as Integer
 'use this function becasue this doesn't count the pick list
-    Dim i, j, Ende, nID as Integer
+    Dim i as Integer
+    Dim j as Integer
+    Dim Ende as Integer
+    Dim nID as Integer
     Sleep 2
     j=0
     for i=1 to MenuGetItemCount

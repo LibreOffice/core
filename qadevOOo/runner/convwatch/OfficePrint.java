@@ -49,10 +49,10 @@ import com.sun.star.uno.AnyConverter;
 import helper.URLHelper;
 import helper.PropertyHelper;
 import helper.OSHelper;
-import convwatch.FileHelper;
-import convwatch.MSOfficePrint;
-import convwatch.GraphicalTestArguments;
-import convwatch.ConvWatchCancelException;
+// import convwatch.FileHelper;
+// import convwatch.MSOfficePrint;
+// import convwatch.GraphicalTestArguments;
+// import convwatch.ConvWatchCancelException;
 
 // import helper.Parameter;
 
@@ -118,7 +118,7 @@ public class OfficePrint {
      */
     static String getDocumentType( XComponent _aDoc )
         {
-            XModel xModel = (XModel) UnoRuntime.queryInterface( XModel.class, _aDoc);
+            XModel xModel =  UnoRuntime.queryInterface( XModel.class, _aDoc);
             PropertyValue[] aArgs = xModel.getArgs();
             for (int i=0;i<aArgs.length;i++)
             {
@@ -145,6 +145,9 @@ public class OfficePrint {
      * the GraphicalTestArguments must contain a living MultiServiceFactory object
      * or we crash here.
      * Be aware, the ownership of the document gets to you, you have to close it.
+     * @param _aGTA
+     * @param _sInputURL
+     * @return
      */
     public static XComponent loadFromURL(GraphicalTestArguments _aGTA,
                                          String _sInputURL)
@@ -158,7 +161,7 @@ public class OfficePrint {
                     return null;
                 }
                 Object oDsk = _aGTA.getMultiServiceFactory().createInstance("com.sun.star.frame.Desktop");
-                XDesktop aDesktop = (XDesktop)UnoRuntime.queryInterface(XDesktop.class, oDsk);
+                XDesktop aDesktop = UnoRuntime.queryInterface(XDesktop.class, oDsk);
 
                 if (aDesktop != null)
                 {
@@ -172,7 +175,7 @@ public class OfficePrint {
                     // set here the loadComponentFromURL() properties
                     // at the moment only 'Hidden' is set, so no window is opened at work
 
-                    ArrayList aPropertyList = new ArrayList();
+                    ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
 
                     // check which properties should set and count it.
                     // if (_aGTA.isHidden())
@@ -209,7 +212,7 @@ public class OfficePrint {
                     GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Load document");
                     // GlobalLogWriter.get().flush();
 
-                    XComponentLoader aCompLoader = (XComponentLoader) UnoRuntime.queryInterface( XComponentLoader.class, aDesktop);
+                    XComponentLoader aCompLoader = UnoRuntime.queryInterface( XComponentLoader.class, aDesktop);
 
                     // XComponent aDoc = null;
 
@@ -251,11 +254,11 @@ public class OfficePrint {
     static boolean exportToPDF(XComponent _xComponent, String _sDestinationName)
         {
             XServiceInfo xServiceInfo =
-                (XServiceInfo) UnoRuntime.queryInterface(
+                 UnoRuntime.queryInterface(
                     XServiceInfo.class, _xComponent
                     );
 
-            ArrayList aPropertyList = new ArrayList();
+            ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
             PropertyValue aFiltername = new PropertyValue();
             aFiltername.Name = "FilterName";
             aFiltername.Value = getFilterName_forPDF(xServiceInfo);
@@ -266,7 +269,7 @@ public class OfficePrint {
             try
             {
                 XStorable store =
-                    (XStorable) UnoRuntime.queryInterface(
+                     UnoRuntime.queryInterface(
                         XStorable.class, _xComponent
                         );
                 store.storeToURL(_sDestinationName, PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
@@ -371,6 +374,10 @@ public class OfficePrint {
      * Due to the fact we use a printer to convert the file to postscript, the default printer
      * to create such postscript format must be installed, this is not tested here.
      *
+     * @param _aGTA
+     * @param _sInputURL
+     * @param _sOutputURL
+     * @param _sPrintFileURL
      * @return true, if print has been done.
      *         Be careful, true means only print returns with no errors, to be sure print is really done
      *         check existance of _sPrintFileURL
@@ -532,7 +539,7 @@ public class OfficePrint {
                     if (_aGTA.isStoreAllowed())
                     {
                         // store the document in an other directory
-                        XStorable aStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, _aDoc);
+                        XStorable aStorable = UnoRuntime.queryInterface( XStorable.class, _aDoc);
                         if (aStorable != null)
                         {
                             PropertyValue [] szEmptyArgs = new PropertyValue [0];
@@ -571,7 +578,7 @@ public class OfficePrint {
                 // Change Pagesettings to DIN A4
 
                 GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Print document.");
-                XPrintable aPrintable = (XPrintable) UnoRuntime.queryInterface( XPrintable.class, _aDoc);
+                XPrintable aPrintable =  UnoRuntime.queryInterface( XPrintable.class, _aDoc);
                 if (aPrintable != null)
                 {
                     // System.out.println("  Set PaperFormat to DIN A4");
@@ -595,7 +602,7 @@ public class OfficePrint {
                     {
                         if (_aGTA.getPrinterName() != null)
                         {
-                            ArrayList aPropertyList = new ArrayList();
+                            ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
                             // PropertyValue [] aPrintProps = new PropertyValue[1];
                             PropertyValue Arg = new PropertyValue();
                             Arg.Name = "Name";
@@ -619,20 +626,20 @@ public class OfficePrint {
                     // int nPropsCount = 0;
 
                     // If we are a SpreadSheet (calc), we need to set PrintAllSheets property to 'true'
-                    XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface( XServiceInfo.class, _aDoc );
+                    XServiceInfo xServiceInfo = UnoRuntime.queryInterface( XServiceInfo.class, _aDoc );
                     if ( xServiceInfo.supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
                     {
                         XMultiServiceFactory xMSF = _aGTA.getMultiServiceFactory();
                         Object aSettings = xMSF.createInstance( "com.sun.star.sheet.GlobalSheetSettings" );
                         if (aSettings != null)
                         {
-                            XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, aSettings );
+                            XPropertySet xPropSet =  UnoRuntime.queryInterface( XPropertySet.class, aSettings );
                             xPropSet.setPropertyValue( "PrintAllSheets", new Boolean( true ) );
                             GlobalLogWriter.get().println("PrintAllSheets := true");
                         }
                     }
 
-                    ArrayList aPrintProps = new ArrayList();
+                    ArrayList<PropertyValue> aPrintProps = new ArrayList<PropertyValue>();
                     // GlobalLogWriter.get().println("Property FileName:=" + _sPrintFileURL);
 
                     // PropertyValue [] aPrintProps = new PropertyValue[nProperties];
@@ -730,6 +737,9 @@ public class OfficePrint {
 
 
     /**
+     * @param _aGTA
+     * @param _sAbsoluteOutputPath
+     * @param _sAbsoluteInputFile
      * @return true, if the reference (*.prrn file) based on given output path and given input path exist.
      *               If OVERWRITE_REFERENCE is set, always return false.
      */
@@ -783,6 +793,11 @@ public class OfficePrint {
      *                      if is null, print only near the Input file path
      * _sPrintType ".prn" Print input file with StarOffice/OpenOffice.org and the default printer as PostScript
      *
+     * @param _aGTA
+     * @param _sAbsoluteOutputPath
+     * @param _sAbsoluteInputFile
+     * @return
+     * @throws ConvWatchCancelException
      */
     public static boolean buildReference(GraphicalTestArguments _aGTA,
                                          String _sAbsoluteOutputPath,
@@ -933,7 +948,7 @@ public class OfficePrint {
             try
             {
                 Object oObj = _xMSF.createInstance("com.sun.star.document.TypeDetection");
-                aTypeDetection = (XTypeDetection)UnoRuntime.queryInterface(XTypeDetection.class, oObj);
+                aTypeDetection = UnoRuntime.queryInterface(XTypeDetection.class, oObj);
             }
             catch(com.sun.star.uno.Exception e)
             {
@@ -975,7 +990,7 @@ public class OfficePrint {
             }
             if (aObj != null)
             {
-                XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, aObj);
+                XNameAccess aNameAccess = UnoRuntime.queryInterface(XNameAccess.class, aObj);
                 if (aNameAccess != null)
                 {
 
@@ -1066,7 +1081,7 @@ public class OfficePrint {
             }
             if (aObj != null)
             {
-                XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, aObj);
+                XNameAccess aNameAccess = UnoRuntime.queryInterface(XNameAccess.class, aObj);
                 if (aNameAccess != null)
                 {
                     if (! aNameAccess.hasByName(_sFilterName))
@@ -1134,7 +1149,7 @@ public class OfficePrint {
             try
             {
                 Object oObj = _xMSF.createInstance("com.sun.star.document.TypeDetection");
-                aTypeDetection = (XTypeDetection)UnoRuntime.queryInterface(XTypeDetection.class, oObj);
+                aTypeDetection =UnoRuntime.queryInterface(XTypeDetection.class, oObj);
             }
             catch(com.sun.star.uno.Exception e)
             {
@@ -1143,7 +1158,7 @@ public class OfficePrint {
             }
             if (aTypeDetection != null)
             {
-                XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, aTypeDetection);
+                XNameAccess aNameAccess = UnoRuntime.queryInterface(XNameAccess.class, aTypeDetection);
                 if (aNameAccess != null)
                 {
 
@@ -1242,12 +1257,12 @@ public class OfficePrint {
 //  TODO: Do we need to wait?
             TimeHelper.waitInSeconds(1, "wait after loadFromURL.");
 
-            XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface( XServiceInfo.class, aDoc );
+            XServiceInfo xServiceInfo = UnoRuntime.queryInterface( XServiceInfo.class, aDoc );
             // String sFilter = getFilterName_forExcel(xServiceInfo);
             // System.out.println("Filter is " + sFilter);
 
             // store the document in an other directory
-            XStorable xStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, aDoc);
+            XStorable xStorable = UnoRuntime.queryInterface( XStorable.class, aDoc);
             if (xStorable == null)
             {
                 GlobalLogWriter.get().println("com.sun.star.frame.XStorable is null");
@@ -1266,7 +1281,7 @@ public class OfficePrint {
             // initialize PropertyArray
             // PropertyValue [] aStoreProps = new PropertyValue[ nPropertyCount ];
             // int nPropertyIndex = 0;
-            ArrayList aPropertyList = new ArrayList();
+            ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
 
             String sExtension = "";
 

@@ -36,6 +36,7 @@ import lib.StatusException;
 import lib.Status;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.sdb.SQLFilterOperator;
 
 /**
 * Testing <code>com.sun.star.sdb.XSingleSelectQueryComposer</code>
@@ -172,7 +173,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         boolean ok = true;
         try{
 
-            oObj.appendFilterByColumn(xProp, true);
+            oObj.appendFilterByColumn(xProp, true,SQLFilterOperator.EQUAL);
             log.println("appendFilterByColumn: " + xQueryAna.getFilter());
             ok = ok && (xQueryAna.getFilter().indexOf(colName) > 0);
 
@@ -183,7 +184,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
         try{
 
-            oObj.appendFilterByColumn(xProp, false);
+            oObj.appendFilterByColumn(xProp, false,SQLFilterOperator.EQUAL);
             log.println("appendFilterByColumn: " + xQueryAna.getFilter());
             ok = ok && (xQueryAna.getFilter().indexOf(colName) > 0);
 
@@ -194,8 +195,8 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
 
         try{
             XPropertySet dummy = null;
-            oObj.appendFilterByColumn(dummy, true);
-            log.println("unexpected Exception was not thorwn");
+            oObj.appendFilterByColumn(dummy, true,SQLFilterOperator.EQUAL);
+            log.println("expected Exception was not thrown");
             tRes.tested("appendFilterByColumn()", false);
 
         } catch (com.sun.star.sdbc.SQLException e){
@@ -227,7 +228,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         try{
             XPropertySet dummy = null;
             oObj.appendGroupByColumn(dummy);
-            log.println("unexpected Exception was not thorwn");
+            log.println("expected Exception was not thrown");
             tRes.tested("appendGroupByColumn()", false);
 
         } catch (com.sun.star.sdbc.SQLException e){
@@ -320,7 +321,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         boolean ok = true;
         try{
 
-            oObj.appendHavingClauseByColumn(xProp, true);
+            oObj.appendHavingClauseByColumn(xProp, true,SQLFilterOperator.EQUAL);
             log.println("appendHavingClauseByColumn: " + xQueryAna.getFilter());
             ok = ok && (xQueryAna.getFilter().indexOf(colName) > 0);
 
@@ -330,8 +331,8 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         }
         try{
             XPropertySet dummy = null;
-            oObj.appendHavingClauseByColumn(dummy, true);
-            log.println("unexpected Exception was not thorwn");
+            oObj.appendHavingClauseByColumn(dummy, true,SQLFilterOperator.EQUAL);
+            log.println("expected Exception was not thrown");
             tRes.tested("appendHavingClauseByColumn()", false);
 
         } catch (com.sun.star.sdbc.SQLException e){
@@ -363,7 +364,7 @@ public class _XSingleSelectQueryComposer extends MultiMethodTest {
         try{
             XPropertySet dummy = null;
             oObj.appendOrderByColumn(dummy, true);
-            log.println("unexpected Exception was not thorwn");
+            log.println("expected Exception was not thrown");
             tRes.tested("appendOrderByColumn()", false);
 
         } catch (com.sun.star.sdbc.SQLException e){

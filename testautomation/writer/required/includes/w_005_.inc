@@ -232,14 +232,55 @@ testcase tFormatChangeCase
     printlog " Open new document"
     Call hNewDocument
     printlog " Insert some text in document and select text"
-    Call wTypeKeys ("Hello World!")
+    Call wTypeKeys ("call him now ! please")
     Call wTypeKeys ("<Shift Home>")
 
     printlog " Format / Case Characters / Upper"
     hUseAsyncSlot( "FormatChangeCaseUpper" )
+    EditCopy
+    if GetClipboardtext() <> "CALL HIM NOW ! PLEASE" then
+        Warnlog "Sentence not 'CALL HIM NOW ! PLEASE' but " & GetClipboardtext()
+    else
+        printlog "  " & GetClipboardtext()
+    endif
 
     printlog " Format / Case Characters / Lower"
     hUseAsyncSlot( "FormatChangeCaseLower" )
+    EditCopy
+    if GetClipboardtext() <> "call him now ! please" then
+        Warnlog "Sentence not 'call him now ! please' but " & GetClipboardtext()
+    else
+        printlog "  " & GetClipboardtext()
+    endif
+
+    printlog " Format / Case Characters / Sentence Case"
+    FormatChangeCaseToSentence
+    EditCopy
+    if GetClipboardtext() <> "Call him now ! Please" then
+        Warnlog "Sentence not 'Call him now ! Please' but " & GetClipboardtext()
+    else
+        printlog "  " & GetClipboardtext()
+    endif
+
+    printlog " Format / Case Characters / Capitalize every word"
+    FormatChangeCaseCapitalizeEveryWord
+    EditCopy
+    if GetClipboardtext() <> "Call Him Now ! Please" then
+        Warnlog "Sentence not 'Call Him Now ! Please' but " & GetClipboardtext()
+    else
+        printlog "  " & GetClipboardtext()
+    endif
+
+
+    printlog " Format / Case Characters / tOGGLE cASE"
+    FormatChangeCaseToggleCase
+    EditCopy
+    if GetClipboardtext() <> "cALL hIM nOW ! pLEASE" then
+        Warnlog "Sentence not 'cALL hIM nOW ! pLEASE' but " & GetClipboardtext()
+    else
+        printlog "  " & GetClipboardtext()
+    endif
+
 
     if ( gAsianSup ) then
         try
@@ -716,7 +757,7 @@ testcase tFormatColumn
     printlog " Close dialog"
     SpaltenBreite.OK
     Wait 500
-    Call wDocSetContext
+    hSetDocumentContext()
     printlog " Enter some text in document"
     Call wTypeKeys ("Dies ist ein langer Text, HALLO HALLO")
     Wait 500
@@ -735,7 +776,7 @@ testcase tFormatColumn
     printlog " Format / Cloumn / Delete"
     TableDeleteColumns
     WaitSlot (500)
-    Call wDocSetContext
+    hSetDocumentContext()
     printlog " Press 'up' twice to point cursor in the table"
     Call wTypeKeys ("<Up>",2)
     wait 500

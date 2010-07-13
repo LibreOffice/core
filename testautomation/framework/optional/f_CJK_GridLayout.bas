@@ -72,8 +72,6 @@ end sub
 sub LoadIncludeFiles
     use "global\system\includes\master.inc"
     use "global\system\includes\gvariabl.inc"
-    use "global\tools\includes\required\t_doc1.inc"
-    use "global\tools\includes\required\t_tools1.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"
    
     use "framework\tools\includes\CJK_tools.inc"   

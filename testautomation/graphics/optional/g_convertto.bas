@@ -40,26 +40,27 @@ sub main
     Call hStatusIn ( "Graphics","g_convertto.bas")
 
     use "graphics\tools\id_tools.inc"
+    use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\g_convertto.inc"
 
     PrintLog "-------------------------" + gApplication + "-------------------"
     Call tiModifyConvertToPolygon
-    Call tdContextConvertIntoBitmap
+   ' Call tdContextConvertIntoBitmap
     Call tiAendernUmwandelnInKurve
     Call tiAendernUmwandelnInPolygonGrafik
-    Call tiAendernUmwandelnIn3D
-    Call tiAendernUmwandelnIn3DRotationsKoerper
-    Call tiAendernUmwandelnInMetaFile
+    'Call tiAendernUmwandelnIn3D
+    'Call tiAendernUmwandelnIn3DRotationsKoerper
+    'Call tiAendernUmwandelnInMetaFile
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-    Call tiModifyConvertToPolygon
-    Call tdContextConvertIntoBitmap
-    Call tiAendernUmwandelnInKurve
-    Call tiAendernUmwandelnInPolygonGrafik
-    Call tiAendernUmwandelnIn3D
-    Call tiAendernUmwandelnIn3DRotationsKoerper
-    Call tiAendernUmwandelnInMetaFile
+    'Call tiModifyConvertToPolygon
+    'Call tdContextConvertIntoBitmap
+    'Call tiAendernUmwandelnInKurve
+    'Call tiAendernUmwandelnInPolygonGrafik
+    'Call tiAendernUmwandelnIn3D
+    'Call tiAendernUmwandelnIn3DRotationsKoerper
+    'Call tiAendernUmwandelnInMetaFile
 
     Call hStatusOut
 end sub

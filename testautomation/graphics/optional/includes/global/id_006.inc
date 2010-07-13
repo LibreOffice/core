@@ -104,7 +104,7 @@ testcase tiToolsThesaurus
         else
             sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odg"))
         end if
-        if hFileExists ( sFileName ) = FALSE then
+        if FileExists ( sFileName ) = FALSE then
             warnlog "The language-file was not found or accessible! The test ends."
             goto endsub
         end if
@@ -146,9 +146,9 @@ endcase
 
 testcase tiToolsHyphenation
     Call hNewDocument
-    ExtrasSilbentrennungDraw
+    ToolsLanguageHyphenationDraw
     WaitSlot (2000)    'sleep 2
-    ExtrasSilbentrennungDraw
+    ToolsLanguageHyphenationDraw
     Call hCloseDocument
 endcase
 

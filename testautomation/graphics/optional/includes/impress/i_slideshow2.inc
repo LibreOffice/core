@@ -44,7 +44,8 @@ testcase tPraesentationAnimation
     Dim i
     Printlog "- Slideshow/Animation"
 
- Call hNewDocument									'/// new document  ///'
+    Call hNewDocument
+    Call sSelectEmptyLayout									'/// new document  ///'
   sleep 2
     InsertGraphicsFromFile								'/// insert graphic ///'
      Kontext "OeffnenDlg"
@@ -411,6 +412,7 @@ testcase tSlideShowInteraction
 
    '/// open application ///'
    Call hNewDocument
+   Call sSelectEmptyLayout
    sleep 5
    setStartCurrentPage(TRUE)   '/// Set "start with current page to ON ///'
 
@@ -839,6 +841,8 @@ endcase
 testcase tAendernObjektBenennen
   Printlog "- Context/Name object"
  Call hNewDocument
+ Call sSelectEmptyLayout									'/// new document  ///'
+
   sleep 1
   Kontext "DocumentImpress"
    if NOT DocumentImpress.Exists then

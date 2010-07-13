@@ -356,6 +356,13 @@ ExtrusionLightingFloater .uno:ExtrusionLightingFloater
 ExtrusionSurfaceFloater .uno:ExtrusionSurfaceFloater
 Extrusion3DColor .uno:Extrusion3DColor
 '-------------------------------------------------------------------------
+*FindBar   .HelpId:findbar
+'-------------------------------------------------------------------------
+FindText .uno:FindText
+DownSearch .uno:DownSearch
+UpSearch .uno:UpSearch
+SearchDialog   .uno:SearchDialog
+'-------------------------------------------------------------------------
 *Flowchart .HelpId:flowchartshapes
 '-------------------------------------------------------------------------
 Process .uno:FlowChartShapes.flowchart-process
@@ -797,7 +804,7 @@ ManageBreakpoints .uno:ManageBreakPoints
 Modules SID_BASICIDE_MODULEDLG
 ObjectCatalog SID_BASICIDE_OBJCAT
 ProcedureStep .uno:BasicStepOver
-SaveSourceTest .uno:SaveBasicAs
+SaveSourceText .uno:SaveBasicAs
 SingleStep .uno:BasicStepInto
 StepBack .uno:BasicStepOut
 '-------------------------------------------------------------------------

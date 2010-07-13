@@ -78,7 +78,7 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
             QAErrorlog " - " + Active.Gettext + "->Bug#110181"
             Active.Ok
         end if
-        Call wDocSetContext
+        hSetDocumentContext()
         Call wTypeKeys "<Escape>",2
         Select Case gApplication
             Case "WRITER","MASTERDOCUMENT","HTML"

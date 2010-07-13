@@ -29,12 +29,7 @@
 '*
 '* short description :
 '*
-'**************************************************************************************
-' #1 tToolsOptionsDrawGeneral 'wrn:1
-' #1 tToolsOptionsDrawView
-' #1 tToolsOptionsDrawGrid
-' #1 tToolsOptionsDrawPrint
-'\*************************************************************************************
+'\******************************************************************************
 
 testcase tToolsOptionsDrawGeneral (sApplication as string)
    dim irgendwas(9) as boolean
@@ -557,7 +552,7 @@ testcase tToolsOptionsDrawGrid (sApplication as string)
     ExitRestartTheOffice
     printlog "opening new doc to get the Options"
     Call hNewDocument
-    hTypeKeys "OpenNewDoc!"
+    
     printlog "checking states"
     ToolsOptions
     hToolsOptions (sApplication,"Grid")

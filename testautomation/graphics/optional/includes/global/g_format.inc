@@ -48,6 +48,7 @@ testcase tiFormatText
 
     '/// open application ///'
     Call hNewDocument
+    Call sSelectEmptyLayout
     '/// create a textbox with text ///'
     Call hTextrahmenErstellen ("This is a text, which, I hope, in Staroffice, will be automaticly formatted. Should that not be the case, then it doesn't matter.",20,20,70,20)
     WaitSlot (1000)
@@ -699,7 +700,8 @@ testcase tiFormat3D_Effekte
     Dim Zaehler as integer
     Dim Posi as string
 
-    Call hNewDocument                              
+    Call hNewDocument
+        Call sSelectEmptyLayout
     printlog "new document"
     '-----------------------------------RECTANGLE------------------------------------------------------
     Call hRechteckErstellen (20,20,60,70)        '/// create rectangle ///'
@@ -1187,6 +1189,7 @@ testcase tiFormatAufzaehlungszeichen
     PrintLog "- Format/Numbering and Bullets"
     
     Call hNewDocument
+    Call sSelectEmptyLayout
     WaitSlot (2000)
     Kontext "DocumentImpress"
     hTextrahmenErstellen ("Hello <Return><Return>",20,20,60,60)

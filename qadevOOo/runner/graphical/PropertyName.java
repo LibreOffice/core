@@ -69,5 +69,5 @@ public interface PropertyName
 //    final public static String DB_CONNECTION_STRING =                      "DB_CONNECTION_STRING";
 //    final public static String CHECK_NEED_TOOLS =                          "CHECK_NEED_TOOLS";
 //    final public static String CREATE_DEFAULT =                            "CREATE_DEFAULT_REFERENCE";
-
+    final public static String NO_SMALL_PICTURES = "NoSmallPictures";
 }

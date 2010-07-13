@@ -29,25 +29,6 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tdModifyFlipVertikal
-' #1 tdModifyFlipHorizontal
-' #1 tdContextConvertIntoCurve
-' #1 tdContextConvertIntoPolygon
-' #1 tdContextConvertIntoContour
-' #1 tdContextConvertInto3D
-' #1 tdContextConvertIntoRotationObject
-' #1 tdContextConvertIntoBitmap
-' #1 tdContextConvertIntoMetaFile
-' #1 tdModifyArrange
-' #1 tdModifyArrangeObjects
-' #1 tdModifyAlignment
-' #1 tdContextDistribution
-' #1 tdContextDescriptionObject
-' #1 tdContextNameObject
-' #1 tdModifyConnectBreak
-' #1 tdModifyShapes
-' #1 tdModifyCombineSplit
 '\**********************************************************************************
 
 testcase tdModifyFlipVertikal
@@ -360,6 +341,7 @@ testcase tdContextDistribution
     Call hNewDocument
     WaitSlot (3000)
     '/// create 3 rectangles ///'
+    Call sSelectEmptyLayout
     Call hRechteckErstellen (20,20,30,30)
     Call hRechteckErstellen (40,40,50,50)
     Call hRechteckErstellen (60,60,70,70)
@@ -430,7 +412,7 @@ testcase tdContextNameObject
     Call hRechteckErstellen ( 30, 40, 50, 60 )
     sleep 1
     '/// select both by spanning a selection with the mouse ///'
-    gMouseMove 1,1,95,95
+    gMouseMove 1,1,70,70
     sleep 1
     '/// Modify->Group ///'
     '///+ Modify->Group ///'
@@ -455,6 +437,7 @@ endcase
 testcase tdModifyConnectBreak
     '/// open application ///'
     Call hNewDocument
+    Call sSelectEmptyLayout
     sleep 1
     '/// create two rectangles ///'
     Call hRechteckErstellen (10,10,30,30)
@@ -483,6 +466,7 @@ endcase
 testcase tdModifyShapes
     '/// open application ///'
     Call hNewDocument
+    Call sSelectEmptyLayout
     sleep 1
     '/// create two rectangles ///'
     gMouseClick 50,50
@@ -551,6 +535,7 @@ endcase
 testcase tdModifyCombineSplit
     '/// open application ///'
     Call hNewDocument
+    Call sSelectEmptyLayout
     sleep 1
     '/// create two rectangles ///'
     Call hRechteckErstellen (30,30,50,50)

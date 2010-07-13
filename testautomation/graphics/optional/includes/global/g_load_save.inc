@@ -302,14 +302,9 @@ testcase tFileOpenImport
     Dateiname.SetText (ConvertPath (gTesttoolpath + "graphics\required\input\imsusmap.cgm"))
     Oeffnen.Click
     Sleep 2
-    ' check if the document is writable
-    if fIsDocumentWritable = false then
-        ' make the document writable and check if it's succesfull
-        if fMakeDocumentWritable = false then
-            warnlog "The document can't be make writeable. Test stopped."
-            goto endsub
-        endif
-    endif
+    
+    call fMakeDocumentWritable
+    
     kontext "DocumentImpress"
     if DocumentImpress.exists(5) then
         DocumentImpress.TypeKeys ("<Tab>")

@@ -151,6 +151,7 @@ GenauigkeitWieAngezeigt sc:CheckBox:RID_SCPAGE_CALC:BTN_CALC
 Suchkriterien sc:CheckBox:RID_SCPAGE_CALC:BTN_MATCH
 RegulaererAusdruck sc:CheckBox:RID_SCPAGE_CALC:BTN_REGEX
 SpaltenZeilenbeschriftung sc:CheckBox:RID_SCPAGE_CALC:BTN_LOOKUP
+LimitDecimals sc:CheckBox:RID_SCPAGE_CALC:BTN_GENERAL_PREC
 
 *TabBereiche HID_INSERT_SECTION_PAGE
 Bereichsliste sw:ComboBox:TP_INSERT_SECTION:ED_RNAME

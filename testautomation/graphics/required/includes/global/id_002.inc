@@ -29,23 +29,7 @@
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiEditUndoRedo
-' #1 tiEditRepeat
-' #1 tiEditCutPasteCopySelectall
-' #1 tiEditPasteSpecial
-' #1 tiEditSearchAndReplace
-' #1 tiEditDuplicate
-' #1 tiEditFields
-' #1 tdEditDeleteSlide
-' #1 tiEditLinks
-' #1 tiEditImageMap
-' #1 tiEditObjectProperties
-' #1 tiEditObjectEdit
-' #1 tiEditPlugIn
-' #1 tiEditHyperlink
-' #1 tEditPoints
-'\**********************************************************************************
+'\******************************************************************************
 testcase tiEditUndoRedo
 
     printlog " open application"
@@ -101,22 +85,15 @@ testcase tiEditCutPasteCopySelectall
 
     call hTBOtypeInDoc
 
-    EditCut
-    sleep (1)
-    EditPaste
-    sleep (1)
-    EditCopy
-    sleep (1)
-    EditPaste
-    sleep (1)
-    EditSelectAll
-    sleep (1)
-    EditCut
-    sleep (1)
-    EditPaste
-    sleep (1)
-    EditDeleteContents
-    sleep (1)
+    hUseAsyncSlot( "EditCut" )
+    hUseAsyncSlot( "EditPaste" )
+    hUseAsyncSlot( "EditCopy" )
+    hUseAsyncSlot( "EditPaste" )
+    hUseAsyncSlot( "EditSelectAll" )
+    hUseAsyncSlot( "EditCut" )
+    hUseAsyncSlot( "EditPaste" )
+    hUseAsyncSlot( "EditDeleteContents" )
+
     printlog " close application"
     Call hCloseDocument
     
@@ -131,14 +108,18 @@ testcase tiEditPasteSpecial
     SetClipboard "This is a Text in the Clipboard"
 
     printlog " Edit->PasteSpecial"
-    EditPasteSpecial
-    WaitSlot (1000)
+    hUseAsyncSlot( "EditPasteSpecial" )
+
     Kontext "InhaltEinfuegen"
+    if ( InhaltEinfuegen.exists( 2 ) ) then
         DialogTest ( InhaltEinfuegen )
 
         printlog " close the dialog without inserting something"
-        InhaltEinfuegen.Cancel
-    WaitSlot (1000)
+        hCloseDialog( InhaltEinfuegen, "Cancel" )
+    else
+        warnlog( "Dialog <InhalteEinfuegen> did not open" )
+    endif
+
     printlog " close application"
     Call hCloseDocument
     
@@ -232,7 +213,7 @@ testcase tiEditFields
 
     hTypeKeys "<ESCAPE>"
     printlog "With a Tab we catch always the Object"
-    hTypeKeys "<Tab>"                  
+    hTypeKeys "<Tab>",3
     printlog "Here we enter Edit-Mode and therefore also the right place"
     hTypeKeys "<F2>"
     printlog "Here we enter Edit-Mode and therefore also the right place"
@@ -406,7 +387,7 @@ testcase tiEditObjectProperties
     gMouseDoubleClick 1,1
 
     printlog " select frame "
-    hTypekeys "<tab>"
+    hTypekeys "<tab>",3
 
     printlog " Edit->Object->Properties "
     kontext
@@ -448,7 +429,7 @@ testcase tiEditObjectEdit
     gMouseClick 20,1
 
     printlog " select object "
-    hTypekeys "<tab>"
+    hTypekeys "<tab>",3
 
     printlog " Edit->Object->Edit "
     EditObjectEdit
@@ -464,7 +445,7 @@ testcase tiEditObjectEdit
     endcatch
 
     printlog " select object "
-    EditSelectAll
+    hTypekeys "<tab>",3
 
     printlog " Edit->Object->Save Copy As "
     EditObjectSaveCopyAs
@@ -531,42 +512,54 @@ testcase tiEditHyperlink
 
     printlog " open application"
     hNewDocument
+    Call sSelectEmptyLayout
     printlog " Insert->Hyperlink"
     InsertHyperlink
-    WaitSlot (5000)
-    Kontext "Hyperlink"
+
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
+
+        Kontext "Hyperlink"
         Auswahl.MouseDown 50, 5
         Auswahl.MouseUp 50, 5
         Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
         Auswahl.typekeys "<TAB>"
-        sleep 3
+        sleep 1
+
         Kontext "TabHyperlinkInternet"
+        printlog "Workaround to get rid of a Focusing-problem..."
+        NameText.Typekeys "alal <RETURN>"
+        NameText.Typekeys "<MOD1 A><DELETE>"
+        TabHyperlinkInternet.Typekeys "<TAB>", 6
+        TabHyperlinkInternet.Typekeys "<LEFT>", 3
+        printlog "End of workaround"
 
-            printlog "Workaround to get rid of a Focusing-problem..."
-            NameText.Typekeys "alal <RETURN>"
-            NameText.Typekeys "<MOD1 A><DELETE>"
-            TabHyperlinkInternet.Typekeys "<TAB>", 6
-            TabHyperlinkInternet.Typekeys "<LEFT>", 3
-            printlog "End of workaround"
+        Internet.Check  
+        ZielUrl.SetText( "http://www.liegerad-fahrer.de" )
 
-            Internet.Check           'Just to make sure the radio-button is addressable.
-            ZielUrl.Settext "http://www.liegerad-fahrer.de"
-    Kontext "Hyperlink"
-        Uebernehmen.Click
-        Hyperlink.Close
+        Uebernehmen.Click()
+
+        kontext "HyperlinkDialog"
+        HyperlinkDialog.Close()
+    else
+        warnlog( "Failed to open <HyperlinkDialog>" )
+    endif
         printlog " presupposition to enable edit->hyperlink: <TAB><F2><STRG+a>"
-        hTypeKeys "<TAB><F2>"
+        hTypeKeys "<TAB>"
+        hTypeKeys "<F2>"
+        hTypeKeys "<MOD1 SHIFT RIGHT>"
     EditSelectAll
     try
         printlog " Edit->Hyperlink "
         EditHyperlinkDraw
-        Kontext "Hyperlink"
-            if Hyperlink.Exists then
-                printlog " close dialog 'Hyperlink'"
-                Hyperlink.Close
-            else
-                Warnlog "- Hyperlinkdialog not up"
-            end if
+
+        Kontext "HyperlinkDialog"
+        if ( HyperlinkDialog.Exists( 2 ) ) then
+            printlog " close dialog 'Hyperlink'"
+            HyperlinkDialog.Close()
+        else
+            Warnlog "- Hyperlinkdialog not up"
+        end if
     catch
         Warnlog "- Not able to edit Hyperlink!"
     endcatch

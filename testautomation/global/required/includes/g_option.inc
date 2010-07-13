@@ -209,21 +209,6 @@ testcase tToolsOptionsStarOffice
                 endif
 
                 Kontext "TabSecurity"
-                if Protect.isEnabled then
-                    Protect.click()
-                    Kontext "PasswordDLG"
-                    call DialogTest( PasswordDLG )
-                    PasswordDLG.cancel()
-                else
-                    select case uCase(gApplication)
-                    case "WRITER","MASTERDOCUMENT"
-                        WarnLog "Protect-Button is disabled."
-                    case "MATH","IMPRESS","DRAW","HTML","CALC"
-                        PrintLog "Protect-Button is disabled."
-                    end select
-                endif
-                
-                Kontext "TabSecurity"
                 if ( TabSecurity.exists( 1 ) ) then
                     Options.click
                     Kontext "TabSecurityOptionsAndWarnings"
@@ -502,21 +487,21 @@ testcase tToolsOptionsLanguageSettings
                 Optionen.TypeKeys "<Down>", 6
                 WaitSlot() ' similar effect as a NOOP
                 OptionenBearbeiten.Click
-                Kontext "SilbentrennungOptionen"
-                Call DialogTest ( SilbentrennungOptionen )
-                SilbentrennungOptionen.Cancel
+                Kontext "HyphenationOptions"
+                Call DialogTest ( HyphenationOptions )
+                HyphenationOptions.Cancel
                 Kontext "TabLinguistik"
                 Optionen.TypeKeys "<Down>"
                 OptionenBearbeiten.Click
-                Kontext "SilbentrennungOptionen"
-                Call DialogTest ( SilbentrennungOptionen )
-                SilbentrennungOptionen.Cancel
+                Kontext "HyphenationOptions"
+                Call DialogTest ( HyphenationOptions )
+                HyphenationOptions.Cancel
                 Kontext "TabLinguistik"
                 Optionen.TypeKeys "<Down>"
                 OptionenBearbeiten.Click
-                Kontext "SilbentrennungOptionen"
-                Call DialogTest ( SilbentrennungOptionen )
-                SilbentrennungOptionen.Cancel
+                Kontext "HyphenationOptions"
+                Call DialogTest ( HyphenationOptions )
+                HyphenationOptions.Cancel
             endif
         case 3,5 :
             try

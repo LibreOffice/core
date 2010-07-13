@@ -58,7 +58,8 @@ testcase tFiledlgPasswords()
             
             hCreateDocument()
             
-            hCloseNavigator()
+            kontext "Navigator"
+            hCloseDialog( Navigator, "close,optional" )
 
             call hChangeDoc()
 
@@ -164,13 +165,15 @@ testcase tFiledlgPasswords()
                 warnlog( "File Open dislog did not come up" )
             endif
 
-            hCloseNavigator()
+            kontext "Navigator"
+            hCloseDialog( Navigator, "close,optional" )
 
             hDestroyDocument()
 
             hDeleteFile( workpath & workfile )
 
-            hCloseNavigator()
+            kontext "Navigator"
+            hCloseDialog( Navigator, "close,optional" )
             
         next iCurrentFileFormat
         

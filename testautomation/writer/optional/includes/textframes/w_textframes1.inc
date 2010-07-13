@@ -85,7 +85,7 @@ testcase tTextframes_1
     '/// 2. Insert a frame over Toolbox / Insert / Frame
     Call hNewDocument
     
-    Call wDocSetContext
+    hSetDocumentContext()
     Call gMouseClick (30, 50)
     
     Call hToolbarSelect("INSERT", true )

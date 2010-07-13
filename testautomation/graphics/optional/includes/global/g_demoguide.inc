@@ -44,6 +44,7 @@ testcase t_Introduction
     '///Open new presentation
     printlog "Open new presentation"
     Call hNewDocument
+    Call sSelectEmptyLayout
     
     '///Open the Gallery
     printlog "Open the Gallery"
@@ -136,7 +137,7 @@ testcase t_Introduction
     DocumentImpress.TypeKeys "<MOD1 A>"
     hOpenContextMenu  '(when the object is marked)
     hMenuSelectNr(12)
-    
+
     '///Add Layout "Title Only"
     Printlog "Add Layout"
     kontext "Tasks"
@@ -144,36 +145,71 @@ testcase t_Introduction
         warnlog "Tasks Panel not visible. Opening now."
         ViewTaskPane
     endif
-    Kontext "LayoutsPreview"
+
+    ' enable all items in the task pane.
+    ' may be one item is not enabled due to a previous testrun
+    dim i as integer
+    for i = 1 to 5
+    	printlog i
+        View.OpenMenu
+        if ( MenuIsItemChecked(MenuGetItemID(i)) ) then
+            ' do nothing the item is allready displayed
+        else
+            MenuSelect(MenuGetItemId(4))
+        endif
+        hMenuSelectNr(0)
+        'sleep(1)
+    next
+
+    View.OpenMenu
+    MenuSelect(MenuGetItemId(1))
+    View.OpenMenu
+    MenuSelect(MenuGetItemId(3))
+    View.OpenMenu
+    MenuSelect(MenuGetItemId(4))
+    View.OpenMenu
+    MenuSelect(MenuGetItemId(5))
+
+
     LayoutsPreview.TypeKeys "<HOME> <DOWN> <DOWN> <RETURN>"
     sleep (5)
     '///Add a background
     Printlog "Add background"
-    
+
     Kontext "Tasks"
     printlog "Deselect all tabs from view menu in task pane except the needed."
     View.OpenMenu
-    MenuSelect(MenuGetItemID(5))        
+    MenuSelect(MenuGetItemID(5))
     View.OpenMenu
-    MenuSelect(MenuGetItemID(4))        
+    MenuSelect(MenuGetItemID(4))
     View.OpenMenu
     MenuSelect(MenuGetItemID(3))
     View.OpenMenu
     MenuSelect(MenuGetItemID(2))
-    Kontext "AvailableForUsePreview"
+    sleep(5)
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(1))
+    	Tasks.TypeKeys "<TAB>",true
+	Tasks.TypeKeys "<MOD1 HOME>",true
     AvailableForUsePreview.TypeKeys "<HOME> <RIGHT> <RETURN>"
-    sleep (5)    
+    sleep (5)
     '///Add a transition effect
     Printlog "Add a transition effect"
     Kontext "Tasks"
-    View.OpenMenu
-    MenuSelect(MenuGetItemID(5))
+    sleep(5)
     View.OpenMenu
     MenuSelect(MenuGetItemID(1))
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(2))
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(3))
+    View.OpenMenu
+    MenuSelect(MenuGetItemID(4))
+
     TransitionSound.GetItemCount   'needed for select
     Sleep 1
     TransitionSound.Select 4
-    
+
     '///Close the document
     Printlog "Close the document"
     Call hCloseDocument
@@ -385,7 +421,7 @@ testcase t_DrawingEngine
     printlog "Open a drawing"
     hFileOpen (Convertpath (gTesttoolPath + "graphics/required/input/Blueprint.odg"))
 
-    Call sMakeReadOnlyDocumentEditable
+    Call fMakeDocumentWritable
 
     '///Select grouped object and enter group
     printlog "Select group"

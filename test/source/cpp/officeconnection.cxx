@@ -54,57 +54,69 @@ OfficeConnection::OfficeConnection(): process_(0) {}
 OfficeConnection::~OfficeConnection() {}
 
 void OfficeConnection::setUp() {
-    oslProcessInfo info;
-    info.Size = sizeof info;
-    CPPUNIT_ASSERT_EQUAL(
-        osl_Process_E_None,
-        osl_getProcessInfo(0, osl_Process_IDENTIFIER, &info));
-    rtl::OUString desc(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM("pipe,name=oootest")) +
-        rtl::OUString::valueOf(static_cast< sal_Int64 >(info.Ident)) +
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";urp")));
-    rtl::OUString noquickArg(
-        RTL_CONSTASCII_USTRINGPARAM("-quickstart=no"));
-    rtl::OUString nofirstArg(
-        RTL_CONSTASCII_USTRINGPARAM("-nofirststartwizard"));
-    rtl::OUString norestoreArg(RTL_CONSTASCII_USTRINGPARAM("-norestore"));
-    rtl::OUString acceptArg(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-accept=")) + desc);
-    rtl::OUString argUser;
+    rtl::OUString desc;
+    rtl::OUString argSoffice;
     CPPUNIT_ASSERT(
         getArgument(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), &argUser));
-    rtl::OUString userArg(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-env:UserInstallation=")) +
-        toAbsoluteFileUrl(argUser));
-    rtl::OUString jreArg(
-        RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_JREHOME=true"));
-    rtl::OUString classpathArg(
-        RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_CLASSPATH=true"));
-    rtl_uString * args[] = {
-        noquickArg.pData, nofirstArg.pData, norestoreArg.pData, acceptArg.pData,
-        userArg.pData, jreArg.pData, classpathArg.pData };
-    rtl_uString ** envs = 0;
-    rtl::OUString argEnv;
-    if (getArgument(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env")), &argEnv))
-    {
-        envs = &argEnv.pData;
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")),
+            &argSoffice));
+    if (argSoffice.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("path:"))) {
+        oslProcessInfo info;
+        info.Size = sizeof info;
+        CPPUNIT_ASSERT_EQUAL(
+            osl_Process_E_None,
+            osl_getProcessInfo(0, osl_Process_IDENTIFIER, &info));
+        desc = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pipe,name=oootest")) +
+            rtl::OUString::valueOf(static_cast< sal_Int64 >(info.Ident));
+        rtl::OUString noquickArg(
+            RTL_CONSTASCII_USTRINGPARAM("-quickstart=no"));
+        rtl::OUString nofirstArg(
+            RTL_CONSTASCII_USTRINGPARAM("-nofirststartwizard"));
+        rtl::OUString norestoreArg(RTL_CONSTASCII_USTRINGPARAM("-norestore"));
+        rtl::OUString acceptArg(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-accept=")) + desc +
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";urp")));
+        rtl::OUString argUser;
+        CPPUNIT_ASSERT(
+            getArgument(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), &argUser));
+        rtl::OUString userArg(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("-env:UserInstallation=")) +
+            toAbsoluteFileUrl(argUser));
+        rtl::OUString jreArg(
+            RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_JREHOME=true"));
+        rtl::OUString classpathArg(
+            RTL_CONSTASCII_USTRINGPARAM(
+                "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true"));
+        rtl_uString * args[] = {
+            noquickArg.pData, nofirstArg.pData, norestoreArg.pData,
+            acceptArg.pData, userArg.pData, jreArg.pData, classpathArg.pData };
+        rtl_uString ** envs = 0;
+        rtl::OUString argEnv;
+        if (getArgument(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env")), &argEnv))
+        {
+            envs = &argEnv.pData;
+        }
+        CPPUNIT_ASSERT_EQUAL(
+            osl_Process_E_None,
+            osl_executeProcess(
+                toAbsoluteFileUrl(
+                    argSoffice.copy(RTL_CONSTASCII_LENGTH("path:"))).pData,
+                args, sizeof args / sizeof args[0], 0, 0, 0, envs,
+                envs == 0 ? 0 : 1, &process_));
+    } else if (argSoffice.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("connect:"))) {
+        desc = argSoffice.copy(RTL_CONSTASCII_LENGTH("connect:"));
+    } else {
+        CPPUNIT_FAIL(
+            "\"soffice\" argument starts with neither \"path:\" nor"
+            " \"connect:\"");
     }
-    rtl::OUString argPath;
-    CPPUNIT_ASSERT(
-        getArgument(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("path")), &argPath));
-    CPPUNIT_ASSERT_EQUAL(
-        osl_Process_E_None,
-        osl_executeProcess(
-            toAbsoluteFileUrl(argPath).pData, args,
-            sizeof args / sizeof args[0], 0, 0, 0, envs, envs == 0 ? 0 : 1,
-            &process_));
     css::uno::Reference< css::bridge::XUnoUrlResolver > resolver(
         css::bridge::UnoUrlResolver::create(
             cppu::defaultBootstrap_InitialComponentContext()));
-    for (int i = 0;; ++i) {
+    for (;;) {
         try {
             factory_ =
                 css::uno::Reference< css::lang::XMultiServiceFactory >(
@@ -113,14 +125,16 @@ void OfficeConnection::setUp() {
                         desc +
                         rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM(
-                                ";StarOffice.ServiceManager"))),
+                                ";urp;StarOffice.ServiceManager"))),
                     css::uno::UNO_QUERY_THROW);
             break;
         } catch (css::connection::NoConnectException &) {}
-        TimeValue delay = { 1, 0 }; // 1 sec
-        CPPUNIT_ASSERT_EQUAL(
-            osl_Process_E_TimedOut,
-            osl_joinProcessWithTimeout(process_, &delay));
+        if (process_ != 0) {
+            TimeValue delay = { 1, 0 }; // 1 sec
+            CPPUNIT_ASSERT_EQUAL(
+                osl_Process_E_TimedOut,
+                osl_joinProcessWithTimeout(process_, &delay));
+        }
     }
 }
 

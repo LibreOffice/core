@@ -34,7 +34,7 @@
 sub main
     PrintLog "------------------------- g_line test -------------------------"
     Call hStatusIn ( "Graphics","g_line.bas")
-
+    use "graphics\tools\id_tools_2.inc"
     use "graphics\optional\includes\global\g_line.inc"
 
     PrintLog "-------------------------" + gApplication + "-------------------"

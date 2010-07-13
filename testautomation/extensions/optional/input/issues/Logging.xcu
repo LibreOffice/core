@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Logging" oor:package="org.openoffice.Office">
+    <node oor:name="Settings">
+        <node oor:name="bw.stv.tvs.logging.DefaultLogger" oor:op="replace">
+            <prop oor:name="DefaultFormatter" oor:type="xs:string">
+                <value>com.sun.star.logging.PlainTextFormatter</value>
+            </prop>
+            <prop oor:name="DefaultHandler" oor:type="xs:string">
+                <value>bw.stv.tvs.logging.UILogHandler</value>
+            </prop>
+            <prop oor:name="LogLevel" oor:type="xs:int">
+                <value>2147483647</value>
+            </prop>
+            <node oor:name="HandlerSettings">
+                <prop oor:name="UIId" oor:type="xs:string">
+                    <value>tvs.ui</value>
+                </prop>
+                <prop oor:name="UITitle" oor:type="xs:string">
+                    <value>TVS-Logger (bw.stv.tvs.logging.DefaultLogger)</value>
+                </prop>
+            </node>
+        </node>
+    </node>
+</oor:component-data>

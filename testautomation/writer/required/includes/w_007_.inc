@@ -80,7 +80,7 @@ testcase tToolsSpellcheck
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if ( not hFileExists ( TheFile ) ) then
+    if ( not FileExists ( TheFile ) ) then
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
@@ -125,7 +125,7 @@ testcase tToolsSpellcheck
                 if Active.exists then
                     if Active.GetRT = 304 then Active.Ok
                     Warnlog "Dialog 'Spellcheck' not up!"
-                    Call hCloseDocument
+                    hFileCloseAll()
                     goto endsub
                 end if
             catch
@@ -155,9 +155,9 @@ testcase tToolsSpellcheck
         if OptionenBearbeiten.IsEnabled then
             OptionenBearbeiten.Click
             wait 500
-            Kontext "SilbentrennungOptionen"
-            DialogTest ( SilbentrennungOptionen )
-            SilbentrennungOptionen.Cancel
+            Kontext "HyphenationOptions"
+            DialogTest ( HyphenationOptions )
+            HyphenationOptions.Cancel
         end if
     next i
 
@@ -204,9 +204,8 @@ testcase tToolsSpellcheck
     Spellcheck.Close
     wait 500
     PrintLog "Close active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+
 endcase
 
 ' -------------------------------------------
@@ -243,7 +242,7 @@ testcase tToolsThesaurus
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if ( not hFileExists ( TheFile ) ) then
+    if ( not FileExists ( TheFile ) ) then
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
@@ -289,19 +288,11 @@ testcase tToolsThesaurus
 
     Kontext "Thesaurus"
     DialogTest ( Thesaurus )
-    printlog " In 'Thesaurus' dialog click 'Language'"
-    Sprache.Click
-    Kontext "SpracheAuswaehlen"
-    DialogTest ( SpracheAuswaehlen )
-    printlog " Close 'Language' dialog"
-    SpracheAuswaehlen.Cancel
-    Kontext "Thesaurus"
     printlog " Close 'Thesaurus' dialog"
     Thesaurus.Cancel
     PrintLog "Close active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+    
 endcase
 
 ' -------------------------------------------
@@ -339,7 +330,7 @@ testcase tToolsHyphenation
         LingFile = str$(iSprache) + "-hyph.dat"
     end select
 
-    if ( not hFileExists( DieDatei ) ) then
+    if ( not FileExists( DieDatei ) ) then
         Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
         goto endsub
     end if
@@ -390,11 +381,11 @@ testcase tToolsHyphenation
         end if
     end if
 
-    Kontext "Silbentrennung"
+    Kontext "Hyphenation"
     printlog " Close upcoming 'Hyphenation' dialog"
-    if Silbentrennung.Exists then
-        Call DialogTest ( Silbentrennung )
-        Silbentrennung.Cancel
+    if Hyphenation.Exists then
+        Call DialogTest ( Hyphenation )
+        Hyphenation.Cancel
     else
         Warnlog "Dialog 'Hyphenation' not up!"
         Kontext "Active"
@@ -1123,6 +1114,10 @@ endcase
 ' -------------------------------------------
 
 testcase tHtmlDocToolsHangulHanjaConversion
+
+    warnlog( "#i112523# - Hangul Hanya Conversion dialog causes crash." )
+    goto endsub
+
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
 
@@ -1232,7 +1227,7 @@ testcase tMasterDocToolsHyphenation
     end select
 
     sTestFile = convertpath( sTestFile )
-    if ( not hFileExists( sTestFile ) )then
+    if ( not FileExists( sTestFile ) )then
         Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
         goto endsub
     end if
@@ -1294,11 +1289,11 @@ testcase tMasterDocToolsHyphenation
         end if
     end if
 
-    Kontext "Silbentrennung"
+    Kontext "Hyphenation"
     printlog " Close upcoming 'Hyphenation' dialog"
-    if ( Silbentrennung.Exists( 2 ) ) then
-        Call DialogTest ( Silbentrennung )
-        Silbentrennung.Cancel
+    if ( Hyphenation.Exists( 2 ) ) then
+        Call DialogTest ( Hyphenation )
+        Hyphenation.Cancel
     else
         Warnlog "Dialog 'Hyphenation' not up!"
         Kontext "Active"

@@ -40,7 +40,7 @@ public interface IDocument
      * @param _sDocument
      * @param _sResult
      * @param _aParams
-     * @throws graphical.DocumentLoaderException
+     * @throws OfficeException
      */
     public void checkOneFile(String _sDocument, String _sResult, ParameterHelper _aParams) throws OfficeException;
 }

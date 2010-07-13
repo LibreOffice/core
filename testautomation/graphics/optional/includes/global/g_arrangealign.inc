@@ -29,16 +29,7 @@
 '*
 '* short description :
 '*
-'**************************************************************************************
-' #1 tiDatei_Fuer_Anordnen_Erstellen
-' #1 tdContextSendBackward
-' #1 tdContextBringForward
-' #1 tdContextSendToBack
-' #1 tdContextBringToFront
-' #1 tdContextReverse
-' #1 tdContextInFrontOfObject
-' #1 tdContextBehindObject
-'\*************************************************************************************
+'\******************************************************************************
 testcase tiDatei_Fuer_Anordnen_Erstellen
 
    dim sTemp as string
@@ -46,7 +37,8 @@ testcase tiDatei_Fuer_Anordnen_Erstellen
    dim zaehler as integer
    '/// This function creates the document, that will be used as reference and working object inthe following cases :-) ///'
    '///'Dim Datei ' somewhere global :-) defined in calling sub! :sub im_107c_ ///
-   call hNewDocument									'/// new document  ///'
+   call hNewDocument
+    call sSelectEmptyLayout								'/// new document  ///'
    if Dir(Datei)<>"" then app.Kill(Datei) ' kill old file
    for Zaehler = 1 to 3									'/// create 3 overlapping objects  ///'
     Kontext

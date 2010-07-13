@@ -293,7 +293,7 @@ public class ORowSet extends TestCase {
                 oldF = utils.getFullURL(origDB);
                 newF = tempFolder + tableName + ".dbf";
             }
-            while ( !utils.overwriteFile( orb, oldF, newF ) );
+            while ( !utils.tryOverwriteFile( orb, oldF, newF ) );
             m_tableFile = newF;
         }
 

@@ -89,7 +89,7 @@ public class OpenOfficePostscriptCreator implements IOffice
         m_aDocument = loadFromURL(m_aParameterHelper, sInputFileURL);
         if (m_aDocument == null)
         {
-            GlobalLogWriter.get().println("loadDocumentFromURL() failed with document: " + sInputFileURL);
+            GlobalLogWriter.println("loadDocumentFromURL() failed with document: " + sInputFileURL);
             throw new OfficeException("load(): failed with document" + sInputFileURL);
         }
 
@@ -101,7 +101,8 @@ public class OpenOfficePostscriptCreator implements IOffice
         if (m_aDocument != null)
         {
             String sDocumentName = FileHelper.appendPath(m_sOutputURL, m_sBasename);
-            if (m_aParameterHelper.getReferenceType().toLowerCase().equals("ooo"))
+            if (m_aParameterHelper.getReferenceType().toLowerCase().equals("ooo") ||
+                m_aParameterHelper.getReferenceType().toLowerCase().equals("ps") )
             {
                 String sPrintURL = sDocumentName + ".ps";
 
@@ -115,13 +116,13 @@ public class OpenOfficePostscriptCreator implements IOffice
                 storeAsPDF(m_aParameterHelper, m_aDocument, sPDFURL);
 
                 String sBasename = FileHelper.getBasename(sPDFURL);
-                FileHelper.addBasenameToIndex(m_sOutputURL, sBasename, "OOo", "pdf-export", m_sDocumentName);
+                FileHelper.addBasenameToIndex(m_sOutputURL, sBasename, "pdf", "pdf-export", m_sDocumentName);
             }
             else
             {
                 throw new OfficeException("unknown reference type");
             }
-            GlobalLogWriter.get().println("Close document.");
+            GlobalLogWriter.println("Close document.");
             m_aDocument.dispose();
         }
     }
@@ -147,11 +148,11 @@ public class OpenOfficePostscriptCreator implements IOffice
             try
             {
                 sValue = AnyConverter.toString(_aValue.Value);
-                GlobalLogWriter.get().println("Property " + sName + ":=" + sValue);
+                GlobalLogWriter.println("Property " + sName + ":=" + sValue);
             }
             catch (com.sun.star.lang.IllegalArgumentException e)
             {
-                GlobalLogWriter.get().println("showProperty: can't convert a object to string.");
+                GlobalLogWriter.println("showProperty: can't convert a object to string. " + e.getMessage());
             }
         }
 
@@ -160,7 +161,7 @@ public class OpenOfficePostscriptCreator implements IOffice
      */
     private String getDocumentType( XComponent _aDoc )
         {
-            XModel xModel = (XModel) UnoRuntime.queryInterface( XModel.class, _aDoc);
+            XModel xModel = UnoRuntime.queryInterface( XModel.class, _aDoc);
             PropertyValue[] aArgs = xModel.getArgs();
             for (int i=0;i<aArgs.length;i++)
             {
@@ -180,7 +181,7 @@ public class OpenOfficePostscriptCreator implements IOffice
     private void showDocumentType( XComponent _aDoc )
         {
             String sNameValue = getDocumentType(_aDoc);
-            GlobalLogWriter.get().println("  Property: '" + sNameValue);
+            GlobalLogWriter.println("  Property: '" + sNameValue);
         }
     /**
      * load a OpenOffice.org document from a given URL (_sInputURL)
@@ -196,15 +197,15 @@ public class OpenOfficePostscriptCreator implements IOffice
             {
                 if (_aGTA.getMultiServiceFactory() == null)
                 {
-                    GlobalLogWriter.get().println("MultiServiceFactory in GraphicalTestArgument not set.");
+                    GlobalLogWriter.println("MultiServiceFactory in GraphicalTestArgument not set.");
                     return null;
                 }
                 Object oDsk = _aGTA.getMultiServiceFactory().createInstance("com.sun.star.frame.Desktop");
-                XDesktop aDesktop = (XDesktop)UnoRuntime.queryInterface(XDesktop.class, oDsk);
+                XDesktop aDesktop = UnoRuntime.queryInterface(XDesktop.class, oDsk);
 
                 if (aDesktop != null)
                 {
-                    GlobalLogWriter.get().println("com.sun.star.frame.Desktop created.");
+                    GlobalLogWriter.println("com.sun.star.frame.Desktop created.");
                     // String sInputURL = aCurrentParameter.sInputURL;
                     // String sOutputURL = aCurrentParameter.sOutputURL;
                     // String sPrintFileURL = aCurrentParameter.sPrintToFileURL;
@@ -214,7 +215,7 @@ public class OpenOfficePostscriptCreator implements IOffice
                     // set here the loadComponentFromURL() properties
                     // at the moment only 'Hidden' is set, so no window is opened at work
 
-                    ArrayList aPropertyList = new ArrayList();
+                    ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
 
                     // check which properties should set and count it.
                     // if (_aGTA.isHidden())
@@ -253,10 +254,10 @@ public class OpenOfficePostscriptCreator implements IOffice
                     aPropertyList.add(ReadOnly);
                     showProperty(ReadOnly);
 
-                    GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Load document");
-                    // GlobalLogWriter.get().flush();
+                    GlobalLogWriter.println(DateHelper.getDateTimeForHumanreadableLog() + " Load document");
+                    // GlobalLogWriter.flush();
 
-                    XComponentLoader aCompLoader = (XComponentLoader) UnoRuntime.queryInterface( XComponentLoader.class, aDesktop);
+                    XComponentLoader aCompLoader = UnoRuntime.queryInterface( XComponentLoader.class, aDesktop);
 
                     // XComponent aDoc = null;
 
@@ -265,30 +266,31 @@ public class OpenOfficePostscriptCreator implements IOffice
                     _aGTA.getPerformance().stopTime(PerformanceContainer.Load);
                     if (aDoc != null)
                     {
-                        GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Load document done.");
+                        GlobalLogWriter.println(DateHelper.getDateTimeForHumanreadableLog() + " Load document done.");
                         showDocumentType(aDoc);
                         _aGTA.setDocumentType(getDocumentType(aDoc));
+// TODO:                        TimeHelper.waitInSeconds(20, "Wait after load document. Maybe helps due to layouting problems.");
                     }
                     else
                     {
-                        GlobalLogWriter.get().println(" Load document failed.");
+                        GlobalLogWriter.println(" Load document failed.");
                         if (_aGTA.getImportFilterName() != null && _aGTA.getImportFilterName().length() > 0)
                         {
-                            GlobalLogWriter.get().println(" Please check FilterName := '" + _aGTA.getImportFilterName() + "'");
+                            GlobalLogWriter.println(" Please check FilterName := '" + _aGTA.getImportFilterName() + "'");
                         }
-                        GlobalLogWriter.get().println("");
+                        GlobalLogWriter.println("");
                     }
                 }
                 else
                 {
-                    GlobalLogWriter.get().println("com.sun.star.frame.Desktop failed.");
+                    GlobalLogWriter.println("com.sun.star.frame.Desktop failed.");
                 }
             }
             catch ( com.sun.star.uno.Exception e )
             {
                 // Some exception occures.FAILED
-                GlobalLogWriter.get().println("UNO Exception caught.");
-                GlobalLogWriter.get().println("Message: " + e.getMessage());
+                GlobalLogWriter.println("UNO Exception caught.");
+                GlobalLogWriter.println("Message: " + e.getMessage());
                 e.printStackTrace();
                 aDoc = null;
             }
@@ -298,11 +300,11 @@ public class OpenOfficePostscriptCreator implements IOffice
     private boolean exportToPDF(XComponent _xComponent, String _sDestinationName)
         {
             XServiceInfo xServiceInfo =
-                (XServiceInfo) UnoRuntime.queryInterface(
+                 UnoRuntime.queryInterface(
                     XServiceInfo.class, _xComponent
                     );
 
-            ArrayList aPropertyList = new ArrayList();
+            ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
             PropertyValue aFiltername = new PropertyValue();
             aFiltername.Name = "FilterName";
             aFiltername.Value = getFilterName_forPDF(xServiceInfo);
@@ -310,18 +312,19 @@ public class OpenOfficePostscriptCreator implements IOffice
             showProperty(aFiltername);
             boolean bWorked = true;
 
+// TODO:             TimeHelper.waitInSeconds(20, "Wait before storeToURL. Maybe helps due to layouting problems.");
             try
             {
                 XStorable store =
-                    (XStorable) UnoRuntime.queryInterface(
+                     UnoRuntime.queryInterface(
                         XStorable.class, _xComponent
                         );
                 store.storeToURL(_sDestinationName, PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
             }
             catch (com.sun.star.io.IOException e)
             {
-                GlobalLogWriter.get().println("IO Exception caught.");
-                GlobalLogWriter.get().println("Message: " + e.getMessage());
+                GlobalLogWriter.println("IO Exception caught.");
+                GlobalLogWriter.println("Message: " + e.getMessage());
                 bWorked = false;
             }
 
@@ -383,13 +386,13 @@ public class OpenOfficePostscriptCreator implements IOffice
 //
 //            if (aDoc == null)
 //            {
-//                GlobalLogWriter.get().println("Can't load document.");
+//                GlobalLogWriter.println("Can't load document.");
 //                return bBack;
 //            }
 //            bBack = storeAsPDF(_aGTA, aDoc, _sOutputURL);
 //            FileHelper.createInfoFile(_sOutputURL, _aGTA, "as pdf");
 //
-//            GlobalLogWriter.get().println("Close document.");
+//            GlobalLogWriter.println("Close document.");
 //            aDoc.dispose();
 //            return bBack;
 //        }
@@ -406,7 +409,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
             if (!bBack)
             {
-                GlobalLogWriter.get().println("Can't store document as PDF.");
+                GlobalLogWriter.println("Can't store document as PDF.");
 //                bBack = false;
                 throw new OfficeException("Can't store document as PDF");
             }
@@ -444,17 +447,17 @@ public class OpenOfficePostscriptCreator implements IOffice
 //                {
 //                    // don't store document
 //                    // input and output are equal OR
-//                    GlobalLogWriter.get().println("Warning: Inputpath and Outputpath are equal. Document will not stored again.");
+//                    GlobalLogWriter.println("Warning: Inputpath and Outputpath are equal. Document will not stored again.");
 //                    disallowStore();
 //                }
 //                bBack = impl_printToFileWithOOo(_aGTA, aDoc, _sOutputURL, _sPrintFileURL);
 //
-//                GlobalLogWriter.get().println("Close document.");
+//                GlobalLogWriter.println("Close document.");
 //                aDoc.dispose();
 //            }
 //            else
 //            {
-//                GlobalLogWriter.get().println("loadDocumentFromURL() failed with document: " + _sInputURL);
+//                GlobalLogWriter.println("loadDocumentFromURL() failed with document: " + _sInputURL);
 //            }
 //            return bBack;
 //        }
@@ -471,7 +474,7 @@ public class OpenOfficePostscriptCreator implements IOffice
             boolean bFailed = true;              // always be a pessimist,
             if (_aDoc == null)
             {
-                GlobalLogWriter.get().println("No document is given.");
+                GlobalLogWriter.println("No document is given.");
                 return bBack;
             }
 
@@ -482,27 +485,27 @@ public class OpenOfficePostscriptCreator implements IOffice
                     if (isStoreAllowed())
                     {
                         // store the document in an other directory
-                        XStorable aStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, _aDoc);
+                        XStorable aStorable = UnoRuntime.queryInterface( XStorable.class, _aDoc);
                         if (aStorable != null)
                         {
                             PropertyValue [] szEmptyArgs = new PropertyValue [0];
 
-                            GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Store document.");
+                            GlobalLogWriter.println(DateHelper.getDateTimeForHumanreadableLog() + " Store document.");
                             _aGTA.getPerformance().startTime(PerformanceContainer.Store);
                             aStorable.storeAsURL(_sOutputURL, szEmptyArgs);
                             _aGTA.getPerformance().stopTime(PerformanceContainer.Store);
 
-                            GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Store document done.");
-                            TimeHelper.waitInSeconds(1, "After store as URL to:" + _sOutputURL);
-                            GlobalLogWriter.get().println("Reload stored file test.");
+                            GlobalLogWriter.println(DateHelper.getDateTimeForHumanreadableLog() + " Store document done.");
+                            // TimeHelper.waitInSeconds(1, "After store as URL to:" + _sOutputURL);
+                            GlobalLogWriter.println("Reload stored file test.");
                             XComponent aDoc = loadFromURL(_aGTA, _sOutputURL);
                             if (aDoc == null)
                             {
-                                GlobalLogWriter.get().println("Reload stored file test failed, can't reload file: " + _sOutputURL);
+                                GlobalLogWriter.println("Reload stored file test failed, can't reload file: " + _sOutputURL);
                             }
                             else
                             {
-                                XCloseable xClose = (XCloseable)UnoRuntime.queryInterface(XCloseable.class, aDoc);
+                                XCloseable xClose = UnoRuntime.queryInterface(XCloseable.class, aDoc);
                                 if (xClose != null)
                                 {
                                     xClose.close(true);
@@ -511,7 +514,7 @@ public class OpenOfficePostscriptCreator implements IOffice
                                 {
                                     aDoc.dispose();
                                 }
-                                TimeHelper.waitInSeconds(1, "after close temp document");
+                                // TimeHelper.waitInSeconds(1, "after close temp document");
                             }
                         }
                     }
@@ -528,8 +531,8 @@ public class OpenOfficePostscriptCreator implements IOffice
             catch ( com.sun.star.uno.Exception e )
             {
                 // Some exception occures.FAILED
-                GlobalLogWriter.get().println("UNO Exception caught.");
-                GlobalLogWriter.get().println("Message: " + e.getMessage());
+                GlobalLogWriter.println("UNO Exception caught.");
+                GlobalLogWriter.println("Message: " + e.getMessage());
 
                 e.printStackTrace();
                 bBack = false;
@@ -541,8 +544,8 @@ public class OpenOfficePostscriptCreator implements IOffice
                 // System.out.println("Document loaded.");
                 // Change Pagesettings to DIN A4
 
-                GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Print document.");
-                XPrintable aPrintable = (XPrintable) UnoRuntime.queryInterface( XPrintable.class, _aDoc);
+                GlobalLogWriter.println(DateHelper.getDateTimeForHumanreadableLog() + " Print document.");
+                XPrintable aPrintable =  UnoRuntime.queryInterface( XPrintable.class, _aDoc);
                 if (aPrintable != null)
                 {
                     // System.out.println("  Set PaperFormat to DIN A4");
@@ -566,14 +569,14 @@ public class OpenOfficePostscriptCreator implements IOffice
                     {
                         if (_aGTA.getPrinterName() != null)
                         {
-                            ArrayList aPropertyList = new ArrayList();
+                            ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
                             // PropertyValue [] aPrintProps = new PropertyValue[1];
                             PropertyValue Arg = new PropertyValue();
                             Arg.Name = "Name";
                             Arg.Value = _aGTA.getPrinterName();
                             aPropertyList.add(Arg);
                             showProperty(Arg);
-                            // GlobalLogWriter.get().println("Printername is not null, so set to " + _aGTA.getPrinterName());
+                            // GlobalLogWriter.println("Printername is not null, so set to " + _aGTA.getPrinterName());
                             aPrintable.setPrinter(PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
                         }
                     }
@@ -590,21 +593,21 @@ public class OpenOfficePostscriptCreator implements IOffice
                     // int nPropsCount = 0;
 
                     // If we are a SpreadSheet (calc), we need to set PrintAllSheets property to 'true'
-                    XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface( XServiceInfo.class, _aDoc );
+                    XServiceInfo xServiceInfo =  UnoRuntime.queryInterface( XServiceInfo.class, _aDoc );
                     if ( xServiceInfo.supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
                     {
                         XMultiServiceFactory xMSF = _aGTA.getMultiServiceFactory();
                         Object aSettings = xMSF.createInstance( "com.sun.star.sheet.GlobalSheetSettings" );
                         if (aSettings != null)
                         {
-                            XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, aSettings );
+                            XPropertySet xPropSet = UnoRuntime.queryInterface( XPropertySet.class, aSettings );
                             xPropSet.setPropertyValue( "PrintAllSheets", new Boolean( true ) );
-                            GlobalLogWriter.get().println("PrintAllSheets := true");
+                            GlobalLogWriter.println("PrintAllSheets := true");
                         }
                     }
 
-                    ArrayList aPrintProps = new ArrayList();
-                    // GlobalLogWriter.get().println("Property FileName:=" + _sPrintFileURL);
+                    ArrayList<PropertyValue> aPrintProps = new ArrayList<PropertyValue>();
+                    // GlobalLogWriter.println("Property FileName:=" + _sPrintFileURL);
 
                     // PropertyValue [] aPrintProps = new PropertyValue[nProperties];
                     PropertyValue Arg = new PropertyValue();
@@ -639,13 +642,13 @@ public class OpenOfficePostscriptCreator implements IOffice
                         showProperty(Arg);
                     }
 
-                    // GlobalLogWriter.get().println("Start printing.");
+                    // GlobalLogWriter.println("Start printing.");
 
                     _aGTA.getPerformance().startTime(PerformanceContainer.Print);
                     aPrintable.print(PropertyHelper.createPropertyValueArrayFormArrayList(aPrintProps));
                     TimeHelper.waitInSeconds(1, "Start waiting for print ready.");
 
-                    GlobalLogWriter.get().println("Wait until document is printed.");
+                    GlobalLogWriter.println("Wait until document is printed.");
                     boolean isBusy = true;
                     int nPrintCount = 0;
                     while (isBusy)
@@ -663,21 +666,22 @@ public class OpenOfficePostscriptCreator implements IOffice
                         if (nPrintCount > 3600)
                         {
                             // we will never wait >1h until print is ready!
-                            GlobalLogWriter.get().println("ERROR: Cancel print due to too long wait.");
+                            GlobalLogWriter.println("ERROR: Cancel print due to too long wait.");
                             throw new com.sun.star.uno.Exception("Convwatch exception, wait too long for printing.");
                         }
                     }
-                    // TimeHelper.waitInSeconds(40, "Start waiting after print ready.");
+// TODO:
+//                    TimeHelper.waitInSeconds(40, "Start waiting after print ready.");
 
                     _aGTA.getPerformance().stopTime(PerformanceContainer.Print);
-                    GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Print document done.");
+                    GlobalLogWriter.println(DateHelper.getDateTimeForHumanreadableLog() + " Print document done.");
 
                     // Create a .info file near the printed '.ps' or '.prn' file.
                     FileHelper.createInfoFile(_sPrintFileURL, _aGTA);
                 }
                 else
                 {
-                    GlobalLogWriter.get().println("Can't get XPrintable interface.");
+                    GlobalLogWriter.println("Can't get XPrintable interface.");
                 }
                 bFailed = false;
                 bBack = true;
@@ -685,8 +689,8 @@ public class OpenOfficePostscriptCreator implements IOffice
             catch ( com.sun.star.uno.Exception e )
             {
                 // Some exception occures.FAILED
-                GlobalLogWriter.get().println("UNO Exception caught.");
-                GlobalLogWriter.get().println("Message: " + e.getMessage());
+                GlobalLogWriter.println("UNO Exception caught.");
+                GlobalLogWriter.println("Message: " + e.getMessage());
 
                 e.printStackTrace();
                 bBack = false;
@@ -694,17 +698,20 @@ public class OpenOfficePostscriptCreator implements IOffice
 
             if (bFailed == true)
             {
-                GlobalLogWriter.get().println("convwatch.OfficePrint: FAILED");
+                GlobalLogWriter.println("convwatch.OfficePrint: FAILED");
             }
             else
             {
-                GlobalLogWriter.get().println("convwatch.OfficePrint: OK");
+                GlobalLogWriter.println("convwatch.OfficePrint: OK");
             }
             return bBack;
         }
 
 
     /**
+     * @param _aGTA
+     * @param _sAbsoluteOutputPath
+     * @param _sAbsoluteInputFile
      * @return true, if the reference (*.prrn file) based on given output path and given input path exist.
      *               If OVERWRITE_REFERENCE is set, always return false.
      */
@@ -744,7 +751,7 @@ public class OpenOfficePostscriptCreator implements IOffice
             String sAbsolutePrintFilename = FileHelper.appendPath(sOutputPath, sPrintFilename + ".prn");
             if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
             {
-                GlobalLogWriter.get().println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
+                GlobalLogWriter.println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
                 return true;
             }
             return false;
@@ -797,7 +804,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 //            String sAbsolutePrintFilename = sOutputPath + fs + sPrintFilename + ".prn";
 //            if (FileHelper.exists(sAbsolutePrintFilename) && _aGTA.getOverwrite() == false)
 //            {
-//                GlobalLogWriter.get().println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
+//                GlobalLogWriter.println("Reference already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
 //                return true;
 //            }
 //
@@ -816,7 +823,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 //            }
 //            else
 //            {
-//                GlobalLogWriter.get().println("OfficePrint.buildreference(): Unknown print type.");
+//                GlobalLogWriter.println("OfficePrint.buildreference(): Unknown print type.");
 //                return false;
 //            }
 //            return printToFile(_aGTA, sInputFileURL, sOutputFileURL, sPrintFileURL);
@@ -845,14 +852,14 @@ public class OpenOfficePostscriptCreator implements IOffice
 //            }
 //            else if (_aGTA.getReferenceType().toLowerCase().equals("pdf"))
 //            {
-//                GlobalLogWriter.get().println("USE PDF AS EXPORT FORMAT.");
+//                GlobalLogWriter.println("USE PDF AS EXPORT FORMAT.");
 //                bBack = storeAsPDF(_aGTA, _sInputFileURL, _sPrintFileURL);
 //            }
 //            else if (_aGTA.getReferenceType().toLowerCase().equals("msoffice"))
 //            {
 //                if (MSOfficePostscriptCreator.isMSOfficeDocumentFormat(_sInputFileURL))
 //                {
-//                    GlobalLogWriter.get().println("USE MSOFFICE AS EXPORT FORMAT.");
+//                    GlobalLogWriter.println("USE MSOFFICE AS EXPORT FORMAT.");
 //                    MSOfficePostscriptCreator a = new MSOfficePostscriptCreator();
 //                    try
 //                    {
@@ -862,19 +869,19 @@ public class OpenOfficePostscriptCreator implements IOffice
 //                    catch(OfficeException e)
 //                    {
 //                        e.printStackTrace();
-//                        GlobalLogWriter.get().println(e.getMessage());
+//                        GlobalLogWriter.println(e.getMessage());
 //                        throw new OfficeException("Exception caught. Problem with MSOffice printer methods.");
 //                    }
 //                    catch(java.io.IOException e)
 //                    {
-//                        GlobalLogWriter.get().println(e.getMessage());
+//                        GlobalLogWriter.println(e.getMessage());
 //                        throw new OfficeException("IOException caught. Problem with MSOffice printer methods.");
 //                    }
 //                    bBack = true;
 //                }
 //                else
 //                {
-//                    GlobalLogWriter.get().println("This document type is not recognized as MSOffice format, as default fallback StarOffice/OpenOffice.org instead is used.");
+//                    GlobalLogWriter.println("This document type is not recognized as MSOffice format, as default fallback StarOffice/OpenOffice.org instead is used.");
 //                    bBack = printToFileWithOOo(_aGTA, _sInputFileURL, _sOutputFileURL, _sPrintFileURL);
 //                }
 //            }
@@ -898,24 +905,24 @@ public class OpenOfficePostscriptCreator implements IOffice
 
             if (_xMSF == null)
             {
-                GlobalLogWriter.get().println("MultiServiceFactory not set.");
+                GlobalLogWriter.println("MultiServiceFactory not set.");
                 return;
             }
             XTypeDetection aTypeDetection = null;
             try
             {
                 Object oObj = _xMSF.createInstance("com.sun.star.document.TypeDetection");
-                aTypeDetection = (XTypeDetection)UnoRuntime.queryInterface(XTypeDetection.class, oObj);
+                aTypeDetection = UnoRuntime.queryInterface(XTypeDetection.class, oObj);
             }
             catch(com.sun.star.uno.Exception e)
             {
-                GlobalLogWriter.get().println("Can't get com.sun.star.document.TypeDetection.");
+                GlobalLogWriter.println("Can't get com.sun.star.document.TypeDetection.");
                 return;
             }
             if (aTypeDetection != null)
             {
                 String sType = aTypeDetection.queryTypeByURL(_sInputURL);
-                GlobalLogWriter.get().println("Type is: " + sType);
+                GlobalLogWriter.println("Type is: " + sType);
             }
         }
 
@@ -931,7 +938,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
             if (_xMSF == null)
             {
-                GlobalLogWriter.get().println("MultiServiceFactory not set.");
+                GlobalLogWriter.println("MultiServiceFactory not set.");
                 return null;
             }
             // XFilterFactory aFilterFactory = null;
@@ -942,12 +949,12 @@ public class OpenOfficePostscriptCreator implements IOffice
             }
             catch(com.sun.star.uno.Exception e)
             {
-                GlobalLogWriter.get().println("Can't get com.sun.star.document.FilterFactory.");
+                GlobalLogWriter.println("Can't get com.sun.star.document.FilterFactory.");
                 return null;
             }
             if (aObj != null)
             {
-                XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, aObj);
+                XNameAccess aNameAccess = UnoRuntime.queryInterface(XNameAccess.class, aObj);
                 if (aNameAccess != null)
                 {
 
@@ -965,7 +972,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
                     if (! aNameAccess.hasByName(_sFilterName))
                     {
-                        GlobalLogWriter.get().println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
+                        GlobalLogWriter.println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
                         return null;
                     }
 
@@ -993,17 +1000,17 @@ public class OpenOfficePostscriptCreator implements IOffice
                         }
                         else
                         {
-                            GlobalLogWriter.get().println("There are no elements for FilterName '" + _sFilterName + "'");
+                            GlobalLogWriter.println("There are no elements for FilterName '" + _sFilterName + "'");
                             return null;
                         }
                     }
                     catch (com.sun.star.container.NoSuchElementException e)
                     {
-                        GlobalLogWriter.get().println("NoSuchElementException caught. " + e.getMessage());
+                        GlobalLogWriter.println("NoSuchElementException caught. " + e.getMessage());
                     }
                     catch (com.sun.star.lang.WrappedTargetException e)
                     {
-                        GlobalLogWriter.get().println("WrappedTargetException caught. " + e.getMessage());
+                        GlobalLogWriter.println("WrappedTargetException caught. " + e.getMessage());
                     }
                 }
             }
@@ -1022,7 +1029,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
             if (_xMSF == null)
             {
-                GlobalLogWriter.get().println("MultiServiceFactory not set.");
+                GlobalLogWriter.println("MultiServiceFactory not set.");
                 return null;
             }
             // XFilterFactory aFilterFactory = null;
@@ -1033,17 +1040,17 @@ public class OpenOfficePostscriptCreator implements IOffice
             }
             catch(com.sun.star.uno.Exception e)
             {
-                GlobalLogWriter.get().println("Can't get com.sun.star.document.FilterFactory.");
+                GlobalLogWriter.println("Can't get com.sun.star.document.FilterFactory.");
                 return null;
             }
             if (aObj != null)
             {
-                XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, aObj);
+                XNameAccess aNameAccess = UnoRuntime.queryInterface(XNameAccess.class, aObj);
                 if (aNameAccess != null)
                 {
                     if (! aNameAccess.hasByName(_sFilterName))
                     {
-                        GlobalLogWriter.get().println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
+                        GlobalLogWriter.println("FilterFactory.hasByName() says there exist no '" + _sFilterName + "'" );
                         return null;
                     }
 
@@ -1071,17 +1078,17 @@ public class OpenOfficePostscriptCreator implements IOffice
                         }
                         else
                         {
-                            GlobalLogWriter.get().println("There are no elements for FilterName '" + _sFilterName + "'");
+                            GlobalLogWriter.println("There are no elements for FilterName '" + _sFilterName + "'");
                             return null;
                         }
                     }
                     catch (com.sun.star.container.NoSuchElementException e)
                     {
-                        GlobalLogWriter.get().println("NoSuchElementException caught. " + e.getMessage());
+                        GlobalLogWriter.println("NoSuchElementException caught. " + e.getMessage());
                     }
                     catch (com.sun.star.lang.WrappedTargetException e)
                     {
-                        GlobalLogWriter.get().println("WrappedTargetException caught. " + e.getMessage());
+                        GlobalLogWriter.println("WrappedTargetException caught. " + e.getMessage());
                     }
                 }
             }
@@ -1099,23 +1106,23 @@ public class OpenOfficePostscriptCreator implements IOffice
 
             if (_xMSF == null)
             {
-                GlobalLogWriter.get().println("MultiServiceFactory not set.");
+                GlobalLogWriter.println("MultiServiceFactory not set.");
                 return null;
             }
             XTypeDetection aTypeDetection = null;
             try
             {
                 Object oObj = _xMSF.createInstance("com.sun.star.document.TypeDetection");
-                aTypeDetection = (XTypeDetection)UnoRuntime.queryInterface(XTypeDetection.class, oObj);
+                aTypeDetection = UnoRuntime.queryInterface(XTypeDetection.class, oObj);
             }
             catch(com.sun.star.uno.Exception e)
             {
-                GlobalLogWriter.get().println("Can't get com.sun.star.document.TypeDetection.");
+                GlobalLogWriter.println("Can't get com.sun.star.document.TypeDetection.");
                 return null;
             }
             if (aTypeDetection != null)
             {
-                XNameAccess aNameAccess = (XNameAccess)UnoRuntime.queryInterface(XNameAccess.class, aTypeDetection);
+                XNameAccess aNameAccess = UnoRuntime.queryInterface(XNameAccess.class, aTypeDetection);
                 if (aNameAccess != null)
                 {
 
@@ -1128,7 +1135,7 @@ public class OpenOfficePostscriptCreator implements IOffice
 
                     if (! aNameAccess.hasByName(_sInternalFilterName))
                     {
-                        GlobalLogWriter.get().println("TypeDetection.hasByName() says there exist no '" + _sInternalFilterName + "'" );
+                        GlobalLogWriter.println("TypeDetection.hasByName() says there exist no '" + _sInternalFilterName + "'" );
                         return null;
                     }
 
@@ -1148,15 +1155,15 @@ public class OpenOfficePostscriptCreator implements IOffice
                                 if (aPropertyValue.Name.equals("Extensions"))
                                 {
                                     aExtensions = (String[])aPropertyValue.Value;
-                                    GlobalLogWriter.get().println("   Possible extensions are: " + String.valueOf(aExtensions.length));
+                                    GlobalLogWriter.println("   Possible extensions are: " + String.valueOf(aExtensions.length));
                                     if (aExtensions.length > 0)
                                     {
                                         for (int j=0;j<aExtensions.length;j++)
                                         {
-                                            GlobalLogWriter.get().println(" " + aExtensions[j]);
+                                            GlobalLogWriter.println(" " + aExtensions[j]);
                                         }
                                         sExtension = aExtensions[0];
-                                        GlobalLogWriter.get().println("");
+                                        GlobalLogWriter.println("");
                                     }
                                 }
                             }
@@ -1164,17 +1171,17 @@ public class OpenOfficePostscriptCreator implements IOffice
                         }
                         else
                         {
-                            GlobalLogWriter.get().println("There are no elements for FilterName '" + _sInternalFilterName + "'");
+                            GlobalLogWriter.println("There are no elements for FilterName '" + _sInternalFilterName + "'");
                             return null;
                         }
                     }
                     catch (com.sun.star.container.NoSuchElementException e)
                     {
-                        GlobalLogWriter.get().println("NoSuchElementException caught. " + e.getMessage());
+                        GlobalLogWriter.println("NoSuchElementException caught. " + e.getMessage());
                     }
                     catch (com.sun.star.lang.WrappedTargetException e)
                     {
-                        GlobalLogWriter.get().println("WrappedTargetException caught. " + e.getMessage());
+                        GlobalLogWriter.println("WrappedTargetException caught. " + e.getMessage());
                     }
 }
             }
@@ -1187,7 +1194,7 @@ public class OpenOfficePostscriptCreator implements IOffice
             XMultiServiceFactory xMSF = _aGTA.getMultiServiceFactory();
             if (xMSF == null)
             {
-                GlobalLogWriter.get().println("MultiServiceFactory in GraphicalTestArgument not set.");
+                GlobalLogWriter.println("MultiServiceFactory in GraphicalTestArgument not set.");
                 return;
             }
 
@@ -1196,33 +1203,33 @@ public class OpenOfficePostscriptCreator implements IOffice
             XComponent aDoc = loadFromURL( _aGTA, sInputURL);
             if (aDoc == null)
             {
-                GlobalLogWriter.get().println("Can't load document '"+ sInputURL + "'");
+                GlobalLogWriter.println("Can't load document '"+ sInputURL + "'");
                 return;
             }
 
             if (_sOutputPath == null)
             {
-                GlobalLogWriter.get().println("Outputpath not set.");
+                GlobalLogWriter.println("Outputpath not set.");
                 return;
             }
 
             if (! isStoreAllowed())
             {
-                GlobalLogWriter.get().println("It's not allowed to store, check Input/Output path.");
+                GlobalLogWriter.println("It's not allowed to store, check Input/Output path.");
                 return;
             }
 //  TODO: Do we need to wait?
 //            TimeHelper.waitInSeconds(1, "wait after loadFromURL.");
 
-            XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface( XServiceInfo.class, aDoc );
+            XServiceInfo xServiceInfo =  UnoRuntime.queryInterface( XServiceInfo.class, aDoc );
             // String sFilter = getFilterName_forExcel(xServiceInfo);
             // System.out.println("Filter is " + sFilter);
 
             // store the document in an other directory
-            XStorable xStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, aDoc);
+            XStorable xStorable =  UnoRuntime.queryInterface( XStorable.class, aDoc);
             if (xStorable == null)
             {
-                GlobalLogWriter.get().println("com.sun.star.frame.XStorable is null");
+                GlobalLogWriter.println("com.sun.star.frame.XStorable is null");
                 return;
             }
 
@@ -1238,7 +1245,7 @@ public class OpenOfficePostscriptCreator implements IOffice
             // initialize PropertyArray
             // PropertyValue [] aStoreProps = new PropertyValue[ nPropertyCount ];
             // int nPropertyIndex = 0;
-            ArrayList aPropertyList = new ArrayList();
+            ArrayList<PropertyValue> aPropertyList = new ArrayList<PropertyValue>();
 
             String sExtension = "";
 
@@ -1247,22 +1254,22 @@ public class OpenOfficePostscriptCreator implements IOffice
                 String sInternalFilterName = getInternalFilterName(sFilterName, xMSF);
                 String sServiceName = getServiceNameFromFilterName(sFilterName, xMSF);
 
-                GlobalLogWriter.get().println("Filter detection:");
+                GlobalLogWriter.println("Filter detection:");
                 // check if service name from file filter is the same as from the loaded document
                 boolean bServiceFailed = false;
                 if (sServiceName == null || sInternalFilterName == null)
                 {
-                    GlobalLogWriter.get().println("Given FilterName '" + sFilterName + "' seems to be unknown.");
+                    GlobalLogWriter.println("Given FilterName '" + sFilterName + "' seems to be unknown.");
                     bServiceFailed = true;
                 }
                 if (! xServiceInfo.supportsService(sServiceName))
                 {
-                    GlobalLogWriter.get().println("Service from FilterName '" + sServiceName + "' is not supported by loaded document.");
+                    GlobalLogWriter.println("Service from FilterName '" + sServiceName + "' is not supported by loaded document.");
                     bServiceFailed = true;
                 }
                 if (bServiceFailed == true)
                 {
-                    GlobalLogWriter.get().println("Please check '" + PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME + "' in the property file.");
+                    GlobalLogWriter.println("Please check '" + PropertyName.DOC_CONVERTER_EXPORT_FILTER_NAME + "' in the property file.");
                     return;
                 }
 
@@ -1273,7 +1280,7 @@ public class OpenOfficePostscriptCreator implements IOffice
                     sExtension = getFileExtension(sInternalFilterName, xMSF);
                     if (sExtension == null)
                     {
-                        GlobalLogWriter.get().println("Can't found an extension for filtername, take it from the source.");
+                        GlobalLogWriter.println("Can't found an extension for filtername, take it from the source.");
                     }
                 }
 
@@ -1283,7 +1290,7 @@ public class OpenOfficePostscriptCreator implements IOffice
                 // aStoreProps[nPropertyIndex ++] = Arg;
                 aPropertyList.add(Arg);
                 showProperty(Arg);
-                GlobalLogWriter.get().println("FilterName is set to: " + sFilterName);
+                GlobalLogWriter.println("FilterName is set to: " + sFilterName);
             }
 
             String sOutputURL = "";
@@ -1311,38 +1318,41 @@ public class OpenOfficePostscriptCreator implements IOffice
 
                 if (FileHelper.exists(sOutputFile) && _aGTA.getOverwrite() == false)
                 {
-                    GlobalLogWriter.get().println("File already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
+                    GlobalLogWriter.println("File already exist, don't overwrite. Set " + PropertyName.DOC_COMPARATOR_OVERWRITE_REFERENCE + "=true to force overwrite.");
                     return;
                 }
 
                 sOutputURL = URLHelper.getFileURLFromSystemPath(sOutputFile);
 
-                GlobalLogWriter.get().println("Store document as '" + sOutputURL + "'");
+                GlobalLogWriter.println("Store document as '" + sOutputURL + "'");
                 xStorable.storeAsURL(sOutputURL, PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
-                GlobalLogWriter.get().println("Document stored.");
+                GlobalLogWriter.println("Document stored.");
             }
             catch (com.sun.star.io.IOException e)
             {
-                GlobalLogWriter.get().println("Can't store document '" + sOutputURL + "'. Message is :'" + e.getMessage() + "'");
+                GlobalLogWriter.println("Can't store document '" + sOutputURL + "'. Message is :'" + e.getMessage() + "'");
             }
 //  TODO: Do we need to wait?
 //            TimeHelper.waitInSeconds(1, "unknown in OfficePrint.convertDocument()");
 
         }
 
-
-    private boolean shouldOfficeStart()
-    {
-        String sNoOffice = (String)m_aParameterHelper.getTestParameters().get( "NoOffice" );
-        if (sNoOffice != null)
-        {
-            if (sNoOffice.toLowerCase().startsWith("t") || sNoOffice.toLowerCase().startsWith("y"))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
+    /**
+     *
+     * @return false, if 'NoOffice=yes' is given
+     */
+//    private boolean shouldOfficeStart()
+//    {
+//        String sNoOffice = (String)m_aParameterHelper.getTestParameters().get( "NoOffice" );
+//        if (sNoOffice != null)
+//        {
+//            if (sNoOffice.toLowerCase().startsWith("t") || sNoOffice.toLowerCase().startsWith("y"))
+//            {
+//                return false;
+//            }
+//        }
+//        return true;
+//    }
 
     OfficeProvider m_aProvider = null;
     private void startOffice()
@@ -1370,7 +1380,7 @@ public class OpenOfficePostscriptCreator implements IOffice
         // Watcher Object is need in log object to give a simple way to say if a running office is alive.
         // As long as a log comes, it pings the Watcher and says the office is alive, if not an
         // internal counter increase and at a given point (300 seconds) the office is killed.
-        GlobalLogWriter.get().println("Set office watcher");
+        GlobalLogWriter.println("Set office watcher");
         if (GlobalLogWriter.get().getWatcher() == null)
         {
             OfficeWatcher aWatcher = (OfficeWatcher)m_aParameterHelper.getTestParameters().get("Watcher");
@@ -1383,7 +1393,11 @@ public class OpenOfficePostscriptCreator implements IOffice
         // Office shutdown
         if (m_aProvider != null)
         {
-            m_aProvider.closeExistingOffice(m_aParameterHelper.getTestParameters(), true);
+            String sAppExecCmd = (String)m_aParameterHelper.getTestParameters().get("AppExecutionCommand");
+            if (sAppExecCmd != null && sAppExecCmd.length() > 0)
+            {
+                m_aProvider.closeExistingOffice(m_aParameterHelper.getTestParameters(), true);
+            }
             // if (OSHelper.isWindows())
             // {
             //     aSemaphore.V(aSemaphore.getSemaphoreFile());

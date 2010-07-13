@@ -588,7 +588,10 @@ endcase
 '-------------------------------------------------------------------------
 function getMenuItemCount as Integer
 'use this function becasue this doesn't count the pick list
-    Dim i, j, Ende, nID as Integer
+    Dim i as Integer
+    Dim j as Integer
+    Dim Ende as Integer
+    Dim nID as Integer
     Sleep 2
     j=0
     for i=1 to MenuGetItemCount

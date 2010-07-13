@@ -1,0 +1,499 @@
+%!PS-Adobe-3.0
+%%Title: CurrentTime
+%%Creator: PScript5.dll Version 5.2.2
+%%CreationDate: 5/17/2010 15:0:3
+%%For: ll93751
+%%BoundingBox: (atend)
+%%Pages: (atend)
+%%Orientation: Portrait
+%%PageOrder: Special
+%%DocumentNeededResources: (atend)
+%%DocumentSuppliedResources: (atend)
+%%DocumentData: Clean7Bit
+%%TargetDevice: (Generic Printer For MSWord Testing) (1) 1
+%%LanguageLevel: 2
+%%EndComments
+
+%%BeginDefaults
+%%PageBoundingBox: 18 18 577 824
+%%ViewingOrientation: 1 0 0 1
+%%EndDefaults
+
+
+%%BeginProlog
+%%BeginResource: file Pscript_WinNT_ErrorHandler 5.0 0
+/currentpacking where{pop/oldpack currentpacking def/setpacking where{pop false
+setpacking}if}if/$brkpage 64 dict def $brkpage begin/prnt{dup type/stringtype
+ne{=string cvs}if dup length 6 mul/tx exch def/ty 10 def currentpoint/toy exch
+def/tox exch def 1 setgray newpath tox toy 2 sub moveto 0 ty rlineto tx 0
+rlineto 0 ty neg rlineto closepath fill tox toy moveto 0 setgray show}bind def
+/nl{currentpoint exch pop lmargin exch moveto 0 -10 rmoveto}def/=={/cp 0 def
+typeprint nl}def/typeprint{dup type exec}readonly def/lmargin 72 def/rmargin 72
+def/tprint{dup length cp add rmargin gt{nl/cp 0 def}if dup length cp add/cp
+exch def prnt}readonly def/cvsprint{=string cvs tprint( )tprint}readonly def
+/integertype{cvsprint}readonly def/realtype{cvsprint}readonly def/booleantype
+{cvsprint}readonly def/operatortype{(--)tprint =string cvs tprint(-- )tprint}
+readonly def/marktype{pop(-mark- )tprint}readonly def/dicttype{pop
+(-dictionary- )tprint}readonly def/nulltype{pop(-null- )tprint}readonly def
+/filetype{pop(-filestream- )tprint}readonly def/savetype{pop(-savelevel- )
+tprint}readonly def/fonttype{pop(-fontid- )tprint}readonly def/nametype{dup
+xcheck not{(/)tprint}if cvsprint}readonly def/stringtype{dup rcheck{(\()tprint
+tprint(\))tprint}{pop(-string- )tprint}ifelse}readonly def/arraytype{dup rcheck
+{dup xcheck{({)tprint{typeprint}forall(})tprint}{([)tprint{typeprint}forall(])
+tprint}ifelse}{pop(-array- )tprint}ifelse}readonly def/packedarraytype{dup
+rcheck{dup xcheck{({)tprint{typeprint}forall(})tprint}{([)tprint{typeprint}
+forall(])tprint}ifelse}{pop(-packedarray- )tprint}ifelse}readonly def/courier
+/Courier findfont 10 scalefont def end errordict/handleerror{systemdict begin
+$error begin $brkpage begin newerror{/newerror false store vmstatus pop pop 0
+ne{grestoreall}if errorname(VMerror)ne{showpage}if initgraphics courier setfont
+lmargin 720 moveto errorname(VMerror)eq{userdict/ehsave known{clear userdict
+/ehsave get restore 2 vmreclaim}if vmstatus exch pop exch pop PrtVMMsg}{
+(ERROR: )prnt errorname prnt nl(OFFENDING COMMAND: )prnt/command load prnt
+$error/ostack known{nl nl(STACK:)prnt nl nl $error/ostack get aload length{==}
+repeat}if}ifelse systemdict/showpage get exec(%%[ Error: )print errorname
+=print(; OffendingCommand: )print/command load =print( ]%%)= flush}if end end
+end}dup 0 systemdict put dup 4 $brkpage put bind readonly put/currentpacking
+where{pop/setpacking where{pop oldpack setpacking}if}if
+%%EndResource
+userdict /Pscript_WinNT_Incr 230 dict dup begin put
+%%BeginResource: file Pscript_FatalError 5.0 0
+userdict begin/FatalErrorIf{{initgraphics findfont 1 index 0 eq{exch pop}{dup
+length dict begin{1 index/FID ne{def}{pop pop}ifelse}forall/Encoding
+{ISOLatin1Encoding}stopped{StandardEncoding}if def currentdict end
+/ErrFont-Latin1 exch definefont}ifelse exch scalefont setfont counttomark 3 div
+cvi{moveto show}repeat showpage quit}{cleartomark}ifelse}bind def end
+%%EndResource
+userdict begin/PrtVMMsg{vmstatus exch sub exch pop gt{[
+(Dieser Druckauftrag erfordert mehr Speicher, als auf diesem Drucker vorhanden ist. )
+100 500
+(Versuchen Sie es mit einer oder mehreren der folgenden Methoden und drucken Sie dann erneut:)
+100 485(Wählen Sie für das Ausgabeformat die Option "Optimale Portierung".)115
+470
+(Stellen Sie sicher, daß auf der Registerkarte "Geräteeinstellungen" die Angabe für "Verfügbarer Postscript-Speicher" korrekt ist.)
+115 455(Reduzieren Sie die Anzahl der im Dokument verwendeten Schriftarten. )
+115 440(Drucken Sie das Dokument in verschiedenen Teilstücken. )115 425 12
+/Times-Roman showpage(%%[ PrinterError: Low Printer VM ]%%)= true FatalErrorIf}
+if}bind def end version cvi 2016 ge{/VM?{pop}bind def}{/VM? userdict/PrtVMMsg
+get def}ifelse
+105000 VM?
+%%BeginResource: file Pscript_Win_Basic 5.0 0
+/d/def load def/,/load load d/~/exch , d/?/ifelse , d/!/pop , d/`/begin , d/^
+/index , d/@/dup , d/+/translate , d/$/roll , d/U/userdict , d/M/moveto , d/-
+/rlineto , d/&/currentdict , d/:/gsave , d/;/grestore , d/F/false , d/T/true ,
+d/N/newpath , d/E/end , d/Ac/arc , d/An/arcn , d/A/ashow , d/D/awidthshow , d/C
+/closepath , d/V/div , d/O/eofill , d/L/fill , d/I/lineto , d/-c/curveto , d/-M
+/rmoveto , d/+S/scale , d/Ji/setfont , d/Lc/setlinecap , d/Lj/setlinejoin , d
+/Lw/setlinewidth , d/Lm/setmiterlimit , d/sd/setdash , d/S/show , d/LH/showpage
+, d/K/stroke , d/W/widthshow , d/R/rotate , d/L2? false/languagelevel where{pop
+languagelevel 2 ge{pop true}if}if d L2?{/xS/xshow , d/yS/yshow , d/zS/xyshow ,
+d}if/b{bind d}bind d/bd{bind d}bind d/xd{~ d}bd/ld{, d}bd/bn/bind ld/lw/Lw ld
+/lc/Lc ld/lj/Lj ld/sg/setgray ld/ADO_mxRot null d/self & d/OrgMx matrix
+currentmatrix d/reinitialize{: OrgMx setmatrix[/TextInit/GraphInit/UtilsInit
+counttomark{@ where{self eq}{F}?{cvx exec}{!}?}repeat cleartomark ;}b
+/initialize{`{/Pscript_Win_Data where{!}{U/Pscript_Win_Data & put}?/ADO_mxRot ~
+d/TextInitialised? F d reinitialize E}{U/Pscript_Win_Data 230 dict @ ` put
+/ADO_mxRot ~ d/TextInitialised? F d reinitialize}?}b/terminate{!{& self eq
+{exit}{E}?}loop E}b/suspend/terminate , d/resume{` Pscript_Win_Data `}b U `
+/lucas 21690 d/featurebegin{countdictstack lucas[}b/featurecleanup{stopped
+{cleartomark @ lucas eq{! exit}if}loop countdictstack ~ sub @ 0 gt{{E}repeat}
+{!}?}b E/snap{transform 0.25 sub round 0.25 add ~ 0.25 sub round 0.25 add ~
+itransform}b/dsnap{dtransform round ~ round ~ idtransform}b/nonzero_round{@ 0.5
+ge{round}{@ -0.5 lt{round}{0 ge{1}{-1}?}?}?}b/nonzero_dsnap{dtransform
+nonzero_round ~ nonzero_round ~ idtransform}b U<04>cvn{}put/rr{1 ^ 0 - 0 ~ -
+neg 0 - C}b/irp{4 -2 $ + +S fx 4 2 $ M 1 ^ 0 - 0 ~ - neg 0 -}b/rp{4 2 $ M 1 ^ 0
+- 0 ~ - neg 0 -}b/solid{[]0 sd}b/g{@ not{U/DefIf_save save put}if U/DefIf_bool
+2 ^ put}b/DefIf_El{if U/DefIf_bool get not @{U/DefIf_save get restore}if}b/e
+{DefIf_El !}b/UDF{L2?{undefinefont}{!}?}b/UDR{L2?{undefineresource}{! !}?}b
+/freeVM{/Courier findfont[40 0 0 -40 0 0]makefont Ji 2 vmreclaim}b/hfRedefFont
+{findfont @ length dict `{1 ^/FID ne{d}{! !}?}forall & E @ ` ~{/CharStrings 1
+dict `/.notdef 0 d & E d}if/Encoding 256 array 0 1 255{1 ^ ~/.notdef put}for d
+E definefont !}bind d/hfMkCIDFont{/CIDFont findresource @ length 2 add dict `{1
+^ @/FID eq ~ @/XUID eq ~/UIDBase eq or or{! !}{d}?}forall/CDevProc ~ d/Metrics2
+16 dict d/CIDFontName 1 ^ d & E 1 ^ ~/CIDFont defineresource ![~]composefont !}
+bind d
+%%EndResource
+%%BeginResource: file Pscript_Win_Utils_L2 5.0 0
+/rf/rectfill , d/fx{1 1 dtransform @ 0 ge{1 sub 0.5}{1 add -0.5}? 3 -1 $ @ 0 ge
+{1 sub 0.5}{1 add -0.5}? 3 1 $ 4 1 $ idtransform 4 -2 $ idtransform}b/BZ{4 -2 $
+snap + +S fx rf}b/rs/rectstroke , d/rc/rectclip , d/UtilsInit{currentglobal{F
+setglobal}if}b/scol{! setcolor}b/colspA/DeviceGray d/colspABC/DeviceRGB d
+/colspRefresh{colspABC setcolorspace}b/SetColSpace{colspABC setcolorspace}b
+/resourcestatus where{!/ColorRendering/ProcSet resourcestatus{! ! T}{F}?}{F}?
+not{/ColorRendering<</GetHalftoneName{currenthalftone @/HalftoneName known{
+/HalftoneName get}{!/none}?}bn/GetPageDeviceName{currentpagedevice @
+/PageDeviceName known{/PageDeviceName get @ null eq{!/none}if}{!/none}?}bn
+/GetSubstituteCRD{!/DefaultColorRendering/ColorRendering resourcestatus{! !
+/DefaultColorRendering}{(DefaultColorRendering*){cvn exit}127 string
+/ColorRendering resourceforall}?}bn>>/defineresource where{!/ProcSet
+defineresource !}{! !}?}if/buildcrdname{/ColorRendering/ProcSet findresource `
+mark GetHalftoneName @ type @/nametype ne ~/stringtype ne and{!/none}if(.)
+GetPageDeviceName @ type @/nametype ne ~/stringtype ne and{!/none}if(.)5 ^ 0 5
+-1 1{^ length add}for string 6 1 $ 5 ^ 5{~ 1 ^ cvs length 1 ^ length 1 ^ sub
+getinterval}repeat ! cvn 3 1 $ ! ! E}b/definecolorrendering{~ buildcrdname ~
+/ColorRendering defineresource !}b/findcolorrendering where{!}{
+/findcolorrendering{buildcrdname @/ColorRendering resourcestatus{! ! T}{
+/ColorRendering/ProcSet findresource ` GetSubstituteCRD E F}?}b}?
+/selectcolorrendering{findcolorrendering !/ColorRendering findresource
+setcolorrendering}b/G2UBegin{findresource/FontInfo get/GlyphNames2Unicode get
+`}bind d/G2CCBegin{findresource/FontInfo get/GlyphNames2HostCode get `}bind d
+/G2UEnd{E}bind d/AddFontInfoBegin{/FontInfo 8 dict @ `}bind d/AddFontInfo{
+/GlyphNames2Unicode 16 dict d/GlyphNames2HostCode 16 dict d}bind d
+/AddFontInfoEnd{E d}bind d/T0AddCFFMtx2{/CIDFont findresource/Metrics2 get ` d
+E}bind d
+%%EndResource
+end
+%%EndProlog
+
+%%BeginSetup
+statusdict begin (%%[ ProductName: ) print product print ( ]%%)= flush end
+[ 1 0 0 1 0 0 ] false Pscript_WinNT_Incr dup /initialize get exec
+featurebegin{
+%%BeginNonPPDFeature: JobTimeout 0
+0 /languagelevel where{pop languagelevel}{1}ifelse 2 ge{1 dict dup/JobTimeout  4 -1 roll put setuserparams}{statusdict/setjobtimeout get exec}ifelse
+%%EndNonPPDFeature
+}featurecleanup
+
+featurebegin{
+%%BeginNonPPDFeature: WaitTimeout 300
+300 /languagelevel where{pop languagelevel}{1}ifelse 2 ge{1 dict dup/WaitTimeout 4 -1 roll put setuserparams}{statusdict/waittimeout 3 -1 roll put}ifelse
+%%EndNonPPDFeature
+}featurecleanup
+
+featurebegin{
+%%BeginFeature: *InputSlot ManualFeed
+
+<< /ManualFeed true /Policies << /ManualFeed 1 >> >> setpagedevice
+%%EndFeature
+}featurecleanup
+featurebegin{
+%%BeginFeature: *Duplex None
+
+<</Duplex false /Tumble false
+  /Policies << /Duplex 1 /Tumble 1 >>
+>> setpagedevice
+%%EndFeature
+}featurecleanup
+featurebegin{
+%%BeginFeature: *PageRegion A4
+<</PageSize [595 842] /ImagingBBox null>> setpagedevice
+%%EndFeature
+}featurecleanup
+featurebegin{
+%%BeginFeature: *Resolution 1200x1200dpi
+
+  1 dict dup /HWResolution [1200 1200] put setpagedevice
+%%EndFeature
+}featurecleanup
+1 setlinecap 1 setlinejoin
+/mysetup [ 72 1200 V 0 0 -72 1200 V 18 824.0003 ] def 
+%%EndSetup
+
+userdict begin /ehsave save def end
+%%Page: 1 1
+%%PageBoundingBox: 18 18 577 824
+%%EndPageComments
+%%BeginPageSetup
+/DeviceRGB dup setcolorspace /colspABC exch def
+mysetup concat colspRefresh
+%%EndPageSetup
+
+0 0 0 1 scol 22500 VM?
+11 dict begin
+/FontName /TTEC2o00 def
+/FontMatrix [1 2048 div 0 0 1 2048 div 0 0 ] def
+/Encoding  256 array 0 1 255 {1 index exch /.notdef put} for  def
+/PaintType 0 def
+/FontType 1 def
+/FontBBox { 0 0 0 0 } def
+AddFontInfoBegin
+AddFontInfo
+AddFontInfoEnd
+currentdict
+end
+
+currentfile eexec
+9e67edc6f3ddb54d987dfb0ad4392351758f10eff40ef287a1387512b853
+046f6e589e2c97d48fdb38d54b68757f1dc48a239a5da408c2bfd473eac0
+3ab6b0025b87770e5f3b06904c282a51ee189ce871258447b47d83c5fad2
+326aa26e4c7f0ff21a841a463c859f102729802bbfa6ac0c2766f6b09317
+a247f37b339b99b7588bee2e861ed9de7a8990c512001ce21da50f4516f7
+553cc5df31ac42402c2b4e2b106773ccdac45a8dee89d3d35ce4f9afb022
+79592359efd5293f35df57216c84236a1347e922a61c45691be2c137b65f
+08f4b3113b88e58dce4bd559387db7a00fe16460e5ab8fc835ea6ed9b938
+610bff26bc7ddabb1ae15c03974a1a9b3c172d5d01da698bb3e9bd8fb187
+15ad84bc85cd145093e29e1b226d167407e1f00a6529c34100fe35097c0d
+b5af1eda9d93c4fbe9bd86433be0237415462af5d09911e8c9f42535e5d2
+2dd429d16a06629077406afc7b7c534dc9e9e045cc02be968fa94e480676
+cb53f625f5f575a27ab6d08d5c839bcfee5628e5ccd4d4605b7fec3a76bb
+28738163f3b82fd887dfecdc22fecb045a567be6d3b5a147b633e25bed18
+40c3e8e2f2258801243cf18236f06a8992b5a43fdca766d185ec61f2b174
+d769605817b24a47643e089d8814e415ab639130ea66e36890bd761d0a8f
+5d374c4904ff82dfe0f21c18dee922bc8376caeba56e25b6c9ddbd670491
+72036f023f43bf7830df38d0c36ef5d7184a77d3822cb988db6213ddd19d
+879129e1b8f3a8dafd1d138bec6d1ded9fbbb5b4294072df1f12a135929c
+9a45aea5ebc051f8d6514ccf32b2acbd84dfcbcce5469c945c93be1929e7
+f9fca6965e31a4328311b483ac44acb3daed602b089ab4fe0f74705bb07b
+21067988ba7246b0dd96c23046cbbc2414fdb62ca2e102c041d24e977418
+1bd25e1bd6f500cad2b24572a49f549bf2e59a693759d0acb7c42c2caaa6
+f940204c5d06b53cc4847dac692da2e938bf86283692a51a631279087ecd
+19b56062b53f44ca8d3025a1c25c7aed9b406e9d9fed5a13ff540359abc6
+0a0a444273d3bf793cb00c3158c1050a0a026d200bf4d34f0237233c5b80
+ee79e7cad72f335228314e3461cd05ef2f3826bc1c5c43a92b0551e00b19
+ebeea73ef66820f36ee61ad9be6012c65138a13ef4cd7745cb966af72d76
+d42781dc5aaf5f69753ae6bd324bf42ec9cee010ff5f487dfaf1eea51f2f
+43488c9a9115ceda9b959465b3ae6f1e94ede9ce7867344484db692e5423
+962fa13ffb0073691e3a193f217e588ec12fcad5e3c7a2da41073813b4e4
+99a784d26534294d71d117a87c98a814df39bf6fc01fac1bf8f73960775b
+0a4ed51d90d942c14585b424223f30c4f93ee07bd3c05dd7f36271b10cc0
+914af6e94e4451befc31d1557802dad903b71eb5189c18fadd8ba9ce4ff0
+c2d750518bfca7c652b5c5d314a35fefb8e62e62632d0168c97718779689
+97abcc8e922914102cc46e07874511d23c143f7c2440a81b012532995272
+f01ae7b4d8f66ffac047ba7ddcf4b156ce29e19491ceb0af30494c5755e6
+16eb123ec1f237fa5d36c4a03de9e90000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+cleartomark
+/TTEC2o00 findfont /Encoding get
+dup 1 /S put
+dup 2 /h put
+dup 3 /e put
+dup 4 /t put
+dup 5 /one put
+pop
+Pscript_WinNT_Incr begin
+%%BeginResource: file Pscript_Text 5.0 0
+/TextInit{TextInitialised? not{/Pscript_Windows_Font & d/TextInitialised? T d
+/fM[1 0 0 1 0 0]d/mFM matrix d/iMat[1 0 0.212557 1 0 0]d}if}b/copyfont{1 ^
+length add dict `{1 ^/FID ne{d}{! !}?}forall & E}b/EncodeDict 11 dict d/bullets
+{{/bullet}repeat}b/rF{3 copyfont @ ` ~ EncodeDict ~ get/Encoding ~ 3 ^/0 eq{&
+/CharStrings known{CharStrings/Eth known not{! EncodeDict/ANSIEncodingOld get}
+if}if}if d E}b/mF{@ 7 1 $ findfont ~{@/Encoding get @ StandardEncoding eq{! T}{
+{ISOLatin1Encoding}stopped{! F}{eq}?{T}{@ ` T 32 1 127{Encoding 1 ^ get
+StandardEncoding 3 -1 $ get eq and}for E}?}?}{F}?{1 ^ ~ rF}{0 copyfont}? 6 -2 $
+! ! ~ !/pd_charset @ where{~ get 128 eq{@ FDV 2 copy get @ length array copy
+put pd_CoverFCRange}if}{!}? 2 ^ ~ definefont fM 5 4 -1 $ put fM 4 0 put fM
+makefont Pscript_Windows_Font 3 1 $ put}b/sLT{: Lw -M currentpoint snap M 0 - 0
+Lc K ;}b/xUP null d/yUP null d/uW null d/xSP null d/ySP null d/sW null d/sSU{N
+/uW ~ d/yUP ~ d/xUP ~ d}b/sU{xUP yUP uW sLT}b/sST{N/sW ~ d/ySP ~ d/xSP ~ d}b/sT
+{xSP ySP sW sLT}b/sR{: + R 0 0 M}b/sRxy{: matrix astore concat 0 0 M}b/eR/; , d
+/AddOrigFP{{&/FontInfo known{&/FontInfo get length 6 add}{6}? dict `
+/WinPitchAndFamily ~ d/WinCharSet ~ d/OrigFontType ~ d/OrigFontStyle ~ d
+/OrigFontName ~ d & E/FontInfo ~ d}{! ! ! ! !}?}b/mFS{makefont
+Pscript_Windows_Font 3 1 $ put}b/mF42D{0 copyfont `/FontName ~ d 2 copy ~ sub 1
+add dict `/.notdef 0 d 2 copy 1 ~{@ 3 ^ sub Encoding ~ get ~ d}for & E
+/CharStrings ~ d ! ! & @ E/FontName get ~ definefont}b/mF42{15 dict ` @ 4 1 $
+FontName ~ d/FontType 0 d/FMapType 2 d/FontMatrix[1 0 0 1 0 0]d 1 ^ 254 add 255
+idiv @ array/Encoding ~ d 0 1 3 -1 $ 1 sub{@ Encoding 3 1 $ put}for/FDepVector
+Encoding length array d/CharStrings 2 dict `/.notdef 0 d & E d 0 1 Encoding
+length 1 sub{@ @ 10 lt{! FontName length 1 add string}{100 lt{FontName length 2
+add string}{FontName length 3 add string}?}? @ 0 FontName @ length string cvs
+putinterval @ 3 -1 $ @ 4 1 $ 3 string cvs FontName length ~ putinterval cvn 1 ^
+256 mul @ 255 add 3 -1 $ 4 ^ findfont mF42D FDepVector 3 1 $ put}for & @ E
+/FontName get ~ definefont ! ! ! mF}b/mF_OTF_V{~ ! ~ ! 4 -1 $ ! findfont 2 ^ ~
+definefont fM @ @ 4 6 -1 $ neg put 5 0 put 90 matrix R matrix concatmatrix
+makefont Pscript_Windows_Font 3 1 $ put}b/mF_TTF_V{3{~ !}repeat 3 -1 $ !
+findfont 1 ^ ~ definefont Pscript_Windows_Font 3 1 $ put}b/UmF{L2?
+{Pscript_Windows_Font ~ undef}{!}?}b/UmF42{@ findfont/FDepVector get{/FontName
+get undefinefont}forall undefinefont}b
+%%EndResource
+end reinitialize
+F /F0 0 /0 F /TTEC2o00 mF 
+/F0SA7 F0 [167 0 0 -167 0 0 ] mFS
+F0SA7 Ji 
+4696 1120 M <010203030405>[111 93 93 93 46  0]xS 
+3600 VM?
+
+currentfile eexec
+9e67edc6b841305d5d10e5a53359c38b0291a4f57acae0c56237cee47bc1
+d85570b1414b43fc17ea6b4843d55ac9afa7067f1a7091b4594d913de276
+a8772313a65fcd26ba87b9a05d166b03e17f03277dd8efccb02a7d4c1be6
+177e723f7aa9e190ce43dd1df2bf2988559fa94bfa641911cece0e747ceb
+9b660904152a628a244fd923b311f5c4a5fe7c546e8d37afebee19511e85
+7ff39e7ff6c4792d53badbc7a555b283f38f31e279752d4342dd5f00e99d
+ba2152623e1e346ef7276b3265bc6cc3a37e315df96fd5d085e519b5cf03
+fb27cf9385ba7058ff6c83c880bff9c4fbd2947bdc5c671ae82a44177042
+f439578104f7c75f2ba09f3a578b522774bde2cbc6643d623a5e689df5bd
+359ed5f335c5b979036b99e788351b92cb83205fff7dfc1b4880b7c6f468
+edd5346a15139d558c3bc6afd4767b4d9529a0b1aa4767bc65f3a158d720
+6b2b276cc6eb3b50ea5319f6a5b9f96114b77ee5ff8b0d84786036821196
+10d2ea5e2af2f62d8e94dfa5e9d87f303e6969e9121676a20da78c247202
+97cf246bcdca069951c2ca4294017dbf317ba60a54367a75dcb0c005394f
+2e21d22fc8f1ca437c52566a26569f6f218d87831bbb59f9d7ce80d28c89
+c77c8ae2b608c786ebca7c5c5a7b7ded13c1007bc6484e8151dc558cb6f0
+6056b74666e6cdb8c0ccdc65044d55b68497ebec08ea9f2c661760595438
+8dfea6f0743c11811fd26f2837f954ef0a99db60eb9c3e1b523e0762deec
+c717a44bfc75d4b55b7b8719218283ecd5e23ccbcc9bc1893cd9dda88922
+be1f24e77c46fbafd369868830f7ac384a338b2dde52ac79f83047febbb7
+a1adfd3f3ea13de8dbb63607beec48b0b5957be43431e98c34591c3ce646
+5c30ed78f1a8d521a4349671263c640e277d310adf33cae19cfdc350adff
+14c02e0b73c1a80c0b97e5974cd751a144d34ca579b5cb81d8e0f230dbb8
+2d306f969dbd71108cc52e7338359ca95bc1873c1c91be7b51240fc14001
+98c8f64796e991eea99e27eba7bdac1f2296da2c6db2cdbcc4d7538af40d
+5cd881a349dbc71725ab9bf815736c339b0f5aec8f6c4ca0438ecca51f39
+130895a4e7fd438813034129b8a838589b370000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+cleartomark
+/TTEC2o00 findfont /Encoding get
+dup 6 /P put
+dup 7 /a put
+dup 8 /g put
+dup 9 /space put
+pop
+4696 13024 M <0607080309>[111 93 93 93  0]xS 
+5132 13024 M <05>S 
+19800 VM?
+11 dict begin
+/FontName /TTBC013398o00 def
+/FontMatrix [1 2048 div 0 0 1 2048 div 0 0 ] def
+/Encoding  256 array 0 1 255 {1 index exch /.notdef put} for  def
+/PaintType 0 def
+/FontType 1 def
+/FontBBox { 0 0 0 0 } def
+AddFontInfoBegin
+AddFontInfo
+AddFontInfoEnd
+currentdict
+end
+
+currentfile eexec
+9e67edc6f3ddb54d987dfb0ad4392351758f10eff40ef287a1387512b853
+046f6e589e2c97d48fdb38d54b68757f1dc48a239a5da408c2bfd473eac0
+3ab6b0025b87770e5f3b06904c282a51ee189ce871258447b47d83c5fad2
+326aa26e4c7f0ff21a841a463c859f102729802bbfa6ac0c2766f6b09317
+a247f37b339b99b7588bee2e861ed9de7a8990c512001ce21da50f4516f7
+553cc5df31ac42402c2b4e2b106773ccdac45a8dee89d3d35ce4f9afb022
+79592359efd5293f35df57216c84236a1347e922a61c45691be2c137b65f
+08f4b3113b88e58dce4bd559387db7a00fe16460e5ab8fc835ea6ed9b938
+610bff26bc7ddabb1add2c77631f898ffcae76502bbe5e22d7ef71c602e1
+9e22c890817f47e70d08803467d31dd4454c7e898bf1e600f73ba7788118
+7a31575a7bde4b80b1052323a8cd8606039f631424bead9a04865f2b6ccd
+563650769cf3b9f4ec66fa0b354b1389beaff83c6934509010d5c85f025f
+31060982b13953fa166bd5a265f4594dd80728aad8dbc710567ddbed093f
+27b08481959f39d5ea87844272e351c3b107807046866c6efdb34ab1a02a
+4560b58fd36e23b92ffe3af9cc87a0bcbebea7877536640c59261a3a850a
+0941a1da1349cafaf520ac0b488e6dd848ded092875c1ddfbb53986369d2
+ea38f05fc71a0f819904a116f9de8d4281e77df87763452fd42258656862
+4ee87f6acc7b7e1de1128cffce1168ba4f0f231290002f98b6bd2bc60a37
+f305d9515113ceba5d077871c967bffa3d810d8b4355895fdb320c155536
+880c517ea5384f01027eae42fb1a1cf3b4105a4bd7287b950000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+cleartomark
+/TTBC013398o00 findfont /Encoding get
+dup 1 /one put
+dup 2 /five put
+pop
+F /F1 0 /0 F /TTBC013398o00 mF 
+/F1S5BA F1 [1466 0 0 -1466 0 0 ] mFS
+F1S5BA Ji 
+1459 3161 M <0102>[815  0]xS 
+900 VM?
+
+currentfile eexec
+9e67edc6b841305af19a6e4bb2a230e3e9efc9b96f464cd2cec0584bfa5d
+e6b6c8bf4fb2bca3ff5c4ffdcb930b9549cfaa6d954b63169b356002d4a2
+065b3dad6c77543f2f4c58aba309a5f2e2cec5372d5eb49ba5adffe6ec0d
+ed20ee879de2476ee6f4099e560589a666b9194b6bf7f0128e1a3afd80ec
+9f40a396884744c1962e90eba74a9cd4a32f9fdd0782f0c6b6d12f732bee
+20b6ac0c3bfba90b08742c53ddc1970000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+cleartomark
+/TTBC013398o00 findfont /Encoding get
+dup 3 /colon put
+pop
+3123 3161 M <03>S 
+900 VM?
+
+currentfile eexec
+9e67edc6b841305af19a6e4bb2a230e3e9efc9b96f464cd2cec0584bfa5d
+e6b6c8bf4fb2bca3ff5c4ffdcb930b9549cfaa6d954b63169b356002d4a2
+065b3dad6c77543f2f4c58abba975b6391782ae96f027086c2b7fc4d3f90
+351b67f8a2fc2116477655cf0dff5a6bf15f1a3d629270d6af26f69b32a3
+312831823f86f43a0ab84649de6044d445b8ed1fbd9a8f026fbac386a0e1
+c5428153a9d4e786021ed524ba1216a3b8ab60edfbf05959d5558b762ca6
+ffa65d882d930f795bc1903885698b5558100097185b7cacdbe4413bc735
+faa8d6a05f03b5bcb23f73372cbb5f7cd01ce3e3bb2e524201be263c6e0c
+f04205a026405c90467d80e06d42e97c1af53a494a1c86c7a93c034ec9a1
+58c34d868fc499aa20961ab79c8fd94237c294a6d7569b8cddbab704dca3
+ab7466244b990000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+cleartomark
+/TTBC013398o00 findfont /Encoding get
+dup 4 /zero put
+pop
+4201 3161 M <0404>[815  0]xS 
+5865 3161 M <03>S 
+900 VM?
+
+currentfile eexec
+9e67edc6b841305af19a6e4bb2a230e3e9efc9b96f464cd2cec0584bfa5d
+e6b6c8bf4fb2bca3ff5c4ffdcb930b9549cfaa6d954b63169b356002d4a2
+065b3dad6c77543f2f4c58abb474233ea80ce809e35265271e29a645609a
+f19523b459da829c3beb337f4e916de7baa7dd40e381e60e1d68dd6dc672
+318ee6d51a4977d970db3ae073fa94a7f5afcd21e06e8476d782a2865dd3
+2a9c235bd5f3c5f1f327252a54d27bae21d8962686e2aa6912c72c946bed
+83223cfc201da7c3f18870a82efce4ad7f1c996c4d99903969225ed21444
+37bc8415a6f4b6d44e30c3d0e47b6d6945d1536311137281dee93fc9a238
+a6036c912e79e0ebe6ecb3d20cd3093cccd00d504fa49f3c0efe04da2103
+3e167528183bdb7896175c77778fde8f0d0b65cb28281e8869747cde7f28
+94c91c302ba109d3ae45ff70f1999a40d8e9a33bd9ce6b8b22961db9c435
+a39d612dba6c4fcc51231f651c91bd0b0724b13d8d8e0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000000000000000000000
+cleartomark
+/TTBC013398o00 findfont /Encoding get
+dup 5 /three put
+pop
+6943 3161 M <0405>[815  0]xS 
+LH
+(%%[Page: 1]%%) = 
+%%PageTrailer
+
+%%Trailer
+%%BoundingBox: 18 18 577 824
+%%DocumentNeededResources: 
+%%DocumentSuppliedResources: 
+%%+ procset Pscript_WinNT_ErrorHandler 5.0 0
+%%+ procset Pscript_FatalError 5.0 0
+%%+ procset Pscript_Win_Basic 5.0 0
+%%+ procset Pscript_Win_Utils_L2 5.0 0
+%%+ procset Pscript_Text 5.0 0
+Pscript_WinNT_Incr dup /terminate get exec
+ehsave restore
+%%Pages: 1
+(%%[LastPage]%%) = 
+%%EOF
+

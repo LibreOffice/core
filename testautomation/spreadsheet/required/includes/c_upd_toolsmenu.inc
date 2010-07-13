@@ -189,14 +189,14 @@ testcase tToolsSpellcheck
     '/// Click on 'Edit' – button
     printlog " Click on 'Edit' – button"
     OptionenBearbeiten.Click
-    Kontext "SilbentrennungOptionen"
-    Call DialogTest ( SilbentrennungOptionen )
+    Kontext "HyphenationOptions"
+    Call DialogTest ( HyphenationOptions )
     '/// Decrease 'Minimal word length'
     printlog " Decrease 'Minimal word length'"
     ZeichenVorUmbruch.More
     '/// Close dialog with 'Cancel'
     printlog " Close dialog with 'Cancel'"
-    SilbentrennungOptionen.Cancel
+    HyphenationOptions.Cancel
     Kontext "TabLinguistik"
     '/// Close dialog with 'Cancel'
     printlog " Close dialog with 'Cancel'"
@@ -391,21 +391,17 @@ endcase
 testcase tToolsLanguageThesaurus
 '///<u><b>Tools – Language – Chinese Translation</b></u>
 
-    '/// Load document from 'gTesttoolPath + "spreadsheet\required\input\english.ods"'
     printlog " Load document from 'gTesttoolPath + spreadsheet\required\input\english.ods"
     Call hFileOpen (Convertpath (gTesttoolPath + "spreadsheet\required\input\english.ods" ))
-    '/// If the file is not editable, click the edit button on standardbar
     printlog "If the file is not editable, click the edit button on standardbar"
     call sMakeReadOnlyDocumentEditable    
     Kontext "DocumentCalc"
-    '/// Enter 'blabla' in a cell
-    printlog " Enter 'blabla' in a cell"
+    printlog " Enter 'test' in a cell"
     Call fCalcSelectRange ("B2")
-    DocumentCalc.TypeKeys "blabla<Return><Up>"
-    '/// Open 'Thesaurus' dialog by 'Tools – Language – Thesaurus
+    DocumentCalc.TypeKeys "test<Return><Up>"
     printlog " Open 'Thesaurus' dialog by 'Tools – Language – Thesaurus"
     try
-        ToolsLanguageThesaurusCalc
+        ToolsLanguageThesaurus
     catch
         warnlog "Thesaurus did not work"
         call hCloseDocument
@@ -413,34 +409,20 @@ testcase tToolsLanguageThesaurus
     endcatch
     Kontext "Thesaurus"
     DialogTest ( Thesaurus )
-    '/// Click on 'Search' button
-    printlog " Click on 'Search' button"
-    Nachschlagen.Click
-    '/// Close messagebox with 'OK'
-    printlog " Close messagebox with 'OK'"
-    Kontext
-    if Active.exists then 
-        Active.OK
+    printlog " Check if the cellcontent test is correctly read"
+    if CurrentWord.GetSelText <> "test" then
+        warnlog "The cellcontent is not test but is " & CurrentWord.GetSelText
     end if
-    Kontext "Thesaurus"
-    '/// Click on 'Language' button
-    printlog " Click on 'Language' button"
-    Sprache.Click
-    Kontext "SpracheAuswaehlen"
-    DialogTest ( SpracheAuswaehlen )
-    '/// Verify that the list has entries
-    printlog " Verify that the list has entries"
-    If Auswahl.GetItemCount < 1 then
-        warnlog "There are no languages available"
+    printlog " Check that there are alternatives available"
+    if Alternatives.GetItemCount < 1 then
+        warnlog "There are no alternatives available"
+    else Alternatives.Select (1)
+        if ReplaceWith.GetText = "" then
+            warnlog "The repacle with field is empty"
+        end if
     end if
-    '/// Close 'Select Language' dialog with 'Cancel'
-    printlog " Close 'Select Language' dialog with 'Cancel'"
-    SpracheAuswaehlen.Cancel
-    Kontext "Thesaurus"
-    '/// Close 'Thesaurus' with 'Cancel'
     printlog " Close 'Thesaurus' with 'Cancel'"
     Thesaurus.Cancel
-    '/// Close document
     printlog " Close document"
     call hCloseDocument
 

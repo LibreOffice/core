@@ -147,7 +147,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
         sFileName = (ConvertPath ( gTesttoolPath + "graphics\required\input\rightfont." + ExtensionString))
     endif
 
-    if hFileExists ( sFileName ) = FALSE then
+    if FileExists ( sFileName ) = FALSE then
         warnlog "The language-file was not found or accessible! The test ends."
         goto endsub
     endif
@@ -159,7 +159,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
     printlog "File opened: " + sFileName
     Sleep 3
 
-    Call sMakeReadOnlyDocumentEditable
+    call fMakeDocumentWritable
 
     if bSimple then
         Printlog "- Tools/Autocorrect -single quotes"
