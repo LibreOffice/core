@@ -27,94 +27,34 @@
 #ifndef _SVX_THESDLG_HXX
 #define _SVX_THESDLG_HXX
 
-// include ---------------------------------------------------------------
 
-#include <vcl/edit.hxx>
-#include <vcl/button.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/fixed.hxx>
-#include <svx/stddlg.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
 
-// forward ---------------------------------------------------------------
+#include "svx/stddlg.hxx"
+#include "svx/svxdllapi.h"
 
-struct ThesDlg_Impl;
+#include <memory>
 
-class SvxThesaurusLanguageDlg_Impl;
 
-namespace com { namespace sun { namespace star {
-    namespace linguistic2 {
-        class XThesaurus;
-        class XMeaning;
-    }
-    namespace lang {
-        struct Locale;
-    }
-}}}
+/////////////////////////////////////////////////////////////////
 
-// class SvxThesaurusDialog ----------------------------------------------
+struct SvxThesaurusDialog_Impl;
 
 class SvxThesaurusDialog : public SvxStandardDialog
 {
-public:
-    friend class SvxThesaurusLanguageDlg_Impl;
+    std::auto_ptr< SvxThesaurusDialog_Impl > m_pImpl;
 
+    SVX_DLLPRIVATE virtual void     Apply();
+
+public:
     SvxThesaurusDialog( Window* pParent,
-                        ::com::sun::star::uno::Reference<
-                            ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
-                        const String &rWord, sal_Int16 nLanguage );
+                        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
+                        const String &rWord, LanguageType nLanguage );
     ~SvxThesaurusDialog();
 
-    String          GetWord() { return aReplaceEdit.GetText(); }
-
+    void            SetWindowTitle( LanguageType nLanguage );
+    String          GetWord();
     sal_uInt16      GetLanguage() const;
-
-private:
-    FixedText       aWordText;
-    ListBox         aWordLB;
-    FixedText       aReplaceText;
-    Edit            aReplaceEdit;
-    FixedText       aMeanText;
-    ListBox         aMeanLB;
-    FixedText       aSynonymText;
-    ListBox         aSynonymLB;
-    FixedLine       aVarFL;
-
-    OKButton        aOkBtn;
-    CancelButton    aCancelBtn;
-    PushButton      aLookUpBtn;
-    PushButton      aLangBtn;
-    HelpButton      aHelpBtn;
-
-    String          aErrStr;
-
-    ThesDlg_Impl*   pImpl;      // always != NULL
-
-    virtual void    Apply();
-
-    void            UpdateSynonymBox_Impl();
-    void            UpdateMeaningBox_Impl(
-                        ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::uno::Reference<
-                                ::com::sun::star::linguistic2::XMeaning >  > *pMeaningSeq = NULL );
-    void            Init_Impl(sal_Int16 nLanguage);
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XMeaning > >
-        SAL_CALL queryMeanings_Impl(
-                ::rtl::OUString& rTerm,
-                const ::com::sun::star::lang::Locale& rLocale,
-                const ::com::sun::star::beans::PropertyValues& rProperties )
-            throw(::com::sun::star::lang::IllegalArgumentException,
-                  ::com::sun::star::uno::RuntimeException);
-    // Handler
-    DECL_LINK( SelectHdl_Impl, ListBox * );
-    DECL_LINK( SynonymHdl_Impl, ListBox * );
-    DECL_LINK( LookUpHdl_Impl, Button * );
-    DECL_LINK( LanguageHdl_Impl, Button * );
-    DECL_LINK( EntryHdl_Impl, ListBox * );
-    DECL_LINK( SpellErrorHdl_Impl, void * );
 };
 
 #endif

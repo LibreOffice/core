@@ -42,7 +42,6 @@ gu    0  1095   # Gujarati
 gu-IN    0  1095   # Gujarati
 he    1255  1037
 hi       0  1081
-hi-IN    0  1081   # hindi
 hr    1250  1050   # Croatian
 hu    1250  1038
 hy       0  1067   # Armenian
@@ -93,6 +92,7 @@ pt    1252  2070
 pt-BR 1252  1046
 pt-PT 1252  2070
 ps       0  2171
+ca-XV   1252  32771  # Catalan Valencian
 rm       0  1047   # Raeto-Romance
 ro    1250  1048   # Romanian
 ru    1251  1049

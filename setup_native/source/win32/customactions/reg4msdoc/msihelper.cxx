@@ -52,7 +52,7 @@ bool IsAllUserInstallation(MSIHANDLE handle)
 std::wstring GetOfficeInstallationPath(MSIHANDLE handle)
 {
     std::wstring progpath;
-    GetMsiProp(handle, TEXT("OFFICEINSTALLLOCATION"), progpath);
+    GetMsiProp(handle, TEXT("INSTALLLOCATION"), progpath);
     return progpath;
 }
 

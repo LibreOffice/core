@@ -347,25 +347,6 @@ namespace abp
     //= ODataSource
     //=====================================================================
     //---------------------------------------------------------------------
-    ODataSource::ODataSource( const Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rName )
-        :m_pImpl(new ODataSourceImpl(_rxORB))
-    {
-        try
-        {
-            // get the data source context
-            Reference< XNameAccess > xContext = lcl_getDataSourceContext( m_pImpl->xORB );
-
-            // retrieve the UNO data source
-            if (xContext.is())
-                xContext->getByName( _rName ) >>= m_pImpl->xDataSource;
-        }
-        catch(const Exception&)
-        {
-            DBG_ERROR("ODataSource::ODataSource: could not access the requested data source (caught an exception)!");
-        }
-    }
-
-    //---------------------------------------------------------------------
     ODataSource::ODataSource( const ODataSource& _rSource )
         :m_pImpl( NULL )
     {

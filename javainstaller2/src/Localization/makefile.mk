@@ -30,7 +30,9 @@ PRJ=..$/..
 PRJNAME=javainstaller2
 TARGET=java_ulffiles
 
+.IF "$(WITH_LANG)"!=""
 WITH_LANG!:=ALL
+.ENDIF          # "$(WITH_LANG)"!=""
 
 # --- Settings -----------------------------------------------------
 

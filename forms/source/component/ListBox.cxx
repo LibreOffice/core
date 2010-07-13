@@ -41,7 +41,6 @@
 /** === begin UNO includes === **/
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
@@ -167,7 +166,7 @@ namespace frm
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aListRowSet( getContext() )
         ,m_nNULLPos(-1)
-        ,m_bBoundComponent(sal_False)
+        ,m_nBoundColumnType( DataType::SQLNULL )
     {
         DBG_CTOR(OListBoxModel,NULL);
 
@@ -175,6 +174,8 @@ namespace frm
         m_eListSourceType = ListSourceType_VALUELIST;
         m_aBoundColumn <<= (sal_Int16)1;
         initValueProperty( PROPERTY_SELECT_SEQ, PROPERTY_ID_SELECT_SEQ);
+
+        startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
     }
 
     //------------------------------------------------------------------
@@ -189,9 +190,11 @@ namespace frm
         ,m_aBoundValues( _pOriginal->m_aBoundValues )
         ,m_aDefaultSelectSeq( _pOriginal->m_aDefaultSelectSeq )
         ,m_nNULLPos(-1)
-        ,m_bBoundComponent(sal_False)
+        ,m_nBoundColumnType( DataType::SQLNULL )
     {
         DBG_CTOR(OListBoxModel,NULL);
+
+        startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
     }
 
     //------------------------------------------------------------------
@@ -454,6 +457,22 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
+    void OListBoxModel::_propertyChanged( const PropertyChangeEvent& i_rEvent ) throw ( RuntimeException )
+    {
+        if ( i_rEvent.PropertyName == PROPERTY_STRINGITEMLIST )
+        {
+            ControlModelLock aLock( *this );
+            // SYNCHRONIZED ----->
+            // our aggregate internally changed its StringItemList property - reflect this in our "overridden"
+            // version of the property
+            setNewStringItemList( i_rEvent.NewValue, aLock );
+            // <----- SYNCHRONIZED
+            return;
+        }
+        OBoundControlModel::_propertyChanged( i_rEvent );
+    }
+
+    //------------------------------------------------------------------------------
     void OListBoxModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
     {
         OBoundControlModel::describeAggregateProperties( _rAggregateProps );
@@ -629,7 +648,7 @@ namespace frm
         DBG_ASSERT( !hasExternalListSource(), "OListBoxModel::loadData: cannot load from DB when I have an external list source!" );
 
         m_nNULLPos = -1;
-        m_bBoundComponent = sal_False;
+        m_nBoundColumnType = DataType::SQLNULL;
 
         // pre-requisites:
         // PRE1: connection
@@ -701,25 +720,10 @@ namespace frm
                         else
                         {
                             // otherwise look for the alias
-                            Reference<XSQLQueryComposerFactory> xFactory(xConnection, UNO_QUERY);
-                            if (!xFactory.is())
-                                break;
-
-                            Reference<XSQLQueryComposer> xComposer = xFactory->createQueryComposer();
-                            try
-                            {
-                                ::rtl::OUString aStatement;
-                                xFormProps->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= aStatement;
-                                xComposer->setQuery( aStatement );
-                            }
-                            catch(Exception&)
-                            {
-                                disposeComponent(xComposer);
-                                break;
-                            }
+                            Reference< XColumnsSupplier > xSupplyFields;
+                            xFormProps->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SingleSelectQueryComposer"))) >>= xSupplyFields;
 
                             // search the field
-                            Reference<XColumnsSupplier> xSupplyFields(xComposer, UNO_QUERY);
                             DBG_ASSERT(xSupplyFields.is(), "OListBoxModel::loadData : invalid query composer !");
 
                             Reference<XNameAccess> xFieldNames = xSupplyFields->getColumns();
@@ -730,7 +734,6 @@ namespace frm
                                 if (hasProperty(PROPERTY_FIELDSOURCE, xComposerFieldAsSet))
                                     xComposerFieldAsSet->getPropertyValue(PROPERTY_FIELDSOURCE) >>= aFieldName;
                             }
-                            disposeComponent(xComposer);
                         }
                     }
                     if (!aFieldName.getLength())
@@ -832,20 +835,19 @@ namespace frm
                     ::dbtools::FormattedColumnValue aValueFormatter( getContext(), m_xCursor, xDataField );
 
                     // Feld der BoundColumn des ResultSets holen
-                    sal_Int32 nBoundColumnType = DataType::SQLNULL;
+                    m_nBoundColumnType = DataType::SQLNULL;
                     if ( ( nBoundColumn > 0 ) && m_xColumn.is() )
                     {   // don't look for a bound column if we're not connected to a field
                         try
                         {
                             Reference< XPropertySet > xBoundField( xColumns->getByIndex( nBoundColumn ), UNO_QUERY_THROW );
-                            OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) >>= nBoundColumnType );
+                            OSL_VERIFY( xBoundField->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) >>= m_nBoundColumnType );
                         }
                         catch( const Exception& )
                         {
                             DBG_UNHANDLED_EXCEPTION();
                         }
                     }
-                    m_bBoundComponent = ( nBoundColumnType != DataType::SQLNULL );
 
                     //  Ist die LB an ein Feld gebunden und sind Leereintraege zulaessig
                     //  dann wird die Position fuer einen Leereintrag gemerkt
@@ -860,9 +862,9 @@ namespace frm
                         aStr = aValueFormatter.getFormattedValue();
                         aDisplayList.push_back( aStr );
 
-                        if ( m_bBoundComponent )
+                        if ( impl_hasBoundComponent() )
                         {
-                            aBoundValue.fill( nBoundColumn + 1, nBoundColumnType, xCursorRow );
+                            aBoundValue.fill( nBoundColumn + 1, m_nBoundColumnType, xCursorRow );
                             aValueList.push_back( aBoundValue );
                         }
 
@@ -907,7 +909,7 @@ namespace frm
         // NULL eintrag hinzufuegen
         if (bUseNULL && m_nNULLPos == -1)
         {
-            if ( m_bBoundComponent )
+            if ( impl_hasBoundComponent() )
                 aValueList.insert( aValueList.begin(), ORowSetValue() );
 
             aDisplayList.insert( aDisplayList.begin(), ORowSetValue( ::rtl::OUString() ) );
@@ -940,7 +942,7 @@ namespace frm
         {
             ValueList().swap(m_aBoundValues);
             m_nNULLPos = -1;
-            m_bBoundComponent = sal_False;
+            m_nBoundColumnType = DataType::SQLNULL;
 
             if ( !hasExternalListSource() )
                 setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( StringSequence() ) );
@@ -1035,7 +1037,7 @@ namespace frm
         Sequence< sal_Int16 > aSelectionIndicies;
 
         ORowSetValue aCurrentValue;
-        aCurrentValue.fill( getFieldType(), m_xColumn );
+        aCurrentValue.fill( impl_hasBoundComponent() ? m_nBoundColumnType : getFieldType(), m_xColumn );
 
         // reset selection for NULL values
         if ( aCurrentValue.isNull() )

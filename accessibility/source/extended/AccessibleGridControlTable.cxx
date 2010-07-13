@@ -51,8 +51,6 @@ namespace accessibility {
 
 // ============================================================================
 
-// Ctor/Dtor/disposing --------------------------------------------------------
-
 DBG_NAME( AccessibleGridControlTable )
 
 AccessibleGridControlTable::AccessibleGridControlTable(
@@ -61,12 +59,10 @@ AccessibleGridControlTable::AccessibleGridControlTable(
         AccessibleTableControlObjType _eType) :
     AccessibleGridControlTableBase( rxParent, rTable, _eType )
 {
-    DBG_CTOR( AccessibleGridControlTable, NULL );
 }
 
 AccessibleGridControlTable::~AccessibleGridControlTable()
 {
-    DBG_DTOR( AccessibleGridControlTable, NULL );
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -92,7 +88,6 @@ sal_Int32 SAL_CALL AccessibleGridControlTable::getAccessibleIndexInParent()
         return 1;
     else
         return 2;
-
 }
 
 // XAccessibleComponent -------------------------------------------------------
@@ -177,7 +172,6 @@ Sequence< sal_Int32 > SAL_CALL AccessibleGridControlTable::getSelectedAccessible
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-
     Sequence< sal_Int32 > aSelSeq;
     implGetSelectedRows( aSelSeq );
     return aSelSeq;
@@ -187,38 +181,34 @@ Sequence< sal_Int32 > SAL_CALL AccessibleGridControlTable::getSelectedAccessible
 Sequence< sal_Int32 > SAL_CALL AccessibleGridControlTable::getSelectedAccessibleColumns()
     throw ( uno::RuntimeException )
 {
-//    TCSolarGuard aSolarGuard;
-//    ::osl::MutexGuard aGuard( getOslMutex() );
-//    ensureIsAlive();
-//
-//    Sequence< sal_Int32 > aSelSeq;
-//    implGetSelectedColumns( aSelSeq );
-//    return aSelSeq;
-    return NULL;
+    Sequence< sal_Int32 > aSelSeq(0);
+    return aSelSeq;
 }
 
-//To Do: not implemented yet
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleRowSelected( sal_Int32 nRow )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    //TCSolarGuard aSolarGuard;
-    //::osl::MutexGuard aGuard( getOslMutex() );
-    //ensureIsAlive();
-    //ensureIsValidRow( nRow );
-    //return implIsRowSelected( nRow );
-    (void) nRow;
-    return sal_False;
+    TCSolarGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( getOslMutex() );
+    ensureIsAlive();
+    ensureIsValidRow( nRow );
+    sal_Bool bSelected = sal_False;
+    Sequence< sal_Int32 > selectedRows = getSelectedAccessibleRows();
+    for(int i=0; i<selectedRows.getLength(); i++)
+    {
+        if(nRow == selectedRows[i])
+        {
+            bSelected = sal_True;
+            continue;
+        }
+    }
+    return bSelected;
 }
 
 //columns aren't selectable
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleColumnSelected( sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    /*TCSolarGuard aSolarGuard;
-    ::osl::MutexGuard aGuard( getOslMutex() );
-    ensureIsAlive();
-    ensureIsValidColumn( nColumn );
-    return implIsColumnSelected( nColumn );*/
     (void) nColumn;
     return sal_False;
 }
@@ -238,16 +228,14 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleSelected(
         sal_Int32 nRow, sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    /*TCSolarGuard aSolarGuard;
+    TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    return implIsRowSelected( nRow ) || implIsColumnSelected( nColumn );*/
-    (void) nRow;
     (void) nColumn;
-    return sal_False;
+    //selection of single cells not possible, so if row is selected, the cell will be selected too
+    return isAccessibleRowSelected(nRow);
 }
-//To Do: not implemented yet
 void SAL_CALL AccessibleGridControlTable::selectAccessibleChild( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
@@ -255,48 +243,51 @@ void SAL_CALL AccessibleGridControlTable::selectAccessibleChild( sal_Int32 nChil
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     ensureIsValidIndex( nChildIndex );
-    //if( isRowBar() )
-    //    implSelectRow( nChildIndex, sal_True );
-    //else
-    //    implSelectColumn( implToVCLColumnPos( nChildIndex ), sal_True );
+    sal_Int32 nColumns = m_aTable.GetColumnCount();
+    sal_Int32 nRow = (nChildIndex / nColumns);
+    std::vector< sal_Int32 > selectedRows = m_aTable.GetSelectedRows();
+    selectedRows.push_back(nRow);
 }
-//To Do - not implemented yet
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleChildSelected( sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
-    // using interface methods - no mutex
-    /*return isRowBar() ?
-        isAccessibleRowSelected( nChildIndex ) :
-        isAccessibleColumnSelected( nChildIndex );*/
-    (void)nChildIndex;
-    return FALSE;
+    TCSolarGuard aSolarGuard;
+    ::osl::MutexGuard aGuard( getOslMutex() );
+    ensureIsAlive();
+    ensureIsValidIndex( nChildIndex );
+    sal_Int32 nColumns = m_aTable.GetColumnCount();
+    sal_Int32 nRow = (nChildIndex / nColumns);
+    return isAccessibleRowSelected(nRow);
 }
-//To Do - not implemented yet
 void SAL_CALL AccessibleGridControlTable::clearAccessibleSelection()
     throw ( uno::RuntimeException )
 {
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
+    for(unsigned int i=0;i<m_aTable.GetSelectedRows().size();i++)
+        m_aTable.RemoveSelectedRow((sal_Int32)i);
 }
-//To Do - not implemented yet
 void SAL_CALL AccessibleGridControlTable::selectAllAccessibleChildren()
     throw ( uno::RuntimeException )
 {
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
+    Sequence< sal_Int32 > selectedRows = getSelectedAccessibleRows();
+    for(int i=0;i<m_aTable.GetRowCount();i++)
+        selectedRows[i]=i;
 }
-//To Do - not implemented yet
 sal_Int32 SAL_CALL AccessibleGridControlTable::getSelectedAccessibleChildCount()
     throw ( uno::RuntimeException )
 {
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-    return 0;
+    Sequence< sal_Int32 > selectedRows = getSelectedAccessibleRows();
+    sal_Int32 nColumns = m_aTable.GetColumnCount();
+    return selectedRows.getLength()*nColumns;
 }
-//To Do - not implemented yet
 Reference< XAccessible > SAL_CALL
 AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
@@ -304,10 +295,12 @@ AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int32 nSelectedChild
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-    (void)nSelectedChildIndex;
-    return NULL;
+    if(isAccessibleChildSelected(nSelectedChildIndex))
+        return getAccessibleChild(nSelectedChildIndex);
+    else
+        return NULL;
 }
-//To Do - not implemented yet
+//not implemented yet, because only row selection possible
 void SAL_CALL AccessibleGridControlTable::deselectAccessibleChild(
         sal_Int32 nSelectedChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
@@ -316,14 +309,6 @@ void SAL_CALL AccessibleGridControlTable::deselectAccessibleChild(
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     (void)nSelectedChildIndex;
-    // method may throw lang::IndexOutOfBoundsException
-    //if ( isAccessibleChildSelected(nSelectedChildIndex) )
-    //{
-    //  if( isRowBar() )
-    //      implSelectRow( nSelectedChildIndex, sal_False );
-    //  else
-    //      implSelectColumn( implToVCLColumnPos( nSelectedChildIndex ), sal_False );
-    //}
 }
 // XInterface -----------------------------------------------------------------
 
@@ -364,14 +349,6 @@ Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
     return m_aTable.calcTableRect();
 }
 // internal helper methods ----------------------------------------------------
-//To Do - not implemented yet
-//sal_Int32 AccessibleGridControlTable::implGetChildIndexFromSelectedIndex(
-//        sal_Int32 nSelectedChildIndex )
-//    throw ( lang::IndexOutOfBoundsException )
-//{
-//  (void)nSelectedChildIndex;
-//  return 0;
-//}
 Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
         sal_Int32 nChildIndex )
     throw ( uno::RuntimeException )

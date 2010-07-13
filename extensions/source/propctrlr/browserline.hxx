@@ -115,7 +115,6 @@ namespace pcr
 
         void                EnablePropertyControls( sal_Int16 _nControls, bool _bEnable );
         void                EnablePropertyLine( bool _bEnable );
-        sal_Bool            IsPropertyInputEnabled( ) const;
 
         void                SetReadOnly( bool _bReadOnly );
 

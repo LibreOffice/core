@@ -53,8 +53,6 @@ namespace accessibility {
 
 // ============================================================================
 
-// Ctor/Dtor/disposing --------------------------------------------------------
-
 DBG_NAME( AccessibleGridControlTableBase )
 
 AccessibleGridControlTableBase::AccessibleGridControlTableBase(
@@ -63,12 +61,10 @@ AccessibleGridControlTableBase::AccessibleGridControlTableBase(
         AccessibleTableControlObjType eObjType ) :
     GridControlAccessibleElement( rxParent, rTable, eObjType )
 {
-    DBG_CTOR( AccessibleGridControlTableBase, NULL );
 }
 
 AccessibleGridControlTableBase::~AccessibleGridControlTableBase()
 {
-    DBG_DTOR( AccessibleGridControlTableBase, NULL );
 }
 
 // XAccessibleContext ---------------------------------------------------------
@@ -223,19 +219,6 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlTableBase::getImplementationI
 }
 
 // internal helper methods ----------------------------------------------------
-
-sal_uInt16 AccessibleGridControlTableBase::implToVCLColumnPos( sal_Int32 nColumn ) const
-{
-    sal_uInt16 nVCLPos = 0;
-    if( (0 <= nColumn) && (nColumn < m_aTable.GetColumnCount()) )
-    {
-        // regard "handle column"
-        if( m_aTable.HasRowHeader() )
-            ++nColumn;
-        nVCLPos = static_cast< sal_uInt16 >( nColumn );
-    }
-    return nVCLPos;
-}
 
 sal_Int32 AccessibleGridControlTableBase::implGetChildCount() const
 {

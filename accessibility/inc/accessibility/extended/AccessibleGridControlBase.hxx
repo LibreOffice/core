@@ -96,8 +96,8 @@ public:
         @param eDescrText  The constant for the description text. */
     AccessibleGridControlBase(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >& rxParent,
-            ::svt::table::IAccessibleTable& rTable,
+                ::com::sun::star::accessibility::XAccessible >& rxParent,
+        ::svt::table::IAccessibleTable& rTable,
         ::svt::table::AccessibleTableControlObjType  eObjType );
 
 protected:
@@ -135,14 +135,14 @@ public:
             The relation set (the GridControl does not have one).
     */
     virtual ::com::sun::star::uno::Reference<
-        ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL
-    getAccessibleRelationSet()
+    ::com::sun::star::accessibility::XAccessibleRelationSet > SAL_CALL
+        getAccessibleRelationSet()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** @return  The set of current states. */
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessibleStateSet > SAL_CALL
-    getAccessibleStateSet()
+        getAccessibleStateSet()
         throw ( ::com::sun::star::uno::RuntimeException );
 
     /** @return  The parent's locale. */
@@ -407,7 +407,7 @@ protected:
 
 private:
     GridControlAccessibleElement();                                             // never implemented
-    GridControlAccessibleElement( const GridControlAccessibleElement& );            // never implemented
+    GridControlAccessibleElement( const GridControlAccessibleElement& );        // never implemented
     GridControlAccessibleElement& operator=( const GridControlAccessibleElement& ); // never implemented
 };
 

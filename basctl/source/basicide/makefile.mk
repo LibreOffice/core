@@ -49,6 +49,7 @@ CDEFS+=-DBASICDEBUG
 
 EXCEPTIONSFILES=$(SLO)$/basicrenderable.obj  \
                 $(SLO)$/scriptdocument.obj  \
+                $(SLO)$/basicbox.obj	\
                 $(SLO)$/basidesh.obj	\
                 $(SLO)$/basides1.obj	\
                 $(SLO)$/basides2.obj	\
@@ -75,7 +76,6 @@ EXCEPTIONSFILES=$(SLO)$/basicrenderable.obj  \
                 $(SLO)$/documentenumeration.obj
 
 SLOFILES =  $(EXCEPTIONSFILES) \
-            $(SLO)$/basicbox.obj	\
             $(SLO)$/baside2b.obj	\
             $(SLO)$/brkdlg.obj	\
             $(SLO)$/objdlg.obj	\
@@ -90,11 +90,7 @@ $(INCCOM)$/dllname.hxx: makefile.mk
     $(RM) $@
         echo \#define DLL_NAME \"libbasctl$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
-.IF "$(USE_SHELL)"!="4nt"
         echo \#define DLL_NAME \"basctl$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE          # "$(USE_SHELL)"!="4nt"
-        echo #define DLL_NAME "basctl$(DLLPOSTFIX)$(DLLPOST)" >$@
-.ENDIF          # "$(USE_SHELL)"!="4nt"
 .ENDIF
 
 $(SLO)$/basiclib.obj : $(INCCOM)$/dllname.hxx

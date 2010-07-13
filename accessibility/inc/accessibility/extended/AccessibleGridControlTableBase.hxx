@@ -57,9 +57,9 @@ public:
         @param eDescrText  The constant for the description text. */
     AccessibleGridControlTableBase(
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible >& rxParent,
-            ::svt::table::IAccessibleTable& rTable,
-            ::svt::table::AccessibleTableControlObjType  eObjType );
+        ::com::sun::star::accessibility::XAccessible >& rxParent,
+    ::svt::table::IAccessibleTable& rTable,
+    ::svt::table::AccessibleTableControlObjType  eObjType );
 
 protected:
     virtual ~AccessibleGridControlTableBase();
@@ -172,14 +172,6 @@ public:
 
 protected:
     // internal helper methods ------------------------------------------------
-
-    /** @attention  This method requires locked mutex's and a living object.
-        @param nColumn
-            the position of the column in the Accessible world
-        @return
-            the position of the column in VCL the Accessible world
-    */
-    sal_uInt16 implToVCLColumnPos( sal_Int32 nColumn ) const;
 
     /** @attention  This method requires locked mutex's and a living object.
         @return  The number of cells of the table. */

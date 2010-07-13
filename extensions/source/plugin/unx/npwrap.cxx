@@ -482,7 +482,9 @@ int main( int argc, char **argv)
 
     medDebug( 1, "left plugin app main loop\n" );
 
+    #ifdef ENABLE_GTK
     g_source_remove(xt_polling_timer_id);
+    #endif
 
     pNP_Shutdown();
     medDebug( 1, "NP_Shutdown done\n" );

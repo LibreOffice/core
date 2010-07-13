@@ -284,6 +284,9 @@
 #define RID_SVXSTR_ARCHIVE_HEADLINE         (RID_SVX_START + 485)
 #define RID_SVXSTR_MULTIFILE_DBL_ERR        (RID_SVX_START + 486)
 
+// password to open/modify dialog
+#define RID_DLG_PASSWORD_TO_OPEN_MODIFY     (RID_SVX_START + 500)
+
 // multi path dialog
 #define RID_SVXDLG_MULTIPATH                (RID_SVX_START + 201)
 #define RID_MULTIPATH_DBL_ERR               (RID_SVX_START + 207)
@@ -427,5 +430,13 @@
 #define RID_SVXSTR_EVENT_FIELDMERGE                         (RID_SVX_START + 1187)
 #define RID_SVXSTR_EVENT_FIELDMERGE_FINISHED                (RID_SVX_START + 1188)
 #define RID_SVXSTR_EVENT_LAYOUT_FINISHED                    (RID_SVX_START + 1189)
+
+// For now, keep new IDs unique only within cui.
+// Later, cui should perhaps get an own range of IDs.
+#define RID_SVXSTR_EVENT_SELECTIONCHANGED                   (RID_SVX_START + 1190)
+#define RID_SVXSTR_EVENT_DOUBLECLICK                        (RID_SVX_START + 1191)
+#define RID_SVXSTR_EVENT_RIGHTCLICK                         (RID_SVX_START + 1192)
+#define RID_SVXSTR_EVENT_CALCULATE                          (RID_SVX_START + 1193)
+#define RID_SVXSTR_EVENT_CONTENTCHANGED                     (RID_SVX_START + 1194)
 
 #endif

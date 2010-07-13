@@ -102,7 +102,6 @@ PRODUCTSWITCH = false
 DEBUGSWITCH = true
 .ENDIF
 
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)" != "4nt"
 $(JAVADIR)$/$(PACKAGE)$/%.java: makefile.mk
     @@-$(MKDIRHIER) $(JAVADIR)$/$(PACKAGE)
     @-echo package org.openoffice.java.accessibility\; > $@
@@ -110,16 +109,6 @@ $(JAVADIR)$/$(PACKAGE)$/%.java: makefile.mk
     @-echo public static final boolean DEBUG = $(DEBUGSWITCH)\; >> $@
     @-echo public static final boolean PRODUCT = $(PRODUCTSWITCH)\; >> $@
     @-echo } >> $@
-.ELSE
-$(JAVADIR)$/$(PACKAGE)$/%.java: makefile.mk
-    @@-$(MKDIRHIER) $(JAVADIR)$/$(PACKAGE)
-    @-echo package org.openoffice.java.accessibility; > $@
-    @-echo public class Build { >> $@
-    @-echo public static final boolean DEBUG = $(DEBUGSWITCH); >> $@
-    @-echo public static final boolean PRODUCT = $(PRODUCTSWITCH); >> $@
-    @-echo } >> $@
-.ENDIF
-
 
 $(CLASSDIR)$/$(PACKAGE)$/Build.class : $(JAVADIR)$/$(PACKAGE)$/Build.java
     -$(JAVAC) -d $(CLASSDIR) $(JAVADIR)$/$(PACKAGE)$/Build.java

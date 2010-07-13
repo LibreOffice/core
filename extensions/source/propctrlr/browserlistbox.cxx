@@ -682,16 +682,6 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    Any OBrowserListBox::GetPropertyValue( const ::rtl::OUString& _rEntryName ) const
-    {
-        Any aValue;
-        ListBoxLines::const_iterator line = m_aLines.find( _rEntryName );
-        if ( line != m_aLines.end() )
-            aValue = impl_getControlAsPropertyValue( line->second );
-        return aValue;
-    }
-
-    //------------------------------------------------------------------------
     sal_uInt16 OBrowserListBox::GetPropertyPos( const ::rtl::OUString& _rEntryName ) const
     {
         sal_uInt16 nRet = LISTBOX_ENTRY_NOTFOUND;
@@ -719,15 +709,6 @@ namespace pcr
         else
             _out_rpLine.reset();
         return ( NULL != _out_rpLine.get() );
-    }
-
-    //------------------------------------------------------------------------
-    sal_Bool OBrowserListBox::IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const
-    {
-        BrowserLinePointer pLine;
-        if ( impl_getBrowserLineForName( _rEntryName, pLine ) )
-            return pLine->IsPropertyInputEnabled();
-        return sal_False;
     }
 
     //------------------------------------------------------------------------

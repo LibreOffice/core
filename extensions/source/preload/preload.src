@@ -86,10 +86,8 @@ TabPage RID_TP_WELCOME
         Text [ en-US ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start the %PRODUCTNAME %PRODUCTVERSION OEM, "
         "please enter your personal data in the dialog following the license text. Important information is contained "
         "in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. "
-        "You can also find detailed information at the Sun website \n\n"
-        "http://www.sun.com/staroffice.\n\nSupport and Training:\n\nGet FREE software support valid for 60 days from date "
-        "of purchase. To take advantage of this offer, visit the website below.\n\n"
-        "http://www.sun.com/star/service\n\nWe hope you enjoy working with %PRODUCTNAME.";
+        "You can also find detailed information at the Oracle website \n\n"
+        "http://www.oracle.com/us/products/applications/open-office.";
     };
 };
 

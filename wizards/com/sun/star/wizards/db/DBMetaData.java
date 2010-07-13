@@ -108,7 +108,6 @@ public class DBMetaData
     public com.sun.star.sdb.tools.XConnectionTools ConnectionTools;
     public com.sun.star.lang.XMultiServiceFactory xMSF;
     public XComponent xConnectionComponent;
-    public SQLQueryComposer oSQLQueryComposer;
 
     private XNameAccess m_xTableNames;
     private XInteractionHandler oInteractionHandler;
@@ -1117,7 +1116,6 @@ public class DBMetaData
         ConnectionTools = null;
         xMSF = null;
         xConnectionComponent = null;
-        oSQLQueryComposer = null;
         CommandObjects = null;
     }
 }

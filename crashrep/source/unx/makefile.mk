@@ -28,7 +28,7 @@
 PRJ=..$/..
 
 PRJNAME=crashrep
-TARGET=crash_report.bin
+TARGET=crashrep
 TARGETTYPE=CUI
 
 ENABLE_EXCEPTIONS=TRUE
@@ -62,8 +62,6 @@ APP1STDLIBS+=-ldl -lnsl
 .IF "$(OS)" == "SOLARIS"
 APP1STDLIBS+=-lsocket
 .ENDIF
-
-UNIXTEXT = $(MISC)/crash_report.sh
 
 .ENDIF #  "$(ENABLE_CRASHDUMP)" != "" || "$(PRODUCT)" == ""
 

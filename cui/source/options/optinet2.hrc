@@ -116,13 +116,7 @@
 #define FL_SEC_MACROSEC             19
 #define FI_SEC_MACROSEC             20
 #define PB_SEC_MACROSEC             21
-#define FL_SEC_FILESHARING          22
-#define CB_SEC_RECOMMREADONLY       23
-#define CB_SEC_RECORDCHANGES        24
-#define PB_SEC_PROTRECORDS          25
 
-#define STR_SEC_PROTRECORDS         10
-#define STR_SEC_UNPROTRECORDS       11
 #define STR_SEC_NOPASSWDSAVE        12
 
 #define TP_WIDTH                    260
