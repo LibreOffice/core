@@ -92,7 +92,7 @@ FindTextFieldControl::~FindTextFieldControl()
 void FindTextFieldControl::InitControls_Impl()
 {
     SetText( String( ::rtl::OUString::createFromAscii("Find") ) );
-    SetControlForeground(COL_GRAY);
+    SetControlForeground(GetSettings().GetStyleSettings().GetDisableColor());
 
     EnableAutocomplete(TRUE, TRUE);
 }
@@ -117,7 +117,7 @@ void FindTextFieldControl::Modify()
 {
     ComboBox::Modify();
 
-    SetControlForeground( Color( COL_BLACK ) );
+    SetControlForeground( GetSettings().GetStyleSettings().GetWindowTextColor() );
 }
 
 long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
@@ -171,7 +171,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             if ( GetText().Len() == 0 )
             {
                 SetText( String( ::rtl::OUString::createFromAscii("Find") ) );
-                SetControlForeground(COL_GRAY);
+                SetControlForeground(GetSettings().GetStyleSettings().GetDisableColor());
                 m_bToClearTextField = sal_True;
             }
             break;
