@@ -1,3 +1,4 @@
+#!/bin/sh
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,15 +26,22 @@
 #
 #*************************************************************************
 
-# Pseudo const
-class _const:
-    class ConstError(TypeError): pass
-    def __setattr__(self, name, value):
-        if self.__dict__.has_key(name):
-            raise self.ConstError, "Can't rebind const(%s)"%name
-        self.__dict__[name] = value
+if [ x${SOLARENV}x = xx ]; then
+    echo No environment found, please use 'setsolar'
+exit 1
+fi
 
-import sys
-sys.modules[__name__] = _const()
+# localize.pl calls localize_sl in solver bin directory which depends on dynamic
+# libraries in solver lib directory but has no correct RPATH (or equivalent):
+if [ "${OS?}" = MACOSX ]; then
+    export DYLD_LIBRARY_PATH=${DYLD_LIBRARY_PATH+${DYLD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib${UPDMINOREXT}
+else
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH+${LD_LIBRARY_PATH}:}${SOLARVERSION?}/${INPATH?}/lib${UPDMINOREXT}
+fi
 
+if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
+    exec python  $SOLARVERSION/$INPATH/bin/xhtex.py "$@"
+else
+    exec python  $SOLARVERSION/$INPATH/bin$UPDMINOREXT/xhtex.py "$@"
+fi
 
