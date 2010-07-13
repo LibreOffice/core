@@ -84,14 +84,21 @@ sub register_extensions
 {
     my ($officedir, $languagestringref, $bundleddir) = @_;
 
+    my $infoline = "";
+
+    if ( $bundleddir eq "" )
+    {
+        $infoline = "ERROR: Failed to determine directory \"bundled\" in \"presets\" folder for extension registration! Please check your installation set.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        installer::exiter::exit_program($infoline, "register_extensions");
+    }
+
     my $programdir = $officedir . $installer::globals::separator;
     if ( $installer::globals::officedirhostname ne "" ) { $programdir = $programdir . $installer::globals::officedirhostname . $installer::globals::separator; }
     $programdir = $programdir . "program";
 
     my $from = cwd();
     chdir($programdir);
-
-    my $infoline = "";
 
     my $unopkgfile = $installer::globals::unopkgfile;
 
