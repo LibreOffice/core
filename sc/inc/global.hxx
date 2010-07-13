@@ -203,13 +203,16 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
                                     // FILTERED und MANUALSIZE nur fuer Zeilen moeglich
 const BYTE   CR_HIDDEN      = 1;
 //const BYTE CR_MARKED      = 2;
-const BYTE   CR_PAGEBREAK   = 4;
+//const BYTE CR_PAGEBREAK   = 4;
 const BYTE   CR_MANUALBREAK = 8;
 const BYTE   CR_FILTERED    = 16;
 const BYTE   CR_MANUALSIZE  = 32;
+const BYTE   CR_ALL         = (CR_HIDDEN | CR_MANUALBREAK | CR_FILTERED | CR_MANUALSIZE);
 
-//  was davon kommt in die Datei:
-#define CR_SAVEMASK     ( ~CR_PAGEBREAK )
+typedef BYTE ScBreakType;
+const ScBreakType BREAK_NONE   = 0;
+const ScBreakType BREAK_PAGE   = 1;
+const ScBreakType BREAK_MANUAL = 2;
 
 // Insert-/Delete-Flags
 const USHORT IDF_NONE       = 0x0000;
@@ -412,6 +415,29 @@ enum ScGetDBMode
     SC_DB_MAKE,     // wenn noetig, "unbenannt" anlegen
     SC_DB_IMPORT,   // wenn noetig, "Importx" anlegen
     SC_DB_OLD       // nicht neu anlegen
+};
+
+/// For ScDBFunc::GetDBData()
+enum ScGetDBSelection
+{
+    /** Keep selection as is, expand to used data area if no selection. */
+    SC_DBSEL_KEEP,
+
+    /** Shrink selection to sheet's data area. */
+    SC_DBSEL_SHRINK_TO_SHEET_DATA,
+
+    /** Shrink selection to actually used data area within the selection. */
+    SC_DBSEL_SHRINK_TO_USED_DATA,
+
+    /** If only one row or portion thereof is selected, shrink row to used data
+        columns and select further rows down until end of data. If an area is
+        selected, shrink rows to actually used columns. Else, no selection,
+        expand to used data area. */
+    SC_DBSEL_ROW_DOWN,
+
+    /** Behave as if the range corresponding to a ScDBData area was selected,
+        for API use. */
+    SC_DBSEL_FORCE_MARK
 };
 
 enum ScLkUpdMode
@@ -779,6 +805,7 @@ struct ScQueryEntry
 {
     BOOL            bDoQuery;
     BOOL            bQueryByString;
+    bool            bQueryByDate;
     SCCOLROW        nField;
     ScQueryOp       eOp;
     ScQueryConnect  eConnect;

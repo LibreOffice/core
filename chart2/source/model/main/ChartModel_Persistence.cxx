@@ -413,8 +413,6 @@ void SAL_CALL ChartModel::initNew()
     try
     {
         // create default chart
-        impl_removeAllDiagrams();
-
         Reference< chart2::XChartTypeTemplate > xTemplate( impl_createDefaultChartTypeTemplate() );
         if( xTemplate.is())
         {
@@ -433,7 +431,7 @@ void SAL_CALL ChartModel::initNew()
 
                 Reference< chart2::XDiagram > xDiagram( xTemplate->createDiagramByDataSource( xDataSource, aParam ) );
 
-                impl_appendDiagram( xDiagram );
+                setFirstDiagram( xDiagram );
 
                 bool bIsRTL = Application::GetSettings().GetLayoutRTL();
                 //reverse x axis for rtl charts
@@ -697,7 +695,11 @@ void SAL_CALL ChartModel::impl_notifyModifiedListeners()
         lang::EventObject aEvent( static_cast< lang::XComponent*>(this) );
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
-            (static_cast< util::XModifyListener*>(aIt.next()))->modified( aEvent );
+        {
+            uno::Reference< util::XModifyListener > xListener( aIt.next(), uno::UNO_QUERY );
+            if( xListener.is() )
+                xListener->modified( aEvent );
+        }
     }
 }
 
@@ -746,7 +748,7 @@ void SAL_CALL ChartModel::removeModifyListener(
     const uno::Reference< util::XModifyListener >& xListener )
     throw(uno::RuntimeException)
 {
-    if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
+    if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.removeInterface(
@@ -827,8 +829,11 @@ void SAL_CALL ChartModel::impl_notifyStorageChangeListeners()
     {
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
-            (static_cast< document::XStorageChangeListener* >(aIt.next()))->notifyStorageChange(
-                static_cast< ::cppu::OWeakObject* >( this ), m_xStorage );
+        {
+            uno::Reference< document::XStorageChangeListener > xListener( aIt.next(), uno::UNO_QUERY );
+            if( xListener.is() )
+                xListener->notifyStorageChange( static_cast< ::cppu::OWeakObject* >( this ), m_xStorage );
+        }
     }
 }
 
@@ -845,7 +850,7 @@ void SAL_CALL ChartModel::addStorageChangeListener( const Reference< document::X
 void SAL_CALL ChartModel::removeStorageChangeListener( const Reference< document::XStorageChangeListener >& xListener )
     throw (uno::RuntimeException)
 {
-    if( m_aLifeTimeManager.impl_isDisposedOrClosed() )
+    if( m_aLifeTimeManager.impl_isDisposedOrClosed(false) )
         return; //behave passive if already disposed or closed
 
     m_aLifeTimeManager.m_aListenerContainer.removeInterface(

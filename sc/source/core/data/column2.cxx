@@ -66,6 +66,7 @@
 #include "compiler.hxx"         // ScTokenArray GetCodeLen
 #include "dbcolect.hxx"
 #include "fillinfo.hxx"
+#include "segmenttree.hxx"
 
 #include <math.h>
 
@@ -193,6 +194,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
     double nPPT = bWidth ? nPPTX : nPPTY;
     if (Search(nRow,nIndex))
     {
+        ScBaseCell* pCell = pItems[nIndex].pCell;
         const ScPatternAttr* pPattern = rOptions.pPattern;
         if (!pPattern)
             pPattern = pAttrArray->GetPattern( nRow );
@@ -233,14 +235,18 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         else
             eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
                                             pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
-        BOOL bBreak;
+        bool bBreak;
         if ( eHorJust == SVX_HOR_JUSTIFY_BLOCK )
-            bBreak = TRUE;
+            bBreak = true;
         else if ( pCondSet &&
                     pCondSet->GetItemState(ATTR_LINEBREAK, TRUE, &pCondItem) == SFX_ITEM_SET)
             bBreak = ((const SfxBoolItem*)pCondItem)->GetValue();
         else
             bBreak = ((const SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
+
+        if (pCell->HasValueData())
+            // Cell has a value.  Disable line break.
+            bBreak = false;
 
         //  get other attributes from pattern and conditional formatting
 
@@ -248,7 +254,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         BOOL bAsianVertical = ( eOrient == SVX_ORIENTATION_STACKED &&
                 ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN, pCondSet )).GetValue() );
         if ( bAsianVertical )
-            bBreak = FALSE;
+            bBreak = false;
 
         if ( bWidth && bBreak )     // after determining bAsianVertical (bBreak may be reset)
             return 0;
@@ -300,7 +306,6 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                 nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
         }
 
-        ScBaseCell* pCell = pItems[nIndex].pCell;
         BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pCell );
         if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
@@ -756,8 +761,8 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
 {
     ScAttrIterator aIter( pAttrArray, nStartRow, nEndRow );
 
-    SCROW nStart;
-    SCROW nEnd;
+    SCROW nStart = -1;
+    SCROW nEnd = -1;
     SCROW nEditPos = 0;
     SCROW nNextEnd = 0;
 
@@ -1403,11 +1408,11 @@ BOOL ScColumn::GetPrevDataPos(SCROW& rRow) const
     return bFound;
 }
 
-BOOL ScColumn::GetNextDataPos(SCROW& rRow) const        // groesser als rRow
+BOOL ScColumn::GetNextDataPos(SCROW& rRow) const        // greater than rRow
 {
     SCSIZE nIndex;
     if (Search( rRow, nIndex ))
-        ++nIndex;                   // naechste Zelle
+        ++nIndex;                   // next cell
 
     BOOL bMore = ( nIndex < nCount );
     if ( bMore )
@@ -1778,7 +1783,7 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
 //  Mehrfachselektion:
 void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
                                         ScFunctionData& rData,
-                                        const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
+                                        ScFlatBoolRowSegments& rHiddenRows,
                                         BOOL bDoExclude, SCROW nExStartRow, SCROW nExEndRow )
 {
     SCSIZE nIndex;
@@ -1786,7 +1791,8 @@ void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
     while (aDataIter.Next( nIndex ))
     {
         SCROW nRow = pItems[nIndex].nRow;
-        if ( !pRowFlags || !( pRowFlags->GetValue(nRow) & CR_HIDDEN ) )
+        bool bRowHidden = rHiddenRows.getValue(nRow);
+        if ( !bRowHidden )
             if ( !bDoExclude || nRow < nExStartRow || nRow > nExEndRow )
                 lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
     }
@@ -1794,7 +1800,7 @@ void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
 
 //  bei bNoMarked die Mehrfachselektion weglassen
 void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
-                                    const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
+                                   ScFlatBoolRowSegments& rHiddenRows,
                                     SCROW nStartRow, SCROW nEndRow )
 {
     SCSIZE nIndex;
@@ -1802,7 +1808,8 @@ void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
     while ( nIndex<nCount && pItems[nIndex].nRow<=nEndRow )
     {
         SCROW nRow = pItems[nIndex].nRow;
-        if ( !pRowFlags || !( pRowFlags->GetValue(nRow) & CR_HIDDEN ) )
+        bool bRowHidden = rHiddenRows.getValue(nRow);
+        if ( !bRowHidden )
             lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
         ++nIndex;
     }

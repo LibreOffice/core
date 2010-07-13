@@ -451,7 +451,7 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
                 sal_Int32 nCount = aCat.Count;
                 if( nCatIndex + 0.5 + nCount >= m_aScale.Maximum )
                 {
-                    nCount = m_aScale.Maximum - 0.5 - nCatIndex;
+                    nCount = static_cast<sal_Int32>(m_aScale.Maximum - 0.5 - nCatIndex);
                     if( nCount <= 0 )
                         nCount = 1;
                 }
@@ -1519,7 +1519,7 @@ void SAL_CALL VCartesianAxis::createShapes()
 
             ::std::vector<TickmarkProperties> aTickmarkPropertiesList;
             static bool bIncludeSpaceBetweenTickAndText = false;
-            sal_Int32 nOffset = pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties, false, bIncludeSpaceBetweenTickAndText ).getLength();
+            sal_Int32 nOffset = static_cast<sal_Int32>(pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties, false, bIncludeSpaceBetweenTickAndText ).getLength());
             sal_Int32 nTextLevelCount = getTextLevelCount();
             for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
             {
@@ -1527,7 +1527,7 @@ void SAL_CALL VCartesianAxis::createShapes()
                 if( apTickIter.get() )
                 {
                     B2DVector aLabelsDistance( lcl_getLabelsDistance( *apTickIter.get(), pTickmarkHelper2D->getDistanceAxisTickToText( m_aAxisProperties, false ) ) );
-                    sal_Int32 nCurrentLength = aLabelsDistance.getLength();
+                    sal_Int32 nCurrentLength = static_cast<sal_Int32>(aLabelsDistance.getLength());
                     aTickmarkPropertiesList.push_back( m_aAxisProperties.makeTickmarkPropertiesForComplexCategories( nOffset + nCurrentLength, 0, nTextLevel ) );
                     nOffset += nCurrentLength;
                 }

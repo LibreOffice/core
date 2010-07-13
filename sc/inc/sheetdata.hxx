@@ -132,6 +132,8 @@ class ScSheetSaveData
 
     ScNoteStyleEntry    maPreviousNote;
 
+    bool                mbInSupportedSave;
+
 public:
                 ScSheetSaveData();
                 ~ScSheetSaveData();
@@ -174,6 +176,9 @@ public:
     const std::vector<ScTextStyleEntry>& GetNoteParaStyles() const { return maNoteParaStyles; }
     const std::vector<ScTextStyleEntry>& GetNoteTextStyles() const { return maNoteTextStyles; }
     const std::vector<ScTextStyleEntry>& GetTextStyles() const   { return maTextStyles; }
+
+    bool        IsInSupportedSave() const;
+    void        SetInSupportedSave( bool bSet );
 };
 
 #endif

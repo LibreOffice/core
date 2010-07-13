@@ -46,6 +46,7 @@ interface TableText
     SID_SELECTALL       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_CHARMAP         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     FID_INSERT_NAME     [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_THES            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
     SID_UNDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]
     SID_REDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; Export = FALSE; ]
@@ -80,6 +81,9 @@ interface TableText
     SID_HYPERLINK_GETLINK   [ StateMethod = GetState; Export = FALSE; ]
         SID_OPEN_HYPERLINK      [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
 
+    SID_TRANSLITERATE_SENTENCE_CASE [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
+    SID_TRANSLITERATE_TITLE_CASE    [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
+    SID_TRANSLITERATE_TOGGLE_CASE   [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
     SID_TRANSLITERATE_UPPER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_LOWER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_HALFWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]

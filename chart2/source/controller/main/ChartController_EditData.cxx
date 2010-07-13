@@ -54,7 +54,7 @@ namespace chart
 
 void ChartController::executeDispatch_EditData()
 {
-    Reference< chart2::XChartDocument > xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
+    Reference< chart2::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
     if( xChartDoc.is())
     {
         Window* pParent( NULL );
@@ -67,7 +67,7 @@ void ChartController::executeDispatch_EditData()
             // using assignment for broken gcc 3.3
             UndoLiveUpdateGuardWithData aUndoGuard = UndoLiveUpdateGuardWithData(
                 ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHART_DATA ))),
-                m_xUndoManager, m_aModel->getModel());
+                m_xUndoManager, getModel() );
             DataEditor aDataEditorDialog( pParent, xChartDoc, m_xCC );
             // the dialog has no OK/Cancel
             aDataEditorDialog.Execute();

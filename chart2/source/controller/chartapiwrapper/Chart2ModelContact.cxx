@@ -38,6 +38,7 @@
 #include "chartview/ExplicitValueProvider.hxx"
 #include "chartview/DrawModelWrapper.hxx"
 #include "AxisHelper.hxx"
+#include "DiagramHelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -118,7 +119,7 @@ Reference< chart2::XDiagram > Chart2ModelContact::getChart2Diagram() const
     return ChartModelHelper::findDiagram( this->getChartModel() );
 }
 
-ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
+uno::Reference< lang::XUnoTunnel > Chart2ModelContact::getChartView() const
 {
     if(!m_xChartView.is())
     {
@@ -128,7 +129,12 @@ ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
         if( xFact.is() )
             m_xChartView = Reference< lang::XUnoTunnel >( xFact->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
     }
+    return m_xChartView;
+}
 
+ExplicitValueProvider* Chart2ModelContact::getExplicitValueProvider() const
+{
+    getChartView();
     if(!m_xChartView.is())
         return 0;
 
@@ -192,30 +198,54 @@ awt::Size Chart2ModelContact::GetPageSize() const
     return ChartModelHelper::getPageSize(m_xChartModel);
 }
 
-awt::Rectangle Chart2ModelContact::GetDiagramRectangleInclusive() const
+awt::Rectangle Chart2ModelContact::SubstractAxisTitleSizes( const awt::Rectangle& rPositionRect )
 {
-    awt::Rectangle aRect;
+    awt::Rectangle aRect = ExplicitValueProvider::substractAxisTitleSizes(
+        m_xChartModel, getChartView(), rPositionRect );
+    return aRect;
+}
 
-    ExplicitValueProvider* pProvider( getExplicitValueProvider() );
-    if( pProvider )
-    {
-        aRect = pProvider->getRectangleOfObject( lcl_getCIDForDiagram( m_xChartModel ) );
-    }
+awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingTitle() const
+{
+    awt::Rectangle aRect( GetDiagramRectangleIncludingAxes() );
+
     //add axis title sizes to the diagram size
-    aRect = ExplicitValueProvider::calculateDiagramPositionAndSizeInclusiveTitle(
-        m_xChartModel, m_xChartView, aRect );
+    aRect = ExplicitValueProvider::addAxisTitleSizes(
+        m_xChartModel, getChartView(), aRect );
 
     return aRect;
 }
 
-awt::Size Chart2ModelContact::GetDiagramSizeInclusive() const
+awt::Rectangle Chart2ModelContact::GetDiagramRectangleIncludingAxes() const
 {
-    return ToSize( this->GetDiagramRectangleInclusive() );
+    awt::Rectangle aRect(0,0,0,0);
+    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
+
+    if( DiagramPositioningMode_INCLUDING == DiagramHelper::getDiagramPositioningMode( xDiagram ) )
+        aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel);
+    else
+    {
+        ExplicitValueProvider* pProvider( getExplicitValueProvider() );
+        if( pProvider )
+            aRect = pProvider->getRectangleOfObject( C2U("PlotAreaIncludingAxes") );
+    }
+    return aRect;
 }
 
-awt::Point Chart2ModelContact::GetDiagramPositionInclusive() const
+awt::Rectangle Chart2ModelContact::GetDiagramRectangleExcludingAxes() const
 {
-    return ToPoint( this->GetDiagramRectangleInclusive() );
+    awt::Rectangle aRect(0,0,0,0);
+    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartModel ) );
+
+    if( DiagramPositioningMode_EXCLUDING == DiagramHelper::getDiagramPositioningMode( xDiagram ) )
+        aRect = DiagramHelper::getDiagramRectangleFromModel(m_xChartModel);
+    else
+    {
+        ExplicitValueProvider* pProvider( getExplicitValueProvider() );
+        if( pProvider )
+            aRect = pProvider->getDiagramRectangleExcludingAxes();
+    }
+    return aRect;
 }
 
 awt::Size Chart2ModelContact::GetLegendSize() const

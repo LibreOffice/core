@@ -67,7 +67,7 @@
 #include "charthelper.hxx"
 
 using namespace ::com::sun::star;
-
+#include <stdio.h>
 // -----------------------------------------------------------------------
 
 
@@ -168,7 +168,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
                 pTab[nTab]->GetName(aTabName);
                 pDrawLayer->ScRenamePage( nTab, aTabName );
 
-                pTab[nTab]->SetDrawPageSize(false);     // #54782# set the right size immediately
+                pTab[nTab]->SetDrawPageSize(false,false);     // #54782# set the right size immediately
 #if 0
                 ULONG nx = (ULONG) ((double) (MAXCOL+1) * STD_COL_WIDTH           * HMM_PER_TWIPS );
                 ULONG ny = (ULONG) ((double) (MAXROW+1) * ScGlobal::nStdRowHeight * HMM_PER_TWIPS );
@@ -722,7 +722,19 @@ void ScDocument::UpdateFontCharSet()
     }
 }
 
-void ScDocument::SetImportingXML( BOOL bVal )
+void ScDocument::SetLoadingMedium( bool bVal )
+{
+    bLoadingMedium = bVal;
+    for (SCTAB nTab = 0; nTab <= MAXTAB; ++nTab)
+    {
+        if (!pTab[nTab])
+            return;
+
+        pTab[nTab]->SetLoadingMedium(bVal);
+    }
+}
+
+void ScDocument::SetImportingXML( bool bVal )
 {
     bImportingXML = bVal;
     if (pDrawLayer)
@@ -739,6 +751,8 @@ void ScDocument::SetImportingXML( BOOL bVal )
                 SetLayoutRTL( nTab, TRUE );             // includes mirroring; bImportingXML must be cleared first
             }
     }
+
+    SetLoadingMedium(bVal);
 }
 
 void ScDocument::SetXMLFromWrapper( BOOL bVal )

@@ -60,6 +60,7 @@ interface TableSelection
     FID_DELETE_TABLE    [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_RENAME      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_RTL         [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_SET_TAB_BG_COLOR    [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
 
     SID_TABLE_ACTIVATE  [ ExecMethod = Execute; ]
 }

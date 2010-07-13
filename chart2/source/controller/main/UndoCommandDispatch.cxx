@@ -38,7 +38,7 @@
 #include <vcl/svapp.hxx>
 
 // for ressource strings STR_UNDO and STR_REDO
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
 
 using namespace ::com::sun::star;

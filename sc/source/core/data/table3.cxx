@@ -31,6 +31,7 @@
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <unotools/charclass.hxx>
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
@@ -207,17 +208,14 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress& rProgress )
 {
     BOOL bByRow = aSortParam.bByRow;
     SCSIZE nCount = pArray->GetCount();
+    SCCOLROW nStart = pArray->GetStart();
     ScSortInfo** ppInfo = pArray->GetFirstArray();
-    // hngngn.. Win16 legacy? Table has ULONG count but can only be initialized using USHORT :-/
-    // FIXME: use std::vector instead, would be better anyway (type safe)
-    USHORT nArghl = (nCount > USHRT_MAX ? USHRT_MAX : static_cast<USHORT>(nCount));
-    Table aTable( nArghl );
+    ::std::vector<ScSortInfo*> aTable(nCount);
     SCSIZE nPos;
     for ( nPos = 0; nPos < nCount; nPos++ )
-    {
-        aTable.Insert( ppInfo[nPos]->nOrg, (void*) ppInfo[nPos] );
-    }
-    SCCOLROW nDest = pArray->GetStart();
+        aTable[ppInfo[nPos]->nOrg - nStart] = ppInfo[nPos];
+
+    SCCOLROW nDest = nStart;
     for ( nPos = 0; nPos < nCount; nPos++, nDest++ )
     {
         SCCOLROW nOrg = ppInfo[nPos]->nOrg;
@@ -230,9 +228,9 @@ void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress& rProgress )
             // neue Position des weggeswapten eintragen
             ScSortInfo* p = ppInfo[nPos];
             p->nOrg = nDest;
-            p = (ScSortInfo*) aTable.Replace( nDest, (void*) p );
+            ::std::swap(p, aTable[nDest-nStart]);
             p->nOrg = nOrg;
-            p = (ScSortInfo*) aTable.Replace( nOrg, (void*) p );
+            ::std::swap(p, aTable[nOrg-nStart]);
             DBG_ASSERT( p == ppInfo[nPos], "SortReorder: nOrg MisMatch" );
         }
         rProgress.SetStateOnPercent( nPos );
@@ -448,14 +446,17 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
             }
         }
     }
-    if (bGlobalKeepQuery && pRowFlags)
+    if (bGlobalKeepQuery)
     {
-        BYTE nRow1Flags = pRowFlags->GetValue(nRow1);
-        BYTE nRow2Flags = pRowFlags->GetValue(nRow2);
-        BYTE nFlags1 = nRow1Flags & ( CR_HIDDEN | CR_FILTERED );
-        BYTE nFlags2 = nRow2Flags & ( CR_HIDDEN | CR_FILTERED );
-        pRowFlags->SetValue( nRow1, (nRow1Flags & ~( CR_HIDDEN | CR_FILTERED )) | nFlags2);
-        pRowFlags->SetValue( nRow2, (nRow2Flags & ~( CR_HIDDEN | CR_FILTERED )) | nFlags1);
+        bool bRow1Hidden = RowHidden(nRow1);
+        bool bRow2Hidden = RowHidden(nRow2);
+        SetRowHidden(nRow1, nRow1, bRow2Hidden);
+        SetRowHidden(nRow2, nRow2, bRow1Hidden);
+
+        bool bRow1Filtered = RowFiltered(nRow1);
+        bool bRow2Filtered = RowFiltered(nRow2);
+        SetRowFiltered(nRow1, nRow1, bRow2Filtered);
+        SetRowFiltered(nRow2, nRow2, bRow1Filtered);
     }
 }
 
@@ -615,7 +616,7 @@ void ScTable::RemoveSubTotals( ScSubTotalParam& rParam )
             if ( pCell->GetCellType() == CELLTYPE_FORMULA )
                 if (((ScFormulaCell*)pCell)->IsSubTotal())
                 {
-                    SetRowFlags(nRow+1,GetRowFlags(nRow+1)&(~CR_MANUALBREAK));
+                    RemoveRowBreak(nRow+1, false, true);
                     pDocument->DeleteRow( 0,nTab, MAXCOL,nTab, nRow, 1 );
                     --nEndRow;
                     aIter = ScColumnIterator( &aCol[nCol],nRow,nEndRow );
@@ -783,9 +784,7 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                     bBlockVis = FALSE;
                     if ( rParam.bPagebreak && nRow < MAXROW &&
                             aRowEntry.nSubStartRow != nStartRow && nLevel == 0)
-                        SetRowFlags( aRowEntry.nSubStartRow,
-                                GetRowFlags(aRowEntry.nSubStartRow) |
-                                CR_MANUALBREAK);
+                        SetRowBreak(aRowEntry.nSubStartRow, false, true);
 
                     if (bSpaceLeft)
                     {
@@ -838,13 +837,6 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         SetString( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, nTab, aOutString );
                         ApplyStyle( nGroupCol[aRowEntry.nGroupNo], aRowEntry.nDestRow, *pStyle );
 
-/*                      if (rParam.bPagebreak && nRow < MAXROW)
-                        {
-                            BYTE nFlags = GetRowFlags( nRow+1 );
-                            nFlags |= CR_MANUALBREAK;
-                            SetRowFlags( nRow+1, nFlags );
-                        }
-*/
                         ++nRow;
                         ++nEndRow;
                         aRowEntry.nSubStartRow = nRow;
@@ -858,11 +850,7 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                         }
                     }
                 }
-                if (!pRowFlags)
-                    bBlockVis = TRUE;
-                else
-                    if ( (pRowFlags->GetValue(nRow) & CR_FILTERED) == 0 )
-                        bBlockVis = TRUE;
+                bBlockVis = !RowFiltered(nRow);
             }
         }
         else
@@ -989,6 +977,35 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
             }
             else
                 nCellVal = GetValue( static_cast<SCCOL>(rEntry.nField), nRow );
+
+            /* NOTE: lcl_PrepareQuery() prepares a filter query such that if a
+             * date+time format was queried rEntry.bQueryByDate is not set. In
+             * case other queries wanted to use this mechanism they should do
+             * the same, in other words only if rEntry.nVal is an integer value
+             * rEntry.bQueryByDate should be true and the time fraction be
+             * stripped here. */
+            if (rEntry.bQueryByDate)
+            {
+                sal_uInt32 nNumFmt = GetNumberFormat(static_cast<SCCOL>(rEntry.nField), nRow);
+                const SvNumberformat* pEntry = pDocument->GetFormatTable()->GetEntry(nNumFmt);
+                if (pEntry)
+                {
+                    short nNumFmtType = pEntry->GetType();
+                    /* NOTE: Omitting the check for absence of
+                     * NUMBERFORMAT_TIME would include also date+time formatted
+                     * values of the same day. That may be desired in some
+                     * cases, querying all time values of a day, but confusing
+                     * in other cases. A user can always setup a standard
+                     * filter query for x >= date AND x < date+1 */
+                    if ((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME))
+                    {
+                        // The format is of date type.  Strip off the time
+                        // element.
+                        nCellVal = ::rtl::math::approxFloor(nCellVal);
+                    }
+                }
+            }
+
             switch (rEntry.eOp)
             {
                 case SC_EQUAL :
@@ -1393,6 +1410,23 @@ static void lcl_PrepareQuery( ScDocument* pDoc, ScTable* pTab, ScQueryParam& rPa
                 sal_uInt32 nIndex = 0;
                 rEntry.bQueryByString = !( pDoc->GetFormatTable()->
                     IsNumberFormat( *rEntry.pStr, nIndex, rEntry.nVal ) );
+                if (rEntry.bQueryByDate)
+                {
+                    if (!rEntry.bQueryByString && ((nIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0))
+                    {
+                        const SvNumberformat* pEntry = pDoc->GetFormatTable()->GetEntry(nIndex);
+                        if (pEntry)
+                        {
+                            short nNumFmtType = pEntry->GetType();
+                            if (!((nNumFmtType & NUMBERFORMAT_DATE) && !(nNumFmtType & NUMBERFORMAT_TIME)))
+                                rEntry.bQueryByDate = false;    // not a date only
+                        }
+                        else
+                            rEntry.bQueryByDate = false;    // what the ... not a date
+                    }
+                    else
+                        rEntry.bQueryByDate = false;    // not a date
+                }
             }
             else
             {
@@ -1776,12 +1810,13 @@ BOOL ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol *
     return TRUE;
 }
 
-void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings)
+void ScTable::GetFilterEntries(SCCOL nCol, SCROW nRow1, SCROW nRow2, TypedScStrCollection& rStrings, bool& rHasDates)
 {
-    aCol[nCol].GetFilterEntries( nRow1, nRow2, rStrings );
+    aCol[nCol].GetFilterEntries( nRow1, nRow2, rStrings, rHasDates );
 }
 
-void ScTable::GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings )
+void ScTable::GetFilteredFilterEntries(
+    SCCOL nCol, SCROW nRow1, SCROW nRow2, const ScQueryParam& rParam, TypedScStrCollection& rStrings, bool& rHasDates )
 {
     // remove the entry for this column from the query parameter
     ScQueryParam aParam( rParam );
@@ -1799,15 +1834,18 @@ void ScTable::GetFilteredFilterEntries( SCCOL nCol, SCROW nRow1, SCROW nRow2, co
 
     BOOL* pSpecial = new BOOL[nEntryCount];
     lcl_PrepareQuery( pDocument, this, aParam, pSpecial );
-
+    bool bHasDates = false;
     for ( SCROW j = nRow1; j <= nRow2; ++j )
     {
         if ( ValidQuery( j, aParam, pSpecial ) )
         {
-            aCol[nCol].GetFilterEntries( j, j, rStrings );
+            bool bThisHasDates = false;
+            aCol[nCol].GetFilterEntries( j, j, rStrings, bThisHasDates );
+            bHasDates |= bThisHasDates;
         }
     }
 
+    rHasDates = bHasDates;
     delete[] pSpecial;
 }
 
@@ -1862,8 +1900,8 @@ sal_Int32 ScTable::GetMaxStringLen( SCCOL nCol, SCROW nRowStart,
         return 0;
 }
 
-xub_StrLen ScTable::GetMaxNumberStringLen( USHORT& nPrecision, SCCOL nCol,
-                                SCROW nRowStart, SCROW nRowEnd ) const
+xub_StrLen ScTable::GetMaxNumberStringLen(
+    sal_uInt16& nPrecision, SCCOL nCol, SCROW nRowStart, SCROW nRowEnd ) const
 {
     if ( ValidCol(nCol) )
         return aCol[nCol].GetMaxNumberStringLen( nPrecision, nRowStart, nRowEnd );
@@ -1884,8 +1922,8 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
     SCCOL nCol;
     if ( rMark.IsMultiMarked() )
         for (nCol=0; nCol<=MAXCOL && !rData.bError; nCol++)
-            if ( !pColFlags || !( pColFlags[nCol] & CR_HIDDEN ) )
-                aCol[nCol].UpdateSelectionFunction( rMark, rData, pRowFlags,
+            if ( !pColFlags || !ColHidden(nCol) )
+                aCol[nCol].UpdateSelectionFunction( rMark, rData, *mpHiddenRows,
                                                     bSingle && ( nCol >= nStartCol && nCol <= nEndCol ),
                                                     nStartRow, nEndRow );
 
@@ -1893,8 +1931,8 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
 
     if ( bSingle && !rMark.IsMarkNegative() )
         for (nCol=nStartCol; nCol<=nEndCol && !rData.bError; nCol++)
-            if ( !pColFlags || !( pColFlags[nCol] & CR_HIDDEN ) )
-                aCol[nCol].UpdateAreaFunction( rData, pRowFlags, nStartRow, nEndRow );
+            if ( !pColFlags || !ColHidden(nCol) )
+                aCol[nCol].UpdateAreaFunction( rData, *mpHiddenRows, nStartRow, nEndRow );
 }
 
 void ScTable::FindConditionalFormat( ULONG nKey, ScRangeList& rList )

@@ -173,6 +173,7 @@
 #define SC_UNONAME_COPYFORM         "CopyFormulas"
 #define SC_UNONAME_TABLAYOUT        "TableLayout"
 #define SC_UNONAME_AUTOPRINT        "AutomaticPrintArea"
+#define SC_UNONAME_TABCOLOR         "TabColor"
 
 //  LinkTarget
 #define SC_UNO_LINKDISPBIT          "LinkDisplayBitmap"
@@ -484,6 +485,7 @@
 #define SC_UNO_ISEXECUTELINKENABLED     "IsExecuteLinkEnabled"
 #define SC_UNO_ISCHANGEREADONLYENABLED  "IsChangeReadOnlyEnabled"
 #define SC_UNO_REFERENCEDEVICE          "ReferenceDevice"
+#define SC_UNO_CODENAME                 "CodeName"
 
 //  document properties from FormModel
 #define SC_UNO_APPLYFMDES           "ApplyFormDesignMode"
@@ -526,6 +528,7 @@
 #define SC_UNO_ZOOMTYPE             "ZoomType"
 #define SC_UNO_ZOOMVALUE            "ZoomValue"
 #define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
+
 /*Stampit enable/disable print cancel */
 #define SC_UNO_ALLOWPRINTJOBCANCEL  "AllowPrintJobCancel"
 
@@ -595,6 +598,7 @@
 #define SC_UNONAME_PAGESIZE         "PageSize"
 #define SC_UNONAME_RENDERDEV        "RenderDevice"
 #define SC_UNONAME_SOURCERANGE      "SourceRange"
+#define SC_UNONAME_INC_NP_AREA      "PageIncludesNonprintableArea"
 
 // CellValueBinding
 #define SC_UNONAME_BOUNDCELL        "BoundCell"
@@ -610,6 +614,7 @@
 // --> PB 2004-08-23 #i33095# Security Options
 #define SC_UNO_LOADREADONLY         "LoadReadonly"
 // <--
+#define SC_UNO_MODIFYPASSWORDINFO   "ModifyPasswordInfo"
 
 // FormulaParser
 #define SC_UNO_COMPILEENGLISH       "CompileEnglish"
@@ -629,6 +634,11 @@
 #define SC_UNONAME_TIMEOUT          "Timeout"
 
 #define SC_UNO_SHAREDOC             "IsDocumentShared"
+
+// EventDescriptor
+
+#define SC_UNO_EVENTTYPE            "EventType"
+#define SC_UNO_SCRIPT               "Script"
 
 #endif
 

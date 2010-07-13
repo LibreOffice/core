@@ -34,6 +34,7 @@
 #include <unotools/fontcvt.hxx>
 #include <sfx2/objsh.hxx>
 #include <editeng/editstat.hxx>
+#include <filter/msfilter/msvbahelper.hxx>
 #include "xestream.hxx"
 #include "document.hxx"
 #include "docuno.hxx"
@@ -45,6 +46,8 @@
 #include "xistream.hxx"
 #include "xiroot.hxx"
 #include "xltools.hxx"
+
+using ::rtl::OUString;
 
 // GUID import/export =========================================================
 
@@ -113,7 +116,12 @@ const XclGuid XclTools::maGuidFileMoniker(
 
 double XclTools::GetDoubleFromRK( sal_Int32 nRKValue )
 {
-    double fVal = 0.0;
+    union
+    {
+        double fVal;
+        sal_math_Double smD;
+    };
+    fVal = 0.0;
 
     if( ::get_flag( nRKValue, EXC_RK_INTFLAG ) )
     {
@@ -123,8 +131,7 @@ double XclTools::GetDoubleFromRK( sal_Int32 nRKValue )
     }
     else
     {
-        sal_math_Double* pDouble = reinterpret_cast< sal_math_Double* >( &fVal );
-        pDouble->w32_parts.msw = nRKValue & EXC_RK_VALUEMASK;
+        smD.w32_parts.msw = nRKValue & EXC_RK_VALUEMASK;
     }
 
     if( ::get_flag( nRKValue, EXC_RK_100FLAG ) )
@@ -160,50 +167,6 @@ bool XclTools::GetRKFromDouble( sal_Int32& rnRKValue, double fValue )
     // double
     return false;
 }
-
-
-sal_uInt8 XclTools::GetXclErrorCode( USHORT nScError )
-{
-    using namespace ScErrorCodes;
-    switch( nScError )
-    {
-        case errIllegalArgument:        return EXC_ERR_VALUE;
-        case errIllegalFPOperation:     return EXC_ERR_NUM;     // maybe DIV/0 or NUM...
-        case errDivisionByZero:         return EXC_ERR_DIV0;
-        case errIllegalParameter:       return EXC_ERR_VALUE;
-        case errPairExpected:           return EXC_ERR_VALUE;
-        case errOperatorExpected:       return EXC_ERR_VALUE;
-        case errVariableExpected:       return EXC_ERR_VALUE;
-        case errParameterExpected:      return EXC_ERR_VALUE;
-        case errNoValue:                return EXC_ERR_VALUE;
-        case errCircularReference:      return EXC_ERR_VALUE;
-        case errNoCode:                 return EXC_ERR_NULL;
-        case errNoRef:                  return EXC_ERR_REF;
-        case errNoName:                 return EXC_ERR_NAME;
-        case errNoAddin:                return EXC_ERR_NAME;
-        case errNoMacro:                return EXC_ERR_NAME;
-        case NOTAVAILABLE:              return EXC_ERR_NA;
-    }
-    return EXC_ERR_NA;
-}
-
-USHORT XclTools::GetScErrorCode( sal_uInt8 nXclError )
-{
-    using namespace ScErrorCodes;
-    switch( nXclError )
-    {
-        case EXC_ERR_NULL:  return errNoCode;
-        case EXC_ERR_DIV0:  return errDivisionByZero;
-        case EXC_ERR_VALUE: return errNoValue;
-        case EXC_ERR_REF:   return errNoRef;
-        case EXC_ERR_NAME:  return errNoName;
-        case EXC_ERR_NUM:   return errIllegalFPOperation;
-        case EXC_ERR_NA:    return NOTAVAILABLE;
-        default:            DBG_ERRORFILE( "XclTools::GetScErrorCode - unknown error code" );
-    }
-    return NOTAVAILABLE;
-}
-
 
 sal_Int32 XclTools::GetScRotation( sal_uInt16 nXclRot, sal_Int32 nRotForStacked )
 {
@@ -252,6 +215,59 @@ sal_uInt8 XclTools::GetXclOrientFromRot( sal_uInt16 nXclRot )
     return EXC_ORIENT_NONE;
 }
 
+sal_uInt8 XclTools::GetXclErrorCode( USHORT nScError )
+{
+    using namespace ScErrorCodes;
+    switch( nScError )
+    {
+        case errIllegalArgument:        return EXC_ERR_VALUE;
+        case errIllegalFPOperation:     return EXC_ERR_NUM;     // maybe DIV/0 or NUM...
+        case errDivisionByZero:         return EXC_ERR_DIV0;
+        case errIllegalParameter:       return EXC_ERR_VALUE;
+        case errPairExpected:           return EXC_ERR_VALUE;
+        case errOperatorExpected:       return EXC_ERR_VALUE;
+        case errVariableExpected:       return EXC_ERR_VALUE;
+        case errParameterExpected:      return EXC_ERR_VALUE;
+        case errNoValue:                return EXC_ERR_VALUE;
+        case errCircularReference:      return EXC_ERR_VALUE;
+        case errNoCode:                 return EXC_ERR_NULL;
+        case errNoRef:                  return EXC_ERR_REF;
+        case errNoName:                 return EXC_ERR_NAME;
+        case errNoAddin:                return EXC_ERR_NAME;
+        case errNoMacro:                return EXC_ERR_NAME;
+        case NOTAVAILABLE:              return EXC_ERR_NA;
+    }
+    return EXC_ERR_NA;
+}
+
+USHORT XclTools::GetScErrorCode( sal_uInt8 nXclError )
+{
+    using namespace ScErrorCodes;
+    switch( nXclError )
+    {
+        case EXC_ERR_NULL:  return errNoCode;
+        case EXC_ERR_DIV0:  return errDivisionByZero;
+        case EXC_ERR_VALUE: return errNoValue;
+        case EXC_ERR_REF:   return errNoRef;
+        case EXC_ERR_NAME:  return errNoName;
+        case EXC_ERR_NUM:   return errIllegalFPOperation;
+        case EXC_ERR_NA:    return NOTAVAILABLE;
+        default:            DBG_ERRORFILE( "XclTools::GetScErrorCode - unknown error code" );
+    }
+    return NOTAVAILABLE;
+}
+
+double XclTools::ErrorToDouble( sal_uInt8 nXclError )
+{
+    union
+    {
+        double fVal;
+        sal_math_Double smD;
+    };
+    ::rtl::math::setNan( &fVal );
+    smD.nan_parts.fraction_lo = GetScErrorCode( nXclError );
+    return fVal;
+}
 
 XclBoolError XclTools::ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sal_uInt8 nValue )
 {
@@ -280,7 +296,6 @@ XclBoolError XclTools::ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sa
     }
     return eType;
 }
-
 
 sal_uInt16 XclTools::GetTwipsFromInch( double fInches )
 {
@@ -672,6 +687,37 @@ void XclTools::SkipSubStream( XclImpStream& rStrm )
     }
 }
 
+// Basic macro names ----------------------------------------------------------
+
+const OUString XclTools::maSbMacroPrefix( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:Standard." ) );
+const OUString XclTools::maSbMacroSuffix( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ) );
+
+OUString XclTools::GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell )
+{
+    OSL_ENSURE( rMacroName.Len() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
+    ::ooo::vba::VBAMacroResolvedInfo aMacroInfo = ::ooo::vba::resolveVBAMacro( pDocShell, rMacroName, false );
+    if( aMacroInfo.IsResolved() )
+        return ::ooo::vba::makeMacroURL( aMacroInfo.ResolvedMacro() );
+    return OUString();
+}
+
+OUString XclTools::GetSbMacroUrl( const String& rModuleName, const String& rMacroName, SfxObjectShell* pDocShell )
+{
+    OSL_ENSURE( rModuleName.Len() > 0, "XclTools::GetSbMacroUrl - module name is empty" );
+    OSL_ENSURE( rMacroName.Len() > 0, "XclTools::GetSbMacroUrl - macro name is empty" );
+    return GetSbMacroUrl( rModuleName + OUString( sal_Unicode( '.' ) ) + rMacroName, pDocShell );
+}
+
+String XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
+{
+    sal_Int32 nSbMacroUrlLen = rSbMacroUrl.getLength();
+    sal_Int32 nMacroNameLen = nSbMacroUrlLen - maSbMacroPrefix.getLength() - maSbMacroSuffix.getLength();
+    if( (nMacroNameLen > 0) && rSbMacroUrl.matchIgnoreAsciiCase( maSbMacroPrefix, 0 ) &&
+            rSbMacroUrl.matchIgnoreAsciiCase( maSbMacroSuffix, nSbMacroUrlLen - maSbMacroSuffix.getLength() ) )
+        return rSbMacroUrl.copy( maSbMacroPrefix.getLength(), nMacroNameLen );
+    return String::EmptyString();
+}
+
 // read/write colors ----------------------------------------------------------
 
 XclImpStream& operator>>( XclImpStream& rStrm, Color& rColor )
@@ -688,4 +734,3 @@ XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor )
 }
 
 // ============================================================================
-

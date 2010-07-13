@@ -86,7 +86,7 @@ void lcl_applyDefaultStyle(
 void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xProp, const uno::Sequence < sal_Int32 >& rAvailablePlacements )
 {
     sal_Int32 nLabelPlacement=0;
-    if( xProp->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nLabelPlacement )
+    if( xProp.is() && (xProp->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nLabelPlacement) )
     {
         bool bValid = false;
         for( sal_Int32 nN = 0; nN < rAvailablePlacements.getLength(); nN++ )
@@ -112,7 +112,7 @@ void lcl_resetLabelPlacementIfDefault( const Reference< beans::XPropertySet >& x
 {
 
     sal_Int32 nLabelPlacement=0;
-    if( xProp->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nLabelPlacement )
+    if( xProp.is() && (xProp->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nLabelPlacement) )
     {
         if( nDefaultPlacement == nLabelPlacement )
             xProp->setPropertyValue( C2U("LabelPlacement"), uno::Any() );

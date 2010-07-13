@@ -110,7 +110,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 nXT += pDoc->GetColWidth(i,nTab);
             if (pDoc->IsNegativePage(nTab))
                 nXT = -nXT;
-            ULONG nYT = pDoc->FastGetRowHeight( 0, nPosY-1, nTab);
+            ULONG nYT = pDoc->GetRowHeight( 0, nPosY-1, nTab);
             aPos = Point( (long)(nXT * HMM_PER_TWIPS), (long)(nYT * HMM_PER_TWIPS) );
         }
     }
@@ -387,7 +387,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             //  Creation of database area "Import1" isn't here, but in the DocShell
             //  slot execute, so it can be added to the undo action
 
-            ScDBData* pDBData = pDocSh->GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, FALSE );
+            ScDBData* pDBData = pDocSh->GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, SC_DBSEL_KEEP );
             String sTarget;
             if (pDBData)
                 sTarget = pDBData->GetName();

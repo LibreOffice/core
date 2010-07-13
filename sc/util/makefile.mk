@@ -71,7 +71,6 @@ SHL1IMPLIB= sci
 
 # dynamic libraries
 SHL1STDLIBS=       \
-        $(VBAHELPERLIB) \
     $(BASICLIB)	\
     $(SFXLIB)		\
     $(SVTOOLLIB)	\
@@ -139,7 +138,7 @@ LIB4FILES=	\
 
 SHL2TARGET= scd$(DLLPOSTFIX)
 SHL2IMPLIB= scdimp
-SHL2VERSIONMAP= scd.map
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=		$(SHL2TARGET)
 
@@ -256,6 +255,7 @@ LIB8OBJFILES = \
         $(SLO)$/attrdlg.obj	\
         $(SLO)$/scuiimoptdlg.obj	\
         $(SLO)$/strindlg.obj		\
+        $(SLO)$/tabbgcolordlg.obj   \
         $(SLO)$/shtabdlg.obj		\
         $(SLO)$/scendlg.obj		\
         $(SLO)$/pvfundlg.obj	\
@@ -288,7 +288,7 @@ TARGET_VBA=vbaobj
 SHL9TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
 SHL9IMPLIB=	i$(TARGET_VBA)
 
-SHL9VERSIONMAP=$(TARGET_VBA).map
+SHL9VERSIONMAP=$(SOLARENV)/src/component.map
 SHL9DEF=$(MISC)$/$(SHL9TARGET).def
 DEF9NAME=$(SHL9TARGET)
 .IF "$(VBA_EXTENSION)"=="YES"
@@ -315,7 +315,7 @@ SHL9STDLIBS= \
         $(ISCLIB) \
         $(VCLLIB) \
         $(TKLIB) \
-        $(SVXMSFILTERLIB)		\
+        $(MSFILTERLIB)		\
         $(FORLIB)
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)

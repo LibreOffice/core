@@ -316,8 +316,6 @@ protected:
     /// Use this method to set initial Description without notification
     void SetDescription(const rtl::OUString& rDesc) { msDescription = rDesc; }
 
-    void SetRole(sal_Int16 nRole);
-
     /// Reference to the parent object.
     ::com::sun::star::uno::Reference<
          ::com::sun::star::accessibility::XAccessible> mxParent;

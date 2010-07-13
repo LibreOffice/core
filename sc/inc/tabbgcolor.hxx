@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: tabbgcolor.hxx,v $
+ * $Revision: 1.00 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,29 +28,27 @@
  *
  ************************************************************************/
 
-#ifndef SC_TEAMDLG_HXX
-#define SC_TEAMDLG_HXX
+#ifndef SC_TABBGCOLOR_HXX
+#define SC_TABBGCOLOR_HXX
 
+#include "tools/color.hxx"
+#include "address.hxx"
 
-#include <vcl/floatwin.hxx>
-#include <vcl/fixed.hxx>
+#include <vector>
 
-
-//========================================================================
-
-class ScTeamDlg : public FloatingWindow
+struct ScUndoTabColorInfo
 {
-public:
-            ScTeamDlg( Window* pParent );
-            ~ScTeamDlg();
+    SCTAB mnTabId;
+    Color maOldTabBgColor;
+    Color maNewTabBgColor;
 
-    virtual BOOL    Close();
-    void            Center();
+    bool IsDefaultOldTabBgColor() const;
+    bool IsDefaultNewTabBgColor() const;
 
-private:
-    FixedBitmap aBmpTeam;
+    explicit ScUndoTabColorInfo(SCTAB nTab);
+    ScUndoTabColorInfo(const ScUndoTabColorInfo& r);
+
+    typedef ::std::vector<ScUndoTabColorInfo> List;
 };
 
-
 #endif
-

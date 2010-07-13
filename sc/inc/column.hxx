@@ -30,7 +30,6 @@
 
 #include "markarr.hxx"
 #include "global.hxx"
-#include "compressedarray.hxx"
 #include "address.hxx"
 #include "rangenam.hxx"
 #include <tools/solar.h>
@@ -65,7 +64,7 @@ class ScPostIt;
 struct ScFunctionData;
 struct ScLineFlags;
 struct ScMergePatternState;
-
+class ScFlatBoolRowSegments;
 
 #define COLUMN_DELTA    4
 
@@ -209,10 +208,10 @@ public:
                 //  UpdateSelectionFunction: Mehrfachselektion
     void        UpdateSelectionFunction( const ScMarkData& rMark,
                                     ScFunctionData& rData,
-                                    const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
+                                    ScFlatBoolRowSegments& rHiddenRows,
                                     BOOL bDoExclude, SCROW nExStartRow, SCROW nExEndRow );
     void        UpdateAreaFunction( ScFunctionData& rData,
-                                    const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
+                                    ScFlatBoolRowSegments& rHiddenRows,
                                     SCROW nStartRow, SCROW nEndRow );
 
     void        CopyToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarked,
@@ -275,7 +274,6 @@ public:
     void        CalcAfterLoad();
     void        CompileAll();
     void        CompileXML( ScProgress& rProgress );
-    bool        MarkUsedExternalReferences();
 
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
@@ -330,7 +328,7 @@ public:
     const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark, BOOL& rFound ) const;
     const ScStyleSheet* GetAreaStyle( BOOL& rFound, SCROW nRow1, SCROW nRow2 ) const;
 
-    void        FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset );
+    void        FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset );
     BOOL        IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const;
 
                 /// May return -1 if not found
@@ -373,7 +371,7 @@ public:
                 /// Including current, may return -1
     SCsROW      GetNextUnprotected( SCROW nRow, BOOL bUp ) const;
 
-    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings);
+    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings, bool& rHasDates);
     BOOL        GetDataEntries(SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit);
 
 //UNUSED2008-05  SCROW      NoteCount( SCROW nMaxRow = MAXROW ) const;
@@ -397,8 +395,8 @@ public:
     void        CompileColRowNameFormula();
 
     sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const;
-    xub_StrLen  GetMaxNumberStringLen( USHORT& nPrecision,
-                                    SCROW nRowStart, SCROW nRowEnd ) const;
+    xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
+                                       SCROW nRowStart, SCROW nRowEnd ) const;
 
 private:
     ScBaseCell* CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos);

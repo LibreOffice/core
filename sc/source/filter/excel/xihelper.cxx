@@ -837,7 +837,7 @@ XclImpCachedValue::~XclImpCachedValue()
 {
 }
 
-USHORT XclImpCachedValue::GetError() const
+USHORT XclImpCachedValue::GetScError() const
 {
     return (mnType == EXC_CACHEDVAL_ERROR) ? XclTools::GetScErrorCode( mnBoolErr ) : 0;
 }
@@ -901,7 +901,7 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
                         xScMatrix->PutBoolean( pValue->GetBool(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_ERROR:
-                        xScMatrix->PutError( pValue->GetError(), nScCol, nScRow );
+                        xScMatrix->PutError( pValue->GetScError(), nScCol, nScRow );
                     break;
                     default:
                         DBG_ERRORFILE( "XclImpCachedMatrix::CreateScMatrix - unknown value type" );

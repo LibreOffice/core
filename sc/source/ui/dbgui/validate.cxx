@@ -581,7 +581,7 @@ void ScTPValidationValue::TidyListBoxes()
 
         pWnd = GetChild(0);
 
-        while( std::find( alstOrder.begin(), alstOrder.end(), pWnd ) != alstOrder.end() && NULL != ( pWnd = pWnd->GetWindow( WINDOW_NEXT) ) );
+        while( std::find( alstOrder.begin(), alstOrder.end(), pWnd ) != alstOrder.end() && NULL != ( pWnd = pWnd->GetWindow( WINDOW_NEXT) ) ) ;
 
         if ( pWnd )
         {

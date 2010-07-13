@@ -81,6 +81,7 @@ hidspecial HID_SC_APPEND_NAME    { HelpID = HID_SC_APPEND_NAME; };
 hidspecial HID_SC_AUTOFMT_NAME   { HelpID = HID_SC_AUTOFMT_NAME; };
 hidspecial HID_SC_ADD_AUTOFMT    { HelpID = HID_SC_ADD_AUTOFMT; };
 hidspecial HID_SC_REN_AFMT_NAME  { HelpID = HID_SC_REN_AFMT_NAME; };
+hidspecial HID_SC_REN_AFMT_DLG   { HelpID = HID_SC_REN_AFMT_DLG; };
 hidspecial HID_SC_RENAME_AUTOFMT { HelpID = HID_SC_RENAME_AUTOFMT; };
 hidspecial HID_PASSWD_TABLE      { HelpID = HID_PASSWD_TABLE; };
 hidspecial HID_PASSWD_DOC        { HelpID = HID_PASSWD_DOC; };

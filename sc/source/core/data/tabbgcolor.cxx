@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: tabbgcolor.hxx,v $
+ * $Revision: 1.00 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -24,16 +27,36 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "segdefs_.hxx"
 
-//****************************************************************
-//
-//und jetzt alle probleme mit ERROR: unknown pragma beseitigen
-//
-//----------------------------------------------------------------
-
-//segmente mit laenge 00000H (map) werden von tcovsegs.exe vergessen
-//jetzt defines nachflicken!
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 
 
 
+// INCLUDE ---------------------------------------------------------------
+
+#include "tabbgcolor.hxx"
+
+bool ScUndoTabColorInfo::IsDefaultOldTabBgColor() const
+{
+    return maOldTabBgColor == Color(COL_AUTO);
+}
+
+bool ScUndoTabColorInfo::IsDefaultNewTabBgColor() const
+{
+    return maOldTabBgColor == Color(COL_AUTO);
+}
+
+ScUndoTabColorInfo::ScUndoTabColorInfo(SCTAB nTab) :
+    mnTabId(nTab),
+    maOldTabBgColor(COL_AUTO),
+    maNewTabBgColor(COL_AUTO)
+{
+}
+
+ScUndoTabColorInfo::ScUndoTabColorInfo(const ScUndoTabColorInfo& r) :
+    mnTabId(r.mnTabId),
+    maOldTabBgColor(r.maOldTabBgColor),
+    maNewTabBgColor(r.maNewTabBgColor)
+{
+}

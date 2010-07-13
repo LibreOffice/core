@@ -35,6 +35,7 @@ class ScDocument;
 class ScMarkArray;
 class ScPatternAttr;
 class ScStyleSheet;
+class ScFlatBoolRowSegments;
 
 class Rectangle;
 class SfxItemPoolCache;
@@ -154,7 +155,7 @@ public:
                                 BOOL bRefresh, BOOL bAttrs );
     BOOL    RemoveAreaMerge( SCROW nStartRow, SCROW nEndRow );
 
-    void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset );
+    void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset );
     BOOL    IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const;
 
     void    DeleteAreaSafe(SCROW nStartRow, SCROW nEndRow);

@@ -56,7 +56,7 @@ namespace chart
 
 ::rtl::OUString ShapeToolbarController::getImplementationName_Static() throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.comp.ShapeToolbarController" ) );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ShapeToolbarController" ) );
 }
 
 Sequence< ::rtl::OUString > ShapeToolbarController::getSupportedServiceNames_Static() throw (uno::RuntimeException)

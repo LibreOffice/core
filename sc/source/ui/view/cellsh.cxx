@@ -42,6 +42,7 @@
 #include <svx/hlnkitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -714,22 +715,22 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 break;
 
             case FID_INS_ROWBRK:
-                if ( nPosY==0 || (pDoc->GetRowFlags(nPosY,nTab) & CR_MANUALBREAK) )
+                if ( nPosY==0 || (pDoc->HasRowBreak(nPosY, nTab) & BREAK_MANUAL) )
                     rSet.DisableItem( nWhich );
                 break;
 
             case FID_INS_COLBRK:
-                if ( nPosX==0 || (pDoc->GetColFlags(nPosX,nTab) & CR_MANUALBREAK) )
+                if ( nPosX==0 || (pDoc->HasColBreak(nPosX, nTab) & BREAK_MANUAL) )
                     rSet.DisableItem( nWhich );
                 break;
 
             case FID_DEL_ROWBRK:
-                if ( nPosY==0 || (pDoc->GetRowFlags(nPosY,nTab) & CR_MANUALBREAK)==0 )
+                if ( nPosY==0 || (pDoc->HasRowBreak(nPosY, nTab) & BREAK_MANUAL) == 0 )
                     rSet.DisableItem( nWhich );
                 break;
 
             case FID_DEL_COLBRK:
-                if ( nPosX==0 || (pDoc->GetColFlags(nPosX,nTab) & CR_MANUALBREAK)==0 )
+                if ( nPosX==0 || (pDoc->HasColBreak(nPosX, nTab) & BREAK_MANUAL) == 0 )
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -966,6 +967,29 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     if ( pDocSh && pDocSh->IsDocShared() )
                     {
                         rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
+            case SID_SPELL_DIALOG:
+                {
+                    if ( pDoc && pData && pDoc->IsTabProtected( pData->GetTabNo() ) )
+                    {
+                        bool bVisible = false;
+                        SfxViewFrame* pViewFrame = ( pTabViewShell ? pTabViewShell->GetViewFrame() : NULL );
+                        if ( pViewFrame && pViewFrame->HasChildWindow( nWhich ) )
+                        {
+                            SfxChildWindow* pChild = pViewFrame->GetChildWindow( nWhich );
+                            Window* pWin = ( pChild ? pChild->GetWindow() : NULL );
+                            if ( pWin && pWin->IsVisible() )
+                            {
+                                bVisible = true;
+                            }
+                        }
+                        if ( !bVisible )
+                        {
+                            rSet.DisableItem( nWhich );
+                        }
                     }
                 }
                 break;

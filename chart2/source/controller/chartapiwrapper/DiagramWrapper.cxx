@@ -59,6 +59,7 @@
 #include "DisposeHelper.hxx"
 #include <comphelper/InlineContainer.hxx>
 #include "WrappedAutomaticPositionProperties.hxx"
+#include "CommonConverters.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -737,49 +738,23 @@ Reference<
 awt::Point SAL_CALL DiagramWrapper::getPosition()
     throw (uno::RuntimeException)
 {
-    awt::Point aPosition;
-
-    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
-    if( xProp.is() )
-    {
-        bool bSet = false;
-        chart2::RelativePosition aRelativePosition;
-        uno::Any aAPosition( xProp->getPropertyValue( C2U( "RelativePosition" ) ) );
-        if( aAPosition >>= aRelativePosition  )
-        {
-            awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
-            aPosition.X = static_cast<sal_Int32>(aRelativePosition.Primary*aPageSize.Width);
-            aPosition.Y = static_cast<sal_Int32>(aRelativePosition.Secondary*aPageSize.Height);
-
-            aPosition = RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
-                aPosition, DiagramWrapper::getSize(), aRelativePosition.Anchor );
-
-            bSet = true;
-        }
-        if(!bSet)
-            aPosition =  m_spChart2ModelContact->GetDiagramPositionInclusive();
-    }
-
+    awt::Point aPosition = ToPoint( m_spChart2ModelContact->GetDiagramRectangleIncludingAxes() );
     return aPosition;
 }
 
 void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
     throw (uno::RuntimeException)
 {
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
     if( xProp.is() )
     {
-        if( aPosition.X < 0 || aPosition.Y < 0 )
+        if( aPosition.X < 0 || aPosition.Y < 0 || aPosition.X > 1 || aPosition.Y > 1 )
         {
-            if( !TitleHelper::getTitle( TitleHelper::X_AXIS_TITLE, m_spChart2ModelContact->getChartModel() ).is() &&
-                !TitleHelper::getTitle( TitleHelper::Y_AXIS_TITLE, m_spChart2ModelContact->getChartModel() ).is() )
-            {
-                DBG_ERROR("DiagramWrapper::setPosition called with negative position -> automatic values are taken instead" );
-                uno::Any aEmpty;
-                xProp->setPropertyValue( C2U( "RelativePosition" ), aEmpty );
-                return;
-            }
-            //else: The saved didagram size does include the axis title sizes thus the position and size could be negative
+            DBG_ERROR("DiagramWrapper::setPosition called with a position out of range -> automatic values are taken instead" );
+            uno::Any aEmpty;
+            xProp->setPropertyValue( C2U( "RelativePosition" ), aEmpty );
+            return;
         }
 
         awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
@@ -789,31 +764,14 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
         aRelativePosition.Primary = double(aPosition.X)/double(aPageSize.Width);
         aRelativePosition.Secondary = double(aPosition.Y)/double(aPageSize.Height);
         xProp->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aRelativePosition) );
+        xProp->setPropertyValue( C2U( "PosSizeExcludeAxes" ), uno::makeAny(false) );
     }
 }
 
 awt::Size SAL_CALL DiagramWrapper::getSize()
     throw (uno::RuntimeException)
 {
-    awt::Size aSize;
-
-    Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
-    if( xProp.is() )
-    {
-        bool bSet = false;
-        chart2::RelativeSize aRelativeSize;
-        uno::Any aASize( xProp->getPropertyValue( C2U( "RelativeSize" ) ) );
-        if(aASize>>=aRelativeSize)
-        {
-            awt::Size aPageSize( m_spChart2ModelContact->GetPageSize() );
-            aSize.Width = static_cast<sal_Int32>(aRelativeSize.Primary*aPageSize.Width);
-            aSize.Height = static_cast<sal_Int32>(aRelativeSize.Secondary*aPageSize.Height);
-            bSet = true;
-        }
-        if(!bSet)
-            aSize = m_spChart2ModelContact->GetDiagramSizeInclusive();
-    }
-
+    awt::Size aSize = ToSize( m_spChart2ModelContact->GetDiagramRectangleIncludingAxes() );
     return aSize;
 }
 
@@ -821,6 +779,7 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
     throw (beans::PropertyVetoException,
            uno::RuntimeException)
 {
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
     if( xProp.is() )
     {
@@ -832,18 +791,14 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 
         if( aRelativeSize.Primary > 1 || aRelativeSize.Secondary > 1 )
         {
-            if( !TitleHelper::getTitle( TitleHelper::X_AXIS_TITLE, m_spChart2ModelContact->getChartModel() ).is() &&
-                !TitleHelper::getTitle( TitleHelper::Y_AXIS_TITLE, m_spChart2ModelContact->getChartModel() ).is() )
-            {
-                DBG_ERROR("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
-                uno::Any aEmpty;
-                xProp->setPropertyValue( C2U( "RelativeSize" ), aEmpty );
-                return;
-            }
-            //else: The saved didagram size does include the axis title sizes thus the position and size could be out of range
+            DBG_ERROR("DiagramWrapper::setSize called with sizes bigger than page -> automatic values are taken instead" );
+            uno::Any aEmpty;
+            xProp->setPropertyValue( C2U( "RelativeSize" ), aEmpty );
+            return;
         }
 
         xProp->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aRelativeSize) );
+        xProp->setPropertyValue( C2U( "PosSizeExcludeAxes" ), uno::makeAny(false) );
     }
 }
 
@@ -852,6 +807,81 @@ OUString SAL_CALL DiagramWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
     return C2U( "com.sun.star.chart.Diagram" );
+}
+
+// ____ XDiagramPositioning ____
+
+void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning() throw (uno::RuntimeException)
+{
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
+    if( xDiaProps.is() )
+    {
+        xDiaProps->setPropertyValue( C2U( "RelativeSize" ), Any() );
+        xDiaProps->setPropertyValue( C2U( "RelativePosition" ), Any() );
+    }
+}
+::sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  ) throw (uno::RuntimeException)
+{
+    uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
+    if( xDiaProps.is() )
+    {
+        Any aRelativeSize( xDiaProps->getPropertyValue( C2U( "RelativeSize" ) ) );
+        Any aRelativePosition( xDiaProps->getPropertyValue( C2U( "RelativePosition" ) ) );
+        if( aRelativeSize.hasValue() && aRelativePosition.hasValue() )
+            return false;
+    }
+    return true;
+}
+void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
+{
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
+    uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
+    if( xDiaProps.is() )
+        xDiaProps->setPropertyValue(C2U("PosSizeExcludeAxes"), uno::makeAny(true) );
+}
+::sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning() throw (uno::RuntimeException)
+{
+    uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
+    if( xDiaProps.is() )
+    {
+        Any aRelativeSize( xDiaProps->getPropertyValue( C2U( "RelativeSize" ) ) );
+        Any aRelativePosition( xDiaProps->getPropertyValue( C2U( "RelativePosition" ) ) );
+        if( aRelativeSize.hasValue() && aRelativePosition.hasValue() )
+        {
+            sal_Bool bPosSizeExcludeAxes = false;
+            xDiaProps->getPropertyValue( C2U( "PosSizeExcludeAxes" ) ) >>= bPosSizeExcludeAxes;
+            return bPosSizeExcludeAxes;
+        }
+    }
+    return false;
+}
+awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionExcludingAxes(  ) throw (uno::RuntimeException)
+{
+    return m_spChart2ModelContact->GetDiagramRectangleExcludingAxes();
+}
+void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
+{
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
+    uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
+    if( xDiaProps.is() )
+        xDiaProps->setPropertyValue(C2U("PosSizeExcludeAxes"), uno::makeAny(false) );
+}
+awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  ) throw (uno::RuntimeException)
+{
+    return m_spChart2ModelContact->GetDiagramRectangleIncludingAxes();
+}
+void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException)
+{
+    ControllerLockGuard aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
+    awt::Rectangle aRect( m_spChart2ModelContact->SubstractAxisTitleSizes(rPositionRect) );
+    DiagramWrapper::setDiagramPositionIncludingAxes( aRect );
+}
+::com::sun::star::awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxesAndAxisTitles(  ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return m_spChart2ModelContact->GetDiagramRectangleIncludingTitle();
 }
 
 // ____ XAxisZSupplier ____
@@ -1221,7 +1251,13 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
 {
     ::com::sun::star::chart::ChartDataRowSource eChartDataRowSource = ::com::sun::star::chart::ChartDataRowSource_ROWS;
     if( ! (rOuterValue >>= eChartDataRowSource) )
-        throw lang::IllegalArgumentException( C2U("Property DataRowSource requires ::com::sun::star::chart::ChartDataRowSource value"), 0, 0 );
+    {
+        sal_Int32 nNew = ::com::sun::star::chart::ChartDataRowSource_ROWS;
+        if( !(rOuterValue >>= nNew) )
+            throw lang::IllegalArgumentException( C2U("Property DataRowSource requires ::com::sun::star::chart::ChartDataRowSource value"), 0, 0 );
+        else
+            eChartDataRowSource = ::com::sun::star::chart::ChartDataRowSource(nNew);
+    }
 
     m_aOuterValue = rOuterValue;
 

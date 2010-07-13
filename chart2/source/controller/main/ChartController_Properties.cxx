@@ -676,7 +676,7 @@ rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand
 
 void SAL_CALL ChartController::executeDispatch_FormatObject(const ::rtl::OUString& rDispatchCommand)
 {
-    uno::Reference< XChartDocument > xChartDocument( m_aModel->getModel(), uno::UNO_QUERY );
+    uno::Reference< XChartDocument > xChartDocument( getModel(), uno::UNO_QUERY );
     rtl::OString aCommand( rtl::OUStringToOString( rDispatchCommand, RTL_TEXTENCODING_ASCII_US ) );
     rtl::OUString rObjectCID = lcl_getObjectCIDForCommand( aCommand, xChartDocument, m_aSelection.getSelectedCID() );
     executeDlg_ObjectProperties( rObjectCID );
@@ -720,7 +720,7 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
     UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::FORMAT,
                 ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aObjectCID ))),
-            m_xUndoManager, m_aModel->getModel() );
+            m_xUndoManager, getModel() );
 
     bool bSuccess = ChartController::executeDlg_ObjectProperties_withoutUndoGuard( aObjectCID, false );
     if( bSuccess )
@@ -738,7 +738,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
     }
     try
     {
-        NumberFormatterWrapper aNumberFormatterWrapper( uno::Reference< util::XNumberFormatsSupplier >(m_aModel->getModel(), uno::UNO_QUERY) );
+        NumberFormatterWrapper aNumberFormatterWrapper( uno::Reference< util::XNumberFormatsSupplier >(getModel(), uno::UNO_QUERY) );
 
         //-------------------------------------------------------------
         //get type of object
@@ -750,19 +750,19 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
         }
         if( OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType )
         {
-            if( !DiagramHelper::isSupportingFloorAndWall( ChartModelHelper::findDiagram( m_aModel->getModel() ) ) )
+            if( !DiagramHelper::isSupportingFloorAndWall( ChartModelHelper::findDiagram( getModel() ) ) )
                 return bRet;
         }
 
         //-------------------------------------------------------------
         //convert properties to ItemSet
 
-        awt::Size aPageSize( ChartModelHelper::getPageSize(m_aModel->getModel()) );
+        awt::Size aPageSize( ChartModelHelper::getPageSize(getModel()) );
 
         ::std::auto_ptr< ReferenceSizeProvider > pRefSizeProv(
             impl_createReferenceSizeProvider());
         ::std::auto_ptr< ::comphelper::ItemConverter > apItemConverter(
-            createItemConverter( rObjectCID, m_aModel->getModel(), m_xCC,
+            createItemConverter( rObjectCID, getModel(), m_xCC,
                                  m_pDrawModelWrapper->getSdrModel(),
                                  &aNumberFormatterWrapper,
                                  ExplicitValueProvider::getExplicitValueProvider(m_xChartView),
@@ -776,24 +776,24 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
         //-------------------------------------------------------------
         //prepare dialog
         ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter( rObjectCID );
-        aDialogParameter.init( m_aModel->getModel() );
+        aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get() );
 
         ::vos::OGuard aGuard( Application::GetSolarMutex());
         SchAttribTabDlg aDlg( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider
-            , uno::Reference< util::XNumberFormatsSupplier >( m_aModel->getModel(), uno::UNO_QUERY ) );
+            , uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ) );
 
         if(aDialogParameter.HasSymbolProperties())
         {
             SfxItemSet* pSymbolShapeProperties=NULL;
             uno::Reference< beans::XPropertySet > xObjectProperties =
-                ObjectIdentifier::getObjectPropertySet( rObjectCID, m_aModel->getModel() );
-            wrapper::DataPointItemConverter aSymbolItemConverter( m_aModel->getModel(), m_xCC
-                                        , xObjectProperties, ObjectIdentifier::getDataSeriesForCID( rObjectCID, m_aModel->getModel() )
+                ObjectIdentifier::getObjectPropertySet( rObjectCID, getModel() );
+            wrapper::DataPointItemConverter aSymbolItemConverter( getModel(), m_xCC
+                                        , xObjectProperties, ObjectIdentifier::getDataSeriesForCID( rObjectCID, getModel() )
                                         , m_pDrawModelWrapper->getSdrModel().GetItemPool()
                                         , m_pDrawModelWrapper->getSdrModel()
                                         , &aNumberFormatterWrapper
-                                        , uno::Reference< lang::XMultiServiceFactory >( m_aModel->getModel(), uno::UNO_QUERY )
+                                        , uno::Reference< lang::XMultiServiceFactory >( getModel(), uno::UNO_QUERY )
                                         , wrapper::GraphicPropertyItemConverter::FILLED_DATA_POINT );
 
             pSymbolShapeProperties = new SfxItemSet( aSymbolItemConverter.CreateEmptyItemSet() );
@@ -807,7 +807,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
         if( aDialogParameter.HasStatisticProperties() )
         {
             aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
-                InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( m_aModel->getModel(), m_xChartView, rObjectCID ) );
+                InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, rObjectCID ) );
         }
 
         //-------------------------------------------------------------
@@ -817,7 +817,7 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
             const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
             if(pOutItemSet)
             {
-                ControllerLockGuard aCLGuard( m_aModel->getModel());
+                ControllerLockGuard aCLGuard( getModel());
                 apItemConverter->ApplyItemSet( *pOutItemSet );//model should be changed now
                 bRet = true;
             }
@@ -839,12 +839,12 @@ void SAL_CALL ChartController::executeDispatch_View3D()
         // using assignment for broken gcc 3.3
         UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
             ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_3D_VIEW ))),
-            m_xUndoManager, m_aModel->getModel());
+            m_xUndoManager, getModel());
 
         // /--
         //open dialog
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
-        View3DDialog aDlg( m_pChartWindow, m_aModel->getModel(), m_pDrawModelWrapper->GetColorTable() );
+        View3DDialog aDlg( m_pChartWindow, getModel(), m_pDrawModelWrapper->GetColorTable() );
         if( aDlg.Execute() == RET_OK )
             aUndoGuard.commitAction();
         // \--

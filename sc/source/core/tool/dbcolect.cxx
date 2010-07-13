@@ -155,6 +155,7 @@ ScDBData::ScDBData( const ScDBData& rData ) :
         nQueryField[i]      = rData.nQueryField[i];
         eQueryOp[i]         = rData.eQueryOp[i];
         bQueryByString[i]   = rData.bQueryByString[i];
+        bQueryByDate[i]     = rData.bQueryByDate[i];
         pQueryStr[i]        = new String( *(rData.pQueryStr[i]) );
         nQueryVal[i]        = rData.nQueryVal[i];
         eQueryConnect[i]    = rData.eQueryConnect[i];
@@ -244,6 +245,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         nQueryField[i]      = rData.nQueryField[i];
         eQueryOp[i]         = rData.eQueryOp[i];
         bQueryByString[i]   = rData.bQueryByString[i];
+        bQueryByDate[i]     = rData.bQueryByDate[i];
         *pQueryStr[i]       = *rData.pQueryStr[i];
         nQueryVal[i]        = rData.nQueryVal[i];
         eQueryConnect[i]    = rData.eQueryConnect[i];
@@ -512,6 +514,7 @@ void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
         rEntry.nField = nQueryField[i];
         rEntry.eOp = eQueryOp[i];
         rEntry.bQueryByString = bQueryByString[i];
+        rEntry.bQueryByDate = bQueryByDate[i];
         *rEntry.pStr = *pQueryStr[i];
         rEntry.nVal = nQueryVal[i];
         rEntry.eConnect = eQueryConnect[i];
@@ -543,6 +546,7 @@ void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
         nQueryField[i] = rEntry.nField;
         eQueryOp[i] = rEntry.eOp;
         bQueryByString[i] = rEntry.bQueryByString;
+        bQueryByDate[i] = rEntry.bQueryByDate;
         *pQueryStr[i] = *rEntry.pStr;
         nQueryVal[i] = rEntry.nVal;
         eQueryConnect[i] = rEntry.eConnect;

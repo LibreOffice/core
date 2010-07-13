@@ -52,7 +52,7 @@ public:
 OOO_DLLPUBLIC_CHARTTOOLS    LifeTimeManager( ::com::sun::star::lang::XComponent* pComponent, sal_Bool bLongLastingCallsCancelable = sal_False );
 OOO_DLLPUBLIC_CHARTTOOLS    virtual ~LifeTimeManager();
 
-OOO_DLLPUBLIC_CHARTTOOLS    sal_Bool    impl_isDisposed();
+OOO_DLLPUBLIC_CHARTTOOLS    bool        impl_isDisposed( bool bAssert=true );
 OOO_DLLPUBLIC_CHARTTOOLS    sal_Bool    dispose() throw(::com::sun::star::uno::RuntimeException);
 
 public:
@@ -105,7 +105,7 @@ OOO_DLLPUBLIC_CHARTTOOLS    CloseableLifeTimeManager( ::com::sun::star::util::XC
         , sal_Bool bLongLastingCallsCancelable = sal_False );
 OOO_DLLPUBLIC_CHARTTOOLS    virtual ~CloseableLifeTimeManager();
 
-OOO_DLLPUBLIC_CHARTTOOLS    sal_Bool    impl_isDisposedOrClosed();
+OOO_DLLPUBLIC_CHARTTOOLS    bool        impl_isDisposedOrClosed( bool bAssert=true );
 OOO_DLLPUBLIC_CHARTTOOLS    sal_Bool    g_close_startTryClose(sal_Bool bDeliverOwnership)
                     throw ( ::com::sun::star::uno::Exception );
 OOO_DLLPUBLIC_CHARTTOOLS    sal_Bool    g_close_isNeedToCancelLongLastingCalls( sal_Bool bDeliverOwnership, ::com::sun::star::util::CloseVetoException& ex )

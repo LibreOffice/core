@@ -34,13 +34,18 @@
 #define EXC_CHART2_3DBAR_HAIRLINES_ONLY 1
 
 #include <map>
+#include <tools/gen.hxx>
 #include "fapihelper.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
     namespace lang      { class XMultiServiceFactory; }
+    namespace chart     { class XChartDocument; }
     namespace chart2    { class XChartDocument; }
+    namespace drawing   { class XShape; }
 } } }
+
+class XclRoot;
 
 // Property names =============================================================
 
@@ -72,6 +77,7 @@ namespace com { namespace sun { namespace star {
 
 // property names
 #define EXC_CHPROP_ADDITIONALSHAPES         CREATE_OUSTRING( "AdditionalShapes" )
+#define EXC_CHPROP_ANCHORPOSITION           CREATE_OUSTRING( "AnchorPosition" )
 #define EXC_CHPROP_ARRANGEORDER             CREATE_OUSTRING( "ArrangeOrder" )
 #define EXC_CHPROP_ATTAXISINDEX             CREATE_OUSTRING( "AttachedAxisIndex" )
 #define EXC_CHPROP_ATTRIBDATAPOINTS         CREATE_OUSTRING( "AttributedDataPoints" )
@@ -94,10 +100,12 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_ERRORBARSTYLE            CREATE_OUSTRING( "ErrorBarStyle" )
 #define EXC_CHPROP_ERRORBARX                CREATE_OUSTRING( "ErrorBarX" )
 #define EXC_CHPROP_ERRORBARY                CREATE_OUSTRING( "ErrorBarY" )
+#define EXC_CHPROP_EXPANSION                CREATE_OUSTRING( "Expansion" )
 #define EXC_CHPROP_FILLBITMAPMODE           CREATE_OUSTRING( "FillBitmapMode" )
 #define EXC_CHPROP_FILLSTYLE                CREATE_OUSTRING( "FillStyle" )
 #define EXC_CHPROP_GAPWIDTHSEQ              CREATE_OUSTRING( "GapwidthSequence" )
 #define EXC_CHPROP_GEOMETRY3D               CREATE_OUSTRING( "Geometry3D" )
+#define EXC_CHPROP_HASMAINTITLE             CREATE_OUSTRING( "HasMainTitle" )
 #define EXC_CHPROP_INCLUDEHIDDENCELLS       CREATE_OUSTRING( "IncludeHiddenCells" )
 #define EXC_CHPROP_JAPANESE                 CREATE_OUSTRING( "Japanese" )
 #define EXC_CHPROP_LABEL                    CREATE_OUSTRING( "Label" )
@@ -116,6 +124,7 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_PERCENTDIAGONAL          CREATE_OUSTRING( "PercentDiagonal" )
 #define EXC_CHPROP_PERSPECTIVE              CREATE_OUSTRING( "Perspective" )
 #define EXC_CHPROP_POSITIVEERROR            CREATE_OUSTRING( "PositiveError" )
+#define EXC_CHPROP_RELATIVEPOSITION         CREATE_OUSTRING( "RelativePosition" )
 #define EXC_CHPROP_RIGHTANGLEDAXES          CREATE_OUSTRING( "RightAngledAxes" )
 #define EXC_CHPROP_ROLE                     CREATE_OUSTRING( "Role" )
 #define EXC_CHPROP_ROTATIONHORIZONTAL       CREATE_OUSTRING( "RotationHorizontal" )
@@ -169,7 +178,8 @@ const sal_Int32 EXC_CHART_AXESSET_NONE          = -1;       /// For internal use
 const sal_Int32 EXC_CHART_AXESSET_PRIMARY       = 0;        /// API primary axes set index.
 const sal_Int32 EXC_CHART_AXESSET_SECONDARY     = 1;        /// API secondary axes set index.
 
-const sal_Int32 EXC_CHART_UNIT                  = 4000;     /// Chart objects are positioned in 1/4000 of chart area.
+const sal_Int32 EXC_CHART_TOTALUNITS            = 4000;     /// Most chart objects are positioned in 1/4000 of chart area.
+const sal_Int32 EXC_CHART_PLOTAREAUNITS         = 1000;     /// For objects that are positioned in 1/1000 of plot area.
 
 // (0x0850) CHFRINFO ----------------------------------------------------------
 
@@ -604,7 +614,8 @@ const sal_uInt16 EXC_ID_CHPROPERTIES            = 0x1044;
 const sal_uInt16 EXC_CHPROPS_MANSERIES          = 0x0001;   /// Manual series allocation.
 const sal_uInt16 EXC_CHPROPS_SHOWVISIBLEONLY    = 0x0002;   /// Show visible cells only.
 const sal_uInt16 EXC_CHPROPS_NORESIZE           = 0x0004;   /// Do not resize chart with window.
-const sal_uInt16 EXC_CHPROPS_MANPLOTAREA        = 0x0008;   /// Plot area with CHFRAMEPOS records.
+const sal_uInt16 EXC_CHPROPS_MANPLOTAREA        = 0x0008;   /// Manual plot area mode.
+const sal_uInt16 EXC_CHPROPS_USEMANPLOTAREA     = 0x0010;   /// Manual plot area layout in CHFRAMEPOS record.
 
 const sal_uInt8 EXC_CHPROPS_EMPTY_SKIP          = 0;        /// Skip empty values.
 const sal_uInt8 EXC_CHPROPS_EMPTY_ZERO          = 1;        /// Plot empty values as zero.
@@ -643,11 +654,11 @@ const sal_uInt16 EXC_ID_CHFORMAT                = 0x104E;
 
 const sal_uInt16 EXC_ID_CHFRAMEPOS              = 0x104F;
 
-const sal_uInt16 EXC_CHFRAMEPOS_ANY             = 2;
-const sal_uInt16 EXC_CHFRAMEPOS_LEGEND          = 5;
-
-const sal_uInt16 EXC_CHFRAMEPOS_MANUALSIZE      = 1;
-const sal_uInt16 EXC_CHFRAMEPOS_AUTOSIZE        = 2;
+const sal_uInt16 EXC_CHFRAMEPOS_POINTS          = 0;
+const sal_uInt16 EXC_CHFRAMEPOS_ABSSIZE_POINTS  = 1;
+const sal_uInt16 EXC_CHFRAMEPOS_PARENT          = 2;
+const sal_uInt16 EXC_CHFRAMEPOS_DEFOFFSET_PLOT  = 3;
+const sal_uInt16 EXC_CHFRAMEPOS_CHARTSIZE       = 5;
 
 // (0x1050) CHFORMATRUNS ------------------------------------------------------
 
@@ -774,8 +785,8 @@ struct XclChFrBlock
 struct XclChFramePos
 {
     XclChRectangle      maRect;             /// Object dependent position data.
-    sal_uInt16          mnObjType;          /// Object type.
-    sal_uInt16          mnSizeMode;         /// Size mode (manual, automatic).
+    sal_uInt16          mnTLMode;           /// Top-left position mode.
+    sal_uInt16          mnBRMode;           /// Bottom-right position mode.
 
     explicit            XclChFramePos();
 };
@@ -885,7 +896,7 @@ struct XclChText
     sal_uInt8           mnVAlign;           /// Vertical alignment.
     sal_uInt16          mnBackMode;         /// Background mode: transparent, opaque.
     sal_uInt16          mnFlags;            /// Additional flags.
-    sal_uInt16          mnPlacement;        /// Text object placement (BIFF8+).
+    sal_uInt16          mnFlags2;           /// Text object placement and text direction (BIFF8+).
     sal_uInt16          mnRotation;         /// Text object rotation (BIFF8+).
 
     explicit            XclChText();
@@ -1013,7 +1024,6 @@ struct XclChLegend
 
 struct XclChTypeGroup
 {
-    XclChRectangle      maRect;             /// Position (not used).
     sal_uInt16          mnFlags;            /// Additional flags.
     sal_uInt16          mnGroupIdx;         /// Chart type group index.
 
@@ -1060,7 +1070,6 @@ struct XclChValueRange
 
 struct XclChTick
 {
-    XclChRectangle      maRect;             /// Position (not used).
     Color               maTextColor;        /// Tick labels color.
     sal_uInt8           mnMajor;            /// Type of tick marks of major grid.
     sal_uInt8           mnMinor;            /// Type of tick marks of minor grid.
@@ -1076,7 +1085,6 @@ struct XclChTick
 
 struct XclChAxis
 {
-    XclChRectangle      maRect;             /// Position (not used).
     sal_uInt16          mnType;             /// Axis type.
 
     explicit            XclChAxis();
@@ -1089,7 +1097,7 @@ struct XclChAxis
 
 struct XclChAxesSet
 {
-    XclChRectangle      maRect;             /// Position of the axes set.
+    XclChRectangle      maRect;             /// Position of the axes set (inner plot area).
     sal_uInt16          mnAxesSetId;        /// Primary/secondary axes set.
 
     explicit            XclChAxesSet();
@@ -1156,16 +1164,6 @@ enum XclChFrameType
 {
      EXC_CHFRAMETYPE_AUTO,          /// Missing frame represents automatic formatting.
      EXC_CHFRAMETYPE_INVISIBLE      /// Missing frame represents invisible formatting.
-};
-
-/** Enumerates different text box types for default text formatting. */
-enum XclChTextType
-{
-    EXC_CHTEXTTYPE_TITLE,           /// Chart title.
-    EXC_CHTEXTTYPE_LEGEND,          /// Chart legend.
-    EXC_CHTEXTTYPE_AXISTITLE,       /// Chart axis titles.
-    EXC_CHTEXTTYPE_AXISLABEL,       /// Chart axis labels.
-    EXC_CHTEXTTYPE_DATALABEL        /// Data point labels.
 };
 
 /** Contains information about auto formatting of a specific chart object type. */
@@ -1298,6 +1296,30 @@ private:
     XclChTypeInfoMap    maInfoMap;          /// Maps chart types to type info data.
 };
 
+// Chart text and title object helpers ========================================
+
+/** Enumerates different text box types for default text formatting and title
+    positioning. */
+enum XclChTextType
+{
+    EXC_CHTEXTTYPE_TITLE,           /// Chart title.
+    EXC_CHTEXTTYPE_LEGEND,          /// Chart legend.
+    EXC_CHTEXTTYPE_AXISTITLE,       /// Chart axis titles.
+    EXC_CHTEXTTYPE_AXISLABEL,       /// Chart axis labels.
+    EXC_CHTEXTTYPE_DATALABEL        /// Data point labels.
+};
+
+/** A map key for text and title objects. */
+struct XclChTextKey : public ::std::pair< XclChTextType, ::std::pair< sal_uInt16, sal_uInt16 > >
+{
+    inline explicit     XclChTextKey( XclChTextType eTextType, sal_uInt16 nMainIdx = 0, sal_uInt16 nSubIdx = 0 )
+                            { first = eTextType; second.first = nMainIdx; second.second = nSubIdx; }
+};
+
+/** Function prototype receiving a chart document and returning a title shape. */
+typedef ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+    (*XclChGetShapeFunc)( const ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument >& );
+
 // Property helpers ===========================================================
 
 class XclChObjectTable
@@ -1363,10 +1385,6 @@ public:
     sal_uInt16          ReadRotationProperties(
                             const ScfPropertySet& rPropSet,
                             bool bSupportsStacked );
-    /** Reads all legend properties from the passed property set. */
-    void                ReadLegendProperties(
-                            XclChLegend& rLegend,
-                            const ScfPropertySet& rPropSet );
 
     /** Writes all line properties to the passed property set. */
     void                WriteLineProperties(
@@ -1397,10 +1415,6 @@ public:
                             ScfPropertySet& rPropSet,
                             sal_uInt16 nRotation,
                             bool bSupportsStacked );
-    /** Writes all legend properties to the passed property set. */
-    void                WriteLegendProperties(
-                            ScfPropertySet& rPropSet,
-                            const XclChLegend& rLegend );
 
 private:
     /** Returns a line property set helper according to the passed property mode. */
@@ -1423,51 +1437,47 @@ private:
     ScfPropSetHelper    maHatchHlpCommon;   /// Properties for hatches in common objects.
     ScfPropSetHelper    maHatchHlpFilled;   /// Properties for hatches in filled series.
     ScfPropSetHelper    maBitmapHlp;        /// Properties for bitmaps.
-    ScfPropSetHelper    maLegendHlp;        /// Properties for legend.
 };
 
 // ============================================================================
 
 /** Base struct for internal root data structs for import and export. */
-class XclChRootData
+struct XclChRootData
 {
-public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
+    typedef ScfRef< XclChTypeInfoProvider >                 XclChTypeProvRef;
+    typedef ScfRef< XclChFormatInfoProvider >               XclChFmtInfoProvRef;
+    typedef ScfRef< XclChObjectTable >                      XclChObjectTableRef;
+    typedef ::std::map< XclChTextKey, XclChGetShapeFunc >   XclChGetShapeFuncMap;
 
-public:
-    explicit            XclChRootData();
-    virtual             ~XclChRootData();
-
-    /** Returns the API reference of the chart document. */
-    XChartDocRef        GetChartDoc() const;
-
-    /** Returns the chart type info provider, that contains data about all chart types. */
-    inline XclChTypeInfoProvider& GetTypeInfoProvider() const { return *mxTypeInfoProv; }
-    /** Returns the chart type info provider, that contains data about all chart types. */
-    inline XclChFormatInfoProvider& GetFormatInfoProvider() const { return *mxFmtInfoProv; }
-
-    inline XclChObjectTable& GetLineDashTable() const { return *mxLineDashTable; }
-    inline XclChObjectTable& GetGradientTable() const { return *mxGradientTable; }
-    inline XclChObjectTable& GetHatchTable() const { return *mxHatchTable; }
-    inline XclChObjectTable& GetBitmapTable() const { return *mxBitmapTable; }
-
-    /** Starts the API chart document conversion. Must be called once before any API access. */
-    void                InitConversion( XChartDocRef xChartDoc );
-    /** Finishes the API chart document conversion. Must be called once before any API access. */
-    void                FinishConversion();
-
-private:
-    typedef ScfRef< XclChTypeInfoProvider >     XclChTypeProvRef;
-    typedef ScfRef< XclChFormatInfoProvider >   XclChFmtInfoProvRef;
-    typedef ScfRef< XclChObjectTable >          XclChObjectTableRef;
-
-    XChartDocRef        mxChartDoc;             /// The chart document.
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
+                        mxChartDoc;             /// The chart document.
+    Rectangle           maChartRect;            /// Position and size of the chart shape.
     XclChTypeProvRef    mxTypeInfoProv;         /// Provides info about chart types.
     XclChFmtInfoProvRef mxFmtInfoProv;          /// Provides info about auto formatting.
     XclChObjectTableRef mxLineDashTable;        /// Container for line dash styles.
     XclChObjectTableRef mxGradientTable;        /// Container for gradient fill styles.
     XclChObjectTableRef mxHatchTable;           /// Container for hatch fill styles.
     XclChObjectTableRef mxBitmapTable;          /// Container for bitmap fill styles.
+    XclChGetShapeFuncMap maGetShapeFuncs;       /// Maps title shape getter functions.
+    sal_Int32           mnBorderGapX;           /// Border gap to chart space in 1/100mm.
+    sal_Int32           mnBorderGapY;           /// Border gap to chart space in 1/100mm.
+    double              mfUnitSizeX;            /// Size of a chart X unit (1/4000 of chart width) in 1/100 mm.
+    double              mfUnitSizeY;            /// Size of a chart Y unit (1/4000 of chart height) in 1/100 mm.
+
+    explicit            XclChRootData();
+    virtual             ~XclChRootData();
+
+    /** Starts the API chart document conversion. Must be called once before any API access. */
+    void                InitConversion(
+                            const XclRoot& rRoot,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >& rxChartDoc,
+                            const Rectangle& rChartRect );
+    /** Finishes the API chart document conversion. Must be called once before any API access. */
+    void                FinishConversion();
+
+    /** Returns the drawing shape interface of the specified title object. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        GetTitleShape( const XclChTextKey& rTitleKey ) const;
 };
 
 // ============================================================================

@@ -93,6 +93,7 @@
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"
+#include <basic/basmgr.hxx>
 
 // pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
 // dtor plus helpers are convenient.
@@ -187,11 +188,11 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 //      bNoSetDirty( TRUE ),
         bNoSetDirty( FALSE ),
         bInsertingFromOtherDoc( FALSE ),
-        bImportingXML( FALSE ),
+        bLoadingMedium( false ),
+        bImportingXML( false ),
         bXMLFromWrapper( FALSE ),
         bCalcingAfterLoad( FALSE ),
         bNoListening( FALSE ),
-        bLoadingDone( TRUE ),
         bIdleDisabled( FALSE ),
         bInLinkUpdate( FALSE ),
         bChartListenerCollectionNeedsUpdate( FALSE ),
@@ -803,10 +804,6 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 if (pDrawLayer)
                     DrawMovePage( static_cast<sal_uInt16>(nOldPos), static_cast<sal_uInt16>(nNewPos) );
 
-                // Update cells containing external references.
-                if (pExternalRefMgr.get())
-                    pExternalRefMgr->updateRefMoveTable(nOldPos, nNewPos, false);
-
                 bValid = TRUE;
             }
         }
@@ -900,6 +897,8 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         SetNoListening( TRUE );     // noch nicht bei CopyToTable/Insert
         pTab[nOldPos]->CopyToTable(0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
                                         pTab[nNewPos], pOnlyMarked );
+        pTab[nNewPos]->SetTabBgColor(pTab[nOldPos]->GetTabBgColor());
+
         SCsTAB nDz;
 /*      if (nNewPos < nOldPos)
             nDz = ((short)nNewPos) - (short)nOldPos + 1;
@@ -924,15 +923,13 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
         pTab[nNewPos]->SetPageStyle( pTab[nOldPos]->GetPageStyle() );
         pTab[nNewPos]->SetPendingRowHeights( pTab[nOldPos]->IsPendingRowHeights() );
-
-        // Update cells containing external references.
-        if (pExternalRefMgr.get())
-            pExternalRefMgr->updateRefMoveTable(nOldPos, nNewPos, true);
     }
     else
         SetAutoCalc( bOldAutoCalc );
     return bValid;
 }
+
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sModuleSource );
 
 ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                 SCTAB nDestPos, BOOL bInsertNew,
@@ -1104,6 +1101,43 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     }
     if (!bValid)
         nRetVal = 0;
+    BOOL bVbaEnabled = IsInVBAMode();
+
+    if ( bVbaEnabled  )
+    {
+        SfxObjectShell* pSrcShell = pSrcDoc ? pSrcDoc->GetDocumentShell() : NULL;
+        if ( pSrcShell )
+        {
+            StarBASIC* pStarBASIC = pSrcShell ? pSrcShell->GetBasic() : NULL;
+            String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+            if ( pSrcShell && pSrcShell->GetBasicManager()->GetName().Len() > 0 )
+            {
+                aLibName = pSrcShell->GetBasicManager()->GetName();
+                pStarBASIC = pSrcShell->GetBasicManager()->GetLib( aLibName );
+            }
+
+            String sCodeName;
+            String sSource;
+            com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = pSrcShell->GetBasicContainer();
+            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
+            if( xLibContainer.is() )
+            {
+                com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                aLibAny >>= xLib;
+            }
+
+            if( xLib.is() )
+            {
+                String sSrcCodeName;
+                pSrcDoc->GetCodeName( nSrcPos, sSrcCodeName );
+                rtl::OUString sRTLSource;
+                xLib->getByName( sSrcCodeName ) >>= sRTLSource;
+                sSource = sRTLSource;
+            }
+            VBA_InsertModule( *this, nDestPos, sCodeName, sSource );
+        }
+    }
+
     return nRetVal;
 }
 

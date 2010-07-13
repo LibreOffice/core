@@ -28,8 +28,6 @@
 #ifndef SC_INTERPRE_HXX
 #define SC_INTERPRE_HXX
 
-#define SC_SPEW_ENABLED 0
-
 #include <math.h>
 #include <rtl/math.hxx>
 #include "formula/errorcodes.hxx"
@@ -37,10 +35,6 @@
 #include "scdll.hxx"
 #include "document.hxx"
 #include "scmatrix.hxx"
-
-#if SC_SPEW_ENABLED
-#include "scspew.hxx"
-#endif
 
 #include <math.h>
 #include <map>
@@ -126,9 +120,6 @@ class ScInterpreter
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
-#if SC_SPEW_ENABLED
-    static ScSpew theSpew;
-#endif
 
     static void GlobalExit();           // aus ScGlobal::Clear() gerufen
 
@@ -171,6 +162,7 @@ private:
     short       nFuncFmtType;           // NumberFormatType of a function
     short       nCurFmtType;            // current NumberFormatType
     short       nRetFmtType;            // NumberFormatType of an expression
+    USHORT      mnStringNoValueError;   // the error set in ConvertStringToValue() if no value
     BOOL        glSubTotal;             // flag for subtotal functions
     BYTE        cPar;                   // current count of parameters
     BOOL        bCalcAsShown;           // precision as shown
@@ -539,11 +531,7 @@ void ScExternalRef();
 void ScGetPivotData();
 void ScHyperLink();
 void ScBahtText();
-void ScCalcTeam();
-void ScAnswer();
 void ScTTT();
-void ScSpewFunc();
-void ScGame();
 
 //----------------Funktionen in interpr2.cxx---------------
 

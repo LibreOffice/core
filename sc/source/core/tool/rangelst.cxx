@@ -229,6 +229,11 @@ BOOL ScRangeList::operator==( const ScRangeList& r ) const
     return TRUE;
 }
 
+BOOL ScRangeList::operator!=( const ScRangeList& r ) const
+{
+    return !operator==( r );
+}
+
 BOOL ScRangeList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     ScDocument* pDoc, const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz )

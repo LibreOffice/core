@@ -485,6 +485,11 @@ BOOL ScDocumentLoader::GetFilterName( const String& rFileName,
         pDocSh = SfxObjectShell::GetNext( *pDocSh, &aScType );
     }
 
+    INetURLObject aUrl( rFileName );
+    INetProtocol eProt = aUrl.GetProtocol();
+    if ( eProt == INET_PROT_NOT_VALID )         // invalid URL?
+        return FALSE;                           // abort without creating a medium
+
     //  Filter-Detection
 
     const SfxFilter* pSfxFilter = NULL;

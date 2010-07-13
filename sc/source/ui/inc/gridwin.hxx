@@ -39,6 +39,7 @@
 
 #include <vector>
 #include <memory>
+#include <boost/shared_ptr.hpp>
 
 // ---------------------------------------------------------------------------
 
@@ -111,6 +112,25 @@ private:
     ::sdr::overlay::OverlayObjectList*              mpOODragRect;
     ::sdr::overlay::OverlayObjectList*              mpOOHeader;
     ::sdr::overlay::OverlayObjectList*              mpOOShrink;
+
+    ::boost::shared_ptr<Rectangle> mpAutoFillRect;
+
+    /**
+     * Stores current visible column and row ranges, used to avoid expensive
+     * operations on objects that are outside visible area.
+     */
+    struct VisibleRange
+    {
+        SCCOL mnCol1;
+        SCCOL mnCol2;
+        SCROW mnRow1;
+        SCROW mnRow2;
+
+        VisibleRange();
+
+        bool isInside(SCCOL nCol, SCROW nRow) const;
+    };
+    VisibleRange maVisibleRange;
 
 private:
     ScViewData*             pViewData;
@@ -215,7 +235,7 @@ private:
 
     BOOL            IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void            ExecFilter( ULONG nSel, SCCOL nCol, SCROW nRow,
-                                const String& aValue );
+                                const String& aValue, bool bCheckForDates );
     void            FilterSelect( ULONG nSel );
 
     void            ExecDataSelect( SCCOL nCol, SCROW nRow, const String& rStr );

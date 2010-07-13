@@ -115,7 +115,7 @@ void ScDocOptions::ResetDocOptions()
     bIsIter             = FALSE;
     nIterCount          = 100;
     fIterEps            = 1.0E-3;
-    nPrecStandardFormat = 2;
+    nPrecStandardFormat = SvNumberFormatter::UNLIMITED_PRECISION;
     nDay                = 30;
     nMonth              = 12;
     nYear               = 1899;

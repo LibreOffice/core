@@ -303,7 +303,9 @@ ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > sp
         m_spChart2ModelContact( spChart2ModelContact ),
         m_aEventListenerContainer( m_aMutex )
 {
+    osl_incrementInterlockedCount( &m_refCount );
     initDataAccess();
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -311,8 +313,10 @@ ChartDataWrapper::ChartDataWrapper( ::boost::shared_ptr< Chart2ModelContact > sp
         m_spChart2ModelContact( spChart2ModelContact ),
         m_aEventListenerContainer( m_aMutex )
 {
+    osl_incrementInterlockedCount( &m_refCount );
     lcl_AllOperator aOperator( xNewData );
     applyData( aOperator );
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 ChartDataWrapper::~ChartDataWrapper()
@@ -482,7 +486,8 @@ void ChartDataWrapper::fireChartDataChangeEvent(
         uno::Reference<
             ::com::sun::star::chart::XChartDataChangeEventListener > xListener(
                 aIter.next(), uno::UNO_QUERY );
-        xListener->chartDataChanged( aEvent );
+        if( xListener.is() )
+            xListener->chartDataChanged( aEvent );
     }
 }
 
@@ -547,6 +552,7 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
     if( !bHasCategories && rDataOperator.setsCategories( bUseColumns ) )
         bHasCategories = true;
 
+    aRangeString = C2U("all");
     uno::Sequence< beans::PropertyValue > aArguments( DataSourceHelper::createArguments(
             aRangeString, aSequenceMapping, bUseColumns, bFirstCellAsLabel, bHasCategories ) );
 

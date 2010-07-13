@@ -114,7 +114,10 @@ public:
     ActiveWorkbook( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext) : ScVbaWorkbook(  xParent, xContext ){}
 };
 
-ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ): ScVbaApplication_BASE( xContext ), m_xCalculation( excel::XlCalculation::xlCalculationAutomatic )
+ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
+    ScVbaApplication_BASE( xContext ),
+    m_xCalculation( excel::XlCalculation::xlCalculationAutomatic ),
+    m_xDisplayAlerts( sal_True)
 {
 }
 
@@ -127,15 +130,81 @@ SfxObjectShell* ScVbaApplication::GetDocShell( const uno::Reference< frame::XMod
     return static_cast< SfxObjectShell* >( excel::getDocShell( xModel ) );
 }
 
+::rtl::OUString SAL_CALL
+ScVbaApplication::getExactName( const ::rtl::OUString& aApproximateName ) throw (uno::RuntimeException)
+{
+    uno::Reference< beans::XExactName > xWSF( new ScVbaWSFunction( this, mxContext ) );
+    return xWSF->getExactName( aApproximateName );
+}
+
+uno::Reference< beans::XIntrospectionAccess > SAL_CALL
+ScVbaApplication::getIntrospection() throw(css::uno::RuntimeException)
+{
+    uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
+    return xWSF->getIntrospection();
+}
+
+uno::Any SAL_CALL
+ScVbaApplication::invoke( const ::rtl::OUString& FunctionName, const uno::Sequence< uno::Any >& Params, uno::Sequence< sal_Int16 >& OutParamIndex, uno::Sequence< uno::Any >& OutParam) throw(lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
+{
+    /*  When calling the functions directly at the Application object, no runtime
+        errors are thrown, but the error is inserted into the return value. */
+    uno::Any aAny;
+    try
+    {
+        uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
+        aAny = xWSF->invoke( FunctionName, Params, OutParamIndex, OutParam );
+    }
+    catch( uno::Exception& )
+    {
+        aAny <<= script::BasicErrorException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), 1000, ::rtl::OUString() );
+    }
+    return aAny;
+}
+
+void SAL_CALL
+ScVbaApplication::setValue( const ::rtl::OUString& PropertyName, const uno::Any& Value ) throw(beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
+{
+    uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
+    xWSF->setValue( PropertyName, Value );
+}
+
+uno::Any SAL_CALL
+ScVbaApplication::getValue( const ::rtl::OUString& PropertyName ) throw(beans::UnknownPropertyException, uno::RuntimeException)
+{
+    uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
+    return xWSF->getValue( PropertyName );
+}
+
+sal_Bool SAL_CALL
+ScVbaApplication::hasMethod( const ::rtl::OUString& Name ) throw(uno::RuntimeException)
+{
+    uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
+    return xWSF->hasMethod( Name );
+}
+
+sal_Bool SAL_CALL
+ScVbaApplication::hasProperty( const ::rtl::OUString& Name ) throw(uno::RuntimeException)
+{
+    uno::Reference< script::XInvocation > xWSF( new ScVbaWSFunction( this, mxContext ) );
+    return xWSF->hasProperty( Name );
+}
+
 uno::Reference< excel::XWorkbook >
 ScVbaApplication::getActiveWorkbook() throw (uno::RuntimeException)
 {
     return new ActiveWorkbook( this, mxContext );
 }
+
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaApplication::getThisWorkbook() throw (uno::RuntimeException)
 {
-    return getActiveWorkbook();
+    uno::Reference< frame::XModel > xModel = getThisExcelDoc(mxContext);
+    if( !xModel.is() )
+        return uno::Reference< excel::XWorkbook >();
+
+    ScVbaWorkbook *pWb = new ScVbaWorkbook( this, mxContext, xModel );
+    return uno::Reference< excel::XWorkbook > (pWb);
 }
 
 uno::Reference< XAssistant > SAL_CALL
@@ -184,7 +253,7 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException)
     }
     else
     {
-        throw uno::RuntimeException( sImpementaionName + rtl::OUString::createFromAscii(" donot be surpported"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( sImpementaionName + rtl::OUString::createFromAscii(" not suported"), uno::Reference< uno::XInterface >() );
     }
 }
 
@@ -238,7 +307,7 @@ ScVbaApplication::Worksheets( const uno::Any& aIndex ) throw (uno::RuntimeExcept
 uno::Any SAL_CALL
 ScVbaApplication::WorksheetFunction( ) throw (::com::sun::star::uno::RuntimeException)
 {
-        return uno::makeAny( uno::Reference< script::XInvocation >( new ScVbaWSFunction( this, mxContext) ) );
+    return uno::makeAny( uno::Reference< script::XInvocation >( new ScVbaWSFunction( this, mxContext ) ) );
 }
 
 uno::Any SAL_CALL
@@ -264,7 +333,10 @@ uno::Reference< excel::XWindow > SAL_CALL
 ScVbaApplication::getActiveWindow() throw (uno::RuntimeException)
 {
     // #FIXME sofar can't determine Parent
-    return new ScVbaWindow( uno::Reference< XHelperInterface >(), mxContext, getCurrentDocument() );
+    uno::Reference< frame::XModel > xModel = getCurrentDocument();
+    ScVbaWindow* pWin = new ScVbaWindow( uno::Reference< XHelperInterface >(), mxContext, xModel );
+    uno::Reference< excel::XWindow > xWin( pWin );
+    return xWin;
 }
 
 uno::Any SAL_CALL
@@ -313,23 +385,6 @@ ScVbaApplication::setStatusBar( const uno::Any& _statusbar ) throw (uno::Runtime
     else
         throw uno::RuntimeException( rtl::OUString::createFromAscii( "Invalid prarameter. It should be a string or False" ),
             uno::Reference< uno::XInterface >() );
-}
-
-double SAL_CALL
-ScVbaApplication::CountA( const uno::Any& arg1 ) throw (uno::RuntimeException)
-{
-    double result = 0;
-    uno::Reference< script::XInvocation > xInvoc( WorksheetFunction(), uno::UNO_QUERY_THROW );
-    if  ( xInvoc.is() )
-    {
-        static rtl::OUString FunctionName( RTL_CONSTASCII_USTRINGPARAM("CountA" ) );
-        uno::Sequence< uno::Any > Params(1);
-        Params[0] = arg1;
-        uno::Sequence< sal_Int16 > OutParamIndex;
-        uno::Sequence< uno::Any > OutParam;
-        xInvoc->invoke( FunctionName, Params, OutParamIndex, OutParam ) >>= result;
-    }
-    return result;
 }
 
 ::sal_Int32 SAL_CALL
@@ -476,8 +531,11 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
         ScGridWindow* gridWindow = (ScGridWindow*)pShell->GetWindow();
         try
         {
-            uno::Reference< excel::XRange > xVbaSheetRange = ScVbaRange::getRangeObjectForName( mxContext, sRangeName, excel::getDocShell( xModel ), formula::FormulaGrammar::CONV_XL_R1C1 );
-;
+            // FIXME: pass proper Worksheet parent
+            uno::Reference< excel::XRange > xVbaSheetRange = ScVbaRange::getRangeObjectForName(
+                uno::Reference< XHelperInterface >(), mxContext, sRangeName,
+                excel::getDocShell( xModel ), formula::FormulaGrammar::CONV_XL_R1C1 );
+
             if( bScroll )
             {
                 xVbaSheetRange->Select();
@@ -615,15 +673,21 @@ ScVbaApplication::getName() throw (uno::RuntimeException)
 }
 
 // #TODO #FIXME get/setDisplayAlerts are just stub impl
+// here just the status of the switch is set
+// the function that throws an error message needs to
+// evaluate this switch in order to know whether it has to disable the
+// error message thrown by OpenOffice
+
 void SAL_CALL
-ScVbaApplication::setDisplayAlerts(sal_Bool /*displayAlerts*/) throw (uno::RuntimeException)
+ScVbaApplication::setDisplayAlerts(sal_Bool displayAlerts) throw (uno::RuntimeException)
 {
+    m_xDisplayAlerts = displayAlerts;
 }
 
 sal_Bool SAL_CALL
 ScVbaApplication::getDisplayAlerts() throw (uno::RuntimeException)
 {
-    return sal_True;
+    return m_xDisplayAlerts;
 }
 void SAL_CALL
 ScVbaApplication::Calculate() throw(  script::BasicErrorException , uno::RuntimeException )
@@ -769,46 +833,74 @@ bool lcl_canJoin( ScRange& r1, ScRange& r2 )
 void lcl_strip_containedRanges( Ranges& vRanges )
 {
     // get rid of ranges that are surrounded by other ranges
-    for( Ranges::iterator it = vRanges.begin(); it != vRanges.end(); ++it )
+    Ranges::iterator it_outer = vRanges.begin();
+    while( it_outer != vRanges.end() )
     {
-        for( Ranges::iterator it_inner = vRanges.begin(); it_inner != vRanges.end(); ++it_inner )
+        bool it_outer_erased = false;   // true = it_outer erased from vRanges
+        Ranges::iterator it_inner = vRanges.begin();
+        /*  Exit the inner loop if outer iterator has been erased in its last
+            iteration (this means it has been joined to last it_inner, or that
+            the it_inner contains it completely). The inner loop will restart
+            with next element of the outer loop, and all elements (from the
+            beginning of the list) will be checked against that new element. */
+        while( !it_outer_erased && (it_inner != vRanges.end()) )
         {
-            if ( it != it_inner )
+            bool it_inner_erased = false;   // true = it_inner erased from vRanges
+            if ( it_outer != it_inner )
             {
 #ifdef DEBUG
-            String r1;
-            String r2;
-            it->Format( r1, SCA_VALID ) ;
-            it_inner->Format( r2, SCA_VALID ) ;
-            OSL_TRACE( "try strip/join address %s with %s ",
-                rtl::OUStringToOString( r1, RTL_TEXTENCODING_UTF8 ).getStr(),
-                rtl::OUStringToOString( r2, RTL_TEXTENCODING_UTF8 ).getStr() );
+                String r1;
+                String r2;
+                it_outer->Format( r1, SCA_VALID ) ;
+                it_inner->Format( r2, SCA_VALID ) ;
+                OSL_TRACE( "try strip/join address %s with %s ",
+                    rtl::OUStringToOString( r1, RTL_TEXTENCODING_UTF8 ).getStr(),
+                    rtl::OUStringToOString( r2, RTL_TEXTENCODING_UTF8 ).getStr() );
 #endif
-                if ( it->In( *it_inner ) )
-                    it_inner = vRanges.erase( it_inner );
-                else if ( it_inner->In( *it ) )
-                    it = vRanges.erase( it );
-#ifndef OWN_JOIN
-                else if ( (*it_inner).aStart.Row() == (*it).aStart.Row()
-                && (*it_inner).aEnd.Row() == (*it).aEnd.Row() )
+                if ( it_outer->In( *it_inner ) )
                 {
-                    it->ExtendTo( *it_inner );
                     it_inner = vRanges.erase( it_inner );
+                    it_inner_erased = true;
+                }
+                else if ( it_inner->In( *it_outer ) )
+                {
+                    it_outer = vRanges.erase( it_outer );
+                    it_outer_erased = true;
+                }
+#ifndef OWN_JOIN
+                else if ( (*it_inner).aStart.Row() == (*it_outer).aStart.Row()
+                        && (*it_inner).aEnd.Row() == (*it_outer).aEnd.Row() )
+                {
+                    it_outer->ExtendTo( *it_inner );
+                    it_inner = vRanges.erase( it_inner );
+                    it_inner_erased = true;
                 }
 #else
-                else if ( lcl_canJoin( *it, *it_inner ) )
+                else if ( lcl_canJoin( *it_outer, *it_inner ) )
                 {
-                    it->ExtendTo( *it_inner );
+                    it_outer->ExtendTo( *it_inner );
                     it_inner = vRanges.erase( it_inner );
+                    it_inner_erased = true;
                 }
-                else if ( lcl_canJoin( *it_inner, *it) )
+                else if ( lcl_canJoin( *it_inner, *it_outer) )
                 {
-                    it_inner->ExtendTo( *it );
-                    it = vRanges.erase( it );
+                    it_inner->ExtendTo( *it_outer );
+                    it_outer = vRanges.erase( it_outer );
+                    it_outer_erased = true;
                 }
 #endif
             }
+            /*  If it_inner has not been erased from vRanges, continue inner
+                loop with next element. Otherwise, it_inner already points to
+                the next element (return value of list::erase()). */
+            if( !it_inner_erased )
+                ++it_inner;
         }
+        /*  If it_outer has not been erased from vRanges, continue outer loop
+            with next element. Otherwise, it_outer already points to the next
+            element (return value of list::erase()). */
+        if( !it_outer_erased )
+            ++it_outer;
     }
 
 }
@@ -855,7 +947,8 @@ lcl_intersectionImpl( ScRangeList& rl1, ScRangeList& rl2 )
 RangesList lcl_intersections( RangesList& vRanges )
 {
     RangesList intersections;
-    for( RangesList::iterator it = vRanges.begin(); it != vRanges.end(); ++it )
+    RangesList::iterator it = vRanges.begin();
+    while( it != vRanges.end() )
     {
         Ranges intermediateList;
         for( RangesList::iterator it_inner = vRanges.begin(); it_inner != vRanges.end(); ++it_inner )
@@ -868,6 +961,7 @@ RangesList lcl_intersections( RangesList& vRanges )
             }
         }
         it = vRanges.erase( it ); // remove it so we don't include it in the next pass.
+        // 'it' is removed uncontidionally from vRanges, so the while loop will terminate
 
         ScRangeList argIntersect;
         lcl_strip_containedRanges( intermediateList );

@@ -88,6 +88,7 @@ const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_LOADREADONLY), 0,  &getBooleanCppuType(),              0, 0},
         // <--
         {MAP_CHAR_LEN(SC_UNO_SHAREDOC),     0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNO_MODIFYPASSWORDINFO), 0,  &getCppuType((uno::Sequence< beans::PropertyValue >*)0),              0, 0},
         {0,0,0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -274,6 +275,20 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                     pDocShell->SetSharedXMLFlag( bDocShared );
                 }
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_MODIFYPASSWORDINFO ) == 0 )
+            {
+                uno::Sequence< beans::PropertyValue > aInfo;
+                if ( !( aValue >>= aInfo ) )
+                    throw lang::IllegalArgumentException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value of type Sequence<PropertyValue> expected!" ) ),
+                        uno::Reference< uno::XInterface >(),
+                        2 );
+
+                if ( !pDocShell->SetModifyPasswordInfo( aInfo ) )
+                    throw beans::PropertyVetoException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The hash is not allowed to be changed now!" ) ),
+                        uno::Reference< uno::XInterface >() );
+            }
             else
             {
                 ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -407,6 +422,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasSharedXMLFlagSet() );
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_MODIFYPASSWORDINFO ) == 0 )
+                aRet <<= pDocShell->GetModifyPasswordInfo();
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();
