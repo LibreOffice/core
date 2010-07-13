@@ -78,6 +78,7 @@ BEGIN
         "dgo",
         "kok",
         "mni",
+        "ca-XV",
         "sat",
         "ug",
         "om",
@@ -136,7 +137,9 @@ BEGIN
     $issolarispkgbuild = 0;
     $issolarissparcbuild = 0;
     $issolarisx86build = 0;
+    $isfreebsdbuild = 0;
     $isfreebsdpkgbuild = 0;
+    $ismacbuild = 0;
     $ismacdmgbuild = 0;
     $unpackpath = "";
     $idttemplatepath = "";
@@ -268,7 +271,7 @@ BEGIN
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
-    $sundirname = "";
+    $sundirname = "Oracle";
     $codefilename = "codes.txt";
     $componentfilename = "components.txt";
     $productcode = "";
@@ -375,6 +378,10 @@ BEGIN
     %spellcheckerfilehash = ();
     $registryrootcomponent = "";
 
+    $installlocationdirectory = "";
+    $installlocationdirectoryset = 0;
+    $vendordirectory = "";
+    $vendordirectoryset = 0;
     $officeinstalldirectory = "";
     $officeinstalldirectoryset = 0;
     $basisinstalldirectory = "";
@@ -393,9 +400,9 @@ BEGIN
     $sundirgid = "";
 
     %sign_extensions = ("dll" => "1", "exe" => "1", "cab" => "1");
-    %treestyles = ("UREDIRECTORY" => "INSTALLURE", "BASISDIRECTORY" => "INSTALLBASIS", "OFFICEDIRECTORY" => "INSTALLOFFICE");
-    %installlocations = ("INSTALLLOCATION" => "1", "BASISINSTALLLOCATION" => "1", "OFFICEINSTALLLOCATION" => "1", "UREINSTALLLOCATION" => "1");
-    %treelayername = ("UREDIRECTORY" => "URE", "BASISDIRECTORY" => "BASIS", "OFFICEDIRECTORY" => "BRAND");
+    %treestyles = ();
+    %installlocations = ("INSTALLLOCATION" => "1");
+    %treelayername = ();
     %hostnametreestyles = ();
     %treeconditions = ();
     %usedtreeconditions = ();
@@ -513,13 +520,12 @@ BEGIN
         if ( $plat =~ /darwin/i )
         {
             $libextension = "\.dylib";
-            $archiveformat = ".dmg";
         }
         else
         {
             $libextension = "\.so";
-            $archiveformat = ".tar.gz";
         }
+        $archiveformat = ".tar.gz";
         $quote = "\'";
         $isunix = 1;
         $iswin = 0;
@@ -529,6 +535,7 @@ BEGIN
     $wrapcmd = "";
 
     if ( $plat =~ /linux/i ) { $islinux = 1; }
+    if ( $plat =~ /kfreebsd/i ) { $islinux = 1; }
     if ( $plat =~ /solaris/i ) { $issolaris = 1; }
     if ( $plat =~ /darwin/i ) { $ismacosx = 1; }
 

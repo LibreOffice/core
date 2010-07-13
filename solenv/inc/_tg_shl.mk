@@ -143,7 +143,9 @@ SHL1VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL1VERSIONMAP)
 $(USE_SHL1VERSIONMAP): $(SHL1OBJS) $(SHL1LIBS)
 .ENDIF
 
-$(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL1VERSIONMAP) .ERRREMOVE: $(SHL1VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -693,7 +695,9 @@ SHL2VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL2VERSIONMAP)
 $(USE_SHL2VERSIONMAP): $(SHL2OBJS) $(SHL2LIBS)
 .ENDIF
 
-$(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL2VERSIONMAP) .ERRREMOVE: $(SHL2VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -1243,7 +1247,9 @@ SHL3VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL3VERSIONMAP)
 $(USE_SHL3VERSIONMAP): $(SHL3OBJS) $(SHL3LIBS)
 .ENDIF
 
-$(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL3VERSIONMAP) .ERRREMOVE: $(SHL3VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -1793,7 +1799,9 @@ SHL4VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL4VERSIONMAP)
 $(USE_SHL4VERSIONMAP): $(SHL4OBJS) $(SHL4LIBS)
 .ENDIF
 
-$(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL4VERSIONMAP) .ERRREMOVE: $(SHL4VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -2343,7 +2351,9 @@ SHL5VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL5VERSIONMAP)
 $(USE_SHL5VERSIONMAP): $(SHL5OBJS) $(SHL5LIBS)
 .ENDIF
 
-$(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL5VERSIONMAP) .ERRREMOVE: $(SHL5VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -2893,7 +2903,9 @@ SHL6VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL6VERSIONMAP)
 $(USE_SHL6VERSIONMAP): $(SHL6OBJS) $(SHL6LIBS)
 .ENDIF
 
-$(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL6VERSIONMAP) .ERRREMOVE: $(SHL6VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -3443,7 +3455,9 @@ SHL7VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL7VERSIONMAP)
 $(USE_SHL7VERSIONMAP): $(SHL7OBJS) $(SHL7LIBS)
 .ENDIF
 
-$(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL7VERSIONMAP) .ERRREMOVE: $(SHL7VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -3993,7 +4007,9 @@ SHL8VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL8VERSIONMAP)
 $(USE_SHL8VERSIONMAP): $(SHL8OBJS) $(SHL8LIBS)
 .ENDIF
 
-$(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL8VERSIONMAP) .ERRREMOVE: $(SHL8VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -4543,7 +4559,9 @@ SHL9VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL9VERSIONMAP)
 $(USE_SHL9VERSIONMAP): $(SHL9OBJS) $(SHL9LIBS)
 .ENDIF
 
-$(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL9VERSIONMAP) .ERRREMOVE: $(SHL9VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
@@ -5093,7 +5111,9 @@ SHL10VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL10VERSIONMAP)
 $(USE_SHL10VERSIONMAP): $(SHL10OBJS) $(SHL10LIBS)
 .ENDIF
 
-$(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
+# .ERRREMOVE is needed as a recipe line like "$(AWK) ... > $@" would create $@
+# even if the $(AWK) part fails:
+$(USE_SHL10VERSIONMAP) .ERRREMOVE: $(SHL10VERSIONMAP)
     @@-$(RM) -f $@
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files

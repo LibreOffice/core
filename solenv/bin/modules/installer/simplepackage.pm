@@ -62,6 +62,21 @@ sub check_simple_packager_project
 }
 
 ####################################################
+# Detecting the directory with extensions
+####################################################
+
+sub get_extensions_dir
+{
+    my ( $subfolderdir ) = @_;
+
+    my $extensiondir = $subfolderdir . $installer::globals::separator;
+    if ( $installer::globals::officedirhostname ne "" ) { $extensiondir = $extensiondir . $installer::globals::officedirhostname . $installer::globals::separator; }
+    $extensiondir = $extensiondir . "share" . $installer::globals::separator . "extensions";
+
+    return $extensiondir;
+}
+
+####################################################
 # Registering extensions
 ####################################################
 
@@ -148,12 +163,15 @@ sub register_extensions
             }
             close (UNOPKG);
 
-            for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
-
             my $returnvalue = $?;   # $? contains the return value of the systemcall
 
             if ($returnvalue)
             {
+                # Writing content of @unopkgoutput only in the error case into the log file. Sometimes it
+                # contains strings like "Error" even in the case of success. This causes a packaging error
+                # when the log file is analyzed at the end, even if there is no real error.
+                for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
+
                 $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
                 push( @installer::globals::logfileinfo, $infoline);
                 installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
@@ -354,13 +372,16 @@ sub replace_variables_in_scriptfile
 #############################################
 # Creating the "simple" package.
 # "zip" for Windows
-# "dmg" on Mac OS X
 # "tar.gz" for all other platforms
+# additionally "dmg" on Mac OS X
 #############################################
 
 sub create_package
 {
-    my ( $installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref ) = @_;
+    my ( $installdir, $archivedir, $packagename, $allvariables, $includepatharrayref, $languagestringref, $format ) = @_;
+
+    installer::logger::print_message( "... creating $installer::globals::packageformat file ...\n" );
+    installer::logger::include_header_into_logfile("Creating $installer::globals::packageformat file:");
 
     # moving dir into temporary directory
     my $pid = $$; # process id
@@ -372,9 +393,9 @@ sub create_package
     installer::systemactions::rename_directory($installdir, $tempdir);
 
     # creating new directory with original name
-    installer::systemactions::create_directory($installdir);
+    installer::systemactions::create_directory($archivedir);
 
-    my $archive =  $installdir . $installer::globals::separator . $packagename . $installer::globals::archiveformat;
+    my $archive = $archivedir . $installer::globals::separator . $packagename . $format;
 
     if ( $archive =~ /zip$/ )
     {
@@ -391,7 +412,6 @@ sub create_package
     }
      elsif ( $archive =~ /dmg$/ )
     {
-        installer::worker::put_scpactions_into_installset("$tempdir/$packagename");
         my $folder = (( -l "$tempdir/$packagename/Applications" ) or ( -l "$tempdir/$packagename/opt" )) ? $packagename : "\.";
 
         if ( $allvariables->{'PACK_INSTALLED'} ) {
@@ -405,7 +425,12 @@ sub create_package
         }
 
         my $sla = 'sla.r';
-        my $ref = installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$sla, $includepatharrayref, 0);
+        my $ref = "";
+
+        if ( ! $allvariables->{'HIDELICENSEDIALOG'} )
+        {
+            installer::scriptitems::get_sourcepath_from_filename_and_includepath( \$sla, $includepatharrayref, 0);
+        }
 
         my $localtempdir = $tempdir;
 
@@ -516,7 +541,7 @@ sub create_package
         }
 
         $systemcall = "cd $localtempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name \"$volume_name\" -ov -o $installdir/tmp && hdiutil convert -ov -format UDZO $installdir/tmp.dmg -o $archive && ";
-        if ($$ref ne "") {
+        if (( $ref ne "" ) && ( $$ref ne "" )) {
             $systemcall .= "hdiutil unflatten $archive && Rez -a $$ref -o $archive && hdiutil flatten $archive &&";
         }
         $systemcall .= "rm -f $installdir/tmp.dmg";
@@ -606,10 +631,22 @@ sub create_simple_package
         }
     }
 
+    # Work around Windows problems with long pathnames (see issue 50885) by
+    # putting the to-be-archived installation tree into the temp directory
+    # instead of the module output tree (unless LOCALINSTALLDIR dictates
+    # otherwise, anyway); can be removed once issue 50885 is fixed:
+    my $tempinstalldir = $installdir;
+    if ( $installer::globals::iswindowsbuild &&
+         $installer::globals::packageformat eq "archive" &&
+         !$installer::globals::localinstalldirset )
+    {
+        $tempinstalldir = File::Temp::tempdir;
+    }
+
     # Creating subfolder in installdir, which shall become the root of package or zip file
     my $subfolderdir = "";
-    if ( $packagename ne "" ) { $subfolderdir = $installdir . $installer::globals::separator . $packagename; }
-    else { $subfolderdir = $installdir; }
+    if ( $packagename ne "" ) { $subfolderdir = $tempinstalldir . $installer::globals::separator . $packagename; }
+    else { $subfolderdir = $tempinstalldir; }
 
     if ( ! -d $subfolderdir ) { installer::systemactions::create_directory($subfolderdir); }
 
@@ -752,27 +789,30 @@ sub create_simple_package
 
     # Registering the extensions
 
-    installer::logger::print_message( "... registering extensions ...\n" );
-    installer::logger::include_header_into_logfile("Registering extensions:");
-    register_extensions($subfolderdir, $languagestringref);
+    # installer::logger::print_message( "... registering extensions ...\n" );
+    # installer::logger::include_header_into_logfile("Registering extensions:");
+    # register_extensions($subfolderdir, $languagestringref);
 
-    # Adding scpactions for mac installations sets, that use not dmg format. Without scpactions the
-    # office does not start.
+    installer::logger::print_message( "... removing superfluous directories ...\n" );
+    installer::logger::include_header_into_logfile("Removing superfluous directories:");
 
-    if (( $installer::globals::packageformat eq "installed" ) && ( $installer::globals::compiler =~ /^unxmacx/ ))
+    my $extensionfolder = get_extensions_dir($subfolderdir);
+
+    installer::systemactions::remove_empty_dirs_in_folder($extensionfolder);
+
+    if ( $installer::globals::compiler =~ /^unxmacx/ )
     {
         installer::worker::put_scpactions_into_installset("$installdir/$packagename");
     }
 
     # Creating archive file
-    if (( $installer::globals::packageformat eq "archive" ) || ( $installer::globals::packageformat eq "dmg" ))
+    if ( $installer::globals::packageformat eq "archive" )
     {
-        # creating a package
-        # -> zip for Windows
-        # -> tar.gz for all other platforms
-        installer::logger::print_message( "... creating $installer::globals::packageformat file ...\n" );
-        installer::logger::include_header_into_logfile("Creating $installer::globals::packageformat file:");
-        create_package($installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref);
+        create_package($tempinstalldir, $installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref, $installer::globals::archiveformat);
+    }
+    elsif ( $installer::globals::packageformat eq "dmg" )
+    {
+        create_package($installdir, $installdir, $packagename, $allvariables, $includepatharrayref, $languagestringref, ".dmg");
     }
 
     # Analyzing the log file

@@ -85,8 +85,8 @@ ARCH_FLAGS*=
 # objcpp = Objective C++ compiler to use
 CXX*=g++
 CC*=gcc
-objc*=gcc
-objcpp*=g++
+objc*=$(CC)
+objcpp*=$(CXX)
 
 CFLAGS=-fsigned-char -fmessage-length=0 -malign-natural -c $(EXTRA_CFLAGS)
 
@@ -206,7 +206,8 @@ LINKFLAGSRUNPATH_OOO=-install_name '@___________________________________________
 LINKFLAGSRUNPATH_SDK=
 LINKFLAGSRUNPATH_BRAND=
 LINKFLAGSRUNPATH_OXT=
-LINKFLAGSRUNPATH_NONE=
+LINKFLAGSRUNPATH_BOXT=
+LINKFLAGSRUNPATH_NONE=-install_name '@__________________________________________________NONE/$(@:f)'
 LINKFLAGS=$(LINKFLAGSDEFS)
 
 # [ed] 5/14/02 If we're building for aqua, add in the objc runtime library into our link line
@@ -285,18 +286,4 @@ RCLINK=
 RCLINKFLAGS=
 RCSETVERSION=
 
-# Add SOLARLIBDIR to the end of a (potentially previously undefined)
-# DYLD_LIBRARY_PATH (there is no real reason to prefer adding at the end over
-# adding at the start); the ": &&" in the bash case enables this to work at the
-# start of a recipe line that is not prefixed by "+" as well as in the middle of
-# an existing && chain; the tcsh case is somewhat imprecise in that it
-# potentially affects multiple commands following on the recipe line:
-.IF "$(USE_SHELL)" == "bash"
-AUGMENT_LIBRARY_PATH = : && \
-    DYLD_LIBRARY_PATH=$${{DYLD_LIBRARY_PATH+$${{DYLD_LIBRARY_PATH}}:}}$(SOLARLIBDIR)
-.ELSE
-AUGMENT_LIBRARY_PATH = if ($$?DYLD_LIBRARY_PATH == 1) \
-    eval 'setenv DYLD_LIBRARY_PATH "$${{DYLD_LIBRARY_PATH}}:$(SOLARLIBDIR)"' \
-    && if ($$?DYLD_LIBRARY_PATH == 0) \
-    setenv DYLD_LIBRARY_PATH "$(SOLARLIBDIR)" &&
-.ENDIF
+OOO_LIBRARY_PATH_VAR = DYLD_LIBRARY_PATH

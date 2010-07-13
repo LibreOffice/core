@@ -769,9 +769,13 @@ sub prepare_language_idt_directory
         installer::systemactions::create_directory($destinationdir . $installer::globals::separator . "Binary");
         installer::systemactions::copy_directory($installer::globals::idttemplatepath . $installer::globals::separator . "Binary", $destinationdir . $installer::globals::separator . "Binary");
 
-        if (( $installer::globals::patch ) && ( $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'} ))
+        if ((( $installer::globals::patch ) && ( $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'} )) || ( $allvariables->{'WINDOWSBITMAPDIRECTORY'} ))
         {
-            my $newsourcedir = $installer::globals::unpackpath . $installer::globals::separator . $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'}; # path setting in list file dependent from unpackpath !?
+            my $bitmapdir = "";
+            if ( $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'} ) { $bitmapdir = $allvariables->{'WINDOWSPATCHBITMAPDIRECTORY'}; }
+            if ( $allvariables->{'WINDOWSBITMAPDIRECTORY'} ) { $bitmapdir = $allvariables->{'WINDOWSBITMAPDIRECTORY'}; }
+
+            my $newsourcedir = $installer::globals::unpackpath . $installer::globals::separator . $bitmapdir; # path setting in list file dependent from unpackpath !?
             $infoline = "\nOverwriting files in directory \"" . $destinationdir . $installer::globals::separator . "Binary" . "\" with files from directory \"" . $newsourcedir . "\".\n";
             push( @installer::globals::logfileinfo, $infoline);
             if ( ! -d $newsourcedir )
@@ -1016,44 +1020,6 @@ sub add_officedir_to_database
         if (( ! $found ) && ( ! $allvariables->{'IGNOREDIRECTORYLAYER'} ))
         {
             installer::exiter::exit_program("ERROR: \"OFFICEDIRECTORYGID\" not found in \"$customactionfilename\" !", "add_officedir_to_database");
-        }
-    }
-
-    if ( $installer::globals::basisinstalldirectoryset )
-    {
-        $found = 0;
-
-        for ( my $i = 0; $i <= $#{$customacfile}; $i++ )
-        {
-            if ( ${$customacfile}[$i] =~ /\bBASISDIRECTORYGID\b/ )
-            {
-                ${$customacfile}[$i] =~ s/\bBASISDIRECTORYGID\b/$installer::globals::basisinstalldirectory/;
-                $found = 1;
-            }
-        }
-
-        if (( ! $found ) && ( ! $allvariables->{'IGNOREDIRECTORYLAYER'} ))
-        {
-            installer::exiter::exit_program("ERROR: \"BASISDIRECTORYGID\" not found in \"$customactionfilename\" !", "add_officedir_to_database");
-        }
-    }
-
-    if ( $installer::globals::ureinstalldirectoryset )
-    {
-        $found = 0;
-
-        for ( my $i = 0; $i <= $#{$customacfile}; $i++ )
-        {
-            if ( ${$customacfile}[$i] =~ /\bUREDIRECTORYGID\b/ )
-            {
-                ${$customacfile}[$i] =~ s/\bUREDIRECTORYGID\b/$installer::globals::ureinstalldirectory/;
-                $found = 1;
-            }
-        }
-
-        if (( ! $found ) && ( ! $allvariables->{'IGNOREDIRECTORYLAYER'} ))
-        {
-            installer::exiter::exit_program("ERROR: \"UREDIRECTORYGID\" not found in \"$customactionfilename\" !", "add_officedir_to_database");
         }
     }
 
@@ -1630,7 +1596,8 @@ sub include_subdirname_into_directory_table
             {
                 my $newuniquename = "sub" . $subdir;
                 $newdir = $newuniquename;
-                my $newparent = $parent;
+                # my $newparent = $parent;
+                my $newparent = "INSTALLLOCATION";
                 my $newname = $name . "\:" . $subdir;
                 my $newline =
                 $line = "$newuniquename\t$newparent\t$newname\n";

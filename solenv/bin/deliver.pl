@@ -73,6 +73,7 @@ $is_debug           = 0;
 
 $error              = 0;
 $module             = 0;            # module name
+$repository         = 0;            # parent directory of this module
 $base_dir           = 0;            # path to module base directory
 $dlst_file          = 0;            # path to d.lst
 $ilst_ext           = 'ilst';       # extension of image lists
@@ -446,7 +447,7 @@ sub parse_options
 sub init_globals
 {
     my $ext;
-    ($module, $base_dir, $dlst_file) =  get_base();
+    ($module, $repository, $base_dir, $dlst_file) =  get_base();
 
     # for CWS:
     $module =~ s/\.lnk$//;
@@ -543,7 +544,7 @@ sub get_base
 {
     # a module base dir contains a subdir 'prj'
     # which in turn contains a file 'd.lst'
-    my (@field, $base, $dlst);
+    my (@field, $repo, $base, $dlst);
     my $path = getcwd();
 
     @field = split(/\//, $path);
@@ -560,7 +561,12 @@ sub get_base
         exit(2);
     }
     else {
-        return ($field[-1], $base, $dlst);
+        if ( defined $field[-2] ) {
+            $repo = $field[-2];
+        } else {
+            print_error("Internal error: cannot determine module's parent directory");
+        }
+        return ($field[-1], $repo, $base, $dlst);
     }
 }
 
@@ -1152,8 +1158,8 @@ sub push_on_loglist
     if (( $entry[0] eq "COPY" ) || ( $entry[0] eq "ADDINCPATH" )) {
         return 0 if ( ! -e $entry[1].$maybedot );
         # make 'from' relative to source root
-        $entry[1] = $module . "/prj/" . $entry[1];
-        $entry[1] =~ s/^$module\/prj\/\.\./$module/;
+        $entry[1] = $repository ."/" . $module . "/prj/" . $entry[1];
+        $entry[1] =~ s/$module\/prj\/\.\./$module/;
     }
     # platform or common tree?
     my $common;
@@ -1212,6 +1218,13 @@ sub zip_files
         print "ZIP: updating $zip_file\n" if $opt_verbose;
         next if ( $opt_check );
 
+        if ( $opt_delete ) {
+            if ( -e $zip_file ) {
+                unlink $zip_file or die "Error: can't remove file '$zip_file': $!";
+            }
+            next;
+        }
+
         local $work_file = "";
         if ( $zip_file eq $common_zip_file) {
             # Zip file in common tree: work on uniq copy to avoid collisions
@@ -1240,31 +1253,14 @@ sub zip_files
         # zip content has to be relative to $dest_dir
         chdir($dest_dir{$zip_file}) or die "Error: cannot chdir into $dest_dir{$zip_file}";
         my $this_ref = $list_ref{$zip_file};
-        if ( $opt_delete ) {
-            if ( -e $work_file ) {
-                open(UNZIP, "unzip -t $work_file 2>&1 |") or die "error opening zip file";
-                if ( grep /empty/, (<UNZIP>)) {
-                    close(UNZIP);
-                    unlink $work_file;
-                    next;
-                }
-                close(UNZIP);
-                open(ZIP, "| $zipexe -q -o -d -@ $work_file") or die "error opening zip file";
-                foreach $file ( @$this_ref ) {
-                    print "ZIP: removing $file from $platform_zip_file\n" if $is_debug;
-                    print ZIP "$file\n";
-                }
-                close(ZIP);
-            }
-        } else {
-            open(ZIP, "| $zipexe -q -o -u -@ $work_file") or die "error opening zip file";
-            foreach $file ( @$this_ref ) {
-                print "ZIP: adding $file to $zip_file\n" if $is_debug;
-                print ZIP "$file\n";
-            }
-            close(ZIP);
-            fix_broken_cygwin_created_zips($work_file) if $^O eq "cygwin";
+        open(ZIP, "| $zipexe -q -o -u -@ $work_file") or die "error opening zip file";
+        foreach $file ( @$this_ref ) {
+            print "ZIP: adding $file to $zip_file\n" if $is_debug;
+            print ZIP "$file\n";
         }
+        close(ZIP);
+        fix_broken_cygwin_created_zips($work_file) if $^O eq "cygwin";
+
         if ( $zip_file eq $common_zip_file) {
             # rename work file back
             if ( -e $work_file ) {
@@ -1303,7 +1299,7 @@ sub fix_broken_cygwin_created_zips
     foreach $member ( $zip->members() ) {
         my $attributes = $member->unixFileAttributes();
         $attributes &= ~0xFE00;
-        print $member->fileName($name) . ": " . sprintf("%lo", $attributes) if $is_debug;
+        print $member->fileName() . ": " . sprintf("%lo", $attributes) if $is_debug;
         $attributes |= 0x10; # add group write permission
         print "-> " . sprintf("%lo", $attributes) . "\n" if $is_debug;
         $member->unixFileAttributes($attributes);

@@ -318,18 +318,6 @@ sub set_important_properties
         push(@{$propertyfile}, $onepropertyline);
     }
 
-    if ( $installer::globals::basisdirhostname )
-    {
-        my $onepropertyline = "BASISDIRHOSTNAME" . "\t" . $installer::globals::basisdirhostname . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
-    if ( $installer::globals::uredirhostname )
-    {
-        my $onepropertyline = "UREDIRHOSTNAME" . "\t" . $installer::globals::uredirhostname . "\n";
-        push(@{$propertyfile}, $onepropertyline);
-    }
-
     if ( $installer::globals::sundirhostname )
     {
         my $onepropertyline = "SUNDIRHOSTNAME" . "\t" . $installer::globals::sundirhostname . "\n";
@@ -393,7 +381,23 @@ sub set_important_properties
     if ( $allvariables->{'HIDELICENSEDIALOG'} )
     {
         my $onepropertyline = "HIDEEULA" . "\t" . "1" . "\n";
-        push(@{$propertyfile}, $onepropertyline);
+
+        my $already_defined = 0;
+
+        for ( my $i = 0; $i <= $#{$propertyfile}; $i++ )
+        {
+            if ( ${$propertyfile}[$i] =~ /^\s*HIDEEULA\t/ )
+            {
+                ${$propertyfile}[$i] = $onepropertyline;
+                $already_defined = 1;
+                last;
+            }
+        }
+
+        if ( ! $already_defined )
+        {
+            push(@{$propertyfile}, $onepropertyline);
+        }
     }
 
     # Setting .NET requirements

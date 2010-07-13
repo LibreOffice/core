@@ -321,6 +321,13 @@ sub create_directories
     else
     {
         $path = $installer::globals::unpackpath . $installer::globals::separator;
+
+        # special handling, if LOCALINSTALLDIR is set
+        if (( $installer::globals::localinstalldirset ) && ( $newdirectory eq "install" ))
+        {
+            $installer::globals::localinstalldir =~ s/\Q$installer::globals::separator\E\s*$//;
+            $path = $installer::globals::localinstalldir . $installer::globals::separator;
+        }
     }
 
     $infoline = "create_directories: Using $path for $newdirectory !\n";
@@ -1655,6 +1662,53 @@ sub read_full_directory {
     }
     closedir(DH);
     return
+}
+
+##############################################################
+# Removing all empty directories below a specified directory
+##############################################################
+
+sub remove_empty_dirs_in_folder
+{
+    my ( $dir ) = @_;
+
+    my @content = ();
+    my $infoline = "";
+
+    $dir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    if ( -d $dir )
+    {
+        opendir(DIR, $dir);
+        @content = readdir(DIR);
+        closedir(DIR);
+
+        my $oneitem;
+
+        foreach $oneitem (@content)
+        {
+            if ((!($oneitem eq ".")) && (!($oneitem eq "..")))
+            {
+                my $item = $dir . $installer::globals::separator . $oneitem;
+
+                if ( -d $item ) # recursive
+                {
+                    remove_empty_dirs_in_folder($item);
+                }
+            }
+        }
+
+        # try to remove empty directory
+        my $returnvalue = rmdir $dir;
+
+        if ( $returnvalue )
+        {
+            $infoline = "Successfully removed empty dir $dir\n";
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+
+    }
+
 }
 
 1;

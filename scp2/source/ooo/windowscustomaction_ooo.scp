@@ -51,7 +51,7 @@ WindowsCustomAction gid_Customaction_Regallmsdocdll
 	Source = "reg4allmsdoc.dll";
 	Target = "FindRegisteredExtensions";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostFinalize");
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH And _IsSetupTypeMin<>\"Custom\"", "CostFinalize");
 End
 
 WindowsCustomAction gid_Customaction_Regactivexdll1
@@ -199,16 +199,6 @@ WindowsCustomAction gid_Customaction_Shellextensionsdll7
 	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "InstallValidate");
 End
 
-WindowsCustomAction gid_Customaction_Register_Extensions
-	Name = "RegisterExtensions";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "RegisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
-	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
-End
-
 WindowsCustomAction gid_Customaction_Set_Admininstall
 	Name = "SetAdminInstallProperty";
 	Typ = "65";
@@ -216,27 +206,6 @@ WindowsCustomAction gid_Customaction_Set_Admininstall
 	Target = "SetAdminInstallProperty";
 	Inbinarytable = 1;
 	Assignment1 = ("AdminExecuteSequence", "", "InstallInitialize");
-End
-
-/*
-WindowsCustomAction gid_Customaction_Remove_Extensions
-	Name = "RemoveExtensions";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "RemoveExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "Shellextensionsdll4");
-End
-*/
-
-WindowsCustomAction gid_Customaction_Deregister_Extensions
-	Name = "DeregisterExtensions";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "DeregisterExtensions";
-	Inbinarytable = 1;
-	// Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "gid_Customaction_Remove_Extensions");
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "behind_IsolateComponents");
 End
 
 WindowsCustomAction gid_Customaction_Check_Install_Directory
@@ -316,44 +285,6 @@ WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "Not Installed", "behind_InstallFinalize");
 	Assignment2 = ("AdminExecuteSequence", "", "behind_InstallFinalize");
-End
-
-WindowsCustomAction gid_Customaction_Langpack_Register_Extensions
-	Name = "RegisterExtensions";
-	Typ = "65";
-	Source = "lngpckinsthlp.dll";
-	Target = "RegisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "end");
-	Assignment2 = ("AdminExecuteSequence", "", "end");
-End
-
-WindowsCustomAction gid_Customaction_Langpack_Deregister_Extensions
-	Name = "DeregisterExtensions";
-	Typ = "65";
-	Source = "lngpckinsthlp.dll";
-	Target = "DeregisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "InstallInitialize");
-End
-
-WindowsCustomAction gid_Customaction_Patch_Register_Extensions
-	Name = "RegisterExtensions";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "RegisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "end");
-	Assignment2 = ("AdminExecuteSequence", "", "end");
-End
-
-WindowsCustomAction gid_Customaction_Patch_Deregister_Extensions
-	Name = "DeregisterExtensions";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "DeregisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "InstallInitialize");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetFeatureState
@@ -515,4 +446,22 @@ WindowsCustomAction gid_Customaction_ShowSurvey
 	Target = "ShowSurveyAfter";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" and Not UPGRADINGPRODUCTCODE", "end");
+End
+
+WindowsCustomAction gid_Customaction_LookForRegisteredExtensions
+	Name = "LookForRegisteredExtensions";
+	Typ = "65";
+	Source = "reg4allmsdoc.dll";
+	Target = "LookForRegisteredExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "LookForRegisteredExtensions", "1", "2");
+End
+
+WindowsCustomAction gid_Customaction_RegisterSomeExtensions
+	Name = "RegisterSomeExtensions";
+	Typ = "65";
+	Source = "reg4allmsdoc.dll";
+	Target = "RegisterSomeExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "FileTypeDialog", "Next", "DoAction", "RegisterSomeExtensions", "1", "1");
 End
