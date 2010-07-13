@@ -3412,15 +3412,16 @@ msi - Windows .msi
       fi
    fi
    AC_SUBST(BUILD_EPM)
-   AC_SUBST(PKGFORMAT)
    AC_SUBST(RPM)
    AC_SUBST(DPKG)
    AC_SUBST(PKGMK)
 else
    AC_MSG_RESULT([no])
    EPM=NO
+   PKGFORMAT=native
 fi
 AC_SUBST(EPM)
+AC_SUBST(PKGFORMAT)
 
 dnl ===================================================================
 dnl Check for gperf
