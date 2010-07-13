@@ -38,9 +38,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-SRS1NAME=	uno
-SRC1FILES=  unoifac2.src
-
 SLOFILES= \
             $(SLO)$/addrtempuno.obj \
             $(SLO)$/contextmenuhelper.obj \
@@ -55,7 +52,9 @@ SLOFILES= \
             $(SLO)$/unoevent.obj \
             $(SLO)$/unoiface.obj \
             $(SLO)$/unoimap.obj \
-            $(SLO)$/svtxgridcontrol.obj 
+            $(SLO)$/svtxgridcontrol.obj \
+            $(SLO)$/popupwindowcontroller.obj \
+            $(SLO)$/popupmenucontrollerbase.obj
 
 # --- Targets ------------------------------------------------------
 

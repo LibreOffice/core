@@ -299,6 +299,7 @@ SHL2DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
 SHL2STDLIBS=\
             $(VCLLIB)\
             $(I18NPAPERLIB)     \
+            $(I18NISOLANGLIB)     \
             $(TOOLSLIB)         \
             $(VOSLIB)           \
             $(BASEGFXLIB)	\

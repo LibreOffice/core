@@ -154,8 +154,8 @@ namespace com { namespace sun { namespace star {
 #define VCLEVENT_TOOLBOX_FORMATCHANGED      1172        // request new layout
 #define VCLEVENT_COMBOBOX_SETTEXT           1173
 // --> OD 2009-04-01 #i92103#
-#define VCLEVENT_LISTBOX_ENTRY_EXPANDED     1174
-#define VCLEVENT_LISTBOX_ENTRY_COLLAPSED    1175
+#define VCLEVENT_ITEM_EXPANDED              1174
+#define VCLEVENT_ITEM_COLLAPSED             1175
 // <--
 #define VCLEVENT_DROPDOWN_PRE_OPEN          1176
 
@@ -192,6 +192,7 @@ namespace com { namespace sun { namespace star {
 
 #define VCLEVENT_TOOLBOX_BUTTONSTATECHANGED     1223    // pData = itempos
 #define VCLEVENT_TABLECELL_NAMECHANGED          1224    // pData = struct(Entry, Column, oldText)
+#define VCLEVENT_TABLEROW_SELECT                1225
 
 class VCL_DLLPUBLIC VclSimpleEvent
 {

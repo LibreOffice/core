@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#include <svl/svtools.hrc>
+#include <svl/svl.hrc>
 String STR_COLUM_DT_AUTO
 {
     Text [ en-US ] = "automatic" ;

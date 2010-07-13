@@ -1,12 +1,12 @@
 #i88276 -o svtools.AccessibleIconChoiceCtrlEntry
 #i88647 -o svtools.AccessibleTabBarPage
--o svtools.AccessibleBrowseBox
--o svtools.AccessibleBrowseBoxHeaderBar
--o svtools.AccessibleBrowseBoxHeaderCell
--o svtools.AccessibleBrowseBoxTable
+#i110988 -o svtools.AccessibleBrowseBox
+#i110988 -o svtools.AccessibleBrowseBoxHeaderBar
+#i110988 -o svtools.AccessibleBrowseBoxHeaderCell
+#i110988 -o svtools.AccessibleBrowseBoxTable
 #i85245 -o svtools.AccessibleBrowseBoxTableCell
 #i88276 -o svtools.AccessibleIconChoiceCtrl
 -o svtools.AccessibleTabBar
 #i85246 -o svtools.AccessibleTabBarPageList
--o svtools.AccessibleTreeListBox
--o svtools.AccessibleTreeListBoxEntry
+#i110988 -o svtools.AccessibleTreeListBox
+#i110988 -o svtools.AccessibleTreeListBoxEntry

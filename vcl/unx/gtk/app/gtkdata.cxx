@@ -636,9 +636,6 @@ void GtkXLib::Init()
 
     Display *pDisp = gdk_x11_display_get_xdisplay( pGdkDisp );
 
-    XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
-    XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
-
     m_pGtkSalDisplay = new GtkSalDisplay( pGdkDisp );
 
     gdk_window_add_filter( NULL, call_filterGdkEvent, m_pGtkSalDisplay );

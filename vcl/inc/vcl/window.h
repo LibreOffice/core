@@ -119,7 +119,6 @@ struct ImplWinData
     USHORT              mnTrackFlags;
     USHORT              mnIsTopWindow;
     BOOL                mbMouseOver;          // tracks mouse over for native widget paint effect
-    SalControlHandle*   mpSalControlHandle;   // native data for NWF
     BOOL                mbEnableNativeWidget; // toggle native widget rendering
     ::std::list< Window* >
                         maTopWindowChildren;
