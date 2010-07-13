@@ -2,9 +2,12 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: BookmarkSet.hxx,v $
+ * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -25,28 +28,29 @@
  *
  ************************************************************************/
 
-#ifndef DBACCESS_CORE_API_BOOKMARKSET_HXX
-#define DBACCESS_CORE_API_BOOKMARKSET_HXX
+#ifndef DBACCESS_CORE_API_WRAPPEDRESULTSET_HXX
+#define DBACCESS_CORE_API_WRAPPEDRESULTSET_HXX
 
 #ifndef DBACCESS_CORE_API_CACHESET_HXX
 #include "CacheSet.hxx"
 #endif
-#ifndef _COM_SUN_STAR_SDBC_XROWUPDATE_HPP_
 #include <com/sun/star/sdbc/XRowUpdate.hpp>
-#endif
+#include <com/sun/star/sdbc/XResultSetUpdate.hpp>
 
 namespace dbaccess
 {
     // this set is used when we have a bookmarkable set from the driver
-    class OBookmarkSet : public OCacheSet
+    class WrappedResultSet : public OCacheSet
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XRowLocate> m_xRowLocate;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate> m_xUpd;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate>       m_xUpdRow;
 
         void updateColumn(sal_Int32 nPos,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate > _xParameter,const connectivity::ORowSetValue& _rValue);
     public:
-        OBookmarkSet()
+        WrappedResultSet()
         {}
-        ~OBookmarkSet()
+        ~WrappedResultSet()
         {
             m_xRowLocate = NULL;
         }
@@ -71,5 +75,5 @@ namespace dbaccess
         virtual void SAL_CALL moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
     };
 }
-#endif // DBACCESS_CORE_API_BOOKMARKSET_HXX
+#endif // DBACCESS_CORE_API_WRAPPEDRESULTSET_HXX
 

@@ -977,7 +977,7 @@ public class RowSet extends ComplexTestCase
         }
         catch (Exception e)
         {
-            assure("could not text the relationship between XParameters and XParametersSupplier" + e.getMessage(), false);
+            assure("could not test the relationship between XParameters and XParametersSupplier" + e.getMessage(), false);
         }
     }
 

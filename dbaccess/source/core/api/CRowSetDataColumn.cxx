@@ -71,9 +71,11 @@ ORowSetDataColumn::ORowSetDataColumn(   const Reference < XResultSetMetaData >& 
                                       sal_Int32 _nPos,
                                       const Reference< XDatabaseMetaData >& _rxDBMeta,
                                       const ::rtl::OUString& _rDescription,
+                                      const ::rtl::OUString& i_sLabel,
                                       const ORowSetCacheIterator& _rColumnValue)
     :ODataColumn(_xMetaData,_xRow,_xRowUpdate,_nPos,_rxDBMeta)
     ,m_aColumnValue(_rColumnValue)
+    ,m_sLabel(i_sLabel)
     ,m_aDescription(_rDescription)
 {
     DBG_CTOR(ORowSetDataColumn,NULL);
@@ -102,7 +104,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
     DECL_PROP1_BOOL( ISCURRENCY,                                READONLY );
     DECL_PROP1_BOOL( ISDEFINITELYWRITABLE,                      READONLY );
     DECL_PROP1( ISNULLABLE,                 sal_Int32,          READONLY );
-    DECL_PROP1_BOOL( ISREADONLY,                                READONLY );
+    DECL_PROP1_BOOL( ISREADONLY,                                BOUND );
     DECL_PROP1_BOOL( ISROWVERSION,                              READONLY );
     DECL_PROP1_BOOL( ISSEARCHABLE,                              READONLY );
     DECL_PROP1_BOOL( ISSIGNED,                                  READONLY );
@@ -146,6 +148,8 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
             rValue = ((*m_aColumnValue)->get())[m_nPos].makeAny();
         }
     }
+    else if ( PROPERTY_ID_LABEL == nHandle && m_sLabel.getLength() )
+        rValue <<= m_sLabel;
     else
         ODataColumn::getFastPropertyValue( rValue, nHandle );
 }
@@ -153,13 +157,21 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
 // -------------------------------------------------------------------------
 void SAL_CALL ORowSetDataColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue )throw (Exception)
 {
-    if ( PROPERTY_ID_VALUE == nHandle )
+    switch( nHandle )
     {
-        updateObject(rValue);
-    }
-    else
-    {
-        ODataColumn::setFastPropertyValue_NoBroadcast( nHandle,rValue );
+        case PROPERTY_ID_VALUE:
+            updateObject(rValue);
+            break;
+        case PROPERTY_ID_ISREADONLY:
+            {
+                sal_Bool bVal = sal_False;
+                rValue >>= bVal;
+                m_isReadOnly.reset(bVal);
+            }
+            break;
+        default:
+            ODataColumn::setFastPropertyValue_NoBroadcast( nHandle,rValue );
+            break;
     }
 }
 // -------------------------------------------------------------------------
@@ -169,14 +181,26 @@ sal_Bool SAL_CALL ORowSetDataColumn::convertFastPropertyValue( Any & rConvertedV
                                                             const Any& rValue ) throw (IllegalArgumentException)
 {
     sal_Bool bModified = sal_False;
-    if ( PROPERTY_ID_VALUE == nHandle )
+    switch( nHandle )
     {
-        rConvertedValue = rValue;
-        getFastPropertyValue(rOldValue, PROPERTY_ID_VALUE);
-        bModified = rConvertedValue != rOldValue;
+        case PROPERTY_ID_VALUE:
+            {
+                rConvertedValue = rValue;
+                getFastPropertyValue(rOldValue, PROPERTY_ID_VALUE);
+                bModified = rConvertedValue != rOldValue;
+            }
+            break;
+        case PROPERTY_ID_ISREADONLY:
+            {
+                rConvertedValue = rValue;
+                getFastPropertyValue(rOldValue, PROPERTY_ID_ISREADONLY);
+                bModified = rConvertedValue != rOldValue;
+            }
+            break;
+        default:
+            bModified = ODataColumn::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
+            break;
     }
-    else
-        bModified = ODataColumn::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
 
     return bModified;
 }
