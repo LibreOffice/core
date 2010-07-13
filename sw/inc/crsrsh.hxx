@@ -27,6 +27,8 @@
 #ifndef _CRSRSH_HXX
 #define _CRSRSH_HXX
 
+#include <com/sun/star/i18n/WordType.hpp>
+
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/rtti.hxx>
@@ -746,11 +748,12 @@ public:
     BOOL GoStartSentence();
     BOOL GoEndSentence();
     BOOL SelectWord( const Point* pPt = 0 );
+    BOOL ExpandToSentenceBorders();
 
     // Position vom akt. Cursor erfragen
-    BOOL IsStartWord()const;
-    BOOL IsEndWord() const;
-    BOOL IsInWord() const;
+    BOOL IsStartWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES )const;
+    BOOL IsEndWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
+    BOOL IsInWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
     BOOL IsStartSentence() const;
     BOOL IsEndSentence() const;
     BOOL IsSttPara() const;

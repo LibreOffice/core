@@ -379,6 +379,7 @@
 #define RID_LSUPX                   (RID_APP_START + 1916)
 #define RID_CSUBX                   (RID_APP_START + 1917)
 #define RID_CSUPX                   (RID_APP_START + 1918)
+#define RID_NOSPACE                 (RID_APP_START + 1919)
 
 #define RID_ALEPH                   (RID_APP_START + 2001)
 #define RID_EMPTYSET                (RID_APP_START + 2002)
@@ -749,6 +750,7 @@
 #define HID_SMA_CONTROL_SYMBOLSET_VIEW                    "STARMATH_HID_SMA_CONTROL_SYMBOLSET_VIEW"
 #define HID_SMA_CONTROL_FONTCHAR_VIEW                     "STARMATH_HID_SMA_CONTROL_FONTCHAR_VIEW"
 
+#define HID_SMA_NOSPACE                                   "STARMATH_HID_SMA_NOSPACE"
 #define BMP_ARROW_RIGHT     1
 
 #define MN_WIN 60

@@ -122,7 +122,7 @@ class SmMathConfig : public utl::ConfigItem
     SmFormat *          pFormat;
     SmCfgOther *        pOther;
     SmFontFormatList *  pFontFormatList;
-    SmSymSetManager *   pSymSetMgr;
+    SmSymbolManager *   pSymbolMgr;
     BOOL                bIsOtherModified;
     BOOL                bIsFormatModified;
 
@@ -182,7 +182,7 @@ public:
     //using utl::ConfigItem::ReplaceSetProperties;
     //using utl::ConfigItem::GetReadOnlyStates;
 
-    SmSymSetManager &   GetSymSetManager();
+    SmSymbolManager &   GetSymbolManager();
     void                GetSymbols( std::vector< SmSym > &rSymbols ) const;
     void                SetSymbols( const std::vector< SmSym > &rNewSymbols );
 

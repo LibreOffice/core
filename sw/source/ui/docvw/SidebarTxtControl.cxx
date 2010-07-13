@@ -340,26 +340,32 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
         }
         else
         {
-            SfxPopupMenuManager* aMgr = mrDocView.GetViewFrame()->GetDispatcher()->Popup(0, this,&rCEvt.GetMousePosPixel());
-            ((PopupMenu*)aMgr->GetSVMenu())->SetSelectHdl( LINK(this, SidebarTxtControl, Select) );
+            SfxPopupMenuManager* pMgr = mrDocView.GetViewFrame()->GetDispatcher()->Popup(0, this,&rCEvt.GetMousePosPixel());
+            ((PopupMenu*)pMgr->GetSVMenu())->SetSelectHdl( LINK(this, SidebarTxtControl, Select) );
 
             {
-                XubString aText = ((PopupMenu*)aMgr->GetSVMenu())->GetItemText( FN_DELETE_NOTE_AUTHOR );
+                XubString aText = ((PopupMenu*)pMgr->GetSVMenu())->GetItemText( FN_DELETE_NOTE_AUTHOR );
                 SwRewriter aRewriter;
                 aRewriter.AddRule(UNDO_ARG1, mrSidebarWin.GetAuthor());
                 aText = aRewriter.Apply(aText);
-                ((PopupMenu*)aMgr->GetSVMenu())->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
+                ((PopupMenu*)pMgr->GetSVMenu())->SetItemText(FN_DELETE_NOTE_AUTHOR,aText);
             }
 
+            Point aPos;
             if (rCEvt.IsMouseEvent())
-                ((PopupMenu*)aMgr->GetSVMenu())->Execute(this,rCEvt.GetMousePosPixel());
+                aPos = rCEvt.GetMousePosPixel();
             else
             {
                 const Size aSize = GetSizePixel();
-                const Point aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
-                ((PopupMenu*)aMgr->GetSVMenu())->Execute(this,aPos);
+                aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
             }
-            delete aMgr;
+
+            //!! call different Execute function to get rid of the new thesaurus sub menu
+            //!! pointer created in the call to Popup.
+            //!! Otherwise we would have a memory leak (see also #i107205#)
+            //((PopupMenu*)pMgr->GetSVMenu())->Execute( this, aPos );
+            pMgr->Execute( aPos, this );
+            delete pMgr;
         }
     }
     else

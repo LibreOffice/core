@@ -115,7 +115,7 @@ Color SmTmpDevice::Impl_GetColor( const Color& rColor )
             if (OUTDEV_WINDOW == rOutDev.GetOutDevType())
                 aBgCol = ((Window &) rOutDev).GetDisplayBackground().GetColor();
 
-            nNewCol = SM_MOD1()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
+            nNewCol = SM_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor;
 
             Color aTmpColor( nNewCol );
             if (aBgCol.IsDark() && aTmpColor.IsDark())
@@ -831,8 +831,9 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         return;
 
     // make distance depend on font size
-    long  nDist = +(rFormat.GetDistance(DIS_HORIZONTAL)
-                    * GetFont().GetSize().Height()) / 100L;
+    long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetSize().Height()) / 100L;
+    if (!IsUseExtraSpaces())
+        nDist = 0;
 
     Point   aPos;
     for (i = 0;  i < nSize;  i++)
@@ -2803,9 +2804,9 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     SmNode::Prepare(rFormat, rDocShell);
 
     const SmSym   *pSym;
-    SmModule  *pp = SM_MOD1();
+    SmModule  *pp = SM_MOD();
 
-    if (NULL != (pSym = pp->GetSymSetManager().GetSymbolByName(GetToken().aText)))
+    if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName(GetToken().aText)))
     {
         SetText( pSym->GetCharacter() );
         GetFont() = pSym->GetFace();

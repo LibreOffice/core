@@ -377,32 +377,12 @@ USHORT SwHTMLTableLayout::GetBrowseWidth( const SwDoc& rDoc )
             return (USHORT)pPageFrm->Prt().Width();
     }
 
-    // Sonst versuchen wir es ueber die ViewShell
-    USHORT nWidth = GetBrowseWidthByVisArea( rDoc );
-    if( !nWidth )
-    {
-        // Und wenn das auch nicht geht, gibt es noch die ActualSize an der
-        // DocShell.
-        if( rDoc.GetDocShell() && GetpApp() && GetpApp()->GetDefaultDevice() )
-        {
-            // this case shouldn't happen because the filter always waits until
-            // a view has been created
-/*
-            nWidth = (USHORT)Application::GetDefaultDevice()
-                    ->PixelToLogic( rDoc.GetDocShell()->GetActualSize(),
-                                    MapMode( MAP_TWIP ) ).Width();
-*/
-            ASSERT( nWidth, "No browse width available" );
-        }
-#ifdef DBG_UTIL
-        else
-        {
-            // und wenn das auch nicht klappt, gibt es zur Zeit keine Breite
-            ASSERT( nWidth, "No browse width available" );
-        }
-#endif
-    }
-    return nWidth;
+    // --> OD 2010-05-12 #i91658#
+    // Assertion removed which state that no browse width is available.
+    // Investigation reveals that all calls can handle the case that no browse
+    // width is provided.
+    return GetBrowseWidthByVisArea( rDoc );
+    // <--
 }
 
 USHORT SwHTMLTableLayout::GetBrowseWidthByTabFrm(
@@ -1859,7 +1839,7 @@ BOOL SwHTMLTableLayout::Resize( USHORT nAbsAvail, BOOL bRecalc,
     // weil sond die Umschaltung von relativ nach absolut nicht funktioniert.
     if( pDoc->GetRootFrm() && pDoc->get(IDocumentSettingAccess::BROWSE_MODE) )
     {
-        USHORT nVisAreaWidth = GetBrowseWidthByVisArea( *pDoc );
+        const USHORT nVisAreaWidth = GetBrowseWidthByVisArea( *pDoc );
         if( nVisAreaWidth < nAbsAvail && !FindFlyFrmFmt() )
             nAbsAvail = nVisAreaWidth;
     }

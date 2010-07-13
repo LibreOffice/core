@@ -1304,7 +1304,7 @@ void SwPostItMgr::Delete()
     CalcRects();
     LayoutPostIts();
 }
-
+#if 0
 void SwPostItMgr::Hide(SwPostItField* pPostItField )
 {
     for(std::list<SwSidebarItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
@@ -1323,7 +1323,7 @@ void SwPostItMgr::Hide(SwPostItField* pPostItField )
 
     LayoutPostIts();
 }
-
+#endif
 void SwPostItMgr::Hide( const String& rAuthor )
 {
     for(SwSidebarItem_iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
@@ -1396,30 +1396,6 @@ sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const SwPostItFie
             return dynamic_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt);
     }
     return NULL;
-}
-
-bool SwPostItMgr::ShowPreview(const SwField* pFld, SwFmtFld*& pFmtFld) const
-{
-    for (unsigned long n=0;n<mPages.size();n++)
-    {
-        if (mPages[n]->mList->size()>0)
-        {
-            for(const_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
-            {
-                if ( (*i)->GetFmtFld() && ((*i)->GetFmtFld()->GetFld()==pFld) )
-                {
-                    pFmtFld = (*i)->GetFmtFld();
-                    const long aSidebarheight = mPages[n]->bScrollbar ? mpEditWin->PixelToLogic(Size(0,GetSidebarScrollerHeight())).Height() : 0;
-                    bool bTopPage = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y())).Y() >= (mPages[n]->mPageRect.Top()+aSidebarheight);
-                    bool bBottomPage  = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y()+(*i)->pPostIt->GetSizePixel().Height())).Y() <= (mPages[n]->mPageRect.Bottom()-aSidebarheight);
-                    const bool bTopVis = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y())).Y() > mpView->GetVisArea().Top();
-                    const bool bBottomVis  = mpEditWin->PixelToLogic(Point(0,(*i)->pPostIt->GetPosPixel().Y()/*+(*i)->pPostIt->GetSizePixel().Height()*/)).Y() <= mpView->GetVisArea().Bottom();
-                    return !(bBottomPage && bTopPage && bBottomVis && bTopVis);
-                }
-            }
-        }
-    }
-    return false;
 }
 
 SwSidebarWin* SwPostItMgr::GetNextPostIt( USHORT aDirection,
@@ -1669,28 +1645,36 @@ void SwPostItMgr::CorrectPositions()
    if (!pFirstPostIt)
        return;
 
-   // yeah, I know, if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
-   const long aAnchorX = mpEditWin->LogicToPixel( Point((long)(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
-   const long aAnchorY = mpEditWin->LogicToPixel( Point(0,(long)(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
-   if (Point(aAnchorX,aAnchorY) != pFirstPostIt->GetPosPixel())
-   {
-       long aAnchorPosX = 0;
-       long aAnchorPosY = 0;
-       for (unsigned long n=0;n<mPages.size();n++)
-       {
-           for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
-           {
-               if ((*i)->bShow && (*i)->pPostIt)
-               {
+    // yeah, I know,    if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
+    // --> OD 2010-06-03 #i111964# - check, if anchor overlay object exists.
+    const long aAnchorX = pFirstPostIt->Anchor()
+                          ? mpEditWin->LogicToPixel( Point((long)(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X()
+                          : 0;
+    const long aAnchorY = pFirstPostIt->Anchor()
+                          ? mpEditWin->LogicToPixel( Point(0,(long)(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1
+                          : 0;
+    // <--
+    if (Point(aAnchorX,aAnchorY) != pFirstPostIt->GetPosPixel())
+    {
+        long aAnchorPosX = 0;
+        long aAnchorPosY = 0;
+        for (unsigned long n=0;n<mPages.size();n++)
+        {
+            for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
+            {
+                // --> OD 2010-06-03 #i111964# - check, if anchor overlay object exists.
+                if ( (*i)->bShow && (*i)->pPostIt && (*i)->pPostIt->Anchor() )
+                // <--
+                {
                     aAnchorPosX = mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT
                         ? mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
                         : mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSixthPosition().getX()),0)).X();
                     aAnchorPosY = mpEditWin->LogicToPixel( Point(0,(long)((*i)->pPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1;
                     (*i)->pPostIt->SetPosPixel(Point(aAnchorPosX,aAnchorPosY));
                }
-           }
-       }
-   }
+            }
+        }
+    }
 }
 
 

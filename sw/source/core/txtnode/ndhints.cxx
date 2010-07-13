@@ -367,7 +367,7 @@ bool SwpHintsArray::Check() const
         CHECK_ERR( !isCHRATR(nWhich),
                    "HintsCheck: Character attribute in end array" );
 
-        // 8) portion check
+        // 8) style portion check
 #if OSL_DEBUG_LEVEL > 1
         const SwTxtAttr* pHtThis = m_HintStarts[i];
         const SwTxtAttr* pHtLast = i > 0 ? m_HintStarts[i-1] : 0;
@@ -375,11 +375,19 @@ bool SwpHintsArray::Check() const
                     ( RES_TXTATR_CHARFMT != pHtLast->Which() && RES_TXTATR_AUTOFMT != pHtLast->Which() ) ||
                     ( RES_TXTATR_CHARFMT != pHtThis->Which() && RES_TXTATR_AUTOFMT != pHtThis->Which() ) ||
                     ( *pHtThis->GetStart() >= *pHtLast->GetEnd() ) ||
-                    ( *pHtThis->GetStart() == *pHtLast->GetStart() && *pHtThis->GetEnd() == *pHtLast->GetEnd() ) ||
-                    ( *pHtThis->GetStart() == *pHtThis->GetEnd() ),
+                    (   (   (   (*pHtThis->GetStart() == *pHtLast->GetStart())
+                            &&  (*pHtThis->GetEnd()   == *pHtLast->GetEnd())
+                            ) // same range
+                        ||  (*pHtThis->GetStart() == *pHtThis->GetEnd())
+                        )
+                    &&  (   (pHtThis->Which() != RES_TXTATR_AUTOFMT)
+                        ||  (pHtLast->Which() != RES_TXTATR_AUTOFMT)
+                        ) // never two AUTOFMT on same range
+                    ),
                    "HintsCheck: Portion inconsistency. "
                    "This can be temporarily ok during undo operations" );
 
+        // 9) nesting portion check
         if (pHtThis->IsNesting())
         {
             for ( USHORT j = 0; j < Count(); ++j )
@@ -397,7 +405,7 @@ bool SwpHintsArray::Check() const
             }
         }
 
-        // 9) dummy char check (unfortunately cannot check SwTxtNode::m_Text)
+        // 10) dummy char check (unfortunately cannot check SwTxtNode::m_Text)
         if (pHtThis->HasDummyChar())
         {
             for ( USHORT j = 0; j < i; ++j )

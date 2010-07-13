@@ -716,6 +716,7 @@ private:
      bool DeleteAndJoinImpl(SwPaM&, const bool);
      bool DeleteAndJoinWithRedlineImpl(SwPaM&, const bool unused = false);
      bool DeleteRangeImpl(SwPaM&, const bool unused = false);
+     bool DeleteRangeImplImpl(SwPaM &);
      bool ReplaceRangeImpl(SwPaM&, String const&, const bool);
 
 public:
@@ -2130,7 +2131,7 @@ public:
 
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
-    SwDoc* CreateCopy() const;
+    SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 };
 
 

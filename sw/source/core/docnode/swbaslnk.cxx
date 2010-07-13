@@ -357,17 +357,19 @@ BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
                     0 != (pANd = pDoc->GetNodes()[pAPos->nNode]) &&
                     0 != (pTblNd = pANd->FindTableNode()) )
                 {
-                    BOOL bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
+                    const BOOL bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
                     SwHTMLTableLayout *pLayout =
                         pTblNd->GetTable().GetHTMLTableLayout();
                     if( pLayout )
                     {
-                        USHORT nBrowseWidth =
-                            pLayout->GetBrowseWidthByTable( *pDoc );
-                        if( nBrowseWidth )
+                        const USHORT nBrowseWidth =
+                                    pLayout->GetBrowseWidthByTable( *pDoc );
+                        if ( nBrowseWidth )
+                        {
                             pLayout->Resize( nBrowseWidth, TRUE, TRUE,
                                              bLastGrf ? HTMLTABLE_RESIZE_NOW
                                                       : 500 );
+                        }
                     }
                 }
             }

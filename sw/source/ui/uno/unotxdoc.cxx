@@ -114,6 +114,8 @@
 #include <drawdoc.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <osl/file.hxx>
+#include <comphelper/storagehelper.hxx>
+
 
 // --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
@@ -3152,16 +3154,13 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::
     if(!IsValid())
         throw RuntimeException();
     //create a new document - hidden - copy the storage and return it
-    SwDoc* pCopyDoc = pDocShell->GetDoc()->CreateCopy();
-    SfxObjectShell* pShell = new SwDocShell( pCopyDoc, SFX_CREATE_MODE_STANDARD );
-    pShell->DoInitNew();
-
-    uno::Reference< embed::XStorage > xSourceStorage = getDocumentStorage();
+    SfxObjectShell* pShell = pDocShell->GetDoc()->CreateCopy(false);
     uno::Reference< frame::XModel > xNewModel = pShell->GetModel();
-    //copy this storage
+    uno::Reference< embed::XStorage > xNewStorage = ::comphelper::OStorageHelper::GetTemporaryStorage( );
+    uno::Sequence< beans::PropertyValue > aTempMediaDescriptor;
+    storeToStorage( xNewStorage, aTempMediaDescriptor );
     uno::Reference< document::XStorageBasedDocument > xStorageDoc( xNewModel, uno::UNO_QUERY );
-    uno::Reference< embed::XStorage > xNewStorage = xStorageDoc->getDocumentStorage();
-    xSourceStorage->copyToStorage( xNewStorage );
+    xStorageDoc->loadFromStorage( xNewStorage, aTempMediaDescriptor );
     return uno::Reference< util::XCloneable >( xNewModel, UNO_QUERY );
 }
 /* -----------------------------20.06.00 09:54--------------------------------

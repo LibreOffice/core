@@ -444,8 +444,6 @@ USHORT SwFntObj::GetFontLeading( const ViewShell *pSh, const OutputDevice& rOut 
 
 void SwFntObj::CreateScrFont( const ViewShell& rSh, const OutputDevice& rOut )
 {
-static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
-
     if ( pScrFont )
         return;
 
@@ -481,6 +479,10 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
         pScrFont = pPrtFont;
 
         FontMetric aMet = pPrt->GetFontMetric( );
+        //Don't loose "faked" properties of the logical font that don't truly
+        //exist in the physical font metrics which vcl which fake up for us
+        aMet.SetWeight(pScrFont->GetWeight());
+        aMet.SetItalic(pScrFont->GetItalic());
 
         bSymbol = RTL_TEXTENCODING_SYMBOL == aMet.GetCharSet();
 
@@ -489,178 +491,6 @@ static sal_Char __READONLY_DATA sStandardString[] = "Dies ist der Teststring";
 
         if ( USHRT_MAX == nExtLeading )
             nExtLeading = static_cast<USHORT>(aMet.GetExtLeading());
-
-#if OSL_DEBUG_LEVEL > 1
-        const XubString aDbgTxt1( pPrtFont->GetName() );
-        const XubString aDbgTxt2( aMet.GetName() );
-#endif
-
-        if ( aMet.IsDeviceFont( ) )
-        {
-            if ( (RTL_TEXTENCODING_DONTKNOW == pPrtFont->GetCharSet() ||
-                  FAMILY_DONTKNOW  == pPrtFont->GetFamily()  ||
-                  PITCH_DONTKNOW   == pPrtFont->GetPitch()     ) &&
-                 (RTL_TEXTENCODING_DONTKNOW == aMet.GetCharSet()  ||
-                  FAMILY_DONTKNOW  == aMet.GetFamily()   ||
-                  PITCH_DONTKNOW   == aMet.GetPitch()      )    )
-            {
-                // Das folgende ist teuer, aber selten: ein unbekannter Font
-                // kann vom Drucker nicht vernuenftig zugeordnet werden. Dann
-                // nehmen wir eben das Mapping des Bildschirms in Anspruch und
-                // setzen den Familyname, Charset und Pitch wie dort. Dieser
-                // Font wird nun nochmals auf dem Drucker eingestellt.
-                Font aFnt1 = pOut->GetFontMetric();
-                Font aFnt2( *pPrtFont );
-
-                if (RTL_TEXTENCODING_DONTKNOW == pPrtFont->GetCharSet())
-                    aFnt2.SetCharSet( aFnt1.GetCharSet() );
-                if (FAMILY_DONTKNOW  == pPrtFont->GetFamily())
-                    aFnt2.SetFamily( aFnt1.GetFamily() );
-                if (PITCH_DONTKNOW   == pPrtFont->GetPitch())
-                    aFnt2.SetPitch( aFnt1.GetPitch() );
-
-                pPrt->SetFont( aFnt2 );
-                aMet = pPrt->GetFontMetric( );
-            }
-
-            const XubString aStandardStr( sStandardString,
-                RTL_TEXTENCODING_MS_1252 );
-
-            // This is the reference width
-            const long nOWidth = pPrt->GetTextWidth( aStandardStr );
-
-            // Let's have a look what's the difference to the width
-            // calculated for the output device using the font set at the
-            // reference device
-            long nSWidth = nOWidth - pOut->GetTextWidth( aStandardStr );
-            nScrHeight = (USHORT) pOut->GetTextHeight();
-
-            // Um Aerger mit dem Generic Printer aus dem Wege zu gehen.
-            if( aMet.GetSize().Height() )
-            {
-                BOOL bScrSymbol = FALSE;
-                CharSet ePrtChSet = aMet.GetCharSet();
-                // NoSymbol bedeutet, dass der Drucker sich fuer einen
-                // Nicht-Symbol-Font entschieden hat.
-                BOOL bNoSymbol = ( RTL_TEXTENCODING_DONTKNOW != ePrtChSet &&
-                                   RTL_TEXTENCODING_SYMBOL != ePrtChSet );
-                if ( bNoSymbol )
-                    bScrSymbol = RTL_TEXTENCODING_SYMBOL ==
-                                 pOut->GetFontMetric().GetCharSet();
-                Size aTmp( aMet.GetSize() );
-
-                if( aTmp.Width() && !pPrtFont->GetSize().Width() )
-                {
-                    aTmp.Width() = 0;
-                    aMet.SetSize( aTmp );
-                }
-
-                // Now we set the metrics used at the reference device at the
-                // output device
-                pOut->SetFont( aMet );
-
-                if( bNoSymbol && ( bScrSymbol != ( RTL_TEXTENCODING_SYMBOL ==
-                                        pOut->GetFontMetric().GetCharSet() ) ) )
-                {
-                    // Hier landen wir, wenn der Drucker keinen Symbolfont waehlt,
-                    // aber genau einer der beiden Screenfonts ein Symbolfont ist.
-                    // Wir nehmen dann eben den anderen.
-                    if ( bScrSymbol )
-                        pScrFont = new Font( aMet ); // mit Abgleich
-                    else
-                        pOut->SetFont( *pPrtFont ); // ohne Abgleich
-                }
-                else
-                {
-                    // Let's have a look what's the difference to the width
-                    // calculated for the output device using the metrics set at
-                    // the reference device
-                    long nPWidth = nOWidth - pOut->GetTextWidth( aStandardStr );
-
-                    // We prefer smaller fonts
-                    BYTE nNeg = 0;
-                    if ( nSWidth<0 ) { nSWidth *= -2; nNeg = 1; }
-                    if ( nPWidth<0 ) { nPWidth *= -2; nNeg |= 2; }
-
-                    // nSWidth = Difference between string width on reference device
-                    //           and string width on output device with user font set.
-                    // nPWidth = Difference between string width on reference device
-                    //           and string width on output device with metric obtained
-                    //           from reference device.
-                    // We prefer to take the font with the smaller deviation,
-                    // exception: keep the original font unless the deviation
-                    // is really bad (at least 3%)
-            // Since the test string is neither localized nor has a high resemblance
-            // of the "real text for this font" a higher deviation is reasonable
-
-                    if ( (nSWidth <= nPWidth)
-                    ||   (nSWidth * 32 <= nOWidth ) )
-                    {
-                        // No adjustment, we take the same font for the output
-                        // device like for the reference device
-                        pOut->SetFont( *pPrtFont );
-                        pScrFont = pPrtFont;
-                        nPWidth = nSWidth;
-                        nNeg &= 1;
-                    }
-                    else
-                    {
-                        // The metrics give a better result. So we build
-                        // a new font for the output device based on the
-                        // metrics used at the reference device
-                        pScrFont = new Font( aMet ); // mit Abgleich
-                        nSWidth = nPWidth;
-                        nNeg &= 2;
-                    }
-
-                    //
-                    // now pScrFont is set to the better font and this should
-                    // be set at the output device
-                    //
-
-                    // we still have to check if the choosed font is not to wide
-                    if( nNeg && nOWidth )
-                    {
-                        nPWidth *= 100;
-                        nPWidth /= nOWidth;
-
-                        // if the screen font is too wide, we try to reduce
-                        // the font height and get a smaller one
-                        if( nPWidth > 25 )
-                        {
-                            if( nPWidth > 80 )
-                                nPWidth = 80;
-                            nPWidth = 100 - nPWidth/4;
-                            Size aTmpSize = pScrFont->GetSize();
-                            aTmpSize.Height() *= nPWidth;
-                            aTmpSize.Height() /= 100;
-                            if( aTmpSize.Width() )
-                            {
-                                aTmpSize.Width() *= nPWidth;
-                                aTmpSize.Width() /= 100;
-                            }
-                            Font *pNew = new Font( *pScrFont );
-                            pNew->SetSize( aTmpSize );
-                            pOut->SetFont( *pNew );
-                            nPWidth = nOWidth -
-                                      pOut->GetTextWidth( aStandardStr );
-                            if( nPWidth < 0 ) { nPWidth *= -2; }
-                            if( nPWidth < nSWidth )
-                            {
-                                if( pScrFont != pPrtFont )
-                                    delete pScrFont;
-                                pScrFont = pNew;
-                            }
-                            else
-                            {
-                                delete pNew;
-                                pOut->SetFont( *pScrFont );
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
         // reset the original reference device font
         pPrt->SetFont( aOldPrtFnt );

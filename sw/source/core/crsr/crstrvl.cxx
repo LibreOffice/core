@@ -34,9 +34,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/brkitem.hxx>
-#ifndef _SVX_SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
 #include <crsrsh.hxx>
 #include <doc.hxx>
 #include <pagefrm.hxx>
@@ -719,7 +717,8 @@ BOOL SwCrsrShell::MoveFldType( const SwFieldType* pFldType, BOOL bNext,
             SwFmtFld* pFmtFld = new SwFmtFld( SwDateTimeField(
                 (SwDateTimeFieldType*)pDoc->GetSysFldType( RES_DATETIMEFLD ) ) );
 
-            pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex() );
+            pTxtFld = new SwTxtFld( *pFmtFld, rPos.nContent.GetIndex(),
+                        pDoc->IsClipBoard() );
             pTxtFld->ChgTxtNode( pTNd );
         }
 

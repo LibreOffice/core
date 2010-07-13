@@ -269,12 +269,10 @@ void SwView::GetState(SfxItemSet &rSet)
             }
             break;
             case FN_REDLINE_ON:
-                rSet.Put( SfxBoolItem( nWhich, (pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0 ) );
-                break;
+                rSet.Put( SfxBoolItem( nWhich, GetDocShell()->IsChangeRecording() ) );
+            break;
             case FN_REDLINE_PROTECT :
-            {
-                rSet.Put( SfxBoolItem( nWhich, pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0 ) );
-            }
+                rSet.Put( SfxBoolItem( nWhich, GetDocShell()->HasChangeRecordProtection() ) );
             break;
             case FN_REDLINE_SHOW:
             {
@@ -303,7 +301,7 @@ void SwView::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
             }
             break;
-            case FN_THESAURUS_DLG:
+            case SID_THESAURUS:
             {
                 SwWrtShell  &rSh = GetWrtShell();
                 if (2 <= rSh.GetCrsrCnt())  // multi selection?

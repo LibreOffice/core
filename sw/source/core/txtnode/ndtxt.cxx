@@ -1327,11 +1327,11 @@ void lcl_CopyHint( const USHORT nWhich, const SwTxtAttr * const pHt,
     ASSERT( nWhich == pHt->Which(), "Falsche Hint-Id" );
     switch( nWhich )
     {
-        // Wenn wir es mit einem Fussnoten-Attribut zu tun haben,
-        // muessen wir natuerlich auch den Fussnotenbereich kopieren.
+        // copy nodesarray section with footnote content
         case RES_TXTATR_FTN :
+            ASSERT(pDest, "lcl_CopyHint: no destination text node?");
             static_cast<const SwTxtFtn*>(pHt)->CopyFtn(
-                static_cast<SwTxtFtn*>(pNewHt));
+                *static_cast<SwTxtFtn*>(pNewHt), *pDest);
             break;
 
         // Beim Kopieren von Feldern in andere Dokumente
@@ -1535,6 +1535,13 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     xub_StrLen nTxtStartIdx = rStart.GetIndex();
     xub_StrLen nDestStart = rDestStart.GetIndex();      // alte Pos merken
 
+    if (pDest->GetDoc()->IsClipBoard() && this->GetNum())
+    {
+        // #i111677# cache expansion of source (for clipboard)
+        pDest->m_pNumStringCache.reset(
+            new ::rtl::OUString(this->GetNumString()));
+    }
+
     if( !nLen )
     {
         // wurde keine Laenge angegeben, dann Kopiere die Attribute
@@ -1637,6 +1644,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     // Del-Array fuer alle RefMarks ohne Ausdehnung
     SwpHts aRefMrkArr;
 
+    USHORT nDeletedDummyChars(0);
         //Achtung: kann ungueltig sein!!
     for (USHORT n = 0; ( n < nSize ); ++n)
     {
@@ -1708,31 +1716,24 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
             pNewHt = MakeTxtAttr( *GetDoc(), pHt->GetAttr(),
                     nAttrStt, nAttrEnd );
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//JP 23.04.95:  erstmal so gesondert hier behandeln. Am Besten ist es
-//              aber im CopyFtn wenn die pDestFtn keinen StartNode hat,
-//              sich diesen dann anlegt.
-//              Aber so kurz vor der BETA besser nicht anfassen.
-            if( RES_TXTATR_FTN == nWhich )
-            {
-                SwTxtFtn* pFtn = (SwTxtFtn*)pNewHt;
-                pFtn->ChgTxtNode( this );
-                pFtn->MakeNewTextSection( GetNodes() );
-                lcl_CopyHint( nWhich, pHt, pFtn, 0, 0 );
-                pFtn->ChgTxtNode( 0 );
-            }
-            else
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            {
-                lcl_CopyHint( nWhich, pHt, pNewHt, 0, pDest );
-            }
+            lcl_CopyHint(nWhich, pHt, pNewHt, 0, pDest);
             aArr.C40_INSERT( SwTxtAttr, pNewHt, aArr.Count() );
         }
         else
         {
-            pNewHt = pDest->InsertItem( pHt->GetAttr(), nAttrStt,
-                                nAttrEnd, nsSetAttrMode::SETATTR_NOTXTATRCHR );
-            lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );
+            pNewHt = pDest->InsertItem( pHt->GetAttr(), nAttrStt - nDeletedDummyChars,
+                nAttrEnd - nDeletedDummyChars, nsSetAttrMode::SETATTR_NOTXTATRCHR );
+            if (pNewHt)
+            {
+                lcl_CopyHint( nWhich, pHt, pNewHt, pOtherDoc, pDest );
+            }
+            else if (pHt->HasDummyChar())
+            {
+                // The attribute that has failed to be copied would insert
+                // dummy char, so positions of the following attributes have
+                // to be shifted by one to compensate for that missing char.
+                ++nDeletedDummyChars;
+            }
         }
 
         if( RES_TXTATR_REFMARK == nWhich && !pEndIdx && !bCopyRefMark )
@@ -2826,6 +2827,11 @@ BOOL SwTxtNode::HasBullet() const
 //i53420 added max outline parameter
 XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, const unsigned int _nRestrictToThisLevel ) const
 {
+    if (GetDoc()->IsClipBoard() && m_pNumStringCache.get())
+    {
+        // #i111677# do not expand number strings in clipboard documents
+        return *m_pNumStringCache;
+    }
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule &&
          IsCountedInList() &&
@@ -3049,8 +3055,10 @@ void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
                         rTxt.Erase( nPos, 1 );
                         if( bExpandFlds )
                         {
-                            const XubString aExpand( ((SwTxtFld*)pAttr)->GetFld().
-                                                    GetFld()->Expand() );
+                            const XubString aExpand(
+                                static_cast<SwTxtFld const*>(pAttr)->GetFld()
+                                    .GetFld()->ExpandField(
+                                        GetDoc()->IsClipBoard()));
                             rTxt.Insert( aExpand, nPos );
                             nPos = nPos + aExpand.Len();
                             nEndPos = nEndPos + aExpand.Len();
@@ -3197,7 +3205,9 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                 {
                 case RES_TXTATR_FIELD:
                     {
-                        const XubString aExpand( ((SwTxtFld*)pHt)->GetFld().GetFld()->Expand() );
+                        XubString const aExpand(
+                            static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
+                                ->ExpandField(GetDoc()->IsClipBoard()));
                         if( aExpand.Len() )
                         {
                             aDestIdx++;     // dahinter einfuegen;
@@ -3293,7 +3303,9 @@ const ModelToViewHelper::ConversionMap*
         const SwTxtAttr* pAttr = (*pSwpHints2)[i];
         if ( RES_TXTATR_FIELD == pAttr->Which() )
         {
-            const XubString aExpand( ((SwTxtFld*)pAttr)->GetFld().GetFld()->Expand() );
+            const XubString aExpand(
+                static_cast<SwTxtFld const*>(pAttr)->GetFld().GetFld()
+                    ->ExpandField(GetDoc()->IsClipBoard()));
             if ( aExpand.Len() > 0 )
             {
                 const xub_StrLen nFieldPos = *pAttr->GetStart();
@@ -4435,6 +4447,10 @@ namespace {
                 if ( pNumRuleItem.GetValue().Len() > 0 )
                 {
                     mbAddTxtNodeToList = true;
+                    // --> OD 2010-05-12 #i105562#
+                    //
+                    mrTxtNode.ResetEmptyListStyleDueToResetOutlineLevelAttr();
+                    // <--
                 }
             }
             break;
@@ -4446,10 +4462,6 @@ namespace {
                                         dynamic_cast<const SfxStringItem&>(pItem);
                 ASSERT( pListIdItem.GetValue().Len() > 0,
                         "<HandleSetAttrAtTxtNode(..)> - empty list id attribute not excepted. Serious defect -> please inform OD." );
-//                const SfxStringItem& rListIdItemOfTxtNode =
-//                                    dynamic_cast<const SfxStringItem&>(
-//                                        rTxtNode.GetAttr( RES_PARATR_LIST_ID ));
-//                if ( pListIdItem.GetValue() != rListIdItemOfTxtNode.GetValue() )
                 const String sListIdOfTxtNode = rTxtNode.GetListId();
                 if ( pListIdItem.GetValue() != sListIdOfTxtNode )
                 {
@@ -4563,11 +4575,6 @@ namespace {
         {
             const SfxStringItem* pListIdItem =
                                     dynamic_cast<const SfxStringItem*>(pItem);
-//            const SfxStringItem& rListIdItemOfTxtNode =
-//                                    dynamic_cast<const SfxStringItem&>(
-//                                        mrTxtNode.GetAttr( RES_PARATR_LIST_ID ));
-//            if ( pListIdItem &&
-//                 pListIdItem->GetValue() != rListIdItemOfTxtNode.GetValue() )
             const String sListIdOfTxtNode = mrTxtNode.GetListId();
             if ( pListIdItem &&
                  pListIdItem->GetValue() != sListIdOfTxtNode )
@@ -4972,7 +4979,9 @@ namespace {
                 mrTxtNode.AddToList();
             }
             // --> OD 2008-11-19 #i70748#
-            else if ( dynamic_cast<const SfxUInt16Item &>(mrTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, FALSE )).GetValue() > 0 )
+            // --> OD 2010-05-12 #i105562#
+            else if ( mrTxtNode.GetpSwAttrSet() &&
+                      dynamic_cast<const SfxUInt16Item &>(mrTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, FALSE )).GetValue() > 0 )
             {
                 mrTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
             }

@@ -44,6 +44,11 @@ SRC1FILES =  \
         inputwin.src \
         workctrl.src
 
+EXCEPTIONSFILES = \
+        $(SLO)$/tblctrl.obj \
+        $(SLO)$/tbxanchr.obj \
+        $(SLO)$/workctrl.obj
+
 SLOFILES =  \
         $(SLO)$/inputwin.obj \
         $(SLO)$/tbxanchr.obj \

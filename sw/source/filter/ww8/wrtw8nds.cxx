@@ -77,6 +77,7 @@
 #include <doc.hxx>
 #include <docary.hxx>
 #include <swtable.hxx>
+#include <swtblfmt.hxx>
 #include <section.hxx>
 #include <pagedesc.hxx>
 #include <swrect.hxx>
@@ -1899,6 +1900,17 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 #endif
 
         AttrOutput().TableInfoCell( pTextNodeInfoInner );
+        if (pTextNodeInfoInner->isFirstInTable())
+        {
+            const SwTable * pTable = pTextNodeInfoInner->getTable();
+            const SwTableFmt * pTabFmt =
+                dynamic_cast<const SwTableFmt *>(pTable->GetRegisteredIn());
+            if (pTabFmt != NULL)
+            {
+                if (pTabFmt->GetBreak().GetBreak() == SVX_BREAK_PAGE_BEFORE)
+                    AttrOutput().PageBreakBefore(true);
+            }
+        }
     }
 
     if ( !bFlyInTable )
@@ -2713,7 +2725,7 @@ void MSWordExportBase::OutputContentNode( const SwCntntNode& rNode )
             break;
         default:
 #if OSL_DEBUG_LEVEL > 0
-            fprintf( stderr, "Unhandled node, type == %d\n", rNode.GetNodeType() );
+            OSL_TRACE("Unhandled node, type == %d\n", rNode.GetNodeType() );
 #endif
             break;
     }

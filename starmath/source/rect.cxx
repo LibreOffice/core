@@ -715,7 +715,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     {
         // since we format for the printer (where GetTextBoundRect will fail)
         // we need a virtual device here.
-        pGlyphDev = &SM_MOD1()->GetDefaultVirtualDev();
+        pGlyphDev = &SM_MOD()->GetDefaultVirtualDev();
     }
 
     const FontMetric  aDevFM (rDev.GetFontMetric());

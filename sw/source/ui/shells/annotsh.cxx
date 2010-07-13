@@ -27,13 +27,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 
-#include <tools/shl.hxx>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+
+#include <tools/shl.hxx>
+#include <i18npool/mslangid.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
@@ -117,8 +121,8 @@
 
 #include <docsh.hxx>
 #include <svl/undo.hxx>
-#include "swabstdlg.hxx" //CHINA001
-#include "chrdlg.hrc" //CHINA001
+#include "swabstdlg.hxx"
+#include "chrdlg.hrc"
 #include "misc.hrc"
 #include <app.hrc>
 
@@ -1138,7 +1142,17 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
             bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV,rReq,rView,rSh);
             break;
         }
-        case FN_THESAURUS_DLG:
+        case SID_THES:
+        {
+            String aReplaceText;
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+            if (pItem2)
+                aReplaceText = pItem2->GetValue();
+            if (aReplaceText.Len() > 0)
+                ReplaceTextWithSynonym( pOLV->GetEditView(), aReplaceText );
+            break;
+        }
+        case SID_THESAURUS:
         {
             pOLV->StartThesaurus();
             break;
@@ -1246,8 +1260,25 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
                 SwLangHelper::GetLanguageStatus(pOLV,rSet);
                 break;
             }
+
+            case SID_THES:
+            {
+                String          aStatusVal;
+                LanguageType    nLang = LANGUAGE_NONE;
+                bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, pOLV->GetEditView() );
+                rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+
+                // disable "Thesaurus" context menu entry if there is nothing to look up
+                uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
+                lang::Locale aLocale( SvxCreateLocale( nLang ) );
+                if (!bIsLookUpWord ||
+                    !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
+                    rSet.DisableItem( SID_THES );
+                break;
+            }
+
             // disable "Thesaurus" if the language is not supported
-            case FN_THESAURUS_DLG:
+            case SID_THESAURUS:
             {
                 const SfxPoolItem &rItem = rView.GetWrtShell().GetDoc()->GetDefault(
                             GetWhichOfScript( RES_CHRATR_LANGUAGE,
@@ -1257,7 +1288,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
                 if (!xThes.is() || nLang == LANGUAGE_NONE ||
                     !xThes->hasLocale( SvxCreateLocale( nLang ) ))
-                    rSet.DisableItem( FN_THESAURUS_DLG );
+                    rSet.DisableItem( SID_THESAURUS );
             }
             break;
             case SID_HANGUL_HANJA_CONVERSION:
@@ -1295,6 +1326,15 @@ void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
 
         switch( rReq.GetSlot() )
         {
+            case SID_TRANSLITERATE_SENTENCE_CASE:
+                nMode = TransliterationModulesExtra::SENTENCE_CASE;
+                break;
+            case SID_TRANSLITERATE_TITLE_CASE:
+                nMode = TransliterationModulesExtra::TITLE_CASE;
+                break;
+            case SID_TRANSLITERATE_TOGGLE_CASE:
+                nMode = TransliterationModulesExtra::TOGGLE_CASE;
+                break;
             case SID_TRANSLITERATE_UPPER:
                 nMode = TransliterationModules_LOWERCASE_UPPERCASE;
                 break;

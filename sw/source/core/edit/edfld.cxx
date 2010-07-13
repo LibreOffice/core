@@ -42,9 +42,7 @@
 #include <expfld.hxx>
 #include <flddat.hxx>
 #include <swundo.hxx>
-#ifndef _DBMGR_HXX
 #include <dbmgr.hxx>
-#endif
 #include <swddetbl.hxx>
 #include <hints.hxx>
 
@@ -226,7 +224,8 @@ void SwEditShell::FieldToText( SwFieldType* pType )
                                      *pFmtFld->GetTxtFld()->GetStart() );
 
                 // Feldinhalt durch Text ersetzen
-                String aEntry( pFmtFld->GetFld()->Expand() );
+                String const aEntry(
+                    pFmtFld->GetFld()->ExpandField(GetDoc()->IsClipBoard()) );
                 pPaM->SetMark();
                 pPaM->Move( fnMoveForward );
                 GetDoc()->DeleteRange( *pPaM );

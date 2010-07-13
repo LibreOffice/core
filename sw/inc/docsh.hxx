@@ -29,6 +29,7 @@
 
 #include <rtl/ref.hxx>
 #include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/uno/Sequence.h>
 #include <vcl/timer.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/objsh.hxx>
@@ -302,6 +303,14 @@ public:
     SfxInPlaceClient* GetIPClient( const ::svt::EmbeddedObjectRef& xObjRef );
 
     virtual const ::sfx2::IXmlIdRegistry* GetXmlIdRegistry() const;
+
+    // passwword protection for Writer (derived from SfxObjectShell)
+    // see also:    FN_REDLINE_ON, FN_REDLINE_ON
+    virtual bool    IsChangeRecording() const;
+    virtual bool    HasChangeRecordProtection() const;
+    virtual void    SetChangeRecording( bool bActivate );
+    virtual bool    SetProtectionPassword( const String &rPassword );
+    virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
 };
 
 class Graphic;
