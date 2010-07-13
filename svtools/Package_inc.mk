@@ -105,7 +105,6 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/javacontext.hxx,svtool
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/javainteractionhandler.hxx,svtools/javainteractionhandler.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/langtab.hxx,svtools/langtab.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/localresaccess.hxx,svtools/localresaccess.hxx))
-$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/logindlg.hxx,svtools/logindlg.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/menuoptions.hxx,svtools/menuoptions.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/miscopt.hxx,svtools/miscopt.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/optionsdrawinglayer.hxx,svtools/optionsdrawinglayer.hxx))
@@ -178,3 +177,4 @@ $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wizardmachine.hxx,svto
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wizdlg.hxx,svtools/wizdlg.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/wmf.hxx,svtools/wmf.hxx))
 $(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/xtextedt.hxx,svtools/xtextedt.hxx))
+$(eval $(call gb_Package_add_file,svtools_inc,inc/svtools/svtools.hrc,svtools/svtools.hrc))

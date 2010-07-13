@@ -211,12 +211,6 @@ namespace utl
     void DesktopTerminationObserver::revokeTerminationListener( ITerminationListener* _pListener )
     {
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-        if ( getListenerAdminData().bAlreadyTerminated )
-        {
-            _pListener->notifyTermination();
-            return;
-        }
-
         Listeners& rListeners = getListenerAdminData().aListeners;
         for ( Listeners::iterator lookup = rListeners.begin();
               lookup != rListeners.end();

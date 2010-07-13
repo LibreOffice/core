@@ -184,6 +184,8 @@ public:
     NSView* getView() const { return mpView; }
     unsigned int getStyleMask() const { return mnStyleMask; }
 
+    void getResolution( long& o_rDPIX, long& o_rDPIY );
+
     // actually the follwing methods do the same thing: flipping y coordinates
     // but having two of them makes clearer what the coordinate system
     // is supposed to be before and after

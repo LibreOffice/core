@@ -51,6 +51,7 @@ class RawBitmap;
 class CmapResult;
 
 #include <vcl/outfont.hxx>
+#include <vcl/impfont.hxx>
 
 class ServerFontLayout;
 #include <vcl/sallayout.hxx>
@@ -258,11 +259,15 @@ class VCL_DLLPUBLIC ImplServerFontEntry : public ImplFontEntry
 {
 private:
     ServerFont*    mpServerFont;
+    ImplFontOptions maFontOptions;
+    bool           mbGotFontOptions;
+    bool           mbValidFontOptions;
 
 public:
                    ImplServerFontEntry( ImplFontSelectData& );
     virtual        ~ImplServerFontEntry();
     void           SetServerFont( ServerFont* p) { mpServerFont = p; }
+    void           HandleFontOptions();
 };
 
 // =======================================================================

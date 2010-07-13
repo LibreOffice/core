@@ -61,7 +61,7 @@ namespace basegfx { namespace tools
             else if( g == maxVal )
                 h = 2.0 + (b - r)/d;
             else
-                h = 4.0 + (r - h)/d;
+                h = 4.0 + (r - g)/d;
 
             h *= 60.0;
 

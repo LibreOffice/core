@@ -641,19 +641,35 @@ bool X11SalGraphics::setFont( const ImplFontSelectData *pEntry, int nFallbackLev
         mpServerFont[ nFallbackLevel ] = pServerFont;
 
         // apply font specific-hint settings if needed
+        // TODO: also disable it for reference devices
     if( !bPrinter_ )
     {
-            // TODO: is it worth it to cache the hint settings, e.g. in the ImplFontEntry?
-            ImplFontOptions aFontOptions;
-            bool GetFCFontOptions( const ImplFontAttributes&, int nSize, ImplFontOptions&);
-            if( GetFCFontOptions( *pEntry->mpFontData, pEntry->mnHeight, aFontOptions ) )
-                pServerFont->SetFontOptions( aFontOptions );
+        ImplServerFontEntry* pSFE = static_cast<ImplServerFontEntry*>( pEntry->mpFontEntry );
+        pSFE->HandleFontOptions();
         }
 
         return true;
     }
 
     return false;
+}
+
+void ImplServerFontEntry::HandleFontOptions( void )
+{
+    bool GetFCFontOptions( const ImplFontAttributes&, int nSize, ImplFontOptions& );
+
+    if( !mpServerFont )
+        return;
+    if( !mbGotFontOptions )
+    {
+        // get and cache the font options
+        mbGotFontOptions = true;
+        mbValidFontOptions = GetFCFontOptions( *maFontSelData.mpFontData,
+            maFontSelData.mnHeight, maFontOptions );
+    }
+    // apply the font options
+    if( mbValidFontOptions )
+        mpServerFont->SetFontOptions( maFontOptions );
 }
 
 //--------------------------------------------------------------------------
@@ -1633,11 +1649,13 @@ void X11SalGraphics::GetDevFontSubstList( OutputDevice* )
 void cairosubcallback( void* pPattern )
 {
     CairoWrapper& rCairo = CairoWrapper::get();
-    if( rCairo.isValid() )
-    {
+    if( !rCairo.isValid() )
+        return;
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        rCairo.ft_font_options_substitute( rStyleSettings.GetCairoFontOptions(), pPattern);
-    }
+    const void* pFontOptions = rStyleSettings.GetCairoFontOptions();
+    if( !pFontOptions )
+        return;
+    rCairo.ft_font_options_substitute( pFontOptions, pPattern );
 }
 
 bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
@@ -1664,7 +1682,6 @@ bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
         default:
             aInfo.m_eItalic = psp::italic::Unknown;
             break;
-
     }
     // set weight
     switch( rFontAttributes.GetWeight() )
@@ -1740,7 +1757,6 @@ bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
 
     const psp::PrintFontManager& rPFM = psp::PrintFontManager::get();
     bool bOK = rPFM.getFontOptions( aInfo, nSize, cairosubcallback, rFontOptions);
-
     return bOK;
 }
 
@@ -2025,7 +2041,7 @@ static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData
 {
     ImplFontSelectData aRet(rFontSelData);
 
-    const rtl::OString aLangAttrib; //TODO: = MsLangId::convertLanguageToIsoByteString( rFontSelData.meLanguage );
+    const rtl::OString aLangAttrib = MsLangId::convertLanguageToIsoByteString( rFontSelData.meLanguage );
 
     psp::italic::type eItalic = psp::italic::Unknown;
     if( rFontSelData.GetSlant() != ITALIC_DONTKNOW )

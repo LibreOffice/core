@@ -741,6 +741,13 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
                                      aMetrics.nEntryHeight );
     }
 
+    if ( !aMetrics.bText && !aMetrics.bImage && !IsUserDrawEnabled() )
+    {
+        // entries which have no (aka an empty) text, and no image, and are not user-drawn, should be
+        // shown nonetheless
+        aMetrics.nEntryHeight = mnTextHeight + mnBorder;
+    }
+
     if ( aMetrics.nEntryWidth > mnMaxWidth )
         mnMaxWidth = aMetrics.nEntryWidth;
     if ( aMetrics.nEntryHeight > mnMaxHeight )

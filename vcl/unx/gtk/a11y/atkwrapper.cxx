@@ -283,7 +283,9 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_RULER,
         ATK_ROLE_UNKNOWN,       // SECTION - registered below
         ATK_ROLE_UNKNOWN,       // TREE_ITEM - registered below
-        ATK_ROLE_TREE_TABLE
+        ATK_ROLE_TREE_TABLE,
+        ATK_ROLE_SCROLL_PANE,   // COMMENT - mapped to atk_role_scroll_pane
+        ATK_ROLE_UNKNOWN        // COMMENT_END - mapped to atk_role_unknown
     };
 
     static bool initialized = false;

@@ -68,7 +68,6 @@ class RscChar
 {
 public:
     static char * MakeUTF8( char * pStr, UINT16 nTextEncoding );
-    static char * MakeUTF8FromL( char * pStr );
 };
 
 /****************** R s c P t r P t r ************************************/

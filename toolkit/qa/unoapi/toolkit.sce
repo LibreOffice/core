@@ -8,17 +8,17 @@
 #i86110 -o toolkit.AccessibleList
 #i86110 -o toolkit.AccessibleListBox
 #i86110 -o toolkit.AccessibleListItem
--o toolkit.AccessibleMenu
--o toolkit.AccessibleMenuBar
+#i111047# -o toolkit.AccessibleMenu
+#i111047# -o toolkit.AccessibleMenuBar
 #i86009 -o toolkit.AccessibleMenuItem
--o toolkit.AccessibleMenuSeparator
+#i111047# -o toolkit.AccessibleMenuSeparator
 #i52607 -o toolkit.AccessiblePopupMenu
 #i86107,i86110 -o toolkit.AccessibleRadioButton
 -o toolkit.AccessibleScrollBar
--o toolkit.AccessibleStatusBar
+#i111225 -o toolkit.AccessibleStatusBar
 -o toolkit.AccessibleStatusBarItem
--o toolkit.AccessibleTabControl
--o toolkit.AccessibleTabPage
+#i109643 -o toolkit.AccessibleTabControl
+#i109643 -o toolkit.AccessibleTabPage
 #i86287 -o toolkit.AccessibleToolBox
 #i88605 -o toolkit.AccessibleToolBoxItem
 -o toolkit.AccessibleWindow
@@ -26,7 +26,7 @@
 -o toolkit.MutableTreeNode
 -o toolkit.TabController
 -o toolkit.TabControllerModel
-#i80788 -o toolkit.Toolkit
+-o toolkit.Toolkit
 -o toolkit.UnoControlButton
 -o toolkit.UnoControlButtonModel
 -o toolkit.UnoControlCheckBox
@@ -39,7 +39,7 @@
 -o toolkit.UnoControlCurrencyFieldModel
 -o toolkit.UnoControlDateField
 -o toolkit.UnoControlDateFieldModel
-#i80788 -o toolkit.UnoControlDialog
+#allegedly was i80788, but still broken: -o toolkit.UnoControlDialog
 -o toolkit.UnoControlDialogModel
 -o toolkit.UnoControlEdit
 -o toolkit.UnoControlEditModel

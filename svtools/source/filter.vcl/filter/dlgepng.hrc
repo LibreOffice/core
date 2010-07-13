@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 
 #define BTN_OK 1
 #define BTN_CANCEL 1

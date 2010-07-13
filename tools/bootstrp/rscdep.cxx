@@ -36,6 +36,7 @@
 #include <string.h>
 
 #include "bootstrp/prj.hxx"
+#include "sal/main.h"
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
@@ -43,6 +44,16 @@
 #include <tools/stream.hxx>
 
 #include "cppdep.hxx"
+
+#if defined WNT
+#if !defined HAVE_GETOPT
+#define __STDC__ 1
+#define __GNU_LIBRARY__
+#include <external/glibc/getopt.h>
+#else
+#include <getopt.h>
+#endif
+#endif
 
 class RscHrcDep : public CppDep
 {
@@ -69,21 +80,7 @@ void RscHrcDep::Execute()
 
 //static String aDelim;
 
-/* poor man's getopt() */
-int     simple_getopt(char *argv[], const char *optstring);
-#if defined(WNT) || defined(OS2)
-static char *optarg = NULL;
-static int  optind = 1;
-static int  optopt = 0;
-static int  opterr = 0;
-#endif
-
-
-int
-#ifdef WNT
-_cdecl
-#endif
-main( int argc, char **argv )
+SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
 {
     int c;
     char aBuf[255];
@@ -183,7 +180,7 @@ main( int argc, char **argv )
 
     while( 1 )
     {
-        c = simple_getopt( argv,
+        c = getopt( argc, argv,
         "_abcdefghi:jklmnopqrstuvwxyzABCDEFGHI:JKLMNOPQRSTUVWXYZ1234567890/-+=.\\()\"");
         if ( c == -1 )
             break;
@@ -298,43 +295,5 @@ main( int argc, char **argv )
     aOutStream.Close();
 
     return 0;
-}
-
-/* my very simple minded implementation of getopt()
- * it's too sad that getopt() is not available everywhere
- * note: this is not a full POSIX conforming getopt()
- */
-int simple_getopt(char *argv[], const char *optstring)
-{
-    char *arg = argv[optind];
-
-    /* skip all response file arguments */
-    if ( arg ) {
-        while ( *arg == '@' )
-            arg = argv[++optind];
-
-        if ( arg[0] == '-' && arg[1] != '\0' ) {
-            const char *popt;
-            int c = arg[1];
-            if ( (popt = strchr(optstring, c)) == NULL ) {
-                optopt = c;
-                if ( opterr )
-                    fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
-                return '?';
-            }
-            if ( *(++popt) == ':') {
-                 if ( arg[2] != '\0' ) {
-                     optarg = ++arg;
-                 } else {
-                     optarg = argv[++optind];
-                 }
-             } else {
-                 optarg = NULL;
-             }
-             ++optind;
-             return c;
-        }
-    }
-    return -1;
 }
 

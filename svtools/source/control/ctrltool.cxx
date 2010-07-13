@@ -37,7 +37,7 @@
 #include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include <svtools/ctrltool.hxx>
 

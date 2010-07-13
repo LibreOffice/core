@@ -988,7 +988,8 @@ namespace { struct Cache : public rtl::Static<ImpFilterLibCache, Cache> {}; }
 // -----------------
 
 GraphicFilter::GraphicFilter( sal_Bool bConfig ) :
-    bUseConfig  ( bConfig )
+    bUseConfig        ( bConfig ),
+    nExpGraphHint     ( 0 )
 {
     ImplInit();
 }
@@ -1674,6 +1675,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
     USHORT nFormatCount = GetExportFormatCount();
 
     ResetLastError();
+    nExpGraphHint = 0;
 
     if( nFormat == GRFILTER_FORMAT_DONTKNOW )
     {
@@ -1846,8 +1848,10 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             }
             else if( aFilterName.EqualsIgnoreCaseAscii( EXP_JPEG ) )
             {
-                if( !ExportJPEG( rOStm, aGraphic, pFilterData ) )
+                bool bExportedGrayJPEG = false;
+                if( !ExportJPEG( rOStm, aGraphic, pFilterData, &bExportedGrayJPEG ) )
                     nStatus = GRFILTER_FORMATERROR;
+                nExpGraphHint = bExportedGrayJPEG ? GRFILTER_OUTHINT_GREY : 0;
 
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;

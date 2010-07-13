@@ -91,7 +91,7 @@ InternalStreamLock::InternalStreamLock(
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "locked %s", aFileName.GetBuffer() );
     if( m_nStartPos || m_nEndPos )
-        fprintf(stderr, " [ %d ... %d ]", m_nStartPos, m_nEndPos );
+        fprintf(stderr, " [ %ld ... %ld ]", m_nStartPos, m_nEndPos );
     fprintf( stderr, "\n" );
 #endif
 }
@@ -103,7 +103,7 @@ InternalStreamLock::~InternalStreamLock()
     ByteString aFileName(m_pStream->GetFileName(), osl_getThreadTextEncoding());
     fprintf( stderr, "unlocked %s", aFileName.GetBuffer() );
     if( m_nStartPos || m_nEndPos )
-        fprintf(stderr, " [ %d ... %d ]", m_nStartPos, m_nEndPos );
+        fprintf(stderr, " [ %ld ... %ld ]", m_nStartPos, m_nEndPos );
     fprintf( stderr, "\n" );
 #endif
 }
@@ -209,7 +209,7 @@ static sal_uInt32 GetSvError( int nErrno )
         { 0,            SVSTREAM_OK },
         { EACCES,       SVSTREAM_ACCESS_DENIED },
         { EBADF,        SVSTREAM_INVALID_HANDLE },
-#if defined( RS6000 ) || defined( ALPHA ) || defined( HP9000 ) || defined( NETBSD ) || defined(FREEBSD) || defined(MACOSX)
+#if defined( RS6000 ) || defined( ALPHA ) || defined( HP9000 ) || defined( NETBSD ) || defined(FREEBSD) || defined(MACOSX) || defined(__FreeBSD_kernel__)
         { EDEADLK,      SVSTREAM_LOCKING_VIOLATION },
 #else
         { EDEADLOCK,    SVSTREAM_LOCKING_VIOLATION },
@@ -223,7 +223,7 @@ static sal_uInt32 GetSvError( int nErrno )
         { EAGAIN,       SVSTREAM_LOCKING_VIOLATION },
         { EISDIR,       SVSTREAM_PATH_NOT_FOUND },
         { ELOOP,        SVSTREAM_PATH_NOT_FOUND },
-#if ! defined( RS6000 ) && ! defined( ALPHA ) && ! defined( NETBSD ) && ! defined (FREEBSD) && ! defined (MACOSX)
+#if ! defined( RS6000 ) && ! defined( ALPHA ) && ! defined( NETBSD ) && ! defined (FREEBSD) && ! defined (MACOSX) && ! defined(__FreeBSD_kernel__)
         { EMULTIHOP,    SVSTREAM_PATH_NOT_FOUND },
         { ENOLINK,      SVSTREAM_PATH_NOT_FOUND },
 #endif
@@ -514,7 +514,7 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
     if( ! InternalStreamLock::LockFile( nByteOffset, nByteOffset+nBytes, this ) )
     {
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "InternalLock on %s [ %d ... %d ] failed\n",
+        fprintf( stderr, "InternalLock on %s [ %ld ... %ld ] failed\n",
                  ByteString(aFilename, osl_getThreadTextEncoding()).GetBuffer(), nByteOffset, nByteOffset+nBytes );
 #endif
         return sal_False;

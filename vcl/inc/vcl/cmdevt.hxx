@@ -138,18 +138,20 @@ private:
     USHORT          mnMode;
     USHORT          mnCode;
     BOOL            mbHorz;
+    BOOL            mbDeltaIsPixel;
 
 public:
                     CommandWheelData();
                     CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
                                       ULONG nScrollLines,
                                       USHORT nWheelMode, USHORT nKeyModifier,
-                                      BOOL mbHorz = FALSE );
+                                      BOOL bHorz = FALSE, BOOL bDeltaIsPixel = FALSE );
 
     long            GetDelta() const { return mnDelta; }
     long            GetNotchDelta() const { return mnNotchDelta; }
     ULONG           GetScrollLines() const { return mnLines; }
     BOOL            IsHorz() const { return mbHorz; }
+    BOOL            IsDeltaPixel() const { return mbDeltaIsPixel; }
 
     USHORT          GetMode() const { return mnMode; }
 
@@ -173,12 +175,13 @@ inline CommandWheelData::CommandWheelData()
     mnMode          = 0;
     mnCode          = 0;
     mbHorz          = FALSE;
+    mbDeltaIsPixel  = FALSE;
 }
 
 inline CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDelta,
                                            ULONG nScrollLines,
                                            USHORT nWheelMode, USHORT nKeyModifier,
-                                           BOOL bHorz )
+                                           BOOL bHorz, BOOL bDeltaIsPixel )
 {
     mnDelta         = nWheelDelta;
     mnNotchDelta    = nWheelNotchDelta;
@@ -186,6 +189,7 @@ inline CommandWheelData::CommandWheelData( long nWheelDelta, long nWheelNotchDel
     mnMode          = nWheelMode;
     mnCode          = nKeyModifier;
     mbHorz          = bHorz;
+    mbDeltaIsPixel  = bDeltaIsPixel;
 }
 
 // ---------------------

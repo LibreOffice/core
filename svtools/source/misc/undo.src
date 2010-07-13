@@ -27,7 +27,7 @@
 
  // include ------------------------------------------------------------------
 
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 
 String STR_UNDO
 {

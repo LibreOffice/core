@@ -58,6 +58,8 @@ public:
         NET_WM_NAME,
         NET_WM_DESKTOP,
         NET_WM_ICON_NAME,
+        NET_WM_PID,
+        NET_WM_PING,
         NET_WM_STATE,
         NET_WM_STATE_MAXIMIZED_HORZ,
         NET_WM_STATE_MAXIMIZED_VERT,
@@ -160,6 +162,7 @@ protected:
                             m_aWMWorkAreas;
     bool                    m_bTransientBehaviour;
     bool                    m_bEnableAlwaysOnTopWorks;
+    bool                    m_bLegacyPartialFullscreen;
     int                     m_nWinGravity;
     int                     m_nInitWinGravity;
 
@@ -220,6 +223,18 @@ public:
     virtual void setWMName( X11SalFrame* pFrame, const String& rWMName ) const;
 
     /*
+     * set NET_WM_PID
+     */
+    virtual void setPID( X11SalFrame* pFrame ) const;
+
+    /*
+     * set WM_CLIENT_MACHINE
+     */
+    virtual void setClientMachine( X11SalFrame* pFrame ) const;
+
+    virtual void answerPing( X11SalFrame*, XClientMessageEvent* ) const;
+
+    /*
      *  maximizes frame
      *  maximization can be toggled in either direction
      *  to get the original position and size
@@ -230,6 +245,15 @@ public:
      *  start/stop fullscreen mode on a frame
      */
     virtual void showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const;
+    /*
+     *  tell whether legacy partial full screen handling is necessary
+     *  see #i107249#: NET_WM_STATE_FULLSCREEN is not well defined, but de facto
+     *  modern WM's interpret it the "right" way, namely they make "full screen"
+     *  taking twin view or Xinerama into accound and honor the positioning hints
+     *  to see which screen actually was meant to use for fullscreen.
+     */
+    bool isLegacyPartialFullscreen() const
+    { return m_bLegacyPartialFullscreen; }
     /*
      * set window struts
      */

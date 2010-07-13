@@ -1128,6 +1128,16 @@ static Font getFont( NSFont* pFont, long nDPIY, const Font& rDefault )
     return aResult;
 }
 
+void AquaSalFrame::getResolution( long& o_rDPIX, long& o_rDPIY )
+{
+    if( ! mpGraphics )
+    {
+        GetGraphics();
+        ReleaseGraphics( mpGraphics );
+    }
+    mpGraphics->GetResolution( o_rDPIX, o_rDPIY );
+}
+
 // on OSX-Aqua the style settings are independent of the frame, so it does
 // not really belong here. Since the connection to the Appearance_Manager
 // is currently done in salnativewidgets.cxx this would be a good place.
@@ -1157,13 +1167,8 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
 
     // get the system font settings
     Font aAppFont = aStyleSettings.GetAppFont();
-    if( ! mpGraphics )
-    {
-        GetGraphics();
-        ReleaseGraphics( mpGraphics );
-    }
     long nDPIX = 72, nDPIY = 72;
-    mpGraphics->GetResolution( nDPIX, nDPIY );
+    getResolution( nDPIX, nDPIY );
     aAppFont = getFont( [NSFont systemFontOfSize: 0], nDPIY, aAppFont );
 
     // TODO: better mapping of aqua<->ooo font settings
@@ -1352,40 +1357,81 @@ void AquaSalFrame::GetWorkArea( Rectangle& rRect )
 SalPointerState AquaSalFrame::GetPointerState()
 {
     SalPointerState state;
+    state.mnState = 0;
 
     // get position
     NSPoint aPt = [mpWindow mouseLocationOutsideOfEventStream];
     CocoaToVCL( aPt, false );
     state.maPos = Point(static_cast<long>(aPt.x), static_cast<long>(aPt.y));
 
-    // FIXME: replace Carbon by Cocoa
-    // Cocoa does not have an equivalent for GetCurrentEventButtonState
-    // and GetCurrentEventKeyModifiers.
-    // we could try to get away with tracking all events for modifierKeys
-    // and all mouse events for button state in VCL_NSApllication::sendEvent,
-    // but it is unclear whether this will get us the same result.
-    // leave in GetCurrentEventButtonState and GetCurrentEventKeyModifiers for now
+    NSEvent* pCur = [NSApp currentEvent];
+    bool bMouseEvent = false;
+    if( pCur )
+    {
+        bMouseEvent = true;
+        switch( [pCur type] )
+        {
+        case NSLeftMouseDown:       state.mnState |= MOUSE_LEFT; break;
+        case NSLeftMouseUp:         break;
+        case NSRightMouseDown:      state.mnState |= MOUSE_RIGHT; break;
+        case NSRightMouseUp:        break;
+        case NSOtherMouseDown:      state.mnState |= ([pCur buttonNumber] == 2) ? MOUSE_MIDDLE : 0; break;
+        case NSOtherMouseUp:        break;
+        case NSMouseMoved:          break;
+        case NSLeftMouseDragged:    state.mnState |= MOUSE_LEFT; break;
+        case NSRightMouseDragged:   state.mnState |= MOUSE_RIGHT; break;
+        case NSOtherMouseDragged:   state.mnState |= ([pCur buttonNumber] == 2) ? MOUSE_MIDDLE : 0; break;
+            break;
+        default:
+            bMouseEvent = false;
+            break;
+        }
+    }
+    if( bMouseEvent )
+    {
+        unsigned int nMask = (unsigned int)[pCur modifierFlags];
+        if( (nMask & NSShiftKeyMask) != 0 )
+            state.mnState |= KEY_SHIFT;
+        if( (nMask & NSControlKeyMask) != 0 )
+            state.mnState |= KEY_MOD3;
+        if( (nMask & NSAlternateKeyMask) != 0 )
+            state.mnState |= KEY_MOD2;
+        if( (nMask & NSCommandKeyMask) != 0 )
+            state.mnState |= KEY_MOD1;
 
-    // fill in button state
-    UInt32 nState = GetCurrentEventButtonState();
-    state.mnState = 0;
-    if( nState & 1 )
-        state.mnState |= MOUSE_LEFT;    // primary button
-    if( nState & 2 )
-        state.mnState |= MOUSE_RIGHT;   // secondary button
-    if( nState & 4 )
-        state.mnState |= MOUSE_MIDDLE;  // tertiary button
+    }
+    else
+    {
+        // FIXME: replace Carbon by Cocoa
+        // Cocoa does not have an equivalent for GetCurrentEventButtonState
+        // and GetCurrentEventKeyModifiers.
+        // we could try to get away with tracking all events for modifierKeys
+        // and all mouse events for button state in VCL_NSApllication::sendEvent,
+        // but it is unclear whether this will get us the same result.
+        // leave in GetCurrentEventButtonState and GetCurrentEventKeyModifiers for now
 
-    // fill in modifier state
-    nState = GetCurrentEventKeyModifiers();
-    if( nState & shiftKey )
-        state.mnState |= KEY_SHIFT;
-    if( nState & controlKey )
-        state.mnState |= KEY_MOD3;
-    if( nState & optionKey )
-        state.mnState |= KEY_MOD2;
-    if( nState & cmdKey )
-        state.mnState |= KEY_MOD1;
+        // fill in button state
+        UInt32 nState = GetCurrentEventButtonState();
+        state.mnState = 0;
+        if( nState & 1 )
+            state.mnState |= MOUSE_LEFT;    // primary button
+        if( nState & 2 )
+            state.mnState |= MOUSE_RIGHT;   // secondary button
+        if( nState & 4 )
+            state.mnState |= MOUSE_MIDDLE;  // tertiary button
+
+        // fill in modifier state
+        nState = GetCurrentEventKeyModifiers();
+        if( nState & shiftKey )
+            state.mnState |= KEY_SHIFT;
+        if( nState & controlKey )
+            state.mnState |= KEY_MOD3;
+        if( nState & optionKey )
+            state.mnState |= KEY_MOD2;
+        if( nState & cmdKey )
+            state.mnState |= KEY_MOD1;
+    }
+
 
     return state;
 }

@@ -68,7 +68,7 @@ SHL1STDLIBS= \
                 $(I18NREGEXPLIB)
 
 SHL1DEPN=		makefile.mk
-SHL1VERSIONMAP= i18nsearch.map
+SHL1VERSIONMAP= $(SOLARENV)/src/component.map
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=		$(SHL1TARGET)
 

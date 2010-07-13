@@ -49,6 +49,14 @@ public:
             }
     BOOL    operator != ( const SvBorder & rObj ) const
             { return !(*this == rObj); }
+    SvBorder & operator = ( const SvBorder & rBorder )
+            {
+                Left()   = rBorder.Left();
+                Top()    = rBorder.Top();
+                Right()  = rBorder.Right();
+                Bottom() = rBorder.Bottom();
+                return *this;
+            }
     SvBorder & operator += ( const SvBorder & rBorder )
             {
                 Left()   += rBorder.Left();

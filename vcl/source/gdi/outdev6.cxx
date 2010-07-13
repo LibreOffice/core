@@ -184,18 +184,31 @@ void OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly,
 
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
-        && ROP_OVERPAINT == GetRasterOp()
-        && IsFillColor())
+        && ROP_OVERPAINT == GetRasterOp() )
     {
         // b2dpolygon support not implemented yet on non-UNX platforms
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
 
-        // transform the polygon and ensure closed
-        aB2DPolyPolygon.transform(aTransform);
-        aB2DPolyPolygon.setClosed(true);
+        // transform the polygon into device space and ensure it is closed
+        aB2DPolyPolygon.transform( aTransform );
+        aB2DPolyPolygon.setClosed( true );
 
-        if(mpGraphics->DrawPolyPolygon(aB2DPolyPolygon, fTransparency, this))
+        bool bDrawnOk = true;
+        if( IsFillColor() )
+            bDrawnOk = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
+        if( bDrawnOk && IsLineColor() )
+        {
+            const basegfx::B2DVector aHairlineWidth(1,1);
+            const int nPolyCount = aB2DPolyPolygon.count();
+            for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
+            {
+                const ::basegfx::B2DPolygon aOnePoly = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
+                mpGraphics->DrawPolyLine( aOnePoly, fTransparency, aHairlineWidth, ::basegfx::B2DLINEJOIN_NONE, this );
+            }
+        }
+
+        if( bDrawnOk )
         {
 #if 0
             // MetaB2DPolyPolygonAction is not implemented yet:
@@ -287,14 +300,17 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
         // get the polygon in device coordinates
         basegfx::B2DPolyPolygon aB2DPolyPolygon( rPolyPoly.getB2DPolyPolygon() );
-        aB2DPolyPolygon.setClosed( true );
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         aB2DPolyPolygon.transform( aTransform );
 
-        // draw the transparent polygon
-        bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, nTransparencePercent*0.01, this );
+        const double fTransparency = 0.01 * nTransparencePercent;
+        if( mbFillColor )
+        {
+            // draw the transparent polygon
+            // NOTE: filled polygons are assumed to be drawn as if they were always closed
+            bDrawn = mpGraphics->DrawPolyPolygon( aB2DPolyPolygon, fTransparency, this );
+        }
 
-        // DrawTransparent() assumes that the border is NOT to be drawn transparently???
         if( mbLineColor )
         {
             // disable the fill color for now
@@ -305,7 +321,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
             for( int nPolyIdx = 0; nPolyIdx < nPolyCount; ++nPolyIdx )
             {
                 const ::basegfx::B2DPolygon& rPolygon = aB2DPolyPolygon.getB2DPolygon( nPolyIdx );
-                mpGraphics->DrawPolyLine( rPolygon, aLineWidths, ::basegfx::B2DLINEJOIN_NONE, this );
+                bDrawn = mpGraphics->DrawPolyLine( rPolygon, fTransparency, aLineWidths, ::basegfx::B2DLINEJOIN_NONE, this );
             }
             // prepare to restore the fill color
             mbInitFillColor = mbFillColor;

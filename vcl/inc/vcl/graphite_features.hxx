@@ -29,11 +29,11 @@
 // Parse a string of features specified as ; separated pairs.
 // e.g.
 // 1001=1&2002=2&fav1=0
-#include "pregraphitestl.h"
+#include <tools/preextstl.h>
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/GrFeature.h>
-#include "postgraphitestl.h"
+#include <tools/postextstl.h>
 
 namespace grutils
 {

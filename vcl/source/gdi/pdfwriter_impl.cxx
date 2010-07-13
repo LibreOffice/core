@@ -4081,15 +4081,15 @@ bool PDFWriterImpl::emitFonts()
                 }
                 else if( (aSubsetInfo.m_nFontType & FontSubsetInfo::TYPE1_PFB) != 0 ) // TODO: also support PFA?
                 {
-                    unsigned char* pBuffer = new unsigned char[ (int)nLength1 ];
+                    boost::shared_array<unsigned char> pBuffer( new unsigned char[ nLength1 ] );
 
                     sal_uInt64 nBytesRead = 0;
-                    CHECK_RETURN( (osl_File_E_None == osl_readFile( aFontFile, pBuffer, nLength1, &nBytesRead ) ) );
+                    CHECK_RETURN( (osl_File_E_None == osl_readFile( aFontFile, pBuffer.get(), nLength1, &nBytesRead ) ) );
                     DBG_ASSERT( nBytesRead==nLength1, "PDF-FontSubset read incomplete!" );
                     CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
                     // get the PFB-segment lengths
                     ThreeInts aSegmentLengths = {0,0,0};
-                    getPfbSegmentLengths( pBuffer, (int)nBytesRead, aSegmentLengths );
+                    getPfbSegmentLengths( pBuffer.get(), (int)nBytesRead, aSegmentLengths );
                     // the lengths below are mandatory for PDF-exported Type1 fonts
                     // because the PFB segment headers get stripped! WhyOhWhy.
                     aLine.append( (sal_Int32)aSegmentLengths[0] );
@@ -4106,11 +4106,9 @@ bool PDFWriterImpl::emitFonts()
                     // emit PFB-sections without section headers
                     beginCompression();
                     checkAndEnableStreamEncryption( nFontStream );
-                    CHECK_RETURN( writeBuffer( pBuffer+ 6, aSegmentLengths[0] ) );
-                    CHECK_RETURN( writeBuffer( pBuffer+12 + aSegmentLengths[0], aSegmentLengths[1] ) );
-                    CHECK_RETURN( writeBuffer( pBuffer+18 + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) );
-
-                    delete[] pBuffer;
+                    CHECK_RETURN( writeBuffer( &pBuffer[6], aSegmentLengths[0] ) );
+                    CHECK_RETURN( writeBuffer( &pBuffer[12] + aSegmentLengths[0], aSegmentLengths[1] ) );
+                    CHECK_RETURN( writeBuffer( &pBuffer[18] + aSegmentLengths[0] + aSegmentLengths[1], aSegmentLengths[2] ) );
                 }
                 else
                 {
@@ -9749,7 +9747,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
             aLine.append( " ]\n" );
         }
     }
-    else if( m_bIsPDF_A1 )
+    else if( m_bIsPDF_A1 && (bWriteMask || aTransparentColor != Color( COL_TRANSPARENT )) )
         m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDFA );
 
     aLine.append( ">>\n"
@@ -11733,7 +11731,7 @@ sal_Int32 PDFWriterImpl::findRadioGroupWidget( const PDFWriter::RadioButtonWidge
         m_aWidgets.back().m_nPage       = m_nCurrentPage;
         m_aWidgets.back().m_eType       = PDFWriter::RadioButton;
         m_aWidgets.back().m_nRadioGroup = rBtn.RadioGroup;
-        m_aWidgets.back().m_nFlags |= 0x00008000;
+        m_aWidgets.back().m_nFlags |= 0x0000C000;   // NoToggleToOff and Radio bits
 
         createWidgetFieldName( sal_Int32(m_aWidgets.size()-1), rBtn );
     }

@@ -49,7 +49,7 @@
 #include <tools/rcid.h>
 #include <rtl/logfile.hxx>
 #include <unotools/configmgr.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/imagemgr.hrc>
 #include <svtools/svtdata.hxx>
 #include <vos/mutex.hxx>

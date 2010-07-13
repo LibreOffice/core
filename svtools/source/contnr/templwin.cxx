@@ -40,7 +40,7 @@
 #include <svtools/templatefoldercache.hxx>
 #include <svtools/imgdef.hxx>
 #include <svtools/txtattr.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include "templwin.hrc"
 #include <svtools/helpid.hrc>
 #include <unotools/pathoptions.hxx>

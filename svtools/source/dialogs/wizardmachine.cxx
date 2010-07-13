@@ -30,10 +30,11 @@
 #include <svtools/wizardmachine.hxx>
 #include <svtools/helpid.hrc>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <svtools/svtdata.hxx>
 #ifndef _SVTOOLS_HRC
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #endif
 
 //.........................................................................
@@ -101,7 +102,7 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardPage::commitPage( CommitPageReason )
+    sal_Bool OWizardPage::commitPage( WizardTypes::CommitPageReason )
     {
         return sal_True;
     }
@@ -160,6 +161,25 @@ namespace svt
         ,m_pPrevPage(NULL)
         ,m_pHelp(NULL)
         ,m_pImpl( new WizardMachineImplData )
+    {
+        implConstruct( _nButtonFlags );
+    }
+
+    //---------------------------------------------------------------------
+    OWizardMachine::OWizardMachine(Window* _pParent, const WinBits i_nStyle, sal_uInt32 _nButtonFlags )
+        :WizardDialog( _pParent, i_nStyle )
+        ,m_pFinish(NULL)
+        ,m_pCancel(NULL)
+        ,m_pNextPage(NULL)
+        ,m_pPrevPage(NULL)
+        ,m_pHelp(NULL)
+        ,m_pImpl( new WizardMachineImplData )
+    {
+        implConstruct( _nButtonFlags );
+    }
+
+    //---------------------------------------------------------------------
+    void OWizardMachine::implConstruct( const sal_uInt32 _nButtonFlags )
     {
         m_pImpl->sTitleBase = GetText();
 
@@ -225,8 +245,6 @@ namespace svt
 
             AddButton( m_pCancel, WIZARDDIALOG_BUTTON_STDOFFSET_X );
         }
-
-
     }
 
     //---------------------------------------------------------------------
@@ -274,35 +292,42 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
+    TabPage* OWizardMachine::GetOrCreatePage( const WizardState i_nState )
+    {
+        if ( NULL == GetPage( i_nState ) )
+        {
+            TabPage* pNewPage = createPage( i_nState );
+            DBG_ASSERT( pNewPage, "OWizardMachine::GetOrCreatePage: invalid new page (NULL)!" );
+
+            // fill up the page sequence of our base class (with dummies)
+            while ( m_pImpl->nFirstUnknownPage < i_nState )
+            {
+                AddPage( NULL );
+                ++m_pImpl->nFirstUnknownPage;
+            }
+
+            if ( m_pImpl->nFirstUnknownPage == i_nState )
+            {
+                // encountered this page number the first time
+                AddPage( pNewPage );
+                ++m_pImpl->nFirstUnknownPage;
+            }
+            else
+                // already had this page - just change it
+                SetPage( i_nState, pNewPage );
+        }
+        return GetPage( i_nState );
+    }
+
+    //---------------------------------------------------------------------
     void OWizardMachine::ActivatePage()
     {
         WizardDialog::ActivatePage();
 
         WizardState nCurrentLevel = GetCurLevel();
-        if (NULL == GetPage(nCurrentLevel))
-        {
-            TabPage* pNewPage = createPage(nCurrentLevel);
-            DBG_ASSERT(pNewPage, "OWizardMachine::ActivatePage: invalid new page (NULL)!");
+        GetOrCreatePage( nCurrentLevel );
 
-            // fill up the page sequence of our base class (with dummies)
-            while (m_pImpl->nFirstUnknownPage < nCurrentLevel)
-            {
-                AddPage(NULL);
-                ++m_pImpl->nFirstUnknownPage;
-            }
-
-            if (m_pImpl->nFirstUnknownPage == nCurrentLevel)
-            {
-                // encountered this page number the first time
-                AddPage(pNewPage);
-                ++m_pImpl->nFirstUnknownPage;
-            }
-            else
-                // already had this page - just change it
-                SetPage(nCurrentLevel, pNewPage);
-        }
-
-        enterState(nCurrentLevel);
+        enterState( nCurrentLevel );
     }
 
     //---------------------------------------------------------------------
@@ -330,8 +355,10 @@ namespace svt
         if (m_pCancel && (_nWizardButtonFlags & WZB_CANCEL))
             pNewDefButton = m_pCancel;
 
-        if (pNewDefButton)
-            defaultButton(pNewDefButton);
+        if ( pNewDefButton )
+            defaultButton( pNewDefButton );
+        else
+            implResetDefault( this );
     }
 
     //---------------------------------------------------------------------
@@ -395,9 +422,10 @@ namespace svt
     void OWizardMachine::enterState(WizardState _nState)
     {
         // tell the page
-        IWizardPage* pCurrentPage = getWizardPage(GetPage(_nState));
-        if ( pCurrentPage )
-            pCurrentPage->initializePage();
+        IWizardPageController* pController = getPageController( GetPage( _nState ) );
+        OSL_ENSURE( pController, "OWizardMachine::enterState: no controller for the given page!" );
+        if ( pController )
+            pController->initializePage();
 
         if ( isAutomaticNextButtonStateEnabled() )
             enableButtons( WZB_NEXT, canAdvance() );
@@ -419,9 +447,9 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    sal_Bool OWizardMachine::onFinish(sal_Int32 _nResult)
+    sal_Bool OWizardMachine::onFinish()
     {
-        return Finnish(_nResult);
+        return Finnish( RET_OK );
     }
 
     //---------------------------------------------------------------------
@@ -434,8 +462,7 @@ namespace svt
         {
             return 0L;
         }
-        long nRet = onFinish( RET_OK );
-        return nRet;
+        return onFinish() ? 1L : 0L;
     }
 
     //---------------------------------------------------------------------
@@ -447,10 +474,9 @@ namespace svt
     //---------------------------------------------------------------------
     sal_Bool OWizardMachine::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
-        IWizardPage* pCurrentPage = getWizardPage(GetPage(getCurrentState()));
-        if ( pCurrentPage )
-            return pCurrentPage->commitPage( _eReason );
-        return sal_True;
+        IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+        ENSURE_OR_RETURN( pController != NULL, "OWizardMachine::prepareLeaveCurrentState: no controller for the current page!", sal_True );
+        return pController->commitPage( _eReason );
     }
 
     //---------------------------------------------------------------------
@@ -664,10 +690,10 @@ namespace svt
     }
 
     //---------------------------------------------------------------------
-    IWizardPage* OWizardMachine::getWizardPage(TabPage* _pCurrentPage) const
+    IWizardPageController* OWizardMachine::getPageController( TabPage* _pCurrentPage ) const
     {
-        OWizardPage* pPage = dynamic_cast< OWizardPage* >( _pCurrentPage );
-        return pPage;
+        IWizardPageController* pController = dynamic_cast< IWizardPageController* >( _pCurrentPage );
+        return pController;
     }
 
     //---------------------------------------------------------------------
@@ -690,11 +716,12 @@ namespace svt
     //---------------------------------------------------------------------
     void OWizardMachine::updateTravelUI()
     {
-        OWizardPage* pPage = dynamic_cast< OWizardPage* >( GetPage( getCurrentState() ) );
+        const IWizardPageController* pController = getPageController( GetPage( getCurrentState() ) );
+        OSL_ENSURE( pController != NULL, "RoadmapWizard::updateTravelUI: no controller for the current page!" );
 
         bool bCanAdvance =
-                ( !pPage || pPage->canAdvance() )   // the current page allows to advance
-            &&  canAdvance();                       // the dialog as a whole allows to advance
+                ( !pController || pController->canAdvance() )   // the current page allows to advance
+            &&  canAdvance();                                   // the dialog as a whole allows to advance
         enableButtons( WZB_NEXT, bCanAdvance );
     }
 

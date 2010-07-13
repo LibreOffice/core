@@ -45,7 +45,7 @@ namespace svt { namespace table
     */
     class SAL_NO_VTABLE ITableRenderer
     {
-    public:
+        public:
         /** paints a (part of) header area
 
             There are two header areas in a table control:
@@ -178,12 +178,44 @@ namespace svt { namespace table
             @param _rText
                 the title of the header row
         */
-        virtual void    PaintRowHeader(
-                            bool _bActive, bool _bSelected,
+        virtual void    PaintRowHeader( bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle, rtl::OUString& _rText ) = 0;
+                const StyleSettings& _rStyle, rtl::OUString& _rText ) = 0;
 
         /** paints a certain cell
+
+            The row to be painted is denoted by the most recent call to
+            ->PrepareRow.
+
+            @param _bSelected
+                <TRUE/> if and only if the cell to be painted is
+                selected currently. This is the case if either
+                the row or the column of the cell is currently selected.
+                <br/>
+                Note that this flag is equal to the respective flag in the
+                previous ->PrepareRow call, it's passed here for convinience
+                only.
+            @param _bActive
+                <TRUE/> if the cell is currently active.
+                <br/>
+                Note that this flag is equal to the respective flag in the
+                previous ->PrepareRow call, it's passed here for convinience
+                only.
+            @param _rDevice
+                denotes the device to paint onto
+            @param _rArea
+                the are into which the cell should be painted
+            @param _rStyle
+                the style to be used for drawing
+            @param _pCellData
+                the content of the cell
+        */
+        virtual void    PaintCellImage( ColPos _nColumn,
+                            bool _bActive, bool _bSelected,
+                            OutputDevice& _rDevice, const Rectangle& _rArea,
+                const StyleSettings& _rStyle, Image* _pCellData ) = 0;
+
+    /** paints a certain cell
 
             The row to be painted is denoted by the most recent call to
             ->PrepareRow.
@@ -211,10 +243,10 @@ namespace svt { namespace table
             @param _rText
                 the content of the cell
         */
-        virtual void    PaintCell( ColPos _nColumn,
+        virtual void    PaintCellString( ColPos _nColumn,
                             bool _bActive, bool _bSelected,
                             OutputDevice& _rDevice, const Rectangle& _rArea,
-                            const StyleSettings& _rStyle, rtl::OUString& _rText ) = 0;
+                const StyleSettings& _rStyle, rtl::OUString& _rText ) = 0;
 
         /** draws a cell cursor in the given rectangle
 

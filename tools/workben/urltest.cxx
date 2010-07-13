@@ -523,6 +523,8 @@ main()
                 /*TODO "vnd.sun.star.wfs:///c|/xyz/",*/
                 /*TODO "vnd.sun.star.wfs://xxx/yyy?zzz",*/
                 "vnd.sun.star.wfs:///x/y/z",
+                "vnd.sun.star.generic:///x/y/z",
+                "vnd.sun.star.generic://host:34/x/y/z"
                 /*TODO "wfs://",*/
                 /*TODO "wfs://LocalHost",*/
                 /*TODO "wfs:///c|/xyz/",*/
@@ -533,13 +535,21 @@ main()
             INetURLObject aUrl(aTest[i]);
             if (aUrl.HasError())
                 printf("BAD %s\n", aTest[i]);
-            else if (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
-                         equalsAscii(aTest[i]) != sal_True)
+            else
             {
+                if (aUrl.GetProtocol() != INET_PROT_GENERIC) {
+                    printf("BAD PROTOCOL %i -> %i\n",
+                           aUrl.GetProtocol(),
+                           INET_PROT_GENERIC);
+                }
+                if (aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI).
+                         equalsAscii(aTest[i]) != sal_True)
+                {
                 String sTest(aUrl.GetMainURL(INetURLObject::DECODE_TO_IURI));
                 printf("BAD %s -> %s\n",
                        aTest[i],
                        ByteString(sTest, RTL_TEXTENCODING_ASCII_US).GetBuffer());
+                }
             }
         }
     }

@@ -34,6 +34,9 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
+#include <vector>
+#include <algorithm>
+
 namespace basegfx
 {
     /** Gradient definition as used in ODF 1.2
@@ -75,6 +78,8 @@ namespace basegfx
     {
         /** Create matrix for ODF's linear gradient definition
 
+            Note that odf linear gradients are varying in y direction.
+
             @param o_rGradientInfo
             Receives the calculated texture transformation matrix (for
             use with standard [0,1]x[0,1] texture coordinates)
@@ -106,7 +111,7 @@ namespace basegfx
 
             @param rUV
             Current uv coordinate. Values outside [0,1] will be
-            clamped.
+            clamped. Assumes gradient color varies along the y axis.
 
             @param rGradInfo
             Gradient info, for transformation and number of steps
@@ -125,6 +130,14 @@ namespace basegfx
         }
 
         /** Create matrix for ODF's axial gradient definition
+
+            Note that odf axial gradients are varying in y
+            direction. Note further that you can map the axial
+            gradient to a linear gradient (in case you want or need to
+            avoid an extra gradient renderer), by using
+            createLinearODFGradientInfo() instead, shifting the
+            resulting texture transformation by 0.5 to the top and
+            appending the same stop colors again, but mirrored.
 
             @param o_rGradientInfo
             Receives the calculated texture transformation matrix (for
@@ -157,7 +170,7 @@ namespace basegfx
 
             @param rUV
             Current uv coordinate. Values outside [0,1] will be
-            clamped.
+            clamped. Assumes gradient color varies along the y axis.
 
             @param rGradInfo
             Gradient info, for transformation and number of steps
@@ -391,7 +404,6 @@ namespace basegfx
         {
             return getSquareGradientAlpha(rUV, rGradInfo); // only matrix setup differs
         }
-
     }
 }
 

@@ -27,7 +27,7 @@ $Hangul = [:Script = HANGUL:];
 # list of dashes or hyphens that should be accepted as part of the word if a single one of these
 # pre- or postfixes a word. E.g. in German: "Arbeits-" or "-nehmer" where that hyphen needs to
 # be part of the word in order to have it properly spell checked etc.
-$PrePostDashHyphen = [ [:name = HYPHEN-MINUS:] [:name = EN DASH:] [:name = EM DASH:] ];
+$PrePostDashHyphen = [ [:name = HYPHEN-MINUS:] ];
 
 
 $ALetter   = [\u0002 [:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCTUATION GERESH:]
@@ -41,7 +41,7 @@ $ALetter   = [\u0002 [:Alphabetic:] [:name= COMMERCIAL AT:] [:name= HEBREW PUNCT
 $MidLetter = [[:name = APOSTROPHE:] [:name = GRAVE ACCENT:] \u0084 [:name = SOFT HYPHEN:] [:name = MIDDLE DOT:] [:name = GREEK TONOS:] [:name= FULL STOP:] 
               [:name = HEBREW PUNCTUATION GERSHAYIM:] [:name = DOUBLE VERTICAL LINE:] [:name = LEFT SINGLE QUOTATION MARK:]
               [:name = RIGHT SINGLE QUOTATION MARK:] [:name = HYPHENATION POINT:] [:name = PRIME:] 
-              [:name = HYPHEN-MINUS:] [:name = EN DASH:] [:name = EM DASH:] ];
+              [:name = HYPHEN-MINUS:] ];
 
 $SufixLetter = [:name= FULL STOP:];
               

@@ -40,13 +40,13 @@
 #include <vector>
 #include <utility>
 // Libraries
-#include "pregraphitestl.h"
+#include <tools/preextstl.h>
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/GrConstants.h>
 #include <graphite/GrAppData.h>
 #include <graphite/SegmentAux.h>
-#include "postgraphitestl.h"
+#include <tools/postextstl.h>
 // Platform
 #include <vcl/sallayout.hxx>
 #include <vcl/dllapi.h>
@@ -75,6 +75,14 @@ namespace grutils { class GrFeatureParser; }
 class VCL_DLLPUBLIC GraphiteLayout : public SalLayout
 {
 public:
+    // Mask to allow Word break status to be stored within mvChar2BaseGlyph
+    enum {
+        WORD_BREAK_BEFORE   = 0x40000000,
+        HYPHEN_BREAK_BEFORE = 0x80000000,
+        BREAK_MASK          = 0xC0000000,
+        GLYPH_INDEX_MASK    = 0x3FFFFFFF
+    } LineBreakMask;
+
     class Glyphs : public std::vector<GlyphItem>
     {
     public:
@@ -159,6 +167,7 @@ private:
     std::pair<int,int>    glyph_to_chars(const GlyphItem &) const;
 
     std::pair<long,long>  caret_positions(size_t) const;
+    void expandOrCondense(ImplLayoutArgs &rArgs);
 };
 
 

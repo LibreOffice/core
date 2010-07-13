@@ -54,7 +54,7 @@ public:
 
     void ChangeNullDate(USHORT nDay, USHORT nMonth, USHORT nYear);
                                                 // tauscht Referenzdatum aus
-    void ChangeStandardPrec(short nPrec);       // tauscht Standardprecision aus
+    void ChangeStandardPrec(sal_uInt16 nPrec);  // tauscht Standardprecision aus
 
     xub_StrLen ScanFormat( String& rString, String& rComment ); // Aufruf der Scan-Analyse
 
@@ -93,7 +93,7 @@ public:
                 InitKeywords();
             return sNameStandardFormat;
         }
-    short GetStandardPrec() const               { return nStandardPrec; }
+    sal_uInt16 GetStandardPrec() const          { return nStandardPrec; }
     const Color& GetRedColor() const            { return StandardColor[4]; }
     Color* GetColor(String& sStr);          // Setzt Hauptfarben oder
                                                 // definierte Farben
@@ -158,7 +158,7 @@ private:                            // ---- privater Teil
                                                 // Array der Standardfarben
     Date* pNullDate;                            // 30Dec1899
     String sNameStandardFormat;             // "Standard"
-    short nStandardPrec;                        // default Precision fuer Standardformat (2)
+    sal_uInt16 nStandardPrec;                   // default Precision for Standardformat
     SvNumberFormatter* pFormatter;              // Pointer auf die Formatliste
 
     String sStrArray[NF_MAX_FORMAT_SYMBOLS];    // Array der Symbole

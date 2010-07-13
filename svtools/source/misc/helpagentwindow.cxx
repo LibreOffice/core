@@ -32,7 +32,7 @@
 #include <vcl/button.hxx>
 #include <vcl/bitmap.hxx>
 #include <svtools/svtdata.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/helpid.hrc>
 
 #define WB_AGENT_STYLE  0

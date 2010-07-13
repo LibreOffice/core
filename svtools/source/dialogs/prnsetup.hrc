@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 
 #define FL_PRINTER          1
 #define LB_NAMES                2

@@ -99,7 +99,8 @@ namespace utl
                 PRODUCTXMLFILEFORMATVERSION,
                 WRITERCOMPATIBILITYVERSIONOOO11,
                 OPENSOURCECONTEXT,
-                ABOUTBOXPRODUCTVERSION
+                ABOUTBOXPRODUCTVERSION,
+                OOOVENDOR
             };
             //direct readonly access to some special configuration elements
             static com::sun::star::uno::Any GetDirectConfigProperty(ConfigProperty eProp);

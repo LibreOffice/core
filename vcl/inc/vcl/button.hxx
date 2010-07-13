@@ -60,7 +60,7 @@ public:
     SAL_DLLPRIVATE USHORT           ImplGetTextStyle( XubString& rText, WinBits nWinStyle, ULONG nDrawFlags );
     SAL_DLLPRIVATE void             ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos, Size& rSize,
                                               BOOL bLayout, ULONG nImageSep, ULONG nDrawFlags,
-                                              USHORT nTextStyle, Rectangle *pSymbolRect=NULL );
+                                              USHORT nTextStyle, Rectangle *pSymbolRect=NULL, bool bAddImageSep = false );
     SAL_DLLPRIVATE void             ImplSetFocusRect( const Rectangle &rFocusRect );
     SAL_DLLPRIVATE const Rectangle& ImplGetFocusRect() const;
     SAL_DLLPRIVATE void             ImplSetSymbolAlign( SymbolAlign eAlign );

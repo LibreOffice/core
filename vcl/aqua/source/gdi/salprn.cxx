@@ -532,8 +532,6 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     PrintAccessoryViewState aAccViewState;
     sal_Int32 nAllPages = 0;
 
-    aAccViewState.bNeedRestart = true;
-
     // reset IsLastPage
     i_rController.setLastPage( sal_False );
 
@@ -549,111 +547,133 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
     if( ! i_rController.isShowDialogs() )
         bShowProgressPanel = sal_False;
 
+    // possibly create one job for collated output
+    sal_Bool bSinglePrintJobs = sal_False;
+    beans::PropertyValue* pSingleValue = i_rController.getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintCollateAsSingleJobs" ) ) );
+    if( pSingleValue )
+    {
+        pSingleValue->Value >>= bSinglePrintJobs;
+    }
+
     // FIXME: jobStarted() should be done after the print dialog has ended (if there is one)
     // how do I know when that might be ?
     i_rController.jobStarted();
-    do
+
+
+    int nCopies = i_rController.getPrinter()->GetCopyCount();
+    int nJobs = 1;
+    if( bSinglePrintJobs )
     {
-        if( aAccViewState.bNeedRestart )
+        nJobs = nCopies;
+        nCopies = 1;
+    }
+
+    for( int nCurJob = 0; nCurJob < nJobs; nCurJob++ )
+    {
+        aAccViewState.bNeedRestart = true;
+        do
         {
-            mnCurPageRangeStart = 0;
-            mnCurPageRangeCount = 0;
-            nAllPages = i_rController.getFilteredPageCount();
-        }
-
-        aAccViewState.bNeedRestart = false;
-
-        Size aCurSize( 21000, 29700 );
-        if( nAllPages > 0 )
-        {
-            mnCurPageRangeCount = 1;
-            aCurSize = getPageSize( i_rController, mnCurPageRangeStart );
-            Size aNextSize( aCurSize );
-
-            // print pages up to a different size
-            while( mnCurPageRangeCount + mnCurPageRangeStart < nAllPages )
+            if( aAccViewState.bNeedRestart )
             {
-                aNextSize = getPageSize( i_rController, mnCurPageRangeStart + mnCurPageRangeCount );
-                if( aCurSize == aNextSize // same page size
-                    ||
-                    (aCurSize.Width() == aNextSize.Height() && aCurSize.Height() == aNextSize.Width()) // same size, but different orientation
-                    )
-                {
-                    mnCurPageRangeCount++;
-                }
-                else
-                    break;
+                mnCurPageRangeStart = 0;
+                mnCurPageRangeCount = 0;
+                nAllPages = i_rController.getFilteredPageCount();
             }
-        }
-        else
-            mnCurPageRangeCount = 0;
 
-        // now for the current run
-        mnStartPageOffsetX = mnStartPageOffsetY = 0;
-        // setup the paper size and orientation
-        // do this on our associated Printer object, since that is
-        // out interface to the applications which occasionally rely on the paper
-        // information (e.g. brochure printing scales to the found paper size)
-        // also SetPaperSizeUser has the advantage that we can share a
-        // platform independent paper matching algorithm
-        boost::shared_ptr<Printer> pPrinter( i_rController.getPrinter() );
-        pPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
-        pPrinter->SetPaperSizeUser( aCurSize, true );
+            aAccViewState.bNeedRestart = false;
 
-        // create view
-        NSView* pPrintView = [[AquaPrintView alloc] initWithController: &i_rController withInfoPrinter: this];
+            Size aCurSize( 21000, 29700 );
+            if( nAllPages > 0 )
+            {
+                mnCurPageRangeCount = 1;
+                aCurSize = getPageSize( i_rController, mnCurPageRangeStart );
+                Size aNextSize( aCurSize );
 
-        NSMutableDictionary* pPrintDict = [mpPrintInfo dictionary];
+                // print pages up to a different size
+                while( mnCurPageRangeCount + mnCurPageRangeStart < nAllPages )
+                {
+                    aNextSize = getPageSize( i_rController, mnCurPageRangeStart + mnCurPageRangeCount );
+                    if( aCurSize == aNextSize // same page size
+                        ||
+                        (aCurSize.Width() == aNextSize.Height() && aCurSize.Height() == aNextSize.Width()) // same size, but different orientation
+                        )
+                    {
+                        mnCurPageRangeCount++;
+                    }
+                    else
+                        break;
+                }
+            }
+            else
+                mnCurPageRangeCount = 0;
 
-        // set filename
-        if( i_pFileName )
-        {
-            [mpPrintInfo setJobDisposition: NSPrintSaveJob];
-            NSString* pPath = CreateNSString( *i_pFileName );
-            [pPrintDict setObject: pPath forKey: NSPrintSavePath];
-            [pPath release];
-        }
+            // now for the current run
+            mnStartPageOffsetX = mnStartPageOffsetY = 0;
+            // setup the paper size and orientation
+            // do this on our associated Printer object, since that is
+            // out interface to the applications which occasionally rely on the paper
+            // information (e.g. brochure printing scales to the found paper size)
+            // also SetPaperSizeUser has the advantage that we can share a
+            // platform independent paper matching algorithm
+            boost::shared_ptr<Printer> pPrinter( i_rController.getPrinter() );
+            pPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
+            pPrinter->SetPaperSizeUser( aCurSize, true );
 
-        [pPrintDict setObject: [[NSNumber numberWithInt: (int)i_rController.getPrinter()->GetCopyCount()] autorelease] forKey: NSPrintCopies];
-        [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
-        [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
-        // #i103253# weird: for some reason, autoreleasing the value below like the others above
-        // leads do a double free malloc error. Why this value should behave differently from all the others
-        // is a mystery.
-        [pPrintDict setObject: [NSNumber numberWithInt: mnCurPageRangeCount] forKey: NSPrintLastPage];
+            // create view
+            NSView* pPrintView = [[AquaPrintView alloc] initWithController: &i_rController withInfoPrinter: this];
+
+            NSMutableDictionary* pPrintDict = [mpPrintInfo dictionary];
+
+            // set filename
+            if( i_pFileName )
+            {
+                [mpPrintInfo setJobDisposition: NSPrintSaveJob];
+                NSString* pPath = CreateNSString( *i_pFileName );
+                [pPrintDict setObject: pPath forKey: NSPrintSavePath];
+                [pPath release];
+            }
+
+            [pPrintDict setObject: [[NSNumber numberWithInt: nCopies] autorelease] forKey: NSPrintCopies];
+            [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
+            [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
+            // #i103253# weird: for some reason, autoreleasing the value below like the others above
+            // leads do a double free malloc error. Why this value should behave differently from all the others
+            // is a mystery.
+            [pPrintDict setObject: [NSNumber numberWithInt: mnCurPageRangeCount] forKey: NSPrintLastPage];
 
 
-        // create print operation
-        NSPrintOperation* pPrintOperation = [NSPrintOperation printOperationWithView: pPrintView printInfo: mpPrintInfo];
+            // create print operation
+            NSPrintOperation* pPrintOperation = [NSPrintOperation printOperationWithView: pPrintView printInfo: mpPrintInfo];
 
-        if( pPrintOperation )
-        {
-            NSObject* pReleaseAfterUse = nil;
-            bool bShowPanel = (! i_rController.isDirectPrint() && getUseNativeDialog() && i_rController.isShowDialogs() );
-            [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
-            [pPrintOperation setShowsProgressPanel: bShowProgressPanel ? YES : NO];
+            if( pPrintOperation )
+            {
+                NSObject* pReleaseAfterUse = nil;
+                bool bShowPanel = (! i_rController.isDirectPrint() && getUseNativeDialog() && i_rController.isShowDialogs() );
+                [pPrintOperation setShowsPrintPanel: bShowPanel ? YES : NO ];
+                [pPrintOperation setShowsProgressPanel: bShowProgressPanel ? YES : NO];
 
-            // set job title (since MacOSX 10.5)
-            if( [pPrintOperation respondsToSelector: @selector(setJobTitle:)] )
-                [pPrintOperation performSelector: @selector(setJobTitle:) withObject: [CreateNSString( i_rJobName ) autorelease]];
+                // set job title (since MacOSX 10.5)
+                if( [pPrintOperation respondsToSelector: @selector(setJobTitle:)] )
+                    [pPrintOperation performSelector: @selector(setJobTitle:) withObject: [CreateNSString( i_rJobName ) autorelease]];
 
-            if( bShowPanel && mnCurPageRangeStart == 0 ) // only the first range of pages gets the accesory view
-                pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withController: &i_rController withState: &aAccViewState];
+                if( bShowPanel && mnCurPageRangeStart == 0 && nCurJob == 0) // only the first range of pages (in the first job) gets the accesory view
+                    pReleaseAfterUse = [AquaPrintAccessoryView setupPrinterPanel: pPrintOperation withController: &i_rController withState: &aAccViewState];
 
-            bSuccess = TRUE;
-            mbJob = true;
-            pInst->startedPrintJob();
-            [pPrintOperation runOperation];
-            pInst->endedPrintJob();
-            bWasAborted = [[[pPrintOperation printInfo] jobDisposition] compare: NSPrintCancelJob] == NSOrderedSame;
-            mbJob = false;
-            if( pReleaseAfterUse )
-                [pReleaseAfterUse release];
-        }
+                bSuccess = TRUE;
+                mbJob = true;
+                pInst->startedPrintJob();
+                [pPrintOperation runOperation];
+                pInst->endedPrintJob();
+                bWasAborted = [[[pPrintOperation printInfo] jobDisposition] compare: NSPrintCancelJob] == NSOrderedSame;
+                mbJob = false;
+                if( pReleaseAfterUse )
+                    [pReleaseAfterUse release];
+            }
 
-        mnCurPageRangeStart += mnCurPageRangeCount;
-        mnCurPageRangeCount = 1;
-    } while( aAccViewState.bNeedRestart || mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
+            mnCurPageRangeStart += mnCurPageRangeCount;
+            mnCurPageRangeCount = 1;
+        } while( aAccViewState.bNeedRestart || mnCurPageRangeStart + mnCurPageRangeCount < nAllPages );
+    }
 
     // inform application that it can release its data
     // this is awkward, but the XRenderable interface has no method for this,

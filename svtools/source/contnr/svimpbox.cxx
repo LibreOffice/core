@@ -40,7 +40,7 @@
 #include <svimpbox.hxx>
 #include <rtl/instance.hxx>
 #include <svtools/svtdata.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 
 // #102891# --------------------
 #ifndef _UNOTOOLS_PROCESSFACTORY_HXX

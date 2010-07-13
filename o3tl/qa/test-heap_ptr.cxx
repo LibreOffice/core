@@ -25,7 +25,9 @@
  *
  ************************************************************************/
 
-#include <testshl/simpleheader.hxx>
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
 
 #include <o3tl/heap_ptr.hxx>
 
@@ -160,4 +162,4 @@ class heap_ptr_test : public CppUnit::TestFixture
 }; // class heap_ptr_test
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(heap_ptr_test, "o3tltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(heap_ptr_test);

@@ -31,7 +31,7 @@
 #include <stdio.h>
 #include <svtools/addresstemplate.hxx>
 #include "addresstemplate.hrc"
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/helpid.hrc>
 #include <svtools/svtdata.hxx>
 #include <tools/debug.hxx>

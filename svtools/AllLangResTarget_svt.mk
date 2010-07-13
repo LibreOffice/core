@@ -57,7 +57,6 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/dialogs/colrdlg.src \
     svtools/source/dialogs/filedlg2.src \
     svtools/source/dialogs/formats.src \
-    svtools/source/dialogs/logindlg.src \
     svtools/source/dialogs/printdlg.src \
     svtools/source/dialogs/prnsetup.src \
     svtools/source/dialogs/so3res.src \
@@ -71,9 +70,9 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/misc/helpagent.src \
     svtools/source/misc/imagemgr.src \
     svtools/source/misc/langtab.src \
-    svtools/source/misc/undo.src \
     svtools/source/plugapp/testtool.src \
-    svtools/source/uno/unoifac2.src \
 ))
 
+    #svtools/source/misc/undo.src \
 
+# vim: set noet sw=4 ts=4:

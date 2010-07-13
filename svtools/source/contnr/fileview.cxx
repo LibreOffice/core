@@ -33,7 +33,7 @@
 #include <svtools/imagemgr.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include "fileview.hrc"
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
@@ -53,6 +53,10 @@
 #include <vcl/waitobj.hxx>
 #include <com/sun/star/io/XPersist.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/ucb/XCommandInfo.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+
 #include <algorithm>
 #include <memory>
 #include <tools/urlobj.hxx>
@@ -62,7 +66,9 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include <vcl/msgbox.hxx>
+#ifndef INCLUDED_RTL_MATH_H
 #include <rtl/math.hxx>
+#endif
 #include <tools/config.hxx>
 #include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
@@ -96,7 +102,7 @@ using ::rtl::OUString;
 
 DECLARE_LIST( StringList_Impl, OUString* )
 
-#define ROW_HEIGHT  17  // the height of a row has to be a little higher than the bitmap
+#define ROW_HEIGHT                17    // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
 
 namespace
@@ -206,6 +212,7 @@ private:
     sal_Bool                mbResizeDisabled        : 1;
     sal_Bool                mbAutoResize            : 1;
     sal_Bool                mbEnableDelete          : 1;
+    sal_Bool                mbEnableRename          : 1;
 
     void            DeleteEntries();
     void            DoQuickSearch( const xub_Unicode& rChar );
@@ -228,6 +235,7 @@ public:
 
     void            EnableAutoResize() { mbAutoResize = sal_True; }
     void            EnableDelete( sal_Bool bEnable ) { mbEnableDelete = bEnable; }
+    void            EnableRename( sal_Bool bEnable ) { mbEnableRename = bEnable; }
     sal_Bool        IsDeleteOrContextMenuEnabled() { return mbEnableDelete || IsContextMenuHandlingEnabled(); }
 
     Reference< XCommandEnvironment >    GetCommandEnvironment() const { return mxCmdEnv; }
@@ -295,11 +303,11 @@ inline const OUString& HashedEntry::GetName() const
 class HashedEntryList : protected List
 {// provides a list of _unique_ Entries
 protected:
-    inline HashedEntry*     First();
-    inline HashedEntry*     Next();
-    inline void             Append( HashedEntry* pNewEntry );
+    inline HashedEntry*         First();
+    inline HashedEntry*         Next();
+    inline void                 Append( HashedEntry* pNewEntry );
 public:
-    virtual                 ~HashedEntryList();
+    virtual                     ~HashedEntryList();
 
     const HashedEntry*      Find( const OUString& rNameToSearchFor );
     const HashedEntry*      Find( const HashedEntry& rToSearchFor );
@@ -334,7 +342,7 @@ HashedEntryList::~HashedEntryList()
 
 const HashedEntry* HashedEntryList::Find( const OUString& rRefName )
 {   // simple linear search, which should be fast enough for this purpose
-    HashedEntry aRef( rRefName );
+    HashedEntry  aRef( rRefName );
     HashedEntry* pIter = First();
     while( pIter && *pIter != aRef )
         pIter = Next();
@@ -415,12 +423,12 @@ class NameTranslationList : protected HashedEntryList
 {   // contains a list of substitutes of strings for a given folder (as URL)
     // explanation of the circumstances see in remarks for Init();
 protected:
-    INetURLObject           maTransFile;    // URL of file with translation entries
-    HashedEntry             maHashedURL;    // for future purposes when dealing with a set of cached
-                                            //  NameTranslationLists
+    INetURLObject               maTransFile;    // URL of file with translation entries
+    HashedEntry                 maHashedURL;    // for future purposes when dealing with a set of cached
+                                                //  NameTranslationLists
 private:
     const String            maTransFileName;
-    void                    Init();         // reads the translation file and fills the (internal) list
+    void                    Init();             // reads the translation file and fills the (internal) list
 
 public:
                             NameTranslationList( const INetURLObject& rBaseURL );
@@ -432,12 +440,12 @@ public:
     using List::operator!=;
     inline sal_Bool operator    !=( const HashedEntry& rRef ) const;
 
-    const OUString*         Translate( const OUString& rName ) const;
+    const OUString*             Translate( const OUString& rName ) const;
                                             // returns NULL, if rName can't be found
 
-    inline void             Update();       // clears list and init
+    inline void                 Update();   // clears list and init
 
-    inline const String&    GetTransTableFileName() const;
+    inline const String&        GetTransTableFileName() const;
                                             // returns the name for the file, which contains the translation strings
 };
 
@@ -459,7 +467,7 @@ void NameTranslationList::Init()
 
         if( aTestContent.isDocument() )
         {// ... also tests the existence of maTransFile by throwing an Exception
-            const sal_Char* pSection = "TRANSLATIONNAMES";
+            const sal_Char*     pSection = "TRANSLATIONNAMES";
             String          aFsysName( maTransFile.getFSysPath( INetURLObject::FSYS_DETECT ) );
             Config          aConfig( aFsysName );
 
@@ -471,7 +479,7 @@ void NameTranslationList::Init()
                 Insert( new NameTranslationEntry( aConfig.GetKeyName( nCnt ), aConfig.ReadKey( nCnt ) ) );
         }
     }
-    catch( Exception& ) {}
+    catch( Exception const & ) {}
 }
 
 NameTranslationList::NameTranslationList( const INetURLObject& rBaseURL ):
@@ -523,7 +531,7 @@ public:
      // IContentTitleTranslation
     virtual sal_Bool        GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const;
 
-    void                    UpdateTranslationTable();   // reads the translation file again
+    void                    UpdateTranslationTable(); // reads the translation file again
 
     void                    SetActualFolder( const INetURLObject& rActualFolder );
     const String*           GetTransTableFileName() const;
@@ -596,7 +604,7 @@ public:
 
     void                    OpenFolder_Impl();
     // #83004# -------
-    void                    ReplaceTabWithString( OUString& aValue );
+    void                        ReplaceTabWithString( OUString& aValue );
     void                    CreateDisplayText_Impl();
     void                    CreateVector_Impl( const Sequence < OUString > &rList );
     void                    SortFolderContent_Impl();
@@ -657,11 +665,13 @@ inline void SvtFileView_Impl::EnableDelete( sal_Bool bEnable )
 
 inline sal_Bool SvtFileView_Impl::EnableNameReplacing( sal_Bool bEnable )
 {
+    mpView->EnableRename( bEnable );
+
     sal_Bool bRet;
     if( mpView->IsDeleteOrContextMenuEnabled() )
     {
         DBG_ASSERT( !mbReplaceNames, "SvtFileView_Impl::EnableNameReplacing(): state should be not possible!" );
-        bRet = !bEnable;    // only for enabling this is an unsuccessful result
+        bRet = !bEnable; // only for enabling this is an unsuccessful result
     }
     else
     {
@@ -740,7 +750,8 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     mnSearchIndex       ( 0 ),
     mbResizeDisabled    ( sal_False ),
     mbAutoResize        ( sal_False ),
-    mbEnableDelete      ( sal_True )
+    mbEnableDelete      ( sal_True ),
+    mbEnableRename      ( sal_True )
 
 {
     Size aBoxSize = pParentWin->GetSizePixel();
@@ -820,7 +831,7 @@ void ViewTabListBox_Impl::Resize()
         mbResizeDisabled = sal_True;
         Point aPos = GetPosPixel();
         SetPosSizePixel( Point( 0, aBarSize.Height() ),
-                         Size( aBoxSize.Width(), aBoxSize.Height() - aBarSize.Height() ) );
+                        Size( aBoxSize.Width(), aBoxSize.Height() - aBarSize.Height() ) );
         mbResizeDisabled = sal_False;
     }
 }
@@ -866,20 +877,90 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 
 PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
 {
-    PopupMenu* pRet;
-    sal_Int32 nSelectedEntries = GetSelectionCount();
+    bool bEnableDelete = mbEnableDelete;
+    bool bEnableRename = mbEnableRename;
 
-    if ( nSelectedEntries )
+    if ( bEnableDelete || bEnableRename )
     {
-        pRet = new PopupMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
-        pRet->EnableItem( MID_FILEVIEW_DELETE, 0 < nSelectedEntries );
-        pRet->EnableItem( MID_FILEVIEW_RENAME, 1 == nSelectedEntries );
-        pRet->RemoveDisabledEntries( sal_True, sal_True );
+        sal_Int32 nSelectedEntries = GetSelectionCount();
+        bEnableDelete &= nSelectedEntries > 0;
+        bEnableRename &= nSelectedEntries == 1;
     }
-    else
-        pRet = NULL;
 
-    return pRet;
+    if ( bEnableDelete || bEnableRename )
+    {
+        SvLBoxEntry* pEntry = FirstSelected();
+        while ( pEntry )
+        {
+            ::ucbhelper::Content aCnt;
+            try
+            {
+                OUString aURL( static_cast< SvtContentEntry * >(
+                    pEntry->GetUserData() )->maURL );
+                aCnt = ::ucbhelper::Content( aURL, mxCmdEnv );
+            }
+            catch( Exception const & )
+            {
+                bEnableDelete = bEnableRename = false;
+            }
+
+            if ( bEnableDelete )
+            {
+                try
+                {
+                    Reference< XCommandInfo > aCommands = aCnt.getCommands();
+                    if ( aCommands.is() )
+                        bEnableDelete
+                            = aCommands->hasCommandByName(
+                                OUString::createFromAscii( "delete" ) );
+                    else
+                        bEnableDelete = false;
+                }
+                catch( Exception const & )
+                {
+                    bEnableDelete = false;
+                }
+            }
+
+            if ( bEnableRename )
+            {
+                try
+                {
+                    Reference< XPropertySetInfo > aProps = aCnt.getProperties();
+                    if ( aProps.is() )
+                    {
+                        Property aProp
+                            = aProps->getPropertyByName(
+                                OUString::createFromAscii( "Title" ) );
+                        bEnableRename
+                            = !( aProp.Attributes & PropertyAttribute::READONLY );
+                    }
+                    else
+                        bEnableRename = false;
+                }
+                catch( Exception const & )
+                {
+                    bEnableRename = false;
+                }
+            }
+
+            pEntry = ( bEnableDelete || bEnableRename )
+                ? NextSelected( pEntry )
+                : 0;
+        }
+    }
+
+    if ( bEnableDelete || bEnableRename )
+    {
+        PopupMenu * pRet
+            = new PopupMenu( SvtResId( RID_FILEVIEW_CONTEXTMENU ) );
+        pRet->EnableItem( MID_FILEVIEW_DELETE, bEnableDelete );
+        pRet->EnableItem( MID_FILEVIEW_RENAME, bEnableRename );
+        pRet->RemoveDisabledEntries( sal_True, sal_True );
+        return pRet;
+    }
+
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -924,12 +1005,31 @@ void ViewTabListBox_Impl::DeleteEntries()
             aURL = ( (SvtContentEntry*)pCurEntry->GetUserData() )->maURL;
 
         if ( !aURL.Len() )
-            return;
+            continue;
 
-        INetURLObject aObj( aURL );
+        bool canDelete = true;
+        try
+        {
+            ::ucbhelper::Content aCnt( aURL, mxCmdEnv );
+            Reference< XCommandInfo > aCommands = aCnt.getCommands();
+            if ( aCommands.is() )
+                canDelete
+                    = aCommands->hasCommandByName(
+                        OUString::createFromAscii( "delete" ) );
+            else
+                canDelete = false;
+        }
+        catch( Exception const & )
+        {
+            canDelete = false;
+        }
+
+        if (!canDelete)
+            continue; // process next entry
 
         if ( eResult != svtools::QUERYDELETE_ALL )
         {
+            INetURLObject aObj( aURL );
             svtools::QueryDeleteDlg_Impl aDlg( NULL, aObj.GetName( INetURLObject::DECODE_WITH_CHARSET ) );
             if ( sDialogPosition.Len() )
                 aDlg.SetWindowState( sDialogPosition );
@@ -975,22 +1075,44 @@ BOOL ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
 
     try
     {
+        OUString aPropName = OUString::createFromAscii( "Title" );
+        bool canRename = true;
         ::ucbhelper::Content aContent( aURL, mxCmdEnv );
 
-        OUString aPropName = OUString::createFromAscii( "Title" );
-        Any aValue;
-        aValue <<= OUString( rNewText );
-        aContent.setPropertyValue( aPropName, aValue );
-        mpParent->EntryRenamed( aURL, rNewText );
+        try
+        {
+            Reference< XPropertySetInfo > aProps = aContent.getProperties();
+            if ( aProps.is() )
+            {
+                Property aProp = aProps->getPropertyByName( aPropName );
+                canRename = !( aProp.Attributes & PropertyAttribute::READONLY );
+            }
+            else
+            {
+                canRename = false;
+            }
+        }
+        catch ( Exception const & )
+        {
+            canRename = false;
+        }
 
-        pData->maURL = aURL;
-        pEntry->SetUserData( pData );
+        if ( canRename )
+        {
+            Any aValue;
+            aValue <<= OUString( rNewText );
+            aContent.setPropertyValue( aPropName, aValue );
+            mpParent->EntryRenamed( aURL, rNewText );
 
-        bRet = TRUE;
+            pData->maURL = aURL;
+            pEntry->SetUserData( pData );
+
+            bRet = TRUE;
+        }
     }
-    catch( ::com::sun::star::ucb::ContentCreationException ) {}
-    catch( ::com::sun::star::ucb::CommandAbortedException ) {}
-    catch( ::com::sun::star::uno::Exception ) {}
+    catch( Exception const & )
+    {
+    }
 
     return bRet;
 }
@@ -1091,12 +1213,12 @@ sal_Bool ViewTabListBox_Impl::Kill( const OUString& rContent )
         ::ucbhelper::Content aCnt( rContent, mxCmdEnv );
         aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
     }
-    catch( ::com::sun::star::ucb::CommandAbortedException& )
+    catch( ::com::sun::star::ucb::CommandAbortedException const & )
     {
         DBG_WARNING( "CommandAbortedException" );
         bRet = sal_False;
     }
-    catch( ::com::sun::star::uno::Exception& )
+    catch( Exception const & )
     {
         DBG_WARNING( "Any other exception" );
         bRet = sal_False;
@@ -1310,7 +1432,7 @@ sal_Bool SvtFileView::GetParentURL( String& rParentURL ) const
             }
         }
     }
-    catch( ::com::sun::star::uno::Exception )
+    catch( Exception const & )
     {
         // perhaps an unkown url protocol (e.g. "private:newdoc")
     }
@@ -1362,7 +1484,7 @@ sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com:
 
     mpImp->FilterFolderContent_Impl( rFilter );
 
-    mpImp->SortFolderContent_Impl();    // possibly not necessary!!!!!!!!!!
+    mpImp->SortFolderContent_Impl(); // possibly not necessary!!!!!!!!!!
     mpImp->CreateDisplayText_Impl();
     mpImp->OpenFolder_Impl();
 
@@ -1995,7 +2117,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
         {
             // normalize the content title (we always match case-insensitive)
             // 91872 - 11.09.2001 - frank.schoenheit@sun.com
-            sCompareString = (*aContentLoop)->GetFileName();    // filter works on file name, not on title!
+            sCompareString = (*aContentLoop)->GetFileName(); // filter works on file name, not on title!
             sal_Bool bDelete;
 
             if( bHideTransFile && sCompareString == sHideEntry )
@@ -2639,12 +2761,12 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
 
     ModalDialog( pParent, SvtResId( DLG_SVT_QUERYDELETE ) ),
 
-    _aEntryLabel    ( this, SvtResId( TXT_ENTRY ) ),
-    _aEntry     ( this, SvtResId( TXT_ENTRYNAME ) ),
-    _aQueryMsg  ( this, SvtResId( TXT_QUERYMSG ) ),
-    _aYesButton ( this, SvtResId( BTN_YES ) ),
-    _aAllButton ( this, SvtResId( BTN_ALL ) ),
-    _aNoButton  ( this, SvtResId( BTN_NO ) ),
+    _aEntryLabel  ( this, SvtResId( TXT_ENTRY ) ),
+    _aEntry       ( this, SvtResId( TXT_ENTRYNAME ) ),
+    _aQueryMsg    ( this, SvtResId( TXT_QUERYMSG ) ),
+    _aYesButton   ( this, SvtResId( BTN_YES ) ),
+    _aAllButton   ( this, SvtResId( BTN_ALL ) ),
+    _aNoButton    ( this, SvtResId( BTN_NO ) ),
     _aCancelButton( this, SvtResId( BTN_CANCEL ) )
 
 {
@@ -2667,12 +2789,6 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
 // -----------------------------------------------------------------------
 
 IMPL_STATIC_LINK( QueryDeleteDlg_Impl, ClickLink, PushButton*, pBtn )
-
-/*  [Beschreibung]
-
-    Die Methode wertet das Resultat der Abfrage aus.
-*/
-
 {
     if ( pBtn == &pThis->_aYesButton )
         pThis->_eResult = QUERYDELETE_YES;
