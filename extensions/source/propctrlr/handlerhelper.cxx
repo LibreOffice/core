@@ -161,14 +161,6 @@ namespace pcr
 
     //--------------------------------------------------------------------
     Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
-                const Sequence< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
-    {
-        ::std::vector< ::rtl::OUString > aAsVector( _rInitialListEntries.getConstArray(), _rInitialListEntries.getConstArray() + _rInitialListEntries.getLength() );
-        return lcl_implCreateListLikeControl( _rxControlFactory, aAsVector, _bReadOnlyControl, _bSorted, sal_True );
-    }
-
-    //--------------------------------------------------------------------
-    Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< ::rtl::OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
     {
         return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, sal_True );

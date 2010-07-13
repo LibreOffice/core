@@ -46,6 +46,7 @@
 #include <com/sun/star/io/XInputStreamProvider.hpp>
 #endif
 
+#include <com/sun/star/container/XContainerListener.hpp>
 
 //----------------------------------------------------------------------------
 
@@ -105,6 +106,8 @@ friend bool BasicIDE::RemoveDialog( const ScriptDocument& rDocument, const Strin
     BOOL                m_bAppBasicModified;
     ::basctl::DocumentEventNotifier
                         m_aNotifier;
+friend class ContainerListenerImpl;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener > m_xLibListener;
 
 #if _SOLAR__PRIVATE
     void                Init();

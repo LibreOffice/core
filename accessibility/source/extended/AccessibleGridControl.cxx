@@ -33,7 +33,6 @@
 #include <svtools/accessibletable.hxx>
 #include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-//#include "svtools/table/tablecontrol.hxx"
 
 // ============================================================================
 
@@ -61,20 +60,18 @@ public:
     /** The data table child. */
     Reference<
         ::com::sun::star::accessibility::XAccessible >          m_xTable;
-    AccessibleGridControlTable*                                 m_pTable;
+    AccessibleGridControlTable*             m_pTable;
 
     /** The header bar for rows. */
     Reference<
         ::com::sun::star::accessibility::XAccessible >          m_xRowHeaderBar;
-    AccessibleGridControlHeader*                                m_pRowHeaderBar;
+    AccessibleGridControlHeader*                m_pRowHeaderBar;
 
     /** The header bar for columns (first row of the table). */
     Reference<
         ::com::sun::star::accessibility::XAccessible >          m_xColumnHeaderBar;
-    AccessibleGridControlHeader*                                m_pColumnHeaderBar;
+    AccessibleGridControlHeader*                m_pColumnHeaderBar;
 };
-
-// Ctor/Dtor/disposing --------------------------------------------------------
 
 DBG_NAME( AccessibleGridControl )
 
@@ -83,7 +80,6 @@ AccessibleGridControl::AccessibleGridControl(
             IAccessibleTable& _rTable )
     : AccessibleGridControlBase( _rxParent, _rTable, TCTYPE_GRIDCONTROL )
 {
-//    DBG_CTOR( AccessibleTableControl, NULL );
     m_pImpl.reset( new AccessibleGridControl_Impl() );
     m_pImpl->m_aCreator = _rxCreator;
 }
@@ -91,7 +87,6 @@ AccessibleGridControl::AccessibleGridControl(
 // -----------------------------------------------------------------------------
 AccessibleGridControl::~AccessibleGridControl()
 {
-    DBG_DTOR( AccessibleGridControl, NULL );
 }
 // -----------------------------------------------------------------------------
 
@@ -99,7 +94,7 @@ void SAL_CALL AccessibleGridControl::disposing()
 {
     ::osl::MutexGuard aGuard( getOslMutex() );
 
-    m_pImpl->m_pTable           = NULL;
+    m_pImpl->m_pTable       = NULL;
     m_pImpl->m_pColumnHeaderBar = NULL;
     m_pImpl->m_pRowHeaderBar    = NULL;
     m_pImpl->m_aCreator         = Reference< XAccessible >();
@@ -143,7 +138,8 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
     {
         if(nChildIndex == 0 && m_aTable.HasColHeader())
         {
-            if(!m_pImpl->m_xColumnHeaderBar.is()){
+            if(!m_pImpl->m_xColumnHeaderBar.is())
+            {
                 AccessibleGridControlHeader* pColHeaderBar = new AccessibleGridControlHeader(m_pImpl->m_aCreator, m_aTable, svt::table::TCTYPE_COLUMNHEADERBAR);
                 m_pImpl->m_xColumnHeaderBar = pColHeaderBar;
             }
@@ -151,7 +147,8 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
         }
         else if(m_aTable.HasRowHeader() && (nChildIndex == 1 || nChildIndex == 0))
         {
-            if(!m_pImpl->m_xRowHeaderBar.is()){
+            if(!m_pImpl->m_xRowHeaderBar.is())
+            {
                 AccessibleGridControlHeader* pRowHeaderBar = new AccessibleGridControlHeader(m_pImpl->m_aCreator, m_aTable, svt::table::TCTYPE_ROWHEADERBAR);
                 m_pImpl->m_xRowHeaderBar = pRowHeaderBar;
             }
@@ -164,7 +161,6 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
             xChild = m_pImpl->m_xTable;
         }
     }
-
     return xChild;
 }
 // -----------------------------------------------------------------------------
@@ -200,11 +196,11 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
         {
             Reference< XAccessible > xCurrChild( implGetFixedChild( nIndex ) );
             Reference< XAccessibleComponent >
-                xCurrChildComp( xCurrChild, uno::UNO_QUERY );
+            xCurrChildComp( xCurrChild, uno::UNO_QUERY );
 
             if( xCurrChildComp.is() &&
-                    VCLRectangle( xCurrChildComp->getBounds() ).IsInside( aPoint ) )
-                xChild = xCurrChild;
+                VCLRectangle( xCurrChildComp->getBounds() ).IsInside( aPoint ) )
+            xChild = xCurrChild;
         }
     }
     return xChild;
@@ -217,7 +213,7 @@ void SAL_CALL AccessibleGridControl::grabFocus()
     TCSolarGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
-    m_aTable.GrabFocus();
+        m_aTable.GrabFocus();
 }
 // -----------------------------------------------------------------------------
 
@@ -260,7 +256,6 @@ Reference< XAccessible > AccessibleGridControl::implGetTable()
     {
         m_pImpl->m_pTable = createAccessibleTable();
         m_pImpl->m_xTable  = m_pImpl->m_pTable;
-
     }
     return m_pImpl->m_xTable;
 }
@@ -302,7 +297,7 @@ AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
     Reference< XAccessible > xRet;
     switch( nChildIndex )
     {
-        case TCINDEX_COLUMNHEADERBAR:
+          case TCINDEX_COLUMNHEADERBAR:
             xRet = implGetHeaderBar( TCTYPE_COLUMNHEADERBAR );
         break;
         case TCINDEX_ROWHEADERBAR:
@@ -318,7 +313,7 @@ AccessibleGridControl::implGetFixedChild( sal_Int32 nChildIndex )
 AccessibleGridControlTable* AccessibleGridControl::createAccessibleTable()
 {
     Reference< XAccessible > xCreator = (Reference< XAccessible >)m_pImpl->m_aCreator;
-    DBG_ASSERT( xCreator.is(), "accessibility/extended/AccessibleGirdControl::createAccessibleTable: my creator died - how this?" );
+        DBG_ASSERT( xCreator.is(), "accessibility/extended/AccessibleGirdControl::createAccessibleTable: my creator died - how this?" );
     return new AccessibleGridControlTable( xCreator, m_aTable, TCTYPE_TABLE );
 }
 // ============================================================================
@@ -331,13 +326,11 @@ AccessibleGridControlAccess::AccessibleGridControlAccess( const Reference< XAcce
         ,m_rTable( _rTable )
         ,m_pContext( NULL )
 {
-    DBG_CTOR( AccessibleGridControlAccess, NULL );
 }
 
 // -----------------------------------------------------------------------------
 AccessibleGridControlAccess::~AccessibleGridControlAccess()
 {
-    DBG_DTOR( AccessibleGridControlAccess, NULL );
 }
 
 // -----------------------------------------------------------------------------

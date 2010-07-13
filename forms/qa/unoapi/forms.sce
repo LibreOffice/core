@@ -1,5 +1,5 @@
 -o forms.OButtonControl
--o forms.OButtonModel
+#i111285 -o forms.OButtonModel
 -o forms.OCheckBoxControl
 -o forms.OCheckBoxModel
 -o forms.OComboBoxControl
@@ -11,10 +11,10 @@
 -o forms.ODateModel
 -o forms.OEditControl
 -o forms.OEditModel
--o forms.OFileControlModel
+#i109939 -o forms.OFileControlModel
 -o forms.OFixedTextModel
 -o forms.OFormattedControl
--o forms.OFormattedFieldWrapper
+#i109939 -o forms.OFormattedFieldWrapper
 # L‰SST EIN DOKUMENT OFFEN -o forms.OFormsCollection
 -o forms.OGridControlModel
 -o forms.OGroupBoxControl

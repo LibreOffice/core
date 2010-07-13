@@ -340,27 +340,6 @@ const char* findProgramDir()
     return sProgram;
 }
 
-// Return: "/home/build/staroffice/program" + original system library path
-const char* getNewLibraryPath()
-{
-    static char pLPATH[NPP_PATH_MAX*4] = {0};
-
-    if (!pLPATH[0])
-    {
-        const char* pProgram = findProgramDir();
-        strcpy(pLPATH, "LD_LIBRARY_PATH=");
-        strcat(pLPATH, pProgram);
-
-        char* pLD = getenv("LD_LIBRARY_PATH");
-        if (pLD)
-        {
-            strcat(pLPATH, ":");
-            strcat(pLPATH, pLD);
-        }
-    }
-    return pLPATH;
-}
-
 #ifdef WNT
 // Return SO executable absolute path, like "/home/build/staroffice/program/soffice"
 const char* findSofficeExecutable()

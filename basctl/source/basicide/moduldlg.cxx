@@ -84,7 +84,7 @@ BOOL __EXPORT ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection&
     if ( pEntry )
     {
         USHORT nDepth = GetModel()->GetDepth( pEntry );
-        if ( nDepth == 2 )
+        if ( nDepth >= 2 )
         {
             BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
             ScriptDocument aDocument( aDesc.GetDocument() );
@@ -162,7 +162,7 @@ DragDropMode __EXPORT ExtBasicTreeListBox::NotifyStartDrag( TransferDataContaine
     if ( pEntry )
     {
         USHORT nDepth = GetModel()->GetDepth( pEntry );
-        if ( nDepth == 2 )
+        if ( nDepth >= 2 )
         {
             nMode_ = SV_DRAGDROP_CTRL_COPY;
             BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
@@ -210,7 +210,7 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
 
     // don't drop on a library, which is not loaded, readonly or password protected
     // or which already has a module/dialog with this name
-    if ( bValid && ( nDepth == 1 || nDepth == 2 ) )
+    if ( bValid && ( nDepth > 0 ) )
     {
         // get source module/dialog name
         BasicEntryDescriptor aSourceDesc( GetEntryDescriptor( pSelected ) );
@@ -348,7 +348,7 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, Sv
         rpNewParent = pTarget;
         rNewChildPos = 0;
     }
-    else if ( nDepth == 2 )
+    else if ( nDepth >= 2 )
     {
         // Target = Modul/Dialog => Modul/Dialog unter das uebergeordnete Basic haengen...
         rpNewParent = GetParent( pTarget );
@@ -623,20 +623,29 @@ void ObjectPage::CheckButtons()
 {
     // enable/disable edit button
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
+    BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
+    ScriptDocument aDocument( aDesc.GetDocument() );
+    ::rtl::OUString aOULibName( aDesc.GetLibName() );
+    String aLibSubName( aDesc.GetLibSubName() );
+    sal_Bool bVBAEnabled = aDocument.isInVBAMode();
+    USHORT nMode = aBasicBox.GetMode();
+
     USHORT nDepth = pCurEntry ? aBasicBox.GetModel()->GetDepth( pCurEntry ) : 0;
-    if ( nDepth == 2 )
+    if ( nDepth >= 2 )
+    {
+        if( bVBAEnabled && ( nMode & BROWSEMODE_MODULES ) && ( nDepth == 2 ) )
+            aEditButton.Disable();
+        else
         aEditButton.Enable();
+    }
     else
         aEditButton.Disable();
 
     // enable/disable new module/dialog buttons
-    BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
     LibraryLocation eLocation( aDesc.GetLocation() );
     BOOL bReadOnly = FALSE;
-    if ( nDepth == 1 || nDepth == 2 )
+    if ( nDepth > 0 )
     {
-        ScriptDocument aDocument( aDesc.GetDocument() );
-        ::rtl::OUString aOULibName( aDesc.GetLibName() );
         Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
         Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
         if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
@@ -657,8 +666,13 @@ void ObjectPage::CheckButtons()
     }
 
     // enable/disable delete button
-    if ( nDepth == 2 && !bReadOnly && eLocation != LIBRARY_LOCATION_SHARE )
+    if ( nDepth >= 2 && !bReadOnly && eLocation != LIBRARY_LOCATION_SHARE )
+    {
+        if( bVBAEnabled && ( nMode & BROWSEMODE_MODULES ) && ( ( nDepth == 2 ) || aLibSubName.Equals( String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) ) )
+            aDelButton.Disable();
+        else
         aDelButton.Enable();
+    }
     else
         aDelButton.Disable();
 }
@@ -685,13 +699,20 @@ IMPL_LINK( ObjectPage, ButtonHdl, Button *, pButton )
         SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
         DBG_ASSERT( pCurEntry, "Entry?!" );
-        if ( aBasicBox.GetModel()->GetDepth( pCurEntry ) == 2 )
+        if ( aBasicBox.GetModel()->GetDepth( pCurEntry ) >= 2 )
         {
             BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
             if ( pDispatcher )
             {
+                String aModName( aDesc.GetName() );
+                // extract the module name from the string like "Sheet1 (Example1)"
+                if( aDesc.GetLibSubName().Equals( String( IDEResId( RID_STR_DOCUMENT_OBJECTS ) ) ) )
+                {
+                    sal_uInt16 nIndex = 0;
+                    aModName = aModName.GetToken( 0, ' ', nIndex );
+                }
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(),
-                                  aDesc.GetName(), aBasicBox.ConvertType( aDesc.GetType() ) );
+                                  aModName, aBasicBox.ConvertType( aDesc.GetType() ) );
                 pDispatcher->Execute( SID_BASICIDE_SHOWSBX, SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
             }
         }
@@ -973,14 +994,14 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
         try
         {
             ::rtl::OUString sModuleCode;
+            // the module has existed
+            if( rDocument.hasModule( aLibName, aModName ) )
+                return NULL;
             rDocument.createModule( aLibName, aModName, bMain, sModuleCode );
             BasicManager* pBasMgr = rDocument.getBasicManager();
-            if ( pBasMgr )
-            {
-                StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
+            StarBASIC* pBasic = pBasMgr? pBasMgr->GetLib( aLibName ) : 0;
                 if ( pBasic )
                     pModule = pBasic->FindModule( aModName );
-            }
             SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, rDocument, aLibName, aModName, BASICIDE_TYPE_MODULE );
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
             SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
@@ -1002,14 +1023,27 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                 {
                     if ( !rBasicBox.IsExpanded( pLibEntry ) )
                         rBasicBox.Expand( pLibEntry );
-                    SvLBoxEntry* pEntry = rBasicBox.FindEntry( pLibEntry, aModName, OBJ_TYPE_MODULE );
+                    SvLBoxEntry* pSubRootEntry = pLibEntry;
+                    if( pBasic && rDocument.isInVBAMode() )
+                    {
+                        // add the new module in the "Modules" entry
+                        SvLBoxEntry* pLibSubEntry = rBasicBox.FindEntry( pLibEntry, String( IDEResId( RID_STR_NORMAL_MODULES ) ) , OBJ_TYPE_NORMAL_MODULES );
+                        if( pLibSubEntry )
+                        {
+                            if( !rBasicBox.IsExpanded( pLibSubEntry ) )
+                                rBasicBox.Expand( pLibSubEntry );
+                            pSubRootEntry = pLibSubEntry;
+                        }
+                    }
+
+                    SvLBoxEntry* pEntry = rBasicBox.FindEntry( pSubRootEntry, aModName, OBJ_TYPE_MODULE );
                     if ( !pEntry )
                     {
                         pEntry = rBasicBox.AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
                             Image( IDEResId( RID_IMG_MODULE_HC ) ),
-                            pLibEntry, false,
+                            pSubRootEntry, false,
                             std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
                         DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
                     }

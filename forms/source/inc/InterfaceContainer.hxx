@@ -273,7 +273,7 @@ protected:
 
 private:
     // hack for Vba Events
-    void fakeVbaEventsHack( sal_Int32 _nIndex );
+    void impl_addVbEvents_nolck_nothrow( const sal_Int32 i_nIndex );
 
     // the runtime event format has changed from version SO5.2 to OOo
     enum EventFormat

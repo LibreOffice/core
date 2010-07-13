@@ -1830,7 +1830,7 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
         while ( _pViewFrame )
         {
             _pViewFrame->GetDispatcher()->Execute(pItem->Which(),    SFX_CALLMODE_ASYNCHRON, pItem, 0L);
-            _pViewFrame = SfxViewFrame::GetNext( *pViewFrame );
+            _pViewFrame = SfxViewFrame::GetNext( *_pViewFrame );
         }
     }
 }
