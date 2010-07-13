@@ -88,7 +88,6 @@ MODULEFILES= \
     Paths-unxwnt.xcu    \
     Paths-unixdesktop.xcu \
     Writer-cjk.xcu \
-    Writer-javamail.xcu \
     Impress-ogltrans.xcu \
     Embedding-calc.xcu   \
     Embedding-chart.xcu   \

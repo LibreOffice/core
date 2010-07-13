@@ -28,8 +28,7 @@
 #ifndef _SFX_BASMGR_HXX
 #define _SFX_BASMGR_HXX
 
-#ifndef _BASMGR_HXX_
 #include <basic/basmgr.hxx>
-#endif
+#include <svtools/svtools.hrc>
 
 #endif  //_SFX_BASMGR_HXX

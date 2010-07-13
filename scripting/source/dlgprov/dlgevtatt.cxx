@@ -50,9 +50,9 @@
 #include <com/sun/star/beans/MethodConcept.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
 
-#ifdef FAKE_VBA_EVENT_SUPPORT
 #include <ooo/vba/XVBAToOOEventDescGen.hpp>
-#endif
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#include <vbahelper/vbaaccesshelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -104,7 +104,6 @@ namespace dlgprov
 
     };
 
-#ifdef FAKE_VBA_EVENT_SUPPORT
   class DialogVBAScriptListenerImpl : public DialogScriptListenerImpl
     {
         protected:
@@ -157,7 +156,6 @@ namespace dlgprov
             }
         }
     }
-#endif
 
 //.........................................................................
 
@@ -166,7 +164,7 @@ namespace dlgprov
     // =============================================================================
 
     DialogEventsAttacherImpl::DialogEventsAttacherImpl( const Reference< XComponentContext >& rxContext, const Reference< frame::XModel >& rxModel, const Reference< awt::XControl >& rxControl, const Reference< XInterface >& rxHandler, const Reference< beans::XIntrospectionAccess >& rxIntrospect, bool bProviderMode, const Reference< script::XScriptListener >& rxRTLListener   )
-        :m_xContext( rxContext )
+        :mbUseFakeVBAEvents( false ), m_xContext( rxContext )
     {
         // key listeners by protocol when ScriptType = 'Script'
         // otherwise key is the ScriptType e.g. StarBasic
@@ -177,9 +175,22 @@ namespace dlgprov
         // handler for Script & ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" )
         listernersForTypes[ rtl::OUString::createFromAscii("vnd.sun.star.UNO") ] = new DialogUnoScriptListenerImpl( rxContext, rxModel, rxControl, rxHandler, rxIntrospect, bProviderMode );
         listernersForTypes[ rtl::OUString::createFromAscii("vnd.sun.star.script") ] = new DialogSFScriptListenerImpl( rxContext, rxModel );
-#ifdef FAKE_VBA_EVENT_SUPPORT
-        listernersForTypes[ rtl::OUString::createFromAscii("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel );
-#endif
+        // Note: in a future cws ( npower13_ObjectModule ) it will be possible
+        // to determine the vba mode from the basiclibrary container, the tunnel hack
+        // below can then be replaced
+        SfxObjectShell* pFoundShell = NULL;
+        if ( rxModel.is() )
+        {
+            uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( rxModel, uno::UNO_QUERY );
+            if ( xObjShellTunnel.is() )
+            {
+                pFoundShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
+                if ( pFoundShell )
+                    mbUseFakeVBAEvents = ooo::vba::isAlienExcelDoc( *pFoundShell );
+            }
+        }
+        if ( mbUseFakeVBAEvents )
+            listernersForTypes[ rtl::OUString::createFromAscii("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel );
     }
 
     // -----------------------------------------------------------------------------
@@ -197,7 +208,6 @@ namespace dlgprov
             throw RuntimeException(); // more text info here please
         return it->second;
     }
-#ifdef FAKE_VBA_EVENT_SUPPORT
     Reference< XScriptEventsSupplier > DialogEventsAttacherImpl::getFakeVbaEventsSupplier( const Reference< XControl >& xControl, rtl::OUString& sControlName )
     {
         Reference< XScriptEventsSupplier > xEventsSupplier;
@@ -210,7 +220,6 @@ namespace dlgprov
         }
         return xEventsSupplier;
     }
-#endif
 
     // -----------------------------------------------------------------------------
     void SAL_CALL DialogEventsAttacherImpl::attachEventsToControl( const Reference< XControl>& xControl, const Reference< XScriptEventsSupplier >& xEventsSupplier, const Any& Helper )
@@ -312,7 +321,6 @@ namespace dlgprov
         // go over all objects
         const Reference< XInterface >* pObjects = Objects.getConstArray();
         sal_Int32 nObjCount = Objects.getLength();
-#ifdef FAKE_VBA_EVENT_SUPPORT
         Reference< awt::XControl > xDlgControl( Objects[ nObjCount - 1 ], uno::UNO_QUERY ); // last object is the dialog
         rtl::OUString sDialogCodeName;
         if ( xDlgControl.is() )
@@ -324,7 +332,6 @@ namespace dlgprov
             }
             catch( Exception& ){}
         }
-#endif
 
         for ( sal_Int32 i = 0; i < nObjCount; ++i )
         {
@@ -339,10 +346,11 @@ namespace dlgprov
             Reference< XControlModel > xControlModel = xControl->getModel();
             Reference< XScriptEventsSupplier > xEventsSupplier( xControlModel, UNO_QUERY );
             attachEventsToControl( xControl, xEventsSupplier, Helper );
-#ifdef FAKE_VBA_EVENT_SUPPORT
-            xEventsSupplier.set( getFakeVbaEventsSupplier( xControl, sDialogCodeName ) );
-            attachEventsToControl( xControl, xEventsSupplier, Helper );
-#endif
+            if ( mbUseFakeVBAEvents )
+            {
+                xEventsSupplier.set( getFakeVbaEventsSupplier( xControl, sDialogCodeName ) );
+                attachEventsToControl( xControl, xEventsSupplier, Helper );
+            }
         }
     }
 

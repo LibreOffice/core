@@ -55,31 +55,32 @@ $(eval $(call gb_Library_add_linked_libs,fwl,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fwl,\
-    framework/source/register/registertemp \
-    framework/source/services/mediatypedetectionhelper \
+    framework/source/classes/fwktabwindow \
+    framework/source/classes/fwlresid \
     framework/source/dispatch/mailtodispatcher \
     framework/source/dispatch/oxt_handler \
-    framework/source/uielement/toolbarsmenucontroller \
-    framework/source/uielement/newmenucontroller \
-    framework/source/uielement/macrosmenucontroller \
-    framework/source/uielement/langselectionmenucontroller \
-    framework/source/uielement/headermenucontroller \
-    framework/source/uielement/footermenucontroller \
-    framework/source/uielement/fontsizemenucontroller \
-    framework/source/uielement/fontmenucontroller \
-    framework/source/services/tabwindowservice \
-    framework/source/classes/fwktabwindow \
-    framework/source/uielement/logotextstatusbarcontroller \
-    framework/source/classes/fwlresid \
-    framework/source/uielement/logoimagestatusbarcontroller \
-    framework/source/uielement/simpletextstatusbarcontroller \
-    framework/source/services/uriabbreviation \
+    framework/source/dispatch/popupmenudispatcher \
     framework/source/dispatch/servicehandler \
-    framework/source/services/license \
     framework/source/recording/dispatchrecorder \
     framework/source/recording/dispatchrecordersupplier \
+    framework/source/register/registertemp \
     framework/source/services/dispatchhelper \
-    framework/source/dispatch/popupmenudispatcher \
+    framework/source/services/license \
+    framework/source/services/mediatypedetectionhelper \
+    framework/source/services/tabwindowservice \
+    framework/source/services/uriabbreviation \
+    framework/source/uielement/fontmenucontroller \
+    framework/source/uielement/fontsizemenucontroller \
+    framework/source/uielement/footermenucontroller \
+    framework/source/uielement/headermenucontroller \
+    framework/source/uielement/langselectionmenucontroller \
+    framework/source/uielement/logoimagestatusbarcontroller \
+    framework/source/uielement/logotextstatusbarcontroller \
+    framework/source/uielement/macrosmenucontroller \
+    framework/source/uielement/newmenucontroller \
+    framework/source/uielement/popupmenucontroller \
+    framework/source/uielement/simpletextstatusbarcontroller \
+    framework/source/uielement/toolbarsmenucontroller \
 ))
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,fwl,\

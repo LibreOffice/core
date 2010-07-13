@@ -347,14 +347,15 @@ void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
         switch (nType)
         {
             case DataType::VARCHAR:
-                if ( eCellType == CellContentType_TEXT )
+                if ( eCellType == CellContentType_EMPTY )
+                    rValue.setNull();
+                else
                 {
+                    // #i25840# still let Calc convert numbers to text
                     const Reference<XText> xText( xCell, UNO_QUERY );
                     if ( xText.is() )
                         rValue = xText->getString();
-                } // if ( eCellType == CellContentType_TEXT )
-                else
-                    rValue.setNull();
+                }
                 break;
             case DataType::DECIMAL:
                 if ( eCellType == CellContentType_VALUE )
@@ -525,7 +526,7 @@ void OCalcTable::fillColumns()
             aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         }
 
-        sdbcx::OColumn* pColumn = new sdbcx::OColumn( aAlias, aTypeName, ::rtl::OUString(),
+        sdbcx::OColumn* pColumn = new sdbcx::OColumn( aAlias, aTypeName, ::rtl::OUString(),::rtl::OUString(),
                                                 ColumnValue::NULLABLE, nPrecision, nDecimals,
                                                 eType, sal_False, sal_False, bCurrency,
                                                 bStoresMixedCaseQuotedIdentifiers);

@@ -60,6 +60,7 @@ void SchXMLParagraphContext::StartElement( const uno::Reference< xml::sax::XAttr
     {
         sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
         rtl::OUString aValue;
+        bool bHaveXmlId( false );
 
         for( sal_Int16 i = 0; i < nAttrCount; i++ )
         {
@@ -67,11 +68,20 @@ void SchXMLParagraphContext::StartElement( const uno::Reference< xml::sax::XAttr
             rtl::OUString aLocalName;
             USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
 
-            if( nPrefix == XML_NAMESPACE_TEXT &&
-                IsXMLToken( aLocalName, XML_ID ) )
+            if (IsXMLToken(aLocalName, XML_ID))
             {
-                (*mpId) = xAttrList->getValueByIndex( i );
-                break;   // we only need this attribute
+                if (nPrefix == XML_NAMESPACE_XML)
+                {
+                    (*mpId) = xAttrList->getValueByIndex( i );
+                    bHaveXmlId = true;
+                }
+                if (nPrefix == XML_NAMESPACE_TEXT)
+                {   // text:id shall be ignored if xml:id exists
+                    if (!bHaveXmlId)
+                    {
+                        (*mpId) = xAttrList->getValueByIndex( i );
+                    }
+                }
             }
         }
     }

@@ -75,6 +75,9 @@ void XMLScriptExportHandler::Export(
             OUString sTmp;
             rValues[i].Value >>= sTmp;
             rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sTmp);
+
+            // #i110911# xlink:type="simple" is required
+            rExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE);
         }
         // else: disregard
     }

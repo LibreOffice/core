@@ -44,7 +44,9 @@
 #include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionApprove.hpp>
 #include <com/sun/star/document/XInteractionFilterSelect.hpp>
+#include <com/sun/star/document/XInteractionFilterOptions.hpp>
 #include <com/sun/star/document/AmbigousFilterRequest.hpp>
+#include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>
 
 #ifndef _COM_SUN_STAR_DOCUMENT_LOCKEDDOCUMENTREQUEST_HPP_
@@ -111,6 +113,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     css::uno::Reference< css::task::XInteractionAbort >                              xAbort     ;
     css::uno::Reference< css::task::XInteractionApprove >                            xApprove   ;
     css::uno::Reference< css::document::XInteractionFilterSelect >                   xFilter    ;
+    css::uno::Reference< css::document::XInteractionFilterOptions >                  xFOptions  ;
 
     sal_Int32 nCount=lContinuations.getLength();
     for (sal_Int32 i=0; i<nCount; ++i)
@@ -123,6 +126,9 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
 
         if ( ! xFilter.is() )
             xFilter = css::uno::Reference< css::document::XInteractionFilterSelect >( lContinuations[i], css::uno::UNO_QUERY );
+
+        if ( ! xFOptions.is() )
+            xFOptions = css::uno::Reference< css::document::XInteractionFilterOptions >( lContinuations[i], css::uno::UNO_QUERY );
     }
 
     // differ between abortable interactions (error, unknown filter ...)
@@ -130,6 +136,7 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
     css::task::ErrorCodeRequest          aErrorCodeRequest     ;
     css::document::AmbigousFilterRequest aAmbigousFilterRequest;
     css::document::LockedDocumentRequest aLockedDocumentRequest;
+    css::document::FilterOptionsRequest  aFilterOptionsRequest;
 
     if (aRequest>>=aAmbigousFilterRequest)
     {
@@ -161,6 +168,15 @@ void SAL_CALL QuietInteraction::handle( const css::uno::Reference< css::task::XI
         else
         if (xAbort.is())
             xAbort->select();
+    }
+    else
+    if (aRequest>>=aFilterOptionsRequest)
+    {
+        if (xFOptions.is())
+        {
+            // let the default filter options be used
+            xFOptions->select();
+        }
     }
     else
     if (xAbort.is())

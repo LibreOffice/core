@@ -823,7 +823,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 pItem = pDispatcher->Execute( GetId(), nCall, 0, &aInternalSet, nModifier );
 
             // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
-            if ( SfxApplication::Is_Impl() )
+            if ( SfxApplication::Get() )
             {
                 SfxDispatcher* pAppDispat = SFX_APP()->GetAppDispatcher_Impl();
                 if ( pAppDispat )

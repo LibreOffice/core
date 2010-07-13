@@ -115,6 +115,7 @@ protected:
     virtual ~PackageRegistryImpl();
     PackageRegistryImpl() : t_helper( getMutex() ) {}
 
+
 public:
     static Reference<deployment::XPackageRegistry> create(
         OUString const & context,
@@ -126,8 +127,8 @@ public:
 
     // XPackageRegistry
     virtual Reference<deployment::XPackage> SAL_CALL bindPackage(
-        OUString const & url, OUString const & mediaType,
-        Reference<XCommandEnvironment> const & xCmdEnv )
+        OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
+        OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
         throw (deployment::DeploymentException, CommandFailedException,
                lang::IllegalArgumentException, RuntimeException);
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
@@ -181,6 +182,7 @@ OUString normalizeMediaType( OUString const & mediaType )
 }
 
 //______________________________________________________________________________
+
 void PackageRegistryImpl::insertBackend(
     Reference<deployment::XPackageRegistry> const & xBackend )
 {
@@ -201,7 +203,8 @@ void PackageRegistryImpl::insertBackend(
         ::std::pair<t_string2registry::iterator, bool> mb_insertion(
             m_mediaType2backend.insert( t_string2registry::value_type(
                                             mediaType, xBackend ) ) );
-        if (mb_insertion.second) {
+        if (mb_insertion.second)
+        {
             // add parameterless media-type, too:
             sal_Int32 semi = mediaType.indexOf( ';' );
             if (semi >= 0) {
@@ -210,9 +213,13 @@ void PackageRegistryImpl::insertBackend(
                         mediaType.copy( 0, semi ), xBackend ) );
             }
             const OUString fileFilter( xPackageType->getFileFilter() );
+            //The package backend shall also be called to determine the mediatype
+            //(XPackageRegistry.bindPackage) when the URL points to a directory.
+            const bool bExtension = mediaType.equals(OUSTR("application/vnd.sun.star.package-bundle"));
             if (fileFilter.getLength() == 0 ||
                 fileFilter.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*.*") ) ||
-                fileFilter.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*") ))
+                fileFilter.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("*") ) ||
+                bExtension)
             {
                 m_ambiguousBackends.insert( xBackend );
             }
@@ -351,10 +358,28 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         }
     }
 
-    // insert bundle be:
-    that->insertBackend(
+    // Insert bundle back-end.
+    // Always register as last, because we want to add extensions also as folders
+    // and as a default we accept every folder, which was not recognized by the other
+    // backends.
+    Reference<deployment::XPackageRegistry> extensionBackend =
         ::dp_registry::backend::bundle::create(
-            that, context, cachePath, readOnly, xComponentContext ) );
+            that, context, cachePath, readOnly, xComponentContext);
+    that->insertBackend(extensionBackend);
+
+    Reference<lang::XServiceInfo> xServiceInfo(
+        extensionBackend, UNO_QUERY_THROW );
+
+    OSL_ASSERT(xServiceInfo.is());
+    OUString registryCachePath(
+        makeURL( cachePath,
+                 ::rtl::Uri::encode(
+                     xServiceInfo->getImplementationName(),
+                     rtl_UriCharClassPchar,
+                     rtl_UriEncodeIgnoreEscapes,
+                     RTL_TEXTENCODING_UTF8 ) ) );
+    create_folder( 0, registryCachePath, Reference<XCommandEnvironment>());
+
 
 #if OSL_DEBUG_LEVEL > 1
     // dump tables:
@@ -434,8 +459,8 @@ void PackageRegistryImpl::update() throw (RuntimeException)
 // XPackageRegistry
 //______________________________________________________________________________
 Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
-    OUString const & url, OUString const & mediaType_,
-    Reference<XCommandEnvironment> const & xCmdEnv )
+    OUString const & url, OUString const & mediaType_, sal_Bool bRemoved,
+    OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
     throw (deployment::DeploymentException, CommandFailedException,
            lang::IllegalArgumentException, RuntimeException)
 {
@@ -445,7 +470,8 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     {
         ::ucbhelper::Content ucbContent;
         if (create_ucb_content(
-                &ucbContent, url, xCmdEnv, false /* no throw */ ))
+                &ucbContent, url, xCmdEnv, false /* no throw */ )
+                && !ucbContent.isFolder())
         {
             OUString title( ucbContent.getPropertyValue(
                                 StrTitle::get() ).get<OUString>() );
@@ -472,7 +498,8 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
         for ( ; iPos != iEnd; ++iPos )
         {
             try {
-                return (*iPos)->bindPackage( url, mediaType, xCmdEnv );
+                return (*iPos)->bindPackage( url, mediaType, bRemoved,
+                    identifier, xCmdEnv );
             }
             catch (lang::IllegalArgumentException &) {
             }
@@ -501,7 +528,8 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
                 getResourceString(RID_STR_UNSUPPORTED_MEDIA_TYPE) + mediaType,
                 static_cast<OWeakObject *>(this), static_cast<sal_Int16>(-1) );
         }
-        return iFind->second->bindPackage( url, mediaType, xCmdEnv );
+        return iFind->second->bindPackage( url, mediaType, bRemoved,
+            identifier, xCmdEnv );
     }
 }
 
@@ -511,7 +539,6 @@ PackageRegistryImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
     return comphelper::containerToSequence(m_typesInfos);
 }
-
 } // anon namespace
 
 //==============================================================================

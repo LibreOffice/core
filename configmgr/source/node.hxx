@@ -46,7 +46,7 @@ public:
 
     virtual Kind kind() const = 0;
 
-    virtual rtl::Reference< Node > clone() const = 0;
+    virtual rtl::Reference< Node > clone(bool keepTemplateName) const = 0;
 
     virtual NodeMap & getMembers();
 

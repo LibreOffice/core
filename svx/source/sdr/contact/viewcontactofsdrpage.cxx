@@ -203,10 +203,18 @@ namespace sdr
                 }
                 else
                 {
-                    // build primitive from pObject's attributes
-                    const SfxItemSet& rFillAttributes = rPage.getSdrPageProperties().GetItemSet();
-                    const drawinglayer::attribute::SdrFillAttribute aFill(
-                        drawinglayer::primitive2d::createNewSdrFillAttribute(rFillAttributes));
+                    drawinglayer::attribute::SdrFillAttribute aFill;
+
+                    // #i110846# Suppress SdrPage FillStyle for MasterPages without StyleSheets,
+                    // else the PoolDefault (XFILL_COLOR and Blue8) will be used. Normally, all
+                    // MasterPages should have a StyleSheet excactly for this reason, but historically
+                    // e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
+                    if(rPage.getSdrPageProperties().GetStyleSheet())
+                    {
+                        // create page fill attributes with correct properties
+                        aFill = drawinglayer::primitive2d::createNewSdrFillAttribute(
+                            rPage.getSdrPageProperties().GetItemSet());
+                    }
 
                     if(!aFill.isDefault())
                     {

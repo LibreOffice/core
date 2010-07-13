@@ -49,6 +49,8 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
+#include "sfx2/taskpane.hxx"
+#include <tools/diagnose_ex.h>
 
 #define SfxModule
 #include "sfxslots.hxx"
@@ -398,6 +400,17 @@ BOOL SfxModule::IsActive() const
     if ( pFrame && pFrame->GetObjectShell()->GetFactory().GetModule() == this )
         return TRUE;
     return FALSE;
+}
+
+bool SfxModule::IsChildWindowAvailable( const USHORT i_nId, const SfxViewFrame* i_pViewFrame ) const
+{
+    if ( i_nId != SID_TASKPANE )
+        // by default, assume it is
+        return true;
+
+    const SfxViewFrame* pViewFrame = i_pViewFrame ? i_pViewFrame : GetFrame();
+    ENSURE_OR_RETURN( pViewFrame, "SfxModule::IsChildWindowAvailable: no frame to ask for the module identifier!", false );
+    return ::sfx2::ModuleTaskPane::ModuleHasToolPanels( pViewFrame->GetFrame().GetFrameInterface() );
 }
 
 SfxModule* SfxModule::GetActiveModule( SfxViewFrame* pFrame )

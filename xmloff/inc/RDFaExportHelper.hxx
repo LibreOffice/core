@@ -53,8 +53,6 @@ private:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::rdf::XDocumentRepository> m_xRepository;
 
-    ::rtl::OUString m_RDFsLabel;
-
     typedef ::std::map< ::rtl::OUString, ::rtl::OUString >
         BlankNodeMap_t;
 

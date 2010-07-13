@@ -1,6 +1,0 @@
-MACAB_1_0 {
-    global:
-        createMacabConnection;
-    local:
-        *;
-};

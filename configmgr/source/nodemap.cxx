@@ -42,7 +42,7 @@ void cloneNodeMap(NodeMap const & source, NodeMap * target) {
     OSL_ASSERT(target != 0 && target->empty());
     NodeMap clone(source);
     for (NodeMap::iterator i(clone.begin()); i != clone.end(); ++i) {
-        i->second = i->second->clone();
+        i->second = i->second->clone(true);
     }
     std::swap(clone, *target);
 }

@@ -347,7 +347,6 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/core/xmltoken \
     xmloff/source/core/xmlerror \
     xmloff/source/core/nmspmap \
-    xmloff/source/core/xmlkywd \
     xmloff/source/core/xmluconv \
     xmloff/source/core/XMLBase64Export \
     xmloff/source/core/DomExport \

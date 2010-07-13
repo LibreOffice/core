@@ -782,13 +782,13 @@
 							<desc>MAX</desc>
 						</info>
 					</enumeration>
-					<enumeration oor:value="5">
+					<enumeration oor:value="6">
 						<info>
 							<desc>IF</desc>
 						</info>
 					</enumeration>
 				</constraints>
-				<value>224 226 222 223 5</value>
+				<value>224 226 222 223 6</value>
 			</prop>
 			<prop oor:name="AutoInput" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
@@ -1206,7 +1206,7 @@
 						<desc>Specifies the number of decimals to be displayed for the Standard number format.</desc>
 						<label>Decimal places</label>
 					</info>
-					<value>2</value>
+					<value>-1</value>
 				</prop>
 				<prop oor:name="RegularExpressions" oor:type="xs:boolean">
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Enable regular expressions in formulas -->

@@ -43,7 +43,7 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objitem.hxx>
@@ -3683,11 +3683,8 @@ namespace svxform
         m_aURLED.DisableHistory();
         m_aFilePickerBtn.SetClickHdl( LINK( this, AddInstanceDialog, FilePickerHdl ) );
 
-        // load the filter name from svtools resource
-        ByteString aResMgrName( "svt" );
-        ResMgr* pSvtResMgr = ResMgr::CreateResMgr(
-            aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-        m_sAllFilterName = String( ResId( STR_FILTERNAME_ALL, *pSvtResMgr ) );
+        // load the filter name from fps_office resource
+        m_sAllFilterName = String( ResId( STR_FILTERNAME_ALL, *CREATEVERSIONRESMGR(fps_office) ) );
     }
 
     AddInstanceDialog::~AddInstanceDialog()

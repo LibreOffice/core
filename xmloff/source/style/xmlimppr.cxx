@@ -40,7 +40,6 @@
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/xmlimp.hxx>
 
-#include "xmloff/xmlkywd.hxx"
 #include "xmloff/unoatrcn.hxx"
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>

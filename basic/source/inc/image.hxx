@@ -106,6 +106,5 @@ public:
 #define SBIMG_COMPARETEXT   0x0002  // OPTION COMPARE TEXT ist aktiv
 #define SBIMG_INITCODE      0x0004  // Init-Code vorhanden
 #define SBIMG_CLASSMODULE   0x0008  // OPTION ClassModule is active
-#define SBIMG_VBASUPPORT    0x0020  // OPTION VBASupport is 1
 
 #endif

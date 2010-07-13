@@ -53,11 +53,6 @@
           <desc>an optional uno service that is called after files and nodes have been copied in order to perform custom migration actions. The service needs to support XInitializable and XJob interfaces according do http://specs.openoffice.org/appwide/migration/spec_migration.sxw</desc>
         </info>
       </prop>
-      <prop oor:name="ServiceConfigComponents" oor:type="oor:string-list">
-        <info>
-          <desc>a list of config components that are to be passed to service</desc>
-        </info>
-      </prop>
       <prop oor:name="IncludedFiles" oor:type="oor:string-list">
         <info>
           <desc>a list of wildcards relative to the old userdata origin that are to be copied</desc>
@@ -158,6 +153,12 @@
 				<!-- UIHints: setup -->
 				<info>
 					<desc>Specifies the name of the standard template file for the factory.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ooSetupFactorySystemDefaultTemplateChanged" oor:type="xs:boolean">
+				<!-- UIHints: setup -->
+				<info>
+					<desc>Indicates if the system default template has been changed.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupFactoryWindowAttributes" oor:type="xs:string">
@@ -266,7 +267,15 @@
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="ooSetupExtension" oor:type="xs:string">
+			<prop oor:name="ooVendor" oor:type="xs:string">
+				<info>
+					<author>IHI</author>
+					<desc>Specifies the vendor who build the product.</desc>
+				</info>
+				<value/>
+			</prop>
+
+            <prop oor:name="ooSetupExtension" oor:type="xs:string">
 				<info>
 					<desc>Specifies the version number that appears on the user interface.</desc>
 				</info>

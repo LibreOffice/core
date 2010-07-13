@@ -49,11 +49,18 @@
 #include "disas.hxx"
 #include "runtime.hxx"
 #include <basic/sbuno.hxx>
+#include <basic/sbobjmod.hxx>
 #include "stdobj.hxx"
 #include "filefmt.hxx"
 #include "sb.hrc"
 #include <basrid.hxx>
 #include <vos/mutex.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include "errobject.hxx"
+
+#include <com/sun/star/script/ModuleType.hpp>
+#include <com/sun/star/script/ModuleInfo.hpp>
+using namespace ::com::sun::star::script;
 
 // #pragma SW_SEGMENT_CLASS( SBASIC, SBASIC_CODE )
 
@@ -63,6 +70,10 @@ TYPEINIT1(StarBASIC,SbxObject)
 
 #define RTLNAME "@SBRTL"
 //  i#i68894#
+using com::sun::star::uno::Reference;
+using com::sun::star::uno::Any;
+using com::sun::star::uno::UNO_QUERY;
+using com::sun::star::lang::XMultiServiceFactory;
 
 const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
 const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
@@ -70,7 +81,25 @@ const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
 SbxObject* StarBASIC::getVBAGlobals( )
 {
     if ( !pVBAGlobals )
+    {
+        Any aThisDoc;
+        if ( GetUNOConstant("ThisComponent", aThisDoc) )
+        {
+            Reference< XMultiServiceFactory > xDocFac( aThisDoc, UNO_QUERY );
+                        if ( xDocFac.is() )
+            {
+                try
+                {
+                    xDocFac->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+                }
+                catch( Exception& )
+                {
+                    // Ignore
+                }
+            }
+        }
         pVBAGlobals = (SbUnoObject*)Find( aVBAHook , SbxCLASS_DONTCARE );
+    }
     return pVBAGlobals;
 }
 
@@ -215,6 +244,7 @@ const SFX_VB_ErrorItem __FAR_DATA SFX_VB_ErrorTab[] =
     { 1004, SbERR_METHOD_FAILED },
     { 1005, SbERR_SETPROP_FAILED },
     { 1006, SbERR_GETPROP_FAILED },
+    { 1007, SbERR_BASIC_COMPAT },
     { 0xFFFF, 0xFFFFFFFFL }     // End mark
 };
 
@@ -291,23 +321,52 @@ SbxObject* SbOLEFactory::CreateObject( const String& rClassName )
 }
 
 
-// Factory class to create user defined objects (type command)
-class SbTypeFactory : public SbxFactory
-{
-    SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
+//========================================================================
+// SbFormFactory, show user forms by: dim as new <user form name>
 
+class SbFormFactory : public SbxFactory
+{
 public:
     virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
     virtual SbxObject* CreateObject( const String& );
 };
 
-SbxBase* SbTypeFactory::Create( UINT16, UINT32 )
+SbxBase* SbFormFactory::Create( UINT16, UINT32 )
 {
     // Not supported
     return NULL;
 }
 
-SbxObject* SbTypeFactory::cloneTypeObjectImpl( const SbxObject& rTypeObj )
+SbxObject* SbFormFactory::CreateObject( const String& rClassName )
+{
+    static String aLoadMethodName( RTL_CONSTASCII_USTRINGPARAM("load") );
+
+    SbxObject* pRet = NULL;
+    SbModule* pMod = pMOD;
+    if( pMod )
+    {
+        SbxVariable* pVar = pMod->Find( rClassName, SbxCLASS_OBJECT );
+        if( pVar )
+        {
+            SbxBase* pObj = pVar->GetObject();
+            SbUserFormModule* pFormModule = PTR_CAST( SbUserFormModule, pObj );
+
+            if( pFormModule != NULL )
+            {
+                pFormModule->load();
+                SbUserFormModuleInstance* pFormInstance = pFormModule->CreateInstance();
+                pRet = pFormInstance;
+            }
+        }
+    }
+    return pRet;
+}
+
+
+//========================================================================
+// SbTypeFactory
+
+SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
 {
     SbxObject* pRet = new SbxObject( rTypeObj );
     pRet->PutObject( pRet );
@@ -322,7 +381,8 @@ SbxObject* SbTypeFactory::cloneTypeObjectImpl( const SbxObject& rTypeObj )
         if( pProp )
         {
             SbxProperty* pNewProp = new SbxProperty( *pProp );
-            if( pVar->GetType() & SbxARRAY )
+            SbxDataType eVarType = pVar->GetType();
+            if( eVarType & SbxARRAY )
             {
                 SbxBase* pParObj = pVar->GetObject();
                 SbxDimArray* pSource = PTR_CAST(SbxDimArray,pParObj);
@@ -349,10 +409,33 @@ SbxObject* SbTypeFactory::cloneTypeObjectImpl( const SbxObject& rTypeObj )
                 pNewProp->PutObject( pDest );
                 pNewProp->SetFlags( nSavFlags );
             }
+            if( eVarType == SbxOBJECT )
+            {
+                SbxBase* pObjBase = pVar->GetObject();
+                SbxObject* pSrcObj = PTR_CAST(SbxObject,pObjBase);
+                SbxObject* pDestObj = NULL;
+                if( pSrcObj != NULL )
+                    pDestObj = cloneTypeObjectImpl( *pSrcObj );
+                pNewProp->PutObject( pDestObj );
+            }
             pProps->PutDirect( pNewProp, i );
         }
     }
     return pRet;
+}
+
+// Factory class to create user defined objects (type command)
+class SbTypeFactory : public SbxFactory
+{
+public:
+    virtual SbxBase* Create( UINT16 nSbxId, UINT32 = SBXCR_SBX );
+    virtual SbxObject* CreateObject( const String& );
+};
+
+SbxBase* SbTypeFactory::Create( UINT16, UINT32 )
+{
+    // Not supported
+    return NULL;
 }
 
 SbxObject* SbTypeFactory::CreateObject( const String& rClassName )
@@ -485,6 +568,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             }
         }
     }
+    SetModuleType( ModuleType::CLASS );
 }
 
 SbClassModuleObject::~SbClassModuleObject()
@@ -682,6 +766,7 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
     SetParent( p );
     pLibInfo = NULL;
     bNoRtl = bBreak = FALSE;
+    bVBAEnabled = FALSE;
     pModules = new SbxArray;
 
     if( !GetSbData()->nInst++ )
@@ -696,6 +781,8 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
         AddFactory( pCLASSFAC );
         pOLEFAC = new SbOLEFactory;
         AddFactory( pOLEFAC );
+        pFORMFAC = new SbFormFactory;
+        AddFactory( pFORMFAC );
     }
     pRtl = new SbiStdObject( String( RTL_CONSTASCII_USTRINGPARAM(RTLNAME) ), this );
     // Search via StarBasic is always global
@@ -716,15 +803,17 @@ StarBASIC::~StarBASIC()
     if( !--GetSbData()->nInst )
     {
         RemoveFactory( pSBFAC );
-        pSBFAC = NULL;
+        delete pSBFAC; pSBFAC = NULL;
         RemoveFactory( pUNOFAC );
-        pUNOFAC = NULL;
+        delete pUNOFAC; pUNOFAC = NULL;
         RemoveFactory( pTYPEFAC );
-        pTYPEFAC = NULL;
+        delete pTYPEFAC; pTYPEFAC = NULL;
         RemoveFactory( pCLASSFAC );
-        pCLASSFAC = NULL;
+        delete pCLASSFAC; pCLASSFAC = NULL;
         RemoveFactory( pOLEFAC );
-        pOLEFAC = NULL;
+        delete pOLEFAC; pOLEFAC = NULL;
+        RemoveFactory( pFORMFAC );
+        delete pFORMFAC; pFORMFAC = NULL;
 
 #ifdef DBG_UTIL
     // There is no need to clean SbiData at program end,
@@ -782,7 +871,34 @@ SbModule* StarBASIC::MakeModule( const String& rName, const String& rSrc )
 
 SbModule* StarBASIC::MakeModule32( const String& rName, const ::rtl::OUString& rSrc )
 {
-    SbModule* p = new SbModule( rName );
+    ModuleInfo mInfo;
+    mInfo.ModuleType = ModuleType::NORMAL;
+    return MakeModule32(  rName, mInfo, rSrc );
+}
+SbModule* StarBASIC::MakeModule32( const String& rName, const ModuleInfo& mInfo, const rtl::OUString& rSrc )
+{
+
+    OSL_TRACE("create module %s type mInfo %d", rtl::OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(), mInfo.ModuleType );
+    SbModule* p = NULL;
+    switch ( mInfo.ModuleType )
+    {
+        case ModuleType::DOCUMENT:
+            // In theory we should be able to create Object modules
+            // in ordinary basic ( in vba mode thought these are create
+            // by the application/basic and not by the user )
+            p = new SbObjModule( rName, mInfo, isVBAEnabled() );
+            break;
+        case ModuleType::CLASS:
+            p = new SbModule( rName, isVBAEnabled() );
+            p->SetModuleType( ModuleType::CLASS );
+        break;
+        case ModuleType::FORM:
+            p = new SbUserFormModule( rName, mInfo, isVBAEnabled() );
+        break;
+        default:
+            p = new SbModule( rName, isVBAEnabled() );
+
+    }
     p->SetSource32( rSrc );
     p->SetParent( this );
     pModules->Insert( p, pModules->Count() );
@@ -958,6 +1074,12 @@ SbxVariable* StarBASIC::Find( const String& rName, SbxClassType t )
                 }
                 pNamed = p;
             }
+            // Only variables qualified by the Module Name e.g. Sheet1.foo
+            // should work for Documant && Class type Modules
+            INT32 nType = p->GetModuleType();
+            if ( nType == ModuleType::DOCUMENT || nType == ModuleType::FORM )
+                continue;
+
             // otherwise check if the element is available
             // unset GBLSEARCH-Flag (due to Rekursion)
             USHORT nGblFlag = p->GetFlags() & SBX_GBLSEARCH;
@@ -1329,6 +1451,7 @@ void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
     }
     else
         GetSbData()->aErrMsg = String::EmptyString();
+
 }
 
 BOOL StarBASIC::CError
@@ -1385,7 +1508,22 @@ BOOL StarBASIC::RTError( SbError code, const String& rMsg, USHORT l, USHORT c1, 
 
     // Umsetzung des Codes fuer String-Transport in SFX-Error
     if( rMsg.Len() )
-        code = (ULONG)*new StringErrorInfo( code, String(rMsg) );
+    {
+        // very confusing, even though MakeErrorText sets up the error text
+        // seems that this is not used ( if rMsg already has content )
+        // In the case of VBA MakeErrorText also formats the error to be alittle more
+        // like vba ( adds an error number etc )
+        if ( SbiRuntime::isVBAEnabled() && ( code == SbERR_BASIC_COMPAT ) )
+        {
+            String aTmp = '\'';
+            aTmp += String::CreateFromInt32( SbxErrObject::getUnoErrObject()->getNumber() );
+            aTmp += String( RTL_CONSTASCII_USTRINGPARAM("\'\n") );
+            aTmp +=  GetSbData()->aErrMsg.Len() ? GetSbData()->aErrMsg : rMsg;
+            code = (ULONG)*new StringErrorInfo( code, aTmp );
+        }
+        else
+            code = (ULONG)*new StringErrorInfo( code, String(rMsg) );
+    }
 
     SetErrorData( code, l, c1, c2 );
     if( GetSbData()->aErrHdl.IsSet() )

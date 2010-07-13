@@ -55,7 +55,7 @@ SLOFILES=\
         $(SLO)$/YUsers.obj				\
         $(SLO)$/Yservices.obj
 
-SHL1VERSIONMAP=$(MYSQL_TARGET).map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 # --- Library -----------------------------------
 

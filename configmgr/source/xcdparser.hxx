@@ -47,7 +47,7 @@ class XcdParser: public Parser {
 public:
     typedef std::set< rtl::OUString > Dependencies;
 
-    XcdParser(int layer, Dependencies const & dependencies, Data * data);
+    XcdParser(int layer, Dependencies const & dependencies, Data & data);
 
 private:
     virtual ~XcdParser();
@@ -66,7 +66,7 @@ private:
 
     int layer_;
     Dependencies const & dependencies_;
-    Data * data_;
+    Data & data_;
     State state_;
     rtl::OUString dependency_;
     rtl::Reference< Parser > nestedParser_;

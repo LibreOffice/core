@@ -189,6 +189,7 @@ SdrItemPool::SdrItemPool(
     mppLocalPoolDefaults[SDRATTR_OBJMOVEPROTECT -SDRATTR_START]=new SdrObjMoveProtectItem;
     mppLocalPoolDefaults[SDRATTR_OBJSIZEPROTECT -SDRATTR_START]=new SdrObjSizeProtectItem;
     mppLocalPoolDefaults[SDRATTR_OBJPRINTABLE   -SDRATTR_START]=new SdrObjPrintableItem;
+    mppLocalPoolDefaults[SDRATTR_OBJVISIBLE     -SDRATTR_START]=new SdrObjVisibleItem;
     mppLocalPoolDefaults[SDRATTR_LAYERID        -SDRATTR_START]=new SdrLayerIdItem;
     mppLocalPoolDefaults[SDRATTR_LAYERNAME      -SDRATTR_START]=new SdrLayerNameItem;
     mppLocalPoolDefaults[SDRATTR_OBJECTNAME     -SDRATTR_START]=new SdrObjectNameItem;
@@ -546,6 +547,7 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, String& rItemName)
         case SDRATTR_OBJMOVEPROTECT : nResId = SIP_SA_OBJMOVEPROTECT;break;
         case SDRATTR_OBJSIZEPROTECT : nResId = SIP_SA_OBJSIZEPROTECT;break;
         case SDRATTR_OBJPRINTABLE   : nResId = SIP_SA_OBJPRINTABLE;break;
+        case SDRATTR_OBJVISIBLE     : nResId = SIP_SA_OBJVISIBLE;break;
         case SDRATTR_LAYERID        : nResId = SIP_SA_LAYERID;break;
         case SDRATTR_LAYERNAME      : nResId = SIP_SA_LAYERNAME;break;
         case SDRATTR_OBJECTNAME     : nResId = SIP_SA_OBJECTNAME;break;

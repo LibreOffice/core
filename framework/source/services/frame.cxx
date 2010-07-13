@@ -1551,8 +1551,9 @@ css::uno::Reference< css::awt::XWindow > SAL_CALL Frame::getComponentWindow() th
 css::uno::Reference< css::frame::XController > SAL_CALL Frame::getController() throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
+    // It seems to be unavoidable that disposed frames allow to ask for a Controller (#111452)
     // Register transaction and reject wrong calls.
-    TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
+    // TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );

@@ -161,6 +161,11 @@ struct lcl_ApplyCellToData : public ::std::unary_function< SchXMLCell, void >
         ++m_nIndex;
     }
 
+    sal_Int32 getCurrentIndex() const
+    {
+        return m_nIndex;
+    }
+
 private:
     Sequence< double > & m_rData;
     sal_Int32 m_nIndex;
@@ -865,7 +870,12 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
                     lcl_ApplyCellToComplexLabel( rRow.front(), aComplexRowDescriptions[nRow] );
 
                 // values
-                ::std::for_each( rRow.begin() + nColOffset, rRow.end(), lcl_ApplyCellToData( aDataInRows[nRow] ));
+                Sequence< double >& rTargetRow = aDataInRows[nRow];
+                lcl_ApplyCellToData aApplyCellToData = ::std::for_each( rRow.begin() + nColOffset, rRow.end(), lcl_ApplyCellToData( rTargetRow ) );
+                double fNaN = 0.0;
+                ::rtl::math::setNan( &fNaN );
+                for( sal_Int32 nCurrentIndex = aApplyCellToData.getCurrentIndex(); nCurrentIndex<nNumColumns; nCurrentIndex++ )
+                    rTargetRow[nCurrentIndex] = fNaN;//#i110615#
             }
         }
     }

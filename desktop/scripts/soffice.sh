@@ -114,19 +114,20 @@ if [ -f /etc/adabasrc ]; then
   . /etc/adabasrc
 fi
 
-# Set PATH so that crash_report is found:
-PATH=$sd_prog${PATH+:$PATH}
-export PATH
-
 # execute soffice binary
 "$sd_prog/$sd_binary" "$@" &
 trap 'kill -9 $!' TERM
 wait $!
 sd_ret=$?
 
-while [ $sd_ret -eq 79 ]
+while [ $sd_ret -eq 79 -o $sd_ret -eq 81 ]
 do
-    "$sd_prog/$sd_binary" ""$BOOTSTRAPVARS"" &
+    if [ $sd_ret -eq 79 ]; then
+        "$sd_prog/$sd_binary" ""$BOOTSTRAPVARS"" &
+    elif [ $sd_ret -eq 81 ]; then
+        "$sd_prog/$sd_binary" "$@" &
+    fi
+
     wait $!
     sd_ret=$?
 done

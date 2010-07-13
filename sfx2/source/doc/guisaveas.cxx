@@ -62,6 +62,9 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/itemset.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
@@ -80,6 +83,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dinfdlg.hxx>
+#include <sfx2/request.hxx>
 #include <sfxtypes.hxx>
 #include "alienwarn.hxx"
 
@@ -108,6 +112,7 @@ const ::rtl::OUString aFilterFlagsString   = ::rtl::OUString::createFromAscii( "
 
 using namespace ::com::sun::star;
 
+namespace {
 //-------------------------------------------------------------------------
 static sal_uInt16 getSlotIDFromMode( sal_Int8 nStoreMode )
 {
@@ -168,6 +173,69 @@ static sal_Int32 getDontFlags( sal_Int8 nStoreMode )
 }
 
 //=========================================================================
+// class DocumentSettingsGuard
+//=========================================================================
+
+class DocumentSettingsGuard
+{
+    uno::Reference< beans::XPropertySet > m_xDocumentSettings;
+    sal_Bool m_bPreserveReadOnly;
+    sal_Bool m_bReadOnlySupported;
+
+    sal_Bool m_bRestoreSettings;
+public:
+    DocumentSettingsGuard( const uno::Reference< frame::XModel >& xModel, sal_Bool bReadOnly, sal_Bool bRestore )
+    : m_bPreserveReadOnly( sal_False )
+    , m_bReadOnlySupported( sal_False )
+    , m_bRestoreSettings( bRestore )
+    {
+        try
+        {
+            uno::Reference< lang::XMultiServiceFactory > xDocSettingsSupplier( xModel, uno::UNO_QUERY_THROW );
+            m_xDocumentSettings.set(
+                xDocSettingsSupplier->createInstance(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.Settings" ) ) ),
+                uno::UNO_QUERY_THROW );
+
+            ::rtl::OUString aLoadReadonlyString( RTL_CONSTASCII_USTRINGPARAM( "LoadReadonly" ) );
+
+            try
+            {
+                m_xDocumentSettings->getPropertyValue( aLoadReadonlyString ) >>= m_bPreserveReadOnly;
+                m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::makeAny( bReadOnly ) );
+                m_bReadOnlySupported = sal_True;
+            }
+            catch( uno::Exception& )
+            {}
+        }
+        catch( uno::Exception& )
+        {}
+
+        if ( ( bReadOnly && !m_bReadOnlySupported ) )
+            throw uno::RuntimeException(); // the user could provide the data, so it must be stored
+    }
+
+    ~DocumentSettingsGuard()
+    {
+        if ( m_bRestoreSettings )
+        {
+            ::rtl::OUString aLoadReadonlyString( RTL_CONSTASCII_USTRINGPARAM( "LoadReadonly" ) );
+
+            try
+            {
+                if ( m_bReadOnlySupported )
+                    m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::makeAny( m_bPreserveReadOnly ) );
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ASSERT( "Unexpected exception!" );
+            }
+        }
+    }
+};
+} // anonymous namespace
+
+//=========================================================================
 // class ModelData_Impl
 //=========================================================================
 class ModelData_Impl
@@ -184,6 +252,8 @@ class ModelData_Impl
 
     ::comphelper::SequenceAsHashMap m_aMediaDescrHM;
 
+    sal_Bool m_bRecommendReadOnly;
+
 public:
     ModelData_Impl( SfxStoringHelper& aOwner,
                     const uno::Reference< frame::XModel >& xModel,
@@ -199,6 +269,8 @@ public:
     uno::Reference< util::XModifiable > GetModifiable();
 
     ::comphelper::SequenceAsHashMap& GetMediaDescr() { return m_aMediaDescrHM; }
+
+    sal_Bool IsRecommendReadOnly() { return m_bRecommendReadOnly; }
 
     const ::comphelper::SequenceAsHashMap& GetDocProps();
 
@@ -252,6 +324,7 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
 , m_pDocumentPropsHM( NULL )
 , m_pModulePropsHM( NULL )
 , m_aMediaDescrHM( aMediaDescr )
+, m_bRecommendReadOnly( sal_False )
 {
     CheckInteractionHandler();
 }
@@ -836,9 +909,16 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     ::rtl::OUString aAdjustToType;
 
-    // bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
-    if ( !(( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED )) &&
-        ( bSetStandardName || GetStorable()->hasLocation() ))
+    if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
+    {
+        // it is export, set the preselected filter
+        ::rtl::OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
+                                        ::rtl::OUString::createFromAscii( "UIName" ),
+                                        ::rtl::OUString() );
+        pFileDlg->SetCurrentFilter( aFilterUIName );
+    }
+    // it is no export, bSetStandardName == true means that user agreed to store document in the default (default default ;-)) format
+    else if ( bSetStandardName || GetStorable()->hasLocation() )
     {
         uno::Sequence< beans::PropertyValue > aOldFilterProps;
         ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
@@ -915,6 +995,12 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     }
 
     ::rtl::OUString aFilterName = aStringTypeFN;
+
+    // the following two arguments can not be converted in MediaDescriptor,
+    // so they should be removed from the ItemSet after retrieving
+    SFX_ITEMSET_ARG( pDialogParams, pRecommendReadOnly, SfxBoolItem, SID_RECOMMENDREADONLY, sal_False );
+    m_bRecommendReadOnly = ( pRecommendReadOnly && pRecommendReadOnly->GetValue() );
+    pDialogParams->ClearItem( SID_RECOMMENDREADONLY );
 
     uno::Sequence< beans::PropertyValue > aPropsFromDialog;
     TransformItems( nSlotID, *pDialogParams, aPropsFromDialog, NULL );
@@ -1238,6 +1324,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
 
     // parse the slot name
     sal_Int8 nStoreMode = getStoreModeFromSlotName( aSlotName );
+    sal_Int8 nStatusSave = STATUS_NO_ACTION;
 
     // handle the special cases
     if ( nStoreMode & SAVEAS_REQUESTED )
@@ -1259,7 +1346,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
     else if ( nStoreMode & SAVE_REQUESTED )
     {
         // if saving is not acceptable by the configuration the warning must be shown
-        sal_Int8 nStatusSave = aModelData.CheckSaveAcceptable( STATUS_SAVE );
+        nStatusSave = aModelData.CheckSaveAcceptable( STATUS_SAVE );
 
         if ( nStatusSave == STATUS_NO_ACTION )
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
@@ -1273,32 +1360,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         {
             throw task::ErrorCodeIOException( ::rtl::OUString(), uno::Reference< uno::XInterface >(), ERRCODE_IO_ABORT );
         }
-        else if ( nStatusSave == STATUS_SAVE )
-        {
-            // Document properties can contain streams that should be freed before storing
-            aModelData.FreeDocumentProps();
-
-            if ( aModelData.GetStorable2().is() )
-            {
-                try
-                {
-                    aModelData.GetStorable2()->storeSelf( aModelData.GetMediaDescr().getAsConstPropertyValueList() );
-                }
-                catch( lang::IllegalArgumentException& )
-                {
-                    OSL_ENSURE( sal_False, "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
-                    aModelData.GetStorable()->store();
-                }
-            }
-            else
-            {
-                OSL_ENSURE( sal_False, "XStorable2 is not supported by the model!\n" );
-                aModelData.GetStorable()->store();
-            }
-
-            return sal_False;
-        }
-        else
+        else if ( nStatusSave != STATUS_SAVE )
         {
             // this should be a usual SaveAs operation
             nStoreMode = SAVEAS_REQUESTED;
@@ -1323,6 +1385,32 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                                                   ERRCODE_IO_ABORT );
             }
         }
+    }
+
+    if ( nStoreMode & SAVE_REQUESTED && nStatusSave == STATUS_SAVE )
+    {
+        // Document properties can contain streams that should be freed before storing
+        aModelData.FreeDocumentProps();
+
+        if ( aModelData.GetStorable2().is() )
+        {
+            try
+            {
+                aModelData.GetStorable2()->storeSelf( aModelData.GetMediaDescr().getAsConstPropertyValueList() );
+            }
+            catch( lang::IllegalArgumentException& )
+            {
+                OSL_ENSURE( sal_False, "ModelData didn't handle illegal parameters, all the parameters are ignored!\n" );
+                aModelData.GetStorable()->store();
+            }
+        }
+        else
+        {
+            OSL_ENSURE( sal_False, "XStorable2 is not supported by the model!\n" );
+            aModelData.GetStorable()->store();
+        }
+
+        return sal_False;
     }
 
     // preselect a filter for the storing process
@@ -1419,13 +1507,13 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                 ::rtl::OUString aSelFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
                                                                                 aFilterNameString,
                                                                                 ::rtl::OUString() );
-                sal_Int8 nStatusSave = aModelData.CheckFilter( aSelFilterName );
-                if ( nStatusSave == STATUS_SAVEAS_STANDARDNAME )
+                sal_Int8 nStatusFilterSave = aModelData.CheckFilter( aSelFilterName );
+                if ( nStatusFilterSave == STATUS_SAVEAS_STANDARDNAME )
                 {
                     // switch to best filter
                     bSetStandardName = sal_True;
                 }
-                else if ( nStatusSave == STATUS_SAVE )
+                else if ( nStatusFilterSave == STATUS_SAVE )
                 {
                     // user confirmed alien filter or "good" filter is used
                     bExit = sal_True;
@@ -1500,6 +1588,8 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
     // store the document and handle it's docinfo
     SvtSaveOptions aOptions;
 
+    DocumentSettingsGuard aSettingsGuard( aModelData.GetModel(), aModelData.IsRecommendReadOnly(), nStoreMode & EXPORT_REQUESTED );
+
     if ( aOptions.IsDocInfoSave()
       && ( !aModelData.GetStorable()->hasLocation()
           || INetURLObject( aModelData.GetStorable()->getLocation() ) != aURL ) )
@@ -1570,8 +1660,10 @@ uno::Sequence< beans::PropertyValue > SfxStoringHelper::SearchForFilter(
     uno::Reference< container::XEnumeration > xFilterEnum =
                                             xFilterQuery->createSubSetEnumerationByProperties( aSearchRequest );
 
-    // use the first filter that is found
+    // the first default filter will be taken,
+    // if there is no filter with flag default the first acceptable filter will be taken
     if ( xFilterEnum.is() )
+    {
         while ( xFilterEnum->hasMoreElements() )
         {
             uno::Sequence< beans::PropertyValue > aProps;
@@ -1582,11 +1674,17 @@ uno::Sequence< beans::PropertyValue > SfxStoringHelper::SearchForFilter(
                                                                         (sal_Int32)0 );
                 if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
                 {
-                    aFilterProps = aProps;
-                    break;
+                    if ( ( nFlags & SFX_FILTER_DEFAULT ) == SFX_FILTER_DEFAULT )
+                    {
+                        aFilterProps = aProps;
+                        break;
+                    }
+                    else if ( !aFilterProps.getLength() )
+                        aFilterProps = aProps;
                 }
             }
         }
+    }
 
     return aFilterProps;
 }

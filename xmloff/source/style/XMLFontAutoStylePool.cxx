@@ -33,11 +33,10 @@
 #include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
-#ifndef _XMLOFF_PROPERTYHANDLER_FONTTYPES_HXX
 #include "fonthdl.hxx"
-#endif
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/XMLFontAutoStylePool.hxx>
+
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

@@ -40,7 +40,7 @@
 #include <com/sun/star/ui/dialogs/CommonFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
-#include <svl/svtools.hrc>
+#include <svtools/svtools.hrc>
 #include <svtools/filedlg2.hrc>
 
 //------------------------------------------------------------
@@ -167,8 +167,6 @@ public:
     {
         String   aResString;
         OUString aResOUString;
-
-        const ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         try
         {

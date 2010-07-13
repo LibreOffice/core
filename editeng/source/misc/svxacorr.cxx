@@ -363,7 +363,7 @@ SvxAutoCorrect::SvxAutoCorrect( const String& rShareAutocorrFile,
     sUserAutoCorrFile( rUserAutocorrFile ),
     pLangTable( new SvxAutoCorrLanguageTable_Impl ),
     pLastFileTable( new SvxAutoCorrLastFileAskTable_Impl ),
-    pCharClass( 0 ),
+    pCharClass( 0 ), bRunNext( false ),
     cStartDQuote( 0 ), cEndDQuote( 0 ), cStartSQuote( 0 ), cEndSQuote( 0 )
 {
     nFlags = SvxAutoCorrect::GetDefaultFlags();
@@ -380,7 +380,7 @@ SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
 
     pLangTable( new SvxAutoCorrLanguageTable_Impl ),
     pLastFileTable( new SvxAutoCorrLastFileAskTable_Impl ),
-    pCharClass( 0 ),
+    pCharClass( 0 ), bRunNext( false ),
 
     nFlags( rCpy.nFlags & ~(ChgWordLstLoad|CplSttLstLoad|WrdSttLstLoad)),
     cStartDQuote( rCpy.cStartDQuote ), cEndDQuote( rCpy.cEndDQuote ),
@@ -669,7 +669,7 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
 
             // Check the presence of "://" in the word
             xub_StrLen nStrPos = rTxt.Search( String::CreateFromAscii( "://" ), nSttWdPos + 1 );
-            if ( STRING_NOTFOUND == nStrPos )
+            if ( STRING_NOTFOUND == nStrPos && nEndPos > 0 )
             {
                 // Check the previous char
                 sal_Unicode cPrevChar = rTxt.GetChar( nEndPos - 1 );
@@ -693,9 +693,12 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
                         // Add the non-breaking space at the end pos
                         if ( bHasSpace )
                             rDoc.Insert( nPos, CHAR_HARDBLANK );
+                        bRunNext = true;
                         bRet = true;
                     }
                 }
+                else if ( chars.indexOf( sal_Unicode( cPrevChar ) ) != -1 )
+                    bRunNext = true;
             }
         }
         else if ( cChar == '/' )
@@ -1189,6 +1192,9 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                                     BOOL bInsert )
 {
     ULONG nRet = 0;
+    bool bIsNextRun = bRunNext;
+    bRunNext = false;  // if it was set, then it has to be turned off
+
     do{                                 // only for middle check loop !!
         if( cChar )
         {
@@ -1227,10 +1233,39 @@ ULONG SvxAutoCorrect::AutoCorrect( SvxAutoCorrDoc& rDoc, const String& rTxt,
                 rDoc.Replace( nInsPos, cChar );
 
             // Hardspaces autocorrection
-            if ( NeedsHardspaceAutocorr( cChar ) && IsAutoCorrFlag( AddNonBrkSpace ) &&
-                FnAddNonBrkSpace( rDoc, rTxt, 0, nInsPos, rDoc.GetLanguage( nInsPos, FALSE ) ) )
+            if ( IsAutoCorrFlag( AddNonBrkSpace ) )
             {
-                nRet = AddNonBrkSpace;
+                if ( NeedsHardspaceAutocorr( cChar ) &&
+                    FnAddNonBrkSpace( rDoc, rTxt, 0, nInsPos, rDoc.GetLanguage( nInsPos, FALSE ) ) )
+                {
+                    nRet = AddNonBrkSpace;
+                }
+                else if ( bIsNextRun && !IsAutoCorrectChar( cChar ) )
+                {
+                    // Remove the NBSP if it wasn't an autocorrection
+                    if ( NeedsHardspaceAutocorr( rTxt.GetChar( nInsPos - 1 ) ) &&
+                            cChar != ' ' && cChar != '\t' && cChar != CHAR_HARDBLANK )
+                    {
+                        // Look for the last HARD_SPACE
+                        xub_StrLen nPos = nInsPos - 1;
+                        bool bFound = false;
+                        while ( nPos != STRING_NOTFOUND  && !bFound )
+                        {
+                            sal_Unicode cTmpChar = rTxt.GetChar( nPos );
+                            if ( cTmpChar == CHAR_HARDBLANK )
+                                bFound = true;
+                            else if ( !NeedsHardspaceAutocorr( cTmpChar ) )
+                                nPos = STRING_NOTFOUND;
+                            nPos--;
+                        }
+
+                        if ( bFound && nPos != STRING_NOTFOUND )
+                        {
+                            rDoc.Delete( nPos + 1, nPos + 2 );
+                            nRet = AddNonBrkSpace;
+                        }
+                    }
+                }
             }
         }
 

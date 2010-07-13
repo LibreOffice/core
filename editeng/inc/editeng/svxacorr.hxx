@@ -209,6 +209,8 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
     SvxAutoCorrLastFileAskTable_Impl* pLastFileTable;
     CharClass* pCharClass;
 
+    bool bRunNext;
+
     LanguageType eCharClassLang;
 
     long nFlags;
@@ -373,6 +375,8 @@ public:
     BOOL FnCptlSttSntnc( SvxAutoCorrDoc&, const String&, BOOL bNormalPos,
                                 xub_StrLen nSttPos, xub_StrLen nEndPos,
                                 LanguageType eLang  = LANGUAGE_SYSTEM);
+
+    bool                HasRunNext() { return bRunNext; }
 
     static long         GetDefaultFlags();
 

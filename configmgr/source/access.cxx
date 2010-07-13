@@ -1229,7 +1229,19 @@ rtl::OUString Access::getHierarchicalName() throw (css::uno::RuntimeException) {
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(lock);
     checkLocalizedPropertyAccess();
-    return getRelativePathRepresentation();
+    // For backwards compatibility, return an absolute path representation where
+    // available:
+    rtl::OUStringBuffer path;
+    rtl::Reference< RootAccess > root(getRootAccess());
+    if (root.is()) {
+        path.append(root->getAbsolutePathRepresentation());
+    }
+    rtl::OUString rel(getRelativePathRepresentation());
+    if (path.getLength() != 0 && rel.getLength() != 0) {
+        path.append(sal_Unicode('/'));
+    }
+    path.append(rel);
+    return path.makeStringAndClear();
 }
 
 rtl::OUString Access::composeHierarchicalName(
@@ -1917,7 +1929,7 @@ css::uno::Reference< css::uno::XInterface > Access::createInstance()
              tmplName),
             static_cast< cppu::OWeakObject * >(this));
     }
-    rtl::Reference< Node > node(tmpl->clone());
+    rtl::Reference< Node > node(tmpl->clone(true));
     node->setLayer(Data::NO_LAYER);
     return static_cast< cppu::OWeakObject * >(
         new ChildAccess(components_, getRootAccess(), node));

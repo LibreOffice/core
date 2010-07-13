@@ -471,6 +471,32 @@ void SfxObjectShell::SetReadOnlyUI( sal_Bool bReadOnly )
 
 //-------------------------------------------------------------------------
 
+void SfxObjectShell::SetReadOnly()
+{
+    // Let the document be completely readonly, means that the
+    // medium open mode is adjusted accordingly, and the write lock
+    // on the file is removed.
+
+     if ( pMedium && !IsReadOnlyMedium() )
+    {
+        sal_Bool bWasROUI = IsReadOnly();
+
+        pMedium->UnlockFile( sal_False );
+
+        // the storage-based mediums are already based on the temporary file
+        // so UnlockFile has already closed the locking stream
+        if ( !pMedium->HasStorage_Impl() && IsLoadingFinished() )
+            pMedium->CloseInStream();
+
+        pMedium->SetOpenMode( SFX_STREAM_READONLY, pMedium->IsDirect(), sal_True );
+        pMedium->GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, sal_True ) );
+
+        if ( !bWasROUI )
+            Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
+    }
+}
+//-------------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::IsReadOnly() const
 {
     return pImp->bReadOnlyUI || IsReadOnlyMedium();
@@ -1364,6 +1390,9 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         if( !IsAbortingImport() )
             PositionView_Impl();
 
+        if ( ( GetModifyPasswordHash() || GetModifyPasswordInfo().getLength() ) && !IsModifyPasswordEntered() )
+            SetReadOnly();
+
         // Salvage
         if ( pSalvageItem )
             bSetModifiedTRUE = sal_True;
@@ -1682,7 +1711,7 @@ namespace
 }
 
 ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptContext, const ::rtl::OUString& _rScriptURL,
-    const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
+    const Sequence< Any >& aParams, Any& aRet, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam, bool bRaiseError )
 {
     OSL_TRACE( "in CallXScript" );
     ErrCode nErr = ERRCODE_NONE;
@@ -1723,7 +1752,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
         nErr = ERRCODE_BASIC_INTERNAL_ERROR;
     }
 
-    if ( bCaughtException )
+    if ( bCaughtException && bRaiseError )
     {
         ::std::auto_ptr< VclAbstractDialog > pScriptErrDlg;
         SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -1746,10 +1775,10 @@ ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
             aParams,
         ::com::sun::star::uno::Any& aRet,
         ::com::sun::star::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >&
-            aOutParam)
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aOutParam
+        , bool bRaiseError )
 {
-    return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam );
+    return CallXScript( GetModel(), rScriptURL, aParams, aRet, aOutParamIndex, aOutParam, bRaiseError );
 }
 
 //-------------------------------------------------------------------------

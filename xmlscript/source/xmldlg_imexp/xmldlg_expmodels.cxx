@@ -653,6 +653,8 @@ void ElementDescriptor::readTreeControlModel( StyleBag * all_styles )
 
     // collect elements
     readDefaults();
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
     readSelectionTypeAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("SelectionType") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":selectiontype") ) );
 
@@ -1138,7 +1140,7 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     }
 
     // collect elements
-    readDefaults( false );
+    readDefaults( false, false );
     readBoolAttr(
         OUString( RTL_CONSTASCII_USTRINGPARAM("Closeable") ),
         OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":closeable") ) );

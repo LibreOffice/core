@@ -1060,6 +1060,44 @@ void SdrMarkView::AddDragModeHdl(SdrDragMode eMode)
     }
 }
 
+/** handle mouse over effects for handles */
+BOOL SdrMarkView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
+{
+    const ULONG nHdlCount = aHdl.GetHdlCount();
+    if( nHdlCount )
+    {
+        SdrHdl* pMouseOverHdl = 0;
+        if( !rMEvt.IsLeaveWindow() && pWin )
+        {
+            Point aMDPos( pWin->PixelToLogic( rMEvt.GetPosPixel() ) );
+            pMouseOverHdl = PickHandle(aMDPos);
+        }
+
+        // notify last mouse over handle that he lost the mouse
+        for(ULONG nHdl = 0; nHdl < nHdlCount; nHdl++ )
+        {
+            SdrHdl* pCurrentHdl = GetHdl(nHdl);
+            if( pCurrentHdl->mbMouseOver )
+            {
+                if( pCurrentHdl != pMouseOverHdl )
+                {
+                    pCurrentHdl->mbMouseOver = false;
+                    pCurrentHdl->onMouseLeave();
+                }
+                break;
+            }
+        }
+
+        // notify current mouse over handle
+        if( pMouseOverHdl /* && !pMouseOverHdl->mbMouseOver */ )
+        {
+            pMouseOverHdl->mbMouseOver = true;
+            pMouseOverHdl->onMouseEnter(rMEvt);
+        }
+    }
+    return SdrSnapView::MouseMove(rMEvt, pWin);
+}
+
 void SdrMarkView::ForceRefToMarked()
 {
     switch(eDragMode)
@@ -1188,6 +1226,10 @@ void SdrMarkView::CheckMarked()
         }
         bRaus=bRaus || pPV->GetLockedLayers().IsSet(nLay) ||  // Layer gesperrt?
                        !pPV->GetVisibleLayers().IsSet(nLay);  // Layer nicht sichtbar?
+
+        if( !bRaus )
+            bRaus = !pObj->IsVisible(); // not visible objects can not be marked
+
         if (!bRaus) {
             // Joe am 9.3.1997: Gruppierte Objekten koennen nun auch
             // markiert werden. Nach EnterGroup muessen aber die Objekte
@@ -1591,7 +1633,7 @@ void SdrMarkView::SetMarkHdlSizePixel(USHORT nSiz)
 #define SDRSEARCH_IMPISMASTER 0x80000000 /* MasterPage wird gerade durchsucht */
 SdrObject* SdrMarkView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const
 {
-    if((nOptions & SDRSEARCH_IMPISMASTER) && pObj->IsNotVisibleAsMaster())
+    if(((nOptions & SDRSEARCH_IMPISMASTER) && pObj->IsNotVisibleAsMaster()) || (!pObj->IsVisible()))
     {
         return NULL;
     }

@@ -1,4 +1,4 @@
-#*************************************************************************
+ #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
@@ -34,11 +34,6 @@ PACKAGE=ooo$/vba
 # --- Settings -----------------------------------------------------
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(ENABLE_VBA)"!="YES"
-dummy:
-        @echo "not building vba..."
-.ELSE
-
 # ------------------------------------------------------------------------
 .IF "$(L10N_framework)"=""
 IDLFILES=\
@@ -67,8 +62,8 @@ IDLFILES=\
     XDialogsBase.idl\
     XDialogBase.idl\
     XPageSetupBase.idl  \
-
+    XVBAAppService.idl\
+    XVBADocService.idl\
 # ------------------------------------------------------------------
 .ENDIF
 .INCLUDE :  target.mk
-.ENDIF

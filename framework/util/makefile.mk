@@ -62,7 +62,6 @@ LIB1OBJFILES=   \
                 $(SLO)$/rootitemcontainer.obj                   \
                 $(SLO)$/constitemcontainer.obj                  \
                 $(SLO)$/jobconst.obj                            \
-                $(SLO)$/popupmenucontrollerbase.obj             \
                 $(SLO)$/mischelper.obj                          \
                 $(SLO)$/propertysethelper.obj
 
@@ -83,7 +82,6 @@ LIB2OBJFILES=   \
                 $(SLO)$/statusbardocumenthandler.obj            \
                 $(SLO)$/toolboxconfiguration.obj                \
                 $(SLO)$/toolboxdocumenthandler.obj              \
-                $(SLO)$/toolboxlayoutdocumenthandler.obj        \
                 $(SLO)$/imagesconfiguration.obj                 \
                 $(SLO)$/imagesdocumenthandler.obj               \
                 $(SLO)$/xmlnamespaces.obj                       \
@@ -116,6 +114,9 @@ SHL1STDLIBS=    \
                 $(UNOTOOLSLIB)      \
                 $(CPPUHELPERLIB)    \
                 $(TOOLSLIB)         \
+                $(SVTOOLLIB)        \
+                $(SVLLIB)        	\
+                $(I18NISOLANGLIB)   \
                 $(VOSLIB)           \
                 $(VCLLIB)           \
                 $(TKLIB)            \

@@ -69,6 +69,8 @@ enum SchXMLChartElemTokenMap
 
 enum SchXMLPlotAreaElemTokenMap
 {
+    XML_TOK_PA_COORDINATE_REGION_EXT,
+    XML_TOK_PA_COORDINATE_REGION,
     XML_TOK_PA_AXIS,
     XML_TOK_PA_SERIES,
     XML_TOK_PA_WALL,

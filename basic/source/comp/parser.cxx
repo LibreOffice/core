@@ -29,6 +29,7 @@
 #include "precompiled_basic.hxx"
 #include <basic/sbx.hxx>
 #include "sbcomp.hxx"
+#include <com/sun/star/script/ModuleType.hpp>
 
 struct SbiParseStack {              // "Stack" fuer Statement-Blocks
     SbiParseStack* pNext;           // Chain
@@ -82,6 +83,7 @@ static SbiStatement StmntTable [] = {
 { IMPLEMENTS, &SbiParser::Implements, Y, N, }, // IMPLEMENTS
 { INPUT,    &SbiParser::Input,      N, Y, }, // INPUT
 { LET,      &SbiParser::Assign,     N, Y, }, // LET
+{ LINE,     &SbiParser::Line,       N, Y, }, // LINE, -> LINE INPUT (#i92642)
 { LINEINPUT,&SbiParser::LineInput,  N, Y, }, // LINE INPUT
 { LOOP,     &SbiParser::BadBlock,   N, Y, }, // LOOP
 { LSET,     &SbiParser::LSet,       N, Y, }, // LSET
@@ -140,7 +142,8 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     bNewGblDefs =
     bSingleLineIf =
     bExplicit = FALSE;
-    bClassModule = FALSE;
+    bClassModule = ( pm->GetModuleType() == com::sun::star::script::ModuleType::CLASS );
+    OSL_TRACE("Parser - %s, bClassModule %d", rtl::OUStringToOString( pm->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), bClassModule );
     pPool    = &aPublics;
     for( short i = 0; i < 26; i++ )
         eDefTypes[ i ] = SbxVARIANT;    // Kein expliziter Defaulttyp
@@ -153,6 +156,10 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
 
     rTypeArray = new SbxArray; // Array fuer Benutzerdefinierte Typen
     rEnumArray = new SbxArray; // Array for Enum types
+    bVBASupportOn = pm->IsVBACompat();
+    if ( bVBASupportOn )
+        EnableCompatibility();
+
 }
 
 
@@ -231,7 +238,9 @@ void SbiParser::Exit()
     SbiToken eTok = Next();
     for( SbiParseStack* p = pStack; p; p = p->pNext )
     {
-        if( eTok == p->eExitTok )
+        SbiToken eExitTok = p->eExitTok;
+        if( eTok == eExitTok ||
+            (eTok == PROPERTY && (eExitTok == GET || eExitTok == LET) ) )   // #i109051
         {
             p->nChain = aGen.Gen( _JUMP, p->nChain );
             return;
@@ -361,7 +370,10 @@ BOOL SbiParser::Parse()
     }
 
     // Ende des Parsings?
-    if( eCurTok == eEndTok )
+    if( eCurTok == eEndTok ||
+        ( bVBASupportOn &&      // #i109075
+          (eCurTok == ENDFUNC || eCurTok == ENDPROPERTY || eCurTok == ENDSUB) &&
+          (eEndTok == ENDFUNC || eEndTok == ENDPROPERTY || eEndTok == ENDSUB) ) )
     {
         Next();
         if( eCurTok != NIL )
@@ -471,10 +483,10 @@ SbiExprNode* SbiParser::GetWithVar()
 
 // Zuweisung oder Subroutine Call
 
-void SbiParser::Symbol()
+void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
 {
     SbiExprMode eMode = bVBASupportOn ? EXPRMODE_STANDALONE : EXPRMODE_STANDARD;
-    SbiExpression aVar( this, SbSYMBOL, eMode );
+    SbiExpression aVar( this, SbSYMBOL, eMode, pKeywordSymbolInfo );
 
     bool bEQ = ( Peek() == EQ );
     if( !bEQ && bVBASupportOn && aVar.IsBracket() )
@@ -698,11 +710,37 @@ void SbiParser::Implements()
         return;
     }
 
-    if( TestSymbol() )
+    Peek();
+    if( eCurTok != SYMBOL )
     {
-        String aImplementedIface = GetSym();
-        aIfaceVector.push_back( aImplementedIface );
+        Error( SbERR_SYMBOL_EXPECTED );
+        return;
     }
+
+    String aImplementedIface = aSym;
+    Next();
+    if( Peek() == DOT )
+    {
+        String aDotStr( '.' );
+        while( Peek() == DOT )
+        {
+            aImplementedIface += aDotStr;
+            Next();
+            SbiToken ePeekTok = Peek();
+            if( ePeekTok == SYMBOL || IsKwd( ePeekTok ) )
+            {
+                Next();
+                aImplementedIface += aSym;
+            }
+            else
+            {
+                Next();
+                Error( SbERR_SYMBOL_EXPECTED );
+                break;
+            }
+        }
+    }
+    aIfaceVector.push_back( aImplementedIface );
 }
 
 void SbiParser::EnableCompatibility()
@@ -739,18 +777,23 @@ void SbiParser::Option()
             break;
         }
         case COMPARE:
-            switch( Next() )
-            {
-                case TEXT:      bText = TRUE; return;
-                case BINARY:    bText = FALSE; return;
-                default:;
-            } // Fall thru!
+        {
+            SbiToken eTok = Next();
+            if( eTok == BINARY )
+                bText = FALSE;
+            else if( eTok == SYMBOL && GetSym().EqualsIgnoreCaseAscii("text") )
+                bText = TRUE;
+            else
+                Error( SbERR_EXPECTED, "Text/Binary" );
+            break;
+        }
         case COMPATIBLE:
             EnableCompatibility();
             break;
 
         case CLASSMODULE:
             bClassModule = TRUE;
+            aGen.GetModule().SetModuleType( com::sun::star::script::ModuleType::CLASS );
             break;
         case VBASUPPORT:
             if( Next() == NUMBER )
@@ -760,6 +803,10 @@ void SbiParser::Option()
                     bVBASupportOn = ( nVal == 1 );
                     if ( bVBASupportOn )
                         EnableCompatibility();
+                    // if the module setting is different
+                    // reset it to what the Option tells us
+                    if ( bVBASupportOn != aGen.GetModule().IsVBACompat() )
+                        aGen.GetModule().SetVBACompat( bVBASupportOn );
                     break;
                 }
             }

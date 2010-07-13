@@ -487,7 +487,7 @@ private:
     boost::shared_ptr< drawinglayer::texture::GeoTexSvx >     mpTransparenceGeoTexSvx;
     drawinglayer::attribute::MaterialAttribute3D              maMaterial;
     basegfx::B3DPolyPolygon                                   maPolyPolygon;
-    sal_uInt32                                                mfCenterZ;
+    double                                                    mfCenterZ;
 
     // bitfield
     bool                                                      mbModulate : 1;

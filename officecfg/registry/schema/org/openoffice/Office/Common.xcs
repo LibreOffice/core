@@ -974,6 +974,19 @@
 				<value>false</value>
 			</prop>
 		</group>
+    <group oor:name="Dictionaries">
+      <info>
+        <author>CD</author>
+        <desc>Contains settings related to dictionaries.</desc>
+      </info>
+      <prop oor:name="RepositoryURL" oor:type="xs:string">
+        <info>
+          <author>CD</author>
+          <desc>Specifies a repository URL where users can download additional dictionaries.</desc>
+        </info>
+        <value/>
+      </prop>
+    </group>
 		<group oor:name="Drawinglayer">
 			<info>
 				<author>AW</author>
@@ -5337,6 +5350,13 @@
 							<desc>Specifies whether form fields are exported as widgets or only their fixed print representation is exported.</desc>
 						</info>
 						<value>true</value>
+                    </prop>
+                    <prop oor:name="EmbedStandardFonts" oor:type="xs:boolean">
+						<info>
+							<author>pl</author>
+							<desc>Specifies whether to embed the 14 standard PDF fonts or not.</desc>
+						</info>
+						<value>false</value>
                     </prop>
 					<prop oor:name="FormsType" oor:type="xs:int">
 						<info>

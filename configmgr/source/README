@@ -76,6 +76,7 @@ update.cxx
 data.cxx
 lock.cxx
 nodemap.cxx
+partial.cxx
 path.hxx
 type.cxx
  Utilities.

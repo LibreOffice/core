@@ -37,8 +37,20 @@ ENABLE_EXCEPTIONS=	TRUE
 # --- Generate -----------------------------------------------------
 
 SLOFILES=		\
-    $(SLO)$/acceleratorconfigurationreader.obj  \
-    $(SLO)$/acceleratorconfigurationwriter.obj  \
+                $(SLO)$/eventsconfiguration.obj				\
+                $(SLO)$/eventsdocumenthandler.obj			\
+                $(SLO)$/imagesconfiguration.obj				\
+                $(SLO)$/imagesdocumenthandler.obj			\
+                $(SLO)$/menuconfiguration.obj				\
+                $(SLO)$/menudocumenthandler.obj				\
+                $(SLO)$/statusbarconfiguration.obj			\
+                $(SLO)$/statusbardocumenthandler.obj		\
+                $(SLO)$/toolboxconfiguration.obj			\
+                $(SLO)$/toolboxdocumenthandler.obj			\
+                $(SLO)$/saxnamespacefilter.obj				\
+                $(SLO)$/xmlnamespaces.obj                   \
+                $(SLO)$/acceleratorconfigurationreader.obj  \
+                $(SLO)$/acceleratorconfigurationwriter.obj
 
 # --- Targets ------------------------------------------------------
 

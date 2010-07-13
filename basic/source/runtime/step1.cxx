@@ -30,11 +30,13 @@
 
 #include <stdlib.h>
 #include <rtl/math.hxx>
+#include <basic/sbuno.hxx>
 #include "runtime.hxx"
 #include "sbintern.hxx"
 #include "iosys.hxx"
 #include "image.hxx"
 #include "sbunoobj.hxx"
+#include "errobject.hxx"
 
 bool checkUnoObjectType( SbUnoObject* refVal,
     const String& aClass );
@@ -230,8 +232,6 @@ void SbiRuntime::StepRETURN( UINT32 nOp1 )
 
 // FOR-Variable testen (+Endlabel)
 
-void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
-
 void SbiRuntime::StepTESTFOR( UINT32 nOp1 )
 {
     if( !pForStk )
@@ -360,6 +360,7 @@ void SbiRuntime::StepERRHDL( UINT32 nOp1 )
     pInst->nErr = 0;
     pInst->nErl = 0;
     nError = 0;
+    SbxErrObject::getUnoErrObject()->Clear();
 }
 
 // Resume nach Fehlern (+0=statement, 1=next or Label)
@@ -380,6 +381,8 @@ void SbiRuntime::StepRESUME( UINT32 nOp1 )
     }
     else
         pCode = pErrStmnt;
+    if ( pError ) // current in error handler ( and got a Resume Next statment )
+        SbxErrObject::getUnoErrObject()->Clear();
 
     if( nOp1 > 1 )
         StepJUMP( nOp1 );
@@ -450,9 +453,9 @@ bool SbiRuntime::implIsClass( SbxObject* pObj, const String& aClass )
 }
 
 bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
-    const String& aClass, bool bRaiseErrors )
+    const String& aClass, bool bRaiseErrors, bool bDefault )
 {
-    bool bOk = true;
+    bool bOk = bDefault;
 
     SbxDataType t = refVal->GetType();
     if( t == SbxOBJECT )
@@ -486,6 +489,8 @@ bool SbiRuntime::checkClass_Impl( const SbxVariableRef& refVal,
             }
             else
             {
+                bOk = true;
+
                 SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pObj);
                 if( pClassModuleObject != NULL )
                     pClassModuleObject->triggerInitializeEvent();
@@ -529,7 +534,8 @@ void SbiRuntime::StepTESTCLASS( UINT32 nOp1 )
 {
     SbxVariableRef xObjVal = PopVar();
     String aClass( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    bool bOk = checkClass_Impl( xObjVal, aClass, false );
+    bool bDefault = !bVBAEnabled;
+    bool bOk = checkClass_Impl( xObjVal, aClass, false, bDefault );
 
     SbxVariable* pRet = new SbxVariable;
     pRet->PutBool( bOk );

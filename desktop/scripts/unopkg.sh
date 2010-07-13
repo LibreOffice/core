@@ -70,10 +70,6 @@ unset XENVIRONMENT
 # uncomment line below if you encounter problems starting soffice on your system
 # SAL_NO_XINITTHREADS=true; export SAL_NO_XINITTHREADS
 
-# Set PATH so that crash_report is found:
-PATH=$sd_prog${PATH+:$PATH}
-export PATH
-
 # execute binary
 exec "$sd_prog/unopkg.bin" "$@" \
     "-env:INIFILENAME=vnd.sun.star.pathname:$sd_prog/redirectrc"

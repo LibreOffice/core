@@ -134,7 +134,7 @@
         <prop oor:name="TemplateRepositoryURL" oor:type="xs:string">
             <value>${STARTCENTER_TEMPLREP_URL}</value>
         </prop>
-        <prop oor:name="StartCenterLayoutStyle" oor:type="xs:int">
+        <prop oor:name="StartCenterLayoutStyle" oor:type="xs:int" install:module="brand">
             <value>${STARTCENTER_LAYOUT_STYLE}</value>
         </prop>
     </node>
@@ -155,6 +155,11 @@
       <value install:module="unx">UNIX</value>
       <value install:module="macosx">MAC</value>
       <value install:module="wnt">WIN</value>
+    </prop>
+  </node>
+  <node oor:name="Dictionaries">
+    <prop oor:name="RepositoryURL" install:module="brand">
+      <value>${DICT_REPO_URL}</value>
     </prop>
   </node>
   <node oor:name="AutoCorrect">

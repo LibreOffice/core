@@ -46,12 +46,15 @@ $(eval $(call gb_Library_set_include,fwi,\
 
 $(eval $(call gb_Library_add_linked_libs,fwi,\
     comphelper \
-    stl \
-    tk \
-    tl \
     cppu \
     cppuhelper \
+    i18nisolang1 \
     sal \
+    stl \
+    svl \
+    svt \
+    tk \
+    tl \
     utl \
     vcl \
     vos3 \
@@ -64,7 +67,6 @@ $(eval $(call gb_Library_add_exception_objects,fwi,\
     framework/source/fwi/classes/protocolhandlercache \
     framework/source/fwi/helper/mischelper \
     framework/source/fwi/helper/networkdomain \
-    framework/source/fwi/helper/popupmenucontrollerbase \
     framework/source/fwi/helper/shareablemutex \
     framework/source/fwi/jobs/configaccess \
     framework/source/fwi/jobs/jobconst \

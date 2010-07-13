@@ -283,6 +283,7 @@ public:
     BOOL                        bSizProt;
     BOOL                        bNoPrint;
     BOOL                        bClosedObj;
+    bool                        mbVisible;
     SdrLayerID                  mnLayerID;
 
 public:
@@ -469,10 +470,10 @@ protected:
     unsigned                    bGrouped : 1;   // Member eines GroupObjektes?
 
     // Die folgende Flags werden gestreamt
-    unsigned                    bMovProt : 1; // Position geschuetzt
-    unsigned                    bSizProt : 1; // Groesse geschuetzt
-    unsigned                    bNoPrint : 1; // Nicht drucken
-
+    unsigned                    bMovProt : 1; // If true, the position is protected
+    unsigned                    bSizProt : 1; // If true, the size is protected
+    unsigned                    bNoPrint : 1; // If true, the object is not printed.
+    unsigned                    mbVisible : 1; // If false, the object is not visible on screen (but maybe on printer, depending on bNoprint
     // Wenn bEmptyPresObj TRUE ist, handelt es sich um ein
     // Praesentationsobjekt, dem noch kein Inhalt zugewiesen
     // wurde. Default ist das Flag auf FALSE. Die Verwaltung
@@ -810,6 +811,14 @@ public:
     virtual void SetLogicRect(const Rectangle& rRect);
     virtual void NbcSetLogicRect(const Rectangle& rRect);
 
+    /** the defaul is to set the logic rect to the given rectangle rMaxRect. If the shape
+        has an intrinsic aspect ratio it may set the logic rect so the aspect
+        ratio is kept but still inside the rectangle rMaxRect.
+
+        If bShrinkOnly is set to true, the size of the current logic rect will not
+        be changed if it is smaller than the given rectangle rMaxRect. */
+    virtual void AdjustToMaxRect( const Rectangle& rMaxRect, bool bShrinkOnly = false );
+
     // Drehwinkel und Shear
     virtual long GetRotateAngle() const;
     virtual long GetShearAngle(FASTBOOL bVertical=FALSE) const;
@@ -1012,6 +1021,8 @@ public:
     sal_Bool IsResizeProtect() const { return bSizProt; }
     void SetPrintable(sal_Bool bPrn);
     sal_Bool IsPrintable() const { return !bNoPrint; }
+    void SetVisible(sal_Bool bVisible);
+    sal_Bool IsVisible() const { return mbVisible; }
     void SetEmptyPresObj(sal_Bool bEpt) { bEmptyPresObj=bEpt; }
     sal_Bool IsEmptyPresObj() const { return bEmptyPresObj; }
     void SetNotVisibleAsMaster(sal_Bool bFlg) { bNotVisibleAsMaster=bFlg; }

@@ -342,18 +342,19 @@
 // Calc-Id's
 // --------------------------------------------------------------------------
 
-#ifndef SC_FUNCTION_START
-#define SC_FUNCTION_START       (SID_SC_START + 200)
-#endif
-#ifndef FILE_MENU_END
-#define FILE_MENU_END           (SC_FUNCTION_START + 20)
-#endif
-#ifndef EDIT_MENU_START
-#define EDIT_MENU_START         (FILE_MENU_END)
-#endif
-#ifndef SC_VIEW_START
-#define SC_VIEW_START           (SID_SC_START)
-#endif
+//! moved to sfx2, still in use:
+//#ifndef SC_FUNCTION_START
+//#define SC_FUNCTION_START       (SID_SC_START + 200)
+//#endif
+//#ifndef FILE_MENU_END
+//#define FILE_MENU_END           (SC_FUNCTION_START + 20)
+//#endif
+//#ifndef EDIT_MENU_START
+//#define EDIT_MENU_START         (FILE_MENU_END)
+//#endif
+//#ifndef SC_VIEW_START
+//#define SC_VIEW_START           (SID_SC_START)
+//#endif
 
 #define SID_OUTLINE_HIDE        (SID_SC_START + 329)
 #define SID_OUTLINE_SHOW        (SID_SC_START + 330)
@@ -365,8 +366,9 @@
 #define SID_ATTR_SECIALCHAR     (SID_SC_START + 581)
 #define SID_ATTR_SPECIALCHAR    (SID_SC_START + 581)
 
-#define FID_CHG_RECORD          (EDIT_MENU_START + 18)
-#define SID_CHG_PROTECT         (SC_VIEW_START + 84)
+//! moved to sfx2, still in use:
+//#define FID_CHG_RECORD          (EDIT_MENU_START + 18)
+//#define SID_CHG_PROTECT         (SC_VIEW_START + 84)
 
 // --------------------------------------------------------------------------
 // Writer-Id's
@@ -383,6 +385,7 @@
 #define FN_INSERT_HARD_SPACE    (FN_INSERT + 44)    /* hard space */
 #define FN_INSERT_HARDHYPHEN    (FN_INSERT + 85)   /* hyphen withou break*/
 
+//!! be aware to not overwrite something that is used in sw/inc/cmdid.h already !!
 #define FN_FORMAT               (SID_SW_START +  400)
 #define FN_SET_JUSTIFY_PARA     (FN_FORMAT + 21)
 #define FN_FORMAT_RESET         (FN_FORMAT + 69)
@@ -401,9 +404,10 @@
 #define FN_PGPREVIEW            (SID_SW_START + 1250)
 #define FN_SHOW_MULTIPLE_PAGES  (FN_PGPREVIEW + 2)
 
-#define FN_EDIT2                (SID_SW_START + 1800)
-#define FN_REDLINE_PROTECT      (FN_EDIT2 + 23)
-#define FN_REDLINE_ON           (FN_EDIT2 + 25)
+//! moved to sfx2, still in use:
+//#define FN_EDIT2                (SID_SW_START + 1800)
+//#define FN_REDLINE_PROTECT      (FN_EDIT2 + 23)
+//#define FN_REDLINE_ON           (FN_EDIT2 + 25)
 
 // --------------------------------------------------------------------------
 // Svx-Id's
@@ -706,6 +710,7 @@
 #define SID_ATTR_TEXT_FITTOSIZE                         ( SID_SVX_START + 367 )
 #define SID_ATTR_BRUSH_ROW                              ( SID_SVX_START + 368 )
 #define SID_OPTFILTER_MSOFFICE                          ( SID_SVX_START + 369 )
+//#define SID_TASKPANE                                    ( SID_SVX_START + 370 )   -> sfxsids.hrc
 #define SID_IMAP                                        ( SID_SVX_START + 371 )
 #define SID_IMAP_DLG                                    ( SID_SVX_START + 372 )
 #define SID_IMAP_SELECT                                 ( SID_SVX_START + 373 )
@@ -747,7 +752,10 @@
 #define SID_ATTR_3D_AMBIENTINTENSITY                    ( SID_SVX_START + 410 ) /* --> Slots mit --> koennen demnaechst entfallen ( heute 12.03.1998 ) */
 #define SID_ATTR_3D_AMBIENTCOLOR                        ( SID_SVX_START + 411 )
 #define SID_IMPORT_GRAPH_LINK                           ( SID_SVX_START + 412 )
-#define SID_HTML_MODE                                   ( SID_SVX_START + 414 )
+
+//! moved to sfx2, still in use:
+//#define SID_HTML_MODE                                   ( SID_SVX_START + 414 )
+
 #define SID_RULER_PROTECT                               ( SID_SVX_START + 415 )
 //#define SID_INET_DLG                                    ( SID_SVX_START + 416 )   -> sfxsids.hrc
 #define SID_COLOR_CONTROL                               ( SID_SVX_START + 417 )
@@ -1026,7 +1034,7 @@
 #define SID_DSBROWSER_EXPLORER                          ( SID_SVX_START + 764 )
 #define SID_FM_CREATE_FIELDCONTROL                      ( SID_SVX_START + 765 )
 #define SID_FM_DATACCESS_DESCRIPTOR                     ( SID_SVX_START + 766 )
-#define SID_FM_GRABCONTROLFOCUS                         ( SID_SVX_START + 767 )
+#define SID_FM_TOGGLECONTROLFOCUS                       ( SID_SVX_START + 767 )
 #define SID_FM_SCROLLBAR                                ( SID_SVX_START + 768 )
 #define SID_FM_SPINBUTTON                               ( SID_SVX_START + 769 )
 #define SID_FM_CONVERTTO_SCROLLBAR                      ( SID_SVX_START + 770 )
@@ -1238,6 +1246,7 @@
 #define SID_TABLE_STYLE_SETTINGS                        (SID_SVX_START+1089)
 #define SID_CHAR_DLG_PREVIEW_STRING                     (SID_SVX_START+1090)
 #define SID_RECHECK_DOCUMENT                            (SID_SVX_START+1091)
+
 #define SID_OBJECT_MIRROR                               (SID_SVX_START+1093)
 
 #define SID_DELETE_POSTIT                               (SID_SVX_START+1094)
@@ -1249,8 +1258,12 @@
 #define SID_DELETEALLBYAUTHOR_POSTIT                    (SID_SVX_START+1100)
 #define SID_INSERT_POSTIT                               (SID_SVX_START+1101)
 
+#define SID_TRANSLITERATE_SENTENCE_CASE                 (SID_SVX_START+1102)
+#define SID_TRANSLITERATE_TITLE_CASE                    (SID_SVX_START+1103)
+#define SID_TRANSLITERATE_TOGGLE_CASE                   (SID_SVX_START+1104)
+
 // IMPORTANT NOTE: adjust SID_SVX_FIRSTFREE, when adding new slot id
-#define SID_SVX_FIRSTFREE                               SID_INSERT_POSTIT + 1
+#define SID_SVX_FIRSTFREE                               (SID_TRANSLITERATE_TOGGLE_CASE + 1)
 
 // --------------------------------------------------------------------------
 // Overflow check for slot IDs

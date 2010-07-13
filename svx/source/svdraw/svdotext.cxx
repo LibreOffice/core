@@ -35,7 +35,6 @@
 #include <svx/svdpage.hxx>  // und fuer AnimationHandler (Laufschrift)
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
-#include "svdscrol.hxx"  // fuer Laufschrift
 #include <svx/svdmodel.hxx>  // OutlinerDefaults
 #include "svx/svdglob.hxx"  // Stringcache
 #include "svx/svdstr.hrc"   // Objektname

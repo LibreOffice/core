@@ -53,3 +53,7 @@ String RID_STR_NO_SUCH_PACKAGE
     Text [ en-US ] = "There is no such extension deployed: ";
 };
 
+String RID_STR_SYNCHRONIZING_REPOSITORY
+{
+    Text [ en-US ] = "Synchronizing repository for %NAME extensions";
+};

@@ -11,6 +11,8 @@ BuildArch: noarch
 Requires: redhat-release
 Provides: openoffice.org3-desktop-integration
 %define _unpackaged_files_terminate_build 0
+%define _binary_filedigest_algorithm 1
+%define _binary_payload w9.gzdio
 %description 
 %productname desktop integration
 

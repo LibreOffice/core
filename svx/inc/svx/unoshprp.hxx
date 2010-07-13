@@ -160,7 +160,7 @@
 #define OWN_ATTR_PAGE_NUMBER                    (OWN_ATTR_VALUE_START+65)
 #define OWN_ATTR_THUMBNAIL                      (OWN_ATTR_VALUE_START+66)
 #define OWN_ATTR_PERSISTNAME                    (OWN_ATTR_VALUE_START+67)
-//#define OWN_ATTR_HASLEVELS                        (OWN_ATTR_VALUE_START+68)
+#define OWN_ATTR_OLE_EMBEDDED_OBJECT_NONEWCLIENT    (OWN_ATTR_VALUE_START+68)
 #define OWN_ATTR_MEDIA_URL                      (OWN_ATTR_VALUE_START+69)
 #define OWN_ATTR_MEDIA_PREFERREDSIZE            (OWN_ATTR_VALUE_START+70)
 #define OWN_ATTR_MEDIA_LOOP                     (OWN_ATTR_VALUE_START+71)
@@ -325,6 +325,7 @@
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_MOVEPROTECT),  SDRATTR_OBJMOVEPROTECT          , &::getBooleanCppuType(),                      0,  0}, \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_NAME),         SDRATTR_OBJECTNAME              , &::getCppuType((const ::rtl::OUString*)0),    0,  0}, \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , &::getBooleanCppuType(),                      0,  0}, \
+    { MAP_CHAR_LEN("Visible"),                      SDRATTR_OBJVISIBLE              , &::getBooleanCppuType(),                      0,  0}, \
     { MAP_CHAR_LEN(UNO_NAME_MISC_OBJ_SIZEPROTECT),  SDRATTR_OBJSIZEPROTECT          , &::getBooleanCppuType(),                      0,  0},\
     { MAP_CHAR_LEN("UINameSingular"),               OWN_ATTR_UINAME_SINGULAR        , &::getCppuType((const ::rtl::OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \
     { MAP_CHAR_LEN("UINamePlural"),                 OWN_ATTR_UINAME_PLURAL          , &::getCppuType((const ::rtl::OUString*)0),    ::com::sun::star::beans::PropertyAttribute::READONLY,   0}, \

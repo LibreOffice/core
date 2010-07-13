@@ -34,16 +34,13 @@ PACKAGE=ooo$/vba$/Excel
 # --- Settings -----------------------------------------------------
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.IF "$(ENABLE_VBA)"!="YES"
-dummy:
-        @echo "not building vba..."
-.ENDIF
-
 # ------------------------------------------------------------------------
 
 
 IDLFILES= XGlobals.idl\
     Globals.idl\
+    SheetObject.idl\
+    SheetObjects.idl\
     XApplication.idl\
     XComment.idl\
     XComments.idl\
@@ -97,6 +94,7 @@ IDLFILES= XGlobals.idl\
     Window.idl \
      XHyperlink.idl \
      Hyperlink.idl \
+     XHyperlinks.idl \
      XPageSetup.idl \
      XPageBreak.idl \
      XHPageBreak.idl \

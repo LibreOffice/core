@@ -168,14 +168,16 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/passwd \
     sfx2/source/dialog/printopt \
     sfx2/source/dialog/recfloat \
+    sfx2/source/dialog/securitypage \
     sfx2/source/dialog/sfxdlg \
-    sfx2/source/dialog/sfxurl \
     sfx2/source/dialog/splitwin \
     sfx2/source/dialog/srchdlg \
     sfx2/source/dialog/styfitem \
     sfx2/source/dialog/styledlg \
     sfx2/source/dialog/tabdlg \
+    sfx2/source/dialog/taskpane \
     sfx2/source/dialog/templdlg \
+    sfx2/source/dialog/titledockwin \
     sfx2/source/dialog/tplcitem \
     sfx2/source/dialog/tplpitem \
     sfx2/source/dialog/versdlg \
@@ -209,7 +211,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/objuno \
     sfx2/source/doc/objxtor \
     sfx2/source/doc/oleprops \
-    sfx2/source/doc/opostponedtruncationstream \
     sfx2/source/doc/ownsubfilterservice \
     sfx2/source/doc/plugin \
     sfx2/source/doc/printhelper \
@@ -217,11 +218,13 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/sfxacldetect \
     sfx2/source/doc/sfxbasemodel \
     sfx2/source/doc/sfxmodelfactory \
+    sfx2/source/doc/syspath \
     sfx2/source/explorer/nochaos \
     sfx2/source/inet/inettbc \
     sfx2/source/menu/mnuitem \
     sfx2/source/menu/mnumgr \
     sfx2/source/menu/objmnctl \
+    sfx2/source/menu/thessubmenu \
     sfx2/source/menu/virtmenu \
     sfx2/source/notify/eventsupplier \
     sfx2/source/notify/hintpost \
