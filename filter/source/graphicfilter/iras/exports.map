@@ -1,4 +1,4 @@
-RASIMPORTER_1_0 {
+UDK_3_0_0 {
         global:
                 GraphicImport;
 

@@ -27,6 +27,7 @@
 
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/helper/attributelist.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
@@ -170,7 +171,7 @@ BlipContext::BlipContext( ContextHandler& rParent,
         // internal picture URL
         OUString aFragmentPath = getFragmentPathFromRelId( aAttribs.getString( R_TOKEN( embed ), OUString() ) );
         if( aFragmentPath.getLength() > 0 )
-            mrBlipProps.mxGraphic = getFilter().importEmbeddedGraphic( aFragmentPath );
+            mrBlipProps.mxGraphic = getFilter().getGraphicHelper().importEmbeddedGraphic( aFragmentPath );
     }
     else if( aAttribs.hasAttribute( R_TOKEN( link ) ) )
     {
@@ -270,12 +271,12 @@ Reference< XFastContextHandler > FillPropertiesContext::createFastChildContext(
 {
     switch( nElement )
     {
-        case A_TOKEN( noFill ):         { rFillProps.moFillType = getToken( nElement ); return 0; };
-        case A_TOKEN( solidFill ):      { rFillProps.moFillType = getToken( nElement ); return new SolidFillContext( rParent, rxAttribs, rFillProps ); };
-        case A_TOKEN( gradFill ):       { rFillProps.moFillType = getToken( nElement ); return new GradientFillContext( rParent, rxAttribs, rFillProps.maGradientProps ); };
-        case A_TOKEN( pattFill ):       { rFillProps.moFillType = getToken( nElement ); return new PatternFillContext( rParent, rxAttribs, rFillProps.maPatternProps ); };
-        case A_TOKEN( blipFill ):       { rFillProps.moFillType = getToken( nElement ); return new BlipFillContext( rParent, rxAttribs, rFillProps.maBlipProps ); };
-        case A_TOKEN( grpFill ):        { rFillProps.moFillType = getToken( nElement ); return 0; };    // TODO
+        case A_TOKEN( noFill ):     { rFillProps.moFillType = getToken( nElement ); return 0; };
+        case A_TOKEN( solidFill ):  { rFillProps.moFillType = getToken( nElement ); return new SolidFillContext( rParent, rxAttribs, rFillProps ); };
+        case A_TOKEN( gradFill ):   { rFillProps.moFillType = getToken( nElement ); return new GradientFillContext( rParent, rxAttribs, rFillProps.maGradientProps ); };
+        case A_TOKEN( pattFill ):   { rFillProps.moFillType = getToken( nElement ); return new PatternFillContext( rParent, rxAttribs, rFillProps.maPatternProps ); };
+        case A_TOKEN( blipFill ):   { rFillProps.moFillType = getToken( nElement ); return new BlipFillContext( rParent, rxAttribs, rFillProps.maBlipProps ); };
+        case A_TOKEN( grpFill ):    { rFillProps.moFillType = getToken( nElement ); return 0; };    // TODO
     }
     return 0;
 }

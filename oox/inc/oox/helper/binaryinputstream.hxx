@@ -34,6 +34,8 @@
 
 namespace oox {
 
+class BinaryOutputStream;
+
 // ============================================================================
 
 /** Interface for binary input stream classes.
@@ -108,6 +110,8 @@ public:
             False = NUL characters are replaced by question marks (default). */
     ::rtl::OUString     readUnicodeArray( sal_Int32 nChars, bool bAllowNulChars = false );
 
+    /** Copies nBytes bytes from the current position to the passed output stream. */
+    void                copyToStream( BinaryOutputStream& rOutStrm, sal_Int64 nBytes = SAL_MAX_INT64 );
 
 private:
     /** Used by the readValue() template functions to read built-in types.
@@ -213,6 +217,71 @@ public:
 };
 
 typedef ::boost::shared_ptr< SequenceInputStream > SequenceInputStreamRef;
+
+// ============================================================================
+
+/** Wraps a BinaryInputStream and provides access to a specific part of the
+    stream data.
+
+    @descr
+        Provides access to the stream data block starting at the current
+        position of the stream, and with a specific length. If the wrapped
+        stream is seekable, this wrapper will treat the position the wrapped
+        has at construction time as position "0" (therefore the class name).
+ */
+class RelativeInputStream : public BinaryInputStream
+{
+public:
+    /** Constructs the wrapper object for the passed stream.
+
+        @attention
+            The passed input stream MUST live at least as long as this stream
+            wrapper. The stream MUST NOT be changed from outside as long as
+            this stream wrapper is used to read from it.
+
+        @param nLength
+            If specified, restricts the amount of data that can be read from
+            the passed input stream.
+     */
+    explicit            RelativeInputStream(
+                            BinaryInputStream& rInStrm,
+                            sal_Int64 nLength = SAL_MAX_INT64 );
+
+    /** Returns whether the wrapped stream is seekable. */
+    virtual bool        isSeekable() const;
+    /** Returns the size of the data block in the wrapped stream offered by
+        this wrapper. */
+    virtual sal_Int64   getLength() const;
+    /** Returns the current relative stream position. */
+    virtual sal_Int64   tell() const;
+    /** Seeks the stream to the passed relative position, if the wrapped stream
+        is seekable. */
+    virtual void        seek( sal_Int64 nPos );
+
+    /** Reads nBytes bytes to the passed sequence. Does not read out of the
+        data block whose size has been specified on construction.
+        @return  Number of bytes really read. */
+    virtual sal_Int32   readData( StreamDataSequence& orData, sal_Int32 nBytes );
+    /** Reads nBytes bytes to the (existing) buffer opMem. Does not read out of
+        the data block whose size has been specified on construction.
+        @return  Number of bytes really read. */
+    virtual sal_Int32   readMemory( void* opMem, sal_Int32 nBytes );
+    /** Seeks the stream forward by the passed number of bytes. This works for
+        non-seekable streams too. Does not seek out of the data block. */
+    virtual void        skip( sal_Int32 nBytes );
+
+    /** Stream operator for integral and floating-point types. */
+    template< typename Type >
+    inline RelativeInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
+
+private:
+    BinaryInputStream&  mrInStrm;
+    sal_Int64           mnStartPos;
+    sal_Int64           mnRelPos;
+    sal_Int64           mnLength;
+};
+
+typedef ::boost::shared_ptr< RelativeInputStream > RelativeInputStreamRef;
 
 // ============================================================================
 

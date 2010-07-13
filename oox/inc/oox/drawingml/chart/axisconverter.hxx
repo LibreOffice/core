@@ -41,15 +41,6 @@ namespace chart {
 
 // ============================================================================
 
-const sal_Int32 API_PRIM_AXESSET = 0;
-const sal_Int32 API_SECN_AXESSET = 1;
-
-const sal_Int32 API_X_AXIS = 0;
-const sal_Int32 API_Y_AXIS = 1;
-const sal_Int32 API_Z_AXIS = 2;
-
-// ============================================================================
-
 struct AxisModel;
 class TypeGroupConverter;
 

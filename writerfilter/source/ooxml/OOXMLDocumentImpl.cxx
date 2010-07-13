@@ -27,6 +27,7 @@
 
 #include <com/sun/star/xml/sax/XParser.hpp>
 
+#include <com/sun/star/xml/sax/SAXException.hpp>
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include "OOXMLDocumentImpl.hxx"
@@ -37,6 +38,7 @@
 
 #include <iostream>
 
+using ::com::sun::star::xml::sax::SAXException;
 namespace writerfilter {
 namespace ooxml
 {
@@ -45,7 +47,7 @@ using namespace ::std;
 
 OOXMLDocumentImpl::OOXMLDocumentImpl
 (OOXMLStream::Pointer_t pStream)
-: mpStream(pStream), mXNoteType(0)
+: mpStream(pStream), mXNoteType(0), mbIsSubstream( false )
 {
 }
 
@@ -135,6 +137,7 @@ OOXMLDocumentImpl::getSubStream(const rtl::OUString & rId)
     writerfilter::Reference<Stream>::Pointer_t pRet( pTemp = new OOXMLDocumentImpl(pStream) );
     pTemp->setModel(mxModel);
     pTemp->setDrawPage(mxDrawPage);
+    pTemp->setIsSubstream( true );
     return pRet;
 }
 
@@ -302,6 +305,10 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
 
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
+#ifdef DEBUG_RESOLVE
+    debug_logger->startElement("OOXMLDocumentImpl.resolve");
+#endif
+
     uno::Reference< xml::sax::XFastParser > xParser
         (mpStream->getFastParser());
 
@@ -314,6 +321,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         pDocHandler->setStream(&rStream);
         pDocHandler->setDocument(this);
         pDocHandler->setXNoteId(msXNoteId);
+        pDocHandler->setIsSubstream( mbIsSubstream );
         uno::Reference < xml::sax::XFastDocumentHandler > xDocumentHandler
             (pDocHandler);
         uno::Reference < xml::sax::XFastTokenHandler > xTokenHandler
@@ -321,17 +329,29 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 
         resolveFastSubStream(rStream, OOXMLStream::SETTINGS);
         resolveFastSubStream(rStream, OOXMLStream::THEME);
-        resolveFastSubStream(rStream, OOXMLStream::NUMBERING);
         resolveFastSubStream(rStream, OOXMLStream::FONTTABLE);
         resolveFastSubStream(rStream, OOXMLStream::STYLES);
+        resolveFastSubStream(rStream, OOXMLStream::NUMBERING);
 
         xParser->setFastDocumentHandler( xDocumentHandler );
         xParser->setTokenHandler( xTokenHandler );
 
         xml::sax::InputSource aParserInput;
         aParserInput.aInputStream = mpStream->getDocumentStream();
-        xParser->parseStream(aParserInput);
+        try
+        {
+            xParser->parseStream(aParserInput);
+        }
+        catch (...) {
+#ifdef DEBUG_ELEMENT
+            debug_logger->element("exception");
+#endif
+        }
     }
+
+#ifdef DEBUG_RESOLVE
+    debug_logger->endElement("OOXMLDocumentImpl.resolve");
+#endif
 }
 
 uno::Reference<io::XInputStream> OOXMLDocumentImpl::getInputStreamForId(const ::rtl::OUString & rId)

@@ -28,6 +28,7 @@
 #include "oox/ppt/pptshape.hxx"
 #include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
+#include "oox/drawingml/textbody.hxx"
 #include "tokens.hxx"
 
 #include <com/sun/star/container/XNamed.hpp>
@@ -40,6 +41,7 @@
 
 using rtl::OUString;
 using namespace ::oox::core;
+using namespace ::oox::drawingml;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -93,7 +95,18 @@ void PPTShape::addShape(
                         aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
                     }
                     break;
-                    case XML_obj :
+                    case XML_subTitle :
+                    {
+                        if ( ( meShapeLocation == Master ) || ( meShapeLocation == Layout ) )
+                            sServiceName = rtl::OUString();
+                        else {
+                            const rtl::OUString sTitleShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.SubtitleShape" ) );
+                            sServiceName = sTitleShapeService;
+                            aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getTitleTextStyle() : rSlidePersist.getTitleTextStyle();
+                        }
+                    }
+                    break;
+                       case XML_obj :
                     {
                         const rtl::OUString sOutlinerShapeService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.OutlinerShape" ) );
                         sServiceName = sOutlinerShapeService;
@@ -155,37 +168,57 @@ void PPTShape::addShape(
                     break;
                 }
             }
-            if ( !aMasterTextListStyle.get() )
-                aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
-            setMasterTextListStyle( aMasterTextListStyle );
 
-            Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, bClearText ) );
-            if ( !rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && ( (sal_Int32)mnSubType == XML_title ) )
+            // use placeholder index if possible
+            if( mnSubType && getSubTypeIndex() && rSlidePersist.getMasterPersist().get() ) {
+                oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
+                if( pPlaceholder.get() && pPlaceholder->getTextBody() ) {
+                TextListStylePtr pNewTextListStyle ( new TextListStyle() );
+
+                pNewTextListStyle->apply( pPlaceholder->getTextBody()->getTextListStyle() );
+                if( pPlaceholder->getMasterTextListStyle().get() )
+                    pNewTextListStyle->apply( *pPlaceholder->getMasterTextListStyle() );
+
+                aMasterTextListStyle = pNewTextListStyle;
+                }
+            }
+
+
+            if ( sServiceName.getLength() )
             {
-                try
-                {
-                    rtl::OUString aTitleText;
-                    Reference< XTextRange > xText( xShape, UNO_QUERY_THROW );
-                    aTitleText = xText->getString();
-                    if ( aTitleText.getLength() && ( aTitleText.getLength() < 64 ) )    // just a magic value, but we don't want to set slide names which are too long
+                if ( !aMasterTextListStyle.get() )
+                    aMasterTextListStyle = rSlidePersist.getMasterPersist().get() ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getOtherTextStyle();
+                setMasterTextListStyle( aMasterTextListStyle );
+
+                Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, pShapeRect, bClearText ) );
+                if ( !rSlidePersist.isMasterPage() && rSlidePersist.getPage().is() && ( (sal_Int32)mnSubType == XML_title ) )
+                 {
+                    try
                     {
-                        Reference< container::XNamed > xName( rSlidePersist.getPage(), UNO_QUERY_THROW );
-                        xName->setName( aTitleText );
+                        rtl::OUString aTitleText;
+                        Reference< XTextRange > xText( xShape, UNO_QUERY_THROW );
+                        aTitleText = xText->getString();
+                        if ( aTitleText.getLength() && ( aTitleText.getLength() < 64 ) )    // just a magic value, but we don't want to set slide names which are too long
+                        {
+                            Reference< container::XNamed > xName( rSlidePersist.getPage(), UNO_QUERY_THROW );
+                            xName->setName( aTitleText );
+                        }
+                    }
+                    catch( uno::Exception& )
+                    {
+
                     }
                 }
-                catch( uno::Exception& )
+                if( pShapeMap && msId.getLength() )
                 {
+                    (*pShapeMap)[ msId ] = shared_from_this();
                 }
-            }
-            if( pShapeMap && msId.getLength() )
-            {
-                (*pShapeMap)[ msId ] = shared_from_this();
-            }
 
-            // if this is a group shape, we have to add also each child shape
-            Reference< XShapes > xShapes( xShape, UNO_QUERY );
-            if ( xShapes.is() )
-                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
+                // if this is a group shape, we have to add also each child shape
+                Reference< XShapes > xShapes( xShape, UNO_QUERY );
+                if ( xShapes.is() )
+                    addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap );
+            }
         }
     }
     catch( const Exception&  )
@@ -196,6 +229,53 @@ void PPTShape::addShape(
 void PPTShape::applyShapeReference( const oox::drawingml::Shape& rReferencedShape )
 {
     Shape::applyShapeReference( rReferencedShape );
+}
+
+oox::drawingml::ShapePtr PPTShape::findPlaceholder( const sal_Int32 nMasterPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
+{
+    oox::drawingml::ShapePtr aShapePtr;
+    std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
+    while( aRevIter != rShapes.rend() )
+    {
+        if ( (*aRevIter)->getSubType() == nMasterPlaceholder )
+        {
+            aShapePtr = *aRevIter;
+            break;
+        }
+        std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
+        aShapePtr = findPlaceholder( nMasterPlaceholder, rChildren );
+        if ( aShapePtr.get() )
+            break;
+        aRevIter++;
+    }
+    return aShapePtr;
+}
+
+oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx, std::vector< oox::drawingml::ShapePtr >& rShapes )
+{
+    oox::drawingml::ShapePtr aShapePtr;
+    std::vector< oox::drawingml::ShapePtr >::reverse_iterator aRevIter( rShapes.rbegin() );
+    while( aRevIter != rShapes.rend() )
+    {
+        if ( (*aRevIter)->getSubTypeIndex() == nIdx )
+        {
+            aShapePtr = *aRevIter;
+            break;
+        }
+        std::vector< oox::drawingml::ShapePtr >& rChildren = (*aRevIter)->getChildren();
+        aShapePtr = findPlaceholderByIndex( nIdx, rChildren );
+        if ( aShapePtr.get() )
+            break;
+        aRevIter++;
+    }
+    return aShapePtr;
+}
+
+// if nFirstPlaceholder can't be found, it will be searched for nSecondPlaceholder
+oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
+{
+    oox::drawingml::ShapePtr pPlaceholder = findPlaceholder( nFirstPlaceholder, rShapes );
+    return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : findPlaceholder( nSecondPlaceholder, rShapes );
 }
 
 } }

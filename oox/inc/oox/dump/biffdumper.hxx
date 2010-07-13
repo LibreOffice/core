@@ -32,6 +32,7 @@
 #include "oox/dump/dffdumper.hxx"
 #include "oox/dump/oledumper.hxx"
 #include "oox/xls/richstring.hxx"
+#include "oox/xls/biffinputstream.hxx"
 
 #if OOX_INCLUDE_DUMPER
 
@@ -211,13 +212,17 @@ protected:
     void                dumpRect( const String& rName,
                             const NameListWrapper& rListWrp = NO_LIST,
                             FormatType eFmtType = FORMATTYPE_DEC );
+    template< typename Type >
+    void                dumpRectWithGaps( const String& rName, sal_Int32 nGap,
+                            const NameListWrapper& rListWrp = NO_LIST,
+                            FormatType eFmtType = FORMATTYPE_DEC );
 
     sal_uInt16          dumpRepeatedRecId();
     void                dumpFrHeader( bool bWithFlags, bool bWithRange );
 
     void                dumpDffClientRect();
     void                dumpEmbeddedDff();
-    void                dumpOcxControl();
+    void                dumpControl();
 
 private:
     typedef ::boost::shared_ptr< BiffSharedData >       BiffSharedDataRef;
@@ -242,7 +247,7 @@ void BiffObjectBase::writeRectItem( const String& rName,
         Type nLeft, Type nTop, Type nWidth, Type nHeight,
         const NameListWrapper& rListWrp, FormatType eFmtType )
 {
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     writeEmptyItem( rName );
     writeValueItem( "x-pos", nLeft, eFmtType, rListWrp );
     writeValueItem( "y-pos", nTop, eFmtType, rListWrp );
@@ -256,6 +261,22 @@ void BiffObjectBase::dumpRect( const String& rName,
 {
     Type nLeft, nTop, nWidth, nHeight;
     *mxBiffStrm >> nLeft >> nTop >> nWidth >> nHeight;
+    writeRectItem( rName, nLeft, nTop, nWidth, nHeight, rListWrp, eFmtType );
+}
+
+template< typename Type >
+void BiffObjectBase::dumpRectWithGaps( const String& rName, sal_Int32 nGap,
+        const NameListWrapper& rListWrp, FormatType eFmtType )
+{
+    Type nLeft, nTop, nWidth, nHeight;
+    *mxBiffStrm >> nLeft;
+    mxBiffStrm->skip( nGap );
+    *mxBiffStrm >> nTop;
+    mxBiffStrm->skip( nGap );
+    *mxBiffStrm >> nWidth;
+    mxBiffStrm->skip( nGap );
+    *mxBiffStrm >> nHeight;
+    mxBiffStrm->skip( nGap );
     writeRectItem( rName, nLeft, nTop, nWidth, nHeight, rListWrp, eFmtType );
 }
 
@@ -460,6 +481,11 @@ private:
     void                dumpObjRecFmla( const String& rName, sal_uInt16 nFmlaSize );
     void                dumpObjRecPictFmla( sal_uInt16 nFmlaSize );
 
+    typedef ::std::pair< sal_uInt8, ::rtl::OUString > ChFrExtPropInfo;
+
+    void                dumpChFrExtProps();
+    ChFrExtPropInfo     dumpChFrExtPropHeader();
+
 private:
     NameListRef         mxColors;
     NameListRef         mxBorderStyles;
@@ -508,6 +534,10 @@ protected:
                             const StorageRef& rxStrg,
                             const ::rtl::OUString& rStrgPath,
                             const ::rtl::OUString& rSysPath );
+
+    virtual void        implDumpBaseStream(
+                            const BinaryInputStreamRef& rxStrm,
+                            const ::rtl::OUString& rSysFileName );
 };
 
 // ============================================================================

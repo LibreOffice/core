@@ -44,10 +44,14 @@ SLOFILES =	\
         $(SLO)$/axbinaryreader.obj		\
         $(SLO)$/axcontrol.obj			\
         $(SLO)$/axcontrolfragment.obj	\
-        $(SLO)$/axcontrolhelper.obj		\
         $(SLO)$/olehelper.obj			\
         $(SLO)$/oleobjecthelper.obj		\
-        $(SLO)$/vbainputstream.obj
+        $(SLO)$/olestorage.obj			\
+        $(SLO)$/vbacontrol.obj          \
+        $(SLO)$/vbahelper.obj           \
+        $(SLO)$/vbainputstream.obj      \
+        $(SLO)$/vbamodule.obj           \
+        $(SLO)$/vbaproject.obj
 
 # --- Targets -------------------------------------------------------
 

@@ -42,6 +42,9 @@
 
 namespace oox { namespace drawingml {
 
+class CustomShapeProperties;
+typedef boost::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
+
 typedef ::std::map< ::rtl::OUString, ShapePtr > ShapeIdMap;
 
 struct ShapeStyleRef
@@ -123,9 +126,11 @@ public:
     void                            setName( const rtl::OUString& rName ) { msName = rName; }
     ::rtl::OUString                 getName( ) { return msName; }
     void                            setId( const rtl::OUString& rId ) { msId = rId; }
-    void                            setSubType( sal_uInt32 nSubType ) { mnSubType = nSubType; }
+    void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
+    void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
-    void                            setIndex( sal_uInt32 nIndex ) { mnIndex = nIndex; }
+    void                            setSubTypeIndex( sal_uInt32 nSubTypeIndex ) { mnSubTypeIndex = nSubTypeIndex; }
+    sal_Int32                       getSubTypeIndex() const { return mnSubTypeIndex; }
 
     // setDefaults has to be called if styles are imported (OfficeXML is not storing properties having the default value)
     void                            setDefaults();
@@ -186,11 +191,11 @@ protected:
     TextListStylePtr            mpMasterTextListStyle;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > mxShape;
 
-    rtl::OUString   msServiceName;
-    rtl::OUString    msName;
-    rtl::OUString    msId;
-    sal_uInt32      mnSubType;      // if this type is not zero, then the shape is a placeholder
-    sal_uInt32      mnIndex;
+    rtl::OUString       msServiceName;
+    rtl::OUString       msName;
+    rtl::OUString       msId;
+    sal_Int32           mnSubType;      // if this type is not zero, then the shape is a placeholder
+    sal_Int32           mnSubTypeIndex;
 
     ShapeStyleRefMap   maShapeStyleRefs;
 
@@ -202,6 +207,7 @@ private:
     sal_Int32                       mnRotation;
     sal_Bool                        mbFlipH;
     sal_Bool                        mbFlipV;
+    sal_Bool                        mbHidden;
 };
 
 ::rtl::OUString GetShapeType( sal_Int32 nType );

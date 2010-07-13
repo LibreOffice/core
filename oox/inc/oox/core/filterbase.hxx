@@ -49,6 +49,7 @@ namespace com { namespace sun { namespace star {
     namespace frame { class XModel; }
     namespace task { class XStatusIndicator; }
     namespace task { class XInteractionHandler; }
+    namespace frame { class XFrame; }
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XStream; }
@@ -112,9 +113,6 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                         getGlobalFactory() const;
 
-    /** Returns the media descriptor. */
-    ::comphelper::MediaDescriptor& getMediaDescriptor() const;
-
     /** Returns the document model (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
                         getModel() const;
@@ -123,6 +121,10 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                         getModelFactory() const;
 
+    /** Returns the frame that will contain the document model. */
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
+                        getTargetFrame() const;
+
     /** Returns the status indicator (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >&
                         getStatusIndicator() const;
@@ -130,6 +132,9 @@ public:
     /** Returns the status interaction handler (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >&
                         getInteractionHandler() const;
+
+    /** Returns the media descriptor. */
+    ::comphelper::MediaDescriptor& getMediaDescriptor() const;
 
     /** Returns the URL of the imported or exported file. */
     const ::rtl::OUString& getFileUrl() const;
@@ -145,12 +150,12 @@ public:
         @param rStorageName
             The name of the embedded storage. The name may contain slashes to
             open storages from embedded substorages.
-        @param bCreate
+        @param bCreateMissing
             True = create missing sub storages (for export filters).
      */
     StorageRef          openSubStorage(
                             const ::rtl::OUString& rStorageName,
-                            bool bCreate ) const;
+                            bool bCreateMissing ) const;
 
     /** Opens and returns the specified input stream from the base storage.
 
@@ -189,20 +194,6 @@ public:
     /** Returns a helper for the handling of OLE obejcts. */
     ::oox::ole::OleObjectHelper& getOleObjectHelper() const;
 
-    /** Returns information about the output device. */
-    const ::com::sun::star::awt::DeviceInfo& getDeviceInfo() const;
-    /** Converts the passed value from horizontal screen pixels to 1/100 mm. */
-    sal_Int32           convertScreenPixelX( double fPixelX ) const;
-    /** Converts the passed value from vertical screen pixels to 1/100 mm. */
-    sal_Int32           convertScreenPixelY( double fPixelY ) const;
-
-    /** Returns a system color specified by the passed XML token identifier. */
-    sal_Int32           getSystemColor( sal_Int32 nToken, sal_Int32 nDefaultRgb = API_RGB_TRANSPARENT ) const;
-    /** Derived classes may implement to resolve a scheme color from the passed XML token identifier. */
-    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
-    /** Derived classes may implement to resolve a palette index to an RGB color. */
-    virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
-
     /** Requests a password from the media descriptor or from the user. On
         success, the password will be inserted into the media descriptor. */
     ::rtl::OUString     requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
@@ -210,12 +201,6 @@ public:
     /** Imports the raw binary data from the specified stream.
         @return  True, if the data could be imported from the stream. */
     bool                importBinaryData( StreamDataSequence& orDataSeq, const ::rtl::OUString& rStreamName );
-
-    /** Imports a graphic from the storage stream with the passed path and name. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >
-                        importEmbeddedGraphic( const ::rtl::OUString& rStreamName ) const;
-    /** Imports a graphic object from the storage stream with the passed path and name. */
-    ::rtl::OUString     importEmbeddedGraphicObject( const ::rtl::OUString& rStreamName ) const;
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
@@ -281,6 +266,10 @@ protected:
 private:
     void                setMediaDescriptor(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rMediaDescSeq );
+
+    /** Derived classes may create a specialized graphic helper, e.g. for
+        resolving palette colors. */
+    virtual GraphicHelper* implCreateGraphicHelper() const;
 
     virtual ::rtl::OUString implGetImplementationName() const = 0;
 

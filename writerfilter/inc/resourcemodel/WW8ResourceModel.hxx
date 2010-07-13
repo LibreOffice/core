@@ -150,6 +150,7 @@ public:
 class WRITERFILTER_DLLPUBLIC Table
 {
 public:
+    typedef boost::shared_ptr<Table> Pointer_t;
     /**
        Receives an entry of the table.
 
@@ -206,6 +207,8 @@ public:
        Receives end mark for group with the same paragraph properties.
      */
     virtual void endParagraphGroup() = 0;
+
+    virtual void markLastParagraphInSection( ) { };
 
     /**
        Receives start mark for group with the same character properties.

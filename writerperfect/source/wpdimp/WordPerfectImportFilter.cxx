@@ -46,9 +46,6 @@
 #ifndef _ATTRLIST_HPP_
 #include <xmloff/attrlist.hxx>
 #endif
-#ifndef _XMLKYWD_HPP
-#include <xmloff/xmlkywd.hxx>
-#endif
 #include <ucbhelper/content.hxx>
 
 #include "filter/FilterInternal.hxx"

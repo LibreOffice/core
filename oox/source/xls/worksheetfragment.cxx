@@ -514,7 +514,12 @@ void OoxWorksheetFragment::importDimension( const AttributeList& rAttribs )
 {
     CellRangeAddress aRange;
     getAddressConverter().convertToCellRangeUnchecked( aRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex() );
-    setDimension( aRange );
+    /*  OOXML stores the used area, if existing, or "A1" if the sheet is empty.
+        In case of "A1", the dimension at the WorksheetHelper object will not
+        be set. If the cell A1 exists, the used area will be updated while
+        importing the cell. */
+    if( (aRange.EndColumn > 0) || (aRange.EndRow > 0) )
+        extendUsedArea( aRange );
 }
 
 void OoxWorksheetFragment::importSheetFormatPr( const AttributeList& rAttribs )
@@ -619,7 +624,12 @@ void OoxWorksheetFragment::importDimension( RecordInputStream& rStrm )
     aBinRange.read( rStrm );
     CellRangeAddress aRange;
     getAddressConverter().convertToCellRangeUnchecked( aRange, aBinRange, getSheetIndex() );
-    setDimension( aRange );
+    /*  BIFF12 stores the used area, if existing, or "A1" if the sheet is
+        empty. In case of "A1", the dimension at the WorksheetHelper object
+        will not be set. If the cell A1 exists, the used area will be updated
+        while importing the cell. */
+    if( (aRange.EndColumn > 0) || (aRange.EndRow > 0) )
+        extendUsedArea( aRange );
 }
 
 void OoxWorksheetFragment::importSheetFormatPr( RecordInputStream& rStrm )
@@ -870,6 +880,7 @@ bool BiffWorksheetFragment::importFragment()
                     case BIFF8: switch( nRecId )
                     {
                         case BIFF_ID_CFHEADER:          rCondFormats.importCfHeader( mrStrm );          break;
+                        case BIFF_ID_CODENAME:          rWorksheetSett.importCodeName( mrStrm );        break;
                         case BIFF_ID_COLINFO:           importColInfo();                                break;
                         case BIFF_ID_DATAVALIDATION:    importDataValidation();                         break;
                         case BIFF_ID_DATAVALIDATIONS:   importDataValidations();                        break;
@@ -1055,15 +1066,21 @@ void BiffWorksheetFragment::importDataValidation()
 
 void BiffWorksheetFragment::importDimension()
 {
+    // 32-bit row indexes in BIFF8
+    bool bInt32Rows = (mrStrm.getRecId() == BIFF3_ID_DIMENSION) && (getBiff() == BIFF8);
     BinRange aBinRange;
-    aBinRange.read( mrStrm, true, (mrStrm.getRecId() == BIFF3_ID_DIMENSION) && (getBiff() == BIFF8) );
-    // first unused row/column index in BIFF, not last used
-    if( aBinRange.maFirst.mnCol < aBinRange.maLast.mnCol ) --aBinRange.maLast.mnCol;
-    if( aBinRange.maFirst.mnRow < aBinRange.maLast.mnRow ) --aBinRange.maLast.mnRow;
-    // set dimension
-    CellRangeAddress aRange;
-    getAddressConverter().convertToCellRangeUnchecked( aRange, aBinRange, getSheetIndex() );
-    setDimension( aRange );
+    aBinRange.read( mrStrm, true, bInt32Rows );
+    /*  BIFF stores the used area with end column and end row increased by 1
+        (first unused column and row). */
+    if( (aBinRange.maFirst.mnCol < aBinRange.maLast.mnCol) && (aBinRange.maFirst.mnRow < aBinRange.maLast.mnRow) )
+    {
+        // reduce range to used area
+        --aBinRange.maLast.mnCol;
+        --aBinRange.maLast.mnRow;
+        CellRangeAddress aRange;
+        getAddressConverter().convertToCellRangeUnchecked( aRange, aBinRange, getSheetIndex() );
+        extendUsedArea( aRange );
+    }
 }
 
 void BiffWorksheetFragment::importHyperlink()
@@ -1080,7 +1097,7 @@ void BiffWorksheetFragment::importHyperlink()
         return;
 
     // try to read the StdHlink data
-    if( !::oox::ole::OleHelper::importStdHlink( aModel, mrStrm, getTextEncoding(), true ) )
+    if( !::oox::ole::OleHelper::importStdHlink( aModel, mrStrm, true ) )
         return;
 
     // try to read the optional following SCREENTIP record

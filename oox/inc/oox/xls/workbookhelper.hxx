@@ -29,9 +29,8 @@
 #define OOX_XLS_WORKBOOKHELPER_HXX
 
 #include <boost/shared_ptr.hpp>
-#include <osl/time.h>
 #include <rtl/ref.hxx>
-#include <com/sun/star/uno/Reference.hxx>
+#include "oox/helper/storagebase.hxx"
 #include "oox/xls/biffhelper.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -72,87 +71,8 @@ namespace oox { namespace drawingml {
 namespace oox {
 namespace xls {
 
-// DEBUG ======================================================================
-
-// Set this define to 1 to show the load/save time of a document in an assertion (nonpro only).
-#define OOX_SHOW_LOADSAVE_TIME 0
-
-// ----------------------------------------------------------------------------
-
-#define OOX_LOADSAVE_TIMER( eTimerType ) (void)0
-
-#if OSL_DEBUG_LEVEL > 0
-namespace dbg {
-
-// ----------------------------------------------------------------------------
-
-#if OOX_SHOW_LOADSAVE_TIME > 0
-
-enum TimerType
-{
-    TIMER_IMPORTFORMULA,
-    TIMER_IMPORTSHEETFRAGMENT,
-    TIMER_ONCREATESHEETCONTEXT,
-    TIMER_IMPORTROW,
-    TIMER_CONVERTROWFORMAT,
-    TIMER_CONVERTCOLUMNFORMAT,
-    TIMER_IMPORTCELL,
-    TIMER_ONENDSHEETELEMENT,
-    TIMER_SETCELL,
-    TIMER_SETCELLFORMAT,
-    TIMER_MERGECELLFORMAT,
-    TIMER_WRITECELLPROPERTIES,
-    TIMER_FINALIZESHEETDATA,
-    TIMER_FINALIZEDRAWING,
-    TIMER_FINALIZEBOOKDATA,
-
-    // TIMER_TOTAL must be the last entry!
-    TIMER_TOTAL
-};
-
-// ----------------------------------------------------------------------------
-
-struct TimeCount;
-
-class Timer
-{
-public:
-    explicit            Timer( TimeCount& rTimeCount );
-                        ~Timer();
-private:
-    TimeCount&          mrTimeCount;
-    TimeValue           maStartTime;
-};
-
-// ----------------------------------------------------------------------------
-
-#undef OOX_LOADSAVE_TIMER
-#define OOX_LOADSAVE_TIMER( TimerType ) ::oox::xls::dbg::Timer aDbgTimer##TimerType( getTimeCount( ::oox::xls::dbg::TIMER_##TimerType ) )
-
-#endif
-
-// ----------------------------------------------------------------------------
-
-struct WorkbookData;
-
-class WorkbookHelper
-{
-protected:
-    explicit            WorkbookHelper( WorkbookData& rBookData );
-    explicit            WorkbookHelper( const WorkbookHelper& rCopy );
-    virtual             ~WorkbookHelper();
-#if OOX_SHOW_LOADSAVE_TIME > 0
-public:
-    TimeCount&          getTimeCount( TimerType eType ) const;
-#endif
-private:
-    WorkbookData&       mrDbgBookData;
-};
-
-// ----------------------------------------------------------------------------
-
-} // namespace dbg
-#endif
+class ExcelFilter;
+class ExcelBiffFilter;
 
 // ============================================================================
 
@@ -201,14 +121,15 @@ class BiffCodecHelper;
     object of type WorkbookData containing global workbook settings, buffers,
     converters, etc. Nearly all classes in this filter implementation are
     derived directly or indirectly from this class.
+
+    This class contains just a simple reference to the WorkbookData object to
+    prevent circular references, as the WorkbookData object contains a lot of
+    objects derived from this class.
  */
 class WorkbookHelper
-#if OSL_DEBUG_LEVEL > 0
-    : public dbg::WorkbookHelper
-#endif
 {
 public:
-    /*implicit*/        WorkbookHelper( WorkbookData& rBookData );
+    inline /*implicit*/ WorkbookHelper( WorkbookData& rBookData ) : mrBookData( rBookData ) {}
     virtual             ~WorkbookHelper();
 
     // filter -----------------------------------------------------------------
@@ -229,6 +150,8 @@ public:
 
     /** Sets the index of the current sheet in the Calc document. */
     void                setCurrentSheetIndex( sal_Int16 nSheet );
+    /** Sets the VBA project storage. */
+    void                setVbaProjectStorage( const StorageRef& rxVbaPrjStrg );
     /** Final conversion after importing the workbook. */
     void                finalizeWorkbookImport();
 
@@ -334,7 +257,7 @@ public:
     /** Returns the page and print settings converter. */
     PageSettingsConverter& getPageSettingsConverter() const;
 
-    // OOX specific -----------------------------------------------------------
+    // OOX specific (MUST NOT be called in BIFF filter) -----------------------
 
     /** Returns the base OOX filter object.
         Must not be called, if current filter is not the OOX filter. */
@@ -344,7 +267,7 @@ public:
         the full path to the fragment stream. */
     bool                importOoxFragment( const ::rtl::Reference< ::oox::core::FragmentHandler >& rxHandler );
 
-    // BIFF specific ----------------------------------------------------------
+    // BIFF specific (MUST NOT be called in OOX filter) -----------------------
 
     /** Returns the base BIFF filter object. */
     ::oox::core::BinaryFilterBase& getBiffFilter() const;
@@ -392,8 +315,8 @@ struct WorkbookDataOwner
 class WorkbookHelperRoot : private prv::WorkbookDataOwner, public WorkbookHelper
 {
 public:
-    explicit            WorkbookHelperRoot( ::oox::core::XmlFilterBase& rFilter );
-    explicit            WorkbookHelperRoot( ::oox::core::BinaryFilterBase& rFilter, BiffType eBiff );
+    explicit            WorkbookHelperRoot( ExcelFilter& rFilter );
+    explicit            WorkbookHelperRoot( ExcelBiffFilter& rFilter, BiffType eBiff );
 
     /** Returns true, if this helper refers to a valid document. */
     bool                isValid() const;
@@ -409,4 +332,3 @@ private:
 } // namespace oox
 
 #endif
-

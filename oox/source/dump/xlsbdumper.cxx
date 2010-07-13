@@ -30,9 +30,9 @@
 #include "oox/dump/biffdumper.hxx"
 #include "oox/dump/oledumper.hxx"
 #include "oox/dump/pptxdumper.hxx"
-#include "oox/helper/olestorage.hxx"
 #include "oox/helper/zipstorage.hxx"
 #include "oox/core/filterbase.hxx"
+#include "oox/ole/olestorage.hxx"
 #include "oox/xls/biffhelper.hxx"
 #include "oox/xls/formulabase.hxx"
 #include "oox/xls/richstring.hxx"
@@ -82,8 +82,8 @@ RecordObjectBase::~RecordObjectBase()
 
 void RecordObjectBase::construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
-    mxStrm.reset( new RecordInputStream( getRecordDataSequence() ) );
-    SequenceRecordObjectBase::construct( rParent, rxStrm, rSysFileName, mxStrm, "RECORD-NAMES", "SIMPLE-RECORDS" );
+    mxBiffStrm.reset( new RecordInputStream( getRecordDataSequence() ) );
+    SequenceRecordObjectBase::construct( rParent, rxStrm, rSysFileName, mxBiffStrm, "RECORD-NAMES", "SIMPLE-RECORDS" );
     if( SequenceRecordObjectBase::implIsValid() )
         mxErrCodes = cfg().getNameList( "ERRORCODES" );
 }
@@ -111,22 +111,22 @@ OUString RecordObjectBase::getErrorName( sal_uInt8 nErrCode ) const
 
 void RecordObjectBase::readAddress( Address& orAddress )
 {
-    in() >> orAddress.mnRow >> orAddress.mnCol;
+    *mxStrm >> orAddress.mnRow >> orAddress.mnCol;
 }
 
 void RecordObjectBase::readRange( Range& orRange )
 {
-    in() >> orRange.maFirst.mnRow >> orRange.maLast.mnRow >> orRange.maFirst.mnCol >> orRange.maLast.mnCol;
+    *mxStrm >> orRange.maFirst.mnRow >> orRange.maLast.mnRow >> orRange.maFirst.mnCol >> orRange.maLast.mnCol;
 }
 
 void RecordObjectBase::readRangeList( RangeList& orRanges )
 {
     sal_Int32 nCount;
-    in() >> nCount;
+    *mxStrm >> nCount;
     if( nCount >= 0 )
     {
         orRanges.resize( getLimitedValue< size_t, sal_Int32 >( nCount, 0, SAL_MAX_UINT16 ) );
-        for( RangeList::iterator aIt = orRanges.begin(), aEnd = orRanges.end(); !in().isEof() && (aIt != aEnd); ++aIt )
+        for( RangeList::iterator aIt = orRanges.begin(), aEnd = orRanges.end(); !mxStrm->isEof() && (aIt != aEnd); ++aIt )
             readRange( *aIt );
     }
     else
@@ -150,11 +150,11 @@ void RecordObjectBase::writeFontPortions( const FontPortionModelList& rPortions 
     if( !rPortions.empty() )
     {
         writeDecItem( "font-count", static_cast< sal_uInt32 >( rPortions.size() ) );
-        IndentGuard aIndGuard( out() );
-        TableGuard aTabGuard( out(), 14 );
+        IndentGuard aIndGuard( mxOut );
+        TableGuard aTabGuard( mxOut, 14 );
         for( FontPortionModelList::const_iterator aIt = rPortions.begin(), aEnd = rPortions.end(); aIt != aEnd; ++aIt )
         {
-            MultiItemsGuard aMultiGuard( out() );
+            MultiItemsGuard aMultiGuard( mxOut );
             writeDecItem( "char-pos", aIt->mnPos );
             writeDecItem( "font-id", aIt->mnFontId, "FONTNAMES" );
         }
@@ -166,11 +166,11 @@ void RecordObjectBase::writePhoneticPortions( const PhoneticPortionModelList& rP
     if( !rPortions.empty() )
     {
         writeDecItem( "portion-count", static_cast< sal_uInt32 >( rPortions.size() ) );
-        IndentGuard aIndGuard( out() );
-        TableGuard aTabGuard( out(), 14, 21 );
+        IndentGuard aIndGuard( mxOut );
+        TableGuard aTabGuard( mxOut, 14, 21 );
         for( PhoneticPortionModelList::const_iterator aIt = rPortions.begin(), aEnd = rPortions.end(); aIt != aEnd; ++aIt )
         {
-            MultiItemsGuard aMultiGuard( out() );
+            MultiItemsGuard aMultiGuard( mxOut );
             writeDecItem( "char-pos", aIt->mnPos );
             writeDecItem( "base-text-start", aIt->mnBasePos );
             writeDecItem( "base-text-length", aIt->mnBaseLen );
@@ -183,7 +183,7 @@ void RecordObjectBase::writePhoneticPortions( const PhoneticPortionModelList& rP
 sal_uInt8 RecordObjectBase::dumpBoolean( const String& rName )
 {
     sal_uInt8 nBool;
-    in() >> nBool;
+    *mxStrm >> nBool;
     writeBooleanItem( rName( "boolean" ), nBool );
     return nBool;
 }
@@ -191,7 +191,7 @@ sal_uInt8 RecordObjectBase::dumpBoolean( const String& rName )
 sal_uInt8 RecordObjectBase::dumpErrorCode( const String& rName )
 {
     sal_uInt8 nErrCode;
-    in() >> nErrCode;
+    *mxStrm >> nErrCode;
     writeErrorCodeItem( rName( "error-code" ), nErrCode );
     return nErrCode;
 }
@@ -200,25 +200,25 @@ OUString RecordObjectBase::dumpString( const String& rName, bool bRich, bool b32
 {
     sal_uInt8 nFlags = bRich ? dumpHex< sal_uInt8 >( "flags", "STRING-FLAGS" ) : 0;
 
-    OUString aString = mxStrm->readString( b32BitLen );
+    OUString aString = mxBiffStrm->readString( b32BitLen );
     writeStringItem( rName( "text" ), aString );
 
     // --- formatting ---
     if( getFlag( nFlags, OOBIN_STRINGFLAG_FONTS ) )
     {
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         FontPortionModelList aPortions;
-        aPortions.importPortions( *mxStrm );
+        aPortions.importPortions( *mxBiffStrm );
         writeFontPortions( aPortions );
     }
 
     // --- phonetic text ---
     if( getFlag( nFlags, OOBIN_STRINGFLAG_PHONETICS ) )
     {
-        IndentGuard aIndGuard( out() );
+        IndentGuard aIndGuard( mxOut );
         dumpString( "phonetic-text" );
         PhoneticPortionModelList aPortions;
-        aPortions.importPortions( *mxStrm );
+        aPortions.importPortions( *mxBiffStrm );
         writePhoneticPortions( aPortions );
         dumpDec< sal_uInt16 >( "font-id", "FONTNAMES" );
         dumpHex< sal_uInt16 >( "flags", "PHONETIC-FLAGS" );
@@ -229,7 +229,7 @@ OUString RecordObjectBase::dumpString( const String& rName, bool bRich, bool b32
 
 void RecordObjectBase::dumpColor( const String& rName )
 {
-    MultiItemsGuard aMultiGuard( out() );
+    MultiItemsGuard aMultiGuard( mxOut );
     writeEmptyItem( rName( "color" ) );
     switch( extractValue< sal_uInt8 >( dumpDec< sal_uInt8 >( "flags", "COLOR-FLAGS" ), 1, 7 ) )
     {
@@ -246,12 +246,12 @@ void RecordObjectBase::dumpColor( const String& rName )
 DateTime RecordObjectBase::dumpPivotDateTime( const String& rName )
 {
     DateTime aDateTime;
-    aDateTime.Year = in().readuInt16();
-    aDateTime.Month = in().readuInt16();
-    aDateTime.Day = in().readuInt8();
-    aDateTime.Hours = in().readuInt8();
-    aDateTime.Minutes = in().readuInt8();
-    aDateTime.Seconds = in().readuInt8();
+    aDateTime.Year = mxStrm->readuInt16();
+    aDateTime.Month = mxStrm->readuInt16();
+    aDateTime.Day = mxStrm->readuInt8();
+    aDateTime.Hours = mxStrm->readuInt8();
+    aDateTime.Minutes = mxStrm->readuInt8();
+    aDateTime.Seconds = mxStrm->readuInt8();
     writeDateTimeItem( rName, aDateTime );
     return aDateTime;
 }
@@ -259,7 +259,7 @@ DateTime RecordObjectBase::dumpPivotDateTime( const String& rName )
 sal_Int32 RecordObjectBase::dumpColIndex( const String& rName )
 {
     sal_Int32 nCol;
-    in() >> nCol;
+    *mxStrm >> nCol;
     writeColIndexItem( rName( "col-idx" ), nCol );
     return nCol;
 }
@@ -267,7 +267,7 @@ sal_Int32 RecordObjectBase::dumpColIndex( const String& rName )
 sal_Int32 RecordObjectBase::dumpRowIndex( const String& rName )
 {
     sal_Int32 nRow;
-    in() >> nRow;
+    *mxStrm >> nRow;
     writeRowIndexItem( rName( "row-idx" ), nRow );
     return nRow;
 }
@@ -275,7 +275,7 @@ sal_Int32 RecordObjectBase::dumpRowIndex( const String& rName )
 sal_Int32 RecordObjectBase::dumpColRange( const String& rName )
 {
     sal_Int32 nCol1, nCol2;
-    in() >> nCol1 >> nCol2;
+    *mxStrm >> nCol1 >> nCol2;
     writeColRangeItem( rName( "col-range" ), nCol1, nCol2 );
     return nCol2 - nCol1 + 1;
 }
@@ -283,7 +283,7 @@ sal_Int32 RecordObjectBase::dumpColRange( const String& rName )
 sal_Int32 RecordObjectBase::dumpRowRange( const String& rName )
 {
     sal_Int32 nRow1, nRow2;
-    in() >> nRow1 >> nRow2;
+    *mxStrm >> nRow1 >> nRow2;
     writeRowRangeItem( rName( "row-range" ), nRow1, nRow2 );
     return nRow2 - nRow1 + 1;
 }
@@ -363,26 +363,25 @@ void FormulaObject::dumpNameFormula( const String& rName )
 void FormulaObject::implDump()
 {
     {
-        MultiItemsGuard aMultiGuard( out() );
+        MultiItemsGuard aMultiGuard( mxOut );
         writeEmptyItem( maName );
         writeDecItem( "formula-size", mnSize );
     }
     if( mnSize < 0 ) return;
 
-    BinaryInputStream& rStrm = in();
-    sal_Int64 nStartPos = rStrm.tell();
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, rStrm.getLength() );
+    sal_Int64 nStartPos = mxStrm->tell();
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, mxStrm->getLength() );
 
     bool bValid = mxTokens.get();
     mxStack.reset( new FormulaStack );
     maAddData.clear();
-    IndentGuard aIndGuard( out() );
+    IndentGuard aIndGuard( mxOut );
     {
-        TableGuard aTabGuard( out(), 8, 18 );
-        while( bValid && (rStrm.tell() < nEndPos) )
+        TableGuard aTabGuard( mxOut, 8, 18 );
+        while( bValid && (mxStrm->tell() < nEndPos) )
         {
-            MultiItemsGuard aMultiGuard( out() );
-            writeHexItem( EMPTY_STRING, static_cast< sal_uInt16 >( rStrm.tell() - nStartPos ) );
+            MultiItemsGuard aMultiGuard( mxOut );
+            writeHexItem( EMPTY_STRING, static_cast< sal_uInt16 >( mxStrm->tell() - nStartPos ) );
             sal_uInt8 nTokenId = dumpHex< sal_uInt8 >( EMPTY_STRING, mxTokens );
             bValid = mxTokens->hasName( nTokenId );
             if( bValid )
@@ -457,7 +456,7 @@ void FormulaObject::implDump()
         }
     }
 
-    if( nEndPos == rStrm.tell() )
+    if( nEndPos == mxStrm->tell() )
     {
         dumpAddTokenData();
         if( mnSize > 0 )
@@ -468,7 +467,7 @@ void FormulaObject::implDump()
     }
     else
     {
-        dumpBinary( OOX_DUMP_ERRASCII( "formula-error" ), static_cast< sal_Int32 >( nEndPos - rStrm.tell() ), false );
+        dumpBinary( OOX_DUMP_ERRASCII( "formula-error" ), static_cast< sal_Int32 >( nEndPos - mxStrm->tell() ), false );
         sal_Int32 nAddDataSize = dumpDec< sal_Int32 >( "add-data-size" );
         dumpBinary( "add-data", nAddDataSize, false );
     }
@@ -479,7 +478,7 @@ void FormulaObject::implDump()
 void FormulaObject::dumpFormula( const String& rName, bool bNameMode )
 {
     maName = rName( "formula" );
-    in() >> mnSize;
+    *mxStrm >> mnSize;
     mbNameMode = bNameMode;
     dump();
 }
@@ -565,7 +564,7 @@ OUString FormulaObject::createPlaceHolder() const
 
 OUString FormulaObject::writeFuncIdItem( sal_uInt16 nFuncId, const FunctionInfo** oppFuncInfo )
 {
-    ItemGuard aItemGuard( out(), "func-id" );
+    ItemGuard aItem( mxOut, "func-id" );
     writeHexItem( EMPTY_STRING, nFuncId, "FUNCID" );
     OUStringBuffer aBuffer;
     const FunctionInfo* pFuncInfo = mxFuncProv->getFuncInfoFromOobFuncId( nFuncId );
@@ -578,10 +577,10 @@ OUString FormulaObject::writeFuncIdItem( sal_uInt16 nFuncId, const FunctionInfo*
         StringHelper::appendIndex( aBuffer, nFuncId & BIFF_TOK_FUNCVAR_FUNCIDMASK );
     }
     OUString aFuncName = aBuffer.makeStringAndClear();
-    aItemGuard.cont();
-    out().writeChar( OOX_DUMP_STRQUOTE );
-    out().writeString( aFuncName );
-    out().writeChar( OOX_DUMP_STRQUOTE );
+    aItem.cont();
+    mxOut->writeChar( OOX_DUMP_STRQUOTE );
+    mxOut->writeString( aFuncName );
+    mxOut->writeChar( OOX_DUMP_STRQUOTE );
     if( oppFuncInfo ) *oppFuncInfo = pFuncInfo;
     return aFuncName;
 }
@@ -641,13 +640,13 @@ OUString FormulaObject::dumpTokenRefId()
 void FormulaObject::dumpIntToken()
 {
     dumpDec< sal_uInt16 >( "value" );
-    mxStack->pushOperand( out().getLastItemValue() );
+    mxStack->pushOperand( mxOut->getLastItemValue() );
 }
 
 void FormulaObject::dumpDoubleToken()
 {
     dumpDec< double >( "value" );
-    mxStack->pushOperand( out().getLastItemValue() );
+    mxStack->pushOperand( mxOut->getLastItemValue() );
 }
 
 void FormulaObject::dumpStringToken()
@@ -660,13 +659,13 @@ void FormulaObject::dumpStringToken()
 void FormulaObject::dumpBoolToken()
 {
     dumpBoolean( "value" );
-    mxStack->pushOperand( out().getLastItemValue() );
+    mxStack->pushOperand( mxOut->getLastItemValue() );
 }
 
 void FormulaObject::dumpErrorToken()
 {
     dumpErrorCode( "value" );
-    mxStack->pushOperand( out().getLastItemValue() );
+    mxStack->pushOperand( mxOut->getLastItemValue() );
 }
 
 void FormulaObject::dumpMissArgToken()
@@ -698,14 +697,14 @@ void FormulaObject::dumpRefToken( const OUString& rTokClass, bool bNameMode )
 {
     TokenAddress aPos = dumpTokenAddress( bNameMode );
     writeTokenAddressItem( "addr", aPos, bNameMode );
-    mxStack->pushOperand( createRef( out().getLastItemValue() ), rTokClass );
+    mxStack->pushOperand( createRef( mxOut->getLastItemValue() ), rTokClass );
 }
 
 void FormulaObject::dumpAreaToken( const OUString& rTokClass, bool bNameMode )
 {
     TokenRange aRange = dumpTokenRange( bNameMode );
     writeTokenRangeItem( "range", aRange, bNameMode );
-    mxStack->pushOperand( createRef( out().getLastItemValue() ), rTokClass );
+    mxStack->pushOperand( createRef( mxOut->getLastItemValue() ), rTokClass );
 }
 
 void FormulaObject::dumpRefErrToken( const OUString& rTokClass, bool bArea )
@@ -719,7 +718,7 @@ void FormulaObject::dumpRef3dToken( const OUString& rTokClass, bool bNameMode )
     OUString aRef = dumpTokenRefId();
     TokenAddress aPos = dumpTokenAddress( bNameMode );
     writeTokenAddress3dItem( "addr", aRef, aPos, bNameMode );
-    mxStack->pushOperand( out().getLastItemValue(), rTokClass );
+    mxStack->pushOperand( mxOut->getLastItemValue(), rTokClass );
 }
 
 void FormulaObject::dumpArea3dToken( const OUString& rTokClass, bool bNameMode )
@@ -727,7 +726,7 @@ void FormulaObject::dumpArea3dToken( const OUString& rTokClass, bool bNameMode )
     OUString aRef = dumpTokenRefId();
     TokenRange aRange = dumpTokenRange( bNameMode );
     writeTokenRange3dItem( "range", aRef, aRange, bNameMode );
-    mxStack->pushOperand( out().getLastItemValue(), rTokClass );
+    mxStack->pushOperand( mxOut->getLastItemValue(), rTokClass );
 }
 
 void FormulaObject::dumpRefErr3dToken( const OUString& rTokClass, bool bArea )
@@ -755,7 +754,7 @@ void FormulaObject::dumpExpToken( const String& rName )
     Address aPos;
     dumpRowIndex( "base-row" );
     OUStringBuffer aOp( rName );
-    StringHelper::appendIndex( aOp, createPlaceHolder() + out().getLastItemValue() );
+    StringHelper::appendIndex( aOp, createPlaceHolder() + mxOut->getLastItemValue() );
     mxStack->pushOperand( aOp.makeStringAndClear() );
     maAddData.push_back( ADDDATA_EXP );
 }
@@ -773,7 +772,7 @@ void FormulaObject::dumpBinaryOpToken( const String& rOp )
 void FormulaObject::dumpFuncToken( const OUString& rTokClass )
 {
     sal_uInt16 nFuncId;
-    in() >> nFuncId;
+    *mxStrm >> nFuncId;
     const FunctionInfo* pFuncInfo = 0;
     OUString aFuncName = writeFuncIdItem( nFuncId, &pFuncInfo );
     if( pFuncInfo && (pFuncInfo->mnMinParamCount == pFuncInfo->mnMaxParamCount) )
@@ -786,7 +785,7 @@ void FormulaObject::dumpFuncVarToken( const OUString& rTokClass )
 {
     sal_uInt8 nParamCount;
     sal_uInt16 nFuncId;
-    in() >> nParamCount >> nFuncId;
+    *mxStrm >> nParamCount >> nFuncId;
     bool bCmd = getFlag( nFuncId, BIFF_TOK_FUNCVAR_CMD );
     if( bCmd )
         writeHexItem( "param-count", nParamCount, "PARAMCOUNT-CMD" );
@@ -803,24 +802,23 @@ void FormulaObject::dumpFuncVarToken( const OUString& rTokClass )
 
 bool FormulaObject::dumpTableToken()
 {
-    Output& rOut = out();
     dumpUnused( 3 );
     sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "TABLEFLAGS" );
     sal_uInt16 nTabId = dumpDec< sal_uInt16 >( "table-id" );
     dumpUnused( 2 );
     {
         sal_uInt16 nCol1, nCol2;
-        in() >> nCol1 >> nCol2;
-        ItemGuard aItem( rOut, "cols" );
-        rOut.writeDec( nCol1 );
+        *mxStrm >> nCol1 >> nCol2;
+        ItemGuard aItem( mxOut, "cols" );
+        mxOut->writeDec( nCol1 );
         if( nCol1 != nCol2 )
         {
-            rOut.writeChar( OOX_DUMP_RANGESEP );
-            rOut.writeDec( nCol2 );
+            mxOut->writeChar( OOX_DUMP_RANGESEP );
+            mxOut->writeDec( nCol2 );
         }
     }
     OUStringBuffer aColRange;
-    StringHelper::appendIndex( aColRange, rOut.getLastItemValue() );
+    StringHelper::appendIndex( aColRange, mxOut->getLastItemValue() );
     OUStringBuffer aParams;
     size_t nParams = 0;
     if( getFlag( nFlags, OOBIN_TOK_TABLE_ALL ) && ++nParams )
@@ -860,7 +858,7 @@ bool FormulaObject::dumpAttrToken()
         case OOBIN_TOK_ATTR_CHOOSE:
         {
             sal_uInt16 nCount = dumpDec< sal_uInt16 >( "choices" );
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
                 dumpDec< sal_uInt16 >( "#skip" );
             dumpDec< sal_uInt16 >( "skip-err" );
@@ -892,27 +890,25 @@ bool FormulaObject::dumpAttrToken()
 
 void FormulaObject::dumpAddTokenData()
 {
-    Output& rOut = out();
-    rOut.resetItemIndex();
-    BinaryInputStream& rStrm = in();
-    sal_Int32 nAddDataSize = (in().getLength() - in().tell() >= 4) ? dumpDec< sal_Int32 >( "add-data-size" ) : 0;
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( rStrm.tell() + nAddDataSize, rStrm.getLength() );
-    for( AddDataTypeVec::const_iterator aIt = maAddData.begin(), aEnd = maAddData.end(); (aIt != aEnd) && !rStrm.isEof() && (rStrm.tell() < nEndPos); ++aIt )
+    mxOut->resetItemIndex();
+    sal_Int32 nAddDataSize = (mxStrm->getLength() - mxStrm->tell() >= 4) ? dumpDec< sal_Int32 >( "add-data-size" ) : 0;
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( mxStrm->tell() + nAddDataSize, mxStrm->getLength() );
+    for( AddDataTypeVec::const_iterator aIt = maAddData.begin(), aEnd = maAddData.end(); (aIt != aEnd) && !mxStrm->isEof() && (mxStrm->tell() < nEndPos); ++aIt )
     {
         AddDataType eType = *aIt;
 
         {
-            ItemGuard aItem( rOut, "#add-data" );
+            ItemGuard aItem( mxOut, "#add-data" );
             switch( eType )
             {
-                case ADDDATA_EXP:       rOut.writeAscii( "tExp" );      break;
-                case ADDDATA_ARRAY:     rOut.writeAscii( "tArray" );    break;
-                case ADDDATA_MEMAREA:   rOut.writeAscii( "tMemArea" );  break;
+                case ADDDATA_EXP:       mxOut->writeAscii( "tExp" );      break;
+                case ADDDATA_ARRAY:     mxOut->writeAscii( "tArray" );    break;
+                case ADDDATA_MEMAREA:   mxOut->writeAscii( "tMemArea" );  break;
             }
         }
 
         size_t nIdx = aIt - maAddData.begin();
-        IndentGuard aIndGuard( rOut );
+        IndentGuard aIndGuard( mxOut );
         switch( eType )
         {
             case ADDDATA_EXP:       dumpAddDataExp( nIdx );     break;
@@ -926,7 +922,7 @@ void FormulaObject::dumpAddTokenData()
 void FormulaObject::dumpAddDataExp( size_t nIdx )
 {
     dumpColIndex( "base-col" );
-    mxStack->replaceOnTop( createPlaceHolder( nIdx ), out().getLastItemValue() );
+    mxStack->replaceOnTop( createPlaceHolder( nIdx ), mxOut->getLastItemValue() );
 }
 
 void FormulaObject::dumpAddDataArray( size_t nIdx )
@@ -935,7 +931,7 @@ void FormulaObject::dumpAddDataArray( size_t nIdx )
     dumpaddDataArrayHeader( nCols, nRows );
 
     OUStringBuffer aOp;
-    TableGuard aTabGuard( out(), 17 );
+    TableGuard aTabGuard( mxOut, 17 );
     for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
     {
         OUStringBuffer aArrayLine;
@@ -954,28 +950,26 @@ void FormulaObject::dumpAddDataMemArea( size_t /*nIdx*/ )
 
 void FormulaObject::dumpaddDataArrayHeader( sal_Int32& rnCols, sal_Int32& rnRows )
 {
-    Output& rOut = out();
-    MultiItemsGuard aMultiGuard( rOut );
+    MultiItemsGuard aMultiGuard( mxOut );
     rnRows = dumpDec< sal_Int32 >( "height" );
     rnCols = dumpDec< sal_Int32 >( "width" );
-    ItemGuard aItem( rOut, "size" );
-    rOut.writeDec( rnCols );
-    rOut.writeChar( 'x' );
-    rOut.writeDec( rnRows );
+    ItemGuard aItem( mxOut, "size" );
+    mxOut->writeDec( rnCols );
+    mxOut->writeChar( 'x' );
+    mxOut->writeDec( rnRows );
     aItem.cont();
-    rOut.writeDec( rnCols * rnRows );
+    mxOut->writeDec( rnCols * rnRows );
 }
 
 OUString FormulaObject::dumpaddDataArrayValue()
 {
-    Output& rOut = out();
-    MultiItemsGuard aMultiGuard( rOut );
+    MultiItemsGuard aMultiGuard( mxOut );
     OUStringBuffer aValue;
     switch( dumpDec< sal_uInt8 >( "type", "ARRAYVALUE-TYPE" ) )
     {
         case OOBIN_TOK_ARRAY_DOUBLE:
             dumpDec< double >( "value" );
-            aValue.append( rOut.getLastItemValue() );
+            aValue.append( mxOut->getLastItemValue() );
         break;
         case OOBIN_TOK_ARRAY_STRING:
             aValue.append( dumpString( "value", false, false ) );
@@ -983,11 +977,11 @@ OUString FormulaObject::dumpaddDataArrayValue()
         break;
         case OOBIN_TOK_ARRAY_BOOL:
             dumpBoolean( "value" );
-            aValue.append( rOut.getLastItemValue() );
+            aValue.append( mxOut->getLastItemValue() );
         break;
         case OOBIN_TOK_ARRAY_ERROR:
             dumpErrorCode( "value" );
-            aValue.append( rOut.getLastItemValue() );
+            aValue.append( mxOut->getLastItemValue() );
             dumpUnused( 3 );
         break;
     }
@@ -1150,11 +1144,11 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "formula2-size" );
             dumpDec< sal_Int32 >( "formula3-size" );
             dumpString( "text" );
-            if( in().getLength() - in().tell() >= 8 )
+            if( mxStrm->getRemaining() >= 8 )
                 mxFmlaObj->dumpNameFormula( "formula1" );
-            if( in().getLength() - in().tell() >= 8 )
+            if( mxStrm->getRemaining() >= 8 )
                 mxFmlaObj->dumpNameFormula( "formula2" );
-            if( in().getLength() - in().tell() >= 8 )
+            if( mxStrm->getRemaining() >= 8 )
                 mxFmlaObj->dumpNameFormula( "formula3" );
         }
         break;
@@ -1272,10 +1266,10 @@ void RecordStreamObject::implDumpRecordBody()
             dumpString( "name" );
             mxFmlaObj->dumpNameFormula();
             dumpString( "comment" );
-            if( in().getLength() - in().tell() >= 4 ) dumpString( "menu-text" );
-            if( in().getLength() - in().tell() >= 4 ) dumpString( "description-text" );
-            if( in().getLength() - in().tell() >= 4 ) dumpString( "help-text" );
-            if( in().getLength() - in().tell() >= 4 ) dumpString( "statusbar-text" );
+            if( mxStrm->getRemaining() >= 4 ) dumpString( "menu-text" );
+            if( mxStrm->getRemaining() >= 4 ) dumpString( "description-text" );
+            if( mxStrm->getRemaining() >= 4 ) dumpString( "help-text" );
+            if( mxStrm->getRemaining() >= 4 ) dumpString( "statusbar-text" );
         break;
 
         case OOBIN_ID_DIMENSION:
@@ -1288,16 +1282,16 @@ void RecordStreamObject::implDumpRecordBody()
 
         case OOBIN_ID_DXF:
             dumpHex< sal_uInt32 >( "flags", "DXF-FLAGS" );
-            for( sal_uInt16 nIndex = 0, nCount = dumpDec< sal_uInt16 >( "subrec-count" ); !in().isEof() && (nIndex < nCount); ++nIndex )
+            for( sal_uInt16 nIndex = 0, nCount = dumpDec< sal_uInt16 >( "subrec-count" ); !mxStrm->isEof() && (nIndex < nCount); ++nIndex )
             {
-                out().startMultiItems();
-                sal_Int64 nStartPos = in().tell();
+                mxOut->startMultiItems();
+                sal_Int64 nStartPos = mxStrm->tell();
                 writeEmptyItem( "SUBREC" );
                 sal_uInt16 nSubRecId = dumpDec< sal_uInt16 >( "id", "DXF-SUBREC" );
                 sal_uInt16 nSubRecSize = dumpDec< sal_uInt16 >( "size" );
                 sal_Int64 nEndPos = nStartPos + nSubRecSize;
-                out().endMultiItems();
-                IndentGuard aIndGuard( out() );
+                mxOut->endMultiItems();
+                IndentGuard aIndGuard( mxOut );
                 switch( nSubRecId )
                 {
                     case 0:
@@ -1438,11 +1432,11 @@ void RecordStreamObject::implDumpRecordBody()
         case OOBIN_ID_EXTERNALSHEETS:
         {
             sal_Int32 nCount = dumpDec< sal_Int32 >( "ref-count" );
-            TableGuard aTabGuard( out(), 13, 17, 24 );
-            out().resetItemIndex();
-            for( sal_Int32 nRefId = 0; !in().isEof() && (nRefId < nCount); ++nRefId )
+            TableGuard aTabGuard( mxOut, 13, 17, 24 );
+            mxOut->resetItemIndex();
+            for( sal_Int32 nRefId = 0; !mxStrm->isEof() && (nRefId < nCount); ++nRefId )
             {
-                MultiItemsGuard aMultiGuard( out() );
+                MultiItemsGuard aMultiGuard( mxOut );
                 writeEmptyItem( "#ref" );
                 dumpDec< sal_Int32 >( "extref-id" );
                 dumpDec< sal_Int32 >( "first-sheet", "EXTERNALSHEETS-ID" );
@@ -1461,8 +1455,8 @@ void RecordStreamObject::implDumpRecordBody()
         break;
 
         case OOBIN_ID_EXTSHEETNAMES:
-            out().resetItemIndex();
-            for( sal_Int32 nSheet = 0, nCount = dumpDec< sal_Int32 >( "sheet-count" ); !in().isEof() && (nSheet < nCount); ++nSheet )
+            mxOut->resetItemIndex();
+            for( sal_Int32 nSheet = 0, nCount = dumpDec< sal_Int32 >( "sheet-count" ); !mxStrm->isEof() && (nSheet < nCount); ++nSheet )
                 dumpString( "#sheet-name" );
         break;
 
@@ -1477,11 +1471,11 @@ void RecordStreamObject::implDumpRecordBody()
             dumpColor( "fg-color" );
             dumpColor( "bg-color" );
             dumpGradientHead();
-            out().resetItemIndex();
-            for( sal_Int32 nStop = 0, nStopCount = dumpDec< sal_Int32 >( "stop-count" ); (nStop < nStopCount) && !in().isEof(); ++nStop )
+            mxOut->resetItemIndex();
+            for( sal_Int32 nStop = 0, nStopCount = dumpDec< sal_Int32 >( "stop-count" ); (nStop < nStopCount) && !mxStrm->isEof(); ++nStop )
             {
                 writeEmptyItem( "#stop" );
-                IndentGuard aIndGuard( out() );
+                IndentGuard aIndGuard( mxOut );
                 dumpColor( "stop-color" );
                 dumpDec< double >( "stop-position" );
             }
@@ -1632,6 +1626,10 @@ void RecordStreamObject::implDumpRecordBody()
         }
         break;
 
+        case OOBIN_ID_OLESIZE:
+            dumpRange( "visible-range" );
+        break;
+
         case OOBIN_ID_PAGEMARGINS:
             dumpDec< double >( "left-margin" );
             dumpDec< double >( "right-margin" );
@@ -1739,7 +1737,7 @@ void RecordStreamObject::implDumpRecordBody()
         {
             sal_uInt16 nType = dumpDec< sal_uInt16 >( "type", "PCITEM_ARRAY-TYPE" );
             sal_Int32 nCount = dumpDec< sal_Int32 >( "count" );
-            out().resetItemIndex();
+            mxOut->resetItemIndex();
             for( sal_Int32 nIdx = 0; nIdx < nCount; ++nIdx )
             {
                 switch( nType )
@@ -1839,8 +1837,8 @@ void RecordStreamObject::implDumpRecordBody()
 
         case OOBIN_ID_PTCOLFIELDS:
             dumpDec< sal_Int32 >( "count" );
-            out().resetItemIndex();
-            while( in().getRemaining() >= 4 )
+            mxOut->resetItemIndex();
+            while( mxStrm->getRemaining() >= 4 )
                 dumpDec< sal_Int32 >( "#field", "PT-FIELDINDEX" );
         break;
 
@@ -1948,8 +1946,8 @@ void RecordStreamObject::implDumpRecordBody()
 
         case OOBIN_ID_PTROWFIELDS:
             dumpDec< sal_Int32 >( "count" );
-            out().resetItemIndex();
-            while( in().getRemaining() >= 4 )
+            mxOut->resetItemIndex();
+            while( mxStrm->getRemaining() >= 4 )
                 dumpDec< sal_Int32 >( "#field", "PT-FIELDINDEX" );
         break;
 
@@ -1959,8 +1957,8 @@ void RecordStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt16 >( "height", "CONV-TWIP-TO-PT" );
             dumpHex< sal_uInt16 >( "flags", "ROW-FLAGS1" );
             dumpHex< sal_uInt8 >( "flags", "ROW-FLAGS2" );
-            out().resetItemIndex();
-            for( sal_Int32 nSpan = 0, nSpanCount = dumpDec< sal_Int32 >( "row-spans-count" ); !in().isEof() && (nSpan < nSpanCount); ++nSpan )
+            mxOut->resetItemIndex();
+            for( sal_Int32 nSpan = 0, nSpanCount = dumpDec< sal_Int32 >( "row-spans-count" ); !mxStrm->isEof() && (nSpan < nSpanCount); ++nSpan )
                 dumpRowRange( "#row-spans" );
         break;
 
@@ -2205,12 +2203,12 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
     {
         if( rStrgPath.equalsAscii( "xl" ) && rStrmName.equalsAscii( "vbaProject.bin" ) )
         {
-            StorageRef xStrg( new OleStorage( getFactory(), xInStrm, false ) );
+            StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, false ) );
             VbaProjectStorageObject( *this, xStrg, rSysFileName ).dump();
         }
         else if( rStrgPath.equalsAscii( "xl/embeddings" ) )
         {
-            StorageRef xStrg( new OleStorage( getFactory(), xInStrm, false ) );
+            StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, false ) );
             OleStorageObject( *this, xStrg, rSysFileName ).dump();
         }
         else if(
@@ -2228,7 +2226,8 @@ void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, cons
         }
         else if( rStrgPath.equalsAscii( "xl/activeX" ) )
         {
-            OcxGuidControlObject( *this, rxStrm, rSysFileName ).dump();
+            StorageRef xStrg( new ::oox::ole::OleStorage( getFactory(), xInStrm, true ) );
+            ActiveXStorageObject( *this, xStrg, rSysFileName ).dump();
         }
         else
         {

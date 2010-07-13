@@ -33,9 +33,6 @@ LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 CLASSDIR!:=$(CLASSDIR)$/$(TARGET)
-.IF "$(XML_CLASSPATH)" != ""
-XCLASSPATH+=":$(XML_CLASSPATH)"
-.ENDIF
 .INCLUDE: settings.mk
 
 SLOFILES=$(SLO)$/XSLTFilter.obj $(SLO)$/fla.obj
@@ -44,7 +41,7 @@ SHL1TARGETDEPN=makefile.mk
 SHL1OBJS=$(SLOFILES)
 SHL1TARGET=$(LIBNAME)$(DLLPOSTFIX)
 SHL1IMPLIB=i$(LIBNAME)
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
@@ -67,6 +64,12 @@ CUSTOMMANIFESTFILE = Manifest
 JARCOMPRESS		= TRUE
 JARCLASSDIRS	= XSLTransformer*.class XSLTFilterOLEExtracter*.class
 JARTARGET		= $(TARGET).jar
+
+.IF "$(SYSTEM_SAXON)" == "YES"
+XCLASSPATH:=$(XCLASSPATH)$(PATH_SEPERATOR)$(SAXON_JAR)
+.ELSE
+JARFILES += saxon9.jar
+.ENDIF
 
 # --- Files --------------------------------------------------------
 JAVACLASSFILES=$(CLASSDIR)$/XSLTransformer.class  $(CLASSDIR)$/XSLTFilterOLEExtracter.class

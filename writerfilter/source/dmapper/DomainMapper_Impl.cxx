@@ -74,11 +74,13 @@
 #ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/QNameToString.hxx>
 #include <resourcemodel/util.hxx>
+#include <dmapperLoggers.hxx>
 #endif
 #include <ooxml/OOXMLFastTokens.hxx>
 
 #if DEBUG
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/TabStop.hpp>
 #endif
 
 #include <map>
@@ -400,7 +402,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsPageBreakDeferred( false ),
         m_bIsInShape( false ),
         m_bShapeContextAdded( false ),
-        m_TableManager( eDocumentType == DOCUMENT_OOXML ),
+        m_pLastSectionContext( ),
         m_nCurrentTabStopIndex( 0 ),
         m_sCurrentParaStyleId(),
         m_bInStyleSheetImport( false ),
@@ -408,8 +410,11 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bLineNumberingSet( false ),
         m_bIsInFootnoteProperties( true ),
         m_bIsCustomFtnMark( false ),
-        m_bIsParaChange( false )
+        m_bIsParaChange( false ),
+        m_bParaChanged( false ),
+        m_bIsLastParaInSection( false )
 {
+    appendTableManager( );
     GetBodyText();
     uno::Reference< text::XTextAppend > xBodyTextAppend = uno::Reference< text::XTextAppend >( m_xBodyText, uno::UNO_QUERY );
     m_aTextAppendStack.push(xBodyTextAppend);
@@ -418,16 +423,18 @@ DomainMapper_Impl::DomainMapper_Impl(
     uno::Reference< text::XTextAppendAndConvert > xBodyTextAppendAndConvert( m_xBodyText, uno::UNO_QUERY );
     TableDataHandler_t::Pointer_t pTableHandler
         (new DomainMapperTableHandler(xBodyTextAppendAndConvert, *this));
-    m_TableManager.setHandler(pTableHandler);
+    getTableManager( ).setHandler(pTableHandler);
 
-    m_TableManager.startLevel();
+    getTableManager( ).startLevel();
 }
 /*-- 01.09.2006 10:22:28---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 DomainMapper_Impl::~DomainMapper_Impl()
 {
-    m_TableManager.endLevel();
+    RemoveLastParagraph( );
+    getTableManager( ).endLevel();
+    popTableManager( );
 }
 /*-------------------------------------------------------------------------
 
@@ -481,6 +488,28 @@ void DomainMapper_Impl::SetDocumentSettingsProperty( const ::rtl::OUString& rPro
         }
     }
 }
+
+void DomainMapper_Impl::RemoveLastParagraph( )
+{
+    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    try
+    {
+        uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
+        xCursor->gotoEnd(false);
+        xCursor->goLeft( 1, true );
+        xCursor->setString(::rtl::OUString());
+    }
+    catch( const uno::Exception& rEx)
+    {
+        (void)rEx;
+    }
+}
+
+void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
+{
+    m_bIsLastParaInSection = bIsLast;
+}
+
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -531,6 +560,12 @@ void DomainMapper_Impl::PushListProperties(PropertyMapPtr pListProperties)
 void    DomainMapper_Impl::PopProperties(ContextType eId)
 {
     OSL_ENSURE(!m_aPropertyStacks[eId].empty(), "section stack already empty");
+
+    if ( eId == CONTEXT_SECTION )
+    {
+        m_pLastSectionContext = m_aPropertyStacks[eId].top( );
+    }
+
     m_aPropertyStacks[eId].pop();
     m_aContextStack.pop();
     if(!m_aContextStack.empty() && !m_aPropertyStacks[m_aContextStack.top()].empty())
@@ -665,7 +700,7 @@ void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
   -----------------------------------------------------------------------*/
 uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
 {
-    uno::Sequence< style::TabStop > aRet( m_aCurrentTabStops.size() );
+    uno::Sequence< style::TabStop > aRet( sal_Int32( m_aCurrentTabStops.size() ) );
     style::TabStop* pArray = aRet.getArray();
     ::std::vector<DeletableTabStop>::const_iterator aIt = m_aCurrentTabStops.begin();
     ::std::vector<DeletableTabStop>::const_iterator aEndIt = m_aCurrentTabStops.end();
@@ -718,11 +753,11 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
-ListTablePtr DomainMapper_Impl::GetListTable()
+ListsManager::Pointer DomainMapper_Impl::GetListTable()
 {
     if(!m_pListTable)
         m_pListTable.reset(
-            new ListTable( m_rDMapper, m_xTextFactory ));
+            new ListsManager( m_rDMapper, m_xTextFactory ));
     return m_pListTable;
 }
 
@@ -843,15 +878,21 @@ void lcl_AddRangeAndStyle(
 
 void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 {
-#if DEBUG
-    clog << "finishParagraph" << endl;
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("finishParagraph");
 #endif
 
     ParagraphPropertyMap* pParaContext = dynamic_cast< ParagraphPropertyMap* >( pPropertyMap.get() );
     TextAppendContext& rAppendContext = m_aTextAppendStack.top();
     uno::Reference< text::XTextAppend >  xTextAppend = rAppendContext.xTextAppend;
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
-    if(xTextAppend.is() && ! m_TableManager.isIgnore())
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->attribute("isTextAppend", xTextAppend.is());
+    dmapper_logger->attribute("isIgnor", m_TableManager.isIgnore());
+#endif
+
+    if(xTextAppend.is() && ! getTableManager( ).isIgnore())
     {
         try
         {
@@ -1055,7 +1096,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 }
                 uno::Reference< text::XTextRange > xTextRange =
                     xTextAppend->finishParagraph( aProperties );
-                m_TableManager.handle(xTextRange);
+                getTableManager( ).handle(xTextRange);
 
                 // Set the anchor of the objects to the created paragraph
                 while ( m_aAnchoredStack.size( ) > 0 && !m_bIsInShape )
@@ -1081,6 +1122,15 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 xCur->goLeft( 1 , true );
                 uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
                 CheckParaRedline( xParaEnd );
+
+                // Remove the last empty section paragraph if needed
+                if ( m_bIsLastParaInSection && !m_bParaChanged )
+                {
+                    RemoveLastParagraph( );
+                    m_bIsLastParaInSection = false;
+                }
+
+                m_bParaChanged = false;
             }
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
@@ -1096,6 +1146,10 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
             //OSL_ENSURE( false, "ArgumentException in DomainMapper_Impl::finishParagraph" );
         }
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("finishParagraph");
+#endif
 }
 /*-------------------------------------------------------------------------
 
@@ -1123,7 +1177,7 @@ util::DateTime lcl_DateStringToDateTime( const ::rtl::OUString& rDateTime )
 void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap )
 {
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    if(xTextAppend.is() && ! m_TableManager.isIgnore())
+    if(xTextAppend.is() && ! getTableManager( ).isIgnore())
     {
         try
         {
@@ -1131,8 +1185,9 @@ void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, Prope
                 xTextAppend->appendTextPortion
                 (rString, pPropertyMap->GetPropertyValues());
             CheckRedline( xTextRange );
+            m_bParaChanged = true;
 
-            //m_TableManager.handle(xTextRange);
+            //getTableManager( ).handle(xTextRange);
         }
         catch(const lang::IllegalArgumentException& rEx)
         {
@@ -1156,7 +1211,7 @@ void DomainMapper_Impl::appendTextContent(
 {
     uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert( m_aTextAppendStack.top().xTextAppend, uno::UNO_QUERY );
     OSL_ENSURE( xTextAppendAndConvert.is(), "trying to append a text content without XTextAppendAndConvert" );
-    if(xTextAppendAndConvert.is() && ! m_TableManager.isIgnore())
+    if(xTextAppendAndConvert.is() && ! getTableManager( ).isIgnore())
     {
         try
         {
@@ -1323,18 +1378,7 @@ void DomainMapper_Impl::PopPageHeaderFooter()
 {
     //header and footer always have an empty paragraph at the end
     //this has to be removed
-    uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    try
-    {
-        uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
-        xCursor->gotoEnd(false);
-        xCursor->goLeft( 1, true );
-        xCursor->setString(::rtl::OUString());
-    }
-    catch( const uno::Exception& rEx)
-    {
-        (void)rEx;
-    }
+    RemoveLastParagraph( );
     m_aTextAppendStack.pop();
 }
 /*-- 24.05.2007 14:22:28---------------------------------------------------
@@ -1359,7 +1403,7 @@ void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
         uno::Sequence< beans::PropertyValue > aFontProperties;
         if( pFontTable && pTopContext->GetFootnoteFontId() >= 0 && pFontTable->size() > (size_t)pTopContext->GetFootnoteFontId() )
         {
-            const FontEntry* pFontEntry = pFontTable->getFontEntry(sal_uInt32(pTopContext->GetFootnoteFontId()));
+            const FontEntry::Pointer_t pFontEntry(pFontTable->getFontEntry(sal_uInt32(pTopContext->GetFootnoteFontId())));
             PropertyMapPtr aFontProps( new PropertyMap );
             aFontProps->Insert(PROP_CHAR_FONT_NAME, true, uno::makeAny( pFontEntry->sFontName  ));
             aFontProps->Insert(PROP_CHAR_FONT_CHAR_SET, true, uno::makeAny( (sal_Int16)pFontEntry->nTextEncoding  ));
@@ -1388,9 +1432,6 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
 {
     if ( pRedline.get( ) )
     {
-#if DEBUG
-        clog << "REDLINE: Writing redline: " << pRedline->m_nId << endl;
-#endif
         try
         {
             ::rtl::OUString sType;
@@ -1419,9 +1460,6 @@ void DomainMapper_Impl::CreateRedline( uno::Reference< text::XTextRange > xRange
         }
         catch( const uno::Exception & rEx )
         {
-#if DEBUG
-            clog << "REDLINE: error - " << rtl::OUStringToOString( rEx.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
-#endif
             ( void ) rEx;
             OSL_ENSURE( false, "Exception in makeRedline" );
         }
@@ -1506,9 +1544,6 @@ void DomainMapper_Impl::PopAnnotation()
 
 void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape > xShape )
 {
-#if DEBUG
-    clog << "PushShapeContext" << endl;
-#endif
     m_bIsInShape = true;
     try
     {
@@ -1545,10 +1580,6 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PopShapeContext()
 {
-#if DEBUG
-        clog << "PopShapeContext" << endl;
-#endif
-
     if ( m_bShapeContextAdded )
     {
         m_aTextAppendStack.pop();
@@ -3632,16 +3663,10 @@ void DomainMapper_Impl::AddNewRedline(  )
     pNew->m_nToken = ooxml::OOXML_mod;
     if ( !m_bIsParaChange )
     {
-#if DEBUG
-    clog << "REDLINE: Adding a new redline to stack" << endl;
-#endif
         m_aRedlines.push_back( pNew );
     }
     else
     {
-#if DEBUG
-    clog << "REDLINE: Setting a new paragraph redline" << endl;
-#endif
         m_pParaRedline.swap( pNew );
     }
 }
@@ -3700,9 +3725,6 @@ void DomainMapper_Impl::RemoveCurrentRedline( )
 {
     if ( m_aRedlines.size( ) > 0 )
     {
-#if DEBUG
-        clog << "REDLINE: Removing back redline" << endl;
-#endif
         m_aRedlines.pop_back( );
     }
 }
@@ -3711,12 +3733,28 @@ void DomainMapper_Impl::ResetParaRedline( )
 {
     if ( m_pParaRedline.get( ) )
     {
-#if DEBUG
-        clog << "REDLINE: Cleaning the para redline" << endl;
-#endif
         RedlineParamsPtr pEmpty;
         m_pParaRedline.swap( pEmpty );
     }
 }
 
+/*-- 22.09.2009 10:26:19---------------------------------------------------
+
+-----------------------------------------------------------------------*/
+void DomainMapper_Impl::ApplySettingsTable()
+{
+    if( m_pSettingsTable )
+    {
+        try
+        {
+            uno::Reference< beans::XPropertySet > xTextDefaults(
+                                                                m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Defaults"))), uno::UNO_QUERY_THROW );
+            sal_Int32 nDefTab = m_pSettingsTable->GetDefaultTabStop();
+            xTextDefaults->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_TAB_STOP_DISTANCE ), uno::makeAny(nDefTab) );
+        }
+        catch(const uno::Exception& )
+        {
+        }
+    }
+}
 }}

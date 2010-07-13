@@ -78,6 +78,8 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
 import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
 
+import net.sf.saxon.FeatureKeys;
+
 /** This outer class provides an inner class to implement the service
  * description, a method to instantiate the
  * component on demand (__getServiceFactory()), and a method to give
@@ -291,6 +293,9 @@ public class XSLTransformer
                             // create new transformer for this stylesheet
                             TransformerFactory tfactory = TransformerFactory.newInstance();
                             debug("TransformerFactory is '" + tfactory.getClass().getName() + "'");
+                // some external saxons (Debian, Ubuntu, ...) have this disabled
+                // per default
+                tfactory.setAttribute(FeatureKeys.ALLOW_EXTERNAL_FUNCTIONS, new Boolean(true));
                             transformer = tfactory.newTransformer(new StreamSource(stylesheeturl));
                             transformer.setOutputProperty("encoding", "UTF-8");
                             // transformer.setURIResolver(XSLTransformer.this);

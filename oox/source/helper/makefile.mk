@@ -48,12 +48,12 @@ SLOFILES =	\
         $(SLO)$/containerhelper.obj			\
         $(SLO)$/graphichelper.obj			\
         $(SLO)$/modelobjecthelper.obj		\
-        $(SLO)$/olestorage.obj				\
         $(SLO)$/progressbar.obj				\
         $(SLO)$/propertymap.obj				\
         $(SLO)$/propertyset.obj				\
         $(SLO)$/recordinputstream.obj		\
         $(SLO)$/storagebase.obj				\
+        $(SLO)$/textinputstream.obj		    \
         $(SLO)$/zipstorage.obj
 
 # --- Targets -------------------------------------------------------

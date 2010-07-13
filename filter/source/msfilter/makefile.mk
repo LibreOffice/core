@@ -51,7 +51,8 @@ SLOFILES= \
     $(SLO)$/mscodec.obj		\
     $(SLO)$/msfiltertracer.obj \
     $(SLO)$/svdfppt.obj		\
-    $(SLO)$/svxmsbas2.obj
+    $(SLO)$/svxmsbas2.obj \
+    $(SLO)$/msvbahelper.obj \
 
 SHL1TARGET= msfilter$(DLLPOSTFIX)
 SHL1IMPLIB=	i$(TARGET)
@@ -59,7 +60,6 @@ SHL1OBJS=	$(SLOFILES)
 SHL1USE_EXPORTS=name
 SHL1STDLIBS= \
              $(EDITENGLIB) \
-             $(VBAHELPERLIB) \
              $(SVXCORELIB) \
              $(SFX2LIB) \
              $(XMLOFFLIB) \

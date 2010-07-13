@@ -35,6 +35,7 @@
 #include <com/sun/star/table/CellVertJustify.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include "oox/helper/containerhelper.hxx"
+#include "oox/helper/graphichelper.hxx"
 #include "oox/drawingml/color.hxx"
 #include "oox/xls/numberformatsbuffer.hxx"
 
@@ -75,6 +76,22 @@ const sal_Int16 API_ESCAPE_SUBSCRIPT        = -101;     /// Subscript: lower cha
 
 const sal_Int8 API_ESCAPEHEIGHT_NONE        = 100;      /// Relative character height if not escaped.
 const sal_Int8 API_ESCAPEHEIGHT_DEFAULT     = 58;       /// Relative character height if escaped.
+
+// ============================================================================
+
+/** Special implementation of the GraphicHelper for Excel palette and scheme
+    colors.
+ */
+class ExcelGraphicHelper : public GraphicHelper, public WorkbookHelper
+{
+public:
+    explicit            ExcelGraphicHelper( const WorkbookHelper& rHelper );
+
+    /** Derived classes may implement to resolve a scheme color from the passed XML token identifier. */
+    virtual sal_Int32   getSchemeColor( sal_Int32 nToken ) const;
+    /** Derived classes may implement to resolve a palette index to an RGB color. */
+    virtual sal_Int32   getPaletteColor( sal_Int32 nPaletteIdx ) const;
+};
 
 // ============================================================================
 
@@ -205,7 +222,7 @@ struct ApiScriptFontName
 {
     ::rtl::OUString     maName;             /// Font name.
     sal_Int16           mnFamily;           /// Font family.
-    sal_Int16           mnCharSet;          /// Font character set.
+    sal_Int16           mnTextEnc;          /// Font text encoding.
 
     explicit            ApiScriptFontName();
 };
@@ -509,7 +526,12 @@ struct ApiBorderData
     bool                mbDiagUsed;         /// True = diagonal line format used.
 
     explicit            ApiBorderData();
+
+    /** Returns true, if any of the outer border lines is visible. */
+    bool                hasAnyOuterBorder() const;
 };
+
+bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight );
 
 // ============================================================================
 
@@ -543,6 +565,11 @@ public:
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();
+
+    /** Returns the border model structure. */
+    inline const BorderModel& getModel() const { return maModel; }
+    /** Returns the converted API border data struct. */
+    inline const ApiBorderData& getApiData() const { return maApiData; }
 
     /** Writes all border attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
@@ -619,6 +646,8 @@ struct ApiSolidFillData
     explicit            ApiSolidFillData();
 };
 
+bool operator==( const ApiSolidFillData& rLeft, const ApiSolidFillData& rRight );
+
 // ============================================================================
 
 /** Contains cell fill attributes, either a pattern fill or a gradient fill. */
@@ -664,6 +693,13 @@ public:
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();
+
+    /** Returns the fill pattern model structure, if extant. */
+    inline const PatternFillModel* getPatternModel() const { return mxPatternModel.get(); }
+    /** Returns the fill gradient model structure, if extant. */
+    inline const GradientFillModel* getGradientModel() const { return mxGradientModel.get(); }
+    /** Returns the converted API fill data struct. */
+    inline const ApiSolidFillData& getApiData() const { return maApiData; }
 
     /** Writes all fill attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
@@ -734,6 +770,9 @@ public:
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
+    /** Returns true, if the XF is a cell XF, and false, if it is a style XF. */
+    inline bool         isCellXf() const { return maModel.mbCellXf; }
+
     /** Returns the referred font object. */
     FontRef             getFont() const;
     /** Returns the alignment data of this style. */
@@ -751,13 +790,13 @@ public:
 private:
     /** Sets 'attribute used' flags from the passed BIFF bit field. */
     void                setBiffUsedFlags( sal_uInt8 nUsedFlags );
-    /** Updates own used flags from the passed cell style XF. */
-    void                updateUsedFlags( const Xf& rStyleXf );
 
 private:
     XfModel             maModel;            /// Cell XF or style XF model data.
     Alignment           maAlignment;        /// Cell alignment data.
     Protection          maProtection;       /// Cell protection data.
+    ::com::sun::star::table::CellVertJustify
+                        meRotationRef;      /// Rotation reference dependent on border.
 };
 
 typedef ::boost::shared_ptr< Xf > XfRef;
@@ -964,6 +1003,8 @@ public:
     sal_Int32           getPaletteColor( sal_Int32 nIndex ) const;
     /** Returns the specified font object. */
     FontRef             getFont( sal_Int32 nFontId ) const;
+    /** Returns the specified border object. */
+    BorderRef           getBorder( sal_Int32 nBorderId ) const;
     /** Returns the specified cell format object. */
     XfRef               getCellXf( sal_Int32 nXfId ) const;
     /** Returns the specified style format object. */
@@ -977,6 +1018,11 @@ public:
     FontRef             getDefaultFont() const;
     /** Returns the model of the default application font (used in the "Normal" cell style). */
     const FontModel&    getDefaultFontModel() const;
+
+    /** Returns true, if the specified borders are equal. */
+    bool                equalBorders( sal_Int32 nBorderId1, sal_Int32 nBorderId2 ) const;
+    /** Returns true, if the specified fills are equal. */
+    bool                equalFills( sal_Int32 nFillId1, sal_Int32 nFillId2 ) const;
 
     /** Returns the default style sheet for unused cells. */
     ::rtl::OUString     getDefaultStyleName() const;

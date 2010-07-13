@@ -729,6 +729,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
         if( rObj.GetAngle() )
             ImplFlipBoundingBox( rObj, aPropOpt );
 
+        aPropOpt.CreateShapeProperties( rObj.GetShapeRef() );
         mpEscherEx->Commit( aPropOpt, rObj.GetRect() );
         if( mpEscherEx->GetGroupLevel() > 1 )
             mpEscherEx->AddChildAnchor( rObj.GetRect() );
@@ -826,6 +827,7 @@ void ImplEESdrWriter::ImplWriteAdditionalText( ImplEESdrObject& rObj,
                                             rObj.GetRect() );
         }
         rObj.SetAngle( nAngle );
+        aPropOpt.CreateShapeProperties( rObj.GetShapeRef() );
         mpEscherEx->Commit( aPropOpt, rObj.GetRect() );
 
         // write the childanchor

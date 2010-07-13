@@ -27,7 +27,7 @@
 
 #include "impdialog.hrc"
 
-#define TAB_PDF_SIZE Size = MAP_APPFONT ( 176, 255 )
+#define TAB_PDF_SIZE Size = MAP_APPFONT ( 176, 268 )
 //string for TabDialog standard buttons
 String STR_PDF_EXPORT
 {
@@ -229,9 +229,16 @@ TabPage  RID_PDF_TAB_GENER
         WordBreak = TRUE ;
         Text[ en-US ] = "Exp~ort automatically inserted blank pages";
     };
-    CheckBox CB_ADDSTREAM
+    CheckBox CB_EMBEDSTANDARDFONTS
     {
         Pos = MAP_APPFONT ( 12 , 248 ) ;
+        Size = MAP_APPFONT ( 158 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "E~mbed standard fonts";
+    };
+    CheckBox CB_ADDSTREAM
+    {
+        Pos = MAP_APPFONT ( 12 , 261 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Create ~hybrid file";

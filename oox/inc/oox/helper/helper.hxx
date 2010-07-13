@@ -69,7 +69,29 @@ namespace oox {
 #define OUSTRING_TO_CSTR( str ) \
     ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US ).getStr()
 
-// ============================================================================
+// Common constants ===========================================================
+
+const sal_uInt8 WINDOWS_CHARSET_ANSI        = 0;
+const sal_uInt8 WINDOWS_CHARSET_DEFAULT     = 1;
+const sal_uInt8 WINDOWS_CHARSET_SYMBOL      = 2;
+const sal_uInt8 WINDOWS_CHARSET_APPLE_ROMAN = 77;
+const sal_uInt8 WINDOWS_CHARSET_SHIFTJIS    = 128;
+const sal_uInt8 WINDOWS_CHARSET_HANGEUL     = 129;
+const sal_uInt8 WINDOWS_CHARSET_JOHAB       = 130;
+const sal_uInt8 WINDOWS_CHARSET_GB2312      = 134;
+const sal_uInt8 WINDOWS_CHARSET_BIG5        = 136;
+const sal_uInt8 WINDOWS_CHARSET_GREEK       = 161;
+const sal_uInt8 WINDOWS_CHARSET_TURKISH     = 162;
+const sal_uInt8 WINDOWS_CHARSET_VIETNAMESE  = 163;
+const sal_uInt8 WINDOWS_CHARSET_HEBREW      = 177;
+const sal_uInt8 WINDOWS_CHARSET_ARABIC      = 178;
+const sal_uInt8 WINDOWS_CHARSET_BALTIC      = 186;
+const sal_uInt8 WINDOWS_CHARSET_RUSSIAN     = 204;
+const sal_uInt8 WINDOWS_CHARSET_THAI        = 222;
+const sal_uInt8 WINDOWS_CHARSET_EASTERN     = 238;
+const sal_uInt8 WINDOWS_CHARSET_OEM         = 255;
+
+// ----------------------------------------------------------------------------
 
 const sal_Int32 API_RGB_TRANSPARENT         = -1;       /// Transparent color for API calls.
 const sal_Int32 API_RGB_BLACK               = 0x00000;  /// Black color for API calls.

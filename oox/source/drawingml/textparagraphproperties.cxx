@@ -322,7 +322,7 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase& rFilterBase, P
     if ( maStyleName.hasValue() )
         rPropMap[ PROP_CharStyleName ] <<= maStyleName;
     if ( maBulletColorPtr->isUsed() )
-        rPropMap[ PROP_BulletColor ] <<= maBulletColorPtr->getColor( rFilterBase );
+        rPropMap[ PROP_BulletColor ] <<= maBulletColorPtr->getColor( rFilterBase.getGraphicHelper() );
 }
 
 TextParagraphProperties::TextParagraphProperties()

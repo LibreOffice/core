@@ -30,8 +30,11 @@
 
 #include "oox/helper/helper.hxx"
 
-namespace oox { class PropertyMap; }
-namespace oox { namespace core { class FilterBase; } }
+namespace oox {
+    class GraphicHelper;
+    class ModelObjectHelper;
+    class PropertyMap;
+}
 
 namespace oox {
 namespace vml {
@@ -71,7 +74,7 @@ public:
 
     /** Converts the passed VML measure string to EMU (English Metric Units).
 
-        @param rFilter  The core filter object needed to perform pixel
+        @param rGraphicHelper  The graphic helper needed to perform pixel
             conversion according to the current output device.
 
         @param rValue  The VML measure value. This is a floating-point value
@@ -88,7 +91,7 @@ public:
             pixel. Set to false if omitted measure unit means EMU.
      */
     static sal_Int32    decodeMeasureToEmu(
-                            const ::oox::core::FilterBase& rFilter,
+                            const GraphicHelper& rGraphicHelper,
                             const ::rtl::OUString& rValue,
                             sal_Int32 nRefValue,
                             bool bPixelX,
@@ -96,14 +99,14 @@ public:
 
     /** Converts the passed VML measure string to 1/100 mm.
 
-        @param rFilter  See above.
+        @param rGraphicHelper  See above.
         @param rValue  See above.
         @param nRefValue  See above.
         @param bPixelX  See above.
         @param bDefaultAsPixel  See above.
      */
     static sal_Int32    decodeMeasureToHmm(
-                            const ::oox::core::FilterBase& rFilter,
+                            const GraphicHelper& rGraphicHelper,
                             const ::rtl::OUString& rValue,
                             sal_Int32 nRefValue,
                             bool bPixelX,
@@ -147,7 +150,8 @@ struct StrokeModel
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const ::oox::core::FilterBase& rFilter ) const;
+                            ModelObjectHelper& rModelObjectHelper,
+                            const GraphicHelper& rGraphicHelper ) const;
 };
 
 // ============================================================================
@@ -165,6 +169,7 @@ struct FillModel
     OptValue< double >  moFocus;                /// Linear gradient focus of second color.
     OptValue< DoublePair > moFocusPos;          /// Rectanguar gradient focus position of second color.
     OptValue< DoublePair > moFocusSize;         /// Rectanguar gradient focus size of second color.
+    OptValue< ::rtl::OUString > moBitmapPath;   /// Path to fill bitmap fragment.
     OptValue< bool >    moRotate;               /// True = rotate gradient/bitmap with shape.
 
     void                assignUsed( const FillModel& rSource );
@@ -172,7 +177,8 @@ struct FillModel
     /** Writes the properties to the passed property map. */
     void                pushToPropMap(
                             PropertyMap& rPropMap,
-                            const ::oox::core::FilterBase& rFilter ) const;
+                            ModelObjectHelper& rModelObjectHelper,
+                            const GraphicHelper& rGraphicHelper ) const;
 };
 
 // ============================================================================

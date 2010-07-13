@@ -344,6 +344,23 @@ Reference< XLabeledDataSequence > ErrorBarConverter::createLabeledDataSequence( 
 
 // ============================================================================
 
+TrendlineLabelConverter::TrendlineLabelConverter( const ConverterRoot& rParent, TrendlineLabelModel& rModel ) :
+    ConverterBase< TrendlineLabelModel >( rParent, rModel )
+{
+}
+
+TrendlineLabelConverter::~TrendlineLabelConverter()
+{
+}
+
+void TrendlineLabelConverter::convertFromModel( PropertySet& rPropSet )
+{
+    // formatting
+    getFormatter().convertFormatting( rPropSet, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_TRENDLINELABEL );
+}
+
+// ============================================================================
+
 TrendlineConverter::TrendlineConverter( const ConverterRoot& rParent, TrendlineModel& rModel ) :
     ConverterBase< TrendlineModel >( rParent, rModel )
 {
@@ -385,8 +402,8 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             // #i83100# formatting of the equation text box
             if( mrModel.mbDispEquation || mrModel.mbDispRSquared )
             {
-                TrendlineLabelModel& rLabel = mrModel.mxLabel.getOrCreate();
-                getFormatter().convertFormatting( aLabelProp, rLabel.mxShapeProp, rLabel.mxTextProp, OBJECTTYPE_TRENDLINELABEL );
+                TrendlineLabelConverter aLabelConv( *this, mrModel.mxLabel.getOrCreate() );
+                aLabelConv.convertFromModel( aLabelProp );
             }
 
             // unsupported: #i5085# manual trendline size

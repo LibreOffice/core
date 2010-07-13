@@ -480,7 +480,6 @@ class </xsl:text>
   <xsl:variable name="stereotype"><xsl:value-of select=".//UML:Stereotype[1]/@xmi.idref"/></xsl:variable>
   <xsl:variable name="offset_"><xsl:value-of select='translate(.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="offset"]/UML:TaggedValue.dataValue, "ABCDEFX", "abcdefx")'/></xsl:variable>
   <xsl:variable name="offset">
-    <xsl:if test='$offset_ != "" and not(starts-with($offset_, "0x"))'>0x</xsl:if>
     <xsl:value-of select='$offset_'/>
   </xsl:variable>
   <xsl:variable name="shift"><xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="shift"]/UML:TaggedValue.dataValue'/></xsl:variable>

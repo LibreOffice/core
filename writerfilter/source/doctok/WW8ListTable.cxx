@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include <resources.hxx>
+#include <WW8ResourceModelImpl.hxx>
 
 namespace writerfilter {
 namespace doctok {
@@ -53,10 +54,6 @@ void WW8ListTable::initPayload()
             payloadOffsets.push_back(nOffsetLevel);
 
             nOffsetLevel += aLevel.calcSize();
-
-            sal_uInt32 nXstSize = getU16(nOffsetLevel);
-
-            nOffsetLevel += 2 + nXstSize * 2;
         }
 
         if (nOffsetLevel > getCount())
@@ -112,6 +109,16 @@ WW8List::get_listlevel(sal_uInt32 nIndex)
         (new WW8ListLevel(mpParent, nPayloadOffset, nPayloadSize));
 }
 
+::rtl::OUString WW8ListLevel::get_xst()
+{
+    sal_uInt32 nOffset = WW8ListLevel::getSize();
+
+    nOffset += get_cbGrpprlPapx();
+    nOffset += get_cbGrpprlChpx();
+
+    return getString(nOffset);
+}
+
 void WW8ListLevel::resolveNoAuto(Properties & rHandler)
 {
     sal_uInt32 nOffset = getSize();
@@ -133,12 +140,6 @@ void WW8ListLevel::resolveNoAuto(Properties & rHandler)
         WW8PropertiesReference aRef(pSet);
         aRef.resolve(rHandler);
     }
-
-    nOffset += get_cbGrpprlChpx();
-
-    WW8StringValue aVal(getString(nOffset));
-
-    rHandler.attribute(0, aVal);
 }
 
 sal_uInt32 WW8ListLevel::calcSize()
@@ -147,6 +148,7 @@ sal_uInt32 WW8ListLevel::calcSize()
 
     nResult += get_cbGrpprlPapx();
     nResult += get_cbGrpprlChpx();
+    nResult += 2 + getU16(nResult) * 2;
 
     return nResult;
 }

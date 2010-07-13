@@ -847,7 +847,7 @@ sal_Int32 DetailFormatterBase::getPhColor( sal_Int32 nSeriesIdx ) const
         Color aColor;
         aColor.setSrgbClr( nPhClr );
         aColor.addChartTintTransformation( fShadeTint );
-        nPhClr = aColor.getColor( mrData.mrFilter );
+        nPhClr = aColor.getColor( mrData.mrFilter.getGraphicHelper() );
     }
 
     return nPhClr;
@@ -859,7 +859,7 @@ sal_Int32 DetailFormatterBase::getSchemeColor( sal_Int32 nColorToken, sal_Int32 
     aColor.setSchemeClr( nColorToken );
     if( nModToken != XML_TOKEN_INVALID )
         aColor.addTransformation( nModToken, nModValue );
-    return aColor.getColor( mrData.mrFilter );
+    return aColor.getColor( mrData.mrFilter.getGraphicHelper() );
 }
 
 // ============================================================================
@@ -888,7 +888,7 @@ void LineFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Sh
         aLineProps.assignUsed( *mxAutoLine );
     if( rxShapeProp.is() )
         aLineProps.assignUsed( rxShapeProp->getLineProperties() );
-    aLineProps.pushToPropSet( rPropSet, mrData.mrFilter, mrData.maModelObjHelper, mrLinePropIds, getPhColor( nSeriesIdx ) );
+    aLineProps.pushToPropSet( rPropSet, mrData.maModelObjHelper, mrData.mrFilter.getGraphicHelper(), mrLinePropIds, getPhColor( nSeriesIdx ) );
 }
 
 // ============================================================================
@@ -916,7 +916,7 @@ void FillFormatter::convertFormatting( PropertySet& rPropSet, const ModelRef< Sh
         aFillProps.assignUsed( rxShapeProp->getFillProperties() );
     if( pPicOptions )
         lclConvertPictureOptions( aFillProps, *pPicOptions );
-    aFillProps.pushToPropSet( rPropSet, mrData.mrFilter, mrData.maModelObjHelper, mrFillPropIds, 0, getPhColor( nSeriesIdx ) );
+    aFillProps.pushToPropSet( rPropSet, mrData.maModelObjHelper, mrData.mrFilter.getGraphicHelper(), mrFillPropIds, 0, getPhColor( nSeriesIdx ) );
 }
 
 // ============================================================================
@@ -1142,18 +1142,19 @@ void ObjectFormatter::convertTextRotation( PropertySet& rPropSet, const ModelRef
 {
     if( rxTextProp.is() )
     {
-        /*  Chart2 expects rotation angle as double value in range of [0,360).
-            OOXML counts clockwise, Chart2 counts counterclockwise. */
-        double fAngle = rxTextProp->getTextProperties().moRotation.get( 0 );
-        fAngle = getDoubleIntervalValue< double >( -fAngle / 60000.0, 0.0, 360.0 );
-        rPropSet.setProperty( PROP_TextRotation, fAngle );
-
+        bool bStacked = false;
         if( bSupportsStacked )
         {
             sal_Int32 nVert = rxTextProp->getTextProperties().moVert.get( XML_horz );
-            bool bStacked = (nVert == XML_wordArtVert) || (nVert == XML_wordArtVertRtl);
+            bStacked = (nVert == XML_wordArtVert) || (nVert == XML_wordArtVertRtl);
             rPropSet.setProperty( PROP_StackCharacters, bStacked );
         }
+
+        /*  Chart2 expects rotation angle as double value in range of [0,360).
+            OOXML counts clockwise, Chart2 counts counterclockwise. */
+        double fAngle = static_cast< double >( bStacked ? 0 : rxTextProp->getTextProperties().moRotation.get( 0 ) );
+        fAngle = getDoubleIntervalValue< double >( -fAngle / 60000.0, 0.0, 360.0 );
+        rPropSet.setProperty( PROP_TextRotation, fAngle );
     }
 }
 
@@ -1195,12 +1196,12 @@ void ObjectFormatter::convertAutomaticFill( PropertySet& rPropSet, ObjectType eO
         pFormat->convertAutomaticFill( rPropSet, nSeriesIdx );
 }
 
-bool ObjectFormatter::isAutomaticLine( const ModelRef< Shape >& rxShapeProp )
+/*static*/ bool ObjectFormatter::isAutomaticLine( const ModelRef< Shape >& rxShapeProp )
 {
     return !rxShapeProp || !rxShapeProp->getLineProperties().maLineFill.moFillType.has();
 }
 
-bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
+/*static*/ bool ObjectFormatter::isAutomaticFill( const ModelRef< Shape >& rxShapeProp )
 {
     return !rxShapeProp || !rxShapeProp->getFillProperties().moFillType.has();
 }

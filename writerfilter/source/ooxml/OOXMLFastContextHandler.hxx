@@ -130,7 +130,7 @@ public:
      */
     virtual string getType() const { return "??"; }
 
-    virtual ResourceEnum_t getResource() const { return UNKNOWN; }
+    virtual ResourceEnum_t getResource() const { return STREAM; }
 
     static XMLTag::Pointer_t toPropertiesTag(OOXMLPropertySet::Pointer_t);
     virtual XMLTag::Pointer_t toTag() const;
@@ -168,6 +168,7 @@ public:
 
     void setDocument(OOXMLDocument * pDocument);
     OOXMLDocument * getDocument();
+    void setXNoteId(OOXMLValue::Pointer_t pValue);
     void setXNoteId(const ::rtl::OUString & rId);
     const rtl::OUString & getXNoteId() const;
     void setForwardEvents(bool bForwardEvents);
@@ -176,6 +177,8 @@ public:
     virtual void setId(Id nId);
     virtual Id getId() const;
 
+    void setDefine(Id nDefine);
+    Id getDefine() const;
     void setFallback(bool bFallbac);
     bool isFallback() const;
 
@@ -188,11 +191,61 @@ public:
 
     sal_uInt32 getInstanceNumber() const;
 
+    void sendTableDepth() const;
+    void setHandle();
+
+    void startSectionGroup();
+    void setLastParagraphInSection();
+    void endSectionGroup();
+    void startParagraphGroup();
+    void endParagraphGroup();
+    void startCharacterGroup();
+    void endCharacterGroup();
+
+    void startField();
+    void fieldSeparator();
+    void endField();
+    void ftnednref();
+    void ftnedncont();
+    void ftnednsep();
+    void pgNum();
+    void tab();
+    void cr();
+    void noBreakHyphen();
+    void softHyphen();
+    void handleLastParagraphInSection();
+    void endOfParagraph();
+    void text(const ::rtl::OUString & sText);
+    virtual void propagateCharacterProperties();
+    virtual void propagateCharacterPropertiesAsSet(const Id & rId);
+    virtual void propagateTableProperties();
+    virtual void propagateRowProperties();
+    virtual void propagateCellProperties();
+    virtual bool propagatesProperties() const;
+    void sendPropertiesWithId(const Id & rId);
+    void sendPropertiesToParent();
+    void sendCellProperties();
+    void sendRowProperties();
+    void sendTableProperties();
+    void clearCellProps();
+    void clearRowProps();
+    void clearTableProps();
+    void clearProps();
+
+    virtual void setDefaultBooleanValue();
+    virtual void setDefaultIntegerValue();
+    virtual void setDefaultHexValue();
+    virtual void setDefaultStringValue();
+
+    const ::rtl::OUString & getText() const;
+
+    void sendPropertyToParent();
     static void dumpOpenContexts();
 
 protected:
     OOXMLFastContextHandler * mpParent;
     Id mId;
+    Id mnDefine;
     Token_t mnToken;
 
 #ifdef DEBUG_CONTEXT_STACK
@@ -237,40 +290,6 @@ protected:
     virtual OOXMLPropertySet * getPicturePropSet
     (const ::rtl::OUString & rId);
     virtual void resolvePropertySetAttrs();
-
-    void sendTableDepth() const;
-    void setHandle();
-
-    void startSectionGroup();
-    void setLastParagraphInSection();
-    void endSectionGroup();
-    void startParagraphGroup();
-    void endParagraphGroup();
-    void startCharacterGroup();
-    void endCharacterGroup();
-
-    void startField();
-    void fieldSeparator();
-    void endField();
-    void ftnednref();
-    void ftnedncont();
-    void ftnednsep();
-    void pgNum();
-    void tab();
-    void cr();
-    void noBreakHyphen();
-    void softHyphen();
-    void handleLastParagraphInSection();
-    void endOfParagraph();
-    void text(const ::rtl::OUString & sText);
-    virtual void propagateCharacterProperties();
-    virtual void propagateCharacterPropertiesAsSet(const Id & rId);
-    virtual bool propagatesProperties() const;
-    void sendPropertiesWithId(const Id & rId);
-    void propagateTableProperties();
-    void clearProps();
-
-    void sendPropertyToParent();
 
     uno::Reference< uno::XComponentContext > getComponentContext();
 
@@ -368,101 +387,29 @@ protected:
         throw (uno::RuntimeException, xml::sax::SAXException);
  };
 
-class OOXMLFastContextHandlerBooleanValue :
+class OOXMLFastContextHandlerValue :
     public OOXMLFastContextHandler
 {
 public:
-    OOXMLFastContextHandlerBooleanValue
+    OOXMLFastContextHandlerValue
     (OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerBooleanValue();
+    virtual ~OOXMLFastContextHandlerValue();
 
-protected:
-    bool mbValue;
-
-    virtual void attributes
-    (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void lcl_endFastElement(Token_t Element)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-
+    virtual void setValue(OOXMLValue::Pointer_t pValue);
     virtual OOXMLValue::Pointer_t getValue() const;
-    void setValue(const ::rtl::OUString & rString);
-};
-
-class OOXMLFastContextHandlerIntegerValue :
-    public OOXMLFastContextHandler
-{
-public:
-    OOXMLFastContextHandlerIntegerValue
-    (OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerIntegerValue();
-
-protected:
-    sal_Int32 mnValue;
-
-    void attributes
-    (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void lcl_endFastElement(Token_t Element)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-
-    virtual OOXMLValue::Pointer_t getValue() const;
-};
-
-class OOXMLFastContextHandlerStringValue :
-    public OOXMLFastContextHandler
-{
-public:
-    OOXMLFastContextHandlerStringValue
-    (OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerStringValue();
-
-protected:
-    ::rtl::OUString  msValue;
-
-    void attributes
-    (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void lcl_endFastElement(Token_t Element)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-
-    virtual OOXMLValue::Pointer_t getValue() const;
-};
-
-class OOXMLFastContextHandlerHexValue :
-    public OOXMLFastContextHandler
-{
-public:
-    OOXMLFastContextHandlerHexValue
-    (OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerHexValue();
-
-protected:
-    sal_Int32  mnValue;
-
-    void attributes
-    (const uno::Reference < xml::sax::XFastAttributeList > & Attribs)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual void lcl_endFastElement(Token_t Element)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-
-    virtual OOXMLValue::Pointer_t getValue() const;
-};
-
-class OOXMLFastContextHandlerListValue :
-    public OOXMLFastContextHandler
-{
-public:
-    OOXMLFastContextHandlerListValue
-    (OOXMLFastContextHandler * pContext);
-    virtual ~OOXMLFastContextHandlerListValue();
-
-protected:
-    mutable OOXMLValue::Pointer_t mpValue;
 
     virtual void lcl_endFastElement(Token_t Element)
-        throw (uno::RuntimeException, xml::sax::SAXException);
-    virtual OOXMLValue::Pointer_t getValue() const;
+    throw (uno::RuntimeException, xml::sax::SAXException);
+
+    virtual string getType() const { return "Value"; }
+
+    virtual void setDefaultBooleanValue();
+    virtual void setDefaultIntegerValue();
+    virtual void setDefaultHexValue();
+    virtual void setDefaultStringValue();
+
+protected:
+    OOXMLValue::Pointer_t mpValue;
 };
 
 class OOXMLFastContextHandlerTable : public OOXMLFastContextHandler
@@ -488,6 +435,8 @@ protected:
 
     virtual ResourceEnum_t getResource() const { return TABLE; }
 
+    virtual string getType() const { return "Table"; }
+
     void addCurrentChild();
 };
 
@@ -497,7 +446,10 @@ public:
     OOXMLFastContextHandlerXNote(OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerXNote();
 
-    void checkId(const rtl::OUString & rId);
+    void checkId(OOXMLValue::Pointer_t pValue);
+
+    virtual string getType() const { return "XNote"; }
+
 private:
     bool mbForwardEventsSaved;
     ::rtl::OUString msMyXNoteId;
@@ -520,6 +472,8 @@ public:
     (OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerTextTableCell();
 
+    virtual string getType() const { return "TextTableCell"; }
+
     void startCell();
     void endCell();
 };
@@ -530,6 +484,8 @@ public:
     OOXMLFastContextHandlerTextTableRow
     (OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerTextTableRow();
+
+    virtual string getType() const { return "TextTableRow"; }
 
     void startRow();
     void endRow();
@@ -542,6 +498,8 @@ public:
     (OOXMLFastContextHandler * pContext);
 
     virtual ~OOXMLFastContextHandlerTextTable();
+
+    virtual string getType() const { return "TextTable"; }
 
 protected:
     virtual void lcl_startFastElement
@@ -557,11 +515,14 @@ class OOXMLFastContextHandlerShape: public OOXMLFastContextHandlerProperties
 {
 private:
     bool m_bShapeSent;
+    bool m_bShapeStarted;
 
 public:
     explicit OOXMLFastContextHandlerShape
     (OOXMLFastContextHandler * pContext);
     virtual ~OOXMLFastContextHandlerShape();
+
+    virtual string getType() const { return "Shape"; }
 
     // ::com::sun::star::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startUnknownElement

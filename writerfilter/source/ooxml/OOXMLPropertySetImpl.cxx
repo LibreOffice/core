@@ -29,7 +29,10 @@
 #include <stdio.h>
 #include <iostream>
 #include <resourcemodel/QNameToString.hxx>
+#include <resourcemodel/Protocol.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <ooxml/OOXMLFastTokens.hxx>
+#include "ooxmlLoggers.hxx"
 
 //#define DEBUG_RESOLVE
 
@@ -125,6 +128,17 @@ string OOXMLPropertyImpl::getName() const
     if (sResult.length() == 0)
         sResult = (*SprmIdToString::Instance())(mId);
 
+    if (sResult.length() == 0)
+        sResult = fastTokenToId(mId);
+
+    if (sResult.length() == 0)
+    {
+        static char sBuffer[256];
+
+        snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIxUINT32, mId);
+        sResult = sBuffer;
+    }
+
     return sResult;
 }
 
@@ -155,14 +169,23 @@ Sprm * OOXMLPropertyImpl::clone()
 
 void OOXMLPropertyImpl::resolve(writerfilter::Properties & rProperties)
 {
+    writerfilter::Properties * pProperties = NULL;
+#ifdef DEBUG_PROTOCOL
+    writerfilter::PropertiesProtocol::Pointer_t pProtocol
+        (new writerfilter::PropertiesProtocol(&rProperties, debug_logger));
+    pProperties = pProtocol.get();
+#else
+    pProperties = &rProperties;
+#endif
+
     switch (meType)
     {
     case SPRM:
         if (mId != 0x0)
-            rProperties.sprm(*this);
+            pProperties->sprm(*this);
         break;
     case ATTRIBUTE:
-        rProperties.attribute(mId, *getValue());
+        pProperties->attribute(mId, *getValue());
         break;
     }
 }
@@ -456,7 +479,15 @@ string OOXMLPropertySetImpl::getType() const
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
     if (pProperty.get() != NULL && pProperty->getId() != 0x0)
+    {
         mProperties.push_back(pProperty);
+    }
+#ifdef DEBUG_PROPERTIES
+    else
+    {
+        debug_logger->element("warning.property_not_added");
+    }
+#endif
 }
 
 void OOXMLPropertySetImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)
@@ -688,6 +719,12 @@ OOXMLTableImpl::~OOXMLTableImpl()
 
 void OOXMLTableImpl::resolve(Table & rTable)
 {
+#ifdef DEBUG_PROTOCOL
+    Table::Pointer_t pTable(new TableProtocol(&rTable, debug_logger));
+#else
+    Table * pTable = &rTable;
+#endif
+
     int nPos = 0;
 
     PropertySets_t::iterator it = mPropertySets.begin();
@@ -699,7 +736,7 @@ void OOXMLTableImpl::resolve(Table & rTable)
             ((*it)->getProperties());
 
         if (pProperties.get() != NULL)
-            rTable.entry(nPos, pProperties);
+            pTable->entry(nPos, pProperties);
 
         ++nPos;
         it++;

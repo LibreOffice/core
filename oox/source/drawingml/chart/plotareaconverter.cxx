@@ -27,7 +27,10 @@
 
 #include "oox/drawingml/chart/plotareaconverter.hxx"
 #include <com/sun/star/drawing/Direction3D.hpp>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -41,6 +44,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::chart2::XCoordinateSystem;
 using ::com::sun::star::chart2::XCoordinateSystemContainer;
 using ::com::sun::star::chart2::XDiagram;
@@ -53,14 +57,15 @@ namespace chart {
 
 namespace {
 
-/** Axes set model. This is a helper class for the plot area converter. */
+/** Axes set model. This is a helper for the plot area converter collecting all
+    type groups and axes of the primary or secondary axes set. */
 struct AxesSetModel
 {
     typedef ModelVector< TypeGroupModel >       TypeGroupVector;
     typedef ModelMap< sal_Int32, AxisModel >    AxisMap;
 
-    TypeGroupVector     maTypeGroups;
-    AxisMap             maAxes;
+    TypeGroupVector     maTypeGroups;       /// All type groups containing data series.
+    AxisMap             maAxes;             /// All axes mapped by API axis type.
 
     inline explicit     AxesSetModel() {}
     inline              ~AxesSetModel() {}
@@ -89,11 +94,14 @@ public:
     inline bool         is3dChart() const { return mb3dChart; }
     /** Returns true, if chart type supports wall and floor format in 3D mode. */
     inline bool         isWall3dChart() const { return mbWall3dChart; }
+    /** Returns true, if chart is a pie chart or doughnut chart. */
+    inline bool         isPieChart() const { return mbPieChart; }
 
 private:
     ::rtl::OUString     maAutoTitle;
     bool                mb3dChart;
     bool                mbWall3dChart;
+    bool                mbPieChart;
 };
 
 // ----------------------------------------------------------------------------
@@ -101,7 +109,8 @@ private:
 AxesSetConverter::AxesSetConverter( const ConverterRoot& rParent, AxesSetModel& rModel ) :
     ConverterBase< AxesSetModel >( rParent, rModel ),
     mb3dChart( false ),
-    mbWall3dChart( false )
+    mbWall3dChart( false ),
+    mbPieChart( false )
 {
 }
 
@@ -158,6 +167,7 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
         // 3D view settings
         mb3dChart = rFirstTypeGroup.is3dChart();
         mbWall3dChart = rFirstTypeGroup.isWall3dChart();
+        mbPieChart = rFirstTypeGroup.getTypeInfo().meTypeCategory == TYPECATEGORY_PIE;
         if( mb3dChart )
         {
             View3DConverter aView3DConv( *this, rView3DModel );
@@ -304,7 +314,8 @@ void WallFloorConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
 PlotAreaConverter::PlotAreaConverter( const ConverterRoot& rParent, PlotAreaModel& rModel ) :
     ConverterBase< PlotAreaModel >( rParent, rModel ),
     mb3dChart( false ),
-    mbWall3dChart( false )
+    mbWall3dChart( false ),
+    mbPieChart( false )
 {
 }
 
@@ -391,6 +402,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
             maAutoTitle = aAxesSetConv.getAutomaticTitle();
             mb3dChart = aAxesSetConv.is3dChart();
             mbWall3dChart = aAxesSetConv.isWall3dChart();
+            mbPieChart = aAxesSetConv.isPieChart();
         }
         else
         {
@@ -403,6 +415,35 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
     {
         PropertySet aPropSet( xDiagram->getWall() );
         getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_PLOTAREA2D );
+    }
+}
+
+void PlotAreaConverter::convertPositionFromModel()
+{
+    LayoutModel& rLayout = mrModel.mxLayout.getOrCreate();
+    LayoutConverter aLayoutConv( *this, rLayout );
+    Rectangle aDiagramRect;
+    if( aLayoutConv.calcAbsRectangle( aDiagramRect ) ) try
+    {
+        namespace cssc = ::com::sun::star::chart;
+        Reference< cssc::XChartDocument > xChart1Doc( getChartDocument(), UNO_QUERY_THROW );
+        Reference< cssc::XDiagramPositioning > xPositioning( xChart1Doc->getDiagram(), UNO_QUERY_THROW );
+        // for pie charts, always set inner plot area size to exclude the data labels as Excel does
+        sal_Int32 nTarget = (mbPieChart && (rLayout.mnTarget == XML_outer)) ? XML_inner : rLayout.mnTarget;
+        switch( nTarget )
+        {
+            case XML_inner:
+                xPositioning->setDiagramPositionExcludingAxes( aDiagramRect );
+            break;
+            case XML_outer:
+                xPositioning->setDiagramPositionIncludingAxes( aDiagramRect );
+            break;
+            default:
+                OSL_ENSURE( false, "PlotAreaConverter::convertPositionFromModel - unknown positioning target" );
+        }
+    }
+    catch( Exception& )
+    {
     }
 }
 

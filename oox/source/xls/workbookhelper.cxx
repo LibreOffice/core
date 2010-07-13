@@ -27,7 +27,6 @@
 
 #include "oox/xls/workbookhelper.hxx"
 #include <osl/thread.h>
-#include <rtl/strbuf.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
@@ -44,14 +43,14 @@
 #include "properties.hxx"
 #include "oox/helper/progressbar.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/core/binaryfilterbase.hxx"
-#include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffcodec.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelchartconverter.hxx"
+#include "oox/xls/excelfilter.hxx"
+#include "oox/xls/excelvbaproject.hxx"
 #include "oox/xls/externallinkbuffer.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/pagesettings.hxx"
@@ -68,7 +67,6 @@
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 
-using ::rtl::OStringBuffer;
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
@@ -103,148 +101,6 @@ using ::oox::drawingml::Theme;
 namespace oox {
 namespace xls {
 
-// DEBUG ======================================================================
-
-#if OSL_DEBUG_LEVEL > 0
-namespace dbg {
-
-// ----------------------------------------------------------------------------
-
-#if OOX_SHOW_LOADSAVE_TIME > 0
-
-struct TimeCount
-{
-    sal_Int64           mnTime;
-    sal_Int32           mnCount;
-    inline explicit     TimeCount() : mnTime( 0 ), mnCount( 0 ) {}
-};
-
-Timer::Timer( TimeCount& rTimeCount ) :
-    mrTimeCount( rTimeCount )
-{
-    ++mrTimeCount.mnCount;
-    osl_getSystemTime( &maStartTime );
-}
-
-Timer::~Timer()
-{
-    TimeValue aEndTime;
-    osl_getSystemTime( &aEndTime );
-    mrTimeCount.mnTime += (SAL_CONST_INT64( 1000000000 ) * (aEndTime.Seconds - maStartTime.Seconds) + aEndTime.Nanosec - maStartTime.Nanosec);
-}
-
-#endif
-
-// ----------------------------------------------------------------------------
-
-struct WorkbookData
-{
-#if OOX_SHOW_LOADSAVE_TIME > 0
-    typedef ::std::vector< TimeCount >      TimeCountVector;
-    typedef ::boost::shared_ptr< Timer >    TimerRef;
-    TimeCountVector     maTimeCounts;
-    TimerRef            mxTotal;
-#endif
-    sal_Int32           mnObjCount;
-
-    explicit            WorkbookData();
-                        ~WorkbookData();
-#if OOX_SHOW_LOADSAVE_TIME > 0
-    TimeCount&          getTimeCount( TimerType eType );
-#endif
-};
-
-WorkbookData::WorkbookData() :
-#if OOX_SHOW_LOADSAVE_TIME > 0
-    maTimeCounts( static_cast< size_t >( TIMER_TOTAL + 1 ) ),
-    mxTotal( new Timer( getTimeCount( TIMER_TOTAL ) ) ),
-#endif
-    mnObjCount( 0 )
-{
-}
-
-WorkbookData::~WorkbookData()
-{
-#if OOX_SHOW_LOADSAVE_TIME > 0
-    mxTotal.reset();
-    static const sal_Char* sppcNames[] =
-    {
-        "importFormula\t",
-        "importSheetFragment",
-        "  onCreateSheetContext",
-        "    importRow\t",
-        "      convertRowFormat",
-        "      convertColumnFormat",
-        "    importCell\t",
-        "  onEndSheetElement",
-        "    setCell\t\t",
-        "    setCellFormat\t",
-        "      mergeCellFormats",
-        "      writeCellProperties",
-        "  finalizeSheetData",
-        "    finalizeDrawing",
-        "finalizeBookData",
-        "total\t\t"
-    };
-    OStringBuffer aBuffer( "Call counts and load/save times:\n" );
-    sal_Int32 nIdx = 0;
-    for( TimeCountVector::iterator aIt = maTimeCounts.begin(), aEnd = maTimeCounts.end(); aIt != aEnd; ++aIt, ++nIdx )
-    {
-        if( aIt->mnCount > 0 )
-        {
-            aBuffer.append( nIdx ).append( ":\t" ).append( sppcNames[ nIdx ] ).
-                append( "\tn=" ).append( aIt->mnCount ).append( ',' ).
-                append( "\tt=" ).append( (aIt->mnTime / 100000000) / 10.0 ).append( 's' ).
-                append( "\t(" ).append( static_cast< sal_Int32 >( ((aIt->mnTime * 1000) / maTimeCounts.back().mnTime) / 10 ) ).append( "%)" );
-            if( aIt->mnCount > 1 )
-                aBuffer.append( "\tt/n=" ).append( static_cast< sal_Int32 >( aIt->mnTime / aIt->mnCount / 1000 ) ).append( "mys" );
-            aBuffer.append( '\n' );
-        }
-    }
-    OSL_ENSURE( false, aBuffer.getStr() );
-#endif
-    OSL_ENSURE( mnObjCount == 0,
-        OStringBuffer( "WorkbookData::~WorkbookData - failed to delete " ).append( mnObjCount ).append( " objects" ).getStr() );
-}
-
-#if OOX_SHOW_LOADSAVE_TIME > 0
-TimeCount& WorkbookData::getTimeCount( TimerType eType )
-{
-    return maTimeCounts[ static_cast< size_t >( eType ) ];
-}
-#endif
-
-// ----------------------------------------------------------------------------
-
-WorkbookHelper::WorkbookHelper( WorkbookData& rBookData ) :
-    mrDbgBookData( rBookData )
-{
-    ++mrDbgBookData.mnObjCount;
-}
-
-WorkbookHelper::WorkbookHelper( const WorkbookHelper& rCopy ) :
-    mrDbgBookData( rCopy.mrDbgBookData )
-{
-    ++mrDbgBookData.mnObjCount;
-}
-
-WorkbookHelper::~WorkbookHelper()
-{
-    --mrDbgBookData.mnObjCount;
-}
-
-#if OOX_SHOW_LOADSAVE_TIME > 0
-TimeCount& WorkbookHelper::getTimeCount( TimerType eType ) const
-{
-    return mrDbgBookData.getTimeCount( eType );
-}
-#endif
-
-// ----------------------------------------------------------------------------
-
-} // namespace dbg
-#endif
-
 // ============================================================================
 
 bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
@@ -257,13 +113,10 @@ bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rNam
 // ============================================================================
 
 class WorkbookData
-#if OSL_DEBUG_LEVEL > 0
-    : public dbg::WorkbookData
-#endif
 {
 public:
-    explicit            WorkbookData( XmlFilterBase& rFilter );
-    explicit            WorkbookData( BinaryFilterBase& rFilter, BiffType eBiff );
+    explicit            WorkbookData( ExcelFilter& rFilter );
+    explicit            WorkbookData( ExcelBiffFilter& rFilter, BiffType eBiff );
                         ~WorkbookData();
 
     /** Returns true, if this helper refers to a valid document. */
@@ -283,6 +136,10 @@ public:
     inline sal_Int16    getCurrentSheetIndex() const { return mnCurrSheet; }
     /** Sets the index of the current sheet in the Calc document. */
     inline void         setCurrentSheetIndex( sal_Int16 nSheet ) { mnCurrSheet = nSheet; }
+    /** Returns the VBA project storage. */
+    inline StorageRef   getVbaProjectStorage() const { return mxVbaPrjStrg; }
+    /** Sets the VBA project storage. */
+    inline void         setVbaProjectStorage( const StorageRef& rxVbaPrjStrg ) { mxVbaPrjStrg = rxVbaPrjStrg; }
 
     // document model ---------------------------------------------------------
 
@@ -396,11 +253,11 @@ private:
     typedef ::std::auto_ptr< WebQueryBuffer >           WebQueryBfrPtr;
     typedef ::std::auto_ptr< PivotCacheBuffer >         PivotCacheBfrPtr;
     typedef ::std::auto_ptr< PivotTableBuffer >         PivotTableBfrPtr;
+    typedef ::std::auto_ptr< FormulaParser >            FormulaParserPtr;
     typedef ::std::auto_ptr< UnitConverter >            UnitConvPtr;
     typedef ::std::auto_ptr< AddressConverter >         AddressConvPtr;
     typedef ::std::auto_ptr< ExcelChartConverter >      ExcelChartConvPtr;
     typedef ::std::auto_ptr< PageSettingsConverter >    PageSettConvPtr;
-    typedef ::std::auto_ptr< FormulaParser >            FormulaParserPtr;
     typedef ::std::auto_ptr< BiffCodecHelper >          BiffCodecHelperPtr;
 
     OUString            maCellStyles;           /// Style family name for cell styles.
@@ -409,8 +266,10 @@ private:
     OUString            maPageStyleServ;        /// Service name for a page style.
     Reference< XSpreadsheetDocument > mxDoc;    /// Document model.
     FilterBase&         mrBaseFilter;           /// Base filter object.
+    ExcelFilterBase&    mrExcelBase;            /// Base object for registration of this structure.
     FilterType          meFilterType;           /// File type of the filter.
     ProgressBarPtr      mxProgressBar;          /// The progress bar.
+    StorageRef          mxVbaPrjStrg;           /// Storage containing the VBA project.
     sal_Int16           mnCurrSheet;            /// Current sheet index in Calc dcument.
     bool                mbWorkbook;             /// True = multi-sheet file.
 
@@ -449,27 +308,36 @@ private:
 
 // ----------------------------------------------------------------------------
 
-WorkbookData::WorkbookData( XmlFilterBase& rFilter ) :
+WorkbookData::WorkbookData( ExcelFilter& rFilter ) :
     mrBaseFilter( rFilter ),
+    mrExcelBase( rFilter ),
     meFilterType( FILTER_OOX ),
     mpOoxFilter( &rFilter ),
+    mpBiffFilter( 0 ),
     meBiff( BIFF_UNKNOWN )
 {
+    // register at the filter, needed for virtual callbacks (even during construction)
+    mrExcelBase.registerWorkbookData( *this );
     initialize( true );
 }
 
-WorkbookData::WorkbookData( BinaryFilterBase& rFilter, BiffType eBiff ) :
+WorkbookData::WorkbookData( ExcelBiffFilter& rFilter, BiffType eBiff ) :
     mrBaseFilter( rFilter ),
+    mrExcelBase( rFilter ),
     meFilterType( FILTER_BIFF ),
+    mpOoxFilter( 0 ),
     mpBiffFilter( &rFilter ),
     meBiff( eBiff )
 {
+    // register at the filter, needed for virtual callbacks (even during construction)
+    mrExcelBase.registerWorkbookData( *this );
     initialize( eBiff >= BIFF5 );
 }
 
 WorkbookData::~WorkbookData()
 {
     finalize();
+    mrExcelBase.unregisterWorkbookData();
 }
 
 // document model -------------------------------------------------------------
@@ -681,7 +549,6 @@ void WorkbookData::initialize( bool bWorkbookFile )
     mxUnitConverter.reset( new UnitConverter( *this ) );
     mxAddrConverter.reset( new AddressConverter( *this ) );
     mxChartConverter.reset( new ExcelChartConverter( *this ) );
-
     mxPageSettConverter.reset( new PageSettingsConverter( *this ) );
 
     // set some document properties needed during import
@@ -715,7 +582,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
     switch( getFilterType() )
     {
         case FILTER_BIFF:
-            mxCodecHelper.reset( new BiffCodecHelper( * this ) );
+            mxCodecHelper.reset( new BiffCodecHelper( *this ) );
         break;
 
         case FILTER_OOX:
@@ -728,7 +595,6 @@ void WorkbookData::initialize( bool bWorkbookFile )
 
 void WorkbookData::finalize()
 {
-    OOX_LOADSAVE_TIMER( FINALIZEBOOKDATA );
     // set some document properties needed after import
     if( mrBaseFilter.isImportFilter() )
     {
@@ -751,14 +617,6 @@ void WorkbookData::finalize()
 }
 
 // ============================================================================
-
-WorkbookHelper::WorkbookHelper( WorkbookData& rBookData ) :
-#if OSL_DEBUG_LEVEL > 0
-    dbg::WorkbookHelper( rBookData ),
-#endif
-    mrBookData( rBookData )
-{
-}
 
 WorkbookHelper::~WorkbookHelper()
 {
@@ -801,6 +659,11 @@ void WorkbookHelper::setCurrentSheetIndex( sal_Int16 nSheet )
     mrBookData.setCurrentSheetIndex( nSheet );
 }
 
+void WorkbookHelper::setVbaProjectStorage( const StorageRef& rxVbaPrjStrg )
+{
+    mrBookData.setVbaProjectStorage( rxVbaPrjStrg );
+}
+
 void WorkbookHelper::finalizeWorkbookImport()
 {
     // workbook settings, document and sheet view settings
@@ -822,6 +685,17 @@ void WorkbookHelper::finalizeWorkbookImport()
         sheets. Automatic numbering is set by passing the value 0. */
     PropertySet aDefPageStyle( getStyleObject( CREATE_OUSTRING( "Default" ), true ) );
     aDefPageStyle.setProperty< sal_Int16 >( PROP_FirstPageNumber, 0 );
+
+    /*  Import the VBA project (after finalizing workbook settings which
+        contains the workbook code name), and attach VBA macros to document and
+        sheet events. */
+    StorageRef xVbaPrjStrg = mrBookData.getVbaProjectStorage();
+    if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
+    {
+        VbaProject aVbaProject( getGlobalFactory(), getDocument() );
+        aVbaProject.importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
+        aVbaProject.attachToEvents();
+    }
 }
 
 // document model -------------------------------------------------------------
@@ -1026,8 +900,6 @@ ExcelChartConverter& WorkbookHelper::getChartConverter() const
     return mrBookData.getChartConverter();
 }
 
-// property helpers -----------------------------------------------------------
-
 PageSettingsConverter& WorkbookHelper::getPageSettingsConverter() const
 {
     return mrBookData.getPageSettingsConverter();
@@ -1111,13 +983,13 @@ WorkbookDataOwner::~WorkbookDataOwner()
 
 // ----------------------------------------------------------------------------
 
-WorkbookHelperRoot::WorkbookHelperRoot( ::oox::core::XmlFilterBase& rFilter ) :
+WorkbookHelperRoot::WorkbookHelperRoot( ExcelFilter& rFilter ) :
     prv::WorkbookDataOwner( prv::WorkbookDataRef( new WorkbookData( rFilter ) ) ),
     WorkbookHelper( *mxBookData )
 {
 }
 
-WorkbookHelperRoot::WorkbookHelperRoot( ::oox::core::BinaryFilterBase& rFilter, BiffType eBiff ) :
+WorkbookHelperRoot::WorkbookHelperRoot( ExcelBiffFilter& rFilter, BiffType eBiff ) :
     prv::WorkbookDataOwner( prv::WorkbookDataRef( new WorkbookData( rFilter, eBiff ) ) ),
     WorkbookHelper( *mxBookData )
 {

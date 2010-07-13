@@ -1,0 +1,131 @@
+This file describes how the remaining efforts for writerfilter can be
+extracted from the source code.
+
+1. Marking up the efforts in the code.
+
+Efforts are marked up in the code with comments like this:
+
+/* WRITERFILTERSTATUS: done: <percent done>, planned: <effort planned>, spent: <effort spent, yet> */
+
+The comments have to follow a case-label immediately. Consecutive
+case-labels can be marked up, too. In the latter case the efforts are
+counted for the preceeding case-labels as a whole.
+
+2. Extraction process
+
+2.1. Stage 1:
+
+This stage is handled in status.sh. An XML-file is generated that
+contains a top level element <stage1>. <stage1> contains an element
+<analyze> and several <qname> and <status> elements.
+
+2.1.1.  Use analyzemodel.xsl to extract necessary data from model.xml.
+
+- Namespaces can be flagged with attribute @todo="ignore" to prevent
+  the namespace being considered.
+
+- For every <element>/<attribute> an entry in an according element in <analyze> is genereated. These elements look like this:
+
+<attribute id="..." resource="..." tokenid="..." qname="..." namespace="..." define="..." name="..."/>
+
+Important for the extraction of efforts: @qname is the identifier used
+in case-labels in .cxx files and thus links the status mark up
+comments with elements/attributes in the model.xml.
+
+2.1.2. Extract status information
+
+The variable SEARCHIN in status.sh determines in what directory the script will search for case labels and status comments. Only .cxx files are searched. Lines like this
+
+case NS_rtf::LN_UNUSED4:
+
+result in elements like this
+
+<qname file="/DomainMapper.cxx" line="216" qname="NS_rtf::LN_UNUSED4"/>.
+
+Lines like this
+
+/* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+
+result in elements like this
+
+<status done="0" planned="0" spent="0"/>
+
+The <qname> and <status> elements are children of the <stage1>
+element. The are inserted in the same order as found in the
+code. Therefore a <status> element corresponds to the group of
+consecutive preceding <qname> elements.
+
+2.2. Stage 2
+
+In this stage analyzestage2.xsl is used on the result of stage 1 to
+group the <qname> and <status> elements from stage 1. For each
+<status> element a <qnames> element is generated that contains the
+<qname> elements that the <status> element refers to, plus the
+<status> element.
+
+2.3. Stage 3
+
+This stage associates the <attribute> and <element> elements in
+model.xml with the extracted data. It uses analyzestage3.xsl on the
+result of stage 2 to do this.
+
+E.g. for given elements from stage 2:
+
+<attribute 
+	   id="dml-wordprocessingDrawing:CT_Inline:distR" 
+	   resource="Properties"  
+	   tokenid="ooxml:CT_Inline_distR" 
+	   qname="NS_ooxml::LN_CT_Inline_distR" 
+	   namespace="dml-wordprocessingDrawing" 
+	   define="CT_Inline" 
+	   name="distR"/>
+
+and 
+
+   <qnames>
+    <qname file="/GraphicImport.cxx" line="1078" qname="NS_ooxml::LN_CT_Inline_distT"/>
+    <qname file="/GraphicImport.cxx" line="1079" qname="NS_ooxml::LN_CT_Inline_distB"/>
+    <qname file="/GraphicImport.cxx" line="1080" qname="NS_ooxml::LN_CT_Inline_distL"/>
+    <qname file="/GraphicImport.cxx" line="1081" qname="NS_ooxml::LN_CT_Inline_distR"/>
+    <status done="0" planned="0.5" spent="0"/>
+  </qnames>
+
+the result of stage 3 will be
+
+  <attribute 
+  	     id="dml-wordprocessingDrawing:CT_Inline:distR" 
+	     resource="Properties" 
+	     tokenid="ooxml:CT_Inline_distR" 
+	     qname="NS_ooxml::LN_CT_Inline_distR" 
+	     namespace="dml-wordprocessingDrawing" 
+	     define="CT_Inline" name="distR">
+
+	     <file name="/GraphicImport.cxx" line="1081">
+      	     	   <status done="0" planned="0.5" spent="0" qname-count="4"/>
+    	     </file>
+
+  </attribute>
+
+@qname-count is the number of case-labels that the according mark-up comment refers to.
+
+3. Collect efforts
+
+This is done by the script efforts.sh. It uses status.sh to extract the status and determines the efforts in two steps.
+
+3.1. Choose which <attribute>/<element> elements need effort
+
+This stage uses todo.xsl on the result of 2.3.
+
+There are two criteria that imply effort:
+
+- The <attribute>/<element> is not handled in any file.
+
+- The status for the <attribute>/<element> declares that work is
+  planned for it and less than 100 percent of this work is done.
+
+3.2. Generate table of efforts in CSV format
+
+This stage uses effort.xsl on the results of 3.1. and produces the
+table of efforts. If there is no status defined for an
+<attribute>/<element> it is assumed that the planned effort is 0.5
+hours and no work has been done.

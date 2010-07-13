@@ -67,9 +67,11 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool b
 {
     if ( pDefaultTextStyle )
     {
+    /*
         maTitleTextStylePtr->apply( *pDefaultTextStyle.get() );
         maBodyTextStylePtr->apply( *pDefaultTextStyle.get() );
         maNotesTextStylePtr->apply( *pDefaultTextStyle.get() );
+    */
         maOtherTextStylePtr->apply( *pDefaultTextStyle.get() );
     }
 }
@@ -177,7 +179,7 @@ void SlidePersist::createBackground( const XmlFilterBase& rFilterBase )
             uno::Reference< beans::XPropertySet > xPagePropSet( mxPage, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xPropertySet( aPropMap.makePropertySet() );
             PropertySet aPropSet( xPropertySet );
-            mpBackgroundPropertiesPtr->pushToPropSet( aPropSet, rFilterBase, rFilterBase.getModelObjectHelper() );
+            mpBackgroundPropertiesPtr->pushToPropSet( aPropSet, rFilterBase.getModelObjectHelper(), rFilterBase.getGraphicHelper() );
             xPagePropSet->setPropertyValue( sBackground, Any( xPropertySet ) );
         }
         catch( Exception )
