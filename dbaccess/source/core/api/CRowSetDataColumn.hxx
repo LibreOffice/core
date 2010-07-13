@@ -48,6 +48,7 @@ namespace dbaccess
         ORowSetCacheIterator        m_aColumnValue;
         ::com::sun::star::uno::Any  m_aOldValue;
 
+        ::rtl::OUString             m_sLabel;
         ::rtl::OUString             m_aDescription;     // description
         ORowSetBase*                m_pRowSet;
 
@@ -59,6 +60,7 @@ namespace dbaccess
                           sal_Int32 _nPos,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
                           const ::rtl::OUString& _rDescription,
+                          const ::rtl::OUString& i_sLabel,
                           const ORowSetCacheIterator& _rColumnValue);
 
 
@@ -78,7 +80,6 @@ namespace dbaccess
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue )throw (::com::sun::star::uno::Exception);
 
         virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
-
     protected:
         using ODataColumn::getFastPropertyValue;
     };

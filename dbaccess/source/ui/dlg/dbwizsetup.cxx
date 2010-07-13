@@ -789,7 +789,7 @@ IMPL_LINK(ODbTypeWizDialogSetup, OnRecentDocumentSelected, OGeneralPage*, /*_pGe
 IMPL_LINK(ODbTypeWizDialogSetup, OnSingleDocumentChosen, OGeneralPage*, /*_pGeneralPage*/)
 {
     if ( prepareLeaveCurrentState( eFinish ) )
-        onFinish( RET_OK );
+        onFinish();
     return 0L;
 }
 
@@ -1078,7 +1078,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         return aExistenceCheck.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     }
     // -----------------------------------------------------------------------------
-    IWizardPage* ODbTypeWizDialogSetup::getWizardPage(TabPage* _pCurrentPage) const
+    IWizardPageController* ODbTypeWizDialogSetup::getPageController( TabPage* _pCurrentPage ) const
     {
         OGenericAdministrationPage* pPage = static_cast<OGenericAdministrationPage*>(_pCurrentPage);
         return pPage;
@@ -1206,7 +1206,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     }
 
     // -----------------------------------------------------------------------------
-    sal_Bool ODbTypeWizDialogSetup::onFinish(sal_Int32 _nResult)
+    sal_Bool ODbTypeWizDialogSetup::onFinish()
     {
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPage::eOpenExisting )
         {
@@ -1214,7 +1214,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             // wants us to load could be a non-database document. Instead, we asynchronously
             // open the selected document. Thus, the wizard's return value is RET_CANCEL,
             // which means to not continue loading the database document
-            if ( !OWizardMachine::onFinish( RET_CANCEL ) )
+            if ( !OWizardMachine::Finnish( RET_CANCEL ) )
                 return sal_False;
 
             Reference< XComponentLoader > xFrameLoader;
@@ -1237,7 +1237,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             skipUntil(PAGE_DBSETUPWIZARD_FINAL);
         }
         if (getCurrentState() == PAGE_DBSETUPWIZARD_FINAL)
-            return SaveDatabaseDocument() ? OWizardMachine::onFinish( _nResult ) : sal_False;
+            return SaveDatabaseDocument() ? OWizardMachine::onFinish() : sal_False;
         else
         {
                enableButtons( WZB_FINISH, sal_False );

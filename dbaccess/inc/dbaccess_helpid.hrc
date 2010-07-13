@@ -326,7 +326,7 @@
 #define HID_APP_VIEW_PREVIEW_CB                           "DBACCESS_HID_APP_VIEW_PREVIEW_CB"
 #define HID_APP_VIEW_PREVIEW_1                            "DBACCESS_HID_APP_VIEW_PREVIEW_1"
 #define HID_APP_VIEW_PREVIEW_2                            "DBACCESS_HID_APP_VIEW_PREVIEW_2"
-// free
+#define HID_TABDESIGN_HELPTEXT                            "DBACCESS_HID_TABDESIGN_HELPTEXT"
 #define UID_APP_VIEW_HORZ_SPLIT                           "DBACCESS_UID_APP_VIEW_HORZ_SPLIT"
 #define UID_APP_VIEW_PREVIEW_1                            "DBACCESS_UID_APP_VIEW_PREVIEW_1"
 #define HID_APP_VIEW_PREVIEW_3                            "DBACCESS_HID_APP_VIEW_PREVIEW_3"

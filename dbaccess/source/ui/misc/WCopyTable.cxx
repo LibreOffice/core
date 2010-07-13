@@ -230,22 +230,10 @@ Sequence< ::rtl::OUString > ObjectCopySource::getColumnNames() const
 //------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ObjectCopySource::getPrimaryKeyColumnNames() const
 {
-    Reference<XKeysSupplier> xSup(m_xObject,UNO_QUERY);
-    Reference< XIndexAccess> xKeys;
-    if(xSup.is() )
-        xKeys = xSup->getKeys();
-
-    ::std::vector< Reference< XNameAccess > > aPrimaryKeyColumns( ::dbaui::getKeyColumns( xKeys, KeyType::PRIMARY ) );
-    OSL_ENSURE( ( aPrimaryKeyColumns.size() == 1 ) || aPrimaryKeyColumns.empty(),
-        "ObjectCopySource::getPrimaryKeyColumnNames: more than one primary key?!" );
-
-    Reference< XNameAccess > xKeyCols;
-    if ( !aPrimaryKeyColumns.empty() )
-        xKeyCols = aPrimaryKeyColumns[0];
-
+    const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(m_xObject);
     Sequence< ::rtl::OUString > aKeyColNames;
-    if ( xKeyCols.is() )
-        aKeyColNames = xKeyCols->getElementNames();
+    if ( xPrimaryKeyColumns.is() )
+        aKeyColNames = xPrimaryKeyColumns->getElementNames();
     return aKeyColNames;
 }
 
@@ -368,7 +356,7 @@ void NamedTableCopySource::impl_ensureColumnInfo_throw()
         OFieldDescription aDesc;
 
         aDesc.SetName(          xStatementMeta->getColumnName(      i ) );
-        aDesc.SetDescription(   xStatementMeta->getColumnLabel(     i ) );
+        aDesc.SetHelpText(      xStatementMeta->getColumnLabel(     i ) );
         aDesc.SetTypeValue(     xStatementMeta->getColumnType(      i ) );
         aDesc.SetTypeName(      xStatementMeta->getColumnTypeName(  i ) );
         aDesc.SetPrecision(     xStatementMeta->getPrecision(       i ) );

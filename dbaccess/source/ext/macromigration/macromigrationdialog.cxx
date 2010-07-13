@@ -314,9 +314,9 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    sal_Bool MacroMigrationDialog::onFinish( sal_Int32 _nResult )
+    sal_Bool MacroMigrationDialog::onFinish()
     {
-        return MacroMigrationDialog_Base::onFinish( _nResult );
+        return MacroMigrationDialog_Base::onFinish();
     }
 
     //--------------------------------------------------------------------

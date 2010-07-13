@@ -1748,7 +1748,7 @@ void OQueryController::impl_reset( const bool i_bForceCurrentControllerSettings 
                     m_pSqlIterator->traverseAll();
                     if ( m_pSqlIterator->hasErrors() )
                     {
-                        if ( !i_bForceCurrentControllerSettings && !editingView() )
+                        if ( !i_bForceCurrentControllerSettings && m_bGraphicalDesign && !editingView() )
                         {
                             impl_showAutoSQLViewError( makeAny( m_pSqlIterator->getErrors() ) );
                         }
