@@ -93,7 +93,8 @@ GR_CONFIGURE_FLAGS= --enable-final=yes --enable-static --disable-shared
 EXTRA_GR_CXX_FLAGS=-fPIC
 
 .IF "$(USE_SYSTEM_STL)"!="YES"
-EXTRA_GR_LD_FLAGS=$(LIBSTLPORT) -lm
+# #i112124# STLPort seems to require libstdc++
+EXTRA_GR_LD_FLAGS=$(LIBSTLPORT) -lm -lstdc++
 GR_LIB_PATH=LD_LIBRARY_PATH=$(SOLARVERSION)/$(INPATH)/lib$(UPDMINOREXT)
 .ELSE
 GR_LIB_PATH=
@@ -101,11 +102,11 @@ GR_LIB_PATH=
 
 .IF "$(OS)"=="WNT"
 PATCH_FILES+=graphite-2.3.1.patch.mingw
-EXTRA_GR_CXX_FLAGS=-nostdinc
+EXTRA_GR_CXX_FLAGS=-mthreads -nostdinc
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 EXTRA_GR_CXX_FLAGS+=-shared-libgcc
 .ENDIF
-EXTRA_GR_LD_FLAGS+=-no-undefined
+EXTRA_GR_LD_FLAGS+=-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2
 .ENDIF
 
 # don't use SOLARLIB for LDFLAGS because it pulls in system graphite so build will fail

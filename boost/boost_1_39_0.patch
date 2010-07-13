@@ -1,6 +1,35 @@
---- misc/boost_1_39_0/boost/function/function_template.hpp	2008-10-16 15:21:50.000000000 +0200
-+++ misc/build/boost_1_39_0/boost/function/function_template.hpp	2009-07-09 12:58:51.141224220 +0200
-@@ -950,10 +950,10 @@
+diff --git boost_1_39_0/boost/config/compiler/visualc.hpp boost_1_39_0/boost/config/compiler/visualc.hpp
+index 552e5bb..d9f90b2 100644
+--- misc/build/boost_1_39_0/boost/config/compiler/visualc.hpp
++++ misc/build/boost_1_39_0/boost/config/compiler/visualc.hpp
+@@ -138,6 +138,9 @@
+ #  define BOOST_NO_RTTI
+ #endif
+ 
++// disable WORKAROUND macro - gives warning for undefined macros
++#define BOOST_STRICT_CONFIG 1
++
+ //
+ // all versions support __declspec:
+ //
+diff --git boost_1_39_0/boost/function/function_base.hpp boost_1_39_0/boost/function/function_base.hpp
+index 6612fb8..35afa16 100644
+--- misc/build/boost_1_39_0/boost/function/function_base.hpp
++++ misc/build/boost_1_39_0/boost/function/function_base.hpp
+@@ -42,7 +42,7 @@
+ #endif       
+ 
+ // Define BOOST_FUNCTION_STD_NS to the namespace that contains type_info.
+-#ifdef BOOST_NO_EXCEPTION_STD_NAMESPACE
++#ifdef BOOST_NO_STD_TYPEINFO
+ // Embedded VC++ does not have type_info in namespace std
+ #  define BOOST_FUNCTION_STD_NS
+ #else
+diff --git boost_1_39_0/boost/function/function_template.hpp boost_1_39_0/boost/function/function_template.hpp
+index 584abe9..36b619b 100644
+--- misc/build/boost_1_39_0/boost/function/function_template.hpp
++++ misc/build/boost_1_39_0/boost/function/function_template.hpp
+@@ -950,10 +950,10 @@ namespace boost {
            f.vtable->manager(f.functor, this->functor,
                              boost::detail::function::move_functor_tag);
  		  f.vtable = 0;
@@ -12,32 +41,11 @@
        } catch (...) {
          vtable = 0;
          throw;
---- misc/boost_1_39_0/boost/function/function_base.hpp	2008-10-16 15:21:50.000000000 +0200
-+++ misc/build/boost_1_39_0/boost/function/function_base.hpp	2009-07-12 21:42:22.779873909 +0200
-@@ -42,7 +42,7 @@
- #endif       
- 
- // Define BOOST_FUNCTION_STD_NS to the namespace that contains type_info.
--#ifdef BOOST_NO_EXCEPTION_STD_NAMESPACE
-+#ifdef BOOST_NO_STD_TYPEINFO
- // Embedded VC++ does not have type_info in namespace std
- #  define BOOST_FUNCTION_STD_NS
- #else
---- misc/boost_1_39_0/boost/config/compiler/visualc.hpp	2009-03-26 20:00:00.000000000 +0100
-+++ misc/build/boost_1_39_0/boost/config/compiler/visualc.hpp	2009-06-10 21:53:42.484375000 +0200
-@@ -138,6 +138,9 @@
- #  define BOOST_NO_RTTI
- #endif
- 
-+// disable WORKAROUND macro - gives warning for undefined macros
-+#define BOOST_STRICT_CONFIG 1
-+
- //
- // all versions support __declspec:
- //
---- misc/boost_1_39_0/boost/mpl/apply_wrap.hpp	2008-10-11 08:50:46.000000000 +0200
-+++ misc/build/boost_1_39_0/boost/mpl/apply_wrap.hpp	2009-06-10 21:53:42.500000000 +0200
-@@ -173,8 +173,8 @@
+diff --git boost_1_39_0/boost/mpl/apply_wrap.hpp boost_1_39_0/boost/mpl/apply_wrap.hpp
+index b3cb12b..0bf8e73 100644
+--- misc/build/boost_1_39_0/boost/mpl/apply_wrap.hpp
++++ misc/build/boost_1_39_0/boost/mpl/apply_wrap.hpp
+@@ -173,8 +173,8 @@ struct BOOST_PP_CAT(apply_wrap,i_)<AUX778076_APPLY_WRAP_SPEC_PARAMS(i_, int)>
  #   undef i_
  
  ///// iteration, depth == 2
@@ -48,15 +56,17 @@
  
  #   define j_ BOOST_PP_FRAME_ITERATION(2)
  
-@@ -230,4 +231,5 @@
+@@ -231,4 +231,5 @@ struct BOOST_PP_CAT(apply_wrap_impl,i_)<
  #   undef j_
  
  #endif // BOOST_PP_ITERATION_DEPTH()
 +#endif
  #endif // BOOST_PP_IS_ITERATING
---- misc/boost_1_39_0/boost/mpl/bind.hpp	2008-10-11 08:19:02.000000000 +0200
-+++ misc/build/boost_1_39_0/boost/mpl/bind.hpp	2009-06-10 21:53:42.515625000 +0200
-@@ -531,7 +531,8 @@
+diff --git boost_1_39_0/boost/mpl/bind.hpp boost_1_39_0/boost/mpl/bind.hpp
+index 5d851ef..780e260 100644
+--- misc/build/boost_1_39_0/boost/mpl/bind.hpp
++++ misc/build/boost_1_39_0/boost/mpl/bind.hpp
+@@ -531,7 +531,8 @@ struct bind_chooser<i_>
  
  ///// iteration, depth == 2
  
@@ -66,15 +76,81 @@
  
  #   define j_ BOOST_PP_FRAME_ITERATION(2)
  #   if !defined(BOOST_MPL_CFG_NO_UNNAMED_PLACEHOLDER_SUPPORT)
-@@ -548,4 +549,5 @@
+@@ -548,4 +549,5 @@ struct bind_chooser<i_>
  #   undef j_
  
  #endif // BOOST_PP_ITERATION_DEPTH()
 +#endif
  #endif // BOOST_PP_IS_ITERATING
---- misc/boost_1_39_0/boost/spirit/home/classic/core/impl/match.ipp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/impl/match.ipp	2009-06-10 21:53:42.531250000 +0200
-@@ -19,12 +19,12 @@
+diff --git boost_1_39_0/boost/ptr_container/detail/move.hpp boost_1_39_0/boost/ptr_container/detail/move.hpp
+index bf07d5f..6b082a7 100644
+--- misc/build/boost_1_39_0/boost/ptr_container/detail/move.hpp
++++ misc/build/boost_1_39_0/boost/ptr_container/detail/move.hpp
+@@ -20,7 +20,7 @@ namespace move_ptrs {
+ template<typename Ptr>
+ class move_source {
+ public:
+-    move_source(Ptr& ptr) : ptr_(ptr) {}
++    move_source(Ptr& _ptr) : ptr_(_ptr) {}
+     Ptr& ptr() const { return ptr_; }
+ private:
+     Ptr& ptr_;
+diff --git boost_1_39_0/boost/ptr_container/detail/reversible_ptr_container.hpp boost_1_39_0/boost/ptr_container/detail/reversible_ptr_container.hpp
+index 47c3903..3ad2c5c 100644
+--- misc/build/boost_1_39_0/boost/ptr_container/detail/reversible_ptr_container.hpp
++++ misc/build/boost_1_39_0/boost/ptr_container/detail/reversible_ptr_container.hpp
+@@ -278,9 +278,9 @@ namespace ptr_container_detail
+ 
+     private:
+         template< class ForwardIterator >
+-        ForwardIterator advance( ForwardIterator begin, size_type n ) 
++        ForwardIterator advance( ForwardIterator _begin, size_type n ) 
+         {
+-            ForwardIterator iter = begin;
++            ForwardIterator iter = _begin;
+             std::advance( iter, n );
+             return iter;
+         }        
+diff --git boost_1_39_0/boost/ptr_container/detail/static_move_ptr.hpp boost_1_39_0/boost/ptr_container/detail/static_move_ptr.hpp
+index ba2b9af..9e0d682 100644
+--- misc/build/boost_1_39_0/boost/ptr_container/detail/static_move_ptr.hpp
++++ misc/build/boost_1_39_0/boost/ptr_container/detail/static_move_ptr.hpp
+@@ -151,7 +151,7 @@ public:
+     deleter_const_reference get_deleter() const { return impl_.second(); }
+ private:
+     template<typename TT, typename DD>
+-    void check(const static_move_ptr<TT, DD>& ptr)
++    void check(const static_move_ptr<TT, DD>& _ptr)
+         {
+             typedef move_ptrs::is_smart_ptr_convertible<TT, T> convertible;
+             BOOST_STATIC_ASSERT(convertible::value);
+diff --git boost_1_39_0/boost/ptr_container/exception.hpp boost_1_39_0/boost/ptr_container/exception.hpp
+index d9a5ffe..7837fbb 100644
+--- misc/build/boost_1_39_0/boost/ptr_container/exception.hpp
++++ misc/build/boost_1_39_0/boost/ptr_container/exception.hpp
+@@ -24,7 +24,7 @@ namespace boost
+     {
+         const char* what_;
+     public:
+-        bad_ptr_container_operation( const char* what ) : what_( what )
++        bad_ptr_container_operation( const char* text ) : what_( text )
+         { }
+         
+         virtual const char* what() const throw()
+@@ -38,7 +38,7 @@ namespace boost
+     class bad_index : public bad_ptr_container_operation
+     {
+     public:
+-        bad_index( const char* what ) : bad_ptr_container_operation( what )
++        bad_index( const char* text ) : bad_ptr_container_operation( text )
+         { }
+     };
+ 
+diff --git boost_1_39_0/boost/spirit/home/classic/core/impl/match.ipp boost_1_39_0/boost/spirit/home/classic/core/impl/match.ipp
+index 492bf4b..565fdec 100644
+--- misc/build/boost_1_39_0/boost/spirit/home/classic/core/impl/match.ipp
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/impl/match.ipp
+@@ -19,12 +19,12 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
      : len(-1), val() {}
  
      template <typename T>
@@ -91,7 +167,7 @@
  
      template <typename T>
      inline bool
-@@ -66,11 +66,11 @@
+@@ -66,11 +66,11 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
      inline match<nil_t>::match()
      : len(-1) {}
  
@@ -107,9 +183,11 @@
  
      inline bool
      match<nil_t>::operator!() const
---- misc/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/impl/rule.ipp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/impl/rule.ipp	2009-06-10 21:53:42.546875000 +0200
-@@ -226,7 +226,7 @@
+diff --git boost_1_39_0/boost/spirit/home/classic/core/non_terminal/impl/rule.ipp boost_1_39_0/boost/spirit/home/classic/core/non_terminal/impl/rule.ipp
+index ca51bd2..b2282fa 100644
+--- misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/impl/rule.ipp
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/impl/rule.ipp
+@@ -226,7 +226,7 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
          template <typename ParserT, typename ScannerT, typename AttrT>
          struct concrete_parser : abstract_parser<ScannerT, AttrT>
          {
@@ -118,9 +196,11 @@
              virtual ~concrete_parser() {}
  
              virtual typename match_result<ScannerT, AttrT>::type
---- misc/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/parser_id.hpp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/parser_id.hpp	2009-06-10 21:53:42.562500000 +0200
-@@ -106,7 +106,7 @@
+diff --git boost_1_39_0/boost/spirit/home/classic/core/non_terminal/parser_id.hpp boost_1_39_0/boost/spirit/home/classic/core/non_terminal/parser_id.hpp
+index 2f4b986..b3809da 100644
+--- misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/parser_id.hpp
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/parser_id.hpp
+@@ -106,7 +106,7 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
                  : parser_id(reinterpret_cast<std::size_t>(this)); 
          }
  
@@ -129,9 +209,11 @@
          
      private:
      
---- misc/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/rule.hpp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/rule.hpp	2009-07-08 22:23:45.899895415 +0200
-@@ -159,11 +159,11 @@
+diff --git boost_1_39_0/boost/spirit/home/classic/core/non_terminal/rule.hpp boost_1_39_0/boost/spirit/home/classic/core/non_terminal/rule.hpp
+index 73389b4..18d26cc 100644
+--- misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/rule.hpp
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/rule.hpp
+@@ -159,11 +159,11 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
              return ptr.get();
          }
  
@@ -147,9 +229,11 @@
  
          scoped_ptr<abstract_parser_t> ptr;
      };
---- misc/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2009-06-10 21:53:42.593750000 +0200
-@@ -210,7 +210,7 @@
+diff --git boost_1_39_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp boost_1_39_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp
+index 5d6761f..b93118a 100644
+--- misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp
+@@ -210,7 +210,7 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
              subrule_list<
                  subrule_parser<ID2, DefT2, ContextT2>,
                  nil_t> >
@@ -158,7 +242,7 @@
          {
              return subrule_list<
                  self_t,
-@@ -220,7 +220,7 @@
+@@ -220,7 +220,7 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
                          *this,
                          subrule_list<
                              subrule_parser<ID2, DefT2, ContextT2>, nil_t>(
@@ -167,7 +251,7 @@
          }
  
          typename DefT::embed_t rhs;
-@@ -258,10 +258,10 @@
+@@ -258,10 +258,10 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
          parse_main(ScannerT const& scan) const
          {
              typedef typename parser_result<self_t, ScannerT>::type result_t;
@@ -181,9 +265,11 @@
          }
  
          template <typename ScannerT>
---- misc/boost_1_39_0/boost/spirit/home/classic/debug/impl/parser_names.ipp	2008-06-22 17:05:38.000000000 +0200
-+++ misc/build/boost_1_39_0/boost/spirit/home/classic/debug/impl/parser_names.ipp	2009-10-11 22:34:54.867381817 +0200
-@@ -395,13 +395,13 @@
+diff --git boost_1_39_0/boost/spirit/home/classic/debug/impl/parser_names.ipp boost_1_39_0/boost/spirit/home/classic/debug/impl/parser_names.ipp
+index 5d75be2..730cf0c 100644
+--- misc/build/boost_1_39_0/boost/spirit/home/classic/debug/impl/parser_names.ipp
++++ misc/build/boost_1_39_0/boost/spirit/home/classic/debug/impl/parser_names.ipp
+@@ -395,13 +395,13 @@ BOOST_SPIRIT_CLASSIC_NAMESPACE_BEGIN
              }
  
              bool register_node(void const *r, char const *name_to_register,

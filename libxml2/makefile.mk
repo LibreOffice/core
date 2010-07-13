@@ -42,32 +42,30 @@ all:
 
 # --- Files --------------------------------------------------------
 
-LIBXML2VERSION=2.6.31
+LIBXML2VERSION=2.7.6
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
-TARFILE_MD5=71ef7bcd3493a94395abccecbcf62dd7
-#.IF "$(OS)$(COM)"=="WNTGCC"
-#PATCH_FILES=$(TARFILE_NAME)-mingw.patch
-#.ELSE
-PATCH_FILES=$(TARFILE_NAME).patch
-#.ENDIF
+TARFILE_MD5=7740a8ec23878a2f50120e1faa2730f2
+PATCH_FILES=libxml2-configure.patch \
+            libxml2-mingw.patch \
+            libxml2-gnome599717.patch \
+            libxml2-gnome602728.patch
 
 # This is only for UNX environment now
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
-PATCH_FILES+=$(TARFILE_NAME)-mingw.patch
-xml2_CC=$(CC)
+xml2_CC=$(CC) -mthreads
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 xml2_CC+=-shared-libgcc
 .ENDIF
-xml2_LIBS=-lws2_32 -lmingwthrd
+xml2_LIBS=-lws2_32
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 xml2_LIBS+=-lstdc++_s
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=no --without-debug --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(xml2_CC)" CFLAGS=-D_MT LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc -L$(ILIB:s/;/ -L/)" LIBS="$(xml2_LIBS)" OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=no --without-debug --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(xml2_CC)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2 -L$(ILIB:s/;/ -L/)" LIBS="$(xml2_LIBS)" OBJDUMP=objdump
 BUILD_ACTION=$(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE

@@ -27,7 +27,7 @@
 
 PRJ=..$/..
 
-PRJNAME=bitstream_vera_fonts
+PRJNAME=more_fonts
 TARGET=ttf_liberation
 
 # --- Settings -----------------------------------------------------
@@ -36,12 +36,11 @@ TARGET=ttf_liberation
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=liberation-fonts-1.05
-TARFILE_MD5=30102daecfb3a6aa022d2691dc075180
-TARFILE_ROOTDIR=liberation-fonts-1.05
+TARFILE_NAME=liberation-fonts-ttf-1.05.3.20100427
+TARFILE_MD5=ef9ab6c1740682fbd730606d5f6922e6 
+TARFILE_ROOTDIR=.
 
 PATCH_FILES=
-
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
@@ -56,8 +55,6 @@ BUILD_FLAGS=
 .INCLUDE : target.mk
 
 .IF "$(WITH_FONTS)"!="NO"
-.IF "$(GUI)" != "WNT"
 .INCLUDE : tg_ext.mk
-.ENDIF
 .ENDIF
 

@@ -1,0 +1,48 @@
+--- misc/libxml2-2.7.6/configure	2008-01-11 17:01:56.000000000 +0900
++++ misc/build/libxml2-2.7.6/configure	2009-09-07 20:48:47.656250000 +0900
+@@ -19914,6 +19914,8 @@
+ 
+ if test "$with_modules" != "no" ; then
+  case "$host" in
++  *-*-mingw*)
++  ;;
+   *-*-cygwin*)
+   MODULE_EXTENSION=".dll"
+   { $as_echo "$as_me:$LINENO: checking for dlopen in -lcygwin" >&5
+@@ -20632,11 +20636,10 @@
+ 
+     fi
+     case $host_os in
+-       *mingw32*) if test "$THREAD_LIBS" != "-lpthread"; then
++       *mingw32*)
+                WITH_THREADS="1"
+                THREADS_W32="Win32"
+ 	       THREAD_CFLAGS="$THREAD_CFLAGS -DHAVE_WIN32_THREADS"
+-           fi
+        ;;
+        *cygwin*) THREAD_LIBS=""
+        ;;
+--- misc/libxml2-2.7.6/libxml.h	2007-11-23 19:47:23.000000000 +0900
++++ misc/build/libxml2-2.7.6/libxml.h	2009-07-10 14:37:34.988250000 +0900
+@@ -30,6 +30,10 @@
+ #include <libxml/xmlversion.h>
+ #else
+ #include "config.h"
++#ifdef __MINGW32__
++#undef HAVE_LIBPTHREAD 
++#undef HAVE_PTHREAD_H 
++#endif
+ #include <libxml/xmlversion.h>
+ #endif
+ 
+--- misc/libxml2-2.7.6/include/libxml/xmlexports.h	2009-09-25 00:31:59.000000000 +0900
++++ misc/build/libxml2-2.7.6/include/libxml/xmlexports.h	2010-06-06 11:15:54.160750000 +0900
+@@ -113,7 +113,7 @@
+    * _imp__xmlFree listed as missing. Try to workaround the problem
+    * by also making that declaration when compiling client code.
+    */
+-  #if !defined(LIBXML_STATIC)
++  #if defined(IN_LIBXML) && !defined(LIBXML_STATIC)
+     #define XMLPUBFUN __declspec(dllexport)
+     #define XMLPUBVAR __declspec(dllexport)
+   #else
