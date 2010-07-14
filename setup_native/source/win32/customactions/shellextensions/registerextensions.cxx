@@ -324,7 +324,7 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
     WIN32_FIND_DATA aFindFileData;
 
     mystr = "unopkg file: " + sUnoPkgFile;
-    MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+    //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
 
     // Find unopkg.exe
     HANDLE hFindUnopkg = FindFirstFile( sUnoPkgFile.c_str(), &aFindFileData );
@@ -340,31 +340,31 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
             + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml")
             + TEXT(" -env:UserInstallation=") + sTempFolder;
         mystr = "Command: " + sCommand;
-        MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+        //MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
 
         DWORD exitCode = 0;
         bool fSuccess = ExecuteCommand( sCommand.c_str(), & exitCode);
 
         deleteTempFolder(sTempFolder);
 
-        if ( fSuccess )
-        {
-            mystr = "Executed successfully!";
-            MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-        }
-        else
-        {
-            mystr = "An error occured during execution!";
-            MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-        }
+//         if ( fSuccess )
+//         {
+//             mystr = "Executed successfully!";
+//             MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+//         }
+//         else
+//         {
+//             mystr = "An error occured during execution!";
+//             MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+//         }
 
         FindClose( hFindUnopkg );
     }
-    else
-    {
-        mystr = "Error: Did not find " + sUnoPkgFile;
-        MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
-    }
+//     else
+//     {
+//         mystr = "Error: Did not find " + sUnoPkgFile;
+//         MessageBox(NULL, mystr.c_str(), "Command", MB_OK);
+//     }
 
     return ERROR_SUCCESS;
 }
@@ -383,7 +383,7 @@ extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
     std::_tstring sInstDir;
 
     std::_tstring sProductKey = GetMsiProperty( handle, TEXT("FINDPRODUCT") );
-    // MessageBox( NULL, sProductKey.c_str(), "Titel", MB_OK );
+    //MessageBox( NULL, sProductKey.c_str(), "Titel", MB_OK );
 
     if ( ERROR_SUCCESS == RegOpenKey( HKEY_CURRENT_USER,  sProductKey.c_str(), &hKey ) )
     {
@@ -412,16 +412,16 @@ extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
 
     bool fSuccess = RemoveCompleteDirectory( sCacheDir );
 
-    if ( fSuccess )
-    {
-        mystr = "Executed successfully!";
-        // MessageBox(NULL, mystr.c_str(), "Main methode", MB_OK);
-    }
-    else
-    {
-        mystr = "An error occured during execution!";
-        // MessageBox(NULL, mystr.c_str(), "Main methode", MB_OK);
-    }
+//     if ( fSuccess )
+//     {
+//         mystr = "Executed successfully!";
+//          MessageBox(NULL, mystr.c_str(), "Main methode", MB_OK);
+//     }
+//     else
+//     {
+//         mystr = "An error occured during execution!";
+//         MessageBox(NULL, mystr.c_str(), "Main methode", MB_OK);
+//     }
 
     return ERROR_SUCCESS;
 }
