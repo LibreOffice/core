@@ -227,7 +227,7 @@ void CurrentMasterPagesSelector::Execute (SfxRequest& rRequest)
             // i.e. is not used.
             SdPage* pMasterPage = GetSelectedMasterPage();
             if (pMasterPage != NULL
-                && mrDocument.GetMasterPageUserCount(pMasterPage) > 0)
+                && mrDocument.GetMasterPageUserCount(pMasterPage) == 0)
             {
                 // Removing the precious flag so that the following call to
                 // RemoveUnnessesaryMasterPages() will remove this master page.
