@@ -39,14 +39,15 @@ class Xhtex(AbstractL10nTool):
     def extract_topic(self, list, inputfile):
         topics = []
         for elem in list:                        
-            if elem.childNodes[0].nodeType == elem.TEXT_NODE:
+            if elem.childNodes[0].nodeType == elem.TEXT_NODE and len(elem.childNodes[0].data.strip()):
                 topics.append(self.prepare_sdf_line(id=elem.getAttribute("id").strip(), text=elem.childNodes[0].data, inputfile=inputfile))            
         return topics
             
     def extract_title(self, list, inputfile):
         titles = []
         for elem in list:
-            titles.append(self.prepare_sdf_line(id=elem.getAttribute("id").strip(), text=elem.getAttribute("title").strip(), inputfile=inputfile))
+            if len(elem.getAttribute("title").strip()):
+                titles.append(self.prepare_sdf_line(id=elem.getAttribute("id").strip(), text=elem.getAttribute("title").strip(), inputfile=inputfile))
         return titles
     
     # Merge methods
