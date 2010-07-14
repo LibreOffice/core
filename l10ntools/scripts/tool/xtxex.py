@@ -76,10 +76,14 @@ class Xtxex(AbstractL10nTool):
         # escape all returns
         lines = [line.replace('\n', "\\n") for line in lines]
         line = ''.join(lines)
-        sdf_entity = self.prepare_sdf_line(inputfile);
-        sdf_entity.text = line
-        return str(sdf_entity)
-    
+        test = str(line)
+        if len(test.strip()):
+            sdf_entity = self.prepare_sdf_line(inputfile);
+            sdf_entity.text = line
+            return str(sdf_entity)
+        else:
+            return ""
+
     def prepare_sdf_line(self, inputfile="", lang=""):
         if lang == "":
             lang = self._source_language
