@@ -199,6 +199,9 @@ DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
 KDE_CFLAGS:=-I$(KDE_ROOT)/include -DQT_CLEAN_NAMESPACE
 KDE_LIBS:=-lkdeui -lkdecore -lqt-mt
 SOLARLIB+=-L$(KDE_ROOT)/lib
+.IF "$(HOSTTYPE)" == "x86_64-linux"
+SOLARLIB+=-L$(KDE_ROOT)/lib64
+.ENDIF          # "$(HOSTTYPE)" == "x86_64-linux"
 .ENDIF          # "$(KDE_ROOT)"!=""
 .ENDIF          # "$(ENABLE_KDE)" != ""
 
