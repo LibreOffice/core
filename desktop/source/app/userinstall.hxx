@@ -29,6 +29,8 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 
+#define BUNDLED_FOLDER_NAME "bundled"
+
 namespace desktop
 {
 

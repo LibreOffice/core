@@ -122,6 +122,7 @@
 #include <osl/file.hxx>
 #include <osl/signal.h>
 #include <rtl/uuid.h>
+#include <rtl/uri.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svl/languageoptions.hxx>
 #include <unotools/internaloptions.hxx>
@@ -468,6 +469,208 @@ void ReplaceStringHookProc( UniString& rStr )
     }
 }
 
+static const char      pPresetsFolder[]        = "presets";
+static const char      pBundledFolder[]        = BUNDLED_FOLDER_NAME;
+static const char      pLastSyncFileName[]     = "lastsynchronized";
+static const sal_Int32 nStrLenLastSync         = 16;
+
+static bool needsSynchronization(
+    ::rtl::OUString const & baseSynchronizedURL, ::rtl::OUString const & userSynchronizedURL )
+{
+    bool bNeedsSync( false );
+
+    ::osl::DirectoryItem itemUserFile;
+    ::osl::File::RC err1 =
+          ::osl::DirectoryItem::get(userSynchronizedURL, itemUserFile);
+
+    //If it does not exist, then there is nothing to be done
+    if (err1 == ::osl::File::E_NOENT)
+    {
+        return true;
+    }
+    else if (err1 != ::osl::File::E_None)
+    {
+        OSL_ENSURE(0, "Cannot access lastsynchronized in user layer");
+        return true; //sync just in case
+    }
+
+    //If last synchronized does not exist in base layer, then do nothing
+    ::osl::DirectoryItem itemBaseFile;
+    ::osl::File::RC err2 = ::osl::DirectoryItem::get(baseSynchronizedURL, itemBaseFile);
+    if (err2 == ::osl::File::E_NOENT)
+    {
+        return true;
+
+    }
+    else if (err2 != ::osl::File::E_None)
+    {
+        OSL_ENSURE(0, "Cannot access file lastsynchronized in base layer");
+        return true; //sync just in case
+    }
+
+    //compare the modification time of the extension folder and the last
+    //modified file
+    ::osl::FileStatus statUser(FileStatusMask_ModifyTime);
+    ::osl::FileStatus statBase(FileStatusMask_ModifyTime);
+    if (itemUserFile.getFileStatus(statUser) == ::osl::File::E_None)
+    {
+        if (itemBaseFile.getFileStatus(statBase) == ::osl::File::E_None)
+        {
+            TimeValue timeUser = statUser.getModifyTime();
+            TimeValue timeBase = statBase.getModifyTime();
+
+            if (timeUser.Seconds < timeBase.Seconds)
+                bNeedsSync = true;
+        }
+        else
+        {
+            OSL_ASSERT(0);
+            bNeedsSync = true;
+        }
+    }
+    else
+    {
+        OSL_ASSERT(0);
+        bNeedsSync = true;
+    }
+
+    return bNeedsSync;
+}
+
+static ::rtl::OUString getBasePresetsPathURL()
+{
+    ::rtl::OUString              aBaseInstallURL;
+    ::utl::Bootstrap::PathStatus aBaseInstallStatus = ::utl::Bootstrap::locateBaseInstallation( aBaseInstallURL );
+
+    if ( aBaseInstallStatus == ::utl::Bootstrap::PATH_EXISTS )
+    {
+        ::rtl::OUStringBuffer aTmp( aBaseInstallURL );
+        ::sal_uInt32          nLastIndex = aBaseInstallURL.lastIndexOf('/');
+
+        if ( nLastIndex != aBaseInstallURL.getLength()-1 )
+            aTmp.appendAscii( "/" );
+        aTmp.appendAscii( pPresetsFolder );
+        aTmp.appendAscii( "/" );
+        aTmp.appendAscii( pBundledFolder );
+        aBaseInstallURL = aTmp.makeStringAndClear();
+    }
+
+    return aBaseInstallURL;
+}
+
+static ::rtl::OUString getUserBundledExtPathURL()
+{
+    ::rtl::OUString folder( RTL_CONSTASCII_USTRINGPARAM( "$BUNDLED_EXTENSIONS_USER" ));
+    ::rtl::Bootstrap::expandMacros(folder);
+
+    return folder;
+}
+
+static ::rtl::OUString getLastSyncFileURLFromBaseInstallation()
+{
+    ::rtl::OUString aBasePresetPathURL = getBasePresetsPathURL();
+    ::sal_uInt32    nLastIndex         = aBasePresetPathURL.lastIndexOf('/');
+
+    ::rtl::OUStringBuffer aTmp( aBasePresetPathURL );
+
+    if ( nLastIndex != aBasePresetPathURL.getLength()-1 )
+        aTmp.appendAscii( "/" );
+    aTmp.appendAscii( pLastSyncFileName );
+
+    return aTmp.makeStringAndClear();
+}
+
+static ::rtl::OUString getLastSyncFileURLFromUserInstallation()
+{
+    ::rtl::OUString aUserBundledPathURL = getUserBundledExtPathURL();
+    ::sal_uInt32    nLastIndex          = aUserBundledPathURL.lastIndexOf('/');
+
+    ::rtl::OUStringBuffer aTmp( aUserBundledPathURL );
+
+    if ( nLastIndex != aUserBundledPathURL.getLength()-1 )
+        aTmp.appendAscii( "/" );
+    aTmp.appendAscii( pLastSyncFileName );
+
+    return aTmp.makeStringAndClear();
+}
+
+static osl::FileBase::RC copy_bundled_recursive(
+    const rtl::OUString& srcUnqPath,
+    const rtl::OUString& dstUnqPath,
+    sal_Int32            TypeToCopy )
+throw()
+{
+    osl::FileBase::RC err = osl::FileBase::E_None;
+
+    if( TypeToCopy == -1 ) // Document
+    {
+        err = osl::File::copy( srcUnqPath,dstUnqPath );
+    }
+    else if( TypeToCopy == +1 ) // Folder
+    {
+        osl::Directory aDir( srcUnqPath );
+        aDir.open();
+
+        err = osl::Directory::create( dstUnqPath );
+        osl::FileBase::RC next = err;
+        if( err == osl::FileBase::E_None ||
+            err == osl::FileBase::E_EXIST )
+        {
+            err = osl::FileBase::E_None;
+            sal_Int32 n_Mask = FileStatusMask_FileURL | FileStatusMask_FileName | FileStatusMask_Type;
+
+            osl::DirectoryItem aDirItem;
+
+            while( err == osl::FileBase::E_None && ( next = aDir.getNextItem( aDirItem ) ) == osl::FileBase::E_None )
+            {
+                sal_Bool IsDoc = false;
+                sal_Bool bFilter = false;
+                osl::FileStatus aFileStatus( n_Mask );
+                aDirItem.getFileStatus( aFileStatus );
+                if( aFileStatus.isValid( FileStatusMask_Type ) )
+                    IsDoc = aFileStatus.getFileType() == osl::FileStatus::Regular;
+
+                // Getting the information for the next recursive copy
+                sal_Int32 newTypeToCopy = IsDoc ? -1 : +1;
+
+                rtl::OUString newSrcUnqPath;
+                if( aFileStatus.isValid( FileStatusMask_FileURL ) )
+                    newSrcUnqPath = aFileStatus.getFileURL();
+
+                rtl::OUString newDstUnqPath = dstUnqPath;
+                rtl::OUString tit;
+                if( aFileStatus.isValid( FileStatusMask_FileName ) )
+                {
+                    ::rtl::OUString aFileName = aFileStatus.getFileName();
+                    tit = rtl::Uri::encode( aFileName,
+                                            rtl_UriCharClassPchar,
+                                            rtl_UriEncodeIgnoreEscapes,
+                                            RTL_TEXTENCODING_UTF8 );
+
+                    // Special treatment for "lastsychronized" file. Must not be
+                    // copied from the bundled folder!
+                    if ( IsDoc && aFileName.equalsAscii( pLastSyncFileName ))
+                        bFilter = true;
+                }
+
+                if( newDstUnqPath.lastIndexOf( sal_Unicode('/') ) != newDstUnqPath.getLength()-1 )
+                    newDstUnqPath += rtl::OUString::createFromAscii( "/" );
+
+                newDstUnqPath += tit;
+
+                if (( newSrcUnqPath != dstUnqPath ) && !bFilter )
+                    err = copy_bundled_recursive( newSrcUnqPath,newDstUnqPath, newTypeToCopy );
+            }
+
+            if( err == osl::FileBase::E_None && next != osl::FileBase::E_NOENT )
+                err = next;
+        }
+        aDir.close();
+    }
+
+    return err;
+}
+
 Desktop::Desktop()
 : m_bServicesRegistered( false )
 , m_aBootstrapError( BE_OK )
@@ -484,6 +687,23 @@ void Desktop::Init()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Init" );
     SetBootstrapStatus(BS_OK);
+
+    // Check for lastsynchronized file for bundled extensions in the user directory
+    // and test if synchronzation is necessary!
+    {
+        ::rtl::OUString aUserLastSyncFilePathURL = getLastSyncFileURLFromUserInstallation();
+        ::rtl::OUString aBaseLastSyncFilePathURL = getLastSyncFileURLFromBaseInstallation();
+
+        if ( needsSynchronization( aBaseLastSyncFilePathURL, aUserLastSyncFilePathURL ))
+        {
+            rtl::OUString aUserPath = getUserBundledExtPathURL();
+            rtl::OUString aBasePresetsBundledPath = getBasePresetsPathURL();
+
+            // copy bundled folder to the user directory
+            osl::FileBase::RC rc = osl::Directory::createPath(aUserPath);
+            copy_bundled_recursive( aBasePresetsBundledPath, aUserPath, +1 );
+        }
+    }
 
     // create service factory...
     Reference < XMultiServiceFactory > rSMgr = CreateApplicationServiceManager();
