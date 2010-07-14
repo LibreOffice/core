@@ -52,6 +52,7 @@ mkdir: %_DEST%\bin%_EXT%\help\com\sun\star\help
 ..\scripts\tool\xtxex.py  %_DEST%\bin%_EXT%\xtxex.py
 ..\scripts\tool\sdf.py %_DEST%\bin%_EXT%\sdf.py
 ..\scripts\tool\xhtex.py %_DEST%\bin%_EXT%\xhtex.py
+..\scripts\tool\pseudo.py %_DEST%\bin%_EXT%\pseudo.py
 ..\scripts\xtxex %_DEST%\bin%_EXT%\xtxex
 ..\scripts\xhtex %_DEST%\bin%_EXT%\xhtex
 
