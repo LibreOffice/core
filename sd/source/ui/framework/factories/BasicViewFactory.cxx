@@ -142,7 +142,8 @@ BasicViewFactory::BasicViewFactory (
       mpBase(NULL),
       mpFrameView(NULL),
       mpViewCache(new ViewCache()),
-      mxLocalPane(new Pane(Reference<XResourceId>(), new WorkWindow(NULL,WB_STDWORK)))
+      mpWindow(new WorkWindow(NULL,WB_STDWORK)),
+      mxLocalPane(new Pane(Reference<XResourceId>(), mpWindow.get()))
 {
     (void)rxContext;
 }
