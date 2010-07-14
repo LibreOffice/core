@@ -131,7 +131,7 @@ String STR_STMT_TYPE_NOT_SUPPORTED
 
 String STR_UNSPECIFIED_ERROR
 {
-    Text [ en-US ] = "An unknown error occurred.";
+    Text [ en-US ] = "An unknown error occured.";
 };
 
 String STR_COULD_NOT_CREATE_ADDRESSBOOK
