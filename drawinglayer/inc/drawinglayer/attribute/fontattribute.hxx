@@ -65,6 +65,7 @@ namespace drawinglayer
                 bool bSymbol = false,
                 bool bVertical = false,
                 bool bItalic = false,
+                bool bMonospaced = false,
                 bool bOutline = false,
                 bool bRTL = false,
                 bool bBiDiStrong = false);
@@ -89,6 +90,7 @@ namespace drawinglayer
             bool getOutline() const;
             bool getRTL() const;
             bool getBiDiStrong() const;
+            bool getMonospaced() const;
         };
     } // end of namespace attribute
 } // end of namespace drawinglayer

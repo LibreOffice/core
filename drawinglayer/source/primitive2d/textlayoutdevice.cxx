@@ -406,6 +406,7 @@ namespace drawinglayer
             aRetval.SetWeight(static_cast<FontWeight>(rFontAttribute.getWeight()));
             aRetval.SetItalic(rFontAttribute.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
             aRetval.SetOutline(rFontAttribute.getOutline());
+            aRetval.SetPitch(rFontAttribute.getMonospaced() ? PITCH_FIXED : PITCH_VARIABLE);
             aRetval.SetLanguage(MsLangId::convertLocaleToLanguage(rLocale));
 
 #ifdef WIN32
@@ -445,6 +446,7 @@ namespace drawinglayer
                 RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet(),
                 rFont.IsVertical(),
                 ITALIC_NONE != rFont.GetItalic(),
+                PITCH_FIXED == rFont.GetPitch(),
                 rFont.IsOutline(),
                 bRTL,
                 bBiDiStrong);

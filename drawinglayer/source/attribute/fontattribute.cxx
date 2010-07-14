@@ -55,6 +55,7 @@ namespace drawinglayer
             unsigned                                    mbOutline : 1;      // Outline Flag
             unsigned                                    mbRTL : 1;          // RTL Flag
             unsigned                                    mbBiDiStrong : 1;   // BiDi Flag
+            unsigned                                    mbMonospaced : 1;
 
             ImpFontAttribute(
                 const String& rFamilyName,
@@ -63,6 +64,7 @@ namespace drawinglayer
                 bool bSymbol,
                 bool bVertical,
                 bool bItalic,
+                bool bMonospaced,
                 bool bOutline,
                 bool bRTL,
                 bool bBiDiStrong)
@@ -75,7 +77,8 @@ namespace drawinglayer
                 mbItalic(bItalic),
                 mbOutline(bOutline),
                 mbRTL(bRTL),
-                mbBiDiStrong(bBiDiStrong)
+                mbBiDiStrong(bBiDiStrong),
+                mbMonospaced(bMonospaced)
             {
             }
 
@@ -89,6 +92,7 @@ namespace drawinglayer
             bool getOutline() const { return mbOutline; }
             bool getRTL() const { return mbRTL; }
             bool getBiDiStrong() const { return mbBiDiStrong; }
+            bool getMonospaced() const { return mbMonospaced; }
 
             bool operator==(const ImpFontAttribute& rCompare) const
             {
@@ -100,7 +104,8 @@ namespace drawinglayer
                     && getItalic() == rCompare.getItalic()
                     && getOutline() == rCompare.getOutline()
                     && getRTL() == rCompare.getRTL()
-                    && getBiDiStrong() == rCompare.getBiDiStrong());
+                    && getBiDiStrong() == rCompare.getBiDiStrong()
+                    && getMonospaced() == rCompare.getMonospaced());
             }
 
             static ImpFontAttribute* get_global_default()
@@ -112,7 +117,7 @@ namespace drawinglayer
                     pDefault = new ImpFontAttribute(
                         String(), String(),
                         0,
-                        false, false, false, false, false, false);
+                        false, false, false, false, false, false, false);
 
                     // never delete; start with RefCount 1, not 0
                     pDefault->mnRefCount++;
@@ -129,11 +134,12 @@ namespace drawinglayer
             bool bSymbol,
             bool bVertical,
             bool bItalic,
+            bool bMonospaced,
             bool bOutline,
             bool bRTL,
             bool bBiDiStrong)
         :   mpFontAttribute(new ImpFontAttribute(
-                rFamilyName, rStyleName, nWeight, bSymbol, bVertical, bItalic, bOutline, bRTL, bBiDiStrong))
+                rFamilyName, rStyleName, nWeight, bSymbol, bVertical, bItalic, bMonospaced, bOutline, bRTL, bBiDiStrong))
         {
         }
 
@@ -245,6 +251,12 @@ namespace drawinglayer
         {
             return mpFontAttribute->getBiDiStrong();
         }
+
+        bool FontAttribute::getMonospaced() const
+        {
+            return mpFontAttribute->getMonospaced();
+        }
+
 
     } // end of namespace attribute
 } // end of namespace drawinglayer
