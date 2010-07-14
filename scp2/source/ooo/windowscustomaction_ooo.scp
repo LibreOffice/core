@@ -215,7 +215,7 @@ WindowsCustomAction gid_Customaction_Remove_Extensions
 	Source = "shlxtmsi.dll";
 	Target = "RemoveExtensions";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "end");
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "FileCost");
 End
 
 WindowsCustomAction gid_Customaction_Set_Admininstall
