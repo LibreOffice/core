@@ -76,7 +76,7 @@ Global const cUnoDatabaseContext = cUnoPrefix + &quot;sdb.DatabaseContext&quot;
 Global const cUnoRowSet = cUnoPrefix + &quot;sdb.RowSet&quot;
 Global const cUnoSmoketestTestExtension = cUnoPrefix + &quot;comp.smoketest.TestExtension&quot;
 Global const cUnoSmoketestCommandEnvironment = cUnoPrefix + &quot;deployment.test.SmoketestCommandEnvironment&quot;
-Global const cUnothePackageManagerFactory = cUnoPrefix + &quot;deployment.thePackageManagerFactory&quot;
+Global const cExtensionManager = cUnoPrefix + &quot;deployment.ExtensionManager&quot;
 
 &apos;UserFieldNames
 Global const cUserFieldTestWriter = &quot;Writer&quot;, cUserFieldTestCalc = &quot;Calc&quot;, cUserFieldTestImpress = &quot;Impress&quot;

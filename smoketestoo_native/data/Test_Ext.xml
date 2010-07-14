@@ -53,14 +53,10 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
     &apos;javaunohelper/com/sun/star/comp/juhtest/SmoketestCommandEnvironment.java and the code is in juh.jar
     cmdEnv = createUnoService(cUnoSmoketestCommandEnvironment)
 
-    &apos;Create the component context and then get the singleton thePackageManagerFactory
+    &apos;Create the component context and then get the singleton ExtensionManager
     &apos;A singleton cannot be created with createUnoService
     ctx = getDefaultContext
-    factory = ctx.getValueByName(&quot;/singletons/&quot; + cUnothePackageManagerFactory)
-
-    &apos;Get the XPackageManager interface. By passing &quot;user&quot; we determine that the actions we perform on
-    &apos;XPackageManager only affect the user installation. To modify the share installation one would pass &quot;share&quot;.
-    ext_mgr = factory.getPackageManager(&quot;user&quot;)
+    ext_mgr = ctx.getValueByName(&quot;/singletons/&quot; + cExtensionManager)
 
     LogState (not IsNull (ext_mgr), &quot;Extension &quot;+ cMessageExtensionService, FileChannel)
     LogState (not IsNull (ext_mgr), &quot;Extension &quot;+ cMessageExtensionService, MainFileChannel)
@@ -74,7 +70,11 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
     nCurrentAction = cEXTInstall
 
     &apos;Add the extension. We must provide a file URL here.
-    ext_mgr.addPackage(sExtensionURL + cExtensionFileName, &quot;&quot;, obj_null, cmdEnv)
+    &apos;By passing &quot;user&quot; we determine that the actions we perform on
+    &apos;XExtensionManager only affect the user installation. To modify the share installation one would pass &quot;share&quot;.
+
+    Dim props() as Object
+    ext_mgr.addExtension(sExtensionURL + cExtensionFileName, props, &quot;user&quot;, obj_null, cmdEnv)
 
     &apos;Check if the extension has been added by creating a service which is contained in the extension.
     oTestExtension = createUnoService(cUnoSmoketestTestExtension)
@@ -91,7 +91,7 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
     nCurrentAction = cEXTUninstall
 
     &apos;Remove the package
-    ext_mgr.removePackage(&quot;org.openoffice.legacy.&quot; + cExtensionFileName, cExtensionFileName, obj_null, cmdEnv)
+    ext_mgr.removeExtension(&quot;org.openoffice.legacy.&quot; + cExtensionFileName, cExtensionFileName, &quot;user&quot;,obj_null, cmdEnv)
 
     &apos;Try to create the service which is contained in the now removed extension.
     oTestExtension = createUnoService(cUnoSmoketestTestExtension)
