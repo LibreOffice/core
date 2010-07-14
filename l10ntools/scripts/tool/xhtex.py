@@ -25,12 +25,12 @@
 #
 #*************************************************************************
 
-from l10ntool import abstractL10nTool
+from l10ntool import AbstractL10nTool
 from sdf import SdfEntity
 import sys
 import xml.dom.minidom
 
-class xhtex(abstractL10nTool):
+class Xhtex(AbstractL10nTool):
     _resource_type = "xht" 
     _sdfdata       = ()
     _lang          = ""
@@ -65,7 +65,7 @@ class xhtex(abstractL10nTool):
 
     # L10N tool       
     def __init__(self):
-        abstractL10nTool.__init__(self)
+        AbstractL10nTool.__init__(self)
         
     def parse_file(self, filename):
         document = ""
@@ -130,5 +130,5 @@ class xhtex(abstractL10nTool):
         return SdfEntity(project=self._options.project_name, source_file=self.get_filename_string(inputfile),
                          resource_type=self._resource_type, gid=id, lid="", langid=lang,text=text)
         
-run = xhtex()
+run = Xhtex()
  

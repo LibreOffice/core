@@ -25,16 +25,16 @@
 #
 #*************************************************************************
 
-from l10ntool import abstractL10nTool
+from l10ntool import AbstractL10nTool
 from sdf import SdfEntity
 import sys
 import shutil 
 
-class xtxex(abstractL10nTool):
+class Xtxex(AbstractL10nTool):
     _resource_type       = "xtx" 
        
     def __init__(self):
-        abstractL10nTool.__init__(self)
+        AbstractL10nTool.__init__(self)
         
     def merge_file(self, inputfilename, outputfilename, parsed_file_ref, lang, is_forced_lang, sdfdata): 
         # Special handling for en-US files
@@ -86,4 +86,4 @@ class xtxex(abstractL10nTool):
         return SdfEntity(project=self._options.project_name, source_file=self.get_filename_string(inputfile),
                           resource_type=self._resource_type, gid="none", lid="none", langid=lang,text="")
          
-run = xtxex()
+run = Xtxex()

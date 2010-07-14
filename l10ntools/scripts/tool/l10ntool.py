@@ -33,7 +33,7 @@ import sys
 import os
 import shutil
 
-class abstractL10nTool:
+class AbstractL10nTool:
     _options            = {}
     _args               = ""
     _resource_type      = "" 
@@ -176,7 +176,6 @@ class abstractL10nTool:
                 return
         else:
             try:
-                print "DBG: make_dir " + str(dir)
                 os.makedirs(dir)
             except IOError:
                 print "Error: Can not create dir " + dir
