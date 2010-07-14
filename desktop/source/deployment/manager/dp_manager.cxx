@@ -949,6 +949,15 @@ void PackageManagerImpl::removePackage(
                 contentRemoved.writeStream( xData, true /* replace existing */ );
             }
             m_activePackagesDB->erase( id, fileName ); // to be removed upon next start
+            //Remove the database folder (user installation) completely if this was
+            //the last extension. Do not do this for tmp because it is used often
+            ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
+            if (id2temp.size() && !m_context.equals(OUSTR("tmp")))
+            {
+                erase_path( m_registrationData,
+                            Reference<XCommandEnvironment>(),
+                                false /* no throw: ignore errors */ );
+            }
         }
         try_dispose( xPackage );
 
