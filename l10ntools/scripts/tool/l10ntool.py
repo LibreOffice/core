@@ -27,6 +27,8 @@
 
 from optparse import OptionParser
 from sdf import SdfData
+from pseudo import PseudoSet
+
 import sys
 import os
 import shutil
@@ -68,9 +70,15 @@ class abstractL10nTool:
     def format_outputfile(self, filename, language):
         extension = filename[filename.rfind('.')+1:]
         file = filename[:filename.rfind('.')]
-        return self.get_outputfile_format_str().replace('[', '{').replace(']','}').format(
-               filename=filename, fileNoExt=file, language=language, extension=extension, path_prefix=self._options.path_prefix,
-               path_postfix=self._options.path_postfix, path=self.get_path())
+    
+        # Python 2.3.x friendly
+        return self.get_outputfile_format_str().replace('[', '%(').replace(']',')s') % \
+                { 'filename': filename, 'fileNoExt': file, 'language': language, 'extension': extension, 'path_prefix': self._options.path_prefix,
+                  'path_postfix': self._options.path_postfix, 'path': self.get_path() }
+
+        #return self.get_outputfile_format_str().replace('[', '{').replace(']','}').format(
+        #       filename=filename, fileNoExt=file, language=language, extension=extension, path_prefix=self._options.path_prefix,
+        #       path_postfix=self._options.path_postfix, path=self.get_path())
 
     def get_path(self):
         if self._options.outputfile.find('/') == -1:
@@ -79,12 +87,12 @@ class abstractL10nTool:
             return self._options.outputfile[:self._options.outputfile.rfind('/')]
             
     def merge(self,  sdfdata):
-        langset,forcedset, foundset = set(), set() , set()
+        langset,forcedset, foundset = PseudoSet(), PseudoSet() , PseudoSet()
 
         if self._options.languages:       
-            langset = set(self._options.languages)  
+            langset = PseudoSet(self._options.languages)  
         if self._options.forcedlanguages: 
-            forcedset = set(self._options.forcedlanguages) 
+            forcedset = PseudoSet(self._options.forcedlanguages) 
         if sdfdata.get_languages_found_in_sdf(): 
             foundset = sdfdata.get_languages_found_in_sdf() 
     

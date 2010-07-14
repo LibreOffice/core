@@ -83,6 +83,7 @@ class xhtex(abstractL10nTool):
     def merge_file(self, inputfilename, outputfilename, parsed_file_ref, lang,is_forced_lang, sdfdata):
         if lang == "en-US":             
             mod_outputfilename = outputfilename.replace("_en-US",'')            
+            self.make_dirs(mod_outputfilename)
             self.copy_file(inputfilename, mod_outputfilename)
             return
         dom = parsed_file_ref.cloneNode(True)

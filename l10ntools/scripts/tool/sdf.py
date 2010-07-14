@@ -25,70 +25,11 @@
 #
 #*************************************************************************
 
-class MyOrderedDict(dict):
-    _keylist        = []
-    _valuelist      = []
-    
-    def __init__(self, defaults={}):
-        dict.__init__(self)
-        for n,v in defaults.items():
-            self[n] = v
+from pseudo import PseudoSet,PseudoOrderedDict
 
-    def __setitem__(self, key, value):
-        self._keylist.append(key)
-        self._valuelist.append(value)
-        return dict.__setitem__(self, key, value)
-        
-    def __delattr__(self, key):
-        self._keylist.__delattr__(key)
-        self._valuelist.__delattr__(dict[key])
-        return dict.__delattr__(self, key)
-
-    def __delitem__(self, key):
-        self._keylist.__delitem__(key)
-        self._valuelist.__delitem__(dict[key])
-        return dict.__delitem__(self, key)
-        
-    def __iter(self):
-        return zip(self._keylist, self._valuelist)
-    
-    def __iterkeys__(self):
-        return self._keylist
-    
-    def __iteritems__(self):
-        return self._valuelist
-    
-    def items(self):
-        return zip(self._keylist,self._valuelist)
-
-    def keys(self):
-        return self._keylist
-
-    def __keysattr__(self):
-        return self._keylist
-    
-    def pop(self, key):
-        self._keylist.pop(key)
-        self._valuelist.pop(key)
-        return dict.__pop__(self, key)
-    
-    def popitem(self):
-        raise NotImplementedError("popitem")
-    
-    def clear(self):
-        self._keylist.clear()
-        self._valuelist.clear()
-        return dict.clear()
-        
-    def copy(self):
-        newobj            = MyOrderedDict(self)
-        newobj._keylist   = self._keylist
-        newobj._valuelist = self._valuelist
-        return newobj
-        
 class SdfData:
     _filename        = "";
-    _dict            = MyOrderedDict()
+    _dict            = PseudoOrderedDict()
     _languages_found = [];
     
     def __init__ (self, filename=""):
@@ -107,7 +48,7 @@ class SdfData:
         self._dict[key] = value
     
     def get_languages_found_in_sdf(self):
-        return set(self._languages_found)
+        return PseudoSet(self._languages_found)
 
     def read(self):
         try:
