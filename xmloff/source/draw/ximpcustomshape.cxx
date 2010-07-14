@@ -708,6 +708,7 @@ void GetEnhancedPath( std::vector< com::sun::star::beans::PropertyValue >& rDest
             case '8' :
             case '9' :
             case '.' :
+            case '-' :
             {
                 com::sun::star::drawing::EnhancedCustomShapeParameterPair aPair;
                 if ( GetNextParameter( aPair.First, nIndex, rValue ) &&
