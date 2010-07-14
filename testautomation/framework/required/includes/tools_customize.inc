@@ -254,7 +254,7 @@ function hUpdtToolsCustomizeToolbars()
     const MENUITEM_DELETE = 2
     const MENUITEM_MODIFY = 4
 
-    const DIALOG_DELAY = 3
+    const DIALOG_DELAY = 1
 
     dim brc as boolean
     dim iCurrentItem as integer
@@ -344,25 +344,7 @@ function hUpdtToolsCustomizeToolbars()
     
     kontext "ScriptSelector"
     if ( ScriptSelector.exists( DIALOG_DELAY ) ) then
-    
-        call dialogtest( ScriptSelector )
-    
-        ' This is a workaround that applies when - for some reason - the menu
-        ' (menubutton: AddCommands) is not open. In this case the ScriptSelector
-        ' will not open. Before this hack the office was left in an unstable state
-        ' and the following tests would have failed. Now we get a  warning
-        ' instead.
-        
-        printlog( CFN & "Add the default item" )
-        try
-            kontext "ScriptSelector"
-            hCloseDialog( ScriptSelector, "ok" )
-        catch
-            qaerrorlog( "#i79207# Could not access ok button on ScriptSelector" )
-            kontext "ScriptSelector"
-            if ( ScriptSelector.exists( DIALOG_DELAY ) ) then printlog( "Scriptselector is open" )
-        endcatch
-        
+        printlog( "ScriptSelector open." )
     else
         LibraryTreeList.typeKeys( "<HOME>" )
         for iCurrentItem = 1 to 5
@@ -372,9 +354,7 @@ function hUpdtToolsCustomizeToolbars()
         next iCurrentItem
     endif
     
-    ' Note: The Customize dialog in the background is updated immediately. This
-    '       means that the cancel-button is active but blocked for a moment
-    'WaitSlot( 2000 )
+    call dialogtest( ScriptSelector )
     
     printlog( CFN & "Close the Script Selector, back to ToolsCustomize dialog" )
     hCloseDialog( ScriptSelector, "cancel" )
@@ -382,75 +362,81 @@ function hUpdtToolsCustomizeToolbars()
     kontext "TabCustomizeToolbars"
     printlog( CFN & "Click the Modify-button" )
 
-    if ( not hClickCommandButton( 1 ) ) then
+    if ( hClickCommandButton( 1 ) ) then
+
+        printlog( CFN & "Command button clicked successfully" )
+        kontext "CustomizeToolbarsRename"
+        UseBindings
+        wait( 100 )
+        if ( CustomizeToolbarsRename.exists( DIALOG_DELAY ) ) then
+
+            printlog( CFN & "Rename dialog is open" )
+            call dialogtest( CustomizeToolbarsRename )
+            EingabeFeld.setText( "Renamed item" )
+
+            printlog( CFN & "Close the dialog" )
+            hCloseDialog( CustomizeToolbarsRename, "ok" )
+        else
+            warnlog( CFN & "CustomizeToolbarsRename could not be accessed" )
+        endif
+    else
         warnlog( CFN & "Something went wrong when accessing the command button" )
     	exit function
     endif
     
-    printlog( CFN & "Rename the item" )
-    UseBindings
-    kontext "CustomizeToolbarsRename"
-    if ( CustomizeToolbarsRename.exists( DIALOG_DELAY ) ) then
-        call dialogtest( CustomizeToolbarsRename )
-        EingabeFeld.setText( "Renamed item" )
-    
-        printlog( CFN & "Close the dialog" )
-        hCloseDialog( CustomizeToolbarsRename, "ok" )
-    else
-        warnlog( CFN & "CustomizeToolbarsRename could not be accessed" )
-    endif
-    
     kontext "TabCustomizeToolbars"
-
-    if ( not hClickCommandButton( 2 ) ) then
+    if ( hClickCommandButton( 2 ) ) then
+        printlog( CFN & "Successfully clicked second item on the command button" )
+    else
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
     
     kontext "TabCustomizeToolbars"
     waitslot
-    printlog( CFN & "Click the Modify-button" )
-    printlog( "******************** 1 ********************" )
+    printlog( CFN & "Deselect separator (if this is the current object)" )
     hDeselectSeparator()
-    printlog( "******************** 2 ********************" )
 
+    kontext "TabCustomizeToolbars"
     if ( not hClickCommandButton( 3 ) ) then
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
     
-    kontext "TabCustomizeToolbars"
     waitslot
+    kontext "TabCustomizeToolbars"
     printlog( CFN & "Click the Modify-button" )
-
-if ( not hClickCommandButton( MENUITEM_MODIFY ) ) then
+    if ( hClickCommandButton( MENUITEM_MODIFY ) ) then
+        printlog( CFN & "Successfully selected modify-item on the command button" )
+    else
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
     
-    kontext "TabCustomizeToolbars"
     WaitSlot
-    printlog( CFN & "Click the Modify-button" )
-
-    if ( not hClickCommandButton( 1 ) ) then
-        warnlog( CFN & "Something went wrong when accessing the command button" )
-        exit function
-    endif
-    
     kontext "TabCustomizeToolbars"
-    waitslot
     printlog( CFN & "Click the Modify-button" )
-    printlog( "******************** 3 ********************" )
-    hDeselectSeparator()
-    printlog( "******************** 4 ********************" )
-
-    if ( not hClickCommandButton( 5 ) ) then
+    if ( hClickCommandButton( 1 ) ) then
+        printlog( CFN & "Successfully selected modify-item on the command button" )
+    else
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif
     
-    printlog( CFN & "On the Change Icon dialog: Click to import an icon" )
+    waitslot
+    kontext "TabCustomizeToolbars"
+    printlog( CFN & "Click the Modify-button" )
+    hDeselectSeparator()
+
+    if ( hClickCommandButton( 5 ) ) then
+        printlog( CFN & "Successfully selected modify-item on the command button" )
+    else
+        warnlog( CFN & "Something went wrong when accessing the command button" )
+        exit function
+    endif
+    
     kontext "ChangeIcon"
+    printlog( CFN & "On the Change Icon dialog: Click to import an icon" )
     if ( ChangeIcon.exists( DIALOG_DELAY ) ) then
         call dialogtest( ChangeIcon )
         import.click()
@@ -467,11 +453,12 @@ if ( not hClickCommandButton( MENUITEM_MODIFY ) ) then
         warnlog( CFN & "Could not access Change Icon dialog" )
     endif
     
-    kontext "TabCustomizeToolbars"
     waitslot
+    kontext "TabCustomizeToolbars"
     printlog( CFN & "Click the Modify-button" )
-
-    if ( not hClickCommandButton( 3 ) ) then
+    if ( hClickCommandButton( 3 ) ) then
+        printlog( CFN & "Successfully selected modify-item on the command button" )
+    else
         warnlog( CFN & "Something went wrong when accessing the command button" )
         exit function
     endif

@@ -88,7 +88,9 @@ OUT2INC += mythes.hxx
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 CONFIGURE_ACTION=configure
-CONFIGURE_FLAGS= --disable-shared --with-pic
+CONFIGURE_FLAGS= --disable-shared --with-pic \
+    HUNSPELL_CFLAGS=-I$(SOLARINCDIR)$/hunspell \
+    HUNSPELL_LIBS="-L$(SOLARLIBDIR) -lhunspell-1.2"
 
 BUILD_ACTION=make
 

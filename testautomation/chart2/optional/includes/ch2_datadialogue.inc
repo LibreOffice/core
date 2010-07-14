@@ -286,9 +286,6 @@ testcase tChartDataDialogueFieldsUndo
         DatabaseUndo
         '/// And then we enter the dialogue again, to check if the values has returned to what they were before we changed them.
         printlog "And then we enter the dialogue again, to check if the values has returned to what they were before we changed them."
-        '/// One press on 'TAB' to select the object ///'
-        printlog "   Click the button 'TAB', to select the object."
-        DocumentImpress.TypeKeys "<TAB>"
         '/// Followed by one press on "RETURN" / "ENTER" to enter the Chart-Data-dialogue  ///'
         printlog "   Click the button 'Return', to enter the Chart-Data-dialogue."
         DocumentImpress.TypeKeys "<RETURN>"

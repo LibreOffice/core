@@ -64,10 +64,12 @@ namespace desktop {
 
 static char const SOFFICE_BOOTSTRAP[] = "Bootstrap";
 static char const SOFFICE_STARTLANG[] = "STARTLANG";
+
 sal_Bool LanguageSelection::bFoundLanguage = sal_False;
 OUString LanguageSelection::aFoundLanguage;
-const OUString LanguageSelection::usFallbackLanguage = OUString::createFromAscii("en-US");
+LanguageSelection::LanguageSelectionStatus LanguageSelection::m_eStatus = LS_STATUS_OK;
 
+const OUString LanguageSelection::usFallbackLanguage = OUString::createFromAscii("en-US");
 
 static sal_Bool existsURL( OUString const& sURL )
 {
@@ -122,6 +124,7 @@ Locale LanguageSelection::IsoStringToLocale(const OUString& str)
 
 bool LanguageSelection::prepareLanguage()
 {
+    m_eStatus = LS_STATUS_OK;
     OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
     Reference< XMultiServiceFactory > theMSF = comphelper::getProcessServiceFactory();
     Reference< XLocalizable > theConfigProvider;
@@ -131,7 +134,9 @@ bool LanguageSelection::prepareLanguage()
     }
     catch(const Exception&)
     {
+        m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
     }
+
     if(!theConfigProvider.is())
         return false;
 
@@ -149,6 +154,7 @@ bool LanguageSelection::prepareLanguage()
     }
     catch(const Exception&)
     {
+        m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
     }
 
     // #i32939# use system locale to set document default locale
@@ -162,6 +168,7 @@ bool LanguageSelection::prepareLanguage()
     }
     catch (Exception&)
     {
+        m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
     }
 
     // get the selected UI language as string
@@ -350,8 +357,10 @@ OUString LanguageSelection::getLanguageString()
         aFoundLanguage = usFallbackLanguage;
         return aFoundLanguage;
     }
+
     // fallback didn't work use first installed language
     aUserLanguage = getFirstInstalledLanguage();
+
     bFoundLanguage = sal_True;
     aFoundLanguage = aUserLanguage;
     return aFoundLanguage;
@@ -455,7 +464,7 @@ sal_Bool LanguageSelection::isInstalledLanguage(OUString& usLocale, sal_Bool bEx
                 // requested locale starts with the installed locale
                 // (i.e. installed locale has index 0 in requested locale)
                 bInstalled = sal_True;
-                usLocale = seqLanguages[i];
+                usLocale   = seqLanguages[i];
                 break;
             }
         }
@@ -484,10 +493,12 @@ OUString LanguageSelection::getUserLanguage()
         }
         catch ( NoSuchElementException const & )
         {
+            m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
             return OUString();
         }
         catch ( WrappedTargetException const & )
         {
+            m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
             return OUString();
         }
     }
@@ -506,10 +517,12 @@ OUString LanguageSelection::getSystemLanguage()
         }
         catch ( NoSuchElementException const & )
         {
+            m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
             return OUString();
         }
         catch ( WrappedTargetException const & )
         {
+            m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
             return OUString();
         }
     }
@@ -533,9 +546,13 @@ void LanguageSelection::resetUserLanguage()
     {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
         OSL_ENSURE(sal_False, aMsg.getStr());
+        m_eStatus = LS_STATUS_CONFIGURATIONACCESS_BROKEN;
     }
-
 }
 
+LanguageSelection::LanguageSelectionStatus LanguageSelection::getStatus()
+{
+    return m_eStatus;
+}
 
 } // namespace desktop

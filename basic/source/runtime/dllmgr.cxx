@@ -684,7 +684,7 @@ Dll * SbiDllMgr::Impl::getDll(rtl::OUString const & name) {
     Dlls::iterator i(dlls.find(name));
     if (i == dlls.end()) {
         i = dlls.insert(Dlls::value_type(name, new Dll)).first;
-        HMODULE h = LoadLibraryW(name);
+        HMODULE h = LoadLibraryW(reinterpret_cast<LPCWSTR>(name.getStr()));
         if (h == 0) {
             dlls.erase(i);
             return 0;

@@ -276,7 +276,7 @@ public:
     SdrOutlinerCache* mpOutlinerCache;
     SdrModelImpl*   mpImpl;
     UINT16          mnCharCompressType;
-    UINT16          nReserveUInt5;
+    UINT16          mnHandoutPageCount;
     UINT16          nReserveUInt6;
     UINT16          nReserveUInt7;
     FASTBOOL        mbModelLocked;
@@ -298,6 +298,10 @@ public:
     SvNumberFormatter* mpNumberFormatter;
 public:
     const SvNumberFormatter& GetNumberFormatter() const;
+
+    UINT16 getHandoutPageCount() const { return mnHandoutPageCount; }
+    void setHandoutPageCount( UINT16 nHandoutPageCount ) { mnHandoutPageCount = nHandoutPageCount; }
+
 protected:
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();

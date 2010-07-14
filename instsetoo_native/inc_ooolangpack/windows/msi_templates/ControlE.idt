@@ -132,7 +132,6 @@ SetupResume	Next	EndDialog	Return	OutOfNoRbDiskSpace <> 1	0
 SetupResume	Next	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	0
 SetupType	Back	NewDialog	CustomerInformation	1	0
 SetupType	Cancel	SpawnDialog	CancelSetup	1	0
-SetupType	Next	AddLocal	ALL	_IsSetupTypeMin = "Typical"	0
 SetupType	Next	NewDialog	CustomSetup	_IsSetupTypeMin = "Custom"	0
 SetupType	Next	NewDialog	ReadyToInstall	_IsSetupTypeMin <> "Custom"	0
 SplashBitmap	Cancel	SpawnDialog	CancelSetup	1	0

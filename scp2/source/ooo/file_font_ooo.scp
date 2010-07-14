@@ -142,7 +142,7 @@ STD_FONT_FILE( gid_File_Fnt_GentiumBookBasicBoldItalic, GenBkBasBI.ttf, Gentium 
 File gid_File_FcLocal_Conf
     Dir = gid_Dir_Fonts_Truetype;
     USER_FILE_BODY;
-#   Styles = ();
+//  Styles = ();
     Name = "fc_local.conf";
 End
 #endif

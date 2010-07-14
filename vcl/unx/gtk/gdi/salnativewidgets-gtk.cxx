@@ -617,7 +617,7 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
  */
 BOOL GtkSalGraphics::hitTestNativeControl( ControlType      nType,
                                 ControlPart     nPart,
-                                const Region&       rControlRegion,
+                                const Rectangle&        rControlRegion,
                                 const Point&        aPos,
                                 BOOL&           rIsInside )
 {
@@ -654,8 +654,8 @@ BOOL GtkSalGraphics::hitTestNativeControl( ControlType      nType,
         else if ( nPart == PART_BUTTON_RIGHT )
             nCounterPart = PART_BUTTON_LEFT;
 
-        aBackward = NWGetScrollButtonRect( m_nScreen, nPart, rControlRegion.GetBoundRect() );
-        aForward = NWGetScrollButtonRect( m_nScreen, nCounterPart, rControlRegion.GetBoundRect() );
+        aBackward = NWGetScrollButtonRect( m_nScreen, nPart, rControlRegion );
+        aForward = NWGetScrollButtonRect( m_nScreen, nCounterPart, rControlRegion );
 
         if ( has_backward && has_forward2 )
         {
@@ -727,7 +727,7 @@ BOOL GtkSalGraphics::hitTestNativeControl( ControlType      nType,
  */
 BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
                             ControlPart nPart,
-                            const Region& rControlRegion,
+                            const Rectangle& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
                             const OUString& rCaption )
@@ -753,7 +753,7 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
         GtkSalGraphics::bThemeChanged = FALSE;
     }
 
-    Rectangle aCtrlRect = rControlRegion.GetBoundRect();
+    Rectangle aCtrlRect( rControlRegion );
     Region aClipRegion( m_aClipRegion );
     if( aClipRegion.IsNull() )
         aClipRegion = aCtrlRect;
@@ -897,7 +897,7 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
 
 BOOL GtkSalGraphics::drawNativeMixedStateCheck( ControlType nType,
                                                 ControlPart nPart,
-                                                const Region& rControlRegion,
+                                                const Rectangle& rControlRegion,
                                                 ControlState nState,
                                                 const ImplControlValue& aValue,
                                                 const OUString& rCaption )
@@ -908,7 +908,7 @@ BOOL GtkSalGraphics::drawNativeMixedStateCheck( ControlType nType,
     bool bOldNeedPixmapPaint = bNeedPixmapPaint;
     bNeedPixmapPaint = true;
 
-    Rectangle aCtrlRect = rControlRegion.GetBoundRect();
+    Rectangle aCtrlRect = rControlRegion;
     BOOL      returnVal = FALSE;
     SelectFont();
 
@@ -956,7 +956,7 @@ BOOL GtkSalGraphics::drawNativeMixedStateCheck( ControlType nType,
  */
 BOOL GtkSalGraphics::drawNativeControlText( ControlType,
                                 ControlPart,
-                                const Region&,
+                                const Rectangle&,
                                 ControlState,
                                 const ImplControlValue&,
                                 const OUString& )
@@ -980,20 +980,20 @@ BOOL GtkSalGraphics::drawNativeControlText( ControlType,
  */
 BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
-                                const Region& rControlRegion,
+                                const Rectangle& rControlRegion,
                                 ControlState nState,
                                 const ImplControlValue& aValue,
                                 const OUString& rCaption,
-                                Region &rNativeBoundingRegion,
-                                Region &rNativeContentRegion )
+                                Rectangle &rNativeBoundingRegion,
+                                Rectangle &rNativeContentRegion )
 {
     BOOL returnVal = FALSE;
 
     if ( (nType==CTRL_PUSHBUTTON) && (nPart==PART_ENTIRE_CONTROL)
-        && (rControlRegion.GetBoundRect().GetWidth() > 16)
-    && (rControlRegion.GetBoundRect().GetHeight() > 16) )
+        && (rControlRegion.GetWidth() > 16)
+    && (rControlRegion.GetHeight() > 16) )
     {
-        rNativeBoundingRegion = NWGetButtonArea( m_nScreen, nType, nPart, rControlRegion.GetBoundRect(),
+        rNativeBoundingRegion = NWGetButtonArea( m_nScreen, nType, nPart, rControlRegion,
         nState, aValue, rCaption );
         rNativeContentRegion = rControlRegion;
 
@@ -1001,7 +1001,7 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if ( (nType==CTRL_COMBOBOX) && ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
-        rNativeBoundingRegion = NWGetComboBoxButtonRect( m_nScreen, nType, nPart, rControlRegion.GetBoundRect(), nState,
+        rNativeBoundingRegion = NWGetComboBoxButtonRect( m_nScreen, nType, nPart, rControlRegion, nState,
         aValue, rCaption );
         rNativeContentRegion = rNativeBoundingRegion;
 
@@ -1010,7 +1010,7 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     if ( (nType==CTRL_SPINBOX) && ((nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
 
-        rNativeBoundingRegion = NWGetSpinButtonRect( m_nScreen, nType, nPart, rControlRegion.GetBoundRect(), nState,
+        rNativeBoundingRegion = NWGetSpinButtonRect( m_nScreen, nType, nPart, rControlRegion, nState,
         aValue, rCaption );
         rNativeContentRegion = rNativeBoundingRegion;
 
@@ -1018,7 +1018,7 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if ( (nType==CTRL_LISTBOX) && ((nPart==PART_BUTTON_DOWN) || (nPart==PART_SUB_EDIT)) )
     {
-        rNativeBoundingRegion = NWGetListBoxButtonRect( m_nScreen, nType, nPart, rControlRegion.GetBoundRect(), nState,
+        rNativeBoundingRegion = NWGetListBoxButtonRect( m_nScreen, nType, nPart, rControlRegion, nState,
         aValue, rCaption );
         rNativeContentRegion = rNativeBoundingRegion;
 
@@ -1032,14 +1032,14 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         (nPart==PART_BUTTON)
         ))
     {
-        rNativeBoundingRegion = NWGetToolbarRect( m_nScreen, nType, nPart, rControlRegion.GetBoundRect(), nState, aValue, rCaption );
+        rNativeBoundingRegion = NWGetToolbarRect( m_nScreen, nType, nPart, rControlRegion, nState, aValue, rCaption );
         rNativeContentRegion = rNativeBoundingRegion;
         returnVal = TRUE;
     }
     if ( (nType==CTRL_SCROLLBAR) && ((nPart==PART_BUTTON_LEFT) || (nPart==PART_BUTTON_RIGHT) ||
         (nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN)  ) )
     {
-        rNativeBoundingRegion = NWGetScrollButtonRect( m_nScreen, nPart, rControlRegion.GetBoundRect() );
+        rNativeBoundingRegion = NWGetScrollButtonRect( m_nScreen, nPart, rControlRegion );
         rNativeContentRegion = rNativeBoundingRegion;
 
         returnVal = TRUE;
@@ -1049,10 +1049,10 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         NWEnsureGTKMenubar( m_nScreen );
         GtkRequisition aReq;
         gtk_widget_size_request( gWidgetData[m_nScreen].gMenubarWidget, &aReq );
-        Rectangle aMenuBarRect = rControlRegion.GetBoundRect();
+        Rectangle aMenuBarRect = rControlRegion;
         aMenuBarRect = Rectangle( aMenuBarRect.TopLeft(),
                                   Size( aMenuBarRect.GetWidth(), aReq.height+1 ) );
-        rNativeBoundingRegion = Region( aMenuBarRect );
+        rNativeBoundingRegion = aMenuBarRect;
         rNativeContentRegion = rNativeBoundingRegion;
         returnVal = TRUE;
     }
@@ -1071,9 +1071,9 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
                                   (char *)NULL );
             rNativeBoundingRegion = rControlRegion;
             Rectangle aIndicatorRect( Point( 0,
-                                             (rControlRegion.GetBoundRect().GetHeight()-indicator_size)/2),
+                                             (rControlRegion.GetHeight()-indicator_size)/2),
                                       Size( indicator_size, indicator_size ) );
-            rNativeContentRegion = Region( aIndicatorRect );
+            rNativeContentRegion = aIndicatorRect;
             returnVal = TRUE;
         }
     }
@@ -1090,9 +1090,9 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         indicator_size += 2*indicator_spacing; // guess overpaint of theme
         rNativeBoundingRegion = rControlRegion;
         Rectangle aIndicatorRect( Point( 0,
-                                         (rControlRegion.GetBoundRect().GetHeight()-indicator_size)/2),
+                                         (rControlRegion.GetHeight()-indicator_size)/2),
                                   Size( indicator_size, indicator_size ) );
-        rNativeContentRegion = Region( aIndicatorRect );
+        rNativeContentRegion = aIndicatorRect;
         returnVal = TRUE;
     }
     if( (nType == CTRL_EDITBOX || nType == CTRL_SPINBOX) && nPart == PART_ENTIRE_CONTROL )
@@ -1101,10 +1101,10 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         GtkWidget* widget = gWidgetData[m_nScreen].gEditBoxWidget;
         GtkRequisition aReq;
         gtk_widget_size_request( widget, &aReq );
-        Rectangle aEditRect = rControlRegion.GetBoundRect();
+        Rectangle aEditRect = rControlRegion;
         aEditRect = Rectangle( aEditRect.TopLeft(),
                                Size( aEditRect.GetWidth(), aReq.height+1 ) );
-        rNativeBoundingRegion = Region( aEditRect );
+        rNativeBoundingRegion = aEditRect;
         rNativeContentRegion = rNativeBoundingRegion;
         returnVal = TRUE;
     }
@@ -1118,7 +1118,7 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
                               "slider-width", &slider_width,
                               "slider-length", &slider_length,
                               (char *)NULL);
-        Rectangle aRect( rControlRegion.GetBoundRect() );
+        Rectangle aRect( rControlRegion );
         if( nPart == PART_THUMB_HORZ )
         {
             aRect.Right() = aRect.Left() + slider_length - 1;
@@ -1129,7 +1129,7 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
             aRect.Bottom() = aRect.Top() + slider_length - 1;
             aRect.Right() = aRect.Left() + slider_width - 1;
         }
-        rNativeBoundingRegion = rNativeContentRegion = Region( aRect );
+        rNativeBoundingRegion = rNativeContentRegion = aRect;
         returnVal = TRUE;
     }
 
@@ -1432,7 +1432,8 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
                                           const ImplControlValue& aValue,
                                           const OUString& )
 {
-    ScrollbarValue* pScrollbarVal = (ScrollbarValue *)(aValue.getOptionalVal());
+    OSL_ASSERT( aValue.getType() == CTRL_SCROLLBAR );
+    const ScrollbarValue* pScrollbarVal = static_cast<const ScrollbarValue *>(&aValue);
     GdkPixmap*      pixmap = NULL;
     Rectangle       pixmapRect, scrollbarRect;
     GtkStateType    stateType;
@@ -1979,7 +1980,7 @@ BOOL GtkSalGraphics::NWPaintGTKSpinBox( ControlType nType, ControlPart nPart,
     Rectangle           pixmapRect;
     GtkStateType        stateType;
     GtkShadowType       shadowType;
-    SpinbuttonValue *   pSpinVal = (SpinbuttonValue *)(aValue.getOptionalVal());
+    const SpinbuttonValue * pSpinVal = (aValue.getType() == CTRL_SPINBUTTONS) ? static_cast<const SpinbuttonValue *>(&aValue) : NULL;
     Rectangle           upBtnRect;
     ControlPart     upBtnPart = PART_BUTTON_UP;
     ControlState        upBtnState = CTRL_STATE_ENABLED;
@@ -2290,10 +2291,11 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
                                         const ImplControlValue& aValue,
                                         const OUString& )
 {
+    OSL_ASSERT( aValue.getType() == CTRL_TAB_ITEM );
     GdkPixmap * pixmap;
     Rectangle       pixmapRect;
     Rectangle       tabRect;
-    TabitemValue *  pTabitemValue = (TabitemValue *)(aValue.getOptionalVal());
+    const TabitemValue *    pTabitemValue = static_cast<const TabitemValue *>(&aValue);
     GtkStateType    stateType;
     GtkShadowType   shadowType;
     if( ! gWidgetData[ m_nScreen ].gCacheTabItems )
@@ -2571,9 +2573,9 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
         gtk_handle_box_set_shadow_type( GTK_HANDLE_BOX(gWidgetData[m_nScreen].gHandleBoxWidget), shadowType );
 
         // evaluate grip rect
-        ToolbarValue* pVal = (ToolbarValue*)aValue.getOptionalVal();
-        if( pVal )
+        if( aValue.getType() == CTRL_TOOLBAR )
         {
+            const ToolbarValue* pVal = static_cast<const ToolbarValue*>(&aValue);
             g_x = pVal->maGripRect.Left();
             g_y = pVal->maGripRect.Top();
             g_w = pVal->maGripRect.GetWidth();
@@ -3044,19 +3046,18 @@ BOOL GtkSalGraphics::NWPaintGTKSlider(
             ControlState nState, const ImplControlValue& rValue,
             const OUString& )
 {
+    OSL_ASSERT( rValue.getType() == CTRL_SLIDER );
     NWEnsureGTKSlider( m_nScreen );
 
     gint            w, h;
     w = rControlRectangle.GetWidth();
     h = rControlRectangle.GetHeight();
 
-    SliderValue* pVal = (SliderValue*)rValue.getOptionalVal();
+    const SliderValue* pVal = static_cast<const SliderValue*>(&rValue);
 
     GdkPixmap* pixmap = NWGetPixmapFromScreen( rControlRectangle );
     if( ! pixmap )
         return FALSE;
-
-    (void)pVal;
 
     GdkDrawable* const &pixDrawable = GDK_DRAWABLE( pixmap );
     GtkWidget* pWidget = (nPart == PART_TRACK_HORZ_AREA)

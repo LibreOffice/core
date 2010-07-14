@@ -2927,7 +2927,8 @@ sal_Bool SdrPathObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::
                 aScale = aCorrectedRangeNoCurve.getRange();
 
                 // define matrix for move polygon to zero point
-                aMoveToZeroMatrix.translate(-aCorrectedRangeNoCurve.getMinX(), aCorrectedRangeNoCurve.getMinY());
+                // #i112280# Added missing minus for Y-Translation
+                aMoveToZeroMatrix.translate(-aCorrectedRangeNoCurve.getMinX(), -aCorrectedRangeNoCurve.getMinY());
             }
             else
             {

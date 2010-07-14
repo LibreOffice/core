@@ -66,6 +66,8 @@ public:
     SAL_DLLPRIVATE void             ImplSetSymbolAlign( SymbolAlign eAlign );
     SAL_DLLPRIVATE SymbolAlign      ImplGetSymbolAlign() const;
     SAL_DLLPRIVATE void             ImplSetSmallSymbol( BOOL bSmall = TRUE );
+    SAL_DLLPRIVATE const Rectangle& ImplGetSymbolRect() const;
+    SAL_DLLPRIVATE void             ImplSetSymbolRect(const Rectangle&);
 
 protected:
                         Button( WindowType nType );

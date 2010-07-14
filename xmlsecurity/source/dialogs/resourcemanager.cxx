@@ -149,7 +149,7 @@ namespace XmlSec
 */
 #ifdef WNT
 vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
-    {
+{
         vector< pair<OUString, OUString> > retVal;
         bool bInEscape = false;
         bool bInValue = false;
@@ -197,7 +197,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                     bInEscape = false;
                 }
             }
-            else if (c == ',')
+            else if (c == ',' || c == '+')
             {
                 //The comma separate the attribute value pairs.
                 //If the comma is not part of a value (the value would then be enclosed in '"'),
@@ -292,7 +292,7 @@ vector< pair< OUString, OUString> > parseDN(const OUString& rRawString)
                     bInEscape = false;
                 }
             }
-            else if (c == ',')
+            else if (c == ',' || c == '+')
             {
                 //The comma separate the attribute value pairs.
                 //If the comma is not part of a value (the value would then be enclosed in '"'),

@@ -153,6 +153,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
 : cppu::WeakImplHelper1<com::sun::star::xml::sax::XFastContextHandler>(),
   mpParent(pContext),
   mId(0),
+  mnDefine(0),
   mnToken(OOXML_FAST_TOKENS_END),
   mpStream(NULL),
   mnTableDepth(0),

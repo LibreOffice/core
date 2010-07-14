@@ -37,6 +37,8 @@
 #include <comphelper/stlunosequence.hxx>
 #include <comphelper/stl_types.hxx>
 
+#include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/rdf/Statement.hpp>
 #include <com/sun/star/rdf/URIs.hpp>
 #include <com/sun/star/rdf/URI.hpp>
@@ -84,6 +86,39 @@ makeCURIE(SvXMLExport * i_pExport,
 
     return buf.makeStringAndClear();
 }
+
+// #i112473# SvXMLExport::GetRelativeReference() not right for RDF on SaveAs
+// because the URIs in the repository are not rewritten on SaveAs, the
+// URI of the loaded document has to be used, not the URI of the target doc.
+static ::rtl::OUString
+getRelativeReference(SvXMLExport const& rExport, ::rtl::OUString const& rURI)
+{
+    uno::Reference< rdf::XURI > const xModelURI(
+        rExport.GetModel(), uno::UNO_QUERY_THROW );
+    ::rtl::OUString const baseURI( xModelURI->getStringValue() );
+
+    uno::Reference<uno::XComponentContext> const xContext(
+        rExport.GetComponentContext());
+    uno::Reference<lang::XMultiComponentFactory> const xServiceFactory(
+        xContext->getServiceManager(), uno::UNO_SET_THROW);
+    uno::Reference<uri::XUriReferenceFactory> const xUriFactory(
+        xServiceFactory->createInstanceWithContext(
+            ::rtl::OUString::createFromAscii(
+                "com.sun.star.uri.UriReferenceFactory"), xContext),
+        uno::UNO_QUERY_THROW);
+
+    uno::Reference< uri::XUriReference > const xBaseURI(
+        xUriFactory->parse(baseURI), uno::UNO_SET_THROW );
+    uno::Reference< uri::XUriReference > const xAbsoluteURI(
+        xUriFactory->parse(rURI), uno::UNO_SET_THROW );
+    uno::Reference< uri::XUriReference > const xRelativeURI(
+        xUriFactory->makeRelative(xBaseURI, xAbsoluteURI, true, true, false),
+        uno::UNO_SET_THROW );
+    ::rtl::OUString const relativeURI(xRelativeURI->getUriReference());
+
+    return relativeURI;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////
 
@@ -145,7 +180,7 @@ RDFaExportHelper::AddRDFa(
         static const sal_Unicode s_OpenBracket ('[');
         static const sal_Unicode s_CloseBracket(']');
         const ::rtl::OUString about( xSubjectURI.is()
-            ?   m_rExport.GetRelativeReference(xSubjectURI->getStringValue())
+            ?   getRelativeReference(m_rExport, xSubjectURI->getStringValue())
             :   ::rtl::OUStringBuffer().append(s_OpenBracket).append(
                         LookupBlankNode(xSubjectBNode)).append(s_CloseBracket)
                     .makeStringAndClear()

@@ -1115,9 +1115,6 @@ endcase
 
 testcase tHtmlDocToolsHangulHanjaConversion
 
-    warnlog( "#i112523# - Hangul Hanya Conversion dialog causes crash." )
-    goto endsub
-
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
 
