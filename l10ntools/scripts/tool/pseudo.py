@@ -52,7 +52,7 @@ class PseudoSet:
             tmplist.extend(self._list)
             [tmplist.remove(key) for key in other if key in tmplist]
         else:
-            print __sub__(none)
+            print "__sub__(none)"
         return PseudoSet(tmplist)
 
     def __and__(self, other):
