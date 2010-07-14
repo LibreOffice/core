@@ -91,7 +91,7 @@ class SequenceAsVector : public ::std::vector< TElementType >
             @param  nLength
                     the number of elements for the new vector.
          */
-        SequenceAsVector(sal_Int32 nLength) :
+        explicit SequenceAsVector(sal_Int32 nLength) :
             ::std::vector< TElementType >( static_cast< size_t >( nLength ) )
         {
         }
