@@ -126,7 +126,7 @@ void SAL_CALL WrappedResultSet::insertRow( const ORowSetRow& _rInsertRow,const c
         updateColumn(i,m_xUpdRow,*aIter);
     }
     m_xUpd->insertRow();
-    (*_rInsertRow->get().begin()) = m_xDriverSet->getRow();
+    (*_rInsertRow->get().begin()) = getBookmark();
 }
 // -------------------------------------------------------------------------
 void SAL_CALL WrappedResultSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& /*_xTable*/  ) throw(SQLException, RuntimeException)
@@ -164,6 +164,7 @@ void SAL_CALL WrappedResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeE
 void SAL_CALL WrappedResultSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "WrappedResultSet::moveToCurrentRow" );
+    m_xUpd->moveToCurrentRow();
 }
 // -------------------------------------------------------------------------
 void WrappedResultSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
