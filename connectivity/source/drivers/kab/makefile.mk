@@ -46,6 +46,9 @@ CFLAGS+=$(KDE_CFLAGS)
 
 .IF "$(KDE_ROOT)"!=""
 EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib
+.IF "$(HOSTTYPE)" == "x86_64-linux"
+EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib64
+.ENDIF
 .ENDIF
 
 # === KAB base library ==========================
