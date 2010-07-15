@@ -82,13 +82,13 @@ sub get_extensions_dir
 
 sub register_extensions
 {
-    my ($officedir, $languagestringref, $bundleddir) = @_;
+    my ($officedir, $languagestringref, $presetsdir) = @_;
 
     my $infoline = "";
 
-    if ( $bundleddir eq "" )
+    if ( $presetsdir eq "" )
     {
-        $infoline = "ERROR: Failed to determine directory \"bundled\" in \"presets\" folder for extension registration! Please check your installation set.\n";
+        $infoline = "ERROR: Failed to determine directory \"presets\" for extension registration! Please check your installation set.\n";
         push( @installer::globals::logfileinfo, $infoline);
         installer::exiter::exit_program($infoline, "register_extensions");
     }
@@ -128,12 +128,15 @@ sub register_extensions
             if ( $^O =~ /cygwin/i )
             {
                 $localtemppath = $installer::globals::cyg_temppath;
-                $bundleddir = qx{cygpath -m "$bundleddir"};
-                chomp($bundleddir);
+                $presetsdir = qx{cygpath -m "$presetsdir"};
+                chomp($presetsdir);
             }
             $localtemppath =~ s/\\/\//g;
             $slash = "/"; # Third slash for Windows. Other OS pathes already start with "/"
         }
+
+        $presetsdir =~ s/\/\s*$//g;
+        my $bundleddir = $presetsdir . "/bundled";
 
         my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $slash . $bundleddir . "\"" . " -env:UserInstallation=file://" . $slash . $localtemppath . " 2\>\&1 |";
 
@@ -635,7 +638,7 @@ sub create_simple_package
     installer::logger::print_message( "... creating directories ...\n" );
     installer::logger::include_header_into_logfile("Creating directories:");
 
-    my $bundleddir = "";
+    my $presetsdir = "";
 
     for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
     {
@@ -644,7 +647,7 @@ sub create_simple_package
         if ( $onedir->{'HostName'} )
         {
             my $destdir = $subfolderdir . $installer::globals::separator . $onedir->{'HostName'};
-            if ( $destdir =~ /\Wbundled\s*$/ ) { $bundleddir = $destdir; }
+            if ( $destdir =~ /\Wpresets\s*$/ ) { $presetsdir = $destdir; }
 
             if ( ! -d $destdir )
             {
@@ -781,7 +784,7 @@ sub create_simple_package
 
     installer::logger::print_message( "... registering extensions ...\n" );
     installer::logger::include_header_into_logfile("Registering extensions:");
-    register_extensions($subfolderdir, $languagestringref, $bundleddir);
+    register_extensions($subfolderdir, $languagestringref, $presetsdir);
 
     if ( $installer::globals::compiler =~ /^unxmacx/ )
     {
