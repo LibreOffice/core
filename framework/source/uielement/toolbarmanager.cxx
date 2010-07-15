@@ -953,7 +953,7 @@ void ToolBarManager::CreateControllers()
         sal_Bool                     bCreate( sal_True );
         Reference< XStatusListener > xController;
         CommandToInfoMap::iterator pCommandIter = m_aCommandMap.find( aCommandURL );
-        sal_Int32 nWidth = ( pCommandIter != m_aCommandMap.end() ? pCommandIter->second.nWidth : 0 );
+        sal_Int16 nWidth = ( pCommandIter != m_aCommandMap.end() ? pCommandIter->second.nWidth : 0 );
 
         svt::ToolboxController* pController( 0 );
 
@@ -1299,7 +1299,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
         rtl::OUString               aHelpURL;
         rtl::OUString               aTooltip;
         sal_uInt16                  nType( ::com::sun::star::ui::ItemType::DEFAULT );
-        sal_uInt32                  nWidth( 0 );
+        sal_uInt16                  nWidth( 0 );
         sal_Bool                    bIsVisible( sal_True );
         sal_uInt32                  nStyle( 0 );
 

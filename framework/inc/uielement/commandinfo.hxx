@@ -53,7 +53,7 @@ struct CommandInfo
                     bRotated( false ) {}
 
     USHORT                  nId;
-    sal_uInt32              nWidth;
+    sal_uInt16              nWidth;
     ::std::vector< USHORT > aIds;
     sal_Int16               nImageInfo;
     sal_Bool                bMirrored : 1,
