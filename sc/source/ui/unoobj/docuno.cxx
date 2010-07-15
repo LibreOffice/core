@@ -60,9 +60,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
-#include <com/sun/star/script/vba/VBAEventId.hpp>
-#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <comphelper/processfactory.hxx>
 
@@ -104,8 +103,6 @@
 
 using namespace com::sun::star;
 
-#define SC_UNO_VBADOCOBJ "ThisVBADocObj" // perhaps we want to actually make this ThisWorkbook ?
-
 //------------------------------------------------------------------------
 
 //  alles ohne Which-ID, Map nur fuer PropertySetInfo
@@ -120,7 +117,6 @@ const SfxItemPropertyMapEntry* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_AUTOCONTFOC),       0, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNO_BASICLIBRARIES),    0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_DIALOGLIBRARIES),   0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY, 0},
-        {MAP_CHAR_LEN(SC_UNO_VBADOCOBJ),   0, &getCppuType((beans::PropertyValue*)0), beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),       PROP_UNO_CALCASSHOWN, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
         {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
@@ -469,7 +465,6 @@ uno::Any SAL_CALL ScModelObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( view::XRenderable )
     SC_QUERYINTERFACE( document::XLinkTargetSupplier )
     SC_QUERYINTERFACE( beans::XPropertySet )
-    SC_QUERYINTERFACE( script::vba::XCoreEventProcessor )
     SC_QUERYINTERFACE( lang::XMultiServiceFactory )
     SC_QUERYINTERFACE( lang::XServiceInfo )
     SC_QUERYINTERFACE( util::XChangesNotifier )
@@ -1887,18 +1882,6 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         {
             aRet <<= pDocShell->GetDialogContainer();
         }
-        else if ( aString.EqualsAscii( SC_UNO_VBADOCOBJ ) )
-        {
-            // PropertyValue seems extreme because we store
-            // the model ( as the value member ) of the PropertyValue that is
-            // itself a property of the model ( the intention however is to
-            // store something like a Workbook object... but we don't do that )
-            // yet
-            beans::PropertyValue aProp;
-            aProp.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ThisExcelDoc") );
-            aProp.Value <<= pDocShell->GetModel();
-            aRet <<= aProp;
-        }
         else if ( aString.EqualsAscii( SC_UNO_RUNTIMEUID ) )
         {
             aRet <<= getRuntimeUID();
@@ -2070,38 +2053,6 @@ uno::Sequence<rtl::OUString> SAL_CALL ScModelObj::getAvailableServiceNames()
     uno::Sequence<rtl::OUString> aDrawServices(SvxFmMSFactory::getAvailableServiceNames());
 
     return concatServiceNames( aMyServices, aDrawServices );
-}
-
-// XCoreEventProcessor
-
-void SAL_CALL ScModelObj::processCoreVbaEvent( sal_Int32 nSlotId )
-        throw (lang::IllegalArgumentException, script::provider::ScriptFrameworkErrorException, util::VetoException, uno::RuntimeException)
-{
-    using namespace ::com::sun::star::script::vba;
-
-    sal_Int32 nVbaEventId = VBAEventId::NO_EVENT;
-    uno::Sequence< uno::Any > aArgs;
-    switch( nSlotId )
-    {
-        case SID_SAVEDOC:
-        case SID_SAVEASDOC:
-            nVbaEventId = VBAEventId::WORKBOOK_BEFORESAVE;
-            aArgs.realloc( 1 );
-            aArgs[ 0 ] <<= (nSlotId == SID_SAVEASDOC);
-        break;
-        case SID_PRINTDOC:
-        case SID_PRINTDOCDIRECT:
-            nVbaEventId = VBAEventId::WORKBOOK_BEFOREPRINT;
-        break;
-        default:
-            throw lang::IllegalArgumentException();
-    }
-
-    uno::Reference< XVBAEventProcessor > xEventProcessor( GetDocument()->GetVbaEventProcessor(), uno::UNO_QUERY );
-    if( !xEventProcessor.is() )
-        throw script::provider::ScriptFrameworkErrorException();
-
-    xEventProcessor->processVbaEvent( nVbaEventId, aArgs );
 }
 
 // XServiceInfo

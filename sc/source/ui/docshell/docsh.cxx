@@ -2243,6 +2243,45 @@ BOOL __EXPORT ScDocShell::DoSaveCompleted( SfxMedium * pNewStor )
 }
 
 
+sal_Bool ScDocShell::QuerySlotExecutable( USHORT nSlotId )
+{
+    // #i112634# ask VBA event handlers whether to save or print the document
+
+    using namespace ::com::sun::star::script::vba;
+
+    sal_Int32 nVbaEventId = VBAEventId::NO_EVENT;
+    uno::Sequence< uno::Any > aArgs;
+    switch( nSlotId )
+    {
+        case SID_SAVEDOC:
+        case SID_SAVEASDOC:
+            nVbaEventId = VBAEventId::WORKBOOK_BEFORESAVE;
+            aArgs.realloc( 1 );
+            aArgs[ 0 ] <<= (nSlotId == SID_SAVEASDOC);
+        break;
+        case SID_PRINTDOC:
+        case SID_PRINTDOCDIRECT:
+            nVbaEventId = VBAEventId::WORKBOOK_BEFOREPRINT;
+        break;
+    }
+
+    sal_Bool bSlotExecutable = sal_True;
+    if( nVbaEventId != VBAEventId::NO_EVENT ) try
+    {
+        uno::Reference< XVBAEventProcessor > xEventProcessor( aDocument.GetVbaEventProcessor(), uno::UNO_QUERY_THROW );
+        xEventProcessor->processVbaEvent( nVbaEventId, aArgs );
+    }
+    catch( util::VetoException& )
+    {
+        bSlotExecutable = sal_False;
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return bSlotExecutable;
+}
+
+
 USHORT __EXPORT ScDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
     if(SC_MOD()->GetCurRefDlgId()>0)
