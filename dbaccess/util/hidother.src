@@ -301,7 +301,6 @@ hidspecial UID_APP_VIEW_VERT_SPLIT                      { HelpId = UID_APP_VIEW_
 hidspecial UID_APP_VIEW_BORDER_WIN                      { HelpId = UID_APP_VIEW_BORDER_WIN ; };
 hidspecial HID_APP_CREATION_LIST                        { HelpId = HID_APP_CREATION_LIST ; };
 hidspecial UID_APP_SWAP_VIEW                            { HelpId = UID_APP_SWAP_VIEW ; };
-hidspecial UID_DLG_TABLE_FILTER                         { HelpId = UID_DLG_TABLE_FILTER ; };
 hidspecial HID_APP_SWAP_ICONCONTROL                     { HelpId = HID_APP_SWAP_ICONCONTROL ; };
 
 hidspecial HID_DSADMIN_APPENDTABLEALIAS                 { HelpId = HID_DSADMIN_APPENDTABLEALIAS ; };
