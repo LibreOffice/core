@@ -43,7 +43,7 @@ BEGIN
     $msiinfo_available = 0;
     $path_displayed = 0;
     $localmsidbpath = "";
-    $bundleddir = "";
+    $presetsdir = "";
 
     $plat = $^O;
 
@@ -824,7 +824,7 @@ sub create_directory_tree
             # Create the directory
             my $newdir = $fulldir . $separator . $dirname;
             if ( ! -f $newdir ) { mkdir $newdir; }
-            if (( $bundleddir eq "" ) && ( $newdir =~ /\Wbundled\s*$/ )) { $bundleddir = $newdir; }
+            if (( $presetsdir eq "" ) && ( $newdir =~ /\Wpresets\s*$/ )) { $presetsdir = $newdir; }
             # Saving in collector
             $pathcollector->{$dir} = $newdir;
             # Iteration
@@ -1094,9 +1094,9 @@ sub register_extensions_sync
 {
     my ($unopkgfile, $localtemppath) = @_;
 
-    if ( $bundleddir eq "" )
+    if ( $presetsdir eq "" )
     {
-        my $logtext = "ERROR: Failed to determine directory \"bundled\" in \"presets\" folder for extension registration! Please check your installation set.";
+        my $logtext = "ERROR: Failed to determine directory \"presets\" folder for extension registration! Please check your installation set.";
         print $logtext . "\n";
         exit_program($logtext);
     }
@@ -1123,9 +1123,12 @@ sub register_extensions_sync
 
     if ( $^O =~ /cygwin/i ) {
         $executable = "./" . $executable;
-        $bundleddir = qx{cygpath -m "$bundleddir"};
-        chomp($bundleddir);
+        $presetsdir = qx{cygpath -m "$presetsdir"};
+        chomp($presetsdir);
     }
+
+    $presetsdir =~ s/\/\s*$//g;
+    my $bundleddir = $presetsdir . "/bundled";
 
     my $systemcall = $executable . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file:///" . $bundleddir . "\"" . " -env:UserInstallation=file:///" . $localtemppath . " 2\>\&1 |";
 
