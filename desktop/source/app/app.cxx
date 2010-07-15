@@ -545,7 +545,7 @@ static ::rtl::OUString getBasePresetsPathURL()
     if ( aBaseInstallStatus == ::utl::Bootstrap::PATH_EXISTS )
     {
         ::rtl::OUStringBuffer aTmp( aBaseInstallURL );
-        ::sal_uInt32          nLastIndex = aBaseInstallURL.lastIndexOf('/');
+        ::sal_Int32          nLastIndex = aBaseInstallURL.lastIndexOf('/');
 
         if ( nLastIndex != aBaseInstallURL.getLength()-1 )
             aTmp.appendAscii( "/" );
@@ -569,7 +569,7 @@ static ::rtl::OUString getUserBundledExtPathURL()
 static ::rtl::OUString getLastSyncFileURLFromBaseInstallation()
 {
     ::rtl::OUString aBasePresetPathURL = getBasePresetsPathURL();
-    ::sal_uInt32    nLastIndex         = aBasePresetPathURL.lastIndexOf('/');
+    ::sal_Int32    nLastIndex         = aBasePresetPathURL.lastIndexOf('/');
 
     ::rtl::OUStringBuffer aTmp( aBasePresetPathURL );
 
@@ -583,7 +583,7 @@ static ::rtl::OUString getLastSyncFileURLFromBaseInstallation()
 static ::rtl::OUString getLastSyncFileURLFromUserInstallation()
 {
     ::rtl::OUString aUserBundledPathURL = getUserBundledExtPathURL();
-    ::sal_uInt32    nLastIndex          = aUserBundledPathURL.lastIndexOf('/');
+    ::sal_Int32    nLastIndex          = aUserBundledPathURL.lastIndexOf('/');
 
     ::rtl::OUStringBuffer aTmp( aUserBundledPathURL );
 
@@ -701,6 +701,7 @@ void Desktop::Init()
 
             // copy bundled folder to the user directory
             osl::FileBase::RC rc = osl::Directory::createPath(aUserPath);
+            (void) rc;
             copy_bundled_recursive( aBasePresetsBundledPath, aUserPath, +1 );
         }
     }
