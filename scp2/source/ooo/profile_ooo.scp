@@ -45,13 +45,6 @@ Profile gid_Profile_Version_Ini_Basis
     Styles = ();
 End
 
-Profile gid_Profile_Bundled_Ini_Basis
-    ModuleID = gid_Module_Root;
-    Name = PROFILENAME(bundled);
-    Dir = gid_Dir_User_Bundled;
-    Styles = ();
-End
-
 Profile gid_Profile_Fundamentalbasis_Ini
     ModuleID = gid_Module_Root;
     Name = PROFILENAME(fundamentalbasis);

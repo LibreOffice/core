@@ -219,6 +219,7 @@ End
 Directory gid_Brand_Dir_Share_Extensions
     ParentID = gid_Brand_Dir_Share;
     DosName = "extensions";
+    Styles = (CREATE);
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Install
