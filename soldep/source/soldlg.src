@@ -272,7 +272,6 @@ ToolBox TID_SOLDEP_MAIN
                         Identifier      = TID_SOLDEP_OPEN;
                         Type            = TOOLBOXITEM_BUTTON;
                         Text            = "Load";
-                        HelpId          = TID_SOLDEP_OPEN;
                         HelpText        = "Load";
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
@@ -285,7 +284,6 @@ ToolBox TID_SOLDEP_MAIN
                         Identifier      = TID_SOLDEP_SAVE;
                         Type            = TOOLBOXITEM_BUTTON;
                         Text            = "Save";
-                        HelpId          = TID_SOLDEP_SAVE;
                         HelpText        = "Save";
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
@@ -302,7 +300,6 @@ ToolBox TID_SOLDEP_MAIN
                         Identifier      = TID_SOLDEP_SELECT_WORKSPACE;
                         Type            = TOOLBOXITEM_BUTTON;
                         Text            = "Select Workspace";
-                        HelpId          = TID_SOLDEP_HIDE_INDEPENDEND;
                         HelpText        = "Select Workspace";
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
@@ -315,7 +312,6 @@ ToolBox TID_SOLDEP_MAIN
                         Identifier      = TID_SOLDEP_FIND;
                         Type            = TOOLBOXITEM_BUTTON;
                         Text            = "Find Module";
-                        HelpId          = TID_SOLDEP_FIND;
                         HelpText        = "Find Module";
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
@@ -328,7 +324,6 @@ ToolBox TID_SOLDEP_MAIN
                         Identifier      = TID_SOLDEP_BACK;
                         Type            = TOOLBOXITEM_BUTTON;
                         Text            = "Back to Overview";
-                        HelpId          = TID_SOLDEP_BACK;
                         HelpText        = "Back to Overview";
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
@@ -341,7 +336,6 @@ ToolBox TID_SOLDEP_MAIN
                         Identifier      = TID_SOLDEP_HIDE_INDEPENDEND;
                         Type            = TOOLBOXITEM_BUTTON;
                         Text            = "Hide Independend Modules";
-                        HelpId          = TID_SOLDEP_HIDE_INDEPENDEND;
                         HelpText        = "Hide Independend Modules";
                         Checkable               = TRUE;
                         ItemBitmap      = Bitmap
