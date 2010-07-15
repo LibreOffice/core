@@ -29,7 +29,6 @@
 #include "precompiled_sfx2.hxx"
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/script/vba/XCoreEventProcessor.hpp>
 #include <com/sun/star/view/PrintableState.hpp>
 #include "com/sun/star/view/XRenderable.hpp"
 
@@ -699,20 +698,11 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
         {
             SfxObjectShell* pDoc = GetObjectShell();
 
-            // ask VBA emulation at document model whether to print the document
-            try
+            // derived class may decide to abort this
+            if( !pDoc->QuerySlotExecutable( nId ) )
             {
-                uno::Reference< script::vba::XCoreEventProcessor > xEventProcessor( pDoc->GetModel(), uno::UNO_QUERY_THROW );
-                xEventProcessor->processCoreVbaEvent( nId );
-            }
-            catch( util::VetoException& )
-            {
-                // VBA event handler indicates to cancel printing the document
                 rReq.SetReturnValue( SfxBoolItem( 0, FALSE ) );
                 return;
-            }
-            catch( uno::Exception& )
-            {
             }
 
             bool bDetectHidden = ( !bSilent && pDoc );

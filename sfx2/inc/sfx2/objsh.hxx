@@ -346,6 +346,9 @@ public:
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
 
+    // called for a few slots like SID_SAVE[AS]DOC, SID_PRINTDOC[DIRECT], derived classes may abort the action
+    virtual sal_Bool            QuerySlotExecutable( USHORT nSlotId );
+
     sal_Bool                    SaveChildren(BOOL bObjectsOnly=FALSE);
     sal_Bool                    SaveAsChildren( SfxMedium &rMedium );
     sal_Bool                    SwitchChildrenPersistance(
