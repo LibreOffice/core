@@ -895,7 +895,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
     if (pChainContext)
         CertFreeCertificateChain(pChainContext);
 
-    return NULL ;
+    return Sequence< Reference < XCertificate > >();
 }
 
 Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: createCertificateFromRaw( const Sequence< sal_Int8 >& rawCertificate ) throw( SecurityException , RuntimeException ) {
