@@ -159,7 +159,6 @@ hidspecial HID_HELP_TOOLBOXITEM_PRINT           { HelpID = HID_HELP_TOOLBOXITEM_
 hidspecial HID_HELP_TOOLBOXITEM_BOOKMARKS       { HelpID = HID_HELP_TOOLBOXITEM_BOOKMARKS; };
 hidspecial HID_HELP_TOOLBOXITEM_SEARCHDIALOG    { HelpID = HID_HELP_TOOLBOXITEM_SEARCHDIALOG; };
 hidspecial HID_TBXCONTROL_FILENEW               { HelpID = HID_TBXCONTROL_FILENEW; };
-hidspecial HID_GLOBAL_FALLBACK                  { HelpID = HID_GLOBAL_FALLBACK; };
 hidspecial HID_CLOSE_WARNING                    { HelpID = HID_CLOSE_WARNING; };
 hidspecial HID_DID_SAVE_PACKED_XML              { HelpID = HID_DID_SAVE_PACKED_XML; };
 hidspecial HID_HELP_ONHELP                      { HelpID = HID_HELP_ONHELP; };
