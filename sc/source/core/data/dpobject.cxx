@@ -67,6 +67,7 @@
 #include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/sheet/XDrillDownDataSupplier.hpp>
@@ -2277,6 +2278,9 @@ uno::Sequence<rtl::OUString> ScDPObject::GetRegisteredSources()
     return aSeq;
 }
 
+// use getContext from addincol.cxx
+uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiServiceFactory> xMSF);
+
 //  static
 uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPServiceDesc& rDesc )
 {
@@ -2301,12 +2305,26 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
                     if ( xIntFac.is() )
                     {
                         uno::Reference<lang::XServiceInfo> xInfo( xIntFac, uno::UNO_QUERY );
-                        uno::Reference<lang::XSingleServiceFactory> xFac( xIntFac, uno::UNO_QUERY );
-                        if ( xFac.is() && xInfo.is() && xInfo->getImplementationName() == aImplName )
+                        if ( xInfo.is() && xInfo->getImplementationName() == aImplName )
                         {
                             try
                             {
-                                uno::Reference<uno::XInterface> xInterface = xFac->createInstance();
+                                // #i113160# try XSingleComponentFactory in addition to (old) XSingleServiceFactory,
+                                // passing the context to the component (see ScUnoAddInCollection::Initialize)
+
+                                uno::Reference<uno::XInterface> xInterface;
+                                uno::Reference<uno::XComponentContext> xCtx = getContext(xManager);
+                                uno::Reference<lang::XSingleComponentFactory> xCFac( xIntFac, uno::UNO_QUERY );
+                                if (xCtx.is() && xCFac.is())
+                                    xInterface = xCFac->createInstanceWithContext(xCtx);
+
+                                if (!xInterface.is())
+                                {
+                                    uno::Reference<lang::XSingleServiceFactory> xFac( xIntFac, uno::UNO_QUERY );
+                                    if ( xFac.is() )
+                                        xInterface = xFac->createInstance();
+                                }
+
                                 uno::Reference<lang::XInitialization> xInit( xInterface, uno::UNO_QUERY );
                                 if (xInit.is())
                                 {
