@@ -384,10 +384,15 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
             case SID_THES:
             {
-                EditView & rEditView = mpView->GetTextEditOutlinerView()->GetEditView();;
+                OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
                 String          aStatusVal;
                 LanguageType    nLang = LANGUAGE_NONE;
-                bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, rEditView );
+                bool bIsLookUpWord = false;
+                if ( pOLV )
+                {
+                    EditView& rEditView = pOLV->GetEditView();
+                    bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, rEditView );
+                }
                 rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
                 // disable "Thesaurus" context menu entry if there is nothing to look up
