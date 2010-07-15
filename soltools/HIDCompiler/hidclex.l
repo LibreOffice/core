@@ -697,7 +697,7 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 					globsuffix = globsuffix==NULL ? glob:globsuffix+1;
 
 					if( ares->helpID ) {
-						fprintf( outfile,"\n\t printf(\"%s \\t %cs %cu \\n\",\n",
+						fprintf( outfile,"\n\t printf(\"%s \\t %cs %cs \\n\",\n",
 						ares->helpID,'%','%');
 						fprintf(outfile,"\t\"HelpID\", (%s) ); \n", ares->helpID);
 					}
