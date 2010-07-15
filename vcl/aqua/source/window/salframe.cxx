@@ -293,6 +293,9 @@ BOOL AquaSalFrame::PostEvent( void *pData )
 // -----------------------------------------------------------------------
 void AquaSalFrame::SetTitle(const XubString& rTitle)
 {
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
     NSString* pTitle = CreateNSString( rTitle );
     [mpWindow setTitle: pTitle];
 
@@ -806,6 +809,9 @@ void AquaSalFrame::SetAlwaysOnTop( BOOL bOnTop )
 
 void AquaSalFrame::ToTop(USHORT nFlags)
 {
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
     if( ! (nFlags & SAL_FRAME_TOTOP_RESTOREWHENMIN) )
     {
         if( ! [mpWindow isVisible] || [mpWindow isMiniaturized] )
