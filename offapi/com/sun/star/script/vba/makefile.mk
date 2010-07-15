@@ -42,7 +42,6 @@ IDLFILES=\
     VBAEventProcessor.idl \
     VBASpreadsheetEventProcessor.idl \
     VBATextEventProcessor.idl \
-    XCoreEventProcessor.idl \
     XVBAEventProcessor.idl
 
 # ------------------------------------------------------------------
