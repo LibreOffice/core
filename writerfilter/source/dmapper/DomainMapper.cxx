@@ -3993,6 +3993,10 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             rContext->Insert( PROP_NUMBERING_LEVEL, true, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
     }
     break;
+    case NS_ooxml::LN_CT_PPrBase_mirrorIndents:
+    case NS_ooxml::LN_CT_PPrBase_textDirection:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        break;
     case NS_ooxml::LN_EG_RPrBase_rStyle:
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
