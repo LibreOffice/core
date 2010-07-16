@@ -343,6 +343,11 @@ MY_FILES_main += $(MY_MOD)/DataAccess/mozab.xcu
 MY_FILES_main += $(MY_MOD)/DataAccess/mozab2.xcu
 .END
 .END
+.IF "$(SYSTEM_LIBTEXTCAT)" != "YES"
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/Paths-internallibtextcat.xcu
+.ELSE
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/Paths-externallibtextcat.xcu
+.END
 
 MY_DEPS_math = main
 MY_FILES_math = \
