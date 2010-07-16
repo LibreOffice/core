@@ -8,7 +8,7 @@
  //  Use, modification and distribution is subject to the Boost Software License, Version 1.0.
  //  (See accompanying file LICENSE_1_0.txt or copy at
  //  http://www.boost.org/LICENSE_1_0.txt)
-@@ -44,6 +45,13 @@
+@@ -41,6 +42,13 @@
  #   pragma warning( disable : 4127 ) // "conditional expression is constant"
  #endif       
  
@@ -22,7 +22,7 @@
  // Define BOOST_FUNCTION_STD_NS to the namespace that contains type_info.
  #ifdef BOOST_NO_STD_TYPEINFO
  // Embedded VC++ does not have type_info in namespace std
-@@ -314,15 +322,15 @@
+@@ -303,15 +311,15 @@
          {
            if (op == clone_functor_tag || op == move_functor_tag) {
              const functor_type* in_functor = 
@@ -39,19 +39,5 @@
 -            reinterpret_cast<functor_type*>(&out_buffer.data)->~Functor();
 +            static_cast<functor_type*>(static_cast<void*>(&out_buffer.data))->~Functor();
            } else if (op == check_functor_type_tag) {
-             const detail::sp_typeinfo& check_type 
+             const BOOST_FUNCTION_STD_NS::type_info& check_type 
                = *out_buffer.type.type;
-@@ -714,8 +722,11 @@
- 
- public: // should be protected, but GCC 2.95.3 will fail to allow access
-   detail::function::vtable_base* get_vtable() const {
--    return reinterpret_cast<detail::function::vtable_base*>(
--             reinterpret_cast<std::size_t>(vtable) & ~(std::size_t)0x01);
-+    return static_cast<detail::function::vtable_base*>(
-+            (void*)(
-+             (std::size_t(static_cast<void*>(vtable)) & ~(std::size_t(0x01)))
-+             )
-+            );
-   }
- 
-   bool has_trivial_copy_and_destroy() const {
