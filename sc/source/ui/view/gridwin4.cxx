@@ -401,17 +401,13 @@ void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
         nScrX += ScViewData::ToPixel( pDoc->GetColWidth( nX2, nTab ), nPPTX );
     }
 
-    long nScrY = ScViewData::ToPixel( pDoc->GetRowHeight( nY1, nTab ), nPPTY );
-    while ( nScrY <= aPixRect.Top() && nY1 < MAXROW )
-    {
-        ++nY1;
-        nScrY += ScViewData::ToPixel( pDoc->GetRowHeight( nY1, nTab ), nPPTY );
-    }
+    long nScrY = 0;
+    ScViewData::AddPixelsWhile( nScrY, aPixRect.Top(), nY1, MAXROW, nPPTY, pDoc, nTab);
     SCROW nY2 = nY1;
-    while ( nScrY <= aPixRect.Bottom() && nY2 < MAXROW )
+    if (nScrY <= aPixRect.Bottom() && nY2 < MAXROW)
     {
         ++nY2;
-        nScrY += ScViewData::ToPixel( pDoc->GetRowHeight( nY2, nTab ), nPPTY );
+        ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
     }
 
     Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS );           // nicht weiterzeichnen
