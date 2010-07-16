@@ -1793,11 +1793,6 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         m_aContext.Version = PDFWriter::PDF_1_4; //meaning we need PDF 1.4, PDF/A flavour
 
     m_bEmbedStandardFonts = m_aContext.EmbedStandardFonts;
-#ifdef MACOSX // disable builtin fonts on the AQUA port
-    // on OSX the glyph fallback feature does not work for non-system fonts
-    // TODO: reevaluate when the OSX ports moves to CoreText
-    m_bEmbedStandardFonts = true;
-#endif
 }
 
 PDFWriterImpl::~PDFWriterImpl()
