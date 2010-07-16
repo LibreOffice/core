@@ -1926,6 +1926,8 @@ ToFile( "HYPHEN_LIB",        "@HYPHEN_LIB@",       "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
 ToFile( "MYTHES_CFLAGS",     "@MYTHES_CFLAGS@",    "e" );
 ToFile( "MYTHES_LIBS",       "@MYTHES_LIBS@",      "e" );
+ToFile( "SYSTEM_LIBTEXTCAT", "@SYSTEM_LIBTEXTCAT@","e" );
+ToFile( "LIBTEXTCAT_SYSTEM_DIR","@LIBTEXTCAT_SYSTEM_DIR@","e" );
 ToFile( "PAM",               "@PAM@",              "e" );
 ToFile( "NEW_SHADOW_API",    "@NEW_SHADOW_API@",   "e" );
 ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );

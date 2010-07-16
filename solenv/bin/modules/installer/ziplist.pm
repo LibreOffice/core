@@ -806,6 +806,7 @@ sub add_variables_to_allvariableshashref
     $variableshashref->{'PRODUCTMINOR'} = $localminor;
 
     $variableshashref->{'PRODUCTBUILDID'} = $installer::globals::buildid;
+    $variableshashref->{'LIBTEXTCAT_SYSTEM_DIR'} = $ENV{'LIBTEXTCAT_SYSTEM_DIR'} , if( defined $ENV{'LIBTEXTCAT_SYSTEM_DIR'} && $ENV{'LIBTEXTCAT_SYSTEM_DIR'} ne "" );
 }
 
 1;

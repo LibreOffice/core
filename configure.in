@@ -546,6 +546,12 @@ AC_ARG_WITH(system-altlinuxhyph,
 AC_ARG_WITH(system-lpsolve,
 [  --with-system-lpsolve         Use lpsolve already on system
 ],,)
+AC_ARG_WITH(system-libtextcat,
+[  --with-system-libtextcat      Use libtextcat already on system
+],,)
+AC_ARG_WITH(external-libtextcat-dir,
+[  --with-external-libtextcat-dir Specify external libtextcat dir
+],,)
 AC_ARG_WITH(system-cppunit,
 [  --with-system-cppunit         Use cppunit already on system
 ],,)
@@ -5141,6 +5147,31 @@ else
     BUILD_TYPE="$BUILD_TYPE LPSOLVE"
 fi
 AC_SUBST(SYSTEM_LPSOLVE)
+
+dnl ===================================================================
+dnl Checking for libtextcat
+dnl ===================================================================
+AC_MSG_CHECKING([which libtextcat to use])
+LIBTEXTCAT_SYSTEM_DIR=file:///usr/share/libtextcat
+if test -n "$with_system_libtextcat"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBTEXTCAT=YES
+    AC_CHECK_HEADER(libtextcat/textcat.h, [],
+       [ AC_MSG_ERROR(libtextcat headers not found.)], [])
+    AC_CHECK_LIB(textcat, special_textcat_Init, ,
+        [ AC_MSG_ERROR(libtextcat library not found or not suitable. libtextcat typically needs to be patched)], [])
+    AC_MSG_CHECKING([for libtextcat data directory])
+    if test -n "$with_external_libtextcat_dir"; then
+        LIBTEXTCAT_SYSTEM_DIR=file://$with_external_libtextcat_dir
+    fi
+    AC_MSG_RESULT([$LIBTEXTCAT_SYSTEM_DIR])
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBTEXTCAT=NO
+    BUILD_TYPE="$BUILD_TYPE LIBTEXTCAT"
+fi
+AC_SUBST(LIBTEXTCAT_SYSTEM_DIR)
+AC_SUBST(SYSTEM_LIBTEXTCAT)
 
 dnl ***************************************
 dnl testing libc version for Linux...

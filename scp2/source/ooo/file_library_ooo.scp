@@ -1669,6 +1669,7 @@ File gid_File_Lib_Migrationoo2
   #endif
 End
 
+#ifndef SYSTEM_LIBTEXTCAT
 File gid_File_Lib_Libtextcat
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -1679,6 +1680,7 @@ File gid_File_Lib_Libtextcat
     Name = "libtextcat.dll";
   #endif
 End
+#endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Guesslang, guesslang )
 
