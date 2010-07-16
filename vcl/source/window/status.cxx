@@ -1533,7 +1533,14 @@ rtl::OString StatusBar::GetHelpId( USHORT nItemId ) const
 
     rtl::OString aRet;
     if ( nPos != STATUSBAR_ITEM_NOTFOUND )
-        aRet = mpItemList->GetObject( nPos )->maHelpId;
+    {
+        ImplStatusItem* pItem = mpItemList->GetObject( nPos );
+        if ( pItem->maHelpId.getLength() )
+            aRet = pItem->maHelpId;
+        else
+            aRet = ::rtl::OUStringToOString( pItem->maCommand, RTL_TEXTENCODING_UTF8 );
+    }
+
     return aRet;
 }
 
