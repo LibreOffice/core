@@ -361,13 +361,13 @@ Menu RID_MENU_REPORT
                     MenuItem
                     {
                         Identifier = SID_FRAME_UP ;
-                        HelpId = HID_FRAME_UP;
+                        HelpId = ".uno:ObjectForwardOne";
                         Text [ en-US ] = "Bring ~Forward" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FRAME_DOWN ;
-                        HelpId = HID_FRAME_DOWN;
+                        HelpId = ".uno:ObjectBackOne";
                         Text [ en-US ] = "Send Back~ward" ;
                     };
                     MenuItem
