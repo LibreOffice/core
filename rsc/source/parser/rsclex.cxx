@@ -179,7 +179,7 @@ int MakeToken( YYSTYPE * pTokenVal ){
                 {
                     c = pFI->GetFastChar();
                 }
-                while( isblank( c ) );
+                while(  c == ' ' || c == '\t' );
                 if( c == '"' )
                 {
                     // this is a continued string
