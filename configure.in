@@ -549,8 +549,8 @@ AC_ARG_WITH(system-lpsolve,
 AC_ARG_WITH(system-libtextcat,
 [  --with-system-libtextcat      Use libtextcat already on system
 ],,)
-AC_ARG_WITH(external-libtextcat-dir,
-[  --with-external-libtextcat-dir Specify external libtextcat dir
+AC_ARG_WITH(external-libtextcat-data,
+[  --with-system-libtextcat-data Use libtextcat data already on system
 ],,)
 AC_ARG_WITH(system-cppunit,
 [  --with-system-cppunit         Use cppunit already on system
@@ -5152,26 +5152,33 @@ dnl ===================================================================
 dnl Checking for libtextcat
 dnl ===================================================================
 AC_MSG_CHECKING([which libtextcat to use])
-LIBTEXTCAT_SYSTEM_DIR=file:///usr/share/libtextcat
-if test -n "$with_system_libtextcat"; then
+if test -n "$with_system_libtextcat" && test "$with_system_libtextcat" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBTEXTCAT=YES
     AC_CHECK_HEADER(libtextcat/textcat.h, [],
        [ AC_MSG_ERROR(libtextcat headers not found.)], [])
     AC_CHECK_LIB(textcat, special_textcat_Init, ,
         [ AC_MSG_ERROR(libtextcat library not found or not suitable. libtextcat typically needs to be patched)], [])
-    AC_MSG_CHECKING([for libtextcat data directory])
-    if test -n "$with_external_libtextcat_dir"; then
-        LIBTEXTCAT_SYSTEM_DIR=file://$with_external_libtextcat_dir
-    fi
-    AC_MSG_RESULT([$LIBTEXTCAT_SYSTEM_DIR])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBTEXTCAT=NO
     BUILD_TYPE="$BUILD_TYPE LIBTEXTCAT"
 fi
-AC_SUBST(LIBTEXTCAT_SYSTEM_DIR)
 AC_SUBST(SYSTEM_LIBTEXTCAT)
+
+AC_MSG_CHECKING([which libtextcat data directory to use])
+if test -n "$with_system_libtextcat_data" && test "$with_system_libtextcat_data" != "no"; then
+    if test "$with_system_libtextcat_data" = "yes"; then
+        SYSTEM_LIBTEXTCAT_DATA=file:///usr/share/libtextcat
+    else
+        SYSTEM_LIBTEXTCAT_DATA=file://$with_system_libtextcat_data
+    fi
+    AC_MSG_RESULT([$SYSTEM_LIBTEXTCAT_DATA])
+else
+    AC_MSG_RESULT([internal])
+    BUILD_TYPE="$BUILD_TYPE LIBTEXTCATDATA"
+fi
+AC_SUBST(SYSTEM_LIBTEXTCAT_DATA)
 
 dnl ***************************************
 dnl testing libc version for Linux...
