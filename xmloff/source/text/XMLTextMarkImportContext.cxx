@@ -116,6 +116,7 @@ XMLTextMarkImportContext::XMLTextMarkImportContext(
     const OUString& rLocalName )
     : SvXMLImportContext(rImport, nPrefix, rLocalName)
     , m_rHelper(rHlp)
+    , m_bHaveAbout(false)
 {
 }
 

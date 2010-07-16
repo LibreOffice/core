@@ -721,7 +721,12 @@ void Desktop::Init()
     {
         // prepare language
         if ( !LanguageSelection::prepareLanguage() )
-            SetBootstrapError( BE_LANGUAGE_MISSING );
+        {
+            if ( LanguageSelection::getStatus() == LanguageSelection::LS_STATUS_CANNOT_DETERMINE_LANGUAGE )
+                SetBootstrapError( BE_LANGUAGE_MISSING );
+            else
+                SetBootstrapError( BE_OFFICECONFIG_BROKEN );
+        }
     }
 
     if ( GetBootstrapError() == BE_OK )
@@ -1101,6 +1106,17 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
         aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
 
         FatalError( aMessage);
+    }
+    else if ( aBootstrapError == BE_OFFICECONFIG_BROKEN )
+    {
+        OUString aMessage;
+        OUStringBuffer aDiagnosticMessage( 100 );
+        OUString aErrorMsg;
+        aErrorMsg = GetMsgString( STR_CONFIG_ERR_ACCESS_GENERAL,
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "A general error occurred while accessing your central configuration." )) );
+        aDiagnosticMessage.append( aErrorMsg );
+        aMessage = MakeStartupErrorMessage( aDiagnosticMessage.makeStringAndClear() );
+        FatalError(aMessage);
     }
     else if ( aBootstrapError == BE_USERINSTALL_FAILED )
     {
