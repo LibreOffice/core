@@ -1045,10 +1045,12 @@ bool SlideSorterView::SetState (
     {
         // Fade in or out the buttons.
         if (eState == PageDescriptor::ST_MouseOver)
+        {
             if (bStateValue)
                 GetButtonBar().RequestFadeIn(rpDescriptor, bAnimate);
             else
                 GetButtonBar().RequestFadeOut(rpDescriptor, bAnimate);
+        }
     }
 
     return bModified;

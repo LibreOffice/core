@@ -619,7 +619,6 @@ bool SlideSorterModel::NotifyPageEvent (const SdrPage* pSdrPage)
     ::osl::MutexGuard aGuard (maMutex);
 
     SdPage* pPage = const_cast<SdPage*>(dynamic_cast<const SdPage*>(pSdrPage));
-    OSL_ASSERT(pPage!=NULL);
     if (pPage == NULL)
         return false;
 

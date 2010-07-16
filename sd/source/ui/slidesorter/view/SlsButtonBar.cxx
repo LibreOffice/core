@@ -305,10 +305,12 @@ void ButtonBar::ProcessMouseMotionEvent (
     {
         SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
         if (pWindow)
+        {
             if (mpButtonUnderMouse)
                 mrSlideSorter.GetView().GetToolTip().ShowHelpText(mpButtonUnderMouse->GetHelpText());
             else
                 mrSlideSorter.GetView().GetToolTip().ShowDefaultHelpText();
+        }
     }
 
     if (bPageHasChanged || bButtonHasChanged || bButtonStateHasChanged)
@@ -394,10 +396,12 @@ SharedButton ButtonBar::GetButtonAt (const Point aModelLocation)
         for (sal_uInt32 nIndex=0; nIndex<rButtons.size(); ++nIndex)
         {
             if (rButtons[sal_uInt32(nIndex)]->GetBoundingBox().IsInside(aLocalLocation))
+            {
                 if (rButtons[sal_uInt32(nIndex)]->IsEnabled())
                     return rButtons[sal_uInt32(nIndex)];
                 else
                     return SharedButton();
+            }
         }
     }
 

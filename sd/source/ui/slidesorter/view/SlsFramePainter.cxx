@@ -208,10 +208,12 @@ void FramePainter::OffsetBitmap::PaintSide (
             + rCornerBitmap2.maOffset.X()\
             - 1);
         for (sal_Int32 nX=nLeft; nX<=nRight; nX+=aBitmapSize.Width())
+        {
             rDevice.DrawBitmapEx(
                 Point(nX,nY),
-                Size(std::min(aBitmapSize.Width(), nRight-nX+1),aBitmapSize.Height()),
+                Size(std::min(aBitmapSize.Width(),static_cast<long>(nRight-nX+1)),aBitmapSize.Height()),
                 maBitmap);
+        }
     }
     else if (rAnchor1.X() == rAnchor2.X())
     {
@@ -226,10 +228,12 @@ void FramePainter::OffsetBitmap::PaintSide (
             + rCornerBitmap2.maOffset.Y()
             - 1);
         for (sal_Int32 nY=nTop; nY<=nBottom; nY+=aBitmapSize.Height())
+        {
             rDevice.DrawBitmapEx(
                 Point(nX,nY),
-                Size(aBitmapSize.Width(), std::min(aBitmapSize.Height(), nBottom-nY+1)),
+                Size(aBitmapSize.Width(), std::min(aBitmapSize.Height(), static_cast<long>(nBottom-nY+1))),
                 maBitmap);
+        }
     }
     else
     {
