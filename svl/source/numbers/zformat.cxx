@@ -2057,7 +2057,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
             OutString = rScan.GetFalseString();
         return FALSE;
     }
-    if (eType & NUMBERFORMAT_TEXT && bStandard)
+    if (eType & NUMBERFORMAT_TEXT)
     {
         ImpGetOutputStandard(fNumber, OutString);
         return FALSE;

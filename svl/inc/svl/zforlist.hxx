@@ -520,6 +520,15 @@ public:
                           String& sOutString, Color** ppColor,
                           LanguageType eLnge = LANGUAGE_DONTKNOW );
 
+    /** Format a string according to a format code string to be scanned.
+        @return
+            <FALSE/> if format code contains an error
+            <TRUE/> else, in which case the string and color are returned.
+     */
+    BOOL GetPreviewString( const String& sFormatString, const String& sPreviewString,
+                          String& sOutString, Color** ppColor,
+                          LanguageType eLnge = LANGUAGE_DONTKNOW );
+
     /** Test whether the format code string is already present in container
         @return
             NUMBERFORMAT_ENTRY_NOT_FOUND if not found, else the format index.
