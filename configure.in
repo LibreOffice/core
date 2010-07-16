@@ -6535,6 +6535,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to include AFMs])
 if test "$with_afms" != "no"; then
   AC_MSG_RESULT([yes])
+  BUILD_TYPE="$BUILD_TYPE AFMS"
 else
   AC_MSG_RESULT([no])
   WITHOUT_AFMS=YES
