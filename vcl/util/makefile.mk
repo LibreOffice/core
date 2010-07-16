@@ -391,6 +391,9 @@ SHL4STDLIBS+= $(XRANDR_LIBS)
 .ENDIF
 .ENDIF
 
+.IF "$(HOSTTYPE)" == "x86_64-linux"
+EXTRALIBPATHS+=-L$(LIBRARY_PATH)
+.ENDIF # "$(HOSTTYPE)" == "x86_64-linux"
 .ENDIF # "$(ENABLE_GTK)" != ""
 
 # KDE plugin
