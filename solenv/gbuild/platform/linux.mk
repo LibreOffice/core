@@ -30,9 +30,9 @@ COM := GCC
 
 gb_MKTEMP := mktemp -p
 
-gb_CC := gcc
-gb_CXX := g++
-gb_GCCP := gcc
+gb_CC := $(CC)
+gb_CXX := $(CXX)
+gb_GCCP := $(CC)
 
 gb_OSDEFS := \
     -DLINUX \
