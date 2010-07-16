@@ -87,6 +87,8 @@ MODULEFILES= \
     Paths-macosx.xcu    \
     Paths-unxwnt.xcu    \
     Paths-unixdesktop.xcu \
+    Paths-internallibtextcat.xcu \
+    Paths-externallibtextcat.xcu \
     Writer-cjk.xcu \
     Impress-ogltrans.xcu \
     Embedding-calc.xcu   \

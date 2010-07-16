@@ -169,7 +169,8 @@
 
                 <node oor:name="Fingerprint" oor:op="fuse" oor:mandatory="true">
                         <node oor:name="InternalPaths">
-                              <node oor:name="$(insturl)/share/fingerprint" oor:op="fuse" />
+                              <node install:module="internallibtextcat" oor:name="$(insturl)/share/fingerprint" oor:op="fuse"/>
+                              <node install:module="externallibtextcat" oor:name="${LIBTEXTCAT_SYSTEM_DIR}" oor:op="fuse"/>
                         </node>
                 </node>
 
