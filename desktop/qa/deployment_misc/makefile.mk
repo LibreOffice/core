@@ -36,6 +36,12 @@ ENABLE_EXCEPTIONS := TRUE
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
+# TODO:  On Windows, test_dp_version.cxx fails due to BOOL redefinition between
+# windef.h and tools/solar.h caused by including "precompiled_desktop.hxx"; this
+# hack to temporarily disable PCH will become unnecessary with the fix for issue
+# 112600:
+CFLAGSCXX += -DDISABLE_PCH_HACK
+
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/test_dp_version.obj
 SHL1STDLIBS = $(CPPUNITLIB) $(DEPLOYMENTMISCLIB) $(SALLIB)
