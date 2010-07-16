@@ -102,7 +102,6 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
     String aDisplayName = RetrieveLabelFromCommand( aCommand );
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
-    pPopupMenu->SetHelpId( 2, ".uno:MacroDialog" );
 
     // insert providers but not basic or java
     addScriptItems( pPopupMenu, 4);
@@ -222,7 +221,6 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startIt
                     aDisplayName.Append( ellipsis );
                     pPopupMenu->InsertItem( itemId, aDisplayName );
                     pPopupMenu->SetItemCommand( itemId, aCommand );
-                    pPopupMenu->SetHelpId( itemId, rtl::OString( aCommand.GetBuffer(), aCommand.Len(), RTL_TEXTENCODING_UTF8 ) );
                     itemId++;
                     break;
                 }

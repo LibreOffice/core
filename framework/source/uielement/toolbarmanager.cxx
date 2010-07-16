@@ -957,7 +957,6 @@ void ToolBarManager::CreateControllers()
 
         svt::ToolboxController* pController( 0 );
 
-        m_pToolBar->SetHelpId( nId, "" ); // reset value again
         if ( bHasDisabledEntries )
         {
             aURL.Complete = aCommandURL;
