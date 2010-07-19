@@ -117,6 +117,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <svl/itemset.hxx>
+#include "app.hrc"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;

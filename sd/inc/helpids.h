@@ -24,68 +24,47 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SOLAR_HRC
-#include <svl/solar.hrc>
-#endif
-
 #include <sfx2/sfxcommands.h>
 #include <svx/svxcommands.h>
 #include "sdcommands.h"
-
-#define SHELLID_SD_TASK_PANE_PREVIEW_CURRENT    (HID_SD_START + 174)
-#define SHELLID_SD_TASK_PANE_PREVIEW_RECENT     (HID_SD_START + 175)
-#define SHELLID_SD_TASK_PANE_PREVIEW_ALL        (HID_SD_START + 176)
-#define SHELLID_SD_TASK_PANE_PREVIEW_LAYOUTS    (HID_SD_START + 177)
 
 #define HID_NOTESMODE                                           "SD_HID_NOTESMODE"
 #define HID_HANDOUTMODE                                         "SD_HID_HANDOUTMODE"
 #define HID_SDDRAWVIEWSHELL                                     "SD_HID_SDDRAWVIEWSHELL"
 #define HID_SDGRAPHICVIEWSHELL                                  "SD_HID_SDGRAPHICVIEWSHELL"
 #define HID_SDOUTLINEVIEWSHELL                                  "SD_HID_SDOUTLINEVIEWSHELL"
-
 #define HID_SD_PRINT_OPTIONS                                    "SD_HID_SD_PRINT_OPTIONS"
 #define HID_SD_OPTIONS_SNAP                                     "SD_HID_SD_OPTIONS_SNAP"
 #define HID_SD_OPTIONS_VIEW                                     "SD_HID_SD_OPTIONS_VIEW"
-
 #define HID_SD_AUTOPILOT_PAGE1                                  "SD_HID_SD_AUTOPILOT_PAGE1"
 #define HID_SD_AUTOPILOT_PAGE2                                  "SD_HID_SD_AUTOPILOT_PAGE2"
 #define HID_SD_AUTOPILOT_PAGE3                                  "SD_HID_SD_AUTOPILOT_PAGE3"
 #define HID_SD_AUTOPILOT_PAGE4                                  "SD_HID_SD_AUTOPILOT_PAGE4"
 #define HID_SD_AUTOPILOT_PAGE5                                  "SD_HID_SD_AUTOPILOT_PAGE5"
 #define HID_SD_AUTOPILOT_PAGE6                                  "SD_HID_SD_AUTOPILOT_PAGE6"
-
 #define HID_SD_CBX_ONLYSELECTED                                 "SD_HID_SD_CBX_ONLYSELECTED"
 #define HID_SD_BTN_FILTERDIALOG                                 "SD_HID_SD_BTN_FILTERDIALOG"
-
 #define HID_SD_BTN_PAGE                                         "SD_HID_SD_BTN_PAGE"
 #define HID_SD_BTN_MASTERPAGE                                   "SD_HID_SD_BTN_MASTERPAGE"
 #define HID_SD_BTN_LAYER                                        "SD_HID_SD_BTN_LAYER"
-
 #define HID_SD_BTN_DRAW                                         "SD_HID_SD_BTN_DRAW"
 #define HID_SD_BTN_SLIDE                                        "SD_HID_SD_BTN_SLIDE"
 #define HID_SD_BTN_OUTLINE                                      "SD_HID_SD_BTN_OUTLINE"
 #define HID_SD_BTN_NOTES                                        "SD_HID_SD_BTN_NOTES"
 #define HID_SD_BTN_HANDOUT                                      "SD_HID_SD_BTN_HANDOUT"
-
 #define HID_SD_WIN_DOCUMENT                                     "SD_HID_SD_WIN_DOCUMENT"
-
 #define HID_SD_OPTIONS_LAYOUT                                   "SD_HID_SD_OPTIONS_LAYOUT"
 #define HID_SD_OPTIONS_CONTENTS                                 "SD_HID_SD_OPTIONS_CONTENTS"
 #define HID_SD_OPTIONS_MISC                                     "SD_HID_SD_OPTIONS_MISC"
-
 #define HID_SD_EFFECT_PREVIEW                                   "SD_HID_SD_EFFECT_PREVIEW"
 #define HID_SD_CTL_NEWFOIL                                      "SD_HID_SD_CTL_NEWFOIL"
 #define HID_SD_NAVIGATOR_TLB                                    "SD_HID_SD_NAVIGATOR_TLB"
 #define HID_SD_NAVIGATOR                                        "SD_HID_SD_NAVIGATOR"
-
 #define HID_SD_CTL_EFFECTS                                      "SD_HID_SD_CTL_EFFECTS"
 #define HID_SD_CTL_TEXT_EFFECTS                                 "SD_HID_SD_CTL_TEXT_EFFECTS"
-
 #define HID_SD_CTL_SLIDE_CHANGE                                 "SD_HID_SD_CTL_SLIDE_CHANGE"
-
 #define HID_SD_NAVIGATOR_TBX                                    "SD_HID_SD_NAVIGATOR_TBX"
 #define HID_SD_NAVIGATOR_LB                                     "SD_HID_SD_NAVIGATOR_LB"
-
 #define HID_SD_NAVIGATOR_TBI_PEN                                "SD_HID_SD_NAVIGATOR_TBI_PEN"
 #define HID_SD_NAVIGATOR_TBI_FIRST                              "SD_HID_SD_NAVIGATOR_TBI_FIRST"
 #define HID_SD_NAVIGATOR_TBI_PREV                               "SD_HID_SD_NAVIGATOR_TBI_PREV"
@@ -130,40 +109,6 @@
 
 #define HID_SD_WIN_PRESENTATION                                 "SD_HID_SD_WIN_PRESENTATION"
 
-// HelpIDs fuer Vorlagen
-#define HID_STANDARD_STYLESHEET_NAME        (HID_SD_START + 70)
-#define HID_POOLSHEET_OBJWITHARROW          (HID_SD_START + 71)
-#define HID_POOLSHEET_OBJWITHSHADOW         (HID_SD_START + 72)
-#define HID_POOLSHEET_OBJWITHOUTFILL        (HID_SD_START + 73)
-#define HID_POOLSHEET_TEXT                  (HID_SD_START + 74)
-#define HID_POOLSHEET_TEXTBODY              (HID_SD_START + 75)
-#define HID_POOLSHEET_TEXTBODY_JUSTIFY      (HID_SD_START + 76)
-#define HID_POOLSHEET_TEXTBODY_INDENT       (HID_SD_START + 77)
-#define HID_POOLSHEET_TITLE                 (HID_SD_START + 78)
-#define HID_POOLSHEET_TITLE1                (HID_SD_START + 79)
-#define HID_POOLSHEET_TITLE2                (HID_SD_START + 80)
-#define HID_POOLSHEET_HEADLINE              (HID_SD_START + 81)
-#define HID_POOLSHEET_HEADLINE1             (HID_SD_START + 82)
-#define HID_POOLSHEET_HEADLINE2             (HID_SD_START + 83)
-#define HID_POOLSHEET_MEASURE               (HID_SD_START + 84)
-
-#define HID_PSEUDOSHEET_TITLE               (HID_SD_START + 85)
-#define HID_PSEUDOSHEET_OUTLINE             (HID_SD_START + 86)
-#define HID_PSEUDOSHEET_OUTLINE1            (HID_SD_START + 87)
-#define HID_PSEUDOSHEET_OUTLINE2            (HID_SD_START + 88)
-#define HID_PSEUDOSHEET_OUTLINE3            (HID_SD_START + 89)
-#define HID_PSEUDOSHEET_OUTLINE4            (HID_SD_START + 90)
-#define HID_PSEUDOSHEET_OUTLINE5            (HID_SD_START + 91)
-#define HID_PSEUDOSHEET_OUTLINE6            (HID_SD_START + 92)
-#define HID_PSEUDOSHEET_OUTLINE7            (HID_SD_START + 93)
-#define HID_PSEUDOSHEET_OUTLINE8            (HID_SD_START + 94)
-#define HID_PSEUDOSHEET_OUTLINE9            (HID_SD_START + 95)
-#define HID_PSEUDOSHEET_BACKGROUNDOBJECTS   (HID_SD_START + 96)
-#define HID_PSEUDOSHEET_BACKGROUND          (HID_SD_START + 97)
-#define HID_PSEUDOSHEET_NOTES               (HID_SD_START + 98)
-
-#define HID_PSEUDOSHEET_SUBTITLE            (HID_SD_START + 101)
-
 #define HID_DLG_DEFINE_CUSTOMSHOW                               "SD_HID_DLG_DEFINE_CUSTOMSHOW"
 #define HID_DLG_DEFINE_CUSTOMSHOW_CTL                           "SD_HID_DLG_DEFINE_CUSTOMSHOW_CTL"
 
@@ -205,9 +150,9 @@
 
 #define HID_SD_PAGEOBJSTLB                                      "SD_HID_SD_PAGEOBJSTLB"
 
-#define HID_SD_NAMEDIALOG_OBJECT            "SD_HID_SD_NAMEDIALOG_OBJECT"
-#define HID_SD_NAMEDIALOG_PAGE              "SD_HID_SD_NAMEDIALOG_PAGE"
-#define HID_SD_NAMEDIALOG_LINEEND           "SD_HID_SD_NAMEDIALOG_LINEEND"
+#define HID_SD_NAMEDIALOG_OBJECT                                "SD_HID_SD_NAMEDIALOG_OBJECT"
+#define HID_SD_NAMEDIALOG_PAGE                                  "SD_HID_SD_NAMEDIALOG_PAGE"
+#define HID_SD_NAMEDIALOG_LINEEND                               "SD_HID_SD_NAMEDIALOG_LINEEND"
 
 #define HID_SD_DRAW_3D_TOOLBOX                                  "SD_HID_SD_DRAW_3D_TOOLBOX"
 #define HID_SD_DRAW_FONTWORK_TOOLBOX                            "SD_HID_SD_DRAW_FONTWORK_TOOLBOX"
@@ -284,13 +229,6 @@
 #define HID_SD_RULER_HORIZONTAL                                 "SD_HID_SD_RULER_HORIZONTAL"
 #define HID_SD_RULER_VERTICAL                                   "SD_HID_SD_RULER_VERTICAL"
 
-#define HID_SD_CELL_STYLE_DEFAULT                           (HID_SD_START + 194)
-#define HID_SD_CELL_STYLE_BANDED                            (HID_SD_START + 195)
-#define HID_SD_CELL_STYLE_HEADER                            (HID_SD_START + 196)
-#define HID_SD_CELL_STYLE_TOTAL                             (HID_SD_START + 197)
-#define HID_SD_CELL_STYLE_FIRST_COLUMN                      (HID_SD_START + 198)
-#define HID_SD_CELL_STYLE_LAST_COLUMN                       (HID_SD_START + 199)
-
 #define HID_SD_TABLE_DESIGN                                     "SD_HID_SD_TABLE_DESIGN"
 #define HID_SD_ANNOTATIONS                                      "SD_HID_SD_ANNOTATIONS"
 
@@ -313,4 +251,3 @@
 #define HID_MN_SUB_PREVIEW_OUTPUT_QUALITY                       "SD_HID_MN_SUB_PREVIEW_OUTPUT_QUALITY"
 #define HID_MN_SUB_CONVERT                                      "SD_HID_MN_SUB_CONVERT"
 #define HID_MN_SUB_MIRROR                                       "SD_HID_MN_SUB_MIRROR"
-
