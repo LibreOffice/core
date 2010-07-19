@@ -27,10 +27,6 @@
 #ifndef _XMLFILTERHELPIDS_HRC_
 #define _XMLFILTERHELPIDS_HRC_
 
-#ifndef _FILTER_HRC
-#include "filter.hrc"
-#endif
-
 #define HID_XML_SOURCE_FILE_DIALOG                          "FILTER_HID_XML_SOURCE_FILE_DIALOG"
 #define HID_XML_SOURCE_FILE_VALIDATE                        "FILTER_HID_XML_SOURCE_FILE_VALIDATE"
 #define HID_XML_FILTER_SETTINGS_DIALOG                      "FILTER_HID_XML_FILTER_SETTINGS_DIALOG"
