@@ -76,7 +76,6 @@ interface BaseSelection
     SID_INSERT_PLUGIN           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_SOUND            [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_VIDEO            [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
-    SID_INSERT_APPLET           [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_FLOATINGFRAME    [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
     SID_INSERT_AVMEDIA          [ ExecMethod = ExecDrawIns; StateMethod = GetDrawInsState; ]
 
