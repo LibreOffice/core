@@ -488,7 +488,7 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
     SCROW  nRow;
     SCCOL  nCol;
 
-    SCROW nTop, nBottom;
+    SCROW nTop = -1, nBottom = -1;
     for (nCol = aMultiRange.aStart.Col(); nCol <= aMultiRange.aEnd.Col(); ++nCol)
     {
         ScMarkArrayIter aMarkIter( &pMultiSel[nCol] );
