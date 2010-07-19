@@ -27,8 +27,6 @@
 #ifndef EXTENSIONS_BIBLIOGRAPHY_HRC
 #define EXTENSIONS_BIBLIOGRAPHY_HRC
 
-#include "extensio.hrc"
-
 #define HID_BIB_CHANGESOURCE                            "EXTENSIONS_HID_BIB_CHANGESOURCE"
 #define HID_BIB_MAPPINGDLG                              "EXTENSIONS_HID_BIB_MAPPINGDLG"
 #define HID_BIB_TBX_TABLE                               "EXTENSIONS_HID_BIB_TBX_TABLE"

@@ -27,8 +27,6 @@
 #ifndef EXTENSIONS_UPDATE_HRC
 #define EXTENSIONS_UPDATE_HRC
 
-#include "extensio.hrc"
-
 #define HID_CHECK_FOR_UPD_DLG                           "EXTENSIONS_HID_CHECK_FOR_UPD_DLG"
 #define HID_CHECK_FOR_UPD_CLOSE                         "EXTENSIONS_HID_CHECK_FOR_UPD_CLOSE"
 #define HID_CHECK_FOR_UPD_PAUSE                         "EXTENSIONS_HID_CHECK_FOR_UPD_PAUSE"

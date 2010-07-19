@@ -27,8 +27,6 @@
 #ifndef EXTENSIONS_DBPILOT_HRC
 #define EXTENSIONS_DBPILOT_HRC
 
-#include "extensio.hrc"
-
 #define HID_GHIDWIZARD_PREVIOUS                         "EXTENSIONS_HID_GHIDWIZARD_PREVIOUS"
 #define HID_GHIDWIZARD_NEXT                             "EXTENSIONS_HID_GHIDWIZARD_NEXT"
 #define HID_GHIDWIZARD_CANCEL                           "EXTENSIONS_HID_GHIDWIZARD_CANCEL"

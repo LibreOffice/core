@@ -27,8 +27,6 @@
 #ifndef EXTENSIONS_ABPILOT_HRC
 #define EXTENSIONS_ABPILOT_HRC
 
-#include "extensio.hrc"
-
 #define HID_ABSPILOT_PREVIOUS                           "EXTENSIONS_HID_ABSPILOT_PREVIOUS"
 #define HID_ABSPILOT_NEXT                               "EXTENSIONS_HID_ABSPILOT_NEXT"
 #define HID_ABSPILOT_CANCEL                             "EXTENSIONS_HID_ABSPILOT_CANCEL"
