@@ -31,80 +31,99 @@
 '*
 '\******************************************************************************
 
-testcase tUpdtScriptCount
-    dim sDialog as string
+testcase tUpdtScripts
 
     printlog( "Resource test for macros and scripts / related dialogs" )
 
     const SCRIPTING_DIALOGS = 5
-
-    dim aScriptCount( SCRIPTING_DIALOGS )
     
-    aScriptCount( 1 ) = 10 ' JavaScript
-    aScriptCount( 2 ) = 14 ' BeanShell
+    const DLG_JAVASCRIPT = "JavaScript"
+    const DLG_BEANSHELL  = "BeanShell"
+    const DLG_PYTHON     = "Python"
+    const DLG_BASIC_ORG  = "BasicOrganizer"
+    const DLG_RUN_MACRO  = "RunMacro"
 
-    if ( lcase( gPlatform ) = "osx" ) then
-        aScriptCount( 3 ) = 8 ' Python
-        aScriptCount( 5 ) = 600 ' Run Macro
-    else
-        aScriptCount( 3 ) = 10 ' Python
-        aScriptCount( 5 ) = 602 ' Run Macro
-    endif
+    ' This is the build specific part of the filename including substrings for
+    ' the productname, platform, and language. At a later point we add the dialog name.
+    ' Replace all blanks (spaces) with "-"
+    dim sDynamicPath as string
+        sDynamicPath = gProductName & "_" & gPlatform & "_" & gISOLang & "_"
+        hStringReplaceChar( sDynamicPath, " ", "-" )
+ 
+    ' This is where reference file is located, the filename is yet incomplete
+    dim sInputPath as string
+        sInputPath = gTesttoolPath & "/framework/required/input/scripts/" & sDynamicPath
+        
+    ' This is where we store the reference file if differences are found.
+    dim sOutputPath as string
+        sOutputPath = gOfficePath & "/user/work/" & sDynamicPath
+      
+    ' These contain the input and output paths (fully qualified)
+    dim sFileIn as string
+    dim sFileOut as string
 
-    if ( gOOo ) then
-        aScriptCount( 4 ) = 585 ' Makro Organizer
-        aScriptCount( 5 ) = aScriptCount( 5 ) - 1 ' Run Macro
-    else
-        ' Makro Organizer
-        aScriptCount( 4 ) = 586
-    endif
+    ' Array that contains the scriptnames for all organizers
+    dim cScriptNamesList( 1000 ) as string
 
+    ' Holds the object of the treelist. Used to reduce the amount of code.
+    dim oTreeList as object
+
+    dim sDialog as string
     dim iCurrentDialog as integer
-    dim iCurrentScriptCount as integer
-    
+
     hInitSingleDoc()
 
     for iCurrentDialog = 1 to SCRIPTING_DIALOGS
 
-        printlog( "" )
-        select case iCurrentDialog
-        case 1: sDialog = "JavaScript" 
-                ToolsMacrosOrganizeMacrosJavaScript
-                kontext "ScriptOrganizer"
-                iCurrentScriptCount = hExpandAllNodes( ScriptTreeList )
-                ScriptOrganizer.cancel()                 
-        case 2: sDialog = "BeanShell"
-                ToolsMacrosOrganizeMacrosBeanShell
-                kontext "ScriptOrganizer"
-                iCurrentScriptCount = hExpandAllNodes( ScriptTreeList )
-                ScriptOrganizer.cancel()                
-        case 3: sDialog = "Python"
-                ToolsMacrosOrganizeMacrosPython
-                kontext "ScriptOrganizer"
-                iCurrentScriptCount = hExpandAllNodes( ScriptTreeList )
-                ScriptOrganizer.cancel()                
-        case 4: sDialog = "Makro Organizer"
-                ToolsMacro_uno
-                Kontext "Makro"
-                hExpandAllNodes( MakroAus )
-                iCurrentScriptCount = hGetScriptCount( MakroAus, MakroListe )
-                Makro.close()                
-        case 5: sDialog = "Run Macro"
-                ToolsMacrosRunMacro
-                kontext "ScriptSelector"
-                hExpandAllNodes( LibraryTreeList )
-                iCurrentScriptCount = hGetScriptCount( LibraryTreeList, ScriptList )
-                ScriptSelector.cancel()                
+        ' Build complete filename and identify dialog for logging and case selection
+        select case ( iCurrentDialog )
+        case 1 : sDialog = DLG_JAVASCRIPT
+        case 2 : sDialog = DLG_BEANSHELL
+        case 3 : sDialog = DLG_PYTHON
+        case 4 : sDialog = DLG_BASIC_ORG
+        case 5 : sDialog = DLG_RUN_MACRO
         end select
 
-        printlog( sDialog )
+        sFileIn  = convertpath( sInputPath  & sDialog & ".txt" )
+        sFileOut = convertpath( sOutputPath & sDialog & ".txt" )
+        printlog( "File in.: " & sFileIn  )
+        printlog( "File out: " & sFileOut )
+
+        printlog( "Open <" & sDialog & "> and access the treelist object" )
+
+        select case ( sDialog )
+        case DLG_JAVASCRIPT: ToolsMacrosOrganizeMacrosJavaScript
+            kontext "ScriptOrganizer"
+            oTreeList = Scriptlist
+        case DLG_BEANSHELL: ToolsMacrosOrganizeMacrosBeanShell
+            kontext "ScriptOrganizer"
+            oTreeList = ScriptTreeList
+        case DLG_PYTHON: ToolsMacrosOrganizeMacrosPython
+            kontext "ScriptOrganizer"
+            oTreeList = ScriptTreeList
+        case DLG_BASIC_ORG: ToolsMacro_uno
+            Kontext "Makro"
+            oTreeList = MakroAus
+        case DLG_RUN_MACRO: ToolsMacrosRunMacro
+            kontext "ScriptSelector"
+            oTreeList = LibraryTreeList
+        end select
         
-        if ( aScriptCount( iCurrentDialog ) <> iCurrentScriptCount ) then
-            warnlog( "Incorrect number of scripts for this dialog: '" + sDialog + "' expected:" + aScriptCount( iCurrentDialog ) + ", but is:" & iCurrentScriptCount )
-        else
-            printlog( "Number of scripts is ok" )
-        endif
+        printlog( "Expand all nodes and retrieve all nodenames" )
+        hGetAllNodeNames( oTreeList, cScriptNamesList() )
         
+        printlog( "Compare to reference list, create new one if differences were found" )
+        hManageComparisionList( sFileIn, sFileOut, cScriptNamesList() )
+        
+        printlog( "Close " & sDialog )
+        select case ( sDialog ) 
+        case DLG_JAVASCRIPT : ScriptOrganizer.cancel()
+        case DLG_BEANSHELL  : ScriptOrganizer.cancel()
+        case DLG_PYTHON     : ScriptOrganizer.cancel()
+        case DLG_BASIC_ORG  : Makro.close()
+        case DLG_RUN_MACRO  : ScriptSelector.cancel()
+        end select
+
     next iCurrentDialog
     
     hCloseDocument()

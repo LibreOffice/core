@@ -31,117 +31,48 @@
 '*
 '\******************************************************************************
 
-function hOpenWizardWithMenu( cType as string ) as integer
+function hOpenWizard( cWizard as string ) as boolean
 
-    const CFN = "hOpenWizardWithMenu::"
+    const CFN = "hOpenWizard(): "
+    const NUMBER_OF_RETRIES = 3
 
-    '///<h3>Open a wizard via menu</h3>
-    '///<i>Starting point: Any plain document</i><br>
-    '///<i>Uses: framework/tools/input/menuentries.txt</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Name of Wizard (string). Known Wizards are:</li>
-    '///<ul>
-    '///+<li>&quot;LETTER&quot;</li>
-    '///+<li>&quot;FAX&quot;</li>
-    '///+<li>&quot;AGENDA&quot;</li>
-    '///+<li>&quot;PRESENTATION&quot;</li>
-    '///+<li>&quot;WEBPAGE&quot;</li>
-    '///+<li>&quot;DOCCONV&quot;</li>
-    '///+<li>&quot;EUROCONV&quot;</li>
-    '///+<li>&quot;ADDRESS&quot;</li>
-    '///+<li>&quot;MAILMERGE&quot;</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcode (integer)</li>
-    '///<ul>
-    '///+<li>0: The expected wizard is open</li>
-    '///+<li>1: No wizard is open</li>
-    '///+<li>2: The incorrect wizard is open</li>
-    '///+<li>3: The requested wizard is unknown to this function</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    dim iMainMenuPosition as integer   ' position in the main menu
-    dim iMenuPosition as integer       ' the position of the menuentry
-    dim iWizardMenuPosition as integer ' the position of the wizards menu
-    dim iWizardID as integer           ' a unique number to identify the wizard
-    dim iWait as integer               ' time of the wizard to open
-    dim iOpen as integer               ' identifier for the open dialog
-    dim brc as boolean                 ' some multi purpose boolean returnvalue
+    dim iTry as integer
+    dim brc as boolean : brc = false
 
-    hOpenWizardWithMenu() = 0
+    if ( GVERBOSE ) then printlog( CFN & "Opening wizard" )
 
-    '///+<li>find out where in the menustructure the wizards are located</li>
-    printlog( "Requested Wizard: " & cType )
-    iWizardID           = hGetWizardParams( cType , "ID"   )
-    iMainMenuPosition   = hGetWizardParams( cType , "MAIN" )
-    iMenuPosition       = hGetWizardParams( cType , "SUB"  )
-    iWizardMenuPosition = 4 ' This is the "Wizards" menuentry below "File"
-    
-    try
-        kontext "DocumentWriter"
-        hUseMenu()
+    ' Call the wizard by slot
+    for iTry = 1 to NUMBER_OF_RETRIES
+        try
+            select case ( ucase( cWizard ) )
+            case "PRESENTATION" : FileAutopilotPresentation
+            case "FIRTSTIME"    : FirstTimeWizard
+            case "MAILMERGE"    : ToolsMailMergeWizard
+            case "EUROCONV"     : FileWizardEuroConverter
+            case "DOCCONV"      : FileWizardDocumentConverter
+            case "WEBPAGE"      : FileWizardsWebPage
+            case "LETTER"       : FileAutopilotLetter
+            case "AGENDA"       : FileAutopilotAgenda
+            case "ADRESS"       : FileAutopilotAddressDataSource
+            case "FAX"          : FileAutopilotFax
+            case else           :
+                warnlog( CFN & "Invalid wizard requested: " & cWizard )
+                hOpenWizard() = brc
+                exit function
+            end select
 
-        '///+<li>Open the 'File' menu</li>
-        printlog( CFN & "Open Menu at pos " & iMainMenuPosition )
-        hMenuSelectNr( iMainMenuPosition )
-        WaitSlot( 2000 )
-  
-        '///+<li>if we are in the filemenu the wizards are below a submenu</li>
-        if ( iMainMenuPosition = 1 ) then
-            printlog( CFN & "Select wizards-submenu at pos " & iWizardMenuPosition )
-            hMenuSelectNr( iWizardMenuPosition )
-            WaitSlot( 2000 )
-        else
-            printlog( CFN & "Wizard is not in File-Menu" )
-        endif
-    
-        '///+<li>try to click the menuentry where we expect the wizard</li>
-        printlog( CFN & "Select " & cType & " wizard at pos " & iMenuPosition )
-        hMenuSelectNr( iMenuPosition )
-        WaitSlot( 2000 )
-        brc = true
-    catch
-        ' we end up here, when the menuitems could not be accessed
-        printlog( CFN & "Error accessing menuentry for wizard" )
-        hOpenWizardwithMenu() = 1
-        brc = false
-    endcatch
-    
+            brc = true
+            exit for
+        catch
+            wait( 200 )
+        endcatch
+    next iTry
+
+    ' Print warning if slot was blocked.
     if ( not brc ) then
-        printlog( CFN & "Trying to open wizard using the slot" )
-        select case iWizardId
-        case 1 : FileAutopilotLetter
-        case 2 : FileAutopilotFax
-        case 3 : FileAutopilotAgenda
-        case 4 : FileAutopilotPresentation
-        end select
+        warnlog( CFN & "Failed to open requested wizard: " & cWizard )
     endif
-    
-    '///+<li>wait for a wizard to open, iOpen is the number of the menuitem</li>
-    iOpen = hWaitForWizard()
-    
-    '///+<li>Verify that the correct wizard is open. iOpen should match iMenuPosition</li>
-    ' This works because the menu-positions are unique. BEWARE!
-    if ( iOpen <> iWizardID ) then
-            
-        qaerrorlog( CFN & "Incorrect Wizard is open, did the menu-order change?" )
-                
-        hFinishWizard( 2 ) 
-        hOpenWizardWithMenu() = 2
 
-    else
-    
-        hOpenWizardWithMenu() = 0
-                
-    endif    
-    '///</ul>
-    
 end function
 
 '*******************************************************************************

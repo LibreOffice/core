@@ -255,6 +255,15 @@ end function
 
 '*******************************************************************************
 
+function hGetAllNodeNames( oControl as object , lsList() as string ) as integer
+
+    hExpandAllNodes( oControl )
+    hGetAllNodeNames() = hGetVisibleNodeNames( oControl, lsList() )
+
+end function
+
+'*******************************************************************************
+
 function hGetVisibleNodeNames( oControl as object , lsList() as string ) as integer
     
     '///<h3>Retrieve the names of all nodes in a treelist</h3>

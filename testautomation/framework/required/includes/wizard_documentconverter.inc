@@ -59,7 +59,7 @@ testcase tUpdtWizardDocumentConverter
     sTargetFile = hGetWorkPath() 
     sLogFile = sTargetFile & "Logfile.odt"
     
-    stargetFile = sTargetFile & "docconv1" & hGetSuffix( "current" )
+    sTargetFile = sTargetFile & "docconv1" & hGetSuffix( "current" )
     
     
     Kontext "DocumentConverter"
