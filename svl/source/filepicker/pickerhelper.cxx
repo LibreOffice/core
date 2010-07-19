@@ -45,7 +45,7 @@ using rtl::OUString;
 namespace svt
 {
     void SetDialogHelpId(
-        Reference < css::ui::dialogs::XFilePicker > _mxFileDlg, sal_Int32 _nHelpId )
+        Reference < css::ui::dialogs::XFilePicker > _mxFileDlg, const rtl::OString& _nHelpId )
     {
         try
         {
@@ -60,7 +60,7 @@ namespace svt
             if( xInfo.is() && xInfo->hasPropertyByName( sHelpURLPropertyName ) )
             {   // yep
                 OUString                sId( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
-                sId += OUString::valueOf( _nHelpId );
+                sId += rtl::OStringToOUString( _nHelpId, RTL_TEXTENCODING_UTF8 );
                 xDialogProps->setPropertyValue( sHelpURLPropertyName, css::uno::makeAny( sId ) );
             }
         }
@@ -71,7 +71,7 @@ namespace svt
     }
 
     void SetDialogHelpId(
-        Reference< css::ui::dialogs::XFolderPicker > _mxFileDlg, sal_Int32 _nHelpId )
+        Reference< css::ui::dialogs::XFolderPicker > _mxFileDlg, const rtl::OString& _nHelpId )
     {
         try
         {
@@ -86,7 +86,7 @@ namespace svt
             if( xInfo.is() && xInfo->hasPropertyByName( sHelpURLPropertyName ) )
             {   // yep
                 OUString                sId( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
-                sId += OUString::valueOf( _nHelpId );
+                sId += rtl::OStringToOUString( _nHelpId, RTL_TEXTENCODING_UTF8 );
                 xDialogProps->setPropertyValue( sHelpURLPropertyName, css::uno::makeAny( sId ) );
             }
         }

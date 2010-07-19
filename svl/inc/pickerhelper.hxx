@@ -56,11 +56,11 @@ namespace svt
 
     SVL_DLLPUBLIC void SetDialogHelpId(
         ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > _mxFileDlg,
-        sal_Int32 _nHelpId );
+        const rtl::OString& _nHelpId );
 
     SVL_DLLPUBLIC void SetDialogHelpId(
         ::com::sun::star::uno::Reference < ::com::sun::star::ui::dialogs::XFolderPicker > _mxFileDlg,
-        sal_Int32 _nHelpId );
+        const rtl::OString& _nHelpId );
 
 }
 
