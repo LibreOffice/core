@@ -443,16 +443,6 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                             pReq->AppendItem(SfxStringItem(FN_PARAM_2, pURL->GetMainURL(INetURLObject::NO_DECODE)));
                         pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
                     } */
-                case SID_INSERT_APPLET:
-                    /*
-                    if(pReq)
-                    {
-                        SvAppletObjectRef xApplet ( xIPObj );
-                        if(xApplet.Is())
-                            pReq->AppendItem(SfxStringItem(FN_PARAM_1 , xApplet->GetCodeBase()));
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_2 , aDlg.GetClass()));
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
-                    }*/
                 case SID_INSERT_FLOATINGFRAME:
                     /*
                     if(pReq && xFloatingFrame.Is())
