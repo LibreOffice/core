@@ -92,7 +92,7 @@ FindTextFieldControl::~FindTextFieldControl()
 void FindTextFieldControl::InitControls_Impl()
 {
     SetText( String( ::rtl::OUString::createFromAscii("Find") ) );
-    SetControlForeground(COL_GRAY);
+    SetControlForeground(GetSettings().GetStyleSettings().GetDisableColor());
 
     EnableAutocomplete(TRUE, TRUE);
 }
@@ -117,7 +117,7 @@ void FindTextFieldControl::Modify()
 {
     ComboBox::Modify();
 
-    SetControlForeground( Color( COL_BLACK ) );
+    SetControlForeground( GetSettings().GetStyleSettings().GetWindowTextColor() );
 }
 
 long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
@@ -135,7 +135,10 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             sal_uInt16 nCode = pKeyEvent->GetKeyCode().GetCode();
 
             if ( (bCtrl && bAlt && KEY_F == nCode) || KEY_ESCAPE == nCode )
+            {
+                nRet = 1;
                 GrabFocusToDocument();
+            }
 
             if ( KEY_RETURN == nCode )
             {
@@ -154,6 +157,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                     lArgs[1].Value <<= sal_False;
 
                 impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
+                nRet = 1;
             }
             break;
         }
@@ -171,7 +175,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
             if ( GetText().Len() == 0 )
             {
                 SetText( String( ::rtl::OUString::createFromAscii("Find") ) );
-                SetControlForeground(COL_GRAY);
+                SetControlForeground(GetSettings().GetStyleSettings().GetDisableColor());
                 m_bToClearTextField = sal_True;
             }
             break;
