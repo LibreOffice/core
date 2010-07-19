@@ -408,7 +408,7 @@ void ScMenuFloatingWindow::Paint(const Rectangle& /*rRect*/)
     {
         SetClipRegion();
         bNativeDrawn = DrawNativeControl(
-            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, Region(aCtrlRect), CTRL_STATE_ENABLED,
+            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED,
             ImplControlValue(), OUString());
     }
     else
@@ -771,7 +771,7 @@ void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
     Point aPos;
     Size aSize;
     getMenuItemPosSize(nPos, aPos, aSize);
-    Region aRegion(Rectangle(aPos,aSize));
+    Rectangle aRegion(aPos,aSize);
 
     if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
     {
@@ -779,7 +779,7 @@ void ScMenuFloatingWindow::highlightMenuItem(size_t nPos, bool bSelected)
         IntersectClipRegion(Rectangle(aPos, aSize));
         Rectangle aCtrlRect(Point(0,0), GetOutputSizePixel());
         DrawNativeControl(
-            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, Region(aCtrlRect), CTRL_STATE_ENABLED,
+            CTRL_MENU_POPUP, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED,
             ImplControlValue(), OUString());
 
         Pop();
