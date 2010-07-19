@@ -224,7 +224,8 @@ namespace svt
             // the file view "overloaded" the SetHelpId
             aHelpId = static_cast< SvtFileView* >( _pControl )->GetHelpId( );
 
-        rtl::OUString sHelpURL( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ) );
+        ::rtl::OUString sHelpURL( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
+        sHelpURL += rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 );
         return sHelpURL;
     }
 
