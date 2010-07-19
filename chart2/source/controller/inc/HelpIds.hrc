@@ -27,8 +27,6 @@
 #ifndef CHART_HELPIDS_HRC
 #define CHART_HELPIDS_HRC
 
-#include <svl/solar.hrc>
-
 #define HID_SCH_ALIGNMENT                                   "CHART2_HID_SCH_ALIGNMENT"
 #define HID_SCH_LEGEND_POS                                  "CHART2_HID_SCH_LEGEND_POS"
 #define HID_SCH_DATA_DESCR                                  "CHART2_HID_SCH_DATA_DESCR"

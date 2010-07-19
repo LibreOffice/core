@@ -262,7 +262,6 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 aServerLst.Remove( ScDocShell::Factory().GetClassId() );   // Starcalc nicht anzeigen
                 //TODO/LATER: currently no inserting of ClassId into SfxRequest!
             case SID_INSERT_PLUGIN :
-            case SID_INSERT_APPLET :
             case SID_INSERT_FLOATINGFRAME :
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
