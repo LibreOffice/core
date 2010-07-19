@@ -3119,7 +3119,7 @@ void ScViewData::AddPixelsWhile( long & rScrY, long nEndPixels, SCROW & rPosY,
             if (nAdd + rScrY > nEndPixels)
             {
                 sal_Int64 nDiff = rScrY + nAdd - nEndPixels;
-                nRows -= nDiff / nPixel;
+                nRows -= static_cast<SCROW>(nDiff / nPixel);
                 nAdd = nPixel * nRows;
                 // We're looking for a value that satisfies loop condition.
                 if (nAdd + rScrY <= nEndPixels)
@@ -3160,7 +3160,7 @@ void ScViewData::AddPixelsWhileBackward( long & rScrY, long nEndPixels,
             if (nAdd + rScrY > nEndPixels)
             {
                 sal_Int64 nDiff = nAdd + rScrY - nEndPixels;
-                nRows -= nDiff / nPixel;
+                nRows -= static_cast<SCROW>(nDiff / nPixel);
                 nAdd = nPixel * nRows;
                 // We're looking for a value that satisfies loop condition.
                 if (nAdd + rScrY <= nEndPixels)
