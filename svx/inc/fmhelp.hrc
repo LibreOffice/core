@@ -27,9 +27,6 @@
 #ifndef _SVX_FMHELP_HRC
 #define _SVX_FMHELP_HRC
 
-// include     -----------------------------------------------------------
-#include <svl/solar.hrc>
-
 // Help-Ids --------------------------------------------------------------
 #define HID_DLG_DBMSG                                         "SVX_HID_DLG_DBMSG"
 #define HID_FORM_NAVIGATOR                                    "SVX_HID_FORM_NAVIGATOR"

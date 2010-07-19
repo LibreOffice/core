@@ -26,9 +26,6 @@
  ************************************************************************/
 #ifndef _SVX_HELPID_HRC
 #define _SVX_HELPID_HRC
-// include ---------------------------------------------------------------
-
-#include <svl/solar.hrc>
 
 #include <svx/exthelpid.hrc>
 #include <svx/svxcommands.h>

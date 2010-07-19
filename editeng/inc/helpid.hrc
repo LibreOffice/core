@@ -30,11 +30,6 @@
 #ifndef _EDITENG_HELPID_HRC
 #define _EDITENG_HELPID_HRC
 
-// include ---------------------------------------------------------------
-
-#include <svl/solar.hrc>
-
-// Help-Ids --------------------------------------------------------------
 #define HID_EDITENG_SPELLER_WORDLANGUAGE                   "EDITENG_HID_EDITENG_SPELLER_WORDLANGUAGE"
 #define HID_EDITENG_SPELLER_PARALANGUAGE                   "EDITENG_HID_EDITENG_SPELLER_PARALANGUAGE"
 #define HID_EDITENG_SPELLER_ADDWORD                        "EDITENG_HID_EDITENG_SPELLER_ADDWORD"
