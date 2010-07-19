@@ -229,17 +229,17 @@ public:
 
     CGPoint*                makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry);
     // native widget rendering methods that require mirroring
-    virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+    virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                               const Point& aPos, BOOL& rIsInside );
-    virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+    virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
-    virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+    virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                const rtl::OUString& aCaption );
-    virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
+    virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const rtl::OUString& aCaption,
-                                                Region &rNativeBoundingRegion, Region &rNativeContentRegion );
+                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
     // get device resolution
     virtual void            GetResolution( long& rDPIX, long& rDPIY );

@@ -1399,7 +1399,7 @@ bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
     IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
     Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
     if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
-        && ((SfxBoolItem*)pItem)->GetValue() == aPasswd.getLength() > 0)
+        && ((SfxBoolItem*)pItem)->GetValue() == (aPasswd.getLength() > 0))
         return false;
 
     bool bRes = false;

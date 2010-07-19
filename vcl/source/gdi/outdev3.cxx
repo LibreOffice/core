@@ -1889,10 +1889,11 @@ ImplDevFontListData* ImplDevFontList::ImplFindByAttributes( ULONG nSearchType,
             nTestMatch -= 1000000;
 
         // test font name substrings
-        if( (rSearchFamilyName.Len() && pData->maMatchFamilyName.Len())
+    // TODO: calculate name matching score using e.g. Levenstein distance
+        if( (rSearchFamilyName.Len() >= 4) && (pData->maMatchFamilyName.Len() >= 4)
         &&    ((rSearchFamilyName.Search( pData->maMatchFamilyName ) != STRING_NOTFOUND)
             || (pData->maMatchFamilyName.Search( rSearchFamilyName ) != STRING_NOTFOUND)) )
-                    nTestMatch += 100000*2;
+                    nTestMatch += 5000;
 
         // test SERIF attribute
         if( nSearchType & IMPL_FONT_ATTR_SERIF )

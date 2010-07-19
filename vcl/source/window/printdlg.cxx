@@ -2514,13 +2514,13 @@ void PrintProgressDialog::implCalcProgressRect()
     if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
-        Region aControlRegion( Rectangle( Point(), Size( 100, mnProgressHeight ) ) );
-        Region aNativeControlRegion, aNativeContentRegion;
+        Rectangle aControlRegion( Point(), Size( 100, mnProgressHeight ) );
+        Rectangle aNativeControlRegion, aNativeContentRegion;
         if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                     CTRL_STATE_ENABLED, aValue, rtl::OUString(),
                                     aNativeControlRegion, aNativeContentRegion ) )
         {
-            mnProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
+            mnProgressHeight = aNativeControlRegion.GetHeight();
         }
         mbNativeProgress = true;
     }

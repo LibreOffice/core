@@ -41,6 +41,7 @@ sub im_007_
     call tSlideShowShowHideSlide()
     call tSlideShowCustomAnimation()
     call tSlideShowInteraction()
+    call tSlideShowAnimation()
 
 end sub
 

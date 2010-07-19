@@ -68,7 +68,7 @@ public:
     const String&   GetUserName() const                 { return m_aUserName; }
     const String&   GetPassword() const                 { return m_aPassword; }
     const String&   GetPasswordToModify() const         { return m_aPasswordToModify; }
-    const bool      IsRecommendToOpenReadonly() const   { return m_bRecommendToOpenReadonly; }
+    bool      IsRecommendToOpenReadonly() const   { return m_bRecommendToOpenReadonly; }
     const String&   GetPath() const                     { return m_aPath; }
     const String&   GetErrorText() const                { return m_aErrorText; }
     BOOL            GetCanRememberPassword() const      { return ( m_nFlags & LOGINERROR_FLAG_CAN_REMEMBER_PASSWORD ); }

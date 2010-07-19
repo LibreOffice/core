@@ -655,7 +655,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     $installer::globals::globalinfo_copied = 1;
 
     my $logminor = "";
-    my $avoidlanginlog = 0;
     if ( $installer::globals::updatepack ) { $logminor = $installer::globals::lastminor; }
     else { $logminor = $installer::globals::minor; }
 
@@ -663,14 +662,15 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     my $loglanguagestring_orig = $loglanguagestring;
     if (length($loglanguagestring) > $installer::globals::max_lang_length)
     {
+        my $number_of_languages = installer::systemactions::get_number_of_langs($loglanguagestring);
         chomp(my $shorter = `echo $loglanguagestring | md5sum | sed -e "s/ .*//g"`);
-        $loglanguagestring = $shorter;
-        $avoidlanginlog = 1;
+        my $id = substr($shorter, 0, 8); # taking only the first 8 digits
+        $loglanguagestring = "lang_" . $number_of_languages . "_id_" . $id;
     }
 
     $installer::globals::logfilename = "log_" . $installer::globals::build;
     if ( $logminor ne "" ) { $installer::globals::logfilename .= "_" . $logminor; }
-    if ( ! $avoidlanginlog ) { $installer::globals::logfilename .= "_" . $loglanguagestring; }
+    $installer::globals::logfilename .= "_" . $loglanguagestring;
     $installer::globals::logfilename .= ".log";
     $loggingdir = $loggingdir . $loglanguagestring . $installer::globals::separator;
     installer::systemactions::create_directory($loggingdir);
@@ -732,7 +732,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if (!($installer::globals::is_copy_only_project))
     {
-        if ( $installer::globals::iswindowsbuild )
+        if (( $installer::globals::iswindowsbuild ) && ( $installer::globals::packageformat ne "archive" ) && ( $installer::globals::packageformat ne "installed" ))
         {
             installer::windows::msiglobal::set_global_code_variables($languagesarrayref, $languagestringref, $allvariableshashref, $alloldproperties);
         }

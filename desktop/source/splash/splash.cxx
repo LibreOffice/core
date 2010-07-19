@@ -640,20 +640,18 @@ void SplashScreen::Paint( const Rectangle&)
 
         ImplControlValue aValue( _iProgress * _barwidth / _iMax);
         Rectangle aDrawRect( Point(_tlx, _tly), Size( _barwidth, _barheight ) );
-        Region aControlRegion( aDrawRect );
-        Region aNativeControlRegion, aNativeContentRegion;
+        Rectangle aNativeControlRegion, aNativeContentRegion;
 
-        if( GetNativeControlRegion( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+        if( GetNativeControlRegion( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
                                              CTRL_STATE_ENABLED, aValue, rtl::OUString(),
                                              aNativeControlRegion, aNativeContentRegion ) )
         {
-              long nProgressHeight = aNativeControlRegion.GetBoundRect().GetHeight();
+              long nProgressHeight = aNativeControlRegion.GetHeight();
               aDrawRect.Top() -= (nProgressHeight - _barheight)/2;
               aDrawRect.Bottom() += (nProgressHeight - _barheight)/2;
-              aControlRegion = Region( aDrawRect );
         }
 
-        if( (bNativeOK = DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+        if( (bNativeOK = DrawNativeControl( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL, aDrawRect,
                                             CTRL_STATE_ENABLED, aValue, _sProgressText )) != FALSE )
         {
             return;

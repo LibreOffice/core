@@ -108,6 +108,8 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     bool            m_bXEmbed;
     int             nVisibility_;
     int             m_nWorkArea;
+    bool            m_bSetFocusOnMap;
+
 
     int             nScreenSaversTimeout_;
     Rectangle       maPaintRegion;

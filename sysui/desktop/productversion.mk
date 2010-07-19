@@ -46,7 +46,7 @@ PKGDIR=$(BIN)
 PRODUCTLIST = openoffice.org broffice.org
 
 # default values to minimize maintainance effort 
-PRODUCTVERSION = 3.3
+PRODUCTVERSION = 3.4
 PRODUCTVERSIONSHORT = 3
 PKGVERSION = $(PRODUCTVERSION)
 # gnome-vfs treats everything behind the last '.' as an icon extension, 

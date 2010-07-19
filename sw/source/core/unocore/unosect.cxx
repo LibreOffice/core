@@ -136,7 +136,8 @@ public:
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_SECTION))
         , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
         , m_bIndexHeader(bIndexHeader)
-        , m_bIsDescriptor(0 == pFmt)
+        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
+        , m_bIsDescriptor((0 == pFmt) ? true : false)
         , m_pProps((pFmt) ? 0 : new SwTextSectionProperties_Impl())
     {
     }

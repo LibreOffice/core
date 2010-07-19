@@ -46,6 +46,8 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/syswin.hxx>
 
+#include "osl/file.h"
+
 #include "KDE4FilePicker.hxx"
 #include "FPServiceInfo.hxx"
 
@@ -246,7 +248,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
     // kde file picker returns the file and directories for selectedFiles()
     // when a file is double clicked
     // make a true list of files
-    const QString dir = "file://" + KUrl(rawFiles[0]).directory();
+    const QString dir = KUrl(rawFiles[0]).directory();
 
     bool singleFile = true;
     if (rawFiles.size() > 1)
@@ -262,7 +264,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
     {
         // if the raw file is not the base directory (see above kde bug)
         // we add the file to list of avail files
-        if ((dir + "/") != ("file://" + rawFiles[i]))
+        if ((dir + "/") != ( rawFiles[i]))
         {
             QString filename = KUrl(rawFiles[i]).fileName();
 
@@ -280,7 +282,11 @@ uno::Sequence< ::rtl::OUString > SAL_CALL KDE4FilePicker::getFiles()
     // add all files and leading directory to outgoing OO sequence
     uno::Sequence< ::rtl::OUString > seq(files.size());
     for (int i = 0; i < files.size(); ++i)
-        seq[i] = toOUString(files[i]);
+    {
+        rtl::OUString aFile(toOUString(files[i])), aURL;
+        osl_getFileURLFromSystemPath(aFile.pData, &aURL.pData );
+        seq[i] = aURL;
+    }
 
     return seq;
 }

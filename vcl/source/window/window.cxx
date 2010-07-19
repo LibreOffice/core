@@ -243,18 +243,17 @@ void Window::ImplInitAppFontData( Window* pWindow )
         // of control sizes, if yes, make app font scalings larger
         // so dialog positioning is not completely off
         ImplControlValue aControlValue;
-        Region aCtrlRegion( (const Rectangle&)Rectangle( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) ) );
-        Region aBoundingRgn( aCtrlRegion );
-        Region aContentRgn( aCtrlRegion );
+        Rectangle aCtrlRegion( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) );
+        Rectangle aBoundingRgn( aCtrlRegion );
+        Rectangle aContentRgn( aCtrlRegion );
         if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
                                              CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
                                              aBoundingRgn, aContentRgn ) )
         {
-            Rectangle aContentRect( aContentRgn.GetBoundRect() );
             // comment: the magical +6 is for the extra border in bordered
             // (which is the standard) edit fields
-            if( aContentRect.GetHeight() - nTextHeight > (nTextHeight+4)/4 )
-                pSVData->maGDIData.mnAppFontY = (aContentRect.GetHeight()-4) * 10;
+            if( aContentRgn.GetHeight() - nTextHeight > (nTextHeight+4)/4 )
+                pSVData->maGDIData.mnAppFontY = (aContentRgn.GetHeight()-4) * 10;
         }
     }
 

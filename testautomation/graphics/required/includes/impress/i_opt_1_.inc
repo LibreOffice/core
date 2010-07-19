@@ -31,14 +31,6 @@
 '*
 '\******************************************************************************
 
-sub i_opt_1_.inc
-
-    call tiAlwaysWithCurrentPage()
-
-end sub
-
-'*******************************************************************************
-
 testcase tiAlwaysWithCurrentPage()
     dim i as integer
 
@@ -202,4 +194,4 @@ testcase tiAlwaysWithCurrentPage()
     setStartCurrentPage(true)
     Call hCloseDocument
 endcase
-'-------------------------------------------------------------------------------
+

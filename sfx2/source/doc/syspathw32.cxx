@@ -74,7 +74,7 @@ typedef unsigned short sal_uInt16;
 extern "C" bool GetUserTemplateLocation(sal_Unicode* pFolder, int nSize)
 {
 #ifdef WNT
-    return _SHGetSpecialFolderW32( CSIDL_TEMPLATES, pFolder, nSize );
+    return _SHGetSpecialFolderW32( CSIDL_TEMPLATES, reinterpret_cast<LPWSTR>(pFolder), nSize );
 #else
     (void)pFolder;
     (void)nSize;

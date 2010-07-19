@@ -487,8 +487,6 @@ testcase tToolsCatalog
 endcase
 
 testcase tToolsCatalogNew
-   qaerrorlog "#i64504# Symbol set name is not saved on exiting OOo"
-goto endsub
     dim i, j as integer
     dim sTemp as string
     dim iStartingSymbolSetCount as integer
@@ -626,7 +624,7 @@ goto endsub
                         SymbolSet.select ""
                     endcatch
                     i = Symbol.getItemCount
-                    if i <> 1 then
+                    if i < 2 then
                         warnlog "Symbol not available in new Symbolset: intsead of 1: " + i
                     endif
                     SymbolSet.setText "TBOnewSymbolSetdelete"

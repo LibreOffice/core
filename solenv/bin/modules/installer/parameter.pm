@@ -530,7 +530,7 @@ sub control_required_parameter
         # and the UpgradeCode for the product are defined.
         # The name "codes.txt" can be overwritten in Product definition with CODEFILENAME (msiglobal.pm)
 
-        if ($installer::globals::iswindowsbuild)
+        if (( $installer::globals::iswindowsbuild ) && ( $installer::globals::packageformat ne "archive" ) && ( $installer::globals::packageformat ne "installed" ))
         {
             $installer::globals::codefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $installer::globals::codefilename;
             installer::files::check_file($installer::globals::codefilename);
