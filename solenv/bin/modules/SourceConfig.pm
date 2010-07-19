@@ -42,6 +42,7 @@ use constant SOURCE_CONFIG_VERSION => 3;
 
 use Carp;
 use Cwd;
+use RepositoryHelper;
 use File::Basename;
 use File::Temp qw(tmpnam);
 
@@ -261,9 +262,10 @@ sub get_fallback_repository {
     my $self = shift;
     if (defined $self->{USER_SOURCE_ROOT}) {
         ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
-        return;
+    } else {
+        my $repository_root = RepositoryHelper->new()->get_repository_root();
+        ${$self->{REPOSITORIES}}{File::Basename::basename($repository_root)} = $repository_root;
     };
-    croak('Cannot determine repository. Please make your checks!!');
 };
 
 sub read_config_file {
