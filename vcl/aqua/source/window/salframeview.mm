@@ -162,6 +162,20 @@ static AquaSalFrame* getMouseContainerFrame()
     return mpFrame;
 }
 
+-(void)displayIfNeeded
+{
+    if( GetSalData() && GetSalData()->mpFirstInstance )
+    {
+        vos::IMutex* pMutex = GetSalData()->mpFirstInstance->GetYieldMutex();
+        if( pMutex )
+        {
+            pMutex->acquire();
+            [super displayIfNeeded];
+            pMutex->release();
+        }
+    }
+}
+
 -(MacOSBOOL)containsMouse
 {
     // is this event actually inside that NSWindow ?
