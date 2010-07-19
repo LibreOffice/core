@@ -601,17 +601,6 @@
         Text [ en-US ] = "~Video..." ; \
     };
 
-#ifdef SOLAR_JAVA
-#define TMP_SID_INSERT_APPLET \
-    MenuItem\
-    {\
-        Identifier = SID_INSERT_APPLET ; \
-        Command = ".uno:InsertApplet" ; \
-        Text [ en-US ] = "~Applet..." ; \
-            };
-#else
-#define TMP_SID_INSERT_APPLET
-#endif
 #define ITEM_INSERT_OBJECT_MN \
     MenuItem\
     {\
@@ -631,7 +620,6 @@
                 TMP_SID_INSERT_PLUGIN\
                 TMP_SID_INSERT_SOUND\
                 TMP_SID_INSERT_VIDEO\
-                TMP_SID_INSERT_APPLET\
                 MenuItem\
                 {\
                     Identifier = SID_INSERT_MATH ; \
