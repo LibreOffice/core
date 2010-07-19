@@ -24,15 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SOLAR_HRC
-#include <svl/solar.hrc>
-#endif
-
 #include "swcommands.h"
 #include <svx/svxcommands.h>
 #include <sfx2/sfxcommands.h>
-
-#define HID_BASE                    HID_APP_START
 
 #define HID_BIB_BASE                                            "SW_HID_BIB_BASE"
 #define HID_DBSEL                                               "SW_HID_DBSEL"
@@ -91,7 +85,7 @@
 #define HID_DRAW_WIN                                            "SW_HID_DRAW_WIN"
 #define HID_EDIT_WIN                                            "SW_HID_EDIT_WIN"
 
-#define HID_INSERT_CTRL                 "SW_HID_INSERT_CTRL" // TbxControl Einfuegen
+#define HID_INSERT_CTRL                                         "SW_HID_INSERT_CTRL" // TbxControl Einfuegen
 #define HID_INSERT_OBJ_CTRL                                     "SW_HID_INSERT_OBJ_CTRL"
 #define HID_INSERT_FIELD_CTRL                                   "SW_HID_INSERT_FIELD_CTRL"
 
@@ -213,7 +207,7 @@
 #define HID_FILEDLG_LOADTEMPLATE                                "SW_HID_FILEDLG_LOADTEMPLATE"
 #define HID_FILEDLG_ROMENU                                      "SW_HID_FILEDLG_ROMENU"
 #define HID_FILEDLG_MAILMRGE1                                   "SW_HID_FILEDLG_MAILMRGE1"
-#define HID_FILEDLG_MAILMRGE2       "SW_HID_FILEDLG_MAILMRGE2"
+#define HID_FILEDLG_MAILMRGE2                                   "SW_HID_FILEDLG_MAILMRGE2"
 #define HID_FILEDLG_FRMPAGE                                     "SW_HID_FILEDLG_FRMPAGE"
 #define HID_FILEDLG_SRCVIEW                                     "SW_HID_FILEDLG_SRCVIEW"
 #define HID_FILEDLG_WIZDOKU                                     "SW_HID_FILEDLG_WIZDOKU"
@@ -223,8 +217,8 @@
 #define HID_MULTI_TOX_DLG                                       "SW_HID_MULTI_TOX_DLG"
 #define HID_ASCII_FILTER                                        "SW_HID_ASCII_FILTER"
 #define HID_GLBLTREE_EDIT_LINK                                  "SW_HID_GLBLTREE_EDIT_LINK"
-#define HID_FORMAT_NAME_OBJECT_NAME                  "SW_HID_FORMAT_NAME_OBJECT_NAME"// #100286#
-#define HID_REFSELECTION_TOOLTIP                 "SW_HID_REFSELECTION_TOOLTIP"    // #i83479#
+#define HID_FORMAT_NAME_OBJECT_NAME                             "SW_HID_FORMAT_NAME_OBJECT_NAME"// #100286#
+#define HID_REFSELECTION_TOOLTIP                                "SW_HID_REFSELECTION_TOOLTIP"    // #i83479#
 
 
 // TabPage Help-IDs *********************************************************
@@ -431,8 +425,8 @@
 #define HID_DLG_PASSWD_SECTION                                  "SW_HID_DLG_PASSWD_SECTION"
 #define HID_MD_COPY_TO_CLIPBOARD                                "SW_HID_MD_COPY_TO_CLIPBOARD"
 #define HID_MD_GLOS_IMPORT                                      "SW_HID_MD_GLOS_IMPORT"
-#define HID_SMARTTAG_MAIN                       "SW_HID_SMARTTAG_MAIN"    // SMARTTAGS
-#define HID_LINGU_IGNORE_SELECTION "SW_HID_LINGU_IGNORE_SELECTION"    // grammar check context menu
+#define HID_SMARTTAG_MAIN                                       "SW_HID_SMARTTAG_MAIN"    // SMARTTAGS
+#define HID_LINGU_IGNORE_SELECTION                              "SW_HID_LINGU_IGNORE_SELECTION"    // grammar check context menu
 
 // Weiter Help-IDs **********************************************************
 
