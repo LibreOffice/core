@@ -444,7 +444,7 @@ void HelpTextWindow::Paint( const Rectangle& )
     if ( IsNativeControlSupported( CTRL_TOOLTIP, PART_ENTIRE_CONTROL ) )
     {
         // #i46472# workaround gcc3.3 temporary problem
-        Region aCtrlRegion = Region( Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+        Rectangle aCtrlRegion( Point( 0, 0 ), GetOutputSizePixel() );
         ImplControlValue    aControlValue;
         bNativeOK = DrawNativeControl( CTRL_TOOLTIP, PART_ENTIRE_CONTROL, aCtrlRegion,
                                        0, aControlValue, rtl::OUString() );
