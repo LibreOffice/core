@@ -1569,7 +1569,7 @@ void lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEn
             if (nAdd + rTwips >= nStopTwips)
             {
                 sal_Int64 nDiff = nAdd + rTwips - nStopTwips;
-                nRows -= nDiff / nHeight;
+                nRows -= static_cast<SCROW>(nDiff / nHeight);
                 nAdd = nHeight * nRows;
                 // We're looking for a value that satisfies loop condition.
                 if (nAdd + rTwips >= nStopTwips)
