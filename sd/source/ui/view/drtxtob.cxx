@@ -384,24 +384,25 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
             case SID_THES:
             {
-                OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
-                String          aStatusVal;
-                LanguageType    nLang = LANGUAGE_NONE;
-                bool bIsLookUpWord = false;
-                if ( pOLV )
+                if( mpView && mpView->GetTextEditOutlinerView() )
                 {
-                    EditView& rEditView = pOLV->GetEditView();
-                    bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, rEditView );
+                    EditView & rEditView = mpView->GetTextEditOutlinerView()->GetEditView();;
+                    String          aStatusVal;
+                    LanguageType    nLang = LANGUAGE_NONE;
+                    bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, rEditView );
+                    rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+
+                    // disable "Thesaurus" context menu entry if there is nothing to look up
+                    lang::Locale aLocale( SvxCreateLocale( nLang ) );
+                    uno::Reference< linguistic2::XThesaurus > xThes( LinguMgr::GetThesaurus() );
+                    if (!bIsLookUpWord ||
+                        !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
+                        rSet.DisableItem( SID_THES );
                 }
-                rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
-
-                // disable "Thesaurus" context menu entry if there is nothing to look up
-                lang::Locale aLocale( SvxCreateLocale( nLang ) );
-                uno::Reference< linguistic2::XThesaurus > xThes( LinguMgr::GetThesaurus() );
-                if (!bIsLookUpWord ||
-                    !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
+                else
+                {
                     rSet.DisableItem( SID_THES );
-
+                }
                 //! avoid puting the same item as SfxBoolItem at the end of this function
                 nSlotId = 0;
             }
