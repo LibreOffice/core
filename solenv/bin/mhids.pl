@@ -266,7 +266,6 @@ if ( !open HID,">$srs/$filebase.hid.$ENV{INPATH}" ) {
 while (<C3>)
 {
     @fields = split /\s+/;
-
     if ( $fields[1] eq "HelpID" )
     {
         print HID "$fields[0] $fields[2]\n";
@@ -373,10 +372,10 @@ while (<C3>)
             $nHID -=       2000000000;
             $x=2;
         }
-        if( $x != 0)
-            { printf HID "%s %d%u \n",$helpIDString,$x, $nHID; }
+        if ( $LID != 0)
+            { printf HID "%s %s:%s:%s:%s \n", $helpIDString, $arr[0], $arr[1], $GID, $LID; }
         else
-            { printf HID "%s %u \n",$helpIDString, $nHID; }
+            { printf HID "%s %s:%s:%s \n", $helpIDString, $arr[0], $arr[1], $GID }
     }
 }
 
