@@ -282,7 +282,7 @@ public:
             a corresponding element herein.
     */
     void                    SetControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId );
-    void                    SetDialogHelpId( const sal_Int32 _nHelpId );
+    void                    SetDialogHelpId( const rtl::OString& _nHelpId );
     void                    CreateMatcher( const String& rName );
 
     /** sets the context of the dialog and trigger necessary actions e.g. loading config, setting help id

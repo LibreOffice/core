@@ -57,7 +57,7 @@ public:
     /// Set dialog help id at FileDlgHelper
     void                    SetControlHelpIds( const INT16* _pControlId, const char** _pHelpId );
     /// Set control help ids at FileDlgHelper
-    void                    SetDialogHelpId( const INT32 _nHelpId );
+    void                    SetDialogHelpId( const rtl::OString& _rHelpId );
 private:
     // disable copy and assignment
     SFX2_DLLPRIVATE SvxOpenGraphicDialog    (const SvxOpenGraphicDialog&);

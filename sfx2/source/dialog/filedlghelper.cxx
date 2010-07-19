@@ -1235,7 +1235,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper_Impl::setDialogHelpId( sal_Int32 _nHelpId )
+void FileDialogHelper_Impl::setDialogHelpId( const rtl::OString& _nHelpId )
 {
     svt::SetDialogHelpId( mxFileDlg, _nHelpId );
 }
@@ -2498,7 +2498,7 @@ void FileDialogHelper::SetControlHelpIds( const sal_Int16* _pControlId, const ch
 }
 
 // ------------------------------------------------------------------------
-void FileDialogHelper::SetDialogHelpId( const sal_Int32 _nHelpId )
+void FileDialogHelper::SetDialogHelpId( const rtl::OString& _nHelpId )
 {
     mpImp->setDialogHelpId( _nHelpId );
 }

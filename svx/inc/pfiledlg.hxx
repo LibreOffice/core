@@ -55,7 +55,7 @@ public:
     static bool IsAvailable (USHORT nKind);
 
     // setting HelpId and/or context of FileDialogHelper
-    void                    SetDialogHelpId( const sal_Int32 nHelpId );
+    void                    SetDialogHelpId( const rtl::OString& nHelpId );
     void                    SetContext( sfx2::FileDialogHelper::Context eNewContext );
 };
 
