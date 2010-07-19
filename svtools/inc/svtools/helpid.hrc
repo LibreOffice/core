@@ -28,12 +28,6 @@
 #ifndef _SVT_HELPID_HRC
 #define _SVT_HELPID_HRC
 
-// include ---------------------------------------------------------------
-
-#include <svl/solar.hrc>
-
-// Help-Ids --------------------------------------------------------------
-
 #define HID_FILEDLG_OPENDLG                                    "SVT_HID_FILEDLG_OPENDLG"
 #define HID_FILEDLG_PATHDLG                                    "SVT_HID_FILEDLG_PATHDLG"
 #define HID_FILEDLG_DIR                                        "SVT_HID_FILEDLG_DIR"
