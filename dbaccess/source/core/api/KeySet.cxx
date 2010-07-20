@@ -253,10 +253,11 @@ void OKeySet::findTableColumnsMatching_throw(const Any& i_aTable
     static ::rtl::OUString s_sDot(RTL_CONSTASCII_USTRINGPARAM("."));
     static ::rtl::OUString s_sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
     // create the where clause
+    Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     SelectColumnsMetaData::iterator aPosEnd = m_pKeyColumnNames->end();
     for(SelectColumnsMetaData::iterator aPosIter = m_pKeyColumnNames->begin();aPosIter != aPosEnd;)
     {
-        aFilter.append(::dbtools::quoteName( aQuote,aPosIter->second.sTableName));
+        aFilter.append(::dbtools::quoteTableName( xMeta,aPosIter->second.sTableName,::dbtools::eInDataManipulation));
         aFilter.append(s_sDot);
         aFilter.append(::dbtools::quoteName( aQuote,aPosIter->second.sRealName));
         aFilter.append(s_sParam);
