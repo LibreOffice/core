@@ -60,7 +60,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-
+#include <tools/urlobj.hxx>
 #include <boost/noncopyable.hpp>
 
 //......................................................................................................................
@@ -410,10 +410,11 @@ namespace sfx2
 
     static rtl::OString lcl_getHelpId( const ::rtl::OUString& _rHelpURL )
     {
-        rtl::OString aHelpId( _rHelpURL, _rHelpURL.getLength(), RTL_TEXTENCODING_UTF8 );
-        if ( 0 == _rHelpURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "HID:" ) ) )
-            aHelpId = aHelpId.copy( sizeof( "HID:" ) - 1 );
-        return aHelpId;
+        INetURLObject aHID( _rHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+            return rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
+        else
+            return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
     }
 
     //------------------------------------------------------------------------------------------------------------------

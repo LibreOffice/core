@@ -1213,13 +1213,14 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     // forward these ids to the file picker
     try
     {
-        const ::rtl::OUString sHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
+        const ::rtl::OUString sHelpIdPrefix( RTL_CONSTASCII_USTRINGPARAM( INET_HID_SCHEME ) );
         // the ids for the single controls
         uno::Reference< XFilePickerControlAccess > xControlAccess( mxFileDlg, UNO_QUERY );
         if ( xControlAccess.is() )
         {
             while ( *_pControlId )
             {
+                DBG_ASSERT( INetURLObject( rtl::OStringToOUString( *_pHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
                 ::rtl::OUString sId( sHelpIdPrefix );
                 sId += ::rtl::OUString( *_pHelpId, strlen( *_pHelpId ), RTL_TEXTENCODING_UTF8 );
                 xControlAccess->setValue( *_pControlId, ControlActions::SET_HELP_URL, makeAny( sId ) );
@@ -1232,12 +1233,6 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
     {
         DBG_ERROR( "FileDialogHelper_Impl::setControlHelpIds: caught an exception while setting the help ids!" );
     }
-}
-
-// ------------------------------------------------------------------------
-void FileDialogHelper_Impl::setDialogHelpId( const rtl::OString& _nHelpId )
-{
-    svt::SetDialogHelpId( mxFileDlg, _nHelpId );
 }
 
 // ------------------------------------------------------------------------
@@ -2344,9 +2339,6 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
     const OUString* pConfigId = GetLastFilterConfigId( _eNewContext );
     if( pConfigId )
         LoadLastUsedFilter( *pConfigId );
-
-//  if( nNewHelpId )
-//      this->setDialogHelpId( nNewHelpId );
 }
 
 // ------------------------------------------------------------------------
@@ -2495,12 +2487,6 @@ void FileDialogHelper::CreateMatcher( const String& rFactory )
 void FileDialogHelper::SetControlHelpIds( const sal_Int16* _pControlId, const char** _pHelpId )
 {
     mpImp->setControlHelpIds( _pControlId, _pHelpId );
-}
-
-// ------------------------------------------------------------------------
-void FileDialogHelper::SetDialogHelpId( const rtl::OString& _nHelpId )
-{
-    mpImp->setDialogHelpId( _nHelpId );
 }
 
 void FileDialogHelper::SetContext( Context _eNewContext )

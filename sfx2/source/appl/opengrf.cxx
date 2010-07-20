@@ -289,7 +289,4 @@ void SvxOpenGraphicDialog::SetControlHelpIds( const INT16* _pControlId, const ch
     mpImpl->aFileDlg.SetControlHelpIds( _pControlId, _pHelpId );
 }
 
-void SvxOpenGraphicDialog::SetDialogHelpId( const rtl::OString& _nHelpId )
-{
-    mpImpl->aFileDlg.SetDialogHelpId( _nHelpId );
-}
+

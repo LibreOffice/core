@@ -274,11 +274,6 @@ bool SvxPluginFileDlg::IsAvailable (sal_uInt16 nKind)
     return bFound;
 }
 
-void SvxPluginFileDlg::SetDialogHelpId( const rtl::OString& _nHelpId )
-{
-    maFileDlg.SetDialogHelpId( _nHelpId );
-}
-
 void SvxPluginFileDlg::SetContext( sfx2::FileDialogHelper::Context _eNewContext )
 {
     maFileDlg.SetContext( _eNewContext );

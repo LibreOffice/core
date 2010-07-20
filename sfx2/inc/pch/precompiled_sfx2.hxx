@@ -543,7 +543,6 @@
 #include "svl/ownlist.hxx"
 #include "svtools/parhtml.hxx"
 #include "unotools/pathoptions.hxx"
-#include "svl/pickerhelper.hxx"
 #include "svl/poolitem.hxx"
 #include "svtools/printoptions.hxx"
 #include "unotools/printwarningoptions.hxx"
