@@ -32,4 +32,4 @@ VERBOSEFLAG := -s
 .ENDIF
 
 all:
-    @cd .. && make $(VERBOSEFLAG) -r -j$(MAXPROCESS)
+    @cd .. && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS)
