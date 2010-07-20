@@ -599,7 +599,28 @@ void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
                 {
                     SbxValues aVals;
                     aVals.eType = SbxVARIANT;
-                    pMeth->Get( aVals );
+
+                    SbxArray* pArg = pVar->GetParameters();
+                    USHORT nVarParCount = (pArg != NULL) ? pArg->Count() : 0;
+                    if( nVarParCount > 1 )
+                    {
+                        SbxArrayRef xMethParameters = new SbxArray;
+                        xMethParameters->Put( pMeth, 0 );   // Method as parameter 0
+                        for( USHORT i = 1 ; i < nVarParCount ; ++i )
+                        {
+                            SbxVariable* pPar = pArg->Get( i );
+                            xMethParameters->Put( pPar, i );
+                        }
+
+                        pMeth->SetParameters( xMethParameters );
+                        pMeth->Get( aVals );
+                        pMeth->SetParameters( NULL );
+                    }
+                    else
+                    {
+                        pMeth->Get( aVals );
+                    }
+
                     pVar->Put( aVals );
                 }
             }
