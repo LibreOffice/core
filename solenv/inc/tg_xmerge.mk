@@ -68,20 +68,20 @@ $(MISC)/$(TARGET).xtx.pmerge.mk : $(PMERGELIST)
     $(COMMAND_ECHO)echo last_merge=$(alllangiso) > $@
 .ENDIF          # "$(XTXFILES)"!=""
 
-.IF "$(XHTFILES)"!=""
-ALLTAR : $(MISC)/$(TARGET).xht.pmerge.mk $(XHTFILES)
+.IF "$(TREEFILE)"!=""
+ALLTAR : $(MISC)/$(TARGET).tree.pmerge.mk $(TREEFILE)
 
-$(MISC)/$(TARGET).xht.pmerge.mk :  $(XHTFILES)
+$(MISC)/$(TARGET).tree.pmerge.mk :  $(TREEFILE)
 
-$(XHTFILES) : $(LOCALIZESDF)
+$(TREEFILE) : $(LOCALIZESDF)
 
-.INCLUDE .IGNORE : $(MISC)/$(TARGET).xht.pmerge.mk
+.INCLUDE .IGNORE : $(MISC)/$(TARGET).tree.pmerge.mk
 
 .IF "$(alllangiso)"!="$(last_merge)"
-XHTMERGEPHONY:=.PHONY
+TREEMERGEPHONY:=.PHONY
 .ENDIF          # "$(alllangiso)" != "$(last_merge)"
 
-$(COMMONMISC)/$(PACKAGE)/en-US/%.tree $(XHTMERGEPHONY) : %.xht
+$(COMMONMISC)/$(PACKAGE)/en-US/%.tree $(TREEMERGEPHONY) : %.tree
     @@-$(MKDIRHIER) $(@:d)
 .IF "$(WITH_LANG)"==""
     $(COMMAND_ECHO)$(COPY) $< $@
@@ -91,7 +91,7 @@ $(COMMONMISC)/$(PACKAGE)/en-US/%.tree $(XHTMERGEPHONY) : %.xht
     $(COMMAND_ECHO)@noop $(assign PDESTDIR1:=$(@:d:d:d))
 .ENDIF          # "$(WITH_LANG)"==""
 
-$(MISC)/$(TARGET).xht.pmerge.mk : $(PMERGELIST1)
+$(MISC)/$(TARGET).tree.pmerge.mk : $(PMERGELIST1)
 .IF "$(WITH_LANG)"!=""
 # xtxex command file requirements:
 # - one file per line
@@ -104,6 +104,6 @@ $(MISC)/$(TARGET).xht.pmerge.mk : $(PMERGELIST1)
 .ENDIF          # "$(WITH_LANG)"!=""
     @-$(RM) $@
     $(COMMAND_ECHO)echo last_merge=$(alllangiso) > $@
-.ENDIF          # "$(XHTFILES)"!=""
+.ENDIF          # "$(TREEFILE)"!=""
 
 
