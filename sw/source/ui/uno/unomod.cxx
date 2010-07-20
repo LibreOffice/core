@@ -799,13 +799,12 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 OUString sHelpURL;
                 if ( ! ( rValue >>= sHelpURL ) )
                     throw IllegalArgumentException();
-                SwEditWin &rEditWin = pView->GetEditWin();
-                OUString sPrefix = sHelpURL.copy ( 0, 4 );
-                // Make sure we have a valid string...should be in the format HID:12345
-                if ( ! sPrefix.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "HID:" ) ) )
+
+                INetURLObject aHID( sHelpURL );
+                if ( aHID.GetProtocol() == INET_PROT_HID )
+                      pView->GetEditWin().SetHelpId( rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
+                else
                     throw IllegalArgumentException ();
-                OUString aID = sHelpURL.copy ( 4 );
-                rEditWin.SetHelpId ( rtl::OUStringToOString( aID, RTL_TEXTENCODING_UTF8 ) );
             }
             else
                 throw UnknownPropertyException();
@@ -984,7 +983,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             {
                 bBool = sal_False;
                 OUStringBuffer sHelpURL;
-                sHelpURL.appendAscii ( "HID:" );
+                sHelpURL.appendAscii ( INET_HID_SCHEME );
                 SwEditWin &rEditWin = pView->GetEditWin();
                 sHelpURL.append( rtl::OStringToOUString( rEditWin.GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
                 rValue <<= sHelpURL.makeStringAndClear();

@@ -1238,8 +1238,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
 
                     const char** pHelpIds = bCreateHtml ? aHTMLHelpIds : aMasterHelpIds;
                     aDlgHelper.SetControlHelpIds( nControlIds, pHelpIds );
-//                    aDlgHelper.SetDialogHelpId( bCreateHtml ? HID_SEND_HTML_DIALOG : HID_SEND_MASTER_DIALOG );
-
                     uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
                     const SfxFilter* pFlt;
