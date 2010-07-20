@@ -95,13 +95,18 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
     -fno-exceptions \
     
 gb_LinkTarget_LDFLAGS := \
-    -Wl,--dynamic-list-cpp-new \
-    -Wl,--dynamic-list-cpp-typeinfo \
     -Wl,--hash-style=both \
-    -Wl,-Bsymbolic-functions \
     -Wl,-z,combreloc \
     -Wl,-z,defs \
     $(subst -L../lib , ,$(SOLARLIB)) \
+
+ifneq ($(HAVE_LD_BSYMBOLIC_FUNCTIONS),)
+gb_LinkTarget_LDFLAGS += \
+    -Wl,--dynamic-list-cpp-new \
+    -Wl,--dynamic-list-cpp-typeinfo \
+    -Wl,-Bsymbolic-functions \
+
+endif
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS := -O0
