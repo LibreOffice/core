@@ -195,7 +195,7 @@ public class CheckXComponentLoader
 
         // get temp path for this environment
         final String tempDirURL = util.utils.getOfficeTemp/*Dir*/(getMSF());
-        m_sTempPath = tempDirURL;
+        m_sTempPath = graphical.FileHelper.getSystemPathFromFileURL(tempDirURL);
         // m_sTempPath = "."+fs_sys;
 
         // get all files from the given directory
