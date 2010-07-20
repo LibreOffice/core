@@ -159,6 +159,9 @@ typedef ::std::hash_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash, ::std::equal
 struct VbaApplicationBase_Impl
 {
     VbaTimerHashMap m_aTimerHash;
+    sal_Bool mbVisible;
+
+    inline VbaApplicationBase_Impl() : mbVisible( sal_True ) {}
 
     virtual ~VbaApplicationBase_Impl()
     {
@@ -262,6 +265,16 @@ void SAL_CALL VbaApplicationBase::setInteractive( ::sal_Bool bInteractive )
     uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
 
     xWindow->setEnable( bInteractive );
+}
+
+sal_Bool SAL_CALL VbaApplicationBase::getVisible() throw (uno::RuntimeException)
+{
+    return m_pImpl->mbVisible;    // dummy implementation
+}
+
+void SAL_CALL VbaApplicationBase::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException)
+{
+    m_pImpl->mbVisible = bVisible;  // dummy implementation
 }
 
 uno::Any SAL_CALL
