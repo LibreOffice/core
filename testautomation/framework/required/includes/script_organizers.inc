@@ -35,6 +35,11 @@ testcase tUpdtScripts
 
     printlog( "Resource test for macros and scripts / related dialogs" )
 
+    if ( gIsoLang <> "en-US" ) then
+        printlog( "No testing for languages other than en_US" )
+        goto endsub
+    endif
+
     const SCRIPTING_DIALOGS = 5
     
     const DLG_JAVASCRIPT = "JavaScript"
@@ -46,17 +51,17 @@ testcase tUpdtScripts
     ' This is the build specific part of the filename including substrings for
     ' the productname, platform, and language. At a later point we add the dialog name.
     ' Replace all blanks (spaces) with "-"
-    dim sDynamicPath as string
-        sDynamicPath = gProductName & "_" & gPlatform & "_" & gISOLang & "_"
-        hStringReplaceChar( sDynamicPath, " ", "-" )
+    dim sProductString as string
+        sProductString = gProductName & "_" & gPlatform & "_" & gISOLang & "_"
+        sProductString = hStringReplaceChar( sProductString, " ", "-" )
  
     ' This is where reference file is located, the filename is yet incomplete
     dim sInputPath as string
-        sInputPath = gTesttoolPath & "framework/required/input/scripts/" & sDynamicPath
+        sInputPath = gTesttoolPath & "framework/required/input/scripts/" & sProductString
         
     ' This is where we store the reference file if differences are found.
     dim sOutputPath as string
-        sOutputPath = gOfficePath & "user/work/" & sDynamicPath
+        sOutputPath = gOfficePath & "user/work/" & sProductString
       
     ' These contain the input and output paths (fully qualified)
     dim sFileIn as string
