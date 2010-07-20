@@ -678,7 +678,18 @@ void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
         while( iLoop >= nParamCount )
         {
             p = new SbxVariable();
-            p->PutErr( 448 );       // Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
+
+            if( SbiRuntime::isVBAEnabled() &&
+                (t == SbxOBJECT || t == SbxSTRING) )
+            {
+                if( t == SbxOBJECT )
+                    p->PutObject( NULL );
+                else
+                    p->PutString( String() );
+            }
+            else
+                p->PutErr( 448 );       // Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
+
             refParams->Put( p, iLoop );
             iLoop--;
         }
