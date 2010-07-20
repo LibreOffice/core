@@ -57,6 +57,7 @@
 #include <algorithm>
 #include <functional>
 #include <vector>
+#include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -509,7 +510,8 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                 rtl::OUString uProp(C2U("HelpURL"));
                 if(xPropInfo->hasPropertyByName(uProp))
                 {
-                    ::rtl::OUString sId = ::rtl::OUString::createFromAscii( "HID:" );
+                    ::rtl::OUString sId = ::rtl::OUString::createFromAscii( INET_HID_SCHEME );
+                    DBG_ASSERT( INetURLObject( rtl::OStringToOUString( sHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
                     sId += ::rtl::OUString( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
                     xPropSet->setPropertyValue( uProp, makeAny( sId ) );
                 }
