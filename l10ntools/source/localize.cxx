@@ -53,7 +53,7 @@ namespace transex3
 const char *ExeTable[][5] = {
     { "src", "transex3", "  -UTF8 -e", "negative", "noiso" },
     { "hrc", "transex3", "  -UTF8 -e", "positive", "noiso" },
-    { "xht", "xhtex", "", "negative", "noiso" },
+    { "tree", "xhtex", "", "negative", "noiso" },
     { "xtx", "xtxex", "", "negative", "noiso" },
     { "ulf", "ulfex", " -e", "negative", "noiso" },
     { "xrb", "xmlex", "-UTF8 -e", "negative", "iso" },
