@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Writer Undo-History - Test ( Typing, Overwrite, Replace, Delete, Sort, Convert To table)
 '*

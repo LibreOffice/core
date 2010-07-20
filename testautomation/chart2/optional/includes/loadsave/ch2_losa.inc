@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Load file of one Spreadsheet format and save to another
 '*

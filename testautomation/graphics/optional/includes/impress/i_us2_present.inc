@@ -25,7 +25,7 @@
 '
 '/**************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Impress User-Scenario: Beginner makes presentation.
 '*
