@@ -131,7 +131,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ::svx::ODataAccessDescriptor&
 // import data
 ODatabaseImportExport::ODatabaseImportExport( const ::dbtools::SharedConnection& _rxConnection,
         const Reference< XNumberFormatter >& _rxNumberF, const Reference< XMultiServiceFactory >& _rM )
-    :m_bBookmarkSelection( NULL )
+    :m_bBookmarkSelection( sal_False )
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)
