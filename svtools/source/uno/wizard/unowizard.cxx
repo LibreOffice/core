@@ -42,6 +42,7 @@
 #include <rtl/strbuf.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/urlobj.hxx>
 
 //......................................................................................................................
 namespace svt { namespace uno
@@ -208,10 +209,11 @@ namespace svt { namespace uno
 
     static rtl::OString lcl_getHelpId( const ::rtl::OUString& _rHelpURL )
     {
-        rtl::OString aHelpId( _rHelpURL, _rHelpURL.getLength(), RTL_TEXTENCODING_UTF8 );
-        if ( 0 == _rHelpURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( "HID:" ) ) )
-            aHelpId = aHelpId.copy( sizeof( "HID:" ) - 1 );
-        return aHelpId;
+        INetURLObject aHID( _rHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+            return rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 );
+        else
+            return rtl::OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
     }
 
     //------------------------------------------------------------------------
@@ -219,7 +221,9 @@ namespace svt { namespace uno
     {
         ::rtl::OUStringBuffer aBuffer;
         ::rtl::OUString aTmp( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
-        aBuffer.appendAscii( "HID:" );
+        INetURLObject aHID( aTmp );
+        if ( aHID.GetProtocol() == INET_PROT_NOT_VALID )
+            aBuffer.appendAscii( INET_HID_SCHEME );
         aBuffer.append( aTmp.getStr() );
         return aBuffer.makeStringAndClear();
     }

@@ -28,26 +28,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include <tools/debug.hxx>
-#ifndef _SV_APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _VCL_PRINT_HXX
 #include <vcl/print.hxx>
-#endif
 #include <vcl/msgbox.hxx>
 #include <vcl/jobset.hxx>
 #include <tools/urlobj.hxx>
-
 #include "printdlg.hrc"
 #include "controldims.hrc"
 #include <svtools/prnsetup.hxx>
 #include <svtools/printdlg.hxx>
 #include <svtools/svtdata.hxx>
 #include <filedlg.hxx>
-#include "svl/pickerhelper.hxx"
-#ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
-#endif
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
