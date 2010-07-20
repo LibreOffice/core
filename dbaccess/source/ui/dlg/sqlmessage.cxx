@@ -77,6 +77,8 @@
 #include "moduledbu.hxx"
 #endif
 
+#include <tools/urlobj.hxx>
+
 #define BUTTONID_MORE   BUTTONID_RETRY + 1
 
 #define DIALOG_WIDTH    220
@@ -690,8 +692,9 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
         lcl_addButton( *this, BUTTON_HELP, false );
 
         rtl::OUString aTmp;
-        if ( m_sHelpURL.indexOfAsciiL( "HID:", 4 ) == 0 )
-            aTmp = m_sHelpURL.copy( 4 );
+        INetURLObject aHID( m_sHelpURL );
+        if ( aHID.GetProtocol() == INET_PROT_HID )
+              aTmp = aHID.GetURLPath();
         else
             aTmp = m_sHelpURL;
 

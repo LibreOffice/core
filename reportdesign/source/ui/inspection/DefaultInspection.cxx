@@ -41,6 +41,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include "metadata.hxx"
+#include <tools/urlobj.hxx>
 
 //........................................................................
 namespace rptui
@@ -51,7 +52,8 @@ namespace rptui
     {
         ::rtl::OUStringBuffer aBuffer;
         ::rtl::OUString aTmp( sHelpId, sHelpId.getLength(), RTL_TEXTENCODING_UTF8 );
-        aBuffer.appendAscii( "HID:" );
+        DBG_ASSERT( INetURLObject( aTmp ).GetProtocol() == INET_PROT_NOT_VALID, "Wrong HelpId!" );
+        aBuffer.appendAscii( INET_HID_SCHEME );
         aBuffer.append( aTmp.getStr() );
         return aBuffer.makeStringAndClear();
     }
