@@ -374,7 +374,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
             if( nLevel >= 1L )
                 nLevel--;
             else
-                nLevel = 0L;
+                nLevel = 0;
             break;
         case XML_TOK_TEXT_LEVEL_ATTR_STYLE_NAME:
             sTextStyleName = rValue;
@@ -471,7 +471,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
 {
     sal_Int16 eType;
 
-    sal_Int32 nCount = 0L;
+    sal_Int32 nCount = 0;
     if( bBullet )
     {
         eType = NumberingType::CHAR_SPECIAL;
@@ -480,7 +480,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     if( bImage )
     {
         eType = NumberingType::BITMAP;
-        nCount = 15L;
+        nCount = 15;
 
         if( (sImageURL.getLength() > 0L) || xBase64Stream.is() )
             nCount++;
@@ -490,7 +490,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
         eType = NumberingType::ARABIC;
         GetImport().GetMM100UnitConverter().convertNumFormat(
                 eType, sNumFormat, sNumLetterSync, sal_True );
-        nCount = 15L;
+        nCount = 15;
     }
 
     if( ( bBullet || bNum ) && nRelSize )
@@ -505,7 +505,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     if( nCount > 0 )
     {
         beans::PropertyValue *pProps = aPropSeq.getArray();
-        sal_Int32 nPos = 0L;
+        sal_Int32 nPos = 0;
         pProps[nPos].Name =
                 OUString::createFromAscii( XML_UNO_NAME_NRULE_NUMBERINGTYPE );
         pProps[nPos++].Value <<= (sal_Int16)eType ;

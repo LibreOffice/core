@@ -853,7 +853,7 @@ void SdXMLExport::ImpPrepAutoLayoutInfos()
         }
 
         // prepare name creation
-        for(sal_Int32 nCnt = 0L; nCnt < mnDocDrawPageCount; nCnt++)
+        for (sal_Int32 nCnt = 0; nCnt < mnDocDrawPageCount; nCnt++)
         {
             Any aAny(mxDocDrawPages->getByIndex(nCnt));
             Reference<XDrawPage> xDrawPage;
@@ -1207,11 +1207,11 @@ void SdXMLExport::ImpWriteAutoLayoutInfos()
 
                         Point aTmpPos(aPartPos);
 
-                        for(sal_Int32 a = 0L; a < nRowCnt; a++)
+                        for (sal_Int32 a = 0; a < nRowCnt; a++)
                         {
                             aTmpPos.X() = aPartPos.X();
 
-                            for(sal_Int32 b = 0L; b < nColCnt; b++)
+                            for (sal_Int32 b = 0; b < nColCnt; b++)
                             {
                                 Rectangle aTmpRect(aTmpPos, aPartSize);
 
@@ -1416,7 +1416,7 @@ void SdXMLExport::ImpPrepPageMasterInfos()
     if(mnDocMasterPageCount)
     {
         // look for needed page-masters, create these
-        for(sal_Int32 nMPageId = 0L; nMPageId < mnDocMasterPageCount; nMPageId++)
+        for (sal_Int32 nMPageId = 0; nMPageId < mnDocMasterPageCount; nMPageId++)
         {
             Reference< XDrawPage > xMasterPage( mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
             ImpXMLEXPPageMasterInfo* pNewInfo = 0L;
@@ -1841,7 +1841,7 @@ void SdXMLExport::ImpWritePresentationStyles()
 {
     if(IsImpress())
     {
-        for(sal_Int32 nCnt = 0L; nCnt < mnDocMasterPageCount; nCnt++)
+        for (sal_Int32 nCnt = 0; nCnt < mnDocMasterPageCount; nCnt++)
         {
             Any aAny(mxDocMasterPages->getByIndex(nCnt));
             Reference<container::XNamed> xNamed;
@@ -2552,7 +2552,7 @@ void SdXMLExport::_ExportMasterStyles()
     }
 
     // export MasterPages in master-styles section
-    for(sal_Int32 nMPageId = 0L; nMPageId < mnDocMasterPageCount; nMPageId++)
+    for (sal_Int32 nMPageId = 0; nMPageId < mnDocMasterPageCount; nMPageId++)
     {
         Reference< XDrawPage > xMasterPage( mxDocMasterPages->getByIndex(nMPageId), UNO_QUERY );
         if(xMasterPage.is())
