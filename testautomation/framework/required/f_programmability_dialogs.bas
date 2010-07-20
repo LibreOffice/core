@@ -62,7 +62,8 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_basic_organizer_tools.inc"
     use "global\tools\includes\optional\t_treelist_tools.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"
-    use "global\tools\includes\optional\t_filetools.inc"    
+    use "global\tools\includes\optional\t_filetools.inc"
+    use "global\tools\includes\optional\t_listfuncs.inc"
 
     use "framework\tools\includes\formcontrols.inc"
     use "framework\tools\includes\pbrowser_tools.inc"

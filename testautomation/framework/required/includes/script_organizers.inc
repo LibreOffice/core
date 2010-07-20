@@ -52,11 +52,11 @@ testcase tUpdtScripts
  
     ' This is where reference file is located, the filename is yet incomplete
     dim sInputPath as string
-        sInputPath = gTesttoolPath & "/framework/required/input/scripts/" & sDynamicPath
+        sInputPath = gTesttoolPath & "framework/required/input/scripts/" & sDynamicPath
         
     ' This is where we store the reference file if differences are found.
     dim sOutputPath as string
-        sOutputPath = gOfficePath & "/user/work/" & sDynamicPath
+        sOutputPath = gOfficePath & "user/work/" & sDynamicPath
       
     ' These contain the input and output paths (fully qualified)
     dim sFileIn as string
@@ -94,7 +94,7 @@ testcase tUpdtScripts
         select case ( sDialog )
         case DLG_JAVASCRIPT: ToolsMacrosOrganizeMacrosJavaScript
             kontext "ScriptOrganizer"
-            oTreeList = Scriptlist
+            oTreeList = ScriptTreelist
         case DLG_BEANSHELL: ToolsMacrosOrganizeMacrosBeanShell
             kontext "ScriptOrganizer"
             oTreeList = ScriptTreeList
