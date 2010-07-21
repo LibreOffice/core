@@ -73,6 +73,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <svl/zforlist.hxx>     // IsNumberFormat
 
 #include <vector>
@@ -85,6 +86,8 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::lang::XComponent;
 using ::com::sun::star::sheet::DataPilotTableHeaderData;
 using ::com::sun::star::sheet::DataPilotTablePositionData;
 using ::com::sun::star::beans::XPropertySet;
@@ -215,6 +218,7 @@ ScDPObject::~ScDPObject()
     delete pImpDesc;
     delete pServDesc;
     mnCacheId = -1; // Wang Xu Ming - DataPilot migration
+    InvalidateSource();
 }
 
 ScDataObject* ScDPObject::Clone() const
@@ -530,6 +534,18 @@ void ScDPObject::InvalidateData()
 
 void ScDPObject::InvalidateSource()
 {
+    Reference< XComponent > xObjectComp( xSource, UNO_QUERY );
+    if ( xObjectComp.is() )
+    {
+        try
+        {
+            xObjectComp->dispose();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
     xSource = NULL;
     mpTableData.reset();
 }
