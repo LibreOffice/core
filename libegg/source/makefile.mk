@@ -63,4 +63,7 @@ SHL1LIBS=       $(SLB)$/eggtray.lib
 
 # --- Targets ----------------------------------
 .ENDIF 		# L10N_framework
+.IF "$(HOSTTYPE)" == "x86_64-linux"
+EXTRALIBPATHS+=-L$(LIBRARY_PATH)
+.ENDIF # "$(HOSTTYPE)" == "x86_64-linux"
 .INCLUDE : target.mk
