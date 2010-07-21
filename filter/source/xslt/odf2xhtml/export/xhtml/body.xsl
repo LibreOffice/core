@@ -1805,6 +1805,11 @@
 		<xsl:param name="minLabelWidth"/>
 		<xsl:param name="listIndent" />
 
+		<!-- The text:list-header shall not be labeled. According to ODF specification (sect. 4.3.2):
+		"The <text:list-header> element represents a list header and is a special kind of list item. It
+		contains one or more paragraphs that are displayed before a list. The paragraphs are formatted
+		like list items but they do not have a preceding number or bullet." -->
+		<xsl:variable name="isListHeader" select="boolean(self::text:list-header)"/>
 
 		<xsl:variable name="listIndentNew">
 			<xsl:choose>
@@ -1823,13 +1828,16 @@
 		<xsl:variable name="itemNumberNew">
 			<xsl:if test="$listStyle/text:list-style/text:list-level-style-number">
 				<xsl:choose>
+					<xsl:when test="$isListHeader">0</xsl:when>
 					<xsl:when test="$isEmptyList">
 						<!--  An empty list item (no text:h/text:p as child), will not count as item and does not increment the count.  -->
 						<xsl:variable name="tempItemNumber">
 							<xsl:choose>
 								<!-- siblings will be incremented by one -->
 								<xsl:when test="$itemNumber">
-									<xsl:value-of select="$itemNumber + 1"/>
+									<xsl:if test="not($isListHeader)">
+										<xsl:value-of select="$itemNumber + 1"/>
+									</xsl:if>
 								</xsl:when>
 								<!-- if a higher list level had content the numbering starts with 1 -->
 								<xsl:when test="$isListNumberingReset and $listLevel &gt; 1">
@@ -1904,6 +1912,7 @@
 							<xsl:when test="$display">
 								<xsl:value-of select="$display"/>
 							</xsl:when>
+							<xsl:when test="$isListHeader">0</xsl:when>
 							<xsl:otherwise>1</xsl:otherwise>
 						</xsl:choose>
 					</xsl:with-param>
@@ -1914,9 +1923,10 @@
 		</xsl:variable>
 		<xsl:element name="li">
 			<xsl:choose>
-				<xsl:when test="$isEmptyList">
+				<xsl:when test="$isEmptyList or $isListHeader">
 					<xsl:apply-templates>
 						<xsl:with-param name="globalData" select="$globalData"/>
+						<xsl:with-param name="isNextLevelNumberingReset" select="$isListHeader or $isNextLevelNumberingReset"/>
 						<xsl:with-param name="itemLabel" select="$itemLabelNew"/>
 						<xsl:with-param name="listLevel" select="$listLevel + 1"/>
 						<xsl:with-param name="listStyleName" select="$listStyleName"/>
@@ -1927,7 +1937,7 @@
 					<xsl:apply-templates mode="list-item-children" select="*[1]">
 						<xsl:with-param name="globalData" select="$globalData"/>
 						<xsl:with-param name="isEmptyList" select="$isEmptyList"/>
-						<xsl:with-param name="isNextLevelNumberingReset" select="$isNextLevelNumberingReset"/>
+						<xsl:with-param name="isNextLevelNumberingReset" select="$isListHeader or $isNextLevelNumberingReset"/>
 						<!-- The new created label is given to the children -->
 						<xsl:with-param name="itemLabel" select="$itemLabelNew"/>
 						<xsl:with-param name="listLabelElement">
@@ -2126,7 +2136,7 @@
 
 
 	<!-- The Numbering start value (or offset from regular counteing) is used at the first item of offset,
-	but have to be reused on following item/headers with no text:start-value -->
+	but have to be reused on following items with no text:start-value -->
 	<xsl:template name="getItemNumber">
 		<xsl:param name="listLevel"/>
 		<xsl:param name="listLevelStyle"/>
@@ -2161,6 +2171,9 @@
 			the level 3 gets a 'pseudoLevel' -->
 		<xsl:param name="pseudoLevel" select="0" />
 
+		<xsl:variable name="isListHeader" select="boolean(self::text:list-header)"/>
+		<xsl:variable name="isEmptyList" select="not(*[name() = 'text:h' or name() = 'text:p'])"/>
+
 		<!-- set the next of preceding list items. Starting from the current to the next previous text:list-item -->
 		<xsl:variable name="precedingListItemOfSameLevelAndStyle" select="$precedingListItemsOfSameLevelAndStyle[$precedingListItemsOfSameLevelAndStyleCount - $IteratorSameLevelAndStyle + 1]"/>
 		<xsl:variable name="precedingListItemOfSameStyle" select="$precedingListItemsOfSameStyle[$precedingListItemsOfSameStyleCount - $IteratorSameStyle + 1]"/>
@@ -2193,7 +2206,7 @@
 								<xsl:when test="$currentListLevel &lt; $listLevel">
 									<xsl:choose>
 										<!-- if it has content the counting is ended -->
-										<xsl:when test="*[name() = 'text:h' or name() = 'text:p']">
+										<xsl:when test="not($isEmptyList or $isListHeader)">
 											<!-- 2DO: Perhaps the children still have to be processed -->
 											<xsl:value-of select="$itemNumber + $pseudoLevel"/>
 										</xsl:when>
@@ -2248,7 +2261,7 @@
 										<xsl:with-param name="pseudoLevel">
 											<xsl:choose>
 												<!-- empty list item does not count -->
-												<xsl:when test="not(*[name() = 'text:h' or name() = 'text:p'])">
+												<xsl:when test="$isEmptyList or $isListHeader">
 													<xsl:value-of select="$pseudoLevel"/>
 												</xsl:when>
 												<xsl:otherwise>1</xsl:otherwise>
@@ -2281,11 +2294,14 @@
 		<xsl:param name="precedingListItemsOfSameStyleCount"/>
 		<xsl:param name="pseudoLevel" />
 
+		<xsl:variable name="isListHeader" select="boolean(self::text:list-header)"/>
+		<xsl:variable name="isEmptyList" select="not(*[name() = 'text:h' or name() = 'text:p'])"/>
+
 		<xsl:choose>
 			<xsl:when test="@text:start-value">
 				<xsl:choose>
-					<xsl:when test="not(*[name() = 'text:h' or name() = 'text:p'])">
-						<!-- empty list item does not count -->
+					<xsl:when test="$isEmptyList or $isListHeader">
+						<!-- empty list item does not count. neither does list header -->
 						<xsl:call-template name="countListItemTillStartValue">
 							<xsl:with-param name="IteratorSameLevelAndStyle" select="$IteratorSameLevelAndStyle + 1" />
 							<xsl:with-param name="IteratorSameStyle" select="$IteratorSameStyle + 1"/>
@@ -2307,8 +2323,8 @@
 			</xsl:when>
 			<xsl:when test="$listLevelStyle/@text:start-value">
 				<xsl:choose>
-					<xsl:when test="not(*[name() = 'text:h' or name() = 'text:p'])">
-						<!-- empty list item does not count -->
+					<xsl:when test="$isEmptyList or $isListHeader">
+						<!-- empty list item does not count. neither does list header -->
 						<xsl:call-template name="countListItemTillStartValue">
 							<xsl:with-param name="IteratorSameLevelAndStyle" select="$IteratorSameLevelAndStyle + 1" />
 							<xsl:with-param name="IteratorSameStyle" select="$IteratorSameStyle + 1"/>
@@ -2330,8 +2346,8 @@
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:choose>
-					<xsl:when test="not(*[name() = 'text:h' or name() = 'text:p'])">
-						<!-- empty list item does not count -->
+					<xsl:when test="$isEmptyList or $isListHeader">
+						<!-- empty list item does not count. neither does list header -->
 						<xsl:call-template name="countListItemTillStartValue">
 							<xsl:with-param name="IteratorSameLevelAndStyle" select="$IteratorSameLevelAndStyle + 1" />
 							<xsl:with-param name="IteratorSameStyle" select="$IteratorSameStyle + 1"/>
