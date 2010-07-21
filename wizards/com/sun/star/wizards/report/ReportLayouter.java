@@ -115,7 +115,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(108), "HID:34363", new Integer(95), new Integer(37), new short[]
+                        new Integer(108), "HID:WIZARDS_HID_DLGREPORT_4_DATALAYOUT", new Integer(95), new Integer(37), new short[]
                         {
                             iSelPos
                         }, new Integer(ReportWizard.SOTEMPLATEPAGE), ContentFiles[0], new Short(curtabindex++), new Integer(99)
@@ -150,7 +150,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(108), "HID:34364", new Integer(205), new Integer(37), new short[]
+                        new Integer(108), "HID:WIZARDS_HID_DLGREPORT_4_PAGELAYOUT", new Integer(205), new Integer(37), new short[]
                         {
                             iSelLayoutPos
                         }, new Integer(ReportWizard.SOTEMPLATEPAGE), LayoutFiles[0], new Short(curtabindex++), new Integer(99)
@@ -174,7 +174,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(10), "HID:34365", sOrientHorizontal, new Integer(101), new Integer(158), new Short(m_nLandscapeState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(60)
+                        new Integer(10), "HID:WIZARDS_HID_DLGREPORT_4_LANDSCAPE", sOrientHorizontal, new Integer(101), new Integer(158), new Short(m_nLandscapeState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(60)
                     });
 
             short m_nPortraitState = CurReportDocument.getDefaultPageOrientation() == SOOPTPORTRAIT ? (short) 1 : (short) 0;
@@ -185,7 +185,7 @@ public class ReportLayouter
                     },
                     new Object[]
                     {
-                        new Integer(10), "HID:34366", sOrientVertical, new Integer(101), new Integer(171), new Short(m_nPortraitState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(60)
+                        new Integer(10), "HID:WIZARDS_HID_DLGREPORT_4_PORTRAIT", sOrientVertical, new Integer(101), new Integer(171), new Short(m_nPortraitState), new Integer(ReportWizard.SOTEMPLATEPAGE), new Short(curtabindex++), new Integer(60)
                     });
 
             aOrientationImage = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgOrientation",

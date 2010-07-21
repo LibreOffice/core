@@ -27,6 +27,7 @@
 package com.sun.star.wizards.agenda;
 
 import java.util.List;
+import com.sun.star.wizards.common.HelpIds;
 
 import com.sun.star.awt.FocusEvent;
 import com.sun.star.awt.Key;
@@ -1178,21 +1179,21 @@ public class TopicsControl extends ControlScroller implements XFocusListener
                     TEXT_PROPS,
                     new Object[]
                     {
-                        I_12, "HID:" + (curHelpIndex + i * 3 + 1), new Integer(x + 15), y_, IStep, new Short((short) (tabindex + 1)), new Integer(84)
+                        I_12, HelpIds.getHelpIdString(curHelpIndex + i * 3 + 1), new Integer(x + 15), y_, IStep, new Short((short) (tabindex + 1)), new Integer(84)
                     });
 
             combobox = dialog.insertTextField(RESP + i, "responsibleTextChanged", this,
                     TEXT_PROPS,
                     new Object[]
                     {
-                        I_12, "HID:" + (curHelpIndex + i * 3 + 2), new Integer(x + 103), y_, IStep, new Short((short) (tabindex + 2)), new Integer(68)
+                        I_12, HelpIds.getHelpIdString(curHelpIndex + i * 3 + 2), new Integer(x + 103), y_, IStep, new Short((short) (tabindex + 2)), new Integer(68)
                     });
 
             timebox = dialog.insertTextField(TIME + i, "timeTextChanged", this,
                     TEXT_PROPS,
                     new Object[]
                     {
-                        I_12, "HID:" + (curHelpIndex + i * 3 + 3), new Integer(x + 175), y_, IStep, new Short((short) (tabindex + 3)), new Integer(20)
+                        I_12, HelpIds.getHelpIdString(curHelpIndex + i * 3 + 3), new Integer(x + 175), y_, IStep, new Short((short) (tabindex + 3)), new Integer(20)
                     });
 
             setEnabled(false);

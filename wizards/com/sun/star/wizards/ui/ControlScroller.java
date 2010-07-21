@@ -32,6 +32,7 @@ import com.sun.star.beans.*;
 import com.sun.star.awt.*;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.*;
+import com.sun.star.wizards.common.HelpIds;
 
 import java.util.*;
 
@@ -133,7 +134,7 @@ public abstract class ControlScroller
                 },
                 new Object[]
                 {
-                    new Short((short) 0), new Boolean(true), new Integer(ScrollHeight), "HID:" + curHelpIndex, new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)
+                    new Short((short) 0), new Boolean(true), new Integer(ScrollHeight), HelpIds.getHelpIdString(curHelpIndex), new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)
                 });
         scrollfields = new Vector();
         int ypos = iStartPosY + SORELFIRSTPOSY;

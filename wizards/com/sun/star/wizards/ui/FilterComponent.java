@@ -50,6 +50,7 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.db.FieldColumn;
@@ -488,7 +489,7 @@ public class FilterComponent
                 new Object[]
                 {
                     Integer.valueOf(9),
-                    "HID:" + curHelpID++,
+                    HelpIds.getHelpIdString(curHelpID++),
                     soptMatchAll,
                     Integer.valueOf(iPosX),
                     Integer.valueOf(iPosY),
@@ -512,7 +513,7 @@ public class FilterComponent
                 new Object[]
                 {
                     Integer.valueOf(9),
-                    "HID:" + curHelpID++,
+                    HelpIds.getHelpIdString(curHelpID++),
                     soptMatchAny,
                     Integer.valueOf(iPosX),
                     Integer.valueOf(iPosY + 12),
@@ -713,7 +714,7 @@ public class FilterComponent
                             Boolean.valueOf(isEnabled()),
                             Boolean.TRUE,
                             Integer.valueOf(13),
-                            "HID:" + _firstRowHelpID++,
+                            HelpIds.getHelpIdString(_firstRowHelpID++),
                             Short.valueOf(UnoDialog.getListBoxLineCount() /* 7 */),
                             Integer.valueOf(nPosX1),
                             Integer.valueOf(iCompPosY + 23),
@@ -743,7 +744,7 @@ public class FilterComponent
                             Boolean.valueOf(isEnabled()),
                             Boolean.TRUE,
                             Integer.valueOf(13),
-                            "HID:" + _firstRowHelpID++,
+                            HelpIds.getHelpIdString(_firstRowHelpID++),
                             Short.valueOf((short) sLogicOperators.length /* 7 */),
                             Integer.valueOf(nPosX2),
                             Integer.valueOf(iCompPosY + 23),
@@ -768,7 +769,7 @@ public class FilterComponent
                         {
                             Boolean.valueOf(isEnabled()),
                             Integer.valueOf(13),
-                            "HID:" + _firstRowHelpID++,
+                            HelpIds.getHelpIdString(_firstRowHelpID++),
                             Integer.valueOf(nPosX3),
                             Integer.valueOf(iCompPosY + 23),
                             IStep,
@@ -776,29 +777,6 @@ public class FilterComponent
                             Integer.valueOf(nValueWidth)
                         });
 
-//                ControlElements[6] = CurUnoDialog.insertListBox((new StringBuilder()).append("lstBoolean").append(sCompSuffix).toString(), SO_BOOLEANLIST[Index], null, new ItemListenerImpl(), new String[] {
-//                    "Enabled",
-//                    "Dropdown",
-//                    "Height",
-//                    "HelpURL",
-//                    "LineCount",
-//                    "PositionX", "PositionY",
-//                    "Step",
-//                    "StringItemList",
-//                    "TabIndex",
-//                    "Width"
-//                }, new Object[] {
-//                    new Boolean(bEnabled),
-//                    Boolean.TRUE,
-//                    new Integer(13),
-//                    "HID:" + _firstRowHelpID++,
-//                    new Short((short) 2),
-//                    new Integer(nPosX3 + 44), new Integer(iCompPosY + 23),
-//                    IStep,
-//                    FilterComponent.sBooleanValues,
-//                    new Short(curtabindex++),
-//                    new Integer(nValueWidth)
-//                });
             }
             catch (Exception exception)
             {

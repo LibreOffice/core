@@ -178,7 +178,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                     },
                     new Object[]
                     {
-                        new Integer(14), "HID:34321", new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop
+                        new Integer(14), HelpIds.getHelpIdString(34321), new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop
                     });
             createWindowPeer(CurReportDocument.getWizardParent());
             calculateDialogPosition(CurReportDocument.getFrame().getComponentWindow().getPosSize());

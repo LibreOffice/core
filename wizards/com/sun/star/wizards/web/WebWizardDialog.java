@@ -39,6 +39,7 @@ import com.sun.star.awt.XRadioButton;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.WizardDialog;
@@ -221,7 +222,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, new Integer(210), "HID:" + HID0_WEBWIZARD, Boolean.TRUE, "WebWizardDialog", new Integer(102), new Integer(52), INTEGERS[1], new Short((short) 6), resources.resWebWizardDialog_title, new Integer(330)
+                    Boolean.TRUE, new Integer(210), HelpIds.getHelpIdString(HID0_WEBWIZARD), Boolean.TRUE, "WebWizardDialog", new Integer(102), new Integer(52), INTEGERS[1], new Short((short) 6), resources.resWebWizardDialog_title, new Integer(330)
                 });
 
         //Set member- FontDescriptors...
@@ -286,7 +287,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + HID1_LST_SESSIONS, new Short((short) 14), "lstLoadSettings", new Integer(97), new Integer(165), INTEGERS[1], new Short(tabIndex++), new Integer(173)
+                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID1_LST_SESSIONS), new Short((short) 14), "lstLoadSettings", new Integer(97), new Integer(165), INTEGERS[1], new Short(tabIndex++), new Integer(173)
                 });
         btnDelSession = insertButton("btnDelSession", BTNDELSESSION_ACTION_PERFORMED,
                 new String[]
@@ -295,7 +296,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, INTEGER_14, "HID:" + HID1_BTN_DEL_SES, new Short(com.sun.star.awt.ImageAlign.LEFT), resources.resbtnDelSession_value, "btnDelSession", new Integer(274), new Integer(164), INTEGERS[1], new Short(tabIndex++), INTEGER_50
+                    Boolean.FALSE, INTEGER_14, HelpIds.getHelpIdString(HID1_BTN_DEL_SES), new Short(com.sun.star.awt.ImageAlign.LEFT), resources.resbtnDelSession_value, "btnDelSession", new Integer(274), new Integer(164), INTEGERS[1], new Short(tabIndex++), INTEGER_50
                 });
     }
 
@@ -322,19 +323,19 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    new Integer(123), "HID:" + HID2_LST_DOCS, new Short((short) 9), "lstDocuments", new Integer(97), new Integer(38), INTEGERS[2], new Short(tabIndex++), new Integer(103)
+                    new Integer(123), HelpIds.getHelpIdString(HID2_LST_DOCS), new Short((short) 9), "lstDocuments", new Integer(97), new Integer(38), INTEGERS[2], new Short(tabIndex++), new Integer(103)
                 });
         btnAddDoc = insertButton("btnAddDoc", BTNADDDOC_ACTION_PERFORMED,
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID2_BTN_ADD_DOC, resources.resbtnAddDoc_value, "btnAddDoc", new Integer(97), new Integer(165), INTEGERS[2], new Short(tabIndex++), INTEGER_50
+                    INTEGER_14, HelpIds.getHelpIdString(HID2_BTN_ADD_DOC), resources.resbtnAddDoc_value, "btnAddDoc", new Integer(97), new Integer(165), INTEGERS[2], new Short(tabIndex++), INTEGER_50
                 });
         btnRemoveDoc = insertButton("btnRemoveDoc", BTNREMOVEDOC_ACTION_PERFORMED,
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID2_BTN_REM_DOC, resources.resbtnRemoveDoc_value, "btnRemoveDoc", new Integer(150), new Integer(165), INTEGERS[2], new Short(tabIndex++), INTEGER_50
+                    INTEGER_14, HelpIds.getHelpIdString(HID2_BTN_REM_DOC), resources.resbtnRemoveDoc_value, "btnRemoveDoc", new Integer(150), new Integer(165), INTEGERS[2], new Short(tabIndex++), INTEGER_50
                 });
         btnDocUp = insertButton("btnDocUp", BTNDOCUP_ACTION_PERFORMED,
                 new String[]
@@ -343,7 +344,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    fontDescriptor7, INTEGER_14, "HID:" + HID2_BTN_DOC_UP, resources.resbtnDocUp_value, "btnDocUp", new Integer(205), new Integer(87), INTEGERS[2], new Short(tabIndex++), new Integer(18)
+                    fontDescriptor7, INTEGER_14, HelpIds.getHelpIdString(HID2_BTN_DOC_UP), resources.resbtnDocUp_value, "btnDocUp", new Integer(205), new Integer(87), INTEGERS[2], new Short(tabIndex++), new Integer(18)
                 });
         btnDocDown = insertButton("btnDocDown", BTNDOCDOWN_ACTION_PERFORMED,
                 new String[]
@@ -352,7 +353,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    fontDescriptor7, INTEGER_14, "HID:" + HID2_BTN_DOC_DOWN, resources.resbtnDocDown_value, "btnDocDown", new Integer(205), new Integer(105), INTEGERS[2], new Short(tabIndex++), new Integer(18)
+                    fontDescriptor7, INTEGER_14, HelpIds.getHelpIdString(HID2_BTN_DOC_DOWN), resources.resbtnDocDown_value, "btnDocDown", new Integer(205), new Integer(105), INTEGERS[2], new Short(tabIndex++), new Integer(18)
                 });
 
         lblDocExportFormat = insertLabel("lblDocExportFormat",
@@ -368,7 +369,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + HID2_LST_DOC_EXPORT, new Short((short) 14), "lstDocTargetType", new Integer(235), new Integer(38), INTEGERS[2], new Short(tabIndex++), new Integer(89)
+                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID2_LST_DOC_EXPORT), new Short((short) 14), "lstDocTargetType", new Integer(235), new Integer(38), INTEGERS[2], new Short(tabIndex++), new Integer(89)
                 });
 
 
@@ -390,7 +391,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_TXT,
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + HID2_TXT_DOC_TITLE, "txtDocTitle", new Integer(235), new Integer(88), INTEGERS[2], new Short(tabIndex++), new Integer(89)
+                    INTEGER_12, HelpIds.getHelpIdString(HID2_TXT_DOC_TITLE), "txtDocTitle", new Integer(235), new Integer(88), INTEGERS[2], new Short(tabIndex++), new Integer(89)
                 });
         lblDocInfo = insertLabel("lblDocInfo",
                 PROPNAMES_LBL,
@@ -405,7 +406,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    INTEGER_40, "HID:" + HID2_TXT_DOC_DESC, Boolean.TRUE, "txtDocInfo", new Integer(235), new Integer(113), INTEGERS[2], new Short(tabIndex++), new Integer(89)
+                    INTEGER_40, HelpIds.getHelpIdString(HID2_TXT_DOC_DESC), Boolean.TRUE, "txtDocInfo", new Integer(235), new Integer(113), INTEGERS[2], new Short(tabIndex++), new Integer(89)
                 });
         lblDocAuthor = insertLabel("lblDocAuthor",
                 PROPNAMES_LBL,
@@ -417,7 +418,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_TXT,
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + HID2_TXT_DOC_AUTHOR, "txtDocAuthor", new Integer(235), new Integer(165), INTEGERS[2], new Short(tabIndex++), new Integer(89)
+                    INTEGER_12, HelpIds.getHelpIdString(HID2_TXT_DOC_AUTHOR), "txtDocAuthor", new Integer(235), new Integer(165), INTEGERS[2], new Short(tabIndex++), new Integer(89)
                 });
     }
 
@@ -459,56 +460,56 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + HID4_CHK_DISPLAY_FILENAME, resources.reschkDocFilename_value, "chkDocFilename", new Integer(103), new Integer(50), new Short((short) 0), INTEGERS[4], new Short((short) 35), new Integer(99)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID4_CHK_DISPLAY_FILENAME), resources.reschkDocFilename_value, "chkDocFilename", new Integer(103), new Integer(50), new Short((short) 0), INTEGERS[4], new Short((short) 35), new Integer(99)
                 });
         chbDocDesc = insertCheckBox("chbDocDesc", null,
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + HID4_CHK_DISPLAY_DESCRIPTION, resources.reschbDocDesc_value, "chbDocDesc", new Integer(103), new Integer(60), new Short((short) 0), INTEGERS[4], new Short((short) 36), new Integer(99)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID4_CHK_DISPLAY_DESCRIPTION), resources.reschbDocDesc_value, "chbDocDesc", new Integer(103), new Integer(60), new Short((short) 0), INTEGERS[4], new Short((short) 36), new Integer(99)
                 });
         chbDocAuthor = insertCheckBox("chbDocAuthor", null,
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + HID4_CHK_DISPLAY_AUTHOR, resources.reschbDocAuthor_value, "chbDocAuthor", new Integer(103), new Integer(70), new Short((short) 0), INTEGERS[4], new Short((short) 37), new Integer(99)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID4_CHK_DISPLAY_AUTHOR), resources.reschbDocAuthor_value, "chbDocAuthor", new Integer(103), new Integer(70), new Short((short) 0), INTEGERS[4], new Short((short) 37), new Integer(99)
                 });
         chkDocCreated = insertCheckBox("chkDocCreated", null,
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + HID4_CHK_DISPLAY_CR_DATE, resources.reschkDocCreated_value, "chkDocCreated", new Integer(103), new Integer(80), new Short((short) 0), INTEGERS[4], new Short((short) 38), new Integer(99)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID4_CHK_DISPLAY_CR_DATE), resources.reschkDocCreated_value, "chkDocCreated", new Integer(103), new Integer(80), new Short((short) 0), INTEGERS[4], new Short((short) 38), new Integer(99)
                 });
         chkDocChanged = insertCheckBox("chkDocChanged", null,
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + HID4_CHK_DISPLAY_UP_DATE, resources.reschkDocChanged_value, "chkDocChanged", new Integer(103), new Integer(90), new Short((short) 0), INTEGERS[4], new Short((short) 39), new Integer(99)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID4_CHK_DISPLAY_UP_DATE), resources.reschkDocChanged_value, "chkDocChanged", new Integer(103), new Integer(90), new Short((short) 0), INTEGERS[4], new Short((short) 39), new Integer(99)
                 });
 
         chkDocFormat = insertCheckBox("chkDocFormat", null,
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + HID4_CHK_DISPLAY_FORMAT, resources.reschkDocFormat_value, "chkDocFormat", new Integer(200), new Integer(50), new Short((short) 0), INTEGERS[4], new Short((short) 40), new Integer(110)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID4_CHK_DISPLAY_FORMAT), resources.reschkDocFormat_value, "chkDocFormat", new Integer(200), new Integer(50), new Short((short) 0), INTEGERS[4], new Short((short) 40), new Integer(110)
                 });
         chkDocFormatIcon = insertCheckBox("chkDocFormatIcon", null,
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + HID4_CHK_DISPLAY_F_ICON, resources.reschkDocFormatIcon_value, "chkDocFormatIcon", new Integer(200), new Integer(60), new Short((short) 0), INTEGERS[4], new Short((short) 41), new Integer(110)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID4_CHK_DISPLAY_F_ICON), resources.reschkDocFormatIcon_value, "chkDocFormatIcon", new Integer(200), new Integer(60), new Short((short) 0), INTEGERS[4], new Short((short) 41), new Integer(110)
                 });
         chkDocPages = insertCheckBox("chkDocPages", null,
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + HID4_CHK_DISPLAY_PAGES, resources.reschkDocPages_value, "chkDocPages", new Integer(200), new Integer(70), new Short((short) 0), INTEGERS[4], new Short((short) 42), new Integer(110)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID4_CHK_DISPLAY_PAGES), resources.reschkDocPages_value, "chkDocPages", new Integer(200), new Integer(70), new Short((short) 0), INTEGERS[4], new Short((short) 42), new Integer(110)
                 });
         chkDocSize = insertCheckBox("chkDocSize", null,
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + HID4_CHK_DISPLAY_SIZE, resources.reschkDocSize_value, "chkDocSize", new Integer(200), new Integer(80), new Short((short) 0), INTEGERS[4], new Short((short) 43), new Integer(110)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID4_CHK_DISPLAY_SIZE), resources.reschkDocSize_value, "chkDocSize", new Integer(200), new Integer(80), new Short((short) 0), INTEGERS[4], new Short((short) 43), new Integer(110)
                 });
         lblOptimizeFor = insertLabel("lblOptimizeFor",
                 PROPNAMES_LBL,
@@ -520,19 +521,19 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGERS[10], "HID:" + HID4_GRP_OPTIMAIZE_640, resources.resoptOptimize640x480_value, "optOptimize640x480", new Integer(103), new Integer(133), INTEGERS[4], new Short((short) 45), new Integer(44)
+                    INTEGERS[10], HelpIds.getHelpIdString(HID4_GRP_OPTIMAIZE_640), resources.resoptOptimize640x480_value, "optOptimize640x480", new Integer(103), new Integer(133), INTEGERS[4], new Short((short) 45), new Integer(44)
                 });
         optOptimize800x600 = insertRadioButton("optOptimize800x600", null,
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGERS[10], "HID:" + HID4_GRP_OPTIMAIZE_800, resources.resoptOptimize800x600_value, "optOptimize800x600", new Integer(103), new Integer(146), INTEGERS[4], new Short((short) 46), new Integer(44)
+                    INTEGERS[10], HelpIds.getHelpIdString(HID4_GRP_OPTIMAIZE_800), resources.resoptOptimize800x600_value, "optOptimize800x600", new Integer(103), new Integer(146), INTEGERS[4], new Short((short) 46), new Integer(44)
                 });
         optOptimize1024x768 = insertRadioButton("optOptimize1024x768", null,
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGERS[10], "HID:" + HID4_GRP_OPTIMAIZE_1024, resources.resoptOptimize1024x768_value, "optOptimize1024x768", new Integer(103), new Integer(158), INTEGERS[4], new Short((short) 47), new Integer(44)
+                    INTEGERS[10], HelpIds.getHelpIdString(HID4_GRP_OPTIMAIZE_1024), resources.resoptOptimize1024x768_value, "optOptimize1024x768", new Integer(103), new Integer(158), INTEGERS[4], new Short((short) 47), new Integer(44)
                 });
 
     }
@@ -557,7 +558,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + HID5_LST_STYLES, new Short((short) 14), "lstStyles", new Integer(179), new Integer(26), INTEGERS[5], new Short((short) 52), new Integer(145)
+                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID5_LST_STYLES), new Short((short) 14), "lstStyles", new Integer(179), new Integer(26), INTEGERS[5], new Short((short) 52), new Integer(145)
                 });
 
         insertLabel("lblBackground", PROPNAMES_LBL,
@@ -577,7 +578,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         btnBackgrounds = insertButton("btnBackgrounds", BTNBACKGROUNDS_ACTION_PERFORMED, PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID5_BTN_BACKGND, resources.resBtnChooseBackground, "btnBackgrounds", new Integer(274), new Integer(43), INTEGERS[5], new Short((short) 53), INTEGER_50
+                    INTEGER_14, HelpIds.getHelpIdString(HID5_BTN_BACKGND), resources.resBtnChooseBackground, "btnBackgrounds", new Integer(274), new Integer(43), INTEGERS[5], new Short((short) 53), INTEGER_50
                 });
 
         insertLabel("lblIconset", PROPNAMES_LBL,
@@ -598,7 +599,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID5_BTN_ICONS, resources.resBtnChooseIconset, "btnIconSets", new Integer(274), new Integer(61), INTEGERS[5], new Short((short) 54), INTEGER_50
+                    INTEGER_14, HelpIds.getHelpIdString(HID5_BTN_ICONS), resources.resBtnChooseIconset, "btnIconSets", new Integer(274), new Integer(61), INTEGERS[5], new Short((short) 54), INTEGER_50
                 });
         insertLabel("lblIconsetInfo",
                 new String[]
@@ -642,7 +643,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_TXT,
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + HID6_TXT_SITE_TITLE, "txtSiteTitle", new Integer(179), new Integer(26), INTEGERS[6], new Short(tabIndex++), new Integer(145)
+                    INTEGER_12, HelpIds.getHelpIdString(HID6_TXT_SITE_TITLE), "txtSiteTitle", new Integer(179), new Integer(26), INTEGERS[6], new Short(tabIndex++), new Integer(145)
                 });
 
 
@@ -664,7 +665,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_TXT,
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + HID6_TXT_SITE_DESC, "txtSiteDesc", new Integer(179), new Integer(70), INTEGERS[6], new Short(tabIndex++), new Integer(145)
+                    INTEGER_12, HelpIds.getHelpIdString(HID6_TXT_SITE_DESC), "txtSiteDesc", new Integer(179), new Integer(70), INTEGERS[6], new Short(tabIndex++), new Integer(145)
                 });
 
         lblEmail = insertLabel("lblEmail", PROPNAMES_LBL,
@@ -675,7 +676,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         txtEmail = insertTextField("txtEmail", null, PROPNAMES_TXT,
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + HID6_TXT_SITE_EMAIL, "txtEmail", new Integer(179), new Integer(87), INTEGERS[6], new Short(tabIndex++), new Integer(145)
+                    INTEGER_12, HelpIds.getHelpIdString(HID6_TXT_SITE_EMAIL), "txtEmail", new Integer(179), new Integer(87), INTEGERS[6], new Short(tabIndex++), new Integer(145)
                 });
 
         lblCopyright = insertLabel("lblCopyright", PROPNAMES_LBL,
@@ -686,7 +687,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         txtCopyright = insertTextField("txtCopyright", null, PROPNAMES_TXT,
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + HID6_TXT_SITE_COPYRIGHT, "txtCopyright", new Integer(179), new Integer(106), INTEGERS[6], new Short(tabIndex++), new Integer(145)
+                    INTEGER_12, HelpIds.getHelpIdString(HID6_TXT_SITE_COPYRIGHT), "txtCopyright", new Integer(179), new Integer(106), INTEGERS[6], new Short(tabIndex++), new Integer(145)
                 });
 
 
@@ -703,7 +704,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + HID6_DATE_SITE_CREATED, "dateSiteCreated", new Integer(179), new Integer(124), INTEGERS[6], new Short(tabIndex++), new Integer(49)
+                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID6_DATE_SITE_CREATED), "dateSiteCreated", new Integer(179), new Integer(124), INTEGERS[6], new Short(tabIndex++), new Integer(49)
                 });
         lblSiteUpdated = insertLabel("lblSiteUpdated",
                 PROPNAMES_LBL,
@@ -719,7 +720,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, INTEGER_12, "HID:" + HID6_DATE_SITE_UPDATED, "dateSiteUpdate", new Integer(179), new Integer(142), INTEGERS[6], new Short(tabIndex++), new Integer(49)
+                    Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID6_DATE_SITE_UPDATED), "dateSiteUpdate", new Integer(179), new Integer(142), INTEGERS[6], new Short(tabIndex++), new Integer(49)
                 });
 
 
@@ -748,7 +749,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID7_BTN_PREVIEW, resources.resbtnPreview_value, "btnPreview", new Integer(103), new Integer(40), INTEGERS[7], new Short(tabIndex++), INTEGER_50
+                    INTEGER_14, HelpIds.getHelpIdString(HID7_BTN_PREVIEW), resources.resbtnPreview_value, "btnPreview", new Integer(103), new Integer(40), INTEGERS[7], new Short(tabIndex++), INTEGER_50
                 });
 
         lblCreateSite = insertFixedLine("lblCreateSite",
@@ -762,45 +763,45 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + HID7_CHK_PUBLISH_LOCAL, resources.reschkLocalDir_value, "chkLocalDir", new Integer(103), new Integer(68), new Short((short) 0), INTEGERS[7], new Short(tabIndex++), new Integer(215)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID7_CHK_PUBLISH_LOCAL), resources.reschkLocalDir_value, "chkLocalDir", new Integer(103), new Integer(68), new Short((short) 0), INTEGERS[7], new Short(tabIndex++), new Integer(215)
                 });
         txtLocalDir = insertTextField("txtLocalDir", null,
                 PROPNAMES_TXT,
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + HID7_TXT_LOCAL, "txtLocalDir", new Integer(113), new Integer(78), INTEGERS[7], new Short(tabIndex++), new Integer(190)
+                    INTEGER_12, HelpIds.getHelpIdString(HID7_TXT_LOCAL), "txtLocalDir", new Integer(113), new Integer(78), INTEGERS[7], new Short(tabIndex++), new Integer(190)
                 });
         btnLocalDir = insertButton("btnLocalDir", BTNLOCALDIR_ACTION_PERFORMED,
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID7_BTN_LOCAL, resources.resbtnLocalDir_value, "btnLocalDir", new Integer(308), new Integer(77), INTEGERS[7], new Short(tabIndex++), INTEGER_16
+                    INTEGER_14, HelpIds.getHelpIdString(HID7_BTN_LOCAL), resources.resbtnLocalDir_value, "btnLocalDir", new Integer(308), new Integer(77), INTEGERS[7], new Short(tabIndex++), INTEGER_16
                 });
 
         chkZip = insertCheckBox("chkZip", null,
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[9], "HID:" + HID7_CHK_PUBLISH_ZIP, resources.reschkZip_value, "chkZip", new Integer(103), new Integer(96), new Short((short) 0), INTEGERS[7], new Short(tabIndex++), new Integer(215)
+                    INTEGERS[9], HelpIds.getHelpIdString(HID7_CHK_PUBLISH_ZIP), resources.reschkZip_value, "chkZip", new Integer(103), new Integer(96), new Short((short) 0), INTEGERS[7], new Short(tabIndex++), new Integer(215)
                 });
         txtZip = insertTextField("txtZip", null,
                 PROPNAMES_TXT,
                 new Object[]
                 {
-                    INTEGER_12, "HID:" + HID7_TXT_ZIP, "txtZip", new Integer(113), new Integer(108), INTEGERS[7], new Short(tabIndex++), new Integer(190)
+                    INTEGER_12, HelpIds.getHelpIdString(HID7_TXT_ZIP), "txtZip", new Integer(113), new Integer(108), INTEGERS[7], new Short(tabIndex++), new Integer(190)
                 });
         btnZip = insertButton("btnZip", BTNZIP_ACTION_PERFORMED,
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID7_BTN_ZIP, resources.resbtnZip_value, "btnZip", new Integer(308), new Integer(107), INTEGERS[7], new Short(tabIndex++), INTEGER_16
+                    INTEGER_14, HelpIds.getHelpIdString(HID7_BTN_ZIP), resources.resbtnZip_value, "btnZip", new Integer(308), new Integer(107), INTEGERS[7], new Short(tabIndex++), INTEGER_16
                 });
 
         chkFTP = insertCheckBox("chkFTP", null,
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[8], "HID:" + HID7_CHK_PUBLISH_FTP, resources.reschkFTP_value, "chkFTP", new Integer(103), new Integer(124), new Short((short) 0), INTEGERS[7], new Short(tabIndex++), new Integer(215)
+                    INTEGERS[8], HelpIds.getHelpIdString(HID7_CHK_PUBLISH_FTP), resources.reschkFTP_value, "chkFTP", new Integer(103), new Integer(124), new Short((short) 0), INTEGERS[7], new Short(tabIndex++), new Integer(215)
                 });
 
         Integer FTP_STEP = disableFTP ? new Integer(99) : INTEGERS[7];
@@ -819,7 +820,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_BUTTON,
                 new Object[]
                 {
-                    INTEGER_14, "HID:" + HID7_BTN_FTP, resources.resbtnFTP_value, "btnFTP", new Integer(274), new Integer(133), FTP_STEP, new Short(tabIndex++), INTEGER_50
+                    INTEGER_14, HelpIds.getHelpIdString(HID7_BTN_FTP), resources.resbtnFTP_value, "btnFTP", new Integer(274), new Integer(133), FTP_STEP, new Short(tabIndex++), INTEGER_50
                 });
 
         if (disableFTP)
@@ -857,7 +858,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_CHKBOX,
                 new Object[]
                 {
-                    INTEGERS[9], "HID:" + HID7_CHK_SAVE, resources.reschkSaveSettings_value, "chkSaveSettings", new Integer(97), new Integer(157), new Short((short) 1), INTEGERS[7], new Short(tabIndex++), new Integer(215)
+                    INTEGERS[9], HelpIds.getHelpIdString(HID7_CHK_SAVE), resources.reschkSaveSettings_value, "chkSaveSettings", new Integer(97), new Integer(157), new Short((short) 1), INTEGERS[7], new Short(tabIndex++), new Integer(215)
                 });
         lblSaveSettings = insertLabel("lblSaveSettings",
                 PROPNAMES_LBL,
@@ -872,7 +873,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    Boolean.TRUE, Boolean.TRUE, INTEGER_12, "HID:" + HID7_TXT_SAVE, new Short((short) 14), "txtSaveSettings", new Integer(179), new Integer(167), INTEGERS[7], new Short(tabIndex++), new Integer(145)
+                    Boolean.TRUE, Boolean.TRUE, INTEGER_12, HelpIds.getHelpIdString(HID7_TXT_SAVE), new Short((short) 14), "txtSaveSettings", new Integer(179), new Integer(167), INTEGERS[7], new Short(tabIndex++), new Integer(145)
                 });
 
     }
