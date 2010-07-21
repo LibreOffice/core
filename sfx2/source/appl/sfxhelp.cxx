@@ -705,8 +705,17 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
     return sHelpText;
 }
 
+BOOL SfxHelp::SearchKeyword( const XubString& rKeyword )
+{
+    return Start_Impl( String(), NULL, rKeyword );
+}
 
 BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
+{
+    return Start_Impl( rURL, pWindow, String() );
+}
+
+BOOL SfxHelp::Start_Impl( const String& rURL, const Window* pWindow, const String& rKeyword )
 {
     // check if help is available
     String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
@@ -720,54 +729,63 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
         return FALSE;
     }
 
-    // check if it's an URL or a jump mark!
-    String          aHelpURL(rURL    );
-    INetURLObject   aParser (aHelpURL);
-    ::rtl::OUString sKeyword;
+    /* rURL may be
+        - a "real" URL
+        - a HelpID (formerly a long, now a string)
+       If rURL is a URL, CreateHelpURL should be called for this URL
+       If rURL is an arbitrary string, the same should happen, but the URL should be tried out
+       if it delivers real help content. In case only the Help Error Document is returned, the
+       parent of the window for that help was called, is asked for its HelpID.
+       For compatibility reasons this upward search is not implemented for "real" URLs.
+       Help keyword search now is implemented as own method; in former versions it
+       was done via Help::Start, but this implementation conflicted with the upward search.
+    */
+    String aHelpURL;
+    INetURLObject aParser( rURL );
     INetProtocol nProtocol = aParser.GetProtocol();
-    if ( nProtocol != INET_PROT_VND_SUN_STAR_HELP )
+    String aHelpModuleName( GetHelpModuleName_Impl() );
+    switch ( nProtocol )
     {
-        String aHelpModuleName( GetHelpModuleName_Impl() );
-        aHelpURL  = CreateHelpURL_Impl( rURL, aHelpModuleName );
-        if ( pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+        case INET_PROT_NOT_VALID :
         {
-            // no help found -> try with parent help id.
-            Window* pParent = pWindow->GetParent();
-            while ( pParent )
+            // no URL, just a HelpID (maybe empty in case of keyword search)
+            aHelpURL  = CreateHelpURL_Impl( rURL, aHelpModuleName );
+            if ( pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
             {
-                ByteString aHelpId = pParent->GetHelpId();
-                aHelpURL = CreateHelpURL( String( aHelpId, RTL_TEXTENCODING_UTF8 ), aHelpModuleName );
-                if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
-                    break;
-                else
+                // no help found -> try with parent help id.
+                Window* pParent = pWindow->GetParent();
+                while ( pParent )
                 {
-                    pParent = pParent->GetParent();
-                    if ( !pParent )
-                        // create help url of start page ( helpid == 0 -> start page)
-                        aHelpURL = CreateHelpURL( String(), aHelpModuleName );
+                    ByteString aHelpId = pParent->GetHelpId();
+                    aHelpURL = CreateHelpURL( String( aHelpId, RTL_TEXTENCODING_UTF8 ), aHelpModuleName );
+                    if ( !SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+                        break;
+                    else
+                    {
+                        pParent = pParent->GetParent();
+                        if ( !pParent )
+                            // create help url of start page ( helpid == 0 -> start page)
+                            aHelpURL = CreateHelpURL( String(), aHelpModuleName );
+                    }
                 }
             }
+            break;
         }
-
-        // pb i91715: strings begin with ".HelpId:" are not words of the basic ide
-        // they are helpid-strings used by the testtool -> so we ignore them
-        static const String sHelpIdScheme( DEFINE_CONST_OUSTRING(".HelpId:") );
-        if ( rURL.Search( sHelpIdScheme ) != 0 )
-            sKeyword = ::rtl::OUString( rURL );
+        case INET_PROT_VND_SUN_STAR_HELP:
+            // already a vnd.sun.star.help URL -> nothing to do
+            aHelpURL = rURL;
+            break;
+        default:
+            aHelpURL  = CreateHelpURL_Impl( rURL, aHelpModuleName );
+            break;
     }
 
     Reference < XFrame > xDesktop( ::comphelper::getProcessServiceFactory()->createInstance(
         DEFINE_CONST_UNICODE("com.sun.star.frame.Desktop") ), UNO_QUERY );
 
-    // check if help is still open
-    // If not - create new one and return acces directly
-    // to the internal sub frame, which shows the help content.
-
-    // Note further: We search for this sub frame here directly instead of
-    // the real top level help task ... It's needed to have the same
-    // sub frame available - so we can use it for loading (which is done
-    // in both cases)!
-
+    // check if help window is still open
+    // If not, create a new one and return access directly to the internal sub frame showing the help content
+    // search must be done here; search one desktop level could return an arbitraty frame
     Reference< XFrame > xHelp = xDesktop->findFrame(
         ::rtl::OUString(DEFINE_CONST_UNICODE("OFFICE_HELP_TASK")),
         FrameSearchFlag::CHILDREN);
@@ -791,8 +809,8 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
 
     pHelpWindow->SetHelpURL( aHelpURL );
     pHelpWindow->loadHelpContent(aHelpURL);
-    if ( sKeyword.getLength() > 0 )
-        pHelpWindow->OpenKeyword( sKeyword );
+    if ( rKeyword.Len() )
+        pHelpWindow->OpenKeyword( rKeyword );
 
     Reference < ::com::sun::star::awt::XTopWindow > xTopWindow( xHelp->getContainerWindow(), UNO_QUERY );
     if ( xTopWindow.is() )
