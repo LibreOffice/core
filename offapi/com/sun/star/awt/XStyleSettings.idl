@@ -1,0 +1,239 @@
+/*************************************************************************
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_awt_XStyleSettings_idl__
+#define __com_sun_star_awt_XStyleSettings_idl__
+
+#include <com/sun/star/util/Color.idl>
+#include <com/sun/star/awt/FontDescriptor.idl>
+#include <com/sun/star/uno/XInterface.idl>
+
+//==================================================================================================================
+
+module com { module sun { module star { module awt {
+
+interface XStyleChangeListener;
+
+//==================================================================================================================
+
+/** provides access to certain style settings within an OpenOffice.org component, such as a window, or
+    within OpenOffice.org as a whole.
+
+    <p>Note that there are constraints for those settings. For instance, if controls are drawn with the
+    native widget framework, i.e. in the desktop theme's look, then they won't necessarily respect all
+    their style settings, because those have a lesser priority than the native look.</p>
+
+    <p>On the other hand, some settings are respected only when rendering the controls in the native
+    desktop/theme look. For instance, without native theming, buttons do not support a "roll over" mode,
+    i.e., they're painted the same way, no matter if they mouse hovers over them or not. But with native
+    theming, this changes, as here the general button look is drawn by the system's theming engine,
+    while the text is drawn by OpenOffice.org. In this case, the button respects the
+    <code>ButtonRolloverTextColor</code> when painting its text.</p>
+ */
+interface XStyleSettings
+{
+    /// specifies the color of the border of active windows
+    [attribute] ::com::sun::star::util::Color ActiveBorderColor;
+
+    ///
+    [attribute] ::com::sun::star::util::Color ActiveColor;
+
+    /// specifies the color of the active tab of a tab control
+    [attribute] ::com::sun::star::util::Color ActiveTabColor;
+
+    /// specifies the text color for active UI components
+    [attribute] ::com::sun::star::util::Color ActiveTextColor;
+
+    /// specifies the color to use for text on buttons which are hovered with the mouse
+    [attribute] ::com::sun::star::util::Color ButtonRolloverTextColor;
+
+    /// specifies the color to use for text on buttons
+    [attribute] ::com::sun::star::util::Color ButtonTextColor;
+
+    ///
+    [attribute] ::com::sun::star::util::Color CheckedColor;
+
+    /// specifies the dark portion of the shadow to use for UI elements
+    [attribute] ::com::sun::star::util::Color DarkShadowColor;
+
+    /// specifies the color of the border of inactive windows
+    [attribute] ::com::sun::star::util::Color DeactiveBorderColor;
+
+    ///
+    [attribute] ::com::sun::star::util::Color DeactiveColor;
+
+    /// specifies the text color for inactive UI components
+    [attribute] ::com::sun::star::util::Color DeactiveTextColor;
+
+    /// specifies the background color of dialogs
+    [attribute] ::com::sun::star::util::Color DialogColor;
+
+    /// specifies the text color of dialogs
+    [attribute] ::com::sun::star::util::Color DialogTextColor;
+
+    /// specifies the text color for disabled UI elements
+    [attribute] ::com::sun::star::util::Color DisableColor;
+
+    ///
+    [attribute] ::com::sun::star::util::Color FaceColor;
+
+    ///
+    [attribute, readonly] ::com::sun::star::util::Color FaceGradientColor;
+
+    /// specifies the background color for dialog input controls
+    [attribute] ::com::sun::star::util::Color FieldColor;
+
+    /// specifies the text color for dialog input controls which are hovered with the mouse
+    [attribute] ::com::sun::star::util::Color FieldRolloverTextColor;
+
+    /// specifies the text color for dialog input controls
+    [attribute] ::com::sun::star::util::Color FieldTextColor;
+
+    /// specifies the text color for dialog elements used for grouping other elements
+    [attribute] ::com::sun::star::util::Color GroupTextColor;
+
+    /// specifies the background color for dialog elements displaying help content
+    [attribute] ::com::sun::star::util::Color HelpColor;
+
+    /// specifies the text color for dialog elements displaying help content
+    [attribute] ::com::sun::star::util::Color HelpTextColor;
+
+    /// specifies the background color for UI elements which are highlighted
+    [attribute] ::com::sun::star::util::Color HighlightColor;
+
+    /// specifies the text color for UI elements which are highlighted
+    [attribute] ::com::sun::star::util::Color HighlightTextColor;
+
+    /// specifies the color of inactive tabs of a tab control
+    [attribute] ::com::sun::star::util::Color InactiveTabColor;
+
+    /// specifies the text color of dialog elements displaying some info text
+    [attribute] ::com::sun::star::util::Color InfoTextColor;
+
+    /// specifies the text color of label elements in dialogs
+    [attribute] ::com::sun::star::util::Color LabelTextColor;
+
+    ///
+    [attribute] ::com::sun::star::util::Color LightColor;
+
+    /// specifies the background color of menu bars
+    [attribute] ::com::sun::star::util::Color MenuBarColor;
+
+    /// specifies the text color of menu bars
+    [attribute] ::com::sun::star::util::Color MenuBarTextColor;
+
+    /// specifies the border color of menus
+    [attribute] ::com::sun::star::util::Color MenuBorderColor;
+
+    // specifies the background color of menus
+    [attribute] ::com::sun::star::util::Color MenuColor;
+
+    /// specifies the background color of highlighted menu items
+    [attribute] ::com::sun::star::util::Color MenuHighlightColor;
+
+    /// specifies the text color of highlighted menu items
+    [attribute] ::com::sun::star::util::Color MenuHighlightTextColor;
+
+    // specifies the text color of menus
+    [attribute] ::com::sun::star::util::Color MenuTextColor;
+
+    /// specifies the color to use for monochrome control elements such as flat borders of controls
+    [attribute] ::com::sun::star::util::Color MonoColor;
+
+    /// specifies the text color of radio buttons and check boxes
+    [attribute] ::com::sun::star::util::Color RadioCheckTextColor;
+
+    /// specifies the color of separators between UI elements
+    [attribute, readonly] ::com::sun::star::util::Color SeparatorColor;
+
+    /// specifies the color to use for UI elements
+    [attribute] ::com::sun::star::util::Color ShadowColor;
+
+    /// specifies the background color to use for non-dialog windows
+    [attribute] ::com::sun::star::util::Color WindowColor;
+
+    /// specifies the text color to use for non-dialog windows
+    [attribute] ::com::sun::star::util::Color WindowTextColor;
+
+    /// specifies the background color to use for document workspaces
+    [attribute] ::com::sun::star::util::Color WorkspaceColor;
+
+    /** controls whether the an UI component should use a high-contrast mode
+    */
+    [attribute] boolean HighContrastMode;
+
+    /// specifies the application font
+    [attribute] FontDescriptor  ApplicationFont;
+
+    /// specifies the help font
+    [attribute] FontDescriptor  HelpFont;
+
+    /// specifies the font to use for window titles
+    [attribute] FontDescriptor  TitleFont;
+
+    /// specifies the font to use the title of floating windows
+    [attribute] FontDescriptor  FloatTitleFont;
+
+    /// specifies the font to use for menus
+    [attribute] FontDescriptor  MenuFont;
+
+    /// specifies the font to use for tool elements
+    [attribute] FontDescriptor  ToolFont;
+
+    /// specifies the font for dialog elements used for grouping other elements
+    [attribute] FontDescriptor  GroupFont;
+
+    /// specifies the font for label controls
+    [attribute] FontDescriptor  LabelFont;
+
+    /// specifies the font of dialog elements displaying some info text
+    [attribute] FontDescriptor  InfoFont;
+
+    /// specifies the font of radio buttons and check boxes
+    [attribute] FontDescriptor  RadioCheckFont;
+
+    /// specifies the font of push buttons
+    [attribute] FontDescriptor  PushButtonFont;
+
+    /// specifies the font for dialog input controls
+    [attribute] FontDescriptor  FieldFont;
+
+    /// registers a listener to be notified when the style settings change
+    void    addStyleChangeListener(
+        [in] XStyleChangeListener Listener );
+
+    /// registers a listener to be notified when the style settings change
+    void    removeStyleChangeListener(
+        [in] XStyleChangeListener Listener );
+};
+
+//==================================================================================================================
+
+}; }; }; };
+
+//==================================================================================================================
+
+#endif
