@@ -57,7 +57,15 @@
 	<xsl:key match="style:master-page" name="masterPageElements" use="@style:name"/>
 	<xsl:key match="style:page-layout" name="pageLayoutElements" use="@style:name"/>
 	<xsl:key name="writingModeStyles" match="/*/office:styles/style:style/style:paragraph-properties/@style:writing-mode | /*/office:automatic-styles/style:style/style:paragraph-properties/@style:writing-mode" use="'test'"/>
+
 	<xsl:template name="create-body">
+		<xsl:param name="globalData"/>
+		<xsl:call-template name="create-body.collect-page-properties">
+			<xsl:with-param name="globalData" select="$globalData"/>
+		</xsl:call-template>
+	</xsl:template>
+
+	<xsl:template name="create-body.collect-page-properties">
 		<xsl:param name="globalData"/>
 
 		<!-- approximation to find the correct master page style (with page dimensions) -->
@@ -75,10 +83,10 @@
 
 		<!-- Take the first of the masterpage list and get the according style:master-page element and find the @style:page-layout-name  -->
 		<xsl:variable name="pageLayoutName" select="key('masterPageElements', substring-before($masterPageNames,';'))/@style:page-layout-name"/>
-		<xsl:variable name="pageProperties">
+		<xsl:variable name="pagePropertiesRTF">
 			<xsl:choose>
 				<xsl:when test="not($pageLayoutName) or $pageLayoutName = ''">
-					<xsl:copy-of select="$globalData/styles-file/*/office:automatic-styles/style:page-layout[1]/style:page-layout-properties"/>
+					<xsl:value-of select="$globalData/styles-file/*/office:automatic-styles/style:page-layout[1]/style:page-layout-properties"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<!-- Find the according style:page-layout and store the properties in a variable  -->
@@ -86,6 +94,36 @@
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
+
+		<xsl:choose>
+			<xsl:when test="function-available('common:node-set')">
+				<xsl:call-template name="create-body.create">
+					<xsl:with-param name="globalData" select="common:node-set($globalData)"/>
+					<xsl:with-param name="pageProperties" select="common:node-set($pagePropertiesRTF)"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="function-available('xalan:nodeset')">
+				<xsl:call-template name="create-body.create">
+					<xsl:with-param name="globalData" select="xalan:nodeset($globalData)"/>
+					<xsl:with-param name="pageProperties" select="xalan:nodeset($pagePropertiesRTF)"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="function-available('xt:node-set')">
+				<xsl:call-template name="create-body.create">
+					<xsl:with-param name="globalData" select="xt:node-set($globalData)"/>
+					<xsl:with-param name="pageProperties" select="xt:node-set($pagePropertiesRTF)"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:message terminate="yes">The required node-set function was not found!</xsl:message>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="create-body.create">
+		<xsl:param name="globalData"/>
+		<xsl:param name="pageProperties"/>
+
 		<xsl:element name="body">
 			<!-- direction of text flow -->
 			<xsl:variable name="writingMode" select="$pageProperties/style:page-layout-properties/@style:writing-mode"/>
