@@ -235,7 +235,7 @@ testcase tCompareXMLFormatLoad
     if SAXGetAttributeValue("chart:values-cell-range-address") = "Sheet1.A1:A2" then
         printlog "The cell range for chart:series is correct"
     else
-        warnlog "#i100780#: The cell range is not Sheet1.A1:A2, it is " & SaxGetAttributeValue("chart:values-cell-range-address")
+        qaerrorlog "#i100780#: The cell range is not Sheet1.A1:A2, it is " & SaxGetAttributeValue("chart:values-cell-range-address")
     endif
     ' DEBUG: printlog "I'm here: " & SAXGetElementName
     '/// Close the XML editor.
