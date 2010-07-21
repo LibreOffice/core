@@ -336,7 +336,7 @@ extern "C" UINT __stdcall RegisterExtensions(MSIHANDLE handle)
         const std::_tstring sTempFolder(createTempFolder());
         std::_tstring sCommandPart1 = sUnoPkgFile + " sync";
         std::_tstring sCommand = sCommandPart1
-            + TEXT(" -env:BUNDLED_EXTENSIONS_USER=$OOO_BASE_DIR/presets/bundled")
+            + TEXT(" -env:BUNDLED_EXTENSIONS_USER=$BRAND_BASE_DIR/share/prereg/bundled")
             + TEXT(" -env:UNO_JAVA_JFW_INSTALL_DATA=$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml")
             + TEXT(" -env:UserInstallation=") + sTempFolder;
         mystr = "Command: " + sCommand;
