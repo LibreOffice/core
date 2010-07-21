@@ -102,8 +102,8 @@
 				</xsl:when>
 				<xsl:otherwise>
 					<!-- As CSS writing-mode is not implemented by all browsers, a heuristic is done -->
-					<xsl:variable name="writingMode" select="key('writingModeStyles', 'test')"/>
-					<xsl:if test="contains($writingMode, 'rl')">
+					<xsl:variable name="writingModeTest" select="key('writingModeStyles', 'test')"/>
+					<xsl:if test="contains($writingModeTest, 'rl')">
 						<xsl:attribute name="dir">rtl</xsl:attribute>
 					</xsl:if>
 				</xsl:otherwise>
@@ -579,13 +579,13 @@
 		</xsl:variable>
 		<xsl:choose>
 			<xsl:when test="$tabIndent='NaN'">
-				<xsl:variable name="tabPosition">
+				<xsl:variable name="tabPositionTmp">
 					<xsl:call-template name="convert2cm">
 						<xsl:with-param name="value" select="$tabStops/style:tab-stop[last()]/@style:position"/>
 					</xsl:call-template>
 				</xsl:variable>
 					<!-- Heuristic: for every tab that is more than specified give a further 1 cm -->
-				<xsl:value-of select="$parentMarginLeft + $tabPosition + count($tabStops/style:tab-stop) - $tabCount"/>
+				<xsl:value-of select="$parentMarginLeft + $tabPositionTmp + count($tabStops/style:tab-stop) - $tabCount"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$tabIndent"/>
