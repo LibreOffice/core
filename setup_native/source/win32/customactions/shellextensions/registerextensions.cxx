@@ -408,7 +408,7 @@ extern "C" UINT __stdcall RemoveExtensions(MSIHANDLE handle)
 
     // Removing complete directory "Basis\presets\bundled"
 
-    std::_tstring sCacheDir = sInstDir + TEXT("Basis\\presets\\bundled");
+    std::_tstring sCacheDir = sInstDir + TEXT("share\\prereg\\bundled");
 
     bool fSuccess = RemoveCompleteDirectory( sCacheDir );
 
