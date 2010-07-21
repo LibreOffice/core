@@ -1127,6 +1127,8 @@ bool X11SalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rOrigPoly
     basegfx::B2DTrapezoidVector aB2DTrapVector;
     basegfx::tools::trapezoidSubdivide( aB2DTrapVector, aPolyPoly );
     const int nTrapCount = aB2DTrapVector.size();
+    if( !nTrapCount )
+        return true;
     const bool bDrawn = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
     return bDrawn;
 }
@@ -1239,6 +1241,8 @@ bool X11SalGraphics::drawPolyLine(const ::basegfx::B2DPolygon& rPolygon, double 
 
         // draw tesselation result
         const int nTrapCount = aB2DTrapVector.size();
+        if( !nTrapCount )
+            return true;
         const bool bDrawOk = drawFilledTrapezoids( &aB2DTrapVector[0], nTrapCount, fTransparency );
 
         // restore the original brush GC
