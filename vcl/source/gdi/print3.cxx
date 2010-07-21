@@ -184,17 +184,17 @@ public:
     {}
     ~ImplPrinterControllerData() { delete mpProgress; }
 
-    Size getRealPaperSize( const Size& i_rPageSize ) const
+    Size getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
     {
         if( maFixedPageSize.Width() > 0 && maFixedPageSize.Height() > 0 )
             return maFixedPageSize;
-        if( maMultiPage.nRows * maMultiPage.nColumns > 1 )
+        if( maMultiPage.nRows * maMultiPage.nColumns > 1 && ! bNoNUP )
             return maMultiPage.aPaperSize;
         return i_rPageSize;
     }
     bool isFixedPageSize() const
     { return maFixedPageSize.Width() != 0 && maFixedPageSize.Height() != 0; }
-    PrinterController::PageSize modifyJobSetup( const Sequence< PropertyValue >& i_rProps );
+    PrinterController::PageSize modifyJobSetup( const Sequence< PropertyValue >& i_rProps, bool bNoNUP );
 };
 
 PrinterController::PrinterController()
@@ -738,7 +738,7 @@ bool PrinterController::setupPrinter( Window* i_pParent )
     return bRet;
 }
 
-PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const Sequence< PropertyValue >& i_rProps )
+PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( const Sequence< PropertyValue >& i_rProps, bool bNoNUP )
 {
     PrinterController::PageSize aPageSize;
     aPageSize.aSize = mpPrinter->GetPaperSize();
@@ -773,7 +773,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
     if( aSetSize.Width && aSetSize.Height )
     {
         Size aSetPaperSize( aSetSize.Width, aSetSize.Height );
-        Size aRealPaperSize( getRealPaperSize( aSetPaperSize ) );
+        Size aRealPaperSize( getRealPaperSize( aSetPaperSize, bNoNUP ) );
         if( aRealPaperSize != aCurSize )
             aIsSize = aSetSize;
     }
@@ -783,7 +783,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
         aPageSize.aSize.Width() = aIsSize.Width;
         aPageSize.aSize.Height() = aIsSize.Height;
 
-        Size aRealPaperSize( getRealPaperSize( aPageSize.aSize ) );
+        Size aRealPaperSize( getRealPaperSize( aPageSize.aSize, bNoNUP ) );
         if( aRealPaperSize != aCurSize )
             mpPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
     }
@@ -849,7 +849,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     mpImplData->mpPrinter->SetMapMode( aMapMode );
 
     // modify job setup if necessary
-    PrinterController::PageSize aPageSize = mpImplData->modifyJobSetup( aPageParm );
+    PrinterController::PageSize aPageSize = mpImplData->modifyJobSetup( aPageParm, true );
 
     o_rMtf.SetPrefSize( aPageSize.aSize );
     o_rMtf.SetPrefMapMode( aMapMode );
@@ -931,7 +931,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         rMPS.nTopMargin == 0 && rMPS.nBottomMargin == 0 )
     {
         PrinterController::PageSize aPageSize = getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
-        Size aPaperSize = mpImplData->getRealPaperSize( aPageSize.aSize );
+        Size aPaperSize = mpImplData->getRealPaperSize( aPageSize.aSize, true );
         mpImplData->mpPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
         mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
         if( aPaperSize != aPageSize.aSize )
@@ -953,7 +953,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     sal_Bool bIsLastPage = mpImplData->mbLastPage;
     mpImplData->mbLastPage = sal_False;
 
-    Size aPaperSize( mpImplData->getRealPaperSize( mpImplData->maMultiPage.aPaperSize ) );
+    Size aPaperSize( mpImplData->getRealPaperSize( mpImplData->maMultiPage.aPaperSize, false ) );
 
     // multi page area: page size minus margins + one time spacing right and down
     // the added spacing is so each subpage can be calculated including its spacing
