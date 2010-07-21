@@ -234,6 +234,8 @@ public:
     virtual SelectionFunction::Mode GetMode (void) const;
     virtual void Abort (void);
 
+    void ResetButtonDownLocation (void);
+
 protected:
     virtual bool ProcessButtonDownEvent (SelectionFunction::EventDescriptor& rDescriptor);
     virtual bool ProcessButtonUpEvent (SelectionFunction::EventDescriptor& rDescriptor);
@@ -902,6 +904,20 @@ void SelectionFunction::ResetShiftKeySelectionAnchor (void)
 
 
 
+void SelectionFunction::ResetMouseAnchor (void)
+{
+    if (mpModeHandler && mpModeHandler->GetMode() == NormalMode)
+    {
+        ::boost::shared_ptr<NormalModeHandler> pHandler (
+            ::boost::dynamic_pointer_cast<NormalModeHandler>(mpModeHandler));
+        if (pHandler)
+            pHandler->ResetButtonDownLocation();
+    }
+}
+
+
+
+
 //===== EventDescriptor =======================================================
 
 SelectionFunction::EventDescriptor::EventDescriptor (
@@ -1133,7 +1149,6 @@ void SelectionFunction::ModeHandler::ProcessEvent (
 
         case BUTTON_UP:
             bIsProcessed = ProcessButtonUpEvent(rDescriptor);
-            mrSelectionFunction.SwitchToNormalMode();
             break;
 
         case MOUSE_MOTION:
@@ -1162,6 +1177,7 @@ bool SelectionFunction::ModeHandler::ProcessButtonDownEvent (EventDescriptor&)
 
 bool SelectionFunction::ModeHandler::ProcessButtonUpEvent (EventDescriptor&)
 {
+    mrSelectionFunction.SwitchToNormalMode();
     return false;
 }
 
@@ -1393,7 +1409,12 @@ bool NormalModeHandler::ProcessButtonDownEvent (
             break;
 
         case BUTTON_DOWN | RIGHT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE:
-            // Fallthrough.
+            // Remember the current selection so that when a multi selection
+            // is started, we can restore the previous selection.
+            mrSlideSorter.GetModel().SaveCurrentSelection();
+            DeselectAllPages();
+            break;
+
         case ANY_MODIFIER(BUTTON_DOWN | LEFT_BUTTON | SINGLE_CLICK | NOT_OVER_PAGE):
             // Remember the current selection so that when a multi selection
             // is started, we can restore the previous selection.
@@ -1465,17 +1486,20 @@ bool NormalModeHandler::ProcessMotionEvent (
         // A mouse motion without visible substitution starts that.
         case ANY_MODIFIER(MOUSE_MOTION | LEFT_BUTTON | SINGLE_CLICK | OVER_SELECTED_PAGE):
         {
-            const sal_Int32 nDistance (maButtonDownLocation
-                ? ::std::max (
-                    abs(maButtonDownLocation->X() - rDescriptor.maMousePosition.X()),
-                    abs(maButtonDownLocation->Y() - rDescriptor.maMousePosition.Y()))
-                : 0);
-            if (nDistance > 3)
-                StartDrag(
-                    rDescriptor.maMousePosition,
-                    (rDescriptor.mnEventCode & CONTROL_MODIFIER) != 0
-                        ? InsertionIndicatorHandler::CopyMode
+            if (maButtonDownLocation)
+            {
+                const sal_Int32 nDistance (maButtonDownLocation
+                    ? ::std::max (
+                        abs(maButtonDownLocation->X() - rDescriptor.maMousePosition.X()),
+                        abs(maButtonDownLocation->Y() - rDescriptor.maMousePosition.Y()))
+                    : 0);
+                if (nDistance > 3)
+                    StartDrag(
+                        rDescriptor.maMousePosition,
+                        (rDescriptor.mnEventCode & CONTROL_MODIFIER) != 0
+                            ? InsertionIndicatorHandler::CopyMode
                             : InsertionIndicatorHandler::MoveMode);
+            }
         }
         break;
 
@@ -1535,6 +1559,14 @@ void NormalModeHandler::RangeSelect (const model::SharedPageDescriptor& rpDescri
             nIndex = nIndex + nStep;
         }
     }
+}
+
+
+
+
+void NormalModeHandler::ResetButtonDownLocation (void)
+{
+    maButtonDownLocation = ::boost::optional<Point>();
 }
 
 
@@ -1985,7 +2017,6 @@ bool ButtonModeHandler::ProcessMotionEvent (SelectionFunction::EventDescriptor& 
 
     return false;
 }
-
 
 
 

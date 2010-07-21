@@ -120,6 +120,12 @@ public:
     bool SwitchToButtonMode (void);
 
     void ResetShiftKeySelectionAnchor (void);
+    /** Special case handling for when the context menu is hidden.  This
+        method will reinitialize the current mouse position to prevent the
+        mouse motion during the time the context menu is displayed from
+        being interpreted as drag-and-drop start.
+    */
+    void ResetMouseAnchor (void);
 
 protected:
     SlideSorter& mrSlideSorter;

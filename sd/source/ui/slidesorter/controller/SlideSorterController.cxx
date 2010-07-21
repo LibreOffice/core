@@ -464,10 +464,16 @@ bool SlideSorterController::Command (
             {
                 SfxDispatcher* pDispatcher = pViewShell->GetDispatcher();
                 if (pDispatcher != NULL)
+                {
                     pDispatcher->ExecutePopup(
                         SdResId(nPopupId),
                         pWindow,
                         &aMenuLocation);
+                    mrSlideSorter.GetView().UpdatePageUnderMouse(false);
+                    ::rtl::Reference<SelectionFunction> pFunction(GetCurrentSelectionFunction());
+                    if (pFunction.is())
+                        pFunction->ResetMouseAnchor();
+                }
             }
             mbIsContextMenuOpen = false;
             if (pPage == NULL)
