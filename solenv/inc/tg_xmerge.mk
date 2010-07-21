@@ -81,7 +81,7 @@ $(TREEFILE) : $(LOCALIZESDF)
 TREEMERGEPHONY:=.PHONY
 .ENDIF          # "$(alllangiso)" != "$(last_merge)"
 
-$(COMMONMISC)/$(PACKAGE)/en-US/%.tree $(TREEMERGEPHONY) : %.tree
+$(OUT_HELP)/en-US/help.tree $(TREEMERGEPHONY) : help.tree
     @@-$(MKDIRHIER) $(@:d)
 .IF "$(WITH_LANG)"==""
     $(COMMAND_ECHO)$(COPY) $< $@
