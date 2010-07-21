@@ -258,7 +258,7 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
         if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
         {
             String aKeyword = GetWordAtCursor();
-            Application::GetHelp()->Start( aKeyword, this );
+            Application::GetHelp()->SearchKeyword( aKeyword );
             bDone = TRUE;
         }
         else if ( rHEvt.GetMode() & HELPMODE_QUICK )
