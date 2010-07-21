@@ -71,7 +71,8 @@ public:
     void                SetHelpFile( const String& rFileName ) { maHelpFile = rFileName; }
     const String&       GetHelpFile() const { return maHelpFile; }
 
-    virtual BOOL        Start( const XubString& rKeyWord, const Window* pWindow );
+    virtual BOOL        Start( const XubString& rHelpId, const Window* pWindow );
+    virtual BOOL        SearchKeyword( const XubString& rKeyWord );
     virtual void        OpenHelpAgent( const rtl::OString& rHelpId );
     virtual XubString   GetHelpText( const String& aHelpURL, const Window* pWindow );
 

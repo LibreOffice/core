@@ -73,6 +73,11 @@ BOOL Help::Start( const XubString&, const Window* )
     return FALSE;
 }
 
+BOOL Help::SearchKeyword( const XubString& )
+{
+    return FALSE;
+}
+
 // -----------------------------------------------------------------------
 
 XubString Help::GetHelpText( const String&, const Window* )
