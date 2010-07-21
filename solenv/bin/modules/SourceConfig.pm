@@ -96,6 +96,9 @@ sub new {
     $self->{WARNINGS} = [];
     $self->{REPORT_MESSAGES} = [];
     $self->{CONFIG_FILE_CONTENT} = [];
+    if (defined $self->{USER_SOURCE_ROOT}) {
+        ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
+    };
     $self->{SOURCE_CONFIG_FILE} = get_config_file($self->{SOURCE_ROOT}) if (!defined $self->{SOURCE_CONFIG_FILE});
     $self->{SOURCE_CONFIG_DEFAULT} = $self->{SOURCE_ROOT} .'/'.SOURCE_CONFIG_FILE_NAME;
     read_config_file($self);
@@ -260,12 +263,8 @@ sub get_config_file {
 #
 sub get_fallback_repository {
     my $self = shift;
-    if (defined $self->{USER_SOURCE_ROOT}) {
-        ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
-    } else {
-        my $repository_root = RepositoryHelper->new()->get_repository_root();
-        ${$self->{REPOSITORIES}}{File::Basename::basename($repository_root)} = $repository_root;
-    };
+    my $repository_root = RepositoryHelper->new()->get_repository_root();
+    ${$self->{REPOSITORIES}}{File::Basename::basename($repository_root)} = $repository_root;
 };
 
 sub read_config_file {
