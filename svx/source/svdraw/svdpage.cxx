@@ -1979,6 +1979,18 @@ void SdrPage::ReplaceCommentByIndex(sal_uInt32 nIndex, const sdr::Comment& rNew)
     }
 }
 
+const SdrPageProperties* SdrPage::getCorrectSdrPageProperties() const
+{
+    if(mpMasterPageDescriptor)
+    {
+        return mpMasterPageDescriptor->getCorrectSdrPageProperties();
+    }
+    else
+    {
+        return &getSdrPageProperties();
+    }
+}
+
 //////////////////////////////////////////////////////////////////////////////
 // use new redirector instead of pPaintProc
 
