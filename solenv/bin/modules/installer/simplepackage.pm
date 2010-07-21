@@ -71,9 +71,10 @@ sub get_extensions_dir
 
     my $extensiondir = $subfolderdir . $installer::globals::separator;
     if ( $installer::globals::officedirhostname ne "" ) { $extensiondir = $extensiondir . $installer::globals::officedirhostname . $installer::globals::separator; }
-    $extensiondir = $extensiondir . "share" . $installer::globals::separator . "extensions";
+    my $extensionsdir = $extensiondir . "share" . $installer::globals::separator . "extensions";
+    my $preregdir = $extensiondir . "share" . $installer::globals::separator . "prereg";
 
-    return $extensiondir;
+    return ( $extensionsdir, $preregdir );
 }
 
 ####################################################
@@ -82,13 +83,13 @@ sub get_extensions_dir
 
 sub register_extensions
 {
-    my ($officedir, $languagestringref, $presetsdir) = @_;
+    my ($officedir, $languagestringref, $preregdir) = @_;
 
     my $infoline = "";
 
-    if ( $presetsdir eq "" )
+    if ( $preregdir eq "" )
     {
-        $infoline = "ERROR: Failed to determine directory \"presets\" for extension registration! Please check your installation set.\n";
+        $infoline = "ERROR: Failed to determine directory \"prereg\" for extension registration! Please check your installation set.\n";
         push( @installer::globals::logfileinfo, $infoline);
         installer::exiter::exit_program($infoline, "register_extensions");
     }
@@ -128,17 +129,16 @@ sub register_extensions
             if ( $^O =~ /cygwin/i )
             {
                 $localtemppath = $installer::globals::cyg_temppath;
-                $presetsdir = qx{cygpath -m "$presetsdir"};
-                chomp($presetsdir);
+                $preregdir = qx{cygpath -m "$preregdir"};
+                chomp($preregdir);
             }
             $localtemppath =~ s/\\/\//g;
             $slash = "/"; # Third slash for Windows. Other OS pathes already start with "/"
         }
 
-        $presetsdir =~ s/\/\s*$//g;
-        my $bundleddir = $presetsdir . "/bundled";
+        $preregdir =~ s/\/\s*$//g;
 
-        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $slash . $bundleddir . "\"" . " -env:UserInstallation=file://" . $slash . $localtemppath . " 2\>\&1 |";
+        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $slash . $preregdir . "\"" . " -env:UserInstallation=file://" . $slash . $localtemppath . " 2\>\&1 |";
 
         print "... $systemcall ...\n";
 
@@ -638,8 +638,6 @@ sub create_simple_package
     installer::logger::print_message( "... creating directories ...\n" );
     installer::logger::include_header_into_logfile("Creating directories:");
 
-    my $presetsdir = "";
-
     for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
     {
         my $onedir = ${$dirsref}[$i];
@@ -647,7 +645,6 @@ sub create_simple_package
         if ( $onedir->{'HostName'} )
         {
             my $destdir = $subfolderdir . $installer::globals::separator . $onedir->{'HostName'};
-            if ( $destdir =~ /\Wpresets\s*$/ ) { $presetsdir = $destdir; }
 
             if ( ! -d $destdir )
             {
@@ -777,14 +774,14 @@ sub create_simple_package
     installer::logger::print_message( "... removing superfluous directories ...\n" );
     installer::logger::include_header_into_logfile("Removing superfluous directories:");
 
-    my $extensionfolder = get_extensions_dir($subfolderdir);
+    my ( $extensionfolder, $preregdir ) = get_extensions_dir($subfolderdir);
     installer::systemactions::remove_empty_dirs_in_folder($extensionfolder);
 
     # Registering the extensions
 
     installer::logger::print_message( "... registering extensions ...\n" );
     installer::logger::include_header_into_logfile("Registering extensions:");
-    register_extensions($subfolderdir, $languagestringref, $presetsdir);
+    register_extensions($subfolderdir, $languagestringref, $preregdir);
 
     if ( $installer::globals::compiler =~ /^unxmacx/ )
     {
