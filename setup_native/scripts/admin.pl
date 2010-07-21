@@ -43,7 +43,6 @@ BEGIN
     $msiinfo_available = 0;
     $path_displayed = 0;
     $localmsidbpath = "";
-    $presetsdir = "";
 
     $plat = $^O;
 
@@ -357,8 +356,9 @@ sub get_extensions_dir
     get_path_from_fullqualifiedname(\$localbranddir); # root dir in brand layer
     $localbranddir =~ s/\Q$separator\E\s*$//;
     my $extensiondir = $localbranddir . $separator . "share" . $separator . "extensions";
+    my $preregdir = $localbranddir . $separator . "share" . $separator . "prereg";
 
-    return $extensiondir;
+    return ($extensiondir, $preregdir);
 }
 
 ########################################################
@@ -824,7 +824,6 @@ sub create_directory_tree
             # Create the directory
             my $newdir = $fulldir . $separator . $dirname;
             if ( ! -f $newdir ) { mkdir $newdir; }
-            if (( $presetsdir eq "" ) && ( $newdir =~ /\Wpresets\s*$/ )) { $presetsdir = $newdir; }
             # Saving in collector
             $pathcollector->{$dir} = $newdir;
             # Iteration
@@ -1092,11 +1091,11 @@ sub get_temppath
 
 sub register_extensions_sync
 {
-    my ($unopkgfile, $localtemppath) = @_;
+    my ($unopkgfile, $localtemppath, $preregdir) = @_;
 
-    if ( $presetsdir eq "" )
+    if ( $preregdir eq "" )
     {
-        my $logtext = "ERROR: Failed to determine directory \"presets\" folder for extension registration! Please check your installation set.";
+        my $logtext = "ERROR: Failed to determine \"prereg\" folder for extension registration! Please check your installation set.";
         print $logtext . "\n";
         exit_program($logtext);
     }
@@ -1123,14 +1122,13 @@ sub register_extensions_sync
 
     if ( $^O =~ /cygwin/i ) {
         $executable = "./" . $executable;
-        $presetsdir = qx{cygpath -m "$presetsdir"};
-        chomp($presetsdir);
+        $preregdir = qx{cygpath -m "$presetsdir"};
+        chomp($preregdir);
     }
 
-    $presetsdir =~ s/\/\s*$//g;
-    my $bundleddir = $presetsdir . "/bundled";
+    $preregdir =~ s/\/\s*$//g;
 
-    my $systemcall = $executable . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file:///" . $bundleddir . "\"" . " -env:UserInstallation=file:///" . $localtemppath . " 2\>\&1 |";
+    my $systemcall = $executable . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file:///" . $preregdir . "\"" . " -env:UserInstallation=file:///" . $localtemppath . " 2\>\&1 |";
 
     print "... $systemcall\n";
 
@@ -1158,7 +1156,7 @@ sub register_extensions_sync
 
 sub register_extensions
 {
-    my ($unopkgfile, $temppath) = @_;
+    my ($unopkgfile, $temppath, $preregdir) = @_;
 
     print "Registering extensions:\n";
 
@@ -1168,7 +1166,7 @@ sub register_extensions
     }
     else
     {
-        register_extensions_sync($unopkgfile, $temppath);
+        register_extensions_sync($unopkgfile, $temppath, $preregdir);
         remove_complete_directory($temppath, 1);
     }
 
@@ -1428,13 +1426,13 @@ $filecontent = read_file($filename);
 my $register_extensions_exists = analyze_customaction_file($filecontent);
 
 # Removing empty dirs in extension folder
-my $extensionfolder = get_extensions_dir($unopkgfile);
+my ( $extensionfolder, $preregdir ) = get_extensions_dir($unopkgfile);
 if ( -d $extensionfolder ) { remove_empty_dirs_in_folder($extensionfolder, 1); }
 
 if ( $register_extensions_exists )
 {
     # Registering extensions
-    register_extensions($unopkgfile, $temppath);
+    register_extensions($unopkgfile, $temppath, $preregdir);
 }
 
 # Saving info in Summary Information Stream of msi database (required for following patches)
