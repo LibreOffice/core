@@ -207,12 +207,8 @@ namespace desktop {
                     if (newDstUnqPath.lastIndexOf(sal_Unicode('/')) != newDstUnqPath.getLength()-1)
                         newDstUnqPath += rtl::OUString::createFromAscii("/");
                     newDstUnqPath += itemname;
-
                     // recursion
-                    // Filer out bundled folder which is treated by a special
-                    // implementation.
-                    if ( !itemname.equalsAscii( BUNDLED_FOLDER_NAME ))
-                        err = copy_recursive(newSrcUnqPath, newDstUnqPath);
+                    err = copy_recursive(newSrcUnqPath, newDstUnqPath);
                 }
                 aDir.close();
 

@@ -469,8 +469,6 @@ void ReplaceStringHookProc( UniString& rStr )
     }
 }
 
-static const char      pPresetsFolder[]        = "presets";
-static const char      pBundledFolder[]        = BUNDLED_FOLDER_NAME;
 static const char      pLastSyncFileName[]     = "lastsynchronized";
 static const sal_Int32 nStrLenLastSync         = 16;
 
@@ -537,25 +535,13 @@ static bool needsSynchronization(
     return bNeedsSync;
 }
 
-static ::rtl::OUString getBasePresetsPathURL()
+static ::rtl::OUString getBrandSharePreregBundledPathURL()
 {
-    ::rtl::OUString              aBaseInstallURL;
-    ::utl::Bootstrap::PathStatus aBaseInstallStatus = ::utl::Bootstrap::locateBaseInstallation( aBaseInstallURL );
+    ::rtl::OUString url(
+        RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/share/prereg/bundled"));
 
-    if ( aBaseInstallStatus == ::utl::Bootstrap::PATH_EXISTS )
-    {
-        ::rtl::OUStringBuffer aTmp( aBaseInstallURL );
-        ::sal_Int32          nLastIndex = aBaseInstallURL.lastIndexOf('/');
-
-        if ( nLastIndex != aBaseInstallURL.getLength()-1 )
-            aTmp.appendAscii( "/" );
-        aTmp.appendAscii( pPresetsFolder );
-        aTmp.appendAscii( "/" );
-        aTmp.appendAscii( pBundledFolder );
-        aBaseInstallURL = aTmp.makeStringAndClear();
-    }
-
-    return aBaseInstallURL;
+    ::rtl::Bootstrap::expandMacros(url);
+    return url;
 }
 
 static ::rtl::OUString getUserBundledExtPathURL()
@@ -566,14 +552,14 @@ static ::rtl::OUString getUserBundledExtPathURL()
     return folder;
 }
 
-static ::rtl::OUString getLastSyncFileURLFromBaseInstallation()
+static ::rtl::OUString getLastSyncFileURLFromBrandInstallation()
 {
-    ::rtl::OUString aBasePresetPathURL = getBasePresetsPathURL();
-    ::sal_Int32    nLastIndex         = aBasePresetPathURL.lastIndexOf('/');
+    ::rtl::OUString aURL = getBrandSharePreregBundledPathURL();
+    ::sal_Int32    nLastIndex         = aURL.lastIndexOf('/');
 
-    ::rtl::OUStringBuffer aTmp( aBasePresetPathURL );
+    ::rtl::OUStringBuffer aTmp( aURL );
 
-    if ( nLastIndex != aBasePresetPathURL.getLength()-1 )
+    if ( nLastIndex != aURL.getLength()-1 )
         aTmp.appendAscii( "/" );
     aTmp.appendAscii( pLastSyncFileName );
 
@@ -692,17 +678,17 @@ void Desktop::Init()
     // and test if synchronzation is necessary!
     {
         ::rtl::OUString aUserLastSyncFilePathURL = getLastSyncFileURLFromUserInstallation();
-        ::rtl::OUString aBaseLastSyncFilePathURL = getLastSyncFileURLFromBaseInstallation();
+        ::rtl::OUString aPreregSyncFilePathURL = getLastSyncFileURLFromBrandInstallation();
 
-        if ( needsSynchronization( aBaseLastSyncFilePathURL, aUserLastSyncFilePathURL ))
+        if ( needsSynchronization( aPreregSyncFilePathURL, aUserLastSyncFilePathURL ))
         {
             rtl::OUString aUserPath = getUserBundledExtPathURL();
-            rtl::OUString aBasePresetsBundledPath = getBasePresetsPathURL();
+            rtl::OUString aPreregBundledPath = getBrandSharePreregBundledPathURL();
 
             // copy bundled folder to the user directory
             osl::FileBase::RC rc = osl::Directory::createPath(aUserPath);
             (void) rc;
-            copy_bundled_recursive( aBasePresetsBundledPath, aUserPath, +1 );
+            copy_bundled_recursive( aPreregBundledPath, aUserPath, +1 );
         }
     }
 

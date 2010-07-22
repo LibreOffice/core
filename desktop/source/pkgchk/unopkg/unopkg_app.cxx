@@ -394,8 +394,11 @@ extern "C" int unopkg_main()
             //then we can delete the registration data at
             //$BUNDLED_EXTENSIONS_USER
             if (hasNoFolder(OUSTR("$BRAND_BASE_DIR/share/extensions")))
+            {
                 removeFolder(OUSTR("$BUNDLED_EXTENSIONS_USER"));
-            return 0;
+                //return otherwise we create the registration data again
+                return 0;
+            }
 
         }
 
