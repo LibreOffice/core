@@ -78,7 +78,6 @@ testcase tUpdtScripts
     dim iCurrentDialog as integer
 
     dim iDiffCount as integer
-    dim iAllowedModifier as integer
 
     hInitSingleDoc()
 
@@ -126,6 +125,9 @@ testcase tUpdtScripts
         
         printlog( "Compare to reference list, create new one if differences were found" )
         iDiffCount = hManageComparisionList( sFileIn, sFileOut, cScriptNamesList() )
+
+        if ( iDiffCount <> 0 ) then warnlog( "The number of scripts has changed, please review." )
+
 
         printlog( "Close <" & sDialog & ">" )
         select case ( sDialog ) 
