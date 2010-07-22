@@ -131,6 +131,57 @@ Resource RID_SLIDESORTER_ICONS
     };
 
 
+    Image IMAGE_COMMAND2B_LARGE
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_large.png" ; };
+    };
+    Image IMAGE_COMMAND2B_LARGE_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_large_hover.png" ; };
+    };
+    Image IMAGE_COMMAND2B_MEDIUM
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_medium.png" ; };
+    };
+    Image IMAGE_COMMAND2B_MEDIUM_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_medium_hover.png" ; };
+    };
+    Image IMAGE_COMMAND2B_SMALL
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_small.png" ; };
+    };
+    Image IMAGE_COMMAND2B_SMALL_HOVER
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_small_hover.png" ; };
+    };
+
+    Image IMAGE_COMMAND2B_LARGE_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_large_hc.png" ; };
+    };
+    Image IMAGE_COMMAND2B_LARGE_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_large_hover_hc.png" ; };
+    };
+    Image IMAGE_COMMAND2B_MEDIUM_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_medium_hc.png" ; };
+    };
+    Image IMAGE_COMMAND2B_MEDIUM_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_medium_hover_hc.png" ; };
+    };
+    Image IMAGE_COMMAND2B_SMALL_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_small_hc.png" ; };
+    };
+    Image IMAGE_COMMAND2B_SMALL_HOVER_HC
+    {
+        ImageBitmap = Bitmap { File = "slide_sorter_command2b_small_hover_hc.png" ; };
+    };
+
+
     Image IMAGE_COMMAND3_LARGE
     {
         ImageBitmap = Bitmap { File = "slide_sorter_command3_large.png" ; };
@@ -252,11 +303,6 @@ Resource RID_SLIDESORTER_ICONS
     };
 
     String STRING_COMMAND2_B
-    {
-        Text [ en-US ] = "Show" ;
-    };
-
-    String STRING_COMMAND2_HELP
     {
         Text [ en-US ] = "Show Slide" ;
     };

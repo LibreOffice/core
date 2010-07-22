@@ -355,6 +355,9 @@ void SlideSorterView::HandleDataChangeEvent (void)
     if (pPainter)
         pPainter->SetColor(mrSlideSorter.GetTheme()->GetColor(Theme::Color_Background));
 
+    if (mpButtonBar)
+        mpButtonBar->HandleDataChangeEvent();
+
     RequestRepaint();
 }
 

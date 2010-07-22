@@ -87,9 +87,8 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
         maStrings[String_DragAndDropPages] = String(SdResId(STRING_DRAG_AND_DROP_PAGES));
         maStrings[String_DragAndDropSlides] = String(SdResId(STRING_DRAG_AND_DROP_SLIDES));
         maStrings[String_Command1] = String(SdResId(STRING_COMMAND1));
-        maStrings[String_Command2_A] = String(SdResId(STRING_COMMAND2_A));
-        maStrings[String_Command2_B] = String(SdResId(STRING_COMMAND2_B));
-        maStrings[String_Command2_Help] = String(SdResId(STRING_COMMAND2_HELP));
+        maStrings[String_Command2] = String(SdResId(STRING_COMMAND2_A));
+        maStrings[String_Command2B] = String(SdResId(STRING_COMMAND2_B));
         maStrings[String_Command3] = String(SdResId(STRING_COMMAND3));
 
         maColor.resize(_ColorType_Size_);
@@ -191,6 +190,13 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
             InitializeIcon(Icon_Command2Small, IMAGE_COMMAND2_SMALL_HC);
             InitializeIcon(Icon_Command2SmallHover, IMAGE_COMMAND2_SMALL_HOVER_HC);
 
+            InitializeIcon(Icon_Command2BLarge, IMAGE_COMMAND2B_LARGE_HC);
+            InitializeIcon(Icon_Command2BLargeHover, IMAGE_COMMAND2B_LARGE_HOVER_HC);
+            InitializeIcon(Icon_Command2BMedium, IMAGE_COMMAND2B_MEDIUM_HC);
+            InitializeIcon(Icon_Command2BMediumHover, IMAGE_COMMAND2B_MEDIUM_HOVER_HC);
+            InitializeIcon(Icon_Command2BSmall, IMAGE_COMMAND2B_SMALL_HC);
+            InitializeIcon(Icon_Command2BSmallHover, IMAGE_COMMAND2B_SMALL_HOVER_HC);
+
             InitializeIcon(Icon_Command3Large, IMAGE_COMMAND3_LARGE_HC);
             InitializeIcon(Icon_Command3LargeHover, IMAGE_COMMAND3_LARGE_HOVER_HC);
             InitializeIcon(Icon_Command3Medium, IMAGE_COMMAND3_SMALL_HC);
@@ -221,6 +227,13 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
             InitializeIcon(Icon_Command2MediumHover, IMAGE_COMMAND2_MEDIUM_HOVER);
             InitializeIcon(Icon_Command2Small, IMAGE_COMMAND2_SMALL);
             InitializeIcon(Icon_Command2SmallHover, IMAGE_COMMAND2_SMALL_HOVER);
+
+            InitializeIcon(Icon_Command2BLarge, IMAGE_COMMAND2B_LARGE);
+            InitializeIcon(Icon_Command2BLargeHover, IMAGE_COMMAND2B_LARGE_HOVER);
+            InitializeIcon(Icon_Command2BMedium, IMAGE_COMMAND2B_MEDIUM);
+            InitializeIcon(Icon_Command2BMediumHover, IMAGE_COMMAND2B_MEDIUM_HOVER);
+            InitializeIcon(Icon_Command2BSmall, IMAGE_COMMAND2B_SMALL);
+            InitializeIcon(Icon_Command2BSmallHover, IMAGE_COMMAND2B_SMALL_HOVER);
 
             InitializeIcon(Icon_Command3Large, IMAGE_COMMAND3_LARGE);
             InitializeIcon(Icon_Command3LargeHover, IMAGE_COMMAND3_LARGE_HOVER);

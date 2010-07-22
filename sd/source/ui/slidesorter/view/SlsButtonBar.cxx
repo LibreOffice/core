@@ -202,16 +202,7 @@ ButtonBar::ButtonBar (SlideSorter& rSlideSorter)
       mpBackgroundTheme(),
       mnLockCount(0)
 {
-    maExcludedButtons.push_back(::boost::shared_ptr<Button>(new UnhideButton(mrSlideSorter)));
-
-    maRegularButtons.push_back(::boost::shared_ptr<Button>(new StartShowButton(mrSlideSorter)));
-    maRegularButtons.push_back(::boost::shared_ptr<Button>(new HideButton(mrSlideSorter)));
-    maRegularButtons.push_back(::boost::shared_ptr<Button>(new DuplicateButton(mrSlideSorter)));
-
-    mpBackgroundTheme.reset(
-        new BitmapBackgroundTheme(
-            mrSlideSorter.GetTheme(),
-            maRegularButtons));
+    HandleDataChangeEvent();
 }
 
 
@@ -610,19 +601,19 @@ bool ButtonBar::LayoutButtons (void)
 
     // Place the buttons.
     Rectangle aBox (maButtonBoundingBox);
-    if (maExcludedButtons.size() > 1)
-        aBox.Right() -= nBorder;
-    for (sal_Int32 nIndex=maExcludedButtons.size()-1; nIndex>=0; --nIndex)
-    {
-        maExcludedButtons[nIndex]->Place(aBox);
-        aBox.Right() = maExcludedButtons[nIndex]->GetBoundingBox().Left() - nGap;
-    }
-    aBox = maButtonBoundingBox;
     aBox.Right() -= nBorder;
     for (sal_Int32 nIndex=maRegularButtons.size()-1; nIndex>=0; --nIndex)
     {
         maRegularButtons[nIndex]->Place(aBox);
         aBox.Right() = maRegularButtons[nIndex]->GetBoundingBox().Left() - nGap;
+    }
+
+    // For slides excluded from the show there is only one icon placed
+    // exactly like the second of the regular icons.
+    if (maRegularButtons.size()>=2 && maExcludedButtons.size()>=1)
+    {
+        Rectangle aBox (maRegularButtons[1]->GetBoundingBox());
+        maExcludedButtons[0]->Place(aBox);
     }
 
     // We return true only when there is no inactive button.
@@ -687,6 +678,28 @@ bool ButtonBar::IsVisible (const model::SharedPageDescriptor& rpDescriptor)
 {
     const double nMaxAlpha (1);
     return rpDescriptor && rpDescriptor->GetVisualState().GetButtonBarAlpha() < nMaxAlpha;
+}
+
+
+
+
+void ButtonBar::HandleDataChangeEvent (void)
+{
+    maExcludedButtons.clear();
+    maExcludedButtons.push_back(::boost::shared_ptr<Button>(new UnhideButton(mrSlideSorter)));
+
+    maRegularButtons.clear();
+    maRegularButtons.push_back(::boost::shared_ptr<Button>(new StartShowButton(mrSlideSorter)));
+    maRegularButtons.push_back(::boost::shared_ptr<Button>(new HideButton(mrSlideSorter)));
+    maRegularButtons.push_back(::boost::shared_ptr<Button>(new DuplicateButton(mrSlideSorter)));
+
+    mpBackgroundTheme.reset(
+        new BitmapBackgroundTheme(
+            mrSlideSorter.GetTheme(),
+            maRegularButtons));
+
+    // Force layout on next Paint().
+    maPageObjectSize = Size(0,0);
 }
 
 
@@ -1362,10 +1375,15 @@ Size ImageButton::GetSize (const Button::IconSize eIconSize) const
 //===== UnhideButton ==========================================================
 
 UnhideButton::UnhideButton (SlideSorter& rSlideSorter)
-    : TextButton(
+    : ImageButton(
         rSlideSorter,
-        rSlideSorter.GetTheme()->GetString(Theme::String_Command2_B),
-        rSlideSorter.GetTheme()->GetString(Theme::String_Command2_Help))
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2BLarge),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2BLargeHover),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2BMedium),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2BMediumHover),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2BSmall),
+        rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2BSmallHover),
+        rSlideSorter.GetTheme()->GetString(Theme::String_Command2B))
 {
 }
 
@@ -1452,7 +1470,7 @@ HideButton::HideButton (SlideSorter& rSlideSorter)
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2MediumHover),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2Small),
         rSlideSorter.GetTheme()->GetIcon(Theme::Icon_Command2SmallHover),
-        rSlideSorter.GetTheme()->GetString(Theme::String_Command2_A))
+        rSlideSorter.GetTheme()->GetString(Theme::String_Command2))
 {
 }
 

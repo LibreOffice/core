@@ -137,6 +137,8 @@ public:
     */
     bool IsVisible (const model::SharedPageDescriptor& rpDescriptor);
 
+    void HandleDataChangeEvent (void);
+
     class BackgroundTheme;
 
     /** While at least one Lock object exists the button bar will not be
@@ -313,7 +315,7 @@ private:
 };
 
 
-class UnhideButton : public TextButton
+class UnhideButton : public ImageButton
 {
 public:
     UnhideButton (SlideSorter& rSlideSorter);
