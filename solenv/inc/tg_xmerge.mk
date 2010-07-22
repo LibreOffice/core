@@ -49,19 +49,19 @@ $(COMMONMISC)/$(PACKAGE)/%$(L10NEXT) $(XTXMERGEPHONY) : %.xtx
     $(COMMAND_ECHO)$(COPY) $< $@
 .ELSE          # "$(WITH_LANG)"==""
     @@-$(RM) $@
-    $(COMMAND_ECHO)@noop $(assign PMERGELIST+:=$(<:f))
-    $(COMMAND_ECHO)@noop $(assign PDESTDIR:=$(@:d))
+    $(COMMAND_ECHO)@noop $(assign XTXMERGELIST+:=$(<:f))
+    $(COMMAND_ECHO)@noop $(assign XTXDESTDIR:=$(@:d))
 .ENDIF          # "$(WITH_LANG)"==""
 
-$(MISC)/$(TARGET).xtx.pmerge.mk : $(PMERGELIST)
+$(MISC)/$(TARGET).xtx.pmerge.mk : $(XTXMERGELIST)
 .IF "$(WITH_LANG)"!=""
 # xtxex command file requirements:
 # - one file per line
 # - no spaces
 # - no empty lines
 # $(uniq ...) to workaround $assign adding the value twice...
-    @noop $(assign PMERGEFILELIST:=$(uniq $(PMERGELIST)))
-    $(COMMAND_ECHO) $(SOLARBINDIR)/xtxex -p $(PRJNAME) -r $(PRJ) -o $(PDESTDIR) -i @$(mktmp $(PMERGEFILELIST:t"\n":s/ //)) -l $(alllangiso:s/ /,/) -f $(alllangiso:s/ /,/) -m $(LOCALIZESDF) -s"[path]/[fileNoExt]_[language]$(L10NEXT)" 
+    @noop $(assign XTXMERGEFILELIST:=$(uniq $(XTXMERGELIST)))
+    $(COMMAND_ECHO) $(SOLARBINDIR)/xtxex -p $(PRJNAME) -r $(PRJ) -o $(XTXDESTDIR) -i @$(mktmp $(XTXMERGEFILELIST:t"\n":s/ //)) -l $(alllangiso:s/ /,/) -f $(alllangiso:s/ /,/) -m $(LOCALIZESDF) -s"[path]/[fileNoExt]_[language]$(L10NEXT)" 
 .ENDIF          # "$(WITH_LANG)"!=""
 
     @-$(RM) $@
@@ -87,20 +87,20 @@ $(OUT_HELP)/en-US/help.tree $(TREEMERGEPHONY) : help.tree
     $(COMMAND_ECHO)$(COPY) $< $@
 .ELSE          # "$(WITH_LANG)"==""
     @@-$(RM) $@
-    $(COMMAND_ECHO)@noop $(assign PMERGELIST1+:=$(<:f))
-    $(COMMAND_ECHO)@noop $(assign PDESTDIR1:=$(@:d:d:d))
+    $(COMMAND_ECHO)@noop $(assign TREEMERGELIST+:=$(<:f))
+    $(COMMAND_ECHO)@noop $(assign TREEDESTDIR:=$(@:d:d:d))
 .ENDIF          # "$(WITH_LANG)"==""
 
-$(MISC)/$(TARGET).tree.pmerge.mk : $(PMERGELIST1)
+$(MISC)/$(TARGET).tree.pmerge.mk : $(TREEMERGELIST)
 .IF "$(WITH_LANG)"!=""
 # xtxex command file requirements:
 # - one file per line
 # - no spaces
 # - no empty lines
 # $(uniq ...) to workaround $assign adding the value twice...
-    @noop $(assign PMERGEFILELIST1:=$(uniq $(PMERGELIST1)))
+    @noop $(assign TREEMERGEFILELIST:=$(uniq $(TREEMERGELIST)))
 # Variables for the pattern filename,fileNoExt,language,extension,pathPrefix,pathPostFix,path
-    $(COMMAND_ECHO) $(SOLARBINDIR)/xhtex -p $(PRJNAME) -r $(PRJ) -o $(PDESTDIR1) -i @$(mktmp $(PMERGEFILELIST1:t"\n":s/ //)) -l $(alllangiso:s/ /,/) -f $(alllangiso:s/ /,/) -m $(LOCALIZESDF) -s"[path]/[language]/[fileNoExt].tree" 
+    $(COMMAND_ECHO) $(SOLARBINDIR)/xhtex -p $(PRJNAME) -r $(PRJ) -o $(TREEDESTDIR) -i @$(mktmp $(TREEMERGEFILELIST:t"\n":s/ //)) -l $(alllangiso:s/ /,/) -f $(alllangiso:s/ /,/) -m $(LOCALIZESDF) -s"[path]/[language]/[fileNoExt].tree" 
 .ENDIF          # "$(WITH_LANG)"!=""
     @-$(RM) $@
     $(COMMAND_ECHO)echo last_merge=$(alllangiso) > $@
