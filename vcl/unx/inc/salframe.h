@@ -206,6 +206,10 @@ public:
     bool                    isMapped() const { return bMapped_; }
     bool                    hasFocus() const { return mbInputFocus; }
 
+    void                    beginUnicodeSequence();
+    bool                    appendUnicodeSequence( sal_Unicode );
+    bool                    endUnicodeSequence();
+
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
 
