@@ -43,7 +43,7 @@ $(XTXFILES) : $(LOCALIZESDF)
 XTXMERGEPHONY:=.PHONY
 .ENDIF          # "$(alllangiso)" != "$(last_merge)"
 
-$(COMMONMISC)/$(PACKAGE)/%$(L10NEXT) $(XTXMERGEPHONY) : %.xtx
+$(MISC)/$(TARGET)/%$(L10NEXT) $(XTXMERGEPHONY) : %.xtx
     @@-$(MKDIRHIER) $(@:d)
 .IF "$(WITH_LANG)"==""
     $(COMMAND_ECHO)$(COPY) $< $@
