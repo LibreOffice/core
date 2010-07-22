@@ -1814,7 +1814,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
                 if ( IsNativeControlSupported( CTRL_LISTNODE, PART_ENTIRE_CONTROL) )
                 {
                     ImplControlValue    aControlValue;
-                    Region            aCtrlRegion( Rectangle(aPos,  pImg->GetSizePixel() ) );
+                    Rectangle           aCtrlRegion( aPos,  pImg->GetSizePixel() );
                     ControlState        nState = 0;
 
                     if ( IsEnabled() )  nState |= CTRL_STATE_ENABLED;
