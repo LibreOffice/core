@@ -266,7 +266,7 @@ function hListCompare( aListOne() as String, aListTwo() as String ) as integer
     if ( ListCount( aTwoOnlyList() ) > 0 ) then
         printlog( CFN & "Objects have been removed from the list" )
         hListPrint( aTwoOnlyList() , "Items found in list TWO only (MISSING)" )
-        hListCompare() = ListCount( aOneOnlyList() ) * -1
+        hListCompare() = ListCount( aTwoOnlyList() ) * -1
     end if
 
     '///</ul>
