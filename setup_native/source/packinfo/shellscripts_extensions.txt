@@ -38,7 +38,7 @@ fi
 if [ -x $$POSTRUN ]; then
 ( echo "test -x \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" || exit 0"
   echo "umask 022"
-  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" sync \"-env:BUNDLED_EXTENSIONS_USER=file:////$$CLIENT_BASEDIR/opt/${UNIXBASISROOTNAME}/basis${OOOBASEVERSION}/presets/bundled\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
+  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" sync \"-env:BUNDLED_EXTENSIONS_USER=file:////$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/prereg\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
 ) | $$POSTRUN -b -c UNOPKG
   if [ "$$?" != "0" ]; then
     echo "\nERROR: Installation of UNO extensions"
@@ -47,7 +47,7 @@ if [ -x $$POSTRUN ]; then
   fi
 else
   # No postrun available, try running unopkg directly
-  "$$UNOPKG" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$BASEDIR/opt/${UNIXBASISROOTNAME}/basis${OOOBASEVERSION}/presets/bundled" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$UNOPKG" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
   if [ "$$?" != "0" ]; then
     echo "\nERROR: Installation of UNO extensions failed."
     test "$$BASEDIR" = "$$CLIENT_BASEDIR" || echo "ERROR: alternate root install requires SUNWpostrun package to be installed"
@@ -89,13 +89,13 @@ if [ -x $$PKG_INSTALL_ROOT/usr/lib/postrun ]; then
 ( echo "test -x \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" || exit 0"
   echo "cd \"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program\""
   echo "umask 022"
-  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" sync \"-env:BUNDLED_EXTENSIONS_USER=file:////$$CLIENT_BASEDIR/opt/${UNIXBASISROOTNAME}/basis${OOOBASEVERSION}/presets/bundled\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
+  echo "\"$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg\" sync \"-env:BUNDLED_EXTENSIONS_USER=file:////$$CLIENT_BASEDIR/PRODUCTDIRECTORYNAME/share/prereg\" \"-env:UserInstallation=file:////$$INSTDIR\" '-env:UNO_JAVA_JFW_INSTALL_DATA=\$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'"
   echo "rm -rf \"$$INSTDIR\""
 ) | $$PKG_INSTALL_ROOT/usr/lib/postrun -c UNOPKG
 else
   # No postrun available, try running unopkg directly
   test -x $$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg || exit 0  
-  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$BASEDIR/opt/${UNIXBASISROOTNAME}/basis${OOOBASEVERSION}/presets/bundled" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
   if [ "$$?" != "0" ]; then
     echo "\nERROR: Removal of UNO extension failed."
     test "$$BASEDIR" = "$$CLIENT_BASEDIR" || echo "ERROR: alternate root uninstall requires SUNWpostrun package to be installed"
@@ -138,7 +138,7 @@ else
 fi
 
 if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$RPM_INSTALL_PREFIX/${UNIXBASISROOTNAME}/basis${OOOBASEVERSION}/presets/bundled" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
 fi
 
 if [ -n "$$INSTDIR" ]; then
@@ -172,7 +172,7 @@ else
 fi
 
 if [ -x "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$RPM_INSTALL_PREFIX/${UNIXBASISROOTNAME}/basis${OOOBASEVERSION}/presets/bundled" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$RPM_INSTALL_PREFIX/PRODUCTDIRECTORYNAME/share/prereg" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
 fi
 
 if [ -n "$$INSTDIR" ]; then
@@ -210,7 +210,7 @@ else
 fi
 
 if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]; then
-  "PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file://////opt/${UNIXBASISROOTNAME}/basis${OOOBASEVERSION}/presets/bundled" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file://////PRODUCTDIRECTORYNAME/share/prereg" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
 fi
 
 if [ -n "$$INSTDIR" ]
@@ -249,7 +249,7 @@ fi
 
 if [ -x "PRODUCTDIRECTORYNAME/program/unopkg" ]
 then
-  "PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file://////opt/${UNIXBASISROOTNAME}/basis${OOOBASEVERSION}/presets/bundled" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file://////PRODUCTDIRECTORYNAME/share/prereg" "-env:UserInstallation=file://////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
 fi
 
 if [ -n "$$INSTDIR" ]
