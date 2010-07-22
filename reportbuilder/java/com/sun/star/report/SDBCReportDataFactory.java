@@ -259,7 +259,17 @@ public class SDBCReportDataFactory implements DataSourceFactory
 
                         if (!expression.startsWith(quote) && columns.hasByName(expression))
                         {
-                            expression = quote + expression + quote;
+                            XPropertySet column;
+                            try
+                            {
+                                column = UnoRuntime.queryInterface(XPropertySet.class, columns.getByName(expression));
+                                expression = quote + column.getPropertyValue("TableName") + quote + "." + quote + expression + quote;
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.getLogger(SDBCReportDataFactory.class.getName()).log(Level.SEVERE, null, ex);
+                                expression = quote + expression + quote;
+                            }
                         }
                         expression = expression.trim(); // Trim away white spaces
 
