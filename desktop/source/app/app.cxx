@@ -1704,6 +1704,13 @@ void Desktop::Main()
             ( xSMgr->createInstance(
             DEFINE_CONST_UNICODE( "com.sun.star.frame.GlobalEventBroadcaster" ) ), UNO_QUERY );
 
+        /* ensure existance of a default window that messages can be dispatched to
+           This is for the benefit of testtool which uses PostUserEvent extensively
+           and else can deadlock while creating this window from another tread while
+           the main thread is not yet in the event loop.
+        */
+        Application::GetDefaultDevice();
+
         // initialize test-tool library (if available)
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ tools::InitTestToolLib" );
         tools::InitTestToolLib();

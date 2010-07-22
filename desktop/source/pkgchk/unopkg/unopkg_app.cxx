@@ -39,6 +39,7 @@
 #include "osl/thread.h"
 #include "osl/process.h"
 #include "osl/conditn.hxx"
+#include "osl/file.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "comphelper/anytostring.hxx"
@@ -376,6 +377,26 @@ extern "C" int unopkg_main()
             oslFileError e = osl_removeFile(extensionUnorc.pData);
             if (e != osl_File_E_None && e != osl_File_E_NOENT)
                 throw Exception(OUSTR("Could not delete ") + extensionUnorc, 0);
+        }
+        else if (subCommand.equals(OUSTR("sync")))
+        {
+            //sync is private!!!! Only for bundled extensions!!!
+            //For performance reasons unopkg sync is called during the setup and
+            //creates the registration data for the repository of the bundled
+            //extensions. It is then copied to the user installation during
+            //startup of OOo (userdata/extensions/bundled).  The registration
+            //data is in the brand installation and must be removed when
+            //uninstalling OOo.  We do this here, before UNO is
+            //bootstrapped. Otherwies files could be locked by this process.
+
+            //If there is no folder left in
+            //$BRAND_BASE_DIR/share/extensions
+            //then we can delete the registration data at
+            //$BUNDLED_EXTENSIONS_USER
+            if (hasNoFolder(OUSTR("$BRAND_BASE_DIR/share/extensions")))
+                removeFolder(OUSTR("$BUNDLED_EXTENSIONS_USER"));
+            return 0;
+
         }
 
         xComponentContext = getUNO(
