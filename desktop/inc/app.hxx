@@ -75,7 +75,8 @@ class Desktop : public Application
             BE_USERINSTALL_FAILED,
             BE_LANGUAGE_MISSING,
             BE_USERINSTALL_NOTENOUGHDISKSPACE,
-            BE_USERINSTALL_NOWRITEACCESS
+            BE_USERINSTALL_NOWRITEACCESS,
+            BE_OFFICECONFIG_BROKEN
         };
         enum BootstrapStatus
         {
