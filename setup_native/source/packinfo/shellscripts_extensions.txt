@@ -47,7 +47,7 @@ if [ -x $$POSTRUN ]; then
   fi
 else
   # No postrun available, try running unopkg directly
-  "$$UNOPKG" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$UNOPKG" sync "-env:BUNDLED_EXTENSIONS_USER=file:////////$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg" "-env:UserInstallation=file:////////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
   if [ "$$?" != "0" ]; then
     echo "\nERROR: Installation of UNO extensions failed."
     test "$$BASEDIR" = "$$CLIENT_BASEDIR" || echo "ERROR: alternate root install requires SUNWpostrun package to be installed"
@@ -95,7 +95,7 @@ if [ -x $$PKG_INSTALL_ROOT/usr/lib/postrun ]; then
 else
   # No postrun available, try running unopkg directly
   test -x $$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg || exit 0  
-  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg" "-env:UserInstallation=file:////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
+  "$$BASEDIR/PRODUCTDIRECTORYNAME/program/unopkg" sync "-env:BUNDLED_EXTENSIONS_USER=file:////////$$BASEDIR/PRODUCTDIRECTORYNAME/share/prereg" "-env:UserInstallation=file:////////$$INSTDIR" '-env:UNO_JAVA_JFW_INSTALL_DATA=$$OOO_BASE_DIR/share/config/javasettingsunopkginstall.xml' '-env:JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY=1'
   if [ "$$?" != "0" ]; then
     echo "\nERROR: Removal of UNO extension failed."
     test "$$BASEDIR" = "$$CLIENT_BASEDIR" || echo "ERROR: alternate root uninstall requires SUNWpostrun package to be installed"
