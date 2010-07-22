@@ -169,13 +169,11 @@ function hManageComparisionList( sFileIn as string, sFileOut as string, sListOut
         printlog( CFN & "Comparision succeeded" )
         hManageComparisionList() = COMPARE_SUCCESS
     else
-        if ( GVERBOSE ) then
-            printlog( CFN & "The two compared lists differ. There are two likely reasons:" )
-            printlog( CFN & "1) The reference file does not exist at all" )
-            printlog( CFN & "2) Reference and actual UI-Content do not match." )
-            printlog( CFN & "Verify and copy the file: " & sFileOut )
-            printlog( CFN & "to this location........: " & sFileIn  )
-        endif
+        printlog( CFN & "The two compared lists differ. There are two likely reasons:" )
+        printlog( CFN & "1) The reference file does not exist at all" )
+        printlog( CFN & "2) Reference and actual UI-Content do not match." )
+        printlog( CFN & "Verify and copy the file: " & sFileOut )
+        printlog( CFN & "to this location........: " & sFileIn  )
         listwrite( sListOut(), sFileOut, ENCODING_UTF8 )
         hManageComparisionList() = irc
     endif
