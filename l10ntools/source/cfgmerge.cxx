@@ -59,7 +59,6 @@ BOOL bMergeMode;
 BOOL bErrorLog;
 BOOL bForce;
 BOOL bUTF8;
-bool bQuiet;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sInputFileName;
@@ -83,7 +82,6 @@ extern char *GetOutputFile( int argc, char* argv[])
     bErrorLog       = TRUE;
     bForce          = FALSE;
     bUTF8           = TRUE;
-    bQuiet          = false;
     sPrj            = "";
     sPrjRoot        = "";
     sInputFileName  = "";
@@ -127,9 +125,6 @@ extern char *GetOutputFile( int argc, char* argv[])
         else if ( sSwitch == "-F" ) {
             nState = STATE_FORCE;
             bForce = TRUE;
-        }
-        else if ( sSwitch == "-QQ" ) {
-            bQuiet = true;
         }
         else if ( sSwitch == "-L" ) {
             nState = STATE_LANGUAGES;
@@ -183,10 +178,6 @@ extern char *GetOutputFile( int argc, char* argv[])
 
     // command line is not valid
     return NULL;
-}
-int isQuiet(){
-    if( bQuiet )    return 1;
-    else            return 0;
 }
 /*****************************************************************************/
 int InitCfgExport( char *pOutput , char* pFilename )

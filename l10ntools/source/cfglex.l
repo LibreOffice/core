@@ -177,7 +177,6 @@ main( int argc, char* argv[])
 		fprintf( stdout, " FileIn:   Source files (*.src)\n" );
 		fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
 		fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-		fprintf( stdout, " -QQ: quiet output\n" );
         fprintf( stdout, " -e: Disable writing errorlog\n" );
 		fprintf( stdout, " -b: Break when Token \"HelpText\" found in source\n" );
 		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
