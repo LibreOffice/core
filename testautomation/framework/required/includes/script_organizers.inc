@@ -122,7 +122,9 @@ testcase tUpdtScripts
         end select
         
         printlog( "Compare to reference list, create new one if differences were found" )
-        hManageComparisionList( sFileIn, sFileOut, cScriptNamesList() )
+        if ( hManageComparisionList( sFileIn, sFileOut, cScriptNamesList() ) <> 0 ) then
+            warnlog( "The number of scripts has changed. Please review!" )
+        endif
         
         printlog( "Close <" & sDialog & ">" )
         select case ( sDialog ) 
