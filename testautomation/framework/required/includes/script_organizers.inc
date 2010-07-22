@@ -158,9 +158,6 @@ sub hGetScriptNames( oTreeList as object, oScriptList as object, cItemList() as 
     dim iCurrentScript as integer
     dim cScriptList( 1000 ) as string
 
-    ' Reset the temporary array to contain zero items
-    ListAllDelete( cScriptList() )
-
     ' Get the number of nodes from the modules treelist
     iObjectsInTreeList = hExpandAllNodes( oTreeList )
 
@@ -172,7 +169,8 @@ sub hGetScriptNames( oTreeList as object, oScriptList as object, cItemList() as 
         cModuleName = hGetNodeName( oTreeList, iCurrentTreeListItem )
         hListAppend( cModuleName, cItemList() )
 
-        ' Get the number of scripts from the right pane
+        ' Get the number of scripts from the right pane, reset the array in advance
+        ListAllDelete( cScriptList() )
         iScriptCount = hGetListItems( oScriptList, cScriptList() )
 
         ' Build the string for the reference list and append it to cScriptList()
