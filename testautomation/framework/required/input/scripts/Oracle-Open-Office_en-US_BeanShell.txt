@@ -1,15 +1,5 @@
 My Macros
 Oracle Open Office Macros
-ExportSheetsToHTML
-exportsheetstohtml.js
-HelloWorld
-helloworld.js
-Highlight
-ButtonPressHandler.js
-ShowDialog.js
-Untitled 1
-My Macros
-Oracle Open Office Macros
 Capitalise
 capitalise.bsh
 HelloWorld
