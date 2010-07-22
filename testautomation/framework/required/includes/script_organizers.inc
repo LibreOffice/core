@@ -53,8 +53,8 @@ testcase tUpdtScripts
     dim sProductString as string : sProductString = gProductName & "_" & gISOLang & "_"
 
     ' define platforms that have different scriptcount
-    if ( gPlatGroup = "win95" ) then sProductString = sProductString & "win_"
-    if ( gPlatform  = "osx"   ) then sProductString = sProductString & "osx_"
+    if ( lcase( gPlatGroup ) = "w95" ) then sProductString = sProductString & "win_"
+    if ( lcase( gPlatform  ) = "osx" ) then sProductString = sProductString & "osx_"
 
     ' replace all blanks
     sProductString = hStringReplaceChar( sProductString, " ", "-" )
