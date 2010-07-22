@@ -51,10 +51,11 @@ testcase tUpdtScripts
     ' This is the build specific part of the filename including substrings for
     ' the productname and language. 
     dim sProductString as string : sProductString = gProductName & "_" & gISOLang & "_"
+    dim sPlatform = lcase( gPlatform )
 
     ' define platforms that have different scriptcount
-    if ( gPlatGroup = "win95" ) then sProductString = sProductString & "win_"
-    if ( gPlatform  = "osx"   ) then sProductString = sProductString & "osx_"
+    if ( instr( sPlatform, "win" ) > 0 ) then sProductString = sProductString & "win_"
+    if ( sPlatform = "osx"   ) then sProductString = sProductString & "osx_"
 
     ' replace all blanks
     sProductString = hStringReplaceChar( sProductString, " ", "-" )
