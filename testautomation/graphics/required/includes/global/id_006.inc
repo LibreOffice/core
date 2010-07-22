@@ -31,7 +31,6 @@
 '*
 '\**********************************************************************************
 
-'------------------------------------------------------------------------------
 sub id_Tools
     printLog "---------    id_006    ----------"
     call tiToolsSpellchecking
@@ -105,9 +104,9 @@ testcase tiToolsSpellcheckingAutomatic
 endcase
 '-------------------------------------------------------------------------------
 testcase tiToolsThesaurus
-
     Dim sWord as string
     Dim sExt as string
+    Dim sFileName as string
 
     'for normal text, the thesaurus is enabled,
     'if the format->character->language of the word has a thesaurus
@@ -195,55 +194,9 @@ testcase tiToolsThesaurus
     if Thesaurus.Exists(3) then
         Thesaurus.Cancel
     else
-        sFileName = (ConvertPath (gTesttoolPath + "graphics\required\input\engtext.odg"))
+         warnlog "the thesaurus does not appear"
     end if
-    if FileExists ( sFileName ) = FALSE then
-        warnlog "The language-file was not found or accessible! The test ends."
-        goto endsub
-    end if
-    Call hFileOpen (sFileName)
-        
-        sleep (2)
-    
-        hTypeKeys "<TAB><RETURN>"
-        hTypeKeys "<END><SHIFT HOME>"
-    
-        '   Call hTextrahmenErstellen ("SimpleTest" + "<Mod1 Shift left>", 10, 10, 30, 40)
-        try
-            '/// Tools->Thesaurus ///'
-            ExtrasThesaurusDraw
-            Kontext "Thesaurus"
-                Call DialogTest ( Thesaurus )
-                '/// click button 'language' ///'
-                Sprache.Click
-                Kontext "SpracheAuswaehlen"
-                    Call DialogTest ( SpracheAuswaehlen )
-                    '/// cancel dialog 'select language' ///'
-                    SpracheAuswaehlen.cancel
-            Kontext "Thesaurus"
-                '/// click button 'search' ///'
-                Nachschlagen.Click
-                kontext
-                '/// if messagebox exist, say OK; (word not found) ///'
-                if Messagebox.exists (5) then
-                    printlog "Messagebox: word not in thesaurus: '"+Messagebox.gettext+"'"
-                    Messagebox.ok
-                end if
-                sleep 1
-                Kontext "Thesaurus"
-                    '/// cancel dialog 'Thesaurus' ///'
-                    Thesaurus.Cancel
-        catch
-            warnlog "Thesaurus didn't work :-("
-        endcatch
-        sleep 1
-        '/// close application ///'
-        Call hCloseDocument
-    else
-        goto endsub
-    endif
     Call hCloseDocument
-
 endcase
 '-------------------------------------------------------------------------------
 testcase tiToolsHyphenation
@@ -519,4 +472,4 @@ testcase tiToolsEyedropper
     '/// close application ///'
     Call hCloseDocument
 endcase
-'-------------------------------------------------------------------------------
+

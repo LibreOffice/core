@@ -166,7 +166,6 @@ testcase tToolsMacro
     printlog " Close Select Certificate' dialog with 'Cancel'"
     SelectCertificate.Cancel
     Kontext "DigitalSignature"
-    add.click
     '/// Close 'Digital Signatures' dialog with 'Cancel'
     printlog " Close 'Digital Signatures' dialog with 'Cancel'"
     DigitalSignature.ok
