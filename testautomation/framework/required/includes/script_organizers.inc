@@ -52,11 +52,11 @@ testcase tUpdtScripts
     ' the productname and language. 
     dim sProductString as string : sProductString = gProductName & "_" & gISOLang & "_"
 
-    select case ( lcase( gPlatform ) )
-    case "osx" : sProductString = sProductString & gPlatform & "_"
-    end select
+    ' define platforms that have different scriptcount
+    if ( gPlatGroup = "win95" ) then sProductString = sProductString & "win_"
+    if ( gPlatform  = "osx"   ) then sProductString = sProductString & "osx_"
 
-    ' Replace blanks with "-" as usage of blanks is discouraged.
+    ' replace all blanks
     sProductString = hStringReplaceChar( sProductString, " ", "-" )
  
     ' This is where reference file is located, the filename is yet incomplete
@@ -76,6 +76,9 @@ testcase tUpdtScripts
 
     dim sDialog as string
     dim iCurrentDialog as integer
+
+    dim iDiffCount as integer
+    dim iAllowedModifier as integer
 
     hInitSingleDoc()
 
@@ -122,17 +125,20 @@ testcase tUpdtScripts
         end select
         
         printlog( "Compare to reference list, create new one if differences were found" )
-        if ( hManageComparisionList( sFileIn, sFileOut, cScriptNamesList() ) <> 0 ) then
-            warnlog( "The number of scripts has changed. Please review!" )
-        endif
-        
+        iDiffCount = hManageComparisionList( sFileIn, sFileOut, cScriptNamesList() )
+
         printlog( "Close <" & sDialog & ">" )
         select case ( sDialog ) 
-        case DLG_JAVASCRIPT : ScriptOrganizer.cancel()
-        case DLG_BEANSHELL  : ScriptOrganizer.cancel()
-        case DLG_PYTHON     : ScriptOrganizer.cancel()
-        case DLG_BASIC_ORG  : Makro.close()
-        case DLG_RUN_MACRO  : ScriptSelector.cancel()
+        case DLG_JAVASCRIPT :
+            ScriptOrganizer.cancel()
+        case DLG_BEANSHELL  :
+            ScriptOrganizer.cancel()
+        case DLG_PYTHON     :
+            ScriptOrganizer.cancel()
+        case DLG_BASIC_ORG  :
+            Makro.close()
+        case DLG_RUN_MACRO  :
+            ScriptSelector.cancel()
         end select
 
     next iCurrentDialog
