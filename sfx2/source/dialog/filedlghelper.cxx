@@ -79,7 +79,6 @@
 #include <unotools/viewoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svtools/helpid.hrc>
-#include <svl/pickerhelper.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <ucbhelper/content.hxx>
