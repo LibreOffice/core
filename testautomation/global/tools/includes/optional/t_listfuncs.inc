@@ -428,7 +428,7 @@ function hCountMatchesInList( acItemList() as string, cSearchTerm as string ) as
         endif
     next iCurrentItem
 
-if ( GVERBOSE ) then printlog( CFN & "Exit with result: " & iHitCount )
+    if ( GVERBOSE ) then printlog( CFN & "Exit with result: " & iHitCount )
     hCountMatchesInList() = iHitCount
 
 end function

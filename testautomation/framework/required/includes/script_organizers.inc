@@ -49,11 +49,15 @@ testcase tUpdtScripts
     const DLG_RUN_MACRO  = "RunMacro"
 
     ' This is the build specific part of the filename including substrings for
-    ' the productname, platform, and language. At a later point we add the dialog name.
-    ' Replace all blanks (spaces) with "-"
-    dim sProductString as string
-        sProductString = gProductName & "_" & gPlatform & "_" & gISOLang & "_"
-        sProductString = hStringReplaceChar( sProductString, " ", "-" )
+    ' the productname and language. 
+    dim sProductString as string : sProductString = gProductName & "_" & gISOLang & "_"
+
+    select case ( lcase( gPlatform ) )
+    case "osx" : sProductString = sProductString & gPlatform & "_"
+    end select
+
+    ' Replace blanks with "-" as usage of blanks is discouraged.
+    sProductString = hStringReplaceChar( sProductString, " ", "-" )
  
     ' This is where reference file is located, the filename is yet incomplete
     dim sInputPath as string
@@ -70,15 +74,14 @@ testcase tUpdtScripts
     ' Array that contains the scriptnames for all organizers
     dim cScriptNamesList( 1000 ) as string
 
-    ' Holds the object of the treelist. Used to reduce the amount of code.
-    dim oTreeList as object
-
     dim sDialog as string
     dim iCurrentDialog as integer
 
     hInitSingleDoc()
 
     for iCurrentDialog = 1 to SCRIPTING_DIALOGS
+
+        ListAllDelete( cScriptNamesList() )
 
         ' Build complete filename and identify dialog for logging and case selection
         select case ( iCurrentDialog )
@@ -89,38 +92,39 @@ testcase tUpdtScripts
         case 5 : sDialog = DLG_RUN_MACRO
         end select
 
+        printlog( "" )
         sFileIn  = convertpath( sInputPath  & sDialog & ".txt" )
         sFileOut = convertpath( sOutputPath & sDialog & ".txt" )
-        printlog( "File in.: " & sFileIn  )
-        printlog( "File out: " & sFileOut )
 
         printlog( "Open <" & sDialog & "> and access the treelist object" )
+
+        ' Note: hGetAllNodeNames() is a *global* function defined in t_treelist_tools.inc
+        ' DLG_BASIC_ORG and DLG_RUN_MACRO have - in addition to the treelist -
+        ' a separate script list. To get those scripts a little more effort is
+        ' required which is done in the *local* function hGetScriptNames()
 
         select case ( sDialog )
         case DLG_JAVASCRIPT: ToolsMacrosOrganizeMacrosJavaScript
             kontext "ScriptOrganizer"
-            oTreeList = ScriptTreelist
+            hGetAllNodeNames( ScriptTreeList, cScriptNamesList() )
         case DLG_BEANSHELL: ToolsMacrosOrganizeMacrosBeanShell
             kontext "ScriptOrganizer"
-            oTreeList = ScriptTreeList
+            hGetAllNodeNames( ScriptTreeList, cScriptNamesList() )
         case DLG_PYTHON: ToolsMacrosOrganizeMacrosPython
             kontext "ScriptOrganizer"
-            oTreeList = ScriptTreeList
+            hGetAllNodeNames( ScriptTreeList, cScriptNamesList() )
         case DLG_BASIC_ORG: ToolsMacro_uno
             Kontext "Makro"
-            oTreeList = MakroAus
+            hGetScriptNames( MakroAus, MakroListe, cScriptNamesList() )
         case DLG_RUN_MACRO: ToolsMacrosRunMacro
             kontext "ScriptSelector"
-            oTreeList = LibraryTreeList
+            hGetScriptNames( LibraryTreeList, ScriptList, cScriptNamesList() )
         end select
-        
-        printlog( "Expand all nodes and retrieve all nodenames" )
-        hGetAllNodeNames( oTreeList, cScriptNamesList() )
         
         printlog( "Compare to reference list, create new one if differences were found" )
         hManageComparisionList( sFileIn, sFileOut, cScriptNamesList() )
         
-        printlog( "Close " & sDialog )
+        printlog( "Close <" & sDialog & ">" )
         select case ( sDialog ) 
         case DLG_JAVASCRIPT : ScriptOrganizer.cancel()
         case DLG_BEANSHELL  : ScriptOrganizer.cancel()
@@ -137,15 +141,46 @@ endcase
 
 '*******************************************************************************
 
-function hGetScriptCount( oTree as object, oList as object ) as integer
+sub hGetScriptNames( oTreeList as object, oScriptList as object, cItemList() as string )
 
-    dim iCurrentTreeItem as integer
-    dim iScriptCount as integer : iScriptCount = 0
-    
-    for iCurrentTreeItem = 1 to oTree.getItemCount()
-        oTree.select( iCurrentTreeItem )
-        iScriptCount = iScriptCount + oList.getItemCount()
-    next iCurrentTreeItem
-    hGetScriptCount() = iScriptCount
-    
-end function
+    ' oTreeList is the treelist object (left pane)
+    ' oScriptList is the script list (right pane)
+    ' cScriptList() is filled with the scriptnames of the form
+    ' <module>:<script name> like "CommonLang:LoadLanguages"
+
+    dim iCurrentTreeListItem as integer
+    dim iObjectsInTreelist as integer
+
+    dim cModuleName as string
+    dim cReferenceString as string
+
+    dim iScriptCount as integer
+    dim iCurrentScript as integer
+    dim cScriptList( 1000 ) as string
+
+    ' Reset the temporary array to contain zero items
+    ListAllDelete( cScriptList() )
+
+    ' Get the number of nodes from the modules treelist
+    iObjectsInTreeList = hExpandAllNodes( oTreeList )
+
+    ' For each item in the modules treelist get the number of scripts (right pane)
+    for iCurrentTreeListItem = 1 to iObjectsInTreeList
+
+        ' Get the name of the current treelist node, append it to the list
+        ' (otherwise it does not appear if it has no scripts)
+        cModuleName = hGetNodeName( oTreeList, iCurrentTreeListItem )
+        hListAppend( cModuleName, cItemList() )
+
+        ' Get the number of scripts from the right pane
+        iScriptCount = hGetListItems( oScriptList, cScriptList() )
+
+        ' Build the string for the reference list and append it to cScriptList()
+        for iCurrentScript = 1 to iScriptCount
+            cReferenceString = cModuleName & ":" & cScriptList( iCurrentScript )
+            hListAppend( cReferenceString, cItemList() )
+        next iCurrentScript
+
+    next iCurrentTreeListItem
+
+end sub
