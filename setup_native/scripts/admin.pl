@@ -1122,7 +1122,7 @@ sub register_extensions_sync
 
     if ( $^O =~ /cygwin/i ) {
         $executable = "./" . $executable;
-        $preregdir = qx{cygpath -m "$presetsdir"};
+        $preregdir = qx{cygpath -m "$preregdir"};
         chomp($preregdir);
     }
 
