@@ -183,6 +183,12 @@ void CurrentSlideManager::SwitchCurrentSlide (
         // the new slide have to be repainted.)
         maSwitchPageDelayTimer.Start();
 
+        // We have to store the (index of the) new current slide at
+        // the tab control because there are other asynchronous
+        // notifications of the slide switching that otherwise
+        // overwrite the correct value.
+        SetCurrentSlideAtTabControl(mpCurrentSlide);
+
         if (bUpdateSelection)
         {
             mrSlideSorter.GetController().GetPageSelector().DeselectAllPages();
@@ -210,19 +216,26 @@ void CurrentSlideManager::SetCurrentSlideAtViewShellBase (const SharedPageDescri
             pDrawViewShell->SwitchPage(nPageNumber);
             pDrawViewShell->GetPageTabControl()->SetCurPageId(nPageNumber+1);
         }
-        /*
-        else
+    }
+}
+
+
+
+
+void CurrentSlideManager::SetCurrentSlideAtTabControl (const SharedPageDescriptor& rpDescriptor)
+{
+    OSL_ASSERT(rpDescriptor.get() != NULL);
+
+    ViewShellBase* pBase = mrSlideSorter.GetViewShellBase();
+    if (pBase != NULL)
+    {
+        ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+            ::boost::dynamic_pointer_cast<DrawViewShell>(pBase->GetMainViewShell()));
+        if (pDrawViewShell)
         {
-            presenter::PresenterViewShell* pPresenterViewShell
-                = dynamic_cast<presenter::PresenterViewShell*>(pBase->GetMainViewShell());
-            if (pPresenterViewShell != NULL)
-            {
-                pPresenterViewShell->SetCurrentSlide(
-                    Reference<drawing::XDrawPage>(
-                        rpDescriptor->GetPage()->getUnoPage(), UNO_QUERY));
-            }
+            USHORT nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
+            pDrawViewShell->GetPageTabControl()->SetCurPageId(nPageNumber+1);
         }
-        */
     }
 }
 

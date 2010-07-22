@@ -106,6 +106,7 @@ private:
 
     bool IsCurrentSlideIsValid (void);
     void SetCurrentSlideAtViewShellBase (const model::SharedPageDescriptor& rpSlide);
+    void SetCurrentSlideAtTabControl (const model::SharedPageDescriptor& rpSlide);
     void SetCurrentSlideAtXController (const model::SharedPageDescriptor& rpSlide);
 
     /** When switching from one slide to a new current slide then this
