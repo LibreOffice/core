@@ -88,11 +88,10 @@ namespace rptui
     void FormattedFieldBeautifier::setPlaceholderText( const uno::Reference< uno::XInterface >& _rxComponent )
     {
         ::rtl::OUString sDataField;
-        uno::Reference< report::XReportComponent > xComponent( _rxComponent, uno::UNO_QUERY );
 
         try
         {
-            uno::Reference< report::XReportControlModel > xControlModel( xComponent, uno::UNO_QUERY );
+            uno::Reference< report::XFormattedField > xControlModel( _rxComponent, uno::UNO_QUERY );
             if ( xControlModel.is() )
             {
                 sDataField = xControlModel->getDataField();
@@ -119,8 +118,8 @@ namespace rptui
                 }
             }
 
-            if ( xComponent.is() )
-                setPlaceholderText( getVclWindowPeer( xComponent ), sDataField );
+            if ( xControlModel.is() )
+                setPlaceholderText( getVclWindowPeer( xControlModel.get() ), sDataField );
         }
         catch (uno::Exception)
         {
