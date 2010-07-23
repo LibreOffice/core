@@ -356,7 +356,7 @@ sub get_extensions_dir
     get_path_from_fullqualifiedname(\$localbranddir); # root dir in brand layer
     $localbranddir =~ s/\Q$separator\E\s*$//;
     my $extensiondir = $localbranddir . $separator . "share" . $separator . "extensions";
-    my $preregdir = $localbranddir . $separator . "share" . $separator . "prereg";
+    my $preregdir = $localbranddir . $separator . "share" . $separator . "prereg" . $separator . "bundled";
 
     return ($extensiondir, $preregdir);
 }
