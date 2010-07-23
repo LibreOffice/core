@@ -404,6 +404,9 @@ void AquaSalFrame::SendPaintEvent( const Rectangle* pRect )
 
 void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
 {
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
     mbShown = bVisible;
     if(bVisible)
     {
