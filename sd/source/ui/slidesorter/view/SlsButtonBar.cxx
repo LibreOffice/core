@@ -612,7 +612,7 @@ bool ButtonBar::LayoutButtons (void)
     // exactly like the second of the regular icons.
     if (maRegularButtons.size()>=2 && maExcludedButtons.size()>=1)
     {
-        Rectangle aBox (maRegularButtons[1]->GetBoundingBox());
+        aBox = maRegularButtons[1]->GetBoundingBox();
         maExcludedButtons[0]->Place(aBox);
     }
 

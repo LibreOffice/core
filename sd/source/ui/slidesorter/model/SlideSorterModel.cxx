@@ -382,6 +382,8 @@ void SlideSorterModel::Resync (void)
         SynchronizeDocumentSelection(); // Try to make the current selection persistent.
         ClearDescriptorList ();
         AdaptSize();
+        SynchronizeModelSelection();
+        mrSlideSorter.GetController().GetPageSelector().CountSelectedPages();
     }
     CheckModel(*this);
 }
