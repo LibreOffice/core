@@ -25,7 +25,15 @@
 #
 #*************************************************************************
 
-include $(dir $(firstword $(MAKEFILE_LIST)))/../SourcePath.mk
+ifneq ($(MAKE_VERSION),3.81)
+$(error You need at least GNU Make 3.81!)
+endif
+
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
+
+include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/../SourcePath.mk
 GBUILDDIR := $(SOLARENV)/gbuild
 include $(GBUILDDIR)/gbuild.mk
 
