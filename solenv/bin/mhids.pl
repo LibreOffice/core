@@ -373,9 +373,9 @@ while (<C3>)
             $x=2;
         }
         if ( $LID != 0)
-            { printf HID "%s %s:%s:%s:%s \n", $helpIDString, $arr[0], $arr[1], $GID, $LID; }
+            { printf HID "%s %s.%s.%s.%s \n", $helpIDString, $arr[0], $arr[1], $GID, $LID; }
         else
-            { printf HID "%s %s:%s:%s \n", $helpIDString, $arr[0], $arr[1], $GID }
+            { printf HID "%s %s.%s.%s \n", $helpIDString, $arr[0], $arr[1], $GID }
     }
 }
 
