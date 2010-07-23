@@ -38,7 +38,7 @@ Menu RID_SVXMNU_ROWS
         MenuItem
         {
             Identifier = SID_FM_DELETEROWS ;
-//          HelpId = CMD_SID_FM_DELETEROWS ;
+            HelpId = HID_FM_DELETEROWS ;
             Text [ en-US ] = "Delete Rows" ;
         };
         MenuItem
@@ -62,7 +62,7 @@ Menu RID_SVXMNU_COLS
         MenuItem
         {
             Identifier = SID_FM_INSERTCOL ;
-//          HelpId = CMD_SID_FM_INSERTCOL ;
+            HelpId = HID_FM_INSERTCOL ;
             Text [ en-US ] = "Insert ~Column" ;
             SubMenu = Menu
             {
@@ -142,25 +142,25 @@ Menu RID_SVXMNU_COLS
         MenuItem
         {
             Identifier = SID_FM_CHANGECOL ;
-//          HelpId = CMD_SID_FM_CHANGECOL ;
+            HelpId = HID_FM_CHANGECOL ;
             Text [ en-US ] = "~Replace with" ;
         };
         MenuItem
         {
             Identifier = SID_FM_DELETECOL ;
-//          HelpId = CMD_SID_FM_DELETECOL ;
+            HelpId = HID_FM_DELETECOL ;
             Text [ en-US ] = "Delete Column" ;
         };
         MenuItem
         {
             Identifier = SID_FM_HIDECOL ;
-//          HelpId = CMD_SID_FM_HIDECOL ;
+            HelpId = HID_FM_HIDECOL ;
             Text [ en-US ] = "~Hide Column";
         };
         MenuItem
         {
             Identifier = SID_FM_SHOWCOLS ;
-//          HelpId = CMD_SID_FM_SHOWCOLS ;
+            HelpId = HID_FM_SHOWCOLS ;
             SubMenu = Menu
             {
                 ItemList =
@@ -168,7 +168,7 @@ Menu RID_SVXMNU_COLS
                     MenuItem
                     {
                         Identifier = SID_FM_SHOWCOLS_MORE ;
-//                      HelpId = CMD_SID_FM_SHOWCOLS_MORE ;
+                        HelpId = HID_FM_SHOWCOLS_MORE ;
                         Text [ en-US ] = "~More...";
                     };
                     MenuItem
@@ -178,7 +178,7 @@ Menu RID_SVXMNU_COLS
                     MenuItem
                     {
                         Identifier = SID_FM_SHOWALLCOLS ;
-//                      HelpId = CMD_SID_FM_SHOWALLCOLS ;
+                        HelpId = HID_FM_SHOWALLCOLS ;
                         Text [ en-US ] = "~All";
                     };
                 };

@@ -30,6 +30,7 @@
 #include "fmexpl.hrc"
 #include "globlmn.hrc"
 #include <svx/svxcommands.h>
+#include "fmhelp.hrc"
 
 Menu RID_FMEXPLORER_POPUPMENU
 {
@@ -38,7 +39,7 @@ Menu RID_FMEXPLORER_POPUPMENU
         MenuItem
         {
             Identifier = SID_FM_NEW ;
-//          HelpId = CMD_SID_FM_NEW ;
+            HelpId = HID_FM_NEW ;
             Text [ en-US ] = "~New" ;
             SubMenu = Menu
             {
@@ -47,13 +48,13 @@ Menu RID_FMEXPLORER_POPUPMENU
                     MenuItem
                     {
                         Identifier = SID_FM_NEW_FORM ;
-//                      HelpId = CMD_SID_FM_NEW_FORM ;
+                        HelpId = HID_FM_NEW_FORM ;
                         Text [ en-US ] = "Form" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_NEW_HIDDEN ;
-//                      HelpId = CMD_SID_FM_NEW_HIDDEN ;
+                        HelpId = HID_FM_NEW_HIDDEN ;
                         Text [ en-US ] = "Hidden Control" ;
                     };
                 };
@@ -71,7 +72,7 @@ Menu RID_FMEXPLORER_POPUPMENU
         MenuItem
         {
             Identifier = SID_FM_DELETE ;
-//          HelpId = CMD_SID_FM_DELETE ;
+            HelpId = HID_FM_DELETE ;
             Text [ en-US ] = "~Delete" ;
         };
         MenuItem
@@ -83,7 +84,7 @@ Menu RID_FMEXPLORER_POPUPMENU
         MenuItem
         {
             Identifier = SID_FM_RENAME_OBJECT ;
-//          HelpId = CMD_SID_FM_RENAME_OBJECT ;
+            HelpId = HID_FM_RENAME_OBJECT ;
             Text [ en-US ] = "~Rename" ;
         };
         MenuItem
