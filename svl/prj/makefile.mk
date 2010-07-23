@@ -25,11 +25,16 @@
 #
 #*************************************************************************
 
-.IF $(VERBOSE)
+PRJ=..
+TARGET=prj
+
+.INCLUDE : settings.mk
+
+.IF "$(VERBOSE)"!=""
 VERBOSEFLAG :=
 .ELSE
 VERBOSEFLAG := -s
 .ENDIF
 
 all:
-    @cd .. && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS)
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS)
