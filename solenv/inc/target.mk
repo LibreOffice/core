@@ -1518,7 +1518,7 @@ $(LOCALIZE_ME_DEST) .PHONY : $(LOCALIZE_ME) $(LOCALIZESDF)
 .ENDIF			# "$(LASTRUN_MERGED)"=="TRUE"
     $(COMMAND_ECHO)-$(MKDIR) $(@:d)
     $(COMMAND_ECHO)-$(RM) $@
-    $(COMMAND_ECHO)$(TRANSEX) $(TRANSEX_VERBOSITY) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m $(LOCALIZESDF) -l all
+    $(COMMAND_ECHO)$(TRANSEX) -p $(PRJNAME) -i $(@:b:+"_tmpl")$(@:e) -o $(@:d)/$(@:b:+"_tmpl")$(@:e).$(INPATH) -m $(LOCALIZESDF) -l all
     $(COMMAND_ECHO)$(RENAME) $(@:d)$(@:b:+"_tmpl")$(@:e).$(INPATH) $@
 
 .ENDIF			# "$(WITH_LANG)"==""
