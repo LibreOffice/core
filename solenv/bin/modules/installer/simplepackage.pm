@@ -72,7 +72,7 @@ sub get_extensions_dir
     my $extensiondir = $subfolderdir . $installer::globals::separator;
     if ( $installer::globals::officedirhostname ne "" ) { $extensiondir = $extensiondir . $installer::globals::officedirhostname . $installer::globals::separator; }
     my $extensionsdir = $extensiondir . "share" . $installer::globals::separator . "extensions";
-    my $preregdir = $extensiondir . "share" . $installer::globals::separator . "prereg";
+    my $preregdir = $extensiondir . "share" . $installer::globals::separator . "prereg" . $installer::globals::separator . "bundled";
 
     return ( $extensionsdir, $preregdir );
 }
