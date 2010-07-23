@@ -28,8 +28,6 @@
 #include <svx/svxcommands.h>
 #include "sdcommands.h"
 
-#define HID_NOTESMODE                                           "SD_HID_NOTESMODE"
-#define HID_HANDOUTMODE                                         "SD_HID_HANDOUTMODE"
 #define HID_SDDRAWVIEWSHELL                                     "SD_HID_SDDRAWVIEWSHELL"
 #define HID_SDGRAPHICVIEWSHELL                                  "SD_HID_SDGRAPHICVIEWSHELL"
 #define HID_SDOUTLINEVIEWSHELL                                  "SD_HID_SDOUTLINEVIEWSHELL"

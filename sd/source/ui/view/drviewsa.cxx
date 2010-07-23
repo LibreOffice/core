@@ -343,8 +343,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         if (mePageKind == PK_NOTES)
         {
             SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetHelpId( HID_NOTESMODE );
-            GetActiveWindow()->SetUniqueId( HID_NOTESMODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_NOTESMODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_NOTESMODE );
 
             // AutoLayouts muessen erzeugt sein
             GetDoc()->StopWorkStartupDelay();
@@ -352,8 +352,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         else if (mePageKind == PK_HANDOUT)
         {
             SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetHelpId( HID_HANDOUTMODE );
-            GetActiveWindow()->SetUniqueId( HID_HANDOUTMODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMODE );
 
             // AutoLayouts muessen erzeugt sein
             GetDoc()->StopWorkStartupDelay();
