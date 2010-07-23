@@ -7,4 +7,4 @@ to	sot\source\sdstor				nmake	-	all	sot_sdst sot_inc NULL
 to	sot\source\unoolestorage			nmake	-	all	sot_unoolestor sot_inc NULL
 to	sot\util					nmake	-	all	sot_ut sot_base sot_sdst sot_unoolestor NULL
 
-to	sot\qa\complex\olesimplestorage			nmake	-	all	sot_complex sot_ut NULL
+# to	sot\qa\complex\olesimplestorage			nmake	-	all	sot_complex sot_ut NULL
