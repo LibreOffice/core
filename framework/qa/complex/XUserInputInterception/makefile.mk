@@ -24,9 +24,16 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
 .IF "$(OOO_SUBSEQUENT_TESTS)" == ""
 nothing .PHONY:
 .ELSE
+
+# we don't want something like this.
+# .IF "$(OS)"=="LINUX"
+# nothing .PHONY:
+# 	@echo "Test marked as failed on this platform"
+# .END
 
 PRJ = ../../..
 PRJNAME = framework
