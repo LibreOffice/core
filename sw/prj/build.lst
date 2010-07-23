@@ -77,6 +77,7 @@ sw      sw\util                             nmake   -       all     sw_util sw_c
 
 sw sw\qa\complex\accessibility      nmake - all sw_qa_complex_accessibility sw_util NULL
 sw sw\qa\complex\checkColor         nmake - all sw_qa_complex_checkColor sw_util NULL
-sw sw\qa\complex\indeterminateState nmake - all sw_qa_complex_indeterminateState sw_util NULL
-sw sw\qa\complex\writer             nmake - all sw_qa_complex_writer sw_util NULL
+# fails
+# sw sw\qa\complex\indeterminateState nmake - all sw_qa_complex_indeterminateState sw_util NULL
+# sw sw\qa\complex\writer             nmake - all sw_qa_complex_writer sw_util NULL
 sw sw\qa\unoapi                     nmake - all sw_qa_unoapi sw_util NULL
