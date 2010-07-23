@@ -30,16 +30,17 @@ $(eval $(call gb_Module_Module,sfx2))
 $(eval $(call gb_Module_add_targets,sfx2,\
     AllLangResTarget_sfx2 \
     Library_sfx2 \
+    Library_qstart \
     Package_inc \
     Package_sdi \
 ))
 
 
 # HACK to create a dummy quickstart lib
-$(call gb_Module_get_target,sfx2) : $(call gb_Library_get_target,qstart_gtk)
+#$(call gb_Module_get_target,sfx2) : $(call gb_Library_get_target,qstart_gtk)
 
-$(call gb_Library_get_target,qstart_gtk) :
-    touch $@
+#$(call gb_Library_get_target,qstart_gtk) :
+#	touch $@
 
 #todo: map file?
 #todo: source/appl ohne Optimierung?
