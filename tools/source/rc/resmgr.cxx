@@ -1811,7 +1811,7 @@ rtl::OString ResMgr::GetAutoHelpId()
     // prepare HID, start with resource prefix
     rtl::OStringBuffer aHID( 32 );
     aHID.append( rtl::OUStringToOString( pImpRes->aPrefix, RTL_TEXTENCODING_UTF8 ) );
-    aHID.append( ':' );
+    aHID.append( '.' );
 
     // append type
     const ImpRCStack *pRC = StackTop();
@@ -1851,7 +1851,7 @@ rtl::OString ResMgr::GetAutoHelpId()
     // append resource id hierarchy
     for( int nOff = nCurStack-1; nOff >= 0; nOff-- )
     {
-        aHID.append( ':' );
+        aHID.append( '.' );
         pRC = StackTop( nOff );
 
         OSL_ENSURE( pRC->pResource, "missing resource in resource stack level !" );
