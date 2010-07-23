@@ -64,6 +64,7 @@ exit 0
 END
 
 %postremove << END
+
 if [ -n "$$TMPDIR" ]; then
   UNOPKGTMP="$$TMPDIR"
 elif [ -n "$$TMP" ]; then
