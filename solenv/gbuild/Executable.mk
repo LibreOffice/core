@@ -35,11 +35,13 @@
 .PHONY : $(call gb_Executable_get_clean_target,%)
 $(call gb_Executable_get_clean_target,%) :
     $(call gb_Helper_abbreviate_dirs,\
-        rm -f $(call gb_Executable_get_target,$*))
+        rm -f $(call gb_Executable_get_target,$*) \
+            $(AUXTARGETS))
 
 $(call gb_Executable_get_target,%) :
     $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && cp -pf $< $@)
+        mkdir -p $(dir $@) && cp -pf $< $@ \
+            $(foreach target,$(AUXTARGETS), && cp -pf $(dir $<)/$(notdir $(target)) $(target)))
 
 define gb_Executable_Executable
 $(call gb_Executable__Executable_impl,$(1),Executable/$(1)$(gb_Executable_EXT))
