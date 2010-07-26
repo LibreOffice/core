@@ -235,28 +235,28 @@ Resource RID_SLIDESORTER_ICONS
 
     Image IMAGE_BUTTONBAR_LARGE
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_large.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_command_background_large.png" ; };
     };
     Image IMAGE_BUTTONBAR_MEDIUM
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_medium.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_command_background_medium.png" ; };
     };
     Image IMAGE_BUTTONBAR_SMALL
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_small.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_command_background_small.png" ; };
     };
 
     Image IMAGE_BUTTONBAR_LARGE_HC
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_large_hc.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_command_background_large_hc.png" ; };
     };
     Image IMAGE_BUTTONBAR_MEDIUM_HC
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_medium_hc.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_command_background_medium_hc.png" ; };
     };
     Image IMAGE_BUTTONBAR_SMALL_HC
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_buttonbar_small_hc.png" ; };
+        ImageBitmap = Bitmap { File = "slide_sorter_command_background_small_hc.png" ; };
     };
 
 
