@@ -335,8 +335,14 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
     // bei dem LineLayout ist allerdings alles anders...
     if( pPor == pCurr )
     {
-        if( pCurr->GetPortion() )
+        if ( pCurr->GetPortion() )
+        {
             pPor = pCurr->GetPortion();
+        }
+
+        // --> OD 2010-07-07 #i112181#
+        rInf.SetOtherThanFtnInside( rInf.IsOtherThanFtnInside() || !pPor->IsFtnPortion() );
+        // <--
     }
     else
     {

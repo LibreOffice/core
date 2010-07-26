@@ -449,6 +449,16 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
 
             }
 
+            // if background filling is set to master pages then clear from page set
+            if( mbMasterPage || bSetToAllPages )
+            {
+                for( USHORT nWhich = XATTR_FILL_FIRST; nWhich <= XATTR_FILL_LAST; nWhich++ )
+                {
+                    pTempSet->ClearItem( nWhich );
+                }
+                pTempSet->Put(XFillStyleItem(XFILL_NONE));
+            }
+
             const SfxPoolItem *pItem;
             if( SFX_ITEM_SET == pTempSet->GetItemState( EE_PARA_WRITINGDIR, sal_False, &pItem ) )
             {

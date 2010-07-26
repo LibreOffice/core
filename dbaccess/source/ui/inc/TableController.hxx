@@ -135,7 +135,7 @@ namespace dbaui
         inline ::std::vector< ::boost::shared_ptr<OTableRow> >* getRows() { return &m_vRowList; }
 
         /// returns the postion of the the first empty row
-        sal_Int32                           getFirstEmptyRowPosition() const;
+        sal_Int32                           getFirstEmptyRowPosition();
 
         inline const OTypeInfoMap*          getTypeInfo() const { return &m_aTypeInfo; }
 

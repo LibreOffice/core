@@ -153,8 +153,8 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 
 				if len(textbody):
 					mimeEncoding = re.sub("charset=.*", "charset=UTF-8", flavor.MimeType)
-			        if mimeEncoding.find('charset=UTF-8') == -1:
-			        	mimeEncoding = mimeEncoding + "; charset=UTF-8"
+					if mimeEncoding.find('charset=UTF-8') == -1:
+						mimeEncoding = mimeEncoding + "; charset=UTF-8"
 					textmsg['Content-Type'] = mimeEncoding
 					textmsg['MIME-Version'] = '1.0'
 					textmsg.set_payload(textbody)

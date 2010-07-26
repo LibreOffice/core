@@ -614,6 +614,17 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
                 break;
         }
     }
+
+    PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
+    if( (eEditMode == EM_MASTERPAGE) && (ePageKind != PK_HANDOUT ) )
+    {
+        rSet.DisableItem(SID_ASSIGN_LAYOUT);
+    }
+
+    if( (eEditMode == EM_MASTERPAGE) || (ePageKind==PK_NOTES) )
+    {
+        rSet.DisableItem(SID_INSERTPAGE);
+    }
 }
 
 

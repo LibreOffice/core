@@ -24,7 +24,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description :
 '*
@@ -872,7 +872,7 @@ testcase tToolsOptionsWriterMailMerge
     printlog " - fill out Mail Settings"
     Kontext "TabMailMergeEmail"
     YourName.Settext "Fredrik Haegg"
-    EmailAddress.Settext "helge.delfs@sun.com"
+    EmailAddress.Settext "helge.delfs@oracle.com"
     SendReplies.Check
     ReplyAddress.Settext "fredrikh@openoffice.org"
     ServerName.Settext "MySMTP-Server"
@@ -926,7 +926,7 @@ testcase tToolsOptionsWriterMailMerge
 
     Kontext "TabMailMergeEmail"
     if YourName.Gettext <> "Fredrik Haegg" then Warnlog "'Your Name' has been changed after a restart"
-    if EmailAddress.Gettext <> "helge.delfs@sun.com" then Warnlog "'Email Address' has been changed after a restart"
+    if EmailAddress.Gettext <> "helge.delfs@oracle.com" then Warnlog "'Email Address' has been changed after a restart"
     if Not SendReplies.IsChecked then Warnlog "'Send replies' has been changed after a restart"
     if ReplyAddress.Gettext <> "fredrikh@openoffice.org" then Warnlog "'Reply adresses' has been changed after a restart"
     if ServerName.Gettext <> "MySMTP-Server" then Warnlog "'Server name' has been changed after a restart"

@@ -67,7 +67,7 @@
 +###CPPFLAGS= /Zc:wchar_t- /nologo /W4 /GR /EHsc /I "./src/font" /I "./src/painter" /I "./src/segment" /I "./src/textsource" /I "./src/generic" /I "./include/graphite" /I "../wrappers/win32" /D "GR_NAMESPACE" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "TRACING"  /Fp"$(INTDIR)\graphite.pch" /Fd"$(INTDIR)\\" /FD /c
 +### HDU: because for full binary compatibility with the rest of OOo all compile flags must match exactly
 +###       which is especially true for template-heavy C++ code with non-default config (e.g. _STLP_DEBUG enabled)
-+CPPFLAGS= $(CFLAGS4MSC) /nologo /W4 /I "./src/font" /I "./src/painter" /I "./src/segment" /I "./src/textsource" /I "./src/generic" /I "./include/graphite" /I "../wrappers/win32" /D "GR_NAMESPACE" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "TRACING"  /Fp"$(INTDIR)\graphite.pch" /Fd"$(INTDIR)\\" /FD /c
++CPPFLAGS= $(CFLAGS4MSC) /nologo /W4 /I "./src/font" /I "./src/painter" /I "./src/segment" /I "./src/textsource" /I "./src/generic" /I "./include/graphite" /I "../wrappers/win32" /D "GR_NAMESPACE" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "TRACING"  /Fp"$(INTDIR)\graphite.pch" /FD /c
 +
  # /Wp62
  
@@ -77,7 +77,33 @@
  
  BSC32=bscmake.exe
  BSC32_FLAGS=/nologo /o"$(OUTDIR)\\$(TARGET).bsc" 
-@@ -48,11 +52,7 @@
+@@ -24,21 +29,21 @@
+ SBREXT = .sbr
+ 
+ !IF "$(CFG)" == "DEBUG"
+-CPP_DEBUG=/D "DEBUG" /Gm /GR /ZI /Od /RTC1 /FR"$(INTDIR)\\" /$(MLIB)d
++CPP_DEBUG=/D "DEBUG" /Gm /GR /Od /RTC1 /FR"$(INTDIR)\\"
+ # CPP_DEBUG=/D "DEBUG" /Gm /GR /ZI /Od /RTC1 /FR"$(INTDIR)\\" /MDd
+ 
+ OUTDIR=.\debug
+ INTDIR=.\debug_temp
+-LINK_DEBUG= MSVCRTD.lib /debug /incremental:yes #/pdbtype:sept
++LINK_DEBUG= /debug 
+ 
+ all : lib lib_dll bsc
+ 
+ !ELSE
+-CPP_DEBUG=/D "NDEBUG" /O2 /$(MLIB)
++CPP_DEBUG=/D "NDEBUG" /O2
+ # CPP_DEBUG=/D "NDEBUG" /O2 /MD
+ OUTDIR=.\release
+ INTDIR=.\release_temp
+-LINK_DEBUG= MSVCRT.lib /incremental:no /NODEFAULTLIB:libc
++LINK_DEBUG= /incremental:no /NODEFAULTLIB:libc
+ 
+ all : lib lib_dll
+ 
+@@ -48,11 +53,7 @@
  CPP_DEBUG=/D "TRACING" $(CPP_DEBUG)
  !ENDIF
  
@@ -89,7 +115,7 @@
  
  clean :
      @- rd /s/q .\release_temp
-@@ -779,7 +779,7 @@
+@@ -779,7 +780,7 @@
  	@- $(CPP) $(CPPFLAGS) $(CPP_DEBUG) /Fo"$(INTDIR)\FileFont$(OBJEXT)" $?
  	
  "$(INTDIR)\FileFont_dll$(OBJEXT)" : "src/font/FileFont.cpp"
@@ -1200,39 +1226,51 @@
  	bool fSkipChunkStart, int cslotReprocess, bool fBackingUp)
  {
  	Assert(AssertValid());
-@@ -1863,7 +1872,7 @@
+@@ -1863,7 +1872,11 @@
  	Ensure that the chunk maps for a pair of streams match properly. The recipient is
  	the input stream.
  ----------------------------------------------------------------------------------------------*/
--void GrSlotStream::AssertChunkMapsValid(GrSlotStream * psstrmOut)
-+void GrSlotStream::AssertChunkMapsValid(GrSlotStream * /*psstrmOut*/)
++#ifdef _DEBUG
+ void GrSlotStream::AssertChunkMapsValid(GrSlotStream * psstrmOut)
++#else
++void GrSlotStream::AssertChunkMapsValid(GrSlotStream * )
++#endif
  {
  #ifdef _DEBUG
  	GrSlotStream * psstrmIn = this;
-@@ -1915,7 +1924,7 @@
+@@ -1915,7 +1924,11 @@
  	Ensure that corresponding items in the streams of a positioning pass have matching
  	stream indices. The recipient is the output stream.
  ----------------------------------------------------------------------------------------------*/
--void GrSlotStream::AssertStreamIndicesValid(GrSlotStream * psstrmIn)
-+void GrSlotStream::AssertStreamIndicesValid(GrSlotStream * /*psstrmIn*/)
++#ifdef _DEBUG
+ void GrSlotStream::AssertStreamIndicesValid(GrSlotStream * psstrmIn)
++#else
++void GrSlotStream::AssertStreamIndicesValid(GrSlotStream * )
++#endif
  {
  #ifdef _DEBUG
  	if (!GotIndexOffset())
-@@ -1939,7 +1948,7 @@
+@@ -1939,7 +1948,11 @@
  	in the output stream. (Currently the compiler ensures this by making it an error
  	to write rules that don't do this.)
  ----------------------------------------------------------------------------------------------*/
--void GrSlotStream::AssertAttachmentsInOutput(int islotMin, int islotLim)
-+void GrSlotStream::AssertAttachmentsInOutput(int /*islotMin*/, int /*islotLim*/)
++#ifdef _DEBUG
+ void GrSlotStream::AssertAttachmentsInOutput(int islotMin, int islotLim)
++#else
++void GrSlotStream::AssertAttachmentsInOutput(int , int )
++#endif
  {
  #ifdef _DEBUG
  	for (int islot = islotMin; islot < islotLim; islot++)
-@@ -2007,7 +2016,7 @@
+@@ -2007,7 +2016,11 @@
  	Record the number of slots in the stream that are previous to the official start of the
  	segment.
  ----------------------------------------------------------------------------------------------*/
--void GrSlotStream::CalcIndexOffset(GrTableManager * ptman)
-+void GrSlotStream::CalcIndexOffset(GrTableManager * /*ptman*/)
++#ifdef _DEBUG
+ void GrSlotStream::CalcIndexOffset(GrTableManager * ptman)
++#else
++void GrSlotStream::CalcIndexOffset(GrTableManager * )
++#endif
  {
  	if (GotIndexOffset())
  		return; // already figured it
@@ -1990,6 +2028,94 @@
  		*pclrBack = kclrTransparent;
 --- misc/silgraphite-2.3.1/wrappers/win32/WinFont.cpp	Thu Jan 29 10:33:19 2009
 +++ misc/build/silgraphite-2.3.1/wrappers/win32/WinFont.cpp	Sat Aug 22 19:36:36 2009
+@@ -70,6 +72,7 @@
+ 	// But don't store m_hfont, because we don't really "own" it; the client is
+ 	// responsible for releasing it.
+ 	m_hfont = 0;
++    m_pGlyphMetricMap = NULL;
+ 	memset(&m_fpropSet, 0, sizeof(m_fpropSet));
+ 
+ 	m_pbCmapTbl = NULL;
+@@ -196,6 +198,7 @@
+ 	m_hdc = 0;
+ 	m_hfont = 0;
+ 	m_hfontClient = 0;
++    m_pGlyphMetricMap = NULL;
+ 	memset(&m_fpropSet, 0, sizeof(FontProps));
+ 
+ 	m_pbCmapTbl = NULL;
+@@ -408,7 +410,7 @@
+ 					if (pPolyCurve->wType == TT_PRIM_QSPLINE &&
+ 						// test if this is the last curve
+ 						pPolyHdr->cb - (int)((byte *)(&pPolyCurve->apfx[j]) - (byte *)(pPolyHdr))
+-							== sizeof POINTFX &&
++							== sizeof (POINTFX) &&
+ 						// and the two points are identical
+ 						CompareFixed(pPolyCurve->apfx[j].x, pPolyHdr->pfxStart.x) &&
+ 						CompareFixed(pPolyCurve->apfx[j].y, pPolyHdr->pfxStart.y))
+@@ -457,6 +459,16 @@
+ ----------------------------------------------------------------------------------------------*/
+ void WinFont::getGlyphMetrics(gid16 chw, gr::Rect & boundingBox, gr::Point & advances)
+ {
++    if (m_pGlyphMetricMap)
++    {
++        GlyphMetricMap::iterator i = m_pGlyphMetricMap->find(chw);
++        if (i != m_pGlyphMetricMap->end())
++        {
++            boundingBox = i->second.first;
++            advances = i->second.second;
++            return;
++        }
++    }
+ 	GLYPHMETRICS gm;
+ 	const MAT2 mat2 = {{0,1}, {0,0}, {0,0}, {0,1}};
+ 	if (GDI_ERROR == ::GetGlyphOutline(m_hdc, chw, GGO_GLYPH_INDEX | GGO_METRICS,
+@@ -474,6 +476,10 @@
+ 	boundingBox.bottom = (float)gm.gmptGlyphOrigin.y - gm.gmBlackBoxY;
+ 	advances.x = gm.gmCellIncX;
+ 	advances.y = gm.gmCellIncY;
++    if (m_pGlyphMetricMap)
++    {
++        (*m_pGlyphMetricMap)[chw] = std::pair<gr::Rect,gr::Point>(boundingBox, advances);
++    }
+ }
+ 
+ /*----------------------------------------------------------------------------------------------
+@@ -618,7 +620,10 @@
+ 
+ 		static int cCreateFontCalls = 0;
+ 		static int cCreateFontZero = 0;
+-		HFONT hfont = g_fhc.GetFont(lf);
++        FontHandleCache::FontCacheValue cache = g_fhc.GetCache(lf);
++        HFONT hfont = cache.hfont;
++        m_pGlyphMetricMap = cache.pGlyphMetricMap;
++		//HFONT hfont = g_fhc.GetFont(lf);
+ 		//char ch1[200];
+ 		//if (hfont == 0)
+ 		//{
+@@ -731,7 +733,7 @@
+ 	@param lf LOGFONT value that describes the desired font
+ 	@return Font handle
+ ----------------------------------------------------------------------------------------------*/
+-HFONT WinFont::FontHandleCache::GetFont(LOGFONT & lf)
++WinFont::FontHandleCache::FontCacheValue WinFont::FontHandleCache::GetCache(LOGFONT & lf)
+ {
+ 	FontCacheValue fcv;
+ 	FontHandleHashMap::iterator itFound = m_hmlffcv.find(lf);
+@@ -752,11 +754,12 @@
+ 			THROW(kresFail);
+ 
+ 		fcv.nRefs = 1;
++        fcv.pGlyphMetricMap = new GlyphMetricMap();
+ 
+ 		m_hmlffcv.insert(std::pair<LOGFONT, FontCacheValue>(lf, fcv));
+ 	}
+ 
+-	return fcv.hfont;
++	return fcv;
+ }
+ 
+ /*----------------------------------------------------------------------------------------------
 @@ -767,7 +767,7 @@
  ----------------------------------------------------------------------------------------------*/
  void WinFont::FontHandleCache::DeleteFont(HFONT hfont)
@@ -1999,11 +2125,31 @@
  		return;
  
  	// find the font in the hash map
+@@ -782,6 +784,8 @@
+ 			{
+ 				// delete font
+ 				::DeleteObject(hfont);
++                if (fcv.pGlyphMetricMap)
++                    delete fcv.pGlyphMetricMap;
+ 				m_hmlffcv.erase(it);
+ 			}
+ 			else
+@@ -832,7 +832,8 @@
+ bool WinFont::LogFontHashFuncs::operator() (const WinFont::LogFontWrapper & key1,
+ 	const WinFont::LogFontWrapper & key2) const
+ {
+-	return (key1 == key2);
++    // return true if key1 should be ordered before key2
++    return (operator()(key1) < operator()(key2));
+ }
+ 
+ /*--------------------------------------------------------------------------------------
 --- misc/silgraphite-2.3.1/wrappers/win32/WinFont.h	Thu Jan 29 10:33:19 2009
 +++ misc/build/silgraphite-2.3.1/wrappers/win32/WinFont.h	Sat Aug 22 19:36:36 2009
-@@ -27,6 +27,10 @@
+@@ -27,7 +27,13 @@
  #include "GrClient.h"
  #include "Font.h"
++#include <map>
  
 +#ifdef _STLPORT_VERSION
 +namespace stdext = _STLP_STD;
@@ -2011,4 +2157,240 @@
 +
  namespace gr
  {
++typedef std::map<gid16, std::pair<gr::Rect, gr::Point> > GlyphMetricMap;
+ 
+ class FontFace;
+@@ -100,6 +110,7 @@
+ 	HFONT m_hfontClient;	// need to replace this HFONT into the DC when we are finished
+ 							// with it
+ 
++    GlyphMetricMap * m_pGlyphMetricMap;
+ 	// Debugging:
+ 	//OLECHAR m_rgchTemp[32];
+ 
+@@ -185,11 +196,13 @@
+ 	class FontHandleCache // hungarian: fhc
+ 	{
+ 	public:
+-		struct FontCacheValue
++        struct FontCacheValue
+ 		{
+ 			int nRefs;   // reference count
+ 			HFONT hfont; // font handle
+ 
++            GlyphMetricMap * pGlyphMetricMap; // glyph metrics
++
+ 			bool operator==(const FontCacheValue & val) const
+ 			{
+ 				return (hfont == val.hfont);
+@@ -199,7 +212,8 @@
+         FontHandleCache() : m_bValid(true) {};
+ 		~FontHandleCache();
+ 
+-		HFONT GetFont(LOGFONT & lf);
++		//HFONT GetFont(LOGFONT & lf);
++        FontCacheValue GetCache(LOGFONT & lf);
+ 		void DeleteFont(HFONT hfont);
+ 
+ 		typedef stdext::hash_map<LogFontWrapper, FontCacheValue, LogFontHashFuncs> FontHandleHashMap;
+--- misc/build/silgraphite-2.3.1/engine/test/RegressionTest/RtTextSrc.h~	2009-01-22 05:06:42.000000000 +0630
++++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/RtTextSrc.h	2010-04-30 23:14:49.000000000 +0630
+@@ -44,18 +44,18 @@
+ 		}
+ 	}
+ 
+-	virtual size_t getFontFeatures(toffset ich, FeatureSetting * prgfset)
++	virtual size_t getFontFeatures(toffset /*ich*/, FeatureSetting * prgfset)
+ 	{
+ 		// Note: size of prgfset buffer = gr::kMaxFeatures = 64
+ 		std::copy(m_fset, m_fset + MAXFEAT, prgfset);
+ 		return m_cFeats;
+ 	}
+ 
+-	virtual bool getRightToLeft(toffset ich)
++	virtual bool getRightToLeft(toffset /*ich*/)
+ 	{
+ 		return m_fRtl;
+ 	}
+-	virtual unsigned int getDirectionDepth(toffset ich)
++	virtual unsigned int getDirectionDepth(toffset /*ich*/)
+ 	{
+ 		return ((m_fRtl == 1) ? 1 : 0);
+ 	}
+
+--- misc/build/silgraphite-2.3.1/engine/test/RegressionTest/GrJustifier.cpp	2010-06-21 12:55:34.000000000 +0630
++++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/GrJustifier.cpp	2010-06-21 13:16:59.000000000 +0630
+@@ -16,8 +16,9 @@
+ //:>	Include files
+ //:>********************************************************************************************
+ //#include "main.h" // This is used by clients, so main.h is not available
+-
++#ifdef _MSC_VER
+ #pragma hdrstop
++#endif
+ // any other headers (not precompiled)
+ #include "GrClient.h"
+ #include "ITextSource.h"
+@@ -31,9 +32,6 @@
+ #include <string>
+ #endif
+ 
+-#undef THIS_FILE
+-DEFINE_THIS_FILE
+-
+ //:>********************************************************************************************
+ //:>	Global constants
+ //:>********************************************************************************************
+@@ -327,9 +325,9 @@
+ 					&dxStretchAchieved);
+ 				for (int iiiGlyph = 0; iiiGlyph < cStretchable; iiiGlyph++)
+ 				{
+-					iiGlyph = viiGlyphsRem[iiiGlyph];
+-					vdxStretchLeft[iiGlyph] = vdxStretchRem[iiiGlyph];
+-					vdxWidth[iiGlyph] = vdxWidthRem[iiiGlyph];
++					int ivGlyph = viiGlyphsRem[iiiGlyph];
++					vdxStretchLeft[ivGlyph] = vdxStretchRem[iiiGlyph];
++					vdxWidth[ivGlyph] = vdxWidthRem[iiiGlyph];
+ 				}
+ 			}
+ 			else
+@@ -366,12 +364,12 @@
+ 	{
+ #ifdef WIN32
+ 		wchar_t rgchw[20];
+-		std::fill_n(rgchw, 20, 0);
++		std::fill_n(rgchw, 20, L'\0');
+ 		_itow(dxStretchNeeded - dxStretchAchieved, rgchw, 10);
+ 		std::wstring strTmp(L"justification failed by ");
+ 		strTmp += rgchw;
+ 		strTmp += L" units (width needed = ";
+-		std::fill_n(rgchw, 10, 0);
++		std::fill_n(rgchw, 10, L'\0');
+ 		_itow(dxDesiredWidth, rgchw, 10);
+ 		strTmp += rgchw;
+ 		strTmp += L")\n";
+--- misc/build/silgraphite-2.3.1/engine/test/RegressionTest/GrJustifier.h	2009-01-22 05:06:42.000000000 +0630
++++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/GrJustifier.h	2010-06-21 13:16:49.000000000 +0630
+@@ -11,7 +11,9 @@
+ Description:
+ 	A default justification agent for Graphite.
+ -------------------------------------------------------------------------------*//*:End Ignore*/
++#ifdef _MSC_VER
+ #pragma once
++#endif
+ #ifndef GRJUSTIFIER_INCLUDED
+ #define GRJUSTIFIER_INCLUDED
+ 
+--- misc/build/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.h	2010-06-21 12:55:34.000000000 +0630
++++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.h	2010-06-21 13:18:12.000000000 +0630
+@@ -11,7 +11,9 @@
+ Description:
+ 	A simple text source that shows how to use this interface within Graphite.
+ -------------------------------------------------------------------------------*//*:End Ignore*/
++#ifdef _MSC_VER
+ #pragma once
++#endif
+ #ifndef GRTXTSRC_INCLUDED
+ #define GRTXTSRC_INCLUDED
+ 
+
+--- misc/build/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.cpp	2010-06-21 12:55:34.000000000 +0630
++++ misc/build/silgraphite-2.3.1/engine/test/RegressionTest/SimpleTextSrc.cpp	2010-06-21 13:18:24.000000000 +0630
+@@ -15,7 +15,9 @@
+ //:>********************************************************************************************
+ //:>	Include files
+ //:>********************************************************************************************
++#ifdef _MSC_VER
+ #pragma hdrstop
++#endif
+ // any other headers (not precompiled)
+ 
+ #include "GrClient.h"
+@@ -23,9 +25,6 @@
+ #include "ITextSource.h"
+ #include "SimpleTextSrc.h"
+ 
+-#undef THIS_FILE
+-DEFINE_THIS_FILE
+-
+ //:>********************************************************************************************
+ //:>	Initialization and destruction
+ //:>********************************************************************************************
+--- misc/build/silgraphite-2.3.1/engine/src/segment/MemoryUsage.cpp	2009-01-22 05:06:42.000000000 +0630
++++ misc/build/silgraphite-2.3.1/engine/src/segment/MemoryUsage.cpp	2010-06-21 13:36:36.000000000 +0630
+@@ -11,10 +11,10 @@
+ Description:
+     Calculates memory usage for the engine and segments.
+ ----------------------------------------------------------------------------------------------*/
+-
++#ifdef _MSC_VER
+ #pragma warning(disable: 4244)	// conversion from wchar_t to char
+ #pragma warning(disable: 4702)	// unreachable code
+-
++#endif
+ //:>********************************************************************************************
+ //:>	Include files
+ //:>********************************************************************************************
+@@ -54,8 +54,6 @@
+ #ifdef _MSC_VER
+ #pragma hdrstop
+ #endif
+-#undef THIS_FILE
+-DEFINE_THIS_FILE
+ 
+ //:End Ignore
+ 
+--- misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotState.h	2010-06-23 19:52:56.429060400 +0700
++++ misc/build/silgraphite-2.3.1/engine/src/segment/GrSlotState.h	2010-05-25 11:51:15.195066300 +0700
+@@ -48,7 +48,7 @@
+ 	{
+ 	}
+ 
+-	~GrSlotAbstract()
++	virtual ~GrSlotAbstract()
+ 	{
+ 		// the table manager is responsible for destroying the contents of m_prgnVarLenBuf
+ 	}
+@@ -231,7 +231,7 @@
+ 		ZapCompositeMetrics();
+ 	}
+ 
+-	~GrSlotState()
++	virtual ~GrSlotState()
+ 	{
+ 	}
+ 
+--- misc/build/silgraphite-2.3.1/engine/src/segment/Segment.cpp.bak	2010-06-23 19:59:54.611660400 +0700
++++ misc/build/silgraphite-2.3.1/engine/src/segment/Segment.cpp	2010-06-23 21:30:16.335460400 +0700
+@@ -246,6 +246,8 @@
+ 
+ 	m_dxsVisibleWidth = -1;
+ 	m_dxsTotalWidth = -1;
++	m_ichwAssocsMin = 0;
++	m_ichwAssocsLim = 0;
+ 
+ //	m_psstrm = NULL;
+ 	m_prgslout = NULL;
+@@ -2988,9 +2988,10 @@
+ 	return kresOk;
+ }
+ 
+-
++#ifdef __GNUC__
+ // suppress GCC 4.3 warning for optimized min()/max() when called with (ich, ich+1) or similar
+ #pragma GCC diagnostic ignored "-Wstrict-overflow"
++#endif
+ 
+ /*----------------------------------------------------------------------------------------------
+ 	Merge the given characters into the same Uniscribe cluster. This means merging any
+--- misc/build/silgraphite-2.3.1/wrappers/win32/win32_dll.cpp.bak	2008-05-09 18:10:30.000000000 +0700
++++ misc/build/silgraphite-2.3.1/wrappers/win32/win32_dll.cpp	2010-05-10 15:46:54.291818000 +0700
+@@ -14,7 +14,7 @@
+ 	DllMain. This is the main DLL entry point for a non-MFC DLL. For an MFC DLL, DllMain is
+ 		in DllModul.cpp. Both DllMains call ModuleEntry::DllMain.
+ ----------------------------------------------------------------------------------------------*/
+-extern "C" BOOL WINAPI DllMain(HMODULE hmod, DWORD dwReason, PVOID pvReserved)
++extern "C" BOOL WINAPI DllMain(HMODULE hmod, DWORD dwReason, PVOID /*pvReserved*/)
+ {
+ 	bool fRet = true;
  

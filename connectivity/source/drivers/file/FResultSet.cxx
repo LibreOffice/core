@@ -1200,7 +1200,9 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
                 break;
         }
 
-        if (m_nRowPos == 0)
+        if ( m_nRowPos < 0 )
+            goto Error;
+        else if (m_nRowPos == 0)
         {
             // COUNT(*) in Ergebnisrow packen
             // (muss die erste und einzige Variable in der Row sein)

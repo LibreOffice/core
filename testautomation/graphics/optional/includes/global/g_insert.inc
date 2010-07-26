@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
@@ -167,7 +167,7 @@ testcase tInsertFields
     hToolsOptions ("STAROFFICE","USERDATA")
     VorName.SetText "Garfield"
     ZuName.SetText  "Peanuts"
-    EMail.SetText   "recumbent@sun.com"
+    EMail.SetText   "recumbent@oracle.com"
     Kontext "ExtrasOptionenDlg"
     ExtrasOptionenDlg.OK
 

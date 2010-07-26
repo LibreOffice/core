@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description : wrappers for accessing menues (context-, bar-, button- menues)
 '*

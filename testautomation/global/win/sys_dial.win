@@ -127,7 +127,7 @@ OrdnerName fpicker:Edit:DLG_SVT_QUERYFOLDERNAME:ED_SVT_QUERYFOLDERNAME_DLG_NAME
 *TranslationWindow svtools:WorkWindow:TT_INLINE_TRANSLATION svtools:FloatingWindow:TT_INLINE_TRANSLATION
 
 ' **** specal longnames for bas test
-' **** author marc.schwanz@sun.com
+' **** author marc.neumann@oracle.com
 *MSC_Special_Dialog MSC_Super_ID
 *MSC_Special_Dialog2 MSC_Super_ID2
 *MSC_Special_Dialog3 MSC_Super_ID3

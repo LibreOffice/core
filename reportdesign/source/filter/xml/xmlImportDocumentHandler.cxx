@@ -30,6 +30,7 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -122,7 +123,6 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
     uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
     if ( xReceiver.is() )
     {
-        xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
         // this fills the chart again
         uno::Sequence< beans::PropertyValue > aArgs( 4 );
         aArgs[0] = beans::PropertyValue(
@@ -137,6 +137,18 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
         aArgs[3] = beans::PropertyValue(
             ::rtl::OUString::createFromAscii("DataRowSource"), -1,
             uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+
+        uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xModel->getDataProvider(),uno::UNO_QUERY);
+        if ( xDataProvider.is() )
+        {
+            aArgs.realloc(5);
+            uno::Sequence< uno::Sequence< ::rtl::OUString > > aColumnNames = xDataProvider->getComplexColumnDescriptions();
+            aArgs[4] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("ComplexColumnDescriptions"), -1,
+                uno::makeAny( aColumnNames ), beans::PropertyState_DIRECT_VALUE );
+        }
+        xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
+
         xReceiver->setArguments( aArgs );
     }
 }

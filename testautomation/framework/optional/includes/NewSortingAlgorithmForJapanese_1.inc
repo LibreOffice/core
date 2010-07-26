@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : hercule.li@sun.com
+'* owner : hercule.li@oracle.com
 '*
 '* short description : New Sorting Algorithm For Japanese Test
 '*

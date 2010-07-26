@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Conversion of Microsoft OLE objects in dependency of settings in Tools::Options::Load/Save::MS_Office
 '*

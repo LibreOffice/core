@@ -68,6 +68,7 @@
 #include "docsh.hxx"
 #include "attrib.hxx"
 #include "stlpool.hxx"
+#include "docpool.hxx"
 #include "unoguard.hxx"
 #include "miscuno.hxx"
 #include "convuno.hxx"
@@ -830,6 +831,9 @@ void SAL_CALL ScStyleFamilyObj::insertByName( const rtl::OUString& aName, const 
             {
                 (void)pStylePool->Make( aNameStr, eFamily, SFXSTYLEBIT_USERDEF );
 
+                if ( eFamily == SFX_STYLE_FAMILY_PARA && !pDoc->IsImportingXML() )
+                    pDoc->GetPool()->CellStyleCreated( aNameStr );
+
                 pStyleObj->InitDoc( pDocShell, aNameStr );  // Objekt kann benutzt werden
 
                 pDocShell->SetDocumentModified();   // verwendet wird der neue Style noch nicht
@@ -1286,6 +1290,10 @@ void SAL_CALL ScStyleObj::setName( const rtl::OUString& aNewName )
         if (bOk)
         {
             aStyleName = aString;       //! notify other objects for this style?
+
+            ScDocument* pDoc = pDocShell->GetDocument();
+            if ( eFamily == SFX_STYLE_FAMILY_PARA && !pDoc->IsImportingXML() )
+                pDoc->GetPool()->CellStyleCreated( aString );
 
             //  Zellvorlagen = 2, Seitenvorlagen = 4
             UINT16 nId = ( eFamily == SFX_STYLE_FAMILY_PARA ) ?

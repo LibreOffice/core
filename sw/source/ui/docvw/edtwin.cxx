@@ -2261,7 +2261,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
 
                 BOOL bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
-                BOOL bRunNext = pACorr->HasRunNext();
+                BOOL bRunNext = pACorr && pACorr->HasRunNext();
                 if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
                         pACfg->IsAutoFmtByInput() &&
                     (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&

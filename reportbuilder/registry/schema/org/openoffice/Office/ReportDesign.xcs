@@ -50,7 +50,7 @@
             <prop oor:name="DownloadURL" oor:type="xs:string">
                 <info>
                     <author>LLA</author>
-                    <desc>Direct download URL to the Sun(tm) Report Builder extension.</desc>
+                    <desc>Direct download URL to the Oracle(tm) Report Builder extension.</desc>
                 </info>
                 <value>http://extensions.services.openoffice.org</value>
             </prop>
@@ -59,7 +59,7 @@
                     <author>LLA</author>
                     <desc>Name of the extension.</desc>
                 </info>
-                <value>Sun(tm) Report Builder</value>
+                <value>Oracle(tm) Report Builder</value>
             </prop>
         </group>
         <group oor:name="UserData" oor:extensible="true">

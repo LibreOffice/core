@@ -25,7 +25,7 @@
 '
 '/***********************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : defining locale dependant strings for language guessing
 '*

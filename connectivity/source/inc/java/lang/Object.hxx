@@ -118,8 +118,6 @@ namespace connectivity
         void clearObject(JNIEnv& rEnv);
         void clearObject();
 
-        java_lang_Class *   getClass();
-
         virtual ::rtl::OUString toString() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() { return m_xFactory; }
 

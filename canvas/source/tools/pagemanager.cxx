@@ -70,7 +70,8 @@ namespace canvas
         {
             maPages.push_back(pPage);
             FragmentSharedPtr pFragment(pPage->allocateSpace(rSize));
-            maFragments.push_back(pFragment);
+            if (pFragment)
+                maFragments.push_back(pFragment);
             return pFragment;
         }
 
@@ -124,34 +125,39 @@ namespace canvas
             FragmentContainer_t::const_iterator       candidate(maFragments.begin());
             while(candidate != aEnd)
             {
-                if(!((*candidate)->isNaked()))
+                if(*candidate && !((*candidate)->isNaked()))
                     break;
                 ++candidate;
             }
 
-            const ::basegfx::B2ISize& rSize((*candidate)->getSize());
-            sal_uInt32                nMaxArea(rSize.getX()*rSize.getY());
-
-            FragmentContainer_t::const_iterator it(candidate);
-            while(it != aEnd)
+            if (candidate != aEnd)
             {
-                if(!((*it)->isNaked()))
+                const ::basegfx::B2ISize& rSize((*candidate)->getSize());
+                sal_uInt32                nMaxArea(rSize.getX()*rSize.getY());
+
+                FragmentContainer_t::const_iterator it(candidate);
+                while(it != aEnd)
                 {
-                    const ::basegfx::B2ISize& rCandidateSize((*it)->getSize());
-                    const sal_uInt32 nArea(rCandidateSize.getX()*rCandidateSize.getY());
-                    if(nArea > nMaxArea)
+                    if (*it && !((*it)->isNaked()))
                     {
-                        candidate=it;
-                        nMaxArea=nArea;
+                        const ::basegfx::B2ISize& rCandidateSize((*it)->getSize());
+                        const sal_uInt32 nArea(rCandidateSize.getX()*rCandidateSize.getY());
+                        if(nArea > nMaxArea)
+                        {
+                            candidate=it;
+                            nMaxArea=nArea;
+                        }
                     }
+
+                    ++it;
                 }
 
-                ++it;
+                // this does not erase the candidate,
+                // but makes it 'naked'...
+                (*candidate)->free(*candidate);
             }
-
-            // this does not erase the candidate,
-            // but makes it 'naked'...
-            (*candidate)->free(*candidate);
+            else
+                break;
         }
     }
 

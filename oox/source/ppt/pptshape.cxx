@@ -169,6 +169,7 @@ void PPTShape::addShape(
                 }
             }
 
+/*
             // use placeholder index if possible
             if( mnSubType && getSubTypeIndex() && rSlidePersist.getMasterPersist().get() ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
@@ -182,8 +183,7 @@ void PPTShape::addShape(
                 aMasterTextListStyle = pNewTextListStyle;
                 }
             }
-
-
+*/
             if ( sServiceName.getLength() )
             {
                 if ( !aMasterTextListStyle.get() )

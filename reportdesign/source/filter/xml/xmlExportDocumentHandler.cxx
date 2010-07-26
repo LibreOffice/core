@@ -289,7 +289,9 @@ void SAL_CALL ExportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
 void SAL_CALL ExportDocumentHandler::characters(const ::rtl::OUString & aChars) throw (uno::RuntimeException, xml::sax::SAXException)
 {
     if ( !(m_bTableRowsStarted || m_bFirstRowExported) )
+    {
         m_xDelegatee->characters(aChars);
+    }
     else if ( m_bExportChar )
     {
         static const ::rtl::OUString s_sZero(RTL_CONSTASCII_USTRINGPARAM("0"));
