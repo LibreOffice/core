@@ -121,16 +121,16 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
 
 public:
     DocObjectWrapper( SbModule* pMod );
-    ~DocObjectWrapper();
+    virtual ~DocObjectWrapper();
 
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
 
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw ( com::sun::star::uno::RuntimeException )
+    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (RuntimeException)
     {
+        if( !m_xAggregateTypeProv.is() )
+            throw RuntimeException();
         return m_xAggregateTypeProv->getImplementationId();
-
     }
 
     virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw (RuntimeException);
