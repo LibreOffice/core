@@ -47,6 +47,8 @@ PATCH_FILES=mythes-1.2.0-vanilla-th-gen-idx.patch \
 .IF "$(GUI)"=="UNX"
 CONFIGURE_DIR=$(BUILD_DIR)
 
+.IF "$(SYSTEM_MYTHES)" != "YES"
+
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
 HUNSPELL_CFLAGS +:= -I$(SOLARINCDIR)$/hunspell
 HUNSPELL_LIBS +:= -L$(SOLARLIBDIR) -lhunspell-1.2
@@ -74,14 +76,9 @@ CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
 CONFIGURE_FLAGS+=CFLAGS='$(LCL_CONFIGURE_CFLAGS)'
 .ENDIF
 
-.IF "$(SYSTEM_MYTHES)" == "YES"
-@all:
-    echo "Nothing to do here."
-.ELSE
 BUILD_ACTION=make
 OUT2INC += mythes.hxx
 .ENDIF
-
 .ENDIF # "$(GUI)"=="UNX"
 
 
