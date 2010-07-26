@@ -80,7 +80,7 @@ void RscHrcDep::Execute()
 
 //static String aDelim;
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
+int main( int argc, char** argv )
 {
     int c;
     char aBuf[255];

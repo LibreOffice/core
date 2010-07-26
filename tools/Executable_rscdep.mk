@@ -56,6 +56,7 @@ $(eval $(call gb_Executable_add_exception_objects,rscdep,\
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Executable_add_linked_libs,rscdep,\
+    gnu_getopt \
     kernel32 \
     user32 \
     msvcrt \
