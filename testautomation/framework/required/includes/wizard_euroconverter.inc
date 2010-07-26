@@ -119,7 +119,7 @@ testcase tUpdtWizardEuroconverter
     kontext "AutopilotEuroKonverter"
     call DialogTest( AutopilotEuroKonverter , 2 )
 
-    hFinishWizard( 1 )
+    hClickButton( Konvertieren )
     hDestroyDocument() 
     hDeleteFile( cTargetDir & TARGET_FILE )
     

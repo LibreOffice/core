@@ -78,7 +78,7 @@ testcase tUpdtWizardDocumentConverter
             printlog( "Page " & 1 + iDocumentType & " is visible" )
         else
             warnlog( "Cannot access page 2, aborting test" )
-            hFinishWizard()
+            hCloseDialog( DocumentConverter, "Cancel" )
             goto endsub
         endif
         
