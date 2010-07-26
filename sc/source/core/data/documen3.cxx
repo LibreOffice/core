@@ -1549,10 +1549,12 @@ void ScDocument::ResetEmbedded()
 
 /** Similar to ScViewData::AddPixelsWhile(), but add height twips and only
     while result is less than nStopTwips.
+    @return TRUE if advanced at least one row.
  */
-void lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEndRow, const ScTable * pTable )
+bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEndRow, const ScTable * pTable )
 {
     SCROW nRow = rPosY;
+    bool bAdded = false;
     bool bStop = false;
     while (rTwips < nStopTwips && nRow <= nEndRow && !bStop)
     {
@@ -1584,8 +1586,12 @@ void lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEn
         }
     }
     if (nRow > rPosY)
+    {
         --nRow;
+        bAdded = true;
+    }
     rPosY = nRow;
+    return bAdded;
 }
 
 ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect )
@@ -1645,17 +1651,15 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect )
 
     SCROW nY1 = 0;
     // Was if(nSize+nAdd<=nTwips+1) inside loop => if(nSize+nAdd<nTwips+2)
-    lcl_AddTwipsWhile( nSize, nTwips+2, nY1, MAXROW, pTable);
-    if (nY1 < MAXROW)
-        ++nY1;  // original loop ended on last evaluated +1 unless that was MAXROW
+    if (lcl_AddTwipsWhile( nSize, nTwips+2, nY1, MAXROW, pTable) && nY1 < MAXROW)
+        ++nY1;  // original loop ended on last matched +1 unless that was MAXROW
 
     nTwips = (long) (aPosRect.Bottom() / HMM_PER_TWIPS);
 
     SCROW nY2 = nY1;
     // Was if(nSize+nAdd<nTwips) inside loop => if(nSize+nAdd<nTwips)
-    lcl_AddTwipsWhile( nSize, nTwips, nY2, MAXROW, pTable);
-    if (nY2 < MAXROW)
-        ++nY2;  // original loop ended on last evaluated +1 unless that was MAXROW
+    if (lcl_AddTwipsWhile( nSize, nTwips, nY2, MAXROW, pTable) && nY2 < MAXROW)
+        ++nY2;  // original loop ended on last matched +1 unless that was MAXROW
 
     return ScRange( nX1,nY1,nTab, nX2,nY2,nTab );
 }
