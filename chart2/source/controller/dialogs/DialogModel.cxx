@@ -526,6 +526,9 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
 
     try
     {
+        Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram() );
+        ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
+
         sal_Int32 nSeriesInChartType = 0;
         const sal_Int32 nTotalSeries = countSeries();
         if( xChartType.is())
@@ -541,7 +544,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
                 xChartType,
                 nTotalSeries, // new series' index
                 nSeriesInChartType,
-                m_xChartDocument->getFirstDiagram(),
+                xDiagram,
                 m_xTemplate,
                 bCreateDataCachedSequences ));
 
@@ -562,6 +565,8 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
             aSeries.insert( aIt, xNewSeries );
             xSeriesCnt->setDataSeries( ContainerToSequence( aSeries ));
         }
+
+        ThreeDHelper::setScheme( xDiagram, e3DScheme );
     }
     catch( uno::Exception & ex )
     {
