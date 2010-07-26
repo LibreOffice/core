@@ -665,6 +665,7 @@ X11SalFrame::X11SalFrame( SalFrame *pParent, ULONG nSalFrameStyle, SystemParentD
     mhStackingWindow            = None;
     mhForeignParent             = None;
     mhBackgroundPixmap          = None;
+    m_bSetFocusOnMap            = false;
 
     pGraphics_                  = NULL;
     pFreeGraphics_              = NULL;
@@ -1226,14 +1227,11 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
         }
 
         XLIB_Time nUserTime = 0;
-        if( ! bNoActivate && (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION|SAL_FRAME_STYLE_TOOLWINDOW)) == 0 )
-        {
-            if( GetDisplay()->getWMAdaptor()->getWindowManagerName().EqualsAscii("Metacity") )
-                nUserTime = pDisplay_->GetLastUserEventTime( true );
-            else
-                nUserTime = pDisplay_->GetLastUserEventTime();
-        }
+        if( ! bNoActivate && (nStyle_ & (SAL_FRAME_STYLE_OWNERDRAWDECORATION)) == 0 )
+            nUserTime = pDisplay_->GetLastUserEventTime( true );
         GetDisplay()->getWMAdaptor()->setUserTime( this, nUserTime );
+        if( ! bNoActivate && (nStyle_ & SAL_FRAME_STYLE_TOOLWINDOW) )
+            m_bSetFocusOnMap = true;
 
         // actually map the window
         if( m_bXEmbed )
@@ -4172,6 +4170,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                                     &aEvent );
                     }
 
+                    bool bSetFocus = m_bSetFocusOnMap;
                     /*  #99570# another workaround for sawfish: if a transient window for the same parent is shown
                      *  sawfish does not set the focus to it. Applies only for click to focus mode.
                      */
@@ -4181,7 +4180,7 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                         // since this will lead to a parent loose-focus, close status,
                         // reget focus, open status, .... flicker loop
                         if ( (I18NStatus::get().getStatusFrame() != this) )
-                            XSetInputFocus( GetXDisplay(), GetShellWindow(), RevertToParent, CurrentTime );
+                            bSetFocus = true;
                     }
 
                     /*
@@ -4219,10 +4218,21 @@ long X11SalFrame::Dispatch( XEvent *pEvent )
                                         mpParent->GetShellWindow(),
                                         RevertToParent,
                                         CurrentTime );
+                        bSetFocus = false;
                     }
+
+                    if( bSetFocus )
+                    {
+                        XSetInputFocus( GetXDisplay(),
+                                        GetShellWindow(),
+                                        RevertToParent,
+                                        CurrentTime );
+                    }
+
 
                     RestackChildren();
                     mbInShow = FALSE;
+                    m_bSetFocusOnMap = false;
                 }
                 break;
 
