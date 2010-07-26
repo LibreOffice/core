@@ -35,6 +35,7 @@
 #include "sb.hxx"
 #include "iosys.hxx"
 #include "disas.hxx"
+#include "sbtrace.hxx"
 
 
 static const char* pOp1[] = {
@@ -361,6 +362,11 @@ BOOL SbiDisas::DisasLine( String& rText )
     rText.Erase();
     if( !Fetch() )
         return FALSE;
+
+#ifdef DBG_TRACE_BASIC
+    String aTraceStr_STMNT;
+#endif
+
     // New line?
     if( eOp == _STMNT && nOp1 != nLine )
     {
@@ -393,8 +399,13 @@ BOOL SbiDisas::DisasLine( String& rText )
             rText.AppendAscii( "; " );
             rText += s;
             rText.AppendAscii( _crlf() );
+
+#ifdef DBG_TRACE_BASIC
+            aTraceStr_STMNT = s;
+#endif
         }
     }
+
     // Label?
     const char* p = "";
     if( cLabels[ nPC >> 3 ] & ( 1 << ( nPC & 7 ) ) )
@@ -432,20 +443,29 @@ BOOL SbiDisas::DisasLine( String& rText )
         rText.AppendAscii( _crlf() );
     }
     snprintf( cBuf, sizeof(cBuf), pMask[ nParts ], nPC, (USHORT) eOp, nOp1, nOp2 );
-    rText.AppendAscii( cBuf );
+
+    String aPCodeStr;
+    aPCodeStr.AppendAscii( cBuf );
     int n = eOp;
     if( eOp >= SbOP2_START )
         n -= SbOP2_START;
     else if( eOp >= SbOP1_START )
         n -= SbOP1_START;
-    rText += '\t';
-    rText.AppendAscii( pOps[ nParts-1 ][ n ] );
-    rText += '\t';
+    aPCodeStr += '\t';
+    aPCodeStr.AppendAscii( pOps[ nParts-1 ][ n ] );
+    aPCodeStr += '\t';
     switch( nParts )
     {
-        case 2: (this->*( pOperand2[ n ] ) )( rText ); break;
-        case 3: (this->*( pOperand3[ n ] ) )( rText ); break;
+        case 2: (this->*( pOperand2[ n ] ) )( aPCodeStr ); break;
+        case 3: (this->*( pOperand3[ n ] ) )( aPCodeStr ); break;
     }
+
+    rText += aPCodeStr;
+
+#ifdef DBG_TRACE_BASIC
+    dbg_RegisterTraceTextForPC( pMod, nPC, aTraceStr_STMNT, aPCodeStr );
+#endif
+
     return TRUE;
 }
 

@@ -45,6 +45,7 @@
 #include "runtime.hxx"
 #include "token.hxx"
 #include "sbunoobj.hxx"
+#include "sbtrace.hxx"
 
 
 //#include <basic/hilight.hxx>
@@ -1044,6 +1045,9 @@ USHORT SbModule::Run( SbMethod* pMeth )
     StarBASICRef xBasic;
     if( bDelInst )
     {
+#ifdef DBG_TRACE_BASIC
+        dbg_InitTrace();
+#endif
         // #32779: Basic waehrend der Ausfuehrung festhalten
         xBasic = (StarBASIC*) GetParent();
 
@@ -1122,17 +1126,27 @@ USHORT SbModule::Run( SbMethod* pMeth )
             SbModule* pOldMod = pMOD;
             pMOD = this;
             SbiRuntime* pRt = new SbiRuntime( this, pMeth, pMeth->nStart );
+
+#ifdef DBG_TRACE_BASIC
+            dbg_traceNotifyCall( this, pMeth, pINST->nCallLvl );
+#endif
+
             pRt->pNext = pINST->pRun;
             if( pRt->pNext )
                 pRt->pNext->block();
             pINST->pRun = pRt;
             if ( mbVBACompat )
-                        {
+            {
                 pINST->EnableCompatibility( TRUE );
-                        }
+            }
             while( pRt->Step() ) {}
             if( pRt->pNext )
                 pRt->pNext->unblock();
+
+#ifdef DBG_TRACE_BASIC
+            bool bLeave = true;
+            dbg_traceNotifyCall( this, pMeth, pINST->nCallLvl, bLeave );
+#endif
 
             // #63710 Durch ein anderes Thread-Handling bei Events kann es passieren,
             // dass show-Aufruf an einem Dialog zurueckkehrt (durch schliessen des
@@ -1227,9 +1241,20 @@ void SbModule::RunInit()
         pMOD = this;
         // Der Init-Code beginnt immer hier
         SbiRuntime* pRt = new SbiRuntime( this, NULL, 0 );
+
+#ifdef DBG_TRACE_BASIC
+        dbg_traceNotifyCall( this, NULL, 0 );
+#endif
+
         pRt->pNext = pINST->pRun;
         pINST->pRun = pRt;
         while( pRt->Step() ) {}
+
+#ifdef DBG_TRACE_BASIC
+        bool bLeave = true;
+        dbg_traceNotifyCall( this, NULL, 0, bLeave );
+#endif
+
         pINST->pRun = pRt->pNext;
         delete pRt;
         pMOD = pOldMod;
