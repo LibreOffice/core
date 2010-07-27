@@ -68,6 +68,7 @@
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
+#include <vbahelper/vbaaccesshelper.hxx>
 
 #include "scabstdlg.hxx" //CHINA001
 #include <sot/formats.hxx>
@@ -272,11 +273,6 @@ void ScDocShell::BeforeXMLLoading()
 {
     aDocument.DisableIdle( TRUE );
 
-    // suppress VBA events when loading the xml
-    uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
-    if( xVbaEvents.is() )
-        xVbaEvents->setIgnoreEvents( sal_True );
-
     // prevent unnecessary broadcasts and updates
     DBG_ASSERT(pModificator == NULL, "The Modificator should not exist");
     pModificator = new ScDocShellModificator( *this );
@@ -361,34 +357,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
     }
     else
         aDocument.SetInsertingFromOtherDoc( FALSE );
-#if 0 // disable load of vba related libraries
-    // add vba globals ( if they are availabl )
-    uno::Any aGlobs;
-        uno::Sequence< uno::Any > aArgs(1);
-        aArgs[ 0 ] <<= GetModel();
-    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
-    GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-        // Fake ThisComponent being setup by Activate ( which is a view
-        // related thing ),
-        //  a) if another document is opened then in theory  ThisComponent
-        //     will be reset as before,
-        //  b) when this document is  'really' Activated then ThisComponent
-        //     again will be set as before
-        // The only wrinkle seems if this document is loaded 'InVisible'
-        // but.. I don't see that this is possible from the vba API
-        // I could be wrong though
-        // There may be implications setting the current component
-        // too early :-/ so I will just manually set the Basic Variables
-        BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
-        if ( pAppMgr )
-            pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
-#if 0 // this should be controlled by a compatibility mode
-        // suppress VBA events when loading the xml
-        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
-        if( xVbaEvents.is() )
-            xVbaEvents->setIgnoreEvents( sal_False );
-#endif
-#endif
+
     aDocument.SetImportingXML( FALSE );
     aDocument.EnableExecuteLink( true );
     aDocument.EnableUndo( TRUE );
@@ -567,6 +536,17 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     xVbaEvents->processVbaEvent( WORKBOOK_AFTERSAVE, aArgs );
                 }
                 break;
+                case SFX_EVENT_CLOSEDOC:
+                {
+                    // explicitly fire WindowDeactivate and Deactivate on closing
+                    uno::Sequence< uno::Any > aArgs;
+                    xVbaEvents->processVbaEvent( WORKBOOK_WINDOWDEACTIVATE, aArgs );
+                    xVbaEvents->processVbaEvent( WORKBOOK_DEACTIVATE, aArgs );
+                    // event processor will remove all listeners on destruction
+                    xVbaEvents.clear();
+                    aDocument.SetVbaEventProcessor( xVbaEvents );
+                }
+                break;
             }
         }
     }
@@ -631,6 +611,40 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             // TODO/LATER: And error message should be shown here probably
                             SetReadOnlyUI( sal_True );
                         }
+                    }
+
+                    // VBA specific initialization
+                    if( aDocument.IsInVBAMode() ) try
+                    {
+                        uno::Reference< frame::XModel > xModel( GetModel(), uno::UNO_SET_THROW );
+
+                        // create VBAGlobals object if not yet done
+                        uno::Reference< lang::XMultiServiceFactory > xFactory( xModel, uno::UNO_QUERY_THROW );
+                        xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+
+                        // Fake ThisComponent being setup by Activate ( which is a view
+                        // related thing ),
+                        //  a) if another document is opened then in theory  ThisComponent
+                        //     will be reset as before,
+                        //  b) when this document is  'really' Activated then ThisComponent
+                        //     again will be set as before
+                        // The only wrinkle seems if this document is loaded 'InVisible'
+                        // but.. I don't see that this is possible from the vba API
+                        // I could be wrong though
+                        // There may be implications setting the current component
+                        // too early :-/ so I will just manually set the Basic Variables
+                        if( BasicManager* pAppMgr = SFX_APP()->GetBasicManager() )
+                            pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", uno::Any( xModel ) );
+
+                        // create the VBA document event processor
+                        uno::Sequence< uno::Any > aArgs( 1 );
+                        aArgs[ 0 ] <<= xModel;
+                        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents(
+                            ooo::vba::createVBAUnoAPIServiceWithArgs( this, "com.sun.star.script.vba.VBASpreadsheetEventProcessor" , aArgs ), uno::UNO_QUERY );
+                        aDocument.SetVbaEventProcessor( xVbaEvents );
+                    }
+                    catch( uno::Exception& )
+                    {
                     }
                 }
                 break;
