@@ -1264,26 +1264,21 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
 
         aChange.Accessor >>= sOrgPath;
         sPath              = sOrgPath;
-        ::rtl::OUString sPrimarySecondary = ::utl::extractFirstFromConfigurationPath(sPath);
-        sPath = ::utl::dropPrefixFromConfigurationPath(sPath, sPrimarySecondary);
-
-        ::rtl::OUString sGlobalModules = ::utl::extractFirstFromConfigurationPath(sPath);
-        sPath = ::utl::dropPrefixFromConfigurationPath(sPath, sGlobalModules);
+        ::rtl::OUString sPrimarySecondary = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
+        ::rtl::OUString sGlobalModules = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
 
         if ( sGlobalModules.equals(CFG_ENTRY_GLOBAL) )
         {
             ::rtl::OUString sModule;
-            sKey = ::utl::extractFirstFromConfigurationPath(sPath);
-            if ( sKey.getLength() )
+            sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
+            if (( sKey.getLength() > 0 ) && ( sPath.getLength() > 0 ))
                 reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
         }
         else if ( sGlobalModules.equals(CFG_ENTRY_MODULES) )
         {
-            ::rtl::OUString sModule = ::utl::extractFirstFromConfigurationPath(sPath);
-            ::rtl::OUString sDropModule = ::rtl::OUString::createFromAscii("Module['") + sModule +  ::rtl::OUString::createFromAscii("']");
-            sPath = ::utl::dropPrefixFromConfigurationPath(sPath, sDropModule);
-            sKey = ::utl::extractFirstFromConfigurationPath(sPath);
-            if ( sKey.getLength() )
+            ::rtl::OUString sModule = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
+            sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
+            if (( sKey.getLength() > 0 ) && ( sPath.getLength() > 0 ))
                 reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
         }
     }
