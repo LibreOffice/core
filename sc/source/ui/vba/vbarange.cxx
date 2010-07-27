@@ -355,7 +355,6 @@ ScVbaRangeAreas::createEnumeration() throw (uno::RuntimeException)
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
     return new RangesEnumerationImpl( mxParent, mxContext, xEnumAccess->createEnumeration(), mbIsRows, mbIsColumns );
-
 }
 
 uno::Any
@@ -1177,7 +1176,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
 
 
 ScVbaRange*
-getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& sName, ScDocShell* pDocSh, table::CellRangeAddress& pAddr, formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1 ) throw ( uno::RuntimeException )
+getRangeForName( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& sName, ScDocShell* pDocSh, table::CellRangeAddress& pAddr, formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1 ) throw ( uno::RuntimeException )
 {
     ScRangeList aCellRanges;
     ScRange refRange;
@@ -1291,7 +1290,7 @@ ScVbaRange::getRangeObjectForName(
         ScDocShell* pDocSh, formula::FormulaGrammar::AddressConvention eConv ) throw ( uno::RuntimeException )
 {
     table::CellRangeAddress refAddr;
-    return getRangeForName( xContext, sRangeName, pDocSh, refAddr, eConv );
+    return getRangeForName( xParent, xContext, sRangeName, pDocSh, refAddr, eConv );
 }
 
 
@@ -2581,7 +2580,7 @@ ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseI
         Cell1 >>= sName;
         RangeHelper referRange( xReferrer );
         table::CellRangeAddress referAddress = referRange.getCellRangeAddressable()->getRangeAddress();
-        return getRangeForName( mxContext, sName, getScDocShell(), referAddress );
+        return getRangeForName( getParent(), mxContext, sName, getScDocShell(), referAddress );
 
     }
     else
@@ -3907,16 +3906,16 @@ ScVbaRange::getPageBreak() throw (uno::RuntimeException)
         {
             ScDocument* pDoc =  getDocumentFromRange( mxRange );
 
-            BYTE nFlag = 0;
+            ScBreakType nBreak = BREAK_NONE;
             if ( !bColumn )
-                nFlag = pDoc -> GetRowFlags(thisAddress.StartRow, thisAddress.Sheet);
+                nBreak = pDoc->HasRowBreak(thisAddress.StartRow, thisAddress.Sheet);
             else
-                nFlag = pDoc -> GetColFlags(static_cast<SCCOL>(thisAddress.StartColumn), thisAddress.Sheet);
+                nBreak = pDoc->HasColBreak(thisAddress.StartColumn, thisAddress.Sheet);
 
-            if ( nFlag & CR_PAGEBREAK)
+            if (nBreak & BREAK_PAGE)
                 nPageBreak = excel::XlPageBreak::xlPageBreakAutomatic;
 
-            if ( nFlag & CR_MANUALBREAK)
+            if (nBreak & BREAK_MANUAL)
                 nPageBreak = excel::XlPageBreak::xlPageBreakManual;
         }
     }

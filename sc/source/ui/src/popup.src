@@ -196,6 +196,15 @@ Menu RID_POPUP_TAB
             HelpId = FID_TAB_EVENTS ;
             Text [ en-US ] = "Sheet E~vents..." ;
         };
+        //------------------------------
+        MenuItem { Separator = TRUE ; };
+        //------------------------------
+        MenuItem
+        {
+            Identifier = FID_TAB_MENU_SET_TAB_BG_COLOR ;
+            HelpId = FID_TAB_MENU_SET_TAB_BG_COLOR ;
+            Text [ en-US ] = "~Tab Color..." ;
+        };
     };
 };
 

@@ -365,8 +365,7 @@ ScModelObj::ScModelObj( ScDocShell* pDocSh ) :
     pDocShell( pDocSh ),
     pPrintFuncCache( NULL ),
     pPrinterOptions( NULL ),
-    maChangesListeners( m_aMutex ),
-    mnXlsWriteProtPass( 0 )
+    maChangesListeners( m_aMutex )
 {
     // pDocShell may be NULL if this is the base of a ScDocOptionsObj
     if ( pDocShell )
@@ -1748,14 +1747,6 @@ void SAL_CALL ScModelObj::setPropertyValue(
             if ( aObjName.getLength() )
                 pDoc->RestoreChartListener( aObjName );
         }
-        else if ( aString.EqualsAscii( "WriteProtectionPassword" ) )
-        {
-            /*  This is a hack for #160550# to preserve the write-protection
-                password in an XLS roundtrip. This property MUST NOT be used
-                for any other purpose. This property will be deleted when the
-                feature "Write Protection With Password" will be implemented. */
-            aValue >>= mnXlsWriteProtPass;
-        }
 
         if ( aNewOpt != rOldOpt )
         {
@@ -1923,14 +1914,6 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( "InternalDocument" ) )
         {
             ScUnoHelpFunctions::SetBoolInAny( aRet, (pDocShell->GetCreateMode() == SFX_CREATE_MODE_INTERNAL) );
-        }
-        else if ( aString.EqualsAscii( "WriteProtectionPassword" ) )
-        {
-            /*  This is a hack for #160550# to preserve the write-protection
-                password in an XLS roundtrip. This property MUST NOT be used
-                for any other purpose. This property will be deleted when the
-                feature "Write Protection With Password" will be implemented. */
-            aRet <<= mnXlsWriteProtPass;
         }
     }
 
@@ -3068,7 +3051,8 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const rtl::OUString& aPro
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
     {
-        BOOL bVis = !(pDoc->GetColFlags( nStartCol, nTab ) & CR_HIDDEN);
+        SCCOL nLastCol;
+        bool bVis = !pDoc->ColHidden(nStartCol, nTab, nLastCol);
         ScUnoHelpFunctions::SetBoolInAny( aAny, bVis );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_OWIDTH ) )
@@ -3078,13 +3062,13 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const rtl::OUString& aPro
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_NEWPAGE ) )
     {
-        BOOL bBreak = ( 0 != (pDoc->GetColFlags( nStartCol, nTab ) & (CR_PAGEBREAK|CR_MANUALBREAK)) );
-        ScUnoHelpFunctions::SetBoolInAny( aAny, bBreak );
+        ScBreakType nBreak = pDoc->HasColBreak(nStartCol, nTab);
+        ScUnoHelpFunctions::SetBoolInAny( aAny, nBreak );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_MANPAGE ) )
     {
-        BOOL bBreak = ( 0 != (pDoc->GetColFlags( nStartCol, nTab ) & (CR_MANUALBREAK)) );
-        ScUnoHelpFunctions::SetBoolInAny( aAny, bBreak );
+        ScBreakType nBreak = pDoc->HasColBreak(nStartCol, nTab);
+        ScUnoHelpFunctions::SetBoolInAny( aAny, (nBreak & BREAK_MANUAL) );
     }
 
     return aAny;
@@ -3244,8 +3228,11 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
         sal_Int32 nNewHeight = 0;
         if ( pDoc->IsImportingXML() && ( aValue >>= nNewHeight ) )
         {
-            // used to set the stored row height for rows with optimal height when loading
-            pDoc->SetRowHeightRange( nStartRow, nEndRow, nTab, (USHORT)HMMToTwips(nNewHeight) );
+            // used to set the stored row height for rows with optimal height when loading.
+
+            // TODO: It's probably cleaner to use a different property name
+            // for this.
+            pDoc->SetRowHeightOnly( nStartRow, nEndRow, nTab, (USHORT)HMMToTwips(nNewHeight) );
         }
         else
         {
@@ -3276,9 +3263,9 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
     {
         //! undo etc.
         if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
-            pDoc->GetRowFlagsArrayModifiable( nTab).OrValue( nStartRow, nEndRow, CR_FILTERED);
+            pDoc->SetRowFiltered(nStartRow, nEndRow, nTab, true);
         else
-            pDoc->GetRowFlagsArrayModifiable( nTab).AndValue( nStartRow, nEndRow, sal::static_int_cast<BYTE>(~CR_FILTERED) );
+            pDoc->SetRowFiltered(nStartRow, nEndRow, nTab, false);
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_NEWPAGE) || aNameString.EqualsAscii( SC_UNONAME_MANPAGE) )
     {
@@ -3326,12 +3313,13 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const rtl::OUString& aProper
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
     {
-        BOOL bVis = !(pDoc->GetRowFlags( nStartRow, nTab ) & CR_HIDDEN);
+        SCROW nLastRow;
+        bool bVis = !pDoc->RowHidden(nStartRow, nTab, nLastRow);
         ScUnoHelpFunctions::SetBoolInAny( aAny, bVis );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLFILT ) )
     {
-        BOOL bVis = ((pDoc->GetRowFlags( nStartRow, nTab ) & CR_FILTERED) != 0);
+        bool bVis = pDoc->RowFiltered(nStartRow, nTab);
         ScUnoHelpFunctions::SetBoolInAny( aAny, bVis );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_OHEIGHT ) )
@@ -3341,13 +3329,13 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const rtl::OUString& aProper
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_NEWPAGE ) )
     {
-        BOOL bBreak = ( 0 != (pDoc->GetRowFlags( nStartRow, nTab ) & (CR_PAGEBREAK|CR_MANUALBREAK)) );
-        ScUnoHelpFunctions::SetBoolInAny( aAny, bBreak );
+        ScBreakType nBreak = pDoc->HasRowBreak(nStartRow, nTab);
+        ScUnoHelpFunctions::SetBoolInAny( aAny, nBreak );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_MANPAGE ) )
     {
-        BOOL bBreak = ( 0 != (pDoc->GetRowFlags( nStartRow, nTab ) & (CR_MANUALBREAK)) );
-        ScUnoHelpFunctions::SetBoolInAny( aAny, bBreak );
+        ScBreakType nBreak = pDoc->HasRowBreak(nStartRow, nTab);
+        ScUnoHelpFunctions::SetBoolInAny( aAny, (nBreak & BREAK_MANUAL) );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLBACK ) || aNameString.EqualsAscii( SC_UNONAME_CELLTRAN ) )
     {

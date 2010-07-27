@@ -45,6 +45,7 @@
 #include <svtools/ctrltool.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svl/zforlist.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dinfdlg.hxx>
@@ -63,9 +64,12 @@
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include <sfx2/request.hxx>
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/script/vba/VBAEventId.hpp>
 #include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
+#include <com/sun/star/sheet/XSpreadsheetView.hpp>
+#include <com/sun/star/task/XJob.hpp>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 #include <vbahelper/vbaaccesshelper.hxx>
@@ -352,6 +356,20 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
                     // else;  nothing has to happen, because it is a user given name
                 }
             }
+
+            // #i94570# DataPilot table names have to be unique, or the tables can't be accessed by API.
+            // If no name (or an invalid name, skipped in ScXMLDataPilotTableContext::EndElement) was set, create a new name.
+            ScDPCollection* pDPCollection = aDocument.GetDPCollection();
+            if ( pDPCollection )
+            {
+                USHORT nDPCount = pDPCollection->GetCount();
+                for (USHORT nDP=0; nDP<nDPCount; nDP++)
+                {
+                    ScDPObject* pDPObj = (*pDPCollection)[nDP];
+                    if ( !pDPObj->GetName().Len() )
+                        pDPObj->SetName( pDPCollection->CreateNewName() );
+                }
+            }
         }
         ScColumn::bDoubleAlloc = sal_False;
     }
@@ -437,7 +455,7 @@ BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
 
     //  only the latin script language is loaded
     //  -> initialize the others from options (before loading)
-    InitOptions();
+    InitOptions(true);
 
     GetUndoManager()->Clear();
 
@@ -666,6 +684,46 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                 SC_MOD()->SetAppOptions( aAppOptions );
                             }
                         }
+                    }
+
+                    try
+                    {
+                        uno::Reference< uno::XComponentContext > xContext;
+                        uno::Reference< lang::XMultiServiceFactory > xServiceManager = ::comphelper::getProcessServiceFactory();
+                        uno::Reference< beans::XPropertySet > xProp( xServiceManager, uno::UNO_QUERY_THROW );
+                        xProp->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ) >>= xContext;
+                        if ( xContext.is() )
+                        {
+                            uno::Reference< container::XContentEnumerationAccess > xEnumAccess( xServiceManager, uno::UNO_QUERY_THROW );
+                            uno::Reference< container::XEnumeration> xEnum = xEnumAccess->createContentEnumeration(
+                                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocumentJob" ) ) );
+                            if ( xEnum.is() )
+                            {
+                                while ( xEnum->hasMoreElements() )
+                                {
+                                    uno::Any aAny = xEnum->nextElement();
+                                    uno::Reference< lang::XSingleComponentFactory > xFactory;
+                                    aAny >>= xFactory;
+                                    if ( xFactory.is() )
+                                    {
+                                        uno::Reference< task::XJob > xJob( xFactory->createInstanceWithContext( xContext ), uno::UNO_QUERY_THROW );
+                                        uno::Sequence< beans::NamedValue > aArgsForJob(1);
+                                        ScViewData* pViewData = GetViewData();
+                                        SfxViewShell* pViewShell = ( pViewData ? pViewData->GetViewShell() : NULL );
+                                        SfxViewFrame* pViewFrame = ( pViewShell ? pViewShell->GetViewFrame() : NULL );
+                                        SfxFrame* pFrame = ( pViewFrame ? &pViewFrame->GetFrame() : NULL );
+                                        uno::Reference< frame::XController > xController = ( pFrame ? pFrame->GetController() : 0 );
+                                        uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );
+                                        aArgsForJob[0] = beans::NamedValue( ::rtl::OUString::createFromAscii( "SpreadsheetView" ),
+                                            uno::makeAny( xSpreadsheetView ) );
+                                        xJob->execute( aArgsForJob );
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch ( uno::Exception & )
+                    {
                     }
                 }
                 break;
@@ -953,9 +1011,32 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
     rDateConvert = static_cast<bool>(aTokens[1].toInt32());
 }
 
+namespace {
+
+class LoadMediumGuard
+{
+public:
+    explicit LoadMediumGuard(ScDocument* pDoc) :
+        mpDoc(pDoc)
+    {
+        mpDoc->SetLoadingMedium(true);
+    }
+
+    ~LoadMediumGuard()
+    {
+        mpDoc->SetLoadingMedium(false);
+    }
+private:
+    ScDocument* mpDoc;
+};
+
+}
+
 BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertFrom" );
+
+    LoadMediumGuard aLoadGuard(&aDocument);
 
     BOOL bRet = FALSE;              // FALSE heisst Benutzerabbruch !!
                                     // bei Fehler: Fehler am Stream setzen!!
@@ -2023,7 +2104,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             /*  #115980# #i104990# If the imported document contains a medium
                 password, determine if we can save it, otherwise ask the users
                 whether they want to save without it. */
-            if( !::sfx2::CheckMSPasswordCapabilityForExport( aFltName ) )
+            if( (rMed.GetFilter()->GetFilterFlags() & SFX_FILTER_ENCRYPTION) == 0 )
             {
                 SfxItemSet* pItemSet = rMed.GetItemSet();
                 const SfxPoolItem* pItem = 0;
@@ -2797,3 +2878,97 @@ sal_Bool ScDocShell::AcceptStateUpdate() const
     return sal_False;
 }
 //-->Added by PengYunQuan for Validity Cell Range Picker
+
+
+bool ScDocShell::IsChangeRecording() const
+{
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    return pChangeTrack != NULL;
+}
+
+
+bool ScDocShell::HasChangeRecordProtection() const
+{
+    bool bRes = false;
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    if (pChangeTrack)
+        bRes = pChangeTrack->IsProtected();
+    return bRes;
+}
+
+
+void ScDocShell::SetChangeRecording( bool bActivate )
+{
+    bool bOldChangeRecording = IsChangeRecording();
+
+    if (bActivate)
+    {
+        aDocument.StartChangeTracking();
+        ScChangeViewSettings aChangeViewSet;
+        aChangeViewSet.SetShowChanges(TRUE);
+        aDocument.SetChangeViewSettings(aChangeViewSet);
+    }
+    else
+    {
+        aDocument.EndChangeTracking();
+        PostPaintGridAll();
+    }
+
+    if (bOldChangeRecording != IsChangeRecording())
+    {
+        UpdateAcceptChangesDialog();
+        // Slots invalidieren
+        SfxBindings* pBindings = GetViewBindings();
+        if (pBindings)
+            pBindings->InvalidateAll(FALSE);
+    }
+}
+
+
+bool ScDocShell::SetProtectionPassword( const String &rNewPassword )
+{
+    bool bRes = false;
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    if (pChangeTrack)
+    {
+        sal_Bool bProtected = pChangeTrack->IsProtected();
+
+        if (rNewPassword.Len())
+        {
+            // when password protection is applied change tracking must always be active
+            SetChangeRecording( true );
+
+            ::com::sun::star::uno::Sequence< sal_Int8 > aProtectionHash;
+            SvPasswordHelper::GetHashPassword( aProtectionHash, rNewPassword );
+            pChangeTrack->SetProtection( aProtectionHash );
+        }
+        else
+        {
+            pChangeTrack->SetProtection( ::com::sun::star::uno::Sequence< sal_Int8 >() );
+        }
+        bRes = true;
+
+        if ( bProtected != pChangeTrack->IsProtected() )
+        {
+            UpdateAcceptChangesDialog();
+            SetDocumentModified();
+        }
+    }
+
+    return bRes;
+}
+
+
+bool ScDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
+{
+    bool bRes = false;
+    ScChangeTrack* pChangeTrack = aDocument.GetChangeTrack();
+    if (pChangeTrack && pChangeTrack->IsProtected())
+    {
+        rPasswordHash = pChangeTrack->GetProtection();
+        bRes = true;
+    }
+    return bRes;
+}
+
+

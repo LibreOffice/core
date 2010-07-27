@@ -36,7 +36,6 @@
 // ============================================================================
 
 ScExtDocSettings::ScExtDocSettings() :
-    maOleSize( ScAddress::INITIALIZE_INVALID ),
     mfTabBarWidth( -1.0 ),
     mnLinkCnt( 0 ),
     mnDisplTab( 0 )

@@ -115,7 +115,6 @@ private:
     void                    HandleCalculateEvents();
 
     rtl::OUString           maBuildId;
-    sal_Int32               mnXlsWriteProtPass;
 protected:
     const SfxItemPropertySet&   GetPropertySet() const { return aPropSet; }
 

@@ -81,7 +81,6 @@ uno::Reference< container::XEnumeration >
 ScVbaComments::createEnumeration() throw (uno::RuntimeException)
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
-
     return new CommentEnumeration( mxParent, mxContext, xEnumAccess->createEnumeration(), mxModel );
 }
 

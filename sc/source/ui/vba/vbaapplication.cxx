@@ -24,14 +24,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include <stdio.h>
 
-
-#include<com/sun/star/sheet/XSpreadsheetView.hpp>
+#include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include<com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include<ooo/vba/excel/XlCalculation.hpp>
+#include <ooo/vba/excel/XlCalculation.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>

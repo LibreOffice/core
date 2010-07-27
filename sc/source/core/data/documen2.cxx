@@ -190,11 +190,11 @@ ScDocument::ScDocument( ScDocumentMode  eMode,
 //      bNoSetDirty( TRUE ),
         bNoSetDirty( FALSE ),
         bInsertingFromOtherDoc( FALSE ),
-        bImportingXML( FALSE ),
+        bLoadingMedium( false ),
+        bImportingXML( false ),
         bXMLFromWrapper( FALSE ),
         bCalcingAfterLoad( FALSE ),
         bNoListening( FALSE ),
-        bLoadingDone( TRUE ),
         bIdleDisabled( FALSE ),
         bInLinkUpdate( FALSE ),
         bChartListenerCollectionNeedsUpdate( FALSE ),
@@ -899,6 +899,8 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         SetNoListening( TRUE );     // noch nicht bei CopyToTable/Insert
         pTab[nOldPos]->CopyToTable(0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
                                         pTab[nNewPos], pOnlyMarked );
+        pTab[nNewPos]->SetTabBgColor(pTab[nOldPos]->GetTabBgColor());
+
         SCsTAB nDz;
 /*      if (nNewPos < nOldPos)
             nDz = ((short)nNewPos) - (short)nOldPos + 1;

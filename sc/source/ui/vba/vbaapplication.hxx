@@ -44,7 +44,7 @@ class ScVbaApplication : public ScVbaApplication_BASE
 private:
     sal_Int32 m_xCalculation;
     sal_Bool m_bDisplayAlerts;
-     sal_Bool  m_bEnableEvents;
+     sal_Bool m_bEnableEvents;
 
     rtl::OUString getOfficePath( const rtl::OUString& sPath ) throw ( css::uno::RuntimeException );
 

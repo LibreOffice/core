@@ -321,9 +321,9 @@ struct XclObjAnchor : public XclRange
     explicit            XclObjAnchor();
 
     /** Calculates a rectangle from the contained coordinates. */
-    Rectangle           GetRect( ScDocument& rDoc, SCTAB nScTab, MapUnit eMapUnit ) const;
+    Rectangle           GetRect( const XclRoot& rRoot, SCTAB nScTab, MapUnit eMapUnit ) const;
     /** Initializes the anchor coordinates for a sheet. */
-    void                SetRect( ScDocument& rDoc, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit );
+    void                SetRect( const XclRoot& rRoot, SCTAB nScTab, const Rectangle& rRect, MapUnit eMapUnit );
 
     /** Initializes the anchor coordinates for an embedded draw page. */
     void                SetRect( const Size& rPageSize, sal_Int32 nScaleX, sal_Int32 nScaleY,

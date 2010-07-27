@@ -1696,7 +1696,7 @@ void XclImpChartObj::FinalizeTabChart()
 
     // create the object anchor
     XclObjAnchor aAnchor;
-    aAnchor.SetRect( GetDoc(), GetCurrScTab(), Rectangle( 1000, 500, nWidth, nHeight ), MAP_100TH_MM );
+    aAnchor.SetRect( GetRoot(), GetCurrScTab(), Rectangle( 1000, 500, nWidth, nHeight ), MAP_100TH_MM );
     SetAnchor( aAnchor );
 }
 
@@ -3926,7 +3926,7 @@ void XclImpSheetDrawing::ConvertObjects( XclImpDffConverter& rDffConv )
 
 Rectangle XclImpSheetDrawing::CalcAnchorRect( const XclObjAnchor& rAnchor, bool /*bDffAnchor*/ ) const
 {
-    return rAnchor.GetRect( GetDoc(), maScUsedArea.aStart.Tab(), MAP_100TH_MM );
+    return rAnchor.GetRect( GetRoot(), maScUsedArea.aStart.Tab(), MAP_100TH_MM );
 }
 
 void XclImpSheetDrawing::OnObjectInserted( const XclImpDrawObjBase& rDrawObj )

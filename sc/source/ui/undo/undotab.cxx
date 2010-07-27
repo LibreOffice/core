@@ -28,18 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-//------------------------------------------------------------------
-
-// ?#define _MACRODLG_HXX
-// ? #define _BIGINT_HXX
-// ? #define _SVDXOUT_HXX
-// ? #define _SVDATTR_HXX
-// ? #define _SVDSURO_HXX
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -59,6 +47,7 @@
 #include "printfun.hxx"
 #include "chgtrack.hxx"
 #include "tabprotection.hxx"
+#include "viewdata.hxx"
 
 // for ScUndoRenameObject - might me moved to another file later
 #include <svx/svditer.hxx>
@@ -90,6 +79,7 @@ TYPEINIT1(ScUndoScenarioFlags,  SfxUndoAction);
 TYPEINIT1(ScUndoRenameObject,   SfxUndoAction);
 TYPEINIT1(ScUndoLayoutRTL,      SfxUndoAction);
 //UNUSED2009-05 TYPEINIT1(ScUndoSetGrammar,     SfxUndoAction);
+TYPEINIT1(ScUndoTabColor,  SfxUndoAction);
 
 
 // -----------------------------------------------------------------------
@@ -411,6 +401,7 @@ void ScUndoDeleteTab::Undo()
                 pDoc->SetActiveScenario( nTab, bActive );
             }
             pDoc->SetVisible( nTab, pRefUndoDoc->IsVisible( nTab ) );
+            pDoc->SetTabBgColor( nTab, pRefUndoDoc->GetTabBgColor(nTab) );
             pDoc->SetSheetEvents( nTab, pRefUndoDoc->GetSheetEvents( nTab ) );
 
             if ( pRefUndoDoc->IsTabProtected( nTab ) )
@@ -777,6 +768,78 @@ BOOL ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
     return FALSE;
 }
 
+//---------------------------------------------------------------------------------
+//
+//      Tab Bg Color
+//
+
+ScUndoTabColor::ScUndoTabColor(
+    ScDocShell* pNewDocShell, SCTAB nT, const Color& aOTabBgColor, const Color& aNTabBgColor) :
+    ScSimpleUndo( pNewDocShell )
+{
+    ScUndoTabColorInfo aInfo(nT);
+    aInfo.maOldTabBgColor = aOTabBgColor;
+    aInfo.maNewTabBgColor = aNTabBgColor;
+    aTabColorList.push_back(aInfo);
+}
+
+ScUndoTabColor::ScUndoTabColor(
+    ScDocShell* pNewDocShell,
+    const ScUndoTabColorInfo::List& rUndoTabColorList) :
+    ScSimpleUndo(pNewDocShell),
+    aTabColorList(rUndoTabColorList)
+{
+}
+
+ScUndoTabColor::~ScUndoTabColor()
+{
+}
+
+String ScUndoTabColor::GetComment() const
+{
+    if (aTabColorList.size() > 1)
+        return ScGlobal::GetRscString(STR_UNDO_SET_MULTI_TAB_BG_COLOR);
+    return ScGlobal::GetRscString(STR_UNDO_SET_TAB_BG_COLOR);
+}
+
+void ScUndoTabColor::DoChange(bool bUndoType) const
+{
+    ScDocument* pDoc = pDocShell->GetDocument();
+    if (!pDoc)
+        return;
+
+    size_t nTabColorCount = aTabColorList.size();
+    for (size_t i = 0; i < nTabColorCount; ++i)
+    {
+        const ScUndoTabColorInfo& rTabColor = aTabColorList[i];
+        pDoc->SetTabBgColor(rTabColor.mnTabId,
+            bUndoType ? rTabColor.maOldTabBgColor : rTabColor.maNewTabBgColor);
+    }
+
+    pDocShell->PostPaintExtras();
+    ScDocShellModificator aModificator( *pDocShell );
+    aModificator.SetDocumentModified();
+}
+
+void ScUndoTabColor::Undo()
+{
+    DoChange(true);
+}
+
+void ScUndoTabColor::Redo()
+{
+    DoChange(false);
+}
+
+void ScUndoTabColor::Repeat(SfxRepeatTarget& /* rTarget */)
+{
+    //  No Repeat
+}
+
+BOOL ScUndoTabColor::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+{
+    return FALSE;
+}
 
 // -----------------------------------------------------------------------
 //

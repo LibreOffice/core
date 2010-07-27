@@ -66,6 +66,7 @@ using namespace ::com::sun::star;
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/fmshell.hxx>
+#include <svtools/xwindowitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docinsert.hxx>
@@ -623,8 +624,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     // getting real parent window when called from Security-Options TP
                     Window* pParent = NULL;
                     const SfxPoolItem* pParentItem;
-                    if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                        pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                    if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                        pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
 
                     // desired state
                     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
@@ -664,17 +665,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                     if ( bDo )
                     {
-                        //  update "accept changes" dialog
-                        //! notify all views
-                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                        if ( pViewFrm && pViewFrm->HasChildWindow(FID_CHG_ACCEPT) )
-                        {
-                            SfxChildWindow* pChild = pViewFrm->GetChildWindow(FID_CHG_ACCEPT);
-                            if (pChild)
-                            {
-                                ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
-                            }
-                        }
+                        UpdateAcceptChangesDialog();
 
                         // Slots invalidieren
                         if (pBindings)
@@ -693,8 +684,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
             {
                 Window* pParent = NULL;
                 const SfxPoolItem* pParentItem;
-                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                    pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                    pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
                 if ( ExecuteChangeProtectionDialog( pParent ) )
                 {
                     rReq.Done();
@@ -1164,6 +1155,21 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
 //------------------------------------------------------------------
 
+void UpdateAcceptChangesDialog()
+{
+    //  update "accept changes" dialog
+    //! notify all views
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if ( pViewFrm && pViewFrm->HasChildWindow( FID_CHG_ACCEPT ) )
+    {
+        SfxChildWindow* pChild = pViewFrm->GetChildWindow( FID_CHG_ACCEPT );
+        if ( pChild )
+            ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
+    }
+}
+
+//------------------------------------------------------------------
+
 BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQueryIfProtected )
 {
     BOOL bDone = FALSE;
@@ -1217,15 +1223,7 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQuer
             }
             if ( bProtected != pChangeTrack->IsProtected() )
             {
-                //  update "accept changes" dialog
-                //! notify all views
-                SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                if ( pViewFrm && pViewFrm->HasChildWindow( FID_CHG_ACCEPT ) )
-                {
-                    SfxChildWindow* pChild = pViewFrm->GetChildWindow( FID_CHG_ACCEPT );
-                    if ( pChild )
-                        ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
-                }
+                UpdateAcceptChangesDialog();
                 bDone = TRUE;
             }
         }
@@ -1491,12 +1489,12 @@ BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         SCROW nEndRow = rRange.aEnd.Row();
         if ( pRepeatRow && nStartRow >= pRepeatRow->aStart.Row() )
         {
-            nBlkTwipsY += aDocument.FastGetRowHeight( pRepeatRow->aStart.Row(),
+            nBlkTwipsY += aDocument.GetRowHeight( pRepeatRow->aStart.Row(),
                     pRepeatRow->aEnd.Row(), nTab );
             if ( nStartRow <= pRepeatRow->aEnd.Row() )
                 nStartRow = pRepeatRow->aEnd.Row() + 1;
         }
-        nBlkTwipsY += aDocument.FastGetRowHeight( nStartRow, nEndRow, nTab );
+        nBlkTwipsY += aDocument.GetRowHeight( nStartRow, nEndRow, nTab );
 
         Size aPhysPage;
         long nHdr, nFtr;

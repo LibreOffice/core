@@ -1848,6 +1848,7 @@ void ScTabViewObj::SelectionChanged()
             /*ErrCode eRet =*/ pDocSh->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
         }
     }
+
     // execute VBA event handler
     try
     {
