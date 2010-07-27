@@ -250,12 +250,20 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
     {
         SFX_APP()->EnterBasicCall();
         Reference<XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
-        Reference<XVBACompat> xVBACompat( xLibContainer, UNO_QUERY );
-
-        if ( xVBACompat.is() && !bAsComment )
-            xVBACompat->setVBACompatModeOn( sal_True );
-
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
+
+        if( !bAsComment ) try
+        {
+            Reference< XVBACompat > xVBACompat( xLibContainer, UNO_QUERY_THROW );
+            xVBACompat->setVBACompatModeOn( sal_True );
+            /*  Force creation of the VBAGlobals object, each application will
+                create the right one and store it at the Basic manager. */
+            Reference< XMultiServiceFactory > xFactory( rDocSh.GetModel(), UNO_QUERY_THROW );
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+        }
+        catch( Exception& )
+        {
+        }
 
         UINT16 nStreamCount = aVBA.GetNoStreams();
         Reference<XNameContainer> xLib;
