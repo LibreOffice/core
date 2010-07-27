@@ -988,6 +988,7 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
 // -----------------------------------------------------------------------
 
 bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
+    double fTransparency,
     const ::basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin )
 {
@@ -1032,6 +1033,7 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
         CGContextAddPath( mrContext, xPath );
         // draw path with antialiased line
         CGContextSetShouldAntialias( mrContext, true );
+        CGContextSetAlpha( mrContext, 1.0 - fTransparency );
         CGContextSetLineJoin( mrContext, aCGLineJoin );
         CGContextSetLineWidth( mrContext, rLineWidths.getX() );
         CGContextDrawPath( mrContext, kCGPathStroke );

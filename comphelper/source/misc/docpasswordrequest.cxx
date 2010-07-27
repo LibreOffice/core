@@ -29,24 +29,26 @@
 #include "precompiled_comphelper.hxx"
 
 #include "comphelper/docpasswordrequest.hxx"
-#include <com/sun/star/task/DocumentMSPasswordRequest.hpp>
-#include <com/sun/star/task/DocumentPasswordRequest.hpp>
+#include <com/sun/star/task/DocumentMSPasswordRequest2.hpp>
+#include <com/sun/star/task/DocumentPasswordRequest2.hpp>
 #include <com/sun/star/task/XInteractionAbort.hpp>
-#include <com/sun/star/task/XInteractionPassword.hpp>
+#include <com/sun/star/task/XInteractionPassword2.hpp>
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
+using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::task::InteractionClassification_QUERY;
-using ::com::sun::star::task::DocumentMSPasswordRequest;
-using ::com::sun::star::task::DocumentPasswordRequest;
+using ::com::sun::star::task::DocumentMSPasswordRequest2;
+using ::com::sun::star::task::DocumentPasswordRequest2;
 using ::com::sun::star::task::PasswordRequestMode;
 using ::com::sun::star::task::XInteractionAbort;
 using ::com::sun::star::task::XInteractionContinuation;
-using ::com::sun::star::task::XInteractionPassword;
+using ::com::sun::star::task::XInteractionPassword2;
+using ::com::sun::star::task::XInteractionRequest;
 
 namespace comphelper {
 
@@ -57,52 +59,64 @@ class AbortContinuation : public ::cppu::WeakImplHelper1< XInteractionAbort >
 public:
     inline explicit     AbortContinuation() : mbSelected( false ) {}
 
-    inline bool         isSelected() const { return mbSelected; }
+    inline sal_Bool     isSelected() const { return mbSelected; }
     inline void         reset() { mbSelected = false; }
 
     virtual void SAL_CALL select() throw( RuntimeException ) { mbSelected = true; }
 
 private:
-    bool                mbSelected;
+    sal_Bool            mbSelected;
 };
 
 // ============================================================================
 
-class PasswordContinuation : public ::cppu::WeakImplHelper1< XInteractionPassword >
+class PasswordContinuation : public ::cppu::WeakImplHelper1< XInteractionPassword2 >
 {
 public:
-    inline explicit     PasswordContinuation() : mbSelected( false ) {}
+    inline explicit     PasswordContinuation() : mbReadOnly( sal_False ), mbSelected( sal_False ) {}
 
-    inline bool         isSelected() const { return mbSelected; }
-    inline void         reset() { mbSelected = false; }
+    inline sal_Bool     isSelected() const { return mbSelected; }
+    inline void         reset() { mbSelected = sal_False; }
 
-    virtual void SAL_CALL select() throw( RuntimeException ) { mbSelected = true; }
+    virtual void SAL_CALL select() throw( RuntimeException ) { mbSelected = sal_True; }
+
     virtual void SAL_CALL setPassword( const OUString& rPass ) throw( RuntimeException ) { maPassword = rPass; }
     virtual OUString SAL_CALL getPassword() throw( RuntimeException ) { return maPassword; }
 
+    virtual void SAL_CALL setPasswordToModify( const OUString& rPass ) throw( RuntimeException ) { maModifyPassword = rPass; }
+    virtual OUString SAL_CALL getPasswordToModify() throw( RuntimeException ) { return maModifyPassword; }
+
+    virtual void SAL_CALL setRecommendReadOnly( sal_Bool bReadOnly ) throw( RuntimeException ) { mbReadOnly = bReadOnly; }
+    virtual sal_Bool SAL_CALL getRecommendReadOnly() throw( RuntimeException ) { return mbReadOnly; }
+
 private:
     OUString            maPassword;
-    bool                mbSelected;
+    OUString            maModifyPassword;
+    sal_Bool            mbReadOnly;
+    sal_Bool            mbSelected;
 };
 
 // ============================================================================
 
 DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
-        PasswordRequestMode eMode, const OUString& rDocumentName )
+        PasswordRequestMode eMode, const OUString& rDocumentName, sal_Bool bPasswordToModify )
+: mpAbort( NULL )
+, mpPassword( NULL )
+, mbPasswordToModify( bPasswordToModify )
 {
     switch( eType )
     {
         case DocPasswordRequestType_STANDARD:
         {
-            DocumentPasswordRequest aRequest( OUString(), Reference< XInterface >(),
-                InteractionClassification_QUERY, eMode, rDocumentName );
+            DocumentPasswordRequest2 aRequest( OUString(), Reference< XInterface >(),
+                InteractionClassification_QUERY, eMode, rDocumentName, bPasswordToModify );
             maRequest <<= aRequest;
         }
         break;
         case DocPasswordRequestType_MS:
         {
-            DocumentMSPasswordRequest aRequest( OUString(), Reference< XInterface >(),
-                InteractionClassification_QUERY, eMode, rDocumentName );
+            DocumentMSPasswordRequest2 aRequest( OUString(), Reference< XInterface >(),
+                InteractionClassification_QUERY, eMode, rDocumentName, bPasswordToModify );
             maRequest <<= aRequest;
         }
         break;
@@ -119,12 +133,32 @@ DocPasswordRequest::~DocPasswordRequest()
 {
 }
 
-bool DocPasswordRequest::isAbort() const
+/*uno::*/Any SAL_CALL DocPasswordRequest::queryInterface( const /*uno::*/Type& rType ) throw (RuntimeException)
+{
+    return ::cppu::queryInterface ( rType,
+            // OWeakObject interfaces
+            dynamic_cast< XInterface* > ( (XInteractionRequest *) this ),
+            static_cast< XWeak* > ( this ),
+            // my own interfaces
+            static_cast< XInteractionRequest*  > ( this ) );
+}
+
+void SAL_CALL DocPasswordRequest::acquire(  ) throw ()
+{
+    OWeakObject::acquire();
+}
+
+void SAL_CALL DocPasswordRequest::release(  ) throw ()
+{
+    OWeakObject::release();
+}
+
+sal_Bool DocPasswordRequest::isAbort() const
 {
     return mpAbort->isSelected();
 }
 
-bool DocPasswordRequest::isPassword() const
+sal_Bool DocPasswordRequest::isPassword() const
 {
     return mpPassword->isSelected();
 }
@@ -132,6 +166,16 @@ bool DocPasswordRequest::isPassword() const
 OUString DocPasswordRequest::getPassword() const
 {
     return mpPassword->getPassword();
+}
+
+OUString DocPasswordRequest::getPasswordToModify() const
+{
+    return mpPassword->getPasswordToModify();
+}
+
+sal_Bool DocPasswordRequest::getRecommendReadOnly() const
+{
+    return mpPassword->getRecommendReadOnly();
 }
 
 Any SAL_CALL DocPasswordRequest::getRequest() throw( RuntimeException )
