@@ -378,7 +378,8 @@ void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
                 bool bError_ = true;
 
                 SbUnoMethod* pUnoMethod = PTR_CAST(SbUnoMethod,p);
-                if( pUnoMethod )
+                SbUnoProperty* pUnoProperty = PTR_CAST(SbUnoProperty,p);
+                if( pUnoMethod || pUnoProperty )
                 {
                     SbUnoObject* pParentUnoObj = PTR_CAST( SbUnoObject,p->GetParent() );
                     if( pParentUnoObj )
