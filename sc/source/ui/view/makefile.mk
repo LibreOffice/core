@@ -154,7 +154,6 @@ EXCEPTIONSFILES= \
     $(SLO)$/formatsh.obj \
     $(SLO)$/gridwin2.obj \
     $(SLO)$/scextopt.obj \
-    $(SLO)$/tabview3.obj \
     $(SLO)$/tabvwshb.obj \
     $(SLO)$/viewdata.obj \
     $(SLO)$/viewfunc.obj \

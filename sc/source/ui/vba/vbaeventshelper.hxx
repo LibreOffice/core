@@ -35,7 +35,7 @@
 
 namespace ooo { namespace vba { namespace excel { class XApplication; } } }
 
-class ScVbaWindowListener;
+class ScVbaEventsListener;
 
 // ============================================================================
 
@@ -73,12 +73,11 @@ private:
 
 private:
     mutable css::uno::WeakReference< ov::excel::XApplication > mxApplication;
-    ::rtl::Reference< ScVbaWindowListener > mxWindowListener;
+    ::rtl::Reference< ScVbaEventsListener > mxListener;
     ScDocShell* mpDocShell;
     ScDocument* mpDoc;
     ScRangeList maOldSelection;
     bool mbOpened;
-    bool mbClosed;
 };
 
 // ============================================================================

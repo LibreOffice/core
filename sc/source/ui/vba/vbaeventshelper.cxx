@@ -40,8 +40,7 @@
 
 #include <ooo/vba/excel/XApplication.hpp>
 
-#include <cppuhelper/implbase1.hxx>
-#include <cppuhelper/implbase3.hxx>
+#include <cppuhelper/implbase4.hxx>
 #include <toolkit/unohlp.hxx>
 #include <vbahelper/helperdecl.hxx>
 #include <vcl/svapp.hxx>
@@ -56,97 +55,15 @@ using namespace ::ooo::vba;
 
 // ============================================================================
 
-typedef ::cppu::WeakImplHelper1< util::XChangesListener > ScVbaChangesListener_BASE;
-
-class ScVbaChangesListener : public ScVbaChangesListener_BASE
-{
-public:
-    ScVbaChangesListener( ScVbaEventsHelper* pHelper, ScDocShell* pDocShell );
-
-    virtual void SAL_CALL changesOccurred( const util::ChangesEvent& aEvent ) throw (uno::RuntimeException);
-    virtual void SAL_CALL disposing( const lang::EventObject& aSource ) throw (uno::RuntimeException);
-
-private:
-    ScVbaEventsHelper* mpVbaEvents;
-    ScDocShell* mpDocShell;
-};
-
-// ----------------------------------------------------------------------------
-
-ScVbaChangesListener::ScVbaChangesListener( ScVbaEventsHelper* pHelper, ScDocShell* pDocShell ) :
-    mpVbaEvents( pHelper ),
-    mpDocShell( pDocShell )
-{
-}
-
-void SAL_CALL ScVbaChangesListener::changesOccurred( const util::ChangesEvent& aEvent ) throw (uno::RuntimeException)
-{
-    sal_Int32 nCount = aEvent.Changes.getLength();
-    if( nCount == 0 )
-        return;
-
-    util::ElementChange aChange = aEvent.Changes[ 0 ];
-    rtl::OUString sOperation;
-    aChange.Accessor >>= sOperation;
-    if( !sOperation.equalsIgnoreAsciiCaseAscii("cell-change") )
-        return;
-
-    if( nCount == 1 )
-    {
-        uno::Reference< table::XCellRange > xRangeObj;
-        aChange.ReplacedElement >>= xRangeObj;
-        if( xRangeObj.is() )
-        {
-            uno::Sequence< uno::Any > aArgs(1);
-            aArgs[0] <<= xRangeObj;
-            mpVbaEvents->processVbaEvent( WORKSHEET_CHANGE, aArgs );
-        }
-        return;
-    }
-
-    ScRangeList aRangeList;
-    for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
-    {
-        aChange = aEvent.Changes[ nIndex ];
-        aChange.Accessor >>= sOperation;
-        uno::Reference< table::XCellRange > xRangeObj;
-        aChange.ReplacedElement >>= xRangeObj;
-        if( xRangeObj.is() && sOperation.equalsIgnoreAsciiCaseAscii("cell-change") )
-        {
-            uno::Reference< sheet::XCellRangeAddressable > xCellRangeAddressable( xRangeObj, uno::UNO_QUERY );
-            if( xCellRangeAddressable.is() )
-            {
-                ScRange aRange;
-                ScUnoConversion::FillScRange( aRange, xCellRangeAddressable->getRangeAddress() );
-                aRangeList.Append( aRange );
-            }
-        }
-    }
-
-    if( (aRangeList.Count() > 0) && mpDocShell )
-    {
-        uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( mpDocShell, aRangeList ) );
-        uno::Sequence< uno::Any > aArgs(1);
-        aArgs[0] <<= xRanges;
-        mpVbaEvents->processVbaEvent( WORKSHEET_CHANGE, aArgs );
-    }
-}
-
-void SAL_CALL ScVbaChangesListener::disposing( const lang::EventObject& /*aSource*/ ) throw(uno::RuntimeException)
-{
-}
-
-// ============================================================================
-
-typedef ::cppu::WeakImplHelper3<
-    awt::XWindowListener, util::XCloseListener, frame::XBorderResizeListener > ScVbaWindowListener_BASE;
+typedef ::cppu::WeakImplHelper4<
+    awt::XWindowListener, util::XCloseListener, frame::XBorderResizeListener, util::XChangesListener > ScVbaEventsListener_BASE;
 
 // This class is to process Workbook window related event
-class ScVbaWindowListener : public ScVbaWindowListener_BASE
+class ScVbaEventsListener : public ScVbaEventsListener_BASE
 {
 public :
-    ScVbaWindowListener( ScVbaEventsHelper* pHelper, const uno::Reference< frame::XModel >& rxModel );
-    virtual ~ScVbaWindowListener();
+    ScVbaEventsListener( ScVbaEventsHelper& rVbaEvents, const uno::Reference< frame::XModel >& rxModel, ScDocShell* pDocShell );
+    virtual ~ScVbaEventsListener();
 
     void startListening();
     void stopListening();
@@ -165,6 +82,9 @@ public :
     // XBorderResizeListener
     virtual void SAL_CALL borderWidthsChanged( const uno::Reference< uno::XInterface >& aObject, const frame::BorderWidths& aNewSize ) throw (uno::RuntimeException);
 
+    // XChangesListener
+    virtual void SAL_CALL changesOccurred( const util::ChangesEvent& aEvent ) throw (uno::RuntimeException);
+
 private:
     uno::Reference< frame::XFrame > getFrame();
     uno::Reference< awt::XWindow > getContainerWindow();
@@ -174,31 +94,36 @@ private:
 
 private:
     ::osl::Mutex maMutex;
-    ScVbaEventsHelper* mpVbaEvents;
+    ScVbaEventsHelper& mrVbaEvents;
     uno::Reference< frame::XModel > mxModel;
+    ScDocShell* mpDocShell;
     bool mbWindowResized;
     bool mbBorderChanged;
+    bool mbDisposed;
 };
 
 // ----------------------------------------------------------------------------
 
-ScVbaWindowListener::ScVbaWindowListener( ScVbaEventsHelper* pHelper, const uno::Reference< frame::XModel >& rxModel ) :
-    mpVbaEvents( pHelper ),
+ScVbaEventsListener::ScVbaEventsListener( ScVbaEventsHelper& rVbaEvents, const uno::Reference< frame::XModel >& rxModel, ScDocShell* pDocShell ) :
+    mrVbaEvents( rVbaEvents ),
     mxModel( rxModel ),
-    mbWindowResized( sal_False ),
-    mbBorderChanged( sal_False )
+    mpDocShell( pDocShell ),
+    mbWindowResized( false ),
+    mbBorderChanged( false ),
+    mbDisposed( !rxModel.is() )
 {
-    OSL_TRACE( "ScVbaWindowListener::ScVbaWindowListener( 0x%x ) - ctor ", this );
+    OSL_TRACE( "ScVbaEventsListener::ScVbaEventsListener( 0x%x ) - ctor ", this );
 }
 
-ScVbaWindowListener::~ScVbaWindowListener()
+ScVbaEventsListener::~ScVbaEventsListener()
 {
-    OSL_TRACE( "ScVbaWindowListener::~ScVbaWindowListener( 0x%x ) - dtor ", this );
+    OSL_TRACE( "ScVbaEventsListener::~ScVbaEventsListener( 0x%x ) - dtor ", this );
+    stopListening();
 }
 
-void ScVbaWindowListener::startListening()
+void ScVbaEventsListener::startListening()
 {
-    if( mxModel.is() )
+    if( !mbDisposed )
     {
         // add window listener
         try
@@ -227,12 +152,21 @@ void ScVbaWindowListener::startListening()
         catch( uno::Exception& )
         {
         }
+        // add content change listener
+        try
+        {
+            uno::Reference< util::XChangesNotifier > xChangesNotifier( mxModel, uno::UNO_QUERY_THROW );
+            xChangesNotifier->addChangesListener( this );
+        }
+        catch( uno::Exception& )
+        {
+        }
     }
 }
 
-void ScVbaWindowListener::stopListening()
+void ScVbaEventsListener::stopListening()
 {
-    if( mxModel.is() )
+    if( !mbDisposed )
     {
         try
         {
@@ -258,80 +192,141 @@ void ScVbaWindowListener::stopListening()
         catch( uno::Exception& )
         {
         }
+        try
+        {
+            uno::Reference< util::XChangesNotifier > xChangesNotifier( mxModel, uno::UNO_QUERY_THROW );
+            xChangesNotifier->removeChangesListener( this );
+        }
+        catch( uno::Exception& )
+        {
+        }
     }
-    mpVbaEvents = 0;
+    mbDisposed = true;
 }
 
-void SAL_CALL ScVbaWindowListener::windowResized(  const awt::WindowEvent& /*aEvent*/ ) throw ( uno::RuntimeException )
+void SAL_CALL ScVbaEventsListener::windowResized(  const awt::WindowEvent& /*aEvent*/ ) throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
     // Workbook_window_resize event
     mbWindowResized = true;
-    if( mbBorderChanged )
+    if( !mbDisposed && mbBorderChanged )
     {
         if( /*Window* pWindow =*/ VCLUnoHelper::GetWindow( getContainerWindow() ) )
         {
             mbBorderChanged = mbWindowResized = false;
             acquire(); // ensure we don't get deleted before the event is handled
-            Application::PostUserEvent( LINK( this, ScVbaWindowListener, fireResizeMacro ), 0 );
+            Application::PostUserEvent( LINK( this, ScVbaEventsListener, fireResizeMacro ), 0 );
         }
     }
 }
 
-void SAL_CALL ScVbaWindowListener::windowMoved(  const awt::WindowEvent& /*aEvent*/ ) throw ( uno::RuntimeException )
+void SAL_CALL ScVbaEventsListener::windowMoved( const awt::WindowEvent& /*aEvent*/ ) throw ( uno::RuntimeException )
 {
     // not interest this time
 }
 
-void SAL_CALL ScVbaWindowListener::windowShown(  const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
+void SAL_CALL ScVbaEventsListener::windowShown( const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
 {
     // not interest this time
 }
 
-void SAL_CALL ScVbaWindowListener::windowHidden(  const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
+void SAL_CALL ScVbaEventsListener::windowHidden( const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
 {
     // not interest this time
 }
 
-void SAL_CALL ScVbaWindowListener::disposing(  const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
+void SAL_CALL ScVbaEventsListener::disposing( const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
-    OSL_TRACE( "ScVbaWindowListener::disposing( 0x%x )", this );
-    mpVbaEvents = 0;
+    OSL_TRACE( "ScVbaEventsListener::disposing( 0x%x )", this );
+    mbDisposed = true;
 }
 
-void SAL_CALL ScVbaWindowListener::queryClosing( const lang::EventObject& /*Source*/, sal_Bool /*GetsOwnership*/ ) throw (util::CloseVetoException, uno::RuntimeException)
+void SAL_CALL ScVbaEventsListener::queryClosing( const lang::EventObject& /*Source*/, sal_Bool /*GetsOwnership*/ ) throw (util::CloseVetoException, uno::RuntimeException)
 {
      // it can cancel the close, but need to throw a CloseVetoException, and it will be transmit to caller.
 }
 
-void SAL_CALL ScVbaWindowListener::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaEventsListener::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( maMutex );
     stopListening();
 }
 
-void SAL_CALL ScVbaWindowListener::borderWidthsChanged( const uno::Reference< uno::XInterface >& /*aObject*/, const frame::BorderWidths& /*aNewSize*/ ) throw (uno::RuntimeException)
+void SAL_CALL ScVbaEventsListener::borderWidthsChanged( const uno::Reference< uno::XInterface >& /*aObject*/, const frame::BorderWidths& /*aNewSize*/ ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( maMutex );
     // work with WindowResized event to guard Window Resize event.
     mbBorderChanged = true;
-    if( mbWindowResized )
+    if( !mbDisposed && mbWindowResized )
     {
         if( /*Window* pWindow =*/ VCLUnoHelper::GetWindow( getContainerWindow() ) )
         {
             mbWindowResized = mbBorderChanged = false;
             acquire(); // ensure we don't get deleted before the timer fires.
-            Application::PostUserEvent( LINK( this, ScVbaWindowListener, fireResizeMacro ), 0 );
+            Application::PostUserEvent( LINK( this, ScVbaEventsListener, fireResizeMacro ), 0 );
         }
+    }
+}
+
+void SAL_CALL ScVbaEventsListener::changesOccurred( const util::ChangesEvent& aEvent ) throw (uno::RuntimeException)
+{
+    sal_Int32 nCount = aEvent.Changes.getLength();
+    if( nCount == 0 )
+        return;
+
+    util::ElementChange aChange = aEvent.Changes[ 0 ];
+    rtl::OUString sOperation;
+    aChange.Accessor >>= sOperation;
+    if( !sOperation.equalsIgnoreAsciiCaseAscii("cell-change") )
+        return;
+
+    if( nCount == 1 )
+    {
+        uno::Reference< table::XCellRange > xRangeObj;
+        aChange.ReplacedElement >>= xRangeObj;
+        if( xRangeObj.is() )
+        {
+            uno::Sequence< uno::Any > aArgs(1);
+            aArgs[0] <<= xRangeObj;
+            mrVbaEvents.processVbaEvent( WORKSHEET_CHANGE, aArgs );
+        }
+        return;
+    }
+
+    ScRangeList aRangeList;
+    for( sal_Int32 nIndex = 0; nIndex < nCount; ++nIndex )
+    {
+        aChange = aEvent.Changes[ nIndex ];
+        aChange.Accessor >>= sOperation;
+        uno::Reference< table::XCellRange > xRangeObj;
+        aChange.ReplacedElement >>= xRangeObj;
+        if( xRangeObj.is() && sOperation.equalsIgnoreAsciiCaseAscii("cell-change") )
+        {
+            uno::Reference< sheet::XCellRangeAddressable > xCellRangeAddressable( xRangeObj, uno::UNO_QUERY );
+            if( xCellRangeAddressable.is() )
+            {
+                ScRange aRange;
+                ScUnoConversion::FillScRange( aRange, xCellRangeAddressable->getRangeAddress() );
+                aRangeList.Append( aRange );
+            }
+        }
+    }
+
+    if( (aRangeList.Count() > 0) && mpDocShell )
+    {
+        uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( mpDocShell, aRangeList ) );
+        uno::Sequence< uno::Any > aArgs(1);
+        aArgs[0] <<= xRanges;
+        mrVbaEvents.processVbaEvent( WORKSHEET_CHANGE, aArgs );
     }
 }
 
 // ----------------------------------------------------------------------------
 
-uno::Reference< frame::XFrame > ScVbaWindowListener::getFrame()
+uno::Reference< frame::XFrame > ScVbaEventsListener::getFrame()
 {
-    if( mpVbaEvents && mxModel.is() ) try
+    if( !mbDisposed && mxModel.is() ) try
     {
         uno::Reference< frame::XController > xController( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
         return xController->getFrame();
@@ -342,7 +337,7 @@ uno::Reference< frame::XFrame > ScVbaWindowListener::getFrame()
     return uno::Reference< frame::XFrame >();
 }
 
-uno::Reference< awt::XWindow > ScVbaWindowListener::getContainerWindow()
+uno::Reference< awt::XWindow > ScVbaEventsListener::getContainerWindow()
 {
     try
     {
@@ -355,7 +350,7 @@ uno::Reference< awt::XWindow > ScVbaWindowListener::getContainerWindow()
     return uno::Reference< awt::XWindow >();
 }
 
-bool ScVbaWindowListener::isMouseReleased()
+bool ScVbaEventsListener::isMouseReleased()
 {
     if( Window* pWindow = VCLUnoHelper::GetWindow( getContainerWindow() ) )
     {
@@ -365,44 +360,32 @@ bool ScVbaWindowListener::isMouseReleased()
     return false;
 }
 
-IMPL_LINK( ScVbaWindowListener, fireResizeMacro, void*, EMPTYARG )
+IMPL_LINK( ScVbaEventsListener, fireResizeMacro, void*, EMPTYARG )
 {
-    if( mpVbaEvents && isMouseReleased() )
+    if( !mbDisposed && isMouseReleased() )
         processWindowResizeMacro();
     release();
     return 0;
 }
 
-void ScVbaWindowListener::processWindowResizeMacro()
+void ScVbaEventsListener::processWindowResizeMacro()
 {
     OSL_TRACE( "**** Attempt to FIRE MACRO **** " );
-    if( mpVbaEvents )
-        mpVbaEvents->processVbaEvent( WORKBOOK_WINDOWRESIZE, uno::Sequence< uno::Any >() );
+    if( !mbDisposed )
+        mrVbaEvents.processVbaEvent( WORKBOOK_WINDOWRESIZE, uno::Sequence< uno::Any >() );
 }
 
 // ============================================================================
 
 ScVbaEventsHelper::ScVbaEventsHelper( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& xContext ) :
     VbaEventsHelperBase( rArgs, xContext ),
-    mbOpened( false ),
-    mbClosed( false )
+    mbOpened( false )
 {
     mpDocShell = dynamic_cast< ScDocShell* >( mpShell ); // mpShell from base class
     mpDoc = mpDocShell ? mpDocShell->GetDocument() : 0;
 
     if( !mxModel.is() || !mpDocShell || !mpDoc )
         return;
-
-    // add worksheet change listener
-    try
-    {
-        uno::Reference< util::XChangesNotifier > xChangesNotifier( mxModel, uno::UNO_QUERY_THROW );
-        uno::Reference< util::XChangesListener > xChangesListener( new ScVbaChangesListener( this, mpDocShell ) );
-        xChangesNotifier->addChangesListener( xChangesListener );
-    }
-    catch( uno::Exception& )
-    {
-    }
 
 #define REGISTER_EVENT( eventid, eventname, type, cancelindex, worksheet ) \
     registerEventHandler( eventid, eventname, type, cancelindex, uno::Any( worksheet ) )
@@ -499,13 +482,9 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
                 rEventQueue.push_back( AUTO_OPEN );
             }
         break;
-        case WORKBOOK_DEACTIVATE:
-            if( mbClosed )
-                rEventQueue.push_back( WORKBOOK_WINDOWDEACTIVATE );
-        break;
         case WORKSHEET_SELECTIONCHANGE:
             // if selection is not changed, then do not fire the event
-            bExecuteEvent = mbOpened && !mbClosed && isSelectionChanged( rArgs, 0 );
+            bExecuteEvent = mbOpened && isSelectionChanged( rArgs, 0 );
         break;
     }
 
@@ -616,25 +595,18 @@ void ScVbaEventsHelper::implPostProcessEvent( EventQueue& rEventQueue,
     {
         case WORKBOOK_OPEN:
             mbOpened = true;
-            // register the window listener
-            if( !mxWindowListener.is() )
+            // register the listeners
+            if( !mxListener.is() )
             {
-                mxWindowListener = new ScVbaWindowListener( this, mxModel );
-                mxWindowListener->startListening();
+                mxListener = new ScVbaEventsListener( *this, mxModel, mpDocShell );
+                mxListener->startListening();
             }
         break;
         case WORKBOOK_BEFORECLOSE:
-            mbClosed = !bCancel;
-            if( mbClosed )
-            {
-                // execute Auto_Close if not cancelled
+            /*  Execute Auto_Close only if not cancelled by event handler, but
+                before UI asks user whether to cancel closing the document. */
+            if( !bCancel )
                 rEventQueue.push_back( AUTO_CLOSE );
-                if( mxWindowListener.is() )
-                {
-                    mxWindowListener->stopListening();
-                    mxWindowListener.clear();
-                }
-            }
         break;
     }
 }
