@@ -50,6 +50,8 @@ using namespace ::com::sun::star::drawing;
 namespace oox { namespace drawingml {
 
 CustomShapeProperties::CustomShapeProperties()
+: mbMirroredX   ( sal_False )
+, mbMirroredY   ( sal_False )
 {
 }
 CustomShapeProperties::~CustomShapeProperties()
@@ -149,7 +151,8 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         sal_uInt32 i;
         PropertyMap aPropertyMap;
         aPropertyMap[ PROP_Type ] <<= CREATE_OUSTRING( "non-primitive" );
-
+        aPropertyMap[ PROP_MirroredX ] <<= Any( mbMirroredX );
+        aPropertyMap[ PROP_MirroredY ] <<= Any( mbMirroredY );
         awt::Size aSize( xShape->getSize() );
         awt::Rectangle aViewBox( 0, 0, aSize.Width * 360, aSize.Height * 360 );
         if ( maPath2DList.size() )
