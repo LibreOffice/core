@@ -52,8 +52,6 @@ public:
     virtual ~VbaEventsHelperBase();
 
     // XVBAEventProcessor
-    virtual void SAL_CALL setIgnoreEvents( sal_Bool bIgnoreEvents ) throw (css::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL getIgnoreEvents() throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasVbaEventHandler( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
     virtual void SAL_CALL processVbaEvent( sal_Int32 nEventId, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException, css::script::provider::ScriptFrameworkErrorException, css::util::VetoException, css::uno::RuntimeException);
 
@@ -156,7 +154,6 @@ private:
     typedef ::std::map< sal_Int32, EventHandlerInfo > EventHandlerMap;
 
     EventHandlerMap maEvents;
-    bool mbIgnoreEvents;
     bool mbDisposed;
 };
 
