@@ -136,7 +136,8 @@ public:
     void SetModuleType( INT32 nType ) { mnType = nType; }
     bool GetIsProxyModule() { return bIsProxyModule; }
     void AddVarName( const String& aName );
-    void RemoveVars();  ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
+    void RemoveVars();
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
     bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
 };
 

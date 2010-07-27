@@ -460,7 +460,7 @@ void BackingWindow::initBackground()
 
     maOpenButton.SetMenuMode( MENUBUTTON_MENUMODE_TIMED );
     maOpenButton.SetSelectHdl( LINK( this, BackingWindow, SelectHdl ) );
-    prepareRecentFileMenu();
+    maOpenButton.SetActivateHdl( LINK( this, BackingWindow, ActivateHdl ) );
 }
 
 void BackingWindow::initControls()
@@ -1053,6 +1053,13 @@ IMPL_LINK( BackingWindow, SelectHdl, Button*, pButton )
             dispatchURL( maRecentFiles[nItem].aTargetURL, rtl::OUString(), xFrame, maRecentFiles[nItem].aArgSeq );
         }
     }
+    return 0;
+}
+
+IMPL_LINK( BackingWindow, ActivateHdl, Button*, pButton )
+{
+    if( pButton == &maOpenButton )
+        prepareRecentFileMenu();
     return 0;
 }
 

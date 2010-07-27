@@ -1170,7 +1170,7 @@ void SbiRuntime::StepGLOBAL( UINT32 nOp1, UINT32 nOp2 )
         StepPUBLIC_Impl( nOp1, nOp2, true );
 
     String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    SbxDataType t = (SbxDataType)(nOp2 & 0xffff);;
+    SbxDataType t = (SbxDataType)(nOp2 & 0xffff);
 
     // Store module scope variables at module scope
     // in non vba mode these are stored at the library level :/

@@ -54,6 +54,9 @@ public:
     virtual void SAL_CALL setSaved( sal_Bool bSave ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getVBProject() throw (css::uno::RuntimeException);
 
+    virtual css::uno::Any SAL_CALL getVBProject() throw (css::uno::RuntimeException); // Michhael E. Bohn
+
+
     // Methods
     virtual void SAL_CALL Close( const css::uno::Any &bSaveChanges,
                                  const css::uno::Any &aFileName,

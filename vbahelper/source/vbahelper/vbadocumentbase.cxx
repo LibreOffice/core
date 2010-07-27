@@ -35,6 +35,7 @@
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp> //Michael E. Bohn
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <ooo/vba/XVBADocService.hpp>
 
 #include <comphelper/unwrapargs.hxx>
 #include <tools/urlobj.hxx>

@@ -558,6 +558,9 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                 *refVar = *refVal;
             }
 
+            if( bWithEvents )
+                refVar->SetComListener( xComListener );     // Hold reference
+
             // lhs is a property who's value is currently (Empty e.g. no broadcast yet)
             // in this case if there is a default prop involved the value of the
             // default property may infact be void so the type will also be SbxEMPTY

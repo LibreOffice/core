@@ -44,6 +44,7 @@
 #include <hash_map>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <tools/datetime.hxx>
+
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbuno.hxx>
@@ -459,6 +460,7 @@ VbaApplicationBase::getServiceImplName()
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaApplicationBase") );
     return sImplName;
 }
+
 uno::Sequence<rtl::OUString>
 VbaApplicationBase::getServiceNames()
 {
