@@ -101,6 +101,9 @@ sub new {
     };
     $self->{SOURCE_CONFIG_FILE} = get_config_file($self->{SOURCE_ROOT}) if (!defined $self->{SOURCE_CONFIG_FILE});
     $self->{SOURCE_CONFIG_DEFAULT} = $self->{SOURCE_ROOT} .'/'.SOURCE_CONFIG_FILE_NAME;
+    if (defined $self->{USER_SOURCE_ROOT}) {
+        ${$self->{REPOSITORIES}}{File::Basename::basename($self->{USER_SOURCE_ROOT})} = $self->{USER_SOURCE_ROOT};
+    };
     read_config_file($self);
        get_module_paths($self);
     bless($self, $class);
@@ -259,7 +262,7 @@ sub get_config_file {
 };
 
 #
-# Fallback - default repository is based on the object initialization parameter...
+# Fallback - fallback repository is based on RepositoryHelper educated guess
 #
 sub get_fallback_repository {
     my $self = shift;
@@ -270,7 +273,9 @@ sub get_fallback_repository {
 sub read_config_file {
     my $self = shift;
     if (!$self->{SOURCE_CONFIG_FILE}) {
-        get_fallback_repository($self);
+        if (!defined $self->{USER_SOURCE_ROOT}) {
+            get_fallback_repository($self);
+        };
         return;
     };
     my $repository_section = 0;
