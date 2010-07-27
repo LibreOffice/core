@@ -74,15 +74,6 @@
 
 using namespace ::com::sun::star;
 
-bool isInVBAMode( ScDocShell& rDocSh )
-{
-    uno::Reference<script::XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
-    uno::Reference<script::XVBACompat> xVBACompat( xLibContainer, uno::UNO_QUERY );
-    if ( xVBACompat.is() )
-        return xVBACompat->getVBACompatModeOn();
-    return false;
-}
-
 class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper1< container::XNameAccess >
 {
     uno::Any maWorkbook;
@@ -547,6 +538,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
 
         case SC_SERVICE_OPCODEMAPPER:
+            if (pDocShell)
             {
                 ScDocument* pDoc = pDocShell->GetDocument();
                 ScAddress aAddress;
@@ -556,44 +548,35 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 break;
             }
         case SC_SERVICE_VBAOBJECTPROVIDER:
-            if ( pDocShell )
+            if (pDocShell && pDocShell->GetDocument()->IsInVBAMode())
             {
                 OSL_TRACE("**** creating VBA Object mapper");
                 xRet.set(static_cast<container::XNameAccess*>(new ScVbaObjectForCodeNameProvider( pDocShell )));
             }
             break;
         case SC_SERVICE_VBACODENAMEPROVIDER:
+            if (pDocShell && pDocShell->GetDocument()->IsInVBAMode())
             {
-                // Only create the excel faking service for excel docs
-                const SfxFilter *pFilt = pDocShell->GetMedium()->GetFilter();
-                if ( pFilt && pFilt->IsAlienFormat() && isInVBAMode( *pDocShell ) )
-                {
-                    // application/vnd.ms-excel is the mime type for Excel
-                    static const rtl::OUString sExcelMimeType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.ms-excel" ) );
-                    if ( sExcelMimeType.equals( pFilt->GetMimeType() ) )
-                    xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider( pDocShell )));
-                }
-                break;
+                OSL_TRACE("**** creating VBA Object provider");
+                xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider( pDocShell )));
             }
+            break;
         case SC_SERVICE_VBAGLOBALS:
+            if (pDocShell)
             {
                 uno::Any aGlobs;
-                ScDocument* pDoc = pDocShell->GetDocument();
-                if ( pDoc )
+                if ( !pDocShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aGlobs ) )
                 {
-                    if ( !pDocShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aGlobs ) )
-                    {
-                        uno::Sequence< uno::Any > aArgs(1);
-                        aArgs[ 0 ] <<= pDocShell->GetModel();
-                        aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
-                        pDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-                        BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
-                        if ( pAppMgr )
-                            pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
-                    }
-                    aGlobs >>= xRet;
+                    uno::Sequence< uno::Any > aArgs(1);
+                    aArgs[ 0 ] <<= pDocShell->GetModel();
+                    xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
+                    pDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", uno::Any( xRet ) );
+                    BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
+                    if ( pAppMgr )
+                        pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
                 }
             }
+        break;
     }
 
     return xRet;

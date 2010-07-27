@@ -501,20 +501,16 @@ bool ScDocument::HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVb
         if ( pEvents && pEvents->GetScript( nEvent ) )
             return true;
         // check if VBA event handlers exist
-        if (bWithVbaEvents)
+        if (bWithVbaEvents && mxVbaEvents.is()) try
         {
-            uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = GetVbaEventProcessor();
-            if ( xVbaEvents.is() ) try
-            {
-                uno::Sequence< uno::Any > aArgs( 1 );
-                aArgs[ 0 ] <<= nTab;
-                if (xVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs ) ||
-                    xVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaDocumentEventId( nEvent ), uno::Sequence< uno::Any >() ))
-                    return true;
-            }
-            catch( uno::Exception& )
-            {
-            }
+            uno::Sequence< uno::Any > aArgs( 1 );
+            aArgs[ 0 ] <<= nTab;
+            if (mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs ) ||
+                mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaDocumentEventId( nEvent ), uno::Sequence< uno::Any >() ))
+                return true;
+        }
+        catch( uno::Exception& )
+        {
         }
     }
     return false;

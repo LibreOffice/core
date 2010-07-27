@@ -1759,8 +1759,10 @@ public:
     void GetSortParam( ScSortParam& rParam, SCTAB nTab );
     void SetSortParam( ScSortParam& rParam, SCTAB nTab );
 
-    com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
-                    GetVbaEventProcessor() const;
+    inline void     SetVbaEventProcessor( const com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >& rxVbaEvents )
+                        { mxVbaEvents = rxVbaEvents; }
+    inline com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
+                    GetVbaEventProcessor() const { return mxVbaEvents; }
 
     /** Should only be GRAM_PODF or GRAM_ODFF. */
     void                SetStorageGrammar( formula::FormulaGrammar::Grammar eGrammar );
