@@ -140,6 +140,9 @@ function hManageComparisionList( sFileIn as string, sFileOut as string, sListOut
     '///<ul>
 
     const CFN = "hManageComparisionList::"
+
+    ' maximum lines per file. Currently this limit is determined by the help
+    ' tests which have up to 22000 entries + reseve.
     const FILESIZE = 25000
     const COMPARE_SUCCESS = 0
     const ENCODING_UTF8 = "UTF8"
@@ -148,37 +151,33 @@ function hManageComparisionList( sFileIn as string, sFileOut as string, sListOut
     dim aReferenceList( FILESIZE ) as string
 
     if ( GVERBOSE ) then printlog( CFN & "Reading: " & sFileIn )
-    ' disabled hGetDataFileSection because some lists contain a #
-    ' (hash) as value which is identified as comment by the function.
-    ' Fixing this for hGetDataFileSection() would break compatibility
-    ' to other functions both in framework and global module
-    'hgetDataFileSection( sFileIn , aReferenceList() , "" , "" , "" )
+
+    ' Do not use hGetDataFileSection() as strings in some lists may begin with a
+    ' "#" which is interpreted as a comment by hGetDataFileSection()
     listread( aReferenceList(), sFileIn, ENCODING_UTF8 )
+
+    ' Word of caution: If the number of new items equals the number of removed items
+    ' this function returns 0 -> success. This case is highly unlikely to ever happen
+    ' unless someone renames scripts.
     irc = hListCompare( sListOut() , aReferenceList() )
         
-    ' A this point there are three possible states:
-    ' a) the reference list does not exist
-    ' b) the comparision failed
-    ' c) the comparision succeeded
-    ' only if hListCompare() returns 0 the testrun is successful.
-    ' This means that on any error, the ref-list will be written so it can be
-    ' directly reviewed/compared to the "faulty" list without having to run this
-    ' test again (after deleting the ref-file)
     '///+<li>In case the lists are not identical, write the new one to the local work directory</li>
     if ( irc = COMPARE_SUCCESS ) then
         printlog( CFN & "Comparision succeeded" )
         hManageComparisionList() = COMPARE_SUCCESS
     else
-        printlog( CFN & "The two compared lists differ. There are two likely reasons:" )
-        printlog( CFN & "1) The reference file does not exist at all" )
-        printlog( CFN & "2) Reference and actual UI-Content do not match." )
+        printlog( CFN & "The two compared lists differ. There are a number of possible reasons:" )
+        printlog( CFN & "- Installation requirements are not met (setup /a?, missing packages?)" )
+        printlog( CFN & "- Reference and actual UI-Content do not match: File an issue." )
+        printlog( CFN & "- The reference file does not exist: Follow steps below." )
         printlog( CFN & "Verify and copy the file: " & sFileOut )
         printlog( CFN & "to this location........: " & sFileIn  )
+        printlog( CFN & "Check this file into the SCM or attach it to an issue" )
         listwrite( sListOut(), sFileOut, ENCODING_UTF8 )
         hManageComparisionList() = irc
     endif
-    
-    '///+<li>Return 0 if the lists are identical, 1 if not and 2-4 on any other error</li>
+
+    '///+<li>Return number of differences between the lists</li>
     '///</ul>
 
 end function
