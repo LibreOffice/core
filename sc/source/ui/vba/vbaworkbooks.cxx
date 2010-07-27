@@ -46,8 +46,8 @@
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/uri/XUriReference.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
-#include <com/sun/star/script/XVBACompat.hpp>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 
@@ -74,8 +74,8 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
     if ( pShell )
     {
         uno::Reference<script::XLibraryContainer> xLibContainer = pShell->GetBasicContainer();
-        uno::Reference<script::XVBACompat> xVBACompat( xLibContainer, uno::UNO_QUERY_THROW );
-        xVBACompat->setVBACompatModeOn( sal_True );
+        uno::Reference<script::vba::XVBACompatibility> xVBACompat( xLibContainer, uno::UNO_QUERY_THROW );
+        xVBACompat->setVBACompatibilityMode( sal_True );
         String aPrjName( RTL_CONSTASCII_USTRINGPARAM( "VBAProject" ) );
         pShell->GetBasicManager()->SetName( aPrjName );
 
@@ -85,10 +85,10 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                 xLibContainer->createLibrary( aPrjName );
             uno::Any aLibAny = xLibContainer->getByName( aPrjName );
             uno::Reference< container::XNameContainer > xLib;
-        aLibAny >>= xLib;
+            aLibAny >>= xLib;
             if( xLib.is()  )
             {
-                uno::Reference< script::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
+                uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY_THROW );
                 uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY_THROW);
                 // bootstrap vbaglobals
                  xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals")));

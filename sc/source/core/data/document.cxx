@@ -51,7 +51,7 @@
 #include <tools/tenccvt.hxx>
 
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/script/XVBACompat.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 #include "document.hxx"
 #include "table.hxx"
@@ -4972,8 +4972,8 @@ bool ScDocument::IsInVBAMode() const
     bool bResult = false;
     if ( pShell )
     {
-        com::sun::star::uno::Reference< com::sun::star::script::XVBACompat > xVBA( pShell->GetBasicContainer(), com::sun::star::uno::UNO_QUERY );
-        bResult = xVBA->getVBACompatModeOn();
+        com::sun::star::uno::Reference< com::sun::star::script::vba::XVBACompatibility > xVBA( pShell->GetBasicContainer(), com::sun::star::uno::UNO_QUERY );
+        bResult = xVBA.is() && xVBA->getVBACompatibilityMode();
     }
     return bResult;
 }
