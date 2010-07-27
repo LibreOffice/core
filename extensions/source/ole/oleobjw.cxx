@@ -1506,6 +1506,9 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
         arDispidNamedArgs.reset(new DISPID[nSizeAr]);
         HRESULT hr = getTypeInfo()->GetIDsOfNames(arNames, nSizeAr,
                                                   arDispidNamedArgs.get());
+        if ( hr == E_NOTIMPL )
+            hr = m_spDispatch->GetIDsOfNames(IID_NULL, arNames, nSizeAr, LOCALE_USER_DEFAULT, arDispidNamedArgs.get() );
+
         if (hr == S_OK)
         {
             // In a "property put" operation, the property value is a named param with the
