@@ -35,7 +35,6 @@ using namespace ::ooo::vba;
 
 VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs, const uno::Reference< uno::XComponentContext >& /*xContext*/ ) :
     mpShell( 0 ),
-    mbIgnoreEvents( false ),
     mbDisposed( false )
 {
     try
@@ -55,16 +54,6 @@ VbaEventsHelperBase::VbaEventsHelperBase( const uno::Sequence< uno::Any >& rArgs
 VbaEventsHelperBase::~VbaEventsHelperBase()
 {
     stopListening();
-}
-
-void SAL_CALL VbaEventsHelperBase::setIgnoreEvents( sal_Bool bIgnoreEvents ) throw (uno::RuntimeException)
-{
-    mbIgnoreEvents = bIgnoreEvents;
-}
-
-sal_Bool SAL_CALL VbaEventsHelperBase::getIgnoreEvents() throw (uno::RuntimeException)
-{
-    return mbIgnoreEvents;
 }
 
 sal_Bool SAL_CALL VbaEventsHelperBase::hasVbaEventHandler( sal_Int32 nEventId, const uno::Sequence< uno::Any >& rArgs )
@@ -87,7 +76,7 @@ void SAL_CALL VbaEventsHelperBase::processVbaEvent( sal_Int32 nEventId, const un
 
     /*  bEnabled will track if event processing is enabled. Every event handler
         may disable handling of other events. */
-    bool bEnabled = !mbIgnoreEvents;
+    bool bEnabled = true;
 
     /*  bCancel will contain the current Cancel value. It is possible that
         multiple events will try to modify the Cancel value. Every event
