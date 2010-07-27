@@ -44,12 +44,6 @@ interface XVBAEventProcessor
 {
     //-------------------------------------------------------------------------
 
-    /** Specifies whether VBA event handling is currently disabled.
-     */
-    [attribute] boolean IgnoreEvents;
-
-    //-------------------------------------------------------------------------
-
     /** Returns whether a VBA event handler exists.
 
         @param nEventId
