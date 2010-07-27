@@ -40,6 +40,7 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <tools/rcid.h>
 #include <tools/shl.hxx>
+#include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
