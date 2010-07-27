@@ -382,6 +382,7 @@ gb_Library_PLAINEXT := .lib
 gb_Library_PLAINLIBS += \
     advapi32 \
     gdi32 \
+    gnu_getopt \
     kernel32 \
     msvcrt \
     mpr \
@@ -431,6 +432,7 @@ gb_Library_FILENAMES := $(patsubst z:iz%,z:zlib%,$(gb_Library_FILENAMES))
 gb_Library_NOILIBFILENAMES:=\
     advapi32 \
     gdi32 \
+    gnu_getopt \
     icuuc \
     kernel32 \
     msvcrt \
@@ -518,6 +520,8 @@ $(call gb_LinkTarget_set_auxtargets,$(2),\
     $(patsubst %.exe,%.pdb,$(call gb_LinkTarget_get_target,$(2))) \
     $(call gb_LinkTarget_get_target,$(2)).manifest \
 )
+$(call gb_Executable_get_target,$(1)) \
+$(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS := $(call gb_Executable_get_target,$(1)).manifest
 endef
 
 # SdiTarget class
