@@ -1067,14 +1067,14 @@ void SvImpLBox::DrawNet()
     //so that SvImpLBox::DrawNet() doesn't draw anything too
      if(pView->IsNativeControlSupported( CTRL_LISTNET, PART_ENTIRE_CONTROL)) {
         ImplControlValue    aControlValue;
-        Point aTemp(0,0);   // temporary needed for g++ 3.3.5
-        Region            aCtrlRegion( Rectangle(aTemp, Size( 0, 0 )) );
+        Point  aTemp(0,0);   // temporary needed for g++ 3.3.5
+        Rectangle aCtrlRegion( aTemp, Size( 0, 0 ) );
         ControlState        nState = CTRL_STATE_ENABLED;
-            if( pView->DrawNativeControl( CTRL_LISTNET, PART_ENTIRE_CONTROL,
-                    aCtrlRegion, nState, aControlValue, rtl::OUString() ) )
-            {
-                return;
-            }
+        if( pView->DrawNativeControl( CTRL_LISTNET, PART_ENTIRE_CONTROL,
+                                      aCtrlRegion, nState, aControlValue, rtl::OUString() ) )
+        {
+            return;
+        }
 
     }
 

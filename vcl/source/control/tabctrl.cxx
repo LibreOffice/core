@@ -411,15 +411,14 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth )
     aSize.Width()  += TAB_TABOFFSET_X*2;
     aSize.Height() += TAB_TABOFFSET_Y*2;
 
-    Region aCtrlRegion(  Rectangle( (const Point&)Point( 0, 0 ), aSize ) );
-    Region aBoundingRgn, aContentRgn;
-    const ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
+    Rectangle aCtrlRegion( Point( 0, 0 ), aSize );
+    Rectangle aBoundingRgn, aContentRgn;
+    const ImplControlValue aControlValue;
     if(GetNativeControlRegion( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion,
                                            CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
                                            aBoundingRgn, aContentRgn ) )
     {
-        Rectangle aCont(aContentRgn.GetBoundRect());
-        return aCont.GetSize();
+        return aContentRgn.GetSize();
     }
 
     // For systems without synthetic bold support
@@ -938,8 +937,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
 
     if( !bLayout && (bNativeOK = IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)) == TRUE )
     {
-        ImplControlValue        aControlValue;
-        Region              aCtrlRegion( pItem->maRect );
+        Rectangle           aCtrlRegion( pItem->maRect );
         ControlState        nState = 0;
 
         if( pItem->mnId == mnCurPageId )
@@ -974,10 +972,9 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
             tiValue.mnAlignment |= TABITEM_FIRST_IN_GROUP;
         if ( bLastInGroup )
             tiValue.mnAlignment |= TABITEM_LAST_IN_GROUP;
-        aControlValue.setOptionalVal( (void *)(&tiValue) );
 
         bNativeOK = DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
-                    aControlValue, rtl::OUString() );
+                    tiValue, rtl::OUString() );
     }
 
     if( ! bLayout && !bNativeOK )
@@ -1236,7 +1233,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     BOOL bNativeOK = FALSE;
     if( ! bLayout && (bNativeOK = IsNativeControlSupported( CTRL_TAB_PANE, PART_ENTIRE_CONTROL) ) == TRUE )
     {
-        const ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
+        const ImplControlValue aControlValue;
 
         ControlState nState = CTRL_STATE_ENABLED;
         int part = PART_ENTIRE_CONTROL;
@@ -1250,10 +1247,8 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
         if( !rRect.IsEmpty() )
             aClipRgn.Intersect( rRect );
 
-        Region aCtrlRegion( aRect );
-        Rectangle aClipRect( aClipRgn.GetBoundRect() );
-        if( !aClipRgn.IsEmpty() ) //&& aClipRect.getHeight() && aClipRect.getWidth() )
-            bNativeOK = DrawNativeControl( CTRL_TAB_PANE, part, aCtrlRegion, nState,
+        if( !aClipRgn.IsEmpty() )
+            bNativeOK = DrawNativeControl( CTRL_TAB_PANE, part, aRect, nState,
                 aControlValue, rtl::OUString() );
     }
     else
