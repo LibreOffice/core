@@ -2,9 +2,6 @@ My Macros
 Standard
 Module1
 Module1:Main
-basic
-Module1
-Module1:Main
 Oracle Open Office Macros
 Capitalise
 Capitalise:capitalise.bsh

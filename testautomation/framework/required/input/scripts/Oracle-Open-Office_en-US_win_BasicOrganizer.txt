@@ -3,9 +3,6 @@ Standard
 Module1
 Module1:Main
 Oracle Open Office Macros
-basic
-Module1
-Module1:Main
 Depot
 CommonLang
 CommonLang:LoadLanguage
