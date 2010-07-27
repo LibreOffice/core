@@ -44,11 +44,10 @@ interface XPackage;
 */
 exception InstallException: com::sun::star::uno::Exception {
     /**
-       represents the new deployment unit.
+       the display name of the extension, which is to be installed.
 
-       <p>Must not be <NULL/>.</p>
     */
-    XPackage New;
+    string displayName;
 
 
 };
