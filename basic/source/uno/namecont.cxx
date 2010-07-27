@@ -2789,12 +2789,12 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
     }
 }
 
-::sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatModeOn() throw (RuntimeException)
+::sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatibilityMode() throw (RuntimeException)
 {
     return mbVBACompat;
 }
 
-void SAL_CALL SfxLibraryContainer::setVBACompatModeOn( ::sal_Bool _vbacompatmodeon ) throw (RuntimeException)
+void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (RuntimeException)
 {
     BasicManager* pBasMgr = getBasicManager();
     if( pBasMgr )

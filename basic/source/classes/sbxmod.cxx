@@ -57,7 +57,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
-#include <com/sun/star/script/XVBACompat.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 using namespace com::sun::star;
@@ -461,9 +461,9 @@ bool getDefaultVBAMode( StarBASIC* pb )
             uno::Reference< beans::XPropertySet > xProp( aDoc, uno::UNO_QUERY );
             if ( xProp.is() )
             {
-                uno::Reference< script::XVBACompat > xVBAMode( xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY );
+                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY );
                 if ( xVBAMode.is() )
-                    bResult = ( xVBAMode->getVBACompatModeOn() == sal_True );
+                    bResult = xVBAMode->getVBACompatibilityMode() == sal_True;
             }
         }
     }
