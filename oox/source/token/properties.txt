@@ -251,6 +251,7 @@ LineStyle
 LineTransparence
 LineWidth
 LinkURL
+LoadReadonly
 LookUpLabels
 MajorTickmarks
 MarkPosition
@@ -260,6 +261,7 @@ MediaType
 MinorTickmarks
 MissingValueTreatment
 Model
+ModifyPasswordHash
 MultiLine
 MultiPageValue
 MultiSelection
@@ -396,6 +398,7 @@ Suffix
 SwapXAndYAxis
 Symbol
 SymbolColor
+TabColor
 TabIndex
 TableBorder
 TableLayout
@@ -451,7 +454,6 @@ VisualEffect
 Weight
 WhiteDay
 Width
-WriteProtectionPassword
 WritingMode
 ZoomType
 ZoomValue

@@ -1,5 +1,5 @@
     <node oor:name="MS PowerPoint 97 Vorlage" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH ALIEN</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH ALIEN ENCRYPTION PASSWORDTOMODIFY</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"/>
         <prop oor:name="UserData"><value>sdfilt</value></prop>

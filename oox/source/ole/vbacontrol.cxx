@@ -198,9 +198,9 @@ void VbaSiteModel::importProperty( sal_Int32 nPropId, const OUString& rValue )
 {
     switch( nPropId )
     {
-        case XML_Name:                  maName = rValue;                                    break;
-        case XML_Tag:                   maTag = rValue;                                     break;
-        case XML_VariousPropertyBits:   mnFlags = AttributeList::decodeUnsigned( rValue );  break;
+        case XML_Name:                  maName = rValue;                                            break;
+        case XML_Tag:                   maTag = rValue;                                             break;
+        case XML_VariousPropertyBits:   mnFlags = AttributeConversion::decodeUnsigned( rValue );    break;
     }
 }
 

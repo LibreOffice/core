@@ -1,6 +1,0 @@
-# 
-# Spreadsheet listrange test.
-# 
-TEST||MINICALC|c_listrange
-MINICALC_ENTER_CELL|2|3|24\n
-SLEEP|5

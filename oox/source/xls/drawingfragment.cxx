@@ -62,6 +62,7 @@ using ::com::sun::star::form::binding::XBindableValue;
 using ::com::sun::star::form::binding::XListEntrySink;
 using ::com::sun::star::form::binding::XListEntrySource;
 using ::com::sun::star::form::binding::XValueBinding;
+using ::com::sun::star::drawing::XShape;
 using ::com::sun::star::table::CellAddress;
 using ::com::sun::star::table::CellRangeAddress;
 using ::oox::core::ContextHandlerRef;
@@ -508,9 +509,13 @@ void OoxDrawingFragment::onEndElement( const OUString& rChars )
         case XDR_TOKEN( twoCellAnchor ):
             if( mxDrawPage.is() && mxShape.get() && mxAnchor.get() && mxAnchor->isValidAnchor() )
             {
-                Rectangle aLoc = mxAnchor->calcEmuLocation( maEmuSheetSize );
-                if( (aLoc.X >= 0) && (aLoc.Y >= 0) && (aLoc.Width >= 0) && (aLoc.Height >= 0) )
-                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, &aLoc );
+                Rectangle aShapeRect = mxAnchor->calcEmuLocation( maEmuSheetSize );
+                if( (aShapeRect.X >= 0) && (aShapeRect.Y >= 0) && (aShapeRect.Width >= 0) && (aShapeRect.Height >= 0) )
+                {
+                    mxShape->addShape( getOoxFilter(), &getTheme(), mxDrawPage, &aShapeRect );
+                    // collect all shape positions in the WorksheetHelper base class
+                    extendShapeBoundingBox( aShapeRect );
+                }
             }
             mxShape.reset();
             mxAnchor.reset();
@@ -646,6 +651,12 @@ void VmlDrawing::convertControlClientData( const Reference< XControlModel >& rxC
         {
         }
     }
+}
+
+void VmlDrawing::notifyShapeInserted( const Reference< XShape >& /*rxShape*/, const Rectangle& rShapeRect )
+{
+    // collect all shape positions in the WorksheetHelper base class
+    extendShapeBoundingBox( rShapeRect );
 }
 
 // ============================================================================
