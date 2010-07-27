@@ -642,6 +642,11 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
             nStatus = p_get_parameters( maHandle, &aParams );
             DUMP_STATE( nStatus, "sane_get_parameters" );
             CheckConsistency( "sane_get_parameters" );
+            if (nStatus != SANE_STATUS_GOOD || aParams.bytes_per_line == 0)
+            {
+                bSuccess = FALSE;
+                break;
+            }
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
             const char* ppFormats[] = { "SANE_FRAME_GRAY", "SANE_FRAME_RGB",
                                   "SANE_FRAME_RED", "SANE_FRAME_GREEN",

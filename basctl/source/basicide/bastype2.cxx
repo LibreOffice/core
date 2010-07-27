@@ -85,7 +85,7 @@ void ModuleInfoHelper::getObjectName( const uno::Reference< container::XNameCont
 
 sal_Int32 ModuleInfoHelper::getModuleType(  const uno::Reference< container::XNameContainer >& rLib, const String& rModName )
 {
-    sal_Int32 nType = ::script::ModuleType::NORMAL;
+    sal_Int32 nType = script::ModuleType::NORMAL;
     uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( rLib, uno::UNO_QUERY );
     if ( xVBAModuleInfo.is() && xVBAModuleInfo->hasModuleInfo( rModName ) )
     {
