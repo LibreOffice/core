@@ -179,6 +179,7 @@ BEGIN
     $rpm = "";
     $rpmcommand = "";
     $rpmquerycommand = "";
+    $rpminfologged = 0;
     $debian = "";
     $installertypedir = "";
     $controlledmakecabversion = "5";
