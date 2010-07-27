@@ -362,7 +362,8 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         specified. */
     if( !aModules.empty() ) try
     {
-        // get the basic library
+        // get the model factory and the basic library
+        Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
         Reference< XNameContainer > xBasicLib( createBasicLibrary(), UNO_SET_THROW );
 
         // set library container to VBA compatibility mode
@@ -374,11 +375,19 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         {
         }
 
+        // create the VBAGlobals object, the model will store it in the Basic manager
+        try
+        {
+            xModelFactory->createInstance( CREATE_OUSTRING( "ooo.vba.VBAGlobals" ) );
+        }
+        catch( Exception& )
+        {
+        }
+
         // try to get access to document objects related to code modules
         Reference< XNameAccess > xDocObjectNA;
         try
         {
-            Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
             xDocObjectNA.set( xModelFactory->createInstance( CREATE_OUSTRING( "ooo.vba.VBAObjectModuleObjectProvider" ) ), UNO_QUERY );
         }
         catch( Exception& )
