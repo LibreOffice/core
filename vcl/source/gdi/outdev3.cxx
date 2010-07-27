@@ -1327,11 +1327,11 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
         "msmincho", "fzmingti", "fzheiti", "ipamincho", "sazanamimincho", "kochimincho", "",
         "sunbatang", "sundotum", "baekmukdotum", "gulim", "batang", "dotum", "",
         "hgmincholightj", "msunglightsc", "msunglighttc", "hymyeongjolightk", "",
-        "tahoma", "dejavusans", "timesnewroman", "lucidatypewriter", "lucidasans", "nimbussansl", "",
+        "tahoma", "dejavusans", "timesnewroman", "liberationsans", "",
         "shree", "mangal", "",
         "raavi", "shruti", "tunga", "",
         "latha", "gautami", "kartika", "vrinda", "",
-        "shayyalmt", "naskmt", "",
+        "shayyalmt", "naskmt", "scheherazade", "",
         "david", "nachlieli", "lucidagrande", "",
         "norasi", "angsanaupc", "",
         "khmerossystem", "",
@@ -1381,6 +1381,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
         }
     }
 
+#ifdef SAL_FONTENUM_STABLE_ON_PLATFORM // #i113472#
     // sort the list of fonts for glyph fallback by quality (highest first)
     // #i33947# keep the EUDC font at the front of the list
     // an insertion sort is good enough for this short list
@@ -1396,6 +1397,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
                 break;
         pFallbackList[ j+1 ] = pTestFont;
     }
+#endif
 
 #if defined(HDU_DEBUG)
     for( int i = 0; i < nMaxLevel; ++i )
