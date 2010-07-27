@@ -416,7 +416,7 @@ double SvXMLExportHelper::GetConversionFactor(::rtl::OUStringBuffer& rUnit,
 
 MapUnit SvXMLExportHelper::GetUnitFromString(const ::rtl::OUString& rString, MapUnit eDefaultUnit)
 {
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     sal_Int32 nLen = rString.getLength();
     MapUnit eRetUnit = eDefaultUnit;
 

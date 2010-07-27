@@ -53,7 +53,7 @@ XMLTokenEnum XMLFormPropOASISTransformerContext::GetValueType(
     sal_Bool bNeg = sal_False;
     sal_uInt32 nVal = 0;
 
-    sal_Int32 nPos = 0L;
+    sal_Int32 nPos = 0;
     sal_Int32 nLen = rValue.getLength();
 
     // skip white space
