@@ -53,8 +53,8 @@
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
-#include <com/sun/star/script/XVBAModuleInfo.hpp>
-#include <com/sun/star/script/XVBACompat.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
+#include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
 /** === end UNO includes === **/
 
 #include <sfx2/objsh.hxx>
@@ -142,8 +142,8 @@ namespace basctl
     using ::com::sun::star::document::XEventBroadcaster;
     using ::com::sun::star::document::XEmbeddedScripts;
     using ::com::sun::star::script::ModuleInfo;
-    using ::com::sun::star::script::XVBAModuleInfo;
-    using ::com::sun::star::script::XVBACompat;
+    using ::com::sun::star::script::vba::XVBACompatibility;
+    using ::com::sun::star::script::vba::XVBAModuleInfo;
     /** === end UNO using === **/
     namespace MacroExecMode = ::com::sun::star::document::MacroExecMode;
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
@@ -456,9 +456,9 @@ namespace basctl
 #ifdef FUTURE_VBA_CWS
         if ( !isApplication() )
         {
-            Reference< XVBACompat > xVBACompat( getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+            Reference< XVBACompatibility > xVBACompat( getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             if ( xVBACompat.is() )
-                bResult = xVBACompat->getVBACompatModeOn();
+                bResult = xVBACompat->getVBACompatibilityMode();
         }
 #endif
         return bResult;
