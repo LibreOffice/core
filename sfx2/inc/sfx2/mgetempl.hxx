@@ -37,6 +37,9 @@
 
 #include <sfx2/tabdlg.hxx>
 
+#include <svtools/svmedit2.hxx>
+#include <svtools/svmedit.hxx>
+
 /* erwartet:
     SID_TEMPLATE_NAME   :   In: StringItem, Name der Vorlage
     SID_TEMPLATE_FAMILY :   In: Familie der Vorlage
@@ -54,6 +57,8 @@ class SfxManageStyleSheetPage : public SfxTabPage
 {
     FixedText aNameFt;
     Edit aNameEd;
+    ExtMultiLineEdit aNameMLE;
+
     CheckBox    aAutoCB;
 
     FixedText aFollowFt;
