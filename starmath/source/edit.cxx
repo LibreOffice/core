@@ -251,7 +251,10 @@ IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 {
     SmModule *pp = SM_MOD();
     if (pp->GetConfig()->IsAutoRedraw())
+    {
         Flush();
+        aModifyTimer.Stop();
+    }
     return 0;
 }
 
@@ -917,7 +920,10 @@ void SmEditWindow::InsertText(const String& Text)
 {
     DBG_ASSERT( pEditView, "EditView missing" );
     if (pEditView)
+    {
         pEditView->InsertText(Text);
+        aModifyTimer.Start();
+    }
 }
 
 void SmEditWindow::Flush()
@@ -928,9 +934,11 @@ void SmEditWindow::Flush()
         pEditEngine->ClearModifyFlag();
         SmViewShell *pViewSh = rCmdBox.GetView();
         if (pViewSh)
+        {
             pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                     SID_TEXT, SFX_CALLMODE_STANDARD,
                     new SfxStringItem(SID_TEXT, GetText()), 0L);
+        }
     }
 
     if (aCursorMoveTimer.IsActive())

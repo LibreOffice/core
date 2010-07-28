@@ -1600,6 +1600,9 @@ BOOL SmSymbolDialog::SelectSymbolSet(const XubString &rSymbolSetName)
         aSymbolSetName  = rSymbolSetName;
         aSymbolSet      = rSymbolMgr.GetSymbolSet( aSymbolSetName );
 
+        // sort symbols by Unicode position (useful for displaying Greek characters alphabetically)
+        std::sort( aSymbolSet.begin(), aSymbolSet.end(), lt_SmSymPtr() );
+
         aSymbolSetDisplay.SetSymbolSet( aSymbolSet );
         if (aSymbolSet.size() > 0)
             SelectSymbol(0);

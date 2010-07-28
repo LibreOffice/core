@@ -28,7 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_starmath.hxx"
 
-#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
+#include "node.hxx"
+#include "rect.hxx"
+#include "symbol.hxx"
+#include "smmod.hxx"
+#include "document.hxx"
+#include "view.hxx"
+#include "mathtype.hxx"
+
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <rtl/math.hxx>
@@ -38,22 +45,13 @@
 #include <vcl/outdev.hxx>
 #include <sfx2/module.hxx>
 
-
-#include "node.hxx"
-#include <rect.hxx>
-#include "symbol.hxx"
-#include "smmod.hxx"
-#include <document.hxx>
-#include <view.hxx>
-#ifndef _MATHTYPE_HXX
-#include "mathtype.hxx"
-#endif
-
 #include <math.h>
 #include <float.h>
 
 // define this to draw rectangles for debugging
 //#define SM_RECT_DEBUG
+
+#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
 
 ////////////////////////////////////////
 // SmTmpDevice
@@ -2355,6 +2353,20 @@ void SmRectangleNode::Draw(OutputDevice &rDev, const Point &rPosition) const
 /**************************************************************************/
 
 
+SmTextNode::SmTextNode( SmNodeType eNodeType, const SmToken &rNodeToken, USHORT nFontDescP ) :
+    SmVisibleNode(eNodeType, rNodeToken)
+{
+    nFontDesc = nFontDescP;
+}
+
+
+SmTextNode::SmTextNode( const SmToken &rNodeToken, USHORT nFontDescP ) :
+    SmVisibleNode(NTEXT, rNodeToken)
+{
+    nFontDesc = nFontDescP;
+}
+
+
 void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
     SmNode::Prepare(rFormat, rDocShell);
@@ -2798,6 +2810,36 @@ void SmAttributNode::CreateTextFromNode(String &rText)
 
 /**************************************************************************/
 
+bool lcl_IsFromGreekSymbolSet( const String &rTokenText )
+{
+    bool bRes = false;
+
+    // valid symbol name needs to have a '%' at pos 0 and at least an additonal char
+    if (rTokenText.Len() > 2 && rTokenText.GetBuffer()[0] == (sal_Unicode)'%')
+    {
+        String aName( rTokenText.Copy(1) );
+        SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName( aName );
+        if (pSymbol && GetExportSymbolSetName( pSymbol->GetSymbolSetName() ).EqualsAscii( "Greek" ) )
+            bRes = true;
+    }
+
+    return bRes;
+}
+
+
+SmSpecialNode::SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT _nFontDesc) :
+    SmTextNode(eNodeType, rNodeToken, _nFontDesc)
+{
+    bIsFromGreekSymbolSet = lcl_IsFromGreekSymbolSet( rNodeToken.aText );
+}
+
+
+SmSpecialNode::SmSpecialNode(const SmToken &rNodeToken) :
+    SmTextNode(NSPECIAL, rNodeToken, FNT_MATH)  //! default Font nicht immer richtig
+{
+    bIsFromGreekSymbolSet = lcl_IsFromGreekSymbolSet( rNodeToken.aText );
+}
+
 
 void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
@@ -2806,7 +2848,8 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     const SmSym   *pSym;
     SmModule  *pp = SM_MOD();
 
-    if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName(GetToken().aText)))
+    String aName( GetToken().aText.Copy(1) );
+    if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName( aName )))
     {
         SetText( pSym->GetCharacter() );
         GetFont() = pSym->GetFace();
@@ -2832,6 +2875,33 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
         SetAttribut(ATTR_BOLD);
 
     Flags() |= FLG_FONT;
+
+    if (bIsFromGreekSymbolSet)
+    {
+        DBG_ASSERT( GetText().Len() == 1, "a symbol should only consist of 1 char!" );
+        bool bItalic = false;
+        INT16 nStyle = rFormat.GetGreekCharStyle();
+        DBG_ASSERT( nStyle >= 0 && nStyle <= 2, "unexpected value for GreekCharStyle" );
+        if (nStyle == 1)
+            bItalic = true;
+        else if (nStyle == 2)
+        {
+            String aText( GetText() );
+            if (aText.Len() > 0)
+            {
+                const sal_Unicode cUppercaseAlpha = 0x0391;
+                const sal_Unicode cUppercaseOmega = 0x03A9;
+                sal_Unicode cChar = aText.GetBuffer()[0];
+                // uppercase letters should be straight and lowercase letters italic
+                bItalic = !(cUppercaseAlpha <= cChar && cChar <= cUppercaseOmega);
+            }
+        }
+
+        if (bItalic)
+            Attributes() |= ATTR_ITALIC;
+        else
+            Attributes() &= ~ATTR_ITALIC;;
+    }
 };
 
 
