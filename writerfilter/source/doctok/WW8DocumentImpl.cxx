@@ -157,6 +157,7 @@ WW8Document::~WW8Document()
 {
 }
 
+#ifdef DEBUG
 class WW8IdToString : public IdToString
 {
 public:
@@ -173,6 +174,7 @@ public:
         return s;
     }
 };
+#endif
 
 WW8DocumentImpl::~WW8DocumentImpl()
 {
@@ -184,6 +186,9 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
 {
     mpDocStream = getSubStream(::rtl::OUString::createFromAscii
                                ("WordDocument"));
+
+    mpSummaryInformationStream = getSubStream(::rtl::OUString::createFromAscii
+                                              ("\5SummaryInformation"));
 
     try
     {
@@ -1077,6 +1082,24 @@ writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getStyleSheet() const
     return pResult;
 }
 
+writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getAssocTable() const
+{
+    writerfilter::Reference<Table>::Pointer_t pResult;
+
+    if (mpFib->get_lcbSttbfAssoc() > 0)
+    {
+        WW8Sttbf::Pointer_t pSttbfAssoc
+            (new WW8Sttbf(*mpTableStream,
+                          mpFib->get_fcSttbfAssoc(),
+                          mpFib->get_lcbSttbfAssoc()));
+
+        pResult = writerfilter::Reference<Table>::Pointer_t
+            (new WW8SttbTableResource(pSttbfAssoc));
+    }
+
+    return pResult;
+}
+
 sal_uInt32 WW8DocumentImpl::getHeaderCount() const
 {
     sal_uInt32 nResult = 0;
@@ -1279,6 +1302,19 @@ writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getField(const CpAndFc & rCpAndFc) const
 {
     return mpFieldHelper->getField(rCpAndFc);
+}
+
+writerfilter::Reference<Properties>::Pointer_t
+WW8DocumentImpl::getDocumentProperties() const
+{
+    writerfilter::Reference<Properties>::Pointer_t pResult;
+
+    if (mpFib->get_lcbDop() > 0)
+    {
+        pResult.reset(new WW8DopBase(*mpTableStream, mpFib->get_fcDop(), mpFib->get_lcbDop()));
+    }
+
+    return pResult;
 }
 
 WW8FLD::Pointer_t WW8DocumentImpl::getCurrentFLD() const
@@ -1632,7 +1668,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
         //output.addItem(mTextboxHeaderEndCpAndFc.toString());
 
-#if 0
+#if 1
         output.addItem("<substream-names>");
         output.addItem(mpStream->getSubStreamNames());
         output.addItem("</substream-names>");
@@ -1640,6 +1676,11 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         if (mpDocStream.get() != NULL)
         {
             mpDocStream->dump(output);
+        }
+
+        if (mpSummaryInformationStream.get() != NULL)
+        {
+            mpSummaryInformationStream->dump(output);
         }
 #endif
 
@@ -1743,6 +1784,11 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             clog << e.getText() << endl;
         }
 
+        writerfilter::Reference<Table>::Pointer_t pAssocTable = getAssocTable();
+
+        if (pAssocTable.get() != NULL)
+            rStream.table(NS_rtf::LN_SttbAssoc, pAssocTable);
+
         writerfilter::Reference<Table>::Pointer_t pListTable = getListTable();
 
         if (pListTable.get() != NULL)
@@ -1844,6 +1890,9 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             {
                 startSectionGroup(rStream);
                 rStream.info(pIt->toString());
+
+                if (nSectionIndex == 0)
+                    rStream.props(getDocumentProperties());
 
                 sal_uInt32 nHeaderStartIndex = 6 + nSectionIndex * 6;
                 sal_uInt32 nHeaderEndIndex = nHeaderStartIndex + 6;
