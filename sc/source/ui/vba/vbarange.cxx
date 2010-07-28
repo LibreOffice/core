@@ -1176,7 +1176,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
 
 
 ScVbaRange*
-getRangeForName( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& sName, ScDocShell* pDocSh, table::CellRangeAddress& pAddr, formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1 ) throw ( uno::RuntimeException )
+getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& sName, ScDocShell* pDocSh, table::CellRangeAddress& pAddr, formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1 ) throw ( uno::RuntimeException )
 {
     ScRangeList aCellRanges;
     ScRange refRange;
@@ -1290,7 +1290,7 @@ ScVbaRange::getRangeObjectForName(
         ScDocShell* pDocSh, formula::FormulaGrammar::AddressConvention eConv ) throw ( uno::RuntimeException )
 {
     table::CellRangeAddress refAddr;
-    return getRangeForName( xParent, xContext, sRangeName, pDocSh, refAddr, eConv );
+    return getRangeForName( xContext, sRangeName, pDocSh, refAddr, eConv );
 }
 
 
@@ -2563,7 +2563,6 @@ ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseI
     // xAddressable now for this range
     xAddressable.set( xReferrer, uno::UNO_QUERY_THROW );
 
-
     if( !Cell1.hasValue() )
         throw uno::RuntimeException(
             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " Invalid Argument " ) ),
@@ -2580,7 +2579,7 @@ ScVbaRange::Range( const uno::Any &Cell1, const uno::Any &Cell2, bool bForceUseI
         Cell1 >>= sName;
         RangeHelper referRange( xReferrer );
         table::CellRangeAddress referAddress = referRange.getCellRangeAddressable()->getRangeAddress();
-        return getRangeForName( getParent(), mxContext, sName, getScDocShell(), referAddress );
+        return getRangeForName( mxContext, sName, getScDocShell(), referAddress );
 
     }
     else
