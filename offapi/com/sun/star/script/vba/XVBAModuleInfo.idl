@@ -28,6 +28,7 @@
 #ifndef __com_sun_star_script_vba_XVBAModuleInfo_idl__
 #define __com_sun_star_script_vba_XVBAModuleInfo_idl__
 
+#include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/script/ModuleInfo.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/container/ElementExistException.idl>
