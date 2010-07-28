@@ -657,8 +657,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                         // create the VBA document event processor
                         uno::Sequence< uno::Any > aArgs( 1 );
                         aArgs[ 0 ] <<= xModel;
-                        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents(
-                            ooo::vba::createVBAUnoAPIServiceWithArgs( this, "com.sun.star.script.vba.VBASpreadsheetEventProcessor" , aArgs ), uno::UNO_QUERY );
+                        xVbaEvents.set( ooo::vba::createVBAUnoAPIServiceWithArgs( this, "com.sun.star.script.vba.VBASpreadsheetEventProcessor" , aArgs ), uno::UNO_QUERY );
                         aDocument.SetVbaEventProcessor( xVbaEvents );
                     }
                     catch( uno::Exception& )
