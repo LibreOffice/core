@@ -68,9 +68,6 @@ public:
     virtual void SAL_CALL Undo() throw (css::uno::RuntimeException);
     virtual void SAL_CALL Quit() throw (css::uno::RuntimeException);
 
-    virtual css::uno::Any SAL_CALL getVBE() throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL SAL_CALL getVBProjects() throw (css::uno::RuntimeException);
-
     // XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
