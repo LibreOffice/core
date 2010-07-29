@@ -1041,6 +1041,8 @@ BOOL StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mpData->mnUseSystemUIFonts        == rSet.mpData->mnUseSystemUIFonts)         &&
          (mpData->mnUseFlatBorders          == rSet.mpData->mnUseFlatBorders)           &&
          (mpData->mnUseFlatMenues           == rSet.mpData->mnUseFlatMenues)            &&
+         (mpData->mnSymbolsStyle            == rSet.mpData->mnSymbolsStyle)             &&
+         (mpData->mnPreferredSymbolsStyle   == rSet.mpData->mnPreferredSymbolsStyle)    &&
          (mpData->maFaceColor               == rSet.mpData->maFaceColor)                &&
          (mpData->maCheckedColor            == rSet.mpData->maCheckedColor)             &&
          (mpData->maLightColor              == rSet.mpData->maLightColor)               &&
