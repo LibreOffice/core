@@ -190,6 +190,7 @@ void OImageControlModel::implConstruct()
 {
     m_pImageProducer = new ImageProducer;
     m_xImageProducer = m_pImageProducer;
+    m_pImageProducer->SetDoneHdl( LINK( this, OImageControlModel, OnImageImportDone ) );
 }
 
 //------------------------------------------------------------------
@@ -630,6 +631,16 @@ void SAL_CALL OImageControlModel::startProduction(  ) throw (RuntimeException)
     GetImageProducer()->startProduction();
 }
 
+//------------------------------------------------------------------------------
+IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic )
+{
+    ENSURE_OR_RETURN( i_pGraphic, "OImageControlModel::OnImageImportDone: illegal graphic!", 0L );
+    setPropertyValue(
+        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ) ),
+        makeAny( Image( i_pGraphic->GetBitmapEx() ).GetXGraphic() )
+    );
+    return 1L;
+}
 
 //==================================================================
 // OImageControlControl
