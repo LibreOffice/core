@@ -57,16 +57,16 @@
 #include <frmatr.hxx>
 #include <ftninfo.hxx>
 #include <fmthdft.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/protitem.hxx>
 
 #include <docary.hxx>
 #include <numrule.hxx>
@@ -684,9 +684,9 @@ void RtfExport::PrepareNewPageDesc( const SfxItemSet* pSet,
     OSL_ENSURE( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
 
     if ( pNewPgDescFmt )
-        m_pSections->AppendSep( *pNewPgDescFmt, rNd, pFmt, nLnNm );
+        m_pSections->AppendSection( *pNewPgDescFmt, rNd, pFmt, nLnNm );
     else if ( pNewPgDesc )
-        m_pSections->AppendSep( pNewPgDesc, rNd, pFmt, nLnNm );
+        m_pSections->AppendSection( pNewPgDesc, rNd, pFmt, nLnNm );
 
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
 }
@@ -732,7 +732,7 @@ void RtfExport::AppendSection( const SwPageDesc* pPageDesc, const SwSectionFmt* 
 {
     OSL_TRACE("%s", __PRETTY_FUNCTION__);
 
-    m_pSections->AppendSep( pPageDesc, pFmt, nLnNum );
+    m_pSections->AppendSection( pPageDesc, pFmt, nLnNum );
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
 }
 

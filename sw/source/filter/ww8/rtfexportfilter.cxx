@@ -60,7 +60,7 @@ sal_Bool RtfExportFilter::filter( const uno::Sequence< beans::PropertyValue >& a
     ::uno::Reference< io::XStream > xStream =
         aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference< io::XStream >() );
     m_pStream = utl::UcbStreamHelper::CreateStream( xStream, sal_True );
-    m_aWriter.SetStrm(*m_pStream);
+    m_aWriter.SetStream(m_pStream);
 
     // get SwDoc*
     uno::Reference< uno::XInterface > xIfc( m_xSrcDoc, uno::UNO_QUERY );

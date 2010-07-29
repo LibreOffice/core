@@ -29,8 +29,8 @@
 #ifndef _RTFSdrEXPORT_HXX_
 #define _RTFSdrEXPORT_HXX_
 
-#include <svx/escherex.hxx>
-#include <svx/outlobj.hxx>
+#include <filter/msfilter/escherex.hxx>
+#include <editeng/outlobj.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <map>

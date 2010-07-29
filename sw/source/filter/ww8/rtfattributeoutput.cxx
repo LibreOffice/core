@@ -44,53 +44,53 @@
 
 #include <hintids.hxx>
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svtools/rtfkeywd.hxx>
 
-#include <svx/fontitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/spltitem.hxx>
-#include <svx/widwitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/keepitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/hyznitem.hxx>
-#include <svx/brkitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/twolinesitem.hxx>
-#include <svx/charscaleitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/paravertalignitem.hxx>
-#include <svx/pgrditem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/spltitem.hxx>
+#include <editeng/widwitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/keepitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/hyznitem.hxx>
+#include <editeng/brkitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charscaleitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/paravertalignitem.hxx>
+#include <editeng/pgrditem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/msoleexp.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 
 #include <docufld.hxx>
 #include <flddropdown.hxx>
@@ -174,37 +174,11 @@ static OString OutTBLBorderLine(RtfExport &rExport, const SvxBorderLine* pLine, 
     }
     else
     {
-        if ( DEF_LINE_WIDTH_0 == pLine->GetOutWidth( ) )
-            // Hairline
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRHAIR);
-        else if( 255 >= pLine->GetOutWidth() )
-        {
-            // Simple width simple
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRS);
-            switch ( pLine->GetStyle( ) )
-            {
-                case DOTTED:
-                    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDOT);
-                    break;
-                case DASHED:
-                    aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRDASH);
-                    break;
-                case SOLID:
-                default:
-                    break;
-            }
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW);
-            aRet.append((sal_Int32)pLine->GetOutWidth());
-        }
+        // single line
+        if( DEF_LINE_WIDTH_1 >= pLine->GetOutWidth() )
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRS OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetOutWidth());
         else
-        {
-            // Shouldn't happen with the OOo default width values
-            OString aTmp = aRet.makeStringAndClear();
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTH);
-            aRet.append(aTmp);
-            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRW);
-            aRet.append((sal_Int32)pLine->GetOutWidth()/2);
-        }
+            aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRTH OOO_STRING_SVTOOLS_RTF_BRDRW).append((sal_Int32)pLine->GetOutWidth() / 2);
     }
 
     aRet.append(OOO_STRING_SVTOOLS_RTF_BRDRCF);
@@ -459,7 +433,7 @@ void RtfAttributeOutput::RawText( const String& rText, bool /*bForceUnicode*/, r
     m_aRunText.append(m_rExport.OutString(rText, eCharSet));
 }
 
-void RtfAttributeOutput::StartRuby( const SwTxtNode& /*rNode*/, xub_StrLen /*nPos*/, const SwFmtRuby& /*rRuby*/ )
+void RtfAttributeOutput::StartRuby( const SwTxtNode& /*rNode*/, const SwFmtRuby& /*rRuby*/ )
 {
     OSL_TRACE("TODO: %s", __PRETTY_FUNCTION__);
 }
@@ -855,6 +829,11 @@ void RtfAttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
     m_aRowDefs.append(aTblAdjust.makeStringAndClear());
 }
 
+void RtfAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
+{
+    OSL_TRACE("TODO: %s", __PRETTY_FUNCTION__);
+}
+
 void RtfAttributeOutput::TableRowEnd( sal_uInt32 /*nDepth*/ )
 {
     OSL_TRACE("%s", __PRETTY_FUNCTION__);
@@ -874,7 +853,7 @@ void RtfAttributeOutput::InitTableHelper( ww8::WW8TableNodeInfoInner::Pointer_t 
     bool bRelBoxSize = false;
 
     // Create the SwWriteTable instance to use col spans
-    GetTablePageSize( pTableTextNodeInfoInner, nPageSize, bRelBoxSize );
+    GetTablePageSize( pTableTextNodeInfoInner.get(), nPageSize, bRelBoxSize );
 
     const SwTable* pTable = pTableTextNodeInfoInner->getTable( );
     const SwFrmFmt *pFmt = pTable->GetFrmFmt( );
@@ -1019,7 +998,7 @@ void RtfAttributeOutput::DefaultStyle( USHORT /*nStyle*/ )
 }
 
 void RtfAttributeOutput::StartStyle( const String& rName, bool /*bPapFmt*/,
-        USHORT nBase, USHORT nNext, USHORT /*nWwId*/, USHORT nId, bool /*bAutoUpdate*/ )
+        USHORT nBase, USHORT nNext, USHORT /*nWwId*/, USHORT nId )
 {
     OSL_TRACE("%s, rName = '%s'", __PRETTY_FUNCTION__,
             OUStringToOString( OUString( rName ), m_rExport.eCurrentEncoding ).getStr());
@@ -1372,7 +1351,7 @@ void RtfAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField /*eTyp
     m_aRunText.append(m_rExport.OutString(rFldCmd, m_rExport.eCurrentEncoding));
     m_aRunText.append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
     if (pFld)
-        m_aRunText.append(m_rExport.OutString(pFld->Expand(), m_rExport.eDefaultEncoding));
+        m_aRunText.append(m_rExport.OutString(pFld->GetCntnt(), m_rExport.eDefaultEncoding));
     m_aRunText.append("}}");
 }
 
@@ -2699,12 +2678,12 @@ void RtfAttributeOutput::FormatAnchor( const SwFmtAnchor& rAnchor )
         m_aRunText.append((sal_Int32)nId);
         switch( nId )
         {
-            case FLY_PAGE:
+            case FLY_AT_PAGE:
                 m_aRunText.append(OOO_STRING_SVTOOLS_RTF_FLYPAGE);
                 m_aRunText.append((sal_Int32)rAnchor.GetPageNum());
                 break;
-            case FLY_AT_CNTNT:
-            case FLY_IN_CNTNT:
+            case FLY_AT_PARA:
+            case FLY_AS_CHAR:
                 m_aRunText.append(OOO_STRING_SVTOOLS_RTF_FLYCNTNT);
                 break;
         }

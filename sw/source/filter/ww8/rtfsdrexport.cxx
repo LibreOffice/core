@@ -34,12 +34,12 @@
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemiter.hxx>
 #include <svtools/rtfkeywd.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editobj.hxx>
-#include <svx/flditem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/svdotext.hxx>
 #include <tools/stream.hxx>
 #include <breakit.hxx>
@@ -70,7 +70,7 @@ public:
 };
 
 RtfSdrExport::RtfSdrExport( RtfExport &rExport )
-    : EscherEx( *( new SvNullStream ), 0 ),
+    : EscherEx( EscherExGlobalRef( new EscherExGlobal ), *( new SvNullStream )),
       m_rExport( rExport ),
       m_rAttrOutput( (RtfAttributeOutput&)m_rExport.AttrOutput() ),
       m_nShapeType( ESCHER_ShpInst_Nil ),
@@ -125,7 +125,7 @@ UINT32 RtfSdrExport::EnterGroup( const String& /*rShapeName*/, const Rectangle* 
 {
     OSL_TRACE("%s", __PRETTY_FUNCTION__);
 
-    return GetShapeID();
+    return GenerateShapeId();
 }
 
 void RtfSdrExport::LeaveGroup()

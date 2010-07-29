@@ -29,6 +29,7 @@
 #ifndef _RTFEXPORT_HXX_
 #define _RTFEXPORT_HXX_
 
+#include <set>
 #include "rtfattributeoutput.hxx"
 #include "wrtww8.hxx"
 

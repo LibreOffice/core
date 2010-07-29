@@ -35,7 +35,7 @@
 #define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
 #endif
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 
 #include <map>
 #include <vector>

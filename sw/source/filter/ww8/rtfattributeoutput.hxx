@@ -29,6 +29,7 @@
 #ifndef _RTFATTRIBUTEOUTPUT_HXX_
 #define _RTFATTRIBUTEOUTPUT_HXX_
 
+#include <set>
 #include "attributeoutputbase.hxx"
 #include "fields.hxx"
 
@@ -89,7 +90,7 @@ public:
     virtual void RawText( const String& rText, bool bForceUnicode, rtl_TextEncoding eCharSet );
 
     /// Output ruby start.
-    virtual void StartRuby( const SwTxtNode& rNode, xub_StrLen nPos, const SwFmtRuby& rRuby );
+    virtual void StartRuby( const SwTxtNode& rNode, const SwFmtRuby& rRuby );
 
     /// Output ruby end.
     virtual void EndRuby();
@@ -136,6 +137,8 @@ public:
 
     virtual void TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
 
+    virtual void TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner );
+
     virtual void TableRowEnd( sal_uInt32 nDepth );
 
     /// Start of the styles table.
@@ -149,8 +152,7 @@ public:
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
-            USHORT nBase, USHORT nNext, USHORT nWwId, USHORT nId,
-            bool bAutoUpdate );
+            USHORT nBase, USHORT nNext, USHORT nWwId, USHORT nId );
 
     /// End of a style in the styles table.
     virtual void EndStyle();
