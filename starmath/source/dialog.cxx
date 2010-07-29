@@ -1485,6 +1485,7 @@ IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG pButton )
     {
         XubString   aText ('%');
         aText += pSym->GetName();
+        aText += (sal_Unicode)' ';
 
         rViewSh.GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERTTEXT, SFX_CALLMODE_STANDARD,

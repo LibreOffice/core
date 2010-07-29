@@ -251,10 +251,8 @@ IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 {
     SmModule *pp = SM_MOD();
     if (pp->GetConfig()->IsAutoRedraw())
-    {
         Flush();
-        aModifyTimer.Stop();
-    }
+    aModifyTimer.Stop();
     return 0;
 }
 
@@ -282,6 +280,7 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
             aOldSelection = aNewSelection;
         }
     }
+    aCursorMoveTimer.Stop();
 
     return 0;
 }
@@ -438,7 +437,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             SmViewShell *pView = GetView();
             if ( pView && !pView->KeyInput(rKEvt) )
             {
-                    /* fuert bei F1 (Hilfe) zum Zerstoeren von this! */
+                /* fuert bei F1 (Hilfe) zum Zerstoeren von this! */
                 Flush();
                 if ( aModifyTimer.IsActive() )
                     aModifyTimer.Stop();
@@ -737,6 +736,9 @@ void SmEditWindow::InsertCommand(USHORT nCommand)
             pEditView->SetSelection(aSelection);
         }
 
+        aModifyTimer.Start();
+        aCursorMoveTimer.Start();
+
         GrabFocus();
     }
 }
@@ -923,6 +925,7 @@ void SmEditWindow::InsertText(const String& Text)
     {
         pEditView->InsertText(Text);
         aModifyTimer.Start();
+        aCursorMoveTimer.Start();
     }
 }
 
