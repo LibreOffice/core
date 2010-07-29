@@ -104,7 +104,7 @@ CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozi
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
-BUILD_ACTION=$(GNUMAKE)
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 CONFIGURE_DIR=win32
@@ -168,7 +168,7 @@ CONFIGURE_FLAGS=--with-pic --disable-shared --disable-crypto-dl --with-libxslt=n
 .IF "$(SYSTEM_MOZILLA)" != "YES"
 CONFIGURE_FLAGS+=--enable-pkgconfig=no
 .ENDIF
-BUILD_ACTION=$(GNUMAKE)
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 
