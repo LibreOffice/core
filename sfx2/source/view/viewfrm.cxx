@@ -813,6 +813,13 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                         xNewObj->SetModifyPasswordEntered( sal_False );
                         xNewObj->SetReadOnly();
                     }
+                    else if ( rReq.GetSlot() == SID_EDITDOC && bForEdit && !xNewObj->IsReadOnlyMedium() )
+                    {
+                        // the filter might request setting of the document to readonly state
+                        // but in case of SID_EDITDOC it should not happen if the document
+                        // can be opened for editing
+                        xNewObj->SetReadOnlyUI( sal_False );
+                    }
 
                     if ( xNewObj->IsDocShared() )
                     {
