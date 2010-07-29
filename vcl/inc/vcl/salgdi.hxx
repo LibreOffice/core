@@ -233,7 +233,7 @@ public:
     // release the fonts
     void                   ReleaseFonts() { SetFont( NULL, 0 ); }
     // get the current font's metrics
-    virtual void            GetFontMetric( ImplFontMetricData* ) = 0;
+    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel = 0 ) = 0;
 
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)

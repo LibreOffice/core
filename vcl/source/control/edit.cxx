@@ -2861,6 +2861,14 @@ Size Edit::CalcMinimumSize() const
     return aSize;
 }
 
+Size Edit::GetMinimumEditSize()
+{
+    Window* pDefWin = ImplGetDefaultWindow();
+    Edit aEdit( pDefWin, WB_BORDER );
+    Size aSize( aEdit.CalcMinimumSize() );
+    return aSize;
+}
+
 // -----------------------------------------------------------------------
 
 Size Edit::GetOptimalSize(WindowSizeType eType) const
