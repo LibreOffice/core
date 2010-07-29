@@ -277,6 +277,9 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
 ))
 endif
 ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_exception_objects,sfx,\
+    sfx2/source/doc/syspathw32 \
+))
 $(eval $(call gb_Library_add_linked_libs,sfx,\
     advapi32 \
     gdi32 \

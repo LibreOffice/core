@@ -90,7 +90,6 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/xml/statusbardocumenthandler \
     framework/source/fwe/xml/toolboxconfiguration \
     framework/source/fwe/xml/toolboxdocumenthandler \
-    framework/source/fwe/xml/toolboxlayoutdocumenthandler \
     framework/source/fwe/xml/xmlnamespaces \
 ))
 

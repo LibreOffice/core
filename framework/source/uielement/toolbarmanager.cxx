@@ -52,7 +52,7 @@
 #endif
 #include <framework/addonsoptions.hxx>
 #include <uielement/toolbarmerger.hxx>
-#include <helper/acceleratorinfo.hxx>
+#include <framework/acceleratorinfo.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
