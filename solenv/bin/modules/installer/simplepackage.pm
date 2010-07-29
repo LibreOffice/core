@@ -111,6 +111,13 @@ sub register_extensions
         push( @installer::globals::logfileinfo, $infoline);
     }
 
+    if ( ! -f $unopkgfile )
+    {
+        $unopkgexists = 0;
+        $infoline = "Info: File $unopkgfile does not exist! Extensions cannot be registered.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
     if ( $unopkgexists )
     {
         my $currentdir = cwd();
