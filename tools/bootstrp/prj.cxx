@@ -111,9 +111,9 @@ ByteString  SimpleConfig::GetNextLine()
     aTmpStr = aTmpStr.EraseTrailingChars();
     while ( aTmpStr.SearchAndReplace(ByteString(' '),ByteString('\t') ) != STRING_NOTFOUND ) ;
     int nLength = aTmpStr.Len();
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     ByteString aEraseString;
-    for ( USHORT i = 0; i<= nLength; i++)
+    for ( sal_uInt16 i = 0; i<= nLength; i++)
     {
         if ( aTmpStr.GetChar( i ) == 0x20  && !bFound )
             aTmpStr.SetChar( i, 0x09 );
@@ -122,7 +122,7 @@ ByteString  SimpleConfig::GetNextLine()
 }
 
 /*****************************************************************************/
-ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
+ByteString SimpleConfig::GetCleanedNextLine( sal_Bool bReadComments )
 /*****************************************************************************/
 {
 
@@ -140,11 +140,11 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
 
     aTmpStr = aTmpStr.EraseLeadingChars();
     aTmpStr = aTmpStr.EraseTrailingChars();
-//  while ( aTmpStr.SearchAndReplace(String(' '),String('\t') ) != (USHORT)-1 );
+//  while ( aTmpStr.SearchAndReplace(String(' '),String('\t') ) != (sal_uInt16)-1 );
     int nLength = aTmpStr.Len();
     ByteString aEraseString;
-    BOOL bFirstTab = TRUE;
-    for ( USHORT i = 0; i<= nLength; i++)
+    sal_Bool bFirstTab = sal_True;
+    for ( sal_uInt16 i = 0; i<= nLength; i++)
     {
         if ( aTmpStr.GetChar( i ) == 0x20 )
             aTmpStr.SetChar( i, 0x09 );
@@ -152,14 +152,14 @@ ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
         if ( aTmpStr.GetChar( i ) ==  0x09 )
         {
             if ( bFirstTab )
-                bFirstTab = FALSE;
+                bFirstTab = sal_False;
             else
             {
                 aTmpStr.SetChar( i, 0x20 );
             }
         }
         else
-            bFirstTab = TRUE;
+            bFirstTab = sal_True;
 
     }
     aTmpStr.EraseAllChars(' ');
@@ -256,7 +256,7 @@ ByteString CommandData::GetCommandTypeString()
 }
 
 /*****************************************************************************/
-CommandData* Prj::GetDirectoryList ( USHORT, USHORT )
+CommandData* Prj::GetDirectoryList ( sal_uInt16, sal_uInt16 )
 /*****************************************************************************/
 {
     return (CommandData *)NULL;
@@ -267,8 +267,8 @@ CommandData* Prj::GetDirectoryData( ByteString aLogFileName )
 /*****************************************************************************/
 {
     CommandData *pData = NULL;
-    ULONG nObjCount = Count();
-    for ( ULONG i=0; i<nObjCount; i++ )
+    sal_uIntPtr nObjCount = Count();
+    for ( sal_uIntPtr i=0; i<nObjCount; i++ )
     {
         pData = GetObject(i);
         if ( pData->GetLogFile() == aLogFileName )
@@ -283,23 +283,23 @@ CommandData* Prj::GetDirectoryData( ByteString aLogFileName )
 
 /*****************************************************************************/
 Prj::Prj() :
-    bVisited( FALSE ),
+    bVisited( sal_False ),
     pPrjInitialDepList(0),
     pPrjDepList(0),
-    bHardDependencies( FALSE ),
-    bSorted( FALSE )
+    bHardDependencies( sal_False ),
+    bSorted( sal_False )
 /*****************************************************************************/
 {
 }
 
 /*****************************************************************************/
 Prj::Prj( ByteString aName ) :
-    bVisited( FALSE ),
+    bVisited( sal_False ),
     aProjectName( aName ),
     pPrjInitialDepList(0),
     pPrjDepList(0),
-    bHardDependencies( FALSE ),
-    bSorted( FALSE )
+    bHardDependencies( sal_False ),
+    bSorted( sal_False )
 /*****************************************************************************/
 {
 }
@@ -353,7 +353,7 @@ void Prj::AddDependencies( ByteString aStr )
 }
 
 /*****************************************************************************/
-SByteStringList* Prj::GetDependencies( BOOL bExpanded )
+SByteStringList* Prj::GetDependencies( sal_Bool bExpanded )
 /*****************************************************************************/
 {
     if ( bExpanded )
@@ -365,8 +365,8 @@ SByteStringList* Prj::GetDependencies( BOOL bExpanded )
 
 
 /*****************************************************************************/
-BOOL Prj::InsertDirectory ( ByteString aDirName, USHORT aWhat,
-                                USHORT aWhatOS, ByteString aLogFileName,
+sal_Bool Prj::InsertDirectory ( ByteString aDirName, sal_uInt16 aWhat,
+                                sal_uInt16 aWhatOS, ByteString aLogFileName,
                                 const ByteString &rClientRestriction )
 /*****************************************************************************/
 {
@@ -380,7 +380,7 @@ BOOL Prj::InsertDirectory ( ByteString aDirName, USHORT aWhat,
 
     Insert( pData );
 
-    return FALSE;
+    return sal_False;
 }
 
 /*****************************************************************************/
@@ -390,12 +390,12 @@ BOOL Prj::InsertDirectory ( ByteString aDirName, USHORT aWhat,
 CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
 /*****************************************************************************/
 {
-    ULONG nCountMember = Count();
+    sal_uIntPtr nCountMember = Count();
     CommandData* pData;
     CommandData* pDataFound = NULL;
     SByteStringList* pDataDeps;
 
-    for ( USHORT i = 0; i < nCountMember; i++ )
+    for ( sal_uInt16 i = 0; i < nCountMember; i++ )
     {
         pData = GetObject( i );
         if ( pData->GetLogFile() == aLogFileName )
@@ -406,8 +406,8 @@ CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
             if ( pDataDeps )
             {
                 ByteString* pString;
-                ULONG nDataDepsCount = pDataDeps->Count();
-                for ( ULONG j = nDataDepsCount; j > 0; j-- )
+                sal_uIntPtr nDataDepsCount = pDataDeps->Count();
+                for ( sal_uIntPtr j = nDataDepsCount; j > 0; j-- )
                 {
                     pString = pDataDeps->GetObject( j - 1 );
                     if ( pString->GetToken( 0, '.') == aLogFileName )
@@ -434,7 +434,7 @@ Star::Star()
 }
 
 /*****************************************************************************/
-Star::Star(String aFileName, USHORT nMode )
+Star::Star(String aFileName, sal_uInt16 nMode )
 /*****************************************************************************/
                 : nStarMode( nMode )
 {
@@ -452,7 +452,7 @@ Star::Star( SolarFileList *pSolarFiles )
 
 /*****************************************************************************/
 Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
-    BOOL bLocal, const char *pSourceRoot )
+    sal_Bool bLocal, const char *pSourceRoot )
 /*****************************************************************************/
 {
     ByteString sPath( rVersion );
@@ -465,7 +465,7 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
 #else
     sPath += "/settings/SOLARLIST";
 #endif
-    GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
+    GenericInformation *pInfo = pStandLst->GetInfo( sPath, sal_True );
 
     if( pInfo && pInfo->GetValue().Len()) {
         ByteString sFile( pInfo->GetValue());
@@ -483,17 +483,17 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
         sPath = rVersion;
         sPath += "/drives";
 
-        GenericInformation *pInfo2 = pStandLst->GetInfo( sPath, TRUE );
+        GenericInformation *pInfo2 = pStandLst->GetInfo( sPath, sal_True );
         if ( pInfo2 && pInfo2->GetSubList())  {
             GenericInformationList *pDrives = pInfo2->GetSubList();
-            for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
+            for ( sal_uIntPtr i = 0; i < pDrives->Count(); i++ ) {
                 GenericInformation *pDrive = pDrives->GetObject( i );
                 if ( pDrive ) {
                     DirEntry aEntry;
-                    BOOL bOk = FALSE;
+                    sal_Bool bOk = sal_False;
                     if ( sSrcRoot.Len()) {
                         aEntry = DirEntry( sSrcRoot );
-                        bOk = TRUE;
+                        bOk = sal_True;
                     }
                     else {
 #ifdef UNX
@@ -502,10 +502,10 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                         if ( pUnixVolume ) {
                             String sRoot( pUnixVolume->GetValue(), RTL_TEXTENCODING_ASCII_US );
                             aEntry = DirEntry( sRoot );
-                            bOk = TRUE;
+                            bOk = sal_True;
                          }
 #else
-                        bOk = TRUE;
+                        bOk = sal_True;
                         String sRoot( *pDrive, RTL_TEXTENCODING_ASCII_US );
                         sRoot += String::CreateFromAscii( "\\" );
                         aEntry = DirEntry( sRoot );
@@ -513,12 +513,12 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                     }
                     if ( bOk ) {
                         sPath = "projects";
-                        GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, TRUE );
+                        GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, sal_True );
                         if ( pProjectsKey ) {
                             if ( !sSrcRoot.Len()) {
                                 sPath = rVersion;
                                 sPath += "/settings/PATH";
-                                GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
+                                GenericInformation *pPath = pStandLst->GetInfo( sPath, sal_True );
                                 if( pPath ) {
                                     ByteString sAddPath( pPath->GetValue());
 #ifdef UNX
@@ -535,7 +535,7 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
                                 String sSolarFile( String::CreateFromAscii( "build.lst" ));
 
-                                for ( ULONG j = 0; j < pProjects->Count(); j++ ) {
+                                for ( sal_uIntPtr j = 0; j < pProjects->Count(); j++ ) {
                                     ByteString sProject( *pProjects->GetObject( j ));
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
@@ -566,18 +566,18 @@ Star::~Star()
 }
 
 /*****************************************************************************/
-BOOL Star::NeedsUpdate()
+sal_Bool Star::NeedsUpdate()
 /*****************************************************************************/
 {
     aMutex.acquire();
-    for ( ULONG i = 0; i < aLoadedFilesList.Count(); i++ )
+    for ( sal_uIntPtr i = 0; i < aLoadedFilesList.Count(); i++ )
         if ( aLoadedFilesList.GetObject( i )->NeedsUpdate()) {
             aMutex.release();
-            return TRUE;
+            return sal_True;
         }
 
     aMutex.release();
-    return FALSE;
+    return sal_False;
 }
 
 /*****************************************************************************/
@@ -593,16 +593,16 @@ void Star::Read( String &rFileName )
     sSourceRoot = aEntry.GetFull();
 
     while( aFileList.Count()) {
-        StarFile *pFile = new StarFile( *aFileList.GetObject(( ULONG ) 0 ));
+        StarFile *pFile = new StarFile( *aFileList.GetObject(( sal_uIntPtr ) 0 ));
         if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
+            SimpleConfig aSolarConfig( *aFileList.GetObject(( sal_uIntPtr ) 0 ));
             while (( aString = aSolarConfig.GetNext()) != "" )
                 InsertToken (( char * ) aString.GetBuffer());
         }
         aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
         aMutex.release();
-        aFileList.Remove(( ULONG ) 0 );
+        aFileList.Remove(( sal_uIntPtr ) 0 );
     }
     // resolve all dependencies recursive
     Expand_Impl();
@@ -615,9 +615,9 @@ void Star::Read( SolarFileList *pSolarFiles )
     while(  pSolarFiles->Count()) {
         ByteString aString;
 
-        StarFile *pFile = new StarFile( *pSolarFiles->GetObject(( ULONG ) 0 ));
+        StarFile *pFile = new StarFile( *pSolarFiles->GetObject(( sal_uIntPtr ) 0 ));
         if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
+            SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( sal_uIntPtr ) 0 ));
             while (( aString = aSolarConfig.GetNext()) != "" )
                 InsertToken (( char * ) aString.GetBuffer());
         }
@@ -625,7 +625,7 @@ void Star::Read( SolarFileList *pSolarFiles )
         aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
         aMutex.release();
-        delete pSolarFiles->Remove(( ULONG ) 0 );
+        delete pSolarFiles->Remove(( sal_uIntPtr ) 0 );
     }
     delete pSolarFiles;
 
@@ -658,7 +658,7 @@ void Star::InsertSolarList( String sProject )
     // inserts a new solarlist part of another project
     String sFileName( CreateFileName( sProject ));
 
-    for ( ULONG i = 0; i < aFileList.Count(); i++ ) {
+    for ( sal_uIntPtr i = 0; i < aFileList.Count(); i++ ) {
         if (( *aFileList.GetObject( i )) == sFileName )
             return;
     }
@@ -677,14 +677,14 @@ void Star::ExpandPrj_Impl( Prj *pPrj, Prj *pDepPrj )
     if ( pDepPrj->bVisited )
         return;
 
-    pDepPrj->bVisited = TRUE;
+    pDepPrj->bVisited = sal_True;
 
     SByteStringList* pPrjLst = pPrj->GetDependencies();
     SByteStringList* pDepLst = NULL;
     ByteString* pDepend;
     ByteString* pPutStr;
     Prj *pNextPrj = NULL;
-    ULONG i, nRetPos;
+    sal_uIntPtr i, nRetPos;
 
     if ( pPrjLst ) {
         pDepLst = pDepPrj->GetDependencies();
@@ -708,9 +708,9 @@ void Star::ExpandPrj_Impl( Prj *pPrj, Prj *pDepPrj )
 void Star::Expand_Impl()
 /*****************************************************************************/
 {
-    for ( ULONG i = 0; i < Count(); i++ ) {
-        for ( ULONG j = 0; j < Count(); j++ )
-            GetObject( j )->bVisited = FALSE;
+    for ( sal_uIntPtr i = 0; i < Count(); i++ ) {
+        for ( sal_uIntPtr j = 0; j < Count(); j++ )
+            GetObject( j )->bVisited = sal_False;
 
         Prj* pPrj = GetObject( i );
         ExpandPrj_Impl( pPrj, pPrj );
@@ -724,9 +724,9 @@ void Star::InsertToken ( char *yytext )
     static int i = 0;
     static ByteString aDirName, aWhat, aWhatOS,
         sClientRestriction, aLogFileName, aProjectName, aPrefix, aCommandPara;
-    static BOOL bPrjDep = FALSE;
-    static BOOL bHardDep = FALSE;
-    static USHORT nCommandType, nOSType;
+    static sal_Bool bPrjDep = sal_False;
+    static sal_Bool bHardDep = sal_False;
+    static sal_uInt16 nCommandType, nOSType;
     CommandData* pCmdData;
     static SByteStringList *pStaticDepList;
     Prj* pPrj;
@@ -743,20 +743,20 @@ void Star::InsertToken ( char *yytext )
         case 2:
                 if ( !strcmp( yytext, ":" ))
                 {
-                    bPrjDep = TRUE;
-                    bHardDep = FALSE;
+                    bPrjDep = sal_True;
+                    bHardDep = sal_False;
                     i = 9;
                 }
                 else if ( !strcmp( yytext, "::" ))
                 {
-                    bPrjDep = TRUE;
-                    bHardDep = TRUE;
+                    bPrjDep = sal_True;
+                    bHardDep = sal_True;
                     i = 9;
                 }
                 else
                 {
-                    bPrjDep = FALSE;
-                    bHardDep = FALSE;
+                    bPrjDep = sal_False;
+                    bHardDep = sal_False;
 
                     aWhat = yytext;
                     if ( aWhat == "nmake" )
@@ -764,8 +764,8 @@ void Star::InsertToken ( char *yytext )
                     else if ( aWhat == "get" )
                         nCommandType = COMMAND_GET;
                     else {
-                        ULONG nOffset = aWhat.Copy( 3 ).ToInt32();
-                        nCommandType = sal::static_int_cast< USHORT >(
+                        sal_uIntPtr nOffset = aWhat.Copy( 3 ).ToInt32();
+                        nCommandType = sal::static_int_cast< sal_uInt16 >(
                             COMMAND_USER_START + nOffset - 1);
                     }
                 }
@@ -836,7 +836,7 @@ void Star::InsertToken ( char *yytext )
                     {
                         // Liste zu Ende
                         i = -1;
-                        bPrjDep= FALSE;
+                        bPrjDep= sal_False;
                     }
                     else
                     {
@@ -908,7 +908,7 @@ void Star::InsertToken ( char *yytext )
 }
 
 /*****************************************************************************/
-BOOL Star::HasProject ( ByteString aProjectName )
+sal_Bool Star::HasProject ( ByteString aProjectName )
 /*****************************************************************************/
 {
     Prj *pPrj;
@@ -920,9 +920,9 @@ BOOL Star::HasProject ( ByteString aProjectName )
     {
         pPrj = GetObject(i);
         if ( pPrj->GetProjectName().EqualsIgnoreCaseAscii(aProjectName) )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*****************************************************************************/
@@ -968,14 +968,14 @@ ByteString Star::GetPrjName( DirEntry &aPath )
 //
 
 /*****************************************************************************/
-StarWriter::StarWriter( String aFileName, BOOL bReadComments, USHORT nMode )
+StarWriter::StarWriter( String aFileName, sal_Bool bReadComments, sal_uInt16 nMode )
 /*****************************************************************************/
 {
     Read ( aFileName, bReadComments, nMode );
 }
 
 /*****************************************************************************/
-StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
+StarWriter::StarWriter( SolarFileList *pSolarFiles, sal_Bool bReadComments )
 /*****************************************************************************/
 {
     Read( pSolarFiles, bReadComments );
@@ -983,7 +983,7 @@ StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
 
 /*****************************************************************************/
 StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
-    BOOL bLocal, const char *pSourceRoot )
+    sal_Bool bLocal, const char *pSourceRoot )
 /*****************************************************************************/
 {
     ByteString sPath( rVersion );
@@ -996,7 +996,7 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
 #else
     sPath += "/settings/SOLARLIST";
 #endif
-    GenericInformation *pInfo = pStandLst->GetInfo( sPath, TRUE );
+    GenericInformation *pInfo = pStandLst->GetInfo( sPath, sal_True );
 
     if( pInfo && pInfo->GetValue().Len()) {
         ByteString sFile( pInfo->GetValue());
@@ -1014,17 +1014,17 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
         sPath = rVersion;
         sPath += "/drives";
 
-        GenericInformation *pInfo2 = pStandLst->GetInfo( sPath, TRUE );
+        GenericInformation *pInfo2 = pStandLst->GetInfo( sPath, sal_True );
         if ( pInfo2 && pInfo2->GetSubList())  {
             GenericInformationList *pDrives = pInfo2->GetSubList();
-            for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
+            for ( sal_uIntPtr i = 0; i < pDrives->Count(); i++ ) {
                 GenericInformation *pDrive = pDrives->GetObject( i );
                 if ( pDrive ) {
                     DirEntry aEntry;
-                    BOOL bOk = FALSE;
+                    sal_Bool bOk = sal_False;
                     if ( sSrcRoot.Len()) {
                         aEntry = DirEntry( sSrcRoot );
-                        bOk = TRUE;
+                        bOk = sal_True;
                     }
                     else {
 #ifdef UNX
@@ -1033,10 +1033,10 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                         if ( pUnixVolume ) {
                             String sRoot( pUnixVolume->GetValue(), RTL_TEXTENCODING_ASCII_US );
                             aEntry = DirEntry( sRoot );
-                            bOk = TRUE;
+                            bOk = sal_True;
                          }
 #else
-                        bOk = TRUE;
+                        bOk = sal_True;
                         String sRoot( *pDrive, RTL_TEXTENCODING_ASCII_US );
                         sRoot += String::CreateFromAscii( "\\" );
                         aEntry = DirEntry( sRoot );
@@ -1044,12 +1044,12 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                     }
                     if ( bOk ) {
                         sPath = "projects";
-                        GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, TRUE );
+                        GenericInformation *pProjectsKey = pDrive->GetSubInfo( sPath, sal_True );
                         if ( pProjectsKey ) {
                             if ( !sSrcRoot.Len()) {
                                 sPath = rVersion;
                                 sPath += "/settings/PATH";
-                                GenericInformation *pPath = pStandLst->GetInfo( sPath, TRUE );
+                                GenericInformation *pPath = pStandLst->GetInfo( sPath, sal_True );
                                 if( pPath ) {
                                     ByteString sAddPath( pPath->GetValue());
 #ifdef UNX
@@ -1066,7 +1066,7 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
                                 String sSolarFile( String::CreateFromAscii( "build.lst" ));
 
-                                for ( ULONG j = 0; j < pProjects->Count(); j++ ) {
+                                for ( sal_uIntPtr j = 0; j < pProjects->Count(); j++ ) {
                                     ByteString sProject( *pProjects->GetObject( j ));
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
@@ -1099,7 +1099,7 @@ void StarWriter::CleanUp()
 }
 
 /*****************************************************************************/
-USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
+sal_uInt16 StarWriter::Read( String aFileName, sal_Bool bReadComments, sal_uInt16 nMode  )
 /*****************************************************************************/
 {
     nStarMode = nMode;
@@ -1114,9 +1114,9 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
 
     while( aFileList.Count()) {
 
-        StarFile *pFile = new StarFile( *aFileList.GetObject(( ULONG ) 0 ));
+        StarFile *pFile = new StarFile( *aFileList.GetObject(( sal_uIntPtr ) 0 ));
         if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *aFileList.GetObject(( ULONG ) 0 ));
+            SimpleConfig aSolarConfig( *aFileList.GetObject(( sal_uIntPtr ) 0 ));
             while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
                 InsertTokenLine ( aString );
         }
@@ -1124,7 +1124,7 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
         aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
         aMutex.release();
-        delete aFileList.Remove(( ULONG ) 0 );
+        delete aFileList.Remove(( sal_uIntPtr ) 0 );
     }
     // resolve all dependencies recursive
     Expand_Impl();
@@ -1135,7 +1135,7 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
 }
 
 /*****************************************************************************/
-USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
+sal_uInt16 StarWriter::Read( SolarFileList *pSolarFiles, sal_Bool bReadComments )
 /*****************************************************************************/
 {
     nStarMode = STAR_MODE_MULTIPLE_PARSE;
@@ -1144,9 +1144,9 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
     while(  pSolarFiles->Count()) {
         ByteString aString;
 
-        StarFile *pFile = new StarFile(  *pSolarFiles->GetObject(( ULONG ) 0 ));
+        StarFile *pFile = new StarFile(  *pSolarFiles->GetObject(( sal_uIntPtr ) 0 ));
         if ( pFile->Exists()) {
-            SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( ULONG ) 0 ));
+            SimpleConfig aSolarConfig( *pSolarFiles->GetObject(( sal_uIntPtr ) 0 ));
             while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
                 InsertTokenLine ( aString );
         }
@@ -1154,7 +1154,7 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
         aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
         aMutex.release();
-        delete pSolarFiles->Remove(( ULONG ) 0 );
+        delete pSolarFiles->Remove(( sal_uIntPtr ) 0 );
     }
     delete pSolarFiles;
 
@@ -1163,7 +1163,7 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
 }
 
 /*****************************************************************************/
-USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
+sal_uInt16 StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
 /*****************************************************************************/
 {
     ByteString aDataString;
@@ -1176,7 +1176,7 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
     if ( pPrj->Count() > 0 )
     {
         pCmdData = pPrj->First();
-        SByteStringList* pPrjDepList = pPrj->GetDependencies( FALSE );
+        SByteStringList* pPrjDepList = pPrj->GetDependencies( sal_False );
         if ( pPrjDepList != 0 )
         {
             aDataString = pPrj->GetPreFix();
@@ -1188,7 +1188,7 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
             else
                 aDataString+= ByteString(":");
             aDataString += aTab;
-            for ( USHORT i = 0; i< pPrjDepList->Count(); i++ ) {
+            for ( sal_uInt16 i = 0; i< pPrjDepList->Count(); i++ ) {
                 aDataString += *pPrjDepList->GetObject( i );
                 aDataString += aSpace;
             }
@@ -1208,7 +1208,7 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
 
                     aDataString+= pCmdData->GetPath();
                     aDataString += aTab;
-                    USHORT nPathLen = pCmdData->GetPath().Len();
+                    sal_uInt16 nPathLen = pCmdData->GetPath().Len();
                     if ( nPathLen < 40 )
                         for ( int i = 0; i < 9 - pCmdData->GetPath().Len() / 4 ; i++ )
                             aDataString += aTab;
@@ -1235,7 +1235,7 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
 
                     pCmdDepList = pCmdData->GetDependencies();
                     if ( pCmdDepList )
-                        for ( USHORT i = 0; i< pCmdDepList->Count(); i++ ) {
+                        for ( sal_uInt16 i = 0; i< pCmdDepList->Count(); i++ ) {
                             aDataString += *pCmdDepList->GetObject( i );
                             aDataString += aSpace;
                     }
@@ -1252,7 +1252,7 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
 }
 
 /*****************************************************************************/
-USHORT StarWriter::Write( String aFileName )
+sal_uInt16 StarWriter::Write( String aFileName )
 /*****************************************************************************/
 {
     SvFileStream aFileStream;
@@ -1275,7 +1275,7 @@ USHORT StarWriter::Write( String aFileName )
 }
 
 /*****************************************************************************/
-USHORT StarWriter::WriteMultiple( String rSourceRoot )
+sal_uInt16 StarWriter::WriteMultiple( String rSourceRoot )
 /*****************************************************************************/
 {
     if ( Count() > 0 )
@@ -1315,10 +1315,10 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
     ByteString aWhat, aWhatOS,
         sClientRestriction, aLogFileName, aProjectName, aPrefix, aCommandPara;
     static  ByteString aDirName;
-    BOOL bPrjDep = FALSE;
-    BOOL bHardDep = FALSE;
-    USHORT nCommandType = 0;
-    USHORT nOSType = 0;
+    sal_Bool bPrjDep = sal_False;
+    sal_Bool bHardDep = sal_False;
+    sal_uInt16 nCommandType = 0;
+    sal_uInt16 nOSType = 0;
     CommandData* pCmdData;
     SByteStringList *pDepList2 = NULL;
     Prj* pPrj;
@@ -1352,20 +1352,20 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
             case 2:
                     if ( !strcmp( yytext, ":" ))
                     {
-                        bPrjDep = TRUE;
-                        bHardDep = FALSE;
+                        bPrjDep = sal_True;
+                        bHardDep = sal_False;
                         i = 9;
                     }
                     else if ( !strcmp( yytext, "::" ))
                     {
-                        bPrjDep = TRUE;
-                        bHardDep = TRUE;
+                        bPrjDep = sal_True;
+                        bHardDep = sal_True;
                         i = 9;
                     }
                     else
                     {
-                        bPrjDep = FALSE;
-                        bHardDep = FALSE;
+                        bPrjDep = sal_False;
+                        bHardDep = sal_False;
 
                         aWhat = yytext;
                         if ( aWhat == "nmake" )
@@ -1373,8 +1373,8 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                         else if ( aWhat == "get" )
                             nCommandType = COMMAND_GET;
                         else {
-                            ULONG nOffset = aWhat.Copy( 3 ).ToInt32();
-                            nCommandType = sal::static_int_cast< USHORT >(
+                            sal_uIntPtr nOffset = aWhat.Copy( 3 ).ToInt32();
+                            nCommandType = sal::static_int_cast< sal_uInt16 >(
                                 COMMAND_USER_START + nOffset - 1);
                         }
                     }
@@ -1446,7 +1446,7 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
                         {
                             // Liste zu Ende
                             i = -1;
-                            bPrjDep= FALSE;
+                            bPrjDep= sal_False;
                         }
                         else
                         {
@@ -1518,34 +1518,34 @@ void StarWriter::InsertTokenLine ( ByteString& rString )
 }
 
 /*****************************************************************************/
-BOOL StarWriter::InsertProject ( Prj* )
+sal_Bool StarWriter::InsertProject ( Prj* )
 /*****************************************************************************/
 {
-    return FALSE;
+    return sal_False;
 }
 
 /*****************************************************************************/
 Prj* StarWriter::RemoveProject ( ByteString aProjectName )
 /*****************************************************************************/
 {
-    ULONG nCountMember = Count();
+    sal_uIntPtr nCountMember = Count();
     Prj* pPrj;
     Prj* pPrjFound = NULL;
     SByteStringList* pPrjDeps;
 
-    for ( USHORT i = 0; i < nCountMember; i++ )
+    for ( sal_uInt16 i = 0; i < nCountMember; i++ )
     {
         pPrj = GetObject( i );
         if ( pPrj->GetProjectName() == aProjectName )
             pPrjFound = pPrj;
         else
         {
-            pPrjDeps = pPrj->GetDependencies( FALSE );
+            pPrjDeps = pPrj->GetDependencies( sal_False );
             if ( pPrjDeps )
             {
                 ByteString* pString;
-                ULONG nPrjDepsCount = pPrjDeps->Count();
-                for ( ULONG j = nPrjDepsCount; j > 0; j-- )
+                sal_uIntPtr nPrjDepsCount = pPrjDeps->Count();
+                for ( sal_uIntPtr j = nPrjDepsCount; j > 0; j-- )
                 {
                     pString = pPrjDeps->GetObject( j - 1 );
                     if ( pString->GetToken( 0, '.') == aProjectName )
@@ -1571,30 +1571,30 @@ StarFile::StarFile( const String &rFile )
 {
     DirEntry aEntry( aFileName );
     if ( aEntry.Exists()) {
-        bExists = TRUE;
+        bExists = sal_True;
         FileStat aStat( aEntry );
         aDate = aStat.DateModified();
         aTime = aStat.TimeModified();
     }
     else
-        bExists = FALSE;
+        bExists = sal_False;
 }
 
 /*****************************************************************************/
-BOOL StarFile::NeedsUpdate()
+sal_Bool StarFile::NeedsUpdate()
 /*****************************************************************************/
 {
     DirEntry aEntry( aFileName );
     if ( aEntry.Exists()) {
         if ( !bExists ) {
-            bExists = TRUE;
-            return TRUE;
+            bExists = sal_True;
+            return sal_True;
         }
         FileStat aStat( aEntry );
         if (( aStat.DateModified() > aDate ) ||
             (( aStat.DateModified() == aDate ) && ( aStat.TimeModified() > aTime )))
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 

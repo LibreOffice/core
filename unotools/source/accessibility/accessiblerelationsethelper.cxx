@@ -202,8 +202,8 @@ sal_Int32 SAL_CALL
             <type>AccessibleRelationType</type>.
 
         @return
-            Returns <TRUE/> if there is a (at least one) relation of the
-            given type and <FALSE/> if there is no such relation in the set.
+            Returns <sal_True/> if there is a (at least one) relation of the
+            given type and <sal_False/> if there is no such relation in the set.
     */
 sal_Bool SAL_CALL
     AccessibleRelationSetHelper::containsRelation( sal_Int16 aRelationType )

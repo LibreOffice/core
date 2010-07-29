@@ -51,17 +51,17 @@ SfxCancelManager::SfxCancelManager( SfxCancelManager *pParent )
 SfxCancelManager::~SfxCancelManager()
 {
     DBG_ASSERT( _pParent || !_aJobs.Count(), "deleting SfxCancelManager in use" );
-    for ( USHORT n = _aJobs.Count(); n--; )
+    for ( sal_uInt16 n = _aJobs.Count(); n--; )
         _aJobs.GetObject(n)->SetManager( _pParent );
 }
 
 //-------------------------------------------------------------------------
 
-BOOL SfxCancelManager::CanCancel() const
+sal_Bool SfxCancelManager::CanCancel() const
 
 /*  [Beschreibung]
 
-    Liefert TRUE wenn an diesem CancelManager oder an einem Parent
+    Liefert sal_True wenn an diesem CancelManager oder an einem Parent
     ein Job l"auft.
 */
 
@@ -72,7 +72,7 @@ BOOL SfxCancelManager::CanCancel() const
 
 //-------------------------------------------------------------------------
 
-void SfxCancelManager::Cancel( BOOL bDeep )
+void SfxCancelManager::Cancel( sal_Bool bDeep )
 
 /*  [Beschreibung]
 
@@ -83,7 +83,7 @@ void SfxCancelManager::Cancel( BOOL bDeep )
 {
     ::vos::OGuard aGuard( lclMutex::get() );
     SfxCancelManagerWeak xWeak( this );
-    for ( USHORT n = _aJobs.Count(); n-- && xWeak.Is(); )
+    for ( sal_uInt16 n = _aJobs.Count(); n-- && xWeak.Is(); )
         if ( n < _aJobs.Count() )
             _aJobs.GetObject(n)->Cancel();
     if ( xWeak.Is() && _pParent )
@@ -133,7 +133,7 @@ void SfxCancelManager::RemoveCancellable( SfxCancellable *pJob )
 {
     ::vos::OClearableGuard aGuard( lclMutex::get() );
     const SfxCancellable *pTmp = pJob;
-    USHORT nPos = _aJobs.GetPos( pTmp );
+    sal_uInt16 nPos = _aJobs.GetPos( pTmp );
     if ( nPos != 0xFFFF )
     {
         _aJobs.Remove( nPos , 1 );
@@ -172,7 +172,7 @@ void SfxCancellable::Cancel()
         delete this;
     }
 #else
-    _bCancelled = TRUE;
+    _bCancelled = sal_True;
 #endif
 }
 
@@ -192,7 +192,7 @@ void SfxCancellable::SetManager( SfxCancelManager *pMgr )
 
 TYPEINIT1(SfxCancelHint, SfxHint);
 
-SfxCancelHint::SfxCancelHint( SfxCancellable* pJob, USHORT _nAction )
+SfxCancelHint::SfxCancelHint( SfxCancellable* pJob, sal_uInt16 _nAction )
 {
     pCancellable = pJob;
     nAction = _nAction;

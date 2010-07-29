@@ -84,7 +84,7 @@ SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
 SfxItemPoolCache::~SfxItemPoolCache()
 {
     DBG_DTOR(SfxItemPoolCache, 0);
-    for ( USHORT nPos = 0; nPos < pCache->Count(); ++nPos ) {
+    for ( sal_uInt16 nPos = 0; nPos < pCache->Count(); ++nPos ) {
         pPool->Remove( *(*pCache)[nPos].pPoolItem );
         pPool->Remove( *(*pCache)[nPos].pOrigItem );
     }
@@ -96,7 +96,7 @@ SfxItemPoolCache::~SfxItemPoolCache()
 
 //------------------------------------------------------------------------
 
-const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, BOOL bNew )
+const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, sal_Bool bNew )
 {
     DBG_CHKTHIS(SfxItemPoolCache, 0);
     DBG_ASSERT( pPool == rOrigItem.GetItemSet().GetPool(), "invalid Pool" );
@@ -104,7 +104,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, BOOL b
                 "original not in pool" );
 
     // Suchen, ob diese Transformations schon einmal vorkam
-    for ( USHORT nPos = 0; nPos < pCache->Count(); ++nPos )
+    for ( sal_uInt16 nPos = 0; nPos < pCache->Count(); ++nPos )
     {
         SfxItemModifyImpl &rMapEntry = (*pCache)[nPos];
         if ( rMapEntry.pOrigItem == &rOrigItem )

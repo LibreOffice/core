@@ -53,7 +53,7 @@
 |*    Letzte Aenderung  MM 20.03.91
 |*
 *************************************************************************/
-char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
+char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
 {
     sal_Size        nMaxUniCodeBuf = strlen( pStr ) + 1;
     char *          pOrgStr = new char[ nMaxUniCodeBuf ];
@@ -113,7 +113,7 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
                         int  i = 0;
                         while( '0' <= *pStr && '7' >= *pStr && i != 3 )
                         {
-                            nChar = nChar * 8 + (BYTE)*pStr - (BYTE)'0';
+                            nChar = nChar * 8 + (sal_uInt8)*pStr - (sal_uInt8)'0';
                             ++pStr;
                             i++;
                         }
@@ -135,11 +135,11 @@ char * RscChar::MakeUTF8( char * pStr, UINT16 nTextEncoding )
                         while( isxdigit( *pStr ) && i != 2 )
                         {
                             if( isdigit( *pStr ) )
-                                nChar = nChar * 16 + (BYTE)*pStr - (BYTE)'0';
+                                nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'0';
                             else if( isupper( *pStr ) )
-                                nChar = nChar * 16 + (BYTE)*pStr - (BYTE)'A' +10;
+                                nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'A' +10;
                             else
-                                nChar = nChar * 16 + (BYTE)*pStr - (BYTE)'a' +10;
+                                nChar = nChar * 16 + (sal_uInt8)*pStr - (sal_uInt8)'a' +10;
                             ++pStr;
                             i++;
                         }

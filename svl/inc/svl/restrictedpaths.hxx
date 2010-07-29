@@ -59,7 +59,7 @@ namespace svt
             only certain URLs can be browsed. This method checks whether a given URL belongs
             to this set of permitted URLs.</p>
 
-            <p>If no "access restriction" is effective, this method always returns <TRUE/>.</p>
+            <p>If no "access restriction" is effective, this method always returns <sal_True/>.</p>
         */
         virtual bool                isUrlAllowed( const String& _rURL ) const;
 
@@ -70,9 +70,9 @@ namespace svt
             to this set of permitted URLs.</p>
 
             <p>Default behavior allows access to parent folder of a restricted folder (but not to its siblings).
-            If allowParents is set to <FALSE/> parent folders will be treated as forbidden.
+            If allowParents is set to <sal_False/> parent folders will be treated as forbidden.
 
-            <p>If no "access restriction" is effective, this method always returns <TRUE/>.</p>
+            <p>If no "access restriction" is effective, this method always returns <sal_True/>.</p>
         */
         bool                        isUrlAllowed( const String& _rURL, bool allowParents ) const;
     };

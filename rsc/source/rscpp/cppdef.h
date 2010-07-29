@@ -26,12 +26,12 @@
  ************************************************************************/
 
 /*
- * This redundant definition of TRUE and FALSE works around
+ * This redundant definition of sal_True and sal_False works around
  * a limitation of Decus C.
  */
-#ifndef TRUE
-#define TRUE                    1
-#define FALSE                   0
+#ifndef sal_True
+#define sal_True                    1
+#define sal_False                   0
 #endif
 
 /*
@@ -96,16 +96,16 @@
  *              to be marked "static" even though they are referenced
  *              by "extern" statements elsewhere.
  *
- * OK_DOLLAR    Should be set TRUE if $ is a valid alphabetic character
+ * OK_DOLLAR    Should be set sal_True if $ is a valid alphabetic character
  *              in identifiers (default), or zero if $ is invalid.
- *              Default is TRUE.
+ *              Default is sal_True.
  *
- * OK_CONCAT    Should be set TRUE if # may be used to concatenate
+ * OK_CONCAT    Should be set sal_True if # may be used to concatenate
  *              tokens in macros (per the Ansi Draft Standard) or
- *              FALSE for old-style # processing (needed if cpp is
+ *              sal_False for old-style # processing (needed if cpp is
  *              to process assembler source code).
  *
- * OK_DATE      Predefines the compilation date if set TRUE.
+ * OK_DATE      Predefines the compilation date if set sal_True.
  *              Not permitted by the Nov. 12, 1984 Draft Standard.
  *
  * S_CHAR etc.  Define the sizeof the basic TARGET machine word types.
@@ -192,14 +192,14 @@
  */
 
 #ifndef OLD_PREPROCESSOR
-#define OLD_PREPROCESSOR        FALSE
+#define OLD_PREPROCESSOR        sal_False
 #endif
 
 #if     OLD_PREPROCESSOR
-#define OK_DOLLAR               FALSE
-#define OK_CONCAT               TRUE
-#define COMMENT_INVISIBLE       TRUE
-#define STRING_FORMAL           TRUE
+#define OK_DOLLAR               sal_False
+#define OK_CONCAT               sal_True
+#define COMMENT_INVISIBLE       sal_True
+#define STRING_FORMAL           sal_True
 #define IDMAX                   63      /* actually, seems to be unlimited */
 #endif
 
@@ -219,14 +219,14 @@
 #endif
 
 /*
- * BIG_ENDIAN is set TRUE on machines (such as the IBM 360 series)
+ * BIG_ENDIAN is set sal_True on machines (such as the IBM 360 series)
  * where 'ab' stores 'a' in the high-bits and 'b' in the low-bits.
- * It is set FALSE on machines (such as the PDP-11 and Vax-11)
+ * It is set sal_False on machines (such as the PDP-11 and Vax-11)
  * where 'ab' stores 'a' in the low-bits and 'b' in the high-bits.
  * (Or is it the other way around?) -- Warning: BIG_ENDIAN code is untested.
  */
 #ifndef BIG_ENDIAN
-#define BIG_ENDIAN              FALSE
+#define BIG_ENDIAN              sal_False
 #endif
 
 /*
@@ -236,7 +236,7 @@
  * expansions.  This was removed from the Draft Ansi Standard.
  */
 #ifndef COMMENT_INVISIBLE
-#define COMMENT_INVISIBLE       FALSE
+#define COMMENT_INVISIBLE       sal_False
 #endif
 
 /*
@@ -245,27 +245,27 @@
  * Standard and a limited recognition capability added.
  */
 #ifndef STRING_FORMAL
-#define STRING_FORMAL           FALSE
+#define STRING_FORMAL           sal_False
 #endif
 
 /*
  * OK_DOLLAR enables use of $ as a valid "letter" in identifiers.
  * This is a permitted extension to the Ansi Standard and is required
- * for e.g., VMS, RSX-11M, etc.   It should be set FALSE if cpp is
+ * for e.g., VMS, RSX-11M, etc.   It should be set sal_False if cpp is
  * used to preprocess assembler source on Unix systems.  OLD_PREPROCESSOR
- * sets OK_DOLLAR FALSE for that reason.
+ * sets OK_DOLLAR sal_False for that reason.
  */
 #ifndef OK_DOLLAR
-#define OK_DOLLAR               TRUE
+#define OK_DOLLAR               sal_True
 #endif
 
 /*
  * OK_CONCAT enables (one possible implementation of) token concatenation.
  * If cpp is used to preprocess Unix assembler source, this should be
- * set FALSE as the concatenation character, #, is used by the assembler.
+ * set sal_False as the concatenation character, #, is used by the assembler.
  */
 #ifndef OK_CONCAT
-#define OK_CONCAT               TRUE
+#define OK_CONCAT               sal_True
 #endif
 
 /*
@@ -274,7 +274,7 @@
  * by the Draft Ansi Standard.
  */
 #ifndef OK_DATE
-#define OK_DATE         TRUE
+#define OK_DATE         sal_True
 #endif
 
 /*

@@ -38,7 +38,7 @@ public:
     LayoutXMLFile( bool mergeMode );
 
     void SearchL10NElements( XMLParentNode *pCur, int pos = 0 );
-    BOOL Write( ByteString &aFilename );
+    sal_Bool Write( ByteString &aFilename );
     void HandleElement( XMLElement* element );
     void InsertL10NElement( ByteString const& id, XMLElement* element );
 

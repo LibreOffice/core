@@ -63,7 +63,7 @@ SO2_IMPL_INVARIANT(SotObject)
 |*
 |*  Beschreibung:
 *************************************************************************/
-void SotObject::TestMemberObjRef( BOOL /*bFree*/ )
+void SotObject::TestMemberObjRef( sal_Bool /*bFree*/ )
 {
 }
 
@@ -73,7 +73,7 @@ void SotObject::TestMemberObjRef( BOOL /*bFree*/ )
 |*  Beschreibung:
 *************************************************************************/
 #ifdef TEST_INVARIANT
-void SotObject::TestMemberInvariant( BOOL /*bPrint*/ )
+void SotObject::TestMemberInvariant( sal_Bool /*bPrint*/ )
 {
 }
 #endif
@@ -87,9 +87,9 @@ SotObject::SotObject()
     : pAggList    ( NULL )
     , nStrongLockCount( 0 )
     , nOwnerLockCount( 0 )
-    , bOwner      ( TRUE )
-    , bSVObject   ( FALSE )
-    , bInClose    ( FALSE )
+    , bOwner      ( sal_True )
+    , bSVObject   ( sal_False )
+    , bInClose    ( sal_False )
 {
     SotFactory::IncSvObjectCount( this );
 }
@@ -123,7 +123,7 @@ IUnknown * SotObject::GetInterface( const SvGlobalName & )
 |*
 |*    Beschreibung
 *************************************************************************/
-BOOL SotObject::IsSvObject() const
+sal_Bool SotObject::IsSvObject() const
 {
     return Owner() || bSVObject;
 }
@@ -138,20 +138,20 @@ BOOL SotObject::IsSvObject() const
 |*                  Objekte um 1 erhoeht, muss dies bei der Berechnung
 |*                  des 0-RefCounts beruecksichtigt werden.
 *************************************************************************/
-BOOL SotObject::ShouldDelete()
+sal_Bool SotObject::ShouldDelete()
 {
     if( !pAggList )
-        return TRUE;
+        return sal_True;
 
     SvAggregate & rMO = pAggList->GetObject( 0 );
     if(  rMO.bMainObj )
     {
         AddRef();
         pAggList->GetObject( 0 ).pObj->ReleaseRef();
-        return FALSE;
+        return sal_False;
     }
 
-   ULONG i;
+   sal_uIntPtr i;
     for( i = 1; i < pAggList->Count(); i++ )
     {
         SvAggregate & rAgg = pAggList->GetObject( i );
@@ -162,7 +162,7 @@ BOOL SotObject::ShouldDelete()
             AddRef();
             // einen Aggregierten runterzaehlen
             rAgg.pObj->ReleaseRef();
-            return FALSE;
+            return sal_False;
         }
     }
     AddNextRef(); // rekursion stoppen
@@ -175,7 +175,7 @@ BOOL SotObject::ShouldDelete()
     delete pAggList;
     pAggList = NULL;
     // und zerstoeren, dies ist unabhaengig vom RefCount
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -212,7 +212,7 @@ SvAggregateMemberList & SotObject::GetAggList()
 |*
 |*    Beschreibung
 *************************************************************************/
-void SotObject::RemoveInterface( ULONG nPos )
+void SotObject::RemoveInterface( sal_uIntPtr nPos )
 {
     SvAggregate & rAgg = pAggList->GetObject( nPos );
     if( !rAgg.bFactory )
@@ -238,7 +238,7 @@ void SotObject::RemoveInterface( SotObject * pObjP )
 {
     DBG_ASSERT( pObjP, "null pointer" );
     DBG_ASSERT( pAggList, "no aggregation list" );
-    ULONG i;
+    sal_uIntPtr i;
     for( i = 0; i < pAggList->Count(); i++ )
     {
         SvAggregate & rAgg = pAggList->GetObject( i );
@@ -257,12 +257,12 @@ void SotObject::AddInterface( SotObject * pObjP )
 {
     pObjP->AddRef(); // Objekt festhalten
     GetAggList();
-    pAggList->Append( SvAggregate( pObjP, FALSE ) );
+    pAggList->Append( SvAggregate( pObjP, sal_False ) );
 
     // sich selbst als Typecast-Verwalter eintragen
     SvAggregateMemberList & rAList = pObjP->GetAggList();
     DBG_ASSERT( !rAList.GetObject( 0 ).bMainObj, "try to aggregate twice" );
-    rAList[ 0 ] = SvAggregate( this, TRUE );
+    rAList[ 0 ] = SvAggregate( this, sal_True );
 }
 
 /*************************************************************************
@@ -298,7 +298,7 @@ void * SotObject::DownAggCast( const SotFactory * pFact )
     // geht den Pfad nur Richtung aggregierte Objekte
     if( pAggList )
     {
-        for( ULONG i = 1; !pCast || i < pAggList->Count(); i++ )
+        for( sal_uIntPtr i = 1; !pCast || i < pAggList->Count(); i++ )
         {
             SvAggregate & rAgg = pAggList->GetObject( i );
             if( rAgg.bFactory )
@@ -307,14 +307,14 @@ void * SotObject::DownAggCast( const SotFactory * pFact )
                 {
                     // On-Demand erzeugen, wenn Typ gebraucht
                     SotObjectRef aObj( CreateAggObj( rAgg.pFact ) );
-                    rAgg.bFactory = FALSE;
+                    rAgg.bFactory = sal_False;
                     rAgg.pObj = aObj;
                     rAgg.pObj->AddRef();
 
                     // sich selbst als Typecast-Verwalter eintragen
                     SvAggregateMemberList & rAList = rAgg.pObj->GetAggList();
                     DBG_ASSERT( !rAList.GetObject( 0 ).bMainObj, "try to aggregate twice" );
-                    rAList[ 0 ] = SvAggregate( this, TRUE );
+                    rAList[ 0 ] = SvAggregate( this, sal_True );
                 }
             }
             if( !rAgg.bFactory )
@@ -382,23 +382,23 @@ SotObject * SotObject::GetMainObj() const
 }
 
 //=========================================================================
-USHORT SotObject::FuzzyLock
+sal_uInt16 SotObject::FuzzyLock
 (
-    BOOL bLock,         /* TRUE, lock. FALSE, unlock. */
-    BOOL /*bIntern*/,   /* TRUE, es handelt sich um einen internen Lock.
-                           FALSE, der Lock kam von aussen (Ole2, Ipc2) */
-    BOOL bClose         /* TRUE, Close aufrufen wenn letzte Lock */
+    sal_Bool bLock,         /* sal_True, lock. sal_False, unlock. */
+    sal_Bool /*bIntern*/,   /* sal_True, es handelt sich um einen internen Lock.
+                           sal_False, der Lock kam von aussen (Ole2, Ipc2) */
+    sal_Bool bClose         /* sal_True, Close aufrufen wenn letzte Lock */
 )
 /*  [Beschreibung]
 
     Erlaubte Parameterkombinationen:
-    ( TRUE,  TRUE,  *     ) ->  interner Lock.
-    ( FALSE, TRUE,  TRUE  ) ->  interner Unlock mit Close,
+    ( sal_True,  sal_True,  *     ) ->  interner Lock.
+    ( sal_False, sal_True,  sal_True  ) ->  interner Unlock mit Close,
                                  wenn LockCount() == 0
-    ( TRUE,  FALSE, *     ) ->  externer Lock.
-    ( FALSE, FALSE, TRUE  ) ->  externer Unlock mit Close,
+    ( sal_True,  sal_False, *     ) ->  externer Lock.
+    ( sal_False, sal_False, sal_True  ) ->  externer Unlock mit Close,
                                  wenn LockCount() == 0
-    ( FALSE, FALSE, FALSE ) ->  externer Unlock
+    ( sal_False, sal_False, sal_False ) ->  externer Unlock
 
     F"ur !Owner() wird der Aufruf an das externe Objekt weitergeleitet.
      F"ur diese muss das <IOleItemContainer>-Interface zur Vef"ugung stehen.
@@ -411,7 +411,7 @@ USHORT SotObject::FuzzyLock
 */
 {
     SotObjectRef xHoldAlive( this );
-    USHORT nRet;
+    sal_uInt16 nRet;
     if( bLock )
     {
         AddRef();
@@ -431,7 +431,7 @@ USHORT SotObject::FuzzyLock
 //=========================================================================
 void SotObject::OwnerLock
 (
-    BOOL bLock      /* TRUE, lock. FALSE, unlock. */
+    sal_Bool bLock      /* sal_True, lock. sal_False, unlock. */
 )
 /*  [Beschreibung]
 
@@ -467,23 +467,23 @@ void SotObject::RemoveOwnerLock()
 }
 
 //=========================================================================
-BOOL SotObject::DoClose()
+sal_Bool SotObject::DoClose()
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if( !bInClose )
     {
         SotObjectRef xHoldAlive( this );
-        bInClose = TRUE;
+        bInClose = sal_True;
         bRet = Close();
-        bInClose = FALSE;
+        bInClose = sal_False;
     }
     return bRet;
 }
 
 //=========================================================================
-BOOL SotObject::Close()
+sal_Bool SotObject::Close()
 {
-    return TRUE;
+    return sal_True;
 }
 
 

@@ -52,16 +52,16 @@ public:
                 ~SByteStringList();
 
                 // neuen ByteString in Liste einfuegen
-    ULONG       PutString( ByteString* );
+    sal_uIntPtr     PutString( ByteString* );
     ByteString*     RemoveString( const ByteString& rName );
 
                 // Position des ByteString in Liste, wenn nicht enthalten, dann
                 // return = NOT_THERE
-    ULONG       IsString( ByteString* );
+    sal_uIntPtr     IsString( ByteString* );
 
                 // Vorgaenger ermitteln ( auch wenn selbst noch nicht in
                 // Liste enthalten
-    ULONG       GetPrevString( ByteString* );
+    sal_uIntPtr     GetPrevString( ByteString* );
     void        CleanUp();
 
     SByteStringList& operator<<  ( SvStream& rStream );
@@ -79,16 +79,16 @@ public:
                 ~SUniStringList();
 
                 // neuen UniString in Liste einfuegen
-    ULONG       PutString( UniString* );
+    sal_uIntPtr     PutString( UniString* );
     UniString*  RemoveString( const UniString& rName );
 
                 // Position des UniString in Liste, wenn nicht enthalten, dann
                 // return = NOT_THERE
-    ULONG       IsString( UniString* );
+    sal_uIntPtr     IsString( UniString* );
 
                 // Vorgaenger ermitteln ( auch wenn selbst noch nicht in
                 // Liste enthalten
-    ULONG       GetPrevString( UniString* );
+    sal_uIntPtr     GetPrevString( UniString* );
 };
 
 class Text

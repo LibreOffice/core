@@ -35,10 +35,10 @@
 class SVL_DLLPUBLIC SfxEnumItem: public CntEnumItem
 {
 protected:
-    SfxEnumItem(USHORT which = 0, USHORT nValue = 0):
+    SfxEnumItem(sal_uInt16 which = 0, sal_uInt16 nValue = 0):
         CntEnumItem(which, nValue) {}
 
-    SfxEnumItem(USHORT which, SvStream & rStream):
+    SfxEnumItem(sal_uInt16 which, SvStream & rStream):
         CntEnumItem(which, rStream) {}
 
 public:
@@ -52,13 +52,13 @@ class SVL_DLLPUBLIC SfxBoolItem: public CntBoolItem
 public:
     TYPEINFO();
 
-    SfxBoolItem(USHORT which = 0, BOOL bValue = FALSE):
+    SfxBoolItem(sal_uInt16 which = 0, sal_Bool bValue = sal_False):
         CntBoolItem(which, bValue) {}
 
-    SfxBoolItem(USHORT which, SvStream & rStream):
+    SfxBoolItem(sal_uInt16 which, SvStream & rStream):
         CntBoolItem(which, rStream) {}
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const
     { return new SfxBoolItem(Which(), rStream); }
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const

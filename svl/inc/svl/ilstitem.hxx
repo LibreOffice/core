@@ -42,7 +42,7 @@ public:
     TYPEINFO();
 
     SfxIntegerListItem();
-    SfxIntegerListItem( USHORT nWhich, const SvULongs& rList );
+    SfxIntegerListItem( sal_uInt16 nWhich, const SvULongs& rList );
     SfxIntegerListItem( const SfxIntegerListItem& rItem );
     ~SfxIntegerListItem();
 
@@ -55,8 +55,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual BOOL            PutValue  ( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
-    virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
+    virtual sal_Bool            PutValue  ( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
+    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
 };
 
 #endif // _SFXINTITEM_HXX

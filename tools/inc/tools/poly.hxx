@@ -85,16 +85,16 @@ private:
 
     enum DataType   { DATA_NONE = 0, DATA_ABSOLUT = 1, DATA_PERCENT = 2 };
     DataType        eType;
-    union           { ULONG mnAbsolut; USHORT mnPercent; };
+    union           { sal_uIntPtr mnAbsolut; sal_uInt16 mnPercent; };
 
 public:
 
                     PolyOptimizeData() : eType( DATA_NONE ) {}
-                    PolyOptimizeData( ULONG nAbsolut ) : eType( DATA_ABSOLUT ), mnAbsolut( nAbsolut ) {}
-                    PolyOptimizeData( USHORT nPercent ) : eType( DATA_PERCENT ), mnPercent( nPercent ) {}
+                    PolyOptimizeData( sal_uIntPtr nAbsolut ) : eType( DATA_ABSOLUT ), mnAbsolut( nAbsolut ) {}
+                    PolyOptimizeData( sal_uInt16 nPercent ) : eType( DATA_PERCENT ), mnPercent( nPercent ) {}
 
-    ULONG           GetAbsValue() const { DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
-    USHORT          GetPercentValue() const { DBG_ASSERT( eType == DATA_PERCENT, "Wrong data type" ); return mnPercent; }
+    sal_uIntPtr         GetAbsValue() const { DBG_ASSERT( eType == DATA_ABSOLUT, "Wrong data type" ); return mnAbsolut; }
+    sal_uInt16          GetPercentValue() const { DBG_ASSERT( eType == DATA_PERCENT, "Wrong data type" ); return mnPercent; }
 };
 
 // -----------
@@ -125,9 +125,9 @@ private:
 public:
 
     Point*              ImplGetPointAry();
-    BYTE*               ImplGetFlagAry();
+    sal_uInt8*               ImplGetFlagAry();
 
-    static void         ImplReduceEdges( Polygon& rPoly, const double& rArea, USHORT nPercent );
+    static void         ImplReduceEdges( Polygon& rPoly, const double& rArea, sal_uInt16 nPercent );
     void                ImplRead( SvStream& rIStream );
     void                ImplWrite( SvStream& rOStream ) const;
 
@@ -135,49 +135,49 @@ public:
 
 public:
                         Polygon();
-                        Polygon( USHORT nSize );
-                        Polygon( USHORT nPoints, const Point* pPtAry,
-                                 const BYTE* pFlagAry = NULL );
+                        Polygon( sal_uInt16 nSize );
+                        Polygon( sal_uInt16 nPoints, const Point* pPtAry,
+                                 const sal_uInt8* pFlagAry = NULL );
                         Polygon( const Rectangle& rRect );
                         Polygon( const Rectangle& rRect,
-                                 ULONG nHorzRound, ULONG nVertRound );
+                                 sal_uIntPtr nHorzRound, sal_uIntPtr nVertRound );
                         Polygon( const Point& rCenter,
                                  long nRadX, long nRadY,
-                                 USHORT nPoints = 0 );
+                                 sal_uInt16 nPoints = 0 );
                         Polygon( const Rectangle& rBound,
                                  const Point& rStart, const Point& rEnd,
                                  PolyStyle ePolyStyle = POLY_ARC );
                         Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                                  const Point& rBezPt2, const Point& rCtrlPt2,
-                                 USHORT nPoints = 0 );
+                                 sal_uInt16 nPoints = 0 );
 
                         Polygon( const Polygon& rPoly );
                         ~Polygon();
 
-    void                SetPoint( const Point& rPt, USHORT nPos );
-    const Point&        GetPoint( USHORT nPos ) const;
+    void                SetPoint( const Point& rPt, sal_uInt16 nPos );
+    const Point&        GetPoint( sal_uInt16 nPos ) const;
 
-    void                SetFlags( USHORT nPos, PolyFlags eFlags );
-    PolyFlags           GetFlags( USHORT nPos ) const;
+    void                SetFlags( sal_uInt16 nPos, PolyFlags eFlags );
+    PolyFlags           GetFlags( sal_uInt16 nPos ) const;
     sal_Bool            HasFlags() const;
 
-    BOOL                IsControl( USHORT nPos ) const;
-    BOOL                IsSmooth( USHORT nPos ) const;
-    BOOL                IsRect() const;
+    sal_Bool                IsControl( sal_uInt16 nPos ) const;
+    sal_Bool                IsSmooth( sal_uInt16 nPos ) const;
+    sal_Bool                IsRect() const;
 
-    void                SetSize( USHORT nNewSize );
-    USHORT              GetSize() const;
+    void                SetSize( sal_uInt16 nNewSize );
+    sal_uInt16              GetSize() const;
 
     void                Clear();
 
     Rectangle           GetBoundRect() const;
     double              GetArea() const;
     double              GetSignedArea() const;
-    BOOL                IsInside( const Point& rPt ) const;
-    BOOL                IsRightOrientated() const;
-    double              CalcDistance( USHORT nPt1, USHORT nPt2 );
-    void                Clip( const Rectangle& rRect, BOOL bPolygon = TRUE );
-    void                Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
+    sal_Bool                IsInside( const Point& rPt ) const;
+    sal_Bool                IsRightOrientated() const;
+    double              CalcDistance( sal_uInt16 nPt1, sal_uInt16 nPt2 );
+    void                Clip( const Rectangle& rRect, sal_Bool bPolygon = sal_True );
+    void                Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
     /** Adaptive subdivision of polygons with curves
 
@@ -208,21 +208,21 @@ public:
     void                Translate( const Point& rTrans );
     void                Scale( double fScaleX, double fScaleY );
     void                Rotate( const Point& rCenter, double fSin, double fCos );
-    void                Rotate( const Point& rCenter, USHORT nAngle10 );
+    void                Rotate( const Point& rCenter, sal_uInt16 nAngle10 );
     void                SlantX( long nYRef, double fSin, double fCos );
     void                SlantY( long nXRef, double fSin, double fCos );
     void                Distort( const Rectangle& rRefRect, const Polygon& rDistortedRect );
 
-    void                Insert( USHORT nPos, const Point& rPt, PolyFlags eFlags = POLY_NORMAL );
-    void                Insert( USHORT nPos, const Polygon& rPoly );
-    void                Remove( USHORT nPos, USHORT nCount );
+    void                Insert( sal_uInt16 nPos, const Point& rPt, PolyFlags eFlags = POLY_NORMAL );
+    void                Insert( sal_uInt16 nPos, const Polygon& rPoly );
+    void                Remove( sal_uInt16 nPos, sal_uInt16 nCount );
 
-    const Point&        operator[]( USHORT nPos ) const { return GetPoint( nPos ); }
-    Point&              operator[]( USHORT nPos );
+    const Point&        operator[]( sal_uInt16 nPos ) const { return GetPoint( nPos ); }
+    Point&              operator[]( sal_uInt16 nPos );
 
     Polygon&            operator=( const Polygon& rPoly );
-    BOOL                operator==( const Polygon& rPoly ) const;
-    BOOL                operator!=( const Polygon& rPoly ) const
+    sal_Bool                operator==( const Polygon& rPoly ) const;
+    sal_Bool                operator!=( const Polygon& rPoly ) const
                             { return !(Polygon::operator==( rPoly )); }
     sal_Bool            IsEqual( const Polygon& rPoly ) const;
 
@@ -235,7 +235,7 @@ public:
     void                Write( SvStream& rOStream ) const;
 
     const Point*        GetConstPointAry() const;
-    const BYTE*         GetConstFlagAry() const;
+    const sal_uInt8*         GetConstFlagAry() const;
 
     // convert to ::basegfx::B2DPolygon and return
     ::basegfx::B2DPolygon getB2DPolygon() const;
@@ -256,33 +256,33 @@ private:
     ImplPolyPolygon*    mpImplPolyPolygon;
 
 //#if 0 // _SOLAR__PRIVATE
-    TOOLS_DLLPRIVATE void  ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, ULONG nOperation ) const;
+    TOOLS_DLLPRIVATE void  ImplDoOperation( const PolyPolygon& rPolyPoly, PolyPolygon& rResult, sal_uIntPtr nOperation ) const;
     TOOLS_DLLPRIVATE void *ImplCreateArtVpath() const;
     TOOLS_DLLPRIVATE void  ImplSetFromArtVpath( void *pVpath );
 //#endif // __PRIVATE
 
 public:
 
-                        PolyPolygon( USHORT nInitSize = 16, USHORT nResize = 16 );
+                        PolyPolygon( sal_uInt16 nInitSize = 16, sal_uInt16 nResize = 16 );
                         PolyPolygon( const Polygon& rPoly );
-                        PolyPolygon( USHORT nPoly, const USHORT* pPointCountAry,
+                        PolyPolygon( sal_uInt16 nPoly, const sal_uInt16* pPointCountAry,
                                      const Point* pPtAry );
                         PolyPolygon( const PolyPolygon& rPolyPoly );
                         ~PolyPolygon();
 
-    void                Insert( const Polygon& rPoly, USHORT nPos = POLYPOLY_APPEND );
-    void                Remove( USHORT nPos );
-    void                Replace( const Polygon& rPoly, USHORT nPos );
-    const Polygon&      GetObject( USHORT nPos ) const;
+    void                Insert( const Polygon& rPoly, sal_uInt16 nPos = POLYPOLY_APPEND );
+    void                Remove( sal_uInt16 nPos );
+    void                Replace( const Polygon& rPoly, sal_uInt16 nPos );
+    const Polygon&      GetObject( sal_uInt16 nPos ) const;
 
-    BOOL                IsRect() const;
+    sal_Bool                IsRect() const;
 
     void                Clear();
 
-    USHORT              Count() const;
+    sal_uInt16              Count() const;
     Rectangle           GetBoundRect() const;
     void                Clip( const Rectangle& rRect );
-    void                Optimize( ULONG nOptimizeFlags, const PolyOptimizeData* pData = NULL );
+    void                Optimize( sal_uIntPtr nOptimizeFlags, const PolyOptimizeData* pData = NULL );
 
     /** Adaptive subdivision of polygons with curves
 
@@ -313,17 +313,17 @@ public:
     void                Translate( const Point& rTrans );
     void                Scale( double fScaleX, double fScaleY );
     void                Rotate( const Point& rCenter, double fSin, double fCos );
-    void                Rotate( const Point& rCenter, USHORT nAngle10 );
+    void                Rotate( const Point& rCenter, sal_uInt16 nAngle10 );
     void                SlantX( long nYRef, double fSin, double fCos );
     void                SlantY( long nXRef, double fSin, double fCos );
     void                Distort( const Rectangle& rRefRect, const Polygon& rDistortedRect );
 
-    const Polygon&      operator[]( USHORT nPos ) const { return GetObject( nPos ); }
-    Polygon&            operator[]( USHORT nPos );
+    const Polygon&      operator[]( sal_uInt16 nPos ) const { return GetObject( nPos ); }
+    Polygon&            operator[]( sal_uInt16 nPos );
 
     PolyPolygon&        operator=( const PolyPolygon& rPolyPoly );
-    BOOL                operator==( const PolyPolygon& rPolyPoly ) const;
-    BOOL                operator!=( const PolyPolygon& rPolyPoly ) const
+    sal_Bool                operator==( const PolyPolygon& rPolyPoly ) const;
+    sal_Bool                operator!=( const PolyPolygon& rPolyPoly ) const
                             { return !(PolyPolygon::operator==( rPolyPoly )); }
 
     sal_Bool            IsEqual( const PolyPolygon& rPolyPoly ) const;

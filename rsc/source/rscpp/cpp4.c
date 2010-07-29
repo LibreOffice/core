@@ -91,16 +91,16 @@ void dodefine()
 {
         register int            c;
         register DEFBUF         *dp;            /* -> new definition    */
-        int                     isredefine;     /* TRUE if redefined    */
+        int                     isredefine;     /* sal_True if redefined    */
         char                    *old = 0;       /* Remember redefined   */
 
         if (type[(c = skipws())] != LET)
             goto bad_define;
-        isredefine = FALSE;                     /* Set if redefining    */
+        isredefine = sal_False;                     /* Set if redefining    */
         if ((dp = lookid(c)) == NULL)           /* If not known now     */
-            dp = defendel(token, FALSE);        /* Save the name        */
+            dp = defendel(token, sal_False);        /* Save the name        */
         else {                                  /* It's known:          */
-            isredefine = TRUE;                  /* Remember this fact   */
+            isredefine = sal_True;                  /* Remember this fact   */
             old = dp->repl;                     /* Remember replacement */
             dp->repl = NULL;                    /* No replacement now   */
         }
@@ -132,7 +132,7 @@ void dodefine()
         if (type[c] == SPA)                     /* At whitespace?       */
             c = skipws();                       /* Not any more.        */
         workp = work;                           /* Replacement put here */
-        inmacro = TRUE;                         /* Keep \<newline> now  */
+        inmacro = sal_True;                         /* Keep \<newline> now  */
         while (c != EOF_CHAR && c != '\n') {    /* Compile macro body   */
 #if OK_CONCAT
 #if COMMENT_INVISIBLE
@@ -184,7 +184,7 @@ void dodefine()
             case BSH:                           /* Backslash            */
                 save('\\');
                 if ((c = get()) == '\n')
-                    wrongline = TRUE;
+                    wrongline = sal_True;
                 save(c);
                 break;
 
@@ -204,7 +204,7 @@ void dodefine()
             }
             c = get();
         }
-        inmacro = FALSE;                        /* Stop newline hack    */
+        inmacro = sal_False;                        /* Stop newline hack    */
         unget();                                /* For control check    */
         if (workp > work && workp[-1] == ' ')   /* Drop trailing blank  */
             workp--;
@@ -234,7 +234,7 @@ void dodefine()
 
 bad_define:
         cerror("#define syntax error", NULLST);
-        inmacro = FALSE;                        /* Stop <newline> hack  */
+        inmacro = sal_False;                        /* Stop <newline> hack  */
 }
 
 void checkparm(int c, DEFBUF* dp)
@@ -285,7 +285,7 @@ register DEFBUF *dp;
          * ANSI Standard C language.
          */
         save(delim);
-        instring = TRUE;
+        instring = sal_True;
         while ((c = get()) != delim
              && c != '\n'
              && c != EOF_CHAR) {
@@ -297,7 +297,7 @@ register DEFBUF *dp;
                     save(get());
             }
         }
-        instring = FALSE;
+        instring = sal_False;
         if (c != delim)
             cerror("Unterminated string in macro body", NULLST);
         save(c);
@@ -349,7 +349,7 @@ void doundef()
             cerror("Illegal #undef argument", NULLST);
         else {
             scanid(c);                          /* Get name to token[]  */
-            if (defendel(token, TRUE) == NULL) {
+            if (defendel(token, sal_True) == NULL) {
 #ifdef STRICT_UNDEF
                 cwarn("Symbol \"%s\" not defined in #undef", token);
 #endif
@@ -459,7 +459,7 @@ void expand(DEFBUF* tokenp)
             if (tokenp->nargs < 0)
                 cfatal("Bug: Illegal __ macro \"%s\"", tokenp->name);
             while ((c = skipws()) == '\n')      /* Look for (, skipping */
-                wrongline = TRUE;               /* spaces and newlines  */
+                wrongline = sal_True;               /* spaces and newlines  */
             if (c != '(') {
                 /*
                  * If the programmer writes
@@ -491,7 +491,7 @@ void expand(DEFBUF* tokenp)
 FILE_LOCAL int
 expcollect()
 /*
- * Collect the actual parameters for this macro.  TRUE if ok.
+ * Collect the actual parameters for this macro.  sal_True if ok.
  */
 {
         register int    c;
@@ -499,7 +499,7 @@ expcollect()
         for (;;) {
             paren = 0;                          /* Collect next arg.    */
             while ((c = skipws()) == '\n')      /* Skip over whitespace */
-                wrongline = TRUE;               /* and newlines.        */
+                wrongline = sal_True;               /* and newlines.        */
             if (c == ')') {                     /* At end of all args?  */
                 /*
                  * Note that there is a guard byte in parm[]
@@ -514,7 +514,7 @@ expcollect()
             for (;; c = cget()) {               /* Collect arg's bytes  */
                 if (c == EOF_CHAR) {
                     cerror("end of file within macro argument", NULLST);
-                    return (FALSE);             /* Sorry.               */
+                    return (sal_False);             /* Sorry.               */
                 }
                 else if (c == '\\') {           /* Quote next character */
                     charput(c);                 /* Save the \ for later */
@@ -537,7 +537,7 @@ expcollect()
                 else if (c == ',' && paren == 0) /* Comma delimits args */
                     break;
                 else if (c == '\n')             /* Newline inside arg?  */
-                    wrongline = TRUE;           /* We'll need a #line   */
+                    wrongline = sal_True;           /* We'll need a #line   */
                 charput(c);                     /* Store this one       */
             }                                   /* Collect an argument  */
             charput(EOS);                       /* Terminate argument   */
@@ -546,7 +546,7 @@ expcollect()
             fprintf( pCppOut, "parm[%d] = \"%s\"\n", nargs, parlist[nargs - 1]);
 #endif
         }                                       /* Collect all args.    */
-        return (TRUE);                          /* Normal return        */
+        return (sal_True);                          /* Normal return        */
 }
 
 FILE_LOCAL

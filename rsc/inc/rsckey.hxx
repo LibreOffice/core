@@ -39,13 +39,13 @@ typedef struct {
 } KEY_STRUCT;
 
 class RscNameTable {
-    BOOL            bSort;      //soll bei jedem einfuegen sortiert werden?
+    sal_Bool            bSort;      //soll bei jedem einfuegen sortiert werden?
     sal_uInt32          nEntries;   //Anzahl der Eintr�ge
     KEY_STRUCT *    pTable;
 public:
             RscNameTable();
             ~RscNameTable();
-    void    SetSort( BOOL bSorted = TRUE );
+    void    SetSort( sal_Bool bSorted = sal_True );
     Atom  Put( Atom nName, sal_uInt32 nTyp, long nValue );
     Atom  Put( Atom nName, sal_uInt32 nTyp );
     Atom  Put( const char * pName, sal_uInt32 nTyp, long nValue );
@@ -53,8 +53,8 @@ public:
     Atom  Put( Atom nName, sal_uInt32 nTyp, RscTop * pClass );
     Atom  Put( const char * pName, sal_uInt32 nTyp, RscTop * pClass );
 
-            // TRUE, wurde gefunden
-    BOOL    Get( Atom nName, KEY_STRUCT * pEle );
+            // sal_True, wurde gefunden
+    sal_Bool    Get( Atom nName, KEY_STRUCT * pEle );
 };
 
 

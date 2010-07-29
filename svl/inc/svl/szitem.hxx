@@ -46,8 +46,8 @@ private:
 public:
                              TYPEINFO();
                              SfxSizeItem();
-                             SfxSizeItem( USHORT nWhich, const Size& rVal );
-                             SfxSizeItem( USHORT nWhich, SvStream & );
+                             SfxSizeItem( sal_uInt16 nWhich, const Size& rVal );
+                             SfxSizeItem( sal_uInt16 nWhich, SvStream & );
                              SfxSizeItem( const SfxSizeItem& );
                              ~SfxSizeItem() { DBG_DTOR(SfxSizeItem, 0); }
 
@@ -58,14 +58,14 @@ public:
                                     const IntlWrapper * = 0 ) const;
 
     virtual int              operator==( const SfxPoolItem& ) const;
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal,
-                                          BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal,
-                                          BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal,
+                                          sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal,
+                                          sal_uInt8 nMemberId = 0 );
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT nItemVersion) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
 
     const Size&             GetValue() const { return aVal; }
     void                    SetValue( const Size& rNewVal ) {

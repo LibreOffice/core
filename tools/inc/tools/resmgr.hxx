@@ -138,7 +138,7 @@ private:
     // the next two methods are needed to prevent the string hook called
     // with the res mgr mutex locked
     // like GetString, but doesn't call the string hook
-    TOOLS_DLLPRIVATE static sal_uInt32  GetStringWithoutHook( UniString& rStr, const BYTE* pStr );
+    TOOLS_DLLPRIVATE static sal_uInt32  GetStringWithoutHook( UniString& rStr, const sal_uInt8* pStr );
     // like ReadString but doesn't call the string hook
     TOOLS_DLLPRIVATE UniString          ReadStringWithoutHook();
 
@@ -153,7 +153,7 @@ public:
     ~ResMgr();
 
                         // Sprachabhaengige Ressource Library
-    static const sal_Char*  GetLang( LanguageType& eLanguage, USHORT nPrio = 0 ); //depricated! see "tools/source/rc/resmgr.cxx"
+    static const sal_Char*  GetLang( LanguageType& eLanguage, sal_uInt16 nPrio = 0 ); //depricated! see "tools/source/rc/resmgr.cxx"
     static ResMgr*      SearchCreateResMgr( const sal_Char* pPrefixName,
                                             com::sun::star::lang::Locale& rLocale );
      static ResMgr*     CreateResMgr( const sal_Char* pPrefixName,
@@ -165,11 +165,11 @@ public:
     void                TestStack( const Resource * );
 
     // ist Resource verfuegbar
-    BOOL                IsAvailable( const ResId& rId,
+    sal_Bool                IsAvailable( const ResId& rId,
                                      const Resource* = NULL) const;
 
     // Resource suchen und laden
-    BOOL                GetResource( const ResId& rId, const Resource * = NULL );
+    sal_Bool                GetResource( const ResId& rId, const Resource * = NULL );
     static void *       GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr );
     // Kontext freigeben
     void                PopContext( const Resource* = NULL );
@@ -182,19 +182,19 @@ public:
                             { return( pHT->GetGlobOff() ); }
 
     // Liefert einen String aus der Resource
-    static sal_uInt32   GetString( UniString& rStr, const BYTE* pStr );
+    static sal_uInt32   GetString( UniString& rStr, const sal_uInt8* pStr );
 
     // Groesse eines Strings in der Resource
     static sal_uInt32   GetStringSize( sal_uInt32 nLen )
                             { nLen++; return (nLen + nLen%2); }
-    static sal_uInt32   GetStringSize( const BYTE* pStr );
+    static sal_uInt32   GetStringSize( const sal_uInt8* pStr );
 
     // return a int64
     static sal_uInt64   GetUInt64( void* pDatum );
     // Gibt einen long zurueck
-    static INT32        GetLong( void * pLong );
+    static sal_Int32        GetLong( void * pLong );
     // return a short
-    static INT16        GetShort( void * pShort );
+    static sal_Int16        GetShort( void * pShort );
 
     // Gibt einen Zeiger auf die Resource zurueck
     void *              GetClass();
@@ -206,12 +206,12 @@ public:
 
     const rtl::OUString&GetFileName() const;
 
-    INT16               ReadShort();
-    INT32               ReadLong();
+    sal_Int16               ReadShort();
+    sal_Int32               ReadLong();
     UniString           ReadString();
 
      // generate auto help id for current resource stack
-    ULONG               GetAutoHelpId();
+    sal_uIntPtr               GetAutoHelpId();
 
     static void         SetReadStringHook( ResHookProc pProc );
     static ResHookProc  GetReadStringHook();

@@ -65,16 +65,16 @@ Time::Time( const ResId& rResId )
 
     ResMgr::GetResourceSkipHeader( rResId, &pResMgr );
 
-    ULONG nObjMask = (USHORT)pResMgr->ReadLong();
+    sal_uIntPtr nObjMask = (sal_uInt16)pResMgr->ReadLong();
 
     if ( 0x01 & nObjMask )
-        SetHour( (USHORT)pResMgr->ReadShort() );
+        SetHour( (sal_uInt16)pResMgr->ReadShort() );
     if ( 0x02 & nObjMask )
-        SetMin( (USHORT)pResMgr->ReadShort() );
+        SetMin( (sal_uInt16)pResMgr->ReadShort() );
     if ( 0x04 & nObjMask )
-        SetSec( (USHORT)pResMgr->ReadShort() );
+        SetSec( (sal_uInt16)pResMgr->ReadShort() );
     if ( 0x08 & nObjMask )
-        Set100Sec( (USHORT)pResMgr->ReadShort() );
+        Set100Sec( (sal_uInt16)pResMgr->ReadShort() );
 }
 
 // =======================================================================
@@ -86,12 +86,12 @@ Date::Date( const ResId& rResId ) : nDate(0)
 
     ResMgr::GetResourceSkipHeader( rResId, &pResMgr );
 
-    ULONG nObjMask = (USHORT)pResMgr->ReadLong();
+    sal_uIntPtr nObjMask = (sal_uInt16)pResMgr->ReadLong();
 
     if ( 0x01 & nObjMask )
-        SetYear( (USHORT)pResMgr->ReadShort() );
+        SetYear( (sal_uInt16)pResMgr->ReadShort() );
     if ( 0x02 & nObjMask )
-        SetMonth( (USHORT)pResMgr->ReadShort() );
+        SetMonth( (sal_uInt16)pResMgr->ReadShort() );
     if ( 0x04 & nObjMask )
-        SetDay( (USHORT)pResMgr->ReadShort() );
+        SetDay( (sal_uInt16)pResMgr->ReadShort() );
 }

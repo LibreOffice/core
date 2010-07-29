@@ -123,7 +123,7 @@ sal_Bool InternalStreamLock::LockFile( sal_Size nStart, sal_Size nEnd, SvFileStr
 
     InternalStreamLock* pLock = NULL;
     InternalStreamLockList &rLockList = LockList::get();
-    for( ULONG i = 0; i < rLockList.Count(); ++i )
+    for( sal_uIntPtr i = 0; i < rLockList.Count(); ++i )
     {
         pLock = rLockList.GetObject( i );
         if( aStat.st_ino == pLock->m_aStat.st_ino )
@@ -167,7 +167,7 @@ void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStrea
     InternalStreamLockList &rLockList = LockList::get();
     if( nStart == 0 && nEnd == 0 )
     {
-        for( ULONG i = 0; i < rLockList.Count(); ++i )
+        for( sal_uIntPtr i = 0; i < rLockList.Count(); ++i )
         {
             if( ( pLock = rLockList.GetObject( i ) )->m_pStream == pStream )
             {
@@ -177,7 +177,7 @@ void InternalStreamLock::UnlockFile( sal_Size nStart, sal_Size nEnd, SvFileStrea
         }
         return;
     }
-    for( ULONG i = 0; i < rLockList.Count(); ++i )
+    for( sal_uIntPtr i = 0; i < rLockList.Count(); ++i )
     {
         if( ( pLock = rLockList.GetObject( i ) )->m_pStream == pStream &&
             nStart == pLock->m_nStartPos && nEnd == pLock->m_nEndPos )

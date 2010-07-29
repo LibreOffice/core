@@ -47,19 +47,19 @@ class SVL_DLLPUBLIC SvInputStream: public SvStream
     com::sun::star::uno::Reference< com::sun::star::io::XSeekable >
         m_xSeekable;
     SvDataPipe_Impl * m_pPipe;
-    ULONG m_nSeekedFrom;
+    sal_uIntPtr m_nSeekedFrom;
 
     SVL_DLLPRIVATE bool open();
 
-    SVL_DLLPRIVATE virtual ULONG GetData(void * pData, ULONG nSize);
+    SVL_DLLPRIVATE virtual sal_uIntPtr GetData(void * pData, sal_uIntPtr nSize);
 
-    SVL_DLLPRIVATE virtual ULONG PutData(void const *, ULONG);
+    SVL_DLLPRIVATE virtual sal_uIntPtr PutData(void const *, sal_uIntPtr);
 
-    SVL_DLLPRIVATE virtual ULONG SeekPos(ULONG nPos);
+    SVL_DLLPRIVATE virtual sal_uIntPtr SeekPos(sal_uIntPtr nPos);
 
     SVL_DLLPRIVATE virtual void FlushData();
 
-    SVL_DLLPRIVATE virtual void SetSize(ULONG);
+    SVL_DLLPRIVATE virtual void SetSize(sal_uIntPtr);
 
 public:
     SvInputStream(
@@ -69,11 +69,11 @@ public:
 
     virtual ~SvInputStream();
 
-    virtual USHORT IsA() const;
+    virtual sal_uInt16 IsA() const;
 
-    virtual void AddMark(ULONG nPos);
+    virtual void AddMark(sal_uIntPtr nPos);
 
-    virtual void RemoveMark(ULONG nPos);
+    virtual void RemoveMark(sal_uIntPtr nPos);
 };
 
 #endif // SVTOOLS_INSTRM_HXX

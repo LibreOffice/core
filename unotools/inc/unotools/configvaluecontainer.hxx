@@ -187,14 +187,14 @@ namespace utl
             <p>The current values in memory (your exchange locations registered using the registerXXX methods) is
             forwarded to their respective configuration nodes.</p>
 
-            <p>Note that calling <method>write</method>(<TRUE/) is the same as calling <method>commit</method>(<TRUE/>).</p>
+            <p>Note that calling <method>write</method>(<sal_True/) is the same as calling <method>commit</method>(<sal_True/>).</p>
 
             @precond
                 The access must have been created for update access
 
             @param _bCommit
-                If set to <TRUE/>, an automatic commit is done after the values have been synchronized.<br/>
-                If set to <FALSE/>, you must explicitly call <method>commit</method> to make your changes persistent.
+                If set to <sal_True/>, an automatic commit is done after the values have been synchronized.<br/>
+                If set to <sal_False/>, you must explicitly call <method>commit</method> to make your changes persistent.
 
             @see read
             @see commit
@@ -203,15 +203,15 @@ namespace utl
 
         /** commits any changes done
 
-            <p>Note that calling <method>write</method>(<TRUE/) is the same as calling <method>commit</method>(<TRUE/>).</p>
+            <p>Note that calling <method>write</method>(<sal_True/) is the same as calling <method>commit</method>(<sal_True/>).</p>
 
             @precond
                 The access must have been created for update access
 
             @param _bWrite
-                If <TRUE/>, the current values in the exchange locations are written to the configuration nodes
+                If <sal_True/>, the current values in the exchange locations are written to the configuration nodes
                 before the changes are committed.<br/>
-                If <FALSE/>, only the current values in the config nodes (as present since the last call to
+                If <sal_False/>, only the current values in the config nodes (as present since the last call to
                 <method>write</method>) are committed.
         */
         void    commit( sal_Bool _bWrite = sal_True );

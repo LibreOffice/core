@@ -41,8 +41,8 @@
 |*
 *************************************************************************/
 
-UniqueIndex::UniqueIndex( ULONG _nStartIndex,
-                          ULONG _nInitSize, ULONG _nReSize ) :
+UniqueIndex::UniqueIndex( sal_uIntPtr _nStartIndex,
+                          sal_uIntPtr _nInitSize, sal_uIntPtr _nReSize ) :
                  Container( _nInitSize )
 {
     nReSize         = _nReSize;
@@ -80,7 +80,7 @@ UniqueIndex::UniqueIndex( const UniqueIndex& rIdx ) :
 |*
 *************************************************************************/
 
-ULONG UniqueIndex::Insert( void* p )
+sal_uIntPtr UniqueIndex::Insert( void* p )
 {
     // NULL-Pointer ist nicht erlaubt
     if ( !p )
@@ -116,13 +116,13 @@ ULONG UniqueIndex::Insert( void* p )
 |*
 *************************************************************************/
 
-ULONG UniqueIndex::Insert( ULONG nIndex, void* p )
+sal_uIntPtr UniqueIndex::Insert( sal_uIntPtr nIndex, void* p )
 {
     // NULL-Pointer ist nicht erlaubt
     if ( !p )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
 
-    ULONG nContIndex = nIndex - nStartIndex;
+    sal_uIntPtr nContIndex = nIndex - nStartIndex;
     // Ist Array voll, dann expandieren
     if ( nContIndex >= Container::GetSize() )
         SetSize( nContIndex + nReSize );
@@ -145,7 +145,7 @@ ULONG UniqueIndex::Insert( ULONG nIndex, void* p )
 |*
 *************************************************************************/
 
-void* UniqueIndex::Remove( ULONG nIndex )
+void* UniqueIndex::Remove( sal_uIntPtr nIndex )
 {
     // Ist Index zulaessig
     if ( (nIndex >= nStartIndex) &&
@@ -172,7 +172,7 @@ void* UniqueIndex::Remove( ULONG nIndex )
 |*
 *************************************************************************/
 
-void* UniqueIndex::Replace( ULONG nIndex, void* p )
+void* UniqueIndex::Replace( sal_uIntPtr nIndex, void* p )
 {
     // NULL-Pointer ist nicht erlaubt
     if ( !p )
@@ -198,7 +198,7 @@ void* UniqueIndex::Replace( ULONG nIndex, void* p )
 |*
 *************************************************************************/
 
-void* UniqueIndex::Get( ULONG nIndex ) const
+void* UniqueIndex::Get( sal_uIntPtr nIndex ) const
 {
     // Ist Index zulaessig
     if ( (nIndex >= nStartIndex) &&
@@ -218,9 +218,9 @@ void* UniqueIndex::Get( ULONG nIndex ) const
 |*
 *************************************************************************/
 
-ULONG UniqueIndex::GetCurIndex() const
+sal_uIntPtr UniqueIndex::GetCurIndex() const
 {
-    ULONG nPos = Container::GetCurPos();
+    sal_uIntPtr nPos = Container::GetCurPos();
 
     // Ist der Current-Index nicht belegt, dann gibt es keinen Current-Index
     if ( !Container::ImpGetObject( nPos ) )
@@ -239,13 +239,13 @@ ULONG UniqueIndex::GetCurIndex() const
 |*
 *************************************************************************/
 
-ULONG UniqueIndex::GetIndex( const void* p ) const
+sal_uIntPtr UniqueIndex::GetIndex( const void* p ) const
 {
     // Wird ein NULL-Pointer uebergeben, dann wurde Pointer nicht gefunden
     if ( !p )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
 
-    ULONG nIndex = Container::GetPos( p );
+    sal_uIntPtr nIndex = Container::GetPos( p );
 
     if ( nIndex != CONTAINER_ENTRY_NOTFOUND )
         return nIndex+nStartIndex;
@@ -263,7 +263,7 @@ ULONG UniqueIndex::GetIndex( const void* p ) const
 |*
 *************************************************************************/
 
-BOOL UniqueIndex::IsIndexValid( ULONG nIndex ) const
+sal_Bool UniqueIndex::IsIndexValid( sal_uIntPtr nIndex ) const
 {
     // Ist Index zulaessig
     if ( (nIndex >= nStartIndex) &&
@@ -271,12 +271,12 @@ BOOL UniqueIndex::IsIndexValid( ULONG nIndex ) const
     {
         // Index ist nur zulaessig, wenn Eintrag auch belegt ist
         if ( Container::ImpGetObject( nIndex-nStartIndex ) )
-            return TRUE;
+            return sal_True;
         else
-            return FALSE;
+            return sal_False;
     }
     else
-        return FALSE;
+        return sal_False;
 }
 
 /*************************************************************************
@@ -289,7 +289,7 @@ BOOL UniqueIndex::IsIndexValid( ULONG nIndex ) const
 |*
 *************************************************************************/
 
-void* UniqueIndex::Seek( ULONG nIndex )
+void* UniqueIndex::Seek( sal_uIntPtr nIndex )
 {
     // Index-Eintrag als aktuellen setzten, wenn er gueltig ist
     if ( IsIndexValid( nIndex ) )
@@ -314,7 +314,7 @@ void* UniqueIndex::Seek( void* p )
     if ( !p )
         return NULL;
 
-    ULONG nIndex = GetIndex( p );
+    sal_uIntPtr nIndex = GetIndex( p );
 
     // Ist Index vorhanden, dann als aktuellen Eintrag setzen
     if ( nIndex != UNIQUEINDEX_ENTRY_NOTFOUND )
@@ -434,15 +434,15 @@ UniqueIndex& UniqueIndex::operator =( const UniqueIndex& rIdx )
 |*
 *************************************************************************/
 
-BOOL UniqueIndex::operator ==( const UniqueIndex& rIdx ) const
+sal_Bool UniqueIndex::operator ==( const UniqueIndex& rIdx ) const
 {
     // Neue Werte zuweisen
     if ( (nStartIndex == rIdx.nStartIndex) &&
          (nCount      == rIdx.nCount)      &&
          (Container::operator ==( rIdx )) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 /*************************************************************************
 |*
@@ -458,7 +458,7 @@ UniqueIdContainer::UniqueIdContainer( const UniqueIdContainer& rObj )
     : UniqueIndex( rObj )
     , nCollectCount( rObj.nCollectCount )
 {
-    ULONG nCur = GetCurIndex();
+    sal_uIntPtr nCur = GetCurIndex();
 
     ImpUniqueId * pEle = (ImpUniqueId *)First();
     while( pEle )
@@ -484,7 +484,7 @@ UniqueIdContainer& UniqueIdContainer::operator = ( const UniqueIdContainer & rOb
     UniqueIndex::operator = ( rObj );
     nCollectCount = rObj.nCollectCount;
 
-    ULONG nCur = GetCurIndex();
+    sal_uIntPtr nCur = GetCurIndex();
 
     ImpUniqueId * pEle = (ImpUniqueId *)First();
     while( pEle )
@@ -506,12 +506,12 @@ UniqueIdContainer& UniqueIdContainer::operator = ( const UniqueIdContainer & rOb
 |*
 *************************************************************************/
 
-void UniqueIdContainer::Clear( BOOL bAll )
+void UniqueIdContainer::Clear( sal_Bool bAll )
 {
-    USHORT nFree = bAll ? 0xFFFF : 1;
+    sal_uInt16 nFree = bAll ? 0xFFFF : 1;
 
     ImpUniqueId* pId = (ImpUniqueId*)Last();
-    BOOL bLast = TRUE;
+    sal_Bool bLast = sal_True;
     while ( pId )
     {
         if ( pId->nRefCount <= nFree )
@@ -525,7 +525,7 @@ void UniqueIdContainer::Clear( BOOL bAll )
         else
         {
             pId = (ImpUniqueId *)Prev();
-            bLast = FALSE;
+            bLast = sal_False;
         }
     }
 }
@@ -544,7 +544,7 @@ UniqueItemId UniqueIdContainer::CreateId()
 {
     if( nCollectCount > 50 )
     { // aufraeumen
-        Clear( FALSE );
+        Clear( sal_False );
         nCollectCount = 0;
     }
     nCollectCount++;
@@ -565,7 +565,7 @@ UniqueItemId UniqueIdContainer::CreateId()
 |*
 *************************************************************************/
 
-UniqueItemId UniqueIdContainer::CreateFreeId( ULONG nId )
+UniqueItemId UniqueIdContainer::CreateFreeId( sal_uIntPtr nId )
 {
     // Einfach erzeugen, fuer abgeleitete Klasse
     ImpUniqueId * pId = new ImpUniqueId;
@@ -584,7 +584,7 @@ UniqueItemId UniqueIdContainer::CreateFreeId( ULONG nId )
 |*
 *************************************************************************/
 
-UniqueItemId UniqueIdContainer::CreateIdProt( ULONG nId )
+UniqueItemId UniqueIdContainer::CreateIdProt( sal_uIntPtr nId )
 {
     if ( IsIndexValid( nId ) )
         return UniqueItemId( (ImpUniqueId *)Get( nId ) );

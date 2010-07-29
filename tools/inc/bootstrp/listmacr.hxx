@@ -36,9 +36,9 @@ public:                                                         \
     void ClearAndDelete()                                       \
     {                                                           \
         while ( Count()) {                                      \
-            PointerType pTmp = GetObject(( ULONG ) 0 );         \
+            PointerType pTmp = GetObject(( sal_uIntPtr ) 0 );       \
             delete pTmp;                                        \
-            Remove(( ULONG ) 0 );                               \
+            Remove(( sal_uIntPtr ) 0 );                             \
         }                                                       \
     }                                                           \
     ~ListType()                                                 \

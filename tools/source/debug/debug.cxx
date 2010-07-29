@@ -104,7 +104,7 @@ class PointerList
 private:
     PBlock*     pFirst;
     PBlock*     pLast;
-    ULONG       nCount;
+    sal_uIntPtr       nCount;
 
 public:
                 PointerList() { pFirst = NULL; pLast = NULL; nCount = 0; }
@@ -113,9 +113,9 @@ public:
     void        Add( const void* p );
     BOOL        Remove( const void* p );
 
-    const void* Get( ULONG nPos ) const;
+    const void* Get( sal_uIntPtr nPos ) const;
     BOOL        IsIn( const void* p ) const;
-    ULONG       Count() const { return nCount; }
+    sal_uIntPtr       Count() const { return nCount; }
 };
 
 // --- Datentypen ---
@@ -124,22 +124,22 @@ public:
 
 struct ProfType
 {
-    ULONG                   nCount;
-    ULONG                   nTime;
-    ULONG                   nMinTime;
-    ULONG                   nMaxTime;
-    ULONG                   nStart;
-    ULONG                   nContinueTime;
-    ULONG                   nContinueStart;
+    sal_uIntPtr                   nCount;
+    sal_uIntPtr                   nTime;
+    sal_uIntPtr                   nMinTime;
+    sal_uIntPtr                   nMaxTime;
+    sal_uIntPtr                   nStart;
+    sal_uIntPtr                   nContinueTime;
+    sal_uIntPtr                   nContinueStart;
     sal_Char                aName[DBG_MAXNAME+1];
 };
 
 struct XtorType
 {
-    ULONG                   nCtorCalls;
-    ULONG                   nDtorCalls;
-    ULONG                   nMaxCount;
-    ULONG                   nStatics;
+    sal_uIntPtr                   nCtorCalls;
+    sal_uIntPtr                   nDtorCalls;
+    sal_uIntPtr                   nMaxCount;
+    sal_uIntPtr                   nStatics;
     sal_Char                aName[DBG_MAXNAME+1];
     BOOL                    bTest;
     PointerList             aThisList;
@@ -309,18 +309,18 @@ static BOOL ImplCoreDump()
 
 // =======================================================================
 
-static ULONG ImplGetPerfTime()
+static sal_uIntPtr ImplGetPerfTime()
 {
 #if defined( WNT )
-    return (ULONG)GetTickCount();
+    return (sal_uIntPtr)GetTickCount();
 #elif defined( OS2 )
-    ULONG nClock;
+    sal_uIntPtr nClock;
     DosQuerySysInfo( QSV_MS_COUNT, QSV_MS_COUNT, &nClock, sizeof( nClock ) );
-    return (ULONG)nClock;
+    return (sal_uIntPtr)nClock;
 #else
-    static ULONG    nImplTicksPerSecond = 0;
+    static sal_uIntPtr    nImplTicksPerSecond = 0;
     static double   dImplTicksPerSecond;
-    ULONG           nTicks = (ULONG)clock();
+    sal_uIntPtr           nTicks = (sal_uIntPtr)clock();
 
     if ( !nImplTicksPerSecond )
     {
@@ -331,7 +331,7 @@ static ULONG ImplGetPerfTime()
     double fTicks = nTicks;
     fTicks *= 1000;
     fTicks /= dImplTicksPerSecond;
-    return (ULONG)fTicks;
+    return (sal_uIntPtr)fTicks;
 #endif
 }
 
@@ -411,12 +411,12 @@ namespace
         lcl_writeConfigString( _pFile, _pKeyName, _bValue ? "1" : "0" );
     }
 
-    void lcl_writeConfigFlag( FILETYPE _pFile, const sal_Char* _pKeyName, ULONG _nAllFlags, ULONG _nCheckFlag )
+    void lcl_writeConfigFlag( FILETYPE _pFile, const sal_Char* _pKeyName, sal_uIntPtr _nAllFlags, sal_uIntPtr _nCheckFlag )
     {
         lcl_writeConfigBoolean( _pFile, _pKeyName, ( _nAllFlags & _nCheckFlag ) != 0 );
     }
 
-    void lcl_writeConfigOutChannel( FILETYPE _pFile, const sal_Char* _pKeyName, ULONG _nValue )
+    void lcl_writeConfigOutChannel( FILETYPE _pFile, const sal_Char* _pKeyName, sal_uIntPtr _nValue )
     {
         const sal_Char* names[ DBG_OUT_COUNT ] =
         {
@@ -464,14 +464,14 @@ namespace
         _pValue[ ( _nValueLen > nValueLen ) ? nValueLen : _nValueLen - 1 ] = 0;
         return strlen( _pValue );
     }
-    void lcl_tryReadConfigBoolean( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, ULONG* _out_pnValue )
+    void lcl_tryReadConfigBoolean( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uIntPtr* _out_pnValue )
     {
         sal_Char aBuf[2];
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
         if ( nValueLen )
             *_out_pnValue = strcmp( aBuf, "1" ) == 0 ? TRUE : FALSE;
     }
-    void lcl_tryReadOutputChannel( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, ULONG* _out_pnValue )
+    void lcl_tryReadOutputChannel( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uIntPtr* _out_pnValue )
     {
         const sal_Char* names[ DBG_OUT_COUNT ] =
         {
@@ -481,7 +481,7 @@ namespace
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
         if ( nValueLen )
         {
-            for ( ULONG name = 0; name < sizeof( names ) / sizeof( names[0] ); ++name )
+            for ( sal_uIntPtr name = 0; name < sizeof( names ) / sizeof( names[0] ); ++name )
             {
                 if ( strcmp( aBuf, names[ name ] ) == 0 )
                 {
@@ -491,7 +491,7 @@ namespace
             }
         }
     }
-    void lcl_tryReadConfigFlag( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, ULONG* _out_pnAllFlags, ULONG _nCheckFlag )
+    void lcl_tryReadConfigFlag( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uIntPtr* _out_pnAllFlags, sal_uIntPtr _nCheckFlag )
     {
         sal_Char aBuf[2];
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
@@ -574,7 +574,7 @@ BOOL PointerList::Remove( const void* p )
         USHORT i = 0;
         while ( i < PBLOCKCOUNT )
         {
-            if ( ((ULONG)p) == ((ULONG)pBlock->aData[i]) )
+            if ( ((sal_uIntPtr)p) == ((sal_uIntPtr)pBlock->aData[i]) )
             {
                 pBlock->aData[i] = NULL;
                 pBlock->nCount--;
@@ -606,13 +606,13 @@ BOOL PointerList::Remove( const void* p )
 
 // -----------------------------------------------------------------------
 
-const void* PointerList::Get( ULONG nPos ) const
+const void* PointerList::Get( sal_uIntPtr nPos ) const
 {
     if ( nCount <= nPos )
         return NULL;
 
     PBlock* pBlock = pFirst;
-    ULONG   nStart = 0;
+    sal_uIntPtr   nStart = 0;
     while ( pBlock )
     {
         USHORT i = 0;
@@ -647,7 +647,7 @@ BOOL PointerList::IsIn( const void* p ) const
         USHORT i = 0;
         while ( i < PBLOCKCOUNT )
         {
-            if ( ((ULONG)p) == ((ULONG)pBlock->aData[i]) )
+            if ( ((sal_uIntPtr)p) == ((sal_uIntPtr)pBlock->aData[i]) )
                 return TRUE;
             i++;
         }
@@ -737,7 +737,7 @@ static DebugData* GetDebugData()
             ConfigSection eCurrentSection = eUnknown;
 
             // no sophisticated algorithm here, assume that the whole file fits into aBuf ...
-            ULONG nReallyRead = FileRead( aBuf, 1, sizeof( aBuf ) / sizeof( sal_Char ) - 1, pIniFile );
+            sal_uIntPtr nReallyRead = FileRead( aBuf, 1, sizeof( aBuf ) / sizeof( sal_Char ) - 1, pIniFile );
             aBuf[ nReallyRead ] = 0;
             const sal_Char* pLine = aBuf;
             while ( const sal_Char* pNextLine = strstr( pLine, FILE_LINEEND ) )
@@ -971,9 +971,9 @@ static void DebugInit()
 static void DebugDeInit()
 {
     DebugData*  pData = GetDebugData();
-    ULONG       i;
-    ULONG       nCount;
-    ULONG       nOldOut;
+    sal_uIntPtr       i;
+    sal_uIntPtr       nCount;
+    sal_uIntPtr       nOldOut;
 
     if( pData->bOslIsHooked )
     {
@@ -1045,9 +1045,9 @@ static void DebugDeInit()
 static void DebugGlobalDeInit()
 {
     DebugData*  pData = GetDebugData();
-    ULONG       i;
-    ULONG       nCount;
-    ULONG       nOldOut;
+    sal_uIntPtr       i;
+    sal_uIntPtr       nCount;
+    sal_uIntPtr       nOldOut;
 
     // Statistik-Ausgaben immer in File
     nOldOut = pData->aDbgData.nTraceOut;
@@ -1065,7 +1065,7 @@ static void DebugGlobalDeInit()
         for( i = 0, nCount = pData->pProfList->Count(); i < nCount; i++ )
         {
             ProfType* pProfData = (ProfType*)pData->pProfList->Get( i );
-            ULONG nAve = pProfData->nTime / pProfData->nCount;
+            sal_uIntPtr nAve = pProfData->nTime / pProfData->nCount;
             DbgOutf( "%-25s : %9lu : %6lu : %6lu : %6lu : %9lu :",
                      pProfData->aName, pProfData->nTime,
                      pProfData->nMinTime, pProfData->nMaxTime, nAve,
@@ -1115,8 +1115,8 @@ void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... )
 static void DebugXTorInfo( sal_Char* pBuf )
 {
     DebugData*  pData = GetDebugData();
-    ULONG       i;
-    ULONG       nCount;
+    sal_uIntPtr       i;
+    sal_uIntPtr       nCount;
 
     // Xtor-Liste ausgeben
     if ( pData->pXtorList && pData->pXtorList->Count() &&
@@ -1283,7 +1283,7 @@ void* DbgFunc( USHORT nAction, void* pParam )
                 break;
 
             case DBG_FUNC_ALLERROROUT:
-                return (void*)(ULONG)TRUE;
+                return (void*)(sal_uIntPtr)TRUE;
 
             case DBG_FUNC_SETTESTSOLARMUTEX:
                 pDebugData->pDbgTestSolarMutex = (DbgTestSolarMutexProc)(long)pParam;
@@ -1340,7 +1340,7 @@ void DbgProf( USHORT nAction, DbgDataType* pDbgData )
 
     sal_Char    aBuf[DBG_BUF_MAXLEN];
     ProfType*   pProfData = (ProfType*)pDbgData->pData;
-    ULONG       nTime;
+    sal_uIntPtr       nTime;
     if ( (nAction != DBG_PROF_START) && !pProfData )
     {
         strcpy( aBuf, DbgError_ProfEnd1 );
@@ -1617,7 +1617,7 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
 
     DebugData*  pData = GetDebugData();
     sal_Char const *   pStr;
-    ULONG       nOut;
+    sal_uIntPtr       nOut;
     int         nBufLen = 0;
 
     if ( nDbgOut == DBG_OUT_ERROR )

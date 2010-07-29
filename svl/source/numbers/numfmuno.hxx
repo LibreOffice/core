@@ -183,11 +183,11 @@ class SvNumberFormatObj : public cppu::WeakImplHelper3<
 {
 private:
     SvNumberFormatsSupplierObj&         rSupplier;
-    ULONG                               nKey;
+    sal_uIntPtr                             nKey;
     mutable ::comphelper::SharedMutex   m_aMutex;
 
 public:
-    SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, ULONG nK, const ::comphelper::SharedMutex& _rMutex );
+    SvNumberFormatObj( SvNumberFormatsSupplierObj& rParent, sal_uIntPtr nK, const ::comphelper::SharedMutex& _rMutex );
     virtual         ~SvNumberFormatObj();
 
                             // XPropertySet

@@ -61,7 +61,7 @@ class SvtSimpleResId
     String  m_sValue;
 
 public:
-    SvtSimpleResId(USHORT nId, const ::com::sun::star::lang::Locale aLocale) : m_sValue(ImpSvlData::GetSvlData().GetSimpleRM(aLocale)->ReadString(nId)) { };
+    SvtSimpleResId(sal_uInt16 nId, const ::com::sun::star::lang::Locale aLocale) : m_sValue(ImpSvlData::GetSvlData().GetSimpleRM(aLocale)->ReadString(nId)) { };
 
     operator String () const { return m_sValue; }
 };

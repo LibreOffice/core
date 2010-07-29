@@ -50,12 +50,12 @@ int _cdecl main( int argc, char *argv[] )
         fprintf( stdout, "           returns a list of all settings of version \"vcl364\"\n" );
     }
     else {
-        BOOL bError = FALSE;
-        BOOL bList = FALSE;
+        sal_Bool bError = sal_False;
+        sal_Bool bList = sal_False;
         ByteString sInfo( "" );
         ByteString sDataBase( GetDefStandList());
 
-        BOOL bGetNow = FALSE;
+        sal_Bool bGetNow = sal_False;
 
         int nCount = 1;
         while (( nCount < argc ) &&
@@ -68,7 +68,7 @@ int _cdecl main( int argc, char *argv[] )
                     sInfo = ByteString( argv[nCount] );
                     nCount++;
                 }
-                else bError = TRUE;
+                else bError = sal_True;
             }
             else if ( ByteString( argv[nCount] ).ToUpperAscii() == "-D" ) {
                 // requestet info path
@@ -77,20 +77,20 @@ int _cdecl main( int argc, char *argv[] )
                     sDataBase = ByteString( argv[nCount] );
                     nCount++;
                 }
-                else bError = TRUE;
+                else bError = sal_True;
             }
             else if ( ByteString( argv[nCount] ).ToUpperAscii() == "-L" ) {
                 // request list of childs
                 nCount++;
-                bList = TRUE;
+                bList = sal_True;
             }
             else if ( ByteString( argv[nCount] ).ToUpperAscii() == "-N" ) {
                 // request list of childs
                 nCount++;
-                bGetNow = TRUE;
+                bGetNow = sal_True;
             }
             else {
-                bError = TRUE;
+                bError = sal_True;
             }
         }
 
@@ -103,7 +103,7 @@ int _cdecl main( int argc, char *argv[] )
                 return 1;
 
             if ( sInfo.Len()) {
-                GenericInformation *pInfo = pList->GetInfo( sInfo, TRUE );
+                GenericInformation *pInfo = pList->GetInfo( sInfo, sal_True );
 
                 if ( pInfo ) {
                     ByteString sValue( pInfo->GetValue());
@@ -113,7 +113,7 @@ int _cdecl main( int argc, char *argv[] )
                         GenericInformationList *pList = pInfo->GetSubList();
                         if ( pList ) {
                             // show whole list of childs and their values
-                            for( ULONG i = 0; i < pList->Count(); i++ ) {
+                            for( sal_uIntPtr i = 0; i < pList->Count(); i++ ) {
                                 GenericInformation *pInfo = pList->GetObject( i );
                                 ByteString sValue( pInfo->GetValue());
                                 fprintf( stdout, "    %s %s\n", pInfo->GetBuffer(), sValue.GetBuffer());
@@ -126,11 +126,11 @@ int _cdecl main( int argc, char *argv[] )
             }
             else {
                 // show whole list of childs and their values
-                for( ULONG i = 0; i < pList->Count(); i++ ) {
+                for( sal_uIntPtr i = 0; i < pList->Count(); i++ ) {
                     GenericInformation *pInfo = pList->GetObject( i );
                     if ( bGetNow ) {
                         ByteString sPath( "settings/now" );
-                        GenericInformation *pSubInfo = pInfo->GetSubInfo( sPath, TRUE );
+                        GenericInformation *pSubInfo = pInfo->GetSubInfo( sPath, sal_True );
                         if ( pSubInfo && pSubInfo->GetValue() == "_TRUE" )
                             fprintf( stdout, "%s\n", pInfo->GetBuffer());
                     }

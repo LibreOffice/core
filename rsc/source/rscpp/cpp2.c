@@ -189,7 +189,7 @@ dump_line:      skipnl();                       /* Ignore rest of line  */
                     free(infile->progname);     /* if it's allocated.   */
                 infile->progname = savestring(tp);
             }
-            wrongline = TRUE;                   /* Force output later   */
+            wrongline = sal_True;                   /* Force output later   */
             break;
 
         case L_include:
@@ -212,9 +212,9 @@ dump_line:      skipnl();                       /* Ignore rest of line  */
             *ifptr |= ELSE_SEEN;
             if ((*ifptr & WAS_COMPILING) != 0) {
                 if (compiling || (*ifptr & TRUE_SEEN) != 0)
-                    compiling = FALSE;
+                    compiling = sal_False;
                 else {
-                    compiling = TRUE;
+                    compiling = sal_True;
                 }
             }
             break;
@@ -227,7 +227,7 @@ else_seen_err:  cerror("#%s may not follow #else", token);
                 goto dump_line;
             }
             if ((*ifptr & (WAS_COMPILING | TRUE_SEEN)) != WAS_COMPILING) {
-                compiling = FALSE;              /* Done compiling stuff */
+                compiling = sal_False;              /* Done compiling stuff */
                 goto dump_line;                 /* Skip this clause     */
             }
             doif(L_if);
@@ -248,7 +248,7 @@ nest_err:       cerror("#%s must be in an #if", token);
                 goto dump_line;
             }
             if (!compiling && (*ifptr & WAS_COMPILING) != 0)
-                wrongline = TRUE;
+                wrongline = sal_True;
             compiling = ((*ifptr & WAS_COMPILING) != 0);
             --ifptr;
             break;
@@ -323,7 +323,7 @@ void doif(int hash)
  * Process an #if, #ifdef, or #ifndef.  The latter two are straightforward,
  * while #if needs a subroutine of its own to evaluate the expression.
  *
- * doif() is called only if compiling is TRUE.  If false, compilation
+ * doif() is called only if compiling is sal_True.  If false, compilation
  * is always supressed, so we don't need to evaluate anything.  This
  * supresses unnecessary warnings.
  */
@@ -337,7 +337,7 @@ void doif(int hash)
         }
         if (hash == L_if) {
             unget();
-            found = (eval() != 0);      /* Evaluate expr, != 0 is  TRUE */
+            found = (eval() != 0);      /* Evaluate expr, != 0 is  sal_True */
             hash = L_ifdef;             /* #if is now like #ifdef       */
         }
         else {
@@ -346,11 +346,11 @@ void doif(int hash)
             found = (lookid(c) != NULL); /* Look for it in symbol table */
         }
         if (found == (hash == L_ifdef)) {
-            compiling = TRUE;
+            compiling = sal_True;
             *ifptr |= TRUE_SEEN;
         }
         else {
-            compiling = FALSE;
+            compiling = sal_False;
         }
         return;
 
@@ -391,7 +391,7 @@ void doinclude()
         if (delim == '<')
             delim = '>';
         workp = work;
-        instring = TRUE;                /* Accept all characters        */
+        instring = sal_True;                /* Accept all characters        */
 #ifdef CONTROL_COMMENTS_NOT_ALLOWED
         while ((c = get()) != '\n' && c != EOF_CHAR)
             save(c);                    /* Put it away.                 */
@@ -408,7 +408,7 @@ void doinclude()
             save(c);
 #endif
         *workp = EOS;                   /* Terminate filename           */
-        instring = FALSE;
+        instring = sal_False;
 #if HOST == SYS_VMS
         /*
          * Assume the default .h filetype.
@@ -439,7 +439,7 @@ openinclude(char* filename, int searchlocal)
  * doinclude() above, but was written as a separate subroutine for
  * programmer convenience.  It searches the list of directories
  * and actually opens the file, linking it into the list of
- * active files.  Returns TRUE if the file was opened, FALSE
+ * active files.  Returns sal_True if the file was opened, sal_False
  * if openinclude() fails.  No error message is printed.
  */
 {
@@ -475,7 +475,7 @@ openinclude(char* filename, int searchlocal)
             }
 #endif
             if (openfile(tmpname))
-                return (TRUE);
+                return (sal_True);
         }
         /*
          * Look in any directories specified by -I command line
@@ -502,10 +502,10 @@ openinclude(char* filename, int searchlocal)
                     sprintf(tmpname, "%s%s", *incptr, filename);
 #endif
                 if (openfile(tmpname))
-                    return (TRUE);
+                    return (sal_True);
             }
         }
-        return (FALSE);
+        return (sal_False);
 }
 
 FILE_LOCAL int
@@ -513,26 +513,26 @@ hasdirectory(char* source, char* result)
 /*
  * If a device or directory is found in the source filename string, the
  * node/device/directory part of the string is copied to result and
- * hasdirectory returns TRUE.  Else, nothing is copied and it returns FALSE.
+ * hasdirectory returns sal_True.  Else, nothing is copied and it returns sal_False.
  */
 {
 #if HOST == SYS_UNIX
         register char           *tp;
 
         if ((tp = strrchr(source, '/')) == NULL)
-            return (FALSE);
+            return (sal_False);
         else {
             strncpy(result, source, tp - source + 1);
             result[tp - source + 1] = EOS;
-            return (TRUE);
+            return (sal_True);
         }
 #else
 #if HOST == SYS_VMS
         if (vmsparse(source, NULLST, result)
          && result[0] != EOS)
-            return (TRUE);
+            return (sal_True);
         else {
-            return (FALSE);
+            return (sal_False);
         }
 #else
         /*
@@ -542,11 +542,11 @@ hasdirectory(char* source, char* result)
 
         if ((tp = strrchr(source, ']')) == NULL
          && (tp = strrchr(source, ':')) == NULL)
-            return (FALSE);
+            return (sal_False);
         else {
             strncpy(result, source, tp - source + 1);
             result[tp - source + 1] = EOS;
-            return (TRUE);
+            return (sal_True);
         }
 #endif
 #endif
@@ -569,7 +569,7 @@ char            *result;        /* Size is at least NAM$C_MAXRSS + 1    */
 /*
  * Parse the source string, applying the default (properly, using
  * the system parse routine), storing it in result.
- * TRUE if it parsed, FALSE on error.
+ * sal_True if it parsed, sal_False on error.
  *
  * If defstring is NULL, there are no defaults and result gets
  * (just) the node::[directory] part of the string (possibly "")
@@ -617,9 +617,9 @@ char            *result;        /* Size is at least NAM$C_MAXRSS + 1    */
                     rp[nam.nam$b_ver] = EOS;
                 }
             }
-            return (TRUE);
+            return (sal_True);
         }
-        return (FALSE);
+        return (sal_False);
 }
 #endif
 

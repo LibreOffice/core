@@ -42,7 +42,7 @@ void ImpAddHSZ( HSZ hszString, String& rStr )
     ImpDdeMgr::DdeQueryString( hszString,aBuf,sizeof(aBuf),850);
     rStr += " (\""; rStr += aBuf; rStr += "\",";
     HATOMTBL hAtomTable = WinQuerySystemAtomTable();
-    ULONG nRefCount = 0;
+    sal_uIntPtr nRefCount = 0;
     if( hszString )
         nRefCount = WinQueryAtomUsage(hAtomTable, (ATOM)hszString );
     rStr += nRefCount; rStr += ')';
@@ -52,7 +52,7 @@ void ImpAddHSZ( HSZ hszString, String& rStr )
 void ImpWriteDdeStatus(char* aFilename, char* pAppContext)
 {
     char aBuf[ 128 ];
-    USHORT nCtr;
+    sal_uInt16 nCtr;
     HWND* pAppPtr;
     ImpHCONV* pConvPtr;
     Transaction* pTransPtr;
@@ -94,7 +94,7 @@ void ImpWriteDdeStatus(char* aFilename, char* pAppContext)
         if( *pAppPtr )
         {
             aLine = "App."; aLine += nCtr; aLine += " HWND:";
-            aLine += (ULONG)*pAppPtr; aStrm.WriteLine(aLine);
+            aLine += (sal_uIntPtr)*pAppPtr; aStrm.WriteLine(aLine);
         }
     }
 
@@ -102,7 +102,7 @@ void ImpWriteDdeStatus(char* aFilename, char* pAppContext)
     aStrm.WriteLine("-------------- Conversation handles ----------------");
     aStrm << endl;
 
-    USHORT nCurCount = pData->nCurConvCount;
+    sal_uInt16 nCurCount = pData->nCurConvCount;
 
     if( nCurCount )
     {
@@ -112,15 +112,15 @@ void ImpWriteDdeStatus(char* aFilename, char* pAppContext)
         if( pConvPtr->hWndThis )
         {
             aLine = "HCONV:";  aLine += nCtr;
-            aLine += " HCONVpartner: "; aLine += (USHORT)pConvPtr->hConvPartner;
+            aLine += " HCONVpartner: "; aLine += (sal_uInt16)pConvPtr->hConvPartner;
             if( !pConvPtr->hConvPartner ) aLine += "(Non-DDEML-App)";
-            aLine += " hszPartner: "; aLine += (USHORT)pConvPtr->hszPartner;
+            aLine += " hszPartner: "; aLine += (sal_uInt16)pConvPtr->hszPartner;
             ImpAddHSZ( pConvPtr->hszPartner, aLine );
             aStrm.WriteLine( aLine );
 
-            aLine = "hszService: "; aLine += (USHORT)pConvPtr->hszServiceReq;
+            aLine = "hszService: "; aLine += (sal_uInt16)pConvPtr->hszServiceReq;
             ImpAddHSZ( pConvPtr->hszServiceReq, aLine );
-            aLine += " hszTopic: "; aLine += (USHORT)pConvPtr->hszTopic;
+            aLine += " hszTopic: "; aLine += (sal_uInt16)pConvPtr->hszTopic;
             ImpAddHSZ( pConvPtr->hszTopic, aLine );
             aStrm.WriteLine( aLine );
 
@@ -129,14 +129,14 @@ void ImpWriteDdeStatus(char* aFilename, char* pAppContext)
             if( pConvPtr->nStatus & ST_INLIST ) aLine += " (Inlist)";
             aStrm.WriteLine(aLine);
 
-            aLine = "pidOwner: "; aLine += (ULONG)pConvPtr->pidOwner;
+            aLine = "pidOwner: "; aLine += (sal_uIntPtr)pConvPtr->pidOwner;
             aStrm.WriteLine( aLine );
-            aLine = "hWndThis: "; aLine += (ULONG)pConvPtr->hWndThis;
+            aLine = "hWndThis: "; aLine += (sal_uIntPtr)pConvPtr->hWndThis;
             aStrm.WriteLine( aLine );
-            aLine = "hWndPartner: "; aLine += (ULONG)pConvPtr->hWndPartner;
+            aLine = "hWndPartner: "; aLine += (sal_uIntPtr)pConvPtr->hWndPartner;
             aStrm.WriteLine( aLine );
 
-            aLine = "hConvList: "; aLine += (ULONG)pConvPtr->hConvList;
+            aLine = "hConvList: "; aLine += (sal_uIntPtr)pConvPtr->hConvList;
             aLine += " Prev: "; aLine += pConvPtr->nPrevHCONV;
             aLine += " Next: "; aLine += pConvPtr->nNextHCONV;
             aStrm.WriteLine( aLine );
@@ -161,9 +161,9 @@ void ImpWriteDdeStatus(char* aFilename, char* pAppContext)
         if( pTransPtr->hConvOwner )
         {
             aLine = "TransactionId:"; aLine += nCtr;
-            aLine += " hConvOwner: "; aLine += (USHORT)pTransPtr->hConvOwner;
+            aLine += " hConvOwner: "; aLine += (sal_uInt16)pTransPtr->hConvOwner;
             aStrm.WriteLine( aLine );
-            aLine = "Item: "; aLine += (USHORT)pTransPtr->hszItem;
+            aLine = "Item: "; aLine += (sal_uInt16)pTransPtr->hszItem;
             ImpAddHSZ( pTransPtr->hszItem, aLine );
             aLine += " Format: "; aLine += pTransPtr->nFormat;
             aStrm.WriteLine( aLine );
@@ -187,7 +187,7 @@ void ImpWriteDdeStatus(char* aFilename, char* pAppContext)
 void ImpWriteDdeData(char* aFilename, DDESTRUCT* pData)
 {
     char aBuf[ 128 ];
-    USHORT nCtr;
+    sal_uInt16 nCtr;
     SvFileStream aStrm(aFilename, STREAM_READWRITE );
     aStrm.Seek( STREAM_SEEK_TO_END );
     String aLine;
@@ -199,7 +199,7 @@ void ImpWriteDdeData(char* aFilename, DDESTRUCT* pData)
     aStrm.WriteLine( aLine );
     aLine = "offabData:"; aLine += pData->offabData; aStrm.WriteLine(aLine);
     char* pBuf = (char*)pData+pData->offabData;
-    USHORT nLen = pData->cbData; // - pData->offabData;
+    sal_uInt16 nLen = pData->cbData; // - pData->offabData;
     while( nLen )
     {
         aStrm << *pBuf;
@@ -236,7 +236,7 @@ APIRET MyDosAllocSharedMem(void** ppBaseAddress, char* pszName, unsigned long ul
     aStr += ": ";
     aStr += ulObjectSize;
     aStr += " (";
-    aStr += (ULONG)*((char**)ppBaseAddress);
+    aStr += (sal_uIntPtr)*((char**)ppBaseAddress);
     aStr += ')';
     ImpWriteLogFile("\\ddeml.mem", (char*)aStr.GetStr() );
 #endif
@@ -253,7 +253,7 @@ APIRET MyDosAllocMem(void** ppBaseAddress, unsigned long ulObjectSize,
     aStr += ": ";
     aStr += ulObjectSize;
     aStr += " (";
-    aStr += (ULONG)*((char**)ppBaseAddress);
+    aStr += (sal_uIntPtr)*((char**)ppBaseAddress);
     aStr += ')';
     ImpWriteLogFile("\\ddeml.mem", (char*)aStr.GetStr() );
 #endif
@@ -268,7 +268,7 @@ APIRET MyDosFreeMem( void* pBaseAddress, char* pContextStr )
     String aStr("DosFreeMem:");
     aStr += pContextStr;
     aStr += ": ";
-    aStr += (ULONG)pBaseAddress;
+    aStr += (sal_uIntPtr)pBaseAddress;
     ImpWriteLogFile("\\ddeml.mem", (char*)aStr.GetStr());
 #endif
     return nRet;

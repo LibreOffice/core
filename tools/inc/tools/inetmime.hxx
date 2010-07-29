@@ -1426,17 +1426,17 @@ public:
 
     void Clear();
 
-    void Insert(INetContentTypeParameter * pParameter, ULONG nIndex)
+    void Insert(INetContentTypeParameter * pParameter, sal_uIntPtr nIndex)
     { List::Insert(pParameter, nIndex); }
 
-    inline const INetContentTypeParameter * GetObject(ULONG nIndex) const;
+    inline const INetContentTypeParameter * GetObject(sal_uIntPtr nIndex) const;
 
     const INetContentTypeParameter * find(const ByteString & rAttribute)
         const;
 };
 
 inline const INetContentTypeParameter *
-INetContentTypeParameterList::GetObject(ULONG nIndex) const
+INetContentTypeParameterList::GetObject(sal_uIntPtr nIndex) const
 {
     return static_cast< INetContentTypeParameter * >(List::GetObject(nIndex));
 }

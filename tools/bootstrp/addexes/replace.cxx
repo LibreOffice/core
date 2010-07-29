@@ -60,7 +60,7 @@ int _cdecl main( int argc, char *argv[] )
     aUpperText.ToUpperAscii();
 
 
-    ULONG nIndex;
+    sal_uIntPtr nIndex;
     aSearch.ToUpperAscii();
 
     nIndex = aUpperText.Search( aSearch.GetBuffer(), 0);

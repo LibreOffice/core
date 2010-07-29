@@ -52,9 +52,9 @@ namespace utl
 
 SearchParam::SearchParam( const String &rText,
                                 SearchType eType,
-                                BOOL bCaseSensitive,
-                                BOOL bWrdOnly,
-                                BOOL bSearchInSel )
+                                sal_Bool bCaseSensitive,
+                                sal_Bool bWrdOnly,
+                                sal_Bool bSearchInSel )
 {
     sSrchStr        = rText;
     eSrchType       = eType;
@@ -66,7 +66,7 @@ SearchParam::SearchParam( const String &rText,
     nTransliterationFlags = 0;
 
     // Werte fuer "Gewichtete Levenshtein-Distanz"
-    bLEV_Relaxed    = TRUE;
+    bLEV_Relaxed    = sal_True;
     nLEV_OtherX     = 2;
     nLEV_ShorterY   = 1;
     nLEV_LongerZ    = 3;
@@ -299,8 +299,8 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
         {
             if( rReplaceStr.GetChar( nPos ) == '&')
             {
-                USHORT nStart = (USHORT)(rResult.startOffset[0]);
-                USHORT nLength = (USHORT)(rResult.endOffset[0] - rResult.startOffset[0]);
+                sal_uInt16 nStart = (sal_uInt16)(rResult.startOffset[0]);
+                sal_uInt16 nLength = (sal_uInt16)(rResult.endOffset[0] - rResult.startOffset[0]);
                 rReplaceStr.Erase( nPos, 1 );   // delete ampersand
                 // replace by found string
                 rReplaceStr.Insert( rStr, nStart, nLength, nPos );
@@ -329,17 +329,17 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
                             int i = sFndChar - '0'; // index
                             if(i < rResult.subRegExpressions)
                             {
-                                USHORT nSttReg = (USHORT)(rResult.startOffset[i]);
-                                USHORT nRegLen = (USHORT)(rResult.endOffset[i]);
+                                sal_uInt16 nSttReg = (sal_uInt16)(rResult.startOffset[i]);
+                                sal_uInt16 nRegLen = (sal_uInt16)(rResult.endOffset[i]);
                                 if( nRegLen > nSttReg )
                                     nRegLen = nRegLen - nSttReg;
                                 else
                                 {
                                     nRegLen = nSttReg - nRegLen;
-                                    nSttReg = (USHORT)(rResult.endOffset[i]);
+                                    nSttReg = (sal_uInt16)(rResult.endOffset[i]);
                                 }
                                 // Copy reference from found string
-                                sTmp = rStr.Copy((USHORT)nSttReg, (USHORT)nRegLen);
+                                sTmp = rStr.Copy((sal_uInt16)nSttReg, (sal_uInt16)nRegLen);
                                 // insert
                                 rReplaceStr.Insert( sTmp, nPos );
                                 // and step over

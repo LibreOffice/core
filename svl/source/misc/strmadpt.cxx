@@ -152,7 +152,7 @@ TYPEINIT1(SvOutputStreamOpenLockBytes, SvOpenLockBytes)
 
 //============================================================================
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::ReadAt(ULONG, void *, ULONG, ULONG *)
+ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uIntPtr, void *, sal_uIntPtr, sal_uIntPtr *)
     const
 {
     return ERRCODE_IO_CANTREAD;
@@ -160,8 +160,8 @@ ErrCode SvOutputStreamOpenLockBytes::ReadAt(ULONG, void *, ULONG, ULONG *)
 
 //============================================================================
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::WriteAt(ULONG nPos, void const * pBuffer,
-                                             ULONG nCount, ULONG * pWritten)
+ErrCode SvOutputStreamOpenLockBytes::WriteAt(sal_uIntPtr nPos, void const * pBuffer,
+                                             sal_uIntPtr nCount, sal_uIntPtr * pWritten)
 {
     if (nPos != m_nPosition)
         return ERRCODE_IO_CANTWRITE;
@@ -187,7 +187,7 @@ ErrCode SvOutputStreamOpenLockBytes::Flush() const
 
 //============================================================================
 // virtual
-ErrCode SvOutputStreamOpenLockBytes::SetSize(ULONG)
+ErrCode SvOutputStreamOpenLockBytes::SetSize(sal_uIntPtr)
 {
     return ERRCODE_IO_NOTSUPPORTED;
 }
@@ -205,15 +205,15 @@ ErrCode SvOutputStreamOpenLockBytes::Stat(SvLockBytesStat * pStat,
 //============================================================================
 // virtual
 ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
-                                                ULONG nCount,
-                                                ULONG * pWritten)
+                                                sal_uIntPtr nCount,
+                                                sal_uIntPtr * pWritten)
 {
     if (!m_xOutputStream.is())
         return ERRCODE_IO_CANTWRITE;
     if (nCount > 0
-        && nCount > std::numeric_limits< ULONG >::max() - m_nPosition)
+        && nCount > std::numeric_limits< sal_uIntPtr >::max() - m_nPosition)
     {
-        nCount = std::numeric_limits< ULONG >::max() - m_nPosition;
+        nCount = std::numeric_limits< sal_uIntPtr >::max() - m_nPosition;
         if (nCount == 0)
             return ERRCODE_IO_CANTWRITE;
     }
@@ -235,14 +235,14 @@ ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
 
 //============================================================================
 // virtual
-ULONG SvOutputStreamOpenLockBytes::Tell() const
+sal_uIntPtr SvOutputStreamOpenLockBytes::Tell() const
 {
     return m_nPosition;
 }
 
 //============================================================================
 // virtual
-ULONG SvOutputStreamOpenLockBytes::Seek(ULONG)
+sal_uIntPtr SvOutputStreamOpenLockBytes::Seek(sal_uIntPtr)
 {
     return m_nPosition;
 }
@@ -476,7 +476,7 @@ bool SvInputStream::open()
 
 //============================================================================
 // virtual
-ULONG SvInputStream::GetData(void * pData, ULONG nSize)
+sal_uIntPtr SvInputStream::GetData(void * pData, sal_uIntPtr nSize)
 {
     if (!open())
     {
@@ -503,8 +503,8 @@ ULONG SvInputStream::GetData(void * pData, ULONG nSize)
         {
             sal_Int32 nRemain
                 = sal_Int32(
-                    std::min(ULONG(nSize - nRead),
-                             ULONG(std::numeric_limits< sal_Int32 >::max())));
+                    std::min(sal_uIntPtr(nSize - nRead),
+                             sal_uIntPtr(std::numeric_limits< sal_Int32 >::max())));
             if (nRemain == 0)
                 break;
             uno::Sequence< sal_Int8 > aBuffer;
@@ -540,8 +540,8 @@ ULONG SvInputStream::GetData(void * pData, ULONG nSize)
                 sal_Int32 nRemain
                     = sal_Int32(
                         std::min(
-                            ULONG(nSize - nRead),
-                            ULONG(std::numeric_limits< sal_Int32 >::max())));
+                            sal_uIntPtr(nSize - nRead),
+                            sal_uIntPtr(std::numeric_limits< sal_Int32 >::max())));
                 if (nRemain == 0)
                     break;
                 uno::Sequence< sal_Int8 > aBuffer;
@@ -571,7 +571,7 @@ ULONG SvInputStream::GetData(void * pData, ULONG nSize)
 
 //============================================================================
 // virtual
-ULONG SvInputStream::PutData(void const *, ULONG)
+sal_uIntPtr SvInputStream::PutData(void const *, sal_uIntPtr)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
@@ -584,7 +584,7 @@ void SvInputStream::FlushData()
 
 //============================================================================
 // virtual
-ULONG SvInputStream::SeekPos(ULONG nPos)
+sal_uIntPtr SvInputStream::SeekPos(sal_uIntPtr nPos)
 {
     if (open())
     {
@@ -601,7 +601,7 @@ ULONG SvInputStream::SeekPos(ULONG nPos)
                             < STREAM_SEEK_TO_END)
                         {
                             m_nSeekedFrom = Tell();
-                            return ULONG(nLength);
+                            return sal_uIntPtr(nLength);
                         }
                     }
                     catch (io::IOException) {}
@@ -636,7 +636,7 @@ ULONG SvInputStream::SeekPos(ULONG nPos)
 
 //============================================================================
 // virtual
-void SvInputStream::SetSize(ULONG)
+void SvInputStream::SetSize(sal_uIntPtr)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
@@ -668,14 +668,14 @@ SvInputStream::~SvInputStream()
 
 //============================================================================
 // virtual
-USHORT SvInputStream::IsA() const
+sal_uInt16 SvInputStream::IsA() const
 {
     return 0;
 }
 
 //============================================================================
 // virtual
-void SvInputStream::AddMark(ULONG nPos)
+void SvInputStream::AddMark(sal_uIntPtr nPos)
 {
     if (open() && m_pPipe)
         m_pPipe->addMark(nPos);
@@ -683,7 +683,7 @@ void SvInputStream::AddMark(ULONG nPos)
 
 //============================================================================
 // virtual
-void SvInputStream::RemoveMark(ULONG nPos)
+void SvInputStream::RemoveMark(sal_uIntPtr nPos)
 {
     if (open() && m_pPipe)
         m_pPipe->removeMark(nPos);
@@ -696,7 +696,7 @@ void SvInputStream::RemoveMark(ULONG nPos)
 //============================================================================
 
 // virtual
-ULONG SvOutputStream::GetData(void *, ULONG)
+sal_uIntPtr SvOutputStream::GetData(void *, sal_uIntPtr)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
@@ -704,20 +704,20 @@ ULONG SvOutputStream::GetData(void *, ULONG)
 
 //============================================================================
 // virtual
-ULONG SvOutputStream::PutData(void const * pData, ULONG nSize)
+sal_uIntPtr SvOutputStream::PutData(void const * pData, sal_uIntPtr nSize)
 {
     if (!m_xStream.is())
     {
         SetError(ERRCODE_IO_CANTWRITE);
         return 0;
     }
-    ULONG nWritten = 0;
+    sal_uIntPtr nWritten = 0;
     for (;;)
     {
         sal_Int32 nRemain
             = sal_Int32(
-                std::min(ULONG(nSize - nWritten),
-                         ULONG(std::numeric_limits< sal_Int32 >::max())));
+                std::min(sal_uIntPtr(nSize - nWritten),
+                         sal_uIntPtr(std::numeric_limits< sal_Int32 >::max())));
         if (nRemain == 0)
             break;
         try
@@ -739,7 +739,7 @@ ULONG SvOutputStream::PutData(void const * pData, ULONG nSize)
 
 //============================================================================
 // virtual
-ULONG SvOutputStream::SeekPos(ULONG)
+sal_uIntPtr SvOutputStream::SeekPos(sal_uIntPtr)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
@@ -763,7 +763,7 @@ void SvOutputStream::FlushData()
 
 //============================================================================
 // virtual
-void SvOutputStream::SetSize(ULONG)
+void SvOutputStream::SetSize(sal_uIntPtr)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
 }
@@ -790,7 +790,7 @@ SvOutputStream::~SvOutputStream()
 
 //============================================================================
 // virtual
-USHORT SvOutputStream::IsA() const
+sal_uInt16 SvOutputStream::IsA() const
 {
     return 0;
 }

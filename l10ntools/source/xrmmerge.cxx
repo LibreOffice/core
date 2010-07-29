@@ -57,10 +57,10 @@ extern "C" { int YYWarning( char * ); }
 #define STATE_ISOCODE99 0x000D
 
 // set of global variables
-BOOL bEnableExport;
-BOOL bMergeMode;
-BOOL bErrorLog;
-BOOL bUTF8;
+sal_Bool bEnableExport;
+sal_Bool bMergeMode;
+sal_Bool bErrorLog;
+sal_Bool bUTF8;
 bool bQuiet;
 ByteString sPrj;
 ByteString sPrjRoot;
@@ -78,18 +78,18 @@ extern "C" {
 extern char *GetOutputFile( int argc, char* argv[])
 /*****************************************************************************/
 {
-    bEnableExport = FALSE;
-    bMergeMode = FALSE;
-    bErrorLog = TRUE;
-    bUTF8 = TRUE;
+    bEnableExport = sal_False;
+    bMergeMode = sal_False;
+    bErrorLog = sal_True;
+    bUTF8 = sal_True;
     sPrj = "";
     sPrjRoot = "";
     sInputFileName = "";
     sActFileName = "";
     Export::sLanguages = "";
     bQuiet = false;
-    USHORT nState = STATE_NON;
-    BOOL bInput = FALSE;
+    sal_uInt16 nState = STATE_NON;
+    sal_Bool bInput = sal_False;
 
     // parse command line
     for( int i = 1; i < argc; i++ ) {
@@ -113,15 +113,15 @@ extern char *GetOutputFile( int argc, char* argv[])
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-E" ) {
             nState = STATE_ERRORLOG;
-            bErrorLog = FALSE;
+            bErrorLog = sal_False;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-UTF8" ) {
             nState = STATE_UTF8;
-            bUTF8 = TRUE;
+            bUTF8 = sal_True;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-NOUTF8" ) {
             nState = STATE_UTF8;
-            bUTF8 = FALSE;
+            bUTF8 = sal_False;
         }
         else if ( ByteString( argv[ i ] ).ToUpperAscii() == "-L" ) {
             nState = STATE_LANGUAGES;
@@ -136,7 +136,7 @@ extern char *GetOutputFile( int argc, char* argv[])
                 }
                 case STATE_INPUT: {
                     sInputFileName = argv[ i ];
-                    bInput = TRUE; // source file found
+                    bInput = sal_True; // source file found
                 }
                 break;
                 case STATE_OUTPUT: {
@@ -153,7 +153,7 @@ extern char *GetOutputFile( int argc, char* argv[])
                 break;
                 case STATE_MERGESRC: {
                     sMergeSrc = ByteString( argv[ i ]);
-                    bMergeMode = TRUE; // activate merge mode, cause merge database found
+                    bMergeMode = sal_True; // activate merge mode, cause merge database found
                 }
                 break;
                 case STATE_LANGUAGES: {
@@ -166,7 +166,7 @@ extern char *GetOutputFile( int argc, char* argv[])
 
     if ( bInput ) {
         // command line is valid
-        bEnableExport = TRUE;
+        bEnableExport = sal_True;
         char *pReturn = new char[ sOutputFile.Len() + 1 ];
         strcpy( pReturn, sOutputFile.GetBuffer());  // #100211# - checked
         return pReturn;
@@ -300,8 +300,8 @@ int GetError()
 /*****************************************************************************/
 XRMResParser::XRMResParser()
 /*****************************************************************************/
-                : bError( FALSE ),
-                bText( FALSE )
+                : bError( sal_False ),
+                bText( sal_False )
 {
     aLanguages = Export::GetLanguages();
 }
@@ -359,7 +359,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 EndOfText( sCurrentOpenTag, sCurrentCloseTag );
             ByteString sTmp = sGID;
             sGID = "";
-            for ( USHORT i = 0; i + 1 < sTmp.GetTokenCount( '.' ); i++ ) {
+            for ( sal_uInt16 i = 0; i + 1 < sTmp.GetTokenCount( '.' ); i++ ) {
                 if ( sGID.Len())
                     sGID += ".";
                 sGID += sTmp.GetToken( i, '.' );
@@ -377,7 +377,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
                     EndOfText( sCurrentOpenTag, sCurrentCloseTag );
                     sLID = sNewLID;
                 }
-                bText = TRUE;
+                bText = sal_True;
                 sCurrentText = "";
                 sCurrentOpenTag = rToken;
                 Output( rToken );
@@ -391,7 +391,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
 
                 ByteString sLang = GetAttribute( sCurrentOpenTag, "xml:lang" );
                 if( sLang.EqualsIgnoreCaseAscii("de") ){
-                     ULONG nLen = 0;
+                     sal_uIntPtr nLen = 0;
                     while ( sCurrentText.Len() != nLen )
                     {
                         nLen = sCurrentText.Len();
@@ -407,7 +407,7 @@ int XRMResParser::Execute( int nToken, char * pToken )
                 //fprintf( stdout, "%s %s\n", sGID.GetBuffer(), sLID.GetBuffer());
                 //fprintf( stdout, "%s\n\n", sCurrentText.GetBuffer());
 
-                bText = FALSE;
+                bText = sal_False;
             }
         }
         break;
@@ -444,7 +444,7 @@ ByteString XRMResParser::GetAttribute( const ByteString &rToken, const ByteStrin
     ByteString sSearch( " " );
     sSearch += rAttribute;
     sSearch += "=";
-    USHORT nPos = sTmp.Search( sSearch );
+    sal_uInt16 nPos = sTmp.Search( sSearch );
 
     if ( nPos != STRING_NOTFOUND ) {
         sTmp = sTmp.Copy( nPos );
@@ -717,7 +717,7 @@ void XRMResMerge::EndOfText(
 //              if ( Export::isAllowed( sCur ) &&
 //>>>>>>> 1.17
                     ( pEntrys->GetText(
-                        sContent, STRING_TYP_TEXT, sCur, TRUE )) &&
+                        sContent, STRING_TYP_TEXT, sCur, sal_True )) &&
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
                     ByteString sText( sContent );
@@ -737,7 +737,7 @@ void XRMResMerge::EndOfText(
                     sAdditionalLine += rCloseTag;
                     sAdditionalLine += "\n";
 
-                    for ( USHORT i = 0; i + 1 < GetGID().GetTokenCount( '.' ); i++ )
+                    for ( sal_uInt16 i = 0; i + 1 < GetGID().GetTokenCount( '.' ); i++ )
                         sAdditionalLine += "\t";
 
                     Output( sAdditionalLine );

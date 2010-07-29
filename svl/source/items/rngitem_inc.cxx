@@ -52,7 +52,7 @@ SfxXRangeItem::SfxXRangeItem()
 
 // -----------------------------------------------------------------------
 
-SfxXRangeItem::SfxXRangeItem( USHORT which, NUMTYPE from, NUMTYPE to ):
+SfxXRangeItem::SfxXRangeItem( sal_uInt16 which, NUMTYPE from, NUMTYPE to ):
     SfxPoolItem( which ),
     nFrom( from ),
     nTo( to )
@@ -62,7 +62,7 @@ SfxXRangeItem::SfxXRangeItem( USHORT which, NUMTYPE from, NUMTYPE to ):
 
 // -----------------------------------------------------------------------
 
-SfxXRangeItem::SfxXRangeItem( USHORT nW, SvStream &rStream ) :
+SfxXRangeItem::SfxXRangeItem( sal_uInt16 nW, SvStream &rStream ) :
     SfxPoolItem( nW )
 {
     rStream >> nFrom;
@@ -115,7 +115,7 @@ SfxPoolItem* SfxXRangeItem::Clone(SfxItemPool *) const
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* SfxXRangeItem::Create(SvStream &rStream, USHORT) const
+SfxPoolItem* SfxXRangeItem::Create(SvStream &rStream, sal_uInt16) const
 {
     NUMTYPE     nVon, nBis;
     rStream >> nVon;
@@ -125,7 +125,7 @@ SfxPoolItem* SfxXRangeItem::Create(SvStream &rStream, USHORT) const
 
 // -----------------------------------------------------------------------
 
-SvStream& SfxXRangeItem::Store(SvStream &rStream, USHORT) const
+SvStream& SfxXRangeItem::Store(SvStream &rStream, sal_uInt16) const
 {
     rStream << nFrom;
     rStream << nTo;
@@ -141,7 +141,7 @@ SfxXRangesItem::SfxXRangesItem()
 
 //-------------------------------------------------------------------------
 
-SfxXRangesItem::SfxXRangesItem( USHORT nWID, const NUMTYPE *pRanges )
+SfxXRangesItem::SfxXRangesItem( sal_uInt16 nWID, const NUMTYPE *pRanges )
 :   SfxPoolItem( nWID )
 {
     NUMTYPE nCount = Count_Impl(pRanges) + 1;
@@ -151,7 +151,7 @@ SfxXRangesItem::SfxXRangesItem( USHORT nWID, const NUMTYPE *pRanges )
 
 //-------------------------------------------------------------------------
 
-SfxXRangesItem::SfxXRangesItem( USHORT nWID, SvStream &rStream )
+SfxXRangesItem::SfxXRangesItem( sal_uInt16 nWID, SvStream &rStream )
 :   SfxPoolItem( nWID )
 {
     NUMTYPE nCount;
@@ -185,9 +185,9 @@ int SfxXRangesItem::operator==( const SfxPoolItem &rItem ) const
 {
     const SfxXRangesItem &rOther = (const SfxXRangesItem&) rItem;
     if ( !_pRanges && !rOther._pRanges )
-        return TRUE;
+        return sal_True;
     if ( _pRanges || rOther._pRanges )
-        return FALSE;
+        return sal_False;
 
     NUMTYPE n;
     for ( n = 0; _pRanges[n] && rOther._pRanges[n]; ++n )
@@ -218,14 +218,14 @@ SfxPoolItem* SfxXRangesItem::Clone( SfxItemPool * ) const
 
 //-------------------------------------------------------------------------
 
-SfxPoolItem* SfxXRangesItem::Create( SvStream &rStream, USHORT ) const
+SfxPoolItem* SfxXRangesItem::Create( SvStream &rStream, sal_uInt16 ) const
 {
     return new SfxXRangesItem( Which(), rStream );
 }
 
 //-------------------------------------------------------------------------
 
-SvStream& SfxXRangesItem::Store( SvStream &rStream, USHORT ) const
+SvStream& SfxXRangesItem::Store( SvStream &rStream, sal_uInt16 ) const
 {
     NUMTYPE nCount = Count_Impl( _pRanges );
     rStream >> nCount;

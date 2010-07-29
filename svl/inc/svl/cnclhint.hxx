@@ -37,11 +37,11 @@ class SfxCancelHint: public SfxHint
 {
 private:
     SfxCancellable* pCancellable;
-    USHORT          nAction;
+    sal_uInt16          nAction;
 public:
     TYPEINFO();
-    SfxCancelHint( SfxCancellable*, USHORT nAction );
-    USHORT GetAction() const { return nAction; }
+    SfxCancelHint( SfxCancellable*, sal_uInt16 nAction );
+    sal_uInt16 GetAction() const { return nAction; }
     const SfxCancellable& GetCancellable() const { return *pCancellable; }
 };
 

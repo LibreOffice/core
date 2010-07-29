@@ -137,7 +137,7 @@ void InitTestToolLib()
             if ( pInitFunc )
             {
                 (reinterpret_cast< pfunc_CreateEventLogger >(pInitFunc))();
-                bLoggerStarted = TRUE;
+                bLoggerStarted = sal_True;
             }
             else
             {
@@ -174,7 +174,7 @@ void DeInitTestToolLib()
             if ( pDeInitFunc )
             {
                 (reinterpret_cast< pfunc_DestroyEventLogger >(pDeInitFunc))();
-                bLoggerStarted = FALSE;
+                bLoggerStarted = sal_False;
             }
         }
 

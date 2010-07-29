@@ -41,7 +41,7 @@ namespace svt
     {
         // ----------------------------------------------------------------
         /** retrieves the value of an environment variable
-            @return <TRUE/> if and only if the retrieved string value is not empty
+            @return <sal_True/> if and only if the retrieved string value is not empty
         */
         bool lcl_getEnvironmentValue( const sal_Char* _pAsciiEnvName, ::rtl::OUString& _rValue )
         {

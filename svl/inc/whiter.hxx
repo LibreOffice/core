@@ -42,19 +42,19 @@ class SfxItemSet;
 
 class SVL_DLLPUBLIC SfxWhichIter
 {
-    const USHORT *pRanges, *pStart;
-    USHORT nOfst, nFrom, nTo;
+    const sal_uInt16 *pRanges, *pStart;
+    sal_uInt16 nOfst, nFrom, nTo;
 
 public:
-    SfxWhichIter( const SfxItemSet& rSet, USHORT nFrom = 0, USHORT nTo = USHRT_MAX );
+    SfxWhichIter( const SfxItemSet& rSet, sal_uInt16 nFrom = 0, sal_uInt16 nTo = USHRT_MAX );
     ~SfxWhichIter();
 
-    USHORT  GetCurWhich() const { return *pRanges + nOfst; }
-    USHORT  NextWhich();
-    USHORT  PrevWhich();
+    sal_uInt16  GetCurWhich() const { return *pRanges + nOfst; }
+    sal_uInt16  NextWhich();
+    sal_uInt16  PrevWhich();
 
-    USHORT  FirstWhich();
-    USHORT  LastWhich();
+    sal_uInt16  FirstWhich();
+    sal_uInt16  LastWhich();
 };
 
 #endif

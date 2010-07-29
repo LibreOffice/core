@@ -163,8 +163,8 @@ typedef sal_Int64 WinBits;
 // --------------
 
 // from vcl/inc/help.hxx
-#define OOO_HELP_INDEX          ((ULONG)0xFFFFFFFF)
-#define OOO_HELP_HELPONHELP     ((ULONG)0xFFFFFFFE)
+#define OOO_HELP_INDEX          ((sal_uIntPtr)0xFFFFFFFF)
+#define OOO_HELP_HELPONHELP     ((sal_uIntPtr)0xFFFFFFFE)
 
 // --------------
 // - FieldTypes -

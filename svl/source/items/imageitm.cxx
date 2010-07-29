@@ -37,27 +37,27 @@ struct SfxImageItem_Impl
 {
     String  aURL;
     long    nAngle;
-    BOOL    bMirrored;
+    sal_Bool    bMirrored;
     int     operator == ( const SfxImageItem_Impl& rOther ) const
             { return nAngle == rOther.nAngle && bMirrored == rOther.bMirrored; }
 };
 
 //---------------------------------------------------------
 
-SfxImageItem::SfxImageItem( USHORT which, UINT16 nImage )
+SfxImageItem::SfxImageItem( sal_uInt16 which, sal_uInt16 nImage )
     : SfxInt16Item( which, nImage )
 {
     pImp = new SfxImageItem_Impl;
     pImp->nAngle = 0;
-    pImp->bMirrored = FALSE;
+    pImp->bMirrored = sal_False;
 }
 
-SfxImageItem::SfxImageItem( USHORT which, const String& rURL )
+SfxImageItem::SfxImageItem( sal_uInt16 which, const String& rURL )
     : SfxInt16Item( which, 0 )
 {
     pImp = new SfxImageItem_Impl;
     pImp->nAngle = 0;
-    pImp->bMirrored = FALSE;
+    pImp->bMirrored = sal_False;
     pImp->aURL = rURL;
 }
 
@@ -87,7 +87,7 @@ int SfxImageItem::operator==( const SfxPoolItem& rItem ) const
     return( ((SfxImageItem&) rItem).GetValue() == GetValue() && (*pImp == *(((SfxImageItem&)rItem).pImp) ) );
 }
 
-BOOL SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
+sal_Bool SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq( 4 );
     aSeq[0] = ::com::sun::star::uno::makeAny( GetValue() );
@@ -96,10 +96,10 @@ BOOL SfxImageItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
     aSeq[3] = ::com::sun::star::uno::makeAny( rtl::OUString( pImp->aURL ));
 
     rVal = ::com::sun::star::uno::makeAny( aSeq );
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+sal_Bool SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aSeq;
     if (( rVal >>= aSeq ) && ( aSeq.getLength() == 4 ))
@@ -112,10 +112,10 @@ BOOL SfxImageItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
         aSeq[2] >>= pImp->bMirrored;
         if ( aSeq[3] >>= aURL )
             pImp->aURL = aURL;
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 void SfxImageItem::SetRotation( long nValue )
@@ -128,12 +128,12 @@ long SfxImageItem::GetRotation() const
     return pImp->nAngle;
 }
 
-void SfxImageItem::SetMirrored( BOOL bSet )
+void SfxImageItem::SetMirrored( sal_Bool bSet )
 {
     pImp->bMirrored = bSet;
 }
 
-BOOL SfxImageItem::IsMirrored() const
+sal_Bool SfxImageItem::IsMirrored() const
 {
     return pImp->bMirrored;
 }

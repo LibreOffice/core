@@ -158,14 +158,14 @@ FileCopier& FileCopier::operator = ( const FileCopier &rCopier )
 |*
 *************************************************************************/
 
-BOOL FileCopier::Progress()
+sal_Bool FileCopier::Progress()
 {
     if ( !aProgressLink )
-        return TRUE;
+        return sal_True;
     else
     {
         if ( aProgressLink.Call( this ) )
-            return TRUE;
+            return sal_True;
         return ( 0 == Error( ERRCODE_ABORT, 0, 0 ) );
     }
 }
@@ -243,7 +243,7 @@ FSysError FileCopier::DoCopy_Impl(
     // HPFS->FAT?
     FSysPathStyle eSourceStyle = DirEntry::GetPathStyle( rSource.ImpGetTopPtr()->GetName() );
     FSysPathStyle eTargetStyle = DirEntry::GetPathStyle( rTarget.ImpGetTopPtr()->GetName() );
-    BOOL bMakeShortNames = ( eSourceStyle == FSYS_STYLE_HPFS && eTargetStyle == FSYS_STYLE_FAT );
+    sal_Bool bMakeShortNames = ( eSourceStyle == FSYS_STYLE_HPFS && eTargetStyle == FSYS_STYLE_FAT );
 
     // Zieldateiname ggf. kuerzen
     DirEntry aTgt;

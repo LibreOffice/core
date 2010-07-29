@@ -54,10 +54,10 @@
 #endif
 
 // static
-inline BOOL ImpDdeMgr::MyWinDdePostMsg( HWND hWndTo, HWND hWndFrom,
-    USHORT nMsg, PDDESTRUCT pData, ULONG nFlags )
+inline sal_Bool ImpDdeMgr::MyWinDdePostMsg( HWND hWndTo, HWND hWndFrom,
+    sal_uInt16 nMsg, PDDESTRUCT pData, sal_uIntPtr nFlags )
 {
-    BOOL bSuccess = WinDdePostMsg( hWndTo,hWndFrom,nMsg,pData,nFlags);
+    sal_Bool bSuccess = WinDdePostMsg( hWndTo,hWndFrom,nMsg,pData,nFlags);
     if( !bSuccess )
     {
         WRITELOG("WinDdePostMsg:Failed!")
@@ -74,13 +74,13 @@ inline BOOL ImpDdeMgr::MyWinDdePostMsg( HWND hWndTo, HWND hWndFrom,
 // ImpDdeMgr
 // *********************************************************************
 
-USHORT ImpDdeMgr::nLastErrInstance = 0;
+sal_uInt16 ImpDdeMgr::nLastErrInstance = 0;
 
 //
 // Conversation-WndProc
 // Steuert Transaktionen eines Conversationhandles
 //
-MRESULT EXPENTRY ConvWndProc(HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2)
+MRESULT EXPENTRY ConvWndProc(HWND hWnd,sal_uIntPtr nMsg,MPARAM nPar1,MPARAM nPar2)
 {
 #if defined(DBG_UTIL) && defined(OV_DEBUG)
     if( nMsg >= WM_DDE_FIRST && nMsg <= WM_DDE_LAST)
@@ -96,7 +96,7 @@ MRESULT EXPENTRY ConvWndProc(HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2)
 // Server-WndProc
 // DDE-Server-Window der App
 //
-MRESULT EXPENTRY ServerWndProc(HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2)
+MRESULT EXPENTRY ServerWndProc(HWND hWnd,sal_uIntPtr nMsg,MPARAM nPar1,MPARAM nPar2)
 {
 #if defined(DBG_UTIL) && defined(OV_DEBUG)
     if( nMsg >= WM_DDE_FIRST && nMsg <= WM_DDE_LAST)
@@ -109,9 +109,9 @@ MRESULT EXPENTRY ServerWndProc(HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2)
 }
 
 
-inline HDDEDATA ImpDdeMgr::Callback( USHORT nTransactionType,
-    USHORT nClipboardFormat, HCONV hConversationHandle, HSZ hsz1,
-    HSZ hsz2, HDDEDATA hData, ULONG nData1, ULONG nData2 )
+inline HDDEDATA ImpDdeMgr::Callback( sal_uInt16 nTransactionType,
+    sal_uInt16 nClipboardFormat, HCONV hConversationHandle, HSZ hsz1,
+    HSZ hsz2, HDDEDATA hData, sal_uIntPtr nData1, sal_uIntPtr nData2 )
 {
     HDDEDATA hRet = (HDDEDATA)0;
     if( pCallback )
@@ -132,8 +132,8 @@ ImpDdeMgr::ImpDdeMgr()
     pAppTable           = 0;
     pConvTable          = 0;
     pTransTable         = 0;
-    bServFilterOn       = TRUE;
-    bInSyncTrans        = FALSE;
+    bServFilterOn       = sal_True;
+    bInSyncTrans        = sal_False;
 
     CreateServerWnd();
     pData = InitAll();
@@ -155,11 +155,11 @@ ImpDdeMgr::~ImpDdeMgr()
 }
 
 
-BOOL ImpDdeMgr::IsSameInstance( HWND hWnd )
+sal_Bool ImpDdeMgr::IsSameInstance( HWND hWnd )
 {
     TID tid; PID pid;
     WinQueryWindowProcess( hWnd, &pid, &tid );
-    return (BOOL)(pid == pidThis);
+    return (sal_Bool)(pid == pidThis);
 }
 
 HSZ ImpDdeMgr::GetAppName( HWND hWnd )
@@ -178,7 +178,7 @@ ImpDdeMgr* ImpDdeMgr::GetImpDdeMgrInstance( HWND hWnd )
     TID tid; PID pidApp;
     WinQueryWindowProcess( hWnd, &pidApp, &tid );
     HWND* pApp = ImpDdeMgr::GetAppTable( pData );
-    USHORT nCurApp = 0;
+    sal_uInt16 nCurApp = 0;
     while( nCurApp < pData->nMaxAppCount )
     {
         HWND hCurWin = *pApp;
@@ -208,7 +208,7 @@ void ImpDdeMgr::CleanUp()
     ImpService* pPtr = pServices;
     if( pPtr )
     {
-        for( USHORT nIdx = 0; nIdx < nServiceCount; nIdx++, pPtr++ )
+        for( sal_uInt16 nIdx = 0; nIdx < nServiceCount; nIdx++, pPtr++ )
         {
             HSZ hStr = pPtr->hBaseServName;
             if( hStr )
@@ -221,7 +221,7 @@ void ImpDdeMgr::CleanUp()
         delete pServices;
         pServices = 0;
     }
-    bServFilterOn = TRUE;  // default setting DDEML
+    bServFilterOn = sal_True;  // default setting DDEML
     UnregisterDDEMLApp();
 }
 
@@ -229,7 +229,7 @@ void ImpDdeMgr::RegisterDDEMLApp()
 {
     HWND* pPtr = pAppTable;
     HWND hCur;
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     while( nPos < pData->nMaxAppCount )
     {
         hCur = *pPtr;
@@ -247,7 +247,7 @@ void ImpDdeMgr::RegisterDDEMLApp()
 void ImpDdeMgr::UnregisterDDEMLApp()
 {
     HWND* pPtr = pAppTable;
-    USHORT nPos = 0;
+    sal_uInt16 nPos = 0;
     while( nPos < pData->nMaxAppCount )
     {
         if (*pPtr == hWndServer )
@@ -269,9 +269,9 @@ ImpDdeMgrData* ImpDdeMgr::AccessMgrData()
     return pData;
 }
 
-USHORT ImpDdeMgr::DdeGetLastError()
+sal_uInt16 ImpDdeMgr::DdeGetLastError()
 {
-    USHORT nErr;
+    sal_uInt16 nErr;
     if ( !pData )
         nErr = DMLERR_DLL_NOT_INITIALIZED;
     else if ( nLastErrInstance )
@@ -286,7 +286,7 @@ USHORT ImpDdeMgr::DdeGetLastError()
 
 
 
-USHORT ImpDdeMgr::DdeInitialize( PFNCALLBACK pCallbackProc, ULONG nTransactionFilter )
+sal_uInt16 ImpDdeMgr::DdeInitialize( PFNCALLBACK pCallbackProc, sal_uIntPtr nTransactionFilter )
 {
     if ( !nLastErrInstance )
     {
@@ -327,7 +327,7 @@ HCONV ImpDdeMgr::DdeConnectImp( HSZ hszService,HSZ hszTopic,CONVCONTEXT* pCC)
     if( !pCC )
         pCC = &aDefaultContext;
 
-    ULONG nBufLen;
+    sal_uIntPtr nBufLen;
     PSZ pService = AllocAtomName( (ATOM)hszService, nBufLen );
     PSZ pTopic = AllocAtomName( (ATOM)hszTopic, nBufLen );
 #if 0 && defined(OV_DEBUG)
@@ -402,7 +402,7 @@ HCONV ImpDdeMgr::DdeConnectImp( HSZ hszService,HSZ hszTopic,CONVCONTEXT* pCC)
 HCONV ImpDdeMgr::DdeConnect( HSZ hszService, HSZ hszTopic, CONVCONTEXT* pCC)
 {
     ////WRITELOG("DdeConnect:Start")
-    bListConnect = FALSE;
+    bListConnect = sal_False;
     HCONV hResult = DdeConnectImp( hszService, hszTopic, pCC );
     ////WRITELOG("DdeConnect:End")
     ////WRITESTATUS("DdeConnect:End")
@@ -421,20 +421,20 @@ HCONVLIST ImpDdeMgr::DdeConnectList( HSZ hszService, HSZ hszTopic,
 
         hCurListId      = hConvList;
         ImpHCONV* pConv = pConvTable;
-        pConv          += (USHORT)hConvList;
-        if( (USHORT)hConvList >= pData->nMaxConvCount ||pConv->hWndThis==0 )
+        pConv          += (sal_uInt16)hConvList;
+        if( (sal_uInt16)hConvList >= pData->nMaxConvCount ||pConv->hWndThis==0 )
         {
             nLastErrInstance = DMLERR_INVALIDPARAMETER;
             return 0;
         }
         GetLastServer(pData, hConvList, hLastConvInList);
-        nPrevConv = (USHORT)hLastConvInList;
+        nPrevConv = (sal_uInt16)hLastConvInList;
     }
     else
         hCurListId = (HCONVLIST)WinCreateWindow( HWND_OBJECT, WC_FRAME,
             CONVLISTNAME, 0,0,0,0,0, HWND_DESKTOP, HWND_BOTTOM, 0,0,0);
 
-    bListConnect = TRUE;
+    bListConnect = sal_True;
     DdeConnectImp( hszService, hszTopic, pCC );
 #if 0 && defined(OV_DEBUG)
     WRITELOG("DdeConnectList:ConnectionList:")
@@ -442,7 +442,7 @@ HCONVLIST ImpDdeMgr::DdeConnectList( HSZ hszService, HSZ hszTopic,
     do
     {
         hDebug = DdeQueryNextServer( hCurListId, hDebug);
-        String aStr( (ULONG)hDebug );
+        String aStr( (sal_uIntPtr)hDebug );
         WRITELOG((char*)(const char*)aStr)
     } while( hDebug );
 #endif
@@ -453,7 +453,7 @@ HCONVLIST ImpDdeMgr::DdeConnectList( HSZ hszService, HSZ hszTopic,
 DDEINIT* ImpDdeMgr::CreateDDEInitData( HWND hWndDestination, HSZ hszService,
     HSZ hszTopic, CONVCONTEXT* pCC )
 {
-    ULONG nLen1 = 0, nLen2 = 0;
+    sal_uIntPtr nLen1 = 0, nLen2 = 0;
     HATOMTBL hAtomTable = WinQuerySystemAtomTable();
 
     if( hszService )
@@ -464,7 +464,7 @@ DDEINIT* ImpDdeMgr::CreateDDEInitData( HWND hWndDestination, HSZ hszService,
 
     DDEINIT* pBuf = 0;
 
-    ULONG nLen = sizeof(DDEINIT) + nLen1+ nLen2 + sizeof(CONVCONTEXT);
+    sal_uIntPtr nLen = sizeof(DDEINIT) + nLen1+ nLen2 + sizeof(CONVCONTEXT);
     if( !(MyDosAllocSharedMem((PPVOID)&pBuf, NULL, nLen,
             PAG_COMMIT | PAG_READ | PAG_WRITE | OBJ_GIVEABLE | OBJ_ANY,
             "CreateDDEInitData")))
@@ -525,7 +525,7 @@ ImpHCONV* ImpDdeMgr::GetFirstServer(ImpDdeMgrData* pData, HCONVLIST hConvList,
     else
     {
         // Startposition
-        pPtr += (USHORT)rhConv;
+        pPtr += (sal_uInt16)rhConv;
         hConv = rhConv;
         pPtr++; hConv++;    // auf den naechsten
     }
@@ -567,12 +567,12 @@ ImpHCONV* ImpDdeMgr::GetLastServer(ImpDdeMgrData* pData, HCONVLIST hConvList,
 }
 
 // static
-BOOL ImpDdeMgr::CheckConvListId( HCONVLIST hConvListId )
+sal_Bool ImpDdeMgr::CheckConvListId( HCONVLIST hConvListId )
 {
     HAB hAB = WinQueryAnchorBlock( (HWND)hConvListId );
     if( hAB )
         return WinIsWindow( hAB, (HWND)hConvListId );
-    return FALSE;
+    return sal_False;
     /*
     HAB hAB = WinQueryAnchorBlock( (HWND)hConvListId );
     if( hAB )
@@ -580,9 +580,9 @@ BOOL ImpDdeMgr::CheckConvListId( HCONVLIST hConvListId )
         char aBuf[ 16 ];
         WinQueryWindowText( (HWND)hConvListId, sizeof(aBuf), aBuf );
         if( strcmp(aBuf, CONVLISTNAME ) == 0 )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
     */
 }
 
@@ -601,7 +601,7 @@ HCONV ImpDdeMgr::DdeQueryNextServer(HCONVLIST hConvList, HCONV hConvPrev)
 // Idee: DisconnectAll uebergibt das ServerWindow. Zu jedem HCONV
 // wird das Creator-Server-Wnd gespeichert. Disconnect braucht
 // dann nur noch die Window-Handles zu vergleichen
-BOOL ImpDdeMgr::DdeDisconnect( HCONV hConv )
+sal_Bool ImpDdeMgr::DdeDisconnect( HCONV hConv )
 {
     WRITELOG("DdeDisconnect:Start")
     ////WRITESTATUS("DdeDisconnect:Start")
@@ -610,14 +610,14 @@ BOOL ImpDdeMgr::DdeDisconnect( HCONV hConv )
     if ( !pData )
     {
         ImpDdeMgr::nLastErrInstance = DMLERR_DLL_NOT_INITIALIZED;
-        return FALSE;
+        return sal_False;
     }
-    ImpHCONV* pConv = GetConvTable(pData) + (USHORT)hConv;
+    ImpHCONV* pConv = GetConvTable(pData) + (sal_uInt16)hConv;
 
-    if( (USHORT)hConv >= pData->nMaxConvCount || pConv->hWndThis==0 )
+    if( (sal_uInt16)hConv >= pData->nMaxConvCount || pConv->hWndThis==0 )
     {
         nLastErrInstance = DMLERR_NO_CONV_ESTABLISHED;
-        return FALSE;
+        return sal_False;
     }
 
     PID pidApp; TID tid;
@@ -633,7 +633,7 @@ BOOL ImpDdeMgr::DdeDisconnect( HCONV hConv )
     WinQueryWindowProcess( hWndThis, &pidThis, &tid );
     WinQueryWindowProcess( hWndPartner, &pidPartner, &tid );
     if( pidApp != pidThis && pidApp != pidPartner )
-        return TRUE;  // gehoert nicht der App -> ueberspringen
+        return sal_True;  // gehoert nicht der App -> ueberspringen
 
     HCONV hConvPartner = pConv->hConvPartner;
 
@@ -644,14 +644,14 @@ BOOL ImpDdeMgr::DdeDisconnect( HCONV hConv )
     ImpConvWndData* pObj =
         (ImpConvWndData*)WinQueryWindowULong( pConv->hWndThis, 0 );
     ImpDdeMgr* pThis = pObj->pThis;
-    pThis->SendUnadvises( hConv, 0, FALSE ); // alle Formate & NICHT loeschen
-    pThis->SendUnadvises( hConvPartner, 0, FALSE ); // alle Formate & NICHT loeschen
+    pThis->SendUnadvises( hConv, 0, sal_False ); // alle Formate & NICHT loeschen
+    pThis->SendUnadvises( hConvPartner, 0, sal_False ); // alle Formate & NICHT loeschen
 
     pConv->nStatus |= ST_TERMINATED;
 
     HAB hAB = WinQueryAnchorBlock( pConv->hWndThis );
     // um die MessageQueue inne Gaenge zu halten
-    ULONG nTimerId = WinStartTimer( hAB, 0, 0, 50 );
+    sal_uIntPtr nTimerId = WinStartTimer( hAB, 0, 0, 50 );
 
     /*
        Die Partner-App muss ein DDE_TERMINATE posten, auf das
@@ -664,7 +664,7 @@ BOOL ImpDdeMgr::DdeDisconnect( HCONV hConv )
         (PDDESTRUCT)0,DDEPM_RETRY);
 
     QMSG aQueueMsg;
-    BOOL bContinue = TRUE;
+    sal_Bool bContinue = sal_True;
     while( bContinue )
     {
         if( WinGetMsg( hAB, &aQueueMsg, 0, 0, 0 ))
@@ -673,7 +673,7 @@ BOOL ImpDdeMgr::DdeDisconnect( HCONV hConv )
             if( (!WinIsWindow( hAB, hWndPartner)) ||
                 (pConv->nStatus & ST_TERMACKREC) )
             {
-                bContinue = FALSE;
+                bContinue = sal_False;
                 if( pConv->nStatus & ST_TERMACKREC )
                 {
                     WRITELOG("DdeDisconnect: TermAck received")
@@ -685,7 +685,7 @@ BOOL ImpDdeMgr::DdeDisconnect( HCONV hConv )
             }
         }
         else
-            bContinue = FALSE;
+            bContinue = sal_False;
     }
 
     WinStopTimer( hAB, 0, nTimerId );
@@ -700,23 +700,23 @@ BOOL ImpDdeMgr::DdeDisconnect( HCONV hConv )
 
     WRITELOG("DdeDisconnect:End")
     //WRITESTATUS("DdeDisconnect:End")
-    return TRUE;
+    return sal_True;
 }
 
 // static
-BOOL ImpDdeMgr::DdeDisconnectList( HCONVLIST hConvList )
+sal_Bool ImpDdeMgr::DdeDisconnectList( HCONVLIST hConvList )
 {
     if( !CheckConvListId( hConvList ) )
     {
         ImpDdeMgr::nLastErrInstance = DMLERR_INVALIDPARAMETER;
-        return FALSE;
+        return sal_False;
     }
 
     ImpDdeMgrData* pData = ImpDdeMgr::AccessMgrData();
     if ( !pData )
     {
         ImpDdeMgr::nLastErrInstance = DMLERR_DLL_NOT_INITIALIZED;
-        return FALSE;
+        return sal_False;
     }
     HCONV hConv = 0;
     GetFirstServer( pData, hConvList, hConv );
@@ -726,7 +726,7 @@ BOOL ImpDdeMgr::DdeDisconnectList( HCONVLIST hConvList )
         GetFirstServer( pData, hConvList, hConv );
     }
     WinDestroyWindow( (HWND)hConvList );
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -744,7 +744,7 @@ HCONV ImpDdeMgr::DdeReconnect(HCONV hConv)
 }
 
 // static
-USHORT ImpDdeMgr::DdeQueryConvInfo(HCONV hConv, ULONG nTransId, CONVINFO* pCI)
+sal_uInt16 ImpDdeMgr::DdeQueryConvInfo(HCONV hConv, sal_uIntPtr nTransId, CONVINFO* pCI)
 {
     if( !pCI || pCI->nSize == 0)
         return 0;
@@ -769,14 +769,14 @@ USHORT ImpDdeMgr::DdeQueryConvInfo(HCONV hConv, ULONG nTransId, CONVINFO* pCI)
         pTrans = 0;
 
     ImpHCONV* pConv = ImpDdeMgr::GetConvTable( pData );
-    pConv += (ULONG)hConv;
+    pConv += (sal_uIntPtr)hConv;
     if( hConv >= pData->nMaxConvCount || pConv->hWndThis == 0 )
     {
         ImpDdeMgr::nLastErrInstance = DMLERR_NO_CONV_ESTABLISHED;
         return 0;
     }
 
-    USHORT nSize = pCI->nSize;
+    sal_uInt16 nSize = pCI->nSize;
     if( nSize > sizeof(CONVINFO) )
         nSize = sizeof(CONVINFO);
     CONVINFO aTempInfo;
@@ -804,13 +804,13 @@ USHORT ImpDdeMgr::DdeQueryConvInfo(HCONV hConv, ULONG nTransId, CONVINFO* pCI)
 }
 
 // static
-BOOL ImpDdeMgr::DdeSetUserHandle(HCONV hConv, ULONG nTransId, ULONG hUser)
+sal_Bool ImpDdeMgr::DdeSetUserHandle(HCONV hConv, sal_uIntPtr nTransId, sal_uIntPtr hUser)
 {
     ImpDdeMgrData* pData = ImpDdeMgr::AccessMgrData();
     if ( !pData )
     {
         ImpDdeMgr::nLastErrInstance = DMLERR_DLL_NOT_INITIALIZED;
-        return FALSE;
+        return sal_False;
     }
     Transaction* pTrans = GetTransTable( pData );
     pTrans += nTransId;
@@ -818,53 +818,53 @@ BOOL ImpDdeMgr::DdeSetUserHandle(HCONV hConv, ULONG nTransId, ULONG hUser)
         pTrans->hConvOwner != hConv )
     {
         ImpDdeMgr::nLastErrInstance = DMLERR_INVALIDPARAMETER;
-        return FALSE;
+        return sal_False;
     }
     if( !pTrans->hConvOwner)
     {
         ImpDdeMgr::nLastErrInstance = DMLERR_UNFOUND_QUEUE_ID;
-        return FALSE;
+        return sal_False;
     }
     pTrans->nUser = hUser;
-    return TRUE;
+    return sal_True;
 }
 
-BOOL ImpDdeMgr::DdeAbandonTransaction( HCONV hConv, ULONG nTransId )
+sal_Bool ImpDdeMgr::DdeAbandonTransaction( HCONV hConv, sal_uIntPtr nTransId )
 {
     ////WRITELOG("DdeAbandonTransaction:Start")
     if( !pData )
     {
         nLastErrInstance = DMLERR_DLL_NOT_INITIALIZED;
-        return FALSE;
+        return sal_False;
     }
     ImpHCONV* pConv = pConvTable;
-    pConv += (USHORT)hConv;
+    pConv += (sal_uInt16)hConv;
     if( nTransId < 1 || nTransId >= pData->nMaxTransCount ||
         hConv < 1 || hConv >= pData->nMaxConvCount || !pConv->hWndThis)
     {
         nLastErrInstance = DMLERR_INVALIDPARAMETER;
-        return FALSE;
+        return sal_False;
     }
     if( !hConv )
     {
         DBG_ASSERT(0,"DdeAbandonTransaction:NULL-hConv not supported");
         nLastErrInstance = DMLERR_INVALIDPARAMETER;
-        return FALSE;
+        return sal_False;
     }
     Transaction* pTrans = pTransTable;
-    pTrans += (USHORT)nTransId;
+    pTrans += (sal_uInt16)nTransId;
     if( pTrans->hConvOwner != hConv )
     {
         nLastErrInstance = DMLERR_UNFOUND_QUEUE_ID;
-        return FALSE;
+        return sal_False;
     }
 
     if( bInSyncTrans && nTransId == nSyncTransId )
     {
-        bSyncAbandonTrans = TRUE;
-        return TRUE;
+        bSyncAbandonTrans = sal_True;
+        return sal_True;
     }
-    USHORT nTempType = pTrans->nType;
+    sal_uInt16 nTempType = pTrans->nType;
     nTempType &= (~XTYPF_MASK);
     if( nTempType == (XTYP_ADVREQ & ~(XTYPF_NOBLOCK)))
     {
@@ -897,7 +897,7 @@ BOOL ImpDdeMgr::DdeAbandonTransaction( HCONV hConv, ULONG nTransId )
             WM_DDE_UNADVISE, pOutDDEData, DDEPM_RETRY ) )
         {
             WRITELOG("DdeAbandTrans:PostMsg Failed")
-            return FALSE;
+            return sal_False;
         }
 #ifdef SO_DDE_ABANDON_TRANSACTION_WAIT_ACK
         WaitTransState( pTrans, nTransId, XST_UNADVACKRCVD, 0 );
@@ -911,40 +911,40 @@ BOOL ImpDdeMgr::DdeAbandonTransaction( HCONV hConv, ULONG nTransId )
         FreeTransaction( pData, nTransId );
     }
     WRITELOG("DdeAbandonTransaction:End")
-    return TRUE;
+    return sal_True;
 }
 
 // wird von einem Server aufgerufen, wenn sich die Daten des
 // Topic/Item-Paars geaendert haben. Diese Funktion fordert
 // dann den Server auf, die Daten zu rendern (bei Hotlinks) und
 // benachrichtigt die Clients
-BOOL ImpDdeMgr::DdePostAdvise( HSZ hszTopic, HSZ hszItem)
+sal_Bool ImpDdeMgr::DdePostAdvise( HSZ hszTopic, HSZ hszItem)
 {
     ////WRITELOG("DdePostAdvise:Start")
     ////WRITESTATUS("DdePostAdvise:Start")
 
 #if 0 && defined( OV_DEBUG )
     String aDebStr("DdePostAdvise:Item ");
-    aDebStr += (ULONG)hszItem;
+    aDebStr += (sal_uIntPtr)hszItem;
     WRITELOG((char*)(const char*)aDebStr)
 #endif
 
     Transaction* pTrans = pTransTable;
     pTrans++;
-    USHORT nCurTrans = 1;
-    USHORT nUsedTransactions = pData->nCurTransCount;
+    sal_uInt16 nCurTrans = 1;
+    sal_uInt16 nUsedTransactions = pData->nCurTransCount;
     while( nUsedTransactions && nCurTrans < pData->nMaxTransCount )
     {
         HCONV hOwner = pTrans->hConvOwner;
         if( hOwner )
         {
             nUsedTransactions--;
-            USHORT nTempType = pTrans->nType;
+            sal_uInt16 nTempType = pTrans->nType;
             nTempType &= (~XTYPF_MASK);
             if( nTempType == (XTYP_ADVREQ & (~XTYPF_NOBLOCK) ) )
             {
                 ImpHCONV* pConv = pConvTable;
-                pConv += (USHORT)hOwner;
+                pConv += (sal_uInt16)hOwner;
                 if(hszItem == pTrans->hszItem && pConv->hszTopic == hszTopic)
                 {
                     if( pConv->hConvPartner )
@@ -953,15 +953,15 @@ BOOL ImpDdeMgr::DdePostAdvise( HSZ hszTopic, HSZ hszItem)
                         // -> auf Server-HCONV umschalten
                         hOwner = pConv->hConvPartner;
                         pConv = pConvTable;
-                        pConv += (USHORT)hOwner;
+                        pConv += (sal_uInt16)hOwner;
                     }
                     HWND hWndClient = pConv->hWndPartner;
                     HWND hWndServer = pConv->hWndThis;
 #if 0 && defined( OV_DEBUG )
                     String aDebStr("DdePostAdvise: Server:");
-                    aDebStr += (ULONG)hWndServer;
+                    aDebStr += (sal_uIntPtr)hWndServer;
                     aDebStr += " Client:";
-                    aDebStr += (ULONG)hWndClient;
+                    aDebStr += (sal_uIntPtr)hWndClient;
                     WRITELOG((char*)(const char*)aDebStr)
 #endif
                     DDESTRUCT* pOutDDEData;
@@ -984,7 +984,7 @@ BOOL ImpDdeMgr::DdePostAdvise( HSZ hszTopic, HSZ hszItem)
                     {
                         // todo: FACK_REQ in Out-Data setzen, wenn pTrans->nType & XTYPF_ACKREQ
                         ////WRITELOG("DdePostAdvise:Sending data/notification")
-                        BOOL bSuccess = MyWinDdePostMsg( hWndClient,
+                        sal_Bool bSuccess = MyWinDdePostMsg( hWndClient,
                             hWndServer,WM_DDE_DATA, pOutDDEData, DDEPM_RETRY);
                         if( bSuccess )
                         {
@@ -1014,12 +1014,12 @@ BOOL ImpDdeMgr::DdePostAdvise( HSZ hszTopic, HSZ hszItem)
         pTrans++;
     }
     ////WRITELOG("DdePostAdvise:End")
-    return TRUE;
+    return sal_True;
 }
 
-BOOL ImpDdeMgr::DdeEnableCallback( HCONV hConv, USHORT wCmd)
+sal_Bool ImpDdeMgr::DdeEnableCallback( HCONV hConv, sal_uInt16 wCmd)
 {
-    return FALSE;
+    return sal_False;
 }
 
 // Rueckgabe: 0==Service nicht registriert; sonst Pointer auf Service-Eintrag
@@ -1028,7 +1028,7 @@ ImpService* ImpDdeMgr::GetService( HSZ hszService )
     ImpService* pPtr = pServices;
     if( !pPtr || !hszService )
         return 0;
-    for( ULONG nIdx = 0; nIdx < nServiceCount; nIdx++, pPtr++ )
+    for( sal_uIntPtr nIdx = 0; nIdx < nServiceCount; nIdx++, pPtr++ )
     {
         if(( hszService == pPtr->hBaseServName )    ||
            ( hszService == pPtr->hInstServName ) )
@@ -1049,7 +1049,7 @@ ImpService* ImpDdeMgr::PutService( HSZ hszService )
         nServiceCount = DDEMLSERVICETABLE_INISIZE;
     }
     ImpService* pPtr = pServices;
-    USHORT nCurPos = 0;
+    sal_uInt16 nCurPos = 0;
     while( pPtr )
     {
         if( pPtr->hBaseServName == 0 )
@@ -1079,11 +1079,11 @@ ImpService* ImpDdeMgr::PutService( HSZ hszService )
 
     DdeKeepStringHandle( hszService );
 
-    USHORT nStrLen = (USHORT)DdeQueryString( hszService, 0, 0, 0);
+    sal_uInt16 nStrLen = (sal_uInt16)DdeQueryString( hszService, 0, 0, 0);
     char* pBuf = new char[ nStrLen + 1 ];
     DdeQueryString(hszService, pBuf, nStrLen, 850 /* CodePage*/ );
     pBuf[ nStrLen ] = 0;
-    String aStr( (ULONG)hWndServer );
+    String aStr( (sal_uIntPtr)hWndServer );
     aStr += pBuf;
     HSZ hszInstServ = DdeCreateStringHandle( (PSZ)(const char*)pBuf, 850 );
     delete [] pBuf;
@@ -1093,21 +1093,21 @@ ImpService* ImpDdeMgr::PutService( HSZ hszService )
     return pPtr;
 }
 
-void ImpDdeMgr::BroadcastService( ImpService* pService, BOOL bRegistered )
+void ImpDdeMgr::BroadcastService( ImpService* pService, sal_Bool bRegistered )
 {
     DBG_ASSERT(pService,"DDE:No Service");
     if( !pService )
         return;
     MPARAM aMp1 = (MPARAM)(pService->hBaseServName);
     MPARAM aMp2 = (MPARAM)(pService->hInstServName);
-    ULONG nMsg;
+    sal_uIntPtr nMsg;
     if( bRegistered )
         nMsg = WM_DDEML_REGISTER;
     else
         nMsg = WM_DDEML_UNREGISTER;
 
     HWND* pPtr = pAppTable;
-    for( USHORT nPos = 0; nPos < pData->nMaxAppCount; nPos++, pPtr++ )
+    for( sal_uInt16 nPos = 0; nPos < pData->nMaxAppCount; nPos++, pPtr++ )
     {
         HWND hWndCurWin = *pPtr;
         if ( hWndCurWin && hWndCurWin != hWndServer )
@@ -1115,29 +1115,29 @@ void ImpDdeMgr::BroadcastService( ImpService* pService, BOOL bRegistered )
     }
 }
 
-HDDEDATA ImpDdeMgr::DdeNameService( HSZ hszService, USHORT afCmd )
+HDDEDATA ImpDdeMgr::DdeNameService( HSZ hszService, sal_uInt16 afCmd )
 {
     HDDEDATA hRet = (HDDEDATA)1;
 
     if( afCmd & DNS_FILTERON )
-        bServFilterOn = TRUE;
+        bServFilterOn = sal_True;
     else if( afCmd & DNS_FILTEROFF )
-        bServFilterOn = FALSE;
+        bServFilterOn = sal_False;
     ImpService* pService = GetService( hszService );
-    BOOL bRegister = (BOOL)(afCmd & DNS_REGISTER);
+    sal_Bool bRegister = (sal_Bool)(afCmd & DNS_REGISTER);
     if( bRegister )
     {
         if( !pService )
         {
             pService = PutService( hszService );
-            BroadcastService( pService, TRUE );
+            BroadcastService( pService, sal_True );
         }
     }
     else
     {
         if( pService )
         {
-            BroadcastService( pService, FALSE );
+            BroadcastService( pService, sal_False );
             DdeFreeStringHandle( pService->hBaseServName );
             pService->hBaseServName = 0;
             DdeFreeStringHandle( pService->hInstServName );
@@ -1150,9 +1150,9 @@ HDDEDATA ImpDdeMgr::DdeNameService( HSZ hszService, USHORT afCmd )
 
 
 // static
-HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
-    HCONV hConv, HSZ hszItem, USHORT nFormat, USHORT nType,
-    ULONG nTimeout, ULONG* pResult)
+HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, sal_uIntPtr cbData,
+    HCONV hConv, HSZ hszItem, sal_uInt16 nFormat, sal_uInt16 nType,
+    sal_uIntPtr nTimeout, sal_uIntPtr* pResult)
 {
     //WRITELOG("DdeClientTransaction:Start")
 
@@ -1176,21 +1176,21 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
         return (HDDEDATA)0;
     }
 
-    BOOL bIsDdeHandle = (BOOL)(pDdeData && cbData==0xffffffff);
-    BOOL bAppOwnsHandle = (BOOL)( bIsDdeHandle &&
+    sal_Bool bIsDdeHandle = (sal_Bool)(pDdeData && cbData==0xffffffff);
+    sal_Bool bAppOwnsHandle = (sal_Bool)( bIsDdeHandle &&
         (((DDESTRUCT*)pDdeData)->fsStatus & IMP_HDATAAPPOWNED) );
 
-    BOOL bNoData  = (BOOL)(nType & XTYPF_NODATA)!=0;
-    BOOL bAckReq  = (BOOL)(nType & XTYPF_ACKREQ)!=0;
-    USHORT nTypeFlags = nType & XTYPF_MASK;
+    sal_Bool bNoData  = (sal_Bool)(nType & XTYPF_NODATA)!=0;
+    sal_Bool bAckReq  = (sal_Bool)(nType & XTYPF_ACKREQ)!=0;
+    sal_uInt16 nTypeFlags = nType & XTYPF_MASK;
     nType &= (~XTYPF_MASK);
 
-    BOOL bSync = (BOOL)( nTimeout != TIMEOUT_ASYNC ) != 0;
+    sal_Bool bSync = (sal_Bool)( nTimeout != TIMEOUT_ASYNC ) != 0;
     if( nType == XTYP_ADVSTART )
-        bSync = TRUE;
+        bSync = sal_True;
 
     // Mapping transaction -> OS/2-Message
-    USHORT nTimeoutErr, nMsg;
+    sal_uInt16 nTimeoutErr, nMsg;
     switch ( nType )
     {
         case XTYP_ADVSTART:
@@ -1232,7 +1232,7 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
         default:
             nMsg = 0;
     }
-    if(!hConv || (USHORT)hConv>= pData->nMaxConvCount || !nType || !nMsg ||
+    if(!hConv || (sal_uInt16)hConv>= pData->nMaxConvCount || !nType || !nMsg ||
        (nType != XTYP_EXECUTE && (!hszItem || !nFormat)) )
     {
         WRITELOG("DdeClientTransaction:Invalid parameter")
@@ -1244,7 +1244,7 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
 
     // ueber den Conversation handle das ImpDdeMgr-Objekt holen
     ImpHCONV* pConv = GetConvTable( pData );
-    pConv += (USHORT)hConv;
+    pConv += (sal_uInt16)hConv;
     ImpConvWndData* pObj =
         (ImpConvWndData*)WinQueryWindowULong( pConv->hWndThis, 0 );
     ImpDdeMgr* pThis = pObj->pThis;
@@ -1260,14 +1260,14 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
 
     Transaction* pTrans;
 
-    BOOL bReqOnAdvLoop = FALSE;
-    ULONG nTransId = GetTransaction( pData, hConv, hszItem, nFormat );
+    sal_Bool bReqOnAdvLoop = sal_False;
+    sal_uIntPtr nTransId = GetTransaction( pData, hConv, hszItem, nFormat );
     if( nTransId )
     {
         // WRITELOG("DdeClientTransaction:Transaction found")
         pTrans = GetTransTable( pData );
-        pTrans += (USHORT)nTransId;
-        USHORT nTransType = pTrans->nType;
+        pTrans += (sal_uInt16)nTransId;
+        sal_uInt16 nTransType = pTrans->nType;
         nTransType &= (~XTYPF_MASK);
         if( (nType != XTYP_REQUEST && nTransType == nType) ||
              // wird Advise-Loop schon zum requesten missbraucht ?
@@ -1300,12 +1300,12 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
                         pTrans->nType |= XTYPF_ACKREQ;
                     if( pResult )
                         *pResult = nTransId;
-                    return (HDDEDATA)TRUE;
+                    return (HDDEDATA)sal_True;
 
                 case XTYP_REQUEST:
                     // WRITELOG("DdeClientTransaction:Using adv trans for req")
                     // nConvst wird unten auf XST_WAITING_REQDATA gesetzt
-                    bReqOnAdvLoop = TRUE;
+                    bReqOnAdvLoop = sal_True;
                     break;
 
                 default:
@@ -1313,7 +1313,7 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
                     ImpDdeMgr::nLastErrInstance = DMLERR_INVALIDPARAMETER;
                     if( bIsDdeHandle && !bAppOwnsHandle )
                         DdeFreeDataHandle( (HDDEDATA)pDdeData );
-                    return (HDDEDATA)FALSE;
+                    return (HDDEDATA)sal_False;
             }
         }
     }
@@ -1324,7 +1324,7 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
     }
 
     pTrans = GetTransTable( pData );
-    pTrans += (USHORT)nTransId;
+    pTrans += (sal_uInt16)nTransId;
     pTrans->nConvst = XST_WAITING_ACK;
     if( nType == XTYP_REQUEST )
         pTrans->nConvst = XST_WAITING_REQDATA;
@@ -1374,9 +1374,9 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
         // WRITELOG("DdeClientTransaction:Starting sync. trans.")
         pThis->hSyncResponseData = (HDDEDATA)0;
         pThis->nSyncResponseMsg  = 0;
-        pThis->bInSyncTrans      = TRUE;
+        pThis->bInSyncTrans      = sal_True;
         pThis->nSyncTransId      = nTransId;
-        pThis->bSyncAbandonTrans = FALSE;
+        pThis->bSyncAbandonTrans = sal_False;
 
         if ( !MyWinDdePostMsg( hWndServer, hWndClient, nMsg, pOutDDEData,
                 DDEPM_RETRY) )
@@ -1390,18 +1390,18 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
                 DBG_ASSERT(pTrans->nType==XTYP_ADVREQ,"DDE:Error!")
                 pTrans->nConvst = 0;
             }
-            return FALSE;
+            return sal_False;
         }
         HAB hAB = WinQueryAnchorBlock( hWndClient );
-        ULONG nDummyTimer = WinStartTimer( hAB, 0, 0, 50 );
-        ULONG nTimeoutId = TID_USERMAX - nTransId;
+        sal_uIntPtr nDummyTimer = WinStartTimer( hAB, 0, 0, 50 );
+        sal_uIntPtr nTimeoutId = TID_USERMAX - nTransId;
         WinStartTimer( hAB, hWndClient, nTimeoutId, nTimeout );
         QMSG aQueueMsg;
-        BOOL bLoop = TRUE;
+        sal_Bool bLoop = sal_True;
         while( bLoop )
         {
             if( pThis->nSyncResponseMsg )
-                bLoop = FALSE;
+                bLoop = sal_False;
             else
             {
                 if( WinGetMsg(hAB,&aQueueMsg,0,0,0 ))
@@ -1409,7 +1409,7 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
                     WinDispatchMsg( hAB, &aQueueMsg );
                 }
                 else
-                    bLoop = FALSE;
+                    bLoop = sal_False;
             }
         }
 
@@ -1431,7 +1431,7 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
         nMsg = pThis->nSyncResponseMsg;
         pThis->hSyncResponseData= 0;
         pThis->nSyncResponseMsg = 0;
-        pThis->bInSyncTrans     = FALSE;
+        pThis->bInSyncTrans     = sal_False;
         pThis->nSyncTransId     = 0;
         if( !pDDEInData && nMsg != WM_TIMER )
         {
@@ -1452,7 +1452,7 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
             case WM_DDE_ACK:
                 {
                 // WRITELOG("DdeClientTransaction:Ack received")
-                BOOL bPositive = (BOOL)(pDDEInData->fsStatus & DDE_FACK);
+                sal_Bool bPositive = (sal_Bool)(pDDEInData->fsStatus & DDE_FACK);
                 MyDosFreeMem( pDDEInData,"DdeClientTransaction" );
                 pDDEInData = (HDDEDATA)bPositive;
                 if( nType == XTYP_ADVSTART && pDDEInData )
@@ -1509,8 +1509,8 @@ HDDEDATA ImpDdeMgr::DdeClientTransaction(void* pDdeData, ULONG cbData,
                 MyDosFreeMem( pDDEInData,"DdeClientTransaction"  );
                 pDDEInData = 0;
         }
-        pThis->bSyncAbandonTrans = FALSE;
-        pThis->bInSyncTrans = FALSE;
+        pThis->bSyncAbandonTrans = sal_False;
+        pThis->bInSyncTrans = sal_False;
         if( pThis->bSyncAbandonTrans && bReqOnAdvLoop )
             pThis->DdeAbandonTransaction( hConv, nTransId );
     }
@@ -1584,10 +1584,10 @@ MRESULT ImpDdeMgr::DdeTimeout( ImpWndProcParams* pParams )
         ////WRITELOG("DdeTimeout:Trans already processed->ignoring timeout")
         return (MRESULT)1;
     }
-    ULONG nTimerId = (ULONG)pParams->nPar1;
-    ULONG nTransId = TID_USERMAX - nTimerId;
+    sal_uIntPtr nTimerId = (sal_uIntPtr)pParams->nPar1;
+    sal_uIntPtr nTransId = TID_USERMAX - nTimerId;
     Transaction* pTrans = pTransTable;
-    pTrans += (USHORT)nTransId;
+    pTrans += (sal_uInt16)nTransId;
     if( nTransId < 1 || nTransId >= pData->nMaxTransCount ||
         pTrans->hConvOwner == 0 )
     {
@@ -1596,7 +1596,7 @@ MRESULT ImpDdeMgr::DdeTimeout( ImpWndProcParams* pParams )
     }
     if( bInSyncTrans && nTransId == nSyncTransId )
     {
-        USHORT nTempType = pTrans->nType;
+        sal_uInt16 nTempType = pTrans->nType;
         nTempType &= (~XTYPF_MASK);
         // advise-loops koennen nur innerhalb synchroner
         // requests timeouts bekommen. die transaktion wird
@@ -1632,10 +1632,10 @@ MRESULT ImpDdeMgr::DdeTerminate( ImpWndProcParams* pParams )
     HCONV hConv = GetConvHandle( pData, hWndThis, hWndPartner );
 #if 0 && defined( OV_DEBUG )
     String strDebug("DdeTerminate:ConvHandle=");
-    strDebug += (USHORT)hConv;
+    strDebug += (sal_uInt16)hConv;
     WRITELOG((char*)(const char*)strDebug)
 #endif
-    ImpHCONV* pConv = pConvTable + (USHORT)hConv;
+    ImpHCONV* pConv = pConvTable + (sal_uInt16)hConv;
     if( hConv )
     {
         // warten wir auf ein DDE_TERMINATE Acknowledge ?
@@ -1655,14 +1655,14 @@ MRESULT ImpDdeMgr::DdeTerminate( ImpWndProcParams* pParams )
         // Es muessen alle Trans geloescht werden, die als Owner den
         // Client oder den Server haben!
         // if( !(pConv->nStatus & ST_CLIENT ) )
-        SendUnadvises( hConv, 0, FALSE );  // alle Formate & nicht loeschen
-        SendUnadvises( pConv->hConvPartner, 0, FALSE );
+        SendUnadvises( hConv, 0, sal_False );  // alle Formate & nicht loeschen
+        SendUnadvises( pConv->hConvPartner, 0, sal_False );
 
         // wir werden von draussen gekillt
         if ( !(nTransactFilter & CBF_SKIP_DISCONNECTS) )
         {
             Callback( XTYP_DISCONNECT, 0, hConv, 0, 0, 0,
-                0, (ULONG)IsSameInstance(hWndPartner));
+                0, (sal_uIntPtr)IsSameInstance(hWndPartner));
         }
 
         // kann unsere Partner-App DDEML ?
@@ -1692,7 +1692,7 @@ MRESULT ImpDdeMgr::DdeTerminate( ImpWndProcParams* pParams )
         // hWndThis nicht loeschen, da wir den Handle noch fuer
         // das Acknowledge brauchen
         ////WRITELOG("DdeTerminate:Freeing conversation")
-        FreeConvHandle( pData, hConv, FALSE );
+        FreeConvHandle( pData, hConv, sal_False );
     }
 
     ////WRITELOG("DdeTerminate:Acknowledging DDE_TERMINATE")
@@ -1725,7 +1725,7 @@ MRESULT ImpDdeMgr::DdeTerminate( ImpWndProcParams* pParams )
         Client: GetConvHandle( HWNDClient, HWNDSender )
 */
 
-MRESULT ImpDdeMgr::ConvWndProc( HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2 )
+MRESULT ImpDdeMgr::ConvWndProc( HWND hWnd,sal_uIntPtr nMsg,MPARAM nPar1,MPARAM nPar2 )
 {
     ImpWndProcParams    aParams;
 
@@ -1740,7 +1740,7 @@ MRESULT ImpDdeMgr::ConvWndProc( HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2 )
 #ifdef DBG_UTIL
         case WM_DDE_INITIATE :
             DBG_ASSERT(0,"dde:unexpected msg");
-            nRet = (MRESULT)TRUE;
+            nRet = (MRESULT)sal_True;
             break;
 #endif
 
@@ -1758,7 +1758,7 @@ MRESULT ImpDdeMgr::ConvWndProc( HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2 )
     return nRet;
 }
 
-MRESULT ImpDdeMgr::SrvWndProc( HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2 )
+MRESULT ImpDdeMgr::SrvWndProc( HWND hWnd,sal_uIntPtr nMsg,MPARAM nPar1,MPARAM nPar2 )
 {
     MRESULT nRet = (MRESULT)0;
 
@@ -1779,7 +1779,7 @@ MRESULT ImpDdeMgr::SrvWndProc( HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2 )
         case WM_DDE_DATA :
         case WM_DDE_INITIATEACK :
             DBG_ASSERT(0,"dde:unexpected msg");
-            nRet = (MRESULT)TRUE;
+            nRet = (MRESULT)sal_True;
             break;
 #endif
 
@@ -1811,9 +1811,9 @@ MRESULT ImpDdeMgr::DdeAck( ImpWndProcParams* pParams )
     DDESTRUCT* pInDDEData = (DDESTRUCT*)(pParams->nPar2);
     if( pInDDEData )
     {
-        BOOL bPositive = (BOOL)(pInDDEData->fsStatus & DDE_FACK ) != 0;
-        BOOL bBusy = bPositive ? FALSE : (BOOL)(pInDDEData->fsStatus & DDE_FBUSY ) != 0;
-        BOOL bNotProcessed = (BOOL)(pInDDEData->fsStatus & DDE_NOTPROCESSED ) != 0;
+        sal_Bool bPositive = (sal_Bool)(pInDDEData->fsStatus & DDE_FACK ) != 0;
+        sal_Bool bBusy = bPositive ? sal_False : (sal_Bool)(pInDDEData->fsStatus & DDE_FBUSY ) != 0;
+        sal_Bool bNotProcessed = (sal_Bool)(pInDDEData->fsStatus & DDE_NOTPROCESSED ) != 0;
 #if 0 && defined( OV_DEBUG )
         String aDebStr("DdeAck:Received ");
         if( bPositive )
@@ -1842,7 +1842,7 @@ MRESULT ImpDdeMgr::DdeAck( ImpWndProcParams* pParams )
         WRITELOG("DdeAck:HCONV not found")
     }
 #endif
-    ULONG nTransId=GetTransaction(pData,hConv,hszItem,pInDDEData->usFormat);
+    sal_uIntPtr nTransId=GetTransaction(pData,hConv,hszItem,pInDDEData->usFormat);
     if( !nTransId )
     {
         WRITELOG("DdeAck:Transaction not found")
@@ -1850,7 +1850,7 @@ MRESULT ImpDdeMgr::DdeAck( ImpWndProcParams* pParams )
         return (MRESULT)0;
     }
 
-    BOOL bThisIsSync = (BOOL)( bInSyncTrans && nTransId == nSyncTransId );
+    sal_Bool bThisIsSync = (sal_Bool)( bInSyncTrans && nTransId == nSyncTransId );
 #if 0 && defined( OV_DEBUG )
     if( bThisIsSync)
         WRITELOG("DdeAck: sync transaction")
@@ -1859,9 +1859,9 @@ MRESULT ImpDdeMgr::DdeAck( ImpWndProcParams* pParams )
 #endif
     // pruefen, ob die Transaktion abgeschlossen ist.
     Transaction* pTrans = pTransTable;
-    pTrans += (USHORT)nTransId;
+    pTrans += (sal_uInt16)nTransId;
     ImpHCONV* pConv = pConvTable;
-    pConv += (USHORT)hConv;
+    pConv += (sal_uInt16)hConv;
 
     if( pTrans->nConvst == XST_UNADVSENT )
     {
@@ -1880,11 +1880,11 @@ MRESULT ImpDdeMgr::DdeAck( ImpWndProcParams* pParams )
         return (MRESULT)0;
     }
 
-    USHORT nType = pTrans->nType;
+    sal_uInt16 nType = pTrans->nType;
     nType &= (~XTYPF_MASK);
     // beginn einer advise-loop oder request auf advise-loop ?
     // wenn ja: transaktion nicht loeschen
-    BOOL bFinished = (BOOL)(nType != XTYP_ADVSTART &&
+    sal_Bool bFinished = (sal_Bool)(nType != XTYP_ADVSTART &&
                             nType != (XTYP_ADVREQ & (~XTYPF_NOBLOCK)) );
     if( bFinished )
     {
@@ -1914,14 +1914,14 @@ MRESULT ImpDdeMgr::DdeAck( ImpWndProcParams* pParams )
 }
 
 
-USHORT ImpDdeMgr::SendUnadvises(HCONV hConvServer,USHORT nFormat,BOOL bFree)
+sal_uInt16 ImpDdeMgr::SendUnadvises(HCONV hConvServer,sal_uInt16 nFormat,sal_Bool bFree)
 {
-    USHORT nTransFound = 0;
-    BOOL bCallApp = (BOOL)(!(nTransactFilter & CBF_FAIL_ADVISES));
+    sal_uInt16 nTransFound = 0;
+    sal_Bool bCallApp = (sal_Bool)(!(nTransactFilter & CBF_FAIL_ADVISES));
 #if 0 && defined( OV_DEBUG )
     String aStr("Unadvising transactions for HCONV=");
-    aStr += (ULONG)hConvServer;
-    aStr += " CallApp:"; aStr += (USHORT)bCallApp;
+    aStr += (sal_uIntPtr)hConvServer;
+    aStr += " CallApp:"; aStr += (sal_uInt16)bCallApp;
     WRITELOG((char*)aStr.GetStr())
 #endif
 
@@ -1932,13 +1932,13 @@ USHORT ImpDdeMgr::SendUnadvises(HCONV hConvServer,USHORT nFormat,BOOL bFree)
         return 0;
 
     ImpHCONV* pConvSrv = pConvTable;
-    pConvSrv += (USHORT)hConvServer;
+    pConvSrv += (sal_uInt16)hConvServer;
     HSZ hszTopic = pConvSrv->hszTopic;
 
     Transaction* pTrans = pTransTable;
     pTrans++;
-    USHORT nCurTransId = 1;
-    USHORT nCurTransactions = pData->nCurTransCount;
+    sal_uInt16 nCurTransId = 1;
+    sal_uInt16 nCurTransactions = pData->nCurTransCount;
     while( nCurTransactions && nCurTransId < pData->nMaxTransCount )
     {
         if( pTrans->hConvOwner )
@@ -1956,7 +1956,7 @@ USHORT ImpDdeMgr::SendUnadvises(HCONV hConvServer,USHORT nFormat,BOOL bFree)
                         hszTopic, pTrans->hszItem, 0,0,0 );
                 }
                 if( bFree )
-                    FreeTransaction( pData, (ULONG)nCurTransId );
+                    FreeTransaction( pData, (sal_uIntPtr)nCurTransId );
             }
         }
         nCurTransId++;
@@ -1967,7 +1967,7 @@ USHORT ImpDdeMgr::SendUnadvises(HCONV hConvServer,USHORT nFormat,BOOL bFree)
 
 
 
-HCONV ImpDdeMgr::CheckIncoming( ImpWndProcParams* pParams, ULONG nTransMask,
+HCONV ImpDdeMgr::CheckIncoming( ImpWndProcParams* pParams, sal_uIntPtr nTransMask,
     HSZ& rhszItem )
 {
 //  ////WRITELOG("CheckIncoming")
@@ -1982,7 +1982,7 @@ HCONV ImpDdeMgr::CheckIncoming( ImpWndProcParams* pParams, ULONG nTransMask,
     HWND hWndThis = pParams->hWndReceiver;
     HWND hWndClient = (HWND)pParams->nPar1;
 
-    BOOL bReject = (BOOL)(nTransactFilter & nTransMask);
+    sal_Bool bReject = (sal_Bool)(nTransactFilter & nTransMask);
     HCONV hConv;
     if( !bReject )
         hConv = GetConvHandle( pData, hWndThis, hWndClient );
@@ -2016,17 +2016,17 @@ MRESULT ImpDdeMgr::DdeAdvise( ImpWndProcParams* pParams )
 
     Transaction* pTrans = pTransTable;
     ImpHCONV* pConv = pConvTable;
-    pConv += (USHORT)hConv;
+    pConv += (sal_uInt16)hConv;
 
     // existiert schon ein Link auf Topic/Item/Format-Vektor ?
 
-    ULONG nTransId=GetTransaction(pData,hConv,hszItem,pInDDEData->usFormat);
+    sal_uIntPtr nTransId=GetTransaction(pData,hConv,hszItem,pInDDEData->usFormat);
     if( nTransId )
     {
         ////WRITELOG("DdeAdvise:Transaction already exists")
-        pTrans += (USHORT)nTransId;
+        pTrans += (sal_uInt16)nTransId;
         // ist es eine AdviseLoop ?
-        USHORT nTempType = pTrans->nType;
+        sal_uInt16 nTempType = pTrans->nType;
         nTempType &= (~XTYPF_MASK);
         if( nTempType == XTYP_ADVREQ )
         {
@@ -2063,7 +2063,7 @@ MRESULT ImpDdeMgr::DdeAdvise( ImpWndProcParams* pParams )
     if( nTransId )
     {
         pTrans = pTransTable;
-        pTrans += (USHORT)nTransId;
+        pTrans += (sal_uInt16)nTransId;
         if( pInDDEData->fsStatus & DDE_FNODATA )
             pTrans->nType |= XTYPF_NODATA;
         if( pInDDEData->fsStatus & DDE_FACKREQ )
@@ -2114,24 +2114,24 @@ MRESULT ImpDdeMgr::DdeData( ImpWndProcParams* pParams )
 #if 0 && defined( OV_DEBUG )
     {
         String aStr("DdeData Address:");
-        aStr += (ULONG)pInDDEData;
+        aStr += (sal_uIntPtr)pInDDEData;
         WRITELOG((char*)aStr.GetStr())
     }
 #endif
 
-    BOOL bSendAck;
+    sal_Bool bSendAck;
     if( pInDDEData && (pInDDEData->fsStatus & DDE_FACKREQ ))
     {
         WRITELOG("DdeData: Ackn requested")
-        bSendAck = TRUE;
+        bSendAck = sal_True;
     }
     else
     {
         WRITELOG("DdeData: Ackn not requested")
-        bSendAck = FALSE;
+        bSendAck = sal_False;
     }
 
-    ULONG nTransId = GetTransaction(pData,hConv,hszItem,pInDDEData->usFormat);
+    sal_uIntPtr nTransId = GetTransaction(pData,hConv,hszItem,pInDDEData->usFormat);
     if( !nTransId )
     {
         WRITELOG("DdeData:Transaction not found")
@@ -2156,11 +2156,11 @@ MRESULT ImpDdeMgr::DdeData( ImpWndProcParams* pParams )
     }
 #endif
 
-    BOOL bThisIsSync = (BOOL)( bInSyncTrans && nTransId == nSyncTransId );
+    sal_Bool bThisIsSync = (sal_Bool)( bInSyncTrans && nTransId == nSyncTransId );
 
     // pruefen, ob die Transaktion abgeschlossen ist.
     Transaction* pTrans = pTransTable;
-    pTrans += (USHORT)nTransId;
+    pTrans += (sal_uInt16)nTransId;
 
     if( pTrans->nConvst == XST_WAITING_ACK )
     {
@@ -2182,11 +2182,11 @@ MRESULT ImpDdeMgr::DdeData( ImpWndProcParams* pParams )
     }
 
     ImpHCONV* pConv = pConvTable;
-    pConv  += (USHORT)hConv;
+    pConv  += (sal_uInt16)hConv;
 
-    USHORT nType = pTrans->nType;
+    sal_uInt16 nType = pTrans->nType;
     nType &= (~XTYPF_MASK);
-    BOOL bNotAdviseLoop = (BOOL)(nType != (XTYP_ADVREQ & (~XTYPF_NOBLOCK)));
+    sal_Bool bNotAdviseLoop = (sal_Bool)(nType != (XTYP_ADVREQ & (~XTYPF_NOBLOCK)));
     if( !bThisIsSync )
     {
         // WRITELOG("DdeData:Is async transaction")
@@ -2244,15 +2244,15 @@ MRESULT ImpDdeMgr::DdeExecute( ImpWndProcParams* pParams )
     DDESTRUCT* pInDDEData = (DDESTRUCT*)(pParams->nPar2);
     HSZ hszItem;
     HCONV hConv = CheckIncoming(pParams, 0, hszItem);
-    BOOL bSuccess = FALSE;
+    sal_Bool bSuccess = sal_False;
     ImpHCONV* pConv = pConvTable;
-    pConv += (USHORT)hConv;
+    pConv += (sal_uInt16)hConv;
     if ( hConv && !(nTransactFilter & CBF_FAIL_EXECUTES) && pInDDEData )
     {
         if ( Callback( XTYP_EXECUTE, pInDDEData->usFormat, hConv,
             pConv->hszTopic, hszItem, pInDDEData, 0, 0 )
                 == (DDESTRUCT*)DDE_FACK )
-            bSuccess = TRUE;
+            bSuccess = sal_True;
     }
     else
     {
@@ -2272,7 +2272,7 @@ MRESULT ImpDdeMgr::DdeExecute( ImpWndProcParams* pParams )
 }
 
 HCONV ImpDdeMgr::ConnectWithClient( HWND hWndClient,
-    HSZ hszPartner, HSZ hszService, HSZ hszTopic, BOOL bSameInst,
+    HSZ hszPartner, HSZ hszService, HSZ hszTopic, sal_Bool bSameInst,
     DDEINIT* pDDEData, CONVCONTEXT* pCC )
 {
     ////WRITELOG("ConnectWithClient:Start")
@@ -2282,10 +2282,10 @@ HCONV ImpDdeMgr::ConnectWithClient( HWND hWndClient,
                     hszPartner, hszService, hszTopic );
     if(!hConv )
         return 0;
-    BOOL bFreeDdeData = FALSE;
+    sal_Bool bFreeDdeData = sal_False;
     if( !pDDEData )
     {
-        bFreeDdeData = TRUE;
+        bFreeDdeData = sal_True;
         pDDEData = CreateDDEInitData( hWndClient,hszService,hszTopic, pCC );
         PID pid; TID tid;
         WinQueryWindowProcess( hWndClient, &pid, &tid );
@@ -2308,7 +2308,7 @@ HCONV ImpDdeMgr::ConnectWithClient( HWND hWndClient,
     if( !(nTransactFilter & CBF_SKIP_CONNECT_CONFIRMS) )
     {
         Callback( XTYP_CONNECT_CONFIRM, 0, hConv, hszTopic, hszService,
-            0, 0, (ULONG)bSameInst );
+            0, 0, (sal_uIntPtr)bSameInst );
     }
 
     if( bFreeDdeData )
@@ -2317,7 +2317,7 @@ HCONV ImpDdeMgr::ConnectWithClient( HWND hWndClient,
     }
     // HCONV der PartnerApp suchen & bei uns eintragen
     ImpHCONV* pConv = pConvTable;
-    pConv += (USHORT)hConv;
+    pConv += (sal_uInt16)hConv;
     pConv->hConvPartner = GetConvHandle( pData, hWndClient, hWndSrv );
 #if 0 && defined(OV_DEBUG)
     if( !pConv->hConvPartner )
@@ -2335,8 +2335,8 @@ MRESULT ImpDdeMgr::DdeInitiate( ImpWndProcParams* pParams )
 {
     ////WRITELOG("DdeInitiate:Received")
     HWND hWndClient = (HWND)(pParams->nPar1);
-//  BOOL bSameInst = IsSameInstance( hWndClient );
-    BOOL bSameInst = (BOOL)(hWndClient==hWndServer);
+//  sal_Bool bSameInst = IsSameInstance( hWndClient );
+    sal_Bool bSameInst = (sal_Bool)(hWndClient==hWndServer);
     DDEINIT* pDDEData = (DDEINIT*)pParams->nPar2;
 
     if ( ( nTransactFilter & (CBF_FAIL_CONNECTIONS | APPCMD_CLIENTONLY)) ||
@@ -2344,7 +2344,7 @@ MRESULT ImpDdeMgr::DdeInitiate( ImpWndProcParams* pParams )
     )
     {
         MyDosFreeMem( pDDEData,"DdeInitiate" );
-        return (MRESULT)FALSE;   // narda
+        return (MRESULT)sal_False;   // narda
     }
 
     HSZ hszService = (HSZ)0;
@@ -2370,7 +2370,7 @@ MRESULT ImpDdeMgr::DdeInitiate( ImpWndProcParams* pParams )
         if( hszService && hszTopic )
         {
             if( IsConvHandleAvailable(pData) && Callback( XTYP_CONNECT,
-                 0, 0, hszTopic,hszService, 0, 0, (ULONG)bSameInst))
+                 0, 0, hszTopic,hszService, 0, 0, (sal_uIntPtr)bSameInst))
             {
                 // App erlaubt Verbindung mit Client
                 ConnectWithClient( hWndClient, hszPartner,
@@ -2384,7 +2384,7 @@ MRESULT ImpDdeMgr::DdeInitiate( ImpWndProcParams* pParams )
             // vom Server eine Liste aller Service/Topic-Paare anfordern
             CONVCONTEXT* pCC=(CONVCONTEXT*)(pDDEData+pDDEData->offConvContext);
             DDESTRUCT* hList = Callback( XTYP_WILDCONNECT, 0, (HCONV)0,
-                hszTopic,hszService, (HDDEDATA)0, (ULONG)pCC, (ULONG)bSameInst );
+                hszTopic,hszService, (HDDEDATA)0, (sal_uIntPtr)pCC, (sal_uIntPtr)bSameInst );
             if( hList )
             {
                 HSZPAIR* pPairs = (HSZPAIR*)((char*)hList+hList->offabData);
@@ -2411,7 +2411,7 @@ MRESULT ImpDdeMgr::DdeInitiate( ImpWndProcParams* pParams )
     DdeFreeStringHandle( hszPartner );
     MyDosFreeMem( pDDEData,"DdeInitiate" );
     ////WRITELOG("DdeInitiate:End")
-    return (MRESULT)TRUE;
+    return (MRESULT)sal_True;
 }
 
 MRESULT ImpDdeMgr::DdeInitiateAck( ImpWndProcParams* pParams )
@@ -2424,7 +2424,7 @@ MRESULT ImpDdeMgr::DdeInitiateAck( ImpWndProcParams* pParams )
         ////WRITELOG("DdeInitiateAck:Already connected")
         MyDosFreeMem( pDDEData,"DdeInitiateAck" );
         WinPostMsg( hWndServer, WM_DDE_TERMINATE, (MPARAM)hWndServer, 0 );
-        return (MRESULT)FALSE;
+        return (MRESULT)sal_False;
     }
 
     HWND hWndThis = pParams->hWndReceiver;
@@ -2440,7 +2440,7 @@ MRESULT ImpDdeMgr::DdeInitiateAck( ImpWndProcParams* pParams )
                 hszPartnerApp, hszService, hszTopic, 0 );
 
     ImpHCONV* pConv = pConvTable;
-    pConv += (USHORT)hCurConv;
+    pConv += (sal_uInt16)hCurConv;
 
     // HCONV der PartnerApp suchen & bei uns eintragen
     pConv->hConvPartner = GetConvHandle( pData, hWndSrv, hWndThis );
@@ -2459,9 +2459,9 @@ MRESULT ImpDdeMgr::DdeInitiateAck( ImpWndProcParams* pParams )
         {
             pConv = pConvTable;
             pConv += nPrevConv;
-            pConv->nNextHCONV = (USHORT)hCurConv;
+            pConv->nNextHCONV = (sal_uInt16)hCurConv;
         }
-        nPrevConv = (USHORT)hCurConv;
+        nPrevConv = (sal_uInt16)hCurConv;
     }
 
     DdeFreeStringHandle( hszService );
@@ -2470,7 +2470,7 @@ MRESULT ImpDdeMgr::DdeInitiateAck( ImpWndProcParams* pParams )
     MyDosFreeMem( pDDEData,"DdeInitiateAck" );
     ////WRITESTATUS("After DdeInitiateAck")
     ////WRITELOG("DdeInitiateAck:End")
-    return (MRESULT)TRUE;
+    return (MRESULT)sal_True;
 }
 
 MRESULT ImpDdeMgr::DdePoke( ImpWndProcParams* pParams )
@@ -2479,15 +2479,15 @@ MRESULT ImpDdeMgr::DdePoke( ImpWndProcParams* pParams )
     HSZ hszItem = 0;
     DDESTRUCT* pInDDEData = (DDESTRUCT*)(pParams->nPar2);
     HCONV hConv = CheckIncoming( pParams, CBF_FAIL_REQUESTS, hszItem );
-    BOOL bSuccess =FALSE;
+    sal_Bool bSuccess =sal_False;
     ImpHCONV* pConv = pConvTable;
-    pConv += (USHORT)hConv;
+    pConv += (sal_uInt16)hConv;
     if ( hConv && !(nTransactFilter & CBF_FAIL_POKES) && pInDDEData )
     {
         if( Callback( XTYP_POKE, pInDDEData->usFormat, hConv,
             pConv->hszTopic, hszItem, pInDDEData, 0, 0 )
                 == (DDESTRUCT*)DDE_FACK )
-            bSuccess = TRUE;
+            bSuccess = sal_True;
     }
 #if 0 && defined( OV_DEBUG )
     else
@@ -2523,7 +2523,7 @@ MRESULT ImpDdeMgr::DdeRequest( ImpWndProcParams* pParams )
     if( hConv )
     {
         ImpHCONV* pConv = pConvTable;
-        pConv += (USHORT)hConv;
+        pConv += (sal_uInt16)hConv;
 
         DDESTRUCT* pOutDDEData = Callback( XTYP_REQUEST, pInDDEData->usFormat,
             hConv, pConv->hszTopic, hszItem, (HDDEDATA)0, 0, 0 );
@@ -2563,26 +2563,26 @@ MRESULT ImpDdeMgr::DdeUnadvise( ImpWndProcParams* pParams )
     DDESTRUCT* pInDDEData = (DDESTRUCT*)(pParams->nPar2);
     HWND hWndThis         = pParams->hWndReceiver;
     HWND hWndClient       = (HWND)pParams->nPar1;
-    USHORT nClosedTransactions = 0;
+    sal_uInt16 nClosedTransactions = 0;
     if( hConv )
     {
-        USHORT nFormat = pInDDEData->usFormat;
+        sal_uInt16 nFormat = pInDDEData->usFormat;
         // alle Transaktionen des HCONVs loeschen ?
         if( !hszItem )
         {
             // App benachrichtigen & Transaktionen loeschen
-            nClosedTransactions = SendUnadvises( hConv, nFormat, TRUE );
+            nClosedTransactions = SendUnadvises( hConv, nFormat, sal_True );
         }
         else
         {
-            ULONG nTransId = GetTransaction(pData, hConv, hszItem, nFormat);
+            sal_uIntPtr nTransId = GetTransaction(pData, hConv, hszItem, nFormat);
             if( nTransId )
             {
                 ////WRITELOG("DdeUnadvise:Transaction found")
                 Transaction* pTrans = pTransTable;
-                pTrans += (USHORT)nTransId;
+                pTrans += (sal_uInt16)nTransId;
                 ImpHCONV* pConv = pConvTable;
-                pConv += (USHORT)hConv;
+                pConv += (sal_uInt16)hConv;
                 nClosedTransactions = 1;
                 if( !(nTransactFilter & CBF_FAIL_ADVISES) )
                     Callback( XTYP_ADVSTOP, nFormat, hConv,
@@ -2615,14 +2615,14 @@ MRESULT ImpDdeMgr::DdeUnadvise( ImpWndProcParams* pParams )
     return (MRESULT)0;
 }
 
-BOOL ImpDdeMgr::WaitTransState( Transaction* pTrans, ULONG nTransId,
-    USHORT nNewState, ULONG nTimeout )
+sal_Bool ImpDdeMgr::WaitTransState( Transaction* pTrans, sal_uIntPtr nTransId,
+    sal_uInt16 nNewState, sal_uIntPtr nTimeout )
 {
     ////WRITELOG("WaitTransState:Start")
     ImpHCONV* pConv = pConvTable;
     pConv += pTrans->hConvOwner;
     HAB hAB = WinQueryAnchorBlock( pConv->hWndThis );
-    ULONG nTimerId = WinStartTimer( hAB, 0, 0, 50 );
+    sal_uIntPtr nTimerId = WinStartTimer( hAB, 0, 0, 50 );
     QMSG aQueueMsg;
 
 //  while( WinGetMsg( hAB, &aQueueMsg, 0, 0, 0 )    &&
@@ -2632,7 +2632,7 @@ BOOL ImpDdeMgr::WaitTransState( Transaction* pTrans, ULONG nTransId,
 //      WinDispatchMsg( hAB, &aQueueMsg );
 //  }
 
-    BOOL bContinue = TRUE;
+    sal_Bool bContinue = sal_True;
     while( bContinue )
     {
         if( WinGetMsg( hAB, &aQueueMsg, 0, 0, 0 ))
@@ -2641,16 +2641,16 @@ BOOL ImpDdeMgr::WaitTransState( Transaction* pTrans, ULONG nTransId,
             if( (!WinIsWindow( hAB, pConv->hWndPartner)) ||
                 (pTrans->nConvst == nNewState) )
             {
-                bContinue = FALSE;
+                bContinue = sal_False;
             }
         }
         else
-            bContinue = FALSE;
+            bContinue = sal_False;
     }
 
     WinStopTimer( hAB, 0, nTimerId );
     ////WRITELOG("WaitTransState:End")
-    return TRUE;
+    return sal_True;
 }
 
 

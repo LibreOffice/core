@@ -44,11 +44,11 @@ TYPEINIT1_AUTOFACTORY(SfxByteItem, CntByteItem);
 
 //============================================================================
 // virtual
-SfxPoolItem * SfxByteItem::Create(SvStream & rStream, USHORT) const
+SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
 {
     short nValue = 0;
     rStream >> nValue;
-    return new SfxByteItem(Which(), BYTE(nValue));
+    return new SfxByteItem(Which(), sal_uInt8(nValue));
 }
 
 //============================================================================
@@ -63,7 +63,7 @@ DBG_NAME(SfxInt16Item);
 TYPEINIT1_AUTOFACTORY(SfxInt16Item, SfxPoolItem);
 
 //============================================================================
-SfxInt16Item::SfxInt16Item(USHORT which, SvStream & rStream):
+SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
     SfxPoolItem(which)
 {
     DBG_CTOR(SfxInt16Item, 0);
@@ -111,31 +111,31 @@ SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
 
 //============================================================================
 // virtual
-BOOL SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, BYTE) const
+sal_Bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int16 nValue = m_nValue;
     rVal <<= nValue;
-    return TRUE;
+    return sal_True;
 }
 
 //============================================================================
 // virtual
-BOOL SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, BYTE )
+sal_Bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     sal_Int16 nValue = sal_Int16();
     if (rVal >>= nValue)
     {
         m_nValue = nValue;
-        return TRUE;
+        return sal_True;
     }
 
     DBG_ERROR( "SfxInt16Item::PutValue - Wrong type!" );
-    return FALSE;
+    return sal_False;
 }
 
 //============================================================================
 // virtual
-SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, USHORT) const
+SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     return new SfxInt16Item(Which(), rStream);
@@ -143,7 +143,7 @@ SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, USHORT) const
 
 //============================================================================
 // virtual
-SvStream & SfxInt16Item::Store(SvStream & rStream, USHORT) const
+SvStream & SfxInt16Item::Store(SvStream & rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     rStream << short(m_nValue);
@@ -158,14 +158,14 @@ SfxPoolItem * SfxInt16Item::Clone(SfxItemPool *) const
 }
 
 //============================================================================
-INT16 SfxInt16Item::GetMin() const
+sal_Int16 SfxInt16Item::GetMin() const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     return -32768;
 }
 
 //============================================================================
-INT16 SfxInt16Item::GetMax() const
+sal_Int16 SfxInt16Item::GetMax() const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     return 32767;
@@ -217,14 +217,14 @@ DBG_NAME(SfxMetricItem);
 TYPEINIT1_AUTOFACTORY(SfxMetricItem, SfxInt32Item);
 
 //============================================================================
-SfxMetricItem::SfxMetricItem(USHORT which, UINT32 nValue):
+SfxMetricItem::SfxMetricItem(sal_uInt16 which, sal_uInt32 nValue):
     SfxInt32Item(which, nValue)
 {
     DBG_CTOR(SfxMetricItem, 0);
 }
 
 //============================================================================
-SfxMetricItem::SfxMetricItem(USHORT which, SvStream & rStream):
+SfxMetricItem::SfxMetricItem(sal_uInt16 which, SvStream & rStream):
     SfxInt32Item(which, rStream)
 {
     DBG_CTOR(SfxMetricItem, 0);

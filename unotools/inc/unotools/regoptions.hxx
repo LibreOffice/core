@@ -69,7 +69,7 @@ namespace utl
         };
 
         /** checks if the registration dialog is allowed
-            <p>A return value of <TRUE/> does not mean that during this session, the dialog is allowed to
+            <p>A return value of <sal_True/> does not mean that during this session, the dialog is allowed to
             be executed. It simply means executing it is allowed <em>in general</em></p>
         */
         DialogPermission    getDialogPermission( ) const;

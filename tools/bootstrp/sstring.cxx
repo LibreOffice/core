@@ -44,9 +44,9 @@ SByteStringList::~SByteStringList()
 {
 }
 
-ULONG SByteStringList::IsString( ByteString* pStr )
+sal_uIntPtr SByteStringList::IsString( ByteString* pStr )
 {
-    ULONG nRet = NOT_THERE;
+    sal_uIntPtr nRet = NOT_THERE;
     if ( (nRet = GetPrevString( pStr )) != 0 )
     {
         ByteString* pString = GetObject( nRet );
@@ -65,15 +65,15 @@ ULONG SByteStringList::IsString( ByteString* pStr )
     }
 }
 
-ULONG SByteStringList::GetPrevString( ByteString* pStr )
+sal_uIntPtr SByteStringList::GetPrevString( ByteString* pStr )
 {
-    ULONG nRet = 0;
-    BOOL bFound = FALSE;
-    ULONG nCountMember = Count();
-    ULONG nUpper = nCountMember;
-    ULONG nLower = 0;
-    ULONG nCurrent = nUpper / 2;
-    ULONG nRem = 0;
+    sal_uIntPtr nRet = 0;
+    sal_Bool bFound = sal_False;
+    sal_uIntPtr nCountMember = Count();
+    sal_uIntPtr nUpper = nCountMember;
+    sal_uIntPtr nLower = 0;
+    sal_uIntPtr nCurrent = nUpper / 2;
+    sal_uIntPtr nRem = 0;
     ByteString* pString;
 
     do
@@ -109,17 +109,17 @@ ULONG SByteStringList::GetPrevString( ByteString* pStr )
 *
 **************************************************************************/
 
-ULONG SByteStringList::PutString( ByteString* pStr )
+sal_uIntPtr SByteStringList::PutString( ByteString* pStr )
 {
-    ULONG nPos = GetPrevString ( pStr );
+    sal_uIntPtr nPos = GetPrevString ( pStr );
     if ( Count() )
     {
         {
             ByteString* pString = GetObject( 0 );
             if ( pString->CompareTo( *pStr ) == COMPARE_GREATER )
             {
-                Insert( pStr, (ULONG)0 );
-                return (ULONG)0;
+                Insert( pStr, (sal_uIntPtr)0 );
+                return (sal_uIntPtr)0;
             }
         }
         ByteString* pString = GetObject( nPos );
@@ -132,7 +132,7 @@ ULONG SByteStringList::PutString( ByteString* pStr )
     else
     {
         Insert( pStr );
-        return (ULONG)0;
+        return (sal_uIntPtr)0;
     }
 
     return NOT_THERE;
@@ -140,7 +140,7 @@ ULONG SByteStringList::PutString( ByteString* pStr )
 
 ByteString* SByteStringList::RemoveString( const ByteString& rName )
 {
-    ULONG i;
+    sal_uIntPtr i;
     ByteString* pReturn;
 
     for( i = 0 ; i < Count(); i++ )
@@ -170,7 +170,7 @@ SByteStringList& SByteStringList::operator<<  ( SvStream& rStream )
 {
     sal_uInt32 nListCount;
     rStream >> nListCount;
-    for ( USHORT i = 0; i < nListCount; i++ ) {
+    for ( sal_uInt16 i = 0; i < nListCount; i++ ) {
         ByteString* pByteString = new ByteString();
         rStream >> *pByteString;
         Insert (pByteString, LIST_APPEND);
@@ -204,9 +204,9 @@ SUniStringList::~SUniStringList()
 {
 }
 
-ULONG SUniStringList::IsString( UniString* pStr )
+sal_uIntPtr SUniStringList::IsString( UniString* pStr )
 {
-    ULONG nRet = NOT_THERE;
+    sal_uIntPtr nRet = NOT_THERE;
     if ( (nRet = GetPrevString( pStr )) != 0 )
     {
         UniString* pString = GetObject( nRet );
@@ -225,15 +225,15 @@ ULONG SUniStringList::IsString( UniString* pStr )
     }
 }
 
-ULONG SUniStringList::GetPrevString( UniString* pStr )
+sal_uIntPtr SUniStringList::GetPrevString( UniString* pStr )
 {
-    ULONG nRet = 0;
-    BOOL bFound = FALSE;
-    ULONG nCountMember = Count();
-    ULONG nUpper = nCountMember;
-    ULONG nLower = 0;
-    ULONG nCurrent = nUpper / 2;
-    ULONG nRem = 0;
+    sal_uIntPtr nRet = 0;
+    sal_Bool bFound = sal_False;
+    sal_uIntPtr nCountMember = Count();
+    sal_uIntPtr nUpper = nCountMember;
+    sal_uIntPtr nLower = 0;
+    sal_uIntPtr nCurrent = nUpper / 2;
+    sal_uIntPtr nRem = 0;
     UniString* pString;
 
     do
@@ -269,17 +269,17 @@ ULONG SUniStringList::GetPrevString( UniString* pStr )
 *
 **************************************************************************/
 
-ULONG SUniStringList::PutString( UniString* pStr )
+sal_uIntPtr SUniStringList::PutString( UniString* pStr )
 {
-    ULONG nPos = GetPrevString ( pStr );
+    sal_uIntPtr nPos = GetPrevString ( pStr );
     if ( Count() )
     {
         {
             UniString* pString = GetObject( 0 );
             if ( pString->CompareTo( *pStr ) == COMPARE_GREATER )
             {
-                Insert( pStr, (ULONG)0);
-                return (ULONG)0;
+                Insert( pStr, (sal_uIntPtr)0);
+                return (sal_uIntPtr)0;
             }
         }
         UniString* pString = GetObject( nPos );
@@ -292,7 +292,7 @@ ULONG SUniStringList::PutString( UniString* pStr )
     else
     {
         Insert( pStr );
-        return (ULONG)0;
+        return (sal_uIntPtr)0;
     }
 
     return NOT_THERE;
@@ -300,7 +300,7 @@ ULONG SUniStringList::PutString( UniString* pStr )
 
 UniString* SUniStringList::RemoveString( const UniString& rName )
 {
-    ULONG i;
+    sal_uIntPtr i;
     UniString* pReturn;
 
     for( i = 0 ; i < Count(); i++ )

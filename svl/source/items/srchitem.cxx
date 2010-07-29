@@ -99,7 +99,7 @@ static Sequence< ::rtl::OUString > lcl_GetNotifyNames()
     const int nCount = sizeof( aTranslitNames ) / sizeof( aTranslitNames[0] );
     Sequence< ::rtl::OUString > aNames( nCount );
     ::rtl::OUString* pNames = aNames.getArray();
-    for (INT32 i = 0;  i < nCount;  ++i)
+    for (sal_Int32 i = 0;  i < nCount;  ++i)
         pNames[i] = ::rtl::OUString::createFromAscii( aTranslitNames[i] );
 
     return aNames;
@@ -128,7 +128,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     bBackward       ( sal_False ),
     bPattern        ( sal_False ),
     bContent        ( sal_False ),
-    bAsianOptions   ( FALSE )
+    bAsianOptions   ( sal_False )
 {
     EnableNotification( lcl_GetNotifyNames() );
 
@@ -145,7 +145,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
     if (aOpt.IsWholeWordsOnly())
         aSearchOpt.searchFlag |= SearchFlags::NORM_WORD_ONLY;
 
-    INT32 &rFlags = aSearchOpt.transliterateFlags;
+    sal_Int32 &rFlags = aSearchOpt.transliterateFlags;
 
     if (!aOpt.IsMatchCase())
         rFlags |= TransliterationModules_IGNORE_CASE;
@@ -229,7 +229,7 @@ SfxPoolItem* SvxSearchItem::Clone( SfxItemPool *) const
 // -----------------------------------------------------------------------
 
 //! used below
-static BOOL operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
+static sal_Bool operator == ( const SearchOptions& rItem1, const SearchOptions& rItem2 )
 {
     return rItem1.algorithmType         == rItem2.algorithmType &&
            rItem1.searchFlag            == rItem2.searchFlag    &&
@@ -425,7 +425,7 @@ void SvxSearchItem::SetTransliterationFlags( sal_Int32 nFlags )
     aSearchOpt.transliterateFlags = nFlags;
 }
 
-sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
@@ -513,7 +513,7 @@ sal_Bool SvxSearchItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMember
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxSearchItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
     sal_Bool bRet = sal_False;

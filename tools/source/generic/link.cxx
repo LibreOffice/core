@@ -39,20 +39,20 @@
 |*
 *************************************************************************/
 
-BOOL Link::operator==( const Link& rLink ) const
+sal_Bool Link::operator==( const Link& rLink ) const
 {
     if ( pFunc == rLink.pFunc )
     {
         if ( pFunc )
         {
             if ( pInst == rLink.pInst )
-                return TRUE;
+                return sal_True;
             else
-                return FALSE;
+                return sal_False;
         }
         else
-            return TRUE;
+            return sal_True;
     }
     else
-        return FALSE;
+        return sal_False;
 }

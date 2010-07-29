@@ -89,7 +89,7 @@ struct ImpHCONV
     HSZ         hszPartner;     // Name of partner application
     HSZ         hszServiceReq;  // Service name
     HSZ         hszTopic;       // Topic name
-    USHORT      nStatus;        // ST_* of conversation
+    sal_uInt16      nStatus;        // ST_* of conversation
     HCONVLIST   hConvList;      // ConvListId , wenn in ConvList
     CONVCONTEXT aConvContext;   // Conversation context
 
@@ -98,15 +98,15 @@ struct ImpHCONV
     HWND        hWndPartner;
     PID         pidOwner;       // PID des DdeManagers, der
                                 // den Conv-Handle erzeugt hat.
-    USHORT      nPrevHCONV;     // 0 == no previous hConv or not in list
-    USHORT      nNextHCONV;     // 0 == no next hconv or not in list
+    sal_uInt16      nPrevHCONV;     // 0 == no previous hConv or not in list
+    sal_uInt16      nNextHCONV;     // 0 == no next hconv or not in list
 };
 
 struct Transaction
 {
     HSZ         hszItem;        // Item name
-    USHORT      nFormat;        // Data format
-    USHORT      nType;          // Transaction type (XTYP_*)
+    sal_uInt16      nFormat;        // Data format
+    sal_uInt16      nType;          // Transaction type (XTYP_*)
                                 // XTYP_ADVREQ [|XTYPF_NODATA] == Advise-Loop
                                 //             [|XTYPF_ACKREQ]
                                 // XTYP_EXECUTE == laufendes Execute
@@ -114,13 +114,13 @@ struct Transaction
                                 // XTYP_POKE
                                 // XTYP_ADVSTOP
                                 // XTYP_ADVSTART
-    USHORT      nConvst;        // Conversation state (XST_*)
+    sal_uInt16      nConvst;        // Conversation state (XST_*)
                                 // 0 == idle
                                 // XST_REQSENT (fuer XTYP_ADVREQ)
                                 // XST_TIMEOUT (fuer alle Typen!)
                                 // XST_WAITING (alle ausser XTYP_ADVREQ)
-    USHORT      nLastError;     // last err in transaction
-    ULONG       nUser;          // Userhandle
+    sal_uInt16      nLastError;     // last err in transaction
+    sal_uIntPtr     nUser;          // Userhandle
     // private
     HCONV       hConvOwner;     // 0 == Transaction not used
 };
@@ -145,24 +145,24 @@ class ImpDdeMgr;
 struct ImpConvWndData
 {
     ImpDdeMgr*  pThis;
-    USHORT      nRefCount;  // Zahl Conversations auf diesem Window
+    sal_uInt16      nRefCount;  // Zahl Conversations auf diesem Window
 };
 
 
 // systemglobale Daten der Library (liegen in named shared memory)
 struct ImpDdeMgrData
 {
-    ULONG       nTotalSize;
-    ULONG       nOffsAppTable;
-    ULONG       nOffsConvTable;
-    ULONG       nOffsTransTable;
-    USHORT      nMaxAppCount;
-    USHORT      nMaxConvCount;
-    USHORT      nMaxTransCount;
-    USHORT      nLastErr;
-    USHORT      nReserved;
-    USHORT      nCurTransCount;
-    USHORT      nCurConvCount;
+    sal_uIntPtr     nTotalSize;
+    sal_uIntPtr     nOffsAppTable;
+    sal_uIntPtr     nOffsConvTable;
+    sal_uIntPtr     nOffsTransTable;
+    sal_uInt16      nMaxAppCount;
+    sal_uInt16      nMaxConvCount;
+    sal_uInt16      nMaxTransCount;
+    sal_uInt16      nLastErr;
+    sal_uInt16      nReserved;
+    sal_uInt16      nCurTransCount;
+    sal_uInt16      nCurConvCount;
     HWND        aAppTable[ 1 ];     // fuer Broadcast-Messages
     ImpHCONV    aConvTable[ 1 ];
     Transaction aTransTable[ 1 ];
@@ -172,25 +172,25 @@ struct ImpDdeMgrData
 
 class ImpDdeMgr
 {
-    friend MRESULT EXPENTRY ConvWndProc(HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2);
-    friend MRESULT EXPENTRY ServerWndProc(HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2);
+    friend MRESULT EXPENTRY ConvWndProc(HWND hWnd,sal_uIntPtr nMsg,MPARAM nPar1,MPARAM nPar2);
+    friend MRESULT EXPENTRY ServerWndProc(HWND hWnd,sal_uIntPtr nMsg,MPARAM nPar1,MPARAM nPar2);
     friend void ImpWriteDdeStatus(char*,char*);
     friend void ImpAddHSZ( HSZ, String& );
 
-    static PSZ      AllocAtomName( ATOM hString, ULONG& rBufLen );
+    static PSZ      AllocAtomName( ATOM hString, sal_uIntPtr& rBufLen );
     static PDDESTRUCT MakeDDEObject( HWND hwnd, ATOM hItemName,
-        USHORT fsStatus, USHORT usFormat, PVOID pabData, ULONG usDataLen );
+        sal_uInt16 fsStatus, sal_uInt16 usFormat, PVOID pabData, sal_uIntPtr usDataLen );
     static APIRET   AllocNamedSharedMem( PPVOID ppBaseAddress, PSZ pName,
-        ULONG nElementSize, ULONG nElementCount );
+        sal_uIntPtr nElementSize, sal_uIntPtr nElementCount );
 
     HWND            hWndServer;
     PID             pidThis;
     PFNCALLBACK     pCallback;
-    ULONG           nTransactFilter;
+    sal_uIntPtr             nTransactFilter;
     CONVCONTEXT     aDefaultContext;
     ImpDdeMgrData*  pData;
     ImpService*     pServices;
-    USHORT          nServiceCount;
+    sal_uInt16          nServiceCount;
 
     ImpHCONV*       pConvTable;         // liegt in pData (nicht deleten!)
     Transaction*    pTransTable;        // liegt in pData (nicht deleten!)
@@ -208,47 +208,47 @@ class ImpDdeMgr
     // Fktn. duerfen nur fuer HCONVs aufgerufen werden, die
     // in der eigenen Applikation erzeugt wurden
     static void     DestroyConversationWnd( HWND hWndConv );
-    static USHORT   GetConversationWndRefCount( HWND hWndConv );
-    static USHORT   IncConversationWndRefCount( HWND hWndConv );
+    static sal_uInt16   GetConversationWndRefCount( HWND hWndConv );
+    static sal_uInt16   IncConversationWndRefCount( HWND hWndConv );
 
-    MRESULT         SrvWndProc(HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2);
-    MRESULT         ConvWndProc(HWND hWnd,ULONG nMsg,MPARAM nPar1,MPARAM nPar2);
+    MRESULT         SrvWndProc(HWND hWnd,sal_uIntPtr nMsg,MPARAM nPar1,MPARAM nPar2);
+    MRESULT         ConvWndProc(HWND hWnd,sal_uIntPtr nMsg,MPARAM nPar1,MPARAM nPar2);
     void            RegisterDDEMLApp();
     void            UnregisterDDEMLApp();
     void            CleanUp();
     ImpDdeMgrData*  InitAll();
-    static BOOL     MyWinDdePostMsg( HWND, HWND, USHORT, PDDESTRUCT, ULONG );
+    static sal_Bool     MyWinDdePostMsg( HWND, HWND, sal_uInt16, PDDESTRUCT, sal_uIntPtr );
     void            MyInitiateDde( HWND hWndServer, HWND hWndClient,
                         HSZ hszService, HSZ hszTopic, CONVCONTEXT* pCC );
     DDEINIT*        CreateDDEInitData( HWND hWndDest, HSZ hszService,
                         HSZ hszTopic, CONVCONTEXT* pCC );
     // wenn pDDEData==0, muss pCC gesetzt sein
     HCONV           ConnectWithClient( HWND hWndClient, HSZ hszPartner,
-                        HSZ hszService, HSZ hszTopic, BOOL bSameInst,
+                        HSZ hszService, HSZ hszTopic, sal_Bool bSameInst,
                         DDEINIT* pDDEData, CONVCONTEXT* pCC = 0);
 
-    HCONV           CheckIncoming( ImpWndProcParams*, ULONG nTransMask,
+    HCONV           CheckIncoming( ImpWndProcParams*, sal_uIntPtr nTransMask,
                         HSZ& rhszItem );
     // fuer Serverbetrieb. Ruft Callback-Fkt fuer alle offenen Advises
     // auf, deren Owner der uebergebene HCONV ist.
-    // bFreeTransactions==TRUE: loescht die Transaktionen
+    // bFreeTransactions==sal_True: loescht die Transaktionen
     // gibt Anzahl der getrennten Transaktionen zurueck
-    USHORT          SendUnadvises( HCONV hConv,
-                       USHORT nFormat, // 0==alle
-                       BOOL bFreeTransactions );
+    sal_uInt16          SendUnadvises( HCONV hConv,
+                       sal_uInt16 nFormat, // 0==alle
+                       sal_Bool bFreeTransactions );
 
-    BOOL            WaitTransState(
-                        Transaction* pTrans, ULONG nTransId,
-                        USHORT nNewState,
-                        ULONG nTimeout );
+    sal_Bool            WaitTransState(
+                        Transaction* pTrans, sal_uIntPtr nTransId,
+                        sal_uInt16 nNewState,
+                        sal_uIntPtr nTimeout );
 
     // DDEML ruft Callback mit XTYP_CONNECT-Transaction nur auf,
     // wenn die App den angeforderten Service registriert hat
-    // Standardeinstellung: TRUE
-    BOOL            bServFilterOn;
+    // Standardeinstellung: sal_True
+    sal_Bool            bServFilterOn;
 
     // Fehlercode muss noch systemglobal werden (Atom o. ae.)
-    static USHORT   nLastErrInstance; // wenn 0, dann gilt globaler Fehlercode
+    static sal_uInt16   nLastErrInstance; // wenn 0, dann gilt globaler Fehlercode
 
     static ImpDdeMgrData* AccessMgrData();
 
@@ -262,17 +262,17 @@ class ImpDdeMgr
     static HCONV    GetConvHandle( ImpDdeMgrData* pBase,
                         HWND hWndThis, HWND hWndPartner );
     static void     FreeConvHandle( ImpDdeMgrData*, HCONV,
-                        BOOL bDestroyHWndThis = TRUE );
+                        sal_Bool bDestroyHWndThis = sal_True );
 
-    static ULONG    CreateTransaction( ImpDdeMgrData* pBase,
-                        HCONV hOwner, HSZ hszItem, USHORT nFormat,
-                        USHORT nTransactionType );
-    static ULONG    GetTransaction( ImpDdeMgrData* pBase,
-                        HCONV hOwner, HSZ hszItem, USHORT nFormat );
+    static sal_uIntPtr  CreateTransaction( ImpDdeMgrData* pBase,
+                        HCONV hOwner, HSZ hszItem, sal_uInt16 nFormat,
+                        sal_uInt16 nTransactionType );
+    static sal_uIntPtr  GetTransaction( ImpDdeMgrData* pBase,
+                        HCONV hOwner, HSZ hszItem, sal_uInt16 nFormat );
 
-    static void     FreeTransaction( ImpDdeMgrData*, ULONG nTransId );
+    static void     FreeTransaction( ImpDdeMgrData*, sal_uIntPtr nTransId );
 
-    BOOL            DisconnectAll();
+    sal_Bool            DisconnectAll();
     // Transaktionen muessen _vor_ den Konversationen geloescht werden!
     static void     FreeTransactions( ImpDdeMgrData*, HWND hWndThis,
                         HWND hWndPartner );
@@ -283,14 +283,14 @@ class ImpDdeMgr
 
     ImpService*     GetService( HSZ hszService );
     ImpService*     PutService( HSZ hszService );
-    void            BroadcastService( ImpService*, BOOL bRegistered );
+    void            BroadcastService( ImpService*, sal_Bool bRegistered );
 
     // rh: Startposition(!) & gefundener Handle
     static ImpHCONV* GetFirstServer( ImpDdeMgrData*, HCONVLIST, HCONV& rh);
     static ImpHCONV* GetLastServer( ImpDdeMgrData*, HCONVLIST, HCONV& );
-    static BOOL     CheckConvListId( HCONVLIST hConvListId );
+    static sal_Bool     CheckConvListId( HCONVLIST hConvListId );
 
-    BOOL            IsSameInstance( HWND hWnd );
+    sal_Bool            IsSameInstance( HWND hWnd );
     HSZ             GetAppName( HWND hWnd );
 
 
@@ -310,76 +310,76 @@ class ImpDdeMgr
     MRESULT         DdeTimeout( ImpWndProcParams* pParams );
 
     HDDEDATA    Callback(
-        USHORT      nTransactionType,
-        USHORT      nClipboardFormat,
+        sal_uInt16      nTransactionType,
+        sal_uInt16      nClipboardFormat,
         HCONV       hConversationHandle,
         HSZ         hsz1,
         HSZ         hsz2,
         HDDEDATA    hData,
-        ULONG       nData1,
-        ULONG       nData2 );
+        sal_uIntPtr     nData1,
+        sal_uIntPtr     nData2 );
 
     HCONV       DdeConnectImp( HSZ hszService,HSZ hszTopic,CONVCONTEXT* pCC);
 
     // connection data
     HCONV           hCurConv;       // wird im DdeInitiateAck gesetzt
     HCONVLIST       hCurListId;     // fuer DdeConnectList
-    USHORT          nPrevConv;      // .... "" ....
-    BOOL            bListConnect;
+    sal_uInt16          nPrevConv;      // .... "" ....
+    sal_Bool            bListConnect;
 
     // synchr. transaction data
-    BOOL            bInSyncTrans;
-    ULONG           nSyncTransId;
+    sal_Bool            bInSyncTrans;
+    sal_uIntPtr         nSyncTransId;
     HDDEDATA        hSyncResponseData;
-    ULONG           nSyncResponseMsg; // WM_DDE_ACK, WM_DDE_DATA, WM_TIMER
-    // TRUE==nach Ende der synchronen Transaktion eine evtl. benutzte
+    sal_uIntPtr         nSyncResponseMsg; // WM_DDE_ACK, WM_DDE_DATA, WM_TIMER
+    // sal_True==nach Ende der synchronen Transaktion eine evtl. benutzte
     // asynchrone Transaktion beenden (typisch synchroner Request auf
     // Advise-Loop)
-    BOOL            bSyncAbandonTrans;
+    sal_Bool            bSyncAbandonTrans;
 
 public:
                     ImpDdeMgr();
                     ~ImpDdeMgr();
 
-    USHORT          DdeInitialize( PFNCALLBACK pCallbackProc, ULONG nTransactionFilter );
-    USHORT          DdeGetLastError();
+    sal_uInt16          DdeInitialize( PFNCALLBACK pCallbackProc, sal_uIntPtr nTransactionFilter );
+    sal_uInt16          DdeGetLastError();
 
     HCONV           DdeConnect( HSZ hszService, HSZ hszTopic, CONVCONTEXT* );
     HCONVLIST       DdeConnectList( HSZ hszService, HSZ hszTopic,
                         HCONVLIST hConvList, CONVCONTEXT* );
-    static BOOL     DdeDisconnect( HCONV hConv );
-    static BOOL     DdeDisconnectList( HCONVLIST hConvList );
+    static sal_Bool     DdeDisconnect( HCONV hConv );
+    static sal_Bool     DdeDisconnectList( HCONVLIST hConvList );
     static HCONV    DdeReconnect(HCONV hConv);
     static HCONV    DdeQueryNextServer(HCONVLIST hConvList, HCONV hConvPrev);
-    static USHORT   DdeQueryConvInfo(HCONV hConv, ULONG idTrans,CONVINFO* pCI);
-    static BOOL     DdeSetUserHandle(HCONV hConv, ULONG id, ULONG hUser);
-    BOOL            DdeAbandonTransaction( HCONV hConv, ULONG idTransaction);
+    static sal_uInt16   DdeQueryConvInfo(HCONV hConv, sal_uIntPtr idTrans,CONVINFO* pCI);
+    static sal_Bool     DdeSetUserHandle(HCONV hConv, sal_uIntPtr id, sal_uIntPtr hUser);
+    sal_Bool            DdeAbandonTransaction( HCONV hConv, sal_uIntPtr idTransaction);
 
-    BOOL            DdePostAdvise( HSZ hszTopic, HSZ hszItem);
-    BOOL            DdeEnableCallback( HCONV hConv, USHORT wCmd);
+    sal_Bool            DdePostAdvise( HSZ hszTopic, HSZ hszItem);
+    sal_Bool            DdeEnableCallback( HCONV hConv, sal_uInt16 wCmd);
 
-    HDDEDATA        DdeNameService( HSZ hszService, USHORT afCmd);
+    HDDEDATA        DdeNameService( HSZ hszService, sal_uInt16 afCmd);
 
-    static HDDEDATA DdeClientTransaction(void* pData, ULONG cbData,
-                        HCONV hConv, HSZ hszItem, USHORT wFmt, USHORT wType,
-                        ULONG dwTimeout, ULONG* pdwResult);
+    static HDDEDATA DdeClientTransaction(void* pData, sal_uIntPtr cbData,
+                        HCONV hConv, HSZ hszItem, sal_uInt16 wFmt, sal_uInt16 wType,
+                        sal_uIntPtr dwTimeout, sal_uIntPtr* pdwResult);
 
     // Data handles
 
-    HDDEDATA        DdeCreateDataHandle( void* pSrc, ULONG cb, ULONG cbOff,
-                        HSZ hszItem, USHORT wFmt, USHORT afCmd);
-    static BYTE*    DdeAccessData(HDDEDATA hData, ULONG* pcbDataSize);
-    static BOOL     DdeUnaccessData(HDDEDATA hData);
-    static BOOL     DdeFreeDataHandle(HDDEDATA hData);
-    static HDDEDATA DdeAddData(HDDEDATA hData,void* pSrc,ULONG cb,ULONG cbOff);
-    static ULONG    DdeGetData(HDDEDATA hData,void* pDst,ULONG cbMax,ULONG cbOff);
+    HDDEDATA        DdeCreateDataHandle( void* pSrc, sal_uIntPtr cb, sal_uIntPtr cbOff,
+                        HSZ hszItem, sal_uInt16 wFmt, sal_uInt16 afCmd);
+    static sal_uInt8*   DdeAccessData(HDDEDATA hData, sal_uIntPtr* pcbDataSize);
+    static sal_Bool     DdeUnaccessData(HDDEDATA hData);
+    static sal_Bool     DdeFreeDataHandle(HDDEDATA hData);
+    static HDDEDATA DdeAddData(HDDEDATA hData,void* pSrc,sal_uIntPtr cb,sal_uIntPtr cbOff);
+    static sal_uIntPtr  DdeGetData(HDDEDATA hData,void* pDst,sal_uIntPtr cbMax,sal_uIntPtr cbOff);
 
     // String handles
 
     static HSZ      DdeCreateStringHandle( PSZ pStr, int iCodePage);
-    static ULONG    DdeQueryString(HSZ hsz,PSZ pStr,ULONG cchMax,int iCPage);
-    static BOOL     DdeFreeStringHandle( HSZ hsz );
-    static BOOL     DdeKeepStringHandle( HSZ hsz );
+    static sal_uIntPtr      DdeQueryString(HSZ hsz,PSZ pStr,sal_uIntPtr cchMax,int iCPage);
+    static sal_Bool     DdeFreeStringHandle( HSZ hsz );
+    static sal_Bool     DdeKeepStringHandle( HSZ hsz );
     static int      DdeCmpStringHandles(HSZ hsz1, HSZ hsz2);
 
     // mit dieser Funktion kann geprueft werden, ob eine
@@ -388,9 +388,9 @@ public:
     // pro Applikation (wg. synchroner Transaktionen)
     static ImpDdeMgr* GetImpDdeMgrInstance( HWND hWnd );
 
-    // gibt TRUE zurueck, wenn mind. ein lebender HCONV
+    // gibt sal_True zurueck, wenn mind. ein lebender HCONV
     // von diesem DdeMgr erzeugt wurde
-    BOOL            OwnsConversationHandles();
+    sal_Bool            OwnsConversationHandles();
 };
 
 // static
@@ -398,7 +398,7 @@ inline ImpHCONV* ImpDdeMgr::GetConvTable( ImpDdeMgrData* pData )
 {
     ImpHCONV* pRet;
     if( pData )
-        pRet = (ImpHCONV*)((ULONG)(pData) + pData->nOffsConvTable);
+        pRet = (ImpHCONV*)((sal_uIntPtr)(pData) + pData->nOffsConvTable);
     else
         pRet = 0;
     return pRet;
@@ -409,7 +409,7 @@ inline Transaction* ImpDdeMgr::GetTransTable( ImpDdeMgrData* pData )
 {
     Transaction* pRet;
     if( pData )
-        pRet = (Transaction*)((ULONG)(pData) + pData->nOffsTransTable);
+        pRet = (Transaction*)((sal_uIntPtr)(pData) + pData->nOffsTransTable);
     else
         pRet = 0;
     return pRet;
@@ -420,7 +420,7 @@ inline HWND* ImpDdeMgr::GetAppTable( ImpDdeMgrData* pData )
 {
     HWND* pRet;
     if( pData )
-        pRet = (HWND*)((ULONG)(pData) + pData->nOffsAppTable);
+        pRet = (HWND*)((sal_uIntPtr)(pData) + pData->nOffsAppTable);
     else
         pRet = 0;
     return pRet;

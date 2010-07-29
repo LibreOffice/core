@@ -77,15 +77,15 @@ public:
                             SfxCancelManager( SfxCancelManager *pParent = 0 );
                             ~SfxCancelManager();
 
-    BOOL                    CanCancel() const;
-    void                    Cancel( BOOL bDeep );
+    sal_Bool                    CanCancel() const;
+    void                    Cancel( sal_Bool bDeep );
     SfxCancelManager*       GetParent() const { return _pParent; }
 
     void                    InsertCancellable( SfxCancellable *pJob );
     void                    RemoveCancellable( SfxCancellable *pJob );
-    USHORT                  GetCancellableCount() const
+    sal_uInt16                  GetCancellableCount() const
                             { return _aJobs.Count(); }
-    SfxCancellable*         GetCancellable( USHORT nPos ) const
+    SfxCancellable*         GetCancellable( sal_uInt16 nPos ) const
                             { return (SfxCancellable*) _aJobs[nPos]; }
 };
 
@@ -116,14 +116,14 @@ class SVL_DLLPUBLIC SfxCancellable
 
 {
     SfxCancelManager*       _pMgr;
-    BOOL                    _bCancelled;
+    sal_Bool                    _bCancelled;
     String                  _aTitle;
 
 public:
                             SfxCancellable( SfxCancelManager *pMgr,
                                             const String &rTitle )
                             :   _pMgr( pMgr ),
-                                _bCancelled( FALSE ),
+                                _bCancelled( sal_False ),
                                 _aTitle( rTitle )
                             { pMgr->InsertCancellable( this ); }
 
@@ -133,8 +133,8 @@ public:
     SfxCancelManager*       GetManager() const { return _pMgr; }
 
     virtual void            Cancel();
-    BOOL                    IsCancelled() const { return _bCancelled; }
-    operator                BOOL() const { return _bCancelled; }
+    sal_Bool                    IsCancelled() const { return _bCancelled; }
+    operator                sal_Bool() const { return _bCancelled; }
     const String&           GetTitle() const { return _aTitle; }
 };
 

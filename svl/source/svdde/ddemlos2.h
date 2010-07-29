@@ -42,25 +42,25 @@ typedef LHANDLE HSTR;
 #endif
 
 
-typedef ULONG       HCONVLIST;
-typedef ULONG       HCONV;
+typedef sal_uIntPtr     HCONVLIST;
+typedef sal_uIntPtr     HCONV;
 typedef ATOM        HSZ;
 typedef DDESTRUCT*  HDDEDATA;
 
 struct CONVINFO
 {
-    USHORT      nSize;                  // sizeof(CONVINFO)
-    ULONG       nUser;                  // Userhandle
+    sal_uInt16      nSize;                  // sizeof(CONVINFO)
+    sal_uIntPtr     nUser;                  // Userhandle
     HCONV       hConvPartner;           //
     HSZ         hszPartner;             // Name der Partnerapp
     HSZ         hszServiceReq;          // Name des angeforderten Services
     HSZ         hszTopic;               // -- " -- Topics
     HSZ         hszItem;                // -- " -- Items
-    USHORT      nFormat;                // Datenformat der akt. Transaktion
-    USHORT      nType;                  // Typ der akt. Transaktion (XTYP_*)
-    USHORT      nStatus;                // ST_* der Konversation
-    USHORT      nConvst;                // XST_* der akt. Transaktion
-    USHORT      nLastError;             // letzter Fehler der Transaktion
+    sal_uInt16      nFormat;                // Datenformat der akt. Transaktion
+    sal_uInt16      nType;                  // Typ der akt. Transaktion (XTYP_*)
+    sal_uInt16      nStatus;                // ST_* der Konversation
+    sal_uInt16      nConvst;                // XST_* der akt. Transaktion
+    sal_uInt16      nLastError;             // letzter Fehler der Transaktion
     HCONVLIST   hConvList;              // ConvListId , wenn in ConvList
     CONVCONTEXT aConvCtxt;              // conversation context
 };
@@ -186,16 +186,16 @@ typedef HSZPAIR *PHSZPAIR;
 
 /****** API entry points ******/
 
-typedef HDDEDATA CALLBACK FNCALLBACK(USHORT wType, USHORT wFmt, HCONV hConv,
-        HSZ hsz1, HSZ hsz2, HDDEDATA hData, ULONG dwData1, ULONG dwData2);
+typedef HDDEDATA CALLBACK FNCALLBACK(sal_uInt16 wType, sal_uInt16 wFmt, HCONV hConv,
+        HSZ hsz1, HSZ hsz2, HDDEDATA hData, sal_uIntPtr dwData1, sal_uIntPtr dwData2);
 typedef FNCALLBACK* PFNCALLBACK;
 
 #define     CBR_BLOCK                0xffffffffL
 
 /* DLL registration functions */
 
-USHORT DdeInitialize(ULONG* pidInst, PFNCALLBACK pfnCallback,
-                ULONG afCmd, ULONG ulRes);
+sal_uInt16 DdeInitialize(sal_uIntPtr* pidInst, PFNCALLBACK pfnCallback,
+                sal_uIntPtr afCmd, sal_uIntPtr ulRes);
 
 /*
  * Callback filter flags for use with standard apps.
@@ -229,39 +229,39 @@ USHORT DdeInitialize(ULONG* pidInst, PFNCALLBACK pfnCallback,
 #define     APPCLASS_MASK                0x0000000FL
 
 
-BOOL DdeUninitialize(ULONG idInst);
+sal_Bool DdeUninitialize(sal_uIntPtr idInst);
 
 /* conversation enumeration functions */
 
-HCONVLIST DdeConnectList(ULONG idInst, HSZ hszService, HSZ hszTopic,
+HCONVLIST DdeConnectList(sal_uIntPtr idInst, HSZ hszService, HSZ hszTopic,
             HCONVLIST hConvList, CONVCONTEXT* pCC);
 HCONV   DdeQueryNextServer(HCONVLIST hConvList, HCONV hConvPrev);
-BOOL    DdeDisconnectList(HCONVLIST hConvList);
+sal_Bool    DdeDisconnectList(HCONVLIST hConvList);
 
 /* conversation control functions */
 
-HCONV   DdeConnect(ULONG idInst, HSZ hszService, HSZ hszTopic,
+HCONV   DdeConnect(sal_uIntPtr idInst, HSZ hszService, HSZ hszTopic,
             CONVCONTEXT* pCC);
-BOOL    DdeDisconnect(HCONV hConv);
+sal_Bool    DdeDisconnect(HCONV hConv);
 HCONV   DdeReconnect(HCONV hConv);
 
-USHORT  DdeQueryConvInfo(HCONV hConv, ULONG idTransaction, CONVINFO* pConvInfo);
-BOOL    DdeSetUserHandle(HCONV hConv, ULONG id, ULONG hUser);
+sal_uInt16  DdeQueryConvInfo(HCONV hConv, sal_uIntPtr idTransaction, CONVINFO* pConvInfo);
+sal_Bool    DdeSetUserHandle(HCONV hConv, sal_uIntPtr id, sal_uIntPtr hUser);
 
-BOOL    DdeAbandonTransaction(ULONG idInst, HCONV hConv, ULONG idTransaction);
+sal_Bool    DdeAbandonTransaction(sal_uIntPtr idInst, HCONV hConv, sal_uIntPtr idTransaction);
 
 
 /* app server interface functions */
 
-BOOL    DdePostAdvise(ULONG idInst, HSZ hszTopic, HSZ hszItem);
-BOOL    DdeEnableCallback(ULONG idInst, HCONV hConv, USHORT wCmd);
+sal_Bool    DdePostAdvise(sal_uIntPtr idInst, HSZ hszTopic, HSZ hszItem);
+sal_Bool    DdeEnableCallback(sal_uIntPtr idInst, HCONV hConv, sal_uInt16 wCmd);
 
 #define EC_ENABLEALL            0
 #define EC_ENABLEONE            ST_BLOCKNEXT
 #define EC_DISABLE              ST_BLOCKED
 #define EC_QUERYWAITING         2
 
-HDDEDATA DdeNameService(ULONG idInst, HSZ hsz1, HSZ hsz2, USHORT afCmd);
+HDDEDATA DdeNameService(sal_uIntPtr idInst, HSZ hsz1, HSZ hsz2, sal_uInt16 afCmd);
 
 #define DNS_REGISTER        0x0001
 #define DNS_UNREGISTER      0x0002
@@ -270,23 +270,23 @@ HDDEDATA DdeNameService(ULONG idInst, HSZ hsz1, HSZ hsz2, USHORT afCmd);
 
 /* app client interface functions */
 
-HDDEDATA DdeClientTransaction(void* pData, ULONG cbData,
-        HCONV hConv, HSZ hszItem, USHORT wFmt, USHORT wType,
-        ULONG dwTimeout, ULONG* pdwResult);
+HDDEDATA DdeClientTransaction(void* pData, sal_uIntPtr cbData,
+        HCONV hConv, HSZ hszItem, sal_uInt16 wFmt, sal_uInt16 wType,
+        sal_uIntPtr dwTimeout, sal_uIntPtr* pdwResult);
 
 /* data transfer functions */
 
-HDDEDATA DdeCreateDataHandle(ULONG idInst, void* pSrc, ULONG cb,
-            ULONG cbOff, HSZ hszItem, USHORT wFmt, USHORT afCmd);
-// HDDEDATA DdeAddData(HDDEDATA hData, void* pSrc, ULONG cb, ULONG cbOff);
-ULONG    DdeGetData(HDDEDATA hData, void* pDst, ULONG cbMax, ULONG cbOff);
-BYTE*    DdeAccessData(HDDEDATA hData, ULONG* pcbDataSize);
-BOOL     DdeUnaccessData(HDDEDATA hData);
-BOOL     DdeFreeDataHandle(HDDEDATA hData);
+HDDEDATA DdeCreateDataHandle(sal_uIntPtr idInst, void* pSrc, sal_uIntPtr cb,
+            sal_uIntPtr cbOff, HSZ hszItem, sal_uInt16 wFmt, sal_uInt16 afCmd);
+// HDDEDATA DdeAddData(HDDEDATA hData, void* pSrc, sal_uIntPtr cb, sal_uIntPtr cbOff);
+sal_uIntPtr    DdeGetData(HDDEDATA hData, void* pDst, sal_uIntPtr cbMax, sal_uIntPtr cbOff);
+sal_uInt8*    DdeAccessData(HDDEDATA hData, sal_uIntPtr* pcbDataSize);
+sal_Bool     DdeUnaccessData(HDDEDATA hData);
+sal_Bool     DdeFreeDataHandle(HDDEDATA hData);
 
 #define     HDATA_APPOWNED          0x0001
 
-USHORT DdeGetLastError(ULONG idInst);
+sal_uInt16 DdeGetLastError(sal_uIntPtr idInst);
 
 #define     DMLERR_NO_ERROR                    0       /* must be 0 */
 
@@ -313,11 +313,11 @@ USHORT DdeGetLastError(ULONG idInst);
 
 #define     DMLERR_LAST                        0x4011
 
-HSZ     DdeCreateStringHandle(ULONG idInst, PSZ pStr, int iCodePage);
-ULONG   DdeQueryString(ULONG idInst, HSZ hsz, PSZ pStr, ULONG cchMax,
+HSZ     DdeCreateStringHandle(sal_uIntPtr idInst, PSZ pStr, int iCodePage);
+sal_uIntPtr   DdeQueryString(sal_uIntPtr idInst, HSZ hsz, PSZ pStr, sal_uIntPtr cchMax,
                         int iCodePage);
-BOOL    DdeFreeStringHandle(ULONG idInst, HSZ hsz);
-BOOL    DdeKeepStringHandle(ULONG idInst, HSZ hsz);
+sal_Bool    DdeFreeStringHandle(sal_uIntPtr idInst, HSZ hsz);
+sal_Bool    DdeKeepStringHandle(sal_uIntPtr idInst, HSZ hsz);
 int     DdeCmpStringHandles(HSZ hsz1, HSZ hsz2);
 
 

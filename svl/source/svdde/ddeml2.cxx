@@ -50,10 +50,10 @@
 //  AllocAtomName
 //
 
-PSZ ImpDdeMgr::AllocAtomName( ATOM hString, ULONG& rBufLen )
+PSZ ImpDdeMgr::AllocAtomName( ATOM hString, sal_uIntPtr& rBufLen )
 {
     HATOMTBL hAtomTable = WinQuerySystemAtomTable();
-    ULONG nLen = WinQueryAtomLength( hAtomTable, hString );
+    sal_uIntPtr nLen = WinQueryAtomLength( hAtomTable, hString );
     nLen++;
     PSZ pBuf = 0;
     if ( !MyDosAllocMem( (PPVOID)&pBuf, nLen, PAG_READ|PAG_WRITE|PAG_COMMIT | OBJ_ANY,"Atom" ) )
@@ -70,10 +70,10 @@ PSZ ImpDdeMgr::AllocAtomName( ATOM hString, ULONG& rBufLen )
 //
 
 PDDESTRUCT ImpDdeMgr::MakeDDEObject( HWND hwnd, ATOM hItemName,
-    USHORT fsStatus, USHORT usFormat, PVOID pabData, ULONG usDataLen )
+    sal_uInt16 fsStatus, sal_uInt16 usFormat, PVOID pabData, sal_uIntPtr usDataLen )
 {
     PDDESTRUCT  pddes = 0;
-    ULONG       usItemLen;
+    sal_uIntPtr     usItemLen;
     PULONG      pulSharedObj;
     //WRITELOG("MakeDDEObject: Start")
 
@@ -83,7 +83,7 @@ PDDESTRUCT ImpDdeMgr::MakeDDEObject( HWND hwnd, ATOM hItemName,
     else
         usItemLen = 1;
 
-    ULONG nTotalSize = sizeof(DDESTRUCT) + usItemLen + usDataLen;
+    sal_uIntPtr nTotalSize = sizeof(DDESTRUCT) + usItemLen + usDataLen;
 
     if( !(MyDosAllocSharedMem((PPVOID)&pulSharedObj, NULL,
             nTotalSize,
@@ -92,7 +92,7 @@ PDDESTRUCT ImpDdeMgr::MakeDDEObject( HWND hwnd, ATOM hItemName,
     {
         pddes = (PDDESTRUCT) pulSharedObj;
         // siehe "Glenn Puchtel, DDE for OS/2" p.60
-        pddes->cbData = (ULONG)usDataLen;
+        pddes->cbData = (sal_uIntPtr)usDataLen;
         pddes->fsStatus = fsStatus;
         pddes->usFormat = usFormat;
         pddes->offszItemName = sizeof( DDESTRUCT );
@@ -122,10 +122,10 @@ PDDESTRUCT ImpDdeMgr::MakeDDEObject( HWND hwnd, ATOM hItemName,
 //
 
 APIRET ImpDdeMgr::AllocNamedSharedMem( PPVOID ppBaseAddress, PSZ pName,
-    ULONG nElementSize, ULONG nElementCount )
+    sal_uIntPtr nElementSize, sal_uIntPtr nElementCount )
 {
-    ULONG nObjSize = (ULONG)(nElementSize * nElementCount );
-    nObjSize += sizeof( ULONG );    // fuer ElementCount am Anfang des Blocks
+    sal_uIntPtr nObjSize = (sal_uIntPtr)(nElementSize * nElementCount );
+    nObjSize += sizeof( sal_uIntPtr );  // fuer ElementCount am Anfang des Blocks
 
     *ppBaseAddress = 0;
     APIRET nRet = MyDosAllocSharedMem( ppBaseAddress, pName, nObjSize,
@@ -134,7 +134,7 @@ APIRET ImpDdeMgr::AllocNamedSharedMem( PPVOID ppBaseAddress, PSZ pName,
     if ( !nRet )
     {
         memset( *ppBaseAddress, 0, nObjSize );
-        ULONG* pULONG = (ULONG*)*ppBaseAddress;
+        sal_uIntPtr* pULONG = (sal_uIntPtr*)*ppBaseAddress;
         *pULONG = nObjSize;
     }
     return nRet;
@@ -144,7 +144,7 @@ void ImpDdeMgr::CreateServerWnd()
 {
     hWndServer = WinCreateWindow( HWND_DESKTOP, WC_FRAME, "DDEServer", 0,
         0,0,0,0, HWND_DESKTOP, HWND_BOTTOM, 0, 0,  0 );
-    WinSetWindowULong( hWndServer, 0, (ULONG)this );
+    WinSetWindowULong( hWndServer, 0, (sal_uIntPtr)this );
     WinSubclassWindow( hWndServer, ::ServerWndProc );
     TID tidDummy;
     WinQueryWindowProcess( hWndServer, &pidThis, &tidDummy );
@@ -165,11 +165,11 @@ HWND ImpDdeMgr::CreateConversationWnd()
         ImpConvWndData* pWndData = new ImpConvWndData;
         pWndData->pThis = this;
         pWndData->nRefCount = 0;
-        WinSetWindowULong( hWnd, 0, (ULONG)pWndData );
+        WinSetWindowULong( hWnd, 0, (sal_uIntPtr)pWndData );
         WinSubclassWindow( hWnd, ::ConvWndProc );
 #if 0 && defined( OV_DEBUG )
         String aStr("ConvWnd created:");
-        aStr += (ULONG)hWnd;
+        aStr += (sal_uIntPtr)hWnd;
         WRITELOG((char*)aStr.GetStr())
 #endif
     }
@@ -189,13 +189,13 @@ void ImpDdeMgr::DestroyConversationWnd( HWND hWnd )
         if( pObj->nRefCount == 0
             // auch Windows mit Refcount vonm loeschen, da dieser in initial
             // auf 0 gesetzt wird
-            || pObj->nRefCount == (USHORT)-1 )
+            || pObj->nRefCount == (sal_uInt16)-1 )
         {
             delete pObj;
             WinDestroyWindow( hWnd );
 #if 0 && defined( OV_DEBUG )
             String aStr("ConvWnd destroyed:");
-            aStr += (ULONG)hWnd;
+            aStr += (sal_uIntPtr)hWnd;
             WRITELOG((char*)aStr.GetStr())
 #endif
         }
@@ -204,7 +204,7 @@ void ImpDdeMgr::DestroyConversationWnd( HWND hWnd )
 #if 0 && defined( OV_DEBUG )
             String aStr("ConvWnd not destroyed (Refcount=");
             aStr += pObj->nRefCount;
-            aStr += ") "; aStr += (ULONG)hWnd;
+            aStr += ") "; aStr += (sal_uIntPtr)hWnd;
             WRITELOG((char*)aStr.GetStr())
 #endif
         }
@@ -218,7 +218,7 @@ void ImpDdeMgr::DestroyConversationWnd( HWND hWnd )
 }
 
 // static
-USHORT ImpDdeMgr::GetConversationWndRefCount( HWND hWnd )
+sal_uInt16 ImpDdeMgr::GetConversationWndRefCount( HWND hWnd )
 {
     ImpConvWndData* pObj = (ImpConvWndData*)WinQueryWindowULong( hWnd, 0 );
     DBG_ASSERT(pObj,"Dde:ConvWnd has no data");
@@ -228,11 +228,11 @@ USHORT ImpDdeMgr::GetConversationWndRefCount( HWND hWnd )
 }
 
 // static
-USHORT ImpDdeMgr::IncConversationWndRefCount( HWND hWnd )
+sal_uInt16 ImpDdeMgr::IncConversationWndRefCount( HWND hWnd )
 {
 #if 0 && defined( OV_DEBUG )
     String aStr("IncConversationWndRefCount ");
-    aStr += (ULONG)hWnd;
+    aStr += (sal_uIntPtr)hWnd;
     WRITELOG((char*)aStr.GetStr())
 #endif
     ImpConvWndData* pObj = (ImpConvWndData*)WinQueryWindowULong( hWnd, 0 );
@@ -255,7 +255,7 @@ ImpDdeMgrData* ImpDdeMgr::InitAll()
         if ( nRet == 2 ) // ERROR_FILE_NOT_FOUND )
         {
             // DDECONVERSATIONCOUNT=4096
-            USHORT nConvTransCount = 128;
+            sal_uInt16 nConvTransCount = 128;
             PSZ pResult;
             nRet = DosScanEnv( "SOMAXDDECONN", (const char**)&pResult );
             if( !nRet )
@@ -264,9 +264,9 @@ ImpDdeMgrData* ImpDdeMgr::InitAll()
                 nTemp = atoi( pResult );
                 nTemp++; // der nullte Eintrag wird nicht benutzt
                 if( nTemp > 128 )
-                    nConvTransCount = (USHORT)nTemp;
+                    nConvTransCount = (sal_uInt16)nTemp;
             }
-            ULONG nSize = sizeof(ImpDdeMgrData);
+            sal_uIntPtr nSize = sizeof(ImpDdeMgrData);
             nSize += sizeof(ImpHCONV) * nConvTransCount;
             nSize += sizeof(Transaction) * nConvTransCount;
             nSize += sizeof(HWND) * DDEMLAPPCOUNT;
@@ -276,8 +276,8 @@ ImpDdeMgrData* ImpDdeMgr::InitAll()
             if ( !nRet )
             {
                 pBase->nTotalSize = nSize;
-                ULONG nAppTable = (ULONG)&(pBase->aAppTable);
-                ULONG nCharBase = (ULONG)pBase;
+                sal_uIntPtr nAppTable = (sal_uIntPtr)&(pBase->aAppTable);
+                sal_uIntPtr nCharBase = (sal_uIntPtr)pBase;
                 pBase->nOffsAppTable =  nAppTable - nCharBase;
                 pBase->nOffsConvTable = pBase->nOffsAppTable;
                 pBase->nOffsConvTable += sizeof(HWND) * DDEMLAPPCOUNT;
@@ -318,10 +318,10 @@ HCONV ImpDdeMgr::CreateConvHandle( ImpDdeMgrData* pData,
         return (HCONV)0;
 
     ImpHCONV* pPtr = ImpDdeMgr::GetConvTable( pData );
-    USHORT nCount = pData->nMaxConvCount;
+    sal_uInt16 nCount = pData->nMaxConvCount;
     pPtr++;
     nCount--;  // ersten Handle (NULLHANDLE) ueberspringen
-    USHORT nIdx = 1;
+    sal_uInt16 nIdx = 1;
     DBG_ASSERT(pPtr,"No ConvTable");
     if( !pPtr )
         return (HCONV)0;
@@ -346,7 +346,7 @@ HCONV ImpDdeMgr::CreateConvHandle( ImpDdeMgrData* pData,
     pPtr->hWndPartner   = hWndPartner;
     pPtr->pidOwner      = pidOwner;
     pPtr->hConvPartner  = (HCONV)0;
-    pPtr->nPrevHCONV    = (USHORT)hPrevHCONV;
+    pPtr->nPrevHCONV    = (sal_uInt16)hPrevHCONV;
     pPtr->nNextHCONV    = 0;
     pPtr->nStatus       = ST_CONNECTED;
 
@@ -357,13 +357,13 @@ HCONV ImpDdeMgr::CreateConvHandle( ImpDdeMgrData* pData,
 
 // static
 void ImpDdeMgr::FreeConvHandle( ImpDdeMgrData* pBase, HCONV hConv,
-    BOOL bDestroyHWndThis )
+    sal_Bool bDestroyHWndThis )
 {
     DBG_ASSERT(pBase,"DDE:No data");
 #if 0 && defined( OV_DEBUG )
     String aStr("FreeConvHandle: Start ");
-    aStr += (ULONG)hConv;
-    aStr += " Destroy: "; aStr += (USHORT)bDestroyHWndThis;
+    aStr += (sal_uIntPtr)hConv;
+    aStr += " Destroy: "; aStr += (sal_uInt16)bDestroyHWndThis;
     WRITELOG((char*)aStr.GetStr());
     WRITESTATUS("FreeConvHandle: Start");
 #endif
@@ -376,12 +376,12 @@ void ImpDdeMgr::FreeConvHandle( ImpDdeMgrData* pBase, HCONV hConv,
     if( hConv && hConv < pBase->nMaxConvCount )
     {
         ImpHCONV* pTable = ImpDdeMgr::GetConvTable( pBase );
-        ImpHCONV* pPtr = pTable + (USHORT)hConv;
+        ImpHCONV* pPtr = pTable + (sal_uInt16)hConv;
         if( pPtr->nStatus & ST_INLIST )
         {
             // Verkettung umsetzen
-            USHORT nPrev = pPtr->nPrevHCONV;
-            USHORT nNext = pPtr->nNextHCONV;
+            sal_uInt16 nPrev = pPtr->nPrevHCONV;
+            sal_uInt16 nNext = pPtr->nNextHCONV;
             if( nPrev )
             {
                 pPtr = pTable + nPrev;
@@ -392,7 +392,7 @@ void ImpDdeMgr::FreeConvHandle( ImpDdeMgrData* pBase, HCONV hConv,
                 pPtr = pTable + nNext;
                 pPtr->nPrevHCONV = nPrev;
             }
-            pPtr = pTable + (USHORT)hConv;
+            pPtr = pTable + (sal_uInt16)hConv;
         }
 
         DdeFreeStringHandle( pPtr->hszPartner );
@@ -422,16 +422,16 @@ HCONV ImpDdeMgr::IsConvHandleAvailable( ImpDdeMgrData* pBase )
         return 0;
 
     ImpHCONV* pPtr = ImpDdeMgr::GetConvTable( pBase );
-    USHORT nCurPos = pBase->nMaxConvCount - 1;
+    sal_uInt16 nCurPos = pBase->nMaxConvCount - 1;
     pPtr += nCurPos;  // von hinten aufrollen
     while( nCurPos >= 1 )
     {
         if( pPtr->hWndThis == 0 )
-            return TRUE;
+            return sal_True;
          pPtr--;
          nCurPos--;
     }
-    return FALSE;
+    return sal_False;
 }
 
 // static
@@ -442,9 +442,9 @@ HCONV ImpDdeMgr::GetConvHandle( ImpDdeMgrData* pBase, HWND hWndThis,
     if( !pBase )
         return 0;
     ImpHCONV* pPtr = ImpDdeMgr::GetConvTable( pBase );
-    USHORT nCurPos = 1;
+    sal_uInt16 nCurPos = 1;
     pPtr++;  // ersten Handle ueberspringen
-    USHORT nCurConvCount = pBase->nCurConvCount;
+    sal_uInt16 nCurConvCount = pBase->nCurConvCount;
     while( nCurConvCount && nCurPos < pBase->nMaxConvCount )
     {
         if( pPtr->hWndThis )
@@ -464,8 +464,8 @@ HCONV ImpDdeMgr::GetConvHandle( ImpDdeMgrData* pBase, HWND hWndThis,
 
 
 // static
-ULONG ImpDdeMgr::CreateTransaction( ImpDdeMgrData* pBase, HCONV hOwner,
-    HSZ hszItem, USHORT nFormat, USHORT nTransactionType )
+sal_uIntPtr ImpDdeMgr::CreateTransaction( ImpDdeMgrData* pBase, HCONV hOwner,
+    HSZ hszItem, sal_uInt16 nFormat, sal_uInt16 nTransactionType )
 {
     DBG_ASSERT(pBase,"DDE:No Data");
     DBG_ASSERT(hOwner!=0,"DDE:No Owner");
@@ -474,7 +474,7 @@ ULONG ImpDdeMgr::CreateTransaction( ImpDdeMgrData* pBase, HCONV hOwner,
     {
         Transaction* pPtr = ImpDdeMgr::GetTransTable( pBase );
         DBG_ASSERT(pPtr->hConvOwner==0,"DDE:Data corrupted");
-        USHORT nId = 1;
+        sal_uInt16 nId = 1;
         pPtr++;
         while( nId < pBase->nMaxTransCount )
         {
@@ -487,7 +487,7 @@ ULONG ImpDdeMgr::CreateTransaction( ImpDdeMgrData* pBase, HCONV hOwner,
                 pPtr->nConvst = XST_CONNECTED;
                 pPtr->nFormat = nFormat;
                 pBase->nCurTransCount++;
-                return (ULONG)nId;
+                return (sal_uIntPtr)nId;
             }
             nId++;
             pPtr++;
@@ -497,7 +497,7 @@ ULONG ImpDdeMgr::CreateTransaction( ImpDdeMgrData* pBase, HCONV hOwner,
 }
 
 // static
-void ImpDdeMgr::FreeTransaction( ImpDdeMgrData* pBase, ULONG nTransId )
+void ImpDdeMgr::FreeTransaction( ImpDdeMgrData* pBase, sal_uIntPtr nTransId )
 {
     DBG_ASSERT(pBase,"DDE:No Data");
     if( !pBase )
@@ -521,8 +521,8 @@ void ImpDdeMgr::FreeTransaction( ImpDdeMgrData* pBase, ULONG nTransId )
 }
 
 // static
-ULONG ImpDdeMgr::GetTransaction( ImpDdeMgrData* pBase,
-    HCONV hOwner, HSZ hszItem, USHORT nFormat )
+sal_uIntPtr ImpDdeMgr::GetTransaction( ImpDdeMgrData* pBase,
+    HCONV hOwner, HSZ hszItem, sal_uInt16 nFormat )
 {
     DBG_ASSERT(pBase,"DDE:No Data");
     if( !pBase || !hOwner )
@@ -535,11 +535,11 @@ ULONG ImpDdeMgr::GetTransaction( ImpDdeMgrData* pBase,
     pTrans++; // NULLHANDLE ueberspringen
 
     ImpHCONV* pConv = ImpDdeMgr::GetConvTable( pBase );
-    pConv += (USHORT)hOwner;
+    pConv += (sal_uInt16)hOwner;
     HCONV hConvPartner = pConv->hConvPartner;
 
-    USHORT nCurTransCount = pBase->nCurTransCount;
-    for( USHORT nTrans=1; nTrans< pBase->nMaxTransCount; nTrans++, pTrans++ )
+    sal_uInt16 nCurTransCount = pBase->nCurTransCount;
+    for( sal_uInt16 nTrans=1; nTrans< pBase->nMaxTransCount; nTrans++, pTrans++ )
     {
         if( pTrans->hConvOwner )
         {
@@ -549,7 +549,7 @@ ULONG ImpDdeMgr::GetTransaction( ImpDdeMgrData* pBase,
                  pTrans->hszItem == hszItem )
             {
                 // gefunden!
-                return (ULONG)nTrans;
+                return (sal_uIntPtr)nTrans;
             }
             nCurTransCount--;
             if( !nCurTransCount )
@@ -577,7 +577,7 @@ HSZ ImpDdeMgr::DdeCreateStringHandle( PSZ pszString, int iCodePage)
 }
 
 // static
-ULONG ImpDdeMgr::DdeQueryString( HSZ hszStr, PSZ pszStr, ULONG cchMax, int iCodePage)
+sal_uIntPtr ImpDdeMgr::DdeQueryString( HSZ hszStr, PSZ pszStr, sal_uIntPtr cchMax, int iCodePage)
 {
     HATOMTBL hAtomTable = WinQuerySystemAtomTable();
     if ( !pszStr )
@@ -590,32 +590,32 @@ ULONG ImpDdeMgr::DdeQueryString( HSZ hszStr, PSZ pszStr, ULONG cchMax, int iCode
 }
 
 // static
-BOOL ImpDdeMgr::DdeFreeStringHandle( HSZ hsz )
+sal_Bool ImpDdeMgr::DdeFreeStringHandle( HSZ hsz )
 {
     if( !hsz )
-        return FALSE;
+        return sal_False;
     ATOM aResult = WinDeleteAtom( WinQuerySystemAtomTable(),(ATOM)hsz );
-    return (BOOL)(aResult==0);
+    return (sal_Bool)(aResult==0);
 }
 
 // static
-BOOL ImpDdeMgr::DdeKeepStringHandle( HSZ hsz )
+sal_Bool ImpDdeMgr::DdeKeepStringHandle( HSZ hsz )
 {
     if( !hsz )
-        return TRUE;
+        return sal_True;
     HATOMTBL hAtomTable = WinQuerySystemAtomTable();
 #ifdef DBG_UTIL
-    ULONG nUsageCount=WinQueryAtomUsage(hAtomTable,(ATOM)hsz);
+    sal_uIntPtr nUsageCount=WinQueryAtomUsage(hAtomTable,(ATOM)hsz);
 #endif
-    ULONG nAtom = 0xFFFF0000;
-    ULONG nPar = (ULONG)hsz;
+    sal_uIntPtr nAtom = 0xFFFF0000;
+    sal_uIntPtr nPar = (sal_uIntPtr)hsz;
     nAtom |= nPar;
     ATOM aAtom = WinAddAtom( hAtomTable, (PSZ)nAtom );
 #ifdef DBG_UTIL
     if ( aAtom )
         DBG_ASSERT(WinQueryAtomUsage(hAtomTable,(ATOM)hsz)==nUsageCount+1,"Keep failed");
 #endif
-    return (BOOL)(aAtom!=0);
+    return (sal_Bool)(aAtom!=0);
 }
 
 
@@ -629,12 +629,12 @@ int ImpDdeMgr::DdeCmpStringHandles(HSZ hsz1, HSZ hsz2)
     return 1;
 }
 
-HDDEDATA ImpDdeMgr::DdeCreateDataHandle( void* pSrc, ULONG cb,
-    ULONG cbOff, HSZ hszItem, USHORT wFmt, USHORT afCmd)
+HDDEDATA ImpDdeMgr::DdeCreateDataHandle( void* pSrc, sal_uIntPtr cb,
+    sal_uIntPtr cbOff, HSZ hszItem, sal_uInt16 wFmt, sal_uInt16 afCmd)
 {
     char* pData = (char*)pSrc;
     pData += cbOff;
-    USHORT nStatus;
+    sal_uInt16 nStatus;
     if( afCmd & HDATA_APPOWNED )
         nStatus = IMP_HDATAAPPOWNED;
     else
@@ -647,15 +647,15 @@ HDDEDATA ImpDdeMgr::DdeCreateDataHandle( void* pSrc, ULONG cb,
 }
 
 // static
-BYTE* ImpDdeMgr::DdeAccessData(HDDEDATA hData, ULONG* pcbDataSize)
+sal_uInt8* ImpDdeMgr::DdeAccessData(HDDEDATA hData, sal_uIntPtr* pcbDataSize)
 {
-    BYTE* pRet = 0;
+    sal_uInt8* pRet = 0;
     *pcbDataSize = 0;
     if ( hData )
     {
-        pRet = (BYTE*)hData;
+        pRet = (sal_uInt8*)hData;
         pRet += hData->offabData;
-        ULONG nLen = hData->cbData;
+        sal_uIntPtr nLen = hData->cbData;
         // nLen -= hData->offabData;
         *pcbDataSize = nLen;
     }
@@ -665,48 +665,48 @@ BYTE* ImpDdeMgr::DdeAccessData(HDDEDATA hData, ULONG* pcbDataSize)
 }
 
 // static
-BOOL ImpDdeMgr::DdeUnaccessData(HDDEDATA hData)
+sal_Bool ImpDdeMgr::DdeUnaccessData(HDDEDATA hData)
 {
-    return TRUE; // nothing to do for us
+    return sal_True; // nothing to do for us
 }
 
 // static
-BOOL ImpDdeMgr::DdeFreeDataHandle(HDDEDATA hData)
+sal_Bool ImpDdeMgr::DdeFreeDataHandle(HDDEDATA hData)
 {
     DdeUnaccessData( hData );
     MyDosFreeMem( (PSZ)hData, "DdeFreeDataHandle" );
-    return TRUE;
+    return sal_True;
 }
 
 // static
-HDDEDATA ImpDdeMgr::DdeAddData(HDDEDATA hData,void* pSrc,ULONG cb,ULONG cbOff)
+HDDEDATA ImpDdeMgr::DdeAddData(HDDEDATA hData,void* pSrc,sal_uIntPtr cb,sal_uIntPtr cbOff)
 {
     return (HDDEDATA)0;
 }
 
 // static
-ULONG ImpDdeMgr::DdeGetData(HDDEDATA hData,void* pDst,ULONG cbMax,ULONG cbOff)
+sal_uIntPtr ImpDdeMgr::DdeGetData(HDDEDATA hData,void* pDst,sal_uIntPtr cbMax,sal_uIntPtr cbOff)
 {
     return 0;
 }
 
-BOOL ImpDdeMgr::DisconnectAll()
+sal_Bool ImpDdeMgr::DisconnectAll()
 {
     //WRITESTATUS("Before DisconnectAll()")
-    USHORT nCurConvCount = pData->nCurConvCount;
+    sal_uInt16 nCurConvCount = pData->nCurConvCount;
     if( !nCurConvCount )
-        return TRUE;
+        return sal_True;
 
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     ImpHCONV* pPtr = pConvTable;
     pPtr++;
 
-    for( USHORT nPos=1; nPos < pData->nMaxConvCount; nPos++, pPtr++ )
+    for( sal_uInt16 nPos=1; nPos < pData->nMaxConvCount; nPos++, pPtr++ )
     {
         if( pPtr->hWndThis )
         {
             if( !DdeDisconnect( (HCONV)nPos ) )
-                bRet = FALSE;
+                bRet = sal_False;
             nCurConvCount--;
             if( !nCurConvCount )
                 break;
@@ -720,22 +720,22 @@ BOOL ImpDdeMgr::DisconnectAll()
 void ImpDdeMgr::FreeTransactions( ImpDdeMgrData* pData,HWND hWndThis,
     HWND hWndPartner )
 {
-    USHORT nCurTransCount = pData->nCurTransCount;
+    sal_uInt16 nCurTransCount = pData->nCurTransCount;
     if( !nCurTransCount )
         return;
 
     Transaction* pTrans = GetTransTable( pData );
     ImpHCONV* pConvTable = GetConvTable( pData );
     pTrans++;
-    for( USHORT nPos=1; nPos < pData->nMaxTransCount; nPos++, pTrans++ )
+    for( sal_uInt16 nPos=1; nPos < pData->nMaxTransCount; nPos++, pTrans++ )
     {
         if( pTrans->hConvOwner )
         {
-            ImpHCONV* pConv = pConvTable + (USHORT)(pTrans->hConvOwner);
+            ImpHCONV* pConv = pConvTable + (sal_uInt16)(pTrans->hConvOwner);
             if((pConv->hWndThis==hWndThis&& pConv->hWndPartner==hWndPartner)||
                (pConv->hWndThis==hWndPartner && pConv->hWndPartner==hWndThis))
             {
-                FreeTransaction( pData, (ULONG)nPos );
+                FreeTransaction( pData, (sal_uIntPtr)nPos );
             }
             nCurTransCount--;
             if( !nCurTransCount )
@@ -747,18 +747,18 @@ void ImpDdeMgr::FreeTransactions( ImpDdeMgrData* pData,HWND hWndThis,
 // static
 void ImpDdeMgr::FreeTransactions( ImpDdeMgrData* pData, HCONV hConvOwner )
 {
-    USHORT nCurTransCount = pData->nCurTransCount;
+    sal_uInt16 nCurTransCount = pData->nCurTransCount;
     if( !nCurTransCount )
         return;
 
     Transaction* pTrans = GetTransTable( pData );
 //  ImpHCONV* pConvTable = GetConvTable( pData );
     pTrans++;
-    for( USHORT nPos=1; nPos < pData->nMaxTransCount; nPos++, pTrans++ )
+    for( sal_uInt16 nPos=1; nPos < pData->nMaxTransCount; nPos++, pTrans++ )
     {
         if( pTrans->hConvOwner == hConvOwner )
         {
-            FreeTransaction( pData, (ULONG)nPos );
+            FreeTransaction( pData, (sal_uIntPtr)nPos );
             nCurTransCount--;
             if( !nCurTransCount )
                 return;
@@ -770,13 +770,13 @@ void ImpDdeMgr::FreeTransactions( ImpDdeMgrData* pData, HCONV hConvOwner )
 void ImpDdeMgr::FreeConversations( ImpDdeMgrData* pData, HWND hWndThis,
     HWND hWndPartner )
 {
-    USHORT nCurCount = pData->nCurConvCount;
+    sal_uInt16 nCurCount = pData->nCurConvCount;
     if( !nCurCount )
         return;
 
     ImpHCONV* pPtr = GetConvTable( pData );
     pPtr++;
-    for( USHORT nPos=1; nPos < pData->nMaxConvCount; nPos++, pPtr++ )
+    for( sal_uInt16 nPos=1; nPos < pData->nMaxConvCount; nPos++, pPtr++ )
     {
         if( pPtr->hWndThis )
         {
@@ -790,25 +790,25 @@ void ImpDdeMgr::FreeConversations( ImpDdeMgrData* pData, HWND hWndThis,
 }
 
 
-BOOL ImpDdeMgr::OwnsConversationHandles()
+sal_Bool ImpDdeMgr::OwnsConversationHandles()
 {
     //WRITESTATUS("OwnsConversationHandles()");
 #if 0 && defined( OV_DEBUG )
     String aStr("OwnsConversationHandles Server:");
-    aStr += (ULONG)hWndServer;
+    aStr += (sal_uIntPtr)hWndServer;
     WRITELOG((char*)aStr.GetStr())
 #endif
     ImpHCONV* pPtr = GetConvTable( pData );
-    for( USHORT nCur = 1; nCur < pData->nMaxConvCount; nCur++, pPtr++ )
+    for( sal_uInt16 nCur = 1; nCur < pData->nMaxConvCount; nCur++, pPtr++ )
     {
         if( pPtr->hWndThis && pPtr->pidOwner == pidThis )
         {
-            //WRITELOG("OwnsConversationHandles: TRUE");
-            return TRUE;
+            //WRITELOG("OwnsConversationHandles: sal_True");
+            return sal_True;
         }
     }
-    // WRITELOG("OwnsConversationHandles: FALSE");
-    return FALSE;
+    // WRITELOG("OwnsConversationHandles: sal_False");
+    return sal_False;
 }
 
 
@@ -817,8 +817,8 @@ BOOL ImpDdeMgr::OwnsConversationHandles()
 // *********************************************************************
 // *********************************************************************
 
-USHORT DdeInitialize(ULONG* pidInst, PFNCALLBACK pfnCallback,
-    ULONG afCmd, ULONG ulRes)
+sal_uInt16 DdeInitialize(sal_uIntPtr* pidInst, PFNCALLBACK pfnCallback,
+    sal_uIntPtr afCmd, sal_uIntPtr ulRes)
 {
     if( (*pidInst)!=0 )
     {
@@ -828,28 +828,28 @@ USHORT DdeInitialize(ULONG* pidInst, PFNCALLBACK pfnCallback,
     }
 
     ImpDdeMgr* pMgr = new ImpDdeMgr;
-    *pidInst = (ULONG)pMgr;
+    *pidInst = (sal_uIntPtr)pMgr;
     return pMgr->DdeInitialize( pfnCallback, afCmd );
 }
 
-BOOL DdeUninitialize(ULONG idInst)
+sal_Bool DdeUninitialize(sal_uIntPtr idInst)
 {
     if( !idInst )
-        return FALSE;
+        return sal_False;
     ImpDdeMgr* pMgr = (ImpDdeMgr*)idInst;
     // nur loeschen, wenn wir nicht mehr benutzt werden!
     if( !pMgr->OwnsConversationHandles() )
     {
-        WRITELOG("DdeUninitialize: TRUE");
+        WRITELOG("DdeUninitialize: sal_True");
         delete pMgr;
-        return TRUE;
+        return sal_True;
     }
-    WRITELOG("DdeUninitialize: FALSE");
-    return FALSE;
+    WRITELOG("DdeUninitialize: sal_False");
+    return sal_False;
 }
 
 
-HCONVLIST DdeConnectList(ULONG idInst, HSZ hszService, HSZ hszTopic,
+HCONVLIST DdeConnectList(sal_uIntPtr idInst, HSZ hszService, HSZ hszTopic,
     HCONVLIST hConvList, CONVCONTEXT* pCC)
 {
     if( !idInst )
@@ -863,12 +863,12 @@ HCONV DdeQueryNextServer(HCONVLIST hConvList, HCONV hConvPrev)
     return ImpDdeMgr::DdeQueryNextServer( hConvList, hConvPrev );
 }
 
-BOOL DdeDisconnectList(HCONVLIST hConvList)
+sal_Bool DdeDisconnectList(HCONVLIST hConvList)
 {
     return ImpDdeMgr::DdeDisconnectList( hConvList );
 }
 
-HCONV DdeConnect(ULONG idInst, HSZ hszService, HSZ hszTopic,
+HCONV DdeConnect(sal_uIntPtr idInst, HSZ hszService, HSZ hszTopic,
     CONVCONTEXT* pCC)
 {
     if( !idInst )
@@ -876,7 +876,7 @@ HCONV DdeConnect(ULONG idInst, HSZ hszService, HSZ hszTopic,
     return ((ImpDdeMgr*)idInst)->DdeConnect( hszService, hszTopic, pCC );
 }
 
-BOOL DdeDisconnect(HCONV hConv)
+sal_Bool DdeDisconnect(HCONV hConv)
 {
     return ImpDdeMgr::DdeDisconnect( hConv );
 }
@@ -887,47 +887,47 @@ HCONV DdeReconnect(HCONV hConv)
 }
 
 
-USHORT DdeQueryConvInfo(HCONV hConv, ULONG idTransact, CONVINFO* pCI )
+sal_uInt16 DdeQueryConvInfo(HCONV hConv, sal_uIntPtr idTransact, CONVINFO* pCI )
 {
     return ImpDdeMgr::DdeQueryConvInfo( hConv, idTransact, pCI );
 }
 
-BOOL DdeSetUserHandle(HCONV hConv, ULONG id, ULONG hUser)
+sal_Bool DdeSetUserHandle(HCONV hConv, sal_uIntPtr id, sal_uIntPtr hUser)
 {
     return ImpDdeMgr::DdeSetUserHandle( hConv, id, hUser );
 }
 
-BOOL DdeAbandonTransaction(ULONG idInst, HCONV hConv, ULONG idTransaction)
+sal_Bool DdeAbandonTransaction(sal_uIntPtr idInst, HCONV hConv, sal_uIntPtr idTransaction)
 {
     if( !idInst )
-        return FALSE;
+        return sal_False;
     return ((ImpDdeMgr*)idInst)->DdeAbandonTransaction(hConv,idTransaction);
 }
 
-BOOL DdePostAdvise(ULONG idInst, HSZ hszTopic, HSZ hszItem)
+sal_Bool DdePostAdvise(sal_uIntPtr idInst, HSZ hszTopic, HSZ hszItem)
 {
     if( !idInst )
-        return FALSE;
+        return sal_False;
     return ((ImpDdeMgr*)idInst)->DdePostAdvise( hszTopic, hszItem );
 }
 
-BOOL DdeEnableCallback(ULONG idInst, HCONV hConv, USHORT wCmd)
+sal_Bool DdeEnableCallback(sal_uIntPtr idInst, HCONV hConv, sal_uInt16 wCmd)
 {
     if( !idInst )
-        return FALSE;
+        return sal_False;
     return ((ImpDdeMgr*)idInst)->DdeEnableCallback( hConv, wCmd );
 }
 
-HDDEDATA DdeClientTransaction(void* pData, ULONG cbData,
-        HCONV hConv, HSZ hszItem, USHORT wFmt, USHORT wType,
-        ULONG dwTimeout, ULONG* pdwResult)
+HDDEDATA DdeClientTransaction(void* pData, sal_uIntPtr cbData,
+        HCONV hConv, HSZ hszItem, sal_uInt16 wFmt, sal_uInt16 wType,
+        sal_uIntPtr dwTimeout, sal_uIntPtr* pdwResult)
 {
     return ImpDdeMgr::DdeClientTransaction( pData, cbData,
         hConv, hszItem, wFmt, wType, dwTimeout, pdwResult );
 }
 
-HDDEDATA DdeCreateDataHandle(ULONG idInst, void* pSrc, ULONG cb,
-    ULONG cbOff, HSZ hszItem, USHORT wFmt, USHORT afCmd)
+HDDEDATA DdeCreateDataHandle(sal_uIntPtr idInst, void* pSrc, sal_uIntPtr cb,
+    sal_uIntPtr cbOff, HSZ hszItem, sal_uInt16 wFmt, sal_uInt16 afCmd)
 {
     if( !idInst )
         return 0;
@@ -935,64 +935,64 @@ HDDEDATA DdeCreateDataHandle(ULONG idInst, void* pSrc, ULONG cb,
         cbOff, hszItem, wFmt, afCmd );
 }
 
-HDDEDATA DdeAddData(HDDEDATA hData, void* pSrc, ULONG cb, ULONG cbOff)
+HDDEDATA DdeAddData(HDDEDATA hData, void* pSrc, sal_uIntPtr cb, sal_uIntPtr cbOff)
 {
     return ImpDdeMgr::DdeAddData( hData, pSrc, cb, cbOff );
 }
 
-ULONG DdeGetData(HDDEDATA hData, void* pDst, ULONG cbMax, ULONG cbOff)
+sal_uIntPtr DdeGetData(HDDEDATA hData, void* pDst, sal_uIntPtr cbMax, sal_uIntPtr cbOff)
 {
     return ImpDdeMgr::DdeGetData( hData, pDst, cbMax, cbOff );
 }
 
-BYTE* DdeAccessData(HDDEDATA hData, ULONG* pcbDataSize)
+sal_uInt8* DdeAccessData(HDDEDATA hData, sal_uIntPtr* pcbDataSize)
 {
     return ImpDdeMgr::DdeAccessData( hData, pcbDataSize );
 }
 
-BOOL DdeUnaccessData(HDDEDATA hData)
+sal_Bool DdeUnaccessData(HDDEDATA hData)
 {
     return ImpDdeMgr::DdeUnaccessData( hData );
 }
 
-BOOL DdeFreeDataHandle(HDDEDATA hData)
+sal_Bool DdeFreeDataHandle(HDDEDATA hData)
 {
     return ImpDdeMgr::DdeFreeDataHandle( hData );
 }
 
-USHORT DdeGetLastError(ULONG idInst)
+sal_uInt16 DdeGetLastError(sal_uIntPtr idInst)
 {
     if( !idInst )
         return DMLERR_DLL_NOT_INITIALIZED;
     return ((ImpDdeMgr*)idInst)->DdeGetLastError();
 }
 
-HSZ DdeCreateStringHandle(ULONG idInst, PSZ pszString,int iCodePage )
+HSZ DdeCreateStringHandle(sal_uIntPtr idInst, PSZ pszString,int iCodePage )
 {
     if( !idInst )
         return 0;
     return ((ImpDdeMgr*)idInst)->DdeCreateStringHandle(pszString,iCodePage);
 }
 
-ULONG DdeQueryString( ULONG idInst, HSZ hsz, PSZ pBuf,
-    ULONG cchMax, int iCodePage )
+sal_uIntPtr DdeQueryString( sal_uIntPtr idInst, HSZ hsz, PSZ pBuf,
+    sal_uIntPtr cchMax, int iCodePage )
 {
     if( !idInst )
         return 0;
     return ((ImpDdeMgr*)idInst)->DdeQueryString( hsz,pBuf,cchMax,iCodePage);
 }
 
-BOOL DdeFreeStringHandle( ULONG idInst, HSZ hsz)
+sal_Bool DdeFreeStringHandle( sal_uIntPtr idInst, HSZ hsz)
 {
     if( !idInst )
-        return FALSE;
+        return sal_False;
     return ((ImpDdeMgr*)idInst)->DdeFreeStringHandle( hsz );
 }
 
-BOOL DdeKeepStringHandle( ULONG idInst, HSZ hsz )
+sal_Bool DdeKeepStringHandle( sal_uIntPtr idInst, HSZ hsz )
 {
     if( !idInst )
-        return FALSE;
+        return sal_False;
     return ((ImpDdeMgr*)idInst)->DdeKeepStringHandle( hsz );
 }
 
@@ -1001,7 +1001,7 @@ int DdeCmpStringHandles(HSZ hsz1, HSZ hsz2)
     return ImpDdeMgr::DdeCmpStringHandles( hsz1, hsz2 );
 }
 
-HDDEDATA DdeNameService( ULONG idInst, HSZ hsz1, HSZ hszRes, USHORT afCmd )
+HDDEDATA DdeNameService( sal_uIntPtr idInst, HSZ hsz1, HSZ hszRes, sal_uInt16 afCmd )
 {
     if( !idInst )
         return 0;

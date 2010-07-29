@@ -174,7 +174,7 @@ namespace utl
                     <ul><li><b>in</b>: the base to use when calculating a new name</li>
                         <li><b>out</b>: an unused element name</li>
                     </ul>
-                @return <TRUE/> if a free name could be generated
+                @return <sal_True/> if a free name could be generated
             */
             sal_Bool                getUniqueSetElementName( const rtl::OUString& _rSetNode, rtl::OUString& _rBaseName);
 

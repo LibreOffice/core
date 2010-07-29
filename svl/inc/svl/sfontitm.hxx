@@ -62,13 +62,13 @@ class SfxFontItem: public SfxPoolItem
 public:
     TYPEINFO();
 
-    inline SfxFontItem(USHORT nWhich);
+    inline SfxFontItem(sal_uInt16 nWhich);
 
     virtual int operator ==(const SfxPoolItem & rItem) const;
 
-    virtual SfxPoolItem * Create(SvStream & rStream, USHORT) const;
+    virtual SfxPoolItem * Create(SvStream & rStream, sal_uInt16) const;
 
-    virtual SvStream & Store(SvStream & rStream, USHORT) const;
+    virtual SvStream & Store(SvStream & rStream, sal_uInt16) const;
 
     virtual SfxPoolItem * Clone(SfxItemPool * = 0) const
     { return new SfxFontItem(*this); }
@@ -142,7 +142,7 @@ public:
     inline void setLanguage(LanguageType nTheLanguage);
 };
 
-inline SfxFontItem::SfxFontItem(USHORT which):
+inline SfxFontItem::SfxFontItem(sal_uInt16 which):
     SfxPoolItem(which),
     m_nCharSet(RTL_TEXTENCODING_DONTKNOW),
     m_nLanguage(LANGUAGE_DONTKNOW),

@@ -39,7 +39,7 @@
 	Atom			varid;
 	struct {
 		Atom			hashid;
-		INT32			nValue;
+		sal_Int32			nValue;
 	}				constname;
 	RscTop *		pClass;
 	RSCHEADER		header;
@@ -47,11 +47,11 @@
 		CLASS_DATA	pData;
 		RscTop *	pClass;
 	}				instance;
-	INT32			value;
-	USHORT			ushort;
+	sal_Int32			value;
+	sal_uInt16			ushort;
 	short			exp_short;
 	char *			string;
-	BOOL			svbool;
+	sal_Bool			svbool;
 	REF_ENUM		copyref;
 	RscDefine	  * defineele;
 	CharSet 		charset;
@@ -130,7 +130,7 @@ resource_definitions
   | MACROTARGET macro_expression
 	{
 		RscExpType		aExpType;
-		INT32			lValue;
+		sal_Int32			lValue;
 
 		aExpType.cType = RSCEXP_NOTHING;
 		pExp = new RscExpression( aExpType, '+', $2 );
@@ -143,13 +143,13 @@ resource_definition
   : line_number
   | '#' DEFINE SYMBOL macro_expression
 	{
-		BOOL		bError = FALSE;
+		sal_Bool		bError = sal_False;
 
 		if( $4.IsNumber() ){
 			if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
 									   ByteString( $3 ),
 									   $4.GetLong(), LIST_APPEND ) )
-				bError = TRUE;
+				bError = sal_True;
 		}
 		else if( $4.IsDefinition() ){
 			RscExpType		aExpType;
@@ -162,13 +162,13 @@ resource_definition
 
 			if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
 									   ByteString( $3 ), pExpr, LIST_APPEND ) )
-				bError = TRUE;
+				bError = sal_True;
 		}
 		else if( $4.IsExpression() ){
 			if( !pTC->aFileTab.NewDef( pFI->GetFileIndex(),
 									   ByteString( $3 ), $4.aExp.pExp,
 									   LIST_APPEND ) )
-				bError = TRUE;
+				bError = sal_True;
 		}
 
 		if( bError ){
@@ -200,7 +200,7 @@ resource_definition
 new_class_definition_header
   : CLASS SYMBOL id_expression ':' CLASSNAME
 	{
-		INT32	lType;
+		sal_Int32	lType;
 
 		$3.Evaluate( &lType );
 
@@ -319,7 +319,7 @@ class_definition
 class_header
   : class_header_body
 	{
-		if( !DoClassHeader( &$1, FALSE ) )
+		if( !DoClassHeader( &$1, sal_False ) )
 			return( ERR_ERROR );
 		$$ = $1;
 	}
@@ -528,7 +528,7 @@ var_header_class
 	{
 		RSCINST aInst;
 
-		aInst = S.Top().pClass->GetVariable( S.Top(), $1, RSCINST(), FALSE, $3.pClass );
+		aInst = S.Top().pClass->GetVariable( S.Top(), $1, RSCINST(), sal_False, $3.pClass );
 
 		if( aInst.pData )
 			S.Push( aInst );
@@ -539,7 +539,7 @@ var_header_class
 			return( ERR_ERROR );
 		};
 
-		if( !DoClassHeader( &$3, TRUE ) )
+		if( !DoClassHeader( &$3, sal_True ) )
 			return( ERR_ERROR );
 		$$ = $3;
 	}
@@ -567,7 +567,7 @@ var_header_class
 							 pHS->getString( $1 )  );
 			return( ERR_ERROR );
 		};
-		if( !DoClassHeader( &$6, TRUE ) )
+		if( !DoClassHeader( &$6, sal_True ) )
 			return( ERR_ERROR );
 		$$ = $6;
 	}
@@ -596,7 +596,7 @@ var_header_class
 							 pHS->getString( $1 )  );
 			return( ERR_ERROR );
 		};
-		if( !DoClassHeader( &$6, TRUE ) )
+		if( !DoClassHeader( &$6, sal_True ) )
 			return( ERR_ERROR );
 		$$ = $6;
 	}
@@ -784,7 +784,7 @@ list
 var_bodysimple
   : macro_expression
 	{
-		INT32	l;
+		sal_Int32	l;
 		ERRTYPE aError;
 
 		if( !$1.Evaluate( &l ) )
@@ -1064,7 +1064,7 @@ id_expression
   | macro_expression
 	{  // pExpession auswerten und loeschen
 		if( RSCEXP_EXP == $1.cType ){
-			INT32	lValue;
+			sal_Int32	lValue;
 
 			if( !$1.Evaluate( &lValue ) )
 				pTC->pEH->Error( ERR_ZERODIVISION, NULL, RscId() );
@@ -1094,8 +1094,8 @@ line_number
 		pFI->SetLineNo( $3 );
 		pFI->SetFileIndex( pTC->aFileTab.NewCodeFile( ByteString( $4 ) ) );
 		pFName = pTC->aFileTab.Get( pFI->GetFileIndex() );
-		pFName->bLoaded = TRUE;
-		pFName->bScanned = TRUE;
+		pFName->bLoaded = sal_True;
+		pFName->bScanned = sal_True;
 	}
   | '#' NUMBER STRING DUMMY_NUMBER
 	{
@@ -1104,8 +1104,8 @@ line_number
 		pFI->SetLineNo( $2 );
 		pFI->SetFileIndex( pTC->aFileTab.NewCodeFile( ByteString( $3 ) ) );
 		pFName = pTC->aFileTab.Get( pFI->GetFileIndex() );
-		pFName->bLoaded = TRUE;
-		pFName->bScanned = TRUE;
+		pFName->bLoaded = sal_True;
+		pFName->bScanned = sal_True;
 	}
   | '#' NUMBER
 	{

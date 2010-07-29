@@ -176,7 +176,7 @@ static RscInstNode * Create( RscInstNode * pNode )
 }
 
 RSCINST RscArray::Create( RSCINST * pInst, const RSCINST & rDflt,
-                          BOOL bOwnClass )
+                          sal_Bool bOwnClass )
 {
     RSCINST aInst;
     RscArrayInst *  pClassData;
@@ -245,7 +245,7 @@ void RscArray::Destroy( const RSCINST & rInst )
 ERRTYPE RscArray::GetValueEle
 (
     const RSCINST & rInst,
-    INT32 lValue,
+    sal_Int32 lValue,
     RscTop * pCreateClass,
     RSCINST * pGetInst
 )
@@ -313,7 +313,7 @@ ERRTYPE RscArray::GetArrayEle
     RSCINST * pGetInst
 )
 {
-    INT32  lValue;
+    sal_Int32  lValue;
     if( !pTypeClass->GetConstValue( nId, &lValue ) )
     { // nicht gefunden
         return ERR_ARRAY_INVALIDINDEX;
@@ -331,31 +331,31 @@ ERRTYPE RscArray::GetArrayEle
 |*    Letzte Aenderung  MM 23.09.91
 |*
 *************************************************************************/
-static BOOL IsConsistent( RscInstNode * pNode, RscInconsList * pList )
+static sal_Bool IsConsistent( RscInstNode * pNode, RscInconsList * pList )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     if( pNode )
     {
         bRet = pNode->aInst.pClass->IsConsistent( pNode->aInst, pList );
         if( !IsConsistent( pNode->Left(), pList ) )
-            bRet = FALSE;
+            bRet = sal_False;
         if( !IsConsistent( pNode->Right(), pList ) )
-            bRet = FALSE;
+            bRet = sal_False;
     }
     return bRet;
 }
 
-BOOL RscArray::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
+sal_Bool RscArray::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
 {
     RscArrayInst * pClassData;
-    BOOL    bRet;
+    sal_Bool    bRet;
 
     bRet = RscTop::IsConsistent( rInst, pList );
 
     pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
     if( !::IsConsistent( pClassData->pNode, pList ) )
-        bRet = FALSE;
+        bRet = sal_False;
 
     return( bRet );
 }
@@ -399,9 +399,9 @@ void RscArray::SetToDefault( const RSCINST & rInst )
 |*    Letzte Aenderung  MM 25.04.91
 |*
 *************************************************************************/
-static BOOL IsDefault( RscInstNode * pNode )
+static sal_Bool IsDefault( RscInstNode * pNode )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     if( pNode )
     {
@@ -414,13 +414,13 @@ static BOOL IsDefault( RscInstNode * pNode )
     return bRet;
 }
 
-BOOL RscArray::IsDefault( const RSCINST & rInst )
+sal_Bool RscArray::IsDefault( const RSCINST & rInst )
 {
     RscArrayInst * pClassData;
 
     pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
 
-    BOOL bRet = ::IsDefault( pClassData->pNode );
+    sal_Bool bRet = ::IsDefault( pClassData->pNode );
 
     if( bRet )
         bRet = RscTop::IsDefault( rInst );
@@ -436,9 +436,9 @@ BOOL RscArray::IsDefault( const RSCINST & rInst )
 |*    Letzte Aenderung  MM 15.01.92
 |*
 *************************************************************************/
-static BOOL IsValueDefault( RscInstNode * pNode, CLASS_DATA pDef )
+static sal_Bool IsValueDefault( RscInstNode * pNode, CLASS_DATA pDef )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     if( pNode )
     {
@@ -451,10 +451,10 @@ static BOOL IsValueDefault( RscInstNode * pNode, CLASS_DATA pDef )
     return bRet;
 }
 
-BOOL RscArray::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
+sal_Bool RscArray::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
 {
     RscArrayInst * pClassData;
-    BOOL bRet;
+    sal_Bool bRet;
 
     bRet = RscTop::IsValueDefault( rInst, pDef );
 
@@ -569,7 +569,7 @@ void RscArray::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 |*    Beschreibung
 *************************************************************************/
 ERRTYPE RscArray::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
-                            RscTypCont * pTC, sal_uInt32 nDeep, BOOL bExtra )
+                            RscTypCont * pTC, sal_uInt32 nDeep, sal_Bool bExtra )
 {
     ERRTYPE aError;
     RscArrayInst * pClassData;
@@ -686,7 +686,7 @@ void RscClassArray::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 *************************************************************************/
 ERRTYPE RscClassArray::WriteRcHeader( const RSCINST & rInst, RscWriteRc & aMem,
                                        RscTypCont * pTC, const RscId & aId,
-                                       sal_uInt32 nDeep, BOOL bExtra )
+                                       sal_uInt32 nDeep, sal_Bool bExtra )
 {
     // Eigenen Typ schreiben
     return GetSuperClass()->WriteRcHeader( rInst, aMem, pTC, aId,

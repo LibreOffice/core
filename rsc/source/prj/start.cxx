@@ -89,11 +89,11 @@
 |*
 |*    Beschreibung
 *************************************************************************/
-static BOOL CallPrePro( const ByteString& rPrePro,
+static sal_Bool CallPrePro( const ByteString& rPrePro,
                         const ByteString& rInput,
                         const ByteString& rOutput,
                         RscPtrPtr * pCmdLine,
-                        BOOL bResponse )
+                        sal_Bool bResponse )
 {
     RscPtrPtr       aNewCmdL;   // Kommandozeile
     RscPtrPtr       aRespCmdL;   // Kommandozeile
@@ -193,9 +193,9 @@ static BOOL CallPrePro( const ByteString& rPrePro,
         unlink( aRspFileName.GetBuffer() );
         #endif
     if ( nExit )
-        return FALSE;
+        return sal_False;
 
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -204,7 +204,7 @@ static BOOL CallPrePro( const ByteString& rPrePro,
 |*
 |*    Beschreibung
 *************************************************************************/
-static BOOL CallRsc2( ByteString aRsc2Name,
+static sal_Bool CallRsc2( ByteString aRsc2Name,
                       RscStrList * pInputList,
                       ByteString aSrsName,
                       RscPtrPtr * pCmdLine )
@@ -310,8 +310,8 @@ static BOOL CallRsc2( ByteString aRsc2Name,
         unlink( aRspFileName.GetBuffer() );
         #endif
     if( nExit )
-        return( FALSE );
-    return( TRUE );
+        return( sal_False );
+    return( sal_True );
 }
 
 /*************************************************************************
@@ -325,11 +325,11 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 *************************************************************************/
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-    BOOL            bPrePro  = TRUE;
-    BOOL            bResFile = TRUE;
-    BOOL            bHelp    = FALSE;
-    BOOL            bError   = FALSE;
-    BOOL            bResponse = FALSE;
+    sal_Bool            bPrePro  = sal_True;
+    sal_Bool            bResFile = sal_True;
+    sal_Bool            bHelp    = sal_False;
+    sal_Bool            bError   = sal_False;
+    sal_Bool            bResponse = sal_False;
     ByteString      aSolarbin(getenv("SOLARBINDIR"));
     ByteString      aDelim("/");
     ByteString      aPrePro; //( aSolarbin + aDelim + ByteString("rscpp"));
@@ -362,7 +362,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     ppStr  = (char **)aCmdLine.GetBlock();
     ppStr++;
     i = 1;
-    BOOL bSetSrs = FALSE;
+    sal_Bool bSetSrs = sal_False;
     while( ppStr && i < (aCmdLine.GetCount() -1) )
     {
         if( '-' == **ppStr )
@@ -370,20 +370,20 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             if( !rsc_stricmp( (*ppStr) + 1, "p" )
               || !rsc_stricmp( (*ppStr) + 1, "l" ) )
             { // kein Preprozessor
-                bPrePro = FALSE;
+                bPrePro = sal_False;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "r" )
               || !rsc_stricmp( (*ppStr) + 1, "s" ) )
             { // erzeugt kein .res-file
-                bResFile = FALSE;
+                bResFile = sal_False;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "h" ) )
             { // Hilfe anzeigen
-                bHelp = TRUE;
+                bHelp = sal_True;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "presponse", 9 ) )
             { // anderer Name fuer den Preprozessor
-                bResponse = TRUE;
+                bResponse = sal_True;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "pp=", 3 ) )
             { // anderer Name fuer den Preprozessor
@@ -399,7 +399,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
             { // anderer Name fuer .srs-file
-                bSetSrs  = TRUE;
+                bSetSrs  = sal_True;
                 aSrsName = (*ppStr);
             }
         }
@@ -426,8 +426,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if( bHelp )
     {
-        bPrePro = FALSE;
-        bResFile = FALSE;
+        bPrePro = sal_False;
+        bResFile = sal_False;
     };
     if( bPrePro && aInputList.Count() )
     {
@@ -440,7 +440,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             if( !CallPrePro( aPrePro, *pString, aTmpName, &aCmdLine, bResponse ) )
             {
                 printf( "Error starting preprocessor\n" );
-                bError = TRUE;
+                bError = sal_True;
                 break;
             }
             aTmpList.Insert( new ByteString( aTmpName ), CONTAINER_APPEND );
@@ -456,7 +456,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             if( !bHelp )
             {
                 printf( "Error starting rsc2 compiler\n" );
-                bError = TRUE;
+                bError = sal_True;
             }
         };
     };

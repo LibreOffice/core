@@ -69,14 +69,14 @@ openfile(char* filename)
             if ( debug || !bDumpDefs )
                 perror(filename);
 #endif
-            return (FALSE);
+            return (sal_False);
         }
 #if OSL_DEBUG_LEVEL > 1
         if (debug)
             fprintf(stderr, "Reading from \"%s\"\n", filename);
 #endif
         addfile(fp, filename);
-        return (TRUE);
+        return (sal_True);
 }
 
 void addfile(FILE* fp, char* filename)
@@ -96,7 +96,7 @@ void addfile(FILE* fp, char* filename)
         file->fp = fp;                  /* Better remember FILE *       */
         file->buffer[0] = EOS;          /* Initialize for first read    */
         line = 1;                       /* Working on line 1 now        */
-        wrongline = TRUE;               /* Force out initial #line      */
+        wrongline = sal_True;               /* Force out initial #line      */
 }
 
 void setincdirs()
@@ -128,9 +128,9 @@ void setincdirs()
 #endif
 
 #if HOST == SYS_RSX
-        extern int      $$rsts;                 /* TRUE on RSTS/E       */
-        extern int      $$pos;                  /* TRUE on PRO-350 P/OS */
-        extern int      $$vms;                  /* TRUE on VMS compat.  */
+        extern int      $$rsts;                 /* sal_True on RSTS/E       */
+        extern int      $$pos;                  /* sal_True on PRO-350 P/OS */
+        extern int      $$vms;                  /* sal_True on VMS compat.  */
 
         if ($$pos) {                            /* P/OS?                */
             *incend++ = "SY:[ZZDECUSC]";        /* C #includes          */
@@ -230,7 +230,7 @@ dooptions(int argc, char** argv)
         char                    *arg;
         SIZES                   *sizp;          /* For -S               */
         int                     size;           /* For -S               */
-        int                     isdatum;        /* FALSE for -S*        */
+        int                     isdatum;        /* sal_False for -S*        */
         int                     endtest;        /* For -S               */
 
         for (i = j = 1; i < argc; i++) {
@@ -246,8 +246,8 @@ dooptions(int argc, char** argv)
                     c = toupper(c);
                 switch (c) {                    /* Command character    */
                 case 'C':                       /* Keep comments        */
-                    cflag = TRUE;
-                    keepcomments = TRUE;
+                    cflag = sal_True;
+                    keepcomments = sal_True;
                     break;
 
                 case 'D':                       /* Define symbol        */
@@ -266,13 +266,13 @@ dooptions(int argc, char** argv)
                     /*
                      * Now, save the word and its definition.
                      */
-                    dp = defendel(argv[i] + 2, FALSE);
+                    dp = defendel(argv[i] + 2, sal_False);
                     dp->repl = savestring(ap);
                     dp->nargs = DEF_NOARGS;
                     break;
 
                 case 'E':                       /* Ignore non-fatal     */
-                    eflag = TRUE;               /* errors.              */
+                    eflag = sal_True;               /* errors.              */
                     break;
 
                 case 'I':                       /* Include directory    */
@@ -317,7 +317,7 @@ dooptions(int argc, char** argv)
 #if HOST != SYS_UNIX
 /*                    zap_uc(ap);*/
 #endif
-                    if (defendel(ap, TRUE) == NULL)
+                    if (defendel(ap, sal_True) == NULL)
                         cwarn("\"%s\" wasn't defined", ap);
                     break;
 
@@ -386,7 +386,7 @@ readoptions(char* filename, char*** pfargv)
             if ( debug || !bDumpDefs )
                 perror(filename);
 #endif
-            return (FALSE);
+            return (sal_False);
         }
         do
         {
@@ -480,7 +480,7 @@ void initdefines()
         if (nflag == 0) {
             for (pp = preset; *pp != NULL; pp++) {
                 if (*pp[0] != EOS) {
-                    dp = defendel(*pp, FALSE);
+                    dp = defendel(*pp, sal_False);
                     dp->repl = savestring("1");
                     dp->nargs = DEF_NOARGS;
                 }
@@ -494,14 +494,14 @@ void initdefines()
          */
         if (nflag < 2) {
             for (pp = magic, i = DEF_NOARGS; *pp != NULL; pp++) {
-                dp = defendel(*pp, FALSE);
+                dp = defendel(*pp, sal_False);
                 dp->nargs = --i;
             }
 #if OK_DATE
             /*
              * Define __DATE__ as today's date.
              */
-            dp = defendel("__DATE__", FALSE);
+            dp = defendel("__DATE__", sal_False);
             dp->repl = tp = getmem(27);
             dp->nargs = DEF_NOARGS;
             time( (time_t*)&tvec);

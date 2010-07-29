@@ -222,8 +222,8 @@ AccessibleStateSetHelper::~AccessibleStateSetHelper(void)
     /** Checks whether the current state set is empty.
 
         @return
-            Returns <TRUE/> if there is no state in this state set and
-            <FALSE/> if there is at least one state set in it.
+            Returns <sal_True/> if there is no state in this state set and
+            <sal_False/> if there is at least one state set in it.
     */
 sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
     throw (uno::RuntimeException)
@@ -240,8 +240,8 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
             the constants of <type>AccessibleStateType</type>.
 
         @return
-            Returns <TRUE/> if the given state is a memeber of this object's
-            state set and <FALSE/> otherwise.
+            Returns <sal_True/> if the given state is a memeber of this object's
+            state set and <sal_False/> otherwise.
     */
 sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)
     throw (uno::RuntimeException)
@@ -260,8 +260,8 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)
             constants of <type>AccessibleStateType</type>.
 
         @return
-            Returns <TRUE/> if all states of the given state set are members
-            of this object's state set.  <FALSE/> is returned if at least
+            Returns <sal_True/> if all states of the given state set are members
+            of this object's state set.  <sal_False/> is returned if at least
             one of the states in the given state is not a member of this
             object's state set.
     */

@@ -47,7 +47,7 @@ public:
     SvtDefaultOptions();
     virtual ~SvtDefaultOptions();
 
-    String  GetDefaultPath( USHORT nId ) const;
+    String  GetDefaultPath( sal_uInt16 nId ) const;
 };
 
 #endif // #ifndef INCLUDED_unotools_DEFAULTOPTIONS_HXX

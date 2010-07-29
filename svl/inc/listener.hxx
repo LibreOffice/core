@@ -50,12 +50,12 @@ public:
                         SvtListener( const SvtListener &rCopy );
     virtual             ~SvtListener();
 
-    BOOL                StartListening( SvtBroadcaster& rBroadcaster );
-    BOOL                EndListening( SvtBroadcaster& rBroadcaster );
+    sal_Bool                StartListening( SvtBroadcaster& rBroadcaster );
+    sal_Bool                EndListening( SvtBroadcaster& rBroadcaster );
     void                EndListeningAll();
-    BOOL                IsListening( SvtBroadcaster& rBroadcaster ) const;
+    sal_Bool                IsListening( SvtBroadcaster& rBroadcaster ) const;
 
-    BOOL                HasBroadcaster() const { return 0 != pBrdCastLst; }
+    sal_Bool                HasBroadcaster() const { return 0 != pBrdCastLst; }
 
     virtual void        Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
 };

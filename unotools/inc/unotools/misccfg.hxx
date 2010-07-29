@@ -46,14 +46,14 @@ public:
     MiscCfg( );
     virtual ~MiscCfg( );
 
-    BOOL        IsNotFoundWarning()     const;
-    void        SetNotFoundWarning( BOOL bSet);
+    sal_Bool        IsNotFoundWarning()     const;
+    void        SetNotFoundWarning( sal_Bool bSet);
 
-    BOOL        IsPaperSizeWarning()    const;
-    void        SetPaperSizeWarning(BOOL bSet);
+    sal_Bool        IsPaperSizeWarning()    const;
+    void        SetPaperSizeWarning(sal_Bool bSet);
 
-    BOOL        IsPaperOrientationWarning()     const;
-    void        SetPaperOrientationWarning( BOOL bSet);
+    sal_Bool        IsPaperOrientationWarning()     const;
+    void        SetPaperOrientationWarning( sal_Bool bSet);
 
                 // 0 ... 99
     sal_Int32   GetYear2000()           const;

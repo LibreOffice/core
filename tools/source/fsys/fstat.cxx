@@ -86,8 +86,8 @@ FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
     aDateAccessed( ULONG(0) ),
     aTimeAccessed( ULONG(0) )
 {
-    BOOL bCached = FSYS_ACCESS_CACHED == (nAccess & FSYS_ACCESS_CACHED);
-    BOOL bFloppy = FSYS_ACCESS_FLOPPY == (nAccess & FSYS_ACCESS_FLOPPY);
+    sal_Bool bCached = FSYS_ACCESS_CACHED == (nAccess & FSYS_ACCESS_CACHED);
+    sal_Bool bFloppy = FSYS_ACCESS_FLOPPY == (nAccess & FSYS_ACCESS_FLOPPY);
 
 #ifdef FEAT_FSYS_DOUBLESPEED
     const FileStat *pStatFromDir = bCached ? rDirEntry.ImpGetStat() : 0;
@@ -120,18 +120,18 @@ FileStat::FileStat( const DirEntry& rDirEntry, FSysAccess nAccess )
 |*
 *************************************************************************/
 
-// TRUE  wenn die Instanz j"unger als rIsOlder ist.
-// FALSE wenn die Instanz "alter oder gleich alt wie rIsOlder ist.
+// sal_True  wenn die Instanz j"unger als rIsOlder ist.
+// sal_False wenn die Instanz "alter oder gleich alt wie rIsOlder ist.
 
-BOOL FileStat::IsYounger( const FileStat& rIsOlder ) const
+sal_Bool FileStat::IsYounger( const FileStat& rIsOlder ) const
 {
     if ( aDateModified > rIsOlder.aDateModified )
-        return TRUE;
+        return sal_True;
     if ( ( aDateModified == rIsOlder.aDateModified ) &&
          ( aTimeModified > rIsOlder.aTimeModified ) )
-        return TRUE;
+        return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -143,9 +143,9 @@ BOOL FileStat::IsYounger( const FileStat& rIsOlder ) const
 |*
 *************************************************************************/
 
-BOOL FileStat::IsKind( DirEntryKind nKind ) const
+sal_Bool FileStat::IsKind( DirEntryKind nKind ) const
 {
-    BOOL bRet = ( ( nKind == FSYS_KIND_UNKNOWN ) &&
+    sal_Bool bRet = ( ( nKind == FSYS_KIND_UNKNOWN ) &&
                   ( nKindFlags == FSYS_KIND_UNKNOWN ) ) ||
                    ( ( nKindFlags & nKind ) == nKind );
     return bRet;
@@ -160,12 +160,12 @@ BOOL FileStat::IsKind( DirEntryKind nKind ) const
 |*
 *************************************************************************/
 
-BOOL FileStat::HasReadOnlyFlag()
+sal_Bool FileStat::HasReadOnlyFlag()
 {
 #if defined WNT || defined UNX || defined OS2
-    return TRUE;
+    return sal_True;
 #else
-    return FALSE;
+    return sal_False;
 #endif
 }
 
@@ -178,7 +178,7 @@ BOOL FileStat::HasReadOnlyFlag()
 |*
 *************************************************************************/
 
-BOOL FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
+sal_Bool FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 {
 
     ByteString aFPath(rEntry.GetFull(), osl_getThreadTextEncoding());
@@ -194,17 +194,17 @@ BOOL FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
         case NO_ERROR:
             return FILE_READONLY == ( aFileStat.attrFile & FILE_READONLY );
         default:
-            return FALSE;
+            return sal_False;
     }
 #elif defined UNX
     /* could we stat the object? */
     struct stat aBuf;
     if (stat(aFPath.GetBuffer(), &aBuf))
-        return FALSE;
+        return sal_False;
     /* jupp, is writable for user? */
     return((aBuf.st_mode & S_IWUSR) != S_IWUSR);
 #else
-    return FALSE;
+    return sal_False;
 #endif
 }
 
@@ -217,7 +217,7 @@ BOOL FileStat::GetReadOnlyFlag( const DirEntry &rEntry )
 |*
 *************************************************************************/
 
-ULONG FileStat::SetReadOnlyFlag( const DirEntry &rEntry, BOOL bRO )
+ULONG FileStat::SetReadOnlyFlag( const DirEntry &rEntry, sal_Bool bRO )
 {
 
     ByteString aFPath(rEntry.GetFull(), osl_getThreadTextEncoding());

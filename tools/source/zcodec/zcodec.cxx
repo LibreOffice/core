@@ -60,7 +60,7 @@ static int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
 // - ZCodec -
 // ----------
 
-ZCodec::ZCodec( ULONG nInBufSize, ULONG nOutBufSize, ULONG nMemUsage )
+ZCodec::ZCodec( sal_uIntPtr nInBufSize, sal_uIntPtr nOutBufSize, sal_uIntPtr nMemUsage )
     : mnCRC(0)
 {
     mnMemUsage = nMemUsage;
@@ -87,11 +87,11 @@ ZCodec::~ZCodec()
 
 // ------------------------------------------------------------------------
 
-void ZCodec::BeginCompression( ULONG nCompressMethod )
+void ZCodec::BeginCompression( sal_uIntPtr nCompressMethod )
 {
     mbInit = 0;
-    mbStatus = TRUE;
-    mbFinish = FALSE;
+    mbStatus = sal_True;
+    mbFinish = sal_False;
     mpIStm = mpOStm = NULL;
     mnInToRead = 0xffffffff;
     mpInBuf = mpOutBuf = NULL;
@@ -146,8 +146,8 @@ long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
     {
         mpIStm = &rIStm;
         mpOStm = &rOStm;
-        ImplInitBuf( FALSE );
-        mpInBuf = new BYTE[ mnInBufSize ];
+        ImplInitBuf( sal_False );
+        mpInBuf = new sal_uInt8[ mnInBufSize ];
     }
     while (( PZSTREAM->avail_in = mpIStm->Read( PZSTREAM->next_in = mpInBuf, mnInBufSize )) != 0 )
     {
@@ -155,7 +155,7 @@ long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
             ImplWriteBack();
         if ( deflate( PZSTREAM, Z_NO_FLUSH ) < 0 )
         {
-            mbStatus = FALSE;
+            mbStatus = sal_False;
             break;
         }
     };
@@ -167,7 +167,7 @@ long ZCodec::Compress( SvStream& rIStm, SvStream& rOStm )
 long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
 {
     int err;
-    ULONG   nInToRead;
+    sal_uIntPtr nInToRead;
     long    nOldTotal_Out = PZSTREAM->total_out;
 
     if ( mbFinish )
@@ -177,8 +177,8 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     {
         mpIStm = &rIStm;
         mpOStm = &rOStm;
-        ImplInitBuf( TRUE );
-        PZSTREAM->next_out = mpOutBuf = new BYTE[ PZSTREAM->avail_out = mnOutBufSize ];
+        ImplInitBuf( sal_True );
+        PZSTREAM->next_out = mpOutBuf = new sal_uInt8[ PZSTREAM->avail_out = mnOutBufSize ];
     }
     do
     {
@@ -196,7 +196,7 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
         err = inflate( PZSTREAM, Z_NO_FLUSH );
         if ( err < 0 )
         {
-            mbStatus = FALSE;
+            mbStatus = sal_False;
             break;
         }
 
@@ -205,18 +205,18 @@ long ZCodec::Decompress( SvStream& rIStm, SvStream& rOStm )
     ImplWriteBack();
 
     if ( err == Z_STREAM_END )
-        mbFinish = TRUE;
+        mbFinish = sal_True;
     return ( mbStatus ) ? (long)(PZSTREAM->total_out - nOldTotal_Out) : -1;
 }
 
 // ------------------------------------------------------------------------
 
-long ZCodec::Write( SvStream& rOStm, const BYTE* pData, ULONG nSize )
+long ZCodec::Write( SvStream& rOStm, const sal_uInt8* pData, sal_uIntPtr nSize )
 {
     if ( mbInit == 0 )
     {
         mpOStm = &rOStm;
-        ImplInitBuf( FALSE );
+        ImplInitBuf( sal_False );
     }
 
     PZSTREAM->avail_in = nSize;
@@ -229,7 +229,7 @@ long ZCodec::Write( SvStream& rOStm, const BYTE* pData, ULONG nSize )
 
         if ( deflate( PZSTREAM, Z_NO_FLUSH ) < 0 )
         {
-            mbStatus = FALSE;
+            mbStatus = sal_False;
             break;
         }
     }
@@ -238,10 +238,10 @@ long ZCodec::Write( SvStream& rOStm, const BYTE* pData, ULONG nSize )
 
 // ------------------------------------------------------------------------
 
-long ZCodec::Read( SvStream& rIStm, BYTE* pData, ULONG nSize )
+long ZCodec::Read( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
 {
     int err;
-    ULONG   nInToRead;
+    sal_uIntPtr nInToRead;
 
     if ( mbFinish )
         return 0;           // PZSTREAM->total_out;
@@ -249,7 +249,7 @@ long ZCodec::Read( SvStream& rIStm, BYTE* pData, ULONG nSize )
     mpIStm = &rIStm;
     if ( mbInit == 0 )
     {
-        ImplInitBuf( TRUE );
+        ImplInitBuf( sal_True );
     }
     PZSTREAM->avail_out = nSize;
     PZSTREAM->next_out = pData;
@@ -278,17 +278,17 @@ long ZCodec::Read( SvStream& rIStm, BYTE* pData, ULONG nSize )
             (PZSTREAM->avail_out != 0) &&
             (PZSTREAM->avail_in || mnInToRead) );
     if ( err == Z_STREAM_END )
-        mbFinish = TRUE;
+        mbFinish = sal_True;
 
     return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
 }
 
 // ------------------------------------------------------------------------
 
-long ZCodec::ReadAsynchron( SvStream& rIStm, BYTE* pData, ULONG nSize )
+long ZCodec::ReadAsynchron( SvStream& rIStm, sal_uInt8* pData, sal_uIntPtr nSize )
 {
     int err = 0;
-    ULONG   nInToRead;
+    sal_uIntPtr nInToRead;
 
     if ( mbFinish )
         return 0;           // PZSTREAM->total_out;
@@ -296,7 +296,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, BYTE* pData, ULONG nSize )
     if ( mbInit == 0 )
     {
         mpIStm = &rIStm;
-        ImplInitBuf( TRUE );
+        ImplInitBuf( sal_True );
     }
     PZSTREAM->avail_out = nSize;
     PZSTREAM->next_out = pData;
@@ -306,9 +306,9 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, BYTE* pData, ULONG nSize )
         {
             nInToRead = (mnInBufSize > mnInToRead) ? mnInToRead : mnInBufSize;
 
-            ULONG nStreamPos = rIStm.Tell();
+            sal_uIntPtr nStreamPos = rIStm.Tell();
             rIStm.Seek( STREAM_SEEK_TO_END );
-            ULONG nMaxPos = rIStm.Tell();
+            sal_uIntPtr nMaxPos = rIStm.Tell();
             rIStm.Seek( nStreamPos );
             if ( ( nMaxPos - nStreamPos ) < nInToRead )
             {
@@ -337,7 +337,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, BYTE* pData, ULONG nSize )
             (PZSTREAM->avail_out != 0) &&
             (PZSTREAM->avail_in || mnInToRead) );
     if ( err == Z_STREAM_END )
-        mbFinish = TRUE;
+        mbFinish = sal_True;
 
     return (mbStatus ? (long)(nSize - PZSTREAM->avail_out) : -1);
 }
@@ -346,7 +346,7 @@ long ZCodec::ReadAsynchron( SvStream& rIStm, BYTE* pData, ULONG nSize )
 
 void ZCodec::ImplWriteBack()
 {
-    ULONG nAvail = mnOutBufSize - PZSTREAM->avail_out;
+    sal_uIntPtr nAvail = mnOutBufSize - PZSTREAM->avail_out;
 
     if ( nAvail )
     {
@@ -359,35 +359,35 @@ void ZCodec::ImplWriteBack()
 
 // ------------------------------------------------------------------------
 
-void ZCodec::SetBreak( ULONG nInToRead )
+void ZCodec::SetBreak( sal_uIntPtr nInToRead )
 {
     mnInToRead = nInToRead;
 }
 
 // ------------------------------------------------------------------------
 
-ULONG ZCodec::GetBreak( void )
+sal_uIntPtr ZCodec::GetBreak( void )
 {
     return ( mnInToRead + PZSTREAM->avail_in );
 }
 
 // ------------------------------------------------------------------------
 
-void ZCodec::SetCRC( ULONG nCRC )
+void ZCodec::SetCRC( sal_uIntPtr nCRC )
 {
     mnCRC = nCRC;
 }
 
 // ------------------------------------------------------------------------
 
-ULONG ZCodec::GetCRC()
+sal_uIntPtr ZCodec::GetCRC()
 {
     return mnCRC;
 }
 
 // ------------------------------------------------------------------------
 
-void ZCodec::ImplInitBuf ( BOOL nIOFlag )
+void ZCodec::ImplInitBuf ( sal_Bool nIOFlag )
 {
     if ( mbInit == 0 )
     {
@@ -396,19 +396,19 @@ void ZCodec::ImplInitBuf ( BOOL nIOFlag )
             mbInit = 1;
             if ( mbStatus && ( mnCompressMethod & ZCODEC_GZ_LIB ) )
             {
-                BYTE n1, n2, j, nMethod, nFlags;
+                sal_uInt8 n1, n2, j, nMethod, nFlags;
                 for ( int i = 0; i < 2; i++ )   // gz - magic number
                 {
                     *mpIStm >> j;
                     if ( j != gz_magic[ i ] )
-                        mbStatus = FALSE;
+                        mbStatus = sal_False;
                 }
                 *mpIStm >> nMethod;
                 *mpIStm >> nFlags;
                 if ( nMethod != Z_DEFLATED )
-                    mbStatus = FALSE;
+                    mbStatus = sal_False;
                 if ( ( nFlags & GZ_RESERVED ) != 0 )
-                    mbStatus = FALSE;
+                    mbStatus = sal_False;
                 /* Discard time, xflags and OS code: */
                 mpIStm->SeekRel( 6 );
                 /* skip the extra field */
@@ -439,13 +439,13 @@ void ZCodec::ImplInitBuf ( BOOL nIOFlag )
                 if ( nFlags & GZ_HEAD_CRC )
                     mpIStm->SeekRel( 2 );
                 if ( mbStatus )
-                    mbStatus = ( inflateInit2( PZSTREAM, -MAX_WBITS) != Z_OK ) ? FALSE : TRUE;
+                    mbStatus = ( inflateInit2( PZSTREAM, -MAX_WBITS) != Z_OK ) ? sal_False : sal_True;
             }
             else
             {
                 mbStatus = ( inflateInit( PZSTREAM ) >= 0 );
             }
-            mpInBuf = new BYTE[ mnInBufSize ];
+            mpInBuf = new sal_uInt8[ mnInBufSize ];
         }
         else
         {
@@ -455,14 +455,14 @@ void ZCodec::ImplInitBuf ( BOOL nIOFlag )
                 MAX_WBITS, mnMemUsage, ( mnCompressMethod >> 8 ) & 0xff,
                     ZLIB_VERSION, sizeof( z_stream ) ) >= 0 );
 
-            PZSTREAM->next_out = mpOutBuf = new BYTE[ PZSTREAM->avail_out = mnOutBufSize ];
+            PZSTREAM->next_out = mpOutBuf = new sal_uInt8[ PZSTREAM->avail_out = mnOutBufSize ];
         }
     }
 }
 
 // ------------------------------------------------------------------------
 
-ULONG ZCodec::UpdateCRC ( ULONG nLatestCRC, ULONG nNumber )
+sal_uIntPtr ZCodec::UpdateCRC ( sal_uIntPtr nLatestCRC, sal_uIntPtr nNumber )
 {
 
 #ifdef OSL_LITENDIAN
@@ -473,14 +473,14 @@ ULONG ZCodec::UpdateCRC ( ULONG nLatestCRC, ULONG nNumber )
 
 // ------------------------------------------------------------------------
 
-ULONG ZCodec::UpdateCRC ( ULONG nLatestCRC, BYTE* pSource, long nDatSize)
+sal_uIntPtr ZCodec::UpdateCRC ( sal_uIntPtr nLatestCRC, sal_uInt8* pSource, long nDatSize)
 {
     return rtl_crc32( nLatestCRC, pSource, nDatSize );
 }
 
 // ------------------------------------------------------------------------
 
-void GZCodec::BeginCompression( ULONG nCompressMethod )
+void GZCodec::BeginCompression( sal_uIntPtr nCompressMethod )
 {
     ZCodec::BeginCompression( nCompressMethod | ZCODEC_GZ_LIB );
 };

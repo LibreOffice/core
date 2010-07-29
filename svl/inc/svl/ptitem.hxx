@@ -44,8 +44,8 @@ class SVL_DLLPUBLIC SfxPointItem: public SfxPoolItem
 public:
                              TYPEINFO();
                              SfxPointItem();
-                             SfxPointItem( USHORT nWhich, const Point& rVal );
-                             SfxPointItem( USHORT nWhich, SvStream & );
+                             SfxPointItem( sal_uInt16 nWhich, const Point& rVal );
+                             SfxPointItem( sal_uInt16 nWhich, SvStream & );
                              SfxPointItem( const SfxPointItem& );
                              ~SfxPointItem() {
                                  DBG_DTOR(SfxPointItem, 0); }
@@ -59,8 +59,8 @@ public:
     virtual int              operator==( const SfxPoolItem& ) const;
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*     Create(SvStream &, USHORT nItemVersion) const;
-    virtual SvStream&        Store(SvStream &, USHORT nItemVersion) const;
+    virtual SfxPoolItem*     Create(SvStream &, sal_uInt16 nItemVersion) const;
+    virtual SvStream&        Store(SvStream &, sal_uInt16 nItemVersion) const;
 
     const Point&             GetValue() const { return aVal; }
             void             SetValue( const Point& rNewVal ) {
@@ -68,10 +68,10 @@ public:
                                  aVal = rNewVal;
                              }
 
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal,
-                                          BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal,
-                                          BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal,
+                                          sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal,
+                                          sal_uInt8 nMemberId = 0 );
 };
 
 #endif
