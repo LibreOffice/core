@@ -82,7 +82,7 @@
 #include <svx/xmleohlp.hxx>
 #include <globals.hrc>
 #include <unomid.h>
-
+#include <unotools/printwarningoptions.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -2733,9 +2733,20 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             // should be set for printing as well ...
             pWrtShell->SetPDFExportOption( sal_True );
 
+            bool bOrigStatus = pRenderDocShell->IsEnableSetModified();
+            // check configuration: shall update of printing information in DocInfo set the document to "modified"?
+            bool bStateChanged = false;
+            if ( bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
+            {
+                pRenderDocShell->EnableSetModified( sal_False );
+                bStateChanged = true;
+            }
+
             // --> FME 2005-05-23 #122919# Force field update before PDF export:
             pWrtShell->ViewShell::UpdateFlds(TRUE);
             // <--
+            if( bStateChanged )
+                pRenderDocShell->EnableSetModified( sal_True );
 
             // there is some redundancy between those two function calls, but right now
             // there is no time to sort this out.
