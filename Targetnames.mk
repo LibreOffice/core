@@ -48,6 +48,7 @@ gb_Library_OOOLIBS :=\
     basegfx \
     cui \
     drawinglayer \
+    eggtray \
     fwe \
     fwi \
     fwk \
