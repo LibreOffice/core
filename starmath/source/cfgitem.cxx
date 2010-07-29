@@ -42,7 +42,6 @@ using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
-#define A2OU(x)        rtl::OUString::createFromAscii( x )
 
 static const char* aRootName = "Office.Math";
 

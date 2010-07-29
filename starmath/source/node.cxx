@@ -2886,12 +2886,12 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
             bItalic = true;
         else if (nStyle == 2)
         {
-            String aText( GetText() );
-            if (aText.Len() > 0)
+            String aTmp( GetText() );
+            if (aTmp.Len() > 0)
             {
                 const sal_Unicode cUppercaseAlpha = 0x0391;
                 const sal_Unicode cUppercaseOmega = 0x03A9;
-                sal_Unicode cChar = aText.GetBuffer()[0];
+                sal_Unicode cChar = aTmp.GetBuffer()[0];
                 // uppercase letters should be straight and lowercase letters italic
                 bItalic = !(cUppercaseAlpha <= cChar && cChar <= cUppercaseOmega);
             }
