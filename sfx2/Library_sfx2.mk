@@ -32,7 +32,7 @@ $(eval $(call gb_Library_add_package_headers,sfx,\
     sfx2_sdi \
 ))
 
-#$(eval $(call gb_Library_add_precompiled_header,sfx,$(SRCDIR)/sfx2/inc/pch/precompiled_sfx2))
+$(eval $(call gb_Library_add_precompiled_header,sfx,$(SRCDIR)/sfx2/inc/pch/precompiled_sfx2))
 
 $(eval $(call gb_Library_add_sdi_headers,sfx,sfx2/sdi/sfxslots))
 

@@ -25,56 +25,71 @@
 #
 #*************************************************************************
 
-#ifeq ($(OS),UNX)
-$(eval $(call gb_Library_Library,qstart))
+ifeq ($(OS),LINUX)
+ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
 
-$(eval $(call gb_Library_set_include,qstart,\
+$(eval $(call gb_Library_Library,qstart_gtk))
+
+$(eval $(call gb_Library_set_include,qstart_gtk,\
     $$(INCLUDE) \
     -I$(SRCDIR)/sfx2/inc \
     -I$(SRCDIR)/sfx2/inc/sfx2 \
     -I$(SRCDIR)/sfx2/inc/pch \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
+    $(filter -I%,$(GTK_CFLAGS)) \
 ))
 
-#WTF: this nice code is currently found in the makefile.mk (unix part only)
-#	PKGCONFIG_MODULES=gtk+-2.0
-#    .IF "$(PKGCONFIG_ROOT)"!=""
-#    PKG_CONFIG=$(PKGCONFIG_ROOT)/bin/pkg-config
-#    PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)/lib/pkgconfig
-#    .EXPORT : PKG_CONFIG_PATH
-#    PKGCONFIG_PREFIX=--define-variable=prefix=$(PKGCONFIG_ROOT)
-#    .ELSE
-#    PKG_CONFIG*=pkg-config
-#    .ENDIF
-#    PKGCONFIG_CFLAGS:=$(shell @$(PKG_CONFIG) $(PKGCONFIG_PREFIX) --cflags $(PKGCONFIG_MODULES))
-#    PKGCONFIG_LIBS:=$(shell @$(PKG_CONFIG) $(PKGCONFIG_PREFIX) --libs $(PKGCONFIG_MODULES))
-#    CFLAGS+=$(PKGCONFIG_CFLAGS
-
-ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
-$(eval $(call gb_Library_set_defs,qstart,\
+$(eval $(call gb_Library_set_defs,qstart_gtk,\
     $$(DEFS) \
-    -DDLL_NAME=libsfx$(DLLPOSTFIX)$(DLLPOST) \
+    -DDLL_NAME=$(notdir $(call gb_Library_get_target,sfx2)) \
     -DENABLE_QUICKSTART_APPLET \
 ))
-endif
 
-#todo: add libs
-$(eval $(call gb_Library_add_linked_libs,qstart,\
+$(eval $(call gb_Library_set_cflags,qstart_gtk,\
+    $$(CFLAGS) \
+    $(filter-out -I%,$(GTK_CFLAGS)) \
+))
+
+$(eval $(call gb_Library_set_ldflags,qstart_gtk,\
+    $$(LDFLAGS) \
+    $(GTK_LIBS) \
+))
+
+$(eval $(call gb_Library_add_linked_libs,qstart_gtk,\
+    comphelper \
+    cppu \
+    cppuhelper \
+    eggtray \
+    fwe \
+    i18nisolang1 \
+    sal \
+    sax \
+    sb \
+    sot \
+    stl \
+    svl \
+    svt \
+    tk \
+    tl \
+    ucbhelper \
+    utl \
+    vcl \
+    vos3 \
+    xml2 \
     sfx \
 ))
 
-$(eval $(call gb_Library_add_linked_system_libs,qstart,\
+$(eval $(call gb_Library_add_linked_system_libs,qstart_gtk,\
     icuuc \
     dl \
     m \
     pthread \
 ))
 
-ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
-$(eval $(call gb_Library_add_exception_objects,qstart,\
-    sfx2/source/appl/shutdowniconunx.ob \
+$(eval $(call gb_Library_add_exception_objects,qstart_gtk,\
+    sfx2/source/appl/shutdowniconunx \
 ))
-endif
 
+endif
 endif
