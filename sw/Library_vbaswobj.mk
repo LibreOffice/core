@@ -51,6 +51,7 @@ $(eval $(call gb_Library_add_linked_libs,vbaswobj,\
     editeng \
     i18nisolang1 \
     sal \
+    sb \
     sfx \
     svl \
     svt \

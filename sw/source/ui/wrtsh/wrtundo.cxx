@@ -37,7 +37,6 @@
 #include <wrtsh.hxx>
 #include <swundo.hxx>                   // fuer Undo-Ids
 #include <swdtflvr.hxx>
-#include <svl/svtools.hrc>
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
