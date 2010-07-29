@@ -1463,7 +1463,7 @@ sal_Bool UnoControl::supportsService( const ::rtl::OUString& rServiceName ) thro
 
     Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
     const ::rtl::OUString* pArray = aSNL.getConstArray();
-    const ::rtl::OUString* pArrayEnd = aSNL.getConstArray();
+    const ::rtl::OUString* pArrayEnd = aSNL.getConstArray() + aSNL.getLength();
     for (; pArray != pArrayEnd; ++pArray )
         if( *pArray == rServiceName )
             break;
@@ -1587,3 +1587,15 @@ awt::Size SAL_CALL UnoControl::convertSizeToPixel( const awt::Size& i_Size, ::sa
     return awt::Size( );
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+uno::Reference< awt::XStyleSettings > SAL_CALL UnoControl::getStyleSettings() throw (RuntimeException)
+{
+    Reference< awt::XStyleSettingsSupplier > xPeerSupplier;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xPeerSupplier = xPeerSupplier.query( getPeer() );
+    }
+    if ( xPeerSupplier.is() )
+        return xPeerSupplier->getStyleSettings();
+    return NULL;
+}
