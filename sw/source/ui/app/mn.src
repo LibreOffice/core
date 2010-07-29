@@ -430,14 +430,14 @@
     MenuItem\
     {\
         Identifier = FN_REPLY ;\
-        HelpID = FN_DELETE_NOTE ;\
+        HelpID = FN_REPLY ;\
         Text [ en-US ] = "Reply" ;\
     };\
     SEPARATOR ; \
     MenuItem\
     {\
-        Identifier = FN_DELETE_NOTE ;\
-        HelpID = FN_DELETE_NOTE ;\
+        Identifier = FN_DELETE_COMMENT ;\
+        HelpID = FN_DELETE_COMMENT ;\
         Text [ en-US ] = "Delete ~Comment" ;\
     };\
     MenuItem\

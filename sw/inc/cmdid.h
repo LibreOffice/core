@@ -1058,7 +1058,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_ENVELOP                  (FN_ENVELP    )
 
-#define FN_DELETE_NOTE              (FN_NOTES+0)
+
 #define FN_DELETE_NOTE_AUTHOR       (FN_NOTES+1)
 #define FN_DELETE_ALL_NOTES         (FN_NOTES+2)
 #define FN_HIDE_NOTE                (FN_NOTES+3)
