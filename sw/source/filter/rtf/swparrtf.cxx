@@ -179,6 +179,12 @@ ULONG RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const S
     return nRet;
 }
 
+ULONG RtfReader::Read(SvStream* pStream, SwDoc& rDoc, const String& rBaseURL, SwPaM& rPam)
+{
+    pStrm = pStream;
+    return Read(rDoc, rBaseURL, rPam, rBaseURL);
+}
+
 SwRTFParser::SwRTFParser(SwDoc* pD,
         uno::Reference<document::XDocumentProperties> i_xDocProps,
         const SwPaM& rCrsr, SvStream& rIn, const String& rBaseURL,

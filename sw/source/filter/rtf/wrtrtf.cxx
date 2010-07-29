@@ -1748,11 +1748,6 @@ RTFSaveData::~RTFSaveData()
     rWrt.bOutSection = bOldOutSection;
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
-{
-    xRet = new SwRTFWriter( rFltName, rBaseURL );
-}
-
 short SwRTFWriter::GetCurrentPageDirection() const
 {
     const SwFrmFmt  &rFmt = pAktPageDesc
