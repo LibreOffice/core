@@ -333,7 +333,7 @@ IMPLEMENT_FORWARD_XINTERFACE2(OReportController,OReportController_BASE,OReportCo
 void OReportController::disposing()
 {
 
-    if ( getView() && m_pClipbordNotifier )
+    if ( m_pClipbordNotifier )
     {
         m_pClipbordNotifier->ClearCallbackLink();
         m_pClipbordNotifier->AddRemoveListener( getView(), sal_False );

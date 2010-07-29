@@ -73,6 +73,7 @@ SLOFILES=	\
         $(SLO)$/View.obj						\
         $(SLO)$/WrappedResultSet.obj			\
         $(SLO)$/OptimisticSet.obj				\
+        $(SLO)$/PrivateRow.obj					\
         $(SLO)$/columnsettings.obj
 
 # --- Targets ----------------------------------
