@@ -326,6 +326,22 @@ BOOL ScTable::HasManualBreaks() const
     return !maRowManualBreaks.empty() || !maColManualBreaks.empty();
 }
 
+void ScTable::SetRowManualBreaks( const ::std::set<SCROW>& rBreaks )
+{
+    maRowManualBreaks = rBreaks;
+    InvalidatePageBreaks();
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
+}
+
+void ScTable::SetColManualBreaks( const ::std::set<SCCOL>& rBreaks )
+{
+    maColManualBreaks = rBreaks;
+    InvalidatePageBreaks();
+    if (IsStreamValid())
+        SetStreamValid(FALSE);
+}
+
 void ScTable::GetAllRowBreaks(set<SCROW>& rBreaks, bool bPage, bool bManual) const
 {
     if (bPage)

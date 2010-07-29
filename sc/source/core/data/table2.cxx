@@ -155,6 +155,22 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
         mpFilteredRows->insertSegment(nStartRow, nSize, true);
         mpHiddenRows->insertSegment(nStartRow, nSize, true);
+
+        if (!maRowManualBreaks.empty())
+        {
+            std::set<SCROW>::reverse_iterator rit = maRowManualBreaks.rbegin();
+            while (rit != maRowManualBreaks.rend())
+            {
+                SCROW nRow = *rit;
+                if (nRow < nStartRow)
+                    break;  // while
+                else
+                {
+                    maRowManualBreaks.erase( (++rit).base());
+                    maRowManualBreaks.insert( nRow + nSize);
+                }
+            }
+        }
     }
 
     for (SCCOL j=nStartCol; j<=nEndCol; j++)
@@ -185,6 +201,18 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
         mpFilteredRows->removeSegment(nStartRow, nStartRow+nSize);
         mpHiddenRows->removeSegment(nStartRow, nStartRow+nSize);
+
+        if (!maRowManualBreaks.empty())
+        {
+            std::set<SCROW>::iterator it = maRowManualBreaks.upper_bound( nStartRow + nSize - 1);
+            maRowManualBreaks.erase( maRowManualBreaks.lower_bound( nStartRow), it);
+            while (it != maRowManualBreaks.end())
+            {
+                SCROW nRow = *it;
+                maRowManualBreaks.erase( it++);
+                maRowManualBreaks.insert( nRow - nSize);
+            }
+        }
     }
 
     {   // scope for bulk broadcast
@@ -233,6 +261,22 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
 
         mpHiddenCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize), true);
         mpFilteredCols->insertSegment(nStartCol, static_cast<SCCOL>(nSize), true);
+
+        if (!maColManualBreaks.empty())
+        {
+            std::set<SCCOL>::reverse_iterator rit = maColManualBreaks.rbegin();
+            while (rit != maColManualBreaks.rend())
+            {
+                SCCOL nCol = *rit;
+                if (nCol < nStartCol)
+                    break;  // while
+                else
+                {
+                    maColManualBreaks.erase( (++rit).base());
+                    maColManualBreaks.insert( nCol + nSize);
+                }
+            }
+        }
     }
 
 
@@ -291,6 +335,18 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         SCCOL nRmSize = nStartCol + static_cast<SCCOL>(nSize);
         mpHiddenCols->removeSegment(nStartCol, nRmSize);
         mpFilteredCols->removeSegment(nStartCol, nRmSize);
+
+        if (!maColManualBreaks.empty())
+        {
+            std::set<SCCOL>::iterator it = maColManualBreaks.upper_bound( nStartCol + nSize - 1);
+            maColManualBreaks.erase( maColManualBreaks.lower_bound( nStartCol), it);
+            while (it != maColManualBreaks.end())
+            {
+                SCCOL nCol = *it;
+                maColManualBreaks.erase( it++);
+                maColManualBreaks.insert( nCol - nSize);
+            }
+        }
     }
 
 
@@ -688,6 +744,7 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 pDestTab->IncRecalcLevel();
 
                 if (bWidth)
+                {
                     for (SCCOL i=nCol1; i<=nCol2; i++)
                     {
                         bool bThisHidden = ColHidden(i);
@@ -703,6 +760,8 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if (bChange)
                             bFlagChange = true;
                     }
+                    pDestTab->SetColManualBreaks( maColManualBreaks);
+                }
 
                 if (bHeight)
                 {
@@ -754,6 +813,7 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         pDestTab->SetRowFiltered(i, nLastRow, bFiltered);
                         i = nLastRow;
                     }
+                    pDestTab->SetRowManualBreaks( maRowManualBreaks);
                 }
                 pDestTab->DecRecalcLevel();
             }
@@ -791,11 +851,17 @@ void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         if (bWidth||bHeight)
         {
             if (bWidth)
+            {
                 for (SCCOL i=nCol1; i<=nCol2; i++)
                     pDestTab->pColWidth[i] = pColWidth[i];
+                pDestTab->SetColManualBreaks( maColManualBreaks);
+            }
             if (bHeight)
+            {
                 pDestTab->CopyRowHeight(*this, nRow1, nRow2, 0);
-        DecRecalcLevel();
+                pDestTab->SetRowManualBreaks( maRowManualBreaks);
+            }
+            DecRecalcLevel();
         }
     }
 }
