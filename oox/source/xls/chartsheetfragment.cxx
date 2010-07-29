@@ -269,6 +269,7 @@ bool BiffChartsheetFragment::importFragment()
                         case BIFF_ID_PICTURE:       rPageSett.importPicture( mrStrm );              break;
                         case BIFF_ID_PAGESETUP:     rPageSett.importPageSetup( mrStrm );            break;
                         case BIFF_ID_SCL:           rSheetViewSett.importScl( mrStrm );             break;
+                        case BIFF_ID_SHEETEXT:      rWorksheetSett.importSheetExt( mrStrm );        break;
                         case BIFF_ID_VCENTER:       rPageSett.importVerCenter( mrStrm );            break;
                         case BIFF3_ID_WINDOW2:      rSheetViewSett.importWindow2( mrStrm );         break;
                     }

@@ -108,6 +108,8 @@ public:
     /** Imports phonetic settings from the PHONETICPR record. */
     void                importPhoneticPr( RecordInputStream& rStrm );
 
+    /** Imports sheet properties from a SHEETEXT record. */
+    void                importSheetExt( BiffInputStream& rStrm );
     /** Imports sheet properties from a SHEETPR record. */
     void                importSheetPr( BiffInputStream& rStrm );
     /** Imports protection status from the PROTECT record. */

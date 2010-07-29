@@ -898,6 +898,7 @@ bool BiffWorksheetFragment::importFragment()
                         case BIFF_ID_SCENARIOS:         importScenarios();                              break;
                         case BIFF_ID_SCENPROTECT:       rWorksheetSett.importScenProtect( mrStrm );     break;
                         case BIFF_ID_SCL:               rSheetViewSett.importScl( mrStrm );             break;
+                        case BIFF_ID_SHEETEXT:          rWorksheetSett.importSheetExt( mrStrm );        break;
                         case BIFF_ID_SHEETPR:           rWorksheetSett.importSheetPr( mrStrm );         break;
                         case BIFF_ID_SHAREDFEATHEAD:    importSharedFeatHead();                         break;
                         case BIFF_ID_STANDARDWIDTH:     importStandardWidth();                          break;
