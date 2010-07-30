@@ -2041,7 +2041,7 @@ static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData
 {
     ImplFontSelectData aRet(rFontSelData);
 
-    const rtl::OString aLangAttrib; //TODO: = MsLangId::convertLanguageToIsoByteString( rFontSelData.meLanguage );
+    const rtl::OString aLangAttrib = MsLangId::convertLanguageToIsoByteString( rFontSelData.meLanguage );
 
     psp::italic::type eItalic = psp::italic::Unknown;
     if( rFontSelData.GetSlant() != ITALIC_DONTKNOW )

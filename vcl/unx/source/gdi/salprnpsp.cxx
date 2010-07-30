@@ -617,6 +617,7 @@ BOOL PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 
         // copy everything to job setup
         copyJobDataToJobSetup( pJobSetup, aInfo );
+        JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
         return TRUE;
     }
     return FALSE;
@@ -694,6 +695,18 @@ BOOL PspSalInfoPrinter::SetData(
 
             pKey = aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
             pValue = pKey ? pKey->getValueCaseInsensitive( aPaper ) : NULL;
+
+            // some PPD files do not specify the standard paper names (e.g. C5 instead of EnvC5)
+            // try to find the correct paper anyway using the size
+            if( pKey && ! pValue && pJobSetup->mePaperFormat != PAPER_USER )
+            {
+                PaperInfo aInfo( pJobSetup->mePaperFormat );
+                aPaper = aData.m_pParser->matchPaper(
+                    TenMuToPt( aInfo.getWidth() ),
+                    TenMuToPt( aInfo.getHeight() ) );
+                pValue = pKey->getValueCaseInsensitive( aPaper );
+            }
+
             if( ! ( pKey && pValue && aData.m_aContext.setValue( pKey, pValue, false ) == pValue ) )
                 return FALSE;
         }

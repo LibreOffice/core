@@ -630,14 +630,12 @@ void GtkXLib::Init()
      * the clipboard build another connection
      * to the xserver using $DISPLAY
      */
-    char *pPutEnvIsBroken = g_strdup_printf( "DISPLAY=%s",
-                                             gdk_display_get_name( pGdkDisp ) );
-    putenv( pPutEnvIsBroken );
+    rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
+    const gchar *name = gdk_display_get_name( pGdkDisp );
+    rtl::OUString envValue(name, strlen(name), aEnc);
+    osl_setEnvironment(envVar.pData, envValue.pData);
 
     Display *pDisp = gdk_x11_display_get_xdisplay( pGdkDisp );
-
-    XSetIOErrorHandler    ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
-    XSetErrorHandler      ( (XErrorHandler)X11SalData::XErrorHdl );
 
     m_pGtkSalDisplay = new GtkSalDisplay( pGdkDisp );
 

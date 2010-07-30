@@ -58,7 +58,7 @@ BOOL SalGraphics::IsNativeControlSupported( ControlType, ControlPart )
  */
 BOOL SalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
-                              const Region&,
+                              const Rectangle&,
                               const Point&,
                               BOOL& )
 {
@@ -77,7 +77,7 @@ BOOL SalGraphics::hitTestNativeControl( ControlType,
  */
 BOOL SalGraphics::drawNativeControl(    ControlType,
                             ControlPart,
-                            const Region&,
+                            const Rectangle&,
                             ControlState,
                             const ImplControlValue&,
                             const OUString& )
@@ -98,7 +98,7 @@ BOOL SalGraphics::drawNativeControl(    ControlType,
  */
 BOOL SalGraphics::drawNativeControlText(    ControlType,
                                 ControlPart,
-                                const Region&,
+                                const Rectangle&,
                                 ControlState,
                                 const ImplControlValue&,
                                 const OUString& )
@@ -122,12 +122,12 @@ BOOL SalGraphics::drawNativeControlText(    ControlType,
  */
 BOOL SalGraphics::getNativeControlRegion(  ControlType,
                                 ControlPart,
-                                const Region&,
+                                const Rectangle&,
                                 ControlState,
                                 const ImplControlValue&,
                                 const OUString&,
-                                Region &,
-                                Region & )
+                                Rectangle &,
+                                Rectangle & )
 {
     return( FALSE );
 }

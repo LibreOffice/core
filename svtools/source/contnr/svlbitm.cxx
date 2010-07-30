@@ -425,7 +425,7 @@ void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
     if ( nIndex != SV_BMP_STATICIMAGE && pWin && pWin->IsNativeControlSupported( (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX, PART_ENTIRE_CONTROL) )
     {
         ImplControlValue    aControlValue;
-        Region              aCtrlRegion( Rectangle(rPos, Size(pData->Width(), pData->Height())) );
+        Rectangle           aCtrlRegion( rPos, Size(pData->Width(), pData->Height()) );
         ControlState        nState = 0;
 
         //states CTRL_STATE_DEFAULT, CTRL_STATE_PRESSED and CTRL_STATE_ROLLOVER are not implemented
@@ -440,7 +440,7 @@ void SvLBoxButton::Paint( const Point& rPos, SvLBox& rDev, USHORT /* nFlags */,
             aControlValue.setTristateVal( BUTTONVALUE_MIXED );
 
         bNativeOK = pWin->DrawNativeControl( (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX, PART_ENTIRE_CONTROL,
-                                aCtrlRegion, nState, aControlValue, rtl::OUString() );
+                                             aCtrlRegion, nState, aControlValue, rtl::OUString() );
     }
 
     if( !bNativeOK)

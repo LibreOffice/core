@@ -50,6 +50,22 @@ ByteString PFormEntrys::Dump(){
     return sRet;
 }
 
+BOOL PFormEntrys::GetTransex3Text( ByteString &rReturn,
+    USHORT nTyp, const ByteString &nLangIndex, BOOL bDel )
+{
+    BOOL rc = GetText( rReturn , nTyp , nLangIndex , bDel );
+    ByteString test( rReturn );
+    for( USHORT idx = 0; idx < rReturn.Len(); idx++ )
+    {
+        if( rReturn.GetChar( idx ) == '\"' && ( idx >= 1 )  &&  rReturn.GetChar( idx-1 ) == '\\' )
+        {
+            rReturn.Erase( idx-1 , 1 );
+        }
+    }
+    //if( !rReturn.Equals( test ) )
+    //    printf("*CHANGED******************\n%s\n%s\n",test.GetBuffer(),rReturn.GetBuffer());
+    return rc;
+}
 /*****************************************************************************/
 BOOL PFormEntrys::GetText( ByteString &rReturn,
     USHORT nTyp, const ByteString &nLangIndex, BOOL bDel )
@@ -335,7 +351,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
         sLID = pResData->sId;
     pResData->sGId = sGID;
     pResData->sId = sLID;
-
+    //printf("MergeData:: Search gid=%s lid=%s filename=%s \n", pResData->sGId.GetBuffer(),pResData->sId.GetBuffer(),pResData->sFilename.GetBuffer()  );
     ByteString sKey = CreateKey( pResData->sResTyp , pResData->sGId , pResData->sId , pResData->sFilename , bCaseSensitive );
 
     //printf("DBG: Searching [%s]\n",sKey.GetBuffer());
@@ -345,6 +361,7 @@ MergeData *MergeDataFile::GetMergeData( ResData *pResData , bool bCaseSensitive 
         //printf("DBG: Found[%s]\n",sKey.GetBuffer());
         return aMap[ sKey ];
     }
+    //Dump();
     pResData->sGId = sOldG;
     pResData->sId = sOldL;
     //printf("DBG: Found[%s]\n",sKey.GetBuffer());

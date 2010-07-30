@@ -67,6 +67,7 @@ UnoTreeModel::UnoTreeModel()
     ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
     ImplRegisterProperty( BASEPROPERTY_HELPURL );
     ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_TABSTOP );
     ImplRegisterProperty( BASEPROPERTY_TREE_SELECTIONTYPE );
     ImplRegisterProperty( BASEPROPERTY_TREE_EDITABLE );
     ImplRegisterProperty( BASEPROPERTY_TREE_DATAMODEL );
@@ -357,6 +358,13 @@ Reference< XTreeNode > SAL_CALL UnoTreeControl::getNodeForLocation( sal_Int32 x,
 Reference< XTreeNode > SAL_CALL UnoTreeControl::getClosestNodeForLocation( sal_Int32 x, sal_Int32 y ) throw (RuntimeException)
 {
     return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getClosestNodeForLocation(x,y);
+}
+
+// -------------------------------------------------------------------
+
+awt::Rectangle SAL_CALL UnoTreeControl::getNodeRect( const Reference< XTreeNode >& Node ) throw (IllegalArgumentException, RuntimeException)
+{
+    return Reference< XTreeControl >( getPeer(), UNO_QUERY_THROW )->getNodeRect( Node );
 }
 
 // -------------------------------------------------------------------
