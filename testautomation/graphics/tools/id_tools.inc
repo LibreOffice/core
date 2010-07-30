@@ -264,7 +264,7 @@ function fMakeDocumentWritable() as boolean
         printlog "Document is already writable."
         fMakeDocumentWritable = true
     endif
-
+    sleep(1)
 end function
 
 '-------------------------------------------------------------------------------
