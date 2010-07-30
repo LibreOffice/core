@@ -1201,24 +1201,24 @@ void RtfExport::WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_
     OSL_TRACE("%s end", __PRETTY_FUNCTION__);
 }
 
-class SwRTFUNOWriter : public Writer
+class SwRTFWriter : public Writer
 {
        public:
-               SwRTFUNOWriter( const String& rFilterName, const String& rBaseURL );
-               virtual ~SwRTFUNOWriter();
+               SwRTFWriter( const String& rFilterName, const String& rBaseURL );
+               virtual ~SwRTFWriter();
                virtual ULONG WriteStream();
 };
 
-SwRTFUNOWriter::SwRTFUNOWriter( const String& /*rFltName*/, const String & rBaseURL )
+SwRTFWriter::SwRTFWriter( const String& /*rFltName*/, const String & rBaseURL )
 {
     OSL_TRACE("%s", __PRETTY_FUNCTION__);
     SetBaseURL( rBaseURL );
 }
 
-SwRTFUNOWriter::~SwRTFUNOWriter()
+SwRTFWriter::~SwRTFWriter()
 {}
 
-ULONG SwRTFUNOWriter::WriteStream()
+ULONG SwRTFWriter::WriteStream()
 {
     OSL_TRACE("%s", __PRETTY_FUNCTION__);
     RtfExport aExport( NULL, pDoc, new SwPaM( *pCurPam->End(), *pCurPam->Start() ), pCurPam, this );
@@ -1229,7 +1229,7 @@ ULONG SwRTFUNOWriter::WriteStream()
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
     OSL_TRACE("%s", __PRETTY_FUNCTION__);
-    xRet = new SwRTFUNOWriter( rFltName, rBaseURL );
+    xRet = new SwRTFWriter( rFltName, rBaseURL );
 }
 
 /* vi:set shiftwidth=4 expandtab: */
