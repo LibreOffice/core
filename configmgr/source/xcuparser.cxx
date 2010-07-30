@@ -196,6 +196,14 @@ bool XcuParser::startElement(
             {
                 handleSetNode(
                     reader, dynamic_cast< SetNode * >(state_.top().node.get()));
+            } else if (ns == XmlReader::NAMESPACE_NONE &&
+                       name.equals(RTL_CONSTASCII_STRINGPARAM("prop")))
+            {
+                OSL_TRACE(
+                    "configmgr bad set node <prop> member in %s",
+                    rtl::OUStringToOString(
+                        reader.getUrl(), RTL_TEXTENCODING_UTF8).getStr());
+                state_.push(State(true)); // ignored
             } else {
                 throw css::uno::RuntimeException(
                     (rtl::OUString(

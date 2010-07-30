@@ -147,6 +147,7 @@ VistaFilePickerImpl::VistaFilePickerImpl()
     , m_lLastFiles   ()
     , m_iEventHandler(new VistaFilePickerEventHandler(this))
     , m_bInExecute   (sal_False)
+    , m_bWasExecuted (sal_False)
     , m_sDirectory   ()
     , m_sFilename    ()
 {
@@ -851,6 +852,8 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(const RequestRef& rRequest)
     // tasks must be done differently .-) (e.g. see impl_sta_getSelectedFiles())
     m_bInExecute = sal_True;
 
+    m_bWasExecuted = sal_True;
+
     aLock.clear();
     // <- SYNCHRONIZED
 
@@ -1092,6 +1095,7 @@ void VistaFilePickerImpl::impl_sta_GetControlValue(const RequestRef& rRequest)
         return;
 
     css::uno::Any aValue;
+    if( m_bWasExecuted )
     switch (nId)
     {
         case css::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PASSWORD :

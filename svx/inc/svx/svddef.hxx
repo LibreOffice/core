@@ -203,7 +203,8 @@
 #define SDRATTR_TRANSFORMREF2X      (SDRATTR_NOTPERSIST_FIRST+32)  /*   1212  long,   def=0     */
 #define SDRATTR_TRANSFORMREF2Y      (SDRATTR_NOTPERSIST_FIRST+33)  /*   1213  long,   def=0     */
 #define SDRATTR_TEXTDIRECTION       (SDRATTR_NOTPERSIST_FIRST+34)  /*   1214 V4+++  long,   def=0     */
-#define SDRATTR_NOTPERSIST_LAST     (SDRATTR_TEXTDIRECTION)  /* 1228 V4+++*/ /* 1213*/  /*  1085 */ /*  1040 */ /*  1123 */ /* Pool V1: 1065 */
+#define SDRATTR_OBJVISIBLE          (SDRATTR_NOTPERSIST_FIRST+35)
+#define SDRATTR_NOTPERSIST_LAST     (SDRATTR_OBJVISIBLE)           /*   1228 V4+++*/ /* 1213*/  /*  1085 */ /*  1040 */ /*  1123 */ /* Pool V1: 1065 */
 // kein SetItem hierfuer
 
 #define SDRATTR_GRAF_FIRST          (SDRATTR_NOTPERSIST_LAST+1)     /*  1229 V4+++*/

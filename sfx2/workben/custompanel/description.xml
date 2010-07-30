@@ -8,7 +8,7 @@
   <version value="0.1" />
   <platform value="UPDATED_SUPPORTED_PLATFORM" />
   <display-name>
-    <name lang="en-US">Custom Tool Panel Example</name>
+    <name>Custom Tool Panel Example</name>
   </display-name>
   <dependencies>
     <OpenOffice.org-minimal-version value="3.3" d:name="OpenOffice.org 3.3"/>

@@ -164,6 +164,7 @@ struct SpellInfo
     EESpellState    eState;
     EPaM            aSpellStart;
     EPaM            aSpellTo;
+    EditPaM         aCurSentenceStart;
     sal_Bool        bSpellToEnd;
     sal_Bool        bMultipleDoc;
     ::svx::SpellPortions    aLastSpellPortions;
@@ -697,6 +698,8 @@ private:
      */
     void ImplFillTextMarkingVector(const ::com::sun::star::lang::Locale& rLocale, EEngineData::TextMarkingVector& rTextMarkingVector, const String& rTxt, const USHORT nIdx, const USHORT nLen) const;
 
+    SpellInfo *     CreateSpellInfo( const EditSelection &rSel, bool bMultipleDocs );
+
 protected:
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
@@ -953,7 +956,7 @@ public:
     //put spelling back to start of current sentence - needed after switch of grammar support
     void                PutSpellingToSentenceStart( EditView& rEditView );
     //applies a changed sentence
-    void                ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bIsGrammarChecking );
+    void                ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck );
     //deinitialize sentence spelling
     void            EndSpelling();
     //adds one or more portions of text to the SpellPortions depending on language changes

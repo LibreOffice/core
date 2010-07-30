@@ -136,7 +136,7 @@ namespace drawinglayer
                 const basegfx::B2DHomMatrix& rObjectTransformation,
                 const geometry::ViewInformation3D& rViewInformation3D);
 
-            /// data ead access
+            /// data read access
             const primitive3d::Primitive3DSequence& getChildren3D() const { return mxChildren3D; }
             const attribute::SdrSceneAttribute& getSdrSceneAttribute() const { return maSdrSceneAttribute; }
             const attribute::SdrLightingAttribute& getSdrLightingAttribute() const { return maSdrLightingAttribute; }
