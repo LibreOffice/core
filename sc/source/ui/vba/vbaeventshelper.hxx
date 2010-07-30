@@ -47,6 +47,9 @@ public:
         const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~ScVbaEventsHelper();
 
+    // XEventListener
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) throw (css::uno::RuntimeException);
+
 protected:
     virtual bool implEventsEnabled() throw (css::uno::RuntimeException);
     virtual bool implPrepareEvent( EventQueue& rEventQueue, const EventHandlerInfo& rInfo, const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::uno::RuntimeException);

@@ -554,17 +554,6 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     xVbaEvents->processVbaEvent( WORKBOOK_AFTERSAVE, aArgs );
                 }
                 break;
-                case SFX_EVENT_CLOSEDOC:
-                {
-                    // explicitly fire WindowDeactivate and Deactivate on closing
-                    uno::Sequence< uno::Any > aArgs;
-                    xVbaEvents->processVbaEvent( WORKBOOK_WINDOWDEACTIVATE, aArgs );
-                    xVbaEvents->processVbaEvent( WORKBOOK_DEACTIVATE, aArgs );
-                    // event processor will remove all listeners on destruction
-                    xVbaEvents.clear();
-                    aDocument.SetVbaEventProcessor( xVbaEvents );
-                }
-                break;
             }
         }
     }
@@ -636,23 +625,9 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     {
                         uno::Reference< frame::XModel > xModel( GetModel(), uno::UNO_SET_THROW );
 
-                        // create VBAGlobals object if not yet done
+                        // create VBAGlobals object if not yet done (this also creates the "ThisExcelDoc" symbol)
                         uno::Reference< lang::XMultiServiceFactory > xFactory( xModel, uno::UNO_QUERY_THROW );
                         xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
-
-                        // Fake ThisComponent being setup by Activate ( which is a view
-                        // related thing ),
-                        //  a) if another document is opened then in theory  ThisComponent
-                        //     will be reset as before,
-                        //  b) when this document is  'really' Activated then ThisComponent
-                        //     again will be set as before
-                        // The only wrinkle seems if this document is loaded 'InVisible'
-                        // but.. I don't see that this is possible from the vba API
-                        // I could be wrong though
-                        // There may be implications setting the current component
-                        // too early :-/ so I will just manually set the Basic Variables
-                        if( BasicManager* pAppMgr = SFX_APP()->GetBasicManager() )
-                            pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", uno::Any( xModel ) );
 
                         // create the VBA document event processor
                         uno::Sequence< uno::Any > aArgs( 1 );

@@ -433,6 +433,12 @@ ScVbaEventsHelper::~ScVbaEventsHelper()
 {
 }
 
+void SAL_CALL ScVbaEventsHelper::disposing( const lang::EventObject& rSource ) throw (uno::RuntimeException)
+{
+    mxListener.clear();
+    VbaEventsHelperBase::disposing( rSource );
+}
+
 // protected ------------------------------------------------------------------
 
 bool ScVbaEventsHelper::implEventsEnabled() throw (uno::RuntimeException)

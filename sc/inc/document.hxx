@@ -337,8 +337,7 @@ private:
 
     Timer               aTrackTimer;
 
-    // mutable for lazy construction
-    mutable com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
+    com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
                         mxVbaEvents;
 
 public:
