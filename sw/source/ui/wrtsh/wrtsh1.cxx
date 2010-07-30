@@ -614,6 +614,9 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
     aFrmMgr.SetSize( aSz );
     SwFlyFrmFmt *pFmt = SwFEShell::InsertObject( xRef, &aFrmMgr.GetAttrSet() );
 
+    if ( bStarMath )
+        SetBaselineFromSm( xRef.GetObject() , pFmt ); // sets baseline for formula
+
     if (pFlyFrmFmt)
         *pFlyFrmFmt = pFmt;
 

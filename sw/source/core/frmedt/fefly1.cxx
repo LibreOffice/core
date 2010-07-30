@@ -73,6 +73,9 @@
 #include <HandleAnchorNodeChg.hxx>
 // <--
 #include <frmatr.hxx>
+// --> 3.7.2010 i#972
+#include <toolkit/helper/vclunohelper.hxx>
+// <--
 // --> OD 2009-12-29 #i89920#
 #include <fmtsrnd.hxx>
 #include <editeng/opaqitem.hxx>
@@ -2152,5 +2155,71 @@ void SwFEShell::SetObjDescription( const String& rDescription )
             }
         }
     }
+}
+// <--
+// --> 8.7.2010 i#972
+void SwFEShell::SetBaselineFromSm( const uno::Reference < embed::XEmbeddedObject >& xObj , SwFrmFmt* pFrmFmt )
+{
+    SvGlobalName aCLSID( xObj->getClassID() );
+    BOOL bStarMath = ( SotExchange::IsMath( aCLSID ) != 0 );
+
+    if (bStarMath) //check the object is formula
+    {
+        if ( !pFrmFmt ) //find format if it was not given
+        {
+            SwFlyFrm *pFly = FindFlyFrm( xObj );
+            if ( !pFly )
+            {
+                ASSERT( pFly , "No fly frame!" );
+                return;
+            }
+
+            pFrmFmt = pFly->GetFmt();
+        }
+
+        if (pFrmFmt)
+         {
+             if (FLY_AS_CHAR == pFrmFmt->GetAnchor().GetAnchorId()) // check the anchor is AsChar
+             {
+                uno::Any aBaseline;
+
+                if( svt::EmbeddedObjectRef::TryRunningState( xObj ) )
+                {
+                    uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
+                    if ( xSet.is() )
+                    {
+                           try
+                        {
+                            aBaseline = xSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BaseLine") ) );
+                        }
+                        catch ( uno::Exception& )
+                        {
+                            ASSERT( FALSE , "Baseline could not be retrieved from Starmath!" );
+                        }
+                    }
+                }
+
+                sal_Int32 nBaseline = ::comphelper::getINT32(aBaseline);
+                long lBaseline = (long) nBaseline;
+
+                const MapMode aSourceMapMode( MAP_100TH_MM );
+                const MapMode aTargetMapMode( MAP_TWIP );
+
+                lBaseline = OutputDevice::LogicToLogic( lBaseline, aSourceMapMode.GetMapUnit(), aTargetMapMode.GetMapUnit() );
+                nBaseline = (sal_Int32) lBaseline;
+
+                ASSERT( (nBaseline > 0) , "Wrong value of Baseline while retrieving from Starmath!" );
+
+                const SwFmtVertOrient &rVert = pFrmFmt->GetVertOrient();
+                SwFmtVertOrient aVert( rVert );
+
+                aVert.SetPos( -nBaseline );
+
+                pFrmFmt->LockModify();
+                pFrmFmt->SetFmtAttr( aVert );
+                pFrmFmt->UnlockModify();
+            }
+         }
+     }
 }
 // <--

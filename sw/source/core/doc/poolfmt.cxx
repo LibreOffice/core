@@ -1332,7 +1332,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     case RES_POOLFRM_FORMEL:
         {
             aSet.Put( SwFmtAnchor( FLY_AS_CHAR ) );
-            aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::CHAR_CENTER, text::RelOrientation::FRAME ) );
+            aSet.Put( SwFmtVertOrient( 0, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
             aSet.Put( SvxLRSpaceItem( 114, 114, 0, 0, RES_LR_SPACE ) );
         }
         break;
