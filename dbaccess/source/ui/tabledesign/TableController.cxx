@@ -108,6 +108,9 @@ using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
 
+// Anzahl Spalten beim Neuanlegen
+#define NEWCOLS        128
+
 namespace
 {
     void dropTable(const Reference<XNameAccess>& _rxTable,const ::rtl::OUString& _sTableName)
@@ -958,7 +961,7 @@ void OTableController::loadData()
     OSL_ENSURE(aTypeIter != m_aTypeInfo.end(),"We have no type infomation!");
 
     bool bReadRow = !isAddAllowed();
-    for(sal_Int32 i=m_vRowList.size(); i<128; i++ )
+    for(sal_Int32 i=m_vRowList.size(); i < NEWCOLS; i++ )
     {
         pTabEdRow.reset(new OTableRow());
         pTabEdRow->SetReadOnly(bReadRow);
@@ -1579,7 +1582,7 @@ void OTableController::reload()
     static_cast<OTableDesignView*>(getView())->Invalidate();
 }
 // -----------------------------------------------------------------------------
-sal_Int32 OTableController::getFirstEmptyRowPosition() const
+sal_Int32 OTableController::getFirstEmptyRowPosition()
 {
     sal_Int32 nRet = -1;
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_vRowList.begin();
@@ -1591,6 +1594,14 @@ sal_Int32 OTableController::getFirstEmptyRowPosition() const
             nRet = aIter - m_vRowList.begin();
             break;
         }
+    }
+    if ( nRet == -1 )
+    {
+        bool bReadRow = !isAddAllowed();
+        ::boost::shared_ptr<OTableRow> pTabEdRow(new OTableRow());
+        pTabEdRow->SetReadOnly(bReadRow);
+        nRet = m_vRowList.size();
+        m_vRowList.push_back( pTabEdRow);
     }
     return nRet;
 }

@@ -148,7 +148,6 @@ void SlidePersist::createXShapes( const XmlFilterBase& rFilterBase )
                 pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, 0, &getShapeMap() );
             else
                 (*aChildIter)->addShape( rFilterBase, getTheme().get(), xShapes, 0, &getShapeMap() );
-
             aChildIter++;
         }
     }

@@ -942,7 +942,9 @@ void Outliner::RestoreStartPosition (void)
         else if (mpViewShell->ISA(OutlineViewShell))
         {
             // Set cursor to its old position.
-            GetView(0)->SetSelection (maStartSelection);
+            OutlinerView* pView = GetView(0);
+            if (pView != NULL)
+                pView->SetSelection (maStartSelection);
         }
     }
 }

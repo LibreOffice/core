@@ -425,60 +425,6 @@ void DbRegistrationOptionsPage::insertNewEntry( const ::rtl::OUString& _sName,co
 }
 
 // -----------------------------------------------------------------------------
-String DbRegistrationOptionsPage::getFileLocation(const String& _sLocation)
-{
-    try
-    {
-        rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) );
-        Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
-        Reference < XFilePicker > xFilePicker( xFactory->createInstance( aService ), UNO_QUERY );
-        OSL_ENSURE(xFilePicker.is() ,"Could create file picker service!");
-        Reference < XFilterManager> xFilterManager(xFilePicker,UNO_QUERY);
-        static const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");
-        const SfxFilter* pFilter = SfxFilter::GetFilterByName( s_sDatabaseType);
-        if ( pFilter )
-        {
-            xFilterManager->appendFilter( pFilter->GetUIName(),pFilter->GetDefaultExtension());
-            xFilterManager->setCurrentFilter(pFilter->GetUIName());
-        }
-
-        INetURLObject aURL( _sLocation, INET_PROT_FILE );
-        xFilePicker->setMultiSelectionMode(sal_False);
-        xFilePicker->setDisplayDirectory( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-        short nRet = xFilePicker->execute();
-
-        if ( ExecutableDialogResults::OK == nRet )
-        {
-
-            // old path is an URL?
-            INetURLObject aObj( _sLocation );
-            FASTBOOL bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
-            Sequence< ::rtl::OUString > aFiles = xFilePicker->getFiles();
-            INetURLObject aNewObj( aFiles[0] );
-            aNewObj.removeFinalSlash();
-
-            // then the new path also an URL else system path
-            String sNewLocation = bURL ? rtl::OUString(aFiles[0]) : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
-
-            if (
-#ifdef UNX
-    // Unix is case sensitive
-                                ( sNewLocation != _sLocation )
-#else
-                                ( sNewLocation.CompareIgnoreCaseToAscii( _sLocation ) != COMPARE_EQUAL )
-#endif
-            )
-                return sNewLocation;
-        }
-    }
-    catch( Exception& )
-    {
-        DBG_ERRORFILE( "DbRegistrationOptionsPage::EditLocationHdl: exception from folder picker" );
-    }
-
-    return String();
-}
-// -----------------------------------------------------------------------------
 void DbRegistrationOptionsPage::openLinkDialog(const String& _sOldName,const String& _sOldLocation,SvLBoxEntry* _pEntry)
 {
     ODocumentLinkDialog aDlg(this,_pEntry == NULL);

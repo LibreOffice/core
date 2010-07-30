@@ -1583,7 +1583,10 @@ STD_UNO_LIB_FILE( gid_File_Lib_Unoxml, unoxml )
 // AVMedia
 STD_UNO_LIB_FILE( gid_File_Lib_AVMedia, avmedia )
 
-#if defined UNX
+#if defined UNX 
+#if defined ENABLE_GSTREAMER
+SPECIAL_UNO_LIB_FILE( gid_File_Lib_AVMediaGst, avmediagst )
+#endif
 #ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_AVmedia, avmedia )
 #endif

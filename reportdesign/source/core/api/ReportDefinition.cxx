@@ -1299,6 +1299,7 @@ void SAL_CALL OReportDefinition::close( ::sal_Bool _bDeliverOwnership ) throw (u
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
     ::comphelper::MediaDescriptor aDescriptor( _aArguments );
     fillArgs(aDescriptor);
+    m_pImpl->m_pReportModel->SetModified(sal_False);
     return sal_True;
 }
 // -----------------------------------------------------------------------------

@@ -24,7 +24,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description :
 '*

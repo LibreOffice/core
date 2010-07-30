@@ -92,9 +92,3 @@ INT32 SvxJSearchOptionsDialog::GetTransliterationFlags() const
 {
     return pPage->GetTransliterationFlags();
 }
-
-
-void SvxJSearchOptionsDialog::SetTransliterationFlags( INT32 nSettings )
-{
-    pPage->SetTransliterationFlags( nSettings );
-}

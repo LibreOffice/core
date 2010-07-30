@@ -173,37 +173,6 @@ void SvxHyperlinkNewDocTp::FillDlgFields ( String& /*aStrURL*/ )
 #define INTERNETSHORTCUT_URL_TAG      "URL"
 #define INTERNETSHORTCUT_ICONID_TAG   "IconIndex"
 
-void SvxHyperlinkNewDocTp::ReadURLFile( const String& rFile, String& rTitle, String& rURL, sal_Int32& rIconId, BOOL* pShowAsFolder )
-{
-    // Open file
-    Config aCfg( rFile );
-    aCfg.SetGroup( INTERNETSHORTCUT_ID_TAG );
-
-    // read URL
-    rURL = aCfg.ReadKey( ByteString( RTL_CONSTASCII_STRINGPARAM( INTERNETSHORTCUT_URL_TAG) ), RTL_TEXTENCODING_ASCII_US );
-    SvtPathOptions aPathOpt;
-    rURL = aPathOpt.SubstituteVariable( rURL );
-
-    // read target
-    if ( pShowAsFolder )
-    {
-        String aTemp( aCfg.ReadKey( ByteString( RTL_CONSTASCII_STRINGPARAM( INTERNETSHORTCUT_TARGET_TAG ) ), RTL_TEXTENCODING_ASCII_US ) );
-        *pShowAsFolder = aTemp == String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( INTERNETSHORTCUT_FOLDER_TAG ) );
-    }
-
-    // read image-ID
-    String aStrIconId( aCfg.ReadKey( ByteString( RTL_CONSTASCII_STRINGPARAM( INTERNETSHORTCUT_ICONID_TAG ) ), RTL_TEXTENCODING_ASCII_US ) );
-    rIconId = aStrIconId.ToInt32();
-
-    // read title
-    String aLangStr = aPathOpt.SubstituteVariable( DEFINE_CONST_UNICODE("$(vlang)") );
-    ByteString aLang( aLangStr, RTL_TEXTENCODING_UTF8 );
-    ByteString aGroup = INTERNETSHORTCUT_ID_TAG;
-    ( ( aGroup += '-' ) += aLang ) += ".W";
-    aCfg.SetGroup( aGroup );
-    rTitle = String( aCfg.ReadKey( INTERNETSHORTCUT_TITLE_TAG ), RTL_TEXTENCODING_UTF7 );
-}
-
 void SvxHyperlinkNewDocTp::FillDocumentList ()
 {
     EnterWait();

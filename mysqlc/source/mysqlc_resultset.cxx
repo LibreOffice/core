@@ -35,6 +35,9 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#include <com/sun/star/sdbc/ResultSetType.hpp>
+#include <com/sun/star/sdbc/FetchDirection.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 
@@ -967,6 +970,7 @@ void SAL_CALL OResultSet::insertRow()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
     // you only have to implement this if you want to insert new rows
+    mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::insertRow", *this);
 }
 /* }}} */
 
@@ -980,6 +984,7 @@ void SAL_CALL OResultSet::updateRow()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     // only when you allow updates
+    mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::updateRow", *this);
 }
 /* }}} */
 
@@ -991,6 +996,7 @@ void SAL_CALL OResultSet::deleteRow()
     OSL_TRACE("OResultSet::deleteRow");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::deleteRow", *this);
 }
 /* }}} */
 
@@ -1002,6 +1008,7 @@ void SAL_CALL OResultSet::cancelRowUpdates()
     OSL_TRACE("OResultSet::cancelRowUpdates");
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+    mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::cancelRowUpdates", *this);
 }
 /* }}} */
 
@@ -1015,6 +1022,7 @@ void SAL_CALL OResultSet::moveToInsertRow()
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     // only when you allow insert's
+    mysqlc_sdbc_driver::throwFeatureNotImplementedException("OResultSet::moveToInsertRow", *this);
 }
 /* }}} */
 
@@ -1444,10 +1452,19 @@ void OResultSet::getFastPropertyValue(Any& _rValue, sal_Int32 nHandle) const
             _rValue <<= sal_False;
             break;
         case PROPERTY_ID_CURSORNAME:
+            break;
         case PROPERTY_ID_RESULTSETCONCURRENCY:
+            _rValue <<= ResultSetConcurrency::READ_ONLY;
+            break;
         case PROPERTY_ID_RESULTSETTYPE:
+            _rValue <<= ResultSetType::SCROLL_INSENSITIVE;
+            break;
         case PROPERTY_ID_FETCHDIRECTION:
+            _rValue <<= FetchDirection::FORWARD;
+            break;
         case PROPERTY_ID_FETCHSIZE:
+            _rValue <<= sal_Int32(50);
+            break;
             ;
         default:
             ;

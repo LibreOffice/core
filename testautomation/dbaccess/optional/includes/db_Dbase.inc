@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : marc.neumann@sun.com
+'* owner : marc.neumann@oracle.com
 '*
 '* short description : Create dBase DS & Table & fill in Test
 '*

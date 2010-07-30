@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 ' **
-' ** owner : joerg.skottke@sun.com
+' ** owner : joerg.skottke@oracle.com
 ' **
 ' ** short description : check macro-dialogs / BASIC-IDE ( 1. part )
 ' **

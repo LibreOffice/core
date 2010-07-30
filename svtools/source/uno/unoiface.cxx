@@ -1664,7 +1664,7 @@ void SVTXRoadmap::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_TEXT,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds, true );
-    VCLXImageConsumer::ImplGetPropertyIds( rIds );
+    VCLXGraphicControl::ImplGetPropertyIds( rIds );
 }
 
 //  ----------------------------------------------------

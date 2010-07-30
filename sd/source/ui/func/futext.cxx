@@ -400,10 +400,17 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             // do the EndTextEdit first, it will delete the handles and force a
                             // recreation. This will make aVEvt.pHdl to point to a deleted handle,
                             // thus it is necessary to reset it and to get it again.
-                            ::Outliner* pOutl = mpView->GetTextEditOutliner();
 
-                            if (mxTextObj.is() && (mxTextObj->GetOutlinerParaObject() ||
-                                (pOutl && pOutl->GetText(pOutl->GetParagraph( 0 )).Len() != 0)))
+                            // #i112855#
+                            // cl: I'm not sure why we checked here also for mxTextObj->GetOutlinerParaObjet
+                            // this caused SdrEndTextEdit() to be called also when not in text editing and
+                            // this does not make sense and caused troubles. (see issue 112855)
+
+//                          ::Outliner* pOutl = mpView->GetTextEditOutliner();
+//
+//                          if (mxTextObj.is() && (mxTextObj->GetOutlinerParaObject() ||
+//                              (pOutl && pOutl->GetText(pOutl->GetParagraph( 0 )).Len() != 0)))
+                            if( mpView->IsTextEdit() )
                             {
                                 mpView->SdrEndTextEdit();
 

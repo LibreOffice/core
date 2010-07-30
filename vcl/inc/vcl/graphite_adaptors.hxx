@@ -86,8 +86,8 @@ namespace grutils
 //
 class VCL_DLLPUBLIC GraphiteFontAdaptor : public gr::Font
 {
-typedef std::map<const gr::gid16, std::pair<gr::Rect, gr::Point> > GlyphMetricMap;
-
+    typedef std::map<const gr::gid16, std::pair<gr::Rect, gr::Point> > GlyphMetricMap;
+    friend class GrFontHasher;
 public:
     static bool    IsGraphiteEnabledFont(ServerFont &) throw();
 

@@ -61,16 +61,6 @@ namespace uno   = ::com::sun::star::uno;
 namespace util  = ::com::sun::star::util;
 using namespace com::sun::star::system;
 
-// class SvxEmptyPage ----------------------------------------------------
-
-SvxEmptyPage::SvxEmptyPage( Window* pParent ) :
-
-    TabPage( pParent, CUI_RES( RID_SVXPAGE_IMPROVEMENT ) )
-
-{
-    FreeResource();
-}
-
 // class SvxImprovementOptionsPage ---------------------------------------
 
 SvxImprovementOptionsPage::SvxImprovementOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
@@ -162,11 +152,6 @@ IMPL_LINK( SvxImprovementOptionsPage, HandleShowData, PushButton*, EMPTYARG )
 SfxTabPage* SvxImprovementOptionsPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SvxImprovementOptionsPage( pParent, rSet );
-}
-
-sal_uInt16* SvxImprovementOptionsPage::GetRanges()
-{
-    return NULL;
 }
 
 sal_Bool SvxImprovementOptionsPage::FillItemSet( SfxItemSet& /*rSet*/ )

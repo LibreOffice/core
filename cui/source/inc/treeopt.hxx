@@ -336,12 +336,6 @@ private:
 
 public:
     ExtensionsTabPage(
-        Window* pParent, const ResId&,
-        const rtl::OUString& rPageURL, const rtl::OUString& rEvtHdl,
-        const com::sun::star::uno::Reference<
-            com::sun::star::awt::XContainerWindowProvider >& rProvider );
-
-    ExtensionsTabPage(
         Window* pParent, WinBits nStyle,
         const rtl::OUString& rPageURL, const rtl::OUString& rEvtHdl,
         const com::sun::star::uno::Reference<
@@ -354,6 +348,5 @@ public:
 
     void            ResetPage();
     void            SavePage();
-    void            HideWindow();
 };
 

@@ -67,7 +67,6 @@ public:
     virtual void    Activate();
 
     INT32           GetTransliterationFlags() const;
-    void            SetTransliterationFlags( INT32 nSettings );
 };
 
 #endif

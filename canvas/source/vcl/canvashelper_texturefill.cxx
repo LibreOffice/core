@@ -700,7 +700,7 @@ namespace vclcanvas
             }
 #endif // complex-clipping vs. XOR-trick
 
-#if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
+#if 0 //defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
             {
                 ::basegfx::B2DRectangle aRect(0.0, 0.0, 1.0, 1.0);
                 ::basegfx::B2DRectangle aTextureDeviceRect;

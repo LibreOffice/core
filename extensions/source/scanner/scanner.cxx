@@ -43,13 +43,14 @@ REF( XInterface ) SAL_CALL ScannerManager_CreateInstance( const REF( com::sun::s
 ScannerManager::ScannerManager() :
     mpData( NULL )
 {
+    AcquireData();
 }
 
 // -----------------------------------------------------------------------------
 
 ScannerManager::~ScannerManager()
 {
-    DestroyData();
+    ReleaseData();
 }
 
 // -----------------------------------------------------------------------------

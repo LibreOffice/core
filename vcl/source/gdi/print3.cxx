@@ -150,6 +150,7 @@ public:
 
     typedef std::hash_map< rtl::OUString, size_t, rtl::OUStringHash > PropertyToIndexMap;
     typedef std::hash_map< rtl::OUString, ControlDependency, rtl::OUStringHash > ControlDependencyMap;
+    typedef std::hash_map< rtl::OUString, Sequence< sal_Bool >, rtl::OUStringHash > ChoiceDisableMap;
 
     boost::shared_ptr<Printer>                                  mpPrinter;
     Sequence< PropertyValue >                                   maUIOptions;
@@ -158,6 +159,7 @@ public:
     PropertyToIndexMap                                          maPropertyToIndex;
     Link                                                        maOptionChangeHdl;
     ControlDependencyMap                                        maControlDependencies;
+    ChoiceDisableMap                                            maChoiceDisableMap;
     sal_Bool                                                    mbFirstPage;
     sal_Bool                                                    mbLastPage;
     sal_Bool                                                    mbReversePageOrder;
@@ -1299,6 +1301,7 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
         bool bHaveProperty = false;
         rtl::OUString aPropName;
         vcl::ImplPrinterControllerData::ControlDependency aDep;
+        Sequence< sal_Bool > aChoicesDisabled;
         for( int n = 0; n < aOptProp.getLength(); n++ )
         {
             const beans::PropertyValue& rEntry( aOptProp[ n ] );
@@ -1326,6 +1329,10 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
             {
                 rEntry.Value >>= aDep.mnDependsOnEntry;
             }
+            else if( rEntry.Name.equalsAscii( "ChoicesDisabled" ) )
+            {
+                rEntry.Value >>= aChoicesDisabled;
+            }
         }
         if( bHaveProperty )
         {
@@ -1338,6 +1345,8 @@ void PrinterController::setUIOptions( const Sequence< beans::PropertyValue >& i_
             }
             if( aDep.maDependsOnName.getLength() > 0 )
                 mpImplData->maControlDependencies[ aPropName ] = aDep;
+            if( aChoicesDisabled.getLength() > 0 )
+                mpImplData->maChoiceDisableMap[ aPropName ] = aChoicesDisabled;
         }
     }
 }
@@ -1409,6 +1418,20 @@ bool PrinterController::isUIOptionEnabled( const rtl::OUString& i_rProperty ) co
                 }
             }
         }
+    }
+    return bEnabled;
+}
+
+bool PrinterController::isUIChoiceEnabled( const rtl::OUString& i_rProperty, sal_Int32 i_nValue ) const
+{
+    bool bEnabled = true;
+    ImplPrinterControllerData::ChoiceDisableMap::const_iterator it =
+        mpImplData->maChoiceDisableMap.find( i_rProperty );
+    if(it != mpImplData->maChoiceDisableMap.end() )
+    {
+        const Sequence< sal_Bool >& rDisabled( it->second );
+        if( i_nValue >= 0 && i_nValue < rDisabled.getLength() )
+            bEnabled = ! rDisabled[i_nValue];
     }
     return bEnabled;
 }
@@ -1789,14 +1812,20 @@ Any PrinterOptionsHelper::getChoiceControlOpt( const rtl::OUString& i_rTitle,
                                                const Sequence< rtl::OUString >& i_rChoices,
                                                sal_Int32 i_nValue,
                                                const rtl::OUString& i_rType,
+                                               const Sequence< sal_Bool >& i_rDisabledChoices,
                                                const PrinterOptionsHelper::UIControlOptions& i_rControlOptions
                                                )
 {
     UIControlOptions aOpt( i_rControlOptions );
     sal_Int32 nUsed = aOpt.maAddProps.getLength();
-    aOpt.maAddProps.realloc( nUsed + 1 );
+    aOpt.maAddProps.realloc( nUsed + 1 + (i_rDisabledChoices.getLength() ? 1 : 0) );
     aOpt.maAddProps[nUsed].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Choices" ) );
     aOpt.maAddProps[nUsed].Value = makeAny( i_rChoices );
+    if( i_rDisabledChoices.getLength() )
+    {
+        aOpt.maAddProps[nUsed+1].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ChoicesDisabled" ) );
+        aOpt.maAddProps[nUsed+1].Value = makeAny( i_rDisabledChoices );
+    }
 
     PropertyValue aVal;
     aVal.Name = i_rProperty;

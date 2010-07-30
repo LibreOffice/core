@@ -1106,9 +1106,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                 // expand if required so
                 if (_bExpandAncestors)
                 {
-                    m_sToBeLoaded = _rCommand;
                     m_pTreeView->getListBox().Expand(pCommandType);
-                    m_sToBeLoaded = ::rtl::OUString();
                 }
 
                 // look for the object
@@ -2054,7 +2052,7 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
         const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
         for (; pIter != pEnd; ++pIter)
         {
-            if( (!m_sToBeLoaded.getLength() || m_sToBeLoaded == *pIter) && !m_pTreeView->getListBox().GetEntryPosByName(*pIter,_pParent))
+            if( !m_pTreeView->getListBox().GetEntryPosByName(*pIter,_pParent))
             {
                 Reference<XNameAccess> xChild(_xNameAccess->getByName(*pIter),UNO_QUERY);
                 DBTreeListUserData* pEntryData = new DBTreeListUserData;

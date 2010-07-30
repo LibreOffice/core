@@ -56,6 +56,10 @@
 #include <svsys.h>
 #endif
 
+#ifdef UNX
+#include <vcl/graphite_adaptors.hxx>
+#endif
+
 #include <vcl/salgdi.hxx>
 
 #include <unicode/uchar.h>
@@ -175,7 +179,8 @@ GraphiteLayout::Glyphs::fill_from(gr::Segment & rSegment, ImplLayoutArgs &rArgs,
     glyph_range_t iGlyphs = rSegment.glyphs();
     int nGlyphs = iGlyphs.second - iGlyphs.first;
     gr::GlyphIterator prevBase = iGlyphs.second;
-    float fMinX = rSegment.advanceWidth();
+    float fSegmentAdvance = rSegment.advanceWidth();
+    float fMinX = fSegmentAdvance;
     float fMaxX = 0.0f;
     rGlyph2Char.assign(nGlyphs, -1);
     long nDxOffset = 0;
@@ -222,7 +227,8 @@ GraphiteLayout::Glyphs::fill_from(gr::Segment & rSegment, ImplLayoutArgs &rArgs,
                         nFirstGlyphInCluster != nGlyphIndex)
                     {
                         std::pair <float,float> aBounds =
-                            appendCluster(rSegment, rArgs, bRtl, nFirstCharInCluster,
+                            appendCluster(rSegment, rArgs, bRtl,
+                            fSegmentAdvance, nFirstCharInCluster,
                             nNextChar, nFirstGlyphInCluster, nGlyphIndex, fScaling,
                             rChar2Base, rGlyph2Char, rCharDxs, nDxOffset);
                         fMinX = std::min(aBounds.first, fMinX);
@@ -285,7 +291,8 @@ GraphiteLayout::Glyphs::fill_from(gr::Segment & rSegment, ImplLayoutArgs &rArgs,
         nFirstGlyphInCluster != nGlyphIndex)
     {
         std::pair <float,float> aBounds =
-            appendCluster(rSegment, rArgs, bRtl, nFirstCharInCluster, nNextChar,
+            appendCluster(rSegment, rArgs, bRtl, fSegmentAdvance,
+                          nFirstCharInCluster, nNextChar,
                           nFirstGlyphInCluster, nGlyphIndex, fScaling,
                           rChar2Base, rGlyph2Char, rCharDxs, nDxOffset);
         fMinX = std::min(aBounds.first, fMinX);
@@ -334,11 +341,11 @@ GraphiteLayout::Glyphs::fill_from(gr::Segment & rSegment, ImplLayoutArgs &rArgs,
     }
 }
 
-std::pair<float,float> GraphiteLayout::Glyphs::appendCluster(gr::Segment & rSeg,
-    ImplLayoutArgs & rArgs, bool bRtl, int nFirstCharInCluster, int nNextChar,
-    int nFirstGlyphInCluster, int nNextGlyph, float fScaling,
-    std::vector<int> & rChar2Base, std::vector<int> & rGlyph2Char,
-    std::vector<int> & rCharDxs, long & rDXOffset)
+std::pair<float,float> GraphiteLayout::Glyphs::appendCluster(gr::Segment& rSeg,
+    ImplLayoutArgs & rArgs, bool bRtl,float fSegmentAdvance,
+    int nFirstCharInCluster, int nNextChar, int nFirstGlyphInCluster,
+    int nNextGlyph, float fScaling, std::vector<int> & rChar2Base,
+    std::vector<int> & rGlyph2Char, std::vector<int> & rCharDxs, long & rDXOffset)
 {
     glyph_range_t iGlyphs = rSeg.glyphs();
     int nGlyphs = iGlyphs.second - iGlyphs.first;
@@ -402,9 +409,9 @@ std::pair<float,float> GraphiteLayout::Glyphs::appendCluster(gr::Segment & rSeg,
         gr::GlyphInfo aGlyph = *(iGlyphs.first + j);
         if (j + nDelta >= nGlyphs || j + nDelta < 0) // at rhs ltr,rtl
         {
-            fNextOrigin = rSeg.advanceWidth();
-            nNextOrigin = round(rSeg.advanceWidth() * fScaling + rDXOffset);
-            aBounds.second = std::max(rSeg.advanceWidth(), aBounds.second);
+            fNextOrigin = fSegmentAdvance;
+            nNextOrigin = round(fSegmentAdvance * fScaling + rDXOffset);
+            aBounds.second = std::max(fSegmentAdvance, aBounds.second);
         }
         else
         {
@@ -546,7 +553,7 @@ GraphiteLayout::GraphiteLayout(const gr::Font & font, const grutils::GrFeaturePa
     // If true, it can cause end of line spaces to be hidden e.g. Doulos SIL
     maLayout.setStartOfLine(false);
     maLayout.setEndOfLine(false);
-//    maLayout.setDumbFallback(false);
+    maLayout.setDumbFallback(true);
     // trailing ws doesn't seem to always take affect if end of line is true
     maLayout.setTrailingWs(gr::ktwshAll);
 #ifdef GRLAYOUT_DEBUG
@@ -598,6 +605,8 @@ bool GraphiteLayout::LayoutText(ImplLayoutArgs & rArgs)
     else delete pSegment;
 #else
     gr::Segment * pSegment = CreateSegment(rArgs);
+    if (!pSegment)
+        return false;
     bool success = LayoutGlyphs(rArgs, pSegment);
     delete pSegment;
 #endif
@@ -649,7 +658,19 @@ public:
 #endif
         return hash;
     };
-
+protected:
+    virtual void UniqueCacheInfo(std::wstring & stuFace, bool & fBold, bool & fItalic)
+    {
+#ifdef WIN32
+        dynamic_cast<GraphiteWinFont&>(mrRealFont).UniqueCacheInfo(stuFace, fBold, fItalic);
+#else
+#ifdef UNX
+        dynamic_cast<GraphiteFontAdaptor&>(mrRealFont).UniqueCacheInfo(stuFace, fBold, fItalic);
+#else
+#error Unknown base type for gr::Font::UniqueCacheInfo
+#endif
+#endif
+    }
 private:
     gr::Font & mrRealFont;
 };
@@ -738,6 +759,14 @@ gr::Segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
         }
         else
         {
+#ifdef GRLAYOUT_DEBUG
+            fprintf(grLog(), "Gr::LayoutText failed: ");
+            for (int i = mnMinCharPos; i < limit; i++)
+            {
+                fprintf(grLog(), "%04x ", rArgs.mpStr[i]);
+            }
+            fprintf(grLog(), "\n");
+#endif
             clear();
             return NULL;
         }
@@ -897,7 +926,7 @@ long GraphiteLayout::FillDXArray( sal_Int32* pDXArray ) const
                 if (i > 0) pDXArray[i] -= mvCharDxs[i-1];
             }
 #ifdef GRLAYOUT_DEBUG
-            fprintf(grLog(),"%d,%d,%ld ", (int)i, (int)mvCharDxs[i], pDXArray[i]);
+            fprintf(grLog(),"%d,%d,%d ", (int)i, (int)mvCharDxs[i], pDXArray[i]);
 #endif
         }
         //std::adjacent_difference(mvCharDxs.begin(), mvCharDxs.end(), pDXArray);
@@ -974,13 +1003,13 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
             {
                 if (mvGlyphs[i].IsClusterStart())
                 {
-                    nOffset = fExtraPerCluster * nCluster;
+                    nOffset = FRound( fExtraPerCluster * nCluster );
                     size_t nCharIndex = mvGlyph2Char[i];
                     mvCharDxs[nCharIndex] += nOffset;
                     // adjust char dxs for rest of characters in cluster
                     while (++nCharIndex < mvGlyph2Char.size())
                     {
-                        int nChar2Base = (mvChar2BaseGlyph[nCharIndex] == -1)? -1 : mvChar2BaseGlyph[nCharIndex] & GLYPH_INDEX_MASK;
+                        int nChar2Base = (mvChar2BaseGlyph[nCharIndex] == -1)? -1 : (int)(mvChar2BaseGlyph[nCharIndex] & GLYPH_INDEX_MASK);
                         if (nChar2Base == -1 || nChar2Base == static_cast<int>(i))
                             mvCharDxs[nCharIndex] += nOffset;
                     }
@@ -1003,12 +1032,12 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
         Glyphs::iterator iGlyph = mvGlyphs.begin();
         while (iGlyph != iLastGlyph)
         {
-            iGlyph->maLinearPos.X() = static_cast<float>(iGlyph->maLinearPos.X()) * fXFactor;
+            iGlyph->maLinearPos.X() = FRound( fXFactor * iGlyph->maLinearPos.X() );
             ++iGlyph;
         }
         for (size_t i = 0; i < mvCharDxs.size(); i++)
         {
-            mvCharDxs[i] = fXFactor * static_cast<float>(mvCharDxs[i]);
+            mvCharDxs[i] = FRound( fXFactor * mvCharDxs[i] );
         }
     }
 }
@@ -1020,7 +1049,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
 
 #ifdef GRLAYOUT_DEBUG
     for (size_t iDx = 0; iDx < mvCharDxs.size(); iDx++)
-         fprintf(grLog(),"%d,%d,%ld ", (int)iDx, (int)mvCharDxs[iDx], args.mpDXArray[iDx]);
+         fprintf(grLog(),"%d,%d,%d ", (int)iDx, (int)mvCharDxs[iDx], args.mpDXArray[iDx]);
     fprintf(grLog(),"ApplyDx\n");
 #endif
     bool bRtl = mnLayoutFlags & SAL_LAYOUT_BIDI_RTL;
@@ -1033,7 +1062,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
     int nPrevClusterLastChar = -1;
     for (size_t i = 0; i < nChars; i++)
     {
-        int nChar2Base = (mvChar2BaseGlyph[i] == -1)? -1 : mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK;
+        int nChar2Base = (mvChar2BaseGlyph[i] == -1)? -1 : (int)(mvChar2BaseGlyph[i] & GLYPH_INDEX_MASK);
         if ((nChar2Base > -1) && (nChar2Base != nPrevClusterGlyph))
         {
             assert((nChar2Base > -1) && (nChar2Base < (signed)mvGlyphs.size()));
@@ -1047,11 +1076,11 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
             int nLastGlyph = nChar2Base;
             for (; j < nChars; j++)
             {
-                int nChar2BaseJ = (mvChar2BaseGlyph[j] == -1)? -1 : mvChar2BaseGlyph[j] & GLYPH_INDEX_MASK;
+                int nChar2BaseJ = (mvChar2BaseGlyph[j] == -1)? -1 : (int)(mvChar2BaseGlyph[j] & GLYPH_INDEX_MASK);
                 assert((nChar2BaseJ >= -1) && (nChar2BaseJ < (signed)mvGlyphs.size()));
                 if (nChar2BaseJ != -1 && mvGlyphs[nChar2BaseJ].IsClusterStart())
                 {
-                    nLastGlyph = nChar2BaseJ + ((bRtl)? 1 : -1);
+                    nLastGlyph = nChar2BaseJ + ((bRtl)? +1 : -1);
                     nLastChar = j - 1;
                     break;
                 }
@@ -1090,7 +1119,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
             }
             long nDWidth = nNewClusterWidth - nOrigClusterWidth;
 #ifdef GRLAYOUT_DEBUG
-            fprintf(grLog(), "c%d last glyph %d/%d\n", i, nLastGlyph, mvGlyphs.size());
+            fprintf(grLog(), "c%lu last glyph %d/%lu\n", i, nLastGlyph, mvGlyphs.size());
 #endif
             assert((nLastGlyph > -1) && (nLastGlyph < (signed)mvGlyphs.size()));
             mvGlyphs[nLastGlyph].mnNewWidth += nDWidth;
@@ -1128,7 +1157,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
     std::copy(args.mpDXArray, args.mpDXArray + nChars,
       mvCharDxs.begin() + (args.mnMinCharPos - mnMinCharPos));
 #ifdef GRLAYOUT_DEBUG
-    fprintf(grLog(),"ApplyDx %ld(%ld)\n", args.mpDXArray[nChars - 1], mnWidth);
+    fprintf(grLog(),"ApplyDx %d(%ld)\n", args.mpDXArray[nChars - 1], mnWidth);
 #endif
     mnWidth = args.mpDXArray[nChars - 1];
 }
@@ -1170,7 +1199,7 @@ void GraphiteLayout::kashidaJustify(std::vector<int>& rDeltaWidths, sal_GlyphId 
         }
         nKashidaCount = 1 + (nGapWidth / nKashidaWidth);
 #ifdef GRLAYOUT_DEBUG
-        printf("inserting %d kashidas at %ld\n", nKashidaCount, (*i).mnGlyphIndex);
+        printf("inserting %d kashidas at %u\n", nKashidaCount, (*i).mnGlyphIndex);
 #endif
         GlyphItem glyphItem = *i;
         Point aPos(0, 0);
@@ -1309,7 +1338,7 @@ void GraphiteLayout::GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray 
             pCaretXArray[i] = pCaretXArray[i+1] = 0;
         }
 #ifdef GRLAYOUT_DEBUG
-        fprintf(grLog(),"%d,%ld-%ld\t", nCharSlot, pCaretXArray[i], pCaretXArray[i+1]);
+        fprintf(grLog(),"%d,%d-%d\t", nCharSlot, pCaretXArray[i], pCaretXArray[i+1]);
 #endif
     }
 #ifdef GRLAYOUT_DEBUG

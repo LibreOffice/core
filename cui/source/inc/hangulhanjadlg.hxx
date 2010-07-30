@@ -152,7 +152,6 @@ namespace svx
         void    SetIgnoreAllHdl( const Link& _rHdl );
         void    SetChangeHdl( const Link& _rHdl );
         void    SetChangeAllHdl( const Link& _rHdl );
-        void    SetOptionsHdl( const Link& _rHdl );
 
         void    SetClickByCharacterHdl( const Link& _rHdl );
         void    SetConversionFormatChangedHdl( const Link& _rHdl );
@@ -174,8 +173,6 @@ namespace svx
         editeng::HangulHanjaConversion::ConversionFormat    GetConversionFormat( ) const;
 
         void            SetByCharacter( sal_Bool _bByCharacter );
-        sal_Bool        GetByCharacter( ) const;
-
         void            SetConversionDirectionState( sal_Bool _bTryBothDirections, editeng::HangulHanjaConversion::ConversionDirection _ePrimaryConversionDirection );
 
         // should text which does not match the primary conversion direction be ignored?

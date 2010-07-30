@@ -39,7 +39,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <vcl/window.hxx>
-#include <vcl/javachild.hxx>
+#include <vcl/syschild.hxx>
 #include <vcl/salbtype.hxx>
 
 #include <basegfx/tools/canvastools.hxx>
@@ -153,7 +153,7 @@ namespace slideshow
                 mxPlayerWindow.clear();
             }
 
-            mpMediaWindow = ::std::auto_ptr< JavaChildWindow >();
+            mpMediaWindow = ::std::auto_ptr< SystemChildWindow >();
 
             // shutdown player
             if( mxPlayer.is() )
@@ -431,28 +431,28 @@ namespace slideshow
 
                         if( !rRangePix.isEmpty() )
                         {
-                            uno::Sequence< uno::Any >   aArgs( 2 );
+                            uno::Sequence< uno::Any >   aArgs( 3 );
                             awt::Rectangle              aAWTRect( rRangePix.getMinX(),
                                                                   rRangePix.getMinY(),
                                                                     rRangePix.getMaxX() - rRangePix.getMinX(),
                                                                     rRangePix.getMaxY() - rRangePix.getMinY() );
 
-                            mpMediaWindow = ::std::auto_ptr< JavaChildWindow >( new JavaChildWindow( pWindow, WB_CLIPCHILDREN ) );
+                            mpMediaWindow = ::std::auto_ptr< SystemChildWindow >( new
+                                                SystemChildWindow( pWindow, WB_CLIPCHILDREN ) );
                             mpMediaWindow->SetBackground( Color( COL_BLACK ) );
-                            mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X,
-                                                                   aAWTRect.Y ),
-                                                            Size( aAWTRect.Width,
-                                                                  aAWTRect.Height ));
+                            mpMediaWindow->SetPosSizePixel( Point( aAWTRect.X, aAWTRect.Y ),
+                                                           Size( aAWTRect.Width, aAWTRect.Height ) );
                             mpMediaWindow->Show();
 
                             if( mxPlayer.is() )
                             {
                                 aArgs[ 0 ] = uno::makeAny(
-                                    sal::static_int_cast<sal_IntPtr>(
-                                        mpMediaWindow->getParentWindowHandleForJava()) );
+                                    sal::static_int_cast< sal_IntPtr >( mpMediaWindow->GetParentWindowHandle() ) );
 
                                 aAWTRect.X = aAWTRect.Y = 0;
                                 aArgs[ 1 ] = uno::makeAny( aAWTRect );
+
+                                aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( mpMediaWindow.get() ) );
 
                                 mxPlayerWindow.set( mxPlayer->createPlayerWindow( aArgs ) );
 
@@ -515,9 +515,7 @@ namespace slideshow
 
                                 if( mxPlayer.is() )
                                 {
-                                    aArgs[ 0 ] = uno::makeAny(
-                                        sal::static_int_cast<sal_Int32>(
-                                            aWNDVal) );
+                                    aArgs[ 0 ] = uno::makeAny( sal::static_int_cast< sal_Int32 >( aWNDVal) );
                                     aArgs[ 1 ] = uno::makeAny( aAWTRect );
 
                                     mxPlayerWindow.set( mxPlayer->createPlayerWindow( aArgs ) );

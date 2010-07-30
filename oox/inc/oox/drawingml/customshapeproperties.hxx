@@ -133,6 +133,8 @@ public:
     OptValue< GeomRect >&               getTextRect(){ return maTextRect; };
     std::vector< Path2D >&              getPath2DList(){ return maPath2DList; };
     std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >& getSegments(){ return maSegments; };
+    void                                setMirroredX( sal_Bool bMirroredX ) { mbMirroredX = bMirroredX; };
+    void                                setMirroredY( sal_Bool bMirroredY ) { mbMirroredY = bMirroredY; };
 
     double getValue( const std::vector< CustomShapeGuide >&, sal_uInt32 nIndex ) const;
     static sal_Int32 SetCustomShapeGuideValue( std::vector< CustomShapeGuide >& rGuideList, const CustomShapeGuide& rGuide );
@@ -150,6 +152,8 @@ private:
 
     std::vector< com::sun::star::drawing::EnhancedCustomShapeSegment >
                                     maSegments;
+    sal_Bool                        mbMirroredX;
+    sal_Bool                        mbMirroredY;
 };
 
 } }

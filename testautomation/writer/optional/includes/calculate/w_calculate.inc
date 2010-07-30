@@ -24,7 +24,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Put description here
 '*

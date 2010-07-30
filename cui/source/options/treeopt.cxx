@@ -40,6 +40,7 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <tools/rcid.h>
 #include <tools/shl.hxx>
+#include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -2709,22 +2710,6 @@ short OfaTreeOptionsDialog::Execute()
 // class ExtensionsTabPage -----------------------------------------------
 
 ExtensionsTabPage::ExtensionsTabPage(
-    Window* pParent, const ResId& rResId, const rtl::OUString& rPageURL,
-    const rtl::OUString& rEvtHdl, const Reference< awt::XContainerWindowProvider >& rProvider ) :
-
-    TabPage( pParent, rResId ),
-
-    m_sPageURL          ( rPageURL ),
-    m_sEventHdl         ( rEvtHdl ),
-    m_xWinProvider      ( rProvider ),
-    m_bIsWindowHidden   ( false )
-
-{
-}
-
-// -----------------------------------------------------------------------
-
-ExtensionsTabPage::ExtensionsTabPage(
     Window* pParent, WinBits nStyle, const rtl::OUString& rPageURL,
     const rtl::OUString& rEvtHdl, const Reference< awt::XContainerWindowProvider >& rProvider ) :
 
@@ -2862,15 +2847,3 @@ void ExtensionsTabPage::SavePage()
 {
     DispatchAction( C2U("ok") );
 }
-
-// -----------------------------------------------------------------------
-
-void ExtensionsTabPage::HideWindow()
-{
-    if ( !m_bIsWindowHidden && m_xPage.is() )
-    {
-        m_xPage->setVisible( sal_False );
-        m_bIsWindowHidden = true;
-    }
-}
-

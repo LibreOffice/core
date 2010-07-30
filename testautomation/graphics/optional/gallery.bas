@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : wolfram.garten@oracle.com
 '*
 '* short description : (quick test) Checking functionality and all Gallery themes
 '*

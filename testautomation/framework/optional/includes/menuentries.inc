@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description : Read menubar and first level drop down lists and compare to reference
 '*

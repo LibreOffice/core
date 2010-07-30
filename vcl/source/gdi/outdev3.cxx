@@ -1645,10 +1645,25 @@ ImplDevFontListData* ImplDevFontList::ImplFindBySubstFontAttr( const utl::FontNa
 
         pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
-            break;
+            return pFoundData;
     }
 
-    return pFoundData;
+    // use known attributes from the configuration to find a matching substitute
+    const ULONG nSearchType = rFontAttr.Type;
+    if( nSearchType != 0 )
+    {
+        const FontWeight eSearchWeight = rFontAttr.Weight;
+        const FontWidth  eSearchWidth  = rFontAttr.Width;
+        const FontItalic eSearchSlant  = ITALIC_DONTKNOW;
+        const FontFamily eSearchFamily = FAMILY_DONTKNOW;
+        const String aSearchName;
+        pFoundData = ImplFindByAttributes( nSearchType,
+            eSearchWeight, eSearchWidth, eSearchFamily, eSearchSlant, aSearchName );
+        if( pFoundData )
+            return pFoundData;
+    }
+
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
@@ -6058,6 +6073,11 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     rtl::OUString aMissingCodes = aMissingCodeBuf.makeStringAndClear();
 
     ImplFontSelectData aFontSelData = mpFontEntry->maFontSelData;
+
+    ImplFontMetricData aOrigMetric( aFontSelData );
+    // TODO: use cached metric in fontentry
+    mpGraphics->GetFontMetric( &aOrigMetric );
+
     // when device specific font substitution may have been performed for
     // the originally selected font then make sure that a fallback to that
     // font is performed first
@@ -6102,7 +6122,27 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         }
 #endif
 
+        // TODO: try to get the metric data from the GFB's mpFontEntry
+        ImplFontMetricData aSubstituteMetric( aFontSelData );
         pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
+        mpGraphics->GetFontMetric( &aSubstituteMetric, nFallbackLevel );
+
+        const long nOriginalHeight = aOrigMetric.mnAscent + aOrigMetric.mnDescent;
+        const long nSubstituteHeight = aSubstituteMetric.mnAscent + aSubstituteMetric.mnDescent;
+        // Too tall, shrink it a bit. Need a better calculation to include extra
+        // factors and any extra wriggle room we might have available?
+    // TODO: should we scale by max-ascent/max-descent instead of design height?
+        if( nSubstituteHeight > nOriginalHeight )
+        {
+            const float fScale = nOriginalHeight / (float)nSubstituteHeight;
+            const float fOrigHeight = aFontSelData.mfExactHeight;
+            const int nOrigHeight = aFontSelData.mnHeight;
+            aFontSelData.mfExactHeight *= fScale;
+            aFontSelData.mnHeight = static_cast<int>(aFontSelData.mfExactHeight);
+            pFallbackFont->mnSetFontFlags = mpGraphics->SetFont( &aFontSelData, nFallbackLevel );
+            aFontSelData.mnHeight = nOrigHeight;
+            aFontSelData.mfExactHeight = fOrigHeight;
+        }
 
         // create and add glyph fallback layout to multilayout
         rLayoutArgs.ResetPos();

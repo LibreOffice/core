@@ -154,42 +154,6 @@ void SvxConfigFunctionListBox_Impl::ClearAll()
     Clear();
 }
 
-SvLBoxEntry* SvxConfigFunctionListBox_Impl::GetEntry_Impl( const String& rName )
-{
-    SvLBoxEntry *pEntry = First();
-    while ( pEntry )
-    {
-        if ( GetEntryText( pEntry ) == rName )
-            return pEntry;
-        pEntry = Next( pEntry );
-    }
-
-    return NULL;
-}
-
-SvLBoxEntry* SvxConfigFunctionListBox_Impl::GetEntry_Impl( USHORT nId )
-{
-    SvLBoxEntry *pEntry = First();
-    while ( pEntry )
-    {
-        SvxGroupInfo_Impl *pData = (SvxGroupInfo_Impl*) pEntry->GetUserData();
-        if ( pData && pData->nOrd == nId )
-            return pEntry;
-        pEntry = Next( pEntry );
-    }
-
-    return NULL;
-}
-
-USHORT SvxConfigFunctionListBox_Impl::GetId( SvLBoxEntry *pEntry )
-{
-    SvxGroupInfo_Impl *pData = pEntry ?
-        (SvxGroupInfo_Impl*) pEntry->GetUserData() : 0;
-    if ( pData )
-        return pData->nOrd;
-    return 0;
-}
-
 String SvxConfigFunctionListBox_Impl::GetHelpText( SvLBoxEntry *pEntry )
 {
     // Information zum selektierten Entry aus den Userdaten holen
@@ -1212,12 +1176,6 @@ void
 SvxScriptSelectorDialog::SetDialogDescription( const String& rDescription )
 {
     aDialogDescription.SetText( rDescription );
-}
-
-USHORT
-SvxScriptSelectorDialog::GetSelectedId()
-{
-    return aCommands.GetId( aCommands.GetLastSelectedEntry() );
 }
 
 String

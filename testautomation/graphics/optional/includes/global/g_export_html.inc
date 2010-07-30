@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
@@ -49,7 +49,7 @@ testcase tHtmlExport
    hToolsOptions ("STAROFFICE","USERDATA")
    VorName.SetText "Garfield"
    ZuName.SetText  "Peanuts"
-   EMail.SetText   "recumbent@sun.com"
+   EMail.SetText   "recumbent@oracle.com"
    Kontext "ExtrasOptionenDlg"
    ExtrasOptionenDlg.OK
 
@@ -197,8 +197,8 @@ testcase tHtmlExport
    end if
    sTemp = EMail.GetText
    Adresse1=EMail.GetText
-   if (sTemp <> "recumbent@sun.com") then
-      warnlog "Value for 'Email' is other than expected, should be 'recumbent@sun.com', is: '"+sTemp+"'"
+   if (sTemp <> "recumbent@oracle.com") then
+      warnlog "Value for 'Email' is other than expected, should be 'recumbent@oracle.com', is: '"+sTemp+"'"
    end if
    printlog "set text in field 'your homepage' "
    Homepage.SetText "mahler"

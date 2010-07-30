@@ -155,17 +155,6 @@ Color TpBorderRGBColor( ColorData aColorData )
 }
 
 // -----------------------------------------------------------------------
-
-Color TpBorderRGBColor( const Color& rColor )
-{
-    Color aRGBColor( rColor.GetRed(),
-                     rColor.GetGreen(),
-                     rColor.GetBlue() );
-
-    return( aRGBColor );
-}
-
-// -----------------------------------------------------------------------
 void lcl_SetDecimalDigitsTo1(MetricField& rField)
 {
     sal_Int64 nMin = rField.Denormalize( rField.GetMin( FUNIT_TWIP ) );

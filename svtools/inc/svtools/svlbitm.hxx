@@ -176,6 +176,8 @@ class SVT_DLLPUBLIC SvLBoxButton : public SvLBoxItem
     USHORT nItemFlags;
     USHORT nImgArrOffs;
     USHORT nBaseOffs;
+
+    void ImplAdjustBoxSize( Size& io_rCtrlSize, ControlType i_eType, Window* pParent );
 public:
                     // An SvLBoxButton can be of three different kinds: an
                     // enabled checkbox (the normal kind), a disabled checkbox

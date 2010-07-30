@@ -73,7 +73,8 @@ protected:
     vos::OMutex                             maProtector;
     void*                                   mpData;
 
-    void                                    DestroyData();
+    void                                    AcquireData();
+    void                                    ReleaseData();
 
 public:
 
@@ -105,7 +106,7 @@ public:
     void                                    Unlock() { maProtector.release(); }
 
     void*                                   GetData() const { return mpData; }
-    void                                    SetData( void* pData ) { DestroyData(); mpData = pData; }
+    void                                    SetData( void* pData ) { ReleaseData(); mpData = pData; }
 };
 
 // -----------------------------------------------------------------------------

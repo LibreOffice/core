@@ -1989,10 +1989,14 @@ void Document::handleParagraphNotifications()
                 determineVisibleRange();
                 notifyVisibleRangeChanges(aOldVisibleBegin, aOldVisibleEnd,
                                           m_xParagraphs->end());
-                Paragraphs::iterator aIt(m_xParagraphs->begin() + n);
-                ::rtl::Reference< ParagraphImpl > xParagraph(getParagraph(aIt));
-                if (xParagraph.is())
-                    xParagraph->textChanged();
+
+                if (n < m_xParagraphs->size())
+                {
+                    Paragraphs::iterator aIt(m_xParagraphs->begin() + n);
+                    ::rtl::Reference< ParagraphImpl > xParagraph(getParagraph(aIt));
+                    if (xParagraph.is())
+                        xParagraph->textChanged();
+                }
                 break;
             }
         default:

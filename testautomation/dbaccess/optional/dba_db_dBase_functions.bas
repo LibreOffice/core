@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : marc.neumann@sun.com
+'* owner : marc.neumann@oracle.com
 '*
 '* short description : Optional test for dBase functions
 '*

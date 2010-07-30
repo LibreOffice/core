@@ -158,17 +158,25 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     try
     {
         Reference< XResultSetUpdate> xUp(_xRs,UNO_QUERY_THROW);
-        xUp->moveToInsertRow();
-        xUp->cancelRowUpdates();
-        _xRs->beforeFirst();
-        m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
-        m_pCacheSet = new WrappedResultSet();
-        m_xCacheSet = m_pCacheSet;
-        m_pCacheSet->construct(_xRs,i_sRowSetFilter);
-        return;
+        Reference< XPropertySet> xProp(_xRs,UNO_QUERY);
+        Reference< XPropertySetInfo > xPropInfo = xProp->getPropertySetInfo();
+        sal_Bool bBookmarkable = xPropInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) &&
+                                any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)) && Reference< XRowLocate >(_xRs, UNO_QUERY).is();
+        if ( bBookmarkable )
+        {
+            xUp->moveToInsertRow();
+            xUp->cancelRowUpdates();
+            _xRs->beforeFirst();
+            m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
+            m_pCacheSet = new WrappedResultSet();
+            m_xCacheSet = m_pCacheSet;
+            m_pCacheSet->construct(_xRs,i_sRowSetFilter);
+            return;
+        }
     }
-    catch(const Exception&)
+    catch(const Exception& ex)
     {
+        (void)ex;
     }
     _xRs->beforeFirst();
 

@@ -80,6 +80,8 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
 
     FreeResource();
 
+    aEdit.SetSizePixel( aEdit.CalcMinimumSize() );
+
     SfxImageManager* pManager = SfxImageManager::GetImageManager( SW_MOD() );
     pManager->RegisterToolBox(this);
 

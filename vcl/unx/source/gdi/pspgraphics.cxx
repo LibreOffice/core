@@ -885,7 +885,7 @@ void PspGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
     }
 }
 
-void PspGraphics::GetFontMetric( ImplFontMetricData *pMetric )
+void PspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
 {
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     psp::PrintFontInfo aInfo;

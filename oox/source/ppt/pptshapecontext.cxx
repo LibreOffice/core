@@ -31,6 +31,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
+#include "oox/helper/attributelist.hxx"
 #include "oox/ppt/pptshape.hxx"
 #include "oox/ppt/pptshapecontext.hxx"
 #include "oox/ppt/pptshapepropertiescontext.hxx"
@@ -100,124 +101,112 @@ Reference< XFastContextHandler > PPTShapeContext::createFastChildContext( sal_In
 
     switch( aElementToken )
     {
-    // nvSpPr CT_ShapeNonVisual begin
-//  case NMSP_PPT|XML_drElemPr:
-//      break;
-    case NMSP_PPT|XML_cNvPr:
-        mpShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
-        mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
-        break;
-    case NMSP_PPT|XML_ph:
-    {
-        sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
-        mpShapePtr->setSubType( nSubType );
-        OUString sIdx( xAttribs->getOptionalValue( XML_idx ) );
-        sal_Bool bHasIdx = sIdx.getLength() > 0;
-        sal_Int32 nIdx = sIdx.toInt32();
-        mpShapePtr->setSubTypeIndex( nIdx );
-
-        if ( nSubType || bHasIdx )
+        // nvSpPr CT_ShapeNonVisual begin
+        //  case NMSP_PPT|XML_drElemPr:
+        //      break;
+        case NMSP_PPT|XML_cNvPr:
         {
-            PPTShape* pPPTShapePtr = dynamic_cast< PPTShape* >( mpShapePtr.get() );
-            if ( pPPTShapePtr )
-            {
-                oox::ppt::ShapeLocation eShapeLocation = pPPTShapePtr->getShapeLocation();
-                oox::drawingml::ShapePtr pPlaceholder;
-
-                if ( bHasIdx && eShapeLocation == Slide )
-                {
-                    // TODO: use id to shape map
-                    SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
-                    if ( pMasterPersist.get() )
-                    pPlaceholder = PPTShape::findPlaceholderByIndex( nIdx, pMasterPersist->getShapes()->getChildren() );
-                }
-                if ( !pPlaceholder.get() && ( ( eShapeLocation == Slide ) || ( eShapeLocation == Layout ) ) )
-                {
-                    // inheriting properties from placeholder objects by cloning shape
-
-                    sal_Int32 nFirstPlaceholder = 0;
-                    sal_Int32 nSecondPlaceholder = 0;
-                    switch( nSubType )
-                    {
-                        case XML_ctrTitle :     // slide/layout
-                            nFirstPlaceholder = XML_ctrTitle;
-                            nSecondPlaceholder = XML_title;
-                            break;
-                        case XML_subTitle :     // slide/layout
-                            nFirstPlaceholder = XML_subTitle;
-                            nSecondPlaceholder = XML_title;
-                            break;
-                        case XML_obj :          // slide/layout
-                            nFirstPlaceholder = XML_obj;
-                            nSecondPlaceholder = XML_body;
-                            break;
-                        case XML_dt :           // slide/layout/master/notes/notesmaster/handoutmaster
-                        case XML_sldNum :       // slide/layout/master/notes/notesmaster/handoutmaster
-                        case XML_ftr :          // slide/layout/master/notes/notesmaster/handoutmaster
-                        case XML_hdr :          // notes/notesmaster/handoutmaster
-                        case XML_body :         // slide/layout/master/notes/notesmaster
-                        case XML_title :        // slide/layout/master/
-                        case XML_chart :        // slide/layout
-                        case XML_tbl :          // slide/layout
-                        case XML_clipArt :      // slide/layout
-                        case XML_dgm :          // slide/layout
-                        case XML_media :        // slide/layout
-                        case XML_sldImg :       // notes/notesmaster
-                        case XML_pic :          // slide/layout
-                            nFirstPlaceholder = nSubType;
-                        default:
-                            break;
-                    }
-                    if ( nFirstPlaceholder )
-                    {
-                        if ( eShapeLocation == Layout )     // for layout objects the referenced object can be found within the same shape tree
-                            pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, -1, mpSlidePersistPtr->getShapes()->getChildren() );
-                        else if ( eShapeLocation == Slide ) // normal slide shapes have to search within the corresponding master tree for referenced objects
-                        {
-                            SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
-                            if ( pMasterPersist.get() )
-                                pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
-                                    pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
-                        }
-                        if ( pPlaceholder.get() )
-                        {
-                            mpShapePtr->applyShapeReference( *pPlaceholder.get() );
-                            PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
-                            if ( pPPTShape )
-                                pPPTShape->setReferenced( sal_True );
-                        }
-                    }
-                }
-                if ( pPlaceholder.get() )
-                {
-                    mpShapePtr->applyShapeReference( *pPlaceholder.get() );
-                    PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
-                    if ( pPPTShape )
-                    pPPTShape->setReferenced( sal_True );
-                    pPPTShapePtr->setPlaceholder( pPlaceholder );
-                }
-            }
+            AttributeList aAttribs( xAttribs );
+            mpShapePtr->setHidden( aAttribs.getBool( XML_hidden, false ) );
+            mpShapePtr->setId( xAttribs->getOptionalValue( XML_id ) );
+            mpShapePtr->setName( xAttribs->getOptionalValue( XML_name ) );
+            break;
         }
-        break;
-    }
-    // nvSpPr CT_ShapeNonVisual end
+        case NMSP_PPT|XML_ph:
+        {
+            sal_Int32 nSubType( xAttribs->getOptionalValueToken( XML_type, XML_obj ) );
+            mpShapePtr->setSubType( nSubType );
+            mpShapePtr->setSubTypeIndex( xAttribs->getOptionalValue( XML_idx ).toInt32() );
+            if ( nSubType )
+            {
+                PPTShape* pPPTShapePtr = dynamic_cast< PPTShape* >( mpShapePtr.get() );
+                if ( pPPTShapePtr )
+                {
+                    oox::ppt::ShapeLocation eShapeLocation = pPPTShapePtr->getShapeLocation();
+                    if ( ( eShapeLocation == Slide ) || ( eShapeLocation == Layout ) )
+                    {
+                        // inheriting properties from placeholder objects by cloning shape
+                        sal_Int32 nFirstPlaceholder = 0;
+                        sal_Int32 nSecondPlaceholder = 0;
+                        switch( nSubType )
+                        {
+                            case XML_ctrTitle :     // slide/layout
+                                  nFirstPlaceholder = XML_ctrTitle;
+                                  nSecondPlaceholder = XML_title;
+                              break;
 
-    case NMSP_PPT|XML_spPr:
-        xRet = new PPTShapePropertiesContext( *this, *mpShapePtr );
-        break;
+                              case XML_subTitle :       // slide/layout
+                                  nFirstPlaceholder = XML_subTitle;
+                                  nSecondPlaceholder = XML_title;
+                              break;
 
-    case NMSP_PPT|XML_style:
-        xRet = new oox::drawingml::ShapeStyleContext( *this, *mpShapePtr );
-        break;
+                             case XML_obj :         // slide/layout
+                                  nFirstPlaceholder = XML_obj;
+                                  nSecondPlaceholder = XML_body;
+                              break;
 
-    case NMSP_PPT|XML_txBody:
-    {
-        oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
-        xTextBody->getTextProperties().maPropertyMap[ PROP_FontIndependentLineSpacing ] <<= static_cast< sal_Bool >( sal_True );
-        mpShapePtr->setTextBody( xTextBody );
-        xRet = new oox::drawingml::TextBodyContext( *this, *xTextBody );
-        break;
-    }
+                            case XML_dt :           // slide/layout/master/notes/notesmaster/handoutmaster
+                              case XML_sldNum :     // slide/layout/master/notes/notesmaster/handoutmaster
+                              case XML_ftr :            // slide/layout/master/notes/notesmaster/handoutmaster
+                              case XML_hdr :            // notes/notesmaster/handoutmaster
+                              case XML_body :           // slide/layout/master/notes/notesmaster
+                              case XML_title :      // slide/layout/master/
+                              case XML_chart :      // slide/layout
+                              case XML_tbl :            // slide/layout
+                              case XML_clipArt :        // slide/layout
+                              case XML_dgm :            // slide/layout
+                              case XML_media :      // slide/layout
+                              case XML_sldImg :     // notes/notesmaster
+                              case XML_pic :            // slide/layout
+                                  nFirstPlaceholder = nSubType;
+                              default:
+                                  break;
+                        }
+                          if ( nFirstPlaceholder )
+                          {
+                              oox::drawingml::ShapePtr pPlaceholder;
+                              if ( eShapeLocation == Layout )       // for layout objects the referenced object can be found within the same shape tree
+                                pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, -1, mpSlidePersistPtr->getShapes()->getChildren() );
+                              else if ( eShapeLocation == Slide )   // normal slide shapes have to search within the corresponding master tree for referenced objects
+                              {
+                                  SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
+                                  if ( pMasterPersist.get() )
+                                    pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder,
+                                pPPTShapePtr->getSubTypeIndex(), pMasterPersist->getShapes()->getChildren() );
+                              }
+                              if ( pPlaceholder.get() )
+                              {
+                                  mpShapePtr->applyShapeReference( *pPlaceholder.get() );
+                                  PPTShape* pPPTShape = dynamic_cast< PPTShape* >( pPlaceholder.get() );
+                                  if ( pPPTShape )
+                                      pPPTShape->setReferenced( sal_True );
+                              }
+                          }
+                    }
+                  }
+
+              }
+              break;
+        }
+
+        // nvSpPr CT_ShapeNonVisual end
+
+        case NMSP_PPT|XML_spPr:
+            xRet = new PPTShapePropertiesContext( *this, *mpShapePtr );
+            break;
+
+        case NMSP_PPT|XML_style:
+            xRet = new oox::drawingml::ShapeStyleContext( *this, *mpShapePtr );
+            break;
+
+        case NMSP_PPT|XML_txBody:
+        {
+            oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
+            xTextBody->getTextProperties().maPropertyMap[ PROP_FontIndependentLineSpacing ] <<= static_cast< sal_Bool >( sal_True );
+            mpShapePtr->setTextBody( xTextBody );
+            xRet = new oox::drawingml::TextBodyContext( *this, *xTextBody );
+            break;
+        }
     }
 
     if( !xRet.is() )

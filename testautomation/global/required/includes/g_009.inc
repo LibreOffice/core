@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description : Global resource tests for the menu: Help
 '*

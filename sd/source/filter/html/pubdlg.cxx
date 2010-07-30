@@ -51,6 +51,7 @@
 #include <svl/eitem.hxx>
 #include <svtools/colrdlg.hxx>
 #include <editeng/colritem.hxx>
+#include <tools/urlobj.hxx>
 #include <tools/list.hxx>
 #include <sdiocmpt.hxx>
 #include <sfx2/docfile.hxx>

@@ -33,8 +33,8 @@ TextListStyle::TextListStyle()
 {
     for ( int i = 0; i < 9; i++ )
     {
-        maListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties ) );
-        maAggregationListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties ) );
+        maListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties() ) );
+        maAggregationListStyle.push_back( TextParagraphPropertiesPtr( new TextParagraphProperties() ) );
     }
 }
 

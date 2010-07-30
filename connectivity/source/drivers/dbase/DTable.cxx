@@ -2607,7 +2607,7 @@ void ODbaseTable::throwInvalidDbaseFormat()
     // no dbase file
 
     const ::rtl::OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
-                STR_SQL_NAME_ERROR,
+                STR_INVALID_DBASE_FILE,
                 "$filename$", getEntry(m_pConnection,m_Name)
              ) );
     ::dbtools::throwGenericSQLException( sError, *this );

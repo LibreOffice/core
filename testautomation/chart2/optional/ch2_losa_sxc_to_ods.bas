@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Load/Save test for chart files - Input: SXC, Output:ODS
 '*
