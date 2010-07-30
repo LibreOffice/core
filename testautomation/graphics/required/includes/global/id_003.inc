@@ -30,6 +30,21 @@
 '* short description :
 '*
 '\******************************************************************************
+
+sub id_003
+
+    printLog Chr(13) + "---------    id_003    ----------"
+
+    call tiViewNavigator
+    call tiViewZoom
+    call tiViewToolbar
+    Call tToolsCustomize			     'global\required\include
+    call tiViewDisplayQuality
+    call tiViewLayer
+    call tViewSnapLines
+    call tViewGrid
+end sub
+'-------------------------------------------------------------------------
 testcase tiViewNavigator
 
     printlog " open application "

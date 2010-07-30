@@ -102,6 +102,7 @@ testcase tLoad100GalleryGraphicFiles
             '///    + Deleting the graphic with &lt;delete&gt; of the keyboard
             '/// <i>Loop ends</i>
             x = LoadGraphic ( lsGraphics(t), corLoad )
+            sleep(1)
             printlog
         catch
             ExceptLog
