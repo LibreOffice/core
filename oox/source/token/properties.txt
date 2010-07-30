@@ -5,6 +5,7 @@ ActiveTable
 Adjust
 AdjustContrast
 AdjustLuminance
+AdjustmentValues
 Align
 AnchorPosition
 ArrangeOrder
@@ -83,6 +84,7 @@ CompileEnglish
 ConditionalFormat
 ConnectBars
 ContainsHeader
+Coordinates
 CopyBack
 CopyFormulas
 CopyStyles
@@ -101,6 +103,7 @@ D3DScenePerspective
 D3DSceneShadeMode
 DDELinks
 DatabaseRanges
+Decoration
 DefaultContext
 DefaultScrollValue
 DefaultSpinValue
@@ -116,6 +119,7 @@ EchoChar
 EnableVisible
 Enabled
 EndPosition
+Equations
 ErrorAlertStyle
 ErrorBarStyle
 ErrorBarX
@@ -167,6 +171,7 @@ GraphicURL
 GridColor
 GroupInfo
 HScroll
+Handles
 HasAutoShowInfo
 HasColumnRowHeaders
 HasHorizontalScrollBar
@@ -246,6 +251,7 @@ LineStyle
 LineTransparence
 LineWidth
 LinkURL
+LoadReadonly
 LookUpLabels
 MajorTickmarks
 MarkPosition
@@ -255,7 +261,9 @@ MediaType
 MinorTickmarks
 MissingValueTreatment
 Model
+ModifyPasswordHash
 MultiLine
+MultiPageValue
 MultiSelection
 Name
 NamedRanges
@@ -285,6 +293,7 @@ ParaLineSpacing
 ParaRightMargin
 ParaTabStops
 ParaTopMargin
+Path
 PercentageNumberFormat
 PersistName
 Perspective
@@ -307,6 +316,16 @@ Printable
 ProgressValueMax
 ProgressValueMin
 Protected
+RadiusRangeMaximum
+RadiusRangeMinimum
+RangeXMaximum
+RangeXMinimum
+RangeYMaximum
+RangeYMinimum
+RefAngle
+RefR
+RefX
+RefY
 Reference
 ReferenceDevice
 RegularExpressions
@@ -335,6 +354,7 @@ ScaleToPagesY
 ScrollValue
 ScrollValueMax
 ScrollValueMin
+Segments
 SelectedPage
 Show
 ShowBorder
@@ -378,6 +398,7 @@ Suffix
 SwapXAndYAxis
 Symbol
 SymbolColor
+TabColor
 TabIndex
 TableBorder
 TableLayout
@@ -425,6 +446,7 @@ VertJustify
 VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
+ViewBox
 Visible
 VisibleSize
 VisualArea
@@ -432,7 +454,6 @@ VisualEffect
 Weight
 WhiteDay
 Width
-WriteProtectionPassword
 WritingMode
 ZoomType
 ZoomValue

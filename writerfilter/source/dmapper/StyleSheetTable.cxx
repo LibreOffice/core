@@ -26,6 +26,7 @@
  ************************************************************************/
 #include <StyleSheetTable.hxx>
 #include <dmapper/DomainMapper.hxx>
+#include <NumberingManager.hxx>
 #include <ConversionHelper.hxx>
 #include <TblStylePrHandler.hxx>
 #include <BorderHandler.hxx>
@@ -911,30 +912,23 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     {
                         // Set the outline levels
                         const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
-                        if ( pStyleSheetProperties && pStyleSheetProperties->GetOutlineLevel( ) >= 0 )
+                        if ( pStyleSheetProperties )
                         {
-                            sal_Int16 nLvl = pStyleSheetProperties->GetOutlineLevel( );
-                            uno::Reference< text::XChapterNumberingSupplier > xOutlines ( m_pImpl->m_xTextDocument,
-                                    uno::UNO_QUERY_THROW );
-                            uno::Reference< container::XIndexReplace > xRules = xOutlines->getChapterNumberingRules( );
-                            uno::Any aLevel = xRules->getByIndex( nLvl );
-                            uno::Sequence< beans::PropertyValue > aLevelProps;
-                            aLevel >>= aLevelProps;
+                            aPropValues.realloc( aPropValues.getLength( ) + 1 );
 
-                            sal_Int32 nLen = aLevelProps.getLength( );
-                            sal_Int32 i = 0;
-                            bool bPropFound = false;
-                            rtl::OUString sPropName( rtl::OUString::createFromAscii( "HeadingStyleName" ) );
-                            while ( i < nLen && !bPropFound )
+                            beans::PropertyValue aLvlVal( rPropNameSupplier.GetName( PROP_OUTLINE_LEVEL ), 0,
+                                    uno::makeAny( sal_Int16( pStyleSheetProperties->GetOutlineLevel( ) + 1 ) ),
+                                    beans::PropertyState_DIRECT_VALUE );
+                            aPropValues[ aPropValues.getLength( ) - 1 ] = aLvlVal;
+
+                            if ( pStyleSheetProperties->GetOutlineLevel( ) == 0 )
                             {
-                                if ( aLevelProps[i].Name.equals( sPropName ) )
-                                {
-                                    aLevelProps[i].Value = uno::makeAny( ConvertStyleName( pEntry->sStyleName ) );
-                                    bPropFound = true;
-                                }
-                                i++;
+                                aPropValues.realloc( aPropValues.getLength( ) + 1 );
+                                beans::PropertyValue aStyleVal( rPropNameSupplier.GetName( PROP_NUMBERING_STYLE_NAME ), 0,
+                                        uno::makeAny( rtl::OUString::createFromAscii( "" ) ),
+                                        beans::PropertyState_DIRECT_VALUE );
+                                aPropValues[ aPropValues.getLength( ) - 1 ] = aStyleVal;
                             }
-                            xRules->replaceByIndex( nLvl, uno::makeAny( aLevelProps ) );
                         }
 
                         uno::Reference< beans::XPropertyState >xState( xStyle, uno::UNO_QUERY_THROW );

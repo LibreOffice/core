@@ -1767,16 +1767,6 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         if (pSttbRgtplc.get() != NULL)
             rStream.table(NS_rtf::LN_SttbRgtplc, pSttbRgtplc);
 
-        writerfilter::Reference<Table>::Pointer_t pListTable = getListTable();
-
-        if (pListTable.get() != NULL)
-            rStream.table(NS_rtf::LN_LISTTABLE, pListTable);
-
-        writerfilter::Reference<Table>::Pointer_t pLFOTable = getLFOTable();
-
-        if (pLFOTable.get() != NULL)
-            rStream.table(NS_rtf::LN_LFOTABLE, pLFOTable);
-
         writerfilter::Reference<Table>::Pointer_t pFontTable = getFontTable();
 
         if (pFontTable.get() != NULL)
@@ -1798,6 +1788,16 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
         if (pAssocTable.get() != NULL)
             rStream.table(NS_rtf::LN_SttbAssoc, pAssocTable);
+
+        writerfilter::Reference<Table>::Pointer_t pListTable = getListTable();
+
+        if (pListTable.get() != NULL)
+            rStream.table(NS_rtf::LN_LISTTABLE, pListTable);
+
+        writerfilter::Reference<Table>::Pointer_t pLFOTable = getLFOTable();
+
+        if (pLFOTable.get() != NULL)
+            rStream.table(NS_rtf::LN_LFOTABLE, pLFOTable);
     }
 
     WW8DocumentIterator::Pointer_t pIt = begin();

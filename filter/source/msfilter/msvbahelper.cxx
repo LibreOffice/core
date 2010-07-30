@@ -41,14 +41,25 @@
 
 using namespace ::com::sun::star;
 
+namespace ooo { namespace vba {
+
 const static rtl::OUString sUrlPart0 = rtl::OUString::createFromAscii( "vnd.sun.star.script:");
 const static rtl::OUString sUrlPart1 = rtl::OUString::createFromAscii( "?language=Basic&location=document");
-
-namespace ooo { namespace vba {
 
 String makeMacroURL( const String& sMacroName )
 {
     return sUrlPart0.concat( sMacroName ).concat( sUrlPart1 ) ;
+}
+
+::rtl::OUString extractMacroName( const ::rtl::OUString& rMacroUrl )
+{
+    if( (rMacroUrl.getLength() > sUrlPart0.getLength() + sUrlPart1.getLength()) &&
+        rMacroUrl.match( sUrlPart0 ) &&
+        rMacroUrl.match( sUrlPart1, rMacroUrl.getLength() - sUrlPart1.getLength() ) )
+    {
+        return rMacroUrl.copy( sUrlPart0.getLength(), rMacroUrl.getLength() - sUrlPart0.getLength() - sUrlPart1.getLength() );
+    }
+    return ::rtl::OUString();
 }
 
 SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
@@ -186,9 +197,15 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
     if ( !pShell )
         return aRes;
     aRes.SetMacroDocContext( pShell );
+
+    // the name may be enclosed in apostrophs
+    ::rtl::OUString sMacroUrl = MacroName;
+    sal_Int32 nMacroLen = MacroName.getLength();
+    if( (nMacroLen >= 2) && (MacroName[0] == '\'') && (MacroName[nMacroLen-1] == '\'') )
+        sMacroUrl = MacroName.copy( 1, nMacroLen - 2 );
+
     // parse the macro name
-    sal_Int32 nDocSepIndex = MacroName.indexOfAsciiL( "!", 1 );
-    String sMacroUrl = MacroName;
+    sal_Int32 nDocSepIndex = sMacroUrl.indexOf( '!' );
 
     String sContainer;
     String sModule;
@@ -201,8 +218,8 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
         // recursively
 
         // assume for now that the document name is *this* document
-        String sDocUrlOrPath = MacroName.copy( 0, nDocSepIndex );
-        sMacroUrl = MacroName.copy( nDocSepIndex + 1 );
+        String sDocUrlOrPath = sMacroUrl.copy( 0, nDocSepIndex );
+        sMacroUrl = sMacroUrl.copy( nDocSepIndex + 1 );
         OSL_TRACE("doc search, current shell is 0x%x", pShell );
         SfxObjectShell* pFoundShell = findShellForUrl( sDocUrlOrPath );
         OSL_TRACE("doc search, after find, found shell is 0x%x", pFoundShell );
@@ -215,7 +232,7 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
         // document is created from )
 
         // macro format = Container.Module.Procedure
-        parseMacro( MacroName, sContainer, sModule, sProcedure );
+        parseMacro( sMacroUrl, sContainer, sModule, sProcedure );
         uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY);
         uno::Reference< container::XNameContainer > xPrjNameCache;
         if ( xSF.is() )

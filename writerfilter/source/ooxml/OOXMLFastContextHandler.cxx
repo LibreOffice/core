@@ -153,6 +153,7 @@ OOXMLFastContextHandler::OOXMLFastContextHandler
 : cppu::WeakImplHelper1<com::sun::star::xml::sax::XFastContextHandler>(),
   mpParent(pContext),
   mId(0),
+  mnDefine(0),
   mnToken(OOXML_FAST_TOKENS_END),
   mpStream(NULL),
   mnTableDepth(0),
@@ -226,10 +227,6 @@ void SAL_CALL OOXMLFastContextHandler::startFastElement
     static char buffer[256];
     snprintf(buffer, sizeof(buffer), "%ld: startFastElement", mnInstanceNumber);
     logger("MEMORY", buffer);
-#endif
-
-#if DEBUG
-    clog << "Token: " << fastTokenToId(Element) << endl;
 #endif
     attributes(Attribs);
     lcl_startFastElement(Element, Attribs);
@@ -734,6 +731,7 @@ void OOXMLFastContextHandler::setLastParagraphInSection()
 #endif
 
     mpParserState->setLastParagraphInSection(true);
+    mpStream->markLastParagraphInSection( );
 }
 
 void OOXMLFastContextHandler::newProperty

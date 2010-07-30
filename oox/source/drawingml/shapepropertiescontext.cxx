@@ -74,7 +74,7 @@ Reference< XFastContextHandler > ShapePropertiesContext::createFastChildContext(
 
     // GeometryGroup
     case NMSP_DRAWINGML|XML_custGeom:   // custom geometry "CT_CustomGeometry2D"
-        xRet.set( new CustomShapeGeometryContext( *this, xAttribs, mrShape ) );
+        xRet.set( new CustomShapeGeometryContext( *this, xAttribs, *(mrShape.getCustomShapeProperties()) ) );
         break;
 
 

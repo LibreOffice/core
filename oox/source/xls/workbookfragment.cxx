@@ -105,6 +105,7 @@ ContextHandlerRef OoxWorkbookFragment::onCreateContext( sal_Int32 nElement, cons
                 case XLS_TOKEN( fileSharing ):          getWorkbookSettings().importFileSharing( rAttribs );    break;
                 case XLS_TOKEN( workbookPr ):           getWorkbookSettings().importWorkbookPr( rAttribs );     break;
                 case XLS_TOKEN( calcPr ):               getWorkbookSettings().importCalcPr( rAttribs );         break;
+                case XLS_TOKEN( oleSize ):              getViewSettings().importOleSize( rAttribs );            break;
             }
         break;
 
@@ -156,6 +157,7 @@ ContextHandlerRef OoxWorkbookFragment::onCreateRecordContext( sal_Int32 nRecId, 
                 case OOBIN_ID_FILESHARING:      getWorkbookSettings().importFileSharing( rStrm );   break;
                 case OOBIN_ID_WORKBOOKPR:       getWorkbookSettings().importWorkbookPr( rStrm );    break;
                 case OOBIN_ID_CALCPR:           getWorkbookSettings().importCalcPr( rStrm );        break;
+                case OOBIN_ID_OLESIZE:          getViewSettings().importOleSize( rStrm );           break;
                 case OOBIN_ID_DEFINEDNAME:      getDefinedNames().importDefinedName( rStrm );       break;
             }
         break;
@@ -565,6 +567,7 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
                     case BIFF5_ID_FONT:         rStyles.importFont( mrStrm );               break;
                     case BIFF4_ID_FORMAT:       rStyles.importFormat( mrStrm );             break;
                     case BIFF_ID_HIDEOBJ:       rWorkbookSett.importHideObj( mrStrm );      break;
+                    case BIFF_ID_OLESIZE:       rViewSett.importOleSize( mrStrm );          break;
                     case BIFF_ID_PALETTE:       rStyles.importPalette( mrStrm );            break;
                     case BIFF_ID_PIVOTCACHE:    rPivotCaches.importPivotCacheRef( mrStrm ); break;
                     case BIFF_ID_SHEET:         rWorksheets.importSheet( mrStrm );          break;
@@ -587,14 +590,15 @@ bool BiffWorkbookFragment::importGlobalsFragment( ISegmentProgressBar& rProgress
                     case BIFF5_ID_FONT:             rStyles.importFont( mrStrm );               break;
                     case BIFF4_ID_FORMAT:           rStyles.importFormat( mrStrm );             break;
                     case BIFF_ID_HIDEOBJ:           rWorkbookSett.importHideObj( mrStrm );      break;
-                    case BIFF_ID_VBAPROJECT:        bHasVbaProject = true;                      break;
-                    case BIFF_ID_VBAPROJECTEMPTY:   bEmptyVbaProject = true;                    break;
+                    case BIFF_ID_OLESIZE:           rViewSett.importOleSize( mrStrm );          break;
                     case BIFF_ID_PALETTE:           rStyles.importPalette( mrStrm );            break;
                     case BIFF_ID_PIVOTCACHE:        rPivotCaches.importPivotCacheRef( mrStrm ); break;
                     case BIFF_ID_SHEET:             rWorksheets.importSheet( mrStrm );          break;
                     case BIFF_ID_SST:               rSharedStrings.importSst( mrStrm );         break;
                     case BIFF_ID_STYLE:             rStyles.importStyle( mrStrm );              break;
                     case BIFF_ID_USESELFS:          rWorkbookSett.importUsesElfs( mrStrm );     break;
+                    case BIFF_ID_VBAPROJECT:        bHasVbaProject = true;                      break;
+                    case BIFF_ID_VBAPROJECTEMPTY:   bEmptyVbaProject = true;                    break;
                     case BIFF_ID_XCT:               bExtLinkRec = true;                         break;
                     case BIFF5_ID_XF:               rStyles.importXf( mrStrm );                 break;
                 }
