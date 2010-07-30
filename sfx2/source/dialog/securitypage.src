@@ -79,9 +79,9 @@ TabPage TP_DOCINFOSECURITY
         Pos = MAP_APPFONT( 12, 48 );
         Size = MAP_APPFONT( 236, 3 * RSC_CD_FIXEDTEXT_HEIGHT );
         Text [ en-US ] =
-                "Note: After a password has been set, the document will only open "
-                "with the password. Should you lose the password, there will be "
-                "no way to recover the document. Please also note that this password "
+                "Note: After a password has been set, the document will only open "\
+                "with the password. Should you lose the password, there will be "\
+                "no way to recover the document. Please also note that this password "\
                 "is case-sensitive.";
         WordBreak = TRUE;
     };
