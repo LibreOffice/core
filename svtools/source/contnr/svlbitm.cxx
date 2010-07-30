@@ -463,12 +463,12 @@ void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, Windo
     if ( i_pParent->IsNativeControlSupported( i_eType, PART_ENTIRE_CONTROL) )
     {
         ImplControlValue    aControlValue;
-        Region              aCtrlRegion( Rectangle( Point( 0, 0 ), io_rSize ) );
+        Rectangle           aCtrlRegion( Point( 0, 0 ), io_rSize );
         ControlState        nState = CTRL_STATE_ENABLED;
 
         aControlValue.setTristateVal( BUTTONVALUE_ON );
 
-        Region aNativeBounds, aNativeContent;
+        Rectangle aNativeBounds, aNativeContent;
         bool bNativeOK = i_pParent->GetNativeControlRegion( i_eType,
                                                             PART_ENTIRE_CONTROL,
                                                             aCtrlRegion,
@@ -479,7 +479,7 @@ void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, Windo
                                                             aNativeContent );
         if( bNativeOK )
         {
-            Size aContentSize( aNativeContent.GetBoundRect().GetSize() );
+            Size aContentSize( aNativeContent.GetSize() );
             // leave a little space around the box image (looks better
             if( aContentSize.Height() + 2 > io_rSize.Height() )
                 io_rSize.Height() = aContentSize.Height() + 2;
