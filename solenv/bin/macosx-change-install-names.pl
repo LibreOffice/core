@@ -45,7 +45,7 @@ sub action($$$)
          'shl/OOO/OOO' => '@loader_path',
          'shl/OXT/URELIB' => '@executable_path/urelibs',
          'shl/BOXT/URELIB' => '@executable_path/urelibs',
-         'shl/BOXT/OOO' => '@loader_path/../../../../../../basis-link/program',
+         'shl/BOXT/OOO' => '@loader_path/../../../basis-link/program',
          'shl/NONE/URELIB' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/OOO' => '@__VIA_LIBRARY_PATH__',
          'shl/NONE/NONE' => '@__VIA_LIBRARY_PATH__');
