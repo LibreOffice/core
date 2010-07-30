@@ -4005,10 +4005,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             rContext->Insert( PROP_NUMBERING_LEVEL, true, uno::makeAny(pStyleSheetProperties->GetListLevel()), false);
     }
     break;
-    case NS_ooxml::LN_CT_PPrBase_mirrorIndents:
-    case NS_ooxml::LN_CT_PPrBase_textDirection:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-        break;
     case NS_ooxml::LN_EG_RPrBase_rStyle:
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
@@ -4228,18 +4224,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     case NS_ooxml::LN_EG_SectPrContents_vAlign:
     case NS_ooxml::LN_EG_RPrBase_fitText:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
-    break;
-    case NS_ooxml::LN_ffdata:
-    {
-        writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
-        if (pProperties.get() != NULL)
-        {
-            FFDataHandler::Pointer_t pFFDataHandler(new FFDataHandler());
-
-            pProperties->resolve(*pFFDataHandler);
-            m_pImpl->SetFieldFFData(pFFDataHandler);
-        }
-    }
     break;
     case NS_ooxml::LN_ffdata:
     {

@@ -627,7 +627,6 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->attribute("isTextAppend", xTextAppend.is());
-    dmapper_logger->attribute("isIgnor", m_TableManager.isIgnore());
 #endif
 
     if(xTextAppend.is() && ! getTableManager( ).isIgnore())
