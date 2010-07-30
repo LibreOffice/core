@@ -1222,7 +1222,7 @@ void RtfAttributeOutput::NumberingDefinition( USHORT nId, const SwNumRule &/*rRu
     m_rExport.OutULong(nId);
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_LISTOVERRIDECOUNT << '0';
     m_rExport.Strm() << OOO_STRING_SVTOOLS_RTF_LS;
-    m_rExport.OutULong(nId-1) << '}';
+    m_rExport.OutULong(nId) << '}';
 }
 
 void RtfAttributeOutput::StartAbstractNumbering( USHORT nId )
@@ -2413,7 +2413,7 @@ void RtfAttributeOutput::ParaNumRule_Impl( const SwTxtNode* pTxtNd, sal_Int32 nL
                     else
                         m_aStyles.append((sal_Int32)nLvl);
                     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_LS);
-                    m_aStyles.append((sal_Int32)m_rExport.GetId(*pRule));
+                    m_aStyles.append((sal_Int32)m_rExport.GetId(*pRule)+1);
                     m_aStyles.append(' ');
                 }
                 else
