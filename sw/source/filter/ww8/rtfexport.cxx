@@ -788,7 +788,7 @@ void RtfExport::OutUnicode(const sal_Char *pToken, const String &rContent)
     if (rContent.Len())
     {
         Strm() << '{' << pToken << ' ';
-        Strm() << OUStringToOString( OUString( rContent ), eCurrentEncoding ).getStr();
+        Strm() << OutString( rContent, eCurrentEncoding ).getStr();
         Strm() << '}';
     }
 }
