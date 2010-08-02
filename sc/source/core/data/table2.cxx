@@ -167,7 +167,7 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
                 else
                 {
                     maRowManualBreaks.erase( (++rit).base());
-                    maRowManualBreaks.insert( nRow + nSize);
+                    maRowManualBreaks.insert( static_cast<SCROW>( nRow + nSize));
                 }
             }
         }
@@ -204,13 +204,13 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
 
         if (!maRowManualBreaks.empty())
         {
-            std::set<SCROW>::iterator it = maRowManualBreaks.upper_bound( nStartRow + nSize - 1);
+            std::set<SCROW>::iterator it = maRowManualBreaks.upper_bound( static_cast<SCROW>( nStartRow + nSize - 1));
             maRowManualBreaks.erase( maRowManualBreaks.lower_bound( nStartRow), it);
             while (it != maRowManualBreaks.end())
             {
                 SCROW nRow = *it;
                 maRowManualBreaks.erase( it++);
-                maRowManualBreaks.insert( nRow - nSize);
+                maRowManualBreaks.insert( static_cast<SCROW>( nRow - nSize));
             }
         }
     }
@@ -273,7 +273,7 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
                 else
                 {
                     maColManualBreaks.erase( (++rit).base());
-                    maColManualBreaks.insert( nCol + nSize);
+                    maColManualBreaks.insert( static_cast<SCCOL>( nCol + nSize));
                 }
             }
         }
@@ -338,13 +338,13 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
 
         if (!maColManualBreaks.empty())
         {
-            std::set<SCCOL>::iterator it = maColManualBreaks.upper_bound( nStartCol + nSize - 1);
+            std::set<SCCOL>::iterator it = maColManualBreaks.upper_bound( static_cast<SCCOL>( nStartCol + nSize - 1));
             maColManualBreaks.erase( maColManualBreaks.lower_bound( nStartCol), it);
             while (it != maColManualBreaks.end())
             {
                 SCCOL nCol = *it;
                 maColManualBreaks.erase( it++);
-                maColManualBreaks.insert( nCol - nSize);
+                maColManualBreaks.insert( static_cast<SCCOL>( nCol - nSize));
             }
         }
     }
