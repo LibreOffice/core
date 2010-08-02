@@ -2821,7 +2821,7 @@ sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
 class GraphiteWinLayout : public WinLayout
 {
 private:
-    mutable gr::WinFont   mpFont;
+    mutable GraphiteWinFont mpFont;
     grutils::GrFeatureParser * mpFeatures;
     mutable GraphiteLayoutWinImpl maImpl;
 public:
