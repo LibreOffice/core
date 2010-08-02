@@ -592,7 +592,7 @@ ScUndoDeleteMulti::ScUndoDeleteMulti( ScDocShell* pNewDocShell,
 
 __EXPORT ScUndoDeleteMulti::~ScUndoDeleteMulti()
 {
-    delete pRanges;
+    delete [] pRanges;
 }
 
 String __EXPORT ScUndoDeleteMulti::GetComment() const

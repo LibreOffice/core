@@ -1546,6 +1546,54 @@ void ScDocument::ResetEmbedded()
     aEmbedRange = ScRange();
 }
 
+
+/** Similar to ScViewData::AddPixelsWhile(), but add height twips and only
+    while result is less than nStopTwips.
+    @return TRUE if advanced at least one row.
+ */
+bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEndRow, const ScTable * pTable )
+{
+    SCROW nRow = rPosY;
+    bool bAdded = false;
+    bool bStop = false;
+    while (rTwips < nStopTwips && nRow <= nEndRow && !bStop)
+    {
+        SCROW nHeightEndRow;
+        USHORT nHeight = pTable->GetRowHeight( nRow, NULL, &nHeightEndRow);
+        if (nHeightEndRow > nEndRow)
+            nHeightEndRow = nEndRow;
+        if (!nHeight)
+            nRow = nHeightEndRow + 1;
+        else
+        {
+            SCROW nRows = nHeightEndRow - nRow + 1;
+            sal_Int64 nAdd = static_cast<sal_Int64>(nHeight) * nRows;
+            if (nAdd + rTwips >= nStopTwips)
+            {
+                sal_Int64 nDiff = nAdd + rTwips - nStopTwips;
+                nRows -= static_cast<SCROW>(nDiff / nHeight);
+                nAdd = nHeight * nRows;
+                // We're looking for a value that satisfies loop condition.
+                if (nAdd + rTwips >= nStopTwips)
+                {
+                    --nRows;
+                    nAdd -= nHeight;
+                }
+                bStop = true;
+            }
+            rTwips += static_cast<long>(nAdd);
+            nRow += nRows;
+        }
+    }
+    if (nRow > rPosY)
+    {
+        --nRow;
+        bAdded = true;
+    }
+    rPosY = nRow;
+    return bAdded;
+}
+
 ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect )
 {
     ScTable* pTable = pTab[nTab];
@@ -1602,43 +1650,16 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect )
     nTwips = (long) (aPosRect.Top() / HMM_PER_TWIPS);
 
     SCROW nY1 = 0;
-    bEnd = FALSE;
-    for (SCROW i = nY1; i <= MAXROW && !bEnd; ++i)
-    {
-        if (pTable->RowHidden(i))
-            continue;
-
-        nY1 = i;
-        nAdd = static_cast<long>(pTable->GetRowHeight(i));
-        if (nSize+nAdd <= nTwips+1 && nY1<MAXROW)
-        {
-            nSize += nAdd;
-            ++nY1;
-        }
-        else
-            bEnd = TRUE;
-    }
-    if (!bEnd)
-        nY1 = MAXROW;   // all hidden down to the bottom
+    // Was if(nSize+nAdd<=nTwips+1) inside loop => if(nSize+nAdd<nTwips+2)
+    if (lcl_AddTwipsWhile( nSize, nTwips+2, nY1, MAXROW, pTable) && nY1 < MAXROW)
+        ++nY1;  // original loop ended on last matched +1 unless that was MAXROW
 
     nTwips = (long) (aPosRect.Bottom() / HMM_PER_TWIPS);
 
     SCROW nY2 = nY1;
-    bEnd = FALSE;
-    for (SCROW i = nY2; i <= MAXROW && !bEnd; ++i)
-    {
-        nY2 = i;
-        nAdd = static_cast<long>(pTable->GetRowHeight(i));
-        if (nSize+nAdd < nTwips && nY2<MAXROW)
-        {
-            nSize += nAdd;
-            ++nY2;
-        }
-        else
-            bEnd = TRUE;
-    }
-    if (!bEnd)
-        nY2 = MAXROW;   // all hidden down to the bottom
+    // Was if(nSize+nAdd<nTwips) inside loop => if(nSize+nAdd<nTwips)
+    if (lcl_AddTwipsWhile( nSize, nTwips, nY2, MAXROW, pTable) && nY2 < MAXROW)
+        ++nY2;  // original loop ended on last matched +1 unless that was MAXROW
 
     return ScRange( nX1,nY1,nTab, nX2,nY2,nTab );
 }

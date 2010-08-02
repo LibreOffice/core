@@ -286,6 +286,7 @@ public:
     virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields);
     sal_Int32 GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField);
     void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nField, const sal_Int32 nStringIndex);
+    void AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nStartField, const sal_Int32 nStringIndex, const sal_Int32 nEndField);
     virtual rtl::OUString* GetStyleName(const sal_Int32 nTable, const sal_Int32 nField);
 };
 
