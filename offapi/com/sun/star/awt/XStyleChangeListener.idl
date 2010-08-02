@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,29 +23,32 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_color_idl__
-#define __com_sun_star_util_color_idl__
 
+#ifndef __com_sun_star_awt_XStyleChangeListener_idl__
+#define __com_sun_star_awt_XStyleChangeListener_idl__
 
-//=============================================================================
+#include <com/sun/star/lang/XEventListener.idl>
 
-module com { module sun { module star { module util {
+//==================================================================================================================
 
-//=============================================================================
-/** describes an RGB color value with an optional alpha channel.
+module com { module sun { module star { module awt {
 
-    <p>The byte order is from high to low:
-    <ol>alpha channel
-    <li>red</li>
-    <li>green</li>
-    <li>blue</li>
-    </ol></p>
-*/
-published typedef long Color;
+//==================================================================================================================
 
-//=============================================================================
+/** to be implemented by components which wish to be notified about changes in the style of a component
+
+    @see XStyleSettings
+ */
+interface XStyleChangeListener : ::com::sun::star::lang::XEventListener
+{
+    /// called when the style settings of the observed component changed
+    void    styleSettingsChanged( [in] com::sun::star::lang::EventObject Event );
+};
+
+//==================================================================================================================
 
 }; }; }; };
 
-#endif
+//==================================================================================================================
 
+#endif
