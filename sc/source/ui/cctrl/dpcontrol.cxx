@@ -959,7 +959,7 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     mnCurTabStop(0),
     mpExtendedData(NULL),
     mpOKAction(NULL),
-    maWndSize(160, 330),
+    maWndSize(240, 330),
     mePrevToggleAllState(STATE_DONTKNOW)
 {
     maTabStopCtrls.reserve(7);
@@ -1032,7 +1032,7 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
     const sal_uInt16 nMenuHeight = 60;
     const sal_uInt16 nSingleItemBtnAreaHeight = 32; // height of the middle area below the list box where the single-action buttons are.
     const sal_uInt16 nBottomBtnAreaHeight = 50;     // height of the bottom area where the OK and Cancel buttons are.
-    const sal_uInt16 nBtnWidth = 60;
+    const sal_uInt16 nBtnWidth = 90;
     const sal_uInt16 nLabelHeight = static_cast< sal_uInt16 >( getLabelFont().GetHeight() );
     const sal_uInt16 nBtnHeight = nLabelHeight*2;
     const sal_uInt16 nBottomMargin = 10;
@@ -1089,7 +1089,7 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
         {
             long h = 26;
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.X() += 75;
+            rPos.X() += 150;
             rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
             rSize = Size(h, h);
         }
@@ -1098,7 +1098,7 @@ void ScDPFieldPopupWindow::getSectionPosSize(Point& rPos, Size& rSize, SectionTy
         {
             long h = 26;
             rPos = Point(nListBoxMargin, nSingleBtnAreaY);
-            rPos.X() += 75 + h + 10;
+            rPos.X() += 150 + h + 10;
             rPos.Y() += (nSingleItemBtnAreaHeight - h)/2;
             rSize = Size(h, h);
         }
