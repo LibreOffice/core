@@ -28,15 +28,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include "saldisp.hxx"
+#include "saldata.hxx"
+
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/time.h>
+
 #include "tools/prex.h"
 #include <X11/Xatom.h>
 #include <X11/keysym.h>
-#include <X11/Xlib.h>
-#include <X11/X.h>
 #include <X11/Xutil.h>
 #include "tools/postx.h"
 #if defined(LINUX) || defined(NETBSD) || defined (FREEBSD)
@@ -3259,6 +3261,8 @@ void SelectionManager::startDrag(
         return;
     }
 
+    SalFrame* pCaptureFrame = NULL;
+
     {
         ClearableMutexGuard aGuard(m_aMutex);
 
@@ -3327,6 +3331,32 @@ void SelectionManager::startDrag(
                           None,
                           None,
                           CurrentTime );
+        /* if we could not grab the pointer here, there is a chance
+           that the pointer is grabbed by the other vcl display (the main loop)
+           so let's break that grab an reset it later
+
+           remark: this whole code should really be molten into normal vcl so only
+           one display is used ....
+        */
+        if( nPointerGrabSuccess != GrabSuccess )
+        {
+            vos::IMutex& rSolarMutex( Application::GetSolarMutex() );
+            if( rSolarMutex.tryToAcquire() )
+            {
+                pCaptureFrame = GetX11SalData()->GetDisplay()->GetCaptureFrame();
+                if( pCaptureFrame )
+                {
+                    GetX11SalData()->GetDisplay()->CaptureMouse( NULL );
+                    nPointerGrabSuccess =
+                                XGrabPointer( m_pDisplay, it->second.m_aRootWindow, True,
+                                              DRAG_EVENT_MASK,
+                                              GrabModeAsync, GrabModeAsync,
+                                              None,
+                                              None,
+                                              CurrentTime );
+                }
+            }
+        }
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "%d\n", nPointerGrabSuccess );
 #endif
@@ -3349,6 +3379,16 @@ void SelectionManager::startDrag(
             aGuard.clear();
             if( listener.is() )
                 listener->dragDropEnd( aDragFailedEvent );
+            if( pCaptureFrame )
+            {
+                vos::IMutex& rSolarMutex( Application::GetSolarMutex() );
+                if( rSolarMutex.tryToAcquire() )
+                    GetX11SalData()->GetDisplay()->CaptureMouse( pCaptureFrame );
+#if OSL_DEBUG_LEVEL > 0
+                else
+                    OSL_ENSURE( 0, "failed to acquire SolarMutex to reset capture frame" );
+#endif
+            }
             return;
         }
 
@@ -3427,6 +3467,17 @@ void SelectionManager::startDrag(
         XUngrabPointer( m_pDisplay, CurrentTime );
         XUngrabKeyboard( m_pDisplay, CurrentTime );
         XFlush( m_pDisplay );
+
+        if( pCaptureFrame )
+        {
+            vos::IMutex& rSolarMutex( Application::GetSolarMutex() );
+            if( rSolarMutex.tryToAcquire() )
+                GetX11SalData()->GetDisplay()->CaptureMouse( pCaptureFrame );
+#if OSL_DEBUG_LEVEL > 0
+            else
+                OSL_ENSURE( 0, "failed to acquire SolarMutex to reset capture frame" );
+#endif
+        }
 
         m_aDragRunning.reset();
 
