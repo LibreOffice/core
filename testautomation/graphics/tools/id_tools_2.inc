@@ -181,56 +181,6 @@ sub sPrintCheckOrder (optional bcheck as boolean)
     Printlog "-----------------------------------"
 end sub
 
-'--------------------------- Tests for Writer ----------------------------------
-sub writertest
-
-    try
-        call Make_And_Check_Formatted_Text_Line_From_Application
-    catch
-        warnlog "Something went wrong with testing writertest"
-    endcatch
-
-    try
-        call Make_Rectangle_From_Application
-        call Full_test_Draw
-        call Full_test_Impress
-        call Full_test_Writer
-        call Full_test_Calc
-    catch
-        warnlog "something wrong with testing writertest"
-    endcatch
-end sub ' big one
-
-'---------------------------- Tests for Calc -----------------------------------
-sub calctest
-
-    try
-        call Make_Rectangle_From_Application
-        call Full_test_Draw
-        call Full_test_Impress
-        call Full_test_Writer
-        call Full_test_Calc
-    catch
-        warnlog "something wrong with calctest"
-    endcatch
-    printlog "currently no specific tests from Calc"
-end sub
-
-'-------------------------------------------------------------------------------
-sub tClipboardFromDrawTest
-
-    EnableQAErrors = false
-    FromApp2 = gApplication
-    printlog "gApplication = " + gApplication
-
-    select case( gApplication )
-    case "WRITER" : call writertest()
-    case "CALC"   : call calctest()
-    case else     : warnlog( "Unsupported gApplication provided: " & gApplication )
-    end select
-    
-end sub
-
 '-------------------------------------------------------------------------------
 sub Select_Copy
 
