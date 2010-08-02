@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : oliver.craemer@sun.com
+'* Owner : oliver.craemer@oracle.com
 '*
 '* short description : Resource-test for the Chart Data Dialogue.
 '*

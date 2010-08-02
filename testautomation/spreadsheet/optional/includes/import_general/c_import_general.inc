@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '**                                                                
-'** owner : oliver.craemer@sun.com                                  
+'** owner : oliver.craemer@oracle.com                                  
 '**                                                                
 '** short description : Imports every Document from a given path (gsSourcePath variable)     
 '**                                                                
