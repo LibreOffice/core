@@ -677,7 +677,7 @@ public:
         return hash;
     };
 protected:
-    virtual void UniqueCacheInfo(std::wstring & stuFace, bool & fBold, bool & fItalic)
+    virtual void UniqueCacheInfo( ext_std::wstring& stuFace, bool& fBold, bool& fItalic )
     {
 #ifdef WIN32
         dynamic_cast<GraphiteWinFont&>(mrRealFont).UniqueCacheInfo(stuFace, fBold, fItalic);
