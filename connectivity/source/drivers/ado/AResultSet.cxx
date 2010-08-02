@@ -692,6 +692,10 @@ void SAL_CALL OResultSet::cancelRowUpdates(  ) throw(SQLException, RuntimeExcept
 
 void SAL_CALL OResultSet::moveToInsertRow(  ) throw(SQLException, RuntimeException)
 {
+ //   ::osl::MutexGuard aGuard( m_aMutex );
+    //checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
+ //   if ( getResultSetConcurrency() == ResultSetConcurrency::READ_ONLY )
+ //       throw SQLException();
 }
 // -------------------------------------------------------------------------
 
@@ -977,7 +981,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& ro
 sal_Int32 OResultSet::getResultSetConcurrency() const
     throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    sal_Int32 nValue=0;
+    sal_Int32 nValue=ResultSetConcurrency::READ_ONLY;
     LockTypeEnum eRet;
     if(!SUCCEEDED(m_pRecordSet->get_LockType(&eRet)))
     {
