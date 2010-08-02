@@ -3133,17 +3133,17 @@ long OutputDevice::ImplGetTextWidth( const SalLayout& rSalLayout ) const
 // -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
-                                     long nX, long nY, long nWidth, long nHeight )
+                                     long nDistX, long nDistY, long nWidth, long nHeight )
 {
+    long nX = nDistX;
+    long nY = nDistY;
+
     short nOrientation = mpFontEntry->mnOrientation;
     if ( nOrientation )
     {
         // Rotate rect without rounding problems for 90 degree rotations
         if ( !(nOrientation % 900) )
         {
-            nX -= nBaseX;
-            nY -= nBaseY;
-
             if ( nOrientation == 900 )
             {
                 long nTemp = nX;
@@ -3171,12 +3171,11 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
                 nHeight = nTemp;
                 nX -= nWidth;
             }
-
-            nX += nBaseX;
-            nY += nBaseY;
         }
         else
         {
+            nX += nBaseX;
+            nY += nBaseY;
             // inflate because polygons are drawn smaller
             Rectangle aRect( Point( nX, nY ), Size( nWidth+1, nHeight+1 ) );
             Polygon   aPoly( aRect );
@@ -3186,6 +3185,8 @@ void OutputDevice::ImplDrawTextRect( long nBaseX, long nBaseY,
         }
     }
 
+    nX += nBaseX;
+    nY += nBaseY;
     mpGraphics->DrawRect( nX, nY, nWidth, nHeight, this );
 }
 
@@ -3206,7 +3207,7 @@ void OutputDevice::ImplDrawTextBackground( const SalLayout& rSalLayout )
     mpGraphics->SetFillColor( ImplColorToSal( GetTextFillColor() ) );
     mbInitFillColor = TRUE;
 
-    ImplDrawTextRect( nX, nY, nX, nY-mpFontEntry->maMetric.mnAscent-mnEmphasisAscent,
+    ImplDrawTextRect( nX, nY, 0, -(mpFontEntry->maMetric.mnAscent + mnEmphasisAscent),
                       nWidth,
                       mpFontEntry->mnLineHeight+mnEmphasisAscent+mnEmphasisDescent );
 }
@@ -3491,13 +3492,16 @@ static void ImplDrawWavePixel( long nOriginX, long nOriginY,
 // -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
-                                     long nStartX, long nStartY,
+                                     long nDistX, long nDistY,
                                      long nWidth, long nHeight,
                                      long nLineWidth, short nOrientation,
                                      const Color& rColor )
 {
     if ( !nHeight )
         return;
+
+    long nStartX = nBaseX + nDistX;
+    long nStartY = nBaseY + nDistY;
 
     // Bei Hoehe von 1 Pixel reicht es, eine Linie auszugeben
     if ( (nLineWidth == 1) && (nHeight == 1) )
@@ -3513,7 +3517,6 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
             ImplRotatePos( nBaseX, nBaseY, nEndX, nEndY, nOrientation );
         }
         mpGraphics->DrawLine( nStartX, nStartY, nEndX, nEndY, this );
-
     }
     else
     {
@@ -3613,7 +3616,7 @@ void OutputDevice::ImplDrawWaveLine( long nBaseX, long nBaseY,
 // -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
-                                         long nX, long nY, long nWidth,
+                                         long nDistX, long nDistY, long nWidth,
                                          FontUnderline eTextLine,
                                          Color aColor,
                                          BOOL bIsAbove )
@@ -3639,7 +3642,7 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
         nLineWidth = 1;
     if ( eTextLine == UNDERLINE_BOLDWAVE )
         nLineWidth *= 2;
-    nLinePos += nY - (nLineHeight / 2);
+    nLinePos += nDistY - (nLineHeight / 2);
     long nLineWidthHeight = ((nLineWidth*mnDPIX)+(mnDPIY/2))/mnDPIY;
     if ( eTextLine == UNDERLINE_DOUBLEWAVE )
     {
@@ -3660,16 +3663,16 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
             nLineDY2 = 1;
 
         nLinePos -= nLineWidthHeight-nLineDY2;
-        ImplDrawWaveLine( nBaseX, nBaseY, nX, nLinePos, nWidth, nLineHeight,
+        ImplDrawWaveLine( nBaseX, nBaseY, nDistX, nLinePos, nWidth, nLineHeight,
                           nLineWidth, mpFontEntry->mnOrientation, aColor );
         nLinePos += nLineWidthHeight+nLineDY;
-        ImplDrawWaveLine( nBaseX, nBaseY, nX, nLinePos, nWidth, nLineHeight,
+        ImplDrawWaveLine( nBaseX, nBaseY, nDistX, nLinePos, nWidth, nLineHeight,
                           nLineWidth, mpFontEntry->mnOrientation, aColor );
     }
     else
     {
         nLinePos -= nLineWidthHeight/2;
-        ImplDrawWaveLine( nBaseX, nBaseY, nX, nLinePos, nWidth, nLineHeight,
+        ImplDrawWaveLine( nBaseX, nBaseY, nDistX, nLinePos, nWidth, nLineHeight,
                           nLineWidth, mpFontEntry->mnOrientation, aColor );
     }
 }
@@ -3677,7 +3680,7 @@ void OutputDevice::ImplDrawWaveTextLine( long nBaseX, long nBaseY,
 // -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
-                                             long nX, long nY, long nWidth,
+                                             long nDistX, long nDistY, long nWidth,
                                              FontUnderline eTextLine,
                                              Color aColor,
                                              BOOL bIsAbove )
@@ -3686,6 +3689,8 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
     long            nLineHeight = 0;
     long            nLinePos  = 0;
     long            nLinePos2 = 0;
+
+    const long nY = nDistY;
 
     if ( eTextLine > UNDERLINE_LAST )
         eTextLine = UNDERLINE_SINGLE;
@@ -3754,7 +3759,7 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
         mpGraphics->SetFillColor( ImplColorToSal( aColor ) );
         mbInitFillColor = TRUE;
 
-        long nLeft = nX;
+        long nLeft = nDistX;
 
         switch ( eTextLine )
         {
@@ -3907,7 +3912,7 @@ void OutputDevice::ImplDrawStraightTextLine( long nBaseX, long nBaseY,
 // -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
-                                          long nX, long nY, long nWidth,
+                                          long nDistX, long nDistY, long nWidth,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
@@ -3915,6 +3920,8 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
     long            nLineHeight = 0;
     long            nLinePos  = 0;
     long            nLinePos2 = 0;
+
+    long nY = nDistY;
 
     if ( eStrikeout > STRIKEOUT_LAST )
         eStrikeout = STRIKEOUT_SINGLE;
@@ -3948,7 +3955,7 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
         mpGraphics->SetFillColor( ImplColorToSal( aColor ) );
         mbInitFillColor = TRUE;
 
-        long nLeft = nX;
+        const long& nLeft = nDistX;
 
         switch ( eStrikeout )
         {
@@ -3969,7 +3976,7 @@ void OutputDevice::ImplDrawStrikeoutLine( long nBaseX, long nBaseY,
 // -----------------------------------------------------------------------
 
 void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
-                                          long nX, long nY, long nWidth,
+                                          long nDistX, long nDistY, long nWidth,
                                           FontStrikeout eStrikeout,
                                           Color aColor )
 {
@@ -4003,12 +4010,12 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 
     // calculate acceptable strikeout length
     // allow the strikeout to be one pixel larger than the text it strikes out
-    long nMaxWidth = nStrikeoutWidth / 2;
+    long nMaxWidth = nStrikeoutWidth * 3 / 4;
     if ( nMaxWidth < 2 )
         nMaxWidth = 2;
     nMaxWidth += nWidth + 1;
 
-    int nStrikeStrLen = (nMaxWidth + nStrikeoutWidth - 1) / nStrikeoutWidth;
+    int nStrikeStrLen = (nMaxWidth - 1) / nStrikeoutWidth;
     // if the text width is smaller than the strikeout text, then do not
     // strike out at all. This case requires user interaction, e.g. adding
     // a space to the text
@@ -4023,7 +4030,9 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     const String aStrikeoutText( aChars, xub_StrLen(nStrikeStrLen) );
 
     if( mpFontEntry->mnOrientation )
-        ImplRotatePos( nBaseX, nBaseY, nX, nY, mpFontEntry->mnOrientation );
+        ImplRotatePos( 0, 0, nDistX, nDistY, mpFontEntry->mnOrientation );
+    nBaseX += nDistX;
+    nBaseY += nDistY;
 
     // strikeout text has to be left aligned
     ULONG nOrigTLM = mnTextLayoutMode;
@@ -4039,7 +4048,7 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
     SetTextColor( aColor );
     ImplInitTextColor();
 
-    pLayout->DrawBase() = Point( nX+mnTextOffX, nY+mnTextOffY );
+    pLayout->DrawBase() = Point( nBaseX+mnTextOffX, nBaseY+mnTextOffY );
     pLayout->DrawText( *mpGraphics );
     pLayout->Release();
 
@@ -4049,8 +4058,8 @@ void OutputDevice::ImplDrawStrikeoutChar( long nBaseX, long nBaseY,
 
 // -----------------------------------------------------------------------
 
-void OutputDevice::ImplDrawTextLine( long nBaseX,
-                                     long nX, long nY, long nWidth,
+void OutputDevice::ImplDrawTextLine( long nX, long nY,
+                                     long nDistX, long nWidth,
                                      FontStrikeout eStrikeout,
                                      FontUnderline eUnderline,
                                      FontUnderline eOverline,
@@ -4069,7 +4078,7 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
     // TODO: fix rotated text
     if ( IsRTLEnabled() )
         // --- RTL --- mirror at basex
-        nX = nBaseX - nWidth - (nX - nBaseX - 1);
+        nX = nDistX - nWidth - (nX - nDistX - 1);
 
     if ( !IsTextLineColor() )
         aUnderlineColor = GetTextColor();
@@ -4082,7 +4091,7 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
          (eUnderline == UNDERLINE_DOUBLEWAVE) ||
          (eUnderline == UNDERLINE_BOLDWAVE) )
     {
-        ImplDrawWaveTextLine( nBaseX, nY, nX, nY, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
+        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
         bUnderlineDone = TRUE;
     }
     if ( (eOverline == UNDERLINE_SMALLWAVE) ||
@@ -4090,25 +4099,25 @@ void OutputDevice::ImplDrawTextLine( long nBaseX,
          (eOverline == UNDERLINE_DOUBLEWAVE) ||
          (eOverline == UNDERLINE_BOLDWAVE) )
     {
-        ImplDrawWaveTextLine( nBaseX, nY, nX, nY, nWidth, eOverline, aOverlineColor, TRUE );
+        ImplDrawWaveTextLine( nX, nY, nDistX, 0, nWidth, eOverline, aOverlineColor, TRUE );
         bOverlineDone = TRUE;
     }
 
     if ( (eStrikeout == STRIKEOUT_SLASH) ||
          (eStrikeout == STRIKEOUT_X) )
     {
-        ImplDrawStrikeoutChar( nBaseX, nY, nX, nY, nWidth, eStrikeout, aStrikeoutColor );
+        ImplDrawStrikeoutChar( nX, nY, nDistX, 0, nWidth, eStrikeout, aStrikeoutColor );
         bStrikeoutDone = TRUE;
     }
 
     if ( !bUnderlineDone )
-        ImplDrawStraightTextLine( nBaseX, nY, nX, nY, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
+        ImplDrawStraightTextLine( nX, nY, nDistX, 0, nWidth, eUnderline, aUnderlineColor, bUnderlineAbove );
 
     if ( !bOverlineDone )
-        ImplDrawStraightTextLine( nBaseX, nY, nX, nY, nWidth, eOverline, aOverlineColor, TRUE );
+        ImplDrawStraightTextLine( nX, nY, nDistX, 0, nWidth, eOverline, aOverlineColor, TRUE );
 
     if ( !bStrikeoutDone )
-        ImplDrawStrikeoutLine( nBaseX, nY, nX, nY, nWidth, eStrikeout, aStrikeoutColor );
+        ImplDrawStrikeoutLine( nX, nY, nDistX, 0, nWidth, eStrikeout, aStrikeoutColor );
 }
 
 // -----------------------------------------------------------------------
@@ -4130,14 +4139,16 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
             {
                 if( !nWidth )
                 {
-                    aStartPt = aPos;//rSalLayout.DrawBase() - (aPos - rSalLayout.DrawOffset());
+                    // TODO: keep both base point
+                    //   and relative distance (as projection to baseline)
+                    aStartPt = aPos;
                 }
 
                 nWidth += nAdvance;
             }
             else if( nWidth > 0 )
             {
-                ImplDrawTextLine( rSalLayout.DrawBase().X(), aStartPt.X(), aStartPt.Y(), nWidth,
+                ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), 0, nWidth,
                     eStrikeout, eUnderline, eOverline, bUnderlineAbove );
                 nWidth = 0;
             }
@@ -4145,7 +4156,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
 
         if( nWidth > 0 )
         {
-            ImplDrawTextLine( rSalLayout.DrawBase().X(), aStartPt.X(), aStartPt.Y(), nWidth,
+            ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), 0, nWidth,
                 eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }
     }
@@ -4153,7 +4164,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
     {
         Point aStartPt = rSalLayout.GetDrawPosition();
         int nWidth = rSalLayout.GetTextWidth() / rSalLayout.GetUnitsPerPixel();
-        ImplDrawTextLine( rSalLayout.DrawBase().X(), aStartPt.X(), aStartPt.Y(), nWidth,
+        ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), 0, nWidth,
             eStrikeout, eUnderline, eOverline, bUnderlineAbove );
     }
 }
@@ -4172,7 +4183,7 @@ void OutputDevice::ImplDrawMnemonicLine( long nX, long nY, long nWidth )
         nX = nBaseX - nWidth - (nX - nBaseX - 1);
     }
 
-    ImplDrawTextLine( nBaseX, nX, nY, nWidth, STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE, FALSE );
+    ImplDrawTextLine( nX, nY, 0, nWidth, STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE, FALSE );
 }
 
 // -----------------------------------------------------------------------
@@ -5420,7 +5431,7 @@ void OutputDevice::DrawTextLine( const Point& rPos, long nWidth,
     Point aPos = ImplLogicToDevicePixel( rPos );
     nWidth = ImplLogicWidthToDevicePixel( nWidth );
     aPos += Point( mnTextOffX, mnTextOffY );
-    ImplDrawTextLine( aPos.X(), aPos.X(), aPos.Y(), nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
+    ImplDrawTextLine( aPos.X(), aPos.X(), 0, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
 
     if( mpAlphaVDev )
         mpAlphaVDev->DrawTextLine( rPos, nWidth, eStrikeout, eUnderline, eOverline, bUnderlineAbove );
@@ -5497,7 +5508,7 @@ void OutputDevice::DrawWaveLine( const Point& rStartPos, const Point& rEndPos,
      if( nWaveHeight > pFontEntry->maMetric.mnWUnderlineSize )
          nWaveHeight = pFontEntry->maMetric.mnWUnderlineSize;
 
-     ImplDrawWaveLine( nStartX, nStartY, nStartX, nStartY,
+     ImplDrawWaveLine( nStartX, nStartY, 0, 0,
                       nEndX-nStartX, nWaveHeight, 1,
                       nOrientation, GetLineColor() );
     if( mpAlphaVDev )
