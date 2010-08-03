@@ -224,6 +224,42 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
     return TRUE;
 }
 
+static void ImplUpdateSeparatorString( String& io_rText,
+                                       const String& rOldDecSep, const String& rNewDecSep,
+                                       const String& rOldThSep, const String& rNewThSep )
+{
+    rtl::OUStringBuffer aBuf( io_rText.Len() );
+    xub_StrLen nIndexDec = 0, nIndexTh = 0, nIndex = 0;
+
+    const sal_Unicode* pBuffer = io_rText.GetBuffer();
+    while( nIndex != STRING_NOTFOUND )
+    {
+        nIndexDec = io_rText.Search( rOldDecSep, nIndex );
+        nIndexTh = io_rText.Search( rOldThSep, nIndex );
+        if(   (nIndexTh != STRING_NOTFOUND && nIndexDec != STRING_NOTFOUND && nIndexTh < nIndexDec )
+           || (nIndexTh != STRING_NOTFOUND && nIndexDec == STRING_NOTFOUND)
+           )
+        {
+            aBuf.append( pBuffer + nIndex, nIndexTh - nIndex );
+            aBuf.append( rNewThSep );
+            nIndex = nIndexTh + rOldThSep.Len();
+        }
+        else if( nIndexDec != STRING_NOTFOUND )
+        {
+            aBuf.append( pBuffer + nIndex, nIndexDec - nIndex );
+            aBuf.append( rNewDecSep );
+            nIndex = nIndexDec + rOldDecSep.Len();
+        }
+        else
+        {
+            aBuf.append( pBuffer + nIndex );
+            nIndex = STRING_NOTFOUND;
+        }
+    }
+
+    io_rText = aBuf.makeStringAndClear();
+}
+
 static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDecSep,
                                   const String& rOldThSep, const String& rNewThSep,
                                   Edit* pEdit )
@@ -236,10 +272,7 @@ static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDe
         BOOL bUpdateMode = pEdit->IsUpdateMode();
         pEdit->SetUpdateMode( FALSE );
         String aText = pEdit->GetText();
-        if( bChangeDec )
-            aText.SearchAndReplaceAll( rNewDecSep, rOldDecSep );
-        if( bChangeTh )
-            aText.SearchAndReplaceAll( rNewThSep, rOldThSep );
+        ImplUpdateSeparatorString( aText, rOldDecSep, rNewDecSep, rOldThSep, rNewThSep );
         pEdit->SetText( aText );
 
         ComboBox* pCombo = dynamic_cast<ComboBox*>(pEdit);
@@ -250,12 +283,11 @@ static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDe
             for ( USHORT i=0; i < nEntryCount; i++ )
             {
                 aText = pCombo->GetEntry( i );
-                if( bChangeDec )
-                    aText.SearchAndReplaceAll( rNewDecSep, rOldDecSep );
-                if( bChangeTh )
-                    aText.SearchAndReplaceAll( rNewThSep, rOldThSep );
+                void* pEntryData = pCombo->GetEntryData( i );
+                ImplUpdateSeparatorString( aText, rOldDecSep, rNewDecSep, rOldThSep, rNewThSep );
                 pCombo->RemoveEntry( i );
                 pCombo->InsertEntry( aText, i );
+                pCombo->SetEntryData( i, pEntryData );
             }
         }
         if( bUpdateMode )
