@@ -87,12 +87,15 @@ struct SchXMLTable
 
     ::std::vector< sal_Int32 > aHiddenColumns;
 
+    bool bProtected;
+
     SchXMLTable() : nRowIndex( -1 ),
                     nColumnIndex( -1 ),
                     nMaxColumnIndex( -1 ),
                     nNumberOfColsEstimate( 0 ),
                     bHasHeaderRow( false ),
-                    bHasHeaderColumn( false )
+                    bHasHeaderColumn( false ),
+                    bProtected( false )
     {}
 };
 
