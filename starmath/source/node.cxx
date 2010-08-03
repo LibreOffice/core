@@ -2818,8 +2818,8 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName(GetToken().aText)))
     {
         sal_UCS4 cChar = pSym->GetCharacter();
-        String aText( OUString( &cChar, 1 ) );
-        SetText( aText );
+        String aTmp( OUString( &cChar, 1 ) );
+        SetText( aTmp );
         GetFont() = pSym->GetFace();
     }
     else
