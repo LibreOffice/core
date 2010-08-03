@@ -1147,7 +1147,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     ComboBox 1
     {
         Pos = MAP_APPFONT ( 59 , 6 ) ;
-        Size = MAP_APPFONT ( 80 , 50 ) ;
+        Size = MAP_APPFONT ( 80 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1162,7 +1162,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     ComboBox 2
     {
         Pos = MAP_APPFONT ( 210 , 6 ) ;
-        Size = MAP_APPFONT ( 80 , 50 ) ;
+        Size = MAP_APPFONT ( 80 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1186,7 +1186,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     ComboBox 4
     {
         Pos = MAP_APPFONT ( 80 , 115 ) ;
-        Size = MAP_APPFONT ( 100 , 80 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1201,7 +1201,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     ComboBox 5
     {
         Pos = MAP_APPFONT ( 80 , 130 ) ;
-        Size = MAP_APPFONT ( 100 , 50 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1217,7 +1217,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 145 ) ;
-        Size = MAP_APPFONT ( 100 , 50 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
         Sort = TRUE ;
         DropDown = TRUE ;
@@ -1233,7 +1233,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 80 , 160 ) ;
-        Size = MAP_APPFONT ( 100 , 50 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
         Sort = FALSE ;
         DropDown = TRUE ;
@@ -1249,7 +1249,7 @@ ModalDialog RID_SYMDEFINEDIALOG
     {
         Border = TRUE;
         Pos = MAP_APPFONT ( 80 , 175 ) ;
-        Size = MAP_APPFONT ( 100 , 50 ) ;
+        Size = MAP_APPFONT ( 100 , 100 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = FALSE ;

@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_starmath.hxx"
 
-#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <rtl/math.hxx>
@@ -38,22 +37,26 @@
 #include <vcl/outdev.hxx>
 #include <sfx2/module.hxx>
 
-
 #include "node.hxx"
 #include <rect.hxx>
 #include "symbol.hxx"
 #include "smmod.hxx"
 #include <document.hxx>
 #include <view.hxx>
-#ifndef _MATHTYPE_HXX
 #include "mathtype.hxx"
-#endif
 
 #include <math.h>
 #include <float.h>
 
+
+#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
+
 // define this to draw rectangles for debugging
 //#define SM_RECT_DEBUG
+
+
+using ::rtl::OUString;
+
 
 ////////////////////////////////////////
 // SmTmpDevice
@@ -2459,6 +2462,12 @@ void SmTextNode::Draw(OutputDevice &rDev, const Point& rPosition) const
     // auf Pixelkoordinaten runden
     aPos = rDev.PixelToLogic( rDev.LogicToPixel(aPos) );
 
+#if OSL_DEBUG_LEVEL > 1
+    sal_Int32 nPos = 0;
+    sal_UCS4 cChar = OUString( aText ).iterateCodePoints( &nPos );
+    (void) cChar;
+#endif
+
     rDev.DrawStretchText(aPos, GetWidth(), aText);
 
 #ifdef SM_RECT_DEBUG
@@ -2808,7 +2817,9 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
 
     if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName(GetToken().aText)))
     {
-        SetText( pSym->GetCharacter() );
+        sal_UCS4 cChar = pSym->GetCharacter();
+        String aText( OUString( &cChar, 1 ) );
+        SetText( aText );
         GetFont() = pSym->GetFace();
     }
     else

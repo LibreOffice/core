@@ -50,17 +50,18 @@
 #include <svx/ucsubset.hxx>
 
 
-#include "config.hxx"
 #include "dialog.hxx"
-#ifndef _STARMATH_HRC
 #include "starmath.hrc"
-#endif
-
+#include "config.hxx"
 #include "dialog.hrc"
 #include "smmod.hxx"
 #include "symbol.hxx"
 #include "view.hxx"
 #include "document.hxx"
+#include "unomodel.hxx"
+
+
+using ::rtl::OUString;
 
 ////////////////////////////////////////
 //
@@ -1157,11 +1158,13 @@ void SmShowSymbolSet::Paint(const Rectangle&)
         SetTextColor( aTxtColor );
 
         int   nIV   = i - v;
-        Size  aSize(GetTextWidth(aSymbol.GetCharacter()), GetTextHeight());
+        sal_UCS4 cChar = aSymbol.GetCharacter();
+        String aText( OUString( &cChar, 1 ) );
+        Size  aSize( GetTextWidth( aText ), GetTextHeight());
 
         DrawText(Point((nIV % nColumns) * nLen + (nLen - aSize.Width()) / 2,
                        (nIV / nColumns) * nLen + (nLen - aSize.Height()) / 2),
-                 aSymbol.GetCharacter());
+                 aText);
     }
 
     if (nSelectSymbol != SYMBOL_NONE)
@@ -1360,7 +1363,9 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
         // keep old text color (font may have different color set)
         SetTextColor(aTxtColor);
 
-        SetText(XubString(pSymbol->GetCharacter()));
+        sal_UCS4 cChar = pSymbol->GetCharacter();
+        String aText( OUString( &cChar, 1 ) );
+        SetText( aText );
     }
 
     // 'Invalidate' fuellt den background mit der background-Farbe.
@@ -1483,8 +1488,9 @@ IMPL_LINK( SmSymbolDialog, GetClickHdl, Button *, EMPTYARG pButton )
     const SmSym *pSym = GetSymbol();
     if (pSym)
     {
-        XubString   aText ('%');
+        String  aText ('%');
         aText += pSym->GetName();
+        aText += (sal_Unicode)' ';
 
         rViewSh.GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERTTEXT, SFX_CALLMODE_STANDARD,
@@ -1640,31 +1646,36 @@ void SmShowChar::Paint(const Rectangle &rRect)
 {
     Control::Paint( rRect );
 
-    XubString Text (GetText ());
-    if (Text.Len() > 0)
+    OUString aText( GetText() );
+    if (aText.getLength() > 0)
     {
-        Size aTextSize(GetTextWidth(Text), GetTextHeight());
+#if OSL_DEBUG_LEVEL > 1
+        sal_Int32 nPos = 0;
+        sal_UCS4 cChar = aText.iterateCodePoints( &nPos );
+        (void) cChar;
+#endif
+        Size aTextSize(GetTextWidth(aText), GetTextHeight());
 
         DrawText(Point((GetOutputSize().Width()  - aTextSize.Width())  / 2,
-                       (GetOutputSize().Height() - aTextSize.Height()) / 2), Text);
+                       (GetOutputSize().Height() - aTextSize.Height()) / 2), aText);
     }
 }
 
 
-void SmShowChar::SetChar(xub_Unicode aChar)
+void SmShowChar::SetSymbol( const SmSym *pSym )
 {
-    SetText(XubString(aChar));
-    Invalidate();
+    if (pSym)
+        SetSymbol( pSym->GetCharacter(), pSym->GetFace() );
 }
 
 
-void SmShowChar::SetFont(const Font &rFont)
+void SmShowChar::SetSymbol( sal_UCS4 cChar, const Font &rFont )
 {
     Color aTxtColor( GetTextColor() );
 
-    Font  aFont (rFont);
-    Size  aSize (Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
+    Size  aSize( Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
 
+    Font aFont( rFont );
     aFont.SetSize(aSize);
     aFont.SetAlign(ALIGN_TOP);
     aFont.SetTransparent(TRUE);
@@ -1673,8 +1684,12 @@ void SmShowChar::SetFont(const Font &rFont)
     // keep text color (new font may have different one)
     SetTextColor( aTxtColor );
 
+    String aText( OUString( &cChar, 1) );
+    SetText( aText );
+
     Invalidate();
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -1862,7 +1877,7 @@ IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, EMPTYARG pComboBox )
 
 IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
 {
-    sal_UCS4 cChar = aCharsetDisplay.GetSelectCharacter();
+   sal_UCS4 cChar = aCharsetDisplay.GetSelectCharacter();
 
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT( pSubsetMap, "SubsetMap missing" );
@@ -1876,9 +1891,18 @@ IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
             aFontsSubsetLB.SetNoSelection();
     }
 
-    // TO_DO_UCS4 (#i74049): get rid of cast without loosing UCS4 functionality
-    aSymbolDisplay.SetChar( sal::static_int_cast< sal_Unicode >(cChar) );
+    aSymbolDisplay.SetSymbol( cChar, aCharsetDisplay.GetFont() );
+
     UpdateButtons();
+
+    // display Unicode position as symbol name while iterating over characters
+    const String aHex( String::CreateFromInt64( cChar, 16 ).ToUpperAscii() );
+    const String aPattern( A2OU( aHex.Len() > 4 ? "Ux000000" : "Ux0000" ) );
+    String aUnicodePos( aPattern.Copy( 0, aPattern.Len() - aHex.Len() ) );
+    aUnicodePos += aHex;
+    aSymbols.SetText( aUnicodePos );
+    aSymbolName.SetText( aUnicodePos );
+
     return 0;
 }
 
@@ -1892,16 +1916,13 @@ IMPL_LINK( SmSymDefineDialog, AddClickHdl, Button *, EMPTYARG pButton )
 #endif
 
     // add symbol
-    // TO_DO_UCS4 (#i74049): get rid of cast without loosing UCS4 functionality
     const SmSym aNewSymbol( aSymbols.GetText(), aCharsetDisplay.GetFont(),
-            sal::static_int_cast< sal_Unicode >( aCharsetDisplay.GetSelectCharacter() ),
-            aSymbolSets.GetText() );
+            aCharsetDisplay.GetSelectCharacter(), aSymbolSets.GetText() );
     //DBG_ASSERT( aSymbolMgrCopy.GetSymbolByName(aTmpSymbolName) == NULL, "symbol already exists" );
     aSymbolMgrCopy.AddOrReplaceSymbol( aNewSymbol );
 
     // update display of new symbol
-    aSymbolDisplay.SetChar( aNewSymbol.GetCharacter() );
-    aSymbolDisplay.SetFont( aNewSymbol.GetFace() );
+    aSymbolDisplay.SetSymbol( &aNewSymbol );
     aSymbolName.SetText( aNewSymbol.GetName() );
     aSymbolSetName.SetText( aNewSymbol.GetSymbolSetName() );
 
@@ -1928,10 +1949,8 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
     // get new Sybol to use
     //! get font from symbol-disp lay since charset-display does not keep
     //! the bold attribut.
-    // TO_DO_UCS4 (#i74049): get rid of cast without loosing UCS4 functionality
     const SmSym aNewSymbol( aSymbols.GetText(), aCharsetDisplay.GetFont(),
-            sal::static_int_cast< sal_Unicode >( aCharsetDisplay.GetSelectCharacter() ),
-            aSymbolSets.GetText() );
+            aCharsetDisplay.GetSelectCharacter(), aSymbolSets.GetText() );
 
     // remove old symbol if the name was changed then add new one
 //    const bool bSetNameChanged    = aOldSymbolSets.GetText() != aSymbolSets.GetText();
@@ -1945,8 +1964,7 @@ IMPL_LINK( SmSymDefineDialog, ChangeClickHdl, Button *, EMPTYARG pButton )
         SetOrigSymbol(NULL, XubString());
 
     // update display of new symbol
-    aSymbolDisplay.SetChar( aNewSymbol.GetCharacter() );
-    aSymbolDisplay.SetFont( aNewSymbol.GetFace() );
+    aSymbolDisplay.SetSymbol( &aNewSymbol );
     aSymbolName.SetText( aNewSymbol.GetName() );
     aSymbolSetName.SetText( aNewSymbol.GetSymbolSetName() );
 
@@ -2266,8 +2284,7 @@ void SmSymDefineDialog::SetOrigSymbol(const SmSym *pSymbol,
 
         aSymName    = pSymbol->GetName();
         aSymSetName = rSymbolSetName;
-        aOldSymbolDisplay.SetFont(pSymbol->GetFace());
-        aOldSymbolDisplay.SetChar(pSymbol->GetCharacter());
+        aOldSymbolDisplay.SetSymbol( pSymbol );
     }
     else
     {   // loeschen des angezeigten Symbols
@@ -2439,7 +2456,7 @@ BOOL SmSymDefineDialog::SelectStyle(const XubString &rStyleName, BOOL bApplyFont
 void SmSymDefineDialog::SelectChar(xub_Unicode cChar)
 {
     aCharsetDisplay.SelectCharacter( cChar );
-    aSymbolDisplay.SetChar( cChar );
+    aSymbolDisplay.SetSymbol( cChar, aCharsetDisplay.GetFont() );
 
     UpdateButtons();
 }
