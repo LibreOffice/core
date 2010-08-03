@@ -168,6 +168,9 @@
 #include "scitems.hxx"
 #include <svx/dbexch.hrc>
 #include <svx/svdetc.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/svdpage.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/stritem.hxx>
@@ -210,6 +213,10 @@
 #include "drwtrans.hxx"
 #include "docuno.hxx"
 #include "clipparam.hxx"
+#include "drawview.hxx"
+#include "chartlis.hxx"
+#include "charthelper.hxx"
+
 
 using namespace com::sun::star;
 
@@ -342,6 +349,26 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bI
 
             ScClipParam aClipParam(aRange, bCut);
             pDoc->CopyToClip(aClipParam, pClipDoc, &rMark, false, false, bIncludeObjects);
+
+            if ( pDoc && pClipDoc )
+            {
+                ScDrawLayer* pDrawLayer = pClipDoc->GetDrawLayer();
+                if ( pDrawLayer )
+                {
+                    ScClipParam& rClipParam = pClipDoc->GetClipParam();
+                    ScRangeListVector& rRangesVector = rClipParam.maProtectedChartRangesVector;
+                    SCTAB nTabCount = pClipDoc->GetTableCount();
+                    for ( SCTAB nTab = 0; nTab < nTabCount; ++nTab )
+                    {
+                        SdrPage* pPage = pDrawLayer->GetPage( static_cast< sal_uInt16 >( nTab ) );
+                        if ( pPage )
+                        {
+                            ScChartHelper::FillProtectedChartRangesVector( rRangesVector, pDoc, pPage );
+                        }
+                    }
+                }
+            }
+
             if (bSysClip)
             {
                 ScDrawLayer::SetGlobalDrawPersist(NULL);
@@ -1354,8 +1381,19 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
 
     AdjustBlockHeight();            // update row heights before pasting objects
 
+    ::std::vector< ::rtl::OUString > aExcludedChartNames;
+    SdrPage* pPage = NULL;
+
     if ( nFlags & IDF_OBJECTS )
     {
+        ScDrawView* pScDrawView = GetScDrawView();
+        SdrModel* pModel = ( pScDrawView ? pScDrawView->GetModel() : NULL );
+        pPage = ( pModel ? pModel->GetPage( static_cast< sal_uInt16 >( nStartTab ) ) : NULL );
+        if ( pPage )
+        {
+            ScChartHelper::GetChartNames( aExcludedChartNames, pPage );
+        }
+
         //  Paste the drawing objects after the row heights have been updated.
 
         pDoc->CopyFromClip( aUserRange, aFilteredMark, IDF_OBJECTS, pRefUndoDoc, pClipDoc,
@@ -1454,6 +1492,19 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
 
     aModificator.SetDocumentModified();
     PostPasteFromClip(aUserRange, rMark);
+
+    if ( nFlags & IDF_OBJECTS )
+    {
+        ScModelObj* pModelObj = ( pDocSh ? ScModelObj::getImplementation( pDocSh->GetModel() ) : NULL );
+        if ( pDoc && pPage && pModelObj && pClipDoc )
+        {
+            ScClipParam& rClipParam = pClipDoc->GetClipParam();
+            const ScRangeListVector& rProtectedChartRangesVector( rClipParam.maProtectedChartRangesVector );
+            ScChartHelper::CreateProtectedChartListenersAndNotify( pDoc, pPage, pModelObj, nStartTab,
+                rProtectedChartRangesVector, aExcludedChartNames );
+        }
+    }
+
     return TRUE;
 }
 

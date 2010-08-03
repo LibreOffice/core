@@ -68,6 +68,9 @@
 #include "drawview.hxx"
 #include "viewdata.hxx"
 #include "scmod.hxx"
+#include "chartlis.hxx"
+#include "rangeutl.hxx"
+#include "formula/grammar.hxx"
 
 // #108584#
 #include "scitems.hxx"
@@ -78,6 +81,7 @@
 // #108584#
 #include <editeng/fhgtitem.hxx>
 #include <vcl/svapp.hxx>
+
 
 using namespace com::sun::star;
 
@@ -235,9 +239,15 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
     //
     if ( pContainerShell )
     {
-        const ScDocument* pDoc = pContainerShell->GetDocument();
+        ScDocument* pDoc = pContainerShell->GetDocument();
         if ( pDoc )
+        {
             nSourceDocID = pDoc->GetDocumentID();
+            if ( pPage )
+            {
+                ScChartHelper::FillProtectedChartRangesVector( m_aProtectedChartRangesVector, pDoc, pPage );
+            }
+        }
     }
 }
 

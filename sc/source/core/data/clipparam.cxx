@@ -50,7 +50,8 @@ ScClipParam::ScClipParam(const ScRange& rRange, bool bCutMode) :
 ScClipParam::ScClipParam(const ScClipParam& r) :
     maRanges(r.maRanges),
     meDirection(r.meDirection),
-    mbCutMode(r.mbCutMode)
+    mbCutMode(r.mbCutMode),
+    maProtectedChartRangesVector(r.maProtectedChartRangesVector)
 {
 }
 

@@ -56,6 +56,10 @@
 #include "drwlayer.hxx"
 #include "drwtrans.hxx"
 #include "globstr.hrc"
+#include "chartlis.hxx"
+#include "docuno.hxx"
+#include "docsh.hxx"
+#include "convuno.hxx"
 
 extern Point aDragStartDiff;
 
@@ -149,8 +153,15 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         else
         {
             SdrModel* pDrawModel = pDragEditView->GetModel();
-            SdrPage* pDestPage = pDrawModel->GetPage( static_cast<sal_uInt16>(GetViewData()->GetTabNo()) );
+            SCTAB nTab = GetViewData()->GetTabNo();
+            SdrPage* pDestPage = pDrawModel->GetPage( static_cast< sal_uInt16 >( nTab ) );
             DBG_ASSERT(pDestPage,"nanu, Page?");
+
+            ::std::vector< ::rtl::OUString > aExcludedChartNames;
+            if ( pDestPage )
+            {
+                ScChartHelper::GetChartNames( aExcludedChartNames, pDestPage );
+            }
 
             SdrMarkList aMark = pDragEditView->GetMarkedObjectList();
             aMark.ForceSort();
@@ -184,6 +195,16 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
             if (bPasteIsMove)
                 pDragEditView->DeleteMarked();
+
+            ScDocument* pDocument = GetViewData()->GetDocument();
+            ScDocShell* pDocShell = GetViewData()->GetDocShell();
+            ScModelObj* pModelObj = ( pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : NULL );
+            if ( pDocument && pDestPage && pModelObj && pDrawTrans )
+            {
+                const ScRangeListVector& rProtectedChartRangesVector( pDrawTrans->GetProtectedChartRangesVector() );
+                ScChartHelper::CreateProtectedChartListenersAndNotify( pDocument, pDestPage, pModelObj, nTab,
+                    rProtectedChartRangesVector, aExcludedChartNames );
+            }
         }
     }
     else
@@ -204,6 +225,15 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         if ( pClient && pClient->IsObjectInPlaceActive() )
             nOptions |= SDRINSERT_DONTMARK;
 
+        ::std::vector< ::rtl::OUString > aExcludedChartNames;
+        SCTAB nTab = GetViewData()->GetTabNo();
+        SdrPage* pPage = pScDrawView->GetModel()->GetPage( static_cast< sal_uInt16 >( nTab ) );
+        DBG_ASSERT( pPage, "Page?" );
+        if ( pPage )
+        {
+            ScChartHelper::GetChartNames( aExcludedChartNames, pPage );
+        }
+
         // #89247# Set flag for ScDocument::UpdateChartListeners() which is
         // called during paste.
         if ( !bSameDocClipboard )
@@ -216,10 +246,6 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
         // #68991# Paste puts all objects on the active (front) layer
         // controls must be on SC_LAYER_CONTROLS
-
-        SCTAB nTab = GetViewData()->GetTabNo();
-        SdrPage* pPage = pScDrawView->GetModel()->GetPage(static_cast<sal_uInt16>(nTab));
-        DBG_ASSERT(pPage,"Page?");
         if (pPage)
         {
             SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
@@ -234,6 +260,17 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
         // #75299# all graphics objects must have names
         GetViewData()->GetDocument()->EnsureGraphicNames();
+
+        ScDocument* pDocument = GetViewData()->GetDocument();
+        ScDocShell* pDocShell = GetViewData()->GetDocShell();
+        ScModelObj* pModelObj = ( pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : NULL );
+        ScDrawTransferObj* pTransferObj = ScDrawTransferObj::GetOwnClipboard( NULL );
+        if ( pDocument && pPage && pModelObj && pTransferObj )
+        {
+            const ScRangeListVector& rProtectedChartRangesVector( pTransferObj->GetProtectedChartRangesVector() );
+            ScChartHelper::CreateProtectedChartListenersAndNotify( pDocument, pPage, pModelObj, nTab,
+                rProtectedChartRangesVector, aExcludedChartNames );
+        }
     }
 
     if (bGroup)

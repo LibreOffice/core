@@ -469,9 +469,12 @@ void ScDocument::UpdateChart( const String& rChartName )
     }
 
     // After the update, chart keeps track of its own data source ranges,
-    // the listener doesn't need to listen anymore.
-    if(pChartListenerCollection)
+    // the listener doesn't need to listen anymore, except the chart has
+    // an internal data provider.
+    if ( !( xChartDoc.is() && xChartDoc->hasInternalDataProvider() ) && pChartListenerCollection )
+    {
         pChartListenerCollection->ChangeListening( rChartName, new ScRangeList );
+    }
 }
 
 void ScDocument::RestoreChartListener( const String& rName )
@@ -579,9 +582,28 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
                 svt::EmbeddedObjectRef::TryRunningState( xIPObj );
 
                 // After the change, chart keeps track of its own data source ranges,
-                // the listener doesn't need to listen anymore.
-
-                pChartListener->ChangeListening( new ScRangeList, bDataChanged );
+                // the listener doesn't need to listen anymore, except the chart has
+                // an internal data provider.
+                bool bInternalDataProvider = false;
+                if ( xIPObj.is() )
+                {
+                    try
+                    {
+                        uno::Reference< chart2::XChartDocument > xChartDoc( xIPObj->getComponent(), uno::UNO_QUERY_THROW );
+                        bInternalDataProvider = xChartDoc->hasInternalDataProvider();
+                    }
+                    catch ( uno::Exception& )
+                    {
+                    }
+                }
+                if ( bInternalDataProvider )
+                {
+                    pChartListener->ChangeListening( aNewRLR, bDataChanged );
+                }
+                else
+                {
+                    pChartListener->ChangeListening( new ScRangeList, bDataChanged );
+                }
             }
         }
     }

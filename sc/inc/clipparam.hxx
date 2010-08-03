@@ -30,6 +30,7 @@
 
 #include "rangelst.hxx"
 #include "rangenam.hxx"
+#include "charthelper.hxx"
 
 #include <vector>
 
@@ -41,9 +42,10 @@ struct ScClipParam
 {
     enum Direction { Unspecified, Column, Row };
 
-    ScRangeList maRanges;
-    Direction   meDirection;
-    bool        mbCutMode;
+    ScRangeList         maRanges;
+    Direction           meDirection;
+    bool                mbCutMode;
+    ScRangeListVector   maProtectedChartRangesVector;
 
     ScClipParam();
     ScClipParam(const ScRange& rRange, bool bCutMode);
