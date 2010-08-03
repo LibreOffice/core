@@ -13701,16 +13701,6 @@ echo "$as_me: error: Library requirements (cppunit >= 1.12.1 ) not met; consider
    { (exit 1); exit 1; }; }
   fi
 
-    echo "$as_me:$LINENO: checking STL compatibility" >&5
-echo $ECHO_N "checking STL compatibility... $ECHO_C" >&6
-    if test "$WITH_STLPORT" != "no"; then
-	{ { echo "$as_me:$LINENO: error: to use system cppunit you need to use --without-stlport" >&5
-echo "$as_me: error: to use system cppunit you need to use --without-stlport" >&2;}
-   { (exit 1); exit 1; }; }
-    else
-	echo "$as_me:$LINENO: result: OK" >&5
-echo "${ECHO_T}OK" >&6
-    fi
 else
     echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6
