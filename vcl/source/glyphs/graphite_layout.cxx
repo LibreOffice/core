@@ -63,13 +63,13 @@
 #include <unicode/uscript.h>
 
 // Graphite Libraries (must be after vcl headers on windows)
-#include <tools/preextstl.h>
+#include <preextstl.h>
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/ITextSource.h>
 #include <graphite/Segment.h>
 #include <graphite/SegmentPainter.h>
-#include <tools/postextstl.h>
+#include <postextstl.h>
 
 #include <vcl/graphite_layout.hxx>
 #include <vcl/graphite_features.hxx>
