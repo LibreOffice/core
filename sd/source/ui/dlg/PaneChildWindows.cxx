@@ -45,6 +45,9 @@
 
 namespace sd {
 
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::drawing::framework::XResourceId;
+
 SFX_IMPL_DOCKINGWINDOW(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
 SFX_IMPL_DOCKINGWINDOW(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
 SFX_IMPL_DOCKINGWINDOW( ToolPanelChildWindow, SID_TASKPANE)
@@ -151,6 +154,25 @@ ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, USHORT i_
 }
 
 //----------------------------------------------------------------------------------------------------------------------
+struct DelayedToolPanelActivation
+{
+    DelayedToolPanelActivation( ToolPanelChildWindow& i_rToolPanelWindow, const ::rtl::OUString& i_rPanelURL )
+        :m_rToolPanelWindow( i_rToolPanelWindow )
+        ,m_sPanelURL( i_rPanelURL )
+    {
+    }
+
+    void operator() (bool)
+    {
+        m_rToolPanelWindow.ActivateToolPanel( m_sPanelURL );
+    }
+
+private:
+    ToolPanelChildWindow&   m_rToolPanelWindow;
+    const ::rtl::OUString   m_sPanelURL;
+};
+
+//----------------------------------------------------------------------------------------------------------------------
 void ToolPanelChildWindow::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
 {
     SfxDockingWindow* pDockingWindow = dynamic_cast< SfxDockingWindow* >( GetWindow() );
@@ -170,8 +192,16 @@ void ToolPanelChildWindow::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL
         // extensions, too. As long as this is not the case, we need to take the direct way ...
         ::boost::shared_ptr< ViewShell > pViewShell = pFrameworkHelper->GetViewShell( framework::FrameworkHelper::msRightPaneURL );
         toolpanel::ToolPanelViewShell* pToolPanelViewShell = dynamic_cast< toolpanel::ToolPanelViewShell* >( pViewShell.get() );
-        ENSURE_OR_RETURN_VOID( pToolPanelViewShell != NULL, "ToolPanelChildWindow::ActivateToolPanel: no tool panel view shell access!" );
-        pToolPanelViewShell->ActivatePanel( i_rPanelURL );
+        if ( pToolPanelViewShell )
+        {
+            pToolPanelViewShell->ActivatePanel( i_rPanelURL );
+        }
+        else
+        {
+            Reference< XResourceId > xTaskPaneResource = pFrameworkHelper->RequestView(
+                framework::FrameworkHelper::msTaskPaneURL, framework::FrameworkHelper::msRightPaneURL );
+            pFrameworkHelper->RunOnResourceActivation( xTaskPaneResource, DelayedToolPanelActivation( *this, i_rPanelURL ) );
+        }
     }
 }
 
