@@ -424,7 +424,10 @@ ImplStyleData::ImplStyleData()
     mnPushButtonStyle           = 0;
     mnTabControlStyle           = 0;
     mnLogoDisplayTime           = LOGO_DISPLAYTIME_STARTTIME;
-    mnDragFullOptions           = 0;
+    mnDragFullOptions           = DRAGFULL_OPTION_WINDOWMOVE | DRAGFULL_OPTION_WINDOWSIZE |
+                                  DRAGFULL_OPTION_OBJECTMOVE | DRAGFULL_OPTION_OBJECTSIZE |
+                                  DRAGFULL_OPTION_DOCKING    | DRAGFULL_OPTION_SPLIT      |
+                                  DRAGFULL_OPTION_SCROLL;
     mnAnimationOptions          = 0;
     mnSelectionOptions          = 0;
     mnDisplayOptions            = 0;
