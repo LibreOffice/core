@@ -60,6 +60,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <ooo/vba/excel/XlEnableSelection.hpp>
+#include <ooo/vba/excel/XWorkbook.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -672,24 +673,26 @@ ScVbaWorksheet::Hyperlinks( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
 }
 
 uno::Any SAL_CALL
+ScVbaWorksheet::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeException)
+{
+    uno::Reference< excel::XWorkbook > xWorkbook( getParent(), uno::UNO_QUERY_THROW );
+    return xWorkbook->Names( aIndex );
+}
+
+uno::Any SAL_CALL
 ScVbaWorksheet::OLEObjects( const uno::Any& Index ) throw (uno::RuntimeException)
 {
-    ScVbaOLEObjects* aOleObjects;
     uno::Reference< sheet::XSpreadsheet > xSpreadsheet( getSheet(), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( xSpreadsheet, uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XDrawPage > xDrawPage( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xIndexAccess( xDrawPage, uno::UNO_QUERY_THROW );
-    aOleObjects = new ScVbaOLEObjects( this, mxContext, xIndexAccess );
 
+    uno::Reference< excel::XOLEObjects >xOleObjects( new ScVbaOLEObjects( this, mxContext, xIndexAccess ) );
     if( Index.hasValue() )
-    {
-            return aOleObjects->Item( Index, uno::Any() );
-    }
-    else
-    {
-        return uno::makeAny( uno::Reference< excel::XOLEObjects> ( aOleObjects ) );
-    }
+        return xOleObjects->Item( Index, uno::Any() );
+    return uno::Any( xOleObjects );
 }
+
 uno::Any SAL_CALL
 ScVbaWorksheet::Shapes( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {

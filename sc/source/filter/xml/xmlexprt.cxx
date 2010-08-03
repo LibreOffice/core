@@ -4340,7 +4340,7 @@ void ScXMLExport::GetConfigurationSettings(uno::Sequence<beans::PropertyValue>& 
 
             uno::Reference <container::XNameAccess> xCodeNameAccess;
             DBG_ASSERT( pDoc, "ScXMLExport::GetConfigurationSettings - no ScDocument!" );
-            if( pDoc )
+            if( pDoc && pDoc->IsInVBAMode() )
             {
                 xCodeNameAccess = new XMLCodeNameProvider( pDoc );
                 if( xCodeNameAccess.is() && xCodeNameAccess->hasElements() )

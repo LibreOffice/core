@@ -30,6 +30,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include "scitems.hxx"
 #include <editeng/langitem.hxx>
 #include <svl/srchitem.hxx>
@@ -88,7 +89,6 @@
 #include <memory>
 
 using namespace com::sun::star;
-using ::std::auto_ptr;
 
 //------------------------------------------------------------------------
 
@@ -512,15 +512,35 @@ void ScDocument::SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew )
         pTab[nTab]->SetSheetEvents( pNew );
 }
 
-bool ScDocument::HasSheetEventScript( sal_Int32 nEvent ) const
+bool ScDocument::HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVbaEvents ) const
 {
-    for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
-        if (pTab[nTab])
+    if (pTab[nTab])
+    {
+        // check if any event handler script has been configured
+        const ScSheetEvents* pEvents = pTab[nTab]->GetSheetEvents();
+        if ( pEvents && pEvents->GetScript( nEvent ) )
+            return true;
+        // check if VBA event handlers exist
+        if (bWithVbaEvents && mxVbaEvents.is()) try
         {
-            const ScSheetEvents* pEvents = pTab[nTab]->GetSheetEvents();
-            if ( pEvents && pEvents->GetScript( nEvent ) )
+            uno::Sequence< uno::Any > aArgs( 1 );
+            aArgs[ 0 ] <<= nTab;
+            if (mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs ) ||
+                mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaDocumentEventId( nEvent ), uno::Sequence< uno::Any >() ))
                 return true;
         }
+        catch( uno::Exception& )
+        {
+        }
+    }
+    return false;
+}
+
+bool ScDocument::HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents ) const
+{
+    for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+        if (HasSheetEventScript( nTab, nEvent, bWithVbaEvents ))
+            return true;
     return false;
 }
 
