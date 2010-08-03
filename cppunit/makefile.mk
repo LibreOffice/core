@@ -97,7 +97,7 @@ CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     LDFLAGS='$(LDFLAGS) $(OOO_STLPORT_LDFLAGS)' \
     LIBS='$(OOO_STLPORT_LIBS) $(MY_LIBS)'
 
-BUILD_ACTION = $(GNUMAKE)
+BUILD_ACTION = $(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_FLAGS = install
 
 OUTDIR2INC = ooo-install/include/cppunit
@@ -172,7 +172,7 @@ CONFIGURE_FLAGS = --prefix=$(shell cd $(PACKAGE_DIR) && \
     LDFLAGS='$(LDFLAGS) $(OOO_STLPORT_LDFLAGS)' \
     LIBS='$(OOO_STLPORT_LIBS) $(MY_LIBS)'
 
-BUILD_ACTION = $(GNUMAKE)
+BUILD_ACTION = $(GNUMAKE) -j$(EXTMAXPROCESS)
 BUILD_FLAGS = install
 
 OUTDIR2INC = ooo-install/include/cppunit

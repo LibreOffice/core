@@ -1,0 +1,40 @@
+--- misc/xmlsec1-1.2.14/configure	Wed Jun 30 11:55:36 2010
++++ misc/build/xmlsec1-1.2.14/configure	Wed Jun 30 11:57:28 2010
+@@ -12077,7 +12077,7 @@
+   ;;
+   *)
+   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-as_dummy="$with_libxml/bin:$PATH"
++as_dummy="$with_libxml${with_libxml:+/bin:}$PATH"
+ for as_dir in $as_dummy
+ do
+   IFS=$as_save_IFS
+@@ -12258,7 +12258,7 @@
+   ;;
+   *)
+   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+-as_dummy="$with_libxslt/bin:$PATH"
++as_dummy="$with_libxslt${with_libxslt:+/bin:}$PATH"
+ for as_dir in $as_dummy
+ do
+   IFS=$as_save_IFS
+--- misc/xmlsec1-1.2.14/configure.in	Wed Jun 30 11:55:37 2010
++++ misc/build/xmlsec1-1.2.14/configure.in	Wed Jun 30 11:53:55 2010
+@@ -231,7 +231,7 @@
+ if test "z$LIBXML_FOUND" = "zno" ; then
+     if test "z$with_libxml" != "zyes" ; then
+ 	AC_PATH_PROG([LIBXML_CONFIG], [$LIBXML_CONFIG], [],
+-		     [$with_libxml/bin:$PATH])
++		     [$with_libxml${with_libxml:+/bin:}$PATH])
+     fi
+     AC_MSG_CHECKING([libxml2 $LIBXML_CONFIG ])
+     if ! LIBXML_VERSION=`$LIBXML_CONFIG --version 2>/dev/null`; then
+@@ -296,7 +296,7 @@
+ if test "z$LIBXSLT_FOUND" = "zno" ; then
+     if test "z$with_libxslt" != "zyes" ; then
+ 	AC_PATH_PROG([LIBXSLT_CONFIG], [$LIBXSLT_CONFIG], [],
+-		     [$with_libxslt/bin:$PATH])
++		     [$with_libxslt${with_libxslt:+/bin:}:$PATH])
+     fi
+     AC_MSG_CHECKING(for libxslt libraries >= $LIBXSLT_MIN_VERSION) 
+     if ! LIBXSLT_VERSION=`$LIBXSLT_CONFIG --version 2>/dev/null`; then
