@@ -25,39 +25,39 @@
  *
  ************************************************************************/
 
-#ifndef UUI_PASSCRTDLG_HXX
-#define UUI_PASSCRTDLG_HXX
+#ifndef UUI_NAMECLASHDLG_HXX
+#define UUI_NAMECLASHDLG_HXX
 
-#include <com/sun/star/task/PasswordRequestMode.hpp>
-#include <svtools/stdctrl.hxx>
-#include <vcl/dialog.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/button.hxx>
+#include "vcl/button.hxx"
+#include "vcl/dialog.hxx"
+#include "vcl/fixed.hxx"
+#include "vcl/edit.hxx"
 
 //============================================================================
-class PasswordCreateDialog : public ModalDialog
+
+enum NameClashResolveDialogResult { ABORT, RENAME, OVERWRITE };
+
+class NameClashDialog : public ModalDialog
 {
-    FixedText       aFTPasswordCrt;
-    Edit            aEDPasswordCrt;
-    FixedText       aFTPasswordRepeat;
-    Edit            aEDPasswordRepeat;
-    FixedText       aFTWarning;
-    FixedLine       aFixedLine1;
-    OKButton        aOKBtn;
-    CancelButton    aCancelBtn;
-    HelpButton      aHelpBtn;
+    FixedText     maFTMessage;
+    Edit          maEDNewName;
+    PushButton    maBtnOverwrite;
+    PushButton    maBtnRename;
+    CancelButton  maBtnCancel;
+    HelpButton    maBtnHelp;
+    rtl::OUString maSameName;
+    rtl::OUString maNewName;
 
-    ResMgr*                                         pResourceMgr;
-    sal_uInt16                                      nMinLen;
-
-    DECL_LINK( OKHdl_Impl, OKButton * );
-    DECL_LINK( EditHdl_Impl, Edit * );
+    DECL_LINK( ButtonHdl_Impl, PushButton * );
 
 public:
-    PasswordCreateDialog( Window* pParent, ResMgr * pResMgr, bool bMSCryptoMode = false );
-
-    String          GetPassword() const { return aEDPasswordCrt.GetText(); }
+    NameClashDialog( Window* pParent, ResMgr* pResMgr,
+                     rtl::OUString const & rTargetFolderURL,
+                     rtl::OUString const & rClashingName,
+                     rtl::OUString const & rProposedNewName,
+                     bool bAllowOverwrite );
+    rtl::OUString getNewName() const { return maNewName; }
 };
 
-#endif // UUI_PASSCRTDLG_HXX
+#endif // UUI_COOKIEDG_HXX
+
