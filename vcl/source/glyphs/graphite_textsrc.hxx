@@ -93,6 +93,7 @@ public:
         virtual ext_std::pair<gr::toffset, gr::toffset> propertyRange(gr::toffset ich);
         virtual size_t  getFontFeatures(gr::toffset ich, gr::FeatureSetting * prgfset);
         virtual bool    sameSegment(gr::toffset ich1, gr::toffset ich2);
+        virtual bool featureVariations() { return false; }
 
         operator ImplLayoutArgs & () throw();
         void setFeatures(const grutils::GrFeatureParser * pFeatures);

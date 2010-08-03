@@ -1199,8 +1199,15 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
             // try to find an exact match
             // because the list is sorted this will also find fontnames of the form searchfontname*
             std::vector< FontNameAttr >::const_iterator it = ::std::lower_bound( lang->second.aSubstAttributes.begin(), lang->second.aSubstAttributes.end(), aSearchAttr, StrictStringSort() );
-            if( it != lang->second.aSubstAttributes.end() && aSearchFont.CompareTo( it->Name, aSearchFont.Len() ) == COMPARE_EQUAL )
-                return &(*it);
+            if( it != lang->second.aSubstAttributes.end())
+            {
+                const FontNameAttr& rFoundAttr = *it;
+                // a search for "abcblack" may match with an entry for "abc"
+                // the reverse is not a good idea (e.g. #i112731# alba->albani)
+                if( rFoundAttr.Name.Len() <= aSearchFont.Len() )
+                    if( aSearchFont.CompareTo( rFoundAttr.Name, rFoundAttr.Name.Len() ) == COMPARE_EQUAL )
+                        return &rFoundAttr;
+            }
         }
         // gradually become more unspecific
         if( aLocale.Variant.getLength() )
