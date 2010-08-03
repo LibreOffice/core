@@ -911,7 +911,7 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
         case SbxVARIANT:    aRetType = ::getCppuType( (Any*)0 ); break;
         //case SbxDATAOBJECT: break;
         case SbxCHAR:       aRetType = ::getCppuType( (sal_Unicode*)0 ); break;
-        case SbxBYTE:       aRetType = ::getCppuType( (sal_Int16*)0 ); break;
+        case SbxBYTE:       aRetType = ::getCppuType( (sal_Int8*)0 ); break;
         case SbxUSHORT:     aRetType = ::getCppuType( (sal_uInt16*)0 ); break;
         case SbxULONG:      aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
         //case SbxLONG64:   break;

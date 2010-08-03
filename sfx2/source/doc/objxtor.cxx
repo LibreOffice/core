@@ -526,6 +526,13 @@ SfxObjectShell* SfxObjectShell::Current()
     return pFrame ? pFrame->GetObjectShell() : 0;
 }
 
+//-------------------------------------------------------------------------
+
+sal_Bool SfxObjectShell::IsInPrepareClose() const
+{
+    return pImp->bInPrepareClose;
+}
+
 //------------------------------------------------------------------------
 
 struct BoolEnv_Impl
