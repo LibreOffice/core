@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : global-level-1-test -> insert all OLE-Objects out of OLE-dialog into all doc-types
 '*

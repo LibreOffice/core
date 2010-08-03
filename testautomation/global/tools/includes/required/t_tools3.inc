@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Global Tools III
 '*
@@ -34,7 +34,7 @@
 sub hToolbarSelect( sType as string, sOpen as boolean, optional SetToDefault as boolean )
     Dim sDefault as integer, sKontext as string, sPosition as integer
     Dim SteppedThrough as boolean
-    '/// Created by helge.delfs@sun.com
+    '/// Created by helge.delfs@oracle.com
     '/// This function opens/closes a toolbar through View/Toolbar menu
     '/// Required parameters:
     '/// sType as string 		-> Name of the toolbar to be opened / closed
@@ -840,7 +840,7 @@ sub hToolbarSelect( sType as string, sOpen as boolean, optional SetToDefault as 
 end sub
 
 sub hCloseAllToolbars
-    '/// Created by thorsten.bosbach@sun.com
+    '/// Created by thorsten.bosbach@oracle.com
     '/// This function closes all known toolbars which are not docked
     '/// only if Build ID is below 8892
     if (gBuild < 8892) AND (gBuild > 8888) then
@@ -1108,7 +1108,7 @@ function hUseAsyncSlot( cSlot as string ) as integer
     iTime = iRetries * DELAY
 
     ' Timeout is -1
-    if ( iRetries = MAX_RETRIES ) then iTime = RC_TIMEOUT
+    if ( iRetries >= MAX_RETRIES ) then iTime = RC_TIMEOUT
 
     if ( GVERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
     hUseAsyncSlot() = iTime
@@ -1142,7 +1142,7 @@ function hClickButton( oButton as object ) as integer
     ' Total time used
     iTime = iRetries * DELAY
 
-    if ( iRetries = MAX_RETRIES ) then iTime = RC_TIMEOUT
+    if ( iRetries >= MAX_RETRIES ) then iTime = RC_TIMEOUT
 
     if ( GVERBOSE ) then printlog( CFN & "Exit with rc=" & iTime )
     hClickButton() = iTime

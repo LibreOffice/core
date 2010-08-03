@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Window/Titlebar functionality
 '*
@@ -250,7 +250,12 @@ testcase tCheckWindowTitle( sApplication as string, sReference as string )
 
     ' Verify that the productname is contained within the string
     if ( iProductNamePosition = STRING_NOT_FOUND ) then
-        warnlog( "The product name is missing" )
+        if ( lcase( gPlatform ) = "osx" ) then
+            printlog( "The product name is missing" )
+            ' life is different on that platform compared to testtool world
+        else
+            warnlog( "The product name is missing" )
+        endif
     endif
 
     ' Verify that the application name (e.g. "Writer") is contained in the string

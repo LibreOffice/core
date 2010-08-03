@@ -54,12 +54,9 @@ DEF1NAME = $(SHL1TARGET)
 
 ALLTAR : cpptest
 
-cpptest : $(SHL1TARGETN) $(BIN)/smoketestdoc.sxw
+cpptest : $(SHL1TARGETN)
 
 OOO_CPPTEST_ARGS = $(SHL1TARGETN) -env:arg-doc=$(BIN)/smoketestdoc.sxw
-
-$(BIN)/smoketestdoc.sxw: data/smoketestdoc.sxw
-    $(COPY) $< $@
 
 .IF "$(OS)" != "WNT"
 $(installationtest_instpath).flag : $(shell ls \
