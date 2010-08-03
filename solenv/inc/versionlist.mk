@@ -25,9 +25,6 @@
 #
 #*************************************************************************
 
-# mk file for Linux Unix X86-64 using GCC, please make generic modifications to unxlng.mk
+.INCLUDE: version.lst
 
-.INCLUDE : unxlng.mk
-CDEFS+=-DX86_64
-DLLPOSTFIX=lx
-BUILD64=1
+.EXPORT : OOOBASEVERSIONMAJOR OOOBASEVERSIONMINOR OOOBASEVERSIONMICRO
