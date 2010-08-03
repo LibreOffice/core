@@ -51,6 +51,8 @@ end sub
 testcase tMacroSecurityLevels( cFileFormat )
 
     printlog( "Check macro execution behavior for all macro security levels" )
+    warnlog( "#i110184# - Documentbound macros not executed when loaded via API" )
+    goto endsub
 
     dim cWorkFile as string
         cWorkFile = gTesttoolPath & "framework\optional\input\BasicDocs\"
