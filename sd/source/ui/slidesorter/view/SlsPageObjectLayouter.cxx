@@ -83,9 +83,9 @@ PageObjectLayouter::PageObjectLayouter (
     maPageNumberAreaBoundingBox = Rectangle(
         Point(
             std::max(gnLeftPageNumberOffset,
-                maPreviewBoundingBox.Left()
+                sal_Int32(maPreviewBoundingBox.Left()
                 - gnRightPageNumberOffset
-                - aPageNumberAreaSize.Width()),
+                - aPageNumberAreaSize.Width())),
             nMaximumBorderWidth),
         aPageNumberAreaSize);
 
