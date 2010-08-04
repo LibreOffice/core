@@ -227,7 +227,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(6) \
         -c $(3) \
         -Fo$(1)" && \
-    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
+    E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$R)))
 $(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
@@ -270,7 +270,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(6) \
         -c $(3) \
         -Fo$(1)" && \
-    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
+    E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$R)))
 $(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 
 endef
@@ -311,7 +311,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(6) \
         -c $(3) \
         -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1)" && \
-    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
+    E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$R)))
     $(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 
 endef
@@ -351,7 +351,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(6) \
         -c $(3) \
         -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1)" && \
-    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
+    E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$R)))
     $(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 
 endef
@@ -393,7 +393,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(foreach lib,$(4),$(call gb_Library_get_filename,$(lib))) \
         $(foreach lib,$(5),$(call gb_StaticLibrary_get_filename,$(lib))) \
         $(subst -out: -implib:$(1),-out:$(1),-out:$(DLLTARGET) -implib:$(1))" && \
-    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && rm -f $(1)); \
+    E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && rm -f $(1)); \
     rm $${RESPONSEFILE} && $$(exit $$R))
 endef
 
@@ -525,7 +525,7 @@ endef
 # StaticLibrary class
 
 gb_StaticLibrary_DEFS :=
-gb_StaticLibrary_TARGETTYPEFLAGS :=
+gb_StaticLibrary_TARGETTYPEFLAGS := -LIB
 gb_StaticLibrary_SYSPRE :=
 gb_StaticLibrary_PLAINEXT := .lib
 gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
