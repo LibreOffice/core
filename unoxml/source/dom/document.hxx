@@ -76,8 +76,6 @@ namespace DOM
         typedef set< Reference< XStreamListener > > listenerlist_t;
     private:
 
-        nodereflist_t m_aNodeRefList;
-
         xmlDocPtr m_aDocPtr;
 
         // datacontrol/source state
@@ -86,8 +84,6 @@ namespace DOM
 
     protected:
         CDocument(xmlDocPtr aDocPtr);
-
-        void addnode(xmlNodePtr aNode);
 
     public:
 

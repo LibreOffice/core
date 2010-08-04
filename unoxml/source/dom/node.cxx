@@ -209,7 +209,7 @@ namespace DOM
                 // m_aNodeType = NodeType::NOTATION_NODE;
                 pNode = static_cast< CNode* >(new CAttr((xmlAttrPtr)aNode));
                 break;
-            // unsopported node types
+            // unsupported node types
             case XML_HTML_DOCUMENT_NODE:
             case XML_ELEMENT_DECL:
             case XML_ATTRIBUTE_DECL:
@@ -219,18 +219,10 @@ namespace DOM
                 pNode = 0;
                 break;
             }
-        }
-        if ( pNode != 0 )
-        {
-            if(CNode::theNodeMap.insert(nodemap_t::value_type(aNode, pNode)).second)
+
+            if ( pNode != 0 )
             {
-                // insertion done, register node with document
-                xmlDocPtr doc = aNode->doc;
-                if( doc != NULL)
-                {
-                    CDocument* pDoc = static_cast< CDocument* >(CNode::get((xmlNodePtr)doc));
-                    pDoc->addnode(aNode);
-                } else
+                if(!CNode::theNodeMap.insert(nodemap_t::value_type(aNode, pNode)).second)
                 {
                     // if insertion failed, delete the new instance and return null
                     delete pNode;
