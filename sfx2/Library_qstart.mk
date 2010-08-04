@@ -25,8 +25,6 @@
 #
 #*************************************************************************
 
-ifeq ($(OS),LINUX)
-ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
 
 $(eval $(call gb_Library_Library,qstart_gtk))
 
@@ -91,5 +89,4 @@ $(eval $(call gb_Library_add_exception_objects,qstart_gtk,\
     sfx2/source/appl/shutdowniconunx \
 ))
 
-endif
-endif
+# vim: set noet sw=4 ts=4:
