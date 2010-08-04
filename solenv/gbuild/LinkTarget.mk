@@ -132,7 +132,16 @@ gb_ObjCxxObject_REPOS := $(gb_REPOS)
 gb_ObjCxxObject_get_source = $(1)/$(2).mm
 # defined by platform
 #  gb_ObjCxxObject__command
-#  gb_ObjCxxObject__command_dep
+
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_ObjCxxObject__command_dep
+mkdir -p $(dir $(1)) && \
+    echo '$(call gb_ObjCxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+
+endef
+else
+gb_ObjCxxObject__command_dep =
+endif
 
 define gb_ObjCxxObject__rules
 $$(call gb_ObjCxxObject_get_target,%) : $$(call gb_ObjCxxObject_get_source,$(1),%)
