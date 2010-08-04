@@ -79,8 +79,8 @@ using namespace ::vos                           ;
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
-OFrames::OFrames(   const   Reference< XMultiServiceFactory >&  xFactory        ,
-                    const   Reference< XFrame >&                xOwner          ,
+OFrames::OFrames(   const   css::uno::Reference< XMultiServiceFactory >&    xFactory        ,
+                    const   css::uno::Reference< XFrame >&              xOwner          ,
                             FrameContainer*                     pFrameContainer )
         //  Init baseclasses first
         :   ThreadHelpBase              ( &Application::GetSolarMutex() )
@@ -107,7 +107,7 @@ OFrames::~OFrames()
 //*****************************************************************************************************************
 //  XFrames
 //*****************************************************************************************************************
-void SAL_CALL OFrames::append( const Reference< XFrame >& xFrame ) throw( RuntimeException )
+void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -118,7 +118,7 @@ void SAL_CALL OFrames::append( const Reference< XFrame >& xFrame ) throw( Runtim
 
     // Do the follow only, if owner instance valid!
     // Lock owner for follow operations - make a "hard reference"!
-    Reference< XFramesSupplier > xOwner( m_xOwner.get(), UNO_QUERY );
+    css::uno::Reference< XFramesSupplier > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() == sal_True )
     {
         // Append frame to the end of the container ...
@@ -133,7 +133,7 @@ void SAL_CALL OFrames::append( const Reference< XFrame >& xFrame ) throw( Runtim
 //*****************************************************************************************************************
 //  XFrames
 //*****************************************************************************************************************
-void SAL_CALL OFrames::remove( const Reference< XFrame >& xFrame ) throw( RuntimeException )
+void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -144,7 +144,7 @@ void SAL_CALL OFrames::remove( const Reference< XFrame >& xFrame ) throw( Runtim
 
     // Do the follow only, if owner instance valid!
     // Lock owner for follow operations - make a "hard reference"!
-    Reference< XFramesSupplier > xOwner( m_xOwner.get(), UNO_QUERY );
+    css::uno::Reference< XFramesSupplier > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() == sal_True )
     {
         // Search frame and remove it from container ...
@@ -160,7 +160,7 @@ void SAL_CALL OFrames::remove( const Reference< XFrame >& xFrame ) throw( Runtim
 //*****************************************************************************************************************
 //  XFrames
 //*****************************************************************************************************************
-Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags ) throw( RuntimeException )
+Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags ) throw( RuntimeException )
 {
     // Ready for multithreading
     ResetableGuard aGuard( m_aLock );
@@ -170,11 +170,11 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
     LOG_ASSERT( impldbg_checkParameter_queryFrames( nSearchFlags ), "OFrames::queryFrames()\nInvalid parameter detected!\n" )
 
     // Set default return value. (empty sequence)
-    Sequence< Reference< XFrame > > seqFrames;
+    Sequence< css::uno::Reference< XFrame > > seqFrames;
 
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
-    Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
+    css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() == sal_True )
     {
         // Work only, if search was not started here ...!
@@ -203,10 +203,10 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
             // Add parent to list ... if any exist!
             if( nSearchFlags & FrameSearchFlag::PARENT )
             {
-                Reference< XFrame > xParent( xOwner->getCreator(), UNO_QUERY );
+                css::uno::Reference< XFrame > xParent( xOwner->getCreator(), UNO_QUERY );
                 if( xParent.is() == sal_True )
                 {
-                    Sequence< Reference< XFrame > > seqParent( 1 );
+                    Sequence< css::uno::Reference< XFrame > > seqParent( 1 );
                     seqParent[0] = xParent;
                     impl_appendSequence( seqFrames, seqParent );
                 }
@@ -216,7 +216,7 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
             // Add owner to list if SELF is searched.
             if( nSearchFlags & FrameSearchFlag::SELF )
             {
-                Sequence< Reference< XFrame > > seqSelf( 1 );
+                Sequence< css::uno::Reference< XFrame > > seqSelf( 1 );
                 seqSelf[0] = xOwner;
                 impl_appendSequence( seqFrames, seqSelf );
             }
@@ -229,7 +229,7 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
                 // Protect this instance against recursive calls from parents.
                 m_bRecursiveSearchProtection = sal_True;
                 // Ask parent of my owner for frames and append results to return list.
-                Reference< XFramesSupplier > xParent( xOwner->getCreator(), UNO_QUERY );
+                css::uno::Reference< XFramesSupplier > xParent( xOwner->getCreator(), UNO_QUERY );
                 // If a parent exist ...
                 if ( xParent.is() == sal_True )
                 {
@@ -254,7 +254,7 @@ Sequence< Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearch
                 {
                     // We don't must control this conversion.
                     // We have done this at append()!
-                    Reference< XFramesSupplier > xItem( (*m_pFrameContainer)[nIndex], UNO_QUERY );
+                    css::uno::Reference< XFramesSupplier > xItem( (*m_pFrameContainer)[nIndex], UNO_QUERY );
                     impl_appendSequence( seqFrames, xItem->getFrames()->queryFrames( nChildSearchFlags ) );
                 }
             }
@@ -280,7 +280,7 @@ sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException )
 
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
-    Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
+    css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() == sal_True )
     {
         // Set CURRENT size of container for return.
@@ -311,7 +311,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
 
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
-    Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
+    css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() == sal_True )
     {
         // Get element form container.
@@ -329,7 +329,7 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
 Type SAL_CALL OFrames::getElementType() throw( RuntimeException )
 {
     // This "container" support XFrame-interfaces only!
-    return ::getCppuType( (const Reference< XFrame >*)NULL );
+    return ::getCppuType( (const css::uno::Reference< XFrame >*)NULL );
 }
 
 //*****************************************************************************************************************
@@ -344,7 +344,7 @@ sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException )
     sal_Bool bHasElements = sal_False;
     // Do the follow only, if owner instance valid.
     // Lock owner for follow operations - make a "hard reference"!
-    Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
+    css::uno::Reference< XFrame > xOwner( m_xOwner.get(), UNO_QUERY );
     if ( xOwner.is() == sal_True )
     {
         // If some elements exist ...
@@ -378,18 +378,18 @@ void OFrames::impl_resetObject()
 //*****************************************************************************************************************
 //  private method
 //*****************************************************************************************************************
-void OFrames::impl_appendSequence(          Sequence< Reference< XFrame > >&    seqDestination  ,
-                                     const  Sequence< Reference< XFrame > >&    seqSource       )
+void OFrames::impl_appendSequence(          Sequence< css::uno::Reference< XFrame > >&  seqDestination  ,
+                                     const  Sequence< css::uno::Reference< XFrame > >&  seqSource       )
 {
     // Get some informations about the sequences.
     sal_Int32                       nSourceCount        = seqSource.getLength();
     sal_Int32                       nDestinationCount   = seqDestination.getLength();
-    const Reference< XFrame >*      pSourceAccess       = seqSource.getConstArray();
-    Reference< XFrame >*            pDestinationAccess  = seqDestination.getArray();
+    const css::uno::Reference< XFrame >*        pSourceAccess       = seqSource.getConstArray();
+    css::uno::Reference< XFrame >*          pDestinationAccess  = seqDestination.getArray();
 
     // Get memory for result list.
-    Sequence< Reference< XFrame > > seqResult           ( nSourceCount + nDestinationCount );
-    Reference< XFrame >*            pResultAccess       = seqResult.getArray();
+    Sequence< css::uno::Reference< XFrame > >   seqResult           ( nSourceCount + nDestinationCount );
+    css::uno::Reference< XFrame >*          pResultAccess       = seqResult.getArray();
     sal_Int32                       nResultPosition     = 0;
 
     // Copy all items from first sequence.
@@ -434,8 +434,8 @@ void OFrames::impl_appendSequence(          Sequence< Reference< XFrame > >&    
 // An instance of this class can only work with valid initialization.
 // We share the mutex with ouer owner class, need a valid factory to instanciate new services and
 // use the access to ouer owner for some operations.
-sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   Reference< XMultiServiceFactory >&  xFactory        ,
-                                                        const   Reference< XFrame >&                xOwner          ,
+sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   css::uno::Reference< XMultiServiceFactory >&    xFactory        ,
+                                                        const   css::uno::Reference< XFrame >&              xOwner          ,
                                                                 FrameContainer*                     pFrameContainer )
 {
     // Set default return value.
@@ -458,7 +458,7 @@ sal_Bool OFrames::impldbg_checkParameter_OFramesCtor(   const   Reference< XMult
 //*****************************************************************************************************************
 // Its only allowed to add valid references to container.
 // AND - alle frames must support XFrames-interface!
-sal_Bool OFrames::impldbg_checkParameter_append( const Reference< XFrame >& xFrame )
+sal_Bool OFrames::impldbg_checkParameter_append( const css::uno::Reference< XFrame >& xFrame )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;
@@ -477,7 +477,7 @@ sal_Bool OFrames::impldbg_checkParameter_append( const Reference< XFrame >& xFra
 //*****************************************************************************************************************
 // Its only allowed to add valid references to container...
 // ... => You can only delete valid references!
-sal_Bool OFrames::impldbg_checkParameter_remove( const Reference< XFrame >& xFrame )
+sal_Bool OFrames::impldbg_checkParameter_remove( const css::uno::Reference< XFrame >& xFrame )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;

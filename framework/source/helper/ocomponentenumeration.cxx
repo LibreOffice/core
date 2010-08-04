@@ -74,7 +74,7 @@ using namespace ::rtl                           ;
 //*****************************************************************************************************************
 //  constructor
 //*****************************************************************************************************************
-OComponentEnumeration::OComponentEnumeration( const Sequence< Reference< XComponent > >& seqComponents )
+OComponentEnumeration::OComponentEnumeration( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
         //  Init baseclasses first
         //  Attention:
         //      Don't change order of initialization!
@@ -200,7 +200,7 @@ void OComponentEnumeration::impl_resetObject()
 
 //*****************************************************************************************************************
 // An empty list is allowed ... hasMoreElements() will return false then!
-sal_Bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor( const Sequence< Reference< XComponent > >& seqComponents )
+sal_Bool OComponentEnumeration::impldbg_checkParameter_OComponentEnumerationCtor( const Sequence< css::uno::Reference< XComponent > >& seqComponents )
 {
     // Set default return value.
     sal_Bool bOK = sal_True;
