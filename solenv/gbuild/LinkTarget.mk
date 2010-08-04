@@ -70,7 +70,16 @@ gb_CxxObject_REPOS := $(gb_REPOS)
 gb_CxxObject_get_source = $(1)/$(2).cxx
 # defined by platform
 #  gb_CxxObject__command
-#  gb_CxxObject__command_dep
+
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_CxxObject__command_dep
+mkdir -p $(dir $(1)) && \
+    echo '$(call gb_CxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+
+endef
+else
+gb_CxxObject__command_dep =
+endif
 
 define gb_CxxObject__set_pchflags
 ifeq ($(gb_ENABLE_PCH),$(true))
