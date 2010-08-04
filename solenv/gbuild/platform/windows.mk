@@ -231,15 +231,6 @@ $(call gb_Helper_abbreviate_dirs_native,\
 $(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_CObject__command_dep
-mkdir -p $(dir $(1)) && \
-    echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
-
-endef
-else
-gb_CObject__command_dep =
-endif
 
 
 # CxxObject class

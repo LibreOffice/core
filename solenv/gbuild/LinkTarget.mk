@@ -33,7 +33,16 @@ gb_CObject_REPOS := $(gb_REPOS)
 gb_CObject_get_source = $(1)/$(2).c
 # defined by platform
 #  gb_CObject__command
-#  gb_CObject__command_dep
+
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_CObject__command_dep
+mkdir -p $(dir $(1)) && \
+    echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+
+endef
+else
+gb_CObject__command_dep =
+endif
 
 define gb_CObject__rules
 $$(call gb_CObject_get_target,%) : $$(call gb_CObject_get_source,$(1),%)
