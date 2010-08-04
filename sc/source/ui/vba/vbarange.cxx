@@ -1206,6 +1206,14 @@ inline table::CellRangeAddress lclGetRangeAddress( const uno::Reference< RangeTy
     return uno::Reference< sheet::XCellRangeAddressable >( rxCellRange, uno::UNO_QUERY_THROW )->getRangeAddress();
 }
 
+void lclClearRange( const uno::Reference< table::XCellRange >& rxCellRange ) throw (uno::RuntimeException)
+{
+    using namespace ::com::sun::star::sheet::CellFlags;
+    sal_Int32 nFlags = VALUE | DATETIME | STRING | ANNOTATION | FORMULA | HARDATTR | STYLES | EDITATTR | FORMATTED;
+    uno::Reference< sheet::XSheetOperation > xSheetOperation( rxCellRange, uno::UNO_QUERY_THROW );
+    xSheetOperation->clearContents( nFlags );
+}
+
 uno::Reference< sheet::XSheetCellRange > lclExpandToMerged( const uno::Reference< table::XCellRange >& rxCellRange, bool bRecursive ) throw (uno::RuntimeException)
 {
     uno::Reference< sheet::XSheetCellRange > xNewCellRange( rxCellRange, uno::UNO_QUERY_THROW );
@@ -1251,15 +1259,27 @@ void lclExpandAndMerge( const uno::Reference< table::XCellRange >& rxCellRange, 
     // Calc cannot merge over merged ranges, always unmerge first
     xMerge->merge( sal_False );
     if( bMerge )
+    {
+        // clear all contents of the covered cells (not the top-left cell)
+        table::CellRangeAddress aRangeAddr = lclGetRangeAddress( rxCellRange );
+        sal_Int32 nLastColIdx = aRangeAddr.EndColumn - aRangeAddr.StartColumn;
+        sal_Int32 nLastRowIdx = aRangeAddr.EndRow - aRangeAddr.StartRow;
+        // clear cells of top row, right of top-left cell
+        if( nLastColIdx > 0 )
+            lclClearRange( rxCellRange->getCellRangeByPosition( 1, 0, nLastColIdx, 0 ) );
+        // clear all rows below top row
+        if( nLastRowIdx > 0 )
+            lclClearRange( rxCellRange->getCellRangeByPosition( 0, 1, nLastColIdx, nLastRowIdx ) );
+        // merge the range
         xMerge->merge( sal_True );
-    // FIXME need to check whether all the cell contents are retained or lost by popping up a dialog
+    }
 }
 
 util::TriState lclGetMergedState( const uno::Reference< table::XCellRange >& rxCellRange ) throw (uno::RuntimeException)
 {
     /*  1) Check if range is completely inside one single merged range. To do
         this, try to extend from top-left cell only (not from entire range).
-        This will excude cases where this range consists of several merged
+        This will exclude cases where this range consists of several merged
         ranges (or parts of them). */
     table::CellRangeAddress aRangeAddr = lclGetRangeAddress( rxCellRange );
     uno::Reference< table::XCellRange > xTopLeft( rxCellRange->getCellRangeByPosition( 0, 0, 0, 0 ), uno::UNO_SET_THROW );
@@ -1508,7 +1528,8 @@ ScVbaRange::setValue( const uno::Any  &aValue ) throw (uno::RuntimeException)
 void
 ScVbaRange::Clear() throw (uno::RuntimeException)
 {
-    sal_Int32 nFlags = sheet::CellFlags::VALUE | sheet::CellFlags::STRING | sheet::CellFlags::HARDATTR | sheet::CellFlags::FORMATTED | sheet::CellFlags::EDITATTR | sheet::CellFlags::FORMULA;
+    using namespace ::com::sun::star::sheet::CellFlags;
+    sal_Int32 nFlags = VALUE | DATETIME | STRING | FORMULA | HARDATTR | EDITATTR | FORMATTED;
     ClearContents( nFlags );
 }
 
