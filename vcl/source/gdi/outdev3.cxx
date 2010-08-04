@@ -4090,10 +4090,14 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
     BOOL            bUnderlineDone = FALSE;
     BOOL            bOverlineDone  = FALSE;
 
-    // TODO: fix rotated text
     if ( IsRTLEnabled() )
+    {
         // --- RTL --- mirror at basex
-        nX = nDistX - nWidth - (nX - nDistX - 1);
+        long nRotDX = nDistX;
+        if( mpFontEntry->mnOrientation )
+            nRotDX = FRound( nRotDX * cos( mpFontEntry->mnOrientation*F_PI1800 ) );
+        nX += 1 + nWidth - nRotDX;
+    }
 
     if ( !IsTextLineColor() )
         aUnderlineColor = GetTextColor();
