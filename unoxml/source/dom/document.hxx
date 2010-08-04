@@ -72,7 +72,6 @@ namespace DOM
         XActiveDataControl, XActiveDataSource, XSAXSerializable, XFastSAXSerializable>
     {
         friend class CNode;
-        typedef std::list< Reference< XNode >* > nodereflist_t;
         typedef set< Reference< XStreamListener > > listenerlist_t;
     private:
 
