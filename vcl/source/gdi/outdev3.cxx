@@ -4093,10 +4093,10 @@ void OutputDevice::ImplDrawTextLine( long nX, long nY,
     if ( IsRTLEnabled() )
     {
         // --- RTL --- mirror at basex
-        long nRotDX = nDistX;
+        long nXAdd = nWidth - nDistX;
         if( mpFontEntry->mnOrientation )
-            nRotDX = FRound( nRotDX * cos( mpFontEntry->mnOrientation*F_PI1800 ) );
-        nX += 1 + nWidth - nRotDX;
+            nXAdd = FRound( nXAdd * cos( mpFontEntry->mnOrientation * F_PI1800 ) );
+        nX += nXAdd - 1;
     }
 
     if ( !IsTextLineColor() )
