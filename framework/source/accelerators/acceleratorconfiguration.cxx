@@ -96,6 +96,8 @@
 
 #include <svtools/acceleratorexecute.hxx>
 
+#include <stdio.h>
+
 //_______________________________________________
 // const
 
@@ -1248,7 +1250,6 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
 
     const sal_Int32 c = aEvent.Changes.getLength();
           sal_Int32 i = 0;
-
     for (i=0; i<c; ++i)
     {
         const css::util::ElementChange& aChange  =   aEvent.Changes[i];
@@ -1278,8 +1279,11 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::changesOccurred(const css::util:
         {
             ::rtl::OUString sModule = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
             sKey = ::utl::extractFirstFromConfigurationPath(sPath, &sPath);
+
             if (( sKey.getLength() > 0 ) && ( sPath.getLength() > 0 ))
+            {
                 reloadChanged(sPrimarySecondary, sGlobalModules, sModule, sKey);
+            }
         }
     }
 }
@@ -1380,8 +1384,8 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( sal_Bool bPreferred, const 
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
                 else if (sToken[k].equalsAscii("MOD2"))
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
-        else if (sToken[k].equalsAscii("MOD3"))
-            aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
+                else if (sToken[k].equalsAscii("MOD3"))
+                    aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
                 else
                 {
                     bValid = sal_False;
