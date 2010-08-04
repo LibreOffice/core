@@ -3966,6 +3966,18 @@ void SelectionManager::deregisterHandler( Atom selection )
 
 // ------------------------------------------------------------------------
 
+static bool bWasError = false;
+
+extern "C"
+{
+    int local_xerror_handler(Display* , XErrorEvent*)
+    {
+        bWasError = true;
+        return 0;
+    }
+    typedef int(*xerror_hdl_t)(Display*,XErrorEvent*);
+}
+
 void SelectionManager::registerDropTarget( XLIB_Window aWindow, DropTarget* pTarget )
 {
     MutexGuard aGuard(m_aMutex);
@@ -3977,18 +3989,31 @@ void SelectionManager::registerDropTarget( XLIB_Window aWindow, DropTarget* pTar
         OSL_ASSERT( "attempt to register window as drop target twice" );
     else if( aWindow && m_pDisplay )
     {
-        XSelectInput( m_pDisplay, aWindow, PropertyChangeMask );
-
-        // set XdndAware
-        XChangeProperty( m_pDisplay, aWindow, m_nXdndAware, XA_ATOM, 32, PropModeReplace, (unsigned char*)&nXdndProtocolRevision, 1 );
-
         DropTargetEntry aEntry( pTarget );
-        // get root window of window (in 99.999% of all cases this will be
-        // DefaultRootWindow( m_pDisplay )
-        int x, y;
-        unsigned int w, h, bw, d;
-        XGetGeometry( m_pDisplay, aWindow, &aEntry.m_aRootWindow,
-                      &x, &y, &w, &h, &bw, &d );
+        bWasError=false;
+        /* #i100000# ugly workaround: gtk sets its own XErrorHandler which is not suitable for us
+           unfortunately XErrorHandler is not per display, so this is just and ugly hack
+           Need to remove separate display and integrate clipboard/dnd into vcl's unx code ASAP
+        */
+        xerror_hdl_t pOldHandler = XSetErrorHandler( local_xerror_handler );
+        XSelectInput( m_pDisplay, aWindow, PropertyChangeMask );
+        if( ! bWasError )
+        {
+            // set XdndAware
+            XChangeProperty( m_pDisplay, aWindow, m_nXdndAware, XA_ATOM, 32, PropModeReplace, (unsigned char*)&nXdndProtocolRevision, 1 );
+            if( ! bWasError )
+            {
+                // get root window of window (in 99.999% of all cases this will be
+                // DefaultRootWindow( m_pDisplay )
+                int x, y;
+                unsigned int w, h, bw, d;
+                XGetGeometry( m_pDisplay, aWindow, &aEntry.m_aRootWindow,
+                              &x, &y, &w, &h, &bw, &d );
+            }
+        }
+        XSetErrorHandler( pOldHandler );
+        if(bWasError)
+            return;
         m_aDropTargets[ aWindow ] = aEntry;
     }
     else
