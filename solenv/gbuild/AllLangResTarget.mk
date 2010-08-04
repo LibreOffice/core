@@ -84,17 +84,21 @@ $$(call gb_SrsPartTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_
     $$(call gb_SrsPartTarget__command_dep,$$*,$$<,$$(INCLUDE),$$(DEFS))
     $$(call gb_SrsPartTarget__command,$$@,$$*,$$<,$$(INCLUDE),$$(DEFS),$$(lastword $$< $$(MERGEDFILE)))
 
+ifeq ($(gb_FULLDEPS),$(true))
 $$(call gb_SrsPartTarget_get_dep_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY)
     $$(call gb_Helper_abbreviate_dirs,\
         mkdir -p $$(dir $$@) && \
         echo '$$(call gb_SrsPartTarget_get_target,$$*) : $$(gb_Helper_PHONY)' > $$@)
+endif
 
 endef
 
 $(foreach repo,$(gb_SrsPartTarget_REPOS),$(eval $(call gb_SrsPartTarget__rules,$(repo))))
 
+ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsPartTarget_get_dep_target,%) :
     $(error unable to find resource definition file $* in repositories: $(gb_SrsPartTarget_REPOS))
+endif
 
 
 define gb_SrsPartTarget_SrsPartTarget
@@ -123,13 +127,14 @@ $(call gb_SrsTarget_get_clean_target,%) :
             $(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))) \
             $(foreach part,$(PARTS),$(call gb_SrsPartMergeTarget_get_target,$(part))))
 
-
+ifeq ($(gb_FULLDEPS),$(true))
 define gb_SrsTarget__command_dep
 $(call gb_Helper_announce,Collecting dependencies for srs $(2) ...)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     cat $(3) > $(1))
 endef
+endif
 
 $(call gb_SrsTarget_get_target,%) :
     $(call gb_SrsTarget__command_dep,$(call gb_SrsTarget_get_dep_target,$*),$*,$(foreach part,$(PARTS),$(call gb_SrsPartTarget_get_dep_target,$(part))))
@@ -138,8 +143,10 @@ $(call gb_SrsTarget_get_target,%) :
         mkdir -p $(dir $@) && \
         cat $^ > $@)
 
+ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsTarget_get_dep_target,%) :
     $(call gb_SrsTarget__command_dep,$@,$*,$^)
+endif
 
 define gb_SrsTarget_SrsTarget
 $(call gb_SrsTarget_get_target,$(1)) : DEFS := $(gb_SrsTarget_DEFAULTDEFS)
@@ -154,13 +161,17 @@ endef
 
 define gb_SrsTarget_set_defs
 $(call gb_SrsTarget_get_target,$(1)) : DEFS := $(2)
+ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsTarget_get_dep_target,$(1)) : DEFS := $(2)
+endif
 
 endef
 
 define gb_SrsTarget_set_include
 $(call gb_SrsTarget_get_target,$(1)) : INCLUDE := $(2)
+ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SrsTarget_get_dep_target,$(1)) : INCLUDE := $(2)
+endif
 
 endef
 

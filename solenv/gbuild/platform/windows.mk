@@ -195,17 +195,9 @@ endef
 # C is the command to execute
 # E is the linker output, that we are only interested in on error (good programs keep silent on success)
 # R is the return code of the link command
-define gb_CObject__command
-$(call gb_Helper_announce,Compiling $(2) (plain C) ...)
-$(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) && \
-    R=0 && C="$(gb_CC) \
-        $(4) $(5) \
-        -I$(dir $(3)) \
-        $(6) \
-        -c $(3) \
-        -Fo$(1)" && \
-    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
+
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_CObject__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
     $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
         $(4) $(5) \
@@ -221,11 +213,33 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v REPODIR=$(REPODIR)/ \
     > $(call gb_CObject_get_dep_target,$(2)))
 endef
+else
+CObject__command_deponcompile =
+endif
 
+define gb_CObject__command
+$(call gb_Helper_announce,Compiling $(2) (plain C) ...)
+$(call gb_Helper_abbreviate_dirs_native,\
+    mkdir -p $(dir $(1)) && \
+    R=0 && C="$(gb_CC) \
+        $(4) $(5) \
+        -I$(dir $(3)) \
+        $(6) \
+        -c $(3) \
+        -Fo$(1)" && \
+    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
+$(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+endef
+
+ifeq ($(gb_FULLDEPS),$(true))
 define gb_CObject__command_dep
 mkdir -p $(dir $(1)) && \
     echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+
 endef
+else
+gb_CObject__command_dep =
+endif
 
 
 # CxxObject class
@@ -234,17 +248,8 @@ endef
 # C is the command to execute
 # E is the linker output, that we are only interested in on error (good programs keep silent on success)
 # R is the return code of the link command
-define gb_CxxObject__command
-$(call gb_Helper_announce,Compiling $(2) ...)
-$(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) && \
-    C="$(gb_CXX) \
-        $(4) $(5) \
-        -I$(dir $(3)) \
-        $(6) \
-        -c $(3) \
-        -Fo$(1)" && \
-    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_CxxObject__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
     $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
         $(4) $(5) \
@@ -260,28 +265,42 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v REPODIR=$(REPODIR)/ \
     > $(call gb_CxxObject_get_dep_target,$(2)))
 endef
+else
+gb_CxxObject__command_deponcompile =
+endif
 
+define gb_CxxObject__command
+$(call gb_Helper_announce,Compiling $(2) ...)
+$(call gb_Helper_abbreviate_dirs_native,\
+    mkdir -p $(dir $(1)) && \
+    C="$(gb_CXX) \
+        $(4) $(5) \
+        -I$(dir $(3)) \
+        $(6) \
+        -c $(3) \
+        -Fo$(1)" && \
+    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
+$(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+
+endef
+
+ifeq ($(gb_FULLDEPS),$(true))
 define gb_CxxObject__command_dep
 mkdir -p $(dir $(1)) && \
     echo '$(call gb_CxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+
 endef
+else
+gb_CxxObject__command_dep =
+endif
 
 
 # PrecompiledHeader class
 
 gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx -Fp$(call gb_PrecompiledHeader_get_target,$(1))
 
-define gb_PrecompiledHeader__command
-$(call gb_Helper_announce,Compiling pch $(2) ...)
-$(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
-    C="$(gb_CXX) \
-        $(4) $(5) \
-        -I$(dir $(3)) \
-        $(6) \
-        -c $(3) \
-        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1)" && \
-    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_PrecompiledHeader__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
     $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
         $(4) $(5) \
@@ -297,15 +316,14 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v REPODIR=$(REPODIR)/ \
     > $(call gb_PrecompiledHeader_get_dep_target,$(2)))
 endef
+else
+gb_PrecompiledHeader__command_deponcompile =
+endif
 
-# NoexPrecompiledHeader class
-
-gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx -Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
-
-define gb_NoexPrecompiledHeader__command
-$(call gb_Helper_announce,Compiling noex pch $(2) ...)
+define gb_PrecompiledHeader__command
+$(call gb_Helper_announce,Compiling pch $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
-    mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
+    mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
     C="$(gb_CXX) \
         $(4) $(5) \
         -I$(dir $(3)) \
@@ -313,6 +331,16 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -c $(3) \
         -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1)" && \
     E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
+    $(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+
+endef
+
+# NoexPrecompiledHeader class
+
+gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx -Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
+
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_NoexPrecompiledHeader__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
     $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
         $(4) $(5) \
@@ -327,6 +355,24 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v SRCDIR=$(SRCDIR)/ \
         -v REPODIR=$(REPODIR)/ \
     > $(call gb_NoexPrecompiledHeader_get_dep_target,$(2)))
+endef
+else
+gb_NoexPrecompiledHeader__command_deponcompile =
+endif
+
+define gb_NoexPrecompiledHeader__command
+$(call gb_Helper_announce,Compiling noex pch $(2) ...)
+$(call gb_Helper_abbreviate_dirs_native,\
+    mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
+    C="$(gb_CXX) \
+        $(4) $(5) \
+        -I$(dir $(3)) \
+        $(6) \
+        -c $(3) \
+        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1)" && \
+    E=$$($$C) || (R=$$? && echo $$C && echo $$E 1>&2 && $$(exit $$R)))
+    $(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+
 endef
 
 
@@ -534,6 +580,7 @@ gb_SdiTarget_SVIDLPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc.exe
 gb_SrsPartTarget_RSCCOMMAND := SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
 
+ifeq ($(gb_FULLDEPS),$(true))
 define gb_SrsPartTarget__command_dep
 $(call gb_Helper_abbreviate_dirs_native,\
     $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
@@ -548,6 +595,9 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -v REPODIR=$(REPODIR)/ \
     > $(call gb_SrsPartTarget_get_dep_target,$(1)))
 endef
+else
+gb_SrsPartTarget__command_dep =
+endif
 
 
 # vim: set noet sw=4 ts=4:
