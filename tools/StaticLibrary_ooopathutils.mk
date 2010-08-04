@@ -25,29 +25,27 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,tools))
+$(eval $(call gb_StaticLibrary_StaticLibrary,ooopathutils))
 
-$(eval $(call gb_Module_add_targets,tools,\
-    Executable_mkunroll \
-    Executable_rscdep \
-    Executable_so_checksum \
-    Executable_sspretty \
-    Library_tl \
-    Package_inc \
-    StaticLibrary_ooopathutils \
+$(eval $(call gb_StaticLibrary_add_package_headers,ooopathutils,tools_inc))
+
+$(eval $(call gb_StaticLibrary_add_exception_objects,ooopathutils,\
+    tools/source/misc/pathutils \
 ))
 
-# TODO:
-#COPY tools/unxlngx6.pro/lib/atools.lib unxlngx6.pro/lib/atools.lib
-#COPY tools/unxlngx6.pro/lib/bootstrp2.lib unxlngx6.pro/lib/bootstrp2.lib
-#COPY tools/unxlngx6.pro/lib/btstrp.lib unxlngx6.pro/lib/btstrp.lib
-#COPY tools/unxlngx6.pro/lib/libatools.a unxlngx6.pro/lib/libatools.a
-#COPY tools/unxlngx6.pro/lib/libbootstrp2.a unxlngx6.pro/lib/libbootstrp2.a
-#COPY tools/unxlngx6.pro/lib/libbtstrp.a unxlngx6.pro/lib/libbtstrp.a
-#COPY tools/unxlngx6.pro/lib/libstdstrm.a unxlngx6.pro/lib/libstdstrm.a
-#COPY tools/unxlngx6.pro/lib/stdstrm.lib unxlngx6.pro/lib/stdstrm.lib
 
-#todo: link tools dynamically everywhere
-#todo: ALWAYSDBGFLAG etc.
+# HACK for now
+define StaticLibrary_ooopathutils_hack
+$(call gb_StaticLibrary_get_target,ooopathutils) : $(OUTDIR)/lib/$(1)
 
+$(OUTDIR)/lib/$(1) : $(call gb_CxxObject_get_target,tools/source/misc/pathutils)
+    cp -f $$< $$@
+
+endef
+
+ifeq ($(OS),WNT)
+$(eval $(call StaticLibrary_ooopathutils_hack,pathutils-obj.obj))
+else
+$(eval $(call StaticLibrary_ooopathutils_hack,pathutils-obj.o))
+endif
 # vim: set noet sw=4 ts=4:
