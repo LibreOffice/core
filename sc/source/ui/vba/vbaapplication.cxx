@@ -302,7 +302,8 @@ ScVbaApplication::getActiveCell() throw (uno::RuntimeException )
     sal_Int32 nCursorX = pTabView->GetCurX();
     sal_Int32 nCursorY = pTabView->GetCurY();
 
-    return  new ScVbaRange( this, mxContext, xRange->getCellRangeByPosition( nCursorX, nCursorY, nCursorX, nCursorY ) );
+    uno::Reference< XHelperInterface > xParent( excel::getUnoSheetModuleObj( xRange ), uno::UNO_QUERY_THROW );
+    return new ScVbaRange( xParent, mxContext, xRange->getCellRangeByPosition( nCursorX, nCursorY, nCursorX, nCursorY ) );
 }
 
 uno::Any SAL_CALL
