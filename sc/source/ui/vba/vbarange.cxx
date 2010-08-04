@@ -2315,8 +2315,7 @@ ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException)
 void
 ScVbaRange::setMergeCells( const uno::Any& aIsMerged ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    bool bMerge = false;
-    aIsMerged >>= bMerge;
+    bool bMerge = extractBoolFromAny( aIsMerged );
 
     if( mxRanges.is() )
     {
@@ -2517,7 +2516,8 @@ ScVbaRange::setWrapText( const uno::Any& aIsWrapped ) throw (script::BasicErrorE
     }
 
     uno::Reference< beans::XPropertySet > xProps(mxRange, ::uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsTextWrapped" ) ), aIsWrapped );
+    bool bIsWrapped = extractBoolFromAny( aIsWrapped );
+    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsTextWrapped" ) ), uno::Any( bIsWrapped ) );
 }
 
 uno::Any
@@ -2896,13 +2896,11 @@ ScVbaRange::setHidden( const uno::Any& _hidden ) throw (uno::RuntimeException)
         return;
     }
 
-    sal_Bool bHidden = sal_False;
-    _hidden >>= bHidden;
-
+    bool bHidden = extractBoolFromAny( _hidden );
     try
     {
         uno::Reference< beans::XPropertySet > xProps = getRowOrColumnProps( mxRange, mbIsRows );
-        xProps->setPropertyValue( ISVISIBLE, uno::makeAny( !bHidden ) );
+        xProps->setPropertyValue( ISVISIBLE, uno::Any( !bHidden ) );
     }
     catch( uno::Exception& e )
     {
@@ -4931,8 +4929,7 @@ void ScVbaRange::setShowDetail(const uno::Any& aShowDetail) throw ( css::uno::Ru
     if( m_Areas->getCount() > 1 )
         throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can not set Range.ShowDetail attribute ")), uno::Reference< uno::XInterface >() );
 
-    sal_Bool bShowDetail = sal_False;
-    aShowDetail >>= bShowDetail;
+    bool bShowDetail = extractBoolFromAny( aShowDetail );
 
     RangeHelper helper( mxRange );
     uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = helper.getSheetCellCursor();
