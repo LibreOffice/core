@@ -4,6 +4,10 @@
 Summary of new features in RtfExport
 
 ---------------------------------------------------------------------
+
+Miklos Vajna
+
+<vmiklos@frugalware.org>
 ---------------------------------------------------------------------
 
 Table of Contents
