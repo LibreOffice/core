@@ -273,7 +273,7 @@ gb_Library_Library_platform =
 # StaticLibrary class
 
 gb_StaticLibrary_DEFS :=
-gb_StaticLibrary_TARGETTYPEFLAGS := -Wl,-z,noexecstack
+gb_StaticLibrary_TARGETTYPEFLAGS := -Wl,-z,noexecstack -static -nostdlib
 gb_StaticLibrary_SYSPRE := lib
 gb_StaticLibrary_PLAINEXT := .a
 gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)

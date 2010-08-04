@@ -116,13 +116,14 @@ gb_Library_UNOLIBS_OOO := \
 
 # => URELIB
 gb_Library_UNOVERLIBS :=\
-    jvmfwk \
     cppu \
+    jvmfwk \
     sal \
 
 gb_StaticLibrary_PLAINLIBS :=\
-    salcpprt \
     jpeglib \
+    ooopathutils \
+    salcpprt \
     zlib \
     
 # vim: set noet sw=4 ts=4:

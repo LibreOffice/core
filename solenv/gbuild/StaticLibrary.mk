@@ -58,16 +58,18 @@ endef
 define gb_StaticLibrary__StaticLibrary_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_StaticLibrary_TARGETTYPEFLAGS))
-$(call gb_LinkTarget_set_defs,$(2)),\
+$(call gb_LinkTarget_set_defs,$(2),\
     $$(DEFS) \
     $(gb_StaticLibrary_DEFS) \
 )
-$(call gb_StaticLibrary_get_target,$(1)) : $(call gb_StaticLibrary_get_target,$(2))
+$(call gb_StaticLibrary_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
+
+$(call gb_Module_register_target,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_StaticLibrary_get_clean_target,$(1)))
 
 endef
 
 define gb_StaticLibrary_forward_to_Linktarget
-gb_StaticLibrary_$(1) = $$(call gb_LinkTarget_$(1),$(call gb_Library_get_linktargetname,$$(call gb_Library_get_filename,$$(1))),$$(2))
+gb_StaticLibrary_$(1) = $$(call gb_LinkTarget_$(1),$(call gb_StaticLibrary_get_linktargetname,$$(call gb_StaticLibrary_get_filename,$$(1))),$$(2))
 
 endef
 

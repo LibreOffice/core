@@ -98,6 +98,7 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
     Module \
     Package \
     ResTarget \
+    StaticLibrary \
 ))
 
 $(eval $(call gb_Helper_make_dep_targets,\
@@ -118,6 +119,7 @@ gb_LinkTarget_get_external_headers_target = $(WORKDIR)/ExternalHeaders/$(1)
 gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
 gb_PackagePart_get_destinations = $(OUTDIR)/xml $(OUTDIR)/inc
 gb_ResTarget_get_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
+gb_StaticLibrary_get_linktargetname = StaticLibrary/$(1)
 
 define gb_Module_register_target
 gb_Module_TARGETSTACK := $(1) $(gb_Module_TARGETSTACK)
