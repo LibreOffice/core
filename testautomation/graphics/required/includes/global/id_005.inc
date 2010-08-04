@@ -1012,8 +1012,8 @@ testcase tiFormatStylesSlideDesign
       DeleteUnusedBackgrounds.check
     printlog "click button 'Load...'"
       Laden.Click
-      kontext "Neu"
-    printlog "click button 'more'"
+      sleep (10)
+    Kontext "Neu"
          Zusaetze.click
          sleep 1
       kontext "Neu"
