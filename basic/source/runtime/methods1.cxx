@@ -1586,8 +1586,6 @@ RTLFUNC(Join)
 }
 
 
-typedef ::std::vector< String > StringVector;
-
 RTLFUNC(Split)
 {
     (void)pBasic;

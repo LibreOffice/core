@@ -161,6 +161,9 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
 
                     // In den String-Pool uebernehmen
                     rDef.SetTypeId( aGblStrings.Add( aCompleteName ) );
+
+                    if( rDef.IsNew() && pProc == NULL )
+                        aRequiredTypes.push_back( aCompleteName );
                 }
                 eType = SbxOBJECT;
                 break;
