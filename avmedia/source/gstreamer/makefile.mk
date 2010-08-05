@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,17 +25,47 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..
+PRJ=..$/..
+PRJNAME=avmediagst
+TARGET=avmediagst
 
-PRJNAME = desktop
-TARGET = deployment_migration
-ENABLE_EXCEPTIONS = TRUE
+# --- Settings ----------------------------------
 
-.INCLUDE : settings.mk
+.INCLUDE :  	settings.mk
 
-SLOFILES = \
-        $(SLO)$/dp_migration.obj
+.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
+CDEFS+= -DVERBOSE
+.ENDIF
 
-.INCLUDE : ..$/target.pmk
-.INCLUDE : target.mk
+# --- Files ----------------------------------
 
+.IF "$(GUI)" == "UNX"  && "$(GUIBASE)"!="aqua" && "$(ENABLE_GSTREAMER)" != ""
+
+PKGCONFIG_MODULES=gtk+-2.0 gstreamer-0.10 gstreamer-interfaces-0.10
+.INCLUDE : pkg_config.mk
+
+SLOFILES= \
+        $(SLO)$/gstuno.obj		\
+        $(SLO)$/gstmanager.obj		\
+        $(SLO)$/gstwindow.obj		\
+        $(SLO)$/gstplayer.obj		\
+        $(SLO)$/gstframegrabber.obj
+
+EXCEPTIONSFILES= \
+        $(SLO)$/gstuno.obj		\
+        $(SLO)$/gstplayer.obj		\
+        $(SLO)$/gstframegrabber.obj
+
+SHL1TARGET=$(TARGET)
+SHL1STDLIBS= $(CPPULIB) $(SALLIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(TOOLSLIB) $(VCLLIB)
+SHL1STDLIBS+=$(PKGCONFIG_LIBS)
+SHL1IMPLIB=i$(TARGET)
+SHL1LIBS=$(SLB)$/$(TARGET).lib
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+
+DEF1NAME=$(SHL1TARGET)
+DEF1EXPORTFILE=exports.dxp
+
+.ENDIF
+
+.INCLUDE :  	target.mk

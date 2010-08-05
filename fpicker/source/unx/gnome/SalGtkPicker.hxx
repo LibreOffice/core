@@ -53,7 +53,7 @@
 class SalGtkPicker
 {
     public:
-        SalGtkPicker() : m_pDialog(0) {}
+        SalGtkPicker(const ::com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory>& xServiceMgr);
         virtual ~SalGtkPicker();
     protected:
         osl::Mutex m_rbHelperMtx;
@@ -69,6 +69,13 @@ class SalGtkPicker
             throw( com::sun::star::uno::RuntimeException );
         static rtl::OUString uritounicode(const gchar *pIn);
         static rtl::OString unicodetouri(const rtl::OUString &rURL);
+};
+
+class GdkThreadLock
+{
+public:
+    GdkThreadLock() { gdk_threads_enter(); }
+    ~GdkThreadLock() { gdk_threads_leave(); }
 };
 
 //Run the Gtk Dialog. Watch for any "new windows" created while we're

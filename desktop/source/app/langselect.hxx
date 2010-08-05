@@ -40,10 +40,24 @@ namespace desktop
 
 class LanguageSelection
 {
+public:
+    enum LanguageSelectionStatus
+    {
+        LS_STATUS_OK,
+        LS_STATUS_CANNOT_DETERMINE_LANGUAGE,
+        LS_STATUS_CONFIGURATIONACCESS_BROKEN
+    };
+
+    static com::sun::star::lang::Locale IsoStringToLocale(const rtl::OUString& str);
+    static rtl::OUString getLanguageString();
+    static bool prepareLanguage();
+    static LanguageSelectionStatus getStatus();
+
 private:
     static const rtl::OUString usFallbackLanguage;
     static rtl::OUString aFoundLanguage;
     static sal_Bool bFoundLanguage;
+    static LanguageSelectionStatus m_eStatus;
 
     static com::sun::star::uno::Reference< com::sun::star::container::XNameAccess >
         getConfigAccess(const sal_Char* pPath, sal_Bool bUpdate=sal_False);
@@ -55,11 +69,6 @@ private:
     static rtl::OUString getSystemLanguage();
     static void resetUserLanguage();
     static void setDefaultLanguage(const rtl::OUString&);
-
-public:
-    static com::sun::star::lang::Locale IsoStringToLocale(const rtl::OUString& str);
-    static rtl::OUString getLanguageString();
-    static bool prepareLanguage();
 };
 
 } //namespace desktop

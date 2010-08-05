@@ -579,6 +579,7 @@ SfxPopupMenuManager* SfxPopupMenuManager::Popup( const ResId& rResId, SfxViewFra
     return 0;
 }
 
+
 void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFrame, const Point& rPoint, Window* pWindow )
 {
     PopupMenu *pSVMenu = new PopupMenu( rResId );
@@ -623,6 +624,12 @@ void SfxPopupMenuManager::ExecutePopup( const ResId& rResId, SfxViewFrame* pFram
         SfxPopupMenuManager aPop( pSVMenu, pFrame->GetBindings() );
         aPop.RemoveDisabledEntries();
         aPop.Execute( rPoint, pWindow );
+
+        // #i112646 avoid crash when context menu is closed.
+        // the (manually inserted) sub-menu needs to be destroyed before
+        // aPop gets destroyed.
+        delete pThesSubMenu;
+        pThesSubMenu = 0;
     }
 
     delete pThesSubMenu;
@@ -632,3 +639,4 @@ Menu* SfxPopupMenuManager::GetSVMenu()
 {
     return (Menu*) GetMenu()->GetSVMenu();
 }
+
