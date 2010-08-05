@@ -2842,7 +2842,7 @@ Size Edit::CalcMinimumSize() const
     Size aMinSize ( CalcSize( 3 ) );
     if( aSize.Width() < aMinSize.Width() )
         aSize.Width() = aMinSize.Width();
-    // add some space between text entry an border
+    // add some space between text entry and border
     aSize.Height() += 4;
 
     aSize = CalcWindowSize( aSize );
@@ -2850,15 +2850,22 @@ Size Edit::CalcMinimumSize() const
     // ask NWF what if it has an opinion, too
     ImplControlValue aControlValue;
     Rectangle aRect( Point( 0, 0 ), aSize );
-    Region aContent, aBound;
+    Rectangle aContent, aBound;
     if( const_cast<Edit*>(this)->GetNativeControlRegion(
                    CTRL_EDITBOX, PART_ENTIRE_CONTROL,
                    aRect, 0, aControlValue, rtl::OUString(), aBound, aContent) )
     {
-        Rectangle aBoundRect( aContent.GetBoundRect() );
-        if( aBoundRect.GetHeight() > aSize.Height() )
-            aSize.Height() = aBoundRect.GetHeight();
+        if( aBound.GetHeight() > aSize.Height() )
+            aSize.Height() = aBound.GetHeight();
     }
+    return aSize;
+}
+
+Size Edit::GetMinimumEditSize()
+{
+    Window* pDefWin = ImplGetDefaultWindow();
+    Edit aEdit( pDefWin, WB_BORDER );
+    Size aSize( aEdit.CalcMinimumSize() );
     return aSize;
 }
 

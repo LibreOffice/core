@@ -340,6 +340,11 @@ String RID_PA_TXT_TESTPAGE_PRINTED
     Text [ en-US ] = "The test page was printed succesfully. Please check the result.";
 };
 
+String RID_ERR_NOWRITE
+{
+    Text [en-US] = "No printers can be installed, because the file system is read-only.\nPlease contact your system administrator.";
+};
+
 String RID_QRY_PRTNAME
 {
     Text [ en-US ] = "~New printer name";

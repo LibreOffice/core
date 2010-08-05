@@ -2819,7 +2819,7 @@ void ImplWin::ImplDraw( bool bLayout )
             sal_Int32 nLeft, nTop, nRight, nBottom;
             pWin->GetBorder( nLeft, nTop, nRight, nBottom );
             Point aPoint( -nLeft, -nTop );
-            Region aCtrlRegion( Rectangle( aPoint - GetPosPixel(), pWin->GetSizePixel() ) );
+            Rectangle aCtrlRegion( aPoint - GetPosPixel(), pWin->GetSizePixel() );
 
             BOOL bMouseOver = FALSE;
             if( GetParent() )
@@ -2838,8 +2838,7 @@ void ImplWin::ImplDraw( bool bLayout )
             if( ! (nParentStyle & WB_BORDER) || (nParentStyle & WB_NOBORDER) )
             {
                 Rectangle aParentRect( Point( 0, 0 ), pWin->GetSizePixel() );
-                Region aParentReg( aParentRect );
-                pWin->DrawNativeControl( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aParentReg,
+                pWin->DrawNativeControl( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aParentRect,
                                          nState, aControlValue, rtl::OUString() );
             }
 

@@ -988,6 +988,7 @@ bool AquaSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPol
 // -----------------------------------------------------------------------
 
 bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
+    double fTransparency,
     const ::basegfx::B2DVector& rLineWidths,
     basegfx::B2DLineJoin eLineJoin )
 {
@@ -1032,6 +1033,7 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
         CGContextAddPath( mrContext, xPath );
         // draw path with antialiased line
         CGContextSetShouldAntialias( mrContext, true );
+        CGContextSetAlpha( mrContext, 1.0 - fTransparency );
         CGContextSetLineJoin( mrContext, aCGLineJoin );
         CGContextSetLineWidth( mrContext, rLineWidths.getX() );
         CGContextDrawPath( mrContext, kCGPathStroke );
@@ -1545,8 +1547,10 @@ void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
+void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
+    (void)nFallbackLevel; // glyph-fallback on ATSU is done differently -> no fallback level
+
     // get the ATSU font metrics (in point units)
     // of the font that has eventually been size-limited
 
