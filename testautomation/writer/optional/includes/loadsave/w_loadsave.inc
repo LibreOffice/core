@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Checks the export to all available Filters from 
 '*
@@ -448,7 +448,7 @@ testcase tExportTop5FormatsIntoTop5
 						Call hCloseDocument
 					Loop
 					printlog " - check if file exists"
-					if hFileExists (sCurrentSaveFile) then
+					if FileExists (sCurrentSaveFile) then
 						printlog "  - success"
 						printlog " - reload previously saved file"
 						if hFileOpenWithFilter(sCurrentSaveFile, sCurrentSaveFilter) = true then

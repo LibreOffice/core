@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : Tools->Options: OpenOffice.org Security
 '*
@@ -91,13 +91,6 @@ sub checkSecurityPage( _file as string )
             warnlog( "Failed to open Security options" )
         endif
         
-        Kontext "TabSecurity"
-        if ( TabSecurity.exists() ) then
-            checkCheckBox( _file , "*" , RecommendToOpenDocumentReadOnly )
-            checkCheckBox( _file , "*" , RecordChanges )   
-        else
-            warnlog( "Could not return to Security Tabpage" )
-        endif
     else
         warnlog( "Security Tabpage not available" )
     endif
@@ -110,6 +103,9 @@ sub changeSecurityPage( _file as string )
     
     printlog( " * Changing current settings according to the reference list." )
     printlog( " * Using settings from file: " & _file )
+
+    kontext "TabSecurity"
+    if ( TabSecurity.exists() ) then
     
     Options.click
     Kontext "TabSecurityOptionsAndWarnings"
@@ -120,12 +116,12 @@ sub changeSecurityPage( _file as string )
     setCheckBox( _file , "*" , RemovePersonalInformationOnSaving )
     setCheckBox( _file , "*" , RecommendPasswordProtectionOnSaving )
     TabSecurityOptionsAndWarnings.cancel
-    Kontext "TabSecurity"
-    setCheckBox( _file , "*" , RecommendToOpenDocumentReadOnly )
-    setCheckBox( _file , "*" , RecordChanges )
     
     Kontext "OptionenDLG"
     OptionenDLG.OK
+    else
+        warnlog( "Security Tabpage not available" )
+    endif
    
     sleep(2)
     call exitRestartTheOffice()

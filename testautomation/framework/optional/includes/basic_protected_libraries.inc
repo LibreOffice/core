@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Test protected libraries
 '*
@@ -47,7 +47,7 @@ testcase tProtectedLibraries
     dim iCurrentLib as integer
     dim cMsg as string
     
-    hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
     
     printlog( "Select My Macros" )
     kontext "Makro"
@@ -97,7 +97,7 @@ testcase tProtectedLibraries
     printlog( "Restart the application" )
     call ExitRestartTheOffice()
     
-    hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
     
     printlog( "Select the protected library" )
     Kontext "Makro"

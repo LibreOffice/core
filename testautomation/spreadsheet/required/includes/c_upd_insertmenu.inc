@@ -25,7 +25,7 @@
 '
 '/***********************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Resource Test - Insert Menu
 '*
@@ -395,139 +395,145 @@ testcase tInsertHyperlink
     '/// Open 'Hyperlink' – dialog via 'Insert – Hyperlink'
     printlog " Open 'Hyperlink' – dialog via 'Insert – Hyperlink'"
     InsertHyperlink
-    WaitSlot( 5000 )
+
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
     
-    Kontext "Hyperlink"
-    '/// Switch to category 'Internet' (first one)
-    printlog " Switch to category 'Internet'"
-    Auswahl.TypeKeys "<HOME>"
-    '/// Choose 'Web'
-    printlog " Choose 'Web'"
-    Kontext "TabHyperlinkInternet"
-    internet.check
-    Call DialogTest ( TabHyperlinkInternet,1 )
-    '/// Click on 'Target in Document' – button (the target dialog appears)
-    printlog " Click on 'Target in Document' – button (the target dialog appears)"
-    Target.Click
-    Kontext "ZielImDokument"
-    Call DialogTest ( ZielImDokument )
-    '/// Close 'Target' – dialog with 'Close'
-    printlog " Close 'Target' – dialog with 'Close'"
-    ZielImDokument.Close
-    Kontext "TabHyperlinkInternet"
-    '/// Choose 'FTP'
-    printlog " Choose 'FTP'"
-    FTP.check
-    Call DialogTest ( TabHyperlinkInternet,2 )
-    '/// Check that the 'Target' – button is disabled
-    printlog " Check that the 'Target' – button is disabled"
-    if Target.IsEnabled then
-        warnlog "The target button is enabled, but should be disabled"
-    end if
-    '/// Check option 'Anonymous User'
-    printlog " Check option 'Anonymous User'"
-    AnonymerBenutzer.Check
-    '/// Check that 'Login Name' is disabled
-    printlog " Check that 'Login Name' is disabled"
-    if Loginname.IsEnabled then
-        warnlog "The Loginname is enabled, but should be disabled"
-    end if
-    '/// Chose 'Telnet'
-    printlog " Chose 'Telnet'"
-    Telnet.check
-    Call DialogTest ( TabHyperlinkInternet,3 )
-    '/// Check that the 'Target' – button is disabled
-    printlog " Check that the 'Target' – button is disabled"
-    if Target.IsEnabled then
-        warnlog "The target button is enabled, but should be disabled"
-    end if
-    '/// Switch to category 'Mail & News'
-    Kontext "Hyperlink"
-    Auswahl.TypeKeys "<DOWN>"
-    Kontext "TabHyperlinkMailUndNews"
-    Call DialogTest ( TabHyperlinkMailUndNews )
-    '/// Click twice on 'Data Source' – button to turn on / off the databasebeamer
-    printlog " Click twice on 'Data Source' – button to turn on / off the databasebeamer"
-    Adressbuch.click
-    Adressbuch.click
-    '/// Check option 'Mail'
-    printlog " Check option 'Mail'"
-    EMail.check
-    '/// Check that the editfield for 'Receiver' is enabled
-    printlog " Check that the editfield for 'Receiver' is enabled"
-    if not Receiver.IsEnabled then
-        warnlog "Receiver is disabled but should be enabled"
-    end if
-    '/// Check that the editfield for 'Subject' is enabled
-    printlog " Check that the editfield for 'Subject' is enabled"
-    if not Betreff.IsEnabled then
-        warnlog "Subject is disabled but should be enabled"
-    end if
-    '/// Check option 'News'
-    printlog " Check option 'News'"
-    News.check
-    '/// Check that the editfield for 'Subject' is disabled
-    printlog " Check that the editfield for 'Subject' is disabled"
-    if Betreff.IsEnabled then
-        warnlog "Subject is enabled but should be disabled"
-    end if
-    '/// Switch to category Document
-    printlog " Switch to category Document"
-    Kontext "Hyperlink"
-    Auswahl.TypeKeys "<DOWN>"
-    Kontext "TabHyperlinkDokument"
-    Call DialogTest ( TabHyperlinkDokument )
-    '/// Enter 'Test' in 'Path'
-    printlog " Enter 'Test' in 'Path'"
-    Path.TypeKeys "Test"
-    '/// Click on 'Open' – button
-    printlog " Click on 'Open' – button"
-    DateiOeffnen.click
-    Kontext "OeffnenDlg"
-    '/// Close 'Open' – dialog with 'Cancel'
-    printlog " Close 'Open' – dialog with 'Cancel'"
-    OeffnenDlg.Cancel
-    Kontext "TabHyperlinkDokument"
-    '/// Click on 'Target in Document' – button (the target dialog appears)
-    printlog " Click on 'Target in Document' – button (the target dialog appears)"
-    Target.click
-    Kontext "ZielImDokument"
-    '/// Close 'Target' – dialog with 'Close'
-    printlog " Close 'Target' – dialog with 'Close'"
-    ZielImDokument.close
-    Kontext "Hyperlink"
-    '/// Switch to category 'New Document'
-    printlog " Switch to category 'New Document'"
-    Auswahl.TypeKeys "<DOWN>"
-    Kontext "TabHyperlinkNeuesDokument"
-    Call DialogTest ( TabHyperlinkNeuesDokument )
-    '/// Check 'Edit Now'
-    printlog " Click 'Edit Now'"
-    SofortBearbeiten.check
-    '/// Check 'Edit Later'
-    printlog " Click 'Edit Later'"
-    SpaeterBearbeiten.check
-    '/// Click on 'Select Path' – button
-    printlog " Click on 'Select Path' – button"
-    Pfad.click
-    Kontext "OeffnenDlg"
-    '/// Close 'Select Path' – dialog with 'Cancel'
-    printlog " Close 'Select Path' – dialog with 'Cancel'"
-    OeffnenDlg.Cancel
-    Kontext "TabHyperlinkNeuesDokument"
-    '/// Check that the 'Frame' listbox has items
-    printlog " Check that the 'Frame' listbox has items"
-    if Frame.GetItemCount < 1 then
-        warnlog "The Frame combobox is empty"
-    end if
-    '/// Check that the 'Form' listbox has 2 entries
-    printlog " Check that the 'Form' listbox has 2 entries"
-    if Form.GetItemCount <> 2 then
-        warnlog "The Form combobox has not 2 items"
-    end if
-    '/// Close 'Hyperlink' – dialog with 'Close'
-    printlog " Close 'Hyperlink' – dialog with 'Close'"
-    TabHyperlinkNeuesDokument.Cancel
+        Kontext "Hyperlink"
+        '/// Switch to category 'Internet' (first one)
+        printlog " Switch to category 'Internet'"
+        Auswahl.TypeKeys "<HOME>"
+        '/// Choose 'Web'
+        printlog " Choose 'Web'"
+        Kontext "TabHyperlinkInternet"
+        internet.check
+        Call DialogTest ( TabHyperlinkInternet,1 )
+        '/// Click on 'Target in Document' – button (the target dialog appears)
+        printlog " Click on 'Target in Document' – button (the target dialog appears)"
+        Target.Click
+        Kontext "ZielImDokument"
+        Call DialogTest ( ZielImDokument )
+        '/// Close 'Target' – dialog with 'Close'
+        printlog " Close 'Target' – dialog with 'Close'"
+        ZielImDokument.Close
+        Kontext "TabHyperlinkInternet"
+        '/// Choose 'FTP'
+        printlog " Choose 'FTP'"
+        FTP.check
+        Call DialogTest ( TabHyperlinkInternet,2 )
+        '/// Check that the 'Target' – button is disabled
+        printlog " Check that the 'Target' – button is disabled"
+        if Target.IsEnabled then
+            warnlog "The target button is enabled, but should be disabled"
+        end if
+        '/// Check option 'Anonymous User'
+        printlog " Check option 'Anonymous User'"
+        AnonymerBenutzer.Check
+        '/// Check that 'Login Name' is disabled
+        printlog " Check that 'Login Name' is disabled"
+        if Loginname.IsEnabled then
+            warnlog "The Loginname is enabled, but should be disabled"
+        end if
+        '/// Chose 'Telnet'
+        printlog " Chose 'Telnet'"
+        Telnet.check
+        Call DialogTest ( TabHyperlinkInternet,3 )
+        '/// Check that the 'Target' – button is disabled
+        printlog " Check that the 'Target' – button is disabled"
+        if Target.IsEnabled then
+            warnlog "The target button is enabled, but should be disabled"
+        end if
+        '/// Switch to category 'Mail & News'
+        Kontext "Hyperlink"
+        Auswahl.TypeKeys "<DOWN>"
+        Kontext "TabHyperlinkMailUndNews"
+        Call DialogTest ( TabHyperlinkMailUndNews )
+        '/// Click twice on 'Data Source' – button to turn on / off the databasebeamer
+        printlog " Click twice on 'Data Source' – button to turn on / off the databasebeamer"
+        Adressbuch.click
+        Adressbuch.click
+        '/// Check option 'Mail'
+        printlog " Check option 'Mail'"
+        EMail.check
+        '/// Check that the editfield for 'Receiver' is enabled
+        printlog " Check that the editfield for 'Receiver' is enabled"
+        if not Receiver.IsEnabled then
+            warnlog "Receiver is disabled but should be enabled"
+        end if
+        '/// Check that the editfield for 'Subject' is enabled
+        printlog " Check that the editfield for 'Subject' is enabled"
+        if not Betreff.IsEnabled then
+            warnlog "Subject is disabled but should be enabled"
+        end if
+        '/// Check option 'News'
+        printlog " Check option 'News'"
+        News.check
+        '/// Check that the editfield for 'Subject' is disabled
+        printlog " Check that the editfield for 'Subject' is disabled"
+        if Betreff.IsEnabled then
+            warnlog "Subject is enabled but should be disabled"
+        end if
+        '/// Switch to category Document
+        printlog " Switch to category Document"
+        Kontext "Hyperlink"
+        Auswahl.TypeKeys "<DOWN>"
+        Kontext "TabHyperlinkDokument"
+        Call DialogTest ( TabHyperlinkDokument )
+        '/// Enter 'Test' in 'Path'
+        printlog " Enter 'Test' in 'Path'"
+        Path.TypeKeys "Test"
+        '/// Click on 'Open' – button
+        printlog " Click on 'Open' – button"
+        DateiOeffnen.click
+        Kontext "OeffnenDlg"
+        '/// Close 'Open' – dialog with 'Cancel'
+        printlog " Close 'Open' – dialog with 'Cancel'"
+        OeffnenDlg.Cancel
+        Kontext "TabHyperlinkDokument"
+        '/// Click on 'Target in Document' – button (the target dialog appears)
+        printlog " Click on 'Target in Document' – button (the target dialog appears)"
+        Target.click
+        Kontext "ZielImDokument"
+        '/// Close 'Target' – dialog with 'Close'
+        printlog " Close 'Target' – dialog with 'Close'"
+        ZielImDokument.close
+        Kontext "Hyperlink"
+        '/// Switch to category 'New Document'
+        printlog " Switch to category 'New Document'"
+        Auswahl.TypeKeys "<DOWN>"
+        Kontext "TabHyperlinkNeuesDokument"
+        Call DialogTest ( TabHyperlinkNeuesDokument )
+        '/// Check 'Edit Now'
+        printlog " Click 'Edit Now'"
+        SofortBearbeiten.check
+        '/// Check 'Edit Later'
+        printlog " Click 'Edit Later'"
+        SpaeterBearbeiten.check
+        '/// Click on 'Select Path' – button
+        printlog " Click on 'Select Path' – button"
+        Pfad.click
+        Kontext "OeffnenDlg"
+        '/// Close 'Select Path' – dialog with 'Cancel'
+        printlog " Close 'Select Path' – dialog with 'Cancel'"
+        OeffnenDlg.Cancel
+        Kontext "TabHyperlinkNeuesDokument"
+        '/// Check that the 'Frame' listbox has items
+        printlog " Check that the 'Frame' listbox has items"
+        if Frame.GetItemCount < 1 then
+            warnlog "The Frame combobox is empty"
+        end if
+        '/// Check that the 'Form' listbox has 2 entries
+        printlog " Check that the 'Form' listbox has 2 entries"
+        if Form.GetItemCount <> 2 then
+            warnlog "The Form combobox has not 2 items"
+        end if
+        '/// Close 'Hyperlink' – dialog with 'Close'
+        printlog " Close 'Hyperlink' – dialog with 'Close'"
+        kontext "HyperlinkDialog"
+        HyperlinkDialog.Close()
+    else
+        warnlog( "Failed to open <HyperlinkDialog>" )
+    endif
     '/// Close document
     printlog " Close starting document"
     call hCloseDocument

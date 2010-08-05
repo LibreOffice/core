@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description :
 '*
@@ -280,7 +280,11 @@ testcase tFilePassword
       printlog "   Check: (" + i + "/" + x +"): " +sTemp
       if Passwort.isEnabled then
          if NOT((instr(sTemp,gMathFilter) = 1)OR(instr(sTemp," (.sxm)") > 1)) then 
-             warnlog "(" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
+             if (4=i) then
+                warnlog "#i112895# (" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
+             else
+                warnlog "(" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
+            endif
          endif
       else
          if (instr(sTemp,gMathFilter) = 1)OR(instr(sTemp," (.sxm)") > 1) then 
@@ -429,7 +433,7 @@ testcase tFilePrint
     DokumentWriter.MouseUp 99,99
 
     sFileName = convertpath( gOfficePath + "user/work/math/level1/ftc_a.odt")
-    if (hFileExists(sFileName)) then
+    if (FileExists(sFileName)) then
         '/// goto end of page; insert page break ///'
         kontext "DokumentWriter"
         DokumentWriter.typeKeys "<mod1 end>"
@@ -660,20 +664,12 @@ function hSpeichernUnterMitFilterKillTBO (sFileName as String, sFilterName, opti
     Dim bAlienNotAllowed as boolean
 
     sDerName = ConvertPath (sFileName)
-
-    if hFileExists (sDerName) = TRUE then
-        try 
-            app.kill (sDerName)
-        catch
-            Exceptlog
-        endcatch
-    end if
-    
-    if FileExists(sDerName) then
-        warnlog "file '" & sDerName & "' couldn't be deleted. Exiting function now..."
+    if ( not hDeleteFile( sDerName ) ) then
+        warnlog( "Aborting function because the file could not be deleted: " & sDerName )
+        hSpeichernUnterMitFilterKillTBO() = FALSE
         exit function
-    end if
-
+    endif
+ 
     sleep (1)
     FileSaveAs    
     Kontext "SpeichernDlg"

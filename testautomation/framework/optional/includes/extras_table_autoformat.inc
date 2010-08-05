@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Test the autoformat-feature for tables
 '*
@@ -39,8 +39,7 @@ testcase tAutoformatTable( iApp as integer )
     endif
 
     
-    dim al_UI_formats( 1000 ) as string
-        al_UI_formats( 0 ) = "0"
+    dim al_UI_formats( 1000 ) as string : al_UI_formats( 0 ) = "0"
     
     dim iFormatCount as integer
     dim iCurrentFormat as integer
@@ -113,11 +112,7 @@ testcase tAutoformatTable( iApp as integer )
     hDestroyDocument()
     
     irc = hManageComparisionList( sFileIn, sFileOut, al_UI_formats() )
-    if ( irc <> 0 ) then
-        warnlog( "The list of table autoformats has changed, please review." )
-    else
-        printlog( "The list of table autoformats is unchanged. Good." )
-    endif
+    hListResultEvaluation( irc , 0 )
     
 endcase
         

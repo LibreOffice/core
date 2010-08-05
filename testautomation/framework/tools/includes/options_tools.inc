@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : tools for options tests
 '*
@@ -140,84 +140,6 @@ sub CreatePathList
         Warnlog "Please check : " + sList
         ListWrite ( lsInterim(), sList, "utf8" )
     end if
-
-end sub
-
-'*******************************************************************************
-
-function URLGraphicCheck ( bRelativ as Boolean, sFile as String )
-
-    Dim sGraphicPath, sTestString, sDummy as String
-    Dim lsFile ( 200 ) as String
-    Dim i as Integer
-    '///check if the pathname of a linked file is relative or not ( only for func_LoadSaveGeneral_2 )
-    sGraphicPath = ( "/share/gallery/photos/desert1.jpg" )
-    ListRead ( lsFile(), sFile )
-
-    for i=1 to ListCount ( lsFile() )
-
-        if Instr( lsFile(i), "IMG SRC" ) <> 0 then
-            sTestString = lsFile(i)
-            i=1000
-        end if
-
-    next i
-
-    if bRelativ = TRUE then
-
-        if Instr( sTestString, "../.." )      = 0  then
-            Warnlog "Bug => The path is not relativ!"
-        endif
-
-        if Instr( sTestString, "file:///" )   <> 0 then
-            Warnlog "Bug => The relativ path contains 'file:///'"
-        endif
-
-    else
-        if Instr( sTestString, "file:///" )   = 0  then
-            Warnlog "Bug => The path is relativ!"
-        endif
-
-        if Instr( sTestString, "../.." )      <> 0 then
-            Warnlog "Bug => The nonrelativ path ( file:/// ) is not correct. It contains '../..'!"
-        endif
-
-    end if
-
-    if Instr( sTestString, sGraphicPath ) = 0 then
-        Warnlog "Wrong path to file, the graphic-part in filename is not correct!"
-    endif
-
-end function
-
-'*******************************************************************************
-
-sub DialogTestForViewOptions
-
-    FormatParagraph
-
-    Kontext
-    active.SetPage TabEinzuegeUndAbstaende
-    Active.SetPage TabAusrichtungAbsatz
-    active.SetPage TabTextfluss
-
-    try
-        active.SetPage TabAsianTypography
-    catch
-    endcatch
-
-    active.SetPage TabNumerierungAbsatz
-    active.SetPage TabTabulator
-    active.SetPage TabInitialen
-    active.SetPage TabUmrandung
-    active.SetPage TabHintergrund
-
-    kontext "TabHintergrund"
-    TabHintergrund.Close
-    EditSearchAndReplace
-
-    Kontext "FindAndReplace"
-    FindAndReplace.Close
 
 end sub
 

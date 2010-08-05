@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Verify that all filters are listed in the filter listbox
 '*
@@ -46,12 +46,14 @@ testcase tVerifyFilterNames
     dim iCurrentItem as integer
     
     dim cFile as string
-    dim iErr as integer
+    dim irc as integer
 
 
     ' For Windows and Solaris Sparc there exists additional commercial filters
     ' that are available for StarOffice only.
     cFile = gProductName & "_Filternames_"
+    cFile = hStringReplaceChar( cFile, " ", "_" )
+
     if ( not gOOo ) then
         select case gtSysName
             case "Windows"       : cFile = cFile & "add_" & gIsoLang & ".txt"
@@ -71,7 +73,7 @@ testcase tVerifyFilterNames
         
     dim cFileOut as string
         cFileOut = hGetWorkPath() & cFile
-    
+
     printlog( "Create a new document" )
     hCreateDocument()
     
@@ -105,7 +107,8 @@ testcase tVerifyFilterNames
         
         OeffnenDlg.cancel()
         
-        iErr = hManageComparisionList( cFileIn, cFileOut, asFilterNames() )    
+        irc = hManageComparisionList( cFileIn, cFileOut, asFilterNames() )
+        hListResultEvaluation( irc , 0 )
 
     else
         warnlog( "File Open dialog not present." )
@@ -113,11 +116,6 @@ testcase tVerifyFilterNames
 
     printlog( "Close the document" )    
     hDestroyDocument()
-    
-    if ( iErr <> 0 ) then
-        warnlog( "Filterlist differs from reference, please review" )
-    endif
-    
-     
+         
 endcase
 

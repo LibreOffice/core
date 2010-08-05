@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Extension Update Test
 '*
@@ -34,7 +34,8 @@
 function hCheckForAdministratorPermissions() as boolean
 
     ' this function returns TRUE if the user can create files in the office
-    ' program directory
+    ' program directory. This is relevant for macro security (VBA compatibility)
+    ' and extension manager behavior (access to shared installations).S
 
     dim iFile as integer
     dim cProbeFile as string
@@ -42,13 +43,14 @@ function hCheckForAdministratorPermissions() as boolean
     cProbeFile = convertpath( gNetzOfficePath & "program/tt_probe_file" )
     try
         iFile = FreeFile
-        open cProbeFile for output as iFile : close iFile
-        kill cProbeFile
+        open cProbeFile for output as iFile
+        close( iFile )
+        kill( cProbeFile )
         hCheckForAdministratorPermissions() = true
-        printlog( "Current user has administrator rights" )
+        printlog( "Current user has administrator permissions" )
     catch
         hCheckForAdministratorPermissions() = false
-        printlog( "Current user does not have administrator rights" )
+        printlog( "Current user does not have administrator permissions" )
     endcatch
 
 end function

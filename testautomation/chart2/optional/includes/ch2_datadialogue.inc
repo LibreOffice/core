@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : oliver.craemer@sun.com
+'* Owner : oliver.craemer@oracle.com
 '*
 '* short description : Resource-test for the Chart Data Dialogue.
 '*
@@ -45,12 +45,6 @@ testcase tChartDataDialogueButtons
         Printlog "   Insert a new Chart-object, via the Menu: 'Insert - Chart'."
         InsertChart
         WaitSlot()
-        '/// Press 'TAB' once to select the object
-        printlog "   Press 'TAB' once to select the object."
-        DocumentImpress.TypeKeys "<TAB>"
-        '/// Click the button 'RETURN' / 'ENTER' to enter the Chart-Data-dialogue
-        printlog "   Click the button 'Return', to enter the Chart-Data-dialogue."
-        DocumentImpress.TypeKeys "<RETURN>"
         Kontext "DocumentChart"
         '/// Open context menu
         printlog "Open context menu" 
@@ -230,12 +224,6 @@ testcase tChartDataDialogueFieldsUndo
         printlog "   Insert a new Chart-object, via the Menu: 'Insert - Chart'."
         InsertChart
         WaitSlot()
-        '/// Press 'TAB' once to select the object
-        printlog "   Press 'TAB' once to select the object."
-        DocumentImpress.TypeKeys "<TAB>"
-        '/// Click the button 'RETURN' / 'ENTER' to enter the Chart-Data-dialogue
-        printlog "   Click the button 'Return', to enter the Chart-Data-dialogue."
-        DocumentImpress.TypeKeys "<RETURN>"
         Kontext "DocumentChart"
         '/// Open context menu
         printlog "Open context menu"
@@ -298,9 +286,6 @@ testcase tChartDataDialogueFieldsUndo
         DatabaseUndo
         '/// And then we enter the dialogue again, to check if the values has returned to what they were before we changed them.
         printlog "And then we enter the dialogue again, to check if the values has returned to what they were before we changed them."
-        '/// One press on 'TAB' to select the object ///'
-        printlog "   Click the button 'TAB', to select the object."
-        DocumentImpress.TypeKeys "<TAB>"
         '/// Followed by one press on "RETURN" / "ENTER" to enter the Chart-Data-dialogue  ///'
         printlog "   Click the button 'Return', to enter the Chart-Data-dialogue."
         DocumentImpress.TypeKeys "<RETURN>"

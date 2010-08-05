@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Import BASIC library via Package Manager GUI as UNO Package
 '*
@@ -41,6 +41,9 @@ testcase tBasicPackageImport
     dim package_name as string : package_name = "tBasicExport.oxt"
 
     const LIBRARY_NAME = "tBasicExport"
+    const MY_MACROS = 1
+    const LIBRARIES_TAB = 3
+    const SHORT_WAIT = 1
     
     dim cDocumentName as string
     dim cLibraryName as string
@@ -49,9 +52,9 @@ testcase tBasicPackageImport
     dim iCurrentLib as integer
     dim iStatus as integer
     
-    dim cFile as string
-        cFile = hGetWorkPath() & package_name 
-        
+    dim cFile as string : cFile = hGetWorkPath() & package_name
+
+    printlog( "Probe for test extension created by basic_packege_export" )
     if ( Not FileExists( cFile ) or ( FileLen( cFile ) = 0 ) ) then
         warnlog( "#i105719# - Test extension is missing or has zero size. This is most likely" & _
                  " a follow-up error from the prior test case. Test stopped." )
@@ -80,14 +83,14 @@ testcase tBasicPackageImport
     ToolsMacro_uno
     
     kontext "Makro"
-    MakroAus.select( 1 )
+    MakroAus.select( MY_MACROS )
     
     Verwalten.click()
     
-    hSelectBasicObjectOrganizerTab( 3 )
+    hSelectBasicObjectOrganizerTab( LIBRARIES_TAB )
     
     kontext "TabBibliotheken"
-    Bibliothek.select( 1 )
+    Bibliothek.select( SHORT_WAIT )
     
     printlog( "Select the new library" )
     kontext "TabBibliotheken"
@@ -98,15 +101,13 @@ testcase tBasicPackageImport
         endif
     next iCurrentLib
     cLibraryName = BibliotheksListe.getSelText()
-    
-    try
-        Hinzufuegen.click()
-    catch
+
+    if ( not hClickButton( Hinzufuegen ) ) then
         warnlog( "#i64007 - Office crashes on clicking import button" )
-    endcatch
+    endif
     
     kontext "OeffnenDlg"
-    OeffnenDlg.cancel()
+    hCloseDialog( OeffnenDlg, "cancel" )
     
     printlog( "Cleanup: Delete Library, close dialogs and remove package" )
 
@@ -119,19 +120,18 @@ testcase tBasicPackageImport
         Loeschen.click()
         
         kontext "active"
-        if ( active.exists( 1 ) ) then
+        if ( active.exists( SHORT_WAIT ) ) then
             active.yes()
         else
             warnlog( "No warning for library deletion" )
         endif
-    endif    
-    
+    endif       
     
     kontext "TabBibliotheken"
-    TabBibliotheken.cancel()
+    hCloseDialog( TabBibliotheken, "cancel" )
     
     kontext "Makro"
-    Makro.cancel()
+    hCloseDialog( Makro, "cancel" )
     
     hExtensionRemoveGUI( package_name )
     

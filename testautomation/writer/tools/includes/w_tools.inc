@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Writer-Tools
 '*
@@ -64,6 +64,7 @@ end sub
 ' -----------------------------------------------------------------------
 
 sub wTypeKeys ( OutputText , optional iLoop as Integer )
+
     Dim i as integer
     If lcase(OutputText) = "<mod1 a>" then
         If iSprache = 34 then OutputText = "<Mod1 E>"
@@ -90,35 +91,7 @@ sub wTypeKeys ( OutputText , optional iLoop as Integer )
         end select
         wait 500
     next i
-end sub
 
-' -----------------------------------------------------------------------
-
-sub wDocSetContext
-    Select Case Ucase(gApplication)
-    Case "WRITER"
-        Kontext "DocumentWriter"
-
-    Case "MASTERDOCUMENT"
-        Kontext "DocumentMasterDoc"
-
-    Case "HTML"
-        Kontext "DocumentWriterWeb"
-
-    Case "IMPRESS"
-        Kontext "DocumentImpress"
-
-    Case "DRAW"
-        Kontext "DocumentDraw"
-
-    Case "MATH"
-        Kontext "DocumentMath"
-
-    Case "CALC"
-        Kontext "DocumentCalc"
-
-    end select
-    wait 500
 end sub
 
 ' -----------------------------------------------------------------------
@@ -176,28 +149,28 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
 
     Objekt = UCase( Objekt )
     select case Objekt
-    	case "RECHTECK" : Rechteck.Click
-		case "LINIE"     : Linie.Click
-		case "ELLIPSE"  : Ellipse.Click
-		case "TEXT"      : Textobjekt.Click
-		case "VTEXT"     :
-        	try
-            	VerticalText.Click
-			catch
-				if gAsianSup = True then
-                	Warnlog "Unable to insert Vertical Text! Asian Support in Options activated ?"
-				end if
-			endcatch
-		case "LAUFTEXT" : Lauftext.Click
-		case "LEGENDE"  : Legende.Click
-		case "VLEGENDE" :
-			try
-				VerticalCallout.Click
-			catch
-				Warnlog "Unable to insert Vertical Callout! Asian Support in Options activated ?"
-			endcatch
+    case "RECHTECK" : Rechteck.Click
+    case "LINIE"     : Linie.Click
+    case "ELLIPSE"  : Ellipse.Click
+    case "TEXT"      : Textobjekt.Click
+    case "VTEXT"     :
+        try
+            VerticalText.Click
+        catch
+            if gAsianSup = True then
+                Warnlog "Unable to insert Vertical Text! Asian Support in Options activated ?"
+            end if
+        endcatch
+    case "LAUFTEXT" : Lauftext.Click
+    case "LEGENDE"  : Legende.Click
+    case "VLEGENDE" :
+        try
+            VerticalCallout.Click
+        catch
+            Warnlog "Unable to insert Vertical Callout! Asian Support in Options activated ?"
+        endcatch
     end select
-	Sleep (2)
+    Sleep (2)
 
     Select Case gApplication
     Case "WRITER"
@@ -236,7 +209,7 @@ sub wZeichenobjektEinfuegen ( Objekt$, xStart%, yStart%, xEnde%, yEnde%, optiona
             wait 100
         end if
     end select
-	sleep (1)
+    sleep (1)
 end sub
 
 ' -----------------------------------------------------------------------
@@ -534,7 +507,7 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
 
     Sleep 2
 
-    Select Case Ucase(gApplication)
+    Select Case gApplication
     Case "CALC"
         if (Liste.GetItemCount < MinEntrys) then Umschalten.Click
         if Liste.GetItemCount >MinEntrys then
@@ -552,7 +525,7 @@ sub wNavigatorAuswahl(Gruppe as integer, Eintrag as integer,optional LeaveFocus 
             Liste.TypeKeys "<Return>"
         end if
 
-    Case "WRITER","HTML", "HTML"
+    Case "WRITER","HTML"
         if (Auswahlliste.GetItemCount < MinEntrys) then
             try
                 Inhaltsansicht.Click

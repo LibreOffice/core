@@ -25,11 +25,27 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Impress Required Test Library (7)
 '*
 '\*****************************************************************
+
+sub im_007_
+
+    call tSlideShowSlideShow()
+    call tSlideShowRehearseTimings()
+    call tSlideShowSlideShowSettings()
+    call tSlideShowCustomSlideShow()
+    call tSlideShowSlideTransition()
+    call tSlideShowShowHideSlide()
+    call tSlideShowCustomAnimation()
+    call tSlideShowInteraction()
+    call tSlideShowAnimation()
+
+end sub
+
+'*******************************************************************************
 
 testcase tSlideShowSlideShow
 
@@ -65,22 +81,22 @@ testcase tSlideShowSlideShow
         DocumentImpress.MouseDoubleClick ( 50, 50 )
         Sleep 3
     catch
-'       FileClose
+        '       FileClose
         warnlog "had to catch <the ball> :-( "
-'   	 Kontext "Messagebox"
-'       if Messagebox.Exists (5) Then Messagebox.No
-'       Kontext
-'       sleep (12)
-'       start sAppExe$
-'       sleep (6)
-'       Kontext
-'       if Office.Exists(2) then Resetapplication
-'       Warnlog "Slide didn't end, application wasn't in document edit mode"
+        '   	 Kontext "Messagebox"
+        '       if Messagebox.Exists (5) Then Messagebox.No
+        '       Kontext
+        '       sleep (12)
+        '       start sAppExe$
+        '       sleep (6)
+        '       Kontext
+        '       if Office.Exists(2) then Resetapplication
+        '       Warnlog "Slide didn't end, application wasn't in document edit mode"
     endcatch
     printlog "close application "
     Call hCloseDocument
 
- endcase 'tSlideShowSlideShow
+endcase 'tSlideShowSlideShow
 '-------------------------------------------------------------------------------
 testcase tSlideShowRehearseTimings
 
@@ -99,32 +115,32 @@ testcase tSlideShowRehearseTimings
     sleep 2
     Kontext "DocumentPresentation"
     printlog "Press <Esc> to leave presentation mode "
-      if DocumentPresentation.Exists (5) then
-         DocumentPresentation.Typekeys ("<Escape>")
-      else
-         Warnlog "SlideShowRehearseTimings mode not accessible"
-      endif
-      Sleep 3
-      if DocumentPresentation.Exists then ' the kontext hasnt to be available, else ERROR
-         DocumentPresentation.TypeKeys "<ESCAPE>" ' => I mustn't be here ever !
-         Warnlog "- Slide show mode should have ended"
-      else
-         printlog "SlideShowRehearseTimings mode not accessible :-) "
-      end if
-      sleep 3
-      try
-         Kontext "DocumentImpress"
-         DocumentImpress.MouseDoubleClick ( 50, 50 )
+    if DocumentPresentation.Exists (5) then
+        DocumentPresentation.Typekeys ("<Escape>")
+    else
+        Warnlog "SlideShowRehearseTimings mode not accessible"
+    endif
+    Sleep 3
+    if DocumentPresentation.Exists then ' the kontext hasnt to be available, else ERROR
+        DocumentPresentation.TypeKeys "<ESCAPE>" ' => I mustn't be here ever !
+        Warnlog "- Slide show mode should have ended"
+    else
+        printlog "SlideShowRehearseTimings mode not accessible :-) "
+    end if
+    sleep 3
+    try
+        Kontext "DocumentImpress"
+        DocumentImpress.MouseDoubleClick ( 50, 50 )
 
-         sleep 3
-      catch
-         warnlog "Had to catch <the ball> :-( "
-      endcatch
+        sleep 3
+    catch
+        warnlog "Had to catch <the ball> :-( "
+    endcatch
     sleep 3
     printlog "close application "
     Call hCloseDocument
 
- endcase 'tSlideShowRehearseTimings
+endcase 'tSlideShowRehearseTimings
 '-------------------------------------------------------------------------------
 testcase tSlideShowSlideShowSettings
 
@@ -171,11 +187,11 @@ testcase tSlideShowSlideShowSettings
     Bildschirmpraesentation.Cancel
     printlog "close application "
     Call hCloseDocument
- 
+
 endcase 'tSlideShowSlideShowSettings
 '-------------------------------------------------------------------------------
 testcase tSlideShowCustomSlideShow
-    
+
     printlog "open application "
     Call hNewDocument
     sleep 2
@@ -225,36 +241,36 @@ testcase tSlideShowCustomSlideShow
     printlog "close dialog 'Custom Slide Shows' "
     '   IndividuellePraesentation.Close ' slide show ends dialog !
     printlog "Slide Show->Slide Show Settings "
-   try
-      SlideShowPresentationSettings
-   catch
-      warnlog "Presentation did not end :-("
-      DocumentPresentation.TypeKeys "<escape>"
-   endcatch
-      Kontext "Bildschirmpraesentation"
-      if Bildschirmpraesentation.exists (5) then
-         printlog "check checkbox 'Custom Slide Show' "
-         RangeCustomSlideShow.Check
-         printlog "check: '" + IndividuellePraesentationName.GetSelText + "'"
-         printlog "cancel dialog 'Slide Show' "
-         Bildschirmpraesentation.Cancel
-      else
-         warnlog "Dialog not open? SlideShowPresentationSettings"
-      endif
-   printlog "Slide Show->Custom Slide Show "
-   SlideShowCustomSlideshow
-      Kontext "IndividuellePraesentation"
-      if (IndividuellePraesentation.exists (5)) then
-         printlog "click button 'Delete' "
-         Loeschen.Click
-         printlog "close dialog 'Custom Slide Shows' "
-         IndividuellePraesentation.Close
-      else
-         warnlog "Dialog not open? SlideShowCustomSlideshow"
-      endif
-   printlog "close application "
-   Call hCloseDocument
-   
+    try
+        SlideShowPresentationSettings
+    catch
+        warnlog "Presentation did not end :-("
+        DocumentPresentation.TypeKeys "<escape>"
+    endcatch
+    Kontext "Bildschirmpraesentation"
+    if Bildschirmpraesentation.exists (5) then
+        printlog "check checkbox 'Custom Slide Show' "
+        RangeCustomSlideShow.Check
+        printlog "check: '" + IndividuellePraesentationName.GetSelText + "'"
+        printlog "cancel dialog 'Slide Show' "
+        Bildschirmpraesentation.Cancel
+    else
+        warnlog "Dialog not open? SlideShowPresentationSettings"
+    endif
+    printlog "Slide Show->Custom Slide Show "
+    SlideShowCustomSlideshow
+    Kontext "IndividuellePraesentation"
+    if (IndividuellePraesentation.exists (5)) then
+        printlog "click button 'Delete' "
+        Loeschen.Click
+        printlog "close dialog 'Custom Slide Shows' "
+        IndividuellePraesentation.Close
+    else
+        warnlog "Dialog not open? SlideShowCustomSlideshow"
+    endif
+    printlog "close application "
+    Call hCloseDocument
+
 endcase 'tSlideShowCustomSlideShow
 '------------------------------------------------------------------------------
 testcase tSlideShowSlideTransition
@@ -273,95 +289,95 @@ testcase tSlideShowSlideTransition
     sleep 2
     printlog "The 'Slide Transition' in the right 'Tasks' Pane has to come up "
     Kontext "Tasks"
-        printlog "Select the second entry from teh Listbox 'Applay to selected slides' "
-        TransitionApplyToSelectedSlide.select (2)
-        sleep 5 ' takes some time, until it is run
-        Printlog "Count of effects : "+TransitionApplyToSelectedSlide.GetItemCount
-        Printlog "Count of Speeds  : "+TransitionSpeed.GetItemCount
-        iCount = TransitionSound.GetItemCount
-        Printlog "Count of Sounds  : " + iCount
+    printlog "Select the second entry from teh Listbox 'Applay to selected slides' "
+    TransitionApplyToSelectedSlide.select (2)
+    sleep 5 ' takes some time, until it is run
+    Printlog "Count of effects : "+TransitionApplyToSelectedSlide.GetItemCount
+    Printlog "Count of Speeds  : "+TransitionSpeed.GetItemCount
+    iCount = TransitionSound.GetItemCount
+    Printlog "Count of Sounds  : " + iCount
 
-        printlog "One Entry of the Listbox 'Sound' is 'Other sound...', select it "
-        TransitionSound.typeKeys "<home>"
-        i = 0
-        for a = 1 to iCount
-            TransitionSound.select (a)
-            kontext "OeffnenDlg"
-            if (OeffnenDlg.exists (5)) then
-                if (0=i) then
-                    ' remember when dialog came up
-                    i = a
-                    OeffnenDlg.cancel
-                else
-                    warnlog "File Open Dialog comes up a second time!"
-                    OeffnenDlg.cancel
-                endif
-            endif
-            kontext "Tasks"
-            ' the Checkbox is disabled on teh first three entries: <No Sound>, <Stop previous sound>...
-            if (TransitionLoopUntilNextSound.isEnabled AND (a<4)) then
-                qaErrorLog "May be Language specific -> Evaluation of TBO; " + a
-            endif
-        next a
-        TransitionSound.select (i)
-        printlog "The dialog 'Open' comes up"
-        sleep 1
+    printlog "One Entry of the Listbox 'Sound' is 'Other sound...', select it "
+    TransitionSound.typeKeys "<home>"
+    i = 0
+    for a = 1 to iCount
+        TransitionSound.select (a)
         kontext "OeffnenDlg"
         if (OeffnenDlg.exists (5)) then
-            printlog "Read all entries in Listbox 'File type' "
-            for i = 1 to Dateityp.getItemCount
-                printlog "" + i + ":" + Dateityp.getItemText(i)
-            next i
-            printlog "cancel dialog 'Open' "
-            OeffnenDlg.cancel
-        else
-            warnlog "Impress:Tasks Pane:Slide Transition:Sound:Other sound... disdn't bring up teh File Open Dialog!"
+            if (0=i) then
+                ' remember when dialog came up
+                i = a
+                OeffnenDlg.cancel
+            else
+                warnlog "File Open Dialog comes up a second time!"
+                OeffnenDlg.cancel
+            endif
         endif
         kontext "Tasks"
-        sleep (2)
-        printlog "check checkbox 'Automatically after' "
-        TransitionAutomaticallyAfter.check
-        sleep (2)
-        printlog "press key 'Page Up' in box "
-        TransitionAutomaticallyAfterTime.typeKeys "<PageUp>"
-        sleep 9
-        printlog "check the standard checkbox 'On mouse click' "
-        TransitionOnMouseClick.check
-        sleep (2)
-        printlog "press button 'Apply to All Slides' "
-        TransitionApplyToAllSlides.click
-        sleep (2)
-        printlog "press button 'Play' "
-        TransitionPlay.click
-        sleep 10
-        printlog "press button 'Slide Show' "
-        TransitionSlideShow.click
-        sleep 2
-        kontext "DocumentPresentation"
-        if DocumentPresentation.exists (10) then
-            printlog "Presentation started :-)"
-            DocumentPresentation.typeKeys "<escape>"
-        else
-            warnlog "Impress:Tasks Pane:Slide Transition:Slide Show button doesn't start slideshow!"
+        ' the Checkbox is disabled on teh first three entries: <No Sound>, <Stop previous sound>...
+        if (TransitionLoopUntilNextSound.isEnabled AND (a<4)) then
+            qaErrorLog "May be Language specific -> Evaluation of TBO; " + a
         endif
-        kontext "Tasks"
+    next a
+    TransitionSound.select (i)
+    printlog "The dialog 'Open' comes up"
+    sleep 1
+    kontext "OeffnenDlg"
+    if (OeffnenDlg.exists (5)) then
+        printlog "Read all entries in Listbox 'File type' "
+        for i = 1 to Dateityp.getItemCount
+            printlog "" + i + ":" + Dateityp.getItemText(i)
+        next i
+        printlog "cancel dialog 'Open' "
+        OeffnenDlg.cancel
+    else
+        warnlog "Impress:Tasks Pane:Slide Transition:Sound:Other sound... disdn't bring up teh File Open Dialog!"
+    endif
+    kontext "Tasks"
+    sleep (2)
+    printlog "check checkbox 'Automatically after' "
+    TransitionAutomaticallyAfter.check
+    sleep (2)
+    printlog "press key 'Page Up' in box "
+    TransitionAutomaticallyAfterTime.typeKeys "<PageUp>"
+    sleep 9
+    printlog "check the standard checkbox 'On mouse click' "
+    TransitionOnMouseClick.check
+    sleep (2)
+    printlog "press button 'Apply to All Slides' "
+    TransitionApplyToAllSlides.click
+    sleep (2)
+    printlog "press button 'Play' "
+    TransitionPlay.click
+    sleep 10
+    printlog "press button 'Slide Show' "
+    TransitionSlideShow.click
+    sleep 2
+    kontext "DocumentPresentation"
+    if DocumentPresentation.exists (10) then
+        printlog "Presentation started :-)"
+        DocumentPresentation.typeKeys "<escape>"
+    else
+        warnlog "Impress:Tasks Pane:Slide Transition:Slide Show button doesn't start slideshow!"
+    endif
+    kontext "Tasks"
 
-        printlog "uncheck and check Checkbox 'Automatic Preview' "
-        printlog "default is checked "
-        if (NOT TransitionAutomaticPreview.isChecked) then
-            warnlog "Impress:Tasks Pane:Slide Transition: Automatic preview has to be checked by default, wasn't!"
-        endif
-        sleep (2)
-        TransitionAutomaticPreview.unCheck
-        sleep (2)
-        TransitionAutomaticPreview.Check
+    printlog "uncheck and check Checkbox 'Automatic Preview' "
+    printlog "default is checked "
+    if (NOT TransitionAutomaticPreview.isChecked) then
+        warnlog "Impress:Tasks Pane:Slide Transition: Automatic preview has to be checked by default, wasn't!"
+    endif
+    sleep (2)
+    TransitionAutomaticPreview.unCheck
+    sleep (2)
+    TransitionAutomaticPreview.Check
     printlog "close application "
     Call hCloseDocument
-    
+
 endcase 'tSlideShowSlideTransition
 '-------------------------------------------------------------------------------
 testcase tSlideShowShowHideSlide
-    
+
     printlog "open application "
     Call hNewDocument
     printlog "create rectangle "
@@ -376,9 +392,9 @@ testcase tSlideShowShowHideSlide
     SlideShowShowSlide
     printlog "close application "
     Call hCloseDocument
-    endcase
-    
-    testcase tSlideShowAnimation
+endcase
+
+testcase tSlideShowAnimation
     printlog "open application "
     Call hNewDocument
     sleep 1
@@ -431,9 +447,9 @@ testcase tSlideShowShowHideSlide
     sleep 5
     printlog "click button 'Stop' "
     try
-    Stopp.Click
+        Stopp.Click
     catch
-    warnlog "Stopbutton doesn't work"
+        warnlog "Stopbutton doesn't work"
     endcatch
     sleep 1
     printlog "Select 1st entry from top in 'Loop Count' "
@@ -450,9 +466,9 @@ testcase tSlideShowShowHideSlide
     kontext "Messagebox"
     printlog "there has to be a messagebox 'Really delete?' say YES!; else ERROR "
     if Messagebox.exists (5) then
-         Messagebox.YES
+        Messagebox.YES
     else
-         warnlog "No one cares about my data :-( No one asked if all shall be deleted :-( "
+        warnlog "No one cares about my data :-( No one asked if all shall be deleted :-( "
     endif
     sleep 1
     kontext "Animation"
@@ -460,7 +476,7 @@ testcase tSlideShowShowHideSlide
     Animation.Close
     printlog "close application "
     Call hCloseDocument
-   
+
 endcase 'tSlideShowShowHideSlide
 '-------------------------------------------------------------------------------
 testcase tSlideShowCustomAnimation
@@ -490,7 +506,7 @@ testcase tSlideShowCustomAnimation
         sleep 1
         AutomaticPreview.Check
         kontext
-        
+
         printlog "Switch to TabPage: Emphasis"
         active.setPage(TabEmphasis)
         kontext "TabEmphasis"
@@ -501,129 +517,129 @@ testcase tSlideShowCustomAnimation
             warnlog "Impress:Tasks Pane:Custom Animation:TabEmphasis tabPage doesn't work."
         endif
         kontext
-            
-            printlog "Switch to TabPage: Exit"
-            active.setPage(TabExit)
-            kontext "TabExit"
-            if TabExit.exists(5) then
-                DialogTest(TabExit)
-            else
-                bError = true
-                warnlog "Impress:Tasks Pane:Custom Animation:TabExit tabPage doesn't work."
-            endif
-            kontext
-            
-            printlog "Switch to TabPage: Motion Paths"
-            active.setPage(TabMotionPaths)
-            kontext "TabMotionPaths"
-            if TabMotionPaths.exists(5) then
-                DialogTest(TabMotionPaths)
-                Effects.select(7)
-            else
-                bError = true
-                warnlog "Impress:Tasks Pane:Custom Animation:TabMotionPaths tabPage doesn't work."
-            endif
-            kontext
-            '-----------------------------------------------------------------------
-            'printlog "Switch to tabpage: Misc Effects"
-            'active.setPage(TabMiscEffects)
-            'kontext "TabMiscEffects"
-            'if TabMiscEffects.exists(5) then
-            '    DialogTest(TabMiscEffects)
-            'else
-            '    bError = true
-            '    warnlog "Impress:TaskPane:CustomAnimation:TabMiscEffects tabPage does not work."
-            'endif
-            'kontext
-            '-----------------------------------------------------------------------
-            printlog "Close dialog 'Custom Animation' with 'OK'"
-            TabMotionPaths.OK
-            bError = false
+
+        printlog "Switch to TabPage: Exit"
+        active.setPage(TabExit)
+        kontext "TabExit"
+        if TabExit.exists(5) then
+            DialogTest(TabExit)
         else
             bError = true
-            warnlog "Impress:Tasks Pane:Custom Animation:Add... button didn't work."
+            warnlog "Impress:Tasks Pane:Custom Animation:TabExit tabPage doesn't work."
         endif
+        kontext
 
-        Kontext "Tasks"
-        if (NOT bError) then
-            printlog "click button 'Change...'"
-            EffectChange.click
-            printlog "Dialog 'Custom Animation' comes up"
-            kontext
-            printlog "Switch to TabPage: Entrance"
-            active.setPage(TabEntrance)
-            kontext "TabEntrance"
-            if (NOT TabEntrance.exists(5)) then
-                warnlog "Impress:Tasks Pane:Custom Animation:Change... button didn't work."
-            endif
-            TabEntrance.cancel
-            Kontext "Tasks"
-            EffectStart.getItemCount
-            if EffectProperty.isEnabled then
-                EffectProperty.getItemCount
-            endif
-            printlog "Click on button '...' (Options)"
-            EffectOptions.click
-            kontext "TabEffect"
-            if TabEffect.exists(5) then
-                dialogTest(TabEffect)
-                Sound.getItemCount
-                AfterAnimation.getItemCount
-                printlog "switch to TabPage 'Timing'"
-                Kontext
-                active.setPage TabTiming
-                kontext "TabTiming"
-                if TabTiming.exists(5) then
-                    dialogTest(TabTiming)
-                    TimingStart.getItemCount
-                    Delay.getText
-                    Speed.getItemCount
-                    Repeat.getItemCount
-                    Rewind.ischecked
-                    TriggerAnimate.isChecked
-                    TriggerStart.isChecked
-                    Shape.getItemCount
-                else
-                    warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
-                endif
-                printlog "switch to TabPage 'Timing'"
-                Kontext
-                active.setPage TabTextAnimation
-                kontext "TabTextAnimation"
-                if TabTextAnimation.exists(5) then
-                    dialogTest(TabTextAnimation)
-                    GroupText.getItemCount
-                    AnimateAttachedShape.isChecked
-                    TabTextAnimation.cancel
-                else
-                    warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: TextAnimation TabPage didn't work."
-                endif
-            else
-                warnlog "Impress:Tasks Pane:Custom Animation:... button didn't work."
-            endif
-            Kontext "Tasks"
-            EffectSpeed.getItemCount
-            EffectList.getItemCount
-            EffectPlay.click
-            printlog "Wait five seconds so the Playfunction has ended "
-            sleep 5
-            EffectSlideShow.click
-            sleep 1
-            kontext "DocumentPresentation"
-            if DocumentPresentation.exists (5) then
-                printlog "Presentation started :-)"
-                DocumentPresentation.typeKeys "<escape>"
-            else
-                warnlog "Impress:Tasks Pane:Custom Animation:Slide Show button doesn't start slideshow!"
-            endif
-            kontext "Tasks"
-            EffectAutomaticPreview.isChecked
-            printlog "click button 'Remove'"
-            EffectRemove.click
+        printlog "Switch to TabPage: Motion Paths"
+        active.setPage(TabMotionPaths)
+        kontext "TabMotionPaths"
+        if TabMotionPaths.exists(5) then
+            DialogTest(TabMotionPaths)
+            Effects.select(7)
+        else
+            bError = true
+            warnlog "Impress:Tasks Pane:Custom Animation:TabMotionPaths tabPage doesn't work."
         endif
+        kontext
+        '-----------------------------------------------------------------------
+        'printlog "Switch to tabpage: Misc Effects"
+        'active.setPage(TabMiscEffects)
+        'kontext "TabMiscEffects"
+        'if TabMiscEffects.exists(5) then
+        '    DialogTest(TabMiscEffects)
+        'else
+        '    bError = true
+        '    warnlog "Impress:TaskPane:CustomAnimation:TabMiscEffects tabPage does not work."
+        'endif
+        'kontext
+        '-----------------------------------------------------------------------
+        printlog "Close dialog 'Custom Animation' with 'OK'"
+        TabMotionPaths.OK
+        bError = false
+    else
+        bError = true
+        warnlog "Impress:Tasks Pane:Custom Animation:Add... button didn't work."
+    endif
+
+    Kontext "Tasks"
+    if (NOT bError) then
+        printlog "click button 'Change...'"
+        EffectChange.click
+        printlog "Dialog 'Custom Animation' comes up"
+        kontext
+        printlog "Switch to TabPage: Entrance"
+        active.setPage(TabEntrance)
+        kontext "TabEntrance"
+        if (NOT TabEntrance.exists(5)) then
+            warnlog "Impress:Tasks Pane:Custom Animation:Change... button didn't work."
+        endif
+        TabEntrance.cancel
+        Kontext "Tasks"
+        EffectStart.getItemCount
+        if EffectProperty.isEnabled then
+            EffectProperty.getItemCount
+        endif
+        printlog "Click on button '...' (Options)"
+        EffectOptions.click
+        kontext "TabEffect"
+        if TabEffect.exists(5) then
+            dialogTest(TabEffect)
+            Sound.getItemCount
+            AfterAnimation.getItemCount
+            printlog "switch to TabPage 'Timing'"
+            Kontext
+            active.setPage TabTiming
+            kontext "TabTiming"
+            if TabTiming.exists(5) then
+                dialogTest(TabTiming)
+                TimingStart.getItemCount
+                Delay.getText
+                Speed.getItemCount
+                Repeat.getItemCount
+                Rewind.ischecked
+                TriggerAnimate.isChecked
+                TriggerStart.isChecked
+                Shape.getItemCount
+            else
+                warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
+            endif
+            printlog "switch to TabPage 'Timing'"
+            Kontext
+            active.setPage TabTextAnimation
+            kontext "TabTextAnimation"
+            if TabTextAnimation.exists(5) then
+                dialogTest(TabTextAnimation)
+                GroupText.getItemCount
+                AnimateAttachedShape.isChecked
+                TabTextAnimation.cancel
+            else
+                warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: TextAnimation TabPage didn't work."
+            endif
+        else
+            warnlog "Impress:Tasks Pane:Custom Animation:... button didn't work."
+        endif
+        Kontext "Tasks"
+        EffectSpeed.getItemCount
+        EffectList.getItemCount
+        EffectPlay.click
+        printlog "Wait five seconds so the Playfunction has ended "
+        sleep 5
+        EffectSlideShow.click
+        sleep 1
+        kontext "DocumentPresentation"
+        if DocumentPresentation.exists (5) then
+            printlog "Presentation started :-)"
+            DocumentPresentation.typeKeys "<escape>"
+        else
+            warnlog "Impress:Tasks Pane:Custom Animation:Slide Show button doesn't start slideshow!"
+        endif
+        kontext "Tasks"
+        EffectAutomaticPreview.isChecked
+        printlog "click button 'Remove'"
+        EffectRemove.click
+    endif
     printlog "close application"
     Call hCloseDocument
-    
+
 endcase 'tSlideShowCustomAnimation
 '-------------------------------------------------------------------------------
 testcase tSlideShowInteraction
@@ -715,5 +731,5 @@ testcase tSlideShowInteraction
     sleep 2
     printlog "close application "
     Call hCloseDocument
- 
+
 endcase 'tSlideShowInteraction

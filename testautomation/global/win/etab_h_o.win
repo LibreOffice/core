@@ -180,6 +180,7 @@ LastRecordButton sw:PushButton:DLG_MM_PREPAREMERGE_PAGE:PB_LAST
 ExcludeCheckBox sw:CheckBox:DLG_MM_PREPAREMERGE_PAGE:CB_EXCLUDE
 EditButton sw:PushButton:DLG_MM_PREPAREMERGE_PAGE:PB_EDIT
 
+*TabMediaWiki sym:vnd.com.sun.star.wiki:settings
 
 *TabMemory HID_OFA_TP_MEMORY
 UndoSteps cui:NumericField:OFA_TP_MEMORY:ED_UNDO

@@ -25,13 +25,11 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'*******************************************************************
-' #1 tiAlwaysWithCurrentPage
-'\******************************************************************
+'\******************************************************************************
 
 testcase tiAlwaysWithCurrentPage()
     dim i as integer
@@ -40,7 +38,7 @@ testcase tiAlwaysWithCurrentPage()
     printlog "Open file 'impdraw\required\input\diashow.od?"
     hFileOpen  ConvertPath (gTesttoolPath + "graphics\required\input\diashow.odp")
     WaitSlot(10000) 'sleep 10
-    
+
     printlog "Check if the document is writable"
     if fIsDocumentWritable = false then
         printlog "Make the document writable and check if it's succesfull"
@@ -49,8 +47,8 @@ testcase tiAlwaysWithCurrentPage()
             goto endsub
         endif
     endif
-    
-    printlog "Test with default option." 
+
+    printlog "Test with default option."
     printlog "Checking: 'Always with current page' - default"
 
     printlog "Setting Options to start with current page."
@@ -69,7 +67,7 @@ testcase tiAlwaysWithCurrentPage()
     if (i<>1) then
         warnlog "Presupposition not met. After loading the file not the first slide is up. It is number: " + i
     endif
-    
+
     printlog "Press Key [Page Down] two times to get to slide number three. We are on slide one."
     hTypeKeys ("<home><PageDown><PageDown>")
     printlog "Start the slideshow with 'Slide Show->Slide Show."
@@ -82,7 +80,7 @@ testcase tiAlwaysWithCurrentPage()
         ViewNavigator
     endif
     printlog "The slideshow has to start on slide 3."
-    printlog "running routine for slide 3 and 4."    
+    printlog "running routine for slide 3 and 4."
     for i = 3 to 4
         Kontext "NavigatorDraw"
         printlog "Checking for navigator.."
@@ -97,7 +95,7 @@ testcase tiAlwaysWithCurrentPage()
         DocumentPresentation.TypeKeys "<pagedown>"
         WaitSlot (5000) 'sleep (5)
     next i
-    
+
     printlog "Trying to end presentation with mouseclick on black endscreen."
     try
         DocumentPresentation.mousedown (50,50,1)
@@ -105,7 +103,7 @@ testcase tiAlwaysWithCurrentPage()
     catch
         warnlog "TimeOut on pressing mouse button."
     endcatch
-    
+
     printlog "Trying to recognize if slideshow did not end.."
     try
         gMouseClick 50,50  ' this one works to recognice the not ending !
@@ -174,7 +172,7 @@ testcase tiAlwaysWithCurrentPage()
         printlog "Ending running presentation with ESC."
         DocumentPresentation.TypeKeys "<ESCAPE>"
     endcatch
-    
+
     Kontext "NavigatorDraw"
     printlog "Checking if navigator is open."
     if (not NavigatorDraw.exists(5)) then
@@ -183,7 +181,7 @@ testcase tiAlwaysWithCurrentPage()
     printlog "Checking if we are on slide 3."
     i = fGetSlideNumber()
     if (i<>3) then
-                warnlog "We are on the wrong slide! Should be 3 but it is: " & i
+        warnlog "We are on the wrong slide! Should be 3 but it is: " & i
     endif
 
     printlog "Close the navigator View->Navigator."
@@ -196,4 +194,4 @@ testcase tiAlwaysWithCurrentPage()
     setStartCurrentPage(true)
     Call hCloseDocument
 endcase
-'-------------------------------------------------------------------------------
+

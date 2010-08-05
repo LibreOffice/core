@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description : wrappers for accessing menues (context-, bar-, button- menues)
 '*
@@ -585,37 +585,57 @@ function hUseMenu ()
     '///<b> function hUseMenu () </b>///'
     '///+ very global function: depends on 'gApplication' just activates the menu-bar ///'
 
-    Select Case Ucase(gApplication)
-        Case "WRITER"
-            Kontext "DocumentWriter"
-            DocumentWriter.UseMenu
-        Case "MASTERDOCUMENT"
-            Kontext "DocumentMasterDoc"
-            DocumentMasterDoc.UseMenu
-        Case "HTML"
-            Kontext "DocumentWriterWeb"
-            DocumentWriterWeb.UseMenu
-        case "CALC" ' there are 2 entries over :-( usually only one, html 0 :-((((
-            Kontext "DocumentCalc"
-            DocumentCalc.UseMenu
-        case "DRAW"
-            Kontext "DocumentDraw"
-            DocumentDraw.UseMenu
-        case "IMPRESS"
-            Kontext "DocumentImpress"
-            DocumentImpress.UseMenu
-        case "MATH" :
-            Kontext "DocumentMath"
-            DocumentMath.UseMenu
-        case "DATABASE" :
-            Kontext "DATABASE"
-            Database.UseMenu
-        case "BASIC" :
-            Kontext "BasicIde"
-            BasicIde.UseMenu
-        case "NONE" :
-            Kontext "DocumentBackground"
-            DocumentBackground.UseMenu
+    Select Case ( gApplication )
+    Case "WRITER"
+
+        Kontext "DocumentWriter"
+        DocumentWriter.UseMenu
+
+    Case "MASTERDOCUMENT"
+
+        Kontext "DocumentMasterDoc"
+        DocumentMasterDoc.UseMenu
+
+    Case "HTML"
+
+        Kontext "DocumentWriterWeb"
+        DocumentWriterWeb.UseMenu
+
+    case "CALC" ' there are 2 entries over :-( usually only one, html 0 :-((((
+
+        Kontext "DocumentCalc"
+        DocumentCalc.UseMenu
+
+    case "DRAW"
+
+        Kontext "DocumentDraw"
+        DocumentDraw.UseMenu
+
+    case "IMPRESS"
+
+        Kontext "DocumentImpress"
+        DocumentImpress.UseMenu
+
+    case "MATH" :
+
+        Kontext "DocumentMath"
+        DocumentMath.UseMenu
+
+    case "DATABASE" :
+
+        Kontext "DATABASE"
+        Database.UseMenu
+
+    case "BASIC" :
+
+        Kontext "BasicIde"
+        BasicIde.UseMenu
+
+    case "NONE" :
+
+        Kontext "DocumentBackground"
+        DocumentBackground.UseMenu
+
     end select
 
 end function
@@ -625,39 +645,56 @@ end function
 function hOpenContextMenu()
 
     '/// very global function: depends on 'gApplication' just opens the Context Menu ///'
-    Select Case Ucase(gApplication)
-        Case "WRITER"
-            Kontext "DocumentWriter"
-            DocumentWriter.openContextMenu
-        Case "MASTERDOCUMENT"
-            Kontext "DocumentMasterDoc"
-            DocumentMasterDoc.openContextMenu
-        Case "HTML"
-            Kontext "DocumentWriterWeb"
-            DocumentWriterWeb.openContextMenu
-        case "CALC"
-            Kontext "DocumentCalc"
-            DocumentCalc.openContextMenu
-        case "DRAW"
-            Kontext "DocumentDraw"
-            DocumentDraw.openContextMenu
-        case "IMPRESS"
-            Kontext "DocumentImpress"
-            DocumentImpress.openContextMenu
-        case "MATH" :
-            Kontext "DocumentMath"
-            DocumentMath.openContextMenu
+    Select Case ( gApplication )
+    Case "WRITER"
+
+        Kontext "DocumentWriter"
+        DocumentWriter.openContextMenu
+
+    Case "MASTERDOCUMENT"
+
+        Kontext "DocumentMasterDoc"
+        DocumentMasterDoc.openContextMenu
+
+    Case "HTML"
+
+        Kontext "DocumentWriterWeb"
+        DocumentWriterWeb.openContextMenu
+
+    case "CALC"
+
+        Kontext "DocumentCalc"
+        DocumentCalc.openContextMenu
+
+    case "DRAW"
+
+        Kontext "DocumentDraw"
+        DocumentDraw.openContextMenu
+
+    case "IMPRESS"
+
+        Kontext "DocumentImpress"
+        DocumentImpress.openContextMenu
+
+    case "MATH" :
+
+        Kontext "DocumentMath"
+        DocumentMath.openContextMenu
+
     end select
 
 end function
 
 '*******************************************************************************
 
-function hGetWindowCaption(sApplication as string, optional bAll as boolean)
+function hGetWindowCaption( sApplication as string, optional bAll as boolean )
 
     '///<b> function hGetWindowCaption () </b>///'
     '///+ just returns the string from the application main window ///'
     '///+ If optional parameter = true, thenn go throught all applications and get caption; return array ///'
+
+    ' BEWARE: THIS FUNCTION MODIFIES ITS FUNCTION PARAMETER UNDER CERTAIN
+    '         CONDITIONS!
 
     dim sTemp as string
     dim aApplication() as string
@@ -665,7 +702,7 @@ function hGetWindowCaption(sApplication as string, optional bAll as boolean)
     dim iTimes as integer
     dim i as integer
 
-    aApplication = array("SWRITER","SGLOBAL","SWEB","SCALC","SDRAW","SIMPRESS","SMATH","BASIC","BACK")
+    aApplication = array("SWRITER","SGLOBAL","SWEB","SCALC","SDRAW","SIMPRESS","SMATH","BASIC","DATABASE","SOFFICE")
     if (isMissing(bAll) OR (NOT bAll)) then
         iTimes = 0
     else
@@ -722,7 +759,13 @@ function hGetWindowCaption(sApplication as string, optional bAll as boolean)
                     sTemp = BasicIDE.caption
                 catch
                 endcatch
-            Case "BACK"
+            Case "DATABASE"
+                Kontext "DATABASE"
+                try
+                    sTemp = DataBase.caption
+                catch
+                endcatch
+            Case "SOFFICE"
                 Kontext "DocumentBackground"
                 try
                     sTemp = DocumentBackground.caption
@@ -748,7 +791,7 @@ end function
 
 '*******************************************************************************
 
-function fSplitWindowTitle(sInString as string)
+function fSplitWindowTitle( sInString as string )
 
     dim a, b, x, i, iProductname as integer
     dim sTemp() as string
@@ -811,35 +854,33 @@ function fSplitWindowTitle(sInString as string)
 
         ' sanity checks, to warn if assumptions are not met!
         select case x
-            case 1:
-                if ((bTestToolCommunication) OR (bDebugVersion)) then
-                    qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 1"
-                    bError = TRUE
-                endif
-            case 2:
-                if ((bTestToolCommunication) OR (NOT bDebugVersion)) then
-                    qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 2"
-                    bError = TRUE
-                endif
-            case 3:
-                if ((NOT bTestToolCommunication) OR (bDebugVersion)) then
-                    qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 3"
-                    bError = TRUE
-                endif
-            case 4:
-                if ((NOT bTestToolCommunication) OR (NOT bDebugVersion)) then
-                    qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 4"
-                    bError = TRUE
-                endif
-            case else:
-                qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 0"
+        case 1:
+            if ((bTestToolCommunication) OR (bDebugVersion)) then
+                qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 1"
                 bError = TRUE
+            endif
+        case 2:
+            if ((bTestToolCommunication) OR (NOT bDebugVersion)) then
+                qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 2"
+                bError = TRUE
+            endif
+        case 3:
+            if ((NOT bTestToolCommunication) OR (bDebugVersion)) then
+                qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 3"
+                bError = TRUE
+            endif
+        case 4:
+            if ((NOT bTestToolCommunication) OR (NOT bDebugVersion)) then
+                qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 4"
+                bError = TRUE
+            endif
+        case else:
+            qaErrorLog "t_menu.inc::fSplitWindowTitle: Unknown count of Window Title Strings! 0"
+            bError = TRUE
         end select
 
-        if bError then
-            printlog sInString
-        endif
-
+        if bError then printlog sInString
+        
         if (x > 1) then ' there is more to evaluate
             ' save the current computed values
             for i=0 to 2
@@ -849,7 +890,6 @@ function fSplitWindowTitle(sInString as string)
             redim sTempReturn(4) as string
             ' copy data back
             for i=0 to 2
-                '***** Warning: Indention error *****
                 sTempReturn(i) = sTempReturn2(i)
             next i
             ' set remaining values, if exist

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Fields - L10N test
 '*
@@ -220,7 +220,7 @@ testcase tL10NtestDate
 	' document has to be copied to local file system to avoid opening a read-only file
 	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
 	FileCopy (sOriginalFile, sTestFile)
-	if hFileExists ( sTestFile ) = false then
+	if FileExists ( sTestFile ) = false then
 		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
 		goto endsub
 	end if
@@ -343,7 +343,7 @@ testcase tL10NtestTime
 	' document has to be copied to local file system to avoid opening a read-only file
 	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
 	FileCopy (sOriginalFile, sTestFile)
-	if hFileExists ( sTestFile ) = false then
+	if FileExists ( sTestFile ) = false then
 		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
 		goto endsub
 	end if

@@ -25,13 +25,11 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : misc functions to handle documents
 '*
 '\******************************************************************************
-
-private const VERBOSE = FALSE
 
 function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
@@ -40,7 +38,7 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
     '///<ul>
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hUseImpressAutopilot::"
     
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
 
     '///+<li>Create a new IMPRESS document</li>
     gApplication = "IMPRESS"
@@ -56,10 +54,10 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
         if ( bEnable ) then
             mitAutopilotStarten.check()
-            if ( VERBOSE ) then printlog( CFN & "Enable Impress Autopilot" )
+            if ( GVERBOSE ) then printlog( CFN & "Enable Impress Autopilot" )
         else
             mitAutopilotStarten.uncheck()
-            if ( VERBOSE ) then printlog( CFN & "Disable Impress Autopilot" )
+            if ( GVERBOSE ) then printlog( CFN & "Disable Impress Autopilot" )
         endif
 
         '///+<li>Return Status of Checkbox (checked=TRUE)</li>
@@ -73,45 +71,15 @@ function hUseImpressAutopilot( bEnable as boolean ) as boolean
 
     '///+<li>Close Tools/Options</li>
     Kontext "OptionenDlg"
-    OptionenDlg.OK()
-
+    hCloseDialog( OptionenDlg, "ok" )
+    
     '///+<li>Close IMPRESS document</li>
     hDestroyDocument()
 
     '///+<li>Returncode is undefined</li>
-    if ( VERBOSE ) then printlog( CFN & "Exit" )
+    if ( GVERBOSE ) then printlog( CFN & "Exit" )
     '///</ul>
     
-end function
-
-'*******************************************************************************
-
-function hCloseNavigator() as boolean
-
-    '///<h3>Function to close the navigator</h3>
-    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hCloseNavigator::"
-    
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
-    
-    Kontext "Navigator"
-    if ( Navigator.Exists() ) then
-        Navigator.Close()
-        Navigator.notExists( 2 )
-        if ( VERBOSE ) then printlog( CFN & "Closed Navigator" )
-    else
-        if ( VERBOSE ) then printlog( CFN & "Navigator not present" )
-    endif
-    
-    Kontext "Navigator"
-    if ( Navigator.exists() ) then
-        hCloseNavigator() = false
-        warnlog( CFN & "Failed to close Navigator, it is still open." )
-    else
-        hCloseNavigator() = true
-    endif
-    
-    if ( VERBOSE ) then printlog( CFN & "Exit" )
-
 end function
 
 '*******************************************************************************
@@ -132,7 +100,7 @@ function hNumericDocType( doctype as integer ) as string
     dim sList( 100 ) as string
     dim iDocTypes as integer
     
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
     
     '///+<li>Retrieve matching list from file</li>
     hGetDataFileSection( sFile , sList() , "application" , "" , "" )
@@ -151,7 +119,7 @@ function hNumericDocType( doctype as integer ) as string
     '///+<li>Set a plain text name as returnvalue for the function</li>
     hGetDataFileSection( sFile , sList() , "application_names" , "" , "" )
     hNumericDocType() = hGetValueForKeyAsString( sList() , gApplication )
-    if ( VERBOSE ) then printlog( CFN & "Exit" )
+    if ( GVERBOSE ) then printlog( CFN & "Exit" )
     '///</ul>
 
 end function
@@ -184,28 +152,30 @@ function hChangeDoc() as string
       case "WRITER", "HTML", "MASTERDOCUMENT"
                       Kontext "DocumentWriter"
                       DocumentWriter.TypeKeys "<Return>This doc is changed!"
-                      hChangeDoc() = "Changed WRITER/HTML/MASTERDOC" 
+                      hChangeDoc() = "Changed WRITER/HTML/MASTERDOC"
 
       '///+<li>CALC: Write some text into the current location (usually A1)</li>
       case "CALC"   : Kontext "DocumentCalc"
                       DocumentCalc.TypeKeys "<Down>This doc is changed!<Return>"
-                      hChangeDoc() = "Changed CALC" 
+                      hChangeDoc() = "Changed CALC"
 
       '///+<li>DRAW: Draw a rectangle</li>
       case "DRAW"   : Kontext "DocumentDraw"
                       hRechteckErstellen ( 20, 20, 25, 25 )
                       gMouseClick ( 1, 1 )
-                      hChangeDoc() = "Changed DRAW" 
+                      hChangeDoc() = "Changed DRAW"
 
       '///+<li>IMPRESS: Draw a rectangle</li>
       case "IMPRESS": Kontext "DocumentImpress"
                       hRechteckErstellen ( 20, 20, 25, 25 )
                       gMouseClick ( 1, 1 )
-                      hChangeDoc() = "Changed IMPRESS" 
+                      hChangeDoc() = "Changed IMPRESS"
 
       '///+<li>MATH: Create a simple formaula</li>
       case "MATH"   : SchreibenInMathdok( "b over c" )
-                      hChangeDoc() = "Changed MATH" 
+                      kontext "DocumentMath"
+                      hChangeDoc() = "Changed MATH"
+                      gMouseClick( 50 , 50 )
 
    end select
    '///</ul>
@@ -226,7 +196,7 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
     dim cIdentifier as string
     dim irc as integer ' some temporary returnvalue
     
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
 
     '///+<li>Test the function parameter</li>
     if ( cString = "" ) then
@@ -253,26 +223,17 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
     DocumentWriter.typeKeys( "<SHIFT END>" )
    
     '///+<li>copy the string to the clipboard and store it into a variable</li>
-    try
-	    editcopy
-	    cIdentifier = getClipboardText()
-	catch
-	    warnlog( "EditCopy failed. Probably the document is empty" )
-	    cIdentifier = "**** invalid ****"
-	endcatch
-    
+    hUseAsyncSlot( "EditCopy" )
+    cIdentifier = getClipboardText()
    
     '///+<li>compare the string to the reference (given as parameter)</li>
     irc = hCompareSubstrings( cIdentifier, cString )
 
     '///+<li>Write the result to the printlog if desired</li>
     if ( irc = 0 ) then
-   
-        if ( bWarn ) then
-            warnlog ( CFN & "The focus is not on the expected document" )
-        else
-            if ( VERBOSE ) then printlog( CFN & "The focus is not on the expected document" )
-        endif
+
+        if ( GVERBOSE ) then printlog( CFN & "The focus is not on the expected document" )
+        if ( bWarn ) then warnlog ( CFN & "The focus is not on the expected document" )
         
         printlog( CFN & "Expected: " & cString )
         printlog( CFN & "Found...: " & cIdentifier )
@@ -283,7 +244,7 @@ function hIdentifyWriterDoc( cString as string, bWarn as boolean ) as boolean
     endif
     '///+<li>Return TRUE only if the current document is the expected one</li>
     
-    if ( VERBOSE ) then printlog( CFN & "Exit" )
+    if ( GVERBOSE ) then printlog( CFN & "Exit" )
     '///</ul>
 
 end function
@@ -300,12 +261,10 @@ function hCreateDocument() as boolean
     dim iDocCountAfter as integer
 
     iDocCountBefore = getDocumentCount
-    if ( VERBOSE ) then printlog( CFN & "Number of open documents before: " & iDocCountBefore )
+    if ( GVERBOSE ) then printlog( CFN & "Number of open documents before: " & iDocCountBefore )
 
-    if ( ucase( gApplication ) = "BACKGROUND" ) then
-    	do while( getDocumentCount > 0 )
-    	    hCloseDocument()
-        loop
+    if ( gApplication = "BACKGROUND" ) then
+    	hFileCloseAll()
         hCreateDocument() = true
     else
     
@@ -317,7 +276,7 @@ function hCreateDocument() as boolean
             hCreateDocument() = false
         endif
     endif
-    if ( VERBOSE ) then printlog( CFN & "New document created. Open: " & iDocCountAfter )
+    if ( GVERBOSE ) then printlog( CFN & "New document created. Open: " & iDocCountAfter )
     '///</ul>
     
 end function
@@ -351,10 +310,9 @@ function hDocumentTypeKeys( cString as string ) as boolean
     '///<ul>
     
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hDocumentTypeKeys::"
-    dim brc as boolean
-        brc = true
         
-    if ( VERBOSE ) then printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
+    hDocumentTypeKeys() = true
     
     '///+<li>Set focus to the current documenttype determined by gApplication</li>
     '///+<li>Type the string passed as function parameter</li>
@@ -375,15 +333,12 @@ function hDocumentTypeKeys( cString as string ) as boolean
                         DocumentWriter.typeKeys( cString )
     case else
         warnlog( CFN & "Exit: Unknown gApplication: " & gApplication )
-        brc = false
+        hDocumentTypeKeys() = false
+        exit function
     end select
     
     '///+<li>Print some message to the log on success</li>
-    if ( brc ) then
-        printlog( CFN & "Exit: Sent keystroke to " & gApplication )
-    endif
-    
-    hDocumentTypeKeys() = brc
+    printlog( CFN & "Exit: Sent keystroke to " & gApplication )
     '///</ul>
     
 end function
@@ -396,26 +351,42 @@ function hDestroyDocument() as boolean
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hDestroyDocument: "
     dim iDocCount as integer : iDocCount = getDocumentCount()
     hDestroyDocument() = false
+
+    dim method( 3 ) as string
+        method( 1 ) = "no,optional"
+        method( 2 ) = "202,optional"
+        method( 3 ) = "ok,optional"  ' This could be a File I/O error
+
+    dim iCurrentMethod as integer
+    dim bDialogClosed as boolean
     
     if ( iDocCount = 0 ) then exit function
-    if ( VERBOSE ) then printlog( CFN & "In.: Open: " & iDocCount )
+    if ( GVERBOSE ) then printlog( CFN & "In.: Open: " & iDocCount )
 
     hUseAsyncSlot( "FileClose" )
-    
-    Kontext "Active"
-    if ( Active.Exists( 2 ) ) then
-        printlog( "Msgbox: " & Active.getText() )
-        try
-            Active.No
-        catch
-            Active.Click ( 202 )
-        endcatch
-        wait( 1000 )
-    end if
+
+    for iCurrentMethod = 1 to 3
+
+        bDialogClosed = false
+
+        Kontext "Active"
+        if ( Active.exists( 1 ) ) then
+            printlog( CFN & "Msgbox: " & Active.getText() )
+            if ( GVERBOSE ) then printlog( CFN & "Method: " & method( iCurrentMethod ) )
+            bDialogClosed = hCloseDialog( Active, method( iCurrentMethod ) )
+        else
+            exit for
+        endif
+        
+        if ( iCurrentMethod = 3 and bDialogClosed ) then 
+            warnlog( "Unexpected messagebox was handled" )
+        endif
+        
+    next iCurrentMethod
     
     if ( getDocumentCount() = iDocCount ) then hCloseDocument()
     if ( getDocumentCount() = iDocCount - 1 ) then hDestroyDocument() = true
-    if ( VERBOSE ) then printlog( CFN & "Out: Open: " & getDocumentCount() )
+    if ( GVERBOSE ) then printlog( CFN & "Out: Open: " & getDocumentCount() )
 
 end function
 
@@ -423,100 +394,20 @@ end function
 
 function hInitSingleDoc() as boolean
 
-    '///<h3>Make sure exactly one single writer document is open</h3>
-    '///<i>The wizards cannot be triggered correctly from the backing window. 
-    '///+ As a workaround this function checks the amount of open documents and
-    '///+ creates exactly one unchanged Writer document</i><br><br>
-
-    '///<u>Parameter(s):</u><br>
-    '///<ol>
-    '///+<li>No input parameters</li>
-    '///</ol>
-
-
-    '///<u>Returns:</u><br>
-    '///<ol>
-    '///+<li>Errorcondition (Boolean)</li>
-    '///<ul>
-    '///+<li>TRUE: Exactly one Writer document is open</li>
-    '///+<li>FALSE: Any error</li>
-    '///</ul>
-    '///</ol>
-
-    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hInitSingleDoc::"
-    dim cOldApplication as string
-
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Close all documents until we are on the backing window</li>
     hFileCloseAll()
-    
-    '///+<li>Save the previous gApplication</li>
-    cOldApplication = gApplication
-    
-    '///+<li>Set gApplication to WRITER</li>
-    gApplication = "WRITER"
-    
-    '///+<li>Open one new Writer document</li>
-    call hNewDocument()
-    
-    '///+<li>Verify that exactly one document is open</li>
-    if ( getDocumentCount = 1 ) then 
-        printlog( CFN & "A single unchanged writer document is open" )
+    hCreateDocument()
+
+    if ( GVERBOSE ) then printlog( "hInitSingleDoc(): Opening document: " & gApplication )
+
+    if ( getDocumentCount = 1 ) then
         hInitSingleDoc() = true
     else
-        printlog( CFN & "Failed to open just one single writer document" )
         hInitSingleDoc() = false
     endif
-    
-    '///+<li>Restore gApplication</li>
-    gApplication = cOldApplication
-    '///</ul>
 
 end function
 
-'*******************************************************************************
-
-function hInitBackingMode() as boolean
-
-    '///<h3>Make that we are on the backing window (no open documents)</h3>
-    '///<i>Close all open documents</i><br><br>
-
-    '///<u>Parameter(s):</u><br>
-    '///<ol>
-    '///+<li>No input parameters</li>
-    '///</ol>
-
-
-    '///<u>Returns:</u><br>
-    '///<ol>
-    '///+<li>Errorcondition (Boolean)</li>
-    '///<ul>
-    '///+<li>TRUE: No open documents are present</li>
-    '///+<li>FALSE: Any error</li>
-    '///</ul>
-    '///</ol>
-
-    const CFN = "global::tools::includes::optional::t_docfuncs.inc::hInitBackingMode::"
-
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Close all documents until we are on the backing window</li>
-    hFileCloseAll()
-    
-    '///+<li>verify that we do not have any open documents left (redundant check)</li>
-    if ( getDocumentCount = 0 ) then
-        printlog( CFN & "Office is in backing mode." )
-        hInitBackingMode() = true
-    else
-        printlog( CFN & "Office is in undefined state." )
-        hInitBackingMode() = false
-    endif
-    '///</ul>
-    
-end function
-
-'*******************************************************************************
+'*******************************************************************************'*******************************************************************************
 
 function hInitWriteDocIdentifier( cString as string ) as boolean
 
@@ -548,42 +439,37 @@ function hInitWriteDocIdentifier( cString as string ) as boolean
     '///</ol>
 
     const CFN = "global::tools::includes::optional::t_docfuncs.inc::hInitWriteDocIdentifier::"
+    const RC_TIMEOUT = -1
 
-    '///<u>Description:</u>
-    '///<ul>
-    '///+<li>Verify number of open documents</li>
-    if ( getDocumentCount <> 1 ) then
-        printlog( CFN & "Incorrect document count" )
-        hInitWriteDocIdentifier() = false
-        exit function
-    endif
-    
-    '///+<li>Verify that it is a writer document</li>
-    kontext "DocumentWriter"
-    if ( not DocumentWriter.exists() ) then
-        printlog( CFN & "Open document is not a text document" )
-        hInitWriteDocIdentifier() = false
-        exit function
-    endif
-    
-    '///+<li>Write the string</li>
-    kontext "DocumentWriter"
-    DocumentWriter.typeKeys( "<MOD1 END>" )
-    DocumentWriter.typeKeys( "<MOD1 SHIFT HOME>" )
-    DocumentWriter.typeKeys( "<DELETE>" )
-    DocumentWriter.typekeys( cString )
-    
-    '///+<li>Verify the string</li>
-    DocumentWriter.typeKeys( "<MOD1 END>" )
-    DocumentWriter.typeKeys( "<MOD1 SHIFT HOME>" )
-    EditCopy
-    if ( getClipboardText = cString ) then
-        printlog( CFN & "Document has been successfully modified." )
-        hInitWriteDocIdentifier() = true
+    if ( getDocumentCount = 1 and gApplication = "WRITER" ) then
+
+        kontext "DocumentWriter"
+        DocumentWriter.typeKeys( "<MOD1 END>" )
+        DocumentWriter.typeKeys( "<MOD1 SHIFT HOME>" )
+        DocumentWriter.typeKeys( "<DELETE>" )
+        DocumentWriter.typekeys( cString )
+
+        DocumentWriter.typeKeys( "<MOD1 END>" )
+        DocumentWriter.typeKeys( "<MOD1 SHIFT HOME>" )
+
+        if ( hUseAsyncSlot( "EditCopy" ) <> RC_TIMEOUT ) then
+
+            if ( getClipboardText = cString ) then
+                printlog( CFN & "Writer document has been successfully modified." )
+                hInitWriteDocIdentifier() = true
+            else
+                warnlog( CFN & "Could not verify document identification string" )
+                hInitWriteDocIdentifier() = false
+            endif
+        else
+            warnlog( CFN & "Unable to copy text to clipboard using <EditCopy>" )
+            hInitWriteDocIdentifier() = false
+        endif
     else
-        printlog( CFN & "Could not verify document identification string" )
+        warnlog ( CFN & "Only one single writer document may be open"   )
+        printlog( CFN & "Number of documents: " & getDocumentCount )
+        printlog( CFN & "Application........: " & gApplication     )
         hInitWriteDocIdentifier() = false
-    endif    
-    '///</ul>
+    endif
 
 end function

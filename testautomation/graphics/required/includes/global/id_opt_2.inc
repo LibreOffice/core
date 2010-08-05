@@ -25,13 +25,11 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'************************************************************************************
-' #1 tToolsOptionsMeasurementUnit
-'\***********************************************************************************
+'\******************************************************************************
 
 testcase tToolsOptionsMeasurementUnit (sApplication as string)
     dim i as integer
