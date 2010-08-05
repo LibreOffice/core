@@ -44,8 +44,8 @@ _DllMgr_callFp:
     shr ecx, 2
     rep movsd
 $1: call DWORD PTR [ebp+8]
-    ; for extra safety, do not trust esp after call (in case the Basic Declare
-    ; signature is wrong):
+    # for extra safety, do not trust esp after call (in case the Basic Declare
+    # signature is wrong):
     mov edi, [ebp-8]
     mov esi, [ebp-4]
     mov esp, ebp

@@ -448,6 +448,7 @@ private:
 public:
     SdrPageProperties& getSdrPageProperties() { return *mpSdrPageProperties; }
     const SdrPageProperties& getSdrPageProperties() const { return *mpSdrPageProperties; }
+    const SdrPageProperties* getCorrectSdrPageProperties() const;
 
 protected:
     // new MasterPageDescriptorVector

@@ -234,7 +234,7 @@ jint read_from_storage_stream_into_buffer( JNIEnv * env, jobject /*obj_this*/,js
     if ( xIn.is() )
     {
         jsize nLen = env->GetArrayLength(buffer);
-        if ( nLen < len )
+        if ( nLen < len || len <= 0 )
         {
             ThrowException( env,
                     "java/io/IOException",
@@ -439,21 +439,17 @@ void write_to_storage_stream_from_buffer( JNIEnv* env, jobject /*obj_this*/, jst
         if ( xOut.is() )
         {
             jbyte *buf = env->GetByteArrayElements(buffer,NULL);
-#ifdef HSQLDB_DBG
-            OSL_ENSURE(len <= env->GetArrayLength(buffer),"Length is greater than the buffer!");
-#endif
-
             if (JNI_FALSE != env->ExceptionCheck())
             {
                 env->ExceptionClear();
                 OSL_ENSURE(0,"ExceptionClear");
             }
             OSL_ENSURE(buf,"buf is NULL");
-            if ( buf )
+            if ( buf && len > 0 && len <= env->GetArrayLength(buffer))
             {
                 Sequence< ::sal_Int8 > aData(buf + off,len);
-                xOut->writeBytes(aData);
                 env->ReleaseByteArrayElements(buffer, buf, JNI_ABORT);
+                xOut->writeBytes(aData);
 #ifdef HSQLDB_DBG
                 if ( logger )
                     logger->write( aData.getConstArray(), len );
