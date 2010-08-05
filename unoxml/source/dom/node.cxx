@@ -52,6 +52,7 @@
 #include <algorithm>
 
 namespace {
+//see CNode::remove
     struct NodeMutex: public ::rtl::Static<osl::Mutex, NodeMutex> {};
 }
 
@@ -136,6 +137,17 @@ namespace DOM
 
     void CNode::remove(const xmlNodePtr aNode)
     {
+        //Using the guard here protects against races when at the same time
+        //CNode::get() is called. This fix helps in many cases but is still
+        //incorrect. remove is called from ~CNode. That is, while the object
+        //is being destructed it can still be obtained by calling CNode::get().
+        //Another bug currently prevents the correct destruction of CNodes. So
+        //the destructor is rarely called.
+        //
+        //Doing this right would probably mean to store WeakReferences in the
+        //map and also guard oder functions. To keep the risk at a minimum
+        //we keep this imperfect fix for the upcoming release and fix it later
+        //properly (http://qa.openoffice.org/issues/show_bug.cgi?id=113682)
         ::osl::MutexGuard guard(NodeMutex::get());
         nodemap_t::iterator i = CNode::theNodeMap.find(aNode);
         if (i != CNode::theNodeMap.end())
@@ -151,6 +163,7 @@ namespace DOM
         CNode* pNode = 0;
         if (aNode == NULL)
             return 0;
+        //see CNode::remove
         ::osl::MutexGuard guard(NodeMutex::get());
         //check whether there is already an instance for this node
         nodemap_t::const_iterator i = CNode::theNodeMap.find(aNode);
