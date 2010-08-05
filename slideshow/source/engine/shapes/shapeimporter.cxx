@@ -513,12 +513,11 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
 
     ::basegfx::B2DPolygon aPoly;
     basegfx::B2DPoint aPoint;
-    for( sal_Int32 nCurrPoly=0; nCurrPoly<pOuterSequence->getLength(); ++nCurrPoly )
+    for( sal_Int32 nCurrPoly=0; nCurrPoly<pOuterSequence->getLength(); ++nCurrPoly, ++pInnerSequence )
     {
         aPoint.setX((*pInnerSequence).X);
         aPoint.setY((*pInnerSequence).Y);
         aPoly.append( aPoint );
-        *pInnerSequence++;
     }
     UnoViewVector::const_iterator aIter=(mrContext.mrViewContainer).begin();
     UnoViewVector::const_iterator aEnd=(mrContext.mrViewContainer).end();
