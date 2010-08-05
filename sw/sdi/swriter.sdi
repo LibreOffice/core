@@ -6623,7 +6623,7 @@ SfxBoolItem ProtectTraceChangeMode FN_REDLINE_PROTECT
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,

@@ -325,22 +325,26 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create a choice for the content to create
     rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
-    uno::Sequence< rtl::OUString > aChoices( bHasSelection ? 3 : 2 );
-    uno::Sequence< rtl::OUString > aHelpText( bHasSelection ? 3 : 2 );
+    uno::Sequence< rtl::OUString > aChoices( 3 );
+    uno::Sequence< sal_Bool > aChoicesDisabled( 3 );
+    uno::Sequence< rtl::OUString > aHelpText( 3 );
     aChoices[0] = aLocalizedStrings.GetString( 38 );
+    aChoicesDisabled[0] = sal_False;
     aHelpText[0] = aLocalizedStrings.GetString( 39 );
     aChoices[1] = aLocalizedStrings.GetString( 40 );
+    aChoicesDisabled[1] = sal_False;
     aHelpText[1] = aLocalizedStrings.GetString( 41 );
-    if (bHasSelection)
-    {
-        aChoices[2] = aLocalizedStrings.GetString( 42 );
-        aHelpText[2] = aLocalizedStrings.GetString( 43 );
-    }
+    aChoices[2] = aLocalizedStrings.GetString( 42 );
+    aChoicesDisabled[2] = sal_Bool(! bHasSelection);
+    aHelpText[2] = aLocalizedStrings.GetString( 43 );
     m_aUIProperties[nIdx++].Value = getChoiceControlOpt( rtl::OUString(),
                                                          aHelpText,
                                                          aPrintRangeName,
                                                          aChoices,
-                                                         bHasSelection ? 2 /*enable 'Selection' radio button*/ : 0 /* enable 'All pages' */);
+                                                         bHasSelection ? 2 /*enable 'Selection' radio button*/ : 0 /* enable 'All pages' */,
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                                         aChoicesDisabled
+                                                         );
     // create a an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
     m_aUIProperties[nIdx++].Value = getEditControlOpt( rtl::OUString(),
@@ -374,6 +378,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                     aChoices,
                                                     nPrintPostIts,
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                    uno::Sequence< sal_Bool >(),
                                                     aAnnotOpt
                                                     );
 
@@ -441,6 +446,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                                aBRTLChoices,
                                                                nBRTLChoice,
                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                               uno::Sequence< sal_Bool >(),
                                                                aBrochureRTLOpt
                                                                );
     }
