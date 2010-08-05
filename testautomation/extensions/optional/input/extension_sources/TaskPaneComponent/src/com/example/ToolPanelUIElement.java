@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author frank.schoenheit@sun.com
+ * @author frank.schoenheit@oracle.com
  */
 public class ToolPanelUIElement extends ComponentBase implements XUIElement
 {

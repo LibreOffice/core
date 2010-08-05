@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : marc.neumann@sun.com
+'* owner : marc.neumann@oracle.com
 '*
 '* short description : Form Filter Test Library
 '*
@@ -58,7 +58,9 @@ testcase tLoadForm
 	FM_FormFilter_Start
 	wait(1000)
     '/// insert 2 in the first textbox
-    printlog "insert 2 in the first textbox"    
+    printlog "insert 2 in the first textbox"
+        DocumentWriter.TypeKeys "<MOD1 F5>" , true
+        sleep(1)
 	DocumentWriter.TypeKeys "2" , true
 	'DocumentWriter.TypeKeys "<RETURN>" , true
 	wait(1000)
@@ -91,7 +93,11 @@ testcase tLoadForm
 	FM_FormFilter_Start
 	wait(1000)
     '/// insert into the second textbox like '%2'
-    printlog "insert into the second textbox like '%2'"    
+    printlog "insert into the second textbox like '%2'"
+        DocumentWriter.TypeKeys "<MOD1 F5>" , true
+	sleep(1)
+        DocumentWriter.TypeKeys "<TAB>" , true
+	sleep(1)
 	DocumentWriter.TypeKeys "like '%2'" , true
 	wait(1000)
     '/// execute the filter

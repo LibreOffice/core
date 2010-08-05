@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Spellcheck-Testing. Functional-Test.
 '*
@@ -43,6 +43,7 @@ sub w_spellcheck
     Call tToolsThesaurus
     Call tToolsSpellcheckButtonChange
     Call tToolsSpellcheckButtonChangeAll
+    Call tToolsThesaurusSynonyms
 
 end sub
 
@@ -1286,7 +1287,7 @@ testcase tToolsThesaurus
     printlog "Set language dependent word in textfield Current Word"
     CurrentWord.Settext sWordInitial
 
-    wait 500
+    Sleep 2
     if Alternatives.GetItemCount = 0 then
         Warnlog "No alternatives text"
     else
@@ -1390,7 +1391,7 @@ testcase tToolsThesaurusSynonyms
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if hFileExists ( TheFile ) <> TRUE then
+    if FileExists ( TheFile ) <> TRUE then
        Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
        exit sub
     end if

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Impress Required Test Library (7)
 '*
@@ -41,6 +41,7 @@ sub im_007_
     call tSlideShowShowHideSlide()
     call tSlideShowCustomAnimation()
     call tSlideShowInteraction()
+    call tSlideShowAnimation()
 
 end sub
 
