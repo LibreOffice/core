@@ -887,7 +887,11 @@ static Twain aTwain;
 // - ScannerManager -
 // ------------------
 
-void ScannerManager::DestroyData()
+void ScannerManager::AcquireData()
+{
+}
+
+void ScannerManager::ReleaseData()
 {
     if( mpData )
     {
@@ -979,7 +983,7 @@ SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
         }
 
         GlobalUnlock( hDIB );
-        DestroyData();
+        ReleaseData();
     }
 
     return aRet;
@@ -1009,7 +1013,7 @@ BOOL SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
     if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
         throw ScannerException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Scanner does not exist" ) ), xThis, ScanError_InvalidContext );
 
-    DestroyData();
+    ReleaseData();
 
     return aTwain.SelectSource( *this );
 }
@@ -1025,7 +1029,7 @@ void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const u
     if( rContext.InternalData != 0 || rContext.ScannerName != ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TWAIN" ) ) )
         throw ScannerException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Scanner does not exist" ) ), xThis, ScanError_InvalidContext );
 
-    DestroyData();
+    ReleaseData();
     aTwain.PerformTransfer( *this, rxListener );
 }
 

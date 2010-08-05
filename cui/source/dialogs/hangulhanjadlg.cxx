@@ -690,12 +690,6 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    void HangulHanjaConversionDialog::SetOptionsHdl( const Link& _rHdl )
-    {
-        m_pPlayground->SetButtonHandler( SvxCommonLinguisticControl::eOptions, _rHdl );
-    }
-
-    //-------------------------------------------------------------------------
     void HangulHanjaConversionDialog::SetFindHdl( const Link& _rHdl )
     {
         m_aFind.SetClickHdl( _rHdl );
@@ -865,11 +859,6 @@ namespace svx
         m_aSuggestions.DisplayListBox( !_bByCharacter );
     }
 
-    //-------------------------------------------------------------------------
-    sal_Bool HangulHanjaConversionDialog::GetByCharacter( ) const
-    {
-        return m_aReplaceByChar.IsChecked();
-    }
     //-------------------------------------------------------------------------
     void HangulHanjaConversionDialog::SetConversionDirectionState(
             sal_Bool _bTryBothDirections,

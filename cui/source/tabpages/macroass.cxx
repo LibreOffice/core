@@ -237,26 +237,6 @@ void _SfxMacroTabPage::ScriptChanged( const String& aLangName )
     EnableButtons( aLangName );
 }
 
-void _SfxMacroTabPage::SetGetRangeLink( FNGetRangeHdl pFn )
-{
-    mpImpl->fnGetRange = pFn;
-}
-
-FNGetRangeHdl _SfxMacroTabPage::GetGetRangeLink() const
-{
-    return mpImpl->fnGetRange;
-}
-
-void _SfxMacroTabPage::SetGetMacrosOfRangeLink( FNGetMacrosOfRangeHdl pFn )
-{
-    mpImpl->fnGetMacroOfRange = pFn;
-}
-
-FNGetMacrosOfRangeHdl _SfxMacroTabPage::GetGetMacrosOfRangeLink() const
-{
-    return mpImpl->fnGetMacroOfRange;
-}
-
 BOOL _SfxMacroTabPage::FillItemSet( SfxItemSet& rSet )
 {
     SvxMacroItem aItem( GetWhich( aPageRg[0] ) );
@@ -311,11 +291,6 @@ void _SfxMacroTabPage::Reset( const SfxItemSet& rSet )
     SvLBoxEntry* pE = rListBox.GetEntry( 0 );
     if( pE )
         rListBox.SetCurEntry( pE );
-}
-
-void _SfxMacroTabPage::SetReadOnly( BOOL bSet )
-{
-    mpImpl->bReadOnly = bSet;
 }
 
 BOOL _SfxMacroTabPage::IsReadOnly() const
@@ -389,12 +364,6 @@ IMPL_STATIC_LINK( _SfxMacroTabPage, SelectMacro_Impl, ListBox*, EMPTYARG )
     _SfxMacroTabPage_Impl*  pImpl = pThis->mpImpl;
     pImpl->pMacroLB->FunctionSelected();
     pThis->EnableButtons( pImpl->pScriptTypeLB->GetSelectEntry() );
-    return 0;
-}
-
-IMPL_STATIC_LINK( _SfxMacroTabPage, GetFocus_Impl, Edit*, EMPTYARG )
-{
-    pThis->EnableButtons( DEFINE_CONST_UNICODE("JavaScript") );
     return 0;
 }
 
@@ -579,24 +548,6 @@ void _SfxMacroTabPage::FillEvents()
         }
     }
 }
-
-void _SfxMacroTabPage::SelectEvent( const String & /*rEventName*/, USHORT nEventId )
-{
-    SvHeaderTabListBox& rListBox = mpImpl->pEventLB->GetListBox();
-    ULONG               nEntryCnt = rListBox.GetEntryCount();
-
-    for( ULONG n = 0 ; n < nEntryCnt ; ++n )
-    {
-        SvLBoxEntry*    pE = rListBox.GetEntry( n );
-        if( pE && ( USHORT ) ( ULONG ) pE->GetUserData() == nEventId )
-        {
-            rListBox.SetCurEntry( pE );
-            rListBox.MakeVisible( pE );
-            break;
-        }
-    }
-}
-
 
 SvStringsDtor* __EXPORT _ImpGetRangeHdl( _SfxMacroTabPage* /*pTbPg*/, const String& rLanguage )
 {

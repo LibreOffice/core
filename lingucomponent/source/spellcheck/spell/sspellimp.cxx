@@ -459,14 +459,12 @@ Reference< XSpellAlternatives >
                 {
                     aStr.realloc( numsug + count );
                     OUString *pStr = aStr.getArray();
-                    for (int ii=0; ii < count; ii++)
+                    for (int ii=0; ii < count; ++ii)
                     {
-                       // if needed add: if (suglst[ii] == NULL) continue;
-                       OUString cvtwrd(suglst[ii],strlen(suglst[ii]),eEnc);
-                       pStr[numsug + ii] = cvtwrd;
-                       free(suglst[ii]);
+                        OUString cvtwrd(suglst[ii],strlen(suglst[ii]),aEnc);
+                        pStr[numsug + ii] = cvtwrd;
                     }
-                    free(suglst);
+                    pMS->free_list(&suglst, count);
                     numsug += count;
                 }
             }

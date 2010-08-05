@@ -97,21 +97,13 @@ protected:
     void                    ExpandTree( SvLBoxEntry* pRootEntry );
     virtual void            RequestingChilds( SvLBoxEntry* pParent );
     virtual void            ExpandedHdl();
-    SvLBoxEntry*            FindEntry( SvLBoxEntry* pParent, const String& rText, BYTE nType );
     virtual long            ExpandingHdl();
-    static BOOL             dialogSort1( com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node1,
-            com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node2 );
-    static BOOL             dialogSort2( com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node1,
-            com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node2 );
-
 public:
     void                    Init( const ::rtl::OUString& language );
     void  RequestSubEntries(  SvLBoxEntry* pRootEntry, ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node,
                               ::com::sun::star::uno::Reference< com::sun::star::frame::XModel>& model  );
                     SFTreeListBox( Window* pParent, const ResId& rRes );
                     ~SFTreeListBox();
-
-    void            UpdateEntries();
 
     void            ExpandAllTrees();
 
@@ -202,15 +194,12 @@ protected:
     BOOL                getBoolProperty( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps, ::rtl::OUString& propName );
     void                CheckButtons(  ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >& node );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface  > getDocumentModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xCtx, ::rtl::OUString& docName );
-
     void        createEntry( SvLBoxEntry* pEntry );
     void        renameEntry( SvLBoxEntry* pEntry );
     void        deleteEntry( SvLBoxEntry* pEntry );
     ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode >
                 getBrowseNode( SvLBoxEntry* pEntry );
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > getModel( SvLBoxEntry* pEntry );
-    void        EnableButton( Button& rButton, BOOL bEnable );
     String      getListOfChildren( ::com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();

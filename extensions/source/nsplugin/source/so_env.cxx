@@ -204,7 +204,9 @@ int nspluginOOoModuleHook (void** aResult)
         strcpy (realFileName, libFileName);
     }
 
+        #if OSL_DEBUG_LEVEL > 1
     fprintf (stderr, "OpenOffice path before fixup is '%s'\n", realFileName);
+        #endif
 
     if (realFileName[0] != '/') {
         /* a relative sym-link and we need to get an absolute path */
@@ -223,7 +225,9 @@ int nspluginOOoModuleHook (void** aResult)
 
     *aResult = realFileName;
 
+        #if OSL_DEBUG_LEVEL > 1
     fprintf (stderr, "OpenOffice path is '%s'\n", realFileName);
+        #endif
 
     return 0;
 }
