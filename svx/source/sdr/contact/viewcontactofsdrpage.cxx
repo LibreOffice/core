@@ -169,24 +169,19 @@ namespace sdr
             }
             else
             {
-                static vcl::DeleteOnDeinit< BitmapEx > aPageShadow35x35(
-                    new BitmapEx(ResId(SIP_SA_PAGESHADOW35X35, *ImpGetResMgr())));
-
-                if(aPageShadow35x35.get())
+                static vcl::DeleteOnDeinit<drawinglayer::primitive2d::DiscreteShadow>
+                    aDiscreteShadow(new drawinglayer::primitive2d::DiscreteShadow(
+                        BitmapEx(ResId(SIP_SA_PAGESHADOW35X35, *ImpGetResMgr()))));
+                if (aDiscreteShadow.get() != NULL)
                 {
-                    static drawinglayer::primitive2d::DiscreteShadow aDiscreteShadow(*aPageShadow35x35.get());
-
                     const drawinglayer::primitive2d::Primitive2DReference xReference(
                         new drawinglayer::primitive2d::DiscreteShadowPrimitive2D(
                             aPageMatrix,
-                            aDiscreteShadow));
+                                *aDiscreteShadow.get()));
 
                     return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
                 }
-                else
-                {
-                    return drawinglayer::primitive2d::Primitive2DSequence();
-                }
+                return drawinglayer::primitive2d::Primitive2DSequence();
             }
         }
 
