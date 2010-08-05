@@ -4146,36 +4146,49 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout,
 {
     if( bWordLine )
     {
-        Point aPos, aStartPt;
-        sal_Int32 nWidth = 0, nAdvance=0;
+        // draw everything relative to the layout base point
+     const Point aStartPt = rSalLayout.DrawBase();
+     // calculate distance of each word from the base point
+        Point aPos;
+        sal_Int32 nDist = 0, nWidth = 0, nAdvance=0;
         for( int nStart = 0;;)
         {
+            // iterate through the layouted glyphs
             sal_GlyphId nGlyphIndex;
             if( !rSalLayout.GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart, &nAdvance ) )
                 break;
 
+            // calculate the boundaries of each word
             if( !rSalLayout.IsSpacingGlyph( nGlyphIndex ) )
             {
                 if( !nWidth )
                 {
-                    // TODO: keep both base point
-                    //   and relative distance (as projection to baseline)
-                    aStartPt = aPos;
+                    // get the distance to the base point (as projected to baseline)
+                    nDist = aPos.X() - aStartPt.X();
+                    if( mpFontEntry->mnOrientation )
+                    {
+                        const long nDY = aPos.Y() - aStartPt.Y();
+                        const double fRad = mpFontEntry->mnOrientation * F_PI1800;
+                        nDist = FRound( nDist*cos(fRad) - nDY*sin(fRad) );
+                    }
                 }
 
+                // update the length of the textline
                 nWidth += nAdvance;
             }
             else if( nWidth > 0 )
             {
-                ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), 0, nWidth,
+             // draw the textline for each word
+                ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), nDist, nWidth,
                     eStrikeout, eUnderline, eOverline, bUnderlineAbove );
                 nWidth = 0;
             }
         }
 
+        // draw textline for the last word
         if( nWidth > 0 )
         {
-            ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), 0, nWidth,
+            ImplDrawTextLine( aStartPt.X(), aStartPt.Y(), nDist, nWidth,
                 eStrikeout, eUnderline, eOverline, bUnderlineAbove );
         }
     }
