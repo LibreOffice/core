@@ -348,6 +348,15 @@ CDOTransferable::ByteSequence_t SAL_CALL CDOTransferable::getClipboardData( CFor
             byteStream = WinENHMFPictToOOMFPict( stgmedium.hEnhMetaFile );
         else if (CF_HDROP == aFormatEtc.getClipformat())
             byteStream = CF_HDROPToFileList(stgmedium.hGlobal);
+        else if ( CF_BITMAP == aFormatEtc.getClipformat() )
+        {
+            byteStream = WinBITMAPToOOBMP(stgmedium.hBitmap);
+            if( aFormatEtc.getTymed() == TYMED_GDI &&
+                ! stgmedium.pUnkForRelease )
+            {
+                DeleteObject(stgmedium.hBitmap);
+            }
+        }
         else
         {
             clipDataToByteStream( aFormatEtc.getClipformat( ), stgmedium, byteStream );

@@ -854,19 +854,22 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& rDirName )
     fprintf( stderr, "FcConfigAppFontAddDir( \"%s\") => %d\n", pDirName, bDirOk );
 #endif
 
-    if( bDirOk )
-    {
-        const rtl::OString aConfFileName = rDirName + "/fc_local.conf";
-        bool bCfgOk = rWrapper.FcConfigParseAndLoad( rWrapper.FcConfigGetCurrent(),
-                            (FcChar8*)aConfFileName.getStr(), FcTrue );
-        (void)bCfgOk; // silence compiler warning
+    if( !bDirOk )
+        return false;
 
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "FcConfigParseAndLoad( \"%s\") => %d\n", aConfFileName.getStr(), bCfgOk );
-#endif
+    // load dir-specific fc-config file too if available
+    const rtl::OString aConfFileName = rDirName + "/fc_local.conf";
+    FILE* pCfgFile = fopen( aConfFileName.getStr(), "rb" );
+    if( pCfgFile )
+    {
+        fclose( pCfgFile);
+        bool bCfgOk = rWrapper.FcConfigParseAndLoad( rWrapper.FcConfigGetCurrent(),
+                        (FcChar8*)aConfFileName.getStr(), FcTrue );
+        if( !bCfgOk )
+            fprintf( stderr, "FcConfigParseAndLoad( \"%s\") => %d\n", aConfFileName.getStr(), bCfgOk );
     }
 
-    return bDirOk;
+    return true;
 }
 
 static void addtopattern(FontCfgWrapper& rWrapper, FcPattern *pPattern,

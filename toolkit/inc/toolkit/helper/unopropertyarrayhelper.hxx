@@ -34,6 +34,7 @@
 #include <tools/table.hxx>
 
 #include <list>
+#include "toolkit/dllapi.h"
 
 //  ----------------------------------------------------
 //  class UnoPropertyArrayHelper
