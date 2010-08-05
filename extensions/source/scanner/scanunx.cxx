@@ -31,6 +31,7 @@
 #include <sanedlg.hxx>
 #include <vos/thread.hxx>
 #include <tools/list.hxx>
+#include <boost/shared_ptr.hpp>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -113,12 +114,41 @@ struct SaneHolder
     vos::OMutex         m_aProtector;
     ScanError           m_nError;
     bool                m_bBusy;
+
+    SaneHolder() : m_nError(ScanError_ScanErrorNone), m_bBusy(false) {}
 };
 
-DECLARE_LIST( SaneHolderList, SaneHolder* )
+namespace
+{
+    typedef std::vector< boost::shared_ptr<SaneHolder> > sanevec;
+    class allSanes
+    {
+    private:
+        int mnRefCount;
+    public:
+        sanevec m_aSanes;
+        allSanes() : mnRefCount(0) {}
+        void acquire();
+        void release();
+    };
 
-static SaneHolderList   allSanes;
-static vos::OMutex      aSaneProtector;
+    void allSanes::acquire()
+    {
+        ++mnRefCount;
+    }
+
+    void allSanes::release()
+    {
+        // was unused, now because of i99835: "Scanning interface not SANE API
+        // compliant" destroy all SaneHolder to get Sane Dtor called
+        --mnRefCount;
+        if (!mnRefCount)
+            m_aSanes.clear();
+    }
+
+    struct theSaneProtector : public rtl::Static<vos::OMutex, theSaneProtector> {};
+    struct theSanes : public rtl::Static<allSanes, theSanes> {};
+}
 
 // -----------------
 // - ScannerThread -
@@ -126,7 +156,7 @@ static vos::OMutex      aSaneProtector;
 
 class ScannerThread : public vos::OThread
 {
-    SaneHolder*                                 m_pHolder;
+    boost::shared_ptr<SaneHolder>               m_pHolder;
     REF( com::sun::star::lang::XEventListener ) m_xListener;
     ScannerManager*                             m_pManager; // just for the disposing call
 
@@ -134,7 +164,7 @@ public:
     virtual void run();
     virtual void onTerminated() { delete this; }
 public:
-    ScannerThread( SaneHolder* pHolder,
+    ScannerThread( boost::shared_ptr<SaneHolder> pHolder,
                    const REF( com::sun::star::lang::XEventListener )& listener,
                    ScannerManager* pManager );
     virtual ~ScannerThread();
@@ -143,7 +173,7 @@ public:
 // -----------------------------------------------------------------------------
 
 ScannerThread::ScannerThread(
-                             SaneHolder* pHolder,
+                             boost::shared_ptr<SaneHolder> pHolder,
                              const REF( com::sun::star::lang::XEventListener )& listener,
                              ScannerManager* pManager )
         : m_pHolder( pHolder ), m_xListener( listener ), m_pManager( pManager )
@@ -192,16 +222,16 @@ void ScannerThread::run()
 // - ScannerManager -
 // ------------------
 
-void ScannerManager::DestroyData()
+void ScannerManager::AcquireData()
 {
-    // was unused, now because of i99835: "Scanning interface not SANE API compliant"
-    // delete all SaneHolder to get Sane Dtor called
-    int i;
-    for ( i = allSanes.Count(); i > 0; i-- )
-    {
-        SaneHolder *pSaneHolder = allSanes.GetObject(i-1);
-        if ( pSaneHolder ) delete pSaneHolder;
-    }
+    vos::OGuard aGuard( theSaneProtector::get() );
+    theSanes::get().acquire();
+}
+
+void ScannerManager::ReleaseData()
+{
+    vos::OGuard aGuard( theSaneProtector::get() );
+    theSanes::get().release();
 }
 
 // -----------------------------------------------------------------------------
@@ -224,17 +254,14 @@ SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
 
 SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
 {
-    vos::OGuard aGuard( aSaneProtector );
+    vos::OGuard aGuard( theSaneProtector::get() );
+    sanevec &rSanes = theSanes::get().m_aSanes;
 
-    if( ! allSanes.Count() )
+    if( rSanes.empty() )
     {
-        SaneHolder* pSaneHolder = new SaneHolder;
-        pSaneHolder->m_nError = ScanError_ScanErrorNone;
-        pSaneHolder->m_bBusy = false;
+        boost::shared_ptr<SaneHolder> pSaneHolder(new SaneHolder);
         if( Sane::IsSane() )
-            allSanes.Insert( pSaneHolder );
-        else
-            delete pSaneHolder;
+            rSanes.push_back( pSaneHolder );
     }
 
     if( Sane::IsSane() )
@@ -252,20 +279,21 @@ SEQ( ScannerContext ) ScannerManager::getAvailableScanners() throw()
 
 BOOL ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( ScannerException )
 {
-    vos::OGuard aGuard( aSaneProtector );
+    vos::OGuard aGuard( theSaneProtector::get() );
+    sanevec &rSanes = theSanes::get().m_aSanes;
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "ScannerManager::configureScanner\n" );
 #endif
 
-    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= allSanes.Count() )
+    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
             ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );
 
-    SaneHolder* pHolder = allSanes.GetObject( scanner_context.InternalData );
+    boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
     if( pHolder->m_bBusy )
         throw ScannerException(
             ::rtl::OUString::createFromAscii( "Scanner is busy" ),
@@ -286,19 +314,20 @@ BOOL ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( 
 void ScannerManager::startScan( const ScannerContext& scanner_context,
                                 const REF( com::sun::star::lang::XEventListener )& listener ) throw( ScannerException )
 {
-    vos::OGuard aGuard( aSaneProtector );
+    vos::OGuard aGuard( theSaneProtector::get() );
+    sanevec &rSanes = theSanes::get().m_aSanes;
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "ScannerManager::startScan\n" );
 #endif
 
-    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= allSanes.Count() )
+    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
             ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );
-    SaneHolder* pHolder = allSanes.GetObject( scanner_context.InternalData );
+    boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
     if( pHolder->m_bBusy )
         throw ScannerException(
             ::rtl::OUString::createFromAscii( "Scanner is busy" ),
@@ -315,16 +344,17 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
 
 ScanError ScannerManager::getError( const ScannerContext& scanner_context ) throw( ScannerException )
 {
-    vos::OGuard aGuard( aSaneProtector );
+    vos::OGuard aGuard( theSaneProtector::get() );
+    sanevec &rSanes = theSanes::get().m_aSanes;
 
-    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= allSanes.Count() )
+    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
             ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );
 
-    SaneHolder* pHolder = allSanes.GetObject( scanner_context.InternalData );
+    boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
 
     return pHolder->m_nError;
 }
@@ -333,15 +363,16 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context ) thro
 
 REF( AWT::XBitmap ) ScannerManager::getBitmap( const ScannerContext& scanner_context ) throw( ScannerException )
 {
-    vos::OGuard aGuard( aSaneProtector );
+    vos::OGuard aGuard( theSaneProtector::get() );
+    sanevec &rSanes = theSanes::get().m_aSanes;
 
-    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= allSanes.Count() )
+    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= rSanes.size() )
         throw ScannerException(
             ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
             REF( XScannerManager )( this ),
             ScanError_InvalidContext
             );
-    SaneHolder* pHolder = allSanes.GetObject( scanner_context.InternalData );
+    boost::shared_ptr<SaneHolder> pHolder = rSanes[scanner_context.InternalData];
 
     vos::OGuard aProtGuard( pHolder->m_aProtector );
 
