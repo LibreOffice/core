@@ -1336,7 +1336,7 @@ void SmShowSymbol::Paint(const Rectangle &rRect)
     Size            aTextSize(GetTextWidth(rText), GetTextHeight());
 
     DrawText(Point((GetOutputSize().Width()  - aTextSize.Width())  / 2,
-                   (GetOutputSize().Height() - aTextSize.Height()) / 2), rText);
+                   (GetOutputSize().Height() * 7/10)), rText);
 }
 
 
@@ -1353,15 +1353,10 @@ void SmShowSymbol::SetSymbol(const SmSym *pSymbol)
 {
     if (pSymbol)
     {
-        Color aTxtColor( GetTextColor() );
-
         Font aFont (pSymbol->GetFace());
         aFont.SetSize(Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
-        aFont.SetAlign(ALIGN_TOP);
+        aFont.SetAlign(ALIGN_BASELINE);
         SetFont(aFont);
-
-        // keep old text color (font may have different color set)
-        SetTextColor(aTxtColor);
 
         sal_UCS4 cChar = pSymbol->GetCharacter();
         String aText( OUString( &cChar, 1 ) );
@@ -1657,7 +1652,7 @@ void SmShowChar::Paint(const Rectangle &rRect)
         Size aTextSize(GetTextWidth(aText), GetTextHeight());
 
         DrawText(Point((GetOutputSize().Width()  - aTextSize.Width())  / 2,
-                       (GetOutputSize().Height() - aTextSize.Height()) / 2), aText);
+                       (GetOutputSize().Height() * 7/10)), aText);
     }
 }
 
@@ -1671,18 +1666,10 @@ void SmShowChar::SetSymbol( const SmSym *pSym )
 
 void SmShowChar::SetSymbol( sal_UCS4 cChar, const Font &rFont )
 {
-    Color aTxtColor( GetTextColor() );
-
-    Size  aSize( Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3));
-
     Font aFont( rFont );
-    aFont.SetSize(aSize);
-    aFont.SetAlign(ALIGN_TOP);
-    aFont.SetTransparent(TRUE);
-    Control::SetFont(aFont);
-
-    // keep text color (new font may have different one)
-    SetTextColor( aTxtColor );
+    aFont.SetSize( Size(0, GetOutputSize().Height() - GetOutputSize().Height() / 3) );
+    aFont.SetAlign(ALIGN_BASELINE);
+    SetFont(aFont);
 
     String aText( OUString( &cChar, 1) );
     SetText( aText );
@@ -2097,8 +2084,8 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
 
     // auto completion is troublesome since that symbols character also gets automatically selected in the
     // display and if the user previously selected a character to define/redefine that one this is bad
-   aOldSymbols.EnableAutocomplete( FALSE, TRUE );
-   aSymbols   .EnableAutocomplete( FALSE, TRUE );
+    aOldSymbols.EnableAutocomplete( FALSE, TRUE );
+    aSymbols   .EnableAutocomplete( FALSE, TRUE );
 
     FillFonts();
     if (aFonts.GetEntryCount() > 0)
@@ -2338,6 +2325,10 @@ BOOL SmSymDefineDialog::SelectSymbol(ComboBox &rComboBox,
 
                 // das zugehoerige Zeichen auswaehlen
                 SelectChar(pSymbol->GetCharacter());
+
+                // since SelectChar will also set the unicode point as text in the
+                // symbols box, we have to set the symbol name again to get that one displayed
+                aSymbols.SetText( pSymbol->GetName() );
             }
         }
 
@@ -2394,7 +2385,7 @@ void SmSymDefineDialog::SetFont(const XubString &rFontName, const XubString &rSt
         aFontsSubsetLB.SetEntryData( nPos, (void *) pSubset );
         // subset must live at least as long as the selected font !!!
         if( bFirst )
-        aFontsSubsetLB.SelectEntryPos( nPos );
+            aFontsSubsetLB.SelectEntryPos( nPos );
         bFirst = false;
     }
     if( bFirst )
@@ -2414,7 +2405,11 @@ BOOL SmSymDefineDialog::SelectFont(const XubString &rFontName, BOOL bApplyFont)
         if (aStyles.GetEntryCount() > 0)
             SelectStyle(aStyles.GetEntry(0));
         if (bApplyFont)
+        {
             SetFont(aFonts.GetSelectEntry(), aStyles.GetText());
+            // update preview to use new font
+            aSymbolDisplay.SetSymbol( aCharsetDisplay.GetSelectCharacter(), aCharsetDisplay.GetFont() );
+        }
         bRet = TRUE;
     }
     else
@@ -2441,7 +2436,11 @@ BOOL SmSymDefineDialog::SelectStyle(const XubString &rStyleName, BOOL bApplyFont
     {
         aStyles.SetText(aStyles.GetEntry(nPos));
         if (bApplyFont)
+        {
             SetFont(aFonts.GetSelectEntry(), aStyles.GetText());
+            // update preview to use new font
+            aSymbolDisplay.SetSymbol( aCharsetDisplay.GetSelectCharacter(), aCharsetDisplay.GetFont() );
+        }
         bRet = TRUE;
     }
     else
