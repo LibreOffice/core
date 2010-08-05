@@ -147,13 +147,13 @@ TabPage RID_SCPAGE_CALC
     {
         Pos = MAP_APPFONT ( 12 , 133 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ en-US ] = "~Automatically find column and row labels" ;
+        Text [ en-US ] = "~Automatically find column and row labels " ;
     };
     CheckBox BTN_GENERAL_PREC
     {
         Pos = MAP_APPFONT ( 12 , 147 ) ;
         Size = MAP_APPFONT ( 148 , 10 ) ;
-        Text [ en-US ] = "~Limit decimals for general number format" ;
+        Text [ en-US ] = "Limit decimals for general number format" ;
     };
     FixedText FT_PREC
     {
