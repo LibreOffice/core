@@ -1868,7 +1868,7 @@ sub remove_Languagepacklibraries_from_Installset
     }
 
     $infoline = "\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    push( @installer::globals::globallogfileinfo, $infoline);
 
     return \@newitemsarray;
 }
