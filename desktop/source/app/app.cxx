@@ -1659,7 +1659,12 @@ void Desktop::Main()
         ::comphelper::ComponentContext aContext( xSMgr );
         xRestartManager.set( aContext.getSingleton( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.OfficeRestartManager" ) ) ), UNO_QUERY );
         if ( !xRestartManager.is() || !xRestartManager->isRestartRequested( sal_True ) )
+        {
+            // if this run of the office is triggered by restart, some additional actions should be done
+            DoRestartActionsIfNecessary( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoQuickstart() );
+
             Execute();
+        }
     }
     catch(const com::sun::star::document::CorruptedFilterConfigurationException& exFilterCfg)
     {
@@ -1674,6 +1679,8 @@ void Desktop::Main()
 
     // check whether the shutdown is caused by restart
     sal_Bool bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+    if ( bRestartRequested )
+        SetRestartState();
 
     if (xGlobalBroadcaster.is())
     {
