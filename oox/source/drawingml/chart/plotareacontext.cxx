@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/plotareacontext.hxx"
+
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/chart/axiscontext.hxx"
 #include "oox/drawingml/chart/plotareamodel.hxx"
@@ -33,12 +34,14 @@
 #include "oox/drawingml/chart/titlecontext.hxx"
 #include "oox/drawingml/chart/typegroupcontext.hxx"
 
-using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextHandlerRef;
-
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using ::oox::core::ContextHandler2Helper;
+using ::oox::core::ContextHandlerRef;
 
 // ============================================================================
 
@@ -182,4 +185,3 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

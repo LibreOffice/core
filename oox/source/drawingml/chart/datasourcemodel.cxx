@@ -57,4 +57,3 @@ DataSourceModel::~DataSourceModel()
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

@@ -26,28 +26,31 @@
  ************************************************************************/
 
 #include "oox/dump/oledumper.hxx"
+
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
-#include <osl/thread.h>
 #include <osl/file.hxx>
+#include <osl/thread.h>
 #include <rtl/tencinfo.h>
-#include "oox/helper/binaryoutputstream.hxx"
 #include "oox/core/filterbase.hxx"
+#include "oox/helper/binaryoutputstream.hxx"
 #include "oox/ole/olestorage.hxx"
 #include "oox/ole/vbainputstream.hxx"
 
 #if OOX_INCLUDE_DUMPER
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OString;
-using ::rtl::OStringToOUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XOutputStream;
-
 namespace oox {
 namespace dump {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OString;
+using ::rtl::OStringToOUString;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 // ============================================================================
@@ -2312,4 +2315,3 @@ void ActiveXStorageObject::implDumpBaseStream( const BinaryInputStreamRef& rxStr
 } // namespace oox
 
 #endif
-

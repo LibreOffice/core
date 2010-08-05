@@ -26,18 +26,21 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/titlecontext.hxx"
+
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/chart/datasourcecontext.hxx"
 #include "oox/drawingml/chart/titlemodel.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextHandlerRef;
-
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using ::oox::core::ContextHandler2Helper;
+using ::oox::core::ContextHandlerRef;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -160,4 +163,3 @@ ContextHandlerRef LegendContext::onCreateContext( sal_Int32 nElement, const Attr
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

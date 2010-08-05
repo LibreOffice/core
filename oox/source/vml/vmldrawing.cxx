@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/vml/vmldrawing.hxx"
+
 #include <com/sun/star/drawing/XShapes.hpp>
 #include "tokens.hxx"
 #include "oox/core/xmlfilterbase.hxx"
@@ -33,18 +34,17 @@
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::awt::XControlModel;
-using ::com::sun::star::drawing::XDrawPage;
-using ::com::sun::star::drawing::XShape;
-using ::com::sun::star::drawing::XShapes;
-using ::oox::core::XmlFilterBase;
-
 namespace oox {
 namespace vml {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::XmlFilterBase;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -164,4 +164,3 @@ void Drawing::notifyShapeInserted( const Reference< XShape >& /*rxShape*/, const
 
 } // namespace vml
 } // namespave oox
-

@@ -26,17 +26,21 @@
  ************************************************************************/
 
 #include "oox/vml/vmlshapecontext.hxx"
+
 #include "oox/vml/vmlshape.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::awt::Point;
+namespace oox {
+namespace vml {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+
 using ::oox::core::ContextHandler2;
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
-
-namespace oox {
-namespace vml {
+using ::rtl::OUString;
 
 // ============================================================================
 

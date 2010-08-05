@@ -26,26 +26,30 @@
  ************************************************************************/
 
 #include "oox/vml/vmlformatting.hxx"
+
 #include <rtl/strbuf.hxx>
 #include "tokens.hxx"
-#include "oox/token/tokenmap.hxx"
-#include "oox/helper/graphichelper.hxx"
-#include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/color.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/lineproperties.hxx"
+#include "oox/helper/graphichelper.hxx"
+#include "oox/helper/propertymap.hxx"
+#include "oox/token/tokenmap.hxx"
 
-using ::rtl::OStringBuffer;
-using ::rtl::OUString;
-using ::com::sun::star::geometry::IntegerRectangle2D;
+namespace oox {
+namespace vml {
+
+// ============================================================================
+
+using namespace ::com::sun::star::geometry;
+
 using ::oox::drawingml::Color;
 using ::oox::drawingml::FillProperties;
 using ::oox::drawingml::LineArrowProperties;
 using ::oox::drawingml::LineProperties;
-
-namespace oox {
-namespace vml {
+using ::rtl::OStringBuffer;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -600,4 +604,3 @@ void FillModel::pushToPropMap( PropertyMap& rPropMap,
 
 } // namespace vml
 } // namespace oox
-

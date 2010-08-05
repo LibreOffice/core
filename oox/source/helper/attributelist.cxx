@@ -26,17 +26,20 @@
  ************************************************************************/
 
 #include "oox/helper/attributelist.hxx"
+
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 
+namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::xml::sax;
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::util::DateTime;
-using ::com::sun::star::xml::sax::XFastAttributeList;
-
-namespace oox {
 
 // ============================================================================
 
@@ -314,4 +317,3 @@ DateTime AttributeList::getDateTime( sal_Int32 nAttrToken, const DateTime& rDefa
 // ============================================================================
 
 } // namespace oox
-

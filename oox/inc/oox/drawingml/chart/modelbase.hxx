@@ -138,4 +138,3 @@ struct LayoutModel
 } // namespace oox
 
 #endif
-

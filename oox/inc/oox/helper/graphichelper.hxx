@@ -172,4 +172,3 @@ private:
 } // namespace oox
 
 #endif
-

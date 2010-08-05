@@ -26,13 +26,16 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/modelbase.hxx"
-#include "oox/helper/attributelist.hxx"
 
-using ::rtl::OUString;
+#include "oox/helper/attributelist.hxx"
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -73,4 +76,3 @@ LayoutModel::~LayoutModel()
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

@@ -69,4 +69,3 @@ struct DataSourceModel
 } // namespace oox
 
 #endif
-

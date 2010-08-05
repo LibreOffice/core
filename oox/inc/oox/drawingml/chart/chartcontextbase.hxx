@@ -99,4 +99,3 @@ public:
 } // namespace oox
 
 #endif
-

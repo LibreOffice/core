@@ -26,12 +26,13 @@
  ************************************************************************/
 
 #include "oox/dump/xlsbdumper.hxx"
+
 #include <com/sun/star/io/XTextInputStream.hpp>
+#include "oox/core/filterbase.hxx"
 #include "oox/dump/biffdumper.hxx"
 #include "oox/dump/oledumper.hxx"
 #include "oox/dump/pptxdumper.hxx"
 #include "oox/helper/zipstorage.hxx"
-#include "oox/core/filterbase.hxx"
 #include "oox/ole/olestorage.hxx"
 #include "oox/xls/biffhelper.hxx"
 #include "oox/xls/formulabase.hxx"
@@ -39,20 +40,22 @@
 
 #if OOX_INCLUDE_DUMPER
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::util::DateTime;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::io::XInputStream;
-using ::comphelper::MediaDescriptor;
-using ::oox::core::FilterBase;
-
-using namespace ::oox::xls;
-
 namespace oox {
 namespace dump {
 namespace xlsb {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::oox::xls;
+
+using ::comphelper::MediaDescriptor;
+using ::oox::core::FilterBase;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -2269,4 +2272,3 @@ void Dumper::implDump()
 } // namespace oox
 
 #endif
-

@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/helper/graphichelper.hxx"
+
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
@@ -39,29 +40,19 @@
 #include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::awt::DeviceInfo;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::awt::XDevice;
-using ::com::sun::star::awt::XUnitConversion;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::frame::XFrame;
-using ::com::sun::star::frame::XFramesSupplier;
-using ::com::sun::star::graphic::GraphicObject;
-using ::com::sun::star::graphic::XGraphic;
-using ::com::sun::star::graphic::XGraphicObject;
-using ::com::sun::star::graphic::XGraphicProvider;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-
 namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -355,4 +346,3 @@ OUString GraphicHelper::importEmbeddedGraphicObject( const OUString& rStreamName
 // ============================================================================
 
 } // namespace oox
-

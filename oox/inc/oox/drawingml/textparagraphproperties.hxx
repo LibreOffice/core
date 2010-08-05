@@ -112,10 +112,6 @@ public:
         size can be zero and the default value is returned. */
     float                               getCharHeightPoints( float fDefault ) const;
 
-#if OSL_DEBUG_LEVEL > 0
-    void dump() { maTextParagraphPropertyMap.dump(); OSL_TRACE("character height: %f", maTextCharacterProperties.getCharHeightPoints(-1)); }
-#endif
-
 protected:
 
     TextCharacterProperties         maTextCharacterProperties;

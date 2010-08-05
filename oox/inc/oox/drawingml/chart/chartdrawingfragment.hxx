@@ -119,4 +119,3 @@ private:
 } // namespace oox
 
 #endif
-

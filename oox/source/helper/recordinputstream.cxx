@@ -26,12 +26,14 @@
  ************************************************************************/
 
 #include "oox/helper/recordinputstream.hxx"
-#include <vector>
-#include <string.h>
 
-using ::rtl::OUString;
+#include <vector>
 
 namespace oox {
+
+// ============================================================================
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -68,4 +70,3 @@ OUString RecordInputStream::readString( bool b32BitLen )
 // ============================================================================
 
 } // namespace oox
-

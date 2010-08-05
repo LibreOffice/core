@@ -26,19 +26,22 @@
  ************************************************************************/
 
 #include "oox/vml/vmlinputstream.hxx"
+
 #include <map>
 #include <rtl/strbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include "oox/helper/helper.hxx"
 
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::io::XInputStream;
-
 namespace oox {
 namespace vml {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
 
 // ============================================================================
 
@@ -277,4 +280,3 @@ InputStream::~InputStream()
 
 } // namespace vml
 } // namespave oox
-

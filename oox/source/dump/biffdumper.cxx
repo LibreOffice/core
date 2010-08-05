@@ -29,8 +29,8 @@
 
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
-#include "oox/dump/oledumper.hxx"
 #include "oox/core/filterbase.hxx"
+#include "oox/dump/oledumper.hxx"
 #include "oox/ole/olestorage.hxx"
 #include "oox/xls/biffdetector.hxx"
 #include "oox/xls/biffinputstream.hxx"
@@ -38,23 +38,27 @@
 
 #if OOX_INCLUDE_DUMPER
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::rtl::OString;
-using ::rtl::OStringBuffer;
-using ::rtl::OStringToOUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::util::DateTime;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::io::XInputStream;
-using ::comphelper::MediaDescriptor;
-using ::oox::core::FilterBase;
-
-using namespace ::oox::xls;
-
 namespace oox {
 namespace dump {
 namespace biff {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+using namespace ::oox::xls;
+
+using ::comphelper::MediaDescriptor;
+using ::oox::core::FilterBase;
+using ::rtl::OString;
+using ::rtl::OStringBuffer;
+using ::rtl::OStringToOUString;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+
+// ============================================================================
 
 namespace  {
 
@@ -93,12 +97,7 @@ const sal_uInt16 BIFF_STYLE_BUILTIN         = 0x8000;
 
 const sal_uInt16 BIFF_PT_NOSTRING           = 0xFFFF;
 
-} // namespace
-
-// ============================================================================
-// ============================================================================
-
-namespace {
+// ----------------------------------------------------------------------------
 
 void lclDumpDffClientPos( const OutputRef& rxOut, const BinaryInputStreamRef& rxStrm, const String& rName, sal_uInt16 nSubScale )
 {
@@ -128,7 +127,8 @@ void lclDumpDffClientRect( const OutputRef& rxOut, const BinaryInputStreamRef& r
 
 } // namespace
 
-// ----------------------------------------------------------------------------
+// ============================================================================
+// ============================================================================
 
 BiffDffStreamObject::BiffDffStreamObject( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm )
 {
@@ -4362,10 +4362,10 @@ void Dumper::implDump()
 }
 
 // ============================================================================
+// ============================================================================
 
 } // namespace biff
 } // namespace dump
 } // namespace oox
 
 #endif
-

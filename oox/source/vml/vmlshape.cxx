@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #include "oox/vml/vmlshape.hxx"
-#include <rtl/math.hxx>
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
@@ -35,38 +35,31 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <rtl/math.hxx>
 #include "properties.hxx"
+#include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
-#include "oox/core/xmlfilterbase.hxx"
 #include "oox/ole/axcontrol.hxx"
 #include "oox/ole/axcontrolfragment.hxx"
 #include "oox/ole/oleobjecthelper.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlshapecontainer.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::awt::XControlModel;
-using ::com::sun::star::graphic::XGraphic;
-using ::com::sun::star::drawing::PointSequenceSequence;
-using ::com::sun::star::drawing::XControlShape;
-using ::com::sun::star::drawing::XEnhancedCustomShapeDefaulter;
-using ::com::sun::star::drawing::XShape;
-using ::com::sun::star::drawing::XShapes;
-using ::oox::core::XmlFilterBase;
-
 namespace oox {
 namespace vml {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::graphic;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::XmlFilterBase;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -552,4 +545,3 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
 
 } // namespace vml
 } // namespace oox
-

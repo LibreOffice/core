@@ -136,4 +136,3 @@ const ShapeBase* ShapeContainer::findShape( const Functor& rFunctor ) const
 } // namespace oox
 
 #endif
-

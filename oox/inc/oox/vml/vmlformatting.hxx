@@ -187,4 +187,3 @@ struct FillModel
 } // namespace oox
 
 #endif
-

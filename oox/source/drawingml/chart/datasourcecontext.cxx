@@ -26,15 +26,18 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/datasourcecontext.hxx"
-#include "oox/drawingml/chart/datasourcemodel.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextHandlerRef;
+#include "oox/drawingml/chart/datasourcemodel.hxx"
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using ::oox::core::ContextHandler2Helper;
+using ::oox::core::ContextHandlerRef;
+using ::rtl::OUString;
 
 // ============================================================================
 

@@ -127,10 +127,6 @@ public:
         @param rPropertyMap  The property map. */
     void                setProperties( const PropertyMap& rPropertyMap );
 
-#if OSL_DEBUG_LEVEL > 0
-    void dump();
-#endif
-
     // ------------------------------------------------------------------------
 private:
     /** Gets the specified property from the property set.
@@ -167,4 +163,3 @@ inline void PropertySet::setProperty( sal_Int32 nPropId, const Type& rValue )
 } // namespace oox
 
 #endif
-

@@ -26,24 +26,23 @@
  ************************************************************************/
 
 #include "oox/helper/storagebase.hxx"
-#include <com/sun/star/io/XStream.hpp>
+
 #include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/io/XStream.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 
+namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::embed;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::embed::XStorage;
-using ::com::sun::star::embed::XTransactedObject;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::XStream;
-
-namespace oox {
 
 // ============================================================================
 

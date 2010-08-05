@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/titleconverter.hxx"
+
 #include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
@@ -33,29 +34,25 @@
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
-#include "properties.hxx"
 #include "oox/drawingml/textbody.hxx"
 #include "oox/drawingml/textparagraph.hxx"
 #include "oox/drawingml/chart/datasourceconverter.hxx"
 #include "oox/drawingml/chart/titlemodel.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::chart2::XDiagram;
-using ::com::sun::star::chart2::XFormattedString;
-using ::com::sun::star::chart2::XLegend;
-using ::com::sun::star::chart2::XTitle;
-using ::com::sun::star::chart2::XTitled;
-using ::com::sun::star::chart2::data::XDataSequence;
-using ::oox::core::XmlFilterBase;
+#include "properties.hxx"
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2::data;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::XmlFilterBase;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -270,4 +267,3 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

@@ -26,25 +26,27 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/chartdrawingfragment.hxx"
+
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/connectorshapecontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/shapecontext.hxx"
 #include "oox/drawingml/shapegroupcontext.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::drawing::XShapes;
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::FragmentHandler2;
-using ::oox::core::XmlFilterBase;
-
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::ContextHandlerRef;
+using ::oox::core::FragmentHandler2;
+using ::oox::core::XmlFilterBase;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -232,4 +234,3 @@ void ChartDrawingFragment::onEndElement( const OUString& rChars )
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

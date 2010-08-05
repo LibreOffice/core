@@ -26,19 +26,23 @@
  ************************************************************************/
 
 #include "oox/vml/vmldrawingfragment.hxx"
+
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmlinputstream.hxx"
 #include "oox/vml/vmlshapecontext.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::io::XInputStream;
+namespace oox {
+namespace vml {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+
 using ::oox::core::ContextHandlerRef;
 using ::oox::core::FragmentHandler2;
 using ::oox::core::XmlFilterBase;
-
-namespace oox {
-namespace vml {
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -90,4 +94,3 @@ void DrawingFragment::finalizeImport()
 
 } // namespace vml
 } // namespace oox
-

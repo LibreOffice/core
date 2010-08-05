@@ -26,20 +26,23 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/seriescontext.hxx"
+
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/chart/datasourcecontext.hxx"
 #include "oox/drawingml/chart/seriesmodel.hxx"
 #include "oox/drawingml/chart/titlecontext.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandler2;
-using ::oox::core::ContextHandler2Helper;
-using ::oox::core::ContextHandlerRef;
-
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using ::oox::core::ContextHandler2;
+using ::oox::core::ContextHandler2Helper;
+using ::oox::core::ContextHandlerRef;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -757,4 +760,3 @@ ContextHandlerRef SurfaceSeriesContext::onCreateContext( sal_Int32 nElement, con
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

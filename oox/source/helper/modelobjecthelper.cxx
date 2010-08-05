@@ -26,21 +26,23 @@
  ************************************************************************/
 
 #include "oox/helper/modelobjecthelper.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "oox/helper/helper.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::awt::Gradient;
-using ::com::sun::star::drawing::LineDash;
-using ::com::sun::star::drawing::PolyPolygonBezierCoords;
-
 namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -88,4 +90,3 @@ OUString ModelObjectHelper::insertFillBitmap( const OUString& rGraphicUrl )
 // ============================================================================
 
 } // namespace oox
-

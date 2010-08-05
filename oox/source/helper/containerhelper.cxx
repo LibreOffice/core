@@ -26,25 +26,23 @@
  ************************************************************************/
 
 #include "oox/helper/containerhelper.hxx"
-#include <rtl/ustrbuf.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
+
+namespace oox {
+
+// ============================================================================
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::container::XIndexContainer;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::container::XNameContainer;
-
-namespace oox {
 
 // ============================================================================
 
@@ -221,4 +219,3 @@ void ObjectContainer::createContainer() const
 // ============================================================================
 
 } // namespace oox
-

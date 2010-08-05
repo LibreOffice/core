@@ -270,4 +270,3 @@ public:
 } // namespace oox
 
 #endif
-

@@ -107,4 +107,3 @@ private:
 } // namespace oox
 
 #endif
-
