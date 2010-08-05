@@ -13962,6 +13962,11 @@
           </choice>
         </list>
       </define>
+      <define name="ST_Percentage">
+        <data type="int">
+          <xs:documentation>Percentage</xs:documentation>
+        </data>
+      </define>
       <define name="CT_Zoom">
         <optional>
           <attribute name="val">

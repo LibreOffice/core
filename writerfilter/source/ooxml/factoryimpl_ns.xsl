@@ -143,6 +143,47 @@ OOXMLFactory_ns::Pointer_t </xsl:text>
 </xsl:text>
 </xsl:template>
 
+<!--
+    Returns resource for attribute.
+-->
+
+<xsl:template name="resourceforattribute">
+  <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
+  <xsl:for-each select="rng:ref">
+    <xsl:variable name="name" select="@name"/>
+    <xsl:variable name="resource1">
+      <xsl:for-each select="key('context-resource', @name)[generate-id(ancestor::namespace) = $mynsid]">
+        <xsl:value-of select="@resource"/>
+      </xsl:for-each>
+    </xsl:variable>
+    <xsl:choose>
+      <xsl:when test="string-length($resource1) > 0">
+        <xsl:value-of select="$resource1"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+          <xsl:call-template name="resourceforattribute"/>
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:for-each>
+  <xsl:for-each select=".//rng:text">
+    <xsl:text>String</xsl:text>
+  </xsl:for-each>
+  <xsl:for-each select=".//rng:data[@type='base64Binary']">
+    <xsl:text>String</xsl:text>
+  </xsl:for-each>
+  <xsl:for-each select=".//rng:data[@type='boolean']">
+    <xsl:text>Boolean</xsl:text>
+  </xsl:for-each>
+  <xsl:for-each select=".//rng:data[@type='unsignedInt']">
+    <xsl:text>Integer</xsl:text>
+  </xsl:for-each>
+  <xsl:for-each select=".//rng:data[@type='int']">
+    <xsl:text>Integer</xsl:text>
+  </xsl:for-each>
+</xsl:template>
+
 <!-- 
 
 creates code block in OOXMLFactory_<namespace>::createAttributeToResourceMap 
@@ -164,42 +205,30 @@ for a rng:define
       // </xsl:text>
       <xsl:value-of select="$defname"/>
     </xsl:if>
-    <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
     <xsl:variable name="resource">
-      <xsl:for-each select="rng:ref">
-        <xsl:for-each select="key('context-resource', @name)[generate-id(ancestor::namespace) = $mynsid]">
-          <xsl:value-of select="@resource"/>
-        </xsl:for-each>
-      </xsl:for-each>
-      <xsl:for-each select=".//rng:text">
-        <xsl:text>String</xsl:text>
-      </xsl:for-each>
-      <xsl:for-each select=".//rng:data[@type='base64Binary']">
-        <xsl:text>String</xsl:text>
-      </xsl:for-each>
-    </xsl:variable>
-
-    <xsl:variable name="refdefine1">
-      <xsl:for-each select="rng:ref">
-        <xsl:variable name="refname" select="@name"/>
-        <xsl:for-each select="ancestor::rng:grammar/rng:define[@name=$refname]">
-          <xsl:call-template name="idfordefine"/>
-        </xsl:for-each>
-      </xsl:for-each>
-    </xsl:variable>
-    <xsl:variable name="refdefine">
-      <xsl:choose>
-        <xsl:when test="string-length($refdefine1) > 0">
-          <xsl:value-of select="$refdefine1"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>0</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
+      <xsl:call-template name="resourceforattribute"/>
     </xsl:variable>
 
     <xsl:choose>
       <xsl:when test="string-length($resource) > 0">
+        <xsl:variable name="refdefine1">
+          <xsl:for-each select="rng:ref">
+            <xsl:variable name="refname" select="@name"/>
+            <xsl:for-each select="ancestor::rng:grammar/rng:define[@name=$refname]">
+              <xsl:call-template name="idfordefine"/>
+            </xsl:for-each>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="refdefine">
+          <xsl:choose>
+            <xsl:when test="string-length($refdefine1) > 0">
+              <xsl:value-of select="$refdefine1"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>0</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <xsl:text>
         (*pMap)[</xsl:text>
         <xsl:call-template name="fasttoken"/>
