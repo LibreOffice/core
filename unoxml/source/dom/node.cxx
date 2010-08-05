@@ -43,12 +43,17 @@
 #include "attr.hxx"
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
-
+#include "rtl/instance.hxx"
+#include "osl/mutex.hxx"
 #include "../events/eventdispatcher.hxx"
 #include "../events/mutationevent.hxx"
 
 #include <boost/bind.hpp>
 #include <algorithm>
+
+namespace {
+    struct NodeMutex: public ::rtl::Static<osl::Mutex, NodeMutex> {};
+}
 
 namespace DOM
 {
@@ -131,6 +136,7 @@ namespace DOM
 
     void CNode::remove(const xmlNodePtr aNode)
     {
+        ::osl::MutexGuard guard(NodeMutex::get());
         nodemap_t::iterator i = CNode::theNodeMap.find(aNode);
         if (i != CNode::theNodeMap.end())
         {
@@ -145,7 +151,7 @@ namespace DOM
         CNode* pNode = 0;
         if (aNode == NULL)
             return 0;
-
+        ::osl::MutexGuard guard(NodeMutex::get());
         //check whether there is already an instance for this node
         nodemap_t::const_iterator i = CNode::theNodeMap.find(aNode);
         if (i != CNode::theNodeMap.end())
