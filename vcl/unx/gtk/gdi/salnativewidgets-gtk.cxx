@@ -2479,7 +2479,6 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
     gint            g_x=0, g_y=0, g_w=10, g_h=10;
     bool            bPaintButton = true;
     GtkWidget*      pButtonWidget = gWidgetData[m_nScreen].gToolbarButtonWidget;
-    const gchar*    pButtonDetail = "button";
     GdkRectangle    clipRect;
 
     NWEnsureGTKToolbar( m_nScreen );
@@ -2538,13 +2537,18 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
         {
             pButtonWidget = gWidgetData[m_nScreen].gToolbarToggleWidget;
             shadowType = GTK_SHADOW_IN;
+            stateType = GTK_STATE_ACTIVE;
             // special case stateType value for depressed toggle buttons
             // cf. gtk+/gtk/gtktogglebutton.c (gtk_toggle_button_update_state)
-            if( ! (nState & (CTRL_STATE_PRESSED|CTRL_STATE_ROLLOVER)) )
-                stateType = GTK_STATE_ACTIVE;
-            pButtonDetail = "togglebutton";
+            if( (nState & (CTRL_STATE_ROLLOVER|CTRL_STATE_PRESSED)) )
+            {
+                stateType = GTK_STATE_PRELIGHT;
+                shadowType = GTK_SHADOW_OUT;
+            }
             bPaintButton = true;
         }
+        else
+            stateType = GTK_STATE_PRELIGHT; // only for bPaintButton = true, in which case always rollver is meant
 
         NWSetWidgetState( pButtonWidget, nState, stateType );
         gtk_widget_ensure_style( pButtonWidget );
@@ -2602,7 +2606,7 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
                                stateType,
                                shadowType,
                                &clipRect,
-                               pButtonWidget, pButtonDetail, x, y, w, h );
+                               pButtonWidget, "button", x, y, w, h );
             }
         }
     }
