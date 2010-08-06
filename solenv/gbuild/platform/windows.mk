@@ -191,11 +191,6 @@ endef
 
 # CObject class
 
-# some dark shell magic here
-# C is the command to execute
-# E is the linker output, that we are only interested in on error (good programs keep silent on success)
-# R is the return code of the link command
-
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_CObject__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -217,17 +212,21 @@ else
 CObject__command_deponcompile =
 endif
 
+# some dark shell magic here
+# C is the command to execute
+# E is the linker output, that we are only interested in on error (good programs keep silent on success)
+# RC is the return code of the link command
 define gb_CObject__command
 $(call gb_Helper_announce,Compiling $(2) (plain C) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    R=0 && C="$(gb_CC) \
+    RC=0 && C="$(gb_CC) \
         $(4) $(5) \
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
         -Fo$(1)" && \
-    E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$R)))
+    E=$$($$C) || (RC=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$RC)))
 $(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
@@ -235,10 +234,6 @@ endef
 
 # CxxObject class
 
-# some dark shell magic here
-# C is the command to execute
-# E is the linker output, that we are only interested in on error (good programs keep silent on success)
-# R is the return code of the link command
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_CxxObject__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -260,17 +255,21 @@ else
 gb_CxxObject__command_deponcompile =
 endif
 
+# some dark shell magic here
+# C is the command to execute
+# E is the linker output, that we are only interested in on error (good programs keep silent on success)
+# RC is the return code of the link command
 define gb_CxxObject__command
 $(call gb_Helper_announce,Compiling $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    C="$(gb_CXX) \
+    RC=0 && C="$(gb_CXX) \
         $(4) $(5) \
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
         -Fo$(1)" && \
-    E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$R)))
+    E=$$($$C) || (RC=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$RC)))
 $(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 
 endef
@@ -305,13 +304,13 @@ define gb_PrecompiledHeader__command
 $(call gb_Helper_announce,Compiling pch $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
-    C="$(gb_CXX) \
+    RC=0 && C="$(gb_CXX) \
         $(4) $(5) \
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
         -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj" && \
-    E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$R)))
+    E=$$($$C) || (RC=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$RC)))
 rm $(1).obj
 $(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 
@@ -346,13 +345,13 @@ define gb_NoexPrecompiledHeader__command
 $(call gb_Helper_announce,Compiling noex pch $(2) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
-    C="$(gb_CXX) \
+    RC=0 && C="$(gb_CXX) \
         $(4) $(5) \
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
         -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj" && \
-    E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$R)))
+    E=$$($$C) || (RC=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$RC)))
 rm $(1).obj
 $(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 
@@ -389,14 +388,14 @@ $(call gb_Helper_abbreviate_dirs_native,\
     RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
     echo "$(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(6),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
-    R=0 && C="$(gb_LINK) \
+    RC=0 && C="$(gb_LINK) \
         $(3) \
         @$${RESPONSEFILE} \
         $(foreach lib,$(4),$(call gb_Library_get_filename,$(lib))) \
         $(foreach lib,$(5),$(call gb_StaticLibrary_get_filename,$(lib))) \
         $(subst -out: -implib:$(1),-out:$(1),-out:$(DLLTARGET) -implib:$(1))" && \
-    E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && rm -f $(1)); \
-    rm $${RESPONSEFILE} && $$(exit $$R))
+    E=$$($$C) || (RC=$$? && echo "$$C" && echo "$$E" 1>&2 && rm -f $(1)); \
+    rm $${RESPONSEFILE} && $$(exit $$RC))
 endef
 
 
