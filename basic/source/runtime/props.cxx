@@ -76,6 +76,13 @@ RTLFUNC(False)
     rPar.Get(0)->PutBool( FALSE );
 }
 
+RTLFUNC(Empty)
+{
+    (void)pBasic;
+    (void)bWrite;
+    (void)rPar;
+}
+
 RTLFUNC(Nothing)
 {
     (void)pBasic;

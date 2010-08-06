@@ -28,14 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 #include "scitems.hxx"
 #include <svx/fmdpage.hxx>
 #include <svx/fmview.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
+#include <svx/unoshape.hxx>
 
 #include <svl/numuno.hxx>
 #include <svl/smplhint.hxx>
@@ -49,6 +48,7 @@
 #include <tools/multisel.hxx>
 #include <tools/resary.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
+
 #include <ctype.h>
 #include <float.h>  // DBL_MAX
 
@@ -61,6 +61,7 @@
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/document/XDocumentEventBroadcaster.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include <com/sun/star/reflection/XIdlClassProvider.hpp>
 #include <comphelper/processfactory.hxx>
 
@@ -99,10 +100,6 @@
 #include "sheetevents.hxx"
 #include "sc.hrc"
 #include "scresid.hxx"
-
-#ifndef _SVX_UNOSHAPE_HXX
-#include <svx/unoshape.hxx>
-#endif
 
 using namespace com::sun::star;
 
@@ -592,8 +589,8 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
             DELETEZ( pPrintFuncCache );
 
-            // handle "OnCalculate" sheet events
-            if ( pDocShell && pDocShell->GetDocument()->HasSheetEventScript( SC_SHEETEVENT_CALCULATE ) )
+            // handle "OnCalculate" sheet events (search also for VBA event handlers)
+            if ( pDocShell && pDocShell->GetDocument()->HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true ) )
                 HandleCalculateEvents();
         }
     }
@@ -2156,20 +2153,8 @@ bool ScModelObj::HasChangesListeners() const
     if ( maChangesListeners.getLength() > 0 )
         return true;
 
-    if ( pDocShell )
-    {
-        // "change" event set in any sheet?
-        ScDocument* pDoc = pDocShell->GetDocument();
-        SCTAB nTabCount = pDoc->GetTableCount();
-        for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
-        {
-            const ScSheetEvents* pEvents = pDoc->GetSheetEvents(nTab);
-            if (pEvents && pEvents->GetScript(SC_SHEETEVENT_CHANGE))
-                return true;
-        }
-    }
-
-    return false;
+    // "change" event set in any sheet?
+    return pDocShell && pDocShell->GetDocument()->HasAnySheetEventScript(SC_SHEETEVENT_CHANGE);
 }
 
 void ScModelObj::NotifyChanges( const ::rtl::OUString& rOperation, const ScRangeList& rRanges,
@@ -2283,17 +2268,29 @@ void ScModelObj::HandleCalculateEvents()
             SCTAB nTabCount = pDoc->GetTableCount();
             for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
             {
-                const ScSheetEvents* pEvents = pDoc->GetSheetEvents(nTab);
-                if (pEvents)
+                if (pDoc->HasCalcNotification(nTab))
                 {
-                    const rtl::OUString* pScript = pEvents->GetScript(SC_SHEETEVENT_CALCULATE);
-                    if (pScript && pDoc->HasCalcNotification(nTab))
+                    if (const ScSheetEvents* pEvents = pDoc->GetSheetEvents( nTab ))
                     {
-                        uno::Any aRet;
-                        uno::Sequence<uno::Any> aParams;
-                        uno::Sequence<sal_Int16> aOutArgsIndex;
-                        uno::Sequence<uno::Any> aOutArgs;
-                        pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
+                        if (const rtl::OUString* pScript = pEvents->GetScript(SC_SHEETEVENT_CALCULATE))
+                        {
+                            uno::Any aRet;
+                            uno::Sequence<uno::Any> aParams;
+                            uno::Sequence<sal_Int16> aOutArgsIndex;
+                            uno::Sequence<uno::Any> aOutArgs;
+                            pDocShell->CallXScript( *pScript, aParams, aRet, aOutArgsIndex, aOutArgs );
+                        }
+                    }
+
+                    try
+                    {
+                        uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents( pDoc->GetVbaEventProcessor(), uno::UNO_SET_THROW );
+                        uno::Sequence< uno::Any > aArgs( 1 );
+                        aArgs[ 0 ] <<= nTab;
+                        xVbaEvents->processVbaEvent( ScSheetEvents::GetVbaSheetEventId( SC_SHEETEVENT_CALCULATE ), aArgs );
+                    }
+                    catch( uno::Exception& )
+                    {
                     }
                 }
             }

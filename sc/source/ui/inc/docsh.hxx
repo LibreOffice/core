@@ -215,6 +215,7 @@ public:
 
     virtual BOOL    SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );      // SfxInPlaceObject
     virtual BOOL    DoSaveCompleted( SfxMedium * pNewStor);     // SfxObjectShell
+    virtual sal_Bool QuerySlotExecutable( USHORT nSlotId );
 
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
                                 USHORT nAspect = ASPECT_CONTENT );

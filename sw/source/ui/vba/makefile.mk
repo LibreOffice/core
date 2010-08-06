@@ -91,6 +91,7 @@ SLOFILES= \
                 $(SLO)$/vbapagesetup.obj \
                 $(SLO)$/vbasection.obj \
                 $(SLO)$/vbasections.obj \
+                $(SLO)$/vbaeventshelper.obj \
 
 # --- Targets ------------------------------------------------------
 

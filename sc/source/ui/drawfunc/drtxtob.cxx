@@ -486,11 +486,16 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
          rSet.GetItemState( SID_THESAURUS ) != SFX_ITEM_UNKNOWN )
     {
         SdrView * pView = pViewData->GetScDrawView();
-        EditView & rEditView = pView->GetTextEditOutlinerView()->GetEditView();
+        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
 
         String          aStatusVal;
         LanguageType    nLang = LANGUAGE_NONE;
-        bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, rEditView );
+        bool bIsLookUpWord = false;
+        if ( pOutView )
+        {
+            EditView& rEditView = pOutView->GetEditView();
+            bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, rEditView );
+        }
         rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
         // disable thesaurus main menu and context menu entry if there is nothing to look up

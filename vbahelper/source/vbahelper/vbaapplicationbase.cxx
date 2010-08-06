@@ -24,39 +24,37 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "vbahelper/vbaapplicationbase.hxx"
+
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp> //Michael E. Bohn
-#include <com/sun/star/lang/XMultiComponentFactory.hpp> //Michael E. Bohn
-#include <com/sun/star/lang/XComponent.hpp> //Michael E. Bohn
-#include <com/sun/star/container/XEnumeration.hpp> //Michael E. Bohn
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/document/XEmbeddedScripts.hpp> //Michael E. Bohn
-#include <ooo/vba/XVBAAppService.hpp> //Michael E. Bohn
+#include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 
-
-#include "vbacommandbars.hxx"
+#include <hash_map>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <tools/datetime.hxx>
 
-// start basic includes
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbuno.hxx>
 #include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
-// end basic includes
 
-#include <hash_map>
+#include "vbacommandbars.hxx"
 
-using namespace com::sun::star;
-using namespace ooo::vba;
+using namespace ::com::sun::star;
+using namespace ::ooo::vba;
 
 #define OFFICEVERSION "11.0"
 
@@ -162,6 +160,9 @@ typedef ::std::hash_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash, ::std::equal
 struct VbaApplicationBase_Impl
 {
     VbaTimerHashMap m_aTimerHash;
+    sal_Bool mbVisible;
+
+    inline VbaApplicationBase_Impl() : mbVisible( sal_True ) {}
 
     virtual ~VbaApplicationBase_Impl()
     {
@@ -185,7 +186,6 @@ VbaApplicationBase::VbaApplicationBase( const uno::Reference< uno::XComponentCon
 
 VbaApplicationBase::~VbaApplicationBase()
 {
-    m_pImpl = 0;
     delete m_pImpl;
 }
 
@@ -266,6 +266,16 @@ void SAL_CALL VbaApplicationBase::setInteractive( ::sal_Bool bInteractive )
     uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
 
     xWindow->setEnable( bInteractive );
+}
+
+sal_Bool SAL_CALL VbaApplicationBase::getVisible() throw (uno::RuntimeException)
+{
+    return m_pImpl->mbVisible;    // dummy implementation
+}
+
+void SAL_CALL VbaApplicationBase::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException)
+{
+    m_pImpl->mbVisible = bVisible;  // dummy implementation
 }
 
 uno::Any SAL_CALL
@@ -407,56 +417,42 @@ float SAL_CALL VbaApplicationBase::CentimetersToPoints( float _Centimeters ) thr
     return ( _Centimeters * rate );
 }
 
-// inserted by Michael E. Bohn
 uno::Any SAL_CALL VbaApplicationBase::getVBE() throw (uno::RuntimeException)
 {
-    uno::Any aAny;
-    uno::Reference< ::lang::XMultiComponentFactory > xServiceManager = mxContext->getServiceManager();
-    try
-      {
-        uno::Reference < ::uno::XInterface > xInterface =  xServiceManager->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAAppService" )),mxContext);
-        uno::Reference < ::ooo::vba::XVBAAppService > xVBAAppService (xInterface, ::uno::UNO_QUERY_THROW );
-        if (xVBAAppService.is()){
-            uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-            return xVBAAppService->getVBE( this, mxContext, xModel);
-          }
-
-        }catch(uno::Exception* e)
-        {
-        }
-    return aAny;
+    try // return empty object on error
+    {
+        uno::Sequence< uno::Any > aArgs( 2 );
+        aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
+        aArgs[ 1 ] <<= getCurrentDocument();
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
+        uno::Reference< uno::XInterface > xVBE = xServiceManager->createInstanceWithArgumentsAndContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBE" ) ), aArgs, mxContext );
+        return uno::Any( xVBE );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return uno::Any();
 }
 
 uno::Any SAL_CALL
 VbaApplicationBase::getVBProjects() throw (uno::RuntimeException)
 {
-    uno::Any aAny;
-    uno::Reference< ::lang::XMultiComponentFactory > xServiceManager = mxContext->getServiceManager();
-    try
-      {
-        uno::Reference < ::uno::XInterface > xInterface =  xServiceManager->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAAppService" )),mxContext);
-        uno::Reference < ::ooo::vba::XVBAAppService > xVBAAppService (xInterface, ::uno::UNO_QUERY_THROW );
-        if (xVBAAppService.is()){
-            uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-            uno::Reference< document::XEmbeddedScripts > xEnbeddedScripts ( xModel, uno::UNO_QUERY_THROW );
-            uno::Reference< script::XStorageBasedLibraryContainer >  xMacroStorageBasedLibraryContainer =  xEnbeddedScripts->getBasicLibraries();
-            uno::Reference< script::XStorageBasedLibraryContainer >  xDialogStorageBasedLibraryContainer = xEnbeddedScripts->getDialogLibraries();
-            uno::Reference< script::XLibraryContainer > xMacroLibraryContainer ( xMacroStorageBasedLibraryContainer, uno::UNO_QUERY_THROW );
-            uno::Reference< script::XLibraryContainer > xDialogLibraryContainer( xDialogStorageBasedLibraryContainer, uno::UNO_QUERY_THROW );
-            return xVBAAppService->getVBProjects(this, mxContext, xModel, xMacroLibraryContainer, xDialogLibraryContainer);
-          }
-
-        }catch(uno::Exception* e)
-        {
-        }
-    return aAny;
-
-
-
+    try // return empty object on error
+    {
+        uno::Sequence< uno::Any > aArgs( 2 );
+        aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
+        aArgs[ 1 ] <<= getCurrentDocument();
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
+        uno::Reference< uno::XInterface > xVBProjects = xServiceManager->createInstanceWithArgumentsAndContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBProjects" ) ), aArgs, mxContext );
+        return uno::Any( xVBProjects );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return uno::Any();
 }
-
-
-
 
 rtl::OUString&
 VbaApplicationBase::getServiceImplName()
@@ -464,6 +460,7 @@ VbaApplicationBase::getServiceImplName()
     static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaApplicationBase") );
     return sImplName;
 }
+
 uno::Sequence<rtl::OUString>
 VbaApplicationBase::getServiceNames()
 {

@@ -367,7 +367,7 @@ SHL5STDLIBS= \
                 $(I18NISOLANGLIB) \
                 $(EDITENGLIB) \
                 $(SVXCORELIB) \
-                $(SVXMSFILTERLIB)
+                $(MSFILTERLIB)
 
 SHL5DEPN=$(SHL1TARGETN)
 SHL5LIBS=$(SLB)$/$(TARGET_VBA).lib

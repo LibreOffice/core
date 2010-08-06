@@ -59,7 +59,6 @@ SLOFILES =										\
         $(SLO)$/excelchartconverter.obj			\
         $(SLO)$/excelfilter.obj					\
         $(SLO)$/excelhandlers.obj				\
-        $(SLO)$/excelvbaproject.obj				\
         $(SLO)$/externallinkbuffer.obj			\
         $(SLO)$/externallinkfragment.obj		\
         $(SLO)$/formulabase.obj					\

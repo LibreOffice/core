@@ -136,10 +136,16 @@ ScBroadcastAreaSlot::ScBroadcastAreaSlot( ScDocument* pDocument,
 ScBroadcastAreaSlot::~ScBroadcastAreaSlot()
 {
     for ( ScBroadcastAreas::iterator aIter( aBroadcastAreaTbl.begin());
-            aIter != aBroadcastAreaTbl.end(); ++aIter)
+            aIter != aBroadcastAreaTbl.end(); /* none */)
     {
-        if (!(*aIter)->DecRef())
-            delete *aIter;
+        // Prevent hash from accessing dangling pointer in case area is
+        // deleted.
+        ScBroadcastArea* pArea = *aIter;
+        // Erase all so no hash will be accessed upon destruction of the
+        // hash_set.
+        aBroadcastAreaTbl.erase( aIter++);
+        if (!pArea->DecRef())
+            delete pArea;
     }
 }
 

@@ -2241,7 +2241,7 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, BOOL bManual )
 }
 
 
-USHORT ScTable::GetColWidth( SCCOL nCol )
+USHORT ScTable::GetColWidth( SCCOL nCol ) const
 {
     DBG_ASSERT(VALIDCOL(nCol),"Falsche Spaltennummer");
 
@@ -2315,34 +2315,50 @@ USHORT ScTable::GetCommonWidth( SCCOL nEndCol )
 }
 
 
-USHORT ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero )
+USHORT ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
 {
-    DBG_ASSERT(VALIDROW(nRow),"Falsche Zeilennummer");
+    DBG_ASSERT(VALIDROW(nRow),"Invalid row number");
 
     if (VALIDROW(nRow) && mpRowHeights)
     {
-        if (bHiddenAsZero && RowHidden(nRow))
+        if (bHiddenAsZero && RowHidden( nRow, pStartRow, pEndRow))
             return 0;
         else
         {
             ScFlatUInt16RowSegments::RangeData aData;
             if (!mpRowHeights->getRangeData(nRow, aData))
+            {
+                if (pStartRow)
+                    *pStartRow = nRow;
+                if (pEndRow)
+                    *pEndRow = nRow;
                 // TODO: What should we return in case the search fails?
                 return 0;
+            }
 
+            // If bHiddenAsZero, pStartRow and pEndRow were initialized to
+            // boundaries of a non-hidden segment. Assume that the previous and
+            // next segment are hidden then and limit the current height
+            // segment.
             if (pStartRow)
-                *pStartRow = aData.mnRow1;
+                *pStartRow = (bHiddenAsZero ? std::max( *pStartRow, aData.mnRow1) : aData.mnRow1);
             if (pEndRow)
-                *pEndRow = aData.mnRow2;
+                *pEndRow = (bHiddenAsZero ? std::min( *pEndRow, aData.mnRow2) : aData.mnRow2);
             return aData.mnValue;
         }
     }
     else
+    {
+        if (pStartRow)
+            *pStartRow = nRow;
+        if (pEndRow)
+            *pEndRow = nRow;
         return (USHORT) ScGlobal::nStdRowHeight;
+    }
 }
 
 
-ULONG ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow )
+ULONG ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
 {
     DBG_ASSERT(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
 
@@ -2368,7 +2384,7 @@ ULONG ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow )
 }
 
 
-ULONG ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale )
+ULONG ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale ) const
 {
     DBG_ASSERT(VALIDROW(nStartRow) && VALIDROW(nEndRow),"Falsche Zeilennummer");
 
@@ -3036,7 +3052,7 @@ void ScTable::SetDrawPageSize(bool bResetStreamValid, bool bUpdateNoteCaptionPos
 }
 
 
-ULONG ScTable::GetRowOffset( SCROW nRow )
+ULONG ScTable::GetRowOffset( SCROW nRow ) const
 {
     ULONG n = 0;
     if ( mpHiddenRows && mpRowHeights )
@@ -3059,7 +3075,7 @@ ULONG ScTable::GetRowOffset( SCROW nRow )
     return n;
 }
 
-SCROW ScTable::GetRowForHeight(ULONG nHeight)
+SCROW ScTable::GetRowForHeight(ULONG nHeight) const
 {
     sal_uInt32 nSum = 0;
 
@@ -3086,7 +3102,7 @@ SCROW ScTable::GetRowForHeight(ULONG nHeight)
 }
 
 
-ULONG ScTable::GetColOffset( SCCOL nCol )
+ULONG ScTable::GetColOffset( SCCOL nCol ) const
 {
     ULONG n = 0;
     if ( pColWidth )

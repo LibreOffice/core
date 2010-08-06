@@ -8,7 +8,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\ooo\vba\word
 
 ..\%__SRC%\ucr\oovbaapi.db %_DEST%\bin%_EXT%\oovbaapi.rdb
 
-..\ooo\vba\*.idl %COMMON_DEST%\idl%_EXT%\ooo\vba\
+..\ooo\vba\*.idl %COMMON_DEST%\idl%_EXT%\ooo\vba
 ..\ooo\vba\constants\*.idl %COMMON_DEST%\idl%_EXT%\ooo\vba\constants 
 ..\ooo\vba\excel\*.idl %COMMON_DEST%\idl%_EXT%\ooo\vba\excel
 ..\ooo\vba\msforms\*.idl %COMMON_DEST%\idl%_EXT%\ooo\vba\msforms

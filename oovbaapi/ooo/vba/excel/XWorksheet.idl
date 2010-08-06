@@ -114,6 +114,7 @@ interface XWorksheet
     XRange Rows([in] any aIndex);
     XRange Columns([in] any aIndex);
     any Hyperlinks( [in] any aIndex );
+    any Names( [in] any Index );
 
     any Evaluate( [in] string Name);
 

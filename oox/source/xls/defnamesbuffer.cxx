@@ -486,8 +486,9 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm, sal_Int16 nCalcShee
 
 void DefinedName::createNameObject()
 {
-    // do not create hidden names and names for (macro) functions
-    if( maModel.mbHidden || maModel.mbFunction )
+    // do not create names for (macro) functions
+    // #163146# do not ignore hidden names (may be regular names created by VBA scripts)
+    if( /*maModel.mbHidden ||*/ maModel.mbFunction )
         return;
 
     // convert original name to final Calc name
@@ -498,10 +499,13 @@ void DefinedName::createNameObject()
     else
         maCalcName = maModel.maName;         //! TODO convert to valid name
 
+    // #163146# do not rename sheet-local names by default, this breaks VBA scripts
+#if 0
     // append sheet index for local names in multi-sheet documents
     if( isWorkbookFile() && !isGlobalName() )
         maCalcName = OUStringBuffer( maCalcName ).append( sal_Unicode( '_' ) ).
             append( static_cast< sal_Int32 >( mnCalcSheet + 1 ) ).makeStringAndClear();
+#endif
 
     // special flags for this name
     sal_Int32 nNameFlags = 0;

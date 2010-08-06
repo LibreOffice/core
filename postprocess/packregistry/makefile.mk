@@ -469,9 +469,9 @@ MY_FILES_ogltrans = \
 .END
 
 .IF "$(GUIBASE)" == "WIN"
-MY_XCDS += $(MISC)/forcedefaultlanguage.xcd
-MY_DEPS_forcedefaultlanguage = main
-MY_FILES_forcedefaultlanguage = \
+MY_XCDS += $(MISC)/forcedefault.xcd
+MY_DEPS_forcedefault = main
+MY_FILES_forcedefault = \
     $(MY_MOD)/org/openoffice/Office/Linguistic-ForceDefaultLanguage.xcu
 .END
 

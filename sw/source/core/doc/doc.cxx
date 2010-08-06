@@ -119,6 +119,9 @@
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
+#ifdef FUTURE_VBA
+#include <vbahelper/vbaaccesshelper.hxx>
+#endif
 
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
@@ -2720,6 +2723,27 @@ void SwDoc::ChkCondColls()
         }
      }
 }
+
+#ifdef FUTURE_VBA
+uno::Reference< script::vba::XVBAEventProcessor >
+SwDoc::GetVbaEventProcessor()
+{
+    if( !mxVbaEvents.is() && pDocShell && ooo::vba::isAlienWordDoc( *pDocShell ) )
+    {
+        try
+        {
+            uno::Reference< frame::XModel > xModel( pDocShell->GetModel(), uno::UNO_SET_THROW );
+            uno::Sequence< uno::Any > aArgs(1);
+            aArgs[0] <<= xModel;
+            mxVbaEvents.set( ooo::vba::createVBAUnoAPIServiceWithArgs( pDocShell, "com.sun.star.script.vba.VBATextEventProcessor" , aArgs ), uno::UNO_QUERY_THROW );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+    return mxVbaEvents;
+}
+#endif
 
 void SwDoc::setExternalData(::sw::tExternalDataType eType,
                             ::sw::tExternalDataPointer pPayload)

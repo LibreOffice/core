@@ -42,7 +42,7 @@ uno::Any DataPilotToPivotTable( const uno::Any& aSource, uno::Reference< uno::XC
 class PivotTableEnumeration : public EnumerationHelperImpl
 {
 public:
-    PivotTableEnumeration( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xContext, xEnumeration ) {}
+    PivotTableEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
@@ -59,7 +59,7 @@ uno::Reference< container::XEnumeration >
 ScVbaPivotTables::createEnumeration() throw (uno::RuntimeException)
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
-    return new PivotTableEnumeration( mxContext, xEnumAccess->createEnumeration() );
+    return new PivotTableEnumeration( mxParent, mxContext, xEnumAccess->createEnumeration() );
 }
 
 uno::Any

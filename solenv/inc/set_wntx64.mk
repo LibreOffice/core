@@ -42,6 +42,10 @@ LIBMGR_X64=$(WRAPCMD) $(LIBMGR_X64_BINARY) $(NOLOGO)
 IMPLIB_X64=$(WRAPCMD) $(LIBMGR_X64_BINARY)
 
 USE_CFLAGS_X64=-c -nologo -Gs $(NOLOGO) -Zm500 -Zc:forScope,wchar_t- -GR
+
+# Stack buffer overrun detection.
+CFLAGS+=-GS
+
 USE_CDEFS_X64+= -DWIN32 -D_AMD64_=1 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NON_CONFORMING_SWPRINTFS
 .IF "$(debug)"!=""
 USE_CFLAGS_X64+=-Zi -Fd$(MISC_X64)/$(@:b).pdb
@@ -77,6 +81,15 @@ CDEFSOBJMT_X64+=-D_MT
 .ELSE
 LINKFLAGS_X64=/MAP /OPT:NOREF
 .ENDIF
+
+# excetion handling protection
+LINKFLAGS+=-safeseh
+
+# enable DEP
+LINKFLAGS+=-nxcompat
+
+# enable ASLR
+LINKFLAGS+=-dynamicbase
 
 .IF "$(PRODUCT)"!="full"
 LINKFLAGS_X64+= -NODEFAULTLIB -DEBUG

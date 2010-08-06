@@ -2094,6 +2094,13 @@ void ConvertEnhancedCustomShapeEquation( SdrObjCustomShape* pCustoShape,
                     aEquation.nPara[ 0 ] = 1;                   // hoping that this will not break anything
                     rEquations.push_back( aEquation );
                 }
+                catch ( ... )
+                {
+                    EnhancedCustomShapeEquation aEquation;      // #i112309# EnhancedCustomShape::Parse error
+                    aEquation.nOperation = 0;                   // not catched on linux platform
+                    aEquation.nPara[ 0 ] = 1;
+                    rEquations.push_back( aEquation );
+                }
                 rEquationOrder.push_back( rEquations.size() - 1 );
             }
             // now updating our old equation indices, they are marked with a bit in the hiword of nOperation

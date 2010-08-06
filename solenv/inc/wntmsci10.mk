@@ -34,7 +34,7 @@ JAVAFLAGSDEBUG=-g
 # SOLAR JAva Unterstuetzung nur fuer wntmsci
 
 ASM=ml
-AFLAGS=/c /Cp /coff
+AFLAGS=/c /Cp /coff /safeseh
 
 # architecture dependent flags for the C and C++ compiler that can be changed by
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build

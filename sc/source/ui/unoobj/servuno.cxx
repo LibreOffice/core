@@ -65,25 +65,13 @@
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <svx/unomod.hxx>
+#include <vbahelper/vbaaccesshelper.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <basic/basmgr.hxx>
 #include <sfx2/app.hxx>
 
 using namespace ::com::sun::star;
-
-#ifndef CWS_NPOWER14MISCFIXES
-uno::Reference< uno::XInterface > lcl_createVBAUnoAPIServiceWithArgs( SfxObjectShell* pShell,  const sal_Char* _pAsciiName, const uno::Sequence< uno::Any >& aArgs ) throw (uno::RuntimeException)
-{
-    uno::Any aUnoVar;
-    if ( !pShell || !pShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aUnoVar ) )
-        throw lang::IllegalArgumentException();
-    uno::Reference< lang::XMultiServiceFactory > xVBAFactory( aUnoVar, uno::UNO_QUERY_THROW );
-    ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( _pAsciiName ) );
-    uno::Reference< uno::XInterface > xIf = xVBAFactory->createInstanceWithArguments( sVarName, aArgs  );
-    return xIf;
-}
-#endif
 
 class ScVbaObjectForCodeNameProvider : public ::cppu::WeakImplHelper1< container::XNameAccess >
 {
@@ -98,13 +86,10 @@ public:
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("")), uno::Reference< uno::XInterface >() );
 
         uno::Sequence< uno::Any > aArgs(2);
-        aArgs[0] = uno::Any( uno::Reference< uno::XInterface >() );
+        // access the application object ( parent for workbook )
+        aArgs[0] = uno::Any( ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.Application", uno::Sequence< uno::Any >() ) );
         aArgs[1] = uno::Any( mpDocShell->GetModel() );
-#ifdef CWS_NPOWER14MISCFIXES
         maWorkbook <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Workbook", aArgs );
-#else
-        maWorkbook <<= lcl_createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Workbook", aArgs );
-#endif
     }
 
     virtual ::sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
@@ -139,13 +124,8 @@ public:
                         aArgs[0] = maWorkbook;
                         aArgs[1] = uno::Any( xModel );
                         aArgs[2] = uno::Any( rtl::OUString( sSheetName ) );
-#ifdef CWS_NPOWER14MISCFIXES
                         // use the convience function
                         maCachedObject <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Worksheet", aArgs );
-#else
-                        // use the temp function
-                        maCachedObject <<= lcl_createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Worksheet", aArgs );
-#endif
                         break;
                     }
                 }
@@ -557,6 +537,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             break;
 
         case SC_SERVICE_OPCODEMAPPER:
+            if (pDocShell)
             {
                 ScDocument* pDoc = pDocShell->GetDocument();
                 ScAddress aAddress;
@@ -566,44 +547,35 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 break;
             }
         case SC_SERVICE_VBAOBJECTPROVIDER:
-            if ( pDocShell )
+            if (pDocShell && pDocShell->GetDocument()->IsInVBAMode())
             {
                 OSL_TRACE("**** creating VBA Object mapper");
                 xRet.set(static_cast<container::XNameAccess*>(new ScVbaObjectForCodeNameProvider( pDocShell )));
             }
             break;
         case SC_SERVICE_VBACODENAMEPROVIDER:
+            if (pDocShell && pDocShell->GetDocument()->IsInVBAMode())
             {
-                // Only create the excel faking service for excel docs
-                const SfxFilter *pFilt = pDocShell->GetMedium()->GetFilter();
-                if ( pFilt && pFilt->IsAlienFormat() )
-                {
-                    // application/vnd.ms-excel is the mime type for Excel
-                    static const rtl::OUString sExcelMimeType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.ms-excel" ) );
-                    if ( sExcelMimeType.equals( pFilt->GetMimeType() ) )
-                    xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider( pDocShell )));
-                }
-                break;
+                OSL_TRACE("**** creating VBA Object provider");
+                xRet.set(static_cast<document::XCodeNameQuery*>(new ScVbaCodeNameProvider( pDocShell )));
             }
+            break;
         case SC_SERVICE_VBAGLOBALS:
+            if (pDocShell)
             {
                 uno::Any aGlobs;
-                ScDocument* pDoc = pDocShell->GetDocument();
-                if ( pDoc )
+                if ( !pDocShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aGlobs ) )
                 {
-                    if ( !pDocShell->GetBasicManager()->GetGlobalUNOConstant( "VBAGlobals", aGlobs ) )
-                    {
-                        uno::Sequence< uno::Any > aArgs(1);
-                        aArgs[ 0 ] <<= pDocShell->GetModel();
-                        aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
-                        pDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-                        BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
-                        if ( pAppMgr )
-                            pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
-                    }
-                    aGlobs >>= xRet;
+                    uno::Sequence< uno::Any > aArgs(1);
+                    aArgs[ 0 ] <<= pDocShell->GetModel();
+                    xRet = ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
+                    pDocShell->GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", uno::Any( xRet ) );
+                    BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
+                    if ( pAppMgr )
+                        pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
                 }
             }
+        break;
     }
 
     return xRet;

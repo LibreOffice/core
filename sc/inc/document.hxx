@@ -161,6 +161,9 @@ namespace com { namespace sun { namespace star {
     namespace embed {
         class XEmbeddedObject;
     }
+    namespace script { namespace vba {
+        class XVBAEventProcessor;
+    } }
     namespace sheet {
         struct TablePageBreakData;
     }
@@ -333,6 +336,9 @@ private:
     ScAddress           aVisSpellPos;                   // within aVisSpellRange (see nVisSpellState)
 
     Timer               aTrackTimer;
+
+    com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
+                        mxVbaEvents;
 
 public:
     ScTabOpList         aTableOpList;                   // list of ScInterpreterTableOpParams currently in use
@@ -739,7 +745,8 @@ public:
 
     const ScSheetEvents* GetSheetEvents( SCTAB nTab ) const;
     void            SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew );
-    bool            HasSheetEventScript( sal_Int32 nEvent ) const;  // on any sheet
+    bool            HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVbaEvents = false ) const;
+    bool            HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents = false ) const;  // on any sheet
 
     BOOL            HasCalcNotification( SCTAB nTab ) const;
     void            SetCalcNotification( SCTAB nTab );
@@ -1276,6 +1283,7 @@ public:
 
     SC_DLLPUBLIC USHORT         GetColWidth( SCCOL nCol, SCTAB nTab ) const;
     SC_DLLPUBLIC USHORT         GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC USHORT         GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC ULONG          GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
     SCROW                       GetRowForHeight( SCTAB nTab, ULONG nHeight ) const;
     ULONG                       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale ) const;
@@ -1782,6 +1790,11 @@ public:
                         { bStyleSheetUsageInvalid = TRUE; }
     void GetSortParam( ScSortParam& rParam, SCTAB nTab );
     void SetSortParam( ScSortParam& rParam, SCTAB nTab );
+
+    inline void     SetVbaEventProcessor( const com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >& rxVbaEvents )
+                        { mxVbaEvents = rxVbaEvents; }
+    inline com::sun::star::uno::Reference< com::sun::star::script::vba::XVBAEventProcessor >
+                    GetVbaEventProcessor() const { return mxVbaEvents; }
 
     /** Should only be GRAM_PODF or GRAM_ODFF. */
     void                SetStorageGrammar( formula::FormulaGrammar::Grammar eGrammar );

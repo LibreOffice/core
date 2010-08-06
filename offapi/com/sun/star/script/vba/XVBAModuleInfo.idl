@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XLibraryContainer.idl,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,47 +24,52 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_script_XVBACompat_idl__
-#define __com_sun_star_script_XVBACompat_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
+#ifndef __com_sun_star_script_vba_XVBAModuleInfo_idl__
+#define __com_sun_star_script_vba_XVBAModuleInfo_idl__
+
 #include <com/sun/star/uno/XInterface.idl>
-#endif
-#ifndef __com_sun_star_script_ModuleInfo_idl__
 #include <com/sun/star/script/ModuleInfo.idl>
-#endif
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
-#ifndef __com_sun_star_container_ElementExistException_idl__
 #include <com/sun/star/container/ElementExistException.idl>
-#endif
-#ifndef __com_sun_star_lang_WrappedTargetException_idl__
 #include <com/sun/star/lang/WrappedTargetException.idl>
-#endif
-#ifndef __com_sun_star_container_NoSuchElementException_idl__
 #include <com/sun/star/container/NoSuchElementException.idl>
-#endif
 
 //=============================================================================
 
-module com {  module sun {  module star {  module script {
+module com {  module sun {  module star {  module script { module vba {
 
-interface XVBAModuleInfo: com::sun::star::uno::XInterface
+interface XVBAModuleInfo
 {
+    //-------------------------------------------------------------------------
 
-    com::sun::star::script::ModuleInfo  getModuleInfo( [in] string ModuleName )
+    com::sun::star::script::ModuleInfo getModuleInfo( [in] string ModuleName )
         raises( com::sun::star::container::NoSuchElementException,
                 com::sun::star::lang::WrappedTargetException );
-    boolean  hasModuleInfo( [in] string ModuleName );
+
+    //-------------------------------------------------------------------------
+
+    boolean hasModuleInfo( [in] string ModuleName );
+
+    //-------------------------------------------------------------------------
+
     void insertModuleInfo( [in] string ModuleName,
                            [in] com::sun::star::script::ModuleInfo ModuleInfo )
         raises( com::sun::star::lang::IllegalArgumentException,
                 com::sun::star::container::ElementExistException,
                 com::sun::star::lang::WrappedTargetException );
+
+    //-------------------------------------------------------------------------
+
     void removeModuleInfo( [in] string ModuleName )
         raises( com::sun::star::container::NoSuchElementException,
                 com::sun::star::lang::WrappedTargetException );
-}; }; }; };
+
+    //-------------------------------------------------------------------------
 };
+
+}; }; }; }; };
+
+//=============================================================================
+
 #endif

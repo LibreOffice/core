@@ -69,6 +69,7 @@ using namespace boost;
 using namespace osl;
 using namespace rtl;
 using namespace cppu;
+using namespace com::sun::star::script;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::bridge;
 using namespace com::sun::star::bridge::oleautomation;
@@ -108,7 +109,7 @@ IUnknownWrapper_Impl::IUnknownWrapper_Impl( Reference<XMultiServiceFactory>& xFa
                                            sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass):
     UnoConversionUtilities<IUnknownWrapper_Impl>( xFactory, unoWrapperClass, comWrapperClass),
     m_pxIdlClass( NULL), m_eJScript( JScriptUndefined),
-    m_bComTlbIndexInit(false)
+    m_bComTlbIndexInit(false),  m_bHasDfltMethod(false), m_bHasDfltProperty(false)
 {
 }
 
@@ -147,17 +148,15 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 Any IUnknownWrapper_Impl::queryInterface(const Type& t)
     throw (RuntimeException)
 {
-    if (t == getCppuType(static_cast<Reference<XInvocation>*>( 0)))
-    {
-        if (m_spDispatch)
-            return WeakImplHelper4<XInvocation, XBridgeSupplier2,
-                XInitialization, XAutomationObject>::queryInterface(t);
-        else
-            return Any();
-    }
+    if (t == getCppuType(static_cast<Reference<XDefaultMethod>*>( 0)) && !m_bHasDfltMethod )
+        return Any();
+    if (t == getCppuType(static_cast<Reference<XDefaultProperty>*>( 0)) && !m_bHasDfltProperty )
+        return Any();
+    if (t == getCppuType(static_cast<Reference<XInvocation>*>( 0)) && !m_spDispatch)
+        return Any();
 
-    return WeakImplHelper4<XInvocation, XBridgeSupplier2,
-        XInitialization, XAutomationObject>::queryInterface(t);
+    return WeakImplHelper6<XInvocation, XBridgeSupplier2,
+        XInitialization, XAutomationObject, XDefaultProperty, XDefaultMethod>::queryInterface(t);
 }
 
 Reference<XIntrospectionAccess> SAL_CALL IUnknownWrapper_Impl::getIntrospection(void)
@@ -1194,6 +1193,68 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
 
     aArguments[1] >>= m_bOriginalDispatch;
     aArguments[2] >>= m_seqTypes;
+
+    ITypeInfo* pType = NULL;
+    try
+    {
+        // a COM object implementation that has no TypeInfo is still a legal COM object;
+        // such objects can at least be transported through UNO using the bridge
+        // so we should allow to create wrappers for them as well
+        pType = getTypeInfo();
+    }
+    catch( BridgeRuntimeError& )
+    {}
+    catch( Exception& )
+    {}
+
+    if ( pType )
+    {
+        try
+        {
+            // Get Default member
+            CComBSTR defaultMemberName;
+            if ( SUCCEEDED( pType->GetDocumentation(0, &defaultMemberName, 0, 0, 0 ) ) )
+            {
+                OUString usName(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(defaultMemberName)));
+                FuncDesc aDescGet(pType);
+                FuncDesc aDescPut(pType);
+                VarDesc aVarDesc(pType);
+                // see if this is a property first ( more likely to be a property then a method )
+                getPropDesc( usName, & aDescGet, & aDescPut, & aVarDesc);
+
+                if ( !aDescGet && !aDescPut )
+                {
+                    getFuncDesc( usName, &aDescGet );
+                    if ( !aDescGet )
+                        throw BridgeRuntimeError( OUSTR("[automation bridge]IUnknownWrapper_Impl::initialize() Failed to get Function or Property desc. for " ) + usName );
+                }
+                // now for some funny heuristics to make basic understand what to do
+                // a single aDescGet ( that doesn't take any params ) would be
+                // a read only ( defaultmember ) property e.g. this object
+                // should implement XDefaultProperty
+                // a single aDescGet ( that *does* ) take params is basically a
+                // default method e.g. implement XDefaultMethod
+
+                // a DescPut ( I guess we only really support a default param with '1' param ) as a setValue ( but I guess we can leave it through, the object will fail if we don't get it right anyway )
+                if ( aDescPut || ( aDescGet && aDescGet->cParams == 0 ) )
+                    m_bHasDfltProperty = true;
+                if ( aDescGet->cParams > 0 )
+                    m_bHasDfltMethod = true;
+                if ( m_bHasDfltProperty || m_bHasDfltMethod )
+                    m_sDefaultMember = usName;
+            }
+        }
+        catch ( BridgeRuntimeError & e )
+        {
+            throw RuntimeException( e.message, Reference<XInterface>() );
+        }
+        catch( Exception& e )
+        {
+            throw RuntimeException(
+                    OUSTR("[automation bridge] unexpected exception in IUnknownWrapper_Impl::initialiase() error message: \n") + e.Message,
+                    Reference<XInterface>() );
+        }
+    }
 }
 
 // UnoConversionUtilities --------------------------------------------------------------------------------
@@ -1445,6 +1506,9 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
         arDispidNamedArgs.reset(new DISPID[nSizeAr]);
         HRESULT hr = getTypeInfo()->GetIDsOfNames(arNames, nSizeAr,
                                                   arDispidNamedArgs.get());
+        if ( hr == E_NOTIMPL )
+            hr = m_spDispatch->GetIDsOfNames(IID_NULL, arNames, nSizeAr, LOCALE_USER_DEFAULT, arDispidNamedArgs.get() );
+
         if (hr == S_OK)
         {
             // In a "property put" operation, the property value is a named param with the

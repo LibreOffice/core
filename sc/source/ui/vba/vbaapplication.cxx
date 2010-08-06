@@ -24,14 +24,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include <stdio.h>
 
-
-#include<com/sun/star/sheet/XSpreadsheetView.hpp>
+#include <com/sun/star/sheet/XSpreadsheetView.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
-#include<com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include<ooo/vba/excel/XlCalculation.hpp>
+#include <ooo/vba/excel/XlCalculation.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/XCalculatable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -117,7 +117,8 @@ public:
 ScVbaApplication::ScVbaApplication( const uno::Reference<uno::XComponentContext >& xContext ) :
     ScVbaApplication_BASE( xContext ),
     m_xCalculation( excel::XlCalculation::xlCalculationAutomatic ),
-    m_xDisplayAlerts( sal_True)
+    m_bDisplayAlerts( sal_True ),
+    m_bEnableEvents( sal_True )
 {
 }
 
@@ -193,18 +194,47 @@ ScVbaApplication::hasProperty( const ::rtl::OUString& Name ) throw(uno::RuntimeE
 uno::Reference< excel::XWorkbook >
 ScVbaApplication::getActiveWorkbook() throw (uno::RuntimeException)
 {
-    return new ActiveWorkbook( this, mxContext );
+    uno::Reference< excel::XWorkbook > xWrkbk;
+    ScDocShell* pShell = excel::getDocShell( getCurrentExcelDoc( mxContext ) );
+    if ( pShell )
+    {
+        String aName;
+        if ( pShell->GetDocument() )
+        {
+            aName = pShell->GetDocument()->GetCodeName();
+            xWrkbk.set( getUnoDocModule(  aName, pShell ), uno::UNO_QUERY );
+            // fallback ( e.g. it's possible a new document was created via the api )
+            // in that case the document will not have the appropriate Document Modules
+            // #TODO #FIXME ( needs to be fixes as part of providing support for an overall document
+            // vba mode etc. )
+            if ( !xWrkbk.is() )
+                return new ActiveWorkbook( this, mxContext );
+        }
+    }
+    return xWrkbk;
 }
 
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaApplication::getThisWorkbook() throw (uno::RuntimeException)
 {
-    uno::Reference< frame::XModel > xModel = getThisExcelDoc(mxContext);
-    if( !xModel.is() )
-        return uno::Reference< excel::XWorkbook >();
-
-    ScVbaWorkbook *pWb = new ScVbaWorkbook( this, mxContext, xModel );
-    return uno::Reference< excel::XWorkbook > (pWb);
+    uno::Reference< excel::XWorkbook > xWrkbk;
+    ScDocShell* pShell = excel::getDocShell( getThisExcelDoc( mxContext ) );
+    if ( pShell )
+    {
+        String aName;
+        if ( pShell->GetDocument() )
+        {
+            aName = pShell->GetDocument()->GetCodeName();
+            xWrkbk.set( getUnoDocModule( aName, pShell ), uno::UNO_QUERY );
+            // fallback ( e.g. it's possible a new document was created via the api )
+            // in that case the document will not have the appropriate Document Modules
+            // #TODO #FIXME ( needs to be fixes as part of providing support for an overall document
+            // vba mode etc. )
+            if ( !xWrkbk.is() )
+                return new ActiveWorkbook( this, mxContext );
+        }
+    }
+    return xWrkbk;
 }
 
 uno::Reference< XAssistant > SAL_CALL
@@ -246,10 +276,10 @@ ScVbaApplication::getSelection() throw (uno::RuntimeException)
         {
             uno::Reference< sheet::XSheetCellRangeContainer > xRanges( getCurrentDocument()->getCurrentSelection(), ::uno::UNO_QUERY);
             if ( xRanges.is() )
-                return uno::makeAny( uno::Reference< excel::XRange >( new ScVbaRange( this, mxContext, xRanges ) ) );
+                return uno::makeAny( uno::Reference< excel::XRange >( new ScVbaRange( excel::getUnoSheetModuleObj( xRanges ), mxContext, xRanges ) ) );
 
         }
-        return uno::makeAny( uno::Reference< excel::XRange >(new ScVbaRange( this, mxContext, xRange ) ) );
+        return uno::makeAny( uno::Reference< excel::XRange >(new ScVbaRange( excel::getUnoSheetModuleObj( xRange ), mxContext, xRange ) ) );
     }
     else
     {
@@ -531,10 +561,8 @@ ScVbaApplication::GoTo( const uno::Any& Reference, const uno::Any& Scroll ) thro
         ScGridWindow* gridWindow = (ScGridWindow*)pShell->GetWindow();
         try
         {
-            // FIXME: pass proper Worksheet parent
             uno::Reference< excel::XRange > xVbaSheetRange = ScVbaRange::getRangeObjectForName(
-                uno::Reference< XHelperInterface >(), mxContext, sRangeName,
-                excel::getDocShell( xModel ), formula::FormulaGrammar::CONV_XL_R1C1 );
+                mxContext, sRangeName, excel::getDocShell( xModel ), formula::FormulaGrammar::CONV_XL_R1C1 );
 
             if( bScroll )
             {
@@ -681,14 +709,27 @@ ScVbaApplication::getName() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaApplication::setDisplayAlerts(sal_Bool displayAlerts) throw (uno::RuntimeException)
 {
-    m_xDisplayAlerts = displayAlerts;
+    m_bDisplayAlerts = displayAlerts;
 }
 
 sal_Bool SAL_CALL
 ScVbaApplication::getDisplayAlerts() throw (uno::RuntimeException)
 {
-    return m_xDisplayAlerts;
+    return m_bDisplayAlerts;
 }
+
+void SAL_CALL
+ScVbaApplication::setEnableEvents(sal_Bool bEnable) throw (uno::RuntimeException)
+{
+    m_bEnableEvents = bEnable;
+}
+
+sal_Bool SAL_CALL
+ScVbaApplication::getEnableEvents() throw (uno::RuntimeException)
+{
+    return m_bEnableEvents;
+}
+
 void SAL_CALL
 ScVbaApplication::Calculate() throw(  script::BasicErrorException , uno::RuntimeException )
 {
@@ -1068,12 +1109,13 @@ ScVbaApplication::Intersect( const uno::Reference< excel::XRange >& Arg1, const 
     ScDocShell* pDocShell = excel::getDocShell( xModel );
     if ( aCellRanges.Count() == 1 )
     {
-        xRefRange = new ScVbaRange( uno::Reference< XHelperInterface >(), mxContext, new ScCellRangeObj( pDocShell, *aCellRanges.First() ) );
+                uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pDocShell, *aCellRanges.First() ));
+        xRefRange = new ScVbaRange( excel::getUnoSheetModuleObj( xRange ), mxContext, xRange );
     }
     else if ( aCellRanges.Count() > 1 )
     {
         uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pDocShell, aCellRanges ) );
-        xRefRange = new ScVbaRange( uno::Reference< XHelperInterface >(), mxContext, xRanges );
+        xRefRange = new ScVbaRange( excel::getUnoSheetModuleObj( xRanges ) , mxContext, xRanges );
 
     }
     return xRefRange;
@@ -1158,12 +1200,13 @@ ScVbaApplication::Union( const uno::Reference< excel::XRange >& Arg1, const uno:
     if ( aCellRanges.Count() == 1 )
     {
     // normal range
-        xRange = new ScVbaRange( uno::Reference< XHelperInterface >(), mxContext, new ScCellRangeObj( pDocShell, *aCellRanges.First() ) );
+                uno::Reference< table::XCellRange > xCalcRange( new ScCellRangeObj( pDocShell, *aCellRanges.First() ) );
+        xRange = new ScVbaRange( excel::getUnoSheetModuleObj( xCalcRange ), mxContext, xCalcRange );
     }
     else if ( aCellRanges.Count() > 1 ) // Multi-Area
     {
         uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pDocShell, aCellRanges ) );
-        xRange = new ScVbaRange( uno::Reference< XHelperInterface >(), mxContext, xRanges );
+        xRange = new ScVbaRange( excel::getUnoSheetModuleObj( xRanges ), mxContext, xRanges );
     }
 
     // #FIXME need proper (WorkSheet) parent

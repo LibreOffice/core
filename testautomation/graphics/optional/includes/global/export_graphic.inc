@@ -32,16 +32,13 @@
 '\******************************************************************************
 
 testcase tEPS
-
     dim x as integer
     dim i as integer
-
     const sFilter = "EPS - Encapsulated PostScript (.eps)"
     const sExt = ".eps"
 
     printlog "open the document"
     hFileOpen( gTesttoolPath + "graphics\required\input\graphicexport." + ExtensionString )
-
     if ( hCallExport ( OutputGrafikTBO , sFilter ) ) then
         Kontext "EPSOptionen"
         if ( EPSOptionen.Exists( 2 ) ) then
@@ -71,21 +68,18 @@ testcase tEPS
             ' next i
             printlog "leave dialog with cancel -> there has to be no file created!"
             hCloseDialog( EPSOptionen, "cancel" )
-
             if ( FileExists( OutputGrafikTBO+sExt ) ) then ' inspired by bug #99932 Graphic is exported though cancel is pressed
                 warnlog "Dialog was canceled, but file got saved, too :-(  - i35177"
             endif
         else
             warnlog( "No export options dialog was displayed" )
         end if
-
         Kontext "Active"
         if Active.Exists(2) then
             Warnlog "'" + sFilter + "' has a problem"
             Active.OK
         end if
     end if
-
     printlog( "Save the file" )
     if ( hCallExport( OutputGrafikTBO, sFilter ) ) then
 
@@ -96,13 +90,14 @@ testcase tEPS
         else
             warnlog( "No export options dialog was displayed" )
         endif
-
         printlog( "Close file and re-insert graphics into new document" )
-        hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        if ( lcase( gPlatform ) <> "osx" ) then
+            hInsertGraphicsToNewFile( OutputGrafikTBO + sExt ) ' local helper function, see bottom of this file
+        else
+            qaErrorLog "#i100253# crash on MacOS X 10.4"
+        endif
     endif
-
     call hCloseDocument
-
 endcase 'tEPS
 '-------------------------------------------------------------------------
 testcase tPCT
@@ -538,26 +533,21 @@ end function
 '*******************************************************************************
 
 function hWaitForOutputFile( sOutputFile as string ) as boolean
-
     const FILE_WRITE_TIMEOUT = 30
     dim iWait as integer : iWait = 0
 
     for iWait = 1 to FILE_WRITE_TIMEOUT
-
         ' File found
         if ( FileExists( sOutputFile ) ) then
             hWaitForOutputFile() = true
             exit function
         endif
-
         ' Timeout
         if ( iWait = FILE_WRITE_TIMEOUT ) then
             hWaitForOutputFile() = false
             exit function
         endif
-
         wait( 1000 )
-
     next iWait
-
 end function
+

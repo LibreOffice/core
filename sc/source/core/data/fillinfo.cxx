@@ -219,6 +219,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
     nArrY=0;
     SCROW nYExtra = nY2+1;
+    USHORT nDocHeight = ScGlobal::nStdRowHeight;
+    SCROW nDocHeightEndRow = -1;
     for (nSignedY=((SCsROW)nY1)-1; nSignedY<=(SCsROW)nYExtra; nSignedY++)
     {
         if (nSignedY >= 0)
@@ -226,11 +228,13 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
         else
             nY = MAXROW+1;          // ungueltig
 
-        USHORT nDocHeight;
-        if (ValidRow(nY))
-            nDocHeight = GetRowHeight( nY, nTab );
-        else
-            nDocHeight = ScGlobal::nStdRowHeight;
+        if (nY > nDocHeightEndRow)
+        {
+            if (ValidRow(nY))
+                nDocHeight = GetRowHeight( nY, nTab, NULL, &nDocHeightEndRow );
+            else
+                nDocHeight = ScGlobal::nStdRowHeight;
+        }
 
         if ( nArrY==0 || nDocHeight || nY > MAXROW )
         {
@@ -384,11 +388,15 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                 nArrY = 1;
                 SCSIZE nUIndex;
+                bool bHiddenRow = true;
+                SCROW nHiddenEndRow = -1;
                 (void) pThisCol->Search( nY1, nUIndex );
                 while ( nUIndex < pThisCol->nCount &&
                         (nThisRow=pThisCol->pItems[nUIndex].nRow) <= nY2 )
                 {
-                    if ( !RowHidden( nThisRow,nTab ) )
+                    if (nThisRow > nHiddenEndRow)
+                        bHiddenRow = RowHidden( nThisRow, nTab, nHiddenEndRow);
+                    if ( !bHiddenRow )
                     {
                         while ( pRowInfo[nArrY].nRowNo < nThisRow )
                             ++nArrY;

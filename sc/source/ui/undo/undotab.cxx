@@ -28,18 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-//------------------------------------------------------------------
-
-// ?#define _MACRODLG_HXX
-// ? #define _BIGINT_HXX
-// ? #define _SVDXOUT_HXX
-// ? #define _SVDATTR_HXX
-// ? #define _SVDSURO_HXX
-
-// INCLUDE ---------------------------------------------------------------
-
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
