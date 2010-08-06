@@ -508,13 +508,15 @@ gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
 
 define gb_Library_Library_platform
-$(call gb_LinkTarget_set_dlltarget,$(2),\
-    $(3))
+$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
 $(call gb_LinkTarget_set_auxtargets,$(2),\
     $(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
     $(3).manifest \
 )
+
+$(call gb_Library_get_target,$(1)) \
+$(call gb_Library_get_clean_target,$(1)) : AUXTARGETS := $(OUTDIR)/bin/$(notdir $(3))
 
 endef
 
@@ -548,8 +550,10 @@ $(call gb_LinkTarget_set_auxtargets,$(2),\
     $(patsubst %.exe,%.pdb,$(call gb_LinkTarget_get_target,$(2))) \
     $(call gb_LinkTarget_get_target,$(2)).manifest \
 )
+
 $(call gb_Executable_get_target,$(1)) \
 $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS := $(call gb_Executable_get_target,$(1)).manifest
+
 endef
 
 # SdiTarget class

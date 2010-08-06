@@ -40,20 +40,25 @@
 #  gb_Library_Library_platform
 
 
+# EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 .PHONY : $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT)
 $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT) : $(call gb_LinkTarget_get_clean_target,$(call gb_Library_get_linktargetname,%$(gb_Library_PLAINEXT)))
     $(call gb_Helper_abbreviate_dirs,\
-        rm -f $(OUTDIR)/lib/$*$(gb_Library_PLAINEXT))
+        rm -f $(OUTDIR)/lib/$*$(gb_Library_PLAINEXT) \
+            $(AUXTARGETS))
 
+# EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 $(gb_Library_OUTDIRLOCATION)/%$(gb_Library_PLAINEXT) : 
     $(call gb_Helper_abbreviate_dirs,\
-        mkdir -p $(dir $@) && cp -pf $< $@)
+        mkdir -p $(dir $@) && cp -pf $< $@ \
+            $(foreach target,$(AUXTARGETS), && cp -pf $(dir $<)/$(notdir $(target)) $(target)))
 
 define gb_Library_Library
 ifeq (,$$(findstring $(1),$$(gb_Library_KNOWNLIBS)))
 $$(info currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)))
 $$(error Library $(1) must be registered in $(GBUILDDIR)/inc/libnames.mk)
 endif
+$(call gb_Library_get_target,$(1)) : AUXTARGETS :=
 $(call gb_Library__Library_impl,$(1),$(call gb_Library_get_linktargetname,$(call gb_Library_get_filename,$(1))))
 
 endef
