@@ -570,42 +570,97 @@ CreateElementMapPointer </xsl:text>
 
 <!-- factoryaction -->
 <xsl:template name="factoryaction">
-    <xsl:param name="action"/>
-    <xsl:text>
-void </xsl:text>
-    <xsl:call-template name="factoryclassname"/>
-    <xsl:text>::</xsl:text>
-    <xsl:value-of select="$action"/>
-    <xsl:text>Action(OOXMLFastContextHandler * pHandler</xsl:text>
-    <xsl:if test="$action='characters'">
-        <xsl:text>, const ::rtl::OUString &amp; sText</xsl:text>
-    </xsl:if>
-    <xsl:text>)
-{
-    switch (pHandler->getDefine())
-    {</xsl:text>
+  <xsl:param name="action"/>
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  <xsl:text>void </xsl:text>
+  <xsl:call-template name="factoryclassname"/>
+  <xsl:text>::</xsl:text>
+  <xsl:value-of select="$action"/>
+  <xsl:text>Action(OOXMLFastContextHandler * pHandler</xsl:text>
+  <xsl:if test="$action='characters'">
+    <xsl:text>, const ::rtl::OUString &amp; sText</xsl:text>
+  </xsl:if>
+  <xsl:text>)&#xa;</xsl:text>
+  <xsl:text>{&#xa;</xsl:text>
+  <xsl:variable name="switch1block">
     <xsl:for-each select="resource[action/@name=$action]">
-        <xsl:text>
-    </xsl:text>
-        <xsl:call-template name="caselabeldefine"/>
-        <xsl:for-each select="action[@name=$action]">
-            <xsl:call-template name="factorychooseaction"/>
-        </xsl:for-each>
-        <xsl:text>
-        break;</xsl:text>
+      <xsl:text>
+      </xsl:text>
+      <xsl:call-template name="caselabeldefine"/>
+      <xsl:for-each select="action[@name=$action]">
+        <xsl:call-template name="factorychooseaction"/>
+      </xsl:for-each>
+      <xsl:text>    break;&#xa;</xsl:text>
     </xsl:for-each>
-    <xsl:text>
-    default:
-        break;
-    }
-}
-</xsl:text>
+  </xsl:variable>
+  <xsl:variable name="switchblock2">
+    <xsl:if test="$action='characters'">
+      <xsl:for-each select="resource[@resource='Value']">
+        <xsl:if test="count(attribute) = 0">
+          <xsl:variable name="name" select="@name"/>
+          <xsl:text>    </xsl:text>
+          <xsl:call-template name="caselabeldefine"/>
+          <xsl:text>&#xa;</xsl:text>
+          <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+            <xsl:for-each select="rng:ref">
+              <xsl:call-template name="charactersactionforvalues"/>
+            </xsl:for-each>
+          </xsl:for-each>
+          <xsl:text>        break;&#xa;</xsl:text>
+      </xsl:if>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:variable>
+  <xsl:if test="string-length($switch1block) > 0 or string-length($switchblock2) > 0">
+    <xsl:text>    sal_uInt32 nDefine = pHandler->getDefine();&#xa;</xsl:text>
+  </xsl:if>
+  <xsl:if test="string-length($switch1block) > 0">
+    <xsl:text>    switch (nDefine)&#xa;</xsl:text>
+    <xsl:text>    {&#xa;</xsl:text>
+    <xsl:value-of select="$switch1block"/>
+    <xsl:text>    default:&#xa;</xsl:text>
+    <xsl:text>        break;&#xa;</xsl:text>
+    <xsl:text>    }&#xa;</xsl:text>
+  </xsl:if>
+  <xsl:if test="string-length($switchblock2) > 0">
+    <xsl:text>    OOXMLFastContextHandlerValue * pValueHandler = dynamic_cast&lt;OOXMLFastContextHandlerValue *&gt;(pHandler);&#xa;</xsl:text>
+    <xsl:text>    switch (nDefine)&#xa;</xsl:text>
+    <xsl:text>    {&#xa;</xsl:text>
+    <xsl:value-of select="$switchblock2"/>
+    <xsl:text>    default:&#xa;</xsl:text>
+    <xsl:text>        break;&#xa;</xsl:text>
+    <xsl:text>    }&#xa;</xsl:text>
+  </xsl:if>
+  <xsl:text>}&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template name="charactersactionforvalues">
+  <xsl:variable name="name" select="@name"/>
+  <xsl:for-each select="ancestor::namespace/rng:grammar/rng:define[@name=$name]">
+    <xsl:text>        {&#xa;</xsl:text>
+    <xsl:text>            // </xsl:text>
+    <xsl:value-of select="@name"/>
+    <xsl:text>&#xa;</xsl:text>
+    <xsl:for-each select="rng:data[@type='int']">
+      <xsl:text>            OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue(sText));&#xa;</xsl:text>
+      <xsl:text>            pValueHandler->setValue(pValue);&#xa;</xsl:text>
+    </xsl:for-each>
+    <xsl:for-each select="rng:list">
+      <xsl:text>            ListValueMapPointer pListValueMap = getListValueMap(nDefine);&#xa;</xsl:text>
+      <xsl:text>            if (pListValueMap.get() != NULL)&#xa;</xsl:text>
+      <xsl:text>            {&#xa;</xsl:text>
+      <xsl:text>                OOXMLValue::Pointer_t pValue(new OOXMLIntegerValue((*pListValueMap)[sText]));&#xa;</xsl:text>
+      <xsl:text>                pValueHandler->setValue(pValue);</xsl:text>
+      <xsl:text>            }&#xa;</xsl:text>
+    </xsl:for-each>
+    <xsl:text>        }&#xa;</xsl:text>
+  </xsl:for-each>
 </xsl:template>
 
 <!-- factoryactions -->
 <xsl:template name="factoryactions">
     <xsl:variable name="ns" select="@name"/>
-    <xsl:for-each select="resource/action">
+    <xsl:for-each select="resource/action[not(@name='characters')]">
         <xsl:sort select="@name"/>
         <xsl:if test="generate-id(key('actions', @name)[ancestor::namespace/@name=$ns][1]) = generate-id(.)">
             <xsl:variable name="name" select="@name"/>
@@ -616,6 +671,9 @@ void </xsl:text>
             </xsl:for-each>
         </xsl:if>
     </xsl:for-each>
+    <xsl:call-template name="factoryaction">
+      <xsl:with-param name="action">characters</xsl:with-param>
+    </xsl:call-template>
 </xsl:template>
 
 <xsl:template name="factorygetdefinename">
