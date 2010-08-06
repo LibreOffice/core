@@ -461,7 +461,7 @@ Reference< XSpellAlternatives >
                     OUString *pStr = aStr.getArray();
                     for (int ii=0; ii < count; ++ii)
                     {
-                        OUString cvtwrd(suglst[ii],strlen(suglst[ii]),aEnc);
+                        OUString cvtwrd(suglst[ii],strlen(suglst[ii]),eEnc);
                         pStr[numsug + ii] = cvtwrd;
                     }
                     pMS->free_list(&suglst, count);
