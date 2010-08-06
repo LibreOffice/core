@@ -15190,9 +15190,33 @@ echo "${ECHO_T}$ac_cv_file__usr_share_java_lucene_core_jar" >&6
 if test $ac_cv_file__usr_share_java_lucene_core_jar = yes; then
    LUCENE_CORE_JAR=/usr/share/java/lucene-core.jar
 else
+   echo "$as_me:$LINENO: checking for /usr/share/java/lucene.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/lucene.jar... $ECHO_C" >&6
+if test "${ac_cv_file__usr_share_java_lucene_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/lucene.jar"; then
+  ac_cv_file__usr_share_java_lucene_jar=yes
+else
+  ac_cv_file__usr_share_java_lucene_jar=no
+fi
+fi
+echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_lucene_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_lucene_jar" >&6
+if test $ac_cv_file__usr_share_java_lucene_jar = yes; then
+   LUCENE_CORE_JAR=/usr/share/java/lucene.jar
+else
    { { echo "$as_me:$LINENO: error: lucene-core.jar replacement not found" >&5
 echo "$as_me: error: lucene-core.jar replacement not found" >&2;}
    { (exit 1); exit 1; }; }
+
+fi
+
+
 
 fi
 

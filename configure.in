@@ -3864,7 +3864,11 @@ if test -n "$with_system_lucene" -o -n "$with_system_libs" && \
             [
               AC_CHECK_FILE(/usr/share/java/lucene-core.jar, 
                 [ LUCENE_CORE_JAR=/usr/share/java/lucene-core.jar ],
-                [ AC_MSG_ERROR(lucene-core.jar replacement not found)]
+                [ AC_CHECK_FILE(/usr/share/java/lucene.jar, 
+                   [ LUCENE_CORE_JAR=/usr/share/java/lucene.jar ],
+                   [ AC_MSG_ERROR(lucene-core.jar replacement not found)]
+                  )
+                ]
               )
             ]
           )
