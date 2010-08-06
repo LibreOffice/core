@@ -259,6 +259,10 @@ void SbiCodeGen::Save()
                     if( !pProc->IsPublic() )
                         pMeth->SetFlag( SBX_PRIVATE );
 
+                    // Declare? -> Hidden
+                    if( pProc->GetLib().Len() > 0 )
+                        pMeth->SetFlag( SBX_HIDDEN );
+
                     pMeth->nStart = pProc->GetAddr();
                     pMeth->nLine1 = pProc->GetLine1();
                     pMeth->nLine2 = pProc->GetLine2();
