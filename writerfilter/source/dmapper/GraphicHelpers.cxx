@@ -8,6 +8,11 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
+#ifdef DEBUG_DOMAINMAPPER
+#include <resourcemodel/QNameToString.hxx>
+#include "dmapperloggers.hxx"
+#endif
+
 #include <iostream>
 using namespace std;
 
@@ -30,6 +35,12 @@ PositionHandler::~PositionHandler( )
 
 void PositionHandler::attribute( Id aName, Value& rVal )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("PositionHandler.attribute");
+    dmapper_logger->attribute("name", (*QNameToString::Instance())(aName));
+    dmapper_logger->attribute("value", rVal.toString());
+#endif
+
     sal_Int32 nIntValue = rVal.getInt( );
     switch ( aName )
     {
@@ -85,12 +96,26 @@ void PositionHandler::attribute( Id aName, Value& rVal )
                 }
             }
             break;
-        default:;
+        default:
+#ifdef DEBUG_DOMAINMAPPER
+            dmapper_logger->element("unhandled");
+#endif
+            break;
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("PositionHandler.attribute");
+#endif
 }
 
 void PositionHandler::sprm( Sprm& rSprm )
 {
+#ifdef DEBUG_DOMAINMAPPER
+    string sSprm = rSprm.toString();
+    dmapper_logger->startElement("PositionHandler.sprm");
+    dmapper_logger->attribute("sprm", sSprm);
+#endif
+
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
 
@@ -153,8 +178,16 @@ void PositionHandler::sprm( Sprm& rSprm )
         case NS_ooxml::LN_CT_PosH_posOffset:
         case NS_ooxml::LN_CT_PosV_posOffset:
             m_nPosition = ConversionHelper::convertEMUToMM100( nIntValue );
-        default:;
+        default:
+#ifdef DEBUG_DOMAINMAPPER
+            dmapper_logger->element("unhandled");
+#endif
+            break;
     }
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("PositionHandler.sprm");
+#endif
 }
 
 WrapHandler::WrapHandler( ) :
