@@ -487,7 +487,7 @@ else
 gb_Library_STLEXT := port_vc7145_stldebug$(gb_Library_DLLEXT)
 endif
 gb_Library_OOOEXT := mi$(gb_Library_DLLEXT)
-gb_Library_UNOEXT := mi.uno$(gb_Library_DLLEXT)
+gb_Library_UNOEXT := .uno$(gb_Library_DLLEXT)
 gb_Library_UNOVEREXT := $(gb_Library_MAJORVER)$(gb_Library_DLLEXT)
 gb_Library_RTVEREXT := $(gb_Library_MAJORVER)$(gb_Library_RTEXT)
 
