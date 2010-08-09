@@ -85,6 +85,8 @@ public:
 };
 
 typedef boost::shared_ptr<StyleSheetEntry> StyleSheetEntryPtr;
+typedef ::std::deque<StyleSheetEntryPtr> StyleSheetEntryDeque;
+typedef boost::shared_ptr<StyleSheetEntryDeque> StyleSheetEntryDequePtr;
 
 class DomainMapper;
 class StyleSheetTable :
@@ -146,7 +148,10 @@ public:
     // Gets all the properties
     //     + corresponding to the mask,
     //     + from the parent styles
-    PropertyMapPtr GetProperties( sal_Int32 nMask );
+    //
+    // @param mask      mask describing which properties to return
+    // @param pStack    already processed StyleSheetEntries
+    PropertyMapPtr GetProperties( sal_Int32 nMask, StyleSheetEntryDequePtr pStack = StyleSheetEntryDequePtr());
 
 #ifdef DEBUG_DOMAINMAPPER
     virtual XMLTag::Pointer_t toTag();
