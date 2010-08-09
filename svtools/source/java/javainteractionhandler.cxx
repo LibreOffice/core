@@ -150,20 +150,25 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
             //We first try to get the patch resource svp680xxx.res
             //If the resource is not found then svt680xxx.res is used
             ResId idWBX = SvtResId(WARNINGBOX_JAVANOTFOUND);
-            SvpResId pidPatchWBX(WARNINGBOX_JAVANOTFOUND);
-            pidPatchWBX.SetRT(RSC_WARNINGBOX);
-            ResMgr *pMgrWB = pidPatchWBX.GetResMgr();
-            if (pMgrWB && pMgrWB->IsAvailable(pidPatchWBX))
-                idWBX = pidPatchWBX;
+            ResMgr* pPatchMgr = ImpSvtData::GetSvtData().GetPatchResMgr();
+            if( pPatchMgr )
+            {
+                ResId pidPatchWBX(WARNINGBOX_JAVANOTFOUND, *pPatchMgr);
+                pidPatchWBX.SetRT(RSC_WARNINGBOX);
+                if ( pPatchMgr->IsAvailable(pidPatchWBX))
+                    idWBX = pidPatchWBX;
+            }
             WarningBox aWarningBox( NULL, idWBX);
 
             String aTitle;
-            SvpResId pidString(STR_WARNING_JAVANOTFOUND);
-            pidString.SetRT(RSC_STRING);
-            ResMgr *pmgr = pidString.GetResMgr();
-            if ( pmgr && pmgr->IsAvailable(pidString))
-                aTitle = String(pidString);
-            else
+            if( pPatchMgr )
+            {
+                ResId pidString(STR_WARNING_JAVANOTFOUND, *pPatchMgr);
+                pidString.SetRT(RSC_STRING);
+                if( pPatchMgr->IsAvailable(pidString))
+                    aTitle = String(pidString);
+            }
+            if( ! aTitle.Len() )
                 aTitle = String( SvtResId( STR_WARNING_JAVANOTFOUND ));
 
             aWarningBox.SetText( aTitle );
