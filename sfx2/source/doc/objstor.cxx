@@ -1182,7 +1182,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
     if ( pMedium
       && pMedium->GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
       && rMedium.GetName().CompareIgnoreCaseToAscii( "private:stream", 14 ) != COMPARE_EQUAL
-      && SfxMedium::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
+      && ::utl::UCBContentHelper::EqualURLs( pMedium->GetName(), rMedium.GetName() ) )
     {
         bStoreToSameLocation = sal_True;
         AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Save" ) ) );
