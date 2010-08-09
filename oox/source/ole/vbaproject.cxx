@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/ole/vbaproject.hxx"
+
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -34,12 +35,10 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
 #include <com/sun/star/script/XVBACompat.hpp>
-#include <rtl/tencinfo.h>
-#include <rtl/ustrbuf.h>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/string.hxx>
-#include "properties.hxx"
-#include "tokens.hxx"
+#include <rtl/tencinfo.h>
+#include <rtl/ustrbuf.h>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -49,33 +48,26 @@
 #include "oox/ole/vbahelper.hxx"
 #include "oox/ole/vbainputstream.hxx"
 #include "oox/ole/vbamodule.hxx"
-
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::document::XEventsSupplier;
-using ::com::sun::star::document::XStorageBasedDocument;
-using ::com::sun::star::embed::XStorage;
-using ::com::sun::star::embed::XTransactedObject;
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::io::XStream;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::script::XLibraryContainer;
-using ::com::sun::star::script::XVBACompat;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::uno::XInterface;
-using ::comphelper::ConfigurationHelper;
-
-namespace ApiModuleType = ::com::sun::star::script::ModuleType;
+#include "properties.hxx"
+#include "tokens.hxx"
 
 namespace oox {
 namespace ole {
+
+// ============================================================================
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::embed;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::uno;
+
+using ::comphelper::ConfigurationHelper;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -248,6 +240,18 @@ bool VbaProject::attachMacroToDocumentEvent(
     return attachMacroToEvent( xEventsSupp, rEventName, rModuleName, rMacroName, rProxyArgs, rProxyType, rProxyCode );
 }
 
+// protected ------------------------------------------------------------------
+
+void VbaProject::addDummyModule( const OUString& rName, sal_Int32 nType )
+{
+    OSL_ENSURE( rName.getLength() > 0, "VbaProject::addDummyModule - missing module name" );
+    maDummyModules[ rName ] = nType;
+}
+
+void VbaProject::prepareModuleImport()
+{
+}
+
 // private --------------------------------------------------------------------
 
 Reference< XLibraryContainer > VbaProject::getLibraryContainer( sal_Int32 nPropId )
@@ -305,6 +309,9 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
     OSL_ENSURE( !aDirStrm.isEof(), "VbaProject::importVba - cannot open 'dir' stream" );
     if( aDirStrm.isEof() )
         return;
+
+    // virtual call, derived classes may do some preparations
+    prepareModuleImport();
 
     // read all records of the directory
     rtl_TextEncoding eTextEnc = RTL_TEXTENCODING_MS_1252;
@@ -394,23 +401,23 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             bExitLoop = (nLineLen >= 2) && (aLine[ 0 ] == '[') && (aLine[ nLineLen - 1 ] == ']');
             if( !bExitLoop && VbaHelper::extractKeyValue( aKey, aValue, aLine ) )
             {
-                sal_Int32 nType = ApiModuleType::UNKNOWN;
+                sal_Int32 nType = ModuleType::UNKNOWN;
                 if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Document" ) ) )
                 {
-                    nType = ApiModuleType::DOCUMENT;
+                    nType = ModuleType::DOCUMENT;
                     // strip automation server version from module names
                     sal_Int32 nSlashPos = aValue.indexOf( '/' );
                     if( nSlashPos >= 0 )
                         aValue = aValue.copy( 0, nSlashPos );
                 }
                 else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Module" ) ) )
-                    nType = ApiModuleType::NORMAL;
+                    nType = ModuleType::NORMAL;
                 else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "Class" ) ) )
-                    nType = ApiModuleType::CLASS;
+                    nType = ModuleType::CLASS;
                 else if( aKey.equalsIgnoreAsciiCaseAsciiL( RTL_CONSTASCII_STRINGPARAM( "BaseClass" ) ) )
-                    nType = ApiModuleType::FORM;
+                    nType = ModuleType::FORM;
 
-                if( (nType != ApiModuleType::UNKNOWN) && (aValue.getLength() > 0) )
+                if( (nType != ModuleType::UNKNOWN) && (aValue.getLength() > 0) )
                 {
                     OSL_ENSURE( aModules.has( aValue ), "VbaProject::importVba - module not found" );
                     if( VbaModule* pModule = aModules.get( aValue ).get() )
@@ -420,11 +427,21 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         }
     }
 
+    // create empty dummy modules
+    VbaModuleMap aDummyModules;
+    for( DummyModuleMap::iterator aIt = maDummyModules.begin(), aEnd = maDummyModules.end(); aIt != aEnd; ++aIt )
+    {
+        OSL_ENSURE( !aModules.has( aIt->first ) && !!aDummyModules.has( aIt->first ), "VbaProject::importVba - multiple modules with the same name" );
+        VbaModuleMap::mapped_type& rxModule = aDummyModules[ aIt->first ];
+        rxModule.reset( new VbaModule( mxDocModel, aIt->first, eTextEnc, bExecutable ) );
+        rxModule->setType( aIt->second );
+    }
+
     /*  Now it is time to load the source code. All modules will be inserted
         into the Basic library of the document specified by the 'maLibName'
         member. Do not create the Basic library, if there are no modules
         specified. */
-    if( !aModules.empty() ) try
+    if( !aModules.empty() && !aDummyModules.empty() ) try
     {
         // get the basic library
         Reference< XNameContainer > xBasicLib( createBasicLibrary(), UNO_SET_THROW );
@@ -432,7 +449,8 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         // set library container to VBA compatibility mode
         try
         {
-            Reference< XVBACompat >( getLibraryContainer( PROP_BasicLibraries ), UNO_QUERY_THROW )->setVBACompatModeOn( sal_True );
+            Reference< XVBACompat > xVBACompat( getLibraryContainer( PROP_BasicLibraries ), UNO_QUERY_THROW );
+            xVBACompat->setVBACompatModeOn( sal_True );
         }
         catch( Exception& )
         {
@@ -450,10 +468,17 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             // not all documents support this
         }
 
-        // call Basic source code import for each module, boost::[c]ref enforces pass-by-ref
         if( xBasicLib.is() )
-            aModules.forEachMem( &VbaModule::importSourceCode,
-                ::boost::ref( *xVbaStrg ), ::boost::cref( xBasicLib ), ::boost::cref( xDocObjectNA ) );
+        {
+            // call Basic source code import for each module, boost::[c]ref enforces pass-by-ref
+            aModules.forEachMem( &VbaModule::createAndImportModule,
+                ::boost::ref( *xVbaStrg ), ::boost::cref( xBasicLib ),
+                ::boost::cref( xDocObjectNA ) );
+
+            // create empty dummy modules
+            aDummyModules.forEachMem( &VbaModule::createEmptyModule,
+                ::boost::cref( xBasicLib ), ::boost::cref( xDocObjectNA ) );
+        }
     }
     catch( Exception& )
     {
@@ -475,7 +500,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             {
                 // resolve module name from storage name (which equals the module stream name)
                 VbaModule* pModule = aModulesByStrm.get( *aIt ).get();
-                OSL_ENSURE( pModule && (pModule->getType() == ApiModuleType::FORM),
+                OSL_ENSURE( pModule && (pModule->getType() == ModuleType::FORM),
                     "VbaProject::importVba - form substorage without form module" );
                 OUString aModuleName;
                 if( pModule )

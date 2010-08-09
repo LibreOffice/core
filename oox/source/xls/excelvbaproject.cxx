@@ -26,30 +26,33 @@
  ************************************************************************/
 
 #include "oox/xls/excelvbaproject.hxx"
+
+#include <list>
+#include <set>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include "properties.hxx"
+#include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
 #include "oox/helper/propertyset.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::container::XEnumeration;
-using ::com::sun::star::container::XEnumerationAccess;
-using ::com::sun::star::document::XEventsSupplier;
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::sheet::XSpreadsheetDocument;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
+#include "properties.hxx"
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -88,6 +91,78 @@ void VbaProject::attachToEvents()
         catch( Exception& )
         {
         }
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+// protected ------------------------------------------------------------------
+
+namespace {
+
+typedef ::std::set< OUString >      CodeNameSet;
+typedef ::std::list< PropertySet >  SheetPropertySetList;
+
+void lclGenerateMissingCodeNames( CodeNameSet& rUsedCodeNames, SheetPropertySetList& rSheetsWithout, const OUString& rCodeNamePrefix )
+{
+    sal_Int32 nCounter = 1;
+    for( SheetPropertySetList::iterator aIt = rSheetsWithout.begin(), aEnd = rSheetsWithout.end(); aIt != aEnd; ++aIt )
+    {
+        // search for an unused codename
+        OUString aCodeName;
+        do
+        {
+            aCodeName = OUStringBuffer( rCodeNamePrefix ).append( nCounter++ ).makeStringAndClear();
+        }
+        while( rUsedCodeNames.count( aCodeName ) > 0 );
+        rUsedCodeNames.insert( aCodeName );
+
+        // set codename at sheet
+        aIt->setProperty( PROP_CodeName, aCodeName );
+    }
+}
+
+} // namespace
+
+void VbaProject::prepareModuleImport()
+{
+    /*  Check if the sheets have imported codenames. Generate new unused
+        codenames if not. */
+    if( mxDocument.is() ) try
+    {
+        // collect existing codenames (do not use them when creating new codenames)
+        CodeNameSet aUsedCodeNames;
+
+        // collect common sheets and chart sheets without codenames
+        SheetPropertySetList aSheetsWithout, aChartsWithout;
+
+        // iterate over all imported sheets
+        Reference< XEnumerationAccess > xSheetsEA( mxDocument->getSheets(), UNO_QUERY_THROW );
+        Reference< XEnumeration > xSheetsEnum( xSheetsEA->createEnumeration(), UNO_SET_THROW );
+        // own try/catch for every sheet
+        while( xSheetsEnum->hasMoreElements() ) try
+        {
+            PropertySet aSheetProp( xSheetsEnum->nextElement() );
+            OUString aCodeName;
+            aSheetProp.getProperty( aCodeName, PROP_CodeName );
+            if( aCodeName.getLength() > 0 )
+            {
+                aUsedCodeNames.insert( aCodeName );
+            }
+            else
+            {
+                // TODO: once we have chart sheets we need a switch/case on sheet type ('SheetNNN' vs. 'ChartNNN')
+                aSheetsWithout.push_back( aSheetProp );
+            }
+        }
+        catch( Exception& )
+        {
+        }
+
+        // create new codenames if sheets do not have one
+        lclGenerateMissingCodeNames( aUsedCodeNames, aSheetsWithout, CREATE_OUSTRING( "Sheet" ) );
+        lclGenerateMissingCodeNames( aUsedCodeNames, aChartsWithout, CREATE_OUSTRING( "Chart" ) );
     }
     catch( Exception& )
     {

@@ -51,6 +51,10 @@ public:
     /** Attaches all document and sheet events to existing VBA macros. */
     void                attachToEvents();
 
+protected:
+    /** Adds dummy modules for sheets without imported code name. */
+    virtual void        prepareModuleImport();
+
 private:
     /** Attaches VBA macros to all supported document events. */
     void                attachToDocumentEvents( const ::rtl::OUString& rCodeName );
