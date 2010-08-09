@@ -71,6 +71,7 @@
 #include <com/sun/star/bridge/oleautomation/Date.hpp>
 #include <com/sun/star/bridge/oleautomation/Decimal.hpp>
 #include <com/sun/star/bridge/oleautomation/Currency.hpp>
+#include <com/sun/star/bridge/oleautomation/XAutomationObject.hpp>
 
 
 using com::sun::star::uno::Reference;
@@ -2265,6 +2266,7 @@ Reference< XInvocation > createDynamicInvocationFor( const Any& aAny );
 SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
     : SbxObject( aName_ )
     , bNeedIntrospection( TRUE )
+    , bIgnoreNativeCOMObjectMembers( FALSE )
 {
     static Reference< XIntrospection > xIntrospection;
 
@@ -2310,6 +2312,12 @@ SbUnoObject::SbUnoObject( const String& aName_, const Any& aUnoObj_ )
             bNeedIntrospection = FALSE;
             return;
         }
+
+        // Ignore introspection based members for COM objects to avoid
+        // hiding of equally named COM symbols, e.g. XInvocation::getValue
+        Reference< oleautomation::XAutomationObject > xAutomationObject( aUnoObj_, UNO_QUERY );
+        if( xAutomationObject.is() )
+            bIgnoreNativeCOMObjectMembers = TRUE;
     }
 
     maTmpUnoObj = aUnoObj_;
@@ -2553,7 +2561,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
     if( !pRes )
     {
         ::rtl::OUString aUName( rName );
-        if( mxUnoAccess.is() )
+        if( mxUnoAccess.is() && !bIgnoreNativeCOMObjectMembers )
         {
             if( mxExactName.is() )
             {
@@ -2713,10 +2721,12 @@ void SbUnoObject::implCreateAll( void )
 
     // Instrospection besorgen
     Reference< XIntrospectionAccess > xAccess = mxUnoAccess;
-    if( !xAccess.is() )
+    if( !xAccess.is() || bIgnoreNativeCOMObjectMembers )
     {
         if( mxInvocation.is() )
             xAccess = mxInvocation->getIntrospection();
+        else if( bIgnoreNativeCOMObjectMembers )
+            return;
     }
     if( !xAccess.is() )
         return;
