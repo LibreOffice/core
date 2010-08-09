@@ -31,7 +31,6 @@
 
 #include "SlideSorterChildWindow.hrc"
 #include "SlideSorterViewShell.hxx"
-#include "SlsDebugDialog.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsProperties.hxx"
@@ -142,8 +141,7 @@ SlideSorter::SlideSorter (
       mpScrollBarBox(rpScrollBarBox),
       mbLayoutPending(true),
       mpProperties(new controller::Properties()),
-      mpTheme(new view::Theme(mpProperties)),
-      mpDebugDialog()
+      mpTheme(new view::Theme(mpProperties))
 {
 }
 
@@ -168,8 +166,7 @@ SlideSorter::SlideSorter (
       mpScrollBarBox(new ScrollBarBox(&rParentWindow)),
       mbLayoutPending(true),
       mpProperties(new controller::Properties()),
-      mpTheme(new view::Theme(mpProperties)),
-      mpDebugDialog()
+      mpTheme(new view::Theme(mpProperties))
 {
 }
 
@@ -180,7 +177,6 @@ void SlideSorter::Init (void)
 {
     if (mpViewShellBase != NULL)
         mxControllerWeak = mpViewShellBase->GetController();
-
 
     // Reinitialize colors in Properties with window specific values.
     if (mpContentWindow)
@@ -219,8 +215,6 @@ void SlideSorter::Init (void)
 
         mbIsValid = true;
     }
-
-    mpDebugDialog.reset(SlideSorterDebugDialog::CreateDebugDialog(*this));
 }
 
 
