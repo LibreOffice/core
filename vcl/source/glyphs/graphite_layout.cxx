@@ -1103,7 +1103,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
     {
         nXOffset = args.mpDXArray[nChars - 1] - mvCharDxs[nChars - 1];
     }
-    int nPrevClusterGlyph = (bRtl)? mvGlyphs.size() : -1;
+    int nPrevClusterGlyph = (bRtl)? (signed)mvGlyphs.size() : -1;
     int nPrevClusterLastChar = -1;
     for (size_t i = 0; i < nChars; i++)
     {
