@@ -46,8 +46,8 @@
 
 #include <linguistic/hyphdta.hxx>
 #include <rtl/ustring.hxx>
-
 #include <rtl/ustrbuf.hxx>
+#include <rtl/textenc.h>
 
 #include <linguistic/lngprops.hxx>
 #include <unotools/pathoptions.hxx>

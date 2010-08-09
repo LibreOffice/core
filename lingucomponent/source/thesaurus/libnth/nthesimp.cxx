@@ -41,6 +41,8 @@
 
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/textenc.h>
+
 #include "nthesimp.hxx"
 #include <linguistic/misc.hxx>
 #include <linguistic/lngprops.hxx>

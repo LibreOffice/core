@@ -51,6 +51,7 @@
 #include <unotools/useroptions.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/textenc.h>
 
 #include <list>
 #include <set>
@@ -334,16 +335,16 @@ INT16 SpellChecker::GetSpellFailure( const OUString &rWord, const Locale &rLocal
                 eEnc = aDEncs[i];
             }
 
-            // we don't want to work with a default text encoding since following incorrect
-            // results may occur only for specific text and thus may be hard to notice.
-            // Thus better always make a clean exit here if the text encoding is in question.
-            // Hopefully something not working at all will raise proper attention quickly. ;-)
-            DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
-            if (eEnc == RTL_TEXTENCODING_DONTKNOW)
-                return -1;
-
             if (pMS)
             {
+                // we don't want to work with a default text encoding since following incorrect
+                // results may occur only for specific text and thus may be hard to notice.
+                // Thus better always make a clean exit here if the text encoding is in question.
+                // Hopefully something not working at all will raise proper attention quickly. ;-)
+                DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
+                if (eEnc == RTL_TEXTENCODING_DONTKNOW)
+                    return -1;
+
                 OString aWrd(OU2ENC(nWord,eEnc));
                 int rVal = pMS->spell((char*)aWrd.getStr());
                 if (rVal != 1)
