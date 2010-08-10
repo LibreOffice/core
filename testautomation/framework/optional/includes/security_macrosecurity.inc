@@ -57,8 +57,6 @@ testcase tMacroSecurityLevels( cFileFormat )
     dim cWorkFile as string
         cWorkFile = gTesttoolPath & "framework\optional\input\BasicDocs\"
         cWorkFile = cWorkFile & "basic" & hGetSuffix( cFileFormat )
-        cWorkFile = convertpath( cWorkFile )
-        cWorkFile = convertToURL( cWorkFile )
 
     dim iSecLevel as integer
 
