@@ -28,10 +28,12 @@
 #ifndef _SB_SBMOD_HXX
 #define _SB_SBMOD_HXX
 
+#include <com/sun/star/script/XInvocation.hpp>
 #include <basic/sbdef.hxx>
 #include <basic/sbxobj.hxx>
 #include <basic/sbxdef.hxx>
 #include <rtl/ustring.hxx>
+#include <vector>
 
 class SbMethod;
 class SbProperty;
@@ -40,6 +42,7 @@ class SbiBreakpoints;
 class SbiImage;
 class SbProcedureProperty;
 class SbIfaceMapperMethod;
+class SbClassModuleObject;
 
 struct SbClassData;
 class SbModuleImpl;
@@ -54,8 +57,10 @@ class SbModule : public SbxObject
     friend class    SbClassModuleObject;
 
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
+    std::vector< String > mModuleVariableNames;
 
 protected:
+    com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
     ::rtl::OUString     aOUSource;
     String              aComment;
     SbiImage*           pImage;        // the Image
@@ -125,11 +130,15 @@ public:
     BOOL LoadBinaryData( SvStream& );
     BOOL ExceedsLegacyModuleSize();
     void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
-        BOOL IsVBACompat();
-        void SetVBACompat( BOOL bCompat );
-        INT32 GetModuleType() { return mnType; }
-        void SetModuleType( INT32 nType ) { mnType = nType; }
+    BOOL IsVBACompat() const;
+    void SetVBACompat( BOOL bCompat );
+    INT32 GetModuleType() { return mnType; }
+    void SetModuleType( INT32 nType ) { mnType = nType; }
     bool GetIsProxyModule() { return bIsProxyModule; }
+    void AddVarName( const String& aName );
+    void RemoveVars();
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > GetUnoModule();
+    bool createCOMWrapperForIface( ::com::sun::star::uno::Any& o_rRetAny, SbClassModuleObject* pProxyClassModuleObject );
 };
 
 #ifndef __SB_SBMODULEREF_HXX

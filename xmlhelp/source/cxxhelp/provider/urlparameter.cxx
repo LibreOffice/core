@@ -306,9 +306,10 @@ void URLParameter::readBerkeley()
     Dbt data;
     DBData aDBData;
     rtl::OUString aExtensionPath;
+    rtl::OUString aExtensionRegistryPath;
     while( true )
     {
-        Db* db = aDbIt.nextDb( &aExtensionPath );
+        Db* db = aDbIt.nextDb( &aExtensionPath, &aExtensionRegistryPath );
         if( !db )
             break;
 
@@ -355,6 +356,7 @@ void URLParameter::readBerkeley()
             aExtendedJarStrBuf.append( aQuestionMark );
             aExtendedJarStrBuf.append( m_aJar );
             m_aJar = aExtendedJarStrBuf.makeStringAndClear();
+            m_aExtensionRegistryPath = aExtensionRegistryPath;
         }
         m_aTag   = converter.getHash();
     }
@@ -1004,18 +1006,20 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
         rtl::OUString aJar = urlParam->get_jar();
 
         bool bAddExtensionPath = false;
+        rtl::OUString aExtensionRegistryPath;
         sal_Int32 nQuestionMark1 = aJar.indexOf( sal_Unicode('?') );
         sal_Int32 nQuestionMark2 = aJar.lastIndexOf( sal_Unicode('?') );
         if( nQuestionMark1 != -1 && nQuestionMark2 != -1 && nQuestionMark1 != nQuestionMark2 )
         {
             aExtensionPath = aJar.copy( nQuestionMark1 + 1, nQuestionMark2 - nQuestionMark1 - 1 );
+            aExtensionRegistryPath = urlParam->get_ExtensionRegistryPath();
             bAddExtensionPath = true;
         }
         else
         {
             // Path not yet specified, search directly
             Reference< XHierarchicalNameAccess > xNA = pDatabases->findJarFileForPath
-                ( aJar, urlParam->get_language(), urlParam->get_path(), &aExtensionPath );
+                ( aJar, urlParam->get_language(), urlParam->get_path(), &aExtensionPath, &aExtensionRegistryPath );
             if( xNA.is() && aExtensionPath.getLength() )
                 bAddExtensionPath = true;
         }
@@ -1038,7 +1042,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
                     Reference< XInterface >() );
             }
 
-            rtl::OUString aOUExpandedExtensionPath = Databases::expandURL( aExtensionPath, xContext );
+            rtl::OUString aOUExpandedExtensionPath = Databases::expandURL( aExtensionRegistryPath, xContext );
             rtl::OString aExpandedExtensionPath = rtl::OUStringToOString( aOUExpandedExtensionPath, osl_getThreadTextEncoding() );
 
             parString[last++] = "ExtensionPath";

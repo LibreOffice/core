@@ -25,9 +25,14 @@
  *
  ************************************************************************/
 
+#include <com/sun/star/awt/XControl.hpp>
+#include <com/sun/star/awt/XControlContainer.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
+#include <com/sun/star/lang/WrappedTargetException.hpp>
+
 #include "vbacontrols.hxx"
 #include <cppuhelper/implbase2.hxx>
-#include <com/sun/star/awt/XControlContainer.hpp>
 #include <ooo/vba//XControlProvider.hpp>
 #include <hash_map>
 
@@ -48,30 +53,54 @@ class ControlArrayWrapper : public ArrayWrapImpl
     ControlVec mControls;
     ControlIndexMap mIndices;
 
-    rtl::OUString getControlName( const uno::Reference< awt::XControl >& xCtrl )
+private:
+    void SetArrayElementTo( const uno::Reference< awt::XControl >& xCtrl, sal_Int32 nIndex = -1 )
     {
-        uno::Reference< beans::XPropertySet > xProp( xCtrl->getModel(), uno::UNO_QUERY );
+        // initialize the element with specified index to the control
+        if ( xCtrl.is() )
+        {
+            if ( nIndex == -1 )
+                nIndex = msNames.getLength();
+
+            if ( nIndex >= msNames.getLength() )
+                msNames.realloc( nIndex );
+
+            msNames[ nIndex ] = getControlName( xCtrl );
+            mControls.push_back( xCtrl );
+            mIndices[ msNames[ nIndex ] ] = nIndex;
+        }
+    }
+
+public:
+    ControlArrayWrapper( const uno::Reference< awt::XControl >& xDialog )
+    {
+        try
+        {
+            mxDialog.set( xDialog, uno::UNO_QUERY_THROW );
+            uno::Sequence< uno::Reference< awt::XControl > > sXControls = mxDialog->getControls();
+
+            msNames.realloc( sXControls.getLength() );
+            for ( sal_Int32 i = 0; i < sXControls.getLength(); ++i )
+                SetArrayElementTo( sXControls[ i ], i );
+        }
+        catch( uno::Exception& )
+        {
+            // accept the case when the dialog already does not exist
+            // in this case the wrapper should work in dummy mode
+        }
+    }
+
+    static rtl::OUString getControlName( const uno::Reference< awt::XControl >& xCtrl )
+    {
+        if ( !xCtrl.is() )
+            throw uno::RuntimeException();
+
+        uno::Reference< beans::XPropertySet > xProp( xCtrl->getModel(), uno::UNO_QUERY_THROW );
         rtl::OUString sName;
         xProp->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Name" ) ) ) >>= sName;
         return sName;
     }
 
-public:
-
-    ControlArrayWrapper( const uno::Reference< awt::XControl >& xDialog )
-    {
-        mxDialog.set( xDialog, uno::UNO_QUERY_THROW );
-        uno::Sequence< uno::Reference< awt::XControl > > sXControls = mxDialog->getControls();
-
-        msNames.realloc( sXControls.getLength() );
-        for ( sal_Int32 i = 0; i < sXControls.getLength(); ++i )
-        {
-            uno::Reference< awt::XControl > xCtrl = sXControls[ i ];
-            msNames[ i ] = getControlName( xCtrl );
-            mControls.push_back( xCtrl );
-            mIndices[ msNames[ i ] ] = i;
-        }
-    }
 
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
@@ -165,7 +194,7 @@ ScVbaControls::ScVbaControls( const uno::Reference< XHelperInterface >& xParent,
                 const css::uno::Reference< awt::XControl >& xDialog )
             : ControlsImpl_BASE( xParent, xContext, lcl_controlsWrapper( xDialog  ) )
 {
-    mxDialog.set( xDialog, uno::UNO_QUERY_THROW );
+    mxDialog.set( xDialog, uno::UNO_QUERY );
 }
 
 uno::Reference< container::XEnumeration >
@@ -203,6 +232,144 @@ ScVbaControls::Move( double cx, double cy ) throw (uno::RuntimeException)
         xControl->setTop( xControl->getTop() + cy );
     }
 }
+
+uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& StringKey, const uno::Any& /*Before*/, const uno::Any& /*After*/ )
+    throw (uno::RuntimeException)
+{
+    uno::Any aResult;
+    ::rtl::OUString aComServiceName;
+
+    try
+    {
+        if ( !mxDialog.is() )
+            throw uno::RuntimeException();
+
+        uno::Reference< awt::XControl > xNewControl;
+        uno::Reference< lang::XMultiServiceFactory > xModelFactory( mxDialog->getModel(), uno::UNO_QUERY_THROW );
+
+        uno::Reference< container::XNameContainer > xDialogContainer( xModelFactory, uno::UNO_QUERY_THROW );
+
+        Object >>= aComServiceName;
+
+        // TODO: Support Before and After?
+        ::rtl::OUString aNewName;
+        StringKey >>= aNewName;
+        if ( !aNewName.getLength() )
+        {
+            aNewName = aComServiceName;
+            if ( !aNewName.getLength() )
+                aNewName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Control" ) );
+
+            sal_Int32 nInd = 0;
+            while( xDialogContainer->hasByName( aNewName ) && nInd < SAL_MAX_INT32 )
+            {
+                aNewName = aComServiceName;
+                aNewName += ::rtl::OUString::valueOf( nInd );
+            }
+        }
+
+        if ( aComServiceName.getLength() )
+        {
+            uno::Reference< awt::XControlModel > xNewModel( xModelFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.custom.awt.UnoControlSystemAXContainerModel" ) ) ), uno::UNO_QUERY_THROW );
+
+
+            xDialogContainer->insertByName( aNewName, uno::makeAny( xNewModel ) );
+            uno::Reference< awt::XControlContainer > xControlContainer( mxDialog, uno::UNO_QUERY_THROW );
+            xNewControl = xControlContainer->getControl( aNewName );
+
+            try
+            {
+                uno::Reference< script::XInvocation > xControlInvoke( xNewControl, uno::UNO_QUERY_THROW );
+
+                uno::Sequence< uno::Any > aArgs( 1 );
+                aArgs[0] <<= aComServiceName;
+                uno::Sequence< sal_Int16 > aOutIDDummy;
+                uno::Sequence< uno::Any > aOutDummy;
+                xControlInvoke->invoke( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SOAddAXControl" ) ), aArgs, aOutIDDummy, aOutDummy );
+            }
+            catch( uno::Exception& )
+            {
+                xDialogContainer->removeByName( aNewName );
+                throw;
+            }
+        }
+
+        if ( xNewControl.is() )
+        {
+            UpdateCollectionIndex( lcl_controlsWrapper( mxDialog  ) );
+            aResult <<= xNewControl;
+            aResult = createCollectionObject( aResult );
+        }
+        else
+            throw uno::RuntimeException();
+    }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& e )
+    {
+        throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not create AXControl!" ) ),
+                uno::Reference< uno::XInterface >(),
+                uno::makeAny( e ) );
+    }
+
+    return aResult;
+}
+
+void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
+    throw (uno::RuntimeException)
+{
+    ::rtl::OUString aControlName;
+    sal_Int32 nIndex = -1;
+
+    try
+    {
+        if ( !mxDialog.is() )
+            throw uno::RuntimeException();
+
+        uno::Reference< lang::XMultiServiceFactory > xModelFactory( mxDialog->getModel(), uno::UNO_QUERY_THROW );
+        uno::Reference< container::XNameContainer > xDialogContainer( xModelFactory, uno::UNO_QUERY_THROW );
+
+        if ( !( ( StringKeyOrIndex >>= aControlName ) && aControlName.getLength() )
+          && !( ( StringKeyOrIndex >>= nIndex ) && nIndex >= 0 && nIndex < m_xIndexAccess->getCount() ) )
+            throw uno::RuntimeException();
+
+        uno::Reference< awt::XControl > xControl;
+        if ( aControlName.getLength() )
+        {
+            uno::Reference< awt::XControlContainer > xControlContainer( mxDialog, uno::UNO_QUERY_THROW );
+            xControl = xControlContainer->getControl( aControlName );
+        }
+        else
+        {
+            m_xIndexAccess->getByIndex( nIndex ) >>= xControl;
+        }
+
+        if ( !xControl.is() )
+            throw uno::RuntimeException();
+
+        if ( !aControlName.getLength() )
+            aControlName = ControlArrayWrapper::getControlName( xControl );
+
+        xDialogContainer->removeByName( aControlName );
+        xControl->dispose();
+    }
+    catch( uno::RuntimeException& )
+    {
+        // the exceptions are not rethrown, impossibility to find or remove the control is currently not reported
+        // since in most cases it means just that the controls is already not there, the VBA seems to do it in the same way
+
+        // throw;
+    }
+    catch( uno::Exception& e )
+    {
+        // throw lang::WrappedTargetException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Can not create AXControl!" ) ),
+        //         uno::Reference< uno::XInterface >(),
+        //         uno::makeAny( e ) );
+    }
+}
+
 
 uno::Type
 ScVbaControls::getElementType() throw (uno::RuntimeException)

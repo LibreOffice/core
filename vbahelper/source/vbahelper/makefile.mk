@@ -65,6 +65,7 @@ SLOFILES=\
     $(SLO)$/vbashaperange.obj \
     $(SLO)$/vbatextframe.obj \
     $(SLO)$/vbapagesetupbase.obj \
+    $(SLO)$/vbaeventshelperbase.obj
 
 # --- Targets -------------------------------------------------------
 

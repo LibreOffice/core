@@ -43,6 +43,9 @@
 #include <vcl/svapp.hxx>
 #include <unotools/textsearch.hxx>
 
+Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::OUString& aVBAType,
+                                           const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj );
+
 #include <algorithm>
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
@@ -309,9 +312,21 @@ void SbiRuntime::StepIS()
 {
     SbxVariableRef refVar1 = PopVar();
     SbxVariableRef refVar2 = PopVar();
-    BOOL bRes = BOOL(
-        refVar1->GetType() == SbxOBJECT
-     && refVar2->GetType() == SbxOBJECT );
+
+    SbxDataType eType1 = refVar1->GetType();
+    SbxDataType eType2 = refVar2->GetType();
+    if ( eType1 == SbxEMPTY )
+    {
+        refVar1->Broadcast( SBX_HINT_DATAWANTED );
+        eType1 = refVar1->GetType();
+    }
+    if ( eType2 == SbxEMPTY )
+    {
+        refVar2->Broadcast( SBX_HINT_DATAWANTED );
+        eType2 = refVar2->GetType();
+    }
+
+    BOOL bRes = BOOL( eType1 == SbxOBJECT && eType2 == SbxOBJECT );
     if ( bVBAEnabled  && !bRes )
         Error( SbERR_INVALID_USAGE_OBJECT );
     bRes = ( bRes && refVar1->GetObject() == refVar2->GetObject() );
@@ -515,7 +530,33 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                 }
             }
 
-            *refVar = *refVal;
+            // Handle withevents
+            BOOL bWithEvents = refVar->IsSet( SBX_WITH_EVENTS );
+            if ( bWithEvents )
+            {
+                Reference< XInterface > xComListener;
+
+                SbxBase* pObj = refVal->GetObject();
+                SbUnoObject* pUnoObj = (pObj != NULL) ? PTR_CAST(SbUnoObject,pObj) : NULL;
+                if( pUnoObj != NULL )
+                {
+                    Any aControlAny = pUnoObj->getUnoAny();
+                    String aDeclareClassName = refVar->GetDeclareClassName();
+                    ::rtl::OUString aVBAType = aDeclareClassName;
+                    ::rtl::OUString aPrefix = refVar->GetName();
+                    SbxObjectRef xScopeObj = refVar->GetParent();
+                    xComListener = createComListener( aControlAny, aVBAType, aPrefix, xScopeObj );
+
+                    refVal->SetDeclareClassName( aDeclareClassName );
+                    refVal->SetComListener( xComListener );     // Hold reference
+                }
+
+                *refVar = *refVal;
+            }
+            else
+            {
+                *refVar = *refVal;
+            }
 
             // lhs is a property who's value is currently (Empty e.g. no broadcast yet)
             // in this case if there is a default prop involved the value of the
@@ -906,6 +947,19 @@ void SbiRuntime::StepARRAYACCESS()
     refVar->SetParameters( refArgv );
     PopArgv();
     PushVar( CheckArray( refVar ) );
+}
+
+void SbiRuntime::StepBYVAL()
+{
+    // Copy variable on stack to break call by reference
+    SbxVariableRef pVar = PopVar();
+    SbxDataType t = pVar->GetType();
+
+    SbxVariable* pCopyVar = new SbxVariable( t );
+    pCopyVar->SetFlag( SBX_READWRITE );
+    *pCopyVar = *pVar;
+
+    PushVar( pCopyVar );
 }
 
 // Einrichten eines Argvs

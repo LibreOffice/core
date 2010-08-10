@@ -27,17 +27,10 @@
 #ifndef __ooo_vba_excel_XApplication_idl__
 #define __ooo_vba_excel_XApplication_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XHelperInterface_idl__
+#include <com/sun/star/beans/XExactName.idl>
+#include <com/sun/star/script/XInvocation.idl>
 #include <ooo/vba/XHelperInterface.idl>
-#endif
-
-#ifndef __ooo_vba_XAssistant_idl__
 #include <ooo/vba/XAssistant.idl>
-#endif
 
 module ooo {  module vba {  module excel {
 
@@ -49,8 +42,11 @@ interface XWorksheetFunction;
 interface XWindow;
 interface XWorksheet;
 
-interface XApplication : com::sun::star::uno::XInterface
+interface XApplication
 {
+    // Application serves as WorksheetFunction object with little differences
+    interface ::com::sun::star::beans::XExactName;
+    interface ::com::sun::star::script::XInvocation;
 
 //  interface ::ooo::vba::XHelperInterface;
 
@@ -68,6 +64,7 @@ interface XApplication : com::sun::star::uno::XInterface
     [attribute] any CutCopyMode;
     [attribute] any StatusBar;
     [attribute] long Cursor;
+        [attribute] boolean EnableEvents;
 
     void setDefaultFilePath([in] string DefaultFilePath) raises(com::sun::star::script::BasicErrorException);
 
@@ -86,8 +83,7 @@ interface XApplication : com::sun::star::uno::XInterface
     any Range( [in] any Cell1, [in] any Cell2 );
     any Names( [in] any Index );
     void GoTo( [in] any Reference, [in] any Scroll );
-    // #FIXME #TODO up to 30 args needed
-    double CountA( [in] any arg1 );
+
     void wait( [in] double time );
     void Calculate() raises(com::sun::star::script::BasicErrorException);
     XRange Intersect([in] XRange Arg1, [in] XRange Arg2, [in] /*Optional*/ any Arg3, [in] /*Optional*/ any Arg4, [in] /*Optional*/ any Arg5, [in] /*Optional*/ any Arg6, [in] /*Optional*/ any Arg7, [in] /*Optional*/ any Arg8, [in] /*Optional*/ any Arg9, [in] /*Optional*/ any Arg10, [in] /*Optional*/ any Arg11, [in] /*Optional*/ any Arg12, [in] /*Optional*/ any Arg13, [in] /*Optional*/ any Arg14, [in] /*Optional*/ any Arg15, [in] /*Optional*/ any Arg16, [in] /*Optional*/ any Arg17, [in] /*Optional*/ any Arg18, [in] /*Optional*/ any Arg19, [in] /*Optional*/ any Arg20, [in] /*Optional*/ any Arg21, [in] /*Optional*/ any Arg22, [in] /*Optional*/ any Arg23, [in] /*Optional*/ any Arg24, [in] /*Optional*/ any Arg25, [in] /*Optional*/ any Arg26, [in] /*Optional*/ any Arg27, [in] /*Optional*/ any Arg28, [in] /*Optional*/ any Arg29, [in] /*Optional*/ any Arg30)

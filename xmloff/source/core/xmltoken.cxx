@@ -1716,6 +1716,7 @@ namespace xmloff { namespace token {
         TOKEN( "symbol-image-name",               XML_SYMBOL_IMAGE_NAME ),
         TOKEN( "symbol-width",                    XML_SYMBOL_WIDTH ),
         TOKEN( "system",                          XML_SYSTEM ),
+        TOKEN( "tab-color",                       XML_TAB_COLOR ),
         TOKEN( "tab-stop",                        XML_TAB_STOP ),
         TOKEN( "tab-stop-distance",               XML_TAB_STOP_DISTANCE ),
         TOKEN( "tab-stops",                       XML_TAB_STOPS ),
@@ -3105,6 +3106,9 @@ namespace xmloff { namespace token {
         TOKEN( "chartooo", XML_NP_CHART_EXT ),
         TOKEN( "http://openoffice.org/2010/chart", XML_N_CHART_EXT ),
         TOKEN( "coordinate-region",    XML_COORDINATE_REGION ),
+
+        TOKEN( "diagonal-bl-tr-widths", XML_DIAGONAL_BL_TR_WIDTHS ),
+        TOKEN( "diagonal-tl-br-widths", XML_DIAGONAL_TL_BR_WIDTHS ),
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }

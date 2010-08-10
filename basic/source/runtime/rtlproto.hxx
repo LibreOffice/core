@@ -38,6 +38,7 @@ extern RTLFUNC(Date);
 extern RTLFUNC(Err);
 extern RTLFUNC(Erl);
 extern RTLFUNC(False);
+extern RTLFUNC(Empty);
 extern RTLFUNC(Nothing);
 extern RTLFUNC(Null);
 extern RTLFUNC(True);
@@ -166,6 +167,7 @@ extern RTLFUNC(RmDir); // JSM
 extern RTLFUNC(SendKeys); // JSM
 extern RTLFUNC(DimArray);
 extern RTLFUNC(Dir);
+extern RTLFUNC(DoEvents);
 extern RTLFUNC(Exp);
 extern RTLFUNC(FileLen);
 extern RTLFUNC(Fix);

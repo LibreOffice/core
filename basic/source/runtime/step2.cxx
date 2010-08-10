@@ -263,8 +263,10 @@ SbxVariable* SbiRuntime::FindElement
             pElem = pNew;
         }
         // Index-Access bei UnoObjekten beruecksichtigen
-        /*
-        else if( pElem->ISA(SbUnoProperty) )
+        // definitely we want this for VBA where properties are often
+        // collections ( which need index access ), but lets only do
+        // this if we actually have params following
+        else if( bVBAEnabled && pElem->ISA(SbUnoProperty) && pElem->GetParameters() )
         {
             // pElem auf eine Ref zuweisen, um ggf. eine Temp-Var zu loeschen
             SbxVariableRef refTemp = pElem;
@@ -274,7 +276,6 @@ SbxVariable* SbiRuntime::FindElement
             pElem->SetParameters( NULL ); // sonst bleibt Ref auf sich selbst
             pElem = pNew;
         }
-        */
     }
     return CheckArray( pElem );
 }
@@ -377,7 +378,8 @@ void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
                 bool bError_ = true;
 
                 SbUnoMethod* pUnoMethod = PTR_CAST(SbUnoMethod,p);
-                if( pUnoMethod )
+                SbUnoProperty* pUnoProperty = PTR_CAST(SbUnoProperty,p);
+                if( pUnoMethod || pUnoProperty )
                 {
                     SbUnoObject* pParentUnoObj = PTR_CAST( SbUnoObject,p->GetParent() );
                     if( pParentUnoObj )
@@ -677,7 +679,18 @@ void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
         while( iLoop >= nParamCount )
         {
             p = new SbxVariable();
-            p->PutErr( 448 );       // Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
+
+            if( SbiRuntime::isVBAEnabled() &&
+                (t == SbxOBJECT || t == SbxSTRING) )
+            {
+                if( t == SbxOBJECT )
+                    p->PutObject( NULL );
+                else
+                    p->PutString( String() );
+            }
+            else
+                p->PutErr( 448 );       // Wie in VB: Error-Code 448 (SbERR_NAMED_NOT_FOUND)
+
             refParams->Put( p, iLoop );
             iLoop--;
         }
@@ -1068,9 +1081,17 @@ void SbiRuntime::StepTCREATE( UINT32 nOp1, UINT32 nOp2 )
         pCopyObj->SetName( aName );
     SbxVariable* pNew = new SbxVariable;
     pNew->PutObject( pCopyObj );
+    pNew->SetDeclareClassName( aClass );
     PushVar( pNew );
 }
 
+void SbiRuntime::implCreateFixedString( SbxVariable* pStrVar, UINT32 nOp2 )
+{
+    USHORT nCount = static_cast<USHORT>( nOp2 >> 17 );      // len = all bits above 0x10000
+    String aStr;
+    aStr.Fill( nCount, 0 );
+    pStrVar->PutString( aStr );
+}
 
 // Einrichten einer lokalen Variablen (+StringID+Typ)
 
@@ -1081,9 +1102,15 @@ void SbiRuntime::StepLOCAL( UINT32 nOp1, UINT32 nOp2 )
     String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     if( refLocals->Find( aName, SbxCLASS_DONTCARE ) == NULL )
     {
-        SbxDataType t = (SbxDataType) nOp2;
+        SbxDataType t = (SbxDataType)(nOp2 & 0xffff);
         SbxVariable* p = new SbxVariable( t );
         p->SetName( aName );
+        bool bWithEvents = ((t & 0xff) == SbxOBJECT && (nOp2 & SBX_TYPE_WITH_EVENTS_FLAG) != 0);
+        if( bWithEvents )
+            p->SetFlag( SBX_WITH_EVENTS );
+        bool bFixedString = ((t & 0xff) == SbxSTRING && (nOp2 & SBX_FIXED_LEN_STRING_FLAG) != 0);
+        if( bFixedString )
+            implCreateFixedString( p, nOp2 );
         refLocals->Put( p, refLocals->Count() );
     }
 }
@@ -1093,7 +1120,7 @@ void SbiRuntime::StepLOCAL( UINT32 nOp1, UINT32 nOp2 )
 void SbiRuntime::StepPUBLIC_Impl( UINT32 nOp1, UINT32 nOp2, bool bUsedForClassModule )
 {
     String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    SbxDataType t = (SbxDataType) nOp2;
+    SbxDataType t = (SbxDataType)(SbxDataType)(nOp2 & 0xffff);;
     BOOL bFlag = pMod->IsSet( SBX_NO_MODIFY );
     pMod->SetFlag( SBX_NO_MODIFY );
     SbxVariableRef p = pMod->Find( aName, SbxCLASS_PROPERTY );
@@ -1109,6 +1136,13 @@ void SbiRuntime::StepPUBLIC_Impl( UINT32 nOp1, UINT32 nOp2, bool bUsedForClassMo
         pProp->SetFlag( SBX_DONTSTORE );
         // AB: 2.7.1996: HACK wegen 'Referenz kann nicht gesichert werden'
         pProp->SetFlag( SBX_NO_MODIFY);
+
+        bool bWithEvents = ((t & 0xff) == SbxOBJECT && (nOp2 & SBX_TYPE_WITH_EVENTS_FLAG) != 0);
+        if( bWithEvents )
+            pProp->SetFlag( SBX_WITH_EVENTS );
+        bool bFixedString = ((t & 0xff) == SbxSTRING && (nOp2 & SBX_FIXED_LEN_STRING_FLAG) != 0);
+        if( bFixedString )
+            implCreateFixedString( p, nOp2 );
     }
 }
 
@@ -1122,7 +1156,10 @@ void SbiRuntime::StepPUBLIC_P( UINT32 nOp1, UINT32 nOp2 )
     // Creates module variable that isn't reinitialised when
     // between invocations ( for VBASupport & document basic only )
     if( pMod->pImage->bFirstInit )
-    StepPUBLIC( nOp1, nOp2 );
+    {
+        bool bUsedForClassModule = pImg->GetFlag( SBIMG_CLASSMODULE );
+        StepPUBLIC_Impl( nOp1, nOp2, bUsedForClassModule );
+    }
 }
 
 // Einrichten einer globalen Variablen (+StringID+Typ)
@@ -1133,15 +1170,26 @@ void SbiRuntime::StepGLOBAL( UINT32 nOp1, UINT32 nOp2 )
         StepPUBLIC_Impl( nOp1, nOp2, true );
 
     String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
-    SbxDataType t = (SbxDataType) nOp2;
-    BOOL bFlag = rBasic.IsSet( SBX_NO_MODIFY );
+    SbxDataType t = (SbxDataType)(nOp2 & 0xffff);
+
+    // Store module scope variables at module scope
+    // in non vba mode these are stored at the library level :/
+    // not sure if this really should not be enabled for ALL basic
+    SbxObject* pStorage = &rBasic;
+    if ( SbiRuntime::isVBAEnabled() )
+    {
+        pStorage = pMod;
+        pMod->AddVarName( aName );
+    }
+
+    BOOL bFlag = pStorage->IsSet( SBX_NO_MODIFY );
     rBasic.SetFlag( SBX_NO_MODIFY );
-    SbxVariableRef p = rBasic.Find( aName, SbxCLASS_PROPERTY );
+    SbxVariableRef p = pStorage->Find( aName, SbxCLASS_PROPERTY );
     if( p.Is() )
-        rBasic.Remove (p);
-    p = rBasic.Make( aName, SbxCLASS_PROPERTY, t );
+        pStorage->Remove (p);
+    p = pStorage->Make( aName, SbxCLASS_PROPERTY, t );
     if( !bFlag )
-        rBasic.ResetFlag( SBX_NO_MODIFY );
+        pStorage->ResetFlag( SBX_NO_MODIFY );
     if( p )
     {
         p->SetFlag( SBX_DONTSTORE );

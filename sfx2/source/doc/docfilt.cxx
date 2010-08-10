@@ -49,20 +49,6 @@
 
 using namespace ::com::sun::star;
 
-namespace sfx2 {
-
-// TODO #i105076# this should be in the filter configuration!!!
-bool CheckMSPasswordCapabilityForExport( const String& rFilterName )
-{
-    return
-        rFilterName.EqualsAscii( "MS Word 97" ) ||
-        rFilterName.EqualsAscii( "MS Word 97 Vorlage" ) ||
-        rFilterName.EqualsAscii( "MS Excel 97" ) ||
-        rFilterName.EqualsAscii( "MS Excel 97 Vorlage/Template" );
-}
-
-} // namespace sfx2
-
 // STATIC DATA -----------------------------------------------------------
 
 DBG_NAME(SfxFilter)

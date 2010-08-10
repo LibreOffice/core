@@ -286,12 +286,14 @@ public:
     sal_Bool                    HasName() const { return bHasName; }
     virtual String              GetAPIName() const;
     void                        SetHasName( sal_Bool bSet = sal_True ) { bHasName = bSet; }
+    void                        SetReadOnly();
     sal_Bool                    IsReadOnly() const;
     sal_Bool                    IsReadOnlyMedium() const;
     void                        SetReadOnlyUI( sal_Bool bReadOnly = sal_True );
     sal_Bool                    IsReadOnlyUI() const;
     void                        SetNoName();
     sal_Bool                    IsInModalMode() const;
+    sal_Bool                    IsInPrepareClose() const;
     //<!--Added by PengYunQuan for Validity Cell Range Picker
     virtual sal_Bool            AcceptStateUpdate() const;
     //-->Added by PengYunQuan for Validity Cell Range Picker
@@ -344,6 +346,9 @@ public:
     virtual sal_Bool            SwitchPersistance(
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
+
+    // called for a few slots like SID_SAVE[AS]DOC, SID_PRINTDOC[DIRECT], derived classes may abort the action
+    virtual sal_Bool            QuerySlotExecutable( USHORT nSlotId );
 
     sal_Bool                    SaveChildren(BOOL bObjectsOnly=FALSE);
     sal_Bool                    SaveAsChildren( SfxMedium &rMedium );
@@ -437,6 +442,13 @@ public:
     void                                            SetLoadReadonly( sal_Bool _bReadonly );
     void                                            SetSaveVersionOnClose( sal_Bool bSet );
     void                                              ResetFromTemplate( const String& rTemplateName, const String& rFileName );
+
+    // TODO/LATER: the following two methods should be replaced by Get/SetModifPasswordInfo in future
+    sal_uInt32                  GetModifyPasswordHash() const;
+    sal_Bool                    SetModifyPasswordHash( sal_uInt32 nHash );
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetModifyPasswordInfo() const;
+    sal_Bool                    SetModifyPasswordInfo( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aInfo );
 
     static sal_uInt32           HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDoc );
 
@@ -685,6 +697,15 @@ public:
                                sal_Int32 nVersion,
                                sal_Bool bTemplate = sal_False) const = 0;
 
+    // change recording and respective passwword protection for Writer and Calc
+    // slots available for Writer:  FN_REDLINE_ON, FN_REDLINE_ON
+    // slots used for Calc:         FID_CHG_RECORD, SID_CHG_PROTECT
+    virtual bool    IsChangeRecording() const;
+    virtual bool    HasChangeRecordProtection() const;
+    virtual void    SetChangeRecording( bool bActivate );
+    virtual bool    SetProtectionPassword( const String &rPassword );
+    virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
+
     // =================================
 
 //#if 0 // _SOLAR__PRIVATE
@@ -713,6 +734,8 @@ public:
     SAL_DLLPRIVATE sal_uInt16 ImplCheckSignaturesInformation(
                 const ::com::sun::star::uno::Sequence< ::com::sun::star::security::DocumentSignatureInformation >& aInfos );
     SAL_DLLPRIVATE void CheckEncryption_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
+    SAL_DLLPRIVATE void SetModifyPasswordEntered( sal_Bool bEntered = sal_True );
+    SAL_DLLPRIVATE sal_Bool IsModifyPasswordEntered();
 
     SAL_DLLPRIVATE void InitBasicManager_Impl();
     SAL_DLLPRIVATE SfxObjectShell_Impl* Get_Impl() { return pImp; }
