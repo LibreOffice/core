@@ -98,6 +98,7 @@ public:
     virtual ::sal_Bool SAL_CALL getProtectionMode() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectContents() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getProtectDrawingObjects() throw (css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getProtectScenarios() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getUsedRange() throw (css::uno::RuntimeException) ;
     virtual css::uno::Any SAL_CALL ChartObjects( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::excel::XOutline > SAL_CALL Outline( ) throw (css::uno::RuntimeException);

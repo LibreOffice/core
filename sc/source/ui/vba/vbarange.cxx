@@ -2997,7 +2997,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     // return a Range object that represents the first cell where that information is found.
     rtl::OUString sWhat;
     sal_Int32 nWhat = 0;
-    float fWhat = 0.0;
+    double fWhat = 0.0;
 
     // string.
     if( What >>= sWhat )
@@ -3029,6 +3029,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
     {
         uno::Reference< util::XSearchDescriptor > xDescriptor = xSearch->createSearchDescriptor();
         xDescriptor->setSearchString( sSearch );
+        xDescriptor->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNO_SRCHREGEXP ) ), uno::Any( true ) );
 
         uno::Reference< excel::XRange > xAfterRange;
         uno::Reference< table::XCellRange > xStartCell;
@@ -3134,8 +3135,7 @@ ScVbaRange::Find( const uno::Any& What, const uno::Any& After, const uno::Any& L
 
         ScGlobal::SetSearchItem( newOptions );
 
-        uno::Reference< util::XSearchDescriptor > xSearchDescriptor( xDescriptor, uno::UNO_QUERY );
-        uno::Reference< uno::XInterface > xInterface = xStartCell.is() ? xSearch->findNext( xStartCell, xSearchDescriptor) : xSearch->findFirst( xSearchDescriptor );
+        uno::Reference< uno::XInterface > xInterface = xStartCell.is() ? xSearch->findNext( xStartCell, xDescriptor) : xSearch->findFirst( xDescriptor );
         uno::Reference< table::XCellRange > xCellRange( xInterface, uno::UNO_QUERY );
         if ( xCellRange.is() )
         {
