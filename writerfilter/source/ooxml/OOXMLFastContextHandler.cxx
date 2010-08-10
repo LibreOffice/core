@@ -1468,7 +1468,16 @@ OOXMLFastContextHandlerValue::~OOXMLFastContextHandlerValue()
 
 void OOXMLFastContextHandlerValue::setValue(OOXMLValue::Pointer_t pValue)
 {
+#ifdef DEBUG_CONTEXT_HANDLER
+    debug_logger->startElement("contexthandler.setValue");
+    debug_logger->attribute("value", pValue->toString());
+#endif
+
     mpValue = pValue;
+
+#ifdef DEBUG_CONTEXT_HANDLER
+    debug_logger->endElement("contexthandler.setValue");
+#endif
 }
 
 OOXMLValue::Pointer_t OOXMLFastContextHandlerValue::getValue() const
