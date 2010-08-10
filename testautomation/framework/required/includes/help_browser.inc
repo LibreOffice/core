@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : global update/resource test
 '*
@@ -154,3 +154,42 @@ testcase tHelp_ToolBar
     brc = hCloseHelp()
 
 endcase
+
+'*******************************************************************************
+
+testcase tHelp_Registration
+
+    ' Check i69670 which was a showstopper in OOo 2.0.4
+    ' Menu-entry "Help / Registration" is disabled
+
+    dim iCurrentMenuEntry as integer
+    dim iMenuEntryCount as integer
+
+    printlog "Check if all entries in Help Menu are enabled"
+    call hNewDocument
+
+    printlog "Open menu"
+    hUseMenu()
+    iMenuEntryCount = hMenuItemGetCount
+
+    printlog "Select the last entry 'Help'"
+    hMenuSelectNr( iMenuEntryCount )
+    iMenuEntryCount = hMenuItemGetCount
+    for iCurrentMenuEntry = 1 to iMenuEntryCount
+        if ( hMenuItemIsEnabled( iCurrentMenuEntry ) ) then
+            printlog "(" & iCurrentMenuEntry & "/" & iMenuEntryCount & _
+            "): Menu entry is enabled:     Help-> " & hMenuItemGetText( iCurrentMenuEntry )
+        else
+	        if (lcase(gPlatform) = "osx") then
+	            warnlog "#i86247# Help->Registration is disabled on MacOS X"
+	        else
+                warnlog "(" & iCurrentMenuEntry & "/" & iMenuEntryCount & _
+                "): Menu entry is not enabled: Help-> " & hMenuItemGetText( iCurrentMenuEntry )
+	        endif
+        endif
+    next iCurrentMenuEntry
+    hMenuClose()
+    call hCloseDocument
+
+endcase
+

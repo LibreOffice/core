@@ -25,15 +25,13 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Walk through a number of dialogs related to digital signatures
 '*
 '\******************************************************************************
 
 testcase tCertificationDialogs
-
-
     dim brc as boolean
     const CFN = "tCertificationDialogs::"
     const SVERSION = "680"
@@ -44,16 +42,23 @@ testcase tCertificationDialogs
 
     hDeleteFile( sFile )
 
-    call hNewDocument() 
+    hNewDocument() 
 
-    call hChangeDoc()
+    hChangeDoc()
 
-    brc = hOpenDigitalSignaturesDialog()
+    hOpenDigitalSignaturesDialog()
 
     kontext "active"
     if ( active.exists( 1 ) ) then
         printlog( "MSGBOX: " & active.getText() )
-        active.yes()
+        try
+           active.yes()
+        catch
+            warnlog( CFN & "This is not the expected messagebox, aborting test" )
+            active.ok()
+            hCloseDocument()
+            goto endsub
+        endcatch
         printlog( CFN & "Allow to save the document" )
     else
         if ( gApplication <> "MASTERDOCUMENT" ) then
@@ -91,8 +96,5 @@ testcase tCertificationDialogs
     endif
 
     call hCloseDocument()
-
-
-
 endcase
 

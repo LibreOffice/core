@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Export BASIC libraries as package
 '*
@@ -40,6 +40,10 @@ testcase tBasicPackageExport
     const LIBRARY_NAME = "tBasicExport"
     const DOCUMENT_POSITION = 4
     const PACKAGE_SIZE = 1325
+
+    const LIBRARIES_TAB = 3
+    const LONG_WAIT = 3
+    const SHORT_WAIT = 1
     
     dim cDocumentName as string
     dim cLibraryName as string
@@ -69,7 +73,7 @@ testcase tBasicPackageExport
     
     printlog( "Select the second document" )
     kontext "Makro"
-    if ( Makro.exists( 1 ) ) then
+    if ( Makro.exists( SHORT_WAIT ) ) then
         iNodeCount = hGetNodeCount( MakroAus )
         cDocumentName = hSelectNode( MakroAus, iNodeCount )
 
@@ -77,7 +81,7 @@ testcase tBasicPackageExport
         Verwalten.click()
         
         printlog( "Go to the libraries tabpage" )
-        hSelectBasicObjectOrganizerTab( 3 )
+        hSelectBasicObjectOrganizerTab( LIBRARIES_TAB )
         
         kontext "TabBibliotheken"
         printlog( "Select the document at pos. " & DOCUMENT_POSITION )
@@ -93,7 +97,7 @@ testcase tBasicPackageExport
         Neu.click()
         
         kontext "NeueBibliothek"
-        if ( NeueBibliothek.exists( 1 ) ) then
+        if ( NeueBibliothek.exists( SHORT_WAIT ) ) then
             printlog( "Name the new library: " & LIBRARY_NAME )
             BibliotheksName.setText( LIBRARY_NAME )
             NeueBibliothek.ok()
@@ -128,7 +132,7 @@ testcase tBasicPackageExport
     
     printlog( "Select the work document" )
     kontext "Makro"
-    if ( Makro.exists( 1 ) ) then
+    if ( Makro.exists( SHORT_WAIT ) ) then
         iNodeCount = hGetNodeCount( MakroAus )
         hSelectNode( MakroAus, iNodeCount )    
         
@@ -136,10 +140,10 @@ testcase tBasicPackageExport
         Verwalten.click()
         
         printlog( "Libraries tab" )
-        hSelectBasicObjectOrganizerTab( 3 )
+        hSelectBasicObjectOrganizerTab( LIBRARIES_TAB )
         
         kontext "TabBibliotheken"
-        if ( TabBibliotheken.exists( 1 ) and TabBibliotheken.isVisible() ) then
+        if ( TabBibliotheken.exists( SHORT_WAIT ) and TabBibliotheken.isVisible() ) then
             Bibliothek.select( DOCUMENT_POSITION )
             
             printlog( "Select the new library" )
@@ -156,17 +160,17 @@ testcase tBasicPackageExport
             Export.click()
             
             kontext "ExportBasicLibraryDlg"
-            if ( ExportBasicLibraryDlg.exists( 3 ) ) then
+            if ( ExportBasicLibraryDlg.exists( LONG_WAIT ) ) then
                 printlog( "Select to export as extension" )
                 ExportAsPackage.check()
-                ExportBasicLibraryDlg.ok()
+                hCloseDialog( ExportBasicLibraryDlg, "ok" )
                 
                 kontext "SpeichernDlg"
-                if ( SpeichernDlg.exists( 3 ) ) then
+                if ( SpeichernDlg.exists( LONG_WAIT ) ) then
                     printlog( "Save the file, suffix will be added automatically." )
                     DateiName.setText( hGetWorkPath() & LIBRARY_NAME )
                     Speichern.click()
-                    Speichern.notExists( 1 )
+                    Speichern.notExists( SHORT_WAIT )
                 else
                     warnlog( "Dialog <File Save> did not open" )
                 endif
@@ -176,16 +180,14 @@ testcase tBasicPackageExport
             
             kontext "TabBibliotheken"
             printlog( "Close libraires tabpage" )
-            TabBibliotheken.cancel()
-            TabBibliotheken.notExists( 1 )
+            hCloseDialog( TabBibliotheken, "cancel" )
         else
             warnlog( "Dialog <TabBibliotheken> is not available" )
         endif
         
         kontext "Makro"
         printlog( "Close BASIC organizer" )
-        Makro.cancel()
-        Makro.notExists( 1 )
+        hCloseDialog( Makro, "cancel" )
     else
         warnlog( "Dialog <Makro> did not open" )
     endif

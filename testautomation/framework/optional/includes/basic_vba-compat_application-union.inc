@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*  
 '*  short description : Test VBA compatibility switches
 '*
@@ -46,12 +46,25 @@ testcase tBasicVBACompatApplicationUnion()
     const RC_FAILURE           = -1
 
     dim macro_identifier( EXPECTED_MACRO_COUNT )
+
+    ' Find out whether we can write to the program directory or not.
+    ' If we can we get different values returned from the test functions
+    ' This is required for userland installations.
+    if( hCheckForAdministratorPermissions() ) then
+        macro_identifier( 1 ) = "1: False"
+        macro_identifier( 2 ) = "2: False"
+        macro_identifier( 3 ) = "3: False"
+        macro_identifier( 4 ) = "4: True"
+        macro_identifier( 5 ) = "5: False"
+        macro_identifier( 6 ) = "6: True"
+    else
         macro_identifier( 1 ) = "1: True"
         macro_identifier( 2 ) = "2: True"
         macro_identifier( 3 ) = "3: True"
         macro_identifier( 4 ) = "4: True"
         macro_identifier( 5 ) = "5: True"
         macro_identifier( 6 ) = "6: True"
+    endif
 
     dim cTestFile as string
         cTestFile = gTesttoolPath & "framework/optional/input/vba-compat/" & DOCUMENT_NAME

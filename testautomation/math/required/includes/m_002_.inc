@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description :
 '*
@@ -46,7 +46,7 @@ testcase tmEditUndoRedo
    hNewDocument
    kontext "DocumentMath"
    '/// type something into the document ///'
-   call hTBOtypeInDoc
+   call SchreibenInMathdok "a over b"
    try
       '/// Edit->Undo ///'
       EditUndo
@@ -70,7 +70,7 @@ testcase tmEditAllClipboard
 '   Commands.TypeKeys Eingabe
 
    '/// type something into the document ///'
-   call hTBOtypeInDoc
+   call SchreibenInMathdok "a over b"
    '/// Edit->Select All ///'
    EditSelectAllMath
    Sleep 2

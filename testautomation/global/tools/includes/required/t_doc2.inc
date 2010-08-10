@@ -25,41 +25,40 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : Global Routines for Document Handling; Part two
 '*
 '\***********************************************************************
-
-private const VERBOSE = TRUE
 
 sub hTabelleEinfuegen
     '/// <b>WRITER only </b>///'
     '///  hTabelleEinfuegen hInsertTable ///'
     '/// insert a dummy table in writer/writerweb/masterdocument ///'
     TableInsertTable
-    sleep(2)
+
     Kontext "TabelleEinfuegenWriter"
-    wait 500
-    TabelleEinfuegenWriter.OK
-    sleep(1)
+    if ( TabelleEinfuegenWriter.exists( 2 ) ) then
 
-    Kontext "TableObjectbar"
-    sleep(1)
-    if TableObjectbar.NotExists then
-        Kontext "TextObjectbar"
-        TextObjectbar.SetNextToolBox
-    end if
+        hCloseDialog( TabelleEinfuegenWriter, "ok" )
 
-    select case uCASE(gApplication)
-    Case "WRITER"
-        Kontext "DocumentWriter"
-    Case "MASTERDOCUMENT"
-        Kontext "DocumentMasterDoc"
-    Case "HTML"
-        Kontext "DocumentWriterWeb"
-    end select
-    sleep(1)
+        Kontext "TableObjectbar"
+        if ( TableObjectbar.exists( 1 ) ) then
+            ' We are happy then, do nothing
+        else
+            Kontext "TextObjectbar"
+            TextObjectbar.SetNextToolBox
+        end if
+
+        select case ( gApplication )
+        Case "WRITER"         : Kontext "DocumentWriter"
+        Case "MASTERDOCUMENT" : Kontext "DocumentMasterDoc"
+        Case "HTML"           : Kontext "DocumentWriterWeb"
+        end select
+    else
+        warnlog( "hTabelleEinfuegen: Failed to open <TabelleEinfuegenWriter> dialog" )
+    endif
+
 end sub
 '
 '-------------------------------------------------------------------------------
@@ -109,13 +108,47 @@ sub SchreibenInMathdok ( Eingabe as String )
         warnlog "--No Clipboard available :-(--"
         printlog "---ClipTest--- should: "+Eingabe +", is: "+GetClipboard
     endif
-    EditPaste
-    sleep(3)
+    hUseAsyncSlot( "EditPaste" )
 end sub
 '
 '-------------------------------------------------------------------------------
 '
+function hEnableDocumentEditMode() as boolean
+
+    hEnableDocumentEditMode() = false
+
+    dim iTry as integer
+
+    printlog( "Try to switch document to edit mode" )
+    for iTry = 1 to 20
+        try
+            kontext "Standardbar"
+            if ( Bearbeiten.getState( 2 ) <> 1 ) then
+                Bearbeiten.click()
+
+                kontext "Active"
+                if ( Active.exists( 1 ) ) then
+                    printlog( "Handle <Use copy message>" )
+                    hCloseDialog( Active, "yes" )
+                    wait( 2000 )
+                    printlog( "Successfully switched to edit mode" )
+                    hEnableDocumentEditMode() = true
+                    exit for
+                endif
+            endif
+        catch
+            wait( 200 )
+        endcatch
+    next iTry
+
+end function
+
+'*******************************************************************************
+
 function sMakeReadOnlyDocumentEditable() as boolean
+
+    sMakeReadOnlyDocumentEditable() = hEnableDocumentEditMode()
+    exit function
 
     ' Function returns TRUE if document has been made editable and FALSE if
     ' no action was required (that is: Document was not read-only)
@@ -124,22 +157,22 @@ function sMakeReadOnlyDocumentEditable() as boolean
     dim iWait as integer
     dim rc as integer
     const CFN = "sMakeReadOnlyDocumentEditable::"
-    
-    if ( VERBOSE ) then printlog( CFN & "Making document editable (create a copy) if it is readonly" )
-    
+
+    if ( GVERBOSE ) then printlog( CFN & "Making document editable (create a copy) if it is readonly" )
+
     ' We still run into synchronization problems with the "Make document editable" feature
-    ' because we do not know when this button becomes available and ready for use: The 
+    ' because we do not know when this button becomes available and ready for use: The
     ' document has to be loaded, then we have to wait for the toolbar to get populated.
     ' One thing appears to work though: Try to execute the slot using hUseAsyncSlot.
     ' This is a little bit tricky because the state of the document is altered but if
     ' the slot has been executed once we know for sure that the button on the toolbar is
     ' available and can check its state and - if need be - chenge the document state back.
-    
+
     ' ========== Workaround begin ==========
     hUseAsyncSlot( "EditDoc" )
     kontext "Active"
     if ( Active.exists() ) then
-        if ( VERBOSE ) then printlog( "Handling create copy message" )
+        if ( GVERBOSE ) then printlog( "Handling create copy message" )
         Active.yes()
         wait( 1000 )
     endif
@@ -153,12 +186,12 @@ function sMakeReadOnlyDocumentEditable() as boolean
                     exit do
                 endif
             catch
-                if ( VERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
+                if ( GVERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
                 iWait = iWait + 1
                 wait ( 1000 )
             endcatch
         else
-            if ( VERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
+            if ( GVERBOSE ) then printlog "Attempt " & iWait & " to make document readable failed"
             iWait = iWait + 1
             wait ( 1000 )
         end if
@@ -166,26 +199,26 @@ function sMakeReadOnlyDocumentEditable() as boolean
     Loop
 
     if ( Bearbeiten.IsEnabled() ) then
-        
+
         if ( Bearbeiten.getState( 2 ) = 0 ) then
-            
+
 			rc = hUseAsyncSlot("editdoc")
 
             if ( rc >= 0 ) then
                 for iTry = 1 to 2
-                
-                
+
+
                     Kontext "Active"
                     if ( Active.exists( 5 ) ) then
-                    
+
                         printlog( CFN & "Messagebox: " & Active.getText() )
-                        
+
                         try
-                            if ( VERBOSE ) then printlog( CFN & "Document was read-only. A copy will be used." )
+                            if ( GVERBOSE ) then printlog( CFN & "Document was read-only. A copy will be used." )
                             Active.Yes()
-                            if ( VERBOSE ) then printlog( CFN & "Closed 'use copy' message" )
+                            if ( GVERBOSE ) then printlog( CFN & "Closed 'use copy' message" )
                         catch
-                            if ( VERBOSE ) then printlog( CFN & "Probing for unexpected messagebox..." )
+                            if ( GVERBOSE ) then printlog( CFN & "Probing for unexpected messagebox..." )
                             active.ok()
                             qaerrorlog( "#i100701 - Object not found message" )
                         endcatch
@@ -198,13 +231,13 @@ function sMakeReadOnlyDocumentEditable() as boolean
                 printlog( CFN & "Document appears to be editable" )
             endif
         else
-            if ( VERBOSE ) then printlog( CFN & "Button <Bearbeiten> is pressed, document is editable" )
+            if ( GVERBOSE ) then printlog( CFN & "Button <Bearbeiten> is pressed, document is editable" )
             sMakeReadOnlyDocumentEditable() = FALSE
         endif
     else
-        if ( VERBOSE ) then printlog( CFN & "Control <Bearbeiten> is not enabled" )
+        if ( GVERBOSE ) then printlog( CFN & "Control <Bearbeiten> is not enabled" )
     endif
-    
+
 end function
 '
 '-------------------------------------------------------------------------------
@@ -215,16 +248,20 @@ function fSelectFirstOLE() as integer
     '+ 0 := Sucess
     '- 1 := unknown application
 
-    dim bNavigatorWasVisible as boolean
-    bNavigatorWasVisible = FALSE
-    dim iIndex
+    const RETVAL_SUCCESS = 0
+    const RETVAL_UNKNOWN_APPLICATION = -1
 
-    fSelectFirstOLE = -1
+    const MAX_WAIT_FOR_NAVIGATOR = 10
 
-    select case uCASE(gApplication)
+    dim bNavigatorWasVisible as boolean : bNavigatorWasVisible = FALSE
+    dim iIndex as integer
+
+    fSelectFirstOLE() = RETVAL_UNKNOWN_APPLICATION
+
+    select case ( gApplication )
     case "CALC"                     :   Kontext "NavigatorCalc"
         'First check if Navigator is visible and remember result
-        if NavigatorCalc.exists (10) then
+        if NavigatorCalc.exists ( MAX_WAIT_FOR_NAVIGATOR ) then
             bNavigatorWasVisible = TRUE
         else
             try
@@ -240,7 +277,7 @@ function fSelectFirstOLE() as integer
             endcatch
         end if
         Kontext "NavigatorCalc"
-        if NavigatorCalc.exists (10) then
+        if NavigatorCalc.exists ( MAX_WAIT_FOR_NAVIGATOR ) then
             'Select first OLE in list
             Liste.TypeKeys "<HOME>"
             for iIndex = 1 to 8
@@ -252,12 +289,12 @@ function fSelectFirstOLE() as integer
             Liste.select(6)
             Liste.TypeKeys "+"
             Liste.TypeKeys "<DOWN><RETURN>"
-            fSelectFirstOLE = 0
+            fSelectFirstOLE() = RETVAL_SUCCESS
         else
             QAErrorLog "Navigator couldn't be opened!"
         end if
     case "DRAW" , "IMPRESS"         :   Kontext "NavigatorDraw"
-        if NavigatorDraw.Exists(10) then
+        if NavigatorDraw.Exists( MAX_WAIT_FOR_NAVIGATOR ) then
             bNavigatorWasVisible = TRUE
         else
             try
@@ -272,21 +309,21 @@ function fSelectFirstOLE() as integer
                 ViewNavigator
             endcatch
             Kontext "NavigatorDraw"
-            if NavigatorDraw.exists(10) then
+            if NavigatorDraw.exists( MAX_WAIT_FOR_NAVIGATOR ) then
                 'Select first OLE in list
                 Liste.TypeKeys "<HOME>"
                 Liste.select(1)
                 Liste.TypeKeys "+<DOWN><RETURN>"
-                fSelectFirstOLE = 0
+                fSelectFirstOLE() = RETVAL_SUCCESS
             else
-                QAErrorLog "Navigator did not occoured!"
+                QAErrorLog "Navigator did not open!"
             end if
         end if
 
     case "WRITER" , "HTML" , "MASTERDOCUMENT" :
-        select case uCASE(gApplication)
+        select case ( gApplication )
         case "MASTERDOCUMENT"    :   Kontext "NavigatorGlobalDoc"
-            if NavigatorGlobalDoc.Exists(10) then
+            if NavigatorGlobalDoc.Exists( MAX_WAIT_FOR_NAVIGATOR ) then
                 bNavigatorWasVisible = TRUE
             else
                 ViewNavigator
@@ -299,7 +336,7 @@ function fSelectFirstOLE() as integer
             endif
         case else           :   Kontext "NavigatorWriter"
             'First check if Navigator is visible and remember result
-            if NavigatorWriter.Exists (10) then
+            if NavigatorWriter.Exists ( MAX_WAIT_FOR_NAVIGATOR ) then
                 bNavigatorWasVisible = TRUE
             else
                 try
@@ -317,7 +354,7 @@ function fSelectFirstOLE() as integer
             end if
         end select
         Kontext "NavigatorWriter"
-        if NavigatorWriter.Exists(10) then
+        if NavigatorWriter.Exists( MAX_WAIT_FOR_NAVIGATOR ) then
 			' Check if all content is visible
 			if Auswahlliste.GetItemCount < 2 then
 				Inhaltsansicht.Click
@@ -329,7 +366,7 @@ function fSelectFirstOLE() as integer
             next iIndex
             Auswahlliste.select(5)
             Auswahlliste.TypeKeys "+<DOWN><RETURN>"
-            fSelectFirstOLE = 0
+            fSelectFirstOLE() = RETVAL_SUCCESS
         else
             QAErrorLog "Navigator did not occoured!"
         end if
@@ -340,7 +377,7 @@ function fSelectFirstOLE() as integer
     if bNavigatorWasVisible = TRUE then
         printlog "Leaving navigator open as initially found"
     else
-        if fSelectFirstOLE = 0 then
+        if ( fSelectFirstOLE = RETVAL_SUCCESS ) then
             ViewNavigator
             printlog "Closing navigator as initially found"
         else

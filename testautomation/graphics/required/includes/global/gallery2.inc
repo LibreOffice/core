@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : wolfram.garten@oracle.com
 '*
 '* short description : Checking all gallery themes
 '*
@@ -40,7 +40,7 @@
 ' #1 tSettingsToCM 'Measurement unit for textdocuments to cm
 ' #1 tResetSettings 'Resetting the measurement unit for textdocuments.
 '*
-'\****************************************************************
+'\******************************************************************************
 
 testcase tSettingsToCM
 

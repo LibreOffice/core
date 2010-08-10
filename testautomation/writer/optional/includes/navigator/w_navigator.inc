@@ -24,7 +24,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Navigator test
 '*
@@ -168,13 +168,11 @@ testcase tViewNavigator2
 
     '/// Close all documents reopen a new and check if Navigator is docked ///
     printlog "  - Close all documents reopen a new and check if Navigator is docked"
-    Call hCloseDocument
-    Sleep 2
-    Call hCloseDocument
-    Sleep 2
+    hFileCloseAll()
+
     '/// New document ///
     Call hNewDocument
-    Call wDocSetContext
+    hSetDocumentContext()
     try
         DocumentWriter.FadeOut
     catch

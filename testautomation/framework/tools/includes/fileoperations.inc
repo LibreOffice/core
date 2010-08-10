@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : check the internal file dialog ( extended tests )
 '*
@@ -64,7 +64,8 @@ function hSaveLoadDelSuccess( cFile as string ) as integer
     printlog( CFN & "Enter with option: " & cFile & "/" & cFileExt )
     
     '///+<li>Close the navigator if it exists</li>
-    hCloseNavigator()
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close,optional" )
 
     '///+<li>Save the current file, overwriting existing</li>
     brc = hSaveFileExpectSuccess( cFile , TRUE ) ' save and overwrite
@@ -197,90 +198,6 @@ function hLoadFileExpectSuccess( fpath as string ) as boolean
     '///+<li>Return the errorcode</li>
     printlog( CFN & "Exit with result: " & brc )
     hLoadFileExpectSuccess() = brc
-    '///</ul>
-    
-end function
-
-'*******************************************************************************
-
-function hLoadFileExpectFailure( fpath as string ) as boolean
-
-    '///<h3>Load a file where failure is expected</h3>
-    '///<i>Uses</i>: framework\tools\t_stringtools.inc<br><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Filename incl. extension (string)</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE = There was an error loading the file (as expected)</li>
-    '///+<li>FALSE = The file was loaded without problems/any other error</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    const CFN = "hLoadFileExpectFailure::"
-
-    dim brc as boolean : brc = true
-
-    printlog( CFN & "Enter with option: " & fpath )
-
-    '///+<li>Click FileOpen</li>
-    hUseAsyncSlot( "FileOpen" )
-    Kontext "OeffnenDLG"
-
-    '///+<li>Enter filepath</li>
-    DateiName.setText( convertpath( fpath ) )
-
-    '///+<li>Click &quot;Open&quot;</li>
-    oeffnen.click()
-
-    '///+<li>Close the expected warning dialog, return to FileOpen</li>
-    Kontext "Active"
-    if ( Active.Exists( 1 ) ) then
-        printlog( CFN & "Expected active: " & active.getText() )
-        active.ok()
-
-        Kontext "OeffnenDLG"
-        if ( OeffnenDlg.exists( 1 ) ) then
-            OeffnenDLG.cancel()
-            brc = true
-        else
-            warnlog( CFN & "File Open dialog is not open" )
-            brc = false
-        endif
-    endif
-
-    '///+<li>Verify that we are on FileOpen dialog, set errorcondition true</li>
-    if ( brc ) then
-        Kontext "OeffnenDLG"
-        if ( Oeffnen.exists( 1 ) ) then
-            printlog( CFN & "File is not loaded, still in File/Open. Good, cancelling" )
-            OeffnenDLG.cancel()
-            brc = true
-        else
-            brc = false
-        endif
-    endif
-    
-    '///+<li>If the document is loaded, set errorcondition to false</li>
-    if ( not brc ) then
-        hFileWait( FALSE )
-        warnlog( CFN & "The file appears to have loaded correctly. Not good" )
-    
-        '///+<li>Click away possible messagebox to recover</li>
-        Kontext "Active"
-        if ( active.exists( 1 ) ) then
-            printlog( CFN & "Unexpected active: " & active.getText() )
-            Active.OK()
-        endif
-    endif 
-    
-    '///+<li>Return errorcondition</li>
-    hLoadFileExpectFailure() = brc
     '///</ul>
     
 end function
@@ -514,80 +431,6 @@ end function
 
 '*******************************************************************************
 
-function hCreateDirectoryExpectSuccess( dirname as string ) as boolean
-
-    '///<h3>Create a directory where success is expected</h3>
-    '///<i>Uses</i>: framework\tools\t_stringtools.inc<br><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Name of the directory (string)</li>
-    '///<ul>
-    '///+<li>Relative or absolute, absolute is recommended</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE = The directory wass created</li>
-    '///+<li>FALSE = On any error (Unable to create or file already exists)</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    dim brc as boolean : brc = true
-        
-    const CFN = "hCreateDirectoryExpectSuccess::"
-    printlog( CFN & "Enter with option: " & dirname )
-
-    '///+<li>Click &quot;File Open&quot;</li>
-    hUseAsyncSlot( "FileOpen" )
-
-    '///+<li>Click on &quot;New folder&quot;</li>
-    Kontext "OeffnenDlg"
-    if ( OeffnenDlg.exists( 2 ) ) then
-    
-        NeuerOrdner.click()
-
-        '///+<li>Enter a name for the folder into the dialog</li>
-        Kontext "NeuerOrdner"
-        if ( NeuerOrdner.exists( 1 ) ) then
-            OrdnerName.setText( dirname )
-            
-            '///+<li>Click &quot;OK&quot;</li>
-            NeuerOrdner.OK()
-        else
-            warnlog( CFN & "New folder dialog did not open." )
-            brc = false
-        endif
-
-        '///+<li>Handle possible messagebox (unexpected)</li>
-        Kontext "Active"
-        if Active.Exists( 1 ) then
-            printlog( CFN & "Unexpected active: " & active.getText() )
-            brc = false
-            try
-                Active.YES()
-            catch
-                Active.OK()
-            endcatch
-        endif
-    else
-        warnlog( CFN & "File Open dialog is not open." )
-        brc = false
-    endif
-    
-    '///+<li>Return errorcondition</li>
-    printlog( CFN & "Exit with result: " & brc )
-    hCreateDirectoryExpectSuccess() = brc
-    
-    '///</ul>
-
-end function
-
-'*******************************************************************************
-
 function hDeleteFileViaFileOpen( cFile as String ) as boolean
 
     '///<h3>Delete a file using the File Open dialog</h3>
@@ -693,38 +536,6 @@ function hDeleteFileViaFileOpen( cFile as String ) as boolean
 
 end function
 
-'******************************************************************************
-
-function hGetFileCountViaFileOpen() as integer
-
-    '///<h3>Get the number of items listed in the FilePicker (File Open)</h3>
-    '///<i>Note</i>: This function works on the current workdirectory<br><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Number of items listed in filepicker</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    '///+<li>Click &quot;File open&quot;</li>
-    hUseAsyncSlot( "FileOpen" )
-    
-    '///+<li>Retrieve the number of items in the filepicker window</li>
-    Kontext "OeffnenDLG"
-    if ( OeffnenDlg.exists( 2 ) ) then
-        hGetFileCountViaFileOpen() = DateiAuswahl.getItemCount()
-        OeffnenDLG.cancel()
-    else
-        hGetFileCountViaFileOpen() = -1
-    endif
-    '///</ul>    
-
-end function
-
 '*******************************************************************************
 
 function hNameGen_append( iDecChar as long ) as string
@@ -795,39 +606,6 @@ function hNameGen_lead( iDecChar as long ) as string
     '///+<li>Return the new filename</li>
     hNamegen_lead() = cFile
     
-    '///</ul>
-
-end function
-
-'*******************************************************************************
-
-function hGetRelPath( cStartDir, cFileName as String ) as string
-
-    '///<h3>Remove the absolute component from a path specification</h3>
-    '///<i>Usually you do not need this function, avoid using it</i><br><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Absolute part of a filespec (startdirectory) (string)</li>
-    '///<ul>
-    '///+<li>e.g. &quot;/home/oscar/mydir&quot;</li>
-    '///</ul>
-    '///+<li>Fully qualified path to the file/directory (string)</li>
-    '///<ul>
-    '///+<li>e.g. &quot;/home/oscar/mydir/somedir/myfile.txt&quot;</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Remaining part of the fully qualified path minus startdirectory (string)</li>
-    '///<ul>
-    '///+<li>e.g. &quot;/somedir/myfile.txt&quot;</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-
-    '///+<li>Find the end of startdir within the FQ filename</li>
-    hGetRelPath() = mid( cFileName , len( cStartDir + 1 ) )
     '///</ul>
 
 end function

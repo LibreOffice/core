@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : gridcontrol
 '*
@@ -51,6 +51,8 @@ testcase tGridcontrolLoad
         printlog "Allow to run macros"
         SecurityWarning.ok
     endif
+    call sleep 1
+    call sMakeReadOnlyDocumentEditable
     call sleep 1
 
     printlog "Start the macro, that performs the test"

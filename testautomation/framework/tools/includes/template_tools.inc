@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Helper functions to ease usage of templates
 '*
@@ -123,86 +123,6 @@ function hFindTemplate( sTemplateName as string ) as integer
     hFindTemplate() = irc
     '///</ul>
     
-end function
-
-'*******************************************************************************
-
-function hGetRefFilePath( cCategory as string, location as string) as string
-
-    '///<h3>Retrieve the location of the reference files for filename comparision</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Category (string)</li>
-    '///<ul>
-    '///+<li>&quot;NEWDOCUMENTS&quot; for New Documents</li>
-    '///+<li>&quot;TEMPLATES&quot; for Templates</li>
-    '///+<li>&quot;SAMPLES&quot; for Samples</li>
-    '///</ul>
-    '///+<li>Location (string)</li>
-    '///<ul>
-    '///+<li>&quot;TESTTOOL&quot; to use files below gTesttoolPath</li>
-    '///+<li>&quot;LOCAL&quot; to use files below gOfficePath/user/work</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>: 
-    '///<ol>
-    '///+<li>Fully qualified path to workfile (string)</li>
-    '///</ol>
-
-    '///<u>Description</u>:
-    '///<ul>
-
-    dim cFile as string
-    
-    cCategory = ucase( cCategory )
-
-    '///+<li>Retrieve the location</li>
-    '///<ul>
-    '///+<li>For TESTTOOL</li>
-    '///<ul>
-    if ( ucase( location ) = "TESTTOOL" ) then
-    
-        '///+<li>Prepend path within testtool-environment</li>
-        cFile = "framework\update\input\templdoc\" & gProductName
-   
-        '///+<li>Build a name containing langcode and .txt suffix</li>
-        if ( cCategory = "NEWDOCUMENTS" ) then
-            cFile = cFile & "\new_" & iSprache & ".txt"
-        elseif ( cCategory  = "TEMPLATES" ) then
-            cFile = cFile & "\tem_" & iSprache & ".txt"
-        elseif ( cCategory = "SAMPLES" ) then
-            cFile = cFile & "\sam_" & iSprache & ".txt"
-        else
-            warnlog( "Invalid category passed to hGetRefFilePath" )
-        endif
-        
-        '///+<li>Set returnvalue</li>
-        hGetRefFilePath() = convertpath( gTesttoolPath & cFile )
-       
-    '///</ul>
-    '///+<li>For LOCAL</li>
-    '///<ul>
-    elseif ( ucase( location ) = "LOCAL" ) then
-   
-        '///+<li>Build a name containing langcode and .txt suffix</li>
-        if ( cCategory = "NEWDOCUMENTS" ) then
-            cFile = "new_" & iSprache & ".txt"
-        elseif ( cCategory = "TEMPLATES" ) then
-            cFile = "tem_" & iSprache & ".txt"
-        elseif ( cCategory = "SAMPLES" ) then
-            cFile = "sam_" & iSprache & ".txt"
-        else
-            warnlog( "Invalid category passed to hGetRefFilePath" )
-        endif
-       
-        '///+<li>Set returnvalue</li>
-        hGetRefFilePath() = convertpath( hGetWorkPath() & cFile )
-
-    end if
-    '///</ul>
-    '///</ul>
-    '///</ul>
-	
 end function
 
 '*******************************************************************************

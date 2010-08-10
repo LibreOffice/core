@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Global Tools II
 '*
@@ -96,69 +96,6 @@ function hSetLocaleStrings (fLocale as String, TBOstringLocale() as String ) as 
    hSetLocaleStrings = bFoundLanguage
 end function
 
-'-------------------------------------------------------------------------
-
-sub GetHTMLCharSet as String
-'///function to get the Character Set for HTML export
-'///+(tools/options/load&save/HTML compatibility -> Character Set)
-   ToolsOptions
-   hToolsOptions ( "LoadSave", "HTMLCompatibility" )
-   GetHTMLCharSet = Zeichensatz.GetSelText
-   Kontext "ExtrasOptionenDlg"
-   ExtrasOptionenDlg.OK
-end sub
-
-'-------------------------------------------------------------------------
-
-sub SetHTMLCharSet ( CharSet as String )
-'///routine to set the Character Set for HTML export
-'///+( tools/options/load&save/HTML compatibility -> Character Set )
-   ToolsOptions
-   hToolsOptions ( "LoadSave", "HTMLCompatibility" )
-   Zeichensatz.Select CharSet
-   Kontext "ExtrasOptionenDlg"
-   ExtrasOptionenDlg.OK
-end sub
-
-'-------------------------------------------------------------------------
-
-sub SetHTMLCharSetToUTF8 as Boolean
-'///function to set the Character Set for HTML export to 'Unicode UTF8'
-'///+( tools/options/load&save/HTML compatibility -> Character Set )
-  Dim i as Integer
-  Dim sDum as String
-
-   ToolsOptions
-   hToolsOptions ( "LoadSave", "HTMLCompatibility" )
-
-   for i=1 to Zeichensatz.GetItemCount
-      sDum = Zeichensatz.GetItemText (i)
-      if Instr ( lcase (sDum), "utf-8" ) <> 0 then
-         Zeichensatz.Select (i)
-         i=1000
-      else
-         if Instr ( lcase (sDum), "utf8" ) <> 0 then
-            Zeichensatz.Select (i)
-            i=1000
-         else
-            if Instr ( lcase (sDum), "utf 8" ) <> 0 then
-               Zeichensatz.Select (i)
-               i=1000
-            end if
-         end if
-      end if
-   next i
-   if i<1000 then
-      SetHTMLCharSetToUTF8 = FALSE
-   else
-      SetHTMLCharSetToUTF8 = TRUE
-   end if
-   Kontext "ExtrasOptionenDlg"
-    ExtrasOptionenDlg.OK
-end sub
-
-'-------------------------------------------------------------------------
-
 function dec(Ref as integer)
 '/// decrement variable, call it like 'dec variable' ///'
 ' reference or value .-) an excursion :-))
@@ -177,235 +114,11 @@ end function
 
 '-------------------------------------------------------------------------
 
-function ActivateAutoPilot ( sWhichOne as String ) as Boolean
-'Author: TZ
-'///Routine to activate (WebPage Autopilot, Form Autopilot, Documentconverter and Euroconveter)
-'///Open via menu items (not via SlotID or Macro URL)
-'///<u>input</u>: Which Autopilot (<i>webpage</i>, <i>form</i>, <i>documentconverter</i>, <i>euroconverter</i>,<i>addressdatasource</i>)
-'///<u>output</u>:<ul><li>TRUE: Autopilot is open</li><li>FALSE: Autopilot can not be opened</li></ul>
-  Dim bIsLoaded as boolean, LoadTime as integer, PrintTime as Integer
-
-   bIsLoaded = FALSE
-   LoadTime = 0
-
-   select case gApplication
-      case "WRITER"
-                       Kontext "DocumentWriter"
-                       DocumentWriter.UseMenu
-      case "HTML"
-                       Kontext "DocumentWriterWeb"
-                       DocumentWriterWeb.UseMenu
-      case "MASTERDOCUMENT"
-                       Kontext "DocumentMasterDoc"
-                       DocumentMasterDoc.UseMenu
-      case "CALC"
-                       Kontext "DocumentCalc"
-                       DocumentCalc.UseMenu
-      case "IMPRESS"
-                       Kontext "DocumentImpress"
-                       DocumentImpress.UseMenu
-      case "DRAW"
-                       Kontext "DocumentDraw"
-                       DocumentDraw.UseMenu
-      case "MATH"
-                       Kontext "DocumentMath"
-                       DocumentMath.UseMenu
-      case else
-                       Kontext "DocumentWriter"
-                       DocumentWriter.UseMenu
-   end select
-   sleep(2)
-   hMenuSelectNr(1)
-   sleep(2)
-   hMenuSelectNr(4)
-   sleep(2)
-
-   select case lcase (sWhichOne)
-      case "webpage"            : hMenuSelectNr(5)
-      case "documentconverter"  : hMenuSelectNr(6)
-      case "euroconverter"      : hMenuSelectNr(7)
-      case "addressdatasource"  : hMenuSelectNr(8)
-   end select
-   sleep(5)
-
-   while bIsLoaded = False
-      while LoadTime < 20
-         PrintTime = LoadTime * 3
-         select case lcase ( sWhichOne )
-            case "webpage"            : Kontext "AutopilotWebPage"
-                                        if AutopilotWebPage.Exists(1) then
-                                           bIsLoaded = true
-                                           printlog "Autopilot is loaded in " + PrintTime + " seconds!"
-                                           LoadTime = 20
-                                           ActivateAutoPilot = TRUE
-                                        end if
-            case "report"             : Kontext "AutoPilotReport"
-                                        if AutoPilotReport.Exists(1) then
-                                           bIsLoaded = true
-                                           printlog "Autopilot is loaded in " + PrintTime + " seconds!"
-                                           LoadTime = 20
-                                           ActivateAutoPilot = TRUE
-                                        end if
-            case "form"               : Kontext "ChooseDatabase"
-                                        if ChooseDatabase.Exists(1) then
-                                           bIsLoaded = true
-                                           printlog "Autopilot is loaded in " + PrintTime  + " seconds!"
-                                           LoadTime = 20
-                                           ActivateAutoPilot = TRUE
-                                        end if
-            case "documentconverter"  : Kontext "DocumentConverter"
-                                        if DocumentConverter.Exists(1) then
-                                           bIsLoaded = true
-                                           printlog "Autopilot is loaded in " + PrintTime + " seconds!"
-                                           LoadTime = 20
-                                           ActivateAutoPilot = TRUE
-                                        end if
-            case "euroconverter"      : Kontext "AutoPilotEuroKonverter"
-                                        if AutoPilotEuroKonverter.Exists(1) then
-                                           bIsLoaded = true
-                                           printlog "Autopilot is loaded in " + PrintTime + " seconds!"
-                                           LoadTime = 20
-                                           ActivateAutoPilot = TRUE
-                                        end if
-            case "addressdatasource"  : Kontext "AddressSourceAutopilot"
-                                        if AddressSourceAutopilot.Exists(1) then
-                                           bIsLoaded = true
-                                           printlog "Autopilot is loaded in " + PrintTime + " seconds!"
-                                           LoadTime = 20
-                                           ActivateAutoPilot = TRUE
-                                        end if
-
-         end select
-         'NOTE: Maybe a messagebox occurs.
-         Kontext "Active"
-         if Active.Exists (1) then
-            warnlog Active.GetText
-            try
-               Active.OK
-            catch
-               Active.Cancel
-            endcatch
-            ActivateAutoPilot = FALSE
-         end if
-         sleep(1)
-         LoadTime = LoadTime + 1
-         if LoadTime = 20 and bIsLoaded = False then
-            warnlog "Autopilot has not been loaded!"
-            ActivateAutoPilot = FALSE
-            bIsLoaded = TRUE
-         end if
-      wend
-   wend
-end function
-
-'-------------------------------------------------------------------------
-
-function SetURL ( sURL as String )
-'Author: TZ
-'/// Routine to open a special URL with <i>file open</i>-dialog
-'/// <u>input</u>: The URL as string
-  FileOpen
-  Kontext "OeffnenDlg"
-   Dateiname.SetText sURL
-   Oeffnen.Click
-   wait 500
-end function
-
-'-------------------------------------------------------------------------
-
-function fGetFileText (sFilename as string, iCount as long) as string
-'/// This function is for getting  the first or last n characters of a file
-'///+<u>Input</u>:<ul><li>filename</li><li>number</li></ul>If the number greater 0 then get n characters from start.
-'///+A number smaller 0 get from end of file.
-'///+<u>Output</u>:<ul><li>string with <b><i>n</i></b> characters</li></ul>
-
-   dim iFile as integer ' filehandle
-   dim iTem as integer  ' get 2 bytes of the file
-   dim iTemByte(2) as integer ' move 1 byte from iTem in each item
-   dim sTemp as string   ' string of file
-   dim iSize as long  ' size in bytes of file
-   dim i as long      ' runner :-)
-
-   iFile = FreeFile
-'   Printlog "FreeFile: " + iFile
-   if (dir (sFilename) <> "") then
-'      Printlog "FileLen: " + FileLen(sFile)
-      Open sFilename For binary access read shared As #iFile
-'      Printlog "Loc: " + Loc(#iFile)  ' LONG! where am i in the file?
-
-      iSize = Lof(#iFile) ' get size in bytes of file
-      if (iSize > 65530) then '65536 = 64kB
-         'Warnlog "fGetFileText: file '" + sFilename + "' might get problems on reading it? size is > 65530 Byte: '" + iSize + "'"
-      else
-'         printlog "iSize: " + iSize
-      endif
-
-      sTemp = ""
-      if (iCount >= 0) then   ' get bytes from file start
-         get iFile,1,sTemp    ' get max 64kByte; but not the 1st 2 bytes :-(
-         get iFile,1,iTem     ' get the first 2 bytes of the file
-         iTemByte(2) = (iTem AND &H0000FF00) \ &H100   ' and seperate the bytes
-         iTemByte(1) = (iTem AND &H000000FF)
-         sTemp = chr(iTemByte(1)) + chr(iTemByte(2)) + sTemp  ' put them together
-       else     ' get bytes from file end
-         if ((iSize+iCount) > 0) then
-               select case (iSize+iCount)
-                  case 1: get iFile,1,sTemp ' take bytes from the end of the file
-                          get iFile,1,iTem     ' get the first 2 bytes of the file
-                          sTemp = chr(iTemByte(2)) + sTemp  ' put them together
-                  case else: get iFile,(iSize+iCount)-1,sTemp ' take bytes from the end of the file
-               end select
-         else
-            get iFile,1,sTemp ' take bytes from the end of the file
-            get iFile,1,iTem     ' get the first 2 bytes of the file
-            iTemByte(2) = (iTem AND &H0000FF00) \ &H100   ' and seperate the bytes
-            iTemByte(1) = (iTem AND &H000000FF)
-            sTemp = chr(iTemByte(1)) + chr(iTemByte(2)) + sTemp  ' put them together
-         endif
-       endif
-'      printlog "'"+left(sTemp,iSize)+"'"  ' gotcha!
-
-      if (iSize-(Abs(iCount)) >= 0) then
-         fGetFileText = left(sTemp,Abs(iCount))
-      else
-         'Warnlog "fGetFileText: file '" + sFilename + "' isn't as big as expected; will only return '" + iSize+ "' bytes fom: " + iCount
-         fGetFileText = left(sTemp,iSize)
-      endif
-
-   ' debugging routine --------------------------------------
-   '   iSize = Lof(#iFile)
-   '   printlog "iSize: " + iSize
-   '   sTemp = ""
-   '   if iSize > 0 then
-   '      printlog "iSize \ 2: " + (iSize \ 2)
-   '      for i = 0 to ((iSize \ 2)-1)
-   '         get iFile,(i*2)+1,iTem
-   '         Printlog "i: " + i + ": 0x" + hex(iTem)
-   '       iTemByte(2) = (iTem AND &H0000FF00) \ &H100
-   '       iTemByte(1) = (iTem AND &H000000FF)
-   '         sTemp = sTemp + chr(iTemByte(1)) + chr(iTemByte(2))
-   '      next i
-   '      if (iSize MOD 2) = 1 then
-   '         get iFile,iSize,iTem
-   '         Printlog "i: " + iSize + ": 0x" + hex(iTem)
-   '       iTemByte(1) = (iTem AND &H000000FF)
-   '         sTemp = sTemp + chr(iTemByte(1))
-   '      endif
-   '   endif
-   '   printlog "'"+sTemp+"'"
-   ' debugging routine --------------------------------------
-      Close #iFile
-   else  ' does file exist
-      Warnlog "fGetFileText: file '" + sFilename + "' doesn't exist"
-      fGetFileText = ""
-   endif
-end function
-'
-'-------------------------------------------------------------------------
-'
 function fSetMeasurementToCM() as string
 '/// Sets the measurement unit to centimeter (cm) and returns the unit.
     Dim i as integer
+
+    const LANGUAGE_CODE_JAPANESE = 81
     
     Call hNewDocument
     ToolsOptions
@@ -413,7 +126,7 @@ function fSetMeasurementToCM() as string
             case "WRITER"
             Call hToolsOptions("WRITER","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 2 )        
@@ -421,7 +134,7 @@ function fSetMeasurementToCM() as string
             case "CALC"
             Call hToolsOptions("CALC","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulator.Gettext , 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulator.Gettext , 2 )        
@@ -429,7 +142,7 @@ function fSetMeasurementToCM() as string
             case "IMPRESS"
             Call hToolsOptions("IMPRESS","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 2 )        
@@ -437,7 +150,7 @@ function fSetMeasurementToCM() as string
             case "DRAW"
             Call hToolsOptions("DRAW","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorabstand.Gettext, 2 )        
@@ -445,7 +158,7 @@ function fSetMeasurementToCM() as string
             case "MASTERDOCUMENT"
             Call hToolsOptions("WRITER","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 2 )        
@@ -457,7 +170,7 @@ function fSetMeasurementToCM() as string
                                                 'because .sdw, .sxw etc. export to HTML depends on it.
                                                 Call hToolsOptions("WRITER","GENERAL")
                                                 Masseinheit.Select(2)
-                                                if iSprache = 81 then
+                                                if iSprache = LANGUAGE_CODE_JAPANESE then
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 3 )        
                                                 else
                                                     fSetMeasurementToCM = Right$( Tabulatorenabstand.Gettext, 2 )        
@@ -494,12 +207,6 @@ function fRemoveDoubleCharacter(stringToChange as string, sCharacter as string) 
       sLastLetter = sNextLetter
    Next n
    fRemoveDoubleCharacter = sFinalString
-End Function
-
-'-------------------------------------------------------------------------
-
-function fRemoveDoubleSpace(stringToChange as string) As String
-    fRemoveDoubleSpace = fRemoveDoubleCharacter(stringToChange, " ")
 End Function
 
 '-------------------------------------------------------------------------
@@ -559,7 +266,7 @@ function hGetUNOService(optional bSilent as boolean, optional byRef sUnoPortExte
     
     ' To not to change the old behaviour, set variable if parameter is not given
     if (isMissing(bSilent)) then
-        bSilent = FALSE
+        bSilent = TRUE
     end if
 
     ' master.inc::sStartUpOffice needs just the Port Numberr from UNO, to pass it to first start up

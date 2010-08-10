@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Test of Hangul/Hanja Conversion - 1
 '*
@@ -47,6 +47,9 @@
 
 testcase tHHNoSelction_1
 
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
     Dim  sTestFile  as String
     Dim  sResult    as String
 
@@ -65,13 +68,14 @@ testcase tHHNoSelction_1
     '/// Open a test file , which includes some Korean characters
     '/// + and some Chinese characters
     Call hFileOpen(sTestFile)
+    sMakeReadOnlyDocumentEditable()
 
     '/// Set focus before the 3rd character
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "<Down>"
 
     '/// Tools / HangulHanjaConversion
-    ToolsLanguageHangulHanjaConversion
+    ToolsLanguageHangulHanjaConversion : WaitSlot
     Kontext "HangulHanjaConversion"
 
     '/// Press Peplace button
@@ -112,6 +116,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHNoSelction_2
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
     Dim  sTestFile  as String
     Dim  sResult    as String
@@ -131,12 +138,13 @@ testcase tHHNoSelction_2
     '/// + Germany , French , Korean and Chinese characters
     '/// + (Korean is before Chinese)
     Call hFileOpen(sTestFile)
+    sMakeReadOnlyDocumentEditable()
     
     '/// Set focus to the beginning
     Call wTypeKeys "<MOD1 Home>"
     
     '/// Tools / HangulHanjaConversion
-    ToolsLanguageHangulHanjaConversion
+    ToolsLanguageHangulHanjaConversion : WaitSlot
     Kontext "HangulHanjaConversion"
 
     '/// Press Peplace button
@@ -166,6 +174,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHNoSelction_3
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
     Dim  sTestFile  as String
     Dim  sResult    as String
@@ -185,12 +196,13 @@ testcase tHHNoSelction_3
     '/// + Germany , French , Korean and Chinese characters
     '/// + (Chinese is before Korean)
     Call hFileOpen(sTestFile)
+    sMakeReadOnlyDocumentEditable()
     
     '/// Set focus to the beginning
     Call wTypeKeys "<MOD1 Home>"
     
     '/// Tools / HangulHanjaConversion
-    ToolsLanguageHangulHanjaConversion
+    ToolsLanguageHangulHanjaConversion : WaitSlot
     Kontext "HangulHanjaConversion"
     
     '/// Press Peplace button
@@ -221,6 +233,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHNoSelction_4
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
 
@@ -236,13 +251,14 @@ testcase tHHNoSelction_4
   '/// + Germany , French characters .
   '/// + There are no Chinese and Korean
    Call hFileOpen(sTestFile)
+   sMakeReadOnlyDocumentEditable()
 
   '/// Set focus to the beginning
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion ,
   '/// + nothing should happen
-   ToolsLanguageHangulHanjaConversion
+   ToolsLanguageHangulHanjaConversion : WaitSlot
    Kontext "HangulHanjaConversion"
 
    if HangulHanjaConversion.Exists then
@@ -257,6 +273,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHNoSelction_5
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sResult    as String
@@ -273,12 +292,13 @@ testcase tHHNoSelction_5
 
   '/// Open a test file , which includes some Chinese and Korean
    Call hFileOpen(sTestFile)
+   sMakeReadOnlyDocumentEditable()
 
   '/// Set focus to the end of the file
    Call wTypeKeys "<MOD1 End>"
 
   '/// Tools / HangulHanjaConversion ,
-   ToolsLanguageHangulHanjaConversion
+   ToolsLanguageHangulHanjaConversion : WaitSlot
    Kontext "HangulHanjaConversion"
      Sleep 1
      if Word.GetText <> sResult then
@@ -293,6 +313,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHNoSelction_6
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
     Dim  sTestFile  as String
     Dim  sResult    as String
@@ -311,6 +334,7 @@ testcase tHHNoSelction_6
     '/// Open a test file , which includes some Chinese and Korean,
     '/// + the 3rd character in 1st line isn't convertible
     Call hFileOpen(sTestFile)
+    sMakeReadOnlyDocumentEditable()
 
     '/// Set focus to the 3rd character (korean)
     Call wTypeKeys "<MOD1 Home>"
@@ -319,7 +343,7 @@ testcase tHHNoSelction_6
     '/// Tools / HangulHanjaConversion , Replace and Always Replace
     '/// + should be disabled , "suggestion" should be empty .
     '/// + Press Ignore button will jump to the next convertible Hangul/Hanja character
-    ToolsLanguageHangulHanjaConversion
+    ToolsLanguageHangulHanjaConversion : WaitSlot
     Kontext "HangulHanjaConversion"
     if Suggestions.GetItemCount <> 0 then
         Warnlog "Suggestion should be empty !"
@@ -354,6 +378,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHNoSelction_7
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sResult    as String
@@ -372,6 +399,7 @@ testcase tHHNoSelction_7
   '/// Open a test file , which includes some Chinese and Korean,
   '/// + the 3rd character in 2nd line isn't convertible
    Call hFileOpen(sTestFile)
+   sMakeReadOnlyDocumentEditable()
 
   '/// Set focus to the 3rd chinese character
    Call wTypeKeys "<MOD1 Home><Down><Home>"
@@ -382,7 +410,7 @@ testcase tHHNoSelction_7
   '/// Tools / HangulHanjaConversion , Replace and Always Replace
   '/// + should be disabled , "suggestion" should be empty .
   '/// + Press Ignore button will jump to the next convertible Hangul/Hanja character
-   ToolsLanguageHangulHanjaConversion
+   ToolsLanguageHangulHanjaConversion : WaitSlot
    Kontext "HangulHanjaConversion"
      if Suggestions.GetItemCount <> 0 then
          Warnlog "Suggestion should be empty !"
@@ -417,6 +445,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHSingleSelction_1
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
     
     Dim  sTestFile  as String
     Dim  sResult    as String
@@ -436,6 +467,7 @@ testcase tHHSingleSelction_1
     
     '/// Open a test file , which includes some Chinese and Korean
     Call hFileOpen(sTestFile)
+    sMakeReadOnlyDocumentEditable()
     
     '/// Select from 4th to 7th character
     Call wTypeKeys "<MOD1 Home>"
@@ -444,7 +476,7 @@ testcase tHHSingleSelction_1
     
     '/// Tools / HangulHanjaConversion ,
     '/// + Press Peplace button
-    ToolsLanguageHangulHanjaConversion
+    ToolsLanguageHangulHanjaConversion : WaitSlot
     Kontext "HangulHanjaConversion"
     if ReplaceBtn.IsEnabled then 
         ReplaceBtn.Click
@@ -475,6 +507,9 @@ endcase
 '----------------------------------------------------------------
 
 testcase tHHMultiSelction_1
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
   Dim  sResult    as String
@@ -493,13 +528,14 @@ testcase tHHMultiSelction_1
 
   '/// Open a test file , which includes some Korean chacters
    Call hFileOpen(sTestFile)
+   sMakeReadOnlyDocumentEditable()
 
   '/// Do a multi Selectiong to the charcters -- 입력
    Call fFindWord(sMultiWord)
 
   '/// Tools / HangulHanjaConversion ,
   '/// + Press Peplace button
-   ToolsLanguageHangulHanjaConversion
+   ToolsLanguageHangulHanjaConversion : WaitSlot
    Kontext "HangulHanjaConversion"
      ReplaceBtn.Click
      Sleep 1
@@ -522,6 +558,9 @@ endcase
 '----------------------------------------------------------------
 
 testcase tHHTextBox_1
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
 
@@ -535,6 +574,7 @@ testcase tHHTextBox_1
   '/// Open a test file , which includes a text box and
   '/// + some Korean chacters in the text box
    Call hFileOpen(sTestFile)
+   sMakeReadOnlyDocumentEditable()
 
   '/// Tools / HangulHanjaConversion , the below 4 checkboxes ralated
   '/// + ruby should be disabled .
@@ -543,7 +583,7 @@ testcase tHHTextBox_1
   '/// -> 'Hangul As Ruby Above Hanja'
   '/// -> 'Hangul As Ruby Below Hanja'
    try
-       ToolsLanguageHangulHanjaConversion
+       ToolsLanguageHangulHanjaConversion : WaitSlot
        Kontext "HangulHanjaConversion"
        if NOT HangulHanjaConversion.Exists then
            Warnlog "Hangul/Hanja Conversion dialogue isn't poped up !"
@@ -590,6 +630,9 @@ endcase
 '----------------------------------------------------------------
 
 testcase tHHDrawBox_1
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
 
@@ -603,7 +646,7 @@ testcase tHHDrawBox_1
   '/// Open a test file , which includes a draw box and
   '/// + some Korean chacters in the text box
    Call hFileOpen(sTestFile)
-
+   sMakeReadOnlyDocumentEditable()
   '/// Tools / HangulHanjaConversion , the below 4 checkboxes ralated
   '/// + ruby should be disabled .
   '/// -> 'Hanja As Ruby Above Hangul'
@@ -611,7 +654,7 @@ testcase tHHDrawBox_1
   '/// -> 'Hangul As Ruby Above Hanja'
   '/// -> 'Hangul As Ruby Below Hanja'
    try
-       ToolsLanguageHangulHanjaConversion
+       ToolsLanguageHangulHanjaConversion : WaitSlot
        Kontext "HangulHanjaConversion"
        if NOT HangulHanjaConversion.Exists then
            Warnlog "Hangul/Hanja Conversion dialogue isn't poped up !"

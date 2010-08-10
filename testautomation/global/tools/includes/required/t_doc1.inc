@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : Global Routines for Document Handling
 '*
@@ -34,7 +34,6 @@
 sub hNewDocument ( optional bANewDoc )
     '/// hNewDocument : open a new document dependent on 'gApplication' ///'
     dim sTemp as string
-    gApplication = gApplication
 
     if IsMissing ( bANewDoc ) <> TRUE then
         if bANewDoc = TRUE then
@@ -52,10 +51,10 @@ sub hNewDocument ( optional bANewDoc )
         else
             FileOpen "FileName", "private:factory/swriter", "FrameName", "_default", "SynchronMode", TRUE
         end if
-        if ( DocumentWriter.IsMax() = false ) then		
-			DocumentWriter.Maximize()
-			Wait( 2000 )
-		end if        				
+        if ( DocumentWriter.IsMax() = false ) then
+            DocumentWriter.Maximize()
+            Wait( 2000 )
+        end if
     case "CALC"
         Kontext "DocumentCalc"
         if gNoNewDoc = TRUE then
@@ -63,10 +62,10 @@ sub hNewDocument ( optional bANewDoc )
         else
             FileOpen "FileName", "private:factory/scalc", "FrameName", "_default", "SynchronMode", TRUE
         end if
-        if ( DocumentCalc.IsMax() = false ) then		
-			DocumentCalc.Maximize()
-			Wait( 2000 )
-		end if        						
+        if ( DocumentCalc.IsMax() = false ) then
+            DocumentCalc.Maximize()
+            Wait( 2000 )
+        end if
     case "IMPRESS"
         Kontext "DocumentImpress"
         if gNoNewDoc = TRUE then
@@ -84,10 +83,10 @@ sub hNewDocument ( optional bANewDoc )
             end if
             Kontext "DocumentImpress"
             Sleep 2
-            if ( DocumentImpress.IsMax() = false ) then		
-            	DocumentImpress.Maximize()
-            	Wait( 2000 )
-            end if        							
+            if ( DocumentImpress.IsMax() = false ) then
+                DocumentImpress.Maximize()
+                Wait( 2000 )
+            end if
         end if
     case "DRAW"
         Kontext "DocumentDraw"
@@ -96,10 +95,10 @@ sub hNewDocument ( optional bANewDoc )
         else
             FileOpen "FileName", "private:factory/sdraw", "FrameName", "_default", "SynchronMode", TRUE
         end if
-        if ( DocumentDraw.IsMax() = false ) then		
-			DocumentDraw.Maximize()
-			Wait( 2000 )
-		end if        									
+        if ( DocumentDraw.IsMax() = false ) then
+            DocumentDraw.Maximize()
+            Wait( 2000 )
+        end if
     case "MASTERDOCUMENT"
         Kontext "DocumentMasterDoc"
         if gNoNewDoc = TRUE then
@@ -111,10 +110,10 @@ sub hNewDocument ( optional bANewDoc )
         sleep (1)
         if Navigator.Exists(5) then Navigator.Close
         Kontext "DocumentMasterDoc"
-        if ( DocumentMasterDoc.IsMax() = false ) then		
-			DocumentMasterDoc.Maximize()
-			Wait( 2000 )
-		end if        											
+        if ( DocumentMasterDoc.IsMax() = false ) then
+            DocumentMasterDoc.Maximize()
+            Wait( 2000 )
+        end if
     case "MATH"
         Kontext "DocumentMath"
         if gNoNewDoc = TRUE then
@@ -123,10 +122,10 @@ sub hNewDocument ( optional bANewDoc )
             FileOpen "FileName", "private:factory/smath", "FrameName", "_default", "SynchronMode", TRUE
         end if
         Kontext "DocumentMath"
-        if ( DocumentMath.IsMax() = false ) then		
-			DocumentMath.Maximize()
-			Wait( 2000 )
-		end if        													
+        if ( DocumentMath.IsMax() = false ) then
+            DocumentMath.Maximize()
+            Wait( 2000 )
+        end if
     case "HTML"
         Kontext "DocumentWriterWeb"
         if gNoNewDoc = TRUE then
@@ -135,10 +134,10 @@ sub hNewDocument ( optional bANewDoc )
             FileOpen "FileName", "private:factory/swriter/web", "FrameName", "_default", "SynchronMode", TRUE
         end if
         Kontext "DocumentWriterWeb"
-        if ( DocumentWriterWeb.IsMax() = false ) then		
-			DocumentWriterWeb.Maximize()
-			Wait( 2000 )
-		end if        															
+        if ( DocumentWriterWeb.IsMax() = false ) then
+            DocumentWriterWeb.Maximize()
+            Wait( 2000 )
+        end if
     case "DATABASE"
         FileOpen "FileName", "private:factory/sdatabase?Interactive", "FrameName", "_default", "SynchronMode", TRUE
         Kontext "DatabaseWizard"
@@ -189,37 +188,55 @@ end sub
 '-------------------------------------------------------------------------------
 '
 function hCreateLabels() as Boolean
-    '/// hCreateLabels : open the tab-dialog for making a new lable (file/new/lable) ///'
-    FileOpen "FileName", "private:factory/swriter?slot=21051", "FrameName", "_default", "SynchronMode", TRUE
-    Sleep (2)
+
+    hCreateLabels() = false
+
+    FileOpen( "FileName", "private:factory/swriter?slot=21051", "FrameName", "_default", "SynchronMode", TRUE )
+    
     Kontext
-    Active.Setpage TabEtiketten
-    Kontext "TabEtiketten"
-    if Not TabEtiketten.Exists then
-        Warnlog "Dialog for Labels is not up!"
-        hCreateLabels = False
+    if ( Active.exists( 5 ) ) then
+        Active.setPage TabEtiketten
+
+        if ( TabEtiketten.exists( 1 ) ) then
+            if ( Tabetiketten.isVisible() ) then
+                hCreateLabels() = true
+            else
+                warnlog( "<TabEtiketten> is not visible" )
+            endif
+        else
+            warnlog( "<TabEtiketten> not open" )
+        endif
     else
-        hCreateLabels = True
+        warnlog( "Failed to open <TabEtiketten>" )
     endif
-    Sleep (2)
+
 end function
 '
 '-------------------------------------------------------------------------------
 '
 function hCreateBusinessCards() as Boolean
-    '/// hCreateBusinessCards : open the tab-dialog for making a new business card (file/new/business cards) ///'
-    FileOpen "FileName", "private:factory/swriter?slot=21052", "FrameName", "_default", "SynchronMode", TRUE
-    Sleep (2)
+
+    hCreateBusinessCards() = false
+
+    FileOpen( "FileName", "private:factory/swriter?slot=21052", "FrameName", "_default", "SynchronMode", TRUE )
+
     Kontext
-    Active.Setpage TabEtikettenMedium
-    Kontext "TabEtikettenMedium"
-    if Not TabEtikettenMedium.Exists then
-        Warnlog "Dialog for BusinessCards is not up!"
-        hCreateBusinessCards = False
+    if ( Active.exists( 5 ) ) then
+        Active.setPage TabEtikettenMedium
+        
+        if ( TabEtikettenMedium.exists( 1 ) ) then
+            if ( TabetikettenMedium.isVisible() ) then
+                hCreateBusinessCards() = true
+            else
+                warnlog( "<TabEtikettenMedium> is not visible" )
+            endif
+        else
+            warnlog( "<TabEtikettenMedium> not open" )
+        endif
     else
-        hCreateBusinessCards = True
+        warnlog( "Failed to open <TabEtikettenMedium>" )
     endif
-    Sleep (2)
+
 end function
 '
 '-------------------------------------------------------------------------------
@@ -231,301 +248,206 @@ function hCloseDocument()
 
     '/// Accept to lose changes'
     Kontext "Active"
-    if Active.Exists(2) then
+    if ( Active.Exists( 2 ) ) then
         try
             Active.No
         catch
-            Active.Click ( 202 )
+            Active.Click( 202 )
         endcatch
     end if
-    
+
     '/// Wait for FileClose to complete'
     WaitSlot( 2000 )
-    
+
 end function
 '
 '-------------------------------------------------------------------------------
 '
-sub gMouseClick ( X%, Y%, optional mb% )
-    '/// gMouseClick ( x_Position, y-Position ) : make a mouseclick on the document (dependent on 'gApplication') ///'
-    '/// default left mousebutton will be used otherwise you can optionally give the mousebutton to press
-    '/// 1 = left mouse button
-    '/// 2 = left mouse button
-    '/// 3 = left mouse button
+sub gMouseClick ( X%, Y%, optional _mousebutton )
 
-    gApplication = gApplication
+    dim oDocument as object
+    dim mousebutton as integer
 
-    if IsMissing(mb%) then mb% = 1
+    ' Handle infamous optional parameter
+    if ( IsMissing( _mousebutton ) ) then
+        mousebutton = 1
+    else
+        mousebutton = _mousebutton
+    endif
 
-    select case gApplication
-    case "BACKGROUND"
-        Kontext "BACKGROUND"
-        autoexecute = false
-        Desktop.MouseDown ( X%, Y%, mb% )
-        Desktop.MouseUp ( X%, Y%, mb% )
-        autoexecute = true
-    case "CALC"
-        Kontext "DocumentCalc"
-        autoexecute = false
-        DocumentCalc.MouseDown ( X%, Y%, mb% )
-        DocumentCalc.MouseUp ( X%, Y%, mb% )
-        autoexecute = true
-    case "DRAW"
-        Kontext "DocumentDraw"
-        autoexecute=false
-        DocumentDraw.MouseDown ( X%, Y%, mb% )
-        DocumentDraw.MouseUp ( X%, Y%, mb% )
-        autoexecute=true
-    case "WRITER"
-        Kontext "DocumentWriter"
-        autoexecute=false
-        DocumentWriter.MouseDown ( X%, Y%, mb% )
-        DocumentWriter.MouseUp ( X%, Y%, mb% )
-        autoexecute=true
-    case "HTML"
-        Kontext "DocumentWriterWeb"
-        autoexecute=false
-        DocumentWriterWeb.MouseDown ( X%, Y%, mb% )
-        DocumentWriterWeb.MouseUp ( X%, Y%, mb% )
-        autoexecute=true
-    case "MASTERDOCUMENT"
-        Kontext "DocumentMasterDoc"
-        autoexecute=false
-        DocumentMasterDoc.MouseDown ( X%, Y%, mb% )
-        DocumentMasterDoc.MouseUp ( X%, Y%, mb% )
-        autoexecute=true
-    case "IMPRESS"
-        Kontext "DocumentImpress"
-        autoexecute=false
-        DocumentImpress.MouseDown ( X%, Y%, mb% )
-        DocumentImpress.MouseUp ( X%, Y%, mb% )
-        autoexecute=true
-    case "MATH"
-        Kontext "DocumentMath"
-        autoexecute=false
-        DocumentMath.MouseDown ( X%, Y%, mb% )
-        DocumentMath.MouseDown ( X%, Y%, mb% )
-        autoexecute=true
-    case "CHART"
-        Kontext "DocumentChart"
-        autoexecute=false
-        DocumentChart.MouseDown ( X%, Y%, mb% )
-        DocumentChart.MouseUp ( X%, Y%, mb% )
-        autoexecute=true
-    end select
-    sleep (2)
+    hSetDocumentContext() ' set kontext to current document type
+    oDocument = hSetDocumentObject() ' get the current document object
+
+    autoexecute = false
+    oDocument.MouseDown ( X%, Y%, mousebutton )
+    oDocument.MouseUp ( X%, Y%, mousebutton )
+    autoexecute = true
+    wait( 1000 )
+    
 end sub
 '
 '-------------------------------------------------------------------------------
 '
 sub gMouseDoubleClick ( X%, Y% )
-    '/// gMouseDoubleClick ( x_Position, y-Position ) : make a mouse-doubleclick on the document ( dependent on 'gApplication' ) ///'
-    gApplication = gApplication
 
-    select case gApplication
-    case "CALC"
-        Kontext "DocumentCalc"
-        DocumentCalc.MouseDoubleClick ( X%, Y% )
-    case "DRAW"
-        Kontext "DocumentDraw"
-        DocumentDraw.MouseDoubleClick ( X%, Y% )
-    case "BACKGROUND"
-        Kontext "BACKGROUND"
-        Desktop.MouseDoubleClick ( X%, Y% )
-    case "WRITER"
-        Kontext "DocumentWriter"
-        DocumentWriter.MouseDoubleClick ( X%, Y% )
-    case "HTML"
-        Kontext "DocumentWriterWeb"
-        DocumentWriterWeb.MouseDoubleClick ( X%, Y% )
-    case "MASTERDOCUMENT"
-        Kontext "DocumentMasterDoc"
-        DocumentMasterDoc.MouseDoubleClick ( X%, Y% )
-    case "IMPRESS"
-        Kontext "DocumentImpress"
-        DocumentImpress.MouseDoubleClick ( X%, Y% )
-    case "MATH"
-        Kontext "DocumentMath"
-        DocumentMath.MouseDoubleClick ( X%, Y% )
-    end select
-    Sleep (2)
+    dim oDocument as object
+
+    hSetDocumentContext() ' set kontext to current document type
+    oDocument = hSetDocumentObject() ' get the current document object
+    oDocument.MouseDoubleClick ( X%, Y% )
+    wait( 1000 )
+
 end sub
 '
 '-------------------------------------------------------------------------------
 '
 sub gMouseMove ( BeginX%, BeginY%, EndX%, EndY% )
-    '/// gMouseMove ( BeginX, BeginY, EndX, EndY ) : make a mousemove trom Bx,By to Ex,Ey on the document ( dependent on 'gApplication' ) ///'
-    gApplication = gApplication
 
-    select case gApplication
-    case "CALC"
-        Kontext "DocumentCalc"
-        DocumentCalc.MouseDown ( BeginX%, BeginY% )
-        DocumentCalc.MouseMove ( EndX%, EndY%)
-        DocumentCalc.MouseUp ( EndX%, EndY% )
-    case "DRAW"
-        Kontext "DocumentDraw"
-        DocumentDraw.MouseDown ( BeginX%, BeginY% )
-        DocumentDraw.MouseMove ( EndX%, EndY% )
-        DocumentDraw.MouseUp ( EndX%, EndY% )
-    case "WRITER"
-        Kontext "DocumentWriter"
-        DocumentWriter.MouseDown ( BeginX%, BeginY% )
-        DocumentWriter.MouseMove ( EndX%, EndY%)
-        DocumentWriter.MouseUp ( EndX%, EndY% )
-    case "HTML"
-        Kontext "DocumentWriterWeb"
-        DocumentWriterWeb.MouseDown ( BeginX%, BeginY% )
-        DocumentWriterWeb.MouseMove ( EndX%, EndY%)
-        DocumentWriterWeb.MouseUp ( EndX%, EndY% )
-    case "MASTERDOCUMENT"
-        Kontext "DocumentMasterDoc"
-        DocumentMasterDoc.MouseDown ( BeginX%, BeginY% )
-        DocumentMasterDoc.MouseMove ( EndX%, EndY%)
-        DocumentMasterDoc.MouseUp ( EndX%, EndY% )
-    case "IMPRESS"
-        Kontext "DocumentImpress"
-        DocumentImpress.MouseDown ( BeginX%, BeginY% )
-        DocumentImpress.MouseMove ( EndX%, EndY%)
-        DocumentImpress.MouseUp ( EndX%, EndY% )
-    case "MATH"
-        Kontext "DocumentMath"
-        DocumentMath.MouseDown ( BeginX%, BeginY% )
-        DocumentMath.MouseMove ( EndX%, EndY%)
-        DocumentMath.MouseDown ( EndX%, EndY% )
-    end select
-    Sleep (2)
+    dim oDocument as object
+
+    hSetDocumentContext() ' set kontext to current document type
+    oDocument = hSetDocumentObject() ' get the current document object
+    oDocument.MouseDown ( BeginX%, BeginY% )
+    oDocument.MouseMove ( EndX%, EndY%)
+    oDocument.MouseUp ( EndX%, EndY% )
+    wait( 1000 )
+
 end sub
 '
 '-------------------------------------------------------------------------------
 '
 sub gMouseDown ( BeginX%, BeginY% )
-    '/// gMouseDown ( x_Position, y-Position ) : make a mousedown on the document (dependent on 'gApplication') ///'
-    '///+ DON'T FORGETT to call gMouseUp !  ///'
-    gApplication = gApplication
 
-    select case gApplication
-    case "CALC"
-        Kontext "DocumentCalc"
-        DocumentCalc.MouseDown ( BeginX%, BeginY% )
-    case "DRAW"
-        Kontext "DocumentDraw"
-        DocumentDraw.MouseDown ( BeginX%, BeginY% )
-    case "WRITER"
-        Kontext "DocumentWriter"
-        DocumentWriter.MouseDown ( BeginX%, BeginY% )
-    case "HTML"
-        Kontext "DocumentWriterWeb"
-        DocumentWriterWeb.MouseDown ( BeginX%, BeginY% )
-    case "MASTERDOCUMENT"
-        Kontext "DocumentMasterDoc"
-        DocumentMasterDoc.MouseDown ( BeginX%, BeginY% )
-    case "IMPRESS"
-        Kontext "DocumentImpress"
-        DocumentImpress.MouseDown ( BeginX%, BeginY% )
-    case "MATH"
-        Kontext "DocumentMath"
-        DocumentMath.MouseDown ( BeginX%, BeginY% )
-    end select
-    Sleep (2)
+    dim oDocument as object
+
+    hSetDocumentContext() ' set kontext to current document type
+    oDocument = hSetDocumentObject() ' get the current document object
+    oDocument.MouseDown ( BeginX%, BeginY% )
+    wait( 300 )
+
 end sub
 '
 '-------------------------------------------------------------------------------
 '
 sub gMouseMove2 ( EndX%, EndY% )
-    '/// gMouseMove2 ( x_Position, y-Position ) : move the pointer to position on the document (dependent on 'gApplication') ///'
-    gApplication = gApplication
 
-    select case gApplication
-    case "CALC"
-        Kontext "DocumentCalc"
-        DocumentCalc.MouseMove ( EndX%, EndY%)
-    case "DRAW"
-        Kontext "DocumentDraw"
-        DocumentDraw.MouseMove ( EndX%, EndY% )
-    case "WRITER"
-        Kontext "DocumentWriter"
-        DocumentWriter.MouseMove ( EndX%, EndY%)
-    case "HTML"
-        Kontext "DocumentWriterWeb"
-        DocumentWriterWeb.MouseMove ( EndX%, EndY%)
-    case "MASTERDOCUMENT"
-        Kontext "DocumentMasterDoc"
-        DocumentMasterDoc.MouseMove ( EndX%, EndY%)
-    case "IMPRESS"
-        Kontext "DocumentImpress"
-        DocumentImpress.MouseMove ( EndX%, EndY%)
-    case "MATH"
-        Kontext "DocumentMath"
-        DocumentMath.MouseMove ( EndX%, EndY%)
-    end select
-    Sleep (2)
+    dim oDocument as object
+
+    hSetDocumentContext() ' set kontext to current document type
+    oDocument = hSetDocumentObject() ' get the current document object
+    oDocument.MouseMove ( EndX%, EndY%)
+    wait( 300 )
+
 end sub
 '
 '-------------------------------------------------------------------------------
 '
 sub gMouseUp ( EndX%, EndY% )
-    '/// gMouseUp ( x_Position, y-Position ) : make a release button on the document (dependent on 'gApplication') ///'
-    gApplication = gApplication
 
-    select case gApplication
-    case "CALC"
-        Kontext "DocumentCalc"
-        DocumentCalc.MouseUp ( EndX%, EndY% )
-    case "DRAW"
-        Kontext "DocumentDraw"
-        DocumentDraw.MouseUp ( EndX%, EndY% )
-    case "WRITER"
-        Kontext "DocumentWriter"
-        DocumentWriter.MouseUp ( EndX%, EndY% )
-    case "HTML"
-        Kontext "DocumentWriterWeb"
-        DocumentWriterWeb.MouseUp ( EndX%, EndY% )
-    case "MASTERDOCUMENT"
-        Kontext "DocumentMasterDoc"
-        DocumentMasterDoc.MouseUp ( EndX%, EndY% )
-    case "IMPRESS"
-        Kontext "DocumentImpress"
-        DocumentImpress.MouseUp ( EndX%, EndY% )
-    case "MATH"
-        Kontext "DocumentMath"
-        DocumentMath.MouseUp ( EndX%, EndY% )
-    end select
-    Sleep (2)
+    dim oDocument as object
+
+    hSetDocumentContext() ' set kontext to current document type
+    oDocument = hSetDocumentObject() ' get the current document object
+    oDocument.MouseUp ( EndX%, EndY% )
+    wait( 300 )
+
 end sub
 '
 '-------------------------------------------------------------------------------
 '
-sub hTypeKeys ( OutputText , optional iLoop as Integer )
-    '/// hTypeKeys  ( OutputText , optional iLoop as Integer ): type the keys in 'outputtext' 'iLoop' times ///'
-    Dim i as integer
+sub hTypeKeys ( OutputText , optional _iLoop as Integer )
 
-    If IsMissing(iLoop) = True then iLoop = 1
-    For i = 1 to iLoop
-        Select Case Ucase(gApplication)
-        Case "WRITER"
-            Kontext "DocumentWriter"
-            DocumentWriter.TypeKeys OutputText
-        Case "MASTERDOCUMENT"
-            Kontext "DocumentMasterDoc"
-            DocumentMasterDoc.TypeKeys OutputText
-        Case "HTML"
-            Kontext "DocumentWriterWeb"
-            DocumentWriterWeb.TypeKeys OutputText
-        case "CALC"
-            Kontext "DocumentCalc"
-            DocumentCalc.TypeKeys OutputText
-        case "DRAW"
-            Kontext "DocumentDraw"
-            DocumentDraw.TypeKeys OutputText
-        case "IMPRESS"
-            Kontext "DocumentImpress"
-            DocumentImpress.TypeKeys OutputText
-        case "MATH"
-            Kontext "DocumentMath"
-            DocumentMath.TypeKeys OutputText
-        end select
-        wait 500
-    next i
+    dim iRepeat as integer
+    dim iLoop as integer
+    dim oDocument as object
+
+    ' Handle infamous optional parameter
+    If ( IsMissing( _iLoop ) ) then
+        iLoop = 1
+    else
+        iLoop = _iLoop
+    endif
+
+    hSetDocumentContext() ' set kontext to current document type
+    oDocument = hSetDocumentObject() ' Get the document object we want to write to
+
+    for iRepeat = 1 to iLoop
+        oDocument.TypeKeys( OutputText )
+        wait( 200 )
+    next iRepeat
+
 end sub
 
+'*******************************************************************************
+
+function hSetDocumentContext() as string
+
+    ' link gApplication to its document kontext
+
+    dim cDocumentContext as string
+
+    select case( gApplication )
+    case "DRAW"             : cDocumentContext = "DocumentDraw"
+    case "IMPRESS"          : cDocumentContext = "DocumentImpress"
+    case "WRITER"           : cDocumentContext = "DocumentWriter"
+    case "CALC"             : cDocumentContext = "DocumentCalc"
+    case "MATH"             : cDocumentContext = "DocumentMath"
+    case "HTML"             : cDocumentContext = "DocumentWriterWeb"
+    case "MASTERDOCUMENT"   : cDocumentContext = "DocumentMasterDoc"
+    case "CHART"            : cDocumentContext = "DocumentChart"
+    case "BACKGROUND"       : cDocumentContext = "Background"
+    case else               : warnlog( "Unknown gApplication: " & gApplication )
+    end select
+
+    kontext cDocumentContext : hSetDocumentContext() = cDocumentContext
+
+end function
+
+'*******************************************************************************
+
+function hSetDocumentObject() as object
+
+    ' link gApplication to its document object
+
+    dim oDocumentObject as object
+
+    select case( gApplication )
+    Case "WRITER"         : oDocumentObject = DocumentWriter
+    Case "MASTERDOCUMENT" : oDocumentObject = DocumentMasterDoc
+    Case "HTML"           : oDocumentObject = DocumentWriterWeb
+    case "CALC"           : oDocumentObject = DocumentCalc
+    case "DRAW"           : oDocumentObject = DocumentDraw
+    case "IMPRESS"        : oDocumentObject = DocumentImpress
+    case "MATH"           : oDocumentObject = DocumentMath
+    case "CHART"          : oDocumentObject = DocumentChart
+    case "BACKGROUND"     : oDocumentObject = Desktop
+    case else             : warnlog( "Unknown gApplication: " & gApplication )
+    end select
+
+    hSetDocumentObject() = oDocumentObject
+
+end function
+
+'*******************************************************************************
+
+function hSetDocumentFactory() as string
+
+    ' link gApplication to its factory as used by FileOpen slot
+
+    dim cDocumentFactory as string
+
+    select case( gApplication )
+    case "DRAW"             : cDocumentFactory = "private:factory/sdraw"
+    case "IMPRESS"          : cDocumentFactory = "private:factory/simpress"
+    case "WRITER"           : cDocumentFactory = "private:factory/swriter"
+    case "CALC"             : cDocumentFactory = "private:factory/scalc"
+    case "MATH"             : cDocumentFactory = "private:factory/smath"
+    case "HTML"             : cDocumentFactory = "private:factory/swriter/web"
+    case "MASTERDOCUMENT"   : cDocumentFactory = "private:factory/swriter/GlobalDocument"
+    case "DATABASE"         : cDocumentFactory = "private:factory/sdatabase?Interactive"
+    case else               : warnlog( "Unknown gApplication: " & gApplication )
+    end select
+
+    hSetDocumentFactory() = cDocumentFactory
+
+end function

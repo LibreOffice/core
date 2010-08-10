@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Search & Replace
 '*
@@ -64,6 +64,9 @@ end sub
 
 '---------------------------------------------------------
 testcase tCheckDialog
+    warnlog( "#i111908# - Control <Replace> cannot be accessed" )
+    goto endsub
+    
  Dim Checkboxtitel
    Call hNewDocument
    EditSearchAndReplace
