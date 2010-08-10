@@ -86,7 +86,7 @@ namespace writerfilter
         const string & getTag() const;
         string toString() const;
 
-        ostream & output(ostream & o) const;
+        ostream & output(ostream & o, const string & sIndent = "") const;
     };
 
     class WRITERFILTER_DLLPUBLIC TagLogger
@@ -139,8 +139,7 @@ namespace writerfilter
         IdToString::Pointer_t mpIdToString;
 
     public:
-        PropertySetToTagHandler(IdToString::Pointer_t pIdToString)
-        : mpTag(new XMLTag("propertyset")), mpIdToString(pIdToString) {}
+        PropertySetToTagHandler(IdToString::Pointer_t pIdToString);
         virtual ~PropertySetToTagHandler();
 
         XMLTag::Pointer_t getTag() const { return mpTag; }
