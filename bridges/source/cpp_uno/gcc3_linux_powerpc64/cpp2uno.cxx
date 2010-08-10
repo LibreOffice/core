@@ -552,7 +552,7 @@ extern "C" void privateSnippetExecutor( ... )
                 "mr     %0,    1\n\t"
                 : "=r" (sp) : );
 
-    volatile long nRegReturn[0];
+    volatile long nRegReturn[1];
 
     typelib_TypeClass aType =
         cpp_mediate( nOffsetAndIndex, (void**)gpreg, (void**)fpreg, sp, (sal_Int64*)nRegReturn);
