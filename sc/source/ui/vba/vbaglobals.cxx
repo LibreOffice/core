@@ -80,6 +80,15 @@ ScVbaGlobals::getApplication() throw (uno::RuntimeException)
        return mxApplication;
 }
 
+
+uno::Reference<excel::XApplication > SAL_CALL
+ScVbaGlobals::getExcel() throw (uno::RuntimeException)
+{
+       return getApplication();
+}
+
+
+
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException)
 {
