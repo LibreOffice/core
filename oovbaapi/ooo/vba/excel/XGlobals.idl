@@ -55,6 +55,8 @@ interface XGlobals: com::sun::star::uno::XInterface
     [attribute, readonly] ooo::vba::XAssistant Assistant;
     [attribute, readonly] any Selection;
     [attribute, readonly] XWorkbook ThisWorkbook;
+    [attribute, readonly] any Debug;
+
 
     void Calculate() raises(com::sun::star::script::BasicErrorException);
     XRange Cells([in] any RowIndex, [in] any ColumnIndex);
