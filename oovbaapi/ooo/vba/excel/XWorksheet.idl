@@ -66,6 +66,7 @@ interface XWorksheet
     [attribute, readonly] boolean ProtectionMode;
     [attribute, readonly] boolean ProtectContents;
     [attribute, readonly] boolean ProtectDrawingObjects;
+    [attribute, readonly] boolean ProtectScenarios;
     [attribute, readonly] XRange UsedRange;
     [attribute, readonly] XWorksheet Next;
     [attribute, readonly] XWorksheet Previous;
