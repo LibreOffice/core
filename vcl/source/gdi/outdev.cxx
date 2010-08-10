@@ -2311,7 +2311,7 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
-        if(mpGraphics->DrawPolyLine(aB2DPolyLine, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this))
+        if( mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this))
         {
             return;
         }
@@ -2416,7 +2416,7 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
 
             if(bTryAA)
             {
-                bDone = mpGraphics->DrawPolyLine(aCandidate, basegfx::B2DVector(1.0, 1.0), basegfx::B2DLINEJOIN_NONE, this);
+                bDone = mpGraphics->DrawPolyLine( aCandidate, 0.0, basegfx::B2DVector(1.0,1.0), basegfx::B2DLINEJOIN_NONE, this);
             }
 
             if(!bDone)
@@ -2605,7 +2605,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
             aB2DPolyLine = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolyLine);
         }
 
-        if(mpGraphics->DrawPolyLine(aB2DPolyLine, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this))
+        if(mpGraphics->DrawPolyLine( aB2DPolyLine, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this))
         {
             return;
         }
@@ -2653,7 +2653,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && LINE_SOLID == rLineInfo.GetStyle())
     {
-        DrawPolyLine(rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), rLineInfo.GetLineJoin());
+        DrawPolyLine( rPoly.getB2DPolygon(), (double)rLineInfo.GetWidth(), rLineInfo.GetLineJoin());
         return;
     }
 
@@ -2785,7 +2785,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
                 aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
             }
 
-            bSuccess = mpGraphics->DrawPolyLine(aB2DPolygon, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
+            bSuccess = mpGraphics->DrawPolyLine( aB2DPolygon, 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
         }
 
         if(bSuccess)
@@ -2877,7 +2877,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 
             for(sal_uInt32 a(0); bSuccess && a < aB2DPolyPolygon.count(); a++)
             {
-                bSuccess = mpGraphics->DrawPolyLine(aB2DPolyPolygon.getB2DPolygon(a), aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
+                bSuccess = mpGraphics->DrawPolyLine( aB2DPolyPolygon.getB2DPolygon(a), 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
             }
         }
 
@@ -3000,7 +3000,7 @@ void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPo
 
             for(sal_uInt32 a(0);bSuccess && a < aB2DPolyPolygon.count(); a++)
             {
-                bSuccess = mpGraphics->DrawPolyLine(aB2DPolyPolygon.getB2DPolygon(a), aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
+                bSuccess = mpGraphics->DrawPolyLine( aB2DPolyPolygon.getB2DPolygon(a), 0.0, aB2DLineWidth, basegfx::B2DLINEJOIN_NONE, this);
             }
         }
 
@@ -3047,7 +3047,7 @@ bool OutputDevice::ImpTryDrawPolyLineDirect(
     }
 
     // draw the polyline
-    return mpGraphics->DrawPolyLine(aB2DPolygon, aB2DLineWidth, eLineJoin, this);
+    return mpGraphics->DrawPolyLine( aB2DPolygon, 0.0, aB2DLineWidth, eLineJoin, this);
 }
 
 void OutputDevice::DrawPolyLine(

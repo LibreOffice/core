@@ -24,6 +24,7 @@ mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 ..\inc\toolkit\awt\vclxtopwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxtopwindow.hxx
 ..\inc\toolkit\awt\vclxtoolkit.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxtoolkit.hxx
 ..\inc\toolkit\awt\vclxwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindow.hxx
+..\inc\toolkit\awt\vclxsystemdependentwindow.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxsystemdependentwindow.hxx
 ..\source\awt\vclxdialog.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxdialog.hxx
 ..\inc\toolkit\awt\vclxwindows.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxwindows.hxx
 ..\inc\toolkit\awt\vclxmenu.hxx %_DEST%\inc%_EXT%\toolkit\awt\vclxmenu.hxx

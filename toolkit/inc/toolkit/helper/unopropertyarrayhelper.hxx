@@ -28,6 +28,7 @@
 #ifndef _TOOLKIT_HELPER_UNOPROPERTYARRAYHELPER_HXX_
 #define _TOOLKIT_HELPER_UNOPROPERTYARRAYHELPER_HXX_
 
+#include <toolkit/dllapi.h>
 #include <cppuhelper/propshlp.hxx>
 
 #include <tools/table.hxx>

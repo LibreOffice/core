@@ -703,11 +703,6 @@ void Export::getRandomName( ByteString& sRandStr )
 DirEntry Export::GetTempFile()
 /*****************************************************************************/
 {
-#if defined(WNT) || defined(OS2)
-    String sTempDir( Export::GetEnv( "TEMP" ), RTL_TEXTENCODING_ASCII_US );
-#else
-    String sTempDir( String::CreateFromAscii( "/tmp" ));
-#endif
     rtl::OUString* sTempFilename = new rtl::OUString();
 
     // Create a temp file
