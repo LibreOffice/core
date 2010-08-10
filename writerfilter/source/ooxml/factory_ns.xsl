@@ -105,6 +105,10 @@ public:
     virtual string getDefineName(Id nId) const;</xsl:text>
     <xsl:call-template name="factoryactiondecls"/>
     virtual void attributeAction(OOXMLFastContextHandler * pHandler, Token_t nToken, OOXMLValue::Pointer_t pValue);
+
+#ifdef DEBUG_FACTORY
+    virtual string getName() const;
+#endif
     <xsl:text>
     
     virtual ~</xsl:text>

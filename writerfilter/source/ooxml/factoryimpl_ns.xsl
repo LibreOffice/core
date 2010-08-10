@@ -881,6 +881,22 @@ void </xsl:text>
   </xsl:choose>
 </xsl:template>
 
+<xsl:template name="factorygetname">
+  <xsl:param name="ns"/>
+  <xsl:text>
+#ifdef DEBUG_FACTORY
+string </xsl:text>
+<xsl:call-template name="factoryclassname"/>
+<xsl:text>::getName() const
+{
+    return "</xsl:text>
+    <xsl:value-of select="$ns"/>
+    <xsl:text>";
+}
+#endif
+</xsl:text>
+</xsl:template>
+
   <xsl:template match="/">
     <xsl:variable name="ns" select="substring-before(substring-after($file, 'OOXMLFactory_'), '.cxx')"/>
     <xsl:text>
@@ -910,6 +926,9 @@ namespace ooxml {
         <xsl:call-template name="factorygetdefinename"/>
         <xsl:call-template name="factorytokentoidmap"/>
         <xsl:call-template name="factoryattributeaction"/>
+        <xsl:call-template name="factorygetname">
+          <xsl:with-param name="ns" select="$ns"/>
+        </xsl:call-template>
     </xsl:for-each>
     <xsl:text>
 /// @endcond
