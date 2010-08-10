@@ -219,6 +219,25 @@ ScVbaGlobals::Rows( const uno::Any& aIndex ) throw (uno::RuntimeException)
 
 }
 
+
+uno::Any SAL_CALL
+ScVbaGlobals::getDebug() throw (uno::RuntimeException)
+{
+    try // return empty object on error
+    {
+        uno::Sequence< uno::Any > aArgs( 1 );
+        aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
+        uno::Reference< uno::XInterface > xVBADebug = xServiceManager->createInstanceWithArgumentsAndContext(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VbaDebug" ) ), aArgs, mxContext );
+        return uno::Any( xVBADebug );
+    }
+    catch( uno::Exception& )
+    {
+    }
+    return uno::Any();
+}
+
 uno::Sequence< ::rtl::OUString > SAL_CALL
 ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
 {
