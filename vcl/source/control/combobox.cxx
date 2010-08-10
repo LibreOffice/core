@@ -1011,6 +1011,14 @@ void ComboBox::Clear()
     mpImplLB->Clear();
     CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) sal_IntPtr(-1) );
 }
+// -----------------------------------------------------------------------
+
+Image ComboBox::GetEntryImage( USHORT nPos ) const
+{
+    if ( mpImplLB->GetEntryList()->HasEntryImage( nPos ) )
+        return mpImplLB->GetEntryList()->GetEntryImage( nPos );
+    return Image();
+}
 
 // -----------------------------------------------------------------------
 
