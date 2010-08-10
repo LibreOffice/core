@@ -414,7 +414,7 @@ ScVbaWorksheet::getStandardHeight() throw (uno::RuntimeException)
 sal_Bool
 ScVbaWorksheet::getProtectionMode() throw (uno::RuntimeException)
 {
-    return false;
+    return sal_False;
 }
 
 sal_Bool
@@ -427,7 +427,13 @@ ScVbaWorksheet::getProtectContents()throw (uno::RuntimeException)
 sal_Bool
 ScVbaWorksheet::getProtectDrawingObjects() throw (uno::RuntimeException)
 {
-    return false;
+    return sal_False;
+}
+
+sal_Bool
+ScVbaWorksheet::getProtectScenarios() throw (uno::RuntimeException)
+{
+    return sal_False;
 }
 
 void
