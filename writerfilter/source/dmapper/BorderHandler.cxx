@@ -44,12 +44,13 @@ using namespace ::com::sun::star;
 
   -----------------------------------------------------------------------*/
 BorderHandler::BorderHandler( bool bOOXML ) :
-    m_nCurrentBorderPosition( BORDER_TOP ),
-    m_nLineWidth(0),
-    m_nLineType(0),
-    m_nLineColor(0),
-    m_nLineDistance(0),
-    m_bOOXML( bOOXML )
+LoggedProperties(dmapper_logger, "BorderHandler"),
+m_nCurrentBorderPosition( BORDER_TOP ),
+m_nLineWidth(0),
+m_nLineType(0),
+m_nLineColor(0),
+m_nLineDistance(0),
+m_bOOXML( bOOXML )
 {
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
@@ -61,14 +62,8 @@ BorderHandler::~BorderHandler()
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void BorderHandler::attribute(Id rName, Value & rVal)
+void BorderHandler::lcl_attribute(Id rName, Value & rVal)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("BorderHandler.attribute");
-    dmapper_logger->attribute("id", (*QNameToString::Instance())(rName));
-    dmapper_logger->endElement("BorderHandler.attribute");
-#endif
-
     sal_Int32 nIntValue = rVal.getInt();
     /* WRITERFILTERSTATUS: table: BorderHandler_attributedata */
     switch( rName )
@@ -120,13 +115,8 @@ void BorderHandler::attribute(Id rName, Value & rVal)
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void BorderHandler::sprm(Sprm & rSprm)
+void BorderHandler::lcl_sprm(Sprm & rSprm)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("BorderHandler.sprm");
-    dmapper_logger->attribute("sprm", rSprm.toString());
-#endif
-
     /* WRITERFILTERSTATUS: table: BorderHandler_sprm */
     switch( rSprm.getId())
     {
@@ -154,11 +144,6 @@ void BorderHandler::sprm(Sprm & rSprm)
         break;
         default:;
     }
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("BorderHandler.sprm");
-#endif
-
 }
 /*-- 24.04.2007 09:09:01---------------------------------------------------
 

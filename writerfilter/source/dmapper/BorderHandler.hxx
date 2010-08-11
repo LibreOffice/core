@@ -28,7 +28,7 @@
 #define INCLUDED_BORDERHANDLER_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 
@@ -36,7 +36,7 @@ namespace writerfilter {
 namespace dmapper
 {
 class PropertyMap;
-class WRITERFILTER_DLLPRIVATE BorderHandler : public Properties
+class WRITERFILTER_DLLPRIVATE BorderHandler : public LoggedProperties
 {
 public:
     //todo: order is a guess
@@ -63,13 +63,13 @@ private:
     bool                                        m_aFilledLines[BORDER_COUNT];
     ::com::sun::star::table::BorderLine         m_aBorderLines[BORDER_COUNT];
 
+    // Properties
+    virtual void lcl_attribute(Id Name, Value & val);
+    virtual void lcl_sprm(Sprm & sprm);
+
 public:
     BorderHandler( bool bOOXML );
     virtual ~BorderHandler();
-
-    // Properties
-    virtual void attribute(Id Name, Value & val);
-    virtual void sprm(Sprm & sprm);
 
     ::boost::shared_ptr<PropertyMap>            getProperties();
     ::com::sun::star::table::BorderLine         getBorderLine();
