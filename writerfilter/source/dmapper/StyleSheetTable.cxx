@@ -47,10 +47,7 @@
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
 
-#ifdef DEBUG_DOMAINMAPPER
 #include <dmapperLoggers.hxx>
-#include <resourcemodel/QNameToString.hxx>
-#endif
 
 using namespace ::com::sun::star;
 namespace writerfilter {
@@ -82,32 +79,11 @@ StyleSheetEntry::~StyleSheetEntry()
 {
 }
 
-#ifdef DEBUG_DOMAINMAPPER
-XMLTag::Pointer_t StyleSheetEntry::toTag()
-{
-    XMLTag::Pointer_t pResult(new XMLTag("StyleSheetEntry"));
-
-    pResult->addAttr("identifierI", sStyleIdentifierI);
-    pResult->addAttr("identifierD", sStyleIdentifierD);
-    pResult->addAttr("default", bIsDefaultStyle ? "true" : "false");
-    pResult->addAttr("invalidHeight", bInvalidHeight ? "true" : "false");
-    pResult->addAttr("hasUPE", bHasUPE ? "true" : "false");
-    pResult->addAttr("styleType", nStyleTypeCode);
-    pResult->addAttr("baseStyle", sBaseStyleIdentifier);
-    pResult->addAttr("nextStyle", sNextStyleIdentifier);
-    pResult->addAttr("styleName", sStyleName);
-    pResult->addAttr("styleName1", sStyleName1);
-    pResult->addAttr("convertedName", sConvertedStyleName);
-    pResult->addTag(pProperties->toTag());
-
-    return pResult;
-}
-#endif
-
 TableStyleSheetEntry::TableStyleSheetEntry( StyleSheetEntry& rEntry, StyleSheetTable* pStyles ):
     StyleSheetEntry( ),
     m_pStyleSheet( pStyles )
 {
+
     bIsDefaultStyle = rEntry.bIsDefaultStyle;
     bInvalidHeight = rEntry.bInvalidHeight;
     bHasUPE = rEntry.bHasUPE;
@@ -128,13 +104,6 @@ TableStyleSheetEntry::~TableStyleSheetEntry( )
 
 void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pProps )
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("AddTblStylePr");
-    dmapper_logger->attribute("type", nType);
-    dmapper_logger->addTag(pProps->toTag());
-    dmapper_logger->endElement("AddTblStylePr");
-#endif
-
     static TblStyleType pTypesToFix[] =
     {
         TBL_STYLE_FIRSTROW,
@@ -210,24 +179,6 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
 
     return pProps;
 }
-
-#ifdef DEBUG_DOMAINMAPPER
-XMLTag::Pointer_t TableStyleSheetEntry::toTag()
-{
-    XMLTag::Pointer_t pResult(StyleSheetEntry::toTag());
-
-    for (sal_Int32 nBit = 0; nBit < 13; ++nBit)
-    {
-        PropertyMapPtr pMap = GetProperties(1 << nBit);
-
-        XMLTag::Pointer_t pTag = pMap->toTag();
-        pTag->addAttr("kind", nBit);
-        pResult->addTag(pTag);
-    }
-
-    return pResult;
-}
-#endif
 
 void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleType nStyleId )
 {
@@ -410,8 +361,10 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Referenc
 /*-- 19.06.2006 12:04:32---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument) :
-    m_pImpl( new StyleSheetTable_Impl(rDMapper, xTextDocument) )
+StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument)
+: LoggedProperties(dmapper_logger, "StyleSheetTable")
+, LoggedTable(dmapper_logger, "StyleSheetTable")
+, m_pImpl( new StyleSheetTable_Impl(rDMapper, xTextDocument) )
 {
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
@@ -424,14 +377,8 @@ StyleSheetTable::~StyleSheetTable()
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void StyleSheetTable::attribute(Id Name, Value & val)
+void StyleSheetTable::lcl_attribute(Id Name, Value & val)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("StyleSheetTable.attribute");
-    dmapper_logger->attribute("name", (*QNameToString::Instance())(Name));
-    dmapper_logger->attribute("value", val.toString());
-#endif
-
     OSL_ENSURE( m_pImpl->m_pCurrentEntry, "current entry has to be set here");
     if(!m_pImpl->m_pCurrentEntry)
         return ;
@@ -553,21 +500,12 @@ void StyleSheetTable::attribute(Id Name, Value & val)
         }
         break;
     }
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("StyleSheetTable.attribute");
-#endif
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void StyleSheetTable::sprm(Sprm & rSprm)
+void StyleSheetTable::lcl_sprm(Sprm & rSprm)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("StyleSheetTable.sprm");
-    dmapper_logger->attribute("sprm", rSprm.toString());
-#endif
-
     sal_uInt32 nSprmId = rSprm.getId();
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue.get() ? pValue->getInt() : 0;
@@ -718,20 +656,12 @@ void StyleSheetTable::sprm(Sprm & rSprm)
             }
             break;
     }
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("StyleSheetTable.sprm");
-#endif
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
+void StyleSheetTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("StyleSheetTable.entry");
-#endif
-
     //create a new style entry
     // printf("StyleSheetTable::entry(...)\n");
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
@@ -751,16 +681,8 @@ void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Po
         //TODO: this entry contains the default settings - they have to be added to the settings
     }
 
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->addTag(m_pImpl->m_pCurrentEntry->toTag());
-#endif
-
     StyleSheetEntryPtr pEmptyEntry;
     m_pImpl->m_pCurrentEntry = pEmptyEntry;
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("StyleSheetTable.entry");
-#endif
 }
 /*-- 21.06.2006 15:34:49---------------------------------------------------
     sorting helper
@@ -820,10 +742,6 @@ uno::Sequence< ::rtl::OUString > PropValVector::getNames()
   -----------------------------------------------------------------------*/
 void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("applyStyleSheets");
-#endif
-
     try
     {
         uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
@@ -982,24 +900,13 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         PropValVector aSortedPropVals;
                         for( sal_Int32 nProp = 0; nProp < aPropValues.getLength(); ++nProp)
                         {
-#ifdef DEBUG_DOMAINMAPPER
-                            dmapper_logger->startElement("propvalue");
-                            dmapper_logger->attribute("name", aPropValues[nProp].Name);
-                            dmapper_logger->attribute("value", aPropValues[nProp].Value);
-#endif
                                 // Don't add the style name properties
                             bool bIsParaStyleName = aPropValues[nProp].Name.equalsAscii( "ParaStyleName" );
                             bool bIsCharStyleName = aPropValues[nProp].Name.equalsAscii( "CharStyleName" );
                             if ( !bIsParaStyleName && !bIsCharStyleName )
                             {
-#ifdef DEBUG_DOMAINMAPPER
-                                dmapper_logger->element("insert");
-#endif
                                 aSortedPropVals.Insert( aPropValues[nProp] );
                             }
-#ifdef DEBUG_DOMAINMAPPER
-                            dmapper_logger->endElement("propvalue");
-#endif
                         }
                         if(bAddFollowStyle)
                         {
@@ -1050,12 +957,6 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     if(bInsert)
                     {
                         xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
-#ifdef DEBUG_DOMAINMAPPER
-                        uno::Reference<beans::XPropertySet> xProps(xStyle, uno::UNO_QUERY);
-                        dmapper_logger->startElement("insertStyle");
-                        dmapper_logger->addTag(unoPropertySetToTag(xProps));
-                        dmapper_logger->endElement("insertStyle");
-#endif
                     }
                 }
                 ++aIt;
@@ -1067,10 +968,6 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
         (void)rEx;
         OSL_ENSURE( false, "Styles could not be imported completely");
     }
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("applyStyleSheets");
-#endif
 }
 /*-- 22.06.2006 15:56:56---------------------------------------------------
 
