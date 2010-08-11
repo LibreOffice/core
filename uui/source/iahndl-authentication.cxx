@@ -52,7 +52,6 @@
 #include "logindlg.hxx"
 #include "masterpasscrtdlg.hxx"
 #include "masterpassworddlg.hxx"
-#include "passcrtdlg.hxx"
 #include "passworddlg.hxx"
 
 #include "iahndl.hxx"
