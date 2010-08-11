@@ -5,7 +5,7 @@
 
 #include <dmapper/DomainMapper.hxx>
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 
 namespace writerfilter {
@@ -32,7 +32,7 @@ enum TblStyleType
     TBL_STYLE_SWCELL
 };
 
-class WRITERFILTER_DLLPRIVATE TblStylePrHandler : public Properties
+class WRITERFILTER_DLLPRIVATE TblStylePrHandler : public LoggedProperties
 {
 private:
     DomainMapper &              m_rDMapper;
@@ -41,13 +41,13 @@ private:
     TblStyleType                m_nType;
     PropertyMapPtr              m_pProperties;
 
+    // Properties
+    virtual void lcl_attribute(Id Name, Value & val);
+    virtual void lcl_sprm(Sprm & sprm);
+
 public:
     TblStylePrHandler( DomainMapper & rDMapper );
     virtual ~TblStylePrHandler( );
-
-    // Properties
-    virtual void attribute(Id Name, Value & val);
-    virtual void sprm(Sprm & sprm);
 
     inline PropertyMapPtr       getProperties() { return m_pProperties; };
     inline TblStyleType         getType() { return m_nType; };
