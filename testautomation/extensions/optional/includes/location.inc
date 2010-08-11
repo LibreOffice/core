@@ -65,11 +65,11 @@ testcase tExtensionLocation
 
     kontext "Makro"
     if ( Makro.exists( 1 ) ) then
-        printlog( "Macro was executed")
-        Makro.close()
-    else
         warnlog( "Macro was not executed")
+        Makro.close()
         goto endsub
+    else
+        printlog( "Macro was executed")
     endif
 
     kontext "active"
