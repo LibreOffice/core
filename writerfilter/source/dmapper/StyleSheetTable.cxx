@@ -709,7 +709,7 @@ void StyleSheetTable::sprm(Sprm & rSprm)
                     m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties );
 
                     PropertyMapPtr pProps(new PropertyMap());
-                    m_pImpl->m_rDMapper.sprm( rSprm, pProps );
+                    m_pImpl->m_rDMapper.sprmWithProps( rSprm, pProps );
 
                     m_pImpl->m_pCurrentEntry->pProperties->insert(pProps);
 

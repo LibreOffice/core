@@ -69,10 +69,6 @@ namespace dmapper
 using namespace ::std;
 using namespace ::com::sun::star;
 
-#ifdef DEBUG_DOMAINMAPPER
-extern TagLogger::Pointer_t dmapper_logger;
-#endif
-
 class XInputStreamHelper : public cppu::WeakImplHelper1
 <    io::XInputStream   >
 {
