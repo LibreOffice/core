@@ -153,7 +153,10 @@ IMPL_LINK( SvxImprovementOptionsPage, HandleShowData, PushButton*, EMPTYARG )
         uno::Reference< lang::XComponent > xDoc = ::comphelper::SynchronousDispatch::dispatch(
             xDesktop, sLogFile, C2S("_default"), 0, aArgs );
         if ( xDoc.is() )
+        {
+            dynamic_cast<Dialog*>(GetParent())->EndDialog( RET_CANCEL );
             return 1;
+        }
     }
 
     return 0;
