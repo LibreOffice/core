@@ -8,10 +8,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
-#ifdef DEBUG_DOMAINMAPPER
-#include <resourcemodel/QNameToString.hxx>
 #include "dmapperloggers.hxx"
-#endif
 
 #include <iostream>
 using namespace std;
@@ -22,7 +19,7 @@ namespace dmapper {
 using namespace com::sun::star;
 
 PositionHandler::PositionHandler( ) :
-    Properties( )
+LoggedProperties(dmapper_logger, "PositionHandler")
 {
     m_nOrient = text::VertOrientation::NONE;
     m_nRelation = text::RelOrientation::FRAME;
@@ -33,14 +30,8 @@ PositionHandler::~PositionHandler( )
 {
 }
 
-void PositionHandler::attribute( Id aName, Value& rVal )
+void PositionHandler::lcl_attribute( Id aName, Value& rVal )
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("PositionHandler.attribute");
-    dmapper_logger->attribute("name", (*QNameToString::Instance())(aName));
-    dmapper_logger->attribute("value", rVal.toString());
-#endif
-
     sal_Int32 nIntValue = rVal.getInt( );
     switch ( aName )
     {
@@ -102,20 +93,10 @@ void PositionHandler::attribute( Id aName, Value& rVal )
 #endif
             break;
     }
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("PositionHandler.attribute");
-#endif
 }
 
-void PositionHandler::sprm( Sprm& rSprm )
+void PositionHandler::lcl_sprm( Sprm& rSprm )
 {
-#ifdef DEBUG_DOMAINMAPPER
-    string sSprm = rSprm.toString();
-    dmapper_logger->startElement("PositionHandler.sprm");
-    dmapper_logger->attribute("sprm", sSprm);
-#endif
-
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
 
@@ -184,14 +165,10 @@ void PositionHandler::sprm( Sprm& rSprm )
 #endif
             break;
     }
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("PositionHandler.sprm");
-#endif
 }
 
 WrapHandler::WrapHandler( ) :
-    Properties( ),
+LoggedProperties(dmapper_logger, "WrapHandler"),
     m_nType( 0 ),
     m_nSide( 0 )
 {
@@ -201,7 +178,7 @@ WrapHandler::~WrapHandler( )
 {
 }
 
-void WrapHandler::attribute( Id aName, Value& rVal )
+void WrapHandler::lcl_attribute( Id aName, Value& rVal )
 {
     switch ( aName )
     {
@@ -215,7 +192,7 @@ void WrapHandler::attribute( Id aName, Value& rVal )
     }
 }
 
-void WrapHandler::sprm( Sprm& )
+void WrapHandler::lcl_sprm( Sprm& )
 {
 }
 
