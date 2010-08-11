@@ -276,7 +276,7 @@ public:
     // set the font
     virtual USHORT         SetFont( ImplFontSelectData*, int nFallbackLevel );
     // get the current font's etrics
-    virtual void            GetFontMetric( ImplFontMetricData* );
+    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
