@@ -1458,7 +1458,11 @@ Reference< XSpellChecker1 > ImpEditEngine::GetSpeller()
 
 SpellInfo * ImpEditEngine::CreateSpellInfo( const EditSelection &rSel, bool bMultipleDocs )
 {
-    pSpellInfo = new SpellInfo;
+    if (!pSpellInfo)
+        pSpellInfo = new SpellInfo;
+    else
+        *pSpellInfo = SpellInfo();  // reset to default values
+
     pSpellInfo->bMultipleDoc = bMultipleDocs;
     EditSelection aSentenceSel( SelectSentence( rSel ) );
 //    pSpellInfo->aSpellStart = CreateEPaM( aSentenceSel.Min() );
@@ -2023,7 +2027,6 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
 #else
     bool bRet = false;
     EditSelection aCurSel( rEditView.pImpEditView->GetEditSelection() );
-    //the pSpellInfo has to be created on demand
     if(!pSpellInfo)
         pSpellInfo = CreateSpellInfo( aCurSel, true );
     pSpellInfo->aCurSentenceStart = aCurSel.Min();
@@ -2191,8 +2194,12 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
 {
 #ifdef SVX_LIGHT
 #else
+    // Note: rNewPortions.size() == 0 is valid and happens when the whole
+    // sentence got removed in the dialog
+
     DBG_ASSERT(pSpellInfo, "pSpellInfo not initialized");
-    if(pSpellInfo)
+    if (pSpellInfo &&
+        pSpellInfo->aLastSpellPortions.size() > 0)  // no portions -> no text to be changed
     {
         // get current paragraph length to calculate later on how the sentence length changed,
         // in order to place the cursor at the end of the sentence again
@@ -2202,6 +2209,10 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
         UndoActionStart( EDITUNDO_INSERT );
         if(pSpellInfo->aLastSpellPortions.size() == rNewPortions.size())
         {
+            DBG_ASSERT( rNewPortions.size() > 0, "rNewPortions should not be empty here" );
+            DBG_ASSERT( pSpellInfo->aLastSpellPortions.size() == pSpellInfo->aLastSpellContentSelections.size(),
+                    "aLastSpellPortions and aLastSpellContentSelections size mismatch" );
+
             //the simple case: the same number of elements on both sides
             //each changed element has to be applied to the corresponding source element
             svx::SpellPortions::const_iterator aCurrentNewPortion = rNewPortions.end();
@@ -2252,6 +2263,8 @@ void ImpEditEngine::ApplyChangedSentence(EditView& rEditView,
         }
         else
         {
+            DBG_ASSERT( pSpellInfo->aLastSpellContentSelections.size() > 0, "aLastSpellContentSelections should not be empty here" );
+
             //select the complete sentence
             SpellContentSelections::const_iterator aCurrentEndPosition = pSpellInfo->aLastSpellContentSelections.end();
             --aCurrentEndPosition;
