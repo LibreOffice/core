@@ -311,19 +311,10 @@ class SmTextNode : public SmVisibleNode
     USHORT      nFontDesc;
 
 protected:
-    SmTextNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT nFontDescP)
-    :   SmVisibleNode(eNodeType, rNodeToken)
-    {
-        nFontDesc = nFontDescP;
-    }
+    SmTextNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT nFontDescP );
 
 public:
-    SmTextNode(const SmToken &rNodeToken, USHORT nFontDescP)
-    :   SmVisibleNode(NTEXT, rNodeToken)
-    {
-        nFontDesc = nFontDescP;
-    }
-
+    SmTextNode(const SmToken &rNodeToken, USHORT nFontDescP );
 
     USHORT              GetFontDesc() const { return nFontDesc; }
     void                SetText(const XubString &rText) { aText = rText; }
@@ -347,15 +338,13 @@ public:
 
 class SmSpecialNode : public SmTextNode
 {
+    bool    bIsFromGreekSymbolSet;
+
 protected:
-    SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT _nFontDesc)
-    :   SmTextNode(eNodeType, rNodeToken, _nFontDesc)
-    {}
+    SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT _nFontDesc);
 
 public:
-    SmSpecialNode(const SmToken &rNodeToken)
-    :   SmTextNode(NSPECIAL, rNodeToken, FNT_MATH)  //! default Font nicht immer richtig
-    {}
+    SmSpecialNode(const SmToken &rNodeToken);
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);

@@ -402,7 +402,28 @@
 				</info>
 				<value>false</value>
 			</prop>
-			<prop oor:name="ScaleNormalBracket" oor:type="xs:boolean">
+            <prop oor:name="GreekCharStyle" oor:type="xs:short">
+                <!-- UIHints: n/a yet -->
+                <info>
+                    <author>TL</author>
+                    <desc>Specifies the default layout for symbols from the 'Greek' symbol set.</desc>
+                    <label>Greek character style</label>
+                </info>
+                <constraints>
+                    <minInclusive oor:value="0">
+                        <info>
+                            <desc>Specifies the minimum value allowed</desc>
+                        </info>
+                    </minInclusive>
+                    <maxInclusive oor:value="2">
+                        <info>
+                            <desc>Specifies the maximum value allowed</desc>
+                        </info>
+                    </maxInclusive>
+                </constraints>
+                <value>0</value>
+            </prop>
+            <prop oor:name="ScaleNormalBracket" oor:type="xs:boolean">
 				<!-- OldPath: Math/StandardFormat -->
 				<!-- OldLocation: Soffice.cfg -->
 				<!-- UIHints: Format - Spacing - Category - Brackets - Scale all brackets -->

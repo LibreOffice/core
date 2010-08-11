@@ -24,34 +24,17 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef INCLUDED_RESOURCE_MODEL_HELPER_HXX
+#define INCLUDED_RESOURCE_MODEL_HELPER_HXX
 
-#ifndef INCLUDED_UTIL_HXX
-#define INCLUDED_UTIL_HXX
-
-#include <string>
-#include <iostream>
+#include <resourcemodel/WW8ResourceModel.hxx>
 
 namespace writerfilter {
-namespace doctok {
-using namespace ::std;
+namespace resourcemodel {
 
-/**
-   Assertion
+void WRITERFILTER_DLLPUBLIC resolveSprmProps(Properties & rHandler, Sprm & rSprm);
+void  WRITERFILTER_DLLPUBLIC resolveAttributeProperties(Properties & rHandler, Value & rValue);
 
-   @bTest       if false the assertion is raised
-*/
-void util_assert(bool bTest);
-
-/**
-   Print string to ostream.
-
-   Printable characters are passed without change. Non-printable
-   characters are replaced by '.'.
-
-   @param o      ostream for output
-   @param str    string to print
- */
-void printBytes(ostream & o, const string & str);
 }}
 
-#endif // INCLUDED_UTIL_HXX
+#endif // INCLUDED_RESOURCE_MODEL_HELPER_HXX
