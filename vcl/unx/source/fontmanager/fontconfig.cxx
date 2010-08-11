@@ -124,13 +124,15 @@ class FontCfgWrapper
     FcBool          (*m_pFcConfigAppFontAddFile)(FcConfig*, const FcChar8*);
     FcBool          (*m_pFcConfigAppFontAddDir)(FcConfig*, const FcChar8*);
     FcBool          (*m_pFcConfigParseAndLoad)(FcConfig*,const FcChar8*,FcBool);
-
     FcBool          (*m_pFcConfigSubstitute)(FcConfig*,FcPattern*,FcMatchKind);
+
     FcBool          (*m_pFcPatternAddInteger)(FcPattern*,const char*,int);
     FcBool                    (*m_pFcPatternAddDouble)(FcPattern*,const char*,double);
     FcBool                    (*m_pFcPatternAddBool)(FcPattern*,const char*,FcBool);
     FcBool                    (*m_pFcPatternAddCharSet)(FcPattern*,const char*,const FcCharSet*);
     FcBool          (*m_pFcPatternAddString)(FcPattern*,const char*,const FcChar8*);
+    FcBool                    (*m_pFcPatternDel)(FcPattern*,const char*);
+
     FT_UInt         (*m_pFcFreeTypeCharIndex)(FT_Face,FcChar32);
 
     oslGenericFunction loadSymbol( const char* );
@@ -242,6 +244,8 @@ public:
     { return m_pFcPatternAddBool( pPattern, pObject, nValue ); }
     FcBool FcPatternAddCharSet(FcPattern* pPattern,const char* pObject,const FcCharSet*pCharSet)
     { return m_pFcPatternAddCharSet(pPattern,pObject,pCharSet); }
+    FcBool FcPatternDel(FcPattern* pPattern, const char* object)
+    { return m_pFcPatternDel( pPattern, object); }
 
     FT_UInt FcFreeTypeCharIndex( FT_Face face, FcChar32 ucs4 )
     { return m_pFcFreeTypeCharIndex ? m_pFcFreeTypeCharIndex( face, ucs4 ) : 0; }
@@ -349,6 +353,9 @@ FontCfgWrapper::FontCfgWrapper()
         loadSymbol( "FcPatternAddCharSet" );
     m_pFcPatternAddString = (FcBool(*)(FcPattern*,const char*,const FcChar8*))
         loadSymbol( "FcPatternAddString" );
+    m_pFcPatternDel = (FcBool(*)(FcPattern*,const char*))
+        loadSymbol( "FcPatternDel" );
+
     m_pFcFreeTypeCharIndex = (FT_UInt(*)(FT_Face,FcChar32))
         loadSymbol( "FcFreeTypeCharIndex" );
 
@@ -397,7 +404,8 @@ FontCfgWrapper::FontCfgWrapper()
             m_pFcPatternAddDouble                     &&
             m_pFcPatternAddCharSet          &&
             m_pFcPatternAddBool             &&
-            m_pFcPatternAddString
+            m_pFcPatternAddString           &&
+            m_pFcPatternDel
             ) )
     {
         osl_unloadModule( (oslModule)m_pLib );
@@ -428,18 +436,31 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
     if( !pOrig )
         return;
 
+    // filter the font sets to remove obsolete or duplicate faces
     for( int i = 0; i < pOrig->nfont; ++i )
     {
-        FcBool outline = false;
-        FcPattern *pOutlinePattern = pOrig->fonts[i];
-        FcResult eOutRes =
-                 FcPatternGetBool( pOutlinePattern, FC_OUTLINE, 0, &outline );
-        if( (eOutRes != FcResultMatch) || (outline != FcTrue) )
+        FcPattern* pOrigPattern = pOrig->fonts[i];
+        // create a pattern to find eventually better alternatives
+        FcPattern* pTestPattern = FcPatternDuplicate( pOrigPattern );
+        FcPatternAddBool( pTestPattern, FC_OUTLINE, FcTrue );
+        // TODO: use pattern->ImplFontAttr->pattern to filter out
+        //       all attribute that are not interesting for finding dupes
+        FcPatternDel( pTestPattern, FC_FONTVERSION );
+        FcPatternDel( pTestPattern, FC_CHARSET );
+        FcPatternDel( pTestPattern, FC_FILE );
+        // find the font face for the dupe-search pattern
+        FcResult eFcResult = FcResultMatch;
+        FcPattern* pBetterPattern = FcFontMatch( FcConfigGetCurrent(), pTestPattern, &eFcResult );
+        FcPatternDestroy( pTestPattern );
+        if( eFcResult != FcResultMatch )
             continue;
-        FcPatternReference(pOutlinePattern);
-        FcFontSetAdd(m_pOutlineSet, pOutlinePattern);
+        // insert best found pattern for the dupe-search pattern
+        // TODO: skip inserting patterns that are already known in the target fontset
+        FcPatternReference( pBetterPattern );
+        FcFontSetAdd( m_pOutlineSet, pBetterPattern );
     }
-    // TODO: FcFontSetDestroy( pOrig );
+
+    // TODO?: FcFontSetDestroy( pOrig );
     #else
     (void)eSetName; // prevent compiler warning about unused parameter
     #endif
