@@ -34,6 +34,26 @@
 namespace writerfilter
 {
 
+class LoggedResourcesHelper
+{
+public:
+    explicit LoggedResourcesHelper(TagLogger::Pointer_t pLogger, const string & sPrefix);
+    virtual ~LoggedResourcesHelper();
+
+    void startElement(const string & sElement);
+    void endElement(const string & sElement);
+    void chars(const ::rtl::OUString & rChars);
+    void chars(const string & rChars);
+    void attribute(const string & rName, const string & rValue);
+    void attribute(const string & rName, sal_uInt32 nValue);
+
+    void setPrefix(const string & rPrefix);
+
+private:
+    TagLogger::Pointer_t mpLogger;
+    string msPrefix;
+};
+
 class LoggedStream : public Stream
 {
 public:
@@ -71,9 +91,7 @@ protected:
     virtual void lcl_substream(Id name, writerfilter::Reference<Stream>::Pointer_t ref) = 0;
     virtual void lcl_info(const string & info) = 0;
 
-private:
-    TagLogger::Pointer_t mpLogger;
-    string msPrefix;
+    LoggedResourcesHelper mHelper;
 };
 
 class LoggedProperties : public Properties
@@ -89,9 +107,7 @@ protected:
     virtual void lcl_attribute(Id name, Value & val) = 0;
     virtual void lcl_sprm(Sprm & sprm) = 0;
 
-private:
-    TagLogger::Pointer_t mpLogger;
-    string msPrefix;
+    LoggedResourcesHelper mHelper;
 };
 
 class LoggedTable : public Table
@@ -105,9 +121,7 @@ public:
 protected:
     virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;
 
-private:
-    TagLogger::Pointer_t mpLogger;
-    string msPrefix;
+    LoggedResourcesHelper mHelper;
 };
 
 }
