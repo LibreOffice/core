@@ -207,8 +207,8 @@ void SbiExprList::Gen()
     {
         pParser->aGen.Gen( _ARGC );
         // AB 10.1.96: Typ-Anpassung bei DECLARE
-        USHORT nCount = 1, nParAnz = 0;
-        SbiSymPool* pPool = NULL;
+        USHORT nCount = 1 /*, nParAnz = 0*/;
+//      SbiSymPool* pPool = NULL;
         for( SbiExpression* pExpr = pFirst; pExpr; pExpr = pExpr->pNext,nCount++ )
         {
             pExpr->Gen();
