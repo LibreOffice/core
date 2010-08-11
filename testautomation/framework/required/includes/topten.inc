@@ -40,7 +40,7 @@ sub topten
     catch
         warnlog( "Optional legacy filters package is not installed" )
         printlog( "Please restart the setup to install the missing filters" )
-        end sub
+        exit sub
     endcatch
 
     gApplication = "WRITER"
