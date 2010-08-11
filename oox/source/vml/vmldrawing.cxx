@@ -102,7 +102,7 @@ Drawing::~Drawing()
 {
     if( !mxCtrlForm.get() )
         mxCtrlForm.reset( new ::oox::ole::EmbeddedForm(
-            mrFilter.getModelFactory(), mxDrawPage, mrFilter.getGraphicHelper() ) );
+            mrFilter.getModel(), mxDrawPage, mrFilter.getGraphicHelper() ) );
     return *mxCtrlForm;
 }
 

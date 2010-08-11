@@ -31,6 +31,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include "oox/drawingml/shape.hxx"
+#include "oox/ole/axcontrol.hxx"
 #include "oox/vml/vmldrawing.hxx"
 #include "oox/vml/vmldrawingfragment.hxx"
 #include "oox/xls/excelhandlers.hxx"
@@ -182,6 +183,9 @@ public:
     virtual void        notifyShapeInserted(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
                             const ::com::sun::star::awt::Rectangle& rShapeRect );
+
+private:
+    ::oox::ole::ControlConverter maControlConv;
 };
 
 // ============================================================================

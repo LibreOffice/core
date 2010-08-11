@@ -82,12 +82,18 @@ public:
                             ApiControlType eCtrlType,
                             sal_Int32 nCtrlIndex ) const;
 
+    /** Binds the passed control model to the data sources. The implementation
+        will check which source types are supported. */
+    void                bindToSources(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
+                            const ControlConverter& rConv ) const;
+
 protected:
     ::rtl::OUString     maName;             /// Name of the control.
     ::rtl::OUString     maTag;              /// User defined tag.
     ::rtl::OUString     maToolTip;          /// Tool tip for the control.
-    ::rtl::OUString     maLinkedCell;       /// Linked cell for the control value in a spreadsheet.
-    ::rtl::OUString     maSourceRange;      /// Source data for the control in a spreadsheet.
+    ::rtl::OUString     maControlSource;    /// Linked cell for the control value in a spreadsheet.
+    ::rtl::OUString     maRowSource;        /// Source data for the control in a spreadsheet.
     AxPairData          maPos;              /// Position in parent container.
     sal_Int32           mnId;               /// Control identifier.
     sal_Int32           mnHelpContextId;    /// Help context identifier.
@@ -181,11 +187,12 @@ private:
 
 // ============================================================================
 
-class VbaUserForm : public VbaFormControl, public ControlConverter
+class VbaUserForm : public VbaFormControl
 {
 public:
     explicit            VbaUserForm(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr = true );
 
@@ -199,6 +206,8 @@ public:
 
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxGlobalFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxDocModel;
+    ControlConverter    maConverter;
 };
 
 // ============================================================================

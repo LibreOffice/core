@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #include "oox/ole/axcontrol.hxx"
-#include <rtl/tencinfo.h>
+
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
@@ -39,39 +39,47 @@
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
+#include <com/sun/star/form/binding/XBindableValue.hpp>
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
+#include <com/sun/star/form/binding/XListEntrySource.hpp>
+#include <com/sun/star/form/binding/XValueBinding.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
-#include "properties.hxx"
-#include "tokens.hxx"
+#include <com/sun/star/table/CellAddress.hpp>
+#include <com/sun/star/table/CellRangeAddress.hpp>
+#include <rtl/tencinfo.h>
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::awt::XControlModel;
-using ::com::sun::star::container::XIndexContainer;
-using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::drawing::XDrawPage;
-using ::com::sun::star::form::XForm;
-using ::com::sun::star::form::XFormComponent;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
+#include "properties.hxx"
+#include "tokens.hxx"
 
 namespace oox {
 namespace ole {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::form::binding;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -220,14 +228,70 @@ const sal_Int16 API_STATE_UNCHECKED         = 0;
 const sal_Int16 API_STATE_CHECKED           = 1;
 const sal_Int16 API_STATE_DONTKNOW          = 2;
 
+// ----------------------------------------------------------------------------
+
+/** Tries to extract a range address from a defined name. */
+bool lclExtractRangeFromName( CellRangeAddress& orRangeAddr, const Reference< XModel >& rxDocModel, const OUString& rAddressString )
+{
+    try
+    {
+        PropertySet aPropSet( rxDocModel );
+        Reference< XNameAccess > xRangesNA( aPropSet.getAnyProperty( PROP_NamedRanges ), UNO_QUERY_THROW );
+        Reference< XCellRangeReferrer > xReferrer( xRangesNA->getByName( rAddressString ), UNO_QUERY_THROW );
+        Reference< XCellRangeAddressable > xAddressable( xReferrer->getReferredCells(), UNO_QUERY_THROW );
+        orRangeAddr = xAddressable->getRangeAddress();
+        return true;
+    }
+    catch( Exception& )
+    {
+    }
+    return false;
+}
+
+bool lclExtractAddressFromName( CellAddress& orAddress, const Reference< XModel >& rxDocModel, const OUString& rAddressString )
+{
+    CellRangeAddress aRangeAddr;
+    if( lclExtractRangeFromName( aRangeAddr, rxDocModel, rAddressString ) &&
+        (aRangeAddr.StartColumn == aRangeAddr.EndColumn) &&
+        (aRangeAddr.StartRow == aRangeAddr.EndRow) )
+    {
+        orAddress.Sheet = aRangeAddr.Sheet;
+        orAddress.Column = aRangeAddr.StartColumn;
+        orAddress.Row = aRangeAddr.StartRow;
+        return true;
+    }
+    return false;
+}
+
+void lclPrepareConverter( PropertySet& rConverter, const Reference< XModel >& rxDocModel,
+        const OUString& rAddressString, sal_Int32 nRefSheet, bool bRange )
+{
+    if( !rConverter.is() ) try
+    {
+        Reference< XMultiServiceFactory > xFactory( rxDocModel, UNO_QUERY_THROW );
+        OUString aServiceName = bRange ?
+            CREATE_OUSTRING( "com.sun.star.table.CellRangeAddressConversion" ) :
+            CREATE_OUSTRING( "com.sun.star.table.CellAddressConversion" );
+        rConverter.set( xFactory->createInstance( aServiceName ) );
+    }
+    catch( Exception& )
+    {
+    }
+    rConverter.setProperty( PROP_XLA1Representation, rAddressString );
+    rConverter.setProperty( PROP_ReferenceSheet, nRefSheet );
+}
+
 } // namespace
 
 // ============================================================================
 
-ControlConverter::ControlConverter( const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
+ControlConverter::ControlConverter( const Reference< XModel >& rxDocModel,
+        const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
+    mxDocModel( rxDocModel ),
     mrGraphicHelper( rGraphicHelper ),
     mbDefaultColorBgr( bDefaultColorBgr )
 {
+    OSL_ENSURE( mxDocModel.is(), "ControlConverter::ControlConverter - missing document model" );
 }
 
 ControlConverter::~ControlConverter()
@@ -283,6 +347,74 @@ void ControlConverter::convertScrollBar( PropertyMap& rPropMap,
     rPropMap.setProperty( PROP_LineIncrement, nSmallChange );
     rPropMap.setProperty( PROP_BlockIncrement, nLargeChange );
     rPropMap.setProperty( bAwtModel ? PROP_ScrollValue : PROP_DefaultScrollValue, nPosition );
+}
+
+void ControlConverter::bindToSources( const Reference< XControlModel >& rxCtrlModel,
+        const OUString& rCtrlSource, const OUString& rRowSource, sal_Int32 nRefSheet ) const
+{
+    // value binding
+    if( rCtrlSource.getLength() > 0 ) try
+    {
+        // first check if the XBindableValue interface is supported
+        Reference< XBindableValue > xBindable( rxCtrlModel, UNO_QUERY_THROW );
+
+        // convert address string to cell address struct
+        CellAddress aAddress;
+        if( !lclExtractAddressFromName( aAddress, mxDocModel, rCtrlSource ) )
+        {
+            lclPrepareConverter( maAddressConverter, mxDocModel, rCtrlSource, nRefSheet, false );
+            if( !maAddressConverter.getProperty( aAddress, PROP_Address ) )
+                throw RuntimeException();
+        }
+
+        // create argument sequence
+        NamedValue aValue;
+        aValue.Name = CREATE_OUSTRING( "BoundCell" );
+        aValue.Value <<= aAddress;
+        Sequence< Any > aArgs( 1 );
+        aArgs[ 0 ] <<= aValue;
+
+        // create the CellValueBinding instance and set at the control model
+        Reference< XMultiServiceFactory > xFactory( mxDocModel, UNO_QUERY_THROW );
+        Reference< XValueBinding > xBinding( xFactory->createInstanceWithArguments(
+            CREATE_OUSTRING( "com.sun.star.table.CellValueBinding" ), aArgs ), UNO_QUERY_THROW );
+        xBindable->setValueBinding( xBinding );
+    }
+    catch( Exception& )
+    {
+    }
+
+    // list entry source
+    if( rRowSource.getLength() > 0 ) try
+    {
+        // first check if the XListEntrySink interface is supported
+        Reference< XListEntrySink > xEntrySink( rxCtrlModel, UNO_QUERY_THROW );
+
+        // convert address string to cell range address struct
+        CellRangeAddress aRangeAddr;
+        if( !lclExtractRangeFromName( aRangeAddr, mxDocModel, rRowSource ) )
+        {
+            lclPrepareConverter( maRangeConverter, mxDocModel, rRowSource, nRefSheet, true );
+            if( !maRangeConverter.getProperty( aRangeAddr, PROP_Address ) )
+                throw RuntimeException();
+        }
+
+        // create argument sequence
+        NamedValue aValue;
+        aValue.Name = CREATE_OUSTRING( "CellRange" );
+        aValue.Value <<= aRangeAddr;
+        Sequence< Any > aArgs( 1 );
+        aArgs[ 0 ] <<= aValue;
+
+        // create the EntrySource instance and set at the control model
+        Reference< XMultiServiceFactory > xFactory( mxDocModel, UNO_QUERY_THROW );
+        Reference< XListEntrySource > xEntrySource( xFactory->createInstanceWithArguments(
+            CREATE_OUSTRING( "com.sun.star.table.CellRangeListSource"  ), aArgs ), UNO_QUERY_THROW );
+        xEntrySink->setListEntrySource( xEntrySource );
+    }
+    catch( Exception& )
+    {
+    }
 }
 
 // ActiveX (Forms 2.0) specific conversion ------------------------------------
@@ -1683,10 +1815,10 @@ bool EmbeddedControl::convertProperties( const Reference< XControlModel >& rxCtr
 
 // ============================================================================
 
-EmbeddedForm::EmbeddedForm( const Reference< XMultiServiceFactory >& rxModelFactory,
+EmbeddedForm::EmbeddedForm( const Reference< XModel >& rxDocModel,
         const Reference< XDrawPage >& rxDrawPage, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
-    ControlConverter( rGraphicHelper, bDefaultColorBgr ),
-    mxModelFactory( rxModelFactory ),
+    ControlConverter( rxDocModel, rGraphicHelper, bDefaultColorBgr ),
+    mxModelFactory( rxDocModel, UNO_QUERY ),
     mxFormsSupp( rxDrawPage, UNO_QUERY )
 {
     OSL_ENSURE( mxModelFactory.is(), "EmbeddedForm::EmbeddedForm - missing service factory" );

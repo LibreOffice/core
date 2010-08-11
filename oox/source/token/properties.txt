@@ -2,6 +2,7 @@ AbsoluteName
 Action
 ActiveSplitRange
 ActiveTable
+Address
 Adjust
 AdjustContrast
 AdjustLuminance
@@ -330,6 +331,7 @@ RefX
 RefY
 Reference
 ReferenceDevice
+ReferenceSheet
 RegularExpressions
 RelId
 RelativeHorizontalTabbarWidth
@@ -457,5 +459,6 @@ Weight
 WhiteDay
 Width
 WritingMode
+XLA1Representation
 ZoomType
 ZoomValue
