@@ -33,6 +33,8 @@
 #include <vector>
 #include <stdio.h>
 
+#include "dmapperLoggers.hxx"
+
 namespace writerfilter {
 namespace dmapper
 {
@@ -46,8 +48,11 @@ struct FontTable_Impl
 /*-- 19.06.2006 12:04:32---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-FontTable::FontTable() :
-    m_pImpl( new FontTable_Impl )
+FontTable::FontTable()
+: LoggedProperties(dmapper_logger, "FontTable")
+, LoggedTable(dmapper_logger, "FontTable")
+, LoggedStream(dmapper_logger, "FontTable")
+, m_pImpl( new FontTable_Impl )
 {
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
@@ -60,7 +65,7 @@ FontTable::~FontTable()
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::attribute(Id Name, Value & val)
+void FontTable::lcl_attribute(Id Name, Value & val)
 {
     OSL_ENSURE( m_pImpl->pCurrentEntry, "current entry has to be set here");
     if(!m_pImpl->pCurrentEntry)
@@ -533,7 +538,7 @@ void FontTable::attribute(Id Name, Value & val)
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::sprm(Sprm& rSprm)
+void FontTable::lcl_sprm(Sprm& rSprm)
 {
     OSL_ENSURE( m_pImpl->pCurrentEntry, "current entry has to be set here");
     if(!m_pImpl->pCurrentEntry)
@@ -561,7 +566,7 @@ void FontTable::sprm(Sprm& rSprm)
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
+void FontTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
     //create a new font entry
     OSL_ENSURE( !m_pImpl->pCurrentEntry, "current entry has to be NULL here");
@@ -574,81 +579,81 @@ void FontTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_
 /*-- 19.06.2006 12:04:34---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::startSectionGroup()
+void FontTable::lcl_startSectionGroup()
 {
 }
 /*-- 19.06.2006 12:04:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::endSectionGroup()
+void FontTable::lcl_endSectionGroup()
 {
 }
 /*-- 19.06.2006 12:04:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::startParagraphGroup()
+void FontTable::lcl_startParagraphGroup()
 {
 }
 /*-- 19.06.2006 12:04:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::endParagraphGroup()
+void FontTable::lcl_endParagraphGroup()
 {
 }
 /*-- 19.06.2006 12:04:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::startCharacterGroup()
+void FontTable::lcl_startCharacterGroup()
 {
 }
 /*-- 19.06.2006 12:04:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::endCharacterGroup()
+void FontTable::lcl_endCharacterGroup()
 {
 }
 /*-- 19.06.2006 12:04:36---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::text(const sal_uInt8*, size_t )
+void FontTable::lcl_text(const sal_uInt8*, size_t )
 {
 }
 /*-- 19.06.2006 12:04:36---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::utext(const sal_uInt8* , size_t)
+void FontTable::lcl_utext(const sal_uInt8* , size_t)
 {
 }
 /*-- 19.06.2006 12:04:37---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::props(writerfilter::Reference<Properties>::Pointer_t)
+void FontTable::lcl_props(writerfilter::Reference<Properties>::Pointer_t)
 {
 }
 /*-- 19.06.2006 12:04:37---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::table(Id, writerfilter::Reference<Table>::Pointer_t)
+void FontTable::lcl_table(Id, writerfilter::Reference<Table>::Pointer_t)
 {
 }
 /*-- 19.06.2006 12:04:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::substream(Id, ::writerfilter::Reference<Stream>::Pointer_t)
+void FontTable::lcl_substream(Id, ::writerfilter::Reference<Stream>::Pointer_t)
 {
 }
 /*-- 19.06.2006 12:04:39---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::info(const string& )
+void FontTable::lcl_info(const string& )
 {
 }
 
-void FontTable::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > )
+void FontTable::lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > )
 {
 }
 
-void FontTable::endShape( )
+void FontTable::lcl_endShape( )
 {
 }
 
