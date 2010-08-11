@@ -981,6 +981,12 @@ void SbiParser::DefDeclare( BOOL bPrivate )
                 // New declare handling
                 if( pDef->GetLib().Len() > 0 )
                 {
+                    if( bNewGblDefs && nGblChain == 0 )
+                    {
+                        nGblChain = aGen.Gen( _JUMP, 0 );
+                        bNewGblDefs = FALSE;
+                    }
+
                     USHORT nSavLine = nLine;
                     aGen.Statement();
                     pDef->Define();
