@@ -54,14 +54,7 @@
 #include <com/sun/star/drawing/XShape.hpp>
 #include <rtl/ustrbuf.hxx>
 
-
-#include <iostream>
-#include <resourcemodel/QNameToString.hxx>
-#include <string.h>
-
-#ifdef DEBUG_DOMAINMAPPER
-#include <resourcemodel/TagLogger.hxx>
-#endif
+#include "dmapperLoggers.hxx"
 
 namespace writerfilter {
 namespace dmapper
@@ -350,9 +343,12 @@ GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xCompo
                              uno::Reference< lang::XMultiServiceFactory > xTextFactory,
                              DomainMapper& rDMapper,
                              GraphicImportType eImportType )
-: m_pImpl( new GraphicImport_Impl( eImportType, rDMapper ))
-  ,m_xComponentContext( xComponentContext )
-  ,m_xTextFactory( xTextFactory)
+: LoggedProperties(dmapper_logger, "GraphicImport")
+, LoggedTable(dmapper_logger, "GraphicImport")
+, LoggedStream(dmapper_logger, "GraphicImport")
+, m_pImpl( new GraphicImport_Impl( eImportType, rDMapper ))
+, m_xComponentContext( xComponentContext )
+, m_xTextFactory( xTextFactory)
 {
 }
 /*-- 01.11.2006 09:42:42---------------------------------------------------
@@ -365,12 +361,8 @@ GraphicImport::~GraphicImport()
 /*-- 01.11.2006 09:45:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::attribute(Id nName, Value & val)
+void GraphicImport::lcl_attribute(Id nName, Value & val)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("attribute");
-    dmapper_logger->attribute("name", (*QNameToString::Instance())(nName));
-#endif
     sal_Int32 nIntValue = val.getInt();
     /* WRITERFILTERSTATUS: table: PICFattribute */
     switch( nName )
@@ -1135,9 +1127,6 @@ void GraphicImport::attribute(Id nName, Value & val)
 #endif
             ;
     }
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("attribute");
-#endif
 }
 
 uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
@@ -1353,13 +1342,8 @@ void GraphicImport::ProcessShapeOptions(Value& val)
 /*-- 01.11.2006 09:45:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::sprm(Sprm & rSprm)
+void GraphicImport::lcl_sprm(Sprm & rSprm)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("sprm");
-    dmapper_logger->chars(rSprm.toString());
-#endif
-
     sal_uInt32 nSprmId = rSprm.getId();
     Value::Pointer_t pValue = rSprm.getValue();
 
@@ -1477,17 +1461,11 @@ void GraphicImport::sprm(Sprm & rSprm)
 #endif
             ;
     }
-
-
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("sprm");
-#endif
 }
 /*-- 01.11.2006 09:45:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+void GraphicImport::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
 /*-- 16.11.2006 16:14:32---------------------------------------------------
@@ -1743,81 +1721,81 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
 /*-- 01.11.2006 09:45:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::startSectionGroup()
+void GraphicImport::lcl_startSectionGroup()
 {
 }
 /*-- 01.11.2006 09:45:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::endSectionGroup()
+void GraphicImport::lcl_endSectionGroup()
 {
 }
 /*-- 01.11.2006 09:45:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::startParagraphGroup()
+void GraphicImport::lcl_startParagraphGroup()
 {
 }
 /*-- 01.11.2006 09:45:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::endParagraphGroup()
+void GraphicImport::lcl_endParagraphGroup()
 {
 }
 /*-- 01.11.2006 09:45:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::startCharacterGroup()
+void GraphicImport::lcl_startCharacterGroup()
 {
 }
 /*-- 01.11.2006 09:45:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::endCharacterGroup()
+void GraphicImport::lcl_endCharacterGroup()
 {
 }
 /*-- 01.11.2006 09:45:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::text(const sal_uInt8 * /*_data*/, size_t /*len*/)
+void GraphicImport::lcl_text(const sal_uInt8 * /*_data*/, size_t /*len*/)
 {
 }
 /*-- 01.11.2006 09:45:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::utext(const sal_uInt8 * /*_data*/, size_t /*len*/)
+void GraphicImport::lcl_utext(const sal_uInt8 * /*_data*/, size_t /*len*/)
 {
 }
 /*-- 01.11.2006 09:45:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::props(writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+void GraphicImport::lcl_props(writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
 /*-- 01.11.2006 09:45:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::table(Id /*name*/, writerfilter::Reference<Table>::Pointer_t /*ref*/)
+void GraphicImport::lcl_table(Id /*name*/, writerfilter::Reference<Table>::Pointer_t /*ref*/)
 {
 }
 /*-- 01.11.2006 09:45:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::substream(Id /*name*/, ::writerfilter::Reference<Stream>::Pointer_t /*ref*/)
+void GraphicImport::lcl_substream(Id /*name*/, ::writerfilter::Reference<Stream>::Pointer_t /*ref*/)
 {
 }
 /*-- 01.11.2006 09:45:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::info(const string & /*info*/)
+void GraphicImport::lcl_info(const string & /*info*/)
 {
 }
 
-void GraphicImport::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
+void GraphicImport::lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
 {
 }
 
-void GraphicImport::endShape( )
+void GraphicImport::lcl_endShape( )
 {
 }
 
