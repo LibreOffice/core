@@ -285,6 +285,7 @@ void LoggedProperties::sprm(Sprm & sprm)
 {
 #ifdef DEBUG_LOGGING
     mHelper.startElement("sprm");
+    mHelper.attribute("name", (*QNameToString::Instance())(sprm.getId()));
     mHelper.chars(sprm.toString());
 #endif
 
