@@ -193,11 +193,14 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                         if (pPrinter)
                         {
                             String aString(sPrinterName);
-                            SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
-                            if (pNewPrinter->IsKnown())
-                                pDocShell->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
-                            else
-                                delete pNewPrinter;
+                            if (pPrinter->GetName() != aString)
+                            {
+                                SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
+                                if (pNewPrinter->IsKnown())
+                                    pDocShell->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
+                                else
+                                    delete pNewPrinter;
+                            }
                         }
                         else
                             throw uno::RuntimeException();
