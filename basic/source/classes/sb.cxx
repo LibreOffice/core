@@ -553,6 +553,35 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                 USHORT nFlags_ = pProp->GetFlags();
                 pProp->SetFlag( SBX_NO_BROADCAST );
                 SbxProperty* pNewProp = new SbxProperty( *pProp );
+
+                // Special handling for modules instances and collections, they need
+                // to be instantiated, otherwise all refer to the same base object
+                SbxDataType eVarType = pProp->GetType();
+                if( eVarType == SbxOBJECT )
+                {
+                    SbxBase* pObjBase = pProp->GetObject();
+                    SbxObject* pObj = PTR_CAST(SbxObject,pObjBase);
+                    if( pObj != NULL )
+                    {
+                        String aObjClass = pObj->GetClassName();
+                        (void)aObjClass;
+
+                        SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pObjBase);
+                        if( pClassModuleObj != NULL )
+                        {
+                            SbModule* pClassModule = pClassModuleObj->getClassModule();
+                            SbClassModuleObject* pNewObj = new SbClassModuleObject( pClassModule );
+                            pNewProp->PutObject( pNewObj );
+                        }
+                        else if( aObjClass.EqualsIgnoreCaseAscii( "Collection" ) )
+                        {
+                            String aCollectionName( RTL_CONSTASCII_USTRINGPARAM("Collection") );
+                            BasicCollection* pNewCollection = new BasicCollection( aCollectionName );
+                            pNewProp->PutObject( pNewCollection );
+                        }
+                    }
+                }
+
                 pNewProp->ResetFlag( SBX_NO_BROADCAST );
                 pNewProp->SetParent( this );
                 pProps->PutDirect( pNewProp, i );
