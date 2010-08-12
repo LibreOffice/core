@@ -45,6 +45,7 @@
 
 #include <rtl/uuid.h>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/bootstrap.hxx>
 
 #include <comphelper/interaction.hxx>
 #include <comphelper/makesequence.hxx>
@@ -136,6 +137,16 @@ uno::Reference<rdf::XURI> createBaseURI(
         throw uno::RuntimeException();
     }
 
+    // #i108078# workaround non-hierarchical vnd.sun.star.expand URIs
+    // this really should be done somewhere else, not here.
+    ::rtl::OUString pkgURI(i_rPkgURI);
+    if (pkgURI.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.expand:")))
+    {
+        // expand it here (makeAbsolute requires hierarchical URI)
+        pkgURI = pkgURI.copy( sizeof("vnd.sun.star.expand:") - 1 );
+        ::rtl::Bootstrap::expandMacros(pkgURI);
+    }
+
     const uno::Reference<lang::XMultiComponentFactory> xServiceFactory(
         i_xContext->getServiceManager(), uno::UNO_SET_THROW);
     const uno::Reference<uri::XUriReferenceFactory> xUriFactory(
@@ -146,11 +157,12 @@ uno::Reference<rdf::XURI> createBaseURI(
     uno::Reference< uri::XUriReference > xBaseURI;
 
     const uno::Reference< uri::XUriReference > xPkgURI(
-        xUriFactory->parse(i_rPkgURI), uno::UNO_SET_THROW );
+        xUriFactory->parse(pkgURI), uno::UNO_SET_THROW );
     xPkgURI->clearFragment();
+
     // need to know whether the storage is a FileSystemStorage
     // XServiceInfo would be better, but it is not implemented
-//    if ( i_rPkgURI.getLength() && ::utl::UCBContentHelper::IsFolder(i_rPkgURI) )
+//    if ( pkgURI.getLength() && ::utl::UCBContentHelper::IsFolder(pkgURI) )
     if (true) {
         xBaseURI.set( xPkgURI, uno::UNO_SET_THROW );
 #if 0
