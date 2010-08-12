@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-#ifdef DEBUG
 #include <fstream>
 #include <string.h>
 #include <resourcemodel/TagLogger.hxx>
@@ -488,4 +487,3 @@ XMLTag::Pointer_t unoPropertySetToTag(uno::Reference<beans::XPropertySet> rPropS
 }
 
 }
-#endif // DEBUG

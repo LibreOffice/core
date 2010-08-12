@@ -28,7 +28,6 @@
  *
  ************************************************************************/
 
-#ifdef DEBUG
 #include "PropertyMap.hxx"
 #include <com/sun/star/beans/PropertyValues.hpp>
 
@@ -47,4 +46,4 @@ typedef uno::Sequence<PropertyValueSeq_t> PropertyValueSeqSeq_t;
 XMLTag::Pointer_t lcl_PropertyValueSeqSeqToTag(PropertyValueSeqSeq_t & rPropValSeqSeq);
 }
 }
-#endif // DEBUG
+

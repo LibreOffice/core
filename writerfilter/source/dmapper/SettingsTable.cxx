@@ -222,7 +222,9 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
         break;
     default:
     {
-        OSL_ENSURE( false, "unknown sprmid in SettingsTable::sprm()");
+#ifdef DEBUG_DMAPPER_SETTINGS_TABLE
+        dmapper_logger->element("unhandled");
+#endif
     }
     }
 }

@@ -28,8 +28,6 @@
 #ifndef INCLUDED_TAG_LOGGER_HXX
 #define INCLUDED_TAG_LOGGER_HXX
 
-#ifdef DEBUG
-
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <WriterFilterDllApi.hxx>
@@ -154,5 +152,4 @@ namespace writerfilter
 WRITERFILTER_DLLPUBLIC XMLTag::Pointer_t unoPropertySetToTag(uno::Reference<beans::XPropertySet> rPropSet);
 }
 
-#endif // DEBUG
 #endif // INCLUDED_TAG_LOGGER_HXX

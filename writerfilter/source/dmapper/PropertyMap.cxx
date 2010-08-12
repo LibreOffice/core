@@ -116,15 +116,15 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
 void lcl_AnyToTag(XMLTag::Pointer_t pTag, const uno::Any & rAny)
 {
     try {
-        sal_Int32 aInt;
+        sal_Int32 aInt = 0;
         rAny >>= aInt;
         pTag->addAttr("value", aInt);
 
-        sal_uInt32 auInt;
+        sal_uInt32 auInt = 0;
         rAny >>= auInt;
         pTag->addAttr("unsignedValue", auInt);
 
-        float aFloat;
+        float aFloat = 0.0f;
         rAny >>= aFloat;
         pTag->addAttr("floatValue", aFloat);
 
