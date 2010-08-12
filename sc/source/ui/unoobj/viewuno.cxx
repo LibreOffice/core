@@ -47,6 +47,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <rtl/uuid.h>
 #include <toolkit/helper/convert.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #include "drawsh.hxx"
 #include "drtxtob.hxx"
@@ -112,6 +113,7 @@ const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_VISAREA),      0,  &getCppuType((awt::Rectangle*)0), 0, 0},
         {MAP_CHAR_LEN(SC_UNO_ZOOMTYPE),     0,  &getCppuType((sal_Int16*)0),    0, 0},
         {MAP_CHAR_LEN(SC_UNO_ZOOMVALUE),    0,  &getCppuType((sal_Int16*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_VISAREASCREEN),0,  &getCppuType((awt::Rectangle*)0), 0, 0},
         {0,0,0,0,0,0}
     };
     return aViewOptPropertyMap_Impl;
@@ -2004,6 +2006,16 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aProperty
         else if ( aString.EqualsAscii( SC_UNO_VISAREA ) ) aRet <<= GetVisArea();
         else if ( aString.EqualsAscii( SC_UNO_ZOOMTYPE ) ) aRet <<= GetZoomType();
         else if ( aString.EqualsAscii( SC_UNO_ZOOMVALUE ) ) aRet <<= GetZoom();
+        else if ( aString.EqualsAscii( SC_UNO_VISAREASCREEN ) )
+        {
+            ScViewData* pViewData = pViewSh->GetViewData();
+            Window* pActiveWin = ( pViewData ? pViewData->GetActiveWin() : NULL );
+            if ( pActiveWin )
+            {
+                Rectangle aRect = pActiveWin->GetWindowExtentsRelative( NULL );
+                aRet <<= AWTRectangle( aRect );
+            }
+        }
     }
 
     return aRet;
