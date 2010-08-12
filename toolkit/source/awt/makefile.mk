@@ -66,6 +66,8 @@ SLOFILES=   \
             $(SLO)$/asynccallback.obj\
             $(SLO)/vclxbutton.obj\
             $(SLO)/vclxdialog.obj\
+            $(SLO)/vclxtabpagemodel.obj\
+            $(SLO)/vclxtabpagecontainer.obj\
             $(SLO)/vclxfixedline.obj\
             $(SLO)/vclxplugin.obj\
             $(SLO)/vclxscroller.obj\

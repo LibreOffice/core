@@ -4306,3 +4306,4 @@ sal_Bool UnoFixedLineControl::isTransparent() throw(uno::RuntimeException)
 {
     return sal_True;
 }
+

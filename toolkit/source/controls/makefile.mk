@@ -55,7 +55,10 @@ SLOFILES=   \
             $(SLO)$/formattedcontrol.obj			\
             $(SLO)$/roadmapcontrol.obj				\
             $(SLO)$/roadmapentry.obj				\
+            $(SLO)$/controlmodelcontainerbase.obj	\
             $(SLO)$/dialogcontrol.obj    			\
+            $(SLO)$/tabpagecontainer.obj   			\
+            $(SLO)$/tabpagemodel.obj    			\
             $(SLO)$/tkscrollbar.obj                 \
             $(SLO)$/tkspinbutton.obj                \
             $(SLO)$/tksimpleanimation.obj           \
