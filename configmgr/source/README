@@ -70,6 +70,7 @@ writemodfile.cxx
 broadcaster.cxx
  Notification management.
 
+additions.hxx
 update.cxx
  Extension manager interface.
 
