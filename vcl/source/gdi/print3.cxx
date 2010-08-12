@@ -444,8 +444,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             if( ! aDlg.Execute() )
             {
                 GDIMetaFile aPageFile;
-                i_pController->setLastPage( sal_True );
-                i_pController->getFilteredPageFile( 0, aPageFile );
+                i_pController->abortJob();
                 return;
             }
             if( aDlg.isPrintToFile() )
@@ -453,9 +452,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                 rtl::OUString aFile = queryFile( pController->getPrinter().get() );
                 if( ! aFile.getLength() )
                 {
-                    GDIMetaFile aPageFile;
-                    i_pController->setLastPage( sal_True );
-                    i_pController->getFilteredPageFile( 0, aPageFile );
+                    i_pController->abortJob();
                     return;
                 }
                 pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalFileName" ) ),
@@ -612,7 +609,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
 
         for( int nJobIteration = 0; nJobIteration < nJobs; nJobIteration++ )
         {
-            bool bError = false;
+            bool bError = false, bAborted = false;
             if( mpPrinter->StartJob( pPrintFile,
                                      i_rJobName,
                                      Application::GetDisplayName(),
@@ -624,11 +621,11 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                 mbJobActive             = TRUE;
                 i_pController->createProgressDialog();
                 int nPages = i_pController->getFilteredPageCount();
-                for( int nOuterIteration = 0; nOuterIteration < nOuterRepeatCount; nOuterIteration++ )
+                for( int nOuterIteration = 0; nOuterIteration < nOuterRepeatCount && ! bAborted; nOuterIteration++ )
                 {
-                    for( int nPage = 0; nPage < nPages; nPage++ )
+                    for( int nPage = 0; nPage < nPages && ! bAborted; nPage++ )
                     {
-                        for( int nInnerIteration = 0; nInnerIteration < nInnerRepeatCount; nInnerIteration++ )
+                        for( int nInnerIteration = 0; nInnerIteration < nInnerRepeatCount && ! bAborted; nInnerIteration++ )
                         {
                             if( nPage == nPages-1 &&
                                 nOuterIteration == nOuterRepeatCount-1 &&
@@ -638,6 +635,11 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                                 i_pController->setLastPage( sal_True );
                             }
                             i_pController->printFilteredPage( nPage );
+                            if( i_pController->isProgressCanceled() )
+                            {
+                                i_pController->abortJob();
+                                bAborted = true;
+                            }
                         }
                     }
                     // FIXME: duplex ?
@@ -1183,6 +1185,13 @@ void PrinterController::jobFinished( view::PrintableState )
 void PrinterController::abortJob()
 {
     setJobState( view::PrintableState_JOB_ABORTED );
+    // applications (well, sw) depend on a page request with "IsLastPage" = true
+    // to free resources, else they (well, sw) will crash eventually
+    setLastPage( sal_True );
+    delete mpImplData->mpProgress;
+    mpImplData->mpProgress = NULL;
+    GDIMetaFile aMtf;
+    getPageFile( 0, aMtf, false );
 }
 
 void PrinterController::setLastPage( sal_Bool i_bLastPage )
@@ -1513,6 +1522,11 @@ void PrinterController::createProgressDialog()
     }
     else
         mpImplData->mpProgress->reset();
+}
+
+bool PrinterController::isProgressCanceled() const
+{
+    return mpImplData->mpProgress && mpImplData->mpProgress->isCanceled();
 }
 
 void PrinterController::setMultipage( const MultiPageSetup& i_rMPS )
