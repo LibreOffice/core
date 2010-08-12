@@ -284,8 +284,6 @@ void Desktop::DoRestartActionsIfNecessary( sal_Bool bQuickStart )
                 xPSet->setPropertyValue( sPropName, makeAny( sal_False ) );
                 Reference< util::XChangesBatch >( xPSet, UNO_QUERY_THROW )->commitChanges();
 
-                sal_Bool bQuickstart = sal_True;
-                sal_Bool bAutostart = sal_True;
                 Sequence< Any > aSeq( 2 );
                 aSeq[0] <<= sal_True;
                 aSeq[1] <<= sal_True;
