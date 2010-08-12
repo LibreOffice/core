@@ -1452,7 +1452,7 @@ void GtkSalFrame::setMinMaxSize()
                 aHints |= GDK_HINT_MAX_SIZE;
             }
         }
-        if( m_bFullscreen )
+        if( m_bFullscreen && m_aMaxSize.Width() && m_aMaxSize.Height() )
         {
             aGeo.max_width = m_aMaxSize.Width();
             aGeo.max_height = m_aMaxSize.Height();
