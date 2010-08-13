@@ -1283,6 +1283,7 @@ public:
 
     SC_DLLPUBLIC USHORT         GetColWidth( SCCOL nCol, SCTAB nTab ) const;
     SC_DLLPUBLIC USHORT         GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC USHORT         GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC ULONG          GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
     SCROW                       GetRowForHeight( SCTAB nTab, ULONG nHeight ) const;
     ULONG                       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale ) const;
