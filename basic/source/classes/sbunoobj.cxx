@@ -1461,7 +1461,7 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
             aRetVal.setValue( &c , getCharCppuType() );
             break;
         }
-        case TypeClass_STRING:          aRetVal <<= ::rtl::OUString( pVar->GetString() ); break;
+        case TypeClass_STRING:          aRetVal <<= pVar->GetOUString(); break;
         case TypeClass_FLOAT:           aRetVal <<= pVar->GetSingle(); break;
         case TypeClass_DOUBLE:          aRetVal <<= pVar->GetDouble(); break;
         //case TypeClass_OCTET:         break;
