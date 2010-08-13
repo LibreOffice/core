@@ -58,6 +58,7 @@ SLOFILES = \
     $(SLO)$/iconcache.obj \
     $(SLO)$/postuninstall.obj \
     $(SLO)$/migrateinstallpath.obj \
+    $(SLO)$/completeinstallpath.obj \
     $(SLO)$/checkdirectory.obj \
     $(SLO)$/setadmininstall.obj \
     $(SLO)$/layerlinks.obj \
