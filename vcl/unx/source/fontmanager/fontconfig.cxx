@@ -121,11 +121,13 @@ class FontCfgWrapper
     FcResult        (*m_pFcPatternGetBool)(const FcPattern*,const char*,int,FcBool*);
     void            (*m_pFcDefaultSubstitute)(FcPattern *);
     FcPattern*      (*m_pFcFontSetMatch)(FcConfig*,FcFontSet**, int, FcPattern*,FcResult*);
+    FcPattern*      (*m_pFcFontMatch)(FcConfig*,FcPattern*,FcResult*);
     FcBool          (*m_pFcConfigAppFontAddFile)(FcConfig*, const FcChar8*);
     FcBool          (*m_pFcConfigAppFontAddDir)(FcConfig*, const FcChar8*);
     FcBool          (*m_pFcConfigParseAndLoad)(FcConfig*,const FcChar8*,FcBool);
     FcBool          (*m_pFcConfigSubstitute)(FcConfig*,FcPattern*,FcMatchKind);
 
+    FcPattern*      (*m_pFcPatternDuplicate)(const FcPattern*);
     FcBool          (*m_pFcPatternAddInteger)(FcPattern*,const char*,int);
     FcBool                    (*m_pFcPatternAddDouble)(FcPattern*,const char*,double);
     FcBool                    (*m_pFcPatternAddBool)(FcPattern*,const char*,FcBool);
@@ -232,8 +234,13 @@ public:
     { m_pFcDefaultSubstitute( pPattern ); }
     FcPattern* FcFontSetMatch( FcConfig* pConfig, FcFontSet **ppFontSet, int nset, FcPattern* pPattern, FcResult* pResult )
     { return m_pFcFontSetMatch ? m_pFcFontSetMatch( pConfig, ppFontSet, nset, pPattern, pResult ) : 0; }
+    FcPattern* FcFontMatch( FcConfig* pConfig, FcPattern* pPattern, FcResult* pResult )
+    { return m_pFcFontMatch( pConfig, pPattern, pResult ); }
     FcBool FcConfigSubstitute( FcConfig* pConfig, FcPattern* pPattern, FcMatchKind eKind )
     { return m_pFcConfigSubstitute( pConfig, pPattern, eKind ); }
+
+    FcPattern* FcPatternDuplicate( const FcPattern* pPattern ) const
+    { return m_pFcPatternDuplicate( pPattern ); }
     FcBool FcPatternAddInteger( FcPattern* pPattern, const char* pObject, int nValue )
     { return m_pFcPatternAddInteger( pPattern, pObject, nValue ); }
     FcBool FcPatternAddDouble( FcPattern* pPattern, const char* pObject, double nValue )
@@ -341,8 +348,13 @@ FontCfgWrapper::FontCfgWrapper()
         loadSymbol( "FcDefaultSubstitute" );
     m_pFcFontSetMatch = (FcPattern*(*)(FcConfig*,FcFontSet**,int,FcPattern*,FcResult*))
         loadSymbol( "FcFontSetMatch" );
+    m_pFcFontMatch = (FcPattern*(*)(FcConfig*,FcPattern*,FcResult*))
+        loadSymbol( "FcFontMatch" );
     m_pFcConfigSubstitute = (FcBool(*)(FcConfig*,FcPattern*,FcMatchKind))
         loadSymbol( "FcConfigSubstitute" );
+
+    m_pFcPatternDuplicate = (FcPattern*(*)(const FcPattern*))
+        loadSymbol( "FcPatternDuplicate" );
     m_pFcPatternAddInteger = (FcBool(*)(FcPattern*,const char*,int))
         loadSymbol( "FcPatternAddInteger" );
     m_pFcPatternAddDouble = (FcBool(*)(FcPattern*,const char*,double))
@@ -398,8 +410,10 @@ FontCfgWrapper::FontCfgWrapper()
             m_pFcConfigAppFontAddFile               &&
             m_pFcConfigAppFontAddDir                &&
             m_pFcConfigParseAndLoad             &&
+            m_pFcFontMatch                  &&
             m_pFcDefaultSubstitute          &&
             m_pFcConfigSubstitute           &&
+            m_pFcPatternDuplicate           &&
             m_pFcPatternAddInteger          &&
             m_pFcPatternAddDouble                     &&
             m_pFcPatternAddCharSet          &&
