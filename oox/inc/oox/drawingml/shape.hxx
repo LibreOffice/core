@@ -30,7 +30,7 @@
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-//#include "oox/drawingml/customshapeproperties.hxx"
+#include "oox/drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/textliststyle.hxx"
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -126,6 +126,8 @@ public:
     void                            setName( const rtl::OUString& rName ) { msName = rName; }
     ::rtl::OUString                 getName( ) { return msName; }
     void                            setId( const rtl::OUString& rId ) { msId = rId; }
+    void                            setHidden( sal_Bool bHidden ) { mbHidden = bHidden; }
+    sal_Bool                        getHidden() const { return mbHidden; };
     void                            setSubType( sal_Int32 nSubType ) { mnSubType = nSubType; }
     sal_Int32                       getSubType() const { return mnSubType; }
     void                            setSubTypeIndex( sal_uInt32 nSubTypeIndex ) { mnSubTypeIndex = nSubTypeIndex; }
@@ -206,6 +208,7 @@ private:
     sal_Int32                       mnRotation;
     sal_Bool                        mbFlipH;
     sal_Bool                        mbFlipV;
+    sal_Bool                        mbHidden;
 };
 
 ::rtl::OUString GetShapeType( sal_Int32 nType );

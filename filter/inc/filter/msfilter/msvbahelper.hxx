@@ -48,7 +48,8 @@ namespace ooo { namespace vba
     };
 
     MSFILTER_DLLPUBLIC String makeMacroURL( const String& sMacroName );
-    MSFILTER_DLLPUBLIC  VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& sMod, bool bSearchGlobalTemplates = false );
+    MSFILTER_DLLPUBLIC ::rtl::OUString extractMacroName( const ::rtl::OUString& rMacroUrl );
+    MSFILTER_DLLPUBLIC VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& sMod, bool bSearchGlobalTemplates = false );
     MSFILTER_DLLPUBLIC sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArgs, com::sun::star::uno::Any& aRet, const com::sun::star::uno::Any& aCaller );
 } }
 

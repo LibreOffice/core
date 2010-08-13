@@ -5087,6 +5087,10 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
             rIn >> nCharCount
                 >> aParaPropSet.pParaSet->mnDepth;  // Einruecktiefe
 
+            aParaPropSet.pParaSet->mnDepth =
+                std::min(sal_uInt16(9),
+                    aParaPropSet.pParaSet->mnDepth);
+
             nCharCount--;
 
             rIn >> nMask;
@@ -5320,8 +5324,8 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
     DffRecordHeader aTextHd;
     rIn >> aTextHd;
     sal_uInt32 nMaxLen = aTextHd.nRecLen;
-    if ( nMaxLen > 0xFFFF )
-        nMaxLen = 0xFFFF;
+    if ( nMaxLen >= 0xFFFF )
+        nMaxLen = 0xFFFE;
 
     if( aTextHd.nRecType == PPT_PST_TextCharsAtom )
     {
@@ -5376,7 +5380,7 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
                 if ( nInstance == TSS_TYPE_PAGETITLE )
                     *pPtr = 0xb;
                 else
-                    aSpecMarkerList.Insert( (void*)( pPtr - pBuf | PPT_SPEC_NEWLINE ), LIST_APPEND );
+                    aSpecMarkerList.Insert( (void*)( (pPtr - pBuf) | PPT_SPEC_NEWLINE ), LIST_APPEND );
             }
             pPtr++;
         }
@@ -7117,6 +7121,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
                                                             PPTCharPropSet* pCurrent = (PPTCharPropSet*)aCharPropList.GetObject( nIdx );
                                                             sal_Int32       nNextStringLen = pCurrent->maString.Len();
+
+                                                            DBG_ASSERT( pFE->pField1, "missing field!" );
+                                                            if (!pFE->pField1)
+                                                                break;
 
                                                             const SvxURLField* pField = (const SvxURLField*)pFE->pField1->GetField();
 

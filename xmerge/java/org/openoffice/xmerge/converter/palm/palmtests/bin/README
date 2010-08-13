@@ -1,6 +1,0 @@
-To run the spose script, you must set the following environmental variables:
-	 
-	POSE2_EXE = Directory and name of the POSE executable file.
-	POSE3_EXE = Directory and name of the POSE executable file. 
-	POSE_PRC =  Directory containing the PRC files to be loaded 
-		    into the emulator
