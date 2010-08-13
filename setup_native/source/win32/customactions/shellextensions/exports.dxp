@@ -5,6 +5,7 @@ DeinstallStartmenuFolderIcon
 SetProductInstallMode
 RebuildShellIconCache
 ExecutePostUninstallScript
+CompleteInstallPath
 MigrateInstallPath
 RegisterExtensions
 RemoveExtensions
