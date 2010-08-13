@@ -1507,7 +1507,8 @@ ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
     CmapResult aCmapResult;
     if( !mpServerFont[0]->GetFontCodeRanges( aCmapResult ) )
         return NULL;
-    return new ImplFontCharMap( aCmapResult );
+    ImplFontCharMap* pNewMap = new ImplFontCharMap( aCmapResult );
+    return pNewMap;
 }
 
 // ----------------------------------------------------------------------------

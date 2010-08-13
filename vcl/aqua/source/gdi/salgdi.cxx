@@ -127,6 +127,7 @@ ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 
     // set the default charmap
     mpCharMap = ImplFontCharMap::GetDefaultMap();
+    mpCharMap->AddReference();
 
     // get the CMAP byte size
     ATSFontRef rFont = FMGetATSFontRefFromFont( mnFontId );
@@ -149,10 +150,11 @@ ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 
     // parse the CMAP
     CmapResult aCmapResult;
-    if( !ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
-        return mpCharMap;
+    mpCharMap->DeReference();
+    if( ParseCMAP( &aBuffer[0], nRawLength, aCmapResult ) )
+        mpCharMap = new ImplFontCharMap( aCmapResult );
 
-    mpCharMap = new ImplFontCharMap( aCmapResult );
+    mpCharMap->AddReference();
     return mpCharMap;
 }
 
@@ -2359,6 +2361,8 @@ void AquaSalGraphics::GetGlyphWidths( const ImplFontData* pFontData, bool bVerti
                 if( nGlyph > 0 )
                     rUnicodeEnc[ nUcsChar ] = nGlyph;
             }
+
+            pMap->DeReference(); // TODO: add and use RAII object instead
         }
 
         ::CloseTTFont( pSftFont );

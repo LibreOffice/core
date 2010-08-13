@@ -592,6 +592,7 @@ void ImplOs2FontData::ReadCmapTable( HPS hPS ) const
             aResult.mpPairCodes, aResult.mpStartGlyphs );
     else
         mpUnicodeMap = ImplFontCharMap::GetDefaultMap();
+    mpUnicodeMap->AddReference();
 }
 
 // =======================================================================
