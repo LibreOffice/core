@@ -292,6 +292,27 @@ sub remove_empty_directory
 }
 
 #######################################################################
+# Calculating the number of languages in the string
+#######################################################################
+
+sub get_number_of_langs
+{
+    my ($languagestring) = @_;
+
+    my $number = 1;
+
+    my $workstring = $languagestring;
+
+    while ( $workstring =~ /^\s*(.*)_(.*?)\s*$/ )
+    {
+        $workstring = $1;
+        $number++;
+    }
+
+    return $number;
+}
+
+#######################################################################
 # Creating the directories, in which files are generated or unzipped
 #######################################################################
 
@@ -380,8 +401,11 @@ sub create_directories
 
             if (length($languagestring) > $installer::globals::max_lang_length )
             {
+                my $number_of_languages = get_number_of_langs($languagestring);
                 chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
-                $languagestring = $shorter;
+                # $languagestring = $shorter;
+                my $id = substr($shorter, 0, 8); # taking only the first 8 digits
+                $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
             }
 
             $path = $path . $languagestring  . $installer::globals::separator;
@@ -1662,6 +1686,53 @@ sub read_full_directory {
     }
     closedir(DH);
     return
+}
+
+##############################################################
+# Removing all empty directories below a specified directory
+##############################################################
+
+sub remove_empty_dirs_in_folder
+{
+    my ( $dir ) = @_;
+
+    my @content = ();
+    my $infoline = "";
+
+    $dir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    if ( -d $dir )
+    {
+        opendir(DIR, $dir);
+        @content = readdir(DIR);
+        closedir(DIR);
+
+        my $oneitem;
+
+        foreach $oneitem (@content)
+        {
+            if ((!($oneitem eq ".")) && (!($oneitem eq "..")))
+            {
+                my $item = $dir . $installer::globals::separator . $oneitem;
+
+                if ( -d $item ) # recursive
+                {
+                    remove_empty_dirs_in_folder($item);
+                }
+            }
+        }
+
+        # try to remove empty directory
+        my $returnvalue = rmdir $dir;
+
+        if ( $returnvalue )
+        {
+            $infoline = "Successfully removed empty dir $dir\n";
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+
+    }
+
 }
 
 1;
