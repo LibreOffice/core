@@ -54,6 +54,8 @@ sub w_020_
     Call tHtmlDoc_TB_Rest
     gApplication = "WRITER"
 
+    Call tUpdtFindBar()
+
 end sub
 
 '-----------------------------------------------------------
