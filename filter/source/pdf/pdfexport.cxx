@@ -50,6 +50,8 @@
 #include <svtools/filter.hxx>
 #include <svl/solar.hrc>
 #include <comphelper/string.hxx>
+#include <unotools/streamwrap.hxx>
+#include <com/sun/star/io/XSeekable.hpp>
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
@@ -72,6 +74,7 @@
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 
 using namespace ::rtl;
 using namespace ::vcl;
@@ -80,6 +83,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
+using namespace ::com::sun::star::graphic;
 
 // -------------
 // - PDFExport -
@@ -1947,7 +1951,6 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                 }
                 GraphicFilter   aGraphicFilter;
                 Graphic         aGraphic( aBitmapEx.GetBitmap() );
-                sal_uInt16      nFormatName = aGraphicFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( "JPG" ) ) );
                 sal_Int32       nColorMode = 0;
 
                 Sequence< PropertyValue > aFilterData( 2 );
@@ -1956,11 +1959,47 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                 aFilterData[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) );
                 aFilterData[ 1 ].Value <<= nColorMode;
 
-                /*sal_uInt16 nError =*/ aGraphicFilter.ExportGraphic( aGraphic, String(), aStrm, nFormatName, &aFilterData );
-                bTrueColorJPG = ((aGraphicFilter.GetExportGraphicHint() & GRFILTER_OUTHINT_GREY) == 0);
-                aStrm.Seek( STREAM_SEEK_TO_END );
-                if ( aStrm.Tell() > nZippedFileSize )
-                    bUseJPGCompression = sal_False;
+                try
+                {
+                    uno::Reference < io::XStream > xStream = new utl::OStreamWrapper( aStrm );
+                    Reference< XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
+                    Reference< XGraphicProvider > xGraphicProvider( mxMSF->createInstance(
+                        OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY );
+                    if ( xGraphicProvider.is() )
+                    {
+                        Reference< XGraphic > xGraphic( aGraphic.GetXGraphic() );
+                        Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
+                        rtl::OUString aMimeType( ::rtl::OUString::createFromAscii( "image/jpeg" ) );
+                        uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
+                        aOutMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+                        aOutMediaProperties[0].Value <<= xOut;
+                        aOutMediaProperties[1].Name = ::rtl::OUString::createFromAscii( "MimeType" );
+                        aOutMediaProperties[1].Value <<= aMimeType;
+                        aOutMediaProperties[2].Name = ::rtl::OUString::createFromAscii( "FilterData" );
+                        aOutMediaProperties[2].Value <<= aFilterData;
+                        xGraphicProvider->storeGraphic( xGraphic, aOutMediaProperties );
+                        xOut->flush();
+                        if ( xSeekable->getLength() > nZippedFileSize )
+                            bUseJPGCompression = sal_False;
+                    }
+                    xSeekable->seek( 0 );
+                    Sequence< PropertyValue > aArgs( 1 );
+                    aArgs[ 0 ].Name = ::rtl::OUString::createFromAscii( "InputStream" );
+                    aArgs[ 0 ].Value <<= xStream;
+                    Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
+                    if ( xPropSet.is() )
+                    {
+                        sal_Int16 nBitsPerPixel = 24;
+                        if ( xPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( "BitsPerPixel" ) ) >>= nBitsPerPixel )
+                        {
+                            bTrueColorJPG = nBitsPerPixel != 8;
+                        }
+                    }
+                }
+                catch( uno::Exception& )
+                {
+
+                }
             }
             if ( bUseJPGCompression )
                 rWriter.DrawJPGBitmap( aStrm, bTrueColorJPG, aSizePixel, Rectangle( aPoint, aSize ), aMask );
