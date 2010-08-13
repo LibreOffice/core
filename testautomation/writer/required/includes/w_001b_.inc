@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description :  Required-Testcases for the File-menu.
 '*
@@ -90,11 +90,8 @@ testcase tFileSendCreateHTMLDocument
     PrintLog "- File / Send / Create HTML-Dokument"
     PrintLog "Open new document"
     Select Case gApplication
-    Case "WRITER"
-        Call hNewDocument
-    Case "MASTERDOCUMENT"
-        Call hNewDocument
-    Case "HTML"
+    Case "WRITER", "MASTERDOCUMENT" : hNewDocument()
+    Case else
         printlog "Not in WriterWeb!"
         goto endsub
     end select
@@ -159,11 +156,8 @@ testcase tFileSendOutlineToPresentation
     endif
 
     Kontext "Navigator"
-    if Navigator.Exists then Navigator.Close
-    PrintLog "Close documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hCloseDialog( Navigator, "Close,optional" )
+    hFileCloseAll()
 endcase
 
 '-----------------------------------------------------------
@@ -259,13 +253,9 @@ testcase tFileSendCreateAutoabstract
     endcatch
 
     Kontext "Navigator"
-    if Navigator.Exists then Navigator.Close
-    Sleep 1
+    hCloseDialog( Navigator, "Close,optional" )
+    hFileCloseAll()
 
-    PrintLog "Close active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
 endcase
 
 '-----------------------------------------------------------
@@ -321,12 +311,11 @@ testcase tFileSendAutoabstractToPresentation
         Warnlog "- Outline in Impress not created!"
     endif
     Kontext "Navigator"
-    if Navigator.Exists then Navigator.Close
-    Sleep 1
+    hCloseDialog( Navigator, "Close,optional" )
     Call hCloseDocument
     PrintLog "Close active document"
 
-    Call wDocSetContext
+    hSetDocumentContext()
     FileClose
 endcase
 '--------------------------------------------------------------------------------------------------------------------------------------------
@@ -694,10 +683,7 @@ testcase tMasterDocFileSendOutlineToPresentation
     endif
 
     Kontext "Navigator"
-    if Navigator.Exists then 
-        Navigator.Close
-        WaitSlot()
-    endif
+    hCloseDialog( Navigator, "Close,optional" )
     
     PrintLog "Close documents"
     hFileCloseAll()
@@ -755,10 +741,7 @@ testcase tMasterDocFileSendCreateAutoabstract
     Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile )
     
     Kontext "Navigator"
-    if ( Navigator.Exists ) then 
-        Navigator.Close
-        WaitSlot()
-    endif
+    hCloseDialog( Navigator, "Close,optional" )
 
     Kontext "DocumentWriter"
     PrintLog "File / Send / Create Autoabstract"
@@ -788,10 +771,7 @@ testcase tMasterDocFileSendCreateAutoabstract
     endif    
 
     Kontext "Navigator"
-    if ( Navigator.Exists ) then 
-        Navigator.Close()
-        WaitSlot()
-    endif
+    hCloseDialog( Navigator, "Close,optional" )
 
     PrintLog "Close documents"
     hFileCloseAll()    
@@ -811,10 +791,7 @@ testcase tMasterDocFileSendAutoabstractToPresentation
     Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile )
     
     Kontext "Navigator"
-    if Navigator.Exists then 
-        Navigator.Close
-        Waitslot()
-    endif
+    hCloseDialog( Navigator, "Close,optional" )
     
     Kontext "DocumentWriter"
     PrintLog "File / Send / Create Autoabstract To Presentation"
@@ -854,15 +831,12 @@ testcase tMasterDocFileSendAutoabstractToPresentation
     endif
     
     Kontext "Navigator"
-    if Navigator.Exists then 
-        Navigator.Close
-        WaitSlot()
-    endif
+    hCloseDialog( Navigator, "Close,optional" )
 
     Call hCloseDocument
     PrintLog "Close active document"
 
-    Call wDocSetContext
+    hSetDocumentContext()
     FileClose
     gApplication = "WRITER"
     

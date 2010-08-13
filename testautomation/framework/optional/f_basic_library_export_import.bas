@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Export BASIC libraries
 '*
@@ -68,8 +68,6 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_listfuncs.inc"    
     use "global\tools\includes\optional\t_stringtools.inc" 
     use "global\tools\includes\optional\t_macro_tools.inc"
-
-    use "framework\tools\includes\init_tools.inc"
     
     gApplication = "WRITER"
     call GetUseFiles()

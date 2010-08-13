@@ -25,7 +25,7 @@
 '
 '/***********************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Resource Test - Tools Menu Part II
 '*
@@ -168,7 +168,7 @@ testcase tToolsMacro
     Kontext "DigitalSignature"
     '/// Close 'Digital Signatures' dialog with 'Cancel'
     printlog " Close 'Digital Signatures' dialog with 'Cancel'"
-    DigitalSignature.Cancel
+    DigitalSignature.ok
     '/// Open 'Macro Organizer' by 'Tools – Macro – Organize Dialogs'
     printlog " Open 'Macro Organizer' by 'Tools – Macro – Organize Dialogs'"
     ToolsMacrosOrganizeDialogs

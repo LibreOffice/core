@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : marc.neumann@sun.com
+'* owner : marc.neumann@oracle.com
 '*
 '* short description : Library with function for creating all possible databases
 '*
@@ -1462,6 +1462,7 @@ function fSetJDBCDriverFiles(sClassPath) as boolean
     call hCloseDocument
     
 end function
+
 '-------------------------------------------------------------------------
 
 function hGetInstalledDatabaseDrivers( dbDriverList() as string ) as integer
@@ -1510,7 +1511,7 @@ function hGetInstalledDatabaseDrivers( dbDriverList() as string ) as integer
         
     endif
     
-    if ( VERBOSE ) then 
+    if ( GVERBOSE ) then
         printlog( CFN & "Returning " & iDriverCount & " drivers" )
     endif
 
@@ -1588,7 +1589,7 @@ function hGetDatabaseDisplayName( dbDriverURL as string ) as string
         
     endif
     
-    if ( VERBOSE ) then 
+    if ( GVERBOSE ) then
         printlog( CFN & "Database display string: " & sDatabaseName )
     endif
     hGetDataBaseDisplayName() = sDatabaseName

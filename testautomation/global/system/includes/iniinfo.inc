@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : get information for startup a test out of important ini-files
 '*
@@ -47,7 +47,7 @@ sub GetIniInformation
     dim bOOo(3) as string
     dim iSoffice(3) as integer
     dim sTemp as string
-    
+
     gPathSigne = hGetPathSigne(gPLatform)
 
     gTTProfileName = hfGetTTProfileName()
@@ -61,10 +61,10 @@ sub GetIniInformation
         gOfficePath = GetIniValue ( gTesttoolIni, "Office IniPath", "Current" ) + gPathSigne
         gRemotePath = GetIniValue ( gTesttoolIni, "RemoteBaseDir", "Current" ) + gPathSigne
     else
-    '/// The part of getting the location of the executable OOo is put into seperated functions.
-    '/// The first OOo executeable is being used.
-    '///+ <ol><li>Entry in TestTool control file (.testtoolrc on UNIX; testtool.ini on Win32)</li>
-    '///+ <li>or<ul><li><b>Win32</b>: Entry in registry</li><li><b>UNIX</b>: If link <pre>/usr/bin/soffice</pre> or <pre>$HOME/soffice</pre> exists</li></ul></li></ol>
+        '/// The part of getting the location of the executable OOo is put into seperated functions.
+        '/// The first OOo executeable is being used.
+        '///+ <ol><li>Entry in TestTool control file (.testtoolrc on UNIX; testtool.ini on Win32)</li>
+        '///+ <li>or<ul><li><b>Win32</b>: Entry in registry</li><li><b>UNIX</b>: If link <pre>/usr/bin/soffice</pre> or <pre>$HOME/soffice</pre> exists</li></ul></li></ol>
         sSoffice(0) = getSofficeTesttool() : bOOO(0) = gOOO
         ' DEBUG: If you need more detailed information about the installation environment
         '        enable the next line.
@@ -73,47 +73,47 @@ sub GetIniInformation
             sSoffice(0) = getSofficeNative()   : bOOO(0) = gOOO
             if (sSoffice(0) <> "") then
                 gOfficePath = sSoffice(0)
-                gVersionsnummer = FindBuildID() 
+                gVersionsnummer = FindBuildID()
                 call hSetBuildVersionInformation(TRUE)
                 iSoffice(0) = gBuild
             end if
             ' DEBUG: If you need more detailed information about the installation environment
-            '        enable the next line.            
+            '        enable the next line.
             ' printlog "RESULT from Native  : '" + sSoffice(0) + "' - OOo? " + bOOO(0) + " - BuildID: " + iSoffice(0)
             if sSoffice(0) = "" then
                 warnlog "No OOo version found on this computer. - Please look into documentation, how to select an OOo version to test."
             end if
         else
-            printlog    "----------------------------------------------------------------------------------------------------"  
-            printlog    "**  Using [OOoProgramDir] value   : " & sSoffice(0)            
+            printlog    "----------------------------------------------------------------------------------------------------"
+            printlog    "**  Using [OOoProgramDir] value   : " & sSoffice(0)
             printlog    "----------------------------------------------------------------------------------------------------"
         end if
         gOfficePath = sSoffice(0)
         gOOO = bOOO(0)
     end if
-   if ((gSamePC = TRUE) AND (gOfficePath = "")) then
+    if ((gSamePC = TRUE) AND (gOfficePath = "")) then
         MsgBox ("The test ends, because no OOo version was found on this computer. - Please look into documentation, how to select an OOo version to test.", 1, "No OOo program installed")
         end
-   end if
+    end if
 
-   gtHidLstPath =  GetIniValue ( gTesttoolIni, gTTProfileName, "HIDDir" ) + hGetPathSigne(gtPlatform)
-   gPort = GetIniValue ( gTesttoolIni, "Communication", "TTPort" )
-   '--------
-   gPCName = GetIniValue ( gTesttoolIni, "Others", "PCname" )
-   if (gPCName = "NOT_SET!" OR gPCName = "") then 
-       gPCName = environ ( "HOSTNAME" )
-       if (gPCName = "") then 
-           gPCName = environ ( "COMPUTERNAME" )
-           if (gPCName = "") then
-               gPCName = environ ( "hostname" )
-               ' If testtool.ini/rc is unmodified, the default value is NOT_SET!
-               if gPCName = "" then 
-                   qaErrorLog "Please insert the computername in section [Others] on the line 'PCname=' in the TestTool confguration file at: '" + gTesttoolIni + "'"
-               end if
-           end if
-       end if
-   end if
-   '--------
+    gtHidLstPath =  GetIniValue ( gTesttoolIni, gTTProfileName, "HIDDir" ) + hGetPathSigne(gtPlatform)
+    gPort = GetIniValue ( gTesttoolIni, "Communication", "TTPort" )
+    '--------
+    gPCName = GetIniValue ( gTesttoolIni, "Others", "PCname" )
+    if (gPCName = "NOT_SET!" OR gPCName = "") then
+        gPCName = environ ( "HOSTNAME" )
+        if (gPCName = "") then
+            gPCName = environ ( "COMPUTERNAME" )
+            if (gPCName = "") then
+                gPCName = environ ( "hostname" )
+                ' If testtool.ini/rc is unmodified, the default value is NOT_SET!
+                if gPCName = "" then
+                    qaErrorLog "Please insert the computername in section [Others] on the line 'PCname=' in the TestTool confguration file at: '" + gTesttoolIni + "'"
+                end if
+            end if
+        end if
+    end if
+    '--------
 
    call GetTheInstallationType            ' gNetzInst and gNetzOfficePath will be set if StarOffice is a Network-Installation
    gOfficeBasisPath = getOfficeBasisPath()
@@ -125,9 +125,9 @@ sub GetIniInformation
     if (gPrivateEnvironmentLocation <> "" AND gPrivateEnvironmentLocation <> ".") then
         if NOT fileExists(gPrivateEnvironmentLocation) then
             qaErrorLog "[PrivateEnvironment] defined in: '"+gTesttoolIni+"', but the path '"+gPrivateEnvironmentLocation+"'does not exist!"
-        else
             gPrivateEnvironmentLocation = ""
         end if
+    else
        gPrivateEnvironmentLocation = ""
    end if
 end sub
@@ -135,13 +135,13 @@ end sub
 '-------------------------------------------------------------------------
 
 sub GetOfficeInformation
-'/// Generates the path to the StarOffice executable.
-'/// <u>Output</u>: <b>sAppExe</b> variable is the StarOffice executable or the client executable (StarOffice server, StarPortal&trade;, Sun&trade; ONE Webtop, ...)
+    '/// Generates the path to the StarOffice executable.
+    '/// <u>Output</u>: <b>sAppExe</b> variable is the StarOffice executable or the client executable (StarOffice server, StarPortal&trade;, Sun&trade; ONE Webtop, ...)
     Dim sProgramNeu as String
     Dim iClient as Integer
     Dim sPlatformProgramPath as string
-    Dim sPlatformBinExt as string      
-   
+    Dim sPlatformBinExt as string
+
     if ( lcase( gPlatform ) = "osx" ) then
         sPlatformProgramPath = "MacOS"
         sPlatformBinExt = ""
@@ -153,154 +153,128 @@ sub GetOfficeInformation
             sPlatformBinExt = ""
         end if
     end if
-   
-      'if it's a client on the same PC
-      if gClient = TRUE AND gClientUser <> "" then
-         if gtPlatform <> "w95" AND gtPlatform <> "wnt" AND gPlatform <> "w2k" AND gtPlatform <> "os2" AND gtPlatform <> "os4" then
+
+    'if it's a client on the same PC
+    if gClient = TRUE AND gClientUser <> "" then
+        if gtPlatform <> "w95" AND gtPlatform <> "wnt" AND gPlatform <> "w2k" AND gtPlatform <> "os2" AND gtPlatform <> "os4" then
             sAppExe = gsClient + "/bin/sclient"
-         else
+        else
             if right( lcase ( sAppExe ), 3 ) <> "exe" then sAppExe = gsClient + "\sclient.exe"
-         end if
-         sAppParameter = " -remote -connect=portal,service=soffice,host=" + gHost + ",port=8208,user=" + gClientUser + ",password=" + gClientUserPWD + ",type=compressed_secure"
-      else
-         if gNetzInst = TRUE then                              ' wenn es sich um eine Netzwerkinstallation handelt
-               select case UCase(gApplication)
-                  case "WRITER"        : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "-writer"
-                  case "CALC"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "-calc"
-                  case "IMPRESS"       : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "private:factory/simpress"
-                  case "DRAW"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "-draw"
-                  case "MASTERDOCUMENT": sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "-global"
-                  case "MATH"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "-math"
-                  case "HTML"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
-                                                      sFactory = "-web"
-                  case else            : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
-               end select
-         'If it's a normal (FAT) office
-         else
+        end if
+        sAppParameter = " -remote -connect=portal,service=soffice,host=" + gHost + ",port=8208,user=" + gClientUser + ",password=" + gClientUserPWD + ",type=compressed_secure"
+    else
+        if gNetzInst = TRUE then                              ' wenn es sich um eine Netzwerkinstallation handelt
+            select case UCase(gApplication)
+            case "WRITER"        : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                sFactory = "-writer"
+            case "CALC"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                sFactory = "-calc"
+            case "IMPRESS"       : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                sFactory = "private:factory/simpress"
+            case "DRAW"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                sFactory = "-draw"
+            case "MASTERDOCUMENT": sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                sFactory = "-global"
+            case "MATH"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                sFactory = "-math"
+            case "HTML"          : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                sFactory = "-web"
+            case else            : sAppExe = gNetzOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+            end select
+            'If it's a normal (FAT) office
+        else
             'If it's a RVP-Office
             if gClient = TRUE then
-              if gPlatgroup <> "unx" then
-                  sAppExe = gOfficePath + "client\sclient.exe"
-               else
-                  sAppExe = gOfficePath + "client/sclient"
-              end if
+                if gPlatgroup <> "unx" then
+                    sAppExe = gOfficePath + "client\sclient.exe"
+                else
+                    sAppExe = gOfficePath + "client/sclient"
+                end if
             else
-               select case UCase(gApplication)
-                  case "WRITER"        : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "-writer"
-                  case "CALC"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "-calc"
-                  case "IMPRESS"       : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "private:factory/simpress"
-                  case "DRAW"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "-draw"
-                  case "MASTERDOCUMENT": sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "-global"
-                  case "MATH"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt 
-                                                      sFactory = "-math"
-                  case "HTML"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
-                                                      sFactory = "-web"
-                  case else            : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
-               end select
+                select case ( gApplication )
+                case "WRITER"        : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                    sFactory = "-writer"
+                case "CALC"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                    sFactory = "-calc"
+                case "IMPRESS"       : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                    sFactory = "private:factory/simpress"
+                case "DRAW"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                    sFactory = "-draw"
+                case "MASTERDOCUMENT": sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                    sFactory = "-global"
+                case "MATH"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                    sFactory = "-math"
+                case "HTML"          : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                    sFactory = "-web"
+                case else            : sAppExe = gOfficePath & sPlatformProgramPath & gPathSigne & "soffice" & sPlatformBinExt
+                end select
             end if
-         end if
-      end if
+        end if
+    end if
 end sub
 
 '-------------------------------------------------------------------------
 
 function hGetPathSigne(sPlatform as string) as string
-'/// Seperators for the different platforms.
-'/// <u>Input</u>: string of class gPlatform
-'/// <u>Output</u>: string which can be used as seperator in directories
+    '/// Seperators for the different platforms.
+    '/// <u>Input</u>: string of class gPlatform
+    '/// <u>Output</u>: string which can be used as seperator in directories
 
     select case sPlatform
-        case "w95" : hGetPathSigne = "\"
-        case "w98" : hGetPathSigne = "\"
-        case "wnt" : hGetPathSigne = "\"
-        case "wme" : hGetPathSigne = "\"
-        case "wse" : hGetPathSigne = "\"
-        case "w2k" : hGetPathSigne = "\"
-        case "wxp" : hGetPathSigne = "\"
-        case "ecs" : hGetPathSigne = "\"
-        case "os4" : hGetPathSigne = "\"
-        case "os5" : hGetPathSigne = "\"
-        case "osx" : hGetPathSigne = "/"
-        case "ppc" : hGetPathSigne = "/"
-        case "sol" : hGetPathSigne = "/"
-        case "lin" : hGetPathSigne = "/"
-        case "x86" : hGetPathSigne = "/"
-        case "fbsd": hGetPathSigne = "/"
-        case "nbsd": hGetPathSigne = "/"
-        case "lin64": hGetPathSigne= "/"
-        case "linsparc": hGetPathSigne = "/"
-        case else  : hGetPathSigne = ""
-                     qaErrorLog " No pathseperator is defined for this platform : " + sPlatform
+    case "w95" : hGetPathSigne = "\"
+    case "w98" : hGetPathSigne = "\"
+    case "wnt" : hGetPathSigne = "\"
+    case "wme" : hGetPathSigne = "\"
+    case "wse" : hGetPathSigne = "\"
+    case "w2k" : hGetPathSigne = "\"
+    case "wxp" : hGetPathSigne = "\"
+    case "ecs" : hGetPathSigne = "\"
+    case "os4" : hGetPathSigne = "\"
+    case "os5" : hGetPathSigne = "\"
+    case "osx" : hGetPathSigne = "/"
+    case "ppc" : hGetPathSigne = "/"
+    case "sol" : hGetPathSigne = "/"
+    case "lin" : hGetPathSigne = "/"
+    case "x86" : hGetPathSigne = "/"
+    case "fbsd": hGetPathSigne = "/"
+    case "nbsd": hGetPathSigne = "/"
+    case "lin64": hGetPathSigne= "/"
+    case "linsparc": hGetPathSigne = "/"
+    case else  : hGetPathSigne = ""
+        qaErrorLog " No pathseperator is defined for this platform : " + sPlatform
     end select
 end function
 
 '-------------------------------------------------------------------------
 
-function ConvertPath ( sDatei$, optional sPlatform as string ) as String
-'/// Path conversion
-'/// <u>Input</u>: path as string; OPTIONAL: string of class gPlatform
-'/// <u>Output</u>: converted path respected to gPlatform; if optional paramter: to that Platform
-'/// Convert the <i>pathsigne</i> '\' to '/' when a test runs under UNIX
-   Dim iW32 as Integer : Dim iUNX as Integer
-   Dim i as Integer : Dim Ende as Integer
-   Dim s1$ : Dim s2$ : Dim s3$
-   dim sLocalPlatGroup as string
-   dim sLocalPathSigne as string
+function ConvertPath( sPath as string ) as string
 
-   if (isMissing(sPlatform)) then
-        sLocalPlatGroup = gPlatGroup
-        sLocalPathSigne = gPathSigne
-   else
-        sLocalPlatGroup = hPlatformToGroup(sPlatform)
-        sLocalPathSigne = hGetPathSigne(sPlatform)
-   end if
-
-   s3$ = "" : iW32 = 0 : iUNX = 0
-   s1$ = sDatei$
-   Ende = len ( s1$ )
-
-'   convert all / to \ if WIN
-   if sLocalPlatGroup <> "unx" then
-      do
-         i = InStr( s1$, "/" )
-         if i = 0 then exit do
-         s2$ = Left( s1$ , i-1 )
-         s1$ = Mid( s1$ , i+1 )
-         s3$ = s3$ + s2$ + "\"
-      loop until s1$=""
-      s1$ = s3$ + s1$
-      s3$ = "" : s2$ = ""
-   end if
-
-   ' convert all \ to gPathSigne => WIN -> XXX
-   do
-      i = InStr( s1$, "\" )
-      if i = 0 then exit do
-      s2$ = Left( s1$ , i-1 )
-      s1$ = Mid( s1$ , i+1 )
-      s3$ = s3$ + s2$ + sLocalPathSigne
-   loop until s1$=""
-
-   ConvertPath = s3$ + s1$
+    if ( getPathSeparator = "/" ) then
+    	ConvertPath() = hStringReplaceChar( sPath, "\", "/" )
+    else
+        ConvertPath() = hStringReplaceChar( sPath, "/", "\" )
+    endif
+    
 end function
 
-'-------------------------------------------------------------------------
+'-------------------------------------------------------------------------------
+
+function hStringReplaceChar( byval myString as string, old_char as string, new_char as string ) as string
+
+    dim iChar as integer
+    for iChar = 1 to len( myString )
+        if ( mid( myString, iChar, 1 ) = old_char ) then mid( myString, iChar, 1, new_char )
+    next iChar
+    hStringReplaceChar() = myString
+
+end function
+
+'-------------------------------------------------------------------------------
 
 sub GetLanguageInformation
-'/// Extracts the language information from <i>Setup.xcu</i>.
-'/// <u>note</u>: It uses the <b>fgetL10Nvalue</b>.
-   Dim sLanOutIni as string
+    '/// Extracts the language information from <i>Setup.xcu</i>.
+    '/// <u>note</u>: It uses the <b>fgetL10Nvalue</b>.
+    Dim sLanOutIni as string
 
     ' function 'fgetL10Nvalue' is also in this library
     sLanOutIni = fgetL10Nvalue()
@@ -310,11 +284,11 @@ sub GetLanguageInformation
         warnlog "=> default is now 01 = en_US"
     end if
 
-     'language Code ISO 639 (and ISO 3166 for en language) is now gLangCode     
-     'ISO 639 http://www.oasis-open.org/cover/iso639a.html
-     'ISO 3166: http://xml.coverpages.org/country3166.html
+    'language Code ISO 639 (and ISO 3166 for en language) is now gLangCode
+    'ISO 639 http://www.oasis-open.org/cover/iso639a.html
+    'ISO 3166: http://xml.coverpages.org/country3166.html
 
-     gISOLang = sLanOutIni
+    gISOLang = sLanOutIni
 
      select case lcase ( sLanOutIni )
          case "en_us", "en-us", "en" : iSprache = 01        ' English (USA)
@@ -380,7 +354,7 @@ end sub
 '-------------------------------------------------------------------------
 
 function ConvertLanguage ( Sprache as String ) as Integer
-'/// Sets international language code for the whole language name.
+    '/// Sets international language code for the whole language name.
 
    select case lCase ( Sprache )
       case "deutsch", "german"                              : ConvertLanguage = 49
@@ -514,7 +488,7 @@ end function
 '-------------------------------------------------------------------------
 
 function ConvertCodeToLanguage ( sSprache as String ) as Integer
-'/// Converts the old language code to international language code
+    '/// Converts the old language code to international language code
 
    select case lCase ( sSprache )
          case "1033" : ConvertCodeToLanguage = 01        ' English (USA)
@@ -569,18 +543,18 @@ sub GetTheInstallationType
     dim aTemp3
     dim i,x as integer
     dim sPlatformProgramPath as string
-    
+
     if ( lcase( gPlatform ) = "osx" ) then
-    	sPlatformProgramPath = "MacOS"
+        sPlatformProgramPath = "MacOS"
     else
-    	sPlatformProgramPath = "program"
+        sPlatformProgramPath = "program"
     endif
-    
+
     if gSamePC = TRUE then
         gNetzInst = TRUE
         gNetzOfficePath = gOfficePath
         if (gSamePC = TRUE) then
-            if gPlatgroup = "unx" then            		            		
+            if gPlatgroup = "unx" then
                 sTemp = GetIniValue (gOfficePath & sPlatformProgramPath & "/bootstraprc", "Bootstrap", "UserInstallation")
             else
                 sTemp = GetIniValue (gOfficePath & sPlatformProgramPath & "\bootstrap.ini", "Bootstrap", "UserInstallation")
@@ -599,8 +573,8 @@ sub GetTheInstallationType
                     gOfficePath = sURL + gPathSigne
                 else
                     if inStr(sURL,"$BRAND_BASE_DIR") > 0 then
-                         gOfficePath = gOfficePath & right(sURL, len(sURL) - (inStr(sURL,"$BRAND_BASE_DIR")+len("$BRAND_BASE_DIR")))
-                    else 
+                        gOfficePath = gOfficePath & right(sURL, len(sURL) - (inStr(sURL,"$BRAND_BASE_DIR")+len("$BRAND_BASE_DIR")))
+                    else
                         qaErrorLog "ininfo.inc::GetTheInstallationType:: Unexpected entry in bootstrap file.(Entry UserInstallation not starting with: $SYSUSERCONFIG or $ORIGIN or file://; Using entry as absolute path!)"
                         printlog "ininfo.inc::GetTheInstallationType:: original UserInstallation entry from 'bootstrap' file: '" + sTemp + "'"
                         printlog "ininfo.inc::GetTheInstallationType:: using now converted from URL for 'gOfficePath': '" + sURL + "'"
@@ -614,7 +588,7 @@ sub GetTheInstallationType
         ' to support some developer bootstraprc/ini's:
         gOfficePath = fRelativeToAbsolutePath(gOfficePath)
         gOfficePath = fRemoveDoubleCharacter(gOfficePath + gPathSigne, gPathSigne)
-    else  
+    else
         gNetzInst = GetIniValue ( gTesttoolIni, "Network", "Net" )
         gNetzOfficePath = GetIniValue ( gTesttoolIni, "Network", "Current" )
         if Right ( gNetzOfficePath,1 ) <> gPathSigne then gNetzOfficePath = gNetzOfficePath + gPathSigne
@@ -624,8 +598,8 @@ end sub
 '-------------------------------------------------------------------------
 
 function ReplaceCharacter(stringToChange$, charToReplace$, replaceWith$) As String
-'/// Replaces a specified character in a string with another character that you specify
-'///+ INPUT: &lt;string&gt; , &lt;which characterto replace&gt; , &lt;which caracter the old one should be replaced&gt;
+    '/// Replaces a specified character in a string with another character that you specify
+    '///+ INPUT: &lt;string&gt; , &lt;which characterto replace&gt; , &lt;which caracter the old one should be replaced&gt;
     Dim ln, n As Long
     Dim NextLetter As String
     Dim FinalString As String
@@ -660,36 +634,32 @@ function fgetL10Nvalue() as string
     dim args(0) as new com.sun.star.beans.NamedValue
     args(0).Name = "nodepath"
     args(0).Value = "/org.openoffice.Setup/L10N"
-    fgetL10Nvalue = hGetUNOService()._
-        createInstance("com.sun.star.configuration.DefaultProvider")._
-        createInstanceWithArguments(_
-            "com.sun.star.configuration.ConfigurationAccess", args())._
-        getByName("ooLocale")
+    fgetL10Nvalue = hGetUNOService().createInstance("com.sun.star.configuration.DefaultProvider").createInstanceWithArguments("com.sun.star.configuration.ConfigurationAccess", args()).getByName("ooLocale")
 end function
 
 '-------------------------------------------------------------------------
 
 function hPlatformToGroup(sPLatform as string) as string
-'/// <u>Input</u>: string of class gPlatform
-'/// <u>Output</u>: string of class gPlatGroup
+    '/// <u>Input</u>: string of class gPlatform
+    '/// <u>Output</u>: string of class gPlatGroup
     select case sPLatform
-        case "w95":hPlatformToGroup = "w95"
-        case "w98":hPlatformToGroup = "w95"
-        case "wse":hPlatformToGroup = "w95"
-        case "wme":hPlatformToGroup = "w95"
-        case "wnt":hPlatformToGroup = "w95"
-        case "w2k":hPlatformToGroup = "w95"
-        case "wxp":hPlatformToGroup = "w95"
-        case "mac":hPlatformToGroup = "mac"
-        case "ppc":hPlatformToGroup = "unx"        
-        case "sol":hPlatformToGroup = "unx"
-        case "x86":hPlatformToGroup = "unx"
-        case "lin":hPlatformToGroup = "unx"
-        case "fbsd":hPlatformToGroup= "unx"
-        case "nbsd":hPlatformToGroup= "unx"
-        case "lin64":hPlatformToGroup= "unx"
-        case "linsparc":hPlatformToGroup = "unx"
-        case "ecs":hPlatformToGroup = "ecs"
+    case "w95":hPlatformToGroup = "w95"
+    case "w98":hPlatformToGroup = "w95"
+    case "wse":hPlatformToGroup = "w95"
+    case "wme":hPlatformToGroup = "w95"
+    case "wnt":hPlatformToGroup = "w95"
+    case "w2k":hPlatformToGroup = "w95"
+    case "wxp":hPlatformToGroup = "w95"
+    case "mac":hPlatformToGroup = "mac"
+    case "ppc":hPlatformToGroup = "unx"
+    case "sol":hPlatformToGroup = "unx"
+    case "x86":hPlatformToGroup = "unx"
+    case "lin":hPlatformToGroup = "unx"
+    case "fbsd":hPlatformToGroup= "unx"
+    case "nbsd":hPlatformToGroup= "unx"
+    case "lin64":hPlatformToGroup= "unx"
+    case "linsparc":hPlatformToGroup = "unx"
+    case "ecs":hPlatformToGroup = "ecs"
     end select
 end function
 
@@ -699,72 +669,69 @@ sub sGetCrashreporterValues as boolean
     '/// This routine reads the values of the [Crashreporter] section
     '///+ in the TestTool control file (testtool.ini / .testtoolrc).
     '///It returns FALSE if one of the required
-    '///+ information is missing in testtool.ini. 
-        
+    '///+ information is missing in testtool.ini.
+
     sGetCrashreporterValues = FALSE
     '/// <i>gUseProxy</i> should be TRUE if you need a proxy or FALSE
-    '///+ if you have a direct connection to the (inter)net.     
-    gUseProxy = GetIniValue ( gTesttoolIni, "Crashreporter" , "UseProxy" )    
+    '///+ if you have a direct connection to the (inter)net.
+    gUseProxy = GetIniValue ( gTesttoolIni, "Crashreporter" , "UseProxy" )
     'If there's no value (=no entries at all...) exit the routine.
     'sGetCrashreporterValues = FALSE so the routine in master.inc
     'will stop testing.
-    if gUseProxy = "" then        
+    if gUseProxy = "" then
         exit sub
     else
         'Making a boolean value from it.
-        gUseProxy = cBool(gUseProxy) 
+        gUseProxy = cBool(gUseProxy)
         '/// <i>gConnectiontype</i> has the value DIRECT or MANUALPROXY in dependency
         '///+ of <i>gUseProxy</i>. If <i>gUseProxy</i> = TRUE then the value of
         '///+ <i>gConnectiontype</i> is MANUALPROXY otherwiese DIRECT.
-        if gUseProxy = FALSE then 
-            gConnectionType = "DIRECT"        
+        if gUseProxy = FALSE then
+            gConnectionType = "DIRECT"
             sGetCrashreporterValues = TRUE
-        else 
+        else
             gConnectionType = "MANUALPROXY"
         end if
-    
-	if gUseProxy then
-		'/// <i>gProxyServer</i> should be the proxy server which is needed to send
-		'///+ the crashreporter data via the net.
-		gProxyServer = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyServer" )
-		'Verifying that a proxy server has been entered if
-		'gUseProxy has been set to TRUE.
-		if gUseProxy = TRUE AND gProxyServer = "" then 
-		    warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " _
-			    & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyServer=' (empty). Please correct it!"
-		    sGetCrashreporterValues = FALSE
-		else
-		    sGetCrashreporterValues = TRUE
-		end if
 
-		'/// <i>gProxyPort</i> should be the proxy server port which is needed to send
-		'///+ the crashreporter data via the net.
-		gProxyPort = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyPort" )
-		'Verifying that a proxy server port has been entered if
-		'gUseProxy has been set to TRUE.
-		if gUseProxy = TRUE AND gProxyPort = "" then 
-		    sGetCrashreporterValues = FALSE
-		    warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " _
-			    & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyPort=' (empty). Please correct it!"       
-		end if
-	else
-	   ' to workaround issue i94779 set server and port to empty in case of direkt access
-	   gProxyServer = ""
-	   gProxyPort = ""
-	endif
-        
+        if gUseProxy then
+            '/// <i>gProxyServer</i> should be the proxy server which is needed to send
+            '///+ the crashreporter data via the net.
+            gProxyServer = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyServer" )
+            'Verifying that a proxy server has been entered if
+            'gUseProxy has been set to TRUE.
+            if gUseProxy = TRUE AND gProxyServer = "" then
+                warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyServer=' (empty). Please correct it!"
+                sGetCrashreporterValues = FALSE
+            else
+                sGetCrashreporterValues = TRUE
+            end if
+
+            '/// <i>gProxyPort</i> should be the proxy server port which is needed to send
+            '///+ the crashreporter data via the net.
+            gProxyPort = GetIniValue ( gTesttoolIni, "Crashreporter" , "ProxyPort" )
+            'Verifying that a proxy server port has been entered if
+            'gUseProxy has been set to TRUE.
+            if gUseProxy = TRUE AND gProxyPort = "" then
+                sGetCrashreporterValues = FALSE
+                warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " & "In the [Crashreporter]-section of TestTool control file 'UseProxy=true' but 'ProxyPort=' (empty). Please correct it!"
+            end if
+        else
+            ' to workaround issue i94779 set server and port to empty in case of direkt access
+            gProxyServer = ""
+            gProxyPort = ""
+        endif
+
         '/// <i>gAllowContact</i> should be TRUE or FALSE
         gAllowContact = GetIniValue ( gTesttoolIni, "Crashreporter" , "AllowContact" )
         gAllowContact = cBool(gAllowContact)
-    
-        '/// <i>gReturnAddress</i> should be the E-Mail address which can be used 
-        '///+ to contact the user who has run the test scripts for additional information .  
+
+        '/// <i>gReturnAddress</i> should be the E-Mail address which can be used
+        '///+ to contact the user who has run the test scripts for additional information .
         gReturnAddress = GetIniValue ( gTesttoolIni, "Crashreporter" , "ReturnAddress" )
         'Verifying that a mail address has been entered if
         'gAllowContact has been set to TRUE.
         if gAllowContact = TRUE AND gReturnAddress = "" then
-            warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " _
-                    & "In the [Crashreporter]-section of TestTool control file 'AllowContact=true' but 'ReturnAddress=' (empty). Please correct it!"           
+            warnlog "qatesttool::global::system::inc::iniinfo.inc::sGetCrashReporterValue: " & "In the [Crashreporter]-section of TestTool control file 'AllowContact=true' but 'ReturnAddress=' (empty). Please correct it!"
             sGetCrashreporterValues = FALSE
         end if
     end if
@@ -800,7 +767,7 @@ function getSofficeNative() as string
     dim bError as boolean
 
     bError = false
-    
+
     '/// separated handling between Linux/Unix and Win32 platforms ///'
     if ("unx" = gPlatGroup) then
         '/// on Linux/Unix systems we need to check/resolv 2 possible links which point to the directory with the 'soffice' executable ///'
@@ -831,30 +798,30 @@ function getSofficeNative() as string
                 sCandidates(2) = sTemp + "/" + sCandidates(2)
             end if
             ' DEBUG: If you need more detailed information about the installation environment
-            '        enable the next line.            
+            '        enable the next line.
             ' printlog "getSofficeNative() - : $HOME/soffice   : '" + sCandidates(2) + "' destination exists?: " +fileExists(sCandidates(2))
         catch
             ' DEBUG: If you need more detailed information about the installation environment
-            '        enable the next line.        
+            '        enable the next line.
             ' printlog "getSofficeNative() - : $HOME/soffice   : NOT AVAILABLE"
             sCandidates(2) = ""
         endcatch
-            for i = 1 to 2
-                if fileExists(sCandidates(i)) then
-                    '/// cut off program//soffice from link destination ///'
-                    y = instr(sCandidates(i), "program/soffice")
-                    if ( lcase( gPlatform ) = "osx" AND y < 1 ) then
-                        ' Accept also MacOS in link to soffice binary
-                        y = instr(sCandidates(i), "MacOS/soffice")
-                    end if 
-                    if (y > 0) then
-                        sCandidates(i) = left(sCandidates(i), y-1)
-                    else
-                        qaErrorLog "master.inc::getSofficeNative():: expected 'program/soffice' at end of link destination: '" + sCandidates(i) + "'"
-                        sCandidates(i) = ""
-                    end if
+        for i = 1 to 2
+            if fileExists(sCandidates(i)) then
+                '/// cut off program//soffice from link destination ///'
+                y = instr(sCandidates(i), "program/soffice")
+                if ( lcase( gPlatform ) = "osx" AND y < 1 ) then
+                    ' Accept also MacOS in link to soffice binary
+                    y = instr(sCandidates(i), "MacOS/soffice")
                 end if
-            next i
+                if (y > 0) then
+                    sCandidates(i) = left(sCandidates(i), y-1)
+                else
+                    qaErrorLog "master.inc::getSofficeNative():: expected 'program/soffice' at end of link destination: '" + sCandidates(i) + "'"
+                    sCandidates(i) = ""
+                end if
+            end if
+        next i
         if (("" = sCandidates(1)) or ("" = sCandidates(2))) then
             ' if one candidate doesn't exist
             '/// If only one candidate exist, take him. ///'
@@ -873,17 +840,17 @@ function getSofficeNative() as string
                 end if
             next i
             ' DEBUG: If you need more detailed information about the installation environment
-            '        enable the next line.            
+            '        enable the next line.
             ' printlog "getSofficeNative() - : BildId (1): " + iBuildId(1) + " (2): " + iBuildId(2)
             '/// - Take the candidate which exists and comes from $HOME ///'
-            if (iBuildId(1) > iBuildId(2)) then 
+            if (iBuildId(1) > iBuildId(2)) then
                 gOfficePath = sCandidates(1)
             else
                 '/// - If BuildIds are equal, the candidate from $HOME wins ///'
                 gOfficePath = sCandidates(2)
             end if
         end if
-        if (not fileExists(gOfficePath)) then 
+        if (not fileExists(gOfficePath)) then
             '/// - check if resulting candidate exist; No: error ///'
             bError = true
         end if
@@ -905,14 +872,14 @@ function getSofficeNative() as string
         iVendorEntries = 1
         sVendor(iVendorEntries) = "Sun Microsystems": inc (iVendorEntries)
         sVendor(iVendorEntries) = "OpenOffice.org"  : inc (iVendorEntries)
-        sVendor(iVendorEntries) = "Oracle"  : inc (iVendorEntries)
+       sVendor(iVendorEntries) = "Oracle"  : inc (iVendorEntries)
         
         iOfficeEntries = 1
         sOffice(iOfficeEntries) = "Oracle Open Office"    : inc (iOfficeEntries)
         sOffice(iOfficeEntries) = "StarOffice"    : inc (iOfficeEntries)
         sOffice(iOfficeEntries) = "StarSuite"     : inc (iOfficeEntries)
         sOffice(iOfficeEntries) = "OpenOffice.org": inc (iOfficeEntries)
-    
+
         iVersionEntries = 1
         sVersion(iVersionEntries) = "9"      : inc (iVersionEntries)
         sVersion(iVersionEntries) = "8"      : inc (iVersionEntries)
@@ -921,10 +888,10 @@ function getSofficeNative() as string
         sVersion(iVersionEntries) = "2.0.0"  : inc (iVersionEntries)
         sVersion(iVersionEntries) = "680"    : inc (iVersionEntries)
         sVersion(iVersionEntries) = "2.2"    : inc (iVersionEntries)
-        
+
         ' put new versions ABOVE THIS LINE! ^^^^^^^^^^^
         sVersion(iVersionEntries) ="NotFound": inc (iVersionEntries) ' HAS TO Stay at LAST
-        
+
         ' I have to walk over both sPath(z),
         '   over all sOffice(y)-1
         '       over all sVersion(x)-2
@@ -939,15 +906,15 @@ function getSofficeNative() as string
                             sTemp = sPath(z) + sVendor(j) + "\" + sOffice(y) + "\" + sVersion(x)
                             sOfficePath(z) = getRegistryValue(sTemp, sKey)
                             iOffice(z) = z*1000 + j*100 + y*10 + x
-                             if (sOfficePath(z) <> "") AND fileExists(sOfficePath(z)) then
+                            if (sOfficePath(z) <> "") AND fileExists(sOfficePath(z)) then
                                 ' DEBUG: If you need more detailed information about the installation environment
-                                '        enable the next line.                                            
+                                '        enable the next line.
                                 ' printlog "getSofficeNative() - : A " + z + ":" + j + ":" + y + ":" + x + " " + sTemp +  " +++++++++++ " + sOfficePath(z)
-                             else
-                                ' printlog "getSofficeNative() - : C " + z + ":" + j + ":" + y + ":" + x + " " + sTemp +  " +++++++++++ " + sOfficePath(z) 
-                                 sOfficePath(z) = ""
-                                 iOffice(z) = 0
-                             end if
+                            else
+                                ' printlog "getSofficeNative() - : C " + z + ":" + j + ":" + y + ":" + x + " " + sTemp +  " +++++++++++ " + sOfficePath(z)
+                                sOfficePath(z) = ""
+                                iOffice(z) = 0
+                            end if
                         else
                             ' This is just for completeness. B has no effect, A counts.
                             sTemp = sPath(z) + sVendor(j) + "\" + sOffice(y) + "\" + sVersion(x)
@@ -955,7 +922,7 @@ function getSofficeNative() as string
                                 sTemp2 = getRegistryValue(sTemp, sKey)
                                 if (sTemp2 <> "") then
                                     ' DEBUG: If you need more detailed information about the installation environment
-                                    '        enable the next line.                                            
+                                    '        enable the next line.
                                     ' printlog "getSofficeNative() - : B " + z + ":" + j + ":" + y + ":" + x + " " + sTemp +  " +++++++++++ "+sTemp2
                                 end if
                             end if
@@ -997,14 +964,14 @@ function getSofficeNative() as string
         end if
     end if
     ' now we have gOfficePath set.
-    
+
     if (not bError) then
         ' needed input for function: fGetProductName()
         '/// Look, if we got an OpenOffice.org version ///'
         gNetzOfficePath = gOfficePath
-        '/// Setting the global <i>gProductName</i> variable here. 
+        '/// Setting the global <i>gProductName</i> variable here.
         gProductName = fGetProductName
-       ' A special build of OpenOffice.org is OOo-dev; #i56804#
+        ' A special build of OpenOffice.org is OOo-dev; #i56804#
         if (gProductName = "OOo-dev") then
             gProductName = "OpenOffice.org"
             PrintLog "This is a 'OOo-dev' product build."
@@ -1024,11 +991,11 @@ end function
 '-------------------------------------------------------------------------
 
 function getSofficeTesttool() as string
-    dim sTemp as string    
-    
+    dim sTemp as string
+
     sTemp = ""
     '/// <ol><li>Look into the current profile section of the TestTool control file </li>
-    '/// deprecated, just kept here for compatibility 
+    '/// deprecated, just kept here for compatibility
     sTemp = GetIniValue ( gTesttoolIni, gTTProfileName, "OOoProgramDir" )
     if (sTemp = "") then
         '///+ <li>Look into the global section of the TestTool control file OOoProgramDir section</li></ol>
@@ -1036,7 +1003,7 @@ function getSofficeTesttool() as string
     end if
     ' Throw error, if the default '.' from first startup is found
     if fileExists(sTemp) AND NOT (sTemp = "." )then
-    ' make sure path ends with path seperator
+        ' make sure path ends with path seperator
         if (right(sTemp,1) <> gPathSigne) then
             sTemp = sTemp + gPathSigne
         end if
@@ -1060,9 +1027,9 @@ function getSofficeTesttool() as string
         gOfficePath = sTemp
         gNetzOfficePath = gOfficePath
         '/// Setting the global <i>gProductName</i> variable here because GetSofficeNative()
-        '///+ won't fill this global variable if [OOoProgramDir] is being used.        
+        '///+ won't fill this global variable if [OOoProgramDir] is being used.
         gProductName = fGetProductName
-       ' A special build of OpenOffice.org is OOo-dev; #i56804#
+        ' A special build of OpenOffice.org is OOo-dev; #i56804#
         if (gProductName = "OOo-dev") then
             gProductName = "OpenOffice.org"
             PrintLog "This is a 'OOo-dev' product build."
@@ -1072,9 +1039,9 @@ function getSofficeTesttool() as string
         else
             gOOO = FALSE
         end if
-        getSofficeTesttool = sTemp        
+        getSofficeTesttool = sTemp
     else
-        '/// No valid path will return an empty string.        
+        '/// No valid path will return an empty string.
         getSofficeTesttool = ""
     end if
 end function
@@ -1155,7 +1122,7 @@ function getOfficeBasisPath as string
 
     sTemp = gNetzOfficePath
     sFile = gNetzOfficePath & "basis-link"
-    
+
     if FileExists( sFile ) then
         if ( lcase( gPlatform ) = "osx" ) then
             'MacOS X
@@ -1163,12 +1130,12 @@ function getOfficeBasisPath as string
         else
             if ( gPlatGroup = "unx" ) then
                 'Unixes
-               sPath = getLinkDestination( sFile )
-               sTemp = fRelativeToAbsolutePath( gNetzOfficePath & sPath )
-               if ( NOT FileExists( sTemp ) ) then
+                sPath = getLinkDestination( sFile )
+                sTemp = fRelativeToAbsolutePath( gNetzOfficePath & sPath )
+                if ( NOT FileExists( sTemp ) ) then
                     sTemp = fRelativeToAbsolutePath( sPath )
-               endif
-               
+                endif
+
             else
                 'all other platforms are Windows/DOS style
                 ListRead( lTemp, sFile )
@@ -1181,7 +1148,7 @@ function getOfficeBasisPath as string
     else
         warnlog( CFN & "Basis-link could not be found" )
     endif
-    
+
     if ( NOT FileExists( sTemp ) ) then
         warnlog( CFN & "Retrieved invalid path" )
     endif

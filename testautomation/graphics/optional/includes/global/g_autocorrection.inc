@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
@@ -147,7 +147,7 @@ testcase tToolsAutocorrectCustomQuotes(bSimple as boolean)
         sFileName = (ConvertPath ( gTesttoolPath + "graphics\required\input\rightfont." + ExtensionString))
     endif
 
-    if hFileExists ( sFileName ) = FALSE then
+    if FileExists ( sFileName ) = FALSE then
         warnlog "The language-file was not found or accessible! The test ends."
         goto endsub
     endif

@@ -25,25 +25,39 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Impress Required Test Library (5)
 '*
 '\*****************************************************************
 
+sub im_005_
+
+    call tiFormatModifyLayout()
+
+end sub
+
+'*******************************************************************************
+
 testcase tiFormatModifyLayout
 
     printlog "open application "
     Call  hNewDocument
-    printlog "Impress: Format->Modify Layout "
-    printlog "Draw   : kontext menu: Slide-> Modify Slide (always disabled :-( ?"
-    FormatPage 
+
+    printlog( "Format/Page" )
+    FormatPage
+
     Kontext "SeitenLayout"
-    DialogTest ( SeitenLayout )
-    sleep 1
-    printlog "cancel dialog 'Page Setup' "
-    SeitenLayout.Cancel
-    printlog "close application "
+    if ( SeitenLayout.exists( 2 ) ) then
+        DialogTest ( SeitenLayout )
+
+        printlog "cancel dialog 'Page Setup' "
+        hCloseDialog( SeitenLayout, "Cancel" )
+    else
+        warnlog( "Dialog <SeitenLayout> did not open" )
+    endif
+
+    printlog "close application"
     Call hCloseDocument
-    
+
 endcase 'tiFormatModifyLayout

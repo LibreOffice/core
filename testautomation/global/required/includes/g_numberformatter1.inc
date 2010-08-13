@@ -25,19 +25,9 @@
 '
 '/************************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : wolfram.garten@oracle.com
 '*
 '* short description : update and resouce test for numberformatter
-'*
-'************************************************************************
-'*
-'#1 tNumberformatterGetLanguage
-'#1 sNumberformatterPreconditions
-'#1 sNumberformatterOpenDialog
-'#1 tNumberformatterPre
-'#1 tNumberformatter
-'#1 tUserDefinedNumberformatter
-'#1 tButtonsNumberformatter
 '*
 '\***********************************************************************
 

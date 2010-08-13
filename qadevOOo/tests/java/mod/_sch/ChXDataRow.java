@@ -107,8 +107,11 @@ public class ChXDataRow extends TestCase {
     * Disposes Chart document.
     */
     protected synchronized void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    closing xChartDoc " );
-        util.DesktopTools.closeDoc(xChartDoc);
+        if( xChartDoc!=null ) {
+            log.println( "    closing xChartDoc" );
+            util.DesktopTools.closeDoc(xChartDoc);
+            xChartDoc = null;
+        }
     }
 
 

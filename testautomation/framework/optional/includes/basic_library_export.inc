@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Export BASIC library (flat)
 '*
@@ -38,7 +38,9 @@ testcase tBasicLibraryExport
     ' Assumption: All actions take place in the user/work directory
     ' macro taken from framework/tools/input/macros.txt::tBasicLibraryExport
     
-    ' For constants (UPPERCASE) see .BAS-file
+    ' For test specific global constants (UPPERCASE) see .BAS-file
+
+    const LIBRARIES_TAB = 3
     
     dim cDocumentName as string
     dim cLibraryName as string
@@ -124,7 +126,7 @@ testcase tBasicLibraryExport
     Verwalten.click()
     
     printlog( "Go to the libraries-tab" )
-    hSelectBasicObjectOrganizerTab( 3 )
+    hSelectBasicObjectOrganizerTab( LIBRARIES_TAB )
     
     kontext "TabBibliotheken"
     printlog( "Select the document at pos. " & DOCUMENT_POSITION )

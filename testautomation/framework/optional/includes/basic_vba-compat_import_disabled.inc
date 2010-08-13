@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*  
 '*  short description : Test VBA compatibility switches
 '*
@@ -80,9 +80,10 @@ testcase tBasicVBACompatImportDisabled()
     hFileOpen( cTestFile )
     
     printlog( "Open the Basic organizer" )
-    hOpenBasicOrganizerFromDoc()
+    ToolsMacro_uno
     
     printlog( "Expand all nodes" )
+    kontext "Makro"
     cNodeCount = hExpandAllNodes( MakroAus )
     
     printlog( "Verify that we have the correct node count for the current mode" )

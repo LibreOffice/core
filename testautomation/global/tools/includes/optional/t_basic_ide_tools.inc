@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 ' **
-' ** owner : joerg.skottke@sun.com
+' ** owner : joerg.skottke@oracle.com
 ' **
 ' ** short description : tools for the property-browser test
 ' **
@@ -36,21 +36,27 @@ function hShowMacroControls() as boolean
     '///<h3>Tear off the ToolsCollectionBar from the MacroBar</h3>
     '///<i>Starting point: Basic dialog editor is open and has the focus</i>
     '///<ul>
-    const CFN = "hShowMacroControls::"   
+    const CFN = "hShowMacroControls::"
+
+    const MAX_WAIT = 5
+    const SHORT_WAIT = 1
+
+    const VERTICALLY_CENTERED = 50
+    const HORIZONTALLY_CENTERED = 50
     
-    printlog( CFN & "Enter" )
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
 
     '///+<li>Test whether the ToolsCollectionBar is already open. If yes, exit directly</li>
     kontext "ToolsCollectionBar"
-    if ( ToolsCollectionBar.exists( 3 ) ) then
-        printlog( CFN & "Exit: ToolsCollectionBar is already open." )
+    if ( ToolsCollectionBar.exists( SHORT_WAIT ) ) then
+        printlog( CFN & "ToolsCollectionBar is already open." )
         hShowMacroControls() = true
         exit function
     endif
     
     '///+<li>Verify that the Dialog Bar is available</li>
     Kontext "DialogBar"
-    if ( DialogBar.exists( 5 ) ) then
+    if ( DialogBar.exists( MAX_WAIT ) ) then
 
         '///+<li>Verify that the controls-button is enabled</li>
         try        
@@ -62,27 +68,23 @@ function hShowMacroControls() as boolean
             
             '///+<li>Verify that the ToolsCollectionBar is visible and can be accessed</li>
             kontext "ToolsCollectionBar"
-            if ( ToolsCollectionBar.exists( 5 ) ) then
+            if ( ToolsCollectionBar.exists( MAX_WAIT ) ) then
             
                 '///+<li>Move it to the upper left corner at pos 50/50</li>
-                ToolsCollectionBar.Move ( 50 , 50 )
-                printlog( CFN & "Exit: ToolsCollectionBar is open and has been placed" )
+                ToolsCollectionBar.Move ( HORIZONTALLY_CENTERED , VERTICALLY_CENTERED )
+                printlog( CFN & "ToolsCollectionBar is open and has been placed" )
                 hShowMacroControls() = true
-                exit function
             else
-                printlog( CFN & "Exit: ToolsCollectionBar is not available. Aborting." )
+                printlog( CFN & "ToolsCollectionBar is not available. Aborting." )
                 hShowMacroControls() = false
-                exit function
             endif
         catch
-            printlog( CFN & "Exit: The Controls-Button is not enabled. Aborting." )
+            printlog( CFN & "The Controls-Button is not enabled. Aborting." )
             hShowMacroControls() = false
-            exit function
         endcatch	
     else
-        printlog( CFN & "Exit: The Dialog Bar is not available. Aborting." )
+        printlog( CFN & "The Dialog Bar is not available. Aborting." )
         hShowMacroControls() = false
-        exit function
     endif
     '///</ul>    
         
@@ -94,22 +96,10 @@ function hGetBasicWorkFile( cMajorID as string ) as string
 
     '///<h3>Retrieve a filename, depending on gApplication and Build-ID</h3>
     '///<i>Structure: work-directory/basic[.suffix]</i>
-    '///<ul>
-    
     const CFN = "hGetBasicWorkFile::"
-    
-    dim sFile as string
-    
-    '///+<li>Build a path and a filename (path from UNO, Suffix from global-module)</li>
-    sFile = hGetWorkPath() & "basic" & hGetSuffix( cMajorId )
-    sFile = ConvertPath( sFile )
-    
+    dim sFile as string : sFile = hGetWorkPath() & "basic" & hGetSuffix( cMajorId )
     printlog( CFN & sFile & " for " & gApplication & " (" & cMajorID & ")" )
-        
-    '///+<li>Return the path as string</li>
-    hGetBasicWorkFile() = convertpath( sFile )
-    
-    '///</ul>
+    hGetBasicWorkFile() = sFile
 
 end function
 
@@ -119,31 +109,32 @@ function hOpenBasicIDE() as boolean
 
     '///<h3>Open the Basic IDE for the last module listed in the Macro Organizer</h3>
     '///<i>Starting point: Basic Macro Organizer has focus</i>
-    '///<ul>
     
     const CFN = "hOpenBasicIDE::"
+    const BUTTON_TIMEOUT = -1
+    const MAX_WAIT = 2
     
-    '///+<li>Select the last module in the treelist, verify that it can be edited</li>
-    hSelectTheLastModule( true )
+    if ( hSelectTheLastModule( true ) ) then
     
-    '///+<li>Click the Edit-button</li>
-    Bearbeiten.click()
-    
-    '///+<li>Maximize the Basic IDE (required to ensure proper operation of mousemovements)</li>
-    sleep( 2 )
-    kontext "BasicIde"
-    BasicIde.maximize()
-    
-    '///+<li>Verify that the Basic IDE is open, return TRUE on success</li>
-    if ( BasicIde.exists() ) then
-       printlog( CFN & "Open Basic-IDE for existing module: success" )
-       hOpenBasicIDE() = true
+        if ( hClickButton( Bearbeiten) <> BUTTON_TIMEOUT ) then
+
+            kontext "BASICIDE"
+            if ( BasicIDE.exists( MAX_WAIT ) ) then
+                printlog( "Basic IDE is open" )
+                BasicIDE.maximize()
+                hOpenBasicIDE() = true
+            else
+                warnlog( CFN & "Failed to open BASIC IDE" )
+                hOpenBasicIDE() = false
+            endif
+        else
+            warnlog( CFN & "Edit button is not enabled, cannot open BASIC IDE"
+            hOpenBasicIDE() = false
+        endif
     else
-       printlog( CFN & "Open Basic-IDE for existing module: failure" )
-       hOpenBasicIDE() = false
+        warnlog( CFN & "Unable to select the last module" )
+        hOpenBasicIDE() = false
     endif
-    
-    '///</ul>
 
 end function
 
@@ -151,32 +142,10 @@ end function
 
 function hCloseBasicIDE() as boolean
 
-    '///<h3>Close the BASIC-IDE with best effort verification</h3>
-    '///<i>Starting point: Basic IDE is open and has the focus</i>
-    '///<ol>
-    '///+<li>File-menu</li>
-    '///+<li>Slot FileClose</li>
-    '///+<li>hCloseDocument()/hDestroyDocument()</li>
-    '///</ol>
-    '///<ul>
-    
-    use "global\tools\includes\optional\t_docfuncs.inc"
-    
-    const CFN = "hCloseBasicIDE::"
-    dim brc as boolean
-
-    '///+<li>Close the macro controls float</li>
+    '///<h3>Close the BASIC-IDE</h3>
     hCloseCollectionBar()
-
-    '///+<li>Try to close the current document</li>
-    brc = hDestroyDocument()
-    if ( brc ) then
-        hCloseBasicIDE() = true
-    else
-        hCloseBasicIDE() = false
-        qaerrorlog( "#i54135# Failed to close BASIC IDE" )
-    endif
-    '///</ul>
+    kontext "BasicIDE"
+    hCloseBasicIDE() = hDestroyDocument()
 
 end function
 
@@ -186,36 +155,31 @@ function hReOpenBasicDialog() as boolean
 
     '///<h3>Open BASIC-IDE after loading a workfile with documentbound macro</h3>
     '///<i>Starting point: Focus on document containing at least one macro</i><br>
-    '///<i>IMPORTANT: Errorhandling is incomplete, test may end up in undefined state</i>
-    '///<ul>
+    const CFN = "hReopenBasicDialog: "
+    const BUTTON_TIMEOUT = -1
     
-    dim brc as boolean
+    if ( hSelectTheLastModule( true ) ) then
 
-    '///+<li>open the macro dialog, select the last module</li>
-    brc = hSelectTheLastModule( true )
-    if ( not brc ) then
-        warnlog( "Could not open the last module for editing." )
-        hReOpenBasicDialog() = false
-        exit function
-    endif
+        if ( hClickButton( Bearbeiten ) <> BUTTON_TIMEOUT ) then
 
-    '///+<li>edit the module</li>
-    Bearbeiten.Click()
+            kontext "BasicIDE"
+            BasicIde.maximize()
 
-    '///+<li>find the dialog window.</li>
-    kontext "BasicIDE"
-    BasicIde.maximize()
-
-    brc = hFindFirstDialog() 
-    if ( not brc ) then
-        warnlog( "Could not find any dialog" )
-        hReOpenBasicDialog() = false
+            if ( hFindFirstDialog() ) then
+                printlog( "BASIC IDE is open." )
+                hReOpenBasicDialog() = true
+            else
+                warnlog( CFN & "Could not find any dialog" )
+                hReOpenBasicDialog() = false
+            endif
+        else
+            warnlog( CFN & "Unable to click Edit button, BASIC IDE not open" )
+            hReOpenBasicDialog() = false
+        endif
     else
-        hReOpenBasicDialog() = true
+        warnlog( CFN & "Could not open the last module for editing." )
+        hReOpenBasicDialog() = false
     endif
-    
-    '///+<li>Return TRUE on success, FALSE on failure</li>
-    '///</ul>
 
 end function
 
@@ -227,39 +191,34 @@ function hFindFirstDialog() as boolean
     '///<i>Starting point: Basic IDE must be open and has the focus</i>
     '///<ul>
     
-    dim iPosOverTabbar as integer
-    dim brc as boolean
     const CFN = "hFindFirstDialog::"
+    const REPEAT_COUNT = 5 ' number of times to send a keystroke to BASIC IDE
+    const MAX_NUMBER_OF_RETRIES = 20
+    const SELECT_TAB_RIGHT = "<MOD1 PAGEUP>"
+    const SCROLL_UP_LEFT   = "<UP><LEFT>"
+
+    dim iPosOverTabbar as integer
+    hFindFirstDialog() = false
 
     '///+<li>Set focus to Basic IDE, maximize it</li>
-    kontext "BasicIde"
+    kontext "BasicIDE"
     BasicIde.maximize()
-    
 
-    brc = false
 
     '///+<li>move pointer over the tabbar and click until a dialog opens (hopefully)</li>
-    for iPosOverTabbar = 1 to 20
+    for iPosOverTabbar = 1 to MAX_NUMBER_OF_RETRIES
 
-        Tabbar.MouseDown ( 5 * iPosOverTabbar , 50 )
-        Tabbar.MouseUp   ( 5 * iPosOverTabbar , 50 )
+        BASICIDE.typeKeys( SELECT_TAB_RIGHT )
 
         if ( DialogWindow.Exists() ) then
-            brc = true
-            DialogWindow.typeKeys( "<up>", 5 )
+            printlog( "BASIC Dialog window found" )
+            hFindFirstDialog() = true
+            DialogWindow.typeKeys( SCROLL_UP_LEFT , REPEAT_COUNT )
             exit for
         endif
 
     next iPosOverTabbar
-    
-    '///+<li>Return TRUE on success, FALSE on failure</li>
-    if ( brc ) then
-        printlog( CFN & "Found dialog" )
-    else
-        printlog( CFN & "Could not find the first dialog via tabbar" )
-    endif
-    hFindFirstDialog() = brc
-    '///</ul>
+       '///</ul>
 
 end function
 
@@ -269,27 +228,19 @@ function hSelectDialogPane() as boolean
 
     '///<h3>Select the dialog pane in the Basic dialog editor</h3>
     '///<i>Starting point: Basic dialog editor is open and has the focus</i>
-    '///<ul>
-
     const CFN = "hSelectDialogPane::"
-    printlog( CFN & "Enter" )
+    const UP_LEFT    = 10
+    const DOWN_RIGHT = 90
+
+    if ( GVERBOSE ) then printlog( CFN & "Enter" )
     
-    '///+<li>Select background dialog by rubberband</li>
     kontext "BasicIDE"
+    DialogWindow.mouseDown( DOWN_RIGHT , DOWN_RIGHT )
+    DialogWindow.mouseMove( UP_LEFT , UP_LEFT )
+    DialogWindow.mouseUp  ( UP_LEFT , UP_LEFT )
     
-    '///+<li>Set the mousepointer down at 90/90</li>
-    DialogWindow.mouseDown( 90 , 90 )
-    
-    '///+<li>Move it to 10/10</li>
-    DialogWindow.mouseMove( 10 , 10 )
-    
-    '///+<li>Release the mouse pointer at 10/10</li>
-    DialogWindow.mouseUp  ( 10 , 10 )
-    
-    '///+<li>Return TRUE, currently no verification is implemented</li>
-    printlog( CFN & "Exit: Selected dialog pane (not verified)" )
+    printlog( CFN & "Selected dialog pane (not verified)" )
     hSelectDialogPane() = true
-    '///</ul>
 
 end function
 
@@ -297,33 +248,23 @@ end function
 
 function hCloseCollectionBar() as boolean
 
-    '///<h3>Close the ToolsCollectionBar (Macro Controls Float)</h3>
-    '///<i>Starting point: Basic Dialog editor is open, ToolsCollectionBar is open</i>
-    '///<ul>
-    
-    const CFN = "hCloseCollectionBar::"
-    const RETRIES = 3
-    
-    dim iTry as integer
-        iTry = 0
-    
-    '///+<li>Try to close the ToolsCollectionBar max 3 times</li>
-    kontext "ToolsCollectionBar"
-    while ( ToolsCollectionBar.exists( 1 ) )
-        iTry = iTry + 1
-        printlog( CFN & "Closing ToolsCollectionBar..." )
-        ToolsCollectionBar.close()
-        
-        if ( iTry = RETRIES ) then
-            printlog( CFN & "Failed to close ToolsCollectionBar" )
-            hCloseCollectionBar() = false
-            exit function
-        endif
-    wend
+    const CFN = "hCloseCollectionBar(): "
 
-    hCloseCollectionBar() = true
-    '///</ul>
-    
+    kontext "ToolsCollectionBar"
+    if ( ToolsCollectionBar.exists() ) then
+
+        if ( hCloseDialog( ToolsCollectionBar, "close" ) ) then
+            printlog( "Closed Macro Controls Float" )
+            hCloseCollectionBar() = true
+        else
+            warnlog( CFN & "Failed to close Macro Controls Float" )
+            hCloseCollectionBar() = false
+        endif
+    else
+        printlog( "Macro Controls Float not open" )
+        hCloseCollectionBar() = true
+    endif
+
 end function
 
 '*******************************************************************************
@@ -331,50 +272,18 @@ end function
 function hDeleteMacro() as boolean
 
     '///<h3>Delete all text in the Basic IDE editor</h3>
-    '///<i>Starting point: Basic IDE is open, has focus, code can be edited</i>
-    '///<ul>
+    const CFN = "hDeleteMacro(): "
     
-    use "global\tools\includes\optional\t_accels.inc"
-
-    '///+<li>Verify all prerequisites are met (BasicIDE must be open)</li>
     kontext "BasicIDE"
-    if ( not BasicIde.exists() ) then
-        warnlog( "hDeleteMacro::BasicIDE is not visible/active. Aborting" )
+    if ( BasicIDE.exists() ) then
+        WaitSlot() : Wait( 100 ) : EditWindow.typeKeys( "<MOD1 HOME>" )
+        WaitSlot() : Wait( 100 ) : EditWindow.typeKeys( "<MOD1 SHIFT END>" )
+        WaitSlot() : Wait( 100 ) : EditWindow.typeKeys( "<DELETE>" )
+        hDeleteMacro() = hIsEditWindowEmpty()
+    else
+        warnlog( CFN & "Basic IDE is not open" )
         hDeleteMacro() = false
-        exit function
     endif
-
-    dim brc as boolean
-    
-    '///+<li>get the languagespecific accelerator for "Edit->Select All"</li> 
-    dim cAccelerator as string
-        cAccelerator = hGetAccel( "SelectAll" )
-    
-    printlog( "hDeleteMacro::Using Accel: " & cAccelerator )
-
-    ' Common for all actions is that we delete the existing macro before
-    ' inserting the new one. This fails if the accelerator for SelectAll
-    ' is incorrect, we try to recover by doing this manually then.
-    '///+<li>Delete the entire content of the Basic IDE editor</li>
-    EditWindow.TypeKeys( cAccelerator )
-    EditWindow.TypeKeys( "<Delete>" )
-
-    ' Verify that the EditWindow is empty, if not use a method that
-    ' should work for all languages/locales
-    '///+<li>Verify that the editor window is indeed empty</li>
-    brc = hIsEditWindowEmpty()
-    if ( not brc ) then
-        qaerrorlog( "#i52430# hDeleteMacro::Accelerator " & cAccelerator & " failed" )
-        printlog( "hDeleteMacro::Trying alternative method" )
-        EditWindow.TypeKeys( "<Mod1 Home>" )
-        EditWindow.TypeKeys( "<Mod1 Shift End>" )
-        EditWindow.TypeKeys( "<Delete>" )
-        brc = hIsEditWindowEmpty()
-    endif
-
-    '///+<li>Return TRUE on success, FALSE on failure</li>
-    hDeleteMacro() = brc
-    '///</ul>
 
 end function
 
@@ -384,112 +293,66 @@ function hIsEditWindowEmpty() as boolean
 
     '///<h3>Test if the Basic-EditWindow is empty</h3>
     '///<i>Starting point: Basic IDE editor is open and has the focus</i>
-    '///<ul>
-    
-    '///+<li>Verify that prerequisites are met: Basic IDE must be open</li>
+    const CFN = "hIsEditWindowEmpty(): "
+
     kontext "BasicIDE"
-    if ( not BasicIDE.exists() ) then
-        warnlog( "hIsEditWindowEmpty::BasicIde is not open/visible" )
-        hIsEditWindowEmpty() = false
-        exit function
-    endif
+    if ( BasicIDE.exists() ) then
+        SetClipboard( "" )
+        WaitSlot() : EditWindow.typeKeys( "<MOD1 HOME>" )
+        WaitSlot() : EditWindow.typeKeys( "<MOD1 SHIFT END>" )
+        hUseAsyncSlot( "EditCopy" )
 
-    '///+<li>Verify that the EditWindow is empty. EditCopy is disabled when empty</li>
-    EditWindow.TypeKeys( "<Mod1 Home>" )
-    EditWindow.TypeKeys( "<Mod1 Shift End>" )
-    try
-        EditCopy
-        printlog( "EditCopy should be enabled for empty Basic IDE editor" )
-    catch
-        setClipboard( "" )
-    endcatch
-
-    if ( getClipBoardText() <> "" ) then
-        hIsEditWindowEmpty() = false
-        printlog( "hIsEditWindowEmpty::no - content follows:" )
-        printlog( GetClipboardText )
+        if ( GetClipBoardText() = "" ) then
+            hIsEditWindowEmpty() = true
+        else
+            warnlog( CFN & "Edit window is not empty" )
+            hIsEditWindowEmpty() = false
+        endif
     else
-        hIsEditWindowEmpty() = true
-        printlog( "hIsEditWindowEmpty::yes" )
+        warnlog( CFN & "BasicIDE is not open" )
+        hIsEditWindowEmpty() = false
     endif
     
-    '///+<li>Return TRUE on success, FALSE on failure</li>
-    '///</ul>
-
 end function
 
 '*******************************************************************************
 
 function hRenameTab( cTabName as string ) as integer
 
-    '///<h3>Rename the first tab in the Basic IDE Tabbar</h3>
-    '///<i>Starting point: Basic IDE is open, at least one tab exists</i><br>
-    '///Return values are:
-    '///<ul>
-    '///+<li>0 = Tab was correctly renamed</li>
-    '///+<li>1 = Invalid name warning is displayed (handle outside of function)</li>
-    '///+<li>2 = Unknown error / failed to rename the tab</li>
-    '///+<li>3 = Unable to access context menu</li>
-    '///</ul>
-    '///Description
-    '///<ul>
-    
-    const CFN = "hRenameTab::"
-    
-    dim cString as string
-    dim iWait as integer
-    dim iTry as integer
-    dim brc as boolean
-        brc = false
+    const CFN = "hRenameTab(): "
 
-    cString = "<HOME><SHIFT END>" & cTabName & "<RETURN>" 
-    kontext "basicide"
-    
-    '///+<li>Open the context menu of the tabbar</li>
-    for iTry = 1 to 5
-	    try
-    	    kontext "basicide"
-        	Tabbar.OpenContextMenu
-            hMenuSelectNr( 3 )
-            sleep( 2 )
-            brc = true
+    const MENUITEM_RENAME  = 3
+    const MAX_WAIT         = 1000
 
+    const RETVAL_SUCCESS   = 0
+    const RETVAL_NO_IDE    = 1
+    const RETVAL_NO_ACCESS = 2
+    const RETVAL_NO_MENU   = 3
+
+    dim sFullString as string : sFullString = "<HOME><SHIFT END>" & cTabName & "<RETURN>"
+
+    kontext "BasicIDE"
+    if ( BasicIDE.exists() ) then
+        try
+            hRenameTab() = RETVAL_NO_MENU
+            Tabbar.openContextMenu()
+            hMenuSelectNr( MENUITEM_RENAME )
+            Wait( MAX_WAIT )
+
+            ' At this point the string on the tab should be selected, print the 
+            ' string to the log and overwrite it with the new name
+            hRenameTab() = RETVAL_NO_ACCESS
+
+            Tabbar.typeKeys( sFullString , true )
+            hRenameTab() = RETVAL_SUCCESS
         catch
-            printlog( "No context menu, retrying..." )
+            warnlog( CFN & "Failed to rename the current module" )
         endcatch
-    next iTry    
-        '///+<li>Select to rename the tab</li>
-    if ( not brc ) then
-        warnlog( CFN & "Unable to access Context Menu" )
-        hRenameTab() = 3 
-        exit function       
+    else
+        warnlog( CFN & "BASIC IDE is not open" )
+        hRenameTab() = RETVAL_NO_IDE
     endif
-    
-    try
-        '///+<li>Overwrite the old name of the tab</li>
-        kontext "basicide"
-        Tabbar.TypeKeys( cString , true )
-        hRenameTab() = 0
-        printlog( CFN & "Tab renamed: " & cTabName )
-    catch
-        '///+<li>Handle possible errors</li>
-        hRenameTab() = 2
-        warnlog(  CFN & "Failed to rename tab: " & cTabName )
-        exit function
-    endcatch
-    
-    kontext "active"
-    for iWait = 1 to 3
-        sleep( 1 )
-        if ( active.exists() ) then
-            hRenameTab() = 1
-            printlog( CFN & "Invalid name for tab: Warning is displayed" )
-            exit for
-        endif
-    next iWait
-    '///+<li>Return 0, 1 or 2</li>
-    '///</ul>
-    
+
 end function
 
 '*******************************************************************************
@@ -532,6 +395,7 @@ function hNewDialog() as boolean
     '///<ul>
 
     const CFN = "hNewDialog::"
+    const MAX_WAIT = 2000
 
     '///+<li>Open the context menu for the tabbar</li>
     kontext "basicide"
@@ -539,20 +403,20 @@ function hNewDialog() as boolean
     
     '///+<li>Select the first item (insert)</li>
     hMenuSelectNr( 1 )
-    WaitSlot( 1000 ) ' sleep( 1 )
+    WaitSlot( MAX_WAIT ) ' sleep( 1 )
     
     '///+<li>Select the second item (new dialog)</li>
     hMenuSelectNr( 2 )
-    WaitSlot( 2000 ) ' sleep( 2 )
+    WaitSlot( MAX_WAIT ) ' sleep( 2 )
     
     '///+<li>Verify that a new dialog is opened and has the focus</li>
     if ( DialogWindow.Exists() ) then 
         printlog( CFN & "New dialog is open" )
         hNewDialog() = true
-		if ( DialogWindow.IsMax() = false ) then		
-			DialogWindow.Maximize()
-			Wait( 2000 )
-		end if		
+	if ( DialogWindow.IsMax() = false ) then		
+            DialogWindow.Maximize()
+            Wait( MAX_WAIT )
+	end if		
     else
         warnlog( CFN & "New dialog is not open" )
         hNewDialog() = false
@@ -571,6 +435,7 @@ function hNewModule() as boolean
     '///<ul>
 
     const CFN = "hNewModule::"
+    const MAX_WAIT = 2000
 
     '///+<li>Open the context menu for the tabbar</li>
     kontext "basicide"
@@ -578,11 +443,11 @@ function hNewModule() as boolean
     
     '///+<li>Select the first item (insert)</li>
     hMenuSelectNr( 1 )
-    WaitSlot( 1000 ) ' sleep( 1 )
+    WaitSlot( MAX_WAIT ) ' sleep( 1 )
     
     '///+<li>Select the first item (new module)</li>
     hMenuSelectNr( 1 )
-    WaitSlot( 2000 ) ' sleep( 2 )
+    WaitSlot( MAX_WAIT ) ' sleep( 2 )
     
     '///+<li>Verify that a new module is opened and has the focus</li>
     if ( EditWindow.Exists() ) then 
@@ -606,6 +471,7 @@ function hHideModule() as boolean
     '///<ul>
 
     const CFN = "hHideModule::"
+    const MENUENTRY_HIDE = 4
     
     kontext "basicide"
     
@@ -614,7 +480,7 @@ function hHideModule() as boolean
        tabbar.openContextMenu
        
        '///+<li>Select the fourth entry (Hide)</li>
-       hMenuSelectNr( 4 )
+       hMenuSelectNr( MENUENTRY_HIDE )
        sleep( 1 )
        hHideModule() = true
        printlog( CFN & "Success" )
@@ -643,14 +509,13 @@ function hInitFormControls( cModule as string ) as boolean
     '///Description:
     '///<ul>
     
-    const CFN = "hInitFormControls::"    
-    dim brc as boolean
+    const CFN = "hInitFormControls::"
+    hInitFormControls() = false
     '///+<li>Create and edit a new module for the current document</li>
-    brc = hInitBasicIde( cModule )
-    if ( not brc ) then
+
+    if ( not hInitBasicIde( cModule ) ) then
         warnlog( "Could not create new module" )
         hCloseBasicIde()
-        hInitFormControls() = false
         exit function
     endif     
     
@@ -658,20 +523,16 @@ function hInitFormControls( cModule as string ) as boolean
     BasicIde.maximize()   
 
     '///+<li>Create a new dialog.</li>
-    brc = hNewDialog()
-    if ( not brc ) then
+    if ( not hNewDialog() ) then
         warnlog( "Could not create Basic-Dialog" )
         hCloseBasicIde()
-        hInitFormControls() = false
         exit function
     endif    
     
     '///+<li>Open the macro controls float.</li>
-    brc = hShowMacroControls()
-    if ( not brc ) then
+    if ( not hShowMacroControls() ) then
         warnlog( CFN & "Could not tear off the macro controls float" )
         hCloseBasicIde()
-        hInitFormControls() = false
         exit function            
     endif
     
@@ -688,52 +549,32 @@ function hInitBasicIde( cModule as string ) as boolean
 
     '///<h3>Get from a new document to the Basic IDE in one go</h3>
     '///<i>Starting point: New, plain document</i>
-    '///<ul>
-    
-    use "global\tools\includes\optional\t_basic_organizer_tools.inc"
-    use "global\tools\includes\optional\t_listfuncs.inc"
 
     const CFN = "hInitBasicIde::"
 
-    if ( cModule = "" ) then
-        warnlog( CFN & "Invalid parameter passed to function" )
-        hInitBasicIde() = false
-        exit function
-    endif        
-    
-    ' some multi-purpose return code 
-    dim brc as boolean 
-    
-    '///+<li>Open the basic Organizer</li>
-    brc = hOpenBasicOrganizerFromDoc()
-    if ( not brc ) then
-        warnlog( CFN & "Could not open the Basic Organizer, aborting" )
-        hInitBasicIde() = false
-        exit function
-    endif
+    ToolsMacro_uno
 
-    '///+<li>Create a new module for the current document</li>
-    brc = hCreateModuleForDoc( cModule )
-    if ( not brc ) then
-        warnlog( CFN & "The Basic-IDE is not open, aborting" )
-        hInitBasicIde() = false
-        
-        kontext "Makro"
-        if ( Makro.exists() ) then
-            printlog( CFN & "Closed Macro Organizer" )
-            Makro.cancel()
+    kontext "Makro"
+    if ( Makro.exists( 2 ) ) then
+
+        if ( hCreateModuleForDoc( cModule ) ) then
+
+            kontext "BasicIDE"
+            if ( BasicIDE.exists( 2 ) ) then
+                BasicIDE.maximize()
+                hInitBasicIde() = true
+            else
+                warnlog( CFN & "Failed to open BASIC IDE" )
+                hInitBasicIde() = false
+            endif
+        else
+            warnlog( CFN & "Failed to create a module for the current document" )
+            hInitBasicIde() = false
         endif
-        exit function
+    else
+        warnlog( CFN & "Failed to open macro organizer" )
+        hInitBasicIde() = false
     endif
-    
-    '///+<li>Maximize the BasicIDE</li>
-    kontext "BasicIde"
-    BasicIde.maximize()
-    
-    '///+<li>Verify that the Basic IDE is open, return TRUE on success, FASLE on failure</li>
-    hInitBasicIde() = true
-    '///</ul>
-    '///NOTE: The function will try to to clean up after itself in case of any error    
     
 end function 
 
@@ -746,19 +587,12 @@ function hInsertMacro( _id as integer ) as boolean
     '///<ul>
     
     const CFN = "hInsertMacro::"
-    dim brc as boolean
-    
-    if ( ( _id < 1 ) or ( _id > 3 ) ) then
-        warnlog( CFN & "Invalid parameter passed to function: " & _id )
-        hInsertMacro() = false
-        exit function
-    endif
-    
     kontext "basicide"
+
+    printlog( CFN & "This function is deprecated" )
     
     '///+<li>Delete the content of the edit window</li>
-    brc = hDeleteMacro()
-    if ( not brc ) then
+    if ( not hDeleteMacro() ) then
         warnlog( CFN & "Content of Basic-IDE was not deleted" )
         hInsertMacro() = false
         exit function
@@ -803,6 +637,7 @@ function hTestMacro( _id as integer ) as integer
     '///<ul>
     
     const CFN = "hTestMacro::"
+    qaerrorlog( CFN & "This function is deprecated, remove me!" )
 
     kontext "basicide"
 
@@ -843,59 +678,49 @@ end function
 function hCreateBasicWorkFiles() as string
 
     '///<H3>Create a macro, attach it to a file, save the file</H3>
-    '///<i>Starting point: The first doc or any other plain document</i>
+    '///<i>Starting point: Any plain document or the backing window</i>
     '///<ul>
     const CFN = "hCreateBasicWorkFiles::"
     const CMACRO = "TestMacro"
     
-    ' some returncodes
-    dim brc as boolean
-    dim irc as integer
-    dim crc as string
-    
-    dim sFile as string
-        sFile = hGetBasicWorkFile( "CURRENT" )
+    dim sFile as string : sFile = hGetBasicWorkFile( "CURRENT" )
         
     '///+<li>Open a new document</li>
-    call hCreateDocument()
+    hCreateDocument()
     
     '///+<li>Change the document (to save it)</li>
-    crc = hChangeDoc()
-    printlog( CFN & crc )
+    printlog( CFN & hChangeDoc() )
     
     '///+<li>Open Basic-Organizer, select the document and create a module</li>
-    brc = hInitBasicIde( CMACRO )
-    if ( not brc ) then
+    if ( not hInitBasicIde( CMACRO ) ) then
         printlog( CFN & "Unable to create a module, aborting" )
-        call hDestroyDocument()
+        hDestroyDocument()
         hCreateBasicWorkFiles() = ""
         exit function
     endif
     
     '///+<li>Insert a macro that triggers a messagebox</li>
-    brc = hInsertMacro( 3 )
-    if ( not brc ) then
+    if ( not hInsertMacro( 3 ) ) then
         printlog( CFN & "Unable to insert macro, aborting" )
         hCloseBasicIde()
-        call hDestroyDocument()
+        hDestroyDocument()
         hCreateBasicWorkFiles() = ""
         exit function
     endif
     
     '///+<li>Close the Basic-IDE</li>
-    brc = hCloseBasicIde()
+    hCloseBasicIde()
     
     '///+<li>Save the file without autoextension, overwrite existing</li>
-    brc = hFileSaveAsKill( sFile )
-    if ( not brc ) then
+    if ( not hFileSaveAsKill( sFile ) ) then
         printlog( CFN & "Unknown error while saving the file. Resetting" )
-        call ExitRestartTheOffice
+        ExitRestartTheOffice
         hCreateBasicWorkFiles() = ""
         exit function
     endif
     
     '///+<li>Close the document</li>
-    call hDestroyDocument()
+    hDestroyDocument()
     
     '///</ul>
     
@@ -905,9 +730,6 @@ end function
 '*******************************************************************************
 
 function hIDESelectTabByIndex( iIndex as integer ) as string
-
-    use "global\tools\includes\optional\t_accels.inc"
-
 
     '///<h3>Select a tab within the BASIC-IDE by index</h3>
      '///<i>The BASIC-IDE has to be open and has the focus. This function
@@ -947,7 +769,6 @@ function hIDESelectTabByIndex( iIndex as integer ) as string
     
     dim cTabName as string
     dim iCurrentTab as integer
-    dim cAccel as string
 
     '///<u>Description:</u>
     '///<ul>
@@ -957,15 +778,14 @@ function hIDESelectTabByIndex( iIndex as integer ) as string
     '///+<li>Retrieve the accelerator to switch tabs</li>
     '///+<li>Switch tabs</li>
     select case iIndex
-    case 0   :  cAccel = ""
-    case 1   :  cAccel = hGetAccel( "IDE_SWITCH_TAB-" )
-                for iTab = 1 to 20
-                    BasicIDE.typeKeys( cAccel )
-                next iTab
-    case else:  cAccel = hGetAccel( "IDE_SWITCH_TAB+" )
-                for iTab = 1 to iIndex
-                    BasicIDE.typeKeys( cAccel )
-                next iTab
+    case 1   :
+        for iTab = 1 to 20
+            BasicIDE.typeKeys( "<MOD1 PAGEDOWN>" )
+        next iTab
+    case else:  
+        for iTab = 1 to iIndex
+            BasicIDE.typeKeys( "<MOD1 PAGEUP>" )
+        next iTab
     end select
     
     '///+<li>Select the Tabbar</li>
@@ -978,7 +798,7 @@ function hIDESelectTabByIndex( iIndex as integer ) as string
     hSelectMenuNr( 3 )
     
     '///+<li>Copy the selected string to the clipboard</li>
-    EditCopy
+    hUseAsyncSlot( "EditCopy" )
     
     '///+<li>Send ESC to the tabbar to deselect the tab</li>
     Kontext "Tabbar"
@@ -988,8 +808,9 @@ function hIDESelectTabByIndex( iIndex as integer ) as string
     cTabName = getClipboardText
     
     '///+<li>Print exit message, set return value</li>
-    printlog( CFN & "Exit with result: " & cTabName )
+    if ( GVERBOSE ) then printlog( CFN & "Exit with result: " & cTabName )
     hIDESelectTabByIndex() = cTabName
     '///</ul>
 
 end function
+

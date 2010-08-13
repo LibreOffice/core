@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Fields general test
 '*
@@ -401,7 +401,7 @@ testcase tDocumentFilename
 	' document has to be copied to local file system to avoid opening a read-only file
 	' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
 	FileCopy (sOriginalFile, sTestFile)
-	if hFileExists ( sTestFile ) = false then
+	if FileExists ( sTestFile ) = false then
 		Warnlog "Test document couldn't be copied to local file system. Test aborted!"
 		goto endsub
 	end if
@@ -879,7 +879,7 @@ testcase tDocumentStatistics
     ' document has to be copied to local file system to avoid opening a read-only file
     ' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
     FileCopy (sOriginalFile, sTestFile)
-    if hFileExists ( sTestFile ) = false then
+    if FileExists ( sTestFile ) = false then
         Warnlog "Test document couldn't be copied to local file system. Test aborted!"
         goto endsub
     end if
@@ -942,7 +942,7 @@ testcase tDocumentTemplate
     ' document has to be copied to local file system to avoid opening a read-only file
     ' because all field data gets lost if documents write-protection is removed via 'sMakeReadOnlyDocumentEditable'
     FileCopy (sOriginalFile, sTestFile)
-    if hFileExists ( sTestFile ) = false then
+    if FileExists ( sTestFile ) = false then
         Warnlog "Test document couldn't be copied to local file system. Test aborted!"
         goto endsub
     end if

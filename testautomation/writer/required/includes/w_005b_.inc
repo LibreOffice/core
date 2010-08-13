@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description :  Testcases for the Format-Menu.
 '*
@@ -176,7 +176,7 @@ testcase tFormatArrange
 
     printlog " Insert a graphic from file '..\writer\required\input\graphics\jolink.jpg'"
     Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
-
+    sleep(2)
     try
         printlog " Format / Arrange / Bring to front"
         FormatArrangeBringToFrontCalc
@@ -219,12 +219,12 @@ testcase tFormatAlignment
     Call hNewDocument
     printlog " Insert a graphic from file '..\writer\required\input\graphics\jolink.jpg'"
     Call hGrafikEinfuegen ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
-
+    sleep(2)
     if ( gApplication = "HTML" ) then
         printlog " Format / Anchor / to Page"
         hUseAsyncSlot( "FormatAnchorToPage" )
     end if
-
+    
     try
         printlog " Format / Alignment / Left"
         FormatAlignmentLeft
@@ -469,14 +469,14 @@ testcase tFormatWrapObject
     if ( hUseAsyncSlot( "FormatWrapContour" ) = -1 ) then
         printlog( "Format / Wrap / Contour disabled. Good." )
     else
-        warnlog( "#i90964# Format / Wrap / Contour should not be enabled for frames" )
+        warnlog( "Format / Wrap / Contour should not be enabled for frames" )
     end if
 
     printlog " Format / Wrap / Edit Contour"
     if ( hUseAsyncSlot( "FormatWrapEditContour" ) = -1 ) then
         printlog( "Format / Wrap / Edit Contour disabled. Good." )
     else
-        Warnlog( "#i90964# Wrap / Edit Contour should not be enabled for frames" )
+        Warnlog( "Wrap / Edit Contour should not be enabled for frames" )
 
         Kontext "KonturEditor"
         if ( KonturEditor.exists( 2 ) ) then

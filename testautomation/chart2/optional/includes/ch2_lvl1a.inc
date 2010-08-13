@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Chart2 functional tests
 '*
@@ -40,109 +40,111 @@ end sub
 
 
 testcase tPlotOptions
-	
-	Dim sOutputFile as string
-	sOutputFile = convertpath(gOfficepath & "user\work\hiddenCells.ods")
 
-	printlog "Load simple chart document"
-	if fLoadVerySimpleChartAndSaveLocal() > 0 then
-		warnlog "Loading test document seems to have failed -> Check this out!"
-		goto endsub
-	endif    
-	printlog "Select chart using navigator"
-	if fSelectFirstOLE = -1 then
-		warnlog "It was not possible to select the chart object!"
-		Call hCloseDocument
-		goto endsub
-	endif	
+    Dim sOutputFile as string
+    sOutputFile = convertpath(gOfficepath & "user\work\hiddenCells.ods")
 
-	printlog "Edit / Object / Edit"
-	EditObjectEdit        
+    gApplication = "CALC"
 
-    printlog "Select DataSeries A by toolbar selectorbox"
-	Kontext "DocumentChart"
-	call fChartSelectElement (8)        
+    printlog "Load simple chart document"
+    if fLoadVerySimpleChartAndSaveLocal() > 0 then
+        warnlog "Loading test document seems to have failed -> Check this out!"
+        goto endsub
+    endif
+    printlog "Select chart using navigator"
+    if fSelectFirstOLE = -1 then
+        warnlog "It was not possible to select the chart object!"
+        Call hCloseDocument
+        goto endsub
+    endif
 
-	printlog "Invoke Format::ObjectProperties"
-	Kontext "Toolbar"
-	FormatSelection.Click        
+    printlog "Edit / Object / Edit"
+    EditObjectEdit
+      waitslot()
+      printlog "Select DataSeries A by toolbar selectorbox"
+    Kontext "DocumentChart"
+    call fChartSelectElement (8)
 
-	printlog "Select tab page Options"
-	Kontext
-	Active.SetPage TabDataSeriesOptions
-	Kontext "TabDataSeriesOptions"
-	printlog "activate checkbox 'Include values from hidden cells'"
-	try
-		IncludeHiddenCells.Check
-	catch
-		Warnlog "checkbox hidden or disabled"
-		Call hCloseDocument
-		goto endsub
-	endcatch
-		
-	printlog "Close and reopen data series dialog - checkbox should be still activated"
-	TabDataSeriesOptions.Ok
-	Kontext "DocumentChart"
-	FormatSelection
-	printlog "Select tab page Options"
-	Kontext
-	Active.SetPage TabDataSeriesOptions
-	Kontext "TabDataSeriesOptions"
-	if Not IncludeHiddenCells.IsChecked then
-		Warnlog "After closing and reopening of Data-Series dialog the checkbox isn't checked anymore"
-		TabDataSeriesOptions.Cancel
-		Kontext "DocumentCalc"
-		DocumentCalc.TypeKeys "<Escape>"		
-		call hCloseDocument
-		goto endsub		
-	endif
+    printlog "Invoke Format::ObjectProperties"
+    Kontext "Toolbar"
+    FormatSelection.Click
 
-	TabDataSeriesOptions.Ok
-	
-	printlog "save and reopen file - checkbox still must be checked"
-	if NOT hFileSaveAsKill (sOutputFile) then
-		warnlog "Saving test document failed -> Aborting"
-		Kontext "DocumentCalc"
-		DocumentCalc.TypeKeys "<Escape>"		
-		call hCloseDocument
-		goto endsub
-	endif    		
-	Call hCloseDocument
-	
+    printlog "Select tab page Options"
+    Kontext
+    Active.SetPage TabDataSeriesOptions
+    Kontext "TabDataSeriesOptions"
+    printlog "activate checkbox 'Include values from hidden cells'"
+    try
+        IncludeHiddenCells.Check
+    catch
+        Warnlog "checkbox hidden or disabled"
+        Call hCloseDocument
+        goto endsub
+    endcatch
+
+    printlog "Close and reopen data series dialog - checkbox should be still activated"
+    TabDataSeriesOptions.Ok
+    Kontext "DocumentChart"
+    FormatSelection
+    printlog "Select tab page Options"
+    Kontext
+    Active.SetPage TabDataSeriesOptions
+    Kontext "TabDataSeriesOptions"
+    if Not IncludeHiddenCells.IsChecked then
+        Warnlog "After closing and reopening of Data-Series dialog the checkbox isn't checked anymore"
+        TabDataSeriesOptions.Cancel
+        Kontext "DocumentCalc"
+        DocumentCalc.TypeKeys "<Escape>"
+        call hCloseDocument
+        goto endsub
+    endif
+
+    TabDataSeriesOptions.Ok
+
+    printlog "save and reopen file - checkbox still must be checked"
+    if NOT hFileSaveAsKill (sOutputFile) then
+        warnlog "Saving test document failed -> Aborting"
+        Kontext "DocumentCalc"
+        DocumentCalc.TypeKeys "<Escape>"
+        call hCloseDocument
+        goto endsub
+    endif
+    Call hCloseDocument
+
     Call hFileOpen(sOutputFile)
-	if fSelectFirstOLE = -1 then
-		warnlog "It was not possible to select the chart object!"
-		Call hCloseDocument
-		goto endsub
-	endif	
+    if fSelectFirstOLE = -1 then
+        warnlog "It was not possible to select the chart object!"
+        Call hCloseDocument
+        goto endsub
+    endif
 
-	EditObjectEdit        
+    EditObjectEdit
+        waitslot()
+        printlog "Select DataSeries A by toolbar selectorbox"
+    call fChartSelectElement (8)
 
-    printlog "Select DataSeries A by toolbar selectorbox"
-	call fChartSelectElement (8)        
+    printlog "Invoke Format::ObjectProperties"
+    Kontext "Toolbar"
+    FormatSelection.Click
+    Kontext
+    Active.SetPage TabDataSeriesOptions
+    Kontext "TabDataSeriesOptions"
+    if Not IncludeHiddenCells.IsChecked then
+        Warnlog "After closing and reopening of Data-Series dialog the checkbox isn't checked anymore"
+        TabDataSeriesOptions.Cancel
+        Kontext "DocumentCalc"
+        DocumentCalc.TypeKeys "<Escape>"
+        call hCloseDocument
+        goto endsub
+    endif
 
-	printlog "Invoke Format::ObjectProperties"
-	Kontext "Toolbar"
-	FormatSelection.Click    	
-	Kontext
-	Active.SetPage TabDataSeriesOptions
-	Kontext "TabDataSeriesOptions"
-	if Not IncludeHiddenCells.IsChecked then
-		Warnlog "After closing and reopening of Data-Series dialog the checkbox isn't checked anymore"
-		TabDataSeriesOptions.Cancel
-		Kontext "DocumentCalc"
-		DocumentCalc.TypeKeys "<Escape>"		
-		call hCloseDocument
-		goto endsub		
-	endif
-	
-	'/// Close dialog with Cancel-button
-	TabDataSeriesOptions.Cancel
-	'/// Close document
-	Kontext "DocumentCalc"
-	DocumentCalc.TypeKeys "<Escape>"
+    '/// Close dialog with Cancel-button
+    TabDataSeriesOptions.Cancel
+    '/// Close document
+    Kontext "DocumentCalc"
+    DocumentCalc.TypeKeys "<Escape>"
 
-	Call hCloseDocument
+    Call hCloseDocument
 endcase
 
 '
@@ -150,14 +152,16 @@ endcase
 '
 testcase tChartShapes
 
-	Dim sLocalFile as string
-	Dim sLocalFileXLS as string
-	Dim sFormatXLS as string
-	sLocalFile = convertpath(gOfficepath & "user\work\chartshapes.ods")
-	sLocalFileXLS = convertpath(gOfficepath & "user\work\chartshapes.xls")
-	sFormatXLS = "MS Excel 97"
-	
-	printlog " Load simple chart document"
+    Dim sLocalFile as string
+    Dim sLocalFileXLS as string
+    Dim sFormatXLS as string
+    sLocalFile = convertpath(gOfficepath & "user\work\chartshapes.ods")
+    sLocalFileXLS = convertpath(gOfficepath & "user\work\chartshapes.xls")
+    sFormatXLS = "MS Excel 97"
+
+    gApplication = "CALC"
+
+    printlog " Load simple chart document"
     if fLoadVerySimpleChartAndSaveLocal() > 0 then
         warnlog "Loading test document seems to have failed -> Check this out!"
         goto endsub
@@ -168,11 +172,11 @@ testcase tChartShapes
     EditObjectEdit
     printlog " Verify that the drawbar is visible"
     Kontext "DrawBar"
-    
+
     qaerrorlog "#i107003# disabled because of bug in toolbars"
-'    if Not DrawBar.Exists then 
-'    	Call hToolbarSelect("Drawing", true)
-'    endif
+    '    if Not DrawBar.Exists then
+    '    	Call hToolbarSelect("Drawing", true)
+    '    endif
 
     printlog " Insert a shape to the chart by <STRG-RETURN>"
     Kontext "DocumentChart"
@@ -197,7 +201,7 @@ testcase tChartShapes
     Kontext "DocumentCalc"
     DocumentCalc.TypeKeys "<Escape>"
     printlog "Select chart using navigator"
-    call fSelectFirstOLE   
+    call fSelectFirstOLE
     printlog "Invoke Edit::Object::Edit to enter Inplace Mode"
     EditObjectEdit
     printlog " Check if shape is still there"
@@ -206,7 +210,7 @@ testcase tChartShapes
     Sleep (1)
     Kontext "Toolbar"
     if ChartElementSelector.GetSelText <> "ChartShape1" then
-    	warnlog "Something is wrong with the shape"
+        warnlog "Something is wrong with the shape"
     endif
     printlog " Leave Chart"
     Kontext "DocumentCalc"
@@ -219,12 +223,12 @@ testcase tChartShapes
         call hCloseDocument
         goto endsub
     end if
-	printlog " Close document"
+    printlog " Close document"
     call hCloseDocument
     printlog " Open document"
     call hFileOpen ( sLocalFile )
-	printlog "Select chart using navigator"
-    call fSelectFirstOLE   
+    printlog "Select chart using navigator"
+    call fSelectFirstOLE
     printlog "Invoke Edit::Object::Edit to enter Inplace Mode"
     EditObjectEdit
     printlog " Check if shape is still there"
@@ -233,16 +237,16 @@ testcase tChartShapes
     Sleep (1)
     Kontext "Toolbar"
     if ChartElementSelector.GetSelText <> "ChartShape1" then
-    	warnlog "Something is wrong with the shape"
+        warnlog "Something is wrong with the shape"
     endif
     printlog " Leave Chart"
     Kontext "DocumentCalc"
     DocumentCalc.TypeKeys "<Escape>"
     printlog " Close document"
     Call hCloseDocument
-	call hFileOpen ( sLocalFileXLS )
-	printlog "Select chart using navigator"
-    call fSelectFirstOLE   
+    call hFileOpen ( sLocalFileXLS )
+    printlog "Select chart using navigator"
+    call fSelectFirstOLE
     printlog "Invoke Edit::Object::Edit to enter Inplace Mode"
     EditObjectEdit
     printlog " Check if shape is still there"
@@ -251,12 +255,12 @@ testcase tChartShapes
     Sleep (1)
     Kontext "Toolbar"
     if ChartElementSelector.GetSelText <> "ChartShape1" then
-    	warnlog "Something is wrong with the shape"
+        warnlog "Something is wrong with the shape"
     endif
     printlog " Leave Chart"
     Kontext "DocumentCalc"
     DocumentCalc.TypeKeys "<Escape>"
     printlog " Close document"
     Call hCloseDocument
-    
+
 endcase

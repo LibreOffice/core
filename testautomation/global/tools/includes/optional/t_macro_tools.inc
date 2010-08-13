@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 ' **
-' ** owner : joerg.skottke@sun.com
+' ** owner : joerg.skottke@oracle.com
 ' **
 ' ** short description : Helper functions for Macro tests
 ' **
@@ -56,53 +56,40 @@ function hInsertMacroFromFile( cMacroId as string, optional cSource as string ) 
     '///<ul>
     
     const CFN = "hInsertMacroFromFile::"
+    const RETVAL_FAILURE = 0
+    const MAX_LINES_IN_MACRO_FILE = 10000
     
     '///+<li>Find the path to the source file</li>
     dim cFile as string
-    if ( IsMissing( cSource ) ) then
-        cFile = convertpath( gTesttoolPath & "global/input/macros.txt" )
-    else
-        cFile = convertpath( cSource )
-    endif        
-    
-    '///+<li>Determine the required array size</li>
-    dim iArraySize as integer
-        iArraySize = hListFileGetSize( cFile )
-        
-    dim aInstructionList( iArraySize ) as string
-        
+    dim aInstructionList( MAX_LINES_IN_MACRO_FILE ) as string
     dim iInstructionCount as integer
     dim iCurrentInstruction as integer
-    
-    dim brc as boolean
-    
+
+    if ( IsMissing( cSource ) ) then cFile = gTesttoolPath & "global/input/macros.txt"
+
     '///+<li>retrieve the macro from the file with ID as section</li>
-    iInstructionCount = hGetDataFileSection( cFile, _
-                                             aInstructionList(), _
-                                             cMacroId, "", "" )
+    iInstructionCount = hGetDataFileSection( cFile, aInstructionList(), cMacroId, "", "" )
                         
     '///+<li>Delete all content from the BASIC IDE edit window</li>
-    brc = hDeleteMacro()
-
     '///+<li>Insert the code into the IDE line by line</li>
-    if ( brc ) then
-
-        for iCurrentInstruction = 1 to iInstructionCount
-        
-            EditWindow.TypeKeys( "<HOME>" )
-            EditWindow.TypeKeys( aInstructionList( iCurrentInstruction ) )
-            EditWindow.TypeKeys( "<RETURN>" )
-            
-        next iCurrentInstruction
-        printlog( CFN & "Inserted macro: " & cMacroId )
-        hInsertMacroFromFile() = iInstructionCount
-        
+    kontext "BasicIDE"
+    if ( EditWindow.exists() ) then
+        if ( hDeleteMacro() ) then
+            for iCurrentInstruction = 1 to iInstructionCount
+                EditWindow.TypeKeys( "<HOME>" )
+                EditWindow.TypeKeys( aInstructionList( iCurrentInstruction ) )
+                EditWindow.TypeKeys( "<RETURN>" )
+            next iCurrentInstruction
+            printlog( CFN & "Inserted macro: " & cMacroId )
+            hInsertMacroFromFile() = iInstructionCount
+        else
+            printlog( CFN & "IDE is not empty, will not insert macro" )
+            hInsertMacroFromFile() = RETVAL_FAILURE
+        endif
     else
-    
-        printlog( CFN & "IDE is not empty, will not insert macro" )
-        hInsertMacroFromFile() = 0
-        
-    endif    
+        printlog( CFN & "Editwindow is not visible" )
+        hInsertMacroFromFile() = RETVAL_FAILURE
+    endif
     '///</ul>
         
 end function
@@ -111,66 +98,78 @@ end function
 
 function hMacroOrganizerRunMacro( cMacroName as string ) as integer
 
-    '///<h3>Execute a macro by name</h3>
-    '///<i>Starting point: Any document</i><br>
-    '///+<i>The function runs silent</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Name of the macro to be run (string)</li>
-    '///<ul>
-    '///+<li>Any macro that can run by itself (main)</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Position of the macro in the treelist (integer)</li>
-    '///<ul>
-    '///+<li>0 = error</li>
-    '///+<li>1-n = position of macro</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    dim irc as integer
+    ' Run a macro by name. Returnvalues as follows:
+    ' = 0: any error
+    ' > 0: position of macro in the list, success.
+
     const CFN = "hMacroOrganizerRunMacro::"
+    const RETVAL_FAILURE = 0
 
-    '///+<li>Go to Tools/Macros/Organize Macros/OpenOffice.org Basic</li>
-    printlog( CFN & "Enter with option: " & cMacroName )
-    ToolsMacro_uno    
-    
-    '///+<li>Find the Macro</li>
-    kontext "Makro"
-    hExpandAllNodes( MakroAus )
-    irc = hSelectNodeByName( MakroAus , cMacroName )
-    hExpandNode( MakroAus, irc )
-    hSelectNextNode( MakroAus )
+    dim iMacroPosition as integer
 
-    if ( MakroAus.getSelText() = cMacroName ) then
-        printlog( CFN & "Matching object found: " & cMacroName )
-    else
-        irc = 0
-    endif
-    
-    
-    '///+<li>Run the macro</li>
+    ToolsMacro_uno
+
     kontext "Makro"
-    if ( Ausfuehren.exists( 1 ) ) then
-        if ( Ausfuehren.isEnabled( 1 ) ) then
-            Ausfuehren.click()
+    if ( Makro.exists( 2 ) ) then
+        hExpandAllNodes( MakroAus )
+        iMacroPosition = hSelectNodeByName( MakroAus, cMacroName )
+        if ( iMacroPosition ) then
+            iMacroPosition = hSelectNextNode( MakroAus )
+            if ( hClickButton( Ausfuehren ) ) then
+                hMacroOrganizerRunMacro() = iMacroPosition
+            else
+                ' run macro button not enabled
+                warnlog( CFN & "Unable to click <Run macro> button" )
+                hMacroOrganizerRunMacro() = RETVAL_FAILURE
+            endif
         else
-            printlog( CFN & "Could not execute macro, button is disabled" )
-            Makro.close()
-            irc = 0
+            warnlog( CFN & "Macro was not found" )
+            hMacroOrganizerRunMacro() = RETVAL_FAILURE
         endif
     else
-        printlog( CFN & "Control does not exist/context failed" )
-        Makro.close()
-        irc = 0
+        warnlog( CFN & "Failed to open Macro Organizer" )
+        hMacroOrganizerRunMacro() = RETVAL_FAILURE
     endif
+
     
-    hMacroOrganizerRunMacro() = irc
-    printlog( CFN & "Exit with result: " & irc )
-    '///</ul>
-    
+end function
+
+'*******************************************************************************
+
+function hBasicIDERunMacro( cIdentifier as string ) as boolean
+
+    const CFN = "hBasicIDERunMacro(): "
+    const MAX_WAIT = 1
+    dim cMessage as string : cMessage = ""
+
+    kontext "BasicIDE"
+    if ( BasicIDE.exists() ) then
+
+        Wait( 2000 )
+
+        kontext "MacroBar"
+        if ( MacroBar.exists() ) then
+            BasicRun.click()
+        else
+            warnlog( "MacroBar not accessible" )
+        endif
+
+        kontext "Active"
+        if ( Active.exists( MAX_WAIT ) ) then
+            cMessage = Active.getText()
+            hCloseDialog( Active, "ok" )
+        endif
+
+        if ( cMessage = cIdentifier ) then
+            printlog( "The expected macro was executed" )
+            hBasicIDERunMacro() = true
+        else
+            printlog( CFN & "Incorrect macro executed" )
+            hBasicIDERunMacro() = false
+        endif
+    else
+        warnlog( CFN & "BasicIDE is not open" )
+        hBasicIDERunMacro() = false
+    endif
+
 end function

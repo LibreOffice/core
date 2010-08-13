@@ -25,26 +25,10 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiEditUndoRedo
-' #1 tiEditRepeat
-' #1 tiEditCutPasteCopySelectall
-' #1 tiEditPasteSpecial
-' #1 tiEditSearchAndReplace
-' #1 tiEditDuplicate
-' #1 tiEditFields
-' #1 tdEditDeleteSlide
-' #1 tiEditLinks
-' #1 tiEditImageMap
-' #1 tiEditObjectProperties
-' #1 tiEditObjectEdit
-' #1 tiEditPlugIn
-' #1 tiEditHyperlink
-' #1 tEditPoints
 '\**********************************************************************************
 
 testcase tiEditUndoRedo
@@ -247,9 +231,9 @@ testcase tiEditLinks
         Link.Check
         Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\desp.bmp")
         Oeffnen.Click
-        sleep 2
+
         kontext "Messagebox"
-        if Messagebox.Exists then
+        if Messagebox.Exists( 2 ) then
             Warnlog Messagebox.GetText
             Messagebox.OK
             sleep 1
@@ -277,9 +261,9 @@ testcase tiEditImageMap
     Call  hNewDocument
 
     EditImageMap
+
     Kontext "ImageMapEditor"
-    sleep (1)
-    if ImageMapEditor.Exists (2) then
+    if ImageMapEditor.Exists( 5 ) then
         printlog "- ImageMap exists"
         DialogTest ( ImageMapEditor )
         try
@@ -319,7 +303,6 @@ testcase tiEditObjectProperties
     WaitSlot (1000)
     Kontext "TabEigenschaften"
     DialogTest ( TabEigenschaften )
-    sleep(1)
     Oeffnen.Click
     Kontext "OeffnenDlg"
     Call DialogTest ( OeffnenDlg )
@@ -410,40 +393,48 @@ endcase
 testcase tiEditHyperlink
     hNewDocument
     InsertHyperlink
-    WaitSlot (5000)
-    Kontext "Hyperlink"
-    Auswahl.MouseDown 50, 5
-    Auswahl.MouseUp 50, 5
-    Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
-    Auswahl.typekeys "<TAB>"
-    sleep 3
-    Kontext "TabHyperlinkInternet"
 
-    'Workaround to get rid of a Focusing-problem...
-    NameText.Typekeys "alal <RETURN>"
-    NameText.Typekeys "<MOD1 A><DELETE>"
-    TabHyperlinkInternet.Typekeys "<TAB>", 6
-    TabHyperlinkInternet.Typekeys "<LEFT>", 3
-    'End of workaround...
-
-    Internet.Check           'Just to make sure the radio-button is addressable.
-    ZielUrl.Settext "http://www.liegerad-fahrer.de"
-    Kontext "Hyperlink"
-    Uebernehmen.Click
-    Hyperlink.Close
-    hTypeKeys "<TAB><F2>"
-    EditSelectAll
-    try
-        EditHyperlinkDraw
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
         Kontext "Hyperlink"
-        if Hyperlink.Exists then
-            Hyperlink.Close
-        else
-            Warnlog "- Hyperlinkdialog not up"
-        end if
-    catch
-        Warnlog "- Not able to edit Hyperlink!"
-    endcatch
+        Auswahl.MouseDown 50, 5
+        Auswahl.MouseUp 50, 5
+        Auswahl.typekeys "<PAGEDOWN><PAGEUP>"
+        Auswahl.typekeys "<TAB>"
+        sleep( 1 )
+        Kontext "TabHyperlinkInternet"
+
+        'Workaround to get rid of a Focusing-problem...
+        NameText.Typekeys "alal <RETURN>"
+        NameText.Typekeys "<MOD1 A><DELETE>"
+        TabHyperlinkInternet.Typekeys "<TAB>", 6
+        TabHyperlinkInternet.Typekeys "<LEFT>", 3
+        'End of workaround...
+
+        Internet.Check           'Just to make sure the radio-button is addressable.
+        ZielUrl.Settext "http://www.liegerad-fahrer.de"
+
+        Uebernehmen.Click()
+
+        kontext "HyperlinkDialog"
+        HyperlinkDialog.Close()
+
+        hTypeKeys "<TAB><F2>"
+        EditSelectAll
+        try
+            EditHyperlinkDraw
+            Kontext "HyperlinkDialog"
+            if ( HyperlinkDialog.Exists( 1 ) ) then
+                HyperlinkDialog.Close()
+            else
+                Warnlog "- Hyperlinkdialog not up"
+            end if
+        catch
+            Warnlog "- Not able to edit Hyperlink!"
+        endcatch
+    else
+        warnlog( "Failed to open <HyperlinkDialog>" )
+    endif
 
     Call hCloseDocument
 endcase

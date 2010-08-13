@@ -25,13 +25,10 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'******************************************************************
-' #1 tiWindowNewWindow
-' #1 tidWindow123       'wrn:2
 '\*****************************************************************
 
 testcase tiWindowNewWindow

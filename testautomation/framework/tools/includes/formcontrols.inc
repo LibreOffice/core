@@ -25,13 +25,15 @@
 '
 '/************************************************************************
 ' **
-' ** owner : joerg.skottke@sun.com
+' ** owner : joerg.skottke@oracle.com
 ' **
 ' ** short description : Tools to draw and select form controls in basic-ide
 ' **
 '\******************************************************************************
 
-public const ICONTROLCOUNT = 22
+private const ICONTROLCOUNT = 22
+
+'*******************************************************************************
 
 function hGetControlParams( cParam as string ) as integer
 
@@ -72,7 +74,7 @@ function hGetControlParams( cParam as string ) as integer
 
     '///+<li>Currently following values are defined:</li>
     '///<ul>
-    select case cParam
+    select case ( cParam )
     '///+<li>XOREGO = 31</li>
     case "XOREGO" : hGetControlParams() = 31
     '///+<li>XDIST = 8</li>
@@ -123,62 +125,57 @@ function hGetControlName( iControl as integer ) as string
     '///<u>Description</u>:
     '///<ul>
     
-
-    dim sControl as string
-
     '///+<li>Currently following control are defined:</li>
     '///<ol>
     select case iControl
     '///+<li>Push Button</li>
-    case 1  : sControl = "Push Button"
+    case 1  : hGetControlName() = "Push Button"
     '///+<li>Image Control</li>
-    case 2  : sControl = "Image Control"
+    case 2  : hGetControlName() = "Image Control"
     '///+<li>Check Box</li>
-    case 3  : sControl = "Check Box"
+    case 3  : hGetControlName() = "Check Box"
     '///+<li>Radio Button</li>
-    case 4  : sControl = "Radio Button"
+    case 4  : hGetControlName() = "Radio Button"
     '///+<li>Fixed Text</li>
-    case 5  : sControl = "Fixed Text"
+    case 5  : hGetControlName() = "Fixed Text"
     '///+<li>Edit Field</li>
-    case 6  : sControl = "Edit Field"
+    case 6  : hGetControlName() = "Edit Field"
     '///+<li>List Box</li>
-    case 7  : sControl = "List Box"
+    case 7  : hGetControlName() = "List Box"
     '///+<li>Combo Box</li>
-    case 8  : sControl = "Combo Box"
+    case 8  : hGetControlName() = "Combo Box"
     '///+<li>Vertical ScrollBar</li>
-    case 9  : sControl = "Vertical ScrollBar"
+    case 9  : hGetControlName() = "Vertical ScrollBar"
     '///+<li>Horizontal ScrollBar</li>
-    case 10 : sControl = "Horizontal ScrollBar"
+    case 10 : hGetControlName() = "Horizontal ScrollBar"
     '///+<li>Frame</li>
-    case 11 : sControl = "Frame"
+    case 11 : hGetControlName() = "Frame"
     '///+<li>Progress Bar</li>
-    case 12 : sControl = "Progress Bar"
+    case 12 : hGetControlName() = "Progress Bar"
     '///+<li>Vertical Fixed Line</li>
-    case 13 : sControl = "Vertical Fixed Line"
+    case 13 : hGetControlName() = "Vertical Fixed Line"
     '///+<li>Horizontal Fixed Line</li>
-    case 14 : sControl = "Horizontal Fixed Line"
+    case 14 : hGetControlName() = "Horizontal Fixed Line"
     '///+<li>Date Field</li>
-    case 15 : sControl = "Date Field"
+    case 15 : hGetControlName() = "Date Field"
     '///+<li>Time Field</li>
-    case 16 : sControl = "Time Field"
+    case 16 : hGetControlName() = "Time Field"
     '///+<li>Numeric Field</li>
-    case 17 : sControl = "Numeric Field"
+    case 17 : hGetControlName() = "Numeric Field"
     '///+<li>Currency Field</li>
-    case 18 : sControl = "Currency Field"
+    case 18 : hGetControlName() = "Currency Field"
     '///+<li>Form Field</li>
-    case 19 : sControl = "Form Field"
+    case 19 : hGetControlName() = "Form Field"
     '///+<li>Pattern Field</li>
-    case 20 : sControl = "Pattern Field"
+    case 20 : hGetControlName() = "Pattern Field"
     '///+<li>File Control</li>
-    case 21 : sControl = "File Control"
+    case 21 : hGetControlName() = "File Control"
     '///+<li>Tree Control</li>
-    case 22 : sControl = "Tree Control" 
+    case 22 : hGetControlName() = "Tree Control"
     '///</ol>
     '///+<li>&quot;&quot; for function parameter &lt; 1 or &gt; 22 </li>
     case else : sControl = ""
     end select
-    
-    hGetControlName() = sControl
     '///</ul>
     
 end function
@@ -305,14 +302,6 @@ function hDrawControlOnDialog( iControl as integer ) as string
 
     const CFN = "hDrawControlOnDialog::"
     
-    '///+<li>Verify function parameter (this is a top level function)</li> 
-    if ( ( iControl < 1 ) or ( iControl > ICONTROLCOUNT ) ) then
-        warnlog( CFN & "Invalid control-number (iControl) passed: " & iControl )
-        hDrawControlOnDialog() = false
-        exit function
-    endif    
-    
-    
     dim sControl as string   ' The name of the current control
     dim brc as boolean       ' some returnvalue
     
@@ -330,7 +319,8 @@ function hDrawControlOnDialog( iControl as integer ) as string
     
     '///+<li>click the desired control</li> 
     sControl = hInsertControl( iControl )
-    printlog( CFN & " at XO=" & iXO & _
+    printlog( CFN & " Index=" & iControl & _
+                    " at XO=" & iXO & _
                     " XE=" & iXE & _
                     " YO=" & iYO & _
                     " YE=" & iYE & _
@@ -405,19 +395,21 @@ function hDrawControl( xPos as integer, _
     '///+<li>Mouse up on pos X/Y-End</li>
     '///</ol>
     '///</ul>
-    
-    DialogWindow.MouseUp( 20 , 20 )
+
+    autoexecute = false
+    DialogWindow.MouseUp( 20 , 20 ) : wait 100
     
     try
-        DialogWindow.MouseDown ( xPos, yPos )
-        DialogWindow.MouseMove ( xEnd, yEnd )
-        DialogWindow.MouseUp   ( xEnd, yEnd )
+        DialogWindow.MouseMove ( xPos, yPos ) : wait 100
+        DialogWindow.MouseDown ( xPos, yPos ) : wait 100
+        DialogWindow.MouseMove ( xEnd, yEnd ) : wait 100
+        DialogWindow.MouseUp   ( xEnd, yEnd ) : wait 100
         hDrawControl() = true
     catch
         warnlog( "#i39852# " & CFN & "Unable to complete mouseactions on dialog" )
         hDrawControl() = false
     endcatch
-    
+    autoexecute = true
 
 end function
 
@@ -459,18 +451,15 @@ function hGetControlPosXO( iControl as integer ) as integer
     '///+<li>13 ... 18 : Column three</li>
     '///+<li>&gt; 18 : Column four</li>
     '///</ul>
-    '///</ul> 
-    
-    if ( iControl <= 6 ) then
-        hGetControlPosXO() = xOffset
-    elseif( ( iControl >= 7 ) and ( iControl <= 12 ) ) then
-        hGetControlPosXO() = xOffset + 1 * xDistance
-    elseif( ( iControl >= 13 ) and ( iControl <= 18 ) ) then
-        hGetControlPosXO() = xOffset + 2 * xDistance
-    else
-        hGetControlPosXO() = xOffset + 3 * xDistance
-    endif
-    
+    '///</ul>
+
+    select case ( iControl )
+    case  1,  2,  3,  4,  5,  6 : hGetControlPosXO() = xOffset
+    case  7,  8,  9, 10, 11, 12 : hGetControlPosXO() = xOffset + 1 * xDistance
+    case 13, 14, 15, 16, 17, 18 : hGetControlPosXO() = xOffset + 2 * xDistance
+    case 19, 20, 21, 22, 23, 24 : hGetControlPosXO() = xOffset + 3 * xDistance
+    end select
+        
 end function
     
 '*******************************************************************************
@@ -514,13 +503,13 @@ function hGetControlPosYO( iControl as integer ) as integer
     '///</ul>
     '///</ul>
 
-    select case iControl
-    case 1 ,  7 , 13 , 19 : hGetControlPosYO() = yOffset
-    case 2 ,  8 , 14 , 20 : hGetControlPosYO() = yOffset + 1 * yDistance
-    case 3 ,  9 , 15 , 21 : hGetControlPosYO() = yOffset + 2 * yDistance
-    case 4 , 10 , 16 , 22 : hGetControlPosYO() = yOffset + 3 * yDistance
-    case 5 , 11 , 17      : hGetControlPosYO() = yOffset + 4 * yDistance
-    case 6 , 12 , 18      : hGetControlPosYO() = yOffset + 5 * yDistance
+    select case ( iControl )
+    case  1,  7, 13, 19 : hGetControlPosYO() = yOffset
+    case  2,  8, 14, 20 : hGetControlPosYO() = yOffset + 1 * yDistance
+    case  3,  9, 15, 21 : hGetControlPosYO() = yOffset + 2 * yDistance
+    case  4, 10, 16, 22 : hGetControlPosYO() = yOffset + 3 * yDistance
+    case  5, 11, 17, 23 : hGetControlPosYO() = yOffset + 4 * yDistance
+    case  6, 12, 18, 24 : hGetControlPosYO() = yOffset + 5 * yDistance
     end select
     
 end function
@@ -679,8 +668,7 @@ function hSelectControl( iControl as integer ) as boolean
     '///+ dialog pane. To prevent the controls from overlapping each other
     '///+ they are arranged in rows and columns. Each control is identified
     '///+ by a unique number (see description for hInsertControl(...)). The 
-    '///+ dimensions are defined in hGetControlParams(...). The coordinates
-    '///+ returned by this function can be used to draw and to select a control.</i><br>
+    '///+ dimensions are defined in hGetControlParams(...).</i><br>
     '///<u>Input</u>:
     '///<ol>
     '///+<li>Number of the control (integer)</li>
@@ -701,16 +689,18 @@ function hSelectControl( iControl as integer ) as boolean
 
     dim xPos as integer
     dim yPos as integer
-    dim iTry as integer  ' we try five times to grab the control
-    dim iTab as integer
+    dim iCurrentSelectionMethod as integer
+
+    const SELECT_MIDDLE       = 1 ' click into the middle of the control
+    const SELECT_UPPER_LEFT   = 2 ' click the upper left corner of the control
+    const SELECT_LOWER_RIGHT  = 3 ' click the lower right corner of the control
+    const SELECT_FRAME_AROUND = 4 ' select by drawing a frame around the control
+
+    const EXTRA_FRAME_SIZE    = 1 ' one percent in-/outside the border of the control
+    const SELECTION_METHODS   = 4 ' this function sports four ways of seleting a control
+    const REPEAT_COUNT        = 5 ' number of times to send a keystroke to the dialog window
 
     hSelectControl() = false
-
-    '///+<li>Check function parameter, this is a top level function</li>
-    if ( ( iControl < 1 ) or ( iControl > ICONTROLCOUNT ) ) then
-        warnlog( "Incorrect index passed to function" )
-        exit function
-    endif       
 
     '///+<li>Verify that the ToolsCollectionBar is visible. if not: Abort</li>
     kontext "ToolsCollectionBar"
@@ -737,10 +727,6 @@ function hSelectControl( iControl as integer ) as boolean
     ' Method 4 is dangerous because it might accidentially select the 
     ' background window which is the reason why this is not the default.
     
-    ' New: Method 5 is troublesome as well because #i79126 does not enable the 
-    ' OpenProperties-button on the Macro Controls Float. Currently it is just used 
-    ' to see what happens if we hack alog using keystrokes. Experimental.
-    
     '///+<li>Try four different ways of selecting the control before giving up</li>
     '///<ol>
     '///+<li>Mouse-Click in the middle</li>
@@ -749,66 +735,64 @@ function hSelectControl( iControl as integer ) as boolean
     '///+<li>Rubberband around the control (Mouse movement)</li>
     '///+<li>Deselct everything and use <TAB> to activate the control</li>
     '///</ol>
-    for iTry = 1 to 5
-        
+
+    autoexecute = false
+    for iCurrentSelectionMethod = 1 to SELECTION_METHODS
+
         Kontext "BasicIDE"
-        
-        select case iTry
-        case 1 
+        DialogWindow.typeKeys( "<UP><LEFT>" , REPEAT_COUNT )
+        select case ( iCurrentSelectionMethod )
+        case SELECT_MIDDLE
+
             xPos = hGetControlPosXM( iControl )  
             yPos = hGetControlPosYM( iControl )
             DialogWindow.MouseMove( xPos, yPos )
             DialogWindow.MouseDown( xPos, yPos )
-            DialogWindow.MouseUp  ( xPos, yPos ) 
-        case 2
-            xPos = hGetControlPosXO( iControl )  
-            yPos = hGetControlPosYO( iControl ) 
+            DialogWindow.MouseUp  ( xPos, yPos )
+
+        case SELECT_UPPER_LEFT
+
+            xPos = hGetControlPosXO( iControl ) + EXTRA_FRAME_SIZE
+            yPos = hGetControlPosYO( iControl ) + EXTRA_FRAME_SIZE
             DialogWindow.MouseMove( xPos, yPos )
             DialogWindow.MouseDown( xPos, yPos )
-            DialogWindow.MouseUp  ( xPos, yPos ) 
-        case 3
-            xPos = hGetControlPosXE( iControl )  
-            yPos = hGetControlPosYE( iControl )
+            DialogWindow.MouseUp  ( xPos, yPos )
+
+        case SELECT_LOWER_RIGHT
+
+            xPos = hGetControlPosXE( iControl ) - EXTRA_FRAME_SIZE
+            yPos = hGetControlPosYE( iControl ) - EXTRA_FRAME_SIZE
             DialogWindow.MouseMove( xPos, yPos )
             DialogWindow.MouseDown( xPos, yPos )
-            DialogWindow.MouseUp  ( xPos, yPos ) 
-        case 4
-            xPos = hGetControlPosXO( iControl ) - 2  
-            yPos = hGetControlPosYO( iControl ) - 2
+            DialogWindow.MouseUp  ( xPos, yPos )
+
+        case SELECT_FRAME_AROUND
+
+            xPos = hGetControlPosXO( iControl ) - EXTRA_FRAME_SIZE
+            yPos = hGetControlPosYO( iControl ) - EXTRA_FRAME_SIZE
             DialogWindow.MouseMove( xPos, yPos )
             DialogWindow.MouseDown( xPos, yPos )
-            DialogWindow.MouseUp  ( xPos, yPos ) 
             
-            xPos = hGetControlPosXE( iControl ) + 2  
-            yPos = hGetControlPosYE( iControl ) + 2              
+            xPos = hGetControlPosXE( iControl ) + EXTRA_FRAME_SIZE
+            yPos = hGetControlPosYE( iControl ) + EXTRA_FRAME_SIZE
             DialogWindow.MouseMove( xPos, yPos )
-            DialogWindow.MouseUp  ( xPos, yPos ) 
-        case 5
-            qaerrorlog( "#i79126# - OpenProperties disabled when selecting control via tab" )
-            'xPos = 80
-            'yPos = 20
-            'DialogWindow.MouseDown( xPos, yPos )
-            'DialogWindow.MouseUp  ( xPos, yPos )
-            'for iTab = 1 to iControl + 1
-            '    DialogWindow.typeKeys( "<TAB>" )
-            'next iTab       
+            DialogWindow.MouseUp  ( xPos, yPos )
+
         end select
-        
-        
-    
-        '///+<li>Check that the ToolsCollectionBar is open</li>
-        kontext "ToolsCollectionBar"
-        if ( ToolsCollectionBar.exists() ) then
-            wait( 300 )
-            if ( OpenProperties.isEnabled() ) then
-                hSelectControl() = true
-                exit for
-            else
-                wait( 500 )
+
+        try
+            if ( iControl = 11 ) then
+                wait( 100 )
+                printlog( "tried method: " & iCurrentSelectionMethod )
             endif
-        endif
+            ContextProperties
+            hSelectControl() = true
+            exit for
+        catch
+        endcatch
         
-    next iTry
+    next iCurrentSelectionMethod
+    autoexecute = true
     '///</ul>
 
 end function
