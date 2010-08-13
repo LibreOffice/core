@@ -629,6 +629,8 @@ testcase tExtensionsFunction
 
         ii = 1
         while (ii < BrowsePackages.getItemCount +1)
+        
+            wait( 2000 ) ' Required, Extension Manager needs time to populate
             kontext "PackageManager"
             'BrowsePackages.typeKeys("+")
             'BrowsePackages.typeKeys("<down>")
