@@ -2086,7 +2086,7 @@ void BasicCollection::CollItem( SbxArray* pPar_ )
     if( nIndex >= 0 && nIndex < (INT32)xItemArray->Count32() )
         pRes = xItemArray->Get32( nIndex );
     if( !pRes )
-        SetError( SbxERR_BAD_INDEX );
+        SetError( SbERR_BAD_ARGUMENT );
     else
         *(pPar_->Get(0)) = *pRes;
 }
@@ -2104,6 +2104,6 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
     if( nIndex >= 0 && nIndex < (INT32)xItemArray->Count32() )
         xItemArray->Remove32( nIndex );
     else
-        SetError( SbxERR_BAD_INDEX );
+        SetError( SbERR_BAD_ARGUMENT );
 }
 
