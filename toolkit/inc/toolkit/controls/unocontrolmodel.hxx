@@ -53,7 +53,7 @@ class ImplPropertyTable;
 //  class UnoControlModel
 //  ----------------------------------------------------
 
-class UnoControlModel : public ::com::sun::star::awt::XControlModel,
+class TOOLKIT_DLLPUBLIC UnoControlModel :   public ::com::sun::star::awt::XControlModel,
                         public ::com::sun::star::beans::XPropertyState,
                         public ::com::sun::star::io::XPersistObject,
                         public ::com::sun::star::lang::XComponent,
@@ -74,7 +74,6 @@ protected:
     void                                        ImplRegisterProperties( const std::list< sal_uInt16 > &rIds );
     void                                        ImplRegisterProperty( sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rDefault );
     ::com::sun::star::uno::Sequence<sal_Int32>  ImplGetPropertyIds() const;
-    virtual void                                ImplPropertyChanged( sal_uInt16 nPropId );
     virtual ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     sal_Bool                                    ImplHasProperty( sal_uInt16 nPropId ) const;
 

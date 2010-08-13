@@ -98,14 +98,11 @@ extern const sal_Char __FAR_DATA szServiceName_DefaultGridDataModel[];
 extern const sal_Char __FAR_DATA szServiceName_DefaultGridColumnModel[];
 extern const sal_Char __FAR_DATA szServiceName_GridColumn[];
 
-extern const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[], szServiceName_UnoSimpleAnimationControlModel[];
-extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[], szServiceName_UnoThrobberControlModel[];
+extern const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[], szServiceName2_UnoSimpleAnimationControl[];
+extern const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[], szServiceName2_UnoSimpleAnimationControlModel[];
+extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[], szServiceName2_UnoThrobberControl[];
+extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[], szServiceName2_UnoThrobberControlModel[];
 extern const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlink[], szServiceName_UnoControlFixedHyperlinkModel[];
-
-// ExtUnoWrapper:
-extern const char __FAR_DATA szServiceName_ImageProducer[], szServiceName2_ImageProducer[];
-
-
 
 #endif // _TOOLKIT_HELPER_SERVICENAMES_HXX_
 

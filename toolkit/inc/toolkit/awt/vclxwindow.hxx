@@ -41,9 +41,10 @@
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/awt/XDockableWindow.hpp>
+#include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
 
 #include <cppuhelper/weak.hxx>
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase9.hxx>
 #include <osl/mutex.hxx>
 
 #include <tools/gen.hxx>    // Size
@@ -51,6 +52,7 @@
 
 #include <stdarg.h>
 #include <list>
+#include <boost/function.hpp>
 
 class Window;
 class VclSimpleEvent;
@@ -70,7 +72,7 @@ namespace toolkit
 
 class UnoPropertyArrayHelper;
 class VCLXWindowImpl;
-typedef ::cppu::ImplInheritanceHelper8  <   VCLXDevice
+typedef ::cppu::ImplInheritanceHelper9  <   VCLXDevice
                                         ,   ::com::sun::star::awt::XWindow2
                                         ,   ::com::sun::star::awt::XVclWindowPeer
                                         ,   ::com::sun::star::awt::XLayoutConstrains
@@ -79,6 +81,7 @@ typedef ::cppu::ImplInheritanceHelper8  <   VCLXDevice
                                         ,   ::com::sun::star::accessibility::XAccessible
                                         ,   ::com::sun::star::lang::XEventListener
                                         ,   ::com::sun::star::beans::XPropertySetInfo
+                                        ,   ::com::sun::star::awt::XStyleSettingsSupplier
                                         >   VCLXWindow_Base;
 
 class TOOLKIT_DLLPUBLIC VCLXWindow : public VCLXWindow_Base
@@ -112,6 +115,23 @@ protected:
 
     ::cppu::OInterfaceContainerHelper&  GetContainerListeners();
     ::cppu::OInterfaceContainerHelper&  GetTopWindowListeners();
+
+public:
+    typedef ::boost::function0< void >  Callback;
+
+protected:
+    /** executes the given callback asynchronously
+
+        At the moment the callback is called, the Solar Mutex is not locked. In particular, this implies that
+        you cannot rely on |this| not being disposed. However, you *can* rely on |this| being still alive (i.e.
+        having a ref count > 0).
+
+        As a consequence, this can be used for doing listener notifications, using event multiplexers. Those multiplexers
+        care for the disposed state themself, and are alive as long as |this| is alive.
+    */
+    void    ImplExecuteAsyncWithoutSolarLock(
+                const Callback& i_callback
+            );
 
 public:
     VCLXWindow( bool bWithDefaultProps = false );
@@ -214,6 +234,9 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(  ) throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
     ::sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XStyleSettingsSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XStyleSettings > SAL_CALL getStyleSettings() throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif // _TOOLKIT_AWT_VCLXWINDOW_HXX_

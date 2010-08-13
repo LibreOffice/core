@@ -2891,8 +2891,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     BOOL bCompBorder = (aStyleSettings.GetOptions() & (STYLE_OPTION_MACSTYLE | STYLE_OPTION_UNIXSTYLE)) == 0;
     // TODO: once those options vanish: just set bCompBorder to TRUE
     // to have the system colors read
-    aStyleSettings.SetScrollBarSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) ); // #99956# do not allow huge scrollbars, most of the UI is not scaled anymore
-    aStyleSettings.SetSpinSize( Min( GetSystemMetrics( SM_CXVSCROLL ), 20 ) );
+    aStyleSettings.SetScrollBarSize( GetSystemMetrics( SM_CXVSCROLL ) );
+    aStyleSettings.SetSpinSize( GetSystemMetrics( SM_CXVSCROLL ) );
     aStyleSettings.SetCursorBlinkTime( GetCaretBlinkTime() );
     if ( bCompBorder )
     {

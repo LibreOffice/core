@@ -129,14 +129,14 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
             IsNativeControlSupported( CTRL_LISTBOX, PART_ENTIRE_CONTROL ) )
         {
                 ImplControlValue aControlValue;
-                Region aCtrlRegion( Rectangle( (const Point&)Point(), Size( 20, mnDDHeight ) ) );
-                Region aBoundingRgn( aCtrlRegion );
-                Region aContentRgn( aCtrlRegion );
+                Rectangle aCtrlRegion( Point( 0, 0 ), Size( 20, mnDDHeight ) );
+                Rectangle aBoundingRgn( aCtrlRegion );
+                Rectangle aContentRgn( aCtrlRegion );
                 if( GetNativeControlRegion( CTRL_LISTBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
                                             CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
                                             aBoundingRgn, aContentRgn ) )
                 {
-                    sal_Int32 nHeight = aBoundingRgn.GetBoundRect().GetHeight();
+                    sal_Int32 nHeight = aBoundingRgn.GetHeight();
                     if( nHeight > mnDDHeight )
                         mnDDHeight = static_cast<USHORT>(nHeight);
                 }
@@ -652,10 +652,10 @@ void ListBox::Resize()
         Window *pBorder = GetWindow( WINDOW_BORDER );
         ImplControlValue aControlValue;
         Point aPoint;
-        Region aContent, aBound;
+        Rectangle aContent, aBound;
 
         // use the full extent of the control
-        Region aArea( Rectangle(aPoint, pBorder->GetOutputSizePixel()) );
+        Rectangle aArea( aPoint, pBorder->GetOutputSizePixel() );
 
         if ( GetNativeControlRegion( CTRL_LISTBOX, PART_BUTTON_DOWN,
                     aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
@@ -665,8 +665,8 @@ void ListBox::Resize()
             aContent.Move( -aPoint.X(), -aPoint.Y() );
 
             // use the themes drop down size for the button
-            aOutSz.Width() = aContent.GetBoundRect().Left();
-            mpBtn->SetPosSizePixel( aContent.GetBoundRect().Left(), nTop, aContent.GetBoundRect().Right(), (nBottom-nTop) );
+            aOutSz.Width() = aContent.Left();
+            mpBtn->SetPosSizePixel( aContent.Left(), nTop, aContent.Right(), (nBottom-nTop) );
 
             // adjust the size of the edit field
             if ( GetNativeControlRegion( CTRL_LISTBOX, PART_SUB_EDIT,
@@ -676,7 +676,6 @@ void ListBox::Resize()
                 aContent.Move( -aPoint.X(), -aPoint.Y() );
 
                 // use the themes drop down size
-                Rectangle aContentRect = aContent.GetBoundRect();
                 if( ! (GetStyle() & WB_BORDER) && ImplGetSVData()->maNWFData.mbNoFocusRects )
                 {
                     // no border but focus ring behavior -> we have a problem; the
@@ -684,11 +683,11 @@ void ListBox::Resize()
                     // let's do the best we can and center vertically, so it doesn't look
                     // completely wrong.
                     Size aSz( GetOutputSizePixel() );
-                    long nDiff = aContentRect.Top() - (aSz.Height() - aContentRect.GetHeight())/2;
-                    aContentRect.Top() -= nDiff;
-                    aContentRect.Bottom() -= nDiff;
+                    long nDiff = aContent.Top() - (aSz.Height() - aContent.GetHeight())/2;
+                    aContent.Top() -= nDiff;
+                    aContent.Bottom() -= nDiff;
                 }
-                mpImplWin->SetPosSizePixel( aContentRect.TopLeft(), aContentRect.GetSize() );
+                mpImplWin->SetPosSizePixel( aContent.TopLeft(), aContent.GetSize() );
             }
             else
                 mpImplWin->SetSizePixel( aOutSz );
@@ -885,6 +884,8 @@ void ListBox::StateChanged( StateChangedType nType )
     {
         SetStyle( ImplInitStyle( GetStyle() ) );
         mpImplLB->GetMainWindow()->EnableSort( ( GetStyle() & WB_SORT ) ? TRUE : FALSE );
+        BOOL bSimpleMode = ( GetStyle() & WB_SIMPLEMODE ) ? TRUE : FALSE;
+        mpImplLB->SetMultiSelectionSimpleMode( bSimpleMode );
     }
     else if( nType == STATE_CHANGE_MIRRORING )
     {
@@ -1077,6 +1078,15 @@ void ListBox::RemoveEntry( USHORT nPos )
 {
     mpImplLB->RemoveEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
     CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, (void*) sal_IntPtr(nPos) );
+}
+
+// -----------------------------------------------------------------------
+
+Image ListBox::GetEntryImage( USHORT nPos ) const
+{
+    if ( mpImplLB->GetEntryList()->HasEntryImage( nPos ) )
+        return mpImplLB->GetEntryList()->GetEntryImage( nPos );
+    return Image();
 }
 
 // -----------------------------------------------------------------------
@@ -1316,15 +1326,14 @@ Size ListBox::CalcMinimumSize() const
         // see how large the edit area inside is to estimate what is needed for the dropdown
         ImplControlValue aControlValue;
         Point aPoint;
-        Region aContent, aBound;
+        Rectangle aContent, aBound;
         Size aTestSize( 100, 20 );
-        Region aArea( Rectangle( aPoint, aTestSize ) );
+        Rectangle aArea( aPoint, aTestSize );
         if( const_cast<ListBox*>(this)->GetNativeControlRegion(
                        CTRL_LISTBOX, PART_SUB_EDIT, aArea, 0, aControlValue, rtl::OUString(), aBound, aContent) )
         {
             // use the themes drop down size
-            Rectangle aContentRect = aContent.GetBoundRect();
-            aSz.Width() += aTestSize.Width() - aContentRect.GetWidth();
+            aSz.Width() += aTestSize.Width() - aContent.GetWidth();
         }
         else
             aSz.Width() += GetSettings().GetStyleSettings().GetScrollBarSize();
@@ -1336,13 +1345,12 @@ Size ListBox::CalcMinimumSize() const
     {
         ImplControlValue aControlValue;
         Rectangle aRect( Point( 0, 0 ), aSz );
-        Region aContent, aBound;
+        Rectangle aContent, aBound;
         if( const_cast<ListBox*>(this)->GetNativeControlRegion(
                        CTRL_LISTBOX, PART_ENTIRE_CONTROL, aRect, 0, aControlValue, rtl::OUString(), aBound, aContent) )
         {
-            Rectangle aBoundRect( aBound.GetBoundRect() );
-            if( aBoundRect.GetHeight() > aSz.Height() )
-                aSz.Height() = aBoundRect.GetHeight();
+            if( aBound.GetHeight() > aSz.Height() )
+                aSz.Height() = aBound.GetHeight();
         }
     }
 

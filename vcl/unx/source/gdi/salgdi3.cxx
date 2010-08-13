@@ -1763,16 +1763,19 @@ bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
 // ----------------------------------------------------------------------------
 
 void
-X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
+X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
 {
-    if( mpServerFont[0] != NULL )
+    if( nFallbackLevel >= MAX_FALLBACK )
+        return;
+
+    if( mpServerFont[nFallbackLevel] != NULL )
     {
         long rDummyFactor;
-        mpServerFont[0]->FetchFontMetric( *pMetric, rDummyFactor );
+        mpServerFont[nFallbackLevel]->FetchFontMetric( *pMetric, rDummyFactor );
     }
-    else if( mXFont[0] != NULL )
+    else if( mXFont[nFallbackLevel] != NULL )
     {
-        mXFont[0]->ToImplFontMetricData( pMetric );
+        mXFont[nFallbackLevel]->ToImplFontMetricData( pMetric );
         if ( bFontVertical_ )
             pMetric->mnOrientation = 0;
     }
@@ -2041,7 +2044,7 @@ static ImplFontSelectData GetFcSubstitute(const ImplFontSelectData &rFontSelData
 {
     ImplFontSelectData aRet(rFontSelData);
 
-    const rtl::OString aLangAttrib; //TODO: = MsLangId::convertLanguageToIsoByteString( rFontSelData.meLanguage );
+    const rtl::OString aLangAttrib = MsLangId::convertLanguageToIsoByteString( rFontSelData.meLanguage );
 
     psp::italic::type eItalic = psp::italic::Unknown;
     if( rFontSelData.GetSlant() != ITALIC_DONTKNOW )

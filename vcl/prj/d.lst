@@ -57,7 +57,6 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\help.hxx %_DEST%\inc%_EXT%\vcl\help.hxx
 ..\inc\vcl\image.hxx %_DEST%\inc%_EXT%\vcl\image.hxx
 ..\inc\vcl\imagerepository.hxx %_DEST%\inc%_EXT%\vcl\imagerepository.hxx
-..\inc\vcl\imgcons.hxx %_DEST%\inc%_EXT%\vcl\imgcons.hxx
 ..\inc\vcl\imgctrl.hxx %_DEST%\inc%_EXT%\vcl\imgctrl.hxx
 ..\inc\vcl\impdel.hxx %_DEST%\inc%_EXT%\vcl\impdel.hxx
 ..\inc\vcl\inputctx.hxx %_DEST%\inc%_EXT%\vcl\inputctx.hxx

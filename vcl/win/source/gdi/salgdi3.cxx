@@ -1579,15 +1579,24 @@ HFONT WinSalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFont
         && (ImplSalWICompareAscii( aLogFont.lfFaceName, "Courier" ) == 0) )
             lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
 
-        // limit font requests to MAXFONTHEIGHT
+        // #i47675# limit font requests to MAXFONTHEIGHT
         // TODO: share MAXFONTHEIGHT font instance
-        if( -aLogFont.lfHeight <= MAXFONTHEIGHT )
+        if( (-aLogFont.lfHeight <= MAXFONTHEIGHT)
+        &&  (+aLogFont.lfWidth <= MAXFONTHEIGHT) )
+        {
             o_rFontScale = 1.0;
-        else
+        }
+        else if( -aLogFont.lfHeight >= +aLogFont.lfWidth )
         {
             o_rFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
             aLogFont.lfHeight = -MAXFONTHEIGHT;
-            aLogFont.lfWidth = static_cast<LONG>( aLogFont.lfWidth / o_rFontScale );
+            aLogFont.lfWidth = FRound( aLogFont.lfWidth / o_rFontScale );
+        }
+        else // #i95867# also limit font widths
+        {
+            o_rFontScale = +aLogFont.lfWidth / (float)MAXFONTHEIGHT;
+            aLogFont.lfWidth = +MAXFONTHEIGHT;
+            aLogFont.lfHeight = FRound( aLogFont.lfHeight / o_rFontScale );
         }
 
         hNewFont = ::CreateFontIndirectW( &aLogFont );
@@ -1751,8 +1760,11 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
+void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
+    // temporarily change the HDC to the font in the fallback level
+    HFONT hOldFont = SelectFont( mhDC, mhFonts[nFallbackLevel] );
+
     if ( aSalShlData.mbWNT )
     {
         wchar_t aFaceName[LF_FACESIZE+60];
@@ -1766,8 +1778,12 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
             pMetric->maName = ImplSalGetUniString( aFaceName );
     }
 
+    // get the font metric
     TEXTMETRICA aWinMetric;
-    if( !GetTextMetricsA( mhDC, &aWinMetric ) )
+    const bool bOK = GetTextMetricsA( mhDC, &aWinMetric );
+    // restore the HDC to the font in the base level
+    SelectFont( mhDC, hOldFont );
+    if( !bOK )
         return;
 
     // device independent font attributes
@@ -1806,7 +1822,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     // #107888# improved metric compatibility for Asian fonts...
     // TODO: assess workaround below for CWS >= extleading
     // TODO: evaluate use of aWinMetric.sTypo* members for CJK
-    if( mpWinFontData[0] && mpWinFontData[0]->SupportsCJK() )
+    if( mpWinFontData[nFallbackLevel] && mpWinFontData[nFallbackLevel]->SupportsCJK() )
     {
         pMetric->mnIntLeading += pMetric->mnExtLeading;
 
@@ -1827,7 +1843,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
 
         // #109280# HACK korean only: increase descent for wavelines and impr
         if( !aSalShlData.mbWNT )
-            if( mpWinFontData[0]->SupportsKorean() )
+            if( mpWinFontData[nFallbackLevel]->SupportsKorean() )
                 pMetric->mnDescent += pMetric->mnExtLeading;
     }
 

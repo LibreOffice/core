@@ -77,7 +77,6 @@ const sal_Char __FAR_DATA szServiceName_UnoControlPatternFieldModel[] = "stardiv
 const sal_Char __FAR_DATA szServiceName_UnoControlFormattedField[] = "stardiv.vcl.control.FormattedField", szServiceName2_UnoControlFormattedField[] = "com.sun.star.awt.UnoControlFormattedField";
 const sal_Char __FAR_DATA szServiceName_UnoControlFormattedFieldModel[] = "stardiv.vcl.controlmodel.FormattedField", szServiceName2_UnoControlFormattedFieldModel[] = "com.sun.star.awt.UnoControlFormattedFieldModel";
 const sal_Char __FAR_DATA szServiceName_MVCIntrospection[] = "stardiv.vcl.MVCIntrospection", szServiceName2_MVCIntrospection[] = "com.sun.star.awt.MVCIntrospection";
-const sal_Char __FAR_DATA szServiceName_ImageProducer[] = "stardiv.vcl.ImageProducer", szServiceName2_ImageProducer[] = "com.sun.star.awt.ImageProducer";
 const sal_Char __FAR_DATA szServiceName_PrinterServer[] = "stardiv.vcl.PrinterServer", szServiceName2_PrinterServer[] = "com.sun.star.awt.PrinterServer";
 const sal_Char __FAR_DATA szServiceName_UnoControlProgressBar[] = "stardiv.vcl.control.ProgressBar", szServiceName2_UnoControlProgressBar[] = "com.sun.star.awt.UnoControlProgressBar";
 const sal_Char __FAR_DATA szServiceName_UnoControlProgressBarModel[] = "stardiv.vcl.controlmodel.ProgressBar", szServiceName2_UnoControlProgressBarModel[] = "com.sun.star.awt.UnoControlProgressBarModel";
@@ -92,10 +91,10 @@ const sal_Char __FAR_DATA szServiceName_UnoSpinButtonModel[] = "com.sun.star.awt
 const sal_Char __FAR_DATA szServiceName_TreeControl[] = "com.sun.star.awt.tree.TreeControl";
 const sal_Char __FAR_DATA szServiceName_TreeControlModel[] = "com.sun.star.awt.tree.TreeControlModel";
 const sal_Char __FAR_DATA szServiceName_MutableTreeDataModel[] = "com.sun.star.awt.tree.MutableTreeDataModel";
-const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoSimpleAnimationControlModel";
-const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoSimpleAnimationControl";
-const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[] = "com.sun.star.awt.UnoThrobberControlModel";
-const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[] = "com.sun.star.awt.UnoThrobberControl";
+const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoSimpleAnimationControlModel", szServiceName2_UnoSimpleAnimationControlModel[] = "com.sun.star.awt.UnoControlSimpleAnimationModel";
+const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoSimpleAnimationControl", szServiceName2_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoControlSimpleAnimation";
+const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[] = "com.sun.star.awt.UnoThrobberControlModel", szServiceName2_UnoThrobberControlModel[] = "com.sun.star.awt.UnoControlThrobberModel";
+const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[] = "com.sun.star.awt.UnoThrobberControl", szServiceName2_UnoThrobberControl[] = "com.sun.star.awt.UnoControlThrobber";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlink[] = "com.sun.star.awt.UnoControlFixedHyperlink";
 const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlinkModel[] = "com.sun.star.awt.UnoControlFixedHyperlinkModel";
 const sal_Char __FAR_DATA szServiceName_GridControl[] = "com.sun.star.awt.grid.UnoControlGrid";

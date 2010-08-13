@@ -263,7 +263,8 @@ ImplFontCharMap::ImplFontCharMap( const CmapResult& rCR )
     }
 }
 
-static ImplFontCharMap* pDefaultImplFontCharMap = NULL;
+static ImplFontCharMap* pDefaultUnicodeImplFontCharMap = NULL;
+static ImplFontCharMap* pDefaultSymbolImplFontCharMap = NULL;
 static const sal_uInt32 aDefaultUnicodeRanges[] = {0x0020,0xD800, 0xE000,0xFFF0};
 static const sal_uInt32 aDefaultSymbolRanges[] = {0x0020,0x0100, 0xF020,0xF100};
 
@@ -288,25 +289,42 @@ ImplFontCharMap::~ImplFontCharMap()
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* ImplFontCharMap::GetDefaultMap( bool bSymbols)
+namespace
 {
-    if( pDefaultImplFontCharMap )
-        pDefaultImplFontCharMap->AddReference();
-    else
+    ImplFontCharMap *GetDefaultUnicodeMap()
     {
-        const sal_uInt32* pRangeCodes = aDefaultUnicodeRanges;
-        int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
-        if( bSymbols )
+        if( pDefaultUnicodeImplFontCharMap )
+            pDefaultUnicodeImplFontCharMap->AddReference();
+        else
         {
-            pRangeCodes = aDefaultSymbolRanges;
-            nCodesCount = sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
+            const sal_uInt32* pRangeCodes = aDefaultUnicodeRanges;
+            int nCodesCount = sizeof(aDefaultUnicodeRanges) / sizeof(*pRangeCodes);
+            CmapResult aDefaultCR( false, pRangeCodes, nCodesCount/2 );
+            pDefaultUnicodeImplFontCharMap = new ImplFontCharMap( aDefaultCR );
         }
 
-        CmapResult aDefaultCR( bSymbols, pRangeCodes, nCodesCount/2 );
-        pDefaultImplFontCharMap = new ImplFontCharMap( aDefaultCR );
+        return pDefaultUnicodeImplFontCharMap;
     }
 
-    return pDefaultImplFontCharMap;
+    ImplFontCharMap *GetDefaultSymbolMap()
+    {
+        if( pDefaultSymbolImplFontCharMap )
+            pDefaultSymbolImplFontCharMap->AddReference();
+        else
+        {
+            const sal_uInt32* pRangeCodes = aDefaultSymbolRanges;
+            int nCodesCount = sizeof(aDefaultSymbolRanges) / sizeof(*pRangeCodes);
+            CmapResult aDefaultCR( true, pRangeCodes, nCodesCount/2 );
+            pDefaultSymbolImplFontCharMap = new ImplFontCharMap( aDefaultCR );
+        }
+
+        return pDefaultSymbolImplFontCharMap;
+    }
+}
+
+ImplFontCharMap* ImplFontCharMap::GetDefaultMap( bool bSymbols)
+{
+    return bSymbols ? GetDefaultSymbolMap() : GetDefaultUnicodeMap();
 }
 
 // -----------------------------------------------------------------------
@@ -321,7 +339,7 @@ void ImplFontCharMap::AddReference()
 void ImplFontCharMap::DeReference()
 {
     if( --mnRefCount <= 0 )
-        if( this != pDefaultImplFontCharMap )
+        if( (this != pDefaultUnicodeImplFontCharMap) && (this != pDefaultSymbolImplFontCharMap) )
             delete this;
 }
 
@@ -386,8 +404,9 @@ int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar ) const
         const bool bSymbolic = (mpRangeCodes[0]>=0xF000) & (mpRangeCodes[1]<=0xF0FF);
         if( !bSymbolic )
             return 0;
-        // check for symbol aliasing (U+F0xx -> U+00xx)
-        nRange = ImplFindRangeIndex( cChar | 0xF000 );
+        // check for symbol aliasing (U+00xx <-> U+F0xx)
+        cChar |= 0xF000;
+        nRange = ImplFindRangeIndex( cChar );
     }
     // check that we are inside a range
     if( (nRange & 1) != 0 )
@@ -401,7 +420,7 @@ int ImplFontCharMap::GetGlyphIndex( sal_uInt32 cChar ) const
         nGlyphIndex += nStartIndex;
     } else {
         // the glyphid array has the glyph index
-        nGlyphIndex = mpGlyphIds[ nGlyphIndex - nStartIndex];
+        nGlyphIndex = mpGlyphIds[ nGlyphIndex - nStartIndex ];
     }
 
     return nGlyphIndex;

@@ -29,7 +29,7 @@
 #include "precompiled_toolkit.hxx"
 #include <toolkit/awt/vclxwindows.hxx>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
-#include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/property.hxx>
@@ -42,7 +42,11 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
+#include <com/sun/star/awt/XItemList.hpp>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 
 #ifndef _SV_BUTTON_HXX
@@ -58,12 +62,20 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
-#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+
+#include <boost/bind.hpp>
+#include <boost/function.hpp>
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
+using ::com::sun::star::uno::RuntimeException;
+using ::com::sun::star::lang::EventObject;
+using ::com::sun::star::awt::ItemListEvent;
+using ::com::sun::star::awt::XItemList;
 using ::com::sun::star::graphic::XGraphic;
+using ::com::sun::star::graphic::XGraphicProvider;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt::VisualEffect;
@@ -195,33 +207,22 @@ namespace toolkit
 }
 
 //  ----------------------------------------------------
-//  class VCLXImageConsumer
+//  class VCLXGraphicControl
 //  ----------------------------------------------------
 
-void VCLXImageConsumer::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+void VCLXGraphicControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
 
-void VCLXImageConsumer::ImplSetNewImage()
+void VCLXGraphicControl::ImplSetNewImage()
 {
-    OSL_PRECOND( GetWindow(), "VCLXImageConsumer::ImplSetNewImage: window is required to be not-NULL!" );
+    OSL_PRECOND( GetWindow(), "VCLXGraphicControl::ImplSetNewImage: window is required to be not-NULL!" );
     Button* pButton = static_cast< Button* >( GetWindow() );
     pButton->SetModeBitmap( GetBitmap() );
 }
 
-void VCLXImageConsumer::ImplUpdateImage( sal_Bool bGetNewImage )
-{
-    if ( !GetWindow() )
-        return;
-
-    if ( bGetNewImage && !maImageConsumer.GetData( maImage ) )
-        return;
-
-    ImplSetNewImage();
-}
-
-void VCLXImageConsumer::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, short Flags ) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphicControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, short Flags ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -230,49 +231,11 @@ void VCLXImageConsumer::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, s
         Size aOldSize = GetWindow()->GetSizePixel();
         VCLXWindow::setPosSize( X, Y, Width, Height, Flags );
         if ( ( aOldSize.Width() != Width ) || ( aOldSize.Height() != Height ) )
-            ImplUpdateImage( sal_False );
+            ImplSetNewImage();
     }
 }
 
-void VCLXImageConsumer::init( sal_Int32 Width, sal_Int32 Height ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.Init( Width, Height );
-}
-
-void VCLXImageConsumer::setColorModel( sal_Int16 BitCount, const ::com::sun::star::uno::Sequence< sal_Int32 >& RGBAPal, sal_Int32 RedMask, sal_Int32 GreenMask, sal_Int32 BlueMask, sal_Int32 AlphaMask ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetColorModel( BitCount, RGBAPal.getLength(), (const sal_uInt32*) RGBAPal.getConstArray(), RedMask, GreenMask, BlueMask, AlphaMask );
-}
-
-void VCLXImageConsumer::setPixelsByBytes( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int8 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetPixelsByBytes( X, Y, Width, Height, (sal_uInt8*)ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void VCLXImageConsumer::setPixelsByLongs( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, const ::com::sun::star::uno::Sequence< sal_Int32 >& ProducerData, sal_Int32 Offset, sal_Int32 Scansize ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.SetPixelsByLongs( X, Y, Width, Height, (const sal_uInt32*) ProducerData.getConstArray(), Offset, Scansize );
-    ImplUpdateImage( sal_True );
-}
-
-void VCLXImageConsumer::complete( sal_Int32 Status, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer > & ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-
-    maImageConsumer.Completed( Status );
-    ImplUpdateImage( sal_True );
-}
-
-void VCLXImageConsumer::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+void VCLXGraphicControl::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -325,7 +288,7 @@ void VCLXImageConsumer::setProperty( const ::rtl::OUString& PropertyName, const 
     }
 }
 
-::com::sun::star::uno::Any VCLXImageConsumer::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::uno::Any VCLXGraphicControl::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
@@ -407,7 +370,7 @@ void VCLXButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_REFERENCE_DEVICE,
                      0);
-    VCLXImageConsumer::ImplGetPropertyIds( rIds );
+    VCLXGraphicControl::ImplGetPropertyIds( rIds );
 }
 
 VCLXButton::VCLXButton()
@@ -433,7 +396,7 @@ void VCLXButton::dispose() throw(::com::sun::star::uno::RuntimeException)
     aObj.Source = (::cppu::OWeakObject*)this;
     maActionListeners.disposeAndClear( aObj );
     maItemListeners.disposeAndClear( aObj );
-    VCLXImageConsumer::dispose();
+    VCLXGraphicControl::dispose();
 }
 
 void VCLXButton::addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l  )throw(::com::sun::star::uno::RuntimeException)
@@ -562,7 +525,7 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             default:
             {
-                VCLXImageConsumer::setProperty( PropertyName, Value );
+                VCLXGraphicControl::setProperty( PropertyName, Value );
             }
         }
     }
@@ -602,7 +565,7 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             default:
             {
-                aProp <<= VCLXImageConsumer::getProperty( PropertyName );
+                aProp <<= VCLXGraphicControl::getProperty( PropertyName );
             }
         }
     }
@@ -626,7 +589,13 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 ::com::sun::star::awt::ActionEvent aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
                 aEvent.ActionCommand = maActionCommand;
-                maActionListeners.actionPerformed( aEvent );
+
+                Callback aCallback = ::boost::bind(
+                    &ActionListenerMultiplexer::actionPerformed,
+                    &maActionListeners,
+                    aEvent
+                );
+                ImplExecuteAsyncWithoutSolarLock( aCallback );
             }
         }
         break;
@@ -647,7 +616,7 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
 
         default:
-            VCLXImageConsumer::ProcessWindowEvent( rVclWindowEvent );
+            VCLXGraphicControl::ProcessWindowEvent( rVclWindowEvent );
             break;
     }
 }
@@ -676,7 +645,7 @@ void VCLXImageControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_WRITING_MODE,
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      0);
-    VCLXImageConsumer::ImplGetPropertyIds( rIds );
+    VCLXGraphicControl::ImplGetPropertyIds( rIds );
 }
 
 VCLXImageControl::VCLXImageControl()
@@ -753,7 +722,7 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
         break;
 
         default:
-            VCLXImageConsumer::setProperty( PropertyName, Value );
+            VCLXGraphicControl::setProperty( PropertyName, Value );
             break;
     }
 }
@@ -777,7 +746,7 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
             break;
 
         default:
-            aProp = VCLXImageConsumer::getProperty( PropertyName );
+            aProp = VCLXGraphicControl::getProperty( PropertyName );
             break;
     }
     return aProp;
@@ -814,7 +783,7 @@ void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_REFERENCE_DEVICE,
                      0);
-    VCLXImageConsumer::ImplGetPropertyIds( rIds );
+    VCLXGraphicControl::ImplGetPropertyIds( rIds );
 }
 
 VCLXCheckBox::VCLXCheckBox() :  maActionListeners( *this ), maItemListeners( *this )
@@ -827,14 +796,14 @@ VCLXCheckBox::VCLXCheckBox() :  maActionListeners( *this ), maItemListeners( *th
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XButton*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XCheckBox*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXImageConsumer::queryInterface( rType ));
+    return (aRet.hasValue() ? aRet : VCLXGraphicControl::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXCheckBox )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XCheckBox>* ) NULL ),
-    VCLXImageConsumer::getTypes()
+    VCLXGraphicControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXCheckBox::CreateAccessibleContext()
@@ -849,7 +818,7 @@ void VCLXCheckBox::dispose() throw(::com::sun::star::uno::RuntimeException)
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
     maItemListeners.disposeAndClear( aObj );
-    VCLXImageConsumer::dispose();
+    VCLXGraphicControl::dispose();
 }
 
 void VCLXCheckBox::addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
@@ -1011,7 +980,7 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
             break;
             default:
             {
-                VCLXImageConsumer::setProperty( PropertyName, Value );
+                VCLXGraphicControl::setProperty( PropertyName, Value );
             }
         }
     }
@@ -1039,7 +1008,7 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
                 break;
             default:
             {
-                aProp <<= VCLXImageConsumer::getProperty( PropertyName );
+                aProp <<= VCLXGraphicControl::getProperty( PropertyName );
             }
         }
     }
@@ -1081,7 +1050,7 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         break;
 
         default:
-            VCLXImageConsumer::ProcessWindowEvent( rVclWindowEvent );
+            VCLXGraphicControl::ProcessWindowEvent( rVclWindowEvent );
             break;
     }
 }
@@ -1114,7 +1083,7 @@ void VCLXRadioButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_REFERENCE_DEVICE,
                      0);
-    VCLXImageConsumer::ImplGetPropertyIds( rIds );
+    VCLXGraphicControl::ImplGetPropertyIds( rIds );
 }
 
 
@@ -1128,14 +1097,14 @@ VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XRadioButton*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XButton*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXImageConsumer::queryInterface( rType ));
+    return (aRet.hasValue() ? aRet : VCLXGraphicControl::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXRadioButton )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRadioButton>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XButton>* ) NULL ),
-    VCLXImageConsumer::getTypes()
+    VCLXGraphicControl::getTypes()
 IMPL_XTYPEPROVIDER_END
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXRadioButton::CreateAccessibleContext()
@@ -1150,7 +1119,7 @@ void VCLXRadioButton::dispose() throw(::com::sun::star::uno::RuntimeException)
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
     maItemListeners.disposeAndClear( aObj );
-    VCLXImageConsumer::dispose();
+    VCLXGraphicControl::dispose();
 }
 
 void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
@@ -1189,7 +1158,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
             break;
             default:
             {
-                VCLXImageConsumer::setProperty( PropertyName, Value );
+                VCLXGraphicControl::setProperty( PropertyName, Value );
             }
         }
     }
@@ -1217,7 +1186,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
                 break;
             default:
             {
-                aProp <<= VCLXImageConsumer::getProperty( PropertyName );
+                aProp <<= VCLXGraphicControl::getProperty( PropertyName );
             }
         }
     }
@@ -1349,7 +1318,7 @@ void VCLXRadioButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
             break;
 
         default:
-            VCLXImageConsumer::ProcessWindowEvent( rVclWindowEvent );
+            VCLXGraphicControl::ProcessWindowEvent( rVclWindowEvent );
             break;
     }
 }
@@ -1529,6 +1498,8 @@ void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
                      BASEPROPERTY_HELPURL,
                      BASEPROPERTY_LINECOUNT,
                      BASEPROPERTY_MULTISELECTION,
+                     BASEPROPERTY_MULTISELECTION_SIMPLEMODE,
+                     BASEPROPERTY_ITEM_SEPARATOR_POS,
                      BASEPROPERTY_PRINTABLE,
                      BASEPROPERTY_SELECTEDITEMS,
                      BASEPROPERTY_STRINGITEMLIST,
@@ -1549,22 +1520,6 @@ VCLXListBox::VCLXListBox()
       maItemListeners( *this )
 {
 }
-
-// ::com::sun::star::uno::XInterface
-::com::sun::star::uno::Any VCLXListBox::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XListBox*, this ),
-                                        SAL_STATIC_CAST( ::com::sun::star::awt::XTextLayoutConstrains*, this ) );
-    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
-}
-
-// ::com::sun::star::lang::XTypeProvider
-IMPL_XTYPEPROVIDER_START( VCLXListBox )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XListBox>* ) NULL ),
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextLayoutConstrains>* ) NULL ),
-    VCLXWindow::getTypes()
-IMPL_XTYPEPROVIDER_END
 
 void VCLXListBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
@@ -1914,6 +1869,13 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_ITEM_SEPARATOR_POS:
+            {
+                sal_Int16 nSeparatorPos(0);
+                if ( Value >>= nSeparatorPos )
+                    pListBox->SetSeparatorPos( nSeparatorPos );
+            }
+            break;
             case BASEPROPERTY_READONLY:
             {
                 sal_Bool b = sal_Bool();
@@ -1928,6 +1890,9 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
                      pListBox->EnableMultiSelection( b );
             }
             break;
+            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
+                ::toolkit::adjustBooleanWindowStyle( Value, pListBox, WB_SIMPLEMODE, sal_False );
+                break;
             case BASEPROPERTY_LINECOUNT:
             {
                 sal_Int16 n = sal_Int16();
@@ -1982,6 +1947,9 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
         sal_uInt16 nPropType = GetPropertyId( PropertyName );
         switch ( nPropType )
         {
+            case BASEPROPERTY_ITEM_SEPARATOR_POS:
+                aProp <<= sal_Int16( pListBox->GetSeparatorPos() );
+                break;
             case BASEPROPERTY_READONLY:
             {
                  aProp <<= (sal_Bool) pListBox->IsReadOnly();
@@ -1990,6 +1958,11 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
             case BASEPROPERTY_MULTISELECTION:
             {
                  aProp <<= (sal_Bool) pListBox->IsMultiSelectionEnabled();
+            }
+            break;
+            case BASEPROPERTY_MULTISELECTION_SIMPLEMODE:
+            {
+                aProp <<= (sal_Bool)( ( pListBox->GetStyle() & WB_SIMPLEMODE ) == 0 );
             }
             break;
             case BASEPROPERTY_LINECOUNT:
@@ -2096,6 +2069,131 @@ void VCLXListBox::ImplCallItemListeners()
     }
 }
 
+namespace
+{
+    Image lcl_getImageFromURL( const ::rtl::OUString& i_rImageURL )
+    {
+        if ( !i_rImageURL.getLength() )
+            return Image();
+
+        try
+        {
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            Reference< XGraphicProvider > xProvider;
+            if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
+            {
+                ::comphelper::NamedValueCollection aMediaProperties;
+                aMediaProperties.put( "URL", i_rImageURL );
+                Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
+                return Image( xGraphic );
+            }
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return Image();
+    }
+}
+
+void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
+
+    ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemInserted: no ListBox?!" );
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition <= sal_Int32( pListBox->GetEntryCount() ) ),
+        "VCLXListBox::listItemInserted: illegal (inconsistent) item position!" );
+    pListBox->InsertEntry(
+        i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString(),
+        i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : Image(),
+        i_rEvent.ItemPosition );
+}
+
+void SAL_CALL VCLXListBox::listItemRemoved( const ItemListEvent& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
+
+    ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemRemoved: no ListBox?!" );
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pListBox->GetEntryCount() ) ),
+        "VCLXListBox::listItemRemoved: illegal (inconsistent) item position!" );
+
+    pListBox->RemoveEntry( i_rEvent.ItemPosition );
+}
+
+void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
+
+    ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemModified: no ListBox?!" );
+    ENSURE_OR_RETURN_VOID( ( i_rEvent.ItemPosition >= 0 ) && ( i_rEvent.ItemPosition < sal_Int32( pListBox->GetEntryCount() ) ),
+        "VCLXListBox::listItemModified: illegal (inconsistent) item position!" );
+
+    // VCL's ListBox does not support changing an entry's text or image, so remove and re-insert
+
+    const ::rtl::OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString( pListBox->GetEntry( i_rEvent.ItemPosition ) );
+    const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : pListBox->GetEntryImage( i_rEvent.ItemPosition  ) );
+
+    pListBox->RemoveEntry( i_rEvent.ItemPosition );
+    pListBox->InsertEntry( sNewText, aNewImage, i_rEvent.ItemPosition );
+}
+
+void SAL_CALL VCLXListBox::allItemsRemoved( const EventObject& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
+    ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemModified: no ListBox?!" );
+
+    pListBox->Clear();
+
+    (void)i_rEvent;
+}
+
+void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
+    ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemModified: no ListBox?!" );
+
+    pListBox->Clear();
+
+    uno::Reference< beans::XPropertySet > xPropSet( i_rEvent.Source, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySetInfo > xPSI( xPropSet->getPropertySetInfo(), uno::UNO_QUERY_THROW );
+    uno::Reference< resource::XStringResourceResolver > xStringResourceResolver;
+    if ( xPSI->hasPropertyByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ) )
+    {
+        xStringResourceResolver.set(
+            xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ) ) ),
+            uno::UNO_QUERY
+        );
+    }
+
+
+    Reference< XItemList > xItemList( i_rEvent.Source, uno::UNO_QUERY_THROW );
+    uno::Sequence< beans::Pair< ::rtl::OUString, ::rtl::OUString > > aItems = xItemList->getAllItems();
+    for ( sal_Int32 i=0; i<aItems.getLength(); ++i )
+    {
+        ::rtl::OUString aLocalizationKey( aItems[i].First );
+        if ( xStringResourceResolver.is() && aLocalizationKey.getLength() != 0 && aLocalizationKey[0] == '&' )
+        {
+            aLocalizationKey = xStringResourceResolver->resolveString(aLocalizationKey.copy( 1 ));
+        }
+        pListBox->InsertEntry( aLocalizationKey, lcl_getImageFromURL( aItems[i].Second ) );
+    }
+}
+
+void SAL_CALL VCLXListBox::disposing( const EventObject& i_rEvent ) throw (RuntimeException)
+{
+    // just disambiguate
+    VCLXWindow::disposing( i_rEvent );
+}
 
 //  ----------------------------------------------------
 //  class VCLXMessageBox
@@ -2205,15 +2303,35 @@ VCLXDialog::~VCLXDialog()
 ::com::sun::star::uno::Any VCLXDialog::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XDialog2*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XDialog*, this ) );
     return (aRet.hasValue() ? aRet : VCLXTopWindow::queryInterface( rType ));
 }
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXDialog )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog2>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDialog>* ) NULL ),
     VCLXTopWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
+
+void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Dialog* pDialog = dynamic_cast< Dialog* >( GetWindow() );
+    if ( pDialog )
+        pDialog->EndDialog( i_result );
+}
+
+void SAL_CALL VCLXDialog::setHelpId( ::sal_Int32 i_id ) throw (RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+        pWindow->SetHelpId( i_id );
+}
 
 void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -2261,11 +2379,7 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXDialog::endExecute() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::vos::OGuard aGuard( GetMutex() );
-
-    Dialog* pDlg = (Dialog*) GetWindow();
-    if ( pDlg )
-        pDlg->EndDialog( 0 );
+    endDialog(0);
 }
 
 void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)
@@ -2865,16 +2979,15 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
     return getMinimumSize();
 }
 
-::com::sun::star::awt::Size VCLXFixedText::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
+::com::sun::star::awt::Size VCLXFixedText::calcAdjustedSize( const ::com::sun::star::awt::Size& rMaxSize ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    ::com::sun::star::awt::Size aSz = rNewSize;
-    ::com::sun::star::awt::Size aMinSz = getMinimumSize();
-    if ( aSz.Height != aMinSz.Height )
-        aSz.Height = aMinSz.Height;
-
-    return aSz;
+    Size aAdjustedSize( VCLUnoHelper::ConvertToVCLSize( rMaxSize ) );
+    FixedText* pFixedText = (FixedText*)GetWindow();
+    if ( pFixedText )
+        aAdjustedSize = pFixedText->CalcMinimumSize( rMaxSize.Width );
+    return VCLUnoHelper::ConvertToAWTSize( aAdjustedSize );
 }
 
 //  ----------------------------------------------------

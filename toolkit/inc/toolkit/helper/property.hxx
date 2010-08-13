@@ -199,7 +199,9 @@ namespace rtl {
 #define BASEPROPERTY_GRID_EVEN_ROW_BACKGROUND       148
 #define BASEPROPERTY_GRID_HEADER_BACKGROUND         149
 #define BASEPROPERTY_GRID_LINE_COLOR                150
-#define BASEPROPERTY_GRID_ROW_BACKGROUND        151
+#define BASEPROPERTY_GRID_ROW_BACKGROUND            151
+#define BASEPROPERTY_MULTISELECTION_SIMPLEMODE      152
+#define BASEPROPERTY_ITEM_SEPARATOR_POS             153
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
@@ -232,7 +234,7 @@ namespace rtl {
 
 TOOLKIT_DLLPUBLIC sal_uInt16        GetPropertyId( const ::rtl::OUString& rPropertyName );
 const ::com::sun::star::uno::Type*  GetPropertyType( sal_uInt16 nPropertyId );
-const ::rtl::OUString&              GetPropertyName( sal_uInt16 nPropertyId );
+TOOLKIT_DLLPUBLIC const ::rtl::OUString&    GetPropertyName( sal_uInt16 nPropertyId );
 sal_Int16                           GetPropertyAttribs( sal_uInt16 nPropertyId );
 sal_uInt16                          GetPropertyOrderNr( sal_uInt16 nPropertyId );
 sal_Bool                            DoesDependOnOthers( sal_uInt16 nPropertyId );
