@@ -64,6 +64,7 @@ interface XApplication
     [attribute] any CutCopyMode;
     [attribute] any StatusBar;
     [attribute] long Cursor;
+        [attribute] boolean EnableEvents;
 
     void setDefaultFilePath([in] string DefaultFilePath) raises(com::sun::star::script::BasicErrorException);
 
