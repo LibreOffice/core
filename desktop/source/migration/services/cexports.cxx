@@ -31,7 +31,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "basicmigration.hxx"
 #include "wordbookmigration.hxx"
-#include "extensionmigration.hxx"
+//#include "extensionmigration.hxx"
 
 extern "C"
 {
@@ -48,11 +48,11 @@ extern "C"
         migration::WordbookMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
         0, 0
     },
-    {
-        migration::ExtensionMigration_create, migration::ExtensionMigration_getImplementationName,
-        migration::ExtensionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
-        0, 0
-    },
+//     {
+//         migration::ExtensionMigration_create, migration::ExtensionMigration_getImplementationName,
+//         migration::ExtensionMigration_getSupportedServiceNames, ::cppu::createSingleComponentFactory,
+//         0, 0
+//     },
     { 0, 0, 0, 0, 0, 0 }
 };
 

@@ -51,13 +51,11 @@ namespace drawinglayer
             if(!getSdrLFSTAttribute().getFill().isDefault()
                 && getUnitPolyPolygon().isClosed())
             {
-                // take care for orientations
-                const basegfx::B2DPolyPolygon aOrientedUnitPolyPolygon(
-                    basegfx::tools::correctOrientations(getUnitPolyPolygon()));
-
+                // #i108255# no need to use correctOrientations here; target is
+                // straight visualisation
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createPolyPolygonFillPrimitive(
-                        aOrientedUnitPolyPolygon,
+                        getUnitPolyPolygon(),
                         getTransform(),
                         getSdrLFSTAttribute().getFill(),
                         getSdrLFSTAttribute().getFillFloatTransGradient()));

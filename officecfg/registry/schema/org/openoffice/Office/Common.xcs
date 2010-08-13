@@ -974,6 +974,19 @@
 				<value>false</value>
 			</prop>
 		</group>
+    <group oor:name="Dictionaries">
+      <info>
+        <author>CD</author>
+        <desc>Contains settings related to dictionaries.</desc>
+      </info>
+      <prop oor:name="RepositoryURL" oor:type="xs:string">
+        <info>
+          <author>CD</author>
+          <desc>Specifies a repository URL where users can download additional dictionaries.</desc>
+        </info>
+        <value/>
+      </prop>
+    </group>
 		<group oor:name="Drawinglayer">
 			<info>
 				<author>AW</author>

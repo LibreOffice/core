@@ -129,8 +129,8 @@ namespace drawinglayer
             TextStrikeout getTextStrikeout() const { return meTextStrikeout; }
             TextEmphasisMark getTextEmphasisMark() const { return meTextEmphasisMark; }
             TextRelief getTextRelief() const { return meTextRelief; }
-            basegfx::BColor getOverlineColor() const { return maOverlineColor; }
-            basegfx::BColor getTextlineColor() const { return maTextlineColor; }
+            const basegfx::BColor& getOverlineColor() const { return maOverlineColor; }
+            const basegfx::BColor& getTextlineColor() const { return maTextlineColor; }
             bool getUnderlineAbove() const { return mbUnderlineAbove; }
             bool getWordLineMode() const { return mbWordLineMode; }
             bool getEmphasisMarkAbove() const { return mbEmphasisMarkAbove; }

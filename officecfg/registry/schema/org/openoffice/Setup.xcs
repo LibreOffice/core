@@ -155,6 +155,12 @@
 					<desc>Specifies the name of the standard template file for the factory.</desc>
 				</info>
 			</prop>
+			<prop oor:name="ooSetupFactorySystemDefaultTemplateChanged" oor:type="xs:boolean">
+				<!-- UIHints: setup -->
+				<info>
+					<desc>Indicates if the system default template has been changed.</desc>
+				</info>
+			</prop>
 			<prop oor:name="ooSetupFactoryWindowAttributes" oor:type="xs:string">
 				<!-- UIHints: setup -->
 				<info>
@@ -261,7 +267,15 @@
 				</info>
 				<value/>
 			</prop>
-			<prop oor:name="ooSetupExtension" oor:type="xs:string">
+			<prop oor:name="ooVendor" oor:type="xs:string">
+				<info>
+					<author>IHI</author>
+					<desc>Specifies the vendor who build the product.</desc>
+				</info>
+				<value/>
+			</prop>
+
+            <prop oor:name="ooSetupExtension" oor:type="xs:string">
 				<info>
 					<desc>Specifies the version number that appears on the user interface.</desc>
 				</info>

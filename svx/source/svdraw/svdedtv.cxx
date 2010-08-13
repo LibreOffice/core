@@ -805,6 +805,12 @@ void SdrEditView::DeleteMarkedList(const SdrMarkList& rMark)
 
 void SdrEditView::DeleteMarkedObj()
 {
+    // #i110981# return when nothing is to be done at all
+    if(!GetMarkedObjectCount())
+    {
+        return;
+    }
+
     // moved breaking action and undo start outside loop
     BrkAction();
     BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedObjects(),SDRREPFUNC_OBJ_DELETE);

@@ -148,6 +148,9 @@ namespace xmloff { namespace token {
         XML_NP_TABLE_EXT,
         XML_N_TABLE_EXT,
 
+        XML_NP_DRAW_EXT,
+        XML_N_DRAW_EXT,
+
         // units
         XML_UNIT_MM,
         XML_UNIT_M,
@@ -1705,6 +1708,7 @@ namespace xmloff { namespace token {
         XML_SYMBOL_IMAGE_NAME,
         XML_SYMBOL_WIDTH,
         XML_SYSTEM,
+        XML_TAB_COLOR,
         XML_TAB_STOP,
         XML_TAB_STOP_DISTANCE,
         XML_TAB_STOPS,
@@ -2547,6 +2551,9 @@ namespace xmloff { namespace token {
         XML_Z,
         XML_DIMENSION,
         XML_VALIDATION_NAME,
+
+        XML_SCREEN,
+        XML_PRINTER,
 
         // XForms tokens
         // already defined: XML_ACTION, XML_VERSION, XML_ENCODING,

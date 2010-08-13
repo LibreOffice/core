@@ -35,6 +35,7 @@
 // predeclarations
 class SdrObject;
 class SfxItemSet;
+class SdrPageProperties;
 
 namespace sdr
 {
@@ -90,7 +91,7 @@ namespace sdr
         sal_Bool operator==(const MasterPageDescriptor& rCandidate) const;
         sal_Bool operator!=(const MasterPageDescriptor& rCandidate) const;
 
-        const SfxItemSet& getCorrectFillAttributes() const;
+        const SdrPageProperties* getCorrectSdrPageProperties() const;
     };
 } // end of namespace sdr
 

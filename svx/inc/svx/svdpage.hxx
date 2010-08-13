@@ -376,7 +376,6 @@ private:
 public:
     // construct/destruct
     SdrPageProperties(SdrPage& rSdrPage);
-    SdrPageProperties(const SdrPageProperties& rCandidate);
     virtual ~SdrPageProperties();
 
     // Notify(...) from baseclass SfxListener
@@ -449,6 +448,7 @@ private:
 public:
     SdrPageProperties& getSdrPageProperties() { return *mpSdrPageProperties; }
     const SdrPageProperties& getSdrPageProperties() const { return *mpSdrPageProperties; }
+    const SdrPageProperties* getCorrectSdrPageProperties() const;
 
 protected:
     // new MasterPageDescriptorVector

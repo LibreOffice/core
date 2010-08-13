@@ -68,10 +68,17 @@ namespace sdr
                 return false;
             }
 
-            // Test if print output but not printable
-            if(GetObjectContact().isOutputToPrinter() && !rObject.IsPrintable())
+            if(GetObjectContact().isOutputToPrinter() )
             {
-                return false;
+                // Test if print output but not printable
+                if( !rObject.IsPrintable())
+                    return false;
+            }
+            else
+            {
+                // test is object is not visible on screen
+                if( !rObject.IsVisible() )
+                    return false;
             }
 
             // Test for hidden object on MasterPage

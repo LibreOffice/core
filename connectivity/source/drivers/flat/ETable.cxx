@@ -159,7 +159,10 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
             (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
         {
             bNumeric = FALSE;
-            nStartPosFirstLine2 = nStartPosFirstLine;
+            if ( m_cStringDelimiter != '\0' )
+                aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
+            else
+                nStartPosFirstLine2 = nStartPosFirstLine;
         }
         else
         {

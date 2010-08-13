@@ -61,11 +61,14 @@ namespace sdr
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfMasterPageDescriptor::createViewIndependentPrimitive2DSequence() const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
+            drawinglayer::attribute::SdrFillAttribute aFill;
+            const SdrPageProperties* pCorrectProperties = GetMasterPageDescriptor().getCorrectSdrPageProperties();
 
-            // build primitive from page fill attributes
-            const SfxItemSet& rPageFillAttributes = GetMasterPageDescriptor().getCorrectFillAttributes();
-            const drawinglayer::attribute::SdrFillAttribute aFill(
-                drawinglayer::primitive2d::createNewSdrFillAttribute(rPageFillAttributes));
+            if(pCorrectProperties)
+            {
+                // create page fill attributes when correct properties were identified
+                aFill = drawinglayer::primitive2d::createNewSdrFillAttribute(pCorrectProperties->GetItemSet());
+            }
 
             if(!aFill.isDefault())
             {

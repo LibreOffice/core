@@ -2755,6 +2755,11 @@ EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rS
 
     EditPaM aCurPaM( aPaM );    // fuers Invalidieren
 
+    // get word boundaries in order to clear possible WrongList entries
+    // and invalidate all the necessary text (everything after and including the
+    // start of the word)
+    EditSelection aCurWord( SelectWord( aCurPaM, i18n::WordType::DICTIONARY_WORD ) );
+
     XubString aText( rStr );
     aText.ConvertLineEnd( LINEEND_LF );
     SfxVoidItem aTabItem( EE_FEATURE_TAB );
@@ -2809,7 +2814,13 @@ EditPaM ImpEditEngine::ImpInsertText( EditSelection aCurSel, const XubString& rS
             }
             ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
             DBG_ASSERT( pPortion, "Blinde Portion in InsertText" );
-            pPortion->MarkInvalid( aCurPaM.GetIndex(), aLine.Len() );
+
+            // now remove the Wrongs (red spell check marks) from both words...
+            WrongList *pWrongs = aCurPaM.GetNode()->GetWrongList();
+            if (pWrongs && pWrongs->HasWrongs())
+                pWrongs->ClearWrongs( aCurWord.Min().GetIndex(), aPaM.GetIndex(), aPaM.GetNode() );
+            // ... and mark both words as 'to be checked again'
+            pPortion->MarkInvalid( aCurWord.Min().GetIndex(), aLine.Len() );
         }
         if ( nEnd < aText.Len() )
             aPaM = ImpInsertParaBreak( aPaM );
@@ -4198,6 +4209,7 @@ long ImpEditEngine::GetXPos( ParaPortion* pParaPortion, EditLine* pLine, USHORT 
                     DBG_ERROR("svx::ImpEditEngine::GetXPos(), index out of range!");
                 }
 
+                // old code restored see #i112788 (which leaves #i74188 unfixed again)
                 long nPosInPortion = pLine->GetCharPosArray().GetObject( nPos );
 
                 if ( !pPortion->IsRightToLeft() )

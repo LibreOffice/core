@@ -129,28 +129,6 @@ SfxPrinterController::SfxPrinterController( const Any& i_rComplete,
         StartListening( *mpViewShell );
         mpObjectShell = mpViewShell->GetObjectShell();
         StartListening( *mpObjectShell );
-        m_bOrigStatus = mpObjectShell->IsEnableSetModified();
-
-        // check configuration: shall update of printing information in DocInfo set the document to "modified"?
-        if ( m_bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
-        {
-            mpObjectShell->EnableSetModified( sal_False );
-            m_bNeedsChange = sal_True;
-        }
-
-        // refresh document info
-        uno::Reference<document::XDocumentProperties> xDocProps(mpObjectShell->getDocProperties());
-        m_aLastPrintedBy = xDocProps->getPrintedBy();
-        m_aLastPrinted = xDocProps->getPrintDate();
-
-        xDocProps->setPrintedBy( mpObjectShell->IsUseUserData()
-            ? ::rtl::OUString( SvtUserOptions().GetFullName() )
-            : ::rtl::OUString() );
-        ::DateTime now;
-
-        xDocProps->setPrintDate( util::DateTime(
-            now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
-            now.GetDay(), now.GetMonth(), now.GetYear() ) );
     }
 
     // initialize extra ui options
@@ -283,6 +261,29 @@ void SfxPrinterController::jobStarted()
 {
     if ( mpObjectShell )
     {
+        m_bOrigStatus = mpObjectShell->IsEnableSetModified();
+
+        // check configuration: shall update of printing information in DocInfo set the document to "modified"?
+        if ( m_bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
+        {
+            mpObjectShell->EnableSetModified( sal_False );
+            m_bNeedsChange = sal_True;
+        }
+
+        // refresh document info
+        uno::Reference<document::XDocumentProperties> xDocProps(mpObjectShell->getDocProperties());
+        m_aLastPrintedBy = xDocProps->getPrintedBy();
+        m_aLastPrinted = xDocProps->getPrintDate();
+
+        xDocProps->setPrintedBy( mpObjectShell->IsUseUserData()
+            ? ::rtl::OUString( SvtUserOptions().GetFullName() )
+            : ::rtl::OUString() );
+        ::DateTime now;
+
+        xDocProps->setPrintDate( util::DateTime(
+            now.Get100Sec(), now.GetSec(), now.GetMin(), now.GetHour(),
+            now.GetDay(), now.GetMonth(), now.GetYear() ) );
+
         // FIXME: how to get all print options incl. AdditionalOptions easily?
         uno::Sequence < beans::PropertyValue > aOpts;
         mpObjectShell->Broadcast( SfxPrintingHint( view::PrintableState_JOB_STARTED, aOpts ) );
@@ -331,7 +332,9 @@ void SfxPrinterController::jobFinished( com::sun::star::view::PrintableState nSt
             mpObjectShell->EnableSetModified( m_bOrigStatus );
 
         if ( mpViewShell )
-            mpViewShell->pImp->pPrinterController = 0;
+        {
+            mpViewShell->pImp->m_pPrinterController.reset();
+        }
     }
 }
 
@@ -642,7 +645,7 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
                                                                                this,
                                                                                rProps
                                                                                ) );
-    pImp->pPrinterController = pController.get();
+    pImp->m_pPrinterController = pController;
 
     SfxObjectShell *pObjShell = GetObjectShell();
     pController->setValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "JobName" ) ),
@@ -660,7 +663,8 @@ void SfxViewShell::ExecPrint( const uno::Sequence < beans::PropertyValue >& rPro
 
 Printer* SfxViewShell::GetActivePrinter() const
 {
-    return pImp->pPrinterController ? pImp->pPrinterController->getPrinter().get() : 0;
+    return (pImp->m_pPrinterController)
+        ?  pImp->m_pPrinterController->getPrinter().get() : 0;
 }
 
 void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )

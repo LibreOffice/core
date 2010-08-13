@@ -114,16 +114,27 @@ namespace sdr
             || maVisibleLayers != rCandidate.maVisibleLayers);
     }
 
-    const SfxItemSet& MasterPageDescriptor::getCorrectFillAttributes() const
+    const SdrPageProperties* MasterPageDescriptor::getCorrectSdrPageProperties() const
     {
-        const SfxItemSet& rOwnerPageAtributes = GetOwnerPage().getSdrPageProperties().GetItemSet();
+        const SdrPage* pCorrectPage = &GetOwnerPage();
+        const SdrPageProperties* pCorrectProperties = &pCorrectPage->getSdrPageProperties();
 
-        if(XFILL_NONE != ((const XFillStyleItem&)rOwnerPageAtributes.Get(XATTR_FILLSTYLE)).GetValue())
+        if(XFILL_NONE == ((const XFillStyleItem&)pCorrectProperties->GetItemSet().Get(XATTR_FILLSTYLE)).GetValue())
         {
-            return rOwnerPageAtributes;
+            pCorrectPage = &GetUsedPage();
+            pCorrectProperties = &pCorrectPage->getSdrPageProperties();
         }
 
-        return GetUsedPage().getSdrPageProperties().GetItemSet();
+        if(pCorrectPage->IsMasterPage() && !pCorrectProperties->GetStyleSheet())
+        {
+            // #i110846# Suppress SdrPage FillStyle for MasterPages without StyleSheets,
+            // else the PoolDefault (XFILL_COLOR and Blue8) will be used. Normally, all
+            // MasterPages should have a StyleSheet excactly for this reason, but historically
+            // e.g. the Notes MasterPage has no StyleSheet set (and there maybe others).
+            pCorrectProperties = 0;
+        }
+
+        return pCorrectProperties;
     }
 } // end of namespace sdr
 
