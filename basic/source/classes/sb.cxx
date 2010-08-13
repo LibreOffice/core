@@ -571,12 +571,16 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                         {
                             SbModule* pClassModule = pClassModuleObj->getClassModule();
                             SbClassModuleObject* pNewObj = new SbClassModuleObject( pClassModule );
+                            pNewObj->SetName( pProp->GetName() );
+                            pNewObj->SetParent( pClassModule->pParent );
                             pNewProp->PutObject( pNewObj );
                         }
                         else if( aObjClass.EqualsIgnoreCaseAscii( "Collection" ) )
                         {
                             String aCollectionName( RTL_CONSTASCII_USTRINGPARAM("Collection") );
                             BasicCollection* pNewCollection = new BasicCollection( aCollectionName );
+                            pNewCollection->SetName( pProp->GetName() );
+                            pNewCollection->SetParent( pClassModule->pParent );
                             pNewProp->PutObject( pNewCollection );
                         }
                     }
