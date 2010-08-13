@@ -442,7 +442,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
 
     // Check value, !object is no error for sure if, only if type is fixed
     SbxDataType eValType = refVal->GetType();
-    bool bGetValObject = false;
+//  bool bGetValObject = false;
     if( !bHandleDefaultProp && eValType != SbxOBJECT && !(eValType & SbxARRAY) && refVal->IsFixed() )
     {
         Error( SbERR_INVALID_USAGE_OBJECT );
