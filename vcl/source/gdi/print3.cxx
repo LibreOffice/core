@@ -594,12 +594,20 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
         i_pController->jobStarted();
 
         int nJobs = 1;
-        int nRepeatCount = bUserCopy ? mnCopyCount : 1;
+        int nOuterRepeatCount = 1;
+        int nInnerRepeatCount = 1;
+        if( bUserCopy )
+        {
+            if( mbCollateCopy )
+                nOuterRepeatCount = mnCopyCount;
+            else
+                nInnerRepeatCount = mnCopyCount;
+        }
         if( bSinglePrintJobs )
         {
             nJobs = mnCopyCount;
             nCopies = 1;
-            nRepeatCount = 1;
+            nOuterRepeatCount = nInnerRepeatCount = 1;
         }
 
         for( int nJobIteration = 0; nJobIteration < nJobs; nJobIteration++ )
@@ -616,13 +624,21 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
                 mbJobActive             = TRUE;
                 i_pController->createProgressDialog();
                 int nPages = i_pController->getFilteredPageCount();
-                for( int nIteration = 0; nIteration < nRepeatCount; nIteration++ )
+                for( int nOuterIteration = 0; nOuterIteration < nOuterRepeatCount; nOuterIteration++ )
                 {
                     for( int nPage = 0; nPage < nPages; nPage++ )
                     {
-                        if( nPage == nPages-1 && nIteration == nRepeatCount-1 && nJobIteration == nJobs-1 )
-                            i_pController->setLastPage( sal_True );
-                        i_pController->printFilteredPage( nPage );
+                        for( int nInnerIteration = 0; nInnerIteration < nInnerRepeatCount; nInnerIteration++ )
+                        {
+                            if( nPage == nPages-1 &&
+                                nOuterIteration == nOuterRepeatCount-1 &&
+                                nInnerIteration == nInnerRepeatCount-1 &&
+                                nJobIteration == nJobs-1 )
+                            {
+                                i_pController->setLastPage( sal_True );
+                            }
+                            i_pController->printFilteredPage( nPage );
+                        }
                     }
                     // FIXME: duplex ?
                 }
