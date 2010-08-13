@@ -569,10 +569,10 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                         SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pObjBase);
                         if( pClassModuleObj != NULL )
                         {
-                            SbModule* pClassModule = pClassModuleObj->getClassModule();
-                            SbClassModuleObject* pNewObj = new SbClassModuleObject( pClassModule );
+                            SbModule* pLclClassModule = pClassModuleObj->getClassModule();
+                            SbClassModuleObject* pNewObj = new SbClassModuleObject( pLclClassModule );
                             pNewObj->SetName( pProp->GetName() );
-                            pNewObj->SetParent( pClassModule->pParent );
+                            pNewObj->SetParent( pLclClassModule->pParent );
                             pNewProp->PutObject( pNewObj );
                         }
                         else if( aObjClass.EqualsIgnoreCaseAscii( "Collection" ) )
