@@ -301,7 +301,12 @@ SbUnoObject* createOLEObject_Impl( const String& aType )
     SbUnoObject* pUnoObj = NULL;
     if( xOLEFactory.is() )
     {
-        Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aType );
+        // some type names available in VBA can not be directly used in COM
+        ::rtl::OUString aOLEType = aType;
+        if ( aOLEType.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SAXXMLReader30" ) ) ) )
+            aOLEType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Msxml2.SAXXMLReader.3.0" ) );
+
+        Reference< XInterface > xOLEObject = xOLEFactory->createInstance( aOLEType );
         if( xOLEObject.is() )
         {
             Any aAny;
