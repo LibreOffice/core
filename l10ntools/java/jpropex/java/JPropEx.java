@@ -121,6 +121,7 @@ public class JPropEx
         String key;
         SdfEntity currentStr;
         String value;
+        String str;
         for( Enumeration e = prop.propertyNames() ; e.hasMoreElements() ; )
         {
             key         = (String)      e.nextElement();
@@ -129,8 +130,11 @@ public class JPropEx
             currentStr.setLid( key );
             value            = prop.getProperty( key , "" );
             //if( value.equals("") )  System.err.println("Warning: in file "+inputFileArg+" the string with the key "+key+" has a empty string!");
-            currentStr.setText( (prop.getProperty( key )).replaceAll("\t" , " " ) );     // TODO: Quoting!!!!
-            data.add( currentStr );
+            str = (prop.getProperty( key )).replaceAll("\t" , " " );    // remove tab
+            str = str.replaceAll("\n"," ");                             // remove return
+            currentStr.setText( str );
+            if( str.length() > 0 )
+                data.add( currentStr );
         }
         data.write( outputFileArg );
     }
