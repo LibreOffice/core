@@ -51,6 +51,7 @@ JobData& JobData::operator=(const JobData& rRight)
     m_pParser               = rRight.m_pParser;
     m_aContext              = rRight.m_aContext;
     m_nPSLevel              = rRight.m_nPSLevel;
+    m_nPDFDevice            = rRight.m_nPDFDevice;
     m_nColorDevice          = rRight.m_nColorDevice;
 
     if( ! m_pParser && m_aPrinterName.getLength() )
@@ -128,6 +129,10 @@ bool JobData::getStreamBuffer( void*& pData, int& bytes )
     aLine += ByteString::CreateFromInt32( m_nPSLevel );
     aStream.WriteLine( aLine );
 
+    aLine = "pdfdevice=";
+    aLine += ByteString::CreateFromInt32( m_nPDFDevice );
+    aStream.WriteLine( aLine );
+
     aLine = "colordevice=";
     aLine += ByteString::CreateFromInt32( m_nColorDevice );
     aStream.WriteLine( aLine );
@@ -158,6 +163,7 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
     bool bColorDepth    = false;
     bool bColorDevice   = false;
     bool bPSLevel       = false;
+    bool bPDFDevice     = false;
     while( ! aStream.IsEof() )
     {
         aStream.ReadLine( aLine );
@@ -202,6 +208,11 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
             bPSLevel = true;
             rJobData.m_nPSLevel = aLine.Copy( 8 ).ToInt32();
         }
+        else if( aLine.CompareTo( "pdfdevice=", 10 ) == COMPARE_EQUAL )
+        {
+            bPDFDevice = true;
+            rJobData.m_nPDFDevice = aLine.Copy( 10 ).ToInt32();
+        }
         else if( aLine.Equals( "PPDContexData" ) )
         {
             if( bPrinter )
@@ -222,5 +233,5 @@ bool JobData::constructFromStreamBuffer( void* pData, int bytes, JobData& rJobDa
         }
     }
 
-    return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bPSLevel && bColorDevice && bColorDepth;
+    return bVersion && bPrinter && bOrientation && bCopies && bContext && bMargin && bPSLevel && bPDFDevice && bColorDevice && bColorDepth;
 }

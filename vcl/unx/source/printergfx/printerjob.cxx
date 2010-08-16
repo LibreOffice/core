@@ -341,7 +341,8 @@ PrinterJob::~PrinterJob ()
     delete mpJobTrailer;
 
     // XXX should really call osl::remove routines
-    removeSpoolDir (maSpoolDirName);
+    if( maSpoolDirName.getLength() )
+        removeSpoolDir (maSpoolDirName);
 
     // osl::Directory::remove (maSpoolDirName);
 }

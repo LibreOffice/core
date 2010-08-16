@@ -54,6 +54,8 @@
 #include "vcl/svapp.hxx"
 #include "vcl/jobset.h"
 #include "vcl/print.h"
+#include "vcl/print.hxx"
+#include "vcl/pdfwriter.hxx"
 #include "vcl/salptype.hxx"
 #include "vcl/printerinfomanager.hxx"
 
@@ -63,6 +65,7 @@
 
 using namespace psp;
 using namespace rtl;
+using namespace com::sun::star;
 
 /*
  *  static helpers
@@ -892,9 +895,26 @@ ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT 
         case PRINTER_CAPABILITIES_FAX:
             return PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "fax" ) ? 1 : 0;
         case PRINTER_CAPABILITIES_PDF:
-            return PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "pdf" ) ? 1 : 0;
+            if( PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "pdf" ) )
+                return 1;
+            else
+            {
+                // see if the PPD contains a value to set Collate to True
+                JobData aData = PrinterInfoManager::get().getPrinterInfo( pJobSetup->maPrinterName );
+                if( pJobSetup->mpDriverData )
+                    JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
+                return aData.m_nPDFDevice > 0 ? 1 : 0;
+            }
         case PRINTER_CAPABILITIES_EXTERNALDIALOG:
             return PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "external_dialog" ) ? 1 : 0;
+        case PRINTER_CAPABILITIES_USEPULLMODEL:
+        {
+            // see if the PPD contains a value to set Collate to True
+            JobData aData = PrinterInfoManager::get().getPrinterInfo( pJobSetup->maPrinterName );
+            if( pJobSetup->mpDriverData )
+                JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
+            return aData.m_nPDFDevice > 0 ? 1 : 0;
+        }
         default: break;
     };
     return 0;
@@ -910,6 +930,7 @@ ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT 
  : m_bFax( false ),
    m_bPdf( false ),
    m_bSwallowFaxNo( false ),
+   m_bIsPDFWriterJob( false ),
    m_pGraphics( NULL ),
    m_nCopies( 1 ),
    m_bCollate( false ),
@@ -1021,22 +1042,28 @@ BOOL PspSalPrinter::StartJob(
 
 BOOL PspSalPrinter::EndJob()
 {
-    BOOL bSuccess = m_aPrintJob.EndJob();
-
-    if( bSuccess )
+    BOOL bSuccess = FALSE;
+    if( m_bIsPDFWriterJob )
+        bSuccess = TRUE;
+    else
     {
-        // check for fax
-        if( m_bFax )
-        {
+        bSuccess = m_aPrintJob.EndJob();
 
-            const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
-            // sendAFax removes the file after use
-            bSuccess = sendAFax( m_aFaxNr, m_aTmpFile, rInfo.m_aCommand );
-        }
-        else if( m_bPdf )
+        if( bSuccess )
         {
-            const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
-            bSuccess = createPdf( m_aFileName, m_aTmpFile, rInfo.m_aCommand );
+            // check for fax
+            if( m_bFax )
+            {
+
+                const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
+                // sendAFax removes the file after use
+                bSuccess = sendAFax( m_aFaxNr, m_aTmpFile, rInfo.m_aCommand );
+            }
+            else if( m_bPdf )
+            {
+                const PrinterInfo& rInfo( PrinterInfoManager::get().getPrinterInfo( m_aJobData.m_aPrinterName ) );
+                bSuccess = createPdf( m_aFileName, m_aTmpFile, rInfo.m_aCommand );
+            }
         }
     }
     vcl_sal::PrinterUpdate::jobEnded();
@@ -1088,6 +1115,156 @@ ULONG PspSalPrinter::GetErrorCode()
 {
     return 0;
 }
+
+// -----------------------------------------------------------------------
+
+BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobName, const String& i_rAppName,
+                              ImplJobSetup* i_pSetupData, vcl::PrinterController& i_rController )
+{
+    OSL_TRACE( "StartJob with controller: pFilename = %s", i_pFileName ? rtl::OUStringToOString( *i_pFileName, RTL_TEXTENCODING_UTF8 ).getStr() : "<nil>" );
+    // mark for endjob
+    m_bIsPDFWriterJob = true;
+    // reset IsLastPage
+    i_rController.setLastPage( sal_False );
+
+    // update job data
+    if( i_pSetupData )
+        JobData::constructFromStreamBuffer( i_pSetupData->mpDriverData, i_pSetupData->mnDriverDataLen, m_aJobData );
+
+    OSL_ASSERT( m_aJobData.m_nPDFDevice > 0 );
+    m_aJobData.m_nPDFDevice = 1;
+
+    // do we want a progress panel ?
+    // possibly create one job for collated output
+    sal_Bool bSinglePrintJobs = sal_False;
+    beans::PropertyValue* pSingleValue = i_rController.getValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrintCollateAsSingleJobs" ) ) );
+    if( pSingleValue )
+    {
+        pSingleValue->Value >>= bSinglePrintJobs;
+    }
+
+    m_aJobData.m_nCopies = i_rController.getPrinter()->GetCopyCount();
+    int nJobs = 1;
+    if( bSinglePrintJobs )
+    {
+        nJobs = m_aJobData.m_nCopies;
+        m_aJobData.m_nCopies = 1;
+    }
+
+    // notify start of real print job
+    i_rController.jobStarted();
+
+    // produce PDF file
+    OUString aPDFUrl;
+    if( i_pFileName )
+        aPDFUrl = *i_pFileName;
+    else
+        osl_createTempFile( NULL, NULL, &aPDFUrl.pData );
+    if( aPDFUrl.compareToAscii( "file:", 5 ) != 0 )
+    {
+        // this is not a file URL, but it should
+        // form it into a osl friendly file URL
+        rtl::OUString aTmp;
+        osl_getFileURLFromSystemPath( aPDFUrl.pData, &aTmp.pData );
+        aPDFUrl = aTmp;
+    }
+
+    // setup PDFWriter
+
+    vcl::PDFWriter::PDFWriterContext aContext;
+    aContext.URL                = aPDFUrl;
+    aContext.Version            = vcl::PDFWriter::PDF_1_4;
+    aContext.Tagged             = false;
+    aContext.EmbedStandardFonts = true;
+    aContext.Encrypt            = false;
+    aContext.DocumentLocale     = Application::GetSettings().GetLocale();
+
+    vcl::PDFDocInfo aDocInfo;
+    aDocInfo.Title              = i_rJobName;
+    aDocInfo.Creator            = i_rAppName;
+    aDocInfo.Producer           = i_rAppName;
+
+    vcl::PDFWriter aPDFWriter( aContext );
+    aPDFWriter.SetDocInfo( aDocInfo );
+    vcl::PDFWriter::PlayMetafileContext aMtfContext;
+    aMtfContext.m_bOnlyLosslessCompression = true;
+
+    boost::shared_ptr<Printer> pPrinter( i_rController.getPrinter() );
+    int nAllPages = i_rController.getFilteredPageCount();
+    i_rController.createProgressDialog();
+    bool bAborted = false;
+    for( int nPage = 0; nPage < nAllPages && ! bAborted; nPage++ )
+    {
+        if( nPage == nAllPages-1 )
+            i_rController.setLastPage( sal_True );
+
+        // get the pages metafile
+        GDIMetaFile aPageFile;
+        vcl::PrinterController::PageSize aPageSize = i_rController.getFilteredPageFile( nPage, aPageFile );
+        if( i_rController.isProgressCanceled() )
+        {
+            bAborted = true;
+            if( nPage != nAllPages-1 )
+            {
+                i_rController.createProgressDialog();
+                i_rController.setLastPage( sal_True );
+                i_rController.getFilteredPageFile( nPage, aPageFile );
+            }
+        }
+        else
+        {
+            pPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
+            pPrinter->SetPaperSizeUser( aPageSize.aSize, true );
+            Size aRealSize( pPrinter->GetPaperSize() );
+
+            aPDFWriter.NewPage( TenMuToPt( aRealSize.Width() ),
+                                TenMuToPt( aRealSize.Height() ),
+                                vcl::PDFWriter::Portrait );
+
+            aPDFWriter.PlayMetafile( aPageFile, aMtfContext, NULL );
+        }
+    }
+
+    aPDFWriter.Emit();
+
+    if( ! i_pFileName && ! bAborted )
+    {
+        oslFileHandle pFile = NULL;
+        osl_openFile( aContext.URL.pData, &pFile, osl_File_OpenFlag_Read );
+        if( pFile )
+        {
+            osl_setFilePos( pFile, osl_Pos_Absolut, 0 );
+            std::vector< char > buffer( 0x10000, 0 );
+            for( int nCurJob = 0; nCurJob < nJobs; nCurJob++ )
+            {
+                FILE* fp = PrinterInfoManager::get().startSpool( i_pSetupData->maPrinterName, i_rController.isDirectPrint() );
+                if( fp )
+                {
+                    sal_uInt64 nBytesRead = 0;
+                    do
+                    {
+                        osl_readFile( pFile, &buffer[0], buffer.size(), &nBytesRead );
+                        if( nBytesRead > 0 )
+                            fwrite( &buffer[0], 1, nBytesRead, fp );
+                    } while( nBytesRead == buffer.size() );
+                    PrinterInfoManager::get().endSpool( i_pSetupData->maPrinterName, i_rJobName, fp, m_aJobData );
+                }
+            }
+            osl_closeFile( pFile );
+        }
+    }
+
+    // job has been spooled
+    i_rController.setJobState( bAborted ? view::PrintableState_JOB_ABORTED : view::PrintableState_JOB_SPOOLED );
+
+    // clean up the PDF file
+    if( ! i_pFileName || bAborted )
+        osl_removeFile( aPDFUrl.pData );
+
+    return TRUE;
+}
+
+
 
 /*
  *  vcl::PrinterUpdate

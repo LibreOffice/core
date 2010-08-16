@@ -283,6 +283,10 @@ void PrinterInfoManager::initialize()
             if( aValue.Len() )
                 m_aGlobalDefaults.m_nPSLevel = aValue.ToInt32();
 
+            aValue = aConfig.ReadKey( "PDFDevice" );
+            if( aValue.Len() )
+                m_aGlobalDefaults.m_nPDFDevice = aValue.ToInt32();
+
             aValue = aConfig.ReadKey( "PerformFontSubstitution" );
             if( aValue.Len() )
             {
@@ -493,6 +497,10 @@ void PrinterInfoManager::initialize()
                 aValue = aConfig.ReadKey( "PSLevel" );
                 if( aValue.Len() )
                     aPrinter.m_aInfo.m_nPSLevel = aValue.ToInt32();
+
+                aValue = aConfig.ReadKey( "PDFDevice" );
+                if( aValue.Len() )
+                    aPrinter.m_aInfo.m_nPDFDevice = aValue.ToInt32();
 
                 aValue = aConfig.ReadKey( "PerformFontSubstitution" );
                 if( ! aValue.Equals( "0" ) && ! aValue.EqualsIgnoreCaseAscii( "false" ) )
@@ -758,6 +766,7 @@ bool PrinterInfoManager::writePrinterConfig()
             pConfig->WriteKey( "Copies", ByteString::CreateFromInt32( it->second.m_aInfo.m_nCopies ) );
             pConfig->WriteKey( "Orientation", it->second.m_aInfo.m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait" );
             pConfig->WriteKey( "PSLevel", ByteString::CreateFromInt32( it->second.m_aInfo.m_nPSLevel ) );
+            pConfig->WriteKey( "PDFDevice", ByteString::CreateFromInt32( it->second.m_aInfo.m_nPDFDevice ) );
             pConfig->WriteKey( "ColorDevice", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDevice ) );
             pConfig->WriteKey( "ColorDepth", ByteString::CreateFromInt32( it->second.m_aInfo.m_nColorDepth ) );
             aValue = ByteString::CreateFromInt32( it->second.m_aInfo.m_nLeftMarginAdjust );
@@ -845,9 +854,10 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         m_aPrinters[ rPrinterName ] = aPrinter;
         bSuccess = true;
         #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "new printer %s, level = %d, colordevice = %d, depth = %d\n",
+        fprintf( stderr, "new printer %s, level = %d, pdfdevice = %d, colordevice = %d, depth = %d\n",
         OUStringToOString( rPrinterName, osl_getThreadTextEncoding() ).getStr(),
         m_aPrinters[rPrinterName].m_aInfo.m_nPSLevel,
+        m_aPrinters[rPrinterName].m_aInfo.m_nPDFDevice,
         m_aPrinters[rPrinterName].m_aInfo.m_nColorDevice,
         m_aPrinters[rPrinterName].m_aInfo.m_nColorDepth );
         #endif

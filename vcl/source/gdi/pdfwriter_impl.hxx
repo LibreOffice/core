@@ -1095,6 +1095,7 @@ i12626
 
     /* true if PDF/A-1a or PDF/A-1b is output */
     sal_Bool        m_bIsPDF_A1;
+    PDFWriter&      m_rOuterFace;
 
 /*
 i12626
@@ -1109,8 +1110,14 @@ methods for PDF security
 /* algorithm 3.4 or 3.5: computing the encryption dictionary's user password value ( /U ) revision 2 or 3 of the standard security handler */
     void computeUDictionaryValue();
 
+    // helper for playMetafile
+    void implWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient,
+                            VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
+    void implWriteBitmapEx( const Point& rPoint, const Size& rSize, const BitmapEx& rBitmapEx,
+                           VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
+
 public:
-    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext );
+    PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, PDFWriter& );
     ~PDFWriterImpl();
 
     /*  for OutputDevice so the reference device can have a list
@@ -1134,6 +1141,7 @@ public:
     bool emit();
     std::set< PDFWriter::ErrorCode > getErrors();
     void insertError( PDFWriter::ErrorCode eErr ) { m_aErrors.insert( eErr ); }
+    void playMetafile( const GDIMetaFile&, vcl::PDFExtOutDevData*, const vcl::PDFWriter::PlayMetafileContext&, VirtualDevice* pDummyDev = NULL );
 
     Size getCurPageSize() const
     {

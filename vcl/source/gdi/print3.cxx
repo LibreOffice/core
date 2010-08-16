@@ -559,7 +559,7 @@ bool Printer::StartJob( const rtl::OUString& i_rJobName, boost::shared_ptr<vcl::
     mnCurPage               = 1;
     mnCurPrintPage          = 1;
     mbPrinting              = TRUE;
-    if( ImplGetSVData()->maGDIData.mbPrinterPullModel )
+    if( GetCapabilities( PRINTER_CAPABILITIES_USEPULLMODEL ) )
     {
         mbJobActive             = TRUE;
         // sallayer does all necessary page printing
@@ -1520,6 +1520,11 @@ void PrinterController::createProgressDialog()
     }
     else
         mpImplData->mpProgress->reset();
+}
+
+bool PrinterController::isProgressCanceled()
+{
+    return mpImplData->mpProgress && mpImplData->mpProgress->isCanceled();
 }
 
 void PrinterController::setMultipage( const MultiPageSetup& i_rMPS )

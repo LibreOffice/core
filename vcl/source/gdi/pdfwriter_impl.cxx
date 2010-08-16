@@ -1692,7 +1692,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
  *  class PDFWriterImpl
  */
 
-PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
+PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, PDFWriter& i_rOuterFace )
         :
         m_pReferenceDevice( NULL ),
         m_aMapMode( MAP_POINT, Point(), Fraction( 1L, pointToPixel(1) ), Fraction( 1L, pointToPixel(1) ) ),
@@ -1718,7 +1718,8 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         m_aCreationMetaDateString( 64 ),
         m_pEncryptionBuffer( NULL ),
         m_nEncryptionBufferSize( 0 ),
-        m_bIsPDF_A1( false )
+        m_bIsPDF_A1( false ),
+        m_rOuterFace( i_rOuterFace )
 {
 #ifdef DO_TEST_PDF
     static bool bOnce = true;

@@ -524,12 +524,18 @@ void CUPSManager::initialize()
     // introduced in dests with 1.2
     // this is needed to check for %%IncludeFeature support
     // (#i65684#, #i65491#)
+    bool bUsePDF = false;
     cups_dest_t* pDest = ((cups_dest_t*)m_pDests);
     const char* pOpt = m_pCUPSWrapper->cupsGetOption( "printer-info",
                                                       pDest->num_options,
                                                       pDest->options );
     if( pOpt )
+    {
         m_bUseIncludeFeature = true;
+        bUsePDF = true;
+        if( m_aGlobalDefaults.m_nPSLevel == 0 && m_aGlobalDefaults.m_nPDFDevice == 0 )
+            m_aGlobalDefaults.m_nPDFDevice = 1;
+    }
     // do not send include JobPatch; CUPS will insert that itself
     // TODO: currently unknwon which versions of CUPS insert JobPatches
     // so currently it is assumed CUPS = don't insert JobPatch files
@@ -593,6 +599,8 @@ void CUPSManager::initialize()
             aPrinter.m_aInfo.m_pParser = c_it->second.getParser();
             aPrinter.m_aInfo.m_aContext = c_it->second;
         }
+        if( bUsePDF && aPrinter.m_aInfo.m_nPSLevel == 0 && aPrinter.m_aInfo.m_nPDFDevice == 0 )
+            aPrinter.m_aInfo.m_nPDFDevice = 1;
         aPrinter.m_aInfo.m_aDriverName = aBuf.makeStringAndClear();
         aPrinter.m_bModified = false;
 
@@ -879,6 +887,12 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOpt
                 rNumOptions = m_pCUPSWrapper->cupsAddOption( aKey.getStr(), aValue.getStr(), rNumOptions, (cups_option_t**)rOptions );
             }
         }
+    }
+
+    if( rJob.m_nPDFDevice > 0 && rJob.m_nCopies > 1 )
+    {
+        rtl::OString aVal( rtl::OString::valueOf( sal_Int32( rJob.m_nCopies ) ) );
+        rNumOptions = m_pCUPSWrapper->cupsAddOption( "copies", aVal.getStr(), rNumOptions, (cups_option_t**)rOptions );
     }
 }
 

@@ -50,6 +50,7 @@ struct JobData
     int                     m_nColorDepth;
     int                     m_nPSLevel;     // 0: no override, else languaglevel to use
     int                     m_nColorDevice; // 0: no override, -1 grey scale, +1 color
+    int                     m_nPDFDevice;   // 0: PostScript, 1: PDF
     orientation::type       m_eOrientation;
     ::rtl::OUString         m_aPrinterName;
     const PPDParser*        m_pParser;
@@ -64,6 +65,7 @@ struct JobData
             m_nColorDepth( 24 ),
             m_nPSLevel( 0 ),
             m_nColorDevice( 0 ),
+            m_nPDFDevice( 0 ),
             m_eOrientation( orientation::Portrait ),
             m_pParser( NULL ) {}
 
