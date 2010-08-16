@@ -45,6 +45,7 @@ struct ScClipParam
     ScRangeList         maRanges;
     Direction           meDirection;
     bool                mbCutMode;
+    sal_uInt32          mnSourceDocID;
     ScRangeListVector   maProtectedChartRangesVector;
 
     ScClipParam();
@@ -72,6 +73,9 @@ struct ScClipParam
     ScRange getWholeRange() const;
 
     void transpose();
+
+    sal_uInt32 getSourceDocID() const { return mnSourceDocID; }
+    void setSourceDocID( sal_uInt32 nVal ) { mnSourceDocID = nVal; }
 };
 
 // ============================================================================

@@ -374,7 +374,7 @@ void ScChartHelper::GetChartNames( ::std::vector< ::rtl::OUString >& rChartNames
 }
 
 void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, SdrPage* pPage, ScModelObj* pModelObj, SCTAB nTab,
-    const ScRangeListVector& rRangesVector, const ::std::vector< ::rtl::OUString >& rExcludedChartNames )
+    const ScRangeListVector& rRangesVector, const ::std::vector< ::rtl::OUString >& rExcludedChartNames, bool bSameDoc )
 {
     if ( pDoc && pPage && pModelObj )
     {
@@ -404,17 +404,27 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                                  ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
                                  bDisableDataTableDialog )
                             {
-                                ScRange aEmptyRange;
-                                ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
-                                USHORT nIndex = 0;
-                                ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
-                                if ( pCollection && !pCollection->Search( &aSearcher, nIndex ) )
+                                if ( bSameDoc )
                                 {
-                                    ScRangeList aRangeList( rRangesVector[ nRangeList++ ] );
-                                    ScRangeListRef rRangeList( new ScRangeList( aRangeList ) );
-                                    ScChartListener* pChartListener = new ScChartListener( aChartName, pDoc, rRangeList );
-                                    pCollection->Insert( pChartListener );
-                                    pChartListener->StartListeningTo();
+                                    ScRange aEmptyRange;
+                                    ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
+                                    USHORT nIndex = 0;
+                                    ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
+                                    if ( pCollection && !pCollection->Search( &aSearcher, nIndex ) )
+                                    {
+                                        ScRangeList aRangeList( rRangesVector[ nRangeList++ ] );
+                                        ScRangeListRef rRangeList( new ScRangeList( aRangeList ) );
+                                        ScChartListener* pChartListener = new ScChartListener( aChartName, pDoc, rRangeList );
+                                        pCollection->Insert( pChartListener );
+                                        pChartListener->StartListeningTo();
+                                    }
+                                }
+                                else
+                                {
+                                    xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ),
+                                        uno::makeAny( sal_False ) );
+                                    xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ),
+                                        uno::makeAny( sal_False ) );
                                 }
                             }
                         }

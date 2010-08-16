@@ -203,7 +203,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             {
                 const ScRangeListVector& rProtectedChartRangesVector( pDrawTrans->GetProtectedChartRangesVector() );
                 ScChartHelper::CreateProtectedChartListenersAndNotify( pDocument, pDestPage, pModelObj, nTab,
-                    rProtectedChartRangesVector, aExcludedChartNames );
+                    rProtectedChartRangesVector, aExcludedChartNames, bSameDoc );
             }
         }
     }
@@ -265,11 +265,12 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         ScDocShell* pDocShell = GetViewData()->GetDocShell();
         ScModelObj* pModelObj = ( pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : NULL );
         ScDrawTransferObj* pTransferObj = ScDrawTransferObj::GetOwnClipboard( NULL );
-        if ( pDocument && pPage && pModelObj && pTransferObj )
+        if ( pDocument && pPage && pModelObj && ( pTransferObj || pDrawTrans ) )
         {
-            const ScRangeListVector& rProtectedChartRangesVector( pTransferObj->GetProtectedChartRangesVector() );
+            const ScRangeListVector& rProtectedChartRangesVector(
+                pTransferObj ? pTransferObj->GetProtectedChartRangesVector() : pDrawTrans->GetProtectedChartRangesVector() );
             ScChartHelper::CreateProtectedChartListenersAndNotify( pDocument, pPage, pModelObj, nTab,
-                rProtectedChartRangesVector, aExcludedChartNames );
+                rProtectedChartRangesVector, aExcludedChartNames, bSameDocClipboard );
         }
     }
 

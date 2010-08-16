@@ -36,13 +36,15 @@ using ::std::vector;
 
 ScClipParam::ScClipParam() :
     meDirection(Unspecified),
-    mbCutMode(false)
+    mbCutMode(false),
+    mnSourceDocID(0)
 {
 }
 
 ScClipParam::ScClipParam(const ScRange& rRange, bool bCutMode) :
     meDirection(Unspecified),
-    mbCutMode(bCutMode)
+    mbCutMode(bCutMode),
+    mnSourceDocID(0)
 {
     maRanges.Append(rRange);
 }
@@ -51,6 +53,7 @@ ScClipParam::ScClipParam(const ScClipParam& r) :
     maRanges(r.maRanges),
     meDirection(r.meDirection),
     mbCutMode(r.mbCutMode),
+    mnSourceDocID(r.mnSourceDocID),
     maProtectedChartRangesVector(r.maProtectedChartRangesVector)
 {
 }

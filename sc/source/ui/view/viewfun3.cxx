@@ -348,6 +348,7 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bI
             }
 
             ScClipParam aClipParam(aRange, bCut);
+            aClipParam.setSourceDocID( pDoc->GetDocumentID() );
             pDoc->CopyToClip(aClipParam, pClipDoc, &rMark, false, false, bIncludeObjects);
 
             if ( pDoc && pClipDoc )
@@ -1499,9 +1500,10 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         if ( pDoc && pPage && pModelObj && pClipDoc )
         {
             ScClipParam& rClipParam = pClipDoc->GetClipParam();
+            bool bSameDoc = ( rClipParam.getSourceDocID() == pDoc->GetDocumentID() );
             const ScRangeListVector& rProtectedChartRangesVector( rClipParam.maProtectedChartRangesVector );
             ScChartHelper::CreateProtectedChartListenersAndNotify( pDoc, pPage, pModelObj, nStartTab,
-                rProtectedChartRangesVector, aExcludedChartNames );
+                rProtectedChartRangesVector, aExcludedChartNames, bSameDoc );
         }
     }
 
