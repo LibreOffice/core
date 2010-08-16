@@ -311,7 +311,6 @@ BOOL GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  BOOL bExtendedInfo )
 {
     UINT32  nTemp32;
     BOOL    bRet = FALSE;
-    BYTE    cByte = 0;
 
     sal_Int32 nStmPos = rStm.Tell();
 
