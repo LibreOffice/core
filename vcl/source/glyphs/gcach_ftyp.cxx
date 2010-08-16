@@ -1733,7 +1733,20 @@ bool FreetypeServerFont::GetGlyphBitmap8( int nGlyphIndex, RawBitmap& rRawBitmap
 // determine unicode ranges in font
 // -----------------------------------------------------------------------
 
-// TODO: replace with GetFontCharMap()
+ImplFontCharMap* FreetypeServerFont::GetImplFontCharMap( void ) const
+{
+    CmapResult aCmapResult;
+    bool bOK = GetFontCodeRanges( aCmapResult );
+    ImplFontCharMap* pIFCMap = NULL;
+    if( !bOK )
+        pIFCMap = ImplFontCharMap::GetDefaultMap();
+    else
+        pIFCMap = new ImplFontCharMap( aCmapResult );
+    // TODO?: cache ImplFontCharMap
+    return pIFCMap;
+}
+
+// TODO: merge into method GetFontCharMap()
 bool FreetypeServerFont::GetFontCodeRanges( CmapResult& rResult ) const
 {
     rResult.mbSymbolic = mpFontInfo->IsSymbolFont();

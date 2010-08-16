@@ -772,14 +772,11 @@ void PspGraphics::DrawServerFontLayout( const ServerFontLayout& rLayout )
 
 ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
 {
-    // TODO: get ImplFontCharMap directly from fonts
     if( !m_pServerFont[0] )
         return NULL;
 
-    CmapResult aCmapResult;
-    if( !m_pServerFont[0]->GetFontCodeRanges( aCmapResult ) )
-        return NULL;
-    return new ImplFontCharMap( aCmapResult );
+    ImplFontCharMap* pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
+    return pIFCMap;
 }
 
 USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
