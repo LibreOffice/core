@@ -49,7 +49,7 @@ RtfFilter::~RtfFilter()
 sal_Bool RtfFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
    throw (uno::RuntimeException)
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
     if( m_xSrcDoc.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xMSF(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW);
