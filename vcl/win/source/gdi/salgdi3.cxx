@@ -2907,7 +2907,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     if( aRawCffData.get() )
     {
         pWinFontData->UpdateFromHDC( mhDC );
-/*const*/ImplFontCharMap* pCharMap = pWinFontData->GetImplFontCharMap();
+        const ImplFontCharMap* pCharMap = pWinFontData->GetImplFontCharMap();
 
         long nRealGlyphIds[ 256 ];
         for( int i = 0; i < nGlyphCount; ++i )
@@ -3172,7 +3172,7 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                 rUnicodeEnc.clear();
             }
             const ImplWinFontData* pWinFont = static_cast<const ImplWinFontData*>(pFont);
-            ImplFontCharMap* pMap = pWinFont->GetImplFontCharMap();
+            const ImplFontCharMap* pMap = pWinFont->GetImplFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no map" );
 
             int nCharCount = pMap->GetCharCount();

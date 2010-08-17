@@ -327,14 +327,14 @@ ImplFontCharMap* ImplFontCharMap::GetDefaultMap( bool bSymbols)
 
 // -----------------------------------------------------------------------
 
-void ImplFontCharMap::AddReference()
+void ImplFontCharMap::AddReference( void ) const
 {
     ++mnRefCount;
 }
 
 // -----------------------------------------------------------------------
 
-void ImplFontCharMap::DeReference()
+void ImplFontCharMap::DeReference( void ) const
 {
     if( --mnRefCount <= 0 )
         if( (this != pDefaultUnicodeImplFontCharMap) && (this != pDefaultSymbolImplFontCharMap) )
