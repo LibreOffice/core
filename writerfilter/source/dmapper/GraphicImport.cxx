@@ -225,7 +225,7 @@ public:
     sal_Int32 nWrap;
     bool      bOpaque;
     bool      bContour;
-    drawing::PointSequenceSequence mContourPolyPolygon;
+    WrapPolygon::Pointer_t mpWrapPolygon;
     bool      bIgnoreWRK;
 
     sal_Int32 nLeftMargin;
@@ -288,7 +288,6 @@ public:
         ,nWrap(0)
         ,bOpaque( true )
         ,bContour(false)
-        ,mContourPolyPolygon(0)
         ,bIgnoreWRK(true)
         ,nLeftMargin(319)
         ,nRightMargin(319)
@@ -1396,7 +1395,7 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
 
                 resolveSprmProps(aHandler, rSprm);
 
-                m_pImpl->mContourPolyPolygon = aHandler.getPolygon();
+                m_pImpl->mpWrapPolygon = aHandler.getPolygon();
             }
             break;
         case NS_ooxml::LN_CT_Anchor_positionH: // 90976;
@@ -1636,13 +1635,6 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ),
                     uno::makeAny(m_pImpl->nBottomMargin));
 
-                uno::Any aContourPolyPolygon;
-                if (m_pImpl->mContourPolyPolygon.getLength() >0)
-                    aContourPolyPolygon <<= m_pImpl->mContourPolyPolygon;
-
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
-                    aContourPolyPolygon);
-
                 if( m_pImpl->eColorMode == drawing::ColorMode_STANDARD &&
                     m_pImpl->nContrast == -70 &&
                     m_pImpl->nBrightness == 70 )
@@ -1670,16 +1662,31 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_MIRRORED_ON_ODD_PAGES ),
                         uno::makeAny( m_pImpl->bHoriFlip ));
                 }
+
                 if( m_pImpl->bVertFlip )
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_MIRRORED ),
                         uno::makeAny( m_pImpl->bVertFlip ));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BACK_COLOR ),
                     uno::makeAny( m_pImpl->nFillColor ));
+
                 //there seems to be no way to detect the original size via _real_ API
                 uno::Reference< beans::XPropertySet > xGraphicProperties( xGraphic, uno::UNO_QUERY_THROW );
                 awt::Size aGraphicSize, aGraphicSizePixel;
                 xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE100th_M_M )) >>= aGraphicSize;
                 xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE_PIXEL )) >>= aGraphicSizePixel;
+
+                uno::Any aContourPolyPolygon;
+                if( aGraphicSize.Width && aGraphicSize.Height &&
+                    m_pImpl->mpWrapPolygon.get() != NULL)
+                {
+                    awt::Size aDstSize(m_pImpl->getXSize(), m_pImpl->getYSize());
+                    WrapPolygon::Pointer_t pCorrected = m_pImpl->mpWrapPolygon->correctWordWrapPolygon(aGraphicSize, aDstSize);
+                    aContourPolyPolygon <<= pCorrected->getPointSequenceSequence();
+                }
+
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
+                                                           aContourPolyPolygon);
+
                 if( aGraphicSize.Width && aGraphicSize.Height )
                 {
                     //todo: i71651 graphic size is not provided by the GraphicDescriptor
@@ -1688,9 +1695,11 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     lcl_CalcCrop( m_pImpl->nLeftCrop, aGraphicSize.Width );
                     lcl_CalcCrop( m_pImpl->nRightCrop, aGraphicSize.Width );
 
+
                     xGraphicProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GRAPHIC_CROP ),
                         uno::makeAny(text::GraphicCrop(m_pImpl->nTopCrop, m_pImpl->nBottomCrop, m_pImpl->nLeftCrop, m_pImpl->nRightCrop)));
                 }
+
             }
 
             if(m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)

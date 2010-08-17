@@ -30,11 +30,41 @@
 
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <resourcemodel/LoggedResources.hxx>
+#include <resourcemodel/Fraction.hxx>
 
 namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
+using resourcemodel::Fraction;
+
+class WrapPolygon
+{
+public:
+    typedef ::std::deque<awt::Point> Points_t;
+    typedef ::boost::shared_ptr<WrapPolygon> Pointer_t;
+
+private:
+    Points_t mPoints;
+
+public:
+    WrapPolygon();
+    virtual ~WrapPolygon();
+
+    void addPoint(const awt::Point & rPoint);
+
+    Points_t::const_iterator begin() const;
+    Points_t::const_iterator end() const;
+    Points_t::iterator begin();
+    Points_t::iterator end();
+
+    size_t size() const;
+
+    WrapPolygon::Pointer_t move(const awt::Point & rMove);
+    WrapPolygon::Pointer_t scale(const Fraction & rFractionX, const Fraction & rFractionY);
+    WrapPolygon::Pointer_t correctWordWrapPolygon(const awt::Size & rSrcSize, const awt::Size & rDstSize);
+    drawing::PointSequenceSequence getPointSequenceSequence() const;
+};
 
 class WrapPolygonHandler : public LoggedProperties
 {
@@ -42,11 +72,10 @@ public:
     WrapPolygonHandler();
     virtual ~WrapPolygonHandler();
 
-    drawing::PointSequenceSequence getPolygon();
+    WrapPolygon::Pointer_t getPolygon();
 
 private:
-    typedef ::std::deque<awt::Point> Points_t;
-    Points_t mPoints;
+    WrapPolygon::Pointer_t mpPolygon;
 
     sal_uInt32 mnX;
     sal_uInt32 mnY;

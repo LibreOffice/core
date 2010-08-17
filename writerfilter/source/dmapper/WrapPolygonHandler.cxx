@@ -40,8 +40,123 @@ using resourcemodel::resolveSprmProps;
 
 namespace dmapper {
 
+WrapPolygon::WrapPolygon()
+{
+}
+
+WrapPolygon::~WrapPolygon()
+{
+}
+
+void WrapPolygon::addPoint(const awt::Point & rPoint)
+{
+    mPoints.push_back(rPoint);
+}
+
+WrapPolygon::Points_t::const_iterator WrapPolygon::begin() const
+{
+    return mPoints.begin();
+}
+
+WrapPolygon::Points_t::const_iterator WrapPolygon::end() const
+{
+    return mPoints.end();
+}
+
+WrapPolygon::Points_t::iterator WrapPolygon::begin()
+{
+    return mPoints.begin();
+}
+
+WrapPolygon::Points_t::iterator WrapPolygon::end()
+{
+    return mPoints.end();
+}
+
+size_t WrapPolygon::size() const
+{
+    return mPoints.size();
+}
+
+WrapPolygon::Pointer_t WrapPolygon::move(const awt::Point & rPoint)
+{
+    WrapPolygon::Pointer_t pResult(new WrapPolygon);
+
+    Points_t::iterator aIt = begin();
+    Points_t::iterator aItEnd = end();
+
+    while (aIt != aItEnd)
+    {
+        awt::Point aPoint(aIt->X + rPoint.X, aIt->Y + rPoint.Y);
+        pResult->addPoint(aPoint);
+        aIt++;
+    }
+
+    return pResult;
+}
+
+WrapPolygon::Pointer_t WrapPolygon::scale(const Fraction & rFractionX, const Fraction & rFractionY)
+{
+    WrapPolygon::Pointer_t pResult(new WrapPolygon);
+
+    Points_t::iterator aIt = begin();
+    Points_t::iterator aItEnd = end();
+
+    while (aIt != aItEnd)
+    {
+        awt::Point aPoint(Fraction(aIt->X) * rFractionX, Fraction(aIt->Y) * rFractionY);
+        pResult->addPoint(aPoint);
+        aIt++;
+    }
+
+    return pResult;
+}
+
+WrapPolygon::Pointer_t WrapPolygon::correctWordWrapPolygon(const awt::Size & rSrcSize, const awt::Size & rDstSize)
+{
+    WrapPolygon::Pointer_t pResult;
+
+    const sal_uInt32 nWrap100Percent = 21600;
+
+    Fraction aMove(nWrap100Percent, rSrcSize.Width);
+    aMove = aMove * Fraction(15, 1);
+    awt::Point aMovePoint(aMove, 0);
+    pResult = move(aMovePoint);
+
+    Fraction aScaleX(nWrap100Percent, Fraction(nWrap100Percent) + aMove);
+    Fraction aScaleY(nWrap100Percent, Fraction(nWrap100Percent) - aMove);
+    pResult = pResult->scale(aScaleX, aScaleY);
+
+    Fraction aScaleDestX(rDstSize.Width, nWrap100Percent);
+    Fraction aScaleDestY(rDstSize.Height, nWrap100Percent);
+    pResult = pResult->scale(aScaleDestX, aScaleDestY);
+
+    return pResult;
+}
+
+drawing::PointSequenceSequence WrapPolygon::getPointSequenceSequence() const
+{
+    drawing::PointSequenceSequence aPolyPolygon(1L);
+    drawing::PointSequence * pPolygon = aPolyPolygon.getArray();
+    pPolygon->realloc(size());
+
+    sal_uInt32 n = 0;
+    Points_t::const_iterator aIt = begin();
+    Points_t::const_iterator aItEnd = end();
+
+    while (aIt != aItEnd)
+    {
+        (*pPolygon)[n] = *aIt;
+        ++n;
+        aIt++;
+    }
+
+    return aPolyPolygon;
+}
+
 WrapPolygonHandler::WrapPolygonHandler()
 : LoggedProperties(dmapper_logger, "WrapPolygonHandler")
+, mpPolygon(new WrapPolygon)
 {
 }
 
@@ -82,7 +197,7 @@ void WrapPolygonHandler::lcl_sprm(Sprm & sprm)
             resolveSprmProps(*this, sprm);
 
             awt::Point aPoint(mnX, mnY);
-            mPoints.push_back(aPoint);
+            mpPolygon->addPoint(aPoint);
         }
         break;
     default:
@@ -93,20 +208,9 @@ void WrapPolygonHandler::lcl_sprm(Sprm & sprm)
     }
 }
 
-drawing::PointSequenceSequence WrapPolygonHandler::getPolygon()
+WrapPolygon::Pointer_t WrapPolygonHandler::getPolygon()
 {
-    drawing::PointSequenceSequence aPolyPolygon(1L);
-    drawing::PointSequence * pPolygon = aPolyPolygon.getArray();
-    pPolygon->realloc(mPoints.size());
-
-    sal_uInt32 n = 0;
-    for (Points_t::const_iterator aIt = mPoints.begin(); aIt != mPoints.end(); aIt++)
-    {
-        (*pPolygon)[n] = *aIt;
-        ++n;
-    }
-
-    return aPolyPolygon;
+    return mpPolygon;
 }
 
 }}
