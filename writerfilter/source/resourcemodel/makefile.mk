@@ -49,6 +49,7 @@ NOOPTFILES= \
     $(SLO)$/qnametostr.obj
 
 SLOFILES= \
+    $(SLO)$/Fraction.obj \
     $(SLO)$/LoggedResources.obj \
     $(SLO)$/Protocol.obj \
     $(SLO)$/ResourceModelHelper.obj \
