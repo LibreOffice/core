@@ -154,7 +154,7 @@ bool RtfExport::CollapseScriptsforWordOk( USHORT nScript, USHORT nWhich )
 
 void RtfExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub_StrLen nLen )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     std::vector< OUString > aStarts;
     std::vector< OUString > aEnds;
@@ -182,7 +182,7 @@ void RtfExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xub
 
 void RtfExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     std::vector<OUString> aStarts;
     std::vector<OUString> aEnds;
@@ -195,7 +195,7 @@ void RtfExport::AppendBookmark( const OUString& rName, bool /*bSkip*/ )
 
 void RtfExport::WriteChar( sal_Unicode )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     /* WriteChar() has nothing to do for rtf. */
 }
@@ -245,7 +245,7 @@ void RtfExport::BuildNumbering()
 
 void RtfExport::WriteNumbering()
 {
-    OSL_TRACE("%s start", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s start", OSL_THIS_FUNC);
 
     if ( !pUsedNumTbl )
         return; // no numbering is used
@@ -258,12 +258,12 @@ void RtfExport::WriteNumbering()
     NumberingDefinitions();
     Strm() << '}';
 
-    OSL_TRACE("%s end", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
 void RtfExport::WriteRevTab()
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     int nRevAuthors = pDoc->GetRedlineTbl().Count();
 
@@ -291,7 +291,7 @@ void RtfExport::WriteRevTab()
 void RtfExport::WriteHeadersFooters( BYTE nHeadFootFlags,
         const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt, BYTE /*nBreakCode*/ )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     // headers
     if ( nHeadFootFlags & nsHdFtFlags::WW8_HEADER_EVEN )
@@ -316,19 +316,19 @@ void RtfExport::WriteHeadersFooters( BYTE nHeadFootFlags,
 
 void RtfExport::OutputField( const SwField* pFld, ww::eField eFldType, const String& rFldCmd, BYTE nMode )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     m_pAttrOutput->WriteField_Impl( pFld, eFldType, rFldCmd, nMode );
 }
 
 void RtfExport::WriteFormData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 {
-    OSL_TRACE("TODO: %s", __PRETTY_FUNCTION__);
+    OSL_TRACE("TODO: %s", OSL_THIS_FUNC);
 }
 
 void RtfExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 {
-    OSL_TRACE("TODO: %s", __PRETTY_FUNCTION__);
+    OSL_TRACE("TODO: %s", OSL_THIS_FUNC);
 }
 
 void RtfExport::DoComboBox(const rtl::OUString& /*rName*/,
@@ -337,21 +337,21 @@ void RtfExport::DoComboBox(const rtl::OUString& /*rName*/,
                              const rtl::OUString& /*rSelected*/,
                              uno::Sequence<rtl::OUString>& /*rListItems*/)
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     // this is handled in RtfAttributeOutput::OutputFlyFrame_Impl
 }
 
 void RtfExport::DoFormText(const SwInputField* /*pFld*/)
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     // this is hanled in RtfAttributeOutput::OutputFlyFrame_Impl
 }
 
 ULONG RtfExport::ReplaceCr( BYTE )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     // Completely unused for Rtf export... only here for code sharing
     // purpose with binary export
@@ -368,21 +368,21 @@ void RtfExport::WriteFonts()
 
 void RtfExport::WriteStyles()
 {
-    OSL_TRACE("%s start", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s start", OSL_THIS_FUNC);
     pStyles->OutputStylesTable();
-    OSL_TRACE("%s end", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
 void RtfExport::WriteMainText()
 {
-    OSL_TRACE("%s start", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s start", OSL_THIS_FUNC);
     WriteText();
-    OSL_TRACE("%s end", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
 void RtfExport::WriteInfo()
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
     Strm() << '{' << OOO_STRING_SVTOOLS_RTF_INFO;
 
     SwDocShell *pDocShell(pDoc->GetDocShell());
@@ -420,7 +420,7 @@ void RtfExport::WriteInfo()
 
 void RtfExport::WritePageDescTable()
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     // Write page descriptions (page styles)
     USHORT nSize = pDoc->GetPageDescCnt();
@@ -677,7 +677,7 @@ void RtfExport::PrepareNewPageDesc( const SfxItemSet* pSet,
         const SwNode& rNd, const SwFmtPageDesc* pNewPgDescFmt,
         const SwPageDesc* pNewPgDesc )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
     const SwSectionFmt* pFmt = GetSectionFormat( rNd );
     const ULONG nLnNm = GetSectionLineNo( pSet, rNd );
 
@@ -695,7 +695,7 @@ bool RtfExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
 {
     bool bRet( false );
 
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     if (SFX_ITEM_SET != rFmt.GetItemState(RES_PARATR_NUMRULE, false))
     {
@@ -716,21 +716,21 @@ bool RtfExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
 
 void RtfExport::OutputGrfNode( const SwGrfNode& )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     /* noop, see RtfAttributeOutput::FlyFrameGraphic */
 }
 
 void RtfExport::OutputOLENode( const SwOLENode& )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     /* noop, see RtfAttributeOutput::FlyFrameOLE */
 }
 
 void RtfExport::AppendSection( const SwPageDesc* pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
 
     m_pSections->AppendSection( pPageDesc, pFmt, nLnNum );
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
@@ -898,7 +898,7 @@ OString RtfExport::OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEn
 
 OString RtfExport::OutString(const String &rStr, rtl_TextEncoding eDestEnc)
 {
-    OSL_TRACE("%s, rStr = '%s'", __PRETTY_FUNCTION__,
+    OSL_TRACE("%s, rStr = '%s'", OSL_THIS_FUNC,
             OUStringToOString( OUString( rStr ), eCurrentEncoding ).getStr());
     OStringBuffer aBuf;
     int nUCMode = 1;
@@ -926,7 +926,7 @@ USHORT RtfExport::GetColor( const Color& rColor ) const
 {
     for (RtfColorTbl::const_iterator it=m_aColTbl.begin() ; it != m_aColTbl.end(); it++ )
         if ((*it).second == rColor) {
-            OSL_TRACE("%s returning %d (%d,%d,%d)", __PRETTY_FUNCTION__, (*it).first, rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue());
+            OSL_TRACE("%s returning %d (%d,%d,%d)", OSL_THIS_FUNC, (*it).first, rColor.GetRed(), rColor.GetGreen(), rColor.GetBlue());
             return (*it).first;
         }
     OSL_ENSURE( FALSE, "No such Color in m_aColTbl!" );
@@ -1105,7 +1105,7 @@ USHORT RtfExport::GetRedline( const String& rAuthor )
 
 void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, BOOL bCheckForFirstPage )
 {
-    OSL_TRACE("%s start", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s start", OSL_THIS_FUNC);
     const SwPageDesc *pSave = pAktPageDesc;
 
     pAktPageDesc = &rPgDsc;
@@ -1155,7 +1155,7 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, 
 
     pAktPageDesc = pSave;
     //bOutPageDesc = bOldOut;
-    OSL_TRACE("%s end", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
 void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
@@ -1173,7 +1173,7 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
             return;
     }
 
-    OSL_TRACE("%s start", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s start", OSL_THIS_FUNC);
 
     Strm() << (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERY : OOO_STRING_SVTOOLS_RTF_FOOTERY);
     OutLong( pAktPageDesc->GetMaster().
@@ -1189,16 +1189,16 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
     WriteHeaderFooterText(pAktPageDesc->GetMaster(), bHeader);
     Strm() << '}';
 
-    OSL_TRACE("%s end", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
 void RtfExport::WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_Char* pStr)
 {
-    OSL_TRACE("%s start", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s start", OSL_THIS_FUNC);
 
     m_pAttrOutput->WriteHeaderFooter_Impl( rFmt, bHeader, pStr );
 
-    OSL_TRACE("%s end", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
 class SwRTFWriter : public Writer
@@ -1211,7 +1211,7 @@ class SwRTFWriter : public Writer
 
 SwRTFWriter::SwRTFWriter( const String& /*rFltName*/, const String & rBaseURL )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
     SetBaseURL( rBaseURL );
 }
 
@@ -1220,7 +1220,7 @@ SwRTFWriter::~SwRTFWriter()
 
 ULONG SwRTFWriter::WriteStream()
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
     RtfExport aExport( NULL, pDoc, new SwPaM( *pCurPam->End(), *pCurPam->Start() ), pCurPam, this );
     aExport.ExportDocument( true );
     return 0;
@@ -1228,7 +1228,7 @@ ULONG SwRTFWriter::WriteStream()
 
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL ExportRTF( const String& rFltName, const String& rBaseURL, WriterRef& xRet )
 {
-    OSL_TRACE("%s", __PRETTY_FUNCTION__);
+    OSL_TRACE("%s", OSL_THIS_FUNC);
     xRet = new SwRTFWriter( rFltName, rBaseURL );
 }
 

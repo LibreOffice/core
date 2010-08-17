@@ -187,7 +187,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceMan
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
 {
-    OSL_TRACE("%s, pImplName is '%s'", __PRETTY_FUNCTION__, pImplName);
+    OSL_TRACE("%s, pImplName is '%s'", OSL_THIS_FUNC, pImplName);
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void* pRet = 0;
 
