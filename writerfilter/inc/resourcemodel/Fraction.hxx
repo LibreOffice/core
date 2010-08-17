@@ -34,10 +34,17 @@ namespace resourcemodel {
 
 class Fraction
 {
+public:
     explicit Fraction(sal_Int32 nNumerator, sal_Int32 nDenominator = 1);
+    explicit Fraction(const Fraction & a, const Fraction & b);
     virtual ~Fraction();
 
-    Fraction operator=(const Fraction & rFraction) const;
+    void init(sal_Int32 nNumerator, sal_Int32 nDenominator);
+    void assign(const Fraction & rFraction);
+
+    Fraction inverse() const;
+
+    Fraction operator=(const Fraction & rFraction);
     Fraction operator+(const Fraction & rFraction) const;
     Fraction operator-(const Fraction & rFraction) const;
     Fraction operator*(const Fraction & rFraction) const;
