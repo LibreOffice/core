@@ -122,6 +122,8 @@ public:
     virtual void lcl_info(const string & info);
     virtual void lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
     virtual void lcl_endShape( );
+
+    void handleWrapTextValue(sal_uInt32 nVal);
 };
 
 typedef boost::shared_ptr< GraphicImport >          GraphicImportPtr;

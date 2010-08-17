@@ -225,6 +225,7 @@ public:
     sal_Int32 nWrap;
     bool      bOpaque;
     bool      bContour;
+    bool      bContourOutside;
     WrapPolygon::Pointer_t mpWrapPolygon;
     bool      bIgnoreWRK;
 
@@ -288,6 +289,7 @@ public:
         ,nWrap(0)
         ,bOpaque( true )
         ,bContour(false)
+        ,bContourOutside(true)
         ,bIgnoreWRK(true)
         ,nLeftMargin(319)
         ,nRightMargin(319)
@@ -365,6 +367,27 @@ GraphicImport::~GraphicImport()
 {
     delete m_pImpl;
 }
+
+void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
+{
+    switch (nVal)
+    {
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides: // 90920;
+        m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
+        break;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left: // 90921;
+        m_pImpl->nWrap = text::WrapTextMode_LEFT;
+        break;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_right: // 90922;
+        m_pImpl->nWrap = text::WrapTextMode_RIGHT;
+        break;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_largest: // 90923;
+        m_pImpl->nWrap = text::WrapTextMode_DYNAMIC;
+        break;
+    default:;
+    }
+}
+
 /*-- 01.11.2006 09:45:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1011,29 +1034,26 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_WrapTight_wrapText: // 90934;
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            m_pImpl->bContour = true;
+            m_pImpl->bContourOutside = true;
+
+            handleWrapTextValue(val.getInt());
+
+            break;
         case NS_ooxml::LN_CT_WrapThrough_wrapText:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->bContour = true;
-            //no break;
+            m_pImpl->bContourOutside = false;
+
+            handleWrapTextValue(val.getInt());
+
+            break;
         case NS_ooxml::LN_CT_WrapSquare_wrapText: //90928;
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            switch ( val.getInt() )
-            {
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides: // 90920;
-                    m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
-                break;
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left: // 90921;
-                    m_pImpl->nWrap = text::WrapTextMode_LEFT;
-                break;
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_right: // 90922;
-                    m_pImpl->nWrap = text::WrapTextMode_RIGHT;
-                break;
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_largest: // 90923;
-                    m_pImpl->nWrap = text::WrapTextMode_DYNAMIC;
-                break;
-                default:;
-            }
-        break;
+
+            handleWrapTextValue(val.getInt());
+            break;
         case NS_ooxml::LN_shape:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             {
@@ -1625,7 +1645,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND_CONTOUR ),
                     uno::makeAny(m_pImpl->bContour));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_OUTSIDE ),
-                    uno::makeAny(true));
+                    uno::makeAny(m_pImpl->bContourOutside));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_LEFT_MARGIN ),
                     uno::makeAny(m_pImpl->nLeftMargin));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_RIGHT_MARGIN ),
