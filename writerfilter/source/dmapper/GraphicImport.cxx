@@ -25,38 +25,44 @@
  *
  ************************************************************************/
 
-#include "GraphicImport.hxx"
-#include "GraphicHelpers.hxx"
-
-#include <dmapper/DomainMapper.hxx>
-#include <PropertyMap.hxx>
-#include <doctok/resourceids.hxx>
-#include <ooxml/resourceids.hxx>
-#include <ConversionHelper.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
-
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
-#include <com/sun/star/text/XTextContent.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <dmapper/DomainMapper.hxx>
+#include <doctok/resourceids.hxx>
+#include <ooxml/resourceids.hxx>
+#include <resourcemodel/ResourceModelHelper.hxx>
+
+#include "ConversionHelper.hxx"
+#include "GraphicHelpers.hxx"
+#include "GraphicImport.hxx"
+#include "PropertyMap.hxx"
+#include "WrapPolygonHandler.hxx"
 #include "dmapperLoggers.hxx"
 
 namespace writerfilter {
+
+using resourcemodel::resolveSprmProps;
+
 namespace dmapper
 {
 using namespace ::std;
@@ -219,6 +225,7 @@ public:
     sal_Int32 nWrap;
     bool      bOpaque;
     bool      bContour;
+    drawing::PointSequenceSequence mContourPolyPolygon;
     bool      bIgnoreWRK;
 
     sal_Int32 nLeftMargin;
@@ -281,6 +288,7 @@ public:
         ,nWrap(0)
         ,bOpaque( true )
         ,bContour(false)
+        ,mContourPolyPolygon(0)
         ,bIgnoreWRK(true)
         ,nLeftMargin(319)
         ,nRightMargin(319)
@@ -1004,6 +1012,7 @@ void GraphicImport::lcl_attribute(Id nName, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_WrapTight_wrapText: // 90934;
+        case NS_ooxml::LN_CT_WrapThrough_wrapText:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->bContour = true;
             //no break;
@@ -1362,12 +1371,12 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Anchor_effectExtent: // 90979;
         case NS_ooxml::LN_EG_WrapType_wrapSquare: // 90945;
         case NS_ooxml::LN_EG_WrapType_wrapTight: // 90946;
+        case NS_ooxml::LN_EG_WrapType_wrapThrough:
         case NS_ooxml::LN_CT_Anchor_docPr: // 90980;
         case NS_ooxml::LN_CT_Anchor_cNvGraphicFramePr: // 90981;
         case NS_ooxml::LN_CT_Anchor_a_graphic: // 90982;
         case NS_ooxml::LN_CT_WrapPath_start: // 90924;
         case NS_ooxml::LN_CT_WrapPath_lineTo: // 90925;
-        case NS_ooxml::LN_CT_WrapTight_wrapPolygon: // 90933;
         case NS_ooxml::LN_graphic_graphic:
         case NS_ooxml::LN_pic_pic:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
@@ -1379,6 +1388,17 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
             }
         }
         break;
+        case NS_ooxml::LN_CT_WrapTight_wrapPolygon:
+        case NS_ooxml::LN_CT_WrapThrough_wrapPolygon:
+            /* WRITERFILTERSTATUS: done: 100, planned: 4, spent: 2 */
+            {
+                WrapPolygonHandler aHandler;
+
+                resolveSprmProps(aHandler, rSprm);
+
+                m_pImpl->mContourPolyPolygon = aHandler.getPolygon();
+            }
+            break;
         case NS_ooxml::LN_CT_Anchor_positionH: // 90976;
         {
             // Use a special handler for the positionning
@@ -1428,10 +1448,6 @@ void GraphicImport::lcl_sprm(Sprm & rSprm)
         case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->nWrap = text::WrapTextMode_NONE;
-        break;
-        case NS_ooxml::LN_EG_WrapType_wrapThrough: // 90947;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
         break;
         case 0xf010:
         case 0xf011:
@@ -1620,8 +1636,13 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ),
                     uno::makeAny(m_pImpl->nBottomMargin));
 
+                uno::Any aContourPolyPolygon;
+                if (m_pImpl->mContourPolyPolygon.getLength() >0)
+                    aContourPolyPolygon <<= m_pImpl->mContourPolyPolygon;
+
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
-                    uno::Any());
+                    aContourPolyPolygon);
+
                 if( m_pImpl->eColorMode == drawing::ColorMode_STANDARD &&
                     m_pImpl->nContrast == -70 &&
                     m_pImpl->nBrightness == 70 )
