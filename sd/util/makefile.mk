@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.58 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,6 +51,8 @@ RESLIB1SRSFILES=\
     $(SRS)$/animui.srs			\
     $(SRS)$/slideshow.srs		\
     $(SRS)$/uitable.srs			\
+    $(SRS)$/view.srs			\
+    $(SRS)$/uiannotations.srs	\
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 # --- StarDraw DLL
@@ -65,13 +63,14 @@ SHL1IMPLIB= sdi
 
 # dynamic libraries
 SHL1STDLIBS+= \
+    $(EDITENGLIB) \
+    $(SVXCORELIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(BASICLIB) \
     $(CPPCANVASLIB) \
     $(BASEGFXLIB) \
     $(DRAWINGLAYERLIB) \
-    $(GOODIESLIB) \
     $(BASEGFXLIB) \
     $(SVTOOLLIB) \
     $(TKLIB) \
@@ -118,18 +117,21 @@ LIB3FILES=      \
             $(SLB)$/dlg.lib			\
             $(SLB)$/core.lib		\
             $(SLB)$/undo.lib		\
+            $(SLB)$/annotations.lib	\
+            $(SLB)$/text.lib		\
             $(SLB)$/helper.lib		\
             $(SLB)$/xml.lib			\
             $(SLB)$/cgm.lib			\
             $(SLB)$/uitable.lib		\
-            $(SLB)$/grf.lib
+            $(SLB)$/uiannotations.lib\
+            $(SLB)$/grf.lib \
+            $(SLB)$/controller.lib
 
 LIB5TARGET=$(SLB)$/sdraw3_2.lib
 LIB5FILES=      \
             $(SLB)$/html.lib		\
             $(SLB)$/filter.lib		\
             $(SLB)$/unoidl.lib		\
-            $(SLB)$/ppt.lib 		\
             $(SLB)$/animui.lib		\
             $(SLB)$/accessibility.lib	\
             $(SLB)$/toolpanel.lib		\
@@ -155,18 +157,19 @@ LIB6FILES=      								\
 # sdd
 SHL2TARGET= sdd$(DLLPOSTFIX)
 SHL2IMPLIB= sddimp
-SHL2VERSIONMAP= sdd.map
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=		$(SHL2TARGET)
 
 SHL2STDLIBS= \
             $(SFX2LIB) \
-            $(SVXLIB) \
+            $(SVXCORELIB) \
             $(SVTOOLLIB) \
             $(SVLLIB) \
             $(VCLLIB) \
                         $(SOTLIB) \
             $(TOOLSLIB) \
+              $(UNOTOOLSLIB)      \
             $(UCBHELPERLIB) \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
@@ -193,6 +196,8 @@ LIB4FILES=	\
 
 SHL4STDLIBS= \
     $(ISDLIB) \
+    $(EDITENGLIB) \
+    $(SVXCORELIB) \
     $(SVXLIB) \
     $(SFXLIB) \
     $(BASEGFXLIB) \
@@ -225,11 +230,41 @@ SHL4OBJS += $(SLO)$/pchname.obj \
 .ENDIF # "$(GUI)$(COM)" == "WNTMSC"
 
 # $(ISDLIB) is build in SHL1TARGET
-.IF "$(GUI)" == "UNX"
+.IF "$(GUI)"=="UNX" || ("$(COM)"=="GCC" && "$(GUI)"=="WNT")
 SHL4DEPN=$(SHL1TARGETN)
+SHL5DEPN=$(SHL1TARGETN)
 .ELSE
 SHL4DEPN=$(SHL1IMPLIBN)
+SHL5DEPN=$(SHL1IMPLIBN)
 .ENDIF
+
+# ppt import/export library
+SHL5TARGET    = sdfilt$(DLLPOSTFIX)
+SHL5IMPLIB    = sdfilti
+SHL5VERSIONMAP= sdfilt.map
+SHL5DEF       = $(MISC)$/$(SHL5TARGET).def
+SHL5LIBS      = $(SLB)$/ppt.lib $(SLB)$/eppt.lib
+
+DEF5NAME=$(SHL5TARGET)
+
+SHL5STDLIBS = $(ISDLIB) \
+              $(EDITENGLIB)       \
+              $(SVXCORELIB)       \
+              $(MSFILTERLIB)   \
+              $(SFX2LIB)          \
+              $(SVTOOLLIB)        \
+              $(SOTLIB)           \
+              $(VCLLIB)           \
+              $(SVLLIB)           \
+              $(SOTLIB)           \
+              $(UNOTOOLSLIB)      \
+              $(TOOLSLIB)         \
+              $(UCBHELPERLIB)     \
+              $(CPPUHELPERLIB)    \
+              $(CPPULIB)          \
+              $(SALLIB)           \
+              $(COMPHELPERLIB)    \
+              $(I18NISOLANGLIB)
 
 # --- Targets -------------------------------------------------------------
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdpage.hxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,7 @@
 #endif
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/presentation/FadeEffect.hpp>
+#include <com/sun/star/office/XAnnotation.hpp>
 
 #include <list>
 #include <functional>
@@ -105,6 +103,8 @@ namespace sd {
 
         bool operator==( const HeaderFooterSettings& rSettings ) const;
     };
+
+    typedef std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > > AnnotationVector;
 }
 
 namespace sd {
@@ -149,13 +149,13 @@ protected:
     Orientation meOrientation;             // Print-Orientation
     SdPageLink* mpPageLink;               // PageLink (nur bei gelinkten Seiten)
 
+    sd::AnnotationVector    maAnnotations;
+
     /** holds the smil animation sequences for this page */
     ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > mxAnimationNode;
 
     /** a helper class to manipulate effects inside the main sequence */
     boost::shared_ptr< sd::MainSequence > mpMainSequence;
-
-    void        AdjustBackgroundSize();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 
@@ -192,11 +192,13 @@ public:
 
     sd::ShapeList&  GetPresentationShapeList() { return maPresentationShapeList; }
 
+    void EnsureMasterPageDefaultBackground();
     SdrObject*      CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rectangle& rRect, BOOL bInsert=FALSE);
     SdrObject*      CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert);
-    SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1 );
+    SdrObject*      GetPresObj(PresObjKind eObjKind, int nIndex = 1, bool bFuzzySearch = false );
     PresObjKind     GetPresObjKind(SdrObject* pObj) const;
     String          GetPresObjText(PresObjKind eObjKind) const;
+    SfxStyleSheet* GetStyleSheetForMasterPageBackground() const;
     SfxStyleSheet*  GetStyleSheetForPresObj(PresObjKind eObjKind) const;
     bool            RestoreDefaultText( SdrObject* pObj );
 
@@ -390,6 +392,12 @@ public:
             master page should not be deleted automatically.
     */
     bool IsPrecious (void) const;
+
+    void createAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
+    void addAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation, int nIndex = -1 );
+    void removeAnnotation( const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation );
+    const sd::AnnotationVector& getAnnotations() const { return maAnnotations; }
+    bool hasAnnotations() const { return !maAnnotations.empty(); }
 
 private:
     bool mbIsPrecious;

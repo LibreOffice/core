@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: screenupdater.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,9 +108,30 @@ namespace slideshow
              */
             void requestImmediateUpdate();
 
+            class UpdateLock {public: virtual void Activate (void) = 0; };
+
+            /** Call this method to create a lock instead of calling
+                lockUpdates() and unlockUpdates() directly.
+                @param bStartLocked
+                    When <TRUE/> then the UpdateLock is created already
+                    locked. When <FALSE/> then Activate() has to be called in order
+                    to lock the lock.
+            */
+            ::boost::shared_ptr<UpdateLock> createLock (const bool bStartLocked);
+
+            /** Lock updates to prevent intermediate repaints.
+            */
+            void lockUpdates (void);
+
+            /** When called as often as lockUpdates() then commitUpdates()
+                is called.
+            */
+            void unlockUpdates (void);
+
         private:
             struct ImplScreenUpdater;
             boost::scoped_ptr<ImplScreenUpdater> mpImpl;
+
         };
     }
 }

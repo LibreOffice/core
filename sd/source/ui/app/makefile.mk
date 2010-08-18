@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.19 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -77,8 +73,11 @@ SLOFILES =	\
         $(SLO)$/tmplctrl.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/sddll1.obj      \
+        $(SLO)$/sddll2.obj      \
         $(SLO)$/sdxfer.obj		\
         $(SLO)$/sdmod1.obj		\
+        $(SLO)$/tbxww.obj		\
         $(SLO)$/tmplctrl.obj
 
 .IF "$(GUI)" == "WNT"
@@ -99,14 +98,10 @@ $(INCCOM)$/sddll0.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
     echo \#define DLL_NAME \"libsd$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE			# "$(GUI)"=="UNX"
-.IF "$(USE_SHELL)"!="4nt"
     echo \#define DLL_NAME \"sd$(DLLPOSTFIX).DLL\" >$@
-.ELSE			# "$(USE_SHELL)"!="4nt"
-    echo #define DLL_NAME "sd$(DLLPOSTFIX).DLL" >$@
-.ENDIF			#  "$(USE_SHELL)"!="4nt"
 .ENDIF			# "$(GUI)"=="UNX"
 
-LOCALIZE_ME =  tbxids_tmpl.src menuids2_tmpl.src accel_tmpl.src menu_tmpl.src menuids_tmpl.src menuids4_tmpl.src popup2_tmpl.src toolbox2_tmpl.src accelids_tmpl.src menuportal_tmpl.src menuids3_tmpl.src
+LOCALIZE_ME =  tbxids_tmpl.src menuids2_tmpl.src menu_tmpl.src menuids_tmpl.src menuids4_tmpl.src popup2_tmpl.src toolbox2_tmpl.src menuportal_tmpl.src menuids3_tmpl.src
 
 
 .INCLUDE :  target.mk

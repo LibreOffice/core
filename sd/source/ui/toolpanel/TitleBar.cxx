@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TitleBar.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,7 @@
 #include <vcl/bitmapex.hxx>
 #include <tools/color.hxx>
 #include <svx/xdash.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/svdobj.hxx>
@@ -63,13 +60,12 @@ namespace sd { namespace toolpanel {
 const int TitleBar::snIndentationWidth = 16;
 
 TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eType, bool bIsExpandable)
-: ::Window (pParent)
+: ::Window (pParent, WB_TABSTOP)
 , TreeNode(this)
 , meType(eType)
 , msTitle(rsTitle)
 , mbExpanded(false)
 , mbFocused(false)
-, mbMouseOver(false)
 , mpDevice(new VirtualDevice (*this))
 , mbIsExpandable (bIsExpandable)
 {
@@ -80,10 +76,6 @@ TitleBar::TitleBar ( ::Window* pParent, const String& rsTitle, TitleBarType eTyp
     // Change the mouse pointer shape so that it acts as a mouse over effect.
     switch (meType)
     {
-        case TBT_WINDOW_TITLE:
-            break;
-
-        case TBT_CONTROL_TITLE:
         case TBT_SUB_CONTROL_HEADLINE:
             if (mbIsExpandable)
                 SetPointer (POINTER_REFHAND);
@@ -173,14 +165,6 @@ void TitleBar::Paint (const Rectangle& rBoundingBox)
 
     switch (meType)
     {
-        case TBT_WINDOW_TITLE:
-            PaintWindowTitleBar ();
-            break;
-
-        case TBT_CONTROL_TITLE:
-            PaintPanelControlTitle ();
-            break;
-
         case TBT_SUB_CONTROL_HEADLINE:
             PaintSubPanelHeadLineBar ();
             break;
@@ -216,24 +200,31 @@ bool TitleBar::IsExpanded (void) const
 }
 
 
-
-
-void TitleBar::SetFocus (bool bFlag)
+void TitleBar::SetEnabledState(bool bFlag)
 {
-    mbFocused = bFlag;
+    if(bFlag)
+        Enable();
+    else
+        Disable();
     Invalidate ();
 }
 
 
 
 
-void TitleBar::SetMouseOver (bool bFlag)
+void TitleBar::GetFocus()
 {
-    if (bFlag != mbMouseOver)
-    {
-        mbMouseOver = bFlag;
-        //        Invalidate();
-    }
+    mbFocused = true;
+    Invalidate();
+}
+
+
+
+
+void TitleBar::LoseFocus()
+{
+    mbFocused = false;
+    Invalidate();
 }
 
 
@@ -246,14 +237,8 @@ bool TitleBar::HasExpansionIndicator (void) const
     {
         switch (meType)
         {
-            case TBT_CONTROL_TITLE:
             case TBT_SUB_CONTROL_HEADLINE:
                 bHasExpansionIndicator = true;
-                break;
-
-            default:
-            case TBT_WINDOW_TITLE:
-                // bHasExpansionIndicator remains false
                 break;
         }
     }
@@ -272,21 +257,6 @@ Image TitleBar::GetExpansionIndicator (void) const
         USHORT nResourceId = 0;
         switch (meType)
         {
-            case TBT_CONTROL_TITLE:
-                if (mbExpanded)
-                    if (bHighContrastMode)
-                        nResourceId = BMP_TRIANGLE_DOWN_H;
-                    else
-                        nResourceId = BMP_TRIANGLE_DOWN;
-                else
-                    if (bHighContrastMode)
-                        nResourceId = BMP_TRIANGLE_RIGHT_H;
-                    else
-                        nResourceId = BMP_TRIANGLE_RIGHT;
-
-                aIndicator = IconCache::Instance().GetIcon(nResourceId);
-                break;
-
             case TBT_SUB_CONTROL_HEADLINE:
                 if (mbExpanded)
                     if (bHighContrastMode)
@@ -301,44 +271,10 @@ Image TitleBar::GetExpansionIndicator (void) const
 
                 aIndicator = IconCache::Instance().GetIcon(nResourceId);
                 break;
-
-            default:
-            case TBT_WINDOW_TITLE:
-                // aIndicator remains empty Image.
-                break;
         }
     }
 
     return aIndicator;
-}
-
-
-
-
-void TitleBar::PaintPanelControlTitle (void)
-{
-    int nWidth (GetOutputSizePixel().Width());
-    Rectangle aTextBox (CalculateTextBoundingBox (nWidth, true));
-    PaintBackground(CalculateTitleBarBox(aTextBox, nWidth));
-    Rectangle aFocusBox (PaintExpansionIndicator (aTextBox));
-    PaintText (aTextBox);
-    aFocusBox.Union (aTextBox);
-    aFocusBox.Left() += 2;
-    PaintFocusIndicator (aFocusBox);
-    PaintMouseOverIndicator (aTextBox);
-}
-
-
-
-
-void TitleBar::PaintWindowTitleBar (void)
-{
-    Rectangle aTextBox (CalculateTextBoundingBox (
-        GetOutputSizePixel().Width(),
-        true));
-
-    PaintText (aTextBox);
-    PaintFocusIndicator (aTextBox);
 }
 
 
@@ -364,7 +300,6 @@ void TitleBar::PaintSubPanelHeadLineBar (void)
     aFocusBox.Left() -= 2;
     aFocusBox.Right() += 1;
     PaintFocusIndicator (aFocusBox);
-    PaintMouseOverIndicator (aTextBox);
 }
 
 
@@ -396,21 +331,6 @@ void TitleBar::PaintFocusIndicator (const Rectangle& rTextBox)
     }
     else
         HideFocus ();
-}
-
-
-
-
-void TitleBar::PaintMouseOverIndicator (const Rectangle& rTextBox)
-{
-    if (mbMouseOver)
-    {
-        Rectangle aBox (rTextBox);
-        // Show the line below the focus rectangle (which is painted
-        // after and over the mouse over indicator.)
-        //        aBox.Bottom() += 2;
-        //        DrawLine (aBox.BottomLeft(), aBox.BottomRight());
-    }
 }
 
 
@@ -454,12 +374,18 @@ void TitleBar::PaintText (const Rectangle& rTextBox)
 
 USHORT TitleBar::GetTextStyle (void)
 {
-    return TEXT_DRAW_LEFT
-        | TEXT_DRAW_TOP
-        | TEXT_DRAW_MULTILINE
-        | TEXT_DRAW_WORDBREAK;
+     if(IsEnabled())
+     {
+         return TEXT_DRAW_LEFT
+             | TEXT_DRAW_TOP
+             | TEXT_DRAW_MULTILINE
+             | TEXT_DRAW_WORDBREAK;
+     }
+     else
+     {
+         return TEXT_DRAW_DISABLE;
+     }
 }
-
 
 
 
@@ -471,29 +397,6 @@ void TitleBar::PaintBackground (const Rectangle& rTitleBarBox)
 
     switch (meType)
     {
-        case TBT_CONTROL_TITLE:
-        {
-            mpDevice->SetFillColor (
-                GetSettings().GetStyleSettings().GetDialogColor());
-            mpDevice->DrawRect(rTitleBarBox);
-
-            mpDevice->SetFillColor();
-            mpDevice->SetLineColor (
-                GetSettings().GetStyleSettings().GetLightColor());
-            mpDevice->DrawLine(
-                rTitleBarBox.TopLeft(),rTitleBarBox.TopRight());
-            mpDevice->DrawLine(
-                rTitleBarBox.TopLeft(),rTitleBarBox.BottomLeft());
-
-            mpDevice->SetLineColor (
-                GetSettings().GetStyleSettings().GetShadowColor());
-            mpDevice-> DrawLine(
-                rTitleBarBox.BottomLeft(), rTitleBarBox.BottomRight());
-            mpDevice->DrawLine(
-                rTitleBarBox.TopRight(), rTitleBarBox.BottomRight());
-        }
-        break;
-
         case TBT_SUB_CONTROL_HEADLINE:
         {
             Color aColor (GetSettings().GetStyleSettings().GetDialogColor());
@@ -523,10 +426,6 @@ void TitleBar::PaintBackground (const Rectangle& rTitleBarBox)
                 Point(rTitleBarBox.Right(), rTitleBarBox.Bottom()));
         }
         break;
-
-        default:
-        case TBT_WINDOW_TITLE:
-            break;
     }
 }
 
@@ -577,16 +476,6 @@ Rectangle TitleBar::CalculateTitleBarBox (
 
    switch (meType)
    {
-       case TBT_WINDOW_TITLE:
-           aTitleBarBox.Bottom() += aTitleBarBox.Top();
-           aTitleBarBox.Top() = 0;
-           break;
-
-        case TBT_CONTROL_TITLE:
-           aTitleBarBox.Bottom() += aTitleBarBox.Top();
-           aTitleBarBox.Top() = 0;
-           break;
-
         case TBT_SUB_CONTROL_HEADLINE:
            aTitleBarBox.Top() -= 3;
            aTitleBarBox.Bottom() += 3;
@@ -603,15 +492,8 @@ Rectangle TitleBar::CalculateTitleBarBox (
 
 
 
-void TitleBar::MouseMove (const MouseEvent& rEvent)
+void TitleBar::MouseMove (const MouseEvent& )
 {
-    Point aRelativePosition = rEvent.GetPosPixel() - GetPosPixel();
-    Size aSize = GetSizePixel();
-    SetMouseOver (
-        aRelativePosition.X() >= 0
-        && aRelativePosition.Y() >= 0
-        && aRelativePosition.X() < aSize.Width()
-        && aRelativePosition.Y() < aSize.Height());
 }
 
 

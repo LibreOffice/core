@@ -1,13 +1,10 @@
-/*************************************************************************
+    /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawview.cxx,v $
- * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +33,8 @@
 #endif
 #include <svx/svdpagv.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/style.hxx>
-#include <svx/outliner.hxx>
+#include <svl/style.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _VIEW3D_HXX //autogen
 #include <svx/view3d.hxx>
 #endif
@@ -48,12 +45,12 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdorect.hxx>
-#include <svtools/poolitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/bulitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svx/numitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/poolitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <svl/itempool.hxx>
+#include <editeng/numitem.hxx>
+#include <svl/whiter.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
@@ -306,8 +303,7 @@ BOOL DrawView::SetAttributes(const SfxItemSet& rSet,
                     String aTemplateName(aLayoutName);
 
                     if (ePresObjKind == PRESOBJ_TITLE ||
-                        ePresObjKind == PRESOBJ_NOTES ||
-                        ePresObjKind == PRESOBJ_BACKGROUND)
+                        ePresObjKind == PRESOBJ_NOTES)
                     {
                         // Presentation object (except outline)
                         SfxStyleSheet* pSheet = rPage.GetStyleSheetForPresObj( ePresObjKind );
@@ -580,19 +576,10 @@ void DrawView::HideSdrPage()
     ::sd::View::HideSdrPage();
 }
 
-SdrObject* DrawView::GetMaxToBtmObj(SdrObject* pObj) const
-{
-    if( pObj )
-    {
-        SdPage* pPage = (SdPage*)pObj->GetPage();
-        if( pPage && pPage->IsMasterPage() )
-            return pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;
-    }
-    return NULL;
-}
-
 void DrawView::DeleteMarked()
 {
+    OSL_TRACE( "DrawView::DeleteMarked() - enter" );
+
     sd::UndoManager* pUndoManager = mpDoc->GetUndoManager();
     DBG_ASSERT( pUndoManager, "sd::DrawView::DeleteMarked(), ui action without undo manager!?" );
 
@@ -605,33 +592,60 @@ void DrawView::DeleteMarked()
     }
 
     SdPage* pPage = 0;
+    bool bResetLayout = false;
 
-    const SdrMarkList& rList = GetMarkedObjectList();
-    ULONG nMarkCount         = rList.GetMarkCount();
-    for (ULONG nMark = 0; nMark < nMarkCount; nMark++)
+    const ULONG nMarkCount = GetMarkedObjectList().GetMarkCount();
+    if( nMarkCount )
     {
-        SdrObject* pObj = rList.GetMark(nMark)->GetMarkedSdrObj();
-        if( pObj && !pObj->IsEmptyPresObj() && pObj->GetUserCall() )
+        SdrMarkList aList( GetMarkedObjectList() );
+        for (ULONG nMark = 0; nMark < nMarkCount; nMark++)
         {
-            pPage = dynamic_cast< SdPage* >( pObj->GetPage() );
-            PresObjKind ePresObjKind;
-            if( pPage && ((ePresObjKind = pPage->GetPresObjKind(pObj)) != PRESOBJ_NONE))
+            SdrObject* pObj = aList.GetMark(nMark)->GetMarkedSdrObj();
+            if( pObj && !pObj->IsEmptyPresObj() && pObj->GetUserCall() )
             {
-                SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
-                bool bVertical = pTextObj && pTextObj->IsVerticalWriting();
-                Rectangle aRect( pObj->GetLogicRect() );
-                pPage->InsertAutoLayoutShape( 0, ePresObjKind, bVertical, aRect, true );
+                pPage = static_cast< SdPage* >( pObj->GetPage() );
+                PresObjKind ePresObjKind;
+                if( pPage && ((ePresObjKind = pPage->GetPresObjKind(pObj)) != PRESOBJ_NONE))
+                {
+                    switch( ePresObjKind )
+                    {
+                    case PRESOBJ_GRAPHIC:
+                    case PRESOBJ_OBJECT:
+                    case PRESOBJ_CHART:
+                    case PRESOBJ_ORGCHART:
+                    case PRESOBJ_TABLE:
+                    case PRESOBJ_CALC:
+                    case PRESOBJ_IMAGE:
+                    case PRESOBJ_MEDIA:
+                        ePresObjKind = PRESOBJ_OUTLINE;
+                        break;
+                    default:
+                        break;
+                    }
+                    SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+                    bool bVertical = pTextObj && pTextObj->IsVerticalWriting();
+                    Rectangle aRect( pObj->GetLogicRect() );
+                    SdrObject* pNewObj = pPage->InsertAutoLayoutShape( 0, ePresObjKind, bVertical, aRect, true );
+
+                    pPage->SetObjectOrdNum( pNewObj->GetOrdNum(), pObj->GetOrdNum() );
+
+                    bResetLayout = true;
+
+                    OSL_TRACE( "DrawView::InsertAutoLayoutShape() - InsertAutoLayoutShape" );
+                }
             }
         }
     }
 
     ::sd::View::DeleteMarked();
 
-    if( pPage )
+    if( pPage && bResetLayout )
         pPage->SetAutoLayout( pPage->GetAutoLayout() );
 
     if( pUndoManager )
         pUndoManager->LeaveListAction();
+
+    OSL_TRACE( "DrawView::InsertAutoLayoutShape() - leave" );
 }
 
 } // end of namespace sd

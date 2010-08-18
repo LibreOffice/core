@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: zigzagwipe.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include "transitiontools.hxx"
 #include "zigzagwipe.hxx"
 
@@ -58,10 +56,8 @@ ZigZagWipe::ZigZagWipe( sal_Int32 nZigs ) : m_zigEdge( 1.0 / nZigs )
 
 ::basegfx::B2DPolyPolygon ZigZagWipe::operator () ( double t )
 {
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.translate( (1.0 + m_zigEdge) * t, 0.0 );
     ::basegfx::B2DPolyPolygon res(m_stdZigZag);
-    res.transform( aTransform );
+    res.transform(basegfx::tools::createTranslateB2DHomMatrix((1.0 + m_zigEdge) * t, 0.0));
     return res;
 }
 
@@ -70,8 +66,8 @@ ZigZagWipe::ZigZagWipe( sal_Int32 nZigs ) : m_zigEdge( 1.0 / nZigs )
     ::basegfx::B2DPolyPolygon res( createUnitRect() );
     ::basegfx::B2DPolygon poly( m_stdZigZag );
     poly.flip();
-    ::basegfx::B2DHomMatrix aTransform;
-    aTransform.translate( (1.0 + m_zigEdge) * (1.0 - t) / 2.0, 0.0 );
+    basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+        (1.0 + m_zigEdge) * (1.0 - t) / 2.0, 0.0));
     poly.transform( aTransform );
     res.append( poly );
     aTransform.scale( -1.0, 1.0 );

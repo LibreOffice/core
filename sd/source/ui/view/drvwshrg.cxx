@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drvwshrg.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,9 +43,7 @@
 #include <svx/svxids.hrc>
 #include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
-#ifndef _AVMEDIA_MEDIAPLAYER_HXX
 #include <avmedia/mediaplayer.hxx>
-#endif
 
 
 #include "app.hrc"
@@ -79,8 +74,6 @@ namespace sd {
 |* SFX-Slotmap und Standardinterface deklarieren
 |*
 \************************************************************************/
-
-SFX_DECL_TYPE(13);
 
 
 SFX_IMPL_INTERFACE(DrawViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL))
@@ -113,6 +106,7 @@ SFX_IMPL_INTERFACE(GraphicViewShell, SfxShell, SdResId(STR_DRAWVIEWSHELL)) //SOH
 {
     SFX_POPUPMENU_REGISTRATION( SdResId(RID_DRAW_TEXTOBJ_INSIDE_POPUP) );
     SFX_CHILDWINDOW_CONTEXT_REGISTRATION( SID_NAVIGATOR );
+    SFX_CHILDWINDOW_REGISTRATION( SID_TASKPANE );
     SFX_CHILDWINDOW_REGISTRATION( SfxTemplateDialogWrapper::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxFontWorkChildWindow::GetChildWindowId() );
     SFX_CHILDWINDOW_REGISTRATION( SvxColorChildWindow::GetChildWindowId() );

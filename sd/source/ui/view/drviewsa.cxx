@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviewsa.cxx,v $
- * $Revision: 1.49.70.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,21 +32,21 @@
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef _SVX_SIZEITEM
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #endif
 #include <svx/svdlayer.hxx>
 #ifndef _SVX_ZOOMITEM
 #include <svx/zoomitem.hxx>
 #endif
 #include <svx/svdpagv.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/zoomslideritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
@@ -65,6 +62,7 @@
 #include <svtools/cliplistener.hxx>
 #include <svx/float3d.hxx>
 
+#include "view/viewoverlaymanager.hxx"
 #include "app.hrc"
 #include "helpids.h"
 #include "strings.hrc"
@@ -83,6 +81,7 @@
 #include "SdUnoDrawView.hxx"
 #include "slideshow.hxx"
 #include "ToolBarManager.hxx"
+#include "annotationmanager.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -138,15 +137,10 @@ void SAL_CALL ScannerEventListener::disposing( const ::com::sun::star::lang::Eve
 |*
 \************************************************************************/
 
-DrawViewShell::DrawViewShell (
-    SfxViewFrame* pFrame,
-    ViewShellBase& rViewShellBase,
-    ::Window* pParentWindow,
-    PageKind ePageKind,
-    FrameView* pFrameViewArgument)
-    : ViewShell (pFrame, pParentWindow, rViewShellBase),
-      maTabControl(this, pParentWindow),
-      mbIsInSwitchPage(false)
+DrawViewShell::DrawViewShell( SfxViewFrame* pFrame, ViewShellBase& rViewShellBase, ::Window* pParentWindow, PageKind ePageKind, FrameView* pFrameViewArgument )
+: ViewShell (pFrame, pParentWindow, rViewShellBase)
+, maTabControl(this, pParentWindow)
+, mbIsInSwitchPage(false)
 {
     if (pFrameViewArgument != NULL)
         mpFrameView = pFrameViewArgument;
@@ -157,30 +151,15 @@ DrawViewShell::DrawViewShell (
 
 /*************************************************************************
 |*
-|* Copy-Konstruktor
-|*
-\************************************************************************/
-
-DrawViewShell::DrawViewShell (
-    SfxViewFrame* pFrame,
-    ::Window* pParentWindow,
-    const DrawViewShell& rShell)
-    : ViewShell(pFrame, pParentWindow, rShell),
-      maTabControl(this, pParentWindow),
-      mbIsInSwitchPage(false)
-{
-    mpFrameView = new FrameView(GetDoc());
-    Construct (GetDocSh(), PK_STANDARD);
-}
-
-/*************************************************************************
-|*
 |* Destruktor
 |*
 \************************************************************************/
 
 DrawViewShell::~DrawViewShell()
 {
+    mpAnnotationManager.reset();
+    mpViewOverlayManager.reset();
+
     OSL_ASSERT (GetViewShell()!=NULL);
 
     if( mxScannerListener.is() )
@@ -422,6 +401,9 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
                                 ::com::sun::star::uno::UNO_QUERY );
         }
     }
+
+    mpAnnotationManager.reset( new AnnotationManager( GetViewShellBase() ) );
+    mpViewOverlayManager.reset( new ViewOverlayManager( GetViewShellBase() ) );
 }
 
 
@@ -857,6 +839,20 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
         }
     }
 
+}
+
+void DrawViewShell::ExecuteAnnotation (SfxRequest& rRequest)
+{
+    if( mpAnnotationManager.get() )
+        mpAnnotationManager->ExecuteAnnotation( rRequest );
+}
+
+// --------------------------------------------------------------------
+
+void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
+{
+    if( mpAnnotationManager.get() )
+        mpAnnotationManager->GetAnnotationState( rItemSet );
 }
 
 

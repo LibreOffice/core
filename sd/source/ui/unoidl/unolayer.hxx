@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unolayer.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <com/sun/star/drawing/XLayerManager.hpp>
 
 #include <cppuhelper/implbase5.hxx>
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <unomodel.hxx>
 
@@ -106,7 +103,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayerManager > mxLayerManager;
 
     SdrLayer*           pLayer;
-    SvxItemPropertySet  aPropSet;
+    const SvxItemPropertySet*   pPropSet;
 
     sal_Bool get( LayerAttribute what ) throw();
     void set( LayerAttribute what, sal_Bool flag ) throw();

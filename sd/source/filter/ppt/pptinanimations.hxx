@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pptinanimations.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,15 +31,13 @@
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
-#ifndef _SD_PPTANIMATIONS_HXX
 #include "pptanimations.hxx"
-#endif
 #include <animations.hxx>
 
 #ifdef DBG_ANIM_LOG
 #include <stdio.h>
 #endif
-#include <svx/svdfppt.hxx>
+#include <filter/msfilter/svdfppt.hxx>
 
 #include <list>
 
@@ -67,7 +62,6 @@ private:
     void importAnimationContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xParent );
     void importTimeContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void importAnimationNodeContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
-    void importAnimationSubContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
 
     void importAnimateSetContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
     void importAnimateFilterContainer( const Atom* pAtom, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode );
@@ -114,18 +108,18 @@ private:
 
 #ifdef DBG_ANIM_LOG
     FILE * mpFile;
+    void dump_anim_group( const Atom* pAtom, const AnimationNode& rNode, const PropertySet& rSet, bool bOpen );
+    void dump( const rtl::OUString& rString );
+    void dump( sal_uInt32 nLen, bool bNewLine = true );
 #endif
 
     void dump_atom_header( const Atom* pAtom, bool bOpen, bool bAppend );
     void dump_atom( const Atom* pAtom, bool bNewLine = true );
-    void dump( sal_uInt32 nLen, bool bNewLine = true );
-    void dump_anim_group( const Atom* pAtom, const AnimationNode& rNode, const PropertySet& rSet, bool bOpen );
     void dump_target( ::com::sun::star::uno::Any& rAny );
     void dump( ::com::sun::star::uno::Any& rAny );
     void dump( const PropertySet& rSet );
     void dump( const AnimationNode& rNode );
     void dump( const char * pText );
-    void dump( const rtl::OUString& rString );
     void dump( const char * pText, sal_Int32 nInt );
     void dump( const char * pText, double fDouble );
     void dump( const char * pText, const char * pText2 );

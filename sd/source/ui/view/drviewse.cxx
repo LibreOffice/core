@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviewse.cxx,v $
- * $Revision: 1.77 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,16 +31,17 @@
 #include <com/sun/star/presentation/XPresentation2.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hdl>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #include <comphelper/processfactory.hxx>
 
 #include "undo/undomanager.hxx"
 #include <vcl/waitobj.hxx>
-#include <svtools/aeitem.hxx>
-#include <svx/editstat.hxx>
+#include <svl/aeitem.hxx>
+#include <editeng/editstat.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/fmshell.hxx>
 #include <vcl/scrbar.hxx>
@@ -51,25 +49,24 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdograf.hxx>
-#include <svtools/eitem.hxx>
-#include <svx/eeitem.hxx>
+#include <svl/eitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxids.hrc>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/ruler.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/ipclient.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <avmedia/mediawindow.hxx>
-#include <svtools/urihelper.hxx>
-#include <sfx2/topfrm.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/docfile.hxx>
 
 #include "DrawViewShell.hxx"
@@ -106,7 +103,7 @@
 #include "anminfo.hxx"
 #include "optsitem.hxx"
 #include "Window.hxx"
-
+#include "fuformatpaintbrush.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -203,13 +200,22 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
 
     if(HasCurrentFunction())
     {
-        if(GetOldFunction() == GetCurrentFunction())
+        if( (nSId == SID_FORMATPAINTBRUSH) && (GetCurrentFunction()->GetSlotID() == SID_TEXTEDIT) )
         {
-            SetOldFunction(0);
+            // save text edit mode for format paintbrush!
+            SetOldFunction( GetCurrentFunction() );
+        }
+        else
+        {
+            if(GetOldFunction() == GetCurrentFunction())
+            {
+                SetOldFunction(0);
+            }
         }
 
         if ( nSId != SID_TEXTEDIT && nSId != SID_ATTR_CHAR && nSId != SID_TEXT_FITTOSIZE &&
              nSId != SID_ATTR_CHAR_VERTICAL && nSId != SID_TEXT_FITTOSIZE_VERTICAL &&
+             nSId != SID_FORMATPAINTBRUSH &&
              mpDrawView->IsTextEdit() )
         {
             mpDrawView->SdrEndTextEdit();
@@ -526,8 +532,18 @@ void DrawViewShell::FuPermanent(SfxRequest& rReq)
         }
         break;
 
+        case SID_FORMATPAINTBRUSH:
+        {
+            SetCurrentFunction( FuFormatPaintBrush::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
+            rReq.Done();
+            SfxBindings& rBind = GetViewFrame()->GetBindings();
+            rBind.Invalidate( nSId );
+            rBind.Update( nSId );
+            break;
+        }
+
         default:
-        break;
+           break;
     }
 
     if(HasOldFunction())
@@ -727,11 +743,19 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             if ( rMarkList.GetMark(0) && !mpDrawView->IsAction() )
             {
                 SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
-                mpDrawView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+                const bool bUndo = mpDrawView->IsUndoEnabled();
+                if( bUndo )
+                    mpDrawView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+
                 mpDrawView->UnmarkAllPoints();
-                mpDrawView->AddUndo(new SdrUndoGeoObj(*pPathObj));
+
+                if( bUndo )
+                    mpDrawView->AddUndo(new SdrUndoGeoObj(*pPathObj));
+
                 pPathObj->ToggleClosed();
-                mpDrawView->EndUndo();
+
+                if( bUndo )
+                    mpDrawView->EndUndo();
             }
             rReq.Done();
         }
@@ -1378,6 +1402,9 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         }
         break;
 
+        case SID_TRANSLITERATE_SENTENCE_CASE:
+        case SID_TRANSLITERATE_TITLE_CASE:
+        case SID_TRANSLITERATE_TOGGLE_CASE:
         case SID_TRANSLITERATE_UPPER:
         case SID_TRANSLITERATE_LOWER:
         case SID_TRANSLITERATE_HALFWIDTH:
@@ -1393,6 +1420,15 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
 
                 switch( nSId )
                 {
+                    case SID_TRANSLITERATE_SENTENCE_CASE:
+                        nType = TransliterationModulesExtra::SENTENCE_CASE;
+                        break;
+                    case SID_TRANSLITERATE_TITLE_CASE:
+                        nType = TransliterationModulesExtra::TITLE_CASE;
+                        break;
+                    case SID_TRANSLITERATE_TOGGLE_CASE:
+                        nType = TransliterationModulesExtra::TOGGLE_CASE;
+                        break;
                     case SID_TRANSLITERATE_UPPER:
                         nType = TransliterationModules_LOWERCASE_UPPERCASE;
                         break;
@@ -1552,7 +1588,7 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
 
                 SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pMarkedObj, true);
                 pInfo->meClickAction = presentation::ClickAction_DOCUMENT;
-                pInfo->maBookmark = sTargetURL;
+                pInfo->SetBookmark( sTargetURL );
             }
         }
         catch( uno::Exception& )

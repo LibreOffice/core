@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuconrec.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include <svx/dialmgr.hxx>
 
 #include "app.hrc"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnedit.hxx>
@@ -53,9 +50,9 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdocirc.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/xtable.hxx>
 
 // #88751#
@@ -67,7 +64,7 @@
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
 // #109583#
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 

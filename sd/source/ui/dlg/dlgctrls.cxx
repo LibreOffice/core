@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgctrls.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,12 +47,6 @@ struct FadeEffectLBImpl
 
 FadeEffectLB::FadeEffectLB( Window* pParent, SdResId Id )
 :   ListBox( pParent, Id ),
-    mpImpl( new FadeEffectLBImpl )
-{
-}
-
-FadeEffectLB::FadeEffectLB( Window* pParent, WinBits aWB )
-:   ListBox( pParent, aWB ),
     mpImpl( new FadeEffectLBImpl )
 {
 }

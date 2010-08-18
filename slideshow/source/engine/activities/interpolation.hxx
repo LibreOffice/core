@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: interpolation.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,11 @@
 #ifndef INCLUDED_SLIDESHOW_INTERPOLATION_HXX
 #define INCLUDED_SLIDESHOW_INTERPOLATION_HXX
 
-#include "lerp.hxx"
+#include <basegfx/tools/lerp.hxx>
 
-namespace slideshow
+namespace basegfx
 {
-    namespace internal
+    namespace tools
     {
         // Interpolator specializations
         // ============================
@@ -45,9 +42,10 @@ namespace slideshow
         // not-straight-forward-interpolatable types
 
         /// Specialization for RGBColor, to employ color-specific interpolator
-        template<> RGBColor lerp< RGBColor >( const RGBColor&   rFrom,
-                                              const RGBColor&   rTo,
-                                              double            t          )
+        template<> ::slideshow::internal::RGBColor lerp< ::slideshow::internal::RGBColor >(
+            const ::slideshow::internal::RGBColor& rFrom,
+            const ::slideshow::internal::RGBColor& rTo,
+            double                                 t     )
         {
             return interpolate( rFrom, rTo, t );
         }
@@ -81,14 +79,20 @@ namespace slideshow
                         "lerp<bool> called" );
             return rTo;
         }
+    }
+}
 
+namespace slideshow
+{
+    namespace internal
+    {
         template< typename ValueType > struct Interpolator
         {
             ValueType operator()( const ValueType&  rFrom,
                                   const ValueType&  rTo,
                                   double            t ) const
             {
-                return lerp( rFrom, rTo, t );
+                return basegfx::tools::lerp( rFrom, rTo, t );
             }
         };
 

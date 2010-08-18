@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: color.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -266,6 +263,19 @@ namespace slideshow
                                                  getSaturation(),
                                                  getLuminance() ) );
             return RGBColor( aColor.mnRed, aColor.mnGreen, aColor.mnBlue );
+        }
+
+        RGBColor::RGBColor(const RGBColor& rLHS)
+        {
+            RGBColor(rLHS.getRed(), rLHS.getGreen(), rLHS.getBlue());
+        }
+
+        RGBColor& RGBColor::operator=( const RGBColor& rLHS ){
+
+            maRGBTriple.mnRed = rLHS.getRed();
+            maRGBTriple.mnGreen = rLHS.getGreen();
+            maRGBTriple.mnBlue = rLHS.getBlue();
+            return *this;
         }
 
         HSLColor operator+( const HSLColor& rLHS, const HSLColor& rRHS )

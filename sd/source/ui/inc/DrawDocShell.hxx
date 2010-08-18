@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DrawDocShell.hxx,v $
- * $Revision: 1.17.76.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +49,6 @@ class SfxPrinter;
 struct SdrDocumentStreamInfo;
 struct SpellCallbackInfo;
 class AbstractSvxNameDialog;
-class SdFormatClipboard;
 
 namespace sd {
 
@@ -74,8 +70,12 @@ public:
     DrawDocShell (
         SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED,
         BOOL bSdDataObj=FALSE,
-        DocumentType=DOCUMENT_TYPE_IMPRESS,
-        BOOL bScriptSupport=TRUE);
+        DocumentType=DOCUMENT_TYPE_IMPRESS);
+
+    DrawDocShell (
+        const sal_uInt64 nModelCreationFlags,
+        BOOL bSdDataObj=FALSE,
+        DocumentType=DOCUMENT_TYPE_IMPRESS);
 
     DrawDocShell (
         SdDrawDocument* pDoc,
@@ -115,7 +115,6 @@ public:
 
     sd::ViewShell* GetViewShell() { return mpViewShell; }
     ::sd::FrameView* GetFrameView();
-    ::Window* GetWindow() const;
     ::sd::FunctionReference GetDocShellFunction() const { return mxDocShellFunction; }
     void SetDocShellFunction( const ::sd::FunctionReference& xFunction );
 
@@ -164,13 +163,6 @@ public:
     UINT16                  GetStyleFamily() const { return mnStyleFamily; }
     void                    SetStyleFamily( UINT16 nSF ) { mnStyleFamily = nSF; }
 
-    BOOL                    HasSpecialProgress() const { return ( mpSpecialProgress != NULL && mpSpecialProgressHdl != NULL ); }
-    void                    ReleaseSpecialProgress() { mpSpecialProgress = NULL; mpSpecialProgressHdl = NULL; }
-    void                    SetSpecialProgress( SfxProgress* _pProgress, Link* pLink ) { mpSpecialProgress = _pProgress; mpSpecialProgressHdl = pLink; }
-    SfxProgress*            GetSpecialProgress() { return( HasSpecialProgress() ? mpSpecialProgress : NULL ); }
-
-    sal_Bool                IsNewDocument() const;
-
     /** executes the SID_OPENDOC slot to let the framework open a document
         with the given URL and this document as a referer */
     void                    OpenBookmark( const String& rBookmarkURL );
@@ -214,9 +206,6 @@ public:
 
     void                    ClearUndoBuffer();
 
-public:
-    SdFormatClipboard*      mpFormatClipboard;
-
 protected:
 
     SdDrawDocument*         mpDoc;
@@ -234,9 +223,6 @@ protected:
     BOOL                    mbInDestruction;
     BOOL                    mbOwnPrinter;
     BOOL                    mbNewDocument;
-
-    static SfxProgress*     mpSpecialProgress;
-    static Link*            mpSpecialProgressHdl;
 
     bool                    mbOwnDocument;          // if true, we own mpDoc and will delete it in our d'tor
     void                    Construct(bool bClipboard);

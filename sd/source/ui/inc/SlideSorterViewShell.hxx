@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlideSorterViewShell.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,12 +52,6 @@ class SlideSorterViewShell
 public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SD_IF_SDSLIDESORTERVIEWSHELL)
-
-    static SfxShell* CreateInstance (
-        sal_Int32 nId,
-        SfxShell* pParent,
-        void* pUserData,
-        ViewShellBase& rBase);
 
     static ::boost::shared_ptr<SlideSorterViewShell> Create(
         SfxViewFrame* pFrame,

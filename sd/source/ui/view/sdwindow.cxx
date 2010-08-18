@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdwindow.cxx,v $
- * $Revision: 1.38.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,10 @@
 #include <sfx2/request.hxx>
 
 #include <sfx2/viewfrm.hxx>
+#include <svx/svxids.hrc>
 
+#include <editeng/outliner.hxx>
+#include <editeng/editview.hxx>
 
 #include "app.hrc"
 #include "helpids.h"
@@ -46,12 +46,8 @@
 #include "FrameView.hxx"
 #include "OutlineViewShell.hxx"
 #include "drawdoc.hxx"
-#ifndef SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
 #include "AccessibleDrawDocumentView.hxx"
-#endif
-#ifndef SD_WINDOW_UPDATER_HXX
 #include "WindowUpdater.hxx"
-#endif
 
 namespace sd {
 
@@ -149,35 +145,6 @@ void Window::SetViewShell (ViewShell* pViewSh)
             pWindowUpdater->RegisterWindow (this);
     }
 }
-
-
-
-
-/*************************************************************************
-|*
-|* Die Haelfte des Sichtbaren Bereich eines anderen Fensters darstellen
-|*
-\************************************************************************/
-
-void Window::ShareViewArea(Window* pOtherWin)
-{
-    mpShareWin      = pOtherWin;
-    maViewOrigin    = pOtherWin->maViewOrigin;
-    maViewSize      = pOtherWin->maViewSize;
-    mnMinZoom       = pOtherWin->mnMinZoom;
-    mnMaxZoom       = pOtherWin->mnMaxZoom;
-    mbCenterAllowed = pOtherWin->mbCenterAllowed;
-
-    long nZoom = pOtherWin->GetZoom();
-    MapMode aMap(GetMapMode());
-    aMap.SetScaleX(Fraction(nZoom, 100));
-    aMap.SetScaleY(Fraction(nZoom, 100));
-    aMap.SetOrigin(pOtherWin->GetMapMode().GetOrigin());
-    SetMapMode(aMap);
-}
-
-
-
 
 void Window::CalcMinZoom()
 {
@@ -1203,6 +1170,40 @@ void Window::DropScroll(const Point& rMousePos)
     {
         OSL_TRACE ("::sd::Window::CreateAccessible: no view shell");
     return ::Window::CreateAccessible ();
+    }
+}
+
+XubString Window::GetSurroundingText() const
+{
+    if ( mpViewShell->GetShellType() == ViewShell::ST_OUTLINE )
+    {
+        return XubString();
+    }
+    else if ( mpViewShell->GetView()->IsTextEdit() )
+    {
+        OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
+        return pOLV->GetEditView().GetSurroundingText();
+    }
+    else
+    {
+        return XubString();
+    }
+}
+
+Selection Window::GetSurroundingTextSelection() const
+{
+    if ( mpViewShell->GetShellType() == ViewShell::ST_OUTLINE )
+    {
+        return Selection( 0, 0 );
+    }
+    else if ( mpViewShell->GetView()->IsTextEdit() )
+    {
+        OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
+        return pOLV->GetEditView().GetSurroundingTextSelection();
+    }
+    else
+    {
+        return Selection( 0, 0 );
     }
 }
 

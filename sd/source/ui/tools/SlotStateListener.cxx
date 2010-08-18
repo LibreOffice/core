@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlotStateListener.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,16 +43,6 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 
 namespace sd { namespace tools {
-
-
-SlotStateListener::SlotStateListener (void)
-    : SlotStateListenerInterfaceBase(maMutex),
-      maCallback(),
-      mxDispatchProviderWeak(NULL)
-{
-}
-
-
 
 
 SlotStateListener::SlotStateListener (
@@ -123,14 +110,6 @@ void SlotStateListener::ObserveSlot (const ::rtl::OUString& rSlotName)
             xDispatch->addStatusListener(this,aURL);
         }
     }
-}
-
-
-
-
-bool SlotStateListener::IsValid (void) const
-{
-    return maRegisteredURLList.size() > 0;
 }
 
 

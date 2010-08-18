@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdtreelb.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <sot/formats.hxx>
 #include <sot/storage.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <svx/svditer.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svdoole2.hxx>
@@ -59,6 +56,7 @@
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>
 #include <svtools/embedtransfer.hxx>
+#include <tools/diagnose_ex.h>
 #include <ViewShell.hxx>
 
 using namespace com::sun::star;
@@ -86,7 +84,13 @@ public:
 };
 
 
-BOOL SdPageObjsTLB::bIsInDrag = FALSE;
+BOOL SD_DLLPRIVATE SdPageObjsTLB::bIsInDrag = FALSE;
+
+BOOL SdPageObjsTLB::IsInDrag()
+{
+    return bIsInDrag;
+}
+
 sal_uInt32 SdPageObjsTLB::SdPageObjsTransferable::mnListBoxDropFormatId = SAL_MAX_UINT32;
 
 // -----------------------------------------
@@ -727,61 +731,6 @@ List* SdPageObjsTLB::GetSelectEntryList( USHORT nDepth )
 
 /*************************************************************************
 |*
-|* Alle Pages (und Objekte) des Docs zurueckgeben
-|* nType == 0 -> Seiten
-|* nType == 1 -> Objekte
-|*
-\************************************************************************/
-
-List* SdPageObjsTLB::GetBookmarkList( USHORT nType )
-{
-    List* pList = NULL;
-
-    if( GetBookmarkDoc() )
-    {
-        SdPage*      pPage = NULL;
-        String*      pName = NULL;
-        USHORT       nPage = 0;
-        const USHORT nMaxPages = mpBookmarkDoc->GetSdPageCount( PK_STANDARD );
-
-        while( nPage < nMaxPages )
-        {
-            pPage = mpBookmarkDoc->GetSdPage( nPage, PK_STANDARD );
-
-            if( nType == 0 ) // Seitennamen einfuegen
-            {
-                if( !pList )
-                    pList = new List();
-
-                pName = new String( pPage->GetRealName() );
-                pList->Insert( pName, LIST_APPEND );
-            }
-            else // Objektnamen einfuegen
-            {
-                // Ueber Objekte der Seite iterieren
-                SdrObjListIter aIter( *pPage, IM_DEEPWITHGROUPS );
-                while( aIter.IsMore() )
-                {
-                    SdrObject* pObj = aIter.Next();
-                    String aStr( GetObjectName( pObj ) );
-                    if( aStr.Len() )
-                    {
-                        if( !pList )
-                            pList = new List();
-
-                        pName = new String( aStr );
-                        pList->Insert( pName, LIST_APPEND );
-                    }
-                }
-            }
-            nPage++;
-        }
-    }
-    return( pList );
-}
-
-/*************************************************************************
-|*
 |* Eintraege werden erst auf Anforderung (Doppelklick) eingefuegt
 |*
 \************************************************************************/
@@ -1265,7 +1214,7 @@ sal_Int8 SdPageObjsTLB::ExecuteDrop( const ExecuteDropEvent& rEvt )
     }
     catch (com::sun::star::uno::Exception&)
     {
-        OSL_ASSERT(false);
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     if (nRet == DND_ACTION_NONE)

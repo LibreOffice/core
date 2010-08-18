@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdview3.cxx,v $
- * $Revision: 1.76 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,17 +33,15 @@
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <sot/filelist.hxx>
-#include <svtools/pathoptions.hxx>
-#ifndef _EDITDATA_HXX
-#include <svx/editdata.hxx>
-#endif
-#include <svtools/urlbmk.hxx>
+#include <unotools/pathoptions.hxx>
+#include <editeng/editdata.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/xexch.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/colritem.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
@@ -55,23 +50,19 @@
 #include <svx/svdetc.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sot/clsids.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 #include <sot/formats.hxx>
-#include <svx/outliner.hxx>
-#ifndef _EDITENG_HXX //autogen
-#include <svx/editeng.hxx>
-#endif
+#include <editeng/outliner.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/e3dundo.hxx>
 #include <svx/dbexch.hrc>
 #include <svx/unomodel.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/metaact.hxx>
-
+#include <svx/svxids.hrc>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include "DrawDocShell.hxx"
@@ -94,6 +85,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/stream.hxx>
 #include <vcl/cvtgrf.hxx>
+#include <svx/sdrhittesthelper.hxx>
 
 // --------------
 // - Namespaces -
@@ -327,7 +319,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
     if( bDrag )
     {
         SdrPageView* pPV = NULL;
-        PickObj( rPos, pPickObj, pPV );
+        PickObj( rPos, getHitTolLog(), pPickObj, pPV );
     }
 
     if( nPage != SDRPAGE_NOTFOUND )
@@ -423,9 +415,12 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             if( pO )
                             {
                                 // #i11702#
-                                BegUndo(String(SdResId(STR_MODIFYLAYER)));
-                                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), (SdrLayerID)nLayer));
-                                EndUndo();
+                                if( IsUndoEnabled() )
+                                {
+                                    BegUndo(String(SdResId(STR_MODIFYLAYER)));
+                                    AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoObjectLayerChange(*pO, pO->GetLayer(), (SdrLayerID)nLayer));
+                                    EndUndo();
+                                }
 
                                 pO->SetLayer( (SdrLayerID) nLayer );
                             }
@@ -504,9 +499,12 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                         pPage->InsertObject(pObj);
 
-                                        BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-                                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
-                                        EndUndo();
+                                        if( IsUndoEnabled() )
+                                        {
+                                            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+                                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
+                                            EndUndo();
+                                        }
 
                                         // #83525#
                                         ImpRememberOrigAndClone* pRem = new ImpRememberOrigAndClone;
@@ -715,7 +713,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                         SdrObject*      pObj = pModel->GetSdPage( 0, PK_STANDARD )->GetObj( 0 );
                         SdrObject*      pPickObj2 = NULL;
                         SdrPageView*    pPV = NULL;
-                        PickObj( rPos, pPickObj2, pPV );
+                        PickObj( rPos, getHitTolLog(), pPickObj2, pPV );
 
                         if( ( mnAction & DND_ACTION_MOVE ) && pPickObj2 && pObj )
                         {
@@ -734,14 +732,28 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             aVec -= aObjRect.TopLeft();
                             pNewObj->NbcMove( Size( aVec.X(), aVec.Y() ) );
 
-                            BegUndo( String( SdResId(STR_UNDO_DRAGDROP ) ) );
+                            const bool bUndo = IsUndoEnabled();
+
+                            if( bUndo )
+                                BegUndo( String( SdResId(STR_UNDO_DRAGDROP ) ) );
                             pNewObj->NbcSetLayer( pPickObj->GetLayer() );
                             SdrPage* pWorkPage = GetSdrPageView()->GetPage();
                             pWorkPage->InsertObject( pNewObj );
-                            AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
-                            AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject( *pPickObj2 ) );
+                            if( bUndo )
+                            {
+                                AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoNewObject( *pNewObj ) );
+                                AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject( *pPickObj2 ) );
+                            }
                             pWorkPage->RemoveObject( pPickObj2->GetOrdNum() );
-                            EndUndo();
+
+                            if( bUndo )
+                            {
+                                EndUndo();
+                            }
+                            else
+                            {
+                                SdrObject::Free(pPickObj2 );
+                            }
                             bChanged = TRUE;
                             mnAction = DND_ACTION_COPY;
                         }
@@ -750,8 +762,12 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                             SfxItemSet aSet( mpDoc->GetPool() );
 
                             // set new attributes to object
-                            BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
-                            AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
+                            const bool bUndo = IsUndoEnabled();
+                            if( bUndo )
+                            {
+                                BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
+                                AddUndo( mpDoc->GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
+                            }
                             aSet.Put( pObj->GetMergedItemSet() );
 
                             // Eckenradius soll nicht uebernommen werden.
@@ -771,11 +787,13 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                 aOldSet.Put(pPickObj->GetMergedItemSet());
                                 aNewSet.Put( pObj->GetMergedItemSet() );
 
-                                AddUndo( new E3dAttributesUndoAction( *mpDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, FALSE ) );
+                                if( bUndo )
+                                    AddUndo( new E3dAttributesUndoAction( *mpDoc, this, (E3dObject*) pPickObj, aNewSet, aOldSet, FALSE ) );
                                 pPickObj->SetMergedItemSetAndBroadcast( aNewSet );
                             }
 
-                            EndUndo();
+                            if( bUndo )
+                                EndUndo();
                             bChanged = TRUE;
                         }
                     }
@@ -1252,9 +1270,12 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
             *xStm >> aFillData;
 
-            BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
-            AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
-            EndUndo();
+            if( IsUndoEnabled() )
+            {
+                BegUndo( String( SdResId( STR_UNDO_DRAGDROP ) ) );
+                AddUndo( GetModel()->GetSdrUndoFactory().CreateUndoAttrObject( *pPickObj ) );
+                EndUndo();
+            }
 
             XFillAttrSetItem*   pSetItem = aFillData.GetXFillAttrSetItem();
             SfxItemSet          rSet = pSetItem->GetItemSet();
@@ -1282,11 +1303,11 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                 aHitPosT.Y() += n2HitLog;
                 aHitPosB.Y() -= n2HitLog;
 
-                if( bClosed                                          &&
-                    pPickObj->IsHit( aHitPosR, nHitLog, pVisiLayer ) &&
-                    pPickObj->IsHit( aHitPosL, nHitLog, pVisiLayer ) &&
-                    pPickObj->IsHit( aHitPosT, nHitLog, pVisiLayer ) &&
-                    pPickObj->IsHit( aHitPosB, nHitLog, pVisiLayer ) )
+                if( bClosed &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosR, nHitLog, *GetSdrPageView(), pVisiLayer, false) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosL, nHitLog, *GetSdrPageView(), pVisiLayer, false) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosT, nHitLog, *GetSdrPageView(), pVisiLayer, false) &&
+                    SdrObjectPrimitiveHit(*pPickObj, aHitPosB, nHitLog, *GetSdrPageView(), pVisiLayer, false) )
                 {
                     // area fill
                     if(eFill == XFILL_SOLID )

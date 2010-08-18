@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConfigurationClassifier.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,13 +87,10 @@ const ConfigurationClassifier::ResourceIdVector& ConfigurationClassifier::GetC2m
 
 
 
-
 const ConfigurationClassifier::ResourceIdVector& ConfigurationClassifier::GetC1andC2 (void) const
 {
     return maC1andC2;
 }
-
-
 
 
 void ConfigurationClassifier::PartitionResources (
@@ -225,8 +219,6 @@ void ConfigurationClassifier::CopyResources (
 }
 
 
-
-
 void ConfigurationClassifier::TraceResourceIdVector (
     const sal_Char* pMessage,
     const ResourceIdVector& rResources) const
@@ -241,8 +233,6 @@ void ConfigurationClassifier::TraceResourceIdVector (
             OUStringToOString(sResource, RTL_TEXTENCODING_UTF8).getStr());
     }
 }
-
-
 
 
 } } // end of namespace sd::framework

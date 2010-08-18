@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoaprms.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,8 +96,6 @@ public:
         pObject         (pObj),
         bInfoCreated    (bCreated)
         {}
-
-        SdAnimationPrmsUndoAction( SdDrawDocument* pTheDoc, SdrObject* pObj );
 
         void SetActive(BOOL bTheOldActive, BOOL bTheNewActive)
             { bOldActive = bTheOldActive; bNewActive = bTheNewActive; }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsQueueProcessor.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,6 @@
 #include "SlsQueueProcessor.hxx"
 #include "SlsCacheConfiguration.hxx"
 #include "SlsRequestQueue.hxx"
-#include "SlsIdleDetector.hxx"
 
 namespace sd { namespace slidesorter { namespace cache {
 
@@ -161,11 +157,12 @@ void QueueProcessor::ProcessRequests (void)
 {
     OSL_ASSERT(mpCacheContext.get()!=NULL);
 
-    while ( ! mrQueue.IsEmpty() && ! mbIsPaused)
+    // Never process more than one request at a time in order to prevent the
+    // lock up of the edit view.
+    if ( ! mrQueue.IsEmpty()
+        && ! mbIsPaused
+        &&  mpCacheContext->IsIdle())
     {
-        if ( ! mpCacheContext->IsIdle())
-            break;
-
         CacheKey aKey = NULL;
         RequestPriorityClass ePriorityClass (NOT_VISIBLE);
         {
@@ -182,25 +179,12 @@ void QueueProcessor::ProcessRequests (void)
 
         if (aKey != NULL)
             ProcessOneRequest(aKey, ePriorityClass);
-
-        // Requests of lower priority are processed one at a time.
-        {
-            ::osl::MutexGuard aGuard (mrQueue.GetMutex());
-            if ( ! mrQueue.IsEmpty())
-                if (mrQueue.GetFrontPriorityClass() > 0)
-                    break;
-        }
     }
 
     // Schedule the processing of the next element(s).
     {
         ::osl::MutexGuard aGuard (mrQueue.GetMutex());
         if ( ! mrQueue.IsEmpty())
-            /*
-            if (bIsShowingFullScreenShow)
-                Start(mnTimeBetweenRequestsWhenNotIdle);
-            else
-            */
             Start(mrQueue.GetFrontPriorityClass());
     }
 }

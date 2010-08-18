@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsGenericPageCache.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,12 +99,6 @@ public:
         const Size& rSize,
         bool bMayBeUpToDate = true);
 
-    /** Tell the cache to replace the bitmap associated with the given
-        request data with a new one that reflects recent changes in the
-        content of the page object.
-    */
-    void InvalidatePreviewBitmap (CacheKey aKey);
-
     /** Call this method when a view-object-contact object is being deleted
         and does not need (a) its current bitmap in the cache and (b) a
         requested a new bitmap.
@@ -126,10 +117,6 @@ public:
         use is to set the precious flag for the visible pages.
     */
     void SetPreciousFlag (CacheKey aKey, bool bIsPrecious);
-
-    /** Return <TRUE/> when there is no preview bitmap in the cache.
-    */
-    bool IsEmpty (void) const;
 
     void Pause (void);
     void Resume (void);

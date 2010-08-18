@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ResourceId.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -590,17 +587,6 @@ bool ResourceId::IsBoundToAnchor (
     }
 
     return true;
-}
-
-
-
-
-bool ResourceId::IsValid (void) const
-{
-    return maResourceURLs.size() == 0
-        || maResourceURLs[0].getLength()>0
-        || maResourceURLs.size() == 1;
-
 }
 
 

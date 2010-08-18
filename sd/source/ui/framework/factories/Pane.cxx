@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Pane.cxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,6 +108,63 @@ Reference<rendering::XCanvas> SAL_CALL Pane::getCanvas (void)
         mxCanvas = CreateCanvas();
 
     return mxCanvas;
+}
+
+
+
+
+//----- XPane2 ----------------------------------------------------------------
+
+sal_Bool SAL_CALL Pane::isVisible (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+
+    const ::Window* pWindow = GetWindow();
+    if (pWindow != NULL)
+        return pWindow->IsVisible();
+    else
+        return false;
+}
+
+
+
+
+void SAL_CALL Pane::setVisible (sal_Bool bIsVisible)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+
+    ::Window* pWindow = GetWindow();
+    if (pWindow != NULL)
+        pWindow->Show(bIsVisible);
+}
+
+
+
+
+Reference<accessibility::XAccessible> SAL_CALL Pane::getAccessible (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::Window* pWindow = GetWindow();
+    if (pWindow != NULL)
+        return pWindow->GetAccessible(FALSE);
+    else
+        return NULL;
+}
+
+
+
+
+void SAL_CALL Pane::setAccessible (
+    const Reference<accessibility::XAccessible>& rxAccessible)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::Window* pWindow = GetWindow();
+    if (pWindow != NULL)
+        pWindow->SetAccessible(rxAccessible);
 }
 
 

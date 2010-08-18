@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewShellBase.cxx,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#include <comphelper/processfactory.hxx>
+
+#include <com/sun/star/frame/UnknownModuleException.hpp>
+#include <com/sun/star/frame/XModuleManager.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 #include "ViewShellBase.hxx"
 #include <algorithm>
 #include "EventMultiplexer.hxx"
@@ -47,7 +51,6 @@
 #include "NotesChildWindow.hxx"
 #include "ViewShellManager.hxx"
 #include "DrawController.hxx"
-#include "PrintManager.hxx"
 #include "UpdateLockManager.hxx"
 #include "FrameView.hxx"
 #include "ViewTabBar.hxx"
@@ -55,16 +58,18 @@
 #include "drawdoc.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/printer.hxx>
 #include "DrawViewShell.hxx"
 #include "GraphicViewShell.hxx"
 #include "OutlineViewShell.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "PresentationViewShell.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "FormShellManager.hxx"
 #include "ToolBarManager.hxx"
+#include "taskpane/PanelId.hxx"
 #include "Window.hxx"
 #include "framework/ConfigurationController.hxx"
+#include "DocumentRenderer.hxx"
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
@@ -83,8 +88,10 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <comphelper/processfactory.hxx>
+#include <vcl/msgbox.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "fubullet.hxx"
 
@@ -94,6 +101,11 @@ using namespace sd;
 
 using ::sd::framework::FrameworkHelper;
 using ::rtl::OUString;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::frame;
+using namespace com::sun::star::container;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::beans;
 
 namespace {
 
@@ -150,12 +162,7 @@ public:
 
     ::boost::shared_ptr<UpdateLockManager> mpUpdateLockManager;
 
-    /// The print manager is responsible for printing documents.
-    ::boost::shared_ptr<PrintManager> mpPrintManager;
-
     ::boost::shared_ptr<FormShellManager> mpFormShellManager;
-
-    ::boost::shared_ptr<CustomHandleManager> mpCustomHandleManager;
 
     Implementation (ViewShellBase& rBase);
     ~Implementation (void);
@@ -272,11 +279,7 @@ ViewShellBase::ViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell*)
     : SfxViewShell (_pFrame,
-        SFX_VIEW_MAXIMIZE_FIRST
-        | SFX_VIEW_OPTIMIZE_EACH
-        | SFX_VIEW_DISABLE_ACCELS
-        | SFX_VIEW_OBJECTSIZE_EMBEDDED
-        | SFX_VIEW_CAN_PRINT
+          SFX_VIEW_CAN_PRINT
         | SFX_VIEW_HAS_PRINTOPTIONS),
       maMutex(),
       mpImpl(),
@@ -287,7 +290,6 @@ ViewShellBase::ViewShellBase (
     mpImpl->mpViewWindow.reset(new FocusForwardingWindow(_pFrame->GetWindow(),*this));
     mpImpl->mpViewWindow->SetBackground(Wallpaper());
     mpImpl->mpUpdateLockManager.reset(new UpdateLockManager(*this));
-    mpImpl->mpPrintManager.reset(new PrintManager(*this));
 
     _pFrame->GetWindow().SetBackground(Wallpaper());
 
@@ -457,13 +459,6 @@ ViewShellBase* ViewShellBase::GetViewShellBase (SfxViewFrame* pViewFrame)
 
 
 
-void ViewShellBase::GetMenuState (SfxItemSet& )
-{
-}
-
-
-
-
 DrawDocShell* ViewShellBase::GetDocShell (void) const
 {
     return mpDocShell;
@@ -503,32 +498,7 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                 }
                 break;
 
-            case SFX_EVENT_CREATEDOC:
-                //                mpPaneManager->InitPanes();
-                break;
-
-            case SFX_EVENT_ACTIVATEDOC:
-                break;
-
-            case SFX_EVENT_STARTAPP:
-            case SFX_EVENT_CLOSEAPP:
-            case SFX_EVENT_CLOSEDOC:
-            case SFX_EVENT_SAVEDOC:
-            case SFX_EVENT_SAVEASDOC:
-            case SFX_EVENT_DEACTIVATEDOC:
-            case SFX_EVENT_PRINTDOC:
-            case SFX_EVENT_ONERROR:
-            case SFX_EVENT_LOADFINISHED:
-            case SFX_EVENT_SAVEFINISHED:
-            case SFX_EVENT_MODIFYCHANGED:
-            case SFX_EVENT_PREPARECLOSEDOC:
-            case SFX_EVENT_NEWMESSAGE:
-            case SFX_EVENT_TOGGLEFULLSCREENMODE:
-            case SFX_EVENT_SAVEDOCDONE:
-            case SFX_EVENT_SAVEASDOCDONE:
-            case SFX_EVENT_MOUSEOVER_OBJECT:
-            case SFX_EVENT_MOUSECLICK_OBJECT:
-            case SFX_EVENT_MOUSEOUT_OBJECT:
+            default:
                 break;
         }
     }
@@ -611,12 +581,21 @@ ErrCode ViewShellBase::DoVerb (long nVerb)
 
 
 
+Reference<view::XRenderable> ViewShellBase::GetRenderable (void)
+{
+    // Create a new DocumentRenderer on every call.  It observes the life
+    // time of this ViewShellBase object.
+    return Reference<view::XRenderable>(new DocumentRenderer(*this));
+}
+
+
+
+
 SfxPrinter* ViewShellBase::GetPrinter (BOOL bCreate)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
 
-    return mpImpl->mpPrintManager->GetPrinter(bCreate);
+    return GetDocShell()->GetPrinter (bCreate);
 }
 
 
@@ -628,9 +607,48 @@ USHORT ViewShellBase::SetPrinter (
     bool bIsAPI)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
 
-    return mpImpl->mpPrintManager->SetPrinter (pNewPrinter, nDiffFlags, bIsAPI);
+    GetDocShell()->SetPrinter(pNewPrinter);
+
+    if ( (nDiffFlags & SFX_PRINTER_CHG_ORIENTATION ||
+          nDiffFlags & SFX_PRINTER_CHG_SIZE) && pNewPrinter  )
+    {
+        MapMode aMap = pNewPrinter->GetMapMode();
+        aMap.SetMapUnit(MAP_100TH_MM);
+        MapMode aOldMap = pNewPrinter->GetMapMode();
+        pNewPrinter->SetMapMode(aMap);
+        Size aNewSize = pNewPrinter->GetOutputSize();
+
+        BOOL bScaleAll = FALSE;
+        if ( bIsAPI )
+        {
+            WarningBox aWarnBox (
+                GetWindow(),
+                (WinBits)(WB_YES_NO | WB_DEF_YES),
+                String(SdResId(STR_SCALE_OBJS_TO_PAGE)));
+            bScaleAll = (aWarnBox.Execute() == RET_YES);
+        }
+
+        ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+            ::boost::dynamic_pointer_cast<DrawViewShell>(GetMainViewShell()));
+        if (pDrawViewShell)
+        {
+            SdPage* pPage = GetDocument()->GetSdPage(
+                0, PK_STANDARD );
+            pDrawViewShell->SetPageSizeAndBorder (
+                pDrawViewShell->GetPageKind(),
+                aNewSize,
+                -1,-1,-1,-1,
+                bScaleAll,
+                pNewPrinter->GetOrientation(),
+                pPage->GetPaperBin(),
+                pPage->IsBackgroundFullSize());
+        }
+
+        pNewPrinter->SetMapMode(aOldMap);
+    }
+
+    return 0;
 }
 
 
@@ -638,10 +656,9 @@ USHORT ViewShellBase::SetPrinter (
 
 PrintDialog* ViewShellBase::CreatePrintDialog (::Window *pParent)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
-    return mpImpl->mpPrintManager->CreatePrintDialog (pParent);
+    (void)pParent;
+    return NULL;
+    //    return mpImpl->mpPrintManager->CreatePrintDialog (pParent);
 }
 
 
@@ -651,21 +668,21 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
     ::Window *pParent,
     const SfxItemSet &rOptions)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
-    return mpImpl->mpPrintManager->CreatePrintOptionsPage (pParent, rOptions);
+    (void)pParent;
+    (void)rOptions;
+    return NULL;
+    //    return mpImpl->mpPrintManager->CreatePrintOptionsPage (pParent, rOptions);
 }
 
 
 
 
-USHORT  ViewShellBase::Print(SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pDlg)
+USHORT  ViewShellBase::Print(SfxProgress&, BOOL bIsAPI, PrintDialog* pDlg)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
-    return mpImpl->mpPrintManager->Print (rProgress, bIsAPI, pDlg);
+    (void)bIsAPI;
+    (void)pDlg;
+    return 0;
+    //    return mpImpl->mpPrintManager->Print (rProgress, bIsAPI, pDlg);
 }
 
 
@@ -676,27 +693,12 @@ ErrCode ViewShellBase::DoPrint (
     PrintDialog* pPrintDialog,
     BOOL bSilent, BOOL bIsAPI )
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
-    return mpImpl->mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
-}
-
-
-
-
-USHORT ViewShellBase::SetPrinterOptDlg (
-    SfxPrinter* pNewPrinter,
-    USHORT nDiffFlags,
-    BOOL bShowDialog)
-{
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
-    return mpImpl->mpPrintManager->SetPrinterOptDlg (
-       pNewPrinter,
-       nDiffFlags,
-       bShowDialog);
+    (void)pPrinter;
+    (void)pPrintDialog;
+    (void)bSilent;
+    (void)bIsAPI;
+    return 0;
+    //return mpImpl->mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
 }
 
 
@@ -704,11 +706,8 @@ USHORT ViewShellBase::SetPrinterOptDlg (
 
 void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
-    OSL_ASSERT(mpImpl->mpPrintManager.get()!=NULL);
-
     SfxViewShell::PreparePrint (pPrintDialog);
-    return mpImpl->mpPrintManager->PreparePrint (pPrintDialog);
+    //mpImpl->mpPrintManager->PreparePrint (pPrintDialog);
 }
 
 
@@ -786,7 +785,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
                 framework::FrameworkHelper::msSlideSorterURL);
             break;
 
-        case SID_RIGHT_PANE:
+        case SID_TASKPANE:
             mpImpl->SetPaneVisibility(
                 rRequest,
                 framework::FrameworkHelper::msRightPaneURL,
@@ -807,7 +806,7 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
             // The full screen mode is not supported.  Ignore the request.
             break;
 
-        case SID_TASK_PANE:
+        case SID_SHOW_TOOL_PANEL:
             mpImpl->ProcessTaskPaneSlot(rRequest);
             break;
 
@@ -1028,7 +1027,7 @@ void ViewShellBase::UpdateBorder ( bool bForce /* = false */ )
     // calls for the views in side panes but prevents calling an already
     // dying SfxViewShell base class.
     // For issue #140703# we have to check the existence of the window,
-    // too.  The SfxTopViewFrame accesses the window without checking it.
+    // too.  The SfxViewFrame accesses the window without checking it.
     ViewShell* pMainViewShell = GetMainViewShell().get();
     if (pMainViewShell != NULL && GetWindow()!=NULL)
     {
@@ -1223,16 +1222,51 @@ void ViewShellBase::SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabB
 }
 
 
-
-
-CustomHandleManager& ViewShellBase::getCustomHandleManager() const
+::rtl::OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const ::rtl::OUString& aCmdURL )
 {
-    OSL_ASSERT(mpImpl.get()!=NULL);
+    ::rtl::OUString aLabel;
 
-    if( !mpImpl->mpCustomHandleManager.get() )
-        mpImpl->mpCustomHandleManager.reset( new ::sd::CustomHandleManager(*const_cast< ViewShellBase* >(this)) );
+    if ( aCmdURL.getLength() > 0 ) try
+    {
+        Reference< XMultiServiceFactory > xServiceManager( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
 
-    return *mpImpl->mpCustomHandleManager.get();
+        Reference< XModuleManager > xModuleManager( xServiceManager->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager") ) ), UNO_QUERY_THROW );
+        Reference< XInterface > xIfac( xFrame, UNO_QUERY_THROW );
+
+        ::rtl::OUString aModuleIdentifier( xModuleManager->identify( xIfac ) );
+
+        if( aModuleIdentifier.getLength() > 0 )
+        {
+            Reference< XNameAccess > xNameAccess( xServiceManager->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.UICommandDescription" ) ) ), UNO_QUERY );
+            if( xNameAccess.is() )
+            {
+                Reference< ::com::sun::star::container::XNameAccess > m_xUICommandLabels( xNameAccess->getByName( aModuleIdentifier ), UNO_QUERY_THROW );
+                Sequence< PropertyValue > aPropSeq;
+                if( m_xUICommandLabels->getByName( aCmdURL ) >>= aPropSeq )
+                {
+                    for( sal_Int32 i = 0; i < aPropSeq.getLength(); i++ )
+                    {
+                        if( aPropSeq[i].Name.equalsAscii( "Name" ))
+                        {
+                            aPropSeq[i].Value >>= aLabel;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch ( Exception& )
+    {
+    }
+
+    return aLabel;
+}
+
+::rtl::OUString ViewShellBase::RetrieveLabelFromCommand( const ::rtl::OUString& aCmdURL ) const
+{
+    Reference< XFrame > xFrame( GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
+    return ImplRetrieveLabelFromCommand( xFrame, aCmdURL );
 }
 
 
@@ -1249,7 +1283,6 @@ ViewShellBase::Implementation::Implementation (ViewShellBase& rBase)
       mpViewShellManager(),
       mpEventMultiplexer(),
       mpUpdateLockManager(),
-      mpPrintManager(),
       mpFormShellManager(),
       mrBase(rBase),
       mpPageCacheManager(slidesorter::cache::PageCacheManager::Instance())
@@ -1378,10 +1411,12 @@ void ViewShellBase::Implementation::SetPaneVisibility (
     {
         Reference<XControllerManager> xControllerManager (mrBase.GetController(), UNO_QUERY_THROW);
 
+        const Reference< XComponentContext > xContext(
+            ::comphelper::getProcessComponentContext() );
         Reference<XResourceId> xPaneId (ResourceId::create(
-            comphelper_getProcessComponentContext(), rsPaneURL));
+            xContext, rsPaneURL));
         Reference<XResourceId> xViewId (ResourceId::createWithAnchorURL(
-            comphelper_getProcessComponentContext(), rsViewURL, rsPaneURL));
+            xContext, rsViewURL, rsPaneURL));
 
         // Determine the new visibility state.
         const SfxItemSet* pArguments = rRequest.GetArgs();
@@ -1423,9 +1458,9 @@ void ViewShellBase::Implementation::SetPaneVisibility (
             xConfigurationController->requestResourceDeactivation(
                 xPaneId);
     }
-    catch (RuntimeException&)
+    catch (const Exception &)
     {
-        DBG_ASSERT(false, "ViewShellBase::Implementation::SetPaneVisibility(): caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -1448,6 +1483,8 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
         if ( ! xConfiguration.is())
             throw RuntimeException();
 
+        const Reference< XComponentContext > xContext(
+            ::comphelper::getProcessComponentContext() );
         SfxWhichIter aSetIterator (rSet);
         sal_uInt16 nItemId (aSetIterator.FirstWhich());
         while (nItemId > 0)
@@ -1460,25 +1497,22 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                 {
                     case SID_LEFT_PANE_IMPRESS:
                         xResourceId = ResourceId::create(
-                            comphelper_getProcessComponentContext(),
-                            FrameworkHelper::msLeftImpressPaneURL);
+                            xContext, FrameworkHelper::msLeftImpressPaneURL);
                         break;
 
                     case SID_LEFT_PANE_DRAW:
                         xResourceId = ResourceId::create(
-                            comphelper_getProcessComponentContext(),
-                            FrameworkHelper::msLeftDrawPaneURL);
+                            xContext, FrameworkHelper::msLeftDrawPaneURL);
                         break;
 
-                    case SID_RIGHT_PANE:
+                    case SID_TASKPANE:
                         xResourceId = ResourceId::create(
-                            comphelper_getProcessComponentContext(),
-                                FrameworkHelper::msRightPaneURL);
+                            xContext, FrameworkHelper::msRightPaneURL);
                         break;
 
                     case SID_NORMAL_MULTI_PANE_GUI:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msImpressViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
@@ -1486,14 +1520,14 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                     case SID_SLIDE_SORTER_MULTI_PANE_GUI:
                     case SID_DIAMODE:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msSlideSorterURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
 
                     case SID_OUTLINEMODE:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msOutlineViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
@@ -1502,14 +1536,14 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
                         // There is only the master page mode for the handout
                         // view so ignore the master page flag.
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msHandoutViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
 
                     case SID_NOTESMODE:
                         xResourceId = ResourceId::createWithAnchorURL(
-                            comphelper_getProcessComponentContext(),
+                            xContext,
                             FrameworkHelper::msNotesViewURL,
                             FrameworkHelper::msCenterPaneURL);
                         break;
@@ -1562,7 +1596,7 @@ void ViewShellBase::Implementation::GetSlotState (SfxItemSet& rSet)
     }
     catch (RuntimeException&)
     {
-        DBG_ASSERT(false, "ViewShellBase::Implementation::GetSlotState(): caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 }
@@ -1575,8 +1609,8 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     // Set the visibility state of the toolpanel and one of its top
     // level panels.
     BOOL bShowToolPanel = TRUE;
-    toolpanel::TaskPaneViewShell::PanelId nPanelId (
-        toolpanel::TaskPaneViewShell::PID_UNKNOWN);
+    toolpanel::PanelId nPanelId (
+        toolpanel::PID_UNKNOWN);
     bool bPanelIdGiven = false;
 
     // Extract the given arguments.
@@ -1597,7 +1631,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
             if (pPanelId != NULL)
             {
                 nPanelId = static_cast<
-                    toolpanel::TaskPaneViewShell::PanelId>(
+                    toolpanel::PanelId>(
                         pPanelId->GetValue());
                 bPanelIdGiven = true;
             }
@@ -1607,7 +1641,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
     // Ignore the request for some combinations of panels and view
     // shell types.
     if (bPanelIdGiven
-        && ! (nPanelId==toolpanel::TaskPaneViewShell::PID_LAYOUT
+        && ! (nPanelId==toolpanel::PID_LAYOUT
             && mrBase.GetMainViewShell()!=NULL
             && mrBase.GetMainViewShell()->GetShellType()==ViewShell::ST_OUTLINE))
     {
@@ -1749,35 +1783,5 @@ void FocusForwardingWindow::Command (const CommandEvent& rEvent)
 
 
 } // end of anonymouse namespace
-
-// ====================================================================
-
-CustomHandleManager::CustomHandleManager( ViewShellBase& rViewShellBase  )
-: mrViewShellBase( rViewShellBase )
-{
-}
-
-CustomHandleManager::~CustomHandleManager()
-{
-    DBG_ASSERT( maSupplier.empty(), "sd::CustomHandleManager::~CustomHandleManager(), still suppliers attached!" );
-}
-
-void CustomHandleManager::registerSupplier( ICustomhandleSupplier* pSupplier )
-{
-    maSupplier.insert( pSupplier );
-}
-
-void CustomHandleManager::unRegisterSupplier( ICustomhandleSupplier* pSupplier )
-{
-    maSupplier.erase( pSupplier );
-}
-
-void CustomHandleManager::addCustomHandler( SdrView& rSourceView, ViewShell::ShellType eShellType, SdrHdlList& rHandlerList )
-{
-    for( std::set< ICustomhandleSupplier* >::iterator aIter( maSupplier.begin() ); aIter != maSupplier.end(); aIter++ )
-    {
-        (*aIter)->addCustomHandler( rSourceView, eShellType, rHandlerList );
-    }
-}
 
 } // end of namespace sd

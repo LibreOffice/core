@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: undoback.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 
 class SdDrawDocument;
 class SdPage;
-class SdrObject;
+class SfxItemSet;
 
 // -----------------------------
 // - SdBackgroundObjUndoAction -
@@ -46,7 +43,7 @@ class SdBackgroundObjUndoAction : public SdUndoAction
 private:
 
     SdPage&                 mrPage;
-    SdrObject*              mpBackgroundObj;
+    SfxItemSet*             mpItemSet;
 
     void                    ImplRestoreBackgroundObj();
 
@@ -54,7 +51,10 @@ public:
 
                             TYPEINFO();
 
-                            SdBackgroundObjUndoAction( SdDrawDocument& rDoc, SdPage& rPage, const SdrObject* pBackgroundObj );
+                            SdBackgroundObjUndoAction(
+                                SdDrawDocument& rDoc,
+                                SdPage& rPage,
+                                const SfxItemSet& rItenSet);
     virtual                 ~SdBackgroundObjUndoAction();
 
     virtual void            Undo();

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PaneShells.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,36 +109,30 @@ LeftDrawPaneShell::~LeftDrawPaneShell (void)
 
 
 
-//===== RightPaneShell ========================================================
+//===== ToolPanelPaneShell ========================================================
 
 #undef ShellClass
-#define ShellClass RightPaneShell
+#define ShellClass ToolPanelPaneShell
 
-SFX_SLOTMAP(RightPaneShell)
+SFX_SLOTMAP( ToolPanelPaneShell )
 {
     { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
-SFX_IMPL_INTERFACE(RightPaneShell, SfxShell, SdResId(STR_RIGHT_PANE_SHELL))
+SFX_IMPL_INTERFACE( ToolPanelPaneShell, SfxShell, SdResId( STR_TOOL_PANEL_SHELL ) )
 {
-    SFX_CHILDWINDOW_REGISTRATION(
-        ::sd::RightPaneChildWindow::GetChildWindowId());
+    SFX_CHILDWINDOW_REGISTRATION( ::sd::ToolPanelChildWindow::GetChildWindowId() );
 }
 
-TYPEINIT1(RightPaneShell, SfxShell);
+TYPEINIT1( ToolPanelPaneShell, SfxShell );
 
-
-
-RightPaneShell::RightPaneShell (void)
-    : SfxShell()
+ToolPanelPaneShell::ToolPanelPaneShell()
+    :SfxShell()
 {
-    SetName(rtl::OUString::createFromAscii("RightPane"));
+    SetName( ::rtl::OUString::createFromAscii( "ToolPanel" ) );
 }
 
-
-
-
-RightPaneShell::~RightPaneShell (void)
+ToolPanelPaneShell::~ToolPanelPaneShell(void)
 {
 }
 

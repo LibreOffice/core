@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlattr.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,8 +46,6 @@ public:
 
     void    SetColors( Color& aBack, Color& aText, Color& aLink,
                        Color& aVLink, Color& aALink );
-    void    GetColors( Color& aBack, Color& aText, Color& aLink,
-                       Color& aVLink, Color& aALink ) const;
 };
 
 #endif // _SD_HTMLATTR_HXX

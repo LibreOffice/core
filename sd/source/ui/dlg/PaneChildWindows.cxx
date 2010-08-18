@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PaneChildWindows.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,27 +29,28 @@
 #include "precompiled_sd.hxx"
 #include "PaneChildWindows.hxx"
 #include "PaneDockingWindow.hrc"
+#include "PaneDockingWindow.hxx"
+#include "ViewShellBase.hxx"
+#include "framework/FrameworkHelper.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "app.hrc"
 #include "strings.hrc"
 #include "sdresid.hxx"
+
 #include <sfx2/app.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-
-namespace sd
-{
-    SFX_IMPL_DOCKINGWINDOW(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
-    SFX_IMPL_DOCKINGWINDOW(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
-    SFX_IMPL_DOCKINGWINDOW(RightPaneChildWindow, SID_RIGHT_PANE)
-}
-
-
-#include "PaneDockingWindow.hxx"
-#include "ViewShellBase.hxx"
-#include "framework/FrameworkHelper.hxx"
+#include <tools/diagnose_ex.h>
 
 namespace sd {
+
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::drawing::framework::XResourceId;
+
+SFX_IMPL_DOCKINGWINDOW(LeftPaneImpressChildWindow, SID_LEFT_PANE_IMPRESS)
+SFX_IMPL_DOCKINGWINDOW(LeftPaneDrawChildWindow, SID_LEFT_PANE_DRAW)
+SFX_IMPL_DOCKINGWINDOW( ToolPanelChildWindow, SID_TASKPANE)
 
 //===== PaneChildWindow =======================================================
 
@@ -61,8 +59,8 @@ PaneChildWindow::PaneChildWindow (
     USHORT nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo,
-    const ResId& rResId,
-    const ::rtl::OUString& rsTitle,
+    const USHORT nDockWinTitleResId,
+    const USHORT nTitleBarResId,
     SfxChildAlignment eAlignment)
     : SfxChildWindow (pParentWindow, nId)
 {
@@ -70,9 +68,8 @@ PaneChildWindow::PaneChildWindow (
         pBindings,
         this,
         pParentWindow,
-        rResId,
-        framework::FrameworkHelper::msLeftImpressPaneURL,
-        rsTitle);
+        SdResId( nDockWinTitleResId ),
+        String( SdResId( nTitleBarResId ) ) );
     eChildAlignment = eAlignment;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize(pInfo);
     SetHideNotDelete(TRUE);
@@ -115,8 +112,8 @@ LeftPaneImpressChildWindow::LeftPaneImpressChildWindow (
         nId,
         pBindings,
         pInfo,
-        SdResId(FLT_LEFT_PANE_IMPRESS_DOCKING_WINDOW),
-        String(SdResId(STR_LEFT_PANE_IMPRESS_TITLE)),
+        FLT_LEFT_PANE_IMPRESS_DOCKING_WINDOW,
+        STR_LEFT_PANE_IMPRESS_TITLE,
         SFX_ALIGN_LEFT)
 {
 }
@@ -136,8 +133,8 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
         nId,
         pBindings,
         pInfo,
-        SdResId(FLT_LEFT_PANE_DRAW_DOCKING_WINDOW),
-        String(SdResId(STR_LEFT_PANE_DRAW_TITLE)),
+        FLT_LEFT_PANE_DRAW_DOCKING_WINDOW,
+        STR_LEFT_PANE_DRAW_TITLE,
         SFX_ALIGN_LEFT)
 {
 }
@@ -145,23 +142,67 @@ LeftPaneDrawChildWindow::LeftPaneDrawChildWindow (
 
 
 
-//===== RightPaneChildWindow ==================================================
-
-RightPaneChildWindow::RightPaneChildWindow (
-    ::Window* pParentWindow,
-    USHORT nId,
-    SfxBindings* pBindings,
-    SfxChildWinInfo* pInfo)
-    : PaneChildWindow(
-        pParentWindow,
-        nId,
-        pBindings,
-        pInfo,
-        SdResId(FLT_RIGHT_PANE_DOCKING_WINDOW),
-        String(SdResId(STR_RIGHT_PANE_TITLE)),
-        SFX_ALIGN_RIGHT)
+//======================================================================================================================
+//= ToolPanelChildWindow
+//======================================================================================================================
+//----------------------------------------------------------------------------------------------------------------------
+ToolPanelChildWindow::ToolPanelChildWindow( ::Window* i_pParentWindow, USHORT i_nId, SfxBindings* i_pBindings,
+        SfxChildWinInfo* i_pChildWindowInfo )
+    :PaneChildWindow( i_pParentWindow, i_nId, i_pBindings, i_pChildWindowInfo,
+        FLT_TOOL_PANEL_DOCKING_WINDOW, STR_RIGHT_PANE_TITLE, SFX_ALIGN_RIGHT )
 {
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+struct DelayedToolPanelActivation
+{
+    DelayedToolPanelActivation( ToolPanelChildWindow& i_rToolPanelWindow, const ::rtl::OUString& i_rPanelURL )
+        :m_rToolPanelWindow( i_rToolPanelWindow )
+        ,m_sPanelURL( i_rPanelURL )
+    {
+    }
+
+    void operator() (bool)
+    {
+        m_rToolPanelWindow.ActivateToolPanel( m_sPanelURL );
+    }
+
+private:
+    ToolPanelChildWindow&   m_rToolPanelWindow;
+    const ::rtl::OUString   m_sPanelURL;
+};
+
+//----------------------------------------------------------------------------------------------------------------------
+void ToolPanelChildWindow::ActivateToolPanel( const ::rtl::OUString& i_rPanelURL )
+{
+    SfxDockingWindow* pDockingWindow = dynamic_cast< SfxDockingWindow* >( GetWindow() );
+    ViewShellBase* pViewShellBase = ViewShellBase::GetViewShellBase( pDockingWindow->GetBindings().GetDispatcher()->GetFrame() );
+    ENSURE_OR_RETURN_VOID( pViewShellBase != NULL, "ToolPanelChildWindow::ActivateToolPanel: no view shell access!" );
+
+    const ::boost::shared_ptr< framework::FrameworkHelper > pFrameworkHelper( framework::FrameworkHelper::Instance( *pViewShellBase ) );
+
+    if ( i_rPanelURL.indexOf( framework::FrameworkHelper::msTaskPanelURLPrefix ) == 0 )
+    {
+        // it's one of our standard panels known to the drawing framework
+        pFrameworkHelper->RequestTaskPanel( i_rPanelURL );
+    }
+    else
+    {
+        // TODO: it would be nice if the drawing framework were able to handle non-standard panels, installed by
+        // extensions, too. As long as this is not the case, we need to take the direct way ...
+        ::boost::shared_ptr< ViewShell > pViewShell = pFrameworkHelper->GetViewShell( framework::FrameworkHelper::msRightPaneURL );
+        toolpanel::ToolPanelViewShell* pToolPanelViewShell = dynamic_cast< toolpanel::ToolPanelViewShell* >( pViewShell.get() );
+        if ( pToolPanelViewShell )
+        {
+            pToolPanelViewShell->ActivatePanel( i_rPanelURL );
+        }
+        else
+        {
+            Reference< XResourceId > xTaskPaneResource = pFrameworkHelper->RequestView(
+                framework::FrameworkHelper::msTaskPaneURL, framework::FrameworkHelper::msRightPaneURL );
+            pFrameworkHelper->RunOnResourceActivation( xTaskPaneResource, DelayedToolPanelActivation( *this, i_rPanelURL ) );
+        }
+    }
+}
 
 } // end of namespace ::sd

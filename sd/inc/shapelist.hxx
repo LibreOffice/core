@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shapelist.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +47,8 @@ namespace sd
             a pointer to the next shape in list or 0*/
         SdrObject* removeShape( SdrObject& rObject );
 
+        void replaceShape( SdrObject& rOldObject, SdrObject& rNewObject );
+
         /** removes all shapes from this list */
         void clear();
 
@@ -63,10 +62,6 @@ namespace sd
             returns the first shape if pObj is 0 */
         SdrObject* getNextShape(SdrObject* pObj) const;
 
-        /** returns the shape prior to the given shape in the list or 0
-            returns the last shape if pObj is 0 */
-        SdrObject* getPreviousShape( SdrObject* pObj ) const;
-
         /**
         */
         SdrObject* getNextShape();
@@ -78,6 +73,8 @@ namespace sd
         /**
         */
         bool hasMore() const;
+
+        const std::list< SdrObject* >& getList() const { return maShapeList; }
 
     private:
         virtual void ObjectInDestruction(const SdrObject& rObject);

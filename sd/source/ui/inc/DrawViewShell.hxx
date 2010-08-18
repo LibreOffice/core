@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DrawViewShell.hxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +56,8 @@ class DrawView;
 class LayerTabBar;
 class Ruler;
 class SdUnoDrawView;
+class AnnotationManager;
+class ViewOverlayManager;
 
 #define CHECK_RANGE(nMin, nValue, nMax) ((nValue >= nMin) && (nValue <= nMax))
 
@@ -94,11 +93,6 @@ public:
         ::Window* pParentWindow,
         PageKind ePageKind = PK_STANDARD,
         FrameView* pFrameView = NULL);
-
-    DrawViewShell(
-        SfxViewFrame* pFrame,
-        ::Window* pParentWindow,
-        const DrawViewShell& rShell);
 
     virtual ~DrawViewShell (void);
 
@@ -200,9 +194,6 @@ public:
     void            ExecFormText(SfxRequest& rReq);
     void            GetFormTextState(SfxItemSet& rSet);
 
-    void            ExecObjPalette(SfxRequest& rReq);
-    void            GetObjPaletteState(SfxItemSet& rSet);
-
     void            ExecAnimationWin(SfxRequest& rReq);
     void            GetAnimationWinState(SfxItemSet& rSet);
 
@@ -230,6 +221,9 @@ public:
 
     void            AttrExec (SfxRequest& rReq);
     void            AttrState (SfxItemSet& rSet);
+
+    void            ExecuteAnnotation (SfxRequest& rRequest);
+    void            GetAnnotationState (SfxItemSet& rItemSet);
 
     void StartRulerDrag (
         const Ruler& rRuler,
@@ -391,7 +385,6 @@ protected:
 
     static BOOL     mbPipette;
 
-
                     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
                     DECL_LINK( CloseHdl, Timer* pTimer );
                     DECL_LINK( TabSplitHdl, TabBar * );
@@ -494,6 +487,9 @@ private:
         const Point& rMouseLocation);
 
     using ViewShell::Notify;
+
+    ::std::auto_ptr< AnnotationManager > mpAnnotationManager;
+    ::std::auto_ptr< ViewOverlayManager > mpViewOverlayManager;
 };
 
 

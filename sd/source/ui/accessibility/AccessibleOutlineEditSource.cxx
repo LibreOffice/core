@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleOutlineEditSource.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
-#include <svx/unoedhlp.hxx>
+#include <editeng/unoedhlp.hxx>
 #include <svx/svdoutl.hxx>
 
 #ifndef SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_EDIT_SOURCE_HXX
@@ -56,6 +53,7 @@ namespace accessibility
     {
         // register as listener - need to broadcast state change messages
         rOutliner.SetNotifyHdl( LINK(this, AccessibleOutlineEditSource, NotifyHdl) );
+        StartListening(rOutliner);
     }
 
     AccessibleOutlineEditSource::~AccessibleOutlineEditSource()
@@ -177,13 +175,32 @@ namespace accessibility
         return Point();
     }
 
-    void AccessibleOutlineEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
+    void AccessibleOutlineEditSource::Notify( SfxBroadcaster& rBroadcaster, const SfxHint& rHint )
     {
-        const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
+        bool bDispose = false;
 
-        if( pSdrHint && ( pSdrHint->GetKind() == HINT_MODELCLEARED ) )
+        if( &rBroadcaster == mpOutliner )
         {
-            // model is dying under us, going defunc
+            const SfxSimpleHint* pHint = dynamic_cast< const SfxSimpleHint * >( &rHint );
+            if( pHint && (pHint->GetId() == SFX_HINT_DYING) )
+            {
+                bDispose = true;
+                mpOutliner = NULL;
+            }
+        }
+        else
+        {
+            const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
+
+            if( pSdrHint && ( pSdrHint->GetKind() == HINT_MODELCLEARED ) )
+            {
+                // model is dying under us, going defunc
+                bDispose = true;
+            }
+        }
+
+        if( bDispose )
+        {
             if( mpOutliner )
                 mpOutliner->SetNotifyHdl( Link() );
             mpOutliner = NULL;

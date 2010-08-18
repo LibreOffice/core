@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PaneShells.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,15 +75,14 @@ public:
 /** Shell that displays the right pane for both Impress and Draw.  The shell
     does not do anything else and has especially no slots.
 */
-class RightPaneShell
-    : public SfxShell
+class ToolPanelPaneShell : public SfxShell
 {
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SD_IF_SDRIGHTPANESHELL)
+    SFX_DECL_INTERFACE( SD_IF_SDTOOLPANELPANESHELL )
 
-    RightPaneShell (void);
-    virtual ~RightPaneShell (void);
+    ToolPanelPaneShell();
+    virtual ~ToolPanelPaneShell();
 };
 
 } // end of namespace sd

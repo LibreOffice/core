@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fupoor.cxx,v $
- * $Revision: 1.50.74.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include "fupoor.hxx"
 
 #include <svx/svxids.hrc>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
@@ -74,7 +71,7 @@
 #include <svx/svditer.hxx>
 
 // #98533#
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -107,6 +104,7 @@ FuPoor::FuPoor (
       bNoScrollUntilInside (TRUE),
       bScrollable (FALSE),
       bDelayActive (FALSE),
+      bFirstMouseMove (FALSE),
       // #95491# remember MouseButton state
       mnCode(0)
 {
@@ -246,16 +244,6 @@ IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( FuPoor, ScrollHdl, Timer *, pTimer )
-
-/*************************************************************************
-|*
-|* String in Applikations-Statuszeile ausgeben
-|*
-\************************************************************************/
-
-void FuPoor::WriteStatus(const String& )
-{
-}
 
 /*************************************************************************
 |*
@@ -506,6 +494,9 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_PAGEUP:
         {
+            if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
+                break;
+
             if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
                 // The page-up key switches layers or pages depending on the
@@ -551,6 +542,8 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_PAGEDOWN:
         {
+            if( rKEvt.GetKeyCode().IsMod1() && rKEvt.GetKeyCode().IsMod2() )
+                break;
             if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
                 // The page-down key switches layers or pages depending on the
@@ -1114,18 +1107,6 @@ void FuPoor::StartDelayToScrollTimer ()
 {
     bDelayActive = TRUE;
     aDelayToScrollTimer.Start ();
-}
-
-/*************************************************************************
-|*
-|* Handler fuer Maustaste
-|*
-\************************************************************************/
-
-long FuPoor::diffPoint (long pos1, long pos2)
-{
-    return (pos1 > pos2) ? pos1 - pos2
-                         : pos2 - pos1;
 }
 
 /*************************************************************************

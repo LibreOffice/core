@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,6 +29,7 @@ PRJ=..$/..$/..
 
 PRJNAME=slideshow
 TARGET=OGLTrans
+TARGETTYPE=GUI
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------------
@@ -58,7 +55,12 @@ DLLPRE=
 SHL1TARGET=$(TARGET).uno
 
 .IF "$(GUI)"=="UNX"
+.IF "$(GUIBASE)"=="aqua"
+    SHL1STDLIBS= $(SALLIB) $(VCLLIB) $(CPPULIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(CANVASTOOLSLIB)
+    CFLAGSCXX+=$(OBJCXXFLAGS)
+.ELSE
     SHL1STDLIBS= $(SALLIB) $(VCLLIB) $(CPPULIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(CANVASTOOLSLIB) -lGL -lGLU -lX11
+.ENDIF
 .ELSE
     SHL1STDLIBS= $(SALLIB) $(VCLLIB) $(CPPULIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(CANVASTOOLSLIB) opengl32.lib glu32.lib gdi32.lib
 .ENDIF
@@ -66,7 +68,7 @@ SHL1IMPLIB=i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp

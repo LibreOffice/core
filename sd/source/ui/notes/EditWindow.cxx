@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: EditWindow.cxx,v $
- * $Revision: 1.7.138.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,19 +31,21 @@
 #include "EditWindow.hxx"
 
 #include "sdmod.hxx"
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
+#include <i18npool/mslangid.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
 #include <vcl/scrbar.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include "sdresid.hxx"
-#include <svtools/itempool.hxx>
-#include <svx/fhgtitem.hxx>
+#include <svl/itempool.hxx>
+#include <editeng/fhgtitem.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/editstat.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/editstat.hxx>
 
 #define SCROLL_LINE         24
 
@@ -174,9 +173,9 @@ EditEngine* EditWindow::CreateEditEngine (void)
             {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
                 DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
-        aTable[0].nLang = aOpt.nDefaultLanguage;
-        aTable[1].nLang = aOpt.nDefaultLanguage_CJK;
-        aTable[2].nLang = aOpt.nDefaultLanguage_CTL;
+        aTable[0].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN);
+        aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN);
+        aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
         //
         for (int i = 0;  i < 3;  ++i)
         {

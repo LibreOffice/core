@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConfigurationTracer.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,16 +41,16 @@ void ConfigurationTracer::TraceConfiguration (
     const char* pMessage)
 {
 #ifdef DEBUG
-    OSL_TRACE("%s at %p {\n", pMessage, rxConfiguration.get());
+    OSL_TRACE("%s at %p {", pMessage, rxConfiguration.get());
     if (rxConfiguration.is())
     {
         TraceBoundResources(rxConfiguration, NULL, 0);
     }
     else
     {
-        OSL_TRACE("    empty\n");
+        OSL_TRACE("    empty");
     }
-    OSL_TRACE("}\n");
+    OSL_TRACE("}");
 #else
     (void)rxConfiguration;
     (void)pMessage;
@@ -63,12 +60,12 @@ void ConfigurationTracer::TraceConfiguration (
 
 
 
+#ifdef DEBUG
 void ConfigurationTracer::TraceBoundResources (
     const Reference<XConfiguration>& rxConfiguration,
     const Reference<XResourceId>& rxResourceId,
     const int nIndentation)
 {
-#ifdef DEBUG
     Sequence<Reference<XResourceId> > aResourceList (
         rxConfiguration->getResources(rxResourceId, ::rtl::OUString(), AnchorBindingMode_DIRECT));
     const ::rtl::OUString sIndentation (::rtl::OUString::createFromAscii("    "));
@@ -77,14 +74,10 @@ void ConfigurationTracer::TraceBoundResources (
         ::rtl::OUString sLine (aResourceList[nIndex]->getResourceURL());
         for (int i=0; i<nIndentation; ++i)
             sLine = sIndentation + sLine;
-        OSL_TRACE("%s\n", OUStringToOString(sLine, RTL_TEXTENCODING_UTF8).getStr());
+        OSL_TRACE("%s", OUStringToOString(sLine, RTL_TEXTENCODING_UTF8).getStr());
         TraceBoundResources(rxConfiguration, aResourceList[nIndex], nIndentation+1);
     }
-#else
-    (void)rxConfiguration;
-    (void)rxResourceId;
-    (void)nIndentation;
-#endif
 }
+#endif
 
 } } // end of namespace sd::framework

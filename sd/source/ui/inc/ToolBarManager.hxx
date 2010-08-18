@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ToolBarManager.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -147,14 +144,6 @@ public:
         TBG__LAST = TBG_MASTER_MODE
     };
 
-    /** Only after calls with bValid=<TRUE/> may the tool bar manager use
-        the frame::XLayoutManager to change the visible tool bars.  Call
-        this method when the controller is attached to or detachted from the
-        frame.  When called with <FALSE/> then ResetAllToolBars() is
-        executed.
-    */
-    void SetValid (bool bValid);
-
     /** Reset the set of visible object bars in the specified group.  Tool
         bars in other groups are not affected.
         @param rParentShell
@@ -211,10 +200,6 @@ public:
     void RemoveToolBar (
         ToolBarGroup eGroup,
         const ::rtl::OUString& rsToolBarName);
-
-    void RemoveToolBarShell (
-        ToolBarGroup eGroup,
-        ShellId nToolBarId);
 
     /** This is basically a shortcut for ResetToolBars(),AddToolBar().  The
         main difference is, that all sub shells of the specified parent
@@ -277,10 +262,6 @@ public:
         ::boost::shared_ptr<ToolBarManager> mpManager;
     };
     friend class UpdateLock;
-
-    /** Return whether updates of tool bars are locked.
-    */
-    bool IsUpdateLocked (void) const;
 
     void ToolBarsDestroyed(void);
 

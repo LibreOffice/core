@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MasterPageObserver.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,12 +79,6 @@ public:
             been registered before is safe and is silently ignored.
     */
     void RemoveEventListener (const Link& rEventListener);
-
-    /** Return a set of the names of master pages for the given document.
-        This convenience method exists because this set is part of the
-        internal data structure and thus takes no time to create.
-    */
-    MasterPageNameSet GetMasterPageNames (SdDrawDocument& rDocument);
 
 private:
     static ::osl::Mutex maMutex;

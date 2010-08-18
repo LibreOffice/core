@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdobjfac.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +55,7 @@ IMPL_LINK( SdObjectFactory, MakeUserData, SdrObjFactory *, pObjFactory )
         switch( pObjFactory->nIdentifier )
         {
             case( SD_ANIMATIONINFO_ID ):
-                pObjFactory->pNewData = new SdAnimationInfo;
+                pObjFactory->pNewData = new SdAnimationInfo( *pObjFactory->pObj );
             break;
 
             case( SD_IMAPINFO_ID ):

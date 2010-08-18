@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unosrch.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +35,9 @@
 #include <com/sun/star/util/XReplaceDescriptor.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <unotools/servicehelper.hxx>
-#include <svx/editdata.hxx>
-#include <svx/unoipset.hxx>
+#include <comphelper/servicehelper.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/unoipset.hxx>
 
 class SdrObject;
 class SvxItemPropertySet;
@@ -61,9 +58,10 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >  GetCurrentShape() const throw();
 
 public:
-    SdUnoSearchReplaceShape( ::com::sun::star::drawing::XDrawPage* xPage ) throw(); // danger, these c'tors are only usable if
-    SdUnoSearchReplaceShape( ::com::sun::star::drawing::XShape* xShape ) throw();   // the given shape or page is derived from
-    virtual ~SdUnoSearchReplaceShape() throw();                                     // this class!!!
+    // danger, this c'tor is only usable if the given shape or page is derived
+    // from this class!!!
+    SdUnoSearchReplaceShape( ::com::sun::star::drawing::XDrawPage* xPage ) throw();
+    virtual ~SdUnoSearchReplaceShape() throw();
 
     // XReplaceable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XReplaceDescriptor > SAL_CALL createReplaceDescriptor(  ) throw(::com::sun::star::uno::RuntimeException);

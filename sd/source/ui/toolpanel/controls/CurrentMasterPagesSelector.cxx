@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CurrentMasterPagesSelector.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +71,8 @@ CurrentMasterPagesSelector::CurrentMasterPagesSelector (
     Link aLink (LINK(this,CurrentMasterPagesSelector,EventMultiplexerListener));
     rBase.GetEventMultiplexer()->AddEventListener(aLink,
         sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE
-        | sd::tools::EventMultiplexerEvent::EID_EDIT_MODE
+        | sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL
+        | sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER
         | sd::tools::EventMultiplexerEvent::EID_PAGE_ORDER
         | sd::tools::EventMultiplexerEvent::EID_SHAPE_CHANGED
         | sd::tools::EventMultiplexerEvent::EID_SHAPE_INSERTED
@@ -282,7 +280,8 @@ IMPL_LINK(CurrentMasterPagesSelector,EventMultiplexerListener,
         switch (pEvent->meEventId)
         {
             case sd::tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
-            case sd::tools::EventMultiplexerEvent::EID_EDIT_MODE:
+            case sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL:
+            case sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER:
             case sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION:
                 UpdateSelection();
                 break;

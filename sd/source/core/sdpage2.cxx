@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdpage2.cxx,v $
- * $Revision: 1.38 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,15 +29,15 @@
 #include "precompiled_sd.hxx"
 #include <sfx2/docfile.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _SVXLINK_HXX
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 #include <svx/svdotext.hxx>
 #include <tools/urlobj.hxx>
-#include <svx/outlobj.hxx>
-#include <svtools/urihelper.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/outlobj.hxx>
+#include <svl/urihelper.hxx>
+#include <editeng/xmlcnitm.hxx>
 #include <svx/svditer.hxx>
 #include <tools/list.hxx>
 
@@ -60,10 +57,14 @@
 
 // #90477#
 #include <tools/tenccvt.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 using namespace ::sd;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::office;
+
+extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString& rEventName, const Reference< XInterface >& xSource );
 
 /*************************************************************************
 |*
@@ -322,13 +323,13 @@ FASTBOOL SdPage::IsReadOnly() const
 
 /*************************************************************************
 |*
-|* Beim LinkManager anmelden
+|* Beim sfx2::LinkManager anmelden
 |*
 \************************************************************************/
 
 void SdPage::ConnectLink()
 {
-    SvxLinkManager* pLinkManager = pModel!=NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel!=NULL ? pModel->GetLinkManager() : NULL;
 
     if (pLinkManager && !mpPageLink && maFileName.Len() && maBookmarkName.Len() &&
         mePageKind==PK_STANDARD && !IsMasterPage() &&
@@ -355,13 +356,13 @@ void SdPage::ConnectLink()
 
 /*************************************************************************
 |*
-|* Beim LinkManager abmelden
+|* Beim sfx2::LinkManager abmelden
 |*
 \************************************************************************/
 
 void SdPage::DisconnectLink()
 {
-    SvxLinkManager* pLinkManager = pModel!=NULL ? pModel->GetLinkManager() : NULL;
+    sfx2::LinkManager* pLinkManager = pModel!=NULL ? pModel->GetLinkManager() : NULL;
 
     if (pLinkManager && mpPageLink)
     {
@@ -585,4 +586,63 @@ void SdPage::setTransitionDuration ( double fTranstionDuration )
 {
     mfTransitionDuration = fTranstionDuration;
     ActionChanged();
+}
+
+namespace sd {
+extern void createAnnotation( Reference< XAnnotation >& xAnnotation, SdPage* pPage );
+extern SdrUndoAction* CreateUndoInsertOrRemoveAnnotation( const Reference< XAnnotation >& xAnnotation, bool bInsert );
+}
+
+void SdPage::createAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )
+{
+    sd::createAnnotation( xAnnotation, this );
+}
+
+void SdPage::addAnnotation( const Reference< XAnnotation >& xAnnotation, int nIndex )
+{
+    if( (nIndex == -1) || (nIndex > (int)maAnnotations.size()) )
+    {
+        maAnnotations.push_back( xAnnotation );
+    }
+    else
+    {
+        maAnnotations.insert( maAnnotations.begin() + nIndex, xAnnotation );
+    }
+
+    if( pModel && pModel->IsUndoEnabled() )
+    {
+        SdrUndoAction* pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, true );
+        if( pAction )
+            pModel->AddUndo( pAction );
+    }
+
+    SetChanged();
+
+    if( pModel )
+    {
+        pModel->SetChanged();
+        Reference< XInterface > xSource( xAnnotation, UNO_QUERY );
+        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnAnnotationInserted" ) ), xSource );
+    }
+}
+
+void SdPage::removeAnnotation( const Reference< XAnnotation >& xAnnotation )
+{
+    if( pModel && pModel->IsUndoEnabled() )
+    {
+        SdrUndoAction* pAction = CreateUndoInsertOrRemoveAnnotation( xAnnotation, false );
+        if( pAction )
+            pModel->AddUndo( pAction );
+    }
+
+    AnnotationVector::iterator iter = std::find( maAnnotations.begin(), maAnnotations.end(), xAnnotation );
+    if( iter != maAnnotations.end() )
+        maAnnotations.erase( iter );
+
+    if( pModel )
+    {
+        pModel->SetChanged();
+        Reference< XInterface > xSource( xAnnotation, UNO_QUERY );
+        NotifyDocumentEvent( static_cast< SdDrawDocument* >( pModel ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnAnnotationRemoved" ) ), xSource );
+    }
 }

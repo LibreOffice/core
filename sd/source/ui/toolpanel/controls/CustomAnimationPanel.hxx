@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CustomAnimationPanel.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@ class ViewShellBase;
 namespace sd { namespace toolpanel {
 class TreeNode;
 class ControlFactory;
+class ToolPanelViewShell;
 } }
 
 namespace sd { namespace toolpanel { namespace controls {
@@ -49,12 +47,16 @@ class CustomAnimationPanel
 {
 public:
     CustomAnimationPanel (
-        TreeNode* pParent,
-        ViewShellBase& rBase);
+        Window& i_rParentWindow,
+        ToolPanelViewShell& i_rPanelViewShell);
     virtual ~CustomAnimationPanel (void);
 
-    static std::auto_ptr<ControlFactory> CreateControlFactory (ViewShellBase& rBase);
+    static std::auto_ptr<ControlFactory> CreateControlFactory (ToolPanelViewShell& i_rPanelViewShell);
 
+    // TreeNode overridables
+    virtual TaskPaneShellManager* GetShellManager();
+
+    // ILayoutableWindow overridables
     virtual Size GetPreferredSize (void);
     virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeigh);
     virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
@@ -71,6 +73,7 @@ public:
 private:
     Size maPreferredSize;
     ::Window* mpWrappedControl;
+    ToolPanelViewShell* m_pPanelViewShell;
 };
 
 } } } // end of namespace ::sd::toolpanel::controls

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewshape.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
@@ -59,7 +57,6 @@
 
 #include "viewshape.hxx"
 #include "tools.hxx"
-#include "lerp.hxx"
 
 #include <boost/bind.hpp>
 
@@ -80,7 +77,7 @@ namespace slideshow
                                   const ShapeAttributeLayerSharedPtr&   rAttr ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::prefetch()" );
-            ENSURE_OR_RETURN( rMtf,
+            ENSURE_OR_RETURN_FALSE( rMtf,
                                "ViewShape::prefetch(): no valid metafile!" );
 
             if( rMtf != io_rCacheEntry.mpMtf ||
@@ -206,7 +203,7 @@ namespace slideshow
             ::cppcanvas::RendererSharedPtr pRenderer(
                 getRenderer( rDestinationCanvas, rMtf, rAttr ) );
 
-            ENSURE_OR_RETURN( pRenderer, "ViewShape::draw(): Invalid renderer" );
+            ENSURE_OR_RETURN_FALSE( pRenderer, "ViewShape::draw(): Invalid renderer" );
 
             pRenderer->setTransformation( rTransform );
 #if defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
@@ -398,7 +395,7 @@ namespace slideshow
                 mpSprite->resize( rSpriteSizePixel );
             }
 
-            ENSURE_OR_RETURN( mpSprite, "ViewShape::renderSprite(): No sprite" );
+            ENSURE_OR_RETURN_FALSE( mpSprite, "ViewShape::renderSprite(): No sprite" );
 
             VERBOSE_TRACE( "ViewShape::renderSprite(): Rendering sprite 0x%X",
                            mpSprite.get() );
@@ -463,9 +460,9 @@ namespace slideshow
             if( mbForceUpdate || (nUpdateFlags & ALPHA) )
             {
                 mpSprite->setAlpha( (pAttr && pAttr->isAlphaValid()) ?
-                                    ::canvas::tools::clamp(pAttr->getAlpha(),
-                                                           0.0,
-                                                           1.0) :
+                                    ::basegfx::clamp(pAttr->getAlpha(),
+                                                     0.0,
+                                                     1.0) :
                                     1.0 );
             }
             if( mbForceUpdate || (nUpdateFlags & CLIP) )
@@ -713,9 +710,8 @@ namespace slideshow
 
                         aBitmapTransform.invert();
 
-                        ::basegfx::B2DHomMatrix aTranslation;
-                        aTranslation.translate( aTmpRect.getMinX(),
-                                                aTmpRect.getMinY() );
+                        const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createTranslateB2DHomMatrix(
+                            aTmpRect.getMinX(), aTmpRect.getMinY()));
 
                         aBitmapTransform = aBitmapTransform * aTranslation;
                         pBitmap->setTransformation( aBitmapTransform );
@@ -873,7 +869,7 @@ namespace slideshow
                                 bool                        bIsVisible ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewShape::update()" );
-            ENSURE_OR_RETURN( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
+            ENSURE_OR_RETURN_FALSE( mpViewLayer->getCanvas(), "ViewShape::update(): Invalid layer canvas" );
 
             // Shall we render to a sprite, or to a plain canvas?
             if( isBackgroundDetached() )

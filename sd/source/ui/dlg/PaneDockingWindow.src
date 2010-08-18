@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PaneDockingWindow.src,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +59,7 @@ DockingWindow FLT_LEFT_PANE_DRAW_DOCKING_WINDOW
     Text [ en-US ] = "Page Pane" ;
 };
 
-DockingWindow FLT_RIGHT_PANE_DOCKING_WINDOW
+DockingWindow FLT_TOOL_PANEL_DOCKING_WINDOW
 {
     //  HelpID = SID_EFFECT_WIN ;
     Border = TRUE ;

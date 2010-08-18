@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TestMenu.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@
 
 namespace sd { namespace toolpanel {
 
+#ifdef SHOW_COLOR_MENU
 /** This factory class is used to create instances of ColorMenu.  It can be
     extended so that its constructor stores arguments that later are passed
     to new ColorMenu objects.
@@ -48,16 +46,16 @@ class ColorMenuFactory
     : public ControlFactory
 {
 protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent )
     {
-        return new ColorMenu (pTreeNode);
+        return new ColorMenu (&i_rParent);
     }
 };
 
 
-ColorMenu::ColorMenu (TreeNode* pParent)
-    : Window (pParent->GetWindow()),
-      TreeNode(pParent),
+ColorMenu::ColorMenu (::Window* i_pParent)
+    : Window (i_pParent),
+      TreeNode(NULL),
       maSet (this),
       mnPreferredColumnCount(2)
 {
@@ -74,7 +72,7 @@ ColorMenu::ColorMenu (TreeNode* pParent)
 
     Fill ();
     maSet.Show();
-    pParent->RequestResize();
+    i_pParent->Resize();
 }
 
 
@@ -85,14 +83,10 @@ ColorMenu::~ColorMenu (void)
 }
 
 
-
-
 ::std::auto_ptr<ControlFactory> ColorMenu::CreateControlFactory (void)
 {
     return ::std::auto_ptr<ControlFactory>(new ColorMenuFactory());
 }
-
-
 
 
 /** The preferred size depends on the preferred number of columns, the
@@ -319,5 +313,6 @@ void ColorMenu::Fill (void)
     maSet.InsertItem (++i, rSettings.GetFontColor());
     maSet.SetItemText (i, String::CreateFromAscii("FontColor"));
 }
+#endif
 
 } } // end of namespace ::sd::toolpanel

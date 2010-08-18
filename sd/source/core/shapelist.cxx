@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shapelist.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,6 +84,44 @@ SdrObject* ShapeList::removeShape( SdrObject& rObject )
     return 0;
 }
 
+void ShapeList::replaceShape( SdrObject& rOldObject, SdrObject& rNewObject )
+{
+    if( &rOldObject == &rNewObject )
+        return;
+
+    ListImpl::iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), &rNewObject ) );
+    if( aIter != maShapeList.end() )
+    {
+        bool bIterErased = aIter == maIter;
+        (*aIter)->RemoveObjectUser(*this);
+        aIter = maShapeList.erase( aIter );
+
+        if( bIterErased )
+            maIter = aIter;
+    }
+
+    aIter = std::find( maShapeList.begin(), maShapeList.end(), &rOldObject );
+    if( aIter != maShapeList.end() )
+    {
+        bool bIterErased = aIter == maIter;
+
+        ListImpl::iterator iNew( maShapeList.insert( aIter, &rNewObject ) );
+
+        (*aIter)->RemoveObjectUser(*this);
+        aIter = maShapeList.erase( aIter );
+
+        rNewObject.AddObjectUser( *this );
+
+        if( bIterErased )
+            maIter = iNew;
+    }
+    else
+    {
+        DBG_ERROR("sd::ShapeList::replaceShape(), given shape not part of list!");
+        addShape( rNewObject );
+    }
+}
+
 /** removes all shapes from this list
     NOTE: iterators will become invalid */
 void ShapeList::clear()
@@ -130,25 +165,6 @@ SdrObject* ShapeList::getNextShape(SdrObject* pObj) const
     else if( !maShapeList.empty() )
     {
         return (*maShapeList.begin());
-    }
-
-    return 0;
-}
-
-SdrObject* ShapeList::getPreviousShape( SdrObject* pObj ) const
-{
-    if( pObj )
-    {
-        ListImpl::const_iterator aIter( std::find( maShapeList.begin(), maShapeList.end(), pObj ) );
-        if( (aIter != maShapeList.end()) && (aIter != maShapeList.begin()) )
-        {
-            aIter--;
-            return (*aIter);
-        }
-    }
-    else if( !maShapeList.empty() )
-    {
-        return (*--maShapeList.end());
     }
 
     return 0;

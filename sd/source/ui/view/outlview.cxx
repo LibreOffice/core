@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outlview.cxx,v $
- * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,40 +30,40 @@
 
 #include "OutlineView.hxx"
 #include <memory>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svx/svxids.hrc>
 #include "eetext.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/editstat.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/svdotext.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/imagemgr.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/style.hxx>
+#include <svl/itempool.hxx>
+#include <svl/style.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdundo.hxx>
-#include <svtools/brdcst.hxx>
+#include <svl/brdcst.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/numitem.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/numitem.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/editeng.hxx>
 
 // #97766#
-#include <svx/editobj.hxx>
-#include <svx/editund2.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editund2.hxx>
 
-#include <svx/editview.hxx>
-#include <svx/svxfont.hxx>
-#include <svx/fhgtitem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/svxfont.hxx>
+#include <editeng/fhgtitem.hxx>
 
 #include "DrawDocShell.hxx"
 #include "drawdoc.hxx"
@@ -212,7 +209,7 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
     maBulletFont.SetShadow(FALSE);
 
 
-    Reference<XFrame> xFrame (mpOutlineViewShell->GetViewShellBase().GetFrame()->GetTopFrame()->GetFrameInterface(), UNO_QUERY);
+    Reference<XFrame> xFrame (mpOutlineViewShell->GetViewShellBase().GetFrame()->GetTopFrame().GetFrameInterface(), UNO_QUERY);
 
     const OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:ShowSlide" ));
     maSlideImage = GetImage( xFrame, aSlotURL, true, false /* todo, hc mode */ );
@@ -2043,6 +2040,7 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
     return 0;
 }
 
+#if 0
 sal_Int32 OutlineView::GetPageNumberWidthPixel()
 {
     Window* pActWin = mpOutlineViewShell->GetActiveWindow();
@@ -2065,6 +2063,7 @@ sal_Int32 OutlineView::GetPageNumberWidthPixel()
     }
     return mnPageNumberWidthPixel;
 }
+#endif
 
 // --------------------------------------------------------------------
 

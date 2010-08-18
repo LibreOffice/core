@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fudraw.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +29,10 @@
 #include "precompiled_sd.hxx"
 
 #include <sot/object.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <vcl/waitobj.hxx>
 
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/svdogrp.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
@@ -76,10 +73,10 @@
 #include "sdresid.hxx"
 #include "drawview.hxx"
 #include "fusel.hxx"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <vcl/msgbox.hxx>
-
 #include "slideshow.hxx"
+#include <svx/sdrhittesthelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -100,14 +97,6 @@ FuDraw::FuDraw(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
     bDragHelpLine(FALSE),
     bPermanent(FALSE)
 {
-}
-
-FunctionReference FuDraw::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq, bool bPermanent )
-{
-    FuDraw* pFunc;
-    FunctionReference xFunc( pFunc = new FuDraw( pViewSh, pWin, pView, pDoc, rReq ) );
-    pFunc->SetPermanent(bPermanent);
-    return xFunc;
 }
 
 /*************************************************************************
@@ -690,7 +679,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             if (eHit == SDRHIT_NONE)
             {
                 // found nothing -> look after at the masterpage
-                mpView->PickObj(aPnt, pObj, pPV, SDRSEARCH_ALSOONMASTER);
+                mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER);
             }
             else if (eHit == SDRHIT_UNMARKEDOBJECT)
             {
@@ -719,7 +708,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 if (bDefPointer && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dPolyScene)))
                 {
                     // In die Gruppe hineinschauen
-                    if (mpView->PickObj(aPnt, pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
+                    if (mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
                         bDefPointer = !SetPointer(pObj, aPnt);
                 }
             }
@@ -767,10 +756,10 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
         aHitPosB.Y() -= n2HitLog;
 
         if ( !pObj->IsClosedObj() ||
-            ( pObj->IsHit(aHitPosR, nHitLog, pVisiLayer) &&
-              pObj->IsHit(aHitPosL, nHitLog, pVisiLayer) &&
-              pObj->IsHit(aHitPosT, nHitLog, pVisiLayer) &&
-              pObj->IsHit(aHitPosB, nHitLog, pVisiLayer) ) )
+            ( SdrObjectPrimitiveHit(*pObj, aHitPosR, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
+              SdrObjectPrimitiveHit(*pObj, aHitPosL, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
+              SdrObjectPrimitiveHit(*pObj, aHitPosT, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false) &&
+              SdrObjectPrimitiveHit(*pObj, aHitPosB, nHitLog, *mpView->GetSdrPageView(), pVisiLayer, false)))
         {
             /**********************************************************
             * hit inside the object (without margin) or open object
@@ -922,7 +911,7 @@ BOOL FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
                 Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(aPosPixel)));
 
-                if (mpView->PickObj(aPos, pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
+                if (mpView->PickObj(aPos, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
                     bReturn = SetHelpText(pObj, aPosPixel, aVEvt);
             }
         }
@@ -1006,7 +995,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // jump to object/page
                 aHelpText = String(SdResId(STR_CLICK_ACTION_BOOKMARK));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( String(INetURLObject::decode( pInfo->maBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) ));
+                aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
 
@@ -1015,7 +1004,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // jump to document (object/page)
                 aHelpText = String(SdResId(STR_CLICK_ACTION_DOCUMENT));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( String(INetURLObject::decode( pInfo->maBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) ));
+                aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
 
@@ -1024,7 +1013,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 // execute program
                 aHelpText = String(SdResId(STR_CLICK_ACTION_PROGRAM));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-                aHelpText.Append( String(INetURLObject::decode( pInfo->maBookmark, '%', INetURLObject::DECODE_WITH_CHARSET ) ));
+                aHelpText.Append( String(INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET ) ));
             }
             break;
 
@@ -1034,18 +1023,19 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 aHelpText = String(SdResId(STR_CLICK_ACTION_MACRO));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
-                if ( SfxApplication::IsXScriptURL( pInfo->maBookmark ) )
+                if ( SfxApplication::IsXScriptURL( pInfo->GetBookmark() ) )
                 {
-                    aHelpText.Append( pInfo->maBookmark );
+                    aHelpText.Append( pInfo->GetBookmark() );
                 }
                 else
                 {
+                    String sBookmark( pInfo->GetBookmark() );
                     sal_Unicode cToken = '.';
-                    aHelpText.Append( pInfo->maBookmark.GetToken( 2, cToken ) );
+                    aHelpText.Append( sBookmark.GetToken( 2, cToken ) );
                     aHelpText.Append( cToken );
-                    aHelpText.Append( pInfo->maBookmark.GetToken( 1, cToken ) );
+                    aHelpText.Append( sBookmark.GetToken( 1, cToken ) );
                     aHelpText.Append( cToken );
-                    aHelpText.Append(  pInfo->maBookmark.GetToken( 0, cToken ) );
+                    aHelpText.Append( sBookmark.GetToken( 0, cToken ) );
                 }
             }
             break;

@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlideSorterService.cxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -629,18 +625,6 @@ void SlideSorterService::Resize (void)
         mpSlideSorter->ArrangeGUIElements(
             Point(0,0),
             Size(aWindowBox.Width, aWindowBox.Height));
-    }
-}
-
-
-
-
-void SlideSorterService::Rearrange (void)
-{
-    if (mxParentWindow.is())
-    {
-        awt::Rectangle aWindowBox = mxParentWindow->getPosSize();
-        mpSlideSorter->GetController().Rearrange();
     }
 }
 

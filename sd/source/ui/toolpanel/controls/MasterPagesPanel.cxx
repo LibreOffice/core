@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MasterPagesPanel.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include "CurrentMasterPagesSelector.hxx"
 #include "RecentMasterPagesSelector.hxx"
 #include "AllMasterPagesSelector.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "taskpane/TaskPaneControlFactory.hxx"
 #include "taskpane/TitledControl.hxx"
 #include "../TaskPaneShellManager.hxx"
@@ -51,8 +49,14 @@
 namespace sd { namespace toolpanel { namespace controls {
 
 
-MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
-    : ScrollPanel (pParent)
+MasterPagesPanel::MasterPagesPanel (::Window& i_rParentWindow, ToolPanelViewShell& i_rPanelViewShell)
+    :ScrollPanel (i_rParentWindow)
+    ,m_pPanelViewShell( &i_rPanelViewShell )
+{
+    impl_construct( m_pPanelViewShell->GetViewShellBase() );
+}
+
+void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
 {
     SdDrawDocument* pDocument = rBase.GetDocument();
     ::std::auto_ptr<controls::MasterPagesSelector> pSelector;
@@ -121,18 +125,33 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
 
 MasterPagesPanel::~MasterPagesPanel (void)
 {
+    TaskPaneShellManager* pShellManager( GetShellManager() );
+    OSL_ENSURE( pShellManager, "MasterPagesPanel::~MasterPagesPanel: no shell manager anymore - cannot remove sub shells!" );
+    if ( pShellManager )
+    {
+        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_CURRENT );
+        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_RECENT );
+        pShellManager->RemoveSubShell( HID_SD_TASK_PANE_PREVIEW_ALL );
+    }
 }
 
 
 
 
-std::auto_ptr<ControlFactory> MasterPagesPanel::CreateControlFactory (ViewShellBase& rBase)
+TaskPaneShellManager* MasterPagesPanel::GetShellManager()
 {
-    return std::auto_ptr<ControlFactory>(
-        new ControlFactoryWithArgs1<MasterPagesPanel,ViewShellBase>(rBase));
+    if ( m_pPanelViewShell )
+        return &m_pPanelViewShell->GetSubShellManager();
+    return TreeNode::GetShellManager();
 }
 
 
 
+
+std::auto_ptr< ControlFactory > MasterPagesPanel::CreateControlFactory( ToolPanelViewShell& i_rToolPanelShell )
+{
+    return std::auto_ptr< ControlFactory >(
+        new RootControlFactoryWithArg< MasterPagesPanel, ToolPanelViewShell >( i_rToolPanelShell ) );
+}
 
 } } } // end of namespace ::sd::toolpanel::controls

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewshel.cxx,v $
- * $Revision: 1.71.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,7 @@
 #ifndef _SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
 #endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/ruler.hxx>
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
@@ -90,7 +87,7 @@
 #include <svx/svdoutl.hxx>
 
 // #96090#
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>
 #include "SpellDialogChildWindow.hxx"
 
@@ -171,14 +168,6 @@ TYPEINIT1(ViewShell, SfxShell);
 ViewShell::ViewShell( SfxViewFrame*, ::Window* pParentWindow, ViewShellBase& rViewShellBase, bool bAllowCenter)
 :   SfxShell(&rViewShellBase)
 ,   mbCenterAllowed(bAllowCenter)
-,   mpParentWindow(pParentWindow)
-{
-    construct();
-}
-
-ViewShell::ViewShell( SfxViewFrame*, ::Window* pParentWindow, const ViewShell& rShell)
-:   SfxShell(rShell.GetViewShell())
-,   mbCenterAllowed(rShell.mbCenterAllowed)
 ,   mpParentWindow(pParentWindow)
 {
     construct();
@@ -665,9 +654,18 @@ void ViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONT );
             GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
         }
-        else if(HasCurrentFunction())
+        else
         {
-            GetCurrentFunction()->Command(rCEvt);
+            bool bConsumed = false;
+               if( GetView() )
+               {
+                bConsumed = GetView()->getSmartTags().Command(rCEvt);
+            }
+
+            if( !bConsumed && HasCurrentFunction())
+            {
+                GetCurrentFunction()->Command(rCEvt);
+            }
         }
     }
 }

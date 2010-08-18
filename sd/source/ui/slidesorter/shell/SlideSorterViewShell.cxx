@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlideSorterViewShell.cxx,v $
- * $Revision: 1.32.70.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,6 +182,18 @@ void SlideSorterViewShell::Initialize (void)
         mpVerticalScrollBar,
         mpScrollBarBox);
     mpView = &mpSlideSorter->GetView();
+
+    // For accessibility we have to shortly hide the content window.
+    // This triggers the construction of a new accessibility object for
+    // the new view shell.  (One is created earlier while the construtor
+    // of the base class is executed.  At that time the correct
+    // accessibility object can not be constructed.)
+    ::Window* pWindow = mpSlideSorter->GetActiveWindow();
+    if (pWindow != NULL)
+    {
+        pWindow->Hide();
+        pWindow->Show();
+    }
 }
 
 
@@ -313,22 +322,6 @@ SfxUndoManager* SlideSorterViewShell::ImpGetUndoManager (void) const
         // tool bar.
         return const_cast<SlideSorterViewShell*>(this)->GetUndoManager();
     }
-}
-
-
-
-
-SfxShell* SlideSorterViewShell::CreateInstance (
-    sal_Int32,
-    SfxShell*,
-    void* pUserData,
-    ViewShellBase& rBase)
-{
-    return new SlideSorterViewShell (
-        rBase.GetViewFrame(),
-        rBase,
-        static_cast< ::Window*>(pUserData),
-        NULL);
 }
 
 

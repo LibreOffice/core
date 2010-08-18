@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviews4.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +28,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+
 #include "DrawViewShell.hxx"
 #include <vcl/msgbox.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _FLDITEM_HXX
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -48,7 +47,7 @@
 #ifndef _GLOBL3D_HXX
 #include <svx/globl3d.hxx>
 #endif
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _SFX_CLIENTSH_HXX
 #include <sfx2/ipclient.hxx>
 #endif
@@ -56,7 +55,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svx/svdopath.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 #include <vcl/cursor.hxx>
 
 
@@ -92,6 +91,8 @@ namespace sd {
 #pragma optimize ( "", off )
 #endif
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing;
 
 /*************************************************************************
 |*
@@ -102,25 +103,20 @@ namespace sd {
 void DrawViewShell::DeleteActualPage()
 {
     USHORT          nPage = maTabControl.GetCurPageId() - 1;
-    SdPage*         pPage = GetDoc()->GetSdPage(nPage,PK_STANDARD);
-
-#ifdef DBG_UTIL
-    USHORT nPageCount = GetDoc()->GetPageCount();
-    DBG_ASSERT(nPageCount > 1, "aber das ist die letzte!");
-#endif
 
     mpDrawView->SdrEndTextEdit();
 
-    mpDrawView->BegUndo();
-
-    mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
-    GetDoc()->RemovePage(pPage->GetPageNum());
-
-    pPage = GetDoc()->GetSdPage(nPage, PK_NOTES);
-    mpDrawView->AddUndo(GetDoc()->GetSdrUndoFactory().CreateUndoDeletePage(*pPage));
-    GetDoc()->RemovePage(pPage->GetPageNum());
-
-    mpDrawView->EndUndo();
+    try
+    {
+        Reference<XDrawPagesSupplier> xDrawPagesSupplier( GetDoc()->getUnoModel(), UNO_QUERY_THROW );
+        Reference<XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
+        Reference< XDrawPage > xPage( xPages->getByIndex( nPage ), UNO_QUERY_THROW );
+        xPages->remove( xPage );
+    }
+    catch( Exception& )
+    {
+        DBG_ERROR("SelectionManager::DeleteSelectedMasterPages(), exception caught!");
+    }
 }
 
 /*************************************************************************
@@ -503,6 +499,9 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
 
     if ( !IsInputLocked() )
     {
+        if( GetView() &&GetView()->getSmartTags().Command(rCEvt) )
+            return;
+
         const bool bNativeShow (SlideShow::IsRunning(GetViewShellBase()));
 
         if( rCEvt.GetCommand() == COMMAND_PASTESELECTION && !bNativeShow )
@@ -659,7 +658,16 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                     UnlockInput();
                                 }
                                 else
-                                    nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
+                                {
+                                    if( (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_TABLE) )
+                                    {
+                                        nSdResId = RID_DRAW_TABLEOBJ_INSIDE_POPUP;
+                                    }
+                                    else
+                                    {
+                                        nSdResId = RID_DRAW_TEXTOBJ_INSIDE_POPUP;
+                                    }
+                                }
                             }
                         }
                         else

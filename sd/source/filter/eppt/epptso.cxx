@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: epptso.cxx,v $
- * $Revision: 1.107.6.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,11 +43,11 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gradient.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 //#ifndef _SVX_XIT_HXX
 //#include <svx/xit.hxx>
 //#endif
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
 #include <com/sun/star/style/VerticalAlignment.hpp>
@@ -103,10 +100,10 @@
 #include <sot/clsids.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <com/sun/star/text/FontRelief.hpp>
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 /*
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdmodel.hxx>
 */
 #include <svtools/fltcall.hxx>
@@ -311,14 +308,6 @@ sal_Bool GroupTable::GetNextGroupEntry()
             mnGroupsClosed++;
     }
     return FALSE;
-}
-
-// ---------------------------------------------------------------------------------------------
-
-void GroupTable::SkipCurrentGroup()
-{
-    if ( mnCurrentGroupEntry )
-        delete ( mpGroupEntry[ --mnCurrentGroupEntry ] );
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -757,7 +746,7 @@ sal_Bool PPTWriter::ImplCloseDocument()
         nBytesToInsert += ImplDocumentListContainer( NULL );
 
         // nBytes im Stream einfuegen, und abhaengige Container anpassen
-        mpPptEscherEx->InsertAtCurrentPos( nBytesToInsert, TRUE );
+        mpPptEscherEx->InsertAtCurrentPos( nBytesToInsert, false );
 
         // CREATE HYPERLINK CONTAINER
         if ( nExEmbedSize )
@@ -1509,7 +1498,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                     {
                         Point aEmptyPoint = Point();
                         Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
-                        EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect );
+                        EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
                         aPropOpt.CreateGradientProperties( mXPropSet );
                         aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
                     }
@@ -1532,7 +1521,7 @@ void PPTWriter::ImplWritePortions( SvStream& rOut, TextObj& rTextObj )
                             {
                                 Point aEmptyPoint = Point();
                                 Rectangle aRect( aEmptyPoint, Size( 28000, 21000 ) );
-                                EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect );
+                                EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect );
                                 aPropOpt.CreateGradientProperties( mXBackgroundPropSet );
                                 aPropOpt.GetOpt( ESCHER_Prop_fillColor, nBackgroundColor );
                             }
@@ -1872,7 +1861,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
     }
 }
 
-PortionObj::PortionObj( PortionObj& rPortionObj )
+PortionObj::PortionObj( const PortionObj& rPortionObj )
 : PropStateValue( rPortionObj )
 {
     ImplConstruct( rPortionObj );
@@ -1963,37 +1952,68 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
         }
     }
 
-    if ( nScriptType != com::sun::star::i18n::ScriptType::COMPLEX )
+    rtl::OUString aCharHeightName, aCharWeightName, aCharLocaleName, aCharPostureName;
+    switch( nScriptType )
     {
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) ), bGetPropStateValue ) )
+        case com::sun::star::i18n::ScriptType::ASIAN :
         {
-        float fFloat;
-        mAny >>= fFloat;
-        if ( fFloat >= ::com::sun::star::awt::FontWeight::SEMIBOLD )
-            mnCharAttr |= 1;
+            aCharHeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharHeightAsian" ) );
+            aCharWeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharWeightAsian" ) );
+            aCharLocaleName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharLocaleAsian" ) );
+            aCharPostureName = String( RTL_CONSTASCII_USTRINGPARAM( "CharPostureAsian" ) );
+            break;
         }
-    }
-    else
-    {
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharWeightComplex" ) ), bGetPropStateValue ) )
+        case com::sun::star::i18n::ScriptType::COMPLEX :
         {
-        float fFloat;
-        mAny >>= fFloat;
-        if ( fFloat >= ::com::sun::star::awt::FontWeight::SEMIBOLD )
-            mnCharAttr |= 1;
+            aCharHeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharHeightComplex" ) );
+            aCharWeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharWeightComplex" ) );
+            aCharLocaleName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharLocaleComplex" ) );
+            aCharPostureName = String( RTL_CONSTASCII_USTRINGPARAM( "CharPostureComplex" ) );
+            break;
+        }
+        default:
+        {
+            aCharHeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) );
+            aCharWeightName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharWeight" ) );
+            aCharLocaleName  = String( RTL_CONSTASCII_USTRINGPARAM( "CharLocale" ) );
+            aCharPostureName = String( RTL_CONSTASCII_USTRINGPARAM( "CharPosture" ) );
+            break;
         }
     }
 
-    if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        mnCharAttrHard |= 1;
-
-    if ( nScriptType != com::sun::star::i18n::ScriptType::COMPLEX )
+    mnCharHeight = 24;
+    if ( GetPropertyValue( mAny, mXPropSet, aCharHeightName, sal_False ) )
     {
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharPosture" ) ), bGetPropStateValue ) )
+        float fVal(0.0);
+        if ( mAny >>= fVal )
         {
-            ::com::sun::star::awt::FontSlant aFS;
-            mAny >>= aFS;
-            switch ( aFS )
+            mnCharHeight = (sal_uInt16)( fVal + 0.5 );
+            meCharHeight = GetPropertyState( mXPropSet, aCharHeightName );
+        }
+    }
+    if ( GetPropertyValue( mAny, mXPropSet, aCharWeightName, sal_False ) )
+    {
+        float fFloat(0.0);
+        if ( mAny >>= fFloat )
+        {
+            if ( fFloat >= ::com::sun::star::awt::FontWeight::SEMIBOLD )
+                mnCharAttr |= 1;
+            if ( GetPropertyState( mXPropSet, aCharWeightName ) == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+                mnCharAttrHard |= 1;
+        }
+    }
+    if ( GetPropertyValue( mAny, mXPropSet, aCharLocaleName, sal_False ) )
+    {
+        com::sun::star::lang::Locale eLocale;
+        if ( mAny >>= eLocale )
+            meCharLocale = eLocale;
+    }
+    if ( GetPropertyValue( mAny, mXPropSet, aCharPostureName, sal_False ) )
+    {
+        ::com::sun::star::awt::FontSlant aFS;
+        if ( mAny >>= aFS )
+        {
+            switch( aFS )
             {
                 case ::com::sun::star::awt::FontSlant_OBLIQUE :
                 case ::com::sun::star::awt::FontSlant_ITALIC :
@@ -2002,32 +2022,14 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
                 default:
                     break;
             }
+            if ( GetPropertyState( mXPropSet, aCharPostureName ) == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
+                mnCharAttrHard |= 2;
         }
     }
-    else
-    {
-        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharPostureComplex" ) ), bGetPropStateValue ) )
-        {
-            ::com::sun::star::awt::FontSlant aFS;
-            mAny >>= aFS;
-            switch ( aFS )
-            {
-                case ::com::sun::star::awt::FontSlant_OBLIQUE :
-                case ::com::sun::star::awt::FontSlant_ITALIC :
-                    mnCharAttr |= 2;
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
-    if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
-        mnCharAttrHard |= 2;
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharUnderline" ) ), bGetPropStateValue ) )
     {
-        sal_Int16 nVal;
+        sal_Int16 nVal(0);
         mAny >>= nVal;
         switch ( nVal )
         {
@@ -2042,7 +2044,7 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharShadowed" ) ), bGetPropStateValue ) )
     {
-        sal_Bool bBool;
+        sal_Bool bBool(sal_False);
         mAny >>= bBool;
         if ( bBool )
             mnCharAttr |= 0x10;
@@ -2050,31 +2052,15 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 16;
 
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharLocale" ) ), bGetPropStateValue ) )
-    {
-        com::sun::star::lang::Locale eLocale;
-        if ( mAny >>= eLocale )
-            meCharLocale = eLocale;
-    }
-
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharRelief" ) ), bGetPropStateValue ) )
     {
-        sal_Int16 nVal;
+        sal_Int16 nVal(0);
         mAny >>= nVal;
         if ( nVal != ::com::sun::star::text::FontRelief::NONE )
             mnCharAttr |= 512;
     }
     if ( ePropState == ::com::sun::star::beans::PropertyState_DIRECT_VALUE )
         mnCharAttrHard |= 512;
-
-    mnCharHeight = 24;
-    if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharHeight" ) ), bGetPropStateValue ) )
-    {
-        float fVal;
-        mAny >>= fVal;
-        mnCharHeight = (sal_uInt16)( fVal + 0.5 );
-    }
-    meCharHeight = ePropState;
 
     if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CharColor" ) ), bGetPropStateValue ) )
     {
@@ -2103,7 +2089,7 @@ void PortionObj::ImplClear()
     delete[] mpText;
 }
 
-void PortionObj::ImplConstruct( PortionObj& rPortionObj )
+void PortionObj::ImplConstruct( const PortionObj& rPortionObj )
 {
     mbLastPortion = rPortionObj.mbLastPortion;
     mnTextSize = rPortionObj.mnTextSize;
@@ -2297,7 +2283,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
     return nRetValue;
 }
 
-PortionObj& PortionObj::operator=( PortionObj& rPortionObj )
+PortionObj& PortionObj::operator=( const PortionObj& rPortionObj )
 {
     if ( this != &rPortionObj )
     {
@@ -2375,7 +2361,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
     }
 }
 
-ParagraphObj::ParagraphObj( ParagraphObj& rObj )
+ParagraphObj::ParagraphObj( const ParagraphObj& rObj )
 : List()
 , PropStateValue()
 , SOParagraph()
@@ -2421,15 +2407,10 @@ void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
 // from sw/source/filter/ww8/wrtw8num.cxx for default bullets to export to MS intact
 static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, String& rFontName)
 {
-    StarSymbolToMSMultiFont *pConvert = 0;
-    FontFamily eFamily = FAMILY_DECORATIVE;
-
-    if (!pConvert)
-    {
-        pConvert = CreateStarSymbolToMSMultiFont();
-    }
     sal_Unicode cChar = rNumStr.GetChar(0);
+    StarSymbolToMSMultiFont *pConvert = CreateStarSymbolToMSMultiFont();
     String sFont = pConvert->ConvertChar(cChar);
+    delete pConvert;
     if (sFont.Len())
     {
         rNumStr = static_cast< sal_Unicode >(cChar | 0xF000);
@@ -2445,7 +2426,6 @@ static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, Str
         let words own font substitution kick in
         */
         rChrSet = RTL_TEXTENCODING_UNICODE;
-        eFamily = FAMILY_SWISS;
         rFontName = ::GetFontToken(rFontName, 0);
     }
     else
@@ -2458,7 +2438,6 @@ static void lcl_SubstituteBullet(String& rNumStr, rtl_TextEncoding& rChrSet, Str
         rFontName.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Wingdings"));
         rNumStr = static_cast< sal_Unicode >(0x6C);
      }
-     delete pConvert;
 }
 
 void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nNumberingDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue )
@@ -2891,7 +2870,7 @@ void ParagraphObj::ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Boo
     meBiDi = ePropState;
 }
 
-void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
+void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
 {
     mnTextSize = rParagraphObj.mnTextSize;
     mnTextAdjust = rParagraphObj.mnTextAdjust;
@@ -2904,8 +2883,9 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
     mbForbiddenRules = rParagraphObj.mbForbiddenRules;
     mnBiDi = rParagraphObj.mnBiDi;
 
-    for ( void* pPtr = rParagraphObj.First(); pPtr; pPtr = rParagraphObj.Next() )
-        Insert( new PortionObj( *(PortionObj*)pPtr ), LIST_APPEND );
+    ParagraphObj& rOther = const_cast<ParagraphObj&>(rParagraphObj);
+    for ( const void* pPtr = rOther.First(); pPtr; pPtr = rOther.Next() )
+        Insert( new PortionObj( *(const PortionObj*)pPtr ), LIST_APPEND );
 
     maTabStop = rParagraphObj.maTabStop;
     bExtendedParameters = rParagraphObj.bExtendedParameters;
@@ -2930,16 +2910,6 @@ void ParagraphObj::ImplConstruct( ParagraphObj& rParagraphObj )
     nBulletId = rParagraphObj.nBulletId;
 }
 
-::com::sun::star::awt::Size ParagraphObj::ImplMapSize( const ::com::sun::star::awt::Size& rSize )
-{
-    Size aSize( OutputDevice::LogicToLogic( Size( rSize.Width, rSize.Height ), maMapModeSrc, maMapModeDest ) );
-    if ( !aSize.Width() )
-        aSize.Width()++;
-    if ( !aSize.Height() )
-        aSize.Height()++;
-    return ::com::sun::star::awt::Size( aSize.Width(), aSize.Height() );
-}
-
 sal_uInt32 ParagraphObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition )
 {
     mnTextSize = 0;
@@ -2948,7 +2918,7 @@ sal_uInt32 ParagraphObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosi
     return mnTextSize;
 }
 
-ParagraphObj& ParagraphObj::operator=( ParagraphObj& rParagraphObj )
+ParagraphObj& ParagraphObj::operator=( const ParagraphObj& rParagraphObj )
 {
     if ( this != &rParagraphObj )
     {
@@ -3011,7 +2981,7 @@ TextObj::TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSim
     ImplCalculateTextPositions();
 }
 
-TextObj::TextObj( TextObj& rTextObj )
+TextObj::TextObj( const TextObj& rTextObj )
 {
     mpImplTextObj = rTextObj.mpImplTextObj;
     mpImplTextObj->mnRefCount++;
@@ -3153,11 +3123,15 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
 
     if ( mbEmptyPresObj )
         mnTextSize = 0;
-    if ( mnTextSize )
+    if ( !mbEmptyPresObj )
     {
         ParagraphObj* pPara;
         TextObj aTextObj( mXText, nTextInstance, maFontCollection, (PPTExBulletProvider&)*this );
-        aTextObj.Write( &rOut );
+
+        // leaving out EPP_TextCharsAtom w/o text - still write out
+        // attribute info though
+        if ( mnTextSize )
+            aTextObj.Write( &rOut );
 
         if ( pPropOpt )
             ImplAdjustFirstLineLineSpacing( aTextObj, *pPropOpt );
@@ -4144,7 +4118,7 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
     if ( bRet && bMasterPage )
     {
         mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-        sal_uInt32 nPresShapeID = mpPptEscherEx->GetShapeID();
+        sal_uInt32 nPresShapeID = mpPptEscherEx->GenerateShapeId();
         mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, nPresShapeID );// Flags: HaveAnchor | HasSpt
         EscherPropertyContainer aPropOpt;
         aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
@@ -4164,6 +4138,7 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
         ImplWriteTextStyleAtom( aClientTextBox, nStyleInstance, 0, NULL, aExtBu, &aPropOpt );
 
         aPropOpt.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+        aPropOpt.CreateShapeProperties( mXShape );
         aPropOpt.Commit( *mpStrm );
         mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
         *mpStrm << (sal_Int16)maRect.Top() << (sal_Int16)maRect.Left() << (sal_Int16)maRect.Right() << (sal_Int16)maRect.Bottom();      // oben, links, rechts, unten ????
@@ -4200,7 +4175,7 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
 
 void PPTWriter::ImplCreateShape( sal_uInt32 nType, sal_uInt32 nFlags, EscherSolverContainer& rSolver )
 {
-    sal_uInt32 nId = mpPptEscherEx->GetShapeID();
+    sal_uInt32 nId = mpPptEscherEx->GenerateShapeId();
     mpPptEscherEx->AddShape( nType, nFlags, nId );
     rSolver.AddShape( mXShape, nId );
 }
@@ -4234,6 +4209,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
     nOlePictureId = 0;
 
     sal_Bool bAdditionalText = FALSE;
+
+    sal_Bool bSecOutl = FALSE;
+    sal_uInt32 nPObjects = 0;
 
     SvMemoryStream* pClientTextBox = NULL;
     SvMemoryStream* pClientData = NULL;
@@ -4285,7 +4263,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             const ::com::sun::star::awt::Size   aSize100thmm( mXShape->getSize() );
             const ::com::sun::star::awt::Point  aPoint100thmm( mXShape->getPosition() );
             Rectangle   aRect100thmm( Point( aPoint100thmm.X, aPoint100thmm.Y ), Size( aSize100thmm.Width, aSize100thmm.Height ) );
-            EscherPropertyContainer aPropOpt( (EscherGraphicProvider&)*mpPptEscherEx, mpPicStrm, aRect100thmm );
+            EscherPropertyContainer aPropOpt( mpPptEscherEx->GetGraphicProvider(), mpPicStrm, aRect100thmm );
 
             if ( bGroup )
             {
@@ -4601,11 +4579,11 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         }
                     }
                     if ( aControlName.Len() )
-                        ImplWriteCString( *mpExEmbed, aControlName, 1 );
+                        PPTWriter::WriteCString( *mpExEmbed, aControlName, 1 );
                     if ( aOleIdentifier.Len() )
-                        ImplWriteCString( *mpExEmbed, aOleIdentifier, 2 );
+                        PPTWriter::WriteCString( *mpExEmbed, aOleIdentifier, 2 );
                     if ( aUserName.Len() )
-                        ImplWriteCString( *mpExEmbed, aUserName, 3 );
+                        PPTWriter::WriteCString( *mpExEmbed, aUserName, 3 );
                 }
                 nSize = mpExEmbed->Tell() - nOldPos;
                 mpExEmbed->Seek( nOldPos - 4 );
@@ -4843,7 +4821,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 sal_uInt16 nChar;
 
                                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                                mnShapeMasterTitle = mpPptEscherEx->GetShapeID();
+                                mnShapeMasterTitle = mpPptEscherEx->GenerateShapeId();
                                 mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterTitle );// Flags: HaveAnchor | HasSpt
                                 EscherPropertyContainer aPropertyOptions;
                                 aPropertyOptions.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
@@ -4889,8 +4867,8 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 *mpStrm << (sal_uInt32)( mnTextSize + 1 ) << (sal_uInt32)1 << (sal_uInt16)0;
                                 mpPptEscherEx->CloseContainer();    // ESCHER_ClientTextBox
                                 mpPptEscherEx->CloseContainer();    // ESCHER_SpContainer
-                                continue;
                             }
+                            continue;
                         }
                         else
                         {
@@ -4925,9 +4903,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( mbPresObj )
                 {
                     nOutlinerCount++;
-                    if ( rLayout.bOutlinerPossible && ( nOutlinerCount == 1 ) ||
-                        ( ( rLayout.bSecOutlinerPossible && ( nOutlinerCount == 2 ) )
-                            && ( nPrevTextStyle == EPP_TEXTSTYLE_BODY ) ) )
+                    if ( (rLayout.bOutlinerPossible && ( nOutlinerCount == 1 )) ||
+                         (( rLayout.bSecOutlinerPossible && ( nOutlinerCount == 2 ) ) && ( nPrevTextStyle == EPP_TEXTSTYLE_BODY ))
+                       )
                     {
                         ImplGetText();
                         TextObj aTextObj( mXText, EPP_TEXTTYPE_Body, maFontCollection, (PPTExBulletProvider&)*this );
@@ -4937,7 +4915,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                             if ( mnTextSize )
                             {
                                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
-                                mnShapeMasterBody = mpPptEscherEx->GetShapeID();
+                                mnShapeMasterBody = mpPptEscherEx->GenerateShapeId();
                                 mpPptEscherEx->AddShape( ESCHER_ShpInst_Rectangle, 0xa00, mnShapeMasterBody );  // Flags: HaveAnchor | HasSpt
                                 EscherPropertyContainer aPropOpt2;
                                 aPropOpt2.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
@@ -5090,9 +5068,9 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 << (sal_uInt32)0
                                 << (sal_uInt32)0x0012b600;
 
-//                  ImplWriteCString( *mpExEmbed, "Photo Editor Photo", 1 );
-//                  ImplWriteCString( *mpExEmbed, "MSPhotoEd.3", 2 );
-//                  ImplWriteCString( *mpExEmbed, "Microsoft Photo Editor 3.0 Photo", 3 );
+//                  PPTWriter::WriteCString( *mpExEmbed, "Photo Editor Photo", 1 );
+//                  PPTWriter::WriteCString( *mpExEmbed, "MSPhotoEd.3", 2 );
+//                  PPTWriter::WriteCString( *mpExEmbed, "Microsoft Photo Editor 3.0 Photo", 3 );
 
                     nSize = mpExEmbed->Tell() - nOldPos;
                     mpExEmbed->Seek( nOldPos - 4 );
@@ -5337,32 +5315,38 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 if ( !pClientTextBox )
                     pClientTextBox = new SvMemoryStream( 0x200, 0x200 );
 
-                *pClientTextBox << (sal_uInt32)( EPP_OutlineTextRefAtom << 16 ) << (sal_uInt32)4
-                                << nPlacementID;
-
                 if ( mbEmptyPresObj == FALSE )
                 {
                     if ( ( ePageType == NORMAL ) && ( bMasterPage == FALSE ) )
-                    {   // try to allocate the textruleratom
-                        TextRuleEntry*  pTextRule = (TextRuleEntry*)maTextRuleList.GetCurObject();
-                        while ( pTextRule )
+                    {
+                        sal_uInt32 nTextType = EPP_TEXTTYPE_Body;
+                        if ( mnTextStyle == EPP_TEXTSTYLE_BODY )
                         {
-                            int nRulePage = pTextRule->nPageNumber;
-                            if ( nRulePage > nPageNumber )
-                                break;
-                            else if ( nRulePage < nPageNumber )
-                                pTextRule = (TextRuleEntry*)maTextRuleList.Next();
-                            else
-                            {
-                                SvMemoryStream* pOut = pTextRule->pOut;
-                                if ( pOut )
-                                {
-                                    pClientTextBox->Write( pOut->GetData(), pOut->Tell() );
-                                    delete pOut, pTextRule->pOut = NULL;
-                                }
-                                maTextRuleList.Next();
-                                break;
-                            }
+                            if ( bSecOutl )
+                                nTextType = EPP_TEXTTYPE_HalfBody;
+                            else if ( mType == "presentation.Subtitle" )
+                                nTextType = EPP_TEXTTYPE_CenterBody;
+                            bSecOutl = sal_True;
+                        }
+                        else
+                            nTextType = EPP_TEXTTYPE_Title;
+
+                        TextRuleEntry aTextRule( nPageNumber );
+                        SvMemoryStream aExtBu( 0x200, 0x200 );
+                        ImplGetText();
+                        ImplWriteTextStyleAtom( *pClientTextBox, nTextType, nPObjects, &aTextRule, aExtBu, NULL );
+                        ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, nPageNumber + 0x100 );
+                        SvMemoryStream* pOut = aTextRule.pOut;
+                        if ( pOut )
+                        {
+                            pClientTextBox->Write( pOut->GetData(), pOut->Tell() );
+                            delete pOut, aTextRule.pOut = NULL;
+                        }
+                        if ( aExtBu.Tell() )
+                        {
+                            if ( !pClientData )
+                                pClientData = new SvMemoryStream( 0x200, 0x200 );
+                            ImplProgTagContainer( pClientData, &aExtBu );
                         }
                     }
                 }
@@ -5406,6 +5390,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             maRect.Justify();
             if ( mnAngle )
                 ImplFlipBoundingBox( aPropOpt );
+            aPropOpt.CreateShapeProperties( mXShape );
             aPropOpt.Commit( *mpStrm );
             mpPptEscherEx->AddClientAnchor( maRect );
 
@@ -5475,6 +5460,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             SvMemoryStream  aExtBu( 0x200, 0x200 );
             ImplWriteTextStyleAtom( *pClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOpt );
 
+            aPropOpt.CreateShapeProperties( mXShape );
             aPropOpt.Commit( *mpStrm );
             mpPptEscherEx->AddClientAnchor( maRect );
 
@@ -5546,7 +5532,7 @@ void PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 n
         mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
         EscherPropertyContainer aPropOptSp;
 
-        sal_uInt32 nId = mpPptEscherEx->GetShapeID();
+        sal_uInt32 nId = mpPptEscherEx->GenerateShapeId();
         mpPptEscherEx->AddShape( ESCHER_ShpInst_Line, 0xa02, nId );
         aPropOptSp.AddOpt( ESCHER_Prop_shapePath, ESCHER_ShapeComplex );
         aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0xa0008 );
@@ -5569,6 +5555,18 @@ void PPTWriter::ImplCreateCellBorder( const CellBorder* pCellBorder, sal_Int32 n
     }
 }
 
+void PPTWriter::WriteCString( SvStream& rSt, const String& rString, sal_uInt32 nInstance )
+{
+    sal_uInt32 i, nLen = rString.Len();
+    if ( nLen )
+    {
+        rSt << (sal_uInt32)( ( nInstance << 4 ) | ( EPP_CString << 16 ) )
+            << (sal_uInt32)( nLen << 1 );
+        for ( i = 0; i < nLen; i++ )
+            rSt << rString.GetChar( (sal_uInt16)i );
+    }
+}
+
 void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, EscherSolverContainer& aSolverContainer,
                                 EscherPropertyContainer& aPropOpt )
 {
@@ -5580,7 +5578,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 << (INT32)maRect.Right()
                 << (INT32)maRect.Bottom();
 
-    sal_uInt32 nShapeId = mpPptEscherEx->GetShapeID();
+    sal_uInt32 nShapeId = mpPptEscherEx->GenerateShapeId();
     mpPptEscherEx->AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );     // Flags: Group | Patriarch
     aSolverContainer.AddShape( rXShape, nShapeId );
     EscherPropertyContainer aPropOpt2;
@@ -5640,6 +5638,7 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x1000100 );
                 aPropOpt2.AddOpt( ESCHER_Prop_tableProperties, 1 );
                 aPropOpt2.AddOpt( ESCHER_Prop_tableRowProperties, sal_True, aMemStrm.Tell(), static_cast< sal_uInt8* >( const_cast< void* >( aMemStrm.GetData() ) ), aMemStrm.Tell() );
+                aPropOpt.CreateShapeProperties( rXShape );
                 aPropOpt.Commit( *mpStrm );
                 aPropOpt2.Commit( *mpStrm, 3, ESCHER_UDefProp );
                 mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
@@ -5694,38 +5693,25 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                             ImplCreateShape( ESCHER_ShpInst_Rectangle, 0xa02, aSolverContainer );          // Flags: Connector | HasSpt | Child
                             aPropOptSp.CreateFillProperties( mXPropSet, sal_True );
                             aPropOptSp.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90000 );
-                            if ( mnTextSize )
-                                aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
+                            aPropOptSp.CreateTextProperties( mXPropSet, mnTxId += 0x60, sal_False, sal_True );
                             aPropOptSp.AddOpt( ESCHER_Prop_WrapText, ESCHER_WrapSquare );
 
-                            if ( mnTextSize )
-                            {
-                                SvMemoryStream aClientTextBox( 0x200, 0x200 );
-                                SvMemoryStream  aExtBu( 0x200, 0x200 );
+                            SvMemoryStream aClientTextBox( 0x200, 0x200 );
+                            SvMemoryStream  aExtBu( 0x200, 0x200 );
 
-                                ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOptSp );
+                            ImplWriteTextStyleAtom( aClientTextBox, EPP_TEXTTYPE_Other, 0, NULL, aExtBu, &aPropOptSp );
 
-                                aPropOptSp.Commit( *mpStrm );
-                                mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
-                                *mpStrm     << nLeft
-                                            << nTop
-                                               << nRight
-                                            << nBottom;
+                            aPropOptSp.Commit( *mpStrm );
+                            mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
+                            *mpStrm     << nLeft
+                                        << nTop
+                                        << nRight
+                                        << nBottom;
 
-                                *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
-                                        << (sal_uInt32)aClientTextBox.Tell();
+                            *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
+                                    << (sal_uInt32)aClientTextBox.Tell();
 
-                                mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
-                            }
-                            else
-                            {
-                                aPropOptSp.Commit( *mpStrm );
-                                mpPptEscherEx->AddAtom( 16, ESCHER_ChildAnchor );
-                                *mpStrm     << nLeft
-                                            << nTop
-                                               << nRight
-                                            << nBottom;
-                            }
+                            mpStrm->Write( aClientTextBox.GetData(), aClientTextBox.Tell() );
                             mpPptEscherEx->CloseContainer();
                         }
                     }

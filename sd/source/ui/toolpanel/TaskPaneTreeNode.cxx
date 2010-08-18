@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TaskPaneTreeNode.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,22 +50,6 @@ TreeNode::TreeNode( TreeNode* pParent)
 
 TreeNode::~TreeNode (void)
 {
-}
-
-
-
-
-bool TreeNode::IsLeaf (void)
-{
-    return (mpControlContainer.get()==NULL);
-}
-
-
-
-
-bool TreeNode::IsRoot (void)
-{
-    return (mpParent==NULL);
 }
 
 
@@ -120,17 +101,6 @@ sal_Int32 TreeNode::GetMinimumWidth (void)
     }
 
     return nTotalMinimumWidth;;
-}
-
-
-
-
-ObjectBarManager* TreeNode::GetObjectBarManager (void)
-{
-    if (mpParent != NULL)
-        return mpParent->GetObjectBarManager();
-    else
-        return NULL;
 }
 
 
@@ -286,18 +256,6 @@ void TreeNode::AddStateChangeListener (const Link& rListener)
     {
         maStateChangeListeners.push_back(rListener);
     }
-}
-
-
-
-
-void TreeNode::RemoveStateChangeListener (const Link& rListener)
-{
-    maStateChangeListeners.erase (
-        ::std::find (
-            maStateChangeListeners.begin(),
-            maStateChangeListeners.end(),
-            rListener));
 }
 
 

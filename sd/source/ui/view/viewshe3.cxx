@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewshe3.cxx,v $
- * $Revision: 1.59.38.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,12 +55,11 @@
 #include <sfx2/bindings.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/outliner.hxx>
-#include <svtools/misccfg.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editstat.hxx>
 #include <tools/multisel.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/style.hxx>
+#include <svl/intitem.hxx>
+#include <svl/style.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -73,7 +69,6 @@
 #endif
 #include "DrawViewShell.hxx"
 #include "OutlineViewShell.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "drawview.hxx"
 
 #include "sdattr.hxx"
@@ -84,6 +79,7 @@
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
 #include "FrameView.hxx"
+#include "framework/FrameworkHelper.hxx"
 #include "optsitem.hxx"
 #include "sdresid.hxx"
 
@@ -92,7 +88,7 @@
 #include <svx/svxids.hrc>
 #endif
 #include <sfx2/request.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <basic/sbstar.hxx>
 
 using namespace ::com::sun::star;
@@ -250,6 +246,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     const SfxItemSet* pArgs = rRequest.GetArgs();
     if (! pArgs)
     {
+/*
         // Make the layout menu visible in the tool pane.
         const ViewShellBase& rBase (GetViewShellBase());
         if (rBase.GetMainViewShell()!=NULL
@@ -257,8 +254,9 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_DRAW)
         {
             framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
-            framework::FrameworkHelper::msLayoutTaskPanelURL);
+                framework::FrameworkHelper::msLayoutTaskPanelURL);
         }
+*/
 
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
@@ -267,23 +265,31 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         if (pTemplatePage != NULL)
         {
             eStandardLayout = pTemplatePage->GetAutoLayout();
+            if( eStandardLayout == AUTOLAYOUT_TITLE )
+                eStandardLayout = AUTOLAYOUT_ENUM;
+
             SdPage* pNotesTemplatePage = static_cast<SdPage*>(pDocument->GetPage(pTemplatePage->GetPageNum()+1));
             if (pNotesTemplatePage != NULL)
                 eNotesLayout = pNotesTemplatePage->GetAutoLayout();
         }
     }
-    else if (pArgs->Count () != 4)
+    else if (pArgs->Count() == 1)
     {
-        Cancel();
-
-        if(HasCurrentFunction(SID_BEZIER_EDIT) )
-            GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
-
-        StarBASIC::FatalError (SbERR_WRONG_ARGS);
-        rRequest.Ignore ();
-        return NULL;
+        pDocument->StopWorkStartupDelay();
+        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
+        if( pLayout )
+        {
+            if (ePageKind == PK_NOTES)
+            {
+                eNotesLayout   = (AutoLayout) pLayout->GetValue ();
+            }
+            else
+            {
+                eStandardLayout   = (AutoLayout) pLayout->GetValue ();
+            }
+        }
     }
-    else
+    else if (pArgs->Count() == 4)
     {
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
@@ -321,10 +327,23 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             return NULL;
         }
     }
+    else
+    {
+        Cancel();
+
+        if(HasCurrentFunction(SID_BEZIER_EDIT) )
+            GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON);
+
+        StarBASIC::FatalError (SbERR_WRONG_ARGS);
+        rRequest.Ignore ();
+        return NULL;
+    }
 
     // 2. Create a new page or duplicate an existing one.
     View* pDrView = GetView();
-    pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
+    const bool bUndo = pDrView && pDrView->IsUndoEnabled();
+    if( bUndo )
+        pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
 
     USHORT nNewPageIndex = 0xffff;
     switch (nSId)
@@ -403,13 +422,18 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     }
     SdPage* pNewPage = 0;
     if(nNewPageIndex != 0xffff)
-    {
         pNewPage = pDocument->GetSdPage(nNewPageIndex, PK_STANDARD);
-        pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pNewPage));
-        pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pDocument->GetSdPage (nNewPageIndex, PK_NOTES)));
-    }
 
-    pDrView->EndUndo();
+    if( bUndo )
+    {
+        if( pNewPage )
+        {
+            pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pNewPage));
+            pDrView->AddUndo(pDocument->GetSdrUndoFactory().CreateUndoNewPage(*pDocument->GetSdPage (nNewPageIndex, PK_NOTES)));
+        }
+
+        pDrView->EndUndo();
+    }
 
     return pNewPage;
 }

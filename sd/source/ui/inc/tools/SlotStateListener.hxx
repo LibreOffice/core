@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlotStateListener.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,13 +57,6 @@ class SlotStateListener
       public SlotStateListenerInterfaceBase
 {
 public:
-    /** Create a new object that has yet to be told about the the frame and
-        slots to listen to and the callback that state changes are relayed
-        to.  When you want to listen to one single slot then you can use the
-        three argument variant of this constructor.
-    */
-    SlotStateListener (void);
-
     /** This convenience version of the constructor takes all parameters
         that are necessary to observe a single slot.  See descriptions of
         the SetCallback(), ConnectToFrame(), and ObserveSlot() methods for
@@ -107,14 +97,6 @@ public:
         @throws DisposedException
     */
     void ObserveSlot (const ::rtl::OUString& rSlotName);
-
-    /** Return whether the called SlotStateListener is connected to a slot.
-        One reason for returning <FALSE/> is that the SlotStateListener has
-        been created before the controller and frame have been properly
-        initialized.
-    */
-    bool IsValid (void) const;
-
 
     //=====  frame::XStatusListener  ==========================================
 

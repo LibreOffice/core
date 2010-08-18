@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: slideshow.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,7 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <cppuhelper/bootstrap.hxx>
 
@@ -43,10 +41,9 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+#include <svx/svdpool.hxx>
+#include <svl/itemprop.hxx>
 
-#include <svtools/itemprop.hxx>
-
-#include <sfx2/topfrm.hxx>
 #include <sfx2/viewfrm.hxx>
 
 #include <toolkit/unohlp.hxx>
@@ -87,7 +84,7 @@ extern String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName );
 
 namespace {
     /** This local version of the work window overloads DataChanged() so that it
-        can restart the slide show when a displau is added or removed.
+        can restart the slide show when a display is added or removed.
     */
     class FullScreenWorkWindow : public WorkWindow
     {
@@ -117,10 +114,10 @@ namespace {
 //////////////////////////////////////////////////////////////////////////////
 // --------------------------------------------------------------------
 
-const SfxItemPropertyMap* ImplGetPresentationPropertyMap()
+const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
 {
     // NOTE: First member must be sorted
-    static const SfxItemPropertyMap aPresentationPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aPresentationPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN("AllowAnimations"),          ATTR_PRESENT_ANIMATION_ALLOWED, &::getBooleanCppuType(),                0, 0 },
         { MAP_CHAR_LEN("CustomShow"),               ATTR_PRESENT_CUSTOMSHOW,        &::getCppuType((const OUString*)0),     0, 0 },
@@ -143,7 +140,7 @@ const SfxItemPropertyMap* ImplGetPresentationPropertyMap()
     return aPresentationPropertyMap_Impl;
 }
 
-SfxItemPropertyMap map_impl[] = { { 0,0,0,0,0,0 } };
+//SfxItemPropertyMap map_impl[] = { { 0,0,0,0,0,0 } };
 
 // --------------------------------------------------------------------
 // class SlideShow
@@ -151,7 +148,7 @@ SfxItemPropertyMap map_impl[] = { { 0,0,0,0,0,0 } };
 
 SlideShow::SlideShow( SdDrawDocument* pDoc )
 : SlideshowBase( m_aMutex )
-, maPropSet(ImplGetPresentationPropertyMap())
+, maPropSet(ImplGetPresentationPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool())
 , mbIsInStartup(false)
 , mpDoc( pDoc )
 , mpCurrentViewShellBase( 0 )
@@ -278,7 +275,7 @@ OUString SAL_CALL SlideShow::getImplementationName(  ) throw(RuntimeException)
 
 sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames(  ) );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames(  ) );
 }
 
 // --------------------------------------------------------------------
@@ -297,7 +294,8 @@ Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  ) throw(Runt
 Reference< XPropertySetInfo > SAL_CALL SlideShow::getPropertySetInfo() throw(RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-    return maPropSet.getPropertySetInfo();
+    static Reference< XPropertySetInfo > xInfo = maPropSet.getPropertySetInfo();
+    return xInfo;
  }
 
 // --------------------------------------------------------------------
@@ -309,15 +307,15 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
 
     sd::PresentationSettings& rPresSettings = mpDoc->getPresentationSettings();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = maPropSet.getPropertyMapEntry(aPropertyName);
 
-    if( pMap && ((pMap->nFlags & PropertyAttribute::READONLY) != 0) )
+    if( pEntry && ((pEntry->nFlags & PropertyAttribute::READONLY) != 0) )
         throw PropertyVetoException();
 
     bool bValuesChanged = false;
     bool bIllegalArgument = true;
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
     case ATTR_PRESENT_ALL:
     {
@@ -582,9 +580,9 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
 
     const sd::PresentationSettings& rPresSettings = mpDoc->getPresentationSettings();
 
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = maPropSet.getPropertyMapEntry(PropertyName);
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
     case ATTR_PRESENT_ALL:
         return Any( (sal_Bool) ( !rPresSettings.mbCustomShow && rPresSettings.mbAll ) );
@@ -705,9 +703,9 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
         {
             PresentationViewShell* pShell = dynamic_cast<PresentationViewShell*>(pFullScreenViewShellBase->GetMainViewShell().get());
 
-            if( pShell && pShell->GetViewFrame() &&  pShell->GetViewFrame()->GetTopFrame() )
+            if( pShell && pShell->GetViewFrame() )
             {
-                WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame()->GetWindow().GetParent());
+                WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pShell->GetViewFrame()->GetTopFrame().GetWindow().GetParent());
                 if( pWorkWindow )
                 {
                     pWorkWindow->StartPresentationMode( FALSE, isAlwaysOnTop() );
@@ -945,13 +943,6 @@ void SlideShow::jumpToPageNumber( sal_Int32 nPageNumber )
 sal_Int32 SlideShow::getCurrentPageNumber()
 {
     return mxController.is() ? mxController->getCurrentSlideNumber() : 0;
-}
-
-// ---------------------------------------------------------
-
-sal_Int32 SlideShow::getCurrentPageIndex()
-{
-    return mxController.is() ? mxController->getCurrentSlideIndex() : 0;
 }
 
 // ---------------------------------------------------------
@@ -1201,7 +1192,7 @@ void SlideShow::StartFullscreenPresentation( )
         // The new frame is created hidden.  To make it visible and activate the
         // new view shell--a prerequisite to process slot calls and initialize
         // its panes--a GrabFocus() has to be called later on.
-        SfxTopFrame* pNewFrame = SfxTopFrame::Create( mpDoc->GetDocSh(), pWorkWindow, PRESENTATION_FACTORY_ID, TRUE);
+        SfxFrame* pNewFrame = SfxFrame::Create( *mpDoc->GetDocSh(), *pWorkWindow, PRESENTATION_FACTORY_ID, true );
         pNewFrame->SetPresentationMode(TRUE);
 
         mpFullScreenViewShellBase = static_cast<ViewShellBase*>(pNewFrame->GetCurrentViewFrame()->GetViewShell());

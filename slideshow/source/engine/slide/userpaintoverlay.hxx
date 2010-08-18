@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: userpaintoverlay.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
-
+#include <vector>
 
 /* Definition of UserPaintOverlay class */
 
@@ -51,7 +48,7 @@ namespace slideshow
 
         class PaintOverlayHandler;
         typedef ::boost::shared_ptr< class UserPaintOverlay > UserPaintOverlaySharedPtr;
-
+        typedef ::std::vector< ::cppcanvas::PolyPolygonSharedPtr> PolyPolygonVector;
         /** Slide overlay, which can be painted into by the user.
 
             This class registers itself at the EventMultiplexer,
@@ -69,15 +66,19 @@ namespace slideshow
                 @param nStrokeWidth
                 Width of the stroked path
              */
-            static UserPaintOverlaySharedPtr create( const RGBColor&         rStrokeColor,
-                                                     double                  nStrokeWidth,
-                                                     const SlideShowContext& rContext );
+            static UserPaintOverlaySharedPtr create( const RGBColor&          rStrokeColor,
+                                                     double                   nStrokeWidth,
+                                                     const SlideShowContext&  rContext,
+                                                     const PolyPolygonVector& rPolygons );
             ~UserPaintOverlay();
+            PolyPolygonVector getPolygons();
+            void drawPolygons();
 
         private:
-            UserPaintOverlay( const RGBColor&         rStrokeColor,
-                              double                  nStrokeWidth,
-                              const SlideShowContext& rContext );
+            UserPaintOverlay( const RGBColor&          rStrokeColor,
+                              double                   nStrokeWidth,
+                              const SlideShowContext&  rContext,
+                              const PolyPolygonVector& rPolygons );
 
             ::boost::shared_ptr<PaintOverlayHandler>    mpHandler;
             EventMultiplexer&                           mrMultiplexer;

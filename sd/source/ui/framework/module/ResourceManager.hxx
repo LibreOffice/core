@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ResourceManager.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,8 +126,6 @@ private:
         const ::com::sun::star::uno::Reference<
             com::sun::star::drawing::framework::XConfiguration>& rxConfiguration);
     void UpdateForMainViewShell (void);
-
-    void Trace (void) const;
 };
 
 } } // end of namespace sd::framework

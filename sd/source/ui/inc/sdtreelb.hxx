@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdtreelb.hxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include "sddllapi.h"
 #include <tools/string.hxx>
 #include <svtools/svtreebx.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <tools/ref.hxx>
 #include "sdxfer.hxx"
 
@@ -71,7 +68,7 @@ class SD_DLLPUBLIC SdPageObjsTLB : public SvTreeListBox
 {
 private:
 
-    static BOOL             bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
+    static BOOL  SD_DLLPRIVATE bIsInDrag;      // static, falls der Navigator im ExecuteDrag geloescht wird
 
 public:
 
@@ -213,13 +210,12 @@ public:
     BOOL                    SelectEntry( const String& rName );
     String                  GetSelectEntry();
     List*                   GetSelectEntryList( USHORT nDepth );
-    List*                   GetBookmarkList( USHORT nType );
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
     ::sd::DrawDocShell*         GetDropDocSh() { return(mpDropDocSh); }
 
     BOOL                    IsLinkableSelected() const { return mbLinkableSelected; }
 
-    static BOOL             IsInDrag()  { return bIsInDrag; }
+    static BOOL             IsInDrag();
     using SvLBox::ExecuteDrop;
 
 private:

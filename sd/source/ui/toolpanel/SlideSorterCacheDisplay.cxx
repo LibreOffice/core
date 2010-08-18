@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlideSorterCacheDisplay.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,38 +71,6 @@ namespace sd { namespace toolpanel {
 
 ::std::map<const SdDrawDocument*, SlideSorterCacheDisplay*> SlideSorterCacheDisplay::maDisplays;
 
-/** This factory class is used to create instances of TestPanel.  It can be
-    extended so that its constructor stores arguments that later are passed
-    to new TestPanel objects.
-*/
-class SlideSorterCacheDisplayFactory
-    : public ControlFactory
-{
-public:
-    SlideSorterCacheDisplayFactory (const SdDrawDocument* pDocument)
-        : mpDocument(pDocument)
-    {
-    }
-
-protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
-    {
-        SlideSorterCacheDisplay* pDisplay = SlideSorterCacheDisplay::Instance(mpDocument);
-        pDisplay->SetParentWindow(pTreeNode->GetWindow());
-        pDisplay->SetParentNode(pTreeNode);
-        return pDisplay;
-    }
-
-private:
-    const SdDrawDocument* mpDocument;
-};
-
-
-
-
-
-
-
 SlideSorterCacheDisplay::SlideSorterCacheDisplay (const SdDrawDocument* pDocument)
     : TreeNode(NULL),
       mpWindow(NULL),
@@ -135,15 +100,6 @@ SlideSorterCacheDisplay::~SlideSorterCacheDisplay (void)
 void SlideSorterCacheDisplay::SetParentWindow (::Window* pParentWindow)
 {
     mpWindow = new PageCacheWindow(pParentWindow, this);
-}
-
-
-
-
-std::auto_ptr<ControlFactory> SlideSorterCacheDisplay::CreateControlFactory (
-    const SdDrawDocument* pDocument)
-{
-    return std::auto_ptr<ControlFactory>(new SlideSorterCacheDisplayFactory(pDocument));
 }
 
 

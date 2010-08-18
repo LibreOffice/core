@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fusumry.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +30,11 @@
 
 
 #include "fusumry.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 
 #include "strings.hrc"
 
@@ -110,6 +107,8 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         i++;
     }
 
+    bool bBegUndo = false;
+
     SfxStyleSheet* pStyle = NULL;
 
     for (i = nFirstPage; i < nCount; i++)
@@ -128,7 +127,14 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     /**********************************************************
                     * Inhaltsverzeichnis-Seite einfuegen und Outliner anlegen
                     **********************************************************/
-                    mpView->BegUndo(String(SdResId(STR_UNDO_SUMMARY_PAGE)));
+                    const bool bUndo = mpView->IsUndoEnabled();
+
+                    if( bUndo )
+                    {
+                        mpView->BegUndo(String(SdResId(STR_UNDO_SUMMARY_PAGE)));
+                        bBegUndo = true;
+                    }
+
                     SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
                     // Seite mit Titel & Gliederung!
@@ -141,7 +147,8 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 
                     // Seite hinten einfuegen
                     mpDoc->InsertPage(pSummaryPage, nCount * 2 + 1);
-                    mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pSummaryPage));
+                    if( bUndo )
+                        mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pSummaryPage));
 
                     // MasterPage der aktuellen Seite verwenden
                     pSummaryPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
@@ -161,7 +168,9 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 
                     // Seite hinten einfuegen
                     mpDoc->InsertPage(pNotesPage, nCount * 2 + 2);
-                    mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
+
+                    if( bUndo )
+                        mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
                     // MasterPage der aktuellen Seite verwenden
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
@@ -218,7 +227,8 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         aAttr.Put(XFillStyleItem(XFILL_NONE));
         pTextObj->SetMergedItemSet(aAttr);
 
-        mpView->EndUndo();
+        if( bBegUndo )
+            mpView->EndUndo();
         delete pOutl;
 
         DrawViewShell* pDrawViewShell= dynamic_cast< DrawViewShell* >( mpViewShell );

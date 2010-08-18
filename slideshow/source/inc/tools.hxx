@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tools.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -289,6 +286,9 @@ namespace slideshow
         /** Convert a plain UNO API 32 bit int to RGBColor
          */
         RGBColor unoColor2RGBColor( sal_Int32 );
+        /** Convert an IntSRGBA to plain UNO API 32 bit int
+         */
+        sal_Int32 RGBAColor2UnoColor( cppcanvas::Color::IntSRGBA );
 
         /** Fill a plain rectangle on the given canvas with the given color
          */

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: glob.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +65,9 @@
 #define SD_IF_SDLEFTDRAWPANESHELL       SFX_INTERFACE_SD_START + 25
 #define SD_IF_SDRIGHTPANESHELL          SFX_INTERFACE_SD_START + 26
 #define SD_IF_SDDRAWTABLEOBJECTBAR      SFX_INTERFACE_SD_START + 27
+#define SD_IF_SDANNOTATIONSHELL         SFX_INTERFACE_SD_START + 28
+#define SD_IF_SDTOOLPANELPANESHELL      SFX_INTERFACE_SD_START + 29
+#define SD_IF_SDTOOLPANELSHELL          SFX_INTERFACE_SD_START + 30
 
 // Inventor-Id fuer StarDraw UserData
 const UINT32 SdUDInventor=UINT32('S')*0x00000001+

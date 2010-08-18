@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewTabBar.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +54,7 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -442,7 +440,7 @@ bool ViewTabBar::ActivatePage (void)
         {
             xView = Reference<XView>(xConfigurationController->getResource(
                 ResourceId::create(
-                    comphelper_getProcessComponentContext(),
+                    ::comphelper::getProcessComponentContext(),
                     FrameworkHelper::msCenterPaneURL)),
                 UNO_QUERY);
         }
@@ -475,7 +473,7 @@ bool ViewTabBar::ActivatePage (void)
     }
     catch (RuntimeException&)
     {
-        DBG_ASSERT(false,"ViewTabBar::ActivatePage(): caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return false;

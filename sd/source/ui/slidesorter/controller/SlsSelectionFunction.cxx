@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsSelectionFunction.cxx,v $
- * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,7 +47,6 @@
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
 #include "framework/FrameworkHelper.hxx"
-#include "showview.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawController.hxx"
 #include <vcl/sound.hxx>
@@ -139,26 +135,6 @@ private:
 };
 
 
-class SelectionFunction::InsertionIndicatorHandler
-{
-public:
-    InsertionIndicatorHandler (SlideSorter& rSlideSorter);
-    ~InsertionIndicatorHandler (void);
-
-    /** Show the insertion marker at the given coordinates.
-    */
-    void Start (const Point& rMouseModelPosition);
-
-    void UpdatePosition (const Point& rMouseModelPosition);
-
-    /** Hide the insertion marker.
-    */
-    void End (void);
-
-private:
-    SlideSorter& mrSlideSorter;
-};
-
 class SelectionFunction::EventDescriptor
 {
 public:
@@ -191,8 +167,7 @@ SelectionFunction::SelectionFunction (
       mbDragSelection(false),
       maInsertionMarkerBox(),
       mbProcessingMouseButtonDown(false),
-      mpSubstitutionHandler(new SubstitutionHandler(mrSlideSorter)),
-      mpInsertionIndicatorHandler(new InsertionIndicatorHandler(mrSlideSorter))
+      mpSubstitutionHandler(new SubstitutionHandler(mrSlideSorter))
 {
     //af    aDelayToScrollTimer.SetTimeout(50);
     aDragTimer.SetTimeoutHdl( LINK( this, SelectionFunction, DragSlideHdl ) );
@@ -243,9 +218,9 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
     rOverlay.GetMouseOverIndicatorOverlay().SetSlideUnderMouse(
         rEvent.IsLeaveWindow() ? model::SharedPageDescriptor() : pHitDescriptor);
     if (pHitDescriptor.get() != NULL)
-        rOverlay.GetMouseOverIndicatorOverlay().Show();
+        rOverlay.GetMouseOverIndicatorOverlay().setVisible(true);
     else
-        rOverlay.GetMouseOverIndicatorOverlay().Hide();
+        rOverlay.GetMouseOverIndicatorOverlay().setVisible(false);
 
     // Allow one mouse move before the drag timer is disabled.
     if (aDragTimer.IsActive())
@@ -258,7 +233,7 @@ BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
 
     Rectangle aRectangle (Point(0,0),mpWindow->GetOutputSizePixel());
     if ( ! aRectangle.IsInside(aMousePosition)
-        && rOverlay.GetSubstitutionOverlay().IsShowing())
+        && rOverlay.GetSubstitutionOverlay().isVisible())
     {
         // Mouse left the window with pressed left button.  Make it a drag.
         StartDrag();
@@ -598,11 +573,11 @@ void SelectionFunction::ProcessRectangleSelection (bool bToggleSelection)
         return;
 
     view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    if (rOverlay.GetSelectionRectangleOverlay().IsShowing())
+    if (rOverlay.GetSelectionRectangleOverlay().isVisible())
     {
         PageSelector& rSelector (mrController.GetPageSelector());
 
-        rOverlay.GetSelectionRectangleOverlay().Hide();
+        rOverlay.GetSelectionRectangleOverlay().setVisible(false);
 
         // Select all pages whose page object lies completly inside the drag
         // rectangle.
@@ -713,20 +688,6 @@ void SelectionFunction::GotoNextPage (int nOffset)
 
 
 
-void SelectionFunction::ClearOverlays (void)
-{
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-
-    rOverlay.GetSubstitutionOverlay().Hide();
-    rOverlay.GetSubstitutionOverlay().Clear();
-
-    mpInsertionIndicatorHandler->End();
-    rOverlay.GetMouseOverIndicatorOverlay().SetSlideUnderMouse(model::SharedPageDescriptor());
-}
-
-
-
-
 void SelectionFunction::ProcessMouseEvent (sal_uInt32 nEventType, const MouseEvent& rEvent)
 {
     // #95491# remember button state for creation of own MouseEvents
@@ -795,9 +756,9 @@ sal_uInt32 SelectionFunction::EncodeMouseEvent (
 
     // Detect whether we are dragging pages or dragging a selection rectangle.
     view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    if (rOverlay.GetSubstitutionOverlay().IsShowing())
+    if (rOverlay.GetSubstitutionOverlay().isVisible())
         nEventCode |= SUBSTITUTION_VISIBLE;
-    if (rOverlay.GetSelectionRectangleOverlay().IsShowing())
+    if (rOverlay.GetSelectionRectangleOverlay().isVisible())
         nEventCode |= RECTANGLE_VISIBLE;
 
     return nEventCode;
@@ -853,9 +814,9 @@ sal_uInt32 SelectionFunction::EncodeKeyEvent (
 
     // Detect whether we are dragging pages or dragging a selection rectangle.
     view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    if (rOverlay.GetSubstitutionOverlay().IsShowing())
+    if (rOverlay.GetSubstitutionOverlay().isVisible())
         nEventCode |= SUBSTITUTION_VISIBLE;
-    if (rOverlay.GetSelectionRectangleOverlay().IsShowing())
+    if (rOverlay.GetSelectionRectangleOverlay().isVisible())
         nEventCode |= RECTANGLE_VISIBLE;
 
     return nEventCode;
@@ -1070,20 +1031,20 @@ void SelectionFunction::EventPostprocessing (const EventDescriptor& rDescriptor)
         // case that the context menu is visible.
         DBG_ASSERT(
             mrController.IsContextMenuOpen()
-                || !rOverlay.GetInsertionIndicatorOverlay().IsShowing(),
+                || !rOverlay.GetInsertionIndicatorOverlay().isVisible(),
             "slidesorter::SelectionFunction: insertion indicator still visible");
         DBG_ASSERT(
-            !rOverlay.GetSubstitutionOverlay().IsShowing(),
+            !rOverlay.GetSubstitutionOverlay().isVisible(),
             "slidesorter::SelectionFunction: substitution still visible");
         DBG_ASSERT(
-            !rOverlay.GetSelectionRectangleOverlay().IsShowing(),
+            !rOverlay.GetSelectionRectangleOverlay().isVisible(),
             "slidesorter::SelectionFunction: selection rectangle still visible");
 
         // Now turn them off.
         if ( ! mrController.IsContextMenuOpen())
-            rOverlay.GetInsertionIndicatorOverlay().Hide();
-        rOverlay.GetSubstitutionOverlay().Hide();
-        rOverlay.GetSelectionRectangleOverlay().Hide();
+            rOverlay.GetInsertionIndicatorOverlay().setVisible(false);
+        rOverlay.GetSubstitutionOverlay().setVisible(false);
+        rOverlay.GetSelectionRectangleOverlay().setVisible(false);
     }
 }
 
@@ -1193,7 +1154,7 @@ SelectionFunction::SubstitutionHandler::~SubstitutionHandler (void)
     if (mrSlideSorter.IsValid())
     {
         view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-        rOverlay.GetSubstitutionOverlay().Hide();
+        rOverlay.GetSubstitutionOverlay().setVisible(false);
         rOverlay.GetSubstitutionOverlay().Clear();
     }
 }
@@ -1212,14 +1173,14 @@ void SelectionFunction::SubstitutionHandler::Start (const Point& rMouseModelPosi
 
     view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
 
-    if ( ! rOverlay.GetSubstitutionOverlay().IsShowing())
+    if ( ! rOverlay.GetSubstitutionOverlay().isVisible())
     {
         // Show a new substitution for the selected page objects.
         model::PageEnumeration aSelectedPages(
             model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 mrSlideSorter.GetModel()));
         rOverlay.GetSubstitutionOverlay().Create(aSelectedPages, rMouseModelPosition);
-        rOverlay.GetSubstitutionOverlay().Show();
+        rOverlay.GetSubstitutionOverlay().setVisible(true);
         mbHasBeenMoved = false;
     }
     else
@@ -1240,7 +1201,7 @@ void SelectionFunction::SubstitutionHandler::UpdatePosition (const Point& rMouse
     rOverlay.GetSubstitutionOverlay().SetPosition(rMouseModelPosition);
 
     rOverlay.GetInsertionIndicatorOverlay().SetPosition(rMouseModelPosition);
-    rOverlay.GetInsertionIndicatorOverlay().Show();
+    rOverlay.GetInsertionIndicatorOverlay().setVisible(true);
 
     mbHasBeenMoved = true;
 }
@@ -1279,9 +1240,9 @@ void SelectionFunction::SubstitutionHandler::Process (void)
 void SelectionFunction::SubstitutionHandler::End (void)
 {
     view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    rOverlay.GetSubstitutionOverlay().Hide();
+    rOverlay.GetSubstitutionOverlay().setVisible(false);
     rOverlay.GetSubstitutionOverlay().Clear();
-    rOverlay.GetInsertionIndicatorOverlay().Hide();
+    rOverlay.GetInsertionIndicatorOverlay().setVisible(false);
 }
 
 
@@ -1304,9 +1265,9 @@ bool SelectionFunction::SubstitutionHandler::IsSubstitutionInsertionNonTrivial (
         view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
 
         // Make sure that the substitution and the insertion indicator are visible.
-        if ( ! rOverlay.GetSubstitutionOverlay().IsShowing())
+        if ( ! rOverlay.GetSubstitutionOverlay().isVisible())
             break;
-        if ( ! rOverlay.GetInsertionIndicatorOverlay().IsShowing())
+        if ( ! rOverlay.GetInsertionIndicatorOverlay().isVisible())
             break;
 
         // Iterate over all selected pages and check whether there are
@@ -1351,57 +1312,6 @@ bool SelectionFunction::SubstitutionHandler::IsSubstitutionInsertionNonTrivial (
     while (false);
 
     return bIsNonTrivial;
-}
-
-
-
-
-//===== InsertionIndicatorHandler =============================================
-
-SelectionFunction::InsertionIndicatorHandler::InsertionIndicatorHandler (
-    SlideSorter& rSlideSorter)
-    : mrSlideSorter(rSlideSorter)
-{
-}
-
-
-
-
-SelectionFunction::InsertionIndicatorHandler::~InsertionIndicatorHandler (void)
-{
-}
-
-
-
-
-void SelectionFunction::InsertionIndicatorHandler::Start (const Point& rMouseModelPosition)
-{
-    if (mrSlideSorter.GetController().GetProperties()->IsUIReadOnly())
-        return;
-
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    rOverlay.GetInsertionIndicatorOverlay().SetPosition(rMouseModelPosition);
-    rOverlay.GetInsertionIndicatorOverlay().Show();
-}
-
-
-
-
-void SelectionFunction::InsertionIndicatorHandler::UpdatePosition (const Point& rMouseModelPosition)
-{
-    if (mrSlideSorter.GetController().GetProperties()->IsUIReadOnly())
-        return;
-
-    view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
-    rOverlay.GetInsertionIndicatorOverlay().SetPosition(rMouseModelPosition);
-}
-
-
-
-
-void SelectionFunction::InsertionIndicatorHandler::End (void)
-{
-    mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay().Hide();
 }
 
 } } } // end of namespace ::sd::slidesorter::controller

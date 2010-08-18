@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: typemap.cxx,v $
- * $Revision: 1.15.70.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,43 +29,43 @@
 #include "precompiled_sd.hxx"
 
 #include "eetext.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svtools/poolitem.hxx>
-#include <svx/tstpitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/protitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <svl/poolitem.hxx>
+#include <editeng/tstpitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/protitem.hxx>
 #include <svx/chrtitem.hxx>
-
-#include <svtools/globalnameitem.hxx>
+#include <sfx2/msg.hxx>
+#include <svl/globalnameitem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/postattr.hxx>
-#include <svx/editdata.hxx>
+#include <editeng/editdata.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/rulritem.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <sfx2/srchitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/svxenum.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/algitem.hxx>
 #include <svx/zoomitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/grafctrl.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
 #include "sdattr.hxx"
 #include <svx/zoomslideritem.hxx>
-
+#include <editeng/memberids.hrc>
 #include <svx/xftstit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xlineit0.hxx>
@@ -96,9 +93,9 @@
 #include <svx/drawitem.hxx>
 
 // #UndoRedo#
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 
-#include <svtools/lckbitem.hxx>
+#include <svl/lckbitem.hxx>
 
 
 #define CharSetItem                 SfxUInt16Item
@@ -129,8 +126,8 @@
 #define OfaStringListItem           SfxStringListItem
 #define avmedia_MediaItem           ::avmedia::MediaItem
 #include <sfx2/tplpitem.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/rectitem.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/rectitem.hxx>
 
 #include <sfx2/frame.hxx>
 

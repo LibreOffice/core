@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlideSorterModel.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,9 +83,6 @@ public:
     */
     bool SetEditMode (EditMode eEditMode);
 
-    /** Set the edit mode to that currently used by the controller.
-    */
-    bool SetEditModeFromController (void);
     EditMode GetEditMode (void) const;
     PageKind GetPageType (void) const;
 
@@ -149,10 +143,6 @@ public:
     /** Set the selection of the document to exactly that of the called model.
     */
     void SynchronizeDocumentSelection (void);
-
-    /** Set the selection of the called model to exactly that of the document.
-    */
-    void SynchronizeModelSelection (void);
 
     /** Replace the factory for the creation of the page objects and
         contacts with the given object.  The old factory is destroyed.

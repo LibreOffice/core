@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PropertySet.cxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,22 +57,6 @@ PropertySet::~PropertySet (void)
 void SAL_CALL PropertySet::disposing (void)
 {
 }
-
-
-
-
-beans::UnknownPropertyException PropertySet::CreateUnknownPropertyException (
-    const rtl::OUString& rsPropertyName)
-{
-    return beans::UnknownPropertyException(
-        OUString::createFromAscii("property ")
-            + rsPropertyName
-                + OUString::createFromAscii(" is not known"),
-        static_cast<XWeak*>(this));
-}
-
-
-
 
 //----- XPropertySet ----------------------------------------------------------
 

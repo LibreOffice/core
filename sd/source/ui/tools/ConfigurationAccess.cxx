@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConfigurationAccess.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <comphelper/processfactory.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -116,11 +114,9 @@ void ConfigurationAccess::Initialize (
             sAccessService,
             aCreationArguments);
     }
-    catch (Exception& rException)
+    catch (Exception&)
     {
-        OSL_TRACE ("caught exception while opening configuration: %s",
-            ::rtl::OUStringToOString(rException.Message,
-                RTL_TEXTENCODING_UTF8).getStr());
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

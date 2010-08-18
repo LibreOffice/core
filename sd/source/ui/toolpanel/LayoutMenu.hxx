@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: LayoutMenu.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,6 +60,7 @@ class EventMultiplexerEvent;
 namespace sd { namespace toolpanel {
 
 class ControlFactory;
+class ToolPanelViewShell;
 
 
 class LayoutMenu
@@ -79,32 +77,18 @@ public:
     /** Create a new layout menu.  Depending on the given flag it
         displays its own scroll bar or lets a surrounding window
         handle that.
-        @param rDocumentShell
-            Used to determine writing direction.
-        @param rViewShellBase
-            Gives access to the view shell at whose active page the
-            layout will be set.
-        @param bUseOwnScrollBar
-            When <TRUE/> then we will show our own scroll bar when not
-            all icons can be displayed in the visible window area.
-            When <FALSE/> then rely on an outer scroll bar.  In this
-            case we will set the height of the window so that all
-            icons are visible.
+        @param i_pParent
+            the parent node in the control tree
+        @param i_rPanelViewShell
+            the view shell of the task pane.
     */
     LayoutMenu (
-        TreeNode* pParent,
-        DrawDocShell& rDocumentShell,
-        ViewShellBase& rViewShellBase,
-        bool bUseOwnScrollBar);
+        TreeNode* i_pParent,
+        ToolPanelViewShell& i_rPanelViewShell);
     virtual ~LayoutMenu (void);
 
     static std::auto_ptr<ControlFactory> CreateControlFactory (
-        ViewShellBase& rBase,
-        DrawDocShell& rDocShell);
-
-    /** Return the name of the currently selected layout.
-    */
-    String GetSelectedLayoutName (void);
+        ToolPanelViewShell& i_rPanelViewShell );
 
     /** Return a numerical value representing the currently selected
         layout.
@@ -130,6 +114,21 @@ public:
 
     void Execute (SfxRequest& rRequest);
     void GetState (SfxItemSet& rItemSet);
+
+    /** The LayoutMenu does not support some main views.  In this case the
+        LayoutMenu is disabled.  This state is updated in this method.
+        @param eMode
+            On some occasions the edit mode is being switched when this
+            method is called can not (yet) be reliably detected.  Luckily,
+            in these cases the new value is provided by some broadcaster.
+            On other occasions the edit mode is not modified and is also not
+            provided.  Therefore the Unknown value.
+    */
+    enum MasterMode { MM_NORMAL, MM_MASTER, MM_UNKNOWN };
+    void UpdateEnabledState (const MasterMode eMode);
+
+    // TreeNode overridables
+    virtual TaskPaneShellManager* GetShellManager (void);
 
     /** Call this method when the set of displayed layouts is not up-to-date
         anymore.  It will re-assemple this set according to the current
@@ -158,6 +157,8 @@ public:
 
 private:
     ViewShellBase& mrBase;
+
+    TaskPaneShellManager*   mpShellManager;
 
     /** Do we use our own scroll bar or is viewport handling done by
         our parent?
@@ -221,6 +222,9 @@ private:
     /** Select the layout that is used by the current page.
     */
     void UpdateSelection (void);
+
+    // internal ctor
+    void    implConstruct( DrawDocShell& rDocumentShell );
 
     /** When clicked then set the current page of the view in the center pane.
     */

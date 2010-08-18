@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FrameworkHelper.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -383,23 +380,6 @@ private:
     /** This disposing method is forwarded from the inner DisposeListener class.
     */
     void disposing (const css::lang::EventObject& rEventObject);
-};
-
-
-
-/** This functor wraps a slot call.  It is used to call a slot after an
-    asynchronous configuration update, eg after switching views.
-*/
-class DispatchCaller
-{
-    SfxDispatcher& mrDispatcher;
-    USHORT mnSId;
-public:
-    /** Create a new DispatchCaller object that, when executed, will call
-        the given slot at the given dispatcher.
-    */
-    DispatchCaller(SfxDispatcher& rDispatcher, USHORT nSId);
-    void operator() (bool bEventSeen);
 };
 
 

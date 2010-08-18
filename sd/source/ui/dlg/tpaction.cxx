@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tpaction.cxx,v $
- * $Revision: 1.41 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-
+#include <svx/svxids.hrc>
 #include <com/sun/star/presentation/AnimationEffect.hpp>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/presentation/AnimationSpeed.hpp>
@@ -54,11 +51,11 @@
 #include <vcl/waitobj.hxx>
 #include <osl/file.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svx/svdpagv.hxx>
 #include <unotools/localfilehelper.hxx>
-#include <svtools/aeitem.hxx>
-#include <svx/colritem.hxx>
+#include <svl/aeitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/svdoole2.hxx>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
@@ -68,7 +65,7 @@
 #include <svx/xtable.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/urihelper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <svx/drawitem.hxx>
 #include "View.hxx"
@@ -88,15 +85,6 @@
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-
-static USHORT pActionRanges[] =
-{
-    ATTR_ANIMATION_TRANSPCOLOR,
-    ATTR_ANIMATION_TRANSPCOLOR,
-    ATTR_ACTION_START,
-    ATTR_ACTION_END,
-    0
-};
 
 #define DOCUMENT_TOKEN (sal_Unicode('#'))
 
@@ -422,13 +410,6 @@ SfxTabPage* SdTPAction::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
     return( new SdTPAction( pWindow, rAttrs ) );
-}
-
-//------------------------------------------------------------------------
-
-USHORT* SdTPAction::GetRanges()
-{
-    return( pActionRanges );
 }
 
 //------------------------------------------------------------------------
@@ -850,35 +831,6 @@ void SdTPAction::SetEditText( String const & rStr )
         default:
             break;
     }
-}
-
-String SdTPAction::GetMacroName( const String& rMacroPath )
-{
-    String result = rMacroPath;
-
-    // try to get name by parsing the macro path
-    // using the new URI parsing services
-
-    Reference< XMultiServiceFactory > xSMgr =
-        ::comphelper::getProcessServiceFactory();
-
-    Reference< com::sun::star::uri::XUriReferenceFactory >
-        xFactory( xSMgr->createInstance(
-            ::rtl::OUString::createFromAscii(
-                "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
-
-    if ( xFactory.is() )
-    {
-        Reference< com::sun::star::uri::XVndSunStarScriptUrl >
-            xUrl( xFactory->parse( rMacroPath ), UNO_QUERY );
-
-        if ( xUrl.is() )
-        {
-            result = xUrl->getName();
-        }
-    }
-
-    return result;
 }
 
 //------------------------------------------------------------------------

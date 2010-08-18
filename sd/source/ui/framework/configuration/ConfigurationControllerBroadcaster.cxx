@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConfigurationControllerBroadcaster.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -126,8 +124,7 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
         }
         catch(RuntimeException&)
         {
-            DBG_ASSERT(false,
-                "ConfigurationController: caught exception while notifying listeners");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -215,8 +212,7 @@ void ConfigurationControllerBroadcaster::DisposeAndClear (void)
                 }
                 catch (RuntimeException&)
                 {
-                    DBG_ASSERT(false,
-                        "ConfigurationController: caught exception while notifying dispose");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
             }
             else

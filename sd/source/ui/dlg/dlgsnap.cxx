@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgsnap.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,8 +35,8 @@
 
 #include <svx/svxids.hrc>
 #include <svx/dlgutil.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/aeitem.hxx>
 
 #include "dlgsnap.hrc"
 #include "sdattr.hxx"
@@ -99,27 +96,35 @@ SdSnapLineDlg::SdSnapLineDlg(
     DBG_ASSERT( pPool, "Wo ist der Pool?" );
     SfxMapUnit ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
-    // Hier werden die Max- und MinWerte in Ahaengigkeit von der
+    // #i48497# Consider page origin
+    SdrPageView* pPV = pView->GetSdrPageView();
+    Point aLeftTop(aWorkArea.Left()+1, aWorkArea.Top()+1);
+    pPV->LogicToPagePos(aLeftTop);
+    Point aRightBottom(aWorkArea.Right()-2, aWorkArea.Bottom()-2);
+    pPV->LogicToPagePos(aRightBottom);
+
+    // Hier werden die Max- und MinWerte in Abhaengigkeit von der
     // WorkArea, PoolUnit und der FieldUnit:
-    SetMetricValue( aMtrFldX, aWorkArea.Left(), ePoolUnit );
+    SetMetricValue( aMtrFldX, aLeftTop.X(), ePoolUnit );
+
     long nValue = static_cast<long>(aMtrFldX.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldX.SetMin( nValue );
     aMtrFldX.SetFirst( nValue );
 
-    SetMetricValue( aMtrFldX, aWorkArea.Right()+1, ePoolUnit );
+    SetMetricValue( aMtrFldX, aRightBottom.X(), ePoolUnit );
     nValue = static_cast<long>(aMtrFldX.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldX.SetMax( nValue );
     aMtrFldX.SetLast( nValue );
 
-    SetMetricValue( aMtrFldY, aWorkArea.Top(), ePoolUnit );
+    SetMetricValue( aMtrFldY, aLeftTop.Y(), ePoolUnit );
     nValue = static_cast<long>(aMtrFldY.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldY.SetMin( nValue );
     aMtrFldY.SetFirst( nValue );
 
-    SetMetricValue( aMtrFldY, aWorkArea.Bottom()+1, ePoolUnit );
+    SetMetricValue( aMtrFldY, aRightBottom.Y(), ePoolUnit );
     nValue = static_cast<long>(aMtrFldY.GetValue());
     nValue = Fraction( nValue ) / aUIScale;
     aMtrFldY.SetMax( nValue );

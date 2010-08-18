@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsScrollBarManager.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -217,26 +214,6 @@ void ScrollBarManager::PlaceFiller (const Rectangle& aArea)
     }
     else
         mpScrollBarFiller->Hide();
-}
-
-
-
-
-void ScrollBarManager::AdaptWindowSize (const Rectangle& rArea)
-{
-    Size aPixelContentSize (mpContentWindow->LogicToPixel(
-        mrSlideSorter.GetView().GetLayouter().GetPageBox (
-            mrSlideSorter.GetModel().GetPageCount()).GetSize()));
-    int nHeightDifference = aPixelContentSize.Height() - rArea.GetHeight();
-    ::Window* pParentWindow = mpContentWindow->GetParent();
-    Size aNewWindowSize (pParentWindow->GetSizePixel());
-    if (nHeightDifference != 0)
-    {
-        aNewWindowSize.Height() += nHeightDifference;
-        pParentWindow->SetPosSizePixel(
-            pParentWindow->GetPosPixel(),
-            aNewWindowSize);
-    }
 }
 
 

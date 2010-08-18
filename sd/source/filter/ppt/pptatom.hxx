@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pptatom.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #define _PPTATOM_HXX_
 
 #include <svx/msdffdef.hxx>
+#include <filter/msfilter/msdffimp.hxx>
 
 class SvStream;
 
@@ -51,20 +49,11 @@ public:
     /** returns true if at least one atim with the given nRecType is found */
     inline bool hasChildAtom( sal_uInt16 nRecType ) const;
 
-    /** returns true if at least one atim with the given nRecType and nRecInstnace is found */
-    inline bool hasChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstance ) const;
-
     /** returns the first child atom with nRecType or NULL */
     inline const Atom* findFirstChildAtom( sal_uInt16 nRecType ) const;
 
     /** returns the next child atom after pLast with nRecType or NULL */
     const Atom* findNextChildAtom( sal_uInt16 nRecType, const Atom* pLast ) const;
-
-    /** returns the first child atom with nRecType and nRecInstance or NULL */
-    inline const Atom* findFirstChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstance ) const;
-
-    /** returns the next child atom after pLast with nRecType and nRecInstance or NULL */
-    const Atom* findNextChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstance, const Atom* pLast ) const;
 
     /** returns the first child atom or NULL */
     inline const Atom* findFirstChildAtom() const;
@@ -101,11 +90,6 @@ inline bool Atom::hasChildAtom( sal_uInt16 nRecType ) const
     return findFirstChildAtom( nRecType ) != NULL;
 }
 
-inline bool Atom::hasChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstance ) const
-{
-    return findFirstChildAtom( nRecType, nRecInstance ) != NULL;
-}
-
 inline const Atom* Atom::findFirstChildAtom( sal_uInt16 nRecType ) const
 {
     return findNextChildAtom( nRecType, NULL );
@@ -114,11 +98,6 @@ inline const Atom* Atom::findFirstChildAtom( sal_uInt16 nRecType ) const
 inline const DffRecordHeader& Atom::getHeader() const
 {
     return maRecordHeader;
-}
-
-inline const Atom* Atom::findFirstChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstance ) const
-{
-    return findNextChildAtom( nRecType, nRecInstance, NULL );
 }
 
 inline const Atom* Atom::findFirstChildAtom() const

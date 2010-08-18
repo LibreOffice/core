@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eppt.hxx,v $
- * $Revision: 1.51 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include <sot/storage.hxx>
 #include <tools/gen.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include <tools/string.hxx>
 #include "pptexanimations.hxx"
 #include <pptexsoundcollection.hxx>
@@ -85,7 +82,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/style/TabStop.hpp>
-#include <svx/msocximex.hxx>
+#include <filter/msfilter/msocximex.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -479,7 +476,6 @@ class GroupTable
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > &
                                 GetCurrentGroupAccess() const { return mpGroupEntry[  mnCurrentGroupEntry - 1 ]->mXIndexAccess; };
         sal_uInt32              GetGroupsClosed();
-        void                    SkipCurrentGroup();
         void                    ResetGroupTable( sal_uInt32 nCount );
         void                    ClearGroupTable();
         sal_Bool                EnterGroup( ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & rIndex );
@@ -537,7 +533,7 @@ class PortionObj : public PropStateValue
     protected :
 
         void            ImplClear();
-        void            ImplConstruct( PortionObj& rPortionObj );
+        void            ImplConstruct( const PortionObj& rPortionObj );
         sal_uInt32      ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & rXTextRangeRef,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef, String& rURL );
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
@@ -570,13 +566,13 @@ class PortionObj : public PropStateValue
                                         sal_Bool bLast, FontCollection& rFontCollection );
                         PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
                                         FontCollection& rFontCollection );
-                        PortionObj( PortionObj& rPortionObj );
+                        PortionObj( const PortionObj& rPortionObj );
                         ~PortionObj();
 
         void            Write( SvStream* pStrm, sal_Bool bLast );
         sal_uInt32      Count() const { return mnTextSize; };
 
-        PortionObj&     operator=( PortionObj& rPortionObj );
+        PortionObj&     operator=( const PortionObj& rPortionObj );
 };
 
 struct ParaFlags
@@ -597,10 +593,9 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
 
     protected :
 
-        void            ImplConstruct( ParagraphObj& rParagraphObj );
+        void            ImplConstruct( const ParagraphObj& rParagraphObj );
         void            ImplClear();
         sal_uInt32      ImplCalculateTextPositions( sal_uInt32 nCurrentTextPosition );
-        ::com::sun::star::awt::Size         ImplMapSize( const ::com::sun::star::awt::Size& rSize );
         void            ImplGetParagraphValues( PPTExBulletProvider& rBuProv, sal_Bool bGetPropStateValue = FALSE );
         void            ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int16 nDepth, sal_Bool bIsBullet, sal_Bool bGetPropStateValue = FALSE );
 
@@ -634,7 +629,7 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
                         ParagraphObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > & rXTextContentRef,
                             ParaFlags, FontCollection& rFontCollection,
                                 PPTExBulletProvider& rBuProv );
-                        ParagraphObj( ParagraphObj& rParargraphObj );
+                        ParagraphObj( const ParagraphObj& rParargraphObj );
                         ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSetRef,
                                         PPTExBulletProvider& rBuProv );
 
@@ -644,7 +639,7 @@ class ParagraphObj : public List, public PropStateValue, public SOParagraph
         void            Write( SvStream* pStrm );
         sal_uInt32          Count() const { return mnTextSize; };
 
-        ParagraphObj&   operator=( ParagraphObj& rParagraphObj );
+        ParagraphObj&   operator=( const ParagraphObj& rParagraphObj );
 };
 
 struct ImplTextObj
@@ -662,13 +657,13 @@ struct ImplTextObj
 
 class TextObj
 {
-        ImplTextObj*    mpImplTextObj;
+        mutable ImplTextObj*    mpImplTextObj;
         void            ImplCalculateTextPositions();
 
     public :
                         TextObj( ::com::sun::star::uno::Reference< ::com::sun::star::text::XSimpleText > &
                                     rXText, int nInstance, FontCollection& rFontCollection, PPTExBulletProvider& rBuProv );
-                        TextObj( TextObj& rTextObj );
+                        TextObj( const TextObj& rTextObj );
                         ~TextObj();
 
         void            Write( SvStream* pStrm );
@@ -756,7 +751,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32          mnShapeMasterTitle;
         sal_uInt32          mnShapeMasterBody;
 
-        List                maTextRuleList;     // TextRuleEntry's
         List                maHyperlink;
 
         FontCollection          maFontCollection;
@@ -774,6 +768,9 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32          ImplVBAInfoContainer( SvStream* pOutStrm = NULL );
         sal_uInt32          ImplDocumentListContainer( SvStream* pOutStrm = NULL );
         sal_uInt32          ImplMasterSlideListContainer( SvStream* pOutStrm = NULL );
+
+    public:
+        static void         WriteCString( SvStream&, const String&, sal_uInt32 nInstance = 0 );
 
     protected:
 
@@ -835,7 +832,6 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         Rectangle                           ImplMapRectangle( const ::com::sun::star::awt::Rectangle& );
 
         sal_Bool                            ImplCloseDocument();        // die font-, hyper-, Soundliste wird geschrieben ..
-        void                                ImplWriteCString( SvStream&, const String&, sal_uInt32 nInstance = 0 );
 
     public:
                                 PPTWriter( SvStorageRef& rSvStorage,

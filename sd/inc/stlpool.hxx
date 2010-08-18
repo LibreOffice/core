@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stlpool.hxx,v $
- * $Revision: 1.7.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +44,8 @@
 #include <stlfamily.hxx>
 #include <stlsheet.hxx>
 
+#include <sddllapi.h>
+
 class SdStyleSheet;
 class SdDrawDocument;
 class SdPage;
@@ -69,7 +68,6 @@ public:
     SfxStyleSheetBase*  GetActualStyleSheet()                                   { return mpActualStyleSheet; }
 
     SfxStyleSheetBase*  GetTitleSheet(const String& rLayoutName);
-    String              GetLayoutName() const;
 
                         // Caller muss Liste loeschen
     List*               CreateOutlineSheetList(const String& rLayoutName);
@@ -82,8 +80,7 @@ public:
                             had to be created. This is used to assert errors in documents
                             when styles are missing.
     */
-    void                CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck = sal_False );
-    void                EraseLayoutStyleSheets(const String& rLayoutName);
+    SD_DLLPUBLIC void                CreateLayoutStyleSheets(const String& rLayoutName, sal_Bool bCheck = sal_False );
     List*               CreateLayoutSheetNames(const String& rLayoutName) const;
     void                CreateLayoutSheetList(const String& rLayoutName, SdStyleSheetVector& rLayoutSheets);
     void                CopyLayoutSheets(const String& rLayoutName, SdStyleSheetPool& rSourcePool, SdStyleSheetVector& rCreatedSheets );
@@ -127,6 +124,8 @@ public:
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
+    virtual void SAL_CALL acquire (void) throw ();
+    virtual void SAL_CALL release (void) throw ();
 protected:
     void CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily eFamily );
 
@@ -150,6 +149,3 @@ private:
 };
 
 #endif     // _SD_STLPOOL_HXX
-
-
-

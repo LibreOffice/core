@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsPageCache.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,6 @@
 
 #include "SlsGenericPageCache.hxx"
 #include "SlsRequestFactory.hxx"
-#include "SlsIdleDetector.hxx"
 #include "cache/SlsPageCache.hxx"
 #include "model/SlideSorterModel.hxx"
 #include <boost/bind.hpp>
@@ -79,25 +75,6 @@ BitmapEx PageCache::GetPreviewBitmap (
     const Size& rSize)
 {
     return mpImplementation->GetPreviewBitmap(aKey, rSize);
-}
-
-
-
-
-void PageCache::RequestPreviewBitmap (
-    CacheKey aKey,
-    const Size& rSize)
-{
-    return mpImplementation->RequestPreviewBitmap(aKey, rSize);
-}
-
-
-
-
-void PageCache::InvalidatePreviewBitmap (
-    CacheKey aKey)
-{
-    mpImplementation->InvalidatePreviewBitmap(aKey);
 }
 
 

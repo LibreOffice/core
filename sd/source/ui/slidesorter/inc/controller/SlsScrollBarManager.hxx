@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsScrollBarManager.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -245,13 +242,6 @@ private:
     void PlaceHorizontalScrollBar (const Rectangle& aArea);
     void PlaceVerticalScrollBar (const Rectangle& aArea);
     void PlaceFiller (const Rectangle& aArea);
-
-    /** Make the height of the content window larger or smaller, so that the
-
-        content size fits exactly in.  This is achieved by changing the size
-        of the parent window and rely on the resulting resize.
-    */
-    void AdaptWindowSize (const Rectangle& rArea);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

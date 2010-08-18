@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TestPanel.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@
 
 namespace sd { namespace toolpanel {
 
+#ifdef SHOW_TEST_PANEL
 /** This factory class is used to create instances of TestPanel.  It can be
     extended so that its constructor stores arguments that later are passed
     to new TestPanel objects.
@@ -48,9 +46,9 @@ class TestPanelFactory
     : public ControlFactory
 {
 protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent )
     {
-        return new TestPanel (pTreeNode);
+        return new TestPanel (i_rParent);
     }
 };
 
@@ -112,8 +110,8 @@ private:
 };
 
 
-TestPanel::TestPanel (TreeNode* pParent)
-    : SubToolPanel (pParent)
+TestPanel::TestPanel (::Window& i_rParent)
+    : SubToolPanel (i_rParent)
 {
     // Create a scrollable panel with two list boxes.
     ScrollPanel* pScrollPanel = new ScrollPanel (this);
@@ -166,13 +164,11 @@ TestPanel::~TestPanel (void)
 {
 }
 
-
-
-
 std::auto_ptr<ControlFactory> TestPanel::CreateControlFactory (void)
 {
     return std::auto_ptr<ControlFactory>(new TestPanelFactory());
 }
+#endif
 
 
 } } // end of namespace ::sd::toolpanel

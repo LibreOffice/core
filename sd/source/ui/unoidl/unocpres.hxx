@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocpres.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include <osl/mutex.hxx>
 
 #include <cppuhelper/implbase5.hxx>
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -127,7 +124,6 @@ private:
 
     // intern
     inline List* GetCustomShowList() const throw();
-    sal_Int32 getSdCustomShowIdx( const ::rtl::OUString& Name ) const throw();
     SdCustomShow * getSdCustomShow( const ::rtl::OUString& Name ) const throw();
 
 public:

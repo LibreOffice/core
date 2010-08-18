@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sddll1.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_sd.hxx"
 
 
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include "sddll.hxx"
 #include "diactrl.hxx"
 #include "tbx_ww.hxx"
@@ -51,12 +48,8 @@
 #include "GraphicViewShellBase.hxx"
 #include "DrawDocShell.hxx"
 #include "GraphicDocShell.hxx"
-#ifndef SD_SLIDEBROWSER_SLIDE_SORTER_VIEW_SHELL_HXX
 #include "SlideSorterViewShell.hxx"
-#endif
-#ifndef SD_SLIDEBROWSER_TASK_PANE_VIEW_SHELL_HXX
-#include "TaskPaneViewShell.hxx"
-#endif
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "FactoryIds.hxx"
 #include "sdmod.hxx"
 #include "app.hrc"
@@ -134,8 +127,8 @@ void SdDLL::RegisterInterfaces()
 
     // View shells for the side panes.
     ::sd::slidesorter::SlideSorterViewShell::RegisterInterface (pMod);
-    ::sd::toolpanel::TaskPaneViewShell::RegisterInterface(pMod);
-    // Tell the task pane view shell to register the interfaces of its
+    ::sd::toolpanel::ToolPanelViewShell::RegisterInterface(pMod);
+    // Tell the tool panel view shell to register the interfaces of its
     // controls.
-    ::sd::toolpanel::TaskPaneViewShell::RegisterControls();
+    ::sd::toolpanel::ToolPanelViewShell::RegisterControls();
 }

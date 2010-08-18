@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsLayouter.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,22 +71,6 @@ Layouter::~Layouter (void)
 }
 
 
-void Layouter::SetObjectWidth (
-    sal_Int32 nMinimalWidth,
-    sal_Int32 nMaximalWidth,
-    sal_Int32 nPreferredWidth)
-{
-    if (nMinimalWidth <= nPreferredWidth && nPreferredWidth <= nMaximalWidth)
-    {
-        mnMinimalWidth = nMinimalWidth;
-        mnPreferredWidth = nMaximalWidth;
-        mnMaximalWidth = nPreferredWidth;
-    }
-}
-
-
-
-
 void Layouter::SetBorders (
     sal_Int32 nLeftBorder,
     sal_Int32 nRightBorder,
@@ -124,20 +105,6 @@ void Layouter::SetPageBorders (
     if (nBottomBorder >= 0)
         mnBottomPageBorder.mnScreen = nBottomBorder;
 }
-
-
-
-
-void Layouter::SetGaps (
-    sal_Int32 nHorizontalGap,
-    sal_Int32 nVerticalGap)
-{
-    if (nHorizontalGap >= 0)
-        mnHorizontalGap.mnScreen = nHorizontalGap;
-    if (nVerticalGap >= 0)
-        mnVerticalGap.mnScreen = nVerticalGap;
-}
-
 
 
 
@@ -340,14 +307,6 @@ bool Layouter::RearrangeVertical (
 
 
 
-void Layouter::SetZoom (double nZoomFactor, OutputDevice* pDevice)
-{
-    SetZoom(Fraction(nZoomFactor), pDevice);
-}
-
-
-
-
 void Layouter::SetZoom (Fraction nZoomFactor, OutputDevice* pDevice)
 {
     MapMode aMapMode (pDevice->GetMapMode());
@@ -404,14 +363,6 @@ void Layouter::SetZoom (Fraction nZoomFactor, OutputDevice* pDevice)
 sal_Int32 Layouter::GetColumnCount (void) const
 {
     return mnColumnCount;
-}
-
-
-
-
-bool Layouter::IsColumnCountFixed (void) const
-{
-    return mnMinimalColumnCount == mnMaximalColumnCount;
 }
 
 
@@ -799,15 +750,6 @@ sal_Int32 Layouter::ResolvePositionInGap (
     }
 
     return nIndex;
-}
-
-
-
-
-const Layouter::BackgroundRectangleList&
-    Layouter::GetBackgroundRectangleList (void) const
-{
-    return maBackgroundRectangleList;
 }
 
 

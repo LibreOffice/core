@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuconstr.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include "fuconstr.hxx"
 
 #include <svx/svxids.hrc>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
@@ -73,13 +70,6 @@ FuConstruct::FuConstruct (
     : FuDraw(pViewSh, pWin, pView, pDoc, rReq),
       bSelectionChanged(FALSE)
 {
-}
-
-FunctionReference FuConstruct::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
-{
-    FunctionReference xFunc( new FuConstruct( pViewSh, pWin, pView, pDoc, rReq ) );
-    xFunc->DoExecute(rReq);
-    return xFunc;
 }
 
 void FuConstruct::DoExecute( SfxRequest& rReq )
@@ -220,7 +210,7 @@ BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
             SdrPageView* pPV;
             USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-            if (!mpView->PickObj(aPnt, pObj, pPV))
+            if (!mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV))
             {
                 mpView->MarkObj(aPnt, nHitLog);
             }

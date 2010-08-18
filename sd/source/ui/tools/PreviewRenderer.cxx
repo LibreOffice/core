@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PreviewRenderer.cxx,v $
- * $Revision: 1.16.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,10 +38,11 @@
 #include <vcl/virdev.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
+#include <tools/diagnose_ex.h>
 
 
 namespace sd {
@@ -134,7 +132,7 @@ Image PreviewRenderer::RenderPage (
         }
         catch (const com::sun::star::uno::Exception&)
         {
-            OSL_TRACE("PreviewRenderer::RenderPage: caught exception");
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -196,7 +194,7 @@ Image PreviewRenderer::RenderSubstitution (
     }
     catch (const com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("PreviewRenderer::RenderPage: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     return aPreview;
@@ -305,7 +303,7 @@ void PreviewRenderer::PaintPage (const SdPage* pPage)
     }
     catch (const ::com::sun::star::uno::Exception&)
     {
-        OSL_TRACE("PreviewRenderer::PaintPage: caught exception");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     // Restore the previous online spelling and redlining states.

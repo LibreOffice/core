@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuoaprms.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 
 #include "sdattr.hxx"
 #include <svx/svdpagv.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/svdundo.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
@@ -46,7 +43,7 @@
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include "svx/xtable.hxx"
 
 #include "strings.hrc"
@@ -186,7 +183,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
         eClickAction        = pInfo->meClickAction;
         nClickActionSet     = ATTR_SET;
 
-        aBookmark           = pInfo->maBookmark;
+        aBookmark           = pInfo->GetBookmark();
         nBookmarkSet        = ATTR_SET;
 
         eSecondEffect       = pInfo->meSecondEffect;
@@ -243,7 +240,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             if( eClickAction != pInfo->meClickAction )
                 nClickActionSet = ATTR_MIXED;
 
-            if( aBookmark != pInfo->maBookmark )
+            if( aBookmark != pInfo->GetBookmark() )
                 nBookmarkSet = ATTR_MIXED;
 
             if( eSecondEffect != pInfo->meSecondEffect )
@@ -353,7 +350,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
             aSound          = pInfo->maSoundFile;       nSoundFileSet       = ATTR_SET;
             bPlayFull       = pInfo->mbPlayFull;        nPlayFullSet        = ATTR_SET;
             eClickAction    = pInfo->meClickAction;     nClickActionSet     = ATTR_SET;
-            aBookmark       = pInfo->maBookmark;        nBookmarkSet        = ATTR_SET;
+            aBookmark       = pInfo->GetBookmark();     nBookmarkSet        = ATTR_SET;
             eSecondEffect   = pInfo->meSecondEffect;    nSecondEffectSet    = ATTR_SET;
             eSecondSpeed    = pInfo->meSecondSpeed;     nSecondSpeedSet     = ATTR_SET;
             bSecondSoundOn  = pInfo->mbSecondSoundOn;   nSecondSoundOnSet   = ATTR_SET;
@@ -733,7 +730,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetPlayFull(pInfo->mbPlayFull, pInfo->mbPlayFull);
 //              pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
                 pAction->SetClickAction(pInfo->meClickAction, pInfo->meClickAction);
-                pAction->SetBookmark(pInfo->maBookmark, pInfo->maBookmark);
+                pAction->SetBookmark(pInfo->GetBookmark(), pInfo->GetBookmark());
 //              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, TRUE);
                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);
                 pAction->SetSecondEffect(pInfo->meSecondEffect, pInfo->meSecondEffect);
@@ -762,10 +759,10 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                 pAction->SetPlayFull(pInfo->mbPlayFull, bPlayFull);
                 pAction->SetPathObj(pInfo->mpPathObj, pPath);
                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
-                pAction->SetBookmark(pInfo->maBookmark, aBookmark);
+                pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
 //              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation,
 //                                          pInfo->mbInvisibleInPresentation);
-                pAction->SetVerb(pInfo->mnVerb, (USHORT)pInfo->maBookmark.ToInt32() );
+                pAction->SetVerb(pInfo->mnVerb, (USHORT)pInfo->GetBookmark().ToInt32() );
                 pAction->SetSecondEffect(pInfo->meSecondEffect, eSecondEffect);
                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, eSecondSpeed);
                 pAction->SetSecondSoundOn(pInfo->mbSecondSoundOn, bSecondSoundOn);
@@ -807,7 +804,7 @@ void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
                     pInfo->meClickAction = eClickAction;
 
                 if (nBookmarkSet == ATTR_SET)
-                    pInfo->maBookmark = aBookmark;
+                    pInfo->SetBookmark( aBookmark );
 
                 if (nSecondEffectSet == ATTR_SET)
                     pInfo->meSecondEffect = eSecondEffect;

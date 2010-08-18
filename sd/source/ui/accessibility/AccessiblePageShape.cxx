@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessiblePageShape.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,8 +44,12 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::accessibility;
 using ::com::sun::star::uno::Reference;
+using ::rtl::OUString;
+
+#define A2S(pString) (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(pString)))
 
 namespace accessibility {
 
@@ -342,7 +343,22 @@ void AccessiblePageShape::dispose (void)
     AccessiblePageShape::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return CreateAccessibleBaseName();
+    Reference<beans::XPropertySet> xPageProperties (mxPage, UNO_QUERY);
+
+    // Get name of the current slide.
+    OUString sCurrentSlideName;
+    try
+    {
+        if (xPageProperties.is())
+        {
+            xPageProperties->getPropertyValue(A2S("LinkDisplayName")) >>= sCurrentSlideName;
+        }
+    }
+    catch (beans::UnknownPropertyException&)
+    {
+    }
+
+    return CreateAccessibleBaseName()+A2S(": ")+sCurrentSlideName;
 }
 
 

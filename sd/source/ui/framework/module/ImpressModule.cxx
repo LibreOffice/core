@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ImpressModule.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include "ViewTabBarModule.hxx"
 #include "CenterViewFocusModule.hxx"
 #include "SlideSorterModule.hxx"
-#include "TaskPaneModule.hxx"
+#include "ToolPanelModule.hxx"
 #include "ToolBarModule.hxx"
 #include "ShellStackGuard.hxx"
 
@@ -57,7 +54,7 @@ void ImpressModule::Initialize (Reference<frame::XController>& rxController)
     new SlideSorterModule(
         rxController,
         FrameworkHelper::msLeftImpressPaneURL);
-    TaskPaneModule::Initialize(rxController);
+    ToolPanelModule::Initialize(rxController);
     new ToolBarModule(rxController);
     new ShellStackGuard(rxController);
 }

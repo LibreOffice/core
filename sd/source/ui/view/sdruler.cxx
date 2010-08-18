@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdruler.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #include "precompiled_sd.hxx"
 
 #include "Ruler.hxx"
-#include <svtools/ptitem.hxx>
+#include <svl/ptitem.hxx>
 #include <svx/ruler.hxx>
 #ifndef _SVXIDS_HXX //autogen
 #include <svx/svxids.hrc>

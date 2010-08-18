@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdview.cxx,v $
- * $Revision: 1.66 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +31,11 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include "View.hxx"
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <sfx2/request.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/fmview.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
@@ -54,7 +51,7 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 
 #include <svx/svdetc.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 
 #include <svx/dialogs.hrc>
 #include <sfx2/viewfrm.hxx>
@@ -99,6 +96,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <svx/unoapi.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <numeric>
 
@@ -263,11 +261,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                 if( !bSubContentProcessing || !pObject->IsNotVisibleAsMaster() )
                 {
                     eKind = pObjectsSdPage ? pObjectsSdPage->GetPresObjKind(pObject) : PRESOBJ_NONE;
-
-                    if( eKind != PRESOBJ_BACKGROUND )
-                    {
-                        bCreateOutline = true;
-                    }
+                    bCreateOutline = true;
                 }
             }
             else if( ( pObject->GetObjInventor() == SdrInventor ) && ( pObject->GetObjIdentifier() == OBJ_TEXT ) )
@@ -313,7 +307,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                     // create dashed border
                     {
                         // create object polygon
-                        basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0)));
+                        basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                         aPolygon.transform(aObjectMatrix);
 
                         // create line and stroke attribute
@@ -443,23 +437,23 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             // get font attributes; use normally scaled font
                             const basegfx::BColor aFontColor(aRGBColor);
                             Font aVclFont;
-                            basegfx::B2DVector aSize;
+                            basegfx::B2DVector aTextSizeAttribute;
 
                             aVclFont.SetHeight( 500 );
 
-                            const drawinglayer::primitive2d::FontAttributes aFontAttributes(drawinglayer::primitive2d::getFontAttributesFromVclFont(
-                                aSize,
-                                aVclFont,
-                                false,
-                                false));
+                            const drawinglayer::attribute::FontAttribute aFontAttribute(
+                                drawinglayer::primitive2d::getFontAttributeFromVclFont(
+                                    aTextSizeAttribute,
+                                    aVclFont,
+                                    false,
+                                    false));
 
                             // fill text matrix
-                            basegfx::B2DHomMatrix aTextMatrix;
-
-                            aTextMatrix.scale(aSize.getX(), aSize.getY());
-                            aTextMatrix.shearX(fShearX);
-                            aTextMatrix.rotate(fRotate);
-                            aTextMatrix.translate(fPosX, fPosY);
+                            const basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
+                                aTextSizeAttribute.getX(), aTextSizeAttribute.getY(),
+                                fShearX,
+                                fRotate,
+                                fPosX, fPosY));
 
                             // create DXTextArray (can be empty one)
                             const ::std::vector< double > aDXArray;
@@ -468,15 +462,16 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                             const ::com::sun::star::lang::Locale aLocale;
 
                             // create primitive and add
-                            const drawinglayer::primitive2d::Primitive2DReference xRef(new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
-                                aTextMatrix,
-                                aObjectString,
-                                0,
-                                nTextLength,
-                                aDXArray,
-                                aFontAttributes,
-                                aLocale,
-                                aFontColor));
+                            const drawinglayer::primitive2d::Primitive2DReference xRef(
+                                new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
+                                    aTextMatrix,
+                                    aObjectString,
+                                    0,
+                                    nTextLength,
+                                    aDXArray,
+                                    aFontAttribute,
+                                    aLocale,
+                                    aFontColor));
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);
                         }
                     }
@@ -793,7 +788,7 @@ sal_Bool View::SdrBeginTextEdit(
             Color aBackground;
             if( pObj->GetObjInventor() == SdrInventor && pObj->GetObjIdentifier() == OBJ_TABLE )
             {
-                aBackground = ImpGetTextEditBackgroundColor();
+                aBackground = GetTextEditBackgroundColor(*this);
             }
             else
             {
@@ -973,89 +968,6 @@ void View::SetMarkedOriginalSize()
     else
         delete pUndoGroup;
 }
-
-/** create a virtual device and paints the slide contents into it.
-    The caller must delete the returned device */
-VirtualDevice* View::CreatePageVDev(USHORT nSdPage, PageKind ePageKind, ULONG nWidthPixel)
-{
-    ViewShell*  pViewShell = mpDocSh->GetViewShell();
-    OutputDevice* pRefDevice = 0;
-    if( pViewShell )
-        pRefDevice = pViewShell->GetActiveWindow();
-
-    if( !pRefDevice )
-        pRefDevice = Application::GetDefaultDevice();
-
-    DBG_ASSERT( pRefDevice, "sd::View::CreatePageVDev(), I need a reference device to work properly!" );
-
-    VirtualDevice* pVDev;
-    if( pRefDevice )
-        pVDev = new VirtualDevice( *pRefDevice );
-    else
-        pVDev = new VirtualDevice();
-
-    MapMode         aMM( MAP_100TH_MM );
-
-    SdPage* pPage = mpDoc->GetSdPage(nSdPage, ePageKind);
-    DBG_ASSERT(pPage, "sd::View::CreatePageVDev(), slide not found!");
-
-    if( pPage )
-    {
-        Size aPageSize(pPage->GetSize());
-        aPageSize.Width()  -= pPage->GetLftBorder();
-        aPageSize.Width()  -= pPage->GetRgtBorder();
-        aPageSize.Height() -= pPage->GetUppBorder();
-        aPageSize.Height() -= pPage->GetLwrBorder();
-
-        // use scaling?
-        if( nWidthPixel )
-        {
-            const Fraction aFrac( (long) nWidthPixel, pVDev->LogicToPixel( aPageSize, aMM ).Width() );
-
-            aMM.SetScaleX( aFrac );
-            aMM.SetScaleY( aFrac );
-        }
-
-        pVDev->SetMapMode( aMM );
-        if( pVDev->SetOutputSize(aPageSize) )
-        {
-            std::auto_ptr< SdrView > pView( new SdrView(mpDoc, pVDev) );
-            pView->SetPageVisible( FALSE );
-            pView->SetBordVisible( FALSE );
-            pView->SetGridVisible( FALSE );
-            pView->SetHlplVisible( FALSE );
-            pView->SetGlueVisible( FALSE );
-            pView->ShowSdrPage(pPage); // WAITING FOR SJ , Point(-pPage->GetLftBorder(), -pPage->GetUppBorder()));
-            SdrPageView* pPageView  = pView->GetSdrPageView();
-            if( pViewShell )
-            {
-                FrameView* pFrameView   = pViewShell->GetFrameView();
-                if( pFrameView )
-                {
-                    pPageView->SetVisibleLayers( pFrameView->GetVisibleLayers() );
-                    pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
-                    pPageView->SetPrintableLayers( pFrameView->GetPrintableLayers() );
-                }
-            }
-
-            // SJ: i40609, the vdev mapmode seems to be dangled after CompleteRedraw,
-            // so we are pushing here, because the mapmode is used afterwards
-            pVDev->Push();
-
-            Point aPoint( 0, 0 );
-            Region aRegion (Rectangle( aPoint, aPageSize ) );
-            pView->CompleteRedraw(pVDev, aRegion);
-            pVDev->Pop();
-        }
-        else
-        {
-            DBG_ERROR("sd::View::CreatePageVDev(), virt. device creation failed!");
-        }
-    }
-    return pVDev;
-}
-
-
 
 /*************************************************************************
 |*
@@ -1252,8 +1164,15 @@ IMPL_LINK( View, OnParagraphRemovingHdl, ::Outliner *, pOutliner )
 
 bool View::isRecordingUndo() const
 {
-    sd::UndoManager* pUndoManager = mpDoc ? mpDoc->GetUndoManager() : 0;
-    return pUndoManager && pUndoManager->isInListAction();
+    if( mpDoc && mpDoc->IsUndoEnabled() )
+    {
+        sd::UndoManager* pUndoManager = mpDoc ? mpDoc->GetUndoManager() : 0;
+        return pUndoManager && pUndoManager->isInListAction();
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void View::AddCustomHdl()

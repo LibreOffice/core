@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sddlgfact.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +51,6 @@
 #include "OutlineBulletDlg.hxx"
 #include "paragr.hxx"
 #include "present.hxx"
-#include "printdlg.hxx"
 #include "prltempl.hxx"
 #include "sdpreslt.hxx"
 #include "tabtempl.hxx"
@@ -79,7 +75,6 @@ IMPL_ABSTDLG_BASE(AbstractSdInsertPasteDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdInsertPagesObjsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractMorphDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdStartPresDlg_Impl);
-IMPL_ABSTDLG_BASE(AbstractSdPrintDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdPresLayoutDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractSfxDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSdVectorizeDlg_Impl);
@@ -329,13 +324,6 @@ void AbstractSdStartPresDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 }
 // AbstractSdStartPresDlg_Impl end
 
-//AbstractSdPrintDlg_Impl begin
-USHORT AbstractSdPrintDlg_Impl::GetAttr()
-{
-    return pDlg->GetAttr();
-}
-// AbstractSdPrintDlg_Impl end
-
 //AbstractSdPresLayoutDlg_Impl begin
 void AbstractSdPresLayoutDlg_Impl::GetAttr( SfxItemSet& rOutAttrs )
 {
@@ -500,13 +488,6 @@ AbstractSdStartPresDlg *  SdAbstractDialogFactory_Impl::CreateSdStartPresentatio
     return new AbstractSdStartPresDlg_Impl( new SdStartPresentationDlg( pWindow, rInAttrs, rPageNames, pCSList ) );
 }
 // add for SdStartPresentationDlg end
-
-// add for SdPrintDlg begin
-AbstractSdPrintDlg *  SdAbstractDialogFactory_Impl::CreateSdPrintDlg( ::Window* pWindow )
-{
-    return new AbstractSdPrintDlg_Impl( new SdPrintDlg( pWindow ) );
-}
-// add for SdPrintDlg end
 
 // add for SdPresLayoutTemplateDlg begin
 SfxAbstractTabDialog *  SdAbstractDialogFactory_Impl::CreateSdPresLayoutTemplateDlg( SfxObjectShell* pDocSh, ::Window* pParent, SdResId DlgId, SfxStyleSheetBase& rStyleBase, PresentationObjects ePO, SfxStyleSheetBasePool* pSSPool )

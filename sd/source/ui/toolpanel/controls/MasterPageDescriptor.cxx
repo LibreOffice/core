@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MasterPageDescriptor.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -335,28 +332,6 @@ bool MasterPageDescriptor::URLComparator::operator() (
         return false;
     else
         return rDescriptor->msURL.equals(msURL);
-}
-
-
-
-
-//===== PageNameComparator ====================================================
-
-MasterPageDescriptor::PageNameComparator::PageNameComparator (const ::rtl::OUString& sPageName)
-    : msPageName(sPageName)
-{
-}
-
-
-
-
-bool MasterPageDescriptor::PageNameComparator::operator() (
-    const SharedMasterPageDescriptor& rDescriptor)
-{
-    if (rDescriptor.get() == NULL)
-        return false;
-    else
-        return rDescriptor->msPageName.equals(msPageName);
 }
 
 

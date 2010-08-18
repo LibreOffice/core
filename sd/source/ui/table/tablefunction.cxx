@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tablefunction.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,23 +43,23 @@
 #include <svx/sdr/overlay/overlayobjectcell.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svxids.hrc>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>
-#include <svx/editstat.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 #include <svx/svxdlg.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #include "framework/FrameworkHelper.hxx"
 #include "app.hrc"
@@ -73,6 +70,7 @@
 #include "Window.hxx"
 #include "drawview.hxx"
 #include "sdresid.hxx"
+#include "undo/undoobjects.hxx"
 
 using ::rtl::OUString;
 using namespace ::sd;
@@ -150,21 +148,48 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             nRows = pDlg->getRows();
         }
 
-        Size aSize( 14100, 200 );
+        Rectangle aRect;
 
-        Point aPos;
-        Rectangle aWinRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
-        aPos = aWinRect.Center();
-        aPos = GetActiveWindow()->PixelToLogic(aPos);
-        aPos.X() -= aSize.Width() / 2;
-        aPos.Y() -= aSize.Height() / 2;
-        Rectangle aRect (aPos, aSize);
+        SdrObject* pPickObj = mpView->GetEmptyPresentationObject( PRESOBJ_TABLE );
+        if( pPickObj )
+        {
+            aRect = pPickObj->GetLogicRect();
+            aRect.setHeight( 200 );
+        }
+        else
+        {
+            Size aSize( 14100, 200 );
+
+            Point aPos;
+            Rectangle aWinRect(aPos, GetActiveWindow()->GetOutputSizePixel() );
+            aPos = aWinRect.Center();
+            aPos = GetActiveWindow()->PixelToLogic(aPos);
+            aPos.X() -= aSize.Width() / 2;
+            aPos.Y() -= aSize.Height() / 2;
+            aRect = Rectangle(aPos, aSize);
+        }
 
         ::sdr::table::SdrTableObj* pObj = new ::sdr::table::SdrTableObj( GetDoc(), aRect, nColumns, nRows );
         pObj->NbcSetStyleSheet( GetDoc()->GetDefaultStyleSheet(), sal_True );
         apply_table_style( pObj, GetDoc(), sTableStyle );
         SdrPageView* pPV = mpView->GetSdrPageView();
-        mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER);
+
+        // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
+        if( pPickObj )
+        {
+            SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
+            if(pPage && pPage->IsPresObj(pPickObj))
+            {
+                pObj->SetUserCall( pPickObj->GetUserCall() );
+                pPage->InsertPresObj( pObj, PRESOBJ_TABLE );
+            }
+        }
+
+        if( pPickObj )
+            mpView->ReplaceObjectAtView(pPickObj, *pPV, pObj, TRUE );
+        else
+            mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER);
+
         Invalidate(SID_DRAWTBX_INSERT);
         rReq.Ignore();
         break;

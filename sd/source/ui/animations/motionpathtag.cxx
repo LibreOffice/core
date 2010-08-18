@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: motionpathtag.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,12 +33,12 @@
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 
 #include <svx/sdr/overlay/overlaymanager.hxx>
-#include <svx/sdr/overlay/overlaysdrobject.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -67,6 +64,9 @@
 #include "ViewShell.hxx"
 #include "app.hrc"
 #include "Window.hxx"
+
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 
 using ::rtl::OUString;
 using ::sdr::PolyPolygonEditor;
@@ -194,9 +194,8 @@ bool PathDragResize::EndSdrDrag(bool /*bCopy*/)
         SdrPathObj* pPathObj = mxTag->getPathObj();
         if( pPathObj )
         {
-            basegfx::B2DHomMatrix aTrans;
             const Point aRef( DragStat().Ref1() );
-            aTrans.translate(-aRef.X(), -aRef.Y());
+            basegfx::B2DHomMatrix aTrans(basegfx::tools::createTranslateB2DHomMatrix(-aRef.X(), -aRef.Y()));
             aTrans.scale(double(aXFact), double(aYFact));
             aTrans.translate(aRef.X(), aRef.Y());
             basegfx::B2DPolyPolygon aDragPoly(pPathObj->GetPathPoly());
@@ -310,26 +309,18 @@ void SdPathHdl::CreateB2dIAObject()
             {
                 for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)
                 {
-                    // const SdrPageViewWinRec& rPageViewWinRec = rPageViewWinList[b];
                     const SdrPageWindow& rPageWindow = *pPageView->GetPageWindow(b);
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager())
+                        if(rPageWindow.GetOverlayManager() && mpPathObj)
                         {
-                            const SdrPathObj& rPath = *mpPathObj;
+                            const sdr::contact::ViewContact& rVC = mpPathObj->GetViewContact();
+                            const drawinglayer::primitive2d::Primitive2DSequence aSequence = rVC.getViewIndependentPrimitive2DSequence();
+                            sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
 
-                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                                ::sdr::overlay::OverlaySdrObject(basegfx::B2DPoint(), rPath);
-                                //::sdr::overlay::OverlayPolyPolygonStriped( maPolyPolygon );
-                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
-
-                            // OVERLAYMANAGER
-                            if(pNewOverlayObject)
-                            {
-                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
-                                maOverlayGroup.append(*pNewOverlayObject);
-                            }
+                            rPageWindow.GetOverlayManager()->add(*pNew);
+                            maOverlayGroup.append(*pNew);
                         }
                     }
                 }
@@ -508,6 +499,7 @@ bool MotionPathTag::MouseButtonDown( const MouseEvent& rMEvt, SmartHdl& rHdl )
     {
         SmartTagReference xTag( this );
         mrView.getSmartTags().select( xTag );
+        selectionChanged();
         return true;
     }
     else
@@ -941,16 +933,13 @@ void MotionPathTag::CheckPossibilities()
     {
         if( isSelected() )
         {
-            if( mrView.IsFrameDragSingles() )
-            {
-                mrView.SetMoveAllowed( true );
-                mrView.SetMoveProtected( false );
-                mrView.SetResizeFreeAllowed( true );
-                mrView.SetResizePropAllowed( true );
-                mrView.SetResizeProtected( false );
+            mrView.SetMoveAllowed( true );
+            mrView.SetMoveProtected( false );
+            mrView.SetResizeFreeAllowed( true );
+            mrView.SetResizePropAllowed( true );
+            mrView.SetResizeProtected( false );
 
-            }
-            else
+            if( !mrView.IsFrameDragSingles() )
             {
                 bool b1stSmooth(true);
                 bool b1stSegm(true);
@@ -974,8 +963,8 @@ void MotionPathTag::addCustomHandles( SdrHdlList& rHandlerList )
         ::com::sun::star::awt::Point aPos( mxOrigin->getPosition() );
         if( (aPos.X != maOriginPos.X) || (aPos.Y != maOriginPos.Y) )
         {
-            ::basegfx::B2DHomMatrix aTransform;
-            aTransform.translate( aPos.X - maOriginPos.X, aPos.Y - maOriginPos.Y );
+            const basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
+                aPos.X - maOriginPos.X, aPos.Y - maOriginPos.Y));
             mxPolyPoly.transform( aTransform );
             mpPathObj->SetPathPoly( mxPolyPoly );
             maOriginPos = aPos;
@@ -1117,8 +1106,18 @@ void MotionPathTag::deselect()
         if( pPts )
             pPts->Clear();
     }
+
+    selectionChanged();
 }
 
+void MotionPathTag::selectionChanged()
+{
+    if( mrView.GetViewShell() && mrView.GetViewShell()->GetViewFrame() )
+    {
+        SfxBindings& rBindings = mrView.GetViewShell()->GetViewFrame()->GetBindings();
+        rBindings.InvalidateAll(TRUE);
+    }
+}
 // --------------------------------------------------------------------
 // IPolyPolygonEditorController
 // --------------------------------------------------------------------

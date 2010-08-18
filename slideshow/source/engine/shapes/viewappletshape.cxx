@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewappletshape.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,7 +138,7 @@ namespace slideshow
 
         bool ViewAppletShape::startApplet( const ::basegfx::B2DRectangle& rBounds )
         {
-            ENSURE_OR_RETURN( mpViewLayer && mpViewLayer->getCanvas() && mpViewLayer->getCanvas()->getUNOCanvas().is(),
+            ENSURE_OR_RETURN_FALSE( mpViewLayer && mpViewLayer->getCanvas() && mpViewLayer->getCanvas()->getUNOCanvas().is(),
                                "ViewAppletShape::startApplet(): Invalid or disposed view" );
             try
             {

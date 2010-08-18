@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleViewForwarder.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,18 +44,6 @@ namespace accessibility {
     May change in the future.
 */
 
-AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, USHORT nWindowId)
-    : mpView (pView),
-      mnWindowId (nWindowId),
-      mrDevice (pView->GetPaintWindow((sal_uInt32)nWindowId)->GetOutputDevice())
-{
-    OSL_ASSERT (mpView != NULL);
-    // empty
-}
-
-
-
-
 AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDevice& rDevice)
     : mpView (pView),
       mnWindowId (0),
@@ -84,15 +69,6 @@ AccessibleViewForwarder::AccessibleViewForwarder (SdrPaintView* pView, OutputDev
 AccessibleViewForwarder::~AccessibleViewForwarder (void)
 {
     // empty
-}
-
-
-
-
-void AccessibleViewForwarder::SetView (SdrPaintView* pView)
-{
-    mpView = pView;
-    OSL_ASSERT (mpView != NULL);
 }
 
 

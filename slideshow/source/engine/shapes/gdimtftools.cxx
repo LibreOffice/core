@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gdimtftools.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,7 +186,7 @@ bool getMetaFile( const uno::Reference< lang::XComponent >&       xSource,
                   int                                             mtfLoadFlags,
                   const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    ENSURE_OR_RETURN( rxContext.is(),
+    ENSURE_OR_RETURN_FALSE( rxContext.is(),
                        "getMetaFile(): Invalid context" );
 
     // create dummy XGraphicRenderer, which receives the
@@ -389,7 +386,7 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
             break;
 
         default:
-            ENSURE_OR_RETURN(false,
+            ENSURE_OR_RETURN_FALSE(false,
                               "getAnimationFromGraphic(): Unexpected case" );
             break;
     }

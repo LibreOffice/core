@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ppt97animations.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +95,6 @@ class Ppt97Animation
 public: //public methods
     Ppt97Animation( SvStream& rIn );
 
-    Ppt97Animation();
     Ppt97Animation( const Ppt97Animation& rAnimation );
     Ppt97Animation& operator= ( const Ppt97Animation& rAnimation );
     bool operator < ( const Ppt97Animation& rAnimation ) const;//later is greater
@@ -132,7 +128,9 @@ private: //private methods
     bool HasAfterEffect() const;
     bool HasAfterEffect_ChangeColor() const;
     bool HasAfterEffect_DimAtNextEffect() const;
+#ifdef FUTURE
     bool HasAfterEffect_DimAfterEffect() const;
+#endif
     bool HasStopPreviousSound() const;
     bool HasReverseOrder() const; //true if the text paragraphs should be animated in reverse order
     sal_Int32 GetParagraphLevel() const; //paragraph level that is animated ( that paragraph and higher levels )

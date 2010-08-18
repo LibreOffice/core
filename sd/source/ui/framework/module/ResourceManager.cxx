@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ResourceManager.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,26 +290,5 @@ void SAL_CALL ResourceManager::disposing (
         dispose();
     }
 }
-
-
-
-
-void ResourceManager::Trace (void) const
-{
-    OSL_TRACE("main views with resource %s:",
-        ::rtl::OUStringToOString(
-            FrameworkHelper::ResourceIdToString(mxResourceId), RTL_TEXTENCODING_UTF8).getStr());
-
-    MainViewContainer::const_iterator iDescriptor;
-    for (iDescriptor=mpActiveMainViewContainer->begin();
-         iDescriptor!=mpActiveMainViewContainer->end();
-         ++iDescriptor)
-    {
-        OSL_TRACE("    %s",
-            ::rtl::OUStringToOString(*iDescriptor, RTL_TEXTENCODING_UTF8).getStr());
-    }
-}
-
-
 
 } } // end of namespace sd::framework

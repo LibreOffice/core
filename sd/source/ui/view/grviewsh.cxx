@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: grviewsh.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,24 +60,6 @@ GraphicViewShell::GraphicViewShell (
 {
     ConstructGraphicViewShell();
 }
-
-/*************************************************************************
-|*
-|* Copy-Konstruktor
-|*
-\************************************************************************/
-
-GraphicViewShell::GraphicViewShell (
-    SfxViewFrame* pFrame,
-    ::Window* pParentWindow,
-    const DrawViewShell& rShell)
-    : DrawViewShell (pFrame, pParentWindow, rShell)
-{
-    ConstructGraphicViewShell();
-}
-
-
-
 
 GraphicViewShell::~GraphicViewShell (void)
 {

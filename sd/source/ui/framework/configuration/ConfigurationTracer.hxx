@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConfigurationTracer.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,6 @@
 
 namespace sd { namespace framework {
 
-
 /** Print debug information about configurations to the standard error
     output channel.
 */
@@ -46,13 +42,14 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration,
         const char* pMessage);
-
+#ifdef DEBUG
     static void TraceBoundResources (
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XConfiguration>& rxConfiguration,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XResourceId>& rxResourceId,
         const int nIndentation);
+#endif
 };
 
 } } // end of namespace sd::framework

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unopage.hxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,9 @@
 #include <com/sun/star/presentation/XPresentationPage.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#include <svtools/itemprop.hxx>
+#include <com/sun/star/office/XAnnotationAccess.hpp>
+
+#include <svl/itemprop.hxx>
 
 #ifndef _SVX_UNOPAGE_HXX
 #include <svx/unopage.hxx>
@@ -45,14 +44,14 @@
 #include <svx/fmdpage.hxx>
 #include <svx/svdpool.hxx>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include "unosrch.hxx"
 
 class SdPage;
 class SvxShape;
 class SdrObject;
-struct SfxItemPropertyMap;
+struct SfxItemPropertySimpleEntry;
 
 #ifdef SVX_LIGHT
 #define SvxFmDrawPage SvxDrawPage
@@ -69,16 +68,18 @@ class SdGenericDrawPage : public SvxFmDrawPage,
                           public ::com::sun::star::beans::XPropertySet,
                           public ::com::sun::star::beans::XMultiPropertySet,
                           public ::com::sun::star::animations::XAnimationNodeSupplier,
+                             public ::com::sun::star::office::XAnnotationAccess,
                           public ::com::sun::star::document::XLinkTargetSupplier
 {
 private:
     SdXImpressDocument* mpModel;
     SdrModel* mpSdrModel;
+    sal_Int16 mnTempPageNumber; // for printing handouts
 
 protected:
     friend class SdXImpressDocument;
 
-    SvxItemPropertySet  maPropSet;
+    const SvxItemPropertySet*   mpPropSet;
 
     virtual void setBackground( const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void getBackground( ::com::sun::star::uno::Any& rValue ) throw();
@@ -94,7 +95,6 @@ protected:
     void SetWidth( sal_Int32 nWidth );
     void SetHeight( sal_Int32 nHeight );
 
-    sal_Bool mbHasBackgroundObject;
     bool     mbIsImpressDocument;
 
     virtual void disposing() throw();
@@ -105,7 +105,7 @@ protected:
     void throwIfDisposed() const throw (::com::sun::star::uno::RuntimeException );
 
 public:
-    SdGenericDrawPage( SdXImpressDocument* pModel, SdPage* pInPage, const SfxItemPropertyMap* pMap ) throw();
+    SdGenericDrawPage( SdXImpressDocument* pModel, SdPage* pInPage, const SvxItemPropertySet* pSet ) throw();
     virtual ~SdGenericDrawPage() throw();
 
     // intern
@@ -114,7 +114,8 @@ public:
     SdPage* GetPage() const { return (SdPage*)SvxDrawPage::mpPage; }
     SdXImpressDocument* GetModel() const;
 
-    UNO3_GETIMPLEMENTATION_DECL( SdGenericDrawPage )
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
     // this is called whenever a SdrObject must be created for a empty api shape wrapper
     virtual SdrObject *_CreateSdrObject( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape ) throw();
@@ -158,6 +159,11 @@ public:
 
     // XAnimationNodeSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode > SAL_CALL getAnimationNode(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // XAnnotationAccess:
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > SAL_CALL createAndInsertAnnotation() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeAnnotation(const ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > & annotation) throw (::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotationEnumeration > SAL_CALL createAnnotationEnumeration() throw (::com::sun::star::uno::RuntimeException);
 };
 
 /***********************************************************************

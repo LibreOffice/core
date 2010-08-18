@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlideSorter.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -193,14 +190,6 @@ void SlideSorter::Init (void)
 
         // Set view pointer of base class.
         SetupControls(pParentWindow);
-
-        // For accessibility we have to shortly hide the content window.
-        // This triggers the construction of a new accessibility object for
-        // the new view shell.  (One is created earlier while the construtor
-        // of the base class is executed.  At that time the correct
-        // accessibility object can not be constructed.)
-        pWindow->Hide();
-        pWindow->Show();
 
         mbIsValid = true;
     }

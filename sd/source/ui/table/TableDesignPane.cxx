@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TableDesignPane.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,36 +30,27 @@
 
 #include "sddll.hxx"
 
-//#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-//#include <com/sun/star/ui/XUIElementFactory.hpp>
 
 #include <comphelper/processfactory.hxx>
-
-//#include <toolkit/helper/vclunohelper.hxx>
-
 #include <sfx2/viewfrm.hxx>
-
 #include <vcl/bmpacc.hxx>
-//#include <vcl/toolbox.hxx>
-
-#include <svtools/style.hxx>
-
+#include <svl/style.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-
+#include <svx/svxids.hrc>
 #include <svx/svdetc.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/borderline.hxx>
-#include <svx/colritem.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/borderline.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/sdr/table/tabledesign.hxx>
 
 #include "TableDesignPane.hxx"
@@ -127,7 +115,7 @@ TableDesignPane::TableDesignPane( ::Window* pParent, ViewShellBase& rBase, bool 
     mxControls[CT_TABLE_STYLES].reset( pValueSet );
     if( !mbModal )
     {
-        pValueSet->SetStyle( pValueSet->GetStyle() & ~(WB_ITEMBORDER|WB_BORDER) | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_NOBORDER );
+        pValueSet->SetStyle( (pValueSet->GetStyle() & ~(WB_ITEMBORDER|WB_BORDER)) | WB_NO_DIRECTSELECT | WB_FLATVALUESET | WB_NOBORDER );
         pValueSet->SetColor();
         pValueSet->SetExtraSpacing(8);
     }
@@ -355,7 +343,9 @@ void TableDesignPane::onSelectionChanged()
             }
 
             Reference< XShapeDescriptor > xDesc( aSel, UNO_QUERY );
-            if( xDesc.is() && xDesc->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.TableShape" ) ) )
+            if( xDesc.is() &&
+                ( xDesc->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.TableShape" ) ) ||
+                  xDesc->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.TableShape" ) ) ) )
             {
                 xNewSelection = Reference< XPropertySet >::query( xDesc );
             }
@@ -401,7 +391,7 @@ void TableDesignPane::updateLayout()
                 mxControls[nId]->SetPaintTransparent(TRUE);
                 mxControls[nId]->SetBackground();
             }
-            aValueSetSize = Size( aPaneSize.Width() - 2 * aOffset.X(), nStylesHeight - mxControls[FL_TABLE_STYLES]->GetSizePixel().Height() - mnOrgOffsetY[FL_TABLE_STYLES]  );
+            aValueSetSize = Size( pValueSet->GetSizePixel().Width(), nStylesHeight - mxControls[FL_TABLE_STYLES]->GetSizePixel().Height() - mnOrgOffsetY[FL_TABLE_STYLES]  );
         }
         else
         {
@@ -456,6 +446,10 @@ void TableDesignPane::updateLayout()
             pValueSet->SetColor( GetSettings().GetStyleSettings().GetWindowColor() );
 
             Point aPos( pValueSet->GetPosPixel() );
+
+            // The following line may look like a no-op but without it the
+            // control is placed off-screen when RTL is active.
+            pValueSet->SetPosPixel(pValueSet->GetPosPixel());
 
             // shift show options section down
             const long nOptionsPos = aPos.Y() + aValueSetSize.Height();

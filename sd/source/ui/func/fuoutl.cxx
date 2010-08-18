@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuoutl.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 
 #include "fuoutl.hxx"
 
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include "OutlineView.hxx"
 #include "OutlineViewShell.hxx"
 #ifndef SD_WINDOW_SHELL_HXX
@@ -61,12 +58,6 @@ FuOutline::FuOutline (
       pOutlineViewShell (static_cast<OutlineViewShell*>(pViewShell)),
       pOutlineView (static_cast<OutlineView*>(pView))
 {
-}
-
-FunctionReference FuOutline::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView, SdDrawDocument* pDoc, SfxRequest& rReq )
-{
-    FunctionReference xFunc( new FuOutline( pViewSh, pWin, pView, pDoc, rReq ) );
-    return xFunc;
 }
 
 /*************************************************************************

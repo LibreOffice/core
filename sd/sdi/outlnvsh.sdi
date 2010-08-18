@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outlnvsh.sdi,v $
- * $Revision: 1.18.70.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -435,6 +432,21 @@ interface OutlineView
     [
         ExecMethod = FuSupport ;
         StateMethod = GetMenuState ;
+    ]
+    SID_TRANSLITERATE_SENTENCE_CASE // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_TRANSLITERATE_TITLE_CASE // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
+    ]
+    SID_TRANSLITERATE_TOGGLE_CASE // ole : no, status : ?
+    [
+        ExecMethod = FuSupport ;
+        StateMethod = GetCtrlState ;
     ]
     SID_TRANSLITERATE_UPPER // ole : no, status : ?
     [

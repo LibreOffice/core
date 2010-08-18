@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ModuleController.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,8 @@
 #include <comphelper/stl_types.hxx>
 #include <boost/bind.hpp>
 #include <hash_map>
+
+#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -171,7 +170,7 @@ void ModuleController::LoadFactories (const Reference<XComponentContext>& rxCont
     }
     catch (Exception&)
     {
-        OSL_TRACE("ERROR in ModuleController::LoadFactories");
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 

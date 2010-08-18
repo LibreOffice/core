@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docshel4.cxx,v $
- * $Revision: 1.80.86.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,10 +36,10 @@
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-#include <svx/flstitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/flagitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/flagitem.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -50,7 +47,7 @@
 #include <sfx2/dispatch.hxx>
 #endif
 #include <svx/svdotext.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
 #ifndef _SFX_ECODE_HXX //autogen
@@ -63,11 +60,11 @@
 #include "unomodel.hxx"
 #endif
 
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/svxmsbas.hxx>
-#include <svtools/saveopt.hxx>
+//#include <svx/svxmsbas.hxx>
+#include <unotools/saveopt.hxx>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <comphelper/processfactory.hxx>
@@ -315,18 +312,6 @@ BOOL DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::
 |*
 \************************************************************************/
 
-sal_Bool DrawDocShell::IsNewDocument() const
-{
-    return( mbNewDocument &&
-            ( !GetMedium() || GetMedium()->GetURLObject().GetProtocol() == INET_PROT_NOT_VALID ) );
-}
-
-/*************************************************************************
-|*
-|* Load: Pools und Dokument laden
-|*
-\************************************************************************/
-
 BOOL DrawDocShell::Load( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
@@ -384,12 +369,12 @@ BOOL DrawDocShell::Load( SfxMedium& rMedium )
     else
     {
         if( nError == ERRCODE_IO_BROKENPACKAGE )
-            SetError( ERRCODE_IO_BROKENPACKAGE );
+            SetError( ERRCODE_IO_BROKENPACKAGE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
         // TODO/LATER: correct error handling?!
-        //pStore->SetError( SVSTREAM_WRONGVERSION );
+        //pStore->SetError( SVSTREAM_WRONGVERSION, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
         else
-            SetError( ERRCODE_ABORT );
+            SetError( ERRCODE_ABORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
     }
 
     // tell SFX to change viewshell when in preview mode
@@ -610,7 +595,7 @@ BOOL DrawDocShell::SaveAs( SfxMedium& rMedium )
     }
 
     if( GetError() == ERRCODE_NONE )
-        SetError( nVBWarning );
+        SetError( nVBWarning, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
 
     return bRet;
 }
@@ -759,24 +744,59 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
         DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
         ViewShellBase& rBase (mpViewShell->GetViewShellBase());
 
-        String aBookmark( rBookmark );
-
-        // Ist das Bookmark eine Seite?
-        BOOL bIsMasterPage;
-        USHORT nPageNumber = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+        BOOL bIsMasterPage = sal_False;
+        USHORT nPageNumber = SDRPAGE_NOTFOUND;
         SdrObject* pObj = NULL;
 
-        if (nPageNumber == SDRPAGE_NOTFOUND)
+        rtl::OUString sBookmark( rBookmark );
+        const rtl::OUString sInteraction( RTL_CONSTASCII_USTRINGPARAM( "action?" ) );
+        if ( sBookmark.match( sInteraction ) )
         {
-            // Ist das Bookmark ein Objekt?
-            pObj = mpDoc->GetObj(aBookmark);
-
-            if (pObj)
+            const rtl::OUString sJump( RTL_CONSTASCII_USTRINGPARAM( "jump=" ) );
+            if ( sBookmark.match( sJump, sInteraction.getLength() ) )
             {
-                nPageNumber = pObj->GetPage()->GetPageNum();
+                rtl::OUString aDestination( sBookmark.copy( sInteraction.getLength() + sJump.getLength() ) );
+                if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "firstslide" ) ) ) )
+                {
+                    nPageNumber = 1;
+                }
+                else if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "lastslide" ) ) ) )
+                {
+                    nPageNumber = mpDoc->GetPageCount() - 2;
+                }
+                else if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "previousslide" ) ) ) )
+                {
+                    SdPage* pPage = pDrawViewShell->GetActualPage();
+                    nPageNumber = pPage->GetPageNum();
+                    nPageNumber = nPageNumber > 2 ? nPageNumber - 2 : SDRPAGE_NOTFOUND;
+                }
+                else if ( aDestination.match( String( RTL_CONSTASCII_USTRINGPARAM( "nextslide" ) ) ) )
+                {
+                    SdPage* pPage = pDrawViewShell->GetActualPage();
+                    nPageNumber = pPage->GetPageNum() + 2;
+                    if ( nPageNumber >= mpDoc->GetPageCount() )
+                        nPageNumber = SDRPAGE_NOTFOUND;
+                }
             }
         }
+        else
+        {
+            String aBookmark( rBookmark );
 
+            // Ist das Bookmark eine Seite?
+            nPageNumber = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+
+            if (nPageNumber == SDRPAGE_NOTFOUND)
+            {
+                // Ist das Bookmark ein Objekt?
+                pObj = mpDoc->GetObj(aBookmark);
+
+                if (pObj)
+                {
+                    nPageNumber = pObj->GetPage()->GetPageNum();
+                }
+            }
+        }
         if (nPageNumber != SDRPAGE_NOTFOUND)
         {
             // Jump to the bookmarked page.  This is done in three steps.

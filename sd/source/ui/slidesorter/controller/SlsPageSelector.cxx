@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsPageSelector.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -174,17 +171,6 @@ void PageSelector::DeselectPage (int nPageIndex)
 {
     model::SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
     if (pDescriptor.get() != NULL)
-        DeselectPage(pDescriptor);
-}
-
-
-
-
-void PageSelector::DeselectPage (const SdPage* pPage)
-{
-    int nPageIndex = (pPage->GetPageNum()-1) / 2;
-    SharedPageDescriptor pDescriptor (mrModel.GetPageDescriptor(nPageIndex));
-    if (pDescriptor.get()!=NULL && pDescriptor->GetPage()==pPage)
         DeselectPage(pDescriptor);
 }
 

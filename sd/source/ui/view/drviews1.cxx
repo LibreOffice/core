@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviews1.cxx,v $
- * $Revision: 1.79.34.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +55,7 @@
 #include <svx/fmshell.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/fmglob.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 
 #include "misc.hxx"
@@ -70,6 +67,8 @@
 #endif
 
 #include <svx/dialogs.hrc>
+
+#include "view/viewoverlaymanager.hxx"
 
 #include "glob.hrc"
 #include "app.hrc"
@@ -95,7 +94,6 @@
 #include "slideshow.hxx"
 #include "optsitem.hxx"
 #include "fusearch.hxx"
-#include "fuspell.hxx"
 #include "Outliner.hxx"
 #include "AnimationChildWindow.hxx"
 #include "SdUnoDrawView.hxx"
@@ -157,16 +155,34 @@ void DrawViewShell::Deactivate(BOOL bIsMDIActivate)
     ViewShell::Deactivate(bIsMDIActivate);
 }
 
+namespace
+{
+    class LockUI
+    {
+    private:
+        void Lock(bool bLock);
+        SfxViewFrame *mpFrame;
+    public:
+        LockUI(SfxViewFrame *pFrame) : mpFrame(pFrame) { Lock(true); }
+        ~LockUI() { Lock(false); }
+
+    };
+
+    void LockUI::Lock(bool bLock)
+    {
+        if (!mpFrame)
+            return;
+        mpFrame->Enable( !bLock );
+    }
+}
+
 /*************************************************************************
 |*
 |* Wird gerufen, wenn sich der Selektionszustand der View aendert
 |*
 \************************************************************************/
-
 void DrawViewShell::SelectionHasChanged (void)
 {
-    // Um die Performance zu steigern wird jetzt die komplette
-    // Shell invalidiert statt alle Slots einzeln
     Invalidate();
 
     //Update3DWindow(); // 3D-Controller
@@ -218,6 +234,8 @@ void DrawViewShell::SelectionHasChanged (void)
             // we need to deselect it now
             if (!pOleObj)
             {
+                //#i47279# disable frame until after object has completed unload
+                LockUI aUILock(GetViewFrame());
                 pIPClient->DeactivateObject();
                 //HMHmpDrView->ShowMarkHdl();
             }
@@ -297,6 +315,7 @@ void DrawViewShell::SetZoom( long nZoom )
     ViewShell::SetZoom( nZoom );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+    mpViewOverlayManager->onZoomChanged();
 }
 
 /*************************************************************************
@@ -310,6 +329,7 @@ void DrawViewShell::SetZoomRect( const Rectangle& rZoomRect )
     ViewShell::SetZoomRect( rZoomRect );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
+    mpViewOverlayManager->onZoomChanged();
 }
 
 /*************************************************************************
@@ -492,6 +512,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         Invalidate( SID_PAGEMODE );
         Invalidate( SID_LAYERMODE );
         Invalidate( SID_MASTERPAGE );
+        Invalidate( SID_DELETE_MASTER_PAGE );
+        Invalidate( SID_DELETE_PAGE );
         Invalidate( SID_SLIDE_MASTERPAGE );
         Invalidate( SID_TITLE_MASTERPAGE );
         Invalidate( SID_NOTES_MASTERPAGE );
@@ -553,7 +575,7 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, BOOL bIsFirst)
     UINT16 nMetric = (UINT16)GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )
-        nMetric = (UINT16)GetModuleFieldUnit();
+        nMetric = (UINT16)GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetFieldUnit();
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
@@ -587,7 +609,7 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
     UINT16 nMetric = (UINT16)GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )
-        nMetric = (UINT16)GetModuleFieldUnit();
+        nMetric = (UINT16)GetViewShellBase().GetViewFrame()->GetDispatcher()->GetModule()->GetFieldUnit();
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
@@ -1196,25 +1218,15 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
             {
                 // set pages for all available handout presentation objects
                 sd::ShapeList& rShapeList = pMaster->GetPresentationShapeList();
-
-                sal_uInt16 nPgNum = 0;
                 SdrObject* pObj = 0;
+
                 while( (pObj = rShapeList.getNextShape(pObj)) != 0 )
                 {
                     if( pMaster->GetPresObjKind(pObj) == PRESOBJ_HANDOUT )
                     {
-                        const sal_uInt16 nDestinationPageNum(2 * nPgNum + 1);
-
-                        if(nDestinationPageNum < GetDoc()->GetPageCount())
-                        {
-                            static_cast<SdrPageObj*>(pObj)->SetReferencedPage(GetDoc()->GetPage(nDestinationPageNum));
-                        }
-                        else
-                        {
-                            static_cast<SdrPageObj*>(pObj)->SetReferencedPage(0L);
-                        }
-
-                        nPgNum++;
+                        // #i105146# We want no content to be displayed for PK_HANDOUT,
+                        // so just never set a page as content
+                        static_cast<SdrPageObj*>(pObj)->SetReferencedPage(0);
                     }
                 }
             }
@@ -1229,7 +1241,13 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, TRUE, FALSE);
         rBindings.Invalidate(SID_STATUS_PAGE, TRUE, FALSE);
+        rBindings.Invalidate(SID_DELETE_MASTER_PAGE, TRUE, FALSE);
+        rBindings.Invalidate(SID_DELETE_PAGE, TRUE, FALSE);
+        rBindings.Invalidate(SID_ASSIGN_LAYOUT,TRUE,FALSE);
+        rBindings.Invalidate(SID_INSERTPAGE,TRUE,FALSE);
         UpdatePreview( mpActualPage );
+
+        mpDrawView->AdjustMarkHdl();
     }
 
     return (bOK);
@@ -1356,6 +1374,7 @@ void DrawViewShell::ResetActualLayer()
 
         pLayerBar->SetCurPageId(nActiveLayer + 1);
         GetViewFrame()->GetBindings().Invalidate( SID_MODIFYLAYER );
+        GetViewFrame()->GetBindings().Invalidate( SID_DELETE_LAYER );
     }
 }
 

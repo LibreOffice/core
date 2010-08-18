@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: eventqueue.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,6 +68,13 @@ namespace slideshow
                 process() are postponed to next process().
              */
             bool addEventForNextRound( const EventSharedPtr& event );
+
+            /** Another way to control the order of asynchronous event
+                exeqution.  Use this method to schedule events that are to
+                be executed after all regular events that have no delay,
+                even when they schedule new regular events without delay.
+            */
+            bool addEventWhenQueueIsEmpty (const EventSharedPtr& rpEvent);
 
             /** Process the event queue.
 
@@ -138,6 +142,7 @@ namespace slideshow
             ImplQueueType                   maEvents;
             typedef ::std::vector<EventEntry> EventEntryVector;
             EventEntryVector                maNextEvents;
+            ImplQueueType                   maNextNextEvents;
             void process_( bool bFireAllEvents );
 
             // perform timing of events via relative time

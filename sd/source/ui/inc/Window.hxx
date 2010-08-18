@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Window.hxx,v $
- * $Revision: 1.7.70.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,8 +65,6 @@ public:
     virtual ~Window (void);
 
     void    SetViewShell (ViewShell* pViewSh);
-
-    void    ShareViewArea(::sd::Window* pOtherWin);
 
     /** Set the zoom factor to the specified value and center the display
         area arround the zoom center.
@@ -211,6 +206,9 @@ protected:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessible (void);
+
+    XubString GetSurroundingText() const;
+    Selection GetSurroundingTextSelection() const;
 };
 
 } // end of namespace sd

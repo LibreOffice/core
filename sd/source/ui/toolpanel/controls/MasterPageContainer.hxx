@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MasterPageContainer.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,26 +143,16 @@ public:
     Token GetTokenForIndex (int nIndex);
 
     Token GetTokenForURL (const String& sURL);
-    Token GetTokenForPageName (const String& sPageName);
     Token GetTokenForStyleName (const String& sStyleName);
     Token GetTokenForPageObject (const SdPage* pPage);
 
     String GetURLForToken (Token aToken);
     String GetPageNameForToken (Token aToken);
     String GetStyleNameForToken (Token aToken);
-    SdPage* GetSlideForToken (Token aToken, bool bLoad=true);
     SdPage* GetPageObjectForToken (Token aToken, bool bLoad=true);
     Origin GetOriginForToken (Token aToken);
     sal_Int32 GetTemplateIndexForToken (Token aToken);
     ::boost::shared_ptr<MasterPageDescriptor> GetDescriptorForToken (Token aToken);
-    bool UpdateDescriptor (
-        const ::boost::shared_ptr<MasterPageDescriptor>& rpDescriptor,
-        bool bForcePageObject,
-        bool bForcePreview,
-        bool bSendEvents);
-
-    void SetPreviewProviderForToken (Token aToken,
-        const ::boost::shared_ptr<PreviewProvider>& rpPreviewProvider);
 
     void InvalidatePreview (Token aToken);
 

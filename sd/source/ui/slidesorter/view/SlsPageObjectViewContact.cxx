@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsPageObjectViewContact.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,21 +91,6 @@ const SdrPage* PageObjectViewContact::GetPage (void) const
 void PageObjectViewContact::ActionChanged (void)
 {
     ViewContactOfPageObj::ActionChanged();
-}
-
-Rectangle PageObjectViewContact::GetPageObjectBoundingBox (void) const
-{
-    // use model data directly here
-    OSL_ASSERT(mpDescriptor.get()!=NULL);
-    Rectangle aRetval(GetPageObject().GetLastBoundRect());
-    const SvBorder aPageDescriptorBorder(mpDescriptor->GetModelBorder());
-
-    aRetval.Left() -= aPageDescriptorBorder.Left();
-    aRetval.Top() -= aPageDescriptorBorder.Top();
-    aRetval.Right() += aPageDescriptorBorder.Right();
-    aRetval.Bottom() += aPageDescriptorBorder.Bottom();
-
-    return aRetval;
 }
 
 SdrPageObj& PageObjectViewContact::GetPageObject (void) const

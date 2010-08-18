@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawshape.cxx,v $
- * $Revision: 1.7.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -262,7 +259,8 @@ namespace slideshow
 
         void DrawShape::updateStateIds() const
         {
-            // update the states, we've just redrawn
+            // Update the states, we've just redrawn or created a new
+            // attribute layer.
             if( mpAttributeLayer )
             {
                 mnAttributeTransformationState = mpAttributeLayer->getTransformationState();
@@ -329,7 +327,7 @@ namespace slideshow
             mbForceUpdate = false;
             mbAttributeLayerRevoked = false;
 
-            ENSURE_OR_RETURN( !maViewShapes.empty(),
+            ENSURE_OR_RETURN_FALSE( !maViewShapes.empty(),
                                "DrawShape::implRender(): render called on DrawShape without views" );
 
             if( maBounds.isEmpty() )
@@ -1061,7 +1059,7 @@ namespace slideshow
 
         bool DrawShape::setIntrinsicAnimationFrame( ::std::size_t nCurrFrame )
         {
-            ENSURE_OR_RETURN( nCurrFrame < maAnimationFrames.size(),
+            ENSURE_OR_RETURN_FALSE( nCurrFrame < maAnimationFrames.size(),
                                "DrawShape::setIntrinsicAnimationFrame(): frame index out of bounds" );
 
             if( mnCurrFrame != nCurrFrame )
@@ -1276,6 +1274,9 @@ namespace slideshow
         {
             // create new layer, with last as its new child
             mpAttributeLayer.reset( new ShapeAttributeLayer( mpAttributeLayer ) );
+
+            // Update the local state ids to reflect those of the new layer.
+            updateStateIds();
 
             return mpAttributeLayer;
         }

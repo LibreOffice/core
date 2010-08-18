@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unosrch.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +30,10 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 
-#ifndef SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
-#endif
+#include <svx/svdpool.hxx>
 #include <svx/unoprov.hxx>
-#include <svx/unotext.hxx>
+#include <editeng/unotext.hxx>
 
 #include <comphelper/extract.hxx>
 #include <rtl/uuid.h>
@@ -55,9 +51,9 @@ using namespace ::com::sun::star;
 #define WID_SEARCH_CASE         1
 #define WID_SEARCH_WORDS        2
 
-const SfxItemPropertyMap* ImplGetSearchPropertyMap()
+const SfxItemPropertyMapEntry* ImplGetSearchPropertyMap()
 {
-    static const SfxItemPropertyMap aSearchPropertyMap_Impl[] =
+    static const SfxItemPropertyMapEntry aSearchPropertyMap_Impl[] =
     {
         { MAP_CHAR_LEN(UNO_NAME_SEARCH_BACKWARDS),  WID_SEARCH_BACKWARDS,   &::getBooleanCppuType(),    0,  0 },
         { MAP_CHAR_LEN(UNO_NAME_SEARCH_CASE),       WID_SEARCH_CASE,        &::getBooleanCppuType(),    0,  0 },
@@ -107,11 +103,6 @@ public:
 SdUnoSearchReplaceShape::SdUnoSearchReplaceShape( drawing::XDrawPage* pPage ) throw()
 {
     mpPage = pPage;
-}
-
-SdUnoSearchReplaceShape::SdUnoSearchReplaceShape( drawing::XShape* pShape ) throw()
-{
-    mpShape = pShape;
 }
 
 SdUnoSearchReplaceShape::~SdUnoSearchReplaceShape() throw()
@@ -732,7 +723,7 @@ UNO3_GETIMPLEMENTATION_IMPL( SdUnoSearchReplaceDescriptor );
 
 SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor( sal_Bool bReplace ) throw()
 {
-    mpPropSet = new SvxItemPropertySet(ImplGetSearchPropertyMap());
+    mpPropSet = new SvxItemPropertySet(ImplGetSearchPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool());
 
     mbBackwards = sal_False;
     mbCaseSensitive = sal_False;
@@ -785,11 +776,11 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const ::rtl::OUStr
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    const SfxItemPropertyMap* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(aPropertyName);
 
     sal_Bool bOk = sal_False;
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
     case WID_SEARCH_BACKWARDS:
         bOk = (aValue >>= mbBackwards);
@@ -815,9 +806,9 @@ uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const ::rtl::O
 
     uno::Any aAny;
 
-    const SfxItemPropertyMap* pMap = mpPropSet->getPropertyMapEntry(PropertyName);
+    const SfxItemPropertySimpleEntry* pEntry = mpPropSet->getPropertyMapEntry(PropertyName);
 
-    switch( pMap ? pMap->nWID : -1 )
+    switch( pEntry ? pEntry->nWID : -1 )
     {
     case WID_SEARCH_BACKWARDS:
         aAny <<= (sal_Bool)mbBackwards;

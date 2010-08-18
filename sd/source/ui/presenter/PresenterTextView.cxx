@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterTextView.cxx,v $
- *
- * $Revision: 1.5.76.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,17 +29,18 @@
 
 #include "PresenterTextView.hxx"
 
+#include <i18npool/mslangid.hxx>
 #include <cppcanvas/vclfactory.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svx/colritem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editstat.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/xflclit.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/svapp.hxx>
@@ -52,6 +49,8 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
 #include <com/sun/star/util/Color.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -114,7 +113,6 @@ public:
     void SetFontDescriptor (const awt::FontDescriptor& rFontDescriptor);
     sal_Int32 GetTop (void) const;
     void SetTop (const sal_Int32 nTop);
-    void ClearText (void);
     void SetText (const OUString& Text);
     sal_Int32 ParseDistance (const OUString& rsDistance) const;
     Reference<rendering::XBitmap> GetBitmap (void);
@@ -381,9 +379,9 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
             {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
                 DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
-        aTable[0].nLang = aOpt.nDefaultLanguage;
-        aTable[1].nLang = aOpt.nDefaultLanguage_CJK;
-        aTable[2].nLang = aOpt.nDefaultLanguage_CTL;
+        aTable[0].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN);
+        aTable[1].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN);
+        aTable[2].nLang = MsLangId::resolveSystemLanguageByScriptType(aOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
         //
         for (int i = 0;  i < 3;  ++i)
         {
@@ -529,17 +527,6 @@ void PresenterTextView::Implementation::SetTop (const sal_Int32 nTop)
     mnTop = nTop;
     mxBitmap = NULL;
     CheckTop();
-}
-
-
-
-
-void PresenterTextView::Implementation::ClearText (void)
-{
-    DBG_ASSERT(mpEditEngine!=NULL, "EditEngine missing");
-    msText = OUString();
-    mnTotalHeight = 0;
-    mxBitmap = NULL;
 }
 
 

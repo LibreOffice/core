@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdview4.cxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xfillit.hxx>
 #include <svx/svdundo.hxx>
@@ -46,15 +43,12 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdoole2.hxx>
-#ifndef _IMPGRF_HXX
-#include <svx/impgrf.hxx>
-#endif
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
-
+#include <svtools/filter.hxx>
 #include "app.hrc"
 #include "Window.hxx"
 #include "DrawDocShell.hxx"
@@ -115,16 +109,30 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     if( !pPickObj && pPV )
     {
         SdrPageView* pPageView = pPV;
-        PickObj(rPos, pPickObj, pPageView);
+        PickObj(rPos, getHitTolLog(), pPickObj, pPageView);
     }
 
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV )
     {
-        if( pPickObj->ISA( SdrGrafObj ) )
+        const bool bIsGraphic = pPickObj->ISA( SdrGrafObj );
+        if( bIsGraphic || pObj->IsEmptyPresObj() )
         {
-            // Das Objekt wird mit der Bitmap gefuellt
-            pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
-            pNewGrafObj->SetGraphic(rGraphic);
+            if( IsUndoEnabled() )
+                BegUndo(String(SdResId(STR_INSERTGRAPHIC)));
+
+            SdPage* pPage = (SdPage*) pPickObj->GetPage();
+
+            if( bIsGraphic )
+            {
+                // Das Objekt wird mit der Bitmap gefuellt
+                pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
+                pNewGrafObj->SetGraphic(rGraphic);
+            }
+            else
+            {
+                pNewGrafObj = new SdrGrafObj( rGraphic, pPickObj->GetLogicRect() );
+                pNewGrafObj->SetEmptyPresObj(TRUE);
+            }
 
             if ( pNewGrafObj->IsEmptyPresObj() )
             {
@@ -134,34 +142,32 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
                 pNewGrafObj->SetEmptyPresObj(FALSE);
             }
 
-            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-
-            SdPage* pPage = (SdPage*) pPickObj->GetPage();
-
-            if (pPage && pPage->GetPresObjKind(pPickObj) == PRESOBJ_GRAPHIC)
+            if (pPage && pPage->IsPresObj(pPickObj))
             {
                 // Neues PresObj in die Liste eintragen
+                pPage->InsertPresObj( pNewGrafObj, PRESOBJ_GRAPHIC );
                 pNewGrafObj->SetUserCall(pPickObj->GetUserCall());
-                AddUndo( new sd::UndoObjectPresentationKind( *pPickObj ) );
-                AddUndo( new sd::UndoObjectPresentationKind( *pNewGrafObj ) );
-                pPage->RemovePresObj(pPickObj);
-                pPage->InsertPresObj(pNewGrafObj, PRESOBJ_GRAPHIC);
             }
 
             if (pImageMap)
                 pNewGrafObj->InsertUserData(new SdIMapInfo(*pImageMap));
 
             ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj); // maybe ReplaceObjectAtView
-            EndUndo();
+
+            if( IsUndoEnabled() )
+                EndUndo();
         }
         else if (pPickObj->IsClosedObj() && !pPickObj->ISA(SdrOle2Obj))
         {
             /******************************************************************
             * Das Objekt wird mit der Graphik gefuellt
             ******************************************************************/
-            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
-            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
-            EndUndo();
+            if( IsUndoEnabled() )
+            {
+                BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+                AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pPickObj));
+                EndUndo();
+            }
 
             XOBitmap aXOBitmap( rGraphic.GetBitmap() );
             SfxItemSet aSet(mpDocSh->GetPool(), XATTR_FILLSTYLE, XATTR_FILLBITMAP);
@@ -238,14 +244,28 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
             Point aVec = aPickObjRect.TopLeft() - aObjRect.TopLeft();
             pNewGrafObj->NbcMove(Size(aVec.X(), aVec.Y()));
 
-            BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
+            const bool bUndo = IsUndoEnabled();
+
+            if( bUndo )
+                BegUndo(String(SdResId(STR_UNDO_DRAGDROP)));
             pNewGrafObj->NbcSetLayer(pPickObj->GetLayer());
             SdrPage* pP = pPV->GetPage();
             pP->InsertObject(pNewGrafObj);
-            AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
-            AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pPickObj));
+            if( bUndo )
+            {
+                AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewObject(*pNewGrafObj));
+                AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pPickObj));
+            }
             pP->RemoveObject(pPickObj->GetOrdNum());
-            EndUndo();
+
+            if( bUndo )
+            {
+                EndUndo();
+            }
+            else
+            {
+                SdrObject::Free(pPickObj);
+            }
             mnAction = DND_ACTION_COPY;
         }
         else
@@ -272,7 +292,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
 
     SdrMediaObj*    pNewMediaObj = NULL;
     SdrPageView*    pPV = GetSdrPageView();
-    SdrObject*      pPickObj = NULL;
+    SdrObject*      pPickObj = GetEmptyPresentationObject( PRESOBJ_MEDIA );
 
     if(pPV && this->ISA(::sd::slidesorter::view::SlideSorterView ))
     {
@@ -283,7 +303,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     if( !pPickObj && pPV )
     {
         SdrPageView* pPageView = pPV;
-        PickObj(rPos, pPickObj, pPageView);
+        PickObj(rPos, getHitTolLog(), pPickObj, pPageView);
     }
 
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV && pPickObj->ISA( SdrMediaObj ) )
@@ -297,10 +317,37 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
     }
     else if( pPV )
     {
-        pNewMediaObj = new SdrMediaObj( Rectangle( rPos, rSize ) );
+        Rectangle aRect( rPos, rSize );
+        if( pPickObj )
+            aRect = pPickObj->GetLogicRect();
 
-        if( pPV && InsertObjectAtView( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER ) )
-            pNewMediaObj->setURL( rMediaURL );
+
+        pNewMediaObj = new SdrMediaObj( aRect );
+
+        bool bIsPres = false;
+        if( pPickObj )
+        {
+            SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
+            bIsPres = pPage && pPage->IsPresObj(pPickObj);
+            if( bIsPres )
+            {
+                pPage->InsertPresObj( pNewMediaObj, PRESOBJ_MEDIA );
+            }
+        }
+
+        if( pPickObj )
+            ReplaceObjectAtView(pPickObj, *pPV, pNewMediaObj);
+        else
+            InsertObjectAtView( pNewMediaObj, *pPV, SDRINSERT_SETDEFLAYER );
+
+        pNewMediaObj->setURL( rMediaURL );
+
+        if( pPickObj )
+        {
+            pNewMediaObj->AdjustToMaxRect( pPickObj->GetLogicRect() );
+            if( bIsPres )
+                pNewMediaObj->SetUserCall(pPickObj->GetUserCall());
+        }
     }
 
     rAction = mnAction;
@@ -338,7 +385,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
             aURL = INetURLObject( aURLStr );
         }
 
-        GraphicFilter*  pGraphicFilter = GetGrfFilter();
+        GraphicFilter*  pGraphicFilter = GraphicFilter::GetGraphicFilter();
         Graphic         aGraphic;
 
         aCurrentDropFile = aURL.GetMainURL( INetURLObject::NO_DECODE );
@@ -348,9 +395,10 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
             if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
             {
                 sal_Int8    nTempAction = ( aIter == maDropFileVector.begin() ) ? mnAction : 0;
+                const bool bLink = ( ( nTempAction & DND_ACTION_LINK ) != 0 );
                 SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, maDropPos, NULL, NULL );
 
-                if( pGrafObj )
+                if( pGrafObj && bLink )
                     pGrafObj->SetGraphicLink( aCurrentDropFile, String() );
 
                 // return action from first inserted graphic
@@ -574,11 +622,6 @@ void View::LockRedraw(BOOL bLock)
 
 
 
-
-bool View::IsRedrawLocked (void) const
-{
-    return mnLockRedrawSmph>0;
-}
 
 /*************************************************************************
 |*

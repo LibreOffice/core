@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: layer.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #ifndef INCLUDED_SLIDESHOW_LAYER_HXX
 #define INCLUDED_SLIDESHOW_LAYER_HXX
 
-#include <basegfx/range/b2dmultirange.hxx>
+#include <basegfx/range/b2dpolyrange.hxx>
 #include <cppcanvas/spritecanvas.hxx>
 
 #include "view.hxx"
@@ -187,7 +184,7 @@ namespace slideshow
                 @return true, if any non-empty addUpdateRange() calls
                 have been made since the last render()/update() call.
              */
-            bool isUpdatePending() const { return !maUpdateAreas.isEmpty(); }
+            bool isUpdatePending() const { return maUpdateAreas.count()!=0; }
 
             /** Update layer bound rect from shape bounds
              */
@@ -297,7 +294,7 @@ namespace slideshow
             typedef ::std::vector< ViewEntry > ViewEntryVector;
 
             ViewEntryVector            maViewEntries;
-            basegfx::B2DMultiRange     maUpdateAreas;
+            basegfx::B2DPolyRange      maUpdateAreas;
             basegfx::B2DRange          maBounds;
             basegfx::B2DRange          maNewBounds;
             const basegfx::B2DRange    maMaxBounds;       // maBounds is clipped against this

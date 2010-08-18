@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawdoc.hxx,v $
- * $Revision: 1.49.108.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +30,9 @@
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/WritingMode.hpp>
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HDL_
 #include <com/sun/star/frame/XModel.hdl>
-#endif
 #include <vcl/print.hxx>
-#ifndef _FM_FMMODEL_HXX
 #include <svx/fmmodel.hxx>
-#endif
 #include "pres.hxx"
 #include <svx/pageitem.hxx>
 #include <unotools/charclass.hxx>
@@ -50,6 +43,8 @@
 
 // #107844#
 #include <svx/svdundo.hxx>
+
+#include <vector>
 
 #ifndef INCLUDED_MEMORY
 #include <memory>
@@ -205,12 +200,15 @@ private:
     ::std::auto_ptr<ImpMasterPageListWatcher> mpMasterPageListWatcher;
 
     void                UpdatePageObjectsInNotes(USHORT nStartPos);
+    void                UpdatePageRelativeURLs(SdPage* pPage, USHORT nPos, sal_Int32 nIncrement);
     void                FillOnlineSpellingList(SdPage* pPage);
     void                SpellObject(SdrTextObj* pObj);
 
                         DECL_LINK(WorkStartupHdl, Timer*);
                         DECL_LINK(OnlineSpellingHdl, Timer*);
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
+
+    std::vector< rtl::OUString > maAnnotationAuthors;
 
 protected:
 
@@ -245,7 +243,7 @@ public:
 
     SvxNumType          GetPageNumType() const;
     void                SetPageNumType(SvxNumType eType) { mePageNumType = eType; }
-    String              CreatePageNumValue(USHORT nNum) const;
+    SD_DLLPUBLIC String              CreatePageNumValue(USHORT nNum) const;
 
     DocumentType        GetDocumentType() const { return meDocType; }
 
@@ -259,7 +257,7 @@ public:
         for newly created slides.
     */
     SD_DLLPUBLIC void   CreateFirstPages( SdDrawDocument* pRefDocument = 0 );
-    BOOL                CreateMissingNotesAndHandoutPages();
+    SD_DLLPUBLIC BOOL                CreateMissingNotesAndHandoutPages();
 
     void                MovePage(USHORT nPgNum, USHORT nNewPos);
     void                InsertPage(SdrPage* pPage, USHORT nPos=0xFFFF);
@@ -435,7 +433,7 @@ public:
     /** deprecated*/
     SdAnimationInfo*    GetAnimationInfo(SdrObject* pObject) const;
 
-    static  SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
+    SD_DLLPUBLIC static     SdAnimationInfo* GetShapeUserData(SdrObject& rObject, bool bCreate = false );
 
     SdIMapInfo*         GetIMapInfo( SdrObject* pObject ) const;
     IMapObject*         GetHitIMapObject( SdrObject* pObject, const Point& rWinPoint, const ::Window& rCmpWnd );
@@ -443,7 +441,6 @@ public:
     CharClass*          GetCharClass() const { return mpCharClass; }
 
     void                RestoreLayerNames();
-    void                MakeUniqueLayerNames();
 
     void                UpdateAllLinks();
 
@@ -466,18 +463,6 @@ public:
 public:
 
     static SdDrawDocument* pDocLockedInsertingLinks;  // static to prevent recursions while resolving links
-
-    /** This method acts as a simplified front end for the more complex
-        <member>CreatePage()</member> method.
-        @param nPageNum
-            The page number as passed to the <member>GetSdPage()</member>
-            method from which to use certain properties for the new pages.
-            These include the auto layout.
-        @return
-            Returns an index of the inserted pages that can be used with the
-            <member>GetSdPage()</member> method.
-    */
-    USHORT CreatePage (USHORT nPageNum);
 
     /** Create and insert a set of two new pages: a standard (draw) page and
         the associated notes page.  The new pages are inserted direclty
@@ -588,6 +573,16 @@ public:
     /* converts the given western font height to a corresponding ctl font height, deppending on the system language */
     static sal_uInt32 convertFontHeightToCTL( sal_uInt32 nWesternFontHeight );
 
+    /** Get the style sheet pool if it was a SdStyleSheetPool.
+     */
+    SD_DLLPUBLIC SdStyleSheetPool* GetSdStyleSheetPool() const;
+
+       void UpdatePageRelativeURLs(const String& rOldName, const String& rNewName);
+
+    void SetCalcFieldValueHdl( ::Outliner* pOutliner);
+
+    sal_uInt16 GetAnnotationAuthorIndex( const rtl::OUString& rAuthor );
+
 private:
     /** This member stores the printer independent layout mode.  Please
         refer to <member>SetPrinterIndependentLayout()</member> for its
@@ -679,7 +674,6 @@ namespace sd
 class ModifyGuard
 {
 public:
-    ModifyGuard( DrawDocShell* pDocShell );
     ModifyGuard( SdDrawDocument* pDoc );
     ~ModifyGuard();
 

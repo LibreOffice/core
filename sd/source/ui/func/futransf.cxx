@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: futransf.cxx,v $
- * $Revision: 1.12.114.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,7 +91,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, mpView, RID_SVXDLG_CAPTION ) );
+                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, mpView ) );
 
                     const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                     SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
@@ -114,7 +111,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateSvxTransformTabDialog( NULL, &aSet,mpView, RID_SVXDLG_TRANSFORM) );
+                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateSvxTransformTabDialog( NULL, &aSet, mpView ) );
                     if( pDlg.get() && (pDlg->Execute() == RET_OK) )
                     {
                         rReq.Done( *( pDlg->GetOutputItemSet() ) );
@@ -138,30 +135,5 @@ void FuTransform::DoExecute( SfxRequest& rReq )
         }
     }
 }
-
-/*************************************************************************
-|*
-|* Function ResizeObject
-|*
-\************************************************************************/
-
-Point FuTransform::GetPoint( Rectangle aRect, RECT_POINT eRP )
-{
-
-    switch( eRP )
-    {
-        case RP_LT: return( Point( aRect.Left(), aRect.Top() ) );
-        case RP_MT: return( Point( aRect.Center().X(), aRect.Top() ) );
-        case RP_RT: return( Point( aRect.Right(), aRect.Top() ) );
-        case RP_LM: return( Point( aRect.Left(), aRect.Center().Y() ) );
-        case RP_MM: return( Point( aRect.Center().X(), aRect.Center().Y() ) );
-        case RP_RM: return( Point( aRect.Right(), aRect.Center().Y() ) );
-        case RP_LB: return( Point( aRect.Left(), aRect.Bottom() ) );
-        case RP_MB: return( Point( aRect.Center().X(), aRect.Bottom() ) );
-        case RP_RB: return( Point( aRect.Right(), aRect.Bottom() ) );
-    }
-    return( Point ( 0, 0 ) ); // Sollte nicht vorkommen !
-}
-
 
 } // end of namespace sd

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviews7.cxx,v $
- * $Revision: 1.78 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +33,9 @@
 #include <svx/fmglob.hxx>
 #include <svx/globl3d.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #ifndef _FLDITEM_HXX
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #endif
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
@@ -46,23 +43,23 @@
 #include <svx/svdpagv.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/fmshell.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/visitem.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/eitem.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/visitem.hxx>
+#include <svl/whiter.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 
 // #UndoRedo#
-#include <svtools/slstitm.hxx>
+#include <svl/slstitm.hxx>
 #include <sfx2/app.hxx>
 #include <svtools/insdlg.hxx>
-#include <svtools/moduleoptions.hxx>
-#include <svtools/languageoptions.hxx>
+#include <unotools/moduleoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx>
 
@@ -87,7 +84,6 @@
 #include "zoomlist.hxx"
 #include "slideshow.hxx"
 #include "drawview.hxx"
-#include "formatclipboard.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"
 #include "LayerTabBar.hxx"
@@ -95,6 +91,7 @@
 #include "Window.hxx"
 #include "fuediglu.hxx"
 #include "fubullet.hxx"
+#include "fuformatpaintbrush.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -210,7 +207,7 @@ IMPL_LINK( DrawViewShell, ClipboardChanged, TransferableDataHelper*, pDataHelper
 
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( SID_PASTE2 );
+        rBindings.Invalidate( SID_PASTE_SPECIAL );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -249,19 +246,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     const ULONG nMarkCount = rMarkList.GetMarkCount();
 
     //format paintbrush
-    {
-        SdFormatClipboard* pFormatClipboard = GetDocSh()->mpFormatClipboard;
-        bool bHasContent = pFormatClipboard && pFormatClipboard->HasContent();
-        rSet.Put(SfxBoolItem(SID_FORMATPAINTBRUSH,bHasContent));
-        if( ( nMarkCount!=1 && !bHasContent ) || mpDrawView->IsTextEdit() )
-            rSet.DisableItem( SID_FORMATPAINTBRUSH );
-        if( !bHasContent && nMarkCount==1 )
-        {
-            SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-            if( !pFormatClipboard->CanCopyThisType(pObj->GetObjInventor(),pObj->GetObjIdentifier()) )
-                rSet.DisableItem( SID_FORMATPAINTBRUSH );
-        }
-    }
+    FuFormatPaintBrush::GetMenuState( *this, rSet );
 
     // Stati der SfxChild-Windows (Animator, Fontwork etc.)
     SetChildWindowState( rSet );
@@ -309,6 +294,26 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     GetMenuStateSel(rSet);
 
+    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ASSIGN_LAYOUT))
+    {
+        bool bDisable = true;
+        if( pPageView )
+        {
+            SdPage* pPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
+
+            if( pPage && !pPage->IsMasterPage() )
+            {
+                rSet.Put( SfxUInt32Item( SID_ASSIGN_LAYOUT, static_cast< sal_uInt32 >(pPage->GetAutoLayout()) ) );
+                bDisable = false;
+            }
+        }
+
+        if(bDisable)
+        {
+            rSet.DisableItem(SID_EXPAND_PAGE);
+        }
+    }
+
     if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_EXPAND_PAGE))
     {
         bool bDisable = true;
@@ -354,6 +359,26 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         if(bDisable)
         {
             rSet.DisableItem(SID_SUMMARY_PAGE);
+        }
+    }
+
+    if (SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_ASSIGN_LAYOUT))
+    {
+        bool bDisable = true;
+        if( pPageView )
+        {
+            SdPage* pPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
+
+            if( pPage && !pPage->IsMasterPage() )
+            {
+                rSet.Put( SfxUInt32Item(SID_ASSIGN_LAYOUT, pPage->GetAutoLayout()) );
+                bDisable = false;
+            }
+        }
+
+        if(bDisable)
+        {
+            rSet.DisableItem(SID_ASSIGN_LAYOUT);
         }
     }
 
@@ -570,7 +595,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     // clipboard (paste)
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE2 ) ||
+        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PASTE_SPECIAL ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
     {
         if ( !mpClipEvtLstnr )
@@ -596,7 +621,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         if( !mbPastePossible )
         {
             rSet.DisableItem( SID_PASTE );
-            rSet.DisableItem( SID_PASTE2 );
+            rSet.DisableItem( SID_PASTE_SPECIAL );
             rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
         }
         else if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) )
@@ -1017,7 +1042,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
           SD_MOD()->GetWaterCan() )
     {
         rSet.DisableItem( SID_PASTE );
-        rSet.DisableItem( SID_PASTE2 );
+        rSet.DisableItem( SID_PASTE_SPECIAL );
         rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
 
         rSet.DisableItem( SID_INSERT_FLD_DATE_FIX );
@@ -1328,6 +1353,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
+    // #i102735# discussed with CL: removed for performance reasons
+    #if 0
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_SOUND ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_INSERT_VIDEO ) )
     {
@@ -1340,6 +1367,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         if (!SvxPluginFileDlg::IsAvailable (SID_INSERT_VIDEO))
             rSet.DisableItem (SID_INSERT_VIDEO);
     }
+    #endif
 
     ///////////////////////////////////////////////////////////////////////
     // Menuoption: Change->Convert->To Bitmap, Change->Convert->To Metafile
@@ -1604,9 +1632,9 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
     // view mode is allowed.
     const bool bIsRunning = SlideShow::IsRunning(GetViewShellBase());
 
-    if (GetViewFrame()->GetFrame()->IsInPlace() || bIsRunning)
+    if (GetViewFrame()->GetFrame().IsInPlace() || bIsRunning)
     {
-        if ( !GetViewFrame()->GetFrame()->IsInPlace() )
+        if ( !GetViewFrame()->GetFrame().IsInPlace() )
         {
             rSet.ClearItem( SID_DRAWINGMODE );
             rSet.DisableItem( SID_DRAWINGMODE );

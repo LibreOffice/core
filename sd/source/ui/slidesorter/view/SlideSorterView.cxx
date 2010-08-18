@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlideSorterView.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,7 +57,7 @@
 #include "sdresid.hxx"
 #include "glob.hrc"
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/xlndsit.hxx>
@@ -72,11 +69,10 @@
 #include <algorithm>
 #include <svx/sdr/contact/objectcontact.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itempool.hxx>
 
-#ifndef _SFXITEMPOOL_HXX
-#include <svtools/itempool.hxx>
-#endif
+#include <boost/foreach.hpp>
 
 using namespace std;
 using namespace ::sd::slidesorter::model;
@@ -108,11 +104,8 @@ SlideSorterView::SlideSorterView (SlideSorter& rSlideSorter)
     maModelBorder(),
     meOrientation(VERTICAL)
 {
-    maPageModel.GetItemPool().FreezeIdRanges();
-
     // Hide the page that contains the page objects.
     SetPageVisible (FALSE);
-    maPageModel.GetItemPool().FreezeIdRanges();
 
     // call FreezeIdRanges() at the pool from the newly constructed SdrModel,
     // else creating SfxItemSets on it will complain
@@ -169,52 +162,6 @@ sal_Int32 SlideSorterView::GetPageIndexAtPoint (const Point& rPosition) const
         // Clip the page index against the page count.
         if (nIndex >= mrModel.GetPageCount())
             nIndex = -1;
-    }
-
-    return nIndex;
-}
-
-
-
-
-sal_Int32 SlideSorterView::GetFadePageIndexAtPoint (
-    const Point& rPosition) const
-{
-    sal_Int32 nIndex (-1);
-
-    ::sd::Window* pWindow = GetWindow();
-    if (pWindow != NULL)
-    {
-        Point aModelPosition (pWindow->PixelToLogic (rPosition));
-        nIndex = mpLayouter->GetIndexAtPoint(
-            aModelPosition,
-            true // Include page borders into hit test
-            );
-
-        // Clip the page index against the page count.
-        if (nIndex >= mrModel.GetPageCount())
-            nIndex = -1;
-
-        if (nIndex >= 0)
-        {
-            // Now test whether the given position is inside the area of the
-            // fade effect indicator.
-            view::PageObjectViewObjectContact* pContact
-                = mrModel.GetPageDescriptor(nIndex)->GetViewObjectContact();
-            if (pContact != NULL)
-            {
-                if ( ! pContact->GetBoundingBox(
-                    *pWindow,
-                    PageObjectViewObjectContact::FadeEffectIndicatorBoundingBox,
-                    PageObjectViewObjectContact::ModelCoordinateSystem).IsInside (
-                    aModelPosition))
-                {
-                    nIndex = -1;
-                }
-            }
-            else
-                nIndex = -1;
-        }
     }
 
     return nIndex;
@@ -472,12 +419,28 @@ void SlideSorterView::DeterminePageObjectVisibilities (void)
                     pContact = pDescriptor->GetViewObjectContact();
 
                 if (pDescriptor.get() != NULL)
-                    pDescriptor->SetVisible (bIsVisible);
+                    pDescriptor->SetVisible(bIsVisible);
             }
 
         }
-        mnFirstVisiblePageIndex = nFirstIndex;
-        mnLastVisiblePageIndex = nLastIndex;
+
+        if (mnFirstVisiblePageIndex != nFirstIndex
+            || mnLastVisiblePageIndex != nLastIndex)
+        {
+            mnFirstVisiblePageIndex = nFirstIndex;
+            mnLastVisiblePageIndex = nLastIndex;
+
+            // Tell the listeners that the visibility of some objects has changed.
+            ::std::vector<Link> aChangeListeners (maVisibilityChangeListeners);
+            for (::std::vector<Link>::const_iterator
+                    iListener=aChangeListeners.begin(),
+                    iEnd=aChangeListeners.end();
+                iListener!=iEnd;
+                ++iListener)
+            {
+                iListener->Call(NULL);
+            }
+        }
     }
 }
 
@@ -731,14 +694,6 @@ ViewOverlay& SlideSorterView::GetOverlay (void)
 
 
 
-::sdr::contact::ObjectContact& SlideSorterView::GetObjectContact (void) const
-{
-    return GetSdrPageView()->GetPageWindow(0)->GetObjectContact();
-}
-
-
-
-
 SlideSorterView::PageRange SlideSorterView::GetVisiblePageRange (void)
 {
     const int nMaxPageIndex (mrModel.GetPageCount() - 1);
@@ -827,26 +782,40 @@ void SlideSorterView::UpdatePageBorders (void)
 
 
 
-Size SlideSorterView::GetPageNumberAreaModelSize (void) const
-{
-    return maPageNumberAreaModelSize;
-}
-
-
-
-
-SvBorder SlideSorterView::GetModelBorder (void) const
-{
-    return maModelBorder;
-}
-
-
-
-
 void SlideSorterView::AddSdrObject (SdrObject& rObject)
 {
     mpPage->InsertObject(&rObject);
     rObject.SetModel(&maPageModel);
 }
+
+
+
+
+void SlideSorterView::AddVisibilityChangeListener (const Link& rListener)
+{
+    if (::std::find (
+        maVisibilityChangeListeners.begin(),
+        maVisibilityChangeListeners.end(),
+        rListener) == maVisibilityChangeListeners.end())
+    {
+        maVisibilityChangeListeners.push_back(rListener);
+    }
+}
+
+
+
+
+void SlideSorterView::RemoveVisibilityChangeListener(const Link&rListener)
+{
+    maVisibilityChangeListeners.erase (
+        ::std::find (
+            maVisibilityChangeListeners.begin(),
+            maVisibilityChangeListeners.end(),
+            rListener));
+}
+
+
+
+
 
 } } } // end of namespace ::sd::slidesorter::view

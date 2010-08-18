@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewmediashape.hxx,v $
- * $Revision: 1.3.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -166,6 +163,7 @@ namespace slideshow
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayer >        mxPlayer;
             ::com::sun::star::uno::Reference< ::com::sun::star::media::XPlayerWindow >  mxPlayerWindow;
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> mxComponentContext;
+            bool mbIsSoundEnabled;
         };
 
         typedef ::boost::shared_ptr< ViewMediaShape > ViewMediaShapeSharedPtr;

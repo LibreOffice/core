@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: futempl.cxx,v $
- * $Revision: 1.28 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,18 +35,18 @@
 
 #include "futempl.hxx"
 
-#include <svx/editdata.hxx>
-#include <svx/bulitem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/bulitem.hxx>
 #include <svx/svxids.hrc>   // fuer SID_OBJECT_SELECT
 #include <sfx2/bindings.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/msgbox.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/request.hxx>
-#include <svx/numitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/svdopage.hxx>
 #include <svx/svditer.hxx>
 
@@ -337,18 +334,18 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
                     if (aName == String(SdResId(STR_PSEUDOSHEET_TITLE)))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_3;
+                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_TITLE;
                     }
                     else if (aName == String(SdResId(STR_PSEUDOSHEET_SUBTITLE)))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_3;
+                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_SUBTITLE;
                     }
                     else if (aName ==
                              String(SdResId(STR_PSEUDOSHEET_BACKGROUND)))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_2;
+                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_BACKGROUND;
                         ePO    = PO_BACKGROUND;
                     }
                     else if (aName ==
@@ -360,13 +357,13 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     else if (aName ==
                              String(SdResId(STR_PSEUDOSHEET_NOTES)))
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_3;
+                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
                         ePO    = PO_NOTES;
                     }
                     else if(aName.Search(String(SdResId(STR_PSEUDOSHEET_OUTLINE))) !=
                             STRING_NOTFOUND)
                     {
-                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE_3;
+                        nDlgId = TAB_PRES_LAYOUT_TEMPLATE;
 
                         String aOutlineStr((SdResId(STR_PSEUDOSHEET_OUTLINE)));
                         // die Nummer ermitteln; ein Leerzeichen zwischen
@@ -696,9 +693,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
 
         case SID_STYLE_UPDATE_BY_EXAMPLE:
         {
-            if (mpView->AreObjectsMarked() &&
-                mpView->GetMarkedObjectList().GetMarkCount() == 1 ||
-                mpView->ISA(OutlineView))
+            if ((mpView->AreObjectsMarked() && mpView->GetMarkedObjectList().GetMarkCount() == 1) ||
+                 mpView->ISA(OutlineView))
             {
                 pStyleSheet = mpView->GetStyleSheet();
 

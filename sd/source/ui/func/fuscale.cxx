@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuscale.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,7 +136,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            pDlg = pFact->CreateSvxZoomDialog(NULL, aNewAttr, RID_SVXDLG_ZOOM);
+            pDlg = pFact->CreateSvxZoomDialog(NULL, aNewAttr);
         }
 
         if( pDlg )
@@ -169,12 +166,11 @@ void FuScale::DoExecute( SfxRequest& rReq )
 
             delete pDlg;
 
-    //      SvxZoomType eZT = ((const SvxZoomItem &) aArgs.Get (RID_SVXDLG_ZOOM)).GetType ();
-            switch (((const SvxZoomItem &) aArgs.Get (RID_SVXDLG_ZOOM)).GetType ())
+            switch (((const SvxZoomItem &) aArgs.Get (SID_ATTR_ZOOM)).GetType ())
             {
                 case SVX_ZOOM_PERCENT:
                 {
-                    nValue = ((const SvxZoomItem &) aArgs.Get (RID_SVXDLG_ZOOM)).GetValue ();
+                    nValue = ((const SvxZoomItem &) aArgs.Get (SID_ATTR_ZOOM)).GetValue ();
 
                     mpViewShell->SetZoom( nValue );
 

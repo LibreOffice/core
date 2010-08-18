@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.32 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,6 +25,7 @@
 #
 #*************************************************************************
 
+
 PRJ=..$/..$/..
 
 PROJECTPCH=sd
@@ -46,6 +43,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
+
+SRS1NAME=$(TARGET)
+SRC1FILES =	\
+        DocumentRenderer.src
 
 SLOFILES =	\
         $(SLO)$/sdview.obj	\
@@ -84,7 +85,6 @@ SLOFILES =	\
         $(SLO)$/presvish.obj \
         $(SLO)$/outlview.obj \
         $(SLO)$/tabcontr.obj \
-        $(SLO)$/showview.obj \
         $(SLO)$/bmcache.obj	\
         $(SLO)$/drbezob.obj	\
         $(SLO)$/drtxtob.obj	\
@@ -94,6 +94,7 @@ SLOFILES =	\
         $(SLO)$/clview.obj  \
         $(SLO)$/zoomlist.obj	\
         $(SLO)$/unmodpg.obj	\
+        $(SLO)$/DocumentRenderer.obj			\
         $(SLO)$/FormShellManager.obj			\
         $(SLO)$/GraphicObjectBar.obj			\
         $(SLO)$/GraphicViewShellBase.obj		\
@@ -104,7 +105,6 @@ SLOFILES =	\
         $(SLO)$/OutlineViewShellBase.obj		\
         $(SLO)$/SlideSorterViewShellBase.obj	\
         $(SLO)$/PresentationViewShellBase.obj	\
-        $(SLO)$/PrintManager.obj				\
         $(SLO)$/ToolBarManager.obj				\
         $(SLO)$/UpdateLockManager.obj			\
         $(SLO)$/ViewClipboard.obj				\
@@ -113,8 +113,8 @@ SLOFILES =	\
         $(SLO)$/ViewShellManager.obj			\
         $(SLO)$/ViewShellHint.obj				\
         $(SLO)$/ViewTabBar.obj					\
-        $(SLO)$/WindowUpdater.obj
-
+        $(SLO)$/WindowUpdater.obj				\
+        $(SLO)$/viewoverlaymanager.obj
 
 
 # --- Tagets -------------------------------------------------------

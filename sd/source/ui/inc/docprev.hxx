@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docprev.hxx,v $
- * $Revision: 1.10.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 
 #include <rtl/ref.hxx>
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/colorcfg.hxx>
 #include "fadedef.h"
 #include "sddllapi.h"
@@ -73,10 +70,8 @@ protected:
 
 public:
                     SdDocPreviewWin( Window* pParent, const ResId& rResId );
-                    SdDocPreviewWin( Window* pParent );
                     ~SdDocPreviewWin();
     void            SetObjectShell( SfxObjectShell* pObj, sal_uInt16 nShowPage = 0 );
-    void            SetGDIFile( GDIMetaFile* pFile );
     virtual void    Resize();
     void            startPreview();
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pptinanimations.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,11 +68,11 @@
 
 #include <vcl/vclenum.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <pptinanimations.hxx>
 #include <pptatom.hxx>
-#include "../pptin.hxx"
+#include "pptin.hxx"
 #include <algorithm>
 
 using ::std::map;
@@ -1506,52 +1503,6 @@ void AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference<
 
                     fprintf( mpFile, "<unknown_0xf136 nU1=\"%ld\" nU2=\"%ld\"/>\n", nU1, nU2 );
 #endif
-                }
-                break;
-
-                default:
-                {
-                    dump_atom_header( pChildAtom, true, false );
-                    dump_atom( pChildAtom );
-                    dump_atom_header( pChildAtom, false, false );
-                }
-                break;
-            }
-
-            pChildAtom = pAtom->findNextChildAtom( pChildAtom );
-        }
-    }
-}
-
-// --------------------------------------------------------------------
-
-/* todo: for now we dump sub containers into its parent container, what else to do with it? */
-void AnimationImporter::importAnimationSubContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
-{
-    DBG_ASSERT( pAtom && xNode.is(), "invalid call to ppt::AnimationImporter::importTimeContainer()!");
-    if( pAtom && xNode.is() )
-    {
-        // import sub containers
-        const Atom* pChildAtom = pAtom->findFirstChildAtom();
-
-        while( pChildAtom )
-        {
-            switch( pChildAtom->getType() )
-            {
-                case DFF_msofbtAnimNode:
-                case DFF_msofbtAnimEvent:
-                case DFF_msofbtAnimValue:
-                case DFF_msofbtAnimAction:
-                case DFF_msofbtAnimPropertySet:
-                    break;
-                case DFF_msofbtAnimCommand:
-                {
-                    const OUString aServiceName( OUString::createFromAscii("com.sun.star.animations.Command") );
-                    Reference< XAnimationNode > xChildNode( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY );
-                    importAnimationNodeContainer( pChildAtom, xChildNode );
-                    Reference< XTimeContainer > xParentContainer( xNode, UNO_QUERY );
-                    if( xParentContainer.is() && xChildNode.is() )
-                        xParentContainer->appendChild( xChildNode );
                 }
                 break;
 
@@ -3897,14 +3848,6 @@ void AnimationImporter::dump_atom( const Atom* , bool  )
 {
 }
 
-void AnimationImporter::dump( sal_uInt32 , bool  )
-{
-}
-
-void AnimationImporter::dump_anim_group( const Atom* , const AnimationNode& , const PropertySet& , bool  )
-{
-}
-
 void AnimationImporter::dump_target( ::com::sun::star::uno::Any&  )
 {
 }
@@ -3922,10 +3865,6 @@ void AnimationImporter::dump( const AnimationNode&  )
 }
 
 void AnimationImporter::dump( const char *  )
-{
-}
-
-void AnimationImporter::dump( const rtl::OUString&  )
 {
 }
 

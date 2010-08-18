@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: animationnodefactory.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -201,7 +198,7 @@ bool implCreateIteratedNodes(
     // ==================================
 
     // TODO(E1): I'm not too sure what to expect here...
-    ENSURE_OR_RETURN(
+    ENSURE_OR_RETURN_FALSE(
         xIterNode->getTarget().hasValue(),
         "implCreateIteratedNodes(): no target on ITERATE node" );
 
@@ -216,14 +213,14 @@ bool implCreateIteratedNodes(
     {
         // no shape provided. Maybe a ParagraphTarget?
         if( !(xIterNode->getTarget() >>= aTarget) )
-            ENSURE_OR_RETURN(
+            ENSURE_OR_RETURN_FALSE(
                 false,
                 "implCreateIteratedNodes(): could not extract any "
                 "target information" );
 
         xTargetShape = aTarget.Shape;
 
-        ENSURE_OR_RETURN(
+        ENSURE_OR_RETURN_FALSE(
             xTargetShape.is(),
             "implCreateIteratedNodes(): invalid shape in ParagraphTarget" );
 
@@ -254,7 +251,7 @@ bool implCreateIteratedNodes(
     // paragraph)
     if( bParagraphTarget )
     {
-        ENSURE_OR_RETURN(
+        ENSURE_OR_RETURN_FALSE(
             aTarget.Paragraph >= 0 &&
             rTreeNodeSupplier.getNumberOfTreeNodes(
                 DocTreeNode::NODETYPE_LOGICAL_PARAGRAPH ) > aTarget.Paragraph,
@@ -325,7 +322,7 @@ bool implCreateIteratedNodes(
         if( !::anim::for_each_childNode( xNode,
                                          aCreator ) )
         {
-            ENSURE_OR_RETURN(
+            ENSURE_OR_RETURN_FALSE(
                 false,
                 "implCreateIteratedNodes(): iterated child node creation failed" );
         }
@@ -448,7 +445,7 @@ bool implCreateIteratedNodes(
                 if( !::anim::for_each_childNode( xNode,
                                                  aCreator ) )
                 {
-                    ENSURE_OR_RETURN(
+                    ENSURE_OR_RETURN_FALSE(
                         false, "implCreateIteratedNodes(): "
                         "iterated child node creation failed" );
                 }

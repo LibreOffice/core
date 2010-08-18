@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optsitem.cxx,v $
- * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #ifndef _SV_SALBTYPE_HRC //autogen
 #include <vcl/salbtype.hxx>
 #endif
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 
 #include "app.hxx"
 #include "optsitem.hxx"
@@ -73,6 +70,10 @@ void SdOptionsItem::Commit()
     if( IsModified() )
         mrParent.Commit( *this );
 };
+
+void SdOptionsItem::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& )
+{}
+
 
 // -----------------------------------------------------------------------------
 
@@ -217,22 +218,6 @@ SdOptionsLayout::SdOptionsLayout(  USHORT nConfigId, BOOL bUseConfig ) :
     nDefTab( 1250 )
 {
     EnableModify( TRUE );
-}
-
-// -----------------------------------------------------------------------------
-
-void SdOptionsLayout::SetDefaults()
-{
-    SetRulerVisible( TRUE );
-    SetHelplines( TRUE );
-    SetHandlesBezier( FALSE );
-    SetMoveOutline( TRUE );
-    SetDragStripes( FALSE );
-    if ( isMetricSystem() )
-        SetMetric( FUNIT_CM );              // default for countries with metric system
-    else
-        SetMetric( FUNIT_INCH );            // default for others
-    SetDefTab( 1250 );
 }
 
 // -----------------------------------------------------------------------------
@@ -405,12 +390,6 @@ SdOptionsContents::SdOptionsContents( USHORT nConfigId, BOOL bUseConfig ) :
 
 // -----------------------------------------------------------------------------
 
-void SdOptionsContents::SetDefaults()
-{
-}
-
-// -----------------------------------------------------------------------------
-
 BOOL SdOptionsContents::operator==(const SdOptionsContents&) const
 {
     return true;
@@ -457,14 +436,6 @@ BOOL SdOptionsContents::WriteData( Any* pValues ) const
 |* SdOptionsContentsItem
 |*
 \************************************************************************/
-
-SdOptionsContentsItem::SdOptionsContentsItem( USHORT _nWhich )
-:   SfxPoolItem         ( _nWhich )
-,   maOptionsContents   ( 0, FALSE )
-{
-}
-
-// ----------------------------------------------------------------------
 
 SdOptionsContentsItem::SdOptionsContentsItem(USHORT _nWhich, SdOptions*, ::sd::FrameView*)
 :   SfxPoolItem         ( _nWhich )
@@ -527,6 +498,7 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
     // #90356#
     bShowUndoDeleteWarning( TRUE ),
     bSlideshowRespectZOrder( TRUE ),
+    bShowComments( TRUE ),
     bPreviewNewEffects( TRUE ),
     bPreviewChangedEffects( FALSE ),
     bPreviewTransitions( TRUE ),
@@ -536,39 +508,6 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
     mnPrinterIndependentLayout (1)
 {
     EnableModify( TRUE );
-}
-
-// -----------------------------------------------------------------------------
-
-void SdOptionsMisc::SetDefaults()
-{
-    SetStartWithTemplate( TRUE );
-    SetMarkedHitMovesAlways( TRUE );
-    SetMoveOnlyDragging( FALSE );
-    SetCrookNoContortion( FALSE );
-    SetQuickEdit( GetConfigId() != SDCFG_DRAW );
-    SetMasterPagePaintCaching( TRUE );
-    SetDragWithCopy( FALSE );
-    SetPickThrough( TRUE );
-    SetBigHandles( FALSE );
-    SetDoubleClickTextEdit( TRUE );
-    SetClickChangeRotation( FALSE );
-    SetStartWithActualPage( FALSE );
-    SetSummationOfParagraphs( FALSE );
-    SetSolidDragging( TRUE );
-    SetSolidMarkHdl( TRUE );
-    // #90356#
-    SetShowUndoDeleteWarning( TRUE );
-    // The default for 6.1-and-above documents is to use printer-independent
-    // formatting.
-    SetPrinterIndependentLayout (1);
-    // #97016#
-    SetDefaultObjectSizeWidth(8000);
-    SetDefaultObjectSizeHeight(5000);
-    SetPreviewNewEffects(true);
-    SetPreviewChangedEffects(false);
-    SetPreviewTransitions(true);
-    SetDisplay(0);
 }
 
 // -----------------------------------------------------------------------------
@@ -601,8 +540,8 @@ BOOL SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsPreviewNewEffects() == rOpt.IsPreviewNewEffects() &&
             IsPreviewChangedEffects() == rOpt.IsPreviewChangedEffects() &&
             IsPreviewTransitions() == rOpt.IsPreviewTransitions() &&
-            GetDisplay() == rOpt.GetDisplay()
-
+            GetDisplay() == rOpt.GetDisplay() &&
+            IsShowComments() == rOpt.IsShowComments()
         );
 }
 
@@ -630,6 +569,8 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
 
         "Compatibility/PrinterIndependentLayout",
 
+        "ShowComments",
+
         // just for impress
         "NewDoc/AutoPilot",
         "Start/CurrentPage",
@@ -645,9 +586,7 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         "Display"
     };
 
-    // #90356# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 15 : 12 );
-    // #97016# rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 16 : 12 );
-    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 24 : 15 );
+    rCount = ( ( GetConfigId() == SDCFG_IMPRESS ) ? 25 : 16 );
     ppNames = aPropNames;
 }
 
@@ -672,33 +611,36 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
     if( pValues[13].hasValue() ) SetDefaultObjectSizeHeight( *(sal_uInt32*) pValues[ 13 ].getValue() );
     if( pValues[14].hasValue() ) SetPrinterIndependentLayout( *(sal_uInt16*) pValues[ 14 ].getValue() );
 
+    if( pValues[15].hasValue() )
+        SetShowComments(  *(sal_Bool*) pValues[ 15 ].getValue() );
+
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        if( pValues[15].hasValue() )
-            SetStartWithTemplate( *(sal_Bool*) pValues[ 15 ].getValue() );
         if( pValues[16].hasValue() )
-            SetStartWithActualPage( *(sal_Bool*) pValues[ 16 ].getValue() );
+            SetStartWithTemplate( *(sal_Bool*) pValues[ 16 ].getValue() );
         if( pValues[17].hasValue() )
-            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 17 ].getValue() );
-        // #90356#
+            SetStartWithActualPage( *(sal_Bool*) pValues[ 17 ].getValue() );
         if( pValues[18].hasValue() )
-            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 18 ].getValue() );
-
+            SetSummationOfParagraphs( *(sal_Bool*) pValues[ 18 ].getValue() );
+        // #90356#
         if( pValues[19].hasValue() )
-            SetSlideshowRespectZOrder(*(sal_Bool*) pValues[ 19 ].getValue());
+            SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 19 ].getValue() );
 
         if( pValues[20].hasValue() )
-            SetPreviewNewEffects(*(sal_Bool*) pValues[ 20 ].getValue());
+            SetSlideshowRespectZOrder(*(sal_Bool*) pValues[ 20 ].getValue());
 
         if( pValues[21].hasValue() )
-            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 21 ].getValue());
+            SetPreviewNewEffects(*(sal_Bool*) pValues[ 21 ].getValue());
 
         if( pValues[22].hasValue() )
-            SetPreviewTransitions(*(sal_Bool*) pValues[ 22 ].getValue());
+            SetPreviewChangedEffects(*(sal_Bool*) pValues[ 22 ].getValue());
 
         if( pValues[23].hasValue() )
-            SetDisplay(*(sal_Int32*) pValues[ 23 ].getValue());
+            SetPreviewTransitions(*(sal_Bool*) pValues[ 23 ].getValue());
+
+        if( pValues[24].hasValue() )
+            SetDisplay(*(sal_Int32*) pValues[ 24 ].getValue());
     }
 
     return TRUE;
@@ -725,22 +667,23 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
     pValues[ 12 ] <<= GetDefaultObjectSizeWidth();
     pValues[ 13 ] <<= GetDefaultObjectSizeHeight();
     pValues[ 14 ] <<= GetPrinterIndependentLayout();
+    pValues[ 15 ] <<= (sal_Bool)IsShowComments();
 
     // just for Impress
     if( GetConfigId() == SDCFG_IMPRESS )
     {
-        pValues[ 15 ] <<= IsStartWithTemplate();
-        pValues[ 16 ] <<= IsStartWithActualPage();
-        pValues[ 17 ] <<= IsSummationOfParagraphs();
+        pValues[ 16 ] <<= IsStartWithTemplate();
+        pValues[ 17 ] <<= IsStartWithActualPage();
+        pValues[ 18 ] <<= IsSummationOfParagraphs();
         // #90356#
-        pValues[ 18 ] <<= IsShowUndoDeleteWarning();
-        pValues[ 19 ] <<= IsSlideshowRespectZOrder();
+        pValues[ 19 ] <<= IsShowUndoDeleteWarning();
+        pValues[ 20 ] <<= IsSlideshowRespectZOrder();
 
-        pValues[ 20 ] <<= IsPreviewNewEffects();
-        pValues[ 21 ] <<= IsPreviewChangedEffects();
-        pValues[ 22 ] <<= IsPreviewTransitions();
+        pValues[ 21 ] <<= IsPreviewNewEffects();
+        pValues[ 22 ] <<= IsPreviewChangedEffects();
+        pValues[ 23 ] <<= IsPreviewTransitions();
 
-        pValues[ 23 ] <<= GetDisplay();
+        pValues[ 24 ] <<= GetDisplay();
     }
 
     return TRUE;
@@ -781,6 +724,7 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT _nWhich, SdOptions* pOpts, ::sd::Fr
         maOptionsMisc.SetPreviewTransitions(pOpts->IsPreviewTransitions());
 
         maOptionsMisc.SetDisplay(pOpts->GetDisplay());
+        maOptionsMisc.SetShowComments( pOpts->IsShowComments() );
     }
 
     if( pView )
@@ -859,6 +803,7 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
         // #90356#
         pOpts->SetShowUndoDeleteWarning( maOptionsMisc.IsShowUndoDeleteWarning() );
         pOpts->SetPrinterIndependentLayout( maOptionsMisc.GetPrinterIndependentLayout() );
+        pOpts->SetShowComments( maOptionsMisc.IsShowComments() );
         // #97016#
         pOpts->SetDefaultObjectSizeWidth( maOptionsMisc.GetDefaultObjectSizeWidth() );
         pOpts->SetDefaultObjectSizeHeight( maOptionsMisc.GetDefaultObjectSizeHeight() );
@@ -896,22 +841,6 @@ SdOptionsSnap::SdOptionsSnap( USHORT nConfigId, BOOL bUseConfig ) :
 
 {
     EnableModify( TRUE );
-}
-
-// -----------------------------------------------------------------------------
-
-void SdOptionsSnap::SetDefaults()
-{
-    SetSnapHelplines( TRUE );
-    SetSnapBorder( TRUE );
-    SetSnapFrame( FALSE );
-    SetSnapPoints( FALSE );
-    SetOrtho( FALSE );
-    SetBigOrtho( TRUE );
-    SetRotate( FALSE );
-    SetSnapArea( 5 );
-    SetAngle( 1500 );
-    SetEliminatePolyPointLimitAngle( 1500 );
 }
 
 // -----------------------------------------------------------------------------
@@ -1089,13 +1018,6 @@ SdOptionsZoom::SdOptionsZoom( USHORT nConfigId, BOOL bUseConfig ) :
 
 // -----------------------------------------------------------------------------
 
-void SdOptionsZoom::SetDefaults()
-{
-    SetScale( 1, 1 );
-}
-
-// -----------------------------------------------------------------------------
-
 BOOL SdOptionsZoom::operator==( const SdOptionsZoom& rOpt ) const
 {
     INT32 nX1, nX2, nY1, nY2;
@@ -1147,63 +1069,6 @@ BOOL SdOptionsZoom::WriteData( Any* pValues ) const
     pValues[ 1 ] <<= (sal_Int32) y;
 
     return TRUE;
-}
-
-/*************************************************************************
-|*
-|* SdOptionsZoomItem
-|*
-\************************************************************************/
-
-SdOptionsZoomItem::SdOptionsZoomItem( USHORT _nWhich )
-:   SfxPoolItem     ( _nWhich )
-,   maOptionsZoom   ( 0, FALSE )
-{
-}
-
-// ----------------------------------------------------------------------
-
-SdOptionsZoomItem::SdOptionsZoomItem( USHORT _nWhich, SdOptions* pOpts, ::sd::FrameView* )
-:   SfxPoolItem     ( _nWhich )
-,   maOptionsZoom   ( 0, FALSE )
-{
-    if( pOpts )
-    {
-        INT32 nX, nY;
-
-        pOpts->GetScale( nX, nY );
-        maOptionsZoom.SetScale( nX, nY );
-    }
-}
-
-// ----------------------------------------------------------------------
-
-SfxPoolItem* SdOptionsZoomItem::Clone( SfxItemPool* ) const
-{
-    return new SdOptionsZoomItem( *this );
-}
-
-
-// ----------------------------------------------------------------------
-
-int SdOptionsZoomItem::operator==( const SfxPoolItem& rAttr ) const
-{
-    const bool bSameType = SfxPoolItem::operator==(rAttr);
-    DBG_ASSERT( bSameType, "SdOptionsZoomItem::operator==(), differen pool item type!" );
-    return bSameType && ( maOptionsZoom == static_cast< const SdOptionsZoomItem& >(rAttr).maOptionsZoom );
-}
-
-// -----------------------------------------------------------------------
-
-void SdOptionsZoomItem::SetOptions( SdOptions* pOpts ) const
-{
-    if( pOpts )
-    {
-        INT32 nX, nY;
-
-        maOptionsZoom.GetScale( nX, nY );
-        pOpts->SetScale( nX, nY );
-    }
 }
 
 /*************************************************************************
@@ -1357,13 +1222,6 @@ BOOL SdOptionsGrid::WriteData( Any* pValues ) const
 |*
 \************************************************************************/
 
-SdOptionsGridItem::SdOptionsGridItem( USHORT _nWhich ) :
-    SvxGridItem( _nWhich )
-{
-}
-
-// -----------------------------------------------------------------------------
-
 SdOptionsGridItem::SdOptionsGridItem( USHORT _nWhich, SdOptions* pOpts, ::sd::FrameView* pView ) :
     SvxGridItem( _nWhich )
 {
@@ -1445,33 +1303,6 @@ SdOptionsPrint::SdOptionsPrint( USHORT nConfigId, BOOL bUseConfig ) :
     nQuality( 0 )
 {
     EnableModify( TRUE );
-}
-
-// -----------------------------------------------------------------------------
-
-void SdOptionsPrint::SetDefaults()
-{
-    SetDraw( TRUE );
-    SetNotes( FALSE );
-    SetHandout( FALSE );
-    SetOutline( FALSE );
-    SetDate( FALSE );
-    SetTime( FALSE );
-    SetPagename( FALSE );
-    SetHiddenPages( TRUE );
-    SetPagesize( FALSE );
-    SetPagetile( FALSE );
-    SetWarningPrinter( TRUE );
-    SetWarningSize( FALSE );
-    SetWarningOrientation( FALSE );
-    SetBooklet( FALSE );
-    SetFrontPage( TRUE );
-    SetBackPage( TRUE );
-    SetCutPage( FALSE );
-    SetPaperbin( FALSE );
-    SetOutputQuality( 0 );
-    SetHandoutHorizontal( TRUE );
-    SetHandoutPages( 6 );
 }
 
 // -----------------------------------------------------------------------------
@@ -1621,31 +1452,6 @@ BOOL SdOptionsPrint::WriteData( Any* pValues ) const
     return TRUE;
 }
 
-void SdOptionsPrint::SetPrinterOptions( const SdOptionsPrint* pOptions )
-{
-    bDraw = pOptions->bDraw;
-    bNotes = pOptions->bNotes;
-    bHandout = pOptions->bHandout;
-    bOutline = pOptions->bOutline;
-    bDate = pOptions->bDate;
-    bTime = pOptions->bTime;
-    bPagename = pOptions->bPagename;
-    bHiddenPages = pOptions->bHiddenPages;
-    bPagesize = pOptions->bPagesize;
-    bPagetile = pOptions->bPagetile;
-    bWarningPrinter = pOptions->bWarningPrinter;
-    bWarningSize = pOptions->bWarningSize;
-    bWarningOrientation = pOptions->bWarningOrientation;
-    bBooklet = pOptions->bBooklet;
-    bFront = pOptions->bFront;
-    bBack = pOptions->bBack;
-    bCutPage = pOptions->bCutPage;
-    bPaperbin = pOptions->bPaperbin;
-    nQuality = pOptions->nQuality;
-    mnHandoutPages = pOptions->mnHandoutPages;
-    mbHandoutHorizontal = pOptions->mbHandoutHorizontal;
-}
-
 /*************************************************************************
 |*
 |* SdOptionsPrintItem
@@ -1753,32 +1559,6 @@ SdOptions::SdOptions( USHORT nConfigId ) :
 
 SdOptions::~SdOptions()
 {
-}
-
-// ----------------------------------------------------------------------
-
-void SdOptions::SetRangeDefaults( ULONG nOptionsRange )
-{
-    if( nOptionsRange & SD_OPTIONS_LAYOUT )
-        SdOptionsLayout::SetDefaults();
-
-    if( nOptionsRange & SD_OPTIONS_CONTENTS )
-        SdOptionsContents::SetDefaults();
-
-    if( nOptionsRange & SD_OPTIONS_MISC )
-        SdOptionsMisc::SetDefaults();
-
-    if( nOptionsRange & SD_OPTIONS_SNAP )
-        SdOptionsSnap::SetDefaults();
-
-    if( nOptionsRange & SD_OPTIONS_ZOOM )
-        SdOptionsZoom::SetDefaults();
-
-    if( nOptionsRange & SD_OPTIONS_GRID )
-        SdOptionsGrid::SetDefaults();
-
-    if( nOptionsRange & SD_OPTIONS_PRINT )
-        SdOptionsPrint::SetDefaults();
 }
 
 // ----------------------------------------------------------------------

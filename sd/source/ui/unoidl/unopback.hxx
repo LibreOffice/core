@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unopback.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,15 +33,13 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <svx/unoshprp.hxx>
-#include <svx/unoipset.hxx>
+#include <editeng/unoipset.hxx>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 #include <cppuhelper/implbase4.hxx>
 
-const SfxItemPropertyMap* ImplGetPageBackgroundPropertyMap();
-
-class SdrObject;
+const SvxItemPropertySet* ImplGetPageBackgroundPropertySet();
 class SdDrawDocument;
 class SfxItemSet;
 
@@ -56,14 +51,13 @@ class SdUnoPageBackground : public ::cppu::WeakImplHelper4<
                             public SfxListener
 {
 protected:
-    SvxItemPropertySet  maPropSet;
+    const SvxItemPropertySet*  mpPropSet;
     SfxItemSet*         mpSet;
     SdrModel*           mpDoc;
 
-    const SfxItemPropertyMap* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
+    const SfxItemPropertySimpleEntry* getPropertyMapEntry( const ::rtl::OUString& rPropertyName ) const throw();
 public:
-    SdUnoPageBackground( SdDrawDocument* pDoc = NULL, SdrObject* pObj = NULL ) throw();
-    SdUnoPageBackground( SdDrawDocument* pDoc, const SfxItemSet* pSet ) throw();
+    SdUnoPageBackground( SdDrawDocument* pDoc = NULL, const SfxItemSet* pSet = NULL) throw();
     ~SdUnoPageBackground() throw();
 
     // internal

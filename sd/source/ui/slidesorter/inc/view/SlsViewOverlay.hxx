@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsViewOverlay.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,32 +71,22 @@ class ViewOverlay;
     support for the display.
 */
 class OverlayBase
-    : private ::boost::noncopyable,
-      public sdr::overlay::OverlayObject
+    : public sdr::overlay::OverlayObject
 {
 public:
     OverlayBase (ViewOverlay& rViewOverlay);
     virtual ~OverlayBase (void);
-
-    virtual void Paint (void);
-
-    virtual void Show (void);
-    virtual void Hide (void);
-    void Toggle (void);
-    bool IsShowing (void);
-    ViewOverlay& GetViewOverlay (void);
 
 protected:
     ::osl::Mutex maMutex;
 
     ViewOverlay& mrViewOverlay;
 
-    virtual void transform (const basegfx::B2DHomMatrix& rMatrix);
-
     /** Make sure that the overlay object is registered at the
         OverlayManager.  This registration is done on demand.
     */
     void EnsureRegistration (void);
+    void RemoveRegistration();
 };
 
 
@@ -134,15 +121,16 @@ public:
     void SetPosition (const Point& rPosition);
     Point GetPosition (void) const;
 
+    // react on stripe definition change
+    virtual void stripeDefinitionHasChanged();
+
 protected:
-    virtual void drawGeometry (OutputDevice& rOutputDevice);
-    virtual void createBaseRange (OutputDevice& rOutputDevice);
+    // geometry creation for OverlayObject
+    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
 private:
     Point maPosition;
-    Point maTranslation;
-    Rectangle maBoundingBox;
-    ::std::vector<Rectangle> maShapes;
+    basegfx::B2DPolyPolygon maShapes;
 };
 
 
@@ -157,15 +145,19 @@ class SelectionRectangleOverlay
 {
 public:
     SelectionRectangleOverlay (ViewOverlay& rViewOverlay);
+    virtual ~SelectionRectangleOverlay();
 
     void Start (const Point& rAnchor);
     void Update (const Point& rSecondCorner);
 
     Rectangle GetSelectionRectangle (void);
 
+    // react on stripe definition change
+    virtual void stripeDefinitionHasChanged();
+
 protected:
-    virtual void drawGeometry (OutputDevice& rOutputDevice);
-    virtual void createBaseRange (OutputDevice& rOutputDevice);
+    // geometry creation for OverlayObject
+    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
 private:
     Point maAnchor;
@@ -183,6 +175,7 @@ class InsertionIndicatorOverlay
 {
 public:
     InsertionIndicatorOverlay (ViewOverlay& rViewOverlay);
+    virtual ~InsertionIndicatorOverlay();
 
     /** Given a position in model coordinates this method calculates the
         insertion marker both as an index in the document and as a rectangle
@@ -193,8 +186,8 @@ public:
     sal_Int32 GetInsertionPageIndex (void) const;
 
 protected:
-    virtual void drawGeometry (OutputDevice& rOutputDevice);
-    virtual void createBaseRange (OutputDevice& rOutputDevice);
+    // geometry creation for OverlayObject
+    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
 private:
     sal_Int32 mnInsertionIndex;
@@ -223,8 +216,8 @@ public:
     void SetSlideUnderMouse (const model::SharedPageDescriptor& rpDescriptor);
 
 protected:
-    virtual void drawGeometry (OutputDevice& rOutputDevice);
-    virtual void createBaseRange (OutputDevice& rOutputDevice);
+    // geometry creation for OverlayObject
+    virtual drawinglayer::primitive2d::Primitive2DSequence createOverlayObjectPrimitive2DSequence();
 
 private:
     /** The page under the mouse is stored as weak shared pointer so that

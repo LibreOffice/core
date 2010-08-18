@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: animobjs.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include <svx/xoutbmp.hxx>
 
 #include <time.h>
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdogrp.hxx>
 #include <sfx2/dispatch.hxx>
@@ -138,7 +135,7 @@ void SdDisplay::DataChanged( const DataChangedEvent& rDCEvt )
     {
         const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
         SetBackground( Wallpaper( Color( rStyles.GetFieldColor() ) ) );
-        SetDrawMode( GetDisplayBackground().GetColor().IsDark()
+        SetDrawMode( GetSettings().GetStyleSettings().GetHighContrastMode()
             ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
             : ViewShell::OUTPUT_DRAWMODE_COLOR );
     }
@@ -601,7 +598,7 @@ void AnimationWindow::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
             aVD.SetOutputSize( aObjSize );
             const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
             aVD.SetBackground( Wallpaper( rStyles.GetFieldColor() ) );
-            aVD.SetDrawMode( GetDisplayBackground().GetColor().IsDark()
+            aVD.SetDrawMode( rStyles.GetHighContrastMode()
                 ? ViewShell::OUTPUT_DRAWMODE_CONTRAST
                 : ViewShell::OUTPUT_DRAWMODE_COLOR );
             aVD.Erase();
@@ -690,19 +687,6 @@ void AnimationWindow::ResetAttrs()
     aLbLoopCount.SelectEntryPos( aLbLoopCount.GetEntryCount() - 1);
 
     UpdateControl( 0 );
-}
-
-// -----------------------------------------------------------------------
-
-void AnimationWindow::WaitInEffect( ULONG nMilliSeconds ) const
-{
-    ULONG nEnd = Time::GetSystemTicks() + nMilliSeconds;
-    ULONG nCurrent = Time::GetSystemTicks();
-    while (nCurrent < nEnd)
-    {
-        nCurrent = Time::GetSystemTicks();
-        Application::Reschedule();
-    }
 }
 
 // -----------------------------------------------------------------------

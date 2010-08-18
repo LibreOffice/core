@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsBitmapCache.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,14 +178,6 @@ void BitmapCache::Clear (void)
 
 
 
-bool BitmapCache::IsEmpty (void) const
-{
-    return mpBitmapContainer->empty();
-}
-
-
-
-
 bool BitmapCache::IsFull (void) const
 {
     return mbIsFull;
@@ -264,21 +253,6 @@ bool BitmapCache::BitmapIsUpToDate (const CacheKey& rKey)
 
 
 
-void BitmapCache::ReleaseBitmap (const CacheKey& rKey)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    CacheBitmapContainer::iterator aIterator (mpBitmapContainer->find(rKey));
-    if (aIterator != mpBitmapContainer->end())
-    {
-        UpdateCacheSize(aIterator->second, REMOVE);
-        mpBitmapContainer->erase(aIterator);
-    }
-}
-
-
-
-
 void BitmapCache::InvalidateBitmap (const CacheKey& rKey)
 {
     ::osl::MutexGuard aGuard (maMutex);
@@ -346,20 +320,6 @@ void BitmapCache::SetBitmap (
 
     if (iEntry != mpBitmapContainer->end())
         UpdateCacheSize(iEntry->second, ADD);
-}
-
-
-
-
-bool BitmapCache::IsPrecious (const CacheKey& rKey)
-{
-    ::osl::MutexGuard aGuard (maMutex);
-
-    CacheBitmapContainer::iterator aIterator (mpBitmapContainer->find(rKey));
-    if (aIterator != mpBitmapContainer->end())
-        return aIterator->second.IsPrecious();
-    else
-        return false;
 }
 
 

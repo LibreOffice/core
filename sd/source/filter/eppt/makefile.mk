@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.15 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,29 +46,6 @@ SLOFILES =	$(SLO)$/eppt.obj				\
             $(SLO)$/escherex.obj			\
             $(SLO)$/pptexanimations.obj		\
             $(SLO)$/pptexsoundcollection.obj
-
-SHL1TARGET	=	emp$(DLLPOSTFIX)
-SHL1IMPLIB	=	eppt
-SHL1VERSIONMAP=exports.map
-SHL1DEF 	=	$(MISC)$/$(SHL1TARGET).def
-SHL1LIBS	=	$(SLB)$/eppt.lib
-
-DEF1NAME=$(SHL1TARGET)
-
-SHL1STDLIBS = 	$(SVXLIB)			\
-                $(SFX2LIB)          \
-                $(SVTOOLLIB)		\
-                $(SOTLIB)           \
-                $(GOODIESLIB)		\
-                $(VCLLIB)			\
-                $(SOTLIB)			\
-                $(UNOTOOLSLIB)		\
-                $(TOOLSLIB) 		\
-                $(UCBHELPERLIB)		\
-                $(CPPULIB)			\
-                $(SALLIB)			\
-                $(COMPHELPERLIB)	\
-                $(I18NISOLANGLIB)
 
 # --- Targets --------------------------------------------------------------
 

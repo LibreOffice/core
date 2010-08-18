@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsCurrentSlideManager.cxx,v $
- *
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -256,20 +252,5 @@ void CurrentSlideManager::HandleModelChange (void)
             mpCurrentSlide->SetIsCurrentPage(true);
     }
 }
-
-
-
-
-SdPage* GetCurrentSdPage (SlideSorter& rSlideSorter)
-{
-    SharedPageDescriptor pDescriptor (
-        rSlideSorter.GetController().GetCurrentSlideManager()->GetCurrentSlide());
-    if (pDescriptor.get() == NULL)
-        return NULL;
-    else
-        return pDescriptor->GetPage();
-}
-
-
 
 } } } // end of namespace ::sd::slidesorter::controller

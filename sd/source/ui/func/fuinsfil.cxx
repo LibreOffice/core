@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuinsfil.cxx,v $
- * $Revision: 1.43 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,11 +31,11 @@
 #include "fuinsfil.hxx"
 #include <vcl/wrkwin.hxx>
 #include <sfx2/progress.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #ifndef _EDITENG_HXX
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #endif
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
 #include <vcl/msgbox.hxx>
@@ -48,8 +45,8 @@
 #include <svx/svdoutl.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sot/formats.hxx>
-#include <svtools/urihelper.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <svl/urihelper.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -586,7 +583,9 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                 SdrRectObj* pTO = new SdrRectObj(OBJ_TEXT);
                 pTO->SetOutlinerParaObject(pOPO);
 
-                mpView->BegUndo(String(SdResId(STR_UNDO_INSERT_TEXTFRAME)));
+                const bool bUndo = mpView->IsUndoEnabled();
+                if( bUndo )
+                    mpView->BegUndo(String(SdResId(STR_UNDO_INSERT_TEXTFRAME)));
                 pPage->InsertObject(pTO);
 
                 // koennte groesser sein als die max. erlaubte Groesse:
@@ -611,8 +610,11 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                     pTO->SetTextLink(aFile, aFilterName, gsl_getSystemTextEncoding() );
                 }
 
-                mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoInsertObject(*pTO));
-                mpView->EndUndo();
+                if( bUndo )
+                {
+                    mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoInsertObject(*pTO));
+                    mpView->EndUndo();
+                }
             }
         }
         delete pOutliner;

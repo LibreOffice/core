@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: outlnvsh.cxx,v $
- * $Revision: 1.90.36.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,8 +42,8 @@
 #include <sot/exchange.hxx>
 #include <svx/ruler.hxx>
 #include <svx/zoomitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include <sfx2/shell.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/viewfac.hxx>
@@ -55,22 +52,22 @@
 #include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
 #include <vcl/scrbar.hxx>
-#include <svtools/whiter.hxx>
-#include <svx/editstat.hxx>
-#include <svtools/itempool.hxx>
+#include <svl/whiter.hxx>
+#include <editeng/editstat.hxx>
+#include <svl/itempool.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <svx/svdorect.hxx>
 #include <sot/formats.hxx>
-#include <sfx2/topfrm.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
-#include <com/sun/star/i18n/TransliterationModules.hdl>
-#include <svx/unolingu.hxx>
+#include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+#include <editeng/unolingu.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svx/outlobj.hxx>
-#include <svtools/cjkoptions.hxx>
+#include <editeng/outlobj.hxx>
+#include <svl/cjkoptions.hxx>
 #include <svtools/cliplistener.hxx>
-#include <sfx2/srchitem.hxx>
-#include <svx/editobj.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/editobj.hxx>
 #include "fubullet.hxx"
 #include "optsitem.hxx"
 
@@ -84,9 +81,7 @@
 #include "sdresid.hxx"
 #include "sdpage.hxx"
 #include "fuoltext.hxx"
-#ifndef SD_FRAME_VIEW
 #include "FrameView.hxx"
-#endif
 #include "zoomlist.hxx"
 #include "stlsheet.hxx"
 #include "slideshow.hxx"
@@ -122,8 +117,6 @@ namespace sd {
 |* SFX-Slotmap und Standardinterface deklarieren
 |*
 \************************************************************************/
-
-SFX_DECL_TYPE(13);
 
 
 SFX_IMPL_INTERFACE(OutlineViewShell, SfxShell, SdResId(STR_OUTLINEVIEWSHELL))
@@ -238,31 +231,6 @@ OutlineViewShell::OutlineViewShell (
     else
         mpFrameView = new FrameView(GetDoc());
 
-    mpFrameView->Connect();
-
-    Construct(GetDocSh());
-}
-
-
-/*************************************************************************
-|*
-|* Copy-Konstruktor
-|*
-\************************************************************************/
-
-OutlineViewShell::OutlineViewShell (
-    SfxViewFrame* pFrame,
-    ::Window* pParentWindow,
-    const OutlineViewShell& rShell)
-    : ViewShell (pFrame, pParentWindow, rShell),
-      pOlView(NULL),
-      pLastPage( NULL ),
-      pClipEvtLstnr(NULL),
-      bPastePossible(FALSE),
-      mbInitialized(false)
-
-{
-    mpFrameView = new FrameView(GetDoc());
     mpFrameView->Connect();
 
     Construct(GetDocSh());
@@ -536,6 +504,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
     std::auto_ptr< OutlineViewModelChangeGuard > aGuard;
     if( pOlView && (
+        (nSlot == SID_TRANSLITERATE_SENTENCE_CASE) ||
+        (nSlot == SID_TRANSLITERATE_TITLE_CASE) ||
+        (nSlot == SID_TRANSLITERATE_TOGGLE_CASE) ||
         (nSlot == SID_TRANSLITERATE_UPPER) ||
         (nSlot == SID_TRANSLITERATE_LOWER) ||
         (nSlot == SID_TRANSLITERATE_HALFWIDTH) ||
@@ -669,6 +640,9 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         }
         break;
 
+        case SID_TRANSLITERATE_SENTENCE_CASE:
+        case SID_TRANSLITERATE_TITLE_CASE:
+        case SID_TRANSLITERATE_TOGGLE_CASE:
         case SID_TRANSLITERATE_UPPER:
         case SID_TRANSLITERATE_LOWER:
         case SID_TRANSLITERATE_HALFWIDTH:
@@ -684,6 +658,15 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
 
                 switch( nSlot )
                 {
+                    case SID_TRANSLITERATE_SENTENCE_CASE:
+                        nType = TransliterationModulesExtra::SENTENCE_CASE;
+                        break;
+                    case SID_TRANSLITERATE_TITLE_CASE:
+                        nType = TransliterationModulesExtra::TITLE_CASE;
+                        break;
+                    case SID_TRANSLITERATE_TOGGLE_CASE:
+                        nType = TransliterationModulesExtra::TOGGLE_CASE;
+                        break;
                     case SID_TRANSLITERATE_UPPER:
                         nType = TransliterationModules_LOWERCASE_UPPERCASE;
                         break;
@@ -797,7 +780,7 @@ IMPL_LINK( OutlineViewShell, ClipboardChanged, TransferableDataHelper*, pDataHel
 
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( SID_PASTE2 );
+        rBindings.Invalidate( SID_PASTE_SPECIAL );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -996,7 +979,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         GetDoc()->SetChanged(TRUE);
     }
 
-    // Da šberladen, muss hier der Status gesetzt werden
+    // Da ï¿½berladen, muss hier der Status gesetzt werden
     if( !GetDocSh()->IsModified() )
     {
         rSet.DisableItem( SID_SAVEDOC );
@@ -1545,8 +1528,8 @@ BOOL OutlineViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     // Pruefen und Unterscheiden von CursorBewegungs- oder Eingabe-Keys
     KeyCode aKeyGroup( rKEvt.GetKeyCode().GetGroup() );
-    if( aKeyGroup != KEYGROUP_CURSOR && aKeyGroup != KEYGROUP_FKEYS ||
-        GetActualPage() != pLastPage )
+    if( (aKeyGroup != KEYGROUP_CURSOR && aKeyGroup != KEYGROUP_FKEYS) ||
+        (GetActualPage() != pLastPage) )
     {
         Invalidate( SID_PREVIEW_STATE );
     }

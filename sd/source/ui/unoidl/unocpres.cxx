@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unocpres.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <vcl/svapp.hxx>
 #include <svx/svdpage.hxx>
 #include <comphelper/extract.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include "unohelp.hxx"
 #include "unomodel.hxx"
@@ -84,7 +82,7 @@ OUString SAL_CALL SdXCustomPresentation::getImplementationName()
 sal_Bool SAL_CALL SdXCustomPresentation::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentation::getSupportedServiceNames()
@@ -305,7 +303,7 @@ OUString SAL_CALL SdXCustomPresentationAccess::getImplementationName()
 sal_Bool SAL_CALL SdXCustomPresentationAccess::supportsService( const OUString& ServiceName )
     throw(uno::RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getSupportedServiceNames()
@@ -495,24 +493,3 @@ SdCustomShow * SdXCustomPresentationAccess::getSdCustomShow( const OUString& Nam
     }
     return NULL;
 }
-
-sal_Int32 SdXCustomPresentationAccess::getSdCustomShowIdx( const OUString& Name ) const throw()
-{
-    sal_Int32 nIdx = 0;
-
-    List* pList = GetCustomShowList();
-    const sal_Int32 nCount = pList?pList->Count():0;
-
-    const String aName( Name );
-
-    while( nIdx < nCount )
-    {
-        SdCustomShow* pShow = (SdCustomShow*)pList->GetObject(nIdx);
-        if( pShow->GetName() == aName )
-            return nIdx;
-        nIdx++;
-    }
-    return -1;
-}
-
-

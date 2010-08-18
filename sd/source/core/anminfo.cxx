@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: anminfo.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 #include <tools/urlobj.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include "svx/xtable.hxx"
 #include <svx/svdopath.hxx>
-#include <svtools/urihelper.hxx>
-
+#include <svl/urihelper.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include "anminfo.hxx"
 #include "glob.hxx"
@@ -47,7 +45,7 @@
 
 using namespace ::com::sun::star;
 
-SdAnimationInfo::SdAnimationInfo()
+SdAnimationInfo::SdAnimationInfo(SdrObject& rObject)
                : SdrObjUserData(SdUDInventor, SD_ANIMATIONINFO_ID, 0),
                  mePresObjKind              (PRESOBJ_NONE),
                  meEffect                   (presentation::AnimationEffect_NONE),
@@ -66,13 +64,14 @@ SdAnimationInfo::SdAnimationInfo()
                  mbSecondSoundOn            (FALSE),
                  mbSecondPlayFull           (FALSE),
                  mnVerb                     (0),
-                 mnPresOrder                (LIST_APPEND)
+                 mnPresOrder                (LIST_APPEND),
+                 mrObject                   (rObject)
 {
     maBlueScreen = RGB_Color(COL_LIGHTMAGENTA);
     maDimColor = RGB_Color(COL_LIGHTGRAY);
 }
 
-SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
+SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rObject)
                : SdrObjUserData             (rAnmInfo),
                     mePresObjKind               (PRESOBJ_NONE),
                  meEffect                   (rAnmInfo.meEffect),
@@ -94,9 +93,10 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo)
                  maSecondSoundFile          (rAnmInfo.maSecondSoundFile),
                  mbSecondSoundOn            (rAnmInfo.mbSecondSoundOn),
                  mbSecondPlayFull           (rAnmInfo.mbSecondPlayFull),
-                 maBookmark                 (rAnmInfo.maBookmark),
+//               maBookmark                 (rAnmInfo.maBookmark),
                  mnVerb                     (rAnmInfo.mnVerb),
-                 mnPresOrder                (LIST_APPEND)
+                 mnPresOrder                (LIST_APPEND),
+                 mrObject                   (rObject)
 {
     // can not be copied
     if(meEffect == presentation::AnimationEffect_PATH)
@@ -108,7 +108,45 @@ SdAnimationInfo::~SdAnimationInfo()
 {
 }
 
-SdrObjUserData* SdAnimationInfo::Clone(SdrObject*) const
+SdrObjUserData* SdAnimationInfo::Clone(SdrObject* pObject) const
 {
-    return new SdAnimationInfo(*this);
+    DBG_ASSERT( pObject, "SdAnimationInfo::Clone(), pObject must not be null!" );
+    if( pObject == 0 )
+        pObject = &mrObject;
+
+    return new SdAnimationInfo(*this, *pObject );
+}
+
+void SdAnimationInfo::SetBookmark( const String& rBookmark )
+{
+    if( meClickAction == ::com::sun::star::presentation::ClickAction_BOOKMARK )
+    {
+        String sURL( '#' );
+        sURL += rBookmark;
+        SvxFieldItem aURLItem( SvxURLField( sURL, sURL ), EE_FEATURE_FIELD );
+        mrObject.SetMergedItem( aURLItem );
+    }
+    else
+    {
+        SvxFieldItem aURLItem( SvxURLField( rBookmark, rBookmark ), EE_FEATURE_FIELD );
+        mrObject.SetMergedItem( aURLItem );
+    }
+}
+
+String SdAnimationInfo::GetBookmark()
+{
+    String sBookmark;
+
+    const SvxFieldItem* pFldItem = dynamic_cast< const SvxFieldItem* >( &mrObject.GetMergedItem( EE_FEATURE_FIELD ) );
+    if( pFldItem )
+    {
+        SvxURLField* pURLField = const_cast< SvxURLField* >( dynamic_cast<const SvxURLField*>( pFldItem->GetField() ) );
+        if( pURLField )
+            sBookmark = pURLField->GetURL();
+    }
+
+    if( (meClickAction == ::com::sun::star::presentation::ClickAction_BOOKMARK) && sBookmark.Len() && (sBookmark.GetChar(0) == '#') )
+        sBookmark = sBookmark.Copy( 1 );
+
+    return sBookmark;
 }

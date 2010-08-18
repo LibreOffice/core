@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SdUnoSlideView.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +27,9 @@
 
 #include "precompiled_sd.hxx"
 
+#include <comphelper/serviceinfohelper.hxx>
+
+#include "DrawController.hxx"
 #include "SdUnoSlideView.hxx"
 
 #include "SlideSorter.hxx"
@@ -41,6 +41,8 @@
 #include "model/SlsPageDescriptor.hxx"
 #include "sdpage.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
+
+using ::rtl::OUString;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -205,10 +207,30 @@ Any SAL_CALL SdUnoSlideView::getFastPropertyValue (
 {
     (void)nHandle;
 
-    throw beans::UnknownPropertyException();
+    if( nHandle != DrawController::PROPERTY_VIEWOFFSET )
+        throw beans::UnknownPropertyException();
+
+    return Any();
 }
 
 
+// XServiceInfo
+OUString SAL_CALL SdUnoSlideView::getImplementationName(  ) throw (RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sd.SdUnoSlideView") );
+}
+
+sal_Bool SAL_CALL SdUnoSlideView::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+{
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+}
+
+Sequence< OUString > SAL_CALL SdUnoSlideView::getSupportedServiceNames(  ) throw (RuntimeException)
+{
+    OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.SlidesView") );
+    uno::Sequence< OUString > aSeq( &aSN, 1 );
+    return aSeq;
+}
 
 
 /*

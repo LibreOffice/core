@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: LayoutMenu.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +47,7 @@
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
 #include "taskpane/TaskPaneControlFactory.hxx"
+#include "taskpane/ToolPanelViewShell.hxx"
 #include "taskpane/ScrollPanel.hxx"
 #include "tools/SlotStateListener.hxx"
 #include "EventMultiplexer.hxx"
@@ -61,8 +59,9 @@
 #include <sfx2/objface.hxx>
 #include "sdresid.hxx"
 #include <vcl/image.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/app.hxx>
+#include "taskpane/TitledControl.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <comphelper/processfactory.hxx>
@@ -86,38 +85,30 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace toolpanel {
 
-/** This factory class stores references to ViewShellBase and DrawDocShell
-    and passes them to new LayoutMenu objects.
-*/
-class LayoutMenuFactory
+class LayoutMenuRootFactory
     : public ControlFactory
 {
 public:
-    LayoutMenuFactory (ViewShellBase& rBase, DrawDocShell& rDocShell)
-        : mrBase(rBase),
-          mrDocShell(rDocShell)
-    {}
+    LayoutMenuRootFactory (ToolPanelViewShell& i_rPanelViewShell)
+        :mrPanelViewShell(i_rPanelViewShell)
+    {
+    }
 
 protected:
-    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    virtual TreeNode* InternalCreateControl( ::Window& i_rParent )
     {
-        ScrollPanel* pScrollPanel = new ScrollPanel (pTreeNode);
+        ScrollPanel* pScrollPanel = new ScrollPanel (i_rParent);
         ::std::auto_ptr<TreeNode> pMenu (
             new LayoutMenu (
                 pScrollPanel,
-                mrDocShell,
-                mrBase,
-                false));
+                mrPanelViewShell));
         pScrollPanel->AddControl(pMenu);
         return pScrollPanel;
     }
 
 private:
-    ViewShellBase& mrBase;
-    DrawDocShell& mrDocShell;
+    ToolPanelViewShell& mrPanelViewShell;
 };
-
-
 
 
 SFX_IMPL_INTERFACE(LayoutMenu, SfxShell,
@@ -163,83 +154,52 @@ static snewfoil_value_info handout[] =
 
 static snewfoil_value_info standard[] =
 {
-    {BMP_FOIL_20, BMP_FOIL_20_H, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,
-     AUTOLAYOUT_NONE},
-    {BMP_FOIL_00, BMP_FOIL_00_H, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,
-     AUTOLAYOUT_TITLE},
-    {BMP_FOIL_01, BMP_FOIL_01_H, STR_AUTOLAYOUT_ENUM, WritingMode_LR_TB,
-     AUTOLAYOUT_ENUM},
-    {BMP_FOIL_03, BMP_FOIL_03_H, STR_AUTOLAYOUT_2TEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_2TEXT},
-    {BMP_FOIL_19, BMP_FOIL_19_H, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,
-     AUTOLAYOUT_ONLY_TITLE},
-    {BMP_FOIL_25, BMP_FOIL_25_H, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_ONLY_TEXT},
-    {BMP_FOIL_11, BMP_FOIL_11_H, STR_AUTOLAYOUT_OBJ, WritingMode_LR_TB,
-     AUTOLAYOUT_OBJ},
-    {BMP_FOIL_02, BMP_FOIL_02_H, STR_AUTOLAYOUT_CHART, WritingMode_LR_TB,
-     AUTOLAYOUT_CHART},
-    {BMP_FOIL_08, BMP_FOIL_08_H, STR_AUTOLAYOUT_TAB, WritingMode_LR_TB,
-     AUTOLAYOUT_TAB},
-    {BMP_FOIL_09, BMP_FOIL_09_H, STR_AUTOLAYOUT_CLIPTEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_CLIPTEXT},
-    {BMP_FOIL_04, BMP_FOIL_04_H, STR_AUTOLAYOUT_TEXTCHART, WritingMode_LR_TB,
-     AUTOLAYOUT_TEXTCHART},
-    {BMP_FOIL_06, BMP_FOIL_06_H, STR_AUTOLAYOUT_TEXTCLIP, WritingMode_LR_TB,
-    AUTOLAYOUT_TEXTCLIP},
-    {BMP_FOIL_07, BMP_FOIL_07_H, STR_AUTOLAYOUT_CHARTTEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_CHARTTEXT},
-    {BMP_FOIL_10, BMP_FOIL_10_H, STR_AUTOLAYOUT_TEXTOBJ, WritingMode_LR_TB,
-     AUTOLAYOUT_TEXTOBJ},
-    {BMP_FOIL_12, BMP_FOIL_12_H, STR_AUTOLAYOUT_TEXT2OBJ, WritingMode_LR_TB,
-     AUTOLAYOUT_TEXT2OBJ},
-    {BMP_FOIL_13, BMP_FOIL_13_H, STR_AUTOLAYOUT_OBJTEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_OBJTEXT},
-    {BMP_FOIL_14, BMP_FOIL_14_H, STR_AUTOLAYOUT_OBJOVERTEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_OBJOVERTEXT},
-    {BMP_FOIL_15, BMP_FOIL_15_H, STR_AUTOLAYOUT_2OBJTEXT, WritingMode_LR_TB,
-     AUTOLAYOUT_2OBJTEXT},
-    {BMP_FOIL_16, BMP_FOIL_16_H, STR_AUTOLAYOUT_2OBJOVERTEXT,
-     WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},
-    {BMP_FOIL_17, BMP_FOIL_17_H, STR_AUTOLAYOUT_TEXTOVEROBJ, WritingMode_LR_TB,
-     AUTOLAYOUT_TEXTOVEROBJ},
-    {BMP_FOIL_18, BMP_FOIL_18_H, STR_AUTOLAYOUT_4OBJ, WritingMode_LR_TB,
-     AUTOLAYOUT_4OBJ},
-    // vertical
-    {BMP_FOIL_21, BMP_FOIL_21_H, STR_AL_VERT_TITLE_TEXT_CHART,
-     WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART},
-    {BMP_FOIL_22, BMP_FOIL_22_H, STR_AL_VERT_TITLE_VERT_OUTLINE,
-     WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE},
-    {BMP_FOIL_23, BMP_FOIL_23_H, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL,
-     AUTOLAYOUT_TITLE_VERTICAL_OUTLINE},
-    {BMP_FOIL_24, BMP_FOIL_24_H, STR_AL_TITLE_VERT_OUTLINE_CLIPART,
-     WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART},
+    {BMP_LAYOUT_EMPTY, BMP_LAYOUT_EMPTY_H, STR_AUTOLAYOUT_NONE, WritingMode_LR_TB,        AUTOLAYOUT_NONE},
+    {BMP_LAYOUT_HEAD03, BMP_LAYOUT_HEAD03_H, STR_AUTOLAYOUT_TITLE, WritingMode_LR_TB,       AUTOLAYOUT_TITLE},
+    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AUTOLAYOUT_CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_ENUM},
+    {BMP_LAYOUT_HEAD02A, BMP_LAYOUT_HEAD02A_H, STR_AUTOLAYOUT_2CONTENT, WritingMode_LR_TB,       AUTOLAYOUT_2TEXT},
+    {BMP_LAYOUT_HEAD01, BMP_LAYOUT_HEAD01_H, STR_AUTOLAYOUT_ONLY_TITLE, WritingMode_LR_TB,  AUTOLAYOUT_ONLY_TITLE},
+    {BMP_LAYOUT_TEXTONLY, BMP_LAYOUT_TEXTONLY_H, STR_AUTOLAYOUT_ONLY_TEXT, WritingMode_LR_TB,   AUTOLAYOUT_ONLY_TEXT},
+    {BMP_LAYOUT_HEAD03B, BMP_LAYOUT_HEAD03B_H, STR_AUTOLAYOUT_2CONTENT_CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_2OBJTEXT},
+    {BMP_LAYOUT_HEAD03C, BMP_LAYOUT_HEAD03C_H, STR_AUTOLAYOUT_CONTENT_2CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_TEXT2OBJ},
+    {BMP_LAYOUT_HEAD03A, BMP_LAYOUT_HEAD03A_H, STR_AUTOLAYOUT_2CONTENT_OVER_CONTENT,WritingMode_LR_TB, AUTOLAYOUT_2OBJOVERTEXT},
+    {BMP_LAYOUT_HEAD02B, BMP_LAYOUT_HEAD02B_H, STR_AUTOLAYOUT_CONTENT_OVER_CONTENT, WritingMode_LR_TB, AUTOLAYOUT_OBJOVERTEXT},
+    {BMP_LAYOUT_HEAD04, BMP_LAYOUT_HEAD04_H, STR_AUTOLAYOUT_4CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_4OBJ},
+    {BMP_LAYOUT_HEAD06, BMP_LAYOUT_HEAD06_H, STR_AUTOLAYOUT_6CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_6CLIPART},
 
+    // vertical
+    {BMP_LAYOUT_VERTICAL02, BMP_LAYOUT_VERTICAL02_H, STR_AL_VERT_TITLE_TEXT_CHART, WritingMode_TB_RL,AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART},
+    {BMP_LAYOUT_VERTICAL01, BMP_LAYOUT_VERTICAL01_H, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE},
+    {BMP_LAYOUT_HEAD02, BMP_LAYOUT_HEAD02_H, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE},
+    {BMP_LAYOUT_HEAD02A, BMP_LAYOUT_HEAD02A_H, STR_AL_TITLE_VERT_OUTLINE_CLIPART,   WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART},
     {0, 0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
-
-
-
-LayoutMenu::LayoutMenu (
-    TreeNode* pParent,
-    DrawDocShell& rDocumentShell,
-    ViewShellBase& rViewShellBase,
-    bool bUseOwnScrollBar)
+LayoutMenu::LayoutMenu( TreeNode* pParent, ToolPanelViewShell& i_rPanelViewShell )
     : ValueSet (pParent->GetWindow()),
       TreeNode(pParent),
       DragSourceHelper(this),
       DropTargetHelper(this),
-      mrBase (rViewShellBase),
-      mbUseOwnScrollBar (bUseOwnScrollBar),
+      mrBase( i_rPanelViewShell.GetViewShellBase() ),
+      mpShellManager (&i_rPanelViewShell.GetSubShellManager()),
+      mbUseOwnScrollBar( false ),
       mnPreferredColumnCount(3),
       mxListener(NULL),
       mbSelectionUpdatePending(true),
       mbIsMainViewChangePending(false)
 {
+    implConstruct( *mrBase.GetDocument()->GetDocSh() );
+}
+
+
+void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
+{
+    OSL_ENSURE( mrBase.GetDocument()->GetDocSh() == &rDocumentShell,
+        "LayoutMenu::implConstruct: hmm?" );
+    // if this fires, then my assumption that the rDocumentShell parameter to our first ctor is superfluous ...
+
     SetStyle (
-        GetStyle()
-        & ~(WB_ITEMBORDER)
+        ( GetStyle()  & ~(WB_ITEMBORDER) )
         | WB_TABSTOP
         | WB_NO_DIRECTSELECT
         );
@@ -257,7 +217,9 @@ LayoutMenu::LayoutMenu (
         | ::sd::tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION
         | ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED
         | ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
-        | ::sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED);
+        | ::sd::tools::EventMultiplexerEvent::EID_CONFIGURATION_UPDATED
+        | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL
+        | ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER);
 
     SetSmartHelpId(SmartId(HID_SD_TASK_PANE_PREVIEW_LAYOUTS));
     SetAccessibleName(SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE));
@@ -271,7 +233,6 @@ LayoutMenu::LayoutMenu (
     // Add this new object as shell to the shell factory.
     GetShellManager()->AddSubShell(HID_SD_TASK_PANE_PREVIEW_LAYOUTS,this,this);
 }
-
 
 
 
@@ -294,18 +255,9 @@ LayoutMenu::~LayoutMenu (void)
 
 
 ::std::auto_ptr<ControlFactory> LayoutMenu::CreateControlFactory (
-    ViewShellBase& rBase,
-    DrawDocShell& rDocShell)
+    ToolPanelViewShell& i_rPanelViewShell )
 {
-    return ::std::auto_ptr<ControlFactory>(new LayoutMenuFactory(rBase, rDocShell));
-}
-
-
-
-
-String LayoutMenu::GetSelectedLayoutName (void)
-{
-    return GetItemText (GetSelectItemId());
+    return ::std::auto_ptr<ControlFactory>(new LayoutMenuRootFactory(i_rPanelViewShell));
 }
 
 
@@ -411,6 +363,74 @@ sal_Int32 LayoutMenu::GetMinimumWidth (void)
 bool LayoutMenu::IsResizable (void)
 {
     return true;
+}
+
+
+
+
+void LayoutMenu::UpdateEnabledState (const MasterMode eMode)
+{
+    bool bIsEnabled (false);
+
+    ::boost::shared_ptr<ViewShell> pMainViewShell (mrBase.GetMainViewShell());
+    if (pMainViewShell)
+    {
+        switch (pMainViewShell->GetShellType())
+        {
+            case ViewShell::ST_NONE:
+            case ViewShell::ST_OUTLINE:
+            case ViewShell::ST_PRESENTATION:
+            case ViewShell::ST_TASK_PANE:
+                // The complete task pane is disabled for these values or
+                // not even visible.  Disabling the LayoutMenu would be
+                // logical but unnecessary.  The main disadvantage is that
+                // after re-enabling it (typically) another panel is
+                // expanded.
+                bIsEnabled = true;
+                break;
+
+            case ViewShell::ST_DRAW:
+            case ViewShell::ST_IMPRESS:
+            {
+                switch (eMode)
+                {
+                    case MM_UNKNOWN:
+                    {
+                        ::boost::shared_ptr<DrawViewShell> pDrawViewShell (
+                            ::boost::dynamic_pointer_cast<DrawViewShell>(pMainViewShell));
+                        if (pDrawViewShell)
+                            bIsEnabled = pDrawViewShell->GetEditMode() != EM_MASTERPAGE;
+                        break;
+                    }
+                    case MM_NORMAL:
+                        bIsEnabled = true;
+                        break;
+
+                    case MM_MASTER:
+                        bIsEnabled = false;
+                        break;
+                }
+                break;
+            }
+
+            case ViewShell::ST_HANDOUT:
+            case ViewShell::ST_NOTES:
+            case ViewShell::ST_SLIDE_SORTER:
+            default:
+                bIsEnabled = true;
+                break;
+        }
+
+        TreeNode* pParentNode = GetParentNode();
+        if (pParentNode != NULL)
+        {
+            TitledControl* pGrandParentNode
+                = dynamic_cast<TitledControl*>(pParentNode->GetParentNode());
+            if (pGrandParentNode != NULL)
+                pGrandParentNode->SetEnabledState(bIsEnabled);
+        }
+
+    }
 }
 
 
@@ -561,6 +581,13 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 
 
 
+TaskPaneShellManager* LayoutMenu::GetShellManager()
+{
+    if ( mpShellManager )
+        return mpShellManager;
+    return TreeNode::GetShellManager();
+}
+
 void LayoutMenu::InvalidateContent (void)
 {
     // The number of items may have changed.  Request a resize so that the
@@ -662,7 +689,8 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
             // There is a slide sorter visible so get the list of selected pages from it.
             pPageSelection = pSlideSorter->GetPageSelection();
         }
-        else
+
+        if( (pSlideSorter == NULL) || (pPageSelection.get() == 0) || pPageSelection->empty() )
         {
             // No valid slide sorter available.  Ask the main view shell for
             // its current page.
@@ -735,7 +763,7 @@ SfxRequest LayoutMenu::CreateRequest (
 
 void LayoutMenu::Fill (void)
 {
-    const bool bHighContrast = GetDisplayBackground().GetColor().IsDark() != 0;
+    const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     SvtLanguageOptions aLanguageOptions;
     sal_Bool bVertical = aLanguageOptions.IsVerticalTextEnabled();
     SdDrawDocument* pDocument = mrBase.GetDocument();
@@ -749,7 +777,7 @@ void LayoutMenu::Fill (void)
         Reference<XControllerManager> xControllerManager (
             Reference<XWeak>(&mrBase.GetDrawController()), UNO_QUERY_THROW);
         Reference<XResourceId> xPaneId (ResourceId::create(
-            comphelper_getProcessComponentContext(),
+            ::comphelper::getProcessComponentContext(),
             FrameworkHelper::msCenterPaneURL));
         Reference<XView> xView (FrameworkHelper::Instance(mrBase)->GetView(xPaneId));
         if (xView.is())
@@ -844,8 +872,13 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                 if (GetShellManager() != NULL)
                     GetShellManager()->MoveToTop(this);
                 if (rEvent.IsMouseEvent())
-                    mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
-                        SdResId(RID_TASKPANE_LAYOUTMENU_POPUP));
+                {
+                    // Do not show the context menu when the mouse was not
+                    // pressed over an item.
+                    if (GetItemId(rEvent.GetMousePosPixel()) > 0)
+                        mrBase.GetViewFrame()->GetDispatcher()->ExecutePopup(
+                            SdResId(RID_TASKPANE_LAYOUTMENU_POPUP));
+                }
                 else
                 {
                     // When the command event was not caused by a mouse
@@ -905,12 +938,14 @@ void LayoutMenu::UpdateSelection (void)
         // Find the entry of the menu for to the layout.
         USHORT nItemCount (GetItemCount());
         for (USHORT nId=1; nId<=nItemCount; nId++)
+        {
             if (*static_cast<AutoLayout*>(GetItemData(nId)) == aLayout)
             {
                 SelectItem(nId);
                 bItemSelected = true;
                 break;
             }
+        }
     }
     while (false);
 
@@ -933,6 +968,7 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
 
         case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
             mbIsMainViewChangePending = true;
+            UpdateEnabledState(MM_UNKNOWN);
             break;
 
         case ::sd::tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
@@ -945,6 +981,14 @@ IMPL_LINK(LayoutMenu, EventMultiplexerListener, ::sd::tools::EventMultiplexerEve
                 mbIsMainViewChangePending = false;
                 InvalidateContent();
             }
+            break;
+
+        case ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_NORMAL:
+            UpdateEnabledState(MM_NORMAL);
+            break;
+
+        case ::sd::tools::EventMultiplexerEvent::EID_EDIT_MODE_MASTER:
+            UpdateEnabledState(MM_MASTER);
             break;
 
         default:

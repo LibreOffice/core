@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MasterPageDescriptor.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -215,11 +212,6 @@ public:
     class URLComparator { public:
         ::rtl::OUString msURL;
         URLComparator (const ::rtl::OUString& sURL);
-        bool operator() (const SharedMasterPageDescriptor& rDescriptor);
-    };
-    class PageNameComparator { public:
-        ::rtl::OUString msPageName;
-        PageNameComparator (const ::rtl::OUString& sPageName);
         bool operator() (const SharedMasterPageDescriptor& rDescriptor);
     };
     class StyleNameComparator { public:

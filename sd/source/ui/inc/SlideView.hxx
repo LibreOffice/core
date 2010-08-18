@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlideView.hxx,v $
- * $Revision: 1.8.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,6 @@ class SdPage;
 
 namespace sd {
 
-class ShowView;
 class SlideViewShell;
 class Window;
 
@@ -132,7 +128,6 @@ private:
     List                aDelayedPaints;
     SlideViewShell*     pSlideViewShell;
     BitmapCache*        pCache;
-    ShowView*           pShowView;
     VirtualDevice*      mpVDev;
     USHORT              nAllowInvalidateSmph;
     USHORT              nPagesPerRow;

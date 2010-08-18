@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawdoc4.cxx,v $
- * $Revision: 1.58.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,47 +36,47 @@
 #include <sfx2/dispatch.hxx>
 #include "Outliner.hxx"
 #include <comphelper/processfactory.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 #include "../ui/inc/DrawDocShell.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <vcl/svapp.hxx>
 #include <eetext.hxx>
 
-#include <svx/akrnitem.hxx>
+#include <editeng/akrnitem.hxx>
 
 #include <svx/svxids.hrc>
-#include <sfx2/srchitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/lspcitem.hxx>
-#include <svx/adjitem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>                  // SVX_RESSTR
-#include <svx/bulitem.hxx>
+#include <editeng/bulitem.hxx>
 #include <svx/xtable.hxx>
 #include <svx/sxmsuitm.hxx>
-#include <svx/borderline.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/borderline.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/xit.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/sdshcitm.hxx>
-#include <svx/editstat.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/cntritem.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/cntritem.hxx>
 #ifndef _SVX_EMPHITEM_HXX
-#include <svx/emphitem.hxx>
+#include <editeng/emphitem.hxx>
 #endif
-#include <svx/fontitem.hxx>
-#include <svx/shdditem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/shdditem.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xflgrit.hxx>
@@ -89,7 +86,7 @@
 #include <svx/xlnedwit.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnedit.hxx>
-#include <svx/charreliefitem.hxx>
+#include <editeng/charreliefitem.hxx>
 #include <svx/xlnstit.hxx>
 #include <svx/xlndsit.hxx>
 #include <svx/xlnwtit.hxx>
@@ -97,16 +94,16 @@
 #include <svx/svditer.hxx>
 #include <svx/svdogrp.hxx>
 #include <tools/shl.hxx>
-#include <svx/numitem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/unolingu.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <svtools/itempool.hxx>
-#include <svx/outlobj.hxx>
+#include <svl/itempool.hxx>
+#include <editeng/outlobj.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/langitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
@@ -119,7 +116,7 @@
 #include "shapelist.hxx"
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -245,26 +242,6 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
     rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
-    // only change paragraph text direction,
-    // if this is a new document and
-    // text direction is set explicitly to RTL
-/*
-    if( mpDocSh &&
-        mpDocSh->IsNewDocument() &&
-        SD_MOD()->GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB )
-    {
-        SvxAdjustItem           aAdjust( SVX_ADJUST_RIGHT );
-        SvxFrameDirectionItem   aFrameDirectionItem( FRMDIR_HORI_RIGHT_TOP, EE_PARA_WRITINGDIR );
-
-        rISet.Put( aAdjust );
-        rISet.Put( aFrameDirectionItem );
-
-        pItemPool->SetPoolDefaultItem( aAdjust );
-        pItemPool->SetPoolDefaultItem( aFrameDirectionItem );
-    }
-    else
-        rISet.Put( SvxAdjustItem() );
-*/
     rISet.Put( SdrTextLeftDistItem( 250 ) );    // sj: (i33745) using text frame distances seems to be a better default
     rISet.Put( SdrTextRightDistItem( 250 ) );
     rISet.Put( SdrTextUpperDistItem( 125 ) );
@@ -640,21 +617,21 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 18 pt
     rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
 
-    rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
-    rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
-    rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
+//  rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
+//  rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
+//  rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
 
-    rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
-    rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
-    rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
+//  rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
+//  rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
+//  rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
 
-    rISet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
-    rISet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
-    rISet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE));
-    rISet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE));
-    rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
-    rISet.Put(SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK));
-    rISet.Put(SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF));
+//    rISet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
+//    rISet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
+//    rISet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE));
+//    rISet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE));
+//    rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
+//    rISet.Put(SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK));
+//    rISet.Put(SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF));
     rISet.Put(SvxColorItem(Color(COL_AUTO), EE_CHAR_COLOR ));
 
     // Absatzattribute (Edit Engine)
@@ -1124,57 +1101,6 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
 
 /*************************************************************************
 |*
-|* Sprachabhaengige Namen der StandardLayer durch eindeutigen Namen ersetzen
-|*
-\************************************************************************/
-
-void SdDrawDocument::MakeUniqueLayerNames()
-{
-    String aLayerLayout(SdResId(STR_LAYER_LAYOUT));
-    String aLayerBckgrnd(SdResId(STR_LAYER_BCKGRND));
-    String aLayerBckgrndObj(SdResId(STR_LAYER_BCKGRNDOBJ));
-    String aLayerControls(SdResId(STR_LAYER_CONTROLS));
-    String aLayerMeasurelines(SdResId(STR_LAYER_MEASURELINES));
-    SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
-    USHORT nStandardLayer = 5;
-    USHORT nLayerCount = Min(rLayerAdmin.GetLayerCount(), nStandardLayer);
-
-    for (USHORT nLayer = 0; nLayer < nLayerCount; nLayer++)
-    {
-        // Die sprachabhaengigen Namen der Default-Layer werden nicht mehr
-        // gespeichert. Es werden stattdessen eindeutige Namen verwendet.
-        SdrLayer* pLayer = rLayerAdmin.GetLayer(nLayer);
-
-        if (pLayer)
-        {
-            String aLayerName(pLayer->GetName());
-
-            if (aLayerName == aLayerLayout)
-            {
-                pLayer->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_LAYOUT" )));
-            }
-            else if (aLayerName == aLayerBckgrnd)
-            {
-                pLayer->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BCKGRND" )));
-            }
-            else if (aLayerName == aLayerBckgrndObj)
-            {
-                pLayer->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_BACKGRNDOBJ" )));
-            }
-            else if (aLayerName == aLayerControls)
-            {
-                pLayer->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_CONTROLS" )));
-            }
-            else if (aLayerName == aLayerMeasurelines)
-            {
-                pLayer->SetName( String( RTL_CONSTASCII_USTRINGPARAM( "LAYER_MEASURELINES" )));
-            }
-        }
-    }
-}
-
-/*************************************************************************
-|*
 |* Eindeutige Namen der StandardLayer durch sprachabhaengige Namen ersetzen
 |*
 \************************************************************************/
@@ -1543,10 +1469,9 @@ sal_uInt32 SdDrawDocument::convertFontHeightToCTL( sal_uInt32 nWesternFontHeight
     return nWesternFontHeight;
 }
 
-ModifyGuard::ModifyGuard( DrawDocShell* pDocShell )
-: mpDocShell( pDocShell ), mpDoc( 0 )
+SdStyleSheetPool* SdDrawDocument::GetSdStyleSheetPool() const
 {
-    init();
+    return dynamic_cast< SdStyleSheetPool* >( GetStyleSheetPool() );
 }
 
 ModifyGuard::ModifyGuard( SdDrawDocument* pDoc )

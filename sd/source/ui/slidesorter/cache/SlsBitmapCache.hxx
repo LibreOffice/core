@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsBitmapCache.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,10 +81,6 @@ public:
     */
     void Clear (void);
 
-    /** Returns <TRUE/> when there is no preview bitmap in the cache.
-    */
-    bool IsEmpty (void) const;
-
     /** Return <TRUE/> when the cache is full, i.e. the cache compactor had
         to be run.
     */
@@ -111,11 +104,6 @@ public:
     */
     ::boost::shared_ptr<BitmapEx> GetBitmap (const CacheKey& rKey);
 
-    /** Release the reference to the preview bitmap that is associated with
-        the given key.
-    */
-    void ReleaseBitmap (const CacheKey& rKey);
-
     /** Mark the specified preview bitmap as not being up-to-date anymore.
     */
     void InvalidateBitmap (const CacheKey& rKey);
@@ -130,11 +118,6 @@ public:
         const CacheKey& rKey,
         const ::boost::shared_ptr<BitmapEx>& rpPreview,
         bool bIsPrecious);
-
-    /** Return whether the specified preview bitmap has been marked as
-        precious.
-    */
-    bool IsPrecious (const CacheKey& rKey);
 
     /** Mark the specified preview bitmap as precious, i.e. that it must not
         be compressed or otherwise removed from the cache.

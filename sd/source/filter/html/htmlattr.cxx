@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlattr.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,16 +99,4 @@ void SdHtmlAttrPreview::SetColors( Color& aBack, Color& aText, Color& aLink,
     m_aLinkColor = aLink;
     m_aVLinkColor = aVLink;
     m_aALinkColor = aALink;
-}
-
-// =====================================================================
-// =====================================================================
-void SdHtmlAttrPreview::GetColors( Color& aBack, Color& aText, Color& aLink,
-                                   Color& aVLink, Color& aALink ) const
-{
-    aBack = m_aBackColor;
-    aText = m_aTextColor;
-    aLink = m_aLinkColor;
-    aVLink = m_aVLinkColor;
-    aALink = m_aALinkColor;
 }

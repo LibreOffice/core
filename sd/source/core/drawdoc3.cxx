@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawdoc3.cxx,v $
- * $Revision: 1.53 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,14 +41,14 @@
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
 #include <sfx2/app.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include <unotools/ucbstreamhelper.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svditer.hxx>
-#include <svtools/style.hxx>
-#include <svx/linkmgr.hxx>
+#include <svl/style.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdundo.hxx>
@@ -577,7 +574,11 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
     /**************************************************************************
     * Dokument einfuegen
     **************************************************************************/
-    BegUndo(String(SdResId(STR_UNDO_INSERTPAGES)));
+
+    const bool bUndo = IsUndoEnabled();
+
+    if( bUndo )
+        BegUndo(String(SdResId(STR_UNDO_INSERTPAGES)));
 
     if (!pBookmarkList)
     {
@@ -766,8 +767,13 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                             pPage->SetName( pStandardPage->GetRealName() );
                         }
 
-                        AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pStandardPage));
+                        if( bUndo )
+                            AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pStandardPage));
+
                         RemovePage(nDestPageNum);
+
+                        if( !bUndo )
+                            delete pStandardPage;
                     }
 
                     SdPage* pNotesPage = 0L;
@@ -787,8 +793,13 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                                 pNewNotesPage->SetName( pStandardPage->GetRealName() );
                         }
 
-                        AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+                        if( bUndo )
+                            AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+
                         RemovePage(nDestPageNum);
+
+                        if( !bUndo )
+                            delete pNotesPage;
                     }
 
                     nReplacedStandardPages++;
@@ -825,8 +836,13 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                  aTest == aMPLayout &&
                  eKind == pTest->GetPageKind() )
             {
-                AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pRefPage));
+                if( bUndo )
+                    AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pRefPage));
+
                 RemoveMasterPage(nPage);
+
+                if( !bUndo )
+                    delete pRefPage;
                 nNewMPageCount--;
                 break;
             }
@@ -876,7 +892,8 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
             // update layout and referred master page
             pRefPage->SetPresentationLayout(aLayout);
-            AddUndo( GetSdrUndoFactory().CreateUndoPageChangeMasterPage( *pRefPage ) );
+            if( bUndo )
+                AddUndo( GetSdrUndoFactory().CreateUndoPageChangeMasterPage( *pRefPage ) );
 
             if (bScaleObjects)
             {
@@ -894,7 +911,8 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
 
             // update layout and referred master page
             pRefPage->SetPresentationLayout(aLayout);
-            AddUndo( GetSdrUndoFactory().CreateUndoPageChangeMasterPage( *pRefPage ) );
+            if( bUndo )
+                AddUndo( GetSdrUndoFactory().CreateUndoPageChangeMasterPage( *pRefPage ) );
 
             if (bScaleObjects)
             {
@@ -944,7 +962,8 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
     // #91146# Make absolutely sure no double masterpages are there
     RemoveUnnecessaryMasterPages(NULL, TRUE, TRUE);
 
-    EndUndo();
+    if( bUndo )
+        EndUndo();
     pUndoMgr->LeaveListAction();
 
     return bContinue;
@@ -1321,6 +1340,9 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, BOOL bOnl
     ::sd::View* pView = NULL;
     SfxUndoManager* pUndoMgr = NULL;
 
+    if( bUndo && !IsUndoEnabled() )
+        bUndo = FALSE;
+
     if (mpDocSh)
     {
         pUndoMgr = mpDocSh->GetUndoManager();
@@ -1406,10 +1428,16 @@ void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, BOOL bOnl
 
                 RemoveMasterPage( pNotesMaster->GetPageNum() );
 
+                if( !bUndo )
+                    delete pNotesMaster;
+
                 if( bUndo )
                     AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pMaster));
 
                 RemoveMasterPage( pMaster->GetPageNum() );
+
+                if( !bUndo )
+                    delete pMaster;
 
                 if( bUndo )
                     EndUndo();  // schon hier, damit sich Joes Actions ZWISCHEN unsere eigenen schieben
@@ -1480,7 +1508,13 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         mpDocSh->SetWaitCursor( TRUE );
 
     SfxUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
-    pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_SET_PRESLAYOUT)), String());
+
+    const bool bUndo = IsUndoEnabled();
+
+    if( bUndo )
+    {
+        pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_SET_PRESLAYOUT)), String());
+    }
 
     SdPage* pSelectedPage   = GetSdPage(nSdPageNum, PK_STANDARD);
     SdPage* pNotes          = (SdPage*) GetPage(pSelectedPage->GetPageNum()+1);
@@ -1715,15 +1749,19 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             if (!bLayoutReloaded)
                 nInsertPos = 0xFFFF;
             InsertMasterPage(pMaster, nInsertPos);
-            AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pMaster));
+            if( bUndo )
+                AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pMaster));
 
             nInsertPos++;
             if (!bLayoutReloaded)
                 nInsertPos = 0xFFFF;
             InsertMasterPage(pNotesMaster, nInsertPos);
-            AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pNotesMaster));
+            if( bUndo )
+            {
+                AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pNotesMaster));
 
-            EndUndo(); // schon hier, damit sich Joes Actions ZWISCHEN unsere eigenen schieben
+                EndUndo(); // schon hier, damit sich Joes Actions ZWISCHEN unsere eigenen schieben
+            }
         }
 
         // Liste mit Seiten fuellen
@@ -1758,13 +1796,16 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         {
             AutoLayout eAutoLayout = pPage->GetAutoLayout();
 
-            SdPresentationLayoutUndoAction * pPLUndoAction =
-                new SdPresentationLayoutUndoAction
-                    (this,
-                    pPage->IsMasterPage() ? aLayoutName : aOldLayoutName,
-                    aLayoutName,
-                     eAutoLayout, eAutoLayout, FALSE, pPage);
-            pUndoMgr->AddUndoAction(pPLUndoAction);
+            if( bUndo )
+            {
+                SdPresentationLayoutUndoAction * pPLUndoAction =
+                    new SdPresentationLayoutUndoAction
+                        (this,
+                        pPage->IsMasterPage() ? aLayoutName : aOldLayoutName,
+                        aLayoutName,
+                         eAutoLayout, eAutoLayout, FALSE, pPage);
+                pUndoMgr->AddUndoAction(pPLUndoAction);
+            }
             pPage->SetPresentationLayout(aLayoutName);
             pPage->SetAutoLayout(eAutoLayout);
 
@@ -1865,13 +1906,20 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->CreateLayoutStyleSheets(aName);
         SdStyleSheetVector aCreatedStyles;
         static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->CreateLayoutSheetList(aName, aCreatedStyles);
-        SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, TRUE);
-        pUndoMgr->AddUndoAction(pMovStyles);
+
+        if( bUndo )
+        {
+            SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, TRUE);
+            pUndoMgr->AddUndoAction(pMovStyles);
+        }
 
         /*********************************************************************
         |* Neue MasterPages erzeugen und ins Dokument eintragen
         \********************************************************************/
-        BegUndo();
+
+        if( bUndo )
+            BegUndo();
+
         pMaster = (SdPage*) AllocPage(TRUE);
         pMaster->SetSize(pSelectedPage->GetSize());
         pMaster->SetBorder(pSelectedPage->GetLftBorder(),
@@ -1881,7 +1929,10 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         pMaster->SetName(aName);
         pMaster->SetLayoutName(aPageLayoutName);
         InsertMasterPage(pMaster);
-        AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pMaster));
+
+        if( bUndo )
+            AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pMaster));
+
         pMaster->SetAutoLayout(AUTOLAYOUT_NONE, true, true);
 
         pNotesMaster = (SdPage*) AllocPage(TRUE);
@@ -1894,9 +1945,14 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         pNotesMaster->SetName(aName);
         pNotesMaster->SetLayoutName(aPageLayoutName);
         InsertMasterPage(pNotesMaster);
-        AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pNotesMaster));
+
+        if( bUndo )
+            AddUndo(GetSdrUndoFactory().CreateUndoNewPage(*pNotesMaster));
+
         pNotesMaster->SetAutoLayout(AUTOLAYOUT_NOTES, true, true);
-        EndUndo();
+
+        if( bUndo )
+            EndUndo();
 
         /*********************************************************************
         |* Liste der betroffenen Standard- und Notizseiten erstellen
@@ -1930,12 +1986,15 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
             AutoLayout eNewAutoLayout =
                 pPage->GetPageKind() == PK_STANDARD ? AUTOLAYOUT_NONE : AUTOLAYOUT_NOTES;
 
-            SdPresentationLayoutUndoAction * pPLUndoAction =
-                new SdPresentationLayoutUndoAction
-                        (this, aOldLayoutName, aName,
-                         eOldAutoLayout, eNewAutoLayout, TRUE,
-                         pPage);
-            pUndoMgr->AddUndoAction(pPLUndoAction);
+            if( bUndo )
+            {
+                SdPresentationLayoutUndoAction * pPLUndoAction =
+                    new SdPresentationLayoutUndoAction
+                            (this, aOldLayoutName, aName,
+                             eOldAutoLayout, eNewAutoLayout, TRUE,
+                             pPage);
+                pUndoMgr->AddUndoAction(pPLUndoAction);
+            }
 
             pPage->SetPresentationLayout(aName);
             pPage->SetAutoLayout(eNewAutoLayout);
@@ -1963,7 +2022,8 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         RemoveUnnecessaryMasterPages(&rOldMaster);
     }
 
-    pUndoMgr->LeaveListAction();
+    if( bUndo )
+        pUndoMgr->LeaveListAction();
 
     if( mpDocSh )
         mpDocSh->SetWaitCursor( FALSE );

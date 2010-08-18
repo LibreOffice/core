@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewbackgroundshape.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +45,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <com/sun/star/rendering/XCanvas.hpp>
 
@@ -70,7 +68,7 @@ namespace slideshow
                                             const GDIMetaFileSharedPtr&         rMtf ) const
         {
             RTL_LOGFILE_CONTEXT( aLog, "::presentation::internal::ViewBackgroundShape::prefetch()" );
-            ENSURE_OR_RETURN( rMtf,
+            ENSURE_OR_RETURN_FALSE( rMtf,
                                "ViewBackgroundShape::prefetch(): no valid metafile!" );
 
             const ::basegfx::B2DHomMatrix& rCanvasTransform(
@@ -120,10 +118,9 @@ namespace slideshow
                 aLinearTransform.set( 1, 2, 0.0 );
                 pBitmapCanvas->setTransformation( aLinearTransform );
 
-                ::basegfx::B2DHomMatrix aShapeTransform;
-
-                aShapeTransform.scale( maBounds.getWidth(), maBounds.getHeight() );
-                aShapeTransform.translate( maBounds.getMinX(), maBounds.getMinY() );
+                const basegfx::B2DHomMatrix aShapeTransform(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                    maBounds.getWidth(), maBounds.getHeight(),
+                    maBounds.getMinX(), maBounds.getMinY()));
 
                 ::cppcanvas::RendererSharedPtr pRenderer(
                     ::cppcanvas::VCLFactory::getInstance().createRenderer(
@@ -131,7 +128,7 @@ namespace slideshow
                         *rMtf.get(),
                         ::cppcanvas::Renderer::Parameters() ) );
 
-                ENSURE_OR_RETURN( pRenderer,
+                ENSURE_OR_RETURN_FALSE( pRenderer,
                                    "ViewBackgroundShape::prefetch(): Could not create Renderer" );
 
                 pRenderer->setTransformation( aShapeTransform );
@@ -172,7 +169,7 @@ namespace slideshow
             if( !prefetch( rDestinationCanvas, rMtf ) )
                 return false;
 
-            ENSURE_OR_RETURN( mxBitmap.is(),
+            ENSURE_OR_RETURN_FALSE( mxBitmap.is(),
                                "ViewBackgroundShape::draw(): Invalid background bitmap" );
 
             ::basegfx::B2DHomMatrix aTransform( mpViewLayer->getTransformation() );

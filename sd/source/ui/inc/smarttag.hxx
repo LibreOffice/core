@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: smarttag.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +64,12 @@ public:
     /** returns true if the SmartTag consumes this event. */
     virtual bool KeyInput( const KeyEvent& rKEvt );
 
+    /** returns true if the SmartTag consumes this event. */
+    virtual bool RequestHelp( const HelpEvent& rHEvt );
+
+    /** returns true if the SmartTag consumes this event. */
+    virtual bool Command( const CommandEvent& rCEvt );
+
     /** returns true if this smart tag is currently selected */
     bool isSelected() const;
 
@@ -119,6 +122,12 @@ public:
     /** returns true if a SmartTag consumes this event. */
     bool KeyInput( const KeyEvent& rKEvt );
 
+    /** returns true if a SmartTag consumes this event. */
+    bool RequestHelp( const HelpEvent& rHEvt );
+
+    /** returns true if a SmartTag consumes this event. */
+    bool Command( const CommandEvent& rCEvt );
+
     /** disposes all smart tags and clears the set */
     void Dispose();
 
@@ -154,6 +163,7 @@ private:
 
     ::sd::View& mrView;
     SmartTagReference mxSelectedTag;
+    SmartTagReference mxMouseOverTag;
 };
 
 /** a derivation from this handle is the visual representation for a smart tag.

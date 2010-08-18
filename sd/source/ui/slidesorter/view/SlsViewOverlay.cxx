@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsViewOverlay.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,10 +52,15 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpagewindow.hxx>
 #include <vcl/svapp.hxx>
+
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
 using namespace ::sdr::overlay;
 
@@ -162,67 +164,7 @@ OverlayBase::OverlayBase (ViewOverlay& rViewOverlay)
 
 OverlayBase::~OverlayBase (void)
 {
-    OverlayManager* pOverlayManager = getOverlayManager();
-    if (pOverlayManager != NULL)
-        pOverlayManager->remove(*this);
-}
-
-
-
-
-void OverlayBase::Paint (void)
-{
-}
-
-
-
-
-bool OverlayBase::IsShowing (void)
-{
-    return isVisible();
-}
-
-
-
-
-void OverlayBase::Toggle (void)
-{
-    if (IsShowing())
-        Hide();
-    else
-        Show();
-}
-
-
-
-
-void OverlayBase::Show (void)
-{
-    setVisible(true);
-}
-
-
-
-
-void OverlayBase::Hide (void)
-{
-    setVisible(false);
-}
-
-
-
-
-ViewOverlay& OverlayBase::GetViewOverlay (void)
-{
-    return mrViewOverlay;
-}
-
-
-
-
-void OverlayBase::transform (const basegfx::B2DHomMatrix& rMatrix)
-{
-    (void)rMatrix;
+    OSL_ENSURE(!getOverlayManager(), "Please call RemoveRegistration() in the derived class; it's too late to call it in the base class since virtual methods will be missing when called in the destructor.");
 }
 
 
@@ -241,12 +183,21 @@ void OverlayBase::EnsureRegistration (void)
 
 
 
+void OverlayBase::RemoveRegistration()
+{
+    OverlayManager* pOverlayManager = getOverlayManager();
+    if (pOverlayManager != NULL)
+        pOverlayManager->remove(*this);
+}
+
+
+
+
 //=====  SubstitutionOverlay  =================================================
 
 SubstitutionOverlay::SubstitutionOverlay (ViewOverlay& rViewOverlay)
     : OverlayBase(rViewOverlay),
       maPosition(0,0),
-      maBoundingBox(),
       maShapes()
 {
 }
@@ -256,6 +207,7 @@ SubstitutionOverlay::SubstitutionOverlay (ViewOverlay& rViewOverlay)
 
 SubstitutionOverlay::~SubstitutionOverlay (void)
 {
+    RemoveRegistration();
 }
 
 
@@ -268,17 +220,20 @@ void SubstitutionOverlay::Create (
     EnsureRegistration();
 
     maPosition = rPosition;
-    maTranslation = Point(0,0);
 
     maShapes.clear();
     while (rSelection.HasMoreElements())
     {
         const Rectangle aBox (rSelection.GetNextElement()->GetPageObject()->GetCurrentBoundRect());
-        maShapes.push_back(aBox);
-        maBoundingBox.Union(aBox);
+        basegfx::B2DRectangle aB2DBox(
+            aBox.Left(),
+            aBox.Top(),
+            aBox.Right(),
+            aBox.Bottom());
+        maShapes.append(basegfx::tools::createPolygonFromRect(aB2DBox), 4);
     }
 
-    setVisible(maShapes.size() > 0);
+    setVisible(maShapes.count() > 0);
     // The selection indicator may have been visible already so call
     // objectChange() to enforce an update.
     objectChange();
@@ -290,7 +245,6 @@ void SubstitutionOverlay::Create (
 void SubstitutionOverlay::Clear (void)
 {
     maShapes.clear();
-    maBoundingBox.SetEmpty();
     setVisible(false);
 }
 
@@ -299,9 +253,9 @@ void SubstitutionOverlay::Clear (void)
 
 void SubstitutionOverlay::Move (const Point& rOffset)
 {
-    maTranslation += rOffset;
-    maBoundingBox.Move(rOffset.X(), rOffset.Y());
+    const basegfx::B2DHomMatrix aTranslation(basegfx::tools::createTranslateB2DHomMatrix(rOffset.X(), rOffset.Y()));
 
+    maShapes.transform(aTranslation);
     maPosition += rOffset;
 
     objectChange();
@@ -312,57 +266,7 @@ void SubstitutionOverlay::Move (const Point& rOffset)
 
 void SubstitutionOverlay::SetPosition (const Point& rPosition)
 {
-    Move(rPosition - maPosition);
-}
-
-
-
-
-void SubstitutionOverlay::drawGeometry (OutputDevice& rOutputDevice)
-{
-    if (getOverlayManager() != NULL)
-    {
-        const sal_uInt32 nSavedStripeLength (getOverlayManager()->getStripeLengthPixel());
-
-        for (::std::vector<Rectangle>::const_iterator
-                 iBox (maShapes.begin()),
-                 iEnd (maShapes.end());
-             iBox!=iEnd;
-             ++iBox)
-        {
-            // Reduce width and height by one pixel to make the box the same
-            // size as the frame of the page object.
-            Rectangle aScreenBox (rOutputDevice.LogicToPixel(*iBox));
-            aScreenBox.Right() -= 1;
-            aScreenBox.Bottom() -= 1;
-
-            // Add accumulated translation.
-            Rectangle aBox (rOutputDevice.PixelToLogic(aScreenBox));
-            aBox.Move(maTranslation.X(), maTranslation.Y());
-
-            ImpDrawPolygonStriped(rOutputDevice,
-                basegfx::tools::createPolygonFromRect(
-                    basegfx::B2DRange(
-                        basegfx::B2IRange(aBox.Left(), aBox.Top(), aBox.Right(),aBox.Bottom()))));
-        }
-
-        getOverlayManager()->setStripeLengthPixel(nSavedStripeLength);
-    }
-}
-
-
-
-
-void SubstitutionOverlay::createBaseRange (OutputDevice& rOutputDevice)
-{
-    (void)rOutputDevice;
-
-    maBaseRange = basegfx::B2DRange(
-        basegfx::B2IRange(
-            maBoundingBox.Left(),
-            maBoundingBox.Top(),
-            maBoundingBox.Right(),
-            maBoundingBox.Bottom()));
+    Move(rPosition - GetPosition());
 }
 
 
@@ -376,6 +280,38 @@ Point SubstitutionOverlay::GetPosition (void) const
 
 
 
+drawinglayer::primitive2d::Primitive2DSequence SubstitutionOverlay::createOverlayObjectPrimitive2DSequence()
+{
+    drawinglayer::primitive2d::Primitive2DSequence aRetval;
+    const sal_uInt32 nCount(maShapes.count());
+
+    if(nCount && getOverlayManager())
+    {
+        aRetval.realloc(nCount);
+        const basegfx::BColor aRGBColorA(getOverlayManager()->getStripeColorA().getBColor());
+        const basegfx::BColor aRGBColorB(getOverlayManager()->getStripeColorB().getBColor());
+
+        for(sal_uInt32 a(0); a < nCount; a++)
+        {
+            aRetval[a] = drawinglayer::primitive2d::Primitive2DReference(
+                new drawinglayer::primitive2d::PolygonMarkerPrimitive2D(
+                    maShapes.getB2DPolygon(a),
+                    aRGBColorA,
+                    aRGBColorB,
+                    gnSubstitutionStripeLength));
+        }
+    }
+
+    return aRetval;
+}
+
+void SubstitutionOverlay::stripeDefinitionHasChanged()
+{
+    // react on OverlayManager's stripe definition change
+    objectChange();
+}
+
+
 //=====  SelectionRectangleOverlay  ===========================================
 
 SelectionRectangleOverlay::SelectionRectangleOverlay (ViewOverlay& rViewOverlay)
@@ -383,6 +319,13 @@ SelectionRectangleOverlay::SelectionRectangleOverlay (ViewOverlay& rViewOverlay)
       maAnchor(0,0),
       maSecondCorner(0,0)
 {
+}
+
+
+
+SelectionRectangleOverlay::~SelectionRectangleOverlay()
+{
+    RemoveRegistration();
 }
 
 
@@ -418,28 +361,33 @@ void SelectionRectangleOverlay::Update (const Point& rSecondCorner)
 
 
 
-void SelectionRectangleOverlay::drawGeometry (OutputDevice& rOutputDevice)
+drawinglayer::primitive2d::Primitive2DSequence SelectionRectangleOverlay::createOverlayObjectPrimitive2DSequence()
 {
-    ImpDrawRangeStriped(
-        rOutputDevice,
-        basegfx::B2DRange(
-            maAnchor.X(),
-            maAnchor.Y(),
-            maSecondCorner.X(),
-            maSecondCorner.Y()));
+    drawinglayer::primitive2d::Primitive2DSequence aRetval;
+    const basegfx::B2DRange aRange(maAnchor.X(), maAnchor.Y(), maSecondCorner.X(), maSecondCorner.Y());
+    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aRange));
+
+    if(aPolygon.count())
+    {
+        const basegfx::BColor aRGBColorA(getOverlayManager()->getStripeColorA().getBColor());
+        const basegfx::BColor aRGBColorB(getOverlayManager()->getStripeColorB().getBColor());
+        const drawinglayer::primitive2d::Primitive2DReference xReference(
+            new drawinglayer::primitive2d::PolygonMarkerPrimitive2D(
+                aPolygon,
+                aRGBColorA,
+                aRGBColorB,
+                gnSubstitutionStripeLength));
+
+        aRetval = drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
+    }
+
+    return aRetval;
 }
 
-
-
-
-void SelectionRectangleOverlay::createBaseRange (OutputDevice& rOutputDevice)
+void SelectionRectangleOverlay::stripeDefinitionHasChanged()
 {
-    (void)rOutputDevice;
-    maBaseRange = basegfx::B2DRange(
-        maAnchor.X(),
-        maAnchor.Y(),
-        maSecondCorner.X(),
-        maSecondCorner.Y());
+    // react on OverlayManager's stripe definition change
+    objectChange();
 }
 
 
@@ -452,6 +400,14 @@ InsertionIndicatorOverlay::InsertionIndicatorOverlay (ViewOverlay& rViewOverlay)
       mnInsertionIndex(-1),
       maBoundingBox()
 {
+}
+
+
+
+
+InsertionIndicatorOverlay::~InsertionIndicatorOverlay()
+{
+    RemoveRegistration();
 }
 
 
@@ -540,40 +496,23 @@ sal_Int32 InsertionIndicatorOverlay::GetInsertionPageIndex (void) const
 
 
 
-void InsertionIndicatorOverlay::drawGeometry (OutputDevice& rOutputDevice)
+drawinglayer::primitive2d::Primitive2DSequence InsertionIndicatorOverlay::createOverlayObjectPrimitive2DSequence()
 {
-    const Color aFillColor (rOutputDevice.GetFillColor());
-    const Color aLineColor (rOutputDevice.GetLineColor());
+    drawinglayer::primitive2d::Primitive2DSequence aRetval(2);
+    const basegfx::B2DRange aRange(maBoundingBox.Left(), maBoundingBox.Top(), maBoundingBox.Right(), maBoundingBox.Bottom());
+    const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aRange));
+    const basegfx::BColor aRGBColor(Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetFontColor().getBColor());
 
-    if (isVisible())
-    {
-        const Color aColor (rOutputDevice.GetSettings().GetStyleSettings().GetFontColor());
-        rOutputDevice.SetLineColor(aColor);
-        rOutputDevice.SetFillColor(aColor);
+    aRetval[0] = drawinglayer::primitive2d::Primitive2DReference(
+        new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+            basegfx::B2DPolyPolygon(aPolygon),
+            aRGBColor));
+    aRetval[1] = drawinglayer::primitive2d::Primitive2DReference(
+        new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
+            aPolygon,
+            aRGBColor));
 
-        // Reduce width of indicator by one pixel to be of the same width as
-        // the page objects.
-        Rectangle aBox (rOutputDevice.LogicToPixel(maBoundingBox));
-        aBox.Right() -= 1;
-        rOutputDevice.DrawRect(rOutputDevice.PixelToLogic(aBox));
-    }
-
-    rOutputDevice.SetFillColor(aFillColor);
-    rOutputDevice.SetLineColor(aLineColor);
-}
-
-
-
-
-void InsertionIndicatorOverlay::createBaseRange (OutputDevice& rOutputDevice)
-{
-    (void)rOutputDevice;
-    const sal_Int32 nBorder (10);
-    maBaseRange = basegfx::B2DRange(
-        maBoundingBox.Left()-nBorder,
-        maBoundingBox.Top()-nBorder,
-        maBoundingBox.Right()-nBorder,
-        maBoundingBox.Bottom()-nBorder);
+    return aRetval;
 }
 
 
@@ -592,6 +531,7 @@ MouseOverIndicatorOverlay::MouseOverIndicatorOverlay (ViewOverlay& rViewOverlay)
 
 MouseOverIndicatorOverlay::~MouseOverIndicatorOverlay (void)
 {
+    RemoveRegistration();
 }
 
 
@@ -634,34 +574,16 @@ void MouseOverIndicatorOverlay::SetSlideUnderMouse (
 
 
 
-void MouseOverIndicatorOverlay::drawGeometry (OutputDevice& rOutputDevice)
+drawinglayer::primitive2d::Primitive2DSequence MouseOverIndicatorOverlay::createOverlayObjectPrimitive2DSequence()
 {
-    const Color aFillColor (rOutputDevice.GetFillColor());
-    const Color aLineColor (rOutputDevice.GetLineColor());
-
     view::PageObjectViewObjectContact* pContact = GetViewObjectContact();
-    if (pContact != NULL)
-        pContact->PaintMouseOverEffect(rOutputDevice, true);
 
-    rOutputDevice.SetFillColor(aFillColor);
-    rOutputDevice.SetLineColor(aLineColor);
-}
-
-
-
-
-void MouseOverIndicatorOverlay::createBaseRange (OutputDevice& rOutputDevice)
-{
-    (void)rOutputDevice;
-    view::PageObjectViewObjectContact* pContact = GetViewObjectContact();
-    if (pContact != NULL)
+    if(pContact)
     {
-        Rectangle aBox (pContact->GetBoundingBox(
-            rOutputDevice,
-            view::PageObjectViewObjectContact::MouseOverIndicatorBoundingBox,
-            view::PageObjectViewObjectContact::ModelCoordinateSystem));
-        maBaseRange = basegfx::B2DRange(aBox.Left(),aBox.Top(),aBox.Right(),aBox.Bottom());
+        return pContact->createMouseOverEffectPrimitive2DSequence();
     }
+
+    return drawinglayer::primitive2d::Primitive2DSequence();
 }
 
 

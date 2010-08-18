@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MasterPagesSelector.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,13 +131,7 @@ public:
             Index into the value set control that is used for displaying the
             previews.
     */
-    void InvalidatePreview (MasterPageContainer::Token aToken);
     void InvalidatePreview (const SdPage* pPage);
-
-    /** Mark all previews as no being up-to-date anymore.  This method is
-        typically called when the size of the previews has changed.
-    */
-    void InvalidateAllPreviews (void);
 
     void UpdateAllPreviews (void);
 

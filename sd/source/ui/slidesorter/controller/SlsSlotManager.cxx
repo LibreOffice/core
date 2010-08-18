@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsSlotManager.cxx,v $
- * $Revision: 1.34.52.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,7 +65,6 @@
 #include "ViewShellBase.hxx"
 #include "ViewShellImplementation.hxx"
 #include "sdattr.hxx"
-#include "TaskPaneViewShell.hxx"
 #include "FrameView.hxx"
 #include "zoomlist.hxx"
 #include "sdpage.hxx"
@@ -80,7 +76,6 @@
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
@@ -88,10 +83,10 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/msgbox.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/itempool.hxx>
+#include <svl/aeitem.hxx>
 #include <com/sun/star/presentation/FadeEffect.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
@@ -243,12 +238,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
 
         case SID_ASSIGN_LAYOUT:
         {
-            SFX_REQUEST_ARG (rRequest, pWhatPage, SfxUInt32Item, ID_VAL_WHATPAGE, FALSE);
-            SFX_REQUEST_ARG (rRequest, pWhatLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-            pShell->mpImpl->AssignLayout(
-                pDocument->GetSdPage((USHORT)pWhatPage->GetValue(),
-                    mrSlideSorter.GetModel().GetPageType()),
-                (AutoLayout)pWhatLayout->GetValue());
+            pShell->mpImpl->AssignLayout( rRequest, mrSlideSorter.GetModel().GetPageType() );
             rRequest.Done ();
         }
         break;
@@ -487,75 +477,6 @@ void SlotManager::GetAttrState (SfxItemSet& rSet)
     }
 }
 
-
-
-
-void SlotManager::GetCtrlState (SfxItemSet& rSet)
-{
-    if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
-    {
-        // "Letzte Version" vom SFx en/disablen lassen
-        ViewShell* pShell = mrSlideSorter.GetViewShell();
-        if (pShell != NULL)
-        {
-            SfxViewFrame* pSlideViewFrame = pShell->GetViewFrame();
-            DBG_ASSERT(pSlideViewFrame!=NULL,
-                "SlideSorterController::GetCtrlState: ViewFrame not found");
-            if (pSlideViewFrame->ISA(SfxTopViewFrame))
-            {
-                pSlideViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
-            }
-            else        // MI sagt: kein MDIFrame --> disablen
-            {
-                rSet.DisableItem(SID_RELOAD);
-            }
-        }
-    }
-
-    // Output quality.
-    if (rSet.GetItemState(SID_OUTPUT_QUALITY_COLOR)==SFX_ITEM_AVAILABLE
-        ||rSet.GetItemState(SID_OUTPUT_QUALITY_GRAYSCALE)==SFX_ITEM_AVAILABLE
-        ||rSet.GetItemState(SID_OUTPUT_QUALITY_BLACKWHITE)==SFX_ITEM_AVAILABLE
-        ||rSet.GetItemState(SID_OUTPUT_QUALITY_CONTRAST)==SFX_ITEM_AVAILABLE)
-    {
-        ULONG nMode = mrSlideSorter.GetView().GetWindow()->GetDrawMode();
-        UINT16 nQuality = 0;
-
-        switch (nMode)
-        {
-            case ::sd::ViewShell::OUTPUT_DRAWMODE_COLOR:
-                nQuality = 0;
-                break;
-            case ::sd::ViewShell::OUTPUT_DRAWMODE_GRAYSCALE:
-                nQuality = 1;
-                break;
-            case ::sd::ViewShell::OUTPUT_DRAWMODE_BLACKWHITE:
-                nQuality = 2;
-                break;
-            case ::sd::ViewShell::OUTPUT_DRAWMODE_CONTRAST:
-                nQuality = 3;
-                break;
-        }
-
-        rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_COLOR,
-                (BOOL)(nQuality==0)));
-        rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_GRAYSCALE,
-                (BOOL)(nQuality==1)));
-        rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_BLACKWHITE,
-                (BOOL)(nQuality==2)));
-        rSet.Put (SfxBoolItem (SID_OUTPUT_QUALITY_CONTRAST,
-                (BOOL)(nQuality==3)));
-    }
-
-    if (rSet.GetItemState(SID_MAIL_SCROLLBODY_PAGEDOWN) == SFX_ITEM_AVAILABLE)
-    {
-        rSet.Put (SfxBoolItem( SID_MAIL_SCROLLBODY_PAGEDOWN, TRUE));
-    }
-}
-
-
-
-
 void SlotManager::GetMenuState ( SfxItemSet& rSet)
 {
     EditMode eEditMode = mrSlideSorter.GetModel().GetEditMode();
@@ -693,6 +614,17 @@ void SlotManager::GetMenuState ( SfxItemSet& rSet)
                 break;
         }
     }
+
+    PageKind ePageKind = mrSlideSorter.GetModel().GetPageType();
+    if( (eEditMode == EM_MASTERPAGE) && (ePageKind != PK_HANDOUT ) )
+    {
+        rSet.DisableItem(SID_ASSIGN_LAYOUT);
+    }
+
+    if( (eEditMode == EM_MASTERPAGE) || (ePageKind==PK_NOTES) )
+    {
+        rSet.DisableItem(SID_INSERTPAGE);
+    }
 }
 
 
@@ -703,13 +635,13 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
     SdTransferable* pTransferClip = SD_MOD()->pTransferClip;
 
     if (rSet.GetItemState(SID_PASTE)  == SFX_ITEM_AVAILABLE
-        || rSet.GetItemState(SID_PASTE2)  == SFX_ITEM_AVAILABLE)
+        || rSet.GetItemState(SID_PASTE_SPECIAL)  == SFX_ITEM_AVAILABLE)
     {
         // Keine eigenen Clipboard-Daten?
         if ( !pTransferClip || !pTransferClip->GetDocShell() )
         {
             rSet.DisableItem(SID_PASTE);
-            rSet.DisableItem(SID_PASTE2);
+            rSet.DisableItem(SID_PASTE_SPECIAL);
         }
         else
         {
@@ -739,7 +671,7 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
                 if ( ! bIsPastingSupported)
                 {
                     rSet.DisableItem(SID_PASTE);
-                    rSet.DisableItem(SID_PASTE2);
+                    rSet.DisableItem(SID_PASTE_SPECIAL);
                 }
             }
         }
@@ -748,7 +680,7 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
     // Cut, copy and paste of master pages is not yet implemented properly
     if (rSet.GetItemState(SID_COPY) == SFX_ITEM_AVAILABLE
         || rSet.GetItemState(SID_PASTE)  == SFX_ITEM_AVAILABLE
-        || rSet.GetItemState(SID_PASTE2)  == SFX_ITEM_AVAILABLE
+        || rSet.GetItemState(SID_PASTE_SPECIAL)  == SFX_ITEM_AVAILABLE
         || rSet.GetItemState(SID_CUT)  == SFX_ITEM_AVAILABLE)
     {
         if (mrSlideSorter.GetModel().GetEditMode() == EM_MASTERPAGE)
@@ -759,8 +691,8 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
                 rSet.DisableItem(SID_COPY);
             if (rSet.GetItemState(SID_PASTE) == SFX_ITEM_AVAILABLE)
                 rSet.DisableItem(SID_PASTE);
-            if (rSet.GetItemState(SID_PASTE2) == SFX_ITEM_AVAILABLE)
-                rSet.DisableItem(SID_PASTE2);
+            if (rSet.GetItemState(SID_PASTE_SPECIAL) == SFX_ITEM_AVAILABLE)
+                rSet.DisableItem(SID_PASTE_SPECIAL);
         }
     }
 
@@ -905,7 +837,7 @@ void SlotManager::RenameSlide (void)
             DBG_ASSERT(pFact, "Dialogdiet fail!");
             AbstractSvxNameDialog* aNameDlg = pFact->CreateSvxNameDialog(
                 mrSlideSorter.GetActiveWindow(),
-                aPageName, aDescr, RID_SVXDLG_NAME);
+                aPageName, aDescr);
             DBG_ASSERT(aNameDlg, "Dialogdiet fail!");
             aNameDlg->SetText( aTitle );
             aNameDlg->SetCheckNameHdl( LINK( this, SlotManager, RenameSlideHdl ), true );
@@ -1076,13 +1008,21 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
 
     // No selection.  Is there an insertion indicator?
     else if (mrSlideSorter.GetView().GetOverlay()
-        .GetInsertionIndicatorOverlay().IsShowing())
+        .GetInsertionIndicatorOverlay().isVisible())
     {
         // Select the page before the insertion indicator.
         nInsertionIndex = mrSlideSorter.GetView().GetOverlay()
             .GetInsertionIndicatorOverlay().GetInsertionPageIndex();
         nInsertionIndex --;
         rSelector.SelectPage (nInsertionIndex);
+    }
+
+    // Is there a stored insertion position?
+    else if (mrSlideSorter.GetController().GetSelectionManager()->GetInsertionPosition() >= 0)
+    {
+        nInsertionIndex
+            = mrSlideSorter.GetController().GetSelectionManager()->GetInsertionPosition() - 1;
+        rSelector.SelectPage(nInsertionIndex);
     }
 
     // Select the last page when there is at least one page.
@@ -1162,38 +1102,6 @@ void SlotManager::InsertSlide (SfxRequest& rRequest)
     rSelector.EnableBroadcasting();
     mrSlideSorter.GetView().LockRedraw(FALSE);
 }
-
-
-
-
-void SlotManager::AssignTransitionEffect (void)
-{
-    model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
-
-    // We have to manually select the pages in the document that are
-    // selected in the slide sorter.
-    rModel.SynchronizeDocumentSelection();
-
-    // #i34011#: Needs review, AF's bugfix is removed here
-    //rShell.AssignFromSlideChangeWindow(rModel.GetEditMode());
-
-    // We have to remove the selection of master pages to not confuse the
-    // model.
-    if (rModel.GetEditMode() == EM_MASTERPAGE)
-    {
-        SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
-        USHORT nMasterPageCount = pDocument->GetMasterSdPageCount(PK_STANDARD);
-        for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
-        {
-            SdPage* pPage = pDocument->GetMasterSdPage(nIndex, PK_STANDARD);
-            if (pPage != NULL)
-                pPage->SetSelected (FALSE);
-        }
-    }
-}
-
-
-
 
 void SlotManager::ExecuteCommandAsynchronously (::std::auto_ptr<Command> pCommand)
 {

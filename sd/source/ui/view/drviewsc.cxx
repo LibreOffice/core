@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drviewsc.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +50,7 @@
 #endif
 #include <sfx2/dispatch.hxx>
 #include <svx/svdoole2.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/grafctrl.hxx>
 #include "stlsheet.hxx"
@@ -127,7 +124,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName, RID_SVXDLG_OBJECT_NAME);
+                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 pDlg->SetCheckNameHdl(LINK(this, DrawViewShell, NameObjectHdl));
@@ -162,7 +159,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription, RID_SVXDLG_OBJECT_TITLE_DESC);
+                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if(RET_OK == pDlg->Execute())

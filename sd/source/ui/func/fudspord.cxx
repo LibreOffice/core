@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fudspord.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,7 +113,7 @@ BOOL FuDisplayOrder::MouseMove(const MouseEvent& rMEvt)
     SdrPageView* pPV;
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( mpView->PickObj(aPnt, pPickObj, pPV) )
+    if ( mpView->PickObj(aPnt, mpView->getHitTolLog(), pPickObj, pPV) )
     {
         if (mpRefObj != pPickObj)
         {
@@ -153,7 +150,7 @@ BOOL FuDisplayOrder::MouseButtonUp(const MouseEvent& rMEvt)
     SdrPageView* pPV = NULL;
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if ( mpView->PickObj(aPnt, mpRefObj, pPV) )
+    if ( mpView->PickObj(aPnt, mpView->getHitTolLog(), mpRefObj, pPV) )
     {
         if (nSlotId == SID_BEFORE_OBJ)
         {

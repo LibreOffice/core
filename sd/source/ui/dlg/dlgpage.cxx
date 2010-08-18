@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgpage.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #undef SD_DLLIMPLEMENTATION
 #endif
 
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
@@ -48,9 +45,9 @@
 #include "dlgpage.hxx"
 
 #include "DrawDocShell.hxx"
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/flagsdef.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 /*************************************************************************
 |*
@@ -100,8 +97,8 @@ void SdPageDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     {
     case RID_SVXPAGE_PAGE:
         aSet.Put (SfxAllEnumItem((const USHORT)SID_ENUM_PAGE_MODE, SVX_PAGE_MODE_PRESENTATION));
-        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_START, SVX_PAPER_A0));
-        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_END, SVX_PAPER_E));
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_START, PAPER_A0));
+        aSet.Put (SfxAllEnumItem((const USHORT)SID_PAPER_END, PAPER_E));
         rPage.PageCreated(aSet);
         break;
     case RID_SVXPAGE_AREA:

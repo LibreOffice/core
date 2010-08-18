@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConfigurationControllerResourceManager.cxx,v $
- *
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +32,7 @@
 #include "ResourceFactoryManager.hxx"
 #include "framework/FrameworkHelper.hxx"
 #include <com/sun/star/lang/DisposedException.hpp>
+#include <tools/diagnose_ex.h>
 #include <algorithm>
 #include <boost/bind.hpp>
 
@@ -172,7 +169,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
         }
         catch(Exception&)
         {
-            OSL_ENSURE(false, "caught exception while activating resource");
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         if (xResource.is())
@@ -201,7 +198,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
     }
     catch (RuntimeException&)
     {
-        OSL_ASSERT(false);
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -261,7 +258,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
     }
     catch (RuntimeException&)
     {
-        OSL_ASSERT(false);
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 #if defined VERBOSE && VERBOSE>=1

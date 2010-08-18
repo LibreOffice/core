@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stlfamily.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +30,12 @@
 
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
+#include <comphelper/serviceinfohelper.hxx>
 
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 
 #include <svx/unoprov.hxx>
 
@@ -198,7 +196,7 @@ OUString SAL_CALL SdStyleFamily::getImplementationName() throw(RuntimeException)
 
 sal_Bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
-    return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
 // ----------------------------------------------------------

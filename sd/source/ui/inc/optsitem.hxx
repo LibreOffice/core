@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optsitem.hxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,6 +82,7 @@ public:
     virtual ~SdOptionsItem();
 
     virtual void            Commit();
+    virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > GetProperties(
                                 const ::com::sun::star::uno::Sequence< ::rtl::OUString >& rNames );
@@ -165,7 +163,6 @@ public:
             SdOptionsLayout( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsLayout() {}
 
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsLayout& rOpt ) const;
 
     BOOL    IsRulerVisible() const { Init(); return (BOOL) bRuler; }
@@ -173,7 +170,7 @@ public:
     BOOL    IsDragStripes() const { Init(); return (BOOL) bDragStripes; }
     BOOL    IsHandlesBezier() const { Init(); return (BOOL) bHandlesBezier; }
     BOOL    IsHelplines() const { Init(); return (BOOL) bHelplines; }
-    UINT16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? (UINT16)GetModuleFieldUnit() : nMetric ); }
+    UINT16  GetMetric() const { Init(); return( ( 0xffff == nMetric ) ? (UINT16)SfxModule::GetCurrentFieldUnit() : nMetric ); }
     UINT16  GetDefTab() const { Init(); return nDefTab; }
 
     void    SetRulerVisible( BOOL bOn = TRUE ) { if( bRuler != bOn ) { OptionsChanged(); bRuler = bOn; } }
@@ -222,7 +219,6 @@ public:
             SdOptionsContents( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsContents() {}
 
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsContents& rOpt ) const;
 };
 
@@ -232,7 +228,6 @@ class SD_DLLPUBLIC SdOptionsContentsItem : public SfxPoolItem
 {
 public:
 
-                            SdOptionsContentsItem( USHORT nWhich);
                             SdOptionsContentsItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -276,6 +271,7 @@ private:
     BOOL    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
     // #i75315#
     BOOL    bSlideshowRespectZOrder : 1;    // Misc/SlideshowRespectZOrder
+    BOOL    bShowComments           : 1;    // Misc/ShowComments
 
     sal_Bool    bPreviewNewEffects;
     sal_Bool    bPreviewChangedEffects;
@@ -302,7 +298,6 @@ public:
             SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsMisc() {}
 
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsMisc& rOpt ) const;
 
     BOOL    IsStartWithTemplate() const { Init(); return (BOOL) bStartWithTemplate; }
@@ -320,6 +315,7 @@ public:
     BOOL    IsSolidDragging() const { Init(); return (BOOL) bSolidDragging; }
     BOOL    IsSolidMarkHdl() const { Init(); return (BOOL) bSolidMarkHdl; }
     BOOL    IsSummationOfParagraphs() const { Init(); return bSummationOfParagraphs != 0; };
+
     /** Return the currently selected printer independent layout mode.
         @return
             Returns 1 for printer independent layout enabled and 0 when it
@@ -372,6 +368,9 @@ public:
     void    SetPreviewNewEffects( sal_Bool bOn )  { if( bPreviewNewEffects != bOn ) { OptionsChanged(); bPreviewNewEffects = bOn; } }
     void    SetPreviewChangedEffects( sal_Bool bOn )  { if( bPreviewChangedEffects != bOn ) { OptionsChanged(); bPreviewChangedEffects = bOn; } }
     void    SetPreviewTransitions( sal_Bool bOn )  { if( bPreviewTransitions != bOn ) { OptionsChanged(); bPreviewTransitions = bOn; } }
+
+    BOOL    IsShowComments() const { Init(); return bShowComments; }
+    void    SetShowComments( BOOL bShow )  { if( bShowComments != bShow ) { OptionsChanged(); bShowComments = bShow; } }
 };
 
 // -----------------------------------------------------------------------------
@@ -424,7 +423,6 @@ public:
             SdOptionsSnap( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsSnap() {}
 
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsSnap& rOpt ) const;
 
     BOOL    IsSnapHelplines() const { Init(); return (BOOL) bSnapHelplines; }
@@ -491,7 +489,6 @@ public:
             SdOptionsZoom( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsZoom() {}
 
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsZoom& rOpt ) const;
 
     void    GetScale( INT32& rX, INT32& rY ) const { Init(); rX = nX; rY = nY; }
@@ -499,23 +496,6 @@ public:
 };
 
 // -----------------------------------------------------------------------------
-
-class SdOptionsZoomItem : public SfxPoolItem
-{
-public:
-
-                            SdOptionsZoomItem( USHORT nWhich);
-                            SdOptionsZoomItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
-
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
-
-    void                    SetOptions( SdOptions* pOpts ) const;
-
-    SdOptionsZoom&          GetOptionsZoom() { return maOptionsZoom; }
-private:
-    SdOptionsZoom   maOptionsZoom;
-};
 
 // -----------------
 // - SdOptionsGrid -
@@ -566,7 +546,6 @@ class SdOptionsGridItem : public SvxGridItem
 {
 
 public:
-                            SdOptionsGridItem( USHORT nWhich );
                             SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, ::sd::FrameView* pView = NULL );
 
     void                    SetOptions( SdOptions* pOpts ) const;
@@ -613,9 +592,6 @@ public:
             SdOptionsPrint( USHORT nConfigId, BOOL bUseConfig );
             virtual ~SdOptionsPrint() {}
 
-    void    SetPrinterOptions( const SdOptionsPrint* pOptions );
-
-    void    SetDefaults();
     BOOL    operator==( const SdOptionsPrint& rOpt ) const;
 
     BOOL    IsDraw() const { Init(); return (BOOL) bDraw; }
@@ -697,7 +673,6 @@ public:
                         SdOptions( USHORT nConfigId );
                         virtual ~SdOptions();
 
-    void                SetRangeDefaults( ULONG nOptionRange );
     void                StoreConfig( ULONG nOptionRange = SD_OPTIONS_ALL );
 };
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: randomnode.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -171,7 +168,7 @@ static const sal_Char* pSN2 = "com.sun.star.comp.sd.RandomAnimationNode";
 
 // --------------------------------------------------------------------
 
-Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetClass )
+SD_DLLPUBLIC Reference< XInterface > RandomAnimationNode_createInstance( sal_Int16 nPresetClass )
 {
     Reference< XInterface > xInt( static_cast<XWeak*>( new RandomAnimationNode( nPresetClass ) ) );
     return xInt;

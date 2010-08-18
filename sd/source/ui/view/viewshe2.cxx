@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewshe2.cxx,v $
- * $Revision: 1.57 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,14 +49,14 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
 #include <svx/ruler.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <svtools/ehdl.hxx>
 #include <svx/svdoole2.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svx/fmshell.hxx>
 #include <sfx2/dispatch.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
@@ -529,34 +526,6 @@ void ViewShell::DrawMarkRect(const Rectangle& rRect) const
     }
 }
 
-
-/*************************************************************************
-|*
-|* Auf allen Split-Windows ein Rechteck zeichnen. Fuer den Rahmen wird der
-|* uebergebene Pen, zum Fuellen die uebergebene Brush benutzt.
-|*
-\************************************************************************/
-
-void ViewShell::DrawFilledRect( const Rectangle& rRect, const Color& rLColor,
-                                  const Color& rFColor ) const
-{
-    if (mpContentWindow.get() != NULL)
-    {
-        const Color& rOldLineColor = mpContentWindow->GetLineColor();
-        const Color& rOldFillColor = mpContentWindow->GetFillColor();
-
-        mpContentWindow->SetLineColor( rLColor );
-        mpContentWindow->SetFillColor( rFColor );
-
-        mpContentWindow->DrawRect(rRect);
-
-        mpContentWindow->SetLineColor( rOldLineColor );
-        mpContentWindow->SetFillColor( rOldFillColor );
-    }
-}
-
-
-
 /*************************************************************************
 |*
 |* Groesse und Raender aller Seiten setzen
@@ -798,7 +767,10 @@ BOOL ViewShell::RequestHelp(const HelpEvent& rHEvt, ::sd::Window*)
 
     if (rHEvt.GetMode())
     {
-        if(HasCurrentFunction())
+        if( GetView() )
+            bReturn = GetView()->getSmartTags().RequestHelp(rHEvt);
+
+        if(!bReturn && HasCurrentFunction())
         {
             bReturn = GetCurrentFunction()->RequestHelp(rHEvt);
         }
@@ -847,18 +819,6 @@ void ViewShell::ReadFrameViewData(FrameView*)
 
 void ViewShell::WriteFrameViewData()
 {
-}
-
-/*************************************************************************
-|*
-|* Auf allen Split-Windows ein Update erzwingen.
-|*
-\************************************************************************/
-
-void ViewShell::UpdateWindows()
-{
-    if (mpContentWindow.get() != NULL)
-        mpContentWindow->Update();
 }
 
 /*************************************************************************

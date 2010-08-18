@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresentationFactory.cxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,10 +34,12 @@
 #include "ViewShellBase.hxx"
 #include <com/sun/star/drawing/framework/XControllerManager.hpp>
 #include <cppuhelper/compbase1.hxx>
+#include <tools/diagnose_ex.h>
 #include "slideshow.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::drawing::framework;
 
 using ::rtl::OUString;
@@ -158,7 +156,7 @@ PresentationFactory::PresentationFactory (
     }
     catch (RuntimeException&)
     {
-        OSL_ASSERT(false);
+        DBG_UNHANDLED_EXCEPTION();
     }
 }
 
@@ -184,7 +182,7 @@ void SAL_CALL PresentationFactory::disposing (void)
 
 Reference<XResource> SAL_CALL PresentationFactory::createResource (
     const Reference<XResourceId>& rxViewId)
-    throw (RuntimeException)
+    throw (RuntimeException, IllegalArgumentException, WrappedTargetException)
 {
     ThrowIfDisposed();
 
@@ -312,7 +310,7 @@ void SAL_CALL PresentationFactoryProvider::initialize(
         }
         catch (RuntimeException&)
         {
-            OSL_ASSERT(false);
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }

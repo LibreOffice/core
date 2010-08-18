@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: epptdef.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,6 +211,9 @@
 #define EPP_GscalingAtom               10001
 #define EPP_GrColorAtom                10002
 #define EPP_GLPointAtom                10003
+#define EPP_Comment10                   12000
+#define EPP_CommentAtom10               12001
+
 
 #define EPP_PLACEHOLDER_NONE                    0   //  0 None
 #define EPP_PLACEHOLDER_MASTERTITLE             1   //  1 Master title

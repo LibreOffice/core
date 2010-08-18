@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DrawController.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawController.hxx"
+#include "DrawDocShell.hxx"
 
 #include "DrawSubController.hxx"
 #include "sdpage.hxx"
@@ -57,6 +55,7 @@
 #include <svx/fmshell.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
+#include <boost/shared_ptr.hpp>
 
 using namespace ::std;
 using ::rtl::OUString;
@@ -166,6 +165,16 @@ void SAL_CALL DrawController::dispose (void)
         if( !mbDisposing )
         {
             mbDisposing = true;
+
+            boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
+            if ( pViewShell )
+            {
+                pViewShell->DeactivateCurrentFunction();
+                DrawDocShell* pDocShell = pViewShell->GetDocSh();
+                if ( pDocShell != NULL )
+                    pDocShell->SetDocShellFunction(0);
+            }
+            pViewShell.reset();
 
             // When the controller has not been detached from its view
             // shell, i.e. mpViewShell is not NULL, then tell PaneManager
@@ -366,18 +375,6 @@ void  SAL_CALL
             }
         }
     }
-}
-
-
-
-
-::awt::Rectangle DrawController::GetVisArea (void) const
-{
-    return awt::Rectangle(
-        maLastVisArea.Left(),
-        maLastVisArea.Top(),
-        maLastVisArea.GetWidth(),
-        maLastVisArea.GetHeight());
 }
 
 
@@ -702,6 +699,11 @@ void DrawController::FillPropertyTable (
             PROPERTY_VIEWOFFSET,
             ::getCppuType((const ::com::sun::star::awt::Point*)0),
             beans::PropertyAttribute::BOUND ));
+    rProperties.push_back(
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("DrawViewMode") ),
+            PROPERTY_DRAWVIEWMODE,
+            ::getCppuType((const ::com::sun::star::awt::Point*)0),
+            beans::PropertyAttribute::BOUND|beans::PropertyAttribute::READONLY|beans::PropertyAttribute::MAYBEVOID ));
 }
 
 
@@ -737,7 +739,7 @@ Reference < beans::XPropertySetInfo >  DrawController::getPropertySetInfo()
 }
 
 
-uno::Reference< form::XFormController > SAL_CALL DrawController::getFormController( const uno::Reference< form::XForm >& Form ) throw (uno::RuntimeException)
+uno::Reference< form::runtime::XFormController > SAL_CALL DrawController::getFormController( const uno::Reference< form::XForm >& Form ) throw (uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -746,7 +748,7 @@ uno::Reference< form::XFormController > SAL_CALL DrawController::getFormControll
     ::boost::shared_ptr<ViewShell> pViewShell = mpBase->GetMainViewShell();
     ::sd::Window* pWindow = pViewShell ? pViewShell->GetActiveWindow() : NULL;
 
-    uno::Reference< form::XFormController > xController( NULL );
+    uno::Reference< form::runtime::XFormController > xController( NULL );
     if ( pFormShell && pSdrView && pWindow )
         xController = pFormShell->GetFormController( Form, *pSdrView, *pWindow );
     return xController;
@@ -879,7 +881,8 @@ void DrawController::ProvideFrameworkControllers (void)
     try
     {
         Reference<XController> xController (this);
-        Reference<XComponentContext> xContext (comphelper_getProcessComponentContext());
+        const Reference<XComponentContext> xContext (
+            ::comphelper::getProcessComponentContext() );
         mxConfigurationController = ConfigurationController::create(
             xContext,
             xController);
@@ -929,4 +932,5 @@ void DrawController::ThrowIfDisposed (void) const
 
 
 } // end of namespace sd
+
 

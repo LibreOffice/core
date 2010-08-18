@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SpellDialogChildWindow.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,14 +96,14 @@ void SpellDialogChildWindow::InvalidateSpellDialog (void)
 
 
 
-::svx::SpellPortions SpellDialogChildWindow::GetNextWrongSentence (void)
+::svx::SpellPortions SpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck*/ )
 {
     ::svx::SpellPortions aResult;
 
     if (mpSdOutliner != NULL)
     {
         ProvideOutliner();
-        aResult = mpSdOutliner->GetNextSpellSentence ();
+        aResult = mpSdOutliner->GetNextSpellSentence();
     }
 
     // Close the spell check dialog when there are no more sentences to
@@ -128,7 +125,7 @@ void SpellDialogChildWindow::InvalidateSpellDialog (void)
 
 
 void SpellDialogChildWindow::ApplyChangedSentence (
-    const ::svx::SpellPortions& rChanged)
+    const ::svx::SpellPortions& rChanged, bool bRecheck )
 {
     if (mpSdOutliner != NULL)
     {
@@ -136,7 +133,7 @@ void SpellDialogChildWindow::ApplyChangedSentence (
         if (pOutlinerView != NULL)
             mpSdOutliner->ApplyChangedSentence (
                 pOutlinerView->GetEditView(),
-                rChanged, false);
+                rChanged, bRecheck);
     }
 }
 

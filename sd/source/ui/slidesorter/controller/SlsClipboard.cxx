@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsClipboard.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -235,7 +232,7 @@ sal_Int32 Clipboard::GetInsertionPosition (::Window* pWindow)
 
     view::InsertionIndicatorOverlay& rInsertionIndicatorOverlay (
         mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay());
-    if (rInsertionIndicatorOverlay.IsShowing())
+    if (rInsertionIndicatorOverlay.isVisible())
     {
         nInsertPosition = rInsertionIndicatorOverlay.GetInsertionPageIndex();
     }
@@ -441,8 +438,8 @@ void Clipboard::StartDrag (
 void Clipboard::DragFinished (sal_Int8 nDropAction)
 {
     // Hide the substitution display and insertion indicator.
-    mrSlideSorter.GetView().GetOverlay().GetSubstitutionOverlay().Hide();
-    mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay().Hide();
+    mrSlideSorter.GetView().GetOverlay().GetSubstitutionOverlay().setVisible(false);
+    mrSlideSorter.GetView().GetOverlay().GetInsertionIndicatorOverlay().setVisible(false);
 
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
@@ -522,7 +519,7 @@ sal_Int8 Clipboard::AcceptDrop (
             Point aPosition = pTargetWindow->PixelToLogic (rEvent.maPosPixel);
             view::ViewOverlay& rOverlay (mrSlideSorter.GetView().GetOverlay());
             rOverlay.GetInsertionIndicatorOverlay().SetPosition (aPosition);
-            rOverlay.GetInsertionIndicatorOverlay().Show();
+            rOverlay.GetInsertionIndicatorOverlay().setVisible(true);
             rOverlay.GetSubstitutionOverlay().SetPosition (aPosition);
 
             // Scroll the window when the mouse reaches the window border.
@@ -581,7 +578,7 @@ sal_Int8 Clipboard::ExecuteDrop (
             USHORT nIndex = DetermineInsertPosition (*pDragTransferable);
             OSL_TRACE ("Clipboard::AcceptDrop() called for index %d",
                 nIndex);
-            rOverlay.GetInsertionIndicatorOverlay().Hide();
+            rOverlay.GetInsertionIndicatorOverlay().setVisible(false);
 
             if (bContinue)
             {

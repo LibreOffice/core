@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsPageDescriptor.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,14 +87,6 @@ SdPage* PageDescriptor::GetPage (void) const
 Reference<drawing::XDrawPage> PageDescriptor::GetXDrawPage (void) const
 {
     return mxPage;
-}
-
-
-
-
-sal_Int32 PageDescriptor::GetPageIndex (void) const
-{
-    return mnIndex;
 }
 
 
@@ -277,14 +266,6 @@ void PageDescriptor::SetPageNumberAreaModelSize (const Size& rSize)
 Size PageDescriptor::GetPageNumberAreaModelSize (void) const
 {
     return maPageNumberAreaModelSize;
-}
-
-
-
-
-bool PageDescriptor::IsCurrentPage (void) const
-{
-    return mbIsCurrent;
 }
 
 

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,19 +45,18 @@ PRJINC=..$/slidesorter
 SLOFILES =      								\
     $(SLO)$/ControlContainer.obj				\
     $(SLO)$/ScrollPanel.obj						\
-    $(SLO)$/SimpleLayoutWrapper.obj				\
     $(SLO)$/SubToolPanel.obj					\
     $(SLO)$/TitleBar.obj 						\
-    $(SLO)$/TitleToolBox.obj					\
     $(SLO)$/TitledControl.obj 					\
-    $(SLO)$/ToolPanel.obj						\
     $(SLO)$/TaskPaneControlFactory.obj 			\
     $(SLO)$/TaskPaneFocusManager.obj 			\
     $(SLO)$/TaskPaneShellManager.obj 			\
     $(SLO)$/TaskPaneTreeNode.obj 			    \
-    $(SLO)$/TaskPaneViewShell.obj 				\
+    $(SLO)$/ToolPanel.obj                       \
+    $(SLO)$/ToolPanelViewShell.obj              \
+    $(SLO)$/ToolPanelFactory.obj                \
+    $(SLO)$/ToolPanelUIElement.obj              \
                                                 \
-    $(SLO)$/EmptyWindow.obj						\
     $(SLO)$/LayoutMenu.obj                      \
     $(SLO)$/TestMenu.obj                        \
     $(SLO)$/TestPanel.obj						\

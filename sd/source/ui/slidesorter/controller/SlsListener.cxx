@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsListener.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +49,7 @@
 #include <com/sun/star/frame/FrameActionEvent.hpp>
 #include <com/sun/star/frame/FrameAction.hpp>
 #include <sfx2/viewfrm.hxx>
+#include <tools/diagnose_ex.h>
 
 
 using namespace ::com::sun::star::accessibility;
@@ -231,8 +229,7 @@ void Listener::ConnectToController (void)
             }
             catch (beans::UnknownPropertyException aEvent)
             {
-                OSL_TRACE ("caught exception in SlideSorterController::SetupListeners: %s",
-                    ::rtl::OUStringToOString(aEvent.Message, RTL_TEXTENCODING_UTF8).getStr());
+                DBG_UNHANDLED_EXCEPTION();
             }
             try
             {
@@ -240,8 +237,7 @@ void Listener::ConnectToController (void)
             }
             catch (beans::UnknownPropertyException aEvent)
             {
-                OSL_TRACE ("caught exception in SlideSorterController::SetupListeners: %s",
-                    ::rtl::OUStringToOString(aEvent.Message, RTL_TEXTENCODING_UTF8).getStr());
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
 
@@ -289,9 +285,7 @@ void Listener::DisconnectFromController (void)
         }
         catch (beans::UnknownPropertyException aEvent)
         {
-            OSL_TRACE ("caught exception in destructor of SlideSorterController: %s",
-                ::rtl::OUStringToOString(aEvent.Message,
-                    RTL_TEXTENCODING_UTF8).getStr());
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         mbListeningToController = false;
@@ -491,9 +485,7 @@ void SAL_CALL Listener::propertyChange (
             }
             catch (beans::UnknownPropertyException aEvent)
             {
-                OSL_TRACE ("caught exception while accessing the page number of a slide: %s",
-                    ::rtl::OUStringToOString(aEvent.Message,
-                        RTL_TEXTENCODING_UTF8).getStr());
+                DBG_UNHANDLED_EXCEPTION();
             }
             catch (lang::DisposedException&)
             {

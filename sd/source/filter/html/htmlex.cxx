@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlex.cxx,v $
- * $Revision: 1.34.80.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <tools/fsys.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
 #include <unotools/ucbstreamhelper.hxx>
@@ -50,15 +47,15 @@
 #include <sfx2/progress.hxx>
 #include <sfx2/progress.hxx>
 #include <vcl/wrkwin.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svditer.hxx>
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imappoly.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/xoutbmp.hxx>
 #include <svtools/htmlout.hxx>
@@ -66,28 +63,23 @@
 #include <vcl/cvtgrf.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/filter.hxx>
-#include <svx/colritem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/flditem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <svtools/style.hxx>
+#include <svl/style.hxx>
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
-//#ifndef _SVDETC_HXX
-//#include <svx/svdetc.hxx>
-//#endif
-#include <svx/frmdiritem.hxx>
+#include <svl/svstdarr.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/impgrf.hxx>               // FillFilter()
 #include <tools/urlobj.hxx>               // INetURLObject
 #include <vcl/bmpacc.hxx>
 #include <svtools/sfxecode.hxx>
-#include <svx/impgrf.hxx>
 #include <com/sun/star/beans/PropertyState.hpp>
 #include <tools/resmgr.hxx>
 #include "comphelper/anytostring.hxx"
@@ -1773,13 +1765,13 @@ bool HtmlExport::CreateHtmlForPresPages()
                         case presentation::ClickAction_BOOKMARK:
                         {
                             BOOL        bIsMasterPage;
-                            USHORT      nPgNum = mpDoc->GetPageByName( pInfo->maBookmark, bIsMasterPage );
+                            USHORT      nPgNum = mpDoc->GetPageByName( pInfo->GetBookmark(), bIsMasterPage );
                             SdrObject*  pObj = NULL;
 
                             if( nPgNum == SDRPAGE_NOTFOUND )
                             {
                                 // Ist das Bookmark ein Objekt?
-                                pObj = mpDoc->GetObj(pInfo->maBookmark);
+                                pObj = mpDoc->GetObj(pInfo->GetBookmark());
                                 if (pObj)
                                     nPgNum = pObj->GetPage()->GetPageNum();
                             }
@@ -1790,7 +1782,7 @@ bool HtmlExport::CreateHtmlForPresPages()
                         break;
 
                         case presentation::ClickAction_DOCUMENT:
-                            aHRef = pInfo->maBookmark;
+                            aHRef = pInfo->GetBookmark();
                         break;
 
                         case presentation::ClickAction_PREVPAGE:
@@ -3375,15 +3367,6 @@ BOOL HtmlErrorContext::GetString( ULONG, String& rCtxStr )
     rCtxStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM("$(URL2)")), maURL2 );
 
     return true;
-}
-
-// =====================================================================
-
-void HtmlErrorContext::SetContext( USHORT nResId )
-{
-    mnResId = nResId;
-    maURL1.Erase();
-    maURL2.Erase();
 }
 
 // =====================================================================

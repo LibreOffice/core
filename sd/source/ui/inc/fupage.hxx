@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fupage.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,7 +50,6 @@ class FuPage
     virtual void Deactivate();         // Function deaktivieren
 
     const SfxItemSet* ExecuteDialog( Window* pParent );
-    void ApplyItemSet( const SfxItemSet* pArgs );
 
 protected:
     virtual ~FuPage (void);
@@ -65,6 +61,8 @@ private:
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq );
+
+    void ApplyItemSet( const SfxItemSet* pArgs );
 
     SfxRequest&                 mrReq;
     const SfxItemSet*           mpArgs;

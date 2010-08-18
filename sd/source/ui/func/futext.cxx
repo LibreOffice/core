@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: futext.cxx,v $
- * $Revision: 1.66.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,38 +30,37 @@
 
 
 #include "futext.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editerr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/svxerr.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/help.hxx>
-#include <svx/editstat.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/intitem.hxx>
+#include <editeng/editstat.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/intitem.hxx>
 #include <svx/svdotext.hxx>
-#ifndef _SVDOGROUP_HXX //autogen
 #include <svx/svdogrp.hxx>
-#endif
-#include <svx/flditem.hxx>
-#include <svtools/style.hxx>
+#include <editeng/flditem.hxx>
+#include <svl/style.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/docfile.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svx/outlobj.hxx>
-
+#include <editeng/outlobj.hxx>
+#include <svtools/langtab.hxx>
 
 // #104122#
-#include <svx/frmdiritem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 #include <svx/svdetc.hxx>
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 
 #include "sdresid.hxx"
 #include "app.hrc"
@@ -325,7 +321,7 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
             {
                 BOOL bMacro = FALSE;
 
-                if (bMacro && mpView->PickObj(aMDPos,pObj,pPV,SDRSEARCH_PICKMACRO))
+                if (bMacro && mpView->PickObj(aMDPos,mpView->getHitTolLog(),pObj,pPV,SDRSEARCH_PICKMACRO))
                 {
                     // Makro
                     USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
@@ -404,10 +400,17 @@ BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
                             // do the EndTextEdit first, it will delete the handles and force a
                             // recreation. This will make aVEvt.pHdl to point to a deleted handle,
                             // thus it is necessary to reset it and to get it again.
-                            ::Outliner* pOutl = mpView->GetTextEditOutliner();
 
-                            if (mxTextObj.is() && (mxTextObj->GetOutlinerParaObject() ||
-                                (pOutl && pOutl->GetText(pOutl->GetParagraph( 0 )).Len() != 0)))
+                            // #i112855#
+                            // cl: I'm not sure why we checked here also for mxTextObj->GetOutlinerParaObjet
+                            // this caused SdrEndTextEdit() to be called also when not in text editing and
+                            // this does not make sense and caused troubles. (see issue 112855)
+
+//                          ::Outliner* pOutl = mpView->GetTextEditOutliner();
+//
+//                          if (mxTextObj.is() && (mxTextObj->GetOutlinerParaObject() ||
+//                              (pOutl && pOutl->GetText(pOutl->GetParagraph( 0 )).Len() != 0)))
+                            if( mpView->IsTextEdit() )
                             {
                                 mpView->SdrEndTextEdit();
 
@@ -659,7 +662,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aPnt( mpWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
-    if( mpView && mpView->MouseButtonUp(rMEvt, mpWindow) || rMEvt.GetClicks() == 2 )
+    if( (mpView && mpView->MouseButtonUp(rMEvt, mpWindow)) || rMEvt.GetClicks() == 2 )
         return (TRUE); // Event von der SdrView ausgewertet
 
     BOOL bEmptyTextObj = FALSE;
@@ -1037,7 +1040,7 @@ void FuText::Activate()
     mpView->SetQuickTextEditMode(mpViewShell->GetFrameView()->IsQuickEdit());
 
     // #i89661# it's no longer necessary to make it so big here, it's fine tuned
-    // for text objects in SdrMarkView::ImpCheckObjHit
+    // for text objects in SdrMarkView::CheckSingleSdrObjectHit
     mpView->SetHitTolerancePixel( 2 * HITPIX );
 
     OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
@@ -1385,7 +1388,7 @@ void FuText::ReceiveRequest(SfxRequest& rReq)
 
 IMPL_LINK( FuText, SpellError, void *, nLang )
 {
-    String aError( ::GetLanguageString( (LanguageType)(ULONG)nLang ) );
+    String aError( SvtLanguageTable::GetLanguageString( (LanguageType)(ULONG)nLang ) );
     ErrorHandler::HandleError(* new StringErrorInfo(
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
     return 0;

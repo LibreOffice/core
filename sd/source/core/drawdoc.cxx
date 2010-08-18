@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawdoc.cxx,v $
- * $Revision: 1.87 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,50 +31,49 @@
 #include "PageListWatcher.hxx"
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
-#include <svx/forbiddencharacterstable.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <editeng/forbiddencharacterstable.hxx>
 
 #include <svx/svxids.hrc>
-#include <sfx2/srchitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/scriptspaceitem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
 
-#ifndef _OFA_MISCCFG_HXX
-#include <svtools/misccfg.hxx>
-#endif
+#include <unotools/useroptions.hxx>
+
 #include <sfx2/printer.hxx>
-#include <sfx2/topfrm.hxx>
 #include <sfx2/app.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "Outliner.hxx"
 #include "app.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/editstat.hxx>
-#include <svx/fontitem.hxx>
-#include <svtools/flagitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/fontitem.hxx>
+#include <svl/flagitem.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/bulitem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/numitem.hxx>
 #include <svx/svditer.hxx>
-#include <svx/unolingu.hxx>
-#include <svtools/itempool.hxx>
+#include <editeng/unolingu.hxx>
+#include <svl/itempool.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <svx/xtable.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <svx/outlobj.hxx>
-#include <svtools/saveopt.hxx>
+#include <editeng/outlobj.hxx>
+#include <unotools/saveopt.hxx>
 #include <comphelper/extract.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #ifndef _SVTOOLS_PATHOPTIONS_HXX_
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
-#include <svtools/lingucfg.hxx>
-#include <svtools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <unotools/linguprops.hxx>
 
 #include "eetext.hxx"
 #include "drawdoc.hxx"
@@ -222,7 +218,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // Vorlagen existieren.
     SdrOutliner& rOutliner = GetDrawOutliner();
     rOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
-    rOutliner.SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
+    SetCalcFieldValueHdl( &rOutliner );
 
     // set linguistic options
     {
@@ -230,9 +226,12 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
         SvtLinguOptions         aOptions;
         aLinguConfig.GetOptions( aOptions );
 
-        SetLanguage( aOptions.nDefaultLanguage, EE_CHAR_LANGUAGE );
-        SetLanguage( aOptions.nDefaultLanguage_CJK, EE_CHAR_LANGUAGE_CJK );
-        SetLanguage( aOptions.nDefaultLanguage_CTL, EE_CHAR_LANGUAGE_CTL );
+        SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage,
+            ::com::sun::star::i18n::ScriptType::LATIN), EE_CHAR_LANGUAGE );
+        SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CJK,
+            ::com::sun::star::i18n::ScriptType::ASIAN), EE_CHAR_LANGUAGE_CJK );
+        SetLanguage( MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CTL,
+            ::com::sun::star::i18n::ScriptType::COMPLEX), EE_CHAR_LANGUAGE_CTL );
 
         mbOnlineSpell = aOptions.bIsSpellAuto;
     }
@@ -256,7 +255,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
 
     // DefTab und SpellOptions setzen
-    //OfaMiscCfg* pOfaMiscCfg = SFX_APP()->GetMiscConfig();
     // Jetzt am Modul (SD)
     USHORT nDefTab = pOptions->GetDefTab();
     SetDefaultTabulator( nDefTab );
@@ -282,7 +280,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     if (mpDocSh)
     {
-        SetLinkManager( new SvxLinkManager(mpDocSh) );
+        SetLinkManager( new sfx2::LinkManager(mpDocSh) );
     }
 
     ULONG nCntrl = rOutliner.GetControlWord();
@@ -315,7 +313,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SfxItemSet aSet2( pHitTestOutliner->GetEmptyItemSet() );
     pHitTestOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)GetStyleSheetPool() );
 
-    pHitTestOutliner->SetCalcFieldValueHdl( LINK(SD_MOD(), SdModule, CalcFieldValueHdl) );
+    SetCalcFieldValueHdl( pHitTestOutliner );
 
     try
     {
@@ -635,25 +633,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
             if( aName != pPage->GetName() )
                 pPage->SetName( aName );
-
-            SdrObject* pPresObj = pPage->GetPresObj( PRESOBJ_BACKGROUND ) ;
-
-            if( pPage->GetPageKind() == PK_STANDARD )
-            {
-                DBG_ASSERT( pPresObj, "Masterpage without a background object!" );
-                if (pPresObj && pPresObj->GetOrdNum() != 0 )
-                    pPage->NbcSetObjectOrdNum(pPresObj->GetOrdNum(),0);
-            }
-            else
-            {
-                DBG_ASSERT( pPresObj == NULL, "Non Standard Masterpage with a background object!\n(This assertion is ok for old binary files)" );
-                if( pPresObj )
-                {
-                    pPage->RemoveObject( pPresObj->GetOrdNum() );
-                    pPage->RemovePresObj(pPresObj);
-                    SdrObject::Free( pPresObj );
-                }
-            }
         }
 
         // Sprachabhaengige Namen der StandardLayer erzeugen
@@ -725,11 +704,6 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
             SdPage* pPage = (SdPage*)GetMasterPage(nPage);
 
             NewOrLoadCompleted( pPage, pSPool );
-
-            // BackgroundObjekt vor Selektion schuetzen #62144#
-            SdrObject* pBackObj = pPage->GetPresObj(PRESOBJ_BACKGROUND);
-            if(pBackObj)
-                pBackObj->SetMarkProtect(TRUE);
         }
     }
 
@@ -1068,5 +1042,36 @@ void SdDrawDocument::MasterPageListChanged()
     mpMasterPageListWatcher->Invalidate();
 }
 
+void SdDrawDocument::SetCalcFieldValueHdl(::Outliner* pOutliner)
+{
+    pOutliner->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
+}
+
+sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const rtl::OUString& rAuthor )
+{
+    // force current user to have first color
+    if( maAnnotationAuthors.empty() )
+    {
+        SvtUserOptions aUserOptions;
+        maAnnotationAuthors.push_back( aUserOptions.GetFullName() );
+    }
+
+    sal_uInt16 idx = 0;
+    for( std::vector< OUString >::iterator iter( maAnnotationAuthors.begin() ); iter != maAnnotationAuthors.end(); iter++ )
+    {
+        if( (*iter) == rAuthor )
+        {
+            break;
+        }
+        idx++;
+    }
+
+    if( idx == maAnnotationAuthors.size() )
+    {
+        maAnnotationAuthors.push_back( rAuthor );
+    }
+
+    return idx;
+}
 
 // eof

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: animationaudionode.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,14 +91,16 @@ void AnimationAudioNode::activate_st()
             // no node duration. Take inherent media time, then
             scheduleDeactivationEvent(
                 makeDelay( boost::bind( &AnimationNode::deactivate, getSelf() ),
-                           mpPlayer->getDuration() ) );
+                                        mpPlayer->getDuration(),
+                           "AnimationAudioNode::deactivate with delay") );
         }
     }
     else
     {
         // deactivate ASAP:
         scheduleDeactivationEvent(
-            makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ) ) );
+            makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ),
+                                    "AnimationAudioNode::deactivate without delay") );
     }
 }
 
@@ -127,7 +126,8 @@ void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
     getContext().mrEventQueue.addEvent(
         makeEvent( boost::bind( &EventMultiplexer::notifyAudioStopped,
                                 boost::ref(getContext().mrEventMultiplexer),
-                                getSelf() ) ) );
+                                getSelf() ),
+                   "AnimationAudioNode::notifyAudioStopped") );
 }
 
 bool AnimationAudioNode::hasPendingAnimation() const

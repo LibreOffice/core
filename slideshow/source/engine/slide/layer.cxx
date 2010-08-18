@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: layer.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +33,11 @@
 
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/range/b1drange.hxx>
-#include <basegfx/range/b2dmultirange.hxx>
+#include <basegfx/range/b2dpolyrange.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 
 #include "layer.hxx"
 
@@ -202,7 +201,8 @@ namespace slideshow
         {
             // TODO(Q1): move this to B2DMultiRange
             if( !rUpdateRange.isEmpty() )
-                maUpdateAreas.addRange( rUpdateRange );
+                maUpdateAreas.appendElement( rUpdateRange,
+                                             basegfx::ORIENTATION_POSITIVE );
         }
 
         void Layer::updateBounds( ShapeSharedPtr const& rShape )
@@ -248,7 +248,7 @@ namespace slideshow
 
         void Layer::clearUpdateRanges()
         {
-            maUpdateAreas.reset();
+            maUpdateAreas.clear();
         }
 
         void Layer::clearContent()
@@ -284,12 +284,14 @@ namespace slideshow
 
         Layer::EndUpdater Layer::beginUpdate()
         {
-            if( !maUpdateAreas.isEmpty() )
+            if( maUpdateAreas.count() )
             {
                 // perform proper layer update. That means, setup proper
                 // clipping, and render each shape that intersects with
                 // the calculated update area
-                ::basegfx::B2DPolyPolygon aClip( maUpdateAreas.getPolyPolygon() );
+                ::basegfx::B2DPolyPolygon aClip( maUpdateAreas.solveCrossovers() );
+                aClip = ::basegfx::tools::stripNeutralPolygons(aClip);
+                aClip = ::basegfx::tools::stripDispensablePolygons(aClip, false);
 
                 // actually, if there happen to be shapes with zero
                 // update area in the maUpdateAreas vector, the

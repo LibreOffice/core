@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OGLTrans_TransitionerImpl.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +52,6 @@
 #include <tools/gen.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syschild.hxx>
-#include <vcl/sysdata.hxx>
 
 #include <boost/noncopyable.hpp>
 
@@ -64,10 +60,16 @@
 
 
 #if defined( WNT )
+    #include <tools/prewin.h>
+    #include <windows.h>
+    #include <tools/postwin.h>
     #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
     #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 #elif defined( OS2 )
 #elif defined( QUARTZ )
+    #include "premac.h"
+    #include <Cocoa/Cocoa.h>
+    #include "postmac.h"
 #elif defined( UNX )
 namespace unx
 {
@@ -77,6 +79,7 @@ namespace unx
 #include <GL/glxext.h>
 }
 #endif
+#include <vcl/sysdata.hxx>
 
 #ifdef DEBUG
 #include <boost/date_time/posix_time/posix_time.hpp>

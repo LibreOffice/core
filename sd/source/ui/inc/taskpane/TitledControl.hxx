@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TitledControl.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,6 @@ class Window;
 namespace sd { namespace toolpanel {
 
 class ControlContainer;
-class ControlFactory;
 
 /** This wrapper adds a title bar to a control.  Both title bar and
     control are child windows.
@@ -83,13 +79,6 @@ public:
         const ClickHandler& rClickHandler,
         TitleBar::TitleBarType eType);
 
-    TitledControl (
-        TreeNode* pParent,
-        ::std::auto_ptr<ControlFactory> pControlFactory,
-        const String& rTitle,
-        const ClickHandler& rClickHandler,
-        TitleBar::TitleBarType eType);
-
     virtual ~TitledControl (void);
 
 
@@ -101,7 +90,6 @@ public:
 
     virtual void Resize (void);
     virtual void GetFocus (void);
-    virtual void LoseFocus (void);
     virtual void KeyInput (const KeyEvent& rEvent);
 
     //    void Select (bool bExpansionState);
@@ -111,8 +99,8 @@ public:
         the control has not yet been created and the given flag is <TRUE/>
         then the control is created.
     */
-    TreeNode* GetControl (bool bCreate=true);
-    const TreeNode* GetConstControl (bool bCreate=true) const;
+    TreeNode* GetControl (void);
+    const TreeNode* GetConstControl () const;
 
     const String& GetTitle (void) const;
 
@@ -135,12 +123,7 @@ public:
     */
     virtual bool IsExpandable (void) const;
 
-    /** Ownership of the given data remains with the caller.  The data
-        is thus not destroyed when the destructor of this class is
-        called.
-    */
-    void SetUserData (void* pUserData);
-    void* GetUserData (void) const;
+    virtual void SetEnabledState(bool bFlag);
 
     virtual bool IsShowing (void) const;
     virtual void Show (bool bVisible);
@@ -157,14 +140,7 @@ private:
     String msTitle;
     bool mbVisible;
     void* mpUserData;
-    ::std::auto_ptr<ControlFactory> mpControlFactory;
     ::std::auto_ptr<ClickHandler> mpClickHandler;
-
-    /** Remember whether to toggle (true) the expansion state when the title
-        bar is clicked on.  When set to false then the control is always
-        expanded.
-    */
-    bool mbExpansionModeIsToggle;
 
     /// Do not use! Assignment operator is not supported.
     const TitledControl& operator= (

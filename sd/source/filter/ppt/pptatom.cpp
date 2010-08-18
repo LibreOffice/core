@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pptatom.cpp,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +49,15 @@ Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
 
             Atom* pLastAtom = NULL;
 
-            while( (mrStream.GetError() == 0 ) && ( mrStream.Tell() < maRecordHeader.GetRecEndFilePos() ) )
+            // retrieve file size (to allow sanity checks)
+            const sal_Size nStreamPos = mrStream.Tell();
+            mrStream.Seek( STREAM_SEEK_TO_END );
+            const sal_Size nStreamSize = mrStream.Tell();
+            mrStream.Seek( nStreamPos );
+
+            while( (mrStream.GetError() == 0 )
+                && ( mrStream.Tell() < nStreamSize )
+                && ( mrStream.Tell() < maRecordHeader.GetRecEndFilePos() ) )
             {
                 mrStream >> aChildHeader;
 
@@ -108,18 +113,6 @@ const Atom* Atom::findNextChildAtom( sal_uInt16 nRecType, const Atom* pLast ) co
     while( pChild && pChild->maRecordHeader.nRecType != nRecType )
     {
         pChild = pChild->mpNextAtom;
-    }
-
-    return pChild;
-}
-
-/** returns the next child atom after pLast with nRecType and nRecInstance or NULL */
-const Atom* Atom::findNextChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstance, const Atom* pLast ) const
-{
-    const Atom* pChild = pLast != NULL ? pLast->mpNextAtom : mpFirstChild;
-    while( pChild && (pChild->maRecordHeader.nRecType != nRecType) && (pChild->maRecordHeader.nRecInstance != nRecInstance) )
-    {
-        pChild = findNextChildAtom( pChild );
     }
 
     return pChild;

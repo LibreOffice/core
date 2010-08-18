@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stlpool.cxx,v $
- * $Revision: 1.41.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,39 +29,39 @@
 #include "precompiled_sd.hxx"
 
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <svx/eeitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svtools/poolitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/numitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/editeng.hxx>
-#include <svtools/smplhint.hxx>
-#include <svx/langitem.hxx>
-#include <svx/charreliefitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/numitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editeng.hxx>
+#include <svl/smplhint.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/charreliefitem.hxx>
 #ifndef _SVX_EMPHITEM_HXX
-#include <svx/emphitem.hxx>
+#include <editeng/emphitem.hxx>
 #endif
 #include <svx/sdr/table/tabledesign.hxx>
-#include <svx/akrnitem.hxx>
+#include <editeng/akrnitem.hxx>
 
 #include <svx/svdattr.hxx>
 #include "eetext.hxx"
 #include <svx/xtable.hxx>           // fuer RGB_Color
-#include <svx/bulitem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svtools/itempool.hxx>
+#include <editeng/bulitem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <svl/itempool.hxx>
 
 #define _SDR_POSITIVE
 #define _SDR_ITEMS
@@ -78,7 +75,7 @@
 #include "sdmod.hxx"
 #include "sdpage.hxx"
 #include "helpids.h"
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -145,30 +142,6 @@ SfxStyleSheetBase* SdStyleSheetPool::GetTitleSheet(const String& rLayoutName)
     aName += String(SdResId(STR_LAYOUT_TITLE));
     SfxStyleSheetBase* pResult = Find(aName, SD_STYLE_FAMILY_MASTERPAGE);
     return pResult;
-}
-
-// ----------------------------------------------------------
-// find layout name of first layout
-// ----------------------------------------------------------
-
-String SdStyleSheetPool::GetLayoutName() const
-{
-    String aName( SdResId(STR_LAYOUT_DEFAULT_NAME ) );
-    sal_uInt32  nCount = aStyles.size();
-
-    for( sal_uInt32 n = 0; n < nCount; n++ )
-    {
-        aName = aStyles[n]->GetName();
-        sal_uInt16 nPos = aName.SearchAscii( SD_LT_SEPARATOR );
-        if( nPos != STRING_NOTFOUND )
-            break;
-    }
-
-    sal_uInt16 nPos = aName.Search( sal_Unicode( ' ' ));
-    if( nPos != STRING_NOTFOUND )
-        aName.Erase( nPos );       // removing blanks and number (e.g. "Gliederung 1")
-
-    return aName;
 }
 
 /*************************************************************************
@@ -573,32 +546,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
     DBG_ASSERT( !bCheck || !bCreated, "missing layout style sheets detected!" );
 }
-
-/*************************************************************************
-|*
-|* StyleSheets des genannten Praesentationslayouts loeschen
-|*
-\************************************************************************/
-
-void SdStyleSheetPool::EraseLayoutStyleSheets(const String& rLayoutName)
-{
-    SfxStyleSheetBase* pSheet = NULL;
-
-    List* pNameList = CreateLayoutSheetNames(rLayoutName);
-
-    String* pName = (String*)pNameList->First();
-    while (pName)
-    {
-        pSheet = Find(*pName, SD_STYLE_FAMILY_MASTERPAGE);
-        DBG_ASSERT(pSheet, "EraseLayoutStyleSheets: Vorlage nicht gefunden");
-        if (pSheet)
-            Remove(pSheet);
-        delete pName;
-        pName = (String*)pNameList->Next();
-    }
-    delete pNameList;
-}
-
 
 /*************************************************************************
 |*
@@ -1440,6 +1387,8 @@ void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
 
 //      EndListening( *mpDoc );
         mpDoc = 0;
+
+        Clear();
     }
 }
 
@@ -1475,6 +1424,18 @@ SdStyleSheetVector SdStyleSheetPool::CreateChildList( SdStyleSheet* pSheet )
     }
 
     return aResult;
+}
+
+// --------------------------------------------------------------------
+
+void SAL_CALL SdStyleSheetPool::acquire (void) throw ()
+{
+    SdStyleSheetPoolBase::acquire();
+}
+
+void SAL_CALL SdStyleSheetPool::release (void) throw ()
+{
+    SdStyleSheetPoolBase::release();
 }
 
 // --------------------------------------------------------------------

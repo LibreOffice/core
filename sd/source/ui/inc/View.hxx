@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: View.hxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -163,10 +160,7 @@ public:
 
     void                    SetMarkedOriginalSize();
 
-    VirtualDevice*          CreatePageVDev(USHORT nSdPage, PageKind ePageKind, ULONG nWidthPixel);
-
     void                    LockRedraw(BOOL bLock);
-    bool IsRedrawLocked (void) const;
 
     BOOL                    IsMorphingAllowed() const;
     BOOL                    IsVectorizeAllowed() const;
@@ -211,6 +205,7 @@ public:
     void SetMarkedPointsSmoothPossible( bool bSet ) { bSetMarkedPointsSmoothPossible = bSet; }
     void SetMarkedSegmentsKindPossible( bool bSet ) { bSetMarkedSegmentsKindPossible = bSet; }
 
+    SdrObject* GetEmptyPresentationObject( PresObjKind eKind );
 protected:
     DECL_LINK( OnParagraphInsertedHdl, ::Outliner * );
     DECL_LINK( OnParagraphRemovingHdl, ::Outliner * );

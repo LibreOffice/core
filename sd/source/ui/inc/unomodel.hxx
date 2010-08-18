@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unomodel.hxx,v $
- * $Revision: 1.36 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,13 +49,13 @@
 
 #include <rtl/ref.hxx>
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/fmdmod.hxx>
 
-#include <svx/unoipset.hxx>
+#include <editeng/unoipset.hxx>
 
-#include <unotools/servicehelper.hxx>
+#include <comphelper/servicehelper.hxx>
 
 class SdDrawDocument;
 class SdPage;
@@ -122,7 +119,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxMarkerTable;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDrawingPool;
 
-    SvxItemPropertySet  maPropSet;
+    const SvxItemPropertySet*   mpPropSet;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > maTypeSequence;
 

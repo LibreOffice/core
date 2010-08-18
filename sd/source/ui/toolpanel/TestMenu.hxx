@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TestMenu.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,8 @@ namespace sd { namespace toolpanel {
 
 class ControlFactory;
 
+#ifdef SHOW_COLOR_MENU
+
 /** This demo menu shows the colors that are available from the
     StyleSettings.
 */
@@ -50,7 +49,7 @@ class ColorMenu
       public TreeNode
 {
 public:
-    ColorMenu (TreeNode* pParent);
+    ColorMenu (::Window* i_pParent);
     virtual ~ColorMenu (void);
 
     static ::std::auto_ptr<ControlFactory> CreateControlFactory (void);
@@ -78,6 +77,7 @@ private:
     int CalculateRowCount (const Size& rItemSize, int nColumnCount);
     void Fill (void);
 };
+#endif
 
 } } // end of namespace ::sd::toolpanel
 

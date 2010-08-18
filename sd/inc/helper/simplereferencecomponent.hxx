@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: simplereferencecomponent.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,14 +31,10 @@
 #include "osl/interlck.h"
 #include "sal/types.h"
 
-#ifndef INCLUDED_CSTDDEF
 #include <cstddef>
-#define INCLUDED_CSTDDEF
-#endif
-#ifndef INCLUDED_NEW
 #include <new>
-#define INCLUDED_NEW
-#endif
+
+#include <sddllapi.h>
 
 namespace sd {
 
@@ -60,8 +53,8 @@ public:
         the total number of calls to release() by a plattform dependent amount
         (which, hopefully, is quite large).
      */
-    void acquire();
-    void release();
+    SD_DLLPUBLIC void acquire();
+    SD_DLLPUBLIC void release();
 
     void Dispose();
 

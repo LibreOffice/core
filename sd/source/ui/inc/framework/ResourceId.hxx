@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ResourceId.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -238,8 +235,6 @@ private:
     bool IsBoundToAnchor (
         const ::std::vector<rtl::OUString>& rResourceURLs,
         css::drawing::framework::AnchorBindingMode eMode) const;
-
-    bool IsValid (void) const;
 
     void ParseResourceURL (void);
 };

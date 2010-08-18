@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SdUnoDrawView.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,21 +38,27 @@
 #include "unomodel.hxx"
 #include "unopage.hxx"
 #include "Window.hxx"
+#include "pres.hxx"
 
 #include <cppuhelper/proptypehlp.hxx>
+#include <comphelper/serviceinfohelper.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshcol.hxx>
 #include <svx/zoomitem.hxx>
+#include <com/sun/star/drawing/DrawViewMode.hpp>
 #include <com/sun/star/drawing/XLayerManager.hpp>
 #include <com/sun/star/view/DocumentZoomType.hpp>
 
 #include <vector>
 
+using rtl::OUString;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing;
 
 
 namespace sd {
@@ -419,7 +422,6 @@ void SdUnoDrawView::setFastPropertyValue (
                 SetViewOffset( aOffset );
             }
             break;
-
         default:
             throw beans::UnknownPropertyException();
     }
@@ -461,6 +463,10 @@ Any SAL_CALL SdUnoDrawView::getFastPropertyValue (
             break;
         case DrawController::PROPERTY_VIEWOFFSET:
             aValue <<= GetViewOffset();
+            break;
+
+        case DrawController::PROPERTY_DRAWVIEWMODE:
+            aValue = getDrawViewMode();
             break;
 
         default:
@@ -604,5 +610,35 @@ SdXImpressDocument* SdUnoDrawView::GetModel (void) const throw()
         return NULL;
 }
 
+Any SdUnoDrawView::getDrawViewMode() const
+{
+    Any aRet;
+    switch( mrDrawViewShell.GetPageKind() )
+    {
+    case PK_NOTES:  aRet <<= DrawViewMode_NOTES; break;
+    case PK_HANDOUT: aRet <<= DrawViewMode_HANDOUT; break;
+    case PK_STANDARD: aRet <<= DrawViewMode_DRAW; break;
+    }
+    return aRet;
+}
+
+// XServiceInfo
+OUString SAL_CALL SdUnoDrawView::getImplementationName(  ) throw (RuntimeException)
+{
+    return OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sd.SdUnoDrawView") );
+}
+
+sal_Bool SAL_CALL SdUnoDrawView::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+{
+    return comphelper::ServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
+}
+
+Sequence< OUString > SAL_CALL SdUnoDrawView::getSupportedServiceNames(  ) throw (RuntimeException)
+{
+    OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.DrawingDocumentDrawView") );
+    uno::Sequence< OUString > aSeq( &aSN, 1 );
+    return aSeq;
+}
 
 } // end of namespace sd
+

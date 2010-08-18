@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sd_primitivetypes2d.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +39,7 @@
 #define PRIMITIVE2D_ID_SDPAGEOBJECTPAGEBITMAPPRIMITIVE      (PRIMITIVE2D_ID_RANGE_SD| 2)
 #define PRIMITIVE2D_ID_SDPAGEOBJECTBORDERPRIMITIVE          (PRIMITIVE2D_ID_RANGE_SD| 3)
 #define PRIMITIVE2D_ID_SDPAGEOBJECTFADENAMENUMBERPRIMITIVE  (PRIMITIVE2D_ID_RANGE_SD| 4)
+#define PRIMITIVE2D_ID_SDMOUSEOVEREFFECTPRIMITIVE           (PRIMITIVE2D_ID_RANGE_SD| 5)
 
 //////////////////////////////////////////////////////////////////////////////
 

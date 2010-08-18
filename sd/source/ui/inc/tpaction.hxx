@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tpaction.hxx,v $
- * $Revision: 1.12.106.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -117,7 +114,6 @@ private:
     void                    SetActualAnimationEffect( ::com::sun::star::presentation::AnimationEffect eAE );
     void                    SetEditText( String const & rStr );
     String                  GetEditText( BOOL bURL = FALSE );
-    String                  GetMacroName( const String& rPath );
     USHORT                  GetClickActionSdResId( ::com::sun::star::presentation::ClickAction eCA );
     USHORT                  GetAnimationEffectSdResId( ::com::sun::star::presentation::AnimationEffect eAE );
 
@@ -126,7 +122,6 @@ public:
             ~SdTPAction();
 
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
-    static  USHORT*    GetRanges();
 
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );

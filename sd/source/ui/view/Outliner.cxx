@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Outliner.cxx,v $
- * $Revision: 1.37.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,34 +30,34 @@
 
 #include "Outliner.hxx"
 #include <vcl/wrkwin.hxx>
-#include <sfx2/srchitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/editstat.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/editstat.hxx>
 #include <vcl/outdev.hxx>
-#ifndef _DLGUTIL_HXX
 #include <svx/dlgutil.hxx>
-#endif
 #include <svx/xtable.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/unolingu.hxx>
 #include <svx/svditer.hxx>
 #include <comphelper/extract.hxx>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <comphelper/processfactory.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/srchdlg.hxx>
-#include <svtools/linguprops.hxx>
-#include <svtools/lingucfg.hxx>
-#include <svx/editeng.hxx>
+#include <unotools/linguprops.hxx>
+#include <unotools/lingucfg.hxx>
+#include <editeng/editeng.hxx>
 #include <vcl/metric.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <svtools/langtab.hxx>
+#include <tools/diagnose_ex.h>
 
 #include "strings.hrc"
 #include "sdstring.hrc"
@@ -80,6 +77,8 @@
 #include "SpellDialogChildWindow.hxx"
 #include "ToolBarManager.hxx"
 #include "framework/FrameworkHelper.hxx"
+#include <svx/svxids.hrc>
+#include <editeng/editerr.hxx>
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -334,6 +333,9 @@ void Outliner::EndSpelling (void)
 {
     if (mbViewShellValid)
     {
+        // Keep old view shell alive until we release the outliner view.
+        ::boost::shared_ptr<ViewShell> pOldViewShell (mpViewShell);
+
         ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
         if (pBase != NULL)
             mpViewShell = pBase->GetMainViewShell();
@@ -424,23 +426,6 @@ BOOL Outliner::SpellNextDocument (void)
     return mbEndOfSearch ? FALSE : TRUE;
 
 }
-
-void Outliner::HandleOutsideChange (ChangeHint eHint)
-{
-    switch (eHint)
-    {
-        case CH_VIEW_SHELL_INVALID:
-            EndSpelling();
-            mbPrepareSpellingPending = true;
-            mbViewShellValid = false;
-            break;
-
-        case CH_VIEW_SHELL_VALID:
-            mbViewShellValid = true;
-            break;
-    }
-}
-
 
 
 /*************************************************************************
@@ -566,7 +551,8 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
 
 void Outliner::Initialize (bool bDirectionIsForward)
 {
-    bool bOldDirectionIsForward = mbDirectionIsForward;
+    const bool bIsAtEnd (maObjectIterator == ::sd::outliner::OutlinerContainer(this).end());
+    const bool bOldDirectionIsForward = mbDirectionIsForward;
     mbDirectionIsForward = bDirectionIsForward;
 
     if (maObjectIterator == ::sd::outliner::Iterator())
@@ -601,10 +587,19 @@ void Outliner::Initialize (bool bDirectionIsForward)
     {
         // Requested iteration direction has changed.  Turn arround the iterator.
         maObjectIterator.Reverse();
-        // The iterator has pointed to the object one ahead/before the current
-        // one.  Now move it to the one before/ahead the current one.
-        ++maObjectIterator;
-        ++maObjectIterator;
+        if (bIsAtEnd)
+        {
+            // The iterator has pointed to end(), which after the search
+            // direction is reversed, becomes begin().
+            maObjectIterator = ::sd::outliner::OutlinerContainer(this).begin();
+        }
+        else
+        {
+            // The iterator has pointed to the object one ahead/before the current
+            // one.  Now move it to the one before/ahead the current one.
+            ++maObjectIterator;
+            ++maObjectIterator;
+        }
 
         mbMatchMayExist = true;
     }
@@ -947,7 +942,9 @@ void Outliner::RestoreStartPosition (void)
         else if (mpViewShell->ISA(OutlineViewShell))
         {
             // Set cursor to its old position.
-            GetView(0)->SetSelection (maStartSelection);
+            OutlinerView* pView = GetView(0);
+            if (pView != NULL)
+                pView->SetSelection (maStartSelection);
         }
     }
 }
@@ -974,7 +971,7 @@ void Outliner::ProvideNextTextObject (void)
     }
     catch (::com::sun::star::uno::Exception e)
     {
-        OSL_TRACE ("Outliner %p: caught exception while ending text edit mode", this);
+        DBG_UNHANDLED_EXCEPTION();
     }
     SetUpdateMode(FALSE);
     OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
@@ -1075,23 +1072,6 @@ void Outliner::EndOfSearch (void)
         }
     }
 }
-
-
-
-
-void Outliner::InitPage (USHORT nPageIndex)
-{
-    (void)nPageIndex;
-
-    ::sd::outliner::IteratorPosition aPosition (*maObjectIterator);
-    if (aPosition.meEditMode == EM_PAGE)
-        mnPageCount = mpDrawDocument->GetSdPageCount(aPosition.mePageKind);
-    else
-        mnPageCount = mpDrawDocument->GetMasterSdPageCount(aPosition.mePageKind);
-}
-
-
-
 
 void Outliner::ShowEndOfSearchDialog (void)
 {
@@ -1392,7 +1372,7 @@ void Outliner::EnterEditMode (BOOL bGrabFocus)
 IMPL_LINK_INLINE_START( Outliner, SpellError, void *, nLang )
 {
     mbError = true;
-    String aError( ::GetLanguageString( (LanguageType)(ULONG)nLang ) );
+    String aError( SvtLanguageTable::GetLanguageString( (LanguageType)(ULONG)nLang ) );
     ErrorHandler::HandleError(* new StringErrorInfo(
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aError) );
     return 0;
@@ -1473,36 +1453,6 @@ bool Outliner::HandleFailedSearch (void)
 
     return bContinueSearch;
 }
-
-
-#if ENABLE_LAYOUT
-#define SvxSearchDialog Window
-#endif
-
-/** See task #95227# for discussion about correct parent for dialogs/info boxes.
-*/
-::Window* Outliner::GetParentForDialog (void)
-{
-    ::Window* pParent = NULL;
-
-    if (meMode == SEARCH)
-        pParent = static_cast<SvxSearchDialog*>(
-            SfxViewFrame::Current()->GetChildWindow(
-                SvxSearchDialogWrapper::GetChildWindowId())->GetWindow());
-
-    if (pParent == NULL)
-        pParent = mpViewShell->GetActiveWindow();
-
-    if (pParent == NULL)
-        pParent = Application::GetDefDialogParent();
-    //1.30->1.31 of sdoutl.cxx        pParent = Application::GetDefModalDialogParent();
-
-    return pParent;
-}
-
-#if ENABLE_LAYOUT
-#undef SvxSearchDialog
-#endif
 
 
 SdrObject* Outliner::SetObject (

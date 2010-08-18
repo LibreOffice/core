@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsPageDescriptor.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,13 +100,6 @@ public:
     */
     css::uno::Reference<css::drawing::XDrawPage> GetXDrawPage (void) const;
 
-    /** Returns the index of the page as it is displayed in the view as page
-        number.  The value may differ from the index returned by the
-        XDrawPage when there are hidden slides and the XIndexAccess used to
-        access the model filters them out.
-    */
-    sal_Int32 GetPageIndex (void) const;
-
     /** Return the page shape that is used for visualizing the page.
     */
     view::PageObject* GetPageObject (void);
@@ -178,10 +168,6 @@ public:
     */
     void SetPageNumberAreaModelSize (const Size& rSize);
     Size GetPageNumberAreaModelSize (void) const;
-
-    /** Returns <TRUE/> when the slide is the current slide.
-    */
-    bool IsCurrentPage (void) const;
 
     /** Set or revoke the state of this slide being the current slide.
     */

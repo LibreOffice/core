@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlsSlideFunction.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,12 +51,6 @@ SlideFunction::SlideFunction (
         rSlideSorter.GetModel().GetDocument(),
         rRequest)
 {
-}
-
-FunctionReference SlideFunction::Create( SlideSorter& rSlideSorter, SfxRequest& rRequest )
-{
-    FunctionReference xFunc( new SlideFunction( rSlideSorter, rRequest ) );
-    return xFunc;
 }
 
 void SlideFunction::ScrollStart (void)

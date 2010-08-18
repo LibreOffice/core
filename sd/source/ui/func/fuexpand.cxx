@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuexpand.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdetc.hxx>
 
 #include "app.hrc"
@@ -56,7 +53,7 @@
 #include "optsitem.hxx"
 #include "sdmod.hxx"
 #include <sfx2/dispatch.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 namespace sd {
 
@@ -122,7 +119,10 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
         if (pActualOutline)
         {
-            mpView->BegUndo(String(SdResId(STR_UNDO_EXPAND_PAGE)));
+            const bool bUndo = mpView->IsUndoEnabled();
+
+            if( bUndo )
+                mpView->BegUndo(String(SdResId(STR_UNDO_EXPAND_PAGE)));
 
             // Aktuelles Gliederungsobjekt in Outliner setzen
             OutlinerParaObject* pParaObj = pActualOutline->GetOutlinerParaObject();
@@ -159,7 +159,9 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // Seite hinter aktueller Seite einfuegen
                     mpDoc->InsertPage(pPage, nActualPageNum + nPos);
                     nPos++;
-                    mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pPage));
+
+                    if( bUndo )
+                        mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pPage));
 
                     // MasterPage der aktuellen Seite verwenden
                     pPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
@@ -180,7 +182,9 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // Seite hinter aktueller Seite einfuegen
                     mpDoc->InsertPage(pNotesPage, nActualPageNum + nPos);
                     nPos++;
-                    mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
+
+                    if( bUndo )
+                        mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
                     // MasterPage der aktuellen Seite verwenden
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
@@ -258,7 +262,8 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 pPara = pOutl->GetParagraph( ++nParaPos );
             }
 
-            mpView->EndUndo();
+            if( bUndo )
+                mpView->EndUndo();
         }
 
         delete pOutl;

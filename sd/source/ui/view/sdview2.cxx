@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdview2.cxx,v $
- * $Revision: 1.61 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,13 +49,13 @@
 #include <sfx2/childwin.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdpagv.hxx>
-#include <svtools/urlbmk.hxx>
-#include <svtools/urlbmk.hxx>
-#include <svx/outliner.hxx>
+#include <svl/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/dbexch.hrc>
 #include <sot/formats.hxx>
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/svditer.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
@@ -421,10 +418,13 @@ void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
         mpDragSrcMarkList = new SdrMarkList(GetMarkedObjectList());
         mnDragSrcPgNum = GetSdrPageView()->GetPage()->GetPageNum();
 
-        String aStr( SdResId(STR_UNDO_DRAGDROP) );
-        aStr += sal_Unicode(' ');
-        aStr += mpDragSrcMarkList->GetMarkDescription();
-        BegUndo(aStr);
+        if( IsUndoEnabled() )
+        {
+            String aStr( SdResId(STR_UNDO_DRAGDROP) );
+            aStr += sal_Unicode(' ');
+            aStr += mpDragSrcMarkList->GetMarkDescription();
+            BegUndo(aStr);
+        }
         CreateDragDataObject( this, *pWindow, rStartPos );
     }
 }
@@ -433,6 +433,8 @@ void View::StartDrag( const Point& rStartPos, ::Window* pWindow )
 
 void View::DragFinished( sal_Int8 nDropAction )
 {
+    const bool bUndo = IsUndoEnabled();
+
     SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
 
     if( pDragTransferable )
@@ -444,7 +446,9 @@ void View::DragFinished( sal_Int8 nDropAction )
         !IsPresObjSelected() )
     {
         mpDragSrcMarkList->ForceSort();
-        BegUndo();
+
+        if( bUndo )
+            BegUndo();
 
         ULONG nm, nAnz = mpDragSrcMarkList->GetMarkCount();
 
@@ -452,7 +456,8 @@ void View::DragFinished( sal_Int8 nDropAction )
         {
             nm--;
             SdrMark* pM=mpDragSrcMarkList->GetMark(nm);
-            AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
+            if( bUndo )
+                AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoDeleteObject(*pM->GetMarkedSdrObj()));
         }
 
         mpDragSrcMarkList->GetMark(0)->GetMarkedSdrObj()->GetOrdNum();
@@ -474,13 +479,15 @@ void View::DragFinished( sal_Int8 nDropAction )
             }
         }
 
-        EndUndo();
+        if( bUndo )
+            EndUndo();
     }
 
     if( pDragTransferable )
         pDragTransferable->SetInternalMove( FALSE );
 
-    EndUndo();
+    if( bUndo )
+        EndUndo();
     mnDragSrcPgNum = SDRPAGE_NOTFOUND;
     delete mpDragSrcMarkList;
     mpDragSrcMarkList = NULL;
@@ -555,7 +562,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                 BOOL        bXFillExchange = rTargetHelper.IsDropFormatSupported( SOT_FORMATSTR_ID_XFA );
 
                 // check handle insert
-                if( !nRet && ( bXFillExchange && ( SDRDRAG_GRADIENT == GetDragMode() ) || ( SDRDRAG_TRANSPARENCE == GetDragMode() ) ) )
+                if( !nRet && ( (bXFillExchange && ( SDRDRAG_GRADIENT == GetDragMode() )) || ( SDRDRAG_TRANSPARENCE == GetDragMode() ) ) )
                 {
                     const SdrHdlList& rHdlList = GetHdlList();
 
@@ -574,19 +581,8 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                             {
                                 static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_NORMAL );
                             }
-
-                            //OLMconst B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
-                            //OLMif( rIAOGroup.IsHit( rEvt.maPosPixel ) )
-                            //OLM{
-                            //OLM    nRet = nDropAction;
-                            //OLM    static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_SELECTED );
-                            //OLM}
-                            //OLMelse
-                            //OLM    static_cast< SdrHdlColor* >( pIAOHandle )->SetSize( SDR_HANDLE_COLOR_SIZE_NORMAL );
                         }
                     }
-
-                    //OLMRefreshAllIAOManagers();
                 }
 
                 // check object insert
@@ -596,7 +592,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
                     SdrPageView*    pPageView = NULL;
                     ::sd::Window* pWindow = mpViewSh->GetActiveWindow();
                     Point           aPos( pWindow->PixelToLogic( rEvt.maPosPixel ) );
-                    const BOOL      bHasPickObj = PickObj( aPos, pPickObj, pPageView );
+                    const BOOL      bHasPickObj = PickObj( aPos, getHitTolLog(), pPickObj, pPageView );
                     BOOL            bIsPresTarget = FALSE;
 
                     if( bHasPickObj && pPickObj && ( pPickObj->IsEmptyPresObj() || pPickObj->GetUserCall() ) )
@@ -722,7 +718,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                 aPos = pTargetWindow->PixelToLogic( rEvt.maPosPixel );
 
             // handle insert?
-            if( !nRet && ( SDRDRAG_GRADIENT == GetDragMode() ) || ( SDRDRAG_TRANSPARENCE == GetDragMode() ) && aDataHelper.HasFormat( SOT_FORMATSTR_ID_XFA ) )
+            if( (!nRet && ( SDRDRAG_GRADIENT == GetDragMode() )) || (( SDRDRAG_TRANSPARENCE == GetDragMode() ) && aDataHelper.HasFormat( SOT_FORMATSTR_ID_XFA )) )
             {
                 const SdrHdlList& rHdlList = GetHdlList();
 
@@ -746,20 +742,6 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 nRet = nDropAction;
                             }
                         }
-
-                        //OLMconst B2dIAOGroup& rIAOGroup = pIAOHandle->GetIAOGroup();
-                        //OLMif( rIAOGroup.IsHit( rEvt.maPosPixel ) )
-                        //OLM{
-                        //OLM   SotStorageStreamRef xStm;
-                        //OLM   if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_XFA, xStm ) && xStm.Is() )
-                        //OLM    {
-                        //OLM        XFillExchangeData aFillData( XFillAttrSetItem( &pDoc->GetPool() ) );
-                        //OLM       *xStm >> aFillData;
-                        //OLM        const Color aColor( ( (XFillColorItem&) aFillData.GetXFillAttrSetItem()->GetItemSet().Get( XATTR_FILLCOLOR ) ).GetValue() );
-                        //OLM       static_cast< SdrHdlColor* >( pIAOHandle )->SetColor( aColor, TRUE );
-                        //OLM        nRet = nDropAction;
-                        //OLM    }
-                        //OLM}
                     }
                 }
             }
@@ -795,7 +777,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                         SdrObject*      pPickObj = NULL;
                         SdrPageView*    pPageView = NULL;
 
-                        if( PickObj( aPos, pPickObj, pPageView ) )
+                        if( PickObj( aPos, getHitTolLog(), pPickObj, pPageView ) )
                         {
                             // insert as clip action => jump
                             rtl::OUString       aBookmark( aINetBookmark.GetURL() );
@@ -839,7 +821,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 pAction->SetPlayFull(pInfo->mbPlayFull, pInfo->mbPlayFull);
                                 pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
                                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
-                                pAction->SetBookmark(pInfo->maBookmark, aBookmark);
+                                pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
 //                              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, TRUE);
                                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);
                                 pAction->SetSecondEffect(pInfo->meSecondEffect, pInfo->meSecondEffect);
@@ -851,7 +833,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 pAction->SetComment(aString);
                                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
                                 pInfo->meClickAction = eClickAction;
-                                pInfo->maBookmark = aBookmark;
+                                pInfo->SetBookmark( aBookmark );
                                 mpDoc->SetChanged();
 
                                 nRet = nDropAction;
@@ -978,7 +960,7 @@ BOOL View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT n
                     String          aTitle( SdResId( STR_TITLE_NAMEGROUP ) );
                     String          aDesc( SdResId( STR_DESC_NAMEGROUP ) );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    AbstractSvxNameDialog* pDlg = pFact ? pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), *pNewName, aDesc, RID_SVXDLG_NAME ) : 0;
+                    AbstractSvxNameDialog* pDlg = pFact ? pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), *pNewName, aDesc ) : 0;
                     if( pDlg )
                     {
                         pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drbezob.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,13 +35,11 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 
-#ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svdopath.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svdundo.hxx>
 #include <sfx2/dispatch.hxx>
 
@@ -79,8 +74,6 @@ namespace sd {
 |*
 \************************************************************************/
 
-
-SFX_DECL_TYPE(13);
 
 
 SFX_IMPL_INTERFACE(BezierObjectBar, ::SfxShell, SdResId(STR_BEZIEROBJECTBARSHELL))
@@ -307,11 +300,19 @@ void BezierObjectBar::Execute(SfxRequest& rReq)
                     case SID_BEZIER_CLOSE:
                     {
                         SdrPathObj* pPathObj = (SdrPathObj*) rMarkList.GetMark(0)->GetMarkedSdrObj();
-                        mpView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+                        const bool bUndo = mpView->IsUndoEnabled();
+                        if( bUndo )
+                            mpView->BegUndo(String(SdResId(STR_UNDO_BEZCLOSE)));
+
                         mpView->UnmarkAllPoints();
-                        mpView->AddUndo(mpView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPathObj));
+
+                        if( bUndo )
+                            mpView->AddUndo(mpView->GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pPathObj));
+
                         pPathObj->ToggleClosed();
-                        mpView->EndUndo();
+
+                        if( bUndo )
+                            mpView->EndUndo();
                         break;
                     }
                 }

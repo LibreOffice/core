@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: EventMultiplexer.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -268,7 +265,7 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     // Connect to the frame to listen for controllers being exchanged.
     // Listen to changes of certain properties.
     Reference<frame::XFrame> xFrame (
-        mrBase.GetFrame()->GetTopFrame()->GetFrameInterface(),
+        mrBase.GetFrame()->GetTopFrame().GetFrameInterface(),
         uno::UNO_QUERY);
     mxFrameWeak = xFrame;
     if (xFrame.is())
@@ -570,7 +567,12 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
     }
     else if (rEvent.PropertyName.equals(msEditModePropertyName))
     {
-        CallListeners(EventMultiplexerEvent::EID_EDIT_MODE);
+        bool bIsMasterPageMode (false);
+        rEvent.NewValue >>= bIsMasterPageMode;
+        if (bIsMasterPageMode)
+            CallListeners(EventMultiplexerEvent::EID_EDIT_MODE_MASTER);
+        else
+            CallListeners(EventMultiplexerEvent::EID_EDIT_MODE_NORMAL);
     }
 }
 
@@ -783,8 +785,9 @@ void EventMultiplexer::Implementation::CallListeners (
 
 void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEvent)
 {
-    ListenerList::const_iterator iListener (maListeners.begin());
-    ListenerList::const_iterator iListenerEnd (maListeners.end());
+    ListenerList aCopyListeners( maListeners );
+    ListenerList::iterator iListener (aCopyListeners.begin());
+    ListenerList::const_iterator iListenerEnd (aCopyListeners.end());
     for (; iListener!=iListenerEnd; ++iListener)
     {
         if ((iListener->second && rEvent.meEventId) != 0)

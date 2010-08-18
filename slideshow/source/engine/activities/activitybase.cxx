@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: activitybase.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -162,7 +159,7 @@ namespace slideshow
             // ================================
 
             // clamp nT to permissible [0,1] range
-            nT = ::canvas::tools::clamp( nT, 0.0, 1.0 );
+            nT = ::basegfx::clamp( nT, 0.0, 1.0 );
 
             // take acceleration/deceleration into account. if the sum
             // of mnAccelerationFraction and mnDecelerationFraction

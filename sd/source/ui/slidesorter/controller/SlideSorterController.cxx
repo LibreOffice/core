@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SlideSorterController.cxx,v $
- * $Revision: 1.45 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +82,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/topfrm.hxx>
 #include <tools/link.hxx>
 #include <vcl/svapp.hxx>
 
@@ -214,14 +210,6 @@ SlideSorterController::~SlideSorterController (void)
 
 
 
-SlideSorter& SlideSorterController::GetSlideSorter (void) const
-{
-    return mrSlideSorter;
-}
-
-
-
-
 model::SharedPageDescriptor SlideSorterController::GetPageAt (
     const Point& aPixelPosition)
 {
@@ -232,23 +220,6 @@ model::SharedPageDescriptor SlideSorterController::GetPageAt (
 
     return pDescriptorAtPoint;
 }
-
-
-
-
-model::SharedPageDescriptor SlideSorterController::GetFadePageAt (
-    const Point& aPixelPosition)
-{
-    sal_Int32 nHitPageIndex (mrView.GetFadePageIndexAtPoint(aPixelPosition));
-    model::SharedPageDescriptor pDescriptorAtPoint;
-    if (nHitPageIndex >= 0)
-        pDescriptorAtPoint = mrModel.GetPageDescriptor(nHitPageIndex);
-
-    return pDescriptorAtPoint;
-}
-
-
-
 
 PageSelector& SlideSorterController::GetPageSelector (void)
 {
@@ -431,7 +402,7 @@ bool SlideSorterController::Command (
                 // would take place.
                 mrView.GetOverlay().GetInsertionIndicatorOverlay().SetPosition(
                     pWindow->PixelToLogic(rEvent.GetMousePosPixel()));
-                mrView.GetOverlay().GetInsertionIndicatorOverlay().Show();
+                mrView.GetOverlay().GetInsertionIndicatorOverlay().setVisible(true);
             }
 
             pWindow->ReleaseMouse();
@@ -477,7 +448,7 @@ bool SlideSorterController::Command (
                 // finds the right place to insert a new slide.
                 GetSelectionManager()->SetInsertionPosition(
                     mrView.GetOverlay().GetInsertionIndicatorOverlay().GetInsertionPageIndex());
-                mrView.GetOverlay().GetInsertionIndicatorOverlay().Hide();
+                mrView.GetOverlay().GetInsertionIndicatorOverlay().setVisible(false);
             }
             bEventHasBeenHandled = true;
         }
@@ -603,11 +574,8 @@ IMPL_LINK(SlideSorterController, WindowEventHandler, VclWindowEvent*, pEvent)
                 break;
 
             case VCLEVENT_WINDOW_GETFOCUS:
-                // Show focus but only when the focus was not set to the
-                // window as a result of a mouse click.
                 if (pActiveWindow != NULL && pWindow == pActiveWindow)
-                    if (pWindow->GetPointerState().mnState==0)
-                        GetFocusManager().ShowFocus();
+                    GetFocusManager().ShowFocus(false);
                 break;
 
             case VCLEVENT_WINDOW_LOSEFOCUS:
@@ -655,7 +623,7 @@ void SlideSorterController::GetCtrlState (SfxItemSet& rSet)
         SfxViewFrame* pSlideViewFrame = SfxViewFrame::Current();
         DBG_ASSERT(pSlideViewFrame!=NULL,
             "SlideSorterController::GetCtrlState: ViewFrame not found");
-        if (pSlideViewFrame && pSlideViewFrame->ISA(SfxTopViewFrame))
+        if (pSlideViewFrame)
         {
             pSlideViewFrame->GetSlotState (SID_RELOAD, NULL, &rSet);
         }
@@ -802,50 +770,6 @@ Rectangle  SlideSorterController::Rearrange (bool bForce)
     }
 
     return aNewContentArea;
-}
-
-
-
-
-void SlideSorterController::SetZoom (long int nZoom)
-{
-    ::sd::Window* pWindow = mrSlideSorter.GetActiveWindow();
-    long int nCurrentZoom ((long int)(
-        pWindow->GetMapMode().GetScaleX().operator double() * 100));
-
-    if (nZoom > nCurrentZoom)
-    {
-        Size aPageSize (mrView.GetPageBoundingBox(
-            0,
-            view::SlideSorterView::CS_MODEL,
-            view::SlideSorterView::BBT_SHAPE).GetSize());
-        Size aWindowSize (pWindow->PixelToLogic(
-            pWindow->GetOutputSizePixel()));
-
-        // The zoom factor must not grow by more then the ratio of the
-        // widths of the output window and the page objects.
-        long nMaxFactor
-            = nCurrentZoom * aWindowSize.Width() / aPageSize.Width();
-        // Apply rounding, so that a current zoom factor of 1 is still
-        // increased.
-        nMaxFactor = (nCurrentZoom * 18 + 5) / 10;
-        nZoom = Min(nMaxFactor, nZoom);
-    }
-    if (nZoom < 1)
-        nZoom = 1;
-
-    mrView.LockRedraw (TRUE);
-    mrView.GetLayouter().SetZoom(nZoom/100.0, pWindow);
-    mrView.Layout();
-    GetScrollBarManager().UpdateScrollBars (false);
-    mrView.GetPreviewCache()->InvalidateCache();
-    mrView.RequestRepaint();
-    mrView.LockRedraw (FALSE);
-
-    /*
-        ViewShell::SetZoom (nZoom);
-        GetViewFrame()->GetBindings().Invalidate (SID_ATTR_ZOOM);
-    */
 }
 
 

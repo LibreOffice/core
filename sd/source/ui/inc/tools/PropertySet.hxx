@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PropertySet.hxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,13 +61,6 @@ public:
     virtual ~PropertySet (void);
 
     virtual void SAL_CALL disposing (void);
-
-
-    /** Create an UnknownPropertyException, but do not yet throw it.  This
-        method fills in the fields of the exception.
-    */
-    css::beans::UnknownPropertyException CreateUnknownPropertyException (
-        const rtl::OUString& rsPropertyName);
 
     // XPropertySet
 

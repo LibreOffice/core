@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewShellImplementation.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,9 +124,7 @@ public:
         @param pPage
             If a NULL pointer is given then this call is ignored.
     */
-    void AssignLayout (
-        SdPage* pPage,
-        AutoLayout aLayout);
+    void AssignLayout ( SfxRequest& rRequest, PageKind ePageKind );
 
     /** Determine the view id of the view shell.  This corresponds to the
         view id stored in the SfxViewFrame class.

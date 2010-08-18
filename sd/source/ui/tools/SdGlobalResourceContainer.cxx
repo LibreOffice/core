@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SdGlobalResourceContainer.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -152,31 +149,6 @@ void SdGlobalResourceContainer::AddResource (const Reference<XInterface>& rxReso
             "SdGlobalResourceContainer:AddResource(): Resource added twice.");
     }
 }
-
-
-
-
-::std::auto_ptr<SdGlobalResource> SdGlobalResourceContainer::ReleaseResource (
-    SdGlobalResource* pResource)
-{
-    ::std::auto_ptr<SdGlobalResource> pResult (NULL);
-
-    ::osl::MutexGuard aGuard (mpImpl->maMutex);
-
-    Implementation::ResourceList::iterator iResource;
-    iResource = ::std::find (
-        mpImpl->maResources.begin(),
-        mpImpl->maResources.end(),
-        pResource);
-    if (iResource != mpImpl->maResources.end())
-    {
-        pResult.reset (*iResource);
-        mpImpl->maResources.erase(iResource);
-    }
-
-    return pResult;
-}
-
 
 
 
