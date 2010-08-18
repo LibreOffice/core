@@ -1237,7 +1237,7 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
             std::vector< char > buffer( 0x10000, 0 );
             for( int nCurJob = 0; nCurJob < nJobs; nCurJob++ )
             {
-                FILE* fp = PrinterInfoManager::get().startSpool( i_pSetupData->maPrinterName, i_rController.isDirectPrint() );
+                FILE* fp = PrinterInfoManager::get().startSpool( pPrinter->GetName(), i_rController.isDirectPrint() );
                 if( fp )
                 {
                     sal_uInt64 nBytesRead = 0;
@@ -1247,7 +1247,7 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
                         if( nBytesRead > 0 )
                             fwrite( &buffer[0], 1, nBytesRead, fp );
                     } while( nBytesRead == buffer.size() );
-                    PrinterInfoManager::get().endSpool( i_pSetupData->maPrinterName, i_rJobName, fp, m_aJobData );
+                    PrinterInfoManager::get().endSpool( pPrinter->GetName(), i_rJobName, fp, m_aJobData );
                 }
             }
             osl_closeFile( pFile );
