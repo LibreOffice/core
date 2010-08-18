@@ -1,5 +1,4 @@
 er	extras	:	solenv NULL
-er	extras									usr30073	-	none	NULL
 er	extras									usr1	-	all	er_mkout NULL
 er	extras\source\autotext					nmake	-	all	er_atxt NULL
 er	extras\source\autotext\lang				nmake	-	all	er_atxtl NULL

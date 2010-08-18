@@ -88,10 +88,6 @@
  <draw:color draw:name="Dark violet" draw:color="#660066"/>
  <draw:color draw:name="Salmon" draw:color="#ff8080"/>
  <draw:color draw:name="Sea blue" draw:color="#0066cc"/>
- <draw:color draw:name="Sun 1" draw:color="#333366"/>
- <draw:color draw:name="Sun 2" draw:color="#666699"/>
- <draw:color draw:name="Sun 3" draw:color="#9999cc"/>
- <draw:color draw:name="Sun 4" draw:color="#ccccff"/>
  <draw:color draw:name="Chart 1" draw:color="#004586"/>
  <draw:color draw:name="Chart 2" draw:color="#ff420e"/>
  <draw:color draw:name="Chart 3" draw:color="#ffd320"/>
