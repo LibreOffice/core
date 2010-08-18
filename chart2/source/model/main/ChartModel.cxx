@@ -1300,7 +1300,8 @@ Reference< util::XNumberFormatsSupplier > ChartModel::impl_getNumberFormatsSuppl
         if( !m_xOwnNumberFormatsSupplier.is() )
         {
             Reference< lang::XMultiServiceFactory > xFactory( m_xContext->getServiceManager(), uno::UNO_QUERY );
-            m_xOwnNumberFormatsSupplier = new SvNumberFormatsSupplierObj( new SvNumberFormatter( xFactory, LANGUAGE_SYSTEM ) );
+            m_apSvNumberFormatter.reset( new SvNumberFormatter( xFactory, LANGUAGE_SYSTEM ) );
+            m_xOwnNumberFormatsSupplier = new SvNumberFormatsSupplierObj( m_apSvNumberFormatter.get() );
             //pOwnNumberFormatter->ChangeStandardPrec( 15 ); todo?
         }
         m_xNumberFormatsSupplier = m_xOwnNumberFormatsSupplier;
