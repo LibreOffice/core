@@ -1,0 +1,30 @@
+--- misc/raptor-1.4.18/configure	2008-06-15 17:25:55.000000000 +0900
++++ misc/build/raptor-1.4.18/configure	2009-06-04 21:10:22.447125000 +0900
+@@ -25238,6 +25238,12 @@
+ rdfa_parser=yes
+ 
+ rdf_parsers_available="rdfxml ntriples turtle trig guess rss-tag-soup rdfa"
++case $host_os in
++mingw*)
++  rdfa_parser=no
++  rdf_parsers_available="rdfxml ntriples turtle trig guess rss-tag-soup"
++  ;;
++esac
+ if test "$USE_MAINTAINER_MODE" = yes; then
+   rdf_parsers_available="$rdf_parsers_available n3"
+ fi
+--- misc/raptor-1.4.18/configure.ac	2008-06-15 17:25:20.000000000 +0900
++++ misc/build/raptor-1.4.18/configure.ac	2009-06-04 21:10:31.025250000 +0900
+@@ -758,6 +758,12 @@
+ rdfa_parser=yes
+ 
+ rdf_parsers_available="rdfxml ntriples turtle trig guess rss-tag-soup rdfa"
++case $host_os in
++mingw*)
++  rdfa_parser=no
++  rdf_parsers_available="rdfxml ntriples turtle trig guess rss-tag-soup"
++  ;;
++esac
+ if test "$USE_MAINTAINER_MODE" = yes; then
+   rdf_parsers_available="$rdf_parsers_available n3"
+ fi

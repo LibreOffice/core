@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,6 +37,7 @@ TARGET=lpsolve
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=lp_solve_5.5
+TARFILE_MD5=26b3e95ddf3d9c077c480ea45874b3b8
 
 .IF "$(GUI)"=="WNT"
 PATCH_FILES=lp_solve_5.5-windows.patch
@@ -56,7 +53,13 @@ CONFIGURE_FLAGS=
 BUILD_DIR=lpsolve55
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-BUILD_ACTION=cmd /c cgcc.bat
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+lpsolve_LDFLAGS=-shared-libgcc
+.ENDIF
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+lpsolve_LIBS=-lstdc++_s
+.ENDIF
+BUILD_ACTION=lpsolve_LDFLAGS=$(lpsolve_LDFLAGS) lpsolve_LIBS=$(lpsolve_LIBS) cmd /c cgcc.bat
 .ELSE
 BUILD_ACTION=cmd /c cvc6.bat
 OUT2LIB=$(BUILD_DIR)$/lpsolve55.lib
@@ -67,6 +70,7 @@ BUILD_ACTION=sh ccc.os2
 OUT2LIB=$(BUILD_DIR)$/liblpsolve55.lib
 .ELSE
 .IF "$(OS)"=="MACOSX"
+.EXPORT: EXTRA_CDEFS EXTRA_LINKFLAGS
 BUILD_ACTION=sh ccc.osx
 OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dylib
 .ELSE

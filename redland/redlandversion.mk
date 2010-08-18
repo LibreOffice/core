@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: redlandversion.mk,v $
-#
-# $Revision: 1.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -30,8 +26,7 @@
 #*************************************************************************
 
 RAPTOR_MAJOR=1
-# rasqal has no stable abi
-RASQAL_MAJOR=0
+RASQAL_MAJOR=1
 # redland has no stable abi
 REDLAND_MAJOR=0
 

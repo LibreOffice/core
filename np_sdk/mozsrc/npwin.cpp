@@ -45,6 +45,12 @@
 //\\// DEFINE
 #define NP_EXPORT
 
+#ifdef OS2
+#define WINAPI _System
+#define HIBYTE(a) (a>>8)
+#define LOBYTE(a) (a&0xFF)
+#endif
+
 //\\// GLOBAL DATA
 NPNetscapeFuncs* g_pNavigatorFuncs = 0;
 

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,12 +37,8 @@ TARGET=icc
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=SampleICC-1.3.2
-#checking for endianess
-.IF "$(CPU)"=="I"
+TARFILE_MD5=fdb27bfe2dbe2e7b57ae194d9bf36bab
 PATCH_FILES=$(TARFILE_NAME).patch
-.ELSE
-PATCH_FILES=$(TARFILE_NAME)-bendian.patch
-.ENDIF
 
 CONVERTFILES= \
     IccProfLib$/IccTagProfSeqId.h \
@@ -54,7 +46,7 @@ CONVERTFILES= \
     Contrib$/ICC_utils$/Stubs.h \
     Contrib$/ICC_utils$/Vetters.cpp
 
-CONFIGURE_ACTION= $(GNUCOPY) -r $(BACK_PATH)..$/source$/create_sRGB_profile Contrib$/CmdLine && unzip $(BACK_PATH)..$/makefiles.zip
+CONFIGURE_ACTION= $(GNUCOPY) -r $(BACK_PATH)..$/source$/create_sRGB_profile Contrib$/CmdLine && unzip -o $(BACK_PATH)..$/makefiles.zip
 BUILD_ACTION=dmake &&  cd Contrib$/CmdLine$/create_sRGB_profile && $(AUGMENT_LIBRARY_PATH) .$/create_sRGB_profile
 
 # --- Targets ------------------------------------------------------

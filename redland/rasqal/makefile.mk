@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,23 +44,40 @@ all:
 
 .INCLUDE :	../redlandversion.mk
 
-RASQALVERSION=0.9.15
+RASQALVERSION=0.9.16
 
 TARFILE_NAME=rasqal-$(RASQALVERSION)
-PATCH_FILES=..$/$(TARFILE_NAME).patch
+TARFILE_MD5=fca8706f2c4619e2fa3f8f42f8fc1e9d
 
 ADDITIONAL_FILES=src/makefile.mk src/rasqal_config.h
 
+OOO_PATCH_FILES= \
+    $(TARFILE_NAME).patch.legal \
+    $(TARFILE_NAME).patch.autotools \
+    $(TARFILE_NAME).patch.ooo_build \
+    $(TARFILE_NAME).patch.dmake \
+    $(TARFILE_NAME).patch.win32
+
+PATCH_FILES=$(OOO_PATCH_FILES)
+
+
 .IF "$(OS)"=="OS2"
-# there is no wntmsci build environment in the tarball; we use custom dmakefile
 BUILD_ACTION=dmake
 BUILD_DIR=$(CONFIGURE_DIR)$/src
-
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
+rasqal_CC=$(CC) -mthreads
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+rasqal_CC+=-shared-libgcc
+.ENDIF
+rasqal_LIBS=
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+rasqal_LIBS+=-lstdc++_s
+.ENDIF
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --disable-pcre --with-decimal=none --with-www=xml --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CFLAGS=-D_MT CPPFLAGS="-nostdinc $(INCLUDE)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc,--export-all-symbols -L$(ILIB:s/;/ -L/)" LIBS=-lmingwthrd OBJDUMP="$(WRAPCMD) objdump" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) XSLTLIB="$(XSLTLIB)"
+CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore --disable-pcre --with-decimal=none --with-www=xml --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(rasqal_CC)" CPPFLAGS="-nostdinc $(INCLUDE)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2,--export-all-symbols -L$(ILIB:s/;/ -L/)" LIBS="$(rasqal_LIBS)" OBJDUMP="$(WRAPCMD) objdump" LIBXML2LIB=$(LIBXML2LIB) XSLTLIB="$(XSLTLIB)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -98,13 +111,14 @@ LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 .ENDIF
 .ENDIF			# "$(SYSBASE)"!=""
 
-CPPFLAGS+:=$(EXTRA_CFLAGS)
+CPPFLAGS+:=$(EXTRA_CDEFS) $(EXTRA_CFLAGS)
 LDFLAGS+:=$(EXTRA_LINKFLAGS)
+XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 
 .EXPORT: CPPFLAGS
 .EXPORT: LDFLAGS
 .EXPORT: LIBXML2LIB
-.EXPORT: ZLIB3RDLIB
+.EXPORT: XSLTLIB
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
@@ -120,7 +134,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 OUT2INC+=src$/rasqal.h
 
 .IF "$(OS)"=="MACOSX"
-OUT2LIB+=src$/.libs$/librasqal.0.dylib src$/.libs$/librasqal.dylib
+OUT2LIB+=src$/.libs$/librasqal.$(RASQAL_MAJOR).dylib src$/.libs$/librasqal.dylib
 OUT2BIN+=src/rasqal-config
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
@@ -130,12 +144,10 @@ OUT2BIN+=src/rasqal-config
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
-
 .ELIF "$(OS)"=="OS2"
 # if we use dmake, this is done automagically
-
 .ELSE
-OUT2LIB+=src$/.libs$/librasqal.so.0 src$/.libs$/librasqal.so
+OUT2LIB+=src$/.libs$/librasqal.so.$(RASQAL_MAJOR) src$/.libs$/librasqal.so
 OUT2BIN+=src/rasqal-config
 .ENDIF
 

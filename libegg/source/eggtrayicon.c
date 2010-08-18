@@ -76,6 +76,14 @@ static void egg_tray_icon_update_manager_window    (EggTrayIcon *icon,
 static void egg_tray_icon_manager_window_destroyed (EggTrayIcon *icon);
 #endif
 
+/*
+ * This is made somewhat more 'interesting' by the facts that:
+ * a) GTypePlugin is a foul & tangled mess
+ * b) We may have been unloaded, and left an invalid
+ *    EggTrayIcon class lying around in the GType database,
+ *    we could use GTypePlugin to fix this, but see a) -
+ *    this is far easier and simpler.
+ */
 GType
 egg_tray_icon_get_type (void)
 {
@@ -88,17 +96,22 @@ egg_tray_icon_get_type (void)
     sizeof (EggTrayIconClass),
     (GBaseInitFunc) NULL,
     (GBaseFinalizeFunc) NULL,
-    (GClassInitFunc) egg_tray_icon_class_init,
+    (GClassInitFunc) NULL, /* class_init */
     NULL, /* class_finalize */
     NULL, /* class_data */
     sizeof (EggTrayIcon),
     0,    /* n_preallocs */
-    (GInstanceInitFunc) egg_tray_icon_init,
+    (GInstanceInitFunc) NULL, /* instance_init */
     NULL
       };
 
-      our_type = g_type_register_static (GTK_TYPE_PLUG, "EggTrayIcon", &our_info, 0);
+      our_type = g_type_from_name ("EggTrayIcon");
+      if (!our_type)
+     our_type = g_type_register_static (GTK_TYPE_PLUG, "EggTrayIcon", &our_info, 0);
     }
+
+  /* always overwrite the function pointers */
+  egg_tray_icon_class_init (g_type_class_ref (our_type));
 
   return our_type;
 }
@@ -128,22 +141,15 @@ egg_tray_icon_class_init (EggTrayIconClass *klass)
 
   container_class->add = egg_tray_icon_add;
 
-  g_object_class_install_property (gobject_class,
-                   PROP_ORIENTATION,
-                   g_param_spec_enum ("orientation",
-                              _("Orientation"),
-                              _("The orientation of the tray."),
-                              GTK_TYPE_ORIENTATION,
-                              GTK_ORIENTATION_HORIZONTAL,
-                              G_PARAM_READABLE));
-
-#if defined (GDK_WINDOWING_X11)
-  /* Nothing */
-#elif defined (GDK_WINDOWING_WIN32)
-  g_warning ("Port eggtrayicon to Win32");
-#else
-  g_warning ("Port eggtrayicon to this GTK+ backend");
-#endif
+  if (!g_object_class_find_property (gobject_class, "orientation"))
+    g_object_class_install_property (gobject_class,
+                     PROP_ORIENTATION,
+                     g_param_spec_enum ("orientation",
+                            "Orientation",
+                            "The orientation of the tray.",
+                            GTK_TYPE_ORIENTATION,
+                            GTK_ORIENTATION_HORIZONTAL,
+                            G_PARAM_READABLE));
 }
 
 static void
@@ -471,7 +477,9 @@ egg_tray_icon_new_for_screen (GdkScreen *screen, const char *name)
 EggTrayIcon*
 egg_tray_icon_new (const gchar *name)
 {
-  return g_object_new (EGG_TYPE_TRAY_ICON, "title", name, NULL);
+  EggTrayIcon *icon = g_object_new (EGG_TYPE_TRAY_ICON, "title", name, NULL);
+  egg_tray_icon_init (icon);
+  return icon;
 }
 
 guint

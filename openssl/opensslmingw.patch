@@ -1,5 +1,5 @@
---- misc/openssl-0.9.8k/Makefile.shared	2008-09-17 17:56:40.000000000 +0200
-+++ misc/build/openssl-0.9.8k/Makefile.shared	2009-03-30 11:52:53.684538000 +0200
+--- misc/openssl-0.9.8o/Makefile.shared	2008-09-17 17:56:40.000000000 +0200
++++ misc/build/openssl-0.9.8o/Makefile.shared	2009-03-30 11:52:53.684538000 +0200
 @@ -254,13 +254,17 @@
  	base=-Wl,--enable-auto-image-base; \
  	if expr $(PLATFORM) : 'mingw' > /dev/null; then \
@@ -21,26 +21,20 @@
  	[ -f apps/$$SHLIB$$SHLIB_SUFFIX ] && rm apps/$$SHLIB$$SHLIB_SUFFIX; \
  	[ -f test/$$SHLIB$$SHLIB_SUFFIX ] && rm test/$$SHLIB$$SHLIB_SUFFIX; \
  	$(LINK_SO_A) || exit 1; \
---- misc/openssl-0.9.8k/apps/Makefile	2008-11-20 01:03:48.000000000 +0900
-+++ misc/build/openssl-0.9.8k/apps/Makefile	2009-04-10 19:49:37.006875000 +0900
-@@ -153,12 +153,12 @@
- 	shlib_target=; if [ -n "$(SHARED_LIBS)" ]; then \
- 		shlib_target="$(SHLIB_TARGET)"; \
- 	elif [ -n "$(FIPSCANLIB)" ]; then \
--	  FIPSLD_CC=$(CC); CC=$(TOP)/fips/fipsld; export CC FIPSLD_CC; \
-+	  FIPSLD_CC="$(CC)"; CC=$(TOP)/fips/fipsld; export CC FIPSLD_CC; \
- 	fi; \
- 	LIBRARIES="$(LIBSSL) $(LIBKRB5) $(LIBCRYPTO)" ; \
- 	[ "x$(FIPSCANLIB)" = "xlibfips" ] && LIBRARIES="$$LIBRARIES -lfips"; \
- 	$(MAKE) -f $(TOP)/Makefile.shared -e \
--		CC=$${CC} APPNAME=$(EXE) OBJECTS="$(PROGRAM).o $(E_OBJ)" \
-+		CC="$${CC}" APPNAME=$(EXE) OBJECTS="$(PROGRAM).o $(E_OBJ)" \
- 		LIBDEPS="$(PEX_LIBS) $$LIBRARIES $(EX_LIBS)" \
- 		link_app.$${shlib_target}
- 	-(cd ..; \
---- misc/openssl-0.9.8k/ms/mingw32.bat	2006-05-05 15:19:32.000000000 +0200
-+++ misc/build/openssl-0.9.8k/ms/mingw32.bat	2009-03-30 11:54:10.000000000 +0200
-@@ -79,13 +79,19 @@
+--- misc/openssl-0.9.8o/e_os2.h	2005-12-19 03:57:07.000000000 +0900
++++ misc/build/openssl-0.9.8o/e_os2.h	2009-04-04 23:07:15.324250000 +0900
+@@ -264,7 +264,7 @@
+ # define OPENSSL_IMPLEMENT_GLOBAL(type,name)			     \
+ 	extern type _hide_##name;				     \
+ 	type *_shadow_##name(void) { return &_hide_##name; }	     \
+-	static type _hide_##name
++	type _hide_##name
+ # define OPENSSL_DECLARE_GLOBAL(type,name) type *_shadow_##name(void)
+ # define OPENSSL_GLOBAL_REF(name) (*(_shadow_##name()))
+ #else
+--- misc/openssl-0.9.8o/ms/mingw32.bat	2006-05-05 15:19:32.000000000 +0200
++++ misc/build/openssl-0.9.8o/ms/mingw32.bat	2009-03-30 11:54:10.000000000 +0200
+@@ -79,15 +79,41 @@
  rem copy ms\tlhelp32.h outinc
  
  echo Building the libraries
@@ -56,47 +50,37 @@
  if errorlevel 1 goto end
 -dllwrap --dllname libssl32.dll --output-lib out/libssl32.a --def ms/ssleay32.def out/libssl.a out/libeay32.a
 +gcc --shared --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32
-+if errorlevel 1 goto end
+ if errorlevel 1 goto end
 +dlltool --dllname ssleay32.dll --output-lib out/libssl.a --input-def ms/ssleay32.def
 +if errorlevel 1 goto end
-+gcc --shared --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto
- if errorlevel 1 goto end
++if "%MINGW_SHARED_GXXLIB%"=="YES" goto shared_gxxlib
++if "%MINGW_SHARED_GCCLIB%"=="YES" goto shared_gcclib
++gcc --shared --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 
++if errorlevel 1 goto end
++gcc --shared --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto 
++if errorlevel 1 goto end
++goto finished
++
++:shared_gcclib
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 
++if errorlevel 1 goto end
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto 
++if errorlevel 1 goto end
++goto finished
++
++:shared_gxxlib
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/libeay32.map ms/libeay32.def -o out/libeay32.dll out/libcrypto_static.a -lwsock32 -lgdi32 -lstdc++_s 
++if errorlevel 1 goto end
++gcc --shared -shared-libgcc --enable-pseudo-reloc -Wl,-Map,out/ssleay32.map -Lout ms/ssleay32.def -o out/ssleay32.dll out/libssl_static.a -lcrypto -lstdc++_s
++if errorlevel 1 goto end
++goto finished
  
++:finished
  echo Done compiling OpenSSL
---- misc/openssl-0.9.8k/test/Makefile	2009-03-25 19:59:22.000000000 +0900
-+++ misc/build/openssl-0.9.8k/test/Makefile	2009-04-10 20:07:21.522500000 +0900
-@@ -402,13 +402,13 @@
- 	if [ "$(FIPSCANLIB)" = "libfips" ]; then \
- 		LIBRARIES="-L$(TOP) -lfips"; \
- 	elif [ -n "$(FIPSCANLIB)" ]; then \
--		FIPSLD_CC=$(CC); CC=$(TOP)/fips/fipsld; export CC FIPSLD_CC; \
-+		FIPSLD_CC="$(CC)"; CC=$(TOP)/fips/fipsld; export CC FIPSLD_CC; \
- 		LIBRARIES="$${FIPSLIBDIR:-$(TOP)/fips/}fipscanister.o"; \
- 	else \
- 		LIBRARIES="$(LIBCRYPTO)"; \
- 	fi; \
- 	$(MAKE) -f $(TOP)/Makefile.shared -e \
--		CC=$${CC} APPNAME=$$target$(EXE_EXT) OBJECTS="$$target.o" \
-+		CC="$${CC}" APPNAME=$$target$(EXE_EXT) OBJECTS="$$target.o" \
- 		LIBDEPS="$(PEX_LIBS) $$LIBRARIES $(EX_LIBS)" \
- 		link_app.$${shlib_target}
  
-@@ -417,11 +417,11 @@
- 	fi; \
- 	LIBRARIES="$(LIBSSL) $(LIBCRYPTO) $(LIBKRB5)"; \
- 	if [ -z "$(SHARED_LIBS)" -a -n "$(FIPSCANLIB)" ] ; then \
--		FIPSLD_CC=$(CC); CC=$(TOP)/fips/fipsld; export CC FIPSLD_CC; \
-+		FIPSLD_CC="$(CC)"; CC=$(TOP)/fips/fipsld; export CC FIPSLD_CC; \
- 	fi; \
- 	[ "$(FIPSCANLIB)" = "libfips" ] && LIBRARIES="$$LIBRARIES -lfips"; \
- 	$(MAKE) -f $(TOP)/Makefile.shared -e \
--		CC=$${CC} APPNAME=$$target$(EXE_EXT) OBJECTS="$$target.o" \
-+		CC="$${CC}" APPNAME=$$target$(EXE_EXT) OBJECTS="$$target.o" \
- 		LIBDEPS="$(PEX_LIBS) $$LIBRARIES $(EX_LIBS)" \
- 		link_app.$${shlib_target}
- 
---- misc/openssl-0.9.8k/util/pl/Mingw32.pl	2006-05-05 15:19:34.000000000 +0200
-+++ misc/build/openssl-0.9.8k/util/pl/Mingw32.pl	2009-03-30 11:55:04.000000000 +0200
+ :end
+--- misc/openssl-0.9.8o/util/pl/Mingw32.pl	2006-05-05 15:19:34.000000000 +0200
++++ misc/build/openssl-0.9.8o/util/pl/Mingw32.pl	2009-03-30 11:55:04.000000000 +0200
 @@ -6,11 +6,11 @@
  $o='/';
  $cp='cp';

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.3.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,6 +49,7 @@ LUCENE_CORE_JAR=lucene-core-$(LUCENE_MAJOR).$(LUCENE_MINOR).jar
 LUCENE_ANALYZERS_JAR=lucene-analyzers-$(LUCENE_MAJOR).$(LUCENE_MINOR).jar
 
 TARFILE_NAME=$(LUCENE_NAME)
+TARFILE_MD5=48d8169acc35f97e05d8dcdfd45be7f2
 PATCH_FILES=lucene.patch
 
 BUILD_DIR=.

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -51,6 +47,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=vigra1.4.0
+TARFILE_MD5=ea91f2fb4212a21d708aced277e6e85a
 PATCH_FILES=$(TARFILE_NAME).patch
 
 CONFIGURE_DIR=

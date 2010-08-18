@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -48,23 +44,40 @@ all:
 
 .INCLUDE :	../redlandversion.mk
 
-REDLANDVERSION=1.0.7
+REDLANDVERSION=1.0.8
 
 TARFILE_NAME=redland-$(REDLANDVERSION)
-PATCH_FILES=..$/$(TARFILE_NAME).patch
+TARFILE_MD5=ca66e26082cab8bb817185a116db809b
 
 ADDITIONAL_FILES=librdf/makefile.mk librdf/rdf_config.h
 
+OOO_PATCH_FILES= \
+    $(TARFILE_NAME).patch.legal \
+    $(TARFILE_NAME).patch.autotools \
+    $(TARFILE_NAME).patch.dmake \
+    $(TARFILE_NAME).patch.ooo_build \
+    $(TARFILE_NAME).patch.win32
+
+PATCH_FILES=$(OOO_PATCH_FILES) \
+
+
 .IF "$(OS)"=="OS2"
-# there is no wntmsci build environment in the tarball; we use custom dmakefile
 BUILD_ACTION=dmake
 BUILD_DIR=$(CONFIGURE_DIR)$/librdf
-
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
+redland_CC=$(CC) -mthreads
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+redland_CC+=-shared-libgcc
+.ENDIF
+redland_LIBS=
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+redland_LIBS+=-lstdc++_s
+.ENDIF
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure PATH="..$/..$/..$/bin:$$PATH"
-CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore       --with-regex-library=posix --with-decimal=none --with-www=xml --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CFLAGS=-D_MT CPPFLAGS="-nostdinc $(INCLUDE)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc,--export-all-symbols -L$(ILIB:s/;/ -L/)" LIBS=-lmingwthrd OBJDUMP="$(WRAPCMD) objdump" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) XSLTLIB="$(XSLTLIB)"
+CONFIGURE_FLAGS=--disable-static --disable-gtk-doc --with-openssl-digests --with-xml-parser=libxml --with-raptor=system --with-rasqual=system --without-bdb --without-sqlite --without-mysql --without-postgresql --without-threestore --with-regex-library=posix --with-decimal=none --with-www=xml --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(redland_CC)" CPPFLAGS="-nostdinc $(INCLUDE)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2,--export-all-symbols -L$(ILIB:s/;/ -L/)" LIBS="$(redland_LIBS)" OBJDUMP="$(WRAPCMD) objdump" LIBXML2LIB=$(LIBXML2LIB) XSLTLIB="$(XSLTLIB)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -88,8 +101,8 @@ CFLAGS=-m64
 .ENDIF
 
 # NB: SOLARDIR before SYSBASE, because linux SYSBASE contains obsolete libcrypto
-CPPFLAGS+:=-I$(SOLARINCDIR)$/external
-LDFLAGS+:=-L$(SOLARLIBDIR)
+CPPFLAGS+:=-I$(PWD)$/$(INCCOM) -I$(SOLARINCDIR)$/external
+LDFLAGS+:=-L$(PWD)$/$(LB) -L$(SOLARLIBDIR)
 
 .IF "$(SYSBASE)"!=""
 CPPFLAGS+:=-I$(SYSBASE)$/usr$/include
@@ -102,14 +115,13 @@ LDFLAGS+:=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -lpthread -ldl
 LDFLAGS+:=-Wl,-dylib_file,@loader_path/libraptor.1.dylib:$(PWD)/$(LB)/libraptor.1.dylib
 .ENDIF
 
-CPPFLAGS+:=$(EXTRA_CFLAGS)
+CPPFLAGS+:=$(EXTRA_CDEFS) $(EXTRA_CFLAGS)
 LDFLAGS+:=$(EXTRA_LINKFLAGS)
-XSLTLIB!:=$(XSLTLIB) # expand variable for (internal) xslt-config
+XSLTLIB!:=$(XSLTLIB) # expand dmake variables for xslt-config
 
 .EXPORT: CPPFLAGS
 .EXPORT: LDFLAGS
 .EXPORT: LIBXML2LIB
-.EXPORT: ZLIB3RDLIB
 .EXPORT: XSLTLIB
 
 CONFIGURE_DIR=
@@ -126,7 +138,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 OUT2INC+=librdf$/*.h
 
 .IF "$(OS)"=="MACOSX"
-OUT2LIB+=librdf$/.libs$/librdf.0.dylib
+OUT2LIB+=librdf$/.libs$/librdf.$(REDLAND_MAJOR).dylib
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2LIB+=librdf$/.libs$/*.a
@@ -134,12 +146,10 @@ OUT2BIN+=librdf$/.libs$/*.dll
 .ELSE
 # if we use dmake, this is done automagically
 .ENDIF
-
 .ELIF "$(OS)"=="OS2"
 # if we use dmake, this is done automagically
-
 .ELSE
-OUT2LIB+=librdf$/.libs$/librdf.so.0
+OUT2LIB+=librdf$/.libs$/librdf.so.$(REDLAND_MAJOR)
 .ENDIF
 
 # --- Targets ------------------------------------------------------

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8.2.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,6 +37,7 @@ TARGET=hyphen
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=hyphen-2.4
+TARFILE_MD5=d0b5af6e408b8d2958f3d83b5244f5e8
 
 ADDITIONAL_FILES += makefile.mk
 
@@ -63,7 +60,9 @@ LCL_CONFIGURE_CFLAGS+=-m64
 LCL_CONFIGURE_CFLAGS+=$(EXTRA_CFLAGS)
 CONFIGURE_FLAGS+=CXXFLAGS="$(EXTRA_CFLAGS)"
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
-.ENDIF # "$(SYSBASE)"!=""
+.ELIF "$(OS)"=="MACOSX" # "$(SYSBASE)"!=""
+CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
+.ENDIF
 
 .IF "$(LCL_CONFIGURE_CFLAGS)"!=""
 CONFIGURE_FLAGS+=CFLAGS='$(LCL_CONFIGURE_CFLAGS)'
@@ -75,7 +74,7 @@ BUILD_ACTION=make hyph_en_US.dic
 @all:
     echo "Nothing to do here."
 .ELSE
-BUILD_ACTION=make
+BUILD_ACTION=make && make check
 OUT2INC += hyphen.h 
 .ENDIF
 

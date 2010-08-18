@@ -2,11 +2,6 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: create_sRGB_profile.cpp,v $
- *
- *  $Revision: 1.6 $
- *
- *  last change: $Author: rt $ $Date: 2008-04-11 07:31:14 $
 
   Derived by beppec56@openoffice.org from various examples
   in SampleICC library, the original copyright retained.

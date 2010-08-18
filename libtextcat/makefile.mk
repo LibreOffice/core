@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,6 +37,7 @@ TARGET=libtextcat
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=libtextcat-2.2
+TARFILE_MD5=128cfc86ed5953e57fe0f5ae98b62c2e
 TARFILE_ROOTDIR=libtextcat-2.2
 
 PATCH_FILES=libtextcat-2.2.patch
@@ -58,7 +55,7 @@ ADDITIONAL_FILES= \
 
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=configure CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
-CONFIGURE_FLAGS=
+CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
 
 BUILD_ACTION=make
 

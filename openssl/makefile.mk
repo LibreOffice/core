@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2008 by Sun Microsystems, Inc.
+#
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.26 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,9 +46,10 @@ TARGET=openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8k
+OPENSSL_NAME=openssl-0.9.8o
 
 TARFILE_NAME=$(OPENSSL_NAME)
+TARFILE_MD5=63ddc5116488985e820075e65fbe6aa4
 
 CONFIGURE_DIR=.
 CONFIGURE_ACTION=config
@@ -65,15 +62,27 @@ OUT2LIB = libssl.*
 OUT2LIB += libcrypto.*
 OUT2INC += include/openssl/*
 
-.IF "$(OS)" == "LINUX"
+UNAME=$(shell uname)
+
+.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD"
     PATCH_FILES=openssllnx.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8k.map \
-        libssl_OOo_0_9_8k.map
-    .IF "$(CPU)" == "X"
-        CONFIGURE_ACTION=Configure linux-generic64
+        libcrypto_OOo_0_9_8o.map \
+        libssl_OOo_0_9_8o.map
+    .IF "$(CPU)" == "I"
+        .IF "$(UNAME)" == "GNU/kFreeBSD"
+            CONFIGURE_ACTION=Configure debian-kfreebsd-i386
+        .ELSE
+            CONFIGURE_ACTION=Configure linux-elf
+        .ENDIF
+    .ELIF "$(BUILD64)" == "1"
+        .IF "$(UNAME)" == "GNU/kFreeBSD"
+            CONFIGURE_ACTION=Configure debian-kfreebsd-amd64
+        .ELSE
+            CONFIGURE_ACTION=Configure linux-generic64
+        .ENDIF
     .ELSE
-        CONFIGURE_ACTION=Configure linux-elf
+        CONFIGURE_ACTION=Configure linux-generic32
     .ENDIF
     # if you build openssl as shared library you have to patch the Makefile.Shared "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \"
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8e.map'
@@ -82,27 +91,23 @@ OUT2INC += include/openssl/*
 .IF "$(OS)" == "SOLARIS"
     PATCH_FILES=opensslsol.patch
     ADDITIONAL_FILES:= \
-        libcrypto_OOo_0_9_8k.map \
-        libssl_OOo_0_9_8k.map
+        libcrypto_OOo_0_9_8o.map \
+        libssl_OOo_0_9_8o.map
     #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
 
-    # We need a 64 BIT switch (currently I disable 64 Bit by default). 
-    # Please replace this with a global switch if available
-    #USE_64 = 1
+    # Use BUILD64 when 1 to select new specific 64bit Configurations if necessary
 
-    # Solaris INTEL
-    .IF "$(CPUNAME)" == "INTEL" 
+    .IF "$(CPUNAME)" == "INTEL" # Solaris INTEL
         .IF "$(CPU)" == "X"
            CONFIGURE_ACTION=Configure solaris64-x86_64-cc
         .ELSE
            CONFIGURE_ACTION=Configure solaris-x86-cc
         .ENDIF
+    .ELIF "$(CPU)" == "U" # Solaris SPARC
+       CONFIGURE_ACTION=Configure solaris64-sparcv9-cc
     .ELSE
-    # Solaris SPARC
-        .IF "$(CPU)" == "U"
-           CONFIGURE_ACTION=Configure solaris64-sparcv9-cc
-        .ENDIF
-.ENDIF
+       CONFIGURE_ACTION=Configure solaris-sparcv9-cc
+    .ENDIF
 .ENDIF
 
 .IF "$(OS)" == "WNT"

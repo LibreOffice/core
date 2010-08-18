@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,6 +38,7 @@ TARGET=ooo_beanshell
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=bsh-2.0b1-src
+TARFILE_MD5=ea570af93c284aa9e5621cd563f54f4d
 TARFILE_ROOTDIR=BeanShell
 PATCH_FILES=bsh-2.0b1-src.patch
 

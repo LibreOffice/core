@@ -1,5 +1,3 @@
 mkdir: %_DEST%\inc%_EXT%\external
 mkdir: %_DEST%\inc%_EXT%\external\odbc
-..\inc\sql.h %_DEST%\inc%_EXT%\external\odbc\sql.h
-..\inc\sqlext.h %_DEST%\inc%_EXT%\external\odbc\sqlext.h
-..\inc\sqltypes.h %_DEST%\inc%_EXT%\external\odbc\sqltypes.h
+..\inc\*.h %_DEST%\inc%_EXT%\external\odbc\*.h

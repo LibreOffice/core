@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,19 +45,18 @@ ANT_BUILDFILE=build$/build.xml
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=hsqldb_$(HSQLDB_VERSION)
+TARFILE_MD5=17410483b5b5f267aa18b7e00b65e6e0
 
 TARFILE_ROOTDIR=hsqldb
 
 CONVERTFILES=build$/build.xml \
-            src$/org$/hsqldb$/persist$/HsqlDatabaseProperties.java
+            src$/org$/hsqldb$/persist$/HsqlDatabaseProperties.java \
+            src$/org$/hsqldb$/Library.java
 
-PATCH_FILES=patches$/accumulated_patches.patch
-
-# ADDITIONAL_FILES=   src$/org$/hsqldb$/Collation.java \
-#                     src$/org$/hsqldb$/TxManager.java \
-#                     src$/org$/hsqldb$/lib$/LongKeyIntValueHashMap.java \
-#                     src$/org$/hsqldb$/persist$/ScaledRAFileInJar.java \
-#                     src$/org$/hsqldb$/test$/TestCollation.java
+PATCH_FILES=patches$/i96823.patch \
+            patches$/i97032.patch \
+            patches$/i103528.patch \
+            patches$/i104901.patch
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,7 +37,7 @@ C_RESTRICTIONFLAGS*=-xc99=no_lib
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-
+.IF "$(L10N_framework)"==""
 .IF "$(ENABLE_GTK)"!=""
 
 PKGCONFIG_MODULES=gtk+-2.0 gdk-2.0
@@ -53,7 +49,7 @@ CFLAGS+=$(PKGCONFIG_CFLAGS)
 SLOFILES=\
     $(SLO)$/eggtrayicon.obj
 
-SHL1STDLIBS+=$(PKGCONFIG_LIBS)
+SHL1STDLIBS+=$(PKGCONFIG_LIBS) $(X11LINK_DYNAMIC)
 .IF "$(PKGCONFIG_ROOT)"!=""
 SHL1SONAME+=-z nodefs
 SHL1NOCHECK=TRUE
@@ -66,5 +62,5 @@ SHL1LIBS=       $(SLB)$/eggtray.lib
 .ENDIF #	"$(ENABLE_GTK)"!=""
 
 # --- Targets ----------------------------------
-
+.ENDIF 		# L10N_framework
 .INCLUDE : target.mk

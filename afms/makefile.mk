@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -37,13 +33,12 @@ TARGET=afms
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
-
+.IF "$(L10N_framework)"==""
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=Adobe-Core35_AFMs-314
+TARFILE_MD5=1756c4fa6c616ae15973c104cd8cb256
 TARFILE_ROOTDIR=Adobe-Core35_AFMs-314
-# TAR_EXCLUDES broken for solaris tar - #i77247#
-# TAR_EXCLUDES=*/*Helvetica-Narrow*
 
 # --- Targets ------------------------------------------------------
 
@@ -53,9 +48,11 @@ ZIP1DIR         = $(MISC)$/build$/$(TARFILE_NAME)
 ZIP1TARGET      = fontunxafm
 ZIP1LIST        = *.afm -x "*Helvetica-Narrow*"
 
+.ENDIF # L10N_framework
 .INCLUDE : target.mk
 
 .INCLUDE : tg_ext.mk
-
+.IF "$(L10N_framework)"==""
 $(ZIP1TARGETN):	$(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 
+.ENDIF # L10N_framework

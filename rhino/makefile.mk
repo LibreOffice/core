@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,12 +39,14 @@ TARGET=ooo_rhino
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=rhino1_5R5
+TARFILE_MD5=798b2ffdc8bcfe7bca2cf92b62caf685
 TARFILE_ROOTDIR=rhino1_5R5
 
 ADDITIONAL_FILES= \
     toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java
 
-PATCH_FILES=rhino1_5R5.patch
+PATCH_FILES=rhino1_5R5.patch \
+    rhino1_5R5-find_swing.patch
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
