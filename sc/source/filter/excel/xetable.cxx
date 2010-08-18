@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xetable.cxx,v $
- * $Revision: 1.18.126.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include <map>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include "scitems.hxx"
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #include "document.hxx"
 #include "dociter.hxx"
 #include "olinetab.hxx"
@@ -653,36 +650,36 @@ void XclExpBooleanCell::WriteContents( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-IMPL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell, 256, 256 )
-
-XclExpErrorCell::XclExpErrorCell(
-        const XclExpRoot rRoot, const XclAddress& rXclPos,
-        const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt8 nErrCode ) :
-    // #i41210# always use latin script for error cells
-    XclExpSingleCellBase( rRoot, EXC_ID3_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
-    mnErrCode( nErrCode )
-{
-}
-
-void XclExpErrorCell::SaveXml( XclExpXmlStream& rStrm )
-{
-    sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
-    rWorksheet->startElement( XML_c,
-            XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
-            XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
-            XML_t,      "e",
-            // OOXTODO: XML_cm, XML_vm, XML_ph
-            FSEND );
-    rWorksheet->startElement( XML_v, FSEND );
-    rWorksheet->write( (sal_Int32) mnErrCode );
-    rWorksheet->endElement( XML_v );
-    rWorksheet->endElement( XML_c );
-}
-
-void XclExpErrorCell::WriteContents( XclExpStream& rStrm )
-{
-    rStrm << mnErrCode << EXC_BOOLERR_ERROR;
-}
+//UNUSED2009-05 IMPL_FIXEDMEMPOOL_NEWDEL( XclExpErrorCell, 256, 256 )
+//UNUSED2009-05
+//UNUSED2009-05 XclExpErrorCell::XclExpErrorCell(
+//UNUSED2009-05         const XclExpRoot rRoot, const XclAddress& rXclPos,
+//UNUSED2009-05         const ScPatternAttr* pPattern, sal_uInt32 nForcedXFId, sal_uInt8 nErrCode ) :
+//UNUSED2009-05     // #i41210# always use latin script for error cells
+//UNUSED2009-05     XclExpSingleCellBase( rRoot, EXC_ID3_BOOLERR, 2, rXclPos, pPattern, ApiScriptType::LATIN, nForcedXFId ),
+//UNUSED2009-05     mnErrCode( nErrCode )
+//UNUSED2009-05 {
+//UNUSED2009-05 }
+//UNUSED2009-05
+//UNUSED2009-05 void XclExpErrorCell::SaveXml( XclExpXmlStream& rStrm )
+//UNUSED2009-05 {
+//UNUSED2009-05     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
+//UNUSED2009-05     rWorksheet->startElement( XML_c,
+//UNUSED2009-05             XML_r,      XclXmlUtils::ToOString( GetXclPos() ).getStr(),
+//UNUSED2009-05             XML_s,      lcl_GetStyleId( rStrm, *this ).getStr(),
+//UNUSED2009-05             XML_t,      "e",
+//UNUSED2009-05             // OOXTODO: XML_cm, XML_vm, XML_ph
+//UNUSED2009-05             FSEND );
+//UNUSED2009-05     rWorksheet->startElement( XML_v, FSEND );
+//UNUSED2009-05     rWorksheet->write( (sal_Int32) mnErrCode );
+//UNUSED2009-05     rWorksheet->endElement( XML_v );
+//UNUSED2009-05     rWorksheet->endElement( XML_c );
+//UNUSED2009-05 }
+//UNUSED2009-05
+//UNUSED2009-05 void XclExpErrorCell::WriteContents( XclExpStream& rStrm )
+//UNUSED2009-05 {
+//UNUSED2009-05     rStrm << mnErrCode << EXC_BOOLERR_ERROR;
+//UNUSED2009-05 }
 
 // ----------------------------------------------------------------------------
 
@@ -839,13 +836,15 @@ XclExpFormulaCell::XclExpFormulaCell(
 
         // #i41420# find script type according to result type (always latin for numeric results)
         sal_Int16 nScript = ApiScriptType::LATIN;
+        bool bForceLineBreak = false;
         if( nFormatType == NUMBERFORMAT_TEXT )
         {
             String aResult;
             mrScFmlaCell.GetString( aResult );
+            bForceLineBreak = mrScFmlaCell.IsMultilineResult();
             nScript = XclExpStringHelper::GetLeadingScriptType( rRoot, aResult );
         }
-        SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt( pPattern, nScript, nAltScNumFmt ) );
+        SetXFId( rRoot.GetXFBuffer().InsertWithNumFmt( pPattern, nScript, nAltScNumFmt, bForceLineBreak ) );
     }
 
     // *** Convert the formula token array *** --------------------------------
@@ -1602,8 +1601,7 @@ XclExpColinfo::XclExpColinfo( const XclExpRoot& rRoot,
     mnWidth = XclTools::GetXclColumnWidth( nScWidth, GetCharWidth() );
 
     // column flags
-    BYTE nScColFlags = rDoc.GetColFlags( nScCol, nScTab );
-    ::set_flag( mnFlags, EXC_COLINFO_HIDDEN, (nScColFlags & CR_HIDDEN) != 0 );
+    ::set_flag( mnFlags, EXC_COLINFO_HIDDEN, rDoc.ColHidden(nScCol, nScTab) );
 
     // outline data
     rOutlineBfr.Update( nScCol );
@@ -1828,23 +1826,17 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt16 nXclRow,
 
     BYTE nRowFlags = GetDoc().GetRowFlags( nScRow, nScTab );
     bool bUserHeight = ::get_flag< BYTE >( nRowFlags, CR_MANUALSIZE );
-    bool bHidden = ::get_flag< BYTE >( nRowFlags, CR_HIDDEN );
+    bool bHidden = GetDoc().RowHidden(nScRow, nScTab);
     ::set_flag( mnFlags, EXC_ROW_UNSYNCED, bUserHeight );
     ::set_flag( mnFlags, EXC_ROW_HIDDEN, bHidden );
 
     // *** Row height *** -----------------------------------------------------
 
-    USHORT nScHeight = GetDoc().GetRowHeight( nScRow, nScTab );
-    if( nScHeight == 0 )
-    {
-        ::set_flag( mnFlags, EXC_ROW_HIDDEN );
-        mnHeight = EXC_ROW_DEFAULTHEIGHT;
-    }
+    if (bUserHeight)
+        mnHeight = GetDoc().GetRowHeight(nScRow, nScTab, false);
     else
-    {
-        // Calc and Excel use twips
-        mnHeight = static_cast< sal_uInt16 >( nScHeight );
-    }
+        mnHeight = EXC_ROW_DEFAULTHEIGHT;
+
     // #76250# not usable in Applix
 //    ::set_flag( mnHeight, EXC_ROW_FLAGDEFHEIGHT, !bUserHeight );
 

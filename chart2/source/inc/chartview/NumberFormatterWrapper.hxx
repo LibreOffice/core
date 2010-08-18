@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: NumberFormatterWrapper.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,7 @@
 #ifndef _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
 #define _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include "chartviewdllapi.hxx"
 
@@ -61,10 +58,11 @@ private: //private member
                         m_xNumberFormatsSupplier;
 
     SvNumberFormatter* m_pNumberFormatter;
+    ::com::sun::star::uno::Any m_aNullDate;
 };
 
 
-class OOO_DLLPUBLIC_CHARTVIEW FixedNumberFormatter
+class FixedNumberFormatter
 {
 public:
     FixedNumberFormatter( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier

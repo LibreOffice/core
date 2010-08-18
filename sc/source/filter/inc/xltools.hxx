@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xltools.hxx,v $
- * $Revision: 1.27.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,8 @@
 
 #include "address.hxx"
 #include "ftools.hxx"
+
+class SfxObjectShell;
 
 // BIFF versions ==============================================================
 
@@ -124,6 +123,8 @@ public:
     /** Converts an Excel error code to a Calc error code. */
     static USHORT       GetScErrorCode( sal_uInt8 nXclError );
 
+    /** Converts the passed BIFF error to a double containing the respective Calc error code. */
+    static double       ErrorToDouble( sal_uInt8 nXclError );
     /** Gets a translated error code or Boolean value from Excel error codes.
         @param rfDblValue  Returns 0.0 for error codes or the value of a Boolean (0.0 or 1.0).
         @param bErrorOrBool  false = nError is a Boolean value; true = is an error value.
@@ -167,8 +168,8 @@ public:
         @return  The corresponding text encoding or RTL_TEXTENCODING_DONTKNOW. */
     static rtl_TextEncoding GetTextEncoding( sal_uInt16 nCodePage );
 
-//UNUSED2008-05  /** Returns an Excel code page from a text encoding. */
-//UNUSED2008-05  static sal_uInt16   GetXclCodePage( rtl_TextEncoding eTextEnc );
+    /** Returns an Excel code page from a text encoding. */
+    static sal_uInt16   GetXclCodePage( rtl_TextEncoding eTextEnc );
 
     // font names -------------------------------------------------------------
 
@@ -194,9 +195,12 @@ public:
 
     /** Returns the specified built-in cell style name.
         @param nStyleId  The identifier of the built-in style.
+        @param rName  Default name for unknown styles.
         @param nLevel  The zero-based outline level for RowLevel and ColLevel styles.
         @return  The style name or an empty string, if the parameters are not valid. */
-    static String       GetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel );
+    static String       GetBuiltInStyleName( sal_uInt8 nStyleId, const String& rName, sal_uInt8 nLevel );
+    /** Returns the passed style name with a special built-in prefix. */
+    static String       GetBuiltInStyleName( const String& rStyleName );
     /** Returns true, if the passed string is a name of an Excel built-in style.
         @param pnStyleId  If not 0, the found style identifier will be returned here.
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
@@ -227,11 +231,24 @@ public:
     /** Skips a substream (BOF/EOF record block). Includes all embedded substreams. */
     static void         SkipSubStream( XclImpStream& rStrm );
 
-    // ------------------------------------------------------------------------
+    // Basic macro names ------------------------------------------------------
+
+    /** Returns the full StarBasic macro URL from an Excel macro name. */
+    static ::rtl::OUString GetSbMacroUrl( const String& rMacroName, SfxObjectShell* pDocShell = 0 );
+    /** Returns the full StarBasic macro URL from an Excel module and macro name. */
+    static ::rtl::OUString GetSbMacroUrl( const String& rModuleName, const String& rMacroName, SfxObjectShell* pDocShell = 0 );
+    /** Returns the Excel macro name from a full StarBasic macro URL. */
+    static String       GetXclMacroName( const ::rtl::OUString& rSbMacroUrl );
+
+// ------------------------------------------------------------------------
 private:
-    static const String maDefNamePrefix;        /// Prefix for built-in defined names.
-    static const String maStyleNamePrefix;      /// Prefix for built-in cell style names.
-    static const String maCFStyleNamePrefix;    /// Prefix for cond. formatting style names.
+    static const String maDefNamePrefix;            /// Prefix for built-in defined names.
+    static const String maStyleNamePrefix1;         /// Prefix for built-in cell style names.
+    static const String maStyleNamePrefix2;         /// Prefix for built-in cell style names from OOX filter.
+    static const String maCFStyleNamePrefix1;       /// Prefix for cond. formatting style names.
+    static const String maCFStyleNamePrefix2;       /// Prefix for cond. formatting style names from OOX filter.
+    static const ::rtl::OUString maSbMacroPrefix;   /// Prefix for StarBasic macros.
+    static const ::rtl::OUString maSbMacroSuffix;   /// Suffix for StarBasic macros.
 };
 
 // read/write colors ----------------------------------------------------------

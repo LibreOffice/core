@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmldpimp.hxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,9 @@
 #include "global.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
+#include "queryparam.hxx"
+
+#include <hash_set>
 
 class ScXMLImport;
 class ScDPSaveNumGroupDimension;
@@ -79,10 +79,21 @@ public:
 
 class ScXMLDataPilotTableContext : public SvXMLImportContext
 {
+    typedef ::std::hash_set< ::rtl::OUString, ::rtl::OUStringHash > StringSet;
+    StringSet       maHiddenMemberFields;
+
+    struct GrandTotalItem
+    {
+        ::rtl::OUString maDisplayName;
+        bool            mbVisible;
+        GrandTotalItem();
+    };
     ScDocument*     pDoc;
     ScDPObject*     pDPObject;
     ScDPSaveData*   pDPSave;
     ScDPDimensionSaveData* pDPDimSaveData;
+    GrandTotalItem  maRowGrandTotal;
+    GrandTotalItem  maColGrandTotal;
     rtl::OUString   sDataPilotTableName;
     rtl::OUString   sApplicationData;
     rtl::OUString   sGrandTotal;
@@ -100,6 +111,10 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     ScAddress       aFilterOutputPosition;
     ScQueryParam    aSourceQueryParam;
     ScMySourceType  nSourceType;
+    sal_uInt32      mnRowFieldCount;
+    sal_uInt32      mnColFieldCount;
+    sal_uInt32      mnPageFieldCount;
+    sal_uInt32      mnDataFieldCount;
     sal_Bool        bIsNative;
     sal_Bool        bIgnoreEmptyRows;
     sal_Bool        bIdentifyCategories;
@@ -131,6 +146,7 @@ public:
 
     virtual void EndElement();
 
+    void SetGrandTotal(::xmloff::token::XMLTokenEnum eOrientation, bool bVisible, const ::rtl::OUString& rDisplayName);
     void SetDatabaseName(const rtl::OUString& sValue) { sDatabaseName = sValue; }
     void SetSourceObject(const rtl::OUString& sValue) { sSourceObject = sValue; }
     void SetNative(const sal_Bool bValue) { bIsNative = bValue; }
@@ -147,7 +163,7 @@ public:
     void SetFilterSourceRange(const ScRange& aValue) { aFilterSourceRange = aValue; }
 //  void SetFilterIsCaseSensitive(const sal_Bool bValue) { aSourceQueryParam.bCaseSens = bValue; }
 //  void SetFilterSkipDuplicates(const sal_Bool bValue) { aSourceQueryParam.bDuplicate = !bValue; }
-    void AddDimension(ScDPSaveDimension* pDim);
+    void AddDimension(ScDPSaveDimension* pDim, bool bHasHiddenMember);
     void AddGroupDim(const ScDPSaveNumGroupDimension& aNumGroupDim);
     void AddGroupDim(const ScDPSaveGroupDimension& aGroupDim);
     void SetButtons();
@@ -253,6 +269,34 @@ public:
     virtual void EndElement();
 };
 
+class ScXMLDataPilotGrandTotalContext : public SvXMLImportContext
+{
+    enum Orientation { COLUMN, ROW, BOTH, NONE };
+
+    ScXMLImport& GetScImport();
+
+    ScXMLDataPilotTableContext* mpTableContext;
+    ::rtl::OUString             maDisplayName;
+    Orientation                 meOrientation;
+    bool                        mbVisible;
+
+public:
+    ScXMLDataPilotGrandTotalContext(
+        ScXMLImport& rImport, USHORT nPrefix, const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+        ScXMLDataPilotTableContext* pTableContext );
+
+    virtual ~ScXMLDataPilotGrandTotalContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+};
+
 class ScXMLSourceCellRangeContext : public SvXMLImportContext
 {
     ScXMLDataPilotTableContext* pDataPilotTable;
@@ -300,12 +344,13 @@ class ScXMLDataPilotFieldContext : public SvXMLImportContext
     sal_Int32                   nGroupPart;
     sal_Int16                   nFunction;
     sal_Int16                   nOrientation;
-    sal_Bool                    bShowEmpty;
-    sal_Bool                    bSelectedPage;
-    sal_Bool                    bIsGroupField;
-    sal_Bool                    bDateValue;
-    sal_Bool                    bAutoStart;
-    sal_Bool                    bAutoEnd;
+    sal_Bool                    bShowEmpty:1;
+    sal_Bool                    bSelectedPage:1;
+    sal_Bool                    bIsGroupField:1;
+    sal_Bool                    bDateValue:1;
+    sal_Bool                    bAutoStart:1;
+    sal_Bool                    bAutoEnd:1;
+    bool                        mbHasHiddenMember:1;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -329,7 +374,8 @@ public:
 
     void SetShowEmpty(const sal_Bool bValue) { if (pDim) pDim->SetShowEmpty(bValue); }
     void SetSubTotals(const sal_uInt16* pFunctions, const sal_Int16 nCount) { if(pDim) pDim->SetSubTotals(nCount, pFunctions); }
-    void AddMember(ScDPSaveMember* pMember) { if (pDim) pDim->AddMember(pMember); }
+    void AddMember(ScDPSaveMember* pMember);
+    void SetSubTotalName(const ::rtl::OUString& rName);
     void SetFieldReference(const com::sun::star::sheet::DataPilotFieldReference& aRef) { if (pDim) pDim->SetReferenceValue(&aRef); }
     void SetAutoShowInfo(const com::sun::star::sheet::DataPilotFieldAutoShowInfo& aInfo) { if (pDim) pDim->SetAutoShowInfo(&aInfo); }
     void SetSortInfo(const com::sun::star::sheet::DataPilotFieldSortInfo& aInfo) { if (pDim) pDim->SetSortInfo(&aInfo); }
@@ -453,6 +499,7 @@ class ScXMLDataPilotSubTotalsContext : public SvXMLImportContext
 
     sal_Int16   nFunctionCount;
     sal_uInt16* pFunctions;
+    ::rtl::OUString maDisplayName;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -476,6 +523,7 @@ public:
 
     virtual void EndElement();
     void AddFunction(sal_Int16 nFunction);
+    void SetDisplayName(const ::rtl::OUString& rName);
 };
 
 class ScXMLDataPilotSubTotalContext : public SvXMLImportContext
@@ -533,6 +581,7 @@ class ScXMLDataPilotMemberContext : public SvXMLImportContext
     ScXMLDataPilotFieldContext* pDataPilotField;
 
     rtl::OUString sName;
+    rtl::OUString maDisplayName;
     sal_Bool    bDisplay;
     sal_Bool    bDisplayDetails;
     sal_Bool    bHasName;

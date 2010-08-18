@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmltabi.hxx,v $
- * $Revision: 1.11.134.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,6 +49,7 @@ class ScXMLTableContext : public SvXMLImportContext
 {
     rtl::OUString   sPrintRanges;
     ::std::auto_ptr<ScXMLExternalTabData> pExternalRefInfo;
+    sal_Int32       nStartOffset;
     sal_Bool        bStartFormPage;
     sal_Bool        bPrintEntireSheet;
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ExplicitValueProvider.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,7 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
@@ -70,6 +68,8 @@ public:
     virtual ::com::sun::star::awt::Rectangle
         getRectangleOfObject( const rtl::OUString& rObjectCID, bool bSnapRect=false )=0;
 
+    virtual ::com::sun::star::awt::Rectangle getDiagramRectangleExcludingAxes()=0;
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         getShapeForCID( const rtl::OUString& rObjectCID )=0;
 
@@ -79,28 +79,36 @@ public:
     static ExplicitValueProvider* getExplicitValueProvider( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xChartView );
 
     static ::com::sun::star::awt::Rectangle
-        calculateDiagramPositionAndSizeInclusiveTitle(
+        addAxisTitleSizes(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::frame::XModel >& xChartModel
             , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XInterface >& xChartView
-            , const ::com::sun::star::awt::Rectangle& rExclusivePositionAndSize );
+            , const ::com::sun::star::awt::Rectangle& rExcludingPositionAndSize );
+
+    static ::com::sun::star::awt::Rectangle
+        substractAxisTitleSizes(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::frame::XModel >& xChartModel
+            , const ::com::sun::star::uno::Reference<
+                ::com::sun::star::uno::XInterface >& xChartView
+            , const ::com::sun::star::awt::Rectangle& rPositionAndSizeIncludingTitles );
 
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
               const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis
             , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XCoordinateSystem > & xCorrespondingCoordinateSystem
             , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
-    static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
-    static sal_Int32 getExplicitNumberFormatKeyForLabel(
+    static sal_Int32 getExplicitNumberFormatKeyForDataLabel(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
             , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries
             , sal_Int32 nPointIndex /*-1 for whole series*/
-            , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAttachedAxisProps );
+            , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
 
-    static sal_Int32 getExplicitPercentageNumberFormatKeyForLabel(
+    static sal_Int32 getExplicitPercentageNumberFormatKeyForDataLabel(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
             , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 };

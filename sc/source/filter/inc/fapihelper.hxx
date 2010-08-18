@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fapihelper.hxx,v $
- * $Revision: 1.11.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +41,8 @@
 namespace com { namespace sun { namespace star {
     namespace lang { class XMultiServiceFactory; }
 } } }
+
+namespace comphelper { class IDocPasswordVerifier; }
 
 // Static helper functions ====================================================
 
@@ -109,7 +108,9 @@ public:
 
     /** Opens a password dialog and returns the entered password.
         @return  The entered password or an empty string on 'Cancel' or any error. */
-    static String       QueryPasswordForMedium( SfxMedium& rMedium );
+    static String       QueryPasswordForMedium( SfxMedium& rMedium,
+                            ::comphelper::IDocPasswordVerifier& rVerifier,
+                            const ::std::vector< ::rtl::OUString >* pDefaultPasswords = 0 );
 };
 
 template< typename Type >

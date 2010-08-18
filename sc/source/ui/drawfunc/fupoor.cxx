@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fupoor.cxx,v $
- * $Revision: 1.13.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
@@ -42,6 +39,7 @@
 #include "detfunc.hxx"
 #include "document.hxx"
 #include <vcl/svapp.hxx>
+#include <svx/sdrhittesthelper.hxx>
 
 /*************************************************************************
 |*
@@ -333,8 +331,10 @@ BOOL FuPoor::IsDetectiveHit( const Point& rLogicPos )
         {
             USHORT nHitLog = (USHORT) pWindow->PixelToLogic(
                                 Size(pView->GetHitTolerancePixel(),0)).Width();
-            if ( pObject->IsHit( rLogicPos, nHitLog ) )
+            if(SdrObjectPrimitiveHit(*pObject, rLogicPos, nHitLog, *pPV, 0, false))
+            {
                 bFound = TRUE;
+            }
         }
 
         pObject = aIter.Next();

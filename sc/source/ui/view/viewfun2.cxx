@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewfun2.cxx,v $
- * $Revision: 1.41.100.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,28 +28,26 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #define _SVSTDARR_STRINGS
-#include <svx/boxitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <svl/srchitem.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objitem.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/svstdarr.hxx>
+#include <svl/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/svstdarr.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/waitobj.hxx>
@@ -88,7 +83,16 @@
 #include "inputwin.hxx"
 #include "funcdesc.hxx"
 #include "docuno.hxx"
+#include "charthelper.hxx"
+#include "tabbgcolor.hxx"
 
+#include <basic/sbstar.hxx>
+#include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/script/XLibraryContainer.hpp>
+using namespace com::sun::star;
+
+// helper func defined in docfunc.cxx
+void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName );
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -2143,6 +2147,7 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
 {
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = pDocSh->GetDocument();
+    BOOL bVbaEnabled = pDoc ? pDoc->IsInVBAMode() : FALSE;
     SCTAB       nNewTab = TheTabs[0];
     int         i;
     WaitObject aWait( GetFrameWin() );
@@ -2195,9 +2200,11 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
                 pUndoDoc->SetActiveScenario( nTab, bActive );
             }
             pUndoDoc->SetVisible( nTab, pDoc->IsVisible( nTab ) );
+            pUndoDoc->SetTabBgColor( nTab, pDoc->GetTabBgColor(nTab) );
+            pUndoDoc->SetSheetEvents( nTab, pDoc->GetSheetEvents( nTab ) );
 
             if ( pDoc->IsTabProtected( nTab ) )
-                pUndoDoc->SetTabProtection( nTab, TRUE, pDoc->GetTabPassword( nTab ) );
+                pUndoDoc->SetTabProtection(nTab, pDoc->GetTabProtection(nTab));
 
             //  Drawing-Layer muss sein Undo selbst in der Hand behalten !!!
             //      pUndoDoc->TransferDrawPage(pDoc, nTab,nTab);
@@ -2214,9 +2221,18 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
 
     for(i=TheTabs.Count()-1;i>=0;i--)
     {
+        String sCodeName;
+        BOOL bHasCodeName = pDoc->GetCodeName( TheTabs[sal::static_int_cast<USHORT>(i)], sCodeName );
         if (pDoc->DeleteTab( TheTabs[sal::static_int_cast<USHORT>(i)], pUndoDoc ))
         {
             bDelDone = TRUE;
+            if( bVbaEnabled )
+            {
+                if( bHasCodeName )
+                {
+                    VBA_DeleteModule( *pDocSh, sCodeName );
+                }
+            }
             pDocSh->Broadcast( ScTablesHint( SC_TAB_DELETED, TheTabs[sal::static_int_cast<USHORT>(i)] ) );
         }
     }
@@ -2273,6 +2289,28 @@ BOOL ScViewFunc::RenameTable( const String& rName, SCTAB nTab )
     return bSuccess;
 }
 
+
+//----------------------------------------------------------------------------
+
+bool ScViewFunc::SetTabBgColor( const Color& rColor, SCTAB nTab )
+{
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( nTab, rColor, TRUE, FALSE );
+    if (bSuccess)
+    {
+        GetViewData()->GetViewShell()->UpdateInputHandler();
+    }
+    return bSuccess;
+}
+
+bool ScViewFunc::SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList )
+{
+    bool bSuccess = GetViewData()->GetDocShell()->GetDocFunc().SetTabBgColor( rUndoSetTabBgColorInfoList, TRUE, FALSE );
+    if (bSuccess)
+    {
+        GetViewData()->GetViewShell()->UpdateInputHandler();
+    }
+    return bSuccess;
+}
 
 //----------------------------------------------------------------------------
 
@@ -2408,7 +2446,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 
     if (bLink)
     {
-        SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+        sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
 
         SfxMedium* pMed = pSrcShell->GetMedium();
         String aFileName = pMed->GetName();
@@ -2612,7 +2650,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
                 }
 
                 if ( nErrVal > 0 && pDoc->IsTabProtected( TheTabs[i] ) )
-                    pDestDoc->SetTabProtection( nDestTab1, TRUE, pDoc->GetTabPassword( TheTabs[i] ) );
+                    pDestDoc->SetTabProtection(nDestTab1, pDoc->GetTabProtection(TheTabs[i]));
 
                 nDestTab1++;
             }
@@ -2803,6 +2841,10 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
             nNewTab--;
 
         SetTabNo( nNewTab, TRUE );
+
+        //#i29848# adjust references to data on the copied sheet
+        if( bCopy )
+            ScChartHelper::AdjustRangesOfChartsOnDestinationPage( pDoc, pDestDoc, nTab, nNewTab );
     }
 }
 

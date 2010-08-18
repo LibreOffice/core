@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formula.hxx,v $
- * $Revision: 1.5.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +41,7 @@
 #ifndef _SVSTDARR_STRINGS
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #endif
 #include "compiler.hxx"
@@ -105,6 +102,7 @@ public:
     virtual ::std::auto_ptr<formula::FormulaTokenArray> convertToTokenArray(const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& _aTokenList);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaParser> getFormulaParser() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XFormulaOpCodeMapper> getFormulaOpCodeMapper() const;
+    virtual ::com::sun::star::table::CellAddress getReferencePosition() const;
 
     virtual BOOL    Close();
 

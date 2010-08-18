@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataSource.hxx,v $
- * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,12 +34,11 @@
 #include <cppuhelper/implbase3.hxx>
 #include <comphelper/uno3.hxx>
 #include "ServiceMacros.hxx"
-#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 
-class OOO_DLLPUBLIC_CHARTTOOLS DataSource : public
+class DataSource : public
     ::cppu::WeakImplHelper3<
         ::com::sun::star::lang::XServiceInfo,
         ::com::sun::star::chart2::data::XDataSource,

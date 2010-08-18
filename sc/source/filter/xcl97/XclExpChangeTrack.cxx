@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XclExpChangeTrack.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -491,6 +488,7 @@ void XclExpChTrTabId::Copy( const XclExpChTrTabIdBuffer& rBuffer )
 
 void XclExpChTrTabId::SaveCont( XclExpStream& rStrm )
 {
+    rStrm.EnableEncryption();
     if( pBuffer )
         for( sal_uInt16* pElem = pBuffer; pElem < (pBuffer + nTabCount); pElem++ )
             rStrm << *pElem;

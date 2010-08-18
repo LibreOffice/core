@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlg_DataEditor.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,10 +40,10 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <svtools/miscopt.hxx>
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 
 // for SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 
 #include <vcl/edit.hxx>
 
@@ -104,7 +101,7 @@ DataEditor::DataEditor(
     SvtMiscOptions aMiscOptions;
     const sal_Int16 nStyle( aMiscOptions.GetToolboxStyle() );
     // react on changes
-    aMiscOptions.AddListener( LINK( this, DataEditor, MiscHdl ) );
+    aMiscOptions.AddListenerLink( LINK( this, DataEditor, MiscHdl ) );
     m_aTbxData.SetOutStyle( nStyle );
 
     // set good window width
@@ -132,7 +129,7 @@ DataEditor::~DataEditor()
     notifySystemWindow( this, & m_aTbxData, ::comphelper::mem_fun( & TaskPaneList::RemoveWindow ));
 
     SvtMiscOptions aMiscOptions;
-    aMiscOptions.RemoveListener( LINK( this, DataEditor, MiscHdl ) );
+    aMiscOptions.RemoveListenerLink( LINK( this, DataEditor, MiscHdl ) );
 
     OSL_TRACE( "DataEditor: DTOR" );
 }
@@ -147,34 +144,22 @@ IMPL_LINK( DataEditor, ToolboxHdl, void *, EMPTYARG )
             break;
         case TBI_DATA_INSERT_COL:
             m_apBrwData->InsertColumn();
-//             ImplAdjustHeaderControls( true /* bRefreshFromModel */ );
+            break;
+        case TBI_DATA_INSERT_TEXT_COL:
+            m_apBrwData->InsertTextColumn();
             break;
         case TBI_DATA_DELETE_ROW:
             m_apBrwData->RemoveRow();
             break;
         case TBI_DATA_DELETE_COL:
             m_apBrwData->RemoveColumn();
-//             ImplAdjustHeaderControls( true /* bRefreshFromModel */ );
             break;
         case TBI_DATA_SWAP_COL :
             m_apBrwData->SwapColumn ();
-//             ImplAdjustHeaderControls( true /* bRefreshFromModel */ );
             break;
         case TBI_DATA_SWAP_ROW :
             m_apBrwData->SwapRow ();
             break;
-//         case TBI_DATA_SORT_COL :
-//             m_apBrwData->QuickSortCol();
-//             break;
-//         case TBI_DATA_SORT_ROW :
-//             m_apBrwData->QuickSortRow();
-//             break;
-//         case TBI_DATA_SORT_TABLE_COL :
-//             m_apBrwData->QuickSortTableCols ();
-//             break;
-//         case TBI_DATA_SORT_TABLE_ROW :
-//             m_apBrwData->QuickSortTableRows ();
-//             break;
     }
 
     return 0;
@@ -186,27 +171,16 @@ IMPL_LINK( DataEditor, BrowserCursorMovedHdl, void *, EMPTYARG )
     if( m_bReadOnly )
         return 0;
 
-    if( m_apBrwData->IsEnableItem() )
-    {
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, m_apBrwData->MayInsertRow() );
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, m_apBrwData->MayInsertColumn() );
-        m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, m_apBrwData->MayDeleteRow() );
-        m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, m_apBrwData->MayDeleteColumn() );
+    bool bIsDataValid = m_apBrwData->IsEnableItem();
 
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_COL,   m_apBrwData->MaySwapColumns() );
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW,   m_apBrwData->MaySwapRows() );
-    }
-    else
-    {
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_COL, FALSE );
-        m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW, FALSE );
-    }
-//     m_aTbxData.EnableItem( TBI_DATA_SORT_COL,       m_apBrwData->MaySortColumn() );
-//     m_aTbxData.EnableItem( TBI_DATA_SORT_ROW,       m_apBrwData->MaySortRow() );
-//     m_aTbxData.EnableItem( TBI_DATA_SORT_TABLE_COL, m_apBrwData->MaySortColumn() );
-//     m_aTbxData.EnableItem( TBI_DATA_SORT_TABLE_ROW, m_apBrwData->MaySortRow() );
+    m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, bIsDataValid && m_apBrwData->MayInsertRow() );
+    m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, bIsDataValid && m_apBrwData->MayInsertColumn() );
+    m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, bIsDataValid && m_apBrwData->MayInsertColumn() );
+    m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, m_apBrwData->MayDeleteRow() );
+    m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, m_apBrwData->MayDeleteColumn() );
+
+    m_aTbxData.EnableItem( TBI_DATA_SWAP_COL,   bIsDataValid && m_apBrwData->MaySwapColumns() );
+    m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW,   bIsDataValid && m_apBrwData->MaySwapRows() );
 
     return 0;
 }
@@ -219,14 +193,11 @@ void DataEditor::SetReadOnly( bool bReadOnly )
     {
         m_aTbxData.EnableItem( TBI_DATA_INSERT_ROW, FALSE );
         m_aTbxData.EnableItem( TBI_DATA_INSERT_COL, FALSE );
+        m_aTbxData.EnableItem( TBI_DATA_INSERT_TEXT_COL, FALSE );
         m_aTbxData.EnableItem( TBI_DATA_DELETE_ROW, FALSE );
         m_aTbxData.EnableItem( TBI_DATA_DELETE_COL, FALSE );
         m_aTbxData.EnableItem( TBI_DATA_SWAP_COL, FALSE );
         m_aTbxData.EnableItem( TBI_DATA_SWAP_ROW, FALSE );
-//         m_aTbxData.EnableItem( TBI_DATA_SORT_COL, FALSE );
-//         m_aTbxData.EnableItem( TBI_DATA_SORT_ROW, FALSE );
-//         m_aTbxData.EnableItem( TBI_DATA_SORT_TABLE_ROW, FALSE );
-//         m_aTbxData.EnableItem( TBI_DATA_SORT_TABLE_COL, FALSE );
     }
 
     m_apBrwData->SetReadOnly( m_bReadOnly );
@@ -358,7 +329,7 @@ bool DataEditor::ApplyChangesToModel()
 // sets the correct toolbar icons depending on the current mode (e.g. high contrast)
 void DataEditor::ApplyImageList()
 {
-    bool bIsHighContrast = ( true && GetDisplayBackground().GetColor().IsDark() );
+    bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
 
     ImageList& rImgLst = bIsHighContrast
         ? m_aToolboxImageListHighContrast

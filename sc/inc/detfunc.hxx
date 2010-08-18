@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: detfunc.hxx,v $
- * $Revision: 1.11.128.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,6 +129,7 @@ class SC_DLLPUBLIC ScDetectiveFunc
 
     BOOL        FindFrameForObject( SdrObject* pObject, ScRange& rRange );
 
+    void        Modified();
 
 public:
                 ScDetectiveFunc(ScDocument* pDocument, SCTAB nTable) : pDoc(pDocument),nTab(nTable) {}

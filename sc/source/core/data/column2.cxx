@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: column2.cxx,v $
- * $Revision: 1.32.126.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,20 +33,20 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/unolingu.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/broadcast.hxx>
-#include <svtools/listeneriter.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/broadcast.hxx>
+#include <svl/listeneriter.hxx>
 #include <vcl/outdev.hxx>
 
 #include "column.hxx"
@@ -69,6 +66,7 @@
 #include "compiler.hxx"         // ScTokenArray GetCodeLen
 #include "dbcolect.hxx"
 #include "fillinfo.hxx"
+#include "segmenttree.hxx"
 
 #include <math.h>
 
@@ -196,6 +194,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
     double nPPT = bWidth ? nPPTX : nPPTY;
     if (Search(nRow,nIndex))
     {
+        ScBaseCell* pCell = pItems[nIndex].pCell;
         const ScPatternAttr* pPattern = rOptions.pPattern;
         if (!pPattern)
             pPattern = pAttrArray->GetPattern( nRow );
@@ -236,14 +235,18 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         else
             eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
                                             pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
-        BOOL bBreak;
+        bool bBreak;
         if ( eHorJust == SVX_HOR_JUSTIFY_BLOCK )
-            bBreak = TRUE;
+            bBreak = true;
         else if ( pCondSet &&
                     pCondSet->GetItemState(ATTR_LINEBREAK, TRUE, &pCondItem) == SFX_ITEM_SET)
             bBreak = ((const SfxBoolItem*)pCondItem)->GetValue();
         else
             bBreak = ((const SfxBoolItem&)pPattern->GetItem(ATTR_LINEBREAK)).GetValue();
+
+        if (pCell->HasValueData())
+            // Cell has a value.  Disable line break.
+            bBreak = false;
 
         //  get other attributes from pattern and conditional formatting
 
@@ -251,7 +254,7 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         BOOL bAsianVertical = ( eOrient == SVX_ORIENTATION_STACKED &&
                 ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN, pCondSet )).GetValue() );
         if ( bAsianVertical )
-            bBreak = FALSE;
+            bBreak = false;
 
         if ( bWidth && bBreak )     // after determining bAsianVertical (bBreak may be reset)
             return 0;
@@ -303,7 +306,6 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
                 nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
         }
 
-        ScBaseCell* pCell = pItems[nIndex].pCell;
         BYTE nScript = pDocument->GetScriptType( nCol, nRow, nTab, pCell );
         if (nScript == 0) nScript = ScGlobal::GetDefaultScriptType();
 
@@ -319,9 +321,12 @@ long ScColumn::GetNeededSize( SCROW nRow, OutputDevice* pDev,
         }
 
         BOOL bAddMargin = TRUE;
-        BOOL bEditEngine = ( pCell->GetCellType() == CELLTYPE_EDIT ||
+        CellType eCellType = pCell->GetCellType();
+
+        BOOL bEditEngine = ( eCellType == CELLTYPE_EDIT ||
                                 eOrient == SVX_ORIENTATION_STACKED ||
-                                IsAmbiguousScript( nScript ) );
+                                IsAmbiguousScript( nScript ) ||
+                                ((eCellType == CELLTYPE_FORMULA) && ((ScFormulaCell*)pCell)->IsMultilineResult()) );
 
         if (!bEditEngine)                                   // direkte Ausgabe
         {
@@ -756,8 +761,8 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
 {
     ScAttrIterator aIter( pAttrArray, nStartRow, nEndRow );
 
-    SCROW nStart;
-    SCROW nEnd;
+    SCROW nStart = -1;
+    SCROW nEnd = -1;
     SCROW nEditPos = 0;
     SCROW nNextEnd = 0;
 
@@ -1188,23 +1193,23 @@ BOOL ScMarkedDataIter::Next( SCSIZE& rIndex )
     return TRUE;
 }
 
-USHORT ScColumn::GetErrorData( SCROW nRow ) const
-{
-    SCSIZE  nIndex;
-    if (Search(nRow, nIndex))
-    {
-        ScBaseCell* pCell = pItems[nIndex].pCell;
-        switch (pCell->GetCellType())
-        {
-            case CELLTYPE_FORMULA :
-                return ((ScFormulaCell*)pCell)->GetErrCode();
-//            break;
-            default:
-            return 0;
-        }
-    }
-    return 0;
-}
+//UNUSED2009-05 USHORT ScColumn::GetErrorData( SCROW nRow ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     SCSIZE  nIndex;
+//UNUSED2009-05     if (Search(nRow, nIndex))
+//UNUSED2009-05     {
+//UNUSED2009-05         ScBaseCell* pCell = pItems[nIndex].pCell;
+//UNUSED2009-05         switch (pCell->GetCellType())
+//UNUSED2009-05         {
+//UNUSED2009-05             case CELLTYPE_FORMULA :
+//UNUSED2009-05                 return ((ScFormulaCell*)pCell)->GetErrCode();
+//UNUSED2009-05 //            break;
+//UNUSED2009-05             default:
+//UNUSED2009-05             return 0;
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05     return 0;
+//UNUSED2009-05 }
 
 //------------
 
@@ -1403,11 +1408,11 @@ BOOL ScColumn::GetPrevDataPos(SCROW& rRow) const
     return bFound;
 }
 
-BOOL ScColumn::GetNextDataPos(SCROW& rRow) const        // groesser als rRow
+BOOL ScColumn::GetNextDataPos(SCROW& rRow) const        // greater than rRow
 {
     SCSIZE nIndex;
     if (Search( rRow, nIndex ))
-        ++nIndex;                   // naechste Zelle
+        ++nIndex;                   // next cell
 
     BOOL bMore = ( nIndex < nCount );
     if ( bMore )
@@ -1778,7 +1783,7 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
 //  Mehrfachselektion:
 void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
                                         ScFunctionData& rData,
-                                        const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
+                                        ScFlatBoolRowSegments& rHiddenRows,
                                         BOOL bDoExclude, SCROW nExStartRow, SCROW nExEndRow )
 {
     SCSIZE nIndex;
@@ -1786,7 +1791,8 @@ void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
     while (aDataIter.Next( nIndex ))
     {
         SCROW nRow = pItems[nIndex].nRow;
-        if ( !pRowFlags || !( pRowFlags->GetValue(nRow) & CR_HIDDEN ) )
+        bool bRowHidden = rHiddenRows.getValue(nRow);
+        if ( !bRowHidden )
             if ( !bDoExclude || nRow < nExStartRow || nRow > nExEndRow )
                 lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
     }
@@ -1794,7 +1800,7 @@ void ScColumn::UpdateSelectionFunction( const ScMarkData& rMark,
 
 //  bei bNoMarked die Mehrfachselektion weglassen
 void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
-                                    const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
+                                   ScFlatBoolRowSegments& rHiddenRows,
                                     SCROW nStartRow, SCROW nEndRow )
 {
     SCSIZE nIndex;
@@ -1802,7 +1808,8 @@ void ScColumn::UpdateAreaFunction( ScFunctionData& rData,
     while ( nIndex<nCount && pItems[nIndex].nRow<=nEndRow )
     {
         SCROW nRow = pItems[nIndex].nRow;
-        if ( !pRowFlags || !( pRowFlags->GetValue(nRow) & CR_HIDDEN ) )
+        bool bRowHidden = rHiddenRows.getValue(nRow);
+        if ( !bRowHidden )
             lcl_UpdateSubTotal( rData, pItems[nIndex].pCell );
         ++nIndex;
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: solver.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,55 +140,6 @@ double lcl_GetValue( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
                      const table::CellAddress& rPos )
 {
     return lcl_GetCell( xDoc, rPos )->getValue();
-}
-
-OUString lcl_FormatCellRef( const uno::Reference<sheet::XSpreadsheetDocument>& xDoc, const table::CellAddress& rPos )
-{
-    uno::Reference<lang::XMultiServiceFactory> xFact( xDoc, uno::UNO_QUERY );
-    uno::Reference<beans::XPropertySet> xConv( xFact->createInstance(
-            OUString::createFromAscii( "com.sun.star.table.CellAddressConversion" ) ), uno::UNO_QUERY );
-    xConv->setPropertyValue( OUString::createFromAscii( "Address" ), uno::makeAny( rPos ) );
-    OUString aRet;
-    xConv->getPropertyValue( OUString::createFromAscii( "UserInterfaceRepresentation" ) ) >>= aRet;
-    return aRet;
-}
-
-bool lcl_ParseCellRef( table::CellAddress& rPos,
-                       const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
-                       const OUString& rStr )
-{
-    uno::Reference<lang::XMultiServiceFactory> xFact( xDoc, uno::UNO_QUERY );
-    uno::Reference<beans::XPropertySet> xConv( xFact->createInstance(
-            OUString::createFromAscii( "com.sun.star.table.CellAddressConversion" ) ), uno::UNO_QUERY );
-    try
-    {
-        xConv->setPropertyValue( OUString::createFromAscii( "UserInterfaceRepresentation" ), uno::makeAny( rStr ) );
-    }
-    catch ( lang::IllegalArgumentException& )
-    {
-        return false;       // no valid ref
-    }
-    xConv->getPropertyValue( OUString::createFromAscii( "Address" ) ) >>= rPos;
-    return true;
-}
-
-bool lcl_ParseRangeRef( table::CellRangeAddress& rRange,
-                        const uno::Reference<sheet::XSpreadsheetDocument>& xDoc,
-                        const OUString& rStr )
-{
-    uno::Reference<lang::XMultiServiceFactory> xFact( xDoc, uno::UNO_QUERY );
-    uno::Reference<beans::XPropertySet> xConv( xFact->createInstance(
-            OUString::createFromAscii( "com.sun.star.table.CellRangeAddressConversion" ) ), uno::UNO_QUERY );
-    try
-    {
-        xConv->setPropertyValue( OUString::createFromAscii( "UserInterfaceRepresentation" ), uno::makeAny( rStr ) );
-    }
-    catch ( lang::IllegalArgumentException& )
-    {
-        return false;       // no valid ref
-    }
-    xConv->getPropertyValue( OUString::createFromAscii( "Address" ) ) >>= rRange;
-    return true;
 }
 
 // -------------------------------------------------------------------------

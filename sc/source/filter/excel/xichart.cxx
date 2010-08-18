@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xichart.cxx,v $
- * $Revision: 1.20.62.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,12 +31,20 @@
 #include "xichart.hxx"
 
 #include <algorithm>
+#include <memory>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/chart/ChartAxisArrangeOrderType.hpp>
+#include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
+#include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -54,17 +59,27 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
+#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 
 #include <sfx2/objsh.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unoapi.hxx>
 
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include "rangeutl.hxx"
+#include "tokenarray.hxx"
+#include "token.hxx"
+#include "compiler.hxx"
+#include "reftokenhelper.hxx"
+#include "chartlis.hxx"
 #include "fprogressbar.hxx"
 #include "xltracer.hxx"
 #include "xistream.hxx"
@@ -72,10 +87,6 @@
 #include "xistyle.hxx"
 #include "xipage.hxx"
 #include "xiview.hxx"
-#include "xiescher.hxx"
-#include "tokenarray.hxx"
-#include "token.hxx"
-#include "compiler.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -84,40 +95,48 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::frame::XModel;
 using ::com::sun::star::util::XNumberFormatsSupplier;
+using ::com::sun::star::drawing::XDrawPage;
+using ::com::sun::star::drawing::XDrawPageSupplier;
+using ::com::sun::star::drawing::XShape;
 
+using ::com::sun::star::chart2::IncrementData;
+using ::com::sun::star::chart2::RelativePosition;
+using ::com::sun::star::chart2::ScaleData;
+using ::com::sun::star::chart2::SubIncrement;
+using ::com::sun::star::chart2::XAxis;
 using ::com::sun::star::chart2::XChartDocument;
-using ::com::sun::star::chart2::XDiagram;
-using ::com::sun::star::chart2::XCoordinateSystemContainer;
-using ::com::sun::star::chart2::XCoordinateSystem;
-using ::com::sun::star::chart2::XChartTypeContainer;
 using ::com::sun::star::chart2::XChartType;
-using ::com::sun::star::chart2::XDataSeriesContainer;
+using ::com::sun::star::chart2::XChartTypeContainer;
+using ::com::sun::star::chart2::XCoordinateSystem;
+using ::com::sun::star::chart2::XCoordinateSystemContainer;
 using ::com::sun::star::chart2::XDataSeries;
+using ::com::sun::star::chart2::XDataSeriesContainer;
+using ::com::sun::star::chart2::XDiagram;
+using ::com::sun::star::chart2::XFormattedString;
+using ::com::sun::star::chart2::XLegend;
 using ::com::sun::star::chart2::XRegressionCurve;
 using ::com::sun::star::chart2::XRegressionCurveContainer;
-using ::com::sun::star::chart2::XAxis;
 using ::com::sun::star::chart2::XScaling;
-using ::com::sun::star::chart2::ScaleData;
-using ::com::sun::star::chart2::IncrementData;
-using ::com::sun::star::chart2::SubIncrement;
-using ::com::sun::star::chart2::XLegend;
-using ::com::sun::star::chart2::XTitled;
 using ::com::sun::star::chart2::XTitle;
-using ::com::sun::star::chart2::XFormattedString;
+using ::com::sun::star::chart2::XTitled;
 
 using ::com::sun::star::chart2::data::XDataProvider;
 using ::com::sun::star::chart2::data::XDataReceiver;
+using ::com::sun::star::chart2::data::XDataSequence;
 using ::com::sun::star::chart2::data::XDataSink;
 using ::com::sun::star::chart2::data::XLabeledDataSequence;
-using ::com::sun::star::chart2::data::XDataSequence;
 
 using ::formula::FormulaToken;
 using ::formula::StackVar;
+
+namespace cssc = ::com::sun::star::chart;
+namespace cssc2 = ::com::sun::star::chart2;
 
 // Helpers ====================================================================
 
@@ -137,10 +156,10 @@ void lclSetValueOrClearAny( Any& rAny, const Type& rValue, bool bClear )
         rAny <<= rValue;
 }
 
-void lclSetScaledValueOrClearAny( Any& rAny, double fValue, Reference< XScaling > xScaling, bool bClear )
+void lclSetExpValueOrClearAny( Any& rAny, double fValue, bool bLogScale, bool bClear )
 {
-    if( !bClear && xScaling.is() )
-        fValue = xScaling->doScaling( fValue );
+    if( !bClear && bLogScale )
+        fValue = pow( 10.0, fValue );
     lclSetValueOrClearAny( rAny, fValue, bClear );
 }
 
@@ -149,28 +168,18 @@ void lclSetScaledValueOrClearAny( Any& rAny, double fValue, Reference< XScaling 
 // Common =====================================================================
 
 /** Stores global data needed in various classes of the Chart import filter. */
-class XclImpChRootData : public XclChRootData
+struct XclImpChRootData : public XclChRootData
 {
-public:
-    explicit            XclImpChRootData( XclImpChChart* pChartData );
+    XclImpChChart&      mrChartData;            /// The chart data object.
 
-    /** Returns a reference to the parent chart data object. */
-    inline XclImpChChart& GetChartData() const { return *mpChartData; }
-
-private:
-    XclImpChChart*      mpChartData;            /// Pointer to the chart data object.
+    inline explicit     XclImpChRootData( XclImpChChart& rChartData ) : mrChartData( rChartData ) {}
 };
-
-XclImpChRootData::XclImpChRootData( XclImpChChart* pChartData ) :
-    mpChartData( pChartData )
-{
-}
 
 // ----------------------------------------------------------------------------
 
-XclImpChRoot::XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart* pChartData ) :
+XclImpChRoot::XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData ) :
     XclImpRoot( rRoot ),
-    mxChData( new XclImpChRootData( pChartData ) )
+    mxChData( new XclImpChRootData( rChartData ) )
 {
 }
 
@@ -180,22 +189,22 @@ XclImpChRoot::~XclImpChRoot()
 
 XclImpChChart& XclImpChRoot::GetChartData() const
 {
-    return mxChData->GetChartData();
+    return mxChData->mrChartData;
 }
 
 const XclChTypeInfo& XclImpChRoot::GetChartTypeInfo( XclChTypeId eType ) const
 {
-    return mxChData->GetTypeInfoProvider().GetTypeInfo( eType );
+    return mxChData->mxTypeInfoProv->GetTypeInfo( eType );
 }
 
 const XclChTypeInfo& XclImpChRoot::GetChartTypeInfo( sal_uInt16 nRecId ) const
 {
-    return mxChData->GetTypeInfoProvider().GetTypeInfoFromRecId( nRecId );
+    return mxChData->mxTypeInfoProv->GetTypeInfoFromRecId( nRecId );
 }
 
 const XclChFormatInfo& XclImpChRoot::GetFormatInfo( XclChObjectType eObjType ) const
 {
-    return mxChData->GetFormatInfoProvider().GetFormatInfo( eObjType );
+    return mxChData->mxFmtInfoProv->GetFormatInfo( eObjType );
 }
 
 Color XclImpChRoot::GetFontAutoColor() const
@@ -216,10 +225,10 @@ Color XclImpChRoot::GetSeriesFillAutoColor( sal_uInt16 nFormatIdx ) const
     return ScfTools::GetMixedColor( aColor, rPal.GetColor( EXC_COLOR_CHWINDOWBACK ), nTrans );
 }
 
-void XclImpChRoot::InitConversion( Reference< XChartDocument > xChartDoc ) const
+void XclImpChRoot::InitConversion( Reference< XChartDocument > xChartDoc, const Rectangle& rChartRect ) const
 {
     // create formatting object tables
-    mxChData->InitConversion( xChartDoc );
+    mxChData->InitConversion( GetRoot(), xChartDoc, rChartRect );
 
     // lock the model to suppress any internal updates
     Reference< XModel > xModel( xChartDoc, UNO_QUERY );
@@ -242,28 +251,62 @@ void XclImpChRoot::InitConversion( Reference< XChartDocument > xChartDoc ) const
     }
 }
 
-void XclImpChRoot::FinishConversion( ScfProgressBar& rProgress ) const
+void XclImpChRoot::FinishConversion( XclImpDffConverter& rDffConv ) const
 {
-    rProgress.Progress( EXC_CHART_PROGRESS_SIZE );
+    rDffConv.Progress( EXC_CHART_PROGRESS_SIZE );
     // unlock the model
-    Reference< XModel > xModel( mxChData->GetChartDoc(), UNO_QUERY );
+    Reference< XModel > xModel( mxChData->mxChartDoc, UNO_QUERY );
     if( xModel.is() )
         xModel->unlockControllers();
-    rProgress.Progress( EXC_CHART_PROGRESS_SIZE );
+    rDffConv.Progress( EXC_CHART_PROGRESS_SIZE );
 
     mxChData->FinishConversion();
 }
 
 Reference< XDataProvider > XclImpChRoot::GetDataProvider() const
 {
-    return mxChData->GetChartDoc()->getDataProvider();
+    return mxChData->mxChartDoc->getDataProvider();
+}
+
+Reference< XShape > XclImpChRoot::GetTitleShape( const XclChTextKey& rTitleKey ) const
+{
+    return mxChData->GetTitleShape( rTitleKey );
+}
+
+sal_Int32 XclImpChRoot::CalcHmmFromChartX( sal_Int32 nPosX ) const
+{
+    return static_cast< sal_Int32 >( mxChData->mfUnitSizeX * nPosX + mxChData->mnBorderGapX + 0.5 );
+}
+
+sal_Int32 XclImpChRoot::CalcHmmFromChartY( sal_Int32 nPosY ) const
+{
+    return static_cast< sal_Int32 >( mxChData->mfUnitSizeY * nPosY + mxChData->mnBorderGapY + 0.5 );
+}
+
+::com::sun::star::awt::Rectangle XclImpChRoot::CalcHmmFromChartRect( const XclChRectangle& rRect ) const
+{
+    return ::com::sun::star::awt::Rectangle(
+        CalcHmmFromChartX( rRect.mnX ),
+        CalcHmmFromChartY( rRect.mnY ),
+        CalcHmmFromChartX( rRect.mnWidth ),
+        CalcHmmFromChartY( rRect.mnHeight ) );
+}
+
+double XclImpChRoot::CalcRelativeFromChartX( sal_Int32 nPosX ) const
+{
+    return static_cast< double >( CalcHmmFromChartX( nPosX ) ) / mxChData->maChartRect.GetWidth();
+}
+
+double XclImpChRoot::CalcRelativeFromChartY( sal_Int32 nPosY ) const
+{
+    return static_cast< double >( CalcHmmFromChartY( nPosY ) ) / mxChData->maChartRect.GetHeight();
 }
 
 void XclImpChRoot::ConvertLineFormat( ScfPropertySet& rPropSet,
         const XclChLineFormat& rLineFmt, XclChPropertyMode ePropMode ) const
 {
     GetChartPropSetHelper().WriteLineProperties(
-        rPropSet, mxChData->GetLineDashTable(), rLineFmt, ePropMode );
+        rPropSet, *mxChData->mxLineDashTable, rLineFmt, ePropMode );
 }
 
 void XclImpChRoot::ConvertAreaFormat( ScfPropertySet& rPropSet,
@@ -277,7 +320,7 @@ void XclImpChRoot::ConvertEscherFormat( ScfPropertySet& rPropSet,
         XclChPropertyMode ePropMode ) const
 {
     GetChartPropSetHelper().WriteEscherProperties( rPropSet,
-        mxChData->GetGradientTable(), mxChData->GetHatchTable(), mxChData->GetBitmapTable(),
+        *mxChData->mxGradientTable, *mxChData->mxHatchTable, *mxChData->mxBitmapTable,
         rEscherFmt, rPicFmt, ePropMode );
 }
 
@@ -348,7 +391,13 @@ void XclImpChGroupBase::SkipBlock( XclImpStream& rStrm )
 
 void XclImpChFramePos::ReadChFramePos( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnObjType >> maData.mnSizeMode >> maData.maRect;
+    rStrm >> maData.mnTLMode >> maData.mnBRMode;
+    /*  According to the spec, the upper 16 bits of all members in the
+        rectangle are unused and may contain garbage. */
+    maData.maRect.mnX = rStrm.ReadInt16(); rStrm.Ignore( 2 );
+    maData.maRect.mnY = rStrm.ReadInt16(); rStrm.Ignore( 2 );
+    maData.maRect.mnWidth = rStrm.ReadInt16(); rStrm.Ignore( 2 );
+    maData.maRect.mnHeight = rStrm.ReadInt16(); rStrm.Ignore( 2 );
 }
 
 // ----------------------------------------------------------------------------
@@ -634,8 +683,11 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
 // ----------------------------------------------------------------------------
 
 XclImpChSourceLink::XclImpChSourceLink( const XclImpChRoot& rRoot ) :
-    XclImpChRoot( rRoot ),
-    mpTokenArray(static_cast<ScTokenArray*>(NULL))
+    XclImpChRoot( rRoot )
+{
+}
+
+XclImpChSourceLink::~XclImpChSourceLink()
 {
 }
 
@@ -646,18 +698,16 @@ void XclImpChSourceLink::ReadChSourceLink( XclImpStream& rStrm )
             >> maData.mnFlags
             >> maData.mnNumFmtIdx;
 
+    mxTokenArray.reset();
     if( GetLinkType() == EXC_CHSRCLINK_WORKSHEET )
     {
         // read token array
         XclTokenArray aXclTokArr;
         rStrm >> aXclTokArr;
 
-        // convert xcl formula tokens to Calc's.
-        const ScTokenArray* pTokenArray =
-            GetFormulaCompiler().CreateFormula(EXC_FMLATYPE_CHART, aXclTokArr);
-
-        if (pTokenArray)
-            mpTokenArray.reset(pTokenArray->Clone());
+        // convert BIFF formula tokens to Calc token array
+        if( const ScTokenArray* pTokens = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_CHART, aXclTokArr ) )
+            mxTokenArray.reset( pTokens->Clone() );
     }
 
     // try to read a following CHSTRING record
@@ -684,79 +734,72 @@ void XclImpChSourceLink::SetTextFormats( const XclFormatRunVec& rFormats )
 
 sal_uInt16 XclImpChSourceLink::GetCellCount() const
 {
-    using namespace ::formula;
-
     sal_uInt32 nCellCount = 0;
-    mpTokenArray->Reset();
-    for (const FormulaToken* p = mpTokenArray->First(); p; p = mpTokenArray->Next())
+    if( mxTokenArray.is() )
     {
-        switch (p->GetType())
+        mxTokenArray->Reset();
+        for( const FormulaToken* pToken = mxTokenArray->First(); pToken; pToken = mxTokenArray->Next() )
         {
-            case svSingleRef:
-            case svExternalSingleRef:
-                // single cell
-                ++nCellCount;
-            break;
-            case svDoubleRef:
-            case svExternalDoubleRef:
+            switch( pToken->GetType() )
             {
-                // cell range
-                const ScComplexRefData& rData = static_cast<const ScToken*>(p)->GetDoubleRef();
-                const ScSingleRefData& s = rData.Ref1;
-                const ScSingleRefData& e = rData.Ref2;
-                SCsTAB nTab = e.nTab - s.nTab;
-                SCsCOL nCol = e.nCol - s.nCol;
-                SCsROW nRow = e.nRow - s.nRow;
-                nCellCount += static_cast<sal_uInt32>(nCol+1) *
-                              static_cast<sal_uInt32>(nRow+1) *
-                              static_cast<sal_uInt32>(nTab+1);
+                case ::formula::svSingleRef:
+                case ::formula::svExternalSingleRef:
+                    // single cell
+                    ++nCellCount;
+                break;
+                case ::formula::svDoubleRef:
+                case ::formula::svExternalDoubleRef:
+                {
+                    // cell range
+                    const ScComplexRefData& rComplexRef = static_cast< const ScToken* >( pToken )->GetDoubleRef();
+                    const ScSingleRefData& rRef1 = rComplexRef.Ref1;
+                    const ScSingleRefData& rRef2 = rComplexRef.Ref2;
+                    sal_uInt32 nTabs = static_cast< sal_uInt32 >( rRef2.nTab - rRef1.nTab + 1 );
+                    sal_uInt32 nCols = static_cast< sal_uInt32 >( rRef2.nCol - rRef1.nCol + 1 );
+                    sal_uInt32 nRows = static_cast< sal_uInt32 >( rRef2.nRow - rRef1.nRow + 1 );
+                    nCellCount += nCols * nRows * nTabs;
+                }
+                break;
+                default: ;
             }
-            break;
-            default: ;
         }
     }
-    return limit_cast<sal_uInt16>(nCellCount);
+    return limit_cast< sal_uInt16 >( nCellCount );
 }
 
 void XclImpChSourceLink::ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const
 {
-    if( ::get_flag( maData.mnFlags, EXC_CHSRCLINK_NUMFMT ) )
-    {
-        sal_uInt32 nScNumFmt = GetNumFmtBuffer().GetScFormat( maData.mnNumFmtIdx );
-        if( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
-        {
-            sal_Int32 nApiNumFmt = static_cast< sal_Int32 >( nScNumFmt );
-            if( bPercent )
-                rPropSet.SetProperty( EXC_CHPROP_PERCENTAGENUMFMT, nApiNumFmt );
-            else
-                rPropSet.SetProperty( EXC_CHPROP_NUMBERFORMAT, nApiNumFmt );
-        }
-    }
+    bool bLinkToSource = ::get_flag( maData.mnFlags, EXC_CHSRCLINK_NUMFMT );
+    sal_uInt32 nScNumFmt = bLinkToSource ? GetNumFmtBuffer().GetScFormat( maData.mnNumFmtIdx ) : NUMBERFORMAT_ENTRY_NOT_FOUND;
+    OUString aPropName = bPercent ? EXC_CHPROP_PERCENTAGENUMFMT : EXC_CHPROP_NUMBERFORMAT;
+    if( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
+        rPropSet.SetProperty( aPropName, static_cast< sal_Int32 >( nScNumFmt ) );
+    else
+        // restore 'link to source' at data point (series may contain manual number format)
+        rPropSet.SetAnyProperty( aPropName, Any() );
 }
 
 Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUString& rRole ) const
 {
     Reference< XDataSequence > xDataSeq;
     Reference< XDataProvider > xDataProv = GetDataProvider();
-    if( xDataProv.is() )
+    if( xDataProv.is() && mxTokenArray.is() )
     {
-        if (mpTokenArray)
+        ScCompiler aComp( GetDocPtr(), ScAddress(), *mxTokenArray );
+        aComp.SetGrammar( ::formula::FormulaGrammar::GRAM_ENGLISH );
+        OUStringBuffer aRangeRep;
+        aComp.CreateStringFromTokenArray( aRangeRep );
+        try
         {
-            ScCompiler aComp(GetDocPtr(), ScAddress(), *mpTokenArray);
-            aComp.SetGrammar(::formula::FormulaGrammar::GRAM_ENGLISH);
-            OUStringBuffer aBuf;
-            aComp.CreateStringFromTokenArray(aBuf);
-            xDataSeq = xDataProv->createDataSequenceByRangeRepresentation(
-                aBuf.makeStringAndClear());
+            xDataSeq = xDataProv->createDataSequenceByRangeRepresentation( aRangeRep.makeStringAndClear() );
+            // set sequence role
+            ScfPropertySet aSeqProp( xDataSeq );
+            aSeqProp.SetProperty( EXC_CHPROP_ROLE, rRole );
         }
-        else
+        catch( Exception& )
         {
-            DBG_ERRORFILE( "XclImpChSourceLink::CreateDataSequence - cannot create data sequence" );
+//            DBG_ERRORFILE( "XclImpChSourceLink::CreateDataSequence - cannot create data sequence" );
         }
-
-        // set sequence role
-        ScfPropertySet aSeqProp( xDataSeq );
-        aSeqProp.SetProperty( EXC_CHPROP_ROLE, rRole );
     }
     return xDataSeq;
 }
@@ -793,6 +836,22 @@ Sequence< Reference< XFormattedString > > XclImpChSourceLink::CreateStringSequen
     return ScfApiHelper::VectorToSequence( aStringVec );
 }
 
+void XclImpChSourceLink::FillSourceLink( ::std::vector< ScSharedTokenRef >& rTokens ) const
+{
+    if( !mxTokenArray.is() )
+        // no links to fill.
+        return;
+
+    mxTokenArray->Reset();
+    for (FormulaToken* p = mxTokenArray->First(); p; p = mxTokenArray->Next())
+    {
+        ScSharedTokenRef pToken(static_cast<ScToken*>(p->Clone()));
+        if (ScRefTokenHelper::isRef(pToken))
+            // This is a reference token.  Store it.
+            ScRefTokenHelper::join(rTokens, pToken);
+    }
+}
+
 // Text =======================================================================
 
 XclImpChFontBase::~XclImpChFontBase()
@@ -805,9 +864,9 @@ void XclImpChFontBase::ConvertFontBase( const XclImpChRoot& rRoot, ScfPropertySe
     rRoot.ConvertFont( rPropSet, GetFontIndex(), &aFontColor );
 }
 
-void XclImpChFontBase::ConvertRotationBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const
+void XclImpChFontBase::ConvertRotationBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet, bool bSupportsStacked ) const
 {
-    rRoot.GetChartPropSetHelper().WriteRotationProperties( rPropSet, GetRotation() );
+    rRoot.GetChartPropSetHelper().WriteRotationProperties( rPropSet, GetRotation(), bSupportsStacked );
 }
 
 // ----------------------------------------------------------------------------
@@ -843,9 +902,7 @@ void XclImpChText::ReadHeaderRecord( XclImpStream& rStrm )
         // #116397# BIFF8: index into palette used instead of RGB data
         maData.maTextColor = GetPalette().GetColor( rStrm.ReaduInt16() );
         // placement and rotation
-        rStrm >> maData.mnPlacement >> maData.mnRotation;
-        // lower 4 bits used for placement, other bits contain garbage
-        maData.mnPlacement &= 0x000F;
+        rStrm >> maData.mnFlags2 >> maData.mnRotation;
     }
     else
     {
@@ -859,6 +916,10 @@ void XclImpChText::ReadSubRecord( XclImpStream& rStrm )
 {
     switch( rStrm.GetRecId() )
     {
+        case EXC_ID_CHFRAMEPOS:
+            mxFramePos.reset( new XclImpChFramePos );
+            mxFramePos->ReadChFramePos( rStrm );
+        break;
         case EXC_ID_CHFONT:
             mxFont.reset( new XclImpChFont );
             mxFont->ReadChFont( rStrm );
@@ -877,6 +938,9 @@ void XclImpChText::ReadSubRecord( XclImpStream& rStrm )
         break;
         case EXC_ID_CHOBJECTLINK:
             rStrm >> maObjLink.mnTarget >> maObjLink.maPointPos.mnSeriesIdx >> maObjLink.maPointPos.mnPointIdx;
+        break;
+        case EXC_ID_CHFRLABELPROPS:
+            ReadChFrLabelProps( rStrm );
         break;
         case EXC_ID_CHEND:
             if( mxSrcLink.is() && !maFormats.empty() )
@@ -938,6 +1002,11 @@ void XclImpChText::ConvertFont( ScfPropertySet& rPropSet ) const
     ConvertFontBase( GetChRoot(), rPropSet );
 }
 
+void XclImpChText::ConvertRotation( ScfPropertySet& rPropSet, bool bSupportsStacked ) const
+{
+    ConvertRotationBase( GetChRoot(), rPropSet, bSupportsStacked );
+}
+
 void XclImpChText::ConvertFrame( ScfPropertySet& rPropSet ) const
 {
     if( mxFrame.is() )
@@ -952,31 +1021,45 @@ void XclImpChText::ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) cons
 
 void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const
 {
-    const sal_uInt16 EXC_CHTEXT_SHOWANYCATEG   = EXC_CHTEXT_SHOWCATEGPERC | EXC_CHTEXT_SHOWCATEG;
-    const sal_uInt16 EXC_CHTEXT_SHOWANYVALUE   = EXC_CHTEXT_SHOWVALUE;
-    const sal_uInt16 EXC_CHTEXT_SHOWANYPERCENT = EXC_CHTEXT_SHOWPERCENT | EXC_CHTEXT_SHOWCATEGPERC;
+    // existing CHFRLABELPROPS record wins over flags from CHTEXT
+    sal_uInt16 nShowFlags = mxLabelProps.is() ? mxLabelProps->mnFlags : maData.mnFlags;
+    sal_uInt16 SHOWANYCATEG   = mxLabelProps.is() ? EXC_CHFRLABELPROPS_SHOWCATEG : (EXC_CHTEXT_SHOWCATEGPERC | EXC_CHTEXT_SHOWCATEG);
+    sal_uInt16 SHOWANYVALUE   = mxLabelProps.is() ? EXC_CHFRLABELPROPS_SHOWVALUE : EXC_CHTEXT_SHOWVALUE;
+    sal_uInt16 SHOWANYPERCENT = mxLabelProps.is() ? EXC_CHFRLABELPROPS_SHOWPERCENT : (EXC_CHTEXT_SHOWPERCENT | EXC_CHTEXT_SHOWCATEGPERC);
+    sal_uInt16 SHOWANYBUBBLE  = mxLabelProps.is() ? EXC_CHFRLABELPROPS_SHOWBUBBLE : EXC_CHTEXT_SHOWBUBBLE;
 
-    bool bIsPie       = rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE;
+    // get raw flags for label values
     bool bShowNone    = IsDeleted();
-    bool bShowCateg   = !bShowNone && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWANYCATEG );
-    bool bShowPercent = !bShowNone && bIsPie && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWANYPERCENT );
-    bool bShowValue   = !bShowNone && !bShowPercent && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWANYVALUE );
-    bool bShowAny     = bShowValue || bShowPercent || bShowCateg;
-    bool bShowSymbol  = bShowAny && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWSYMBOL );
+    bool bShowCateg   = !bShowNone && ::get_flag( nShowFlags, SHOWANYCATEG );
+    bool bShowPercent = !bShowNone && ::get_flag( nShowFlags, SHOWANYPERCENT );
+    bool bShowValue   = !bShowNone && ::get_flag( nShowFlags, SHOWANYVALUE );
+    bool bShowBubble  = !bShowNone && ::get_flag( nShowFlags, SHOWANYBUBBLE );
 
-    // type of attached label
-    namespace cssc = ::com::sun::star::chart2;
-    cssc::DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
+    // adjust to Chart2 behaviour
+    if( rTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES )
+         bShowValue = bShowBubble;  // Chart2 bubble charts show bubble size if 'ShowValue' is set
+
+    // other flags
+    bool bShowAny = bShowValue || bShowPercent || bShowCateg;
+    bool bShowSymbol = bShowAny && ::get_flag( maData.mnFlags, EXC_CHTEXT_SHOWSYMBOL );
+
+    // create API struct for label values, set API label separator
+    cssc2::DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
     rPropSet.SetProperty( EXC_CHPROP_LABEL, aPointLabel );
+    String aSep = mxLabelProps.is() ? mxLabelProps->maSeparator : String( sal_Unicode( '\n' ) );
+    if( aSep.Len() == 0 )
+        aSep = CREATE_STRING( "; " );
+    rPropSet.SetStringProperty( EXC_CHPROP_LABELSEPARATOR, aSep );
 
     // text properties of attached label
     if( bShowAny )
     {
         ConvertFont( rPropSet );
+        ConvertRotation( rPropSet, false );
         // label placement
-        using namespace ::com::sun::star::chart::DataLabelPlacement;
+        using namespace cssc::DataLabelPlacement;
         sal_Int32 nPlacement = rTypeInfo.mnDefaultLabelPos;
-        switch( maData.mnPlacement )
+        switch( ::extract_value< sal_uInt16 >( maData.mnFlags2, 0, 4 ) )
         {
             case EXC_CHTEXT_POS_DEFAULT:    nPlacement = rTypeInfo.mnDefaultLabelPos;   break;
             case EXC_CHTEXT_POS_OUTSIDE:    nPlacement = OUTSIDE;                       break;
@@ -1015,11 +1098,80 @@ Reference< XTitle > XclImpChText::CreateTitle() const
                 // more title formatting properties
                 ScfPropertySet aTitleProp( xTitle );
                 ConvertFrame( aTitleProp );
-                ConvertRotationBase( GetChRoot(), aTitleProp );
+                ConvertRotation( aTitleProp, true );
             }
         }
     }
     return xTitle;
+}
+
+void XclImpChText::ConvertTitlePosition( const XclChTextKey& rTitleKey ) const
+{
+    if( !mxFramePos ) return;
+
+    const XclChFramePos& rPosData = mxFramePos->GetFramePosData();
+    OSL_ENSURE( (rPosData.mnTLMode == EXC_CHFRAMEPOS_PARENT) && (rPosData.mnBRMode == EXC_CHFRAMEPOS_PARENT),
+        "XclImpChText::ConvertTitlePosition - unexpected frame position mode" );
+
+    /*  Check if title is moved manually. To get the actual position of the
+        title, we do some kind of hack and use the values from the CHTEXT
+        record, effectively ignoring the contents of the CHFRAMEPOS record
+        which contains the position relative to the default title position
+        (according to the spec, the CHFRAMEPOS supersedes the CHTEXT record).
+        Especially when it comes to axis titles, things would become very
+        complicated here, because the relative title position is stored in a
+        measurement unit that is dependent on the size of the inner plot area,
+        the interpretation of the X and Y coordinate is dependent on the
+        direction of the axis, and in 3D charts, and the title default
+        positions are dependent on the 3D view settings (rotation, elevation,
+        and perspective). Thus, it is easier to assume that the creator has
+        written out the correct absolute position and size of the title in the
+        CHTEXT record. This is assured by checking that the shape size stored
+        in the CHTEXT record is non-zero. */
+    if( (rPosData.mnTLMode == EXC_CHFRAMEPOS_PARENT) &&
+        ((rPosData.maRect.mnX != 0) || (rPosData.maRect.mnY != 0)) &&
+        (maData.maRect.mnWidth > 0) && (maData.maRect.mnHeight > 0) ) try
+    {
+        Reference< XShape > xTitleShape( GetTitleShape( rTitleKey ), UNO_SET_THROW );
+        // the call to XShape.getSize() may recalc the chart view
+        ::com::sun::star::awt::Size aTitleSize = xTitleShape->getSize();
+        // rotated titles need special handling...
+        sal_Int32 nScRot = XclTools::GetScRotation( GetRotation(), 0 );
+        double fRad = nScRot * F_PI18000;
+        double fSin = fabs( sin( fRad ) );
+        double fCos = fabs( cos( fRad ) );
+        ::com::sun::star::awt::Size aBoundSize(
+            static_cast< sal_Int32 >( fCos * aTitleSize.Width + fSin * aTitleSize.Height + 0.5 ),
+            static_cast< sal_Int32 >( fSin * aTitleSize.Width + fCos * aTitleSize.Height + 0.5 ) );
+        // calculate the title position from the values in the CHTEXT record
+        ::com::sun::star::awt::Point aTitlePos(
+            CalcHmmFromChartX( maData.maRect.mnX ),
+            CalcHmmFromChartY( maData.maRect.mnY ) );
+        // add part of height to X direction, if title is rotated down (clockwise)
+        if( nScRot > 18000 )
+            aTitlePos.X += static_cast< sal_Int32 >( fSin * aTitleSize.Height + 0.5 );
+        // add part of width to Y direction, if title is rotated up (counterclockwise)
+        else if( nScRot > 0 )
+            aTitlePos.Y += static_cast< sal_Int32 >( fSin * aTitleSize.Width + 0.5 );
+        // set the resulting position at the title shape
+        xTitleShape->setPosition( aTitlePos );
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+void XclImpChText::ReadChFrLabelProps( XclImpStream& rStrm )
+{
+    if( GetBiff() == EXC_BIFF8 )
+    {
+        mxLabelProps.reset( new XclChFrLabelProps );
+        sal_uInt16 nSepLen;
+        rStrm.Ignore( 12 );
+        rStrm >> mxLabelProps->mnFlags >> nSepLen;
+        if( nSepLen > 0 )
+            mxLabelProps->maSeparator = rStrm.ReadUniString( nSepLen );
+    }
 }
 
 namespace {
@@ -1032,12 +1184,14 @@ void lclUpdateText( XclImpChTextRef& rxText, XclImpChTextRef xDefText )
         rxText = xDefText;
 }
 
-void lclFinalizeTitle( XclImpChTextRef& rxTitle, XclImpChTextRef xDefText )
+void lclFinalizeTitle( XclImpChTextRef& rxTitle, XclImpChTextRef xDefText, const String& rAutoTitle )
 {
     /*  Do not update a title, if it is not visible (if rxTitle is null).
         Existing reference indicates enabled title. */
     if( rxTitle.is() )
     {
+        if( !rxTitle->HasString() )
+            rxTitle->SetString( rAutoTitle );
         if( rxTitle->HasString() )
             rxTitle->UpdateText( xDefText.get() );
         else
@@ -1489,7 +1643,6 @@ Reference< XPropertySet > XclImpChSerErrorBar::CreateErrorBar( const XclImpChSer
         aBarProp.SetBoolProperty( EXC_CHPROP_SHOWNEGATIVEERROR, pNegBar != 0 );
 
         // type of displayed error
-        namespace cssc = ::com::sun::star::chart;
         switch( pPrimaryBar->maData.mnSourceType )
         {
             case EXC_CHSERERR_PERCENT:
@@ -1746,6 +1899,14 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
                     CreateCategSequence( EXC_CHPROP_ROLE_XVALUES );
                 if( xXValueSeq.is() )
                     aLabeledSeqVec.push_back( xXValueSeq );
+                // add size values of bubble charts
+                if( rTypeInfo.meTypeId == EXC_CHTYPEID_BUBBLES )
+                {
+                    Reference< XLabeledDataSequence > xSizeValueSeq =
+                        lclCreateLabeledDataSequence( mxBubbleLink, EXC_CHPROP_ROLE_SIZEVALUES, mxTitleLink.get() );
+                    if( xSizeValueSeq.is() )
+                        aLabeledSeqVec.push_back( xSizeValueSeq );
+                }
             }
             // attach labeled data sequences to series
             if( !aLabeledSeqVec.empty() )
@@ -1793,6 +1954,18 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
         }
     }
     return xDataSeries;
+}
+
+void XclImpChSeries::FillAllSourceLinks( ::std::vector< ScSharedTokenRef >& rTokens ) const
+{
+    if( mxValueLink.is() )
+        mxValueLink->FillSourceLink( rTokens );
+    if( mxCategLink.is() )
+        mxCategLink->FillSourceLink( rTokens );
+    if( mxTitleLink.is() )
+        mxTitleLink->FillSourceLink( rTokens );
+    if( mxBubbleLink.is() )
+        mxBubbleLink->FillSourceLink( rTokens );
 }
 
 void XclImpChSeries::ReadChSourceLink( XclImpStream& rStrm )
@@ -2117,7 +2290,9 @@ void XclImpChChart3d::ReadChChart3d( XclImpStream& rStrm )
 void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, bool b3dWallChart ) const
 {
     namespace cssd = ::com::sun::star::drawing;
-    DBG_ASSERT( ::get_flag( maData.mnFlags, EXC_CHCHART3D_HASWALLS ) == b3dWallChart, "XclImpChChart3d::Convert - wrong wall flag" );
+
+//    #i104057# do not assert this, written by broken external generators
+//    DBG_ASSERT( ::get_flag( maData.mnFlags, EXC_CHCHART3D_HASWALLS ) == b3dWallChart, "XclImpChChart3d::Convert - wrong wall flag" );
 
     sal_Int32 nRotationY = 0;
     sal_Int32 nRotationX = 0;
@@ -2204,6 +2379,10 @@ void XclImpChLegend::ReadSubRecord( XclImpStream& rStrm )
 {
     switch( rStrm.GetRecId() )
     {
+        case EXC_ID_CHFRAMEPOS:
+            mxFramePos.reset( new XclImpChFramePos );
+            mxFramePos->ReadChFramePos( rStrm );
+        break;
         case EXC_ID_CHTEXT:
             mxText.reset( new XclImpChText( GetChRoot() ) );
             mxText->ReadRecordGroup( rStrm );
@@ -2230,6 +2409,7 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
     if( xLegend.is() )
     {
         ScfPropertySet aLegendProp( xLegend );
+        aLegendProp.SetBoolProperty( EXC_CHPROP_SHOW, true );
 
         // frame properties
         if( mxFrame.is() )
@@ -2237,8 +2417,69 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
         // text properties
         if( mxText.is() )
             mxText->ConvertFont( aLegendProp );
-        // special legend properties
-        GetChartPropSetHelper().WriteLegendProperties( aLegendProp, maData );
+
+        /*  Legend position and size. Default positions are used only if the
+            plot area is positioned automatically (Excel sets the plot area to
+            manual mode, if the legend is moved or resized). With manual plot
+            areas, Excel ignores the value in maData.mnDockMode completely. */
+        cssc2::LegendPosition eApiPos = cssc2::LegendPosition_CUSTOM;
+        cssc2::LegendExpansion eApiExpand = cssc2::LegendExpansion_BALANCED;
+        if( !GetChartData().IsManualPlotArea() ) switch( maData.mnDockMode )
+        {
+            case EXC_CHLEGEND_LEFT:     eApiPos = cssc2::LegendPosition_LINE_START; eApiExpand = cssc2::LegendExpansion_HIGH;   break;
+            case EXC_CHLEGEND_RIGHT:    eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc2::LegendExpansion_HIGH;   break;
+            case EXC_CHLEGEND_TOP:      eApiPos = cssc2::LegendPosition_PAGE_START; eApiExpand = cssc2::LegendExpansion_WIDE;   break;
+            case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc2::LegendPosition_PAGE_END;   eApiExpand = cssc2::LegendExpansion_WIDE;   break;
+            // top-right not supported
+            case EXC_CHLEGEND_CORNER:   eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc2::LegendExpansion_HIGH;   break;
+        }
+
+        // no automatic position: try to find the correct position and size
+        if( eApiPos == cssc2::LegendPosition_CUSTOM )
+        {
+            const XclChFramePos* pFramePos = mxFramePos.is() ? &mxFramePos->GetFramePosData() : 0;
+
+            /*  Legend position. Only the settings from the CHFRAMEPOS record
+                are used by Excel, the position in the CHLEGEND record will be
+                ignored. */
+            if( pFramePos )
+            {
+                RelativePosition aRelPos;
+                aRelPos.Primary = CalcRelativeFromChartX( pFramePos->maRect.mnX );
+                aRelPos.Secondary = CalcRelativeFromChartY( pFramePos->maRect.mnY );
+                aRelPos.Anchor = ::com::sun::star::drawing::Alignment_TOP_LEFT;
+                aLegendProp.SetProperty( EXC_CHPROP_RELATIVEPOSITION, aRelPos );
+            }
+            else
+            {
+                // no manual position found, just go for the default
+                eApiPos = cssc2::LegendPosition_LINE_END;
+            }
+
+
+            /*  Legend size. #i71697# It is not possible to set the legend size
+                directly in the Chart, do some magic here. */
+            if( !pFramePos || (pFramePos->mnBRMode != EXC_CHFRAMEPOS_ABSSIZE_POINTS) ||
+                (pFramePos->maRect.mnWidth == 0) || (pFramePos->maRect.mnHeight == 0) )
+            {
+                // automatic size: determine entry direction from flags
+                eApiExpand = ::get_flagvalue( maData.mnFlags, EXC_CHLEGEND_STACKED,
+                    cssc2::LegendExpansion_HIGH, cssc2::LegendExpansion_WIDE );
+            }
+            else
+            {
+                // legend size is given in points, not in chart units
+                double fRatio = static_cast< double >( pFramePos->maRect.mnWidth ) / pFramePos->maRect.mnHeight;
+                if( fRatio > 1.5 )
+                    eApiExpand = cssc2::LegendExpansion_WIDE;
+                else if( fRatio < 0.75 )
+                    eApiExpand = cssc2::LegendExpansion_HIGH;
+                else
+                    eApiExpand = cssc2::LegendExpansion_BALANCED;
+            }
+        }
+        aLegendProp.SetProperty( EXC_CHPROP_ANCHORPOSITION, eApiPos );
+        aLegendProp.SetProperty( EXC_CHPROP_EXPANSION, eApiExpand );
     }
     return xLegend;
 }
@@ -2281,7 +2522,8 @@ XclImpChTypeGroup::XclImpChTypeGroup( const XclImpChRoot& rRoot ) :
 
 void XclImpChTypeGroup::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.maRect >> maData.mnFlags >> maData.mnGroupIdx;
+    rStrm.Ignore( 16 );
+    rStrm >> maData.mnFlags >> maData.mnGroupIdx;
 }
 
 void XclImpChTypeGroup::ReadSubRecord( XclImpStream& rStrm )
@@ -2471,13 +2713,12 @@ void XclImpChTypeGroup::InsertDataSeries( Reference< XChartType > xChartType,
     if( xSeriesCont.is() && xSeries.is() )
     {
         // series stacking mode
-        namespace cssc = ::com::sun::star::chart2;
-        cssc::StackingDirection eStacking = cssc::StackingDirection_NO_STACKING;
+        cssc2::StackingDirection eStacking = cssc2::StackingDirection_NO_STACKING;
         // stacked overrides deep-3d
         if( maType.IsStacked() || maType.IsPercent() )
-            eStacking = cssc::StackingDirection_Y_STACKING;
+            eStacking = cssc2::StackingDirection_Y_STACKING;
         else if( Is3dDeepChart() )
-            eStacking = cssc::StackingDirection_Z_STACKING;
+            eStacking = cssc2::StackingDirection_Z_STACKING;
 
         // additional series properties
         ScfPropertySet aSeriesProp( xSeries );
@@ -2592,23 +2833,33 @@ void XclImpChLabelRange::ReadChLabelRange( XclImpStream& rStrm )
 
 void XclImpChLabelRange::Convert( ScfPropertySet& rPropSet, ScaleData& rScaleData, bool bMirrorOrient ) const
 {
-    namespace cssc = ::com::sun::star::chart2;
-
-    // do not overlap text
-    rPropSet.SetBoolProperty( EXC_CHPROP_TEXTOVERLAP, false );
-    // do not break text into several lines
-    rPropSet.SetBoolProperty( EXC_CHPROP_TEXTBREAK, false );
-
-    // origin (max-cross not supported, fall back to auto-cross)
-    bool bMaxCross = ::get_flag( maData.mnFlags, EXC_CHLABELRANGE_MAXCROSS );
-    sal_uInt16 nCross = ::std::max< sal_uInt16 >( maData.mnCross, 1 );
-    lclSetValueOrClearAny( rScaleData.Origin, static_cast< double >( nCross ), bMaxCross );
+    // do not overlap text unless all labels are visible
+    rPropSet.SetBoolProperty( EXC_CHPROP_TEXTOVERLAP, maData.mnLabelFreq == 1 );
+    // do not break text into several lines unless all labels are visible
+    rPropSet.SetBoolProperty( EXC_CHPROP_TEXTBREAK, maData.mnLabelFreq == 1 );
+    // do not stagger labels in two lines
+    rPropSet.SetProperty( EXC_CHPROP_ARRANGEORDER, cssc::ChartAxisArrangeOrderType_SIDE_BY_SIDE );
 
     // reverse order
     bool bReverse = ::get_flag( maData.mnFlags, EXC_CHLABELRANGE_REVERSE ) != bMirrorOrient;
-    rScaleData.Orientation = bReverse ? cssc::AxisOrientation_REVERSE : cssc::AxisOrientation_MATHEMATICAL;
+    rScaleData.Orientation = bReverse ? cssc2::AxisOrientation_REVERSE : cssc2::AxisOrientation_MATHEMATICAL;
 
     //! TODO #i58731# show n-th category
+}
+
+void XclImpChLabelRange::ConvertAxisPosition( ScfPropertySet& rPropSet, bool b3dChart ) const
+{
+    /*  Crossing mode (max-cross flag overrides other crossing settings). Excel
+        does not move the Y axis in 3D charts, regardless of actual settings.
+        But: the Y axis has to be moved to "end", if the X axis is mirrored,
+        to keep it at the left end of the chart. */
+    bool bMaxCross = ::get_flag( maData.mnFlags, b3dChart ? EXC_CHLABELRANGE_REVERSE : EXC_CHLABELRANGE_MAXCROSS );
+    cssc::ChartAxisPosition eAxisPos = bMaxCross ? cssc::ChartAxisPosition_END : cssc::ChartAxisPosition_VALUE;
+    rPropSet.SetProperty( EXC_CHPROP_CROSSOVERPOSITION, eAxisPos );
+
+    // crossing position
+    double fCrossingPos = b3dChart ? 1.0 : maData.mnCross;
+    rPropSet.SetProperty( EXC_CHPROP_CROSSOVERVALUE, fCrossingPos );
 }
 
 // ----------------------------------------------------------------------------
@@ -2633,22 +2884,11 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) co
     // scaling algorithm
     bool bLogScale = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE );
     OUString aScalingService = bLogScale ? SERVICE_CHART2_LOGSCALING : SERVICE_CHART2_LINEARSCALING;
-    Reference< XScaling > xScaling( ScfApiHelper::CreateInstance( aScalingService ), UNO_QUERY );
-    Reference< XScaling > xLogScaling;
-    if( xScaling.is() )
-    {
-        rScaleData.Scaling = xScaling;
-        if( bLogScale )
-            xLogScaling = xScaling->getInverseScaling();
-    }
+    rScaleData.Scaling.set( ScfApiHelper::CreateInstance( aScalingService ), UNO_QUERY );
 
     // min/max
-    lclSetScaledValueOrClearAny( rScaleData.Minimum, maData.mfMin, xLogScaling, ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMIN ) );
-    lclSetScaledValueOrClearAny( rScaleData.Maximum, maData.mfMax, xLogScaling, ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMAX ) );
-
-    // origin (max-cross overrides crossing settings, fall back to auto-cross)
-    const sal_uInt16 nAutoCrossFlags = EXC_CHVALUERANGE_AUTOCROSS | EXC_CHVALUERANGE_MAXCROSS;
-    lclSetScaledValueOrClearAny( rScaleData.Origin, maData.mfCross, xLogScaling, ::get_flag( maData.mnFlags, nAutoCrossFlags ) );
+    lclSetExpValueOrClearAny( rScaleData.Minimum, maData.mfMin, bLogScale, ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMIN ) );
+    lclSetExpValueOrClearAny( rScaleData.Maximum, maData.mfMax, bLogScale, ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMAX ) );
 
     // increment
     bool bAutoMajor = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOMAJOR );
@@ -2659,19 +2899,43 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) co
     // minor increment
     Sequence< SubIncrement >& rSubIncrementSeq = rIncrementData.SubIncrements;
     rSubIncrementSeq.realloc( 1 );
-    sal_Int32 nCount = 0;
-    if( !bAutoMajor && !bAutoMinor && (0.0 < maData.mfMinorStep) && (maData.mfMinorStep <= maData.mfMajorStep) )
+    Any& rIntervalCount = rSubIncrementSeq[ 0 ].IntervalCount;
+    if( bLogScale )
     {
-        double fCount = maData.mfMajorStep / maData.mfMinorStep + 0.5;
-        if( fCount < 1001.0 )
-            nCount = static_cast< sal_Int32 >( fCount );
+        if( !bAutoMinor )
+            rIntervalCount <<= sal_Int32( 9 );
     }
-    lclSetValueOrClearAny( rSubIncrementSeq[ 0 ].IntervalCount, nCount, nCount == 0 );
+    else
+    {
+        sal_Int32 nCount = 0;
+        if( !bAutoMajor && !bAutoMinor && (0.0 < maData.mfMinorStep) && (maData.mfMinorStep <= maData.mfMajorStep) )
+        {
+            double fCount = maData.mfMajorStep / maData.mfMinorStep + 0.5;
+            if( fCount < 1001.0 )
+                nCount = static_cast< sal_Int32 >( fCount );
+        }
+        lclSetValueOrClearAny( rIntervalCount, nCount, nCount == 0 );
+    }
 
     // reverse order
-    namespace cssc = ::com::sun::star::chart2;
     bool bReverse = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_REVERSE ) != bMirrorOrient;
-    rScaleData.Orientation = bReverse ? cssc::AxisOrientation_REVERSE : cssc::AxisOrientation_MATHEMATICAL;
+    rScaleData.Orientation = bReverse ? cssc2::AxisOrientation_REVERSE : cssc2::AxisOrientation_MATHEMATICAL;
+}
+
+void XclImpChValueRange::ConvertAxisPosition( ScfPropertySet& rPropSet ) const
+{
+    bool bMaxCross = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_MAXCROSS );
+    bool bAutoCross = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_AUTOCROSS );
+    bool bLogScale = ::get_flag( maData.mnFlags, EXC_CHVALUERANGE_LOGSCALE );
+
+    // crossing mode (max-cross flag overrides other crossing settings)
+    cssc::ChartAxisPosition eAxisPos = bMaxCross ? cssc::ChartAxisPosition_END : cssc::ChartAxisPosition_VALUE;
+    rPropSet.SetProperty( EXC_CHPROP_CROSSOVERPOSITION, eAxisPos );
+
+    // crossing position
+    double fCrossingPos = bAutoCross ? 0.0 : maData.mfCross;
+    if( bLogScale ) fCrossingPos = pow( 10.0, fCrossingPos );
+    rPropSet.SetProperty( EXC_CHPROP_CROSSOVERVALUE, fCrossingPos );
 }
 
 // ----------------------------------------------------------------------------
@@ -2687,6 +2951,18 @@ sal_Int32 lclGetApiTickmarks( sal_uInt8 nXclTickPos )
     return nApiTickmarks;
 }
 
+cssc::ChartAxisLabelPosition lclGetApiLabelPosition( sal_Int8 nXclLabelPos )
+{
+    using namespace ::com::sun::star::chart;
+    switch( nXclLabelPos )
+    {
+        case EXC_CHTICK_LOW:    return ChartAxisLabelPosition_OUTSIDE_START;
+        case EXC_CHTICK_HIGH:   return ChartAxisLabelPosition_OUTSIDE_END;
+        case EXC_CHTICK_NEXT:   return ChartAxisLabelPosition_NEAR_AXIS;
+    }
+    return ChartAxisLabelPosition_NEAR_AXIS;
+}
+
 } // namespace
 
 XclImpChTick::XclImpChTick( const XclImpChRoot& rRoot ) :
@@ -2699,9 +2975,9 @@ void XclImpChTick::ReadChTick( XclImpStream& rStrm )
     rStrm   >> maData.mnMajor
             >> maData.mnMinor
             >> maData.mnLabelPos
-            >> maData.mnBackMode
-            >> maData.maRect
-            >> maData.maTextColor
+            >> maData.mnBackMode;
+    rStrm.Ignore( 16 );
+    rStrm   >> maData.maTextColor
             >> maData.mnFlags;
 
     if( GetBiff() == EXC_BIFF8 )
@@ -2733,6 +3009,8 @@ void XclImpChTick::Convert( ScfPropertySet& rPropSet ) const
 {
     rPropSet.SetProperty( EXC_CHPROP_MAJORTICKS, lclGetApiTickmarks( maData.mnMajor ) );
     rPropSet.SetProperty( EXC_CHPROP_MINORTICKS, lclGetApiTickmarks( maData.mnMinor ) );
+    rPropSet.SetProperty( EXC_CHPROP_LABELPOSITION, lclGetApiLabelPosition( maData.mnLabelPos ) );
+    rPropSet.SetProperty( EXC_CHPROP_MARKPOSITION, cssc::ChartAxisMarkPosition_AT_AXIS );
 }
 
 // ----------------------------------------------------------------------------
@@ -2746,7 +3024,7 @@ XclImpChAxis::XclImpChAxis( const XclImpChRoot& rRoot, sal_uInt16 nAxisType ) :
 
 void XclImpChAxis::ReadHeaderRecord( XclImpStream& rStrm )
 {
-    rStrm >> maData.mnType >> maData.maRect;
+    rStrm >> maData.mnType;
 }
 
 void XclImpChAxis::ReadSubRecord( XclImpStream& rStrm )
@@ -2821,7 +3099,7 @@ sal_uInt16 XclImpChAxis::GetRotation() const
     return mxTick.is() ? mxTick->GetRotation() : EXC_CHART_AUTOROTATION;
 }
 
-Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup, bool bPrimary ) const
+Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup, const XclImpChAxis* pCrossingAxis ) const
 {
     // create the axis object (always)
     Reference< XAxis > xAxis( ScfApiHelper::CreateInstance( SERVICE_CHART2_AXIS ), UNO_QUERY );
@@ -2852,7 +3130,7 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
             else if( const XclImpChText* pDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISLABEL ).get() )
                 pDefText->ConvertFont( aAxisProp );
             // label text rotation
-            ConvertRotationBase( GetChRoot(), aAxisProp );
+            ConvertRotationBase( GetChRoot(), aAxisProp, true );
             // number format
             sal_uInt32 nScNumFmt = GetNumFmtBuffer().GetScFormat( mnNumFmtIdx );
             if( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
@@ -2864,42 +3142,46 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
         const XclChExtTypeInfo& rTypeInfo = rTypeGroup.GetTypeInfo();
         ScaleData aScaleData = xAxis->getScaleData();
         // set axis type
-        namespace ApiAxisType = ::com::sun::star::chart2::AxisType;
         switch( GetAxisType() )
         {
             case EXC_CHAXIS_X:
                 if( rTypeInfo.mbCategoryAxis )
                 {
-                    aScaleData.AxisType = ApiAxisType::CATEGORY;
+                    aScaleData.AxisType = cssc2::AxisType::CATEGORY;
                     aScaleData.Categories = rTypeGroup.CreateCategSequence();
                 }
                 else
-                    aScaleData.AxisType = ApiAxisType::REALNUMBER;
+                    aScaleData.AxisType = cssc2::AxisType::REALNUMBER;
             break;
             case EXC_CHAXIS_Y:
                 aScaleData.AxisType = rTypeGroup.IsPercent() ?
-                    ApiAxisType::PERCENT : ApiAxisType::REALNUMBER;
+                    cssc2::AxisType::PERCENT : cssc2::AxisType::REALNUMBER;
             break;
             case EXC_CHAXIS_Z:
-                aScaleData.AxisType = ApiAxisType::SERIES;
+                aScaleData.AxisType = cssc2::AxisType::SERIES;
             break;
         }
         // axis scaling settings, dependent on axis type
         switch( aScaleData.AxisType )
         {
-            case ApiAxisType::CATEGORY:
-            case ApiAxisType::SERIES:
+            case cssc2::AxisType::CATEGORY:
+            case cssc2::AxisType::SERIES:
                 // #i71684# radar charts have reversed rotation direction
                 mxLabelRange->Convert( aAxisProp, aScaleData, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR );
             break;
-            case ApiAxisType::REALNUMBER:
-            case ApiAxisType::PERCENT:
+            case cssc2::AxisType::REALNUMBER:
+            case cssc2::AxisType::PERCENT:
                 // #i85167# pie/donut charts have reversed rotation direction (at Y axis!)
                 mxValueRange->Convert( aScaleData, rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_PIE );
             break;
             default:
                 DBG_ERRORFILE( "XclImpChAxis::CreateAxis - unknown axis type" );
         }
+
+        /*  Do not set a value to the Origin member anymore (will be done via
+            new axis properties 'CrossoverPosition' and 'CrossoverValue'). */
+        aScaleData.Origin.clear();
+
         // write back
         xAxis->setScaleData( aScaleData );
 
@@ -2920,9 +3202,10 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
                 mxMinorGrid->Convert( GetChRoot(), aSubGridProp, EXC_CHOBJTYPE_GRIDLINE );
         }
 
-        // axis position ------------------------------------------------------
+        // position of crossing axis ------------------------------------------
 
-        aAxisProp.SetProperty( CREATE_OUSTRING( "CrossoverPosition" ), bPrimary ? ::com::sun::star::chart::ChartAxisPosition_START : ::com::sun::star::chart::ChartAxisPosition_END );
+        if( pCrossingAxis )
+            pCrossingAxis->ConvertAxisPosition( aAxisProp, rTypeGroup );
     }
     return xAxis;
 }
@@ -2931,6 +3214,14 @@ void XclImpChAxis::ConvertWall( ScfPropertySet& rPropSet ) const
 {
     if( mxWallFrame.is() )
         mxWallFrame->Convert( rPropSet );
+}
+
+void XclImpChAxis::ConvertAxisPosition( ScfPropertySet& rPropSet, const XclImpChTypeGroup& rTypeGroup ) const
+{
+    if( ((GetAxisType() == EXC_CHAXIS_X) && rTypeGroup.GetTypeInfo().mbCategoryAxis) || (GetAxisType() == EXC_CHAXIS_Z) )
+        mxLabelRange->ConvertAxisPosition( rPropSet, rTypeGroup.Is3dChart() );
+    else
+        mxValueRange->ConvertAxisPosition( rPropSet );
 }
 
 void XclImpChAxis::ReadChAxisLine( XclImpStream& rStrm )
@@ -3003,8 +3294,8 @@ void XclImpChAxesSet::ReadSubRecord( XclImpStream& rStrm )
     switch( rStrm.GetRecId() )
     {
         case EXC_ID_CHFRAMEPOS:
-            mxPos.reset( new XclImpChFramePos );
-            mxPos->ReadChFramePos( rStrm );
+            mxFramePos.reset( new XclImpChFramePos );
+            mxFramePos->ReadChFramePos( rStrm );
         break;
         case EXC_ID_CHAXIS:
             ReadChAxis( rStrm );
@@ -3040,13 +3331,13 @@ void XclImpChAxesSet::Finalize()
     // invalid chart type groups are deleted now, check again with IsValidAxesSet()
     if( IsValidAxesSet() )
     {
-        // create dummy X axis for charts supporting category ranges
-        XclImpChTypeGroupRef xTypeGroup = GetFirstTypeGroup();
-        if( !mxXAxis && xTypeGroup.is() && xTypeGroup->GetTypeInfo().mbCategoryAxis )
+        // always create missing axis objects
+        if( !mxXAxis )
             mxXAxis.reset( new XclImpChAxis( GetChRoot(), EXC_CHAXIS_X ) );
-        // create dummy Y axis for pie/doughnut charts
-        if( !mxYAxis && xTypeGroup.is() && (xTypeGroup->GetTypeInfo().meTypeCateg == EXC_CHTYPECATEG_PIE) )
+        if( !mxYAxis )
             mxYAxis.reset( new XclImpChAxis( GetChRoot(), EXC_CHAXIS_Y ) );
+        if( !mxZAxis && GetFirstTypeGroup()->Is3dDeepChart() )
+            mxZAxis.reset( new XclImpChAxis( GetChRoot(), EXC_CHAXIS_Z ) );
 
         // finalize axes
         if( mxXAxis.is() ) mxXAxis->Finalize();
@@ -3055,9 +3346,10 @@ void XclImpChAxesSet::Finalize()
 
         // finalize axis titles
         XclImpChTextRef xDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISTITLE );
-        lclFinalizeTitle( mxXAxisTitle, xDefText );
-        lclFinalizeTitle( mxYAxisTitle, xDefText );
-        lclFinalizeTitle( mxZAxisTitle, xDefText );
+        String aAutoTitle = CREATE_STRING( "Axis Title" );
+        lclFinalizeTitle( mxXAxisTitle, xDefText, aAutoTitle );
+        lclFinalizeTitle( mxYAxisTitle, xDefText, aAutoTitle );
+        lclFinalizeTitle( mxZAxisTitle, xDefText, aAutoTitle );
 
         // #i47745# missing plot frame -> invisible border and area
         if( !mxPlotFrame )
@@ -3112,11 +3404,21 @@ void XclImpChAxesSet::Convert( Reference< XDiagram > xDiagram ) const
             }
 
             // create the axes with grids and axis titles and insert them into the diagram
-            ConvertAxis( mxXAxis, mxXAxisTitle, xCoordSystem );
-            ConvertAxis( mxYAxis, mxYAxisTitle, xCoordSystem );
-            ConvertAxis( mxZAxis, mxZAxisTitle, xCoordSystem );
+            ConvertAxis( mxXAxis, mxXAxisTitle, xCoordSystem, mxYAxis.get() );
+            ConvertAxis( mxYAxis, mxYAxisTitle, xCoordSystem, mxXAxis.get() );
+            ConvertAxis( mxZAxis, mxZAxisTitle, xCoordSystem, 0 );
         }
     }
+}
+
+void XclImpChAxesSet::ConvertTitlePositions() const
+{
+    if( mxXAxisTitle.is() )
+        mxXAxisTitle->ConvertTitlePosition( XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, maData.mnAxesSetId, EXC_CHAXIS_X ) );
+    if( mxYAxisTitle.is() )
+        mxYAxisTitle->ConvertTitlePosition( XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, maData.mnAxesSetId, EXC_CHAXIS_Y ) );
+    if( mxZAxisTitle.is() )
+        mxZAxisTitle->ConvertTitlePosition( XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, maData.mnAxesSetId, EXC_CHAXIS_Z ) );
 }
 
 void XclImpChAxesSet::ReadChAxis( XclImpStream& rStrm )
@@ -3216,20 +3518,24 @@ Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XD
 
 void XclImpChAxesSet::ConvertAxis(
         XclImpChAxisRef xChAxis, XclImpChTextRef xChAxisTitle,
-        Reference< XCoordinateSystem > xCoordSystem ) const
+        Reference< XCoordinateSystem > xCoordSystem, const XclImpChAxis* pCrossingAxis ) const
 {
     if( xChAxis.is() )
     {
         // create and attach the axis object
-        Reference< XAxis > xAxis = CreateAxis( *xChAxis );
+        Reference< XAxis > xAxis = CreateAxis( *xChAxis, pCrossingAxis );
         if( xAxis.is() )
         {
             // create and attach the axis title
-            if( xChAxisTitle.is() )
+            if( xChAxisTitle.is() ) try
             {
-                Reference< XTitled > xTitled( xAxis, UNO_QUERY );
-                if( xTitled.is() )
-                    xTitled->setTitleObject( xChAxisTitle->CreateTitle() );
+                Reference< XTitled > xTitled( xAxis, UNO_QUERY_THROW );
+                Reference< XTitle > xTitle( xChAxisTitle->CreateTitle(), UNO_SET_THROW );
+                xTitled->setTitleObject( xTitle );
+            }
+            catch( Exception& )
+            {
+                DBG_ERRORFILE( "XclImpChAxesSet::ConvertAxis - cannot set axis title" );
             }
 
             // insert axis into coordinate system
@@ -3247,11 +3553,11 @@ void XclImpChAxesSet::ConvertAxis(
     }
 }
 
-Reference< XAxis > XclImpChAxesSet::CreateAxis( const XclImpChAxis& rChAxis ) const
+Reference< XAxis > XclImpChAxesSet::CreateAxis( const XclImpChAxis& rChAxis, const XclImpChAxis* pCrossingAxis ) const
 {
     Reference< XAxis > xAxis;
     if( const XclImpChTypeGroup* pTypeGroup = GetFirstTypeGroup().get() )
-        xAxis = rChAxis.CreateAxis( *pTypeGroup, GetAxesSetId() == EXC_CHAXESSET_PRIMARY );
+        xAxis = rChAxis.CreateAxis( *pTypeGroup, pCrossingAxis );
     return xAxis;
 }
 
@@ -3283,7 +3589,7 @@ void XclImpChAxesSet::ConvertBackground( Reference< XDiagram > xDiagram ) const
 // The chart object ===========================================================
 
 XclImpChChart::XclImpChChart( const XclImpRoot& rRoot ) :
-    XclImpChRoot( rRoot, this )
+    XclImpChRoot( rRoot, *this )
 {
     mxPrimAxesSet.reset( new XclImpChAxesSet( GetChRoot(), EXC_CHAXESSET_PRIMARY ) );
     mxSecnAxesSet.reset( new XclImpChAxesSet( GetChRoot(), EXC_CHAXESSET_SECONDARY ) );
@@ -3383,23 +3689,34 @@ XclImpChTextRef XclImpChChart::GetDefaultText( XclChTextType eTextType ) const
     return maDefTexts.get( nDefTextId );
 }
 
-void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressBar& rProgress ) const
+bool XclImpChChart::IsManualPlotArea() const
+{
+    // there is no real automatic mode in BIFF5 charts
+    return (GetBiff() <= EXC_BIFF5) || ::get_flag( maProps.mnFlags, EXC_CHPROPS_USEMANPLOTAREA );
+}
+
+void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc,
+        XclImpDffConverter& rDffConv, const OUString& rObjName, const Rectangle& rChartRect ) const
 {
     // initialize conversion (locks the model to suppress any internal updates)
-    InitConversion( xChartDoc );
+    InitConversion( xChartDoc, rChartRect );
 
-    // chart frame and title
+    // chart frame formatting
     if( mxFrame.is() )
     {
         ScfPropertySet aFrameProp( xChartDoc->getPageBackground() );
         mxFrame->Convert( aFrameProp );
     }
-    if( mxTitle.is() )
+
+    // chart title
+    if( mxTitle.is() ) try
     {
-        Reference< XTitled > xTitled( xChartDoc, UNO_QUERY );
-        Reference< XTitle > xTitle = mxTitle->CreateTitle();
-        if( xTitled.is() && xTitle.is() )
-            xTitled->setTitleObject( xTitle );
+        Reference< XTitled > xTitled( xChartDoc, UNO_QUERY_THROW );
+        Reference< XTitle > xTitle( mxTitle->CreateTitle(), UNO_SET_THROW );
+        xTitled->setTitleObject( xTitle );
+    }
+    catch( Exception& )
+    {
     }
 
     /*  Create the diagram object and attach it to the chart document. Currently,
@@ -3415,8 +3732,68 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressB
     if( xDiagram.is() && mxLegend.is() )
         xDiagram->setLegend( mxLegend->CreateLegend() );
 
+    /*  Following all conversions needing the old Chart1 API that involves full
+        initialization of the chart view. */
+    Reference< cssc::XChartDocument > xChart1Doc( xChartDoc, UNO_QUERY );
+    if( xChart1Doc.is() )
+    {
+        Reference< cssc::XDiagram > xDiagram1 = xChart1Doc->getDiagram();
+
+        /*  Set the 'IncludeHiddenCells' property via the old API as only this
+            ensures that the data provider and all created sequences get this
+            flag correctly. */
+        ScfPropertySet aDiaProp( xDiagram1 );
+        bool bShowVisCells = ::get_flag( maProps.mnFlags, EXC_CHPROPS_SHOWVISIBLEONLY );
+        aDiaProp.SetBoolProperty( EXC_CHPROP_INCLUDEHIDDENCELLS, !bShowVisCells );
+
+        // plot area position and size (there is no real automatic mode in BIFF5 charts)
+        XclImpChFramePosRef xPlotAreaPos = mxPrimAxesSet->GetPlotAreaFramePos();
+        if( IsManualPlotArea() && xPlotAreaPos.is() ) try
+        {
+            const XclChFramePos& rFramePos = xPlotAreaPos->GetFramePosData();
+            if( (rFramePos.mnTLMode == EXC_CHFRAMEPOS_PARENT) && (rFramePos.mnBRMode == EXC_CHFRAMEPOS_PARENT) )
+            {
+                Reference< cssc::XDiagramPositioning > xPositioning( xDiagram1, UNO_QUERY_THROW );
+                ::com::sun::star::awt::Rectangle aDiagramRect = CalcHmmFromChartRect( rFramePos.maRect );
+                // for pie charts, always set inner plot area size to exclude the data labels as Excel does
+                const XclImpChTypeGroup* pFirstTypeGroup = mxPrimAxesSet->GetFirstTypeGroup().get();
+                if( pFirstTypeGroup && (pFirstTypeGroup->GetTypeInfo().meTypeCateg == EXC_CHTYPECATEG_PIE) )
+                    xPositioning->setDiagramPositionExcludingAxes( aDiagramRect );
+                else if( pFirstTypeGroup && pFirstTypeGroup->Is3dChart() )
+                    xPositioning->setDiagramPositionIncludingAxesAndAxisTitles( aDiagramRect );
+                else
+                    xPositioning->setDiagramPositionIncludingAxes( aDiagramRect );
+            }
+        }
+        catch( Exception& )
+        {
+        }
+
+        // positions of all title objects
+        if( mxTitle.is() )
+            mxTitle->ConvertTitlePosition( XclChTextKey( EXC_CHTEXTTYPE_TITLE ) );
+        mxPrimAxesSet->ConvertTitlePositions();
+        mxSecnAxesSet->ConvertTitlePositions();
+    }
+
     // unlock the model
-    FinishConversion( rProgress );
+    FinishConversion( rDffConv );
+
+    // start listening to this chart
+    ScDocument& rDoc = GetRoot().GetDoc();
+    if( ScChartListenerCollection* pChartCollection = rDoc.GetChartListenerCollection() )
+    {
+        ::std::auto_ptr< ::std::vector< ScSharedTokenRef > > xRefTokens( new ::std::vector< ScSharedTokenRef > );
+        for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end(); aIt != aEnd; ++aIt )
+            (*aIt)->FillAllSourceLinks( *xRefTokens );
+        if( !xRefTokens->empty() )
+        {
+            ::std::auto_ptr< ScChartListener > xListener( new ScChartListener( rObjName, &rDoc, xRefTokens.release() ) );
+            xListener->SetUsed( true );
+            xListener->StartListeningTo();
+            pChartCollection->Insert( xListener.release() );
+        }
+    }
 }
 
 void XclImpChChart::ReadChSeries( XclImpStream& rStrm )
@@ -3425,6 +3802,11 @@ void XclImpChChart::ReadChSeries( XclImpStream& rStrm )
     XclImpChSeriesRef xSeries( new XclImpChSeries( GetChRoot(), nNewSeriesIdx ) );
     xSeries->ReadRecordGroup( rStrm );
     maSeries.push_back( xSeries );
+}
+
+void XclImpChChart::ReadChProperties( XclImpStream& rStrm )
+{
+    rStrm >> maProps.mnFlags >> maProps.mnEmptyMode;
 }
 
 void XclImpChChart::ReadChAxesSet( XclImpStream& rStrm )
@@ -3455,11 +3837,6 @@ void XclImpChChart::ReadChText( XclImpStream& rStrm )
         }
         break;
     }
-}
-
-void XclImpChChart::ReadChProperties( XclImpStream& rStrm )
-{
-    rStrm >> maProps.mnFlags >> maProps.mnEmptyMode;
 }
 
 void XclImpChChart::Finalize()
@@ -3531,21 +3908,24 @@ void XclImpChChart::FinalizeDataFormats()
 
 void XclImpChChart::FinalizeTitle()
 {
-    if( (!mxTitle || (!mxTitle->IsDeleted() && !mxTitle->HasString())) && !mxSecnAxesSet->IsValidAxesSet() )
+    // special handling for auto-generated title
+    String aAutoTitle;
+    if( !mxTitle || (!mxTitle->IsDeleted() && !mxTitle->HasString()) )
     {
-        /*  Chart title is auto-generated from series title, if there is only
-            one series with title in the chart. */
-        const String& rSerTitle = mxPrimAxesSet->GetSingleSeriesTitle();
-        if( rSerTitle.Len() > 0 )
+        // automatic title from first series name (if there are no series on secondary axes set)
+        if( !mxSecnAxesSet->IsValidAxesSet() )
+            aAutoTitle = mxPrimAxesSet->GetSingleSeriesTitle();
+        if( mxTitle.is() || (aAutoTitle.Len() > 0) )
         {
             if( !mxTitle )
                 mxTitle.reset( new XclImpChText( GetChRoot() ) );
-            mxTitle->SetString( rSerTitle );
+            if( aAutoTitle.Len() == 0 )
+                aAutoTitle = CREATE_STRING( "Chart Title" );
         }
     }
 
-    // will reset mxTitle, if it does not contain a string
-    lclFinalizeTitle( mxTitle, GetDefaultText( EXC_CHTEXTTYPE_TITLE ) );
+    // will reset mxTitle, if it does not contain a string and no auto title exists
+    lclFinalizeTitle( mxTitle, GetDefaultText( EXC_CHTEXTTYPE_TITLE ), aAutoTitle );
 }
 
 Reference< XDiagram > XclImpChChart::CreateDiagram() const
@@ -3557,7 +3937,7 @@ Reference< XDiagram > XclImpChChart::CreateDiagram() const
     ScfPropertySet aDiaProp( xDiagram );
 
     // treatment of missing values
-    using namespace ::com::sun::star::chart::MissingValueTreatment;
+    using namespace cssc::MissingValueTreatment;
     sal_Int32 nMissingValues = LEAVE_GAP;
     switch( maProps.mnEmptyMode )
     {
@@ -3572,10 +3952,76 @@ Reference< XDiagram > XclImpChChart::CreateDiagram() const
 
 // ----------------------------------------------------------------------------
 
+XclImpChartDrawing::XclImpChartDrawing( const XclImpRoot& rRoot, bool bOwnTab ) :
+    XclImpDrawing( rRoot, bOwnTab ), // sheet charts may contain OLE objects
+    mnScTab( rRoot.GetCurrScTab() ),
+    mbOwnTab( bOwnTab )
+{
+}
+
+void XclImpChartDrawing::ConvertObjects( XclImpDffConverter& rDffConv,
+        const Reference< XModel >& rxModel, const Rectangle& rChartRect )
+{
+    maChartRect = rChartRect;   // needed in CalcAnchorRect() callback
+
+    SdrModel* pSdrModel = 0;
+    SdrPage* pSdrPage = 0;
+    if( mbOwnTab )
+    {
+        // chart sheet: insert all shapes into the sheet, not into the chart object
+        pSdrModel = GetDoc().GetDrawLayer();
+        pSdrPage = GetSdrPage( mnScTab );
+    }
+    else
+    {
+        // embedded chart object: insert all shapes into the chart
+        try
+        {
+            Reference< XDrawPageSupplier > xDrawPageSupp( rxModel, UNO_QUERY_THROW );
+            Reference< XDrawPage > xDrawPage( xDrawPageSupp->getDrawPage(), UNO_SET_THROW );
+            pSdrPage = ::GetSdrPageFromXDrawPage( xDrawPage );
+            pSdrModel = pSdrPage ? pSdrPage->GetModel() : 0;
+        }
+        catch( Exception& )
+        {
+        }
+    }
+
+    if( pSdrModel && pSdrPage )
+        ImplConvertObjects( rDffConv, *pSdrModel, *pSdrPage );
+}
+
+Rectangle XclImpChartDrawing::CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const
+{
+    /*  In objects with DFF client anchor, the position of the shape is stored
+        in the cell address components of the client anchor. In old BIFF3-BIFF5
+        objects, the position is stored in the offset components of the anchor. */
+    Rectangle aRect(
+        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnCol : rAnchor.mnLX ) / EXC_CHART_TOTALUNITS * maChartRect.GetWidth()  + 0.5 ),
+        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maFirst.mnRow : rAnchor.mnTY ) / EXC_CHART_TOTALUNITS * maChartRect.GetHeight() + 0.5 ),
+        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnCol  : rAnchor.mnRX ) / EXC_CHART_TOTALUNITS * maChartRect.GetWidth()  + 0.5 ),
+        static_cast< long >( static_cast< double >( bDffAnchor ? rAnchor.maLast.mnRow  : rAnchor.mnBY ) / EXC_CHART_TOTALUNITS * maChartRect.GetHeight() + 0.5 ) );
+    aRect.Justify();
+    // move shapes into chart area for sheet charts
+    if( mbOwnTab )
+        aRect.Move( maChartRect.Left(), maChartRect.Top() );
+    return aRect;
+}
+
+void XclImpChartDrawing::OnObjectInserted( const XclImpDrawObjBase& )
+{
+}
+
+// ----------------------------------------------------------------------------
+
 XclImpChart::XclImpChart( const XclImpRoot& rRoot, bool bOwnTab ) :
     XclImpRoot( rRoot ),
     mbOwnTab( bOwnTab ),
     mbIsPivotChart( false )
+{
+}
+
+XclImpChart::~XclImpChart()
 {
 }
 
@@ -3607,8 +4053,19 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
 
             case EXC_ID_WINDOW2:        rTabViewSett.ReadWindow2( rStrm, true );break;
             case EXC_ID_SCL:            rTabViewSett.ReadScl( rStrm );          break;
+
+            case EXC_ID_SHEETEXT: //0x0862
+            {
+                // FIXME: do not need to pass palette, XclImpTabVieSettings is derived from root
+                XclImpPalette& rPal = GetPalette();
+                rTabViewSett.ReadTabBgColor( rStrm,  rPal);
+            }
+            break;
+
+            case EXC_ID_CODENAME:       ReadCodeName( rStrm, false );           break;
         }
 
+        // common records
         switch( rStrm.GetRecId() )
         {
             case EXC_ID_EOF:            bLoop = false;                          break;
@@ -3620,12 +4077,29 @@ void XclImpChart::ReadChartSubStream( XclImpStream& rStrm )
             case EXC_ID5_BOF:           XclTools::SkipSubStream( rStrm );       break;
 
             case EXC_ID_CHCHART:        ReadChChart( rStrm );                   break;
-            case EXC_ID_OBJ:            GetTracer().TraceChartEmbeddedObj();    break;
 
             case EXC_ID8_CHPIVOTREF:
                 GetTracer().TracePivotChartExists();
                 mbIsPivotChart = true;
             break;
+
+            // BIFF specific records
+            default: switch( GetBiff() )
+            {
+                case EXC_BIFF5: switch( rStrm.GetRecId() )
+                {
+                    case EXC_ID_OBJ:        GetChartDrawing().ReadObj( rStrm );         break;
+                }
+                break;
+                case EXC_BIFF8: switch( rStrm.GetRecId() )
+                {
+                    case EXC_ID_MSODRAWING: GetChartDrawing().ReadMsoDrawing( rStrm );  break;
+                    // #i61786# weird documents: OBJ without MSODRAWING -> read in BIFF5 format
+                    case EXC_ID_OBJ:        GetChartDrawing().ReadObj( rStrm );         break;
+                }
+                break;
+                default:;
+            }
         }
     }
 }
@@ -3639,14 +4113,28 @@ void XclImpChart::UpdateObjFrame( const XclObjLineData& rLineData, const XclObjF
 
 sal_Size XclImpChart::GetProgressSize() const
 {
-    return mxChartData.is() ? mxChartData->GetProgressSize() : 0;
+    return
+        (mxChartData.is() ? mxChartData->GetProgressSize() : 0) +
+        (mxChartDrawing.is() ? mxChartDrawing->GetProgressSize() : 0);
 }
 
-void XclImpChart::Convert( Reference< XModel > xModel, ScfProgressBar& rProgress ) const
+void XclImpChart::Convert( Reference< XModel > xModel, XclImpDffConverter& rDffConv, const OUString& rObjName, const Rectangle& rChartRect ) const
 {
     Reference< XChartDocument > xChartDoc( xModel, UNO_QUERY );
-    if( mxChartData.is() && xChartDoc.is() )
-        mxChartData->Convert( xChartDoc, rProgress );
+    if( xChartDoc.is() )
+    {
+        if( mxChartData.is() )
+            mxChartData->Convert( xChartDoc, rDffConv, rObjName, rChartRect );
+        if( mxChartDrawing.is() )
+            mxChartDrawing->ConvertObjects( rDffConv, xModel, rChartRect );
+    }
+}
+
+XclImpChartDrawing& XclImpChart::GetChartDrawing()
+{
+    if( !mxChartDrawing )
+        mxChartDrawing.reset( new XclImpChartDrawing( GetRoot(), mbOwnTab ) );
+    return *mxChartDrawing;
 }
 
 void XclImpChart::ReadChChart( XclImpStream& rStrm )

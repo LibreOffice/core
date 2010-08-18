@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridwin3.cxx,v $
- * $Revision: 1.20.126.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,14 +29,14 @@
 #include "precompiled_sc.hxx"
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/svdoutl.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/ptitem.hxx>
+#include <svl/ptitem.hxx>
 
 #include "tabvwsh.hxx"
 #include "gridwin.hxx"
@@ -215,6 +212,7 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, UL
             pDrView->setHideOle(!bDrawOle);
             pDrView->setHideChart(!bDrawChart);
             pDrView->setHideDraw(!bDrawDraw);
+            pDrView->setHideFormControl(!bDrawDraw);
         }
 
         if(SC_UPDATE_CHANGED == eMode)
@@ -267,7 +265,7 @@ MapMode ScGridWindow::GetDrawMapMode( BOOL bForce )
             SCROW nEndRow = 0;
             pDoc->GetTableArea( nTab, nEndCol, nEndRow );
             if (nEndCol<20) nEndCol = 20;
-            if (nEndRow<20) nEndRow = 20;
+            if (nEndRow<1000) nEndRow = 1000;
             ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, this,
                                     pViewData->GetZoomX(),pViewData->GetZoomY(),
                                     pViewData->GetPPTX(),pViewData->GetPPTY(),

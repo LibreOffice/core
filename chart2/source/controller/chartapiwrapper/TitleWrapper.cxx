@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TitleWrapper.cxx,v $
- * $Revision: 1.8.44.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,8 @@
 #include "TitleWrapper.hxx"
 #include "macros.hxx"
 #include "ContainerHelper.hxx"
+#include "ControllerLockGuard.hxx"
+
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -228,6 +227,9 @@ TitleWrapper::TitleWrapper( ::chart::TitleHelper::eTitleType eTitleType,
         m_aEventListenerContainer( m_aMutex ),
         m_eTitleType(eTitleType)
 {
+    ControllerLockGuard aCtrlLockGuard( Reference< frame::XModel >( m_spChart2ModelContact->getChart2Document(), uno::UNO_QUERY ));
+    if( !getTitleObject().is() ) //#i83831# create an empty title at the model, thus references to properties can be mapped mapped correctly
+        TitleHelper::createTitle( m_eTitleType, OUString(), m_spChart2ModelContact->getChartModel(), m_spChart2ModelContact->m_xContext );
 }
 
 TitleWrapper::~TitleWrapper()
@@ -454,6 +456,33 @@ Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
     return aRet;
 }
 
+void SAL_CALL TitleWrapper::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+    if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
+    {
+        Reference< beans::XPropertySet > xPropSet( getFirstCharacterPropertySet(), uno::UNO_QUERY );
+        if( xPropSet.is() )
+            xPropSet->addPropertyChangeListener( rPropertyName, xListener );
+    }
+    else
+        WrappedPropertySet::addPropertyChangeListener( rPropertyName, xListener );
+}
+void SAL_CALL TitleWrapper::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
+                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
+    if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
+    {
+        Reference< beans::XPropertySet > xPropSet( getFirstCharacterPropertySet(), uno::UNO_QUERY );
+        if( xPropSet.is() )
+            xPropSet->removePropertyChangeListener( rPropertyName, xListener );
+    }
+    else
+        WrappedPropertySet::removePropertyChangeListener( rPropertyName, xListener );
+}
+
 // ================================================================================
 
 //ReferenceSizePropertyProvider
@@ -505,7 +534,7 @@ const std::vector< WrappedProperty* > TitleWrapper::createWrappedProperties()
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
     aWrappedProperties.push_back( new WrappedTitleStringProperty( m_spChart2ModelContact->m_xContext ) );
-    aWrappedProperties.push_back( new WrappedTextRotationProperty() );
+    aWrappedProperties.push_back( new WrappedTextRotationProperty( m_eTitleType==TitleHelper::Y_AXIS_TITLE || m_eTitleType==TitleHelper::X_AXIS_TITLE ) );
     aWrappedProperties.push_back( new WrappedStackedTextProperty() );
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
     WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );

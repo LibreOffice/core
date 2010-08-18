@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuins2.cxx,v $
- * $Revision: 1.31.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,16 +37,16 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sot/exchange.hxx>
-#include <svtools/globalnameitem.hxx>
+#include <svl/globalnameitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/pfiledlg.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/urihelper.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/urihelper.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/insdlg.hxx>
 #include <svtools/soerr.hxx>
 #include <svx/svxdlg.hxx>
@@ -167,8 +164,10 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
             if ( aRangeListRef->Count() )
             {
                 pScDoc->LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
+
+                // update string from modified ranges.  The ranges must be in the current formula syntax.
                 String aTmpStr;
-                aRangeListRef->Format( aTmpStr, SCR_ABS_3D, pScDoc, pScDoc->GetAddressConvention() );   // update string from changed ranges
+                aRangeListRef->Format( aTmpStr, SCR_ABS_3D, pScDoc, pScDoc->GetAddressConvention() );
                 aRangeString = aTmpStr;
 
                 ScChartPositioner aChartPositioner( pScDoc, aRangeListRef );
@@ -527,7 +526,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             ScRangeList aRanges;
             aMultiMark.FillRangeListWithMarks( &aRanges, FALSE );
             String aStr;
-            aRanges.Format( aStr, SCR_ABS_3D, pViewSh->GetViewData()->GetDocument() );
+            ScDocument* pDocument = pViewSh->GetViewData()->GetDocument();
+            aRanges.Format( aStr, SCR_ABS_3D, pDocument, pDocument->GetAddressConvention() );
             aRangeString = aStr;
 
             // get "total" range for positioning

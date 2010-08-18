@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewSettingsSequenceDefines.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +61,7 @@
 // this are the defines for the position of the settings in the
 // TableViewSettingsSequence
 
-#define SC_TABLE_VIEWSETTINGS_COUNT         14
+#define SC_TABLE_VIEWSETTINGS_COUNT         15
 
 #define SC_CURSOR_X                         0
 #define SC_CURSOR_Y                         1
@@ -80,6 +77,7 @@
 #define SC_TABLE_ZOOM_TYPE                  11
 #define SC_TABLE_ZOOM_VALUE                 12
 #define SC_TABLE_PAGE_VIEW_ZOOM_VALUE       13
+#define SC_TABLE_TAB_BG_COLOR               14
 
 #define SC_CURSORPOSITIONX                  "CursorPositionX"
 #define SC_CURSORPOSITIONY                  "CursorPositionY"

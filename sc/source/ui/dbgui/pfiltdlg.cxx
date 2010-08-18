@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pfiltdlg.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +52,7 @@
 #define _PFILTDLG_CXX
 #include "pfiltdlg.hxx"
 #undef _PFILTDLG_CXX
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 //==================================================================
 
@@ -352,11 +349,12 @@ void ScPivotFilterDlg::UpdateValueList( USHORT nList )
                 SCROW   nFirstRow   = theQueryData.nRow1;
                 SCROW   nLastRow    = theQueryData.nRow2;
                 nFirstRow++;
+                bool bHasDates = false;
 
                 pEntryLists[nColumn] = new TypedScStrCollection( 128, 128 );
                 pEntryLists[nColumn]->SetCaseSensitive( aBtnCase.IsChecked() );
                 pDoc->GetFilterEntriesArea( nColumn, nFirstRow, nLastRow,
-                                            nTab, *pEntryLists[nColumn] );
+                                            nTab, *pEntryLists[nColumn], bHasDates );
             }
 
             TypedScStrCollection* pColl = pEntryLists[nColumn];

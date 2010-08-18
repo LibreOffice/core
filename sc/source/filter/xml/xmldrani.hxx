@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmldrani.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <com/sun/star/sheet/SubTotalColumn.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/sheet/TableFilterField.hpp>
+#include <com/sun/star/sheet/TableFilterField2.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include <com/sun/star/table/TableOrientation.hpp>
@@ -79,7 +76,7 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     rtl::OUString   sDatabaseName;
     rtl::OUString   sSourceObject;
     com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aSortSequence;
-    com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField> aFilterFields;
+    com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2> aFilterFields;
     std::vector < ScSubTotalRule > aSubTotalRules;
     com::sun::star::table::CellAddress aFilterOutputPosition;
     com::sun::star::table::CellRangeAddress aFilterConditionSourceRangeAddress;
@@ -146,7 +143,7 @@ public:
     void SetFilterIsCaseSensitive(const sal_Bool bTemp) { bFilterIsCaseSensitive = bTemp; }
     void SetFilterSkipDuplicates(const sal_Bool bTemp) { bFilterSkipDuplicates = bTemp; }
     void SetFilterUseRegularExpressions(const sal_Bool bTemp) { bFilterUseRegularExpressions = bTemp; }
-    void SetFilterFields(const com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField>& aTemp) { aFilterFields = aTemp; }
+    void SetFilterFields(const com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField2>& aTemp) { aFilterFields = aTemp; }
     void SetFilterOutputPosition(const com::sun::star::table::CellAddress& aTemp) { aFilterOutputPosition = aTemp; }
     void SetFilterConditionSourceRangeAddress(const com::sun::star::table::CellRangeAddress& aTemp) { aFilterConditionSourceRangeAddress = aTemp;
                                                                                                     bFilterConditionSourceRange = sal_True; }

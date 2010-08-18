@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PieChart.cxx,v $
- * $Revision: 1.20.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,11 +121,15 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
 //-----------------------------------------------------------------------------
 
 PieChart::PieChart( const uno::Reference<XChartType>& xChartTypeModel
-                   , sal_Int32 nDimensionCount )
+                   , sal_Int32 nDimensionCount
+                   , bool bExcludingPositioning )
         : VSeriesPlotter( xChartTypeModel, nDimensionCount )
         , m_pPosHelper( new PiePositionHelper( NormalAxis_Z, (m_nDimension==3)?0.0:90.0 ) )
         , m_bUseRings(false)
+        , m_bSizeExcludesLabelsAndExplodedSegments(bExcludingPositioning)
 {
+    ::rtl::math::setNan(&m_fMaxOffset);
+
     PlotterBase::m_pPosHelper = m_pPosHelper;
     VSeriesPlotter::m_pMainPosHelper = m_pPosHelper;
     m_pPosHelper->m_fRadiusOffset = 0.0;
@@ -179,6 +180,11 @@ bool PieChart::keepAspectRatio() const
 {
     if( m_nDimension == 3 )
         return false;
+    return true;
+}
+
+bool PieChart::shouldSnapRectToUsedArea()
+{
     return true;
 }
 
@@ -248,44 +254,51 @@ double PieChart::getMinimumX()
 {
     return 0.5;
 }
-double PieChart::getMaxOffset() const
+double PieChart::getMaxOffset()
 {
-    double fRet = 0.0;
+    if (!::rtl::math::isNan(m_fMaxOffset))
+        // Value already cached.  Use it.
+        return m_fMaxOffset;
+
+    m_fMaxOffset = 0.0;
     if( m_aZSlots.size()<=0 )
-        return fRet;
+        return m_fMaxOffset;
     if( m_aZSlots[0].size()<=0 )
-        return fRet;
+        return m_fMaxOffset;
 
     const ::std::vector< VDataSeries* >& rSeriesList( m_aZSlots[0][0].m_aSeriesVector );
     if( rSeriesList.size()<=0 )
-        return fRet;
+        return m_fMaxOffset;
 
     VDataSeries* pSeries = rSeriesList[0];
     uno::Reference< beans::XPropertySet > xSeriesProp( pSeries->getPropertiesOfSeries() );
     if( !xSeriesProp.is() )
-        return fRet;
+        return m_fMaxOffset;
 
     double fExplodePercentage=0.0;
     xSeriesProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
-    if(fExplodePercentage>fRet)
-        fRet=fExplodePercentage;
+    if(fExplodePercentage>m_fMaxOffset)
+        m_fMaxOffset=fExplodePercentage;
 
-    uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-    if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+    if(!m_bSizeExcludesLabelsAndExplodedSegments)
     {
-        for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+        uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+        if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
         {
-            uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint(aAttributedDataPointIndexList[nN]) );
-            if(xPointProp.is())
+            for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
             {
-                fExplodePercentage=0.0;
-                xPointProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
-                if(fExplodePercentage>fRet)
-                    fRet=fExplodePercentage;
+                uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint(aAttributedDataPointIndexList[nN]) );
+                if(xPointProp.is())
+                {
+                    fExplodePercentage=0.0;
+                    xPointProp->getPropertyValue( C2U( "Offset" )) >>= fExplodePercentage;
+                    if(fExplodePercentage>m_fMaxOffset)
+                        m_fMaxOffset=fExplodePercentage;
+                }
             }
         }
     }
-    return fRet;
+    return m_fMaxOffset;
 }
 double PieChart::getMaximumX()
 {
@@ -357,6 +370,7 @@ void PieChart::createShapes()
         nExplodeableSlot = m_aZSlots[0].size()-1;
 
     m_aLabelInfoList.clear();
+    ::rtl::math::setNan(&m_fMaxOffset);
 
 //=============================================================================
     for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); aXSlotIter++, fSlotX+=1.0 )
@@ -376,7 +390,7 @@ void PieChart::createShapes()
         sal_Int32 nPointCount=pSeries->getTotalPointCount();
         for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
         {
-            double fY = pSeries->getY( nPointIndex );
+            double fY = pSeries->getYValue( nPointIndex );
             if(fY<0.0)
             {
                 //@todo warn somehow that negative values are treated as positive
@@ -392,7 +406,8 @@ void PieChart::createShapes()
         for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
         {
             double fLogicInnerRadius, fLogicOuterRadius;
-            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, getMaxOffset() );
+            double fOffset = getMaxOffset();
+            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, fOffset );
             if( !bIsVisible )
                 continue;
 
@@ -402,7 +417,7 @@ void PieChart::createShapes()
 
             uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
             //collect data point information (logic coordinates, style ):
-            double fLogicYValue = fabs(pSeries->getY( nPointIndex ));
+            double fLogicYValue = fabs(pSeries->getYValue( nPointIndex ));
             if( ::rtl::math::isNan(fLogicYValue) )
                 continue;
             if(fLogicYValue==0.0)//@todo: continue also if the resolution to small

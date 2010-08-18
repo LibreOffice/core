@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: NumberFormatterWrapper.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,12 +31,13 @@
 #include "macros.hxx"
 #include <comphelper/processfactory.hxx>
 // header for class SvNumberFormatsSupplierObj
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 // header for class SvNumberformat
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include <tools/color.hxx>
 #include <i18npool/mslangid.hxx>
 #include <tools/debug.hxx>
+#include <com/sun/star/util/DateTime.hpp>
 
 //.............................................................................
 namespace chart
@@ -83,6 +81,10 @@ NumberFormatterWrapper::NumberFormatterWrapper( const uno::Reference< util::XNum
                     , m_pNumberFormatter(NULL)
 
 {
+    uno::Reference<beans::XPropertySet> xProp(m_xNumberFormatsSupplier,uno::UNO_QUERY);
+    rtl::OUString sNullDate( RTL_CONSTASCII_USTRINGPARAM("NullDate"));
+    if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(sNullDate) )
+        m_aNullDate = xProp->getPropertyValue(sNullDate);
     SvNumberFormatsSupplierObj* pSupplierObj = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     if( pSupplierObj )
         m_pNumberFormatter = pSupplierObj->GetNumberFormatter();
@@ -108,8 +110,27 @@ rtl::OUString NumberFormatterWrapper::getFormattedString(
         DBG_ERROR("Need a NumberFormatter");
         return aText;
     }
+    // i99104 handle null date correctly
+    USHORT nYear = 1899,nDay = 30,nMonth = 12;
+    if ( m_aNullDate.hasValue() )
+    {
+        Date* pDate = m_pNumberFormatter->GetNullDate();
+        if ( pDate )
+        {
+            nYear = pDate->GetYear();
+            nMonth = pDate->GetMonth();
+            nDay = pDate->GetDay();
+        } // if ( pDate )
+        util::DateTime aNewNullDate;
+        m_aNullDate >>= aNewNullDate;
+        m_pNumberFormatter->ChangeNullDate(aNewNullDate.Day,aNewNullDate.Month,aNewNullDate.Year);
+    }
     m_pNumberFormatter->GetOutputString(
         fValue, nNumberFormatKey, aText, &pTextColor);
+    if ( m_aNullDate.hasValue() )
+    {
+        m_pNumberFormatter->ChangeNullDate(nDay,nMonth,nYear);
+    }
     rtl::OUString aRet( aText );
 
     if(pTextColor)

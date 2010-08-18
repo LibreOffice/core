@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: table4.cxx,v $
- * $Revision: 1.23.126.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,24 +41,24 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editeng.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/keycodes.hxx>
 #include <rtl/math.hxx>
 #include <unotools/charclass.hxx>
@@ -106,7 +103,14 @@ short lcl_DecompValueString( String& aValue, sal_Int32& nVal, USHORT* pMinDigits
         nNum = nNeg = 1;
     while ( p[nNum] && CharClass::isAsciiNumeric( p[nNum] ) )
         nNum++;
-    if ( nNum > nNeg )
+
+    sal_Unicode cNext = p[nNum];            // 0 if at the end
+    sal_Unicode cLast = p[aValue.Len()-1];
+
+    // #i5550# If there are numbers at the beginning and the end,
+    // prefer the one at the beginning only if it's followed by a space.
+    // Otherwise, use the number at the end, to enable things like IP addresses.
+    if ( nNum > nNeg && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(cLast) ) )
     {   // number at the beginning
         nVal = aValue.Copy( 0, nNum ).ToInt32();
         //  #60893# any number with a leading zero sets the minimum number of digits
@@ -582,13 +586,13 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         //  Attributierung uebertragen
 
         const ScPatternAttr* pSrcPattern = NULL;
+        const ScStyleSheet* pStyleSheet = NULL;
         ULONG nAtSrc = nISrcStart;
         ScPatternAttr* pNewPattern = NULL;
         BOOL bGetPattern = TRUE;
         rInner = nIStart;
         while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
         {
-            const ScStyleSheet* pStyleSheet = NULL;
             if ( bGetPattern )
             {
                 if ( pNewPattern )

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: token.cxx,v $
- * $Revision: 1.33.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,7 +116,7 @@ IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator, 32, 16 )
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 
 // Since RawTokens are temporary for the compiler, don't align on 4k and waste memory.
-// ScRawToken size is FixMembers + MAXSTRLEN ~= 264
+// ScRawToken size is FixMembers + MAXSTRLEN + ~4 ~= 1036
 IMPL_FIXEDMEMPOOL_NEWDEL( ScRawToken, 8, 4 )
 // Some ScDoubleRawToken, FixMembers + sizeof(double) ~= 16
 const USHORT nMemPoolDoubleRawToken = 0x0400 / sizeof(ScDoubleRawToken);
@@ -394,7 +391,7 @@ ScRawToken* ScRawToken::Clone() const
 
 FormulaToken* ScRawToken::CreateToken() const
 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
 #define IF_NOT_OPCODE_ERROR(o,c) if (eOp!=o) DBG_ERROR1( #c "::ctor: OpCode %d lost, converted to " #o "; maybe inherit from FormulaToken instead!", int(eOp))
 #else
 #define IF_NOT_OPCODE_ERROR(o,c)
@@ -1821,8 +1818,11 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
             case svSingleRef :
             {
                 ScSingleRefData& rRef1 = static_cast<ScToken*>(pCode[j])->GetSingleRef();
+                if ( rRef1.IsFlag3D() )
+                {
                     rRef1.CalcAbsIfRel( rOldPos );
                     rRef1.CalcRelFromAbs( rNewPos );
+                }
             }
             break;
             default:

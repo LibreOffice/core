@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlchart.cxx,v $
- * $Revision: 1.11.62.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,26 +38,27 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
-#include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
+#include <com/sun/star/chart/XAxisXSupplier.hpp>
+#include <com/sun/star/chart/XAxisYSupplier.hpp>
+#include <com/sun/star/chart/XAxisZSupplier.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
+#include <com/sun/star/chart2/Symbol.hpp>
 
 #include <rtl/math.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/unomid.hxx>
-#include <svx/escherex.hxx>
-
+#include <filter/msfilter/escherex.hxx>
+#include <editeng/memberids.hrc>
 #include "global.hxx"
-#include "xlconst.hxx"
+#include "xlroot.hxx"
 #include "xlstyle.hxx"
-#include "xltools.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
@@ -69,6 +67,9 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::lang::XMultiServiceFactory;
 using ::com::sun::star::chart2::XChartDocument;
+using ::com::sun::star::drawing::XShape;
+
+namespace cssc = ::com::sun::star::chart;
 
 // Common =====================================================================
 
@@ -94,11 +95,21 @@ bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR )
         ((rL.mnSeriesIdx == rR.mnSeriesIdx) && (rL.mnPointIdx < rR.mnPointIdx));
 }
 
+// ----------------------------------------------------------------------------
+
+XclChFrBlock::XclChFrBlock( sal_uInt16 nType ) :
+    mnType( nType ),
+    mnContext( 0 ),
+    mnValue1( 0 ),
+    mnValue2( 0 )
+{
+}
+
 // Frame formatting ===========================================================
 
 XclChFramePos::XclChFramePos() :
-    mnObjType( EXC_CHFRAMEPOS_ANY ),
-    mnSizeMode( EXC_CHFRAMEPOS_AUTOSIZE )
+    mnTLMode( EXC_CHFRAMEPOS_PARENT ),
+    mnBRMode( EXC_CHFRAMEPOS_PARENT )
 {
 }
 
@@ -169,13 +180,20 @@ XclChObjectLink::XclChObjectLink() :
 
 // ----------------------------------------------------------------------------
 
+XclChFrLabelProps::XclChFrLabelProps() :
+    mnFlags( 0 )
+{
+}
+
+// ----------------------------------------------------------------------------
+
 XclChText::XclChText() :
     maTextColor( COL_BLACK ),
     mnHAlign( EXC_CHTEXT_ALIGN_CENTER ),
     mnVAlign( EXC_CHTEXT_ALIGN_CENTER ),
     mnBackMode( EXC_CHTEXT_TRANSPARENT ),
     mnFlags( EXC_CHTEXT_AUTOCOLOR | EXC_CHTEXT_AUTOFILL ),
-    mnPlacement( EXC_CHTEXT_POS_DEFAULT ),
+    mnFlags2( EXC_CHTEXT_POS_DEFAULT ),
     mnRotation( EXC_ROT_NONE )
 {
 }
@@ -294,7 +312,7 @@ XclChTypeGroup::XclChTypeGroup() :
 // ----------------------------------------------------------------------------
 
 XclChProperties::XclChProperties() :
-    mnFlags( EXC_CHPROPS_MANSERIES ),
+    mnFlags( 0 ),
     mnEmptyMode( EXC_CHPROPS_EMPTY_SKIP )
 {
 }
@@ -487,34 +505,36 @@ const XclChFormatInfo& XclChFormatInfoProvider::GetFormatInfo( XclChObjectType e
 namespace {
 
 // chart type service names
-const sal_Char SERVICE_CHART2_AREA[]    = "com.sun.star.chart2.AreaChartType";
-const sal_Char SERVICE_CHART2_CANDLE[]  = "com.sun.star.chart2.CandleStickChartType";
-const sal_Char SERVICE_CHART2_COLUMN[]  = "com.sun.star.chart2.ColumnChartType";
-const sal_Char SERVICE_CHART2_LINE[]    = "com.sun.star.chart2.LineChartType";
-const sal_Char SERVICE_CHART2_NET[]     = "com.sun.star.chart2.NetChartType";
-const sal_Char SERVICE_CHART2_PIE[]     = "com.sun.star.chart2.PieChartType";
-const sal_Char SERVICE_CHART2_SCATTER[] = "com.sun.star.chart2.ScatterChartType";
-const sal_Char SERVICE_CHART2_SURFACE[] = "com.sun.star.chart2.ColumnChartType";    // Todo
+const sal_Char SERVICE_CHART2_AREA[]      = "com.sun.star.chart2.AreaChartType";
+const sal_Char SERVICE_CHART2_CANDLE[]    = "com.sun.star.chart2.CandleStickChartType";
+const sal_Char SERVICE_CHART2_COLUMN[]    = "com.sun.star.chart2.ColumnChartType";
+const sal_Char SERVICE_CHART2_LINE[]      = "com.sun.star.chart2.LineChartType";
+const sal_Char SERVICE_CHART2_NET[]       = "com.sun.star.chart2.NetChartType";
+const sal_Char SERVICE_CHART2_FILLEDNET[] = "com.sun.star.chart2.FilledNetChartType";
+const sal_Char SERVICE_CHART2_PIE[]       = "com.sun.star.chart2.PieChartType";
+const sal_Char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
+const sal_Char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
+const sal_Char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
 
-namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
+namespace csscd = cssc::DataLabelPlacement;
 
 static const XclChTypeInfo spTypeInfos[] =
 {
-    // chart type             chart type category      record id           service                 varied point color     def label combi       comb2d 3d     polar  area2d area3d 1stvis xcateg swap   stack  revers betw
-    { EXC_CHTYPEID_BAR,       EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  true,  false, true,  false, true,  false, true  },
-    { EXC_CHTYPEID_HORBAR,    EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  false, true,  true,  true,  false, true  },
-    { EXC_CHTYPEID_LINE,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_LINE,    EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  true,  false, false, true,  false, true,  false, true,  false, true  },
-    { EXC_CHTYPEID_AREA,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHAREA,      SERVICE_CHART2_AREA,    EXC_CHVARPOINT_NONE,   csscd::CENTER,        true,  true,  false, true,  true,  false, true,  false, true,  true,  false },
-    { EXC_CHTYPEID_STOCK,     EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_CANDLE,  EXC_CHVARPOINT_NONE,   csscd::RIGHT,         true,  false, false, false, false, false, true,  false, true,  false, true  },
-    { EXC_CHTYPEID_RADARLINE, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARLINE, SERVICE_CHART2_NET,     EXC_CHVARPOINT_SINGLE, csscd::TOP,           false, false, true,  false, true,  false, true,  false, false, false, false },
-    { EXC_CHTYPEID_RADARAREA, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARAREA, SERVICE_CHART2_NET,     EXC_CHVARPOINT_NONE,   csscd::TOP,           false, false, true,  true,  true,  false, true,  false, false, false, false },
-    { EXC_CHTYPEID_PIE,       EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  true,  false, false, false, false },
-    { EXC_CHTYPEID_DONUT,     EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  false, true,  false, false, true,  false },
-    { EXC_CHTYPEID_PIEEXT,    EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIEEXT,    SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, false, true,  true,  true,  true,  true,  false, false, false, false },
-    { EXC_CHTYPEID_SCATTER,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  false, false, false, true,  false, false, false, false, false, false },
-    { EXC_CHTYPEID_BUBBLES,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         false, false, false, true,  true,  false, false, false, false, false, false },
-    { EXC_CHTYPEID_SURFACE,   EXC_CHTYPECATEG_SURFACE, EXC_ID_CHSURFACE,   SERVICE_CHART2_SURFACE, EXC_CHVARPOINT_NONE,   csscd::RIGHT,         false, true,  false, true,  true,  false, true,  false, false, false, false },
-    { EXC_CHTYPEID_UNKNOWN,   EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  true,  false, true,  false, true,  false, true  }
+    // chart type             chart type category      record id           service                   varied point color     def label pos         comb2d 3d     polar  area2d area3d 1stvis xcateg swap   stack  revers betw
+    { EXC_CHTYPEID_BAR,       EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,    EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  true,  false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_HORBAR,    EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,    EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  false, true,  true,  true,  false, true  },
+    { EXC_CHTYPEID_LINE,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_LINE,      EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  true,  false, false, true,  false, true,  false, true,  false, false },
+    { EXC_CHTYPEID_AREA,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHAREA,      SERVICE_CHART2_AREA,      EXC_CHVARPOINT_NONE,   csscd::CENTER,        true,  true,  false, true,  true,  false, true,  false, true,  true,  false },
+    { EXC_CHTYPEID_STOCK,     EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_CANDLE,    EXC_CHVARPOINT_NONE,   csscd::RIGHT,         true,  false, false, false, false, false, true,  false, true,  false, false },
+    { EXC_CHTYPEID_RADARLINE, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARLINE, SERVICE_CHART2_NET,       EXC_CHVARPOINT_SINGLE, csscd::TOP,           false, false, true,  false, true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_RADARAREA, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARAREA, SERVICE_CHART2_FILLEDNET, EXC_CHVARPOINT_NONE,   csscd::TOP,           false, false, true,  true,  true,  false, true,  false, false, true,  false },
+    { EXC_CHTYPEID_PIE,       EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,       EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  true,  true,  false, false, false, false },
+    { EXC_CHTYPEID_DONUT,     EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,       EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  true,  true,  true,  false, true,  false, false, true,  false },
+    { EXC_CHTYPEID_PIEEXT,    EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIEEXT,    SERVICE_CHART2_PIE,       EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, false, true,  true,  true,  true,  true,  false, false, false, false },
+    { EXC_CHTYPEID_SCATTER,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER,   EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  false, false, false, true,  false, false, false, false, false, false },
+    { EXC_CHTYPEID_BUBBLES,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_BUBBLE,    EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         false, false, false, true,  true,  false, false, false, false, false, false },
+    { EXC_CHTYPEID_SURFACE,   EXC_CHTYPECATEG_SURFACE, EXC_ID_CHSURFACE,   SERVICE_CHART2_SURFACE,   EXC_CHVARPOINT_NONE,   csscd::RIGHT,         false, true,  false, true,  true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_UNKNOWN,   EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,    EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  true,  false, true,  false, true,  false, true  }
 };
 
 } // namespace
@@ -664,12 +684,6 @@ const sal_Char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Colo
 /** Property names for bitmap area style. */
 const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", 0 };
 
-/** Property names for text rotation properties. */
-const sal_Char* const sppcRotationNames[] = { "TextRotation", "StackCharacters", 0 };
-/** Property names for legend properties. */
-const sal_Char* const sppcLegendNames[] =
-    { "Show", "AnchorPosition", "Expansion", "RelativePosition", 0 };
-
 } // namespace
 
 // ----------------------------------------------------------------------------
@@ -684,9 +698,7 @@ XclChPropSetHelper::XclChPropSetHelper() :
     maGradHlpFilled( sppcGradNamesFilled ),
     maHatchHlpCommon( sppcHatchNamesCommon ),
     maHatchHlpFilled( sppcHatchNamesFilled ),
-    maBitmapHlp( sppcBitmapNames ),
-    maRotationHlp( sppcRotationNames ),
-    maLegendHlp( sppcLegendNames )
+    maBitmapHlp( sppcBitmapNames )
 {
 }
 
@@ -934,55 +946,14 @@ void XclChPropSetHelper::ReadMarkerProperties(
     }
 }
 
-sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPropSet )
+sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPropSet, bool bSupportsStacked )
 {
     // chart2 handles rotation as double in the range [0,360)
-    double fAngle(0);
-    bool bStacked;
-    maRotationHlp.ReadFromPropertySet( rPropSet );
-    maRotationHlp >> fAngle >> bStacked;
+    double fAngle = 0.0;
+    rPropSet.GetProperty( fAngle, EXC_CHPROP_TEXTROTATION );
+    bool bStacked = bSupportsStacked && rPropSet.GetBoolProperty( EXC_CHPROP_STACKCHARACTERS );
     return bStacked ? EXC_ROT_STACKED :
         XclTools::GetXclRotation( static_cast< sal_Int32 >( fAngle * 100.0 + 0.5 ) );
-}
-
-void XclChPropSetHelper::ReadLegendProperties( XclChLegend& rLegend, const ScfPropertySet& rPropSet )
-{
-    namespace cssc = ::com::sun::star::chart2;
-    namespace cssd = ::com::sun::star::drawing;
-
-    // read the properties
-    bool bShow;
-    cssc::LegendPosition eApiPos;
-    cssc::LegendExpansion eApiExpand;
-    Any aRelPosAny;
-    maLegendHlp.ReadFromPropertySet( rPropSet );
-    maLegendHlp >> bShow >> eApiPos >> eApiExpand >> aRelPosAny;
-    DBG_ASSERT( bShow, "XclChPropSetHelper::ReadLegendProperties - legend must be visible" );
-
-    // legend position
-    switch( eApiPos )
-    {
-        case cssc::LegendPosition_LINE_START:   rLegend.mnDockMode = EXC_CHLEGEND_LEFT;     break;
-        case cssc::LegendPosition_LINE_END:     rLegend.mnDockMode = EXC_CHLEGEND_RIGHT;    break;
-        case cssc::LegendPosition_PAGE_START:   rLegend.mnDockMode = EXC_CHLEGEND_TOP;      break;
-        case cssc::LegendPosition_PAGE_END:     rLegend.mnDockMode = EXC_CHLEGEND_BOTTOM;   break;
-        default:                                rLegend.mnDockMode = EXC_CHLEGEND_NOTDOCKED;
-    }
-    // legend expansion
-    ::set_flag( rLegend.mnFlags, EXC_CHLEGEND_STACKED, eApiExpand != cssc::LegendExpansion_WIDE );
-    // legend position
-    if( rLegend.mnDockMode == EXC_CHLEGEND_NOTDOCKED )
-    {
-        cssc::RelativePosition aRelPos;
-        if( aRelPosAny >>= aRelPos )
-        {
-            rLegend.maRect.mnX = limit_cast< sal_Int32 >( aRelPos.Primary * 4000.0, 0, 4000 );
-            rLegend.maRect.mnY = limit_cast< sal_Int32 >( aRelPos.Secondary * 4000.0, 0, 4000 );
-        }
-        else
-            rLegend.mnDockMode = EXC_CHLEGEND_LEFT;
-    }
-    ::set_flag( rLegend.mnFlags, EXC_CHLEGEND_DOCKED, rLegend.mnDockMode != EXC_CHLEGEND_NOTDOCKED );
 }
 
 // write properties -----------------------------------------------------------
@@ -1183,62 +1154,16 @@ void XclChPropSetHelper::WriteMarkerProperties(
 }
 
 void XclChPropSetHelper::WriteRotationProperties(
-        ScfPropertySet& rPropSet, sal_uInt16 nRotation )
+        ScfPropertySet& rPropSet, sal_uInt16 nRotation, bool bSupportsStacked )
 {
     if( nRotation != EXC_CHART_AUTOROTATION )
     {
         // chart2 handles rotation as double in the range [0,360)
         double fAngle = XclTools::GetScRotation( nRotation, 0 ) / 100.0;
-        bool bStacked = nRotation == EXC_ROT_STACKED;
-        maRotationHlp.InitializeWrite();
-        maRotationHlp << fAngle << bStacked;
-        maRotationHlp.WriteToPropertySet( rPropSet );
+        rPropSet.SetProperty( EXC_CHPROP_TEXTROTATION, fAngle );
+        if( bSupportsStacked )
+            rPropSet.SetProperty( EXC_CHPROP_STACKCHARACTERS, nRotation == EXC_ROT_STACKED );
     }
-}
-
-void XclChPropSetHelper::WriteLegendProperties(
-        ScfPropertySet& rPropSet, const XclChLegend& rLegend )
-{
-    namespace cssc = ::com::sun::star::chart2;
-    namespace cssd = ::com::sun::star::drawing;
-
-    // legend position
-    cssc::LegendPosition eApiPos = cssc::LegendPosition_CUSTOM;
-    switch( rLegend.mnDockMode )
-    {
-        case EXC_CHLEGEND_LEFT:     eApiPos = cssc::LegendPosition_LINE_START;  break;
-        case EXC_CHLEGEND_RIGHT:    eApiPos = cssc::LegendPosition_LINE_END;    break;
-        case EXC_CHLEGEND_TOP:      eApiPos = cssc::LegendPosition_PAGE_START;  break;
-        case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc::LegendPosition_PAGE_END;    break;
-    }
-    // legend expansion
-    cssc::LegendExpansion eApiExpand = ::get_flagvalue(
-        rLegend.mnFlags, EXC_CHLEGEND_STACKED, cssc::LegendExpansion_HIGH, cssc::LegendExpansion_WIDE );
-    // legend position
-    Any aRelPosAny;
-    if( eApiPos == cssc::LegendPosition_CUSTOM )
-    {
-        // #i71697# it is not possible to set the size directly, do some magic here
-        double fRatio = ((rLegend.maRect.mnWidth > 0) && (rLegend.maRect.mnHeight > 0)) ?
-            (static_cast< double >( rLegend.maRect.mnWidth ) / rLegend.maRect.mnHeight) : 1.0;
-        if( fRatio > 1.5 )
-            eApiExpand = cssc::LegendExpansion_WIDE;
-        else if( fRatio < 0.75 )
-            eApiExpand = cssc::LegendExpansion_HIGH;
-        else
-            eApiExpand = cssc::LegendExpansion_BALANCED;
-        // set position
-        cssc::RelativePosition aRelPos;
-        aRelPos.Primary = rLegend.maRect.mnX / 4000.0;
-        aRelPos.Secondary = rLegend.maRect.mnY / 4000.0;
-        aRelPos.Anchor = cssd::Alignment_TOP_LEFT;
-        aRelPosAny <<= aRelPos;
-    }
-
-    // write the properties
-    maLegendHlp.InitializeWrite();
-    maLegendHlp << true << eApiPos << eApiExpand << aRelPosAny;
-    maLegendHlp.WriteToPropertySet( rPropSet );
 }
 
 // private --------------------------------------------------------------------
@@ -1290,27 +1215,81 @@ ScfPropSetHelper& XclChPropSetHelper::GetHatchHelper( XclChPropertyMode ePropMod
 
 // ============================================================================
 
+namespace {
+
+/*  The following local functions implement getting the XShape interface of all
+    supported title objects (chart and axes). This needs some effort due to the
+    design of the old Chart1 API used to access these objects. */
+
+/** A code fragment that returns a shape object from the passed shape supplier
+    using the specified interface function. Checks a boolean property first. */
+#define EXC_FRAGMENT_GETTITLESHAPE( shape_supplier, supplier_func, property_name ) \
+    ScfPropertySet aPropSet( shape_supplier ); \
+    if( shape_supplier.is() && aPropSet.GetBoolProperty( CREATE_OUSTRING( #property_name ) ) ) \
+        return shape_supplier->supplier_func(); \
+    return Reference< XShape >(); \
+
+/** Implements a function returning the drawing shape of an axis title, if
+    existing, using the specified API interface and its function. */
+#define EXC_DEFINEFUNC_GETAXISTITLESHAPE( func_name, interface_type, supplier_func, property_name ) \
+Reference< XShape > func_name( const Reference< cssc::XChartDocument >& rxChart1Doc ) \
+{ \
+    Reference< cssc::interface_type > xAxisSupp( rxChart1Doc->getDiagram(), UNO_QUERY ); \
+    EXC_FRAGMENT_GETTITLESHAPE( xAxisSupp, supplier_func, property_name ) \
+}
+
+/** Returns the drawing shape of the main title, if existing. */
+Reference< XShape > lclGetMainTitleShape( const Reference< cssc::XChartDocument >& rxChart1Doc )
+{
+    EXC_FRAGMENT_GETTITLESHAPE( rxChart1Doc, getTitle, HasMainTitle )
+}
+
+EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetXAxisTitleShape, XAxisXSupplier, getXAxisTitle, HasXAxisTitle )
+EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetYAxisTitleShape, XAxisYSupplier, getYAxisTitle, HasYAxisTitle )
+EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetZAxisTitleShape, XAxisZSupplier, getZAxisTitle, HasZAxisTitle )
+EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecXAxisTitleShape, XSecondAxisTitleSupplier, getSecondXAxisTitle, HasSecondaryXAxisTitle )
+EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupplier, getSecondYAxisTitle, HasSecondaryYAxisTitle )
+
+#undef EXC_DEFINEFUNC_GETAXISTITLESHAPE
+#undef EXC_IMPLEMENT_GETTITLESHAPE
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
 XclChRootData::XclChRootData() :
     mxTypeInfoProv( new XclChTypeInfoProvider ),
-    mxFmtInfoProv( new XclChFormatInfoProvider )
+    mxFmtInfoProv( new XclChFormatInfoProvider ),
+    mnBorderGapX( 0 ),
+    mnBorderGapY( 0 )
 {
+    // remember some title shape getter functions
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_TITLE ) ] = lclGetMainTitleShape;
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_PRIMARY, EXC_CHAXIS_X ) ] = lclGetXAxisTitleShape;
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_PRIMARY, EXC_CHAXIS_Y ) ] = lclGetYAxisTitleShape;
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_PRIMARY, EXC_CHAXIS_Z ) ] = lclGetZAxisTitleShape;
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_SECONDARY, EXC_CHAXIS_X ) ] = lclGetSecXAxisTitleShape;
+    maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_SECONDARY, EXC_CHAXIS_Y ) ] = lclGetSecYAxisTitleShape;
 }
 
 XclChRootData::~XclChRootData()
 {
 }
 
-Reference< XChartDocument > XclChRootData::GetChartDoc() const
+void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChartDocument >& rxChartDoc, const Rectangle& rChartRect )
 {
-    DBG_ASSERT( mxChartDoc.is(), "XclChRootData::GetChartDoc - missing chart document" );
-    return mxChartDoc;
-}
+    // remember chart document reference and chart shape position/size
+    DBG_ASSERT( rxChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
+    mxChartDoc = rxChartDoc;
+    maChartRect = rChartRect;
 
-void XclChRootData::InitConversion( XChartDocRef xChartDoc )
-{
-    // remember chart document reference
-    DBG_ASSERT( xChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
-    mxChartDoc = xChartDoc;
+    // Excel excludes a border of 5 pixels in each direction from chart area
+    mnBorderGapX = rRoot.GetHmmFromPixelX( 5.0 );
+    mnBorderGapY = rRoot.GetHmmFromPixelY( 5.0 );
+
+    // size of a chart unit in 1/100 mm
+    mfUnitSizeX = ::std::max< double >( maChartRect.GetWidth() - 2 * mnBorderGapX, mnBorderGapX ) / EXC_CHART_TOTALUNITS;
+    mfUnitSizeY = ::std::max< double >( maChartRect.GetHeight() - 2 * mnBorderGapY, mnBorderGapY ) / EXC_CHART_TOTALUNITS;
 
     // create object tables
     Reference< XMultiServiceFactory > xFactory( mxChartDoc, UNO_QUERY );
@@ -1335,5 +1314,15 @@ void XclChRootData::FinishConversion()
     mxChartDoc.clear();
 }
 
-// ============================================================================
+Reference< XShape > XclChRootData::GetTitleShape( const XclChTextKey& rTitleKey ) const
+{
+    XclChGetShapeFuncMap::const_iterator aIt = maGetShapeFuncs.find( rTitleKey );
+    OSL_ENSURE( aIt != maGetShapeFuncs.end(), "XclChRootData::GetTitleShape - invalid title key" );
+    Reference< cssc::XChartDocument > xChart1Doc( mxChartDoc, UNO_QUERY );
+    Reference< XShape > xTitleShape;
+    if( xChart1Doc.is() && (aIt != maGetShapeFuncs.end()) )
+        xTitleShape = (aIt->second)( xChart1Doc );
+    return xTitleShape;
+}
 
+// ============================================================================

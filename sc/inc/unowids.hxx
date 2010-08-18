@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unowids.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,7 +77,9 @@
 #define SC_WID_UNO_TABLAYOUT        ( SC_WID_UNO_START + 37 )
 #define SC_WID_UNO_AUTOPRINT        ( SC_WID_UNO_START + 38 )
 #define SC_WID_UNO_ABSNAME          ( SC_WID_UNO_START + 39 )
-#define SC_WID_UNO_END              ( SC_WID_UNO_START + 39 )
+#define SC_WID_UNO_CODENAME         ( SC_WID_UNO_START + 40 )
+#define SC_WID_UNO_TABCOLOR         ( SC_WID_UNO_START + 41 )
+#define SC_WID_UNO_END              ( SC_WID_UNO_START + 41 )
 
 
 inline BOOL IsScUnoWid( USHORT nWid )

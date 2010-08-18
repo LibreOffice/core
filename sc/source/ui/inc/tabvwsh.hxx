@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabvwsh.hxx,v $
- * $Revision: 1.30.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,14 +28,16 @@
 #ifndef SC_TABVWSH_HXX
 #define SC_TABVWSH_HXX
 
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfac.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include "scdllapi.h"
 #include "dbfunc.hxx"           // -> tabview
 #include "target.hxx"
 #include "rangelst.hxx"         // ScRangeListRef
 #include "shellids.hxx"
+#include "tabprotection.hxx" // for ScPasswordHash
 
 class FmFormShell;
 class SbxObject;
@@ -105,6 +104,7 @@ private:
     static USHORT           nInsCellsCtrlState;
     static USHORT           nInsObjCtrlState;
 
+    SvxHtmlOptions          aHTMLOpt;
     ObjectSelectionType     eCurOST;
     USHORT                  nDrawSfxId;
     USHORT                  nCtrlSfxId;
@@ -197,6 +197,7 @@ private:
     DECL_LINK( SimpleRefAborted, String* );
     DECL_LINK( SimpleRefChange, String* );
     DECL_LINK( FormControlActivated, FmFormShell* );
+    DECL_LINK( HtmlOptionsHdl, void * );
 
 protected:
     virtual void    Activate(BOOL bMDI);
@@ -417,7 +418,7 @@ public:
 
     void    ExecuteCellFormatDlg    ( SfxRequest& rReq, USHORT nTabPage = 0xffff );
 
-    BOOL    GetFunction( String& rFuncStr );
+    BOOL    GetFunction( String& rFuncStr, sal_uInt16 nErrCode = 0 );
 
     void    StartSimpleRefDialog( const String& rTitle, const String& rInitVal,
                                     BOOL bCloseOnButtonUp, BOOL bSingleCell, BOOL bMultiSelection );
@@ -429,6 +430,8 @@ public:
     void    RemoveAccessibilityObject( SfxListener& rObject );
     void    BroadcastAccessibility( const SfxHint &rHint );
     BOOL    HasAccessibilityObjects();
+
+    bool    ExecuteRetypePassDlg(ScPasswordHash eDesiredHash);
 
     using ScTabView::ShowCursor;
 };

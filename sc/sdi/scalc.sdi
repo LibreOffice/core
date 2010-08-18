@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scalc.sdi,v $
- * $Revision: 1.40 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -2705,81 +2702,6 @@ SfxVoidItem FunctionDialog SID_OPENDLG_FUNCTION
 ]
 
 //--------------------------------------------------------------------------
-SfxUInt32Item GetClipboardFormat SID_GET_CLPBRD_FORMAT_BY_IDX
-(SfxUInt16Item Index SID_GET_CLPBRD_FORMAT_BY_IDX)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
-SfxUInt16Item GetClipboardFormatCount SID_GET_CLPBRD_FORMAT_COUNT
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
-SfxStringItem GetClipboardFormatName SID_GET_CLPBRD_FORMAT_NAME
-(SfxUInt32Item Format SID_GET_CLPBRD_FORMAT_NAME)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem GoalSeek SID_SOLVE
 ()
 [
@@ -2853,6 +2775,33 @@ SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
     ToolBoxConfig = TRUE,
     GroupId = GID_OPTIONS;
 ]
+
+//--------------------------------------------------------------------------
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+SfxVoidItem ValidityReference SID_VALIDITY_REFERENCE
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_OPTIONS;
+]
+//-->Added by PengYunQuan for Validity Cell Range Picker
 
 //--------------------------------------------------------------------------
 SfxVoidItem GoDownToEndOfData SID_CURSORBLKDOWN
@@ -4985,31 +4934,6 @@ SfxVoidItem PageFormatDialog SID_FORMATPAGE
 ]
 
 //--------------------------------------------------------------------------
-SfxInt16Item PasteSpecial FID_PASTE_CONTENTS
-(SfxUInt32Item Format FID_PASTE_CONTENTS)
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Volatile,
-    FastCall = TRUE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_EDIT;
-]
-
-//--------------------------------------------------------------------------
 SfxVoidItem PreviousPage SID_PREVIEW_PREVIOUS
 ()
 [
@@ -6870,6 +6794,56 @@ SfxVoidItem TableSelectAll FID_TAB_SELECTALL
 ]
 
 //--------------------------------------------------------------------------
+SfxVoidItem TableDeselectAll FID_TAB_DESELECTALL
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem TableEvents FID_TAB_EVENTS
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EDIT;
+]
+
+//--------------------------------------------------------------------------
 SfxVoidItem TextAttributes SID_DRAWTEXT_ATTR_DLG
 ()
 [
@@ -7799,3 +7773,56 @@ SfxVoidItem ShareDocument SID_SHARE_DOC
     ToolBoxConfig = FALSE,
     GroupId = GID_OPTIONS;
 ]
+
+//--------------------------------------------------------------------------
+SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR
+
+[
+    // flags:
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    Readonly = FALSE,
+
+    // config:
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+
+//--------------------------------------------------------------------------
+SfxVoidItem SetTabBgColor FID_TAB_MENU_SET_TAB_BG_COLOR
+(SvxColorItem TabBgColor FID_TAB_SET_TAB_BG_COLOR)
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_FORMAT;
+]
+

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: content.cxx,v $
- * $Revision: 1.26.102.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,14 +36,14 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdxcgv.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/help.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
-#include <svtools/urlbmk.hxx>
+#include <svl/urlbmk.hxx>
 #include <stdlib.h>
 
 #include "content.hxx"
@@ -71,6 +68,7 @@
 #include "navicfg.hxx"
 #include "navsett.hxx"
 #include "postit.hxx"
+#include "clipparam.hxx"
 
 using namespace com::sun::star;
 
@@ -829,7 +827,7 @@ void ScContentTree::GetLinkNames()
     if (!pDoc)
         return;
 
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
     DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = rLinks.Count();
@@ -850,7 +848,7 @@ const ScAreaLink* ScContentTree::GetLink( ULONG nIndex )
         return NULL;
 
     ULONG nFound = 0;
-    SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+    sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
     DBG_ASSERT(pLinkManager, "kein LinkManager am Dokument?");
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
     USHORT nCount = rLinks.Count();
@@ -1103,9 +1101,8 @@ void lcl_DoDragCells( ScDocShell* pSrcShell, const ScRange& rRange, USHORT nFlag
                                                    aMark ) )
     {
         ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-        pSrcDoc->CopyToClip( rRange.aStart.Col(), rRange.aStart.Row(),
-                             rRange.aEnd.Col(),   rRange.aEnd.Row(),
-                             FALSE, pClipDoc, FALSE, &aMark );
+        ScClipParam aClipParam(rRange, false);
+        pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aMark);
         // pClipDoc->ExtendMerge( rRange, TRUE );
 
         TransferableObjectDescriptor aObjDesc;

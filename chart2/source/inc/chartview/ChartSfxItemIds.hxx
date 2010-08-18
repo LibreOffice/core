@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartSfxItemIds.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +48,8 @@
 #define SCHATTR_DATADESCR_SEPARATOR         (SCHATTR_DATADESCR_START + 4)
 #define SCHATTR_DATADESCR_PLACEMENT         (SCHATTR_DATADESCR_START + 5)
 #define SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS   (SCHATTR_DATADESCR_START + 6)
-#define SCHATTR_DATADESCR_END               SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS
+#define SCHATTR_DATADESCR_NO_PERCENTVALUE   (SCHATTR_DATADESCR_START + 7) //percentage values should not be offered
+#define SCHATTR_DATADESCR_END               SCHATTR_DATADESCR_NO_PERCENTVALUE
 
 #define SCHATTR_LEGEND_START                (SCHATTR_DATADESCR_END + 1)
 #define SCHATTR_LEGEND_POS                  SCHATTR_LEGEND_START
@@ -209,8 +207,9 @@
 #define SCHATTR_CLOCKWISE               (SCHATTR_CHARTTYPE_START + 10)
 #define SCHATTR_MISSING_VALUE_TREATMENT     (SCHATTR_CHARTTYPE_START + 11)
 #define SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS (SCHATTR_CHARTTYPE_START + 12)
+#define SCHATTR_INCLUDE_HIDDEN_CELLS    (SCHATTR_CHARTTYPE_START + 13)
 
-#define SCHATTR_CHARTTYPE_END           SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS
+#define SCHATTR_CHARTTYPE_END           SCHATTR_INCLUDE_HIDDEN_CELLS
 
 // items for transporting information to dialogs
 #define SCHATTR_MISC_START              (SCHATTR_CHARTTYPE_END + 1)

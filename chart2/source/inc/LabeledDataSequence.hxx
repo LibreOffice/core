@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: LabeledDataSequence.hxx,v $
- * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,6 @@
 #define CHART2_LABELEDDATASEQUENCE_HXX
 #include "ServiceMacros.hxx"
 #include "MutexContainer.hxx"
-#include "charttoolsdllapi.hxx"
 #include <comphelper/uno3.hxx>
 #include <cppuhelper/implbase4.hxx>
 
@@ -56,7 +52,7 @@ typedef cppu::WeakImplHelper4<
     LabeledDataSequence_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS LabeledDataSequence :
+class LabeledDataSequence :
         public MutexContainer,
         public impl::LabeledDataSequence_Base
 {

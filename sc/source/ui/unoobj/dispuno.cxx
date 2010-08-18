@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dispuno.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/dataaccessdescriptor.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -68,9 +65,7 @@ uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( SfxViewShell*
         SfxViewFrame* pViewFrame = pViewShell->GetViewFrame();
         if (pViewFrame)
         {
-            SfxFrame* pFrame = pViewFrame->GetFrame();
-            if (pFrame)
-                return uno::Reference<view::XSelectionSupplier>( pFrame->GetController(), uno::UNO_QUERY );
+            return uno::Reference<view::XSelectionSupplier>( pViewFrame->GetFrame().GetController(), uno::UNO_QUERY );
         }
     }
     return uno::Reference<view::XSelectionSupplier>();
@@ -84,8 +79,7 @@ ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pVi
 {
     if ( pViewShell )
     {
-        SfxFrame* pFrame = pViewShell->GetViewFrame()->GetFrame();
-        m_xIntercepted.set(uno::Reference<frame::XDispatchProviderInterception>(pFrame->GetFrameInterface(), uno::UNO_QUERY));
+        m_xIntercepted.set(uno::Reference<frame::XDispatchProviderInterception>(pViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), uno::UNO_QUERY));
         if (m_xIntercepted.is())
         {
             comphelper::increment( m_refCount );

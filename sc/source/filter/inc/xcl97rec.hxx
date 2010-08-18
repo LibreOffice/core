@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xcl97rec.hxx,v $
- * $Revision: 1.48.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,92 +32,35 @@
 #include "xcl97esc.hxx"
 #include "xlstyle.hxx"
 
-// --- class XclMsodrawing_Base --------------------------------------
-
-class XclMsodrawing_Base
-{
-protected:
-        XclEscher*              pEscher;
-        sal_Size                nStartPos;      // position in OffsetMap
-        sal_Size                nStopPos;       // position in OffsetMap
-
-public:
-                                XclMsodrawing_Base( XclEscher& rEscher, sal_Size nInitialSize = 0 );
-    virtual                     ~XclMsodrawing_Base();
-
-    inline  XclEscher*          GetEscher() const   { return pEscher; }
-    inline  XclEscherEx*        GetEscherEx() const { return pEscher->GetEx(); }
-            void                UpdateStopPos();
-            sal_Size            GetDataLen() const;
-};
-
-
-// --- class XclMsodrawinggroup --------------------------------------
-
-class XclMsodrawinggroup : public XclMsodrawing_Base, public ExcRecord
-{
-private:
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
-public:
-                                XclMsodrawinggroup( RootData& rRoot,
-                                    UINT16 nEscherType = 0 );
-    virtual                     ~XclMsodrawinggroup();
-
-    virtual UINT16              GetNum() const;
-    virtual sal_Size            GetLen() const;
-};
-
-
-// --- class XclMsodrawing -------------------------------------------
-
-class XclMsodrawing : public XclMsodrawing_Base, public ExcRecord
-{
-private:
-
-    virtual void                SaveCont( XclExpStream& rStrm );
-
-public:
-                                XclMsodrawing(
-                                    const XclExpRoot& rRoot,
-                                    UINT16 nEscherType = 0,
-                                    sal_Size nInitialSize = 0 );
-    virtual                     ~XclMsodrawing();
-
-    virtual UINT16              GetNum() const;
-    virtual sal_Size            GetLen() const;
-};
-
-
-// --- class XclObjList ----------------------------------------------
+// ============================================================================
 
 class XclObj;
-class XclMsodrawing;
+class XclExpMsoDrawing;
 
-class XclObjList : public List, public ExcEmptyRec, protected XclExpRoot
+class XclExpObjList : public List, public ExcEmptyRec, protected XclExpRoot
 {
-private:
-        XclMsodrawing*          pMsodrawingPerSheet;
-        XclMsodrawing*          pSolverContainer;
-
 public:
-                                XclObjList( const XclExpRoot& rRoot );
-    virtual                     ~XclObjList();
+    explicit            XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx );
+    virtual             ~XclExpObjList();
 
-            XclObj*             First() { return (XclObj*) List::First(); }
-            XclObj*             Next()  { return (XclObj*) List::Next(); }
+    XclObj*             First() { return (XclObj*) List::First(); }
+    XclObj*             Next() { return (XclObj*) List::Next(); }
 
-                                /// return: 1-based ObjId
-                                ///! count>=0xFFFF: Obj will be deleted, return 0
-            UINT16              Add( XclObj* );
+    /// return: 1-based ObjId
+    ///! count>=0xFFFF: Obj will be deleted, return 0
+    UINT16              Add( XclObj* );
 
-    inline  XclMsodrawing*      GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
+    inline XclExpMsoDrawing* GetMsodrawingPerSheet() { return pMsodrawingPerSheet; }
 
                                 /// close groups and DgContainer opened in ctor
-            void                EndSheet();
+    void                EndSheet();
 
-    virtual void                Save( XclExpStream& rStrm );
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    XclEscherEx&        mrEscherEx;
+    XclExpMsoDrawing*   pMsodrawingPerSheet;
+    XclExpMsoDrawing*   pSolverContainer;
 };
 
 
@@ -132,8 +72,9 @@ class SdrTextObj;
 class XclObj : public XclExpRecord
 {
 protected:
-        XclMsodrawing*      pMsodrawing;
-        XclMsodrawing*      pClientTextbox;
+        XclEscherEx&        mrEscherEx;
+        XclExpMsoDrawing*   pMsodrawing;
+        XclExpMsoDrawing*   pClientTextbox;
         XclTxo*             pTxo;
         sal_uInt16          mnObjType;
         UINT16              nObjId;
@@ -144,7 +85,9 @@ protected:
 
     /** @param bOwnEscher  If set to true, this object will create its escher data.
         See SetOwnEscher() for details. */
-    explicit                    XclObj( const XclExpRoot& rRoot, sal_uInt16 nObjType, bool bOwnEscher = false );
+    explicit                    XclObj( XclExpObjectManager& rObjMgr, sal_uInt16 nObjType, bool bOwnEscher = false );
+
+    void                        ImplWriteAnchor( const XclExpRoot& rRoot, const SdrObject* pSdrObj, const Rectangle* pChildAnchor );
 
                                 // overwritten for writing MSODRAWING record
     virtual void                WriteBody( XclExpStream& rStrm );
@@ -186,27 +129,15 @@ public:
                                 //! actually writes ESCHER_ClientTextbox
             void                SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj );
 
-    inline  void                UpdateStopPos();
-
     virtual void                Save( XclExpStream& rStrm );
 };
-
-
-inline void XclObj::UpdateStopPos()
-{
-    if ( pClientTextbox )
-        pClientTextbox->UpdateStopPos();
-    else
-        pMsodrawing->UpdateStopPos();
-}
-
 
 // --- class XclObjComment -------------------------------------------
 
 class XclObjComment : public XclObj
 {
 public:
-                                XclObjComment( const XclExpRoot& rRoot,
+                                XclObjComment( XclExpObjectManager& rObjMgr,
                                     const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible );
     virtual                     ~XclObjComment();
 
@@ -231,7 +162,7 @@ private:
 
 protected:
 public:
-                                XclObjDropDown( const XclExpRoot& rRoot, const ScAddress& rPos, BOOL bFilt );
+                                XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, BOOL bFilt );
     virtual                     ~XclObjDropDown();
 };
 
@@ -278,7 +209,7 @@ private:
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:
-                                XclObjOle( const XclExpRoot& rRoot, const SdrObject& rObj );
+                                XclObjOle( XclExpObjectManager& rObjMgr, const SdrObject& rObj );
     virtual                     ~XclObjOle();
 
     virtual void                Save( XclExpStream& rStrm );
@@ -293,7 +224,7 @@ private:
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
 public:
-                                XclObjAny( const XclExpRoot& rRoot );
+                                XclObjAny( XclExpObjectManager& rObjMgr );
     virtual                     ~XclObjAny();
 
     virtual void                Save( XclExpStream& rStrm );
@@ -416,7 +347,7 @@ private:
     sal_Size                    nRecLen;
     XclExpString                sName;
     XclExpString                sComment;
-    static XclExpString         sUsername;
+    XclExpString                sUserName;
     UINT8                       nProtected;
 
     inline ExcEScenarioCell*    _First()    { return (ExcEScenarioCell*) List::First(); }
@@ -428,7 +359,7 @@ private:
 
 protected:
 public:
-                                ExcEScenario( ScDocument& rDoc, SCTAB nTab );
+                                ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab );
     virtual                     ~ExcEScenario();
 
     virtual UINT16              GetNum() const;
@@ -454,7 +385,7 @@ private:
 
 protected:
 public:
-                                ExcEScenarioManager( ScDocument& rDoc, SCTAB nTab );
+                                ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab );
     virtual                     ~ExcEScenarioManager();
 
     virtual void                Save( XclExpStream& rStrm );
@@ -464,23 +395,24 @@ public:
     virtual sal_Size            GetLen() const;
 };
 
+// ============================================================================
 
-// ---- class XclProtection ------------------------------------------
-
-class XclProtection : public ExcDummyRec
+/** Represents a SHEETPROTECTION record that stores sheet protection
+    options.  Note that a sheet still needs to save its sheet protection
+    options even when it's not protected. */
+class XclExpSheetProtectOptions : public XclExpRecord
 {
-    // replacement for records PROTECT, SCENPROTECT, OBJPROTECT...
-private:
-    static const BYTE           pMyData[];
-    static const sal_Size       nMyLen;
 public:
-    virtual sal_Size            GetLen( void ) const;
-    virtual const BYTE*         GetData( void ) const;
+    explicit            XclExpSheetProtectOptions( const XclExpRoot& rRoot, SCTAB nTab );
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    sal_uInt16      mnOptions;      /// Encoded sheet protection options.
 };
 
-
-// -------------------------------------------------------------------
-
+// ============================================================================
 
 class XclCalccount : public ExcRecord
 {
@@ -542,6 +474,118 @@ public:
                                 XclRefmode( const ScDocument& );
 
     virtual void                SaveXml( XclExpXmlStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpFilePass : public XclExpRecord
+{
+public:
+    explicit XclExpFilePass( const XclExpRoot& rRoot );
+    virtual ~XclExpFilePass();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+
+private:
+    const XclExpRoot& mrRoot;
+};
+
+// ============================================================================
+
+/** Beginning of User Interface Records */
+class XclExpInterfaceHdr : public XclExpUInt16Record
+{
+public:
+    explicit            XclExpInterfaceHdr( sal_uInt16 nCodePage );
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+/** End of User Interface Records */
+class XclExpInterfaceEnd : public XclExpRecord
+{
+public:
+    explicit XclExpInterfaceEnd();
+    virtual ~XclExpInterfaceEnd();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+/** Write Access User Name - This record contains the user name, which is
+    the name you type when you install Excel. */
+class XclExpWriteAccess : public XclExpRecord
+{
+public:
+    explicit XclExpWriteAccess();
+    virtual ~XclExpWriteAccess();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpFileSharing : public XclExpRecord
+{
+public:
+    explicit            XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash, bool bRecommendReadOnly );
+
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    XclExpString        maUserName;
+    sal_uInt16          mnPasswordHash;
+    bool                mbRecommendReadOnly;
+};
+
+// ============================================================================
+
+class XclExpProt4Rev : public XclExpRecord
+{
+public:
+    explicit XclExpProt4Rev();
+    virtual ~XclExpProt4Rev();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpProt4RevPass : public XclExpRecord
+{
+public:
+    explicit XclExpProt4RevPass();
+    virtual ~XclExpProt4RevPass();
+
+private:
+    virtual void WriteBody( XclExpStream& rStrm );
+};
+
+// ============================================================================
+
+class XclExpRecalcId : public XclExpDummyRecord
+{
+public:
+    explicit XclExpRecalcId();
+};
+
+// ============================================================================
+
+class XclExpBookExt : public XclExpDummyRecord
+{
+public:
+    explicit XclExpBookExt();
 };
 
 

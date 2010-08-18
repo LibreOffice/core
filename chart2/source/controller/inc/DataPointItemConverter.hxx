@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataPointItemConverter.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,6 +100,7 @@ private:
     sal_Int32                           m_nNumberFormat;
     sal_Int32                           m_nPercentNumberFormat;
     ::com::sun::star::uno::Sequence< sal_Int32 > m_aAvailableLabelPlacements;
+    bool                                m_bForbidPercentValue;
 };
 
 } //  namespace wrapper

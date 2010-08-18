@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: miscuno.cxx,v $
- * $Revision: 1.14.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,6 +36,9 @@
 #include "unoguard.hxx"
 
 using namespace com::sun::star;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::Any;
+using ::rtl::OUString;
 
 //------------------------------------------------------------------------
 
@@ -137,6 +137,26 @@ sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XProp
     return nRet;
 }
 
+// static
+OUString ScUnoHelpFunctions::GetStringProperty(
+    const Reference<beans::XPropertySet>& xProp, const OUString& rName, const OUString& rDefault )
+{
+    OUString aRet = rDefault;
+    if (!xProp.is())
+        return aRet;
+
+    try
+    {
+        Any any = xProp->getPropertyValue(rName);
+        any >>= aRet;
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
+    return aRet;
+}
+
 //  static
 sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 {
@@ -178,6 +198,20 @@ sal_Int32 ScUnoHelpFunctions::GetEnumFromAny( const uno::Any& aAny )
 void ScUnoHelpFunctions::SetBoolInAny( uno::Any& rAny, sal_Bool bValue )
 {
     rAny.setValue( &bValue, getBooleanCppuType() );
+}
+
+//  static
+void ScUnoHelpFunctions::SetOptionalPropertyValue(
+    Reference<beans::XPropertySet>& rPropSet, const sal_Char* pPropName, const Any& rVal )
+{
+    try
+    {
+        rPropSet->setPropertyValue(OUString::createFromAscii(pPropName), rVal);
+    }
+    catch (const beans::UnknownPropertyException&)
+    {
+        // ignored - not supported.
+    }
 }
 
 //------------------------------------------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_ChartType.cxx,v $
- * $Revision: 1.8.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -854,16 +851,37 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
     m_aSubTypeList.SetColCount(4);
     m_aSubTypeList.SetLineCount(1);
 
-    bool bIsHighContrast = ( true && GetDisplayBackground().GetColor().IsDark() );
+    bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
+
+    bool bDisableComplexChartTypes = false;
+    uno::Reference< beans::XPropertySet > xProps( m_xChartModel, uno::UNO_QUERY );
+    if ( xProps.is() )
+    {
+        try
+        {
+            xProps->getPropertyValue( C2U( "DisableComplexChartTypes" ) ) >>= bDisableComplexChartTypes;
+        }
+        catch( uno::Exception& e )
+        {
+            ASSERT_EXCEPTION( e );
+        }
+    }
 
     m_aChartTypeDialogControllerList.push_back(new ColumnChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new BarChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new PieChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new AreaChartDialogController() );
     m_aChartTypeDialogControllerList.push_back(new LineChartDialogController() );
-    m_aChartTypeDialogControllerList.push_back(new XYChartDialogController() );
+    if ( !bDisableComplexChartTypes )
+    {
+        m_aChartTypeDialogControllerList.push_back(new XYChartDialogController() );
+        m_aChartTypeDialogControllerList.push_back(new BubbleChartDialogController() );
+    }
     m_aChartTypeDialogControllerList.push_back(new NetChartDialogController() );
-    m_aChartTypeDialogControllerList.push_back(new StockChartDialogController() );
+    if ( !bDisableComplexChartTypes )
+    {
+        m_aChartTypeDialogControllerList.push_back(new StockChartDialogController() );
+    }
     m_aChartTypeDialogControllerList.push_back(new CombiColumnLineChartDialogController() );
 
     ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
@@ -989,12 +1007,13 @@ IMPL_LINK( ChartTypeTabPage, SelectMainTypeHdl, void *, EMPTYARG )
             commitToModel( aParameter );
         //detect the new ThreeDLookScheme
         aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( ChartModelHelper::findDiagram( m_xChartModel ) );
-        if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Simple )
-            aParameter.eThreeDLookScheme=ThreeDLookScheme_Simple;
+        if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Realistic )
+            aParameter.eThreeDLookScheme=ThreeDLookScheme_Realistic;
 
         aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
         this->fillAllControls( aParameter );
-        m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel);
+        uno::Reference< beans::XPropertySet > xTemplateProps( this->getCurrentTemplate(), uno::UNO_QUERY );
+        m_pCurrentMainType->fillExtraControls(aParameter,m_xChartModel,xTemplateProps);
     }
     return 0;
 }
@@ -1068,7 +1087,7 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
     m_nChangingCalls++;
     if( m_pCurrentMainType && bAlsoResetSubTypeList )
     {
-        bool bIsHighContrast = ( true && GetDisplayBackground().GetColor().IsDark() );
+        bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
         m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, bIsHighContrast, rParameter );
     }
     m_aSubTypeList.SelectItem( static_cast<USHORT>( rParameter.nSubTypeIndex) );
@@ -1110,8 +1129,8 @@ void ChartTypeTabPage::initializePage()
 
             //set ThreeDLookScheme
             aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( xDiagram );
-            if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Simple )
-                aParameter.eThreeDLookScheme=ThreeDLookScheme_Simple;
+            if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Realistic )
+                aParameter.eThreeDLookScheme=ThreeDLookScheme_Realistic;
 
             aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
 
@@ -1134,7 +1153,7 @@ void ChartTypeTabPage::initializePage()
     }
 }
 
-sal_Bool ChartTypeTabPage::commitPage( CommitPageReason /*eReason*/ )
+sal_Bool ChartTypeTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
     //commit changes to model
     if( !m_bDoLiveUpdate && m_pCurrentMainType )

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CharacterProperties.hxx,v $
- * $Revision: 1.4.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,6 +118,7 @@ public:
         PROP_CHAR_COMPLEX_WEIGHT,
         PROP_CHAR_COMPLEX_POSTURE,
         PROP_CHAR_COMPLEX_LOCALE,
+        PROP_PARA_IS_CHARACTER_DISTANCE,
 
         PROP_WRITING_MODE,
 

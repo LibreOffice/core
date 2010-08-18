@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: addruno.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include "docsh.hxx"
 #include "unonames.hxx"
@@ -115,7 +112,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
 
     if ( bIsRange )
     {
-        static SfxItemPropertyMap aPropertyMap[] =
+        static SfxItemPropertyMapEntry aPropertyMap[] =
         {
             {MAP_CHAR_LEN(SC_UNONAME_ADDRESS),  0,  &getCppuType((table::CellRangeAddress*)0), 0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
@@ -128,7 +125,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
     }
     else
     {
-        static SfxItemPropertyMap aPropertyMap[] =
+        static SfxItemPropertyMapEntry aPropertyMap[] =
         {
             {MAP_CHAR_LEN(SC_UNONAME_ADDRESS),  0,  &getCppuType((table::CellAddress*)0), 0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },

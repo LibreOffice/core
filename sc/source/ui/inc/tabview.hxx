@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabview.hxx,v $
- * $Revision: 1.28.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -181,9 +178,6 @@ private:
     BOOL                bMoveIsShift;
     BOOL                bNewStartIfMarking;
 
-    BOOL                bOldSelection;          // old style (inverting) of selection
-
-
     void            Init();
 
     void            DoAddWin( ScGridWindow* pWin );
@@ -227,7 +221,7 @@ protected:
 
 public:
                     ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
-                    ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell );
+//UNUSED2009-05     ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell );
                     ~ScTabView();
 
     void            MakeDrawLayer();
@@ -295,7 +289,7 @@ public:
 
     void            TabChanged();
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll );
-    void            RefreshZoom();
+    SC_DLLPUBLIC void            RefreshZoom();
     void            SetPagebreakMode( BOOL bSet );
 
     void            UpdateLayerLocks();
@@ -393,7 +387,10 @@ public:
 
     void            SetNewStartIfMarking();
 
-    void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    //void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
+    SC_DLLPUBLIC void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
+    //-->Added by PengYunQuan for Validity Cell Range Picker
     void            SelectNextTab( short nDir, BOOL bExtendSelection = FALSE );
 
     void            ActivateView( BOOL bActivate, BOOL bFirst );
@@ -472,6 +469,7 @@ public:
 
     void            SelectAll( BOOL bContinue = FALSE );
     void            SelectAllTables();
+    void            DeselectAllTables();
 
     void            MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
                                 BOOL bCols = FALSE, BOOL bRows = FALSE, BOOL bCellSelection = FALSE );
@@ -527,9 +525,6 @@ public:
     void            SetBrushDocument( ScDocument* pNew, BOOL bLock );
     void            SetDrawBrushSet( SfxItemSet* pNew, BOOL bLock );
     void            ResetBrushDocument();
-
-    void            UpdateSelectionType();
-    BOOL            IsOldSelection() const          { return bOldSelection; }
 };
 
 

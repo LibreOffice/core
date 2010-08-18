@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scui_def.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +50,8 @@
 #define BTN_PASTE_NAME  100  // from namepast.hxx
 #define BTN_PASTE_LIST  101  // from namepast.hxx
 
+#define BTN_EXTEND_RANGE       150
+#define BTN_CURRENT_SELECTION  151
 #define SCRET_REMOVE    0x42 //from subtdlg.hxx
 #endif
 

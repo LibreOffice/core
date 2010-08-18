@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Scaling.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,7 +27,6 @@
 #ifndef _CHART2_SCALING_HXX
 #define _CHART2_SCALING_HXX
 #include "ServiceMacros.hxx"
-#include "charttoolsdllapi.hxx"
 #include <com/sun/star/chart2/XScaling.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XServiceName.hpp>
@@ -46,7 +42,7 @@ namespace chart
 /**
 */
 
-class OOO_DLLPUBLIC_CHARTTOOLS LogarithmicScaling :
+class LogarithmicScaling :
         public ::cppu::WeakImplHelper3 <
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
@@ -67,13 +63,12 @@ public:
     APPHELPER_XSERVICEINFO_DECL()
 
     // ____ XScaling ____
-        virtual double SAL_CALL
-    doScaling( double value )
+    virtual double SAL_CALL doScaling( double value )
         throw (::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Reference<
+    virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XScaling > SAL_CALL
-    getInverseScaling() throw (::com::sun::star::uno::RuntimeException);
+        getInverseScaling() throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____
     virtual ::rtl::OUString SAL_CALL getServiceName()
@@ -88,7 +83,7 @@ private:
 
 // ----------------------------------------
 
-class OOO_DLLPUBLIC_CHARTTOOLS ExponentialScaling :
+class ExponentialScaling :
         public ::cppu::WeakImplHelper3 <
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
@@ -129,7 +124,7 @@ private:
 
 // ----------------------------------------
 
-class OOO_DLLPUBLIC_CHARTTOOLS LinearScaling : public ::cppu::WeakImplHelper3 <
+class LinearScaling : public ::cppu::WeakImplHelper3 <
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::lang::XServiceInfo
@@ -150,13 +145,12 @@ public:
     APPHELPER_XSERVICEINFO_DECL()
 
     // ____ XScaling ____
-        virtual double SAL_CALL
-    doScaling( double value )
+    virtual double SAL_CALL doScaling( double value )
         throw (::com::sun::star::uno::RuntimeException);
 
-        virtual ::com::sun::star::uno::Reference<
+    virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::chart2::XScaling > SAL_CALL
-    getInverseScaling() throw (::com::sun::star::uno::RuntimeException);
+        getInverseScaling() throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____
     virtual ::rtl::OUString SAL_CALL getServiceName()
@@ -171,7 +165,7 @@ private:
 
 // ----------------------------------------
 
-class OOO_DLLPUBLIC_CHARTTOOLS PowerScaling : public ::cppu::WeakImplHelper3 <
+class PowerScaling : public ::cppu::WeakImplHelper3 <
         ::com::sun::star::chart2::XScaling,
         ::com::sun::star::lang::XServiceName,
         ::com::sun::star::lang::XServiceInfo

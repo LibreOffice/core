@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ItemConverter.cxx,v $
- * $Revision: 1.15.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,10 +30,10 @@
 #include "ItemConverter.hxx"
 #include "macros.hxx"
 #include <com/sun/star/lang/XComponent.hpp>
-#include <svtools/itemprop.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/itemiter.hxx>
 // header for class SfxWhichIter
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/svxids.hrc>
 
 using namespace ::com::sun::star;

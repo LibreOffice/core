@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: _serviceregistration_charttypes.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +36,10 @@
 #include "ColumnChartType.hxx"
 #include "LineChartType.hxx"
 #include "NetChartType.hxx"
+#include "FilledNetChartType.hxx"
 #include "PieChartType.hxx"
 #include "ScatterChartType.hxx"
+#include "BubbleChartType.hxx"
 
 namespace
 {
@@ -95,6 +94,14 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
         , 0
     }
     ,{
+          ::chart::FilledNetChartType::create
+        , ::chart::FilledNetChartType::getImplementationName_Static
+        , ::chart::FilledNetChartType::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+    ,{
           ::chart::PieChartType::create
         , ::chart::PieChartType::getImplementationName_Static
         , ::chart::PieChartType::getSupportedServiceNames_Static
@@ -106,6 +113,14 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_charttypes[] =
           ::chart::ScatterChartType::create
         , ::chart::ScatterChartType::getImplementationName_Static
         , ::chart::ScatterChartType::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+        ,{
+          ::chart::BubbleChartType::create
+        , ::chart::BubbleChartType::getImplementationName_Static
+        , ::chart::BubbleChartType::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0

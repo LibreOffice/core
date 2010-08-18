@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlannoi.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,39 +27,59 @@
 #ifndef SC_XMLANNOI_HXX
 #define SC_XMLANNOI_HXX
 
+#include <memory>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <editeng/editdata.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 
 class ScXMLImport;
 class ScXMLTableRowCellContext;
 
+struct ScXMLAnnotationStyleEntry
+{
+    sal_uInt16          mnFamily;
+    rtl::OUString       maName;
+    ESelection          maSelection;
+
+    ScXMLAnnotationStyleEntry( sal_uInt16 nFam, const rtl::OUString& rNam, const ESelection& rSel ) :
+        mnFamily( nFam ),
+        maName( rNam ),
+        maSelection( rSel )
+    {
+    }
+};
+
+struct ScXMLAnnotationData
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        mxShape;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
+                        mxShapes;
+    ::rtl::OUString     maAuthor;
+    ::rtl::OUString     maCreateDate;
+    ::rtl::OUString     maSimpleText;
+    ::rtl::OUString     maStyleName;
+    ::rtl::OUString     maTextStyle;
+    bool                mbUseShapePos;
+    bool                mbShown;
+    std::vector<ScXMLAnnotationStyleEntry> maContentStyles;
+
+    explicit            ScXMLAnnotationData();
+                        ~ScXMLAnnotationData();
+};
+
 class ScXMLAnnotationContext : public SvXMLImportContext
 {
-    rtl::OUStringBuffer sOUText;
-    rtl::OUStringBuffer sAuthorBuffer;
-    rtl::OUStringBuffer sCreateDateBuffer;
-    rtl::OUStringBuffer sCreateDateStringBuffer;
-    sal_Int32       nParagraphCount;
-    sal_Bool        bDisplay;
-    sal_Bool        bHasTextP;
-    sal_Bool        bHasPos;
-    ScXMLTableRowCellContext*   pCellContext;
-    SvXMLImportContext*         pShapeContext;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > xShapes;
-
-    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
-    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
-
 public:
 
     ScXMLAnnotationContext( ScXMLImport& rImport, USHORT nPrfx,
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLAnnotationData& rAnnotationData,
                         ScXMLTableRowCellContext* pCellContext);
 
     virtual ~ScXMLAnnotationContext();
@@ -78,8 +95,26 @@ public:
 
     virtual void EndElement();
 
-    void SetShape(const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xTempShape,
-        const com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& xTempShapes) { xShape.set(xTempShape); xShapes.set(xTempShapes); }
+    void SetShape(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+        const ::rtl::OUString& rStyleName, const ::rtl::OUString& rTextStyle );
+
+    void AddContentStyle( sal_uInt16 nFamily, const rtl::OUString& rName, const ESelection& rSelection );
+
+private:
+    ScXMLAnnotationData& mrAnnotationData;
+    rtl::OUStringBuffer maTextBuffer;
+    rtl::OUStringBuffer maAuthorBuffer;
+    rtl::OUStringBuffer maCreateDateBuffer;
+    rtl::OUStringBuffer maCreateDateStringBuffer;
+    sal_Int32           nParagraphCount;
+    sal_Bool            bHasTextP;
+    ScXMLTableRowCellContext* pCellContext;
+    SvXMLImportContext* pShapeContext;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 };
 
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlcontent.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,10 @@
 #include <sal/types.h>
 
 // Constants ==================================================================
+
+// (0x005B) FILESHARING -------------------------------------------------------
+
+const sal_uInt16 EXC_ID_FILESHARING         = 0x005B;
 
 // (0x00E5) MERGEDCELLS -------------------------------------------------------
 

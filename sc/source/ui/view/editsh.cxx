@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editsh.cxx,v $
- * $Revision: 1.35.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,26 +32,29 @@
 
 //------------------------------------------------------------------
 
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
+
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/clipfmtitem.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/cntritem.hxx>
-//CHINA001 #include <svx/chardlg.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editview.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/msg.hxx>
@@ -64,12 +64,12 @@
 #include <sfx2/viewfrm.hxx>
 #include <sot/exchange.hxx>
 #include <svtools/cliplistener.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include <sot/formats.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 #define _EDITSH_CXX
 #include "editsh.hxx"
@@ -94,6 +94,11 @@
 
 #include "scui_def.hxx" //CHINA001
 #include "scabstdlg.hxx" //CHINA001
+
+
+using namespace ::com::sun::star;
+
+
 TYPEINIT1( ScEditShell, SfxShell );
 
 SFX_IMPL_INTERFACE(ScEditShell, SfxShell, ScResId(SCSTR_EDITSHELL))
@@ -216,6 +221,17 @@ void ScEditShell::Execute( SfxRequest& rReq )
             }
             break;
 
+        case SID_THES:
+            {
+                String aReplaceText;
+                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , sal_False );
+                if (pItem2)
+                    aReplaceText = pItem2->GetValue();
+                if (aReplaceText.Len() > 0)
+                    ReplaceTextWithSynonym( *pEditView, aReplaceText );
+            }
+            break;
+
         case SID_COPY:
             pTableView->Copy();
             break;
@@ -268,7 +284,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        case FID_PASTE_CONTENTS:
+        case SID_PASTE_SPECIAL:
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 SfxAbstractPasteDialog* pDlg = pFact->CreatePasteDialog( pViewData->GetDialogParent() );
@@ -683,6 +699,22 @@ void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
             case SID_INSERT_ZWSP:
                 ScViewUtil::HideDisabledSlot( rSet, pViewData->GetBindings(), nWhich );
             break;
+
+            case SID_THES:
+                {
+                    String          aStatusVal;
+                    LanguageType    nLang = LANGUAGE_NONE;
+                    bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, *pActiveView );
+                    rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+
+                    // disable thesaurus context menu entry if there is nothing to look up
+                    BOOL bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
+                    if (!bIsLookUpWord || !bCanDoThesaurus)
+                        rSet.DisableItem( SID_THES );
+                }
+                break;
+
+
         }
         nWhich = aIter.NextWhich();
     }
@@ -714,7 +746,7 @@ IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
 
         SfxBindings& rBindings = pViewData->GetBindings();
         rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( FID_PASTE_CONTENTS );
+        rBindings.Invalidate( SID_PASTE_SPECIAL );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -742,7 +774,7 @@ void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
         switch (nWhich)
         {
             case SID_PASTE:
-            case FID_PASTE_CONTENTS:
+            case SID_PASTE_SPECIAL:
                 if( !bPastePossible )
                     rSet.DisableItem( nWhich );
                 break;

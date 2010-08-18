@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabview.cxx,v $
- * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,6 +197,8 @@
 #include "AccessibilityHints.hxx"
 #include "appoptio.hxx"
 
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+
 #include <string>
 #include <algorithm>
 
@@ -211,6 +210,8 @@
 
 //  fuer Rad-Maus
 #define SC_DELTA_ZOOM   10
+
+using namespace ::com::sun::star;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -384,8 +385,7 @@ BOOL lcl_HasRowOutline( const ScViewData& rViewData )
             bInActivatePart( FALSE ),                                       \
             bInZoomUpdate( FALSE ),                                         \
             bMoveIsShift( FALSE ),                                          \
-            bNewStartIfMarking( FALSE ),                                    \
-            bOldSelection( FALSE )
+            bNewStartIfMarking( FALSE )
 
 
 ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
@@ -398,22 +398,22 @@ ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pView
     Init();
 }
 
-ScTabView::ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell ) :
-            pFrameWin( pParent ),
-            aViewData( rScTabView.aViewData ),
-            TABVIEW_INIT
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabView::ScTabView" );
-
-    aViewData.SetViewShell( pViewShell );
-    Init();
-
-    UpdateShow();
-    if ( aViewData.GetActivePart() != SC_SPLIT_BOTTOMLEFT )
-        pGridWin[SC_SPLIT_BOTTOMLEFT]->Show();
-
-    InvalidateSplit();
-}
+//UNUSED2009-05 ScTabView::ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell ) :
+//UNUSED2009-05             pFrameWin( pParent ),
+//UNUSED2009-05             aViewData( rScTabView.aViewData ),
+//UNUSED2009-05             TABVIEW_INIT
+//UNUSED2009-05 {
+//UNUSED2009-05     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabView::ScTabView" );
+//UNUSED2009-05
+//UNUSED2009-05     aViewData.SetViewShell( pViewShell );
+//UNUSED2009-05     Init();
+//UNUSED2009-05
+//UNUSED2009-05     UpdateShow();
+//UNUSED2009-05     if ( aViewData.GetActivePart() != SC_SPLIT_BOTTOMLEFT )
+//UNUSED2009-05         pGridWin[SC_SPLIT_BOTTOMLEFT]->Show();
+//UNUSED2009-05
+//UNUSED2009-05     InvalidateSplit();
+//UNUSED2009-05 }
 
 void ScTabView::InitScrollBar( ScrollBar& rScrollBar, long nMaxVal )
 {
@@ -1169,7 +1169,7 @@ BOOL ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
     const CommandWheelData* pData = rCEvt.GetWheelData();
     if ( pData && pData->GetMode() == COMMAND_WHEEL_ZOOM )
     {
-        if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame()->IsInPlace() )
+        if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace() )
         {
             //  for ole inplace editing, the scale is defined by the visarea and client size
             //  and can't be changed directly
@@ -1439,7 +1439,7 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, BOOL bUpdBars )
     SCsCOL nDir = ( nDeltaX > 0 ) ? 1 : -1;
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
-    while ( ( pDoc->GetColFlags( nNewX, nTab ) & CR_HIDDEN ) &&
+    while ( pDoc->ColHidden(nNewX, nTab) &&
             nNewX+nDir >= 0 && nNewX+nDir <= MAXCOL )
         nNewX = sal::static_int_cast<SCsCOL>( nNewX + nDir );
 
@@ -1528,7 +1528,7 @@ void ScTabView::ScrollY( long nDeltaY, ScVSplitPos eWhich, BOOL bUpdBars )
     SCsROW nDir = ( nDeltaY > 0 ) ? 1 : -1;
     ScDocument* pDoc = aViewData.GetDocument();
     SCTAB nTab = aViewData.GetTabNo();
-    while ( ( pDoc->GetRowFlags( nNewY, nTab ) & CR_HIDDEN ) &&
+    while ( pDoc->RowHidden(nNewY, nTab) &&
             nNewY+nDir >= 0 && nNewY+nDir <= MAXROW )
         nNewY += nDir;
 
@@ -1615,7 +1615,7 @@ SCROW lcl_LastVisible( ScViewData& rViewData )
     SCTAB nTab = rViewData.GetTabNo();
 
     SCROW nVis = MAXROW;
-    while ( nVis > 0 && pDoc->FastGetRowHeight( nVis, nTab ) == 0 )
+    while ( nVis > 0 && pDoc->GetRowHeight( nVis, nTab ) == 0 )
         --nVis;
     return nVis;
 }
@@ -1626,7 +1626,7 @@ void ScTabView::UpdateHeaderWidth( const ScVSplitPos* pWhich, const SCROW* pPosY
         return;
 
     SCROW nEndPos = MAXROW;
-    if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( !aViewData.GetViewShell()->GetViewFrame()->GetFrame().IsInPlace() )
     {
         //  fuer OLE Inplace immer MAXROW
 
@@ -2455,16 +2455,13 @@ void ScTabView::SetNewVisArea()
     SfxViewFrame* pViewFrame = aViewData.GetViewShell()->GetViewFrame();
     if (pViewFrame)
     {
-        SfxFrame* pFrame = pViewFrame->GetFrame();
-        if (pFrame)
+        SfxFrame& rFrame = pViewFrame->GetFrame();
+        com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = rFrame.GetController();
+        if (xController.is())
         {
-            com::sun::star::uno::Reference<com::sun::star::frame::XController> xController = pFrame->GetController();
-            if (xController.is())
-            {
-                ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
-                if (pImp)
-                    pImp->VisAreaChanged();
-            }
+            ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+            if (pImp)
+                pImp->VisAreaChanged();
         }
     }
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
@@ -2477,7 +2474,7 @@ sal_Bool ScTabView::HasPageFieldDataAtCursor() const
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
     if (pWin)
-        return pWin->HasPageFieldData( nCol, nRow );
+        return pWin->GetDPFieldOrientation( nCol, nRow ) == sheet::DataPilotFieldOrientation_PAGE;
 
     return sal_False;
 }
@@ -2487,15 +2484,23 @@ void ScTabView::StartDataSelect()
     ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
     SCCOL nCol = aViewData.GetCurX();
     SCROW nRow = aViewData.GetCurY();
-    if (pWin)
-    {
-        //  #i36598# If the cursor is on a page field's data cell,
-        //  no meaningful input is possible anyway, so this function
-        //  can be used to select a page field entry.
 
-        if ( pWin->HasPageFieldData( nCol, nRow ) )
-            pWin->DoPageFieldMenue( nCol, nRow );
-        else
+    if (!pWin)
+        return;
+
+    switch (pWin->GetDPFieldOrientation(nCol, nRow))
+    {
+        case sheet::DataPilotFieldOrientation_PAGE:
+            //  #i36598# If the cursor is on a page field's data cell,
+            //  no meaningful input is possible anyway, so this function
+            //  can be used to select a page field entry.
+            pWin->LaunchPageFieldMenu( nCol, nRow );
+        break;
+        case sheet::DataPilotFieldOrientation_COLUMN:
+        case sheet::DataPilotFieldOrientation_ROW:
+            pWin->LaunchDPFieldMenu( nCol, nRow );
+        break;
+        default:
             pWin->DoAutoFilterMenue( nCol, nRow, TRUE );
     }
 }

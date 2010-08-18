@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fudraw.cxx,v $
- * $Revision: 1.25.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 
 //------------------------------------------------------------------------
 
-#include <svx/editeng.hxx>  // EditEngine::IsSimpleCharInput
-#include <svx/outlobj.hxx>
+#include <editeng/editeng.hxx>  // EditEngine::IsSimpleCharInput
+#include <editeng/outlobj.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdouno.hxx>
@@ -313,7 +310,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
-                    BOOL bOle = pViewShell->GetViewFrame()->GetFrame()->IsInPlace();
+                    BOOL bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !bOle )
                     {
@@ -795,12 +792,12 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
         SdrPageView* pPV;
 
         ScMacroInfo* pInfo = 0;
-        if ( pView->PickObj(aPnt, pObj, pPV, SDRSEARCH_ALSOONMASTER) )
+        if ( pView->PickObj(aPnt, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER) )
         {
             if ( pObj->IsGroupObject() )
             {
                 SdrObject* pHit = 0;
-                if ( pView->PickObj(aMDPos, pHit, pPV, SDRSEARCH_DEEP ) )
+                if ( pView->PickObj(aMDPos, pView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
                     pObj = pHit;
             }
             pInfo = ScDrawLayer::GetMacroInfo( pObj );
@@ -825,7 +822,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             //  kann mit ALT unterdrueckt werden
             pWindow->SetPointer( Pointer( POINTER_REFHAND ) );          // Text-URL / ImageMap
         }
-        else if ( !bAlt && pView->PickObj(aPnt, pObj, pPV, SDRSEARCH_PICKMACRO) )
+        else if ( !bAlt && pView->PickObj(aPnt, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
         {
             //  kann mit ALT unterdrueckt werden
             SdrObjMacroHitRec aHitRec;  //! muss da noch irgendwas gesetzt werden ????

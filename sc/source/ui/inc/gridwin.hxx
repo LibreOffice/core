@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridwin.hxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,17 +34,20 @@
 #include "viewdata.hxx"
 #include "cbutton.hxx"
 #include <svx/sdr/overlay/overlayobject.hxx>
+#include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <vector>
+#include <memory>
+#include <boost/shared_ptr.hpp>
 
 // ---------------------------------------------------------------------------
 
 struct ScTableInfo;
 class ScViewSelectionEngine;
-#if OLD_PIVOT_IMPLEMENTATION
-class ScPivot;
-#endif
 class ScDPObject;
+class ScDPFieldPopupWindow;
+class ScDPFieldButton;
 class ScOutputData;
 class ScFilterListBox;
 class AutoFilterPopup;
@@ -97,43 +97,7 @@ public:
 
 // ---------------------------------------------------------------------------
 // predefines
-class ScGridWindow;
-
-enum ScOverlayType { SC_OVERLAY_INVERT, SC_OVERLAY_SOLID, SC_OVERLAY_BORDER_TRANSPARENT };
-
-// #114409#
-namespace sdr
-{
-    namespace overlay
-    {
-        // predefines
-        class OverlayObjectList;
-
-        // OverlayObjectCell - used for cell cursor, selection and AutoFill handle
-
-        class OverlayObjectCell : public OverlayObject
-        {
-        public:
-            typedef ::std::vector< basegfx::B2DRange > RangeVector;
-
-        private:
-            ScOverlayType   mePaintType;
-            RangeVector     maRectangles;
-
-            virtual void drawGeometry(OutputDevice& rOutputDevice);
-            virtual void createBaseRange(OutputDevice& rOutputDevice);
-
-        public:
-            OverlayObjectCell( ScOverlayType eType, const Color& rColor, const RangeVector& rRects);
-            virtual ~OverlayObjectCell();
-
-            virtual void transform(const basegfx::B2DHomMatrix& rMatrix);
-        };
-
-    } // end of namespace overlay
-} // end of namespace sdr
-
-// ---------------------------------------------------------------------------
+namespace sdr { namespace overlay { class OverlayObjectList; }}
 
 class ScGridWindow : public Window, public DropTargetHelper, public DragSourceHelper
 {
@@ -149,6 +113,25 @@ private:
     ::sdr::overlay::OverlayObjectList*              mpOOHeader;
     ::sdr::overlay::OverlayObjectList*              mpOOShrink;
 
+    ::boost::shared_ptr<Rectangle> mpAutoFillRect;
+
+    /**
+     * Stores current visible column and row ranges, used to avoid expensive
+     * operations on objects that are outside visible area.
+     */
+    struct VisibleRange
+    {
+        SCCOL mnCol1;
+        SCCOL mnCol2;
+        SCROW mnRow1;
+        SCROW mnRow2;
+
+        VisibleRange();
+
+        bool isInside(SCCOL nCol, SCROW nRow) const;
+    };
+    VisibleRange maVisibleRange;
+
 private:
     ScViewData*             pViewData;
     ScSplitPos              eWhich;
@@ -159,6 +142,8 @@ private:
 
     ScFilterListBox*        pFilterBox;
     FloatingWindow*         pFilterFloat;
+    ::std::auto_ptr<ScDPFieldPopupWindow> mpDPFieldPopup;
+    ::std::auto_ptr<ScDPFieldButton>      mpFilterButton;
 
     USHORT                  nCursorHideCount;
 
@@ -168,14 +153,6 @@ private:
     BOOL                    bEEMouse;               // Edit-Engine hat Maus
     BYTE                    nMouseStatus;
     BYTE                    nNestedButtonState;     // track nested button up/down calls
-
-#if OLD_PIVOT_IMPLEMENTATION
-    BOOL                    bPivotMouse;            // Pivot-D&D (alte Pivottabellen)
-    ScPivot*                pDragPivot;
-    BOOL                    bPivotColField;
-    SCCOL                   nPivotCol;
-    SCCOL                   nPivotField;
-#endif
 
     BOOL                    bDPMouse;               // DataPilot-D&D (neue Pivottabellen)
     long                    nDPField;
@@ -233,17 +210,22 @@ private:
     BOOL            TestMouse( const MouseEvent& rMEvt, BOOL bAction );
 
     BOOL            DoPageFieldSelection( SCCOL nCol, SCROW nRow );
+    bool            DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
     void            DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt );
-#if OLD_PIVOT_IMPLEMENTATION
-    void            PivotMouseMove( const MouseEvent& rMEvt );
-    void            PivotMouseButtonUp( const MouseEvent& rMEvt );
-    BOOL            PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove );
-    void            DoPivotDrop( BOOL bDelete, BOOL bToCols, SCSIZE nDestPos );
-#endif
 
     void            DPMouseMove( const MouseEvent& rMEvt );
     void            DPMouseButtonUp( const MouseEvent& rMEvt );
     void            DPTestMouse( const MouseEvent& rMEvt, BOOL bMove );
+
+    /**
+     * Check if the mouse click is on a field popup button.
+     *
+     * @return bool true if the field popup menu has been launched and no
+     *         further mouse event handling is necessary, false otherwise.
+     */
+    bool            DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj);
+    void            DPLaunchFieldPopupMenu(
+        const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj);
 
     void            RFMouseMove( const MouseEvent& rMEvt, BOOL bUp );
 
@@ -253,7 +235,7 @@ private:
 
     BOOL            IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab );
     void            ExecFilter( ULONG nSel, SCCOL nCol, SCROW nRow,
-                                const String& aValue );
+                                const String& aValue, bool bCheckForDates );
     void            FilterSelect( ULONG nSel );
 
     void            ExecDataSelect( SCCOL nCol, SCROW nRow, const String& rStr );
@@ -311,7 +293,7 @@ private:
 
     void            PasteSelection( const Point& rPosPixel );
 
-    void            SelectForContextMenu( const Point& rPosPixel );
+    void            SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, SCsROW nCellY );
 
     void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
 
@@ -367,9 +349,11 @@ public:
 
     void            DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect );
     void            DoScenarioMenue( const ScRange& rScenRange );
-    void            DoPageFieldMenue( SCCOL nCol, SCROW nRow );
 
-    BOOL            HasPageFieldData( SCCOL nCol, SCROW nRow ) const;
+    void            LaunchPageFieldMenu( SCCOL nCol, SCROW nRow );
+    void            LaunchDPFieldMenu( SCCOL nCol, SCROW nRow );
+
+    ::com::sun::star::sheet::DataPilotFieldOrientation GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const;
 
     void            DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     ScTableInfo& rTabInfo, OutputDevice* pContentDev );
@@ -408,6 +392,8 @@ public:
     void            DoInvertRect( const Rectangle& rPixel );
 
     void            CheckNeedsRepaint();
+
+    void            UpdateDPFromFieldPopupMenu();
 
     // #114409#
     void CursorChanged();

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_Wizard_TitlesAndObjects.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,7 +125,7 @@ void TitlesAndObjectsTabPage::initializePage()
     m_bCommitToModel = true;
 }
 
-sal_Bool TitlesAndObjectsTabPage::commitPage( CommitPageReason /*eReason*/ )
+sal_Bool TitlesAndObjectsTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
     if( m_apTitleResources->IsModified() ) //titles may have changed in the meanwhile
         commitToModel();

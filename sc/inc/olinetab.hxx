@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: olinetab.hxx,v $
- * $Revision: 1.6.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,26 +30,24 @@
 
 
 #include "collect.hxx"
-#include "compressedarray.hxx"
 #include "scdllapi.h"
 
 #define SC_OL_MAXDEPTH      7
 
 class SvStream;
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
+class ScTable;
 
 
 class ScOutlineEntry : public ScDataObject
 {
     SCCOLROW    nStart;
     SCSIZE      nSize;
-    BOOL        bHidden;
-    BOOL        bVisible;
+    bool        bHidden;
+    bool        bVisible;
 
 public:
                             ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize,
-                                                BOOL bNewHidden = FALSE );
+                                                bool bNewHidden = FALSE );
                             ScOutlineEntry( const ScOutlineEntry& rEntry );
 
     virtual ScDataObject*       Clone() const;
@@ -60,14 +55,14 @@ public:
     SCCOLROW                GetStart() const    { return nStart; }
     SCSIZE                  GetSize() const     { return nSize; }
     SCCOLROW                GetEnd() const      { return nStart+nSize-1; }
-    BOOL                    IsHidden() const    { return bHidden; }             // Gruppe versteckt
-    BOOL                    IsVisible() const   { return bVisible; }            // Control sichtbar?
+    bool                    IsHidden() const    { return bHidden; }             // Gruppe versteckt
+    bool                    IsVisible() const   { return bVisible; }            // Control sichtbar?
 
     void                    Move( SCsCOLROW nDelta );
     void                    SetSize( SCSIZE nNewSize );
     void                    SetPosSize( SCCOLROW nNewPos, SCSIZE nNewSize );
-    void                    SetHidden( BOOL bNewHidden );
-    void                    SetVisible( BOOL bNewVisible );
+    void                    SetHidden( bool bNewHidden );
+    void                    SetVisible( bool bNewVisible );
 };
 
 
@@ -128,9 +123,7 @@ public:
     void                    InsertSpace( SCCOLROW nStartPos, SCSIZE nSize );
     BOOL                    DeleteSpace( SCCOLROW nStartPos, SCSIZE nSize );
 
-    BOOL                    ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos,
-                                BOOL bShow,
-                                const ScBitMaskCompressedArray< SCCOLROW, BYTE>& rHiddenFlags );
+    bool                    ManualAction( SCCOLROW nStartPos, SCCOLROW nEndPos, bool bShow, ScTable& rTable, bool bCol );
 
     void                    RemoveAll();
 };

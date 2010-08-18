@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_DataSource.cxx,v $
- * $Revision: 1.5.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include "DataSeriesHelper.hxx"
 #include "tp_DataSourceControls.hxx"
 #include "ControllerLockGuard.hxx"
-#include "LabeledDataSequence.hxx"
+#include "DataSourceHelper.hxx"
 #include <com/sun/star/sheet/XRangeSelection.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
@@ -375,6 +372,29 @@ void DataSourceTabPage::ActivatePage()
 
 void DataSourceTabPage::initializePage()
 {
+}
+
+void DataSourceTabPage::DeactivatePage()
+{
+    commitPage();
+    svt::OWizardPage::DeactivatePage();
+}
+
+void DataSourceTabPage::commitPage()
+{
+    commitPage(::svt::WizardTypes::eFinish);
+}
+
+sal_Bool DataSourceTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
+{
+    //ranges may have been edited in the meanwhile (dirty is true in that case here)
+    if( isValid() )
+    {
+        updateModelFromControl( 0 /*update all*/ );
+        return sal_True;//return false if this page should not be left
+    }
+    else
+        return sal_False;
 }
 
 bool DataSourceTabPage::isRangeFieldContentValid( Edit & rEdit )
@@ -890,7 +910,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                 // create or change categories
                 if( !xLabeledSeq.is())
                 {
-                    xLabeledSeq.set( new ::chart::LabeledDataSequence( Reference< uno::XComponentContext >(0)));
+                    xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence( Reference< uno::XComponentContext >(0)));
                     m_rDialogModel.setCategories( xLabeledSeq );
                 }
                 try
@@ -945,7 +965,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                             if( ! xLabeledSeq.is())
                             {
                                 // no corresponding labeled data sequence for label found
-                                xLabeledSeq.set( new ::chart::LabeledDataSequence( Reference< uno::XComponentContext >(0)));
+                                xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence( Reference< uno::XComponentContext >(0)));
                                 lcl_addLSequenceToDataSource( xLabeledSeq, xSource );
                             }
                         }
@@ -1009,7 +1029,7 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                         xLabeledSeq.set( lcl_findLSequenceWithOnlyLabel( xSource ));
                                     if( ! xLabeledSeq.is())
                                     {
-                                        xLabeledSeq.set( new ::chart::LabeledDataSequence( Reference< uno::XComponentContext >(0)));
+                                        xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence( Reference< uno::XComponentContext >(0)));
                                         lcl_addLSequenceToDataSource( xLabeledSeq, xSource );
                                     }
                                 }

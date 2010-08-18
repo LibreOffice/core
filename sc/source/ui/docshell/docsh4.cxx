@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh4.cxx,v $
- * $Revision: 1.61.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@ using namespace ::com::sun::star;
 
 #include "scitems.hxx"
 #include <sfx2/fcontnr.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
@@ -56,11 +53,10 @@ using namespace ::com::sun::star;
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/sfxecode.hxx>
-#include <sfx2/topfrm.hxx>
 #include <svx/ofaitem.hxx>
 #include <sot/formats.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/waitobj.hxx>
 #include <tools/multisel.hxx>
@@ -70,12 +66,13 @@ using namespace ::com::sun::star;
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/fmshell.hxx>
+#include <svtools/xwindowitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docinsert.hxx>
-#include <svtools/PasswordHelper.hxx>
-#include <svtools/documentlockfile.hxx>
-#include <svtools/sharecontrolfile.hxx>
+#include <svl/PasswordHelper.hxx>
+#include <svl/documentlockfile.hxx>
+#include <svl/sharecontrolfile.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include "docuno.hxx"
@@ -124,8 +121,9 @@ using namespace ::com::sun::star;
 #include "scresid.hxx" //add by CHINA001
 #include "scabstdlg.hxx" //CHINA001
 #include "externalrefmgr.hxx"
-
 #include "sharedocdlg.hxx"
+#include "conditio.hxx"
+#include "sheetevents.hxx"
 
 //------------------------------------------------------------------
 
@@ -267,7 +265,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                                 GetUndoManager()->EnterListAction( aStrImport, aStrImport );
                             }
 
-                            ScDBData* pDBData = GetDBData( ScRange(aPos), SC_DB_IMPORT, FALSE );
+                            ScDBData* pDBData = GetDBData( ScRange(aPos), SC_DB_IMPORT, SC_DBSEL_KEEP );
                             DBG_ASSERT(pDBData, "kann DB-Daten nicht anlegen");
                             sTarget = pDBData->GetName();
                         }
@@ -626,8 +624,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     // getting real parent window when called from Security-Options TP
                     Window* pParent = NULL;
                     const SfxPoolItem* pParentItem;
-                    if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                        pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                    if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                        pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
 
                     // desired state
                     ScChangeTrack* pChangeTrack = pDoc->GetChangeTrack();
@@ -667,17 +665,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                     if ( bDo )
                     {
-                        //  update "accept changes" dialog
-                        //! notify all views
-                        SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                        if ( pViewFrm && pViewFrm->HasChildWindow(FID_CHG_ACCEPT) )
-                        {
-                            SfxChildWindow* pChild = pViewFrm->GetChildWindow(FID_CHG_ACCEPT);
-                            if (pChild)
-                            {
-                                ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
-                            }
-                        }
+                        UpdateAcceptChangesDialog();
 
                         // Slots invalidieren
                         if (pBindings)
@@ -696,8 +684,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
             {
                 Window* pParent = NULL;
                 const SfxPoolItem* pParentItem;
-                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                    pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                if( pReqArgs && SFX_ITEM_SET == pReqArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                    pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
                 if ( ExecuteChangeProtectionDialog( pParent ) )
                 {
                     rReq.Done();
@@ -1167,6 +1155,21 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
 //------------------------------------------------------------------
 
+void UpdateAcceptChangesDialog()
+{
+    //  update "accept changes" dialog
+    //! notify all views
+    SfxViewFrame* pViewFrm = SfxViewFrame::Current();
+    if ( pViewFrm && pViewFrm->HasChildWindow( FID_CHG_ACCEPT ) )
+    {
+        SfxChildWindow* pChild = pViewFrm->GetChildWindow( FID_CHG_ACCEPT );
+        if ( pChild )
+            ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
+    }
+}
+
+//------------------------------------------------------------------
+
 BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQueryIfProtected )
 {
     BOOL bDone = FALSE;
@@ -1220,15 +1223,7 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQuer
             }
             if ( bProtected != pChangeTrack->IsProtected() )
             {
-                //  update "accept changes" dialog
-                //! notify all views
-                SfxViewFrame* pViewFrm = SfxViewFrame::Current();
-                if ( pViewFrm && pViewFrm->HasChildWindow( FID_CHG_ACCEPT ) )
-                {
-                    SfxChildWindow* pChild = pViewFrm->GetChildWindow( FID_CHG_ACCEPT );
-                    if ( pChild )
-                        ((ScAcceptChgDlgWrapper*)pChild)->ReInitDlg();
-                }
+                UpdateAcceptChangesDialog();
                 bDone = TRUE;
             }
         }
@@ -1266,6 +1261,8 @@ void ScDocShell::DoRecalc( BOOL bApi )
         if ( pSh )
             pSh->UpdateCharts(TRUE);
 
+        aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+
         //  #47939# Wenn es Charts gibt, dann alles painten, damit nicht
         //  PostDataChanged und die Charts nacheinander kommen und Teile
         //  doppelt gepainted werden.
@@ -1291,6 +1288,26 @@ void ScDocShell::DoHardRecalc( BOOL /* bApi */ )
     GetDocFunc().DetectiveRefresh();    // erzeugt eigenes Undo
     if ( pSh )
         pSh->UpdateCharts(TRUE);
+
+    // set notification flags for "calculate" event (used in SFX_HINT_DATACHANGED broadcast)
+    // (might check for the presence of any formulas on each sheet)
+    SCTAB nTabCount = aDocument.GetTableCount();
+    SCTAB nTab;
+    if (aDocument.HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true )) // search also for VBA hendler
+        for (nTab=0; nTab<nTabCount; nTab++)
+            aDocument.SetCalcNotification(nTab);
+
+    // CalcAll doesn't broadcast value changes, so SC_HINT_CALCALL is broadcasted globally
+    // in addition to SFX_HINT_DATACHANGED.
+    aDocument.BroadcastUno( SfxSimpleHint( SC_HINT_CALCALL ) );
+    aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
+
+    // use hard recalc also to disable stream-copying of all sheets
+    // (somewhat consistent with charts)
+    for (nTab=0; nTab<nTabCount; nTab++)
+        if (aDocument.IsStreamValid(nTab))
+            aDocument.SetStreamValid(nTab, FALSE);
+
     PostPaintGridAll();
 }
 
@@ -1365,6 +1382,23 @@ void ScDocShell::NotifyStyle( const SfxStyleSheetHint& rHint )
                     pBindings->Invalidate( SID_ATTR_PARA_LEFT_TO_RIGHT );
                     pBindings->Invalidate( SID_ATTR_PARA_RIGHT_TO_LEFT );
                 }
+            }
+        }
+    }
+    else if ( pStyle->GetFamily() == SFX_STYLE_FAMILY_PARA )
+    {
+        if ( nId == SFX_STYLESHEET_MODIFIED)
+        {
+            String aNewName = pStyle->GetName();
+            String aOldName = aNewName;
+            BOOL bExtended = rHint.ISA(SfxStyleSheetHintExtended);
+            if (bExtended)
+                aOldName = ((SfxStyleSheetHintExtended&)rHint).GetOldName();
+            if ( aNewName != aOldName )
+            {
+                ScConditionalFormatList* pList = aDocument.GetCondFormList();
+                if (pList)
+                    pList->RenameCellStyle( aOldName,aNewName );
             }
         }
     }
@@ -1455,12 +1489,12 @@ BOOL ScDocShell::AdjustPrintZoom( const ScRange& rRange )
         SCROW nEndRow = rRange.aEnd.Row();
         if ( pRepeatRow && nStartRow >= pRepeatRow->aStart.Row() )
         {
-            nBlkTwipsY += aDocument.FastGetRowHeight( pRepeatRow->aStart.Row(),
+            nBlkTwipsY += aDocument.GetRowHeight( pRepeatRow->aStart.Row(),
                     pRepeatRow->aEnd.Row(), nTab );
             if ( nStartRow <= pRepeatRow->aEnd.Row() )
                 nStartRow = pRepeatRow->aEnd.Row() + 1;
         }
-        nBlkTwipsY += aDocument.FastGetRowHeight( nStartRow, nEndRow, nTab );
+        nBlkTwipsY += aDocument.GetRowHeight( nStartRow, nEndRow, nTab );
 
         Size aPhysPage;
         long nHdr, nFtr;
@@ -1816,6 +1850,10 @@ void lcl_GetPrintData( ScDocShell* pDocShell /*in*/,
         rOptions = SC_MOD()->GetPrintOptions();
     }
 
+    // update all pending row heights with a single progress bar,
+    // instead of a separate progress for each sheet from ScPrintFunc
+    pDocShell->UpdatePendingRowHeights( MAXTAB, true );
+
     // get number of total pages
     rnTotalPages = 0;
     SCTAB nTabCount = pDocument->GetTableCount();
@@ -2108,15 +2146,20 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
                 }
             }
 
-            if ( n+1 < nCollateCopies && pPrinter->GetDuplexMode() == DUPLEX_ON && ( nPrinted % 2 ) == 1 )
+            if ( n+1 < nCollateCopies &&
+                 (pPrinter->GetDuplexMode() == DUPLEX_SHORTEDGE || pPrinter->GetDuplexMode() == DUPLEX_LONGEDGE) &&
+                 ( nPrinted % 2 ) == 1 )
             {
                 // #105584# when several collated copies are printed in duplex mode, and there is
                 // an odd number of pages, print an empty page between copies, so the first page of
                 // the second copy isn't printed on the back of the last page of the first copy.
                 // (same as in Writer ViewShell::Prt)
 
+                // FIXME: needs to be adapted to XRenderable interface
+                #if 0
                 pPrinter->StartPage();
                 pPrinter->EndPage();
+                #endif
             }
         }
     }
@@ -2406,10 +2449,12 @@ long __EXPORT ScDocShell::DdeGetData( const String& rItem,
         if( aDdeTextFmt.EqualsAscii( "CSV" ) ||
             aDdeTextFmt.EqualsAscii( "FCSV" ) )
             aObj.SetSeparator( ',' );
+        aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, 0, false ) );
         return aObj.ExportData( rMimeType, rValue ) ? 1 : 0;
     }
 
     ScImportExport aObj( &aDocument, rItem );
+    aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, 0, false ) );
     if( aObj.IsRef() )
         return aObj.ExportData( rMimeType, rValue ) ? 1 : 0;
     return 0;
@@ -2473,10 +2518,14 @@ long __EXPORT ScDocShell::DdeSetData( const String& rItem,
                 pData->GetSymbol( aPos );           // continue with the name's contents
         }
     }
+
+    // Address in DDE function must be always parsed as CONV_OOO so that it
+    // would always work regardless of current address convension.  We do this
+    // because the address item in a DDE entry is *not* normalized when saved
+    // into ODF.
     ScRange aRange;
-    formula::FormulaGrammar::AddressConvention eConv = aDocument.GetAddressConvention();
-    BOOL bValid = ( ( aRange.Parse( aPos, &aDocument, eConv ) & SCA_VALID ) ||
-                    ( aRange.aStart.Parse( aPos, &aDocument, eConv ) & SCA_VALID ) );
+    bool bValid = ( (aRange.Parse(aPos, &aDocument, formula::FormulaGrammar::CONV_OOO ) & SCA_VALID) ||
+                    (aRange.aStart.Parse(aPos, &aDocument, formula::FormulaGrammar::CONV_OOO) & SCA_VALID) );
 
     ScServerObject* pObj = NULL;            // NULL = error
     if ( bValid )
@@ -2516,7 +2565,7 @@ ScTabViewShell* ScDocShell::GetBestViewShell( BOOL bOnlyVisible )
     if( !pViewSh )
     {
         // 1. ViewShell suchen
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, TYPE(SfxTopViewFrame), bOnlyVisible );
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this, bOnlyVisible );
         if( pFrame )
         {
             SfxViewShell* p = pFrame->GetViewShell();

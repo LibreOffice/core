@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbacharts.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,11 +32,9 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
 
-ScVbaCharts::ScVbaCharts( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext ) : Charts_BASE(_xParent, _xContext, uno::Reference< container::XIndexAccess >() )
+ScVbaCharts::ScVbaCharts( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const uno::Reference< frame::XModel >& xModel ) : Charts_BASE(_xParent, _xContext, uno::Reference< container::XIndexAccess >())
 {
-    // #TODO #FIXME surely this is wrong, you should never use the
-    // currently documement ( it could be anything )
-    xComponent.set( getCurrentDocument(), uno::UNO_QUERY_THROW );
+    xComponent.set( xModel, uno::UNO_QUERY_THROW );
     xSpreadsheetDocument.set( xComponent, uno::UNO_QUERY_THROW );
 }
 

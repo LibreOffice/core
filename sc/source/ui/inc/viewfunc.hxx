@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewfunc.hxx,v $
- * $Revision: 1.34.128.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,16 +29,18 @@
 
 #include "tabview.hxx"
 
+#include "tabbgcolor.hxx"
+
 #ifndef _SVSTDARR_SHORTS
 #define _SVSTDARR_SHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #endif
 
 #ifndef _SVSTDARR_STRINGS
 
 #define _SVSTDARR_STRINGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #endif
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -69,6 +68,7 @@ class Exchange;
 class ScRangeList;
 class SvxHyperlinkItem;
 class ScTransferObj;
+class ScTableProtection;
 
 namespace com { namespace sun { namespace star { namespace datatransfer { class XTransferable; } } } }
 
@@ -199,6 +199,8 @@ public:
 
     void            ChangeIndent( BOOL bIncrement );
 
+    void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
+
     void            Protect( SCTAB nTab, const String& rPassword );
     BOOL            Unprotect( SCTAB nTab, const String& rPassword );
 
@@ -273,6 +275,9 @@ public:
                                     SCTAB nCount, const SCTAB* pSrcTabs,
                                     BOOL bLink,SCTAB nTab);
 
+    bool            SetTabBgColor( const Color& rColor, SCTAB nTabNr );
+    bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoSetTabBgColorInfoList );
+
     void            InsertTableLink( const String& rFile,
                                         const String& rFilter, const String& rOptions,
                                         const String& rTabName );
@@ -300,6 +305,7 @@ public:
 
     void            SetNoteText( const ScAddress& rPos, const String& rNoteText );
     void            ReplaceNote( const ScAddress& rPos, const String& rNoteText, const String* pAuthor, const String* pDate );
+    void            DoRefConversion( BOOL bRecord = TRUE );
 
 //UNUSED2008-05  void            DoSpellingChecker( BOOL bRecord = TRUE );
     void            DoHangulHanjaConversion( BOOL bRecord = TRUE );
@@ -344,6 +350,11 @@ private:
     void            PasteRTF( SCCOL nCol, SCROW nStartRow,
                                 const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::datatransfer::XTransferable >& rxTransferable );
+    bool            PasteMultiRangesFromClip( sal_uInt16 nFlags, ScDocument* pClipDoc, sal_uInt16 nFunction,
+                                              bool bSkipEmpty, bool bTranspos, bool bAsLink, bool bAllowDialogs,
+                                              InsCellCmd eMoveMode, sal_uInt16 nCondFlags, sal_uInt16 nUndoFlags );
+    void            PostPasteFromClip(const ScRange& rPasteRange, const ScMarkData& rMark);
+
     USHORT          GetOptimalColWidth( SCCOL nCol, SCTAB nTab, BOOL bFormula );
 
     void            StartFormatArea();

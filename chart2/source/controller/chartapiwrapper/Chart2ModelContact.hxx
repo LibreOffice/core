@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Chart2ModelContact.hxx,v $
- * $Revision: 1.3.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,6 +31,7 @@
 #include <com/sun/star/chart2/ExplicitIncrementData.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <cppuhelper/weakref.hxx>
@@ -87,20 +85,32 @@ public:
     sal_Int32 getExplicitNumberFormatKeyForAxis(
             const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
 
+    sal_Int32 getExplicitNumberFormatKeyForSeries(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries );
+
     /** Returns the size of the page in logic coordinates.  This value is used
         for setting an appropriate "ReferencePageSize" for FontHeights.
      */
     ::com::sun::star::awt::Size GetPageSize() const;
 
-    /** Returns the size of the diagram object in logic coordinates inclusive
-        the space reserved for axis titles.
+    /** calculates the current axes title sizes and substract that space them from the given recangle
      */
-    ::com::sun::star::awt::Size GetDiagramSizeInclusive() const;
+    ::com::sun::star::awt::Rectangle SubstractAxisTitleSizes( const ::com::sun::star::awt::Rectangle& rPositionRect );
 
-    /** Returns the position of the diagram in logic coordinates inclusive
-        the space reserved for axis titles.
+    /** Returns the position and size of the diagram in logic coordinates (100th mm) including
+        the space used for axes including axes titles.
      */
-    ::com::sun::star::awt::Point GetDiagramPositionInclusive() const;
+    ::com::sun::star::awt::Rectangle GetDiagramRectangleIncludingTitle() const;
+
+    /** Returns the position and size of the diagram in logic coordinates (100th mm) including
+        the space used for axes excluding axes titles.
+     */
+    ::com::sun::star::awt::Rectangle GetDiagramRectangleIncludingAxes() const;
+
+    /** Returns the position and size of the diagram in logic coordinates (100th mm) excluding
+        the space used for axes (inner plot area).
+     */
+    ::com::sun::star::awt::Rectangle GetDiagramRectangleExcludingAxes() const;
 
     /** Returns the size of the object in logic coordinates.
      */
@@ -133,7 +143,8 @@ public:
 
 private: //methods
     ExplicitValueProvider* getExplicitValueProvider() const;
-    ::com::sun::star::awt::Rectangle GetDiagramRectangleInclusive() const;
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::lang::XUnoTunnel > getChartView() const;
 
 public: //member
     ::com::sun::star::uno::Reference<

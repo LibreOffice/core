@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DialogModel.cxx,v $
- * $Revision: 1.7.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,12 +37,11 @@
 #include "macros.hxx"
 #include "Strings.hrc"
 #include "ResId.hxx"
-#include "LabeledDataSequence.hxx"
-#include "CachedDataSequence.hxx"
 #include "ContainerHelper.hxx"
 #include "CommonFunctors.hxx"
 #include "ControllerLockGuard.hxx"
 #include "ChartTypeHelper.hxx"
+#include "ThreeDHelper.hxx"
 
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -110,6 +106,7 @@ OUString lcl_ConvertRole( const OUString & rRoleString, bool bFromInternalToUI )
         aTranslationMap[ C2U( "values-min" ) ] =   OUString( String( ::chart::SchResId( STR_DATA_ROLE_MIN )));
         aTranslationMap[ C2U( "values-x" ) ] =     OUString( String( ::chart::SchResId( STR_DATA_ROLE_X )));
         aTranslationMap[ C2U( "values-y" ) ] =     OUString( String( ::chart::SchResId( STR_DATA_ROLE_Y )));
+        aTranslationMap[ C2U( "values-size" ) ] =  OUString( String( ::chart::SchResId( STR_DATA_ROLE_SIZE )));
     }
 
     if( bFromInternalToUI )
@@ -157,6 +154,7 @@ void lcl_createRoleIndexMap( lcl_tRoleIndexMap & rOutMap )
     rOutMap[ C2U( "values-min" ) ] =            ++nIndex;
     rOutMap[ C2U( "values-max" ) ] =            ++nIndex;
     rOutMap[ C2U( "values-last" ) ] =           ++nIndex;
+    rOutMap[ C2U( "values-size" ) ] =           ++nIndex;
 }
 
 struct lcl_DataSeriesContainerAppend : public
@@ -328,26 +326,26 @@ Reference< XDataSeries > lcl_CreateNewSeries(
             {
                 if( aRoles[nI].equals( lcl_aLabelRole ))
                     continue;
-                Reference< data::XDataSequence > xSeq( new ::chart::CachedDataSequence());
+                Reference< data::XDataSequence > xSeq( ::chart::DataSourceHelper::createCachedDataSequence() );
                 lcl_SetSequenceRole( xSeq, aRoles[nI] );
                 // assert that aRoleOfSeqForSeriesLabel is part of the mandatory roles
                 if( aRoles[nI].equals( aRoleOfSeqForSeriesLabel ))
                 {
-                    Reference< data::XDataSequence > xLabel( new ::chart::CachedDataSequence( aLabel ));
+                    Reference< data::XDataSequence > xLabel( ::chart::DataSourceHelper::createCachedDataSequence( aLabel ));
                     lcl_SetSequenceRole( xLabel, lcl_aLabelRole );
-                    aNewSequences.push_back( new ::chart::LabeledDataSequence( xSeq, xLabel ));
+                    aNewSequences.push_back( ::chart::DataSourceHelper::createLabeledDataSequence( xSeq, xLabel ));
                 }
                 else
-                    aNewSequences.push_back( new ::chart::LabeledDataSequence( xSeq ));
+                    aNewSequences.push_back( ::chart::DataSourceHelper::createLabeledDataSequence( xSeq ));
             }
 
             for(nI=0; nI<aOptRoles.getLength(); ++nI)
             {
                 if( aOptRoles[nI].equals( lcl_aLabelRole ))
                     continue;
-                Reference< data::XDataSequence > xSeq( new ::chart::CachedDataSequence());
+                Reference< data::XDataSequence > xSeq( ::chart::DataSourceHelper::createCachedDataSequence());
                 lcl_SetSequenceRole( xSeq, aOptRoles[nI] );
-                aNewSequences.push_back( new ::chart::LabeledDataSequence( xSeq ));
+                aNewSequences.push_back( ::chart::DataSourceHelper::createLabeledDataSequence( xSeq ));
             }
 
             xSink->setData( ContainerToSequence( aNewSequences ));
@@ -528,6 +526,9 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
 
     try
     {
+        Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram() );
+        ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
+
         sal_Int32 nSeriesInChartType = 0;
         const sal_Int32 nTotalSeries = countSeries();
         if( xChartType.is())
@@ -543,7 +544,7 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
                 xChartType,
                 nTotalSeries, // new series' index
                 nSeriesInChartType,
-                m_xChartDocument->getFirstDiagram(),
+                xDiagram,
                 m_xTemplate,
                 bCreateDataCachedSequences ));
 
@@ -564,6 +565,8 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
             aSeries.insert( aIt, xNewSeries );
             xSeriesCnt->setDataSeries( ContainerToSequence( aSeries ));
         }
+
+        ThreeDHelper::setScheme( xDiagram, e3DScheme );
     }
     catch( uno::Exception & ex )
     {
@@ -697,14 +700,19 @@ bool DialogModel::setData(
             m_xTemplate->getDataInterpreter());
         if( xInterpreter.is())
         {
+            Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram() );
+            ThreeDLookScheme e3DScheme = ThreeDHelper::detectScheme( xDiagram );
+
             ::std::vector< Reference< XDataSeries > > aSeriesToReUse(
-                DiagramHelper::getDataSeriesFromDiagram( m_xChartDocument->getFirstDiagram()));
+                DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
             applyInterpretedData(
                 xInterpreter->interpretDataSource(
                     xDataSource, rArguments,
                     ContainerToSequence( aSeriesToReUse )),
                 aSeriesToReUse,
                 true /* bSetStyles */);
+
+            ThreeDHelper::setScheme( xDiagram, e3DScheme );
         }
     }
     catch( uno::Exception & ex )
@@ -720,12 +728,6 @@ bool DialogModel::setData(
 OUString DialogModel::ConvertRoleFromInternalToUI( const OUString & rRoleString )
 {
     return lcl_ConvertRole( rRoleString, true );
-}
-
-// static
-OUString DialogModel::ConvertRoleFromUIToInternal( const OUString & rRoleString )
-{
-    return lcl_ConvertRole( rRoleString, false );
 }
 
 // static
@@ -748,43 +750,6 @@ sal_Int32 DialogModel::GetRoleIndexForSorting( const ::rtl::OUString & rInternal
         return aIt->second;
 
     return 0;
-}
-
-// static
-bool DialogModel::isSeriesValid(
-        const Reference< chart2::XDataSeries > & xSeries,
-        const OUString & aRoleOfSequenceForLabel,
-        const Reference< chart2::XChartType > & xChartType )
-{
-    if( ! (xSeries.is() && xChartType.is()))
-        return false;
-
-    try
-    {
-        sal_Int32 nFoundRoles = 0;
-        DialogModel::tRolesWithRanges aRolesWithRanges;
-        Reference< data::XDataSource > xSource( xSeries, uno::UNO_QUERY_THROW );
-        const Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
-        ::std::copy( aSeq.getConstArray(), aSeq.getConstArray() + aSeq.getLength(),
-                     lcl_RolesWithRangeAppend( aRolesWithRanges, aRoleOfSequenceForLabel ));
-        const Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
-        for( sal_Int32 nI = 0; nI < aRoles.getLength(); ++nI )
-            if( !aRoles[nI].equals( lcl_aLabelRole ) && aRolesWithRanges.find( aRoles[nI] ) != aRolesWithRanges.end() )
-                ++nFoundRoles;
-        // strong condition: all mandatory roles exist (except the label)
-//             if( !aRoles[nI].equals( lcl_aLabelRole ) && aRolesWithRanges.find( aRoles[nI] ) == aRolesWithRanges.end() )
-//                 return false;
-        // weak condition: one mandatory role exists
-        if( aRoles.getLength() > 0 && nFoundRoles == 0 )
-            return false;
-    }
-    catch( uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-        return false;
-    }
-
-    return true;
 }
 
 // private methods
@@ -873,8 +838,6 @@ void DialogModel::applyInterpretedData(
 
         DialogModel::setCategories(rNewData.Categories);
     }
-
-    OSL_ASSERT( ! rNewData.UnusedData.hasElements());
 }
 
 sal_Int32 DialogModel::countSeries() const

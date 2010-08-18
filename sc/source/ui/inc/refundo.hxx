@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: refundo.hxx,v $
- * $Revision: 1.5.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +34,6 @@ class ScDocument;
 class ScDBCollection;
 class ScRangeName;
 class ScPrintRangeSaver;
-#if OLD_PIVOT_IMPLEMENTATION
-class ScPivotCollection;
-#endif
 class ScDPCollection;
 class ScChartCollection;
 class ScConditionalFormatList;
@@ -54,9 +48,6 @@ private:
     ScDBCollection*             pDBCollection;
     ScRangeName*                pRangeName;
     ScPrintRangeSaver*          pPrintRanges;
-#if OLD_PIVOT_IMPLEMENTATION
-    ScPivotCollection*          pPivotCollection;
-#endif
     ScDPCollection*             pDPCollection;
     ScConditionalFormatList*    pCondFormList;
     ScDetOpList*                pDetOpList;

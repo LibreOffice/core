@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: excrecds.cxx,v $
- * $Revision: 1.88 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,37 +35,37 @@
 #include "excrecds.hxx"
 
 #include <map>
-#include <svx/countryid.hxx>
+#include <filter/msfilter/countryid.hxx>
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/objsh.hxx>
 
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
 
-#include <svx/flditem.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/flstitem.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/escpitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/escpitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <svtools/ctrltool.hxx>
 
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <string.h>
 
@@ -91,6 +88,7 @@
 #include "formula/errorcodes.hxx"
 
 #include "excdoc.hxx"
+#include "xeescher.hxx"
 #include "xeformula.hxx"
 #include "xelink.hxx"
 #include "xename.hxx"
@@ -100,23 +98,17 @@
 
 #include <oox/core/tokens.hxx>
 
+using ::com::sun::star::uno::Sequence;
 
 
 using ::rtl::OString;
 
 //--------------------------------------------------------- class ExcDummy_00 -
 const BYTE      ExcDummy_00::pMyData[] = {
-    0xe1, 0x00, 0x00, 0x00,                                 // INTERFACEHDR
-    0xc1, 0x00, 0x02, 0x00, 0x00, 0x00,                     // MMS
-    0xbf, 0x00, 0x00, 0x00,                                 // TOOLBARHDR
-    0xc0, 0x00, 0x00, 0x00,                                 // TOOLBAREND
-    0xe2, 0x00, 0x00, 0x00,                                 // INTERFACEEND
-    0x5c, 0x00, 0x20, 0x00, 0x04, 0x4d, 0x72, 0x20, 0x58,   // WRITEACCESS
+    0x5c, 0x00, 0x20, 0x00, 0x04, 'C',  'a',  'l',  'c',    // WRITEACCESS
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
-    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
-    0x42, 0x00, 0x02, 0x00, 0xe4, 0x04,                     // CODEPAGE
-    0x9c, 0x00, 0x02, 0x00, 0x0e, 0x00                      // FNGROUPCOUNT
+    0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
 };
 const sal_Size ExcDummy_00::nMyLen = sizeof( ExcDummy_00::pMyData );
 
@@ -217,12 +209,6 @@ UINT16 ExcDummyRec::GetNum( void ) const
 
 //------------------------------------------------------- class ExcBoolRecord -
 
-ExcBoolRecord::ExcBoolRecord( SfxItemSet* pItemSet, USHORT nWhich, BOOL bDefault )
-{
-    bVal = pItemSet? ( ( const SfxBoolItem& ) pItemSet->Get( nWhich ) ).GetValue() : bDefault;
-}
-
-
 void ExcBoolRecord::SaveCont( XclExpStream& rStrm )
 {
     rStrm << (UINT16)(bVal ? 0x0001 : 0x0000);
@@ -320,27 +306,6 @@ sal_Size ExcEof::GetLen( void ) const
 
 
 
-//----------------------------------------------------- class ExcFngroupcount -
-
-void ExcFngroupcount::SaveCont( XclExpStream& rStrm )
-{
-    rStrm << ( UINT16 ) 0x000E;     // copied from Excel
-}
-
-
-UINT16 ExcFngroupcount::GetNum( void ) const
-{
-    return 0x009C;
-}
-
-
-sal_Size ExcFngroupcount::GetLen( void ) const
-{
-    return 2;
-}
-
-
-
 //--------------------------------------------------------- class ExcDummy_00 -
 
 sal_Size ExcDummy_00::GetLen( void ) const
@@ -432,7 +397,9 @@ ExcBundlesheetBase::ExcBundlesheetBase() :
 void ExcBundlesheetBase::UpdateStreamPos( XclExpStream& rStrm )
 {
     rStrm.SetSvStreamPos( nOwnPos );
+    rStrm.DisableEncryption();
     rStrm << static_cast<sal_uInt32>(nStrPos);
+    rStrm.EnableEncryption();
 }
 
 
@@ -487,7 +454,7 @@ XclExpCountry::XclExpCountry( const XclExpRoot& rRoot ) :
     /*  #i31530# set document country as UI country too -
         needed for correct behaviour of number formats. */
     mnUICountry = mnDocCountry = static_cast< sal_uInt16 >(
-        ::svx::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
+        ::msfilter::ConvertLanguageToCountry( rRoot.GetDocLanguage() ) );
 }
 
 void XclExpCountry::WriteBody( XclExpStream& rStrm )
@@ -532,7 +499,7 @@ void XclExpWsbool::SaveXml( XclExpXmlStream& rStrm )
 // XclExpWindowProtection ===============================================================
 
 XclExpWindowProtection::XclExpWindowProtection(bool bValue) :
-    XclExpBoolRecord(EXC_ID_WINDOWPROTECT,bValue)
+    XclExpBoolRecord(EXC_ID_WINDOWPROTECT, bValue)
 {
 }
 
@@ -545,9 +512,31 @@ void XclExpWindowProtection::SaveXml( XclExpXmlStream& rStrm )
 
 // XclExpDocProtection ===============================================================
 
-XclExpDocProtection::XclExpDocProtection(bool bValue) :
-    XclExpBoolRecord(EXC_ID_PROTECT,bValue)
+XclExpProtection::XclExpProtection(bool bValue) :
+    XclExpBoolRecord(EXC_ID_PROTECT, bValue)
 {
+}
+
+// ============================================================================
+
+XclExpPassHash::XclExpPassHash(const Sequence<sal_Int8>& aHash) :
+    XclExpRecord(EXC_ID_PASSWORD, 2),
+    mnHash(0x0000)
+{
+    if (aHash.getLength() >= 2)
+    {
+        mnHash  = ((aHash[0] << 8) & 0xFFFF);
+        mnHash |= (aHash[1] & 0xFF);
+    }
+}
+
+XclExpPassHash::~XclExpPassHash()
+{
+}
+
+void XclExpPassHash::WriteBody(XclExpStream& rStrm)
+{
+    rStrm << mnHash;
 }
 
 // ============================================================================
@@ -699,7 +688,31 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
     String  sText;
 
     if( rEntry.pStr )
+    {
         sText.Assign( *rEntry.pStr );
+        switch( rEntry.eOp )
+        {
+            case SC_CONTAINS:
+            case SC_DOES_NOT_CONTAIN:
+            {
+                sText.InsertAscii( "*" , 0 );
+                sText.AppendAscii( "*" );
+            }
+            break;
+            case SC_BEGINS_WITH:
+            case SC_DOES_NOT_BEGIN_WITH:
+                sText.AppendAscii( "*" );
+            break;
+            case SC_ENDS_WITH:
+            case SC_DOES_NOT_END_WITH:
+                sText.InsertAscii( "*" , 0 );
+            break;
+            default:
+            {
+                //nothing
+            }
+        }
+    }
 
     BOOL bLen = sText.Len() > 0;
 
@@ -759,6 +772,14 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
                     case SC_LESS_EQUAL:     nOper = EXC_AFOPER_LESSEQUAL;       break;
                     case SC_GREATER_EQUAL:  nOper = EXC_AFOPER_GREATEREQUAL;    break;
                     case SC_NOT_EQUAL:      nOper = EXC_AFOPER_NOTEQUAL;        break;
+                    case SC_CONTAINS:
+                    case SC_BEGINS_WITH:
+                    case SC_ENDS_WITH:
+                                            nOper = EXC_AFOPER_EQUAL;           break;
+                    case SC_DOES_NOT_CONTAIN:
+                    case SC_DOES_NOT_BEGIN_WITH:
+                    case SC_DOES_NOT_END_WITH:
+                                            nOper = EXC_AFOPER_NOTEQUAL;        break;
                     default:;
                 }
                 bConflict = !AddCondition( rEntry.eConnect, nType, nOper, fVal, pText );
@@ -956,8 +977,8 @@ void ExcAutoFilterRecs::AddObjRecs()
         ScAddress aAddr( pFilterInfo->GetStartPos() );
         for( SCCOL nObj = 0, nCount = pFilterInfo->GetColCount(); nObj < nCount; nObj++ )
         {
-            XclObjDropDown* pObj = new XclObjDropDown( GetRoot(), aAddr, IsFiltered( nObj ) );
-            GetOldRoot().pObjRecs->Add( pObj );
+            XclObj* pObjRec = new XclObjDropDown( GetObjectManager(), aAddr, IsFiltered( nObj ) );
+            GetObjectManager().AddObj( pObjRec );
             aAddr.IncCol( 1 );
         }
     }

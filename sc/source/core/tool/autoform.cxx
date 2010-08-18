@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: autoform.cxx,v $
- * $Revision: 1.22.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,14 +36,14 @@
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/itemset.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/itemset.hxx>
 #include <tools/shl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <tools/tenccvt.hxx>
@@ -1026,11 +1023,11 @@ short ScAutoFormat::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
     ((ScAutoFormatData*)pKey1)->GetName(aStr1);
     ((ScAutoFormatData*)pKey2)->GetName(aStr2);
     String aStrStandard = ScGlobal::GetRscString(STR_STYLENAME_STANDARD);
-    if ( ScGlobal::pTransliteration->isEqual( aStr1, aStrStandard ) )
+    if ( ScGlobal::GetpTransliteration()->isEqual( aStr1, aStrStandard ) )
         return -1;
-    if ( ScGlobal::pTransliteration->isEqual( aStr2, aStrStandard ) )
+    if ( ScGlobal::GetpTransliteration()->isEqual( aStr2, aStrStandard ) )
         return 1;
-    return (short) ScGlobal::pTransliteration->compareString( aStr1, aStr2 );
+    return (short) ScGlobal::GetpTransliteration()->compareString( aStr1, aStr2 );
 }
 
 BOOL ScAutoFormat::Load()

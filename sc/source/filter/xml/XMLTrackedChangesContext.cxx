@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XMLTrackedChangesContext.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 
@@ -109,6 +106,7 @@ class ScXMLCellContentDeletionContext : public SvXMLImportContext
 {
     rtl::OUString                       sFormulaAddress;
     rtl::OUString                       sFormula;
+    rtl::OUString                       sFormulaNmsp;
     rtl::OUString                       sInputString;
     ScBigRange                          aBigRange;
     double                              fValue;
@@ -298,7 +296,8 @@ public:
     ScXMLChangeCellContext( ScXMLImport& rImport, USHORT nPrfx, const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                      ScBaseCell*& rOldCell, rtl::OUString& sAddress, rtl::OUString& sFormula,
+                                      ScBaseCell*& rOldCell, rtl::OUString& sAddress,
+                                      rtl::OUString& rFormula, rtl::OUString& rFormulaNmsp,
                                       formula::FormulaGrammar::Grammar& rGrammar,
                                       rtl::OUString& rInputString, double& fValue, sal_uInt16& nType,
                                       sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows);
@@ -322,6 +321,7 @@ class ScXMLPreviousContext : public SvXMLImportContext
 {
     rtl::OUString                       sFormulaAddress;
     rtl::OUString                       sFormula;
+    rtl::OUString                       sFormulaNmsp;
     rtl::OUString                       sInputString;
     double                              fValue;
     ScXMLChangeTrackingImportHelper*    pChangeTrackingImportHelper;
@@ -329,7 +329,7 @@ class ScXMLPreviousContext : public SvXMLImportContext
     sal_uInt32                          nID;
     sal_Int32                           nMatrixCols;
     sal_Int32                           nMatrixRows;
-    formula::FormulaGrammar::Grammar                  eGrammar;
+    formula::FormulaGrammar::Grammar    eGrammar;
     sal_uInt16                          nType;
     sal_uInt8                           nMatrixFlag;
 
@@ -831,7 +831,7 @@ SvXMLImportContext *ScXMLCellContentDeletionContext::CreateChildContext( USHORT 
         {
             bContainsCell = sal_True;
             pContext = new ScXMLChangeCellContext(GetScImport(), nPrefix, rLocalName, xAttrList,
-                pCell, sFormulaAddress, sFormula, eGrammar, sInputString, fValue, nType, nMatrixFlag, nMatrixCols, nMatrixRows );
+                pCell, sFormulaAddress, sFormula, sFormulaNmsp, eGrammar, sInputString, fValue, nType, nMatrixFlag, nMatrixCols, nMatrixRows );
         }
         else if (IsXMLToken(rLocalName, XML_CELL_ADDRESS))
         {
@@ -1115,7 +1115,8 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
                                               USHORT nPrfx,
                                                    const ::rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
-                                            ScBaseCell*& rTempOldCell, rtl::OUString& rAddress, rtl::OUString& rFormula,
+                                            ScBaseCell*& rTempOldCell, rtl::OUString& rAddress,
+                                            rtl::OUString& rFormula, rtl::OUString& rFormulaNmsp,
                                             formula::FormulaGrammar::Grammar& rGrammar,
                                             rtl::OUString& rTempInputString, double& fDateTimeValue, sal_uInt16& nType,
                                             sal_uInt8& nMatrixFlag, sal_Int32& nMatrixCols, sal_Int32& nMatrixRows ) :
@@ -1130,7 +1131,6 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
     bString(sal_True),
     bFormula(sal_False)
 {
-    const formula::FormulaGrammar::Grammar eStorageGrammar = rGrammar = GetScImport().GetDocument()->GetStorageGrammar();
     sal_Bool bIsMatrix(sal_False);
     sal_Bool bIsCoveredMatrix(sal_False);
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
@@ -1147,12 +1147,7 @@ ScXMLChangeCellContext::ScXMLChangeCellContext(  ScXMLImport& rImport,
             if (IsXMLToken(aLocalName, XML_FORMULA))
             {
                 bEmpty = sal_False;
-                sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
-                        _GetKeyByAttrName( sValue, &rFormula, sal_False );
-
-                if (!ScXMLImport::IsAcceptedFormulaNamespace( nFormulaPrefix,
-                            sValue, rGrammar, eStorageGrammar))
-                    rFormula = sValue;
+                GetScImport().ExtractFormulaNamespaceGrammar( rFormula, rFormulaNmsp, rGrammar, sValue );
                 bFormula = sal_True;
             }
             else if (IsXMLToken(aLocalName, XML_CELL_ADDRESS))
@@ -1339,8 +1334,6 @@ ScXMLPreviousContext::ScXMLPreviousContext(  ScXMLImport& rImport,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList,
                                             ScXMLChangeTrackingImportHelper* pTempChangeTrackingImportHelper ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    sFormulaAddress(),
-    sFormula(),
     pChangeTrackingImportHelper(pTempChangeTrackingImportHelper),
     pOldCell(NULL),
     nID(0),
@@ -1380,7 +1373,7 @@ SvXMLImportContext *ScXMLPreviousContext::CreateChildContext( USHORT nPrefix,
 
     if ((nPrefix == XML_NAMESPACE_TABLE) && (IsXMLToken(rLocalName, XML_CHANGE_TRACK_TABLE_CELL)))
         pContext = new ScXMLChangeCellContext(GetScImport(), nPrefix, rLocalName, xAttrList,
-            pOldCell, sFormulaAddress, sFormula, eGrammar, sInputString, fValue, nType, nMatrixFlag, nMatrixCols, nMatrixRows);
+            pOldCell, sFormulaAddress, sFormula, sFormulaNmsp, eGrammar, sInputString, fValue, nType, nMatrixFlag, nMatrixCols, nMatrixRows);
 
     if( !pContext )
         pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );

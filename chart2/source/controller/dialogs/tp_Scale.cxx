@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_Scale.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,9 +43,9 @@
 // header for class SvxDoubleItem
 #include <svx/chrtitem.hxx>
 // header for class SfxBoolItem
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 // header for SfxInt32Item
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 
 // header for class WarningBox
 #include <vcl/msgbox.hxx>
@@ -58,7 +55,7 @@
 #ifndef _ZFORLIST_DECLARE_TABLE
 #define _ZFORLIST_DECLARE_TABLE
 #endif
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #endif
 
 #include <svtools/controldims.hrc>

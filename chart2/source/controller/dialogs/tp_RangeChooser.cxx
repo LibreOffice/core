@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_RangeChooser.cxx,v $
- * $Revision: 1.5.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -214,6 +211,29 @@ void RangeChooserTabPage::initControlsFromModel()
     isValid();
 
     m_nChangingControlCalls--;
+}
+
+void RangeChooserTabPage::DeactivatePage()
+{
+    commitPage();
+    svt::OWizardPage::DeactivatePage();
+}
+
+void RangeChooserTabPage::commitPage()
+{
+    commitPage(::svt::WizardTypes::eFinish);
+}
+
+sal_Bool RangeChooserTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
+{
+    //ranges may have been edited in the meanwhile (dirty is true in that case here)
+    if( isValid() )
+    {
+        changeDialogModelAccordingToControls();
+        return sal_True;//return false if this page should not be left
+    }
+    else
+        return sal_False;
 }
 
 void RangeChooserTabPage::changeDialogModelAccordingToControls()

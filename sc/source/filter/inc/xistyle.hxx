@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xistyle.hxx,v $
- * $Revision: 1.23.90.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -319,6 +316,9 @@ struct XclImpCellBorder : public XclCellBorder
     /** Fills this struct with BIFF8 CF (conditional format) record data. */
     void                FillFromCF8( sal_uInt16 nLineStyle, sal_uInt32 nLineColor, sal_uInt32 nFlags );
 
+    /** Returns true, if any of the outer border lines is visible. */
+    bool                HasAnyOuterBorder() const;
+
     /** Inserts a box item representing this border style into the item set.
         @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items. */
     void                FillToItemSet(
@@ -397,21 +397,14 @@ public:
     /** Reads an XF record. */
     void                ReadXF( XclImpStream& rStrm );
 
-    /** Sets the style name of this XF, if it is a style XF.
-        @descr  Additionally creates this user-defined style in the Calc document. */
-    void                SetStyleName( const String& rStyleName );
-    /** Sets the style name of this XF from a built-in Excel style, if it is a style XF.
-        @descr  Does not create the style in the Calc document. This is done on demand
-        in CreatePattern(), if the style is really used. */
-    void                SetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel );
-
-    inline const String& GetStyleName() const { return maStyleName; }
     inline sal_uInt8    GetHorAlign() const { return maAlignment.mnHorAlign; }
     inline sal_uInt8    GetVerAlign() const { return maAlignment.mnVerAlign; }
     inline sal_uInt16   GetFontIndex() const { return mnXclFont; }
 
-    /** Creates the Calc style sheet, if this is a user-defined style. */
-    void                CreateUserStyle();
+    /** Creates a Calc item set containing an item set with all cell properties.
+        @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items.
+        @return  A read-only reference to the item set stored internally. */
+    const ScPatternAttr& CreatePattern( bool bSkipPoolDefs = false );
 
     /** Inserts all formatting attributes to the specified area in the Calc document.
         @param nForcedNumFmt  If not set to NUMBERFORMAT_ENTRY_NOT_FOUND, it will overwrite
@@ -433,23 +426,11 @@ private:
         @descr  In cell XFs, a set bit represents "used", in style XFs it is a cleared bit.
         Therefore mbCellXF must be set correctly before calling this method. */
     void                SetUsedFlags( sal_uInt8 nUsedFlags );
-    /** Sets own "attribute used" flags, if attributes are different from passed parent XF. */
-    void                UpdateUsedFlags( const XclImpXF& rParentXF );
-
-    /** Creates a Calc item set containing an item set with all cell properties.
-        @param bSkipPoolDefs  true = Do not put items equal to pool default; false = Put all items.
-        @return  A read-only reference to the item set stored internally. */
-    const ScPatternAttr& CreatePattern( bool bSkipPoolDefs = false );
-    /** Creates a cell style sheet and inserts it into the Calc document.
-        @descr  Creates a style sheet only for style XFs with a valid style name.
-        @return  The pointer to the cell style sheet, or 0, if there is no style sheet. */
-    ScStyleSheet*       CreateStyleSheet();
 
 private:
     typedef ::std::auto_ptr< ScPatternAttr > ScPatternAttrPtr;
 
     ScPatternAttrPtr    mpPattern;          /// Calc item set.
-    String              maStyleName;        /// Name of the style sheet.
     ScStyleSheet*       mpStyleSheet;       /// Calc cell style sheet.
 
     XclImpCellProt      maProtection;       /// Cell protection flags.
@@ -458,9 +439,42 @@ private:
     XclImpCellArea      maArea;             /// Background area style.
     sal_uInt16          mnXclNumFmt;        /// Index to number format.
     sal_uInt16          mnXclFont;          /// Index to font record.
+};
 
-    bool                mbWasBuiltIn;       /// true = XF was an Excel built-in style.
-    bool                mbForceCreate;      /// true = Force creation of style sheet.
+// ----------------------------------------------------------------------------
+
+/** Contains all data of a cell style associated with an XF record. */
+class XclImpStyle : protected XclImpRoot
+{
+public:
+    explicit            XclImpStyle( const XclImpRoot& rRoot );
+
+    /** Reads a STYLE record. */
+    void                ReadStyle( XclImpStream& rStrm );
+
+    inline const String& GetName() const { return maName; }
+    inline sal_uInt16   GetXfId() const { return mnXfId; }
+    inline bool         IsBuiltin() const { return mbBuiltin && (mnBuiltinId != EXC_STYLE_USERDEF); }
+    inline sal_uInt8    GetBuiltinId() const { return mnBuiltinId; }
+    inline sal_uInt8    GetLevel() const { return mnLevel; }
+
+    /** Creates a cell style sheet and inserts it into the Calc document.
+        @return  The pointer to the cell style sheet, or 0, if there is no style sheet. */
+    ScStyleSheet*       CreateStyleSheet();
+    /** Creates the Calc style sheet, if this is a user-defined style. */
+    void                CreateUserStyle( const String& rFinalName );
+
+private:
+    String              maName;             /// Cell style name.
+    sal_uInt16          mnXfId;             /// Formatting for this cell style.
+    sal_uInt8           mnBuiltinId;        /// Identifier for builtin styles.
+    sal_uInt8           mnLevel;            /// Level for builtin column/row styles.
+    bool                mbBuiltin;          /// True = builtin style.
+    bool                mbCustom;           /// True = customized builtin style.
+    bool                mbHidden;           /// True = style not visible in GUI.
+
+    String              maFinalName;        /// Final name used in the Calc document.
+    ScStyleSheet*       mpStyleSheet;       /// Calc cell style sheet.
 };
 
 // ----------------------------------------------------------------------------
@@ -491,6 +505,9 @@ public:
 
     /** Creates all user defined style sheets. */
     void                CreateUserStyles();
+    /** Creates a cell style sheet of the passed XF and inserts it into the Calc document.
+        @return  The pointer to the cell style sheet, or 0, if there is no style sheet. */
+    ScStyleSheet*       CreateStyleSheet( sal_uInt16 nXFIndex );
 
     /** Inserts formatting attributes from an XF to the specified area in the Calc document.
         @param nForcedNumFmt  If not set to NUMBERFORMAT_ENTRY_NOT_FOUND, it will overwrite
@@ -501,7 +518,13 @@ public:
                             SCTAB nScTab, const XclImpXFIndex& rXFIndex );
 
 private:
+    typedef ScfDelList< XclImpStyle >               XclImpStyleList;
+    typedef ::std::map< sal_uInt16, XclImpStyle* >  XclImpStyleMap;
+
     ScfDelList< XclImpXF > maXFList;        /// List of contents of all XF record.
+    XclImpStyleList     maBuiltinStyles;    /// List of built-in cell styles.
+    XclImpStyleList     maUserStyles;       /// List of user defined cell styles.
+    XclImpStyleMap      maStylesByXf;       /// Maps XF records to cell styles.
 };
 
 // Buffer for XF indexes in cells =============================================

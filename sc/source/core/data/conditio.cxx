@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: conditio.cxx,v $
- * $Revision: 1.25.30.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +34,8 @@
 
 #include "scitems.hxx"
 #include <sfx2/objsh.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/itemset.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <unotools/collatorwrapper.hxx>
 
@@ -130,7 +127,10 @@ ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
     nVal2(r.nVal2),
     aStrVal1(r.aStrVal1),
     aStrVal2(r.aStrVal2),
-    eTempGrammar(r.eTempGrammar),
+    aStrNmsp1(r.aStrNmsp1),
+    aStrNmsp2(r.aStrNmsp2),
+    eTempGrammar1(r.eTempGrammar1),
+    eTempGrammar2(r.eTempGrammar2),
     bIsStr1(r.bIsStr1),
     bIsStr2(r.bIsStr2),
     pFormula1(NULL),
@@ -161,7 +161,10 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
     nVal2(r.nVal2),
     aStrVal1(r.aStrVal1),
     aStrVal2(r.aStrVal2),
-    eTempGrammar(r.eTempGrammar),
+    aStrNmsp1(r.aStrNmsp1),
+    aStrNmsp2(r.aStrNmsp2),
+    eTempGrammar1(r.eTempGrammar1),
+    eTempGrammar2(r.eTempGrammar2),
     bIsStr1(r.bIsStr1),
     bIsStr2(r.bIsStr2),
     pFormula1(NULL),
@@ -187,14 +190,17 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
 }
 
 ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
-                                const String& rExpr1, const String& rExpr2,
-                                ScDocument* pDocument, const ScAddress& rPos,
-                                const FormulaGrammar::Grammar eGrammar ) :
+        const String& rExpr1, const String& rExpr2, ScDocument* pDocument, const ScAddress& rPos,
+        const String& rExprNmsp1, const String& rExprNmsp2,
+        FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2 ) :
     eOp(eOper),
     nOptions(0),    // spaeter...
     nVal1(0.0),
     nVal2(0.0),
-    eTempGrammar(eGrammar),
+    aStrNmsp1(rExprNmsp1),
+    aStrNmsp2(rExprNmsp2),
+    eTempGrammar1(eGrammar1),
+    eTempGrammar2(eGrammar2),
     bIsStr1(FALSE),
     bIsStr2(FALSE),
     pFormula1(NULL),
@@ -207,7 +213,7 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     bRelRef2(FALSE),
     bFirstRun(TRUE)
 {
-    Compile( rExpr1, rExpr2, eGrammar, FALSE );
+    Compile( rExpr1, rExpr2, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2, FALSE );
 
     //  Formelzellen werden erst bei IsValid angelegt
 }
@@ -219,7 +225,8 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     nOptions(0),    // spaeter...
     nVal1(0.0),
     nVal2(0.0),
-    eTempGrammar(FormulaGrammar::GRAM_DEFAULT),
+    eTempGrammar1(FormulaGrammar::GRAM_DEFAULT),
+    eTempGrammar2(FormulaGrammar::GRAM_DEFAULT),
     bIsStr1(FALSE),
     bIsStr2(FALSE),
     pFormula1(NULL),
@@ -294,15 +301,16 @@ ScConditionEntry::~ScConditionEntry()
 }
 
 void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
-                                const FormulaGrammar::Grammar eGrammar, BOOL bTextToReal )
+        const String& rExprNmsp1, const String& rExprNmsp2,
+        FormulaGrammar::Grammar eGrammar1, FormulaGrammar::Grammar eGrammar2, BOOL bTextToReal )
 {
     if ( rExpr1.Len() || rExpr2.Len() )
     {
         ScCompiler aComp( pDoc, aSrcPos );
-        aComp.SetGrammar(eGrammar);
 
         if ( rExpr1.Len() )
         {
+            aComp.SetGrammar( eGrammar1 );
             if ( pDoc->IsImportingXML() && !bTextToReal )
             {
                 //  temporary formula string as string tokens
@@ -313,7 +321,7 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
             }
             else
             {
-                pFormula1 = aComp.CompileString( rExpr1 );
+                pFormula1 = aComp.CompileString( rExpr1, rExprNmsp1 );
                 if ( pFormula1->GetLen() == 1 )
                 {
                     // einzelne (konstante Zahl) ?
@@ -339,6 +347,7 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
 
         if ( rExpr2.Len() )
         {
+            aComp.SetGrammar( eGrammar2 );
             if ( pDoc->IsImportingXML() && !bTextToReal )
             {
                 //  temporary formula string as string tokens
@@ -349,7 +358,7 @@ void ScConditionEntry::Compile( const String& rExpr1, const String& rExpr2,
             }
             else
             {
-                pFormula2 = aComp.CompileString( rExpr2 );
+                pFormula2 = aComp.CompileString( rExpr2, rExprNmsp2 );
                 if ( pFormula2->GetLen() == 1 )
                 {
                     // einzelne (konstante Zahl) ?
@@ -429,9 +438,9 @@ void ScConditionEntry::CompileXML()
 
     //  Convert the text tokens that were created during XML import into real tokens.
 
-    Compile( GetExpression(aSrcPos, 0, 0, eTempGrammar),
-             GetExpression(aSrcPos, 1, 0, eTempGrammar),
-             eTempGrammar, TRUE );
+    Compile( GetExpression(aSrcPos, 0, 0, eTempGrammar1),
+             GetExpression(aSrcPos, 1, 0, eTempGrammar2),
+             aStrNmsp1, aStrNmsp2, eTempGrammar1, eTempGrammar2, TRUE );
 }
 
 void ScConditionEntry::SetSrcString( const String& rNew )
@@ -774,7 +783,7 @@ BOOL ScConditionEntry::IsValidStr( const String& rArg ) const
     String aUpVal2( aStrVal2 );
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
-        if ( ScGlobal::pCollator->compareString( aUpVal1, aUpVal2 )
+        if ( ScGlobal::GetCollator()->compareString( aUpVal1, aUpVal2 )
                 == COMPARE_GREATER )
         {
             //  richtige Reihenfolge fuer Wertebereich
@@ -785,16 +794,16 @@ BOOL ScConditionEntry::IsValidStr( const String& rArg ) const
     switch ( eOp )
     {
         case SC_COND_EQUAL:
-            bValid = (ScGlobal::pCollator->compareString(
+            bValid = (ScGlobal::GetCollator()->compareString(
                 rArg, aUpVal1 ) == COMPARE_EQUAL);
         break;
         case SC_COND_NOTEQUAL:
-            bValid = (ScGlobal::pCollator->compareString(
+            bValid = (ScGlobal::GetCollator()->compareString(
                 rArg, aUpVal1 ) != COMPARE_EQUAL);
         break;
         default:
         {
-            sal_Int32 nCompare = ScGlobal::pCollator->compareString(
+            sal_Int32 nCompare = ScGlobal::GetCollator()->compareString(
                 rArg, aUpVal1 );
             switch ( eOp )
             {
@@ -814,7 +823,7 @@ BOOL ScConditionEntry::IsValidStr( const String& rArg ) const
                 case SC_COND_NOTBETWEEN:
                     //  Test auf NOTBETWEEN:
                     bValid = ( nCompare == COMPARE_LESS ||
-                        ScGlobal::pCollator->compareString( rArg,
+                        ScGlobal::GetCollator()->compareString( rArg,
                         aUpVal2 ) == COMPARE_GREATER );
                     if ( eOp == SC_COND_BETWEEN )
                         bValid = !bValid;
@@ -1129,8 +1138,10 @@ ScCondFormatEntry::ScCondFormatEntry( ScConditionMode eOper,
                                         const String& rExpr1, const String& rExpr2,
                                         ScDocument* pDocument, const ScAddress& rPos,
                                         const String& rStyle,
-                                        const FormulaGrammar::Grammar eGrammar ) :
-    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, eGrammar ),
+                                        const String& rExprNmsp1, const String& rExprNmsp2,
+                                        FormulaGrammar::Grammar eGrammar1,
+                                        FormulaGrammar::Grammar eGrammar2 ) :
+    ScConditionEntry( eOper, rExpr1, rExpr2, pDocument, rPos, rExprNmsp1, rExprNmsp2, eGrammar1, eGrammar2 ),
     aStyleName( rStyle ),
     pParent( NULL )
 {
@@ -1455,6 +1466,13 @@ void ScConditionalFormat::UpdateReference( UpdateRefMode eUpdateRefMode,
     pAreas = NULL;
 }
 
+void ScConditionalFormat::RenameCellStyle(const String& rOld, const String& rNew)
+{
+    for (USHORT i=0; i<nEntryCount; i++)
+        if ( ppEntries[i]->GetStyle() == rOld )
+            ppEntries[i]->UpdateStyleName( rNew );
+}
+
 void ScConditionalFormat::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
 {
     for (USHORT i=0; i<nEntryCount; i++)
@@ -1532,13 +1550,6 @@ ScConditionalFormat* ScConditionalFormatList::GetFormat( sal_uInt32 nKey )
     return NULL;
 }
 
-//UNUSED2008-05  void ScConditionalFormatList::ResetUsed()
-//UNUSED2008-05  {
-//UNUSED2008-05      USHORT nCount = Count();
-//UNUSED2008-05      for (USHORT i=0; i<nCount; i++)
-//UNUSED2008-05          (*this)[i]->SetUsed(FALSE);
-//UNUSED2008-05  }
-
 void ScConditionalFormatList::CompileAll()
 {
     USHORT nCount = Count();
@@ -1559,6 +1570,13 @@ void ScConditionalFormatList::UpdateReference( UpdateRefMode eUpdateRefMode,
     USHORT nCount = Count();
     for (USHORT i=0; i<nCount; i++)
         (*this)[i]->UpdateReference( eUpdateRefMode, rRange, nDx, nDy, nDz );
+}
+
+void ScConditionalFormatList::RenameCellStyle( const String& rOld, const String& rNew )
+{
+    ULONG nCount=Count();
+    for (USHORT i=0; i<nCount; i++)
+        (*this)[i]->RenameCellStyle(rOld,rNew);
 }
 
 void ScConditionalFormatList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cursuno.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +31,8 @@
 
 
 #include "scitems.hxx"
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
 #include <rtl/uuid.h>
 
 #include "cursuno.hxx"
@@ -136,7 +133,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion() throw(uno::RuntimeExcep
         SCTAB nTab = aOneRange.aStart.Tab();
 
         pDocSh->GetDocument()->GetDataArea(
-                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, TRUE );
+                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, TRUE, false );
 
         ScRange aNew( nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab );
         SetNewRange( aNew );
@@ -334,7 +331,7 @@ void SAL_CALL ScCellCursorObj::gotoStart() throw(uno::RuntimeException)
         SCTAB nTab = aOneRange.aStart.Tab();
 
         pDocSh->GetDocument()->GetDataArea(
-                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE );
+                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE, false );
 
         ScRange aNew( nStartCol, nStartRow, nTab );
         SetNewRange( aNew );
@@ -362,7 +359,7 @@ void SAL_CALL ScCellCursorObj::gotoEnd() throw(uno::RuntimeException)
         SCTAB nTab = aOneRange.aStart.Tab();
 
         pDocSh->GetDocument()->GetDataArea(
-                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE );
+                        nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE, false );
 
         ScRange aNew( nEndCol, nEndRow, nTab );
         SetNewRange( aNew );

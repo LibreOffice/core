@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WeakListenerAdapter.hxx,v $
- * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,6 @@
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
@@ -94,7 +90,7 @@ private:
 
 // --------------------------------------------------------------------------------
 
-class OOO_DLLPUBLIC_CHARTTOOLS WeakModifyListenerAdapter :
+class WeakModifyListenerAdapter :
         public WeakListenerAdapter< ::com::sun::star::util::XModifyListener >
 {
 public:
@@ -110,7 +106,7 @@ protected:
 
 // --------------------------------------------------------------------------------
 
-class OOO_DLLPUBLIC_CHARTTOOLS WeakSelectionChangeListenerAdapter :
+class WeakSelectionChangeListenerAdapter :
         public WeakListenerAdapter< ::com::sun::star::view::XSelectionChangeListener >
 {
 public:

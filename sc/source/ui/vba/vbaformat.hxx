@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbaformat.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,9 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
+
+class ScCellRangesBase;
 
 template< typename Ifc1 >
 class ScVbaFormat : public InheritedHelperInterfaceImpl1< Ifc1 >
@@ -63,6 +62,9 @@ protected:
     css::uno::Reference< css::beans::XPropertyState > getXPropertyState() throw ( css::uno::RuntimeException );
     void initializeNumberFormats() throw ( css::script::BasicErrorException );
     void setNumberFormat( css::lang::Locale _aLocale, const rtl::OUString& _sFormatString) throw( css::script::BasicErrorException );
+    SfxItemSet*  getCurrentDataSet( ) throw ( css::uno::RuntimeException );
+protected:
+    virtual ScCellRangesBase* getCellRangesBase() throw ( css::uno::RuntimeException );
 public:
     ScVbaFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& xModel, bool bCheckAmbiguoity ) throw ( css::script::BasicErrorException );
     virtual ~ScVbaFormat() {}

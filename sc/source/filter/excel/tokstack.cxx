@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tokstack.cxx,v $
- * $Revision: 1.14.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,20 +205,20 @@ void TokenPool::GrowDouble( void )
 }
 
 
-void TokenPool::GrowError( void )
-{
-    UINT16      nP_ErrNew = nP_Err * 2;
-
-    USHORT*     pP_ErrNew = new USHORT[ nP_ErrNew ];
-
-    for( UINT16 nL = 0 ; nL < nP_Err ; nL++ )
-        pP_ErrNew[ nL ] = pP_Err[ nL ];
-
-    nP_Err = nP_ErrNew;
-
-    delete[] pP_Err;
-    pP_Err = pP_ErrNew;
-}
+//UNUSED2009-05 void TokenPool::GrowError( void )
+//UNUSED2009-05 {
+//UNUSED2009-05     UINT16      nP_ErrNew = nP_Err * 2;
+//UNUSED2009-05
+//UNUSED2009-05     USHORT*     pP_ErrNew = new USHORT[ nP_ErrNew ];
+//UNUSED2009-05
+//UNUSED2009-05     for( UINT16 nL = 0 ; nL < nP_Err ; nL++ )
+//UNUSED2009-05         pP_ErrNew[ nL ] = pP_Err[ nL ];
+//UNUSED2009-05
+//UNUSED2009-05     nP_Err = nP_ErrNew;
+//UNUSED2009-05
+//UNUSED2009-05     delete[] pP_Err;
+//UNUSED2009-05     pP_Err = pP_ErrNew;
+//UNUSED2009-05 }
 
 
 void TokenPool::GrowTripel( void )
@@ -593,28 +590,6 @@ const TokenId TokenPool::Store( const double& rDouble )
 }
 
 
-//UNUSED2008-05  const TokenId TokenPool::StoreError( USHORT nError )
-//UNUSED2008-05  {
-//UNUSED2008-05      if( nElementAkt >= nElement )
-//UNUSED2008-05          GrowElement();
-//UNUSED2008-05
-//UNUSED2008-05      if( nP_ErrAkt >= nP_Err )
-//UNUSED2008-05          GrowError();
-//UNUSED2008-05
-//UNUSED2008-05      pElement[ nElementAkt ] = nP_ErrAkt;    // Index in Error-Array
-//UNUSED2008-05      pType[ nElementAkt ] = T_Err;           // Typinfo Error eintragen
-//UNUSED2008-05
-//UNUSED2008-05      pP_Err[ nP_ErrAkt ] = nError;
-//UNUSED2008-05
-//UNUSED2008-05      pSize[ nElementAkt ] = 1;           // eigentlich Banane
-//UNUSED2008-05
-//UNUSED2008-05      nElementAkt++;
-//UNUSED2008-05      nP_ErrAkt++;
-//UNUSED2008-05
-//UNUSED2008-05      return ( const TokenId ) nElementAkt; // Ausgabe von altem Wert + 1!
-//UNUSED2008-05  }
-
-
 const TokenId TokenPool::Store( const UINT16 nIndex )
 {
     if( nElementAkt >= nElement )
@@ -762,7 +737,7 @@ const TokenId TokenPool::StoreNlf( const ScSingleRefData& rTr )
     return ( const TokenId ) nElementAkt;
 }
 
-const TokenId TokenPool::StoreMatrix( SCSIZE nC, SCSIZE nR )
+const TokenId TokenPool::StoreMatrix()
 {
     ScMatrix* pM;
 
@@ -775,8 +750,7 @@ const TokenId TokenPool::StoreMatrix( SCSIZE nC, SCSIZE nR )
     pElement[ nElementAkt ] = nP_MatrixAkt;
     pType[ nElementAkt ] = T_Matrix;
 
-    pM = new ScMatrix( nC, nR );
-    pM->FillDouble( 0., 0,0, nC-1, nR-1 );
+    pM = new ScMatrix( 0, 0 );
     pM->IncRef( );
     ppP_Matrix[ nP_MatrixAkt ] = pM;
 

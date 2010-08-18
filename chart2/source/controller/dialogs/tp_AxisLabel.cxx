@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_AxisLabel.cxx,v $
- * $Revision: 1.10.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,9 +38,9 @@
 #include <svx/chrtitem.hxx>
 
 // header for SfxInt32Item
-#include <svtools/intitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <svl/intitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/frmdiritem.hxx>
 
 //.............................................................................
 namespace chart

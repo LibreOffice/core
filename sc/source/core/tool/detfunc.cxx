@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: detfunc.cxx,v $
- * $Revision: 1.30.20.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 
 #include "scitems.hxx"
 #include <svtools/colorcfg.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/sdshitm.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <svx/sdtditm.hxx>
@@ -58,11 +55,11 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
-#include <svx/outliner.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/sxcecitm.hxx>
-#include <svtools/whiter.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <svl/whiter.hxx>
+#include <editeng/writingmodeitem.hxx>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
@@ -290,6 +287,12 @@ void ScCommentData::UpdateCaptionSet( const SfxItemSet& rItemSet )
 
 //------------------------------------------------------------------------
 
+void ScDetectiveFunc::Modified()
+{
+    if (pDoc->IsStreamValid(nTab))
+        pDoc->SetStreamValid(nTab, FALSE);
+}
+
 inline BOOL Intersect( SCCOL nStartCol1, SCROW nStartRow1, SCCOL nEndCol1, SCROW nEndRow1,
                         SCCOL nStartCol2, SCROW nStartRow2, SCCOL nEndCol2, SCROW nEndRow2 )
 {
@@ -356,7 +359,7 @@ Point ScDetectiveFunc::GetDrawPos( SCCOL nCol, SCROW nRow, DrawPosMode eMode ) c
 
     for ( SCCOL i = 0; i < nCol; ++i )
         aPos.X() += pDoc->GetColWidth( i, nTab );
-    aPos.Y() += pDoc->FastGetRowHeight( 0, nRow - 1, nTab );
+    aPos.Y() += pDoc->GetRowHeight( 0, nRow - 1, nTab );
 
     aPos.X() = static_cast< long >( aPos.X() * HMM_PER_TWIPS );
     aPos.Y() = static_cast< long >( aPos.Y() * HMM_PER_TWIPS );
@@ -547,6 +550,7 @@ BOOL ScDetectiveFunc::InsertArrow( SCCOL nCol, SCROW nRow,
 
     pData->maEnd.Set( nCol, nRow, nTab);
 
+    Modified();
     return TRUE;
 }
 
@@ -609,6 +613,7 @@ BOOL ScDetectiveFunc::InsertToOtherTab( SCCOL nStartCol, SCROW nStartRow,
     pData->maStart.Set( nStartCol, nStartRow, nTab);
     pData->maEnd.SetInvalid();
 
+    Modified();
     return TRUE;
 }
 
@@ -676,6 +681,8 @@ void ScDetectiveFunc::DrawCircle( SCCOL nCol, SCROW nRow, ScDetectiveData& rData
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pCircle, TRUE );
     pData->maStart.Set( nCol, nRow, nTab);
     pData->maEnd.SetInvalid();
+
+    Modified();
 }
 
 void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, BOOL bDestPnt )
@@ -716,6 +723,8 @@ void ScDetectiveFunc::DeleteArrowsAt( SCCOL nCol, SCROW nRow, BOOL bDestPnt )
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
         delete[] ppObj;
+
+        Modified();
     }
 }
 
@@ -791,6 +800,8 @@ void ScDetectiveFunc::DeleteBox( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nR
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
         delete[] ppObj;
+
+        Modified();
     }
 }
 
@@ -1333,6 +1344,8 @@ BOOL ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
             pPage->RemoveObject( ppObj[nDelCount-i]->GetOrdNum() );
 
         delete[] ppObj;
+
+        Modified();
     }
 
     return ( nDelCount != 0 );
@@ -1420,6 +1433,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
 
     for( SCTAB nObjTab = 0, nTabCount = rDoc.GetTableCount(); nObjTab < nTabCount; ++nObjTab )
     {
+        rDoc.InitializeNoteCaptions( nObjTab );
         SdrPage* pPage = pModel->GetPage( static_cast< sal_uInt16 >( nObjTab ) );
         DBG_ASSERT( pPage, "Page ?" );
         if( pPage )
@@ -1430,6 +1444,7 @@ void ScDetectiveFunc::UpdateAllComments( ScDocument& rDoc )
                 if ( ScDrawObjData* pData = ScDrawLayer::GetNoteCaptionData( pObject, nObjTab ) )
                 {
                     ScPostIt* pNote = rDoc.GetNote( pData->maStart );
+                    // caption should exist, we iterate over drawing objects...
                     DBG_ASSERT( pNote && (pNote->GetCaption() == pObject), "ScDetectiveFunc::UpdateAllComments - invalid cell note" );
                     if( pNote )
                     {

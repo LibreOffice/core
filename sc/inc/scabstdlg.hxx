@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scabstdlg.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,7 @@
 #include "sc.hrc"
 #include "global.hxx"
 #include "pivot.hxx"
+#include "i18npool/lang.h"
 
 class ScAsciiOptions;
 class ScAutoFormat;
@@ -55,6 +53,9 @@ class SfxStyleSheetBase;
 class ScDPObject;
 struct ScDPFuncData;
 struct ScDPNumGroupInfo;
+//<!--Added by PengYunQuan for Validity Cell Range Picker
+class ScTabViewShell;
+//-->Added by PengYunQuan for Validity Cell Range Picker
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldReference;
@@ -65,6 +66,7 @@ class AbstractScImportAsciiDlg : public VclAbstractDialog  //add for ScImportAsc
 public:
     virtual void                        GetOptions( ScAsciiOptions& rOpt ) = 0;
     virtual void                        SetTextToColumnsMode() = 0;
+    virtual void                        SaveParameters() = 0;
 };
 
 
@@ -235,7 +237,7 @@ class AbstractScDPSubtotalDlg : public VclAbstractDialog  //add for ScDPSubtotal
 {
 public:
     virtual USHORT  GetFuncMask() const = 0;
-    virtual void    FillLabelData( LabelData& rLabelData ) const = 0;
+    virtual void    FillLabelData( ScDPLabelData& rLabelData ) const = 0;
 };
 
 class AbstractScDPNumGroupDlg : public VclAbstractDialog
@@ -284,11 +286,25 @@ public:
     virtual void GetInputString( String& rString ) const = 0;
 };
 
+class AbstractScTabBgColorDlg : public VclAbstractDialog  //add for ScTabBgColorDlg
+{
+public:
+    virtual void GetSelectedColor( Color& rColor ) const = 0;
+};
+
 class AbstractScImportOptionsDlg : public VclAbstractDialog  //add for ScImportOptionsDlg
 {
 public:
     virtual void GetImportOptions( ScImportOptions& rOptions ) const = 0;
 };
+
+class AbstractScTextImportOptionsDlg : public VclAbstractDialog //add for ScLangChooserDlg
+{
+public:
+    virtual LanguageType GetLanguageType() const = 0;
+    virtual bool IsDateConversionSet() const = 0;
+};
+
 //-------Scabstract fractory ---------------------------
 class ScAbstractDialogFactory
 {
@@ -298,6 +314,8 @@ public:
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
                                                                     SvStream* pInStream, int nId,
                                                                     sal_Unicode cSep = '\t') = 0;
+
+    virtual     AbstractScTextImportOptionsDlg * CreateScTextImportOptionsDlg( Window* pParent, int nId ) = 0;
 
     virtual     AbstractScAutoFormatDlg * CreateScAutoFormatDlg( Window*                    pParent, //add for ScAutoFormatDlg
                                                                 ScAutoFormat*               pAutoFormat,
@@ -314,6 +332,7 @@ public:
                                                     const String&   rStrLabel,
                                                     int nId,
                                                     BOOL                bColDefault = TRUE ) = 0;
+    virtual VclAbstractDialog * CreateScSortWarningDlg ( Window* pParent, const String& rExtendText, const String& rCurrentText, int nId ) = 0;  //add for ScSortWarningDlg
     virtual AbstractScDataPilotDatabaseDlg * CreateScDataPilotDatabaseDlg (Window* pParent ,int nId ) = 0; //add for ScDataPilotDatabaseDlg
 
     virtual AbstractScDataPilotSourceTypeDlg * CreateScDataPilotSourceTypeDlg ( Window* pParent, BOOL bEnableExternal, int nId ) = 0; //add for ScDataPilotSourceTypeDlg
@@ -422,6 +441,14 @@ public:
                                                                 const String& rDefault,
                                                                 ULONG nHelpId ,
                                                                 int nId ) = 0;
+
+    virtual AbstractScTabBgColorDlg * CreateScTabBgColorDlg (  Window* pParent, //add for ScTabBgColorDlg
+                                                                const String& rTitle, //Dialog Title
+                                                                const String& rTabBgColorNoColorText, //Label for no tab color
+                                                                const Color& rDefaultColor, //Currently selected Color
+                                                                ULONG nHelpId ,
+                                                                int nId ) = 0;
+
     virtual AbstractScImportOptionsDlg * CreateScImportOptionsDlg ( Window*                 pParent, //add for ScImportOptionsDlg
                                                                     int nId,
                                                                     BOOL                    bAscii = TRUE,
@@ -458,8 +485,13 @@ public:
     virtual SfxAbstractTabDialog * CreateScParagraphDlg( Window* pParent, const SfxItemSet* pAttr ,//add for ScParagraphDlg
                                                             int nId ) = 0;
 
+    //<!--Modified by PengYunQuan for Validity Cell Range Picker
+    //virtual SfxAbstractTabDialog * CreateScValidationDlg( Window* pParent, //add for ScValidationDlg
+    //                                              const SfxItemSet* pArgSet,int nId  ) = 0;
+
     virtual SfxAbstractTabDialog * CreateScValidationDlg( Window* pParent, //add for ScValidationDlg
-                                                        const SfxItemSet* pArgSet,int nId  ) = 0;
+                                                        const SfxItemSet* pArgSet,int nId, ScTabViewShell *pTabVwSh  ) = 0;
+    //-->Modified by PengYunQuan for Validity Cell Range Picker
     virtual SfxAbstractTabDialog * CreateScSortDlg( Window*          pParent, //add for ScSortDlg
                                                     const SfxItemSet* pArgSet,int nId ) = 0;
     // for tabpage

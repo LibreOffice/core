@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataSeriesPointWrapper.cxx,v $
- * $Revision: 1.15.44.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +47,8 @@
 #include "WrappedDataCaptionProperties.hxx"
 #include "WrappedSeriesAreaOrLineProperty.hxx"
 #include "WrappedScaleTextProperties.hxx"
+#include "WrappedNumberFormatProperty.hxx"
+#include "WrappedTextRotationProperty.hxx"
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
 // header for define DBG_ASSERT
@@ -87,10 +86,12 @@ enum
     PROP_SERIES_DATAPOINT_PERCENT_DIAGONAL,
     PROP_SERIES_DATAPOINT_LABEL_SEPARATOR,
     PROP_SERIES_NUMBERFORMAT,
+    PROP_SERIES_LINK_NUMBERFORMAT_TO_SOURCE,
     PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
     PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
     //other series properties
-    PROP_SERIES_ATTACHED_AXIS
+    PROP_SERIES_ATTACHED_AXIS,
+    PROP_SERIES_DATAPOINT_TEXT_ROTATION
 };
 
 void lcl_AddPropertiesToVector_PointProperties(
@@ -145,6 +146,13 @@ void lcl_AddPropertiesToVector_PointProperties(
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "TextRotation" ),
+                  PROP_SERIES_DATAPOINT_TEXT_ROTATION,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
 void lcl_AddPropertiesToVector_SeriesOnly(
@@ -154,6 +162,13 @@ void lcl_AddPropertiesToVector_SeriesOnly(
         Property( C2U( "Axis" ),
                   PROP_SERIES_ATTACHED_AXIS,
                   ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U( "LinkNumberFormatToSource" ),
+                  PROP_SERIES_LINK_NUMBERFORMAT_TO_SOURCE,
+                  ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 }
@@ -270,7 +285,7 @@ void WrappedAttachedAxisProperty::setPropertyValue( const Any& rOuterValue, cons
     {
         Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
         if( xDiagram.is() )
-            ::chart::DiagramHelper::attachSeriesToAxis( bNewAttachedToMainAxis, xDataSeries, xDiagram, m_spChart2ModelContact->m_xContext );
+            ::chart::DiagramHelper::attachSeriesToAxis( bNewAttachedToMainAxis, xDataSeries, xDiagram, m_spChart2ModelContact->m_xContext, false );
     }
 }
 
@@ -704,6 +719,10 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     {
         WrappedStatisticProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
         aWrappedProperties.push_back( new WrappedAttachedAxisProperty( m_spChart2ModelContact ) );
+
+        WrappedNumberFormatProperty* pWrappedNumberFormatProperty = new WrappedNumberFormatProperty( m_spChart2ModelContact );
+        aWrappedProperties.push_back( pWrappedNumberFormatProperty );
+        aWrappedProperties.push_back( new WrappedLinkNumberFormatProperty(pWrappedNumberFormatProperty) );
     }
 
     WrappedSymbolProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
@@ -727,7 +746,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillStyle" ), C2U( "FillStyle" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillTransparence" ), C2U( "Transparency" ) ) );
 
-    aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U( "LineJoint" ), uno::makeAny( drawing::LineJoint_NONE ) ) );
+    aWrappedProperties.push_back( new WrappedIgnoreProperty( C2U( "LineJoint" ), uno::makeAny( drawing::LineJoint_ROUND ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillTransparenceGradientName" ), C2U( "TransparencyGradientName" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillGradientName" ), C2U( "GradientName" ) ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillGradientStepCount" ), C2U( "GradientStepCount" ) ) );
@@ -749,6 +768,8 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     aWrappedProperties.push_back( new WrappedProperty( C2U( "SolidType" ), C2U( "Geometry3D" ) ) );
     aWrappedProperties.push_back( new WrappedSegmentOffsetProperty() );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "D3DPercentDiagonal" ), C2U( "PercentDiagonal" ) ) );
+
+    aWrappedProperties.push_back( new WrappedTextRotationProperty() );
 
     return aWrappedProperties;
 }

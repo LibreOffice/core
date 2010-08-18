@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataSeries.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,6 +108,10 @@ protected:
         SAL_CALL getDataPointByIndex( sal_Int32 nIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
                ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL resetDataPoint( sal_Int32 nIndex )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL resetAllDataPoints()
+        throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XDataSink ____
     // ___________________

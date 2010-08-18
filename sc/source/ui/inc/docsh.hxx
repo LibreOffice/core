@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh.hxx,v $
- * $Revision: 1.50.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,10 +31,8 @@
 
 #include <sfx2/objsh.hxx>
 
-//REMOVE    #ifndef _SFX_INTERNO_HXX //autogen
-//REMOVE    #include <sfx2/interno.hxx>
-//REMOVE    #endif
 #include <sfx2/docfac.hxx>
+#include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/viewsh.hxx>
 
 #include "scdllapi.h"
@@ -59,9 +54,6 @@ class INetURLObject;
 class ScPaintItem;
 class ScViewData;
 class ScDocFunc;
-#if OLD_PIVOT_IMPLEMENTATION
-class ScPivot;
-#endif
 class ScDrawLayer;
 class ScTabViewShell;
 class ScSbxDocHelper;
@@ -75,6 +67,7 @@ class VirtualDevice;
 class ScImportOptions;
 class ScDocShellModificator;
 class ScOptSolverSave;
+class ScSheetSaveData;
 
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
@@ -103,7 +96,6 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     double              nPrtToScreenFactor;
 //!   FontList*           pFontList;
     DocShell_Impl*      pImpl;
-    SfxUndoManager*     pUndoManager;
     ScDocFunc*          pDocFunc;
 
     //SfxObjectCreateMode   eShellMode;
@@ -127,12 +119,13 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     ScPaintLockData*    pPaintLockData;
     ScJobSetup*         pOldJobSetup;
     ScOptSolverSave*    pSolverSaveData;
+    ScSheetSaveData*    pSheetSaveData;
 
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 
     SC_DLLPRIVATE void          InitItems();
     SC_DLLPRIVATE void          DoEnterHandler();
-    SC_DLLPRIVATE void          InitOptions();
+    SC_DLLPRIVATE void          InitOptions(bool bForLoading);
     SC_DLLPRIVATE void          ResetDrawObjectShell();
 
     // SUNWS needs a forward declared friend, otherwise types and members
@@ -171,6 +164,8 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     SC_DLLPRIVATE void          EnableSharedSettings( bool bEnable );
     SC_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > LoadSharedDocument();
 
+    SC_DLLPRIVATE void          UseSheetSaveEntries();
+
 protected:
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -182,7 +177,7 @@ public:
                     SFX_DECL_OBJECTFACTORY();
 
                     ScDocShell( const ScDocShell& rDocShell );
-                    ScDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED, const bool _bScriptSupport = true );
+                    ScDocShell( const sal_uInt64 i_nSfxCreationFlags = SFXMODEL_EMBEDDED_OBJECT );
                     ~ScDocShell();
 
     using SotObject::GetInterface;
@@ -220,6 +215,7 @@ public:
 
     virtual BOOL    SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& );      // SfxInPlaceObject
     virtual BOOL    DoSaveCompleted( SfxMedium * pNewStor);     // SfxObjectShell
+    virtual sal_Bool QuerySlotExecutable( USHORT nSlotId );
 
     virtual void    Draw( OutputDevice *, const JobSetup & rSetup,
                                 USHORT nAspect = ASPECT_CONTENT );
@@ -291,12 +287,9 @@ public:
     BOOL            IsEditable() const;
 
     BOOL            AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab );
-    void            UpdateAllRowHeights();
+    void            UpdateAllRowHeights( const ScMarkData* pTabMark = NULL );
+    void            UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore = false );
 
-#if OLD_PIVOT_IMPLEMENTATION
-    void            PivotUpdate( ScPivot* pOldPivot, ScPivot* pNewPivot,
-                                    BOOL bRecord = TRUE, BOOL bApi = FALSE );
-#endif
     void            RefreshPivotTables( const ScRange& rSource );
     void            DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord = TRUE );
     void            UseScenario( SCTAB nTab, const String& rName, BOOL bRecord = TRUE );
@@ -321,7 +314,7 @@ public:
     BOOL            IsOle();
 
     void            DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
-    ScDBData*       GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL bForceMark );
+    ScDBData*       GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel );
     ScDBData*       GetOldAutoDBRange();    // has to be deleted by caller!
     void            CancelAutoDBRange();    // called when dialog is cancelled
 
@@ -405,6 +398,7 @@ public:
 
     static ScDocShell* GetShellByNum( USHORT nDocNo );
     static String   GetOwnFilterName();
+        static String   GetHtmlFilterName();
     static String   GetWebQueryFilterName();
     static String   GetAsciiFilterName();
     static String   GetLotusFilterName();
@@ -421,7 +415,23 @@ public:
 
     const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
     void            SetSolverSaveData( const ScOptSolverSave& rData );
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    sal_Bool        AcceptStateUpdate() const;
+    //-->Added by PengYunQuan for Validity Cell Range Picker
+    ScSheetSaveData* GetSheetSaveData();
+
+    // passwword protection for Calc (derived from SfxObjectShell)
+    // see also:    FID_CHG_RECORD, SID_CHG_PROTECT
+    virtual bool    IsChangeRecording() const;
+    virtual bool    HasChangeRecordProtection() const;
+    virtual void    SetChangeRecording( bool bActivate );
+    virtual bool    SetProtectionPassword( const String &rPassword );
+    virtual bool    GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash );
 };
+
+
+void UpdateAcceptChangesDialog();
+
 
 SO2_DECL_REF(ScDocShell)
 SO2_IMPL_REF(ScDocShell)

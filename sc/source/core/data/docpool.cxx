@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docpool.cxx,v $
- * $Revision: 1.25.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,40 +33,40 @@
 #include "scitems.hxx"
 #include <tools/shl.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/aeitem.hxx>
-#include <svtools/itemiter.hxx>
+#include <svl/aeitem.hxx>
+#include <svl/itemiter.hxx>
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
 #include <svx/dialmgr.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/forbiddenruleitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/hngpnctitem.hxx>
-#include <svx/itemtype.hxx>
-#include <svx/langitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/hngpnctitem.hxx>
+#include <editeng/itemtype.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/postitem.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/postitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/svxitems.hrc>
-#include <svx/udlnitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/xmlcnitm.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/xmlcnitm.hxx>
 
 #include "docpool.hxx"
 #include "global.hxx"
@@ -654,6 +651,26 @@ void ScDocumentPool::StyleDeleted( ScStyleSheet* pStyle )
     }
 }
 
+void ScDocumentPool::CellStyleCreated( const String& rName )
+{
+    // If a style was created, don't keep any pattern with its name string in the pool,
+    // because it would compare equal to a pattern with a pointer to the new style.
+    // Calling StyleSheetChanged isn't enough because the pool may still contain items
+    // for undo or clipboard content.
+
+    sal_uInt16 nCount = GetItemCount(ATTR_PATTERN);
+    for (sal_uInt16 i=0; i<nCount; i++)
+    {
+        ScPatternAttr* pPattern = (ScPatternAttr*)GetItem(ATTR_PATTERN, i);
+        if ( pPattern && pPattern->GetStyleSheet() == NULL )
+        {
+            const String* pStyleName = pPattern->GetStyleName();
+            if ( pStyleName && *pStyleName == rName )
+                pPattern->UpdateStyleSheet();           // find and store style pointer
+        }
+    }
+}
+
 SfxItemPool* __EXPORT ScDocumentPool::Clone() const
 {
     return new SfxItemPool (*this, TRUE);
@@ -708,7 +725,7 @@ SfxItemPresentation lcl_HFPresentation
                 nTmp = rLRItem.GetRight();
                 nRightMargin = nTmp < 0 ? 0 : USHORT(nTmp);
 
-                aText = SVX_RESSTR(RID_SVXITEMS_LRSPACE_LEFT);
+                aText = EE_RESSTR(RID_SVXITEMS_LRSPACE_LEFT);
                 if ( 100 != nPropLeftMargin )
                 {
                     aText += String::CreateFromInt32( nPropLeftMargin );
@@ -718,13 +735,13 @@ SfxItemPresentation lcl_HFPresentation
                 {
                     aText += GetMetricText( (long)nLeftMargin,
                                            eCoreMetric, ePresentationMetric, pIntl );
-                    aText += SVX_RESSTR(GetMetricId(ePresentationMetric));
+                    aText += EE_RESSTR(GetMetricId(ePresentationMetric));
                 }
                 aText += cpDelim;
 
                 // nPropFirstLineOfst haben wir nicht
 
-                aText += SVX_RESSTR(RID_SVXITEMS_LRSPACE_RIGHT);
+                aText += EE_RESSTR(RID_SVXITEMS_LRSPACE_RIGHT);
                 if ( 100 != nPropRightMargin )
                 {
                     aText += String::CreateFromInt32( nPropRightMargin );
@@ -734,14 +751,14 @@ SfxItemPresentation lcl_HFPresentation
                 {
                     aText += GetMetricText( (long)nRightMargin,
                                             eCoreMetric, ePresentationMetric, pIntl );
-                    aText += SVX_RESSTR(GetMetricId(ePresentationMetric));
+                    aText += EE_RESSTR(GetMetricId(ePresentationMetric));
                 }
             }
             break;
 
             default:
                 if ( !pIntl )
-                    pIntl = ScGlobal::pScIntlWrapper;
+                    pIntl = ScGlobal::GetScIntlWrapper();
                 pItem->GetPresentation( ePresentation, eCoreMetric, ePresentationMetric, aText, pIntl );
 
         }
@@ -1018,7 +1035,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
 
         default:
             if ( !pIntl )
-                pIntl = ScGlobal::pScIntlWrapper;
+                pIntl = ScGlobal::GetScIntlWrapper();
             ePresentation = rItem.GetPresentation( ePresentation, GetMetric( nW ), ePresentationMetric, rText, pIntl );
         break;
     }

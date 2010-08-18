@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: excform.cxx,v $
- * $Revision: 1.52.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -474,10 +471,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                 aIn.Ignore( (meBiff == EXC_BIFF2) ? 3 : 4 );
                 if( bAllowArrays )
                 {
-                    SCSIZE nC = nByte ? nByte : 256;
-                    SCSIZE nR = nUINT16;
-
-                    aStack << aPool.StoreMatrix( nC, nR );
+                    aStack << aPool.StoreMatrix();
                     aExtensions.push_back( EXTENSION_ARRAY );
                 }
                 else
@@ -1895,6 +1889,7 @@ void ExcelToSc::ReadExtensionArray( unsigned int n, XclImpStream& aIn )
 
     if( NULL != pMatrix )
     {
+        pMatrix->Resize(nCols, nRows);
         pMatrix->GetDimensions( nC, nR);
         if( nC != nCols || nR != nRows )
         {

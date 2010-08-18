@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documen3.cxx,v $
- * $Revision: 1.42.100.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,13 +30,15 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <com/sun/star/script/vba/XVBAEventProcessor.hpp>
 #include "scitems.hxx"
-#include <svx/langitem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/linkmgr.hxx>
+#include <editeng/langitem.hxx>
+#include <svl/srchitem.hxx>
+#include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <vcl/svapp.hxx>
 #include "document.hxx"
 #include "attrib.hxx"
@@ -77,11 +76,19 @@
 #include "drwlayer.hxx"
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+#include "dpshttab.hxx"
+#include "dptablecache.hxx"
+// End Comments
+#include "tabprotection.hxx"
+#include "formulaparserpool.hxx"
+#include "clipparam.hxx"
+#include "sheetevents.hxx"
 
 #include <memory>
 
 using namespace com::sun::star;
-using ::std::auto_ptr;
 
 //------------------------------------------------------------------------
 
@@ -227,46 +234,6 @@ ScDPObject* ScDocument::GetDPAtBlock( const ScRange & rBlock ) const
     return NULL;
 }
 
-#if OLD_PIVOT_IMPLEMENTATION
-ScPivotCollection* ScDocument::GetPivotCollection() const
-{
-    return pPivotCollection;
-}
-
-void ScDocument::SetPivotCollection(ScPivotCollection* pNewPivotCollection)
-{
-    if ( pPivotCollection && pNewPivotCollection &&
-            *pPivotCollection == *pNewPivotCollection )
-    {
-        delete pNewPivotCollection;
-        return;
-    }
-
-    if (pPivotCollection)
-        delete pPivotCollection;
-    pPivotCollection = pNewPivotCollection;
-
-    if (pPivotCollection)
-    {
-        USHORT nCount = pPivotCollection->GetCount();
-        for (USHORT i=0; i<nCount; i++)
-        {
-            ScPivot* pPivot = (*pPivotCollection)[i];
-            if (pPivot->CreateData())
-                pPivot->ReleaseData();
-        }
-    }
-}
-
-ScPivot* ScDocument::GetPivotAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const
-{
-    if (pPivotCollection)
-        return pPivotCollection->GetPivotAtCursor(nCol, nRow, nTab);
-    else
-        return NULL;
-}
-#endif
-
 ScChartCollection* ScDocument::GetChartCollection() const
 {
     return pChartCollection;
@@ -317,6 +284,26 @@ void ScDocument::SetScenarioData( SCTAB nTab, const String& rComment,
         pTab[nTab]->SetScenarioColor( rColor );
         pTab[nTab]->SetScenarioFlags( nFlags );
     }
+}
+
+Color ScDocument::GetTabBgColor( SCTAB nTab ) const
+{
+    if (ValidTab(nTab) && pTab[nTab])
+        return pTab[nTab]->GetTabBgColor();
+    return Color(COL_AUTO);
+}
+
+void ScDocument::SetTabBgColor( SCTAB nTab, const Color& rColor )
+{
+    if (ValidTab(nTab) && pTab[nTab])
+        pTab[nTab]->SetTabBgColor(rColor);
+}
+
+bool ScDocument::IsDefaultTabBgColor( SCTAB nTab ) const
+{
+    if (ValidTab(nTab) && pTab[nTab])
+        return pTab[nTab]->GetTabBgColor() == COL_AUTO;
+    return true;
 }
 
 void ScDocument::GetScenarioData( SCTAB nTab, String& rComment,
@@ -465,7 +452,7 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     {
         ScTableLink* pLink = new ScTableLink( pShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( TRUE );
-        pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
+        GetLinkManager()->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, aFileName,
                                         &aFilterName );
         pLink->Update();
         pLink->SetInCreate( FALSE );
@@ -476,10 +463,11 @@ BOOL ScDocument::LinkExternalTab( SCTAB& rTab, const String& aDocTab,
     return TRUE;
 }
 
-ScExternalRefManager* ScDocument::GetExternalRefManager()
+ScExternalRefManager* ScDocument::GetExternalRefManager() const
 {
+    ScDocument* pThis = const_cast<ScDocument*>(this);
     if (!pExternalRefMgr.get())
-        pExternalRefMgr.reset(new ScExternalRefManager(this));
+        pThis->pExternalRefMgr.reset( new ScExternalRefManager( pThis));
 
     return pExternalRefMgr.get();
 }
@@ -498,13 +486,83 @@ void ScDocument::MarkUsedExternalReferences()
     // Charts.
     bool bAllMarked = pExternalRefMgr->markUsedByLinkListeners();
     // Formula cells.
-    for (SCTAB nTab = 0; !bAllMarked && nTab < nMaxTableNumber; ++nTab)
-    {
-        if (pTab[nTab])
-            bAllMarked = pTab[nTab]->MarkUsedExternalReferences();
-    }
+    bAllMarked = pExternalRefMgr->markUsedExternalRefCells();
+
     /* NOTE: Conditional formats and validation objects are marked when
      * collecting them during export. */
+}
+
+ScFormulaParserPool& ScDocument::GetFormulaParserPool() const
+{
+    if( !mxFormulaParserPool.get() )
+        mxFormulaParserPool.reset( new ScFormulaParserPool( *this ) );
+    return *mxFormulaParserPool;
+}
+
+const ScSheetEvents* ScDocument::GetSheetEvents( SCTAB nTab ) const
+{
+    if (VALIDTAB(nTab) && pTab[nTab])
+        return pTab[nTab]->GetSheetEvents();
+    return NULL;
+}
+
+void ScDocument::SetSheetEvents( SCTAB nTab, const ScSheetEvents* pNew )
+{
+    if (VALIDTAB(nTab) && pTab[nTab])
+        pTab[nTab]->SetSheetEvents( pNew );
+}
+
+bool ScDocument::HasSheetEventScript( SCTAB nTab, sal_Int32 nEvent, bool bWithVbaEvents ) const
+{
+    if (pTab[nTab])
+    {
+        // check if any event handler script has been configured
+        const ScSheetEvents* pEvents = pTab[nTab]->GetSheetEvents();
+        if ( pEvents && pEvents->GetScript( nEvent ) )
+            return true;
+        // check if VBA event handlers exist
+        if (bWithVbaEvents && mxVbaEvents.is()) try
+        {
+            uno::Sequence< uno::Any > aArgs( 1 );
+            aArgs[ 0 ] <<= nTab;
+            if (mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaSheetEventId( nEvent ), aArgs ) ||
+                mxVbaEvents->hasVbaEventHandler( ScSheetEvents::GetVbaDocumentEventId( nEvent ), uno::Sequence< uno::Any >() ))
+                return true;
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+    return false;
+}
+
+bool ScDocument::HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents ) const
+{
+    for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+        if (HasSheetEventScript( nTab, nEvent, bWithVbaEvents ))
+            return true;
+    return false;
+}
+
+BOOL ScDocument::HasCalcNotification( SCTAB nTab ) const
+{
+    if (VALIDTAB(nTab) && pTab[nTab])
+        return pTab[nTab]->GetCalcNotification();
+    return FALSE;
+}
+
+void ScDocument::SetCalcNotification( SCTAB nTab )
+{
+    // set only if not set before
+    if (VALIDTAB(nTab) && pTab[nTab] && !pTab[nTab]->GetCalcNotification())
+        pTab[nTab]->SetCalcNotification(TRUE);
+}
+
+void ScDocument::ResetCalcNotifications()
+{
+    for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+        if (pTab[nTab] && pTab[nTab]->GetCalcNotification())
+            pTab[nTab]->SetCalcNotification(FALSE);
 }
 
 ScOutlineTable* ScDocument::GetOutlineTable( SCTAB nTab, BOOL bCreate )
@@ -811,7 +869,8 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                     SCCOL nCol2, SCROW nRow2, SCTAB nTab2,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc, BOOL bIncludeDraw )
+                                    ScDocument* pUndoDoc, BOOL bIncludeDraw,
+                                    bool bUpdateNoteCaptionPos )
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
@@ -835,10 +894,6 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
             xRowNameRanges->UpdateReference( eUpdateRefMode, this, aRange, nDx, nDy, nDz );
             pDBCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
             pRangeName->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
-#if OLD_PIVOT_IMPLEMENTATION
-            if (pPivotCollection)
-                pPivotCollection->UpdateReference( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
-#endif
             if ( pDPCollection )
                 pDPCollection->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz );
             UpdateChartRef( eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2, nDx, nDy, nDz );
@@ -859,7 +914,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
             if (pTab[i])
                 pTab[i]->UpdateReference(
                     eUpdateRefMode, nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
-                    nDx, nDy, nDz, pUndoDoc, bIncludeDraw );
+                    nDx, nDy, nDz, pUndoDoc, bIncludeDraw, bUpdateNoteCaptionPos );
 
         if ( bIsEmbedded )
         {
@@ -888,7 +943,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
         {
             ScDocument* pClipDoc = SC_MOD()->GetClipDoc();
             if (pClipDoc)
-                pClipDoc->bCutMode = FALSE;
+                pClipDoc->GetClipParam().mbCutMode = false;
         }
     }
 }
@@ -898,7 +953,10 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
 {
     DBG_ASSERT(pClipDoc->bIsClip, "UpdateTranspose: kein Clip");
 
-    ScRange aSource = pClipDoc->aClipRange;         // Tab wird noch angepasst
+    ScRange aSource;
+    ScClipParam& rClipParam = GetClipParam();
+    if (rClipParam.maRanges.Count())
+        aSource = *rClipParam.maRanges.First();
     ScAddress aDest = rDestPos;
 
     SCTAB nClipTab = 0;
@@ -928,9 +986,6 @@ void ScDocument::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
     //! UpdateChartRef
 
     pRangeName->UpdateGrow( rArea, nGrowX, nGrowY );
-#if OLD_PIVOT_IMPLEMENTATION
-    pPivotCollection->UpdateGrow( rArea, nGrowX, nGrowY );
-#endif
 
     for (SCTAB i=0; i<=MAXTAB && pTab[i]; i++)
         pTab[i]->UpdateGrow( rArea, nGrowX, nGrowY );
@@ -1155,15 +1210,6 @@ BOOL ScDocument::SearchAndReplace(const SvxSearchItem& rSearchItem,
     return bFound;
 }
 
-BOOL ScDocument::IsFiltered( SCROW nRow, SCTAB nTab ) const
-{
-    if (VALIDTAB(nTab))
-        if (pTab[nTab])
-            return pTab[nTab]->IsFiltered( nRow );
-    DBG_ERROR("Falsche Tabellennummer");
-    return 0;
-}
-
 //  Outline anpassen
 
 BOOL ScDocument::UpdateOutlineCol( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, BOOL bShow )
@@ -1292,7 +1338,8 @@ BOOL ScDocument::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, 
 //  GetFilterEntries - Eintraege fuer AutoFilter-Listbox
 //
 
-BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedScStrCollection& rStrings, bool bFilter )
+BOOL ScDocument::GetFilterEntries(
+    SCCOL nCol, SCROW nRow, SCTAB nTab, bool bFilter, TypedScStrCollection& rStrings, bool& rHasDates)
 {
     if ( ValidTab(nTab) && pTab[nTab] && pDBCollection )
     {
@@ -1329,11 +1376,11 @@ BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedScSt
 
             if ( bFilter )
             {
-                pTab[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rStrings );
+                pTab[nTab]->GetFilteredFilterEntries( nCol, nStartRow, nEndRow, aParam, rStrings, rHasDates );
             }
             else
             {
-                pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings );
+                pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
             }
 
             return TRUE;
@@ -1348,11 +1395,11 @@ BOOL ScDocument::GetFilterEntries( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedScSt
 //
 
 BOOL ScDocument::GetFilterEntriesArea( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
-                                        SCTAB nTab, TypedScStrCollection& rStrings )
+                                        SCTAB nTab, TypedScStrCollection& rStrings, bool& rHasDates )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
     {
-        pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings );
+        pTab[nTab]->GetFilterEntries( nCol, nStartRow, nEndRow, rStrings, rHasDates );
         return TRUE;
     }
 
@@ -1519,6 +1566,54 @@ void ScDocument::ResetEmbedded()
     aEmbedRange = ScRange();
 }
 
+
+/** Similar to ScViewData::AddPixelsWhile(), but add height twips and only
+    while result is less than nStopTwips.
+    @return TRUE if advanced at least one row.
+ */
+bool lcl_AddTwipsWhile( long & rTwips, long nStopTwips, SCROW & rPosY, SCROW nEndRow, const ScTable * pTable )
+{
+    SCROW nRow = rPosY;
+    bool bAdded = false;
+    bool bStop = false;
+    while (rTwips < nStopTwips && nRow <= nEndRow && !bStop)
+    {
+        SCROW nHeightEndRow;
+        USHORT nHeight = pTable->GetRowHeight( nRow, NULL, &nHeightEndRow);
+        if (nHeightEndRow > nEndRow)
+            nHeightEndRow = nEndRow;
+        if (!nHeight)
+            nRow = nHeightEndRow + 1;
+        else
+        {
+            SCROW nRows = nHeightEndRow - nRow + 1;
+            sal_Int64 nAdd = static_cast<sal_Int64>(nHeight) * nRows;
+            if (nAdd + rTwips >= nStopTwips)
+            {
+                sal_Int64 nDiff = nAdd + rTwips - nStopTwips;
+                nRows -= static_cast<SCROW>(nDiff / nHeight);
+                nAdd = nHeight * nRows;
+                // We're looking for a value that satisfies loop condition.
+                if (nAdd + rTwips >= nStopTwips)
+                {
+                    --nRows;
+                    nAdd -= nHeight;
+                }
+                bStop = true;
+            }
+            rTwips += static_cast<long>(nAdd);
+            nRow += nRows;
+        }
+    }
+    if (nRow > rPosY)
+    {
+        --nRow;
+        bAdded = true;
+    }
+    rPosY = nRow;
+    return bAdded;
+}
+
 ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect )
 {
     ScTable* pTable = pTab[nTab];
@@ -1575,46 +1670,16 @@ ScRange ScDocument::GetRange( SCTAB nTab, const Rectangle& rMMRect )
     nTwips = (long) (aPosRect.Top() / HMM_PER_TWIPS);
 
     SCROW nY1 = 0;
-    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-            *(pTable->GetRowFlagsArray()), nY1, MAXROW, CR_HIDDEN, 0,
-            *(pTable->GetRowHeightArray()));
-    bEnd = FALSE;
-    while (!bEnd && aIter)
-    {
-        nY1 = aIter.GetPos();
-        nAdd = (long) *aIter;
-        if (nSize+nAdd <= nTwips+1 && nY1<MAXROW)
-        {
-            nSize += nAdd;
-            ++nY1;
-            ++aIter;
-        }
-        else
-            bEnd = TRUE;
-    }
-    if (!aIter)
-        nY1 = aIter.GetIterEnd();   // all hidden down to the bottom
+    // Was if(nSize+nAdd<=nTwips+1) inside loop => if(nSize+nAdd<nTwips+2)
+    if (lcl_AddTwipsWhile( nSize, nTwips+2, nY1, MAXROW, pTable) && nY1 < MAXROW)
+        ++nY1;  // original loop ended on last matched +1 unless that was MAXROW
 
     nTwips = (long) (aPosRect.Bottom() / HMM_PER_TWIPS);
 
     SCROW nY2 = nY1;
-    aIter.NewLimits( nY2, MAXROW);
-    bEnd = FALSE;
-    while (!bEnd && aIter)
-    {
-        nY2 = aIter.GetPos();
-        nAdd = (long) *aIter;
-        if (nSize+nAdd < nTwips && nY2<MAXROW)
-        {
-            nSize += nAdd;
-            ++nY2;
-            ++aIter;
-        }
-        else
-            bEnd = TRUE;
-    }
-    if (!aIter)
-        nY2 = aIter.GetIterEnd();   // all hidden down to the bottom
+    // Was if(nSize+nAdd<nTwips) inside loop => if(nSize+nAdd<nTwips)
+    if (lcl_AddTwipsWhile( nSize, nTwips, nY2, MAXROW, pTable) && nY2 < MAXROW)
+        ++nY2;  // original loop ended on last matched +1 unless that was MAXROW
 
     return ScRange( nX1,nY1,nTab, nX2,nY2,nTab );
 }
@@ -1652,24 +1717,33 @@ void lcl_SnapVer( ScTable* pTable, long& rVal, SCROW& rStartRow )
     SCROW nRow = 0;
     long nTwips = (long) (rVal / HMM_PER_TWIPS);
     long nSnap = 0;
-    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-            *(pTable->GetRowFlagsArray()), nRow, MAXROW, CR_HIDDEN, 0,
-            *(pTable->GetRowHeightArray()));
-    while ( aIter )
+
+    bool bFound = false;
+    for (SCROW i = nRow; i <= MAXROW; ++i)
     {
-        nRow = aIter.GetPos();
-        long nAdd = *aIter;
+        SCROW nLastRow;
+        if (pTable->RowHidden(i, NULL, &nLastRow))
+        {
+            i = nLastRow;
+            continue;
+        }
+
+        nRow = i;
+        long nAdd = pTable->GetRowHeight(i);
         if ( nSnap + nAdd/2 < nTwips || nRow < rStartRow )
         {
             nSnap += nAdd;
             ++nRow;
-            ++aIter;
         }
         else
+        {
+            bFound = true;
             break;
+        }
     }
-    if (!aIter)
+    if (!bFound)
         nRow = MAXROW;  // all hidden down to the bottom
+
     rVal = (long) ( nSnap * HMM_PER_TWIPS );
     rStartRow = nRow;
 }
@@ -1701,28 +1775,28 @@ void ScDocument::SnapVisArea( Rectangle& rRect ) const
         ScDrawLayer::MirrorRectRTL( rRect );        // back to real rectangle
 }
 
-void ScDocument::SetDocProtection( BOOL bProtect, const uno::Sequence<sal_Int8>& rPasswd )
+ScDocProtection* ScDocument::GetDocProtection() const
 {
-    bProtected = bProtect;
-    aProtectPass = rPasswd;
+    return pDocProtection.get();
 }
 
-void ScDocument::SetTabProtection( SCTAB nTab, BOOL bProtect, const uno::Sequence<sal_Int8>& rPasswd )
+void ScDocument::SetDocProtection(const ScDocProtection* pProtect)
 {
-    if (VALIDTAB(nTab))
-        if (pTab[nTab])
-            pTab[nTab]->SetProtection( bProtect, rPasswd );
+    if (pProtect)
+        pDocProtection.reset(new ScDocProtection(*pProtect));
+    else
+        pDocProtection.reset(NULL);
 }
 
 BOOL ScDocument::IsDocProtected() const
 {
-    return bProtected;
+    return pDocProtection.get() && pDocProtection->isProtected();
 }
 
 BOOL ScDocument::IsDocEditable() const
 {
     // import into read-only document is possible
-    return !bProtected && ( bImportingXML || mbChangeReadOnlyEnabled || !pShell || !pShell->IsReadOnly() );
+    return !IsDocProtected() && ( bImportingXML || mbChangeReadOnlyEnabled || !pShell || !pShell->IsReadOnly() );
 }
 
 BOOL ScDocument::IsTabProtected( SCTAB nTab ) const
@@ -1734,18 +1808,28 @@ BOOL ScDocument::IsTabProtected( SCTAB nTab ) const
     return FALSE;
 }
 
-const uno::Sequence<sal_Int8>& ScDocument::GetDocPassword() const
-{
-    return aProtectPass;
-}
-
-const uno::Sequence<sal_Int8>& ScDocument::GetTabPassword( SCTAB nTab ) const
+ScTableProtection* ScDocument::GetTabProtection( SCTAB nTab ) const
 {
     if (VALIDTAB(nTab) && pTab[nTab])
-        return pTab[nTab]->GetPassword();
+        return pTab[nTab]->GetProtection();
 
-    DBG_ERROR("Falsche Tabellennummer");
-    return aProtectPass;
+    return NULL;
+}
+
+void ScDocument::SetTabProtection(SCTAB nTab, const ScTableProtection* pProtect)
+{
+    if (!ValidTab(nTab))
+        return;
+
+    pTab[nTab]->SetProtection(pProtect);
+}
+
+void ScDocument::CopyTabProtection(SCTAB nTabSrc, SCTAB nTabDest)
+{
+    if (!ValidTab(nTabSrc) || !ValidTab(nTabDest))
+        return;
+
+    pTab[nTabDest]->SetProtection( pTab[nTabSrc]->GetProtection() );
 }
 
 const ScDocOptions& ScDocument::GetDocOptions() const
@@ -1756,16 +1840,10 @@ const ScDocOptions& ScDocument::GetDocOptions() const
 
 void ScDocument::SetDocOptions( const ScDocOptions& rOpt )
 {
-    USHORT d,m,y;
-
     DBG_ASSERT( pDocOptions, "No DocOptions! :-(" );
     *pDocOptions = rOpt;
-    rOpt.GetDate( d,m,y );
 
-    SvNumberFormatter* pFormatter = xPoolHelper->GetFormTable();
-    pFormatter->ChangeNullDate( d,m,y );
-    pFormatter->ChangeStandardPrec( (USHORT)rOpt.GetStdPrecision() );
-    pFormatter->SetYear2000( rOpt.GetYear2000() );
+    xPoolHelper->SetFormTableOpt(rOpt);
 }
 
 const ScViewOptions& ScDocument::GetViewOptions() const
@@ -1823,14 +1901,14 @@ Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow,
 
     for (i=0; i<nStartCol; i++)
         aRect.Left() += GetColWidth(i,nTab);
-    aRect.Top() += FastGetRowHeight( 0, nStartRow-1, nTab);
+    aRect.Top() += GetRowHeight( 0, nStartRow-1, nTab);
 
     aRect.Right()  = aRect.Left();
     aRect.Bottom() = aRect.Top();
 
     for (i=nStartCol; i<=nEndCol; i++)
         aRect.Right() += GetColWidth(i,nTab);
-    aRect.Bottom() += FastGetRowHeight( nStartRow, nEndRow, nTab);
+    aRect.Bottom() += GetRowHeight( nStartRow, nEndRow, nTab);
 
     aRect.Left()    = (long)(aRect.Left()   * HMM_PER_TWIPS);
     aRect.Right()   = (long)(aRect.Right()  * HMM_PER_TWIPS);
@@ -1926,12 +2004,125 @@ void ScDocument::IncSizeRecalcLevel( SCTAB nTab )
         pTab[nTab]->IncRecalcLevel();
 }
 
-void ScDocument::DecSizeRecalcLevel( SCTAB nTab )
+void ScDocument::DecSizeRecalcLevel( SCTAB nTab, bool bUpdateNoteCaptionPos )
 {
     if ( ValidTab(nTab)  && pTab[nTab] )
-        pTab[nTab]->DecRecalcLevel();
+        pTab[nTab]->DecRecalcLevel( bUpdateNoteCaptionPos );
 }
 
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
+ScDPTableDataCache* ScDocument::GetDPObjectCache( long nID )
+{
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    { //
+        if ( nID == (*iter)->GetId() )
+            return *iter;
+    }
+    return NULL;
+}
 
+ScDPTableDataCache* ScDocument::GetUsedDPObjectCache ( ScRange rRange )
+{
+    ScDPTableDataCache* pCache = NULL;
+    USHORT nCount = GetDPCollection()->GetCount();
+    for ( short i=nCount-1; i>=0 ; i--)
+    {
+        if ( const ScSheetSourceDesc* pUsedSheetDesc = (*pDPCollection)[i]->GetSheetDesc() )
+            if ( rRange == pUsedSheetDesc->aSourceRange )
+            {
+                long nID = (*pDPCollection)[i]->GetCacheId();
+                if ( nID >= 0  )
+                    pCache= GetDPObjectCache( nID );
+                if ( pCache )
+                    return pCache;
+            }
+    }
+    return pCache;
+}
 
+long ScDocument::AddDPObjectCache( ScDPTableDataCache* pData )
+{
+    if ( pData->GetId() < 0 )
+    { //create a id for it
+        pData->SetId( GetNewDPObjectCacheId() );
+    }
+    m_listDPObjectsCaches.push_back( pData );
+    return pData->GetId();
+}
 
+long ScDocument::GetNewDPObjectCacheId()
+{
+    long nID = 0;
+
+    bool bFound = false;
+    std::list<ScDPTableDataCache*>::iterator iter;
+    do {
+        for ( iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+        { //Get a new Id
+            if ( nID == (*iter)->GetId() )
+            {
+                nID++;
+                bFound = true;
+                break;
+            }
+        }
+        if ( iter == m_listDPObjectsCaches.end() )
+            bFound = false;
+    } while ( bFound );
+
+    return nID;
+}
+
+void ScDocument::RemoveDPObjectCache( long nID )
+{
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    {
+        if ( nID == (*iter)->GetId() )
+        {
+            ScDPTableDataCache* pCache = *iter;
+            m_listDPObjectsCaches.erase( iter );
+            delete pCache;
+            break;
+        }
+    }
+
+}
+
+void ScDocument::RemoveUnusedDPObjectCaches()
+{
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    {
+        long  nID = (*iter)->GetId();
+        USHORT nCount = GetDPCollection()->GetCount();
+        USHORT i ;
+        for ( i=0; i<nCount; i++)
+        {
+            if ( nID ==  (*pDPCollection)[i]->GetCacheId() )
+                break;
+        }
+        if ( i == nCount )
+        {
+            ScDPTableDataCache* pCache = *iter;
+            m_listDPObjectsCaches.erase( iter );
+            delete pCache;
+            continue;
+        }
+    }
+}
+
+void ScDocument::GetUsedDPObjectCache( std::list<ScDPTableDataCache*>& usedlist )
+{
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    {
+        long  nID = (*iter)->GetId();
+        USHORT nCount = GetDPCollection()->GetCount();
+        USHORT i=0;
+        for ( i=0; i<nCount; i++)
+            if ( nID ==  (*pDPCollection)[i]->GetCacheId() )
+                break;
+        if ( i != nCount )
+            usedlist.push_back( *iter );
+    }
+}
+// End Comments

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drtxtob.sdi,v $
- * $Revision: 1.17.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,10 +58,12 @@ interface TableDrawText
     SID_CUT             [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_COPY            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_PASTE           [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
-    FID_PASTE_CONTENTS  [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
+    SID_PASTE_SPECIAL   [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
     SID_CLIPBOARD_FORMAT_ITEMS [ ExecMethod = Execute; StateMethod = GetClipState; Export = FALSE; ]
     SID_SELECTALL       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
     SID_CHARMAP         [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_THES            [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
+    SID_THESAURUS       [ ExecMethod = Execute; StateMethod = GetState; Export = FALSE; ]
      // Attribute: --------------------------------------------------
     SID_TEXT_STANDARD           [ ExecMethod = ExecuteAttr; StateMethod = GetState; Export = FALSE; ]
     SID_DRAWTEXT_ATTR_DLG       [ ExecMethod = ExecuteAttr; StateMethod = GetState; Export = FALSE; ]
@@ -129,6 +128,9 @@ interface TableDrawText
     SID_VERTICALTEXT_STATE              [ StateMethod = GetAttrState ; Export = FALSE; ]
     SID_CTLFONT_STATE                   [ StateMethod = GetAttrState ; Export = FALSE; ]
 
+    SID_TRANSLITERATE_SENTENCE_CASE [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
+    SID_TRANSLITERATE_TITLE_CASE    [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
+    SID_TRANSLITERATE_TOGGLE_CASE   [ ExecMethod = ExecuteTrans; StateMethod = GetState;  Export = FALSE; ]
     SID_TRANSLITERATE_UPPER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_LOWER     [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]
     SID_TRANSLITERATE_HALFWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetState; Export = FALSE; ]

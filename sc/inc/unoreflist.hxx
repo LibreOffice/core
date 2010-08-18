@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoreflist.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #define SC_UNOREFLIST_HXX
 
 #include <list>
-#include <svtools/hint.hxx>
+#include <svl/hint.hxx>
 #include "rangelst.hxx"
 
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlg_DataEditor.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #ifndef _SCH_DGRDATA_HXX
 #define _SCH_DGRDATA_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/toolbox.hxx>
 #include <comphelper/stl_types.hxx>

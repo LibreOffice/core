@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabvwsha.cxx,v $
- * $Revision: 1.28.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,13 +34,13 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
-#include <svtools/slstitm.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/zformat.hxx>
-#include <svx/boxitem.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/zformat.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/numinf.hxx>
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -72,11 +69,23 @@
 #include "compiler.hxx"
 
 
-BOOL ScTabViewShell::GetFunction( String& rFuncStr )
+BOOL ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
 {
     String aStr;
 
     ScSubTotalFunc eFunc = (ScSubTotalFunc) SC_MOD()->GetAppOptions().GetStatusFunc();
+    ScViewData* pViewData   = GetViewData();
+    ScMarkData& rMark       = pViewData->GetMarkData();
+    bool bIgnoreError = (rMark.IsMarked() || rMark.IsMultiMarked());
+
+    if (bIgnoreError && (eFunc == SUBTOTAL_FUNC_CNT || eFunc == SUBTOTAL_FUNC_CNT2))
+        nErrCode = 0;
+
+    if (nErrCode)
+    {
+        rFuncStr = ScGlobal::GetLongErrorString(nErrCode);
+        return true;
+    }
 
     USHORT nGlobStrId = 0;
     switch (eFunc)
@@ -94,9 +103,7 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr )
     }
     if (nGlobStrId)
     {
-        ScViewData* pViewData   = GetViewData();
         ScDocument* pDoc        = pViewData->GetDocument();
-        ScMarkData& rMark       = pViewData->GetMarkData();
         SCCOL       nPosX       = pViewData->GetCurX();
         SCROW       nPosY       = pViewData->GetCurY();
         SCTAB       nTab        = pViewData->GetTabNo();
@@ -104,30 +111,38 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr )
         aStr = ScGlobal::GetRscString(nGlobStrId);
         aStr += '=';
 
-        //  Anzahl im Standardformat, die anderen nach Cursorposition
-        sal_uInt32 nNumFmt = 0;
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 )
-        {
-            //  Zahlformat aus Attributen oder Formel
-            pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
-            if ( (nNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
-            {
-                ScBaseCell* pCell;
-                pDoc->GetCell( nPosX, nPosY, nTab, pCell );
-                if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
-                    nNumFmt = ((ScFormulaCell*)pCell)->GetStandardFormat(
-                        *pFormatter, nNumFmt );
-            }
-        }
         ScAddress aCursor( nPosX, nPosY, nTab );
         double nVal;
         if ( pDoc->GetSelectionFunction( eFunc, aCursor, rMark, nVal ) )
         {
-            String aValStr;
-            Color* pDummy;
-            pFormatter->GetOutputString( nVal, nNumFmt, aValStr, &pDummy );
-            aStr += aValStr;
+            if ( nVal == 0.0 )
+                aStr += '0';
+            else
+            {
+                //  Anzahl im Standardformat, die anderen nach Cursorposition
+                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                sal_uInt32 nNumFmt = 0;
+                if ( eFunc != SUBTOTAL_FUNC_CNT && eFunc != SUBTOTAL_FUNC_CNT2 )
+                {
+                    //  Zahlformat aus Attributen oder Formel
+                    pDoc->GetNumberFormat( nPosX, nPosY, nTab, nNumFmt );
+                    if ( (nNumFmt % SV_COUNTRY_LANGUAGE_OFFSET) == 0 )
+                    {
+                        ScBaseCell* pCell;
+                        pDoc->GetCell( nPosX, nPosY, nTab, pCell );
+                        if (pCell && pCell->GetCellType() == CELLTYPE_FORMULA)
+                        {
+
+                            nNumFmt = ((ScFormulaCell*)pCell)->GetStandardFormat(*pFormatter, nNumFmt );
+                        }
+                    }
+                }
+
+                String aValStr;
+                Color* pDummy;
+                pFormatter->GetOutputString( nVal, nNumFmt, aValStr, &pDummy );
+                aStr += aValStr;
+            }
         }
 
         rFuncStr = aStr;
@@ -159,7 +174,7 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
     USHORT      nMyId       = 0;
 
     SfxViewFrame* pThisFrame = GetViewFrame();
-    BOOL bOle = GetViewFrame()->GetFrame()->IsInPlace();
+    BOOL bOle = GetViewFrame()->GetFrame().IsInPlace();
 
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
@@ -450,6 +465,11 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_READONLY_MODE:
                 rSet.Put( SfxBoolItem( nWhich, GetViewData()->GetDocShell()->IsReadOnly() ) );
+                break;
+
+            case FID_TAB_DESELECTALL:
+                if ( nTabSelCount == 1 )
+                    rSet.DisableItem( nWhich );     // enabled only if several sheets are selected
                 break;
 
         } // switch ( nWitch )

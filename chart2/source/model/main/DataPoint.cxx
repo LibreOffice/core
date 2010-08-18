@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataPoint.cxx,v $
- * $Revision: 1.9.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,17 +87,21 @@ namespace chart
 DataPoint::DataPoint( const uno::Reference< beans::XPropertySet > & rParentProperties ) :
         ::property::OPropertySet( m_aMutex ),
         m_xParentProperties( rParentProperties ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
         m_bNoParentPropAllowed( false )
-{}
+{
+    SetNewValuesExplicitlyEvenIfTheyEqualDefault();
+}
 
 DataPoint::DataPoint( const DataPoint & rOther ) :
         MutexContainer(),
         impl::DataPoint_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
         m_bNoParentPropAllowed( true )
 {
+    SetNewValuesExplicitlyEvenIfTheyEqualDefault();
+
     // m_xParentProperties has to be set from outside, like in the method
     // DataSeries::createClone
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AxisHelper.cxx,v $
- * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,8 +37,9 @@
 #include "ContainerHelper.hxx"
 #include "servicenames_coosystems.hxx"
 #include "DataSeriesHelper.hxx"
+#include "Scaling.hxx"
 
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 
@@ -66,6 +64,17 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 
+//static
+Reference< chart2::XScaling > AxisHelper::createLinearScaling()
+{
+    return new LinearScaling( 1.0, 0.0 );
+}
+
+//static
+Reference< chart2::XScaling > AxisHelper::createLogarithmicScaling( double fBase )
+{
+    return new LogarithmicScaling( fBase );
+}
 
 //static
 ScaleData AxisHelper::createDefaultScale()
@@ -273,6 +282,26 @@ void AxisHelper::makeAxisInvisible( const Reference< XAxis >& xAxis )
     {
         xProps->setPropertyValue( C2U( "Show" ), uno::makeAny( sal_False ) );
     }
+}
+
+//static
+void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, const Reference< XDiagram >& xDiagram )
+{
+    //axis is hidden if no data is attached anymore but data is available
+    bool bOtherSeriesAttachedToThisAxis = false;
+    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt = aSeriesVector.begin();
+    for( ; aIt != aSeriesVector.end(); ++aIt)
+    {
+        uno::Reference< chart2::XAxis > xCurrentAxis( DiagramHelper::getAttachedAxis( *aIt, xDiagram ), uno::UNO_QUERY );
+        if( xCurrentAxis==xAxis )
+        {
+            bOtherSeriesAttachedToThisAxis = true;
+            break;
+        }
+    }
+    if(!bOtherSeriesAttachedToThisAxis && !aSeriesVector.empty() )
+        AxisHelper::makeAxisInvisible( xAxis );
 }
 
 void AxisHelper::hideGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pvfundlg.src,v $
- * $Revision: 1.39 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -230,8 +227,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     };
     CheckBox CB_SHOWALL
     {
-        Pos = MAP_APPFONT ( 12 , 127 ) ;
-        Size = MAP_APPFONT ( 140 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 127 ) ;
+        Size = MAP_APPFONT ( 152 , 10 ) ;
         Text [ en-US ] = "Show it~ems without data";
         TabStop = TRUE ;
     };

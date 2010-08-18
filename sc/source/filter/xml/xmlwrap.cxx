@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlwrap.cxx,v $
- * $Revision: 1.69.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,8 +42,8 @@
 #include <svx/xmlgrhlp.hxx>
 #include <svtools/sfxecode.hxx>
 #include <sfx2/frame.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/itemset.hxx>
+#include <svl/stritem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <tools/urlobj.hxx>
 #include <com/sun/star/container/XChild.hpp>
@@ -71,7 +68,7 @@
 
 #include <svx/xmleohlp.hxx>
 #include <rtl/logfile.hxx>
-#include <svtools/saveopt.hxx>
+#include <unotools/saveopt.hxx>
 
 #include "document.hxx"
 #include "xmlwrap.hxx"
@@ -81,6 +78,9 @@
 #include "globstr.hrc"
 #include "scerrors.hxx"
 #include "XMLExportSharedData.hxx"
+#include "docuno.hxx"
+#include "sheetdata.hxx"
+#include "XMLCodeNameProvider.hxx"
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
@@ -265,7 +265,24 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( xml::sax::SAXParseException& r )
     {
-        if( bEncrypted )
+        // sax parser sends wrapped exceptions,
+        // try to find the original one
+        xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
+        sal_Bool bTryChild = sal_True;
+
+        while( bTryChild )
+        {
+            xml::sax::SAXException aTmp;
+            if ( aSaxEx.WrappedException >>= aTmp )
+                aSaxEx = aTmp;
+            else
+                bTryChild = sal_False;
+        }
+
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( aSaxEx.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+        else if( bEncrypted )
             nReturn = ERRCODE_SFX_WRONGPASSWORD;
         else
         {
@@ -298,7 +315,10 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     }
     catch( xml::sax::SAXException& r )
     {
-        if( bEncrypted )
+        packages::zip::ZipIOException aBrokenPackage;
+        if ( r.WrappedException >>= aBrokenPackage )
+            return ERRCODE_IO_BROKENPACKAGE;
+        else if( bEncrypted )
             nReturn = ERRCODE_SFX_WRONGPASSWORD;
         else
         {
@@ -406,6 +426,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             { MAP_LEN( "StreamRelPath" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "StreamName" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "BuildId" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "ScriptConfiguration" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
 
             { NULL, 0, 0, NULL, 0, 0 }
         };
@@ -616,12 +637,37 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                     xModelSet->setPropertyValue( sBuildPropName, xInfoSet->getPropertyValue(sBuildPropName) );
                 }
             }
+
+            // Set Code Names
+            uno::Any aAny = xInfoSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("ScriptConfiguration") ));
+            uno::Reference <container::XNameAccess> xCodeNameAccess;
+            if( aAny >>= xCodeNameAccess )
+                XMLCodeNameProvider::set( xCodeNameAccess, &rDoc );
         }
 
         // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
         return bRet;//!bStylesOnly ? bDocRetval : bStylesRetval;
     }
     return sal_False;
+}
+
+bool lcl_HasValidStream(ScDocument& rDoc)
+{
+    SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
+    if ( pObjSh->IsDocShared() )
+        return false;                       // never copy stream from shared file
+
+    // don't read remote file again
+    // (could instead re-use medium directly in that case)
+    SfxMedium* pSrcMed = rDoc.GetDocumentShell()->GetMedium();
+    if ( !pSrcMed || pSrcMed->IsRemote() )
+        return false;
+
+    SCTAB nTabCount = rDoc.GetTableCount();
+    for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
+        if (rDoc.IsStreamValid(nTab))
+            return true;
+    return false;
 }
 
 sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServiceFactory>& xServiceFactory,
@@ -691,7 +737,55 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
     {
         ScXMLExport* pExport = static_cast<ScXMLExport*>(SvXMLExport::getImplementation(xFilter));
         pExport->SetSharedData(pSharedData);
-        bRet = xFilter->filter( aDescriptor );
+
+        // if there are sheets to copy, get the source stream
+        if ( sName.equalsAscii("content.xml") && lcl_HasValidStream(rDoc) &&
+             ( pExport->getExportFlags() & EXPORT_OASIS ) )
+        {
+            // old stream is still in this file's storage - open read-only
+
+            // #i106854# use the document's storage directly, without a temporary SfxMedium
+            uno::Reference<embed::XStorage> xTmpStorage = rDoc.GetDocumentShell()->GetStorage();
+            uno::Reference<io::XStream> xSrcStream;
+            uno::Reference<io::XInputStream> xSrcInput;
+
+            // #i108978# If an embedded object is saved and no events are notified, don't use the stream
+            // because without the ...DONE events, stream positions aren't updated.
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xModel)->GetSheetSaveData();
+            if (pSheetData && pSheetData->IsInSupportedSave())
+            {
+                try
+                {
+                    if (xTmpStorage.is())
+                        xSrcStream = xTmpStorage->openStreamElement( sName, embed::ElementModes::READ );
+                    if (xSrcStream.is())
+                        xSrcInput = xSrcStream->getInputStream();
+                }
+                catch (uno::Exception&)
+                {
+                    // stream not available (for example, password protected) - save normally (xSrcInput is null)
+                }
+            }
+
+            pExport->SetSourceStream( xSrcInput );
+            bRet = xFilter->filter( aDescriptor );
+            pExport->SetSourceStream( uno::Reference<io::XInputStream>() );
+
+            // If there was an error, reset all stream flags, so the next save attempt will use normal saving.
+            // #i110692# For embedded objects, the stream may be unavailable for one save operation (m_pAntiImpl)
+            // and become available again later. But after saving normally once, the stream positions aren't
+            // valid anymore, so the flags also have to be reset if the stream wasn't available.
+            if ( !bRet || !xSrcInput.is() )
+            {
+                SCTAB nTabCount = rDoc.GetTableCount();
+                for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                    if (rDoc.IsStreamValid(nTab))
+                        rDoc.SetStreamValid(nTab, FALSE);
+            }
+        }
+        else
+            bRet = xFilter->filter( aDescriptor );
+
         pSharedData = pExport->GetSharedData();
 
         //stream is closed by SAX parser

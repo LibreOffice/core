@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editutil.cxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,22 +35,22 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/algitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/editview.hxx>
-#include <svx/editstat.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/numitem.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/numitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
-#include <svtools/inethist.hxx>
-#include <svtools/syslocale.hxx>
+#include <svl/inethist.hxx>
+#include <unotools/syslocale.hxx>
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 #endif
 
 #include "editutil.hxx"
@@ -64,12 +61,13 @@
 #include "patattr.hxx"
 #include "scmod.hxx"
 #include "inputopt.hxx"
+#include "compiler.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
 //  Delimiters zusaetzlich zu EditEngine-Default:
 
-const sal_Char __FAR_DATA ScEditUtil::pCalcDelimiters[] = "=();+-*/^&<>";
+const sal_Char __FAR_DATA ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
 
 
 //------------------------------------------------------------------------
@@ -79,20 +77,31 @@ String ScEditUtil::ModifyDelimiters( const String& rOld )
     String aRet = rOld;
     aRet.EraseAllChars( '_' );  // underscore is used in function argument names
     aRet.AppendAscii( RTL_CONSTASCII_STRINGPARAM( pCalcDelimiters ) );
+    aRet.Append(ScCompiler::GetNativeSymbol(ocSep)); // argument separator is localized.
     return aRet;
 }
 
-String ScEditUtil::GetSpaceDelimitedString( const EditEngine& rEngine )
+static String lcl_GetDelimitedString( const EditEngine& rEngine, const sal_Char c )
 {
     String aRet;
     USHORT nParCount = rEngine.GetParagraphCount();
     for (USHORT nPar=0; nPar<nParCount; nPar++)
     {
         if (nPar > 0)
-            aRet += ' ';
+            aRet += c;
         aRet += rEngine.GetText( nPar );
     }
     return aRet;
+}
+
+String ScEditUtil::GetSpaceDelimitedString( const EditEngine& rEngine )
+{
+    return lcl_GetDelimitedString(rEngine, ' ');
+}
+
+String ScEditUtil::GetMultilineString( const EditEngine& rEngine )
+{
+    return lcl_GetDelimitedString(rEngine, '\n');
 }
 
 //------------------------------------------------------------------------

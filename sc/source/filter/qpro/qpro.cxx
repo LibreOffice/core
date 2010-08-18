@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: qpro.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +68,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 readString( aLabel, getLength() - 7 );
                 nStyle = nStyle >> 3;
                 pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell( nCol, nRow, nTab, new ScStringCell( aLabel ), (BOOL) TRUE );
+                pDoc->PutCell( nCol, nRow, nTab, ScBaseCell::CreateTextCell( aLabel, pDoc ), (BOOL) TRUE );
                 }
                 break;
 
@@ -214,12 +211,6 @@ FltError ScQProReader::import( ScDocument *pDoc )
 bool ScQProReader::recordsLeft()
 {
     bool bValue = ScBiffReader::recordsLeft();
-    return bValue;
-}
-
-bool ScQProReader::IsEndOfFile()
-{
-    bool bValue = ScBiffReader::mbEndOfFile;
     return bValue;
 }
 

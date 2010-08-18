@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formatsh.cxx,v $
- * $Revision: 1.41.142.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,37 +51,37 @@
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/stritem.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/languageoptions.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/langitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/zformat.hxx>
+#include <svl/languageoptions.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svx/numinf.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/tplpitem.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include <svx/algitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/shaditem.hxx>
+#include <editeng/shaditem.hxx>
 
 #include "formatsh.hxx"
 #include "sc.hrc"
@@ -554,6 +551,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             if ( bConvertBack )
                                 // Namen zu Style-Pointer
                                 pDoc->UpdStlShtPtrsFrmNms();
+                            else
+                                pDoc->GetPool()->CellStyleCreated( aStyleName );
 
                             // Attribute uebernehmen und Style anwenden
                             pStyleSheet->GetItemSet().Put( aAttrSet );
@@ -824,6 +823,11 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                                 bNumFormatChanged, aOldSet, rNewSet ) )
                                 pDoc->InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
 
+                            SCTAB nTabCount = pDoc->GetTableCount();
+                            for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                                if (pDoc->IsStreamValid(nTab))
+                                    pDoc->SetStreamValid(nTab, FALSE);
+
                             ULONG nOldFormat = ((const SfxUInt32Item&)aOldSet.
                                                     Get( ATTR_VALUE_FORMAT )).GetValue();
                             ULONG nNewFormat = ((const SfxUInt32Item&)rNewSet.
@@ -837,6 +841,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                     rNewSet.Put( SvxLanguageItem(
                                                     pNew->GetLanguage(), ATTR_LANGUAGE_FORMAT ) );
                             }
+
+                            pDoc->GetPool()->CellStyleCreated( pStyleSheet->GetName() );
                         }
                         else
                         {

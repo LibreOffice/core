@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shapeuno.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +34,11 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
-
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XEventsSupplier.hpp>
-#include <cppuhelper/weak.hxx>
+
+#include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase1.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace uno {
@@ -59,13 +58,16 @@ class ShapeUnoEventAccessImpl;
 //  object which aggregates all svx shape objects,
 //  to add own properties
 
-class ScShapeObj : public ::cppu::OWeakObject,
-                    public ::com::sun::star::beans::XPropertySet,
-                    public ::com::sun::star::beans::XPropertyState,
-                    public ::com::sun::star::text::XTextContent,
-                    public ::com::sun::star::text::XText,
-                    public ::com::sun::star::lang::XTypeProvider,
-                    public ::com::sun::star::document::XEventsSupplier
+typedef ::cppu::WeakImplHelper5 <   ::com::sun::star::beans::XPropertySet
+                                ,   ::com::sun::star::beans::XPropertyState
+                                ,   ::com::sun::star::text::XTextContent
+                                ,   ::com::sun::star::document::XEventsSupplier
+                                ,   ::com::sun::star::lang::XServiceInfo
+                                >   ScShapeObj_Base;
+typedef ::cppu::ImplHelper1     <   ::com::sun::star::text::XText
+                                >   ScShapeObj_TextBase;
+class ScShapeObj    :public ScShapeObj_Base
+                    ,public ScShapeObj_TextBase
 {
 private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation > mxShapeAgg;
@@ -75,6 +77,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > mxPropSetInfo;
     com::sun::star::uno::Sequence< sal_Int8 >*                              pImplementationId;
     BOOL                                                                    bIsTextShape;
+    bool                                                                    bInitializedNotifier;
 
     SdrObject* GetSdrObject() const throw();
 
@@ -225,6 +228,14 @@ public:
                             // XEventsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents()
                                 throw(::com::sun::star::uno::RuntimeException);
+
+                            // XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName(  )
+                                throw (::com::sun::star::uno::RuntimeException) ;
+    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
+                                throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif

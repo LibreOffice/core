@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CachedDataSequence.hxx,v $
- * $Revision: 1.6.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,6 @@
 #include <comphelper/propertycontainer.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include "ServiceMacros.hxx"
-#include "charttoolsdllapi.hxx"
 
 // interfaces and types
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -69,7 +65,7 @@ typedef ::cppu::WeakComponentImplHelper7<
     CachedDataSequence_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS CachedDataSequence :
+class CachedDataSequence :
         public ::comphelper::OMutexAndBroadcastHelper,
         public ::comphelper::OPropertyContainer,
         public ::comphelper::OPropertyArrayUsageHelper< CachedDataSequence >,
@@ -84,24 +80,10 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::uno::XComponentContext > & xContext );
 
-    /** creates a sequence and initializes it with the given vector of floating
-        point numbers
-     */
-    explicit CachedDataSequence( const ::std::vector< double > & rVector );
-
-    /** creates a sequence and initializes it with the given vector of strings
-     */
-    explicit CachedDataSequence( const ::std::vector< ::rtl::OUString > & rVector );
-
     /** creates a sequence and initializes it with the given string.  This is
         especially useful for labels, which only have one element.
      */
     explicit CachedDataSequence( const ::rtl::OUString & rSingleText );
-
-    /** creates a sequence and initializes it with the given vector of arbitrary
-        content
-     */
-    explicit CachedDataSequence( const ::std::vector< ::com::sun::star::uno::Any > & rVector );
 
     /// Copy CTOR
     explicit CachedDataSequence( const CachedDataSequence & rSource );
@@ -167,8 +149,6 @@ protected:
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
     ::rtl::OUString                                 m_sRole;
-    sal_Bool                                        m_bIsHidden;
-    ::com::sun::star::uno::Sequence< sal_Int32 >    m_aHiddenValues;
     // </properties>
 
     enum DataType
@@ -183,6 +163,7 @@ protected:
      */
     void registerProperties();
 
+private:
     /** is used by interface method getNumericalData().
      */
     ::com::sun::star::uno::Sequence< double > Impl_getNumericalData() const;

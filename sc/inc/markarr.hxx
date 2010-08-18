@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: markarr.hxx,v $
- * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +62,7 @@ public:
     void    CopyMarksTo( ScMarkArray& rDestMarkArray ) const;
 
     BOOL    Search( SCROW nRow, SCSIZE& nIndex ) const;
-    void    DeleteArea(SCROW nStartRow, SCROW nEndRow);
+//UNUSED2009-05 void    DeleteArea(SCROW nStartRow, SCROW nEndRow);
 
     /// Including current row, may return -1 if bUp and not found
     SCsROW  GetNextMarked( SCsROW nRow, BOOL bUp ) const;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_ChartType.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,7 +73,7 @@ public:
     virtual ~ChartTypeTabPage();
 
     virtual void        initializePage();
-    virtual sal_Bool    commitPage( CommitPageReason eReason );
+    virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason eReason );
 
     virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartTypeTemplate > getCurrentTemplate() const;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlimprt.hxx,v $
- * $Revision: 1.97.52.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -177,7 +174,9 @@ enum ScXMLTableTokens
     XML_TOK_TABLE_SOURCE,
     XML_TOK_TABLE_SCENARIO,
     XML_TOK_TABLE_SHAPES,
-    XML_TOK_TABLE_FORMS
+    XML_TOK_TABLE_FORMS,
+    XML_TOK_TABLE_EVENT_LISTENERS,
+    XML_TOK_TABLE_EVENT_LISTENERS_EXT
 };
 
 enum ScXMLTableRowsTokens
@@ -489,6 +488,7 @@ enum ScXMLDataPilotTableElemTokens
 {
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SQL,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_TABLE,
+    XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_QUERY,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SERVICE,
     XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_CELL_RANGE,
@@ -504,6 +504,14 @@ enum ScXMLDataPilotTableSourceServiceAttrTokens
     XML_TOK_SOURCE_SERVICE_ATTR_PASSWORD
 };
 
+enum ScXMLDataPilotGrandTotalAttrTokens
+{
+    XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY,
+    XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_ORIENTATION,
+    XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME,
+    XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME_EXT
+};
+
 enum ScXMLDataPilotTableSourceCellRangeElemTokens
 {
     XML_TOK_SOURCE_CELL_RANGE_ELEM_FILTER
@@ -517,6 +525,8 @@ enum ScXMLDataPilotTableSourceCellRangeAttrTokens
 enum ScXMLDataPilotFieldAttrTokens
 {
     XML_TOK_DATA_PILOT_FIELD_ATTR_SOURCE_FIELD_NAME,
+    XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME,
+    XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME_EXT,
     XML_TOK_DATA_PILOT_FIELD_ATTR_IS_DATA_LAYOUT_FIELD,
     XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION,
     XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION,
@@ -552,7 +562,9 @@ enum ScXMLDataPilotSubTotalsElemTokens
 
 enum ScXMLDataPilotSubTotalAttrTokens
 {
-    XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION
+    XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION,
+    XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME,
+    XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME_EXT
 };
 
 enum ScXMLDataPilotMembersElemTokens
@@ -563,6 +575,8 @@ enum ScXMLDataPilotMembersElemTokens
 enum ScXMLDataPilotMemberAttrTokens
 {
     XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME,
+    XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME,
+    XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME_EXT,
     XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY,
     XML_TOK_DATA_PILOT_MEMBER_ATTR_SHOW_DETAILS
 };
@@ -598,6 +612,7 @@ struct ScMyNamedExpression
 {
     rtl::OUString      sName;
     rtl::OUString      sContent;
+    rtl::OUString      sContentNmsp;
     rtl::OUString      sBaseCellAddress;
     rtl::OUString      sRangeType;
     formula::FormulaGrammar::Grammar eGrammar;
@@ -624,11 +639,14 @@ struct ScMyImportValidation
     rtl::OUString                                   sErrorMessage;
     rtl::OUString                                   sFormula1;
     rtl::OUString                                   sFormula2;
+    rtl::OUString                                   sFormulaNmsp1;
+    rtl::OUString                                   sFormulaNmsp2;
     rtl::OUString                                   sBaseCellAddress;   // #b4974740# string is used directly
     com::sun::star::sheet::ValidationAlertStyle     aAlertStyle;
     com::sun::star::sheet::ValidationType           aValidationType;
     com::sun::star::sheet::ConditionOperator        aOperator;
-    formula::FormulaGrammar::Grammar                              eGrammar;
+    formula::FormulaGrammar::Grammar                eGrammar1;
+    formula::FormulaGrammar::Grammar                eGrammar2;
     sal_Int16                                       nShowList;
     sal_Bool                                        bShowErrorMessage;
     sal_Bool                                        bShowImputMessage;
@@ -719,6 +737,7 @@ class ScXMLImport: public SvXMLImport
     SvXMLTokenMap           *pDataPilotTableAttrTokenMap;
     SvXMLTokenMap           *pDataPilotTableElemTokenMap;
     SvXMLTokenMap           *pDataPilotTableSourceServiceAttrTokenMap;
+    SvXMLTokenMap           *pDataPilotGrandTotalAttrTokenMap;
     SvXMLTokenMap           *pDataPilotTableSourceCellRangeElemTokenMap;
     SvXMLTokenMap           *pDataPilotTableSourceCellRangeAttrTokenMap;
     SvXMLTokenMap           *pDataPilotFieldAttrTokenMap;
@@ -882,6 +901,7 @@ public:
     const SvXMLTokenMap& GetDataPilotTableAttrTokenMap();
     const SvXMLTokenMap& GetDataPilotTableElemTokenMap();
     const SvXMLTokenMap& GetDataPilotTableSourceServiceAttrTokenMap();
+    const SvXMLTokenMap& GetDataPilotGrandTotalAttrTokenMap();
     const SvXMLTokenMap& GetDataPilotTableSourceCellRangeElemTokenMap();
     const SvXMLTokenMap& GetDataPilotTableSourceCellRangeAttrTokenMap();
     const SvXMLTokenMap& GetDataPilotFieldAttrTokenMap();
@@ -976,6 +996,8 @@ public:
     void LockSolarMutex();
     void UnlockSolarMutex();
 
+    sal_Int32 GetByteOffset();
+
     void SetRangeOverflowType(sal_uInt32 nType);
 
     sal_Int32   GetRangeType(const rtl::OUString sRangeType) const;
@@ -983,46 +1005,43 @@ public:
     void SetLabelRanges();
     void AddDefaultNote( const com::sun::star::table::CellAddress& aCell );
 
+    sal_Int32   GetVisibleSheet();
+    /** Extracts the formula string, the formula grammar namespace URL, and a
+        grammar enum value from the passed formula attribute value.
 
-    /** If namespace prefix is an accepted formula namespace.
+        @param rFormula
+            (out-parameter) Returns the plain formula string with the leading
+            equality sign if existing.
 
-        For an accepted namespace (return <TRUE/>), the formula text is the
-        part without the namespace tag (aFormula of the _GetKeyByAttrName()
-        example below).
+        @param rFormulaNmsp
+            (out-parameter) Returns the URL of the formula grammar namespace if
+            the attribute value contains the prefix of an unknown namespace.
 
-        For an invalid namespace (not defined in the file,
-        XML_NAMESPACE_UNKNOWN; may also be the result of no namespace with
-        colon in the formula text, in that case text has to start with
-        character '=') or no namespace tag (XML_NAMESPACE_NONE) the full text
-        (rValue) should be used (return <FALSE/>).
+        @param reGrammar
+            (out-parameter) Returns the exact formula grammar if the formula
+            is in a supported ODF format (e.g. FormulaGrammar::GRAM_PODF for
+            ODF 1.0/1.1 formulas, or FormulaGrammar::GRAM_ODFF for ODF 1.2
+            formulas a.k.a. OpenFormula). Returns the default storage grammar,
+            if the attribute value does not contain a namespace prefix. Returns
+            the special value FormulaGrammar::GRAM_EXTERNAL, if an unknown
+            namespace could be extracted from the formula which will be
+            contained in the parameter rFormulaNmsp then.
 
-        @param nFormulaPrefix
-            The result of a _GetKeyByAttrName( rValue, aFormula, sal_False)
-            call.
+        @param rAttrValue
+            The value of the processed formula attribute.
 
-        @param rValue
-            The attribute's string (formula text) including the namespace, if
-            any.
-
-        @param rGrammar
-            Return value set toformula::FormulaGrammar::GRAM_ODFF orformula::FormulaGrammar::GRAM_PODF or
-            eStorageGrammar, according to the namespace or absence thereof
-            encountered.
-
-        @param eStorageGrammar
-            Default storage grammar of the document,formula::FormulaGrammar::GRAM_ODFF for
-            ODF 1.2 and later documents,formula::FormulaGrammar::GRAM_PODF for ODF 1.x
-            documents.
-
-        @return
-            <TRUE/> if an accepted namespace (XML_NAMESPACE_OF or
-            XML_NAMESPACE_OOOC), else <FALSE/>.
+        @param bRestrictToExternalNmsp
+            If set to TRUE, only namespaces of external formula grammars will
+            be recognized. Internal namespace prefixes (e.g. 'oooc:' or 'of:'
+            will be considered to be part of the formula, e.g. an expression
+            with range operator.
      */
-
-    static bool IsAcceptedFormulaNamespace( const sal_uInt16 nFormulaPrefix,
-            const rtl::OUString & rValue, formula::FormulaGrammar::Grammar& rGrammar,
-            const formula::FormulaGrammar::Grammar eStorageGrammar );
-
+    void ExtractFormulaNamespaceGrammar(
+            ::rtl::OUString& rFormula,
+            ::rtl::OUString& rFormulaNmsp,
+            ::formula::FormulaGrammar::Grammar& reGrammar,
+            const ::rtl::OUString& rAttrValue,
+            bool bRestrictToExternalNmsp = false ) const;
 };
 
 #endif

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scslots.sdi,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,7 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-import "svxslots.ilb"
 
 module
 "ADC7D7A1-2341-101C-A55A-04021C007002"
@@ -36,7 +32,6 @@ StarCalc
 [
 HelpText( "StarDivision StarCalc" ),
 SlotIdFile( "scslots.hrc" )
-TypeLibFile( "scslots.tlb" )
 ModulePrefix( "Sc" )
 ]
 {
@@ -54,6 +49,11 @@ ModulePrefix( "Sc" )
 
     //----------------------------------------------------------
     // bei Problemen ggF. "von Hand" includen (=Copy/Paste)
+    include "sfx2/sfxitems.sdi"
+    include "sfx2/sfx.sdi"
+    include "svx/svxitems.sdi"
+    include "svx/xoitems.sdi"
+    include "svx/svx.sdi"
 
     include "scalc.sdi"
     include "docsh.sdi"

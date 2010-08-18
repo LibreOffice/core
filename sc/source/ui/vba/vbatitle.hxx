@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbatitle.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,14 +27,15 @@
 #ifndef SC_VBA_TITLE_HXX
 #define SC_VBA_TITLE_HXX
 
-#include "vbahelperinterface.hxx"
-#include "vbahelper.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
+#include "excelvbahelper.hxx"
 #include "vbainterior.hxx"
 #include "vbafont.hxx"
 #include "vbapalette.hxx"
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/excel/XTitle.hpp>
+#include <ooo/vba/excel/XCharacters.hpp>
 #include <basic/sberrors.hxx>
 #include <memory>
 

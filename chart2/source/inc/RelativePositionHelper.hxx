@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RelativePositionHelper.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +74,7 @@ public:
         been changed to the given one.  The passed object size is taken into
         account for shifting the position.
      */
-    static ::com::sun::star::chart2::RelativePosition
+    SAL_DLLPRIVATE static ::com::sun::star::chart2::RelativePosition
         getReanchoredPosition(
             const ::com::sun::star::chart2::RelativePosition & rPosition,
             const ::com::sun::star::chart2::RelativeSize & rObjectSize,

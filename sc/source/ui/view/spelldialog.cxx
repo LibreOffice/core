@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: spelldialog.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +33,9 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/svxids.hrc>
-#include <svx/editstat.hxx>
-#include <svx/editview.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/unolingu.hxx>
 #include "selectionstate.hxx"
 
 #include "spelleng.hxx"
@@ -82,7 +79,7 @@ void ScSpellDialogChildWindow::InvalidateSpellDialog()
 
 // protected ------------------------------------------------------------------
 
-::svx::SpellPortions ScSpellDialogChildWindow::GetNextWrongSentence()
+::svx::SpellPortions ScSpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck*/ )
 {
     ::svx::SpellPortions aPortions;
     if( mxEngine.get() && mpViewData )
@@ -106,11 +103,11 @@ void ScSpellDialogChildWindow::InvalidateSpellDialog()
     return aPortions;
 }
 
-void ScSpellDialogChildWindow::ApplyChangedSentence( const ::svx::SpellPortions& rChanged )
+void ScSpellDialogChildWindow::ApplyChangedSentence( const ::svx::SpellPortions& rChanged, bool bRecheck )
 {
     if( mxEngine.get() && mpViewData )
         if( EditView* pEditView = mpViewData->GetSpellingView() )
-            mxEngine->ApplyChangedSentence( *pEditView, rChanged, false );
+            mxEngine->ApplyChangedSentence( *pEditView, rChanged, bRecheck );
 }
 
 void ScSpellDialogChildWindow::GetFocus()
@@ -203,7 +200,12 @@ void ScSpellDialogChildWindow::Init()
             ScEditableTester aTester( mpDoc, rMarkData );
             if( !aTester.IsEditable() )
             {
-                mpViewShell->ErrorMessage( aTester.GetMessageId() );
+                // #i85751# Don't show a ErrorMessage here, because the vcl
+                // parent of the InfoBox is not fully initialized yet.
+                // This leads to problems in the modality behaviour of the
+                // ScSpellDialogChildWindow.
+
+                //mpViewShell->ErrorMessage( aTester.GetMessageId() );
                 return;
             }
         }

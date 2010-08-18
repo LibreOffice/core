@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.42.90.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -103,7 +99,6 @@ SLOFILES =	\
         $(SLO)$/xlpage.obj					\
         $(SLO)$/xlpivot.obj					\
         $(SLO)$/xlroot.obj					\
-        $(SLO)$/xlstream.obj				\
         $(SLO)$/xlstyle.obj					\
         $(SLO)$/xltools.obj					\
         $(SLO)$/xltracer.obj				\
@@ -122,6 +117,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/excimp8.obj					\
         $(SLO)$/excrecds.obj				\
         $(SLO)$/expop2.obj					\
+        $(SLO)$/impop.obj					\
         $(SLO)$/namebuff.obj				\
         $(SLO)$/tokstack.obj				\
         $(SLO)$/xecontent.obj				\
@@ -153,7 +149,9 @@ EXCEPTIONSFILES = \
         $(SLO)$/xlchart.obj					\
         $(SLO)$/xlformula.obj				\
         $(SLO)$/xlpivot.obj					\
+        $(SLO)$/xlroot.obj					\
         $(SLO)$/xlstyle.obj					\
+        $(SLO)$/xltools.obj					\
         $(SLO)$/xlview.obj
 
 # --- Targets -------------------------------------------------------

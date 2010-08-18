@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drwlayer.hxx,v $
- * $Revision: 1.21.128.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,13 +110,9 @@ private:
     void            MoveAreaTwips( SCTAB nTab, const Rectangle& rArea, const Point& rMove,
                                 const Point& rTopLeft );
     void            MoveCells( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                                SCsCOL nDx,SCsROW nDy );
+                                SCsCOL nDx,SCsROW nDy, bool bUpdateNoteCaptionPos );
 
-    void            RecalcPos( SdrObject* pObj,
-                        const ScDrawObjData& rData,
-                        const ScAddress& rOldStart,
-                        const ScAddress& rOldEnd,
-                        bool bNegativePage );
+    void            RecalcPos( SdrObject* pObj, const ScDrawObjData& rData, bool bNegativePage, bool bUpdateNoteCaptionPos );
 
 public:
                     ScDrawLayer( ScDocument* pDocument, const String& rName );
@@ -162,7 +155,7 @@ public:
     void            AddCalcUndo( SdrUndoAction* pUndo );
 
     void            MoveArea( SCTAB nTab, SCCOL nCol1,SCROW nRow1, SCCOL nCol2,SCROW nRow2,
-                                SCsCOL nDx,SCsROW nDy, BOOL bInsDel );
+                                SCsCOL nDx,SCsROW nDy, BOOL bInsDel, bool bUpdateNoteCaptionPos = true );
     void            WidthChanged( SCTAB nTab, SCCOL nCol, long nDifTwips );
     void            HeightChanged( SCTAB nTab, SCROW nRow, long nDifTwips );
 
@@ -180,7 +173,7 @@ public:
                                     SCTAB nSourceTab, const Rectangle& rSourceRange,
                                     const ScAddress& rDestPos, const Rectangle& rDestRange );
 
-    void            SetPageSize( USHORT nPageNo, const Size& rSize );
+    void            SetPageSize( USHORT nPageNo, const Size& rSize, bool bUpdateNoteCaptionPos = true );
 
                     //  mirror or move between positive and negative positions for RTL
     void            MirrorRTL( SdrObject* pObj );

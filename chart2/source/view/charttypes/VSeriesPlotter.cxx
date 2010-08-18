@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VSeriesPlotter.cxx,v $
- * $Revision: 1.44.8.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,13 +58,14 @@
 #include "PieChart.hxx"
 #include "AreaChart.hxx"
 #include "CandleStickChart.hxx"
+#include "BubbleChart.hxx"
 //
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <tools/color.hxx>
 // header for class OUStringBuffer
 #include <rtl/ustrbuf.hxx>
@@ -75,6 +73,8 @@
 #include <tools/debug.hxx>
 #include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/util/XCloneable.hpp>
+
+#include <svx/unoshape.hxx>
 
 #include <functional>
 
@@ -116,13 +116,6 @@ VDataSeriesGroup::VDataSeriesGroup( VDataSeries* pSeries )
 {
 }
 
-VDataSeriesGroup::VDataSeriesGroup( const ::std::vector< VDataSeries* >& rSeriesVector )
-        : m_aSeriesVector(rSeriesVector)
-        , m_bMaxPointCountDirty(true)
-        , m_nMaxPointCount(0)
-        , m_aListOfCachedYValues()
-{
-}
 VDataSeriesGroup::~VDataSeriesGroup()
 {
 }
@@ -163,7 +156,7 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_aZSlots()
         , m_bCategoryXAxis(bCategoryXAxis)
         , m_xColorScheme()
-        , m_xExplicitCategoriesProvider()
+        , m_pExplicitCategoriesProvider(0)
         , m_bPointsWereSkipped(false)
 {
     DBG_ASSERT(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
@@ -394,7 +387,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
         }
         else
         {
-            if( m_aAxesNumberFormats.hasFormat(1,rDataSeries.getAttachedAxisIndex()) ) //y-axis
+            if( rDataSeries.shouldLabelNumberFormatKeyBeDetectedFromYAxis() && m_aAxesNumberFormats.hasFormat(1,rDataSeries.getAttachedAxisIndex()) ) //y-axis
                 nNumberFormatKey = m_aAxesNumberFormats.getFormat(1,rDataSeries.getAttachedAxisIndex());
             else
                 nNumberFormatKey = rDataSeries.detectNumberFormatKey( nPointIndex );
@@ -465,11 +458,15 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         //prepare text
         ::rtl::OUStringBuffer aText;
         ::rtl::OUString aSeparator(sal_Unicode(' '));
+        double fRotationDegrees = 0.0;
         try
         {
             uno::Reference< beans::XPropertySet > xPointProps( rDataSeries.getPropertiesOfPoint( nPointIndex ) );
             if(xPointProps.is())
+            {
                 xPointProps->getPropertyValue( C2U( "LabelSeparator" ) ) >>= aSeparator;
+                xPointProps->getPropertyValue( C2U( "TextRotation" ) ) >>= fRotationDegrees;
+            }
         }
         catch( uno::Exception& e )
         {
@@ -480,9 +477,9 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         {
             if(pLabel->ShowCategoryName)
             {
-                if( m_xExplicitCategoriesProvider.is() )
+                if( m_pExplicitCategoriesProvider )
                 {
-                    Sequence< OUString > aCategories( m_xExplicitCategoriesProvider->getTextualData() );
+                    Sequence< OUString > aCategories( m_pExplicitCategoriesProvider->getSimpleCategories() );
                     if( nPointIndex >= 0 && nPointIndex < aCategories.getLength() )
                     {
                         aText.append( aCategories[nPointIndex] );
@@ -537,8 +534,24 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             createText( xTarget_, aText.makeStringAndClear()
                         , *pPropNames, *pPropValues, ShapeFactory::makeTransformation( aScreenPosition2D ) );
 
-        if( xSymbol.is() && xTextShape.is() )
+        if( !xTextShape.is() )
+            return xTextShape;
+
+        const awt::Point aUnrotatedTextPos( xTextShape->getPosition() );
+        if( fRotationDegrees != 0.0 )
         {
+            const double fDegreesPi( fRotationDegrees * ( F_PI / -180.0 ) );
+            uno::Reference< beans::XPropertySet > xProp( xTextShape, uno::UNO_QUERY );
+            if( xProp.is() )
+                xProp->setPropertyValue( C2U( "Transformation" ), ShapeFactory::makeTransformation( aScreenPosition2D, fDegreesPi ) );
+            LabelPositionHelper::correctPositionForRotation( xTextShape, eAlignment, fRotationDegrees, true /*bRotateAroundCenter*/ );
+        }
+
+        if( xSymbol.is() )
+        {
+            const awt::Point aOldTextPos( xTextShape->getPosition() );
+            awt::Point aNewTextPos( aOldTextPos );
+
             awt::Size aSymbolSize( xSymbol->getSize() );
             awt::Size aTextSize( xTextShape->getSize() );
 
@@ -547,11 +560,17 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             sal_Int32 nYDiff = aTextSize.Height/nLineCountForSymbolsize;
             sal_Int32 nXDiff = aSymbolSize.Width * nYDiff/aSymbolSize.Height;
 
+            // #i109336# Improve auto positioning in chart
+            nXDiff = nXDiff * 80 / 100;
+            nYDiff = nYDiff * 80 / 100;
+
             aSymbolSize.Width =  nXDiff * 75/100;
             aSymbolSize.Height = nYDiff * 75/100;
 
-            awt::Point aSymbolPosition( xTextShape->getPosition() );
-            aSymbolPosition.Y += (nYDiff * 25/200);
+            awt::Point aSymbolPosition( aUnrotatedTextPos );
+
+            // #i109336# Improve auto positioning in chart
+            aSymbolPosition.Y += ( nYDiff / 4 );
 
             if(LABEL_ALIGN_LEFT==eAlignment
                 || LABEL_ALIGN_LEFT_TOP==eAlignment
@@ -563,39 +582,21 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 || LABEL_ALIGN_RIGHT_TOP==eAlignment
                 || LABEL_ALIGN_RIGHT_BOTTOM==eAlignment )
             {
-                aScreenPosition2D.X += nXDiff;
+                aNewTextPos.X += nXDiff;
             }
             else if(LABEL_ALIGN_TOP==eAlignment
                 || LABEL_ALIGN_BOTTOM==eAlignment
                 || LABEL_ALIGN_CENTER==eAlignment )
             {
                 aSymbolPosition.X -= nXDiff/2;
-                aScreenPosition2D.X += nXDiff/2;
+                aNewTextPos.X += nXDiff/2;
             }
 
             xSymbol->setSize( aSymbolSize );
             xSymbol->setPosition( aSymbolPosition );
 
-            /*
-            ::basegfx::B2DHomMatrix aM;
-            //As autogrow is active the rectangle is automatically expanded to that side
-            //to which the text is not adjusted.
-            aM.scale( aSymbolSize.Width, aSymbolSize.Height );
-            aM.translate( aSymbolPosition.X, aSymbolPosition.Y );
-            uno::Any aATransformation( uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
-
             //set position
-            uno::Reference< beans::XPropertySet > xSymbolProp( xSymbol, uno::UNO_QUERY );
-            if( xSymbolProp.is() )
-            {
-                xSymbolProp->setPropertyValue( C2U( "Transformation" ), aATransformation );
-            }
-            */
-
-            //set position
-            uno::Reference< beans::XPropertySet > xProp( xTextShape, uno::UNO_QUERY );
-            if( xProp.is() )
-                xProp->setPropertyValue( C2U( "Transformation" ), ShapeFactory::makeTransformation( aScreenPosition2D ) );
+            xTextShape->setPosition( aNewTextPos );
         }
     }
     catch( uno::Exception& e )
@@ -1132,7 +1133,12 @@ void VSeriesPlotter::setMappedProperties(
 double VSeriesPlotter::getMinimumX()
 {
     if( m_bCategoryXAxis )
-        return 1.0;//first category (index 0) matches with real number 1.0
+    {
+        double fRet = 1.0;//first category (index 0) matches with real number 1.0
+        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
+            fRet -= 0.5;
+        return fRet;
+    }
 
     double fMinimum, fMaximum;
     this->getMinimumAndMaximiumX( fMinimum, fMaximum );
@@ -1143,8 +1149,10 @@ double VSeriesPlotter::getMaximumX()
     if( m_bCategoryXAxis )
     {
         //return category count
-        sal_Int32 nPointCount = getPointCount();
-        return nPointCount;//first category (index 0) matches with real number 1.0
+        double fRet = getPointCount();//first category (index 0) matches with real number 1.0
+        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
+            fRet += 0.5;
+        return fRet;
     }
 
     double fMinimum, fMaximum;
@@ -1361,9 +1369,9 @@ void VSeriesPlotter::setColorScheme( const uno::Reference< XColorScheme >& xColo
     m_xColorScheme = xColorScheme;
 }
 
-void VSeriesPlotter::setExplicitCategoriesProvider( const uno::Reference< data::XTextualDataSequence >& xExplicitCategoriesProvider )
+void VSeriesPlotter::setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider )
 {
-    m_xExplicitCategoriesProvider = xExplicitCategoriesProvider;
+    m_pExplicitCategoriesProvider = pExplicitCategoriesProvider;
 }
 
 sal_Int32 VDataSeriesGroup::getPointCount() const
@@ -1415,7 +1423,7 @@ void VDataSeriesGroup::getMinimumAndMaximiumX( double& rfMinimum, double& rfMaxi
         sal_Int32 nPointCount = (*aSeriesIter)->getTotalPointCount();
         for(sal_Int32 nN=0;nN<nPointCount;nN++)
         {
-            double fX = (*aSeriesIter)->getX( nN );
+            double fX = (*aSeriesIter)->getXValue( nN );
             if( ::rtl::math::isNan(fX) )
                 continue;
             if(rfMaximum<fX)
@@ -1447,12 +1455,12 @@ void VDataSeriesGroup::getMinimumAndMaximiumYInContinuousXRange( double& rfMinY,
             if( nAxisIndex != (*aSeriesIter)->getAttachedAxisIndex() )
                 continue;
 
-            double fX = (*aSeriesIter)->getX( nN );
+            double fX = (*aSeriesIter)->getXValue( nN );
             if( ::rtl::math::isNan(fX) )
                 continue;
             if( fX < fMinX || fX > fMaxX )
                 continue;
-            double fY = (*aSeriesIter)->getY( nN );
+            double fY = (*aSeriesIter)->getYValue( nN );
             if( ::rtl::math::isNan(fY) )
                 continue;
             if(rfMaxY<fY)
@@ -1731,6 +1739,18 @@ bool VSeriesPlotter::PointsWereSkipped() const
     return m_bPointsWereSkipped;
 }
 
+bool VSeriesPlotter::WantToPlotInFrontOfAxisLine()
+{
+    return ChartTypeHelper::isSeriesInFrontOfAxisLine( m_xChartTypeModel );
+}
+
+bool VSeriesPlotter::shouldSnapRectToUsedArea()
+{
+    if( m_nDimension == 3 )
+        return false;
+    return true;
+}
+
 Sequence< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntries(
               LegendExpansion eLegendExpansion
             , const Reference< beans::XPropertySet >& xTextProperties
@@ -1929,8 +1949,8 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSe
         if( bVaryColorsByPoint )
         {
             Sequence< OUString > aCategoryNames;
-            if( m_xExplicitCategoriesProvider.is() )
-                aCategoryNames = m_xExplicitCategoriesProvider->getTextualData();
+            if( m_pExplicitCategoriesProvider )
+                aCategoryNames = m_pExplicitCategoriesProvider->getSimpleCategories();
 
             for( sal_Int32 nIdx=0; nIdx<aCategoryNames.getLength(); ++nIdx )
             {
@@ -2053,7 +2073,8 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForCh
 //static
 VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
     const uno::Reference<XChartType>& xChartTypeModel
-    , sal_Int32 nDimensionCount )
+    , sal_Int32 nDimensionCount
+    , bool bExcludingPositioning )
 {
     rtl::OUString aChartType = xChartTypeModel->getChartType();
 
@@ -2069,10 +2090,14 @@ VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,true);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
         pRet = new AreaChart(xChartTypeModel,nDimensionCount,false,true);
+    else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
+        pRet = new BubbleChart(xChartTypeModel,nDimensionCount);
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
-        pRet = new PieChart(xChartTypeModel,nDimensionCount);
+        pRet = new PieChart(xChartTypeModel,nDimensionCount, bExcludingPositioning );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
-        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,true,new PolarPlottingPositionHelper(),true,true,false,1,drawing::Direction3D(1,1,1) );
+        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,true,new PolarPlottingPositionHelper(),true,false,1,drawing::Direction3D(1,1,1) );
+    else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
+        pRet = new AreaChart(xChartTypeModel,nDimensionCount,true,false,new PolarPlottingPositionHelper(),true,false,1,drawing::Direction3D(1,1,1) );
     else if( aChartType.equalsIgnoreAsciiCase(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
         pRet = new CandleStickChart(xChartTypeModel,nDimensionCount);
     else

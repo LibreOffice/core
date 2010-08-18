@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chartlis.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 #include <vcl/timer.hxx>
-#include <svtools/listener.hxx>
+#include <svl/listener.hxx>
 #include "collect.hxx"
 #include "rangelst.hxx"
 #include "token.hxx"
@@ -41,6 +38,7 @@
 
 #include <memory>
 #include <vector>
+#include <list>
 #include <hash_set>
 
 class ScDocument;
@@ -48,7 +46,7 @@ class ScChartUnoData;
 #include <com/sun/star/chart/XChartData.hpp>
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 
-class ScChartListener : public StrData, public SvtListener
+class SC_DLLPUBLIC ScChartListener : public StrData, public SvtListener
 {
 public:
     class ExternalRefListener : public ScExternalRefManager::LinkListener
@@ -131,9 +129,31 @@ public:
                         { return !operator==( r ); }
 };
 
+// ============================================================================
+
+class ScChartHiddenRangeListener
+{
+public:
+    ScChartHiddenRangeListener();
+    virtual ~ScChartHiddenRangeListener();
+    virtual void notify() = 0;
+};
+
+// ============================================================================
+
 class ScChartListenerCollection : public ScStrCollection
 {
+public:
+    struct RangeListenerItem
+    {
+        ScRange                     maRange;
+        ScChartHiddenRangeListener* mpListener;
+        explicit RangeListenerItem(const ScRange& rRange, ScChartHiddenRangeListener* p);
+    };
+
 private:
+    ::std::list<RangeListenerItem> maHiddenListeners;
+
     Timer           aTimer;
     ScDocument*     pDoc;
 
@@ -163,7 +183,7 @@ public:
                              const com::sun::star::uno::Reference< com::sun::star::chart::XChartData >& rSource );
     void            StartTimer();
     void            UpdateDirtyCharts();
-    void            SetDirty();
+    void SC_DLLPUBLIC SetDirty();
     void            SetDiffDirty( const ScChartListenerCollection&,
                         BOOL bSetChartRangeLists = FALSE );
 
@@ -173,6 +193,24 @@ public:
     void            UpdateChartsContainingTab( SCTAB nTab );
 
     BOOL            operator==( const ScChartListenerCollection& );
+
+    /**
+     * Start listening on hide/show change within specified cell range.  A
+     * single listener may listen on multiple ranges when the caller passes
+     * the same pointer multiple times with different ranges.
+     *
+     * Note that the caller is responsible for managing the life-cycle of the
+     * listener instance.
+     */
+    void            StartListeningHiddenRange( const ScRange& rRange,
+                                               ScChartHiddenRangeListener* pListener );
+
+    /**
+     * Remove all ranges associated with passed listener instance from the
+     * list of hidden range listeners.  This does not delete the passed
+     * listener instance.
+     */
+    void            EndListeningHiddenRange( ScChartHiddenRangeListener* pListener );
 };
 
 

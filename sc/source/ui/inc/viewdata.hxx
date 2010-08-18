@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewdata.hxx,v $
- * $Revision: 1.24.24.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,6 +222,7 @@ private:
 
     SC_DLLPRIVATE void          CalcPPT();
     SC_DLLPRIVATE void          CreateTabData( SCTAB nNewTab );
+    SC_DLLPRIVATE void          CreateTabData( std::vector< SCTAB >& rvTabs );
     SC_DLLPRIVATE void          CreateSelectedTabData();
 
 public:
@@ -311,6 +309,8 @@ public:
     void            SetPagebreakMode( BOOL bSet );
 
     void            SetZoomType( SvxZoomType eNew, BOOL bAll );
+    void            SetZoomType( SvxZoomType eNew, std::vector< SCTAB >& tabs );
+    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, std::vector< SCTAB >& tabs );
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll );
     void            RefreshZoom();
 
@@ -482,6 +482,24 @@ public:
     BOOL            IsSelCtrlMouseClick() { return bSelCtrlMouseClick; }
 
     static inline long ToPixel( USHORT nTwips, double nFactor );
+
+    /** while (rScrY <= nEndPixels && rPosY <= nEndRow) add pixels of row
+        heights converted with nPPTY to rScrY, optimized for row height
+        segments. Upon return rPosY is the last row evaluated <= nEndRow, rScrY
+        may be > nEndPixels!
+     */
+    static void     AddPixelsWhile( long & rScrY, long nEndPixels,
+                                    SCROW & rPosY, SCROW nEndRow, double nPPTY,
+                                    const ScDocument * pDoc, SCTAB nTabNo );
+
+    /** while (rScrY <= nEndPixels && rPosY >= nStartRow) add pixels of row
+        heights converted with nPPTY to rScrY, optimized for row height
+        segments. Upon return rPosY is the last row evaluated >= nStartRow,
+        rScrY may be > nEndPixels!
+     */
+    static void     AddPixelsWhileBackward( long & rScrY, long nEndPixels,
+                                    SCROW & rPosY, SCROW nStartRow, double nPPTY,
+                                    const ScDocument * pDoc, SCTAB nTabNo );
 };
 
 

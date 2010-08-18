@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: compiler.hxx,v $
- * $Revision: 1.36.30.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +61,7 @@
 // constants and data types also for external modules (ScInterpreter et al)
 
 #define MAXCODE      512    /* maximum number of tokens in formula */
-#define MAXSTRLEN    256    /* maximum length of input string of one symbol */
+#define MAXSTRLEN    1024   /* maximum length of input string of one symbol */
 #define MAXJUMPCOUNT 32     /* maximum number of jumps (ocChose) */
 
 // flag values of CharTable
@@ -91,6 +88,8 @@
 #define SC_COMPILER_C_ODF_RBRACKET    0x00080000  // ODF ']' reference bracket
 #define SC_COMPILER_C_ODF_LABEL_OP    0x00100000  // ODF '!!' automatic intersection of labels
 #define SC_COMPILER_C_ODF_NAME_MARKER 0x00200000  // ODF '$$' marker that starts a defined (range) name
+#define SC_COMPILER_C_CHAR_NAME       0x00400000  // start character of a defined name
+#define SC_COMPILER_C_NAME            0x00800000  // continuation character of a defined name
 
 #define SC_COMPILER_FILE_TAB_SEP      '#'         // 'Doc'#Tab
 
@@ -217,6 +216,14 @@ typedef formula::SimpleIntrusiveReference< struct ScRawToken > ScRawTokenRef;
 class SC_DLLPUBLIC ScCompiler : public formula::FormulaCompiler
 {
 public:
+
+    enum EncodeUrlMode
+    {
+        ENCODE_BY_GRAMMAR,
+        ENCODE_ALWAYS,
+        ENCODE_NEVER,
+    };
+
     struct Convention
     {
         const formula::FormulaGrammar::AddressConvention meConv;
@@ -311,9 +318,12 @@ private:
     const CharClass*    pCharClass;         // which character classification is used for parseAnyToken
     USHORT      mnPredetectedReference;     // reference when reading ODF, 0 (none), 1 (single) or 2 (double)
     SCsTAB      nMaxTab;                    // last sheet in document
+    sal_Int32   mnRangeOpPosInSymbol;       // if and where a range operator is in symbol
     const Convention *pConv;
+    EncodeUrlMode   meEncodeUrlMode;
     bool        mbCloseBrackets;            // whether to close open brackets automatically, default TRUE
     bool        mbExtendedErrorDetection;
+    bool        mbRewind;                   // whether symbol is to be rewound to some step during lexical analysis
 
     BOOL   NextNewToken(bool bInArray = false);
 
@@ -352,14 +362,14 @@ public:
                                 const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO );
 
     static BOOL EnQuote( String& rStr );
+    sal_Unicode GetNativeAddressSymbol( Convention::SpecialSymbolType eType ) const;
 
 
     // Check if it is a valid english function name
     bool IsEnglishSymbol( const String& rName );
 
     //! _either_ CompileForFAP _or_ AutoCorrection, _not_ both
-    void            SetCompileForFAP( BOOL bVal )
-                        { bCompileForFAP = bVal; bIgnoreErrors = bVal; }
+    // #i101512# SetCompileForFAP is in formula::FormulaCompiler
     void            SetAutoCorrection( BOOL bVal )
                         { bAutoCorrect = bVal; bIgnoreErrors = bVal; }
     void            SetCloseBrackets( bool bVal ) { mbCloseBrackets = bVal; }
@@ -371,6 +381,8 @@ public:
 
     void            SetGrammar( const formula::FormulaGrammar::Grammar eGrammar );
 
+    void            SetEncodeUrlMode( EncodeUrlMode eMode );
+    EncodeUrlMode   GetEncodeUrlMode() const;
 private:
     /** Set grammar and reference convention from within SetFormulaLanguage()
         or SetGrammar().
@@ -394,6 +406,8 @@ public:
         maExternalLinks = rLinks;
     }
 
+    void            CreateStringFromXMLTokenArray( String& rFormula, String& rFormulaNmsp );
+
     void            SetExtendedErrorDetection( bool bVal ) { mbExtendedErrorDetection = bVal; }
 
     BOOL            IsCorrected() { return bCorrected; }
@@ -401,12 +415,13 @@ public:
 
     // Use convention from this->aPos by default
     ScTokenArray* CompileString( const String& rFormula );
+    ScTokenArray* CompileString( const String& rFormula, const String& rFormulaNmsp );
     const ScDocument* GetDoc() const { return pDoc; }
     const ScAddress& GetPos() const { return aPos; }
 
-    void MoveRelWrap();
-    static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc,
-                             const ScAddress& rPos );
+    void MoveRelWrap( SCCOL nMaxCol, SCROW nMaxRow );
+    static void MoveRelWrap( ScTokenArray& rArr, ScDocument* pDoc, const ScAddress& rPos,
+                             SCCOL nMaxCol, SCROW nMaxRow );
 
     BOOL UpdateNameReference( UpdateRefMode eUpdateRefMode,
                               const ScRange&,
@@ -430,28 +445,66 @@ public:
 
     BOOL HasModifiedRange();
 
-    /// If the character is allowed as first character in sheet names or references
+    /** If the character is allowed as first character in sheet names or
+        references, includes '$' and '?'. */
     static inline BOOL IsCharWordChar( String const & rStr,
                                        xub_StrLen nPos,
                                        const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
         {
             sal_Unicode c = rStr.GetChar( nPos );
-            return c < 128 ?
-                static_cast<BOOL>(
-                    (pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD) :
-                ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
+            if (c < 128)
+            {
+                return pConventions[eConv] ? static_cast<BOOL>(
+                        (pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD) :
+                    FALSE;   // no convention => assume invalid
+            }
+            else
+                return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
         }
 
-    /// If the character is allowed in sheet names or references
+    /** If the character is allowed in sheet names, thus may be part of a
+        reference, includes '$' and '?' and such. */
     static inline BOOL IsWordChar( String const & rStr,
                                    xub_StrLen nPos,
                                    const formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO )
         {
             sal_Unicode c = rStr.GetChar( nPos );
-            return c < 128 ?
-                static_cast<BOOL>(
-                    (pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
-                ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
+            if (c < 128)
+            {
+                return pConventions[eConv] ? static_cast<BOOL>(
+                        (pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
+                    FALSE;   // convention not known => assume invalid
+            }
+            else
+                return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
+        }
+
+    /** If the character is allowed as tested by nFlags (SC_COMPILER_C_...
+        bits) for all known address conventions. If more than one bit is given
+        in nFlags, all bits must match. If bTestLetterNumeric is FALSE and
+        char>=128, no LetterNumeric test is done and FALSE is returned. */
+    static inline bool IsCharFlagAllConventions( String const & rStr,
+                                                 xub_StrLen nPos,
+                                                 ULONG nFlags,
+                                                 bool bTestLetterNumeric = true )
+        {
+            sal_Unicode c = rStr.GetChar( nPos );
+            if (c < 128)
+            {
+                for ( int nConv = formula::FormulaGrammar::CONV_UNSPECIFIED;
+                        ++nConv < formula::FormulaGrammar::CONV_LAST; )
+                {
+                    if (pConventions[nConv] &&
+                            ((pConventions[nConv]->mpCharTable[ UINT8(c) ] & nFlags) != nFlags))
+                        return false;
+                    // convention not known => assume valid
+                }
+                return true;
+            }
+            else if (bTestLetterNumeric)
+                return ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
+            else
+                return false;
         }
 
 private:

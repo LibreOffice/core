@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: solveroptions.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,7 +63,7 @@ struct ScSolverOptionsEntry
 
     bool operator< (const ScSolverOptionsEntry& rOther) const
     {
-        return ( ScGlobal::pCollator->compareString( aDescription, rOther.aDescription ) == COMPARE_LESS );
+        return ( ScGlobal::GetCollator()->compareString( aDescription, rOther.aDescription ) == COMPARE_LESS );
     }
 };
 

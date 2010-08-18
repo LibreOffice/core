@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_DataLabel.cxx,v $
- * $Revision: 1.9.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@ namespace chart
 
 DataLabelsTabPage::DataLabelsTabPage(Window* pWindow, const SfxItemSet& rInAttrs) :
         SfxTabPage(pWindow, SchResId(TP_DATA_DESCR), rInAttrs),
-        m_aDataLabelResources(this, rInAttrs, true)
+        m_aDataLabelResources(this, rInAttrs)
 {
     FreeResource();
 }

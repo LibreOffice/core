@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: futext3.cxx,v $
- * $Revision: 1.15.128.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,16 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <svx/editeng.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdview.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <vcl/cursor.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 
 #include "global.hxx"
 #include "drwlayer.hxx"
@@ -110,6 +107,9 @@ void FuText::StopEditMode(BOOL /*bTextDirection*/)
         }
     }
 
+    if( pNote )
+        rDoc.LockStreamValid(true);     // only the affected sheet is invalidated below
+
     /*  SdrObjEditView::SdrEndTextEdit() may try to delete the entire drawing
         object, if it does not contain text and has invisible border and fill.
         This must not happen for note caption objects. They will be removed
@@ -130,7 +130,7 @@ void FuText::StopEditMode(BOOL /*bTextDirection*/)
     if( pNote )
     {
         // hide the caption object if it is in hidden state
-        pNote->HideCaptionTemp();
+        pNote->ShowCaptionTemp( aNotePos, false );
 
         // update author and date
         pNote->AutoStamp();
@@ -183,6 +183,11 @@ void FuText::StopEditMode(BOOL /*bTextDirection*/)
                     pAction->SetComment( ScGlobal::GetRscString( bNewNote ? STR_UNDO_INSERTNOTE : STR_UNDO_DELETENOTE ) );
             }
         }
+
+        // invalidate stream positions only for the affected sheet
+        rDoc.LockStreamValid(false);
+        if (rDoc.IsStreamValid(aNotePos.Tab()))
+            rDoc.SetStreamValid(aNotePos.Tab(), FALSE);
     }
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unonames.hxx,v $
- * $Revision: 1.82.104.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -176,6 +173,7 @@
 #define SC_UNONAME_COPYFORM         "CopyFormulas"
 #define SC_UNONAME_TABLAYOUT        "TableLayout"
 #define SC_UNONAME_AUTOPRINT        "AutomaticPrintArea"
+#define SC_UNONAME_TABCOLOR         "TabColor"
 
 //  LinkTarget
 #define SC_UNO_LINKDISPBIT          "LinkDisplayBitmap"
@@ -318,7 +316,10 @@
 #define SC_UNONAME_FORMULA2         "Formula2"
 #define SC_UNONAME_SOURCEPOS        "SourcePosition"
 #define SC_UNONAME_SOURCESTR        "SourcePositionAsString" // only for use in XML filter
-#define SC_UNONAME_GRAMMAR          "Grammar" // only for use in XML filter
+#define SC_UNONAME_FORMULANMSP1     "FormulaNamespace1" // only for use in XML filter
+#define SC_UNONAME_FORMULANMSP2     "FormulaNamespace2" // only for use in XML filter
+#define SC_UNONAME_GRAMMAR1         "Grammar1" // only for use in XML filter
+#define SC_UNONAME_GRAMMAR2         "Grammar2" // only for use in XML filter
 #define SC_UNONAME_STYLENAME        "StyleName"
 
 //  validation
@@ -484,6 +485,7 @@
 #define SC_UNO_ISEXECUTELINKENABLED     "IsExecuteLinkEnabled"
 #define SC_UNO_ISCHANGEREADONLYENABLED  "IsChangeReadOnlyEnabled"
 #define SC_UNO_REFERENCEDEVICE          "ReferenceDevice"
+#define SC_UNO_CODENAME                 "CodeName"
 
 //  document properties from FormModel
 #define SC_UNO_APPLYFMDES           "ApplyFormDesignMode"
@@ -526,6 +528,7 @@
 #define SC_UNO_ZOOMTYPE             "ZoomType"
 #define SC_UNO_ZOOMVALUE            "ZoomValue"
 #define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
+
 /*Stampit enable/disable print cancel */
 #define SC_UNO_ALLOWPRINTJOBCANCEL  "AllowPrintJobCancel"
 
@@ -558,6 +561,10 @@
 #define SC_UNO_ROWFIELDCOUNT        "RowFieldCount"
 #define SC_UNO_COLUMNFIELDCOUNT     "ColumnFieldCount"
 #define SC_UNO_DATAFIELDCOUNT       "DataFieldCount"
+#define SC_UNO_LAYOUTNAME           "LayoutName"
+#define SC_UNO_FIELD_SUBTOTALNAME   "FieldSubtotalName"
+#define SC_UNO_GRANDTOTAL_NAME      "GrandTotalName"
+#define SC_UNO_HAS_HIDDEN_MEMBER    "HasHiddenMember"
 
 //  (preliminary:)
 #define SC_UNO_REFVALUE             "ReferenceValue"
@@ -570,6 +577,15 @@
 #define SC_UNO_RPTEMPTY             "RepeatIfEmpty"
 #define SC_UNO_DRILLDOWN            "DrillDownOnDoubleClick"
 #define SC_UNO_SHOWFILT             "ShowFilterButton"
+#define SC_UNO_IMPORTDESC           "ImportDescriptor"
+#define SC_UNO_SOURCESERV           "SourceServiceName"
+#define SC_UNO_SERVICEARG           "ServiceArguments"
+
+// properties in data pilot descriptor ServiceArguments
+#define SC_UNO_SOURCENAME           "SourceName"
+#define SC_UNO_OBJECTNAME           "ObjectName"
+#define SC_UNO_USERNAME             "UserName"
+#define SC_UNO_PASSWORD             "Password"
 
 //  range selection
 #define SC_UNONAME_INITVAL          "InitialValue"
@@ -582,6 +598,7 @@
 #define SC_UNONAME_PAGESIZE         "PageSize"
 #define SC_UNONAME_RENDERDEV        "RenderDevice"
 #define SC_UNONAME_SOURCERANGE      "SourceRange"
+#define SC_UNONAME_INC_NP_AREA      "PageIncludesNonprintableArea"
 
 // CellValueBinding
 #define SC_UNONAME_BOUNDCELL        "BoundCell"
@@ -597,9 +614,9 @@
 // --> PB 2004-08-23 #i33095# Security Options
 #define SC_UNO_LOADREADONLY         "LoadReadonly"
 // <--
+#define SC_UNO_MODIFYPASSWORDINFO   "ModifyPasswordInfo"
 
 // FormulaParser
-#define SC_UNO_REFERENCEPOS         "ReferencePosition"
 #define SC_UNO_COMPILEENGLISH       "CompileEnglish"
 #define SC_UNO_FORMULACONVENTION    "FormulaConvention"
 #define SC_UNO_IGNORELEADING        "IgnoreLeadingSpaces"
@@ -608,14 +625,20 @@
 #define SC_UNO_COMPILEFAP           "CompileFAP"
 
 // Chart2
-#define SC_UNONAME_ISHIDDEN         "IsHidden"
-#define SC_UNONAME_ROLE             "Role"
+#define SC_UNONAME_ROLE                 "Role"
+#define SC_UNONAME_HIDDENVALUES         "HiddenValues"
+#define SC_UNONAME_INCLUDEHIDDENCELLS   "IncludeHiddenCells"
 #define SC_UNONAME_HIDDENVALUES     "HiddenValues"
 
 // Solver
 #define SC_UNONAME_TIMEOUT          "Timeout"
 
 #define SC_UNO_SHAREDOC             "IsDocumentShared"
+
+// EventDescriptor
+
+#define SC_UNO_EVENTTYPE            "EventType"
+#define SC_UNO_SCRIPT               "Script"
 
 #endif
 

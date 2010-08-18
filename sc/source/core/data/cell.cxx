@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cell.cxx,v $
- * $Revision: 1.44.38.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include "scitems.hxx"
 #include "attrib.hxx"
@@ -54,10 +51,10 @@
 #include "recursionhelper.hxx"
 #include "postit.hxx"
 #include "externalrefmgr.hxx"
-#include <svx/editobj.hxx>
-#include <svtools/intitem.hxx>
-#include <svx/flditem.hxx>
-#include <svtools/broadcast.hxx>
+#include <editeng/editobj.hxx>
+#include <svl/intitem.hxx>
+#include <editeng/flditem.hxx>
+#include <svl/broadcast.hxx>
 
 using namespace formula;
 // More or less arbitrary, of course all recursions must fit into available
@@ -148,7 +145,7 @@ ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, const ScAddress&
     return lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
 }
 
-ScBaseCell* ScBaseCell::CloneWithNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
+ScBaseCell* ScBaseCell::CloneWithNote( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
 {
     ScBaseCell* pNewCell = lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
     if( mpNote )
@@ -156,7 +153,7 @@ ScBaseCell* ScBaseCell::CloneWithNote( ScDocument& rDestDoc, const ScAddress& rD
         if( !pNewCell )
             pNewCell = new ScNoteCell;
         bool bCloneCaption = (nCloneFlags & SC_CLONECELL_NOCAPTION) == 0;
-        pNewCell->TakeNote( ScNoteUtil::CloneNote( rDestDoc, rDestPos, *mpNote, bCloneCaption ) );
+        pNewCell->TakeNote( mpNote->Clone( rOwnPos, rDestDoc, rDestPos, bCloneCaption ) );
     }
     return pNewCell;
 }
@@ -280,21 +277,21 @@ void ScBaseCell::StartListeningTo( ScDocument* pDoc )
                                 if ( rRef1.IsColRel() )
                                 {   // ColName
                                     pDoc->StartListeningArea( ScRange (
-                                        0,
+                                        rRef1.nCol,
                                         rRef1.nRow,
                                         rRef1.nTab,
-                                        MAXCOL,
-                                        rRef2.nRow,
+                                        rRef2.nCol,
+                                        MAXROW,
                                         rRef2.nTab ), pFormCell );
                                 }
                                 else
                                 {   // RowName
                                     pDoc->StartListeningArea( ScRange (
                                         rRef1.nCol,
-                                        0,
+                                        rRef1.nRow,
                                         rRef1.nTab,
-                                        rRef2.nCol,
-                                        MAXROW,
+                                        MAXCOL,
+                                        rRef2.nRow,
                                         rRef2.nTab ), pFormCell );
                                 }
                             }
@@ -370,21 +367,21 @@ void ScBaseCell::EndListeningTo( ScDocument* pDoc, ScTokenArray* pArr,
                                 if ( rRef1.IsColRel() )
                                 {   // ColName
                                     pDoc->EndListeningArea( ScRange (
-                                        0,
+                                        rRef1.nCol,
                                         rRef1.nRow,
                                         rRef1.nTab,
-                                        MAXCOL,
-                                        rRef2.nRow,
+                                        rRef2.nCol,
+                                        MAXROW,
                                         rRef2.nTab ), pFormCell );
                                 }
                                 else
                                 {   // RowName
                                     pDoc->EndListeningArea( ScRange (
                                         rRef1.nCol,
-                                        0,
+                                        rRef1.nRow,
                                         rRef1.nTab,
-                                        rRef2.nCol,
-                                        MAXROW,
+                                        MAXCOL,
+                                        rRef2.nRow,
                                         rRef2.nTab ), pFormCell );
                                 }
                             }
@@ -581,23 +578,6 @@ ScNoteCell::~ScNoteCell()
     eCellType = CELLTYPE_DESTROYED;
 }
 #endif
-
-ScNoteCell::ScNoteCell( SvStream& rStream, USHORT nVer ) :
-    ScBaseCell( CELLTYPE_NOTE )
-{
-    if( nVer >= SC_DATABYTES2 )
-    {
-        BYTE cData;
-        rStream >> cData;
-        if( cData & 0x0F )
-            rStream.SeekRel( cData & 0x0F );
-    }
-}
-
-void ScNoteCell::Save( SvStream& rStream ) const
-{
-    rStream << (BYTE) 0x00;
-}
 
 // ============================================================================
 
@@ -839,6 +819,10 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
 ScFormulaCell::~ScFormulaCell()
 {
     pDocument->RemoveFromFormulaTree( this );
+
+    if (pDocument->HasExternalRefManager())
+        pDocument->GetExternalRefManager()->removeRefCell(this);
+
     delete pCode;
 #ifdef DBG_UTIL
     eCellType = CELLTYPE_DESTROYED;
@@ -1016,15 +1000,15 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
 
     ScCompiler aComp( pDocument, aPos, *pCode);
     aComp.SetGrammar(eTempGrammar);
-    String aFormula;
-    aComp.CreateStringFromTokenArray( aFormula );
+    String aFormula, aFormulaNmsp;
+    aComp.CreateStringFromXMLTokenArray( aFormula, aFormulaNmsp );
     pDocument->DecXMLImportedFormulaCount( aFormula.Len() );
     rProgress.SetStateCountDownOnPercent( pDocument->GetXMLImportedFormulaCount() );
     // pCode darf fuer Abfragen noch nicht geloescht, muss aber leer sein
     if ( pCode )
         pCode->Clear();
     ScTokenArray* pCodeOld = pCode;
-    pCode = aComp.CompileString( aFormula );
+    pCode = aComp.CompileString( aFormula, aFormulaNmsp );
     delete pCodeOld;
     if( !pCode->GetCodeError() )
     {
@@ -1576,6 +1560,10 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         }
         bRunning = bOldRunning;
 
+        // #i102616# For single-sheet saving consider only content changes, not format type,
+        // because format type isn't set on loading (might be changed later)
+        BOOL bContentChanged = FALSE;
+
         // Do not create a HyperLink() cell if the formula results in an error.
         if( p->GetError() && pCode->IsHyperLink())
             pCode->SetHyperLink(FALSE);
@@ -1614,7 +1602,12 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         // New error code?
         if( p->GetError() != nOldErrCode )
+        {
             bChanged = TRUE;
+            // bContentChanged only has to be set if the file content would be changed
+            if ( aResult.GetCellResultType() != svUnknown )
+                bContentChanged = TRUE;
+        }
         // Different number format?
         if( nFormatType != p->GetRetFormatType() )
         {
@@ -1630,7 +1623,34 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
         // In case of changes just obtain the result, no temporary and
         // comparison needed anymore.
         if (bChanged)
+        {
+            // #i102616# Compare anyway if the sheet is still marked unchanged for single-sheet saving
+            // Also handle special cases of initial results after loading.
+
+            if ( !bContentChanged && pDocument->IsStreamValid(aPos.Tab()) )
+            {
+                ScFormulaResult aNewResult( p->GetResultToken());
+                StackVar eOld = aResult.GetCellResultType();
+                StackVar eNew = aNewResult.GetCellResultType();
+                if ( eOld == svUnknown && ( eNew == svError || ( eNew == svDouble && aNewResult.GetDouble() == 0.0 ) ) )
+                {
+                    // ScXMLTableRowCellContext::EndElement doesn't call SetFormulaResultDouble for 0
+                    // -> no change
+                }
+                else
+                {
+                    if ( eOld == svHybridCell )     // string result from SetFormulaResultString?
+                        eOld = svString;            // ScHybridCellToken has a valid GetString method
+
+                    // #i106045# use approxEqual to compare with stored value
+                    bContentChanged = (eOld != eNew ||
+                            (eNew == svDouble && !rtl::math::approxEqual( aResult.GetDouble(), aNewResult.GetDouble() )) ||
+                            (eNew == svString && aResult.GetString() != aNewResult.GetString()));
+                }
+            }
+
             aResult.SetToken( p->GetResultToken() );
+        }
         else
         {
             ScFormulaResult aNewResult( p->GetResultToken());
@@ -1639,6 +1659,20 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             bChanged = (eOld != eNew ||
                     (eNew == svDouble && aResult.GetDouble() != aNewResult.GetDouble()) ||
                     (eNew == svString && aResult.GetString() != aNewResult.GetString()));
+
+            // #i102616# handle special cases of initial results after loading (only if the sheet is still marked unchanged)
+            if ( bChanged && !bContentChanged && pDocument->IsStreamValid(aPos.Tab()) )
+            {
+                if ( ( eOld == svUnknown && ( eNew == svError || ( eNew == svDouble && aNewResult.GetDouble() == 0.0 ) ) ) ||
+                     ( eOld == svHybridCell && eNew == svString && aResult.GetString() == aNewResult.GetString() ) ||
+                     ( eOld == svDouble && eNew == svDouble && rtl::math::approxEqual( aResult.GetDouble(), aNewResult.GetDouble() ) ) )
+                {
+                    // no change, see above
+                }
+                else
+                    bContentChanged = TRUE;
+            }
+
             aResult.Assign( aNewResult);
         }
 
@@ -1675,12 +1709,18 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             // Coded double error may occur via filter import.
             USHORT nErr = GetDoubleErrorValue( aResult.GetDouble());
             aResult.SetResultError( nErr);
-            bChanged = true;
+            bChanged = bContentChanged = true;
         }
         if( bChanged )
         {
             SetTextWidth( TEXTWIDTH_DIRTY );
             SetScriptType( SC_SCRIPTTYPE_UNKNOWN );
+        }
+        if (bContentChanged && pDocument->IsStreamValid(aPos.Tab()))
+        {
+            // pass bIgnoreLock=TRUE, because even if called from pending row height update,
+            // a changed result must still reset the stream flag
+            pDocument->SetStreamValid(aPos.Tab(), FALSE, TRUE);
         }
         if ( !pCode->IsRecalcModeAlways() )
             pDocument->RemoveFromFormulaTree( this );
@@ -1701,7 +1741,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
         // Reschedule verlangsamt das ganze erheblich, nur bei Prozentaenderung ausfuehren
         ScProgress::GetInterpretProgress()->SetStateCountDownOnPercent(
-            pDocument->GetFormulaCodeInTree() );
+            pDocument->GetFormulaCodeInTree()/MIN_NO_CODES_PER_PROGRESS_UPDATE );
     }
     else
     {
@@ -1806,6 +1846,9 @@ void ScFormulaCell::SetDirty()
                 pDocument->TrackFormulas();
             }
         }
+
+        if (pDocument->IsStreamValid(aPos.Tab()))
+            pDocument->SetStreamValid(aPos.Tab(), FALSE);
     }
 }
 
@@ -1917,6 +1960,13 @@ void ScFormulaCell::GetURLResult( String& rURL, String& rCellText )
         else
             pFormatter->GetOutputString( aCellString, nURLFormat, rURL, &pColor );
     }
+}
+
+bool ScFormulaCell::IsMultilineResult()
+{
+    if (!IsValue())
+        return aResult.IsMultiline();
+    return false;
 }
 
 EditTextObject* ScFormulaCell::CreateURLObject()

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridwin5.cxx,v $
- * $Revision: 1.23.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,11 +30,11 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 
-#include <svx/editview.hxx>
+#include <editeng/editview.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpagv.hxx>
 #include <svtools/imapobj.hxx>
@@ -338,12 +335,12 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
                         SdrObject* pObj = 0;
                         SdrPageView* pPV = 0;
                         Point aMDPos = PixelToLogic( aPosPixel );
-                        if ( pDrView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER) )
+                        if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER) )
                         {
                             if ( pObj->IsGroupObject() )
                             {
                                     SdrObject* pHit = 0;
-                                    if ( pDrView->PickObj(aMDPos, pHit, pPV, SDRSEARCH_DEEP ) )
+                                    if ( pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
                                         pObj = pHit;
                             }
 #ifdef ISSUE66550_HLINK_FOR_SHAPES

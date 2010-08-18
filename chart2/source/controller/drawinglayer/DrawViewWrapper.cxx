@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DrawViewWrapper.cxx,v $
- * $Revision: 1.20.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,10 @@
 #include "DrawViewWrapper.hxx"
 #include "chartview/DrawModelWrapper.hxx"
 #include "ConfigurationAccess.hxx"
+#include "macros.hxx"
 
+#include <unotools/lingucfg.hxx>
+#include <editeng/langitem.hxx>
 // header for class SdrPage
 #include <svx/svdpage.hxx>
 //header for class SdrPageView
@@ -46,7 +46,7 @@
 #include <svx/svdoutl.hxx>
 
 // header for class SvxForbiddenCharactersTable
-#include <svx/forbiddencharacterstable.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
 
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -54,6 +54,7 @@
 
 // header for class SvxShape
 #include <svx/unoshape.hxx>
+#include <editeng/fhgtitem.hxx>
 
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
@@ -165,6 +166,24 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool 
 
     SetPagePaintingAllowed(bPaintPageForEditMode);
 
+    // #i12587# support for shapes in chart
+    SdrOutliner* pOutliner = getOutliner();
+    SfxItemPool* pOutlinerPool = ( pOutliner ? pOutliner->GetEditTextObjectPool() : NULL );
+    if ( pOutlinerPool )
+    {
+        SvtLinguConfig aLinguConfig;
+        SvtLinguOptions aLinguOptions;
+        if ( aLinguConfig.GetOptions( aLinguOptions ) )
+        {
+            pOutlinerPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOptions.nDefaultLanguage, EE_CHAR_LANGUAGE ) );
+            pOutlinerPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOptions.nDefaultLanguage_CJK, EE_CHAR_LANGUAGE_CJK ) );
+            pOutlinerPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOptions.nDefaultLanguage_CTL, EE_CHAR_LANGUAGE_CTL ) );
+        }
+
+        // set font height without changing SdrEngineDefaults
+        pOutlinerPool->SetPoolDefaultItem( SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ) );  // 12pt
+    }
+
     ReInit();
 }
 
@@ -223,6 +242,14 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 
     if( pRet )
     {
+        //ignore some special shapes
+        rtl::OUString aShapeName = pRet->GetName();
+        if( aShapeName.match(C2U("PlotAreaIncludingAxes")) || aShapeName.match(C2U("PlotAreaExcludingAxes")) )
+        {
+            pRet->SetMarkProtect( true );
+            return getHitObject( rPnt );
+        }
+
         //3d objects need a special treatment
         //because the simple PickObj method is not accurate in this case for performance reasons
         E3dObject* pE3d = dynamic_cast< E3dObject* >(pRet);
@@ -321,7 +348,7 @@ SfxItemSet DrawViewWrapper::getPositionAndSizeItemSetFromMarkedObject() const
                     0);
     SfxItemSet aGeoSet( E3dView::GetGeoAttrFromMarked() );
     aFullSet.Put( aGeoSet );
-    aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC,static_cast< sal_uInt16 >( ConfigurationAccess::getConfigurationAccess()->getFieldUnit())));
+    aFullSet.Put( SfxUInt16Item(SID_ATTR_METRIC,static_cast< sal_uInt16 >( ConfigurationAccess::getFieldUnit())));
     return aFullSet;
 }
 

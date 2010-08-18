@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabview2.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include <vcl/timer.hxx>
@@ -587,8 +584,26 @@ void ScTabView::SelectAllTables()
 //      pDoc->ExtendMarksFromTable( nTab );
 
         aViewData.GetDocShell()->PostPaintExtras();
-        aViewData.GetBindings().Invalidate( FID_FILL_TAB );
+        SfxBindings& rBind = aViewData.GetBindings();
+        rBind.Invalidate( FID_FILL_TAB );
+        rBind.Invalidate( FID_TAB_DESELECTALL );
     }
+}
+
+void ScTabView::DeselectAllTables()
+{
+    ScDocument* pDoc = aViewData.GetDocument();
+    ScMarkData& rMark = aViewData.GetMarkData();
+    SCTAB nTab = aViewData.GetTabNo();
+    SCTAB nCount = pDoc->GetTableCount();
+
+    for (SCTAB i=0; i<nCount; i++)
+        rMark.SelectTable( i, ( i == nTab ) );
+
+    aViewData.GetDocShell()->PostPaintExtras();
+    SfxBindings& rBind = aViewData.GetBindings();
+    rBind.Invalidate( FID_FILL_TAB );
+    rBind.Invalidate( FID_TAB_DESELECTALL );
 }
 
 BOOL lcl_FitsInWindow( double fScaleX, double fScaleY, USHORT nZoom,
@@ -625,13 +640,13 @@ BOOL lcl_FitsInWindow( double fScaleX, double fScaleY, USHORT nZoom,
     }
 
     long nBlockY = 0;
-    ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT> aIter(
-            pDoc->GetRowFlagsArray( nTab), 0, nFixPosY-1, CR_HIDDEN, 0,
-            pDoc->GetRowHeightArray( nTab));
-    for ( ; aIter; ++aIter)
+    for (SCROW nRow = 0; nRow <= nFixPosY-1; ++nRow)
     {
+        if (pDoc->RowHidden(nRow, nTab))
+            continue;
+
         //  for frozen panes, add both parts
-        USHORT nRowTwips = *aIter;
+        USHORT nRowTwips = pDoc->GetRowHeight(nRow, nTab);
         if (nRowTwips)
         {
             nBlockY += (long)(nRowTwips * fScaleY);
@@ -639,10 +654,9 @@ BOOL lcl_FitsInWindow( double fScaleX, double fScaleY, USHORT nZoom,
                 return FALSE;
         }
     }
-    aIter.NewLimits( nStartRow, nEndRow);
-    for ( ; aIter; ++aIter)
+    for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
     {
-        USHORT nRowTwips = *aIter;
+        USHORT nRowTwips = pDoc->GetRowHeight(nRow, nTab);
         if (nRowTwips)
         {
             nBlockY += (long)(nRowTwips * fScaleY);

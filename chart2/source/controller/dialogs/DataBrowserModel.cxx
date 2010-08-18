@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataBrowserModel.cxx,v $
- * $Revision: 1.6.16.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,9 @@
 #include "macros.hxx"
 #include "StatisticsHelper.hxx"
 #include "ContainerHelper.hxx"
+#include "ChartTypeHelper.hxx"
+#include "chartview/ExplicitValueProvider.hxx"
+#include "ExplicitCategoriesProvider.hxx"
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
@@ -52,6 +52,7 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
 #include <rtl/math.hxx>
 
@@ -103,7 +104,7 @@ OUString lcl_getUIRoleName(
 {
     OUString aResult( lcl_getRole( xLSeq ));
     if( aResult.getLength())
-        aResult = chart::DialogModel::ConvertRoleFromInternalToUI( aResult );
+        aResult = ::chart::DialogModel::ConvertRoleFromInternalToUI( aResult );
     return aResult;
 }
 
@@ -279,8 +280,8 @@ struct DataBrowserModel::implColumnLess : public ::std::binary_function<
     {
         if( rLeft.m_xLabeledDataSequence.is() && rRight.m_xLabeledDataSequence.is())
         {
-            return chart::DialogModel::GetRoleIndexForSorting( lcl_getRole( rLeft.m_xLabeledDataSequence )) <
-                chart::DialogModel::GetRoleIndexForSorting( lcl_getRole( rRight.m_xLabeledDataSequence ));
+            return DialogModel::GetRoleIndexForSorting( lcl_getRole( rLeft.m_xLabeledDataSequence )) <
+                DialogModel::GetRoleIndexForSorting( lcl_getRole( rRight.m_xLabeledDataSequence ));
         }
         return true;
     }
@@ -323,12 +324,17 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
     if( xDataProvider.is())
     {
+        if( isCategoriesColumn(nAfterColumnIndex) )
+            nAfterColumnIndex = getCategoryColumnCount()-1;
+
         sal_Int32 nStartCol = 0;
         Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDocument ));
         Reference< chart2::XChartType > xChartType;
         Reference< chart2::XDataSeries > xSeries;
         if( static_cast< tDataColumnVector::size_type >( nAfterColumnIndex ) <= m_aColumns.size())
             xSeries.set( m_aColumns[nAfterColumnIndex].m_xDataSeries );
+
+        sal_Int32 nSeriesNumberFormat = 0;
         if( xSeries.is())
         {
             xChartType.set( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ));
@@ -337,6 +343,10 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
                                 lcl_DataSeriesOfHeaderMatches( xSeries )));
             if( aIt != m_aHeaders.end())
                 nStartCol = aIt->m_nEndColumn;
+
+            Reference< beans::XPropertySet > xSeriesProps( xSeries, uno::UNO_QUERY );
+            if( xSeriesProps.is() )
+                xSeriesProps->getPropertyValue( C2U( "NumberFormat" )) >>= nSeriesNumberFormat;
         }
         else
         {
@@ -348,7 +358,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         {
             sal_Int32 nOffset = 0;
             if( xDiagram.is() && lcl_ShowCategories( xDiagram ))
-                ++nOffset;
+                nOffset=getCategoryColumnCount();
             // get shared sequences of current series
             Reference< chart2::XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY );
             lcl_tSharedSeqVec aSharedSequences;
@@ -404,13 +414,45 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
                         }
                     }
                 }
+                if( nSeriesNumberFormat != 0 )
+                {
+                    //give the new series the same number format as the former series especially for bubble charts thus the bubble size values can be edited with same format immidiately
+                    Reference< beans::XPropertySet > xNewSeriesProps( xNewSeries, uno::UNO_QUERY );
+                    if( xNewSeriesProps.is() )
+                        xNewSeriesProps->setPropertyValue( C2U( "NumberFormat" ), uno::makeAny( nSeriesNumberFormat ) );
+                }
+
                 updateFromModel();
             }
         }
     }
 }
 
-void DataBrowserModel::removeDataSeries( sal_Int32 nAtColumnIndex )
+void DataBrowserModel::insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex )
+{
+    //create a new text column for complex categories
+
+    OSL_ASSERT( m_apDialogModel.get());
+    Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
+    if( xDataProvider.is() )
+    {
+        if( !isCategoriesColumn(nAfterColumnIndex) )
+            nAfterColumnIndex = getCategoryColumnCount()-1;
+
+        if(nAfterColumnIndex<0)
+        {
+            OSL_ENSURE( false, "wrong index for category level insertion" );
+            return;
+        }
+
+        m_apDialogModel->startControllerLockTimer();
+        ControllerLockGuard aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+        xDataProvider->insertComplexCategoryLevel( nAfterColumnIndex+1 );
+        updateFromModel();
+    }
+}
+
+void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColumnIndex )
 {
     OSL_ASSERT( m_apDialogModel.get());
     if( static_cast< tDataColumnVector::size_type >( nAtColumnIndex ) < m_aColumns.size())
@@ -460,6 +502,20 @@ void DataBrowserModel::removeDataSeries( sal_Int32 nAtColumnIndex )
                 }
             }
             updateFromModel();
+        }
+        else
+        {
+            //delete a category column if there is more than one level (in case of a single column we do not get here)
+            OSL_ENSURE(nAtColumnIndex>0, "wrong index for categories deletion" );
+
+            Reference< chart2::XInternalDataProvider > xDataProvider( m_apDialogModel->getDataProvider(), uno::UNO_QUERY );
+            if( xDataProvider.is() )
+            {
+                m_apDialogModel->startControllerLockTimer();
+                ControllerLockGuard aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+                xDataProvider->deleteComplexCategoryLevel( nAtColumnIndex );
+                updateFromModel();
+            }
         }
     }
 }
@@ -601,6 +657,8 @@ bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const 
         bResult = true;
         try
         {
+            ControllerLockGuard aLockedControllers( Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY ) );
+
             // label
             if( nAtRow == -1 )
             {
@@ -614,6 +672,12 @@ bool DataBrowserModel::setCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow, const 
                     m_aColumns[ nIndex ].m_xLabeledDataSequence->getValues(), uno::UNO_QUERY_THROW );
                 xIndexReplace->replaceByIndex( nAtRow, rValue );
             }
+
+            m_apDialogModel->startControllerLockTimer();
+            //notify change directly to the model (this is necessary here as sequences for complex categories not known directly to the chart model so they do not notify their changes) (for complex categories see issue #i82971#)
+            Reference< util::XModifiable > xModifiable( m_xChartDocument, uno::UNO_QUERY );
+            if( xModifiable.is() )
+                xModifiable->setModified(true);
         }
         catch( const uno::Exception & ex )
         {
@@ -670,11 +734,26 @@ OUString DataBrowserModel::getRoleOfColumn( sal_Int32 nColumnIndex ) const
     return OUString();
 }
 
-Reference< chart2::data::XLabeledDataSequence >
-    DataBrowserModel::getCategories() const throw()
+bool DataBrowserModel::isCategoriesColumn( sal_Int32 nColumnIndex ) const
 {
-    OSL_ASSERT( m_apDialogModel.get());
-    return m_apDialogModel->getCategories();
+    bool bIsCategories = false;
+    if( nColumnIndex>=0 && nColumnIndex<static_cast< sal_Int32 >(m_aColumns.size()) )
+        bIsCategories = !m_aColumns[ nColumnIndex ].m_xDataSeries.is();
+    return bIsCategories;
+}
+
+sal_Int32 DataBrowserModel::getCategoryColumnCount()
+{
+    sal_Int32 nLastTextColumnIndex = -1;
+    tDataColumnVector::const_iterator aIt = m_aColumns.begin();
+    for( ; aIt != m_aColumns.end(); ++aIt )
+    {
+        if( !aIt->m_xDataSeries.is() )
+            nLastTextColumnIndex++;
+        else
+            break;
+    }
+    return nLastTextColumnIndex+1;
 }
 
 const DataBrowserModel::tDataHeaderVector& DataBrowserModel::getDataHeaders() const
@@ -704,16 +783,27 @@ void DataBrowserModel::updateFromModel()
     sal_Int32 nHeaderEnd   = 0;
     if( lcl_ShowCategories( xDiagram ))
     {
-        Reference< chart2::data::XLabeledDataSequence > xCategories( this->getCategories());
-        tDataColumn aCategories;
-        aCategories.m_xLabeledDataSequence.set( xCategories );
-        if( lcl_ShowCategoriesAsDataLabel( xDiagram ))
-            aCategories.m_aUIRoleName = chart::DialogModel::GetRoleDataLabel();
-        else
-            aCategories.m_aUIRoleName = lcl_getUIRoleName( xCategories );
-        aCategories.m_eCellType = TEXT;
-        m_aColumns.push_back( aCategories );
-        ++nHeaderStart;
+        Reference< frame::XModel > xChartModel( m_xChartDocument, uno::UNO_QUERY );
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(xChartModel), xChartModel );
+
+        const Sequence< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
+        sal_Int32 nLevelCount = rSplitCategoriesList.getLength();
+        for( sal_Int32 nL = 0; nL<nLevelCount; nL++ )
+        {
+            Reference< chart2::data::XLabeledDataSequence > xCategories( rSplitCategoriesList[nL] );
+            if( !xCategories.is() )
+                continue;
+
+            tDataColumn aCategories;
+            aCategories.m_xLabeledDataSequence.set( xCategories );
+            if( lcl_ShowCategoriesAsDataLabel( xDiagram ))
+                aCategories.m_aUIRoleName = DialogModel::GetRoleDataLabel();
+            else
+                aCategories.m_aUIRoleName = lcl_getUIRoleName( xCategories );
+            aCategories.m_eCellType = TEXT;
+            m_aColumns.push_back( aCategories );
+            ++nHeaderStart;
+        }
     }
 
     Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
@@ -724,11 +814,15 @@ void DataBrowserModel::updateFromModel()
     {
         Reference< chart2::XChartTypeContainer > xCTCnt( aCooSysSeq[nCooSysIdx], uno::UNO_QUERY_THROW );
         Sequence< Reference< chart2::XChartType > > aChartTypes( xCTCnt->getChartTypes());
+        sal_Int32 nXAxisNumberFormat = DataSeriesHelper::getNumberFormatKeyFromAxis( 0, aCooSysSeq[nCooSysIdx], 0, 0 );
+
         for( sal_Int32 nCTIdx=0; nCTIdx<aChartTypes.getLength(); ++nCTIdx )
         {
             Reference< chart2::XDataSeriesContainer > xSeriesCnt( aChartTypes[nCTIdx], uno::UNO_QUERY );
             if( xSeriesCnt.is())
             {
+                rtl::OUString aRoleForDataLabelNumberFormat = ChartTypeHelper::getRoleOfSequenceForDataLabelNumberFormatDetection( aChartTypes[nCTIdx] );
+
                 Sequence< Reference< chart2::XDataSeries > > aSeries( xSeriesCnt->getDataSeries());
                 lcl_tSharedSeqVec aSharedSequences( lcl_getSharedSequences( aSeries ));
                 for( lcl_tSharedSeqVec::const_iterator aIt( aSharedSequences.begin());
@@ -741,16 +835,15 @@ void DataBrowserModel::updateFromModel()
                     // as the sequences are shared it should be ok to take the first series
                     // @todo: dimension index 0 for x-values used here. This is just a guess.
                     // Also, the axis index is 0, as there is usually only one x-axis
-                    aSharedSequence.m_nNumberFormatKey =
-                        DataSeriesHelper::getNumberFormatKeyFromAxis(
-                            aSeries[0], aCooSysSeq[nCooSysIdx], 0, 0 );
+                    aSharedSequence.m_nNumberFormatKey = nXAxisNumberFormat;
                     m_aColumns.push_back( aSharedSequence );
                     ++nHeaderStart;
                 }
                 for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeries.getLength(); ++nSeriesIdx )
                 {
                     tDataColumnVector::size_type nStartColIndex = m_aColumns.size();
-                    Reference< chart2::data::XDataSource > xSource( aSeries[nSeriesIdx], uno::UNO_QUERY );
+                    Reference< chart2::XDataSeries > xSeries( aSeries[nSeriesIdx] );
+                    Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
                     if( xSource.is())
                     {
                         Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqs( xSource->getDataSequences());
@@ -768,9 +861,14 @@ void DataBrowserModel::updateFromModel()
                         {
                             sal_Int32 nSequenceNumberFormatKey = nYAxisNumberFormatKey;
                             OUString aRole = lcl_getRole( aLSeqs[nSeqIdx] );
-                            if( aRole.equals( C2U( "values-x" ) ) )
-                                nSequenceNumberFormatKey = DataSeriesHelper::getNumberFormatKeyFromAxis(
-                                    aSeries[nSeriesIdx], aCooSysSeq[nCooSysIdx], 0, 0 );
+
+                            if( aRole.equals( aRoleForDataLabelNumberFormat ) )
+                            {
+                                nSequenceNumberFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel(
+                                    Reference< beans::XPropertySet >( xSeries, uno::UNO_QUERY ), xSeries, -1, xDiagram );
+                            }
+                            else if( aRole.equals( C2U( "values-x" ) ) )
+                                nSequenceNumberFormatKey = nXAxisNumberFormat;
 
                             if( ::std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
                                              lcl_RepresentationsOfLSeqMatch( aLSeqs[nSeqIdx] )) == aSharedSequences.end())

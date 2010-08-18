@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xechart.hxx,v $
- * $Revision: 1.7.62.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,6 +28,7 @@
 #ifndef SC_XECHART_HXX
 #define SC_XECHART_HXX
 
+#include <tools/gen.hxx>
 #include "xerecord.hxx"
 #include "xlchart.hxx"
 #include "xlformula.hxx"
@@ -41,6 +39,10 @@
 class Size;
 
 namespace com { namespace sun { namespace star {
+    namespace awt
+    {
+        struct Rectangle;
+    }
     namespace frame
     {
         class XModel;
@@ -67,21 +69,28 @@ namespace com { namespace sun { namespace star {
 
 // Common =====================================================================
 
-class XclExpChRootData;
+struct XclExpChRootData;
 class XclExpChChart;
 
-/** Base class for complex chart classes, provides access to other components of the chart. */
+/** Base class for complex chart classes, provides access to other components
+    of the chart.
+
+    Keeps also track of future record levels and writes the needed future
+    records on demand.
+ */
 class XclExpChRoot : public XclExpRoot
 {
 public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
 
 public:
-    explicit            XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart* pChartData );
+    explicit            XclExpChRoot( const XclExpRoot& rRoot, XclExpChChart& rChartData );
     virtual             ~XclExpChRoot();
 
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclExpChRoot& GetChRoot() const { return *this; }
+    /** Returns the API Chart document model. */
+    XChartDocRef        GetChartDocument() const;
     /** Returns a reference to the parent chart data object. */
     XclExpChChart&      GetChartData() const;
     /** Returns chart type info for a unique chart type identifier. */
@@ -93,7 +102,7 @@ public:
     const XclChFormatInfo& GetFormatInfo( XclChObjectType eObjType ) const;
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
-    void                InitConversion( XChartDocRef xChartDoc ) const;
+    void                InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const;
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
     void                FinishConversion() const;
 
@@ -101,6 +110,18 @@ public:
     bool                IsSystemColor( const Color& rColor, sal_uInt16 nSysColorIdx ) const;
     /** Sets a system color and the respective color identifier. */
     void                SetSystemColor( Color& rColor, sal_uInt32& rnColorId, sal_uInt16 nSysColorIdx ) const;
+
+    /** Converts the passed horizontal coordinate from 1/100 mm to Excel chart units. */
+    sal_Int32           CalcChartXFromHmm( sal_Int32 nPosX ) const;
+    /** Converts the passed vertical coordinate from 1/100 mm to Excel chart units. */
+    sal_Int32           CalcChartYFromHmm( sal_Int32 nPosY ) const;
+    /** Converts the passed rectangle from 1/100 mm to Excel chart units. */
+    XclChRectangle      CalcChartRectFromHmm( const ::com::sun::star::awt::Rectangle& rRect ) const;
+
+    /** Converts the passed horizontal coordinate from a relative position to Excel chart units. */
+    sal_Int32           CalcChartXFromRelative( double fPosX ) const;
+    /** Converts the passed vertical coordinate from a relative position to Excel chart units. */
+    sal_Int32           CalcChartYFromRelative( double fPosY ) const;
 
     /** Reads all line properties from the passed property set. */
     void                ConvertLineFormat(
@@ -127,6 +148,14 @@ public:
     /** Reads the pie rotation property and returns the converted angle. */
     static sal_uInt16   ConvertPieRotation( const ScfPropertySet& rPropSet );
 
+protected:
+    /** Called from XclExpChGroupBase::Save, registers a new future record level. */
+    void                RegisterFutureRecBlock( const XclChFrBlock& rFrBlock );
+    /** Called from XclExpChFutureRecordBase::Save, Initializes the current future record level. */
+    void                InitializeFutureRecBlock( XclExpStream& rStrm );
+    /** Called from XclExpChGroupBase::Save, finalizes the current future record level. */
+    void                FinalizeFutureRecBlock( XclExpStream& rStrm );
+
 private:
     typedef ScfRef< XclExpChRootData > XclExpChRootDataRef;
     XclExpChRootDataRef mxChData;           /// Reference to the root data object.
@@ -139,11 +168,11 @@ private:
     A chart record group consists of a header record, followed by a CHBEGIN
     record, followed by group sub records, and finished with a CHEND record.
  */
-class XclExpChGroupBase : public XclExpRecord
+class XclExpChGroupBase : public XclExpRecord, protected XclExpChRoot
 {
 public:
-    /** @param bWriteBeginEnd  true = write CHBEGIN/CHEND records enclosing sub records. */
     explicit            XclExpChGroupBase(
+                            const XclExpChRoot& rRoot, sal_uInt16 nFrType,
                             sal_uInt16 nRecId, sal_Size nRecSize = 0 );
     virtual             ~XclExpChGroupBase();
 
@@ -153,9 +182,51 @@ public:
     virtual bool        HasSubRecords() const;
     /** Derived classes implement writing any records embedded in this group. */
     virtual void        WriteSubRecords( XclExpStream& rStrm ) = 0;
+
+protected:
+    /** Sets context information for future record blocks. */
+    void                SetFutureRecordContext( sal_uInt16 nFrContext,
+                            sal_uInt16 nFrValue1 = 0, sal_uInt16 nFrValue2 = 0 );
+
+private:
+    XclChFrBlock        maFrBlock;          /// Future records block settings.
+};
+
+// ----------------------------------------------------------------------------
+
+/** Base class for chart future records. On saving, the record writes missing
+    CHFRBLOCKBEGIN records automatically.
+ */
+class XclExpChFutureRecordBase : public XclExpFutureRecord, protected XclExpChRoot
+{
+public:
+    explicit            XclExpChFutureRecordBase( const XclExpChRoot& rRoot,
+                            XclFutureRecType eRecType, sal_uInt16 nRecId, sal_Size nRecSize = 0 );
+
+    /** Writes missing CHFRBLOCKBEGIN records and this record. */
+    virtual void        Save( XclExpStream& rStrm );
 };
 
 // Frame formatting ===========================================================
+
+class XclExpChFramePos : public XclExpRecord
+{
+public:
+    explicit            XclExpChFramePos( sal_uInt16 nTLMode, sal_uInt16 nBRMode );
+
+    /** Returns read/write access to the frame position data. */
+    inline XclChFramePos& GetFramePosData() { return maData; }
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    XclChFramePos       maData;             /// Position of the frame.
+};
+
+typedef ScfRef< XclExpChFramePos > XclExpChFramePosRef;
+
+// ----------------------------------------------------------------------------
 
 class XclExpChLineFormat : public XclExpRecord
 {
@@ -232,8 +303,7 @@ public:
     explicit            XclExpChEscherFormat( const XclExpChRoot& rRoot );
 
     /** Converts complex area formatting from the passed property set. */
-    void                Convert( const XclExpChRoot& rRoot,
-                            const ScfPropertySet& rPropSet, XclChObjectType eObjType );
+    void                Convert( const ScfPropertySet& rPropSet, XclChObjectType eObjType );
 
     /** Returns true, if the object contains valid formatting data. */
     bool                IsValid() const;
@@ -247,7 +317,7 @@ public:
 
 private:
     /** Inserts a color from the contained Escher property set into the color palette. */
-    sal_uInt32          RegisterColor( const XclExpChRoot& rRoot, sal_uInt16 nPropId );
+    sal_uInt32          RegisterColor( sal_uInt16 nPropId );
 
     virtual void        WriteBody( XclExpStream& rStrm );
 
@@ -301,7 +371,7 @@ private:
     The CHFRAME group consists of: CHFRAME, CHBEGIN, CHLINEFORMAT,
     CHAREAFORMAT, CHESCHERFORMAT group, CHEND.
  */
-class XclExpChFrame : public XclExpChGroupBase, public XclExpChFrameBase, protected XclExpChRoot
+class XclExpChFrame : public XclExpChGroupBase, public XclExpChFrameBase
 {
 public:
     explicit            XclExpChFrame( const XclExpChRoot& rRoot, XclChObjectType eObjType );
@@ -395,6 +465,29 @@ typedef ScfRef< XclExpChObjectLink > XclExpChObjectLinkRef;
 
 // ----------------------------------------------------------------------------
 
+/** Additional data label settings in the future record CHFRLABELPROPS. */
+class XclExpChFrLabelProps : public XclExpChFutureRecordBase
+{
+public:
+    explicit            XclExpChFrLabelProps( const XclExpChRoot& rRoot );
+
+    /** Converts separator and the passed data label flags. */
+    void                Convert(
+                            const ScfPropertySet& rPropSet, bool bShowSeries,
+                            bool bShowCateg, bool bShowValue,
+                            bool bShowPercent, bool bShowBubble );
+
+private:
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    XclChFrLabelProps   maData;             /// Contents of the CHFRLABELPROPS record.
+};
+
+typedef ScfRef< XclExpChFrLabelProps > XclExpChFrLabelPropsRef;
+
+// ----------------------------------------------------------------------------
+
 /** Base class for objects with font settings. Provides font conversion helper functions. */
 class XclExpChFontBase
 {
@@ -411,7 +504,7 @@ public:
     /** Creates a CHFONT record from the passed font index, calls virtual function SetFont(). */
     void                ConvertFontBase( const XclExpChRoot& rRoot, const ScfPropertySet& rPropSet );
     /** Converts rotation settings, calls virtual function SetRotation(). */
-    void                ConvertRotationBase( const XclExpChRoot& rRoot, const ScfPropertySet& rPropSet );
+    void                ConvertRotationBase( const XclExpChRoot& rRoot, const ScfPropertySet& rPropSet, bool bSupportsStacked );
 };
 
 // ----------------------------------------------------------------------------
@@ -421,7 +514,7 @@ public:
     The CHTEXT group consists of: CHTEXT, CHBEGIN, CHFRAMEPOS, CHFONT,
     CHFORMATRUNS, CHSOURCELINK, CHSTRING, CHFRAME group, CHOBJECTLINK, and CHEND.
  */
-class XclExpChText : public XclExpChGroupBase, public XclExpChFontBase, protected XclExpChRoot
+class XclExpChText : public XclExpChGroupBase, public XclExpChFontBase
 {
 public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >            XTitleRef;
@@ -458,10 +551,12 @@ private:
 
 private:
     XclChText           maData;             /// Contents of the CHTEXT record.
+    XclExpChFramePosRef mxFramePos;         /// Relative text frame position (CHFRAMEPOS record).
     XclExpChSourceLinkRef mxSrcLink;        /// Linked data (CHSOURCELINK with CHSTRING record).
     XclExpChFrameRef    mxFrame;            /// Text object frame properties (CHFRAME group).
     XclExpChFontRef     mxFont;             /// Index into font buffer (CHFONT record).
     XclExpChObjectLinkRef mxObjLink;        /// Link target for this text object.
+    XclExpChFrLabelPropsRef mxLabelProps;   /// Extended data label properties (CHFRLABELPROPS record).
     sal_uInt32          mnTextColorId;      /// Text color identifier.
 };
 
@@ -556,7 +651,7 @@ typedef ScfRef< XclExpChAttachedLabel > XclExpChAttLabelRef;
     CHMARKERFORMAT, CHPIEFORMAT, CH3DDATAFORMAT, CHSERIESFORMAT,
     CHATTACHEDLABEL, CHEND.
  */
-class XclExpChDataFormat : public XclExpChGroupBase, public XclExpChFrameBase, protected XclExpChRoot
+class XclExpChDataFormat : public XclExpChGroupBase, public XclExpChFrameBase
 {
 public:
     explicit            XclExpChDataFormat( const XclExpChRoot& rRoot,
@@ -647,7 +742,7 @@ typedef ScfRef< XclExpChSerErrorBar > XclExpChSerErrorBarRef;
     CHDATAFORMAT groups, CHSERGROUP, CHSERPARENT, CHSERERRORBAR,
     CHSERTRENDLINE, CHEND.
  */
-class XclExpChSeries : public XclExpChGroupBase, protected XclExpChRoot
+class XclExpChSeries : public XclExpChGroupBase
 {
 public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >                      XDiagramRef;
@@ -773,10 +868,10 @@ typedef ScfRef< XclExpChChart3d > XclExpChChart3dRef;
 
 /** Represents the CHLEGEND record group describing the chart legend.
 
-    The CHLEGEND group consists of: CHLEGEND, CHBEGIN, CHFRAME group,
-    CHTEXT group, CHEND.
+    The CHLEGEND group consists of: CHLEGEND, CHBEGIN, CHFRAMEPOS, CHFRAME
+    group, CHTEXT group, CHEND.
  */
-class XclExpChLegend : public XclExpChGroupBase, protected XclExpChRoot
+class XclExpChLegend : public XclExpChGroupBase
 {
 public:
     explicit            XclExpChLegend( const XclExpChRoot& rRoot );
@@ -792,6 +887,7 @@ private:
 
 private:
     XclChLegend         maData;             /// Contents of the CHLEGEND record.
+    XclExpChFramePosRef mxFramePos;         /// Legend frame position (CHFRAMEPOS record).
     XclExpChTextRef     mxText;             /// Legend text format (CHTEXT group).
     XclExpChFrameRef    mxFrame;            /// Legend frame format (CHFRAME group).
 };
@@ -808,10 +904,10 @@ typedef ScfRef< XclExpChLegend > XclExpChLegendRef;
 class XclExpChDropBar : public XclExpChGroupBase, public XclExpChFrameBase
 {
 public:
-    explicit            XclExpChDropBar( XclChObjectType eObjType );
+    explicit            XclExpChDropBar( const XclExpChRoot& rRoot, XclChObjectType eObjType );
 
     /** Converts and writes the contained frame data to the passed property set. */
-    void                Convert( const XclExpChRoot& rRoot, const ScfPropertySet& rPropSet );
+    void                Convert( const ScfPropertySet& rPropSet );
 
     /** Writes all embedded records. */
     virtual void        WriteSubRecords( XclExpStream& rStrm );
@@ -835,7 +931,7 @@ typedef ScfRef< XclExpChDropBar > XclExpChDropBarRef;
     CHDROPBAR groups, CHCHARTLINE groups (CHCHARTLINE with CHLINEFORMAT),
     CHDATAFORMAT group, CHEND.
  */
-class XclExpChTypeGroup : public XclExpChGroupBase, protected XclExpChRoot
+class XclExpChTypeGroup : public XclExpChGroupBase
 {
 public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >                      XDiagramRef;
@@ -912,19 +1008,15 @@ typedef ScfRef< XclExpChTypeGroup > XclExpChTypeGroupRef;
 class XclExpChLabelRange : public XclExpRecord, protected XclExpChRoot
 {
 public:
-    typedef ::com::sun::star::chart2::ScaleData ScaleData;
-
-public:
     explicit            XclExpChLabelRange( const XclExpChRoot& rRoot );
 
     /** Converts category axis scaling settings. */
-    void                Convert( const ScaleData& rScaleData, bool bMirrorOrient );
+    void                Convert( const ::com::sun::star::chart2::ScaleData& rScaleData, bool bMirrorOrient );
+    /** Converts position settings of a crossing axis at this axis. */
+    void                ConvertAxisPosition( const ScfPropertySet& rPropSet );
     /** Sets flag for tickmark position between categories or on categories. */
     inline void         SetTicksBetweenCateg( bool bTicksBetween )
                             { ::set_flag( maData.mnFlags, EXC_CHLABELRANGE_BETWEEN, bTicksBetween ); }
-    /** Swaps flag for crossing axis at maximum position. */
-    inline void         SwapAxisMaxCross()
-                            { ::set_flag( maData.mnFlags, EXC_CHLABELRANGE_MAXCROSS, !::get_flag( maData.mnFlags, EXC_CHLABELRANGE_MAXCROSS ) ); }
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -940,13 +1032,12 @@ typedef ScfRef< XclExpChLabelRange > XclExpChLabelRangeRef;
 class XclExpChValueRange : public XclExpRecord, protected XclExpChRoot
 {
 public:
-    typedef ::com::sun::star::chart2::ScaleData ScaleData;
-
-public:
     explicit            XclExpChValueRange( const XclExpChRoot& rRoot );
 
     /** Converts value axis scaling settings. */
-    void                Convert( const ScaleData& rScaleData );
+    void                Convert( const ::com::sun::star::chart2::ScaleData& rScaleData );
+    /** Converts position settings of a crossing axis at this axis. */
+    void                ConvertAxisPosition( const ScfPropertySet& rPropSet );
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -965,13 +1056,11 @@ public:
     explicit            XclExpChTick( const XclExpChRoot& rRoot );
 
     /** Converts axis tick mark settings. */
-    void                Convert( const ScfPropertySet& rPropSet );
+    void                Convert( const ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo, sal_uInt16 nAxisType );
     /** Sets font color and color identifier to internal data structures. */
     void                SetFontColor( const Color& rColor, sal_uInt32 nColorId );
     /** Sets text rotation to internal data structures. */
     void                SetRotation( sal_uInt16 nRotation );
-    /** Sets position of axis labels relative to axis. */
-    inline void         SetLabelPos( sal_uInt8 nLabelPos ) { maData.mnLabelPos = nLabelPos; }
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -991,7 +1080,7 @@ typedef ScfRef< XclExpChTick > XclExpChTickRef;
     CHVALUERANGE, CHFORMAT, CHTICK, CHFONT, CHAXISLINE groups (CHAXISLINE with
     CHLINEFORMAT, CHAREAFORMAT, and CHESCHERFORMAT group), CHEND.
  */
-class XclExpChAxis : public XclExpChGroupBase, public XclExpChFontBase, protected XclExpChRoot
+class XclExpChAxis : public XclExpChGroupBase, public XclExpChFontBase
 {
 public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >  XDiagramRef;
@@ -1006,7 +1095,7 @@ public:
     virtual void        SetRotation( sal_uInt16 nRotation );
 
     /** Converts formatting and scaling settings from the passed axis. */
-    void                Convert( XAxisRef xAxis, const XclChExtTypeInfo& rTypeInfo, sal_Int32 nApiAxesSetIdx );
+    void                Convert( XAxisRef xAxis, XAxisRef xCrossingAxis, const XclChExtTypeInfo& rTypeInfo );
     /** Converts and writes 3D wall/floor properties from the passed diagram. */
     void                ConvertWall( XDiagramRef xDiagram );
 
@@ -1044,7 +1133,7 @@ typedef ScfRef< XclExpChAxis > XclExpChAxisRef;
     groups, CHTEXT groups, CHPLOTFRAME group (CHPLOTFRAME with CHFRAME group),
     CHTYPEGROUP group, CHEND.
  */
-class XclExpChAxesSet : public XclExpChGroupBase, protected XclExpChRoot
+class XclExpChAxesSet : public XclExpChGroupBase
 {
 public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >          XDiagramRef;
@@ -1078,7 +1167,8 @@ private:
     /** Converts a complete axis object including axis title. */
     void                ConvertAxis( XclExpChAxisRef& rxChAxis, sal_uInt16 nAxisType,
                             XclExpChTextRef& rxChAxisTitle, sal_uInt16 nTitleTarget,
-                            XCoordSystemRef xCoordSystem, const XclChExtTypeInfo& rTypeInfo );
+                            XCoordSystemRef xCoordSystem, const XclChExtTypeInfo& rTypeInfo,
+                            sal_Int32 nCrossingAxisDim );
 
     virtual void        WriteBody( XclExpStream& rStrm );
 
@@ -1086,6 +1176,7 @@ private:
     typedef XclExpRecordList< XclExpChTypeGroup > XclExpChTypeGroupList;
 
     XclChAxesSet        maData;             /// Contents of the CHAXESSET record.
+    XclExpChFramePosRef mxFramePos;         /// Outer plot area position (CHFRAMEPOS record).
     XclExpChAxisRef     mxXAxis;            /// The X axis (CHAXIS group).
     XclExpChAxisRef     mxYAxis;            /// The Y axis (CHAXIS group).
     XclExpChAxisRef     mxZAxis;            /// The Z axis (CHAXIS group).
@@ -1106,14 +1197,14 @@ typedef ScfRef< XclExpChAxesSet > XclExpChAxesSetRef;
     group, CHSERIES groups, CHPROPERTIES, CHDEFAULTTEXT groups (CHDEFAULTTEXT
     with CHTEXT groups), CHUSEDAXESSETS, CHAXESSET groups, CHTEXT groups, CHEND.
  */
-class XclExpChChart : public XclExpChGroupBase, protected XclExpChRoot
+class XclExpChChart : public XclExpChGroupBase
 {
 public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
 
 public:
     explicit            XclExpChChart( const XclExpRoot& rRoot,
-                            XChartDocRef xChartDoc, const Size& rSize );
+                            XChartDocRef xChartDoc, const Rectangle& rChartRect );
 
     /** Creates, registers and returns a new data series object. */
     XclExpChSeriesRef   CreateSeries();
@@ -1121,6 +1212,8 @@ public:
     void                RemoveLastSeries();
     /** Stores a CHTEXT group that describes a data point label. */
     void                SetDataLabel( XclExpChTextRef xText );
+    /** Sets the plot area position and size to manual mode. */
+    void                SetManualPlotArea();
 
     /** Writes all embedded records. */
     virtual void        WriteSubRecords( XclExpStream& rStrm );
@@ -1144,6 +1237,27 @@ private:
 
 // ----------------------------------------------------------------------------
 
+/** Represents the group of DFF and OBJ records containing all drawing shapes
+    embedded in the chart object.
+ */
+class XclExpChartDrawing : public XclExpRecordBase, protected XclExpRoot
+{
+public:
+    explicit            XclExpChartDrawing(
+                            const XclExpRoot& rRoot,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
+                            const Size& rChartSize );
+    virtual             ~XclExpChartDrawing();
+
+    virtual void        Save( XclExpStream& rStrm );
+
+private:
+    ScfRef< XclExpObjectManager > mxObjMgr;
+    ScfRef< XclExpRecordBase > mxObjRecs;
+};
+
+// ----------------------------------------------------------------------------
+
 /** Represents the entire chart substream (all records in BOF/EOF block). */
 class XclExpChart : public XclExpSubStream, protected XclExpRoot
 {
@@ -1152,7 +1266,7 @@ public:
 
 public:
     explicit            XclExpChart( const XclExpRoot& rRoot,
-                            XModelRef xModel, const Size& rSize );
+                            XModelRef xModel, const Rectangle& rChartRect );
 };
 
 // ============================================================================

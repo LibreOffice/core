@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellsh.cxx,v $
- * $Revision: 1.48.126.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,21 +32,22 @@
 
 #include "scitems.hxx"
 
-#include <svtools/slstitm.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/slstitm.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/insdlg.hxx>
 #include <sot/formats.hxx>
 #include <svx/hlnkitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/childwin.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 
 #include "cellsh.hxx"
 #include "sc.hrc"
@@ -206,7 +204,6 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 break;
 
             case SID_COPY:                      // Kopieren
-                bDisable = (!bSimpleArea && eMarkType != SC_MARK_SIMPLE_FILTERED);
                 // nur wegen Matrix nicht editierbar? Matrix nicht zerreissen
                 //! schlaegt nicht zu, wenn geschuetzt UND Matrix, aber damit
                 //! muss man leben.. wird in Copy-Routine abgefangen, sonst
@@ -443,7 +440,7 @@ IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
 
         SfxBindings& rBindings = GetViewData()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( FID_PASTE_CONTENTS );
+        rBindings.Invalidate( SID_PASTE_SPECIAL );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -453,7 +450,7 @@ IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
 void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
 {
 // SID_PASTE
-// FID_PASTE_CONTENTS
+// SID_PASTE_SPECIAL
 // SID_CLIPBOARD_FORMAT_ITEMS
 
     if ( !pImpl->m_pClipEvtLstnr )
@@ -490,7 +487,7 @@ void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
     if (bDisable)
     {
         rSet.DisableItem( SID_PASTE );
-        rSet.DisableItem( FID_PASTE_CONTENTS );
+        rSet.DisableItem( SID_PASTE_SPECIAL );
         rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     else if ( rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) != SFX_ITEM_UNKNOWN )
@@ -522,7 +519,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     // removed: SID_BORDER_OBJECT (old Basic)
 
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-//     BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace();
+//     BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame().IsInPlace();
 //  BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScViewData* pData       = GetViewData();
@@ -670,15 +667,9 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                                 nErrCode = pFCell->GetErrCode();
                         }
 
-                        if ( nErrCode > 0 )
-                            rSet.Put( SfxStringItem( nWhich,
-                                ScGlobal::GetLongErrorString( nErrCode ) ) );
-                        else
-                        {
-                            String aFuncStr;
-                            if ( pTabViewShell->GetFunction( aFuncStr ) )
-                                rSet.Put( SfxStringItem( nWhich, aFuncStr ) );
-                        }
+                        String aFuncStr;
+                        if ( pTabViewShell->GetFunction( aFuncStr, nErrCode ) )
+                            rSet.Put( SfxStringItem( nWhich, aFuncStr ) );
                     }
                 }
                 break;
@@ -724,22 +715,22 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                 break;
 
             case FID_INS_ROWBRK:
-                if ( nPosY==0 || (pDoc->GetRowFlags(nPosY,nTab) & CR_MANUALBREAK) )
+                if ( nPosY==0 || (pDoc->HasRowBreak(nPosY, nTab) & BREAK_MANUAL) )
                     rSet.DisableItem( nWhich );
                 break;
 
             case FID_INS_COLBRK:
-                if ( nPosX==0 || (pDoc->GetColFlags(nPosX,nTab) & CR_MANUALBREAK) )
+                if ( nPosX==0 || (pDoc->HasColBreak(nPosX, nTab) & BREAK_MANUAL) )
                     rSet.DisableItem( nWhich );
                 break;
 
             case FID_DEL_ROWBRK:
-                if ( nPosY==0 || (pDoc->GetRowFlags(nPosY,nTab) & CR_MANUALBREAK)==0 )
+                if ( nPosY==0 || (pDoc->HasRowBreak(nPosY, nTab) & BREAK_MANUAL) == 0 )
                     rSet.DisableItem( nWhich );
                 break;
 
             case FID_DEL_COLBRK:
-                if ( nPosX==0 || (pDoc->GetColFlags(nPosX,nTab) & CR_MANUALBREAK)==0 )
+                if ( nPosX==0 || (pDoc->HasColBreak(nPosX, nTab) & BREAK_MANUAL) == 0 )
                     rSet.DisableItem( nWhich );
                 break;
 
@@ -976,6 +967,29 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     if ( pDocSh && pDocSh->IsDocShared() )
                     {
                         rSet.DisableItem( nWhich );
+                    }
+                }
+                break;
+
+            case SID_SPELL_DIALOG:
+                {
+                    if ( pDoc && pData && pDoc->IsTabProtected( pData->GetTabNo() ) )
+                    {
+                        bool bVisible = false;
+                        SfxViewFrame* pViewFrame = ( pTabViewShell ? pTabViewShell->GetViewFrame() : NULL );
+                        if ( pViewFrame && pViewFrame->HasChildWindow( nWhich ) )
+                        {
+                            SfxChildWindow* pChild = pViewFrame->GetChildWindow( nWhich );
+                            Window* pWin = ( pChild ? pChild->GetWindow() : NULL );
+                            if ( pWin && pWin->IsVisible() )
+                            {
+                                bVisible = true;
+                            }
+                        }
+                        if ( !bVisible )
+                        {
+                            rSet.DisableItem( nWhich );
+                        }
                     }
                 }
                 break;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawview.hxx,v $
- * $Revision: 1.12.126.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -143,7 +140,7 @@ public:
     inline void     UnlockInternalLayer() { LockInternalLayer( false ); }
 
     SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
-    void                    CaptionTextDirection(USHORT nSlot);
+//UNUSED2009-05 void                    CaptionTextDirection(USHORT nSlot);
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 };
 

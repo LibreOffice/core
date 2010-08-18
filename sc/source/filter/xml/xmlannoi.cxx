@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlannoi.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,13 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "xmlannoi.hxx"
 #include "xmlimprt.hxx"
-#include "xmlcelli.hxx"
 #include "xmlconti.hxx"
 #include "XMLTableShapeImportHelper.hxx"
 
@@ -45,12 +39,21 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <svx/unoshape.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/outlobj.hxx>
 
 using namespace com::sun::star;
 using namespace xmloff::token;
+
+//------------------------------------------------------------------
+
+ScXMLAnnotationData::ScXMLAnnotationData() :
+    mbUseShapePos( false ),
+    mbShown( false )
+{
+}
+
+ScXMLAnnotationData::~ScXMLAnnotationData()
+{
+}
 
 //------------------------------------------------------------------
 
@@ -58,12 +61,12 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const uno::Reference<xml::sax::XAttributeList>& xAttrList,
+                                      ScXMLAnnotationData& rAnnotationData,
                                       ScXMLTableRowCellContext* pTempCellContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    mrAnnotationData( rAnnotationData ),
     nParagraphCount(0),
-    bDisplay(sal_False),
     bHasTextP(sal_False),
-    bHasPos(sal_False),
     pCellContext(pTempCellContext),
     pShapeContext(NULL)
 {
@@ -91,32 +94,32 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
         {
             case XML_TOK_TABLE_ANNOTATION_ATTR_AUTHOR:
             {
-                sAuthorBuffer = sValue;
+                maAuthorBuffer = sValue;
             }
             break;
             case XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE:
             {
-                sCreateDateBuffer = sValue;
+                maCreateDateBuffer = sValue;
             }
             break;
             case XML_TOK_TABLE_ANNOTATION_ATTR_CREATE_DATE_STRING:
             {
-                sCreateDateStringBuffer = sValue;
+                maCreateDateStringBuffer = sValue;
             }
             break;
             case XML_TOK_TABLE_ANNOTATION_ATTR_DISPLAY:
             {
-                bDisplay = IsXMLToken(sValue, XML_TRUE);
+                mrAnnotationData.mbShown = IsXMLToken(sValue, XML_TRUE);
             }
             break;
             case XML_TOK_TABLE_ANNOTATION_ATTR_X:
             {
-                bHasPos = sal_True;
+                mrAnnotationData.mbUseShapePos = true;
             }
             break;
             case XML_TOK_TABLE_ANNOTATION_ATTR_Y:
             {
-                bHasPos = sal_True;
+                mrAnnotationData.mbUseShapePos = true;
             }
             break;
         }
@@ -144,28 +147,28 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
     {
         if( IsXMLToken( rLName, XML_CREATOR ) )
             pContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, xAttrList, sAuthorBuffer);
+                                            rLName, xAttrList, maAuthorBuffer);
         else if( IsXMLToken( rLName, XML_DATE ) )
             pContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, xAttrList, sCreateDateBuffer);
+                                            rLName, xAttrList, maCreateDateBuffer);
     }
     else if( XML_NAMESPACE_META == nPrefix )
     {
         if( IsXMLToken( rLName, XML_DATE_STRING ) )
             pContext = new ScXMLContentContext(GetScImport(), nPrefix,
-                                            rLName, xAttrList, sCreateDateStringBuffer);
+                                            rLName, xAttrList, maCreateDateStringBuffer);
     }
 /*  else if ((nPrefix == XML_NAMESPACE_TEXT) && IsXMLToken(rLName, XML_P) )
     {
         if (!bHasTextP)
         {
             bHasTextP = sal_True;
-            sOUText.setLength(0);
+            maTextBuffer.setLength(0);
         }
         if(nParagraphCount)
-            sOUText.append(static_cast<sal_Unicode>('\n'));
+            maTextBuffer.append(static_cast<sal_Unicode>('\n'));
         ++nParagraphCount;
-        pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sOUText);
+        pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, maTextBuffer);
     }*/
 
     if( !pContext && pShapeContext )
@@ -180,7 +183,7 @@ SvXMLImportContext *ScXMLAnnotationContext::CreateChildContext( USHORT nPrefix,
 void ScXMLAnnotationContext::Characters( const ::rtl::OUString& rChars )
 {
     if (!bHasTextP)
-        sOUText.append(rChars);
+        maTextBuffer.append(rChars);
 }
 
 void ScXMLAnnotationContext::EndElement()
@@ -191,41 +194,27 @@ void ScXMLAnnotationContext::EndElement()
         delete pShapeContext;
     }
 
-    ScMyImportAnnotation* pMyAnnotation = new ScMyImportAnnotation();
-    pMyAnnotation->sAuthor = sAuthorBuffer.makeStringAndClear();
-    pMyAnnotation->sCreateDate = sCreateDateBuffer.makeStringAndClear();
-    if (!pMyAnnotation->sCreateDate.getLength())
-        pMyAnnotation->sCreateDate = sCreateDateStringBuffer.makeStringAndClear();
-    pMyAnnotation->sText = sOUText.makeStringAndClear();
-    pMyAnnotation->bDisplay = bDisplay;
-
-    if (xShape.is() && xShapes.is())
-    {
-        SvxShape* pShapeImp = SvxShape::getImplementation(xShape);
-        if (pShapeImp)
-        {
-            SdrObject *pSdrObj = pShapeImp->GetSdrObject();
-            if (pSdrObj)
-            {
-                if (bHasPos)
-                {
-                    pMyAnnotation->pItemSet = pSdrObj->GetMergedItemSet().Clone();
-                    awt::Point aPos = xShape->getPosition();
-                    awt::Size aSize = xShape->getSize();
-                    Rectangle aRect(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height));
-                    pMyAnnotation->pRect = new Rectangle(aRect);
-                }
-
-                if( OutlinerParaObject* pOPO = pSdrObj->GetOutlinerParaObject() )
-                    pMyAnnotation->pOPO = new OutlinerParaObject( *pOPO );
-
-                xShapes->remove(xShape);
-            }
-        }
-    }
+    mrAnnotationData.maAuthor = maAuthorBuffer.makeStringAndClear();
+    mrAnnotationData.maCreateDate = maCreateDateBuffer.makeStringAndClear();
+    if (!mrAnnotationData.maCreateDate.getLength())
+        mrAnnotationData.maCreateDate = maCreateDateStringBuffer.makeStringAndClear();
+    mrAnnotationData.maSimpleText = maTextBuffer.makeStringAndClear();
 
     XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)GetScImport().GetShapeImport().get();
     pTableShapeImport->SetAnnotation(NULL);
-
-    pCellContext->AddAnnotation(pMyAnnotation);
 }
+
+void ScXMLAnnotationContext::SetShape( const uno::Reference< drawing::XShape >& rxShape, const uno::Reference< drawing::XShapes >& rxShapes,
+                                       const rtl::OUString& rStyleName, const rtl::OUString& rTextStyle )
+{
+    mrAnnotationData.mxShape = rxShape;
+    mrAnnotationData.mxShapes = rxShapes;
+    mrAnnotationData.maStyleName = rStyleName;
+    mrAnnotationData.maTextStyle = rTextStyle;
+}
+
+void ScXMLAnnotationContext::AddContentStyle( sal_uInt16 nFamily, const rtl::OUString& rName, const ESelection& rSelection )
+{
+    mrAnnotationData.maContentStyles.push_back( ScXMLAnnotationStyleEntry( nFamily, rName, rSelection ) );
+}
+

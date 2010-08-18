@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbastyles.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #define SC_VBA_STYLES_HXX
 #include <ooo/vba/excel/XStyles.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include "vbacollectionimpl.hxx"
+#include <vbahelper/vbacollectionimpl.hxx>
 
 typedef CollTestImplHelper< ov::excel::XStyles > ScVbaStyles_BASE;
 class ScVbaStyles: public ScVbaStyles_BASE

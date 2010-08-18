@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: NetChartTypeTemplate.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,8 @@ public:
         const ::rtl::OUString & rServiceName,
         StackMode eStackMode,
         bool bSymbols,
-        bool bHasLines = true
+        bool bHasLines = true,
+        bool bHasFilledArea = false
         );
     virtual ~NetChartTypeTemplate();
 
@@ -80,6 +78,7 @@ private:
     StackMode  m_eStackMode;
     bool                                 m_bHasSymbols;
     bool                                 m_bHasLines;
+    bool                                 m_bHasFilledArea;
 };
 
 } //  namespace chart

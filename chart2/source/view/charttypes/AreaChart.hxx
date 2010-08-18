@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AreaChart.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +49,6 @@ public:
              , bool bCategoryXAxis, bool bNoArea=false
              , PlottingPositionHelper* pPlottingPositionHelper=NULL //takes owner ship
              , bool bConnectLastToFirstPoint=false
-             , bool bAddOneToXMax=false
              , bool bExpandIfValuesCloseToBorder=true
              , sal_Int32 nKeepAspectRatio=-1 //0->no 1->yes other value->automatic
              , const ::com::sun::star::drawing::Direction3D& rAspectRatio=::com::sun::star::drawing::Direction3D(1,1,1)//only taken into account if nKeepAspectRatio==1
@@ -79,6 +75,7 @@ public:
     //-------------------------------------------------------------------------
     // MinimumAndMaximumSupplier
     //-------------------------------------------------------------------------
+    virtual double getMinimumX();
     virtual double getMaximumX();
     virtual bool isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex );
     virtual bool isSeperateStackingForDifferentSigns( sal_Int32 nDimensionIndex );
@@ -104,27 +101,18 @@ private: //methods
                 , ::com::sun::star::drawing::PolyPolygonShape3D* pSeriesPoly
                 , PlottingPositionHelper* pPosHelper );
 
-    void    impl_maybeReplaceNanWithZero( double& rfValue );
-
 private: //member
     PlottingPositionHelper*             m_pMainPosHelper;
 
     bool                                m_bArea;//false -> line or symbol only
     bool                                m_bLine;
     bool                                m_bSymbol;
+    bool                                m_bIsPolarCooSys;//used e.g. for net chart (the data labels need to be placed different)
     bool                                m_bConnectLastToFirstPoint;//used e.g. for net chart
-    bool                                m_bAddOneToXMax;//used e.g. for net chart (the angle axis needs a different autoscaling)
     bool                                m_bExpandIfValuesCloseToBorder; // e.g. false for net charts
+
     sal_Int32                           m_nKeepAspectRatio; //0->no 1->yes other value->automatic
     ::com::sun::star::drawing::Direction3D m_aGivenAspectRatio; //only used if nKeepAspectRatio==1
-
-    enum tNanHandling
-    {
-        NAN_AS_ZERO,
-        NAN_AS_GAP,
-        NAN_AS_INTERPOLATED
-    };
-    tNanHandling    m_eNanHandling;
 
     //Properties for splines:
     ::com::sun::star::chart2::CurveStyle    m_eCurveStyle;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StatusBarCommandDispatch.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,7 +95,7 @@ void StatusBarCommandDispatch::fireStatusEvent(
     {
         uno::Any aArg;
         Reference< chart2::XChartDocument > xDoc( m_xModifiable, uno::UNO_QUERY );
-        aArg <<= ObjectNameProvider::getSelectedObjectText( m_aSelectedCID, xDoc );
+        aArg <<= ObjectNameProvider::getSelectedObjectText( m_aSelectedOID.getObjectCID(), xDoc );
         fireStatusEventForURL( C2U(".uno:Context"), aArg, true, xSingleListener );
     }
     if( bFireModified )
@@ -150,9 +147,9 @@ void SAL_CALL StatusBarCommandDispatch::selectionChanged( const lang::EventObjec
     throw (uno::RuntimeException)
 {
     if( m_xSelectionSupplier.is())
-        m_xSelectionSupplier->getSelection() >>= m_aSelectedCID;
+        m_aSelectedOID = ObjectIdentifier( m_xSelectionSupplier->getSelection() );
     else
-        m_aSelectedCID = OUString();
+        m_aSelectedOID = ObjectIdentifier();
     fireAllStatusEvents( 0 );
 }
 

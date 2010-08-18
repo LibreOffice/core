@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawview.cxx,v $
- * $Revision: 1.50.126.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,8 +41,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -190,7 +187,7 @@ void ScDrawView::AddCustomHdl()
             if(nCol > 0)
                 --nCol;
 
-            SCROW nRow = nPosY <= 0 ? 0 : pDoc->FastGetRowForHeight( nTab,
+            SCROW nRow = nPosY <= 0 ? 0 : pDoc->GetRowForHeight( nTab,
                     (ULONG) nPosY);
             if(nRow > 0)
                 --nRow;
@@ -379,8 +376,8 @@ void ScDrawView::RecalcScale()
     pDoc->GetTableArea( nTab, nEndCol, nEndRow );
     if (nEndCol<20)
         nEndCol = 20;
-    if (nEndRow<20)
-        nEndRow = 20;
+    if (nEndRow<1000)
+        nEndRow = 1000;
 
     ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev,aZoomX,aZoomY,nPPTX,nPPTY,
                             aScaleX,aScaleY );
@@ -400,13 +397,13 @@ void ScDrawView::MarkListHasChanged()
 
     ScTabViewShell* pViewSh = pViewData->GetViewShell();
 
-    if (!bInConstruct)          // nicht wenn die View gerade angelegt wird
+    // #i110829# remove the cell selection only if drawing objects are selected
+    if ( !bInConstruct && GetMarkedObjectList().GetMarkCount() )
     {
-        pViewSh->Unmark();      // Selektion auff'm Doc entfernen
+        pViewSh->Unmark();      // remove cell selection
 
         //  #65379# end cell edit mode if drawing objects are selected
-        if ( GetMarkedObjectList().GetMarkCount() )
-            SC_MOD()->InputEnterHandler();
+        SC_MOD()->InputEnterHandler();
     }
 
     //  IP deaktivieren
@@ -532,7 +529,7 @@ void ScDrawView::MarkListHasChanged()
     //  Verben anpassen
 
     SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
-    BOOL bOle = pViewSh->GetViewFrame()->GetFrame()->IsInPlace();
+    BOOL bOle = pViewSh->GetViewFrame()->GetFrame().IsInPlace();
     if ( pOle2Obj && !bOle )
     {
         uno::Reference < embed::XEmbeddedObject > xObj = pOle2Obj->GetObjRef();
@@ -573,16 +570,13 @@ void ScDrawView::MarkListHasChanged()
 
     if (pViewFrame)
     {
-        SfxFrame* pFrame = pViewFrame->GetFrame();
-        if (pFrame)
+        SfxFrame& rFrame = pViewFrame->GetFrame();
+        uno::Reference<frame::XController> xController = rFrame.GetController();
+        if (xController.is())
         {
-            uno::Reference<frame::XController> xController = pFrame->GetController();
-            if (xController.is())
-            {
-                ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
-                if (pImp)
-                    pImp->SelectionChanged();
-            }
+            ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
+            if (pImp)
+                pImp->SelectionChanged();
         }
     }
 
@@ -828,28 +822,28 @@ void ScDrawView::MarkDropObj( SdrObject* pObj )
     }
 }
 
-void ScDrawView::CaptionTextDirection( USHORT nSlot )
-{
-    if(nSlot != SID_TEXTDIRECTION_LEFT_TO_RIGHT && nSlot != SID_TEXTDIRECTION_TOP_TO_BOTTOM)
-        return;
-
-    SdrObject* pObject  = GetTextEditObject();
-    if ( ScDrawLayer::IsNoteCaption( pObject ) )
-    {
-        if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
-        {
-            SfxItemSet aAttr(pCaption->GetMergedItemSet());
-            aAttr.Put( SvxWritingModeItem(
-                nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
-                    com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
-                    SDRATTR_TEXTDIRECTION ) );
-            pCaption->SetMergedItemSet(aAttr);
-            FuPoor* pPoor = pViewData->GetView()->GetDrawFuncPtr();
-            if ( pPoor )
-            {
-                FuText* pText = static_cast<FuText*>(pPoor);
-                pText->StopEditMode(TRUE);
-            }
-        }
-    }
-}
+//UNUSED2009-05 void ScDrawView::CaptionTextDirection( USHORT nSlot )
+//UNUSED2009-05 {
+//UNUSED2009-05     if(nSlot != SID_TEXTDIRECTION_LEFT_TO_RIGHT && nSlot != SID_TEXTDIRECTION_TOP_TO_BOTTOM)
+//UNUSED2009-05         return;
+//UNUSED2009-05
+//UNUSED2009-05     SdrObject* pObject  = GetTextEditObject();
+//UNUSED2009-05     if ( ScDrawLayer::IsNoteCaption( pObject ) )
+//UNUSED2009-05     {
+//UNUSED2009-05         if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
+//UNUSED2009-05         {
+//UNUSED2009-05             SfxItemSet aAttr(pCaption->GetMergedItemSet());
+//UNUSED2009-05             aAttr.Put( SvxWritingModeItem(
+//UNUSED2009-05                 nSlot == SID_TEXTDIRECTION_LEFT_TO_RIGHT ?
+//UNUSED2009-05                     com::sun::star::text::WritingMode_LR_TB : com::sun::star::text::WritingMode_TB_RL,
+//UNUSED2009-05                     SDRATTR_TEXTDIRECTION ) );
+//UNUSED2009-05             pCaption->SetMergedItemSet(aAttr);
+//UNUSED2009-05             FuPoor* pPoor = pViewData->GetView()->GetDrawFuncPtr();
+//UNUSED2009-05             if ( pPoor )
+//UNUSED2009-05             {
+//UNUSED2009-05                 FuText* pText = static_cast<FuText*>(pPoor);
+//UNUSED2009-05                 pText->StopEditMode(TRUE);
+//UNUSED2009-05             }
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05 }

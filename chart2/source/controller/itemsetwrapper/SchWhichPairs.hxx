@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SchWhichPairs.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #endif
 #include <svx/xdef.hxx>
 #include <svx/svddef.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include "chartview/ChartSfxItemIds.hxx"
 
@@ -90,27 +87,6 @@ const USHORT nGridWhichPairs[] =
     0
 };
 
-const USHORT nChartWhichPairs[] =
-{
-    SCHATTR_STYLE_START,SCHATTR_STYLE_END,          //    59 -    68  sch/schattr.hxx
-    0
-};
-
-const USHORT nDiagramAreaWhichPairs[] =
-{
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
-    0
-};
-
-const USHORT nAreaAndChartWhichPairs[] =   // pairs for chart AND area
-{
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
-    XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
-    SCHATTR_STYLE_START,SCHATTR_STYLE_END,          //    59 -    68  sch/schattr.hxx
-    0
-};
-
 const USHORT nLegendWhichPairs[] =
 {
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
@@ -128,23 +104,22 @@ const USHORT nDataLabelWhichPairs[] =
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */ \
     SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_VALUE,   /*      40          sch/schattr.hxx*/ \
     SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, /*      41          sch/schattr.hxx*/ \
-    SCHATTR_DATADESCR_PLACEMENT, SCHATTR_DATADESCR_PLACEMENT,
-    SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS,
+    SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,
+    EE_PARA_WRITINGDIR,EE_PARA_WRITINGDIR,
     0
 };
 
 #define CHART_POINT_WHICHPAIRS  \
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              /*  1000 -  1016  svx/xdef.hxx   */ \
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              /*  1018 -  1046  svx/xdef.hxx   */ \
-    EE_ITEMS_START, EE_ITEMS_END,                   /*  3994 -  4037  svx/eeitem.hxx */ \
+    EE_ITEMS_START, EE_ITEMS_END,                   /*  3994 -  4037  editeng/eeitem.hxx */ \
     SID_CHAR_DLG_PREVIEW_STRING, SID_CHAR_DLG_PREVIEW_STRING, \
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END, /*     1 -     2  sch/schattr.hxx*/ \
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */ \
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */ \
     SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_VALUE,   /*      40          sch/schattr.hxx*/ \
     SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, /*      41          sch/schattr.hxx*/ \
-    SCHATTR_DATADESCR_PLACEMENT, SCHATTR_DATADESCR_PLACEMENT, \
-    SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, \
+    SCHATTR_TEXT_DEGREES, SCHATTR_TEXT_DEGREES, \
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          /*    59 -    68  sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_BRUSH,SCHATTR_SYMBOL_BRUSH,      /*    94          sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_SIZE,SCHATTR_SYMBOL_SIZE,        /*    97          sch/schattr.hxx*/ \
@@ -163,7 +138,8 @@ const USHORT nDataPointWhichPairs[] =
     SCHATTR_STARTING_ANGLE,SCHATTR_STARTING_ANGLE, \
     SCHATTR_CLOCKWISE,SCHATTR_CLOCKWISE, \
     SCHATTR_MISSING_VALUE_TREATMENT,SCHATTR_MISSING_VALUE_TREATMENT, \
-    SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS,SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS
+    SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS,SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS, \
+    SCHATTR_INCLUDE_HIDDEN_CELLS,SCHATTR_INCLUDE_HIDDEN_CELLS
 
 const USHORT nSeriesOptionsWhichPairs[] =
 {

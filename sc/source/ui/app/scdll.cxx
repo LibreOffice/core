@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scdll.cxx,v $
- * $Revision: 1.44.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #ifndef _FM_FMOBJFAC_HXX
@@ -43,6 +40,7 @@
 #include <svx/tbxcolor.hxx>
 
 #include <sot/clsids.hxx>
+#include <sfx2/taskpane.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
@@ -50,7 +48,7 @@
 #include <avmedia/mediaplayer.hxx>
 #include <avmedia/mediatoolbox.hxx>
 #include <comphelper/types.hxx>
-#include <svx/extrusioncontrols.hxx>
+#include <svx/extrusioncolorcontrol.hxx>
 #include <svx/fontworkgallery.hxx>
 #include <svx/tbxcustomshapes.hxx>
 
@@ -96,7 +94,7 @@
 #include <svx/selctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/zoomctrl.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/modctrl.hxx>
 #include <svx/pszctrl.hxx>
 #include <svx/fntctl.hxx>
@@ -266,6 +264,9 @@ void ScDLL::Init()
     //Media Controller
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
 
+    // common SFX controller
+    ::sfx2::TaskPaneWrapper::RegisterChildWindow( FALSE, pMod );
+
     // Svx-StatusBar-Controller
     SvxInsertStatusBarControl       ::RegisterControl(SID_ATTR_INSERT,      pMod);
     SvxSelectionModeControl         ::RegisterControl(SID_STATUS_SELMODE,   pMod);
@@ -281,15 +282,8 @@ void ScDLL::Init()
     SvxFontSizeMenuControl          ::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT, pMod);
 
     // CustomShape extrusion controller
-    svx::ExtrusionDepthControl::RegisterControl( SID_EXTRUSION_DEPTH_FLOATER, pMod );
-    svx::ExtrusionDirectionControl::RegisterControl( SID_EXTRUSION_DIRECTION_FLOATER, pMod );
-    svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
-    svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
-
     svx::FontWorkShapeTypeControl::RegisterControl( SID_FONTWORK_SHAPE_TYPE, pMod );
-    svx::FontWorkAlignmentControl::RegisterControl( SID_FONTWORK_ALIGNMENT_FLOATER, pMod );
-    svx::FontWorkCharacterSpacingControl::RegisterControl( SID_FONTWORK_CHARACTER_SPACING_FLOATER, pMod );
 
     //  Child-Windows
 
@@ -327,6 +321,10 @@ void ScDLL::Init()
     GalleryChildWindow          ::RegisterChildWindow(FALSE, pMod);
     ScSpellDialogChildWindow    ::RegisterChildWindow(FALSE, pMod);
     ::avmedia::MediaPlayer      ::RegisterChildWindow(FALSE, pMod);
+
+    //<!--Added by PengYunQuan for Validity Cell Range Picker
+    ScValidityRefChildWin::RegisterChildWindow(FALSE, pMod);
+    //-->Added by PengYunQuan for Validity Cell Range Picker
 
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CharacterPropertyItemConverter.cxx,v $
- * $Revision: 1.14.56.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,14 +32,15 @@
 #include "macros.hxx"
 #include "ItemPropertyMap.hxx"
 #include "RelativeSizeHelper.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svtools/stritem.hxx>
+#include <editeng/memberids.hrc>
+#include <editeng/eeitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <svl/stritem.hxx>
 
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/XFormattedString.hpp>
@@ -78,7 +76,7 @@ namespace
 //         IPM_MAP_ENTRY( EE_CHAR_WEIGHT_CTL, "CharWeightComplex", 0 )
 //         IPM_MAP_ENTRY( EE_CHAR_ITALIC_CJK, "CharPostureAsian", 0 )
 //         IPM_MAP_ENTRY( EE_CHAR_ITALIC_CTL, "CharPostureComplex", 0 )
-
+        IPM_MAP_ENTRY( EE_PARA_ASIANCJKSPACING, "ParaIsCharacterDistance", 0 )
         );
 
     return aCharacterPropertyMap;
@@ -290,6 +288,11 @@ void CharacterPropertyItemConverter::FillSpecialItem(
                 rOutItemSet.Put( SfxStringItem( nWhichId, C2U( "" ) ) );
         }
         break;
+
+        case EE_PARA_FORBIDDENRULES:
+        case EE_PARA_HANGINGPUNCTUATION:
+            rOutItemSet.DisableItem( nWhichId );
+            break;
     }
 }
 

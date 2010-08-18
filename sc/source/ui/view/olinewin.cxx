@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: olinewin.cxx,v $
- * $Revision: 1.15.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -167,7 +164,7 @@ void ScOutlineWindow::InitSettings()
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground( rStyleSettings.GetFaceColor() );
     maLineColor = rStyleSettings.GetButtonTextColor();
-    mpSymbols = ScGlobal::GetOutlineSymbols( !!GetBackground().GetColor().IsDark() );
+    mpSymbols = ScGlobal::GetOutlineSymbols( rStyleSettings.GetHighContrastMode() );
     Invalidate();
 }
 
@@ -186,16 +183,15 @@ const ScOutlineEntry* ScOutlineWindow::GetOutlineEntry( size_t nLevel, size_t nE
 
 bool ScOutlineWindow::IsHidden( SCCOLROW nColRowIndex ) const
 {
-    sal_uInt8 nFlags = mbHoriz ?
-        GetDoc().GetColFlags( static_cast<SCCOL>(nColRowIndex), GetTab() ) :
-        GetDoc().GetRowFlags( static_cast<SCROW>(nColRowIndex), GetTab() );
-    return (nFlags & CR_HIDDEN) != 0;
+    return mbHoriz ?
+        GetDoc().ColHidden(static_cast<SCCOL>(nColRowIndex), GetTab()) :
+        GetDoc().RowHidden(static_cast<SCROW>(nColRowIndex), GetTab());
 }
 
 bool ScOutlineWindow::IsFiltered( SCCOLROW nColRowIndex ) const
 {
     // columns cannot be filtered
-    return !mbHoriz && GetDoc().IsFiltered( static_cast<SCROW>(nColRowIndex), GetTab() );
+    return !mbHoriz && GetDoc().RowFiltered( static_cast<SCROW>(nColRowIndex), GetTab() );
 }
 
 bool ScOutlineWindow::IsFirstVisible( SCCOLROW nColRowIndex ) const

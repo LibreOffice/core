@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartModelHelper.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,11 @@
 #include "ChartModelHelper.hxx"
 #include "macros.hxx"
 #include "DiagramHelper.hxx"
+#include "DataSourceHelper.hxx"
+#include "ControllerLockGuard.hxx"
+#include "RangeHighlighter.hxx"
+#include "InternalDataProvider.hxx"
+
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -51,6 +53,20 @@ namespace chart
 //.............................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
+
+//static
+uno::Reference< chart2::data::XRangeHighlighter > ChartModelHelper::createRangeHighlighter(
+        const uno::Reference< view::XSelectionSupplier > & xSelectionSupplier )
+{
+    return new RangeHighlighter( xSelectionSupplier );
+}
+
+//static
+uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDataProvider(
+    const uno::Reference< ::com::sun::star::chart2::XChartDocument >& xChartDoc, bool bConnectToModel )
+{
+    return new InternalDataProvider( xChartDoc, bConnectToModel );
+}
 
 //static
 uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< frame::XModel >& xModel )
@@ -74,6 +90,20 @@ uno::Reference< XDiagram > ChartModelHelper::findDiagram( const uno::Reference< 
         ASSERT_EXCEPTION( ex );
     }
     return NULL;
+}
+
+//static
+uno::Reference< XCoordinateSystem > ChartModelHelper::getFirstCoordinateSystem( const uno::Reference< frame::XModel >& xModel )
+{
+    uno::Reference< XCoordinateSystem > XCooSys;
+    uno::Reference< XCoordinateSystemContainer > xCooSysCnt( ChartModelHelper::findDiagram( xModel ), uno::UNO_QUERY );
+    if( xCooSysCnt.is() )
+    {
+        uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
+        if( aCooSysSeq.getLength() )
+            XCooSys = aCooSysSeq[0];
+    }
+    return XCooSys;
 }
 
 // static
@@ -104,9 +134,14 @@ uno::Reference< XChartType > ChartModelHelper::getChartTypeOfSeries(
     return DiagramHelper::getChartTypeOfSeries( ChartModelHelper::findDiagram( xModel ), xGivenDataSeries );
 }
 
+awt::Size ChartModelHelper::getDefaultPageSize()
+{
+    return awt::Size( 16000, 9000 );
+}
+
 awt::Size ChartModelHelper::getPageSize( const uno::Reference< frame::XModel >& xModel )
 {
-    awt::Size aPageSize( 8000, 7000 );
+    awt::Size aPageSize( ChartModelHelper::getDefaultPageSize() );
     uno::Reference< embed::XVisualObject > xVisualObject(xModel,uno::UNO_QUERY);
     DBG_ASSERT(xVisualObject.is(),"need xVisualObject for page size");
     if( xVisualObject.is() )
@@ -135,6 +170,96 @@ void ChartModelHelper::triggerRangeHighlighting( const uno::Reference< frame::XM
             xSelectionChangeListener->selectionChanged( aEvent );
         }
     }
+}
+
+bool ChartModelHelper::isIncludeHiddenCells( const uno::Reference< frame::XModel >& xChartModel )
+{
+    bool bIncluded = true;  // hidden cells are included by default.
+
+    uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
+    if (!xDiagram.is())
+        return bIncluded;
+
+    uno::Reference< beans::XPropertySet > xProp( xDiagram, uno::UNO_QUERY );
+    if (!xProp.is())
+        return bIncluded;
+
+    try
+    {
+        xProp->getPropertyValue(C2U("IncludeHiddenCells")) >>= bIncluded;
+    }
+    catch( const beans::UnknownPropertyException& )
+    {
+    }
+
+    return bIncluded;
+}
+
+bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, const uno::Reference< frame::XModel >& xChartModel )
+{
+    bool bChanged = false;
+    try
+    {
+        ControllerLockGuard aLockedControllers( xChartModel );
+
+        uno::Reference< beans::XPropertySet > xDiagramProperties( ChartModelHelper::findDiagram(xChartModel), uno::UNO_QUERY );
+        if (xDiagramProperties.is())
+        {
+            bool bOldValue = bIncludeHiddenCells;
+            xDiagramProperties->getPropertyValue( C2U("IncludeHiddenCells") ) >>= bOldValue;
+            if( bOldValue == bIncludeHiddenCells )
+                bChanged = true;
+
+            //set the property on all instances in all cases to get the different objects in sync!
+
+            uno::Any aNewValue = uno::makeAny(bIncludeHiddenCells);
+
+            try
+            {
+                uno::Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY );
+                if( xChartDoc.is() )
+                {
+                    uno::Reference< beans::XPropertySet > xDataProviderProperties( xChartDoc->getDataProvider(), uno::UNO_QUERY );
+                    if( xDataProviderProperties.is() )
+                        xDataProviderProperties->setPropertyValue(C2U("IncludeHiddenCells"), aNewValue );
+                }
+            }
+            catch( const beans::UnknownPropertyException& )
+            {
+                //the property is optional!
+            }
+
+            try
+            {
+                uno::Reference< chart2::data::XDataSource > xUsedData( DataSourceHelper::getUsedData( xChartModel ) );
+                if( xUsedData.is() )
+                {
+                    uno::Reference< beans::XPropertySet > xProp;
+                    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aData( xUsedData->getDataSequences());
+                    for( sal_Int32 i=0; i<aData.getLength(); ++i )
+                    {
+                        xProp.set( uno::Reference< beans::XPropertySet >( aData[i]->getValues(), uno::UNO_QUERY ) );
+                        if(xProp.is())
+                            xProp->setPropertyValue(C2U("IncludeHiddenCells"), aNewValue );
+                        xProp.set( uno::Reference< beans::XPropertySet >( aData[i]->getLabel(), uno::UNO_QUERY ) );
+                        if(xProp.is())
+                            xProp->setPropertyValue(C2U("IncludeHiddenCells"), aNewValue );
+                    }
+                }
+            }
+            catch( const beans::UnknownPropertyException& )
+            {
+                //the property is optional!
+            }
+
+            xDiagramProperties->setPropertyValue( C2U("IncludeHiddenCells"), aNewValue);
+        }
+    }
+    catch (uno::Exception& e)
+    {
+        ASSERT_EXCEPTION(e);
+    }
+    return bChanged;
 }
 
 //.............................................................................

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ftools.hxx,v $
- * $Revision: 1.24.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +35,7 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
+#include <oox/helper/helper.hxx>
 #include "filter.hxx"
 #include "scdllapi.h"
 
@@ -50,9 +48,6 @@
 
 /** Expands to a temporary String, created from an ASCII character array. */
 #define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
-/** Expands to a temporary ::rtl::OUString, created from an ASCII character array. */
-#undef CREATE_OUSTRING
-#define CREATE_OUSTRING( ascii )    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
 
 // items and item sets --------------------------------------------------------
 
@@ -522,7 +517,9 @@ class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, UINT32 nDifOption = SC_DIFOPT_EXCEL );
     virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange );
-    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE );
+    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange,
+                                   double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE,
+                                   SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true );
 
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange );
     virtual ScEEAbsImport *CreateHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight );

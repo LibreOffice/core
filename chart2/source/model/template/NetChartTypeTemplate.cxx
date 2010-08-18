@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: NetChartTypeTemplate.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,6 @@
 #include "NetChartTypeTemplate.hxx"
 #include "macros.hxx"
 #include "PolarCoordinateSystem.hxx"
-#include "Scaling.hxx"
 #include "DiagramHelper.hxx"
 #include "servicenames_charttypes.hxx"
 #include "DataSeriesHelper.hxx"
@@ -65,11 +61,13 @@ NetChartTypeTemplate::NetChartTypeTemplate(
     const ::rtl::OUString & rServiceName,
     StackMode eStackMode,
     bool bSymbols,
-    bool bHasLines ) :
+    bool bHasLines ,
+    bool bHasFilledArea ) :
         ChartTypeTemplate( xContext, rServiceName ),
         m_eStackMode( eStackMode ),
         m_bHasSymbols( bSymbols ),
-        m_bHasLines( bHasLines )
+        m_bHasLines( bHasLines ),
+        m_bHasFilledArea( bHasFilledArea )
 {}
 
 NetChartTypeTemplate::~NetChartTypeTemplate()
@@ -111,11 +109,18 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
 {
     sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
-    // check symbol-style
-    // for a template with symbols it is ok, if there is at least one series
-    // with symbols, otherwise an unknown template is too easy to achieve
+    uno::Reference< beans::XPropertySet > xChartTypeProp(
+        DiagramHelper::getChartTypeByIndex( xDiagram, 0 ), uno::UNO_QUERY_THROW );
+
     if( bResult )
     {
+        //filled net chart?:
+        if( m_bHasFilledArea )
+            return sal_True;
+
+        // check symbol-style
+        // for a template with symbols it is ok, if there is at least one series
+        // with symbols, otherwise an unknown template is too easy to achieve
         bool bSymbolFound = false;
         bool bLineFound = false;
 
@@ -183,8 +188,13 @@ Reference< chart2::XChartType > NetChartTypeTemplate::getChartTypeForIndex( sal_
     {
         Reference< lang::XMultiServiceFactory > xFact(
             GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
-        xResult.set( xFact->createInstance(
-                         CHART2_SERVICE_NAME_CHARTTYPE_NET ), uno::UNO_QUERY_THROW );
+
+        if( m_bHasFilledArea )
+            xResult.set( xFact->createInstance(
+                             CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ), uno::UNO_QUERY_THROW );
+        else
+            xResult.set( xFact->createInstance(
+                             CHART2_SERVICE_NAME_CHARTTYPE_NET ), uno::UNO_QUERY_THROW );
     }
     catch( uno::Exception & ex )
     {

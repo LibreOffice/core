@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConfigurationAccess.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +32,11 @@
 #include "macros.hxx"
 
 // header for class SvtSysLocale
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 // header for class ConfigItem
 #include <unotools/configitem.hxx>
+// header for rtl::Static
+#include <rtl/instance.hxx>
 
 
 //.............................................................................
@@ -67,6 +66,8 @@ public:
     virtual ~CalcConfigItem();
 
     FieldUnit getFieldUnit();
+    virtual void                    Commit();
+    virtual void                    Notify( const uno::Sequence<rtl::OUString>& aPropertyNames);
 };
 
 CalcConfigItem::CalcConfigItem()
@@ -77,6 +78,9 @@ CalcConfigItem::CalcConfigItem()
 CalcConfigItem::~CalcConfigItem()
 {
 }
+
+void CalcConfigItem::Commit() {}
+void CalcConfigItem::Notify( const uno::Sequence<rtl::OUString>& ) {}
 
 FieldUnit CalcConfigItem::getFieldUnit()
 {
@@ -96,37 +100,20 @@ FieldUnit CalcConfigItem::getFieldUnit()
     return eResult;
 }
 
-// ----------------------------------------
-
-ConfigurationAccess * ConfigurationAccess::m_pThis = 0;
-
-// private, use static getConfigurationAccess method
-ConfigurationAccess::ConfigurationAccess()
-    : m_pCalcConfigItem(0)
+namespace
 {
-    m_pCalcConfigItem = new CalcConfigItem();
+    //a CalcConfigItem Singleton
+    struct theCalcConfigItem : public rtl::Static< CalcConfigItem, theCalcConfigItem > {};
 }
 
-// static
-ConfigurationAccess * ConfigurationAccess::getConfigurationAccess()
+namespace ConfigurationAccess
 {
-    // note: not threadsafe
-    if( !m_pThis )
-        m_pThis = new ConfigurationAccess();
-    return m_pThis;
-}
-
-ConfigurationAccess::~ConfigurationAccess()
-{
-    delete m_pCalcConfigItem;
-}
-
-FieldUnit ConfigurationAccess::getFieldUnit()
-{
-    OSL_ASSERT( m_pCalcConfigItem );
-    FieldUnit aUnit( m_pCalcConfigItem->getFieldUnit() );
-    return aUnit;
-}
+    FieldUnit getFieldUnit()
+    {
+        FieldUnit aUnit( theCalcConfigItem::get().getFieldUnit() );
+        return aUnit;
+    }
+} //namespace ConfigurationAccess
 
 //.............................................................................
 } //namespace chart

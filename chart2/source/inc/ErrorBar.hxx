@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ErrorBar.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +47,10 @@
 namespace chart
 {
 
+OOO_DLLPUBLIC_CHARTTOOLS    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createErrorBar(
+    const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > & xContext );
+
 namespace impl
 {
 typedef ::cppu::WeakImplHelper6<
@@ -62,7 +63,7 @@ typedef ::cppu::WeakImplHelper6<
     ErrorBar_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS ErrorBar :
+class ErrorBar :
         public MutexContainer,
         public impl::ErrorBar_Base,
         public ::property::OPropertySet

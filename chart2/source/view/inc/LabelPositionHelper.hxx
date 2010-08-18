@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: LabelPositionHelper.hxx,v $
- * $Revision: 1.4.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +62,9 @@ public:
     static void doDynamicFontResize(  tAnySequence& rPropValues, const tNameSequence& rPropNames
                     , const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisModelProps
                     , const ::com::sun::star::awt::Size& rNewReferenceSize );
+
+    static void correctPositionForRotation( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape2DText
+                    , LabelAlignment eLabelAlignment, const double fRotationAngle, bool bRotateAroundCenter );
 
 private:
     LabelPositionHelper();

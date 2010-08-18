@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AxisHelper.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,9 @@ namespace chart
 class OOO_DLLPUBLIC_CHARTTOOLS AxisHelper
 {
 public:
+    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling > createLinearScaling();
+    static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling > createLogarithmicScaling( double fBase = 10.0 );
+
     static ::com::sun::star::chart2::ScaleData createDefaultScale();
 
     static void removeExplicitScaling( ::com::sun::star::chart2::ScaleData& rScaleData );
@@ -101,7 +101,10 @@ public:
     static void makeAxisInvisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
     static void makeGridInvisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xGridProperties );
 
-    static sal_Bool areAxisLabelsVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProperties );
+    static void hideAxisIfNoDataIsAttached( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis
+                                          , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram);
+
+    SAL_DLLPRIVATE static sal_Bool areAxisLabelsVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProperties );
     static sal_Bool isAxisVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
     static sal_Bool isGridVisible( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xGridProperties );
 
@@ -187,7 +190,7 @@ public:
     /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
                </TRUE> are returned
      */
-    static std::vector<
+    SAL_DLLPRIVATE static std::vector<
                 ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XAxis > >
             getAllAxesOfCoordinateSystem( const ::com::sun::star::uno::Reference<

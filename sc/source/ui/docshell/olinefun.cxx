@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: olinefun.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,6 +134,9 @@ BOOL ScOutlineDocFunc::MakeOutline( const ScRange& rRange, BOOL bColumns, BOOL b
                                         pUndoTab, bColumns, TRUE ) );
         }
 
+        if (pDoc->IsStreamValid(nTab))
+            pDoc->SetStreamValid(nTab, FALSE);
+
         USHORT nParts = 0;              // Datenbereich nicht geaendert
         if ( bColumns )
             nParts |= PAINT_TOP;
@@ -199,6 +199,9 @@ BOOL ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, BOOL bColumns, BOOL
                                             nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab,
                                             pUndoTab, bColumns, FALSE ) );
             }
+
+            if (pDoc->IsStreamValid(nTab))
+                pDoc->SetStreamValid(nTab, FALSE);
 
             USHORT nParts = 0;              // Datenbereich nicht geaendert
             if ( bColumns )
@@ -264,6 +267,9 @@ BOOL ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, BOOL bRecord, BOOL bApi )
         pDoc->SetOutlineTable( nTab, NULL );
 
         pDoc->UpdatePageBreaks( nTab );
+
+        if (pDoc->IsStreamValid(nTab))
+            pDoc->SetStreamValid(nTab, FALSE);
 
         rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab,
                                     PAINT_GRID | PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
@@ -332,6 +338,9 @@ BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bA
                                     nEndCol, nEndRow, nTab,
                                     pUndoDoc, pUndoTab ) );
     }
+
+    if (pDoc->IsStreamValid(nTab))
+        pDoc->SetStreamValid(nTab, FALSE);
 
     rDocShell.PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_LEFT | PAINT_TOP | PAINT_SIZE );
     rDocShell.SetDocumentModified();
@@ -411,7 +420,7 @@ BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
             if ( bColumns )
                 pDoc->ShowCol( static_cast<SCCOL>(i), nTab, bShow );
             else
-                if ( !bShow || !pDoc->IsFiltered( i,nTab ) )
+                if ( !bShow || !pDoc->RowFiltered( i,nTab ) )
                     pDoc->ShowRow( i, nTab, bShow );
         }
     }
@@ -509,7 +518,7 @@ BOOL ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
             }
         }
         for ( i=nMin; i<=nMax; i++ )
-            if ( !pDoc->IsFiltered( i,nTab ) )              // weggefilterte nicht einblenden
+            if ( !pDoc->RowFiltered( i,nTab ) )             // weggefilterte nicht einblenden
                 pDoc->ShowRow( i, nTab, TRUE );
 
         pDoc->UpdatePageBreaks( nTab );
@@ -669,7 +678,7 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
         if ( bColumns )
             pDoc->ShowCol( static_cast<SCCOL>(i), nTab, TRUE );
         else
-            if ( !pDoc->IsFiltered( i,nTab ) )              // weggefilterte nicht einblenden
+            if ( !pDoc->RowFiltered( i,nTab ) )             // weggefilterte nicht einblenden
                 pDoc->ShowRow( i, nTab, TRUE );
     }
 
@@ -692,6 +701,7 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 
     pArray->SetVisibleBelow( nLevel, nEntry, TRUE, TRUE );
 
+    pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
 
     if (bPaint)
@@ -757,6 +767,7 @@ BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 
     pArray->SetVisibleBelow( nLevel, nEntry, FALSE );
 
+    pDoc->InvalidatePageBreaks(nTab);
     pDoc->UpdatePageBreaks( nTab );
 
     if (bPaint)

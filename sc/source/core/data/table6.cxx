@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: table6.cxx,v $
- * $Revision: 1.18.128.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +33,8 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
 #include <unotools/textsearch.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/editobj.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/editobj.hxx>
 
 #include "table.hxx"
 #include "collect.hxx"
@@ -219,7 +216,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 // NB: rich text format is lost.
                 // This is also true of Cells.
                 if( ScPostIt* pNote = pCell->GetNote() )
-                    pNote->SetText( aString );
+                    pNote->SetText( ScAddress( nCol, nRow, nTab ), aString );
             }
             else if ( cMatrixFlag != MM_NONE )
             {   // #60558# Matrix nicht zerreissen
@@ -658,7 +655,7 @@ BOOL ScTable::SearchAndReplace(const SvxSearchItem& rSearchItem,
         {
             //  SearchParam no longer needed - SearchOptions contains all settings
             com::sun::star::util::SearchOptions aSearchOptions = rSearchItem.GetSearchOptions();
-            aSearchOptions.Locale = *ScGlobal::pLocale;
+            aSearchOptions.Locale = *ScGlobal::GetLocale();
 
             //  #107259# reflect UseAsianOptions flag in SearchOptions
             //  (use only ignore case and width if asian options are disabled).

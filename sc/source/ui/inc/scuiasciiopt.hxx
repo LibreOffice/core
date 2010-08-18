@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scuiasciiopt.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,8 @@
 
 
 #include "asciiopt.hxx"
+#include "svx/langbox.hxx"
+
 // ============================================================================
 
 class ScImportAsciiDlg : public ModalDialog
@@ -49,6 +48,8 @@ class ScImportAsciiDlg : public ModalDialog
     FixedLine                   aFlFieldOpt;
     FixedText                   aFtCharSet;
     SvxTextEncodingBox          aLbCharSet;
+    FixedText                   aFtCustomLang;
+    SvxLanguageBox              aLbCustomLang;
 
     FixedText                   aFtRow;
     NumericField                aNfRow;
@@ -64,8 +65,14 @@ class ScImportAsciiDlg : public ModalDialog
     CheckBox                    aCkbOther;
     Edit                        aEdOther;
     CheckBox                    aCkbAsOnce;
+
+    FixedLine                   aFlOtherOpt;
+
     FixedText                   aFtTextSep;
     ComboBox                    aCbTextSep;
+
+    CheckBox                    aCkbQuotedAsText;
+    CheckBox                    aCkbDetectNumber;
 
     FixedLine                   aFlWidth;
     FixedText                   aFtType;
@@ -87,6 +94,7 @@ class ScImportAsciiDlg : public ModalDialog
 
     CharSet                     meCharSet;          /// Selected char set.
     bool                        mbCharSetSystem;    /// Is System char set selected?
+    bool                        mbFileImport;       /// Is this dialog involked for csv file import ?
 
 public:
                                 ScImportAsciiDlg(
@@ -96,6 +104,7 @@ public:
 
     void                        GetOptions( ScAsciiOptions& rOpt );
     void                        SetTextToColumnsMode();
+    void                        SaveParameters();
 
 private:
     /** Sets the selected char set data to meCharSet and mbCharSetSystem. */

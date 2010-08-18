@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: collect.cxx,v $
- * $Revision: 1.14.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +93,7 @@ ScCollection::~ScCollection()
 }
 
 //------------------------------------------------------------------------
-
+USHORT ScCollection::GetCount() const { return nCount; }
 void ScCollection::AtFree(USHORT nIndex)
 {
     if ((pItems) && (nIndex < nCount))
@@ -334,38 +331,6 @@ ScDataObject*   ScStrCollection::Clone() const
 }
 
 //------------------------------------------------------------------------
-
-void ScStrCollection::Load( SvStream& rStream )
-{
-    ScReadHeader aHdr( rStream );
-    lcl_DeleteScDataObjects( pItems, nCount );
-    BOOL bDups;
-    rStream >> bDups;
-    SetDups( bDups );
-    rStream >> nCount >> nLimit >> nDelta;
-    pItems = new ScDataObject*[nLimit];
-    String aStr;
-    rtl_TextEncoding eSet = rStream.GetStreamCharSet();
-    for ( USHORT i=0; i<nCount; i++ )
-    {
-        rStream.ReadByteString( aStr, eSet );
-        pItems[i] = new StrData( aStr );
-    }
-}
-
-void ScStrCollection::Store( SvStream& rStream ) const
-{
-    ScWriteHeader aHdr( rStream );
-    BOOL bDups = IsDups();
-    rStream << bDups << nCount << nLimit << nDelta;
-    rtl_TextEncoding eSet = rStream.GetStreamCharSet();
-    for ( USHORT i=0; i<nCount; i++ )
-    {
-        rStream.WriteByteString( ((StrData*)pItems[i])->GetString(), eSet );
-    }
-}
-
-//------------------------------------------------------------------------
 // TypedScStrCollection
 //------------------------------------------------------------------------
 
@@ -387,14 +352,33 @@ void ScStrCollection::Store( SvStream& rStream ) const
 //UNUSED2008-05      }
 //UNUSED2008-05  }
 
+
 ScDataObject*   TypedStrData::Clone() const
 {
     return new TypedStrData(*this);
 }
 
+TypedScStrCollection::TypedScStrCollection( USHORT nLim , USHORT nDel , BOOL bDup  )
+    : ScSortedCollection( nLim, nDel, bDup )
+{
+    bCaseSensitive = FALSE;
+}
+
+TypedScStrCollection::~TypedScStrCollection()
+{}
 ScDataObject* TypedScStrCollection::Clone() const
 {
     return new TypedScStrCollection(*this);
+}
+
+TypedStrData*    TypedScStrCollection::operator[]( const USHORT nIndex) const
+{
+    return (TypedStrData*)At(nIndex);
+}
+
+void    TypedScStrCollection::SetCaseSensitive( BOOL bSet )
+{
+    bCaseSensitive = bSet;
 }
 
 short TypedScStrCollection::Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const
@@ -428,10 +412,10 @@ short TypedScStrCollection::Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) 
             // Strings vergleichen:
             //---------------------
             if ( bCaseSensitive )
-                nResult = (short) ScGlobal::pCaseTransliteration->compareString(
+                nResult = (short) ScGlobal::GetCaseTransliteration()->compareString(
                     rData1.aStrValue, rData2.aStrValue );
             else
-                nResult = (short) ScGlobal::pTransliteration->compareString(
+                nResult = (short) ScGlobal::GetpTransliteration()->compareString(
                     rData1.aStrValue, rData2.aStrValue );
         }
     }
@@ -467,12 +451,12 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
             TypedStrData* pData = (TypedStrData*) pItems[i];
             if (pData->nStrType)
             {
-                if ( ScGlobal::pTransliteration->isMatch( rStart, pData->aStrValue ) )
+                if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->aStrValue ) )
                 {
                     //  If the collection is case sensitive, it may contain several entries
                     //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
-                            !ScGlobal::pTransliteration->isEqual(
+                            !ScGlobal::GetpTransliteration()->isEqual(
                             pData->aStrValue, aOldResult ) )
                     {
                         rResult = pData->aStrValue;
@@ -495,12 +479,12 @@ BOOL TypedScStrCollection::FindText( const String& rStart, String& rResult,
             TypedStrData* pData = (TypedStrData*) pItems[i];
             if (pData->nStrType)
             {
-                if ( ScGlobal::pTransliteration->isMatch( rStart, pData->aStrValue ) )
+                if ( ScGlobal::GetpTransliteration()->isMatch( rStart, pData->aStrValue ) )
                 {
                     //  If the collection is case sensitive, it may contain several entries
                     //  that are equal when compared case-insensitive. They are skipped here.
                     if ( !bCaseSensitive || !aOldResult.Len() ||
-                            !ScGlobal::pTransliteration->isEqual(
+                            !ScGlobal::GetpTransliteration()->isEqual(
                             pData->aStrValue, aOldResult ) )
                     {
                         rResult = pData->aStrValue;
@@ -523,7 +507,7 @@ BOOL TypedScStrCollection::GetExactMatch( String& rString ) const
     for (USHORT i=0; i<nCount; i++)
     {
         TypedStrData* pData = (TypedStrData*) pItems[i];
-        if ( pData->nStrType && ScGlobal::pTransliteration->isEqual(
+        if ( pData->nStrType && ScGlobal::GetpTransliteration()->isEqual(
                 pData->aStrValue, rString ) )
         {
             rString = pData->aStrValue;                         // String anpassen

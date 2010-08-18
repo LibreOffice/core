@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xilink.cxx,v $
- * $Revision: 1.25.46.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,6 +150,7 @@ struct XclImpXti
     sal_uInt16          mnSupbook;      /// Index to SUPBOOK record.
     sal_uInt16          mnSBTabFirst;   /// Index to the first sheet of the range in the SUPBOOK.
     sal_uInt16          mnSBTabLast;    /// Index to the last sheet of the range in the SUPBOOK.
+    inline explicit     XclImpXti() : mnSupbook( SAL_MAX_UINT16 ), mnSBTabFirst( SAL_MAX_UINT16 ), mnSBTabLast( SAL_MAX_UINT16 ) {}
 };
 
 inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
@@ -204,28 +202,30 @@ public:
     const String&       GetMacroName( sal_uInt16 nExtSheet, sal_uInt16 nExtName ) const;
 
 private:
+    /** Returns the specified XTI (link entry from BIFF8 EXTERNSHEET record). */
+    const XclImpXti*    GetXti( sal_uInt16 nXtiIndex ) const;
     /** Returns the specified SUPBOOK (external document). */
-    const XclImpSupbook* GetSupbook( sal_uInt32 nXtiIndex ) const;
-    /** Returns the SUPBOOK (external workbook) specified by its URL. */
-    const XclImpSupbook* GetSupbook( const String& rUrl ) const;
+    const XclImpSupbook* GetSupbook( sal_uInt16 nXtiIndex ) const;
+//UNUSED2009-05 /** Returns the SUPBOOK (external workbook) specified by its URL. */
+//UNUSED2009-05 const XclImpSupbook* GetSupbook( const String& rUrl ) const;
 
     void                LoadCachedValues();
 
-    /** Finds the largest range of sheet indexes in a SUPBOOK after a start sheet index.
-        @param rnSBTabFirst  (out-param) The first sheet index of the range in SUPBOOK is returned here.
-        @param rnSBTabLast  (out-param) The last sheet index of the range in SUPBOOK is returned here (inclusive).
-        @param nSupbook  The list index of the SUPBOOK.
-        @param nSBTabStart  The first allowed sheet index. Sheet ranges with an earlier start index are ignored.
-        @return  true = the return values are valid; false = nothing found. */
-    bool                FindNextTabRange(
-                            sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
-                            sal_uInt16 nSupbook, sal_uInt16 nSBTabStart ) const;
+//UNUSED2009-05 /** Finds the largest range of sheet indexes in a SUPBOOK after a start sheet index.
+//UNUSED2009-05     @param rnSBTabFirst  (out-param) The first sheet index of the range in SUPBOOK is returned here.
+//UNUSED2009-05     @param rnSBTabLast  (out-param) The last sheet index of the range in SUPBOOK is returned here (inclusive).
+//UNUSED2009-05     @param nSupbook  The list index of the SUPBOOK.
+//UNUSED2009-05     @param nSBTabStart  The first allowed sheet index. Sheet ranges with an earlier start index are ignored.
+//UNUSED2009-05     @return  true = the return values are valid; false = nothing found. */
+//UNUSED2009-05 bool                FindNextTabRange(
+//UNUSED2009-05                         sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
+//UNUSED2009-05                         sal_uInt16 nSupbook, sal_uInt16 nSBTabStart ) const;
 
 private:
-    typedef ScfDelList< XclImpXti >     XclImpXtiList;
+    typedef ::std::vector< XclImpXti >  XclImpXtiVector;
     typedef ScfDelList< XclImpSupbook > XclImpSupbookList;
 
-    XclImpXtiList       maXtiList;          /// List of all XTI structures.
+    XclImpXtiVector     maXtiList;          /// List of all XTI structures.
     XclImpSupbookList   maSupbookList;      /// List of external documents.
     bool                mbCreated;          /// true = Calc sheets already created.
 };
@@ -263,6 +263,7 @@ void XclImpTabInfo::ReadTabid( XclImpStream& rStrm )
     DBG_ASSERT_BIFF( rStrm.GetRoot().GetBiff() == EXC_BIFF8 );
     if( rStrm.GetRoot().GetBiff() == EXC_BIFF8 )
     {
+        rStrm.EnableDecryption();
         sal_Size nReadCount = rStrm.GetRecLeft() / 2;
         DBG_ASSERT( nReadCount <= 0xFFFF, "XclImpTabInfo::ReadTabid - record too long" );
         maTabIdVec.clear();
@@ -412,6 +413,11 @@ void XclImpSupbookTab::LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheT
         switch (p->GetType())
         {
             case EXC_CACHEDVAL_BOOL:
+            {
+                bool b = p->GetBool();
+                ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(b ? 1.0 : 0.0));
+                pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken);
+            }
             break;
             case EXC_CACHEDVAL_DOUBLE:
             {
@@ -420,9 +426,12 @@ void XclImpSupbookTab::LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheT
                 pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken);
             }
             break;
-            case EXC_CACHEDVAL_EMPTY:
-            break;
             case EXC_CACHEDVAL_ERROR:
+            {
+                double fError = XclTools::ErrorToDouble( p->GetXclError() );
+                ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(fError));
+                pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken);
+            }
             break;
             case EXC_CACHEDVAL_STRING:
             {
@@ -566,6 +575,7 @@ void XclImpSupbook::LoadCachedValues()
         const String& rTabName = pTab->GetTabName();
         ScExternalRefCache::TableTypeRef pCacheTable = pRefMgr->getCacheTable(nFileId, rTabName, true);
         pTab->LoadCachedValues(pCacheTable);
+        pCacheTable->setWholeTableCached();
     }
 }
 
@@ -581,15 +591,17 @@ void XclImpLinkManagerImpl::ReadExternsheet( XclImpStream& rStrm )
 {
     sal_uInt16 nXtiCount;
     rStrm >> nXtiCount;
+    DBG_ASSERT( static_cast< sal_Size >( nXtiCount * 6 ) == rStrm.GetRecLeft(), "XclImpLinkManagerImpl::ReadExternsheet - invalid count" );
+    nXtiCount = static_cast< sal_uInt16 >( ::std::min< sal_Size >( nXtiCount, rStrm.GetRecLeft() / 6 ) );
 
-    XclImpXti* pXti;
-    while( nXtiCount )
-    {
-        pXti = new XclImpXti;
-        rStrm >> *pXti;
-        maXtiList.Append( pXti );
-        --nXtiCount;
-    }
+    /*  #i104057# A weird external XLS generator writes multiple EXTERNSHEET
+        records instead of only one as expected. Surprisingly, Excel seems to
+        insert the entries of the second record before the entries of the first
+        record. */
+    XclImpXtiVector aNewEntries( nXtiCount );
+    for( XclImpXtiVector::iterator aIt = aNewEntries.begin(), aEnd = aNewEntries.end(); rStrm.IsValid() && (aIt != aEnd); ++aIt )
+        rStrm >> *aIt;
+    maXtiList.insert( maXtiList.begin(), aNewEntries.begin(), aNewEntries.end() );
 
     LoadCachedValues();
 }
@@ -626,7 +638,7 @@ bool XclImpLinkManagerImpl::IsSelfRef( sal_uInt16 nXtiIndex ) const
 bool XclImpLinkManagerImpl::GetScTabRange(
         SCTAB& rnFirstScTab, SCTAB& rnLastScTab, sal_uInt16 nXtiIndex ) const
 {
-    if( const XclImpXti* pXti = maXtiList.GetObject( nXtiIndex ) )
+    if( const XclImpXti* pXti = GetXti( nXtiIndex ) )
     {
         if (maSupbookList.GetObject(pXti->mnSupbook))
         {
@@ -670,19 +682,24 @@ const String& XclImpLinkManagerImpl::GetMacroName( sal_uInt16 nExtSheet, sal_uIn
     return pSupbook ? pSupbook->GetMacroName( nExtName ) : EMPTY_STRING;
 }
 
-const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( sal_uInt32 nXtiIndex ) const
+const XclImpXti* XclImpLinkManagerImpl::GetXti( sal_uInt16 nXtiIndex ) const
 {
-    const XclImpXti* pXti = maXtiList.GetObject( nXtiIndex );
+    return (nXtiIndex < maXtiList.size()) ? &maXtiList[ nXtiIndex ] : 0;
+}
+
+const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( sal_uInt16 nXtiIndex ) const
+{
+    const XclImpXti* pXti = GetXti( nXtiIndex );
     return pXti ? maSupbookList.GetObject( pXti->mnSupbook ) : 0;
 }
 
-const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( const String& rUrl ) const
-{
-    for( const XclImpSupbook* pSupbook = maSupbookList.First(); pSupbook; pSupbook = maSupbookList.Next() )
-        if( pSupbook->GetXclUrl() == rUrl )
-            return pSupbook;
-    return 0;
-}
+//UNUSED2009-05 const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( const String& rUrl ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     for( const XclImpSupbook* pSupbook = maSupbookList.First(); pSupbook; pSupbook = maSupbookList.Next() )
+//UNUSED2009-05         if( pSupbook->GetXclUrl() == rUrl )
+//UNUSED2009-05             return pSupbook;
+//UNUSED2009-05     return 0;
+//UNUSED2009-05 }
 
 void XclImpLinkManagerImpl::LoadCachedValues()
 {
@@ -697,21 +714,21 @@ void XclImpLinkManagerImpl::LoadCachedValues()
     }
 }
 
-bool XclImpLinkManagerImpl::FindNextTabRange(
-        sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
-        sal_uInt16 nSupbook, sal_uInt16 nSBTabStart ) const
-{
-    rnSBTabFirst = rnSBTabLast = EXC_NOTAB;
-    for( const XclImpXti* pXti = maXtiList.First(); pXti; pXti = maXtiList.Next() )
-    {
-        if( (nSupbook == pXti->mnSupbook) && (nSBTabStart <= pXti->mnSBTabLast) && (pXti->mnSBTabFirst < rnSBTabFirst) )
-        {
-            rnSBTabFirst = ::std::max( nSBTabStart, pXti->mnSBTabFirst );
-            rnSBTabLast = pXti->mnSBTabLast;
-        }
-    }
-    return rnSBTabFirst != EXC_NOTAB;
-}
+//UNUSED2009-05 bool XclImpLinkManagerImpl::FindNextTabRange(
+//UNUSED2009-05         sal_uInt16& rnSBTabFirst, sal_uInt16& rnSBTabLast,
+//UNUSED2009-05         sal_uInt16 nSupbook, sal_uInt16 nSBTabStart ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     rnSBTabFirst = rnSBTabLast = EXC_NOTAB;
+//UNUSED2009-05     for( const XclImpXti* pXti = maXtiList.First(); pXti; pXti = maXtiList.Next() )
+//UNUSED2009-05     {
+//UNUSED2009-05         if( (nSupbook == pXti->mnSupbook) && (nSBTabStart <= pXti->mnSBTabLast) && (pXti->mnSBTabFirst < rnSBTabFirst) )
+//UNUSED2009-05         {
+//UNUSED2009-05             rnSBTabFirst = ::std::max( nSBTabStart, pXti->mnSBTabFirst );
+//UNUSED2009-05             rnSBTabLast = pXti->mnSBTabLast;
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05     return rnSBTabFirst != EXC_NOTAB;
+//UNUSED2009-05 }
 
 // ============================================================================
 

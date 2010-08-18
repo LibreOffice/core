@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabvwsh4.cxx,v $
- * $Revision: 1.76.102.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,24 +32,23 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <sfx2/topfrm.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/fmshell.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <svx/prtqry.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svtools/printdlg.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <svl/whiter.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <rtl/logfile.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/docfile.hxx>
@@ -266,7 +262,7 @@ void __EXPORT ScTabViewShell::Deactivate(BOOL bMDI)
         DeActivateOlk( GetViewData() );
         ActivateView( FALSE, FALSE );
 
-        if ( GetViewFrame()->GetFrame()->IsInPlace() ) // inplace
+        if ( GetViewFrame()->GetFrame().IsInPlace() ) // inplace
             GetViewData()->GetDocShell()->UpdateOle(GetViewData(),TRUE);
 
         if ( pHdl )
@@ -294,8 +290,7 @@ void ScTabViewShell::SetActive()
 
 #if 0
     SfxViewFrame* pFrame = GetViewFrame();
-    if ( pFrame->ISA(SfxTopViewFrame) )
-        pFrame->GetFrame()->Appear();
+    pFrame->GetFrame().Appear();
 
     SFX_APP()->SetViewFrame( pFrame );          // immer erst Appear, dann SetViewFrame (#29290#)
 #endif
@@ -393,7 +388,7 @@ void __EXPORT ScTabViewShell::AdjustPosSizePixel( const Point &rPos, const Size 
 void __EXPORT ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
 {
     Size aNewSize( rSize );
-    if ( GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( GetViewFrame()->GetFrame().IsInPlace() )
     {
         SvBorder aBorder;
            GetBorderSize( aBorder, rSize );
@@ -1190,6 +1185,10 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
     bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
     pDlg->CheckSheetRange( bAllTabs ? PRINTSHEETS_ALL : PRINTSHEETS_SELECTED_SHEETS );
 
+    // update all pending row heights with a single progress bar,
+    // instead of a separate progress for each sheet from ScPrintFunc
+    pDocShell->UpdatePendingRowHeights( MAXTAB, true );
+
     for ( SCTAB i=0; i<nTabCount; i++ )
     {
         ScPrintFunc aPrintFunc( pDocShell, pPrinter, i );
@@ -1334,13 +1333,10 @@ ScTabViewObj* lcl_GetViewObj( ScTabViewShell& rShell )
     SfxViewFrame* pViewFrame = rShell.GetViewFrame();
     if (pViewFrame)
     {
-        SfxFrame* pFrame = pViewFrame->GetFrame();
-        if (pFrame)
-        {
-            uno::Reference<frame::XController> xController = pFrame->GetController();
-            if (xController.is())
-                pRet = ScTabViewObj::getImplementation( xController );
-        }
+        SfxFrame& rFrame = pViewFrame->GetFrame();
+        uno::Reference<frame::XController> xController = rFrame.GetController();
+        if (xController.is())
+            pRet = ScTabViewObj::getImplementation( xController );
     }
     return pRet;
 }
@@ -1381,8 +1377,7 @@ void ScTabViewShell::StartSimpleRefDialog(
         // Then the view has to be activated first, the same way as in Execute for SID_CURRENTDOC.
         // Can't use GrabFocus here, because it needs to take effect immediately.
 
-        if ( pViewFrm->ISA(SfxTopViewFrame) )
-            pViewFrm->GetFrame()->Appear();
+        pViewFrm->GetFrame().Appear();
     }
 
     USHORT nId = ScSimpleRefDlgWrapper::GetChildWindowId();
@@ -1506,7 +1501,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         //  #51889# Spezialfall: Copy/Cut bei Mehrfachselektion -> Fehlermeldung
         //  (Slot ist disabled, SfxViewShell::KeyInput wuerde also kommentarlos verschluckt)
         KeyFuncType eFunc = aCode.GetFunction();
-        if ( eFunc == KEYFUNC_COPY || eFunc == KEYFUNC_CUT )
+        if ( eFunc == KEYFUNC_CUT )
         {
             ScRange aDummy;
             ScMarkType eMarkType = GetViewData()->GetSimpleArea( aDummy );
@@ -1524,7 +1519,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
         //  container app and are executed during Window::KeyInput.
         //  -> don't pass keys to input handler that would be used there
         //  but should call slots instead.
-        BOOL bParent = ( GetViewFrame()->GetFrame()->IsInPlace() && eFunc != KEYFUNC_DONTKNOW );
+        BOOL bParent = ( GetViewFrame()->GetFrame().IsInPlace() && eFunc != KEYFUNC_DONTKNOW );
 
         if( !bUsed && !bDraw && nCode != KEY_RETURN && !bParent )
             bUsed = pScMod->InputKeyEvent( rKEvt, TRUE );       // Eingabe
@@ -1644,8 +1639,6 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
 
 //------------------------------------------------------------------
 
-//  SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_DISABLE_ACCELS ),
-
 #define __INIT_ScTabViewShell \
     eCurOST(OST_NONE),          \
     nDrawSfxId(0),              \
@@ -1735,7 +1728,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
         // show the right cells
         GetViewData()->SetScreenPos( bNegativePage ? aVisArea.TopRight() : aVisArea.TopLeft() );
 
-        if ( GetViewFrame()->GetFrame()->IsInPlace() )                         // inplace
+        if ( GetViewFrame()->GetFrame().IsInPlace() )                         // inplace
         {
             pDocSh->SetInplace( TRUE );             // schon so initialisiert
             if (pDoc->IsEmbedded())
@@ -1802,7 +1795,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
             {
                 SCTAB nInitTabCount = 3;                            //! konfigurierbar !!!
                 for (SCTAB i=1; i<nInitTabCount; i++)
-                    pDoc->MakeTable(i);
+                    pDoc->MakeTable(i,false);
             }
 
             pDocSh->SetEmpty( FALSE );          // #i6232# make sure this is done only once
@@ -1875,7 +1868,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
     // #105575#; update only in the first creation of the ViewShell
     pDocSh->SetUpdateEnabled(FALSE);
 
-    if ( GetViewFrame()->GetFrame()->IsInPlace() )
+    if ( GetViewFrame()->GetFrame().IsInPlace() )
         UpdateHeaderWidth(); // The implace activation requires headers to be calculated
 
     SvBorder aBorder;
@@ -1897,7 +1890,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
 //UNUSED2008-05
 //UNUSED2008-05      UpdatePageBreakData();
 //UNUSED2008-05
-//UNUSED2008-05      /*uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame()->GetFrameInterface();
+//UNUSED2008-05      /*uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
 //UNUSED2008-05      if (xFrame.is())
 //UNUSED2008-05          xFrame->setComponent( uno::Reference<awt::XWindow>(), new ScTabViewObj( this ) );*/
 //UNUSED2008-05      // make Controller known to SFX
@@ -1913,7 +1906,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
 
 ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
-    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
+    SfxViewShell( pViewFrame, SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
     ScDBFunc( &pViewFrame->GetWindow(), (ScDocShell&)*pViewFrame->GetObjectShell(), this ),
     __INIT_ScTabViewShell
 {
@@ -1949,7 +1942,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
         SetZoomType( rAppOpt.GetZoomType(), TRUE );
     }
 
-    /*uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame()->GetFrameInterface();
+    /*uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame().GetFrameInterface();
     if (xFrame.is())
         xFrame->setComponent( uno::Reference<awt::XWindow>(), new ScTabViewObj( this ) );*/
     // make Controller known to SFX

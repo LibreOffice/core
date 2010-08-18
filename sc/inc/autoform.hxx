@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: autoform.hxx,v $
- * $Revision: 1.8.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,22 +47,22 @@ JP 20.07.95:
 **************************************************************************/
 
 #include "scitems.hxx"
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svtools/intitem.hxx>
-#include <svx/bolnitem.hxx>
+#include <svl/intitem.hxx>
+#include <editeng/bolnitem.hxx>
 #include "scdllapi.h"
 #include "collect.hxx"
 #include "global.hxx"

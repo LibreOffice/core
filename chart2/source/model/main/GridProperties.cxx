@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: GridProperties.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -128,20 +125,20 @@ namespace chart
 
 GridProperties::GridProperties( Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
 }
 
 GridProperties::GridProperties() :
         ::property::OPropertySet( m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 GridProperties::GridProperties( const GridProperties & rOther ) :
         MutexContainer(),
         impl::GridProperties_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
 }
 

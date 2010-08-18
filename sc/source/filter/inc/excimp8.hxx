@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: excimp8.hxx,v $
- * $Revision: 1.71.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,7 @@
 #include "excscen.hxx"
 #include "excdefs.hxx"
 #include "ftools.hxx"
+#include "queryparam.hxx"
 
 class SotStorage;
 
@@ -52,36 +50,37 @@ class XclImpStream;
 
 class ImportExcel8 : public ImportExcel
 {
-    protected:
-        ExcScenarioList         aScenList;
+public:
+                            ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm );
+    virtual                 ~ImportExcel8( void );
 
-        BOOL                    bHasBasic;
+    virtual FltError        Read( void );
 
-        void                    Calccount( void );              // 0x0C
-        void                    Precision( void );              // 0x0E
-        void                    Delta( void );                  // 0x10
-        void                    Iteration( void );              // 0x11
-        void                    WinProtection(  void );         // 0x19
-        void                    Boundsheet( void );             // 0x85
-        void                    FilterMode( void );             // 0x9B
-        void                    AutoFilterInfo( void );         // 0x9D
-        void                    AutoFilter( void );             // 0x9E
-        void                    Scenman( void );                // 0xAE
-        void                    Scenario( void );               // 0xAF
-        void                    ReadBasic( void );              // 0xD3
-        void                    Labelsst( void );               // 0xFD
+protected:
+    ExcScenarioList         aScenList;
 
-        void                    Hlink( void );                  // 0x01B8
-        void                    Codename( BOOL bWBGlobals );    // 0x01BA
+    void                    Calccount( void );              // 0x0C
+    void                    Precision( void );              // 0x0E
+    void                    Delta( void );                  // 0x10
+    void                    Iteration( void );              // 0x11
+    void                    Boundsheet( void );             // 0x85
+    void                    FilterMode( void );             // 0x9B
+    void                    AutoFilterInfo( void );         // 0x9D
+    void                    AutoFilter( void );             // 0x9E
+    void                    Scenman( void );                // 0xAE
+    void                    Scenario( void );               // 0xAF
+    void                    ReadBasic( void );              // 0xD3
+    void                    Labelsst( void );               // 0xFD
 
-        virtual void            EndSheet( void );
-        virtual void            PostDocLoad( void );
+    void                    Hlink( void );                  // 0x01B8
+    void                    Codename( BOOL bWBGlobals );    // 0x01BA
+    void                    SheetProtection( void );        // 0x0867
 
-    public:
-                                ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm );
-        virtual                 ~ImportExcel8( void );
+    virtual void            EndSheet( void );
+    virtual void            PostDocLoad( void );
 
-        virtual FltError        Read( void );
+private:
+    void                    LoadDocumentProperties();
 };
 
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: transobj.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -63,11 +60,11 @@
 #include "scmod.hxx"
 
 // for InitDocShell
-#include <svx/paperinf.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/algitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
 #include "docsh.hxx"
 #include "markdata.hxx"
 #include "stlpool.hxx"
@@ -313,6 +310,8 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             BOOL bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
             ScImportExport aObj( pDoc, aBlock );
+            if ( bUsedForLink )
+                aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
             aObj.SetFormulas( pDoc->GetViewOptions().GetOption( VOPT_FORMULAS ) );
             aObj.SetIncludeFiltered( bIncludeFiltered );
 
@@ -603,25 +602,23 @@ void ScTransferObj::InitDocShell()
         //  widths / heights
         //  (must be copied before CopyFromClip, for drawing objects)
 
-        SCCOL nCol;
-        SCROW nRow;
+        SCCOL nCol, nLastCol;
         SCTAB nSrcTab = aBlock.aStart.Tab();
         pDestDoc->SetLayoutRTL(0, pDoc->IsLayoutRTL(nSrcTab));
         for (nCol=nStartX; nCol<=nEndX; nCol++)
-            if ( pDoc->GetColFlags( nCol, nSrcTab ) & CR_HIDDEN )
+            if ( pDoc->ColHidden(nCol, nSrcTab, nLastCol) )
                 pDestDoc->ShowCol( nCol, 0, FALSE );
             else
                 pDestDoc->SetColWidth( nCol, 0, pDoc->GetColWidth( nCol, nSrcTab ) );
 
         ScBitMaskCompressedArray< SCROW, BYTE> & rDestRowFlags =
             pDestDoc->GetRowFlagsArrayModifiable(0);
-        ScCompressedArrayIterator< SCROW, BYTE> aIter( pDoc->GetRowFlagsArray(
-                    nSrcTab), nStartY, nEndY);
-        for ( ; aIter; ++aIter )
+
+        for (SCROW nRow = nStartY; nRow <= nEndY; ++nRow)
         {
-            nRow = aIter.GetPos();
-            BYTE nSourceFlags = *aIter;
-            if ( nSourceFlags & CR_HIDDEN )
+            BYTE nSourceFlags = pDoc->GetRowFlags(nRow, nSrcTab);
+            SCROW nLastRow = -1;
+            if ( pDoc->RowHidden(nRow, nSrcTab, nLastRow) )
                 pDestDoc->ShowRow( nRow, 0, FALSE );
             else
             {
@@ -656,7 +653,7 @@ void ScTransferObj::InitDocShell()
 
         //  page format (grid etc) and page size (maximum size for ole object)
 
-        Size aPaperSize = SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 );       // Twips
+        Size aPaperSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );       // Twips
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
         String aStyleName = pDoc->GetPageStyle( aBlock.aStart.Tab() );
         SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
@@ -685,7 +682,7 @@ void ScTransferObj::InitDocShell()
 
         for (nCol=0; nCol<nStartX; nCol++)
             nPosX += pDestDoc->GetColWidth( nCol, 0 );
-        nPosY += pDestDoc->FastGetRowHeight( 0, nStartY-1, 0 );
+        nPosY += pDestDoc->GetRowHeight( 0, nStartY-1, 0 );
         nPosX = (long) ( nPosX * HMM_PER_TWIPS );
         nPosY = (long) ( nPosY * HMM_PER_TWIPS );
 
@@ -702,9 +699,9 @@ void ScTransferObj::InitDocShell()
                 break;
             nSizeX += nAdd;
         }
-        for (nRow=nStartY; nRow<=nEndY; nRow++)
+        for (SCROW nRow=nStartY; nRow<=nEndY; nRow++)
         {
-            long nAdd = pDestDoc->FastGetRowHeight( nRow, 0 );
+            long nAdd = pDestDoc->GetRowHeight( nRow, 0 );
             if ( nSizeY+nAdd > aPaperSize.Height() && nSizeY )  // above limit?
                 break;
             nSizeY += nAdd;
@@ -817,7 +814,10 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
                 {
                     String aStr;
                     pFCell->GetString(aStr);
-                    pNew = new ScStringCell( aStr );
+                    if ( pFCell->IsMultilineResult() )
+                        pNew = new ScEditCell( aStr, pDestDoc );
+                    else
+                        pNew = new ScStringCell( aStr );
                 }
                 pDestDoc->PutCell( nCol,nRow,nDestTab, pNew );
 

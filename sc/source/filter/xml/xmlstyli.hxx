@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlstyli.hxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,8 +37,11 @@
 #include <xmloff/xmlimppr.hxx>
 #include <xmloff/XMLTextMasterPageContext.hxx>
 #include <xmloff/XMLTextMasterStylesContext.hxx>
+#include <xmloff/txtstyli.hxx>
 #include <com/sun/star/sheet/ConditionOperator.hpp>
 #include "xmlimprt.hxx"
+
+class ScSheetSaveData;
 
 class ScXMLCellImportPropertyMapper : public SvXMLImportPropertyMapper
 {
@@ -101,26 +101,29 @@ class XMLTableStyleContext : public XMLPropStyleContext
     std::vector<ScXMLMapContent>    aMaps;
     com::sun::star::uno::Any    aConditionalFormat;
     sal_Int32                   nNumberFormat;
+    sal_Int32                   nLastSheet;
     sal_Bool                    bConditionalFormatCreated;
     sal_Bool                    bParentSet;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
 
-    void SetOperator(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const com::sun::star::sheet::ConditionOperator aOp) const;
-    void SetBaseCellAddress(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const rtl::OUString& sBaseCell) const;
-    void SetStyle(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const rtl::OUString& sApplyStyle) const;
-    void SetFormula1(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const rtl::OUString& sFormula, bool bPreParse = true) const;
-    void SetFormula2(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const rtl::OUString& sFormula) const;
-    void SetFormulas(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const rtl::OUString& sFormulas) const;
-    void SetGrammar(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const formula::FormulaGrammar::Grammar eGrammar) const;
+    void SetOperator(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
+            ::com::sun::star::sheet::ConditionOperator eOp ) const;
+
+    void SetBaseCellAddress(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
+            const ::rtl::OUString& rBaseCell ) const;
+
+    void SetStyle(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
+            const ::rtl::OUString& rApplyStyle ) const;
+
+    void SetFormula(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rProps,
+        sal_Int32 nFormulaIdx, const ::rtl::OUString& rFormula,
+        const ::rtl::OUString& rFormulaNmsp, ::formula::FormulaGrammar::Grammar eGrammar, bool bHasNmsp ) const;
 
     void GetConditionalFormat(
         ::com::sun::star::uno::Any& aAny, const rtl::OUString& sCondition,
@@ -155,6 +158,9 @@ public:
     XMLPropertyState* FindProperty(const sal_Int16 nContextID);
 
     sal_Int32 GetNumberFormat();// { return nNumberFormat; }
+
+    sal_Int32 GetLastSheet() const       { return nLastSheet; }
+    void SetLastSheet(sal_Int32 nNew)    { nLastSheet = nNew; }
 
 private:
     using XMLPropStyleContext::SetStyle;
@@ -295,6 +301,29 @@ public:
 
     virtual void Finish( sal_Bool bOverwrite );
 };
+
+class ScCellTextStyleContext : public XMLTextStyleContext
+{
+    sal_Int32   nLastSheet;
+
+    const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
+    ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
+
+public:
+    ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const ::rtl::OUString& rLName,
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::xml::sax::XAttributeList > & xAttrList,
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily,
+            sal_Bool bDefaultStyle = sal_False );
+    virtual ~ScCellTextStyleContext();
+
+    // overload FillPropertySet to store style information
+    virtual void FillPropertySet(
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > & rPropSet );
+};
+
 
 #endif
 

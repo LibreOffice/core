@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: colrowst.cxx,v $
- * $Revision: 1.34.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +40,7 @@
 #include "xltable.hxx"
 #include "xistream.hxx"
 #include "xistyle.hxx"
+#include "queryparam.hxx"
 
 // for filter manager
 #include "excimp8.hxx"
@@ -95,6 +93,12 @@ void XclImpColRowSettings::SetWidthRange( SCCOL nScCol1, SCCOL nScCol2, sal_uInt
 {
     DBG_ASSERT( (nScCol1 <= nScCol2) && ValidCol( nScCol2 ), "XclImpColRowSettings::SetColWidthRange - invalid column range" );
     nScCol2 = ::std::min( nScCol2, MAXCOL );
+    if (nScCol2 == 256)
+        // In BIFF8, the column range is 0-255, and the use of 256 probably
+        // means the range should extend to the max column if the loading app
+        // support columns beyond 255.
+        nScCol2 = MAXCOL;
+
     nScCol1 = ::std::min( nScCol1, nScCol2 );
     ::std::fill( maWidths.begin() + nScCol1, maWidths.begin() + nScCol2 + 1, nWidth );
     for( ScfUInt8Vec::iterator aIt = maColFlags.begin() + nScCol1, aEnd = maColFlags.begin() + nScCol2 + 1; aIt != aEnd; ++aIt )
@@ -203,7 +207,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
     // row heights ------------------------------------------------------------
 
     // #i54252# set default row height
-    rDoc.SetRowHeightRange( 0, MAXROW, nScTab, mnDefHeight );
+    rDoc.SetRowHeightOnly( 0, MAXROW, nScTab, mnDefHeight );
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_UNSYNCED ) )
         // first access to row flags, do not ask for old flags
         rDoc.SetRowFlags( 0, MAXROW, nScTab, CR_MANUALSIZE );
@@ -254,7 +258,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
         {
             DBG_ASSERT( (nScRow == 0) || (nFirstScRow >= 0), "XclImpColRowSettings::Convert - algorithm error" );
             if( nScRow > 0 )
-                rDoc.SetRowHeightRange( nFirstScRow, nScRow - 1, nScTab, nLastHeight );
+                rDoc.SetRowHeightOnly( nFirstScRow, nScRow - 1, nScTab, nLastHeight );
 
             nFirstScRow = nScRow;
             nLastHeight = nHeight;
@@ -263,7 +267,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
 
     // set row height of last portion
     if( mnLastScRow >= 0 )
-        rDoc.SetRowHeightRange( nFirstScRow, mnLastScRow, nScTab, nLastHeight );
+        rDoc.SetRowHeightOnly( nFirstScRow, mnLastScRow, nScTab, nLastHeight );
 
     // ------------------------------------------------------------------------
 
@@ -303,7 +307,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
             rDoc.ShowRow( nScRow, nScTab, FALSE );
             // #i38093# rows hidden by filter need extra flag
             if( (nFirstFilterScRow <= nScRow) && (nScRow <= nLastFilterScRow) )
-                rDoc.SetRowFlags( nScRow, nScTab, rDoc.GetRowFlags( nScRow, nScTab ) | CR_FILTERED );
+                rDoc.SetRowFiltered(nScRow, nScRow, nScTab, true);
         }
     }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_PolarOptions.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,12 +29,11 @@
 #include "tp_PolarOptions.hxx"
 #include "tp_PolarOptions.hrc"
 #include "ResId.hxx"
-#include "TabPages.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 #include "NoWarningThisInCTOR.hxx"
 
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 #include <svtools/controldims.hrc>
 
 //.............................................................................
@@ -51,7 +47,9 @@ PolarOptionsTabPage::PolarOptionsTabPage( Window* pWindow,const SfxItemSet& rInA
     m_aFL_StartingAngle( this, SchResId( FL_STARTING_ANGLE ) ),
     m_aAngleDial( this, SchResId( CT_ANGLE_DIAL ) ),
     m_aFT_Degrees( this, SchResId( FT_ROTATION_DEGREES ) ),
-    m_aNF_StartingAngle( this, SchResId( NF_STARTING_ANGLE ) )
+    m_aNF_StartingAngle( this, SchResId( NF_STARTING_ANGLE ) ),
+    m_aFL_PlotOptions( this, SchResId( FL_PLOT_OPTIONS_POLAR ) ),
+    m_aCB_IncludeHiddenCells( this, SchResId( CB_INCLUDE_HIDDEN_CELLS_POLAR ) )
 {
     FreeResource();
 
@@ -77,6 +75,9 @@ BOOL PolarOptionsTabPage::FillItemSet( SfxItemSet& rOutAttrs )
 
     if( m_aCB_Clockwise.IsVisible() )
         rOutAttrs.Put(SfxBoolItem(SCHATTR_CLOCKWISE,m_aCB_Clockwise.IsChecked()));
+
+    if (m_aCB_IncludeHiddenCells.IsVisible())
+        rOutAttrs.Put(SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, m_aCB_IncludeHiddenCells.IsChecked()));
 
     return TRUE;
 }
@@ -107,6 +108,16 @@ void PolarOptionsTabPage::Reset(const SfxItemSet& rInAttrs)
     else
     {
         m_aCB_Clockwise.Show(FALSE);
+    }
+    if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    {
+        bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
+        m_aCB_IncludeHiddenCells.Check(bVal);
+    }
+    else
+    {
+        m_aCB_IncludeHiddenCells.Show(FALSE);
+        m_aFL_PlotOptions.Show(FALSE);
     }
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellsh1.cxx,v $
- * $Revision: 1.54.102.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,22 +52,22 @@
 #include <sfx2/viewfrm.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
-#include <svtools/stritem.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/stritem.hxx>
+#include <svl/whiter.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <vcl/msgbox.hxx>
 #include <svx/svxdlg.hxx>
 #include <sot/formats.hxx>
 #include <svx/postattr.hxx>
-#include <svx/fontitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <sfx2/passwd.hxx>
 #include <svx/hlnkitem.hxx>
 #include <basic/sbxcore.hxx>
-#include <svtools/useroptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <vcl/waitobj.hxx>
 #include <unotools/localedatawrapper.hxx>
 
@@ -103,6 +100,8 @@
 #include "dpsave.hxx"
 #include "dpgroup.hxx"      // for ScDPNumGroupInfo
 #include "spellparam.hxx"
+#include "postit.hxx"
+#include "clipparam.hxx"
 
 #include "globstr.hrc"
 #include "scui_def.hxx" //CHINA001
@@ -1181,41 +1180,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_PASTE:
             {
-                Window* pWin = GetViewData()->GetActiveWin();
-                ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
-                ScDocument* pThisDoc = GetViewData()->GetDocument();
-                ScDPObject* pDPObj = pThisDoc->GetDPAtCursor( GetViewData()->GetCurX(),
-                                     GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-                if ( pOwnClip && pDPObj )
-                {
-                    // paste from Calc into DataPilot table: sort (similar to drag & drop)
-
-                    ScDocument* pClipDoc = pOwnClip->GetDocument();
-                    SCTAB nSourceTab = pOwnClip->GetVisibleTab();
-
-                    SCCOL nClipStartX;
-                    SCROW nClipStartY;
-                    SCCOL nClipEndX;
-                    SCROW nClipEndY;
-                    pClipDoc->GetClipStart( nClipStartX, nClipStartY );
-                    pClipDoc->GetClipArea( nClipEndX, nClipEndY, TRUE );
-                    nClipEndX = nClipEndX + nClipStartX;
-                    nClipEndY = nClipEndY + nClipStartY;   // GetClipArea returns the difference
-
-                    ScRange aSource( nClipStartX, nClipStartY, nSourceTab, nClipEndX, nClipEndY, nSourceTab );
-                    BOOL bDone = pTabViewShell->DataPilotMove( aSource, GetViewData()->GetCurPos() );
-                    if ( !bDone )
-                        pTabViewShell->ErrorMessage( STR_ERR_DATAPILOT_INPUT );
-                }
-                else
-                {
-                    // normal paste
-                    WaitObject aWait( GetViewData()->GetDialogParent() );
-                    pTabViewShell->PasteFromSystem();
-                }
+                PasteFromClipboard ( GetViewData(), pTabViewShell, true );
                 rReq.Done();
             }
-            pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
             break;
 
         case SID_CLIPBOARD_FORMAT_ITEMS:
@@ -1417,7 +1384,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             pTabViewShell->CellContentChanged();        // => PasteFromXXX ???
             break;
 
-        case FID_PASTE_CONTENTS:
+        case SID_PASTE_SPECIAL:
             // Unterscheidung, ob eigene oder fremde Daten,
             // dadurch FID_INS_CELL_CONTENTS ueberfluessig
             {
@@ -1514,43 +1481,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
             break;
-
-#if 0
-        //  clipboard slots were used only for old basic:
-
-        case SID_GET_CLPBRD_FORMAT_COUNT:
-            rReq.SetReturnValue( SfxUInt16Item( nSlot, Clipboard::GetFormatCount() ) );
-            break;
-
-        case SID_GET_CLPBRD_FORMAT_BY_IDX:
-            if (pReqArgs)
-            {
-                const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
-                     pItem->ISA(SfxUInt16Item) )
-                {
-                    USHORT nCount = Clipboard::GetFormatCount();
-                    USHORT nPos = ((const SfxUInt16Item*)pItem)->GetValue();    // 1-based
-                    if ( nPos && nPos <= nCount )
-                        rReq.SetReturnValue( SfxUInt32Item( nSlot, Clipboard::GetFormat(--nPos) ) );
-                }
-            }
-            break;
-
-        case SID_GET_CLPBRD_FORMAT_NAME:
-            if (pReqArgs)
-            {
-                const SfxPoolItem* pItem;
-                if ( pReqArgs->GetItemState(nSlot, TRUE, &pItem) == SFX_ITEM_SET &&
-                     pItem->ISA(SfxUInt32Item) )
-                {
-                    String aName = Exchange::GetFormatName(
-                                    ((const SfxUInt32Item*)pItem)->GetValue() );
-                    rReq.SetReturnValue( SfxStringItem( nSlot, aName ) );
-                }
-            }
-            break;
-#endif
 
         //
         //  sonstiges
@@ -1708,32 +1638,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
 
         case SID_TOGGLE_REL:
-            {
-                BOOL bOk = FALSE;
-                SCCOL nCol = GetViewData()->GetCurX();
-                SCROW nRow = GetViewData()->GetCurY();
-                SCTAB nTab = GetViewData()->GetTabNo();
-                ScDocument* pDoc = GetViewData()->GetDocument();
-                CellType eType;
-                pDoc->GetCellType( nCol, nRow, nTab, eType );
-                if (eType == CELLTYPE_FORMULA)
-                {
-                    String aOld;
-                    pDoc->GetFormula( nCol, nRow, nTab, aOld );
-                    xub_StrLen nLen = aOld.Len();
-                    ScRefFinder aFinder( aOld, pDoc );
-                    aFinder.ToggleRel( 0, nLen );
-                    if (aFinder.GetFound())
-                    {
-                        String aNew = aFinder.GetText();
-                        pTabViewShell->EnterData( nCol, nRow, nTab, aNew );
-                        pTabViewShell->UpdateInputHandler();
-                        bOk = TRUE;
-                    }
-                }
-                if (!bOk)
-                    pTabViewShell->ErrorMessage(STR_ERR_NOREF);
-            }
+            pTabViewShell->DoRefConversion();
             break;
 
         case SID_DEC_INDENT:
@@ -2039,7 +1944,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), GetPool().GetWhich(SID_ATTR_CHAR_FONT) ) );
 
                 SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( pTabViewShell->GetDialogParent(), aSet,
-                    pTabViewShell->GetViewFrame()->GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
+                    pTabViewShell->GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
 
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -2250,3 +2155,52 @@ IMPL_LINK( ScCellShell, DialogClosed, AbstractScLinkedAreaDlg*, EMPTYARG )
     return 0;
 }
 
+void ScCellShell::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTabViewShell, bool bShowDialog )
+{
+    Window* pWin = pViewData->GetActiveWin();
+    ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
+    ScDocument* pThisDoc = pViewData->GetDocument();
+    ScDPObject* pDPObj = pThisDoc->GetDPAtCursor( pViewData->GetCurX(),
+                         pViewData->GetCurY(), pViewData->GetTabNo() );
+    if ( pOwnClip && pDPObj )
+    {
+        // paste from Calc into DataPilot table: sort (similar to drag & drop)
+
+        ScDocument* pClipDoc = pOwnClip->GetDocument();
+        SCTAB nSourceTab = pOwnClip->GetVisibleTab();
+
+        SCCOL nClipStartX;
+        SCROW nClipStartY;
+        SCCOL nClipEndX;
+        SCROW nClipEndY;
+        pClipDoc->GetClipStart( nClipStartX, nClipStartY );
+        pClipDoc->GetClipArea( nClipEndX, nClipEndY, TRUE );
+        nClipEndX = nClipEndX + nClipStartX;
+        nClipEndY = nClipEndY + nClipStartY;   // GetClipArea returns the difference
+
+        ScRange aSource( nClipStartX, nClipStartY, nSourceTab, nClipEndX, nClipEndY, nSourceTab );
+        BOOL bDone = pTabViewShell->DataPilotMove( aSource, pViewData->GetCurPos() );
+        if ( !bDone )
+            pTabViewShell->ErrorMessage( STR_ERR_DATAPILOT_INPUT );
+    }
+    else
+    {
+        // normal paste
+        WaitObject aWait( pViewData->GetDialogParent() );
+        if (!pOwnClip)
+            pTabViewShell->PasteFromSystem();
+        else
+        {
+            ScDocument* pClipDoc = pOwnClip->GetDocument();
+            sal_uInt16 nFlags = IDF_ALL;
+            if (pClipDoc->GetClipParam().isMultiRange())
+                // For multi-range paste, we paste values by default.
+                nFlags &= ~IDF_FORMULA;
+
+            pTabViewShell->PasteFromClip( nFlags, pClipDoc,
+                    PASTE_NOFUNC, FALSE, FALSE, FALSE, INS_NONE, IDF_NONE,
+                    bShowDialog );      // allow warning dialog
+        }
+    }
+    pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
+}

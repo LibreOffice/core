@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scdetect.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,10 +61,10 @@
 #include <svtools/parhtml.hxx>
 #include <rtl/ustring.h>
 #include <rtl/logfile.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/window.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/stritem.hxx>
 #include <tools/urlobj.hxx>
 #include <vos/mutex.hxx>
 #include <svtools/sfxecode.hxx>
@@ -259,6 +256,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
     sal_Int32 nIndexOfReadOnlyFlag = -1;
     sal_Int32 nIndexOfTemplateFlag = -1;
     sal_Int32 nIndexOfDocumentTitle = -1;
+    bool bFakeXLS = false;
 
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
@@ -300,7 +298,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
         }
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")) )
             lDescriptor[nProperty].Value >>= xInteraction;
-        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RapairPackage")) )
+        else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage")) )
             lDescriptor[nProperty].Value >>= bRepairPackage;
         else if( lDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle")) )
             nIndexOfDocumentTitle = nProperty;
@@ -350,13 +348,13 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
             // maybe that IsStorage() already created an error!
             if ( bIsStorage )
             {
-                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage());
+                uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage( sal_False ));
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
                     // error during storage creation means _here_ that the medium
                     // is broken, but we can not handle it in medium since unpossibility
                     // to create a storage does not _always_ means that the medium is broken
-                    aMedium.SetError( aMedium.GetLastStorageCreationState() );
+                    aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
                     if ( xInteraction.is() )
                     {
                         OUString empty;
@@ -439,8 +437,11 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
             }
             else
             {
+                bool bIsXLS = false;
                 SvStream* pStream = aMedium.GetInStream();
                 const SfxFilter* pPreselectedFilter = pFilter;
+                if ( pPreselectedFilter && pPreselectedFilter->GetName().SearchAscii("Excel") != STRING_NOTFOUND )
+                    bIsXLS = true;
                 pFilter = 0;
                 if ( pStream )
                 {
@@ -721,7 +722,8 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             // further checks for filters only if they are preselected: ASCII, HTML, RTF, DBase
                             // without the preselection other filters (Writer) take precedence
                             // DBase can't be detected reliably, so it also needs preselection
-                            if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && lcl_MayBeAscii( rStr ) )
+                            bool bMaybeText = lcl_MayBeAscii( rStr );
+                            if ( pPreselectedFilter->GetFilterName().EqualsAscii(pFilterAscii) && bMaybeText )
                             {
                                 // Text filter is accepted if preselected
                                 pFilter = pPreselectedFilter;
@@ -750,7 +752,14 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                                     else
                                     {
                                         pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterHtmlWeb) );
+                                        if ( bIsXLS )
+                                            bFakeXLS = true;
                                     }
+                                }
+                                else if ( bIsXLS && bMaybeText )
+                                {
+                                    pFilter = aMatcher.GetFilter4FilterName( String::CreateFromAscii(pFilterAscii) );
+                                    bFakeXLS = true;
                                 }
                                 else if ( aHeader.CompareTo( "{\\rtf", 5 ) == COMPARE_EQUAL )
                                 {
@@ -835,6 +844,19 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
         }
         else
             lDescriptor[nIndexOfDocumentTitle].Value <<= aDocumentTitle;
+    }
+
+    if ( bFakeXLS )
+    {
+        if ( nIndexOfFilterName == -1 )
+        {
+            lDescriptor.realloc( nPropertyCount + 1 );
+            lDescriptor[nPropertyCount].Name = ::rtl::OUString::createFromAscii("FilterName");
+            lDescriptor[nPropertyCount].Value <<= rtl::OUString(pFilter->GetName());
+            nPropertyCount++;
+        }
+        else
+            lDescriptor[nIndexOfFilterName].Value <<= rtl::OUString(pFilter->GetName());
     }
 
     if ( pFilter )

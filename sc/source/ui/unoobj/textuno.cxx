@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textuno.cxx,v $
- * $Revision: 1.25.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,21 +31,21 @@
 
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-
-
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <svx/svdpool.hxx>
+#include <svx/svdobj.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/unomid.hxx>
-#include <svx/unoprnms.hxx>
-#include <svx/unofored.hxx>
+#include <editeng/unoprnms.hxx>
+#include <editeng/unofored.hxx>
 #include <rtl/uuid.h>
 #include <vcl/virdev.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-
+#include <editeng/unoipset.hxx>
 #include "textuno.hxx"
 #include "fielduno.hxx"
 #include "servuno.hxx"
@@ -68,9 +65,9 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------------
 
-const SfxItemPropertyMap* lcl_GetHdFtPropertyMap()
+const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 {
-    static SfxItemPropertyMap aHdFtPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aHdFtPropertyMap_Impl[] =
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
@@ -85,7 +82,7 @@ const SfxItemPropertyMap* lcl_GetHdFtPropertyMap()
         //  modify PropertyMap to include CONVERT_TWIPS flag for font height
         //  (headers/footers are in twips)
 
-        SfxItemPropertyMap* pEntry = aHdFtPropertyMap_Impl;
+        SfxItemPropertyMapEntry* pEntry = aHdFtPropertyMap_Impl;
         while (pEntry->pName)
         {
             if ( ( pEntry->nWID == EE_CHAR_FONTHEIGHT ||
@@ -100,8 +97,8 @@ const SfxItemPropertyMap* lcl_GetHdFtPropertyMap()
         }
         bTwipsSet = TRUE;
     }
-
-    return aHdFtPropertyMap_Impl;
+    static SvxItemPropertySet aHdFtPropertySet_Impl( aHdFtPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
+    return &aHdFtPropertySet_Impl;
 }
 
 //------------------------------------------------------------------------
@@ -349,7 +346,7 @@ void ScHeaderFooterTextObj::CreateUnoText_Impl()
     {
         //  can't be aggregated because getString/setString is handled here
         ScSharedHeaderFooterEditSource aEditSource( &aTextData );
-        pUnoText = new SvxUnoText( &aEditSource, lcl_GetHdFtPropertyMap(), uno::Reference<text::XText>() );
+        pUnoText = new SvxUnoText( &aEditSource, lcl_GetHdFtPropertySet(), uno::Reference<text::XText>() );
         pUnoText->acquire();
     }
 }
@@ -897,6 +894,47 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd() throw(uno::
     return xRange;
 }
 
+// XUnoTunnel
+
+sal_Int64 SAL_CALL ScDrawTextCursor::getSomething(
+                const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
+{
+    if ( rId.getLength() == 16 &&
+          0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
+                                    rId.getConstArray(), 16 ) )
+    {
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+    }
+    return SvxUnoTextCursor::getSomething( rId );
+}
+
+// static
+const uno::Sequence<sal_Int8>& ScDrawTextCursor::getUnoTunnelId()
+{
+    static uno::Sequence<sal_Int8> * pSeq = 0;
+    if( !pSeq )
+    {
+        osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
+        if( !pSeq )
+        {
+            static uno::Sequence< sal_Int8 > aSeq( 16 );
+            rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
+            pSeq = &aSeq;
+        }
+    }
+    return *pSeq;
+}
+
+// static
+ScDrawTextCursor* ScDrawTextCursor::getImplementation( const uno::Reference<uno::XInterface> xObj )
+{
+    ScDrawTextCursor* pRet = NULL;
+    uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
+    if (xUT.is())
+        pRet = reinterpret_cast<ScDrawTextCursor*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
+    return pRet;
+}
+
 //------------------------------------------------------------------------
 
 ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
@@ -920,7 +958,7 @@ ScSimpleEditSourceHelper::~ScSimpleEditSourceHelper()
 }
 
 ScEditEngineTextObj::ScEditEngineTextObj() :
-    SvxUnoText( GetOriginalSource(), ScCellObj::GetEditPropertyMap(), uno::Reference<text::XText>() )
+    SvxUnoText( GetOriginalSource(), ScCellObj::GetEditPropertySet(), uno::Reference<text::XText>() )
 {
 }
 
@@ -1104,7 +1142,7 @@ void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 ScCellTextObj::ScCellTextObj(ScDocShell* pDocSh, const ScAddress& rP) :
     ScCellTextData( pDocSh, rP ),
-    SvxUnoText( GetOriginalSource(), ScCellObj::GetEditPropertyMap(), uno::Reference<text::XText>() )
+    SvxUnoText( GetOriginalSource(), ScCellObj::GetEditPropertySet(), uno::Reference<text::XText>() )
 {
 }
 

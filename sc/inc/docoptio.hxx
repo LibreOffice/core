@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docoptio.hxx,v $
- * $Revision: 1.7.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,8 @@
 #define SC_DOCOPTIO_HXX
 
 #include <unotools/configitem.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/itemprop.hxx>
 #include "scdllapi.h"
 #include "optutil.hxx"
 
@@ -40,7 +38,7 @@ class SC_DLLPUBLIC ScDocOptions
 {
     double fIterEps;                // Epsilon-Wert dazu
     USHORT nIterCount;              // Anzahl
-    USHORT nPrecStandardFormat;     // Nachkommastellen Standard
+    sal_uInt16 nPrecStandardFormat; // precision for standard format
     USHORT nDay;                    // Nulldatum:
     USHORT nMonth;
     USHORT nYear;
@@ -88,8 +86,8 @@ public:
     inline int                  operator==( const ScDocOptions& rOpt ) const;
     inline int                  operator!=( const ScDocOptions& rOpt ) const;
 
-    USHORT  GetStdPrecision() const     { return nPrecStandardFormat; }
-    void    SetStdPrecision( USHORT n ) { nPrecStandardFormat = n; }
+    sal_uInt16  GetStdPrecision() const { return nPrecStandardFormat; }
+    void        SetStdPrecision( sal_uInt16 n ) { nPrecStandardFormat = n; }
 
     BOOL    IsCalcAsShown() const       { return bCalcAsShown; }
     void    SetCalcAsShown( BOOL bVal ) { bCalcAsShown = bVal; }

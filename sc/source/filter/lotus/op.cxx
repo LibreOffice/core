@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: op.cxx,v $
- * $Revision: 1.18.126.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,9 +45,9 @@
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include <svx/algitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 
 #include "cell.hxx"
 #include "rangenam.hxx"
@@ -171,20 +168,20 @@ void OP_Label( SvStream& r, UINT16 n )
 }
 
 
-void OP_Text( SvStream& r, UINT16 n )        // WK3
-{
-    UINT16          nRow;
-    BYTE            nCol, nTab;
-    sal_Char        pText[ 256 ];
-
-    r >> nRow >> nTab >> nCol;
-    n -= 4;
-
-    r.Read( pText, n );
-    pText[ n ] = 0;   // zur Sicherheit Nullterminator anhaengen
-
-    PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab), pText );
-}
+//UNUSED2009-05 void OP_Text( SvStream& r, UINT16 n )        // WK3
+//UNUSED2009-05 {
+//UNUSED2009-05     UINT16          nRow;
+//UNUSED2009-05     BYTE            nCol, nTab;
+//UNUSED2009-05     sal_Char        pText[ 256 ];
+//UNUSED2009-05
+//UNUSED2009-05     r >> nRow >> nTab >> nCol;
+//UNUSED2009-05     n -= 4;
+//UNUSED2009-05
+//UNUSED2009-05     r.Read( pText, n );
+//UNUSED2009-05     pText[ n ] = 0;   // zur Sicherheit Nullterminator anhaengen
+//UNUSED2009-05
+//UNUSED2009-05     PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab), pText );
+//UNUSED2009-05 }
 
 
 void OP_Formula( SvStream& r, UINT16 /*n*/ )
@@ -229,7 +226,7 @@ void OP_ColumnWidth( SvStream& r, UINT16 /*n*/ )
         nBreite = ( UINT16 ) ( TWIPS_PER_CHAR * nWidthSpaces );
     else
     {
-        pDoc->SetColFlags( static_cast<SCCOL> (nCol), 0, pDoc->GetColFlags( static_cast<SCCOL> (nCol), 0 ) | CR_HIDDEN );
+        pDoc->SetColHidden(static_cast<SCCOL>(nCol), static_cast<SCCOL>(nCol), 0, true);
         nBreite = nDefWidth;
     }
 
@@ -338,7 +335,7 @@ void OP_HiddenCols( SvStream& r, UINT16 /*n*/ )
         {
             if( nAkt & 0x01 )   // unterstes Bit gesetzt?
                 // -> Hidden Col
-                pDoc->SetColFlags( nCount, 0, pDoc->GetColFlags( nCount, 0 ) | CR_HIDDEN );
+                pDoc->SetColHidden(nCount, nCount, 0, true);
 
             nCount++;
             nAkt = nAkt / 2;    // der Naechste bitte...
@@ -466,7 +463,7 @@ void OP_Note123( SvStream& r, UINT16 n)
     delete [] pText;
 
     ScAddress aPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab) );
-    ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false );
+    ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false, false );
 }
 
 void OP_HorAlign123( BYTE nAlignPattern, SfxItemSet& rPatternItemSet )

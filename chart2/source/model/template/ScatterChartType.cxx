@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ScatterChartType.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,7 +33,7 @@
 #include "servicenames_charttypes.hxx"
 #include "ContainerHelper.hxx"
 #include "CartesianCoordinateSystem.hxx"
-#include "Scaling.hxx"
+#include "AxisHelper.hxx"
 #include "AxisIndexDefines.hxx"
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -179,7 +176,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 
         chart2::ScaleData aScaleData = xAxis->getScaleData();
         aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
-        aScaleData.Scaling = new LinearScaling( 1.0, 0.0 );
+        aScaleData.Scaling = AxisHelper::createLinearScaling();
 
         if( i == 2  )
             aScaleData.AxisType = chart2::AxisType::SERIES;

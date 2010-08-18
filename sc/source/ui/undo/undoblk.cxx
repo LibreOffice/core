@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: undoblk.cxx,v $
- * $Revision: 1.27.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include "scitems.hxx"
 #include <vcl/virdev.hxx>
 #include <vcl/waitobj.hxx>
-#include <svx/boxitem.hxx>
+#include <editeng/boxitem.hxx>
 #include <sfx2/app.hxx>
 
 #include "undoblk.hxx"
@@ -64,6 +61,7 @@
 #include "transobj.hxx"
 #include "refundo.hxx"
 #include "undoolk.hxx"
+#include "clipparam.hxx"
 #include "sc.hrc"
 
 
@@ -441,7 +439,7 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
     for( i=0; i<nCount && bUndo; i++ )
     {
         pRefUndoDoc->CopyToDocument( aEffRange.aStart.Col(), aEffRange.aStart.Row(), pTabs[i], aEffRange.aEnd.Col(), aEffRange.aEnd.Row(), pTabs[i]+pScenarios[i],
-            IDF_ALL, FALSE, pDoc );
+            IDF_ALL | IDF_NOCAPTIONS, FALSE, pDoc );
     }
 
     ScRange aWorkRange( aEffRange );
@@ -451,7 +449,7 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
     for( i=0; i<nCount; i++ )
     {
         if ( pDoc->HasAttrib( aWorkRange.aStart.Col(), aWorkRange.aStart.Row(), pTabs[i],
-            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i], HASATTR_MERGED ) )
+            aWorkRange.aEnd.Col(), aWorkRange.aEnd.Row(), pTabs[i], HASATTR_MERGED | HASATTR_OVERLAPPED ) )
         {
             // #i51445# old merge flag attributes must be deleted also for single cells,
             // not only for whole columns/rows
@@ -594,7 +592,7 @@ ScUndoDeleteMulti::ScUndoDeleteMulti( ScDocShell* pNewDocShell,
 
 __EXPORT ScUndoDeleteMulti::~ScUndoDeleteMulti()
 {
-    delete pRanges;
+    delete [] pRanges;
 }
 
 String __EXPORT ScUndoDeleteMulti::GetComment() const
@@ -1150,10 +1148,10 @@ ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
     BOOL bIncludeFiltered = bCut;
     if ( !bIncludeFiltered )
     {
-        //  manually find number of non-filtered rows
-        SCROW nPastedCount = pDocShell->GetDocument()->GetRowFlagsArray(
-                aSrcRange.aStart.Tab()).CountForCondition(
-                aSrcRange.aStart.Row(), aSrcRange.aEnd.Row(), CR_FILTERED, 0);
+        // find number of non-filtered rows
+        SCROW nPastedCount = pDocShell->GetDocument()->CountNonFilteredRows(
+            aSrcRange.aStart.Row(), aSrcRange.aEnd.Row(), aSrcRange.aStart.Tab());
+
         if ( nPastedCount == 0 )
             nPastedCount = 1;
         aDestEnd.SetRow( aNewDestPos.Row() + nPastedCount - 1 );
@@ -1316,9 +1314,8 @@ void __EXPORT ScUndoDragDrop::Redo()
         aSourceMark.SelectTable( nTab, TRUE );
 
     // do not clone objects and note captions into clipdoc (see above)
-    pDoc->CopyToClip( aSrcRange.aStart.Col(), aSrcRange.aStart.Row(),
-                      aSrcRange.aEnd.Col(),   aSrcRange.aEnd.Row(),
-                      bCut, pClipDoc, FALSE, &aSourceMark, bKeepScenarioFlags, FALSE, FALSE );
+    ScClipParam aClipParam(aSrcRange, bCut);
+    pDoc->CopyToClip(aClipParam, pClipDoc, &aSourceMark, false, bKeepScenarioFlags, false, false);
 
     if (bCut)
     {
@@ -1729,8 +1726,8 @@ void __EXPORT ScUndoEnterMatrix::Undo()
 
     ScDocument* pDoc = pDocShell->GetDocument();
 
-    pDoc->DeleteAreaTab( aBlockRange, IDF_ALL );
-    pUndoDoc->CopyToDocument( aBlockRange, IDF_ALL, FALSE, pDoc );
+    pDoc->DeleteAreaTab( aBlockRange, IDF_ALL & ~IDF_NOTE );
+    pUndoDoc->CopyToDocument( aBlockRange, IDF_ALL & ~IDF_NOTE, FALSE, pDoc );
     pDocShell->PostPaint( aBlockRange, PAINT_GRID );
     pDocShell->PostDataChanged();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();

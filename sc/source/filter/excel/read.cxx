@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: read.cxx,v $
- * $Revision: 1.70.88.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,6 +64,8 @@ FltError ImportExcel::Read( void )
     XclImpXFBuffer&         rXFBfr          = GetXFBuffer();
     XclImpNameManager&      rNameMgr        = GetNameManager();
     XclImpObjectManager&    rObjMgr         = GetObjectManager();
+    (void)rObjMgr;
+    // call to GetCurrSheetDrawing() cannot be cached (changes in new sheets)
 
     enum Zustand {
         Z_BiffNull, // Nicht in gueltigem Biff-Format
@@ -99,9 +98,28 @@ FltError ImportExcel::Read( void )
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
+    /*  #i104057# Need to track a base position for progress bar calculation,
+        because sheet substreams may not be in order of sheets. */
+    sal_Size nProgressBasePos = 0;
+    sal_Size nProgressBaseSize = 0;
+
     while( eAkt != Z_Ende )
     {
-        aIn.StartNextRecord();
+        if( eAkt == Z_Biff5E )
+        {
+            sal_uInt16 nScTab = GetCurrScTab();
+            if( nScTab < maSheetOffsets.size()  )
+            {
+                nProgressBaseSize += (aIn.GetSvStreamPos() - nProgressBasePos);
+                nProgressBasePos = maSheetOffsets[ nScTab ];
+                aIn.StartNextRecord( nProgressBasePos );
+            }
+            else
+                eAkt = Z_Ende;
+        }
+        else
+            aIn.StartNextRecord();
+
         nOpcode = aIn.GetRecId();
 
         if( !aIn.IsValid() )
@@ -124,8 +142,11 @@ FltError ImportExcel::Read( void )
             break;
         }
 
+        if( eAkt == Z_Ende )
+            break;
+
         if( eAkt != Z_Biff5TPre && eAkt != Z_Biff5WPre )
-            pProgress->ProgressAbs( aIn.GetSvStreamPos() );
+            pProgress->ProgressAbs( nProgressBaseSize + aIn.GetSvStreamPos() - nProgressBasePos );
 
         switch( eAkt )
         {
@@ -227,7 +248,7 @@ FltError ImportExcel::Read( void )
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                     case 0x18:  rNameMgr.ReadName( maStrm );            break;
-                    case 0x1C:  rObjMgr.ReadNote( maStrm );             break;
+                    case 0x1C:  GetCurrSheetDrawing().ReadNote( maStrm );break;
                     case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
                     case 0x1E:  rNumFmtBfr.ReadFormat( maStrm );        break;
                     case 0x20:  Columndefault(); break; // COLUMNDEFAULT[ 2   ]
@@ -290,7 +311,7 @@ FltError ImportExcel::Read( void )
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                     case 0x1A:
                     case 0x1B:  rPageSett.ReadPageBreaks( maStrm );     break;
-                    case 0x1C:  rObjMgr.ReadNote( maStrm );             break;
+                    case 0x1C:  GetCurrSheetDrawing().ReadNote( maStrm );break;
                     case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
                     case 0x1E:  rNumFmtBfr.ReadFormat( maStrm );        break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
@@ -305,10 +326,11 @@ FltError ImportExcel::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
                         break;
+                    case EXC_ID_FILESHARING: ReadFileSharing();         break;
                     case 0x41:  rTabViewSett.ReadPane( maStrm );        break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
-                    case 0x5D:  rObjMgr.ReadObj( maStrm );              break;
+                    case 0x5D:  GetCurrSheetDrawing().ReadObj( maStrm );break;
                     case 0x7D:  Colinfo(); break;       // COLINFO      [  345]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
                     case 0x92:  rPal.ReadPalette( maStrm );             break;
@@ -354,13 +376,13 @@ FltError ImportExcel::Read( void )
                         Eof();
                         eAkt = Z_Ende;
                         break;
-                    case 0x12:  Protect(); break;       // SHEET PROTECTION
+                    case 0x12:  SheetProtect(); break;       // SHEET PROTECTION
                     case 0x14:
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                     case 0x1A:
                     case 0x1B:  rPageSett.ReadPageBreaks( maStrm );     break;
-                    case 0x1C:  rObjMgr.ReadNote( maStrm );             break;
+                    case 0x1C:  GetCurrSheetDrawing().ReadNote( maStrm );break;
                     case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345]
                     case 0x26:
@@ -374,11 +396,12 @@ FltError ImportExcel::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
                         break;
+                    case EXC_ID_FILESHARING: ReadFileSharing();         break;
                     case 0x41:  rTabViewSett.ReadPane( maStrm );        break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
-                    case 0x5D:  rObjMgr.ReadObj( maStrm );              break;
+                    case 0x5D:  GetCurrSheetDrawing().ReadObj( maStrm );break;
                     case 0x7D:  Colinfo(); break;       // COLINFO      [  345]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
                     case 0x92:  rPal.ReadPalette( maStrm );             break;
@@ -412,6 +435,7 @@ FltError ImportExcel::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
                         break;
+                    case EXC_ID_FILESHARING: ReadFileSharing();         break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
@@ -469,12 +493,12 @@ FltError ImportExcel::Read( void )
                         Eof();
                         eAkt = Z_Biff4E;
                     break;
-                    case 0x12:  Protect(); break;       // SHEET PROTECTION
+                    case 0x12:  SheetProtect(); break;       // SHEET PROTECTION
                     case 0x14:
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
                     case 0x1A:
                     case 0x1B:  rPageSett.ReadPageBreaks( maStrm );     break;
-                    case 0x1C:  rObjMgr.ReadNote( maStrm );             break;
+                    case 0x1C:  GetCurrSheetDrawing().ReadNote( maStrm );break;
                     case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
                     case 0x2F:                          // FILEPASS     [ 2345]
                         eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
@@ -485,7 +509,7 @@ FltError ImportExcel::Read( void )
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
-                    case 0x5D:  rObjMgr.ReadObj( maStrm );              break;
+                    case 0x5D:  GetCurrSheetDrawing().ReadObj( maStrm );break;
                     case 0x7D:  Colinfo(); break;       // COLINFO      [  345]
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
                     case 0x8F:  Bundleheader(); break;  // BUNDLEHEADER [   4 ]
@@ -546,6 +570,7 @@ FltError ImportExcel::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
                         break;
+                    case EXC_ID_FILESHARING: ReadFileSharing();         break;
                     case 0x3D:  Window1(); break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5]
@@ -596,7 +621,7 @@ FltError ImportExcel::Read( void )
                             eAkt = Z_Biff5T;
                             aIn.SeekGlobalPosition(); // und zurueck an alte Position
                             break;
-                        case 0x12:  Protect(); break;       // SHEET PROTECTION
+                        case 0x12:  SheetProtect(); break;       // SHEET PROTECTION
                         case 0x1A:
                         case 0x1B:  rPageSett.ReadPageBreaks( maStrm );     break;
                         case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
@@ -643,7 +668,7 @@ FltError ImportExcel::Read( void )
                     case 0x14:
                     case 0x15:  rPageSett.ReadHeaderFooter( maStrm );   break;
                     case 0x17:  Externsheet(); break;   // EXTERNSHEET  [ 2345]
-                    case 0x1C:  rObjMgr.ReadNote( maStrm );             break;
+                    case 0x1C:  GetCurrSheetDrawing().ReadNote( maStrm );break;
                     case 0x1D:  rTabViewSett.ReadSelection( maStrm );   break;
                     case 0x23:  Externname25(); break;  // EXTERNNAME   [ 2  5]
                     case 0x26:
@@ -657,7 +682,7 @@ FltError ImportExcel::Read( void )
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = Z_Ende;
                         break;
-                    case 0x5D:  rObjMgr.ReadObj( maStrm );              break;
+                    case 0x5D:  GetCurrSheetDrawing().ReadObj( maStrm );break;
                     case 0x83:
                     case 0x84:  rPageSett.ReadCenter( maStrm );         break;
                     case 0xA0:  rTabViewSett.ReadScl( maStrm );         break;
@@ -691,7 +716,7 @@ FltError ImportExcel::Read( void )
                                 aIn.StoreGlobalPosition(); // und Position merken
                             break;
                             case Biff5C:    // chart sheet
-                                GetObjectManager().ReadTabChart( maStrm );
+                                GetCurrSheetDrawing().ReadTabChart( maStrm );
                                 Eof();
                                 GetTracer().TraceChartOnlySheet();
                             break;
@@ -776,6 +801,7 @@ FltError ImportExcel8::Read( void )
     XclImpNameManager&      rNameMgr        = GetNameManager();
     XclImpLinkManager&      rLinkMgr        = GetLinkManager();
     XclImpObjectManager&    rObjMgr         = GetObjectManager();
+    // call to GetCurrSheetDrawing() cannot be cached (changes in new sheets)
     XclImpCondFormatManager& rCondFmtMgr    = GetCondFormatManager();
     XclImpPivotTableManager& rPTableMgr     = GetPivotTableManager();
     XclImpWebQueryBuffer&   rWQBfr          = GetWebQueryBuffer();
@@ -800,9 +826,28 @@ FltError ImportExcel8::Read( void )
     ::std::auto_ptr< ScfSimpleProgressBar > pProgress( new ScfSimpleProgressBar(
         aIn.GetSvStreamSize(), GetDocShell(), STR_LOAD_DOC ) );
 
+    /*  #i104057# Need to track a base position for progress bar calculation,
+        because sheet substreams may not be in order of sheets. */
+    sal_Size nProgressBasePos = 0;
+    sal_Size nProgressBaseSize = 0;
+
     while( eAkt != EXC_STATE_END )
     {
-        aIn.StartNextRecord();
+        if( eAkt == EXC_STATE_BEFORE_SHEET )
+        {
+            sal_uInt16 nScTab = GetCurrScTab();
+            if( nScTab < maSheetOffsets.size()  )
+            {
+                nProgressBaseSize += (aIn.GetSvStreamPos() - nProgressBasePos);
+                nProgressBasePos = maSheetOffsets[ nScTab ];
+                aIn.StartNextRecord( nProgressBasePos );
+            }
+            else
+                eAkt = EXC_STATE_END;
+        }
+        else
+            aIn.StartNextRecord();
+
         if( !aIn.IsValid() )
         {
             // #124240# #i63591# finalize table if EOF is missing
@@ -826,7 +871,7 @@ FltError ImportExcel8::Read( void )
             break;
 
         if( eAkt != EXC_STATE_SHEET_PRE && eAkt != EXC_STATE_GLOBALS_PRE )
-            pProgress->ProgressAbs( aIn.GetSvStreamPos() );
+            pProgress->ProgressAbs( nProgressBaseSize + aIn.GetSvStreamPos() - nProgressBasePos );
 
         sal_uInt16 nRecId = aIn.GetRecId();
 
@@ -895,12 +940,14 @@ FltError ImportExcel8::Read( void )
                         }
                         break;
                     case 0x12:  DocProtect(); break;    // PROTECT      [    5678]
+                    case 0x13:  DocPasssword(); break;
                     case 0x19:  WinProtection(); break;
                     case 0x2F:                          // FILEPASS     [ 2345   ]
                         eLastErr = XclImpDecryptHelper::ReadFilepass( maStrm );
                         if( eLastErr != ERRCODE_NONE )
                             eAkt = EXC_STATE_END;
                         break;
+                    case EXC_ID_FILESHARING: ReadFileSharing();         break;
                     case 0x3D:  Window1(); break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
                     case 0x85:  Boundsheet(); break;    // BOUNDSHEET   [    5   ]
@@ -939,10 +986,10 @@ FltError ImportExcel8::Read( void )
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34    ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
-                    case 0xD3:  ReadBasic(); break;
+                    case 0xD3:  SetHasBasic(); break;
                     case 0xDE:  Olesize(); break;
-                    case 0x01BA: Codename( TRUE ); break;
 
+                    case EXC_ID_CODENAME:       ReadCodeName( aIn, true );          break;
                     case EXC_ID_USESELFS:       ReadUsesElfs();                     break;
 
                     case EXC_ID2_FONT:          rFontBfr.ReadFont( maStrm );        break;
@@ -996,7 +1043,7 @@ FltError ImportExcel8::Read( void )
                                 aIn.StoreGlobalPosition();
                             break;
                             case Biff8C:    // chart sheet
-                                rObjMgr.ReadTabChart( maStrm );
+                                GetCurrSheetDrawing().ReadTabChart( maStrm );
                                 Eof();
                                 GetTracer().TraceChartOnlySheet();
                             break;
@@ -1035,11 +1082,14 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID2_DIMENSIONS:
                     case EXC_ID3_DIMENSIONS:    ReadDimensions();                       break;
 
+                    case EXC_ID_CODENAME:       ReadCodeName( aIn, false );             break;
+
                     case 0x0A:                          // EOF          [ 2345   ]
                         eAkt = EXC_STATE_SHEET;
                         aIn.SeekGlobalPosition();         // und zurueck an alte Position
                         break;
-                    case 0x12:  Protect(); break;
+                    case 0x12:  SheetProtect(); break;
+                    case 0x13:  SheetPassword(); break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
                     case 0x55:  DefColWidth(); break;
                     case 0x7D:  Colinfo(); break;       // COLINFO      [  345   ]
@@ -1049,12 +1099,12 @@ FltError ImportExcel8::Read( void )
                     case 0x9B:  FilterMode(); break;    // FILTERMODE
                     case 0x9D:  AutoFilterInfo(); break;// AUTOFILTERINFO
                     case 0x9E:  AutoFilter(); break;    // AUTOFILTER
-                    case 0x01BA: Codename( FALSE ); break;
                     case 0x0208: Row34(); break;        // ROW          [  34    ]
                     case 0x0021:
                     case 0x0221: Array34(); break;      // ARRAY        [  34    ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                     case 0x04BC: Shrfmla(); break;      // SHRFMLA      [    5   ]
+                    case 0x0867: SheetProtection(); break; // SHEETPROTECTION
                 }
             }
             break;
@@ -1115,10 +1165,10 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_SETUP:          rPageSett.ReadSetup( maStrm );          break;
                     case EXC_ID8_IMGDATA:       rPageSett.ReadImgData( maStrm );        break;
 
-                    case EXC_ID_MSODRAWING:     rObjMgr.ReadMsoDrawing( maStrm );       break;
+                    case EXC_ID_MSODRAWING:     GetCurrSheetDrawing().ReadMsoDrawing( maStrm ); break;
                     // #i61786# weird documents: OBJ without MSODRAWING -> read in BIFF5 format
-                    case EXC_ID_OBJ:            rObjMgr.ReadObj( maStrm );              break;
-                    case EXC_ID_NOTE:           rObjMgr.ReadNote( maStrm );             break;
+                    case EXC_ID_OBJ:            GetCurrSheetDrawing().ReadObj( maStrm ); break;
+                    case EXC_ID_NOTE:           GetCurrSheetDrawing().ReadNote( maStrm ); break;
 
                     case EXC_ID_HLINK:          XclImpHyperlink::ReadHlink( maStrm );   break;
                     case EXC_ID_LABELRANGES:    XclImpLabelranges::ReadLabelranges( maStrm ); break;
@@ -1143,6 +1193,8 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_SXDI:           rPTableMgr.ReadSxdi( maStrm );      break;
                     case EXC_ID_SXVDEX:         rPTableMgr.ReadSxvdex( maStrm );    break;
                     case EXC_ID_SXEX:           rPTableMgr.ReadSxex( maStrm );      break;
+                    case EXC_ID_SHEETEXT:       rTabViewSett.ReadTabBgColor( maStrm, rPal );    break;
+                    case EXC_ID_SXVIEWEX9:      rPTableMgr.ReadSxViewEx9( maStrm ); break;
                 }
             }
             break;
@@ -1161,7 +1213,9 @@ FltError ImportExcel8::Read( void )
 
         pProgress.reset();
 
-        AdjustRowHeight();
+        if (pD->IsAdjustHeightEnabled())
+            AdjustRowHeight();
+
         PostDocLoad();
 
         pD->CalcAfterLoad();
@@ -1177,6 +1231,9 @@ FltError ImportExcel8::Read( void )
             eLastErr = SCWARN_IMPORT_ROW_OVERFLOW;
         else if( rAddrConv.IsColTruncated() )
             eLastErr = SCWARN_IMPORT_COLUMN_OVERFLOW;
+
+        if( GetBiff() == EXC_BIFF8 )
+            GetPivotTableManager().MaybeRefreshPivotTables();
     }
 
     return eLastErr;

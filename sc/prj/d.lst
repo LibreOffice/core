@@ -4,11 +4,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\menubar
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\toolbar
-mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator
-mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\en-US
-mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\de
-mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\es
-mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\fr
 mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\statusbar
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
@@ -34,10 +29,6 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\statusbar
 
 ..\uiconfig\scalc\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\menubar\*.xml
 ..\uiconfig\scalc\toolbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\toolbar\*.xml
-..\uiconfig\scalc\accelerator\en-US\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\en-US\*.xml
-..\uiconfig\scalc\accelerator\de\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\de\*.xml
-..\uiconfig\scalc\accelerator\es\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\es\*.xml
-..\uiconfig\scalc\accelerator\fr\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\accelerator\fr\*.xml
 ..\uiconfig\scalc\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\scalc\statusbar\*.xml
 
 ..\%__SRC%\bin\*-layout.zip %_DEST%\pck%_EXT%\*.*

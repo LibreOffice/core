@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: global.hxx,v $
- * $Revision: 1.53.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,15 +83,6 @@ extern "C" {
 #define SC_TRANSLITERATION_CASESENSE 0
 #endif
 
-// Remove the old pivot table implementation that the current data pilot
-// implementation has effectively replaced.  The old pivot code was still
-// around to handle loading of the old binary format.  Now that the old
-// binary filter is handled by binfilter, we can safely remove the old pivot
-// handling code.
-#define OLD_PIVOT_IMPLEMENTATION 0
-
-//------------------------------------------------------------------------
-struct LabelData;
 //------------------------------------------------------------------------
 
 //  die 1000 Namen des Calc...
@@ -215,13 +203,16 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
                                     // FILTERED und MANUALSIZE nur fuer Zeilen moeglich
 const BYTE   CR_HIDDEN      = 1;
 //const BYTE CR_MARKED      = 2;
-const BYTE   CR_PAGEBREAK   = 4;
+//const BYTE CR_PAGEBREAK   = 4;
 const BYTE   CR_MANUALBREAK = 8;
 const BYTE   CR_FILTERED    = 16;
 const BYTE   CR_MANUALSIZE  = 32;
+const BYTE   CR_ALL         = (CR_HIDDEN | CR_MANUALBREAK | CR_FILTERED | CR_MANUALSIZE);
 
-//  was davon kommt in die Datei:
-#define CR_SAVEMASK     ( ~CR_PAGEBREAK )
+typedef BYTE ScBreakType;
+const ScBreakType BREAK_NONE   = 0;
+const ScBreakType BREAK_PAGE   = 1;
+const ScBreakType BREAK_MANUAL = 2;
 
 // Insert-/Delete-Flags
 const USHORT IDF_NONE       = 0x0000;
@@ -238,6 +229,7 @@ const USHORT IDF_ATTRIB     = IDF_HARDATTR | IDF_STYLES;
 const USHORT IDF_CONTENTS   = IDF_VALUE | IDF_DATETIME | IDF_STRING | IDF_NOTE | IDF_FORMULA;
 const USHORT IDF_ALL        = IDF_CONTENTS | IDF_ATTRIB | IDF_OBJECTS;
 const USHORT IDF_NOCAPTIONS = 0x0200;   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
+const USHORT IDF_ADDNOTES   = 0x0400;   /// Internal use only (copy from clip): do not delete existing cell contents when pasting notes.
 
 /// Copy flags for auto/series fill functions: do not touch notes and drawing objects.
 const USHORT IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
@@ -425,6 +417,29 @@ enum ScGetDBMode
     SC_DB_OLD       // nicht neu anlegen
 };
 
+/// For ScDBFunc::GetDBData()
+enum ScGetDBSelection
+{
+    /** Keep selection as is, expand to used data area if no selection. */
+    SC_DBSEL_KEEP,
+
+    /** Shrink selection to sheet's data area. */
+    SC_DBSEL_SHRINK_TO_SHEET_DATA,
+
+    /** Shrink selection to actually used data area within the selection. */
+    SC_DBSEL_SHRINK_TO_USED_DATA,
+
+    /** If only one row or portion thereof is selected, shrink row to used data
+        columns and select further rows down until end of data. If an area is
+        selected, shrink rows to actually used columns. Else, no selection,
+        expand to used data area. */
+    SC_DBSEL_ROW_DOWN,
+
+    /** Behave as if the range corresponding to a ScDBData area was selected,
+        for API use. */
+    SC_DBSEL_FORCE_MARK
+};
+
 enum ScLkUpdMode
 {                   //Verknuepfungen
     LM_ALWAYS,      //immer aktualisieren
@@ -466,7 +481,7 @@ struct ScImportParam
 
     ScImportParam&  operator=   ( const ScImportParam& r );
     BOOL            operator==  ( const ScImportParam& r ) const;
-    void            Clear       ();
+//UNUSED2009-05 void            Clear       ();
 };
 
 struct ScStringHashCode
@@ -547,9 +562,15 @@ class ScGlobal
     static  SvNumberFormatter*  pEnglishFormatter;          // for UNO / XML export
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XOrdinalSuffix> xOrdinalSuffix;
+    static CalendarWrapper*     pCalendar;
+    static CollatorWrapper*     pCaseCollator;
+    static CollatorWrapper*     pCollator;
+    static ::utl::TransliterationWrapper* pTransliteration;
+    static ::utl::TransliterationWrapper* pCaseTransliteration;
+    static IntlWrapper*         pScIntlWrapper;
+    static ::com::sun::star::lang::Locale*      pLocale;
 
 public:
-    static ::com::sun::star::lang::Locale*      pLocale;
     static SvtSysLocale*        pSysLocale;
     // for faster access a pointer to the single instance provided by SvtSysLocale
     SC_DLLPUBLIC static const CharClass*     pCharClass;
@@ -557,15 +578,15 @@ public:
     SC_DLLPUBLIC static const LocaleDataWrapper* pLocaleData;
     SC_DLLPUBLIC static const LocaleDataWrapper* GetpLocaleData();
 
-    static CalendarWrapper*     pCalendar;
-    SC_DLLPUBLIC static CollatorWrapper*        pCollator;
-    static CollatorWrapper*     pCaseCollator;
+    static CalendarWrapper*     GetCalendar();
+    SC_DLLPUBLIC static CollatorWrapper*        GetCollator();
+    static CollatorWrapper*     GetCaseCollator();
+    static IntlWrapper*         GetScIntlWrapper();
+    static ::com::sun::star::lang::Locale*      GetLocale();
 
-    static ::utl::TransliterationWrapper* pTransliteration;
     SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration(); //CHINA001
+    static ::utl::TransliterationWrapper* GetCaseTransliteration();
 
-    static ::utl::TransliterationWrapper* pCaseTransliteration;
-    static IntlWrapper*         pScIntlWrapper;
     SC_DLLPUBLIC static LanguageType            eLnge;
     static sal_Unicode          cListDelimiter;
 
@@ -727,7 +748,13 @@ enum ScQueryOp
         SC_TOPVAL,
         SC_BOTVAL,
         SC_TOPPERC,
-        SC_BOTPERC
+        SC_BOTPERC,
+        SC_CONTAINS,
+        SC_DOES_NOT_CONTAIN,
+        SC_BEGINS_WITH,
+        SC_DOES_NOT_BEGIN_WITH,
+        SC_ENDS_WITH,
+        SC_DOES_NOT_END_WITH
     };
 
 // -----------------------------------------------------------------------
@@ -757,21 +784,6 @@ enum ScSubTotalFunc
     };
 
 
-#define     PIVOT_MAXFUNC           11
-#define     PIVOT_FUNC_NONE         0x0000
-#define     PIVOT_FUNC_SUM          0x0001
-#define     PIVOT_FUNC_COUNT        0x0002
-#define     PIVOT_FUNC_AVERAGE      0x0004
-#define     PIVOT_FUNC_MAX          0x0008
-#define     PIVOT_FUNC_MIN          0x0010
-#define     PIVOT_FUNC_PRODUCT      0x0020
-#define     PIVOT_FUNC_COUNT_NUM    0x0040
-#define     PIVOT_FUNC_STD_DEV      0x0080
-#define     PIVOT_FUNC_STD_DEVP     0x0100
-#define     PIVOT_FUNC_STD_VAR      0x0200
-#define     PIVOT_FUNC_STD_VARP     0x0400
-#define     PIVOT_FUNC_AUTO         0x1000
-
 // -----------------------------------------------------------------------
 
 /*
@@ -793,6 +805,7 @@ struct ScQueryEntry
 {
     BOOL            bDoQuery;
     BOOL            bQueryByString;
+    bool            bQueryByDate;
     SCCOLROW        nField;
     ScQueryOp       eOp;
     ScQueryConnect  eConnect;
@@ -811,47 +824,6 @@ struct ScQueryEntry
     void            Clear();
     ScQueryEntry&   operator=( const ScQueryEntry& r );
     BOOL            operator==( const ScQueryEntry& r ) const;
-};
-
-struct SC_DLLPUBLIC ScQueryParam
-{
-    SCCOL           nCol1;
-    SCROW           nRow1;
-    SCCOL           nCol2;
-    SCROW           nRow2;
-    SCTAB           nTab;
-    BOOL            bHasHeader;
-    BOOL            bByRow;
-    BOOL            bInplace;
-    BOOL            bCaseSens;
-    BOOL            bRegExp;
-    BOOL            bMixedComparison;   // whether numbers are smaller than strings
-    BOOL            bDuplicate;
-    BOOL            bDestPers;          // nicht gespeichert
-    SCTAB           nDestTab;
-    SCCOL           nDestCol;
-    SCROW           nDestRow;
-
-private:
-    SCSIZE          nEntryCount;
-    ScQueryEntry*   pEntries;
-
-public:
-    ScQueryParam();
-    ScQueryParam( const ScQueryParam& r );
-    ~ScQueryParam();
-
-    SCSIZE          GetEntryCount() const           { return nEntryCount; }
-    ScQueryEntry&   GetEntry(SCSIZE n) const        { return pEntries[n]; }
-    void            Resize(SCSIZE nNew);
-
-    ScQueryParam&   operator=   ( const ScQueryParam& r );
-    BOOL            operator==  ( const ScQueryParam& rOther ) const;
-    void            Clear       ();
-    void            DeleteQuery( SCSIZE nPos );
-
-    void            MoveToDest();
-    void            FillInExcelSyntax(String& aCellStr, SCSIZE nIndex);
 };
 
 // -----------------------------------------------------------------------
@@ -913,46 +885,6 @@ struct ScConsolidateParam
     void                Clear           (); // = ClearDataAreas()+Members
     void                ClearDataAreas  ();
     void                SetAreas        ( ScArea* const* ppAreas, USHORT nCount );
-};
-
-// -----------------------------------------------------------------------
-
-class ScSimpleSharedString
-{
-public:
-    static const sal_Int32 EMPTY = 0;
-
-    ScSimpleSharedString();
-    ScSimpleSharedString(const ScSimpleSharedString& r);
-    ~ScSimpleSharedString();
-
-    const String*    getString(sal_Int32 nId);
-    sal_Int32        getStringId(const String& aStr);
-    sal_Int32        insertString(const String& aStr);
-
-private:
-
-    /** internal shared string table implementation */
-    class StringTable
-    {
-    public:
-        sal_Int32 insertString(const String& aStr);
-        sal_Int32 getStringId(const String& aStr);
-        const String* getString(sal_Int32 nId) const;
-
-        StringTable();
-        StringTable(const StringTable& r);
-        ~StringTable();
-
-    private:
-        typedef ::std::hash_map< String, sal_Int32, ScStringHashCode, ::std::equal_to< String > > SharedStrMap;
-
-        ::std::vector<String> maSharedStrings;
-        SharedStrMap maSharedStringIds;
-        sal_Int32 mnStrCount;
-    };
-
-    StringTable maStringTable;
 };
 
 // -----------------------------------------------------------------------

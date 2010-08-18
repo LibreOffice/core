@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlexprt.hxx,v $
- * $Revision: 1.84.52.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +35,10 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 
+namespace com { namespace sun { namespace star {
+    namespace beans { class XPropertySet; }
+} } }
+
 #include <hash_map>
 
 class ScOutlineArray;
@@ -62,6 +63,7 @@ class XMLNumberFormatAttributesExportHelper;
 class ScChartListener;
 class SfxItemPool;
 class ScAddress;
+class ScBaseCell;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
@@ -70,6 +72,9 @@ class ScXMLExport : public SvXMLExport
     ScDocument*                 pDoc;
     com::sun::star::uno::Reference <com::sun::star::sheet::XSpreadsheet> xCurrentTable;
     com::sun::star::uno::Reference <com::sun::star::table::XCellRange> xCurrentTableCellRange;
+
+    com::sun::star::uno::Reference<com::sun::star::io::XInputStream> xSourceStream;
+    sal_Int32                   nSourceStreamPos;
 
     UniReference < XMLPropertyHandlerFactory >  xScPropHdlFactory;
     UniReference < XMLPropertySetMapper >       xCellStylesPropertySetMapper;
@@ -138,7 +143,7 @@ class ScXMLExport : public SvXMLExport
 
     void CollectInternalShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape );
 
-    com::sun::star::table::CellRangeAddress GetEndAddress(com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
+    com::sun::star::table::CellRangeAddress GetEndAddress(const com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& xTable,
                                                         const sal_Int32 nTable);
 //  ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
     void GetAreaLinks( com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc, ScMyAreaLinksContainer& rAreaLinks );
@@ -187,9 +192,10 @@ class ScXMLExport : public SvXMLExport
     void SetRepeatAttribute (const sal_Int32 nEqualCellCount);
 
     sal_Bool IsCellTypeEqual (const ScMyCell& aCell1, const ScMyCell& aCell2) const;
-    sal_Bool IsEditCell(const com::sun::star::table::CellAddress& aAddress) const;
+     sal_Bool IsEditCell(const com::sun::star::table::CellAddress& aAddress, ScMyCell* pMyCell = NULL) const;
 //UNUSED2008-05  sal_Bool IsEditCell(const com::sun::star::uno::Reference <com::sun::star::table::XCell>& xCell) const;
     sal_Bool IsEditCell(ScMyCell& rCell) const;
+    sal_Bool IsMultiLineFormulaCell(ScMyCell& rCell) const;
 //UNUSED2008-05  sal_Bool IsAnnotationEqual(const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell1,
 //UNUSED2008-05                             const com::sun::star::uno::Reference<com::sun::star::table::XCell>& xCell2);
     sal_Bool IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2);
@@ -205,7 +211,21 @@ class ScXMLExport : public SvXMLExport
 
     void CollectUserDefinedNamespaces(const SfxItemPool* pPool, sal_uInt16 nAttrib);
 
+    void AddStyleFromCells(
+        const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xProperties,
+        const com::sun::star::uno::Reference< com::sun::star::sheet::XSpreadsheet >& xTable,
+        sal_Int32 nTable, const rtl::OUString* pOldName );
+    void AddStyleFromColumn(
+        const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xColumnProperties,
+        const rtl::OUString* pOldName, sal_Int32& rIndex, sal_Bool& rIsVisible );
+    void AddStyleFromRow(
+        const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xRowProperties,
+        const rtl::OUString* pOldName, sal_Int32& rIndex );
+
     void IncrementProgressBar(sal_Bool bEditCell, sal_Int32 nInc = 1);
+
+    void CopySourceStream( sal_Int32 nStartOffset, sal_Int32 nEndOffset, sal_Int32& rNewStart, sal_Int32& rNewEnd );
+
 protected:
     virtual SvXMLAutoStylePoolP* CreateAutoStylePool();
     virtual XMLPageExport* CreatePageExport();
@@ -231,6 +251,8 @@ public:
 
     UniReference < XMLPropertySetMapper > GetCellStylesPropertySetMapper() { return xCellStylesPropertySetMapper; }
     UniReference < XMLPropertySetMapper > GetTableStylesPropertySetMapper() { return xTableStylesPropertySetMapper; }
+
+    void SetSourceStream( const com::sun::star::uno::Reference<com::sun::star::io::XInputStream>& xNewStream );
 
     void GetChangeTrackViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
     virtual void GetViewSettings(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);

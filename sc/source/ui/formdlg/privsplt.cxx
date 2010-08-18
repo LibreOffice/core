@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: privsplt.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -229,24 +226,6 @@ void ScPrivatSplit::MouseMove( const MouseEvent& rMEvt )
         Invalidate();
         Update();
     }
-}
-
-/*************************************************************************
-#*  Member:     SetXRange                                   Datum:14.10.97
-#*------------------------------------------------------------------------
-#*
-#*  Klasse:     ScPrivatSplit
-#*
-#*  Funktion:   Setzt den Range fuer die X- Verschiebung
-#*
-#*  Input:      neuer Bereich
-#*
-#*  Output:     ---
-#*
-#************************************************************************/
-void ScPrivatSplit::SetXRange(Range cRgeX)
-{
-    aXMovingRange=cRgeX;
 }
 
 /*************************************************************************

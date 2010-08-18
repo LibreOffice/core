@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlg_DataSource.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -200,6 +197,19 @@ DataSourceDialog::~DataSourceDialog()
 
     m_nLastPageId = m_pTabControl->GetCurPageId();
     delete m_pTabControl;
+}
+
+short DataSourceDialog::Execute()
+{
+    short nResult = TabDialog::Execute();
+    if( nResult == RET_OK )
+    {
+        if( m_pRangeChooserTabePage )
+            m_pRangeChooserTabePage->commitPage();
+        if( m_pDataSourceTabPage )
+            m_pDataSourceTabPage->commitPage();
+    }
+    return nResult;
 }
 
 void DataSourceDialog::setInvalidPage( TabPage * pTabPage )

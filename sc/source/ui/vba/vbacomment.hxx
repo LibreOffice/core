@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbacomment.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,17 +31,19 @@
 
 #include <ooo/vba/excel/XComment.hpp>
 #include <ooo/vba/excel/XApplication.hpp>
+#include <ooo/vba/msforms/XShape.hpp>
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSheetAnnotation.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "vbahelperinterface.hxx"
+#include <vbahelper/vbahelperinterface.hxx>
 
 typedef InheritedHelperInterfaceImpl1< ov::excel::XComment > ScVbaComment_BASE;
 
 class ScVbaComment : public ScVbaComment_BASE
 {
+    css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::table::XCellRange > mxRange;
 
 private:
@@ -53,13 +52,18 @@ private:
     sal_Int32 SAL_CALL getAnnotationIndex() throw (css::uno::RuntimeException);
     css::uno::Reference< ov::excel::XComment > SAL_CALL getCommentByIndex( sal_Int32 Index ) throw (css::uno::RuntimeException);
 public:
-    ScVbaComment( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange ) throw ( css::lang::IllegalArgumentException );
+    ScVbaComment(
+        const css::uno::Reference< ov::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::frame::XModel >& xModel,
+        const css::uno::Reference< css::table::XCellRange >& xRange ) throw ( css::lang::IllegalArgumentException );
 
     virtual ~ScVbaComment() {}
 
     // Attributes
     virtual rtl::OUString SAL_CALL getAuthor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setAuthor( const rtl::OUString& _author ) throw (css::uno::RuntimeException);
+    virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException);
 

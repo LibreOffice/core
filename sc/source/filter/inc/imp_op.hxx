@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: imp_op.hxx,v $
- * $Revision: 1.43.14.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -99,6 +96,9 @@ protected:
     XclImpStream            maStrm;             // input stream
     XclImpStream&           aIn;                // input stream
 
+    ScfUInt32Vec            maSheetOffsets;
+    ScRange                 maScOleSize;        /// Visible range if embedded.
+
     NameBuffer*             pExtNameBuff;       // ... externe Namen (Ind.-Basis=1)
     ExcelToSc*              pFormConv;          // Formel-Konverter
 
@@ -119,6 +119,8 @@ protected:
                                                 //  Abschneiden von Zellen fuehrt
 
     // Record-Funktionen
+    void                    ReadFileSharing();
+
     sal_uInt16              ReadXFIndex( bool bBiff2 );
 
     void                    ReadDimensions();
@@ -135,9 +137,11 @@ protected:
     void                    Bof2( void );                   // 0x09
     void                    Eof( void );                    // 0x0A
     void                    DocProtect( void );             // 0x12
-    void                    Protect( void );                // 0x12 Sheet Protection
-    BOOL                    Password( void );               // 0x13
+    void                    SheetProtect( void );           // 0x12 Sheet Protection
+    void                    DocPasssword( void );           // 0x13 document password
+    void                    SheetPassword( void );               // 0x13 sheet password
     void                    Externsheet( void );            // 0x17
+    void                    WinProtection( void );          // 0x19
     void                    Columndefault( void );          // 0x20
     void                    Array25( void );                // 0x21
     void                    Rec1904( void );                // 0x22

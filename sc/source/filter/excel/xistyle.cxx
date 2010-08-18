@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xistyle.cxx,v $
- * $Revision: 1.38.14.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,26 +31,26 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/objsh.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include "scitems.hxx"
-#include <svx/fontitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/escpitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/escpitem.hxx>
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/colritem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/flstitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flstitem.hxx>
 #include "document.hxx"
 #include "docpool.hxx"
 #include "attrib.hxx"
@@ -704,7 +701,6 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
     sal_uInt8 nXclRot = (mnOrient == EXC_ORIENT_NONE) ? mnRotation : XclTools::GetXclRotFromOrient( mnOrient );
     bool bStacked = (nXclRot == EXC_ROT_STACKED);
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_STACKED, bStacked ), bSkipPoolDefs );
-    ScfTools::PutItem( rItemSet, SvxRotateModeItem( SVX_ROTATE_MODE_STANDARD, ATTR_ROTATE_MODE ), bSkipPoolDefs );
     // set an angle in the range from -90 to 90 degrees
     sal_Int32 nAngle = XclTools::GetScRotation( nXclRot, 0 );
     ScfTools::PutItem( rItemSet, SfxInt32Item( ATTR_ROTATE_VALUE, nAngle ), bSkipPoolDefs );
@@ -800,6 +796,15 @@ void XclImpCellBorder::FillFromCF8( sal_uInt16 nLineStyle, sal_uInt32 nLineColor
     mbTopUsed     = !::get_flag( nFlags, EXC_CF_BORDER_TOP );
     mbBottomUsed  = !::get_flag( nFlags, EXC_CF_BORDER_BOTTOM );
     mbDiagUsed    = false;
+}
+
+bool XclImpCellBorder::HasAnyOuterBorder() const
+{
+    return
+        (mbLeftUsed   && (mnLeftLine != EXC_LINE_NONE)) ||
+        (mbRightUsed  && (mnRightLine != EXC_LINE_NONE)) ||
+        (mbTopUsed    && (mnTopLine != EXC_LINE_NONE)) ||
+        (mbBottomUsed && (mnBottomLine != EXC_LINE_NONE));
 }
 
 namespace {
@@ -968,9 +973,7 @@ XclImpXF::XclImpXF( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
     mpStyleSheet( 0 ),
     mnXclNumFmt( 0 ),
-    mnXclFont( 0 ),
-    mbWasBuiltIn( false ),
-    mbForceCreate( false )
+    mnXclFont( 0 )
 {
 }
 
@@ -1088,32 +1091,94 @@ void XclImpXF::ReadXF( XclImpStream& rStrm )
     }
 }
 
-void XclImpXF::SetStyleName( const String& rStyleName )
+const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 {
-    DBG_ASSERT( IsStyleXF(), "XclImpXF::SetStyleName - not a style XF" );
-    DBG_ASSERT( rStyleName.Len(), "XclImpXF::SetStyleName - style name empty" );
-    if( IsStyleXF() && !maStyleName.Len() )
-    {
-        maStyleName = rStyleName;
-        mbForceCreate = true;
-    }
-}
+    if( mpPattern.get() )
+        return *mpPattern;
 
-void XclImpXF::SetBuiltInStyleName( sal_uInt8 nStyleId, sal_uInt8 nLevel )
-{
-    DBG_ASSERT( IsStyleXF(), "XclImpXF::SetStyleName - not a style XF" );
-    if( IsStyleXF() && !maStyleName.Len() )
-    {
-        mbWasBuiltIn = true;
-        maStyleName = XclTools::GetBuiltInStyleName( nStyleId, nLevel );
-        mbForceCreate = nStyleId == EXC_STYLE_NORMAL;   // force creation of "Default" style
-    }
-}
+    // create new pattern attribute set
+    mpPattern.reset( new ScPatternAttr( GetDoc().GetPool() ) );
+    SfxItemSet& rItemSet = mpPattern->GetItemSet();
+    XclImpXF* pParentXF = IsCellXF() ? GetXFBuffer().GetXF( mnParent ) : 0;
 
-void XclImpXF::CreateUserStyle()
-{
-    if( IsStyleXF() && mbForceCreate )
-        CreateStyleSheet();
+    // parent cell style
+    if( IsCellXF() && !mpStyleSheet )
+    {
+        mpStyleSheet = GetXFBuffer().CreateStyleSheet( mnParent );
+
+        /*  Enables mb***Used flags, if the formatting attributes differ from
+            the passed XF record. In cell XFs Excel uses the cell attributes,
+            if they differ from the parent style XF.
+            #109899# ...or if the respective flag is not set in parent style XF. */
+        if( pParentXF )
+        {
+            if( !mbProtUsed )
+                mbProtUsed = !pParentXF->mbProtUsed || !(maProtection == pParentXF->maProtection);
+            if( !mbFontUsed )
+                mbFontUsed = !pParentXF->mbFontUsed || (mnXclFont != pParentXF->mnXclFont);
+            if( !mbFmtUsed )
+                mbFmtUsed = !pParentXF->mbFmtUsed || (mnXclNumFmt != pParentXF->mnXclNumFmt);
+            if( !mbAlignUsed )
+                mbAlignUsed = !pParentXF->mbAlignUsed || !(maAlignment == pParentXF->maAlignment);
+            if( !mbBorderUsed )
+                mbBorderUsed = !pParentXF->mbBorderUsed || !(maBorder == pParentXF->maBorder);
+            if( !mbAreaUsed )
+                mbAreaUsed = !pParentXF->mbAreaUsed || !(maArea == pParentXF->maArea);
+        }
+    }
+
+    // cell protection
+    if( mbProtUsed )
+        maProtection.FillToItemSet( rItemSet, bSkipPoolDefs );
+
+    // font
+    if( mbFontUsed )
+        GetFontBuffer().FillToItemSet( rItemSet, EXC_FONTITEM_CELL, mnXclFont, bSkipPoolDefs );
+
+    // value format
+    if( mbFmtUsed )
+    {
+        GetNumFmtBuffer().FillToItemSet( rItemSet, mnXclNumFmt, bSkipPoolDefs );
+        // Trace occurrences of Windows date formats
+        GetTracer().TraceDates( mnXclNumFmt );
+    }
+
+    // alignment
+    if( mbAlignUsed )
+        maAlignment.FillToItemSet( rItemSet, GetFontBuffer().GetFont( mnXclFont ), bSkipPoolDefs );
+
+    // border
+    if( mbBorderUsed )
+    {
+        maBorder.FillToItemSet( rItemSet, GetPalette(), bSkipPoolDefs );
+        GetTracer().TraceBorderLineStyle(maBorder.mnLeftLine > EXC_LINE_HAIR ||
+            maBorder.mnRightLine > EXC_LINE_HAIR || maBorder.mnTopLine > EXC_LINE_HAIR ||
+            maBorder.mnBottomLine > EXC_LINE_HAIR );
+    }
+
+    // area
+    if( mbAreaUsed )
+    {
+        maArea.FillToItemSet( rItemSet, GetPalette(), bSkipPoolDefs );
+        GetTracer().TraceFillPattern(maArea.mnPattern != EXC_PATT_NONE &&
+            maArea.mnPattern != EXC_PATT_SOLID);
+    }
+
+    /*  #i38709# Decide which rotation reference mode to use. If any outer
+        border line of the cell is set (either explicitly or via cell style),
+        and the cell contents are rotated, set rotation reference to bottom of
+        cell. This causes the borders to be painted rotated with the text. */
+    if( mbAlignUsed || mbBorderUsed )
+    {
+        SvxRotateMode eRotateMode = SVX_ROTATE_MODE_STANDARD;
+        const XclImpCellAlign* pAlign = mbAlignUsed ? &maAlignment : (pParentXF ? &pParentXF->maAlignment : 0);
+        const XclImpCellBorder* pBorder = mbBorderUsed ? &maBorder : (pParentXF ? &pParentXF->maBorder : 0);
+        if( pAlign && pBorder && (0 < pAlign->mnRotation) && (pAlign->mnRotation <= 180) && pBorder->HasAnyOuterBorder() )
+            eRotateMode = SVX_ROTATE_MODE_BOTTOM;
+        ScfTools::PutItem( rItemSet, SvxRotateModeItem( eRotateMode, ATTR_ROTATE_MODE ), bSkipPoolDefs );
+    }
+
+    return *mpPattern;
 }
 
 void XclImpXF::ApplyPattern(
@@ -1156,112 +1221,98 @@ void XclImpXF::SetUsedFlags( sal_uInt8 nUsedFlags )
     mbAreaUsed   = (mbCellXF == ::get_flag( nUsedFlags, EXC_XF_DIFF_AREA ));
 }
 
-void XclImpXF::UpdateUsedFlags( const XclImpXF& rParentXF )
+// ----------------------------------------------------------------------------
+
+XclImpStyle::XclImpStyle( const XclImpRoot& rRoot ) :
+    XclImpRoot( rRoot ),
+    mnXfId( EXC_XF_NOTFOUND ),
+    mnBuiltinId( EXC_STYLE_USERDEF ),
+    mnLevel( EXC_STYLE_NOLEVEL ),
+    mbBuiltin( false ),
+    mbCustom( false ),
+    mbHidden( false ),
+    mpStyleSheet( 0 )
 {
-    /*  Enables mb***Used flags, if the formatting attributes differ from
-        the passed XF record. In cell XFs Excel uses the cell attributes,
-        if they differ from the parent style XF.
-        #109899# ...or if the respective flag is not set in parent style XF. */
-    if( !mbProtUsed )
-        mbProtUsed = !rParentXF.mbProtUsed || !(maProtection == rParentXF.maProtection);
-    if( !mbFontUsed )
-        mbFontUsed = !rParentXF.mbFontUsed || (mnXclFont != rParentXF.mnXclFont);
-    if( !mbFmtUsed )
-        mbFmtUsed = !rParentXF.mbFmtUsed || (mnXclNumFmt != rParentXF.mnXclNumFmt);
-    if( !mbAlignUsed )
-        mbAlignUsed = !rParentXF.mbAlignUsed || !(maAlignment == rParentXF.maAlignment);
-    if( !mbBorderUsed )
-        mbBorderUsed = !rParentXF.mbBorderUsed || !(maBorder == rParentXF.maBorder);
-    if( !mbAreaUsed )
-        mbAreaUsed = !rParentXF.mbAreaUsed || !(maArea == rParentXF.maArea);
 }
 
-const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
+void XclImpStyle::ReadStyle( XclImpStream& rStrm )
 {
-    if( mpPattern.get() )
-        return *mpPattern;
+    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF3 );
 
-    // create new pattern attribute set
-    mpPattern.reset( new ScPatternAttr( GetDoc().GetPool() ) );
-    SfxItemSet& rItemSet = mpPattern->GetItemSet();
+    sal_uInt16 nXFIndex;
+    rStrm >> nXFIndex;
+    mnXfId = nXFIndex & EXC_STYLE_XFMASK;
+    mbBuiltin = ::get_flag( nXFIndex, EXC_STYLE_BUILTIN );
 
-    // parent cell style
-    if( IsCellXF() )
+    if( mbBuiltin )
     {
-        if( XclImpXF* pParentXF = GetXFBuffer().GetXF( mnParent ) )
+        rStrm >> mnBuiltinId >> mnLevel;
+    }
+    else
+    {
+        maName = (GetBiff() <= EXC_BIFF5) ? rStrm.ReadByteString( false ) : rStrm.ReadUniString();
+        // #i103281# check if this is a new built-in style introduced in XL2007
+        if( (GetBiff() == EXC_BIFF8) && (rStrm.GetNextRecId() == EXC_ID_STYLEEXT) && rStrm.StartNextRecord() )
         {
-            mpStyleSheet = pParentXF->CreateStyleSheet();
-            UpdateUsedFlags( *pParentXF );
+            sal_uInt8 nExtFlags;
+            rStrm.Ignore( 12 );
+            rStrm >> nExtFlags;
+            mbBuiltin = ::get_flag( nExtFlags, EXC_STYLEEXT_BUILTIN );
+            mbCustom = ::get_flag( nExtFlags, EXC_STYLEEXT_CUSTOM );
+            mbHidden = ::get_flag( nExtFlags, EXC_STYLEEXT_HIDDEN );
+            if( mbBuiltin )
+            {
+                rStrm.Ignore( 1 );  // category
+                rStrm >> mnBuiltinId >> mnLevel;
+            }
         }
     }
-
-    // cell protection
-    if( mbProtUsed )
-        maProtection.FillToItemSet( rItemSet, bSkipPoolDefs );
-
-    // font
-    if( mbFontUsed )
-        GetFontBuffer().FillToItemSet( rItemSet, EXC_FONTITEM_CELL, mnXclFont, bSkipPoolDefs );
-
-    // value format
-    if( mbFmtUsed )
-    {
-        GetNumFmtBuffer().FillToItemSet( rItemSet, mnXclNumFmt, bSkipPoolDefs );
-        // Trace occurrences of Windows date formats
-        GetTracer().TraceDates( mnXclNumFmt );
-    }
-
-    // alignment
-    if( mbAlignUsed )
-        maAlignment.FillToItemSet( rItemSet, GetFontBuffer().GetFont( mnXclFont ), bSkipPoolDefs );
-
-    // border
-    if( mbBorderUsed )
-    {
-        maBorder.FillToItemSet( rItemSet, GetPalette(), bSkipPoolDefs );
-        GetTracer().TraceBorderLineStyle(maBorder.mnLeftLine > EXC_LINE_HAIR ||
-            maBorder.mnRightLine > EXC_LINE_HAIR || maBorder.mnTopLine > EXC_LINE_HAIR ||
-            maBorder.mnBottomLine > EXC_LINE_HAIR );
-    }
-
-    // area
-    if( mbAreaUsed )
-    {
-        maArea.FillToItemSet( rItemSet, GetPalette(), bSkipPoolDefs );
-        GetTracer().TraceFillPattern(maArea.mnPattern != EXC_PATT_NONE &&
-            maArea.mnPattern != EXC_PATT_SOLID);
-    }
-
-    return *mpPattern;
 }
 
-ScStyleSheet* XclImpXF::CreateStyleSheet()
+ScStyleSheet* XclImpStyle::CreateStyleSheet()
 {
-    if( !mpStyleSheet && maStyleName.Len() )    // valid name implies style XF
+    // #i1624# #i1768# ignore unnamed user styles
+    if( !mpStyleSheet && (maFinalName.Len() > 0) )
     {
-        // there may be a user-defined "Default" - test on built-in too!
-        bool bDefStyle = mbWasBuiltIn && (maStyleName == ScGlobal::GetRscString( STR_STYLENAME_STANDARD ));
+        bool bCreatePattern = false;
+        XclImpXF* pXF = GetXFBuffer().GetXF( mnXfId );
+
+        bool bDefStyle = mbBuiltin && (mnBuiltinId == EXC_STYLE_NORMAL);
         if( bDefStyle )
         {
-            // set all flags to true to get all items in CreatePattern()
-            SetAllUsedFlags( true );
+            // set all flags to true to get all items in XclImpXF::CreatePattern()
+            if( pXF ) pXF->SetAllUsedFlags( true );
             // use existing "Default" style sheet
             mpStyleSheet = static_cast< ScStyleSheet* >( GetStyleSheetPool().Find(
                 ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PARA ) );
-            DBG_ASSERT( mpStyleSheet, "XclImpXF::CreateStyleSheet - Default style not found" );
+            DBG_ASSERT( mpStyleSheet, "XclImpStyle::CreateStyleSheet - Default style not found" );
+            bCreatePattern = true;
         }
         else
         {
-            /*  mbWasBuiltIn==true forces renaming of equal-named user defined styles
-                to be able to re-export built-in styles correctly. */
-            mpStyleSheet = &ScfTools::MakeCellStyleSheet( GetStyleSheetPool(), maStyleName, mbWasBuiltIn );
+            /*  #i103281# do not create another style sheet of the same name,
+                if it exists already. This is needed to prevent that styles
+                pasted from clipboard get duplicated over and over. */
+            mpStyleSheet = static_cast< ScStyleSheet* >( GetStyleSheetPool().Find( maFinalName, SFX_STYLE_FAMILY_PARA ) );
+            if( !mpStyleSheet )
+            {
+                mpStyleSheet = &static_cast< ScStyleSheet& >( GetStyleSheetPool().Make( maFinalName, SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_USERDEF ) );
+                bCreatePattern = true;
+            }
         }
 
         // bDefStyle==true omits default pool items in CreatePattern()
-        if( mpStyleSheet )
-            mpStyleSheet->GetItemSet().Put( CreatePattern( bDefStyle ).GetItemSet() );
+        if( bCreatePattern && mpStyleSheet && pXF )
+            mpStyleSheet->GetItemSet().Put( pXF->CreatePattern( bDefStyle ).GetItemSet() );
     }
     return mpStyleSheet;
+}
+
+void XclImpStyle::CreateUserStyle( const String& rFinalName )
+{
+    maFinalName = rFinalName;
+    if( !IsBuiltin() || mbCustom )
+        CreateStyleSheet();
 }
 
 // ----------------------------------------------------------------------------
@@ -1274,6 +1325,9 @@ XclImpXFBuffer::XclImpXFBuffer( const XclImpRoot& rRoot ) :
 void XclImpXFBuffer::Initialize()
 {
     maXFList.Clear();
+    maBuiltinStyles.Clear();
+    maUserStyles.Clear();
+    maStylesByXf.clear();
 }
 
 void XclImpXFBuffer::ReadXF( XclImpStream& rStrm )
@@ -1281,39 +1335,15 @@ void XclImpXFBuffer::ReadXF( XclImpStream& rStrm )
     XclImpXF* pXF = new XclImpXF( GetRoot() );
     pXF->ReadXF( rStrm );
     maXFList.Append( pXF );
-
-    if( (GetBiff() >= EXC_BIFF3) && (maXFList.Count() == 1) )
-        // set the name of the "Default" cell style (always the first XF in an Excel file)
-        pXF->SetBuiltInStyleName( EXC_STYLE_NORMAL, 0 );
 }
 
 void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
 {
-    DBG_ASSERT_BIFF( GetBiff() >= EXC_BIFF3 );
-
-    sal_uInt16 nXFIndex;
-    rStrm >> nXFIndex;
-
-    XclImpXF* pXF = GetXF( nXFIndex & EXC_STYLE_XFMASK );   // bits 0...11 are used for XF index
-    if( pXF && pXF->IsStyleXF() )
-    {
-        if( ::get_flag( nXFIndex, EXC_STYLE_BUILTIN ) )     // built-in styles
-        {
-            sal_uInt8 nStyleId, nLevel;
-            rStrm >> nStyleId >> nLevel;
-            pXF->SetBuiltInStyleName( nStyleId, nLevel );
-        }
-        else                                                // user-defined styles
-        {
-            String aStyleName;
-            if( GetBiff() <= EXC_BIFF5 )
-                aStyleName = rStrm.ReadByteString( false );    // 8 bit length
-            else
-                aStyleName = rStrm.ReadUniString();
-            if( aStyleName.Len() )  // #i1624# #i1768# ignore unnamed styles
-                pXF->SetStyleName( aStyleName );
-        }
-    }
+    XclImpStyle* pStyle = new XclImpStyle( GetRoot() );
+    pStyle->ReadStyle( rStrm );
+    (pStyle->IsBuiltin() ? maBuiltinStyles : maUserStyles).Append( pStyle );
+    DBG_ASSERT( maStylesByXf.count( pStyle->GetXfId() ) == 0, "XclImpXFBuffer::ReadStyle - multiple styles with equal XF identifier" );
+    maStylesByXf[ pStyle->GetXfId() ] = pStyle;
 }
 
 sal_uInt16 XclImpXFBuffer::GetFontIndex( sal_uInt16 nXFIndex ) const
@@ -1327,10 +1357,93 @@ const XclImpFont* XclImpXFBuffer::GetFont( sal_uInt16 nXFIndex ) const
     return GetFontBuffer().GetFont( GetFontIndex( nXFIndex ) );
 }
 
+namespace {
+
+/** Functor for case-insensitive string comparison, usable in maps etc. */
+struct IgnoreCaseCompare
+{
+    inline bool operator()( const String& rName1, const String& rName2 ) const
+        { return rName1.CompareIgnoreCaseToAscii( rName2 ) == COMPARE_LESS; }
+};
+
+} // namespace
+
 void XclImpXFBuffer::CreateUserStyles()
 {
-    for( XclImpXF* pXF = maXFList.First(); pXF; pXF = maXFList.Next() )
-        pXF->CreateUserStyle();
+    // calculate final names of all styles
+    typedef ::std::map< String, XclImpStyle*, IgnoreCaseCompare > CellStyleNameMap;
+    typedef ::std::vector< XclImpStyle* > XclImpStyleVector;
+
+    CellStyleNameMap aCellStyles;
+    XclImpStyleVector aConflictNameStyles;
+
+    /*  First, reserve style names that are built-in in Calc. This causes that
+        imported cell styles get different unused names and thus do not try to
+        overwrite these built-in styles. For BIFF4 workbooks (which contain a
+        separate list of cell styles per sheet), reserve all existing styles if
+        current sheet is not the first sheet (this styles buffer will be
+        initialized again for every new sheet). This will create unique names
+        for styles in different sheets with the same name. Assuming that the
+        BIFF4W import filter is never used to import from clipboard... */
+    bool bReserveAll = (GetBiff() == EXC_BIFF4) && (GetCurrScTab() > 0);
+    SfxStyleSheetIterator aStyleIter( GetDoc().GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
+    String aStandardName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
+    for( SfxStyleSheetBase* pStyleSheet = aStyleIter.First(); pStyleSheet; pStyleSheet = aStyleIter.Next() )
+        if( (pStyleSheet->GetName() != aStandardName) && (bReserveAll || !pStyleSheet->IsUserDefined()) )
+            if( aCellStyles.count( pStyleSheet->GetName() ) == 0 )
+                aCellStyles[ pStyleSheet->GetName() ] = 0;
+
+    /*  Calculate names of built-in styles. Store styles with reserved names
+        in the aConflictNameStyles list. */
+    for( XclImpStyle* pStyle = maBuiltinStyles.First(); pStyle; pStyle = maBuiltinStyles.Next() )
+    {
+        String aStyleName = XclTools::GetBuiltInStyleName( pStyle->GetBuiltinId(), pStyle->GetName(), pStyle->GetLevel() );
+        DBG_ASSERT( bReserveAll || (aCellStyles.count( aStyleName ) == 0),
+            "XclImpXFBuffer::CreateUserStyles - multiple styles with equal built-in identifier" );
+        if( aCellStyles.count( aStyleName ) > 0 )
+            aConflictNameStyles.push_back( pStyle );
+        else
+            aCellStyles[ aStyleName ] = pStyle;
+    }
+
+    /*  Calculate names of user defined styles. Store styles with reserved
+        names in the aConflictNameStyles list. */
+    for( XclImpStyle* pStyle = maUserStyles.First(); pStyle; pStyle = maUserStyles.Next() )
+    {
+        // #i1624# #i1768# ignore unnamed user styles
+        if( pStyle->GetName().Len() > 0 )
+        {
+            if( aCellStyles.count( pStyle->GetName() ) > 0 )
+                aConflictNameStyles.push_back( pStyle );
+            else
+                aCellStyles[ pStyle->GetName() ] = pStyle;
+        }
+    }
+
+    // find unused names for all styles with conflicting names
+    for( XclImpStyleVector::iterator aIt = aConflictNameStyles.begin(), aEnd = aConflictNameStyles.end(); aIt != aEnd; ++aIt )
+    {
+        XclImpStyle* pStyle = *aIt;
+        String aUnusedName;
+        sal_Int32 nIndex = 0;
+        do
+        {
+            aUnusedName.Assign( pStyle->GetName() ).Append( ' ' ).Append( String::CreateFromInt32( ++nIndex ) );
+        }
+        while( aCellStyles.count( aUnusedName ) > 0 );
+        aCellStyles[ aUnusedName ] = pStyle;
+    }
+
+    // set final names and create user-defined and modified built-in cell styles
+    for( CellStyleNameMap::iterator aIt = aCellStyles.begin(), aEnd = aCellStyles.end(); aIt != aEnd; ++aIt )
+        if( aIt->second )
+            aIt->second->CreateUserStyle( aIt->first );
+}
+
+ScStyleSheet* XclImpXFBuffer::CreateStyleSheet( sal_uInt16 nXFIndex )
+{
+    XclImpStyleMap::iterator aIt = maStylesByXf.find( nXFIndex );
+    return (aIt == maStylesByXf.end()) ? 0 : aIt->second->CreateStyleSheet();
 }
 
 void XclImpXFBuffer::ApplyPattern(

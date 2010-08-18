@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbapalette.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,10 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #include "vbapalette.hxx"
 #include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include "excelvbahelper.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
@@ -85,6 +84,11 @@ public:
 
 };
 
+ScVbaPalette::ScVbaPalette( const uno::Reference< frame::XModel >& rxModel ) :
+    m_pShell( excel::getDocShell( rxModel ) )
+{
+}
+
 uno::Reference< container::XIndexAccess >
 ScVbaPalette::getDefaultPalette()
 {
@@ -92,7 +96,7 @@ ScVbaPalette::getDefaultPalette()
 }
 
 uno::Reference< container::XIndexAccess >
-ScVbaPalette::getPalette()
+ScVbaPalette::getPalette() const
 {
     uno::Reference< container::XIndexAccess > xIndex;
     uno::Reference< beans::XPropertySet > xProps;

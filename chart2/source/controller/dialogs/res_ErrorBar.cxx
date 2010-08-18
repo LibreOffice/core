@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: res_ErrorBar.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,10 +37,11 @@
 #include "RangeSelectionHelper.hxx"
 // for RANGE_SELECTION_INVALID_RANGE_BACKGROUND_COLOR
 #include "TabPageNotifiable.hxx"
+#include "macros.hxx"
 
 #include <rtl/math.hxx>
 #include <vcl/dialog.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 
 using namespace ::com::sun::star;
 
@@ -150,7 +148,8 @@ ErrorBarResources::ErrorBarResources( Window* pParent, Dialog * pParentDialog,
         m_pParentWindow( pParent ),
         m_pParentDialog( pParentDialog ),
         m_pCurrentRangeChoosingField( 0 ),
-        m_bHasInternalDataProvider( true )
+        m_bHasInternalDataProvider( true ),
+        m_bDisableDataTableDialog( false )
 {
     if( m_bNoneAvailable )
         m_aRbNone.SetClickHdl( LINK( this, ErrorBarResources, CategoryChosen ));
@@ -200,7 +199,21 @@ void ErrorBarResources::SetChartDocumentForRangeChoosing(
     const uno::Reference< chart2::XChartDocument > & xChartDocument )
 {
     if( xChartDocument.is())
+    {
         m_bHasInternalDataProvider = xChartDocument->hasInternalDataProvider();
+        uno::Reference< beans::XPropertySet > xProps( xChartDocument, uno::UNO_QUERY );
+        if ( xProps.is() )
+        {
+            try
+            {
+                xProps->getPropertyValue( C2U( "DisableDataTableDialog" ) ) >>= m_bDisableDataTableDialog;
+            }
+            catch( uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
+        }
+    }
     m_apRangeSelectionHelper.reset( new RangeSelectionHelper( xChartDocument ));
 
     // has internal data provider => rename "cell range" to "from data"
@@ -243,6 +256,7 @@ void ErrorBarResources::UpdateControlStates()
     m_aLbFunction.Enable( bIsFunction );
 
     // range buttons
+    m_aRbRange.Enable( !m_bHasInternalDataProvider || !m_bDisableDataTableDialog );
     bool bShowRange = ( m_aRbRange.IsChecked());
     bool bCanChooseRange =
         ( bShowRange &&
@@ -682,7 +696,7 @@ BOOL ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
 void ErrorBarResources::FillValueSets()
 {
-    bool bIsHighContrast = ( true && m_aRbConst.GetDisplayBackground().GetColor().IsDark() );
+    bool bIsHighContrast = ( true && m_aRbConst.GetSettings().GetStyleSettings().GetHighContrastMode() );
 
     // do not scale images, show then centered
 //     m_aFiPositive.SetStyle( (m_aFiPositive.GetStyle() & (~WB_SCALE)) | WB_CENTER );

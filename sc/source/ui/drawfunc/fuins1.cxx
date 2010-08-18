@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuins1.cxx,v $
- * $Revision: 1.12.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,15 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <svx/impgrf.hxx>
-#include <svx/opengrf.hxx>
+#include <sfx2/opengrf.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svtools/filter.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <tools/urlobj.hxx>
 #include <avmedia/mediawindow.hxx>
@@ -273,7 +269,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             bAsLink = ((const SfxBoolItem*)pItem)->GetValue();
 
         Graphic aGraphic;
-        int nError = ::LoadGraphic( aFileName, aFilterName, aGraphic, ::GetGrfFilter() );
+        int nError = GraphicFilter::LoadGraphic( aFileName, aFilterName, aGraphic, GraphicFilter::GetGraphicFilter() );
         if ( nError == GRFILTER_OK )
         {
             lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, TRUE, pViewSh, pWindow, pView );

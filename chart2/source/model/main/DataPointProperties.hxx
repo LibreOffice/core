@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataPointProperties.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,6 +74,7 @@ public:
         PROP_DATAPOINT_PERCENTAGE_NUMBER_FORMAT,
         PROP_DATAPOINT_LABEL_PLACEMENT,
         PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE,
+        PROP_DATAPOINT_TEXT_ROTATION,
 
         // statistics
         PROP_DATAPOINT_ERROR_BAR_X,

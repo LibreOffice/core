@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabvwsh.sdi,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,13 +50,16 @@ interface Tables
 ]
 {
     FID_TAB_SELECTALL   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TAB_DESELECTALL [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_TAB_MENU_RENAME [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_TAB_APPEND  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_INS_TABLE   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_APPEND      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_INS_TABLE       [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_INS_TABLE_EXT   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_TABLE_HIDE  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-    FID_TABLE_SHOW  [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
-        SID_SELECT_TABLES       [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TABLE_HIDE      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TABLE_SHOW      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    SID_SELECT_TABLES   [ ExecMethod = Execute; StateMethod = GetState; ]
+    FID_TAB_MENU_SET_TAB_BG_COLOR   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_EVENTS      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
 }
 
  // ===========================================================================
@@ -129,7 +129,7 @@ interface BaseSelection
 
 }
 
-interface TableEditView : View
+interface TableEditView
 [
     uuid ( "16D7E4A0-2FB4-11CF-89CB-008029E4B0B1" )
 ]
@@ -266,7 +266,7 @@ interface DataPilotField
 }
 
  // ===========================================================================
-shell ScTabViewShell : SfxViewShell
+shell ScTabViewShell
 {
     import TableSelection "ActiveDocument.ActiveTable";
     import TableOLEObject "SelectedObject";

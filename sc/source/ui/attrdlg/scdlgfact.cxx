@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scdlgfact.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +62,7 @@
 #include "scendlg.hxx" //add for ScNewScenarioDlg
 #include "shtabdlg.hxx" //add for ScShowTabDlg
 #include "strindlg.hxx" //add for ScStringInputDlg
+#include "tabbgcolordlg.hxx"//add for ScTabBgColorDlg
 #include "scuiimoptdlg.hxx" //add for ScImportOptionsDlg
 #include "attrdlg.hxx" //add for ScAttrDlg
 #include "hfedtdlg.hxx" //add for ScHFEditDlg
@@ -74,6 +72,7 @@
 #include "validate.hxx" //add for ScValidationDlg
 #include "validate.hrc" //add for ScValidationDlg
 #include "sortdlg.hxx" //add for ScSortDlg
+#include "textimportoptions.hxx"
 #include "opredlin.hxx" //add for  ScRedlineOptionsTabPage
 #include "tpcalc.hxx" //add for ScTpCalcOptions
 #include "tpprint.hxx" //add for ScTpPrintOptions
@@ -114,7 +113,9 @@ IMPL_ABSTDLG_BASE(AbstractScDPShowDetailDlg_Impl); //add for ScDPShowDetailDlg
 IMPL_ABSTDLG_BASE(AbstractScNewScenarioDlg_Impl); //add for ScNewScenarioDlg
 IMPL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl); //add for ScShowTabDlg
 IMPL_ABSTDLG_BASE(AbstractScStringInputDlg_Impl); //add for ScStringInputDlg
+IMPL_ABSTDLG_BASE(AbstractScTabBgColorDlg_Impl); //add for ScTabBgColorDlg
 IMPL_ABSTDLG_BASE(AbstractScImportOptionsDlg_Impl); //add for ScImportOptionsDlg
+IMPL_ABSTDLG_BASE(AbstractScTextImportOptionsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractTabDialog_Impl); //add for ScAttrDlg, ScHFEditDlg, ScStyleDlg, ScSubTotalDlg,ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 
 // AbstractTabDialog_Impl begin
@@ -194,6 +195,11 @@ void AbstractScImportAsciiDlg_Impl::GetOptions( ScAsciiOptions& rOpt )
 void AbstractScImportAsciiDlg_Impl::SetTextToColumnsMode()
 {
     pDlg->SetTextToColumnsMode();
+}
+
+void AbstractScImportAsciiDlg_Impl::SaveParameters()
+{
+    pDlg->SaveParameters();
 }
 
 // AbstractScImportAsciiDlg_Impl end
@@ -614,12 +620,34 @@ void AbstractScStringInputDlg_Impl::GetInputString( String& rString ) const  //a
 }
 //add for AbstractScStringInputDlg_Impl end
 
+//add for AbstractScTabBgColorDlg_Impl begin
+void AbstractScTabBgColorDlg_Impl::GetSelectedColor( Color& rColor ) const  //add for ScTabBgColorDlg
+{
+    pDlg->GetSelectedColor( rColor );
+}
+//add for AbstractScTabBgColorDlg_Impl end
+
+
 //add for AbstractScImportOptionsDlg_Impl begin
 void AbstractScImportOptionsDlg_Impl::GetImportOptions( ScImportOptions& rOptions ) const  //add for ScImportOptionsDlg
 {
     pDlg->GetImportOptions(rOptions);
 }
 // add for AbstractScImportOptionsDlg_Impl end
+
+//add for AbstractScLangChooserDlg_Impl begin
+LanguageType AbstractScTextImportOptionsDlg_Impl::GetLanguageType() const
+{
+    return pDlg->getLanguageType();
+}
+
+bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
+{
+    return pDlg->isDateConversionSet();
+}
+
+//add for AbstractScLangChooserDlg_Impl end
+
 // =========================Factories  for createdialog ===================
 
 //add for ScImportAsciiDlg begin
@@ -641,6 +669,21 @@ AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg 
     return 0;
 }
 // ScImportAsciiDlg end
+
+AbstractScTextImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScTextImportOptionsDlg( Window* pParent, int nId )
+{
+    ScTextImportOptionsDlg* pDlg = NULL;
+    switch (nId)
+    {
+        case RID_SCDLG_TEXT_IMPORT_OPTIONS:
+            pDlg = new ScTextImportOptionsDlg(pParent);
+        break;
+        default:
+            ;
+    }
+
+    return pDlg ? new AbstractScTextImportOptionsDlg_Impl(pDlg) : NULL;
+}
 
 //add for ScAutoFormatDlg begin
 
@@ -714,6 +757,24 @@ VclAbstractDialog *  ScAbstractDialogFactory_Impl::CreateScColOrRowDlg(Window*  
 }
 //add for ScColOrRowDlg end
 
+//add for ScSortWarningDlg begin
+VclAbstractDialog * ScAbstractDialogFactory_Impl::CreateScSortWarningDlg( Window* pParent, const String& rExtendText,
+                                                                          const String& rCurrentText, int nId )
+{
+    Dialog * pDlg=NULL;
+    switch ( nId )
+    {
+    case RID_SCDLG_SORT_WARNING:
+        pDlg = new ScSortWarningDlg( pParent, rExtendText, rCurrentText );
+        break;
+    default:
+        break;
+    }
+    if( pDlg )
+        return new VclAbstractDialog_Impl( pDlg );
+    return 0;
+}
+//add for ScSortWarningDlg end
 
 //add for ScDataPilotDatabaseDlg begin
 
@@ -1242,6 +1303,31 @@ AbstractScShowTabDlg * ScAbstractDialogFactory_Impl::CreateScShowTabDlg ( Window
 }
  //add for ScStringInputDlg end
 
+//add for ScTabBgColorDlg begin
+AbstractScTabBgColorDlg * ScAbstractDialogFactory_Impl::CreateScTabBgColorDlg (
+                                                            Window* pParent,
+                                                            const String& rTitle,
+                                                            const String& rTabBgColorNoColorText,
+                                                            const Color& rDefaultColor,
+                                                            ULONG nHelpId ,
+                                                            int nId )
+{
+ScTabBgColorDlg * pDlg=NULL;
+switch ( nId )
+{
+    case RID_SCDLG_TAB_BG_COLOR :
+        pDlg = new ScTabBgColorDlg( pParent, rTitle, rTabBgColorNoColorText, rDefaultColor, nHelpId );
+        break;
+    default:
+        break;
+}
+
+if ( pDlg )
+    return new AbstractScTabBgColorDlg_Impl( pDlg );
+return 0;
+}
+//add for ScTabBgColorDlg end
+
 //add for ScImportOptionsDlg begin
 AbstractScImportOptionsDlg * ScAbstractDialogFactory_Impl::CreateScImportOptionsDlg ( Window*               pParent,
                                                                     int nId,
@@ -1407,13 +1493,19 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScParagraphDlg( Windo
 
 //add for ScValidationDlg begin
 SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScValidationDlg( Window* pParent,
-                                                        const SfxItemSet* pArgSet,int nId  )
+//<!--Modified by PengYunQuan for Validity Cell Range Picker
+//                                                      const SfxItemSet* pArgSet,int nId  )
+                                                        const SfxItemSet* pArgSet,int nId, ScTabViewShell *pTabVwSh  )
+//-->Modified by PengYunQuan for Validity Cell Range Picke
 {
     SfxTabDialog* pDlg=NULL;
     switch ( nId )
     {
         case TAB_DLG_VALIDATION :
-            pDlg = new ScValidationDlg( pParent, pArgSet );
+            //<!--Modified by PengYunQuan for Validity Cell Range Picker
+            //pDlg = new ScValidationDlg( pParent, pArgSet );
+            pDlg = new ScValidationDlg( pParent, pArgSet, pTabVwSh );
+            //-->Modified by PengYunQuan for Validity Cell Range Picker
             break;
         default:
             break;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xestring.cxx,v $
- * $Revision: 1.13.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -423,7 +420,8 @@ void XclExpString::WriteFormats( XclExpStream& rStrm, bool bWriteSize ) const
 
 void XclExpString::Write( XclExpStream& rStrm ) const
 {
-    WriteHeader( rStrm );
+    if (!mbSkipHeader)
+        WriteHeader( rStrm );
     WriteBuffer( rStrm );
     if( IsWriteFormats() )      // only in BIFF8 included in string
         WriteFormats( rStrm );
@@ -589,6 +587,7 @@ void XclExpString::Init( sal_Int32 nCurrLen, XclStrFlags nFlags, sal_uInt16 nMax
     mbSmartFlags = bBiff8 && ::get_flag( nFlags, EXC_STR_SMARTFLAGS );
     mbSkipFormats = ::get_flag( nFlags, EXC_STR_SEPARATEFORMATS );
     mbWrapped = false;
+    mbSkipHeader = ::get_flag( nFlags, EXC_STR_NOHEADER );
     mnMaxLen = nMaxLen;
     SetStrLen( nCurrLen );
 

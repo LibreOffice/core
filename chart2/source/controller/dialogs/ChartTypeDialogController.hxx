@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartTypeDialogController.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -299,6 +296,19 @@ private:
 private:
     FixedText*      m_pFT_NumberOfLines;
     MetricField*    m_pMF_NumberOfLines;
+};
+
+class BubbleChartDialogController : public ChartTypeDialogController
+{
+public:
+    BubbleChartDialogController();
+    virtual ~BubbleChartDialogController();
+
+    virtual String  getName();
+    virtual Image   getImage( bool bIsHighContrast );
+    virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
 };
 
 //.............................................................................

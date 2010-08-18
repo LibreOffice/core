@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbcolect.hxx,v $
- * $Revision: 1.13.32.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,8 +39,6 @@
 //------------------------------------------------------------------------
 
 class ScDocument;
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
 
 //------------------------------------------------------------------------
 
@@ -89,6 +84,7 @@ private:
     SCCOLROW        nQueryField[MAXQUERY];
     ScQueryOp       eQueryOp[MAXQUERY];
     BOOL            bQueryByString[MAXQUERY];
+    bool            bQueryByDate[MAXQUERY];
     String*         pQueryStr[MAXQUERY];
     double          nQueryVal[MAXQUERY];
     ScQueryConnect  eQueryConnect[MAXQUERY];

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RegressionCurveModel.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +106,7 @@ RegressionCurveModel::RegressionCurveModel(
         ::property::OPropertySet( m_aMutex ),
     m_xContext( xContext ),
     m_eRegressionCurveType( eCurveType ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
         m_xEquationProperties( new RegressionEquation( xContext ))
 {
     // set 0 line width (default) hard, so that it is always written to XML,
@@ -125,7 +122,7 @@ RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther 
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
     m_eRegressionCurveType( rOther.m_eRegressionCurveType ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     m_xEquationProperties.set( CloneHelper::CreateRefClone< uno::Reference< beans::XPropertySet > >()( rOther.m_xEquationProperties ));
     ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scextopt.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,12 +36,9 @@
 // ============================================================================
 
 ScExtDocSettings::ScExtDocSettings() :
-    maOleSize( ScAddress::INITIALIZE_INVALID ),
     mfTabBarWidth( -1.0 ),
     mnLinkCnt( 0 ),
-    mnDisplTab( 0 ),
-    mbWinProtected( false ),
-    mbEncrypted( false )
+    mnDisplTab( 0 )
 {
 }
 
@@ -203,20 +197,27 @@ ScExtTabSettings& ScExtDocOptions::GetOrCreateTabSettings( SCTAB nTab )
     return mxImpl->maTabSett.GetOrCreateTabSettings( nTab );
 }
 
-size_t ScExtDocOptions::GetCodeNameCount() const
+SCTAB ScExtDocOptions::GetCodeNameCount() const
 {
-    return mxImpl->maCodeNames.size();
+    return static_cast< SCTAB >( mxImpl->maCodeNames.size() );
 }
 
-const String& ScExtDocOptions::GetCodeName( size_t nIdx ) const
+const String& ScExtDocOptions::GetCodeName( SCTAB nTab ) const
 {
-    DBG_ASSERT( nIdx < GetCodeNameCount(), "ScExtDocOptions::GetCodeName - invalid index" );
-    return (nIdx < GetCodeNameCount()) ? mxImpl->maCodeNames[ nIdx ] : EMPTY_STRING;
+    DBG_ASSERT( (0 <= nTab) && (nTab < GetCodeNameCount()), "ScExtDocOptions::GetCodeName - invalid sheet index" );
+    return ((0 <= nTab) && (nTab < GetCodeNameCount())) ? mxImpl->maCodeNames[ static_cast< size_t >( nTab ) ] : EMPTY_STRING;
 }
 
-void ScExtDocOptions::AppendCodeName( const String& rCodeName )
+void ScExtDocOptions::SetCodeName( SCTAB nTab, const String& rCodeName )
 {
-    mxImpl->maCodeNames.push_back( rCodeName );
+    DBG_ASSERT( nTab >= 0, "ScExtDocOptions::SetCodeName - invalid sheet index" );
+    if( nTab >= 0 )
+    {
+        size_t nIndex = static_cast< size_t >( nTab );
+        if( nIndex >= mxImpl->maCodeNames.size() )
+            mxImpl->maCodeNames.resize( nIndex + 1 );
+        mxImpl->maCodeNames[ nIndex ] = rCodeName;
+    }
 }
 
 // ============================================================================

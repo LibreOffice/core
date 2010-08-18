@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SeriesOptionsItemConverter.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,13 +45,13 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 
 // for SfxBoolItem
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
 
 //SfxIntegerListItem
-#include <svtools/ilstitem.hxx>
+#include <svl/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
 
 #include <rtl/math.hxx>
 #include <functional>
@@ -93,6 +90,8 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         , m_bClockwise(false)
         , m_aSupportedMissingValueTreatments()
         , m_nMissingValueTreatment(0)
+        , m_bSupportingPlottingOfHiddenCells(false)
+        , m_bIncludeHiddenCells(true)
 {
     try
     {
@@ -159,6 +158,23 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         m_aSupportedMissingValueTreatments = ChartTypeHelper::getSupportedMissingValueTreatments( xChartType );
         m_nMissingValueTreatment = DiagramHelper::getCorrectedMissingValueTreatment(
             ChartModelHelper::findDiagram(m_xChartModel), xChartType );
+
+        uno::Reference< XChartDocument > xChartDoc( m_xChartModel, uno::UNO_QUERY );
+        uno::Reference< beans::XPropertySet > xProp( xChartDoc->getDataProvider(), uno::UNO_QUERY );
+        if( xProp.is() )
+        {
+            try
+            {
+                //test whether the data provider offers this property
+                xProp->getPropertyValue(C2U("IncludeHiddenCells"));
+                //if not exception is thrown the property is offered
+                m_bSupportingPlottingOfHiddenCells = true;
+                xDiagramProperties->getPropertyValue( C2U("IncludeHiddenCells") ) >>= m_bIncludeHiddenCells;
+            }
+            catch( const beans::UnknownPropertyException& )
+            {
+            }
+        }
     }
     catch( uno::Exception ex )
     {
@@ -341,6 +357,16 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxIte
             }
         }
         break;
+        case SCHATTR_INCLUDE_HIDDEN_CELLS:
+        {
+            if( m_bSupportingPlottingOfHiddenCells )
+            {
+                bool bIncludeHiddenCells = static_cast<const SfxBoolItem &>(rItemSet.Get(nWhichId)).GetValue();
+                if (bIncludeHiddenCells != m_bIncludeHiddenCells)
+                    bChanged = ChartModelHelper::setIncludeHiddenCells( bIncludeHiddenCells, m_xChartModel );
+            }
+        }
+        break;
     }
     return bChanged;
 }
@@ -410,6 +436,12 @@ void SeriesOptionsItemConverter::FillSpecialItem(
             for ( sal_Int32 nN=0; nN<m_aSupportedMissingValueTreatments.getLength(); nN++ )
                 aList.Insert( m_aSupportedMissingValueTreatments[nN], sal::static_int_cast< USHORT >(nN) );
             rOutItemSet.Put( SfxIntegerListItem( nWhichId, aList ) );
+            break;
+        }
+        case SCHATTR_INCLUDE_HIDDEN_CELLS:
+        {
+            if( m_bSupportingPlottingOfHiddenCells )
+                rOutItemSet.Put( SfxBoolItem(nWhichId, m_bIncludeHiddenCells) );
             break;
         }
         default:

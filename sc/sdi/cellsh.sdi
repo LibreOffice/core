@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellsh.sdi,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,9 @@ interface CellSelection
     SID_VIEW_DATA_SOURCE_BROWSER [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_OPENDLG_FUNCTION        [ ExecMethod = Execute; StateMethod = GetCellState; ]
     SID_INS_FUNCTION            [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
+
+    // no Exec/StateMethod needed, but SfxDispatcher complains if the slot is not included in the shell
+    SID_VALIDITY_REFERENCE []
 
     // Datenbank-Operationen {
     SID_SORT_ASCENDING      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
@@ -153,11 +153,8 @@ interface CellSelection
     SID_CUT             [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_COPY            [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_PASTE           [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
-    FID_PASTE_CONTENTS  [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
+    SID_PASTE_SPECIAL   [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
     SID_CLIPBOARD_FORMAT_ITEMS  [ ExecMethod = ExecuteEdit; StateMethod = GetClipState; ]
-    SID_GET_CLPBRD_FORMAT_COUNT     [ ExecMethod = ExecuteEdit; ]
-    SID_GET_CLPBRD_FORMAT_BY_IDX    [ ExecMethod = ExecuteEdit; ]
-    SID_GET_CLPBRD_FORMAT_NAME      [ ExecMethod = ExecuteEdit; ]
     SID_EXTERNAL_SOURCE [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     FID_MERGE_ON        [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_MERGE_OFF       [ ExecMethod = Execute; StateMethod = GetState; ]
@@ -192,6 +189,9 @@ interface CellSelection
     SID_HANGUL_HANJA_CONVERSION [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
         SID_CHINESE_CONVERSION          [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
 
+    SID_TRANSLITERATE_SENTENCE_CASE [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
+    SID_TRANSLITERATE_TITLE_CASE    [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
+    SID_TRANSLITERATE_TOGGLE_CASE   [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
     SID_TRANSLITERATE_UPPER     [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
     SID_TRANSLITERATE_LOWER     [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]
     SID_TRANSLITERATE_HALFWIDTH [ ExecMethod = ExecuteTrans; StateMethod = GetBlockState; ]

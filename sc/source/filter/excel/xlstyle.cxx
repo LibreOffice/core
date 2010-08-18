@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlstyle.cxx,v $
- * $Revision: 1.27.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include <vcl/font.hxx>
 #include <rtl/tencinfo.h>
 #include <toolkit/unohlp.hxx>
-#include <svx/svxfont.hxx>
+#include <editeng/svxfont.hxx>
 #include "global.hxx"
 #include "xlroot.hxx"
 
@@ -471,11 +468,11 @@ void XclFontData::SetApiFamily( sal_Int16 nApiFamily )
     }
 }
 
-void XclFontData::SetApiFontEncoding( sal_Int16 nApiFontEnc )
-{
-    // API constants are equal to rtl_TextEncoding constants
-    SetFontEncoding( static_cast< rtl_TextEncoding >( nApiFontEnc ) );
-}
+//UNUSED2009-05 void XclFontData::SetApiFontEncoding( sal_Int16 nApiFontEnc )
+//UNUSED2009-05 {
+//UNUSED2009-05     // API constants are equal to rtl_TextEncoding constants
+//UNUSED2009-05     SetFontEncoding( static_cast< rtl_TextEncoding >( nApiFontEnc ) );
+//UNUSED2009-05 }
 
 void XclFontData::SetApiPosture( Awt::FontSlant eApiPosture )
 {
@@ -661,8 +658,11 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
                 fApiHeight, fApiWeight, eApiPosture, nApiUnderl, nApiStrikeout );
 
             // font escapement
-            sal_Int16 nApiEscapement;
-            sal_Int8 nApiEscHeight;
+            sal_Int16 nApiEscapement = 0;
+            sal_Int8 nApiEscHeight = 0;
+            maHlpChEscapement.ReadFromPropertySet( rPropSet );
+            maHlpChEscapement.ReadFromPropertySet( rPropSet );
+            maHlpChEscapement.ReadFromPropertySet( rPropSet );
             maHlpChEscapement >> nApiEscapement >> nApiEscHeight;
             rFontData.SetApiEscapement( nApiEscapement );
         }
@@ -724,6 +724,7 @@ void XclFontPropSetHelper::WriteFontProperties(
             // font escapement
             if( rFontData.GetScEscapement() != SVX_ESCAPEMENT_OFF )
             {
+                maHlpChEscapement.InitializeWrite();
                 maHlpChEscapement << rFontData.GetApiEscapement() << EXC_API_ESC_HEIGHT;
                 maHlpChEscapement.WriteToPropertySet( rPropSet );
             }

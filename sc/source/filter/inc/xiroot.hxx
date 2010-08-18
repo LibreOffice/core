@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xiroot.hxx,v $
- * $Revision: 1.22.88.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,6 +51,7 @@ class XclImpTabInfo;
 class XclImpNameManager;
 class XclImpLinkManager;
 class XclImpObjectManager;
+class XclImpSheetDrawing;
 class XclImpCondFormatManager;
 class XclImpAutoFilterBuffer;
 class XclImpWebQueryBuffer;
@@ -61,6 +59,8 @@ class XclImpPivotTableManager;
 class XclImpPageSettings;
 class XclImpDocViewSettings;
 class XclImpTabViewSettings;
+class XclImpSheetProtectBuffer;
+class XclImpDocProtectBuffer;
 
 class _ScRangeListTabs;
 class ExcelToSc;
@@ -87,6 +87,8 @@ struct XclImpRootData : public XclRootData
     typedef ScfRef< XclImpPageSettings >        XclImpPageSettRef;
     typedef ScfRef< XclImpDocViewSettings >     XclImpDocViewSettRef;
     typedef ScfRef< XclImpTabViewSettings >     XclImpTabViewSettRef;
+    typedef ScfRef< XclImpSheetProtectBuffer >  XclImpTabProtectRef;
+    typedef ScfRef< XclImpDocProtectBuffer >    XclImpDocProtectRef;
 
     XclImpAddrConvRef   mxAddrConv;         /// The address converter.
     XclImpFmlaCompRef   mxFmlaComp;         /// The formula compiler.
@@ -110,8 +112,11 @@ struct XclImpRootData : public XclRootData
     XclImpPageSettRef   mxPageSett;         /// Page settings for current sheet.
     XclImpDocViewSettRef mxDocViewSett;     /// View settings for entire document.
     XclImpTabViewSettRef mxTabViewSett;     /// View settings for current sheet.
+    XclImpTabProtectRef mxTabProtect;       /// Sheet protection options for current sheet.
+    XclImpDocProtectRef mxDocProtect;       /// Document protection options.
 
     bool                mbHasCodePage;      /// true = CODEPAGE record exists.
+    bool                mbHasBasic;         /// true = document contains VB project.
 
     explicit            XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
                             SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc );
@@ -173,6 +178,8 @@ public:
 
     /** Returns the drawing object manager. */
     XclImpObjectManager& GetObjectManager() const;
+    /** Returns the drawing container of the current sheet. */
+    XclImpSheetDrawing& GetCurrSheetDrawing() const;
     /** Returns the conditional formattings manager. */
     XclImpCondFormatManager& GetCondFormatManager() const;
     /** Returns the filter manager. */
@@ -181,6 +188,10 @@ public:
     XclImpWebQueryBuffer& GetWebQueryBuffer() const;
     /** Returns the pivot table manager. */
     XclImpPivotTableManager& GetPivotTableManager() const;
+    /** Returns the sheet protection options of the current sheet. */
+    XclImpSheetProtectBuffer& GetSheetProtectBuffer() const;
+    /** Returns the document protection options. */
+    XclImpDocProtectBuffer& GetDocProtectBuffer() const;
 
     /** Returns the page settings of the current sheet. */
     XclImpPageSettings& GetPageSettings() const;
@@ -192,6 +203,13 @@ public:
     /** Returns the Calc add-in function name for an Excel function name. */
     String              GetScAddInName( const String& rXclName ) const;
 
+    /** Returns true, if the document contains a VB project. */
+    inline bool         HasBasic() const { return mrImpData.mbHasBasic; }
+    /** Called to indicate that the document contains a VB project. */
+    inline void         SetHasBasic() { mrImpData.mbHasBasic = true; }
+    /** Reads the CODENAME record and inserts the codename into the document. */
+    void                ReadCodeName( XclImpStream& rStrm, bool bGlobals );
+
 private:
     mutable XclImpRootData& mrImpData;      /// Reference to the global import data struct.
 };
@@ -199,4 +217,3 @@ private:
 // ============================================================================
 
 #endif
-

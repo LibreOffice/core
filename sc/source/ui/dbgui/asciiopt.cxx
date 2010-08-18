@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: asciiopt.cxx,v $
- * $Revision: 1.25 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,8 +53,11 @@ ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( FALSE ),
     aFieldSeps      ( ';' ),
     bMergeFieldSeps ( FALSE ),
+    bQuotedFieldAsText(false),
+    bDetectSpecialNumber(false),
     cTextSep        ( cDefaultTextSep ),
     eCharSet        ( gsl_getSystemTextEncoding() ),
+    eLang           ( LANGUAGE_SYSTEM ),
     bCharSetSystem  ( FALSE ),
     nStartRow       ( 1 ),
     nInfoCount      ( 0 ),
@@ -71,8 +71,11 @@ ScAsciiOptions::ScAsciiOptions(const ScAsciiOptions& rOpt) :
     bFixedLen       ( rOpt.bFixedLen ),
     aFieldSeps      ( rOpt.aFieldSeps ),
     bMergeFieldSeps ( rOpt.bMergeFieldSeps ),
+    bQuotedFieldAsText(rOpt.bQuotedFieldAsText),
+    bDetectSpecialNumber(rOpt.bDetectSpecialNumber),
     cTextSep        ( rOpt.cTextSep ),
     eCharSet        ( rOpt.eCharSet ),
+    eLang           ( rOpt.eLang ),
     bCharSetSystem  ( rOpt.bCharSetSystem ),
     nStartRow       ( rOpt.nStartRow ),
     nInfoCount      ( rOpt.nInfoCount )
@@ -155,6 +158,7 @@ ScAsciiOptions& ScAsciiOptions::operator=( const ScAsciiOptions& rCpy )
     bFixedLen       = rCpy.bFixedLen;
     aFieldSeps      = rCpy.aFieldSeps;
     bMergeFieldSeps = rCpy.bMergeFieldSeps;
+    bQuotedFieldAsText = rCpy.bQuotedFieldAsText;
     cTextSep        = rCpy.cTextSep;
     eCharSet        = rCpy.eCharSet;
     bCharSetSystem  = rCpy.bCharSetSystem;
@@ -169,6 +173,7 @@ BOOL ScAsciiOptions::operator==( const ScAsciiOptions& rCmp ) const
     if ( bFixedLen       == rCmp.bFixedLen &&
          aFieldSeps      == rCmp.aFieldSeps &&
          bMergeFieldSeps == rCmp.bMergeFieldSeps &&
+         bQuotedFieldAsText == rCmp.bQuotedFieldAsText &&
          cTextSep        == rCmp.cTextSep &&
          eCharSet        == rCmp.eCharSet &&
          bCharSetSystem  == rCmp.bCharSetSystem &&
@@ -286,6 +291,27 @@ void ScAsciiOptions::ReadFromString( const String& rString )
             pColFormat = NULL;
         }
     }
+
+    // Language
+    if (nCount >= 6)
+    {
+        aToken = rString.GetToken(5, ',');
+        eLang = static_cast<LanguageType>(aToken.ToInt32());
+    }
+
+    // Import quoted field as text.
+    if (nCount >= 7)
+    {
+        aToken = rString.GetToken(6, ',');
+        bQuotedFieldAsText = aToken.EqualsAscii("true") ? true : false;
+    }
+
+    // Detect special nubmers.
+    if (nCount >= 8)
+    {
+        aToken = rString.GetToken(7, ',');
+        bDetectSpecialNumber = aToken.EqualsAscii("true") ? true : false;
+    }
 }
 
 
@@ -356,6 +382,22 @@ String ScAsciiOptions::WriteToString() const
         aOutStr += '/';
         aOutStr += String::CreateFromInt32(pColFormat[nInfo]);
     }
+
+    // #i112025# the options string is used in macros and linked sheets,
+    // so new options must be added at the end, to remain compatible
+
+    aOutStr += ',';
+
+    // Language
+    aOutStr += String::CreateFromInt32(eLang);
+    aOutStr += ',';
+
+    // Import quoted field as text.
+    aOutStr += String::CreateFromAscii(bQuotedFieldAsText ? "true" : "false");
+    aOutStr += ',';
+
+    // Detect special nubmers.
+    aOutStr += String::CreateFromAscii(bDetectSpecialNumber ? "true" : "false");
 
     return aOutStr;
 }

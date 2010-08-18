@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabvwshh.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,8 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <basic/sbxcore.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
+#include <vcl/msgbox.hxx>
 
 #include "tabvwsh.hxx"
 #include "client.hxx"
@@ -50,6 +48,10 @@
 #include "docsh.hxx"
 #include "sc.hrc"
 #include "drwlayer.hxx"     // GetVisibleName
+#include "retypepassdlg.hxx"
+#include "tabprotection.hxx"
+
+#include <memory>
 
 using namespace com::sun::star;
 
@@ -268,6 +270,22 @@ void ScTabViewShell::BroadcastAccessibility( const SfxHint &rHint )
 BOOL ScTabViewShell::HasAccessibilityObjects()
 {
     return pAccessibilityBroadcaster != NULL;
+}
+
+bool ScTabViewShell::ExecuteRetypePassDlg(ScPasswordHash eDesiredHash)
+{
+    using ::std::auto_ptr;
+
+    ScDocument* pDoc = GetViewData()->GetDocument();
+
+    auto_ptr<ScRetypePassDlg> pDlg(new ScRetypePassDlg(GetDialogParent()));
+    pDlg->SetDataFromDocument(*pDoc);
+    pDlg->SetDesiredHash(eDesiredHash);
+    if (pDlg->Execute() != RET_OK)
+        return false;
+
+    pDlg->WriteNewDataToDocument(*pDoc);
+    return true;
 }
 
 

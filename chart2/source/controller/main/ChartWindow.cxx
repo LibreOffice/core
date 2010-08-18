@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartWindow.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,6 +57,7 @@ namespace chart
 ChartWindow::ChartWindow( WindowController* pWindowController, Window* pParent, WinBits nStyle )
         : Window(pParent, nStyle)
         , m_pWindowController( pWindowController )
+        , m_bInPaint(false)
 {
     this->SetSmartHelpId( SmartId( HID_SCH_WIN_DOCUMENT ) );
     this->SetMapMode( MapMode(MAP_100TH_MM) );
@@ -92,10 +90,12 @@ void ChartWindow::PrePaint()
 
 void ChartWindow::Paint( const Rectangle& rRect )
 {
+    m_bInPaint = true;
     if( m_pWindowController )
         m_pWindowController->execute_Paint( rRect );
     else
         Window::Paint( rRect );
+    m_bInPaint = false;
 }
 
 void ChartWindow::MouseButtonDown(const MouseEvent& rMEvt)
@@ -241,6 +241,29 @@ void ChartWindow::adjustHighContrastMode()
 
     bool bUseContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
     SetDrawMode( bUseContrast ? nContrastMode : DRAWMODE_DEFAULT );
+}
+
+void ChartWindow::ForceInvalidate()
+{
+    ::Window::Invalidate();
+}
+void ChartWindow::Invalidate( USHORT nFlags )
+{
+    if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
+        return;
+    ::Window::Invalidate( nFlags );
+}
+void ChartWindow::Invalidate( const Rectangle& rRect, USHORT nFlags )
+{
+    if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
+        return;
+    ::Window::Invalidate( rRect, nFlags );
+}
+void ChartWindow::Invalidate( const Region& rRegion, USHORT nFlags )
+{
+    if( m_bInPaint ) // #i101928# superfluous paint calls while entering and editing charts"
+        return;
+    ::Window::Invalidate( rRegion, nFlags );
 }
 
 //.............................................................................

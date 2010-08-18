@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chartlis.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,7 @@
 
 using namespace com::sun::star;
 using ::std::vector;
+using ::std::list;
 using ::std::hash_set;
 using ::std::auto_ptr;
 using ::std::unary_function;
@@ -454,8 +452,23 @@ BOOL ScChartListener::operator==( const ScChartListener& r )
     return *mpTokens == *r.mpTokens;
 }
 
+// ============================================================================
+
+ScChartHiddenRangeListener::ScChartHiddenRangeListener()
+{
+}
+
+ScChartHiddenRangeListener::~ScChartHiddenRangeListener()
+{
+    // empty d'tor
+}
 
 // === ScChartListenerCollection ======================================
+
+ScChartListenerCollection::RangeListenerItem::RangeListenerItem(const ScRange& rRange, ScChartHiddenRangeListener* p) :
+    maRange(rRange), mpListener(p)
+{
+}
 
 ScChartListenerCollection::ScChartListenerCollection( ScDocument* pDocP ) :
     ScStrCollection( 4, 4, FALSE ),
@@ -643,6 +656,14 @@ void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
     }
     if ( bDirty )
         StartTimer();
+
+    // New hidden range listener implementation
+    for (list<RangeListenerItem>::iterator itr = maHiddenListeners.begin(), itrEnd = maHiddenListeners.end();
+          itr != itrEnd; ++itr)
+    {
+        if (itr->maRange.Intersects(rRange))
+            itr->mpListener->notify();
+    }
 }
 
 
@@ -682,6 +703,34 @@ BOOL ScChartListenerCollection::operator==( const ScChartListenerCollection& r )
     return TRUE;
 }
 
+void ScChartListenerCollection::StartListeningHiddenRange( const ScRange& rRange, ScChartHiddenRangeListener* pListener )
+{
+    RangeListenerItem aItem(rRange, pListener);
+    maHiddenListeners.push_back(aItem);
+}
 
+namespace {
 
+struct MatchListener : public ::std::unary_function<
+        ScChartListenerCollection::RangeListenerItem, bool>
+{
+    MatchListener(const ScChartHiddenRangeListener* pMatch) :
+        mpMatch(pMatch)
+    {
+    }
+
+    bool operator() (const ScChartListenerCollection::RangeListenerItem& rItem) const
+    {
+        return mpMatch == rItem.mpListener;
+    }
+
+private:
+    const ScChartHiddenRangeListener* mpMatch;
+};
+
+}
+void ScChartListenerCollection::EndListeningHiddenRange( ScChartHiddenRangeListener* pListener )
+{
+    maHiddenListeners.remove_if(MatchListener(pListener));
+}
 

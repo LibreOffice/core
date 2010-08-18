@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OPropertySet.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +60,8 @@ OPropertySet::OPropertySet( ::osl::Mutex & par_rMutex ) :
         // the following causes a warning; there seems to be no way to avoid it
         OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
         m_rMutex( par_rMutex ),
-        m_pImplProperties( new impl::ImplOPropertySet() )
+        m_pImplProperties( new impl::ImplOPropertySet() ),
+        m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault(false)
 {
 }
 
@@ -71,13 +69,19 @@ OPropertySet::OPropertySet( const OPropertySet & rOther, ::osl::Mutex & par_rMut
         OBroadcastHelper( par_rMutex ),
         // the following causes a warning; there seems to be no way to avoid it
         OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
-        m_rMutex( par_rMutex )
+        m_rMutex( par_rMutex ),
+        m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault(false)
 {
     // /--
     MutexGuard aGuard( m_rMutex );
     if( rOther.m_pImplProperties.get())
         m_pImplProperties.reset( new impl::ImplOPropertySet( * rOther.m_pImplProperties.get()));
     // \--
+}
+
+void OPropertySet::SetNewValuesExplicitlyEvenIfTheyEqualDefault()
+{
+    m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault = true;
 }
 
 OPropertySet::~OPropertySet()
@@ -322,6 +326,8 @@ sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
         }
     }
     rConvertedValue = rValue;
+    if( !m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault && rOldValue == rConvertedValue )
+        return sal_False;//no change necessary
     return sal_True;
 }
 
@@ -341,7 +347,20 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
     }
 #endif
 
+    Any aDefault;
+    try
+    {
+        aDefault = GetDefaultValue( nHandle );
+    }
+    catch( beans::UnknownPropertyException ex )
+    {
+        aDefault.clear();
+    }
     m_pImplProperties->SetPropertyValueByHandle( nHandle, rValue );
+    if( !m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault && aDefault.hasValue() && aDefault == rValue ) //#i98893# don't export defaults to file
+        m_pImplProperties->SetPropertyToDefault( nHandle );
+    else
+        m_pImplProperties->SetPropertyValueByHandle( nHandle, rValue );
 }
 
 void SAL_CALL OPropertySet::getFastPropertyValue
@@ -355,7 +374,7 @@ void SAL_CALL OPropertySet::getFastPropertyValue
         uno::Reference< beans::XFastPropertySet > xStylePropSet( m_pImplProperties->GetStyle(), uno::UNO_QUERY );
         if( xStylePropSet.is() )
         {
-#ifndef NDEBUG
+#ifdef DBG_UTIL
             {
                 // check if the handle of the style points to the same property
                 // name as the handle in this property set

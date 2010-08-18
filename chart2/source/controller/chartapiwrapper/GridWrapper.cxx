@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: GridWrapper.cxx,v $
- * $Revision: 1.3.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,6 @@
 #include "GridWrapper.hxx"
 #include "macros.hxx"
 #include "AxisHelper.hxx"
-#include "Scaling.hxx"
 #include "Chart2ModelContact.hxx"
 #include "ContainerHelper.hxx"
 #include "AxisIndexDefines.hxx"

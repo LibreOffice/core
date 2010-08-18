@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cell2.cxx,v $
- * $Revision: 1.34.102.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,14 @@
 
 
 // INCLUDE ---------------------------------------------------------------
+#include <algorithm>
+#include <deque>
+
+#include <boost/bind.hpp>
+
 #include <vcl/mapmod.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
 
 #include "cell.hxx"
 #include "compiler.hxx"
@@ -48,7 +50,6 @@
 #include "scmatrix.hxx"
 #include "editutil.hxx"
 #include "chgtrack.hxx"
-#include "indexmap.hxx"
 #include "externalrefmgr.hxx"
 
 using namespace formula;
@@ -129,9 +130,9 @@ void ScEditCell::GetString( String& rString ) const
         // auch Text von URL-Feldern, Doc-Engine ist eine ScFieldEditEngine
         EditEngine& rEngine = pDoc->GetEditEngine();
         rEngine.SetText( *pData );
-        rString = ScEditUtil::GetSpaceDelimitedString(rEngine);     // space between paragraphs
-        // kurze Strings fuer Formeln merken
-        if ( rString.Len() < MAXSTRLEN )
+        rString = ScEditUtil::GetMultilineString(rEngine); // string with line separators between paragraphs
+        // cache short strings for formulas
+        if ( rString.Len() < 256 )
             ((ScEditCell*)this)->pString = new String( rString );   //! non-const
     }
     else
@@ -174,6 +175,223 @@ void ScEditCell::SetTextObject( const EditTextObject* pObject,
 }
 
 // ============================================================================
+
+namespace
+{
+
+using std::deque;
+
+typedef SCCOLROW(*DimensionSelector)(const ScSingleRefData&);
+
+
+static SCCOLROW lcl_GetCol(const ScSingleRefData& rData)
+{
+    return rData.nCol;
+}
+
+
+static SCCOLROW lcl_GetRow(const ScSingleRefData& rData)
+{
+    return rData.nRow;
+}
+
+
+static SCCOLROW lcl_GetTab(const ScSingleRefData& rData)
+{
+    return rData.nTab;
+}
+
+
+/** Check if both references span the same range in selected dimension.
+ */
+static bool
+lcl_checkRangeDimension(
+        const SingleDoubleRefProvider& rRef1,
+        const SingleDoubleRefProvider& rRef2,
+        const DimensionSelector aWhich)
+{
+    return
+        aWhich(rRef1.Ref1) == aWhich(rRef2.Ref1)
+        && aWhich(rRef1.Ref2) == aWhich(rRef2.Ref2);
+}
+
+
+static bool
+lcl_checkRangeDimensions(
+        const SingleDoubleRefProvider& rRef1,
+        const SingleDoubleRefProvider& rRef2,
+        bool& bCol, bool& bRow, bool& bTab)
+{
+    const bool bSameCols(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetCol));
+    const bool bSameRows(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetRow));
+    const bool bSameTabs(lcl_checkRangeDimension(rRef1, rRef2, lcl_GetTab));
+
+    // Test if exactly two dimensions are equal
+    if (!(bSameCols ^ bSameRows ^ bSameTabs)
+            && (bSameCols || bSameRows || bSameTabs))
+    {
+        bCol = !bSameCols;
+        bRow = !bSameRows;
+        bTab = !bSameTabs;
+        return true;
+    }
+    return false;
+}
+
+
+/** Check if references in given reference list can possibly
+    form a range. To do that, two of their dimensions must be the same.
+ */
+static bool
+lcl_checkRangeDimensions(
+        const deque<ScToken*>::const_iterator aBegin,
+        const deque<ScToken*>::const_iterator aEnd,
+        bool& bCol, bool& bRow, bool& bTab)
+{
+    deque<ScToken*>::const_iterator aCur(aBegin);
+    ++aCur;
+    const SingleDoubleRefProvider aRef(**aBegin);
+    bool bOk(false);
+    {
+        const SingleDoubleRefProvider aRefCur(**aCur);
+        bOk = lcl_checkRangeDimensions(aRef, aRefCur, bCol, bRow, bTab);
+    }
+    while (bOk && aCur != aEnd)
+    {
+        const SingleDoubleRefProvider aRefCur(**aCur);
+        bool bColTmp(false);
+        bool bRowTmp(false);
+        bool bTabTmp(false);
+        bOk = lcl_checkRangeDimensions(aRef, aRefCur, bColTmp, bRowTmp, bTabTmp);
+        bOk = bOk && (bCol == bColTmp && bRow == bRowTmp && bTab == bTabTmp);
+        ++aCur;
+    }
+
+    if (bOk && aCur == aEnd)
+    {
+        bCol = bCol;
+        bRow = bRow;
+        bTab = bTab;
+        return true;
+    }
+    return false;
+}
+
+
+bool
+lcl_lessReferenceBy(
+        const ScToken* const pRef1, const ScToken* const pRef2,
+        const DimensionSelector aWhich)
+{
+    const SingleDoubleRefProvider rRef1(*pRef1);
+    const SingleDoubleRefProvider rRef2(*pRef2);
+    return aWhich(rRef1.Ref1) < aWhich(rRef2.Ref1);
+}
+
+
+/** Returns true if range denoted by token pRef2 starts immediately after
+    range denoted by token pRef1. Dimension, in which the comparison takes
+    place, is given by aWhich.
+ */
+bool
+lcl_isImmediatelyFollowing(
+        const ScToken* const pRef1, const ScToken* const pRef2,
+        const DimensionSelector aWhich)
+{
+    const SingleDoubleRefProvider rRef1(*pRef1);
+    const SingleDoubleRefProvider rRef2(*pRef2);
+    return aWhich(rRef2.Ref1) - aWhich(rRef1.Ref2) == 1;
+}
+
+
+static bool
+lcl_checkIfAdjacent(
+        const deque<ScToken*>& rReferences,
+        const DimensionSelector aWhich)
+{
+    typedef deque<ScToken*>::const_iterator Iter;
+    Iter aBegin(rReferences.begin());
+    Iter aEnd(rReferences.end());
+    Iter aBegin1(aBegin);
+    ++aBegin1, --aEnd;
+    return std::equal(
+            aBegin, aEnd, aBegin1,
+            boost::bind(lcl_isImmediatelyFollowing, _1, _2, aWhich));
+}
+
+
+static void
+lcl_fillRangeFromRefList(
+        const deque<ScToken*>& rReferences, ScRange& rRange)
+{
+    const ScSingleRefData aStart(
+            SingleDoubleRefProvider(*rReferences.front()).Ref1);
+    rRange.aStart.Set(aStart.nCol, aStart.nRow, aStart.nTab);
+    const ScSingleRefData aEnd(
+            SingleDoubleRefProvider(*rReferences.back()).Ref2);
+    rRange.aEnd.Set(aEnd.nCol, aEnd.nRow, aEnd.nTab);
+}
+
+
+static bool
+lcl_refListFormsOneRange(
+        const ScAddress& aPos, deque<ScToken*>& rReferences,
+        ScRange& rRange)
+{
+    std::for_each(
+            rReferences.begin(), rReferences.end(),
+            bind(&ScToken::CalcAbsIfRel, _1, aPos))
+        ;
+    if (rReferences.size() == 1) {
+        lcl_fillRangeFromRefList(rReferences, rRange);
+        return true;
+    }
+
+    bool bCell(false);
+    bool bRow(false);
+    bool bTab(false);
+    if (lcl_checkRangeDimensions(rReferences.begin(), rReferences.end(),
+            bCell, bRow, bTab))
+    {
+        DimensionSelector aWhich;
+        if (bCell)
+        {
+            aWhich = lcl_GetCol;
+        }
+        else if (bRow)
+        {
+            aWhich = lcl_GetRow;
+        }
+        else if (bTab)
+        {
+            aWhich = lcl_GetTab;
+        }
+        else
+        {
+            OSL_ENSURE(false, "lcl_checkRangeDimensions shouldn't allow that!");
+            aWhich = lcl_GetRow;    // initialize to avoid warning
+        }
+        // Sort the references by start of range
+        std::sort(rReferences.begin(), rReferences.end(),
+                boost::bind(lcl_lessReferenceBy, _1, _2, aWhich));
+        if (lcl_checkIfAdjacent(rReferences, aWhich))
+        {
+            lcl_fillRangeFromRefList(rReferences, rRange);
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool lcl_isReference(const FormulaToken& rToken)
+{
+    return
+        rToken.GetType() == svSingleRef ||
+        rToken.GetType() == svDoubleRef;
+}
+
+}
 
 BOOL ScFormulaCell::IsEmpty()
 {
@@ -349,7 +567,7 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 }
                 else
                 {
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     String aTmp;
                     ByteString aMsg( "broken Matrix, no MatFormula at origin, Pos: " );
                     aPos.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
@@ -379,7 +597,7 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 if ( !nEdges )
                     nEdges = 1;             // mittendrin
             }
-#ifndef PRODUCT
+#ifdef DBG_UTIL
             else
             {
                 String aTmp;
@@ -449,6 +667,60 @@ BOOL ScFormulaCell::HasOneReference( ScRange& r ) const
         return FALSE;
 }
 
+bool
+ScFormulaCell::HasRefListExpressibleAsOneReference(ScRange& rRange) const
+{
+    /* If there appears just one reference in the formula, it's the same
+       as HasOneReference(). If there are more of them, they can denote
+       one range if they are (sole) arguments of one function.
+       Union of these references must form one range and their
+       intersection must be empty set.
+    */
+
+    // Detect the simple case of exactly one reference in advance without all
+    // overhead.
+    // #i107741# Doing so actually makes outlines using SUBTOTAL(x;reference)
+    // work again, where the function does not have only references.
+    if (HasOneReference( rRange))
+        return true;
+
+    pCode->Reset();
+    // Get first reference, if any
+    ScToken* const pFirstReference(
+            dynamic_cast<ScToken*>(pCode->GetNextReferenceRPN()));
+    if (pFirstReference)
+    {
+        // Collect all consecutive references, starting by the one
+        // already found
+        std::deque<ScToken*> aReferences;
+        aReferences.push_back(pFirstReference);
+        FormulaToken* pToken(pCode->NextRPN());
+        FormulaToken* pFunction(0);
+        while (pToken)
+        {
+            if (lcl_isReference(*pToken))
+            {
+                aReferences.push_back(dynamic_cast<ScToken*>(pToken));
+                pToken = pCode->NextRPN();
+            }
+            else
+            {
+                if (pToken->IsFunction())
+                {
+                    pFunction = pToken;
+                }
+                break;
+            }
+        }
+        if (pFunction && !pCode->GetNextReferenceRPN()
+                && (pFunction->GetParamCount() == aReferences.size()))
+        {
+            return lcl_refListFormsOneRange(aPos, aReferences, rRange);
+        }
+    }
+    return false;
+}
+
 BOOL ScFormulaCell::HasRelNameReference() const
 {
     pCode->Reset();
@@ -472,7 +744,7 @@ BOOL ScFormulaCell::HasColRowName() const
 void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc )
+                                    ScDocument* pUndoDoc, const ScAddress* pUndoCellPos )
 {
     SCCOL nCol1 = r.aStart.Col();
     SCROW nRow1 = r.aStart.Row();
@@ -484,6 +756,8 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     SCROW nRow = aPos.Row();
     SCTAB nTab = aPos.Tab();
     ScAddress aUndoPos( aPos );         // position for undo cell in pUndoDoc
+    if ( pUndoCellPos )
+        aUndoPos = *pUndoCellPos;
     ScAddress aOldPos( aPos );
 //  BOOL bPosChanged = FALSE;           // ob diese Zelle bewegt wurde
     BOOL bIsInsert = FALSE;
@@ -706,10 +980,15 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             //  (InsertCells/DeleteCells - aPos is changed above) as well as when UpdateReference
             //  is called after moving the cells (MoveBlock/PasteFromClip - aOldPos is changed).
 
-            ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos,
-                    pOld, eTempGrammar, cMatrixFlag );
-            pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
-            pUndoDoc->PutCell( aUndoPos, pFCell );
+            // If there is already a formula cell in the undo document, don't overwrite it,
+            // the first (oldest) is the important cell.
+            if ( pUndoDoc->GetCellType( aUndoPos ) != CELLTYPE_FORMULA )
+            {
+                ScFormulaCell* pFCell = new ScFormulaCell( pUndoDoc, aUndoPos,
+                        pOld, eTempGrammar, cMatrixFlag );
+                pFCell->aResult.SetToken( NULL);  // to recognize it as changed later (Cut/Paste!)
+                pUndoDoc->PutCell( aUndoPos, pFCell );
+            }
         }
         bValChanged = FALSE;
         if ( pRangeData )
@@ -717,6 +996,8 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = pRangeData->GetCode()->Clone();
+            // #i18937# #i110008# call MoveRelWrap, but with the old position
+            ScCompiler::MoveRelWrap(*pCode, pDocument, aOldPos, pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.UpdateSharedFormulaReference( eUpdateRefMode, aOldPos, r,
@@ -757,17 +1038,6 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
 
         delete pOld;
     }
-
-    pCode->Reset();
-    for ( formula::FormulaToken* t = pCode->GetNextReferenceOrName(); t; t = pCode->GetNextReferenceOrName() )
-    {
-        StackVar sv = t->GetType();
-        if (sv == svExternalSingleRef || sv == svExternalDoubleRef || sv == svExternalName)
-        {
-            pDocument->GetExternalRefManager()->updateRefCell(aOldPos, aPos, eUpdateRefMode == URM_COPY);
-            break;
-        }
-    }
 }
 
 void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
@@ -792,7 +1062,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
             pCode = new ScTokenArray( *pRangeData->GetCode() );
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.SetGrammar(pDocument->GetGrammar());
-            aComp2.MoveRelWrap();
+            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             aComp2.UpdateInsertTab( nTable, FALSE );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
@@ -828,7 +1098,7 @@ BOOL ScFormulaCell::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove)
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.CompileTokenArray();
-            aComp2.MoveRelWrap();
+            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             aComp2.UpdateDeleteTab( nTable, FALSE, FALSE, bRefChanged );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
@@ -865,7 +1135,7 @@ void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.SetGrammar(pDocument->GetGrammar());
             aComp2.CompileTokenArray();
-            aComp2.MoveRelWrap();
+            aComp2.MoveRelWrap(pRangeData->GetMaxCol(), pRangeData->GetMaxRow());
             aComp2.UpdateMoveTab( nOldPos, nNewPos, TRUE );
             bCompile = TRUE;
         }
@@ -1205,14 +1475,15 @@ void ScFormulaCell::FindRangeNamesInUse(std::set<USHORT>& rIndexes) const
     lcl_FindRangeNamesInUse( rIndexes, pCode, pDocument->GetRangeName() );
 }
 
-void ScFormulaCell::ReplaceRangeNamesInUse( const ScIndexMap& rMap )
+void ScFormulaCell::ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap )
 {
     for( FormulaToken* p = pCode->First(); p; p = pCode->Next() )
     {
         if( p->GetOpCode() == ocName )
         {
-            USHORT nIndex = p->GetIndex();
-            USHORT nNewIndex = rMap.Find( nIndex );
+            sal_uInt16 nIndex = p->GetIndex();
+            ScRangeData::IndexMap::const_iterator itr = rMap.find(nIndex);
+            sal_uInt16 nNewIndex = itr == rMap.end() ? nIndex : itr->second;
             if ( nIndex != nNewIndex )
             {
                 p->SetIndex( nNewIndex );

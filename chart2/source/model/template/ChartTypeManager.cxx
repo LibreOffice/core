@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartTypeManager.cxx,v $
- * $Revision: 1.18.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,6 @@
 #include "StackMode.hxx"
 #include "ContainerHelper.hxx"
 
-#include "Scaling.hxx"
 #include "CartesianCoordinateSystem.hxx"
 
 #include "LineChartTypeTemplate.hxx"
@@ -46,6 +42,7 @@
 #include "ScatterChartTypeTemplate.hxx"
 #include "StockChartTypeTemplate.hxx"
 #include "NetChartTypeTemplate.hxx"
+#include "BubbleChartTypeTemplate.hxx"
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/InlineContainer.hxx>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -128,10 +125,14 @@ enum TemplateId
     TEMPLATE_PERCENTSTACKEDNET,
     TEMPLATE_PERCENTSTACKEDNETSYMBOL,
     TEMPLATE_PERCENTSTACKEDNETLINE,
+    TEMPLATE_FILLEDNET,
+    TEMPLATE_STACKEDFILLEDNET,
+    TEMPLATE_PERCENTSTACKEDFILLEDNET,
     TEMPLATE_STOCKLOWHIGHCLOSE,
     TEMPLATE_STOCKOPENLOWHIGHCLOSE,
     TEMPLATE_STOCKVOLUMELOWHIGHCLOSE,
     TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE,
+    TEMPLATE_BUBBLE,
 //    TEMPLATE_SURFACE,
 //     TEMPLATE_ADDIN,
     TEMPLATE_NOT_FOUND = 0xffff
@@ -199,10 +200,14 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         ( C2U( "com.sun.star.chart2.template.PercentStackedNet" ),              TEMPLATE_PERCENTSTACKEDNET )
         ( C2U( "com.sun.star.chart2.template.PercentStackedNetSymbol" ),        TEMPLATE_PERCENTSTACKEDNETSYMBOL )
         ( C2U( "com.sun.star.chart2.template.PercentStackedNetLine" ),          TEMPLATE_PERCENTSTACKEDNETLINE )
+        ( C2U( "com.sun.star.chart2.template.FilledNet" ),                      TEMPLATE_FILLEDNET )
+        ( C2U( "com.sun.star.chart2.template.StackedFilledNet" ),               TEMPLATE_STACKEDFILLEDNET )
+        ( C2U( "com.sun.star.chart2.template.PercentStackedFilledNet" ),        TEMPLATE_PERCENTSTACKEDFILLEDNET )
         ( C2U( "com.sun.star.chart2.template.StockLowHighClose" ),              TEMPLATE_STOCKLOWHIGHCLOSE )
         ( C2U( "com.sun.star.chart2.template.StockOpenLowHighClose" ),          TEMPLATE_STOCKOPENLOWHIGHCLOSE )
         ( C2U( "com.sun.star.chart2.template.StockVolumeLowHighClose" ),        TEMPLATE_STOCKVOLUMELOWHIGHCLOSE )
         ( C2U( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ),    TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE )
+        ( C2U( "com.sun.star.chart2.template.Bubble" ),                         TEMPLATE_BUBBLE )
 //      ( C2U( "com.sun.star.chart2.template.Surface" ),                        TEMPLATE_SURFACE )
 //      ( C2U( "com.sun.star.chart2.template.Addin" ),                          TEMPLATE_ADDIN )
         );
@@ -501,6 +506,18 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                     StackMode_Y_STACKED_PERCENT, false, true ));
                 break;
 
+            case TEMPLATE_FILLEDNET:
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    StackMode_NONE, false, false, true ));
+                break;
+            case TEMPLATE_STACKEDFILLEDNET:
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    StackMode_Y_STACKED, false, false, true ));
+                break;
+            case TEMPLATE_PERCENTSTACKEDFILLEDNET:
+                xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
+                    StackMode_Y_STACKED_PERCENT, false, false, true ));
+                break;
 
             case TEMPLATE_STOCKLOWHIGHCLOSE:
                 xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,
@@ -517,6 +534,11 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
             case TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE:
                 xTemplate.set( new StockChartTypeTemplate( m_xContext, aServiceSpecifier,
                     StockChartTypeTemplate::VOL_OPEN_LOW_HI_CLOSE, true ));
+                break;
+
+            //BubbleChart
+            case TEMPLATE_BUBBLE:
+                xTemplate.set( new BubbleChartTypeTemplate( m_xContext, aServiceSpecifier ));
                 break;
 
 //            case TEMPLATE_SURFACE:

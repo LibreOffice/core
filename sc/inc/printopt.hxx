@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: printopt.hxx,v $
- * $Revision: 1.5.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #ifndef SC_PRINTOPT_HXX
 #define SC_PRINTOPT_HXX
 
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>
 #include "scdllapi.h"
 
@@ -96,6 +93,7 @@ public:
     void            SetOptions( const ScPrintOptions& rNew );
 
     virtual void    Commit();
+    virtual void Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
 };
 
 #endif

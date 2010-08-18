@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rechead.hxx,v $
- * $Revision: 1.4.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,33 +126,6 @@
 class SvStream;
 
 // -----------------------------------------------------------------------
-
-//  "Automatischer" Record-Header mit Groessenangabe
-
-class ScReadHeader
-{
-private:
-    SvStream&   rStream;
-    ULONG       nDataEnd;
-
-public:
-    ScReadHeader(SvStream& rNewStream);
-    ~ScReadHeader();
-
-    ULONG   BytesLeft() const;
-};
-
-class ScWriteHeader
-{
-private:
-    SvStream&   rStream;
-    ULONG       nDataPos;
-    sal_uInt32  nDataSize;
-
-public:
-    ScWriteHeader(SvStream& rNewStream, sal_uInt32 nDefault = 0);
-    ~ScWriteHeader();
-};
 
         //  Header mit Groessenangaben fuer mehrere Objekte
 

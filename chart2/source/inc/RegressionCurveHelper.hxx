@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RegressionCurveHelper.hxx,v $
- * $Revision: 1.11.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,14 +46,14 @@ class OOO_DLLPUBLIC_CHARTTOOLS RegressionCurveHelper
 {
 public:
     /// returns a model mean-value line
-    static ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurve >
         createMeanValueLine(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext > & xContext );
 
     /// returns a model regression curve
-    static ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurve >
         createRegressionCurveByServiceName(
             const ::com::sun::star::uno::Reference<
@@ -151,6 +148,10 @@ public:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
 
+    static void removeEquations(
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+
     /** adds the given regression curve if there was none before. If there are
         regression curves, the first one is replaced by the one given by the
         type. All remaining curves are remnoved.
@@ -187,7 +188,7 @@ public:
             If false, the sequence (1, 2, 3, ...) will always be used, even if
             there is a data-sequence with role "values-x"
      */
-    static void initializeCurveCalculator(
+    SAL_DLLPRIVATE static void initializeCurveCalculator(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveCalculator > & xOutCurveCalculator,
         const ::com::sun::star::uno::Reference<
@@ -222,6 +223,10 @@ public:
     static sal_Int32 getRegressionCurveIndex(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveContainer > & xContainer,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve > & xCurve );
+
+    static bool hasEquation(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurve > & xCurve );
 

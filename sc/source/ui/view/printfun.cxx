@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: printfun.cxx,v $
- * $Revision: 1.58.50.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,25 +31,25 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include "printfun.hxx"
 
 #include <svx/svxids.hrc>
-#include <svx/adjitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/editstat.hxx>     // EE_CNTRL_RTFSTYLESHEETS
+#include <editeng/editstat.hxx>     // EE_CNTRL_RTFSTYLESHEETS
 #include <svx/fmview.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/lrspitem.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/sizeitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/sizeitem.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/progress.hxx>
@@ -87,6 +84,8 @@
 
 #include <vcl/lineinfo.hxx>
 #include <tools/pstm.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 #define ZOOM_MIN    10
 
@@ -185,6 +184,7 @@ long lcl_LineTotal(const SvxBorderLine* pLine)
 
 void ScPrintFunc::Construct( const ScPrintOptions* pOptions )
 {
+    pDocShell->UpdatePendingRowHeights( nPrintTab );
     pDoc = pDocShell->GetDocument();
 
     SfxPrinter* pDocPrinter = pDoc->GetPrinter();   // auch fuer Preview den Drucker nehmen
@@ -886,7 +886,7 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
     if ( !aPageSize.Width() || !aPageSize.Height() )
     {
         DBG_ERROR("PageSize Null ?!?!?");
-        aPageSize = SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 );
+        aPageSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );
     }
 
     pBorderItem     = (const SvxBoxItem*)    &pParamSet->Get(ATTR_BORDER);
@@ -1503,7 +1503,7 @@ void ScPrintFunc::PrintRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY )
 
     for (SCROW nRow=nY1; nRow<=nY2; nRow++)
     {
-        USHORT nDocH = pDoc->FastGetRowHeight( nRow, nPrintTab );
+        USHORT nDocH = pDoc->GetRowHeight( nRow, nPrintTab );
         if (nDocH)
         {
             long nHeight = (long) (nDocH * nScaleY);
@@ -1559,7 +1559,7 @@ void ScPrintFunc::LocateRowHdr( SCROW nY1, SCROW nY2, long nScrX, long nScrY,
         nEndX -= nOneX;
 
     long nPosY = nScrY - nOneY;
-    nPosY += pDoc->FastGetScaledRowHeight( nY1, nY2, nPrintTab, nScaleY);
+    nPosY += pDoc->GetScaledRowHeight( nY1, nY2, nPrintTab, nScaleY);
     Rectangle aCellRect( nScrX, nScrY, nEndX, nPosY );
     rLocationData.AddRowHeaders( aCellRect, nY1, nY2, bRepRow );
 }
@@ -1601,7 +1601,7 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     }
 
     long nPosY = nScrY - nOneY;
-    nPosY += pDoc->FastGetScaledRowHeight( nY1, nY2, nPrintTab, nScaleY);
+    nPosY += pDoc->GetScaledRowHeight( nY1, nY2, nPrintTab, nScaleY);
     Rectangle aCellRect( nScrX, nScrY, nPosX, nPosY );
     rLocationData.AddCellRange( aCellRect, ScRange( nX1,nY1,nPrintTab, nX2,nY2,nPrintTab ),
                                 bRepCol, bRepRow, aDrawMapMode );
@@ -1647,7 +1647,8 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
 
     // test if all paint parts are hidden, then a paint is not necessary at all
     const Point aMMOffset(aOutputData.PrePrintDrawingLayer(nLogStX, nLogStY));
-    const bool bHideAllDrawingLayer(pDrawView && pDrawView->getHideOle() && pDrawView->getHideChart() && pDrawView->getHideDraw());
+    const bool bHideAllDrawingLayer( pDrawView && pDrawView->getHideOle() && pDrawView->getHideChart()
+            && pDrawView->getHideDraw() && pDrawView->getHideFormControl() );
 
     if(!bHideAllDrawingLayer)
     {
@@ -2042,7 +2043,10 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
     }
 
     if ( pPrinter && bDoPrint )
-        pPrinter->StartPage();
+    {
+        DBG_ERROR( "StartPage does not exist anymore" );
+        // pPrinter->StartPage();
+    }
 
     if ( bDoPrint || pLocationData )
     {
@@ -2063,7 +2067,10 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
     long nCount = DoNotes( nNoteStart, bDoPrint, pLocationData );
 
     if ( pPrinter && bDoPrint )
-        pPrinter->EndPage();
+    {
+        DBG_ERROR( "EndPage does not exist anymore" );
+        // pPrinter->EndPage();
+    }
 
     return nCount;
 }
@@ -2122,10 +2129,14 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
         pDrawView->setHideOle(!aTableParam.bObjects);
         pDrawView->setHideChart(!aTableParam.bCharts);
         pDrawView->setHideDraw(!aTableParam.bDrawings);
+        pDrawView->setHideFormControl(!aTableParam.bDrawings);
     }
 
     if ( pPrinter && bDoPrint )
-        pPrinter->StartPage();
+    {
+        DBG_ERROR( "StartPage does not exist anymore" );
+        // pPrinter->StartPage();
+    }
 
     //  Kopf- und Fusszeilen (ohne Zentrierung)
 
@@ -2172,9 +2183,9 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     }
     if ( bCenterVer )
     {
-        long nDataHeight = pDoc->FastGetRowHeight( nY1, nY2, nPrintTab);
+        long nDataHeight = pDoc->GetRowHeight( nY1, nY2, nPrintTab);
         if (bDoRepRow)
-            nDataHeight += pDoc->FastGetRowHeight( nRepeatStartRow,
+            nDataHeight += pDoc->GetRowHeight( nRepeatStartRow,
                     nRepeatEndRow, nPrintTab);
         if (aTableParam.bHeaders)
             nDataHeight += (long) PRINT_HEADER_HEIGHT;
@@ -2207,11 +2218,11 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
         for (SCCOL i=nRepeatStartCol; i<=nRepeatEndCol; i++)
             nRepeatWidth += (long) (pDoc->GetColWidth(i,nPrintTab) * nScaleX);
     if (bDoRepRow)
-        nRepeatHeight += pDoc->FastGetScaledRowHeight( nRepeatStartRow,
+        nRepeatHeight += pDoc->GetScaledRowHeight( nRepeatStartRow,
                 nRepeatEndRow, nPrintTab, nScaleY);
     for (SCCOL i=nX1; i<=nX2; i++)
         nContentWidth += (long) (pDoc->GetColWidth(i,nPrintTab) * nScaleX);
-    nContentHeight += pDoc->FastGetScaledRowHeight( nY1, nY2, nPrintTab,
+    nContentHeight += pDoc->GetScaledRowHeight( nY1, nY2, nPrintTab,
             nScaleY);
 
     //  partition the page
@@ -2407,7 +2418,10 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     }
 
     if ( pPrinter && bDoPrint )
-        pPrinter->EndPage();
+    {
+        DBG_ERROR( "EndPage does not exist anymore" );
+        // pPrinter->EndPage();
+    }
 
     aLastSourceRange = ScRange( nX1, nY1, nPrintTab, nX2, nY2, nPrintTab );
     bSourceRangeValid = TRUE;
@@ -2677,7 +2691,7 @@ void ScPrintFunc::ApplyPrintSettings()
                 aEnumSize.Width() = aEnumSize.Height();
                 aEnumSize.Height() = nTemp;
         }
-        Paper ePaper = SvxPaperInfo::GetSvPaper( aEnumSize, MAP_TWIP, TRUE );
+        Paper ePaper = SvxPaperInfo::GetSvxPaper( aEnumSize, MAP_TWIP, TRUE );
         USHORT nPaperBin = ((const SvxPaperBinItem&)pParamSet->Get(ATTR_PAGE_PAPERBIN)).GetValue();
 
         pPrinter->SetPaper( ePaper );
@@ -2874,30 +2888,84 @@ void ScPrintFunc::CalcZoom( USHORT nRangeNo )                       // Zoom bere
     if (aTableParam.bScalePageNum)
     {
         nZoom = 100;
-        BOOL bFound = FALSE;
         USHORT nPagesToFit = aTableParam.nScalePageNum;
-        while (!bFound)
+
+        sal_uInt16 nLastFitZoom = 0, nLastNonFitZoom = 0;
+        while (true)
         {
+            if (nZoom <= ZOOM_MIN)
+                break;
+
             CalcPages();
-            if ( nPagesX * nPagesY <= nPagesToFit || nZoom <= ZOOM_MIN )
-                bFound = TRUE;
+            bool bFitsPage = (nPagesX * nPagesY <= nPagesToFit);
+
+            if (bFitsPage)
+            {
+                if (nZoom == 100)
+                    // If it fits at 100 %, it's good enough for me.
+                    break;
+
+                nLastFitZoom = nZoom;
+                nZoom = (nLastNonFitZoom + nZoom) / 2;
+
+                if (nLastFitZoom == nZoom)
+                    // It converged.  Use this zoom level.
+                    break;
+            }
             else
-                --nZoom;
+            {
+                if (nZoom - nLastFitZoom <= 1)
+                {
+                    nZoom = nLastFitZoom;
+                    CalcPages();
+                    break;
+                }
+
+                nLastNonFitZoom = nZoom;
+                nZoom = (nLastFitZoom + nZoom) / 2;
+            }
         }
     }
     else if (aTableParam.bScaleTo)
     {
         nZoom = 100;
-        BOOL bFound = FALSE;
         USHORT nW = aTableParam.nScaleWidth;
         USHORT nH = aTableParam.nScaleHeight;
-        while (!bFound)
+
+        sal_uInt16 nLastFitZoom = 0, nLastNonFitZoom = 0;
+        while (true)
         {
+            if (nZoom <= ZOOM_MIN)
+                break;
+
             CalcPages();
-            if ( ((!nW || (nPagesX <= nW)) && (!nH || (nPagesY <= nH))) || (nZoom <= ZOOM_MIN) )
-                bFound = TRUE;
+            bool bFitsPage = ((!nW || (nPagesX <= nW)) && (!nH || (nPagesY <= nH)));
+
+            if (bFitsPage)
+            {
+                if (nZoom == 100)
+                    // If it fits at 100 %, it's good enough for me.
+                    break;
+
+                nLastFitZoom = nZoom;
+                nZoom = (nLastNonFitZoom + nZoom) / 2;
+
+                if (nLastFitZoom == nZoom)
+                    // It converged.  Use this zoom level.
+                    break;
+            }
             else
-                --nZoom;
+            {
+                if (nZoom - nLastFitZoom <= 1)
+                {
+                    nZoom = nLastFitZoom;
+                    CalcPages();
+                    break;
+                }
+
+                nLastNonFitZoom = nZoom;
+                nZoom = (nLastFitZoom + nZoom) / 2;
+            }
         }
     }
     else if (aTableParam.bScaleAll)
@@ -3017,18 +3085,20 @@ void ScPrintFunc::CalcPages()               // berechnet aPageRect und Seiten au
     nPagesY = 0;
     nTotalY = 0;
 
-    BOOL bVisCol = FALSE;
+    bool bVisCol = false;
+    SCCOL nLastCol = -1;
     for (SCCOL i=nStartCol; i<=nEndCol; i++)
     {
-        BYTE nFlags = pDoc->GetColFlags(i,nPrintTab);
-        if ( i>nStartCol && bVisCol && (nFlags & CR_PAGEBREAK) )
+        bool bHidden = pDoc->ColHidden(i, nPrintTab, nLastCol);
+        bool bPageBreak = (pDoc->HasColBreak(i, nPrintTab) & BREAK_PAGE);
+        if ( i>nStartCol && bVisCol && bPageBreak )
         {
             pPageEndX[nPagesX] = i-1;
             ++nPagesX;
-            bVisCol = FALSE;
+            bVisCol = false;
         }
-        if (!(nFlags & CR_HIDDEN))
-            bVisCol = TRUE;
+        if (!bHidden)
+            bVisCol = true;
     }
     if (bVisCol)    // auch am Ende keine leeren Seiten
     {
@@ -3036,39 +3106,60 @@ void ScPrintFunc::CalcPages()               // berechnet aPageRect und Seiten au
         ++nPagesX;
     }
 
-    BOOL bVisRow = FALSE;
+    bool bVisRow = false;
     SCROW nPageStartRow = nStartRow;
-    ScCompressedArrayIterator< SCROW, BYTE> aIter( pDoc->GetRowFlagsArray(
-                nPrintTab), nStartRow, nEndRow);
-    do
+    SCROW nLastVisibleRow = -1;
+
+    ::boost::scoped_ptr<ScRowBreakIterator> pRowBreakIter(pDoc->GetRowBreakIterator(nPrintTab));
+    SCROW nNextPageBreak = pRowBreakIter->first();
+    while (nNextPageBreak != ScRowBreakIterator::NOT_FOUND && nNextPageBreak < nStartRow)
+        // Skip until the page break position is at the start row or greater.
+        nNextPageBreak = pRowBreakIter->next();
+
+    for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
     {
-        BYTE nFlags = *aIter;
-        SCROW nRangeEnd = aIter.GetRangeEnd();
-        for (SCROW j=aIter.GetRangeStart(); j<=nRangeEnd; ++j)
+        bool bPageBreak = (nNextPageBreak == nRow);
+        if (bPageBreak)
+            nNextPageBreak = pRowBreakIter->next();
+
+        if (nRow > nStartRow && bVisRow && bPageBreak )
         {
-            if ( j>nStartRow && bVisRow && (nFlags & CR_PAGEBREAK) )
+            pPageEndY[nTotalY] = nRow-1;
+            ++nTotalY;
+
+            if ( !aTableParam.bSkipEmpty ||
+                    !pDoc->IsPrintEmpty( nPrintTab, nStartCol, nPageStartRow, nEndCol, nRow-1 ) )
             {
-                pPageEndY[nTotalY] = j-1;
-                ++nTotalY;
-
-                if ( !aTableParam.bSkipEmpty ||
-                        !pDoc->IsPrintEmpty( nPrintTab, nStartCol, nPageStartRow, nEndCol, j-1 ) )
-                {
-                    pPageRows[nPagesY].SetStartRow( nPageStartRow );
-                    pPageRows[nPagesY].SetEndRow( j-1 );
-                    pPageRows[nPagesY].SetPagesX( nPagesX );
-                    if (aTableParam.bSkipEmpty)
-                        lcl_SetHidden( pDoc, nPrintTab, pPageRows[nPagesY], nStartCol, pPageEndX );
-                    ++nPagesY;
-                }
-
-                nPageStartRow = j;
-                bVisRow = FALSE;
+                pPageRows[nPagesY].SetStartRow( nPageStartRow );
+                pPageRows[nPagesY].SetEndRow( nRow-1 );
+                pPageRows[nPagesY].SetPagesX( nPagesX );
+                if (aTableParam.bSkipEmpty)
+                    lcl_SetHidden( pDoc, nPrintTab, pPageRows[nPagesY], nStartCol, pPageEndX );
+                ++nPagesY;
             }
-            if (!(nFlags & CR_HIDDEN))
-                bVisRow = TRUE;
+
+            nPageStartRow = nRow;
+            bVisRow = false;
         }
-    } while (aIter.NextRange());
+
+        if (nRow <= nLastVisibleRow)
+        {
+            // This row is still visible.  Don't bother calling RowHidden() to
+            // find out, for speed optimization.
+            bVisRow = true;
+            continue;
+        }
+
+        SCROW nLastRow = -1;
+        if (!pDoc->RowHidden(nRow, nPrintTab, NULL, &nLastRow))
+        {
+            bVisRow = true;
+            nLastVisibleRow = nLastRow;
+        }
+        else
+            // skip all hidden rows.
+            nRow = nLastRow;
+    }
 
     if (bVisRow)
     {

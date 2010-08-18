@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawsh.cxx,v $
- * $Revision: 1.15.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,10 +33,10 @@
 
 #include "scitems.hxx"
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <svx/fontwork.hxx>
 //#include <svx/labdlg.hxx> CHINA001
-#include <svx/srchitem.hxx>
+#include <svl/srchitem.hxx>
 #include <svx/tabarea.hxx>
 #include <svx/tabline.hxx>
 //CHINA001 #include <svx/transfrm.hxx>
@@ -48,7 +45,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <vcl/msgbox.hxx>
 
 #include "drawsh.hxx"
@@ -71,7 +68,7 @@
 
 #include "userdat.hxx"
 #include <sfx2/objsh.hxx>
-#include <svtools/macitem.hxx>
+#include <svl/macitem.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/viewsh.hxx>
 #include <com/sun/star/util/XModifiable.hpp>
@@ -230,7 +227,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                 {
                     SdrPageView* pPV = 0;
                     SdrObject* pHit = 0;
-                    if ( pView->PickObj( pWin->PixelToLogic( pViewData->GetMousePosPixel() ), pHit, pPV, SDRSEARCH_DEEP ) )
+                    if ( pView->PickObj( pWin->PixelToLogic( pViewData->GetMousePosPixel() ), pView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
                         pObj = pHit;
                 }
 
@@ -266,7 +263,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if ( pFact )
                                 {
-                                    SfxAbstractTabDialog *pDlg = pFact->CreateCaptionDialog( pWin, pView, RID_SVXDLG_CAPTION );
+                                    SfxAbstractTabDialog *pDlg = pFact->CreateCaptionDialog( pWin, pView );
 
                                     const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                                     SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
@@ -291,7 +288,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if(pFact)
                                 {
-                                    SfxAbstractTabDialog* pDlg = pFact->CreateSvxTransformTabDialog( pWin, &aNewAttr,pView, RID_SVXDLG_TRANSFORM );
+                                    SfxAbstractTabDialog* pDlg = pFact->CreateSvxTransformTabDialog( pWin, &aNewAttr,pView );
                                     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                                     if (pDlg->Execute() == RET_OK)
                                     {
@@ -338,7 +335,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
 
     com::sun::star::uno::Reference < com::sun::star::frame::XFrame > xFrame;
     if (GetViewShell())
-        xFrame = GetViewShell()->GetViewFrame()->GetFrame()->GetFrameInterface();
+        xFrame = GetViewShell()->GetViewFrame()->GetFrame().GetFrameInterface();
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     SfxAbstractDialog* pMacroDlg = pFact->CreateSfxDialog( pWin, *pItemSet, xFrame, SID_EVENTCONFIG );
@@ -398,7 +395,6 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
         SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
                     &aNewAttr,
                 pViewData->GetDocument()->GetDrawLayer(),
-                RID_SVXDLG_LINE,
                 pObj,
                 bHasMarked);
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
@@ -439,7 +435,6 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
     AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( pViewData->GetDialogParent(),
                                                                     &aNewAttr,
                                                             pViewData->GetDocument()->GetDrawLayer(),
-                                                            RID_SVXDLG_AREA,
                                                             pView);
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
@@ -477,7 +472,7 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT /* nTabPage */ )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aNewAttr, RID_SVXDLG_TEXT, pView );
+    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aNewAttr, pView );
 
     USHORT nResult = pDlg->Execute();
 

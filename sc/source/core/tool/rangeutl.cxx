@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rangeutl.cxx,v $
- * $Revision: 1.12.30.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -786,7 +783,7 @@ static void lcl_appendCellAddress(
     if (rExtInfo.mbExternal)
     {
         ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-        const String* pFilePath = pRefMgr->getExternalFileName(rExtInfo.mnFileId);
+        const String* pFilePath = pRefMgr->getExternalFileName(rExtInfo.mnFileId, true);
         if (!pFilePath)
             return;
 
@@ -821,7 +818,7 @@ static void lcl_appendCellRangeAddress(
         DBG_ASSERT(rExtInfo1.mnFileId == rExtInfo2.mnFileId, "File IDs do not match between 1st and 2nd addresses.");
 
         ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
-        const String* pFilePath = pRefMgr->getExternalFileName(rExtInfo1.mnFileId);
+        const String* pFilePath = pRefMgr->getExternalFileName(rExtInfo1.mnFileId, true);
         if (!pFilePath)
             return;
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DiagramHelper.hxx,v $
- * $Revision: 1.9.22.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +45,13 @@
 
 namespace chart
 {
+
+enum DiagramPositioningMode
+{
+    DiagramPositioningMode_AUTO,
+    DiagramPositioningMode_EXCLUDING,
+    DiagramPositioningMode_INCLUDING
+};
 
 class OOO_DLLPUBLIC_CHARTTOOLS DiagramHelper
 {
@@ -157,7 +161,7 @@ public:
     /** Replaces all occurences of xCooSysToReplace in the tree with
         xReplacement in the diagram's tree
      */
-    static void replaceCoordinateSystem(
+    SAL_DLLPRIVATE static void replaceCoordinateSystem(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram > & xDiagram,
         const ::com::sun::star::uno::Reference<
@@ -175,7 +179,8 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram >& xDiagram,
         const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XComponentContext > & xContext );
+            ::com::sun::star::uno::XComponentContext > & xContext,
+        bool bAdaptAxes=true );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XAxis > getAttachedAxis(
@@ -226,18 +231,14 @@ public:
                 ::com::sun::star::chart2::XDiagram > & xDiagram );
 
     static ::com::sun::star::uno::Sequence< rtl::OUString >
-        generateAutomaticCategories(
+        getExplicitSimpleCategories(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartDocument > & xChartDoc );
 
-    static ::com::sun::star::uno::Sequence< rtl::OUString >
-        generateAutomaticCategories(
+    SAL_DLLPRIVATE static ::com::sun::star::uno::Sequence< rtl::OUString >
+        generateAutomaticCategoriesFromCooSys(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XCoordinateSystem > & xCooSys );
-
-    static void generateAutomaticCategoriesFromChartType(
-            ::com::sun::star::uno::Sequence< rtl::OUString >& rRet,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType >
@@ -251,7 +252,7 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDiagram > & xDiagram );
 
-    static bool areChartTypesCompatible( const ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE static bool areChartTypesCompatible( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartType >& xFirstType,
                 const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartType >& xSecondType );
@@ -323,6 +324,19 @@ public:
                 ::com::sun::star::chart2::XDiagram > & xDiagram,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XChartType >& xChartType );
+
+    static DiagramPositioningMode getDiagramPositioningMode( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XDiagram > & xDiagram );
+
+    static bool setDiagramPositioning( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel,
+        const ::com::sun::star::awt::Rectangle& rPosRect /*100th mm*/ );
+
+    static ::com::sun::star::awt::Rectangle getDiagramRectangleFromModel( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel );
+
+    static bool switchDiagramPositioningToExcludingPositioning( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::frame::XModel >& xChartModel
+        , bool bResetModifiedState //set model back to unchanged if it was unchanged before
+        , bool bConvertAlsoFromAutoPositioning );
 
 private:
     // not implemented

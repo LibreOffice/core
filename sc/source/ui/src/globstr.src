@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: globstr.src,v $
- * $Revision: 1.74.96.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -304,23 +301,23 @@ Resource RID_GLOBSTR
     };
     String STR_UNDO_INSERTNOTE
     {
-        Text [ en-US ] = "Insert Note" ;
+        Text [ en-US ] = "Insert Comment" ;
     };
     String STR_UNDO_DELETENOTE
     {
-        Text [ en-US ] = "Delete Note" ;
+        Text [ en-US ] = "Delete Comment" ;
     };
     String STR_UNDO_SHOWNOTE
     {
-        Text [ en-US ] = "Show Note" ;
+        Text [ en-US ] = "Show Comment" ;
     };
     String STR_UNDO_HIDENOTE
     {
-        Text [ en-US ] = "Hide note" ;
+        Text [ en-US ] = "Hide Comment" ;
     };
     String STR_UNDO_EDITNOTE
     {
-        Text [ en-US ] = "Edit Note" ;
+        Text [ en-US ] = "Edit Comment" ;
     };
     String STR_UNDO_DEC_INDENT
     {
@@ -437,10 +434,6 @@ Resource RID_GLOBSTR
     String STR_MSSG_MOVEBLOCKTO_0
     {
         Text [ en-US ] = "Cell merge not possible if cells already merged!" ;
-    };
-    String STR_MSSG_APPLYPATTLINES_0
-    {
-        Text [ en-US ] = "Cannot apply borders to multiple selection" ;
     };
     String STR_MSSG_INSERTCELLS_0
     {
@@ -934,10 +927,6 @@ Resource RID_GLOBSTR
 
     /* END error constants and error strings. */
 
-    String STR_ODER_SO
-    {
-        Text [ en-US ] = "%s or similar" ;
-    };
     String STR_GRIDCOLOR
     {
         Text [ en-US ] = "Grid color" ;
@@ -1024,11 +1013,11 @@ Resource RID_GLOBSTR
     };
     String STR_NOTES
     {
-        Text [ en-US ] = "Notes" ;
+        Text [ en-US ] = "Comments" ;
     };
     String STR_QUERY_DELTAB
     {
-        Text [ en-US ] = "Are you sure you want to permanently delete the current sheet(s)?" ;
+        Text [ en-US ] = "Are you sure you want to delete the selected sheet(s)?" ;
     };
     String STR_QUERY_DELSCENARIO
     {
@@ -1133,6 +1122,14 @@ Resource RID_GLOBSTR
     String STR_UNDO_RENAME_TAB
     {
         Text [ en-US ] = "Rename Sheet" ;
+    };
+    String STR_UNDO_SET_TAB_BG_COLOR
+    {
+        Text [ en-US ] = "Color Tab" ;
+    };
+    String STR_UNDO_SET_MULTI_TAB_BG_COLOR
+    {
+        Text [ en-US ] = "Color Tabs" ;
     };
     String STR_UNDO_MOVE_TAB
     {
@@ -1264,7 +1261,7 @@ Resource RID_GLOBSTR
     };
     String STR_SCATTR_PAGE_NOTES
     {
-        Text [ en-US ] = "Notes" ;
+        Text [ en-US ] = "Comments" ;
     };
     String STR_SCATTR_PAGE_GRID
     {
@@ -1661,7 +1658,7 @@ Resource RID_GLOBSTR
 
     String STR_UNDO_CHINESE_TRANSLATION
     {
-        Text [ en-US ] = "Chinese translation";
+        Text [ en-US ] = "Chinese conversion";
     };
 
     String STR_ERR_DATAPILOT_INPUT
@@ -1728,6 +1725,18 @@ Resource RID_GLOBSTR
     String STR_STYLE_FAMILY_PAGE
     {
         Text [ en-US ] = "Page Styles";
+    };
+    String STR_ERR_DATAPILOTSOURCE
+    {
+        Text [ en-US ] = "DataPilot source data is invalid.";
+    };
+    String STR_PIVOT_FIRSTROWEMPTYERR
+    {
+        Text [ en-US ] = "The field name cannot be empty. Check the first row of data source to make sure there are no empty cells." ;
+    };
+    String STR_PIVOT_ONLYONEROWERR
+    {
+        Text [ en-US ] = "DataPilot table needs at least two rows of data to create or refresh." ;
     };
 };
 

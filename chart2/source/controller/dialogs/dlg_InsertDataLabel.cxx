@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlg_InsertDataLabel.cxx,v $
- * $Revision: 1.10.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,11 +44,12 @@ DataLabelsDialog::DataLabelsDialog(Window* pWindow, const SfxItemSet& rInAttrs, 
     m_aBtnOK(this, SchResId(BTN_OK)),
     m_aBtnCancel(this, SchResId(BTN_CANCEL)),
     m_aBtnHelp(this, SchResId(BTN_HELP)),
-    m_apDataLabelResources( new DataLabelResources(this,rInAttrs,false) ),
+    m_apDataLabelResources( new DataLabelResources(this,rInAttrs) ),
     m_rInAttrs(rInAttrs)
 {
     FreeResource();
-    SetText( ObjectNameProvider::getName(OBJECTTYPE_DATA_LABELS) );
+    this->SetText( ObjectNameProvider::getName_ObjectForAllSeries( OBJECTTYPE_DATA_LABELS ) );
+
     m_apDataLabelResources->SetNumberFormatter( pFormatter );
     Reset();
 }

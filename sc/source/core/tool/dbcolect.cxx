@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbcolect.cxx,v $
- * $Revision: 1.17.32.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@
 #include "refupdat.hxx"
 #include "rechead.hxx"
 #include "document.hxx"
+#include "queryparam.hxx"
 #include "globstr.hrc"
 
 
@@ -157,6 +155,7 @@ ScDBData::ScDBData( const ScDBData& rData ) :
         nQueryField[i]      = rData.nQueryField[i];
         eQueryOp[i]         = rData.eQueryOp[i];
         bQueryByString[i]   = rData.bQueryByString[i];
+        bQueryByDate[i]     = rData.bQueryByDate[i];
         pQueryStr[i]        = new String( *(rData.pQueryStr[i]) );
         nQueryVal[i]        = rData.nQueryVal[i];
         eQueryConnect[i]    = rData.eQueryConnect[i];
@@ -246,6 +245,7 @@ ScDBData& ScDBData::operator= (const ScDBData& rData)
         nQueryField[i]      = rData.nQueryField[i];
         eQueryOp[i]         = rData.eQueryOp[i];
         bQueryByString[i]   = rData.bQueryByString[i];
+        bQueryByDate[i]     = rData.bQueryByDate[i];
         *pQueryStr[i]       = *rData.pQueryStr[i];
         nQueryVal[i]        = rData.nQueryVal[i];
         eQueryConnect[i]    = rData.eQueryConnect[i];
@@ -514,6 +514,7 @@ void ScDBData::GetQueryParam( ScQueryParam& rQueryParam ) const
         rEntry.nField = nQueryField[i];
         rEntry.eOp = eQueryOp[i];
         rEntry.bQueryByString = bQueryByString[i];
+        rEntry.bQueryByDate = bQueryByDate[i];
         *rEntry.pStr = *pQueryStr[i];
         rEntry.nVal = nQueryVal[i];
         rEntry.eConnect = eQueryConnect[i];
@@ -545,6 +546,7 @@ void ScDBData::SetQueryParam(const ScQueryParam& rQueryParam)
         nQueryField[i] = rEntry.nField;
         eQueryOp[i] = rEntry.eOp;
         bQueryByString[i] = rEntry.bQueryByString;
+        bQueryByDate[i] = rEntry.bQueryByDate;
         *pQueryStr[i] = *rEntry.pStr;
         nQueryVal[i] = rEntry.nVal;
         eQueryConnect[i] = rEntry.eConnect;
@@ -701,7 +703,7 @@ short ScDBCollection::Compare(ScDataObject* pKey1, ScDataObject* pKey2) const
 {
     const String& rStr1 = ((ScDBData*)pKey1)->GetName();
     const String& rStr2 = ((ScDBData*)pKey2)->GetName();
-    return (short) ScGlobal::pTransliteration->compareString( rStr1, rStr2 );
+    return (short) ScGlobal::GetpTransliteration()->compareString( rStr1, rStr2 );
 }
 
 //  IsEqual - alles gleich

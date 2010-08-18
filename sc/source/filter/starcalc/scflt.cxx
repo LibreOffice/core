@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scflt.cxx,v $
- * $Revision: 1.25.124.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,27 +33,27 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/ulspitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/PasswordHelper.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/ulspitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
@@ -81,6 +78,7 @@
 #include "postit.hxx"
 #include "globstr.hrc"
 #include "ftools.hxx"
+#include "tabprotection.hxx"
 
 #include "fprogressbar.hxx"
 
@@ -1087,9 +1085,11 @@ void Sc10Import::LoadProtect()
     //rStream.Read(&SheetProtect, sizeof(SheetProtect));
     lcl_ReadSheetProtect(rStream, SheetProtect);
     nError = rStream.GetError();
-    uno::Sequence<sal_Int8> aPass;
-    SvPasswordHelper::GetHashPassword(aPass, SC10TOSTRING( SheetProtect.PassWord ));
-    pDoc->SetDocProtection( SheetProtect.Protect,  aPass);
+
+    ScDocProtection aProtection;
+    aProtection.setProtected(static_cast<bool>(SheetProtect.Protect));
+    aProtection.setPassword(SC10TOSTRING(SheetProtect.PassWord));
+    pDoc->SetDocProtection(&aProtection);
 }
 
 
@@ -1441,10 +1441,11 @@ void Sc10Import::LoadTables()
 
         //rStream.Read(&TabProtect, sizeof(TabProtect));
         lcl_ReadTabProtect(rStream, TabProtect);
-        uno::Sequence<sal_Int8> aPass;
-        SvPasswordHelper::GetHashPassword(aPass, SC10TOSTRING( TabProtect.PassWord ));
 
-        pDoc->SetTabProtection( static_cast<SCTAB>(Tab), TabProtect.Protect, aPass);
+        ScTableProtection aProtection;
+        aProtection.setProtected(static_cast<bool>(TabProtect.Protect));
+        aProtection.setPassword(SC10TOSTRING(TabProtect.PassWord));
+        pDoc->SetTabProtection(static_cast<SCTAB>(Tab), &aProtection);
 
         rStream >> TabNo;
 
@@ -1547,14 +1548,14 @@ void Sc10Import::LoadTables()
             rStream >> DataValue;
             if (DataValue != 0)
             {
-                BYTE nFlags = 0;
-                if ((DataValue & crfSoftBreak) == crfSoftBreak)
-                    nFlags |= CR_PAGEBREAK;
-                if ((DataValue & crfHardBreak) == crfHardBreak)
-                    nFlags |= CR_MANUALBREAK;
-                if ((DataValue & crfHidden) == crfHidden)
-                    nFlags |= CR_HIDDEN;
-                for (SCCOL k = static_cast<SCCOL>(DataStart); k <= static_cast<SCCOL>(DataEnd); k++) pDoc->SetColFlags(k, static_cast<SCTAB> (TabNo), nFlags);
+                bool bPageBreak   = ((DataValue & crfSoftBreak) == crfSoftBreak);
+                bool bManualBreak = ((DataValue & crfHardBreak) == crfHardBreak);
+                bool bHidden = ((DataValue & crfHidden) == crfHidden);
+                for (SCCOL k = static_cast<SCCOL>(DataStart); k <= static_cast<SCCOL>(DataEnd); k++)
+                {
+                    pDoc->SetColHidden(k, k, static_cast<SCTAB>(TabNo), bHidden);
+                    pDoc->SetColBreak(k, static_cast<SCTAB> (TabNo), bPageBreak, bManualBreak);
+                }
             }
             DataStart = DataEnd + 1;
         }
@@ -1597,14 +1598,14 @@ void Sc10Import::LoadTables()
             rStream >> DataValue;
             if (DataValue != 0)
             {
-                BYTE nFlags = 0;
-                if ((DataValue & crfSoftBreak) == crfSoftBreak)
-                    nFlags |= CR_PAGEBREAK;
-                if ((DataValue & crfHardBreak) == crfHardBreak)
-                    nFlags |= CR_MANUALBREAK;
-                if ((DataValue & crfHidden) == crfHidden)
-                    nFlags |= CR_HIDDEN;
-                for (SCROW l = static_cast<SCROW>(DataStart); l <= static_cast<SCROW>(DataEnd); l++) pDoc->SetRowFlags(l, static_cast<SCTAB> (TabNo), nFlags);
+                bool bPageBreak   = ((DataValue & crfSoftBreak) == crfSoftBreak);
+                bool bManualBreak = ((DataValue & crfHardBreak) == crfHardBreak);
+                bool bHidden      = ((DataValue & crfHidden) == crfHidden);
+                for (SCROW l = static_cast<SCROW>(DataStart); l <= static_cast<SCROW>(DataEnd); l++)
+                {
+                    pDoc->SetRowHidden(l, l, static_cast<SCTAB> (TabNo), bHidden);
+                    pDoc->SetRowBreak(l, static_cast<SCTAB> (TabNo), bPageBreak, bManualBreak);
+                }
             }
             DataStart = DataEnd + 1;
         }
@@ -1710,7 +1711,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                 String aNoteText( SC10TOSTRING(pNote));
                 delete [] pNote;
                 ScAddress aPos( Col, static_cast<SCROW>(Row), Tab );
-                ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false );
+                ScNoteUtil::CreateNoteFromString( *pDoc, aPos, aNoteText, false, false );
             }
         }
         pPrgrsBar->Progress();
@@ -2395,7 +2396,7 @@ void Sc10Import::LoadObjects()
         nStartX = (long) ( nStartX * HMM_PER_TWIPS );
         nStartX += (long) ( GraphHeader.x / nPPTX * HMM_PER_TWIPS );
         long nSizeX = (long) ( GraphHeader.w / nPPTX * HMM_PER_TWIPS );
-        long nStartY = pDoc->FastGetRowHeight( 0,
+        long nStartY = pDoc->GetRowHeight( 0,
                 static_cast<SCsROW>(GraphHeader.CarretY) - 1,
                 static_cast<SCTAB>(GraphHeader.CarretZ));
         nStartY = (long) ( nStartY * HMM_PER_TWIPS );

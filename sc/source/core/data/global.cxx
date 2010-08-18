@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: global.cxx,v $
- * $Revision: 1.56.102.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,19 +34,19 @@
 #include <vcl/svapp.hxx>
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/langitem.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/rcid.h>
@@ -67,7 +64,7 @@
 #include <unotools/collatorwrapper.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <unotools/intlwrapper.hxx>
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
 #include "global.hxx"
@@ -146,15 +143,6 @@ long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 
 static USHORT nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
 
-
-// ... oder so?
-
-BOOL bOderSo;
-
-bool SC_DLLPUBLIC ScGetWriteTeamInfo()
-{
-  return bOderSo;
-}
 
 class SfxViewShell;
 SfxViewShell* pScActiveViewShell = NULL;            //! als Member !!!!!
@@ -520,12 +508,6 @@ String ScGlobal::GetLongErrorString(USHORT nErrNumber)
         break;
     }
     String aRes( GetRscString( nErrNumber ) );
-    if( bOderSo )
-    {
-        String aOderSo( GetRscString( STR_ODER_SO ) );
-        aOderSo.SearchAndReplace( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("%s")), aRes );
-        aRes = aOderSo;
-    }
     return aRes;
 }
 
@@ -559,24 +541,9 @@ void ScGlobal::Init()
 
     //! Wenn Sortierung etc. von der Sprache der installierten Offfice-Version
     //! abhaengen sollen, hier "Application::GetSettings().GetUILanguage()"
-    LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
-    pLocale = new ::com::sun::star::lang::Locale( Application::GetSettings().GetLocale());
     pSysLocale = new SvtSysLocale;
     pCharClass = pSysLocale->GetCharClassPtr();
     pLocaleData = pSysLocale->GetLocaleDataPtr();
-    pCalendar = new CalendarWrapper( ::comphelper::getProcessServiceFactory() );
-    pCalendar->loadDefaultCalendar( *pLocale );
-    pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
-    pCollator->loadDefaultCollator( *pLocale, SC_COLLATOR_IGNORES );
-    pCaseCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
-    pCaseCollator->loadDefaultCollator( *pLocale, 0 );
-    pTransliteration = new ::utl::TransliterationWrapper(
-        ::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_IGNORECASE );
-    pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
-    pCaseTransliteration = new ::utl::TransliterationWrapper(
-        ::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_CASESENSE );
-    pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
-    pScIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );
 
     ppRscString = new String *[ STR_COUNT ];
     for( USHORT nC = 0 ; nC < STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
@@ -1766,6 +1733,7 @@ ScFunctionMgr::ScFunctionMgr()
         aCatLists[i] = new List;
 
     pRootList = aCatLists[0];                               // Gesamtliste ("Alle") erstellen
+    CollatorWrapper* pCaseCollator = ScGlobal::GetCaseCollator();
     for ( n=0; n<nCount; n++ )
     {
         ULONG nTmpCnt=0;
@@ -1775,8 +1743,7 @@ ScFunctionMgr::ScFunctionMgr()
             // ist zwar case-sensitiv, aber Umlaute muessen richtig einsortiert werden
 
             const ScFuncDesc*   pTmpDesc = (const ScFuncDesc*)pRootList->GetObject(nTmpCnt);
-            if ( ScGlobal::pCaseCollator->compareString(
-                        *pDesc->pFuncName, *pTmpDesc->pFuncName ) == COMPARE_LESS )
+            if ( pCaseCollator->compareString(*pDesc->pFuncName, *pTmpDesc->pFuncName ) == COMPARE_LESS )
                 break;
         }
         pRootList->Insert((void*)pDesc, nTmpCnt);                   // Einsortieren
@@ -1949,6 +1916,13 @@ sal_uInt32 ScFunctionCategory::getNumber() const
 
 utl::TransliterationWrapper* ScGlobal::GetpTransliteration() //add by CHINA001
 {
+    if ( !pTransliteration )
+    {
+        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
+        pTransliteration = new ::utl::TransliterationWrapper(
+            ::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_IGNORECASE );
+        pTransliteration->loadModuleIfNeeded( eOfficeLanguage );
+    }
     DBG_ASSERT(
         pTransliteration,
         "ScGlobal::GetpTransliteration() called before ScGlobal::Init()");
@@ -1962,3 +1936,57 @@ const LocaleDataWrapper* ScGlobal::GetpLocaleData()
         "ScGlobal::GetpLocaleData() called before ScGlobal::Init()");
     return pLocaleData;
 }
+CalendarWrapper*     ScGlobal::GetCalendar()
+{
+    if ( !pCalendar )
+    {
+        pCalendar = new CalendarWrapper( ::comphelper::getProcessServiceFactory() );
+        pCalendar->loadDefaultCalendar( *GetLocale() );
+    }
+    return pCalendar;
+}
+CollatorWrapper*        ScGlobal::GetCollator()
+{
+    if ( !pCollator )
+    {
+        pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
+        pCollator->loadDefaultCollator( *GetLocale(), SC_COLLATOR_IGNORES );
+    } // if ( !pCollator )
+    return pCollator;
+}
+CollatorWrapper*        ScGlobal::GetCaseCollator()
+{
+    if ( !pCaseCollator )
+    {
+        pCaseCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
+        pCaseCollator->loadDefaultCollator( *GetLocale(), 0 );
+    } // if ( !pCaseCollator )
+    return pCaseCollator;
+}
+::utl::TransliterationWrapper* ScGlobal::GetCaseTransliteration()
+{
+    if ( !pCaseTransliteration )
+    {
+        const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
+        pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_CASESENSE );
+        pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
+    } // if ( !pCaseTransliteration )
+    return pCaseTransliteration;
+}
+IntlWrapper*         ScGlobal::GetScIntlWrapper()
+{
+    if ( !pScIntlWrapper )
+    {
+        pScIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), *GetLocale() );
+    }
+    return pScIntlWrapper;
+}
+::com::sun::star::lang::Locale*     ScGlobal::GetLocale()
+{
+    if ( !pLocale )
+    {
+        pLocale = new ::com::sun::star::lang::Locale( Application::GetSettings().GetLocale());
+    }
+    return pLocale;
+}
+

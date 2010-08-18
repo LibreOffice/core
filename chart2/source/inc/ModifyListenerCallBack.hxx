@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ModifyListenerCallBack.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,11 +50,11 @@ public:
     virtual ~ModifyListenerCallBack();
 
     void startListening( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyBroadcaster >& xBroadcaster );
-    void stopListening();
+    SAL_DLLPRIVATE void stopListening();
 
 private: //methods
-    ModifyListenerCallBack();
-    ModifyListenerCallBack( const ModifyListenerCallBack& );
+    SAL_DLLPRIVATE ModifyListenerCallBack();
+    SAL_DLLPRIVATE ModifyListenerCallBack( const ModifyListenerCallBack& );
 
 private: //member
     ModifyListenerCallBack_impl* pModifyListener_impl;

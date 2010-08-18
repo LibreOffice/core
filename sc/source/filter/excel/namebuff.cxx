@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: namebuff.cxx,v $
- * $Revision: 1.26.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -127,6 +124,9 @@ void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
     DBG_ASSERT( mnCurrIdx <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
 
     ScRangeData* pData = new ScRangeData( pExcRoot->pIR->GetDocPtr(), aName, rToken, rRange.aStart, RT_SHARED );
+    const ScAddress& rMaxPos = pExcRoot->pIR->GetMaxPos();
+    pData->SetMaxCol(rMaxPos.Col());
+    pData->SetMaxRow(rMaxPos.Row());
     pData->SetIndex( static_cast< USHORT >( mnCurrIdx ) );
     pExcRoot->pIR->GetNamedRanges().Insert( pData );
     index_hash[rRange.aStart] = static_cast< USHORT >( mnCurrIdx );

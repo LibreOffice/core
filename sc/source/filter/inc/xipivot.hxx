@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xipivot.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -186,6 +183,8 @@ public:
     /** Reads the entire pivot cache stream. Uses decrypter from passed stream. */
     void                ReadPivotCacheStream( XclImpStream& rStrm );
 
+    bool                IsRefreshOnLoad() const;
+
 private:
     typedef ::std::vector< XclImpPCFieldRef > XclImpPCFieldVec;
 
@@ -350,11 +349,18 @@ public:
     void                ReadSxdi( XclImpStream& rStrm );
     /** Reads an SXEX record containing additional settings for the pivot table. */
     void                ReadSxex( XclImpStream& rStrm );
+    /** Reads an SXVIEWEX9 record that specifies the pivot tables
+     *  autoformat. */
+    void                ReadSxViewEx9( XclImpStream& rStrm );
 
     // ------------------------------------------------------------------------
 
     /** Inserts the pivot table into the Calc document. */
     void                Convert();
+
+    void                MaybeRefresh();
+
+    void                ApplyMergeFlags(const ScRange& rOutRange, const ScDPSaveData& rSaveData);
 
     // ------------------------------------------------------------------------
 private:
@@ -364,6 +370,7 @@ private:
 
     XclPTInfo           maPTInfo;           /// General info about the pivot table (SXVIEW record).
     XclPTExtInfo        maPTExtInfo;        /// Extended info about the pivot table (SXEX record).
+    XclPTViewEx9Info    maPTViewEx9Info;     /// (SXVIEWEX9 record)
     XclImpPTFieldVec    maFields;           /// Vector containing all fields.
     XclImpPTFieldRef    mxCurrField;        /// Current field for importing additional info.
     ScfStringVec        maVisFieldNames;    /// Vector containing all visible field names.
@@ -374,6 +381,7 @@ private:
     ScfUInt16Vec        maFiltDataFields;   /// Filtered data field indexes.
     XclImpPTField       maDataOrientField;  /// Special data field orientation field.
     ScRange             maOutScRange;       /// Output range in the Calc document.
+    ScDPObject*         mpDPObj;
 };
 
 typedef ScfRef< XclImpPivotTable > XclImpPivotTableRef;
@@ -422,6 +430,9 @@ public:
     void                ReadSxvi( XclImpStream& rStrm );
     /** Reads an SXEX record containing additional settings for a pivot table. */
     void                ReadSxex( XclImpStream& rStrm );
+    /** Reads an SXVIEWEX9 record that specifies the pivot tables
+     *  autoformat. */
+    void                ReadSxViewEx9( XclImpStream& rStrm );
 
     // ------------------------------------------------------------------------
 
@@ -429,6 +440,8 @@ public:
     void                ReadPivotCaches( XclImpStream& rStrm );
     /** Inserts all pivot tables into the Calc document. */
     void                ConvertPivotTables();
+
+    void                MaybeRefreshPivotTables();
 
 private:
     typedef ::std::vector< XclImpPivotCacheRef >    XclImpPivotCacheVec;

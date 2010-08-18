@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xiroot.cxx,v $
- * $Revision: 1.24.88.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,8 @@
 #include "precompiled_sc.hxx"
 #include "xiroot.hxx"
 #include "addincol.hxx"
+#include "document.hxx"
+#include "scextopt.hxx"
 #include "xltracer.hxx"
 #include "xihelper.hxx"
 #include "xiformula.hxx"
@@ -52,7 +51,8 @@
 XclImpRootData::XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
         SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc ) :
     XclRootData( eBiff, rMedium, xRootStrg, rDoc, eTextEnc, false ),
-    mbHasCodePage( false )
+    mbHasCodePage( false ),
+    mbHasBasic( false )
 {
 }
 
@@ -86,6 +86,8 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
         GetOldRoot().pAutoFilterBuffer = new XclImpAutoFilterBuffer;
         mrImpData.mxWebQueryBfr.reset( new XclImpWebQueryBuffer( GetRoot() ) );
         mrImpData.mxPTableMgr.reset( new XclImpPivotTableManager( GetRoot() ) );
+        mrImpData.mxTabProtect.reset( new XclImpSheetProtectBuffer( GetRoot() ) );
+        mrImpData.mxDocProtect.reset( new XclImpDocProtectBuffer( GetRoot() ) );
     }
 
     mrImpData.mxPageSett.reset( new XclImpPageSettings( GetRoot() ) );
@@ -207,6 +209,12 @@ XclImpObjectManager& XclImpRoot::GetObjectManager() const
     return *mrImpData.mxObjMgr;
 }
 
+XclImpSheetDrawing& XclImpRoot::GetCurrSheetDrawing() const
+{
+    DBG_ASSERT( !IsInGlobals(), "XclImpRoot::GetCurrSheetDrawing - must not be called from workbook globals" );
+    return mrImpData.mxObjMgr->GetSheetDrawing( GetCurrScTab() );
+}
+
 XclImpCondFormatManager& XclImpRoot::GetCondFormatManager() const
 {
     DBG_ASSERT( mrImpData.mxCondFmtMgr.is(), "XclImpRoot::GetCondFormatManager - invalid call, wrong BIFF" );
@@ -232,6 +240,18 @@ XclImpPivotTableManager& XclImpRoot::GetPivotTableManager() const
     return *mrImpData.mxPTableMgr;
 }
 
+XclImpSheetProtectBuffer& XclImpRoot::GetSheetProtectBuffer() const
+{
+    DBG_ASSERT( mrImpData.mxTabProtect.is(), "XclImpRoot::GetSheetProtectBuffer - invalid call, wrong BIFF" );
+    return *mrImpData.mxTabProtect;
+}
+
+XclImpDocProtectBuffer& XclImpRoot::GetDocProtectBuffer() const
+{
+    DBG_ASSERT( mrImpData.mxDocProtect.is(), "XclImpRoot::GetDocProtectBuffer - invalid call, wrong BIFF" );
+    return *mrImpData.mxDocProtect;
+}
+
 XclImpPageSettings& XclImpRoot::GetPageSettings() const
 {
     return *mrImpData.mxPageSett;
@@ -255,5 +275,25 @@ String XclImpRoot::GetScAddInName( const String& rXclName ) const
     return rXclName;
 }
 
-// ============================================================================
+void XclImpRoot::ReadCodeName( XclImpStream& rStrm, bool bGlobals )
+{
+    if( mrImpData.mbHasBasic && (GetBiff() == EXC_BIFF8) )
+    {
+        String aName = rStrm.ReadUniString();
+        if( aName.Len() > 0 )
+        {
+            if( bGlobals )
+            {
+                GetExtDocOptions().GetDocSettings().maGlobCodeName = aName;
+                GetDoc().SetCodeName( aName );
+            }
+            else
+            {
+                GetExtDocOptions().SetCodeName( GetCurrScTab(), aName );
+                GetDoc().SetCodeName( GetCurrScTab(), aName );
+            }
+        }
+    }
+}
 
+// ============================================================================

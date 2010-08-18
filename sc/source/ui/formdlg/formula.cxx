@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formula.cxx,v $
- * $Revision: 1.18.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,11 +36,10 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/svtreebx.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/topfrm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <unotools/charclass.hxx>
@@ -126,7 +122,6 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
     m_xParser.set(ScServiceProvider::MakeInstance(SC_SERVICE_FORMULAPARS,(ScDocShell*)pDoc->GetDocumentShell()),uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet> xSet(m_xParser,uno::UNO_QUERY);
     xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_COMPILEFAP)),uno::makeAny(sal_True));
-    xSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_REFERENCEPOS)),uno::makeAny(table::CellAddress(aCursorPos.Tab(),aCursorPos.Col(),aCursorPos.Row())));
 
     m_xOpCodeMapper.set(ScServiceProvider::MakeInstance(SC_SERVICE_OPCODEMAPPER,(ScDocShell*)pDoc->GetDocumentShell()),uno::UNO_QUERY);
 
@@ -312,7 +307,7 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
 {
     ScInputHandler* pHdl=NULL;
 
-    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell, TYPE(SfxTopViewFrame) );
+    SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
     while( pFrame && pHdl==NULL)
     {
         SfxViewShell* p = pFrame->GetViewShell();
@@ -322,7 +317,7 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
             pHdl=pViewSh->GetInputHandler();
             if(ppViewSh!=NULL) *ppViewSh=pViewSh;
         }
-        pFrame = SfxViewFrame::GetNext(*pFrame,pDocShell, TYPE(SfxTopViewFrame) );
+        pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
     }
 
 
@@ -657,6 +652,12 @@ uno::Reference< sheet::XFormulaOpCodeMapper> ScFormulaDlg::getFormulaOpCodeMappe
 {
     return m_xOpCodeMapper;
 }
+
+table::CellAddress ScFormulaDlg::getReferencePosition() const
+{
+    return table::CellAddress(aCursorPos.Tab(),aCursorPos.Col(),aCursorPos.Row());
+}
+
 ::std::auto_ptr<formula::FormulaTokenArray> ScFormulaDlg::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
     ::std::auto_ptr<formula::FormulaTokenArray> pArray(new ScTokenArray());

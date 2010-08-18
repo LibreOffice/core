@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlstyli.cxx,v $
- * $Revision: 1.63 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,6 +47,11 @@
 #include <tools/debug.hxx>
 #include "XMLTableHeaderFooterContext.hxx"
 #include "XMLConverter.hxx"
+#include "XMLTableShapeImportHelper.hxx"
+#include "sheetdata.hxx"
+#include "xmlannoi.hxx"
+#include "textuno.hxx"
+#include "cellsuno.hxx"
 
 #include "docuno.hxx"
 #include "unonames.hxx"
@@ -73,6 +75,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace xmloff::token;
 //using namespace ::com::sun::star::text;
+using namespace ::formula;
 
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
@@ -102,6 +105,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     XMLPropertyState* pAllBorderWidthProperty = NULL;
     XMLPropertyState* pBorderWidths[4] = { NULL, NULL, NULL, NULL };
     XMLPropertyState* pDiagBorders[2] = { 0 };
+    XMLPropertyState* pOldDiagBorderWidths[2] = { 0 };      // old attribute names without "s"
     XMLPropertyState* pDiagBorderWidths[2] = { 0 };
 
     ::std::vector< XMLPropertyState >::iterator endproperty(rProperties.end());
@@ -131,8 +135,10 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
                 case CTF_SC_BOTTOMBORDERWIDTH           : pBorderWidths[XML_LINE_BOTTOM] = &*property; break;
                 case CTF_SC_DIAGONALTLBR                : pDiagBorders[XML_LINE_TLBR] = &*property; break;
                 case CTF_SC_DIAGONALBLTR                : pDiagBorders[XML_LINE_BLTR] = &*property; break;
-                case CTF_SC_DIAGONALTLBRWIDTH           : pDiagBorderWidths[XML_LINE_TLBR] = &*property; break;
-                case CTF_SC_DIAGONALBLTRWIDTH           : pDiagBorderWidths[XML_LINE_BLTR] = &*property; break;
+                case CTF_SC_DIAGONALTLBRWIDTH           : pOldDiagBorderWidths[XML_LINE_TLBR] = &*property; break;
+                case CTF_SC_DIAGONALTLBRWIDTHS          : pDiagBorderWidths[XML_LINE_TLBR] = &*property; break;
+                case CTF_SC_DIAGONALBLTRWIDTH           : pOldDiagBorderWidths[XML_LINE_BLTR] = &*property; break;
+                case CTF_SC_DIAGONALBLTRWIDTHS          : pDiagBorderWidths[XML_LINE_BLTR] = &*property; break;
             }
         }
     }
@@ -176,17 +182,23 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     }
     for( i = 0; i < 2; ++i )
     {
-        if( pDiagBorders[i] && pDiagBorderWidths[i] )
+        if( pDiagBorders[i] && ( pDiagBorderWidths[i] || pOldDiagBorderWidths[i] ) )
         {
             table::BorderLine aBorderLine;
             pDiagBorders[i]->maValue >>= aBorderLine;
             table::BorderLine aBorderLineWidth;
-            pDiagBorderWidths[i]->maValue >>= aBorderLineWidth;
+            if (pDiagBorderWidths[i])
+                pDiagBorderWidths[i]->maValue >>= aBorderLineWidth;     // prefer new attribute
+            else
+                pOldDiagBorderWidths[i]->maValue >>= aBorderLineWidth;
             aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
             aBorderLine.InnerLineWidth = aBorderLineWidth.InnerLineWidth;
             aBorderLine.LineDistance = aBorderLineWidth.LineDistance;
             pDiagBorders[i]->maValue <<= aBorderLine;
-            pDiagBorderWidths[i]->mnIndex = -1;
+            if (pDiagBorderWidths[i])
+                pDiagBorderWidths[i]->mnIndex = -1;
+            if (pOldDiagBorderWidths[i])
+                pOldDiagBorderWidths[i]->mnIndex = -1;      // reset mnIndex for old and new attribute if both are present
         }
     }
 
@@ -248,8 +260,14 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
         if (::cppu::any2bool(pOptimalHeight->maValue))
         {
             if (pHeight)
+            {
+                // set the stored height, but keep "optimal" flag:
+                // pass the height value as OptimalHeight property (only allowed while loading!)
+                pOptimalHeight->maValue = pHeight->maValue;
                 pHeight->mnIndex = -1;
-            pOptimalHeight->mnIndex = -1;
+            }
+            else
+                pOptimalHeight->mnIndex = -1;
         }
     }
     else if (pHeight)
@@ -279,10 +297,7 @@ public:
 
 ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName, const uno::Reference< xml::sax::XAttributeList > & xAttrList )
-    : SvXMLImportContext( rImport, nPrfx, rLName ),
-    sApplyStyle(),
-    sCondition(),
-    sBaseCell()
+    : SvXMLImportContext( rImport, nPrfx, rLName )
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -309,200 +324,118 @@ ScXMLMapContext::~ScXMLMapContext()
 {
 }
 
-void XMLTableStyleContext::SetOperator(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
-        const com::sun::star::sheet::ConditionOperator aOp) const
+namespace {
+
+template< typename Type >
+inline void lclAppendProperty( uno::Sequence< beans::PropertyValue >& rProps, const OUString& rPropName, const Type& rValue )
 {
-    sal_Int32 nLength(aProps.getLength());
-    aProps.realloc(nLength + 1);
-    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OPERATOR));
-    aProps[nLength].Value <<= aOp;
+    sal_Int32 nLength = rProps.getLength();
+    rProps.realloc( nLength + 1 );
+    rProps[ nLength ].Name = rPropName;
+    rProps[ nLength ].Value <<= rValue;
 }
 
-void XMLTableStyleContext::SetBaseCellAddress(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
-    const rtl::OUString& sBaseCell) const
+} // namespace
+
+void XMLTableStyleContext::SetOperator( uno::Sequence< beans::PropertyValue >& rProps, sheet::ConditionOperator eOp ) const
 {
-    sal_Int32 nLength(aProps.getLength());
-    aProps.realloc(nLength + 1);
-
-    // #b4974740# source position must be set as string, because it may
-    // refer to a sheet that hasn't been loaded yet.
-
-    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR));
-    aProps[nLength].Value <<= sBaseCell;
+    lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_OPERATOR ) ), eOp );
 }
 
-void XMLTableStyleContext::SetStyle(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
-    const rtl::OUString& sApplyStyle) const
+void XMLTableStyleContext::SetBaseCellAddress( uno::Sequence< beans::PropertyValue >& rProps, const OUString& rBaseCell ) const
 {
-    sal_Int32 nLength(aProps.getLength());
-    aProps.realloc(nLength + 1);
-    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_STYLENAME));
-    aProps[nLength].Value <<= sApplyStyle;
+    /*  #b4974740# Source position must be set as string, because it may refer
+        to a sheet that hasn't been loaded yet. */
+    lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_SOURCESTR ) ), rBaseCell );
 }
 
-void XMLTableStyleContext::SetFormula1(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-    const rtl::OUString& sFormula, bool bPreParse) const
+void XMLTableStyleContext::SetStyle( uno::Sequence<beans::PropertyValue>& rProps, const OUString& rApplyStyle ) const
 {
-    sal_Int32 nLength(aProps.getLength());
-    aProps.realloc(nLength + 1);
-    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULA1));
-    if (bPreParse)
+    lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_STYLENAME ) ), rApplyStyle );
+}
+
+void XMLTableStyleContext::SetFormula( uno::Sequence< beans::PropertyValue >& rProps,
+        sal_Int32 nFormulaIdx, const OUString& rFormula, const OUString& rFormulaNmsp,
+        FormulaGrammar::Grammar eGrammar, bool bHasNmsp ) const
+{
+    OUString aFormula, aFormulaNmsp;
+    FormulaGrammar::Grammar eNewGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
+    if( bHasNmsp )
     {
-        rtl::OUString sRealFormula(sFormula);
-        ScXMLConverter::ParseFormula(sRealFormula);
-        aProps[nLength].Value <<= sRealFormula;
+        // the entire attribute contains a namespace: internal namespace not allowed
+        aFormula = rFormula;
+        aFormulaNmsp = rFormulaNmsp;
+        eNewGrammar = eGrammar;
     }
     else
-        aProps[nLength].Value <<= sFormula;
-}
-
-void XMLTableStyleContext::SetFormula2(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-    const rtl::OUString& sFormula) const
-{
-    sal_Int32 nLength(aProps.getLength());
-    aProps.realloc(nLength + 1);
-    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULA2));
-    rtl::OUString sRealFormula(sFormula);
-    ScXMLConverter::ParseFormula(sRealFormula);
-    aProps[nLength].Value <<= sRealFormula;
-}
-
-void XMLTableStyleContext::SetFormulas(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-    const rtl::OUString& sFormulas) const
-{
-    sal_Int32 i(0);
-    sal_Bool bString(sal_False);
-    sal_Int32 nBrakes(0);
-    while ((sFormulas[i] != ',' || nBrakes > 0 || bString) && i < sFormulas.getLength())
     {
-        if (sFormulas[i] == '(')
-            ++nBrakes;
-        if (sFormulas[i] == ')')
-            --nBrakes;
-        if (sFormulas[i] == '"')
-            bString = !bString;
-        ++i;
+        // the attribute does not contain a namespace: try to find a namespace of an external grammar
+        GetScImport().ExtractFormulaNamespaceGrammar( aFormula, aFormulaNmsp, eNewGrammar, rFormula, true );
+        if( eNewGrammar != FormulaGrammar::GRAM_EXTERNAL )
+            eNewGrammar = eGrammar;
     }
-    if (sFormulas[i] == ',')
-    {
-        rtl::OUString sFormula1(sFormulas.copy(0, i));
-        rtl::OUString sFormula2(sFormulas.copy(i + 1));
-        SetFormula1(aProps, sFormula1);
-        SetFormula2(aProps, sFormula2);
-    }
-}
 
-void XMLTableStyleContext::SetGrammar(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aProps,
-        const formula::FormulaGrammar::Grammar eGrammar) const
-{
-    sal_Int32 nLength(aProps.getLength());
-    aProps.realloc(nLength + 1);
-    aProps[nLength].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_GRAMMAR));
-    aProps[nLength].Value <<= static_cast<sal_Int32>(eGrammar);
+    // add formula, formula namespace, and grammar with appropriate property names
+    sal_Int32 nGrammar = static_cast< sal_Int32 >( eNewGrammar );
+    switch( nFormulaIdx )
+    {
+        case 1:
+            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FORMULA1 ) ), aFormula );
+            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FORMULANMSP1 ) ), aFormulaNmsp );
+            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_GRAMMAR1 ) ), nGrammar );
+        break;
+        case 2:
+            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FORMULA2 ) ), aFormula );
+            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_FORMULANMSP2 ) ), aFormulaNmsp );
+            lclAppendProperty( rProps, OUString( RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_GRAMMAR2 ) ), nGrammar );
+        break;
+        default:
+            OSL_ENSURE( false, "XMLTableStyleContext::SetFormula - invalid formula index" );
+    }
 }
 
 void XMLTableStyleContext::GetConditionalFormat(uno::Any& aAny,
         const rtl::OUString& sTempCondition,
         const rtl::OUString& sApplyStyle, const rtl::OUString& sBaseCell) const
 {
-    rtl::OUString sCondition(sTempCondition);
-    if (sCondition.getLength() && sApplyStyle.getLength())
+    if (sTempCondition.getLength() && sApplyStyle.getLength())
     {
         uno::Reference<sheet::XSheetConditionalEntries> xConditionalEntries(aAny, uno::UNO_QUERY);
         if (xConditionalEntries.is())
         {
-            const formula::FormulaGrammar::Grammar eStorageGrammar = GetScImport().GetDocument()->GetStorageGrammar();
-            formula::FormulaGrammar::Grammar eGrammar = eStorageGrammar;
-            // ToDo: erase all blanks in the condition, but not in formulas or strings
-            rtl::OUString scell_content(RTL_CONSTASCII_USTRINGPARAM("cell_content"));
-            rtl::OUString scell_content_is_between(RTL_CONSTASCII_USTRINGPARAM("cell_content_is_between"));
-            rtl::OUString scell_content_is_not_between(RTL_CONSTASCII_USTRINGPARAM("cell_content_is_not_between"));
-            rtl::OUString sis_true_formula(RTL_CONSTASCII_USTRINGPARAM("is_true_formula"));
             uno::Sequence<beans::PropertyValue> aProps;
             if (sBaseCell.getLength())
                 SetBaseCellAddress(aProps, sBaseCell);
             SetStyle(aProps, sApplyStyle);
-            sal_Int32 i = 0;
-            while (sCondition[i] != '(' && i < sCondition.getLength())
-                ++i;
-            if (sCondition[i] == '(')
+
+            // extract leading namespace from condition string
+            OUString aCondition, aConditionNmsp;
+            FormulaGrammar::Grammar eGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
+            GetScImport().ExtractFormulaNamespaceGrammar( aCondition, aConditionNmsp, eGrammar, sTempCondition );
+            bool bHasNmsp = aCondition.getLength() < sTempCondition.getLength();
+
+            // parse a condition from the attribute string
+            ScXMLConditionParseResult aParseResult;
+            ScXMLConditionHelper::parseCondition( aParseResult, aCondition, 0 );
+
+            /*  Check the result. A valid value in aParseResult.meToken implies
+                that the other members of aParseResult are filled with valid
+                data for that token. */
+            switch( aParseResult.meToken )
             {
-                sCondition = sCondition.copy(i + 1);
-                if (i == scell_content.getLength())
-                {
-                    sCondition = sCondition.copy(1);
-                    switch (sCondition[0])
-                    {
-                        case '<' :
-                        {
-                            if (sCondition[1] == '=')
-                            {
-                                SetOperator(aProps, sheet::ConditionOperator_LESS_EQUAL);
-                                sCondition = sCondition.copy(2);
-                            }
-                            else
-                            {
-                                SetOperator(aProps, sheet::ConditionOperator_LESS);
-                                sCondition = sCondition.copy(1);
-                            }
-                        }
-                        break;
-                        case '>' :
-                        {
-                            if (sCondition[1] == '=')
-                            {
-                                SetOperator(aProps, sheet::ConditionOperator_GREATER_EQUAL);
-                                sCondition = sCondition.copy(2);
-                            }
-                            else
-                            {
-                                SetOperator(aProps, sheet::ConditionOperator_GREATER);
-                                sCondition = sCondition.copy(1);
-                            }
-                        }
-                        break;
-                        case '=' :
-                        {
-                            SetOperator(aProps, sheet::ConditionOperator_EQUAL);
-                            sCondition = sCondition.copy(1);
-                        }
-                        break;
-                        case '!' :
-                        {
-                            SetOperator(aProps, sheet::ConditionOperator_NOT_EQUAL);
-                            sCondition = sCondition.copy(1);
-                        }
-                        break;
-                    }
-                    SetFormula1(aProps, sCondition);
-                }
-                else if (i == scell_content_is_between.getLength())
-                {
-                    SetOperator(aProps, sheet::ConditionOperator_BETWEEN);
-                    sCondition = sCondition.copy(0, sCondition.getLength() - 1);
-                    SetFormulas(aProps, sCondition);
-                }
-                else if (i == scell_content_is_not_between.getLength())
-                {
-                    SetOperator(aProps, sheet::ConditionOperator_NOT_BETWEEN);
-                    sCondition = sCondition.copy(0, sCondition.getLength() - 1);
-                    SetFormulas(aProps, sCondition);
-                }
-                else if (i == sis_true_formula.getLength())
-                {
-                    SetOperator(aProps, sheet::ConditionOperator_FORMULA);
-                    sCondition = sCondition.copy(0, sCondition.getLength() - 1);
-                    rtl::OUString sFormula;
-                    sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
-                        _GetKeyByAttrName( sCondition, &sFormula, sal_False );
-                    if (ScXMLImport::IsAcceptedFormulaNamespace( nFormulaPrefix,
-                                sCondition, eGrammar, eStorageGrammar))
-                        sCondition = sFormula;
-                    SetFormula1(aProps, sCondition, false);
-                }
+                case XML_COND_CELLCONTENT:      // condition is 'cell-content()<operator><expression>'
+                case XML_COND_ISTRUEFORMULA:    // condition is 'is-true-formula(<expression>)'
+                case XML_COND_ISBETWEEN:        // condition is 'cell-content-is-between(<expression1>,<expression2>)'
+                case XML_COND_ISNOTBETWEEN:     // condition is 'cell-content-is-not-between(<expression1>,<expression2>)'
+                    SetOperator( aProps, aParseResult.meOperator );
+                    SetFormula( aProps, 1, aParseResult.maOperand1, aConditionNmsp, eGrammar, bHasNmsp );
+                    SetFormula( aProps, 2, aParseResult.maOperand2, aConditionNmsp, eGrammar, bHasNmsp );
+                break;
+
+                default:;   // unacceptable or unknown condition
             }
-            SetGrammar( aProps, eGrammar);
-            xConditionalEntries->addNew(aProps);
+
+            xConditionalEntries->addNew( aProps );
             aAny <<= xConditionalEntries;
         }
     }
@@ -539,6 +472,7 @@ XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
     sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))),
     pStyles(&rStyles),
     nNumberFormat(-1),
+    nLastSheet(-1),
     bConditionalFormatCreated(sal_False),
     bParentSet(sal_False)
 {
@@ -687,15 +621,22 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
     }
     return nNumberFormat;
 }
+
 // ----------------------------------------------------------------------------
 
 SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
-    SvXMLStyleContext *pStyle(SvXMLStylesContext::CreateStyleStyleChildContext( nFamily, nPrefix,
-                                                            rLocalName,
-                                                            xAttrList ));
+    SvXMLStyleContext *pStyle;
+    // use own wrapper for text and paragraph, to record style usage
+    if (nFamily == XML_STYLE_FAMILY_TEXT_PARAGRAPH || nFamily == XML_STYLE_FAMILY_TEXT_TEXT)
+        pStyle = new ScCellTextStyleContext( GetImport(), nPrefix, rLocalName,
+                                            xAttrList, *this, nFamily );
+    else
+        pStyle = SvXMLStylesContext::CreateStyleStyleChildContext(
+                    nFamily, nPrefix, rLocalName, xAttrList );
+
     if (!pStyle)
     {
         switch( nFamily )
@@ -1089,5 +1030,58 @@ void ScMasterPageContext::Finish( sal_Bool bOverwrite )
         ClearContent(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTFTRCON)));
     if (!bContainsRightHeader)
         ClearContent(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_PAGE_RIGHTHDRCON)));
+}
+
+// ---------------------------------------------------------------------------
+
+ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+            const rtl::OUString& rLName, const uno::Reference<xml::sax::XAttributeList> & xAttrList,
+            SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle ) :
+    XMLTextStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
+    nLastSheet(-1)
+{
+}
+
+ScCellTextStyleContext::~ScCellTextStyleContext()
+{
+}
+
+void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPropertySet>& xPropSet )
+{
+    XMLTextStyleContext::FillPropertySet( xPropSet );
+
+    ScXMLImport& rXMLImport = GetScImport();
+
+    ScCellTextCursor* pCellImp = ScCellTextCursor::getImplementation( xPropSet );
+    if (pCellImp)
+    {
+        ScAddress aPos = pCellImp->GetCellObj().GetPosition();
+        if ( static_cast<sal_Int32>(aPos.Tab()) != nLastSheet )
+        {
+            ESelection aSel = pCellImp->GetSelection();
+
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetImport().GetModel())->GetSheetSaveData();
+            pSheetData->AddTextStyle( GetName(), aPos, aSel );
+
+            nLastSheet = static_cast<sal_Int32>(aPos.Tab());
+        }
+    }
+    else if ( rXMLImport.GetTables().GetCurrentSheet() != nLastSheet )
+    {
+        ScDrawTextCursor* pDrawImp = ScDrawTextCursor::getImplementation( xPropSet );
+        if (pDrawImp)
+        {
+            XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)GetScImport().GetShapeImport().get();
+            ScXMLAnnotationContext* pAnnotationContext = pTableShapeImport->GetAnnotationContext();
+            if (pAnnotationContext)
+            {
+                pAnnotationContext->AddContentStyle( GetFamily(), GetName(), pDrawImp->GetSelection() );
+                nLastSheet = rXMLImport.GetTables().GetCurrentSheet();
+            }
+        }
+
+        // if it's a different shape, BlockSheet is called from XMLTableShapeImportHelper::finishShape
+        // formatted text in page headers/footers can be ignored
+    }
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlroot.cxx,v $
- * $Revision: 1.32.88.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,17 +28,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "xlroot.hxx"
+#include <com/sun/star/awt/XDevice.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/stritem.hxx>
+#include <svl/languageoptions.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <vcl/font.hxx>
-#include <svx/editstat.hxx>
+#include <editeng/editstat.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include "document.hxx"
 #include "docpool.hxx"
 #include "docuno.hxx"
@@ -54,12 +55,21 @@
 #include "xlstyle.hxx"
 #include "xlchart.hxx"
 #include "xltracer.hxx"
-
+#include <unotools/useroptions.hxx>
 #include "root.hxx"
 
 namespace ApiScriptType = ::com::sun::star::i18n::ScriptType;
 
 using ::rtl::OUString;
+using ::com::sun::star::uno::Exception;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::UNO_SET_THROW;
+using ::com::sun::star::awt::XDevice;
+using ::com::sun::star::awt::DeviceInfo;
+using ::com::sun::star::frame::XFrame;
+using ::com::sun::star::frame::XFramesSupplier;
+using ::com::sun::star::lang::XMultiServiceFactory;
 
 // Global data ================================================================
 
@@ -79,6 +89,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mrMedium( rMedium ),
     mxRootStrg( xRootStrg ),
     mrDoc( rDoc ),
+    maDefPassword( CREATE_STRING( "VelvetSweatshop" ) ),
     meTextEnc( eTextEnc ),
     meSysLang( Application::GetSettings().GetLanguage() ),
     meDocLang( Application::GetSettings().GetLanguage() ),
@@ -90,12 +101,16 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     mxFontPropSetHlp( new XclFontPropSetHelper ),
     mxChPropSetHlp( new XclChPropSetHelper ),
     mxRD( new RootData ),//!
+    mfScreenPixelX( 50.0 ),
+    mfScreenPixelY( 50.0 ),
     mnCharWidth( 110 ),
     mnScTab( 0 ),
-    mbExport( bExport ),
-    mbHasPassw( false )
+    mbExport( bExport )
 {
-    // default script type, e.g. for empty cells
+ maUserName = SvtUserOptions().GetLastName();
+    if( maUserName.Len() == 0 )
+        maUserName = CREATE_STRING( "Calc" );
+
     switch( ScGlobal::GetDefaultScriptType() )
     {
         case SCRIPTTYPE_LATIN:      mnDefApiScript = ApiScriptType::LATIN;      break;
@@ -129,6 +144,22 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         mxExtDocOpt.reset( new ScExtDocOptions( *pOldDocOpt ) );
     else
         mxExtDocOpt.reset( new ScExtDocOptions );
+
+    // screen pixel size
+    try
+    {
+        Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_SET_THROW );
+        Reference< XFramesSupplier > xFramesSupp( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.frame.Desktop" ) ), UNO_QUERY_THROW );
+        Reference< XFrame > xFrame( xFramesSupp->getActiveFrame(), UNO_SET_THROW );
+        Reference< XDevice > xDevice( xFrame->getContainerWindow(), UNO_QUERY_THROW );
+        DeviceInfo aDeviceInfo = xDevice->getInfo();
+        mfScreenPixelX = (aDeviceInfo.PixelPerMeterX > 0) ? (100000.0 / aDeviceInfo.PixelPerMeterX) : 50.0;
+        mfScreenPixelY = (aDeviceInfo.PixelPerMeterY > 0) ? (100000.0 / aDeviceInfo.PixelPerMeterY) : 50.0;
+    }
+    catch( Exception& )
+    {
+        OSL_ENSURE( false, "XclRootData::XclRootData - cannot get output device info" );
+    }
 }
 
 XclRootData::~XclRootData()
@@ -199,15 +230,21 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
     }
 }
 
-const String& XclRoot::QueryPassword() const
+sal_Int32 XclRoot::GetHmmFromPixelX( double fPixelX ) const
 {
-    if( !mrData.mbHasPassw )
-    {
-        mrData.maPassw = ScfApiHelper::QueryPasswordForMedium( GetMedium() );
-        // set to true, even if dialog has been cancelled (never ask twice)
-        mrData.mbHasPassw = true;
-    }
-    return mrData.maPassw;
+    return static_cast< sal_Int32 >( fPixelX * mrData.mfScreenPixelX + 0.5 );
+}
+
+sal_Int32 XclRoot::GetHmmFromPixelY( double fPixelY ) const
+{
+    return static_cast< sal_Int32 >( fPixelY * mrData.mfScreenPixelY + 0.5 );
+}
+
+String XclRoot::RequestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
+{
+    ::std::vector< OUString > aDefaultPasswords;
+    aDefaultPasswords.push_back( mrData.maDefPassword );
+    return ScfApiHelper::QueryPasswordForMedium( mrData.mrMedium, rVerifier, &aDefaultPasswords );
 }
 
 bool XclRoot::HasVbaStorage() const

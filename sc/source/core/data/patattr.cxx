@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: patattr.cxx,v $
- * $Revision: 1.34.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,33 +32,33 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/cntritem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/cntritem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/colritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/forbiddenruleitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/postitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/forbiddenruleitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/postitem.hxx>
 #include <svx/rotmodit.hxx>
-#include <svx/scriptspaceitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/shaditem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/zforlist.hxx>
+#include <editeng/scriptspaceitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/shaditem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 
@@ -258,14 +255,16 @@ void ScPatternAttr::GetFont(
     FontEmphasisMark eEmphasis;
     FontRelief eRelief;
     Color aColor;
+    LanguageType eLang;
 
-    USHORT nFontId, nHeightId, nWeightId, nPostureId;
+    USHORT nFontId, nHeightId, nWeightId, nPostureId, nLangId;
     if ( nScript == SCRIPTTYPE_ASIAN )
     {
         nFontId    = ATTR_CJK_FONT;
         nHeightId  = ATTR_CJK_FONT_HEIGHT;
         nWeightId  = ATTR_CJK_FONT_WEIGHT;
         nPostureId = ATTR_CJK_FONT_POSTURE;
+        nLangId    = ATTR_CJK_FONT_LANGUAGE;
     }
     else if ( nScript == SCRIPTTYPE_COMPLEX )
     {
@@ -273,6 +272,7 @@ void ScPatternAttr::GetFont(
         nHeightId  = ATTR_CTL_FONT_HEIGHT;
         nWeightId  = ATTR_CTL_FONT_WEIGHT;
         nPostureId = ATTR_CTL_FONT_POSTURE;
+        nLangId    = ATTR_CTL_FONT_LANGUAGE;
     }
     else
     {
@@ -280,6 +280,7 @@ void ScPatternAttr::GetFont(
         nHeightId  = ATTR_FONT_HEIGHT;
         nWeightId  = ATTR_FONT_WEIGHT;
         nPostureId = ATTR_FONT_POSTURE;
+        nLangId    = ATTR_FONT_LANGUAGE;
     }
 
     if ( pCondSet )
@@ -337,6 +338,10 @@ void ScPatternAttr::GetFont(
         if ( pCondSet->GetItemState( ATTR_FONT_COLOR, TRUE, &pItem ) != SFX_ITEM_SET )
             pItem = &rItemSet.Get( ATTR_FONT_COLOR );
         aColor = ((const SvxColorItem*)pItem)->GetValue();
+
+        if ( pCondSet->GetItemState( nLangId, TRUE, &pItem ) != SFX_ITEM_SET )
+            pItem = &rItemSet.Get( nLangId );
+        eLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
     }
     else    // alles aus rItemSet
     {
@@ -365,6 +370,9 @@ void ScPatternAttr::GetFont(
                         rItemSet.Get( ATTR_FONT_RELIEF )).GetValue();
         aColor = ((const SvxColorItem&)
                         rItemSet.Get( ATTR_FONT_COLOR )).GetValue();
+        // for graphite language features
+        eLang =
+        ((const SvxLanguageItem&)rItemSet.Get( nLangId )).GetLanguage();
     }
     DBG_ASSERT(pFontAttr,"nanu?");
 
@@ -380,6 +388,8 @@ void ScPatternAttr::GetFont(
     rFont.SetFamily( pFontAttr->GetFamily() );
     rFont.SetCharSet( pFontAttr->GetCharSet() );
     rFont.SetPitch( pFontAttr->GetPitch() );
+
+    rFont.SetLanguage(eLang);
 
     //  Groesse
 

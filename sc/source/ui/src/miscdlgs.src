@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: miscdlgs.src,v $
- * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,11 +154,6 @@ ModalDialog RID_SCDLG_INSCELL
     };
 };
 
-Bitmap RID_SCTEAMDLGBMP1
-{
-    File = "calcteam.bmp";
-};
-
 ModalDialog RID_SCDLG_DELCONT
 {
     OutputSize = TRUE ;
@@ -236,7 +228,7 @@ ModalDialog RID_SCDLG_DELCONT
     {
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ en-US ] = "Not~es" ;
+        Text [ en-US ] = "~Comments" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_DELOBJECTS
@@ -329,14 +321,14 @@ ModalDialog RID_SCDLG_INSCONT
     {
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        Text [ en-US ] = "O~bjects" ;
+        Text [ en-US ] = "~Objects" ;
         TabStop = TRUE ;
     };
     CheckBox BTN_INSNOTES
     {
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        Text [ en-US ] = "N~otes" ;
+        Text [ en-US ] = "~Comments" ;
         TabStop = TRUE ;
     };
     FixedLine FL_FRAME
@@ -361,7 +353,7 @@ ModalDialog RID_SCDLG_INSCONT
     {
         Pos = MAP_APPFONT ( 111 , 44 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ en-US ] = "S~ubtract" ;
+        Text [ en-US ] = "~Subtract" ;
     };
     RadioButton BTN_OP_MUL
     {
@@ -546,6 +538,96 @@ ModalDialog RID_SCDLG_STRINPUT
         Size = MAP_APPFONT ( 110 , 8 ) ;
     };
 };
+ModalDialog RID_SCDLG_TAB_BG_COLOR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 118 , 167 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Control TAB_BG_COLOR_CT_BORDER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 1 , 1 ) ; //12, 32
+        Size = MAP_APPFONT ( 116+2 , 145+2 ) ;
+        DialogControl = TRUE;
+    };
+    Control TAB_BG_COLOR_SET_BGDCOLOR
+    {
+        // * HelpId = HID_BACKGROUND_CTL_BGDCOLORSET ;
+        Hide = FALSE ;
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 116 , 145 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 82 , 151 ) ;
+        Size = MAP_APPFONT ( 35 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = FALSE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 45 , 151 ) ;
+        Size = MAP_APPFONT ( 35 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 2 , 151 ) ;
+        Size = MAP_APPFONT ( 35 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = FALSE ;
+    };
+};
+/*
+ModalDialog RID_SCDLG_TAB_BG_COLOR
+{
+    OutputSize = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 180 , 150 ) ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Control TAB_BG_COLOR_CT_BORDER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 1 , 1 ) ; //12, 32
+        Size = MAP_APPFONT ( 116+2 , 145+2 ) ;
+        DialogControl = TRUE;
+    };
+    Control TAB_BG_COLOR_SET_BGDCOLOR
+    {
+        // * HelpId = HID_BACKGROUND_CTL_BGDCOLORSET ;
+        Hide = FALSE ;
+        Pos = MAP_APPFONT ( 0 , 0 ) ;
+        Size = MAP_APPFONT ( 116 , 145 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 125 , 50 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 125 , 67 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = FALSE ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 125 , 84 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = FALSE ;
+    };
+};
+*/
 /*
 ModalDialog RID_SCDLG_MTRINPUT
 {
@@ -1332,18 +1414,6 @@ ModalDialog RID_SCDLG_NAMES_PASTE
         Text [ en-US ] = "Insert ~All" ;
     };
     Text [ en-US ] = "Insert Name" ;
-};
-
-FloatingWindow RID_SCDLG_TEAM
-{
-    Hide = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    Zoomable = TRUE ;
-    FixedBitmap 1 { Pos = MAP_APPFONT ( 1 , 1 ) ; };
-    Text [ en-US ] = "The %PRODUCTNAME Calc Team" ;
 };
 
 ModalDialog RID_SCDLG_CHARTCOLROW

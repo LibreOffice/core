@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fusel.cxx,v $
- * $Revision: 1.23.128.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 
 #include <com/sun/star/embed/EmbedStates.hpp>
 
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdotext.hxx>
 #include <sfx2/dispatch.hxx>
@@ -44,7 +41,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <sfx2/app.hxx>
 
@@ -171,7 +168,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
         else
         {
             BOOL bAlt = rMEvt.IsMod2();
-            if ( !bAlt && pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_PICKMACRO) )
+            if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_PICKMACRO) )
             {
                 pView->BegMacroObj(aMDPos, pObj, pPV, pWindow);
                 bReturn = TRUE;
@@ -179,7 +176,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             else
             {
                 String sURL, sTarget;
-                if ( !bAlt && pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_ALSOONMASTER))
+                if ( !bAlt && pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER))
                 {
                    // Support for imported Excel docs
                    // Excel is of course not consistent and allows
@@ -200,7 +197,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                    if ( pObj->IsGroupObject() )
                    {
                        SdrObject* pHit = NULL;
-                       if ( pView->PickObj(aMDPos, pHit, pPV, SDRSEARCH_DEEP ) )
+                       if ( pView->PickObj(aMDPos, pView->getHitTolLog(), pHit, pPV, SDRSEARCH_DEEP ) )
                            pObj = pHit;
                    }
 
@@ -393,7 +390,7 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     BOOL bReturn = FuDraw::MouseButtonUp(rMEvt);
 //  BOOL bOle    = pViewShell->GetViewData()->IsOle();
-    BOOL bOle = pViewShell->GetViewFrame()->GetFrame()->IsInPlace();
+    BOOL bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
 
     if (aDragTimer.IsActive() )
     {

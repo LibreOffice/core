@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tokenuno.cxx,v $
- * $Revision: 1.6.108.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include <com/sun/star/sheet/AddressConvention.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include "miscuno.hxx"
 #include "convuno.hxx"
@@ -51,17 +48,16 @@
 #include "docsh.hxx"
 #include "rangeseq.hxx"
 #include "externalrefmgr.hxx"
-using namespace formula;
 
-using namespace com::sun::star;
+using namespace ::formula;
+using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+// ============================================================================
 
-const SfxItemPropertyMap* lcl_GetFormulaParserMap()
+const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
 {
-    static SfxItemPropertyMap aFormulaParserMap_Impl[] =
+    static SfxItemPropertyMapEntry aFormulaParserMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_REFERENCEPOS),         0,  &getCppuType((table::CellAddress*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNO_COMPILEFAP),           0,  &getBooleanCppuType(),                   0, 0 },
         {MAP_CHAR_LEN(SC_UNO_COMPILEENGLISH),       0,  &getBooleanCppuType(),                   0, 0 },
         {MAP_CHAR_LEN(SC_UNO_IGNORELEADING),        0,  &getBooleanCppuType(),                   0, 0 },
@@ -74,7 +70,7 @@ const SfxItemPropertyMap* lcl_GetFormulaParserMap()
 
 SC_SIMPLE_SERVICE_INFO( ScFormulaParserObj, "ScFormulaParserObj", SC_SERVICENAME_FORMULAPARS )
 
-//------------------------------------------------------------------------
+// ============================================================================
 
 ScFormulaParserObj::ScFormulaParserObj(ScDocShell* pDocSh) :
     mpDocShell( pDocSh ),
@@ -135,7 +131,8 @@ void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
     rCompiler.SetExternalLinks( maExternalLinks);
 }
 
-uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula( const rtl::OUString& aFormula )
+uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula(
+        const rtl::OUString& aFormula, const table::CellAddress& rReferencePos )
                                 throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -144,7 +141,11 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula( co
     if (mpDocShell)
     {
         ScDocument* pDoc = mpDocShell->GetDocument();
-        ScCompiler aCompiler( pDoc, maRefPos);
+        ScExternalRefManager::ApiGuard aExtRefGuard(pDoc);
+
+        ScAddress aRefPos( ScAddress::UNINITIALIZED );
+        ScUnoConversion::FillScAddress( aRefPos, rReferencePos );
+        ScCompiler aCompiler( pDoc, aRefPos);
         aCompiler.SetGrammar(pDoc->GetGrammar());
         SetCompilerFlags( aCompiler );
 
@@ -156,7 +157,8 @@ uno::Sequence<sheet::FormulaToken> SAL_CALL ScFormulaParserObj::parseFormula( co
     return aRet;
 }
 
-rtl::OUString SAL_CALL ScFormulaParserObj::printFormula( const uno::Sequence<sheet::FormulaToken>& aTokens )
+rtl::OUString SAL_CALL ScFormulaParserObj::printFormula(
+        const uno::Sequence<sheet::FormulaToken>& aTokens, const table::CellAddress& rReferencePos )
                                 throw (uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -167,7 +169,9 @@ rtl::OUString SAL_CALL ScFormulaParserObj::printFormula( const uno::Sequence<she
         ScDocument* pDoc = mpDocShell->GetDocument();
         ScTokenArray aCode;
         (void)ScTokenConversion::ConvertToTokenArray( *pDoc, aCode, aTokens );
-        ScCompiler aCompiler( pDoc, maRefPos, aCode);
+        ScAddress aRefPos( ScAddress::UNINITIALIZED );
+        ScUnoConversion::FillScAddress( aRefPos, rReferencePos );
+        ScCompiler aCompiler( pDoc, aRefPos, aCode);
         aCompiler.SetGrammar(pDoc->GetGrammar());
         SetCompilerFlags( aCompiler );
 
@@ -197,13 +201,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
 {
     ScUnoGuard aGuard;
     String aString(aPropertyName);
-    if ( aString.EqualsAscii( SC_UNO_REFERENCEPOS ) )
-    {
-        table::CellAddress aAddress;
-        aValue >>= aAddress;
-        ScUnoConversion::FillScAddress( maRefPos, aAddress );
-    } // if ( aString.EqualsAscii( SC_UNO_REFERENCEPOS ) )
-    else if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )
+    if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )
     {
         aValue >>= mbCompileFAP;
     }
@@ -218,7 +216,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
             if (mxOpCodeMap.get() && mbEnglish != bOldEnglish)
             {
                 ScDocument* pDoc = mpDocShell->GetDocument();
-                ScCompiler aCompiler( pDoc, maRefPos);
+                ScCompiler aCompiler( pDoc, ScAddress());
                 aCompiler.SetGrammar(pDoc->GetGrammar());
                 mxOpCodeMap = aCompiler.CreateOpCodeMap( maOpCodeMapping, mbEnglish);
             }
@@ -239,7 +237,7 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         if (aValue >>= maOpCodeMapping)
         {
             ScDocument* pDoc = mpDocShell->GetDocument();
-            ScCompiler aCompiler( pDoc, maRefPos);
+            ScCompiler aCompiler( pDoc, ScAddress());
             aCompiler.SetGrammar(pDoc->GetGrammar());
             mxOpCodeMap = aCompiler.CreateOpCodeMap( maOpCodeMapping, mbEnglish);
         }
@@ -262,13 +260,7 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const rtl::OUString& aPr
     ScUnoGuard aGuard;
     uno::Any aRet;
     String aString(aPropertyName);
-    if ( aString.EqualsAscii( SC_UNO_REFERENCEPOS ) )
-    {
-        table::CellAddress aAddress;
-        ScUnoConversion::FillApiAddress( aAddress, maRefPos );
-        aRet <<= aAddress;
-    }
-    else if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )
+    if ( aString.EqualsAscii( SC_UNO_COMPILEFAP ) )
     {
         aRet <<= mbCompileFAP;
     }
@@ -299,7 +291,7 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const rtl::OUString& aPr
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFormulaParserObj )
 
-//------------------------------------------------------------------------
+// ============================================================================
 
 void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
 {
@@ -345,7 +337,7 @@ void lcl_SingleRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rR
 bool ScTokenConversion::ConvertToTokenArray( ScDocument& rDoc,
         ScTokenArray& rTokenArray, const uno::Sequence<sheet::FormulaToken>& rSequence )
 {
-    return rTokenArray.Fill(rSequence,rDoc.GetExternalRefManager());
+    return !rTokenArray.Fill(rSequence,rDoc.GetExternalRefManager());
 }
 
 // static
@@ -463,9 +455,13 @@ bool ScTokenConversion::ConvertToTokenSequence( ScDocument& rDoc,
 
     return !bError;
 }
-// -----------------------------------------------------------------------------
+
+// ============================================================================
+
 ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> _pCompiler)
 : formula::FormulaOpCodeMapperObj(_pCompiler)
 {
 }
+
+// ============================================================================
 

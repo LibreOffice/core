@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: afmtuno.cxx,v $
- * $Revision: 1.16.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,10 @@
 
 
 #include "scitems.hxx"
+#include <editeng/memberids.hrc>
 #include <tools/debug.hxx>
 #include <tools/shl.hxx>
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #include <svx/unomid.hxx>
 #include "unowids.hxx"
 #include <rtl/uuid.h>
@@ -85,9 +83,9 @@ using namespace ::com::sun::star;
 
 //  AutoFormat-Map nur fuer PropertySetInfo, ohne Which-IDs
 
-const SfxItemPropertyMap* lcl_GetAutoFormatMap()
+const SfxItemPropertyMapEntry* lcl_GetAutoFormatMap()
 {
-    static SfxItemPropertyMap aAutoFormatMap_Impl[] =
+    static SfxItemPropertyMapEntry aAutoFormatMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_INCBACK),  0,  &::getBooleanCppuType(),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_INCBORD),  0,  &::getBooleanCppuType(),    0, 0 },
@@ -103,9 +101,9 @@ const SfxItemPropertyMap* lcl_GetAutoFormatMap()
 //! Zahlformat (String/Language) ??? (in XNumberFormat nur ReadOnly)
 //! table::TableBorder ??!?
 
-const SfxItemPropertyMap* lcl_GetAutoFieldMap()
+const SfxItemPropertyMapEntry* lcl_GetAutoFieldMap()
 {
-    static SfxItemPropertyMap aAutoFieldMap_Impl[] =
+    static SfxItemPropertyMapEntry aAutoFieldMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,        &::getCppuType((const sal_Int32*)0),        0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CCOLOR),   ATTR_FONT_COLOR,        &::getCppuType((const sal_Int32*)0),        0, 0 },
@@ -735,21 +733,20 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
 {
     ScUnoGuard aGuard;
     ScAutoFormat* pFormats = ScGlobal::GetAutoFormat();
-    String aPropString(aPropertyName);
-    const SfxItemPropertyMap* pMap =
-            SfxItemPropertyMap::GetByName( lcl_GetAutoFieldMap(), aPropString );
+    const SfxItemPropertySimpleEntry* pEntry =
+            aPropSet.getPropertyMap()->getByName( aPropertyName );
 
-    if ( pMap && pMap->nWID && pFormats && nFormatIndex < pFormats->GetCount() )
+    if ( pEntry && pEntry->nWID && pFormats && nFormatIndex < pFormats->GetCount() )
     {
         ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
 
-        if ( IsScItemWid( pMap->nWID ) )
+        if ( IsScItemWid( pEntry->nWID ) )
         {
-            if( const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pMap->nWID ) )
+            if( const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pEntry->nWID ) )
             {
                 sal_Bool bDone = sal_False;
 
-                switch( pMap->nWID )
+                switch( pEntry->nWID )
                 {
                     case ATTR_STACKED:
                     {
@@ -783,7 +780,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                     break;
                     default:
                         SfxPoolItem* pNewItem = pItem->Clone();
-                        bDone = pNewItem->PutValue( aValue, pMap->nMemberId );
+                        bDone = pNewItem->PutValue( aValue, pEntry->nMemberId );
                         if (bDone)
                             pData->PutItem( nFieldIndex, *pNewItem );
                         delete pNewItem;
@@ -796,7 +793,7 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
         }
         else
         {
-            switch (pMap->nWID)
+            switch (pEntry->nWID)
             {
                 case SC_WID_UNO_TBLBORD:
                     {
@@ -826,19 +823,18 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
     uno::Any aVal;
 
     ScAutoFormat* pFormats = ScGlobal::GetAutoFormat();
-    String aPropString(aPropertyName);
-    const SfxItemPropertyMap* pMap =
-            SfxItemPropertyMap::GetByName( lcl_GetAutoFieldMap(), aPropString );
+    const SfxItemPropertySimpleEntry* pEntry =
+            aPropSet.getPropertyMap()->getByName( aPropertyName );
 
-    if ( pMap && pMap->nWID && pFormats && nFormatIndex < pFormats->GetCount() )
+    if ( pEntry && pEntry->nWID && pFormats && nFormatIndex < pFormats->GetCount() )
     {
         const ScAutoFormatData* pData = (*pFormats)[nFormatIndex];
 
-        if ( IsScItemWid( pMap->nWID ) )
+        if ( IsScItemWid( pEntry->nWID ) )
         {
-            if( const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pMap->nWID ) )
+            if( const SfxPoolItem* pItem = pData->GetItem( nFieldIndex, pEntry->nWID ) )
             {
-                switch( pMap->nWID )
+                switch( pEntry->nWID )
                 {
                     case ATTR_STACKED:
                     {
@@ -849,13 +845,13 @@ uno::Any SAL_CALL ScAutoFormatFieldObj::getPropertyValue( const rtl::OUString& a
                     }
                     break;
                     default:
-                        pItem->QueryValue( aVal, pMap->nMemberId );
+                        pItem->QueryValue( aVal, pEntry->nMemberId );
                 }
             }
         }
         else
         {
-            switch (pMap->nWID)
+            switch (pEntry->nWID)
             {
                 case SC_WID_UNO_TBLBORD:
                     {

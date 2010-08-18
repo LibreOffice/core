@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: textuno.hxx,v $
- * $Revision: 1.15.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +30,9 @@
 
 #include "global.hxx"           // ScRange, ScAddress
 #include "address.hxx"
-#include <svx/unotext.hxx>
-#include <svtools/brdcst.hxx>
-#include <svtools/lstner.hxx>
+#include <editeng/unotext.hxx>
+#include <svl/brdcst.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -259,6 +256,8 @@ public:
                             ScCellTextCursor(ScCellObj& rText);
         virtual                                 ~ScCellTextCursor() throw();
 
+    ScCellObj&              GetCellObj() const  { return rTextObj; }
+
                             // SvxUnoTextCursor methods reimplemented here:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XText > SAL_CALL
                             getText() throw(::com::sun::star::uno::RuntimeException);
@@ -324,6 +323,15 @@ public:
                             getStart() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > SAL_CALL
                             getEnd() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XUnoTunnel
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence<
+                                    sal_Int8 >& aIdentifier )
+                                throw(::com::sun::star::uno::RuntimeException);
+
+    static const com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId();
+    static ScDrawTextCursor* getImplementation( const com::sun::star::uno::Reference<
+                                    com::sun::star::uno::XInterface> xObj );
 };
 
 

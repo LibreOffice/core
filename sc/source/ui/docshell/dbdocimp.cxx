@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbdocimp.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +69,7 @@
 using namespace com::sun::star;
 
 #define SC_SERVICE_ROWSET           "com.sun.star.sdb.RowSet"
-#define SC_SERVICE_INTHANDLER       "com.sun.star.sdb.InteractionHandler"
+#define SC_SERVICE_INTHANDLER       "com.sun.star.task.InteractionHandler"
 
 //! move to a header file?
 #define SC_DBPROP_DATASOURCENAME    "DataSourceName"
@@ -89,7 +86,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
     if ( !pFrame || !rParam.bImport )
         return;
 
-    uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame()->GetFrameInterface();
+    uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame().GetFrameInterface();
     uno::Reference<frame::XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);
 
     uno::Reference<frame::XFrame> xBeamerFrame = xFrame->findFrame(
@@ -192,7 +189,7 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
         //  create database range
         //! merge this with SID_SBA_IMPORT execute in docsh4.cxx
 
-        ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, FALSE );
+        ScDBData* pDBData = rDocShell.GetDBData( ScRange(rPos), SC_DB_IMPORT, SC_DBSEL_KEEP );
         DBG_ASSERT(pDBData, "can't create DB data");
         String sTarget = pDBData->GetName();
 
@@ -576,18 +573,21 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
         if (bRecord)
         {
+            // do not touch notes (ScUndoImportData does not support drawing undo)
+            sal_uInt16 nCopyFlags = IDF_ALL & ~IDF_NOTE;
+
             //  nFormulaCols is set only if column count is unchanged
             pDoc->CopyToDocument( rParam.nCol1, rParam.nRow1, nTab,
                                     nEndCol+nFormulaCols, nEndRow, nTab,
-                                    IDF_ALL, FALSE, pUndoDoc );
+                                    nCopyFlags, FALSE, pUndoDoc );
             if ( rParam.nCol2 > nEndCol )
                 pDoc->CopyToDocument( nEndCol+1, rParam.nRow1, nTab,
                                         nUndoEndCol, nUndoEndRow, nTab,
-                                        IDF_ALL, FALSE, pUndoDoc );
+                                        nCopyFlags, FALSE, pUndoDoc );
             if ( rParam.nRow2 > nEndRow )
                 pDoc->CopyToDocument( rParam.nCol1, nEndRow+1, nTab,
                                         nUndoEndCol+nFormulaCols, nUndoEndRow, nTab,
-                                        IDF_ALL, FALSE, pUndoDoc );
+                                        nCopyFlags, FALSE, pUndoDoc );
         }
 
         //
@@ -601,7 +601,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
 
             ScRange aDelRange( rParam.nCol1, rParam.nRow1, nTab,
                                 rParam.nCol2, rParam.nRow2, nTab );
-            pDoc->DeleteAreaTab( aDelRange, IDF_ALL );  // ohne die Formeln
+            pDoc->DeleteAreaTab( aDelRange, IDF_ALL & ~IDF_NOTE );  // ohne die Formeln
 
             ScRange aOld( rParam.nCol1, rParam.nRow1, nTab,
                             rParam.nCol2+nFormulaCols, rParam.nRow2, nTab );
@@ -611,10 +611,10 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         }
         else if ( nEndCol < rParam.nCol2 )      // DeleteArea calls PutInOrder
             pDoc->DeleteArea( nEndCol+1, rParam.nRow1, rParam.nCol2, rParam.nRow2,
-                                aNewMark, IDF_CONTENTS );
+                                aNewMark, IDF_CONTENTS & ~IDF_NOTE );
 
         //  CopyToDocument doesn't remove contents
-        pDoc->DeleteAreaTab( rParam.nCol1, rParam.nRow1, nEndCol, nEndRow, nTab, IDF_CONTENTS );
+        pDoc->DeleteAreaTab( rParam.nCol1, rParam.nRow1, nEndCol, nEndRow, nTab, IDF_CONTENTS & ~IDF_NOTE );
 
         //  #41216# remove each column from ImportDoc after copying to reduce memory usage
         BOOL bOldAutoCalc = pDoc->GetAutoCalc();
@@ -671,7 +671,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             if (nFormulaCols > 0)                   // include filled formulas for redo
                 pDoc->CopyToDocument( rParam.nCol1, rParam.nRow1, nTab,
                                         nEndCol+nFormulaCols, nEndRow, nTab,
-                                        IDF_ALL, FALSE, pRedoDoc );
+                                        IDF_ALL & ~IDF_NOTE, FALSE, pRedoDoc );
 
             ScDBData* pRedoDBData = pDBData ? new ScDBData( *pDBData ) : NULL;
 

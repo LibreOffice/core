@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ObjectNameProvider.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,8 +46,6 @@
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
 
-// #include <svtools/syslocale.hxx>
-
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 
@@ -87,6 +82,16 @@ OUString lcl_getDataSeriesName( const rtl::OUString& rObjectCID, const Reference
     return aRet;
 }
 
+OUString lcl_getFullSeriesName( const rtl::OUString& rObjectCID, const Reference< frame::XModel >& xChartModel )
+{
+    OUString aRet = String(SchResId(STR_TIP_DATASERIES));
+    OUString aWildcard( C2U("%SERIESNAME") );
+    sal_Int32 nIndex = aRet.indexOf( aWildcard );
+    if( nIndex != -1 )
+        aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataSeriesName( rObjectCID, xChartModel ) );
+    return aRet;
+}
+
 void lcl_addText( OUString& rOut, const OUString& rSeparator, const OUString& rNext )
 {
     if( rOut.getLength() && rNext.getLength() )
@@ -109,7 +114,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
     Sequence< Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
 
-    rtl::OUString aX, aY, aY_Min, aY_Max, aY_First, aY_Last;
+    rtl::OUString aX, aY, aY_Min, aY_Max, aY_First, aY_Last, a_Size;
     double fValue = 0;
 
     uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartModel, uno::UNO_QUERY );
@@ -170,6 +175,12 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
                     sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
                     aY_Last = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
                 }
+                else if( aRole.equals(C2U("values-size")) )
+                {
+                    aData[nPointIndex]>>= fValue;
+                    sal_Int32 nNumberFormatKey = xDataSequence->getNumberFormatKeyByIndex( nPointIndex );
+                    a_Size = aNumberFormatterWrapper.getFormattedString( nNumberFormatKey, fValue, nLabelColor, bColorChanged );
+                }
             }
             catch( uno::Exception& e )
             {
@@ -184,7 +195,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
 
         replaceParamterInString( aCategory
             , C2U("%CATEGORYVALUE")
-            , ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, nPointIndex )
+            , ExplicitCategoriesProvider::getCategoryByIndex( xCooSys, xChartModel, nPointIndex )
             );
 
         aRet = aCategory;
@@ -201,6 +212,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
     lcl_addText( aRet, aSeparator, aY_Min );
     lcl_addText( aRet, aSeparator, aY_Max );
     lcl_addText( aRet, aSeparator, aY_Last );
+    lcl_addText( aRet, aSeparator, a_Size );
 
     return aRet;
 }
@@ -281,22 +293,27 @@ rtl::OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural 
                 aRet=String(SchResId(STR_OBJECT_LABEL));
                 break;
         case OBJECTTYPE_DATA_ERRORS:
-                aRet=String(SchResId(STR_OBJECT_ERROR_INDICATOR));//@todo? maybe distinguish plural singular
+                aRet=String(SchResId(STR_OBJECT_ERROR_BARS));//@todo? maybe distinguish plural singular
                 break;
         case OBJECTTYPE_DATA_ERRORS_X:
-                aRet=String(SchResId(STR_OBJECT_ERROR_INDICATOR));//@todo? maybe specialize in future
+                aRet=String(SchResId(STR_OBJECT_ERROR_BARS));//@todo? maybe specialize in future
                 break;
         case OBJECTTYPE_DATA_ERRORS_Y:
-                aRet=String(SchResId(STR_OBJECT_ERROR_INDICATOR));//@todo? maybe specialize in future
+                aRet=String(SchResId(STR_OBJECT_ERROR_BARS));//@todo? maybe specialize in future
                 break;
         case OBJECTTYPE_DATA_ERRORS_Z:
-                aRet=String(SchResId(STR_OBJECT_ERROR_INDICATOR));//@todo? maybe specialize in future
+                aRet=String(SchResId(STR_OBJECT_ERROR_BARS));//@todo? maybe specialize in future
                 break;
         case OBJECTTYPE_DATA_AVERAGE_LINE:
                 aRet=String(SchResId(STR_OBJECT_AVERAGE_LINE));
                 break;
         case OBJECTTYPE_DATA_CURVE:
-                aRet=String(SchResId(STR_OBJECT_CURVE));
+            {
+                if(bPlural)
+                    aRet=String(SchResId(STR_OBJECT_CURVES));
+                else
+                    aRet=String(SchResId(STR_OBJECT_CURVE));
+            }
                 break;
         case OBJECTTYPE_DATA_STOCK_RANGE:
                 //aRet=String(SchResId());
@@ -326,15 +343,24 @@ rtl::OUString ObjectNameProvider::getAxisName( const rtl::OUString& rObjectCID
     Reference< XAxis > xAxis(
         ObjectIdentifier::getObjectPropertySet( rObjectCID , xChartModel ), uno::UNO_QUERY );
 
-    sal_Int32 nDimensionIndex = AxisHelper::getDimensionIndexOfAxis( xAxis, ChartModelHelper::findDiagram( xChartModel ) );
+    sal_Int32 nCooSysIndex = 0;
+    sal_Int32 nDimensionIndex = 0;
+    sal_Int32 nAxisIndex = 0;
+    AxisHelper::getIndicesForAxis( xAxis, ChartModelHelper::findDiagram( xChartModel ), nCooSysIndex, nDimensionIndex, nAxisIndex );
 
     switch(nDimensionIndex)
     {
         case 0://x-axis
-            aRet=String(SchResId(STR_OBJECT_AXIS_X));
+            if( nAxisIndex == 0 )
+                aRet=String(SchResId(STR_OBJECT_AXIS_X));
+            else
+                aRet=String(SchResId(STR_OBJECT_SECONDARY_X_AXIS));
             break;
         case 1://y-axis
-            aRet=String(SchResId(STR_OBJECT_AXIS_Y));
+            if( nAxisIndex == 0 )
+                aRet=String(SchResId(STR_OBJECT_AXIS_Y));
+            else
+                aRet=String(SchResId(STR_OBJECT_SECONDARY_Y_AXIS));
             break;
         case 2://z-axis
             aRet=String(SchResId(STR_OBJECT_AXIS_Z));
@@ -343,6 +369,45 @@ rtl::OUString ObjectNameProvider::getAxisName( const rtl::OUString& rObjectCID
             aRet=String(SchResId(STR_OBJECT_AXIS));
             break;
     }
+
+    return aRet;
+}
+
+//static
+OUString ObjectNameProvider::getTitleNameByType( TitleHelper::eTitleType eType )
+{
+    OUString aRet;
+
+    switch(eType)
+    {
+        case TitleHelper::MAIN_TITLE:
+            aRet=String(SchResId(STR_OBJECT_TITLE_MAIN));
+            break;
+        case TitleHelper::SUB_TITLE:
+            aRet=String(SchResId(STR_OBJECT_TITLE_SUB));
+            break;
+        case TitleHelper::X_AXIS_TITLE:
+            aRet=String(SchResId(STR_OBJECT_TITLE_X_AXIS));
+            break;
+        case TitleHelper::Y_AXIS_TITLE:
+            aRet=String(SchResId(STR_OBJECT_TITLE_Y_AXIS));
+            break;
+        case TitleHelper::Z_AXIS_TITLE:
+            aRet=String(SchResId(STR_OBJECT_TITLE_Z_AXIS));
+            break;
+        case TitleHelper::SECONDARY_X_AXIS_TITLE:
+            aRet=String(SchResId(STR_OBJECT_TITLE_SECONDARY_X_AXIS));
+            break;
+        case TitleHelper::SECONDARY_Y_AXIS_TITLE:
+            aRet=String(SchResId(STR_OBJECT_TITLE_SECONDARY_Y_AXIS));
+            break;
+        default:
+            DBG_ERROR("unknown title type");
+            break;
+    }
+
+    if( !aRet.getLength() )
+        aRet=String(SchResId(STR_OBJECT_TITLE));
 
     return aRet;
 }
@@ -359,35 +424,7 @@ OUString ObjectNameProvider::getTitleName( const OUString& rObjectCID
     {
         TitleHelper::eTitleType eType;
         if( TitleHelper::getTitleType( eType, xTitle, xChartModel ) )
-        {
-            switch(eType)
-            {
-                case TitleHelper::MAIN_TITLE:
-                    aRet=String(SchResId(STR_OBJECT_TITLE_MAIN));
-                    break;
-                case TitleHelper::SUB_TITLE:
-                    aRet=String(SchResId(STR_OBJECT_TITLE_SUB));
-                    break;
-                case TitleHelper::X_AXIS_TITLE:
-                    aRet=String(SchResId(STR_OBJECT_TITLE_X_AXIS));
-                    break;
-                case TitleHelper::Y_AXIS_TITLE:
-                    aRet=String(SchResId(STR_OBJECT_TITLE_Y_AXIS));
-                    break;
-                case TitleHelper::Z_AXIS_TITLE:
-                    aRet=String(SchResId(STR_OBJECT_TITLE_Z_AXIS));
-                    break;
-                case TitleHelper::SECONDARY_X_AXIS_TITLE:
-                    aRet=String(SchResId(STR_OBJECT_TITLE_SECONDARY_X_AXIS));
-                    break;
-                case TitleHelper::SECONDARY_Y_AXIS_TITLE:
-                    aRet=String(SchResId(STR_OBJECT_TITLE_SECONDARY_Y_AXIS));
-                    break;
-                default:
-                    DBG_ERROR("unknown title type");
-                    break;
-            }
-        }
+            aRet = ObjectNameProvider::getTitleNameByType( eType );
     }
     if( !aRet.getLength() )
         aRet=String(SchResId(STR_OBJECT_TITLE));
@@ -474,12 +511,7 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
     }
     else if( OBJECTTYPE_DATA_SERIES == eObjectType )
     {
-        aRet=String(SchResId(STR_TIP_DATASERIES));
-
-        OUString aWildcard( C2U("%SERIESNAME") );
-        sal_Int32 nIndex = aRet.indexOf( aWildcard );
-        if( nIndex != -1 )
-            aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataSeriesName( rObjectCID, xChartModel ) );
+        aRet = lcl_getFullSeriesName( rObjectCID, xChartModel );
     }
     else if( OBJECTTYPE_DATA_POINT == eObjectType )
     {
@@ -746,7 +778,41 @@ rtl::OUString ObjectNameProvider::getNameForCID(
         case OBJECTTYPE_TITLE:
             return getTitleName( rObjectCID, xModel );
         case OBJECTTYPE_GRID:
+        case OBJECTTYPE_SUBGRID:
             return getGridName( rObjectCID, xModel );
+        case OBJECTTYPE_DATA_SERIES:
+            return lcl_getFullSeriesName( rObjectCID, xModel );
+        //case OBJECTTYPE_LEGEND_ENTRY:
+        case OBJECTTYPE_DATA_POINT:
+        case OBJECTTYPE_DATA_LABELS:
+        case OBJECTTYPE_DATA_LABEL:
+        case OBJECTTYPE_DATA_ERRORS:
+        case OBJECTTYPE_DATA_ERRORS_X:
+        case OBJECTTYPE_DATA_ERRORS_Y:
+        case OBJECTTYPE_DATA_ERRORS_Z:
+        case OBJECTTYPE_DATA_CURVE:
+        case OBJECTTYPE_DATA_AVERAGE_LINE:
+        case OBJECTTYPE_DATA_CURVE_EQUATION:
+            {
+                rtl::OUString aRet = lcl_getFullSeriesName( rObjectCID, xModel );
+                aRet += C2U(" ");
+                if( eType == OBJECTTYPE_DATA_POINT || eType == OBJECTTYPE_DATA_LABEL )
+                {
+                    aRet += getName( OBJECTTYPE_DATA_POINT  );
+                    sal_Int32 nPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( rObjectCID );
+                    aRet += C2U(" ");
+                    aRet += OUString::valueOf(nPointIndex+1);
+
+                    if( eType == OBJECTTYPE_DATA_LABEL )
+                    {
+                        aRet += C2U(" ");
+                        aRet += getName( OBJECTTYPE_DATA_LABEL  );
+                    }
+                }
+                else
+                    aRet += getName( eType );
+                return aRet;
+            }
         default:
             break;
     }
@@ -754,6 +820,32 @@ rtl::OUString ObjectNameProvider::getNameForCID(
     return getName( eType );
 }
 
+//static
+rtl::OUString ObjectNameProvider::getName_ObjectForSeries(
+        ObjectType eObjectType,
+        const rtl::OUString& rSeriesCID,
+        const uno::Reference< chart2::XChartDocument >& xChartDocument )
+{
+    uno::Reference< frame::XModel> xChartModel( xChartDocument, uno::UNO_QUERY );
+    Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rSeriesCID , xChartModel ), uno::UNO_QUERY );
+    if( xSeries.is() )
+    {
+        OUString aRet = String(SchResId(STR_OBJECT_FOR_SERIES));
+        replaceParamterInString( aRet, C2U("%OBJECTNAME"), getName( eObjectType, false /*bPlural*/ ) );
+        replaceParamterInString( aRet, C2U("%SERIESNAME"), lcl_getDataSeriesName( rSeriesCID, xChartModel ) );
+        return aRet;
+    }
+    else
+        return ObjectNameProvider::getName_ObjectForAllSeries( eObjectType );
+}
+
+//static
+rtl::OUString ObjectNameProvider::getName_ObjectForAllSeries( ObjectType eObjectType )
+{
+    OUString aRet = String(SchResId(STR_OBJECT_FOR_ALL_SERIES));
+    replaceParamterInString( aRet, C2U("%OBJECTNAME"), getName( eObjectType, true /*bPlural*/ ) );
+    return aRet;
+}
 
 //.............................................................................
 } //namespace chart

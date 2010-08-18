@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fuconstr.cxx,v $
- * $Revision: 1.11.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <svx/outliner.hxx>
-#include <svx/outlobj.hxx>
+#include <editeng/outliner.hxx>
+#include <editeng/outlobj.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdouno.hxx>
 #include <sfx2/dispatch.hxx>

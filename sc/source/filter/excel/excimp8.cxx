@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: excimp8.cxx,v $
- * $Revision: 1.127.4.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,30 +30,32 @@
 
 #include "excimp8.hxx"
 
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
 #include <scitems.hxx>
 #include <comphelper/processfactory.hxx>
-#include <svtools/fltrcfg.hxx>
+#include <unotools/fltrcfg.hxx>
 
 #include <svtools/wmf.hxx>
 
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/editdata.hxx>
-#include <svx/editeng.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/colritem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/editdata.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/flditem.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/svxmsbas.hxx>
+#include <filter/msfilter/svxmsbas.hxx>
+#include <basic/basmgr.hxx>
 
 #include <vcl/graph.hxx>
 #include <vcl/bmpacc.hxx>
@@ -67,6 +66,7 @@
 #include <tools/string.hxx>
 #include <tools/urlobj.hxx>
 #include <rtl/math.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <drwlayer.hxx>
@@ -102,24 +102,19 @@
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-
+#include <cppuhelper/component_context.hxx>
+#include <sfx2/app.hxx>
 
 using namespace com::sun::star;
-
-
-#define INVALID_POS     0xFFFFFFFF
-
-
+using ::rtl::OUString;
 
 
 ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
     ImportExcel( rImpData, rStrm )
 {
+    // replace BIFF2-BIFF5 formula importer with BIFF8 formula importer
     delete pFormConv;
-
     pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( GetRoot() );
-
-    bHasBasic = FALSE;
 }
 
 
@@ -160,24 +155,18 @@ void ImportExcel8::Iteration( void )
 }
 
 
-void ImportExcel8:: WinProtection( void )
-{
-    if( aIn.ReaduInt16() != 0 )
-        GetExtDocOptions().GetDocSettings().mbWinProtected = true;
-}
-
 void ImportExcel8::Boundsheet( void )
 {
     UINT8           nLen;
     UINT16          nGrbit;
 
-    aIn.Ignore( 4 );
+    aIn.DisableDecryption();
+    maSheetOffsets.push_back( aIn.ReaduInt32() );
+    aIn.EnableDecryption();
     aIn >> nGrbit >> nLen;
 
     String aName( aIn.ReadUniString( nLen ) );
     GetTabInfo().AppendXclTabName( aName, nBdshtTab );
-
-    *pExcRoot->pTabNameBuff << aName;
 
     SCTAB nScTab = static_cast< SCTAB >( nBdshtTab );
     if( nScTab > 0 )
@@ -234,35 +223,13 @@ void ImportExcel8::Labelsst( void )
 }
 
 
-void ImportExcel8::Codename( BOOL bWorkbookGlobals )
+void ImportExcel8::SheetProtection( void )
 {
-    if( bHasBasic )
-    {
-        String aName( aIn.ReadUniString() );
-        if( aName.Len() )
-        {
-            if( bWorkbookGlobals )
-                GetExtDocOptions().GetDocSettings().maGlobCodeName = aName;
-            else
-                GetExtDocOptions().AppendCodeName( aName );
-        }
-    }
-}
-
-bool lcl_hasVBAEnabled()
-{
-    uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
-        // test if vba service is present
-    uno::Reference< uno::XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY );
-    uno::Reference< uno::XInterface > xGlobals( xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/ooo.vba.theGlobals") ), uno::UNO_QUERY );
-
-    return xGlobals.is();
+    GetSheetProtectBuffer().ReadOptions( aIn, GetCurrScTab() );
 }
 
 void ImportExcel8::ReadBasic( void )
 {
-    bHasBasic = TRUE;
-
     SfxObjectShell* pShell = GetDocShell();
     SotStorageRef xRootStrg = GetRootStorage();
     SvtFilterOptions* pFilterOpt = SvtFilterOptions::Get();
@@ -274,7 +241,7 @@ void ImportExcel8::ReadBasic( void )
         if( bLoadCode || bLoadStrg )
         {
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
-            bool bAsComment = !bLoadExecutable || !lcl_hasVBAEnabled();
+            bool bAsComment = !bLoadExecutable;
             aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, bAsComment );
         }
     }
@@ -290,11 +257,16 @@ void ImportExcel8::EndSheet( void )
 
 void ImportExcel8::PostDocLoad( void )
 {
+    // reading basic has been delayed until sheet objects (codenames etc.) are read
+    if( HasBasic() )
+        ReadBasic();
     // #i11776# filtered ranges before outlines and hidden rows
     if( pExcRoot->pAutoFilterBuffer )
         pExcRoot->pAutoFilterBuffer->Apply();
 
     GetWebQueryBuffer().Apply();    //! test if extant
+    GetSheetProtectBuffer().Apply();
+    GetDocProtectBuffer().Apply();
 
     ImportExcel::PostDocLoad();
 
@@ -307,24 +279,30 @@ void ImportExcel8::PostDocLoad( void )
     }
 
     // read doc info (no docshell while pasting from clipboard)
-    if( SfxObjectShell* pShell = GetDocShell() )
-    {
-        // BIFF5+ without storage is possible
-        SotStorageRef xRootStrg = GetRootStorage();
-        if( xRootStrg.Is() )
-        {
-            uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
-                pShell->GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<document::XDocumentProperties> xDocProps
-                = xDPS->getDocumentProperties();
-            sfx2::LoadOlePropertySet(xDocProps, GetRootStorage());
-        }
-    }
+    LoadDocumentProperties();
 
     // #i45843# Pivot tables are now handled outside of PostDocLoad, so they are available
     // when formula cells are calculated, for the GETPIVOTDATA function.
 }
 
+void ImportExcel8::LoadDocumentProperties()
+{
+    // no docshell while pasting from clipboard
+    if( SfxObjectShell* pShell = GetDocShell() )
+    {
+        // BIFF5+ without storage is possible
+        SotStorageRef xRootStrg = GetRootStorage();
+        if( xRootStrg.Is() ) try
+        {
+            uno::Reference< document::XDocumentPropertiesSupplier > xDPS( pShell->GetModel(), uno::UNO_QUERY_THROW );
+            uno::Reference< document::XDocumentProperties > xDocProps( xDPS->getDocumentProperties(), uno::UNO_SET_THROW );
+            sfx2::LoadOlePropertySet( xDocProps, xRootStrg );
+        }
+        catch( uno::Exception& )
+        {
+        }
+    }
+}
 
 //___________________________________________________________________
 // autofilter
@@ -426,6 +404,38 @@ void XclImpAutoFilterData::InsertQueryParam()
     }
 }
 
+static void ExcelQueryToOooQuery( ScQueryEntry& rEntry )
+{
+    if( ( rEntry.eOp != SC_EQUAL && rEntry.eOp != SC_NOT_EQUAL ) || rEntry.pStr == NULL )
+        return;
+    else
+    {
+        xub_StrLen nLen = rEntry.pStr->Len();
+        sal_Unicode nStart = rEntry.pStr->GetChar( 0 );
+        sal_Unicode nEnd   = rEntry.pStr->GetChar( nLen-1 );
+        if( nLen >2 && nStart == '*' && nEnd == '*' )
+        {
+            rEntry.pStr->Erase( nLen-1, 1 );
+            rEntry.pStr->Erase( 0, 1 );
+            rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_CONTAINS : SC_DOES_NOT_CONTAIN;
+        }
+        else if( nLen > 1 && nStart == '*' && nEnd != '*' )
+        {
+            rEntry.pStr->Erase( 0, 1 );
+            rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_ENDS_WITH : SC_DOES_NOT_END_WITH;
+        }
+        else if( nLen > 1 && nStart != '*' && nEnd == '*' )
+        {
+            rEntry.pStr->Erase( nLen-1, 1 );
+            rEntry.eOp = ( rEntry.eOp == SC_EQUAL ) ? SC_BEGINS_WITH : SC_DOES_NOT_BEGIN_WITH;
+        }
+        else if( nLen == 2 && nStart == '*' && nEnd == '*' )
+        {
+            rEntry.pStr->Erase( 0, 1 );
+        }
+    }
+}
+
 void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
 {
     UINT16 nCol, nFlags;
@@ -463,14 +473,14 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         BOOL    bIgnore;
 
         UINT8   nStrLen[ 2 ]    = { 0, 0 };
-        String* pEntryStr[ 2 ]  = { NULL, NULL };
+        ScQueryEntry *pQueryEntries[ 2 ] = { NULL, NULL };
 
         for( nE = 0; nE < 2; nE++ )
         {
             if( nFirstEmpty < nCount )
             {
                 ScQueryEntry& aEntry = aParam.GetEntry( nFirstEmpty );
-                pEntryStr[ nE ] = aEntry.pStr;
+                pQueryEntries[ nE ] = &aEntry;
                 bIgnore = FALSE;
 
                 rStrm >> nType >> nOper;
@@ -558,8 +568,12 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
         }
 
         for( nE = 0; nE < 2; nE++ )
-            if( nStrLen[ nE ] && pEntryStr[ nE ] )
-                pEntryStr[ nE ]->Assign( rStrm.ReadUniString( nStrLen[ nE ] ) );
+            if( nStrLen[ nE ] && pQueryEntries[ nE ] )
+            {
+                pQueryEntries[ nE ]->pStr->Assign ( rStrm.ReadUniString( nStrLen[ nE ] ) );
+                ExcelQueryToOooQuery( *pQueryEntries[ nE ] );
+            }
+
     }
 }
 

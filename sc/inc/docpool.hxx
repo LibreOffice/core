@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docpool.hxx,v $
- * $Revision: 1.10.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #ifndef SC_SCDOCPOL_HXX
 #define SC_SCDOCPOL_HXX
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include "scdllapi.h"
 
 class ScStyleSheet;
@@ -68,6 +65,7 @@ public:
     static void                 CheckRef( const SfxPoolItem& );
 
     void StyleDeleted( ScStyleSheet* pStyle );      // Loeschen von Vorlagen im Organizer
+    void CellStyleCreated( const String& rName );
     virtual SfxItemPresentation     GetPresentation(
                                         const SfxPoolItem&  rItem,
                                         SfxItemPresentation ePresentation,

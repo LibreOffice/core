@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XMLTableShapeImportHelper.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -57,6 +54,8 @@ public:
     void SetCell (const ::com::sun::star::table::CellAddress& rAddress) { aStartCell = rAddress; }
     void SetOnTable (const sal_Bool bTempOnTable) { bOnTable = bTempOnTable; }
     void SetAnnotation(ScXMLAnnotationContext* pAnnotation) { pAnnotationContext = pAnnotation; }
+
+    ScXMLAnnotationContext* GetAnnotationContext() const    { return pAnnotationContext; }
 };
 
 

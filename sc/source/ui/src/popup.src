@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: popup.src,v $
- * $Revision: 1.58.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,19 +83,19 @@ Menu RID_POPUP_CELLS
         {
             Identifier = SID_INSERT_POSTIT ;
             HelpId = SID_INSERT_POSTIT ;
-            Text [ en-US ] = "Insert ~Note" ;
+            Text [ en-US ] = "Insert Co~mment" ;
         };
         MenuItem
         {
             Identifier = SID_DELETE_NOTE ;
             HelpId = SID_DELETE_NOTE ;
-            Text [ en-US ] = "D~elete Note" ;
+            Text [ en-US ] = "D~elete Comment" ;
         };
         MenuItem
         {
             Identifier = FID_NOTE_VISIBLE ;
             HelpId = FID_NOTE_VISIBLE ;
-            Text [ en-US ] = "Sho~w Note" ;
+            Text [ en-US ] = "Sho~w Comment" ;
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -126,8 +123,8 @@ Menu RID_POPUP_CELLS
 
         MenuItem
         {
-            Identifier = FID_PASTE_CONTENTS ;
-            HelpId = FID_PASTE_CONTENTS ;
+            Identifier = SID_PASTE_SPECIAL ;
+            HelpId = SID_PASTE_SPECIAL ;
             Text [ en-US ] = "P~aste Special..." ;
         };
          //------------------------------
@@ -183,9 +180,30 @@ Menu RID_POPUP_TAB
         };
         MenuItem
         {
+            Identifier = FID_TAB_DESELECTALL ;
+            HelpId = FID_TAB_DESELECTALL ;
+            Text [ en-US ] = "D~eselect All Sheets" ;
+        };
+        MenuItem
+        {
             Identifier = FID_TAB_RTL ;
             HelpId = FID_TAB_RTL ;
             Text [ en-US ] = "S~heet Right-To-Left" ;
+        };
+        MenuItem
+        {
+            Identifier = FID_TAB_EVENTS ;
+            HelpId = FID_TAB_EVENTS ;
+            Text [ en-US ] = "Sheet E~vents..." ;
+        };
+        //------------------------------
+        MenuItem { Separator = TRUE ; };
+        //------------------------------
+        MenuItem
+        {
+            Identifier = FID_TAB_MENU_SET_TAB_BG_COLOR ;
+            HelpId = FID_TAB_MENU_SET_TAB_BG_COLOR ;
+            Text [ en-US ] = "~Tab Color..." ;
         };
     };
 };
@@ -518,7 +536,7 @@ Menu RID_POPUP_PAGEBREAK
         {
             Identifier = FID_NOTE_VISIBLE ;
             HelpId = FID_NOTE_VISIBLE ;
-            Text [ en-US ] = "Sho~w Note" ;
+            Text [ en-US ] = "Sho~w Comment" ;
         };
     };
 };

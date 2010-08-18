@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xerecord.cxx,v $
- * $Revision: 1.10.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,16 +46,10 @@ void XclExpRecordBase::SaveXml( XclExpXmlStream& /*rStrm*/ )
 {
 }
 
-//UNUSED2008-05  void XclExpRecordBase::SaveRepeated( XclExpStream& rStrm, size_t nCount )
-//UNUSED2008-05  {
-//UNUSED2008-05      for( size_t nIndex = 0; nIndex < nCount; ++nIndex )
-//UNUSED2008-05          Save( rStrm );
-//UNUSED2008-05  }
-
 // ----------------------------------------------------------------------------
 
-XclExpDelegatingRecord::XclExpDelegatingRecord( XclExpRecordBase* pRecord )
-    : mpRecord( pRecord )
+XclExpDelegatingRecord::XclExpDelegatingRecord( XclExpRecordBase* pRecord ) :
+    mpRecord( pRecord )
 {
 }
 
@@ -70,9 +61,8 @@ XclExpDelegatingRecord::~XclExpDelegatingRecord()
 
 void XclExpDelegatingRecord::SaveXml( XclExpXmlStream& rStrm )
 {
-    if( !mpRecord )
-        return;
-    mpRecord->SaveXml( rStrm );
+    if( mpRecord )
+        mpRecord->SaveXml( rStrm );
 }
 
 // ----------------------------------------------------------------------------
@@ -238,6 +228,24 @@ void XclExpDummyRecord::SetData( const void* pRecData, sal_Size nRecSize )
 void XclExpDummyRecord::WriteBody( XclExpStream& rStrm )
 {
     rStrm.Write( mpData, GetRecSize() );
+}
+
+// Future records =============================================================
+
+XclExpFutureRecord::XclExpFutureRecord( XclFutureRecType eRecType, sal_uInt16 nRecId, sal_Size nRecSize ) :
+    XclExpRecord( nRecId, nRecSize ),
+    meRecType( eRecType )
+{
+}
+
+void XclExpFutureRecord::Save( XclExpStream& rStrm )
+{
+    rStrm.StartRecord( GetRecId(), GetRecSize() + ((meRecType == EXC_FUTUREREC_UNUSEDREF) ? 12 : 4) );
+    rStrm << GetRecId() << sal_uInt16( 0 );
+    if( meRecType == EXC_FUTUREREC_UNUSEDREF )
+        rStrm.WriteZeroBytes( 8 );
+    WriteBody( rStrm );
+    rStrm.EndRecord();
 }
 
 // ============================================================================

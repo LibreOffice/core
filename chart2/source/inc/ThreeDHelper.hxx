@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ThreeDHelper.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +102,7 @@ public:
         sal_Int32 nElevationDeg, sal_Int32 nRotationDeg
         , double& rfXAngleRad, double& rfYAngleRad, double& rfZAngleRad );
 
-    static void convertXYZAngleRadToElevationRotationDeg(
+    SAL_DLLPRIVATE static void convertXYZAngleRadToElevationRotationDeg(
         sal_Int32& rnElevationDeg, sal_Int32& rnRotationDeg
         , double fXRad, double fYRad, double fZRad );
 
@@ -116,8 +113,8 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet >& xSceneProperties
             , double fCameraDistance );
-    static void ensureCameraDistanceRange( double& rfCameraDistance );
-    static void getCameraDistanceRange( double& rfMinimumDistance, double& rfMaximumDistance );
+    SAL_DLLPRIVATE static void ensureCameraDistanceRange( double& rfCameraDistance );
+    SAL_DLLPRIVATE static void getCameraDistanceRange( double& rfMinimumDistance, double& rfMaximumDistance );
 
     static double CameraDistanceToPerspective( double fCameraDistance );
     static double PerspectiveToCameraDistance( double fPerspective );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drawvie4.cxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -285,8 +282,8 @@ void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
     pDoc->GetTableArea( nTab, nEndCol, nEndRow );
     if (nEndCol<20)
         nEndCol = 20;
-    if (nEndRow<20)
-        nEndRow = 20;
+    if (nEndRow<1000)
+        nEndRow = 1000;
 
     Fraction aZoom(1,1);
     ScDrawUtil::CalcScale( pDoc, nTab, 0,0, nEndCol,nEndRow, pDev, aZoom,aZoom,

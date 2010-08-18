@@ -1,31 +1,28 @@
 /*************************************************************************
 *
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2008 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: xmlimprt.cxx,v $
-* $Revision: 1.132.30.4 $
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
-*
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
@@ -33,7 +30,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -51,9 +48,9 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlerror.hxx>
 
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <svl/languageoptions.hxx>
 
 #include "xmlimprt.hxx"
 #include "document.hxx"
@@ -71,9 +68,11 @@
 #include "XMLChangeTrackingImportHelper.hxx"
 #include "chgviset.hxx"
 #include "XMLStylesImportHelper.hxx"
+#include "sheetdata.hxx"
 #include "unonames.hxx"
 #include "rangeutl.hxx"
 #include "postit.hxx"
+#include "formulaparserpool.hxx"
 #include <comphelper/extract.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -92,6 +91,7 @@
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
+#include <com/sun/star/io/XSeekable.hpp>
 
 #define SC_LOCALE           "Locale"
 #define SC_STANDARDFORMAT   "StandardFormat"
@@ -645,6 +645,8 @@ const SvXMLTokenMap& ScXMLImport::GetTableElemTokenMap()
             { XML_NAMESPACE_TABLE,  XML_SCENARIO,                   XML_TOK_TABLE_SCENARIO      },
             { XML_NAMESPACE_TABLE,  XML_SHAPES,                     XML_TOK_TABLE_SHAPES        },
             { XML_NAMESPACE_OFFICE, XML_FORMS,                      XML_TOK_TABLE_FORMS         },
+            { XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS,            XML_TOK_TABLE_EVENT_LISTENERS },
+            { XML_NAMESPACE_OFFICE_EXT, XML_EVENT_LISTENERS,        XML_TOK_TABLE_EVENT_LISTENERS_EXT },
             XML_TOKEN_MAP_END
         };
 
@@ -698,12 +700,12 @@ const SvXMLTokenMap& ScXMLImport::GetTableAttrTokenMap()
     {
         static __FAR_DATA SvXMLTokenMapEntry aTableAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAME,                        XML_TOK_TABLE_NAME              },
-            { XML_NAMESPACE_TABLE, XML_STYLE_NAME,                  XML_TOK_TABLE_STYLE_NAME        },
-            { XML_NAMESPACE_TABLE, XML_PROTECTED,                   XML_TOK_TABLE_PROTECTION        },
-            { XML_NAMESPACE_TABLE, XML_PRINT_RANGES,                XML_TOK_TABLE_PRINT_RANGES      },
-            { XML_NAMESPACE_TABLE, XML_PROTECTION_KEY,              XML_TOK_TABLE_PASSWORD          },
-            { XML_NAMESPACE_TABLE, XML_PRINT,                       XML_TOK_TABLE_PRINT             },
+            { XML_NAMESPACE_TABLE,     XML_NAME,           XML_TOK_TABLE_NAME          },
+            { XML_NAMESPACE_TABLE,     XML_STYLE_NAME,     XML_TOK_TABLE_STYLE_NAME    },
+            { XML_NAMESPACE_TABLE,     XML_PROTECTED,      XML_TOK_TABLE_PROTECTION    },
+            { XML_NAMESPACE_TABLE,     XML_PRINT_RANGES,   XML_TOK_TABLE_PRINT_RANGES  },
+            { XML_NAMESPACE_TABLE,     XML_PROTECTION_KEY, XML_TOK_TABLE_PASSWORD      },
+            { XML_NAMESPACE_TABLE,     XML_PRINT,          XML_TOK_TABLE_PRINT         },
             XML_TOKEN_MAP_END
         };
 
@@ -1344,6 +1346,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableElemTokenMap()
         {
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL, XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SQL        },
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE,   XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_TABLE      },
+            { XML_NAMESPACE_TABLE, XML_DATA_PILOT_GRAND_TOTAL,  XML_TOK_DATA_PILOT_TABLE_ELEM_GRAND_TOTAL       },
             { XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY,   XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_QUERY      },
             { XML_NAMESPACE_TABLE, XML_SOURCE_SERVICE,          XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_SERVICE    },
             { XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE,       XML_TOK_DATA_PILOT_TABLE_ELEM_SOURCE_CELL_RANGE },
@@ -1367,7 +1370,7 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceServiceAttrTokenMap()
             { XML_NAMESPACE_TABLE, XML_SOURCE_NAME,             XML_TOK_SOURCE_SERVICE_ATTR_SOURCE_NAME         },
             { XML_NAMESPACE_TABLE, XML_OBJECT_NAME,             XML_TOK_SOURCE_SERVICE_ATTR_OBJECT_NAME         },
             { XML_NAMESPACE_TABLE, XML_USER_NAME,               XML_TOK_SOURCE_SERVICE_ATTR_USER_NAME           },
-            { XML_NAMESPACE_TABLE, XML_PASSWORT,                XML_TOK_SOURCE_SERVICE_ATTR_PASSWORD            },
+            { XML_NAMESPACE_TABLE, XML_PASSWORD,                XML_TOK_SOURCE_SERVICE_ATTR_PASSWORD            },
             XML_TOKEN_MAP_END
         };
 
@@ -1375,6 +1378,25 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceServiceAttrTokenMap()
     } // if( !pDataPilotTableSourceServiceAttrTokenMap )
 
     return *pDataPilotTableSourceServiceAttrTokenMap;
+}
+
+const SvXMLTokenMap& ScXMLImport::GetDataPilotGrandTotalAttrTokenMap()
+{
+    if (!pDataPilotGrandTotalAttrTokenMap)
+    {
+        static __FAR_DATA SvXMLTokenMapEntry aDataPilotGrandTotalAttrTokenMap[] =
+        {
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY,      XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY          },
+            { XML_NAMESPACE_TABLE,     XML_ORIENTATION,  XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_ORIENTATION      },
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME     },
+            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_GRAND_TOTAL_ATTR_DISPLAY_NAME_EXT },
+            XML_TOKEN_MAP_END
+        };
+
+        pDataPilotGrandTotalAttrTokenMap = new SvXMLTokenMap( aDataPilotGrandTotalAttrTokenMap );
+    }
+
+    return *pDataPilotGrandTotalAttrTokenMap;
 }
 
 const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceCellRangeAttrTokenMap()
@@ -1415,12 +1437,14 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotFieldAttrTokenMap()
     {
         static __FAR_DATA SvXMLTokenMapEntry aDataPilotFieldAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME,       XML_TOK_DATA_PILOT_FIELD_ATTR_SOURCE_FIELD_NAME     },
-            { XML_NAMESPACE_TABLE, XML_IS_DATA_LAYOUT_FIELD,    XML_TOK_DATA_PILOT_FIELD_ATTR_IS_DATA_LAYOUT_FIELD  },
-            { XML_NAMESPACE_TABLE, XML_FUNCTION,                XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION              },
-            { XML_NAMESPACE_TABLE, XML_ORIENTATION,             XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION           },
-            { XML_NAMESPACE_TABLE, XML_SELECTED_PAGE,           XML_TOK_DATA_PILOT_FIELD_ATTR_SELECTED_PAGE         },
-            { XML_NAMESPACE_TABLE, XML_USED_HIERARCHY,          XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY        },
+            { XML_NAMESPACE_TABLE,     XML_SOURCE_FIELD_NAME,    XML_TOK_DATA_PILOT_FIELD_ATTR_SOURCE_FIELD_NAME    },
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME,         XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME         },
+            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME,         XML_TOK_DATA_PILOT_FIELD_ATTR_DISPLAY_NAME_EXT     },
+            { XML_NAMESPACE_TABLE,     XML_IS_DATA_LAYOUT_FIELD, XML_TOK_DATA_PILOT_FIELD_ATTR_IS_DATA_LAYOUT_FIELD },
+            { XML_NAMESPACE_TABLE,     XML_FUNCTION,             XML_TOK_DATA_PILOT_FIELD_ATTR_FUNCTION             },
+            { XML_NAMESPACE_TABLE,     XML_ORIENTATION,          XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION          },
+            { XML_NAMESPACE_TABLE,     XML_SELECTED_PAGE,        XML_TOK_DATA_PILOT_FIELD_ATTR_SELECTED_PAGE        },
+            { XML_NAMESPACE_TABLE,     XML_USED_HIERARCHY,       XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY       },
             XML_TOKEN_MAP_END
         };
 
@@ -1506,7 +1530,9 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotSubTotalAttrTokenMap()
     {
         static __FAR_DATA SvXMLTokenMapEntry aDataPilotSubTotalAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_FUNCTION,                XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION           },
+            { XML_NAMESPACE_TABLE,     XML_FUNCTION,     XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_FUNCTION         },
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME     },
+            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_SUBTOTAL_ATTR_DISPLAY_NAME_EXT },
             XML_TOKEN_MAP_END
         };
 
@@ -1538,9 +1564,11 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotMemberAttrTokenMap()
     {
         static __FAR_DATA SvXMLTokenMapEntry aDataPilotMemberAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_NAME,                    XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME                 },
-            { XML_NAMESPACE_TABLE, XML_DISPLAY,             XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY              },
-            { XML_NAMESPACE_TABLE, XML_SHOW_DETAILS,        XML_TOK_DATA_PILOT_MEMBER_ATTR_SHOW_DETAILS     },
+            { XML_NAMESPACE_TABLE,     XML_NAME,         XML_TOK_DATA_PILOT_MEMBER_ATTR_NAME             },
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME     },
+            { XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY_NAME_EXT },
+            { XML_NAMESPACE_TABLE,     XML_DISPLAY,      XML_TOK_DATA_PILOT_MEMBER_ATTR_DISPLAY          },
+            { XML_NAMESPACE_TABLE,     XML_SHOW_DETAILS, XML_TOK_DATA_PILOT_MEMBER_ATTR_SHOW_DETAILS     },
             XML_TOKEN_MAP_END
         };
 
@@ -1674,6 +1702,7 @@ ScXMLImport::ScXMLImport(
     pDataPilotTableAttrTokenMap( 0 ),
     pDataPilotTableElemTokenMap( 0 ),
     pDataPilotTableSourceServiceAttrTokenMap( 0 ),
+    pDataPilotGrandTotalAttrTokenMap(NULL),
     pDataPilotTableSourceCellRangeElemTokenMap( 0 ),
     pDataPilotTableSourceCellRangeAttrTokenMap( 0 ),
     pDataPilotFieldAttrTokenMap( 0 ),
@@ -2189,10 +2218,11 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
         if (xMultiServiceFactory.is())
         {
             sal_Int32 nCount(aConfigProps.getLength());
-            rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("TrackedChangesProtectionKey"));
+            rtl::OUString sCTName(RTL_CONSTASCII_USTRINGPARAM("TrackedChangesProtectionKey"));
+            rtl::OUString sSCName(RTL_CONSTASCII_USTRINGPARAM("ScriptConfiguration"));
             for (sal_Int32 i = nCount - 1; i >= 0; --i)
             {
-                if (aConfigProps[i].Name == sName)
+                if (aConfigProps[i].Name == sCTName)
                 {
                     rtl::OUString sKey;
                     if (aConfigProps[i].Value >>= sKey)
@@ -2210,6 +2240,28 @@ void ScXMLImport::SetConfigurationSettings(const uno::Sequence<beans::PropertyVa
                                 pTrack->SetProtection(aPass);
                                 pDoc->SetChangeTrack(pTrack);
                             }
+                        }
+                    }
+                }
+                else if (aConfigProps[i].Name == sSCName)
+                {
+                    uno::Type aType = aConfigProps[i].Value.getValueType();
+                    uno::Reference<beans::XPropertySet> xImportInfo =
+                        getImportInfo();
+
+                    if (xImportInfo.is() &&
+                        (aType.equals(getCppuType(
+                          (uno::Reference<container::XNameContainer> *)0 ) ) ||
+                        aType.equals(getCppuType(
+                          (uno::Reference<container::XNameAccess> *)0 ) ) ) )
+                    {
+                        uno::Reference< beans::XPropertySetInfo > xPropertySetInfo =
+                            xImportInfo->getPropertySetInfo();
+                        if (xPropertySetInfo.is() &&
+                            xPropertySetInfo->hasPropertyByName(sSCName) )
+                        {
+                            xImportInfo->setPropertyValue(sSCName,
+                                    aConfigProps[i].Value );
                         }
                     }
                 }
@@ -2415,6 +2467,20 @@ void ScXMLImport::SetStyleToRanges()
                 pStyle->FillPropertySet(xProperties);
                 sal_Int32 nNumberFormat(pStyle->GetNumberFormat());
                 SetType(xProperties, nNumberFormat, nPrevCellType, sPrevCurrency);
+
+                // store first cell of first range for each style, once per sheet
+                uno::Sequence<table::CellRangeAddress> aAddresses(xSheetCellRanges->getRangeAddresses());
+                if ( aAddresses.getLength() > 0 )
+                {
+                    const table::CellRangeAddress& rRange = aAddresses[0];
+                    if ( rRange.Sheet != pStyle->GetLastSheet() )
+                    {
+                        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
+                        pSheetData->AddCellStyle( sPrevStyleName,
+                            ScAddress( (SCCOL)rRange.StartColumn, (SCROW)rRange.StartRow, (SCTAB)rRange.Sheet ) );
+                        pStyle->SetLastSheet(rRange.Sheet);
+                    }
+                }
             }
             else
             {
@@ -2567,6 +2633,17 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
     sal_uInt16 nFlags = getImportFlags();
     if ( ( nFlags & IMPORT_CONTENT ) && !( nFlags & IMPORT_STYLES ) )
         ExamineDefaultStyle();
+
+    if (getImportFlags() & IMPORT_CONTENT)
+    {
+        if (GetModel().is())
+        {
+            // store initial namespaces, to find the ones that were added from the file later
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
+            const SvXMLNamespaceMap& rNamespaces = GetNamespaceMap();
+            pSheetData->StoreInitialNamespaces(rNamespaces);
+        }
+    }
 
     UnlockSolarMutex();
 }
@@ -2771,6 +2848,19 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
         GetProgressBarHelper()->End();  // make room for subsequent SfxProgressBars
         if (pDoc)
             pDoc->CompileXML();
+
+        if (pDoc && GetModel().is())
+        {
+            // set "valid stream" flags after loading (before UpdateRowHeights, so changed formula results
+            // in UpdateRowHeights can already clear the flags again)
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetModel())->GetSheetSaveData();
+
+            SCTAB nTabCount = pDoc->GetTableCount();
+            for (SCTAB nTab=0; nTab<nTabCount; ++nTab)
+                if (!pSheetData->IsSheetBlocked( nTab ))
+                    pDoc->SetStreamValid( nTab, TRUE );
+        }
+
         aTables.UpdateRowHeights();
         aTables.ResizeShapes();
     }
@@ -2830,6 +2920,16 @@ void ScXMLImport::UnlockSolarMutex()
     }
 }
 
+sal_Int32 ScXMLImport::GetByteOffset()
+{
+    sal_Int32 nOffset = -1;
+    uno::Reference<xml::sax::XLocator> xLocator = GetLocator();
+    uno::Reference<io::XSeekable> xSeek( xLocator, uno::UNO_QUERY );        //! should use different interface
+    if ( xSeek.is() )
+        nOffset = (sal_Int32)xSeek->getPosition();
+    return nOffset;
+}
+
 void ScXMLImport::SetRangeOverflowType(sal_uInt32 nType)
 {
     //  #i31130# Overflow is stored in the document, because the ScXMLImport object
@@ -2850,36 +2950,99 @@ void ScXMLImport::ProgressBarIncrement(sal_Bool bEditCell, sal_Int32 nInc)
     }
 }
 
-// static
-bool ScXMLImport::IsAcceptedFormulaNamespace( const sal_uInt16 nFormulaPrefix,
-                                             const rtl::OUString & rValue, formula::FormulaGrammar::Grammar& rGrammar,
-                                             const formula::FormulaGrammar::Grammar eStorageGrammar )
+sal_Int32 ScXMLImport::GetVisibleSheet()
 {
-    switch (nFormulaPrefix)
+    // Get the visible sheet number from model's view data (after settings were loaded),
+    // or 0 (default: first sheet) if no settings available.
+
+    uno::Reference<document::XViewDataSupplier> xSupp(GetModel(), uno::UNO_QUERY);
+    if (xSupp.is())
     {
-    case XML_NAMESPACE_OF:
-        rGrammar = formula::FormulaGrammar::GRAM_ODFF;
-        return true;
-    case XML_NAMESPACE_OOOC:
-        rGrammar = formula::FormulaGrammar::GRAM_PODF;
-        return true;
+        uno::Reference<container::XIndexAccess> xIndex = xSupp->getViewData();
+        if ( xIndex.is() && xIndex->getCount() > 0 )
+        {
+            uno::Any aAny( xIndex->getByIndex(0) );
+            uno::Sequence<beans::PropertyValue> aViewSettings;  // settings for (first) view
+            if ( aAny >>= aViewSettings )
+            {
+                sal_Int32 nCount = aViewSettings.getLength();
+                for (sal_Int32 i = 0; i < nCount; ++i)
+                {
+                    if ( aViewSettings[i].Name.compareToAscii(SC_ACTIVETABLE) == 0 )
+                    {
+                        rtl::OUString sValue;
+                        if(aViewSettings[i].Value >>= sValue)
+                        {
+                            String sTabName(sValue);
+                            SCTAB nTab = 0;
+                            if (pDoc->GetTable(sTabName, nTab))
+                                return nTab;
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    // An invalid namespace can occur from a colon in the formula text if no
-    // namespace tag was added. First character in string has to be '=' in that
-    // case.
-    bool bNoNamespace = (nFormulaPrefix == XML_NAMESPACE_NONE ||
-        (nFormulaPrefix == XML_NAMESPACE_UNKNOWN && rValue.toChar() == '='));
-
-    if (bNoNamespace && eStorageGrammar == formula::FormulaGrammar::GRAM_PODF)
-        // There may be documents in the wild that stored no namespace in ODF 1.x
-        rGrammar = formula::FormulaGrammar::GRAM_PODF;
-    else if (bNoNamespace)
-        // The default for ODF 1.2 and later without namespace is 'of:' ODFF
-        rGrammar = formula::FormulaGrammar::GRAM_ODFF;
-    else
-        // Whatever ...
-        rGrammar = eStorageGrammar;
-
-    return false;
+    return 0;
 }
+
+void ScXMLImport::ExtractFormulaNamespaceGrammar(
+        OUString& rFormula, OUString& rFormulaNmsp, FormulaGrammar::Grammar& reGrammar,
+        const OUString& rAttrValue, bool bRestrictToExternalNmsp ) const
+{
+    // parse the attribute value, extract namespace ID, literal namespace, and formula string
+    rFormulaNmsp = OUString();
+    sal_uInt16 nNsId = GetNamespaceMap()._GetKeyByAttrName( rAttrValue, 0, &rFormula, &rFormulaNmsp, sal_False );
+
+    // check if we have an ODF formula namespace
+    if( !bRestrictToExternalNmsp ) switch( nNsId )
+    {
+        case XML_NAMESPACE_OOOC:
+            rFormulaNmsp = OUString();  // remove namespace string for built-in grammar
+            reGrammar = FormulaGrammar::GRAM_PODF;
+            return;
+        case XML_NAMESPACE_OF:
+            rFormulaNmsp = OUString();  // remove namespace string for built-in grammar
+            reGrammar = FormulaGrammar::GRAM_ODFF;
+            return;
+    }
+
+    /*  Find default grammar for formulas without namespace. There may be
+        documents in the wild that stored no namespace in ODF 1.0/1.1. Use
+        GRAM_PODF then (old style ODF 1.0/1.1 formulas). The default for ODF
+        1.2 and later without namespace is GRAM_ODFF (OpenFormula). */
+    FormulaGrammar::Grammar eDefaultGrammar =
+        (GetDocument()->GetStorageGrammar() == FormulaGrammar::GRAM_PODF) ?
+            FormulaGrammar::GRAM_PODF : FormulaGrammar::GRAM_ODFF;
+
+    /*  Check if we have no namespace at all. The value XML_NAMESPACE_NONE
+        indicates that there is no colon. If the first character of the
+        attribute value is the equality sign, the value XML_NAMESPACE_UNKNOWN
+        indicates that there is a colon somewhere in the formula string. */
+    if( (nNsId == XML_NAMESPACE_NONE) || ((nNsId == XML_NAMESPACE_UNKNOWN) && (rAttrValue.toChar() == '=')) )
+    {
+        rFormula = rAttrValue;          // return entire string as formula
+        reGrammar = eDefaultGrammar;
+        return;
+    }
+
+    /*  Check if a namespace URL could be resolved from the attribute value.
+        Use that namespace only, if the Calc document knows an associated
+        external formula parser. This prevents that the range operator in
+        conjunction with defined names is confused as namespaces prefix, e.g.
+        in the expression 'table:A1' where 'table' is a named reference. */
+    if( ((nNsId & XML_NAMESPACE_UNKNOWN_FLAG) != 0) && (rFormulaNmsp.getLength() > 0) &&
+        GetDocument()->GetFormulaParserPool().hasFormulaParser( rFormulaNmsp ) )
+    {
+        reGrammar = FormulaGrammar::GRAM_EXTERNAL;
+        return;
+    }
+
+    /*  All attempts failed (e.g. no namespace and no leading equality sign, or
+        an invalid namespace prefix), continue with the entire attribute value. */
+    rFormula = rAttrValue;
+    rFormulaNmsp = OUString();  // remove any namespace string
+    reGrammar = eDefaultGrammar;
+}
+

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xelink.hxx,v $
- * $Revision: 1.13.134.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,8 +81,8 @@ public:
 
     /** Returns the Calc sheet index of the nSortedTab-th entry in the sorted sheet names list. */
     SCTAB               GetRealScTab( SCTAB nSortedScTab ) const;
-    /** Returns the index of the passed Calc sheet in the sorted sheet names list. */
-    SCTAB               GetSortedScTab( SCTAB nScTab ) const;
+//UNUSED2009-05 /** Returns the index of the passed Calc sheet in the sorted sheet names list. */
+//UNUSED2009-05 SCTAB               GetSortedScTab( SCTAB nScTab ) const;
 
     /** Returns the number of Calc sheets. */
     inline SCTAB        GetScTabCount() const { return mnScCnt; }

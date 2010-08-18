@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellsh3.cxx,v $
- * $Revision: 1.24.90.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
 #include "globstr.hrc"
@@ -91,7 +88,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             case SID_OPENDLG_FUNCTION:
                     //  #53318# inplace macht die EditShell Aerger...
                     //! kann nicht immer umgeschaltet werden ????
-                    if (!pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace())
+                    if (!pTabViewShell->GetViewFrame()->GetFrame().IsInPlace())
                         pTabViewShell->SetDontSwitch(TRUE);         // EditShell nicht abschalten
                     // kein break
 
@@ -247,7 +244,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     if (nSlot == FID_INPUTLINE_BLOCK)
                     {
-                        pTabViewShell->EnterBlock( String(), pData );
+                        pTabViewShell->EnterBlock( aString, pData );
                     }
                     else if ( aString.Len() > 0 && ( aString.GetChar(0) == '=' || aString.GetChar(0) == '+' || aString.GetChar(0) == '-' ) )
                     {
@@ -950,15 +947,11 @@ void ScCellShell::Execute( SfxRequest& rReq )
             DBG_ERROR("Execute von InputLine-Status");
             break;
 
-
         case SID_STATUS_DOCPOS:
-            {
-                //! Navigator an-/ausschalten (wie im Writer) ???
-                //!pViewData->GetDispatcher().Execute( SID_NAVIGATOR,
-                //!                       SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
-            }
+            // Launch navigator.
+            GetViewData()->GetDispatcher().Execute(
+                SID_NAVIGATOR, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
             break;
-
 
         case SID_MARKAREA:
             // called from Basic at the hidden view to select a range in the visible view

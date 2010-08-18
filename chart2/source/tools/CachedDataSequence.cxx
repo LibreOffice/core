@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CachedDataSequence.cxx,v $
- * $Revision: 1.7.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,9 +65,7 @@ enum
 {
 //     PROP_SOURCE_IDENTIFIER,
     PROP_NUMBERFORMAT_KEY,
-    PROP_PROPOSED_ROLE,
-    PROP_HIDDEN,
-    PROP_HIDDEN_VALUES
+    PROP_PROPOSED_ROLE
 };
 }  // anonymous namespace
 
@@ -82,64 +77,28 @@ namespace chart
 CachedDataSequence::CachedDataSequence()
         : OPropertyContainer( GetBroadcastHelper()),
           CachedDataSequence_Base( GetMutex()),
-          m_bIsHidden( true ),
           m_eCurrentDataType( NUMERICAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     registerProperties();
 }
 CachedDataSequence::CachedDataSequence( const Reference< uno::XComponentContext > & /*xContext*/ )
         : OPropertyContainer( GetBroadcastHelper()),
           CachedDataSequence_Base( GetMutex()),
-          m_bIsHidden( true ),
           m_eCurrentDataType( MIXED ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( ))
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder( ))
 {
-    registerProperties();
-}
-
-CachedDataSequence::CachedDataSequence( const ::std::vector< double > & rVector )
-        : OPropertyContainer( GetBroadcastHelper()),
-          CachedDataSequence_Base( GetMutex()),
-          m_bIsHidden( true ),
-          m_eCurrentDataType( NUMERICAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
-{
-    m_aNumericalSequence = ContainerToSequence( rVector );
-    registerProperties();
-}
-
-CachedDataSequence::CachedDataSequence( const ::std::vector< OUString > & rVector )
-        : OPropertyContainer( GetBroadcastHelper()),
-          CachedDataSequence_Base( GetMutex()),
-          m_bIsHidden( true ),
-          m_eCurrentDataType( TEXTUAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
-{
-    m_aTextualSequence = ContainerToSequence( rVector );
     registerProperties();
 }
 
 CachedDataSequence::CachedDataSequence( const OUString & rSingleText )
         : OPropertyContainer( GetBroadcastHelper()),
           CachedDataSequence_Base( GetMutex()),
-          m_bIsHidden( true ),
           m_eCurrentDataType( TEXTUAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     m_aTextualSequence.realloc(1);
     m_aTextualSequence[0] = rSingleText;
-    registerProperties();
-}
-
-CachedDataSequence::CachedDataSequence( const ::std::vector< Any > & rVector )
-        : OPropertyContainer( GetBroadcastHelper()),
-          CachedDataSequence_Base( GetMutex()),
-          m_bIsHidden( true ),
-          m_eCurrentDataType( MIXED ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
-{
-    m_aMixedSequence = ContainerToSequence( rVector );
     registerProperties();
 }
 
@@ -150,10 +109,8 @@ CachedDataSequence::CachedDataSequence( const CachedDataSequence & rSource )
           CachedDataSequence_Base( GetMutex()),
           m_nNumberFormatKey( rSource.m_nNumberFormatKey ),
           m_sRole( rSource.m_sRole ),
-          m_bIsHidden( rSource.m_bIsHidden ),
-          m_aHiddenValues( rSource.m_aHiddenValues ),
           m_eCurrentDataType( rSource.m_eCurrentDataType ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+          m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     switch( m_eCurrentDataType )
     {
@@ -187,18 +144,6 @@ void CachedDataSequence::registerProperties()
                       0,   // PropertyAttributes
                       & m_sRole,
                       ::getCppuType( & m_sRole ) );
-
-    registerProperty( C2U( "IsHidden" ),
-                      PROP_HIDDEN,
-                      0,   // PropertyAttributes
-                      & m_bIsHidden,
-                      ::getCppuType( & m_bIsHidden ) );
-
-    registerProperty( C2U( "HiddenValues" ),
-                      PROP_HIDDEN_VALUES,
-                      0,   // PropertyAttributes
-                      & m_aHiddenValues,
-                      ::getCppuType( & m_aHiddenValues ) );
 }
 
 Sequence< double > CachedDataSequence::Impl_getNumericalData() const

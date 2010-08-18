@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scextopt.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,13 +38,10 @@
 /** Extended settings for the document, used in import/export filters. */
 struct ScExtDocSettings
 {
-    ScRange             maOleSize;          /// Visible range if embedded.
     String              maGlobCodeName;     /// Global codename (VBA module name).
     double              mfTabBarWidth;      /// Width of the tabbar, relative to frame window width (0.0 ... 1.0).
     sal_uInt32          mnLinkCnt;          /// Recursive counter for loading external documents.
     SCTAB               mnDisplTab;         /// Index of displayed sheet.
-    bool                mbWinProtected;     /// true = Window properties are protected.
-    bool                mbEncrypted;        /// true = Imported file was encrypted.
 
     explicit            ScExtDocSettings();
 };
@@ -121,11 +115,11 @@ public:
     ScExtTabSettings&   GetOrCreateTabSettings( SCTAB nTab );
 
     /** Returns the number of sheet codenames. */
-    size_t              GetCodeNameCount() const;
+    SCTAB               GetCodeNameCount() const;
     /** Returns the specified codename (empty string = no codename). */
-    const String&       GetCodeName( size_t nIdx ) const;
+    const String&       GetCodeName( SCTAB nTab ) const;
     /** Appends a codename for a sheet. */
-    void                AppendCodeName( const String& rCodeName );
+    void                SetCodeName( SCTAB nTab, const String& rCodeName );
 
 private:
     ::std::auto_ptr< ScExtDocOptionsImpl > mxImpl;

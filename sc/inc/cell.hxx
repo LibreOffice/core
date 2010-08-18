@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cell.hxx,v $
- * $Revision: 1.30.38.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,13 +32,14 @@
 
 #include <set>
 #include <tools/mempool.hxx>
-#include <svtools/listener.hxx>
+#include <svl/listener.hxx>
 #include "global.hxx"
+#include "rangenam.hxx"
 #include "formula/grammar.hxx"
 #include "tokenarray.hxx"
 #include "formularesult.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <vcl/fontcvt.hxx>
+#include <unotools/fontcvt.hxx>
 #include "scdllapi.h"
 
 #define USE_MEMPOOL
@@ -58,9 +56,6 @@ class SvtBroadcaster;
 class ScCodeArray;
 class ScProgress;
 class ScPostIt;
-
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
 
 // ============================================================================
 
@@ -102,7 +97,7 @@ public:
 
     /** Returns a clone of this cell, clones cell note and caption object too
         (unless SC_CLONECELL_NOCAPTION flag is set). Broadcaster will not be cloned. */
-    ScBaseCell*     CloneWithNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+    ScBaseCell*     CloneWithNote( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
 
     /** Due to the fact that ScBaseCell does not have a vtable, this function
         deletes the cell by calling the appropriate d'tor of the derived class. */
@@ -195,10 +190,6 @@ public:
 #ifdef DBG_UTIL
                     ~ScNoteCell();
 #endif
-
-                    ScNoteCell( SvStream& rStream, USHORT nVer );
-
-    void            Save( SvStream& rStream ) const;
 
 private:
                     ScNoteCell( const ScNoteCell& );
@@ -296,8 +287,6 @@ enum ScMatrixMode {
     MM_FAKE      = 3                    // Interpret "as-if" matrix formula (legacy)
 };
 
-class ScIndexMap;
-
 class SC_DLLPUBLIC ScFormulaCell : public ScBaseCell, public SvtListener
 {
 private:
@@ -387,13 +376,23 @@ public:
     inline USHORT   GetSeenInIteration() const { return nSeenInIteration; }
 
     BOOL            HasOneReference( ScRange& r ) const;
+    /* Checks if the formula contains reference list that can be
+       expressed by one reference (like A1;A2;A3:A5 -> A1:A5). The
+       reference list is not required to be sorted (i.e. A3;A1;A2 is
+       still recognized as A1:A3), but no overlapping is allowed.
+       If one reference is recognized, the rRange is filled.
+
+       It is similar to HasOneReference(), but more general.
+     */
+    bool HasRefListExpressibleAsOneReference(ScRange& rRange) const;
     BOOL            HasRelNameReference() const;
     BOOL            HasColRowName() const;
 
     void            UpdateReference(UpdateRefMode eUpdateRefMode,
                                     const ScRange& r,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz,
-                                    ScDocument* pUndoDoc = NULL );
+                                    ScDocument* pUndoDoc = NULL,
+                                    const ScAddress* pUndoCellPos = NULL );
 
     void            TransposeReference();
     void            UpdateTranspose( const ScRange& rSource, const ScAddress& rDest,
@@ -410,7 +409,7 @@ public:
     void            UpdateCompile( BOOL bForceIfNameInUse = FALSE );
     BOOL            IsRangeNameInUse(USHORT nIndex) const;
     void            FindRangeNamesInUse(std::set<USHORT>& rIndexes) const;
-    void            ReplaceRangeNamesInUse( const ScIndexMap& rMap );
+    void            ReplaceRangeNamesInUse( const ScRangeData::IndexMap& rMap );
     BOOL            IsSubTotal() const                      { return bSubTotal; }
     BOOL            IsChanged() const                       { return bChanged; }
     void            ResetChanged()                          { bChanged = FALSE; }
@@ -485,6 +484,9 @@ public:
     inline BOOL     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
     EditTextObject*     CreateURLObject() ;
     void            GetURLResult( String& rURL, String& rCellText );
+
+    /** Determines whether or not the result string contains more than one paragraph */
+    bool            IsMultilineResult();
 };
 
 //          Iterator fuer Referenzen in einer Formelzelle

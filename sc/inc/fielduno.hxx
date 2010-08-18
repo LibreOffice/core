@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fielduno.hxx,v $
- * $Revision: 1.8.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,9 @@
 #include "address.hxx"
 #include "mutexhlp.hxx"
 
-#include <svtools/lstner.hxx>
-#include <svtools/itemprop.hxx>
-#include <svx/editdata.hxx>
+#include <svl/lstner.hxx>
+#include <svl/itemprop.hxx>
+#include <editeng/editdata.hxx>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/container/XContainer.hpp>
@@ -138,7 +135,7 @@ class ScCellFieldObj : public ScMutexHelper,
                         public SfxListener
 {
 private:
-    SfxItemPropertySet      aPropSet;
+    const SfxItemPropertySet*       pPropSet;
     ScDocShell*             pDocShell;
     ScAddress               aCellPos;
     SvxEditSource*          pEditSource;
@@ -337,7 +334,7 @@ class ScHeaderFieldObj : public ScMutexHelper,
                             public ::com::sun::star::lang::XServiceInfo
 {
 private:
-    SfxItemPropertySet          aPropSet;
+    const SfxItemPropertySet*   pPropSet;
     ScHeaderFooterContentObj*   pContentObj;
     USHORT                      nPart;
     UINT16                      nType;

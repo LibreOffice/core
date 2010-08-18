@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewutil.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,23 +36,24 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/charmap.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/cjkoptions.hxx>
-#include <svtools/ctloptions.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/cjkoptions.hxx>
+#include <svl/ctloptions.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/eitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
 
 #include <com/sun/star/i18n/TransliterationModules.hpp>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
+
 
 #include "viewutil.hxx"
 #include "global.hxx"
@@ -124,6 +122,15 @@ sal_Int32 ScViewUtil::GetTransliterationType( USHORT nSlotID )
     sal_Int32 nType = 0;
     switch ( nSlotID )
     {
+        case SID_TRANSLITERATE_SENTENCE_CASE:
+            nType = com::sun::star::i18n::TransliterationModulesExtra::SENTENCE_CASE;
+            break;
+        case SID_TRANSLITERATE_TITLE_CASE:
+            nType = com::sun::star::i18n::TransliterationModulesExtra::TITLE_CASE;
+            break;
+        case SID_TRANSLITERATE_TOGGLE_CASE:
+            nType = com::sun::star::i18n::TransliterationModulesExtra::TOGGLE_CASE;
+            break;
         case SID_TRANSLITERATE_UPPER:
             nType = com::sun::star::i18n::TransliterationModules_LOWERCASE_UPPERCASE;
             break;
@@ -264,20 +271,19 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
         if ( rMark.GetTableSelect(nTab ) )
         {
-            ScCompressedArrayIterator<SCROW, BYTE> aIter(pDoc->GetRowFlagsArray(nTab), nStartRow, nEndRow);
-            do
+            for (SCROW nRow = nStartRow; nRow <= nEndRow; ++nRow)
             {
-                if (*aIter & CR_FILTERED)
+                SCROW nLastRow = nRow;
+                if (pDoc->RowFiltered(nRow, nTab, NULL, &nLastRow))
                 {
                     // use nStartCol/nEndCol, so the multi mark area isn't extended to all columns
                     // (visible in repaint for indentation)
-
-                    rMark.SetMultiMarkArea( ScRange( nStartCol, aIter.GetRangeStart(), nTab,
-                                                     nEndCol, aIter.GetRangeEnd(), nTab ), FALSE );
+                    rMark.SetMultiMarkArea(
+                        ScRange(nStartCol, nRow, nTab, nEndCol, nLastRow, nTab), false);
                     bChanged = true;
+                    nRow = nLastRow;
                 }
             }
-            while (aIter.NextRange());
         }
 
     if ( bChanged && !rMark.HasAnyMultiMarks() )
@@ -288,34 +294,29 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc )
 
 
 // static
-bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, const ScDocument * pDoc, size_t nRows )
+bool ScViewUtil::FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_t nRows )
 {
     SCTAB nTab = rRange.aStart.Tab();
     bool bOneTabOnly = (nTab == rRange.aEnd.Tab());
     // Always fit the range on its first sheet.
     DBG_ASSERT( bOneTabOnly, "ScViewUtil::ExtendToUnfilteredRows: works only on one sheet");
     SCROW nStartRow = rRange.aStart.Row();
-    // FillArrayForCondition() usually is the fastest to determine such a set
-    // in one pass, even if the array isn't used but the last element.
-    SCROW* pArr = new SCROW[nRows];
-    size_t nCount = pDoc->GetRowFlagsArray( nTab).FillArrayForCondition(
-            nStartRow, MAXROW, CR_FILTERED, 0, pArr, nRows);
-    if (nCount)
-        rRange.aEnd.SetRow( pArr[nCount-1]);
-    delete [] pArr;
-    return nCount == nRows && bOneTabOnly;
+    SCROW nLastRow = pDoc->LastNonFilteredRow(nStartRow, MAXROW, nTab);
+    if (ValidRow(nLastRow))
+        rRange.aEnd.SetRow(nLastRow);
+    SCROW nCount = pDoc->CountNonFilteredRows(nStartRow, MAXROW, nTab);
+    return static_cast<size_t>(nCount) == nRows && bOneTabOnly;
 }
 
 
 // static
-bool ScViewUtil::HasFiltered( const ScRange& rRange, const ScDocument* pDoc )
+bool ScViewUtil::HasFiltered( const ScRange& rRange, ScDocument* pDoc )
 {
     SCROW nStartRow = rRange.aStart.Row();
     SCROW nEndRow = rRange.aEnd.Row();
     for (SCTAB nTab=rRange.aStart.Tab(); nTab<=rRange.aEnd.Tab(); nTab++)
     {
-        if ( pDoc->GetRowFlagsArray( nTab).HasCondition( nStartRow, nEndRow,
-                CR_FILTERED, CR_FILTERED ) )
+        if (pDoc->HasFilteredRows(nStartRow, nEndRow, nTab))
             return true;
     }
 
@@ -374,7 +375,7 @@ BOOL ScViewUtil::ExecuteCharMap( const SvxFontItem& rOldFont,
         SfxAllItemSet aSet( rFrame.GetObjectShell()->GetPool() );
         aSet.Put( SfxBoolItem( FN_PARAM_1, FALSE ) );
         aSet.Put( SvxFontItem( rOldFont.GetFamily(), rOldFont.GetFamilyName(), rOldFont.GetStyleName(), rOldFont.GetPitch(), rOldFont.GetCharSet(), aSet.GetPool()->GetWhich( SID_ATTR_CHAR_FONT ) ) );
-        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( &rFrame.GetWindow(), aSet, rFrame.GetFrame()->GetFrameInterface(), RID_SVXDLG_CHARMAP );
+        SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( &rFrame.GetWindow(), aSet, rFrame.GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
         if ( pDlg->Execute() == RET_OK )
         {
             SFX_ITEMSET_ARG( pDlg->GetOutputItemSet(), pItem, SfxStringItem, SID_CHARMAP, FALSE );
@@ -481,12 +482,13 @@ BOOL ScUpdateRect::GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
     return TRUE;
 }
 
+#ifdef OLD_SELECTION_PAINT
 BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, BOOL& rCont )
 {
     rCont = FALSE;
 
-    if ( nNewStartX == nOldStartX && nNewEndX == nOldEndX &&
-         nNewStartY == nOldStartY && nNewEndY == nOldEndY )
+    if (nNewStartX == nOldStartX && nNewEndX == nOldEndX &&
+        nNewStartY == nOldStartY && nNewEndY == nOldEndY)
     {
         rX1 = nNewStartX;
         rY1 = nNewStartY;
@@ -500,14 +502,14 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
     rX2 = Max(nNewEndX,nOldEndX);
     rY2 = Max(nNewEndY,nOldEndY);
 
-    if ( nNewStartX == nOldStartX && nNewEndX == nOldEndX )             // nur vertikal
+    if (nNewStartX == nOldStartX && nNewEndX == nOldEndX)             // nur vertikal
     {
-        if ( nNewStartY == nOldStartY )
+        if (nNewStartY == nOldStartY)
         {
             rY1 = Min( nNewEndY, nOldEndY ) + 1;
             rY2 = Max( nNewEndY, nOldEndY );
         }
-        else if ( nNewEndY == nOldEndY )
+        else if (nNewEndY == nOldEndY)
         {
             rY1 = Min( nNewStartY, nOldStartY );
             rY2 = Max( nNewStartY, nOldStartY ) - 1;
@@ -523,14 +525,14 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
             nContX2 = rX2;
         }
     }
-    else if ( nNewStartY == nOldStartY && nNewEndY == nOldEndY )        // nur horizontal
+    else if (nNewStartY == nOldStartY && nNewEndY == nOldEndY)        // nur horizontal
     {
-        if ( nNewStartX == nOldStartX )
+        if (nNewStartX == nOldStartX)
         {
             rX1 = Min( nNewEndX, nOldEndX ) + 1;
             rX2 = Max( nNewEndX, nOldEndX );
         }
-        else if ( nNewEndX == nOldEndX )
+        else if (nNewEndX == nOldEndX)
         {
             rX1 = Min( nNewStartX, nOldStartX );
             rX2 = Max( nNewStartX, nOldStartX ) - 1;
@@ -546,9 +548,9 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
             nContY2 = rY2;
         }
     }
-    else if ( nNewEndX == nOldEndX && nNewEndY == nOldEndY )            // links oben
+    else if (nNewEndX == nOldEndX && nNewEndY == nOldEndY)            // links oben
     {
-        if ( (nNewStartX<nOldStartX) == (nNewStartY<nOldStartY) )
+        if ((nNewStartX<nOldStartX) == (nNewStartY<nOldStartY))
             rX1 = Min( nNewStartX, nOldStartX );
         else
             rX1 = Max( nNewStartX, nOldStartX );            // Ecke weglassen
@@ -561,9 +563,9 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
         nContX1 = Min( nNewStartX, nOldStartX );            // links
         nContX2 = Max( nNewStartX, nOldStartX ) - 1;
     }
-    else if ( nNewStartX == nOldStartX && nNewEndY == nOldEndY )        // rechts oben
+    else if (nNewStartX == nOldStartX && nNewEndY == nOldEndY)        // rechts oben
     {
-        if ( (nNewEndX<nOldEndX) != (nNewStartY<nOldStartY) )
+        if ((nNewEndX<nOldEndX) != (nNewStartY<nOldStartY))
             rX2 = Max( nNewEndX, nOldEndX );
         else
             rX2 = Min( nNewEndX, nOldEndX );                // Ecke weglassen
@@ -576,9 +578,9 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
         nContX1 = Min( nNewEndX, nOldEndX ) + 1;            // rechts
         nContX2 = Max( nNewEndX, nOldEndX );
     }
-    else if ( nNewEndX == nOldEndX && nNewStartY == nOldStartY )        // links unten
+    else if (nNewEndX == nOldEndX && nNewStartY == nOldStartY)        // links unten
     {
-        if ( (nNewStartX<nOldStartX) != (nNewEndY<nOldEndY) )
+        if ((nNewStartX<nOldStartX) != (nNewEndY<nOldEndY))
             rX1 = Min( nNewStartX, nOldStartX );
         else
             rX1 = Max( nNewStartX, nOldStartX );            // Ecke weglassen
@@ -591,9 +593,9 @@ BOOL ScUpdateRect::GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, B
         nContX1 = Min( nNewStartX, nOldStartX );            // links
         nContX2 = Max( nNewStartX, nOldStartX ) - 1;
     }
-    else if ( nNewStartX == nOldStartX && nNewStartY == nOldStartY )    // rechts unten
+    else if (nNewStartX == nOldStartX && nNewStartY == nOldStartY)    // rechts unten
     {
-        if ( (nNewEndX<nOldEndX) == (nNewEndY<nOldEndY) )
+        if ((nNewEndX<nOldEndX) == (nNewEndY<nOldEndY))
             rX2 = Max( nNewEndX, nOldEndX );
         else
             rX2 = Min( nNewEndX, nOldEndX );                // Ecke weglassen
@@ -629,6 +631,7 @@ void ScUpdateRect::GetContDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
     rX2 = nContX2;
     rY2 = nContY2;
 }
+#endif
 
 
 

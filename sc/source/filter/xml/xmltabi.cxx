@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmltabi.cxx,v $
- * $Revision: 1.40.134.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -50,11 +47,13 @@
 #include "XMLStylesImportHelper.hxx"
 #include "rangeutl.hxx"
 #include "externalrefmgr.hxx"
+#include "sheetdata.hxx"
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/formsimp.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <xmloff/XMLEventsImportContext.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheets.hpp>
@@ -100,21 +99,27 @@ static bool lcl_isExternalRefCache(const rtl::OUString& rName, rtl::OUString& rU
         const sal_Unicode c = p[i];
         if (i <= 7)
         {
+            // Checking the prefix 'file://'.
             if (c != aPrefix[i])
                 return false;
         }
-        else if (c == '#')
-        {
-            if (cPrev != '\'')
-                return false;
-
-            rUrl = aUrlBuf.makeStringAndClear();
-            rUrl = rUrl.copy(0, rUrl.getLength()-1); // remove the trailing single-quote.
-            bInUrl = false;
-        }
         else if (bInUrl)
-            aUrlBuf.append(c);
+        {
+            // parsing file URL
+            if (c == '#')
+            {
+                if (cPrev != '\'')
+                    return false;
+
+                rUrl = aUrlBuf.makeStringAndClear();
+                rUrl = rUrl.copy(0, rUrl.getLength()-1); // remove the trailing single-quote.
+                bInUrl = false;
+            }
+            else
+                aUrlBuf.append(c);
+        }
         else
+            // parsing sheet name.
             aTabNameBuf.append(c);
 
         cPrev = c;
@@ -147,9 +152,13 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                                       const sal_Int32 nSpannedCols) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pExternalRefInfo(NULL),
+    nStartOffset(-1),
     bStartFormPage(sal_False),
     bPrintEntireSheet(sal_True)
 {
+    // get start offset in file (if available)
+    nStartOffset = GetScImport().GetByteOffset();
+
     if (!bTempIsSubTable)
     {
         sal_Bool bProtection(sal_False);
@@ -204,6 +213,7 @@ ScXMLTableContext::ScXMLTableContext( ScXMLImport& rImport,
                 ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
                 pExternalRefInfo->mnFileId = pRefMgr->getExternalFileId(aExtUrl);
                 pExternalRefInfo->mpCacheTable = pRefMgr->getCacheTable(pExternalRefInfo->mnFileId, aExtTabName, true);
+                pExternalRefInfo->mpCacheTable->setWholeTableCached();
             }
         }
         else
@@ -235,6 +245,12 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
         // external cache data.
         switch (nToken)
         {
+            case XML_TOK_TABLE_ROW_GROUP:
+            case XML_TOK_TABLE_HEADER_ROWS:
+            case XML_TOK_TABLE_ROWS:
+                // #i101319# don't discard rows in groups or header (repeat range)
+                return new ScXMLExternalRefRowsContext(
+                    GetScImport(), nPrefix, rLName, xAttrList, *pExternalRefInfo);
             case XML_TOK_TABLE_ROW:
                 return new ScXMLExternalRefRowContext(
                     GetScImport(), nPrefix, rLName, xAttrList, *pExternalRefInfo);
@@ -308,6 +324,14 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
             pContext = GetScImport().GetFormImport()->createOfficeFormsContext( GetScImport(), nPrefix, rLName );
         }
         break;
+    case XML_TOK_TABLE_EVENT_LISTENERS:
+    case XML_TOK_TABLE_EVENT_LISTENERS_EXT:
+        {
+            // use XEventsSupplier interface of the sheet
+            uno::Reference<document::XEventsSupplier> xSupplier( GetScImport().GetTables().GetCurrentXSheet(), uno::UNO_QUERY );
+            pContext = new XMLEventsImportContext( GetImport(), nPrefix, rLName, xSupplier );
+        }
+        break;
     default:
         ;
     }
@@ -320,6 +344,9 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLTableContext::EndElement()
 {
+    // get end offset in file (if available)
+//    sal_Int32 nEndOffset = GetScImport().GetByteOffset();
+
     GetScImport().LockSolarMutex();
     GetScImport().GetStylesImportHelper()->EndTable();
     ScDocument* pDoc(GetScImport().GetDocument());
@@ -380,6 +407,15 @@ void ScXMLTableContext::EndElement()
 
         GetScImport().GetTables().DeleteTable();
         GetScImport().ProgressBarIncrement(sal_False);
+
+        // store stream positions
+        if (!pExternalRefInfo.get() && nStartOffset >= 0 /* && nEndOffset >= 0 */)
+        {
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
+            sal_Int32 nTab = GetScImport().GetTables().GetCurrentSheet();
+            // pSheetData->AddStreamPos( nTab, nStartOffset, nEndOffset );
+            pSheetData->StartStreamPos( nTab, nStartOffset );
+        }
     }
     GetScImport().UnlockSolarMutex();
 }

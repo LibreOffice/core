@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartType.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 #include "CommonFunctors.hxx"
 #include "macros.hxx"
 #include "CartesianCoordinateSystem.hxx"
-#include "Scaling.hxx"
+#include "AxisHelper.hxx"
 #include "CloneHelper.hxx"
 #include "AxisIndexDefines.hxx"
 #include "ContainerHelper.hxx"
@@ -57,7 +54,7 @@ namespace chart
 ChartType::ChartType(
     const Reference< uno::XComponentContext > & xContext ) :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
         m_xContext( xContext ),
         m_bNotifyChanges( true )
 {}
@@ -66,7 +63,7 @@ ChartType::ChartType( const ChartType & rOther ) :
         MutexContainer(),
         impl::ChartType_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
     m_xContext( rOther.m_xContext ),
     m_bNotifyChanges( true )
 {
@@ -106,7 +103,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 
         chart2::ScaleData aScaleData = xAxis->getScaleData();
         aScaleData.Orientation = chart2::AxisOrientation_MATHEMATICAL;
-        aScaleData.Scaling = new LinearScaling( 1.0, 0.0 );
+        aScaleData.Scaling = AxisHelper::createLinearScaling();
 
         switch( i )
         {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: spelldialog.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,12 +65,12 @@ protected:
         next sentence with spelling errors. While doing so the view
         mode may be changed and text shapes are set into edit mode.
     */
-    virtual ::svx::SpellPortions GetNextWrongSentence();
+    virtual ::svx::SpellPortions GetNextWrongSentence( bool bRecheck );
 
     /** This method is responsible for merging corrections made in the
         spelling dialog back into the document.
     */
-    virtual void        ApplyChangedSentence( const ::svx::SpellPortions& rChanged );
+    virtual void        ApplyChangedSentence( const ::svx::SpellPortions& rChanged, bool bRecheck );
     virtual void        GetFocus();
     virtual void        LoseFocus();
 

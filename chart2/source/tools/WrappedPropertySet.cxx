@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WrappedPropertySet.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +33,8 @@
 
 // header for define DELETEZ
 #include <tools/solar.h>
+
+#include <tools/debug.hxx>
 
 //.............................................................................
 namespace chart
@@ -118,7 +117,11 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
         else if( xInnerPropertySet.is() )
             xInnerPropertySet->setPropertyValue( rPropertyName, rValue );
         else
-            throw beans::UnknownPropertyException();
+        {
+#if OSL_DEBUG_LEVEL > 1
+            DBG_ERROR("found no inner property set to map to");
+#endif
+        }
     }
     catch( beans::UnknownPropertyException& ex )
     {
@@ -163,7 +166,11 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
         else if( xInnerPropertySet.is() )
             aRet = xInnerPropertySet->getPropertyValue( rPropertyName );
         else
-            throw beans::UnknownPropertyException();
+        {
+#if OSL_DEBUG_LEVEL > 1
+            DBG_ERROR("found no inner property set to map to");
+#endif
+        }
     }
     catch( beans::UnknownPropertyException& ex )
     {

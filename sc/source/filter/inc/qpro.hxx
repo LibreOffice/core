@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: qpro.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,6 @@ class ScQProReader : public ScBiffReader
 {
     public:
     bool recordsLeft();
-    bool IsEndOfFile();
     void SetEof( bool bValue ){ mbEndOfFile = bValue; }
     bool nextRecord();
     sal_uInt16 getId() { return mnId; }

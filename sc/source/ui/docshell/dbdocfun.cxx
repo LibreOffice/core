@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbdocfun.cxx,v $
- * $Revision: 1.20.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +55,8 @@
 #include "editable.hxx"
 #include "attrib.hxx"
 #include "drwlayer.hxx"
+#include "dpshttab.hxx"
+#include "hints.hxx"
 
 // -----------------------------------------------------------------
 
@@ -594,7 +593,7 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
         if (pDestData)
             pNewData = pDestData;               // Bereich vorhanden -> anpassen
         else                                    // Bereich ab Cursor/Markierung wird angelegt
-            pNewData = rDocShell.GetDBData(aDestPos, SC_DB_MAKE, TRUE );
+            pNewData = rDocShell.GetDBData(aDestPos, SC_DB_MAKE, SC_DBSEL_FORCE_MARK );
         if (pNewData)
         {
             pNewData->SetArea( nTab,
@@ -921,7 +920,7 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             pNewData = rDocShell.GetDBData(
                             ScRange( aLocalParam.nCol1, aLocalParam.nRow1, nDestTab,
                                      aLocalParam.nCol2, aLocalParam.nRow2, nDestTab ),
-                            SC_DB_MAKE, TRUE );
+                            SC_DB_MAKE, SC_DBSEL_FORCE_MARK );
 
         if (pNewData)
         {
@@ -938,7 +937,10 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
     }
 
     if (!bCopy)
+    {
+        pDoc->InvalidatePageBreaks(nTab);
         pDoc->UpdatePageBreaks( nTab );
+    }
 
     // #i23299# because of Subtotal functions, the whole rows must be set dirty
     ScRange aDirtyRange( 0 , aLocalParam.nRow1, nDestTab,
@@ -1233,7 +1235,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                                   aRange.aEnd.Col(),   aRange.aEnd.Row(),
                                   nTab, SC_MF_AUTO );
 
-            pDoc->GetDPCollection()->Free( pOldObj );   // object is deleted here
+            pDoc->GetDPCollection()->FreeTable( pOldObj );  // object is deleted here
 
             rDocShell.PostPaintGridAll();   //! only necessary parts
             rDocShell.PostPaint( aRange.aStart.Col(), aRange.aStart.Row(), nTab,
@@ -1276,8 +1278,15 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 //  output range must be set at pNewObj
 
                 pDestObj = new ScDPObject( *pNewObj );
+
+                // #i94570# When changing the output position in the dialog, a new table is created
+                // with the settings from the old table, including the name.
+                // So we have to check for duplicate names here (before inserting).
+                if ( pDoc->GetDPCollection()->GetByName(pDestObj->GetName()) )
+                    pDestObj->SetName( String() );      // ignore the invalid name, create a new name below
+
                 pDestObj->SetAlive(TRUE);
-                if ( !pDoc->GetDPCollection()->Insert(pDestObj) )
+                if ( !pDoc->GetDPCollection()->InsertNewTable(pDestObj) )
                 {
                     DBG_ERROR("cannot insert DPObject");
                     DELETEZ( pDestObj );
@@ -1299,6 +1308,22 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 
                 BOOL bOverflow = FALSE;
                 ScRange aNewOut = pDestObj->GetNewOutputRange( bOverflow );
+
+                //! test for overlap with other data pilot tables
+                if( pOldObj )
+                {
+                    const ScSheetSourceDesc* pSheetDesc = pOldObj->GetSheetDesc();
+                    if( pSheetDesc && pSheetDesc->aSourceRange.Intersects( aNewOut ) )
+                    {
+                        ScRange aOldRange = pOldObj->GetOutRange();
+                        SCsROW nDiff = aOldRange.aStart.Row()-aNewOut.aStart.Row();
+                        aNewOut.aStart.SetRow( aOldRange.aStart.Row() );
+                        aNewOut.aEnd.SetRow( aNewOut.aEnd.Row()+nDiff );
+                        if( !ValidRow( aNewOut.aStart.Row() ) || !ValidRow( aNewOut.aEnd.Row() ) )
+                            bOverflow = TRUE;
+                    }
+                }
+
                 if ( bOverflow )
                 {
                     //  like with STR_PROTECTIONERR, use undo to reverse everything
@@ -1354,9 +1379,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                     pDoc->CopyToDocument( aNewOut, IDF_ALL, FALSE, pNewUndoDoc );
                 }
 
-                //! test for overlap with other data pilot tables
-
-                pDestObj->Output();
+                pDestObj->Output( aNewOut.aStart );
 
                 rDocShell.PostPaintGridAll();           //! only necessary parts
                 bDone = TRUE;
@@ -1391,7 +1414,12 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     delete pUndoDPObj;
 
     if (bDone)
+    {
+        // notify API objects
+        if (pDestObj)
+            pDoc->BroadcastUno( ScDataPilotModifiedHint( pDestObj->GetName() ) );
         aModificator.SetDocumentModified();
+    }
 
     if ( nErrId && !bApi )
         rDocShell.ErrorMessage( nErrId );

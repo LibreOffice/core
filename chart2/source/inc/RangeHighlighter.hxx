@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RangeHighlighter.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,6 @@
 #define CHART2_RANGEHIGHLIGHTER_HXX
 
 #include "MutexContainer.hxx"
-#include "charttoolsdllapi.hxx"
 #include <cppuhelper/compbase2.hxx>
 #include <com/sun/star/chart2/data/XRangeHighlighter.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
@@ -56,7 +52,7 @@ typedef ::cppu::WeakComponentImplHelper2<
     RangeHighlighter_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS RangeHighlighter :
+class RangeHighlighter :
         public MutexContainer,
         public impl::RangeHighlighter_Base
 {
@@ -111,6 +107,7 @@ private:
     ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::data::HighlightedRange >
         m_aSelectedRanges;
     sal_Int32 m_nAddedListenerCount;
+    bool m_bIncludeHiddenCells;
 };
 
 } //  namespace chart

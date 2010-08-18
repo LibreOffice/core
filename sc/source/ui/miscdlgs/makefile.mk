@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,6 +46,7 @@ SLOFILES =  \
     $(SLO)$/delcodlg.obj		\
     $(SLO)$/inscodlg.obj		\
     $(SLO)$/strindlg.obj		\
+    $(SLO)$/tabbgcolordlg.obj   \
     $(SLO)$/mtrindlg.obj		\
     $(SLO)$/lbseldlg.obj		\
     $(SLO)$/filldlg.obj			\
@@ -64,7 +61,6 @@ SLOFILES =  \
     $(SLO)$/crdlg.obj			\
     $(SLO)$/namecrea.obj		\
     $(SLO)$/namepast.obj		\
-    $(SLO)$/teamdlg.obj			\
     $(SLO)$/textdlgs.obj		\
     $(SLO)$/anyrefdg.obj		\
     $(SLO)$/crnrdlg.obj			\
@@ -78,7 +74,9 @@ SLOFILES =  \
     $(SLO)$/warnbox.obj	\
     $(SLO)$/scuiautofmt.obj     \
     $(SLO)$/conflictsdlg.obj    \
-    $(SLO)$/sharedocdlg.obj
+    $(SLO)$/sharedocdlg.obj \
+    $(SLO)$/protectiondlg.obj \
+    $(SLO)$/retypepassdlg.obj
 
 EXCEPTIONSFILES = \
     $(SLO)$/acredlin.obj        \
@@ -87,7 +85,9 @@ EXCEPTIONSFILES = \
     $(SLO)$/optsolver.obj       \
     $(SLO)$/solveroptions.obj   \
     $(SLO)$/crnrdlg.obj         \
-    $(SLO)$/solverutil.obj
+    $(SLO)$/solverutil.obj \
+    $(SLO)$/protectiondlg.obj \
+    $(SLO)$/retypepassdlg.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
@@ -96,7 +96,9 @@ SRC1FILES = \
     highred.src					\
     linkarea.src                \
     conflictsdlg.src            \
-    sharedocdlg.src
+    sharedocdlg.src \
+    protectiondlg.src \
+    retypepassdlg.src
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
@@ -107,7 +109,6 @@ LIB1OBJFILES =  \
     $(SLO)$/solveroptions.obj   \
     $(SLO)$/solverutil.obj      \
     $(SLO)$/tabopdlg.obj		\
-    $(SLO)$/teamdlg.obj			\
     $(SLO)$/anyrefdg.obj		\
     $(SLO)$/crnrdlg.obj			\
     $(SLO)$/acredlin.obj		\
@@ -116,7 +117,9 @@ LIB1OBJFILES =  \
     $(SLO)$/redcom.obj			\
     $(SLO)$/warnbox.obj         \
     $(SLO)$/conflictsdlg.obj    \
-    $(SLO)$/sharedocdlg.obj
+    $(SLO)$/sharedocdlg.obj \
+    $(SLO)$/protectiondlg.obj \
+    $(SLO)$/retypepassdlg.obj
 
 # --- Tagets -------------------------------------------------------
 

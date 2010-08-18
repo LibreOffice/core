@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: editutil.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 #include "scdllapi.h"
 #include "address.hxx"
-#include <svx/editeng.hxx>
+#include <editeng/editeng.hxx>
 #include <svx/pageitem.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -63,7 +60,12 @@ class ScEditUtil
 
 public:
     static String ModifyDelimiters( const String& rOld );
+
+    /// Retrieves string with paragraphs delimited by spaces
     static String GetSpaceDelimitedString( const EditEngine& rEngine );
+
+    /// Retrieves string with paragraphs delimited by new lines ('\n').
+    static String GetMultilineString( const EditEngine& rEngine );
 
 public:
                 ScEditUtil( ScDocument* pDocument, SCCOL nX, SCROW nY, SCTAB nZ,

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xihelper.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,12 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "xihelper.hxx"
-#include <svtools/itemset.hxx>
-#include <svx/editobj.hxx>
+#include <svl/itemset.hxx>
+#include <editeng/editobj.hxx>
 #include <tools/urlobj.hxx>
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
-#include <svx/flditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/flditem.hxx>
 #include "document.hxx"
 #include "cell.hxx"
 #include "rangelst.hxx"
@@ -137,23 +134,23 @@ bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
     return bValidStart;
 }
 
-ScRange XclImpAddressConverter::CreateValidRange(
-        const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
-{
-    return ScRange(
-        CreateValidAddress( rXclRange.maFirst, nScTab1, bWarn ),
-        CreateValidAddress( rXclRange.maLast,  nScTab2, bWarn ) );
-}
+//UNUSED2009-05 ScRange XclImpAddressConverter::CreateValidRange(
+//UNUSED2009-05         const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
+//UNUSED2009-05 {
+//UNUSED2009-05     return ScRange(
+//UNUSED2009-05         CreateValidAddress( rXclRange.maFirst, nScTab1, bWarn ),
+//UNUSED2009-05         CreateValidAddress( rXclRange.maLast,  nScTab2, bWarn ) );
+//UNUSED2009-05 }
 
 // cell range list ------------------------------------------------------------
 
-bool XclImpAddressConverter::CheckRangeList( const XclRangeList& rXclRanges, bool bWarn )
-{
-    for( XclRangeList::const_iterator aIt = rXclRanges.begin(), aEnd = rXclRanges.end(); aIt != aEnd; ++aIt )
-        if( !CheckRange( *aIt, bWarn ) )
-            return false;
-    return true;
-}
+//UNUSED2009-05 bool XclImpAddressConverter::CheckRangeList( const XclRangeList& rXclRanges, bool bWarn )
+//UNUSED2009-05 {
+//UNUSED2009-05     for( XclRangeList::const_iterator aIt = rXclRanges.begin(), aEnd = rXclRanges.end(); aIt != aEnd; ++aIt )
+//UNUSED2009-05         if( !CheckRange( *aIt, bWarn ) )
+//UNUSED2009-05             return false;
+//UNUSED2009-05     return true;
+//UNUSED2009-05 }
 
 void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
         const XclRangeList& rXclRanges, SCTAB nScTab, bool bWarn )
@@ -254,11 +251,11 @@ EditTextObject* XclImpStringHelper::CreateTextObject(
     return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_EDITENG, 0 );
 }
 
-EditTextObject* XclImpStringHelper::CreateNoteObject(
-        const XclImpRoot& rRoot, const XclImpString& rString )
-{
-    return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_NOTE, 0 );
-}
+//UNUSED2009-05 EditTextObject* XclImpStringHelper::CreateNoteObject(
+//UNUSED2009-05         const XclImpRoot& rRoot, const XclImpString& rString )
+//UNUSED2009-05 {
+//UNUSED2009-05     return lclCreateTextObject( rRoot, rString, EXC_FONTITEM_NOTE, 0 );
+//UNUSED2009-05 }
 
 ScBaseCell* XclImpStringHelper::CreateCell(
         const XclImpRoot& rRoot, const XclImpString& rString, sal_uInt16 nXFIndex )
@@ -840,7 +837,7 @@ XclImpCachedValue::~XclImpCachedValue()
 {
 }
 
-USHORT XclImpCachedValue::GetError() const
+USHORT XclImpCachedValue::GetScError() const
 {
     return (mnType == EXC_CACHEDVAL_ERROR) ? XclTools::GetScErrorCode( mnBoolErr ) : 0;
 }
@@ -904,7 +901,7 @@ ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
                         xScMatrix->PutBoolean( pValue->GetBool(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_ERROR:
-                        xScMatrix->PutError( pValue->GetError(), nScCol, nScRow );
+                        xScMatrix->PutError( pValue->GetScError(), nScCol, nScRow );
                     break;
                     default:
                         DBG_ERRORFILE( "XclImpCachedMatrix::CreateScMatrix - unknown value type" );

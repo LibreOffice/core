@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartItemPool.cxx,v $
- * $Revision: 1.9.42.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,15 +33,16 @@
 
 #include "chartview/ChartSfxItemIds.hxx"
 #include <svx/chrtitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/sizeitem.hxx>
-// header for class SfxStringItem
-#include <svtools/stritem.hxx>
-//SfxIntegerListItem
-#include <svtools/ilstitem.hxx>
+#include <svl/intitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <svl/stritem.hxx>
+#include <svl/rectitem.hxx>
+#include <svl/ilstitem.hxx>
 #define _SVSTDARR_ULONGS
-#include <svtools/svstdarr.hxx>
+#include <svl/svstdarr.hxx>
+#include <editeng/editids.hrc>
+#include <svx/svxids.hrc>
 
 namespace chart
 {
@@ -66,6 +64,7 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_DATADESCR_PLACEMENT      - SCHATTR_START] = new SfxInt32Item(SCHATTR_DATADESCR_PLACEMENT,0);
     SvULongs aTmp;
     ppPoolDefaults[SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS - SCHATTR_START] = new SfxIntegerListItem(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS,aTmp);
+    ppPoolDefaults[SCHATTR_DATADESCR_NO_PERCENTVALUE    - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_NO_PERCENTVALUE);
 
     ppPoolDefaults[SCHATTR_LEGEND_POS               - SCHATTR_START] = new SvxChartLegendPosItem( CHLEGEND_RIGHT, SCHATTR_LEGEND_POS );
 //  ppPoolDefaults[SCHATTR_TEXT_ORIENT              - SCHATTR_START] = new SvxChartTextOrientItem;
@@ -184,6 +183,7 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_DIAGRAM_STYLE        - SCHATTR_START] = new SvxChartStyleItem( CHSTYLE_2D_COLUMN, SCHATTR_DIAGRAM_STYLE );
     ppPoolDefaults[SCHATTR_TEXTBREAK            - SCHATTR_START] = new SfxBoolItem( SCHATTR_TEXTBREAK, FALSE );
     ppPoolDefaults[SCHATTR_GROUP_BARS_PER_AXIS  - SCHATTR_START] = new SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, FALSE);
+    ppPoolDefaults[SCHATTR_INCLUDE_HIDDEN_CELLS - SCHATTR_START] = new SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, TRUE);
     ppPoolDefaults[SCHATTR_STARTING_ANGLE       - SCHATTR_START] = new SfxInt32Item( SCHATTR_STARTING_ANGLE, 90 );
     ppPoolDefaults[SCHATTR_CLOCKWISE            - SCHATTR_START] = new SfxBoolItem( SCHATTR_CLOCKWISE, FALSE );
 

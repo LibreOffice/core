@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VTitle.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -254,6 +251,21 @@ void VTitle::createShapes(
                     RelativeSizeHelper::adaptFontSizes( xTargetProps, aOldRefSize, rReferenceSize );
                 }
             }
+        }
+
+        // #i109336# Improve auto positioning in chart
+        float fFontHeight = 0.0;
+        if ( xShapeProp.is() && ( xShapeProp->getPropertyValue( C2U( "CharHeight" ) ) >>= fFontHeight ) )
+        {
+            fFontHeight *= ( 2540. / 72. );  // pt -> 1/100 mm
+            float fXFraction = 0.18;
+            sal_Int32 nXDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * fXFraction ) );
+            float fYFraction = 0.30;
+            sal_Int32 nYDistance = static_cast< sal_Int32 >( ::rtl::math::round( fFontHeight * fYFraction ) );
+            xShapeProp->setPropertyValue( C2U( "TextLeftDistance" ), uno::makeAny( nXDistance ) );
+            xShapeProp->setPropertyValue( C2U( "TextRightDistance" ), uno::makeAny( nXDistance ) );
+            xShapeProp->setPropertyValue( C2U( "TextUpperDistance" ), uno::makeAny( nYDistance ) );
+            xShapeProp->setPropertyValue( C2U( "TextLowerDistance" ), uno::makeAny( nYDistance ) );
         }
 
         try

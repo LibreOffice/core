@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartController_Tools.cxx,v $
- * $Revision: 1.9.36.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +48,9 @@
 #include "LegendHelper.hxx"
 #include "AxisHelper.hxx"
 #include "RegressionCurveHelper.hxx"
+#include "ShapeController.hxx"
+#include "DiagramHelper.hxx"
+#include "ObjectNameProvider.hxx"
 
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
@@ -61,8 +61,6 @@
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
-
-// #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
 #include <svx/ActionDescriptionProvider.hxx>
 // for TransferableDataHelper/TransferableHelper
@@ -80,8 +78,17 @@
 // for SolarMutex
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/dialogs.hrc>
 // for OutlinerView
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdundo.hxx>
+#include <svx/unoapi.hxx>
+#include <svx/unopage.hxx>
+
+#include <boost/scoped_ptr.hpp>
 
 using namespace ::com::sun::star;
 
@@ -110,7 +117,14 @@ bool lcl_deleteDataSeries(
                 ActionDescriptionProvider::createDescription(
                     ActionDescriptionProvider::DELETE, ::rtl::OUString( String( ::chart::SchResId( STR_OBJECT_DATASERIES )))),
                 xUndoManager, xModel );
+
+            Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( xModel ) );
+            uno::Reference< chart2::XAxis > xAxis( ::chart::DiagramHelper::getAttachedAxis( xSeries, xDiagram ) );
+
             ::chart::DataSeriesHelper::deleteSeries( xSeries, xChartType );
+
+            ::chart::AxisHelper::hideAxisIfNoDataIsAttached( xAxis, xDiagram );
+
             bResult = true;
             aUndoGuard.commitAction();
         }
@@ -187,61 +201,17 @@ bool lcl_deleteDataCurve(
 
 } // anonymous namespace
 
-namespace
-{
-void lcl_InsertStringAsTextShapeIntoDrawPage(
-    const Reference< lang::XMultiServiceFactory > & xShapeFactory,
-    const Reference< drawing::XDrawPage > & xDrawPage,
-    OUString & rString,
-    const awt::Point & aPosition )
-{
-    OSL_ASSERT( xShapeFactory.is() && xDrawPage.is());
-    if( ! (xShapeFactory.is()  && xDrawPage.is()))
-        return;
-
-    try
-    {
-        Reference< drawing::XShape > xTextShape(
-            xShapeFactory->createInstance( C2U("com.sun.star.drawing.TextShape")), uno::UNO_QUERY_THROW );
-        xDrawPage->add( xTextShape );
-
-        Reference< text::XTextRange > xRange( xTextShape, uno::UNO_QUERY_THROW );
-        xRange->setString( rString );
-
-        float fCharHeight = 10.0;
-        Reference< beans::XPropertySet > xProperties( xTextShape, uno::UNO_QUERY_THROW );
-        xProperties->setPropertyValue( C2U("TextAutoGrowHeight"), uno::makeAny( true ));
-        xProperties->setPropertyValue( C2U("TextAutoGrowWidth"), uno::makeAny( true ));
-        xProperties->setPropertyValue( C2U("CharHeight"), uno::makeAny( fCharHeight ));
-        xProperties->setPropertyValue( C2U("CharHeightAsian"), uno::makeAny( fCharHeight ));
-        xProperties->setPropertyValue( C2U("CharHeightComplex"), uno::makeAny( fCharHeight ));
-        xProperties->setPropertyValue( C2U("TextVerticalAdjust"), uno::makeAny( drawing::TextVerticalAdjust_CENTER ));
-        xProperties->setPropertyValue( C2U("TextHorizontalAdjust"), uno::makeAny( drawing::TextHorizontalAdjust_CENTER ));
-        xProperties->setPropertyValue( C2U("CharFontName"), uno::makeAny( C2U( "Albany" )));
-
-        awt::Point aAdaptedPos( aPosition );
-        aAdaptedPos.Y -= (xTextShape->getSize().Height / 2);
-        aAdaptedPos.X -= (xTextShape->getSize().Width / 2);
-        xTextShape->setPosition( aAdaptedPos );
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-}
-
-} // anonymous namespace
 
 namespace chart
 {
 
-::std::auto_ptr< ReferenceSizeProvider > ChartController::impl_createReferenceSizeProvider() const
+::std::auto_ptr< ReferenceSizeProvider > ChartController::impl_createReferenceSizeProvider()
 {
-    awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel()) );
+    awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
 
     return ::std::auto_ptr< ReferenceSizeProvider >(
         new ReferenceSizeProvider( aPageSize,
-            Reference< chart2::XChartDocument >( m_aModel->getModel(), uno::UNO_QUERY )));
+            Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY )));
 }
 
 void ChartController::impl_adaptDataSeriesAutoResize()
@@ -259,7 +229,7 @@ void ChartController::executeDispatch_NewArrangement()
 
     try
     {
-        Reference< frame::XModel > xModel( m_aModel->getModel());
+        Reference< frame::XModel > xModel( getModel() );
         Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( xModel ));
         if( xDiagram.is())
         {
@@ -273,6 +243,7 @@ void ChartController::executeDispatch_NewArrangement()
             Reference< beans::XPropertyState > xState( xDiagram, uno::UNO_QUERY_THROW );
             xState->setPropertyToDefault( C2U("RelativeSize"));
             xState->setPropertyToDefault( C2U("RelativePosition"));
+            xState->setPropertyToDefault( C2U("PosSizeExcludeAxes"));
 
             // 3d rotation
             ThreeDHelper::set3DSettingsToDefault( uno::Reference< beans::XPropertySet >( xDiagram, uno::UNO_QUERY ) );
@@ -315,8 +286,8 @@ void ChartController::executeDispatch_ScaleText()
     // using assignment for broken gcc 3.3
     UndoGuard aUndoGuard = UndoGuard(
         ::rtl::OUString( String( SchResId( STR_ACTION_SCALE_TEXT ))),
-        m_xUndoManager, m_aModel->getModel());
-    ControllerLockGuard aCtlLockGuard( m_aModel->getModel());
+        m_xUndoManager, getModel() );
+    ControllerLockGuard aCtlLockGuard( getModel() );
     ::std::auto_ptr< ReferenceSizeProvider > apRefSizeProv( impl_createReferenceSizeProvider());
     OSL_ASSERT( apRefSizeProv.get());
     if( apRefSizeProv.get())
@@ -337,22 +308,21 @@ void ChartController::executeDispatch_Paste()
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( m_pChartWindow ));
         if( aDataHelper.GetTransferable().is())
         {
-//             if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ))
-//             {
-//                 SotStorageStreamRef xStm;
-//                 if( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStm ))
-//                 {
-//                     xStm->Seek( 0 );
-//                     uno::Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ));
-//                     SdrModel * pModel = new SdrModel();
-//                     DrawModelWrapper * pDrawModelWrapper( this->GetDrawModelWrapper());
-//                     if( SvxDrawingLayerImport( pModel, xInputStream ))
-//                         lcl_CopyShapesToChart( *pModel, m_pDrawModelWrapper->getSdrModel());
-//                     delete pModel;
-//                 }
-//             }
-//             else
-            if( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ))
+            if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_DRAWING ) )
+            {
+                SotStorageStreamRef xStm;
+                if ( aDataHelper.GetSotStorageStream( SOT_FORMATSTR_ID_DRAWING, xStm ) )
+                {
+                    xStm->Seek( 0 );
+                    Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( *xStm ) );
+                    ::boost::scoped_ptr< SdrModel > spModel( new SdrModel() );
+                    if ( SvxDrawingLayerImport( spModel.get(), xInputStream ) )
+                    {
+                        impl_PasteShapes( spModel.get() );
+                    }
+                }
+            }
+            else if ( aDataHelper.HasFormat( SOT_FORMATSTR_ID_SVXB ) )
             {
                 // graphic exchange format (graphic manager bitmap format?)
                 SotStorageStreamRef xStm;
@@ -385,14 +355,7 @@ void ChartController::executeDispatch_Paste()
                             pOutlinerView->InsertText( aString );
                         else
                         {
-                            awt::Point aTextPos;
-                            awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel()));
-                            aTextPos.X = (aPageSize.Width / 2);
-                            aTextPos.Y = (aPageSize.Height / 2);
-                            lcl_InsertStringAsTextShapeIntoDrawPage(
-                                m_pDrawModelWrapper->getShapeFactory(),
-                                m_pDrawModelWrapper->getMainDrawPage(),
-                                aString, aTextPos );
+                            impl_PasteStringAsTextShape( aString, awt::Point( 0, 0 ) );
                         }
                     }
                 }
@@ -416,7 +379,7 @@ void ChartController::impl_PasteGraphic(
 {
     // note: the XPropertySet of the model is the old API. Also the property
     // "AdditionalShapes" that is used there.
-    uno::Reference< beans::XPropertySet > xModelProp( m_aModel->getModel(), uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xModelProp( getModel(), uno::UNO_QUERY );
     DrawModelWrapper * pDrawModelWrapper( this->GetDrawModelWrapper());
     if( ! (xGraphic.is() && xModelProp.is()))
         return;
@@ -432,7 +395,7 @@ void ChartController::impl_PasteGraphic(
             xPage->add( xGraphicShape );
             //need to change the model state manually
             {
-                uno::Reference< util::XModifiable > xModifiable( m_aModel->getModel(), uno::UNO_QUERY );
+                uno::Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY );
                 if( xModifiable.is() )
                     xModifiable->setModified( true );
             }
@@ -444,7 +407,6 @@ void ChartController::impl_PasteGraphic(
         uno::Reference< beans::XPropertySet > xGraphicProp( xGraphic, uno::UNO_QUERY );
 
         awt::Size aGraphicSize( 1000, 1000 );
-        awt::Point aShapePos( 100,100 );
         // first try size in 100th mm, then pixel size
         if( ! ( xGraphicProp->getPropertyValue( C2U("Size100thMM")) >>= aGraphicSize ) &&
             ( ( xGraphicProp->getPropertyValue( C2U("SizePixel")) >>= aGraphicSize ) && m_pChartWindow ))
@@ -454,41 +416,162 @@ void ChartController::impl_PasteGraphic(
             aGraphicSize.Height = aVCLSize.getHeight();
         }
         xGraphicShape->setSize( aGraphicSize );
+        xGraphicShape->setPosition( awt::Point( 0, 0 ) );
+    }
+}
 
-        awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel()));
-        aShapePos.X = (aPageSize.Width / 2)  - (aGraphicSize.Width / 2);
-        aShapePos.Y = (aPageSize.Height / 2) - (aGraphicSize.Height / 2);
-        xGraphicShape->setPosition( aShapePos );
+void ChartController::impl_PasteShapes( SdrModel* pModel )
+{
+    DrawModelWrapper* pDrawModelWrapper( this->GetDrawModelWrapper() );
+    if ( pDrawModelWrapper && m_pDrawViewWrapper )
+    {
+        Reference< drawing::XDrawPage > xDestPage( pDrawModelWrapper->getMainDrawPage() );
+        SdrPage* pDestPage = GetSdrPageFromXDrawPage( xDestPage );
+        if ( pDestPage )
+        {
+            Reference< drawing::XShape > xSelShape;
+            m_pDrawViewWrapper->BegUndo( SVX_RESSTR( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
+            sal_uInt16 nCount = pModel->GetPageCount();
+            for ( sal_uInt16 i = 0; i < nCount; ++i )
+            {
+                const SdrPage* pPage = pModel->GetPage( i );
+                SdrObjListIter aIter( *pPage, IM_DEEPNOGROUPS );
+                while ( aIter.IsMore() )
+                {
+                    SdrObject* pObj = aIter.Next();
+                    SdrObject* pNewObj = ( pObj ? pObj->Clone() : NULL );
+                    if ( pNewObj )
+                    {
+                        pNewObj->SetModel( &pDrawModelWrapper->getSdrModel() );
+                        pNewObj->SetPage( pDestPage );
+
+                        // set position
+                        Reference< drawing::XShape > xShape( pNewObj->getUnoShape(), uno::UNO_QUERY );
+                        if ( xShape.is() )
+                        {
+                            xShape->setPosition( awt::Point( 0, 0 ) );
+                        }
+
+                        pDestPage->InsertObject( pNewObj );
+                        m_pDrawViewWrapper->AddUndo( new SdrUndoInsertObj( *pNewObj ) );
+                        xSelShape = xShape;
+                    }
+                }
+            }
+
+            Reference< util::XModifiable > xModifiable( getModel(), uno::UNO_QUERY );
+            if ( xModifiable.is() )
+            {
+                xModifiable->setModified( true );
+            }
+
+            // select last inserted shape
+            m_aSelection.setSelection( xSelShape );
+            m_aSelection.applySelection( m_pDrawViewWrapper );
+
+            m_pDrawViewWrapper->EndUndo();
+
+            impl_switchDiagramPositioningToExcludingPositioning();
+        }
+    }
+}
+
+void ChartController::impl_PasteStringAsTextShape( const OUString& rString, const awt::Point& rPosition )
+{
+    DrawModelWrapper* pDrawModelWrapper( this->GetDrawModelWrapper() );
+    if ( pDrawModelWrapper && m_pDrawViewWrapper )
+    {
+        const Reference< lang::XMultiServiceFactory >& xShapeFactory( pDrawModelWrapper->getShapeFactory() );
+        const Reference< drawing::XDrawPage >& xDrawPage( pDrawModelWrapper->getMainDrawPage() );
+        OSL_ASSERT( xShapeFactory.is() && xDrawPage.is() );
+
+        if ( xShapeFactory.is() && xDrawPage.is() )
+        {
+            try
+            {
+                Reference< drawing::XShape > xTextShape(
+                    xShapeFactory->createInstance( C2U( "com.sun.star.drawing.TextShape" ) ), uno::UNO_QUERY_THROW );
+                xDrawPage->add( xTextShape );
+
+                Reference< text::XTextRange > xRange( xTextShape, uno::UNO_QUERY_THROW );
+                xRange->setString( rString );
+
+                float fCharHeight = 10.0;
+                Reference< beans::XPropertySet > xProperties( xTextShape, uno::UNO_QUERY_THROW );
+                xProperties->setPropertyValue( C2U( "TextAutoGrowHeight" ), uno::makeAny( true ) );
+                xProperties->setPropertyValue( C2U( "TextAutoGrowWidth" ), uno::makeAny( true ) );
+                xProperties->setPropertyValue( C2U( "CharHeight" ), uno::makeAny( fCharHeight ) );
+                xProperties->setPropertyValue( C2U( "CharHeightAsian" ), uno::makeAny( fCharHeight ) );
+                xProperties->setPropertyValue( C2U( "CharHeightComplex" ), uno::makeAny( fCharHeight ) );
+                xProperties->setPropertyValue( C2U( "TextVerticalAdjust" ), uno::makeAny( drawing::TextVerticalAdjust_CENTER ) );
+                xProperties->setPropertyValue( C2U( "TextHorizontalAdjust" ), uno::makeAny( drawing::TextHorizontalAdjust_CENTER ) );
+                xProperties->setPropertyValue( C2U( "CharFontName" ), uno::makeAny( C2U( "Albany" ) ) );
+
+                xTextShape->setPosition( rPosition );
+
+                m_aSelection.setSelection( xTextShape );
+                m_aSelection.applySelection( m_pDrawViewWrapper );
+
+                SdrObject* pObj = DrawViewWrapper::getSdrObject( xTextShape );
+                if ( pObj )
+                {
+                    m_pDrawViewWrapper->BegUndo( SVX_RESSTR( RID_SVX_3D_UNDO_EXCHANGE_PASTE ) );
+                    m_pDrawViewWrapper->AddUndo( new SdrUndoInsertObj( *pObj ) );
+                    m_pDrawViewWrapper->EndUndo();
+
+                    impl_switchDiagramPositioningToExcludingPositioning();
+                }
+            }
+            catch ( const uno::Exception& ex )
+            {
+                ASSERT_EXCEPTION( ex );
+            }
+        }
     }
 }
 
 void ChartController::executeDispatch_Copy()
 {
-
-    Reference< datatransfer::XTransferable > xTransferable;
-
+    if ( m_pDrawViewWrapper )
     {
-        ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
-        SdrObject * pSelectedObj = 0;
-        if( m_pDrawViewWrapper && m_pDrawModelWrapper )
+        OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+        if ( pOutlinerView )
         {
-            if( m_aSelection.getSelectedCID().getLength() )
-                pSelectedObj = m_pDrawModelWrapper->getNamedSdrObject( m_aSelection.getSelectedCID() );
-            else
-                pSelectedObj = DrawViewWrapper::getSdrObject( m_aSelection.getSelectedAdditionalShape() );
-
-            if( pSelectedObj )
+            pOutlinerView->Copy();
+        }
+        else
+        {
+            Reference< datatransfer::XTransferable > xTransferable;
             {
-                xTransferable = Reference< datatransfer::XTransferable >( new ChartTransferable(
-                        & m_pDrawModelWrapper->getSdrModel(), pSelectedObj ));
+                ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+                SdrObject* pSelectedObj = 0;
+                if ( m_pDrawModelWrapper )
+                {
+                    ObjectIdentifier aSelOID( m_aSelection.getSelectedOID() );
+                    if ( aSelOID.isAutoGeneratedObject() )
+                    {
+                        pSelectedObj = m_pDrawModelWrapper->getNamedSdrObject( aSelOID.getObjectCID() );
+                    }
+                    else if ( aSelOID.isAdditionalShape() )
+                    {
+                        pSelectedObj = DrawViewWrapper::getSdrObject( aSelOID.getAdditionalShape() );
+                    }
+                    if ( pSelectedObj )
+                    {
+                        xTransferable = Reference< datatransfer::XTransferable >( new ChartTransferable(
+                                &m_pDrawModelWrapper->getSdrModel(), pSelectedObj, aSelOID.isAdditionalShape() ) );
+                    }
+                }
+            }
+            if ( xTransferable.is() )
+            {
+                Reference< datatransfer::clipboard::XClipboard > xClipboard( TransferableHelper::GetSystemClipboard() );
+                if ( xClipboard.is() )
+                {
+                    xClipboard->setContents( xTransferable, Reference< datatransfer::clipboard::XClipboardOwner >() );
+                }
             }
         }
-    }
-    if( xTransferable.is() )
-    {
-        Reference< datatransfer::clipboard::XClipboard > xClipboard( TransferableHelper::GetSystemClipboard());
-        if( xClipboard.is())
-            xClipboard->setContents( xTransferable, Reference< datatransfer::clipboard::XClipboardOwner >() );
     }
 }
 
@@ -501,12 +584,12 @@ void ChartController::executeDispatch_Cut()
 //static
 bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
 {
-    OUString aSelObjCID;
-    if( (rSelection >>= aSelObjCID) && aSelObjCID.getLength() > 0 )
+    ObjectIdentifier aSelOID( rSelection );
+    if ( aSelOID.isAutoGeneratedObject() )
     {
+        OUString aSelObjCID( aSelOID.getObjectCID() );
         ObjectType aObjectType(ObjectIdentifier::getObjectType( aSelObjCID ));
-        if( (OBJECTTYPE_TITLE == aObjectType) || (OBJECTTYPE_LEGEND == aObjectType)
-                || (OBJECTTYPE_DATA_SERIES == aObjectType) )
+        if( (OBJECTTYPE_TITLE == aObjectType) || (OBJECTTYPE_LEGEND == aObjectType) )
             return true;
         if( (OBJECTTYPE_DATA_SERIES == aObjectType) || (OBJECTTYPE_LEGEND_ENTRY == aObjectType) )
             return true;
@@ -515,6 +598,24 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
             return true;
         if( (OBJECTTYPE_DATA_LABELS == aObjectType) || (OBJECTTYPE_DATA_LABEL == aObjectType) )
             return true;
+        if( (OBJECTTYPE_AXIS == aObjectType) || (OBJECTTYPE_GRID == aObjectType) || (OBJECTTYPE_SUBGRID == aObjectType) )
+            return true;
+    }
+    else if ( aSelOID.isAdditionalShape() )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool ChartController::isShapeContext() const
+{
+    if ( m_aSelection.isAdditionalShapeSelected() ||
+         ( m_pDrawViewWrapper && m_pDrawViewWrapper->AreObjectsMarked() &&
+           ( m_pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT ) ) )
+    {
+        return true;
     }
 
     return false;
@@ -542,9 +643,7 @@ bool ChartController::executeDispatch_Delete()
             return false;
 
         //remove chart object
-        impl_ClearSelection();
-
-        uno::Reference< chart2::XChartDocument > xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
+        uno::Reference< chart2::XChartDocument > xChartDoc( getModel(), uno::UNO_QUERY );
         if( !xChartDoc.is() )
             return false;
 
@@ -557,9 +656,9 @@ bool ChartController::executeDispatch_Delete()
                 UndoGuard aUndoGuard = UndoGuard(
                     ActionDescriptionProvider::createDescription(
                         ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_TITLE )))),
-                    m_xUndoManager, m_aModel->getModel() );
+                    m_xUndoManager, getModel());
                 TitleHelper::removeTitle(
-                    ObjectIdentifier::getTitleTypeForCID( aCID ), m_aModel->getModel());
+                    ObjectIdentifier::getTitleTypeForCID( aCID ), getModel() );
                 bReturn = true;
                 aUndoGuard.commitAction();
                 break;
@@ -576,7 +675,7 @@ bool ChartController::executeDispatch_Delete()
                         UndoGuard aUndoGuard = UndoGuard(
                             ActionDescriptionProvider::createDescription(
                                 ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_LEGEND )))),
-                            m_xUndoManager, m_aModel->getModel() );
+                            m_xUndoManager, getModel() );
                         xLegendProp->setPropertyValue( C2U("Show"), uno::makeAny( false ));
                         bReturn = true;
                         aUndoGuard.commitAction();
@@ -586,7 +685,7 @@ bool ChartController::executeDispatch_Delete()
             }
 
             case OBJECTTYPE_DATA_SERIES:
-                bReturn = lcl_deleteDataSeries( aCID, m_aModel->getModel(), m_xUndoManager );
+                bReturn = lcl_deleteDataSeries( aCID, getModel(), m_xUndoManager );
                 break;
 
             case OBJECTTYPE_LEGEND_ENTRY:
@@ -594,9 +693,9 @@ bool ChartController::executeDispatch_Delete()
                 ObjectType eParentObjectType = ObjectIdentifier::getObjectType(
                     ObjectIdentifier::getFullParentParticle( aCID ));
                 if( eParentObjectType == OBJECTTYPE_DATA_SERIES )
-                    bReturn = lcl_deleteDataSeries( aCID, m_aModel->getModel(), m_xUndoManager );
+                    bReturn = lcl_deleteDataSeries( aCID, getModel(), m_xUndoManager );
                 else if( eParentObjectType == OBJECTTYPE_DATA_CURVE )
-                    bReturn = lcl_deleteDataCurve( aCID, m_aModel->getModel(), m_xUndoManager );
+                    bReturn = lcl_deleteDataCurve( aCID, getModel(), m_xUndoManager );
                 break;
             }
 
@@ -604,14 +703,14 @@ bool ChartController::executeDispatch_Delete()
             {
                 uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
                     ObjectIdentifier::getObjectPropertySet(
-                        ObjectIdentifier::getFullParentParticle( aCID ), m_aModel->getModel()), uno::UNO_QUERY );
+                        ObjectIdentifier::getFullParentParticle( aCID ), getModel()), uno::UNO_QUERY );
                 if( xRegCurveCnt.is())
                 {
                     // using assignment for broken gcc 3.3
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
                             ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_AVERAGE_LINE )))),
-                        m_xUndoManager, m_aModel->getModel() );
+                        m_xUndoManager, getModel() );
                     RegressionCurveHelper::removeMeanValueLine( xRegCurveCnt );
                     bReturn = true;
                     aUndoGuard.commitAction();
@@ -620,16 +719,16 @@ bool ChartController::executeDispatch_Delete()
             }
 
             case OBJECTTYPE_DATA_CURVE:
-                bReturn = lcl_deleteDataCurve( aCID, m_aModel->getModel(), m_xUndoManager );
+                bReturn = lcl_deleteDataCurve( aCID, getModel(), m_xUndoManager );
                 break;
 
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {
                 uno::Reference< beans::XPropertySet > xEqProp(
-                    ObjectIdentifier::getObjectPropertySet( aCID, m_aModel->getModel()));
+                    ObjectIdentifier::getObjectPropertySet( aCID, getModel()));
                 if( xEqProp.is())
                 {
-                    uno::Reference< frame::XModel > xModel( m_aModel->getModel());
+                    uno::Reference< frame::XModel > xModel( getModel() );
                     // using assignment for broken gcc 3.3
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
@@ -649,14 +748,14 @@ bool ChartController::executeDispatch_Delete()
             case OBJECTTYPE_DATA_ERRORS:
             {
                 uno::Reference< beans::XPropertySet > xErrorBarProp(
-                    ObjectIdentifier::getObjectPropertySet( aCID, m_aModel->getModel()));
+                    ObjectIdentifier::getObjectPropertySet( aCID, getModel() ));
                 if( xErrorBarProp.is())
                 {
-                    uno::Reference< frame::XModel > xModel( m_aModel->getModel());
+                    uno::Reference< frame::XModel > xModel( getModel() );
                     // using assignment for broken gcc 3.3
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
-                            ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_ERROR_INDICATOR )))),
+                            ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_ERROR_BARS )))),
                         m_xUndoManager, xModel );
                     {
                         ControllerLockGuard aCtlLockGuard( xModel );
@@ -674,14 +773,14 @@ bool ChartController::executeDispatch_Delete()
             case OBJECTTYPE_DATA_LABEL:
             {
                 uno::Reference< beans::XPropertySet > xObjectProperties =
-                    ObjectIdentifier::getObjectPropertySet( aCID, m_aModel->getModel() );
+                    ObjectIdentifier::getObjectPropertySet( aCID, getModel() );
                 if( xObjectProperties.is() )
                 {
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
                         ActionDescriptionProvider::DELETE, ::rtl::OUString( String(
                             SchResId( aObjectType == OBJECTTYPE_DATA_LABEL ? STR_OBJECT_LABEL : STR_OBJECT_DATALABELS )))),
-                                m_xUndoManager, m_aModel->getModel() );
+                                m_xUndoManager, getModel() );
                     chart2::DataPointLabel aLabel;
                     xObjectProperties->getPropertyValue( C2U( "Label" ) ) >>= aLabel;
                     aLabel.ShowNumber = false;
@@ -690,7 +789,7 @@ bool ChartController::executeDispatch_Delete()
                     aLabel.ShowLegendSymbol = false;
                     if( aObjectType == OBJECTTYPE_DATA_LABELS )
                     {
-                        uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, m_aModel->getModel() ));
+                        uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, getModel() ));
                         ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "Label" ), uno::makeAny(aLabel) );
                     }
                     else
@@ -698,6 +797,24 @@ bool ChartController::executeDispatch_Delete()
                     bReturn = true;
                     aUndoGuard.commitAction();
                 }
+                break;
+            }
+            case OBJECTTYPE_AXIS:
+            {
+                executeDispatch_DeleteAxis();
+                bReturn = true;
+                break;
+            }
+            case OBJECTTYPE_GRID:
+            {
+                executeDispatch_DeleteMajorGrid();
+                bReturn = true;
+                break;
+            }
+            case OBJECTTYPE_SUBGRID:
+            {
+                executeDispatch_DeleteMinorGrid();
+                bReturn = true;
                 break;
             }
 
@@ -727,7 +844,7 @@ bool ChartController::executeDispatch_Delete()
 
 void ChartController::executeDispatch_ToggleLegend()
 {
-    Reference< frame::XModel > xModel( m_aModel->getModel());
+    Reference< frame::XModel > xModel( getModel() );
     UndoGuard aUndoGuard = UndoGuard(
         ::rtl::OUString( String( SchResId( STR_ACTION_TOGGLE_LEGEND ))), m_xUndoManager, xModel );
     Reference< beans::XPropertySet > xLegendProp( LegendHelper::getLegend( xModel ), uno::UNO_QUERY );
@@ -761,10 +878,10 @@ void ChartController::executeDispatch_ToggleLegend()
 
 void ChartController::executeDispatch_ToggleGridHorizontal()
 {
-    Reference< frame::XModel > xModel( m_aModel->getModel());
+    Reference< frame::XModel > xModel( getModel() );
     UndoGuard aUndoGuard = UndoGuard(
         ::rtl::OUString( String( SchResId( STR_ACTION_TOGGLE_GRID_HORZ ))), m_xUndoManager, xModel );
-    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( m_aModel->getModel()));
+    Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram( getModel() ));
     if( xDiagram.is())
     {
         sal_Int32 nDimensionIndex = 1;
@@ -780,6 +897,25 @@ void ChartController::executeDispatch_ToggleGridHorizontal()
 
         aUndoGuard.commitAction();
     }
+}
+
+void ChartController::impl_ShapeControllerDispatch( const util::URL& rURL, const Sequence< beans::PropertyValue >& rArgs )
+{
+    Reference< frame::XDispatch > xDispatch( m_aDispatchContainer.getShapeController() );
+    if ( xDispatch.is() )
+    {
+        xDispatch->dispatch( rURL, rArgs );
+    }
+}
+
+void ChartController::impl_switchDiagramPositioningToExcludingPositioning()
+{
+    UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
+        ActionDescriptionProvider::POS_SIZE,
+        ObjectNameProvider::getName( OBJECTTYPE_DIAGRAM)),
+        m_xUndoManager, m_aModel->getModel() );
+    if( DiagramHelper::switchDiagramPositioningToExcludingPositioning( m_aModel->getModel(), true, true ) )
+        aUndoGuard.commitAction();
 }
 
 } //  namespace chart

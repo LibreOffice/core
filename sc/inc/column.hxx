@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: column.hxx,v $
- * $Revision: 1.21.128.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 
 #include "markarr.hxx"
 #include "global.hxx"
-#include "compressedarray.hxx"
 #include "address.hxx"
+#include "rangenam.hxx"
 #include <tools/solar.h>
 
 #include <set>
@@ -58,8 +55,6 @@ class ScBaseCell;
 class ScDocument;
 class ScFormulaCell;
 class ScMarkData;
-class ScMultipleReadHeader;
-class ScMultipleWriteHeader;
 class ScPatternAttr;
 class ScStyleSheet;
 class SvtBroadcaster;
@@ -69,7 +64,7 @@ class ScPostIt;
 struct ScFunctionData;
 struct ScLineFlags;
 struct ScMergePatternState;
-
+class ScFlatBoolRowSegments;
 
 #define COLUMN_DELTA    4
 
@@ -99,8 +94,6 @@ struct ColEntry
 };
 
 
-class ScIndexMap;
-
 class ScColumn
 {
 private:
@@ -117,7 +110,7 @@ private:
 friend class ScDocument;                    // fuer FillInfo
 friend class ScDocumentIterator;
 friend class ScValueIterator;
-friend class ScQueryValueIterator;
+friend class ScDBQueryDataIterator;
 friend class ScColumnIterator;
 friend class ScQueryCellIterator;
 friend class ScMarkedDataIter;
@@ -146,9 +139,9 @@ public:
     void        SwapRow( SCROW nRow1, SCROW nRow2 );
     void        SwapCell( SCROW nRow, ScColumn& rCol);
 
-    BOOL        HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
-                            BOOL bLeft, BOOL bRight ) const;
-    BOOL        HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
+//UNUSED2009-05 BOOL        HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
+//UNUSED2009-05             BOOL bLeft, BOOL bRight ) const;
+    bool        HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
     BOOL        HasAttribSelection( const ScMarkData& rMark, USHORT nMask ) const;
     BOOL        ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
@@ -215,10 +208,10 @@ public:
                 //  UpdateSelectionFunction: Mehrfachselektion
     void        UpdateSelectionFunction( const ScMarkData& rMark,
                                     ScFunctionData& rData,
-                                    const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
+                                    ScFlatBoolRowSegments& rHiddenRows,
                                     BOOL bDoExclude, SCROW nExStartRow, SCROW nExEndRow );
     void        UpdateAreaFunction( ScFunctionData& rData,
-                                    const ScBitMaskCompressedArray< SCROW, BYTE>* pRowFlags,
+                                    ScFlatBoolRowSegments& rHiddenRows,
                                     SCROW nStartRow, SCROW nEndRow );
 
     void        CopyToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarked,
@@ -241,7 +234,9 @@ public:
 
                 //  TRUE = Zahlformat gesetzt
     BOOL        SetString( SCROW nRow, SCTAB nTab, const String& rString,
-                           formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO );
+                           formula::FormulaGrammar::AddressConvention conv = formula::FormulaGrammar::CONV_OOO,
+                           SvNumberFormatter* pFormatter = NULL,
+                           bool bDetectNumberFormat = true );
     void        SetValue( SCROW nRow, const double& rVal);
     void        SetError( SCROW nRow, const USHORT nError);
 
@@ -258,7 +253,7 @@ public:
 
     BOOL        HasStringData( SCROW nRow ) const;
     BOOL        HasValueData( SCROW nRow ) const;
-    USHORT      GetErrorData( SCROW nRow) const;
+//UNUSED2009-05 USHORT      GetErrorData( SCROW nRow) const;
     BOOL        HasStringCells( SCROW nStartRow, SCROW nEndRow ) const;
 
     /** Returns the pointer to a cell note object at the passed row. */
@@ -279,7 +274,6 @@ public:
     void        CalcAfterLoad();
     void        CompileAll();
     void        CompileXML( ScProgress& rProgress );
-    bool        MarkUsedExternalReferences();
 
     void        ResetChanged( SCROW nStartRow, SCROW nEndRow );
 
@@ -299,7 +293,7 @@ public:
     void        SetTabNo(SCTAB nNewTab);
     BOOL        IsRangeNameInUse(SCROW nRow1, SCROW nRow2, USHORT nIndex) const;
     void        FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<USHORT>& rIndexes) const;
-    void        ReplaceRangeNamesInUse( SCROW nRow1, SCROW nRow2, const ScIndexMap& rMap );
+    void        ReplaceRangeNamesInUse( SCROW nRow1, SCROW nRow2, const ScRangeData::IndexMap& rMap );
 
     const SfxPoolItem*      GetAttr( SCROW nRow, USHORT nWhich ) const;
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
@@ -334,7 +328,7 @@ public:
     const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark, BOOL& rFound ) const;
     const ScStyleSheet* GetAreaStyle( BOOL& rFound, SCROW nRow1, SCROW nRow2 ) const;
 
-    void        FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset );
+    void        FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset );
     BOOL        IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const;
 
                 /// May return -1 if not found
@@ -377,7 +371,7 @@ public:
                 /// Including current, may return -1
     SCsROW      GetNextUnprotected( SCROW nRow, BOOL bUp ) const;
 
-    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings);
+    void        GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings, bool& rHasDates);
     BOOL        GetDataEntries(SCROW nRow, TypedScStrCollection& rStrings, BOOL bLimit);
 
 //UNUSED2008-05  SCROW      NoteCount( SCROW nMaxRow = MAXROW ) const;
@@ -401,8 +395,8 @@ public:
     void        CompileColRowNameFormula();
 
     sal_Int32   GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCharSet ) const;
-    xub_StrLen  GetMaxNumberStringLen( USHORT& nPrecision,
-                                    SCROW nRowStart, SCROW nRowEnd ) const;
+    xub_StrLen  GetMaxNumberStringLen( sal_uInt16& nPrecision,
+                                       SCROW nRowStart, SCROW nRowEnd ) const;
 
 private:
     ScBaseCell* CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestDoc, const ScAddress& rDestPos);

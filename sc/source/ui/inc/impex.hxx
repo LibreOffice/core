@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: impex.hxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,17 @@ class SvStream;
 class SfxMedium;
 class ScAsciiOptions;
 
+struct ScExportTextOptions
+{
+    enum NewlineConversion { ToSystem, ToSpace, None };
+    ScExportTextOptions( NewlineConversion eNewlineConversion = ToSystem, sal_Unicode cSeparatorConvertTo = 0, bool bAddQuotes = false ) :
+        meNewlineConversion( eNewlineConversion ), mcSeparatorConvertTo( cSeparatorConvertTo ), mbAddQuotes( bAddQuotes ) {}
+
+    NewlineConversion meNewlineConversion;
+    sal_Unicode mcSeparatorConvertTo;   // Convert separator to this character
+    bool mbAddQuotes;
+};
+
 class ScImportExport
 {
     ScDocShell* pDocSh;
@@ -60,6 +68,7 @@ class ScImportExport
     BOOL        bUndo;                  // Mit Undo?
     BOOL        bOverflow;              // zuviele Zeilen/Spalten
     bool        mbApi;
+    ScExportTextOptions mExportTextOptions;
 
     ScAsciiOptions* pExtOptions;        // erweiterte Optionen
 
@@ -98,7 +107,7 @@ public:
 
     static BOOL  IsFormatSupported( ULONG nFormat );
     static const sal_Unicode* ScanNextFieldFromString( const sal_Unicode* p,
-            String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, BOOL bMergeSeps );
+            String& rField, sal_Unicode cStr, const sal_Unicode* pSeps, bool bMergeSeps, bool& rbIsQuoted );
     static  void    WriteUnicodeOrByteString( SvStream& rStrm, const String& rString, BOOL bZero = FALSE );
     static  void    WriteUnicodeOrByteEndl( SvStream& rStrm );
     static  inline  BOOL    IsEndianSwap( const SvStream& rStrm );
@@ -138,6 +147,8 @@ public:
 
     bool IsApi() const { return mbApi; }
     void SetApi( bool bApi ) { mbApi = bApi; }
+    const ScExportTextOptions& GetExportTextOptions() { return mExportTextOptions; }
+    void SetExportTextOptions( const ScExportTextOptions& options ) { mExportTextOptions = options; }
 };
 
 

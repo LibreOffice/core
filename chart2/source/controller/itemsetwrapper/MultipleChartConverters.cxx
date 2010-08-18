@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MultipleChartConverters.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,9 +138,8 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
         uno::Reference< beans::XPropertySet > xObjectProperties( *aIt, uno::UNO_QUERY);
         uno::Reference< uno::XComponentContext> xContext(0);//do not need Context for label properties
 
-        sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForLabel( xObjectProperties, *aIt, -1/*nPointIndex*/,
-                uno::Reference< beans::XPropertySet >( DiagramHelper::getAttachedAxis( *aIt, ChartModelHelper::findDiagram( xChartModel ) ), uno::UNO_QUERY ) );
-        sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForLabel(
+        sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties, *aIt, -1/*nPointIndex*/, ChartModelHelper::findDiagram( xChartModel ) );
+        sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
                 xObjectProperties,uno::Reference< util::XNumberFormatsSupplier >(xChartModel, uno::UNO_QUERY));
 
         m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(

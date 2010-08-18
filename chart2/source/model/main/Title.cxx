@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Title.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -225,14 +222,14 @@ namespace chart
 
 Title::Title( uno::Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 Title::Title( const Title & rOther ) :
         MutexContainer(),
         impl::Title_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     CloneHelper::CloneRefSequence< uno::Reference< chart2::XFormattedString > >(
         rOther.m_aStrings, m_aStrings );
@@ -259,24 +256,25 @@ uno::Reference< util::XCloneable > SAL_CALL Title::createClone()
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL Title::getText()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     return m_aStrings;
-    // \--
 }
 
-void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& Strings )
+void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& rNewStrings )
     throw (uno::RuntimeException)
 {
-    // /--
-    MutexGuard aGuard( GetMutex() );
+    uno::Sequence< uno::Reference< chart2::XFormattedString > > aOldStrings;
+    {
+        MutexGuard aGuard( GetMutex() );
+        std::swap( m_aStrings, aOldStrings );
+        m_aStrings = rNewStrings;
+    }
+    //don't keep the mutex locked while calling out
     ModifyListenerHelper::removeListenerFromAllElements(
-        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
-    m_aStrings = Strings;
+        ContainerHelper::SequenceToVector( aOldStrings ), m_xModifyEventForwarder );
     ModifyListenerHelper::addListenerToAllElements(
-        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
+        ContainerHelper::SequenceToVector( rNewStrings ), m_xModifyEventForwarder );
     fireModifyEvent();
-    // \--
 }
 
 // ================================================================================

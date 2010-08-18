@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: defltuno.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,9 +29,9 @@
 #include "precompiled_sc.hxx"
 
 
-
-#include <svtools/smplhint.hxx>
-#include <svtools/itemprop.hxx>
+#include <editeng/memberids.hrc>
+#include <svl/smplhint.hxx>
+#include <svl/itemprop.hxx>
 #include <svx/unomid.hxx>
 #include <i18npool/mslangid.hxx>
 
@@ -49,13 +46,15 @@
 #include "unonames.hxx"
 #include "docoptio.hxx"
 
+#include <limits>
+
 using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-const SfxItemPropertyMap* lcl_GetDocDefaultsMap()
+const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
 {
-    static SfxItemPropertyMap aDocDefaultsMap_Impl[] =
+    static SfxItemPropertyMapEntry aDocDefaultsMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_CFCHARS),  ATTR_FONT,          &getCppuType((sal_Int16*)0),        0, MID_FONT_CHAR_SET },
         {MAP_CHAR_LEN(SC_UNO_CJK_CFCHARS),  ATTR_CJK_FONT,      &getCppuType((sal_Int16*)0),        0, MID_FONT_CHAR_SET },
@@ -93,7 +92,8 @@ SC_SIMPLE_SERVICE_INFO( ScDocDefaultsObj, "ScDocDefaultsObj", "com.sun.star.shee
 //------------------------------------------------------------------------
 
 ScDocDefaultsObj::ScDocDefaultsObj(ScDocShell* pDocSh) :
-    pDocShell( pDocSh )
+    pDocShell( pDocSh ),
+    aPropertyMap(lcl_GetDocDefaultsMap())
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 }
@@ -129,8 +129,8 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocDefaultsObj::getPropertySe
                                                         throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    static uno::Reference<beans::XPropertySetInfo> aRef(
-        new SfxItemPropertySetInfo( lcl_GetDocDefaultsMap() ));
+    static uno::Reference<beans::XPropertySetInfo> aRef = new SfxItemPropertySetInfo(
+                                                                        &aPropertyMap );
     return aRef;
 }
 
@@ -145,11 +145,10 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    const SfxItemPropertyMap* pMap =
-            SfxItemPropertyMap::GetByName( lcl_GetDocDefaultsMap(), aPropertyName );
-    if ( !pMap )
+    const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
+    if ( !pEntry )
         throw beans::UnknownPropertyException();
-    if(!pMap->nWID)
+    if(!pEntry->nWID)
     {
         if(aPropertyName.compareToAscii(SC_UNO_STANDARDDEC) == 0)
         {
@@ -160,7 +159,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
                 sal_Int16 nValue = 0;
                 if (aValue >>= nValue)
                 {
-                    aDocOpt.SetStdPrecision(static_cast<sal_uInt8> (nValue));
+                    aDocOpt.SetStdPrecision(static_cast<sal_uInt16> (nValue));
                     pDoc->SetDocOptions(aDocOpt);
                 }
             }
@@ -184,9 +183,9 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
                 throw uno::RuntimeException();
         }
     }
-    else if ( pMap->nWID == ATTR_FONT_LANGUAGE ||
-              pMap->nWID == ATTR_CJK_FONT_LANGUAGE ||
-              pMap->nWID == ATTR_CTL_FONT_LANGUAGE )
+    else if ( pEntry->nWID == ATTR_FONT_LANGUAGE ||
+              pEntry->nWID == ATTR_CJK_FONT_LANGUAGE ||
+              pEntry->nWID == ATTR_CTL_FONT_LANGUAGE )
     {
         //  for getPropertyValue the PoolDefaults are sufficient,
         //  but setPropertyValue has to be handled differently
@@ -204,9 +203,9 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
             LanguageType eLatin, eCjk, eCtl;
             pDoc->GetLanguage( eLatin, eCjk, eCtl );
 
-            if ( pMap->nWID == ATTR_CJK_FONT_LANGUAGE )
+            if ( pEntry->nWID == ATTR_CJK_FONT_LANGUAGE )
                 eCjk = eNew;
-            else if ( pMap->nWID == ATTR_CTL_FONT_LANGUAGE )
+            else if ( pEntry->nWID == ATTR_CTL_FONT_LANGUAGE )
                 eCtl = eNew;
             else
                 eLatin = eNew;
@@ -217,9 +216,9 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
     else
     {
         ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
-        SfxPoolItem* pNewItem = pPool->GetDefaultItem(pMap->nWID).Clone();
+        SfxPoolItem* pNewItem = pPool->GetDefaultItem(pEntry->nWID).Clone();
 
-        if( !pNewItem->PutValue( aValue, pMap->nMemberId ) )
+        if( !pNewItem->PutValue( aValue, pEntry->nMemberId ) )
             throw lang::IllegalArgumentException();
 
         pPool->SetPoolDefaultItem( *pNewItem );
@@ -241,12 +240,11 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const rtl::OUString& aProp
         throw uno::RuntimeException();
 
     uno::Any aRet;
-    const SfxItemPropertyMap* pMap =
-            SfxItemPropertyMap::GetByName( lcl_GetDocDefaultsMap(), aPropertyName );
-    if ( !pMap )
+    const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
+    if ( !pEntry )
         throw beans::UnknownPropertyException();
 
-    if (!pMap->nWID)
+    if (!pEntry->nWID)
     {
         if(aPropertyName.compareToAscii(SC_UNO_STANDARDDEC) == 0)
         {
@@ -254,7 +252,12 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const rtl::OUString& aProp
             if (pDoc)
             {
                 const ScDocOptions& aDocOpt = pDoc->GetDocOptions();
-                aRet <<= static_cast<sal_Int16> (aDocOpt.GetStdPrecision());
+                sal_uInt16 nPrec = aDocOpt.GetStdPrecision();
+                // the max value of unsigned 16-bit integer is used as the flag
+                // value for unlimited precision, c.f.
+                // SvNumberFormatter::UNLIMITED_PRECISION.
+                if (nPrec <= ::std::numeric_limits<sal_Int16>::max())
+                    aRet <<= static_cast<sal_Int16> (nPrec);
             }
             else
                 throw uno::RuntimeException();
@@ -275,8 +278,8 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const rtl::OUString& aProp
     else
     {
         ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
-        const SfxPoolItem& rItem = pPool->GetDefaultItem( pMap->nWID );
-        rItem.QueryValue( aRet, pMap->nMemberId );
+        const SfxPoolItem& rItem = pPool->GetDefaultItem( pEntry->nWID );
+        rItem.QueryValue( aRet, pEntry->nMemberId );
     }
     return aRet;
 }
@@ -293,14 +296,13 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const rtl::OUS
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    const SfxItemPropertyMap* pMap =
-            SfxItemPropertyMap::GetByName( lcl_GetDocDefaultsMap(), aPropertyName );
-    if ( !pMap )
+    const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
+    if ( !pEntry )
         throw beans::UnknownPropertyException();
 
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
 
-    USHORT nWID = pMap->nWID;
+    USHORT nWID = pEntry->nWID;
     if ( nWID == ATTR_FONT || nWID == ATTR_CJK_FONT || nWID == ATTR_CTL_FONT || !nWID )
     {
         //  static default for font is system-dependent,
@@ -343,15 +345,14 @@ void SAL_CALL ScDocDefaultsObj::setPropertyToDefault( const rtl::OUString& aProp
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    const SfxItemPropertyMap* pMap =
-            SfxItemPropertyMap::GetByName( lcl_GetDocDefaultsMap(), aPropertyName );
-    if ( !pMap )
+    const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
+    if ( !pEntry )
         throw beans::UnknownPropertyException();
 
-    if (pMap->nWID)
+    if (pEntry->nWID)
     {
         ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
-        pPool->ResetPoolDefaultItem( pMap->nWID );
+        pPool->ResetPoolDefaultItem( pEntry->nWID );
 
         ItemsChanged();
     }
@@ -368,18 +369,17 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const rtl::OUString& aPr
     if ( !pDocShell )
         throw uno::RuntimeException();
 
-    const SfxItemPropertyMap* pMap =
-            SfxItemPropertyMap::GetByName( lcl_GetDocDefaultsMap(), aPropertyName );
-    if ( !pMap )
+    const SfxItemPropertySimpleEntry* pEntry = aPropertyMap.getByName( aPropertyName );
+    if ( !pEntry )
         throw beans::UnknownPropertyException();
 
     uno::Any aRet;
-    if (pMap->nWID)
+    if (pEntry->nWID)
     {
         ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
-        const SfxPoolItem* pItem = pPool->GetItem( pMap->nWID, SFX_ITEMS_STATICDEFAULT );
+        const SfxPoolItem* pItem = pPool->GetItem( pEntry->nWID, SFX_ITEMS_STATICDEFAULT );
         if (pItem)
-            pItem->QueryValue( aRet, pMap->nMemberId );
+            pItem->QueryValue( aRet, pEntry->nMemberId );
     }
     return aRet;
 }

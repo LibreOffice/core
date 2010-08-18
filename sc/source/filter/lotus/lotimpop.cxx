@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lotimpop.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -183,8 +180,7 @@ void ImportLotus::Hiddencolumn( UINT16 nRecLen )
         {
             Read( nCol );
 
-            pD->SetColFlags( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), pD->GetColFlags( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab) ) | CR_HIDDEN );
-
+            pD->SetColHidden(static_cast<SCCOL>(nCol), static_cast<SCCOL>(nCol), static_cast<SCTAB>(nLTab), true);
             nCnt--;
         }
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartElementFactory.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,6 @@
 
 #include "ChartElementFactory.hxx"
 #include "ObjectIdentifier.hxx"
-
 #include "AccessibleChartElement.hxx"
 
 namespace chart
@@ -41,8 +37,8 @@ namespace chart
 
 AccessibleBase* ChartElementFactory::CreateChartElement( const AccessibleElementInfo& rAccInfo )
 {
-    ObjectType eType(
-        ObjectIdentifier::getObjectType( rAccInfo.m_aCID ));
+    ObjectIdentifier aOID( rAccInfo.m_aOID );
+    ObjectType eType( aOID.getObjectType() );
 
     switch( eType )
     {
@@ -74,6 +70,8 @@ AccessibleBase* ChartElementFactory::CreateChartElement( const AccessibleElement
         case OBJECTTYPE_DATA_CURVE_EQUATION:
             return new AccessibleChartElement( rAccInfo, true, false );
         case OBJECTTYPE_UNKNOWN:
+            break;
+        default:
             break;
     }
 

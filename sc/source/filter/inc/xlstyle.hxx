@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlstyle.hxx,v $
- * $Revision: 1.23.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +34,9 @@
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <tools/color.hxx>
 #include <vcl/vclenum.hxx>
-#include <svx/svxenum.hxx>
-#include <svx/frmdir.hxx>
-#include <svtools/zforlist.hxx>
+#include <editeng/svxenum.hxx>
+#include <editeng/frmdir.hxx>
+#include <svl/zforlist.hxx>
 #include "fapihelper.hxx"
 
 class XclRoot;
@@ -242,6 +239,14 @@ const sal_uInt8 EXC_STYLE_USERDEF           = 0xFF;         /// No built-in styl
 const sal_uInt8 EXC_STYLE_LEVELCOUNT        = 7;            /// Number of outline level styles.
 const sal_uInt8 EXC_STYLE_NOLEVEL           = 0xFF;         /// Default value for unused level.
 
+// (0x0892) STYLEEXT ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_STYLEEXT            = 0x0892;
+
+const sal_uInt8 EXC_STYLEEXT_BUILTIN        = 0x01;
+const sal_uInt8 EXC_STYLEEXT_HIDDEN         = 0x02;
+const sal_uInt8 EXC_STYLEEXT_CUSTOM         = 0x04;
+
 // Structs and classes ========================================================
 
 // Color data =================================================================
@@ -372,8 +377,8 @@ struct XclFontData
     void                SetApiHeight( float fPoint );
     /** Sets the API font family. */
     void                SetApiFamily( sal_Int16 nApiFamily );
-    /** Sets the API font text encoding. */
-    void                SetApiFontEncoding( sal_Int16 nApiFontEnc );
+//UNUSED2009-05 /** Sets the API font text encoding. */
+//UNUSED2009-05 void                SetApiFontEncoding( sal_Int16 nApiFontEnc );
     /** Sets the API font posture. */
     void                SetApiPosture( ::com::sun::star::awt::FontSlant eApiPosture );
     /** Sets the API font weight. */

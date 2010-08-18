@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleText.hxx,v $
- * $Revision: 1.19.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include "textuno.hxx"
 #include "global.hxx"
 #include "viewdata.hxx"
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 
 #include <memory>
 
@@ -46,6 +43,7 @@ class ScEditViewForwarder;
 class ScPreviewShell;
 class EditTextObject;
 class ScCsvViewForwarder;
+class ScAccessibleCell;
 
 
 // ============================================================================
@@ -103,7 +101,7 @@ class ScAccessibleCellTextData : public ScAccessibleCellBaseTextData
 {
 public:
                         ScAccessibleCellTextData(ScTabViewShell* pViewShell,
-                            const ScAddress& rP, ScSplitPos eSplitPos);
+                            const ScAddress& rP, ScSplitPos eSplitPos, ScAccessibleCell* pAccCell);
     virtual             ~ScAccessibleCellTextData();
 
     virtual ScAccessibleTextData* Clone() const;
@@ -123,6 +121,7 @@ private:
     ScTabViewShell* mpViewShell;
     ScSplitPos meSplitPos;
     sal_Bool mbViewEditEngine;
+    ScAccessibleCell* mpAccessibleCell;
 
     // prevent the using of this method of the base class
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }

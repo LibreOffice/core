@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: address.hxx,v $
- * $Revision: 1.17.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,9 +82,10 @@ const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 // A define to handle critical sections we hopefully don't need very often.
 #define SC_ROWLIMIT_MORE_THAN_32K 1     /* set to 1 if we throw the switch */
 
-// The maximum values. Defines are needed for preprocessor checks in
-// bcaslot.cxx, otherwise type safe constants are preferred.
-#define MAXROWCOUNT_DEFINE 65536
+// The maximum values. Defines are needed for preprocessor checks, for example
+// in bcaslot.cxx, otherwise type safe constants are preferred.
+//#define MAXROWCOUNT_DEFINE 65536
+#define MAXROWCOUNT_DEFINE 1048576
 #define MAXCOLCOUNT_DEFINE 1024
 
 // Count values
@@ -126,7 +124,11 @@ const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 // #if SC_ROWLIMIT_MORE_THAN_64K
 // #error row limit 64k
 // #endif
-#define SC_ROWLIMIT_MORE_THAN_64K 0     /* set to 1 if we throw the switch */
+#if MAXROWCOUNT_DEFINE > 65536
+#define SC_ROWLIMIT_MORE_THAN_64K 1
+#else
+#define SC_ROWLIMIT_MORE_THAN_64K 0
+#endif
 const SCROW SCROWS64K = 65536;
 
 // === old stuff defines =====================================================
@@ -276,7 +278,7 @@ public:
             {}
         /* Use the formula::FormulaGrammar::AddressConvention associated with rAddr::Tab() */
         Details( const ScDocument* pDoc, const ScAddress & rAddr );
-        void SetPos( const ScDocument* pDoc, const ScAddress & rAddr );
+//UNUSED2009-05 void SetPos( const ScDocument* pDoc, const ScAddress & rAddr );
     };
     SC_DLLPUBLIC static const Details detailsOOOa1;
 
@@ -434,6 +436,22 @@ inline size_t ScAddress::hash() const
             (static_cast<size_t>(nCol) << 24) ^ static_cast<size_t>(nRow);
 }
 
+struct ScAddressHashFunctor
+{
+    size_t operator()( const ScAddress & rAdr ) const
+    {
+        return rAdr.hash();
+    }
+};
+
+struct ScAddressEqualFunctor
+{
+    bool operator()( const ScAddress & rAdr1, const ScAddress & rAdr2 ) const
+    {
+        return rAdr1 == rAdr2;
+    }
+};
+
 
 // === ScRange ===============================================================
 
@@ -521,7 +539,9 @@ public:
     inline bool operator>( const ScRange& r ) const;
     inline bool operator>=( const ScRange& r ) const;
 
-    inline size_t hash() const;
+    /// Hash 2D area ignoring table number.
+    inline size_t hashArea() const;
+    /// Hash start column and start and end rows.
     inline size_t hashStartColumn() const;
 };
 
@@ -580,7 +600,7 @@ inline bool ScRange::In( const ScRange& r ) const
 }
 
 
-inline size_t ScRange::hash() const
+inline size_t ScRange::hashArea() const
 {
     // Assume that there are not that many ranges with identical corners so we
     // won't have too many collisions. Also assume that more lower row and
@@ -607,6 +627,23 @@ inline size_t ScRange::hashStartColumn() const
         (static_cast<size_t>(aStart.Row()) << 16) ^ // start row <= 2^8
         static_cast<size_t>(aEnd.Row());
 }
+
+
+struct ScRangeHashAreaFunctor
+{
+    size_t operator()( const ScRange & rRange ) const
+    {
+        return rRange.hashArea();
+    }
+};
+
+struct ScRangeEqualFunctor
+{
+    bool operator()( const ScRange & rRange1, const ScRange & rRange2 ) const
+    {
+        return rRange1 == rRange2;
+    }
+};
 
 
 // === ScRangePair ===========================================================
@@ -756,12 +793,14 @@ template< typename T > void PutInOrder( T& nStart, T& nEnd )
 
 bool ConvertSingleRef( ScDocument* pDoc, const String& rRefString,
         SCTAB nDefTab, ScRefAddress& rRefAddress,
-        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1);
+        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+        ScAddress::ExternalInfo* pExtInfo = NULL );
 
 bool ConvertDoubleRef(ScDocument* pDoc, const String& rRefString,
         SCTAB nDefTab, ScRefAddress& rStartRefAddress,
         ScRefAddress& rEndRefAddress,
-        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1);
+        const ScAddress::Details& rDetails = ScAddress::detailsOOOa1,
+        ScAddress::ExternalInfo* pExtInfo = NULL );
 
 /// append alpha representation of column to buffer
 SC_DLLPUBLIC void ScColToAlpha( rtl::OUStringBuffer& rBuffer, SCCOL nCol);

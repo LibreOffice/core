@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: BaseCoordinateSystem.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -113,7 +110,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     sal_Bool bSwapXAndYAxis /* = sal_False */ ) :
         ::property::OPropertySet( m_aMutex ),
         m_xContext( xContext ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
         m_nDimensionCount( nDimensionCount )
  {
     m_aAllAxis.resize( m_nDimensionCount );
@@ -154,7 +151,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
         MutexContainer(),
         ::property::OPropertySet( rSource, m_aMutex ),
     m_xContext( rSource.m_xContext ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
     m_nDimensionCount( rSource.m_nDimensionCount ),
     m_aOrigin( rSource.m_aOrigin )
 {

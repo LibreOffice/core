@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: confuno.cxx,v $
- * $Revision: 1.32 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,9 +53,9 @@ using namespace com::sun::star;
 #define SCSAVEVERSION                           "SaveVersionOnClose"
 
 
-const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
+const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
 {
-    static SfxItemPropertyMap aConfigPropertyMap_Impl[] =
+    static SfxItemPropertyMapEntry aConfigPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_SHOWZERO),     0,  &getBooleanCppuType(),              0, 0},
         {MAP_CHAR_LEN(SC_UNO_SHOWNOTES),    0,  &getBooleanCppuType(),              0, 0},
@@ -91,6 +88,7 @@ const SfxItemPropertyMap* lcl_GetConfigPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_LOADREADONLY), 0,  &getBooleanCppuType(),              0, 0},
         // <--
         {MAP_CHAR_LEN(SC_UNO_SHAREDOC),     0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNO_MODIFYPASSWORDINFO), 0,  &getCppuType((uno::Sequence< beans::PropertyValue >*)0),              0, 0},
         {0,0,0,0,0,0}
     };
     return aConfigPropertyMap_Impl;
@@ -195,11 +193,14 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                         if (pPrinter)
                         {
                             String aString(sPrinterName);
-                            SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
-                            if (pNewPrinter->IsKnown())
-                                pDocShell->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
-                            else
-                                delete pNewPrinter;
+                            if (pPrinter->GetName() != aString)
+                            {
+                                SfxPrinter* pNewPrinter = new SfxPrinter( pPrinter->GetOptions().Clone(), aString );
+                                if (pNewPrinter->IsKnown())
+                                    pDocShell->SetPrinter( pNewPrinter, SFX_PRINTER_PRINTER );
+                                else
+                                    delete pNewPrinter;
+                            }
                         }
                         else
                             throw uno::RuntimeException();
@@ -276,6 +277,20 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 {
                     pDocShell->SetSharedXMLFlag( bDocShared );
                 }
+            }
+            else if ( aPropertyName.compareToAscii( SC_UNO_MODIFYPASSWORDINFO ) == 0 )
+            {
+                uno::Sequence< beans::PropertyValue > aInfo;
+                if ( !( aValue >>= aInfo ) )
+                    throw lang::IllegalArgumentException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Value of type Sequence<PropertyValue> expected!" ) ),
+                        uno::Reference< uno::XInterface >(),
+                        2 );
+
+                if ( !pDocShell->SetModifyPasswordInfo( aInfo ) )
+                    throw beans::PropertyVetoException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The hash is not allowed to be changed now!" ) ),
+                        uno::Reference< uno::XInterface >() );
             }
             else
             {
@@ -410,6 +425,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
             {
                 ScUnoHelpFunctions::SetBoolInAny( aRet, pDocShell->HasSharedXMLFlagSet() );
             }
+            else if ( aPropertyName.compareToAscii( SC_UNO_MODIFYPASSWORDINFO ) == 0 )
+                aRet <<= pDocShell->GetModifyPasswordInfo();
             else
             {
                 const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();

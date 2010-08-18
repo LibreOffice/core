@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CandleStickChart.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,7 +42,7 @@
 #include "DataSeriesHelper.hxx"
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 
 //.............................................................................
 namespace chart
@@ -250,7 +247,7 @@ void CandleStickChart::createShapes()
                 for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
                 {
                     //collect data point information (logic coordinates, style ):
-                    double fLogicX = pPosHelper->getSlotPos( (*aSeriesIter)->getX( nIndex ), fSlotX );
+                    double fLogicX = pPosHelper->getSlotPos( (*aSeriesIter)->getXValue( nIndex ), fSlotX );
                     double fY_First = (*aSeriesIter)->getY_First( nIndex );
                     double fY_Last = (*aSeriesIter)->getY_Last( nIndex );
                     double fY_Min = (*aSeriesIter)->getY_Min( nIndex );

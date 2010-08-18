@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlsubti.cxx,v $
- * $Revision: 1.50.30.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,10 +35,14 @@
 #include "xmlstyli.hxx"
 #include "xmlimprt.hxx"
 #include "document.hxx"
+#include "markdata.hxx"
 #include "XMLConverter.hxx"
 #include "docuno.hxx"
 #include "cellsuno.hxx"
 #include "XMLStylesImportHelper.hxx"
+#include "sheetdata.hxx"
+#include "tabprotection.hxx"
+#include <svx/svdpage.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
@@ -57,6 +58,10 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XProtectable.hpp>
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
+
+#include <memory>
+
+using ::std::auto_ptr;
 
 //------------------------------------------------------------------
 
@@ -262,7 +267,12 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                                     XMLTableStyleContext* pStyle = (XMLTableStyleContext *)pStyles->FindStyleChildContext(
                                         XML_STYLE_FAMILY_TABLE_TABLE, sStyleName, sal_True);
                                     if (pStyle)
+                                    {
                                         pStyle->FillPropertySet(xProperties);
+
+                                        ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rImport.GetModel())->GetSheetSaveData();
+                                        pSheetData->AddTableStyle( sStyleName, ScAddress( 0, 0, (SCTAB)nCurrentSheet ) );
+                                    }
                                 }
                             }
                         }
@@ -576,7 +586,39 @@ void ScMyTables::UpdateRowHeights()
     {
         rImport.LockSolarMutex();
         // update automatic row heights
-        ScModelObj::getImplementation(rImport.GetModel())->UpdateAllRowHeights();
+
+        // For sheets with any kind of shapes (including notes),
+        // update row heights immediately (before setting the positions).
+        // For sheets without shapes, set "pending" flag
+        // and update row heights when a sheet is shown.
+        // The current sheet (from view settings) is always updated immediately.
+
+        ScDocument* pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
+        if (pDoc)
+        {
+            SCTAB nCount = pDoc->GetTableCount();
+            ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+
+            SCTAB nVisible = static_cast<SCTAB>( rImport.GetVisibleSheet() );
+
+            ScMarkData aUpdateSheets;
+            for (SCTAB nTab=0; nTab<nCount; ++nTab)
+            {
+                const SdrPage* pPage = pDrawLayer ? pDrawLayer->GetPage(nTab) : NULL;
+                if ( nTab == nVisible || ( pPage && pPage->GetObjCount() != 0 ) )
+                    aUpdateSheets.SelectTable( nTab, TRUE );
+                else
+                    pDoc->SetPendingRowHeights( nTab, TRUE );
+            }
+
+            if (aUpdateSheets.GetSelectCount())
+            {
+                pDoc->LockStreamValid( true );      // ignore draw page size (but not formula results)
+                ScModelObj::getImplementation(rImport.GetModel())->UpdateAllRowHeights(&aUpdateSheets);
+                pDoc->LockStreamValid( false );
+            }
+        }
+
         rImport.UnlockSolarMutex();
     }
 }
@@ -606,7 +648,7 @@ void ScMyTables::DeleteTable()
         ScMyMatrixRangeList::iterator aEndItr = aMatrixRangeList.end();
         while(aItr != aEndItr)
         {
-            SetMatrix(aItr->aRange, aItr->sFormula, aItr->eGrammar);
+            SetMatrix(aItr->aRange, aItr->sFormula, aItr->sFormulaNmsp, aItr->eGrammar);
             ++aItr;
         }
         aMatrixRangeList.clear();
@@ -616,13 +658,10 @@ void ScMyTables::DeleteTable()
     {
         uno::Sequence<sal_Int8> aPass;
         SvXMLUnitConverter::decodeBase64(aPass, sPassword);
-        rImport.GetDocument()->SetTabProtection(static_cast<SCTAB>(nCurrentSheet), bProtection, aPass);
-        /*uno::Reference <util::XProtectable> xProtectable(xCurrentSheet, uno::UNO_QUERY);
-        if (xProtectable.is())
-        {
-            rtl::OUString sKey;
-            xProtectable->protect(sKey);
-        }*/
+        auto_ptr<ScTableProtection> pProtect(new ScTableProtection);
+        pProtect->setProtected(bProtection);
+        pProtect->setPasswordHash(aPass, PASSHASH_OOO);
+        rImport.GetDocument()->SetTabProtection(static_cast<SCTAB>(nCurrentSheet), pProtect.get());
     }
 
     rImport.UnlockSolarMutex();
@@ -723,7 +762,9 @@ void ScMyTables::AddShape(uno::Reference <drawing::XShape>& rShape,
     aResizeShapes.AddShape(rShape, pRangeList, rStartAddress, rEndAddress, nEndX, nEndY);
 }
 
-void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow, const rtl::OUString& rFormula, const formula::FormulaGrammar::Grammar eGrammar)
+void ScMyTables::AddMatrixRange(
+        sal_Int32 nStartColumn, sal_Int32 nStartRow, sal_Int32 nEndColumn, sal_Int32 nEndRow,
+        const rtl::OUString& rFormula, const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
 {
     DBG_ASSERT(nEndRow >= nStartRow, "wrong row order");
     DBG_ASSERT(nEndColumn >= nStartColumn, "wrong column order");
@@ -733,7 +774,7 @@ void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal
     aRange.EndColumn = nEndColumn;
     aRange.EndRow = nEndRow;
     aRange.Sheet = sal::static_int_cast<sal_Int16>(nCurrentSheet);
-    ScMatrixRange aMRange(aRange, rFormula, eGrammar);
+    ScMatrixRange aMRange(aRange, rFormula, rFormulaNmsp, eGrammar);
     aMatrixRangeList.push_back(aMRange);
 }
 
@@ -754,7 +795,7 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
             }
             else if ((nRow > aItr->aRange.EndRow) && (nColumn > aItr->aRange.EndColumn))
             {
-                SetMatrix(aItr->aRange, aItr->sFormula, aItr->eGrammar);
+                SetMatrix(aItr->aRange, aItr->sFormula, aItr->sFormulaNmsp, aItr->eGrammar);
                 aItr = aMatrixRangeList.erase(aItr);
             }
             else if (nColumn < aItr->aRange.StartColumn)
@@ -771,7 +812,8 @@ sal_Bool ScMyTables::IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow)
     return bResult;
 }
 
-void ScMyTables::SetMatrix(const table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const formula::FormulaGrammar::Grammar eGrammar)
+void ScMyTables::SetMatrix(const table::CellRangeAddress& rRange, const rtl::OUString& rFormula,
+        const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar)
 {
     uno::Reference <table::XCellRange> xMatrixCellRange(
         GetCurrentXCellRange()->getCellRangeByPosition(rRange.StartColumn, rRange.StartRow,
@@ -785,7 +827,7 @@ void ScMyTables::SetMatrix(const table::CellRangeAddress& rRange, const rtl::OUS
                 static_cast<ScCellRangeObj*>(ScCellRangesBase::getImplementation(
                             xMatrixCellRange));
             if (pCellRangeObj)
-                pCellRangeObj->SetArrayFormulaWithGrammar( rFormula, eGrammar);
+                pCellRangeObj->SetArrayFormulaWithGrammar( rFormula, rFormulaNmsp, eGrammar);
         }
     }
 }

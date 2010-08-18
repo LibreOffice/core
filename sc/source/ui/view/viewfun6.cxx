@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewfun6.cxx,v $
- * $Revision: 1.11.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,9 +172,11 @@ void ScViewFunc::EditNote()
         // hide temporary note caption
         HideNoteMarker();
         // show caption object without changing internal visibility state
-        pNote->ShowCaptionTemp();
+        pNote->ShowCaptionTemp( aPos );
 
-        // drawing object has been created in ScDocument::GetOrCreateNote
+        /*  Drawing object has been created in ScDocument::GetOrCreateNote() or
+            in ScPostIt::ShowCaptionTemp(), so ScPostIt::GetCaption() should
+            return a caption object. */
         if( SdrCaptionObj* pCaption = pNote->GetCaption() )
         {
             // #i33764# enable the resize handles before starting edit mode

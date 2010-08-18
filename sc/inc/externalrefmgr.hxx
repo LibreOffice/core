@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: externalrefmgr.hxx,v $
- * $Revision: 1.1.2.23 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,14 +34,16 @@
 #include "sfx2/lnkbase.hxx"
 #include "tools/time.hxx"
 #include "vcl/timer.hxx"
-#include "svtools/zforlist.hxx"
+#include "svl/zforlist.hxx"
 #include "scmatrix.hxx"
+#include "rangelst.hxx"
 
 #include <hash_map>
 #include <hash_set>
 #include <boost/shared_ptr.hpp>
 #include <vector>
 #include <list>
+#include <set>
 #include <formula/ExternalReferenceHelper.hxx>
 
 class ScDocument;
@@ -58,6 +57,7 @@ class ScTokenArray;
 class String;
 class SfxObjectShellRef;
 class Window;
+class ScFormulaCell;
 
 class ScExternalRefCache;
 
@@ -129,27 +129,80 @@ public:
     class Table;
     friend class ScExternalRefCache::Table;
 
+    /**
+     * Represents a single cached table in an external document.  It only
+     * stores non-empty cells; empty cells should never be stored in the data
+     * cache. Instead, cached ranges should be used to determine whether or
+     * not a cell is empty or needs fetching from the source document.  If a
+     * cell's value is not stored but its address is within the cached ranges,
+     * that cell is already queried in the source document and we know it's
+     * empty.
+     */
     class Table
     {
     public:
+
+        enum ReferencedFlag
+        {
+            UNREFERENCED,
+            REFERENCED_MARKED,      // marked as referenced during store to file
+            REFERENCED_PERMANENT    // permanently marked, e.g. from within interpreter
+        };
+
         Table();
         ~Table();
 
-        SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0);
-        TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
+        /**
+         * Add cell value to the cache.
+         *
+         * @param bSetCacheRange if true, mark this cell 'cached'.  This is
+         *                       false _only when_ adding a range of cell
+         *                       values, for performance reasons.
+         */
+        SC_DLLPUBLIC void setCell(SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex = 0, bool bSetCacheRange = true);
+        SC_DLLPUBLIC TokenRef getCell(SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex = NULL) const;
         bool hasRow( SCROW nRow ) const;
-        /// A temporary state used only during store to file.
-        bool isReferenced() const;
+        /** Set/clear referenced status flag only if current status is not
+            REFERENCED_PERMANENT. */
         void setReferenced( bool bReferenced );
+        /// Unconditionally set the reference status flag.
+        void setReferencedFlag( ReferencedFlag eFlag );
+        ReferencedFlag getReferencedFlag() const;
+        bool isReferenced() const;
         /// Obtain a sorted vector of rows.
-        void getAllRows(::std::vector<SCROW>& rRows) const;
+        void getAllRows(::std::vector<SCROW>& rRows, SCROW nLow = 0, SCROW nHigh = MAXROW) const;
+        /// Returns the half-open range of used rows in this table. Returns [0,0) if table is empty.
+        SC_DLLPUBLIC ::std::pair< SCROW, SCROW > getRowRange() const;
         /// Obtain a sorted vector of columns.
-        void getAllCols(SCROW nRow, ::std::vector<SCCOL>& rCols) const;
+        void getAllCols(SCROW nRow, ::std::vector<SCCOL>& rCols, SCCOL nLow = 0, SCCOL nHigh = MAXCOL) const;
+        /// Returns the half-open range of used columns in the specified row. Returns [0,0) if row is empty.
+        SC_DLLPUBLIC ::std::pair< SCCOL, SCCOL > getColRange( SCROW nRow ) const;
         void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
+        const ScRangeList& getCachedRanges() const;
+        bool isRangeCached(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
+
+        void setCachedCell(SCCOL nCol, SCROW nRow);
+        void setCachedCellRange(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+
+        /**
+         * Call this to mark the entire table "cached".  This will prevent all
+         * future attempts to access the source document even when non-cached
+         * cells are queried.  In such case, non-cached cells are treated as
+         * empty cells.  Useful when loading a document with own external data
+         * cache.
+         */
+        SC_DLLPUBLIC void setWholeTableCached();
+    private:
+        bool isInCachedRanges(SCCOL nCol, SCROW nRow) const;
+        TokenRef getEmptyOrNullToken(SCCOL nCol, SCROW nRow) const;
 
     private:
-        RowsDataType maRows;
-        bool         mbReferenced;
+        /** Data cache */
+        RowsDataType                    maRows;
+        /** Collection of individual cached ranges.  The table ranges are
+         *  not used & always zero. */
+        ScRangeList                     maCachedRanges;
+        ReferencedFlag                  meReferenced;
     };
 
     typedef ::boost::shared_ptr<Table>      TableTypeRef;
@@ -172,8 +225,7 @@ public:
      * @return pointer to the token instance in the cache.
      */
     ScExternalRefCache::TokenRef getCellData(
-        sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow,
-        bool bEmptyCellOnNull, sal_uInt32* pnFmtIndex = NULL);
+        sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow, sal_uInt32* pnFmtIndex);
 
     /**
      * Get a cached cell range data.
@@ -183,12 +235,12 @@ public:
      *         guaranteed if the TokenArrayRef is properly used..
      */
     ScExternalRefCache::TokenArrayRef getCellRangeData(
-        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, bool bEmptyCellOnNull);
+        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange);
 
     ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const String& rName);
     void setRangeNameTokens(sal_uInt16 nFileId, const String& rName, TokenArrayRef pArray);
 
-    void setCellData(sal_uInt16 nFileId, const String& rTabName, SCROW nRow, SCCOL nCol, TokenRef pToken, sal_uInt32 nFmtIndex);
+    void setCellData(sal_uInt16 nFileId, const String& rTabName, SCCOL nCol, SCROW nRow, TokenRef pToken, sal_uInt32 nFmtIndex);
 
     struct SingleRangeData
     {
@@ -219,9 +271,16 @@ public:
      * Set a table as referenced, used only during store-to-file.
      * @returns <TRUE/> if ALL tables of ALL documents are marked.
      */
-    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName );
+    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets, bool bPermanent );
     void setAllCacheTableReferencedStati( bool bReferenced );
     bool areAllCacheTablesReferenced() const;
+
+    /**
+     * Set a table as permanently referenced, to be called if not in
+     * mark-during-store-to-file cycle.
+     */
+    void setCacheTableReferencedPermanently( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
+
 private:
     struct ReferencedStatus
     {
@@ -305,58 +364,8 @@ class SC_DLLPUBLIC ScExternalRefManager : public formula::ExternalReferenceHelpe
 {
 public:
 
-    // SUNWS needs a forward declared friend, otherwise types and members
-    // of the outer class are not accessible.
-    class RefCells;
-    friend class ScExternalRefManager::RefCells;
-
-    /**
-     *  Collection of cell addresses that contain external references. This
-     *  data is used for link updates.
-     */
-    class RefCells
-    {
-    public:
-        RefCells();
-        ~RefCells();
-
-        void insertCell(const ScAddress& rAddr);
-        void removeCell(const ScAddress& rAddr);
-        void moveTable(SCTAB nOldTab, SCTAB nNewTab, bool bCopy);
-        void insertTable(SCTAB nPos);
-        void removeTable(SCTAB nPos);
-        void refreshAllCells(ScExternalRefManager& rRefMgr);
-    private:
-
-        typedef ::std::hash_set<SCROW>              RowSet;
-        typedef ::std::hash_map<SCCOL, RowSet>      ColSet;
-
-        // SUNWS needs a forward declared friend, otherwise types and members
-        // of the outer class are not accessible.
-        struct TabItem;
-        friend struct ScExternalRefManager::RefCells::TabItem;
-
-        struct TabItem
-        {
-            SCTAB       mnIndex;
-            ColSet      maCols;
-            explicit TabItem(SCTAB nIndex);
-            explicit TabItem(const TabItem& r);
-        };
-        typedef ::boost::shared_ptr<TabItem>        TabItemRef;
-
-        /**
-         * Return the position that points either to the specified table
-         * position or to the position where a new table would be inserted in
-         * case the specified table is not present.
-         *
-         * @param nTab index of the desired table
-         */
-        ::std::list<TabItemRef>::iterator getTabPos(SCTAB nTab);
-
-        // This list must be sorted by the table index at all times.
-        ::std::list<TabItemRef> maTables;
-    };
+    typedef ::std::set<ScFormulaCell*>                      RefCellSet;
+    typedef ::std::hash_map<sal_uInt16, RefCellSet>         RefCellMap;
 
     enum LinkUpdateType { LINK_MODIFIED, LINK_BROKEN };
 
@@ -381,6 +390,21 @@ public:
         };
     };
 
+    /**
+     * Use this guard when performing something from the API that might query
+     * values from external references.  Interpreting formula strings is one
+     * such example.
+     */
+    class ApiGuard
+    {
+    public:
+        ApiGuard(ScDocument* pDoc);
+        ~ApiGuard();
+    private:
+        ScExternalRefManager* mpMgr;
+        bool mbOldInteractionEnabled;
+    };
+
 private:
     /** Shell instance for a source document. */
     struct SrcShell
@@ -392,7 +416,6 @@ private:
     typedef ::std::hash_map<sal_uInt16, SrcShell>           DocShellMap;
     typedef ::std::hash_map<sal_uInt16, bool>               LinkedDocMap;
 
-    typedef ::std::hash_map<sal_uInt16, RefCells>           RefCellMap;
     typedef ::std::hash_map<sal_uInt16, SvNumberFormatterMergeMap> NumFmtMap;
 
 
@@ -403,10 +426,13 @@ public:
     /** Source document meta-data container. */
     struct SrcFileData
     {
-        String maFileName;
+        String maFileName;      /// original file name as loaded from the file.
+        String maRealFileName;  /// file name created from the relative name.
         String maRelativeName;
         String maFilterName;
         String maFilterOptions;
+
+        void maybeCreateRealFileName(const String& rOwnDocName);
     };
 
 public:
@@ -448,6 +474,13 @@ public:
      * @return shared_ptr to the cache table instance
      */
     ScExternalRefCache::TableTypeRef getCacheTable(sal_uInt16 nFileId, const String& rTabName, bool bCreateNew, size_t* pnIndex = 0);
+
+    /** Returns a vector containing all (real) table names and cache tables of
+        the specified file.
+
+        The index in the returned vector corresponds to the table index used to
+        access the cache table, e.g. in getCacheTable().
+     */
     void getAllCachedTableNames(sal_uInt16 nFileId, ::std::vector<String>& rTabNames) const;
 
     /**
@@ -486,25 +519,26 @@ public:
      */
     bool markUsedByLinkListeners();
 
-    /**
-     * Set all tables of a document as referenced, used only during
-     * store-to-file.
-     * @returns <TRUE/> if ALL tables of ALL external documents are marked.
-     */
-    bool setCacheDocReferenced( sal_uInt16 nFileId );
+    bool markUsedExternalRefCells();
 
     /**
      * Set a table as referenced, used only during store-to-file.
      * @returns <TRUE/> if ALL tables of ALL external documents are marked.
      */
-    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName );
+    bool setCacheTableReferenced( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
     void setAllCacheTableReferencedStati( bool bReferenced );
+
+    /**
+     * Set a table as permanently referenced, to be called if not in
+     * mark-during-store-to-file cycle.
+     */
+    void setCacheTableReferencedPermanently( sal_uInt16 nFileId, const String& rTabName, size_t nSheets );
 
     /**
      * @returns <TRUE/> if setAllCacheTableReferencedStati(false) was called,
      * <FALSE/> if setAllCacheTableReferencedStati(true) was called.
      */
-    bool isInReferenceMarking() const   { return bInReferenceMarking; }
+    bool isInReferenceMarking() const   { return mbInReferenceMarking; }
 
     void storeRangeNameTokens(sal_uInt16 nFileId, const String& rName, const ScTokenArray& rArray);
 
@@ -525,7 +559,8 @@ public:
      * @return shared_ptr to a token array instance.  <i>The caller must not
      *         delete the instance returned by this method.</i>
      */
-    ScExternalRefCache::TokenArrayRef getDoubleRefTokens(sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, const ScAddress* pCurPos);
+    ScExternalRefCache::TokenArrayRef getDoubleRefTokens(
+        sal_uInt16 nFileId, const String& rTabName, const ScRange& rRange, const ScAddress* pCurPos);
 
     /**
      * Get an array of tokens corresponding with a specified name in a
@@ -538,7 +573,8 @@ public:
      *
      * @return shared_ptr to array of tokens composing the name
      */
-    ScExternalRefCache::TokenArrayRef getRangeNameTokens(sal_uInt16 nFileId, const String& rName, const ScAddress* pCurPos = NULL);
+    ScExternalRefCache::TokenArrayRef getRangeNameTokens(
+        sal_uInt16 nFileId, const String& rName, const ScAddress* pCurPos = NULL);
 
     const String& getOwnDocumentName() const;
     bool isOwnDocument(const String& rFile) const;
@@ -551,7 +587,21 @@ public:
      */
     void convertToAbsName(String& rFile) const;
     sal_uInt16 getExternalFileId(const String& rFile);
-    const String* getExternalFileName(sal_uInt16 nFileId) const;
+
+    /**
+     * It returns a pointer to the name of the URI associated with a given
+     * external file ID.  In case the original document has moved, it returns
+     * an URI adjusted for the relocation.
+     *
+     * @param nFileId file ID for an external document
+     * @param bForceOriginal If true, it always returns the original document
+     *                       URI even if the referring document has relocated.
+     *                       If false, it returns an URI adjusted for
+     *                       relocated document.
+     *
+     * @return const String* external document URI.
+     */
+    const String* getExternalFileName(sal_uInt16 nFileId, bool bForceOriginal = false);
     bool hasExternalFile(sal_uInt16 nFileId) const;
     bool hasExternalFile(const String& rFile) const;
     const SrcFileData* getExternalFileData(sal_uInt16 nFileId) const;
@@ -560,8 +610,15 @@ public:
     const String* getRealRangeName(sal_uInt16 nFileId, const String& rRangeName) const;
     void refreshNames(sal_uInt16 nFileId);
     void breakLink(sal_uInt16 nFileId);
-    void switchSrcFile(sal_uInt16 nFileId, const String& rNewFile);
+    void switchSrcFile(sal_uInt16 nFileId, const String& rNewFile, const String& rNewFilter);
 
+    /**
+     * Set a relative file path for the specified file ID.  Note that the
+     * caller must ensure that the passed URL is a valid relative URL.
+     *
+     * @param nFileId file ID for an external document
+     * @param rRelUrl relative URL
+     */
     void setRelativeFileName(sal_uInt16 nFileId, const String& rRelUrl);
 
     /**
@@ -582,36 +639,19 @@ public:
      * Re-generates relative names for all stored source files.  This is
      * necessary when exporting to an ods document, to ensure that all source
      * files have their respective relative names for xlink:href export.
+     *
+     * @param rBaseFileUrl Absolute URL of the content.xml fragment of the
+     *                     document being exported.
      */
-    void resetSrcFileData();
+    void resetSrcFileData(const String& rBaseFileUrl);
 
     /**
-     * Update a single referencing cell position.
+     * Stop tracking a specific formula cell.
      *
-     * @param rOldPos old position
-     * @param rNewPos new position
+     * @param pCell pointer to cell that formerly contained external
+     *              reference.
      */
-    void updateRefCell(const ScAddress& rOldPos, const ScAddress& rNewPos, bool bCopy);
-
-    /**
-     * Update referencing cells affected by sheet movement.
-     *
-     * @param nOldTab old sheet position
-     * @param nNewTab new sheet position
-     * @param bCopy whether this is a sheet move (false) or sheet copy (true)
-     */
-    void updateRefMoveTable(SCTAB nOldTab, SCTAB nNewTab, bool bCopy);
-
-    /**
-     * Update referencing cells affected by sheet insertion.
-     *
-     * @param nPos sheet insertion position.  All sheets to the right
-     *             including the one at the insertion poistion shift to the
-     *             right by one.
-     */
-    void updateRefInsertTable(SCTAB nPos);
-
-    void updateRefDeleteTable(SCTAB nPos);
+    void removeRefCell(ScFormulaCell* pCell);
 
     /**
      * Register a new link listener to a specified external document.  Note
@@ -650,7 +690,18 @@ private:
 
     void maybeLinkExternalFile(sal_uInt16 nFileId);
 
-    bool compileTokensByCell(const ScAddress& rCell);
+    /**
+     * Try to create a "real" file name from the relative path.  The original
+     * file name may not point to the real document when the referencing and
+     * referenced documents have been moved.
+     *
+     * For the real file name to be created, the relative name should not be
+     * empty before calling this method, or the real file name will not be
+     * created.
+     *
+     * @param nFileId file ID for an external document
+     */
+    void maybeCreateRealFileName(sal_uInt16 nFileId);
 
     /**
      * Purge those source document instances that have not been accessed for
@@ -691,7 +742,13 @@ private:
     ::std::vector<SrcFileData> maSrcFiles;
 
     /** Status whether in reference marking state. See isInReferenceMarking(). */
-    bool bInReferenceMarking;
+    bool mbInReferenceMarking:1;
+
+    /**
+     * Controls whether or not to allow user interaction.  We don't want any
+     * user interaction when calling from the API.
+     */
+    bool mbUserInteractionEnabled:1;
 
     AutoTimer maSrcDocTimer;
     DECL_LINK(TimeOutHdl, AutoTimer*);

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: userlist.cxx,v $
- * $Revision: 1.11.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -153,7 +150,7 @@ StringCompare ScUserListData::Compare(const String& rSubStr1, const String& rSub
     else if (bFound2)
         return COMPARE_GREATER;
     else
-        return (StringCompare) ScGlobal::pCaseTransliteration->compareString( rSubStr1, rSubStr2 );
+        return (StringCompare) ScGlobal::GetCaseTransliteration()->compareString( rSubStr1, rSubStr2 );
 }
 
 StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSubStr2) const
@@ -179,7 +176,7 @@ StringCompare ScUserListData::ICompare(const String& rSubStr1, const String& rSu
     else if (bFound2)
         return COMPARE_GREATER;
     else
-        return (StringCompare) ScGlobal::pTransliteration->compareString( rSubStr1, rSubStr2 );
+        return (StringCompare) ScGlobal::GetpTransliteration()->compareString( rSubStr1, rSubStr2 );
 }
 
 ScUserList::ScUserList(USHORT nLim, USHORT nDel) :

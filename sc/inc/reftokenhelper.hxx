@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: token.hxx,v $
- * $Revision: 1.15.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +53,8 @@ public:
      * The source range may consist of multiple ranges separated by ';'s.
      */
     static void compileRangeRepresentation(
-        ::std::vector<ScSharedTokenRef>& rRefTokens, const ::rtl::OUString& rRangeStr, ScDocument* pDoc);
+        ::std::vector<ScSharedTokenRef>& rRefTokens, const ::rtl::OUString& rRangeStr, ScDocument* pDoc,
+        ::formula::FormulaGrammar::Grammar eGrammar = ::formula::FormulaGrammar::GRAM_ENGLISH);
 
     static bool getRangeFromToken(ScRange& rRange, const ScSharedTokenRef& pToken, bool bExternal = false);
 
@@ -69,12 +67,12 @@ public:
 
     static void getTokensFromRangeList(::std::vector<ScSharedTokenRef>& pTokens, const ScRangeList& rRanges);
 
-    static bool isRef(const ScSharedTokenRef& pToken);
-    static bool isExternalRef(const ScSharedTokenRef& pToken);
+    static bool SC_DLLPUBLIC isRef(const ScSharedTokenRef& pToken);
+    static bool SC_DLLPUBLIC isExternalRef(const ScSharedTokenRef& pToken);
 
-    static bool intersects(const ::std::vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken);
+    static bool SC_DLLPUBLIC intersects(const ::std::vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken);
 
-    static void join(::std::vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken);
+    static void SC_DLLPUBLIC join(::std::vector<ScSharedTokenRef>& rTokens, const ScSharedTokenRef& pToken);
 
     static bool getDoubleRefDataFromToken(ScComplexRefData& rData, const ScSharedTokenRef& pToken);
 };

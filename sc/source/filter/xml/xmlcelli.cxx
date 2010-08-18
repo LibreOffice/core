@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlcelli.cxx,v $
- * $Revision: 1.96.128.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,13 +41,14 @@
 #include "docuno.hxx"
 #include "unonames.hxx"
 #include "postit.hxx"
+#include "sheetdata.hxx"
 
 #include "XMLTableShapeImportHelper.hxx"
 #include "XMLTextPContext.hxx"
 #include "XMLStylesImportHelper.hxx"
 
 #include "arealink.hxx"
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #include "convuno.hxx"
 #include "XMLConverter.hxx"
 #include "scerrors.hxx"
@@ -64,11 +62,12 @@
 #include <xmloff/families.hxx>
 #include <xmloff/numehelp.hxx>
 #include <xmloff/xmlnmspe.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/svdocapt.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/editobj.hxx>
-#include <svtools/languageoptions.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/editobj.hxx>
+#include <svx/unoapi.hxx>
+#include <svl/languageoptions.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -99,15 +98,6 @@ using namespace xmloff::token;
 
 //------------------------------------------------------------------
 
-ScMyImportAnnotation::~ScMyImportAnnotation()
-{
-    delete pRect;
-    delete pItemSet;
-    delete pOPO;
-}
-
-//------------------------------------------------------------------
-
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
@@ -117,7 +107,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       const sal_Int32 nTempRepeatedRows ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pContentValidationName(NULL),
-    pMyAnnotation(NULL),
     pDetectiveObjVec(NULL),
     pCellRangeSource(NULL),
     fValue(0.0),
@@ -138,7 +127,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     bSolarMutexLocked(sal_False),
     bFormulaTextResult(sal_False)
 {
-    formula::FormulaGrammar::Grammar eStorageGrammar = eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
     rXMLImport.SetRemoveLastChar(sal_False);
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -241,25 +229,9 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 if (sValue.getLength())
                 {
                     DBG_ASSERT(!pOUFormula, "here should be only one formula");
-                    rtl::OUString sFormula;
-                    sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
-                            _GetKeyByAttrName( sValue, &sFormula, sal_False );
-
-                    if (ScXMLImport::IsAcceptedFormulaNamespace(
-                                nFormulaPrefix, sValue, eGrammar,
-                                eStorageGrammar))
-                    {
-                        // Namespaces we accept.
-                        pOUFormula.reset( sFormula);
-                    }
-                    else
-                    {
-                        // No namespace => entire string.
-                        // Also unknown namespace included in formula,
-                        // so hopefully will result in string or
-                        // compile error.
-                        pOUFormula.reset( sValue);
-                    }
+                    rtl::OUString aFormula, aFormulaNmsp;
+                    rXMLImport.ExtractFormulaNamespaceGrammar( aFormula, aFormulaNmsp, eGrammar, sValue );
+                    pOUFormula.reset( FormulaWithNamespace( aFormula, aFormulaNmsp ) );
                 }
             }
             break;
@@ -283,8 +255,6 @@ ScXMLTableRowCellContext::~ScXMLTableRowCellContext()
 {
     if (pContentValidationName)
         delete pContentValidationName;
-    if (pMyAnnotation)
-        delete pMyAnnotation;
     if (pDetectiveObjVec)
         delete pDetectiveObjVec;
     if (pCellRangeSource)
@@ -425,8 +395,10 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
     case XML_TOK_TABLE_ROW_CELL_ANNOTATION:
         {
             bIsEmpty = sal_False;
+            DBG_ASSERT( !mxAnnotationData.get(), "ScXMLTableRowCellContext::CreateChildContext - multiple annotations in one cell" );
+            mxAnnotationData.reset( new ScXMLAnnotationData );
             pContext = new ScXMLAnnotationContext( rXMLImport, nPrefix, rLName,
-                                                    xAttrList, this);
+                                                    xAttrList, *mxAnnotationData, this);
         }
         break;
     case XML_TOK_TABLE_ROW_CELL_DETECTIVE:
@@ -515,21 +487,31 @@ void ScXMLTableRowCellContext::DoMerge(const com::sun::star::table::CellAddress&
         uno::Reference<table::XCellRange> xCellRange(rXMLImport.GetTables().GetCurrentXCellRange());
         if ( xCellRange.is() )
         {
-            table::CellRangeAddress aCellAddress;
-            if (IsMerged(xCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
+            // Stored merge range may actually be of a larger extend than what
+            // we support, in which case getCellRangeByPosition() throws
+            // IndexOutOfBoundsException. Do nothing then.
+            try
             {
-                //unmerge
-                uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                        aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
-                if (xMergeable.is())
-                    xMergeable->merge(sal_False);
-            }
+                table::CellRangeAddress aCellAddress;
+                if (IsMerged(xCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
+                {
+                    //unmerge
+                    uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                aCellAddress.EndColumn, aCellAddress.EndRow), uno::UNO_QUERY);
+                    if (xMergeable.is())
+                        xMergeable->merge(sal_False);
+                }
 
-            //merge
-            uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows), uno::UNO_QUERY);
-            if (xMergeable.is())
-                xMergeable->merge(sal_True);
+                //merge
+                uno::Reference <util::XMergeable> xMergeable (xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                            aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows), uno::UNO_QUERY);
+                if (xMergeable.is())
+                    xMergeable->merge(sal_True);
+            }
+            catch ( lang::IndexOutOfBoundsException & )
+            {
+                DBG_ERRORFILE("ScXMLTableRowCellContext::DoMerge: range to be merged larger than what we support");
+            }
         }
     }
 }
@@ -539,7 +521,7 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
     if (pContentValidationName)
     {
         ScMyImportValidation aValidation;
-        aValidation.eGrammar = GetScImport().GetDocument()->GetStorageGrammar();
+        aValidation.eGrammar1 = aValidation.eGrammar2 = GetScImport().GetDocument()->GetStorageGrammar();
         if (rXMLImport.GetValidation(*pContentValidationName, aValidation))
         {
             uno::Reference<beans::XPropertySet> xPropertySet(xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML))), uno::UNO_QUERY);
@@ -568,11 +550,19 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
                     // #b4974740# source position must be set as string, because it may
                     // refer to a sheet that hasn't been loaded yet.
                     xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCESTR)), uno::makeAny(aValidation.sBaseCellAddress));
-                    // Transport grammar.
-                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_GRAMMAR)), uno::makeAny(static_cast<sal_Int32>(aValidation.eGrammar)));
+                    // Transport grammar and formula namespace
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULANMSP1)), uno::makeAny(aValidation.sFormulaNmsp1));
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FORMULANMSP2)), uno::makeAny(aValidation.sFormulaNmsp2));
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_GRAMMAR1)), uno::makeAny(static_cast<sal_Int32>(aValidation.eGrammar1)));
+                    xPropertySet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_GRAMMAR2)), uno::makeAny(static_cast<sal_Int32>(aValidation.eGrammar2)));
                 }
             }
             xPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_VALIXML)), uno::makeAny(xPropertySet));
+
+            // For now, any sheet with validity is blocked from stream-copying.
+            // Later, the validation names could be stored along with the style names.
+            ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetImport().GetModel())->GetSheetSaveData();
+            pSheetData->BlockSheet( GetScImport().GetTables().GetCurrentSheet() );
         }
     }
 }
@@ -607,70 +597,109 @@ void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCe
 
 void ScXMLTableRowCellContext::SetAnnotation(const table::CellAddress& aCellAddress)
 {
-    /*uno::Reference<sheet::XSheetAnnotationAnchor> xSheetAnnotationAnchor(xCell, uno::UNO_QUERY);
-    if (xSheetAnnotationAnchor.is())
-    {
-        uno::Reference <sheet::XSheetAnnotation> xSheetAnnotation (xSheetAnnotationAnchor->getAnnotation());
-        uno::Reference<text::XSimpleText> xSimpleText(xSheetAnnotation, uno::UNO_QUERY);
-        if (xSheetAnnotation.is() && xSimpleText.is())
-        {
-            xSimpleText->setString(aMyAnnotation.sText);
-            //xSheetAnnotation->setAuthor(aMyAnnotation.sAuthor);
-            //xSheetAnnotation->setDate();
-            xSheetAnnotation->setIsVisible(aMyAnnotation.bDisplay);
-        }
-    }*/
-    if( pMyAnnotation )
-    {
-        double fDate;
-        rXMLImport.GetMM100UnitConverter().convertDateTime(fDate, pMyAnnotation->sCreateDate);
-        ScDocument* pDoc = rXMLImport.GetDocument();
-        if (pDoc)
-        {
-            LockSolarMutex();
-            SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
-            sal_uInt32 nfIndex = pNumForm->GetFormatIndex(NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM);
-            String sDate;
-            Color* pColor = NULL;
-            Color** ppColor = &pColor;
-            pNumForm->GetOutputString(fDate, nfIndex, sDate, ppColor);
+    ScDocument* pDoc = rXMLImport.GetDocument();
+    if( !pDoc || !mxAnnotationData.get() )
+        return;
 
-            ScAddress aPos;
-            ScUnoConversion::FillScAddress( aPos, aCellAddress );
-            if( ScPostIt* pNote = pDoc->GetOrCreateNote( aPos ) )
+    LockSolarMutex();
+
+    ScAddress aPos;
+    ScUnoConversion::FillScAddress( aPos, aCellAddress );
+    ScPostIt* pNote = 0;
+
+    uno::Reference< drawing::XShapes > xShapes = rXMLImport.GetTables().GetCurrentXShapes();
+    uno::Reference< container::XIndexAccess > xShapesIA( xShapes, uno::UNO_QUERY );
+    sal_Int32 nOldShapeCount = xShapesIA.is() ? xShapesIA->getCount() : 0;
+
+    DBG_ASSERT( !mxAnnotationData->mxShape.is() || mxAnnotationData->mxShapes.is(),
+        "ScXMLTableRowCellContext::SetAnnotation - shape without drawing page" );
+    if( mxAnnotationData->mxShape.is() && mxAnnotationData->mxShapes.is() )
+    {
+        DBG_ASSERT( mxAnnotationData->mxShapes.get() == xShapes.get(), "ScXMLTableRowCellContext::SetAnnotation - diffenet drawing pages" );
+        SdrObject* pObject = ::GetSdrObjectFromXShape( mxAnnotationData->mxShape );
+        DBG_ASSERT( pObject, "ScXMLTableRowCellContext::SetAnnotation - cannot get SdrObject from shape" );
+
+        /*  Try to reuse the drawing object already created (but only if the
+            note is visible, and the object is a caption object). */
+        if( mxAnnotationData->mbShown && mxAnnotationData->mbUseShapePos )
+        {
+            if( SdrCaptionObj* pCaption = dynamic_cast< SdrCaptionObj* >( pObject ) )
             {
-                pNote->SetDate( sDate );
-                pNote->SetAuthor( pMyAnnotation->sAuthor );
-                if( SdrCaptionObj* pCaption = pNote->GetCaption() )
-                {
-                    if( pMyAnnotation->pOPO )
-                    {
-                        // transfer outliner object to caption
-                        pCaption->SetOutlinerParaObject( pMyAnnotation->pOPO );
-                        // do not delete the object in ScMyImportAnnotation d'tor
-                        pMyAnnotation->pOPO = 0;
-                    }
-                    else
-                        pCaption->SetText( pMyAnnotation->sText );
-                    // copy all items and reset shadow items
-                    if( pMyAnnotation->pItemSet )
-                        pNote->SetCaptionItems( *pMyAnnotation->pItemSet );
-                    else
-                        pNote->SetCaptionDefaultItems();    // default items need to be applied to text
-                    if( pMyAnnotation->pRect )
-                        pCaption->SetLogicRect( *pMyAnnotation->pRect );
-
-                    uno::Reference<container::XIndexAccess> xShapesIndex (rXMLImport.GetTables().GetCurrentXShapes(), uno::UNO_QUERY); // make draw page
-                    if (xShapesIndex.is())
-                    {
-                        sal_Int32 nShapes = xShapesIndex->getCount();
-                        uno::Reference < drawing::XShape > xShape;
-                        rXMLImport.GetShapeImport()->shapeWithZIndexAdded(xShape, nShapes);
-                    }
-                }
-                pNote->ShowCaption( pMyAnnotation->bDisplay );
+                OSL_ENSURE( !pCaption->GetLogicRect().IsEmpty(), "ScXMLTableRowCellContext::SetAnnotation - invalid caption rectangle" );
+                // create the cell note with the caption object
+                pNote = ScNoteUtil::CreateNoteFromCaption( *pDoc, aPos, *pCaption, true );
+                // forget pointer to object (do not create note again below)
+                pObject = 0;
             }
         }
+
+        // drawing object has not been used to create a note -> use shape data
+        if( pObject )
+        {
+            // rescue settings from drawing object before the shape is removed
+            ::std::auto_ptr< SfxItemSet > xItemSet( new SfxItemSet( pObject->GetMergedItemSet() ) );
+            ::std::auto_ptr< OutlinerParaObject > xOutlinerObj;
+            if( OutlinerParaObject* pOutlinerObj = pObject->GetOutlinerParaObject() )
+                xOutlinerObj.reset( new OutlinerParaObject( *pOutlinerObj ) );
+            Rectangle aCaptionRect;
+            if( mxAnnotationData->mbUseShapePos )
+                aCaptionRect = pObject->GetLogicRect();
+            // remove the shape from the drawing page, this invalidates pObject
+            mxAnnotationData->mxShapes->remove( mxAnnotationData->mxShape );
+            pObject = 0;
+            // update current number of existing objects
+            if( xShapesIA.is() )
+                nOldShapeCount = xShapesIA->getCount();
+
+            // an outliner object is required (empty note captions not allowed)
+            if( xOutlinerObj.get() )
+            {
+                // create cell note with all data from drawing object
+                pNote = ScNoteUtil::CreateNoteFromObjectData( *pDoc, aPos,
+                    xItemSet.release(), xOutlinerObj.release(),
+                    aCaptionRect, mxAnnotationData->mbShown, false );
+            }
+        }
+    }
+    else if( mxAnnotationData->maSimpleText.getLength() > 0 )
+    {
+        // create note from simple text
+        pNote = ScNoteUtil::CreateNoteFromString( *pDoc, aPos,
+            mxAnnotationData->maSimpleText, mxAnnotationData->mbShown, false );
+    }
+
+    // set author and date
+    if( pNote )
+    {
+        double fDate;
+        rXMLImport.GetMM100UnitConverter().convertDateTime( fDate, mxAnnotationData->maCreateDate );
+        SvNumberFormatter* pNumForm = pDoc->GetFormatTable();
+        sal_uInt32 nfIndex = pNumForm->GetFormatIndex( NF_DATE_SYS_DDMMYYYY, LANGUAGE_SYSTEM );
+        String aDate;
+        Color* pColor = 0;
+        Color** ppColor = &pColor;
+        pNumForm->GetOutputString( fDate, nfIndex, aDate, ppColor );
+        pNote->SetDate( aDate );
+        pNote->SetAuthor( mxAnnotationData->maAuthor );
+    }
+
+    // register a shape that has been newly created in the ScNoteUtil functions
+    if( xShapesIA.is() && (nOldShapeCount < xShapesIA->getCount()) )
+    {
+        uno::Reference< drawing::XShape > xShape;
+        rXMLImport.GetShapeImport()->shapeWithZIndexAdded( xShape, xShapesIA->getCount() );
+    }
+
+    // store the style names for stream copying
+    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(rXMLImport.GetModel())->GetSheetSaveData();
+    pSheetData->HandleNoteStyles( mxAnnotationData->maStyleName, mxAnnotationData->maTextStyle, aPos );
+
+    std::vector<ScXMLAnnotationStyleEntry>::const_iterator aIter = mxAnnotationData->maContentStyles.begin();
+    std::vector<ScXMLAnnotationStyleEntry>::const_iterator aEnd = mxAnnotationData->maContentStyles.end();
+    while (aIter != aEnd)
+    {
+        pSheetData->AddNoteContentStyle( aIter->mnFamily, aIter->maName, aPos, aIter->maSelection );
+        ++aIter;
     }
 }
 
@@ -717,7 +746,7 @@ void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPo
             String sSourceStr( pCellRangeSource->sSourceStr );
             ScAreaLink* pLink = new ScAreaLink( pDoc->GetDocumentShell(), pCellRangeSource->sURL,
                 sFilterName, pCellRangeSource->sFilterOptions, sSourceStr, aDestRange, pCellRangeSource->nRefresh );
-            SvxLinkManager* pLinkManager = pDoc->GetLinkManager();
+            sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
             pLinkManager->InsertFileLink( *pLink, OBJECT_CLIENT_FILE, pCellRangeSource->sURL, &sFilterName, &sSourceStr );
         }
     }
@@ -798,7 +827,7 @@ void ScXMLTableRowCellContext::EndElement()
 //              uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
                 if ((pContentValidationName && pContentValidationName->getLength()) ||
-                    pMyAnnotation || pDetectiveObjVec || pCellRangeSource)
+                    mxAnnotationData.get() || pDetectiveObjVec || pCellRangeSource)
                     bIsEmpty = sal_False;
 
                 ScMyTables& rTables = rXMLImport.GetTables();
@@ -980,7 +1009,7 @@ void ScXMLTableRowCellContext::EndElement()
                             }
                             else
                             {
-                                if (!bWasEmpty || (pMyAnnotation))
+                                if (!bWasEmpty || mxAnnotationData.get())
                                 {
                                     if (aCurrentPos.Row > MAXROW)
                                         rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_ROW_OVERFLOW);
@@ -1028,7 +1057,7 @@ void ScXMLTableRowCellContext::EndElement()
                     //SetType(xTempCell);
                 }
             }
-            else
+            else // if ( !pOUFormula )
             {
                 if (CellExists(aCellPos))
                 {
@@ -1041,7 +1070,7 @@ void ScXMLTableRowCellContext::EndElement()
                     {
                         DBG_ERRORFILE("It seems here are to many columns or rows");
                     }
-                    if (xCell.is() && pOUFormula)
+                    if (xCell.is())
                     {
                         SetCellProperties(xCell); // set now only the validation
                         DBG_ASSERT(((nCellsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
@@ -1054,7 +1083,7 @@ void ScXMLTableRowCellContext::EndElement()
                                             xCell));
                             if (pCellObj)
                             {
-                                pCellObj->SetFormulaWithGrammar( *pOUFormula, eGrammar);
+                                pCellObj->SetFormulaWithGrammar( pOUFormula->first, pOUFormula->second, eGrammar);
                                 if (bFormulaTextResult && pOUTextValue && pOUTextValue->getLength())
                                     pCellObj->SetFormulaResultString( *pOUTextValue);
                                 else if (fValue != 0.0)
@@ -1069,7 +1098,7 @@ void ScXMLTableRowCellContext::EndElement()
                                         aCellPos.Column, aCellPos.Row,
                                         aCellPos.Column + nMatrixCols - 1,
                                         aCellPos.Row + nMatrixRows - 1,
-                                        *pOUFormula, eGrammar);
+                                        pOUFormula->first, pOUFormula->second, eGrammar);
                             }
                         }
                         SetAnnotation( aCellPos );
@@ -1086,7 +1115,7 @@ void ScXMLTableRowCellContext::EndElement()
                         rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_COLUMN_OVERFLOW);
                 }
 
-            }
+            } // if ( !pOUFormula )
         }
         UnlockSolarMutex();
     }

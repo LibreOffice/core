@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tp_PolarOptions.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +55,9 @@ private:
     svx::DialControl m_aAngleDial;
     FixedText        m_aFT_Degrees;
     NumericField     m_aNF_StartingAngle;
+
+    FixedLine        m_aFL_PlotOptions;
+    CheckBox         m_aCB_IncludeHiddenCells;
 };
 
 //.............................................................................

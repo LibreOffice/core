@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: styleuno.hxx,v $
- * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,8 @@
 #ifndef SC_STYLEUNO_HXX
 #define SC_STYLEUNO_HXX
 
-#include <svtools/itemprop.hxx>
-#include <svtools/lstner.hxx>
+#include <svl/itemprop.hxx>
+#include <svl/lstner.hxx>
 #include <rsc/rscsfx.hxx>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -224,14 +221,15 @@ class ScStyleObj : public ::cppu::WeakImplHelper7<
                 public SfxListener
 {
 private:
-    SfxItemPropertySet      aPropSet;
+    const SfxItemPropertySet* pPropSet;
     ScDocShell*             pDocShell;
     SfxStyleFamily          eFamily;        // Familie
     String                  aStyleName;
 
     SfxStyleSheetBase*      GetStyle_Impl();
-    const SfxItemSet*       GetStyleItemSet_Impl( const String& rPropName, const SfxItemPropertyMap*& rpMapEntry );
-    void                    SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    const SfxItemSet*       GetStyleItemSet_Impl( const ::rtl::OUString& rPropName, const SfxItemPropertySimpleEntry*& rpEntry );
+    void                    SetOnePropertyValue(    const ::rtl::OUString& rPropertyName,
+                                                    const SfxItemPropertySimpleEntry* pEntry,
                                                     const ::com::sun::star::uno::Any* pValue )
                                             throw(::com::sun::star::lang::IllegalArgumentException,
                                                     ::com::sun::star::uno::RuntimeException);

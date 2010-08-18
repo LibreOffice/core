@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DiagramHelper.cxx,v $
- * $Revision: 1.18.22.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,10 +35,17 @@
 #include "AxisHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "ChartTypeHelper.hxx"
+#include "ChartModelHelper.hxx"
 #include "CommonConverters.hxx"
+#include "ExplicitCategoriesProvider.hxx"
 #include "servicenames_charttypes.hxx"
+#include "ChartModelHelper.hxx"
+#include "RelativePositionHelper.hxx"
+#include "ControllerLockGuard.hxx"
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
+#include <com/sun/star/chart/XChartDocument.hpp>
+#include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
@@ -50,9 +54,13 @@
 #include <com/sun/star/chart2/InterpretedData.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <com/sun/star/drawing/ShadeMode.hpp>
+#include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 
+#include <unotools/saveopt.hxx>
 #include <rtl/math.hxx>
+
+#include <com/sun/star/util/XModifiable.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -467,18 +475,20 @@ sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
 
     try
     {
-        Reference< XCoordinateSystemContainer > xCooSysCnt(
-            xDiagram, uno::UNO_QUERY_THROW );
-        Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
-            xCooSysCnt->getCoordinateSystems());
-
-        for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
+        Reference< XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY );
+        if( xCooSysCnt.is() )
         {
-            Reference< XCoordinateSystem > xCooSys( aCooSysSeq[i] );
-            if(xCooSys.is())
+            Sequence< Reference< XCoordinateSystem > > aCooSysSeq(
+                xCooSysCnt->getCoordinateSystems());
+
+            for( sal_Int32 i=0; i<aCooSysSeq.getLength(); ++i )
             {
-                nResult = xCooSys->getDimension();
-                break;
+                Reference< XCoordinateSystem > xCooSys( aCooSysSeq[i] );
+                if(xCooSys.is())
+                {
+                    nResult = xCooSys->getDimension();
+                    break;
+                }
             }
         }
     }
@@ -503,8 +513,12 @@ void DiagramHelper::setDimension(
 
     try
     {
-        //change all coordinate systems:
+        bool rbFound = false;
+        bool rbAmbiguous = true;
+        StackMode eStackMode = DiagramHelper::getStackMode( xDiagram, rbFound, rbAmbiguous );
+        bool bIsSupportingOnlyDeepStackingFor3D=false;
 
+        //change all coordinate systems:
         Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY_THROW );
         Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
         for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
@@ -520,6 +534,7 @@ void DiagramHelper::setDimension(
             for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
             {
                 Reference< XChartType > xChartType( aChartTypeList[nT], uno::UNO_QUERY );
+                bIsSupportingOnlyDeepStackingFor3D = ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( xChartType );
                 if(!xNewCooSys.is())
                 {
                     xNewCooSys = xChartType->createCoordinateSystem( nNewDimensionCount );
@@ -533,6 +548,12 @@ void DiagramHelper::setDimension(
             // replace the old coordinate system at all places where it was used
             DiagramHelper::replaceCoordinateSystem( xDiagram, xOldCooSys, xNewCooSys );
         }
+
+        //correct stack mode if necessary
+        if( nNewDimensionCount==3 && eStackMode != StackMode_Z_STACKED && bIsSupportingOnlyDeepStackingFor3D )
+            DiagramHelper::setStackMode( xDiagram, StackMode_Z_STACKED );
+        else if( nNewDimensionCount==2 && eStackMode == StackMode_Z_STACKED )
+            DiagramHelper::setStackMode( xDiagram, StackMode_NONE );
     }
     catch( uno::Exception & ex )
     {
@@ -556,6 +577,8 @@ void DiagramHelper::replaceCoordinateSystem(
     {
         try
         {
+            Reference< chart2::data::XLabeledDataSequence > xCategories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
+
             // move chart types of xCooSysToReplace to xReplacement
             Reference< XChartTypeContainer > xCTCntCooSys( xCooSysToReplace, uno::UNO_QUERY_THROW );
             Reference< XChartTypeContainer > xCTCntReplacement( xReplacement, uno::UNO_QUERY_THROW );
@@ -563,6 +586,9 @@ void DiagramHelper::replaceCoordinateSystem(
 
             xCont->removeCoordinateSystem( xCooSysToReplace );
             xCont->addCoordinateSystem( xReplacement );
+
+            if( xCategories.is() )
+                DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram );
         }
         catch( uno::Exception & ex )
         {
@@ -584,7 +610,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
                         , const uno::Reference< chart2::XDataSeries >& xDataSeries
                         , const uno::Reference< chart2::XDiagram >& xDiagram
                         , const uno::Reference< uno::XComponentContext > & xContext
-                        )
+                        , bool bAdaptAxes )
 {
     bool bChanged = false;
 
@@ -595,6 +621,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
 
     sal_Int32 nNewAxisIndex = bAttachToMainAxis ? 0 : 1;
     sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
+    uno::Reference< chart2::XAxis > xOldAxis( DiagramHelper::getAttachedAxis( xDataSeries, xDiagram ) );
 
     if( nOldAxisIndex != nNewAxisIndex )
     {
@@ -614,6 +641,11 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
         uno::Reference< XAxis > xAxis( AxisHelper::getAxis( 1, bAttachToMainAxis, xDiagram ) );
         if(!xAxis.is()) //create an axis if necessary
             xAxis = AxisHelper::createAxis( 1, bAttachToMainAxis, xDiagram, xContext );
+        if( bAdaptAxes )
+        {
+            AxisHelper::makeAxisVisible( xAxis );
+            AxisHelper::hideAxisIfNoDataIsAttached( xOldAxis, xDiagram );
+        }
     }
 
     return bChanged;
@@ -942,8 +974,7 @@ Reference< data::XLabeledDataSequence >
     return xResult;
 }
 
-//static
-void DiagramHelper::generateAutomaticCategoriesFromChartType(
+void lcl_generateAutomaticCategoriesFromChartType(
             Sequence< rtl::OUString >& rRet,
             const Reference< XChartType >& xChartType )
 {
@@ -973,51 +1004,7 @@ void DiagramHelper::generateAutomaticCategoriesFromChartType(
     }
 }
 
-//static
-Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategories(
-            const Reference< XChartDocument >& xChartDoc )
-{
-    Sequence< rtl::OUString > aRet;
-    if(xChartDoc.is())
-    {
-        uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram() );
-        if(xDia.is())
-        {
-            Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDia ) );
-            if( xCategories.is() )
-                aRet = DataSequenceToStringSequence(xCategories->getValues());
-            if( !aRet.getLength() )
-            {
-                /*
-                //unused ranges are very problematic as they bear the risk to damage the rectangular structure completly
-                if( bUseUnusedDataAlso )
-                {
-                    Sequence< Reference< chart2::data::XLabeledDataSequence > > aUnusedSequences( xDia->getUnusedData() );
-                    ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aUnusedCategoryVector(
-                        DataSeriesHelper::getAllDataSequencesByRole( aUnusedSequences, C2U("categories") ) );
-                    if( aUnusedCategoryVector.size() && aUnusedCategoryVector[0].is() )
-                        aRet = DataSequenceToStringSequence(aUnusedCategoryVector[0]->getValues());
-                }
-                */
-                if( !aRet.getLength() )
-                {
-                    Reference< XCoordinateSystemContainer > xCooSysCnt( xDia, uno::UNO_QUERY );
-                    if( xCooSysCnt.is() )
-                    {
-                        Sequence< Reference< XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems() );
-                        if( aCooSysSeq.getLength() )
-                            aRet = DiagramHelper::generateAutomaticCategories( aCooSysSeq[0] );
-                    }
-                }
-            }
-        }
-    }
-    return aRet;
-}
-
-//static
-Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategories(
-            const Reference< XCoordinateSystem > & xCooSys )
+Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategoriesFromCooSys( const Reference< XCoordinateSystem > & xCooSys )
 {
     Sequence< rtl::OUString > aRet;
 
@@ -1027,10 +1014,25 @@ Sequence< rtl::OUString > DiagramHelper::generateAutomaticCategories(
         Sequence< Reference< XChartType > > aChartTypes( xTypeCntr->getChartTypes() );
         for( sal_Int32 nN=0; nN<aChartTypes.getLength(); nN++ )
         {
-            DiagramHelper::generateAutomaticCategoriesFromChartType( aRet, aChartTypes[nN] );
+            lcl_generateAutomaticCategoriesFromChartType( aRet, aChartTypes[nN] );
             if( aRet.getLength() )
                 return aRet;
         }
+    }
+    return aRet;
+}
+
+//static
+Sequence< rtl::OUString > DiagramHelper::getExplicitSimpleCategories(
+            const Reference< XChartDocument >& xChartDoc )
+{
+    Sequence< rtl::OUString > aRet;
+    uno::Reference< frame::XModel > xChartModel( xChartDoc, uno::UNO_QUERY );
+    if(xChartModel.is())
+    {
+        uno::Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartModel ) );
+        ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
+        aRet = aExplicitCategoriesProvider.getSimpleCategories();
     }
     return aRet;
 }
@@ -1304,6 +1306,8 @@ bool DiagramHelper::isSupportingFloorAndWall( const Reference<
             return false;
         if( xType.is() && xType->getChartType().match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
             return false;
+        if( xType.is() && xType->getChartType().match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
+            return false;
     }
     return true;
 }
@@ -1412,6 +1416,144 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
     }
 
     return nResult;
+}
+
+//static
+DiagramPositioningMode DiagramHelper::getDiagramPositioningMode( const uno::Reference<
+                chart2::XDiagram > & xDiagram )
+{
+    DiagramPositioningMode eMode = DiagramPositioningMode_AUTO;
+    uno::Reference< beans::XPropertySet > xDiaProps( xDiagram, uno::UNO_QUERY );
+    if( xDiaProps.is() )
+    {
+        RelativePosition aRelPos;
+        RelativeSize aRelSize;
+        if( (xDiaProps->getPropertyValue(C2U("RelativePosition")) >>= aRelPos ) &&
+            (xDiaProps->getPropertyValue(C2U("RelativeSize")) >>= aRelSize ) )
+        {
+            bool bPosSizeExcludeAxes=false;
+            xDiaProps->getPropertyValue(C2U("PosSizeExcludeAxes")) >>= bPosSizeExcludeAxes;
+            if( bPosSizeExcludeAxes )
+                eMode = DiagramPositioningMode_EXCLUDING;
+            else
+                eMode = DiagramPositioningMode_INCLUDING;
+        }
+    }
+    return eMode;
+}
+
+void lcl_ensureRange0to1( double& rValue )
+{
+    if(rValue<0.0)
+        rValue=0.0;
+    if(rValue>1.0)
+        rValue=1.0;
+}
+
+//static
+bool DiagramHelper::setDiagramPositioning( const uno::Reference< frame::XModel >& xChartModel,
+        const awt::Rectangle& rPosRect /*100th mm*/ )
+{
+    ControllerLockGuard aCtrlLockGuard( xChartModel );
+
+    bool bChanged = false;
+    awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
+    uno::Reference< beans::XPropertySet > xDiaProps( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
+    if( !xDiaProps.is() )
+        return bChanged;
+
+    RelativePosition aOldPos;
+    RelativeSize aOldSize;
+    xDiaProps->getPropertyValue(C2U("RelativePosition") ) >>= aOldPos;
+    xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aOldSize;
+
+    RelativePosition aNewPos;
+    aNewPos.Anchor = drawing::Alignment_TOP_LEFT;
+    aNewPos.Primary = double(rPosRect.X)/double(aPageSize.Width);
+    aNewPos.Secondary = double(rPosRect.Y)/double(aPageSize.Height);
+
+    chart2::RelativeSize aNewSize;
+    aNewSize.Primary = double(rPosRect.Width)/double(aPageSize.Width);
+    aNewSize.Secondary = double(rPosRect.Height)/double(aPageSize.Height);
+
+    lcl_ensureRange0to1( aNewPos.Primary );
+    lcl_ensureRange0to1( aNewPos.Secondary );
+    lcl_ensureRange0to1( aNewSize.Primary );
+    lcl_ensureRange0to1( aNewSize.Secondary );
+    if( (aNewPos.Primary + aNewSize.Primary) > 1.0 )
+        aNewPos.Primary = 1.0 - aNewSize.Primary;
+    if( (aNewPos.Secondary + aNewSize.Secondary) > 1.0 )
+        aNewPos.Secondary = 1.0 - aNewSize.Secondary;
+
+    xDiaProps->setPropertyValue( C2U( "RelativePosition" ), uno::makeAny(aNewPos) );
+    xDiaProps->setPropertyValue( C2U( "RelativeSize" ), uno::makeAny(aNewSize) );
+
+    bChanged = (aOldPos.Anchor!=aNewPos.Anchor) ||
+        (aOldPos.Primary!=aNewPos.Primary) ||
+        (aOldPos.Secondary!=aNewPos.Secondary) ||
+        (aOldSize.Primary!=aNewSize.Primary) ||
+        (aOldSize.Secondary!=aNewSize.Secondary);
+    return bChanged;
+}
+
+//static
+awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference< frame::XModel >& xChartModel )
+{
+    awt::Rectangle aRet(-1,-1,-1,-1);
+
+    uno::Reference< beans::XPropertySet > xDiaProps( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
+    if( !xDiaProps.is() )
+        return aRet;
+
+    awt::Size aPageSize( ChartModelHelper::getPageSize(xChartModel) );
+
+    RelativePosition aRelPos;
+    RelativeSize aRelSize;
+    xDiaProps->getPropertyValue(C2U("RelativePosition") ) >>= aRelPos;
+    xDiaProps->getPropertyValue(C2U("RelativeSize") ) >>= aRelSize;
+
+    awt::Size aAbsSize(
+        aRelSize.Primary * aPageSize.Width,
+        aRelSize.Secondary * aPageSize.Height );
+
+    awt::Point aAbsPos(
+        static_cast< sal_Int32 >( aRelPos.Primary * aPageSize.Width ),
+        static_cast< sal_Int32 >( aRelPos.Secondary * aPageSize.Height ));
+
+    awt::Point aAbsPosLeftTop = RelativePositionHelper::getUpperLeftCornerOfAnchoredObject( aAbsPos, aAbsSize, aRelPos.Anchor );
+
+    aRet = awt::Rectangle(aAbsPosLeftTop.X, aAbsPosLeftTop.Y, aAbsSize.Width, aAbsSize.Height );
+
+    return aRet;
+}
+
+//static
+bool DiagramHelper::switchDiagramPositioningToExcludingPositioning(
+    const uno::Reference< frame::XModel >& xChartModel
+    , bool bResetModifiedState, bool bConvertAlsoFromAutoPositioning )
+{
+    //return true if something was changed
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+    if( nCurrentODFVersion == SvtSaveOptions::ODFVER_LATEST )//#i100778# todo: change this dependent on fileformat evolution
+    {
+        uno::Reference< ::com::sun::star::chart::XChartDocument > xOldDoc( xChartModel, uno::UNO_QUERY ) ;
+        if( xOldDoc.is() )
+        {
+            uno::Reference< ::com::sun::star::chart::XDiagramPositioning > xDiagramPositioning( xOldDoc->getDiagram(), uno::UNO_QUERY );
+            if( xDiagramPositioning.is() && ( bConvertAlsoFromAutoPositioning || !xDiagramPositioning->isAutomaticDiagramPositioning() )
+                && !xDiagramPositioning->isExcludingDiagramPositioning() )
+            {
+                ControllerLockGuard aCtrlLockGuard( xChartModel );
+                uno::Reference< util::XModifiable > xModifiable( xChartModel, uno::UNO_QUERY );
+                bool bModelWasModified = xModifiable.is() && xModifiable->isModified();
+                xDiagramPositioning->setDiagramPositionExcludingAxes( xDiagramPositioning->calculateDiagramPositionExcludingAxes() );
+                if(bResetModifiedState && !bModelWasModified && xModifiable.is() )
+                    xModifiable->setModified(sal_False);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 } //  namespace chart

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: excdoc.hxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +69,7 @@ private:
     // pRec mit new anlegen und vergessen, delete macht ExcTable selber!
     void                        Add( XclExpRecordBase* pRec );
 
-    void                        FillAsXmlTable( size_t nCodeNameIdx );
+    void                        FillAsXmlTable( SCTAB nCodeNameIdx );
 
 public:
                                 ExcTable( const XclExpRoot& rRoot );
@@ -80,8 +77,8 @@ public:
                                 ~ExcTable();
 
     void                        FillAsHeader( ExcBoundsheetList& rBoundsheetList );
-    void                        FillAsTable( size_t nCodeNameIdx );
-    void                        FillAsEmptyTable( size_t nCodeNameIdx );
+    void                        FillAsTable( SCTAB nCodeNameIdx );
+    void                        FillAsEmptyTable( SCTAB nCodeNameIdx );
 
     void                        Write( XclExpStream& );
     void                        WriteXml( XclExpXmlStream& );

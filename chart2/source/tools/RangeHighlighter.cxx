@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RangeHighlighter.cxx,v $
- * $Revision: 1.6.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,9 +35,11 @@
 #include "ContainerHelper.hxx"
 #include "macros.hxx"
 #include "ObjectIdentifier.hxx"
+#include "DataSeriesHelper.hxx"
 
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 #define PREFERED_DEFAULT_COLOR 0x0000ff
 
@@ -78,7 +77,8 @@ RangeHighlighter::RangeHighlighter(
     const Reference< view::XSelectionSupplier > & xSelectionSupplier ) :
         impl::RangeHighlighter_Base( m_aMutex ),
         m_xSelectionSupplier( xSelectionSupplier ),
-        m_nAddedListenerCount( 0 )
+        m_nAddedListenerCount( 0 ),
+        m_bIncludeHiddenCells(true)
 {
 }
 
@@ -104,67 +104,84 @@ void RangeHighlighter::determineRanges()
             if( xController.is())
                 xChartModel.set( xController->getModel());
 
+            m_bIncludeHiddenCells = ChartModelHelper::isIncludeHiddenCells( xChartModel );
+
             uno::Any aSelection( m_xSelectionSupplier->getSelection());
-            OUString aCID;
-            if(( aSelection >>= aCID ) &&
-               aCID.getLength() > 0 )
+            const uno::Type& rType = aSelection.getValueType();
+
+            if ( rType == ::getCppuType( static_cast< const OUString* >( 0 ) ) )
             {
                 // @todo??: maybe getSelection() should return a model object rather than a CID
 
-                ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
-                sal_Int32 nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aCID );
-                Reference< chart2::XDataSeries > xDataSeries( ObjectIdentifier::getDataSeriesForCID( aCID, xChartModel ) );
-                if( OBJECTTYPE_LEGEND_ENTRY == eObjectType )
+                OUString aCID;
+                aSelection >>= aCID;
+                if ( aCID.getLength() > 0 )
                 {
-                    OUString aParentParticel( ObjectIdentifier::getFullParentParticle( aCID ) );
-                    ObjectType eParentObjectType = ObjectIdentifier::getObjectType( aParentParticel );
-                    eObjectType = eParentObjectType;
-                    if( OBJECTTYPE_DATA_POINT == eObjectType )
-                        nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aParentParticel );
-                }
+                    ObjectType eObjectType = ObjectIdentifier::getObjectType( aCID );
+                    sal_Int32 nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aCID );
+                    Reference< chart2::XDataSeries > xDataSeries( ObjectIdentifier::getDataSeriesForCID( aCID, xChartModel ) );
+                    if( OBJECTTYPE_LEGEND_ENTRY == eObjectType )
+                    {
+                        OUString aParentParticel( ObjectIdentifier::getFullParentParticle( aCID ) );
+                        ObjectType eParentObjectType = ObjectIdentifier::getObjectType( aParentParticel );
+                        eObjectType = eParentObjectType;
+                        if( OBJECTTYPE_DATA_POINT == eObjectType )
+                            nIndex = ObjectIdentifier::getIndexFromParticleOrCID( aParentParticel );
+                    }
 
-                if( OBJECTTYPE_DATA_POINT == eObjectType || OBJECTTYPE_DATA_LABEL == eObjectType )
-                {
-                    // Data Point
-                    fillRangesForDataPoint( xDataSeries, nIndex );
-                    return;
-                }
-                else if( OBJECTTYPE_DATA_ERRORS == eObjectType )
-                {
-                    // select error bar ranges, or data series, if the style is
-                    // not set to FROM_DATA
-                    fillRangesForErrorBars( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), xDataSeries );
-                    return;
-                }
-                else if( xDataSeries.is() )
-                {
-                    // Data Series
-                    fillRangesForDataSeries( xDataSeries );
-                    return;
-                }
-                else if( OBJECTTYPE_AXIS == eObjectType )
-                {
-                    // Axis (Categories)
-                    Reference< chart2::XAxis > xAxis( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), uno::UNO_QUERY );
-                    if( xAxis.is())
+                    if( OBJECTTYPE_DATA_POINT == eObjectType || OBJECTTYPE_DATA_LABEL == eObjectType )
                     {
-                        fillRangesForCategories( xAxis );
+                        // Data Point
+                        fillRangesForDataPoint( xDataSeries, nIndex );
                         return;
                     }
-                }
-                else if( OBJECTTYPE_PAGE == eObjectType
-                         || OBJECTTYPE_DIAGRAM == eObjectType
-                         || OBJECTTYPE_DIAGRAM_WALL == eObjectType
-                         || OBJECTTYPE_DIAGRAM_FLOOR == eObjectType
-                    )
-                {
-                    // Diagram
-                    Reference< chart2::XDiagram > xDia( ObjectIdentifier::getDiagramForCID( aCID, xChartModel ) );
-                    if( xDia.is())
+                    else if( OBJECTTYPE_DATA_ERRORS == eObjectType )
                     {
-                        fillRangesForDiagram( xDia );
+                        // select error bar ranges, or data series, if the style is
+                        // not set to FROM_DATA
+                        fillRangesForErrorBars( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), xDataSeries );
                         return;
                     }
+                    else if( xDataSeries.is() )
+                    {
+                        // Data Series
+                        fillRangesForDataSeries( xDataSeries );
+                        return;
+                    }
+                    else if( OBJECTTYPE_AXIS == eObjectType )
+                    {
+                        // Axis (Categories)
+                        Reference< chart2::XAxis > xAxis( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), uno::UNO_QUERY );
+                        if( xAxis.is())
+                        {
+                            fillRangesForCategories( xAxis );
+                            return;
+                        }
+                    }
+                    else if( OBJECTTYPE_PAGE == eObjectType
+                             || OBJECTTYPE_DIAGRAM == eObjectType
+                             || OBJECTTYPE_DIAGRAM_WALL == eObjectType
+                             || OBJECTTYPE_DIAGRAM_FLOOR == eObjectType
+                        )
+                    {
+                        // Diagram
+                        Reference< chart2::XDiagram > xDia( ObjectIdentifier::getDiagramForCID( aCID, xChartModel ) );
+                        if( xDia.is())
+                        {
+                            fillRangesForDiagram( xDia );
+                            return;
+                        }
+                    }
+                }
+            }
+            else if ( rType == ::getCppuType( static_cast< const Reference< drawing::XShape >* >( 0 ) ) )
+            {
+                // #i12587# support for shapes in chart
+                Reference< drawing::XShape > xShape;
+                aSelection >>= xShape;
+                if ( xShape.is() )
+                {
+                    return;
                 }
             }
             else
@@ -271,11 +288,13 @@ void RangeHighlighter::fillRangesForDataPoint( const Reference< uno::XInterface 
                             -1,
                             nPreferredColor,
                             sal_False ));
+
+                sal_Int32 nUnhiddenIndex = DataSeriesHelper::translateIndexFromHiddenToFullSequence( nIndex, xValues, !m_bIncludeHiddenCells );
                 if( xValues.is())
                     aHilightedRanges.push_back(
                         chart2::data::HighlightedRange(
                             xValues->getSourceRangeRepresentation(),
-                            nIndex,
+                            nUnhiddenIndex,
                             nPreferredColor,
                             sal_False ));
             }
@@ -329,7 +348,11 @@ void RangeHighlighter::fireSelectionEvent()
         lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );
         ::cppu::OInterfaceIteratorHelper aIt( *pIC );
         while( aIt.hasMoreElements() )
-            (static_cast< view::XSelectionChangeListener*>(aIt.next()))->selectionChanged( aEvent );
+        {
+            uno::Reference< view::XSelectionChangeListener > xListener( aIt.next(), uno::UNO_QUERY );
+            if( xListener.is() )
+                xListener->selectionChanged( aEvent );
+        }
     }
 }
 

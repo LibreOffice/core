@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: attarray.hxx,v $
- * $Revision: 1.9.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +35,7 @@ class ScDocument;
 class ScMarkArray;
 class ScPatternAttr;
 class ScStyleSheet;
+class ScFlatBoolRowSegments;
 
 class Rectangle;
 class SfxItemPoolCache;
@@ -110,8 +108,9 @@ public:
 
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
     void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
-
+#ifdef DBG_UTIL
     void    TestData() const;
+#endif
     void    Reset( const ScPatternAttr* pPattern, BOOL bAlloc = TRUE );
     BOOL    Concat(SCSIZE nPos);
 
@@ -150,13 +149,13 @@ public:
 
     BOOL    HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
                         BOOL bLeft, BOOL bRight ) const;
-    BOOL    HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
+    bool    HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const;
     BOOL    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
                                 BOOL bRefresh, BOOL bAttrs );
     BOOL    RemoveAreaMerge( SCROW nStartRow, SCROW nEndRow );
 
-    void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset );
+    void    FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset );
     BOOL    IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const;
 
     void    DeleteAreaSafe(SCROW nStartRow, SCROW nEndRow);

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scmatrix.cxx,v $
- * $Revision: 1.17.136.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include "address.hxx"
 #include "formula/errorcodes.hxx"
 #include "interpre.hxx"
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <tools/stream.hxx>
 #include <rtl/math.hxx>
 
@@ -65,10 +62,15 @@ void ScMatrix::CreateMatrix(SCSIZE nC, SCSIZE nR)       // nur fuer ctor
     mnNonValue = 0;
 }
 
-ScMatrix::~ScMatrix()
+void ScMatrix::Clear()
 {
     DeleteIsString();
     delete [] pMat;
+}
+
+ScMatrix::~ScMatrix()
+{
+    Clear();
 }
 
 ScMatrix* ScMatrix::Clone() const
@@ -77,6 +79,12 @@ ScMatrix* ScMatrix::Clone() const
     MatCopy(*pScMat);
     pScMat->SetErrorInterpreter( pErrorInterpreter);    // TODO: really?
     return pScMat;
+}
+
+void ScMatrix::Resize( SCSIZE nC, SCSIZE nR)
+{
+    Clear();
+    CreateMatrix(nC, nR);
 }
 
 ScMatrix* ScMatrix::CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows ) const
@@ -608,48 +616,48 @@ void ScMatrix::MatTrans(ScMatrix& mRes) const
     }
 }
 
-void ScMatrix::MatCopyUpperLeft(ScMatrix& mRes) const
-{
-    if (nColCount < mRes.nColCount || nRowCount < mRes.nRowCount)
-    {
-        DBG_ERRORFILE("ScMatrix::MatCopyUpperLeft: dimension error");
-    }
-    else
-    {
-        if (mnValType)
-        {
-            ScMatValType nType;
-            mRes.ResetIsString();
-            for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
-            {
-                SCSIZE nStart = i * nRowCount;
-                for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
-                {
-                    if ( IsNonValueType( (nType = mnValType[nStart+j]) ))
-                        mRes.PutStringEntry( pMat[nStart+j].pS, nType,
-                            i*mRes.nRowCount+j );
-                    else
-                    {
-                        mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
-                        mRes.mnValType[i*mRes.nRowCount+j] = nType;
-                    }
-                }
-            }
-        }
-        else
-        {
-            mRes.DeleteIsString();
-            for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
-            {
-                SCSIZE nStart = i * nRowCount;
-                for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
-                {
-                    mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
-                }
-            }
-        }
-    }
-}
+//UNUSED2009-05 void ScMatrix::MatCopyUpperLeft(ScMatrix& mRes) const
+//UNUSED2009-05 {
+//UNUSED2009-05     if (nColCount < mRes.nColCount || nRowCount < mRes.nRowCount)
+//UNUSED2009-05     {
+//UNUSED2009-05         DBG_ERRORFILE("ScMatrix::MatCopyUpperLeft: dimension error");
+//UNUSED2009-05     }
+//UNUSED2009-05     else
+//UNUSED2009-05     {
+//UNUSED2009-05         if (mnValType)
+//UNUSED2009-05         {
+//UNUSED2009-05             ScMatValType nType;
+//UNUSED2009-05             mRes.ResetIsString();
+//UNUSED2009-05             for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
+//UNUSED2009-05             {
+//UNUSED2009-05                 SCSIZE nStart = i * nRowCount;
+//UNUSED2009-05                 for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
+//UNUSED2009-05                 {
+//UNUSED2009-05                     if ( IsNonValueType( (nType = mnValType[nStart+j]) ))
+//UNUSED2009-05                         mRes.PutStringEntry( pMat[nStart+j].pS, nType,
+//UNUSED2009-05                             i*mRes.nRowCount+j );
+//UNUSED2009-05                     else
+//UNUSED2009-05                     {
+//UNUSED2009-05                         mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
+//UNUSED2009-05                         mRes.mnValType[i*mRes.nRowCount+j] = nType;
+//UNUSED2009-05                     }
+//UNUSED2009-05                 }
+//UNUSED2009-05             }
+//UNUSED2009-05         }
+//UNUSED2009-05         else
+//UNUSED2009-05         {
+//UNUSED2009-05             mRes.DeleteIsString();
+//UNUSED2009-05             for ( SCSIZE i = 0; i < mRes.nColCount; i++ )
+//UNUSED2009-05             {
+//UNUSED2009-05                 SCSIZE nStart = i * nRowCount;
+//UNUSED2009-05                 for ( SCSIZE j = 0; j < mRes.nRowCount; j++ )
+//UNUSED2009-05                 {
+//UNUSED2009-05                     mRes.pMat[i*mRes.nRowCount+j].fVal = pMat[nStart+j].fVal;
+//UNUSED2009-05                 }
+//UNUSED2009-05             }
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05 }
 
 void ScMatrix::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 )
 {

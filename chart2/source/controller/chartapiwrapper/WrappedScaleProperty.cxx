@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WrappedScaleProperty.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,6 @@
 
 #include "WrappedScaleProperty.hxx"
 #include "macros.hxx"
-#include "Scaling.hxx"
 #include "CommonConverters.hxx"
 #include "AxisHelper.hxx"
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -280,7 +276,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
                 if( (!bBool) != (!bWasLogarithm) )
                 {
                     if( bBool )
-                        aScaleData.Scaling = new LogarithmicScaling( 10.0 );
+                        aScaleData.Scaling = AxisHelper::createLogarithmicScaling( 10.0 );
                     else
                         aScaleData.Scaling = 0;
                     bSetScaleData = true;

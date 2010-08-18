@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewDefines.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,6 @@ namespace chart
 #define FIXED_SIZE_FOR_3D_CHART_VOLUME (10000.0)
 //There needs to be a little distance betweengrid lines and walls in 3D, otherwise the lines are partly hidden by the walls
 #define GRID_TO_WALL_DISTANCE (1.0)
-#define FLOOR_THICKNESS (100.0)
 
 const double    ZDIRECTION = 1.0;
 const sal_Int32 AXIS2D_TICKLENGTH = 150;//value like in old chart

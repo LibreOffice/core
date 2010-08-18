@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh5.cxx,v $
- * $Revision: 1.20.30.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 #include <vcl/waitobj.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
 
@@ -68,6 +65,11 @@
 #include "sc.hrc"
 #include "waitoff.hxx"
 #include "sizedev.hxx"
+#include <basic/sbstar.hxx>
+#include <basic/basmgr.hxx>
+
+// defined in docfunc.cxx
+void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sModuleSource );
 
 // ---------------------------------------------------------------------------
 
@@ -100,8 +102,9 @@ void ScDocShell::ErrorMessage( USHORT nGlobStrId )
 BOOL ScDocShell::IsEditable() const
 {
     // import into read-only document is possible - must be extended if other filters use api
+    // #i108547# MSOOXML filter uses "IsChangeReadOnlyEnabled" property
 
-    return !IsReadOnly() || aDocument.IsImportingXML();
+    return !IsReadOnly() || aDocument.IsImportingXML() || aDocument.IsChangeReadOnlyEnabled();
 }
 
 void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW /* nY2 */ )
@@ -151,7 +154,7 @@ ScDBData* lcl_GetDBNearCursor( ScDBCollection* pColl, SCCOL nCol, SCROW nRow, SC
     return pNoNameData;                 // "unbenannt" nur zurueck, wenn sonst nichts gefunden
 }
 
-ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL bForceMark )
+ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, ScGetDBSelection eSel )
 {
     SCCOL nCol = rMarked.aStart.Col();
     SCROW nRow = rMarked.aStart.Row();
@@ -172,7 +175,9 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
     if (!pData)
         pData = lcl_GetDBNearCursor( aDocument.GetDBCollection(), nCol, nRow, nTab );
 
-    BOOL bSelected = ( bForceMark || rMarked.aStart != rMarked.aEnd );
+    BOOL bSelected = ( eSel == SC_DBSEL_FORCE_MARK ||
+            (rMarked.aStart != rMarked.aEnd && eSel != SC_DBSEL_ROW_DOWN) );
+    bool bOnlyDown = (!bSelected && eSel == SC_DBSEL_ROW_DOWN && rMarked.aStart.Row() == rMarked.aEnd.Row());
 
     BOOL bUseThis = FALSE;
     if (pData)
@@ -192,12 +197,21 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
             bUseThis = TRUE;
             if ( bIsNoName && eMode == SC_DB_MAKE )
             {
-                //  wenn nichts markiert, "unbenannt" auf zusammenhaengenden Bereich anpassen
+                // If nothing marked or only one row marked, adapt
+                // "unbenannt"/"unnamed" to contiguous area.
                 nStartCol = nCol;
                 nStartRow = nRow;
-                nEndCol = nStartCol;
-                nEndRow = nStartRow;
-                aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE );
+                if (bOnlyDown)
+                {
+                    nEndCol = rMarked.aEnd.Col();
+                    nEndRow = rMarked.aEnd.Row();
+                }
+                else
+                {
+                    nEndCol = nStartCol;
+                    nEndRow = nStartRow;
+                }
+                aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE, bOnlyDown );
                 if ( nOldCol1 != nStartCol || nOldCol2 != nEndCol || nOldRow1 != nStartRow )
                     bUseThis = FALSE;               // passt gar nicht
                 else if ( nOldRow2 != nEndRow )
@@ -245,9 +259,17 @@ ScDBData* ScDocShell::GetDBData( const ScRange& rMarked, ScGetDBMode eMode, BOOL
         {                                       // zusammenhaengender Bereich
             nStartCol = nCol;
             nStartRow = nRow;
-            nEndCol = nStartCol;
-            nEndRow = nStartRow;
-            aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE );
+            if (bOnlyDown)
+            {
+                nEndCol = rMarked.aEnd.Col();
+                nEndRow = rMarked.aEnd.Row();
+            }
+            else
+            {
+                nEndCol = nStartCol;
+                nEndRow = nStartRow;
+            }
+            aDocument.GetDataArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow, FALSE, bOnlyDown );
         }
 
         BOOL bHasHeader = aDocument.HasColHeader( nStartCol,nStartRow, nEndCol,nEndRow, nTab );
@@ -393,21 +415,54 @@ BOOL ScDocShell::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab )
     return bChange;
 }
 
-void ScDocShell::UpdateAllRowHeights()
+void ScDocShell::UpdateAllRowHeights( const ScMarkData* pTabMark )
 {
     // update automatic row heights
 
     ScSizeDeviceProvider aProv(this);
     Fraction aZoom(1,1);
-    aDocument.UpdateAllRowHeights( aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom );
+    aDocument.UpdateAllRowHeights( aProv.GetDevice(), aProv.GetPPTX(), aProv.GetPPTY(), aZoom, aZoom, pTabMark );
 }
 
-#if OLD_PIVOT_IMPLEMENTATION
-void ScDocShell::PivotUpdate( ScPivot*, ScPivot*, BOOL, BOOL )
+void ScDocShell::UpdatePendingRowHeights( SCTAB nUpdateTab, bool bBefore )
 {
-    DBG_ERRORFILE("PivotUpdate is obsolete!");
+    BOOL bIsUndoEnabled = aDocument.IsUndoEnabled();
+    aDocument.EnableUndo( FALSE );
+    aDocument.LockStreamValid( true );      // ignore draw page size (but not formula results)
+    if ( bBefore )          // check all sheets up to nUpdateTab
+    {
+        SCTAB nTabCount = aDocument.GetTableCount();
+        if ( nUpdateTab >= nTabCount )
+            nUpdateTab = nTabCount-1;     // nUpdateTab is inclusive
+
+        ScMarkData aUpdateSheets;
+        SCTAB nTab;
+        for (nTab=0; nTab<=nUpdateTab; ++nTab)
+            if ( aDocument.IsPendingRowHeights( nTab ) )
+                aUpdateSheets.SelectTable( nTab, TRUE );
+
+        if (aUpdateSheets.GetSelectCount())
+            UpdateAllRowHeights(&aUpdateSheets);        // update with a single progress bar
+
+        for (nTab=0; nTab<=nUpdateTab; ++nTab)
+            if ( aUpdateSheets.GetTableSelect( nTab ) )
+            {
+                aDocument.UpdatePageBreaks( nTab );
+                aDocument.SetPendingRowHeights( nTab, FALSE );
+            }
+    }
+    else                    // only nUpdateTab
+    {
+        if ( aDocument.IsPendingRowHeights( nUpdateTab ) )
+        {
+            AdjustRowHeight( 0, MAXROW, nUpdateTab );
+            aDocument.UpdatePageBreaks( nUpdateTab );
+            aDocument.SetPendingRowHeights( nUpdateTab, FALSE );
+        }
+    }
+    aDocument.LockStreamValid( false );
+    aDocument.EnableUndo( bIsUndoEnabled );
 }
-#endif
 
 void ScDocShell::RefreshPivotTables( const ScRange& rSource )
 {
@@ -807,14 +862,17 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
     ScDocShellModificator aModificator( *this );
 
     // #i92477# be consistent with ScDocFunc::InsertTable: any index past the last sheet means "append"
+    // #i101139# nDestTab must be the target position, not APPEND (for CopyTabProtection etc.)
     if ( nDestTab >= aDocument.GetTableCount() )
-        nDestTab = SC_TAB_APPEND;
+        nDestTab = aDocument.GetTableCount();
 
     if (bCopy)
     {
         if (bRecord)
             aDocument.BeginDrawUndo();          // drawing layer must do its own undo actions
 
+        String sSrcCodeName;
+        aDocument.GetCodeName( nSrcTab, sSrcCodeName );
         if (!aDocument.CopyTab( nSrcTab, nDestTab ))
         {
             //! EndDrawUndo?
@@ -827,7 +885,7 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
                 ++nAdjSource;               // new position of source table after CopyTab
 
             if ( aDocument.IsTabProtected( nAdjSource ) )
-                aDocument.SetTabProtection( nDestTab, TRUE, aDocument.GetTabPassword( nAdjSource ) );
+                aDocument.CopyTabProtection(nAdjSource, nDestTab);
 
             if (bRecord)
             {
@@ -838,8 +896,38 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
                 GetUndoManager()->AddUndoAction(
                         new ScUndoCopyTab( this, aSrcList, aDestList ) );
             }
-        }
 
+            BOOL bVbaEnabled = aDocument.IsInVBAMode();
+                        if ( bVbaEnabled )
+                        {
+                StarBASIC* pStarBASIC = GetBasic();
+                            String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+                            if ( GetBasicManager()->GetName().Len() > 0 )
+                            {
+                                aLibName = GetBasicManager()->GetName();
+                                pStarBASIC = GetBasicManager()->GetLib( aLibName );
+                            }
+                            SCTAB nTabToUse = nDestTab;
+                            if ( nDestTab == SC_TAB_APPEND )
+                                nTabToUse = aDocument.GetMaxTableNumber() - 1;
+                            String sCodeName;
+                            String sSource;
+                            com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = GetBasicContainer();
+                            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
+                            if( xLibContainer.is() )
+                            {
+                                com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
+                                aLibAny >>= xLib;
+                            }
+                            if( xLib.is() )
+                            {
+                                rtl::OUString sRTLSource;
+                                xLib->getByName( sSrcCodeName ) >>= sRTLSource;
+                                sSource = sRTLSource;
+                            }
+                            VBA_InsertModule( aDocument, nTabToUse, sCodeName, sSource );
+                        }
+                }
         Broadcast( ScTablesHint( SC_TAB_COPIED, nSrcTab, nDestTab ) );
     }
     else

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh3.cxx,v $
- * $Revision: 1.38.52.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,17 +37,15 @@
 
 #include "scitems.hxx"
 #include "rangelst.hxx"
-#include <svx/flstitem.hxx>
+#include <editeng/flstitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/paperinf.hxx>
+#include <editeng/paperinf.hxx>
 #include <svx/postattr.hxx>
-//#include <svx/postdlg.hxx>
-#include <svx/sizeitem.hxx>
-
+#include <editeng/sizeitem.hxx>
+#include <unotools/misccfg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/misccfg.hxx>
 #include <sfx2/printer.hxx>
 #include <svtools/ctrltool.hxx>
 #include <vcl/virdev.hxx>
@@ -429,7 +424,7 @@ double ScDocShell::GetOutputFactor() const
 
 //---------------------------------------------------------------------
 
-void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
+void ScDocShell::InitOptions(bool bForLoading)      // called from InitNew and Load
 {
     //  Einstellungen aus dem SpellCheckCfg kommen in Doc- und ViewOptions
 
@@ -443,7 +438,15 @@ void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
     aDocOpt.SetAutoSpell( bAutoSpell );
 
     // zweistellige Jahreszahleneingabe aus Extras->Optionen->Allgemein->Sonstiges
-    aDocOpt.SetYear2000( sal::static_int_cast<USHORT>( SFX_APP()->GetMiscConfig()->GetYear2000() ) );
+    aDocOpt.SetYear2000( sal::static_int_cast<USHORT>( ::utl::MiscCfg().GetYear2000() ) );
+
+    if (bForLoading)
+    {
+        // #i112123# No style:decimal-places attribute means automatic decimals, not the configured default,
+        // so it must not be taken from the global options.
+        // Calculation settings are handled separately in ScXMLBodyContext::EndElement.
+        aDocOpt.SetStdPrecision( SvNumberFormatter::UNLIMITED_PRECISION );
+    }
 
     aDocument.SetDocOptions( aDocOpt );
     aDocument.SetViewOptions( aViewOpt );
@@ -483,6 +486,10 @@ OutputDevice* ScDocShell::GetRefDevice()
 
 USHORT ScDocShell::SetPrinter( SfxPrinter* pNewPrinter, USHORT nDiffFlags )
 {
+    SfxPrinter *pOld = aDocument.GetPrinter( FALSE );
+    if ( pOld && pOld->IsPrinting() )
+        return SFX_PRINTERROR_BUSY;
+
     if (nDiffFlags & SFX_PRINTER_PRINTER)
     {
         if ( aDocument.GetPrinter() != pNewPrinter )
@@ -964,7 +971,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 //  -> wird weggelassen
                 //! ??? Loesch-Aktion rueckgaengig machen ???
                 //! ??? Aktion irgendwo anders speichern  ???
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                 String aValue;
                 if ( eSourceType == SC_CAT_CONTENT )
                     ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
@@ -1051,8 +1058,8 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                                     aValue.Erase( 0, 1 );
                                     aValue.Erase( aValue.Len()-1, 1 );
                                     GetDocFunc().EnterMatrix( aSourceRange,
-                                            NULL, NULL, aValue, FALSE, FALSE,
-                                           formula::FormulaGrammar::GRAM_DEFAULT );
+                                        NULL, NULL, aValue, FALSE, FALSE,
+                                        EMPTY_STRING, formula::FormulaGrammar::GRAM_DEFAULT );
                                 }
                                 break;
                                 case MM_REFERENCE :     // do nothing
@@ -1089,6 +1096,16 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             {
                                 aSourceRange = pDel->GetOverAllRange().MakeRange();
                                 GetDocFunc().DeleteCells( aSourceRange, NULL, DEL_DELROWS, TRUE, FALSE );
+
+                                // #i101099# [Collaboration] Changes are not correctly shown
+                                if ( bShared )
+                                {
+                                    ScChangeAction* pAct = pThisTrack->GetLast();
+                                    if ( pAct && pAct->GetType() == eSourceType && pAct->IsDeletedIn() && !pSourceAction->IsDeletedIn() )
+                                    {
+                                        pAct->RemoveAllDeletedIn();
+                                    }
+                                }
                             }
                         }
                         break;
@@ -1122,7 +1139,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     ScChangeAction* pAct = pThisTrack->GetLast();
                     if ( pAct && pAct->GetActionNumber() > nOldActionMax )
                         pAct->SetComment( rComment );
-#ifndef PRODUCT
+#ifdef DBG_UTIL
                     else
                         DBG_ERROR( "MergeDocument: wohin mit dem Kommentar?!?" );
 #endif

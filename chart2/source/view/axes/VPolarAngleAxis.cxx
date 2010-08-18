@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: VPolarAngleAxis.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +62,7 @@ VPolarAngleAxis::~VPolarAngleAxis()
 
 bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
                        const uno::Reference< drawing::XShapes >& xTarget
-                     , TickIter& rTickIter
+                     , EquidistantTickIter& rTickIter
                      , AxisLabelProperties& rAxisLabelProperties
                      , double fLogicRadius
                      , double fLogicZ )
@@ -102,7 +99,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
         ; pTickInfo
         ; pTickInfo = rTickIter.nextInfo(), nTick++ )
     {
-        //don't create labels which does not fit into the rythm
+        //don't create labels which does not fit into the rhythm
         if( nTick%rAxisLabelProperties.nRhythm != 0)
             continue;
 
@@ -192,11 +189,10 @@ void SAL_CALL VPolarAngleAxis::createLabels()
         //create tick mark text shapes
         //@todo: iterate through all tick depth wich should be labeled
 
-        TickIter aTickIter( m_aAllTickInfos, m_aIncrement, 0, 0 );
+        EquidistantTickIter aTickIter( m_aAllTickInfos, m_aIncrement, 0, 0 );
         this->updateUnscaledValuesAtTicks( aTickIter );
 
-        TickIter aRemoveIter( m_aAllTickInfos, m_aIncrement, 0, 0 );
-        removeTextShapesFromTicks( aRemoveIter, m_xTextTarget );
+        removeTextShapesFromTicks();
 
         AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
         aAxisLabelProperties.bOverlapAllowed = true;

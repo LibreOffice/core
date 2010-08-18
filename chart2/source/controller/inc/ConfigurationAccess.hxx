@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConfigurationAccess.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,15 +40,8 @@ namespace chart
 /**
 */
 
-class CalcConfigItem;
-class ConfigurationAccess
+namespace ConfigurationAccess
 {
-public:
-    // use this to get the singleton ConfigurationAccess (CTOR is private)
-    static ConfigurationAccess *  getConfigurationAccess();
-
-    ~ConfigurationAccess();
-
     /** @descr Retrieve the FieldUnit to be used for the UI.  This unit is retrieved
     from the registry settings of the Calc application.
 
@@ -61,13 +51,7 @@ public:
     @return the FieldUnit enum.  See <vcl/fldunit.hxx> for definition
     */
     FieldUnit getFieldUnit();
-
-private:
-    ConfigurationAccess();
-
-    static ConfigurationAccess *  m_pThis;
-    CalcConfigItem* m_pCalcConfigItem;
-};
+}
 
 //.............................................................................
 } //namespace chart

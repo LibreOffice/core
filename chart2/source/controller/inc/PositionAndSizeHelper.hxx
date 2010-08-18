@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PositionAndSizeHelper.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,8 +51,7 @@ public:
     static bool moveObject( const rtl::OUString& rObjectCID
             , const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xChartModel
             , const ::com::sun::star::awt::Rectangle& rNewPositionAndSize
-            , const ::com::sun::star::awt::Rectangle& rPageRectangle
-            , ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xChartView );
+            , const ::com::sun::star::awt::Rectangle& rPageRectangle );
 };
 
 //.............................................................................

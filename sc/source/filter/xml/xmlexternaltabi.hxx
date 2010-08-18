@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlexternaltabi.hxx,v $
- * $Revision: 1.1.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #define SC_XMLEXTERNALTABI_HXX
 
 #include <xmloff/xmlictxt.hxx>
+#include "rtl/ustrbuf.hxx"
 
 class ScXMLImport;
 struct ScXMLExternalTabData;
@@ -61,6 +59,30 @@ private:
     ::rtl::OUString         maTableName;
     ::rtl::OUString         maFilterName;
     ::rtl::OUString         maFilterOptions;
+};
+
+// ============================================================================
+
+class ScXMLExternalRefRowsContext : public SvXMLImportContext
+{
+public:
+    ScXMLExternalRefRowsContext( ScXMLImport& rImport, USHORT nPrefix,
+                        const ::rtl::OUString& rLName,
+                        const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                        ScXMLExternalTabData& rRefInfo );
+
+    virtual ~ScXMLExternalRefRowsContext();
+
+    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+                                     const ::rtl::OUString& rLocalName,
+                                     const ::com::sun::star::uno::Reference<
+                                        ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    virtual void EndElement();
+private:
+    ScXMLImport&            mrScImport;
+    ScXMLExternalTabData&   mrExternalRefInfo;
 };
 
 // ============================================================================
@@ -108,6 +130,8 @@ public:
 
     virtual void EndElement();
 
+    void SetCellString(const ::rtl::OUString& rStr);
+
 private:
     ScXMLImport&            mrScImport;
     ScXMLExternalTabData&   mrExternalRefInfo;
@@ -129,7 +153,7 @@ public:
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                        ::rtl::OUString& rCellString );
+                        ScXMLExternalRefCellContext& rParent );
 
     virtual ~ScXMLExternalRefCellTextContext();
 
@@ -144,7 +168,9 @@ public:
 
 private:
     ScXMLImport&            mrScImport;
-    ::rtl::OUString&        mrCellString;
+    ScXMLExternalRefCellContext& mrParent;
+
+    ::rtl::OUStringBuffer   maCellStrBuf;
 };
 
 #endif

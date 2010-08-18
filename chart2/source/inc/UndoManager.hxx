@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UndoManager.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,6 @@
 
 #include "ConfigItemListener.hxx"
 #include "MutexContainer.hxx"
-#include "charttoolsdllapi.hxx"
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -40,14 +36,17 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/chart2/XUndoManager.hpp>
 #include <com/sun/star/chart2/XUndoHelper.hpp>
+#include <com/sun/star/lang/XUnoTunnel.hpp>
 
-#include <cppuhelper/compbase3.hxx>
+#include <cppuhelper/compbase4.hxx>
 #include <rtl/ustring.hxx>
 
 // for pair
 #include <utility>
 // for auto_ptr
 #include <memory>
+
+class SdrUndoAction;
 
 namespace com { namespace sun { namespace star {
 namespace frame {
@@ -66,10 +65,11 @@ class UndoElement;
 class  UndoStack;
 class  ModifyBroadcaster;
 
-typedef ::cppu::WeakComponentImplHelper3<
+typedef ::cppu::WeakComponentImplHelper4<
             ::com::sun::star::util::XModifyBroadcaster,
             ::com::sun::star::chart2::XUndoManager,
-            ::com::sun::star::chart2::XUndoHelper >
+            ::com::sun::star::chart2::XUndoHelper,
+            ::com::sun::star::lang::XUnoTunnel >
     UndoManager_Base;
 
 } // namespace impl
@@ -82,7 +82,7 @@ typedef ::cppu::WeakComponentImplHelper3<
     redo-stacks support the css::util::XCloneable interface, which is
     implemented such that the entire model is cloned.
  */
-class OOO_DLLPUBLIC_CHARTTOOLS UndoManager :
+class UndoManager :
         public MutexContainer,
         public ConfigItemListener,
         public impl::UndoManager_Base
@@ -90,6 +90,15 @@ class OOO_DLLPUBLIC_CHARTTOOLS UndoManager :
 public:
     explicit UndoManager();
     virtual ~UndoManager();
+
+    void addShapeUndoAction( SdrUndoAction* pAction );
+
+    // ____ XUnoTunnel ____
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    static const ::com::sun::star::uno::Sequence< sal_Int8 >& getUnoTunnelId();
+    static UndoManager* getImplementation( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> xObj );
 
 protected:
     // ____ ConfigItemListener ____
@@ -149,7 +158,8 @@ private:
         ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xCurrentModel,
         impl::UndoStack * pStackToRemoveFrom,
-        impl::UndoStack * pStackToAddTo );
+        impl::UndoStack * pStackToAddTo,
+        bool bUndo = true );
 
     ::std::auto_ptr< impl::UndoStack > m_apUndoStack;
     ::std::auto_ptr< impl::UndoStack > m_apRedoStack;

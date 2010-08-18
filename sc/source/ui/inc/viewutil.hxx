@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewutil.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,10 +68,10 @@ public:
 
     static sal_Int32 GetTransliterationType( USHORT nSlotID );
 
-    static bool HasFiltered( const ScRange& rRange, const ScDocument* pDoc );
+    static bool HasFiltered( const ScRange& rRange, ScDocument* pDoc );
     /** Fit a range to cover nRows number of unfiltered rows.
         @return <TRUE/> if the resulting range covers nRows unfiltered rows. */
-    static bool FitToUnfilteredRows( ScRange & rRange, const ScDocument * pDoc, size_t nRows );
+    static bool FitToUnfilteredRows( ScRange & rRange, ScDocument * pDoc, size_t nRows );
     static void UnmarkFiltered( ScMarkData& rMark, ScDocument* pDoc );
 
     static void HideDisabledSlot( SfxItemSet& rSet, SfxBindings& rBindings, USHORT nSlotId );
@@ -106,8 +103,10 @@ public:
             ScUpdateRect( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     void    SetNew( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );
     BOOL    GetDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
+#ifdef OLD_SELECTION_PAINT
     BOOL    GetXorDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, BOOL& rCont );
     void    GetContDiff( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 );
+#endif
 };
 
 

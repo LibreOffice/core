@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chartpos.hxx,v $
- * $Revision: 1.3.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -100,8 +97,8 @@ public:
                                             return ppRowHeader[ nChartRow ];
                                         return NULL;
                                     }
-            ScRangeListRef      GetColRanges( SCCOL nChartCol ) const;
-            ScRangeListRef      GetRowRanges( SCROW nChartRow ) const;
+//UNUSED2009-05 ScRangeListRef      GetColRanges( SCCOL nChartCol ) const;
+//UNUSED2009-05 ScRangeListRef      GetRowRanges( SCROW nChartRow ) const;
 };
 
 
@@ -114,7 +111,6 @@ enum ScChartGlue {
 };
 
 class ScDocument;
-class ScMultipleReadHeader;
 
 class ScChartPositioner             // nur noch Parameter-Struct
 {

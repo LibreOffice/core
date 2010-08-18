@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataSourceHelper.cxx,v $
- * $Revision: 1.6.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,8 @@
 #include "ContainerHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "PropertyHelper.hxx"
+#include "CachedDataSequence.hxx"
+#include "LabeledDataSequence.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -116,6 +115,41 @@ void lcl_addErrorBarRanges(
 }
 
 } // anonymous namespace
+
+Reference< chart2::data::XDataSource > DataSourceHelper::createDataSource(
+        const Sequence< Reference< chart2::data::XLabeledDataSequence > >& rSequences )
+{
+    return new DataSource(rSequences);
+}
+
+Reference< chart2::data::XDataSequence > DataSourceHelper::createCachedDataSequence()
+{
+    return new ::chart::CachedDataSequence();
+}
+
+Reference< chart2::data::XDataSequence > DataSourceHelper::createCachedDataSequence( const ::rtl::OUString& rSingleText )
+{
+    return new ::chart::CachedDataSequence( rSingleText );
+}
+
+Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledDataSequence(
+        const Reference< chart2::data::XDataSequence >& xValues ,
+        const Reference< chart2::data::XDataSequence >& xLabels )
+{
+    return new ::chart::LabeledDataSequence( xValues, xLabels );
+}
+
+Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledDataSequence(
+        const Reference< chart2::data::XDataSequence >& xValues )
+{
+    return new ::chart::LabeledDataSequence( xValues );
+}
+
+Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledDataSequence(
+        const Reference< uno::XComponentContext >& xContext )
+{
+    return new ::chart::LabeledDataSequence( xContext );
+}
 
 uno::Sequence< beans::PropertyValue > DataSourceHelper::createArguments(
                                             bool bUseColumns, bool bFirstCellAsLabel, bool bHasCategories )
@@ -264,18 +298,13 @@ uno::Sequence< ::rtl::OUString > DataSourceHelper::getUsedDataRanges( const uno:
 }
 
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
-    const uno::Reference< chart2::XChartDocument >& xChartDoc,
-    bool bIncludeUnusedData /* = false */ )
+    const uno::Reference< chart2::XChartDocument >& xChartDoc )
 {
-    if( bIncludeUnusedData )
-        return getUsedData( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ), bIncludeUnusedData );
-    else
-         return pressUsedDataIntoRectangularFormat( xChartDoc );
+    return pressUsedDataIntoRectangularFormat( xChartDoc );
 }
 
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
-    const uno::Reference< frame::XModel >& xChartModel,
-    bool bIncludeUnusedData /* = false */ )
+    const uno::Reference< frame::XModel >& xChartModel )
 {
     ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
 
@@ -296,14 +325,6 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
                      ::std::back_inserter( aResult ));
     }
 
-    if( bIncludeUnusedData && xDiagram.is())
-    {
-        uno::Sequence< uno::Reference< data::XLabeledDataSequence > > aUnusedData( xDiagram->getUnusedData());
-        ::std::copy( aUnusedData.getConstArray(),
-                     aUnusedData.getConstArray() + aUnusedData.getLength(),
-                     ::std::back_inserter( aResult ));
-    }
-
     return uno::Reference< chart2::data::XDataSource >(
         new DataSource( ContainerHelper::ContainerToSequence( aResult )));
 }
@@ -315,8 +336,7 @@ bool DataSourceHelper::detectRangeSegmentation(
     , ::com::sun::star::uno::Sequence< sal_Int32 >& rSequenceMapping
     , bool& rOutUseColumns
     , bool& rOutFirstCellAsLabel
-    , bool& rOutHasCategories
-    , bool bIncludeUnusedData /* = false */)
+    , bool& rOutHasCategories )
 {
     bool bSomethingDetected = false;
 
@@ -326,9 +346,6 @@ bool DataSourceHelper::detectRangeSegmentation(
     uno::Reference< data::XDataProvider >  xDataProvider( xChartDocument->getDataProvider() );
     if( !xDataProvider.is() )
         return bSomethingDetected;
-
-    OSL_ASSERT( !bIncludeUnusedData ); //bIncludeUnusedData is not supported currently
-    (void)(bIncludeUnusedData); // avoid warning in non-debug build
 
     try
     {
@@ -493,6 +510,19 @@ Sequence< OUString > DataSourceHelper::getRangesFromLabeledDataSequence(
             aResult.realloc( 1 );
             aResult[0] = xValues->getSourceRangeRepresentation();
         }
+    }
+    return aResult;
+}
+
+OUString DataSourceHelper::getRangeFromValues(
+    const Reference< data::XLabeledDataSequence > & xLSeq )
+{
+    OUString aResult;
+    if( xLSeq.is() )
+    {
+        Reference< data::XDataSequence > xValues( xLSeq->getValues() );
+        if( xValues.is() )
+            aResult = xValues->getSourceRangeRepresentation();
     }
     return aResult;
 }

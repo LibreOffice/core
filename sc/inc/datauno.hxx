@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: datauno.hxx,v $
- * $Revision: 1.8.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,8 +29,8 @@
 #define SC_DATAUNO_HXX
 
 #include "global.hxx"
-#include <svtools/itemprop.hxx>
-#include <svtools/lstner.hxx>
+#include "queryparam.hxx"
+
 #include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
@@ -50,11 +47,14 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
+#include "svl/itemprop.hxx"
+#include "svl/lstner.hxx"
 
 class ScDBData;
 class ScDocShell;
@@ -340,8 +340,9 @@ public:
 
 //  to uno, all three look the same
 
-class ScFilterDescriptorBase : public cppu::WeakImplHelper3<
+class ScFilterDescriptorBase : public cppu::WeakImplHelper4<
                                     com::sun::star::sheet::XSheetFilterDescriptor,
+                                    com::sun::star::sheet::XSheetFilterDescriptor2,
                                     com::sun::star::beans::XPropertySet,
                                     com::sun::star::lang::XServiceInfo >,
                                public SfxListener
@@ -366,6 +367,13 @@ public:
                             getFilterFields() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setFilterFields( const ::com::sun::star::uno::Sequence<
                                 ::com::sun::star::sheet::TableFilterField >& aFilterFields )
+                                    throw(::com::sun::star::uno::RuntimeException);
+
+                            // XSheetFilterDescriptor2
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::TableFilterField2 > SAL_CALL
+                            getFilterFields2() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setFilterFields2( const ::com::sun::star::uno::Sequence<
+                                ::com::sun::star::sheet::TableFilterField2 >& aFilterFields )
                                     throw(::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet

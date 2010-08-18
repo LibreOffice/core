@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: attarray.cxx,v $
- * $Revision: 1.25.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,13 +34,13 @@
 
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/bolnitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/shaditem.hxx>
-#include <svtools/poolcach.hxx>
-#include <svx/fontitem.hxx>
-#include <vcl/fontcvt.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/shaditem.hxx>
+#include <svl/poolcach.hxx>
+#include <editeng/fontitem.hxx>
+#include <unotools/fontcvt.hxx>
 
 #include "attarray.hxx"
 #include "global.hxx"
@@ -55,7 +52,7 @@
 #include "markarr.hxx"
 #include "rechead.hxx"
 #include "globstr.hrc"
-
+#include "segmenttree.hxx"
 
 #undef DBG_INVALIDATE
 #define DBGOUTPUT(s) \
@@ -103,10 +100,10 @@ ScAttrArray::~ScAttrArray()
 }
 
 //------------------------------------------------------------------------
-
+#ifdef DBG_UTIL
 void ScAttrArray::TestData() const
 {
-#ifdef DBG_UTIL
+
     USHORT nErr = 0;
     if (pData)
     {
@@ -129,8 +126,8 @@ void ScAttrArray::TestData() const
         aMsg += ByteString::CreateFromInt32(nCol);
         DBG_ERROR( aMsg.GetBuffer() );
     }
-#endif
 }
+#endif
 
 //------------------------------------------------------------------------
 
@@ -169,6 +166,9 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern, BOOL bAlloc )
             pDocPool->Remove(*pOldPattern);
         }
         delete[] pData;
+
+        if (pDocument->IsStreamValid(nTab))
+            pDocument->SetStreamValid(nTab, FALSE);
 
         if (bAlloc)
         {
@@ -472,6 +472,9 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 pData[nInsert].pPattern = pPattern;
                 nCount++;
             }
+
+            if (pDocument->IsStreamValid(nTab))
+                pDocument->SetStreamValid(nTab, FALSE);
         }
     }
 //  InfoBox(0, String(nCount) + String(" Eintraege") ).Execute();
@@ -550,6 +553,9 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
             delete pNewPattern;
         }
         while ((nStart <= nEndRow) && (nPos < nCount));
+
+        if (pDocument->IsStreamValid(nTab))
+            pDocument->SetStreamValid(nTab, FALSE);
     }
 
 #ifdef DBG_UTIL
@@ -789,6 +795,9 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
             }
         }
         while (nStart <= nEndRow);
+
+        if (pDocument->IsStreamValid(nTab))
+            pDocument->SetStreamValid(nTab, FALSE);
     }
 
 #ifdef DBG_UTIL
@@ -1219,13 +1228,13 @@ BOOL ScAttrArray::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
 
 //  Testen, ob Bereich bestimmtes Attribut enthaelt
 
-BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
+bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
 {
     SCSIZE nStartIndex;
     SCSIZE nEndIndex;
     Search( nRow1, nStartIndex );
     Search( nRow2, nEndIndex );
-    BOOL bFound = FALSE;
+    bool bFound = false;
 
     for (SCSIZE i=nStartIndex; i<=nEndIndex && !bFound; i++)
     {
@@ -1235,46 +1244,46 @@ BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
             const ScMergeAttr* pMerge =
                     (const ScMergeAttr*) &pPattern->GetItem( ATTR_MERGE );
             if ( pMerge->GetColMerge() > 1 || pMerge->GetRowMerge() > 1 )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & ( HASATTR_OVERLAPPED | HASATTR_NOTOVERLAPPED | HASATTR_AUTOFILTER ) )
         {
             const ScMergeFlagAttr* pMergeFlag =
                     (const ScMergeFlagAttr*) &pPattern->GetItem( ATTR_MERGE_FLAG );
             if ( (nMask & HASATTR_OVERLAPPED) && pMergeFlag->IsOverlapped() )
-                bFound = TRUE;
+                bFound = true;
             if ( (nMask & HASATTR_NOTOVERLAPPED) && !pMergeFlag->IsOverlapped() )
-                bFound = TRUE;
+                bFound = true;
             if ( (nMask & HASATTR_AUTOFILTER) && pMergeFlag->HasAutoFilter() )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_LINES )
         {
             const SvxBoxItem* pBox =
                     (const SvxBoxItem*) &pPattern->GetItem( ATTR_BORDER );
             if ( pBox->GetLeft() || pBox->GetRight() || pBox->GetTop() || pBox->GetBottom() )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_SHADOW )
         {
             const SvxShadowItem* pShadow =
                     (const SvxShadowItem*) &pPattern->GetItem( ATTR_SHADOW );
             if ( pShadow->GetLocation() != SVX_SHADOW_NONE )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_CONDITIONAL )
         {
             const SfxUInt32Item* pConditional =
                     (const SfxUInt32Item*) &pPattern->GetItem( ATTR_CONDITIONAL );
             if ( pConditional->GetValue() != 0 )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_PROTECTED )
         {
             const ScProtectionAttr* pProtect =
                     (const ScProtectionAttr*) &pPattern->GetItem( ATTR_PROTECTION );
             if ( pProtect->GetProtection() || pProtect->GetHideCell() )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_ROTATE )
         {
@@ -1284,21 +1293,21 @@ BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
             // (see ScPatternAttr::GetCellOrientation)
             INT32 nAngle = pRotate->GetValue();
             if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_NEEDHEIGHT )
         {
             if (pPattern->GetCellOrientation() != SVX_ORIENTATION_STANDARD)
-                bFound = TRUE;
+                bFound = true;
             else if (((const SfxBoolItem&)pPattern->GetItem( ATTR_LINEBREAK )).GetValue())
-                bFound = TRUE;
+                bFound = true;
             else if ((SvxCellHorJustify)((const SvxHorJustifyItem&)pPattern->
                         GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_BLOCK)
-                bFound = TRUE;
+                bFound = true;
             else if (((const SfxUInt32Item&)pPattern->GetItem( ATTR_CONDITIONAL )).GetValue())
-                bFound = TRUE;
+                bFound = true;
             else if (((const SfxInt32Item&)pPattern->GetItem( ATTR_ROTATE_VALUE )).GetValue())
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & ( HASATTR_SHADOW_RIGHT | HASATTR_SHADOW_DOWN ) )
         {
@@ -1307,17 +1316,17 @@ BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
             SvxShadowLocation eLoc = pShadow->GetLocation();
             if ( nMask & HASATTR_SHADOW_RIGHT )
                 if ( eLoc == SVX_SHADOW_TOPRIGHT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
-                    bFound = TRUE;
+                    bFound = true;
             if ( nMask & HASATTR_SHADOW_DOWN )
                 if ( eLoc == SVX_SHADOW_BOTTOMLEFT || eLoc == SVX_SHADOW_BOTTOMRIGHT )
-                    bFound = TRUE;
+                    bFound = true;
         }
         if ( nMask & HASATTR_RTL )
         {
             const SvxFrameDirectionItem& rDirection =
                     (const SvxFrameDirectionItem&) pPattern->GetItem( ATTR_WRITINGDIR );
             if ( rDirection.GetValue() == FRMDIR_HORI_RIGHT_TOP )
-                bFound = TRUE;
+                bFound = true;
         }
         if ( nMask & HASATTR_RIGHTORCENTER )
         {
@@ -1325,7 +1334,7 @@ BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
             SvxCellHorJustify eHorJust = (SvxCellHorJustify)
                     ((const SvxHorJustifyItem&) pPattern->GetItem( ATTR_HOR_JUSTIFY )).GetValue();
             if ( eHorJust == SVX_HOR_JUSTIFY_RIGHT || eHorJust == SVX_HOR_JUSTIFY_CENTER )
-                bFound = TRUE;
+                bFound = true;
         }
     }
 
@@ -1718,8 +1727,7 @@ SCsROW ScAttrArray::GetNextUnprotected( SCsROW nRow, BOOL bUp ) const
     return nRet;
 }
 
-
-void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset )
+void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset )
 {
     SCROW nStart = 0;
     SCSIZE nPos = 0;
@@ -1731,7 +1739,7 @@ void ScAttrArray::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pU
 //          for (SCROW nRow = nStart; nRow <= nEnd; nRow++)
 //              pUsed[nRow] = TRUE;
 
-            memset( &pUsed[nStart], TRUE, nEnd-nStart+1 );
+            rUsedRows.setTrue(nStart, nEnd);
 
             if (bReset)
             {
@@ -2104,9 +2112,9 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
         //  im eingefuegten Bereich ist nichts zusammengefasst
     }
 
-    //  Flags nicht duplizieren
-    //! direkt am Pattern testen ??
-    RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO );
+    // Don't duplicate the merge flags in the inserted row.
+    // #i108488# SC_MF_SCENARIO has to be allowed.
+    RemoveFlags( nStartRow, nStartRow+nSize-1, SC_MF_HOR | SC_MF_VER | SC_MF_AUTO | SC_MF_BUTTON );
 }
 
 

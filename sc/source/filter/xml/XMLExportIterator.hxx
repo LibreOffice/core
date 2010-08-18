@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XMLExportIterator.hxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +45,7 @@ class   ScHorizontalCellIterator;
 struct  ScMyCell;
 class   ScXMLExport;
 class   ScFormatRangeStyles;
+class   ScBaseCell;
 
 //==============================================================================
 
@@ -95,6 +93,7 @@ public:
     const ScMyShapeList*        GetShapes() { return &aShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 struct ScMyNoteShape
@@ -123,6 +122,7 @@ public:
     const ScMyNoteShapeList*    GetNotes() { return &aNoteShapeList; }
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -151,6 +151,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort(); // + remove doublets
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -191,6 +192,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -217,6 +219,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -253,6 +256,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -283,6 +287,7 @@ public:
                                 using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
+    void                        SkipTable(SCTAB nSkip);
 };
 
 //==============================================================================
@@ -311,6 +316,8 @@ struct ScMyCell
     sal_Int32                   nStyleIndex;
     sal_Int32                   nNumberFormat;
     com::sun::star::table::CellContentType  nType;
+
+    ScBaseCell*                 pBaseCell;
 
     sal_Bool                    bIsAutoStyle;
 
@@ -397,6 +404,7 @@ public:
 
     void                        SetCurrentTable(const SCTAB nTable,
                                     com::sun::star::uno::Reference<com::sun::star::sheet::XSpreadsheet>& rxTable);
+    void                        SkipTable(SCTAB nSkip);
 
     sal_Bool                    GetNext(ScMyCell& aCell, ScFormatRangeStyles* pCellStyles);
 };

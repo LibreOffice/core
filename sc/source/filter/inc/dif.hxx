@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dif.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,7 +79,11 @@ private:
     SvNumberFormatter*  pNumFormatter;
     SvStream&           rIn;
     BOOL                bPlain;
+    String              aLookAheadLine;
 
+    bool                ReadNextLine( String& rStr );
+    bool                LookAhead();
+    DATASET             GetNumberDataset( const sal_Unicode* pPossibleNumericData );
     static inline BOOL  IsBOT( const sal_Unicode* pRef );
     static inline BOOL  IsEOD( const sal_Unicode* pRef );
     static inline BOOL  Is1_0( const sal_Unicode* pRef );

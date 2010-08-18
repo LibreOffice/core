@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xistream.hxx,v $
- * $Revision: 1.13.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,8 @@
 #ifndef SC_XISTREAM_HXX
 #define SC_XISTREAM_HXX
 
-#include <svx/mscodec.hxx>
+#include <comphelper/docpasswordhelper.hxx>
+#include <filter/msfilter/mscodec.hxx>
 #include "xlstream.hxx"
 #include "xlconst.hxx"
 
@@ -52,7 +50,7 @@ class XclImpDecrypter;
 typedef ScfRef< XclImpDecrypter > XclImpDecrypterRef;
 
 /** Base class for BIFF stream decryption. */
-class XclImpDecrypter
+class XclImpDecrypter : public ::comphelper::IDocPasswordVerifier
 {
 public:
     explicit            XclImpDecrypter();
@@ -60,12 +58,16 @@ public:
 
     /** Returns the current error code of the decrypter. */
     inline ErrCode      GetError() const { return mnError; }
-    /** Returns true, if the decrypter has been constructed successfully.
-        This means especially that construction happened with a valid password. */
+    /** Returns true, if the decoder has been initialized correctly. */
     inline bool         IsValid() const { return mnError == ERRCODE_NONE; }
 
     /** Creates a (ref-counted) copy of this decrypter object. */
     XclImpDecrypterRef  Clone() const;
+
+    /** Implementation of the ::comphelper::IDocPasswordVerifier interface,
+        calls the new virtual function implVerify(). */
+    virtual ::comphelper::DocPasswordVerifierResult
+                        verifyPassword( const ::rtl::OUString& rPassword );
 
     /** Updates the decrypter on start of a new record or after seeking stream. */
     void                Update( SvStream& rStrm, sal_uInt16 nRecSize );
@@ -77,12 +79,12 @@ protected:
     /** Protected copy c'tor for OnClone(). */
     explicit            XclImpDecrypter( const XclImpDecrypter& rSrc );
 
-    /** Sets the decrypter to a state showing whether the password was correct. */
-    void                SetHasValidPassword( bool bValid );
-
 private:
     /** Implementation of cloning this object. */
     virtual XclImpDecrypter* OnClone() const = 0;
+    /** Derived classes implement password verification and initialization of
+        the decoder. */
+    virtual bool        OnVerify( const ::rtl::OUString& rPassword ) = 0;
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize ) = 0;
     /** Implementation of the decryption. */
@@ -100,12 +102,7 @@ private:
 class XclImpBiff5Decrypter : public XclImpDecrypter
 {
 public:
-    /** Constructs the decrypter.
-        @descr  Checks if the passed key and hash specify workbook protection.
-        Asks for a password otherwise.
-        @param nKey  Password key from FILEPASS record to verify password.
-        @param nHash  Password hash value from FILEPASS record to verify password. */
-    explicit            XclImpBiff5Decrypter( const XclImpRoot& rRoot, sal_uInt16 nKey, sal_uInt16 nHash );
+    explicit            XclImpBiff5Decrypter( sal_uInt16 nKey, sal_uInt16 nHash );
 
 private:
     /** Private copy c'tor for OnClone(). */
@@ -113,18 +110,18 @@ private:
 
     /** Implementation of cloning this object. */
     virtual XclImpBiff5Decrypter* OnClone() const;
+    /** Implements password verification and initialization of the decoder. */
+    virtual bool        OnVerify( const ::rtl::OUString& rPassword );
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize );
     /** Implementation of the decryption. */
     virtual sal_uInt16  OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes );
 
-    /** Initializes the members.
-        @postcond  Internal status is set and can be querried with IsValid(). */
-    void                Init( const ByteString& rPass, sal_uInt16 nKey, sal_uInt16 nHash );
-
 private:
-    ::svx::MSCodec_XorXLS95 maCodec;       /// Crypto algorithm implementation.
-    sal_uInt8           mpnPassw[ 16 ]; /// Cached password data for copy construction.
+    ::msfilter::MSCodec_XorXLS95 maCodec;       /// Crypto algorithm implementation.
+    ::std::vector< sal_uInt8 > maPassword;
+    sal_uInt16          mnKey;
+    sal_uInt16          mnHash;
 };
 
 // ----------------------------------------------------------------------------
@@ -133,14 +130,8 @@ private:
 class XclImpBiff8Decrypter : public XclImpDecrypter
 {
 public:
-    /** Constructs the decrypter.
-        @descr  Checks if the passed salt data specifies workbook protection.
-        Asks for a password otherwise.
-        @param pnDocId  Unique document identifier from FILEPASS record.
-        @param pnSaltData  Salt data from FILEPASS record.
-        @param pnSaltHash  Salt hash value from FILEPASS record. */
-    explicit            XclImpBiff8Decrypter( const XclImpRoot& rRoot, sal_uInt8 pnDocId[ 16 ],
-                            sal_uInt8 pnSaltData[ 16 ], sal_uInt8 pnSaltHash[ 16 ] );
+    explicit            XclImpBiff8Decrypter( sal_uInt8 pnSalt[ 16 ],
+                            sal_uInt8 pnVerifier[ 16 ], sal_uInt8 pnVerifierHash[ 16 ] );
 
 private:
     /** Private copy c'tor for OnClone(). */
@@ -148,15 +139,12 @@ private:
 
     /** Implementation of cloning this object. */
     virtual XclImpBiff8Decrypter* OnClone() const;
+    /** Implements password verification and initialization of the decoder. */
+    virtual bool        OnVerify( const ::rtl::OUString& rPassword );
     /** Implementation of updating the decrypter. */
     virtual void        OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize );
     /** Implementation of the decryption. */
     virtual sal_uInt16  OnRead( SvStream& rStrm, sal_uInt8* pnData, sal_uInt16 nBytes );
-
-    /** Initializes the internal codec.
-        @postcond  Internal status is set and can be querried with IsValid(). */
-    void                Init( const String& rPass, sal_uInt8 pnDocId[ 16 ],
-                            sal_uInt8 pnSaltData[ 16 ], sal_uInt8 pnSaltHash[ 16 ] );
 
     /** Returns the block number corresponding to the passed stream position. */
     sal_uInt32          GetBlock( sal_Size nStrmPos ) const;
@@ -164,9 +152,11 @@ private:
     sal_uInt16          GetOffset( sal_Size nStrmPos ) const;
 
 private:
-    ::svx::MSCodec_Std97 maCodec;       /// Crypto algorithm implementation.
-    sal_uInt16          mpnPassw[ 16 ]; /// Cached password data for copy construction.
-    sal_uInt8           mpnDocId[ 16 ]; /// Cached document ID for copy construction.
+    ::msfilter::MSCodec_Std97 maCodec;       /// Crypto algorithm implementation.
+    ::std::vector< sal_uInt16 > maPassword;
+    ::std::vector< sal_uInt8 > maSalt;
+    ::std::vector< sal_uInt8 > maVerifier;
+    ::std::vector< sal_uInt8 > maVerifierHash;
 };
 
 // ============================================================================
@@ -276,6 +266,10 @@ public:
         CONTINUE usage is switched on.
         @return  false = no record found (end of stream). */
     bool                StartNextRecord();
+    /** Sets stream pointer to the start of the record content for the record
+        at the passed absolute stream position.
+        @return  false = no record found (end of stream). */
+    bool                StartNextRecord( sal_Size nNextRecPos );
     /** Sets stream pointer to begin of record content.
         @param bContLookup  Automatic CONTINUE lookup on/off. In difference
         to other stream settings, this setting is persistent until next call of

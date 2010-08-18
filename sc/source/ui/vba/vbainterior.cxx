@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vbainterior.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,10 +40,13 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
+#include <map>
+
 #include <svx/xtable.hxx>
 
 #include "vbainterior.hxx"
 #include "vbapalette.hxx"
+#include "document.hxx"
 
 #define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
 #define COLORMAST 0xFFFFFF
@@ -163,10 +163,18 @@ ScVbaInterior::setColorIndex( const css::uno::Any& _colorindex ) throw (css::uno
     sal_Int32 nIndex = 0;
     _colorindex >>= nIndex;
 
-    // setColor expects colors in XL RGB values
-    // #FIXME this is daft we convert OO RGB val to XL RGB val and
-    // then back again to OO RGB value
-    setColor( OORGBToXLRGB( GetIndexColor( nIndex ) ) );
+    // hackly for excel::XlColorIndex::xlColorIndexNone
+    if( nIndex == excel::XlColorIndex::xlColorIndexNone )
+    {
+        m_xProps->setPropertyValue( BACKCOLOR, uno::makeAny( sal_Int32( -1 ) ) );
+    }
+    else
+    {
+        // setColor expects colors in XL RGB values
+        // #FIXME this is daft we convert OO RGB val to XL RGB val and
+        // then back again to OO RGB value
+        setColor( OORGBToXLRGB( GetIndexColor( nIndex ) ) );
+    }
 }
 uno::Any
 ScVbaInterior::GetIndexColor( const sal_Int32& nColorIndex )
@@ -204,13 +212,21 @@ uno::Any SAL_CALL
 ScVbaInterior::getColorIndex() throw ( css::uno::RuntimeException )
 {
     sal_Int32 nColor = 0;
+    // hackly for excel::XlColorIndex::xlColorIndexNone
+    uno::Any aColor = m_xProps->getPropertyValue( BACKCOLOR );
+    if( ( aColor >>= nColor ) && ( nColor == -1 ) )
+    {
+        nColor = excel::XlColorIndex::xlColorIndexNone;
+        return uno::makeAny( nColor );
+    }
+
     // getColor returns Xl ColorValue, need to convert it to OO val
     // as the palette deals with OO RGB values
     // #FIXME this is daft in getColor we convert OO RGB val to XL RGB val
     // and then back again to OO RGB value
     XLRGBToOORGB( getColor() ) >>= nColor;
 
-    return uno::makeAny( GetIndexColor( nColor ) );
+    return uno::makeAny( GetColorIndex( nColor ) );
 }
 Color
 ScVbaInterior::GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt32 nXclPattern )

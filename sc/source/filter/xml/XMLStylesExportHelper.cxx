@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XMLStylesExportHelper.cxx,v $
- * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -878,7 +875,7 @@ sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const rtl::OUString& rString,
     sal_Int32 nPrefixLength(rPrefix.getLength());
     rtl::OUString sTemp(rString.copy(nPrefixLength));
     sal_Int32 nIndex(sTemp.toInt32());
-    if (aAutoStyleNames.at(nIndex - 1)->equals(rString))
+    if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aAutoStyleNames.size() && aAutoStyleNames.at(nIndex - 1)->equals(rString))
     {
         bIsAutoStyle = sal_True;
         return nIndex - 1;
@@ -944,7 +941,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
 }
 
 sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nColumn, const sal_Int32 nRow,
-    sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Bool bRemoveRange)
+    sal_Bool& bIsAutoStyle, sal_Int32& nValidationIndex, sal_Int32& nNumberFormat, const sal_Int32 nRemoveBeforeRow)
 {
     DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
     ScMyFormatRangeAddresses* pFormatRanges(aTables[nTable]);
@@ -977,7 +974,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable, const s
         }
         else
         {
-            if (bRemoveRange && (*aItr).aRangeAddress.EndRow < nRow)
+            if ((*aItr).aRangeAddress.EndRow < nRemoveBeforeRow)
                 aItr = pFormatRanges->erase(aItr);
             else
                 ++aItr;
@@ -1111,7 +1108,7 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const rtl::OUString& rStrin
     sal_Int32 nPrefixLength(rPrefix.getLength());
     rtl::OUString sTemp(rString.copy(nPrefixLength));
     sal_Int32 nIndex(sTemp.toInt32());
-    if (aStyleNames.at(nIndex - 1)->equals(rString))
+    if (nIndex > 0 && static_cast<size_t>(nIndex-1) < aStyleNames.size() && aStyleNames.at(nIndex - 1)->equals(rString))
         return nIndex - 1;
     else
     {
@@ -1237,10 +1234,31 @@ void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nFie
     const sal_Int32 nStringIndex)
 {
     DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
-    DBG_ASSERT(aTables[nTable].size() >= static_cast<sal_uInt32>(nField), "wrong field");
-    if (aTables[nTable].size() == static_cast<sal_uInt32>(nField))
+    DBG_ASSERT(aTables[nTable].size() >= static_cast<size_t>(nField), "wrong field");
+    if (aTables[nTable].size() == static_cast<size_t>(nField))
         aTables[nTable].push_back(nStringIndex);
-    aTables[nTable][nField] = nStringIndex;
+    else
+        aTables[nTable][nField] = nStringIndex;
+}
+
+void ScRowStyles::AddFieldStyleName(const sal_Int32 nTable, const sal_Int32 nStartField,
+        const sal_Int32 nStringIndex, const sal_Int32 nEndField)
+{
+    DBG_ASSERT( nStartField <= nEndField, "bad field range");
+    DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    DBG_ASSERT(aTables[nTable].size() >= static_cast<size_t>(nStartField), "wrong field");
+    ScMysalInt32Vec& rTable = aTables[nTable];
+    size_t nSize = rTable.size();
+    if (nSize == static_cast<size_t>(nStartField))
+        rTable.insert( rTable.end(), static_cast<size_t>(nEndField - nStartField + 1), nStringIndex);
+    else
+    {
+        size_t nField = static_cast<size_t>(nStartField);
+        for ( ; nField < nSize && nField <= static_cast<size_t>(nEndField); ++nField)
+            rTable[nField] = nStringIndex;
+        if (nField <= static_cast<size_t>(nEndField))
+            rTable.insert( rTable.end(), static_cast<size_t>(nEndField - nField + 1), nStringIndex);
+    }
 }
 
 rtl::OUString* ScRowStyles::GetStyleName(const sal_Int32 nTable, const sal_Int32 nField)

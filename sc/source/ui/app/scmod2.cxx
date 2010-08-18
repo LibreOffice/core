@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scmod2.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +32,10 @@
 
 //------------------------------------------------------------------
 
-#include <svx/unolingu.hxx>
-#include <svtools/lingucfg.hxx>
-
+#include <editeng/unolingu.hxx>
+#include <unotools/lingucfg.hxx>
+#include <i18npool/mslangid.hxx>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -62,9 +60,9 @@ void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCt
     SvtLinguOptions aOptions;
     aConfig.GetOptions( aOptions );
 
-    rDefLang = aOptions.nDefaultLanguage;
-    rCjkLang = aOptions.nDefaultLanguage_CJK;
-    rCtlLang = aOptions.nDefaultLanguage_CTL;
+    rDefLang = MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage, ::com::sun::star::i18n::ScriptType::LATIN);
+    rCjkLang = MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN);
+    rCtlLang = MsLangId::resolveSystemLanguageByScriptType(aOptions.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
     rAutoSpell = aOptions.bIsSpellAuto;
 }
 

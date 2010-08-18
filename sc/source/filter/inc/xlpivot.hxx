@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlpivot.hxx,v $
- * $Revision: 1.12.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,9 @@
 #include <tools/datetime.hxx>
 #include "ftools.hxx"
 #include "xladdress.hxx"
+#include "dpobject.hxx"
+
+#include <memory>
 
 class XclImpStream;
 class XclExpStream;
@@ -72,6 +72,10 @@ const sal_uInt16 EXC_PT_MAXDATACOUNT        = 256;
 
 // pivot table items
 const sal_uInt16 EXC_PT_MAXITEMCOUNT        = 32500;
+
+const sal_uInt16 EXC_PT_AUTOFMT_HEADER      = 0x810;
+const sal_uInt16 EXC_PT_AUTOFMT_ZERO        = 0;
+const sal_uInt32 EXC_PT_AUTOFMT_FLAGS       = 0x20;
 
 /** Data type of a pivot cache item. */
 enum XclPCItemType
@@ -396,6 +400,9 @@ const double EXC_SXDBEX_CREATION_DATE       = 51901.029652778;
 const sal_uInt16 EXC_ID_SXFDBTYPE           = 0x01BB;
 const sal_uInt16 EXC_SXFDBTYPE_DEFAULT      = 0x0000;
 
+// (0x0810) SXVIEWEX9 ---------------------------------------------------------
+const sal_uInt16 EXC_ID_SXVIEWEX9       = 0x0810;
+
 // ============================================================================
 // Pivot cache
 // ============================================================================
@@ -663,6 +670,8 @@ struct XclPTFieldExtInfo
     sal_uInt32          mnFlags;        /// Several flags and number of items for AutoShow.
     sal_uInt16          mnSortField;    /// Index to data field sorting bases on.
     sal_uInt16          mnShowField;    /// Index to data field AutoShow bases on.
+    sal_uInt16          mnNumFmt;
+    ::std::auto_ptr<rtl::OUString> mpFieldTotalName;
 
     explicit            XclPTFieldExtInfo();
 
@@ -786,5 +795,23 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo );
 
 // ============================================================================
 
+// Pivot table autoformat settings ==============================================
+
+/** Pivot table autoformat settings (SXVIEWEX9 record). */
+struct XclPTViewEx9Info
+{
+    sal_uInt32          mbReport;           /// 2 for report* fmts ?
+    sal_uInt8           mnAutoFormat;       /// AutoFormat ID
+    sal_uInt8           mnGridLayout;       /// 0 == gridlayout, 0x10 == modern
+    String              maGrandTotalName;
+
+    explicit            XclPTViewEx9Info();
+    void                Init( const ScDPObject& rDPObj );
+};
+
+XclImpStream& operator>>( XclImpStream& rStrm, XclPTViewEx9Info& rInfo );
+XclExpStream& operator<<( XclExpStream& rStrm, const XclPTViewEx9Info& rInfo );
+
+// ============================================================================
 #endif
 

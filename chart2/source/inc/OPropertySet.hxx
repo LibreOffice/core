@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OPropertySet.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,6 +76,8 @@ public:
 
 protected:
     explicit OPropertySet( const OPropertySet & rOther, ::osl::Mutex & rMutex );
+
+    void SetNewValuesExplicitlyEvenIfTheyEqualDefault();
 
     /** implement this method to provide default values for all properties
         supporting defaults.  If a property does not have a default value, you
@@ -311,6 +310,7 @@ private:
 
     /// pImpl idiom implementation
     ::std::auto_ptr< impl::ImplOPropertySet > m_pImplProperties;
+    bool m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault;
 };
 
 } //  namespace property

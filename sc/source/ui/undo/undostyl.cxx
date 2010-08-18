@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: undostyl.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,11 +32,12 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <vcl/virdev.hxx>
 
 #include "undostyl.hxx"
 #include "docsh.hxx"
+#include "docpool.hxx"
 #include "stlpool.hxx"
 #include "printfun.hxx"
 #include "scmod.hxx"
@@ -169,6 +167,9 @@ void ScUndoModifyStyle::DoChange( ScDocShell* pDocSh, const String& rName,
     {
         // create style (with new name)
         pStyle = &pStlPool->Make( aNewName, eStyleFamily, SFXSTYLEBIT_USERDEF );
+
+        if ( eStyleFamily == SFX_STYLE_FAMILY_PARA )
+            pDoc->GetPool()->CellStyleCreated( aNewName );
     }
 
     if ( pStyle )

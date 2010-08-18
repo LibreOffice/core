@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: defltuno.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,11 +28,12 @@
 #ifndef SC_DEFLTUNO_HXX
 #define SC_DEFLTUNO_HXX
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <cppuhelper/implbase3.hxx>
+#include <svl/itemprop.hxx>
 
 class ScDocShell;
 
@@ -48,6 +46,7 @@ class ScDocDefaultsObj : public ::cppu::WeakImplHelper3<
 {
 private:
     ScDocShell*             pDocShell;
+    SfxItemPropertyMap      aPropertyMap;
 
     void                    ItemsChanged();
 

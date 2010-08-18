@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chart2uno.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,9 @@
 #include "rangelst.hxx"
 #include "externalrefmgr.hxx"
 #include "token.hxx"
+#include "chartlis.hxx"
 
-#include <svtools/lstner.hxx>
+#include <svl/lstner.hxx>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
@@ -54,12 +52,11 @@
 // #include <com/sun/star/lang/XUnoTunnel.hpp>
 // #endif
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase6.hxx>
 #include <cppuhelper/implbase7.hxx>
 #include <rtl/ustring.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/itemprop.hxx>
 
 #include <hash_set>
 #include <list>
@@ -74,9 +71,10 @@ class ScDocument;
 // DataProvider ==============================================================
 
 class ScChart2DataProvider : public
-                ::cppu::WeakImplHelper3<
+                ::cppu::WeakImplHelper4<
                     ::com::sun::star::chart2::data::XDataProvider,
                     ::com::sun::star::chart2::data::XRangeXMLConversion,
+                    ::com::sun::star::beans::XPropertySet,
                     ::com::sun::star::lang::XServiceInfo>,
                 SfxListener
 {
@@ -125,6 +123,59 @@ public:
     virtual ::rtl::OUString SAL_CALL convertRangeFromXML( const ::rtl::OUString& sXMLRange )
         throw ( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
+    // XPropertySet ----------------------------------------------------------
+
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySetInfo> SAL_CALL
+        getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL setPropertyValue(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Any& rValue)
+        throw( ::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::beans::PropertyVetoException,
+                ::com::sun::star::lang::IllegalArgumentException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue(
+            const ::rtl::OUString& rPropertyName)
+        throw( ::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL addPropertyChangeListener(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertyChangeListener>& xListener)
+        throw( ::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL removePropertyChangeListener(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertyChangeListener>& rListener)
+        throw( ::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL addVetoableChangeListener(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XVetoableChangeListener>& rListener)
+        throw( ::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL removeVetoableChangeListener(
+            const ::rtl::OUString& rPropertyName,
+            const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XVetoableChangeListener>& rListener)
+        throw( ::com::sun::star::beans::UnknownPropertyException,
+                ::com::sun::star::lang::WrappedTargetException,
+                ::com::sun::star::uno::RuntimeException);
+
     // XServiceInfo ----------------------------------------------------------
 
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw(
@@ -137,27 +188,11 @@ public:
         getSupportedServiceNames() throw(
                 ::com::sun::star::uno::RuntimeException);
 
-    /**
-     * Check the current list of reference tokens, and add the upper left
-     * corner of the minimum range that encloses all ranges if certain
-     * conditions are met.
-     *
-     * @param rRefTokens list of reference tokens
-     *
-     * @return true if the corner was added, false otherwise.
-     */
-    static bool addUpperLeftCornerIfMissing(::std::vector<ScSharedTokenRef>& rRefTokens);
-
-private:
-
-    void detectRangesFromDataSource(::std::vector<ScSharedTokenRef>& rRefTokens,
-                                    ::com::sun::star::chart::ChartDataRowSource& rRowSource,
-                                    bool& rRowSourceDetected,
-                                    const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource);
-
 private:
 
     ScDocument*                 m_pDocument;
+    SfxItemPropertySet          m_aPropSet;
+    sal_Bool                    m_bIncludeHiddenCells;
 };
 
 
@@ -287,7 +322,7 @@ class ScChart2DataSequence : public
 public:
     explicit ScChart2DataSequence( ScDocument* pDoc,
             const com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataProvider >& xDP,
-            ::std::vector<ScSharedTokenRef>* pTokens);
+            ::std::vector<ScSharedTokenRef>* pTokens, bool bIncludeHiddenCells );
 
     virtual ~ScChart2DataSequence();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -404,6 +439,9 @@ public:
 //  static ScChart2DataSequence* getImplementation( const com::sun::star::uno::Reference<
 //                                  com::sun::star::uno::XInterface> xObj );
 
+private:
+    void setDataChangedHint(bool b);
+
     // Implementation --------------------------------------------------------
 
     void    RefChanged();
@@ -461,12 +499,32 @@ private:
         Item();
     };
 
+    class HiddenRangeListener : public ScChartHiddenRangeListener
+    {
+    public:
+        HiddenRangeListener(ScChart2DataSequence& rParent);
+        virtual ~HiddenRangeListener();
+
+        virtual void notify();
+
+    private:
+        ScChart2DataSequence& mrParent;
+    };
+
     ::std::list<Item>           m_aDataArray;
+
+    /**
+     * Cached data for getData.  We may also need to cache data for the
+     * numerical and textural data series if they turn out to be bottlenecks
+     * under certain scenarios.
+     */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_aMixedDataCache;
+
     ::com::sun::star::uno::Sequence<sal_Int32>  m_aHiddenValues;
 
     // properties
     ::com::sun::star::chart2::data::DataSequenceRole  m_aRole;
-    sal_Bool                    m_bHidden;
+    sal_Bool                    m_bIncludeHiddenCells;
 
     // internals
     typedef ::std::auto_ptr< ::std::vector<ScSharedTokenRef> >  TokenListPtr;
@@ -481,6 +539,7 @@ private:
     com::sun::star::uno::Reference < com::sun::star::chart2::data::XDataProvider > m_xDataProvider;
     SfxItemPropertySet          m_aPropSet;
 
+    ::std::auto_ptr<HiddenRangeListener> m_pHiddenListener;
     ScLinkListener*             m_pValueListener;
     XModifyListenerArr_Impl     m_aValueListeners;
 
@@ -625,7 +684,7 @@ private:
 
     // properties
     ::com::sun::star::chart2::data::DataSequenceRole  m_aRole;
-    sal_Bool                    m_bHidden;
+    sal_Bool                    m_bIncludeHiddenCells;
     // internals
     ScRangeListRef              m_xRanges;
     ScDocument*                 m_pDocument;

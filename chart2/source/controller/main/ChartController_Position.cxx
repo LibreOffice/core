@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartController_Position.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +45,7 @@
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
 #include <svx/rectenum.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/aeitem.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include <vcl/svapp.hxx>
@@ -142,7 +139,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::POS_SIZE,
             ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ))),
-        m_xUndoManager, m_aModel->getModel() );
+        m_xUndoManager, getModel() );
 
     SfxAbstractTabDialog * pDlg = NULL;
     try
@@ -169,14 +166,13 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
                 Rectangle aObjectRect;
                 aItemSet.Put(*pOutItemSet);//overwrite old values with new values (-> all items are set)
                 lcl_getPositionAndSizeFromItemSet( aItemSet, aObjectRect, aSelectedSize );
-                awt::Size aPageSize( ChartModelHelper::getPageSize( m_aModel->getModel() ) );
+                awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
                 Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
                 bool bChanged = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
-                            , m_aModel->getModel()
+                            , getModel()
                             , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
-                            , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight())
-                            , m_xChartView );
+                            , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
                 if( bChanged )
                     aUndoGuard.commitAction();
             }

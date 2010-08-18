@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlexp.cxx,v $
- * $Revision: 1.38.144.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,34 +33,34 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <rtl/tencinfo.h>
 
 #include <vcl/svapp.hxx>
 #include <svx/algitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <svx/xoutbmp.hxx>
-#include <svx/editeng.hxx>
-#include <svx/htmlcfg.hxx>
+#include <editeng/editeng.hxx>
+#include <svtools/htmlcfg.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/frmhtmlw.hxx>
 #include <sfx2/objsh.hxx>
-#include <svtools/stritem.hxx>
-#include <svtools/urihelper.hxx>
+#include <svl/stritem.hxx>
+#include <svl/urihelper.hxx>
 #ifndef _SVSTDARR_USHORTS
 #define _SVSTDARR_USHORTS
 #endif
-#include <svtools/svstdarr.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/zforlist.hxx>
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <svtools/parhtml.hxx>
@@ -86,9 +83,9 @@
 #include "ftools.hxx"
 
 
-#include <svx/flditem.hxx>
-#include <svx/borderline.hxx>
-#include <svtools/syslocale.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/borderline.hxx>
+#include <unotools/syslocale.hxx>
 
 
 // ohne sc.hrc: error C2679: binary '=' : no operator defined which takes a
@@ -150,8 +147,6 @@ const sal_Char __FAR_DATA ScHTMLExport::sIndentSource[nIndentMax+1] =
 
 #define OUT_SP_CSTR_ASS( s )    rStrm << ' ' << s << '='
 #define APPEND_SPACE( s )   s.AppendAscii(" ")
-
-extern BOOL bOderSo;
 
 #define GLOBSTR(id) ScGlobal::GetRscString( id )
 
@@ -236,30 +231,6 @@ void lcl_AppendHTMLColorTripel( ByteString& rStr, const Color& rColor )
     rResult = '<'; rResult += rTag; rResult += '>';
 }
 */
-
-bool SC_DLLPUBLIC ScGetWriteTeamInfo();
-
-void lcl_WriteTeamInfo( SvStream& rStrm, rtl_TextEncoding eDestEnc )
-{
-    if ( !ScGetWriteTeamInfo() ) return;
-    lcl_OUT_LF();
-    lcl_OUT_COMMENT( CREATE_STRING( "Sascha Ballach                     " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Michael Daeumling (aka Bitsau)     " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Michael Hagen                      " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Roland Jakobs                      " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Andreas Krebs                      " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "John Marmion                       " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Niklas Nebel                       " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Jacques Nietsch                    " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Marcus Olk                         " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Eike Rathke                        " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Daniel Rentz                       " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Stephan Templin                    " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "Gunnar Timm                        " ) );
-    lcl_OUT_COMMENT( CREATE_STRING( "*** Man kann nicht ALLES haben! ***" ) );
-    lcl_OUT_LF();
-}
-
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -419,8 +390,6 @@ void ScHTMLExport::WriteHeader()
             OUT_COMMENT( aStrOut );
         }
         //----------------------------------------------------------
-
-        lcl_WriteTeamInfo( rStrm, eDestEnc );
     }
     OUT_LF();
 
@@ -749,7 +718,7 @@ void ScHTMLExport::WriteTables()
         SCCOL nCol;
         for ( nCol=nStartCol; nCol<=nEndCol; nCol++ )
         {
-            if ( !(pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN) )
+            if ( !pDoc->ColHidden(nCol, nTab) )
                 ++nColCnt;
         }
         (((aByteStrOut += ' ') += OOO_STRING_SVTOOLS_HTML_O_cols) += '=') += ByteString::CreateFromInt32( nColCnt );
@@ -770,7 +739,7 @@ void ScHTMLExport::WriteTables()
         aByteStr += '=';
         for ( nCol=nStartCol; nCol<=nEndCol; nCol++ )
         {
-            if ( pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN )
+            if ( pDoc->ColHidden(nCol, nTab) )
                 continue;   // for
 
             aByteStrOut  = aByteStr;
@@ -785,14 +754,12 @@ void ScHTMLExport::WriteTables()
         // At least old (3.x, 4.x?) Netscape doesn't follow <TABLE COLS=n> and
         // <COL WIDTH=x> specified, but needs a width at every column.
         bTableDataWidth = TRUE;     // widths in first row
-        bool bHasHiddenRows = pDoc->GetRowFlagsArray( nTab).HasCondition(
-                nStartRow, nEndRow, CR_HIDDEN, CR_HIDDEN);
+        bool bHasHiddenRows = pDoc->HasHiddenRows(nStartRow, nEndRow, nTab);
         for ( SCROW nRow=nStartRow; nRow<=nEndRow; nRow++ )
         {
-            if ( bHasHiddenRows && (pDoc->GetRowFlags( nRow, nTab ) & CR_HIDDEN) )
+            if ( bHasHiddenRows && pDoc->RowHidden(nRow, nTab) )
             {
-                nRow = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition(
-                        nRow+1, nEndRow, CR_HIDDEN, 0);
+                nRow = pDoc->FirstVisibleRow(nRow+1, nEndRow, nTab);
                 --nRow;
                 continue;   // for
             }
@@ -801,7 +768,7 @@ void ScHTMLExport::WriteTables()
             bTableDataHeight = TRUE;  // height at every first cell of each row
             for ( SCCOL nCol2=nStartCol; nCol2<=nEndCol; nCol2++ )
             {
-                if ( pDoc->GetColFlags( nCol2, nTab ) & CR_HIDDEN )
+                if ( pDoc->ColHidden(nCol2, nTab) )
                     continue;   // for
 
                 if ( nCol2 == nEndCol )
@@ -1154,9 +1121,31 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( !bFieldText )
     {
         if ( !aStrOut.Len() )
+        {
             TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // #42573# keine komplett leere Zelle
+        }
         else
-            OUT_STR( aStrOut );
+        {
+            xub_StrLen nPos = aStrOut.Search( _LF );
+            if ( nPos == STRING_NOTFOUND )
+            {
+                OUT_STR( aStrOut );
+            }
+            else
+            {
+                xub_StrLen nStartPos = 0;
+                do
+                {
+                    String aSingleLine( aStrOut, nStartPos, nPos - nStartPos );
+                    OUT_STR( aSingleLine );
+                    TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );
+                    nStartPos = nPos + 1;
+                }
+                while( ( nPos = aStrOut.Search( _LF, nStartPos ) ) != STRING_NOTFOUND );
+                String aSingleLine( aStrOut, nStartPos, aStrOut.Len() - nStartPos );
+                OUT_STR( aSingleLine );
+            }
+        }
     }
     if ( pGraphEntry )
         WriteGraphEntry( pGraphEntry );
@@ -1194,7 +1183,7 @@ BOOL ScHTMLExport::WriteFieldText( const ScEditCell* pCell )
         for ( USHORT nPar=0; nPar < nParas; nPar++ )
         {
             if ( nPar > 0 )
-                rStrm << ' ';       // blank between paragraphs
+                TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );
             SvUShorts aPortions;
             rEngine.GetPortions( nPar, aPortions );
             USHORT nCnt = aPortions.Count();

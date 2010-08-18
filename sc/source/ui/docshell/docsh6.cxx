@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docsh6.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 
 #include <svx/pageitem.hxx>
 #include <vcl/virdev.hxx>
-#include <svx/linkmgr.hxx>
+#include <sfx2/linkmgr.hxx>
 #endif
 
 // INCLUDE ---------------------------------------------------------------
@@ -367,7 +364,7 @@ BOOL __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
 
 void ScDocShell::UpdateLinks()
 {
-    SvxLinkManager* pLinkManager = aDocument.GetLinkManager();
+    sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
     ScStrCollection aNames;
 
     // nicht mehr benutzte Links raus
@@ -438,7 +435,7 @@ void ScDocShell::UpdateLinks()
 
 BOOL ScDocShell::ReloadTabLinks()
 {
-    SvxLinkManager* pLinkManager = aDocument.GetLinkManager();
+    sfx2::LinkManager* pLinkManager = aDocument.GetLinkManager();
 
     BOOL bAny = FALSE;
     USHORT nCount = pLinkManager->GetLinks().Count();

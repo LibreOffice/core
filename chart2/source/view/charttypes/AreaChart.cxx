@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AreaChart.cxx,v $
- * $Revision: 1.53.42.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,12 +42,13 @@
 #include "LabelPositionHelper.hxx"
 #include "Clipping.hxx"
 #include "Stripe.hxx"
+#include "PolarLabelPositionHelper.hxx"
 
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <tools/debug.hxx>
-#include <svx/unoprnms.hxx>
+#include <editeng/unoprnms.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/NormalsKind.hpp>
@@ -74,7 +72,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
                      , bool bNoArea
                      , PlottingPositionHelper* pPlottingPositionHelper
                      , bool bConnectLastToFirstPoint
-                     , bool bAddOneToXMax
                      , bool bExpandIfValuesCloseToBorder
                      , sal_Int32 nKeepAspectRatio
                      , const drawing::Direction3D& rAspectRatio
@@ -84,12 +81,11 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_bArea(!bNoArea)
         , m_bLine(bNoArea)
         , m_bSymbol( ChartTypeHelper::isSupportingSymbolProperties(xChartTypeModel,nDimensionCount) )
+        , m_bIsPolarCooSys( bConnectLastToFirstPoint )
         , m_bConnectLastToFirstPoint( bConnectLastToFirstPoint )
-        , m_bAddOneToXMax(bAddOneToXMax)
         , m_bExpandIfValuesCloseToBorder( bExpandIfValuesCloseToBorder )
         , m_nKeepAspectRatio(nKeepAspectRatio)
         , m_aGivenAspectRatio(rAspectRatio)
-        , m_eNanHandling( bCategoryXAxis ? NAN_AS_GAP : NAN_AS_INTERPOLATED )
         , m_eCurveStyle(CurveStyle_LINES)
         , m_nCurveResolution(20)
         , m_nSplineOrder(3)
@@ -102,9 +98,6 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
         m_pMainPosHelper = new PlottingPositionHelper();
     PlotterBase::m_pPosHelper = m_pMainPosHelper;
     VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper;
-
-    if( m_bArea )
-        m_eNanHandling = NAN_AS_ZERO;
 
     try
     {
@@ -128,14 +121,17 @@ AreaChart::~AreaChart()
     delete m_pMainPosHelper;
 }
 
+double AreaChart::getMinimumX()
+{
+    if( m_bCategoryXAxis && m_bIsPolarCooSys )//the angle axis in net charts needs a different autoscaling
+        return 1.0;//first category (index 0) matches with real number 1.0
+    return VSeriesPlotter::getMinimumX();
+}
+
 double AreaChart::getMaximumX()
 {
-    if( m_bAddOneToXMax )
-    {
-        //return category count
-        sal_Int32 nPointCount = getPointCount();
-        return nPointCount+1;
-    }
+    if( m_bCategoryXAxis && m_bIsPolarCooSys )//the angle axis in net charts needs a different autoscaling
+        return getPointCount()+1;
     return VSeriesPlotter::getMaximumX();
 }
 
@@ -234,6 +230,12 @@ bool AreaChart::keepAspectRatio() const
 
 void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
+    if( m_bArea && !m_bIsPolarCooSys && pSeries )
+    {
+        sal_Int32 nMissingValueTreatment = pSeries->getMissingValueTreatment();
+        if( nMissingValueTreatment == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP  )
+            pSeries->setMissingValueTreatment( ::com::sun::star::chart::MissingValueTreatment::USE_ZERO );
+    }
     if( m_nDimension == 3 && !m_bCategoryXAxis )
     {
         //3D xy always deep
@@ -351,9 +353,10 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
         if( m_bConnectLastToFirstPoint && !ShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
         {
             // do NOT connect last and first point, if one is NAN, and NAN handling is NAN_AS_GAP
-            double fFirstY = pSeries->getY( 0 );
-            double fLastY = pSeries->getY( VSeriesPlotter::getPointCount() - 1 );
-            if( (m_eNanHandling != NAN_AS_GAP) || (::rtl::math::isFinite( fFirstY ) && ::rtl::math::isFinite( fLastY )) )
+            double fFirstY = pSeries->getYValue( 0 );
+            double fLastY = pSeries->getYValue( VSeriesPlotter::getPointCount() - 1 );
+            if( (pSeries->getMissingValueTreatment() != ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP)
+                || (::rtl::math::isFinite( fFirstY ) && ::rtl::math::isFinite( fLastY )) )
             {
                 // connect last point in last polygon with first point in first polygon
                 ::basegfx::B2DRectangle aScaledLogicClipDoubleRect( pPosHelper->getScaledLogicClipDoubleRect() );
@@ -400,7 +403,7 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
 
                 m_pShapeFactory->createStripe(xSeriesGroupShape_Shapes
                     , Stripe( aPoint1, aPoint2, fDepth )
-                    , pSeries->getPropertiesOfSeries(), PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), true );
+                    , pSeries->getPropertiesOfSeries(), PropertyMapper::getPropertyNameMapForFilledSeriesProperties(), true, 1 );
             }
         }
     }
@@ -429,7 +432,12 @@ bool AreaChart::impl_createArea( VDataSeries* pSeries
 
     drawing::PolyPolygonShape3D aPoly( *pSeriesPoly );
     //add second part to the polygon (grounding points or previous series points)
-    if(!pPreviousSeriesPoly)
+    if( m_bConnectLastToFirstPoint && !ShapeFactory::isPolygonEmptyOrSinglePoint(*pSeriesPoly) )
+    {
+        if( pPreviousSeriesPoly )
+            addPolygon( aPoly, *pPreviousSeriesPoly );
+    }
+    else if(!pPreviousSeriesPoly)
     {
         double fMinX = pSeries->m_fLogicMinX;
         double fMaxX = pSeries->m_fLogicMaxX;
@@ -573,13 +581,6 @@ void lcl_reorderSeries( ::std::vector< ::std::vector< VDataSeriesGroup > >&  rZS
 
 }//anonymous namespace
 
-void AreaChart::impl_maybeReplaceNanWithZero( double& rfValue )
-{
-    if( m_eNanHandling == NAN_AS_ZERO &&
-        ( ::rtl::math::isNan(rfValue) || ::rtl::math::isInf(rfValue) )  )
-        rfValue = 0.0;
-}
-
 //better performance for big data
 struct FormerPoint
 {
@@ -676,8 +677,7 @@ void AreaChart::createShapes()
                         pPosHelper = m_pMainPosHelper;
                     PlotterBase::m_pPosHelper = pPosHelper;
 
-                    double fAdd = pSeries->getY( nIndex );
-                    impl_maybeReplaceNanWithZero( fAdd );
+                    double fAdd = pSeries->getYValue( nIndex );
                     if( !::rtl::math::isNan(fAdd) && !::rtl::math::isInf(fAdd) )
                         aLogicYSumMap[nAttachedAxisIndex] += fabs( fAdd );
                 }
@@ -709,23 +709,6 @@ void AreaChart::createShapes()
                     if(!pSeries)
                         continue;
 
-                    sal_Int32 nMissingValueTreatment = pSeries->getMissingValueTreatment();
-                    switch( nMissingValueTreatment )
-                    {
-                       case ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP:
-                           if( !m_bArea )
-                               m_eNanHandling = NAN_AS_GAP;
-                           break;
-                       case ::com::sun::star::chart::MissingValueTreatment::USE_ZERO:
-                           m_eNanHandling = NAN_AS_ZERO;
-                           break;
-                       case ::com::sun::star::chart::MissingValueTreatment::CONTINUE:
-                           m_eNanHandling = NAN_AS_INTERPOLATED;
-                           break;
-                       default:
-                           break;
-                    }
-
                     /*  #i70133# ignore points outside of series length in standard area
                         charts. Stacked area charts will use missing points as zeros. In
                         standard charts, pSeriesList contains only one series. */
@@ -745,10 +728,24 @@ void AreaChart::createShapes()
                     (*aSeriesIter)->m_fLogicZPos = fLogicZ;
 
                     //collect data point information (logic coordinates, style ):
-                    double fLogicX = (*aSeriesIter)->getX(nIndex);
-                    double fLogicY = (*aSeriesIter)->getY(nIndex);
-                    impl_maybeReplaceNanWithZero( fLogicX );
-                    impl_maybeReplaceNanWithZero( fLogicY );
+                    double fLogicX = (*aSeriesIter)->getXValue(nIndex);
+                    double fLogicY = (*aSeriesIter)->getYValue(nIndex);
+
+                    if( m_bIsPolarCooSys && m_bArea &&
+                        ( ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY) ) )
+                    {
+                        if( (*aSeriesIter)->getMissingValueTreatment() == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP )
+                        {
+                            if( pSeriesList->size() == 1 || nSeriesIndex == 0 )
+                            {
+                                fLogicY = pPosHelper->getLogicMinY();
+                                if( !pPosHelper->isMathematicalOrientationY() )
+                                    fLogicY = pPosHelper->getLogicMaxY();
+                            }
+                            else
+                                fLogicY = 0.0;
+                        }
+                    }
 
                     if( m_nDimension==3 && m_bArea && pSeriesList->size()!=1 )
                         fLogicY = fabs( fLogicY );
@@ -762,7 +759,7 @@ void AreaChart::createShapes()
                         || ::rtl::math::isNan(fLogicY) || ::rtl::math::isInf(fLogicY)
                         || ::rtl::math::isNan(fLogicZ) || ::rtl::math::isInf(fLogicZ) )
                     {
-                        if( m_eNanHandling == NAN_AS_GAP )
+                        if( (*aSeriesIter)->getMissingValueTreatment() == ::com::sun::star::chart::MissingValueTreatment::LEAVE_GAP )
                         {
                             drawing::PolyPolygonShape3D& rPolygon = (*aSeriesIter)->m_aPolyPolygonShape3D;
                             sal_Int32& rIndex = (*aSeriesIter)->m_nPolygonIndex;
@@ -821,7 +818,21 @@ void AreaChart::createShapes()
                     //store point information for series polygon
                     //for area and/or line (symbols only do not need this)
                     if( isValidPosition(aScaledLogicPosition) )
+                    {
                         AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aScaledLogicPosition, (*aSeriesIter)->m_nPolygonIndex );
+
+                        //prepare clipping for filled net charts
+                        if( !bIsVisible && m_bIsPolarCooSys && m_bArea )
+                        {
+                            drawing::Position3D aClippedPos(aScaledLogicPosition);
+                            pPosHelper->clipScaledLogicValues( 0, &aClippedPos.PositionY, 0 );
+                            if( pPosHelper->isLogicVisible( aClippedPos.PositionX, aClippedPos.PositionY, aClippedPos.PositionZ ) )
+                            {
+                                AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aClippedPos, (*aSeriesIter)->m_nPolygonIndex );
+                                AddPointToPoly( (*aSeriesIter)->m_aPolyPolygonShape3D, aScaledLogicPosition, (*aSeriesIter)->m_nPolygonIndex );
+                            }
+                        }
+                    }
 
                     //create a single datapoint if point is visible
                     //apply clipping:
@@ -933,12 +944,29 @@ void AreaChart::createShapes()
                                 break;
                             }
 
+                            awt::Point aScreenPosition2D;//get the screen position for the labels
+                            sal_Int32 nOffset = 100; //todo maybe calculate this font height dependent
+                            if( m_bIsPolarCooSys && nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE )
+                            {
+                                PolarPlottingPositionHelper* pPolarPosHelper = dynamic_cast<PolarPlottingPositionHelper*>(pPosHelper);
+                                if( pPolarPosHelper )
+                                {
+                                    PolarLabelPositionHelper aPolarLabelPositionHelper(pPolarPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory);
+                                    aScreenPosition2D = awt::Point( aPolarLabelPositionHelper.getLabelScreenPositionAndAlignmentForLogicValues(
+                                        eAlignment, fLogicX, fLogicY, fLogicZ, nOffset ));
+                                }
+                            }
+                            else
+                            {
+                                if(LABEL_ALIGN_CENTER==eAlignment || m_nDimension == 3 )
+                                    nOffset = 0;
+                                aScreenPosition2D = awt::Point( LabelPositionHelper(pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
+                                    .transformSceneToScreenPosition( aScenePosition3D ) );
+                            }
 
-                            awt::Point aScreenPosition2D( LabelPositionHelper(pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
-                                .transformSceneToScreenPosition( aScenePosition3D ) );
                             this->createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
                                             , fLogicValueForLabeDisplay
-                                            , aLogicYSumMap[nAttachedAxisIndex], aScreenPosition2D, eAlignment );
+                                            , aLogicYSumMap[nAttachedAxisIndex], aScreenPosition2D, eAlignment, nOffset );
                         }
                     }
 

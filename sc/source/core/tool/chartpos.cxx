@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: chartpos.cxx,v $
- * $Revision: 1.4.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -307,27 +304,18 @@ void ScChartPositioner::CheckColRowHeaders()
     if ( aRangeListRef->Count() == 1 )
     {
         aRangeListRef->First()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-        // Beschriftungen auch nach hidden Cols/Rows finden
-        while ( nCol1 <= nCol2 && (pDocument->GetColFlags(
-                nCol1, nTab1) & CR_HIDDEN) != 0 )
-            nCol1++;
-        while ( nRow1 <= nRow2 && (pDocument->GetRowFlags(
-                nRow1, nTab1) & CR_HIDDEN) != 0 )
-            nRow1++;
         if ( nCol1 > nCol2 || nRow1 > nRow2 )
             bColStrings = bRowStrings = FALSE;
         else
         {
             for (iCol=nCol1; iCol<=nCol2 && bColStrings; iCol++)
             {
-                if ( iCol==nCol1 || (pDocument->GetColFlags( iCol, nTab1) & CR_HIDDEN) == 0 )
-                    if (pDocument->HasValueData( iCol, nRow1, nTab1 ))
+                if (pDocument->HasValueData( iCol, nRow1, nTab1 ))
                         bColStrings = FALSE;
             }
             for (iRow=nRow1; iRow<=nRow2 && bRowStrings; iRow++)
             {
-                if ( iRow==nRow1 || (pDocument->GetRowFlags( iRow, nTab1) & CR_HIDDEN) == 0 )
-                    if (pDocument->HasValueData( nCol1, iRow, nTab1 ))
+                if (pDocument->HasValueData( nCol1, iRow, nTab1 ))
                         bRowStrings = FALSE;
             }
         }
@@ -341,43 +329,22 @@ void ScChartPositioner::CheckColRowHeaders()
         {
             pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
             BOOL bTopRow = (nRow1 == nStartRow);
-            BOOL bHidOk;
             if ( bRowStrings && (bVert || nCol1 == nStartCol) )
             {   // NONE oder ROWS: RowStrings in jeder Selektion moeglich
                 // COLS oder BOTH: nur aus der ersten Spalte
-                while ( nCol1 <= nCol2 && (pDocument->GetColFlags(
-                        nCol1, nTab1) & CR_HIDDEN) != 0 )
-                    nCol1++;
-                while ( nRow1 <= nRow2 && (pDocument->GetRowFlags(
-                        nRow1, nTab1) & CR_HIDDEN) != 0 )
-                    nRow1++;
                 if ( nCol1 <= nCol2 )
                     for (iRow=nRow1; iRow<=nRow2 && bRowStrings; iRow++)
                     {
-                        if ( iRow==nRow1 || (pDocument->GetRowFlags( iRow, nTab1) & CR_HIDDEN) == 0 )
-                            if (pDocument->HasValueData( nCol1, iRow, nTab1 ))
+                        if (pDocument->HasValueData( nCol1, iRow, nTab1 ))
                                 bRowStrings = FALSE;
                     }
-                bHidOk = TRUE;
             }
-            else
-                bHidOk = FALSE;
             if ( bColStrings && bTopRow )
             {   // ColStrings nur aus der ersten Zeile
-                if ( !bHidOk )
-                {
-                    while ( nCol1 <= nCol2 && (pDocument->GetColFlags(
-                            nCol1, nTab1) & CR_HIDDEN) != 0 )
-                        nCol1++;
-                    while ( nRow1 <= nRow2 && (pDocument->GetRowFlags(
-                            nRow1, nTab1) & CR_HIDDEN) != 0 )
-                        nRow1++;
-                }
                 if ( nRow1 <= nRow2 )
                     for (iCol=nCol1; iCol<=nCol2 && bColStrings; iCol++)
                     {
-                        if ( iCol==nCol1 || (pDocument->GetColFlags( iCol, nTab1) & CR_HIDDEN) == 0 )
-                            if (pDocument->HasValueData( iCol, nRow1, nTab1 ))
+                        if (pDocument->HasValueData( iCol, nRow1, nTab1 ))
                                 bColStrings = FALSE;
                     }
             }
@@ -439,40 +406,34 @@ void ScChartPositioner::CreatePositionMap()
                     static_cast<ULONG>(nCol1));
             for ( nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol )
             {
-                if ( (pDocument->GetColFlags( nCol, nTab) & CR_HIDDEN) == 0 )
-                {
-                    if ( bNoGlue || eGlue == SC_CHARTGLUE_ROWS )
-                    {   // meistens gleiche Cols
-                        if ( (pCol = (Table*) pCols->Get( nInsCol ))==NULL )
-                        {
-                            pCols->Insert( nInsCol, pNewRowTable );
-                            pCol = pNewRowTable;
-                            pNewRowTable = new Table;
-                        }
+                if ( bNoGlue || eGlue == SC_CHARTGLUE_ROWS )
+                {   // meistens gleiche Cols
+                    if ( (pCol = (Table*) pCols->Get( nInsCol ))==NULL )
+                    {
+                        pCols->Insert( nInsCol, pNewRowTable );
+                        pCol = pNewRowTable;
+                        pNewRowTable = new Table;
+                    }
+                }
+                else
+                {   // meistens neue Cols
+                    if ( pCols->Insert( nInsCol, pNewRowTable ) )
+                    {
+                        pCol = pNewRowTable;
+                        pNewRowTable = new Table;
                     }
                     else
-                    {   // meistens neue Cols
-                        if ( pCols->Insert( nInsCol, pNewRowTable ) )
-                        {
-                            pCol = pNewRowTable;
-                            pNewRowTable = new Table;
-                        }
-                        else
-                            pCol = (Table*) pCols->Get( nInsCol );
-                    }
-                    // bei anderer Tabelle wurde bereits neuer ColKey erzeugt,
-                    // die Zeilen muessen fuer's Dummy fuellen gleich sein!
-                    ULONG nInsRow = (bNoGlue ? nNoGlueRow : nRow1);
-                    for ( nRow = nRow1; nRow <= nRow2; nRow++, nInsRow++ )
+                        pCol = (Table*) pCols->Get( nInsCol );
+                }
+                // bei anderer Tabelle wurde bereits neuer ColKey erzeugt,
+                // die Zeilen muessen fuer's Dummy fuellen gleich sein!
+                ULONG nInsRow = (bNoGlue ? nNoGlueRow : nRow1);
+                for ( nRow = nRow1; nRow <= nRow2; nRow++, nInsRow++ )
+                {
+                    if ( pCol->Insert( nInsRow, pNewAddress ) )
                     {
-                        if ( (pDocument->GetRowFlags( nRow, nTab) & CR_HIDDEN) == 0 )
-                        {
-                            if ( pCol->Insert( nInsRow, pNewAddress ) )
-                            {
-                                pNewAddress->Set( nCol, nRow, nTab );
-                                pNewAddress = new ScAddress;
-                            }
-                        }
+                        pNewAddress->Set( nCol, nRow, nTab );
+                        pNewAddress = new ScAddress;
                     }
                 }
             }
@@ -652,34 +613,34 @@ ScChartPositionMap::~ScChartPositionMap()
 }
 
 
-ScRangeListRef ScChartPositionMap::GetColRanges( SCCOL nChartCol ) const
-{
-    ScRangeListRef xRangeList = new ScRangeList;
-    if ( nChartCol < nColCount )
-    {
-        ULONG nStop = GetIndex( nChartCol, nRowCount );
-        for ( ULONG nIndex = GetIndex( nChartCol, 0 ); nIndex < nStop; nIndex++ )
-        {
-            if ( ppData[ nIndex ] )
-                xRangeList->Join( *ppData[ nIndex ] );
-        }
-    }
-    return xRangeList;
-}
+//UNUSED2009-05 ScRangeListRef ScChartPositionMap::GetColRanges( SCCOL nChartCol ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     ScRangeListRef xRangeList = new ScRangeList;
+//UNUSED2009-05     if ( nChartCol < nColCount )
+//UNUSED2009-05     {
+//UNUSED2009-05         ULONG nStop = GetIndex( nChartCol, nRowCount );
+//UNUSED2009-05         for ( ULONG nIndex = GetIndex( nChartCol, 0 ); nIndex < nStop; nIndex++ )
+//UNUSED2009-05         {
+//UNUSED2009-05             if ( ppData[ nIndex ] )
+//UNUSED2009-05                 xRangeList->Join( *ppData[ nIndex ] );
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05     return xRangeList;
+//UNUSED2009-05 }
 
 
-ScRangeListRef ScChartPositionMap::GetRowRanges( SCROW nChartRow ) const
-{
-    ScRangeListRef xRangeList = new ScRangeList;
-    if ( nChartRow < nRowCount )
-    {
-        ULONG nStop = GetIndex( nColCount, nChartRow );
-        for ( ULONG nIndex = GetIndex( 0, nChartRow ); nIndex < nStop;
-                nIndex += nRowCount )
-        {
-            if ( ppData[ nIndex ] )
-                xRangeList->Join( *ppData[ nIndex ] );
-        }
-    }
-    return xRangeList;
-}
+//UNUSED2009-05 ScRangeListRef ScChartPositionMap::GetRowRanges( SCROW nChartRow ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     ScRangeListRef xRangeList = new ScRangeList;
+//UNUSED2009-05     if ( nChartRow < nRowCount )
+//UNUSED2009-05     {
+//UNUSED2009-05         ULONG nStop = GetIndex( nColCount, nChartRow );
+//UNUSED2009-05         for ( ULONG nIndex = GetIndex( 0, nChartRow ); nIndex < nStop;
+//UNUSED2009-05                 nIndex += nRowCount )
+//UNUSED2009-05         {
+//UNUSED2009-05             if ( ppData[ nIndex ] )
+//UNUSED2009-05                 xRangeList->Join( *ppData[ nIndex ] );
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05     return xRangeList;
+//UNUSED2009-05 }

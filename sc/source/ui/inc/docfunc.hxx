@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docfunc.hxx,v $
- * $Revision: 1.19.100.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 
 #include <tools/link.hxx>
 #include "global.hxx"
-#include "postit.hxx"
 #include "formula/grammar.hxx"
+#include "tabbgcolor.hxx"
 
 class ScEditEngineDefaulter;
 class SdrUndoAction;
@@ -47,7 +44,7 @@ class ScRangeName;
 class ScBaseCell;
 class ScTokenArray;
 struct ScTabOpParam;
-
+class ScTableProtection;
 
 // ---------------------------------------------------------------------------
 
@@ -90,11 +87,12 @@ public:
                                 BOOL bInterpret, BOOL bApi );
     BOOL            SetCellText( const ScAddress& rPos, const String& rText,
                                     BOOL bInterpret, BOOL bEnglish, BOOL bApi,
+                                    const String& rFormulaNmsp,
                                     const formula::FormulaGrammar::Grammar eGrammar );
 
                     // creates a new cell for use with PutCell
     ScBaseCell*     InterpretEnglishString( const ScAddress& rPos, const String& rText,
-                                            const formula::FormulaGrammar::Grammar eGrammar );
+                        const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar );
 
     bool            ShowNote( const ScAddress& rPos, bool bShow = true );
     inline bool     HideNote( const ScAddress& rPos ) { return ShowNote( rPos, false ); }
@@ -120,11 +118,14 @@ public:
     BOOL            RenameTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi );
     BOOL            DeleteTable( SCTAB nTab, BOOL bRecord, BOOL bApi );
 
+    bool            SetTabBgColor( SCTAB nTab, const Color& rColor, bool bRecord, bool bApi );
+    bool            SetTabBgColor( ScUndoTabColorInfo::List& rUndoTabColorList, bool bRecord, bool bApi );
+
     BOOL            SetTableVisible( SCTAB nTab, BOOL bVisible, BOOL bApi );
 
     BOOL            SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL bApi );
 
-    BOOL            SetGrammar( formula::FormulaGrammar::Grammar eGrammar );
+//UNUSED2009-05 BOOL            SetGrammar( formula::FormulaGrammar::Grammar eGrammar );
 
     SC_DLLPUBLIC BOOL           SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
                                     SCTAB nTab, ScSizeMode eMode, USHORT nSizeTwips,
@@ -134,6 +135,8 @@ public:
                                     BOOL bRecord, BOOL bSetModified, BOOL bApi );
     BOOL            RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
                                     BOOL bRecord, BOOL bSetModified, BOOL bApi );
+
+    void            ProtectSheet( SCTAB nTab, const ScTableProtection& rProtect );
 
     BOOL            Protect( SCTAB nTab, const String& rPassword, BOOL bApi );
     BOOL            Unprotect( SCTAB nTab, const String& rPassword, BOOL bApi );
@@ -146,6 +149,7 @@ public:
     BOOL            EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
                                     const ScTokenArray* pTokenArray,
                                     const String& rString, BOOL bApi, BOOL bEnglish,
+                                    const String& rFormulaNmsp,
                                     const formula::FormulaGrammar::Grammar );
 
     BOOL            TabOp( const ScRange& rRange, const ScMarkData* pTabMark,

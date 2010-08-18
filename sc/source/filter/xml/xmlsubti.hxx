@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlsubti.hxx,v $
- * $Revision: 1.32.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,10 +94,12 @@ public:
 struct ScMatrixRange
 {
     rtl::OUString sFormula;
+    rtl::OUString sFormulaNmsp;
     formula::FormulaGrammar::Grammar eGrammar;
     com::sun::star::table::CellRangeAddress aRange;
-    ScMatrixRange(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const formula::FormulaGrammar::Grammar eGrammarP) :
+    ScMatrixRange(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula, const rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammarP) :
         sFormula(rFormula),
+        sFormulaNmsp(rFormulaNmsp),
         eGrammar(eGrammarP),
         aRange(rRange)
     {
@@ -181,11 +180,13 @@ public:
                                                 sal_Int32 nEndColumn,
                                                 sal_Int32 nEndRow,
                                                 const rtl::OUString& rFormula,
+                                                const rtl::OUString& rFormulaNmsp,
                                                 const formula::FormulaGrammar::Grammar );
 
     sal_Bool                            IsPartOfMatrix(sal_Int32 nColumn, sal_Int32 nRow);
     void                                SetMatrix( const com::sun::star::table::CellRangeAddress& rRange,
                                                 const rtl::OUString& rFormula,
+                                                const rtl::OUString& rFormulaNmsp,
                                                 const formula::FormulaGrammar::Grammar );
 };
 

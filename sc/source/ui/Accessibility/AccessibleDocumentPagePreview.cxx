@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessibleDocumentPagePreview.cxx,v $
- * $Revision: 1.38.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1213,7 +1210,7 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
 //UNUSED2008-05      if (rItr->mxShape.get() == xShape.get())
 //UNUSED2008-05          bResult = sal_True; // if the shape is found
 //UNUSED2008-05
-//UNUSED2008-05  /*#ifndef PRODUCT // test whether it finds truly the correct shape (perhaps it is not really sorted)
+//UNUSED2008-05  /*#ifdef DBG_UTIL // test whether it finds truly the correct shape (perhaps it is not really sorted)
 //UNUSED2008-05      ScShapeChildVec::iterator aDebugItr = std::find(rShapes.begin(), rShapes.end(), aShape);
 //UNUSED2008-05      DBG_ASSERT(rItr == aDebugItr, "wrong Shape found");
 //UNUSED2008-05  #endif*/
@@ -1906,40 +1903,40 @@ ScShapeChilds* ScAccessibleDocumentPagePreview::GetShapeChilds()
     return mpShapeChilds;
 }
 
-uno::Reference < XAccessible > ScAccessibleDocumentPagePreview::GetCurrentAccessibleTable()
-{
-    if (!mpTable)
-    {
-        if ( mpViewShell )
-        {
-            const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-            ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
-            //! order is background shapes, header, table or notes, footer, foreground shapes, controls
-            sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
+//UNUSED2009-05 uno::Reference < XAccessible > ScAccessibleDocumentPagePreview::GetCurrentAccessibleTable()
+//UNUSED2009-05 {
+//UNUSED2009-05     if (!mpTable)
+//UNUSED2009-05     {
+//UNUSED2009-05         if ( mpViewShell )
+//UNUSED2009-05         {
+//UNUSED2009-05             const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+//UNUSED2009-05             ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
+//UNUSED2009-05             //! order is background shapes, header, table or notes, footer, foreground shapes, controls
+//UNUSED2009-05             sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
+//UNUSED2009-05
+//UNUSED2009-05             mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
+//UNUSED2009-05             mpTable->acquire();
+//UNUSED2009-05             mpTable->Init();
+//UNUSED2009-05         }
+//UNUSED2009-05     }
+//UNUSED2009-05     return mpTable;
+//UNUSED2009-05 }
 
-            mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-            mpTable->acquire();
-            mpTable->Init();
-        }
-    }
-    return mpTable;
-}
-
-void ScAccessibleDocumentPagePreview::ChildCountChanged()
-{
-    if (mpViewShell)
-    {
-        const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
-        ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
-        //! order is background shapes, header, table or notes, footer, foreground shapes, controls
-        if(mpHeader)
-            mpHeader->SetCurrentIndexInParent(aCount.nBackShapes);
-        if (mpTable)
-            mpTable->SetCurrentIndexInParent(aCount.nBackShapes + aCount.nHeaders);
-        if (mpFooter)
-            mpFooter->SetCurrentIndexInParent(aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs);
-
-        if (mpNotesChilds)
-            mpNotesChilds->SetOffset(aCount.nBackShapes + aCount.nHeaders);
-    }
-}
+//UNUSED2009-05 void ScAccessibleDocumentPagePreview::ChildCountChanged()
+//UNUSED2009-05 {
+//UNUSED2009-05     if (mpViewShell)
+//UNUSED2009-05     {
+//UNUSED2009-05         const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
+//UNUSED2009-05         ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
+//UNUSED2009-05         //! order is background shapes, header, table or notes, footer, foreground shapes, controls
+//UNUSED2009-05         if(mpHeader)
+//UNUSED2009-05             mpHeader->SetCurrentIndexInParent(aCount.nBackShapes);
+//UNUSED2009-05         if (mpTable)
+//UNUSED2009-05             mpTable->SetCurrentIndexInParent(aCount.nBackShapes + aCount.nHeaders);
+//UNUSED2009-05         if (mpFooter)
+//UNUSED2009-05             mpFooter->SetCurrentIndexInParent(aCount.nBackShapes + aCount.nHeaders + aCount.nTables + aCount.nNoteParagraphs);
+//UNUSED2009-05
+//UNUSED2009-05         if (mpNotesChilds)
+//UNUSED2009-05             mpNotesChilds->SetOffset(aCount.nBackShapes + aCount.nHeaders);
+//UNUSED2009-05     }
+//UNUSED2009-05 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: NameContainer.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,6 +46,12 @@ using ::rtl::OUString;
 namespace chart
 {
 //.............................................................................
+
+uno::Reference< container::XNameContainer > createNameContainer(
+        const ::com::sun::star::uno::Type& rType, const rtl::OUString& rServicename, const rtl::OUString& rImplementationName )
+{
+    return new NameContainer( rType, rServicename, rImplementationName );
+}
 
 NameContainer::NameContainer( const ::com::sun::star::uno::Type& rType, const OUString& rServicename, const OUString& rImplementationName )
     : m_aType( rType )

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: res_DataLabel.hxx,v $
- * $Revision: 1.5.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,8 +31,10 @@
 // header for class CheckBox
 #include <vcl/button.hxx>
 // header for class SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include "TextDirectionListBox.hxx"
+
+#include <svx/dialcontrol.hxx>
 
 class SvNumberFormatter;
 
@@ -47,7 +46,7 @@ namespace chart
 class DataLabelResources
 {
 public:
-    DataLabelResources( Window* pParent, const SfxItemSet& rInAttrs, bool bShowTextDirectionListBox );
+    DataLabelResources( Window* pParent, const SfxItemSet& rInAttrs );
     virtual ~DataLabelResources();
 
     BOOL FillItemSet(SfxItemSet& rOutAttrs) const;
@@ -67,6 +66,11 @@ private:
 
     FixedText           m_aFT_LabelPlacement;
     ListBox             m_aLB_LabelPlacement;
+
+    FixedLine           m_aFL_Rotate;
+    svx::DialControl    m_aDC_Dial;
+    FixedText           m_aFT_Degrees;
+    NumericField        m_aNF_Degrees;
 
     FixedText               m_aFT_TextDirection;
     TextDirectionListBox    m_aLB_TextDirection;

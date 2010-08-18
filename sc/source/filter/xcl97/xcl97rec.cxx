@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xcl97rec.cxx,v $
- * $Revision: 1.87.30.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,17 +31,17 @@
 #include <svx/svdpool.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/editobj.hxx>
+#include <editeng/editobj.hxx>
 #include <svx/svdoole2.hxx>
 #include <sot/storage.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/unoapi.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/math.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zformat.hxx>
 #include "cell.hxx"
 #include "drwlayer.hxx"
 
@@ -52,20 +49,20 @@
 #include "xcl97esc.hxx"
 #include "editutil.hxx"
 #include "xecontent.hxx"
+#include "xeescher.hxx"
 #include "xestyle.hxx"
 #include "xelink.hxx"
 
 #include "scitems.hxx"
 
-#include <svtools/fltrcfg.hxx>
-#include <svx/brshitem.hxx>
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/eeitem.hxx>
-#include <svx/msoleexp.hxx>
+#include <unotools/fltrcfg.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/eeitem.hxx>
+#include <filter/msfilter/msoleexp.hxx>
 
-#include <svtools/useroptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 
 #include <stdio.h>
@@ -78,6 +75,7 @@
 #include "scextopt.hxx"
 #include "docoptio.hxx"
 #include "patattr.hxx"
+#include "tabprotection.hxx"
 
 #include <oox/core/tokens.hxx>
 
@@ -89,180 +87,22 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::drawing::XShape;
 
+// ============================================================================
 
-//___________________________________________________________________
-
-// --- class XclMsodrawing_Base --------------------------------------
-
-XclMsodrawing_Base::XclMsodrawing_Base( XclEscher& rEscher, sal_Size nInitialSize )
-        :
-        pEscher( &rEscher ),
-        nStartPos( rEscher.GetEx()->GetLastOffsetMapPos() )
-{
-    // for safety's sake add this now
-    nStopPos = GetEscherEx()->AddCurrentOffsetToMap();
-    (void)nInitialSize; // avoid compiler warning
-    DBG_ASSERT( GetDataLen() == nInitialSize, "XclMsodrawing_Base ctor: do I really own that data?" );
-}
-
-
-XclMsodrawing_Base::~XclMsodrawing_Base()
-{
-}
-
-
-void XclMsodrawing_Base::UpdateStopPos()
-{
-    if ( nStopPos > 0 )
-        GetEscherEx()->ReplaceCurrentOffsetInMap( nStopPos );
-    else
-        nStopPos = GetEscherEx()->AddCurrentOffsetToMap();
-}
-
-
-sal_Size XclMsodrawing_Base::GetDataLen() const
-{
-    if ( nStartPos < nStopPos )
-    {
-        XclEscherEx* pEx = GetEscherEx();
-        return pEx->GetOffsetFromMap( nStopPos ) - pEx->GetOffsetFromMap( nStartPos );
-    }
-    DBG_ERRORFILE( "XclMsodrawing_Base::GetDataLen: position mismatch" );
-    return 0;
-}
-
-
-
-// --- class XclMsodrawinggroup --------------------------------------
-
-XclMsodrawinggroup::XclMsodrawinggroup( RootData& rRoot, UINT16 nEscherType )
-        :
-        XclMsodrawing_Base( *rRoot.pEscher )
-{
-    if ( nEscherType )
-    {
-        XclEscherEx* pEx = GetEscherEx();
-        SvStream& rOut = pEx->GetStream();
-        switch ( nEscherType )
-        {
-            case ESCHER_DggContainer :
-            {   // per-document data
-                pEx->OpenContainer( nEscherType );
-//2do: stuff it with our own document defaults?
-#if 0
-                pEx->BeginCount();
-                pEx->AddOpt( ... );
-                pEx->EndCount( ESCHER_OPT, 3 );
-#else
-                BYTE pDummyOPT[] = {
-                    0xBF, 0x00, 0x08, 0x00, 0x08, 0x00, 0x81, 0x01,
-                    0x09, 0x00, 0x00, 0x08, 0xC0, 0x01, 0x40, 0x00,
-                    0x00, 0x08
-                };
-                pEx->AddAtom( sizeof(pDummyOPT), ESCHER_OPT, 3, 3 );
-                rOut.Write( pDummyOPT, sizeof(pDummyOPT) );
-#endif
-                BYTE pDummySplitMenuColors[] = {
-                    0x0D, 0x00, 0x00, 0x08, 0x0C, 0x00, 0x00, 0x08,
-                    0x17, 0x00, 0x00, 0x08, 0xF7, 0x00, 0x00, 0x10
-                };
-                pEx->AddAtom( sizeof(pDummySplitMenuColors), ESCHER_SplitMenuColors, 0, 4 );
-                rOut.Write( pDummySplitMenuColors, sizeof(pDummySplitMenuColors) );
-                pEx->CloseContainer();  // ESCHER_DggContainer
-            }
-            break;
-        }
-        UpdateStopPos();
-    }
-}
-
-
-XclMsodrawinggroup::~XclMsodrawinggroup()
-{
-}
-
-
-void XclMsodrawinggroup::SaveCont( XclExpStream& rStrm )
-{
-    DBG_ASSERT( GetEscherEx()->GetStreamPos() == GetEscherEx()->GetOffsetFromMap( nStartPos ),
-        "XclMsodrawinggroup::SaveCont: Escher stream position mismatch" );
-    rStrm.CopyFromStream( pEscher->GetStrm(), GetDataLen() );
-}
-
-
-UINT16 XclMsodrawinggroup::GetNum() const
-{
-    return 0x00EB;
-}
-
-
-sal_Size XclMsodrawinggroup::GetLen() const
-{
-    return GetDataLen();
-}
-
-
-
-// --- class XclMsodrawing --------------------------------------
-
-XclMsodrawing::XclMsodrawing( const XclExpRoot& rRoot, UINT16 nEscherType, sal_Size nInitialSize ) :
-    XclMsodrawing_Base( *rRoot.GetOldRoot().pEscher, nInitialSize )
-{
-    if ( nEscherType )
-    {
-        XclEscherEx* pEx = GetEscherEx();
-        switch ( nEscherType )
-        {
-            case ESCHER_DgContainer :
-            {   // per-sheet data
-                pEx->OpenContainer( nEscherType );
-                // open group shape container
-                Rectangle aRect( 0, 0, 0, 0 );
-                pEx->EnterGroup( &aRect );
-            }
-            break;
-        }
-        UpdateStopPos();
-    }
-}
-
-
-XclMsodrawing::~XclMsodrawing()
-{
-}
-
-
-void XclMsodrawing::SaveCont( XclExpStream& rStrm )
-{
-    DBG_ASSERT( GetEscherEx()->GetStreamPos() == GetEscherEx()->GetOffsetFromMap( nStartPos ),
-        "XclMsodrawing::SaveCont: Escher stream position mismatch" );
-    rStrm.CopyFromStream( pEscher->GetStrm(), GetDataLen() );
-}
-
-
-UINT16 XclMsodrawing::GetNum() const
-{
-    return 0x00EC;
-}
-
-
-sal_Size XclMsodrawing::GetLen() const
-{
-    return GetDataLen();
-}
-
-
-// --- class XclObjList ----------------------------------------------
-
-XclObjList::XclObjList( const XclExpRoot& rRoot ) :
+XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) :
     XclExpRoot( rRoot ),
-    pMsodrawingPerSheet( new XclMsodrawing( rRoot, ESCHER_DgContainer ) ),
-    pSolverContainer( NULL )
+    mrEscherEx( rEscherEx ),
+    pSolverContainer( 0 )
 {
+    pMsodrawingPerSheet = new XclExpMsoDrawing( rEscherEx );
+    // open the DGCONTAINER and the patriarch group shape
+    mrEscherEx.OpenContainer( ESCHER_DgContainer );
+    Rectangle aRect( 0, 0, 0, 0 );
+    mrEscherEx.EnterGroup( &aRect );
+    mrEscherEx.UpdateDffFragmentEnd();
 }
 
-
-XclObjList::~XclObjList()
+XclExpObjList::~XclExpObjList()
 {
     for ( XclObj* p = First(); p; p = Next() )
         delete p;
@@ -270,10 +110,9 @@ XclObjList::~XclObjList()
     delete pSolverContainer;
 }
 
-
-UINT16 XclObjList::Add( XclObj* pObj )
+UINT16 XclExpObjList::Add( XclObj* pObj )
 {
-    DBG_ASSERT( Count() < 0xFFFF, "XclObjList::Add: too much for Xcl" );
+    DBG_ASSERT( Count() < 0xFFFF, "XclExpObjList::Add: too much for Xcl" );
     if ( Count() < 0xFFFF )
     {
         Insert( pObj, LIST_APPEND );
@@ -288,22 +127,17 @@ UINT16 XclObjList::Add( XclObj* pObj )
     }
 }
 
-
-void XclObjList::EndSheet()
+void XclExpObjList::EndSheet()
 {
-    XclEscherEx* pEx = pMsodrawingPerSheet->GetEscherEx();
-
     // Is there still something in the stream? -> The solver container
-    sal_Size nSolverSize = pEx->GetStreamPos() - pEx->GetOffsetFromMap( pEx->GetLastOffsetMapPos() );
-    if( nSolverSize > 0 )
-        pSolverContainer = new XclMsodrawing( GetRoot(), ESCHER_SolverContainer, nSolverSize );
+    if( mrEscherEx.HasPendingDffData() )
+        pSolverContainer = new XclExpMsoDrawing( mrEscherEx );
 
-    //! close ESCHER_DgContainer created by XclObjList ctor MSODRAWING
-    pEx->CloseContainer();
+    // close the DGCONTAINER created by XclExpObjList ctor MSODRAWING
+    mrEscherEx.CloseContainer();
 }
 
-
-void XclObjList::Save( XclExpStream& rStrm )
+void XclExpObjList::Save( XclExpStream& rStrm )
 {
     //! Escher must be written, even if there are no objects
     pMsodrawingPerSheet->Save( rStrm );
@@ -315,27 +149,25 @@ void XclObjList::Save( XclExpStream& rStrm )
         pSolverContainer->Save( rStrm );
 }
 
-
-
 // --- class XclObj --------------------------------------------------
 
-XclObj::XclObj( const XclExpRoot& rRoot, sal_uInt16 nObjType, bool bOwnEscher ) :
+XclObj::XclObj( XclExpObjectManager& rObjMgr, sal_uInt16 nObjType, bool bOwnEscher ) :
     XclExpRecord( EXC_ID_OBJ, 26 ),
+    mrEscherEx( rObjMgr.GetEscherEx() ),
     pClientTextbox( NULL ),
     pTxo( NULL ),
     mnObjType( nObjType ),
     nObjId(0),
     nGrbit( 0x6011 ),   // AutoLine, AutoFill, Printable, Locked
-    bFirstOnSheet( rRoot.GetOldRoot().pObjRecs->Count() == 0 ),
+    bFirstOnSheet( !rObjMgr.HasObj() ),
     mbOwnEscher( bOwnEscher )
 {
     //! first object continues the first MSODRAWING record
     if ( bFirstOnSheet )
-        pMsodrawing = rRoot.GetOldRoot().pObjRecs->GetMsodrawingPerSheet();
+        pMsodrawing = rObjMgr.GetMsodrawingPerSheet();
     else
-        pMsodrawing = new XclMsodrawing( rRoot );
+        pMsodrawing = new XclExpMsoDrawing( mrEscherEx );
 }
-
 
 XclObj::~XclObj()
 {
@@ -345,6 +177,18 @@ XclObj::~XclObj()
     delete pTxo;
 }
 
+void XclObj::ImplWriteAnchor( const XclExpRoot& /*rRoot*/, const SdrObject* pSdrObj, const Rectangle* pChildAnchor )
+{
+    if( pChildAnchor )
+    {
+        mrEscherEx.AddChildAnchor( *pChildAnchor );
+    }
+    else if( pSdrObj )
+    {
+        ::std::auto_ptr< XclExpDffAnchorBase > xDffAnchor( mrEscherEx.CreateDffAnchor( *pSdrObj ) );
+        xDffAnchor->WriteDffData( mrEscherEx );
+    }
+}
 
 void XclObj::SetEscherShapeType( UINT16 nType )
 {
@@ -375,20 +219,18 @@ void XclObj::SetEscherShapeType( UINT16 nType )
     }
 }
 
-
 void XclObj::SetText( const XclExpRoot& rRoot, const SdrTextObj& rObj )
 {
     DBG_ASSERT( !pClientTextbox, "XclObj::SetText: already set" );
     if ( !pClientTextbox )
     {
-        pMsodrawing->UpdateStopPos();
-        pClientTextbox = new XclMsodrawing( rRoot );
-        pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
-        pClientTextbox->UpdateStopPos();
+        mrEscherEx.UpdateDffFragmentEnd();
+        pClientTextbox = new XclExpMsoDrawing( mrEscherEx );
+        mrEscherEx.AddAtom( 0, ESCHER_ClientTextbox );    // TXO record
+        mrEscherEx.UpdateDffFragmentEnd();
         pTxo = new XclTxo( rRoot, rObj );
     }
 }
-
 
 void XclObj::WriteBody( XclExpStream& rStrm )
 {
@@ -417,7 +259,6 @@ void XclObj::WriteBody( XclExpStream& rStrm )
     rStrm.CopyFromStream( aMemStrm );
 }
 
-
 void XclObj::Save( XclExpStream& rStrm )
 {
     // MSODRAWING record (msofbtSpContainer)
@@ -430,7 +271,6 @@ void XclObj::Save( XclExpStream& rStrm )
     // second MSODRAWING record and TXO and CONTINUE records
     SaveTextRecs( rStrm );
 }
-
 
 void XclObj::WriteSubRecs( XclExpStream& /*rStrm*/ )
 {
@@ -446,17 +286,14 @@ void XclObj::SaveTextRecs( XclExpStream& rStrm )
         pTxo->Save( rStrm );
 }
 
-
 // --- class XclObjComment -------------------------------------------
 
-
-XclObjComment::XclObjComment( const XclExpRoot& rRoot, const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible )
-            :
-            XclObj( rRoot, EXC_OBJTYPE_NOTE, true )
+XclObjComment::XclObjComment( XclExpObjectManager& rObjMgr, const Rectangle& rRect, const EditTextObject& rEditObj, SdrObject* pCaption, bool bVisible ) :
+    XclObj( rObjMgr, EXC_OBJTYPE_NOTE, true )
 {
-    ProcessEscherObj(rRoot, rRect, pCaption, bVisible);
+    ProcessEscherObj( rObjMgr.GetRoot(), rRect, pCaption, bVisible);
     // TXO
-    pTxo = new XclTxo( rRoot, rEditObj, pCaption );
+    pTxo = new XclTxo( rObjMgr.GetRoot(), rEditObj, pCaption );
 }
 
 void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& rRect, SdrObject* pCaption, const bool bVisible )
@@ -507,31 +344,29 @@ void XclObjComment::ProcessEscherObj( const XclExpRoot& rRoot, const Rectangle& 
     }
 
     nGrbit = 0;     // all off: AutoLine, AutoFill, Printable, Locked
-    XclEscherEx* pEx = pMsodrawing->GetEscherEx();
-    pEx->OpenContainer( ESCHER_SpContainer );
-    pEx->AddShape( ESCHER_ShpInst_TextBox, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
+    mrEscherEx.OpenContainer( ESCHER_SpContainer );
+    mrEscherEx.AddShape( ESCHER_ShpInst_TextBox, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
     sal_uInt32 nFlags = 0x000A0000;
     ::set_flag( nFlags, sal_uInt32(2), !bVisible );
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, nFlags );                  // bool field
-    aPropOpt.Commit( pEx->GetStream() );
+    aPropOpt.Commit( mrEscherEx.GetStream() );
 
-    XclExpDffNoteAnchor( rRoot, rRect ).WriteData( *pEx);
+    XclExpDffNoteAnchor( rRoot, rRect ).WriteDffData( mrEscherEx );
 
-    pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
-    pMsodrawing->UpdateStopPos();
+    mrEscherEx.AddAtom( 0, ESCHER_ClientData );                        // OBJ record
+    mrEscherEx.UpdateDffFragmentEnd();
+
     //! Be sure to construct the MSODRAWING ClientTextbox record _after_ the
     //! base OBJ's MSODRAWING record Escher data is completed.
-    pClientTextbox = new XclMsodrawing( rRoot );
-    pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
-    pClientTextbox->UpdateStopPos();
-    pEx->CloseContainer();  // ESCHER_SpContainer
+    pClientTextbox = new XclExpMsoDrawing( mrEscherEx );
+    mrEscherEx.AddAtom( 0, ESCHER_ClientTextbox );    // TXO record
+    mrEscherEx.UpdateDffFragmentEnd();
+    mrEscherEx.CloseContainer();   // ESCHER_SpContainer
 }
-
 
 XclObjComment::~XclObjComment()
 {
 }
-
 
 void XclObjComment::Save( XclExpStream& rStrm )
 {
@@ -539,34 +374,32 @@ void XclObjComment::Save( XclExpStream& rStrm )
     XclObj::Save( rStrm );
 }
 
-
 // --- class XclObjDropDown ------------------------------------------
 
-XclObjDropDown::XclObjDropDown( const XclExpRoot& rRoot, const ScAddress& rPos, BOOL bFilt ) :
-        XclObj( rRoot, EXC_OBJTYPE_DROPDOWN, true ),
-        bIsFiltered( bFilt )
+XclObjDropDown::XclObjDropDown( XclExpObjectManager& rObjMgr, const ScAddress& rPos, BOOL bFilt ) :
+    XclObj( rObjMgr, EXC_OBJTYPE_DROPDOWN, true ),
+    bIsFiltered( bFilt )
 {
     SetLocked( TRUE );
     SetPrintable( FALSE );
     SetAutoFill( TRUE );
     SetAutoLine( FALSE );
     nGrbit |= 0x0100;   // undocumented
-    XclEscherEx* pEx = pMsodrawing->GetEscherEx();
-    pEx->OpenContainer( ESCHER_SpContainer );
-    pEx->AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
+    mrEscherEx.OpenContainer( ESCHER_SpContainer );
+    mrEscherEx.AddShape( ESCHER_ShpInst_HostControl, SHAPEFLAG_HAVEANCHOR | SHAPEFLAG_HAVESPT );
     EscherPropertyContainer aPropOpt;
     aPropOpt.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x01040104 ); // bool field
     aPropOpt.AddOpt( ESCHER_Prop_FitTextToShape, 0x00080008 );      // bool field
     aPropOpt.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x00010000 );      // bool field
     aPropOpt.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x00080000 );     // bool field
     aPropOpt.AddOpt( ESCHER_Prop_fPrint, 0x000A0000 );              // bool field
-    aPropOpt.Commit( pEx->GetStream() );
+    aPropOpt.Commit( mrEscherEx.GetStream() );
 
-    XclExpDffDropDownAnchor( rRoot, rPos ).WriteData( *pEx );
+    XclExpDffDropDownAnchor( rObjMgr.GetRoot(), rPos ).WriteDffData( mrEscherEx );
 
-    pEx->AddAtom( 0, ESCHER_ClientData );                       // OBJ record
-    pMsodrawing->UpdateStopPos();
-    pEx->CloseContainer();  // ESCHER_SpContainer
+    mrEscherEx.AddAtom( 0, ESCHER_ClientData );                        // OBJ record
+    mrEscherEx.UpdateDffFragmentEnd();
+    mrEscherEx.CloseContainer();   // ESCHER_SpContainer
 
     // old size + ftSbs + ftLbsData
     AddRecSize( 24 + 20 );
@@ -592,7 +425,6 @@ void XclObjDropDown::WriteSubRecs( XclExpStream& rStrm )
             << nDropDownFlags << sal_uInt16( 20 ) << sal_uInt16( 130 );
     rStrm.EndRecord();
 }
-
 
 // --- class XclTxo --------------------------------------------------
 
@@ -750,21 +582,18 @@ sal_Size XclTxo::GetLen() const
     return 18;
 }
 
-
 // --- class XclObjOle -------------------------------------------
 
-XclObjOle::XclObjOle( const XclExpRoot& rRoot, const SdrObject& rObj ) :
-    XclObj( rRoot, EXC_OBJTYPE_PICTURE ),
+XclObjOle::XclObjOle( XclExpObjectManager& rObjMgr, const SdrObject& rObj ) :
+    XclObj( rObjMgr, EXC_OBJTYPE_PICTURE ),
     rOleObj( rObj ),
-    pRootStorage( rRoot.GetRootStorage() )
+    pRootStorage( rObjMgr.GetRoot().GetRootStorage() )
 {
 }
-
 
 XclObjOle::~XclObjOle()
 {
 }
-
 
 void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
 {
@@ -835,18 +664,16 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     }
 }
 
-
 void XclObjOle::Save( XclExpStream& rStrm )
 {
     // content of this record
     XclObj::Save( rStrm );
 }
 
-
 // --- class XclObjAny -------------------------------------------
 
-XclObjAny::XclObjAny( const XclExpRoot& rRoot ) :
-    XclObj( rRoot, EXC_OBJTYPE_UNKNOWN )
+XclObjAny::XclObjAny( XclExpObjectManager& rObjMgr ) :
+    XclObj( rObjMgr, EXC_OBJTYPE_UNKNOWN )
 {
 }
 
@@ -871,7 +698,6 @@ void XclObjAny::Save( XclExpStream& rStrm )
     XclObj::Save( rStrm );
 }
 
-
 // --- class ExcBof8_Base --------------------------------------------
 
 ExcBof8_Base::ExcBof8_Base()
@@ -887,6 +713,7 @@ ExcBof8_Base::ExcBof8_Base()
 
 void ExcBof8_Base::SaveCont( XclExpStream& rStrm )
 {
+    rStrm.DisableEncryption();
     rStrm   << nVers << nDocType << nRupBuild << nRupYear
             << nFileHistory << nLowestBiffVer;
 }
@@ -946,7 +773,10 @@ void ExcBundlesheet8::SaveCont( XclExpStream& rStrm )
 {
     nOwnPos = rStrm.GetSvStreamPos();
     // write dummy position, real position comes later
-    rStrm << sal_uInt32( 0 ) << nGrbit << GetName();
+    rStrm.DisableEncryption();
+    rStrm << sal_uInt32(0);
+    rStrm.EnableEncryption();
+    rStrm << nGrbit << GetName();
 }
 
 
@@ -1050,15 +880,14 @@ void ExcEScenarioCell::SaveXml( XclExpXmlStream& rStrm )
 
 
 
-XclExpString ExcEScenario::sUsername;
-
-ExcEScenario::ExcEScenario( ScDocument& rDoc, SCTAB nTab )
+ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
 {
     String  sTmpName;
     String  sTmpComm;
     Color   aDummyCol;
     USHORT  nFlags;
 
+    ScDocument& rDoc = rRoot.GetDoc();
     rDoc.GetName( nTab, sTmpName );
     sName.Assign( sTmpName, EXC_STR_8BITLENGTH );
     nRecLen = 8 + sName.GetBufferSize();
@@ -1069,14 +898,8 @@ ExcEScenario::ExcEScenario( ScDocument& rDoc, SCTAB nTab )
         nRecLen += sComment.GetSize();
     nProtected = (nFlags & SC_SCENARIO_PROTECT) ? 1 : 0;
 
-    if( !sUsername.Len() )
-    {
-        SvtUserOptions aUserOpt;
-        sUsername.Assign( aUserOpt.GetLastName(), EXC_STR_DEFAULT, 255 );
-    }
-    if( !sUsername.Len() )
-        sUsername.Assign( String::CreateFromAscii( "SC" ) );
-    nRecLen += sUsername.GetSize();
+    sUserName.Assign( rRoot.GetUserName(), EXC_STR_DEFAULT, 255 );
+    nRecLen += sUserName.GetSize();
 
     const ScRangeList* pRList = rDoc.GetScenarioRanges( nTab );
     if( !pRList )
@@ -1135,11 +958,11 @@ void ExcEScenario::SaveCont( XclExpStream& rStrm )
             << (UINT8) 0                    // fHidden
             << (UINT8) sName.Len()          // length of scen name
             << (UINT8) sComment.Len()       // length of comment
-            << (UINT8) sUsername.Len();     // length of user name
+            << (UINT8) sUserName.Len();     // length of user name
     sName.WriteFlagField( rStrm );
     sName.WriteBuffer( rStrm );
 
-    rStrm << sUsername;
+    rStrm << sUserName;
 
     if( sComment.Len() )
         rStrm << sComment;
@@ -1171,7 +994,7 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
             XML_locked,     XclXmlUtils::ToPsz( nProtected ),
             // OOXTODO: XML_hidden,
             XML_count,      OString::valueOf( (sal_Int32) List::Count() ).getStr(),
-            XML_user,       XESTRING_TO_PSZ( sUsername ),
+            XML_user,       XESTRING_TO_PSZ( sUserName ),
             XML_comment,    XESTRING_TO_PSZ( sComment ),
             FSEND );
 
@@ -1184,9 +1007,10 @@ void ExcEScenario::SaveXml( XclExpXmlStream& rStrm )
 
 
 
-ExcEScenarioManager::ExcEScenarioManager( ScDocument& rDoc, SCTAB nTab ) :
+ExcEScenarioManager::ExcEScenarioManager( const XclExpRoot& rRoot, SCTAB nTab ) :
         nActive( 0 )
 {
+    ScDocument& rDoc = rRoot.GetDoc();
     if( rDoc.IsScenario( nTab ) )
         return;
 
@@ -1195,7 +1019,7 @@ ExcEScenarioManager::ExcEScenarioManager( ScDocument& rDoc, SCTAB nTab ) :
 
     while( rDoc.IsScenario( nNewTab ) )
     {
-        Append( new ExcEScenario( rDoc, nNewTab ) );
+        Append( new ExcEScenario( rRoot, nNewTab ) );
 
         if( rDoc.IsActiveScenario( nNewTab ) )
             nActive = static_cast<sal_uInt16>(nNewTab - nFirstTab);
@@ -1254,33 +1078,73 @@ sal_Size ExcEScenarioManager::GetLen() const
     return 8;
 }
 
+// ============================================================================
 
-
-// ---- class XclProtection ------------------------------------------
-
-const BYTE      XclProtection::pMyData[] =
+struct XclExpTabProtectOption
 {
-    0x12, 0x00, 0x02, 0x00, 0x01, 0x00,         // PROTECT
-    0xDD, 0x00, 0x02, 0x00, 0x01, 0x00,         // SCENPROTECT
-    0x63, 0x00, 0x02, 0x00, 0x01, 0x00          // OBJPROTECT
+    ScTableProtection::Option   eOption;
+    sal_uInt16                  nMask;
 };
-const sal_Size XclProtection::nMyLen = sizeof( XclProtection::pMyData );
 
-sal_Size XclProtection::GetLen( void ) const
+XclExpSheetProtectOptions::XclExpSheetProtectOptions( const XclExpRoot& rRoot, SCTAB nTab ) :
+    XclExpRecord( 0x0867, 23 )
 {
-    return nMyLen;
+    static const XclExpTabProtectOption aTable[] =
+    {
+        { ScTableProtection::OBJECTS,               0x0001 },
+        { ScTableProtection::SCENARIOS,             0x0002 },
+        { ScTableProtection::FORMAT_CELLS,          0x0004 },
+        { ScTableProtection::FORMAT_COLUMNS,        0x0008 },
+        { ScTableProtection::FORMAT_ROWS,           0x0010 },
+        { ScTableProtection::INSERT_COLUMNS,        0x0020 },
+        { ScTableProtection::INSERT_ROWS,           0x0040 },
+        { ScTableProtection::INSERT_HYPERLINKS,     0x0080 },
+
+        { ScTableProtection::DELETE_COLUMNS,        0x0100 },
+        { ScTableProtection::DELETE_ROWS,           0x0200 },
+        { ScTableProtection::SELECT_LOCKED_CELLS,   0x0400 },
+        { ScTableProtection::SORT,                  0x0800 },
+        { ScTableProtection::AUTOFILTER,            0x1000 },
+        { ScTableProtection::PIVOT_TABLES,          0x2000 },
+        { ScTableProtection::SELECT_UNLOCKED_CELLS, 0x4000 },
+
+        { ScTableProtection::NONE,                  0x0000 }
+    };
+
+    mnOptions = 0x0000;
+    ScTableProtection* pProtect = rRoot.GetDoc().GetTabProtection(nTab);
+    if (!pProtect)
+        return;
+
+    for (int i = 0; aTable[i].nMask != 0x0000; ++i)
+    {
+        if ( pProtect->isOptionEnabled(aTable[i].eOption) )
+            mnOptions |= aTable[i].nMask;
+    }
 }
 
-
-const BYTE* XclProtection::GetData( void ) const
+void XclExpSheetProtectOptions::WriteBody( XclExpStream& rStrm )
 {
-    return pMyData;
+    sal_uInt16 nBytes = 0x0867;
+    rStrm << nBytes;
+
+    sal_uChar nZero = 0x00;
+    for (int i = 0; i < 9; ++i)
+        rStrm << nZero;
+
+    nBytes = 0x0200;
+    rStrm << nBytes;
+    nBytes = 0x0100;
+    rStrm << nBytes;
+    nBytes = 0xFFFF;
+    rStrm << nBytes << nBytes;
+
+    rStrm << mnOptions;
+    nBytes = 0;
+    rStrm << nBytes;
 }
 
-
-
-
-
+// ============================================================================
 
 
 
@@ -1385,8 +1249,190 @@ void XclDelta::SaveXml( XclExpXmlStream& rStrm )
             FSEND );
 }
 
+// ============================================================================
+
+XclExpFilePass::XclExpFilePass( const XclExpRoot& rRoot ) :
+    XclExpRecord(0x002F, 54),
+    mrRoot(rRoot)
+{
+}
+
+XclExpFilePass::~XclExpFilePass()
+{
+}
+
+void XclExpFilePass::WriteBody( XclExpStream& rStrm )
+{
+    static const sal_uInt8 nDocId[] = {
+        0x17, 0xf7, 0x01, 0x08, 0xea, 0xad, 0x30, 0x5c,
+        0x1a, 0x95, 0xa5, 0x75, 0xd6, 0x79, 0xcd, 0x8d };
 
 
+    static const sal_uInt8 nSalt[] = {
+        0xa4, 0x5b, 0xf7, 0xe9, 0x9f, 0x55, 0x21, 0xc5,
+        0xc5, 0x56, 0xa8, 0x0d, 0x39, 0x05, 0x3a, 0xb4 };
+
+    // 0x0000 - neither standard nor strong encryption
+    // 0x0001 - standard or strong encryption
+    rStrm << static_cast<sal_uInt16>(0x0001);
+
+    // 0x0000 - non standard encryption
+    // 0x0001 - standard encryption
+    sal_uInt16 nStdEnc = 0x0001;
+    rStrm << nStdEnc << nStdEnc;
+
+    sal_uInt8 nSaltHash[16];
+    XclExpEncrypterRef xEnc( new XclExpBiff8Encrypter(mrRoot, nDocId, nSalt) );
+    xEnc->GetSaltDigest(nSaltHash);
+
+    rStrm.Write(nDocId, 16);
+    rStrm.Write(nSalt, 16);
+    rStrm.Write(nSaltHash, 16);
+
+    rStrm.SetEncrypter(xEnc);
+}
+
+// ============================================================================
+
+XclExpInterfaceHdr::XclExpInterfaceHdr( sal_uInt16 nCodePage ) :
+    XclExpUInt16Record( EXC_ID_INTERFACEHDR, nCodePage )
+{
+}
+
+void XclExpInterfaceHdr::WriteBody( XclExpStream& rStrm )
+{
+    rStrm.DisableEncryption();
+    rStrm << GetValue();
+}
+
+// ============================================================================
+
+XclExpInterfaceEnd::XclExpInterfaceEnd() :
+    XclExpRecord(0x00E2, 0) {}
+
+XclExpInterfaceEnd::~XclExpInterfaceEnd() {}
+
+void XclExpInterfaceEnd::WriteBody( XclExpStream& rStrm )
+{
+    // Don't forget to re-enable encryption.
+    rStrm.EnableEncryption();
+}
+
+// ============================================================================
+
+XclExpWriteAccess::XclExpWriteAccess() :
+    XclExpRecord(0x005C, 112)
+{
+}
+
+XclExpWriteAccess::~XclExpWriteAccess()
+{
+}
+
+void XclExpWriteAccess::WriteBody( XclExpStream& rStrm )
+{
+    static const sal_uInt8 aData[] = {
+        0x04, 0x00, 0x00,  'C',  'a',  'l',  'c', 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+        0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+
+    sal_Size nDataSize = sizeof(aData);
+    for (sal_Size i = 0; i < nDataSize; ++i)
+        rStrm << aData[i];
+}
+
+// ============================================================================
+
+XclExpFileSharing::XclExpFileSharing( const XclExpRoot& rRoot, sal_uInt16 nPasswordHash, bool bRecommendReadOnly ) :
+    XclExpRecord( EXC_ID_FILESHARING ),
+    mnPasswordHash( nPasswordHash ),
+    mbRecommendReadOnly( bRecommendReadOnly )
+{
+    if( rRoot.GetBiff() <= EXC_BIFF5 )
+        maUserName.AssignByte( rRoot.GetUserName(), rRoot.GetTextEncoding(), EXC_STR_8BITLENGTH );
+    else
+        maUserName.Assign( rRoot.GetUserName() );
+}
+
+void XclExpFileSharing::Save( XclExpStream& rStrm )
+{
+    if( (mnPasswordHash != 0) || mbRecommendReadOnly )
+        XclExpRecord::Save( rStrm );
+}
+
+void XclExpFileSharing::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << sal_uInt16( mbRecommendReadOnly ? 1 : 0 ) << mnPasswordHash << maUserName;
+}
+
+// ============================================================================
+
+XclExpProt4Rev::XclExpProt4Rev() :
+    XclExpRecord(0x01AF, 2)
+{
+}
+
+XclExpProt4Rev::~XclExpProt4Rev()
+{
+}
+
+void XclExpProt4Rev::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << static_cast<sal_uInt16>(0x0000);
+}
+
+// ============================================================================
+
+XclExpProt4RevPass::XclExpProt4RevPass() :
+    XclExpRecord(0x01BC, 2)
+{
+}
+
+XclExpProt4RevPass::~XclExpProt4RevPass()
+{
+}
+
+void XclExpProt4RevPass::WriteBody( XclExpStream& rStrm )
+{
+    rStrm << static_cast<sal_uInt16>(0x0000);
+}
+
+// ============================================================================
+
+static const sal_uInt8 nDataRecalcId[] = {
+    0xC1, 0x01, 0x00, 0x00, 0x54, 0x8D, 0x01, 0x00
+};
+
+XclExpRecalcId::XclExpRecalcId() :
+    XclExpDummyRecord(0x01C1, nDataRecalcId, sizeof(nDataRecalcId))
+{
+}
+
+// ============================================================================
+
+static const sal_uInt8 nDataBookExt[] = {
+    0x63, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x15, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x02
+};
+
+XclExpBookExt::XclExpBookExt() :
+    XclExpDummyRecord(0x0863, nDataBookExt, sizeof(nDataBookExt))
+{
+}
+
+// ============================================================================
 
 XclRefmode::XclRefmode( const ScDocument& rDoc ) :
     XclExpBoolRecord( 0x000F, rDoc.GetAddressConvention() != formula::FormulaGrammar::CONV_XL_R1C1 )

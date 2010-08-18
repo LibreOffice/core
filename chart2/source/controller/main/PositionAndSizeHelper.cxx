@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PositionAndSizeHelper.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -144,8 +141,6 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     {
         //@todo decide wether x is primary or secondary
 
-        //xChartView
-
         //set position:
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_CENTER;
@@ -172,7 +167,6 @@ bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
                 , const uno::Reference< frame::XModel >& xChartModel
                 , const awt::Rectangle& rNewPositionAndSize
                 , const awt::Rectangle& rPageRectangle
-                , uno::Reference< uno::XInterface > xChartView
                 )
 {
     ControllerLockGuard aLockedControllers( xChartModel );
@@ -186,10 +180,6 @@ bool PositionAndSizeHelper::moveObject( const rtl::OUString& rObjectCID
         xObjectProp = uno::Reference< beans::XPropertySet >( ObjectIdentifier::getDiagramForCID( rObjectCID, xChartModel ), uno::UNO_QUERY );
         if(!xObjectProp.is())
             return false;
-
-        //add axis title sizes to the diagram size
-        aNewPositionAndSize = ExplicitValueProvider::calculateDiagramPositionAndSizeInclusiveTitle(
-            xChartModel, xChartView, rNewPositionAndSize );
     }
     return moveObject( eObjectType, xObjectProp, aNewPositionAndSize, rPageRectangle );
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: subtotal.hxx,v $
- * $Revision: 1.5.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,35 +32,6 @@
 
 class SubTotal
 {
-#if OLD_PIVOT_IMPLEMENTATION
-private:
-    long    nCount;
-    long    nCount2;
-    double  nSum;
-    double  nSumSqr;
-    double  nMax;
-    double  nMin;
-    double  nProduct;
-    BOOL    bSumOk;
-    BOOL    bSumSqrOk;
-    BOOL    bProductOk;
-    USHORT  nProgress;
-
-public:
-    SCSIZE  nIndex;         // Test
-
-public:
-            SubTotal();
-            ~SubTotal();
-
-    void    UpdateNoVal();
-    void    Update( double nVal );
-    void    Update( const SubTotal& rVal );
-
-    short   Valid( USHORT nFunction ) const;
-                            // return 0 => Fehler, -1 => kein Wert, 1 => ok
-    double  Result( USHORT nFunction ) const;
-#endif
 public:
 
     static  BOOL SafePlus( double& fVal1, double fVal2);

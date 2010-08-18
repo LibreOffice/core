@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pivot.hrc,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +62,10 @@
 #define BTN_TOTALROW            28
 #define BTN_FILTER              29
 #define BTN_DRILLDOWN           30
+
+#define FT_INAREA               40
+#define RB_INAREA               41
+#define ED_INAREA               42
 
 #define PIVOTSTR_SUM            1
 #define PIVOTSTR_COUNT          2

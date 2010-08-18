@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlroot.hxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +32,8 @@
 #include <sot/storage.hxx>
 #include "xlconst.hxx"
 #include "xltools.hxx"
+
+namespace comphelper { class IDocPasswordVerifier; }
 
 // Forward declarations of objects in public use ==============================
 
@@ -92,7 +91,8 @@ struct XclRootData
     ScDocument&         mrDoc;              /// The source or destination document.
     String              maDocUrl;           /// Document URL of imported/exported file.
     String              maBasePath;         /// Base path of imported/exported file (path of maDocUrl).
-    String              maPassw;            /// Entered password for stream encryption/decryption.
+    String              maUserName;         /// Current user name.
+    const String        maDefPassword;      /// The default password used for stream encryption.
     rtl_TextEncoding    meTextEnc;          /// Text encoding to import/export byte strings.
     LanguageType        meSysLang;          /// System language.
     LanguageType        meDocLang;          /// Document language (import: from file, export: from system).
@@ -113,10 +113,11 @@ struct XclRootData
     XclTracerRef        mxTracer;           /// Filter tracer.
     RootDataRef         mxRD;               /// Old RootData struct. Will be removed.
 
+    double              mfScreenPixelX;     /// Width of a screen pixel (1/100 mm).
+    double              mfScreenPixelY;     /// Height of a screen pixel (1/100 mm).
     long                mnCharWidth;        /// Width of '0' in default font (twips).
     SCTAB               mnScTab;            /// Current Calc sheet index.
     const bool          mbExport;           /// false = Import, true = Export.
-    bool                mbHasPassw;         /// true = Password already querried.
 
     explicit            XclRootData( XclBiff eBiff, SfxMedium& rMedium,
                             SotStorageRef xRootStrg, ScDocument& rDoc,
@@ -178,14 +179,24 @@ public:
     /** Returns the current Calc sheet index. */
     inline SCTAB        GetCurrScTab() const { return mrData.mnScTab; }
 
+    /** Calculates the width of the passed number of pixels in 1/100 mm. */
+    sal_Int32           GetHmmFromPixelX( double fPixelX ) const;
+    /** Calculates the height of the passed number of pixels in 1/100 mm. */
+    sal_Int32           GetHmmFromPixelY( double fPixelY ) const;
+
     /** Returns the medium to import from. */
     inline SfxMedium&   GetMedium() const { return mrData.mrMedium; }
     /** Returns the document URL of the imported/exported file. */
     inline const String& GetDocUrl() const { return mrData.maDocUrl; }
     /** Returns the base path of the imported/exported file. */
     inline const String& GetBasePath() const { return mrData.maBasePath; }
-    /** Queries a password from the user and returns it (empty string -> input cancelled). */
-    const String&       QueryPassword() const;
+    /** Returns the current user name. */
+    inline const String& GetUserName() const { return mrData.maUserName; }
+
+    /** Returns the default password used for stream encryption. */
+    inline const String& GetDefaultPassword() const { return mrData.maDefPassword; }
+    /** Requests and verifies a password from the medium or the user. */
+    String              RequestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
 
     /** Returns the OLE2 root storage of the imported/exported file.
         @return  Pointer to root storage or 0, if the file is a simple stream. */

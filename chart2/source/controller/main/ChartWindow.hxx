@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartWindow.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,10 +67,16 @@ public:
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
     virtual void RequestHelp( const HelpEvent& rHEvt );
 
+    void ForceInvalidate();
+    virtual void Invalidate( USHORT nFlags = 0 );
+    virtual void Invalidate( const Rectangle& rRect, USHORT nFlags = 0 );
+    virtual void Invalidate( const Region& rRegion, USHORT nFlags = 0 );
+
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
 private:
     WindowController*    m_pWindowController;
+    bool m_bInPaint;
 
     void adjustHighContrastMode();
 };

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prevwsh2.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +64,7 @@
 //#define _FSYS_HXX
 //#define _STREAM_HXX
 #define _CACHESTR_HXX
-#define _SV_MULTISEL_HXX
+//#define _SV_MULTISEL_HXX
 
 //SV
 //#define _CLIP_HXX ***
@@ -300,7 +297,7 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/svdmodel.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include "prevwsh.hxx"
 #include "docsh.hxx"

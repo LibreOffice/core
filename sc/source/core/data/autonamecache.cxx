@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: autonamecache.cxx,v $
- * $Revision: 1.4.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@
 #include "autonamecache.hxx"
 #include "dociter.hxx"
 #include "cell.hxx"
+#include "queryparam.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -99,7 +97,7 @@ const ScAutoNameAddresses& ScAutoNameCache::GetNameOccurences( const String& rNa
                     ;   // nothing, prevent compiler warning
                 break;
             }
-            if ( ScGlobal::pTransliteration->isEqual( aStr, rName ) )
+            if ( ScGlobal::GetpTransliteration()->isEqual( aStr, rName ) )
             {
                 rAddresses.push_back( ScAddress( aIter.GetCol(), aIter.GetRow(), aIter.GetTab() ) );
             }

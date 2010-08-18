@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documen7.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,6 +52,7 @@
 #include "scmod.hxx"        // SC_MOD
 #include "inputopt.hxx"     // GetExpandRefs
 #include "conditio.hxx"
+#include "sheetevents.hxx"
 #include <tools/shl.hxx>
 
 
@@ -125,6 +123,13 @@ void ScDocument::Broadcast( const ScHint& rHint )
     //  Repaint fuer bedingte Formate mit relativen Referenzen:
     if ( pCondFormList && rHint.GetAddress() != BCA_BRDCST_ALWAYS )
         pCondFormList->SourceChanged( rHint.GetAddress() );
+
+    if ( rHint.GetAddress() != BCA_BRDCST_ALWAYS )
+    {
+        SCTAB nTab = rHint.GetAddress().Tab();
+        if (pTab[nTab] && pTab[nTab]->IsStreamValid())
+            pTab[nTab]->SetStreamValid(FALSE);
+    }
 }
 
 
@@ -448,6 +453,8 @@ void ScDocument::TrackFormulas( ULONG nHintId )
     if ( pFormulaTrack )
     {
         erBEEPER();
+        // outside the loop, check if any sheet has a "calculate" event script
+        bool bCalcEvent = HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true );
         SvtBroadcaster* pBC;
         ScFormulaCell* pTrack;
         ScFormulaCell* pNext;
@@ -461,6 +468,9 @@ void ScDocument::TrackFormulas( ULONG nHintId )
             //  Repaint fuer bedingte Formate mit relativen Referenzen:
             if ( pCondFormList )
                 pCondFormList->SourceChanged( pTrack->aPos );
+            // for "calculate" event, keep track of which sheets are affected by tracked formulas
+            if ( bCalcEvent )
+                SetCalcNotification( pTrack->aPos.Tab() );
             pTrack = pTrack->GetNextTrack();
         } while ( pTrack );
         pTrack = pFormulaTrack;

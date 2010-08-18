@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xichart.hxx,v $
- * $Revision: 1.13.62.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,20 +33,27 @@
 #include <set>
 #include <list>
 
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 
 #include "rangelst.hxx"
+#include "token.hxx"
 #include "xlchart.hxx"
 #include "xlstyle.hxx"
+#include "xiescher.hxx"
 #include "xistring.hxx"
-#include "xiroot.hxx"
-
-#include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star {
+    namespace awt
+    {
+        struct Rectangle;
+    }
     namespace frame
     {
         class XModel;
+    }
+    namespace drawing
+    {
+        class XShape;
     }
     namespace chart2
     {
@@ -79,7 +83,7 @@ struct XclObjFillData;
 // Common =====================================================================
 
 class ScfProgressBar;
-class XclImpChRootData;
+struct XclImpChRootData;
 class XclImpChChart;
 class ScTokenArray;
 
@@ -87,11 +91,10 @@ class ScTokenArray;
 class XclImpChRoot : public XclImpRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >        XChartDocRef;
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >   XDataProviderRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > XChartDocRef;
 
 public:
-    explicit            XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart* pChartData );
+    explicit            XclImpChRoot( const XclImpRoot& rRoot, XclImpChChart& rChartData );
     virtual             ~XclImpChRoot();
 
     /** Returns this root instance - for code readability in derived classes. */
@@ -113,12 +116,28 @@ public:
     Color               GetSeriesFillAutoColor( sal_uInt16 nFormatIdx ) const;
 
     /** Starts the API chart document conversion. Must be called once before all API conversion. */
-    void                InitConversion( XChartDocRef xChartDoc ) const;
+    void                InitConversion( XChartDocRef xChartDoc, const Rectangle& rChartRect ) const;
     /** Finishes the API chart document conversion. Must be called once after all API conversion. */
-    void                FinishConversion( ScfProgressBar& rProgress ) const;
+    void                FinishConversion( XclImpDffConverter& rDffConv ) const;
 
     /** Returns the data provider for the chart document. */
-    XDataProviderRef    GetDataProvider() const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >
+                        GetDataProvider() const;
+    /** Returns the drawing shape interface of the specified title object. */
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        GetTitleShape( const XclChTextKey& rTitleKey ) const;
+
+    /** Converts the passed horizontal coordinate from Excel chart units into 1/100 mm. */
+    sal_Int32           CalcHmmFromChartX( sal_Int32 nPosX ) const;
+    /** Converts the passed vertical coordinate from Excel chart units into 1/100 mm. */
+    sal_Int32           CalcHmmFromChartY( sal_Int32 nPosY ) const;
+    /** Converts the passed rectangle from Excel chart units into 1/100 mm. */
+    ::com::sun::star::awt::Rectangle CalcHmmFromChartRect( const XclChRectangle& rRect ) const;
+
+    /** Converts the passed horizontal coordinate from Excel chart units into a relative position. */
+    double              CalcRelativeFromChartX( sal_Int32 nPosX ) const;
+    /** Converts the passed vertical coordinate from Excel chart units into a relative position. */
+    double              CalcRelativeFromChartY( sal_Int32 nPosY ) const;
 
     /** Writes all line properties to the passed property set. */
     void                ConvertLineFormat(
@@ -187,6 +206,9 @@ class XclImpChFramePos
 public:
     /** Reads the CHFRAMEPOS record (frame position and size). */
     void                ReadChFramePos( XclImpStream& rStrm );
+
+    /** Returns read-only access to the imported frame position data. */
+    inline const XclChFramePos& GetFramePosData() const { return maData; }
 
 private:
     XclChFramePos       maData;             /// Position of the frame.
@@ -375,6 +397,7 @@ public:
 
 public:
     explicit            XclImpChSourceLink( const XclImpChRoot& rRoot );
+    virtual             ~XclImpChSourceLink();
 
     /** Reads the CHSOURCELINK record (link to source data). */
     void                ReadChSourceLink( XclImpStream& rStrm );
@@ -404,13 +427,12 @@ public:
     XFormattedStringSeq CreateStringSequence( const XclImpChRoot& rRoot,
                             sal_uInt16 nLeadFontIdx, const Color& rLeadFontColor ) const;
 
+    void                FillSourceLink(::std::vector<ScSharedTokenRef>& rTokens) const;
+
 private:
     XclChSourceLink     maData;             /// Contents of the CHSOURCELINK record.
     XclImpStringRef     mxString;           /// Text data (CHSTRING record).
-
-    // Tokens representing data ranges.  This must be ref-counted to allow the
-    // parent class to be stored in a STL container.
-    ::boost::shared_ptr<ScTokenArray> mpTokenArray;
+    ScfRef< ScTokenArray> mxTokenArray;     /// Token array representing the data ranges.
 };
 
 typedef ScfRef< XclImpChSourceLink > XclImpChSourceLinkRef;
@@ -433,7 +455,7 @@ public:
     /** Converts and writes the contained font settings to the passed property set. */
     void                ConvertFontBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
     /** Converts and writes the contained rotation settings to the passed property set. */
-    void                ConvertRotationBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet ) const;
+    void                ConvertRotationBase( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet, bool bSupportsStacked ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -500,6 +522,8 @@ public:
 
     /** Converts and writes the contained font settings to the passed property set. */
     void                ConvertFont( ScfPropertySet& rPropSet ) const;
+    /** Converts and writes the contained rotation settings to the passed property set. */
+    void                ConvertRotation( ScfPropertySet& rPropSet, bool bSupportsStacked ) const;
     /** Converts and writes the contained frame data to the passed property set. */
     void                ConvertFrame( ScfPropertySet& rPropSet ) const;
     /** Converts and writes the contained number format to the passed property set. */
@@ -508,17 +532,26 @@ public:
     void                ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const;
     /** Creates a title text object. */
     XTitleRef           CreateTitle() const;
+    /** Converts the manual position of the specified title */
+    void                ConvertTitlePosition( const XclChTextKey& rTitleKey ) const;
 
 private:
     using               XclImpChRoot::ConvertFont;
 
+    /** Reads a CHFRLABELPROPS record. */
+    void                ReadChFrLabelProps( XclImpStream& rStrm );
+
 private:
+    typedef ScfRef< XclChFrLabelProps > XclChFrLabelPropsRef;
+
     XclChText           maData;             /// Contents of the CHTEXT record.
     XclChObjectLink     maObjLink;          /// Link target for this text object.
     XclFormatRunVec     maFormats;          /// Formatting runs (CHFORMATRUNS record).
+    XclImpChFramePosRef mxFramePos;         /// Relative text frame position (CHFRAMEPOS record).
     XclImpChSourceLinkRef mxSrcLink;        /// Linked data (CHSOURCELINK with CHSTRING record).
     XclImpChFrameRef    mxFrame;            /// Text object frame properties (CHFRAME group).
     XclImpChFontRef     mxFont;             /// Index into font buffer (CHFONT record).
+    XclChFrLabelPropsRef mxLabelProps;      /// Extended data label properties (CHFRLABELPROPS record).
 };
 
 typedef ScfRef< XclImpChText > XclImpChTextRef;
@@ -807,6 +840,8 @@ public:
     /** Creates a data series object with initialized source links. */
     XDataSeriesRef      CreateDataSeries() const;
 
+    void                FillAllSourceLinks(::std::vector<ScSharedTokenRef>& rTokens) const;
+
 private:
     /** Reads a CHSOURCELINK record. */
     void                ReadChSourceLink( XclImpStream& rStrm );
@@ -916,8 +951,8 @@ typedef ScfRef< XclImpChChart3d > XclImpChChart3dRef;
 
 /** Represents the CHLEGEND record group describing the chart legend.
 
-    The CHLEGEND group consists of: CHLEGEND, CHBEGIN, CHFRAME group,
-    CHTEXT group, CHEND.
+    The CHLEGEND group consists of: CHLEGEND, CHBEGIN, CHFRAMEPOS, CHFRAME
+    group, CHTEXT group, CHEND.
  */
 class XclImpChLegend : public XclImpChGroupBase, protected XclImpChRoot
 {
@@ -939,6 +974,7 @@ public:
 
 private:
     XclChLegend         maData;             /// Contents of the CHLEGEND record.
+    XclImpChFramePosRef mxFramePos;         /// Legend frame position (CHFRAMEPOS record).
     XclImpChTextRef     mxText;             /// Legend text format (CHTEXT group).
     XclImpChFrameRef    mxFrame;            /// Legend frame format (CHFRAME group).
 };
@@ -1100,6 +1136,8 @@ public:
     void                ReadChLabelRange( XclImpStream& rStrm );
     /** Converts category axis scaling settings. */
     void                Convert( ScfPropertySet& rPropSet, ScaleData& rScaleData, bool bMirrorOrient ) const;
+    /** Converts position settings of this axis at a crossing axis. */
+    void                ConvertAxisPosition( ScfPropertySet& rPropSet, bool b3dChart ) const;
 
 private:
     XclChLabelRange     maData;             /// Contents of the CHLABELRANGE record.
@@ -1120,6 +1158,8 @@ public:
     void                ReadChValueRange( XclImpStream& rStrm );
     /** Converts value axis scaling settings. */
     void                Convert( ScaleData& rScaleData, bool bMirrorOrient ) const;
+    /** Converts position settings of this axis at a crossing axis. */
+    void                ConvertAxisPosition( ScfPropertySet& rPropSet ) const;
 
 private:
     XclChValueRange     maData;             /// Contents of the CHVALUERANGE record.
@@ -1196,9 +1236,11 @@ public:
     inline bool         HasMinorGrid() const { return mxMinorGrid.is(); }
 
     /** Creates an API axis object. */
-    XAxisRef            CreateAxis( const XclImpChTypeGroup& rTypeGroup, bool bPrimary ) const;
+    XAxisRef            CreateAxis( const XclImpChTypeGroup& rTypeGroup, const XclImpChAxis* pCrossingAxis ) const;
     /** Converts and writes 3D wall/floor properties to the passed property set. */
     void                ConvertWall( ScfPropertySet& rPropSet ) const;
+    /** Converts position settings of this axis at a crossing axis. */
+    void                ConvertAxisPosition( ScfPropertySet& rPropSet, const XclImpChTypeGroup& rTypeGroup ) const;
 
 private:
     /** Reads a CHAXISLINE record specifying the target for following line properties. */
@@ -1253,6 +1295,8 @@ public:
     /** Returns the axes set index used by the chart API. */
     inline sal_Int32    GetApiAxesSetIndex() const { return maData.GetApiAxesSetIndex(); }
 
+    /** Returns the outer plot area position, if existing. */
+    inline XclImpChFramePosRef GetPlotAreaFramePos() const { return mxFramePos; }
     /** Returns the specified chart type group. */
     inline XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const { return maTypeGroups.get( nGroupIdx ); }
     /** Returns the first chart type group. */
@@ -1264,6 +1308,8 @@ public:
 
     /** Creates a coordinate system and converts all series and axis settings. */
     void                Convert( XDiagramRef xDiagram ) const;
+    /** Converts the manual positions of all axis titles. */
+    void                ConvertTitlePositions() const;
 
 private:
     /** Reads a CHAXIS record group containing a single axis. */
@@ -1282,9 +1328,9 @@ private:
     XCoordSystemRef     CreateCoordSystem( XDiagramRef xDiagram ) const;
     /** Creates and inserts an axis into the container and registers the coordinate system. */
     void                ConvertAxis( XclImpChAxisRef xChAxis, XclImpChTextRef xChAxisTitle,
-                            XCoordSystemRef xCoordSystem ) const;
+                            XCoordSystemRef xCoordSystem, const XclImpChAxis* pCrossingAxis ) const;
     /** Creates and returns an API axis object. */
-    XAxisRef            CreateAxis( const XclImpChAxis& rChAxis ) const;
+    XAxisRef            CreateAxis( const XclImpChAxis& rChAxis, const XclImpChAxis* pCrossingAxis ) const;
     /** Writes all properties of the background area to the passed diagram. */
     void                ConvertBackground( XDiagramRef xDiagram ) const;
 
@@ -1292,7 +1338,7 @@ private:
     typedef ScfRefMap< sal_uInt16, XclImpChTypeGroup > XclImpChTypeGroupMap;
 
     XclChAxesSet        maData;             /// Contents of the CHAXESSET record.
-    XclImpChFramePosRef mxPos;              /// Position of the axes set (CHFRAMEPOS record).
+    XclImpChFramePosRef mxFramePos;         /// Outer plot area position (CHFRAMEPOS record).
     XclImpChAxisRef     mxXAxis;            /// The X axis (CHAXIS group).
     XclImpChAxisRef     mxYAxis;            /// The Y axis (CHAXIS group).
     XclImpChAxisRef     mxZAxis;            /// The Z axis (CHAXIS group).
@@ -1339,21 +1385,26 @@ public:
     XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const;
     /** Returns the specified default text. */
     XclImpChTextRef     GetDefaultText( XclChTextType eTextType ) const;
+    /** Returns true, if the plot area has benn moved and/or resized manually. */
+    bool                IsManualPlotArea() const;
     /** Returns the number of units on the progress bar needed for the chart. */
     inline sal_Size     GetProgressSize() const { return 2 * EXC_CHART_PROGRESS_SIZE; }
 
     /** Converts and writes all properties to the passed chart. */
-    void                Convert( XChartDocRef xChartDoc, ScfProgressBar& rProgress ) const;
+    void                Convert( XChartDocRef xChartDoc,
+                            XclImpDffConverter& rDffConv,
+                            const ::rtl::OUString& rObjName,
+                            const Rectangle& rChartRect ) const;
 
 private:
     /** Reads a CHSERIES group (data series source and formatting). */
     void                ReadChSeries( XclImpStream& rStrm );
+    /** Reads a CHPROPERTIES record (global chart properties). */
+    void                ReadChProperties( XclImpStream& rStrm );
     /** Reads a CHAXESSET group (primary/secondary axes set). */
     void                ReadChAxesSet( XclImpStream& rStrm );
     /** Reads a CHTEXT group (chart title and series/point captions). */
     void                ReadChText( XclImpStream& rStrm );
-    /** Reads a CHPROPERTIES record (global chart properties). */
-    void                ReadChProperties( XclImpStream& rStrm );
 
     /** Final processing after reading the entire chart data. */
     void                Finalize();
@@ -1388,6 +1439,31 @@ typedef ScfRef< XclImpChChart > XclImpChChartRef;
 
 // ----------------------------------------------------------------------------
 
+/** Drawing container of a chart. */
+class XclImpChartDrawing : public XclImpDrawing
+{
+public:
+    explicit            XclImpChartDrawing( const XclImpRoot& rRoot, bool bOwnTab );
+
+    /** Converts all objects and inserts them into the chart drawing page. */
+    void                ConvertObjects(
+                            XclImpDffConverter& rDffConv,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel,
+                            const Rectangle& rChartRect );
+
+    /** Calculate the resulting rectangle of the passed anchor. */
+    virtual Rectangle   CalcAnchorRect( const XclObjAnchor& rAnchor, bool bDffAnchor ) const;
+    /** Called whenever an object has been inserted into the draw page. */
+    virtual void        OnObjectInserted( const XclImpDrawObjBase& rDrawObj );
+
+private:
+    Rectangle           maChartRect;        /// Position and size of the chart shape in 1/100 mm.
+    SCTAB               mnScTab;            /// Index of the sheet that contains the chart.
+    bool                mbOwnTab;           /// True = own sheet, false = embedded object.
+};
+
+// ----------------------------------------------------------------------------
+
 /** Represents the entire chart substream (all records in BOF/EOF block). */
 class XclImpChart : protected XclImpRoot
 {
@@ -1398,6 +1474,7 @@ public:
     /** Constructs a new chart object.
         @param bOwnTab  True = chart is on an own sheet; false = chart is an embedded object. */
     explicit            XclImpChart( const XclImpRoot& rRoot, bool bOwnTab );
+    virtual             ~XclImpChart();
 
     /** Reads the complete chart substream (BOF/EOF block).
         @descr  The passed stream must be located in the BOF record of the chart substream. */
@@ -1411,14 +1488,22 @@ public:
     inline bool         IsPivotChart() const { return mbIsPivotChart; }
 
     /** Creates the chart object in the passed component. */
-    void                Convert( XModelRef xModel, ScfProgressBar& rProgress ) const;
+    void                Convert( XModelRef xModel,
+                            XclImpDffConverter& rDffConv,
+                            const ::rtl::OUString& rObjName,
+                            const Rectangle& rChartRect ) const;
 
 private:
+    /** Returns (initially creates) the drawing container for embedded shapes. **/
+    XclImpChartDrawing& GetChartDrawing();
     /** Reads the CHCHART group (entire chart data). */
     void                ReadChChart( XclImpStream& rStrm );
 
 private:
+    typedef ScfRef< XclImpChartDrawing > XclImpChartDrawingRef;
+
     XclImpChChartRef    mxChartData;        /// The chart data (CHCHART group).
+    XclImpChartDrawingRef mxChartDrawing;   /// Drawing container for embedded shapes.
     bool                mbOwnTab;           /// true = own sheet; false = embedded object.
     bool                mbIsPivotChart;     /// true = chart is based on a pivot table.
 };

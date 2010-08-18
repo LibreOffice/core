@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: acredlin.cxx,v $
- * $Revision: 1.25.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,7 +32,7 @@
 
 
 
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <unotools/textsearch.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -2127,7 +2124,7 @@ IMPL_LINK( ScAcceptChgDlg, ColCompareHdl, SvSortData*, pSortData )
             if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
                 nLeftKind == SV_ITEM_ID_LBOXSTRING )
             {
-                eCompare= (StringCompare) ScGlobal::pCaseCollator->compareString(
+                eCompare= (StringCompare) ScGlobal::GetCaseCollator()->compareString(
                                         ((SvLBoxString*)pLeftItem)->GetText(),
                                         ((SvLBoxString*)pRightItem)->GetText());
 

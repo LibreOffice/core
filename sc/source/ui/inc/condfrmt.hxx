@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: condfrmt.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,6 +68,7 @@ private:
     formula::RefButton          aRbCond12;
     FixedText           aFtCond1Template;
     ListBox             aLbCond1Template;
+    PushButton          aBtnNew1;
     FixedLine           aFlSep1;
 
     CheckBox            aCbxCond2;
@@ -83,6 +81,7 @@ private:
     formula::RefButton          aRbCond22;
     FixedText           aFtCond2Template;
     ListBox             aLbCond2Template;
+    PushButton          aBtnNew2;
     FixedLine           aFlSep2;
 
     CheckBox            aCbxCond3;
@@ -95,6 +94,7 @@ private:
     formula::RefButton          aRbCond32;
     FixedText           aFtCond3Template;
     ListBox             aLbCond3Template;
+    PushButton          aBtnNew3;
 
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
@@ -146,6 +146,7 @@ private:
     DECL_LINK( GetFocusHdl, Control* );
     DECL_LINK( LoseFocusHdl, Control* );
     DECL_LINK( BtnHdl, PushButton* );
+    DECL_LINK( NewBtnHdl, PushButton* );
 #endif // _CONDFRMT_CXX
 };
 

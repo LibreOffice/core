@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormattedString.cxx,v $
- * $Revision: 1.9.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +88,7 @@ FormattedString::FormattedString(
         uno::Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
     m_aString(),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 FormattedString::FormattedString( const FormattedString & rOther ) :
@@ -99,7 +96,7 @@ FormattedString::FormattedString( const FormattedString & rOther ) :
         impl::FormattedString_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_aString( rOther.m_aString ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {}
 
 FormattedString::~FormattedString()
@@ -125,11 +122,13 @@ uno::Reference< util::XCloneable > SAL_CALL FormattedString::createClone()
 void SAL_CALL FormattedString::setString( const ::rtl::OUString& String )
     throw (uno::RuntimeException)
 {
-    // /--
-    MutexGuard aGuard( GetMutex());
-    m_aString = String;
+    {
+        MutexGuard aGuard( GetMutex());
+        m_aString = String;
+    }
+    //don't keep the mutex locked while calling out
     fireModifyEvent();
-    // \--
+
 }
 
 // ____ XModifyBroadcaster ____

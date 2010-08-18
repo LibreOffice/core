@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WrappedPropertySet.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,11 +113,11 @@ protected: //methods
 
     virtual ::com::sun::star::uno::Reference<
                         ::com::sun::star::beans::XPropertySet > getInnerPropertySet() = 0;
-    ::com::sun::star::uno::Reference<
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference<
                         ::com::sun::star::beans::XPropertyState > getInnerPropertyState();
 
     ::cppu::IPropertyArrayHelper&   getInfoHelper();
-    tWrappedPropertyMap&            getWrappedPropertyMap();
+    SAL_DLLPRIVATE tWrappedPropertyMap&            getWrappedPropertyMap();
 
     const WrappedProperty*          getWrappedProperty( const ::rtl::OUString& rOuterName );
     const WrappedProperty*          getWrappedProperty( sal_Int32 nHandle );

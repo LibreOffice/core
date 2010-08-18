@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlview.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,6 +86,11 @@ const sal_uInt8 EXC_PANE_TOPLEFT            = 3;        /// Single, top, left, o
 
 const sal_uInt16 EXC_ID_SCL                 = 0x00A0;
 
+// (0x0862) SHEETEXT ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_SHEETEXT            = 0x0862;   /// header id for sheetext
+const sal_uInt8 EXC_SHEETEXT_TABCOLOR       = 0x7F;     /// mask for tab color
+const sal_uInt16 EXC_COLOR_NOTABBG          = 0x7F;     /// Excel ignores Tab color when set to this value...
 // Structs ====================================================================
 
 /** Contains all view settings for the entire document. */
@@ -149,6 +151,9 @@ struct XclTabViewData
     bool                mbShowHeadings;     /// true = Show column/row headings.
     bool                mbShowZeros;        /// true = Show zero value zells.
     bool                mbShowOutline;      /// true = Show outlines.
+    Color               maTabBgColor;       /// Tab Color default = (COL_AUTO )
+    bool                IsDefaultTabBgColor() const { return maTabBgColor == Color(COL_AUTO) ? TRUE : FALSE; };
+    sal_uInt32          mnTabBgColorId;         /// pallette color id
 
     explicit            XclTabViewData();
                         ~XclTabViewData();

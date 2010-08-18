@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hidother.src,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,6 +81,7 @@ hidspecial HID_SC_APPEND_NAME    { HelpID = HID_SC_APPEND_NAME; };
 hidspecial HID_SC_AUTOFMT_NAME   { HelpID = HID_SC_AUTOFMT_NAME; };
 hidspecial HID_SC_ADD_AUTOFMT    { HelpID = HID_SC_ADD_AUTOFMT; };
 hidspecial HID_SC_REN_AFMT_NAME  { HelpID = HID_SC_REN_AFMT_NAME; };
+hidspecial HID_SC_REN_AFMT_DLG   { HelpID = HID_SC_REN_AFMT_DLG; };
 hidspecial HID_SC_RENAME_AUTOFMT { HelpID = HID_SC_RENAME_AUTOFMT; };
 hidspecial HID_PASSWD_TABLE      { HelpID = HID_PASSWD_TABLE; };
 hidspecial HID_PASSWD_DOC        { HelpID = HID_PASSWD_DOC; };

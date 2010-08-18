@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: analysis.cxx,v $
- * $Revision: 1.46.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -918,21 +915,21 @@ double SAL_CALL AnalysisAddIn::getLcm( constREFXPS& xOpt, const SEQSEQ( double )
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesseli( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBesseli( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
 {
     double fRet = sca::analysis::BesselI( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesselj( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBesselj( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
 {
     double fRet = sca::analysis::BesselJ( fNum, nOrder );
     RETURN_FINITE( fRet );
 }
 
 
-double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
 {
     if( nOrder < 0 || fNum <= 0.0 )
         THROW_IAE;
@@ -942,7 +939,7 @@ double SAL_CALL AnalysisAddIn::getBesselk( double fNum, sal_Int32 nOrder ) THROW
 }
 
 
-double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) THROWDEF_RTE_IAE_NCE
 {
     if( nOrder < 0 || fNum <= 0.0 )
         THROW_IAE;

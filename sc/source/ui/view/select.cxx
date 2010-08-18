@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: select.cxx,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,6 +44,7 @@
 //#include "dataobj.hxx"
 #include "transobj.hxx"
 #include "docsh.hxx"
+#include "tabprotection.hxx"
 
 extern USHORT nScFillModeMouseModifier;             // global.cxx
 
@@ -277,12 +275,12 @@ BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOO
         ScDocument* pDoc = pViewData->GetDocument();
         SCTAB nTab = pViewData->GetTabNo();
         if ( bLeft && !bRightScroll )
-            do --nPosX; while ( nPosX>=0 && ( pDoc->GetColFlags( nPosX, nTab ) & CR_HIDDEN ) );
+            do --nPosX; while ( nPosX>=0 && pDoc->ColHidden( nPosX, nTab ) );
         if ( bTop && !bBottomScroll )
         {
             if (--nPosY >= 0)
             {
-                pDoc->GetRowFlagsArray( nTab).GetLastForCondition( 0, nPosY, CR_HIDDEN, 0);
+                nPosY = pDoc->LastVisibleRow(0, nPosY, nTab);
                 if (!ValidRow(nPosY))
                     nPosY = -1;
             }
@@ -322,6 +320,26 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
 {
     ScTabView* pView = pViewData->GetView();
     SCTAB nTab = pViewData->GetTabNo();
+    ScDocument* pDoc = pViewData->GetDocument();
+
+    if ( pDoc->IsTabProtected(nTab) )
+    {
+        if (nPosX < 0 || nPosY < 0)
+            return false;
+
+        ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+        bool bSkipProtected   = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bool bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+
+        if ( bSkipProtected && bSkipUnprotected )
+            return FALSE;
+
+        bool bCellProtected = pDoc->HasAttrib(nPosX, nPosY, nTab, nPosX, nPosY, nTab, HASATTR_PROTECTED);
+        if ( (bCellProtected && bSkipProtected) || (!bCellProtected && bSkipUnprotected) )
+            // Don't select this cell!
+            return FALSE;
+    }
+
     ScModule* pScMod = SC_MOD();
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     bool bRefMode = ( pViewShell ? pViewShell->IsRefInputMode() : false );
@@ -375,7 +393,6 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
 
         ScRange aDelRange;
         BOOL bOldDelMark = pViewData->GetDelMark( aDelRange );
-        ScDocument* pDoc = pViewData->GetDocument();
 
         if ( nPosX+1 >= (SCsCOL) nStartX && nPosX <= (SCsCOL) nEndX &&
              nPosY+1 >= (SCsROW) nStartY && nPosY <= (SCsROW) nEndY &&
@@ -459,7 +476,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
             {
                 //  #94321# in SetCursorAtPoint hidden columns are skipped.
                 //  They must be skipped here too, or the result will always be the first hidden column.
-                do ++nPosX; while ( nPosX<nStartX && ( pDoc->GetColFlags( nPosX, nTab ) & CR_HIDDEN ) );
+                do ++nPosX; while ( nPosX<nStartX && pDoc->ColHidden(nPosX, nTab) );
                 for (SCCOL i=nPosX; i<nStartX; i++)
                     nSizeX += pDoc->GetColWidth( i, nTab );
             }
@@ -474,8 +491,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
                 //  They must be skipped here too, or the result will always be the first hidden row.
                 if (++nPosY < nStartY)
                 {
-                    nPosY = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition(
-                            nPosY, nStartY-1, CR_HIDDEN, 0);
+                    nPosY = pDoc->FirstVisibleRow(nPosY, nStartY-1, nTab);
                     if (!ValidRow(nPosY))
                         nPosY = nStartY;
                 }
@@ -511,7 +527,6 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
         BYTE nMode = pViewData->GetFillMode();
         if ( nMode == SC_FILL_EMBED_LT || nMode == SC_FILL_EMBED_RB )
         {
-            ScDocument* pDoc = pViewData->GetDocument();
             DBG_ASSERT( pDoc->IsEmbedded(), "!pDoc->IsEmbedded()" );
             ScRange aRange;
             pDoc->GetEmbedded( aRange);

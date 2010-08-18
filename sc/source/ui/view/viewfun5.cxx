@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewfun5.cxx,v $
- * $Revision: 1.54 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,9 +50,9 @@
 #include <sot/clsids.hxx>
 #include <sot/formats.hxx>
 #include <sot/filelist.hxx>
-#include <svtools/pathoptions.hxx>
-#include <svtools/ptitem.hxx>
-#include <svtools/stritem.hxx>
+#include <unotools/pathoptions.hxx>
+#include <svl/ptitem.hxx>
+#include <svl/stritem.hxx>
 #include <svtools/transfer.hxx>
 #include <vcl/graph.hxx>
 
@@ -79,6 +76,7 @@
 
 #include "asciiopt.hxx"
 #include "scabstdlg.hxx"
+#include "clipparam.hxx"
 #include <vcl/msgbox.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/dbaexchange.hxx>
@@ -112,7 +110,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 nXT += pDoc->GetColWidth(i,nTab);
             if (pDoc->IsNegativePage(nTab))
                 nXT = -nXT;
-            ULONG nYT = pDoc->FastGetRowHeight( 0, nPosY-1, nTab);
+            ULONG nYT = pDoc->GetRowHeight( 0, nPosY-1, nTab);
             aPos = Point( (long)(nXT * HMM_PER_TWIPS), (long)(nYT * HMM_PER_TWIPS) );
         }
     }
@@ -163,12 +161,12 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     if ( pSrcDoc->GetDataStart( nSrcTab, nFirstCol, nFirstRow ) )
                         pSrcDoc->GetCellArea( nSrcTab, nLastCol, nLastRow );
                     else
-                        {
+                    {
                         nFirstCol = nLastCol = 0;
                         nFirstRow = nLastRow = 0;
-                        }
-                    pSrcDoc->CopyToClip( nFirstCol, nFirstRow, nLastCol, nLastRow,
-                                            FALSE, pClipDoc, FALSE, &aSrcMark );
+                    }
+                    ScClipParam aClipParam(ScRange(nFirstCol, nFirstRow, 0, nLastCol, nLastRow, 0), false);
+                    pSrcDoc->CopyToClip(aClipParam, pClipDoc, &aSrcMark);
                     ScGlobal::SetClipDocName( xDocShRef->GetTitle( SFX_TITLE_FULLNAME ) );
 
                     SetCursor( nPosX, nPosY );
@@ -389,7 +387,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             //  Creation of database area "Import1" isn't here, but in the DocShell
             //  slot execute, so it can be added to the undo action
 
-            ScDBData* pDBData = pDocSh->GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, FALSE );
+            ScDBData* pDBData = pDocSh->GetDBData( ScRange(nPosX,nPosY,nTab), SC_DB_OLD, SC_DBSEL_KEEP );
             String sTarget;
             if (pDBData)
                 sTarget = pDBData->GetName();

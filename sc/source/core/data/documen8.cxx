@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: documen8.cxx,v $
- * $Revision: 1.52.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,30 +31,31 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <tools/string.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/linkmgr.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/unolingu.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/langitem.hxx>
+#include <sfx2/linkmgr.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include <svtools/flagitem.hxx>
-#include <svtools/intitem.hxx>
+#include <svl/flagitem.hxx>
+#include <svl/intitem.hxx>
 #define _SVSTDARR_USHORTS
-#include <svtools/svstdarr.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
-#include <svtools/misccfg.hxx>
+#include <svl/svstdarr.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
+#include <unotools/misccfg.hxx>
 #include <sfx2/app.hxx>
 #include <unotools/transliterationwrapper.hxx>
-#include <svtools/securityoptions.hxx>
+#include <unotools/securityoptions.hxx>
 
 #include <vcl/virdev.hxx>
 #include <vcl/msgbox.hxx>
@@ -95,6 +93,7 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 #include "charthelper.hxx"
+#include "dpobject.hxx"
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
@@ -136,17 +135,14 @@ SfxPrinter* ScDocument::GetPrinter(BOOL bCreateIfNotExist)
                             SID_SCPRINTOPTIONS,         SID_SCPRINTOPTIONS,
                             NULL );
 
-        SfxMiscCfg* pOffCfg = SFX_APP()->GetMiscConfig();
-        if ( pOffCfg )
-        {
-            USHORT nFlags = 0;
-            if ( pOffCfg->IsPaperOrientationWarning() )
-                nFlags |= SFX_PRINTER_CHG_ORIENTATION;
-            if ( pOffCfg->IsPaperSizeWarning() )
-                nFlags |= SFX_PRINTER_CHG_SIZE;
-            pSet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, nFlags ) );
-            pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, pOffCfg->IsNotFoundWarning() ) );
-        }
+        ::utl::MiscCfg aMisc;
+        USHORT nFlags = 0;
+        if ( aMisc.IsPaperOrientationWarning() )
+            nFlags |= SFX_PRINTER_CHG_ORIENTATION;
+        if ( aMisc.IsPaperSizeWarning() )
+            nFlags |= SFX_PRINTER_CHG_SIZE;
+        pSet->Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, nFlags ) );
+        pSet->Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
 
         pPrinter = new SfxPrinter( pSet );
         pPrinter->SetMapMode( MAP_100TH_MM );
@@ -188,21 +184,18 @@ void ScDocument::SetPrintOptions()
 
     if ( pPrinter )
     {
-        SfxMiscCfg* pOffCfg = SFX_APP()->GetMiscConfig();
-        if ( pOffCfg )
-        {
-            SfxItemSet aOptSet( pPrinter->GetOptions() );
+        ::utl::MiscCfg aMisc;
+        SfxItemSet aOptSet( pPrinter->GetOptions() );
 
-            USHORT nFlags = 0;
-            if ( pOffCfg->IsPaperOrientationWarning() )
-                nFlags |= SFX_PRINTER_CHG_ORIENTATION;
-            if ( pOffCfg->IsPaperSizeWarning() )
-                nFlags |= SFX_PRINTER_CHG_SIZE;
-            aOptSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, nFlags ) );
-            aOptSet.Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, pOffCfg->IsNotFoundWarning() ) );
+        USHORT nFlags = 0;
+        if ( aMisc.IsPaperOrientationWarning() )
+            nFlags |= SFX_PRINTER_CHG_ORIENTATION;
+        if ( aMisc.IsPaperSizeWarning() )
+            nFlags |= SFX_PRINTER_CHG_SIZE;
+        aOptSet.Put( SfxFlagItem( SID_PRINTER_CHANGESTODOC, nFlags ) );
+        aOptSet.Put( SfxBoolItem( SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning() ) );
 
-            pPrinter->SetOptions( aOptSet );
-        }
+        pPrinter->SetOptions( aOptSet );
     }
 }
 
@@ -270,6 +263,11 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                 if ( ScGlobal::CheckWidthInvalidate( bNumFormatChanged,
                         rSet, rChanges ) )
                     InvalidateTextWidth( NULL, NULL, bNumFormatChanged );
+
+                for (SCTAB nTab=0; nTab<=MAXTAB; ++nTab)
+                    if (pTab[nTab] && pTab[nTab]->IsStreamValid())
+                        pTab[nTab]->SetStreamValid( FALSE );
+
                 ULONG nOldFormat =
                     ((const SfxUInt32Item*)&rSet.Get(
                     ATTR_VALUE_FORMAT ))->GetValue();
@@ -318,20 +316,8 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
 void ScDocument::CopyStdStylesFrom( ScDocument* pSrcDoc )
 {
     // #b5017505# number format exchange list has to be handled here, too
-
-    SvNumberFormatter* pThisFormatter = xPoolHelper->GetFormTable();
-    SvNumberFormatter* pOtherFormatter = pSrcDoc->xPoolHelper->GetFormTable();
-    if (pOtherFormatter && pOtherFormatter != pThisFormatter)
-    {
-        SvNumberFormatterIndexTable* pExchangeList =
-                pThisFormatter->MergeFormatter(*(pOtherFormatter));
-        if (pExchangeList->Count() > 0)
-            pFormatExchangeList = pExchangeList;
-    }
-
+    NumFmtMergeHandler aNumFmtMergeHdl(this, pSrcDoc);
     xPoolHelper->GetStylePool()->CopyStdStylesFrom( pSrcDoc->xPoolHelper->GetStylePool() );
-
-    pFormatExchangeList = NULL;
 }
 
 //------------------------------------------------------------------------
@@ -712,8 +698,13 @@ BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
     //  skip everything left of rSpellPos:
     while ( pCell && nRow == rSpellPos.Row() && nCol < rSpellPos.Col() )
         pCell = aIter.GetNext( nCol, nRow );
-    while ( pCell )
+
+    for (; pCell; pCell = aIter.GetNext(nCol, nRow))
     {
+        if (pDPCollection && pDPCollection->HasDPTable(nCol, nRow, nTab))
+            // Don't spell check within datapilot table.
+            continue;
+
         CellType eType = pCell->GetCellType();
         if ( eType == CELLTYPE_STRING || eType == CELLTYPE_EDIT )
         {
@@ -798,8 +789,6 @@ BOOL ScDocument::OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpe
 
         if ( ++nCellCount >= SPELL_MAXCELLS )           // seen enough cells?
             break;
-
-        pCell = aIter.GetNext( nCol, nRow );
     }
 
     if ( pCell )
@@ -919,7 +908,7 @@ BOOL ScDocument::IdleCheckLinks()           // TRUE = demnaechst wieder versuche
 {
     BOOL bAnyLeft = FALSE;
 
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -947,7 +936,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     //  bei 4.0-Export alle mit Modus != DEFAULT weglassen
     BOOL bExport40 = ( rStream.GetVersion() <= SOFFICE_FILEFORMAT_40 );
 
-    const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
+    const ::sfx2::SvBaseLinks& rLinks = GetLinkManager()->GetLinks();
     USHORT nCount = rLinks.Count();
 
     //  erstmal zaehlen...
@@ -985,6 +974,7 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
 {
     ScMultipleReadHeader aHdr( rStream );
 
+    GetLinkManager();
     USHORT nCount;
     rStream >> nCount;
     for (USHORT i=0; i<nCount; i++)
@@ -997,7 +987,7 @@ void ScDocument::LoadDdeLinks(SvStream& rStream)
 
 BOOL ScDocument::HasDdeLinks() const
 {
-    if (pLinkManager)           // Clipboard z.B. hat keinen LinkManager
+    if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1024,7 +1014,7 @@ BOOL ScDocument::IsInLinkUpdate() const
 
 void ScDocument::UpdateExternalRefLinks()
 {
-    if (!pLinkManager)
+    if (!GetLinkManager())
         return;
 
     const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
@@ -1046,12 +1036,24 @@ void ScDocument::UpdateExternalRefLinks()
         TrackFormulas();
         pShell->Broadcast( SfxSimpleHint(FID_DATACHANGED) );
         ResetChanged( ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB) );
+
+        // #i101960# set document modified, as in TrackTimeHdl for DDE links
+        if (!pShell->IsModified())
+        {
+            pShell->SetModified( TRUE );
+            SfxBindings* pBindings = GetViewBindings();
+            if (pBindings)
+            {
+                pBindings->Invalidate( SID_SAVEDOC );
+                pBindings->Invalidate( SID_DOC_MODIFIED );
+            }
+        }
     }
 }
 
 void ScDocument::UpdateDdeLinks()
 {
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1097,7 +1099,7 @@ BOOL ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, const
     //! wenn's mal alles asynchron wird, aber auch hier
 
     BOOL bFound = FALSE;
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1122,7 +1124,7 @@ BOOL ScDocument::UpdateDdeLink( const String& rAppl, const String& rTopic, const
 
 void ScDocument::DisconnectDdeLinks()
 {
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1145,7 +1147,7 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
             pDestDoc->LoadDdeLinks(*pClipData);
         }
     }
-    else if (pLinkManager)              // Links direkt kopieren
+    else if (GetLinkManager())              // Links direkt kopieren
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1166,7 +1168,7 @@ void ScDocument::CopyDdeLinks( ScDocument* pDestDoc ) const
 USHORT ScDocument::GetDdeLinkCount() const
 {
     USHORT nDdeCount = 0;
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1186,7 +1188,7 @@ namespace {
                      (does not include other links from link manager).
     @return  The DDE link, if it exists, otherwise 0. */
 ScDdeLink* lclGetDdeLink(
-        const SvxLinkManager* pLinkManager,
+        const sfx2::LinkManager* pLinkManager,
         const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode,
         USHORT* pnDdePos = NULL )
 {
@@ -1215,7 +1217,7 @@ ScDdeLink* lclGetDdeLink(
 /** Returns a pointer to the specified DDE link.
     @param nDdePos  Index of the DDE link (does not include other links from link manager).
     @return  The DDE link, if it exists, otherwise 0. */
-ScDdeLink* lclGetDdeLink( const SvxLinkManager* pLinkManager, USHORT nDdePos )
+ScDdeLink* lclGetDdeLink( const sfx2::LinkManager* pLinkManager, USHORT nDdePos )
 {
     if( pLinkManager )
     {
@@ -1242,12 +1244,12 @@ ScDdeLink* lclGetDdeLink( const SvxLinkManager* pLinkManager, USHORT nDdePos )
 
 bool ScDocument::FindDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, USHORT& rnDdePos )
 {
-    return lclGetDdeLink( pLinkManager, rAppl, rTopic, rItem, nMode, &rnDdePos ) != NULL;
+    return lclGetDdeLink( GetLinkManager(), rAppl, rTopic, rItem, nMode, &rnDdePos ) != NULL;
 }
 
 bool ScDocument::GetDdeLinkData( USHORT nDdePos, String& rAppl, String& rTopic, String& rItem ) const
 {
-    if( const ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos ) )
+    if( const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
         rAppl  = pDdeLink->GetAppl();
         rTopic = pDdeLink->GetTopic();
@@ -1259,7 +1261,7 @@ bool ScDocument::GetDdeLinkData( USHORT nDdePos, String& rAppl, String& rTopic, 
 
 bool ScDocument::GetDdeLinkMode( USHORT nDdePos, BYTE& rnMode ) const
 {
-    if( const ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos ) )
+    if( const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
         rnMode = pDdeLink->GetMode();
         return true;
@@ -1269,7 +1271,7 @@ bool ScDocument::GetDdeLinkMode( USHORT nDdePos, BYTE& rnMode ) const
 
 const ScMatrix* ScDocument::GetDdeLinkResultMatrix( USHORT nDdePos ) const
 {
-    const ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos );
+    const ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos );
     return pDdeLink ? pDdeLink->GetResult() : NULL;
 }
 
@@ -1280,7 +1282,7 @@ bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const
         on existing and new links. */
     //! store DDE links additionally at document (for efficiency)?
     DBG_ASSERT( nMode != SC_DDE_IGNOREMODE, "ScDocument::CreateDdeLink - SC_DDE_IGNOREMODE not allowed here" );
-    if( pLinkManager && (nMode != SC_DDE_IGNOREMODE) )
+    if( GetLinkManager() && (nMode != SC_DDE_IGNOREMODE) )
     {
         ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, rAppl, rTopic, rItem, nMode );
         if( !pDdeLink )
@@ -1301,7 +1303,7 @@ bool ScDocument::CreateDdeLink( const String& rAppl, const String& rTopic, const
 
 bool ScDocument::SetDdeLinkResultMatrix( USHORT nDdePos, ScMatrix* pResults )
 {
-    if( ScDdeLink* pDdeLink = lclGetDdeLink( pLinkManager, nDdePos ) )
+    if( ScDdeLink* pDdeLink = lclGetDdeLink( GetLinkManager(), nDdePos ) )
     {
         pDdeLink->SetResult( pResults );
         return true;
@@ -1313,7 +1315,7 @@ bool ScDocument::SetDdeLinkResultMatrix( USHORT nDdePos, ScMatrix* pResults )
 
 BOOL ScDocument::HasAreaLinks() const
 {
-    if (pLinkManager)           // Clipboard z.B. hat keinen LinkManager
+    if (GetLinkManager())           // Clipboard z.B. hat keinen LinkManager
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1327,7 +1329,7 @@ BOOL ScDocument::HasAreaLinks() const
 
 void ScDocument::UpdateAreaLinks()
 {
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nCount = rLinks.Count();
@@ -1342,7 +1344,7 @@ void ScDocument::UpdateAreaLinks()
 
 void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
 {
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
         USHORT nPos = 0;
@@ -1361,7 +1363,7 @@ void ScDocument::DeleteAreaLinksOnTab( SCTAB nTab )
 void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
                              const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
 {
-    if (pLinkManager)
+    if (GetLinkManager())
     {
         bool bAnyUpdate = false;
 

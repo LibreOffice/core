@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rangelst.cxx,v $
- * $Revision: 1.11.32.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,7 +41,7 @@
 #include "document.hxx"
 #include "refupdat.hxx"
 #include "rechead.hxx"
-
+#include "compiler.hxx"
 
 // === ScRangeList ====================================================
 
@@ -61,32 +58,14 @@ void ScRangeList::RemoveAll()
     Clear();
 }
 
-static void defaultDelimiter( char& cDelimiter, formula::FormulaGrammar::AddressConvention eConv)
-{
-    if( cDelimiter == 0)
-    {
-        switch( eConv )
-        {
-        default :
-        case formula::FormulaGrammar::CONV_OOO :
-            cDelimiter = ';';
-            break;
-
-        case formula::FormulaGrammar::CONV_XL_A1 :
-        case formula::FormulaGrammar::CONV_XL_R1C1 :
-            cDelimiter = ',';
-            break;
-        }
-    }
-}
-
 USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
                            formula::FormulaGrammar::AddressConvention eConv,
-                           char cDelimiter )
+                           sal_Unicode cDelimiter )
 {
     if ( rStr.Len() )
     {
-        defaultDelimiter( cDelimiter, eConv);
+        if (!cDelimiter)
+            cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
 
         nMask |= SCA_VALID;             // falls das jemand vergessen sollte
         USHORT nResult = (USHORT)~0;    // alle Bits setzen
@@ -126,11 +105,12 @@ USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
 
 void ScRangeList::Format( String& rStr, USHORT nFlags, ScDocument* pDoc,
                           formula::FormulaGrammar::AddressConvention eConv,
-                          char cDelimiter ) const
+                          sal_Unicode cDelimiter ) const
 {
     rStr.Erase();
 
-    defaultDelimiter( cDelimiter, eConv);
+    if (!cDelimiter)
+        cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
 
     ULONG nCnt = Count();
     for ( ULONG nIdx = 0; nIdx < nCnt; nIdx++ )
@@ -247,6 +227,11 @@ BOOL ScRangeList::operator==( const ScRangeList& r ) const
             return FALSE;           // auch andere Reihenfolge ist ungleich
     }
     return TRUE;
+}
+
+BOOL ScRangeList::operator!=( const ScRangeList& r ) const
+{
+    return !operator==( r );
 }
 
 BOOL ScRangeList::UpdateReference( UpdateRefMode eUpdateRefMode,
@@ -624,7 +609,7 @@ ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
     {
         ps1->pDoc->GetName( rStartPos1.Tab(), aStr1 );
         ps2->pDoc->GetName( rStartPos2.Tab(), aStr2 );
-        nComp = ScGlobal::pCollator->compareString( aStr1, aStr2 );
+        nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
     }
     switch ( nComp )
     {
@@ -655,7 +640,7 @@ ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
                 {
                     ps1->pDoc->GetName( rEndPos1.Tab(), aStr1 );
                     ps2->pDoc->GetName( rEndPos2.Tab(), aStr2 );
-                    nComp = ScGlobal::pCollator->compareString( aStr1, aStr2 );
+                    nComp = ScGlobal::GetCollator()->compareString( aStr1, aStr2 );
                 }
                 switch ( nComp )
                 {

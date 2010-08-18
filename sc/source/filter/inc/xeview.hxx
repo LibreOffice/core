@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xeview.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,6 +131,20 @@ private:
     sal_uInt8           mnPane;             /// Pane identifier of this selection.
 };
 
+class XclExpTabBgColor : public XclExpRecord
+{
+public:
+    explicit            XclExpTabBgColor( const XclTabViewData& rTabViewData );
+
+    /* virtual void        SaveXml( XclExpXmlStream& rStrm ); TODO Fix XML Saving Stream */
+private:
+    /** Writes the contents of the SHEETEXT record. */
+    virtual void        WriteBody( XclExpStream& rStrm );
+
+private:
+    const XclTabViewData&  mrTabViewData;             /// view settings data of current sheet.
+};
+
 // View settings ==============================================================
 
 /** Contains all view settings records for a single sheet. */
@@ -156,6 +167,7 @@ private:
     void                WriteScl( XclExpStream& rStrm ) const;
     void                WritePane( XclExpStream& rStrm ) const;
     void                WriteSelection( XclExpStream& rStrm, sal_uInt8 nPane ) const;
+    void                WriteTabBgColor( XclExpStream& rStrm ) const;
 
 private:
     XclTabViewData      maData;             /// All view settings for a sheet.

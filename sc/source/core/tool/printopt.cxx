@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: printopt.cxx,v $
- * $Revision: 1.7.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,13 +74,13 @@ const ScPrintOptions& ScPrintOptions::operator=( const ScPrintOptions& rCpy )
     return *this;
 }
 
-inline int ScPrintOptions::operator==( const ScPrintOptions& rOpt ) const
+int ScPrintOptions::operator==( const ScPrintOptions& rOpt ) const
 {
     return bSkipEmpty == rOpt.bSkipEmpty
         && bAllSheets == rOpt.bAllSheets;
 }
 
-inline int ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
+int ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
 {
     return !(operator==(rOpt));
 }
@@ -210,4 +207,5 @@ void ScPrintCfg::SetOptions( const ScPrintOptions& rNew )
     SetModified();
 }
 
+void ScPrintCfg::Notify( const ::com::sun::star::uno::Sequence< rtl::OUString >& ) {}
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xepivot.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,8 +195,8 @@ public:
     sal_uInt16          GetFieldCount() const;
     /** Returns the specified pivot cache field. */
     const XclExpPCField* GetField( sal_uInt16 nFieldIdx ) const;
-    /** Returns a pivot cache field by its name. */
-    const XclExpPCField* GetField( const String& rFieldName ) const;
+//UNUSED2009-05 /** Returns a pivot cache field by its name. */
+//UNUSED2009-05 const XclExpPCField* GetField( const String& rFieldName ) const;
     /** Returns true, if this pivot cache contains non-standard fields (e.g. grouping fields). */
     bool                HasAddFields() const;
 
@@ -301,8 +298,8 @@ public:
     /** Returns the index of the last inserted data info struct. */
     sal_uInt16          GetLastDataInfoIndex() const;
 
-    /** Returns an item by its name. */
-    const XclExpPTItem* GetItem( const String& rName ) const;
+//UNUSED2009-05 /** Returns an item by its name. */
+//UNUSED2009-05 const XclExpPTItem* GetItem( const String& rName ) const;
     /** Returns the list index of an item by its name.
         @param nDefaultIdx  This value will be returned, if the item could not be found. */
     sal_uInt16          GetItemIndex( const String& rName, sal_uInt16 nDefaultIdx ) const;
@@ -413,6 +410,10 @@ private:
     /** Writes the SXEX records containing additional pivot table info. */
     void                WriteSxex( XclExpStream& rStrm ) const;
 
+    void                WriteQsiSxTag( XclExpStream& rStrm ) const;
+    /** Writes the SX_AUTOFORMAT records with the autoformat id and header layout */
+    void                WriteSxViewEx9( XclExpStream& rStrm ) const;
+
     // ------------------------------------------------------------------------
 private:
     typedef XclExpRecordList< XclExpPTField >   XclExpPTFieldList;
@@ -422,6 +423,7 @@ private:
     const XclExpPivotCache& mrPCache;       /// The pivot cache this pivot table bases on.
     XclPTInfo           maPTInfo;           /// Info about the pivot table (SXVIEW record).
     XclPTExtInfo        maPTExtInfo;        /// Extended info about the pivot table (SXEX record).
+    XclPTViewEx9Info    maPTViewEx9Info;    /// The selected autoformat (SXVIEWEX9)
     XclExpPTFieldList   maFieldList;        /// All fields in pivot cache order.
     ScfUInt16Vec        maRowFields;        /// Row field indexes.
     ScfUInt16Vec        maColFields;        /// Column field indexes.

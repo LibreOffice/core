@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WrappedStatisticProperties.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -208,7 +205,7 @@ protected:
         if( !xErrorBarProperties.is() )
         {
             // todo: use a valid context
-            xErrorBarProperties = new ::chart::ErrorBar( uno::Reference< uno::XComponentContext >() );
+            xErrorBarProperties = ::chart::createErrorBar( uno::Reference< uno::XComponentContext >() );
             //default in new and old api are different
             xErrorBarProperties->setPropertyValue( C2U( "ShowPositiveError" ), uno::makeAny(sal_Bool(sal_False)) );
             xErrorBarProperties->setPropertyValue( C2U( "ShowNegativeError" ), uno::makeAny(sal_Bool(sal_False)) );
@@ -979,7 +976,6 @@ void WrappedStatisticPropertySetProperty::setValueToSeries(
     const Reference< beans::XPropertySet >& /* xSeriesPropertySet */
     , Reference< beans::XPropertySet > /* xNewValue */ ) const
 {
-    OSL_ENSURE( false, "Trying to set a read-only property" );
 }
 
 //-----------------------------------------------------------------------------

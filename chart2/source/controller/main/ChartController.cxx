@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ChartController.cxx,v $
- * $Revision: 1.30.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,6 +50,10 @@
 #include "dlg_CreationWizard.hxx"
 #include "dlg_ChartType.hxx"
 //#include "svx/ActionDescriptionProvider.hxx"
+#include "AccessibleChartView.hxx"
+#include "DrawCommandDispatch.hxx"
+#include "ShapeController.hxx"
+#include "UndoManager.hxx"
 
 #include <comphelper/InlineContainer.hxx>
 
@@ -100,6 +101,7 @@ namespace chart
 //.............................................................................
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
@@ -127,7 +129,8 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
     , m_bWaitingForMouseUp(false)
     , m_bConnectingToView(false)
     , m_xUndoManager( 0 )
-    , m_aDispatchContainer( m_xCC )
+    , m_aDispatchContainer( m_xCC, this )
+    , m_eDrawMode( CHARTDRAW_SELECT )
 {
     DBG_CTOR(ChartController,NULL);
 //     m_aDispatchContainer.setUndoManager( m_xUndoManager );
@@ -407,7 +410,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
         m_apDropTargetHelper.reset();
     }
     {
-        awt::Size aPageSize( ChartModelHelper::getPageSize(m_aModel->getModel()) );
+        awt::Size aPageSize( ChartModelHelper::getPageSize(getModel()) );
 
         // calls to VCL
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
@@ -417,7 +420,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
         m_pChartWindow->Show();
         m_apDropTargetHelper.reset(
             new ChartDropTargetHelper( m_pChartWindow->GetDropTarget(),
-                                       uno::Reference< chart2::XChartDocument >( m_aModel->getModel(), uno::UNO_QUERY )));
+                                       uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY )));
 
         impl_createDrawViewController();
     }
@@ -441,6 +444,11 @@ APPHELPER_XSERVICEINFO_IMPL(ChartController,CHART_CONTROLLER_SERVICE_IMPLEMENTAT
                     //@todo: createElement should become unnecessary, remove when #i79198# is fixed
                     xLayoutManager->createElement(  C2U( "private:resource/toolbar/toolbar" ) );
                     xLayoutManager->requestElement( C2U( "private:resource/toolbar/toolbar" ) );
+
+                    // #i12587# support for shapes in chart
+                    xLayoutManager->createElement(  C2U( "private:resource/toolbar/drawbar" ) );
+                    xLayoutManager->requestElement( C2U( "private:resource/toolbar/drawbar" ) );
+
                     xLayoutManager->requestElement( C2U( "private:resource/statusbar/statusbar" ) );
                     xLayoutManager->unlock();
 
@@ -468,7 +476,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     {
         //the view has become dirty, we should repaint it if we have a window
         if( m_pChartWindow )
-            m_pChartWindow->Invalidate();
+            m_pChartWindow->ForceInvalidate();
     }
     else if( rEvent.NewMode.equals(C2U("invalid")) )
     {
@@ -478,8 +486,11 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         if( m_pDrawViewWrapper && m_pDrawViewWrapper->IsTextEdit() )
             this->EndTextEdit();
         if( m_pDrawViewWrapper )
+        {
             m_pDrawViewWrapper->UnmarkAll();
             //m_pDrawViewWrapper->hideMarkHandles(); todo??
+            m_pDrawViewWrapper->HideSdrPage();
+        }
     }
     else
     {
@@ -503,7 +514,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
                     if( m_aSelection.hasSelection() )
                         this->impl_selectObjectAndNotiy();
                     else
-                        ChartModelHelper::triggerRangeHighlighting( m_aModel->getModel() );
+                        ChartModelHelper::triggerRangeHighlighting( getModel() );
 
                     impl_initializeAccessible();
 
@@ -559,13 +570,27 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 
     // set new model at dispatchers
     m_aDispatchContainer.setModel( aNewModelRef->getModel());
-    ControllerCommandDispatch * pDispatch = new ControllerCommandDispatch( m_xCC, this );
+    ControllerCommandDispatch * pDispatch = new ControllerCommandDispatch( m_xCC, this, &m_aDispatchContainer );
     pDispatch->initialize();
 
     // the dispatch container will return "this" for all commands returned by
     // impl_getAvailableCommands().  That means, for those commands dispatch()
     // is called here at the ChartController.
-    m_aDispatchContainer.setFallbackDispatch( pDispatch, impl_getAvailableCommands() );
+    m_aDispatchContainer.setChartDispatch( pDispatch, impl_getAvailableCommands() );
+
+    DrawCommandDispatch* pDrawDispatch = new DrawCommandDispatch( m_xCC, this );
+    if ( pDrawDispatch )
+    {
+        pDrawDispatch->initialize();
+        m_aDispatchContainer.setDrawCommandDispatch( pDrawDispatch );
+    }
+
+    ShapeController* pShapeController = new ShapeController( m_xCC, this );
+    if ( pShapeController )
+    {
+        pShapeController->initialize();
+        m_aDispatchContainer.setShapeController( pShapeController );
+    }
 
 #ifdef TEST_ENABLE_MODIFY_LISTENER
     uno::Reference< util::XModifyBroadcaster > xMBroadcaster( aNewModelRef->getModel(),uno::UNO_QUERY );
@@ -573,7 +598,10 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         xMBroadcaster->addModifyListener( this );
 #endif
 
-    uno::Reference< lang::XMultiServiceFactory > xFact( m_aModel->getModel(), uno::UNO_QUERY );
+    //select chart area per default:
+    select( uno::makeAny( ObjectIdentifier::createClassifiedIdentifier( OBJECTTYPE_PAGE, rtl::OUString() ) ) );
+
+    uno::Reference< lang::XMultiServiceFactory > xFact( getModel(), uno::UNO_QUERY );
     if( xFact.is())
     {
         m_xChartView = xFact->createInstance( CHART_VIEW_SERVICE_NAME );
@@ -587,7 +615,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     if( m_pChartWindow )
         m_pChartWindow->Invalidate();
 
-    uno::Reference< chart2::XUndoSupplier > xUndoSupplier( m_aModel->getModel(), uno::UNO_QUERY );
+    uno::Reference< chart2::XUndoSupplier > xUndoSupplier( getModel(), uno::UNO_QUERY );
     if( xUndoSupplier.is())
         m_xUndoManager.set( xUndoSupplier->getUndoManager());
 
@@ -707,7 +735,7 @@ void ChartController::impl_createDrawViewController()
         if( m_pDrawModelWrapper )
         {
             m_pDrawViewWrapper = new DrawViewWrapper(&m_pDrawModelWrapper->getSdrModel(),m_pChartWindow,true);
-            m_pDrawViewWrapper->attachParentReferenceDevice( m_aModel->getModel());
+            m_pDrawViewWrapper->attachParentReferenceDevice( getModel() );
         }
     }
 }
@@ -748,7 +776,7 @@ void ChartController::impl_deleteDrawViewController()
         if( m_aModel.is())
         {
             uno::Reference< view::XSelectionChangeListener > xSelectionChangeListener;
-            uno::Reference< chart2::data::XDataReceiver > xDataReceiver( m_aModel->getModel(), uno::UNO_QUERY );
+            uno::Reference< chart2::data::XDataReceiver > xDataReceiver( getModel(), uno::UNO_QUERY );
             if( xDataReceiver.is() )
                 xSelectionChangeListener = uno::Reference< view::XSelectionChangeListener >( xDataReceiver->getRangeHighlighter(), uno::UNO_QUERY );
             if( xSelectionChangeListener.is() )
@@ -846,7 +874,7 @@ void ChartController::impl_deleteDrawViewController()
         throw(uno::RuntimeException)
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex());
-    if( m_aLifeTimeManager.impl_isDisposed() )
+    if( m_aLifeTimeManager.impl_isDisposed(false) )
         return; //behave passive if already disposed or suspended
 
     //--remove listener
@@ -931,6 +959,8 @@ bool ChartController::impl_releaseThisModel( const uno::Reference< uno::XInterfa
             bReleaseModel = true;
         }
     }
+    if( bReleaseModel )
+        m_aDispatchContainer.setModel( 0 );
     return bReleaseModel;
 }
 
@@ -971,7 +1001,7 @@ namespace
 {
 bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
 {
-    if( aCommand.equals("MainTitle")
+    if(    aCommand.equals("MainTitle")
         || aCommand.equals("SubTitle")
         || aCommand.equals("XTitle")
         || aCommand.equals("YTitle")
@@ -979,7 +1009,6 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         || aCommand.equals("SecondaryXTitle")
         || aCommand.equals("SecondaryYTitle")
         || aCommand.equals("AllTitles")
-        || aCommand.equals("Legend")
         || aCommand.equals("DiagramAxisX")
         || aCommand.equals("DiagramAxisY")
         || aCommand.equals("DiagramAxisZ")
@@ -993,9 +1022,31 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         || aCommand.equals("DiagramGridYHelp")
         || aCommand.equals("DiagramGridZHelp")
         || aCommand.equals("DiagramGridAll")
+
         || aCommand.equals("DiagramWall")
         || aCommand.equals("DiagramFloor")
         || aCommand.equals("DiagramArea")
+        || aCommand.equals("Legend")
+
+        || aCommand.equals("FormatWall")
+        || aCommand.equals("FormatFloor")
+        || aCommand.equals("FormatChartArea")
+        || aCommand.equals("FormatLegend")
+
+        || aCommand.equals("FormatTitle")
+        || aCommand.equals("FormatAxis")
+        || aCommand.equals("FormatDataSeries")
+        || aCommand.equals("FormatDataPoint")
+        || aCommand.equals("FormatDataLabels")
+        || aCommand.equals("FormatDataLabel")
+        || aCommand.equals("FormatYErrorBars")
+        || aCommand.equals("FormatMeanValue")
+        || aCommand.equals("FormatTrendline")
+        || aCommand.equals("FormatTrendlineEquation")
+        || aCommand.equals("FormatStockLoss")
+        || aCommand.equals("FormatStockGain")
+        || aCommand.equals("FormatMajorGrid")
+        || aCommand.equals("FormatMinorGrid")
         )
     return true;
 
@@ -1010,7 +1061,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         , sal_Int32 /* nSearchFlags */)
         throw(uno::RuntimeException)
 {
-    if ( !m_aLifeTimeManager.impl_isDisposed() )
+    if ( !m_aLifeTimeManager.impl_isDisposed() && getModel().is() )
     {
         if( rTargetFrameName.getLength() &&
             rTargetFrameName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("_self")))
@@ -1037,7 +1088,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
 
     void SAL_CALL ChartController
 ::dispatch( const util::URL& rURL
-            , const uno::Sequence< beans::PropertyValue >& /* rArgs */ )
+            , const uno::Sequence< beans::PropertyValue >& rArgs )
             throw (uno::RuntimeException)
 {
     //@todo avoid OString (see Mathias mail on bug #104387#)
@@ -1054,31 +1105,35 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     //----------------------------------
     else if(aCommand.equals("Update")) //Update Chart
     {
-        ChartViewHelper::setViewToDirtyState( m_aModel->getModel() );
+        ChartViewHelper::setViewToDirtyState( getModel() );
         if( m_pChartWindow )
             m_pChartWindow->Invalidate();
     }
     else if(aCommand.equals("DiagramData"))
         this->executeDispatch_EditData();
     //insert objects
-    else if( aCommand.equals("InsertTitle"))
-        this->executeDispatch_InsertTitle();
-    else if( aCommand.equals("InsertLegend"))
+    else if( aCommand.equals("InsertTitles")
+        || aCommand.equals("InsertMenuTitles") )
+        this->executeDispatch_InsertTitles();
+    else if( aCommand.equals("InsertMenuLegend") )
+        this->executeDispatch_OpenLegendDialog();
+    else if( aCommand.equals("InsertLegend") )
         this->executeDispatch_InsertLegend();
-    else if( aCommand.equals("InsertDescription"))
-        this->executeDispatch_InsertDataLabel();
-    else if( aCommand.equals("InsertAxis"))
-        this->executeDispatch_InsertAxis();
-    else if( aCommand.equals("InsertGrids"))
+    else if( aCommand.equals("DeleteLegend") )
+        this->executeDispatch_DeleteLegend();
+    else if( aCommand.equals("InsertMenuDataLabels"))
+        this->executeDispatch_InsertMenu_DataLabels();
+    else if( aCommand.equals("InsertMenuAxes")
+        || aCommand.equals("InsertRemoveAxes") )
+        this->executeDispatch_InsertAxes();
+    else if( aCommand.equals("InsertMenuGrids"))
         this->executeDispatch_InsertGrid();
-//     else if( aCommand.equals("InsertStatistics"))
-//         this->executeDispatch_InsertStatistic();
-    else if( aCommand.equals("InsertTrendlines"))
-        this->executeDispatch_InsertTrendlines();
-    else if( aCommand.equals("InsertMeanValues"))
-        this->executeDispatch_InsertMeanValues();
-    else if( aCommand.equals("InsertYErrorbars"))
-        this->executeDispatch_InsertYErrorbars();
+    else if( aCommand.equals("InsertMenuTrendlines"))
+        this->executeDispatch_InsertMenu_Trendlines();
+    else if( aCommand.equals("InsertMenuMeanValues"))
+        this->executeDispatch_InsertMenu_MeanValues();
+    else if( aCommand.equals("InsertMenuYErrorBars"))
+        this->executeDispatch_InsertMenu_YErrorBars();
     else if( aCommand.equals("InsertSymbol"))
          this->executeDispatch_InsertSpecialCharacter();
     else if( aCommand.equals("InsertTrendline"))
@@ -1089,17 +1144,60 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_InsertMeanValue();
     else if( aCommand.equals("DeleteMeanValue"))
         this->executeDispatch_DeleteMeanValue();
-    else if( aCommand.equals("InsertYErrorbar"))
-        this->executeDispatch_InsertYErrorbar();
-    else if( aCommand.equals("DeleteYErrorbar"))
-        this->executeDispatch_DeleteYErrorbar();
+    else if( aCommand.equals("InsertYErrorBars"))
+        this->executeDispatch_InsertYErrorBars();
+    else if( aCommand.equals("DeleteYErrorBars"))
+        this->executeDispatch_DeleteYErrorBars();
     else if( aCommand.equals("InsertTrendlineEquation"))
          this->executeDispatch_InsertTrendlineEquation();
+    else if( aCommand.equals("DeleteTrendlineEquation"))
+         this->executeDispatch_DeleteTrendlineEquation();
+    else if( aCommand.equals("InsertTrendlineEquationAndR2"))
+         this->executeDispatch_InsertTrendlineEquation( true );
+    else if( aCommand.equals("InsertR2Value"))
+         this->executeDispatch_InsertR2Value();
+    else if( aCommand.equals("DeleteR2Value"))
+         this->executeDispatch_DeleteR2Value();
+    else if( aCommand.equals("InsertDataLabels") )
+        this->executeDispatch_InsertDataLabels();
+    else if( aCommand.equals("InsertDataLabel") )
+        this->executeDispatch_InsertDataLabel();
+    else if( aCommand.equals("DeleteDataLabels") )
+        this->executeDispatch_DeleteDataLabels();
+    else if( aCommand.equals("DeleteDataLabel") )
+        this->executeDispatch_DeleteDataLabel();
+    else if( aCommand.equals("ResetAllDataPoints") )
+        this->executeDispatch_ResetAllDataPoints();
+    else if( aCommand.equals("ResetDataPoint") )
+        this->executeDispatch_ResetDataPoint();
+    else if( aCommand.equals("InsertAxis") )
+        this->executeDispatch_InsertAxis();
+    else if( aCommand.equals("InsertMajorGrid") )
+        this->executeDispatch_InsertMajorGrid();
+    else if( aCommand.equals("InsertMinorGrid") )
+        this->executeDispatch_InsertMinorGrid();
+    else if( aCommand.equals("InsertAxisTitle") )
+        this->executeDispatch_InsertAxisTitle();
+    else if( aCommand.equals("DeleteAxis") )
+        this->executeDispatch_DeleteAxis();
+    else if( aCommand.equals("DeleteMajorGrid") )
+        this->executeDispatch_DeleteMajorGrid();
+    else if( aCommand.equals("DeleteMinorGrid") )
+        this->executeDispatch_DeleteMinorGrid();
     //format objects
-    else if( aCommand.equals("DiagramObjects"))
+    else if( aCommand.equals("FormatSelection") )
         this->executeDispatch_ObjectProperties();
     else if( aCommand.equals("TransformDialog"))
-        this->executeDispatch_PositionAndSize();
+    {
+        if ( isShapeContext() )
+        {
+            this->impl_ShapeControllerDispatch( rURL, rArgs );
+        }
+        else
+        {
+            this->executeDispatch_PositionAndSize();
+        }
+    }
     else if( lcl_isFormatObjectCommand(aCommand) )
         this->executeDispatch_FormatObject(rURL.Path);
     //more format
@@ -1109,10 +1207,28 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_ChartType();
     else if( aCommand.equals("View3D"))
         this->executeDispatch_View3D();
-    else if( aCommand.equals("Forward"))
-        this->executeDispatch_MoveSeries( sal_True );
-    else if( aCommand.equals("Backward"))
-        this->executeDispatch_MoveSeries( sal_False );
+    else if ( aCommand.equals( "Forward" ) )
+    {
+        if ( isShapeContext() )
+        {
+            this->impl_ShapeControllerDispatch( rURL, rArgs );
+        }
+        else
+        {
+            this->executeDispatch_MoveSeries( sal_True );
+        }
+    }
+    else if ( aCommand.equals( "Backward" ) )
+    {
+        if ( isShapeContext() )
+        {
+            this->impl_ShapeControllerDispatch( rURL, rArgs );
+        }
+        else
+        {
+            this->executeDispatch_MoveSeries( sal_False );
+        }
+    }
     else if( aCommand.equals("NewArrangement"))
         this->executeDispatch_NewArrangement();
     else if( aCommand.equals("ToggleLegend"))
@@ -1211,12 +1327,12 @@ void SAL_CALL ChartController::executeDispatch_ChartType()
 {
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHARTTYPE ))), m_xUndoManager, m_aModel->getModel() );
+        ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_CHARTTYPE ))), m_xUndoManager, getModel() );
 
     // /--
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex());
     //prepare and open dialog
-    ChartTypeDialog aDlg( m_pChartWindow, m_aModel->getModel(), m_xCC );
+    ChartTypeDialog aDlg( m_pChartWindow, getModel(), m_xCC );
     if( aDlg.Execute() == RET_OK )
     {
         impl_adaptDataSeriesAutoResize();
@@ -1229,14 +1345,14 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
 {
     //-------------------------------------------------------------
     //convert properties to ItemSet
-    uno::Reference< XChartDocument >   xChartDoc( m_aModel->getModel(), uno::UNO_QUERY );
+    uno::Reference< XChartDocument >   xChartDoc( getModel(), uno::UNO_QUERY );
     DBG_ASSERT( xChartDoc.is(), "Invalid XChartDocument" );
     if( !xChartDoc.is())
         return;
 
     // using assignment for broken gcc 3.3
     UndoLiveUpdateGuard aUndoGuard = UndoLiveUpdateGuard(
-        ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_DATA_RANGES ))), m_xUndoManager, m_aModel->getModel() );
+        ::rtl::OUString( String( SchResId( STR_ACTION_EDIT_DATA_RANGES ))), m_xUndoManager, getModel() );
     if( xChartDoc.is())
     {
         // /--
@@ -1253,20 +1369,20 @@ void SAL_CALL ChartController::executeDispatch_SourceData()
 
 void SAL_CALL ChartController::executeDispatch_MoveSeries( sal_Bool bForward )
 {
-    ControllerLockGuard aCLGuard( m_aModel->getModel());
+    ControllerLockGuard aCLGuard( getModel() );
 
     //get selected series
     ::rtl::OUString aObjectCID(m_aSelection.getSelectedCID());
     uno::Reference< XDataSeries > xGivenDataSeries( ObjectIdentifier::getDataSeriesForCID( //yyy todo also legendentries and labels?
-            aObjectCID, m_aModel->getModel() ) );
+            aObjectCID, getModel() ) );
 
     UndoGuardWithSelection aUndoGuard(
         ActionDescriptionProvider::createDescription(
             (bForward ? ActionDescriptionProvider::MOVE_TOTOP : ActionDescriptionProvider::MOVE_TOBOTTOM),
             ::rtl::OUString( String( SchResId( STR_OBJECT_DATASERIES )))),
-        m_xUndoManager, m_aModel->getModel());
+        m_xUndoManager, getModel());
 
-    bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( m_aModel->getModel() ), xGivenDataSeries, bForward );
+    bool bChanged = DiagramHelper::moveSeries( ChartModelHelper::findDiagram( getModel() ), xGivenDataSeries, bForward );
     if( bChanged )
     {
         m_aSelection.setSelection( ObjectIdentifier::getMovedSeriesCID( aObjectCID, bForward ) );
@@ -1318,7 +1434,7 @@ void SAL_CALL ChartController::modified( const lang::EventObject& /* aEvent */ )
 {
     // the source can also be a subobject of the ChartModel
     // @todo: change the source in ChartModel to always be the model itself ?
-//     if( m_aModel->getModel() == aEvent.Source )
+//     if( getModel() == aEvent.Source )
 
 
     //todo? update menu states ?
@@ -1328,6 +1444,20 @@ void SAL_CALL ChartController::modified( const lang::EventObject& /* aEvent */ )
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
+IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )
+{
+    ::rtl::OUString aObjectCID = m_aSelection.getSelectedCID();
+    if ( aObjectCID.getLength() == 0 )
+    {
+        UndoManager* pUndoManager = UndoManager::getImplementation( m_xUndoManager );
+        if ( pUndoManager )
+        {
+            pUndoManager->addShapeUndoAction( pUndoAction );
+        }
+    }
+    return 0L;
+}
+
 DrawModelWrapper* ChartController::GetDrawModelWrapper()
 {
     if( !m_pDrawModelWrapper.get() )
@@ -1335,16 +1465,26 @@ DrawModelWrapper* ChartController::GetDrawModelWrapper()
         ExplicitValueProvider* pProvider = ExplicitValueProvider::getExplicitValueProvider( m_xChartView );
         if( pProvider )
             m_pDrawModelWrapper = pProvider->getDrawModelWrapper();
+        if ( m_pDrawModelWrapper.get() )
+        {
+            m_pDrawModelWrapper->getSdrModel().SetNotifyUndoActionHdl( LINK( this, ChartController, NotifyUndoActionHdl ) );
+        }
     }
     return m_pDrawModelWrapper.get();
 }
 
-uno::Reference< accessibility::XAccessible > ChartController::CreateAccessible()
+DrawViewWrapper* ChartController::GetDrawViewWrapper()
 {
-    uno::Reference< accessibility::XAccessible > xResult(
-        m_xCC->getServiceManager()->createInstanceWithContext(
-            CHART2_ACCESSIBLE_SERVICE_NAME, m_xCC ), uno::UNO_QUERY );
+    if ( !m_pDrawViewWrapper )
+    {
+        impl_createDrawViewController();
+    }
+    return m_pDrawViewWrapper;
+}
 
+uno::Reference< XAccessible > ChartController::CreateAccessible()
+{
+    uno::Reference< XAccessible > xResult = new AccessibleChartView( m_xCC, GetDrawViewWrapper() );
     impl_initializeAccessible( uno::Reference< lang::XInitialization >( xResult, uno::UNO_QUERY ) );
     return xResult;
 }
@@ -1373,10 +1513,10 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         uno::Sequence< uno::Any > aArguments(5);
         uno::Reference<view::XSelectionSupplier> xSelectionSupplier(this);
         aArguments[0]=uno::makeAny(xSelectionSupplier);
-        uno::Reference<frame::XModel> xModel(m_aModel->getModel());
+        uno::Reference<frame::XModel> xModel(getModel());
         aArguments[1]=uno::makeAny(xModel);
         aArguments[2]=uno::makeAny(m_xChartView);
-        uno::Reference< accessibility::XAccessible > xParent;
+        uno::Reference< XAccessible > xParent;
         if( m_pChartWindow )
         {
             Window* pParentWin( m_pChartWindow->GetAccessibleParentWindow());
@@ -1402,15 +1542,23 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( C2U("Cut") )                ( C2U("Copy") )                 ( C2U("Paste") )
         ( C2U("DataRanges") )         ( C2U("DiagramData") )
         // insert objects
-        ( C2U("InsertTitle") )        ( C2U("InsertLegend") )         ( C2U("InsertDescription") )
-        ( C2U("InsertAxis") )         ( C2U("InsertGrids") )          ( C2U("InsertStatistics") )
-        ( C2U("InsertSymbol") )       ( C2U("InsertTrendline") )      ( C2U("InsertTrendlineEquation") )
-        ( C2U("InsertTrendlines") )   ( C2U("InsertMeanValue") )      ( C2U("InsertMeanValues") )
-        ( C2U("InsertYErrorbars") )   ( C2U("InsertYErrorbar") )
-        ( C2U("DeleteTrendline") )    ( C2U("DeleteMeanValue") )      ( C2U("DeleteYErrorbar") )
+        ( C2U("InsertMenuTitles") )   ( C2U("InsertTitles") )
+        ( C2U("InsertMenuLegend") )   ( C2U("InsertLegend") )         ( C2U("DeleteLegend") )
+        ( C2U("InsertMenuDataLabels") )
+        ( C2U("InsertMenuAxes") )     ( C2U("InsertRemoveAxes") )         ( C2U("InsertMenuGrids") )
+        ( C2U("InsertSymbol") )
+        ( C2U("InsertTrendlineEquation") )  ( C2U("InsertTrendlineEquationAndR2") )
+        ( C2U("InsertR2Value") )      ( C2U("DeleteR2Value") )
+        ( C2U("InsertMenuTrendlines") )  ( C2U("InsertTrendline") )
+        ( C2U("InsertMenuMeanValues") ) ( C2U("InsertMeanValue") )
+        ( C2U("InsertMenuYErrorBars") )   ( C2U("InsertYErrorBars") )
+        ( C2U("InsertDataLabels") )   ( C2U("InsertDataLabel") )
+        ( C2U("DeleteTrendline") )    ( C2U("DeleteMeanValue") )      ( C2U("DeleteTrendlineEquation") )
+        ( C2U("DeleteYErrorBars") )
+        ( C2U("DeleteDataLabels") )   ( C2U("DeleteDataLabel") )
         //format objects
 //MENUCHANGE            ( C2U("SelectSourceRanges") )
-        ( C2U("DiagramObjects") )     ( C2U("TransformDialog") )
+        ( C2U("FormatSelection") )     ( C2U("TransformDialog") )
         ( C2U("DiagramType") )        ( C2U("View3D") )
         ( C2U("Forward") )            ( C2U("Backward") )
         ( C2U("MainTitle") )          ( C2U("SubTitle") )
@@ -1423,12 +1571,30 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( C2U("DiagramGridXHelp") )   ( C2U("DiagramGridYHelp") )     ( C2U("DiagramGridZHelp") )
         ( C2U("DiagramGridAll") )
         ( C2U("DiagramWall") )        ( C2U("DiagramFloor") )         ( C2U("DiagramArea") )
+
+        //context menu - format objects entries
+        ( C2U("FormatWall") )        ( C2U("FormatFloor") )         ( C2U("FormatChartArea") )
+        ( C2U("FormatLegend") )
+
+        ( C2U("FormatAxis") )           ( C2U("FormatTitle") )
+        ( C2U("FormatDataSeries") )     ( C2U("FormatDataPoint") )
+        ( C2U("ResetAllDataPoints") )   ( C2U("ResetDataPoint") )
+        ( C2U("FormatDataLabels") )     ( C2U("FormatDataLabel") )
+        ( C2U("FormatMeanValue") )      ( C2U("FormatTrendline") )      ( C2U("FormatTrendlineEquation") )
+        ( C2U("FormatYErrorBars") )
+        ( C2U("FormatStockLoss") )      ( C2U("FormatStockGain") )
+
+        ( C2U("FormatMajorGrid") )      ( C2U("InsertMajorGrid") )      ( C2U("DeleteMajorGrid") )
+        ( C2U("FormatMinorGrid") )      ( C2U("InsertMinorGrid") )      ( C2U("DeleteMinorGrid") )
+        ( C2U("InsertAxis") )           ( C2U("DeleteAxis") )           ( C2U("InsertAxisTitle") )
+
         // toolbar commands
         ( C2U("ToggleGridHorizontal"))( C2U("ToggleLegend") )         ( C2U("ScaleText") )
         ( C2U("NewArrangement") )     ( C2U("Update") )
         ( C2U("DefaultColors") )      ( C2U("BarWidth") )             ( C2U("NumberOfLines") )
         ( C2U("ArrangeRow") )
         ( C2U("StatusBarVisible") )
+        ( C2U("ChartElementSelector") )
         ;
 }
 

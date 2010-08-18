@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: column3.cxx,v $
- * $Revision: 1.27.128.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,8 +32,8 @@
 
 
 #include <sfx2/objsh.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/zformat.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/zformat.hxx>
 
 #include "scitems.hxx"
 #include "column.hxx"
@@ -54,6 +51,13 @@
 #include "markdata.hxx"
 #include "detfunc.hxx"          // fuer Notizen bei DeleteRange
 #include "postit.hxx"
+#include "stringutil.hxx"
+
+#include <com/sun/star/i18n/LocaleDataItem.hpp>
+
+using ::com::sun::star::i18n::LocaleDataItem;
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // Err527 Workaround
 extern const ScFormulaCell* pLastFormulaTreeTop;    // in cellform.cxx
@@ -521,6 +525,15 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, USHORT nDelFla
     for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
         (*aIt)->EndListeningTo( pDocument );
 
+    // #i101869# if the note cell with the broadcaster was deleted in EndListening,
+    // forget the pointer to the broadcaster
+    for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
+    {
+        SCSIZE nIndex;
+        if ( !Search( (*aIt)->aPos.Row(), nIndex ) )
+            (*aIt)->ReleaseBroadcaster();
+    }
+
     // broadcast SC_HINT_DYING for all cells and delete them
     for ( FormulaCellVector::iterator aIt = aDelCells.begin(), aEnd = aDelCells.end(); aIt != aEnd; ++aIt )
     {
@@ -739,6 +752,9 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
             Resize( nNew );
     }
 
+    // IDF_ADDNOTES must be passed without other content flags than IDF_NOTE
+    bool bAddNotes = (nInsFlag & (IDF_CONTENTS | IDF_ADDNOTES)) == (IDF_NOTE | IDF_ADDNOTES);
+
     BOOL bAtEnd = FALSE;
     for (SCSIZE i = 0; i < nColCount && !bAtEnd; i++)
     {
@@ -751,12 +767,38 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
             //  nDestRow may be negative then
 
             ScAddress aDestPos( nCol, (SCROW)nDestRow, nTab );
-            ScBaseCell* pNew = bAsLink ?
-                rColumn.CreateRefCell( pDocument, aDestPos, i, nInsFlag ) :
-                rColumn.CloneCell( i, nInsFlag, *pDocument, aDestPos );
 
-            if (pNew)
-                Insert((SCROW)nDestRow, pNew);
+            /*  #i102056# Paste from clipboard needs to paste the cell notes in
+                a second pass. This must not overwrite the existing cells
+                already copied to the destination position in the first pass.
+                To indicate this special case, the modifier IDF_ADDNOTES is
+                passed together with IDF_NOTE in nInsFlag. Of course, there is
+                still the need to create a new cell, if there is no cell at the
+                destination position at all. */
+            ScBaseCell* pAddNoteCell = bAddNotes ? GetCell( aDestPos.Row() ) : 0;
+            if (pAddNoteCell)
+            {
+                // do nothing if source cell does not contain a note
+                const ScBaseCell* pSourceCell = rColumn.pItems[i].pCell;
+                const ScPostIt* pSourceNote = pSourceCell ? pSourceCell->GetNote() : 0;
+                if (pSourceNote)
+                {
+                    DBG_ASSERT( !pAddNoteCell->HasNote(), "ScColumn::CopyFromClip - unexpected note at destination cell" );
+                    bool bCloneCaption = (nInsFlag & IDF_NOCAPTIONS) == 0;
+                    // #i52342# if caption is cloned, the note must be constructed with the destination document
+                    ScAddress aSourcePos( rColumn.nCol, rColumn.pItems[i].nRow, rColumn.nTab );
+                    ScPostIt* pNewNote = pSourceNote->Clone( aSourcePos, *pDocument, aDestPos, bCloneCaption );
+                    pAddNoteCell->TakeNote( pNewNote );
+                }
+            }
+            else
+            {
+                ScBaseCell* pNewCell = bAsLink ?
+                    rColumn.CreateRefCell( pDocument, aDestPos, i, nInsFlag ) :
+                    rColumn.CloneCell( i, nInsFlag, *pDocument, aDestPos );
+                if (pNewCell)
+                    Insert( aDestPos.Row(), pNewCell );
+            }
         }
     }
 }
@@ -846,7 +888,16 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestD
                     rForm.GetString( aString );
                     // #33224# do not clone empty string
                     if (aString.Len() > 0)
-                        pNew = new ScStringCell( aString );
+                    {
+                        if ( rForm.IsMultilineResult() )
+                        {
+                            pNew = new ScEditCell( aString, &rDestDoc );
+                        }
+                        else
+                        {
+                            pNew = new ScStringCell( aString );
+                        }
+                    }
                 }
             }
         break;
@@ -861,7 +912,8 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestD
         {
             bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
             // #i52342# if caption is cloned, the note must be constructed with the destination document
-            ScPostIt* pNewNote = ScNoteUtil::CloneNote( rDestDoc, rDestPos, *pNote, bCloneCaption );
+            ScAddress aOwnPos( nCol, pItems[nIndex].nRow, nTab );
+            ScPostIt* pNewNote = pNote->Clone( aOwnPos, rDestDoc, rDestPos, bCloneCaption );
             if (!pNew)
                 pNew = new ScNoteCell( pNewNote );
             else
@@ -1196,7 +1248,8 @@ void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
 
 //  TRUE = Zahlformat gesetzt
 BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
-                          formula::FormulaGrammar::AddressConvention eConv )
+                          formula::FormulaGrammar::AddressConvention eConv,
+                          SvNumberFormatter* pLangFormatter, bool bDetectNumberFormat )
 {
     BOOL bNumFmtSet = FALSE;
     if (VALIDROW(nRow))
@@ -1208,6 +1261,10 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
             double nVal;
             sal_uInt32 nIndex, nOldIndex = 0;
             sal_Unicode cFirstChar;
+            // #i110979# If a different NumberFormatter is passed in (pLangFormatter),
+            // its formats aren't valid in the document.
+            // Only use the language / LocaleDataWrapper from pLangFormatter,
+            // always the document's number formatter for IsNumberFormat.
             SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
             SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
             if ( pDocSh )
@@ -1275,46 +1332,93 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                     if ( !bIsText )
                         nIndex = nOldIndex = pFormatter->GetStandardIndex();
                 }
-                if ( !bIsText &&
-                        pFormatter->IsNumberFormat(rString, nIndex, nVal) )
-                {                                               // Zahl
-                    pNewCell = new ScValueCell( nVal );
-                    if ( nIndex != nOldIndex)
-                    {
-                        // #i22345# New behavior: Apply the detected number format only if
-                        // the old one was the default number, date, time or boolean format.
-                        // Exception: If the new format is boolean, always apply it.
 
-                        BOOL bOverwrite = FALSE;
-                        const SvNumberformat* pOldFormat = pFormatter->GetEntry( nOldIndex );
-                        if ( pOldFormat )
+                do
+                {
+                    if (bIsText)
+                        break;
+
+                    if (bDetectNumberFormat)
+                    {
+                        if ( pLangFormatter )
                         {
-                            short nOldType = pOldFormat->GetType() & ~NUMBERFORMAT_DEFINED;
-                            if ( nOldType == NUMBERFORMAT_NUMBER || nOldType == NUMBERFORMAT_DATE ||
-                                 nOldType == NUMBERFORMAT_TIME || nOldType == NUMBERFORMAT_LOGICAL )
+                            // for number detection: valid format index for selected language
+                            nIndex = pFormatter->GetStandardIndex( pLangFormatter->GetLanguage() );
+                        }
+
+                        if (!pFormatter->IsNumberFormat(rString, nIndex, nVal))
+                            break;
+
+                        if ( pLangFormatter )
+                        {
+                            // convert back to the original language if a built-in format was detected
+                            const SvNumberformat* pOldFormat = pFormatter->GetEntry( nOldIndex );
+                            if ( pOldFormat )
+                                nIndex = pFormatter->GetFormatForLanguageIfBuiltIn( nIndex, pOldFormat->GetLanguage() );
+                        }
+
+                        pNewCell = new ScValueCell( nVal );
+                        if ( nIndex != nOldIndex)
+                        {
+                            // #i22345# New behavior: Apply the detected number format only if
+                            // the old one was the default number, date, time or boolean format.
+                            // Exception: If the new format is boolean, always apply it.
+
+                            BOOL bOverwrite = FALSE;
+                            const SvNumberformat* pOldFormat = pFormatter->GetEntry( nOldIndex );
+                            if ( pOldFormat )
                             {
-                                if ( nOldIndex == pFormatter->GetStandardFormat(
-                                                    nOldType, pOldFormat->GetLanguage() ) )
+                                short nOldType = pOldFormat->GetType() & ~NUMBERFORMAT_DEFINED;
+                                if ( nOldType == NUMBERFORMAT_NUMBER || nOldType == NUMBERFORMAT_DATE ||
+                                     nOldType == NUMBERFORMAT_TIME || nOldType == NUMBERFORMAT_LOGICAL )
                                 {
-                                    bOverwrite = TRUE;      // default of these types can be overwritten
+                                    if ( nOldIndex == pFormatter->GetStandardFormat(
+                                                        nOldType, pOldFormat->GetLanguage() ) )
+                                    {
+                                        bOverwrite = TRUE;      // default of these types can be overwritten
+                                    }
                                 }
                             }
-                        }
-                        if ( !bOverwrite && pFormatter->GetType( nIndex ) == NUMBERFORMAT_LOGICAL )
-                        {
-                            bOverwrite = TRUE;              // overwrite anything if boolean was detected
-                        }
+                            if ( !bOverwrite && pFormatter->GetType( nIndex ) == NUMBERFORMAT_LOGICAL )
+                            {
+                                bOverwrite = TRUE;              // overwrite anything if boolean was detected
+                            }
 
-                        if ( bOverwrite )
-                        {
-                            ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT,
-                                (UINT32) nIndex) );
-                            bNumFmtSet = TRUE;
+                            if ( bOverwrite )
+                            {
+                                ApplyAttr( nRow, SfxUInt32Item( ATTR_VALUE_FORMAT,
+                                    (UINT32) nIndex) );
+                                bNumFmtSet = TRUE;
+                            }
                         }
                     }
+                    else
+                    {
+                        // Only check if the string is a regular number.
+                        SvNumberFormatter* pLocaleSource = pLangFormatter ? pLangFormatter : pFormatter;
+                        const LocaleDataWrapper* pLocale = pLocaleSource->GetLocaleData();
+                        if (!pLocale)
+                            break;
+
+                        LocaleDataItem aLocaleItem = pLocale->getLocaleItem();
+                        const OUString& rDecSep = aLocaleItem.decimalSeparator;
+                        const OUString& rGroupSep = aLocaleItem.thousandSeparator;
+                        if (rDecSep.getLength() != 1 || rGroupSep.getLength() != 1)
+                            break;
+
+                        sal_Unicode dsep = rDecSep.getStr()[0];
+                        sal_Unicode gsep = rGroupSep.getStr()[0];
+
+                        if (!ScStringUtil::parseSimpleNumber(rString, dsep, gsep, nVal))
+                            break;
+
+                        pNewCell = new ScValueCell(nVal);
+                    }
                 }
-                else                                            // Text
-                    pNewCell = new ScStringCell( rString );
+                while (false);
+
+                if (!pNewCell)
+                    pNewCell = new ScStringCell(rString);
             }
         }
 
@@ -1381,8 +1485,9 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
 }
 
 
-void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings)
+void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollection& rStrings, bool& rHasDates)
 {
+    bool bHasDates = false;
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
     String aString;
     SCROW nRow = 0;
@@ -1418,6 +1523,18 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
                     nValue = 0.0;
             }
 
+            if (pFormatter)
+            {
+                short nType = pFormatter->GetType(nFormat);
+                if ((nType & NUMBERFORMAT_DATE) && !(nType & NUMBERFORMAT_TIME))
+                {
+                    // special case for date values.  Disregard the time
+                    // element if the number format is of date type.
+                    nValue = ::rtl::math::approxFloor(nValue);
+                    bHasDates = true;
+                }
+            }
+
             pData = new TypedStrData( aString, nValue, SC_STRTYPE_VALUE );
         }
 #if 0 // DR
@@ -1436,6 +1553,8 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedScStrCollec
 
         ++nIndex;
     }
+
+    rHasDates = bHasDates;
 }
 
 //
@@ -1529,8 +1648,8 @@ BOOL ScColumn::GetDataEntries(SCROW nStartRow, TypedScStrCollection& rStrings, B
 void ScColumn::RemoveProtected( SCROW nStartRow, SCROW nEndRow )
 {
     ScAttrIterator aAttrIter( pAttrArray, nStartRow, nEndRow );
-    SCROW nTop;
-    SCROW nBottom;
+    SCROW nTop = -1;
+    SCROW nBottom = -1;
     SCSIZE nIndex;
     const ScPatternAttr* pPattern = aAttrIter.Next( nTop, nBottom );
     while (pPattern)
@@ -1819,11 +1938,15 @@ sal_Int32 ScColumn::GetMaxStringLen( SCROW nRowStart, SCROW nRowEnd, CharSet eCh
 }
 
 
-xub_StrLen ScColumn::GetMaxNumberStringLen( USHORT& nPrecision,
-        SCROW nRowStart, SCROW nRowEnd ) const
+xub_StrLen ScColumn::GetMaxNumberStringLen(
+    sal_uInt16& nPrecision, SCROW nRowStart, SCROW nRowEnd ) const
 {
     xub_StrLen nStringLen = 0;
     nPrecision = pDocument->GetDocOptions().GetStdPrecision();
+    if ( nPrecision == SvNumberFormatter::UNLIMITED_PRECISION )
+        // In case of unlimited precision, use 2 instead.
+        nPrecision = 2;
+
     if ( pItems )
     {
         String aString;
@@ -1846,8 +1969,8 @@ xub_StrLen ScColumn::GetMaxNumberStringLen( USHORT& nPrecision,
                 {
                     if ( nFormat )
                     {   // more decimals than standard?
-                        USHORT nPrec = pNumFmt->GetFormatPrecision( nFormat );
-                        if ( nPrec > nPrecision )
+                        sal_uInt16 nPrec = pNumFmt->GetFormatPrecision( nFormat );
+                        if ( nPrec != SvNumberFormatter::UNLIMITED_PRECISION && nPrec > nPrecision )
                             nPrecision = nPrec;
                     }
                     if ( nPrecision )

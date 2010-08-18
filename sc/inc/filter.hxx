@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filter.hxx,v $
- * $Revision: 1.8.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,7 @@ class SvStream;
 class ScAddress;
 class ScDocument;
 class ScRange;
+class SvNumberFormatter;
 
 // Return-Werte Im-/Exportfilter    (ULONG)
 
@@ -92,7 +90,9 @@ class ScEEAbsImport {
     virtual ~ScEEAbsImport() {}
     virtual ULONG   Read( SvStream& rStream, const String& rBaseURL ) = 0;
     virtual ScRange GetRange() = 0;
-    virtual void    WriteToDocument( BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0 ) = 0;
+    virtual void    WriteToDocument(
+        BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0,
+        SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
 };
 
 class ScFormatFilterPlugin {
@@ -109,7 +109,8 @@ class ScFormatFilterPlugin {
     virtual FltError ScImportDif( SvStream&, ScDocument*, const ScAddress& rInsPos,
                  const CharSet eSrc = RTL_TEXTENCODING_DONTKNOW, UINT32 nDifOption = SC_DIFOPT_EXCEL ) = 0;
     virtual FltError ScImportRTF( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange ) = 0;
-    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0, BOOL bCalcWidthHeight = TRUE ) = 0;
+    virtual FltError ScImportHTML( SvStream&, const String& rBaseURL, ScDocument*, ScRange& rRange, double nOutputFactor = 1.0,
+                                   BOOL bCalcWidthHeight = TRUE, SvNumberFormatter* pFormatter = NULL, bool bConvertDate = true ) = 0;
 
     // various import helpers
     virtual ScEEAbsImport *CreateRTFImport( ScDocument* pDoc, const ScRange& rRange ) = 0;

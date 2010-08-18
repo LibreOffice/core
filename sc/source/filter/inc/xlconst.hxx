@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xlconst.hxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -205,6 +202,10 @@ const sal_uInt16 EXC_WSBOOL_FITTOPAGE       = 0x0100;
 
 const sal_uInt16 EXC_WSBOOL_DEFAULTFLAGS    = 0x04C1;
 
+// (0x0086) WRITEPROT ---------------------------------------------------------
+
+const sal_uInt16 EXC_ID_WRITEPROT           = 0x0086;
+
 // (0x008C) COUNTRY -----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_COUNTRY             = 0x008C;
@@ -212,6 +213,10 @@ const sal_uInt16 EXC_ID_COUNTRY             = 0x008C;
 // (0x009B) FILTERMODE --------------------------------------------------------
 
 const sal_uInt16 EXC_ID_FILTERMODE          = 0x009B;
+
+// (0x009C) FNGROUPCOUNT ------------------------------------------------------
+
+const sal_uInt16 EXC_ID_FNGROUPCOUNT        = 0x009C;
 
 // (0x009D) AUTOFILTERINFO ----------------------------------------------------
 
@@ -221,14 +226,50 @@ const sal_uInt16 EXC_ID_AUTOFILTERINFO      = 0x009D;
 
 const sal_uInt16 EXC_ID_AUTOFILTER          = 0x009E;
 
+// (0x00BF, 0x00C0, 0x00C1) TOOLBARHDR, TOOLBAREND, MMS -----------------------
+
+const sal_uInt16 EXC_ID_TOOLBARHDR          = 0x00BF;
+const sal_uInt16 EXC_ID_TOOLBAREND          = 0x00C0;
+const sal_uInt16 EXC_ID_MMS                 = 0x00C1;
+
+// (0x00E1, 0x00E2) INTERFACEHDR, INTERFACEEND --------------------------------
+
+const sal_uInt16 EXC_ID_INTERFACEHDR        = 0x00E1;
+const sal_uInt16 EXC_ID_INTERFACEEND        = 0x00E2;
+
 // (0x0160) USESELFS ----------------------------------------------------------
 
 const sal_uInt16 EXC_ID_USESELFS            = 0x0160;
+
+// (0x0161) DSF ---------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_DSF                 = 0x0161;
 
 // (0x01AA,0x01AB) USERSVIEWBEGIN, USERSVIEWEND -------------------------------
 
 const sal_uInt16 EXC_ID_USERSVIEWBEGIN      = 0x01AA;
 const sal_uInt16 EXC_ID_USERSVIEWEND        = 0x01AB;
+
+// (0x01BA) CODENAME ----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_CODENAME            = 0x01BA;
+
+// (0x01C0) XL9FILE -----------------------------------------------------------
+
+const sal_uInt16 EXC_ID_XL9FILE             = 0x01C0;
+
+// (0x8xx) Future records -----------------------------------------------------
+
+/** Enumerates different header types of future records. */
+enum XclFutureRecType
+{
+    EXC_FUTUREREC_SIMPLE,           /// Record identifier and empty flags field.
+    EXC_FUTUREREC_UNUSEDREF         /// Record identifier, empty flags field, unused range address.
+};
+
+const sal_uInt16 EXC_FUTUREREC_EMPTYFLAGS   = 0x0000;
+const sal_uInt16 EXC_FUTUREREC_HASREF       = 0x0001;
+const sal_uInt16 EXC_FUTUREREC_ALERT        = 0x0002;
 
 // ============================================================================
 

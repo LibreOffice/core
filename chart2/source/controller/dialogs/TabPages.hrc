@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TabPages.hrc,v $
- * $Revision: 1.7.20.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,6 @@
 ////#define RBT_DOWNUP 3
 ////#define RBT_AUTOORDER 4
 
-//#define TP_STAT                   905
 #define FL_TEXTBREAK                3
 #define CBX_TEXTBREAK               2
 #define CBX_TEXTOVERLAP             4
@@ -82,22 +78,6 @@
 #define GRP_FILL                    1
 #define CTL_BITMAP_PREVIEW          6
 */
-
-//#define TP_OPTIONS                 908
-#define GRP_OPT_AXIS                1
-#define RBT_OPT_AXIS_1              2
-#define RBT_OPT_AXIS_2              3
-#define MT_GAP                      4
-#define MT_OVERLAP                  5
-#define FT_GAP                      6
-#define FT_OVERLAP                  7
-#define GB_BAR                      8
-#define CB_CONNECTOR                9
-#define CB_BARS_SIDE_BY_SIDE       10
-#define FL_PLOT_MISSING_VALUES     11
-#define RB_DONT_PAINT              12
-#define RB_ASSUME_ZERO             13
-#define RB_CONTINUE_LINE           14
 
 //------------
 //from old chart tplabel.hrc

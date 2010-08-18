@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cellsuno.hxx,v $
- * $Revision: 1.33 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,9 +32,9 @@
 #include "rangelst.hxx"         // ScRangeList
 
 #include "formula/grammar.hxx"
-#include <svtools/lstner.hxx>
-#include <svtools/listener.hxx>
-#include <svtools/itemprop.hxx>
+#include <svl/lstner.hxx>
+#include <svl/listener.hxx>
+#include <svl/itemprop.hxx>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
@@ -93,6 +90,7 @@
 #include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
 #include <com/sun/star/sheet/XExternalSheetName.hpp>
+#include <com/sun/star/document/XEventsSupplier.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase3.hxx>
 
@@ -112,7 +110,7 @@ class ScPatternAttr;
 class SvxBorderLine;
 class SvxBoxItem;
 class SvxBoxInfoItem;
-
+class SvxItemPropertySet;
 
 class ScLinkListener : public SvtListener
 {
@@ -152,7 +150,9 @@ public:
 namespace ooo
 {
     namespace vba {
+        namespace excel {
     class ScVbaCellRangeAccess;  // Vba Helper class
+    }
     }
 }
 
@@ -175,10 +175,10 @@ class SC_DLLPUBLIC ScCellRangesBase : public com::sun::star::beans::XPropertySet
 {
     friend class ScTabViewObj;      // fuer select()
     friend class ScTableSheetObj;   // fuer createCursorByRange()
-     friend class ooo::vba::ScVbaCellRangeAccess;
+     friend class ooo::vba::excel::ScVbaCellRangeAccess;
 
 private:
-    SfxItemPropertySet      aPropSet;
+    const SfxItemPropertySet* pPropSet;
     ScDocShell*             pDocShell;
     ScLinkListener*         pValueListener;
     ScPatternAttr*          pCurrentFlat;
@@ -221,11 +221,11 @@ protected:
     // GetItemPropertyMap for derived classes must contain all entries, including base class
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
     virtual ::com::sun::star::beans::PropertyState GetOnePropertyState(
-                                USHORT nItemWhich, const SfxItemPropertyMap* pMap );
-    virtual void            GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+                                USHORT nItemWhich, const SfxItemPropertySimpleEntry* pEntry );
+    virtual void            GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException);
@@ -610,16 +610,16 @@ class SC_DLLPUBLIC ScCellRangeObj : public ScCellRangesBase,
                        public com::sun::star::table::XColumnRowRange
 {
 private:
-    SfxItemPropertySet      aRangePropSet;
+    const SfxItemPropertySet*       pRangePropSet;
     ScRange                 aRange;
 
 protected:
     const ScRange&          GetRange() const    { return aRange; }
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
-    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException);
@@ -629,9 +629,10 @@ protected:
                                 throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                     ::com::sun::star::uno::RuntimeException);
 
-            void            SetArrayFormula_Impl( const rtl::OUString& aFormula,
-                                                    const formula::FormulaGrammar::Grammar eGrammar )
-                                throw(::com::sun::star::uno::RuntimeException);
+            void            SetArrayFormula_Impl( const rtl::OUString& rFormula,
+                                const rtl::OUString& rFormulaNmsp,
+                                const formula::FormulaGrammar::Grammar eGrammar )
+                                    throw(::com::sun::star::uno::RuntimeException);
 
 public:
                             ScCellRangeObj(ScDocShell* pDocSh, const ScRange& rR);
@@ -650,7 +651,8 @@ public:
     virtual void            RefChanged();
 
                             // via getImplementation()
-    virtual void            SetArrayFormulaWithGrammar( const ::rtl::OUString& aFormula,
+    virtual void            SetArrayFormulaWithGrammar( const ::rtl::OUString& rFormula,
+                                    const ::rtl::OUString& rFormulaNmsp,
                                     const formula::FormulaGrammar::Grammar )
                                 throw(::com::sun::star::uno::RuntimeException);
 
@@ -825,7 +827,7 @@ class ScCellObj : public ScCellRangeObj,
 {
 private:
     SvxUnoText*             pUnoText;
-    SfxItemPropertySet      aCellPropSet;
+    const SfxItemPropertySet*   pCellPropSet;
     ScAddress               aCellPos;
     sal_Int16               nActionLockCount;
 
@@ -839,16 +841,16 @@ private:
 
 protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
-    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException);
 
 public:
-    static const SfxItemPropertyMap* GetEditPropertyMap();
+    static const SvxItemPropertySet* GetEditPropertySet();
     static const SfxItemPropertyMap* GetCellPropertyMap();
 
                             ScCellObj(ScDocShell* pDocSh, const ScAddress& rP);
@@ -869,7 +871,7 @@ public:
     void                    SetFormulaResultString( const ::rtl::OUString& rResult );
     void                    SetFormulaResultDouble( double fResult );
     void                    SetFormulaWithGrammar( const ::rtl::OUString& rFormula,
-                                                    const formula::FormulaGrammar::Grammar );
+                                const ::rtl::OUString& rFormulaNmsp, const formula::FormulaGrammar::Grammar );
     const ScAddress&        GetPosition() const { return aCellPos; }
 
                             // XText
@@ -980,7 +982,6 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int16 SAL_CALL resetActionLocks() throw(::com::sun::star::uno::RuntimeException);
 
-    static String       GetInputString_Impl(ScDocument* pDoc, const ScAddress& aPos, BOOL bEnglish);
     static String       GetOutputString_Impl(ScDocument* pDoc, const ScAddress& aPos);
 };
 
@@ -1002,22 +1003,23 @@ class ScTableSheetObj : public ScCellRangeObj,
                         public com::sun::star::util::XProtectable,
                         public com::sun::star::sheet::XScenario,
                         public com::sun::star::sheet::XScenarioEnhanced,
-                        public com::sun::star::sheet::XExternalSheetName
+                        public com::sun::star::sheet::XExternalSheetName,
+                        public com::sun::star::document::XEventsSupplier
 {
     friend class ScTableSheetsObj;      // fuer insertByName()
 
 private:
-    SfxItemPropertySet      aSheetPropSet;
+    const SfxItemPropertySet*       pSheetPropSet;
 
     SCTAB                   GetTab_Impl() const;
     void                    PrintAreaUndo_Impl( ScPrintRangeSaver* pOldRanges );
 
 protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
-    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException);
@@ -1207,6 +1209,10 @@ public:
                                 throw (::com::sun::star::container::ElementExistException,
                                        ::com::sun::star::uno::RuntimeException);
 
+                            // XEventsSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > SAL_CALL getEvents()
+                                throw (::com::sun::star::uno::RuntimeException);
+
                             // XPropertySet ueberladen wegen Sheet-Properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
                             SAL_CALL getPropertySetInfo()
@@ -1241,14 +1247,14 @@ class ScTableColumnObj : public ScCellRangeObj,
                          public com::sun::star::container::XNamed
 {
 private:
-    SfxItemPropertySet      aColPropSet;
+    const SfxItemPropertySet*       pColPropSet;
 
 protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
-    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException);
@@ -1292,14 +1298,14 @@ public:
 class ScTableRowObj : public ScCellRangeObj
 {
 private:
-    SfxItemPropertySet      aRowPropSet;
+    const SfxItemPropertySet*       pRowPropSet;
 
 protected:
     virtual const SfxItemPropertyMap* GetItemPropertyMap();
-    virtual void GetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 ::com::sun::star::uno::Any& )
                                 throw(::com::sun::star::uno::RuntimeException);
-    virtual void            SetOnePropertyValue( const SfxItemPropertyMap* pMap,
+    virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const ::com::sun::star::uno::Any& aValue )
                                 throw(::com::sun::star::lang::IllegalArgumentException,
                                         ::com::sun::star::uno::RuntimeException);

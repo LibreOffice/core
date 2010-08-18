@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scfuncs.src,v $
- * $Revision: 1.95 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1027,7 +1024,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "An interger between 1583 and 9956, or 0 and 99 (19xx or 20xx depending on the option set).";
+            Text [ en-US ] = "An integer between 1583 and 9956, or 0 and 99 (19xx or 20xx depending on the option set).";
         };
     };
      // -=*# Resource for function BW #*=-
@@ -1579,7 +1576,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Calulates the arithmetically declining value of an asset (depreciation) for a specified period." ;
+            Text [ en-US ] = "Calculates the arithmetically declining value of an asset (depreciation) for a specified period." ;
         };
         ExtraData =
         {
@@ -2691,7 +2688,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Raises a number to the power of another." ;
+            Text [ en-US ] = "Returns a^b, base a raised to the power of exponent b." ;
         };
         ExtraData =
         {
@@ -2707,15 +2704,15 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "The number that is to be raised to the power of another." ;
+            Text [ en-US ] = "The base a of the power a^b." ;
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "Power" ;
+            Text [ en-US ] = "Exponent" ;
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The power by which the number is to be raised." ;
+            Text [ en-US ] = "The exponent b of the power a^b." ;
         };
     };
      // -=*# Resource for function ANZAHLLEEREZELLEN #*=-
@@ -4067,7 +4064,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Array transposition. Exchanges the rows and columns of an aray." ;
+            Text [ en-US ] = "Array transposition. Exchanges the rows and columns of an array." ;
         };
         ExtraData =
         {
@@ -4727,7 +4724,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "Value 1; value 2;.. .are 1 to 30 arguments representing a sample taken from a basic total population.";
+            Text [ en-US ] = "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population.";
         };
     };
      // -=*# Resource for function VARIANZEN #*=-
@@ -4823,7 +4820,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "Value 1; value 2;.. .are 1 to 30 arguments representing a sample taken from a basic total population.";
+            Text [ en-US ] = "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population.";
         };
     };
      // -=*# Resource for function STABWN #*=-
@@ -4919,7 +4916,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "Value 1; value 2;.. .are 1 to 30 arguments representing a sample taken from a basic total population.";
+            Text [ en-US ] = "Value 1; value 2; ... are 1 to 30 arguments representing a sample taken from a basic total population.";
         };
     };
      // -=*# Resource for function SUMQUADABW #*=-
@@ -5718,7 +5715,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_NORMVERT );
-            4;  0;  0;  0;  0;
+            4;  0;  0;  0;  1;
             0;
         };
         String 2 // Name of Parameter 1
@@ -5731,7 +5728,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "mean" ;
+            Text [ en-US ] = "Mean" ;
         };
         String 5 // Description of Parameter 2
         {
@@ -5751,7 +5748,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 9 // Description of Parameter 4
         {
-            Text [ en-US ] = "Cumulated. C=0 calculates the density function, C=1 the distribution." ;
+            Text [ en-US ] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
         };
     };
      // -=*# Resource for function NORMINV #*=-
@@ -5854,7 +5851,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             0;
             ID_FUNCTION_GRP_STATISTIC;
             U2S( HID_FUNC_LOGNORMVERT );
-            3;  0;  0;  0;
+            4;  0;  1;  1;  1;
             0;
         };
         String 2 // Name of Parameter 1
@@ -5871,7 +5868,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "Mean value. The mean value of the log normal distribution." ;
+            Text [ en-US ] = "The mean value of the log normal distribution. It is set to 0 if omitted." ;
         };
         String 6 // Name of Parameter 3
         {
@@ -5879,7 +5876,15 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "Standard deviation. The standard deviation of the log normal distribution." ;
+            Text [ en-US ] = "The standard deviation of the log normal distribution. It is set to 1 if omitted." ;
+        };
+        String 8 // Name of Parameter 4
+        {
+            Text [ en-US] = "Cumulative";
+        };
+        String 9 // Description of Parameter 4
+        {
+            Text [ en-US] = "0 or FALSE calculates the probability density function. Any other value or TRUE or omitted calculates the cumulative distribution function." ;
         };
     };
      // -=*# Resource for function LOGINV #*=-
@@ -6353,7 +6358,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "Mode = 1calculates the one-tailed test, 2 = two-tailed distribution." ;
+            Text [ en-US ] = "Mode = 1 calculates the one-tailed test, 2 = two-tailed distribution." ;
         };
     };
      // -=*# Resource for function TINV #*=-
@@ -6758,7 +6763,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Returns the two-tailed P value of a z test." ;
+            Text [ en-US ] = "Calculates the probability of observing a z-statistic greater than the one computed based on a sample." ;
         };
         ExtraData =
         {
@@ -6774,15 +6779,15 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "The data array." ;
+            Text [ en-US ] = "The given sample, drawn from a normally distributed population." ;
         };
         String 4 // Name of Parameter 2
         {
-            Text [ en-US ] = "Number" ;
+            Text [ en-US ] = "mu" ;
         };
         String 5 // Description of Parameter 2
         {
-            Text [ en-US ] = "The value to be tested." ;
+            Text [ en-US ] = "The known mean of the population." ;
         };
         String 6 // Name of Parameter 3
         {
@@ -6790,7 +6795,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 7 // Description of Parameter 3
         {
-            Text [ en-US ] = "The standard deviation of the population." ;
+            Text [ en-US ] = "The known standard deviation of the population. If omitted, the standard deviation of the given sample is used." ;
         };
     };
      // -=*# Resource for function CHITEST #*=-
@@ -7520,7 +7525,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 9 // Description of Parameter 4
         {
-            Text [ en-US ] = "if the value is TRUE or not given, the search column of the array must be sorted in ascending order." ;
+            Text [ en-US ] = "If the value is TRUE or not given, the search column of the array must be sorted in ascending order." ;
         };
     };
      // -=*# Resource for function INDEX #*=-
@@ -8392,7 +8397,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
     {
         String 1 // Description
         {
-            Text [ en-US ] = "Converts a value into text." ;
+            Text [ en-US ] = "Returns a value if it is text, otherwise an empty string." ;
         };
         ExtraData =
         {
@@ -8408,7 +8413,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 3 // Description of Parameter 1
         {
-            Text [ en-US ] = "The value to be converted." ;
+            Text [ en-US ] = "The value to be checked and returned if it is text." ;
         };
     };
      // -=*# Resource for function ERSETZEN #*=-
@@ -8704,7 +8709,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         String 9 // Description of Parameter 4
         {
-            Text [ en-US ] = "Which occurence of the old text is to be replaced." ;
+            Text [ en-US ] = "Which occurrence of the old text is to be replaced." ;
         };
     };
      // -=*# Resource for function BASIS #*=-
@@ -8906,7 +8911,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         ExtraData =
         {
-            1;  // TODO: implementation and unsuppress
+            0;
             ID_FUNCTION_GRP_TEXT;
             U2S( HID_FUNC_UNICODE );
             1;  0;
@@ -8929,7 +8934,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
         };
         ExtraData =
         {
-            1;  // TODO: implementation and unsuppress
+            0;
             ID_FUNCTION_GRP_TEXT;
             U2S( HID_FUNC_UNICHAR );
             1;  0;

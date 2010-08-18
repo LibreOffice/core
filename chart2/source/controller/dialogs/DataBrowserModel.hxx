@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataBrowserModel.hxx,v $
- * $Revision: 1.7.16.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,10 +60,14 @@ public:
      */
     void insertDataSeries( sal_Int32 nAfterColumnIndex );
 
+    /** Inserts a new text column for complex categories.
+     */
+    void insertComplexCategoryLevel( sal_Int32 nAfterColumnIndex );
+
     /** Removes a data series to which the data column with index nAtColumnIndex
         belongs.
      */
-    void removeDataSeries( sal_Int32 nAtColumnIndex );
+    void removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColumnIndex );
 
     /** Swaps the series to which the data column with index nFirstIndex belongs
         with the next series (which starts at an index >= nFirstIndex + 1)
@@ -100,6 +101,7 @@ public:
 
     // returns the UI string of the corresponding role
     ::rtl::OUString getRoleOfColumn( sal_Int32 nColumnIndex ) const;
+    bool isCategoriesColumn( sal_Int32 nColumnIndex ) const;
 
     struct tDataHeader
     {
@@ -156,9 +158,7 @@ private:
         sal_Int32 & rInOutSequenceIndex,
         sal_Int32 & rInOutHeaderEnd );
 
-    ::com::sun::star::uno::Reference<
-            ::com::sun::star::chart2::data::XLabeledDataSequence >
-        getCategories() const throw();
+    sal_Int32 getCategoryColumnCount();
 
     ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartDocument > m_xChartDocument;

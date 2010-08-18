@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: interpre.hxx,v $
- * $Revision: 1.35.44.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,8 +28,6 @@
 #ifndef SC_INTERPRE_HXX
 #define SC_INTERPRE_HXX
 
-#define SC_SPEW_ENABLED 0
-
 #include <math.h>
 #include <rtl/math.hxx>
 #include "formula/errorcodes.hxx"
@@ -40,10 +35,6 @@
 #include "scdll.hxx"
 #include "document.hxx"
 #include "scmatrix.hxx"
-
-#if SC_SPEW_ENABLED
-#include "scspew.hxx"
-#endif
 
 #include <math.h>
 #include <map>
@@ -53,7 +44,10 @@ class SbxVariable;
 class ScBaseCell;
 class ScFormulaCell;
 class SvNumberFormatter;
+class ScDBRangeBase;
 struct MatrixDoubleOp;
+struct ScQueryParam;
+struct ScDBQueryParamBase;
 
 struct ScCompare
 {
@@ -68,6 +62,21 @@ struct ScCompare
             bEmpty[0] = FALSE;
             bEmpty[1] = FALSE;
         }
+};
+
+struct ScCompareOptions
+{
+    ScQueryEntry        aQueryEntry;
+    bool                bRegEx;
+    bool                bMatchWholeCell;
+    bool                bIgnoreCase;
+
+                        ScCompareOptions( ScDocument* pDoc, const ScQueryEntry& rEntry, bool bReg );
+private:
+                        // Not implemented, prevent usage.
+                        ScCompareOptions();
+                        ScCompareOptions( const ScCompareOptions & );
+     ScCompareOptions&  operator=( const ScCompareOptions & );
 };
 
 class ScToken;
@@ -111,9 +120,6 @@ class ScInterpreter
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL( ScInterpreter )
-#if SC_SPEW_ENABLED
-    static ScSpew theSpew;
-#endif
 
     static void GlobalExit();           // aus ScGlobal::Clear() gerufen
 
@@ -156,6 +162,7 @@ private:
     short       nFuncFmtType;           // NumberFormatType of a function
     short       nCurFmtType;            // current NumberFormatType
     short       nRetFmtType;            // NumberFormatType of an expression
+    USHORT      mnStringNoValueError;   // the error set in ConvertStringToValue() if no value
     BOOL        glSubTotal;             // flag for subtotal functions
     BYTE        cPar;                   // current count of parameters
     BOOL        bCalcAsShown;           // precision as shown
@@ -178,6 +185,7 @@ void ReplaceCell( ScAddress& );     // for TableOp
 void ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );  // for TableOp
 BOOL IsTableOpInRange( const ScRange& );
 ULONG GetCellNumberFormat( const ScAddress&, const ScBaseCell* );
+double ConvertStringToValue( const String& );
 double GetCellValue( const ScAddress&, const ScBaseCell* );
 double GetCellValueOrZero( const ScAddress&, const ScBaseCell* );
 double GetValueCellValue( const ScAddress&, const ScValueCell* );
@@ -286,6 +294,7 @@ void DoubleRefToVars( const ScToken* p,
         SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
         SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
         BOOL bDontCheckForTableOp = FALSE );
+ScDBRangeBase* PopDoubleRef();
 void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                           SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2,
                           BOOL bDontCheckForTableOp = FALSE );
@@ -356,9 +365,16 @@ void ScChoseJump();
 // Returns true if last jump was executed and result matrix pushed.
 bool JumpMatrix( short nStackLevel );
 
-double CompareFunc( const ScCompare& rComp );
+/** @param pOptions
+        NULL means case sensitivity document option is to be used!
+ */
+double CompareFunc( const ScCompare& rComp, ScCompareOptions* pOptions = NULL );
 double Compare();
-ScMatrixRef CompareMat();
+/** @param pOptions
+        NULL means case sensitivity document option is to be used!
+ */
+ScMatrixRef CompareMat( ScCompareOptions* pOptions = NULL );
+ScMatrixRef QueryMat( ScMatrix* pMat, ScCompareOptions& rOptions );
 void ScEqual();
 void ScNotEqual();
 void ScLess();
@@ -431,6 +447,8 @@ void ScClean();
 void ScChar();
 void ScJis();
 void ScAsc();
+void ScUnicode();
+void ScUnichar();
 void ScMin( BOOL bTextAsZero = FALSE );
 void ScMax( BOOL bTextAsZero = FALSE );
 double IterateParameters( ScIterFunc, BOOL bTextAsZero = FALSE );
@@ -466,7 +484,7 @@ void ScSubTotal();
 // compatibility). If this was the case then rMissingField is set to TRUE upon
 // return. If rMissingField==FALSE upon call all "missing cases" are considered
 // to be an error.
-BOOL GetDBParams( SCTAB& rTab, ScQueryParam& rParam, BOOL& rMissingField );
+ScDBQueryParamBase* GetDBParams( BOOL& rMissingField );
 
 void DBIterator( ScIterFunc );
 void ScDBSum();
@@ -513,14 +531,20 @@ void ScExternalRef();
 void ScGetPivotData();
 void ScHyperLink();
 void ScBahtText();
-void ScCalcTeam();
-void ScAnswer();
 void ScTTT();
-void ScSpewFunc();
-void ScGame();
 
 //----------------Funktionen in interpr2.cxx---------------
-double GetDate(INT16 nYear, INT16 nMonth, INT16 nDay);
+
+/** Obtain the date serial number for a given date.
+    @param bStrict
+        If FALSE, nYear < 100 takes the two-digit year setting into account,
+        and rollover of invalid calendar dates takes place, e.g. 1999-02-31 =>
+        1999-03-03.
+        If TRUE, the date passed must be a valid Gregorian calendar date. No
+        two-digit expanding or rollover is done.
+ */
+double GetDateSerial( INT16 nYear, INT16 nMonth, INT16 nDay, bool bStrict );
+
 void ScGetActDate();
 void ScGetActTime();
 void ScGetYear();
@@ -660,6 +684,7 @@ void ScNoName();
 void ScBadName();
 // Statistik:
 double phi(double x);
+double integralPhi(double x);
 double taylor(double* pPolynom, USHORT nMax, double x);
 double gauss(double x);
 double gaussinv(double x);

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AccessiblePreviewCell.cxx,v $
- * $Revision: 1.21.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 #include <tools/gen.hxx>
 #include "AccessibleText.hxx"
 #include "editsrc.hxx"
@@ -43,7 +40,7 @@
 #include "document.hxx"
 #include <svx/AccessibleTextHelper.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/helper/convert.hxx>
 

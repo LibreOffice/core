@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Strings.hrc,v $
- * $Revision: 1.9.72.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,9 +28,10 @@
 #define CHART_STRINGS_HRC
 
 // this includes no link dependency
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 
-//next is 281
+//next free is 291
+//single free is: 134
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -99,6 +97,7 @@
 #define STR_STACKED                         (RID_APP_START + 11)
 #define STR_PERCENT                         (RID_APP_START + 12)
 #define STR_DEEP                            (RID_APP_START + 13)
+#define STR_FILLED                          (RID_APP_START + 285)
 
 #define STR_DONUT                           (RID_APP_START + 8)
 #define STR_TYPE_PIE                        (RID_APP_START + 187)
@@ -128,6 +127,9 @@
 #define STR_STOCK_3                         (RID_APP_START + 145)
 #define STR_STOCK_4                         (RID_APP_START + 146)
 
+#define STR_TYPE_BUBBLE                     (RID_APP_START + 282)
+#define STR_BUBBLE_1                        (RID_APP_START + 283)
+
 //-----------------------------------------------------------------------------
 //additional controls for wizard:
 
@@ -149,7 +151,7 @@
 #define STR_INDICATE_BOTH                   (RID_APP_START + 131)
 #define STR_INDICATE_UP                     (RID_APP_START + 132)
 #define STR_INDICATE_DOWN                   (RID_APP_START + 133)
-#define STR_REGRESSION_NONE                 (RID_APP_START + 134)
+
 #define STR_REGRESSION_LINEAR               (RID_APP_START + 135)
 #define STR_REGRESSION_LOG                  (RID_APP_START + 136)
 #define STR_REGRESSION_EXP                  (RID_APP_START + 137)
@@ -180,6 +182,7 @@
 #define STR_DATA_ROLE_MIN                   (RID_APP_START + 248)
 #define STR_DATA_ROLE_MAX                   (RID_APP_START + 249)
 #define STR_DATA_ROLE_CATEGORIES            (RID_APP_START + 260)
+#define STR_DATA_ROLE_SIZE                  (RID_APP_START + 284)
 
 #define STR_DATA_UNNAMED_SERIES             (RID_APP_START + 250)
 #define STR_DATA_UNNAMED_SERIES_WITH_INDEX  (RID_APP_START + 251)
@@ -225,8 +228,11 @@
 #define STR_OBJECT_DATASERIES               (RID_APP_START + 204)
 #define STR_OBJECT_DATASERIES_PLURAL        (RID_APP_START + 205)
 
+#define STR_OBJECT_FOR_SERIES               (RID_APP_START + 288)
+#define STR_OBJECT_FOR_ALL_SERIES           (RID_APP_START + 289)
+
 #define STR_OBJECT_AVERAGE_LINE             (RID_APP_START + 174)
-#define STR_OBJECT_ERROR_INDICATOR          (RID_APP_START + 175)
+#define STR_OBJECT_ERROR_BARS               (RID_APP_START + 175)
 #define STR_OBJECT_CURVE                    (RID_APP_START + 176)
 #define STR_OBJECT_CURVES                   (RID_APP_START + 130)
 
@@ -238,6 +244,9 @@
 #define STR_OBJECT_AXIS_X                   (RID_APP_START + 211)
 #define STR_OBJECT_AXIS_Y                   (RID_APP_START + 212)
 #define STR_OBJECT_AXIS_Z                   (RID_APP_START + 213)
+
+#define STR_OBJECT_SECONDARY_X_AXIS         (RID_APP_START + 286)
+#define STR_OBJECT_SECONDARY_Y_AXIS         (RID_APP_START + 287)
 
 #define STR_OBJECT_GRID                     (RID_APP_START + 214)
 #define STR_OBJECT_GRIDS                    (RID_APP_START + 215)
@@ -255,6 +264,8 @@
 #define STR_OBJECT_CURVE_EQUATION           (RID_APP_START + 268)
 #define STR_STATISTICS_IN_LEGEND            (RID_APP_START + 180)
 
+#define STR_OBJECT_SHAPE                    (RID_APP_START + 290)
+
 //-----------------------------------------------------------------------------
 //Titles for tabpages and dialogs
 
@@ -262,7 +273,7 @@
 #define STR_PAGE_BORDER                      (RID_APP_START + 217)
 #define STR_PAGE_AREA                        (RID_APP_START + 218)
 #define STR_PAGE_TRANSPARENCY                (RID_APP_START + 219)
-#define STR_PAGE_CHARACTERS                  (RID_APP_START + 220)
+#define STR_PAGE_FONT                        (RID_APP_START + 220)
 #define STR_PAGE_FONT_EFFECTS                (RID_APP_START + 221)
 #define STR_PAGE_LAYOUT                      (RID_APP_START + 222)
 #define STR_PAGE_OPTIONS                     (RID_APP_START + 223)
@@ -287,6 +298,7 @@
 #define STR_DLG_NUMBERFORMAT_FOR_PERCENTAGE_VALUE   (RID_APP_START + 266)
 
 #define STR_PAGE_POSITIONING  (RID_APP_START + 277)
+#define STR_PAGE_ASIAN                       (RID_APP_START + 281)
 
 //-----------------------------------------------------------------------------
 //strings used as description for actions on toolbar icons, as tip help or for undo

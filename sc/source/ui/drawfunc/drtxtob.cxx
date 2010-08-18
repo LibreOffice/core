@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: drtxtob.cxx,v $
- * $Revision: 1.34.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,28 +32,32 @@
 
 //-------------------------------------------------------------------------
 
+#include <com/sun/star/linguistic2/XThesaurus.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+
 #include "scitems.hxx"
 
-#include <svx/adjitem.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/clipfmtitem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/editeng.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/flditem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/frmdiritem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/editeng.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svx/hlnkitem.hxx>
-#include <svx/lspcitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <svx/svdoutl.hxx>
-#include <svx/outlobj.hxx>
-#include <svx/postitem.hxx>
-#include <svx/scripttypeitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/srchitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/writingmodeitem.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/outlobj.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <svl/srchitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/writingmodeitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
@@ -65,8 +66,8 @@
 #include <sfx2/viewfrm.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>
-#include <svtools/whiter.hxx>
-#include <svtools/languageoptions.hxx>
+#include <svl/whiter.hxx>
+#include <svl/languageoptions.hxx>
 #include <vcl/msgbox.hxx>
 
 #include <svx/svxdlg.hxx>
@@ -74,6 +75,7 @@
 
 #include "sc.hrc"
 #include "globstr.hrc"
+#include "scmod.hxx"
 #include "drtxtob.hxx"
 #include "fudraw.hxx"
 #include "viewdata.hxx"
@@ -85,6 +87,10 @@
 
 #define ScDrawTextObjectBar
 #include "scslots.hxx"
+
+
+using namespace ::com::sun::star;
+
 
 SFX_IMPL_INTERFACE( ScDrawTextObjectBar, SfxShell, ScResId(SCSTR_DRAWTEXTSHELL) )
 {
@@ -201,7 +207,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             }
             break;
 
-        case FID_PASTE_CONTENTS:
+        case SID_PASTE_SPECIAL:
             ExecutePasteContents( rReq );
             break;
 
@@ -366,6 +372,24 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             ExecuteGlobal( rReq );
             break;
 #endif
+
+        case SID_THES:
+            {
+                String aReplaceText;
+                SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES, sal_False );
+                if (pItem2)
+                    aReplaceText = pItem2->GetValue();
+                if (aReplaceText.Len() > 0)
+                    ReplaceTextWithSynonym( pOutView->GetEditView(), aReplaceText );
+            }
+            break;
+
+        case SID_THESAURUS:
+            {
+                pOutView->StartThesaurus();
+            }
+            break;
+
     }
 }
 
@@ -457,6 +481,30 @@ void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             rSet.Put( SfxBoolItem( SID_ENABLE_HYPHENATION, bValue ) );
         }
     }
+
+    if ( rSet.GetItemState( SID_THES ) != SFX_ITEM_UNKNOWN  ||
+         rSet.GetItemState( SID_THESAURUS ) != SFX_ITEM_UNKNOWN )
+    {
+        SdrView * pView = pViewData->GetScDrawView();
+        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+
+        String          aStatusVal;
+        LanguageType    nLang = LANGUAGE_NONE;
+        bool bIsLookUpWord = false;
+        if ( pOutView )
+        {
+            EditView& rEditView = pOutView->GetEditView();
+            bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, rEditView );
+        }
+        rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+
+        // disable thesaurus main menu and context menu entry if there is nothing to look up
+        BOOL bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
+        if (!bIsLookUpWord || !bCanDoThesaurus)
+            rSet.DisableItem( SID_THES );
+        if (!bCanDoThesaurus)
+            rSet.DisableItem( SID_THESAURUS );
+    }
 }
 
 IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pDataHelper )
@@ -467,7 +515,7 @@ IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pData
 
         SfxBindings& rBindings = pViewData->GetBindings();
         rBindings.Invalidate( SID_PASTE );
-        rBindings.Invalidate( FID_PASTE_CONTENTS );
+        rBindings.Invalidate( SID_PASTE_SPECIAL );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -502,7 +550,7 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
         switch (nWhich)
         {
             case SID_PASTE:
-            case FID_PASTE_CONTENTS:
+            case SID_PASTE_SPECIAL:
                 if( !bPastePossible )
                     rSet.DisableItem( nWhich );
                 break;
@@ -799,7 +847,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             case SID_DRAWTEXT_ATTR_DLG:
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aEditAttr, RID_SVXDLG_TEXT, pView );
+                    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aEditAttr, pView );
 
                     bDone = ( RET_OK == pDlg->Execute() );
 

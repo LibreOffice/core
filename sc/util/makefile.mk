@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.49 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,10 +37,6 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :  settings.mk
 
-.IF "$(OS)"=="IRIX"
-LINKFLAGS+=-Wl,-LD_LAYOUT:lgot_buffer=30
-.ENDIF
-
 # --- Resourcen ----------------------------------------------------
 
 RESLIB1LIST=\
@@ -58,6 +50,7 @@ RESLIB1LIST=\
     $(SRS)$/formdlgs.srs \
     $(SRS)$/pagedlg.srs	\
     $(SRS)$/navipi.srs	\
+    $(SRS)$/cctrl.srs	\
     $(SOLARCOMMONRESDIR)$/sfx.srs
 
 RESLIB1NAME=sc
@@ -82,9 +75,11 @@ SHL1STDLIBS=       \
     $(SFXLIB)		\
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
+    $(SVXCORELIB)		\
+    $(EDITENGLIB)		\
     $(SVXLIB)		\
-    $(GOODIESLIB)	\
     $(BASEGFXLIB) \
+    $(DRAWINGLAYERLIB) \
     $(VCLLIB)		\
     $(CPPULIB)		\
     $(CPPUHELPERLIB)	\
@@ -98,7 +93,6 @@ SHL1STDLIBS=       \
     $(UNOTOOLSLIB) \
     $(SOTLIB)		\
     $(XMLOFFLIB)	\
-    $(DBTOOLSLIB)	\
     $(AVMEDIALIB) \
     $(FORLIB) \
     $(FORUILIB)
@@ -144,7 +138,7 @@ LIB4FILES=	\
 
 SHL2TARGET= scd$(DLLPOSTFIX)
 SHL2IMPLIB= scdimp
-SHL2VERSIONMAP= scd.map
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=		$(SHL2TARGET)
 
@@ -187,8 +181,12 @@ SHL6STDLIBS= \
     $(SFXLIB)		\
     $(SVTOOLLIB)	\
     $(SVLLIB)		\
+    $(SVXCORELIB)		\
+    $(EDITENGLIB)		\
+    $(MSFILTERLIB)		\
     $(SVXLIB)		\
     $(BASEGFXLIB) \
+    $(DRAWINGLAYERLIB) \
     $(VCLLIB)		\
     $(CPPULIB)		\
     $(CPPUHELPERLIB)	\
@@ -213,6 +211,8 @@ DEF8NAME=$(SHL8TARGET)
 
 SHL8STDLIBS= \
             $(ISCLIB) \
+            $(EDITENGLIB)		\
+            $(SVXCORELIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
             $(SVTOOLLIB) \
@@ -224,8 +224,9 @@ SHL8STDLIBS= \
             $(I18NISOLANGLIB) \
             $(COMPHELPERLIB) \
             $(CPPULIB) \
-            $(SALLIB)
-
+            $(SALLIB) \
+            $(FORLIB) \
+            $(FORUILIB)
 .IF "$(ENABLE_LAYOUT)" == "TRUE"
 SHL8STDLIBS+=$(TKLIB)
 .ENDIF # ENABLE_LAYOUT == TRUE
@@ -254,6 +255,7 @@ LIB8OBJFILES = \
         $(SLO)$/attrdlg.obj	\
         $(SLO)$/scuiimoptdlg.obj	\
         $(SLO)$/strindlg.obj		\
+        $(SLO)$/tabbgcolordlg.obj   \
         $(SLO)$/shtabdlg.obj		\
         $(SLO)$/scendlg.obj		\
         $(SLO)$/pvfundlg.obj	\
@@ -275,6 +277,7 @@ LIB8OBJFILES = \
         $(SLO)$/dapidata.obj	\
         $(SLO)$/crdlg.obj			\
         $(SLO)$/scuiasciiopt.obj	\
+        $(SLO)$/textimportoptions.obj	\
         $(SLO)$/scuiautofmt.obj	\
         $(SLO)$/dpgroupdlg.obj	\
         $(SLO)$/editfield.obj
@@ -285,7 +288,7 @@ TARGET_VBA=vbaobj
 SHL9TARGET=$(TARGET_VBA)$(DLLPOSTFIX).uno
 SHL9IMPLIB=	i$(TARGET_VBA)
 
-SHL9VERSIONMAP=$(TARGET_VBA).map
+SHL9VERSIONMAP=$(SOLARENV)/src/component.map
 SHL9DEF=$(MISC)$/$(SHL9TARGET).def
 DEF9NAME=$(SHL9TARGET)
 .IF "$(VBA_EXTENSION)"=="YES"
@@ -295,6 +298,7 @@ SHL9RPATH=OOO
 .ENDIF
 
 SHL9STDLIBS= \
+        $(VBAHELPERLIB) \
         $(CPPUHELPERLIB) \
         $(VCLLIB) \
         $(CPPULIB) \
@@ -304,12 +308,14 @@ SHL9STDLIBS= \
         $(SALLIB)\
         $(BASICLIB)	\
         $(SFXLIB)	\
-        $(SVXLIB)	\
+        $(EDITENGLIB)		\
+        $(SVXCORELIB)	\
         $(SVTOOLLIB)    \
         $(SVLLIB) \
         $(ISCLIB) \
         $(VCLLIB) \
         $(TKLIB) \
+        $(MSFILTERLIB)		\
         $(FORLIB)
 
 SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)

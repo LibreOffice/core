@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: gridwin2.cxx,v $
- * $Revision: 1.16.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,46 +52,122 @@
 #include "dpoutput.hxx"     // ScDPPositionData
 #include "dpshttab.hxx"
 #include "dbdocfun.hxx"
+#include "dpcontrol.hxx"
+#include "dpcontrol.hrc"
+#include "strload.hxx"
+#include "userlist.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include "scabstdlg.hxx" //CHINA001
-using namespace com::sun::star;
 
+#include <vector>
+#include <hash_map>
+
+using namespace com::sun::star;
+using ::com::sun::star::sheet::DataPilotFieldOrientation;
+using ::std::vector;
+using ::std::auto_ptr;
+using ::std::hash_map;
+using ::rtl::OUString;
+using ::rtl::OUStringHash;
 
 // STATIC DATA -----------------------------------------------------------
 
 // -----------------------------------------------------------------------
 
-BOOL ScGridWindow::HasPageFieldData( SCCOL nCol, SCROW nRow ) const
+DataPilotFieldOrientation ScGridWindow::GetDPFieldOrientation( SCCOL nCol, SCROW nRow ) const
 {
+    using namespace ::com::sun::star::sheet;
+
     ScDocument* pDoc = pViewData->GetDocument();
     SCTAB nTab = pViewData->GetTabNo();
     ScDPObject* pDPObj = pDoc->GetDPAtCursor(nCol, nRow, nTab);
-    if ( pDPObj && nCol > 0 )
+    if (!pDPObj)
+        return DataPilotFieldOrientation_HIDDEN;
+
+    USHORT nOrient = DataPilotFieldOrientation_HIDDEN;
+
+    // Check for page field first.
+    if (nCol > 0)
     {
         // look for the dimension header left of the drop-down arrow
-        USHORT nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
         long nField = pDPObj->GetHeaderDim( ScAddress( nCol-1, nRow, nTab ), nOrient );
-        if ( nField >= 0 && nOrient == sheet::DataPilotFieldOrientation_PAGE )
+        if ( nField >= 0 && nOrient == DataPilotFieldOrientation_PAGE )
         {
             BOOL bIsDataLayout = FALSE;
             String aFieldName = pDPObj->GetDimName( nField, bIsDataLayout );
             if ( aFieldName.Len() && !bIsDataLayout )
-                return TRUE;
+                return DataPilotFieldOrientation_PAGE;
         }
     }
-    return FALSE;
+
+    nOrient = sheet::DataPilotFieldOrientation_HIDDEN;
+
+    // Now, check for row/column field.
+    long nField = pDPObj->GetHeaderDim(ScAddress(nCol, nRow, nTab), nOrient);
+    if (nField >= 0 && (nOrient == DataPilotFieldOrientation_COLUMN || nOrient == DataPilotFieldOrientation_ROW) )
+    {
+        BOOL bIsDataLayout = FALSE;
+        String aFieldName = pDPObj->GetDimName(nField, bIsDataLayout);
+        if (aFieldName.Len() && !bIsDataLayout)
+            return static_cast<DataPilotFieldOrientation>(nOrient);
+    }
+
+    return DataPilotFieldOrientation_HIDDEN;
 }
 
 // private method for mouse button handling
 BOOL ScGridWindow::DoPageFieldSelection( SCCOL nCol, SCROW nRow )
 {
-    if ( HasPageFieldData( nCol, nRow ) )
+    if (GetDPFieldOrientation( nCol, nRow ) == sheet::DataPilotFieldOrientation_PAGE)
     {
-        DoPageFieldMenue( nCol, nRow );
+        LaunchPageFieldMenu( nCol, nRow );
         return TRUE;
     }
     return FALSE;
+}
+
+bool ScGridWindow::DoAutoFilterButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt )
+{
+    ScDocument* pDoc = pViewData->GetDocument();
+    SCTAB nTab = pViewData->GetTabNo();
+    Point aScrPos  = pViewData->GetScrPos(nCol, nRow, eWhich);
+    Point aDiffPix = rMEvt.GetPosPixel();
+
+    aDiffPix -= aScrPos;
+    BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
+    if ( bLayoutRTL )
+        aDiffPix.X() = -aDiffPix.X();
+
+    long nSizeX, nSizeY;
+    pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
+    Size aScrSize(nSizeX-1, nSizeY-1);
+
+    // Check if the mouse cursor is clicking on the popup arrow box.
+    mpFilterButton.reset(new ScDPFieldButton(this, &GetSettings().GetStyleSettings(), &pViewData->GetZoomX(), &pViewData->GetZoomY(), pDoc));
+    mpFilterButton->setBoundingBox(aScrPos, aScrSize);
+    Point aPopupPos;
+    Size aPopupSize;
+    mpFilterButton->getPopupBoundingBox(aPopupPos, aPopupSize);
+    Rectangle aRec(aPopupPos, aPopupSize);
+    if (aRec.IsInside(rMEvt.GetPosPixel()))
+    {
+        if ( DoPageFieldSelection( nCol, nRow ) )
+            return true;
+
+        bool bFilterActive = IsAutoFilterActive(nCol, nRow, nTab);
+        mpFilterButton->setHasHiddenMember(bFilterActive);
+        mpFilterButton->setDrawBaseButton(false);
+        mpFilterButton->setDrawPopupButton(true);
+        mpFilterButton->setPopupPressed(true);
+        HideCursor();
+        mpFilterButton->draw();
+        ShowCursor();
+        DoAutoFilterMenue(nCol, nRow, false);
+        return true;
+    }
+
+    return false;
 }
 
 void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt )
@@ -103,91 +176,6 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
     SCTAB nTab = pViewData->GetTabNo();
 
     ScDPObject* pDPObj  = pDoc->GetDPAtCursor(nCol, nRow, nTab);
-
-#if OLD_PIVOT_IMPLEMENTATION
-    ScPivotCollection* pPivotCollection = pDoc->GetPivotCollection();
-    ScPivot* pPivot = pPivotCollection->GetPivotAtCursor(nCol, nRow, nTab);
-
-    if (pPivot)             // alte Pivottabellen
-    {
-        if (pPivot->IsFilterAtCursor(nCol, nRow, nTab))
-        {
-            ReleaseMouse();     // falls schon beim ButtonDown gecaptured, #44018#
-
-            ScQueryParam aQueryParam;
-            pPivot->GetQuery(aQueryParam);
-            SCTAB nSrcTab = pPivot->GetSrcArea().aStart.Tab();
-
-            SfxItemSet aArgSet( pViewData->GetViewShell()->GetPool(),
-                                        SCITEM_QUERYDATA, SCITEM_QUERYDATA );
-            aArgSet.Put( ScQueryItem( SCITEM_QUERYDATA, pViewData, &aQueryParam ) );
-
-            //CHINA001 ScPivotFilterDlg* pDlg = new ScPivotFilterDlg(
-            //CHINA001                                  pViewData->GetViewShell()->GetDialogParent(),
-            //CHINA001                                  aArgSet, nSrcTab );
-            ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-            DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
-
-            AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewData->GetViewShell()->GetDialogParent(),
-                                                                            aArgSet, nSrcTab,
-                                                                            RID_SCDLG_PIVOTFILTER);
-            DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
-            if ( pDlg->Execute() == RET_OK )
-            {
-                ScPivot* pNewPivot = pPivot->CreateNew();
-
-                const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
-                pNewPivot->SetQuery(rQueryItem.GetQueryData());
-
-                PivotField* pColArr = new PivotField[PIVOT_MAXFIELD];
-                SCSIZE nColCount;
-                pPivot->GetColFields( pColArr, nColCount );
-                PivotField* pRowArr = new PivotField[PIVOT_MAXFIELD];
-                SCSIZE nRowCount;
-                pPivot->GetRowFields( pRowArr, nRowCount );
-                PivotField* pDataArr = new PivotField[PIVOT_MAXFIELD];
-                SCSIZE nDataCount;
-                pPivot->GetDataFields( pDataArr, nDataCount );
-
-                pNewPivot->SetColFields( pColArr, nColCount );
-                pNewPivot->SetRowFields( pRowArr, nRowCount );
-                pNewPivot->SetDataFields( pDataArr, nDataCount );
-
-                pNewPivot->SetName( pPivot->GetName() );
-                pNewPivot->SetTag( pPivot->GetTag() );
-
-                pViewData->GetDocShell()->PivotUpdate( pPivot, pNewPivot );
-            }
-            delete pDlg;
-        }
-        else
-        {
-            SCCOL nField;
-            if (pPivot->GetColFieldAtCursor(nCol, nRow, nTab, nField))
-            {
-                bPivotMouse     = TRUE;
-                nPivotField     = nField;
-                bPivotColField  = TRUE;
-                nPivotCol       = nCol;
-                pDragPivot      = pPivot;
-                PivotTestMouse( rMEvt, TRUE );
-                // CaptureMouse();
-                StartTracking();
-            }
-            else if (pPivot->GetRowFieldAtCursor(nCol, nRow, nTab, nField))
-            {
-                bPivotMouse     = TRUE;
-                nPivotField     = nField;
-                bPivotColField  = FALSE;
-                nPivotCol       = nCol;
-                pDragPivot      = pPivot;
-                PivotTestMouse( rMEvt, TRUE );
-                // CaptureMouse();
-                StartTracking();
-            }
-        }
-    }
-#endif
 
     if (pDPObj)
     {
@@ -199,6 +187,15 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             bDPMouse   = TRUE;
             nDPField   = nField;
             pDragDPObj = pDPObj;
+
+            if (DPTestFieldPopupArrow(rMEvt, aPos, pDPObj))
+            {
+                // field name pop up menu has been launched.  Don't activate
+                // field move.
+                bDPMouse = false;
+                return;
+            }
+
             DPTestMouse( rMEvt, TRUE );
             StartTracking();
         }
@@ -255,365 +252,6 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
         DBG_ERROR("Da is ja garnix");
     }
 }
-
-#if OLD_PIVOT_IMPLEMENTATION
-void ScGridWindow::DoPivotDrop( BOOL bDelete, BOOL bToCols, SCSIZE nDestPos )
-{
-    if ( nPivotField == PIVOT_DATA_FIELD && bDelete )
-    {
-        pViewData->GetView()->ErrorMessage(STR_PIVOT_MOVENOTALLOWED);
-        return;
-    }
-
-    if ( bPivotColField != bToCols && !bDelete )
-    {
-        SCSIZE nDestCount = bToCols ? pDragPivot->GetColFieldCount()
-                                   : pDragPivot->GetRowFieldCount();
-        if ( nDestCount >= PIVOT_MAXFIELD )     // schon voll?
-        {
-            //  Versuch, mehr als PIVOT_MAXFIELD Eintraege zu erzeugen
-            pViewData->GetView()->ErrorMessage(STR_PIVOT_ERROR);
-            return;
-        }
-    }
-
-    PivotField* pColArr = new PivotField[PIVOT_MAXFIELD];
-    SCSIZE nColCount;
-    pDragPivot->GetColFields( pColArr, nColCount );
-
-    PivotField* pRowArr = new PivotField[PIVOT_MAXFIELD];
-    SCSIZE nRowCount;
-    pDragPivot->GetRowFields( pRowArr, nRowCount );
-
-    PivotField* pDataArr = new PivotField[PIVOT_MAXFIELD];
-    SCSIZE nDataCount;
-    pDragPivot->GetDataFields( pDataArr, nDataCount );
-
-    SCSIZE nOldPos = 0;
-    PivotField aMoveField;
-
-    PivotField* pSource = bPivotColField ? pColArr : pRowArr;
-    SCSIZE& rCount = bPivotColField ? nColCount : nRowCount;
-
-    BOOL bFound = FALSE;
-    for (SCSIZE i=0; i<rCount && !bFound; i++)
-        if (pSource[i].nCol == nPivotField)
-        {
-            nOldPos = i;
-            aMoveField = pSource[i];
-            --rCount;
-            if (i<rCount)
-                memmove( &pSource[i], &pSource[i+1], (rCount-i)*sizeof(PivotField) );
-            if ( bPivotColField == bToCols )
-                if (nDestPos > i)
-                    --nDestPos;
-            bFound = TRUE;
-        }
-
-    if (bFound)
-    {
-        if (!bDelete)
-        {
-            PivotField* pDest = bToCols ? pColArr : pRowArr;
-            SCSIZE& rDestCount = bToCols ? nColCount : nRowCount;
-
-            if (nDestPos < rDestCount)
-                memmove( &pDest[nDestPos+1], &pDest[nDestPos],
-                            (rDestCount-nDestPos)*sizeof(PivotField) );
-            pDest[nDestPos] = aMoveField;
-            ++rDestCount;
-        }
-
-        BOOL bEmpty = ( nColCount + nRowCount == 0 ||
-                        ( nColCount + nRowCount == 1 && nDataCount <= 1 ) );
-
-        if ( bEmpty )               // Pivottabelle loeschen
-        {
-            pViewData->GetDocShell()->PivotUpdate( pDragPivot, NULL );
-        }
-        else
-        {
-            ScPivot* pNewPivot = pDragPivot->CreateNew();
-            pNewPivot->SetColFields( pColArr, nColCount );
-            pNewPivot->SetRowFields( pRowArr, nRowCount );
-            pNewPivot->SetDataFields( pDataArr, nDataCount );
-
-            pNewPivot->SetName( pDragPivot->GetName() );
-            pNewPivot->SetTag( pDragPivot->GetTag() );
-
-            pViewData->GetDocShell()->PivotUpdate( pDragPivot, pNewPivot );
-        }
-        pDragPivot = NULL;
-    }
-    else
-    {
-        DBG_ASSERT(0,"Pivot-Eintrag nicht gefunden");
-    }
-
-    delete[] pColArr;
-    delete[] pRowArr;
-    delete[] pDataArr;
-}
-
-BOOL ScGridWindow::PivotTestMouse( const MouseEvent& rMEvt, BOOL bMove )
-{
-    BOOL bRet = FALSE;
-    BOOL bTimer = FALSE;
-    Point aPos = rMEvt.GetPosPixel();
-
-    SCsCOL nDx = 0;
-    SCsROW nDy = 0;
-    if ( aPos.X() < 0 )
-        nDx = -1;
-    if ( aPos.Y() < 0 )
-        nDy = -1;
-    Size aSize = GetOutputSizePixel();
-    if ( aPos.X() >= aSize.Width() )
-        nDx = 1;
-    if ( aPos.Y() >= aSize.Height() )
-        nDy = 1;
-    if ( nDx != 0 || nDy != 0 )
-    {
-        if (bDragRect)
-        {
-            // DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
-            bDragRect = FALSE;
-            UpdateDragRectOverlay();
-        }
-
-        if ( nDx != 0 )
-            pViewData->GetView()->ScrollX( nDx, WhichH(eWhich) );
-        if ( nDy != 0 )
-            pViewData->GetView()->ScrollY( nDy, WhichV(eWhich) );
-
-        bTimer = TRUE;
-    }
-
-    SCsCOL  nPosX;
-    SCsROW  nPosY;
-    pViewData->GetPosFromPixel( aPos.X(), aPos.Y(), eWhich, nPosX, nPosY );
-    BOOL    bMouseLeft;
-    BOOL    bMouseTop;
-    pViewData->GetMouseQuadrant( aPos, eWhich, nPosX, nPosY, bMouseLeft, bMouseTop );
-
-    SCCOL nPiCol1;
-    SCROW nPiRow1;
-    SCCOL nPiCol2;
-    SCROW nPiRow2;
-    SCTAB nTab;
-    pDragPivot->GetDestArea( nPiCol1, nPiRow1, nPiCol2, nPiRow2, nTab );
-
-    if ( nPosX >= (SCsCOL) nPiCol1 && nPosX <= (SCsCOL) nPiCol2 &&
-         nPosY >= (SCsROW) nPiRow1 && nPosY <= (SCsROW) nPiRow2 )
-    {
-        SCsROW nFilterAdd = 2;      // Platz fuer Filter-Button
-        SCsROW nColRows   = 1;      //! Ueberschrift: 0, wenn keine Zeilen, aber mehrere Datenfelder
-        SCCOL nNewStartX;
-        SCROW nNewStartY;
-        SCCOL nNewEndX;
-        SCROW nNewEndY;
-
-        SCsCOL nRelX = nPosX - (SCsCOL) nPiCol1;
-        SCsROW nRelY = nPosY - (SCsROW) nPiRow1 - nFilterAdd;
-
-        PivotField* pFieldArr = new PivotField[PIVOT_MAXFIELD];
-        SCSIZE nColCount;
-        pDragPivot->GetColFields( pFieldArr, nColCount );
-        SCSIZE nRowCount;
-        pDragPivot->GetRowFields( pFieldArr, nRowCount );
-        delete[] pFieldArr;
-
-        BOOL bBefore;
-        SCsCOL nColSize = static_cast<SCsCOL>(Max( nColCount, (SCSIZE) 1 ));
-        SCsROW nRowSize = static_cast<SCsROW>(Max( nRowCount, (SCSIZE) 1 ));
-
-        BOOL bToCols;
-        if (nRelX < nColSize && nRelY >= nRowSize)
-            bToCols = TRUE;                                     // links
-        else if (nRelY < nRowSize && nRelX >= nColSize)
-            bToCols = FALSE;                                    // oben
-        else
-            bToCols = ( nRelY-nRowSize > static_cast<SCsCOLROW>(nRelX-nColSize) );
-
-        SCsCOL nDestCol = 0;
-        SCsROW nDestRow = 0;
-        BOOL bNothing = FALSE;
-
-        if ( bToCols )
-        {
-            bBefore = bMouseLeft;
-            nDestCol = nRelX;
-            if (nDestCol < 0)
-            {
-                nDestCol = 0;
-                bBefore = TRUE;
-            }
-            if (nDestCol >= static_cast<SCsCOL>(nColCount))
-            {
-                nDestCol = static_cast<SCsCOL>(nColCount)-1;
-                bBefore = FALSE;
-            }
-
-            nNewStartY = nPiRow1 + nFilterAdd + static_cast<SCROW>(nRowCount) + nColRows;
-            nNewEndY   = nPiRow2 - 1;
-            nNewStartX = nPiCol1 + (SCCOL) nDestCol;
-            nNewEndX   = nNewStartX;
-
-            if ( !bPivotColField )                  // von der anderen Seite
-            {
-                if (bBefore)
-                    nNewEndX = nNewStartX - 1;                      // vor dem Feld
-                else
-                    nNewStartX = nNewEndX + 1;                      // hinter dem Feld
-            }
-            else
-            {
-                SCCOL nThisCol = (SCCOL) nPosX;         // absolute Spalte ( == Maus )
-                if ( nThisCol < nPivotCol )
-                {
-                    nNewEndX = nNewStartX - 1;                      // vor dem Feld
-                    bBefore = TRUE;
-                }
-                else if ( nThisCol > nPivotCol )
-                {
-                    nNewStartX = nNewEndX + 1;                      // hinter dem Feld
-                    bBefore = FALSE;
-                }
-                else
-                    bNothing = TRUE;
-            }
-            SetPointer( Pointer( POINTER_PIVOT_ROW ) );
-        }
-        else
-        {
-            if (nRelY <= 0 && static_cast<SCsCOLROW>(nRelX) < static_cast<SCsCOLROW>(nColCount)+static_cast<SCsCOLROW>(nRowCount))
-            {
-                nDestRow = static_cast<SCsCOLROW>(nRelX) - static_cast<SCsCOLROW>(nColCount);
-                bBefore = bMouseLeft;
-            }
-            else
-            {
-                nDestRow = nRelY-1;
-                bBefore = bMouseTop;
-            }
-            if (nDestRow < 0)
-            {
-                nDestRow = 0;
-                bBefore = TRUE;
-            }
-            if (nDestRow >= static_cast<SCsROW>(nRowCount))
-            {
-                nDestRow = static_cast<SCsROW>(nRowCount)-1;
-                bBefore = FALSE;
-            }
-
-            nNewStartX = nPiCol1 + (SCCOL) nColCount;
-            nNewEndX   = nPiCol2 - 1;
-            nNewStartY = nPiRow1 + nFilterAdd + nDestRow + nColRows;
-            nNewEndY   = nNewStartY;
-            if ( bPivotColField )                   // von der anderen Seite
-            {
-                if (bBefore)
-                    nNewEndY = nNewStartY - 1;                      // vor dem Feld
-                else
-                    nNewStartY = nNewEndY + 1;                      // hinter dem Feld
-            }
-            else
-            {
-                SCCOL nThisCol =
-                    static_cast<SCCOL>(static_cast<SCCOLROW>(nDestRow) +
-                            static_cast<SCCOLROW>(nColCount) + nPiCol1);
-                // absolute Spalte
-                if ( nThisCol < nPivotCol )
-                {
-                    bBefore = TRUE;
-                    nNewEndY = nNewStartY - 1;                      // vor dem Feld
-                }
-                else if ( nThisCol > nPivotCol )
-                {
-                    bBefore = FALSE;
-                    nNewStartY = nNewEndY + 1;                      // hinter dem Feld
-                }
-                else
-                    bNothing = TRUE;
-            }
-            SetPointer( Pointer( POINTER_PIVOT_COL ) );
-        }
-
-        if (bMove)
-        {
-            if ( nNewStartX != nDragStartX || nNewEndX != nDragEndX ||
-                 nNewStartY != nDragStartY || nNewEndY != nDragEndY || !bDragRect )
-            {
-                //if (bDragRect)
-                //  DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
-
-                nDragStartX = nNewStartX;
-                nDragStartY = nNewStartY;
-                nDragEndX = nNewEndX;
-                nDragEndY = nNewEndY;
-                bDragRect = TRUE;
-
-                // DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
-
-                UpdateDragRectOverlay();
-            }
-        }
-        else
-        {
-            if (bDragRect)
-            {
-                // DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
-                bDragRect = FALSE;
-                UpdateDragRectOverlay();
-            }
-
-            if (!bNothing)
-            {
-                SCSIZE nDestPos = bToCols ? static_cast<SCSIZE>(nDestCol) : static_cast<SCSIZE>(nDestRow);
-                if (!bBefore)
-                    ++nDestPos;
-                DoPivotDrop( FALSE, bToCols, nDestPos );
-            }
-        }
-
-        bRet = TRUE;
-    }
-    else
-    {
-        if (bMove)
-            SetPointer( Pointer( POINTER_PIVOT_DELETE ) );
-        // if (bDragRect)
-        //  DrawDragRect( nDragStartX, nDragStartY, nDragEndX, nDragEndY, FALSE );
-        bDragRect = FALSE;
-        UpdateDragRectOverlay();
-
-        if (!bMove)
-            DoPivotDrop( TRUE, FALSE,0 );
-    }
-
-    if (bTimer && bMove)
-        pViewData->GetView()->SetTimer( this, rMEvt );          // Event wiederholen
-    else
-        pViewData->GetView()->ResetTimer();
-
-    return bRet;
-}
-
-void ScGridWindow::PivotMouseMove( const MouseEvent& rMEvt )
-{
-    PivotTestMouse( rMEvt, TRUE );
-}
-
-void ScGridWindow::PivotMouseButtonUp( const MouseEvent& rMEvt )
-{
-    bPivotMouse = FALSE;        // als erstes, falls PivotTestMouse eine Fehlermeldung bringt
-    ReleaseMouse();
-
-    PivotTestMouse( rMEvt, FALSE );
-    SetPointer( Pointer( POINTER_ARROW ) );
-}
-#endif
 
 // -----------------------------------------------------------------------
 //
@@ -724,6 +362,223 @@ void ScGridWindow::DPTestMouse( const MouseEvent& rMEvt, BOOL bMove )
         pViewData->GetView()->SetTimer( this, rMEvt );          // repeat event
     else
         pViewData->GetView()->ResetTimer();
+}
+
+bool ScGridWindow::DPTestFieldPopupArrow(const MouseEvent& rMEvt, const ScAddress& rPos, ScDPObject* pDPObj)
+{
+    // Get the geometry of the cell.
+    Point aScrPos = pViewData->GetScrPos(rPos.Col(), rPos.Row(), eWhich);
+    long nSizeX, nSizeY;
+    pViewData->GetMergeSizePixel(rPos.Col(), rPos.Row(), nSizeX, nSizeY);
+    Size aScrSize(nSizeX-1, nSizeY-1);
+
+    // Check if the mouse cursor is clicking on the popup arrow box.
+    ScDPFieldButton aBtn(this, &GetSettings().GetStyleSettings());
+    aBtn.setBoundingBox(aScrPos, aScrSize);
+    Point aPopupPos;
+    Size aPopupSize;
+    aBtn.getPopupBoundingBox(aPopupPos, aPopupSize);
+    Rectangle aRec(aPopupPos, aPopupSize);
+    if (aRec.IsInside(rMEvt.GetPosPixel()))
+    {
+        // Mouse cursor inside the popup arrow box.  Launch the field menu.
+        DPLaunchFieldPopupMenu(OutputToScreenPixel(aScrPos), aScrSize, rPos, pDPObj);
+        return true;
+    }
+
+    return false;
+}
+
+namespace {
+
+struct DPFieldPopupData : public ScDPFieldPopupWindow::ExtendedData
+{
+    ScPivotParam    maDPParam;
+    ScDPObject*     mpDPObj;
+    long            mnDim;
+};
+
+class DPFieldPopupOKAction : public ScMenuFloatingWindow::Action
+{
+public:
+    explicit DPFieldPopupOKAction(ScGridWindow* p) :
+        mpGridWindow(p) {}
+
+    virtual void execute()
+    {
+        mpGridWindow->UpdateDPFromFieldPopupMenu();
+    }
+private:
+    ScGridWindow* mpGridWindow;
+};
+
+class PopupSortAction : public ScMenuFloatingWindow::Action
+{
+public:
+    enum SortType { ASCENDING, DESCENDING, CUSTOM };
+
+    explicit PopupSortAction(const ScAddress& rPos, SortType eType, sal_uInt16 nUserListIndex, ScTabViewShell* pViewShell) :
+        maPos(rPos), meType(eType), mnUserListIndex(nUserListIndex), mpViewShell(pViewShell) {}
+
+    virtual void execute()
+    {
+        switch (meType)
+        {
+            case ASCENDING:
+                mpViewShell->DataPilotSort(maPos, true);
+            break;
+            case DESCENDING:
+                mpViewShell->DataPilotSort(maPos, false);
+            break;
+            case CUSTOM:
+                mpViewShell->DataPilotSort(maPos, true, &mnUserListIndex);
+            break;
+            default:
+                ;
+        }
+    }
+
+private:
+    ScAddress       maPos;
+    SortType        meType;
+    sal_uInt16      mnUserListIndex;
+    ScTabViewShell* mpViewShell;
+};
+
+}
+
+void ScGridWindow::DPLaunchFieldPopupMenu(
+    const Point& rScrPos, const Size& rScrSize, const ScAddress& rPos, ScDPObject* pDPObj)
+{
+    // We need to get the list of field members.
+    auto_ptr<DPFieldPopupData> pDPData(new DPFieldPopupData);
+    pDPObj->FillLabelData(pDPData->maDPParam);
+    pDPData->mpDPObj = pDPObj;
+
+    USHORT nOrient;
+    pDPData->mnDim = pDPObj->GetHeaderDim(rPos, nOrient);
+
+    if (pDPData->maDPParam.maLabelArray.size() <= static_cast<size_t>(pDPData->mnDim))
+        // out-of-bound dimension ID.  This should never happen!
+        return;
+
+    const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
+
+    mpDPFieldPopup.reset(new ScDPFieldPopupWindow(this, pViewData->GetDocument()));
+    mpDPFieldPopup->setName(OUString::createFromAscii("DataPilot field member popup"));
+    mpDPFieldPopup->setExtendedData(pDPData.release());
+    mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
+    {
+        // Populate field members.
+        size_t n = rLabelData.maMembers.size();
+        mpDPFieldPopup->setMemberSize(n);
+        for (size_t i = 0; i < n; ++i)
+        {
+            const ScDPLabelData::Member& rMem = rLabelData.maMembers[i];
+            mpDPFieldPopup->addMember(rMem.getDisplayName(), rMem.mbVisible);
+        }
+        mpDPFieldPopup->initMembers();
+    }
+
+    vector<OUString> aUserSortNames;
+    ScUserList* pUserList = ScGlobal::GetUserList();
+    if (pUserList)
+    {
+        sal_uInt16 n = pUserList->GetCount();
+        aUserSortNames.reserve(n);
+        for (sal_uInt16 i = 0; i < n; ++i)
+        {
+            ScUserListData* pData = static_cast<ScUserListData*>((*pUserList)[i]);
+            aUserSortNames.push_back(pData->GetString());
+        }
+    }
+
+    // Populate the menus.
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    mpDPFieldPopup->addMenuItem(
+        ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_ASC).GetString(), true,
+        new PopupSortAction(rPos, PopupSortAction::ASCENDING, 0, pViewShell));
+    mpDPFieldPopup->addMenuItem(
+        ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_DESC).GetString(), true,
+        new PopupSortAction(rPos, PopupSortAction::DESCENDING, 0, pViewShell));
+    ScMenuFloatingWindow* pSubMenu = mpDPFieldPopup->addSubMenuItem(
+        ScRscStrLoader(RID_POPUP_FILTER, STR_MENU_SORT_CUSTOM).GetString(), !aUserSortNames.empty());
+
+    if (pSubMenu && !aUserSortNames.empty())
+    {
+        size_t n = aUserSortNames.size();
+        for (size_t i = 0; i < n; ++i)
+        {
+            pSubMenu->addMenuItem(
+                aUserSortNames[i], true,
+                new PopupSortAction(rPos, PopupSortAction::CUSTOM, static_cast<sal_uInt16>(i), pViewShell));
+        }
+    }
+
+    Rectangle aCellRect(rScrPos, rScrSize);
+    const Size& rPopupSize = mpDPFieldPopup->getWindowSize();
+    if (rScrSize.getWidth() > rPopupSize.getWidth())
+    {
+        // If the cell width is larger than the popup window width, launch it
+        // right-aligned with the cell.
+        long nXOffset = rScrSize.getWidth() - rPopupSize.getWidth();
+        aCellRect.SetPos(Point(rScrPos.X() + nXOffset, rScrPos.Y()));
+    }
+    mpDPFieldPopup->SetPopupModeEndHdl( LINK(this, ScGridWindow, PopupModeEndHdl) );
+    mpDPFieldPopup->StartPopupMode(aCellRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
+}
+
+void ScGridWindow::UpdateDPFromFieldPopupMenu()
+{
+    typedef hash_map<OUString, OUString, OUStringHash> MemNameMapType;
+    typedef hash_map<OUString, bool, OUStringHash> MemVisibilityType;
+
+    if (!mpDPFieldPopup.get())
+        return;
+
+    DPFieldPopupData* pDPData = static_cast<DPFieldPopupData*>(mpDPFieldPopup->getExtendedData());
+    if (!pDPData)
+        return;
+
+    ScDPObject* pDPObj = pDPData->mpDPObj;
+    ScDPObject aNewDPObj(*pDPObj);
+    aNewDPObj.BuildAllDimensionMembers();
+    ScDPSaveData* pSaveData = aNewDPObj.GetSaveData();
+
+    BOOL bIsDataLayout;
+    String aDimName = pDPObj->GetDimName(pDPData->mnDim, bIsDataLayout);
+    ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aDimName);
+    if (!pDim)
+        return;
+
+    // Build a map of layout names to original names.
+    const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
+    MemNameMapType aMemNameMap;
+    for (vector<ScDPLabelData::Member>::const_iterator itr = rLabelData.maMembers.begin(), itrEnd = rLabelData.maMembers.end();
+           itr != itrEnd; ++itr)
+        aMemNameMap.insert(MemNameMapType::value_type(itr->maLayoutName, itr->maName));
+
+    // The raw result may contain a mixture of layout names and original names.
+    MemVisibilityType aRawResult;
+    mpDPFieldPopup->getResult(aRawResult);
+
+    MemVisibilityType aResult;
+    for (MemVisibilityType::const_iterator itr = aRawResult.begin(), itrEnd = aRawResult.end(); itr != itrEnd; ++itr)
+    {
+        MemNameMapType::const_iterator itrNameMap = aMemNameMap.find(itr->first);
+        if (itrNameMap == aMemNameMap.end())
+            // This is an original member name.  Use it as-is.
+            aResult.insert(MemVisibilityType::value_type(itr->first, itr->second));
+        else
+        {
+            // This is a layout name.  Get the original member name and use it.
+            aResult.insert(MemVisibilityType::value_type(itrNameMap->second, itr->second));
+        }
+    }
+    pDim->UpdateMemberVisibility(aResult);
+
+    ScDBDocFunc aFunc(*pViewData->GetDocShell());
+    aFunc.DataPilotUpdate(pDPObj, &aNewDPObj, true, false);
 }
 
 void ScGridWindow::DPMouseMove( const MouseEvent& rMEvt )
@@ -1078,7 +933,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
                 BOOL bGrow = !bHide && nNew > nPagebreakBreak;
                 if ( bColumn )
                 {
-                    if ( pDoc->GetColFlags( static_cast<SCCOL>(nPagebreakBreak), nTab ) & CR_MANUALBREAK )
+                    if (pDoc->HasColBreak(static_cast<SCCOL>(nPagebreakBreak), nTab) & BREAK_MANUAL)
                     {
                         ScAddress aOldAddr( static_cast<SCCOL>(nPagebreakBreak), nPosY, nTab );
                         pViewFunc->DeletePageBreak( TRUE, TRUE, &aOldAddr, FALSE );
@@ -1091,8 +946,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
                     if ( bGrow )
                     {
                         //  vorigen Break auf hart, und Skalierung aendern
-                        if ( static_cast<SCCOL>(nPagebreakPrev) > aPagebreakSource.aStart.Col() &&
-                                !(pDoc->GetColFlags( static_cast<SCCOL>(nPagebreakPrev), nTab ) & CR_MANUALBREAK) )
+                        bool bManualBreak = (pDoc->HasColBreak(static_cast<SCCOL>(nPagebreakPrev), nTab) & BREAK_MANUAL);
+                        if ( static_cast<SCCOL>(nPagebreakPrev) > aPagebreakSource.aStart.Col() && !bManualBreak )
                         {
                             ScAddress aPrev( static_cast<SCCOL>(nPagebreakPrev), nPosY, nTab );
                             pViewFunc->InsertPageBreak( TRUE, TRUE, &aPrev, FALSE );
@@ -1105,7 +960,7 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
                 }
                 else
                 {
-                    if ( pDoc->GetRowFlags( nPagebreakBreak, nTab ) & CR_MANUALBREAK )
+                    if (pDoc->HasRowBreak(nPagebreakBreak, nTab) & BREAK_MANUAL)
                     {
                         ScAddress aOldAddr( nPosX, nPagebreakBreak, nTab );
                         pViewFunc->DeletePageBreak( FALSE, TRUE, &aOldAddr, FALSE );
@@ -1118,8 +973,8 @@ void ScGridWindow::PagebreakMove( const MouseEvent& rMEvt, BOOL bUp )
                     if ( bGrow )
                     {
                         //  vorigen Break auf hart, und Skalierung aendern
-                        if ( nPagebreakPrev > aPagebreakSource.aStart.Row() &&
-                                !(pDoc->GetRowFlags( nPagebreakPrev, nTab ) & CR_MANUALBREAK) )
+                        bool bManualBreak = (pDoc->HasRowBreak(nPagebreakPrev, nTab) & BREAK_MANUAL);
+                        if ( nPagebreakPrev > aPagebreakSource.aStart.Row() && !bManualBreak )
                         {
                             ScAddress aPrev( nPosX, nPagebreakPrev, nTab );
                             pViewFunc->InsertPageBreak( FALSE, TRUE, &aPrev, FALSE );

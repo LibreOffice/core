@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: fusel2.cxx,v $
- * $Revision: 1.12.128.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/outliner.hxx>
 
 #include "fusel.hxx"
 #include "tabvwsh.hxx"
@@ -53,6 +50,7 @@
 #include "drwlayer.hxx"
 #include "docsh.hxx"
 #include "drawview.hxx"
+#include <svx/sdrhittesthelper.hxx>
 
 // -----------------------------------------------------------------------
 
@@ -79,7 +77,7 @@ BOOL FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
         {
             USHORT nHitLog = (USHORT) pWindow->PixelToLogic(
                                 Size(pView->GetHitTolerancePixel(),0)).Width();
-            if ( pObject->IsHit( rPos, nHitLog ) )
+            if (SdrObjectPrimitiveHit(*pObject, rPos, nHitLog, *pPV, 0, false))
             {
                 ScViewData* pViewData = pViewShell->GetViewData();
                 ScSplitPos ePos = pViewShell->FindWindow( pWindow );

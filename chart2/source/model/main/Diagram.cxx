@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Diagram.cxx,v $
- *
- * $Revision: 1.24.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,9 +71,11 @@ enum
 {
     PROP_DIAGRAM_REL_POS,
     PROP_DIAGRAM_REL_SIZE,
+    PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS,
     PROP_DIAGRAM_SORT_BY_X_VALUES,
     PROP_DIAGRAM_CONNECT_BARS,
     PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
+    PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS,
     PROP_DIAGRAM_STARTING_ANGLE,
     PROP_DIAGRAM_RIGHT_ANGLED_AXES,
     PROP_DIAGRAM_PERSPECTIVE,
@@ -104,6 +102,13 @@ void lcl_AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID ));
 
     rOutProperties.push_back(
+        Property( C2U( "PosSizeExcludeAxes" ),
+                  PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
         Property( C2U( "SortByXValues" ),
                   PROP_DIAGRAM_SORT_BY_X_VALUES,
                   ::getBooleanCppuType(),
@@ -120,6 +125,13 @@ void lcl_AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U("GroupBarsPerAxis"),
                   PROP_DIAGRAM_GROUP_BARS_PER_AXIS,
+                  ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    rOutProperties.push_back(
+        Property( C2U("IncludeHiddenCells"),
+                  PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS,
                   ::getBooleanCppuType(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
@@ -167,9 +179,11 @@ void lcl_AddPropertiesToVector(
 void lcl_AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_POSSIZE_EXCLUDE_LABELS, true );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_SORT_BY_X_VALUES, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_CONNECT_BARS, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_GROUP_BARS_PER_AXIS, true );
+    ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_INCLUDE_HIDDEN_CELLS, true );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DIAGRAM_RIGHT_ANGLED_AXES, false );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DIAGRAM_STARTING_ANGLE, 90 );
 }
@@ -241,7 +255,7 @@ namespace chart
 Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
         ::property::OPropertySet( m_aMutex ),
         m_xContext( xContext ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+        m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     // Set camera position to a default position (that should be set hard, so
     // that it will be exported.  The property default is a camera looking
@@ -257,7 +271,7 @@ Diagram::Diagram( const Diagram & rOther ) :
         impl::Diagram_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
+    m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
     lcl_tCooSysMapping aCooSysMapping =
         lcl_CloneCoordinateSystems( rOther.m_aCoordSystems, m_aCoordSystems );
@@ -295,112 +309,118 @@ Diagram::~Diagram()
 uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
     throw (uno::RuntimeException)
 {
-    // /--
-    MutexGuard aGuard( GetMutex() );
-    if( ! m_xWall.is())
+    uno::Reference< beans::XPropertySet > xRet;
+    bool bAddListener = false;
     {
-        m_xWall.set( new Wall());
-        ModifyListenerHelper::addListener( m_xWall, m_xModifyEventForwarder );
+        MutexGuard aGuard( GetMutex() );
+        if( !m_xWall.is() )
+        {
+            m_xWall.set( new Wall() );
+            bAddListener = true;
+        }
+        xRet =  m_xWall;
     }
-    return m_xWall;
-    // \--
+    if(bAddListener)
+        ModifyListenerHelper::addListener( xRet, m_xModifyEventForwarder );
+    return xRet;
 }
 
 uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getFloor()
     throw (uno::RuntimeException)
 {
-    // /--
-    MutexGuard aGuard( GetMutex() );
-    if( ! m_xFloor.is())
+    uno::Reference< beans::XPropertySet > xRet;
+    bool bAddListener = false;
     {
-        m_xFloor.set( new Wall());
-        ModifyListenerHelper::addListener( m_xFloor, m_xModifyEventForwarder );
+        MutexGuard aGuard( GetMutex() );
+        if( !m_xFloor.is() )
+        {
+            m_xFloor.set( new Wall() );
+            bAddListener = true;
+        }
+        xRet = m_xFloor;
     }
-    return m_xFloor;
-    // \--
+    if(bAddListener)
+        ModifyListenerHelper::addListener( xRet, m_xModifyEventForwarder );
+    return xRet;
 }
 
 uno::Reference< chart2::XLegend > SAL_CALL Diagram::getLegend()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     return m_xLegend;
-    // \--
 }
 
-void SAL_CALL Diagram::setLegend( const uno::Reference< chart2::XLegend >& xLegend )
+void SAL_CALL Diagram::setLegend( const uno::Reference< chart2::XLegend >& xNewLegend )
     throw (uno::RuntimeException)
 {
-    // /--
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
-    if( xLegend != m_xLegend )
+    Reference< chart2::XLegend > xOldLegend;
     {
-        if( m_xLegend.is())
-            ModifyListenerHelper::removeListener( m_xLegend, m_xModifyEventForwarder );
-        m_xLegend = xLegend;
-        if( m_xLegend.is())
-            ModifyListenerHelper::addListener( m_xLegend, m_xModifyEventForwarder );
-        aGuard.clear();
-        // \--
-        fireModifyEvent();
+        MutexGuard aGuard( GetMutex() );
+        if( m_xLegend == xNewLegend )
+            return;
+        xOldLegend = m_xLegend;
+        m_xLegend = xNewLegend;
     }
+    if( xOldLegend.is())
+        ModifyListenerHelper::removeListener( xOldLegend, m_xModifyEventForwarder );
+    if( xNewLegend.is())
+        ModifyListenerHelper::addListener( xNewLegend, m_xModifyEventForwarder );
+    fireModifyEvent();
 }
 
 Reference< chart2::XColorScheme > SAL_CALL Diagram::getDefaultColorScheme()
     throw (uno::RuntimeException)
 {
-    if( ! m_xColorScheme.is())
+    Reference< chart2::XColorScheme > xRet;
     {
-        m_xColorScheme.set( new ConfigColorScheme( m_xContext ));
+        MutexGuard aGuard( GetMutex() );
+        xRet = m_xColorScheme;
     }
-    return m_xColorScheme;
+
+    if( !xRet.is())
+    {
+        xRet.set( createConfigColorScheme( m_xContext ));
+        MutexGuard aGuard( GetMutex() );
+        m_xColorScheme = xRet;
+    }
+    return xRet;
 }
 
 void SAL_CALL Diagram::setDefaultColorScheme( const Reference< chart2::XColorScheme >& xColorScheme )
     throw (uno::RuntimeException)
 {
-    m_xColorScheme.set( xColorScheme );
+    {
+        MutexGuard aGuard( GetMutex() );
+        m_xColorScheme.set( xColorScheme );
+    }
     fireModifyEvent();
-}
-
-void SAL_CALL Diagram::setUnusedData( const Sequence< Reference< chart2::data::XLabeledDataSequence > >& aUnusedData )
-    throw (uno::RuntimeException)
-{
-    m_aUnusedData = aUnusedData;
-}
-
-Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL Diagram::getUnusedData()
-    throw (uno::RuntimeException)
-{
-    return m_aUnusedData;
 }
 
 // ____ XTitled ____
 uno::Reference< chart2::XTitle > SAL_CALL Diagram::getTitleObject()
     throw (uno::RuntimeException)
 {
-    // /--
     MutexGuard aGuard( GetMutex() );
     return m_xTitle;
-    // \--
 }
 
-void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& Title )
+void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& xNewTitle )
     throw (uno::RuntimeException)
 {
-    // /--
-    ::osl::ClearableMutexGuard aGuard( GetMutex() );
-
-    if( m_xTitle != Title )
+    Reference< chart2::XTitle > xOldTitle;
     {
-        ModifyListenerHelper::removeListener( m_xTitle, m_xModifyEventForwarder );
-        m_xTitle = Title;
-        ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
-        // \--
-        aGuard.clear();
-        fireModifyEvent();
+        MutexGuard aGuard( GetMutex() );
+        if( m_xTitle == xNewTitle )
+            return;
+        xOldTitle = m_xTitle;
+        m_xTitle = xNewTitle;
     }
+    if( xOldTitle.is())
+        ModifyListenerHelper::removeListener( xOldTitle, m_xModifyEventForwarder );
+    if( xNewTitle.is())
+        ModifyListenerHelper::addListener( xNewTitle, m_xModifyEventForwarder );
+    fireModifyEvent();
 }
 
 // ____ X3DDefaultSetter ____
@@ -428,18 +448,19 @@ void SAL_CALL Diagram::addCoordinateSystem(
     throw (lang::IllegalArgumentException,
            uno::RuntimeException)
 {
-    if( ::std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys )
-        != m_aCoordSystems.end())
-        throw lang::IllegalArgumentException();
-
-    if( m_aCoordSystems.size()>=1 )
     {
-        OSL_ENSURE( false, "more than one coordinatesystem is not supported yet by the fileformat" );
-        return;
+        MutexGuard aGuard( GetMutex() );
+        if( ::std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys )
+            != m_aCoordSystems.end())
+            throw lang::IllegalArgumentException();
+
+        if( m_aCoordSystems.size()>=1 )
+        {
+            OSL_ENSURE( false, "more than one coordinatesystem is not supported yet by the fileformat" );
+            return;
+        }
+        m_aCoordSystems.push_back( aCoordSys );
     }
-
-    m_aCoordSystems.push_back( aCoordSys );
-
     ModifyListenerHelper::addListener( aCoordSys, m_xModifyEventForwarder );
     fireModifyEvent();
 }
@@ -449,15 +470,16 @@ void SAL_CALL Diagram::removeCoordinateSystem(
     throw (container::NoSuchElementException,
            uno::RuntimeException)
 {
-    ::std::vector< uno::Reference< chart2::XCoordinateSystem > >::iterator
-          aIt( ::std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys ));
-    if( aIt == m_aCoordSystems.end())
-        throw container::NoSuchElementException(
-            C2U( "The given coordinate-system is no element of the container" ),
-            static_cast< uno::XWeak * >( this ));
-
-    m_aCoordSystems.erase( aIt );
-
+    {
+        MutexGuard aGuard( GetMutex() );
+        ::std::vector< uno::Reference< chart2::XCoordinateSystem > >::iterator
+              aIt( ::std::find( m_aCoordSystems.begin(), m_aCoordSystems.end(), aCoordSys ));
+        if( aIt == m_aCoordSystems.end())
+            throw container::NoSuchElementException(
+                C2U( "The given coordinate-system is no element of the container" ),
+                static_cast< uno::XWeak * >( this ));
+        m_aCoordSystems.erase( aIt );
+    }
     ModifyListenerHelper::removeListener( aCoordSys, m_xModifyEventForwarder );
     fireModifyEvent();
 }
@@ -465,6 +487,7 @@ void SAL_CALL Diagram::removeCoordinateSystem(
 uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > SAL_CALL Diagram::getCoordinateSystems()
     throw (uno::RuntimeException)
 {
+    MutexGuard aGuard( GetMutex() );
     return ContainerHelper::ContainerToSequence( m_aCoordSystems );
 }
 
@@ -473,17 +496,20 @@ void SAL_CALL Diagram::setCoordinateSystems(
     throw (lang::IllegalArgumentException,
            uno::RuntimeException)
 {
-    Sequence< Reference< chart2::XCoordinateSystem > > aNew(aCoordinateSystems);
-
-    if( aNew.getLength()>1 )
+    tCoordinateSystemContainerType aNew;
+    tCoordinateSystemContainerType aOld;
+    if( aCoordinateSystems.getLength()>0 )
     {
-        OSL_ENSURE( false, "more than one coordinatesystem is not supported yet by the fileformat" );
-        aNew.realloc(1);
+        OSL_ENSURE( aCoordinateSystems.getLength()<=1, "more than one coordinatesystem is not supported yet by the fileformat" );
+        aNew.push_back( aCoordinateSystems[0] );
     }
-
-    ModifyListenerHelper::removeListenerFromAllElements( m_aCoordSystems, m_xModifyEventForwarder );
-    m_aCoordSystems = ContainerHelper::SequenceToVector( aNew );
-    ModifyListenerHelper::addListenerToAllElements( m_aCoordSystems, m_xModifyEventForwarder );
+    {
+        MutexGuard aGuard( GetMutex() );
+        std::swap( aOld, m_aCoordSystems );
+        m_aCoordSystems = aNew;
+    }
+    ModifyListenerHelper::removeListenerFromAllElements( aOld, m_xModifyEventForwarder );
+    ModifyListenerHelper::addListenerToAllElements( aNew, m_xModifyEventForwarder );
     fireModifyEvent();
 }
 
@@ -491,6 +517,7 @@ void SAL_CALL Diagram::setCoordinateSystems(
 Reference< util::XCloneable > SAL_CALL Diagram::createClone()
     throw (uno::RuntimeException)
 {
+    MutexGuard aGuard( GetMutex() );
     return Reference< util::XCloneable >( new Diagram( *this ));
 }
 

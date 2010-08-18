@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sfiltdlg.cxx,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +75,12 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         aEdFilterArea   ( this, this, ScResId( ED_CRITERIA_AREA ) ),
         aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea, this ),
         //
+        aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
         _INIT_COMMON_FILTER_RSCOBJS
+        aBtnOk          ( this, ScResId( BTN_OK ) ),
+        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+        aBtnMore        ( this, ScResId( BTN_MORE ) ),
         //
         pOptionsMgr     ( NULL ),
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),

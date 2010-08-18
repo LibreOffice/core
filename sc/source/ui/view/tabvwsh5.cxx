@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabvwsh5.cxx,v $
- * $Revision: 1.13.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +33,8 @@
 // INCLUDE ---------------------------------------------------------------
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
-#include <svtools/smplhint.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/smplhint.hxx>
+#include <svl/zforlist.hxx>
 #include <svx/numfmtsh.hxx>
 #include <svx/numinf.hxx>
 #include <svx/svxids.hrc>
@@ -47,6 +44,7 @@
 #include "tabvwsh.hxx"
 #include "sc.hrc"
 #include "global.hxx"
+#include "docsh.hxx"
 #include "document.hxx"
 #include "cell.hxx"
 #include "globstr.hrc"
@@ -159,6 +157,10 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             if (nParts & PAINT_EXTRAS)          // zuerst, falls Tabelle weg ist !!!
                 if (PaintExtras())
                     nParts = PAINT_ALL;
+
+            // if the current sheet has pending row height updates (sheet links refreshed),
+            // execute them before invalidating the window
+            GetViewData()->GetDocShell()->UpdatePendingRowHeights( GetViewData()->GetTabNo() );
 
             if (nParts & PAINT_SIZE)
                 RepeatResize();                     //! InvalidateBorder ???

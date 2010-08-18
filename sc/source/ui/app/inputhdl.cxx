@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: inputhdl.cxx,v $
- * $Revision: 1.77.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,30 +31,30 @@
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 #include <sfx2/app.hxx>
-#include <svx/acorrcfg.hxx>
+#include <editeng/acorrcfg.hxx>
 #include <svx/algitem.hxx>
-#include <svx/adjitem.hxx>
-#include <svx/brshitem.hxx>
+#include <editeng/adjitem.hxx>
+#include <editeng/brshitem.hxx>
 #include <svtools/colorcfg.hxx>
-#include <svx/colritem.hxx>
-#include <svx/editobj.hxx>
-#include <svx/editstat.hxx>
-#include <svx/editview.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/forbiddencharacterstable.hxx>
-#include <svx/langitem.hxx>
-#include <svx/svxacorr.hxx>
-#include <svx/unolingu.hxx>
-#include <svx/wghtitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/editobj.hxx>
+#include <editeng/editstat.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/forbiddencharacterstable.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/svxacorr.hxx>
+#include <editeng/unolingu.hxx>
+#include <editeng/wghtitem.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #include <vcl/sound.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/help.hxx>
@@ -113,14 +110,22 @@ extern USHORT nEditAdjust;      //! Member an ViewData
 
 //==================================================================
 
+static sal_Unicode lcl_getSheetSeparator(ScDocument* pDoc)
+{
+    ScCompiler aComp(pDoc, ScAddress());
+    aComp.SetGrammar(pDoc->GetGrammar());
+    return aComp.GetNativeAddressSymbol(ScCompiler::Convention::SHEET_SEPARATOR);
+}
+
 void ScInputHandler::InitRangeFinder( const String& rFormula )
 {
     DeleteRangeFinder();
+    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
+    ScDocument* pDoc = pDocSh->GetDocument();
+    const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDoc);
 
     if ( !pActiveViewSh || !SC_MOD()->GetInputOptions().GetRangeFinder() )
         return;
-    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
 
 //  String aDelimiters = pEngine->GetWordDelimiters();
     String aDelimiters = ScEditUtil::ModifyDelimiters(
@@ -129,7 +134,7 @@ void ScInputHandler::InitRangeFinder( const String& rFormula )
     xub_StrLen nColon = aDelimiters.Search(':');
     if ( nColon != STRING_NOTFOUND )
         aDelimiters.Erase( nColon, 1 );             // Delimiter ohne Doppelpunkt
-    xub_StrLen nDot = aDelimiters.Search('.');
+    xub_StrLen nDot = aDelimiters.Search(cSheetSep);
     if ( nDot != STRING_NOTFOUND )
         aDelimiters.Erase( nDot, 1 );               // Delimiter ohne Punkt
 
@@ -183,6 +188,14 @@ handle_r1c1:
                     aRange.aStart.SetTab( pActiveViewSh->GetViewData()->GetTabNo() );
                 if ( (nFlags & SCA_TAB2_3D) == 0 )
                     aRange.aEnd.SetTab( aRange.aStart.Tab() );
+
+                if ( ( nFlags & ( SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2 ) ) == 0 )
+                {
+                    // #i73766# if a single ref was parsed, set the same "abs" flags for ref2,
+                    // so Format doesn't output a double ref because of different flags.
+                    USHORT nAbsFlags = nFlags & ( SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE );
+                    nFlags |= nAbsFlags << 4;
+                }
 
                 if (!nCount)
                 {
@@ -416,7 +429,9 @@ ScInputHandler::ScInputHandler()
         pColumnData( NULL ),
         pFormulaData( NULL ),
         pFormulaDataPara( NULL ),
+        pTipVisibleParent( NULL ),
         nTipVisible( 0 ),
+        pTipVisibleSecParent( NULL ),
         nTipVisibleSec( 0 ),
         nAutoPos( SCPOS_INVALID ),
         bUseTab( FALSE ),
@@ -678,12 +693,29 @@ void ScInputHandler::GetFormulaData()
     }
 }
 
+IMPL_LINK( ScInputHandler, ShowHideTipVisibleParentListener, VclWindowEvent*, pEvent )
+{
+    if( pEvent->GetId() == VCLEVENT_OBJECT_DYING || pEvent->GetId() == VCLEVENT_WINDOW_HIDE )
+        HideTip();
+    return 0;
+}
+
+IMPL_LINK( ScInputHandler, ShowHideTipVisibleSecParentListener, VclWindowEvent*, pEvent )
+{
+    if( pEvent->GetId() == VCLEVENT_OBJECT_DYING || pEvent->GetId() == VCLEVENT_WINDOW_HIDE )
+        HideTipBelow();
+    return 0;
+}
+
 void ScInputHandler::HideTip()
 {
     if ( nTipVisible )
     {
+        if (pTipVisibleParent)
+            pTipVisibleParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
         Help::HideTip( nTipVisible );
         nTipVisible = 0;
+        pTipVisibleParent = NULL;
     }
     aManualTip.Erase();
 }
@@ -691,8 +723,11 @@ void ScInputHandler::HideTipBelow()
 {
     if ( nTipVisibleSec )
     {
+        if (pTipVisibleSecParent)
+            pTipVisibleSecParent->RemoveEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
         Help::HideTip( nTipVisibleSec );
         nTipVisibleSec = 0;
+        pTipVisibleSecParent = NULL;
     }
     aManualTip.Erase();
 }
@@ -702,6 +737,9 @@ void ScInputHandler::ShowTipCursor()
     HideTip();
     HideTipBelow();
     EditView* pActiveView = pTopView ? pTopView : pTableView;
+    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDocSh->GetDocument());
 
     if ( bFormulaMode && pActiveView && pFormulaDataPara && pEngine->GetParagraphCount() == 1 )
     {
@@ -730,7 +768,7 @@ void ScInputHandler::ShowTipCursor()
                 nLeftParentPos = lcl_MatchParenthesis( aSelText, aSelText.Len()-1 );
                 if( nLeftParentPos != STRING_NOTFOUND )
                 {
-                    sal_Unicode c = aSelText.GetChar( nLeftParentPos-1 );
+                    sal_Unicode c = ( nLeftParentPos > 0 ) ? aSelText.GetChar( nLeftParentPos-1 ) : 0;
                     if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z' )) )
                         continue;
                     nNextFStart = aHelper.GetFunctionStart( aSelText, nLeftParentPos, TRUE);
@@ -764,8 +802,8 @@ void ScInputHandler::ShowTipCursor()
                                 }
                                 if( bFlag )
                                 {
-                                    nCountSemicolon = aNew.GetTokenCount(';')-1;
-                                    nCountDot = aNew.GetTokenCount('.')-1;
+                                    nCountSemicolon = aNew.GetTokenCount(cSep)-1;
+                                    nCountDot = aNew.GetTokenCount(cSheetSep)-1;
 
                                     if( !nCountSemicolon )
                                     {
@@ -787,7 +825,7 @@ void ScInputHandler::ShowTipCursor()
                                             {
                                                 nStartPosition = i+1;
                                             }
-                                            else if( cNext == ';' )
+                                            else if( cNext == cSep )
                                             {
                                                 nCount ++;
                                                 nEndPosition = i;
@@ -808,7 +846,7 @@ void ScInputHandler::ShowTipCursor()
                                             {
                                                 nStartPosition = i+1;
                                             }
-                                            else if( cNext == ';' )
+                                            else if( cNext == cSep )
                                             {
                                                 nCount ++;
                                                 nEndPosition = i;
@@ -818,7 +856,7 @@ void ScInputHandler::ShowTipCursor()
                                                 }
                                                 nStartPosition = nEndPosition+1;
                                             }
-                                            else if( cNext == '.' )
+                                            else if( cNext == cSheetSep )
                                             {
                                                 continue;
                                             }
@@ -881,15 +919,16 @@ void ScInputHandler::ShowTip( const String& rText )
     if (pActiveView)
     {
         Point aPos;
-        Window* pWin = pActiveView->GetWindow();
+        pTipVisibleParent = pActiveView->GetWindow();
         Cursor* pCur = pActiveView->GetCursor();
         if (pCur)
-            aPos = pWin->LogicToPixel( pCur->GetPos() );
-        aPos = pWin->OutputToScreenPixel( aPos );
+            aPos = pTipVisibleParent->LogicToPixel( pCur->GetPos() );
+        aPos = pTipVisibleParent->OutputToScreenPixel( aPos );
         Rectangle aRect( aPos, aPos );
 
         USHORT nAlign = QUICKHELP_LEFT|QUICKHELP_BOTTOM;
-        nTipVisible = Help::ShowTip(pWin, aRect, rText, nAlign);
+        nTipVisible = Help::ShowTip(pTipVisibleParent, aRect, rText, nAlign);
+        pTipVisibleParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleParentListener ) );
     }
 }
 
@@ -901,24 +940,28 @@ void ScInputHandler::ShowTipBelow( const String& rText )
     if ( pActiveView )
     {
         Point aPos;
-        Window* pWin = pActiveView->GetWindow();
+        pTipVisibleSecParent = pActiveView->GetWindow();
         Cursor* pCur = pActiveView->GetCursor();
         if ( pCur )
         {
             Point aLogicPos = pCur->GetPos();
             aLogicPos.Y() += pCur->GetHeight();
-            aPos = pWin->LogicToPixel( aLogicPos );
+            aPos = pTipVisibleSecParent->LogicToPixel( aLogicPos );
         }
-        aPos = pWin->OutputToScreenPixel( aPos );
+        aPos = pTipVisibleSecParent->OutputToScreenPixel( aPos );
         Rectangle aRect( aPos, aPos );
-        USHORT nAlign = QUICKHELP_LEFT | QUICKHELP_TOP;
-        nTipVisibleSec = Help::ShowTip(pWin, aRect, rText, nAlign);
+        USHORT nAlign = QUICKHELP_LEFT | QUICKHELP_TOP | QUICKHELP_NOEVADEPOINTER;
+        nTipVisibleSec = Help::ShowTip(pTipVisibleSecParent, aRect, rText, nAlign);
+        pTipVisibleSecParent->AddEventListener( LINK( this, ScInputHandler, ShowHideTipVisibleSecParentListener ) );
     }
 }
 
 void ScInputHandler::UseFormulaData()
 {
     EditView* pActiveView = pTopView ? pTopView : pTableView;
+    ScDocShell* pDocSh = pActiveViewSh->GetViewData()->GetDocShell();
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
+    const sal_Unicode cSheetSep = lcl_getSheetSeparator(pDocSh->GetDocument());
 
     //  Formeln duerfen nur 1 Absatz haben
     if ( pActiveView && pFormulaData && pEngine->GetParagraphCount() == 1 )
@@ -969,7 +1012,8 @@ void ScInputHandler::UseFormulaData()
                 if( nLeftParentPos == STRING_NOTFOUND )
                     break;
 
-                sal_Unicode c = aFormula.GetChar( nLeftParentPos-1 );
+                // #160063# nLeftParentPos can be 0 if a parenthesis is inserted before the formula
+                sal_Unicode c = ( nLeftParentPos > 0 ) ? aFormula.GetChar( nLeftParentPos-1 ) : 0;
                 if( !((c >= 'A' && c<= 'Z') || (c>= 'a' && c<= 'z') ) )
                     continue;
                 nNextFStart = aHelper.GetFunctionStart( aFormula, nLeftParentPos, TRUE);
@@ -1003,8 +1047,8 @@ void ScInputHandler::UseFormulaData()
                             }
                             if( bFlag )
                             {
-                                nCountSemicolon = aNew.GetTokenCount(';')-1;
-                                nCountDot = aNew.GetTokenCount('.')-1;
+                                nCountSemicolon = aNew.GetTokenCount(cSep)-1;
+                                nCountDot = aNew.GetTokenCount(cSheetSep)-1;
 
                                if( !nCountSemicolon )
                                {
@@ -1026,7 +1070,7 @@ void ScInputHandler::UseFormulaData()
                                         {
                                             nStartPosition = i+1;
                                         }
-                                        else if( cNext == ';' )
+                                        else if( cNext == cSep )
                                         {
                                             nCount ++;
                                             nEndPosition = i;
@@ -1047,7 +1091,7 @@ void ScInputHandler::UseFormulaData()
                                         {
                                             nStartPosition = i+1;
                                         }
-                                        else if( cNext == ';' )
+                                        else if( cNext == cSep )
                                         {
                                             nCount ++;
                                             nEndPosition = i;
@@ -1057,7 +1101,7 @@ void ScInputHandler::UseFormulaData()
                                             }
                                             nStartPosition = nEndPosition+1;
                                         }
-                                        else if( cNext == '.' )
+                                        else if( cNext == cSheetSep )
                                         {
                                             continue;
                                         }
@@ -2670,6 +2714,7 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
     delete pObject;
 
     HideTip();
+    HideTipBelow();
 
     nFormSelStart = nFormSelEnd = 0;
     aFormText.Erase();
@@ -2740,6 +2785,7 @@ BOOL ScInputHandler::IsModalMode( SfxObjectShell* pDocSh )
 
 void ScInputHandler::AddRefEntry()
 {
+    const sal_Unicode cSep = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
     UpdateActiveView();
     if (!pTableView && !pTopView)
         return;                             // z.B. FillMode
@@ -2748,9 +2794,9 @@ void ScInputHandler::AddRefEntry()
 
     RemoveSelection();
     if (pTableView)
-        pTableView->InsertText( ';', FALSE );
+        pTableView->InsertText( cSep, FALSE );
     if (pTopView)
-        pTopView->InsertText( ';', FALSE );
+        pTopView->InsertText( cSep, FALSE );
 
     DataChanged();
 }

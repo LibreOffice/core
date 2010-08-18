@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xestyle.hxx,v $
- * $Revision: 1.20.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,9 +31,9 @@
 #include <map>
 #include <tools/mempool.hxx>
 #include <tools/string.hxx>
-#include <svtools/zforlist.hxx>
-#include <svtools/nfkeytab.hxx>
-#include <svx/svxfont.hxx>
+#include <svl/zforlist.hxx>
+#include <svl/nfkeytab.hxx>
+#include <editeng/svxfont.hxx>
 #include "xerecord.hxx"
 #include "xlstyle.hxx"
 #include "xeroot.hxx"
@@ -61,7 +58,8 @@ enum XclExpColorType
     EXC_COLOR_CHARTLINE,        /// Line in a chart.
     EXC_COLOR_CHARTAREA,        /// Area in a chart.
     EXC_COLOR_CTRLTEXT,         /// Text color in a form control.
-    EXC_COLOR_GRID              /// Spreadsheet grid color.
+    EXC_COLOR_GRID,              /// Spreadsheet grid color.
+    EXC_COLOR_TABBG             /// Spreadsheet tab bg color.
 };
 
 // ----------------------------------------------------------------------------
@@ -136,6 +134,36 @@ class Font;
 class SvxFont;
 
 const size_t EXC_FONTLIST_NOTFOUND = static_cast< size_t >( -1 );
+
+// ----------------------------------------------------------------------------
+
+/** Static helper functions for font export. */
+class XclExpFontHelper
+{
+public:
+    /** Returns the script type of the first font item found in the item set and its parents. */
+    static sal_Int16    GetFirstUsedScript(
+                            const XclExpRoot& rRoot,
+                            const SfxItemSet& rItemSet );
+
+    /** Returns a VCL font object filled from the passed item set. */
+    static Font         GetFontFromItemSet(
+                            const XclExpRoot& rRoot,
+                            const SfxItemSet& rItemSet,
+                            sal_Int16 nScript );
+
+    /** Returns true, if at least one font related item is set in the passed item set.
+        @param bDeep  true = Searches in parent item sets too. */
+    static bool         CheckItems(
+                            const XclExpRoot& rRoot,
+                            const SfxItemSet& rItemSet,
+                            sal_Int16 nScript,
+                            bool bDeep );
+
+private:
+                            XclExpFontHelper();
+                            ~XclExpFontHelper();
+};
 
 // ----------------------------------------------------------------------------
 
@@ -227,15 +255,6 @@ public:
     /** Writes all FONT records contained in this buffer. */
     virtual void        Save( XclExpStream& rStrm );
     virtual void        SaveXml( XclExpXmlStream& rStrm );
-
-    /** Returns the script type of the first font item found in the item set and its parents. */
-    static sal_Int16    GetFirstUsedScript( const SfxItemSet& rItemSet );
-
-    /** Returns a VCL font object filled from the passed item set. */
-    static Font         GetFontFromItemSet( const SfxItemSet& rItemSet, sal_Int16 nScript );
-    /** Returns true, if at least one font related item is set in the passed item set.
-        @param bDeep  true = Searches in parent item sets too. */
-    static bool         CheckItems( const SfxItemSet& rItemSet, sal_Int16 nScript, bool bDeep );
 
 private:
     /** Initializes the default fonts for the current BIFF version. */
@@ -643,10 +662,13 @@ public:
         @param nXFFlags  Additional flags allowing to control the creation of an XF.
         @param nForceScNumFmt  The number format to be exported, e.g. formula
             result type. This format will always overwrite the cell's number format.
+        @param bForceLineBreak  true = Set line break flag unconditionally.
+            This is required for cells that contain multi-line text.
         @return  A unique XF record ID. */
     sal_uInt32          InsertWithNumFmt(
                             const ScPatternAttr* pPattern, sal_Int16 nScript,
-                            ULONG nForceScNumFmt );
+                            ULONG nForceScNumFmt,
+                            bool bForceLineBreak );
     /** Inserts the passed cell style. Creates a style XF record and a STYLE record.
         @return  A unique XF record ID. */
     sal_uInt32          InsertStyle( const SfxStyleSheetBase* pStyleSheet );

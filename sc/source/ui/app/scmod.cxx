@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: scmod.cxx,v $
- * $Revision: 1.58.128.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,10 +38,10 @@
 
 #include "scitems.hxx"
 #include <sfx2/app.hxx>
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
-#include <svx/flditem.hxx>
-#include <svx/outliner.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/outliner.hxx>
 #include <basic/sbstar.hxx>
 
 #include <sfx2/sfxdlg.hxx>
@@ -56,17 +53,17 @@
 
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
-#include <svtools/ctloptions.hxx>
-#include <svtools/useroptions.hxx>
+#include <svl/ctloptions.hxx>
+#include <unotools/useroptions.hxx>
 #include <vcl/status.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/macrconf.hxx>
 #include <sfx2/printer.hxx>
-#include <svx/langitem.hxx>
+#include <editeng/langitem.hxx>
 #include <svtools/colorcfg.hxx>
 
-#include <svtools/whiter.hxx>
+#include <svl/whiter.hxx>
 #include <svx/selctrl.hxx>
 #include <svx/insctrl.hxx>
 #include <svx/zoomctrl.hxx>
@@ -74,7 +71,7 @@
 #include <svx/pszctrl.hxx>
 #include <svx/zoomsliderctrl.hxx>
 #include <vcl/msgbox.hxx>
-#include <svtools/inethist.hxx>
+#include <svl/inethist.hxx>
 #include <vcl/waitobj.hxx>
 #include <svx/svxerr.hxx>
 
@@ -101,7 +98,6 @@
 #include "msgpool.hxx"
 #include "scresid.hxx"
 #include "anyrefdg.hxx"
-#include "teamdlg.hxx"
 #include "dwfunctr.hxx"
 #include "formdata.hxx"
 //CHINA001 #include "tpview.hxx"
@@ -145,7 +141,6 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pSelTransfer( NULL ),
     pMessagePool( NULL ),
     pRefInputHandler( NULL ),
-    pTeamDlg( NULL ),
     pViewCfg( NULL ),
     pDocCfg( NULL ),
     pAppCfg( NULL ),
@@ -217,6 +212,118 @@ ScModule::~ScModule()
 }
 
 //------------------------------------------------------------------
+void ScModule::ConfigurationChanged( utl::ConfigurationBroadcaster* p, sal_uInt32 )
+{
+    if ( p == pColorConfig || p == pAccessOptions )
+    {
+        //  Test if detective objects have to be updated with new colors
+        //  (if the detective colors haven't been used yet, there's nothing to update)
+        if ( ScDetectiveFunc::IsColorsInitialized() )
+        {
+            const svtools::ColorConfig& rColors = GetColorConfig();
+            BOOL bArrows =
+                ( ScDetectiveFunc::GetArrowColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVE).nColor ||
+                  ScDetectiveFunc::GetErrorColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVEERROR).nColor );
+            BOOL bComments =
+                ( ScDetectiveFunc::GetCommentColor() != (ColorData)rColors.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor );
+            if ( bArrows || bComments )
+            {
+                ScDetectiveFunc::InitializeColors();        // get the new colors
+
+                //  update detective objects in all open documents
+                SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
+                while ( pObjSh )
+                {
+                    if ( pObjSh->Type() == TYPE(ScDocShell) )
+                    {
+                        ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
+                        if ( bArrows )
+                            ScDetectiveFunc( pDocSh->GetDocument(), 0 ).UpdateAllArrowColors();
+                        if ( bComments )
+                            ScDetectiveFunc::UpdateAllComments( *pDocSh->GetDocument() );
+                    }
+                    pObjSh = SfxObjectShell::GetNext( *pObjSh );
+                }
+            }
+        }
+
+        //  force all views to repaint, using the new options
+
+        SfxViewShell* pViewShell = SfxViewShell::GetFirst();
+        while(pViewShell)
+        {
+            if ( pViewShell->ISA(ScTabViewShell) )
+            {
+                ScTabViewShell* pViewSh = (ScTabViewShell*)pViewShell;
+                pViewSh->PaintGrid();
+                pViewSh->PaintTop();
+                pViewSh->PaintLeft();
+                pViewSh->PaintExtras();
+
+                ScInputHandler* pHdl = pViewSh->GetInputHandler();
+                if ( pHdl )
+                    pHdl->ForgetLastPattern();  // EditEngine BackgroundColor may change
+            }
+            else if ( pViewShell->ISA(ScPreviewShell) )
+            {
+                Window* pWin = pViewShell->GetWindow();
+                if (pWin)
+                    pWin->Invalidate();
+            }
+            pViewShell = SfxViewShell::GetNext( *pViewShell );
+        }
+    }
+    else if ( p == pCTLOptions )
+    {
+        //  for all documents: set digit language for printer, recalc output factor, update row heights
+        SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
+        while ( pObjSh )
+        {
+            if ( pObjSh->Type() == TYPE(ScDocShell) )
+            {
+                ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
+                OutputDevice* pPrinter = pDocSh->GetPrinter();
+                if ( pPrinter )
+                    pPrinter->SetDigitLanguage( GetOptDigitLanguage() );
+
+                pDocSh->CalcOutputFactor();
+
+                SCTAB nTabCount = pDocSh->GetDocument()->GetTableCount();
+                for (SCTAB nTab=0; nTab<nTabCount; nTab++)
+                    pDocSh->AdjustRowHeight( 0, MAXROW, nTab );
+            }
+            pObjSh = SfxObjectShell::GetNext( *pObjSh );
+        }
+
+        //  for all views (table and preview): update digit language
+        SfxViewShell* pSh = SfxViewShell::GetFirst();
+        while ( pSh )
+        {
+            if ( pSh->ISA( ScTabViewShell ) )
+            {
+                ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
+
+                //  set ref-device for EditEngine (re-evaluates digit settings)
+                ScInputHandler* pHdl = GetInputHdl(pViewSh);
+                if (pHdl)
+                    pHdl->UpdateRefDevice();
+
+                pViewSh->DigitLanguageChanged();
+                pViewSh->PaintGrid();
+            }
+            else if ( pSh->ISA( ScPreviewShell ) )
+            {
+                ScPreviewShell* pPreviewSh = (ScPreviewShell*)pSh;
+                ScPreview* pPreview = pPreviewSh->GetPreview();
+
+                pPreview->SetDigitLanguage( GetOptDigitLanguage() );
+                pPreview->Invalidate();
+            }
+
+            pSh = SfxViewShell::GetNext( *pSh );
+        }
+    }
+}
 
 void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -227,115 +334,6 @@ void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
         {
             //  ConfigItems must be removed before ConfigManager
             DeleteCfg();
-        }
-        else if ( nHintId == SFX_HINT_COLORS_CHANGED || nHintId == SFX_HINT_ACCESSIBILITY_CHANGED )
-        {
-            //  Test if detective objects have to be updated with new colors
-            //  (if the detective colors haven't been used yet, there's nothing to update)
-            if ( ScDetectiveFunc::IsColorsInitialized() )
-            {
-                const svtools::ColorConfig& rColors = GetColorConfig();
-                BOOL bArrows =
-                    ( ScDetectiveFunc::GetArrowColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVE).nColor ||
-                      ScDetectiveFunc::GetErrorColor() != (ColorData)rColors.GetColorValue(svtools::CALCDETECTIVEERROR).nColor );
-                BOOL bComments =
-                    ( ScDetectiveFunc::GetCommentColor() != (ColorData)rColors.GetColorValue(svtools::CALCNOTESBACKGROUND).nColor );
-                if ( bArrows || bComments )
-                {
-                    ScDetectiveFunc::InitializeColors();        // get the new colors
-
-                    //  update detective objects in all open documents
-                    SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
-                    while ( pObjSh )
-                    {
-                        if ( pObjSh->Type() == TYPE(ScDocShell) )
-                        {
-                            ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
-                            if ( bArrows )
-                                ScDetectiveFunc( pDocSh->GetDocument(), 0 ).UpdateAllArrowColors();
-                            if ( bComments )
-                                ScDetectiveFunc::UpdateAllComments( *pDocSh->GetDocument() );
-                        }
-                        pObjSh = SfxObjectShell::GetNext( *pObjSh );
-                    }
-                }
-            }
-
-            //  force all views to repaint, using the new options
-
-            SfxViewShell* pViewShell = SfxViewShell::GetFirst();
-            while(pViewShell)
-            {
-                if ( pViewShell->ISA(ScTabViewShell) )
-                {
-                    ScTabViewShell* pViewSh = (ScTabViewShell*)pViewShell;
-                    pViewSh->PaintGrid();
-                    pViewSh->PaintTop();
-                    pViewSh->PaintLeft();
-                    pViewSh->PaintExtras();
-
-                    ScInputHandler* pHdl = pViewSh->GetInputHandler();
-                    if ( pHdl )
-                        pHdl->ForgetLastPattern();  // EditEngine BackgroundColor may change
-                }
-                else if ( pViewShell->ISA(ScPreviewShell) )
-                {
-                    Window* pWin = pViewShell->GetWindow();
-                    if (pWin)
-                        pWin->Invalidate();
-                }
-                pViewShell = SfxViewShell::GetNext( *pViewShell );
-            }
-        }
-        else if ( nHintId == SFX_HINT_CTL_SETTINGS_CHANGED )
-        {
-            //  for all documents: set digit language for printer, recalc output factor, update row heights
-            SfxObjectShell* pObjSh = SfxObjectShell::GetFirst();
-            while ( pObjSh )
-            {
-                if ( pObjSh->Type() == TYPE(ScDocShell) )
-                {
-                    ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
-                    OutputDevice* pPrinter = pDocSh->GetPrinter();
-                    if ( pPrinter )
-                        pPrinter->SetDigitLanguage( GetOptDigitLanguage() );
-
-                    pDocSh->CalcOutputFactor();
-
-                    SCTAB nTabCount = pDocSh->GetDocument()->GetTableCount();
-                    for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                        pDocSh->AdjustRowHeight( 0, MAXROW, nTab );
-                }
-                pObjSh = SfxObjectShell::GetNext( *pObjSh );
-            }
-
-            //  for all views (table and preview): update digit language
-            SfxViewShell* pSh = SfxViewShell::GetFirst();
-            while ( pSh )
-            {
-                if ( pSh->ISA( ScTabViewShell ) )
-                {
-                    ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
-
-                    //  set ref-device for EditEngine (re-evaluates digit settings)
-                    ScInputHandler* pHdl = GetInputHdl(pViewSh);
-                    if (pHdl)
-                        pHdl->UpdateRefDevice();
-
-                    pViewSh->DigitLanguageChanged();
-                    pViewSh->PaintGrid();
-                }
-                else if ( pSh->ISA( ScPreviewShell ) )
-                {
-                    ScPreviewShell* pPreviewSh = (ScPreviewShell*)pSh;
-                    ScPreview* pPreview = pPreviewSh->GetPreview();
-
-                    pPreview->SetDigitLanguage( GetOptDigitLanguage() );
-                    pPreview->Invalidate();
-                }
-
-                pSh = SfxViewShell::GetNext( *pSh );
-            }
         }
     }
 }
@@ -354,17 +352,17 @@ void ScModule::DeleteCfg()
 
     if ( pColorConfig )
     {
-        EndListening(*pColorConfig);
+        pColorConfig->RemoveListener(this);
         DELETEZ( pColorConfig );
     }
     if ( pAccessOptions )
     {
-        EndListening(*pAccessOptions);
+        pAccessOptions->RemoveListener(this);
         DELETEZ( pAccessOptions );
     }
     if ( pCTLOptions )
     {
-        EndListening(*pCTLOptions);
+        pCTLOptions->RemoveListener(this);
         DELETEZ( pCTLOptions );
     }
     if( pUserOptions )
@@ -967,7 +965,7 @@ svtools::ColorConfig& ScModule::GetColorConfig()
     if ( !pColorConfig )
     {
         pColorConfig = new svtools::ColorConfig;
-        StartListening(*pColorConfig);
+        pColorConfig->AddListener(this);
     }
 
     return *pColorConfig;
@@ -978,7 +976,7 @@ SvtAccessibilityOptions& ScModule::GetAccessOptions()
     if ( !pAccessOptions )
     {
         pAccessOptions = new SvtAccessibilityOptions;
-        StartListening(*pAccessOptions);
+        pAccessOptions->AddListener(this);
     }
 
     return *pAccessOptions;
@@ -989,7 +987,7 @@ SvtCTLOptions& ScModule::GetCTLOptions()
     if ( !pCTLOptions )
     {
         pCTLOptions = new SvtCTLOptions;
-        StartListening(*pCTLOptions);
+        pCTLOptions->AddListener(this);
     }
 
     return *pCTLOptions;
@@ -1507,11 +1505,6 @@ void ScModule::ViewShellGone( ScTabViewShell* pViewSh )
     ScInputHandler* pHdl = GetInputHdl();
     if (pHdl)
         pHdl->ViewShellGone( pViewSh );
-
-    //  Team dialog is opened with the window from a view as parent
-    //  -> close it if any view is closed
-    if (pTeamDlg)
-        pTeamDlg->Close();          // resets variable pTeamDlg
 }
 
 void ScModule::SetRefInputHdl( ScInputHandler* pNew )
@@ -1633,21 +1626,6 @@ void ScModule::SetRefDialog( USHORT nId, BOOL bVis, SfxViewFrame* pViewFrm )
         SfxApplication* pSfxApp = SFX_APP();
         pSfxApp->Broadcast( SfxSimpleHint( FID_REFMODECHANGED ) );
     }
-}
-
-void ScModule::OpenTeamDlg()
-{
-    if ( !pTeamDlg )
-    {
-        //  team dialog needs an existing parent window
-        //  -> use window from active view (dialog is closed in ViewShellGone)
-
-        ScTabViewShell* pShell = ScTabViewShell::GetActiveViewShell();
-        if (pShell)
-            pTeamDlg = new ScTeamDlg( pShell->GetActiveWin() );
-    }
-    else
-        pTeamDlg->Center();
 }
 
 SfxChildWindow* lcl_GetChildWinFromAnyView( USHORT nId )
@@ -1930,21 +1908,19 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
     if ( pDocSh )
     {
         ScDocument* pDoc = pDocSh->GetDocument();
-        if ( pDoc->IsLoadingDone() )
-        {
-            BOOL bLinks = pDoc->IdleCheckLinks();
-            BOOL bWidth = pDoc->IdleCalcTextWidth();
-            BOOL bSpell = pDoc->ContinueOnlineSpelling();
-            if ( bSpell )
-                aSpellTimer.Start();                    // da ist noch was
 
-            bMore = bLinks || bWidth || bSpell;         // ueberhaupt noch was?
+        BOOL bLinks = pDoc->IdleCheckLinks();
+        BOOL bWidth = pDoc->IdleCalcTextWidth();
+        BOOL bSpell = pDoc->ContinueOnlineSpelling();
+        if ( bSpell )
+            aSpellTimer.Start();                    // da ist noch was
 
-            //  While calculating a Basic formula, a paint event may have occured,
-            //  so check the bNeedsRepaint flags for this document's views
-            if (bWidth)
-                lcl_CheckNeedsRepaint( pDocSh );
-        }
+        bMore = bLinks || bWidth || bSpell;         // ueberhaupt noch was?
+
+        //  While calculating a Basic formula, a paint event may have occured,
+        //  so check the bNeedsRepaint flags for this document's views
+        if (bWidth)
+            lcl_CheckNeedsRepaint( pDocSh );
     }
 
     ULONG nOldTime = aIdleTimer.GetTimeout();
@@ -2214,6 +2190,87 @@ IMPL_LINK( ScModule, CalcFieldValueHdl, EditFieldInfo*, pInfo )
     return 0;
 }
 
+BOOL ScModule::RegisterRefWindow( USHORT nSlotId, Window *pWnd )
+{
+    std::list<Window*> & rlRefWindow = m_mapRefWindow[nSlotId];
 
+    if( std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd ) == rlRefWindow.end() )
+    {
+        rlRefWindow.push_back( pWnd );
+        return TRUE;
+    }
 
+    return FALSE;
+}
+
+BOOL  ScModule::UnregisterRefWindow( USHORT nSlotId, Window *pWnd )
+{
+    std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
+
+    if( iSlot == m_mapRefWindow.end() )
+        return FALSE;
+
+    std::list<Window*> & rlRefWindow = iSlot->second;
+
+    std::list<Window*>::iterator i = std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
+
+    if( i == rlRefWindow.end() )
+        return FALSE;
+
+    rlRefWindow.erase( i );
+
+    if( !rlRefWindow.size() )
+        m_mapRefWindow.erase( nSlotId );
+
+    return TRUE;
+}
+
+BOOL  ScModule::IsAliveRefDlg( USHORT nSlotId, Window *pWnd )
+{
+    std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
+
+    if( iSlot == m_mapRefWindow.end() )
+        return FALSE;
+
+    std::list<Window*> & rlRefWindow = iSlot->second;
+
+    return rlRefWindow.end() != std::find( rlRefWindow.begin(), rlRefWindow.end(), pWnd );
+}
+
+Window *  ScModule::Find1RefWindow( USHORT nSlotId, Window *pWndAncestor )
+{
+    if (!pWndAncestor)
+        return NULL;
+
+    std::map<USHORT, std::list<Window*> >::iterator iSlot = m_mapRefWindow.find( nSlotId );
+
+    if( iSlot == m_mapRefWindow.end() )
+        return NULL;
+
+    std::list<Window*> & rlRefWindow = iSlot->second;
+
+    while( Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
+
+    for( std::list<Window*>::iterator i = rlRefWindow.begin(); i!=rlRefWindow.end(); i++ )
+        if ( pWndAncestor->IsWindowOrChild( *i, (*i)->IsSystemWindow() ) )
+            return *i;
+
+    return NULL;
+}
+
+Window *  ScModule::Find1RefWindow( Window *pWndAncestor )
+{
+    if (!pWndAncestor)
+        return NULL;
+
+    while( Window *pParent = pWndAncestor->GetParent() ) pWndAncestor = pParent;
+
+    for( std::map<USHORT, std::list<Window*> >::iterator i = m_mapRefWindow.begin();
+        i!=m_mapRefWindow.end(); i++ )
+        for( std::list<Window*>::iterator j = i->second.begin(); j!=i->second.end(); j++ )
+            if ( pWndAncestor->IsWindowOrChild( *j, (*j)->IsSystemWindow() ) )
+                return *j;
+
+    return NULL;
+}
 

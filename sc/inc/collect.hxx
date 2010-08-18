@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: collect.hxx,v $
- * $Revision: 1.6.32.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,8 +50,8 @@ class SC_DLLPUBLIC ScDataObject
 {
 public:
                             ScDataObject() {}
-    virtual                 ~ScDataObject();
-    virtual ScDataObject*       Clone() const = 0;
+    virtual    ~ScDataObject();
+    virtual    ScDataObject*       Clone() const = 0;
 };
 
 class SC_DLLPUBLIC ScCollection : public ScDataObject
@@ -65,29 +62,29 @@ protected:
     USHORT          nDelta;
     ScDataObject**  pItems;
 public:
-                        ScCollection(USHORT nLim = 4, USHORT nDel = 4);
-                        ScCollection(const ScCollection& rCollection);
+    ScCollection(USHORT nLim = 4, USHORT nDel = 4);
+    ScCollection(const ScCollection& rCollection);
     virtual             ~ScCollection();
 
     virtual ScDataObject*   Clone() const;
 
-            void        AtFree(USHORT nIndex);
-            void        Free(ScDataObject* pScDataObject);
-            void        FreeAll();
+    void        AtFree(USHORT nIndex);
+    void        Free(ScDataObject* pScDataObject);
+    void        FreeAll();
 
-            BOOL        AtInsert(USHORT nIndex, ScDataObject* pScDataObject);
+    BOOL        AtInsert(USHORT nIndex, ScDataObject* pScDataObject);
     virtual BOOL        Insert(ScDataObject* pScDataObject);
 
-            ScDataObject*   At(USHORT nIndex) const;
+    ScDataObject*   At(USHORT nIndex) const;
     virtual USHORT      IndexOf(ScDataObject* pScDataObject) const;
-            USHORT      GetCount() const { return nCount; }
+    USHORT GetCount() const;
 
             ScDataObject* operator[]( const USHORT nIndex) const {return At(nIndex);}
             ScCollection&   operator=( const ScCollection& rCol );
 };
 
 
-class SC_DLLPUBLIC ScSortedCollection : public ScCollection
+class SC_DLLPUBLIC  ScSortedCollection : public ScCollection
 {
 private:
     BOOL    bDuplicates;
@@ -96,19 +93,19 @@ protected:
             void        SetDups( BOOL bVal ) { bDuplicates = bVal; }
             BOOL        IsDups() const { return bDuplicates; }
 public:
-                        ScSortedCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE);
-                        ScSortedCollection(const ScSortedCollection& rScSortedCollection) :
+    ScSortedCollection(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE);
+    ScSortedCollection(const ScSortedCollection& rScSortedCollection) :
                             ScCollection(rScSortedCollection),
                             bDuplicates(rScSortedCollection.bDuplicates) {}
 
     virtual USHORT      IndexOf(ScDataObject* pScDataObject) const;
     virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const = 0;
     virtual BOOL        IsEqual(ScDataObject* pKey1, ScDataObject* pKey2) const;
-            BOOL        Search(ScDataObject* pScDataObject, USHORT& rIndex) const;
+    BOOL        Search(ScDataObject* pScDataObject, USHORT& rIndex) const;
     virtual BOOL        Insert(ScDataObject* pScDataObject);
     virtual BOOL        InsertPos(ScDataObject* pScDataObject, USHORT& nIndex);
 
-            BOOL        operator==(const ScSortedCollection& rCmp) const;
+    BOOL        operator==(const ScSortedCollection& rCmp) const;
 };
 
 
@@ -143,9 +140,6 @@ public:
     virtual ScDataObject*   Clone() const;
             StrData*    operator[]( const USHORT nIndex) const {return (StrData*)At(nIndex);}
     virtual short       Compare(ScDataObject* pKey1, ScDataObject* pKey2) const;
-
-            void        Load( SvStream& );
-            void        Store( SvStream& ) const;
 };
 
 //------------------------------------------------------------------------
@@ -178,9 +172,6 @@ public:
 
 private:
     friend class TypedScStrCollection;
-#if OLD_PIVOT_IMPLEMENTATION
-    friend class PivotScStrCollection;
-#endif
 
     String  aStrValue;
     double  nValue;
@@ -193,19 +184,18 @@ private:
     BOOL    bCaseSensitive;
 
 public:
-            TypedScStrCollection( USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE )
-                : ScSortedCollection( nLim, nDel, bDup ) { bCaseSensitive = FALSE; }
+    TypedScStrCollection( USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE );
 
-            TypedScStrCollection( const TypedScStrCollection& rCpy )
-                : ScSortedCollection( rCpy ) { bCaseSensitive = rCpy.bCaseSensitive; }
+    TypedScStrCollection( const TypedScStrCollection& rCpy )
+        : ScSortedCollection( rCpy ) { bCaseSensitive = rCpy.bCaseSensitive; }
+    ~TypedScStrCollection();
 
     virtual ScDataObject*       Clone() const;
     virtual short           Compare( ScDataObject* pKey1, ScDataObject* pKey2 ) const;
 
-    TypedStrData*   operator[]( const USHORT nIndex) const
-                        { return (TypedStrData*)At(nIndex); }
+    TypedStrData*   operator[]( const USHORT nIndex) const;
 
-    void    SetCaseSensitive( BOOL bSet )       { bCaseSensitive = bSet; }
+    void    SetCaseSensitive( BOOL bSet );
 
     BOOL    FindText( const String& rStart, String& rResult, USHORT& rPos, BOOL bBack ) const;
     BOOL    GetExactMatch( String& rString ) const;

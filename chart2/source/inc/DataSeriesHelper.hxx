@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataSeriesHelper.hxx,v $
- * $Revision: 1.7.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,6 +39,7 @@
 
 #include <vector>
 #include <functional>
+#include <hash_set>
 
 namespace chart
 {
@@ -49,7 +47,7 @@ namespace chart
 namespace DataSeriesHelper
 {
 
-OOO_DLLPUBLIC_CHARTTOOLS ::rtl::OUString GetRole(
+::rtl::OUString GetRole(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::data::XLabeledDataSequence >& xLabeledDataSequence );
 
@@ -179,6 +177,34 @@ OOO_DLLPUBLIC_CHARTTOOLS bool hasAttributedDataPointDifferentValue(
 OOO_DLLPUBLIC_CHARTTOOLS bool areAllSeriesAttachedToSameAxis(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType,
         sal_Int32 & rOutAxisIndex );
+
+OOO_DLLPUBLIC_CHARTTOOLS bool hasUnhiddenData( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XDataSeries >& xSeries );
+
+OOO_DLLPUBLIC_CHARTTOOLS
+sal_Int32 translateIndexFromHiddenToFullSequence( sal_Int32 nClippedIndex, const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::data::XDataSequence >& xDataSequence, bool bTranslate );
+
+OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelsAtSeries( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XDataSeries >& xSeries );
+
+OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelsAtPoints( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XDataSeries >& xSeries );
+
+OOO_DLLPUBLIC_CHARTTOOLS bool hasDataLabelAtPoint( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XDataSeries >& xSeries, sal_Int32 nPointIndex );
+
+OOO_DLLPUBLIC_CHARTTOOLS void insertDataLabelsToSeriesAndAllPoints( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XDataSeries >& xSeries );
+
+OOO_DLLPUBLIC_CHARTTOOLS void insertDataLabelToPoint( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >& xPointPropertySet );
+
+OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromSeriesAndAllPoints( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::chart2::XDataSeries >& xSeries );
+
+OOO_DLLPUBLIC_CHARTTOOLS void deleteDataLabelsFromPoint( const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet >& xPointPropertySet );
 
 } //  namespace DataSeriesHelper
 } //  namespace chart

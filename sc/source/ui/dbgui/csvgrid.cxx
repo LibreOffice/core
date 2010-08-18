@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: csvgrid.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 
 #include <algorithm>
 #include <svtools/colorcfg.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <tools/poly.hxx>
 #include "scmod.hxx"
 #include "asciiopt.hxx"
@@ -46,13 +43,13 @@
 
 // *** edit engine ***
 #include "scitems.hxx"
-#include <svx/eeitem.hxx>
+#include <editeng/eeitem.hxx>
 
 
-#include <svx/colritem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svtools/itemset.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <svl/itemset.hxx>
 #include "editutil.hxx"
 // *** edit engine ***
 
@@ -96,12 +93,12 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     InitColors();
     InitFonts();
     ImplClearSplits();
-    StartListening( mrColorConfig );
+    mrColorConfig.AddListener(this);
 }
 
 ScCsvGrid::~ScCsvGrid()
 {
-    EndListening( mrColorConfig );
+    mrColorConfig.RemoveListener(this);
 }
 
 
@@ -737,7 +734,8 @@ void ScCsvGrid::ImplSetTextLineSep(
     while( *pChar && (nColIx < sal::static_int_cast<sal_uInt32>(CSV_MAXCOLCOUNT)) )
     {
         // scan for next cell text
-        pChar = ScImportExport::ScanNextFieldFromString( pChar, aCellText, cTextSep, pSepChars, bMergeSep );
+        bool bIsQuoted = false;
+        pChar = ScImportExport::ScanNextFieldFromString( pChar, aCellText, cTextSep, pSepChars, bMergeSep, bIsQuoted );
 
         // update column width
         sal_Int32 nWidth = Max( CSV_MINCOLWIDTH, aCellText.Len() + sal_Int32( 1 ) );
@@ -995,14 +993,10 @@ void ScCsvGrid::DataChanged( const DataChangedEvent& rDCEvt )
     ScCsvControl::DataChanged( rDCEvt );
 }
 
-void ScCsvGrid::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void ScCsvGrid::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
-    if( rHint.ISA( SfxSimpleHint ) &&
-        (static_cast< const SfxSimpleHint& >( rHint ).GetId() == SFX_HINT_COLORS_CHANGED) )
-    {
-        InitColors();
-        Repaint();
-    }
+    InitColors();
+    Repaint();
 }
 
 

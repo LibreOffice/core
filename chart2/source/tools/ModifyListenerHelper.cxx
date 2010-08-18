@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ModifyListenerHelper.cxx,v $
- * $Revision: 1.5.44.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,17 +103,17 @@ namespace chart
 namespace ModifyListenerHelper
 {
 
+uno::Reference< util::XModifyListener > createModifyEventForwarder()
+{
+    return new ModifyEventForwarder();
+}
+
 ModifyEventForwarder::ModifyEventForwarder() :
         ::cppu::WeakComponentImplHelper2<
         ::com::sun::star::util::XModifyBroadcaster,
         ::com::sun::star::util::XModifyListener >( m_aMutex ),
         m_aModifyListeners( m_aMutex )
 {
-}
-
-void ModifyEventForwarder::FireEvent( const Reference< uno::XWeak > & xSource )
-{
-    lcl_fireModifyEvent( m_aModifyListeners, xSource, 0 );
 }
 
 void ModifyEventForwarder::FireEvent( const lang::EventObject & rEvent )

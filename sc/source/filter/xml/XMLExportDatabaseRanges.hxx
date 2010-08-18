@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XMLExportDatabaseRanges.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,9 +30,9 @@
 
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/sheet/FilterOperator.hpp>
-#include <com/sun/star/sheet/TableFilterField.hpp>
-#include <com/sun/star/sheet/XSheetFilterDescriptor.hpp>
+#include <com/sun/star/sheet/FilterOperator2.hpp>
+#include <com/sun/star/sheet/TableFilterField2.hpp>
+#include <com/sun/star/sheet/XSheetFilterDescriptor2.hpp>
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
@@ -49,9 +46,9 @@ class ScXMLExportDatabaseRanges
     ScDocument*     pDoc;
 
     void WriteImportDescriptor(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aImportDescriptor);
-    rtl::OUString getOperatorXML(const com::sun::star::sheet::FilterOperator aFilterOperator, const sal_Bool bUseRegularExpressions) const;
-    void WriteCondition(const com::sun::star::sheet::TableFilterField& aFilterField, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions);
-    void WriteFilterDescriptor(const com::sun::star::uno::Reference <com::sun::star::sheet::XSheetFilterDescriptor>& xSheetFilterDescriptor, const rtl::OUString sDatabaseRangeName);
+    rtl::OUString getOperatorXML(const long aFilterOperator, const sal_Bool bUseRegularExpressions) const;
+    void WriteCondition(const com::sun::star::sheet::TableFilterField2& aFilterField, sal_Bool bIsCaseSensitive, sal_Bool bUseRegularExpressions);
+    void WriteFilterDescriptor(const com::sun::star::uno::Reference <com::sun::star::sheet::XSheetFilterDescriptor2>& xSheetFilterDescriptor, const rtl::OUString sDatabaseRangeName);
     void WriteSortDescriptor(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aSortProperties);
     void WriteSubTotalDescriptor(const com::sun::star::uno::Reference <com::sun::star::sheet::XSubTotalDescriptor> xSubTotalDescriptor, const rtl::OUString sDatabaseRangeName);
 public:

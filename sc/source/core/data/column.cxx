@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: column.cxx,v $
- * $Revision: 1.31.128.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +34,9 @@
 
 #include <map>
 
-#include <svtools/poolcach.hxx>
-#include <svtools/zforlist.hxx>
-#include <svx/scripttypeitem.hxx>
+#include <svl/poolcach.hxx>
+#include <svl/zforlist.hxx>
+#include <editeng/scripttypeitem.hxx>
 #include <string.h>
 
 #include "scitems.hxx"
@@ -240,14 +237,14 @@ BOOL ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
 }
 
 
-BOOL ScColumn::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
-                            BOOL bLeft, BOOL bRight ) const
-{
-    return pAttrArray->HasLines( nRow1, nRow2, rSizes, bLeft, bRight );
-}
+//UNUSED2009-05 BOOL ScColumn::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
+//UNUSED2009-05                             BOOL bLeft, BOOL bRight ) const
+//UNUSED2009-05 {
+//UNUSED2009-05     return pAttrArray->HasLines( nRow1, nRow2, rSizes, bLeft, bRight );
+//UNUSED2009-05 }
 
 
-BOOL ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
+bool ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
 {
     return pAttrArray->HasAttrib( nRow1, nRow2, nMask );
 }
@@ -603,12 +600,10 @@ const ScStyleSheet* ScColumn::GetAreaStyle( BOOL& rFound, SCROW nRow1, SCROW nRo
     return bEqual ? pStyle : NULL;
 }
 
-
-void ScColumn::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, BOOL* pUsed, BOOL bReset )
+void ScColumn::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset )
 {
-    pAttrArray->FindStyleSheet( pStyleSheet, pUsed, bReset );
+    pAttrArray->FindStyleSheet( pStyleSheet, rUsedRows, bReset );
 }
-
 
 BOOL ScColumn::IsStyleSheetUsed( const ScStyleSheet& rStyle, BOOL bGatherAllStyles ) const
 {
@@ -896,11 +891,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
             SvtBroadcaster* pBC2 = pCell2->ReleaseBroadcaster();
             pCell1->TakeBroadcaster( pBC2 );
             pCell2->TakeBroadcaster( pBC1 );
-
-            ScHint aHint1( SC_HINT_DATACHANGED, aPos1, pCell2 );
-            pDocument->Broadcast( aHint1 );
-            ScHint aHint2( SC_HINT_DATACHANGED, aPos2, pCell1 );
-            pDocument->Broadcast( aHint2 );
         }
         else
         {
@@ -921,7 +911,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
 
             // insert ColEntry at new position
             Insert( nRow2, pCell1 );
-            pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, aPos1, pDummyCell ) );
         }
 
         return;
@@ -1002,14 +991,6 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         Delete( nRow2 );            // deletes pCell2
     else if ( pNew2 )
         Insert( nRow2, pNew2 );     // deletes pCell2 (if existing), inserts pNew2
-
-    //  #64122# Bei Formeln hinterher nochmal broadcasten, damit die Formel nicht in irgendwelchen
-    //  FormulaTrack-Listen landet, ohne die Broadcaster beruecksichtigt zu haben
-    //  (erst hier, wenn beide Zellen eingefuegt sind)
-    if ( pBC1 && pFmlaCell2 )
-        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, aPos1, pNew1 ) );
-    if ( pBC2 && pFmlaCell1 )
-        pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED, aPos2, pNew2 ) );
 }
 
 
@@ -1233,8 +1214,8 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
             }
         }
 
-        delete pDelRows;
-        delete ppDelCells;
+        delete [] pDelRows;
+        delete [] ppDelCells;
     }
 
     pDocument->SetAutoCalc( bOldAutoCalc );
@@ -1272,11 +1253,14 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, BOOL bKee
     {
         int nCloneFlags = bCloneNoteCaptions ? SC_CLONECELL_DEFAULT : SC_CLONECELL_NOCAPTION;
         rColumn.Resize( rColumn.GetCellCount() + nBlockCount );
-        ScAddress aPos( rColumn.nCol, 0, rColumn.nTab );
+        ScAddress aOwnPos( nCol, 0, nTab );
+        ScAddress aDestPos( rColumn.nCol, 0, rColumn.nTab );
         for (i = nStartIndex; i <= nEndIndex; i++)
         {
-            aPos.SetRow( pItems[i].nRow );
-            rColumn.Append( aPos.Row(), pItems[i].pCell->CloneWithNote( *rColumn.pDocument, aPos, nCloneFlags ) );
+            aOwnPos.SetRow( pItems[i].nRow );
+            aDestPos.SetRow( pItems[i].nRow );
+            ScBaseCell* pNewCell = pItems[i].pCell->CloneWithNote( aOwnPos, *rColumn.pDocument, aDestPos, nCloneFlags );
+            rColumn.Append( aDestPos.Row(), pNewCell );
         }
     }
 }
@@ -1376,16 +1360,18 @@ void ScColumn::UndoToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarke
 void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
 {
     ScDocument& rDestDoc = *rDestCol.pDocument;
+    ScAddress aOwnPos( nCol, 0, nTab );
     ScAddress aDestPos( rDestCol.nCol, 0, rDestCol.nTab );
 
     SCSIZE nPosCount = rPosCol.nCount;
     for (SCSIZE nPosIndex = 0; nPosIndex < nPosCount; nPosIndex++)
     {
-        aDestPos.SetRow( rPosCol.pItems[nPosIndex].nRow );
+        aOwnPos.SetRow( rPosCol.pItems[nPosIndex].nRow );
+        aDestPos.SetRow( aOwnPos.Row() );
         SCSIZE nThisIndex;
         if ( Search( aDestPos.Row(), nThisIndex ) )
         {
-            ScBaseCell* pNew = pItems[nThisIndex].pCell->CloneWithNote( rDestDoc, aDestPos );
+            ScBaseCell* pNew = pItems[nThisIndex].pCell->CloneWithNote( aOwnPos, rDestDoc, aDestPos );
             rDestCol.Insert( aDestPos.Row(), pNew );
         }
     }
@@ -1400,7 +1386,7 @@ void ScColumn::CopyScenarioFrom( const ScColumn& rSrcCol )
     //  Dies ist die Szenario-Tabelle, die Daten werden hineinkopiert
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    SCROW nStart, nEnd;
+    SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
@@ -1431,7 +1417,7 @@ void ScColumn::CopyScenarioTo( ScColumn& rDestCol ) const
     //  Dies ist die Szenario-Tabelle, die Daten werden in die andere kopiert
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    SCROW nStart, nEnd;
+    SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
@@ -1480,7 +1466,7 @@ void ScColumn::MarkScenarioIn( ScMarkData& rDestMark ) const
     ScRange aRange( nCol, 0, nTab );
 
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    SCROW nStart, nEnd;
+    SCROW nStart = -1, nEnd = -1;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern)
     {
@@ -1673,7 +1659,10 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
                     if( pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
                         SCROW nRow = pItems[i].nRow;
-                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc );
+                        // When deleting rows on several sheets, the formula's position may be updated with the first call,
+                        // so the undo position must be passed from here.
+                        ScAddress aUndoPos( nCol, nRow, nTab );
+                        ((ScFormulaCell*)pCell)->UpdateReference( eUpdateRefMode, aRange, nDx, nDy, nDz, pUndoDoc, &aUndoPos );
                         if ( nRow != pItems[i].nRow )
                             Search( nRow, i );  // Listener removed/inserted?
                     }
@@ -1866,7 +1855,7 @@ void ScColumn::FindRangeNamesInUse(SCROW nRow1, SCROW nRow2, std::set<USHORT>& r
 }
 
 void ScColumn::ReplaceRangeNamesInUse(SCROW nRow1, SCROW nRow2,
-                                     const ScIndexMap& rMap )
+                                     const ScRangeData::IndexMap& rMap )
 {
     if (pItems)
         for (SCSIZE i = 0; i < nCount; i++)
@@ -1882,7 +1871,6 @@ void ScColumn::ReplaceRangeNamesInUse(SCROW nRow1, SCROW nRow2,
             }
         }
 }
-
 
 void ScColumn::SetDirtyVar()
 {
@@ -2096,22 +2084,6 @@ void ScColumn::CalcAfterLoad()
 }
 
 
-bool ScColumn::MarkUsedExternalReferences()
-{
-    bool bAllMarked = false;
-    if (pItems)
-    {
-        for (SCSIZE i = 0; i < nCount && !bAllMarked; ++i)
-        {
-            ScBaseCell* pCell = pItems[i].pCell;
-            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
-                bAllMarked = ((ScFormulaCell*)pCell)->MarkUsedExternalReferences();
-        }
-    }
-    return bAllMarked;
-}
-
-
 void ScColumn::ResetChanged( SCROW nStartRow, SCROW nEndRow )
 {
     if (pItems)
@@ -2139,8 +2111,10 @@ BOOL ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const
     while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : FALSE )
     {
         ScBaseCell* pCell = pItems[nIndex].pCell;
-        if ( pCell->GetCellType() == CELLTYPE_EDIT ||
-             IsAmbiguousScriptNonZero( pDocument->GetScriptType(nCol, nRow, nTab, pCell) ) )
+        CellType eCellType = pCell->GetCellType();
+        if ( eCellType == CELLTYPE_EDIT ||
+             IsAmbiguousScriptNonZero( pDocument->GetScriptType(nCol, nRow, nTab, pCell) ) ||
+             ((eCellType == CELLTYPE_FORMULA) && ((ScFormulaCell*)pCell)->IsMultilineResult()) )
         {
             rFirst = nRow;
             return TRUE;

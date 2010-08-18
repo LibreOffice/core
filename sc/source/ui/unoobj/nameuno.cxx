@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: nameuno.cxx,v $
- * $Revision: 1.21.132.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -60,9 +57,9 @@ using namespace ::com::sun::star;
 
 //------------------------------------------------------------------------
 
-const SfxItemPropertyMap* lcl_GetNamedRangeMap()
+const SfxItemPropertyMapEntry* lcl_GetNamedRangeMap()
 {
-    static SfxItemPropertyMap aNamedRangeMap_Impl[] =
+    static SfxItemPropertyMapEntry aNamedRangeMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),      0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME),     0,  &getCppuType((rtl::OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
@@ -343,7 +340,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScNamedRangeObj::getReferredCells()
     ScUnoGuard aGuard;
     ScRange aRange;
     ScRangeData* pData = GetRangeData_Impl();
-    if ( pData && pData->IsReference( aRange ) )
+    if ( pData && pData->IsValidReference( aRange ) )
     {
         //! static Funktion um ScCellObj/ScCellRangeObj zu erzeugen am ScCellRangeObj ???
 

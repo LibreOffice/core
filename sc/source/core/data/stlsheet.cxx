@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stlsheet.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,24 +36,25 @@
 #include "stlpool.hxx"
 
 #include "scitems.hxx"
-#include <svx/boxitem.hxx>
-#include <svx/frmdiritem.hxx>
-#include <svx/lrspitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <svx/pageitem.hxx>
-#include <svx/paperinf.hxx>
-#include <svx/pbinitem.hxx>
-#include <svx/sizeitem.hxx>
-#include <svx/ulspitem.hxx>
+#include <editeng/paperinf.hxx>
+#include <editeng/pbinitem.hxx>
+#include <editeng/sizeitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <sfx2/printer.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
+#include <svl/smplhint.hxx>
 #include "attrib.hxx"
+
 
 #include <vcl/svapp.hxx>    // GetSettings()
 
 #include "globstr.hrc"
-
+#include "sc.hrc"
 //------------------------------------------------------------------------
 
 TYPEINIT1(ScStyleSheet, SfxStyleSheet);
@@ -173,17 +171,11 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                     //  gespeicherte Printer noch nicht geladen ist!
 
                     ScDocument* pDoc = ((ScStyleSheetPool&)GetPool()).GetDocument();
-                    if ( pDoc && pDoc->IsLoadingDone() )
+                    if ( pDoc )
                     {
                         // Setzen von sinnvollen Default-Werten:
-                        // SfxPrinter*      pPrinter = pDoc->GetPrinter();
                         SvxPageItem     aPageItem( ATTR_PAGE );
-                        // #50536# PaperBin auf Default lassen,
-                        // nicht auf aktuelle Drucker-Einstellung umsetzen
-                        // SvxSizeItem      aPaperSizeItem(ATTR_PAGE_SIZE,SvxPaperInfo::GetPaperSize(pPrinter) );
-
-                        SvxPaper        aDefaultPaper = SvxPaperInfo::GetDefaultSvxPaper( Application::GetSettings().GetLanguage() );
-                        SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetPaperSize(aDefaultPaper) );
+                        SvxSizeItem     aPaperSizeItem( ATTR_PAGE_SIZE, SvxPaperInfo::GetDefaultPaperSize() );
 
                         SvxSetItem      aHFSetItem(
                                             (const SvxSetItem&)
@@ -253,6 +245,18 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                 break;
         }
         bMySet = TRUE;
+    } // if ( !pSet )
+    if ( nHelpId == HID_SC_SHEET_CELL_ERG1 )
+    {
+        if ( !pSet->Count() )
+        {
+            ScDocument* pDoc = ((ScStyleSheetPool&)GetPool()).GetDocument();
+            if ( pDoc )
+            {
+                ULONG nNumFmt = pDoc->GetFormatTable()->GetStandardFormat( NUMBERFORMAT_CURRENCY,ScGlobal::eLnge );
+                pSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumFmt ) );
+            } // if ( pDoc && pDoc->IsLoadingDone() )
+        }
     }
 
     return *pSet;

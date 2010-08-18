@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xename.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,8 +53,8 @@ public:
     /** Inserts the Calc database range with the passed index and returns the Excel NAME index. */
     sal_uInt16          InsertDBRange( USHORT nScDBRangeIdx );
 
-    /** Inserts a new built-in defined name. */
-    sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab );
+//UNUSED2009-05 /** Inserts a new built-in defined name. */
+//UNUSED2009-05 sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, XclTokenArrayRef xTokArr, SCTAB nScTab );
     /** Inserts a new built-in defined name, referring to the passed sheet range. */
     sal_uInt16          InsertBuiltInName( sal_Unicode cBuiltIn, const ScRange& rRange );
     /** Inserts a new built-in defined name, referring to the passed sheet range list. */

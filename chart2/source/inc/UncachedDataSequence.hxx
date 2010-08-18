@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UncachedDataSequence.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +70,7 @@ typedef ::cppu::WeakComponentImplHelper8<
     UncachedDataSequence_Base;
 }
 
-class OOO_DLLPUBLIC_CHARTTOOLS UncachedDataSequence :
+class UncachedDataSequence :
         public ::comphelper::OMutexAndBroadcastHelper,
         public ::comphelper::OPropertyContainer,
         public ::comphelper::OPropertyArrayUsageHelper< UncachedDataSequence >,
@@ -186,8 +183,6 @@ protected:
     // <properties>
     sal_Int32                                       m_nNumberFormatKey;
     ::rtl::OUString                                 m_sRole;
-    sal_Bool                                        m_bIsHidden;
-    ::com::sun::star::uno::Sequence< sal_Int32 >    m_aHiddenValues;
     ::rtl::OUString                                 m_aXMLRange;
     // </properties>
 

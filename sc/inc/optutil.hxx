@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: optutil.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,7 @@
 
 #include <unotools/configitem.hxx>
 #include <tools/link.hxx>
+#include "scdllapi.h"
 
 
 class ScOptionsUtil
@@ -44,13 +42,13 @@ public:
 
 //  ConfigItem for classes that use items from several sub trees
 
-class ScLinkConfigItem : public utl::ConfigItem
+class SC_DLLPUBLIC ScLinkConfigItem : public utl::ConfigItem
 {
     Link    aCommitLink;
 
 public:
-            ScLinkConfigItem( const rtl::OUString rSubTree );
-            ScLinkConfigItem( const rtl::OUString rSubTree, sal_Int16 nMode );
+            ScLinkConfigItem( const rtl::OUString& rSubTree );
+            ScLinkConfigItem( const rtl::OUString& rSubTree, sal_Int16 nMode );
     void    SetCommitLink( const Link& rLink );
 
     virtual void    Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames );

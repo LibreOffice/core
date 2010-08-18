@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xestring.hxx,v $
- * $Revision: 1.11.32.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -323,6 +320,7 @@ private:
     bool                mbSmartFlags;   /// true = omit flags on empty string; false = always write flags.
     bool                mbSkipFormats;  /// true = skip formats on export; false = write complete formatted string.
     bool                mbWrapped;      /// true = text contains several paragraphs.
+    bool                mbSkipHeader;   /// ture = skip length and flags when writing string bytes.
 };
 
 inline bool operator==( const XclExpString& rLeft, const XclExpString& rRight )
