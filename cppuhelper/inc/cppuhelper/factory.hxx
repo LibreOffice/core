@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: factory.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -146,6 +143,23 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >(
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >
 SAL_CALL createSingleComponentFactory(
+    ComponentFactoryFunc fptr,
+    ::rtl::OUString const & rImplementationName,
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
+    rtl_ModuleCount * pModCount = 0 )
+    SAL_THROW( () );
+
+/** Creates a single service factory which holds the instance created only once.
+
+    @param fptr function pointer for instanciating the object
+    @param rImplementationName implementation name of service
+    @param rServiceNames supported services
+    @param pModCount for future extension (library unloading concept).
+
+    @see createSingleComponentFactory
+*/
+::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > SAL_CALL
+createOneInstanceComponentFactory(
     ComponentFactoryFunc fptr,
     ::rtl::OUString const & rImplementationName,
     ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,

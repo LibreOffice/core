@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: weak.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -216,22 +213,28 @@ void SAL_CALL OWeakObject::release() throw()
     if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
         // notify/clear all weak-refs before object's dtor is executed
         // (which may check weak-refs to this object):
-        if (m_pWeakConnectionPoint != 0) {
-            OWeakConnectionPoint * const p = m_pWeakConnectionPoint;
-            m_pWeakConnectionPoint = 0;
-            try {
-                p->dispose();
-            }
-            catch (RuntimeException const& exc) {
-                OSL_ENSURE(
-                    false, OUStringToOString(
-                        exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                static_cast<void>(exc);
-            }
-            p->release();
-        }
+        disposeWeakConnectionPoint();
         // destroy object:
         delete this;
+    }
+}
+
+void OWeakObject::disposeWeakConnectionPoint()
+{
+    OSL_PRECOND( m_refCount == 0, "OWeakObject::disposeWeakConnectionPoint: only to be called with a ref count of 0!" );
+    if (m_pWeakConnectionPoint != 0) {
+        OWeakConnectionPoint * const p = m_pWeakConnectionPoint;
+        m_pWeakConnectionPoint = 0;
+        try {
+            p->dispose();
+        }
+        catch (RuntimeException const& exc) {
+            OSL_ENSURE(
+                false, OUStringToOString(
+                    exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+            static_cast<void>(exc);
+        }
+        p->release();
     }
 }
 
@@ -473,29 +476,47 @@ WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef) SA
     }
 }
 
-WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef) SAL_THROW( () )
+void WeakReferenceHelper::clear() SAL_THROW( () )
 {
     try
     {
-    if (this != &rWeakRef)
-    {
-        Reference< XInterface > xInt( rWeakRef.get() );
         if (m_pImpl)
         {
             if (m_pImpl->m_XWeakConnectionPoint.is())
             {
-                m_pImpl->m_XWeakConnectionPoint->removeReference((XReference*)m_pImpl);
+                m_pImpl->m_XWeakConnectionPoint->removeReference(
+                        (XReference*)m_pImpl);
                 m_pImpl->m_XWeakConnectionPoint.clear();
             }
             m_pImpl->release();
             m_pImpl = 0;
         }
+    }
+    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+}
+
+WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& rWeakRef) SAL_THROW( () )
+{
+    if (this == &rWeakRef)
+    {
+        return *this;
+    }
+    Reference< XInterface > xInt( rWeakRef.get() );
+    return operator = ( xInt );
+}
+
+WeakReferenceHelper & SAL_CALL
+WeakReferenceHelper::operator= (const Reference< XInterface > & xInt)
+SAL_THROW( () )
+{
+    try
+    {
+        clear();
         if (xInt.is())
         {
             m_pImpl = new OWeakRefListener(xInt);
             m_pImpl->acquire();
         }
-    }
     }
     catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
     return *this;
@@ -503,20 +524,7 @@ WeakReferenceHelper& WeakReferenceHelper::operator=(const WeakReferenceHelper& r
 
 WeakReferenceHelper::~WeakReferenceHelper() SAL_THROW( () )
 {
-    try
-    {
-    if (m_pImpl)
-    {
-        if (m_pImpl->m_XWeakConnectionPoint.is())
-        {
-            m_pImpl->m_XWeakConnectionPoint->removeReference((XReference*)m_pImpl);
-            m_pImpl->m_XWeakConnectionPoint.clear();
-        }
-        m_pImpl->release();
-        m_pImpl = 0; // for safety
-    }
-    }
-    catch (RuntimeException &) { OSL_ASSERT( 0 ); } // assert here, but no unexpected()
+    clear();
 }
 
 Reference< XInterface > WeakReferenceHelper::get() const SAL_THROW( () )

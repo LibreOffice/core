@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: conditn.c,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -107,8 +104,7 @@ oslConditionResult SAL_CALL osl_waitCondition(oslCondition Condition,
     while ( 1 )
     {
         /* Only wake up if a SendMessage call to the threads message loop is detected */
-
-        switch( MsgWaitForMultipleObjects( 1, &(HANDLE)Condition, FALSE, timeout, QS_SENDMESSAGE ) )
+        switch( MsgWaitForMultipleObjects( 1, (HANDLE *)(&Condition), FALSE, timeout, QS_SENDMESSAGE ) )
         {
             case WAIT_OBJECT_0 + 1:
                 {

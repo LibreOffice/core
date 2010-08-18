@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -69,7 +65,7 @@ RDB = $(SOLARBINDIR)$/offapi.rdb
 EXTRA_RDB = $(SOLARBINDIR)$/udkapi.rdb
 
 $(BIN)/cli_oootypes.dll : $(RDB) $(EXTRA_RDB) version.txt
-    $(WRAPCMD) $(SOLARBINDIR)$/climaker.exe $(CLIMAKERFLAGS) \
+        $(CLIMAKER) $(CLIMAKERFLAGS) \
         --out $@ \
          --assembly-version $(CLI_OOOTYPES_NEW_VERSION) \
         --assembly-company "OpenOffice.org" \

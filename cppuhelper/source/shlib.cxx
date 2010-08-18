@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: shlib.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -315,7 +312,26 @@ static OUString getLibEnv(OUString         const & aModulePath,
     }
 
     if (!pEnv->is() && pEnvTypeName)
+    {
         *pSourceEnv_name = OUString::createFromAscii(pEnvTypeName);
+        const char * pUNO_ENV_LOG = ::getenv( "UNO_ENV_LOG" );
+        if (pUNO_ENV_LOG && rtl_str_getLength(pUNO_ENV_LOG) )
+        {
+            OString implName(OUStringToOString(cImplName, RTL_TEXTENCODING_ASCII_US));
+            OString aEnv( pUNO_ENV_LOG );
+            sal_Int32 nIndex = 0;
+            do
+            {
+                const OString aStr( aEnv.getToken( 0, ';', nIndex ) );
+                if ( aStr.equals(implName) )
+                {
+                    *pSourceEnv_name += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":log"));
+                    break;
+                }
+            } while( nIndex != -1 );
+        }
+
+    }
 
     return aExcMsg;
 }

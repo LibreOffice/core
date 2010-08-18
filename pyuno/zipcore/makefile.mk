@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,7 +32,7 @@ TARGET=zipcore
 LIBTARGET=NO
 
 .INCLUDE : settings.mk
-
+.IF "$(L10N_framework)"==""
 UWINAPILIB =
 
 .IF "$(SYSTEM_PYTHON)" == "YES" || "$(GUI)" == "OS2"
@@ -59,7 +55,7 @@ PYTHONBINARY=$(DESTROOT)$/bin$/python$(EXECPOST)
 .ENDIF
 
 FINDLIBFILES_TMP:=$(subst,/,$/ \
-    $(shell @$(FIND) $(SOLARLIBDIR)$/python -type f| $(GREP) -v .pyc |$(GREP) -v .py\~ |$(GREP) -v .orig ))
+    $(shell @$(FIND) $(SOLARLIBDIR)$/python -type f| $(GREP) -v "\.pyc" |$(GREP) -v "\.py~" |$(GREP) -v .orig | $(GREP) -v _failed))
 FINDLIBFILES=$(subst,$(SOLARLIBDIR)$/python, $(FINDLIBFILES_TMP))
 
 FILES=\
@@ -73,6 +69,7 @@ APP1STDLIBS =
 APP1RPATH = BRAND
 OBJFILES = $(OBJ)$/python.obj
 .ENDIF
+
 
 .INCLUDE: target.mk
 
@@ -129,3 +126,7 @@ $(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
 .ENDIF
 
 .ENDIF
+.ELSE
+ivo:
+    $(ECHO)
+.ENDIF # L10N_framework

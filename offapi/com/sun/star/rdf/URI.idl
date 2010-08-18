@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: URI.idl,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +55,7 @@ service URI : XURI
     /** creates an URI RDF node.
 
         @param Value
-            the URI, represented as string.
+            the URI, represented as <atom>string</atom>.
 
         @throws com::sun::star::lang::IllegalArgumentException
             if the argument does not represent a valid URI
@@ -70,10 +67,11 @@ service URI : XURI
     /** creates an URI RDF node from namespace prefix and local name.
 
         @param Namespace
-            the namespace prefix of the URI, represented as string.
+            the namespace prefix of the URI, represented as
+            <atom>string</atom>.
 
         @param LocalName
-            the local name of the URI, represented as string.
+            the local name of the URI, represented as <atom>string</atom>.
 
         @throws com::sun::star::lang::IllegalArgumentException
             if the arguments do not represent a valid URI

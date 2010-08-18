@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,6 +42,7 @@ IDLFILES=\
     AccessibleChartDocumentView.idl\
     AreaDiagram.idl\
     BarDiagram.idl\
+    BubbleDiagram.idl\
     Chart3DBarProperties.idl\
     ChartArea.idl\
     ChartAxis.idl\
@@ -90,6 +87,7 @@ IDLFILES=\
     Diagram.idl\
     Dim3DDiagram.idl\
     DonutDiagram.idl\
+    FilledNetDiagram.idl\
     LineDiagram.idl\
     MissingValueTreatment.idl\
     NetDiagram.idl\
@@ -105,7 +103,9 @@ IDLFILES=\
     XChartDataArray.idl\
     XChartDataChangeEventListener.idl\
     XChartDocument.idl\
+    XComplexDescriptionAccess.idl\
     XDiagram.idl\
+    XDiagramPositioning.idl\
     XStatisticDisplay.idl\
     XTwoAxisXSupplier.idl\
     XTwoAxisYSupplier.idl\

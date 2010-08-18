@@ -2,12 +2,9 @@
 #
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rtl_String_Utils.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +88,7 @@ sal_Char* cpystr( sal_Char* dst, const sal_Char* src )
     const sal_Char* psrc = src;
     sal_Char* pdst = dst;
 
-    while( *pdst++ = *psrc++ );
+    while( (*pdst++ = *psrc++) );
     return ( dst );
 }
 

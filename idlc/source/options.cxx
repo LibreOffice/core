@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: options.cxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,7 +34,7 @@
 
 using namespace rtl;
 
-Options::Options(): m_stdin(false)
+Options::Options(): m_stdin(false), m_verbose(false), m_quiet(false)
 {
 }
 
@@ -188,6 +185,22 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                     if (m_options.count("-cid") == 0)
                         m_options["-cid"] = OString(av[j]);
                 } else
+                    throw IllegalArgument(OString(av[j]) + ", please check your input");
+                break;
+            case 'v':
+                if ( 0 == strcmp( &av[j][1], "verbose" ) )
+                {
+                    m_verbose = true;
+                }
+                else
+                    throw IllegalArgument(OString(av[j]) + ", please check your input");
+                break;
+            case 'q':
+                if ( 0 == strcmp( &av[j][1], "quiet" ) )
+                {
+                    m_quiet = true;
+                }
+                else
                     throw IllegalArgument(OString(av[j]) + ", please check your input");
                 break;
             case 'w':

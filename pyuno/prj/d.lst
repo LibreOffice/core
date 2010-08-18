@@ -16,6 +16,7 @@ mkdir: %_DEST%\lib%_EXT%\pyuno
 ..\%__SRC%\bin\uno.py %_DEST%\bin%_EXT%\pyuno\uno.py
 ..\%__SRC%\bin\pyuno_services.rdb %_DEST%\bin%_EXT%\pyuno_services.rdb
 ..\%__SRC%\bin\pyuno.pyd %_DEST%\bin%_EXT%\pyuno.pyd
+..\%__SRC%\bin\pyuno.dll %_DEST%\bin%_EXT%\pyuno.dll
 ..\%__SRC%\bin\pythonl*.dll %_DEST%\bin%_EXT%\pythonl*.dll
 
 ..\%__SRC%\misc\pyunorc %_DEST%\lib%_EXT%\pyunorc

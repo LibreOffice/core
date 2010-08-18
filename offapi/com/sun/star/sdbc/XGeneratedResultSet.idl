@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XGeneratedResultSet.idl,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,9 +41,9 @@
 
 /** provides a result set which gives access to automatically generated values after a new row was inserted.
 
-    The relative order of columns in the result set returned by getGeneratedValues must be the same as the relative order
-    of the same columns as returned when executing a "SELECT * FROM table". This ensures that clients of this interface
-    can reliably fetch the column values.
+    <p>The relative order of columns in the result set returned by <member>getGeneratedValues</member> must be the same
+    as the relative order of the same columns as returned when executing a "SELECT * FROM table". This ensures that
+    clients of this interface can reliably fetch the column values.</p>
 
     @see com::sun::star::sdbc::Statement
     @see com::sun::star::sdbc::PreparedStatement

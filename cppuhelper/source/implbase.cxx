@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: implbase.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -247,6 +244,8 @@ void WeakComponentImplHelperBase::release()
     throw ()
 {
     if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
+        // ensure no other references are created, via the weak connection point, from now on
+        disposeWeakConnectionPoint();
         // restore reference count:
         osl_incrementInterlockedCount( &m_refCount );
         if (! rBHelper.bDisposed) {
@@ -381,6 +380,8 @@ void WeakAggComponentImplHelperBase::release()
         OWeakAggObject::release();
     }
     else if (osl_decrementInterlockedCount( &m_refCount ) == 0) {
+        // ensure no other references are created, via the weak connection point, from now on
+        disposeWeakConnectionPoint();
         // restore reference count:
         osl_incrementInterlockedCount( &m_refCount );
         if (! rBHelper.bDisposed) {

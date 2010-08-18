@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.110 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,6 +41,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssauth.db \
     $(UCR)$/cssawt.db \
     $(UCR)$/cssawttree.db \
+    $(UCR)$/cssawtgrid.db \
     $(UCR)$/csschart.db \
     $(UCR)$/csschart2.db \
     $(UCR)$/csschart2data.db \
@@ -98,6 +95,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssdomevents.db \
     $(UCR)$/cssscanner.db \
     $(UCR)$/cssscript.db \
+    $(UCR)$/cssscriptvba.db \
     $(UCR)$/csssdb.db \
     $(UCR)$/csssdbc.db \
     $(UCR)$/csssdbcx.db \
@@ -143,6 +141,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssreport.db \
     $(UCR)$/cssrptins.db \
     $(UCR)$/cssrptmeta.db \
+    $(UCR)$/cssoffice.db \
     $(UCR)$/cssrdf.db
 
 
@@ -152,6 +151,7 @@ REGISTRYCHECKFLAG=$(MISC)$/registrycheck.flag
 
 UNOTYPE_STATISTICS=$(MISC)$/unotype_statistics.txt
 
+REGVIEWTOOL=$(SOLARBINDIR)$/regview$(EXECPOST)
 
 # --- Targets ------------------------------------------------------
 
@@ -161,14 +161,14 @@ ALLTAR : $(UCR)$/types.db \
        $(UNOTYPE_STATISTICS)
 
 $(UCR)$/types.db : $(UCR)$/offapi.db $(SOLARBINDIR)$/udkapi.rdb
-    -$(RM) $(REGISTRYCHECKFLAG)
-    $(GNUCOPY) -f $(UCR)$/offapi.db $@
-    $(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi.rdb
+    @-$(RM) $(REGISTRYCHECKFLAG)
+    @$(GNUCOPY) -f $(UCR)$/offapi.db $@
+    $(COMMAND_ECHO)$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi.rdb
 
 $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udkapi_doc.rdb
-    -$(RM) $(REGISTRYCHECKFLAG)
-    $(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
-    $(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
+    @-$(RM) $(REGISTRYCHECKFLAG)
+    @$(GNUCOPY) -f $(OUT)$/ucrdoc$/offapi_doc.db $@
+    $(COMMAND_ECHO)$(REGMERGE) $@ / $(SOLARBINDIR)$/udkapi_doc.rdb
 
 #JSC: The type library has changed, all temporary not checked types are removed
 #     and will be check from now on.
@@ -177,12 +177,12 @@ $(OUT)$/ucrdoc$/types_doc.db : $(OUT)$/ucrdoc$/offapi_doc.db $(SOLARBINDIR)$/udk
 #JSC: i have removed the doc rdb because all type information is already in the
 #     types.rdb, even the service and singleton type info. IDL docu isn't checked.
 $(REGISTRYCHECKFLAG) : $(UCR)$/types.db $(OUT)$/ucrdoc$/types_doc.db
-    $(REGCOMPARE) -f -t -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db \
+    $(COMMAND_ECHO)$(REGCOMPARE) -f -t -r1 $(REFERENCE_RDB) -r2 $(UCR)$/types.db \
         && echo > $(REGISTRYCHECKFLAG)
 
 #JSC: new target to prepare some UNO type statistics, the ouput will be later used
 #     for versioning of UNO cli type libraries
 $(UNOTYPE_STATISTICS) : $(REGISTRYCHECKFLAG)
-    $(AUGMENT_LIBRARY_PATH) $(PERL) checknewapi.pl $(UCR)$/types.db $(REFERENCE_RDB) "$(RSCREVISION)" > $@
+    $(COMMAND_ECHO)$(AUGMENT_LIBRARY_PATH) $(PERL) checknewapi.pl $(UCR)$/types.db $(REFERENCE_RDB) "$(RSCREVISION)" "$(REGVIEWTOOL)" > $@
 
 .INCLUDE :  target.mk

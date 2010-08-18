@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SharedLibraryLoader_Test.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,7 +88,7 @@ public class SharedLibraryLoader_Test {
             if ( ! test_getSharedLibraryLoaderFactory() )
                 return false;
 
-        sharedLibraryLoader = (XImplementationLoader) UnoRuntime.queryInterface(
+        sharedLibraryLoader = UnoRuntime.queryInterface(
                 XImplementationLoader.class, sharedLibraryLoaderFactory.createInstance() );
 
         System.out.print("Test - ");
@@ -115,11 +112,11 @@ public class SharedLibraryLoader_Test {
 
         System.err.println("- get the native ServiceManger factory");
         XSingleServiceFactory aSMgrFac =
-            (XSingleServiceFactory) UnoRuntime.queryInterface( XSingleServiceFactory.class,
+            UnoRuntime.queryInterface( XSingleServiceFactory.class,
                         sharedLibraryLoader.activate(NATIVE_SERVICE_MANAGER_IMP_NAME, null, NATIVE_SERVICE_MANAGER_LIB_NAME, null));
 
         System.err.println("- instantiate the native ServiceManger");
-        nativeServiceManager =  (XMultiServiceFactory) UnoRuntime.queryInterface( XMultiServiceFactory.class, aSMgrFac.createInstance() );
+        nativeServiceManager = UnoRuntime.queryInterface( XMultiServiceFactory.class, aSMgrFac.createInstance() );
 
         System.out.print("Test - ");
         System.out.println(nativeServiceManager == null? "failed" : "successfull");
@@ -141,12 +138,12 @@ public class SharedLibraryLoader_Test {
 
         System.err.println("- get factory of the Registry");
         XSingleServiceFactory aRegFac =
-            (XSingleServiceFactory) UnoRuntime.queryInterface( XSingleServiceFactory.class,
+            UnoRuntime.queryInterface( XSingleServiceFactory.class,
                         sharedLibraryLoader.activate(NATIVE_REGISTRY_IMP_NAME, null, NATIVE_REGISTRY_LIB_NAME, null)
             );
         System.err.println("- instantiate the Registry");
         simpleRegistry =
-            (XSimpleRegistry) UnoRuntime.queryInterface( XSimpleRegistry.class, aRegFac.createInstance() );
+            UnoRuntime.queryInterface( XSimpleRegistry.class, aRegFac.createInstance() );
         System.out.print("Test - ");
         System.out.println(simpleRegistry == null? "failed" : "successfull");
         System.out.println("*******************************************************************");

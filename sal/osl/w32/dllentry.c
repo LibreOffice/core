@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dllentry.c,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -255,7 +252,7 @@ void do_cleanup( void )
 
             */
 
-#ifdef PRODUCT
+#ifndef DBG_UTIL
             __try
 #endif
             {
@@ -267,7 +264,7 @@ void do_cleanup( void )
                 rtl_cache_fini();
                 rtl_arena_fini();
             }
-#ifdef PRODUCT
+#ifndef DBG_UTIL
             __except( EXCEPTION_EXECUTE_HANDLER )
             {
             }

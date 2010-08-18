@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: BridgeFactory.java,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -134,7 +131,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
         if (hasName) {
             IBridge iBridges[] = UnoRuntime.getBridges();
             for(int i = 0; i < iBridges.length; ++ i) {
-                XBridge xBridge = (XBridge)UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
+                XBridge xBridge = UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
 
                 if(xBridge != null) {
                     if(xBridge.getName().equals(sName))
@@ -148,7 +145,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
         try {
             IBridge iBridge = UnoRuntime.getBridgeByName("java", context, "remote", context, hasName ? new Object[]{sProtocol, aConnection, anInstanceProvider, sName} : new Object[]{sProtocol, aConnection, anInstanceProvider});
 
-            xBridge = (XBridge)UnoRuntime.queryInterface(XBridge.class, iBridge);
+            xBridge = UnoRuntime.queryInterface(XBridge.class, iBridge);
         }
         catch(Exception exception) {
             throw new com.sun.star.lang.IllegalArgumentException(exception.getMessage());
@@ -171,7 +168,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
 
         IBridge iBridges[] = UnoRuntime.getBridges();
         for(int i = 0; i < iBridges.length; ++ i) {
-            xBridge = (XBridge)UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
+            xBridge = UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
 
             if(xBridge != null) {
                 if(xBridge.getName().equals(sName))
@@ -199,7 +196,7 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
 
         IBridge iBridges[] = UnoRuntime.getBridges();
         for(int i = 0; i < iBridges.length; ++ i) {
-            XBridge xBridge = (XBridge)UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
+            XBridge xBridge = UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
 
             if(xBridge != null)
                 vector.addElement(xBridge);

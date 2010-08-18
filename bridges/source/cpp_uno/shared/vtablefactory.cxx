@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: vtablefactory.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -272,7 +269,7 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
         char *tmpfname = new char[aTmpName.getLength()+1];
         strncpy(tmpfname, aTmpName.getStr(), aTmpName.getLength()+1);
         if ((block.fd = mkstemp(tmpfname)) == -1)
-          perror("creation of executable memory area failed");
+            perror("creation of executable memory area failed");
         if (block.fd == -1)
         {
             delete[] tmpfname;
@@ -280,7 +277,13 @@ bool VtableFactory::createBlock(Block &block, sal_Int32 slotCount) const
         }
         unlink(tmpfname);
         delete[] tmpfname;
-        ftruncate(block.fd, block.size);
+        if (ftruncate(block.fd, block.size) == -1)
+        {
+            perror("truncation of executable memory area failed");
+            close(block.fd);
+            block.fd = -1;
+            break;
+        }
         block.start = mmap(NULL, block.size, PROT_READ | PROT_WRITE, MAP_SHARED, block.fd, 0);
         if (block.start== MAP_FAILED) {
             block.start = 0;

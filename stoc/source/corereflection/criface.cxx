@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: criface.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -880,7 +877,8 @@ sal_Bool InterfaceIdlClassImpl::isAssignableFrom( const Reference< XIdlClass > &
 Uik InterfaceIdlClassImpl::getUik()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return *(Uik *)&getTypeDescr()->aUik;
+    return Uik(0, 0, 0, 0, 0);
+        // Uiks are deprecated and this function must not be called
 }
 //__________________________________________________________________________________________________
 Sequence< Reference< XIdlMethod > > InterfaceIdlClassImpl::getMethods()

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XInsertObjectDialog.idl,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +62,7 @@
 //=============================================================================
 /** allows to create and initialize a new embedded object using GUI dialog.
  */
-interface XInsertObjectDialog: com::sun::star::uno::XInterface
+published interface XInsertObjectDialog: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
     /** creates a new object using GUI dialog.

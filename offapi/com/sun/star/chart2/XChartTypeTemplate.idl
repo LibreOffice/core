@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XChartTypeTemplate.idl,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -81,12 +78,10 @@ interface XChartTypeTemplate : ::com::sun::star::uno::XInterface
         [in] data::XDataSource xDataSource,
         [in] sequence< com::sun::star::beans::PropertyValue > aArguments );
 
-    /** Return the names of parameters that are interpreted in the
-        <member>createDiagramByDataSource</member> method.
-
-        @see StandardChartTypeTemplateParameters
+    /** @return
+            <TRUE/> if the template does support categories
      */
-    sequence< string > getAvailableCreationParameterNames();
+    boolean supportsCategories();
 
     /** Analyses the given diagram and reinterprets its
         <type>DataSeries</type> and <type>Categories</type> and

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.21 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -126,9 +122,7 @@ ALLTAR: \
 #Create the config file that is used with the policy assembly
 $(CLIMAKER_CONFIG): climaker.exe.config
     $(COPY) $< $@
-.IF "$(USE_SHELL)"!="4nt"
     chmod +x $@
-.ENDIF          # "$(USE_SHELL)"!="4nt"
 
 
 .IF "$(BUILD_FOR_CLI)" != ""

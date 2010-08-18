@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,15 +50,15 @@ MY_SCRIPTCAT=tr -d "\015" <
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 # BEGIN ----------------------------------------------------------------
-# auto generated Target:joblist by codegen.pl 
+# auto generated Target:joblist by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/rtl_Bootstrap.obj
 
 SHL1TARGET= rtl_Bootstrap
-SHL1STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
@@ -72,7 +68,7 @@ DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # END ------------------------------------------------------------------
 
-OBJ2FILES=$(OBJ)$/bootstrap_process.obj 
+OBJ2FILES=$(OBJ)$/bootstrap_process.obj
 APP2TARGET=bootstrap_process
 APP2OBJS=$(OBJ2FILES)
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: BridgeFactory_Test.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +72,7 @@ public final class BridgeFactory_Test extends ComplexTestCase {
         assure("", UnoRuntime.areSame(xBridge, xBridges[0]));
 
         // dispose the bridge
-        XComponent xComponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, xBridge);
+        XComponent xComponent = UnoRuntime.queryInterface(XComponent.class, xBridge);
         xComponent.dispose();
 
 
@@ -103,7 +100,7 @@ public final class BridgeFactory_Test extends ComplexTestCase {
                && UnoRuntime.areSame(xBridge_new, xBridges[0]));
 
         // dispose the new bridge
-        XComponent xComponent_new = (XComponent)UnoRuntime.queryInterface(XComponent.class, xBridge_new);
+        XComponent xComponent_new = UnoRuntime.queryInterface(XComponent.class, xBridge_new);
         xComponent_new.dispose();
     }
 }

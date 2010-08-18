@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sunjre.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,8 +71,6 @@ char const* const* SunInfo::getRuntimePaths(int * size)
         "/bin/classic/jvm.dll"
 #elif defined(OS2)
         "/bin/classic/jvm.dll",
-        "/bin/client/jvm.dll",
-        "/bin/hotspot/jvm.dll"
 #elif UNX
         "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so",
         "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so",

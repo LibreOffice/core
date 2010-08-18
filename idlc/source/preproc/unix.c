@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unix.c,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,15 +33,14 @@
 #if (defined(_WIN32) || defined(_MSDOS) || defined(__IBMC__))
 #include <io.h>
 #include <sys/stat.h>
+#include <external/glibc/getopt.h>
 #else
 #include <unistd.h>
 #endif
 
 #include "cpp.h"
 
-extern int cppgetopt(int, char *const *, const char *);
-extern char *optarg, rcsid[];
-extern int optind;
+extern char rcsid[];
 
 int Pflag = 0;                          /* print no line information */
 int Iflag = 0;                          /* print includes */
@@ -65,7 +61,7 @@ void
     Tokenrow tr;
 
     setup_kwtab();
-    while ((c = cppgetopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
+    while ((c = getopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
         switch (c)
         {
             case 'N':

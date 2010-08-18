@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: salinit.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -43,6 +40,26 @@ extern "C" {
 
 void SAL_CALL sal_detail_initialize(int argc, char ** argv)
 {
+    // SetProcessDEPPolicy(PROCESS_DEP_ENABLE);
+    // SetDllDirectoryW(L"");
+    // SetSearchPathMode(
+    //   BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE | BASE_SEARCH_PATH_PERMANENT);
+    HMODULE h = GetModuleHandleW(L"kernel32.dll");
+    if (h != 0) {
+        FARPROC p = GetProcAddress(h, "SetProcessDEPPolicy");
+        if (p != 0) {
+            reinterpret_cast< BOOL (WINAPI *)(DWORD) >(p)(0x00000001);
+    }
+    p = GetProcAddress(h, "SetDllDirectoryW");
+        if (p != 0) {
+            reinterpret_cast< BOOL (WINAPI *)(LPCWSTR) >(p)(L"");
+        }
+        p = GetProcAddress(h, "SetSearchPathMode");
+        if (p != 0) {
+            reinterpret_cast< BOOL (WINAPI *)(DWORD) >(p)(0x8001);
+        }
+    }
+
     WSADATA wsaData;
     int     error;
     WORD    wVersionRequested;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: osl_old_testprofile.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,10 @@
 #include <stdio.h>
 #include <osl/profile.h>
 
-#include <cppunit/simpleheader.hxx>
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 
 //==================================================================================================
 // -----------------------------------------------------------------------------
@@ -67,7 +67,8 @@ void oldtests::test_profile(void)
 
 
     // successful write
-    if (hProfile = osl_openProfile( ustrProfileName, 0 ))
+    hProfile = osl_openProfile( ustrProfileName, 0 );
+    if (hProfile != 0)
     {
         if (! osl_writeProfileBool( hProfile, "testsection", "testbool", 1 ))
             printf( "### cannot write into init file!\n" );
@@ -76,7 +77,8 @@ void oldtests::test_profile(void)
     }
 
     // unsuccessful write
-    if (hProfile = osl_openProfile( ustrProfileName2, 0 ))
+    hProfile = osl_openProfile( ustrProfileName2, 0 );
+    if (hProfile != 0)
     {
         if (osl_writeProfileBool( hProfile, "testsection", "testbool", 1 ))
             printf( "### unexpected success writing into test2.ini!\n" );
@@ -91,7 +93,7 @@ void oldtests::test_profile(void)
 } // namespace osl_Profile
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_Profile::oldtests, "osl_Profile" );
+CPPUNIT_TEST_SUITE_REGISTRATION( osl_Profile::oldtests );
 
 // -----------------------------------------------------------------------------
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();

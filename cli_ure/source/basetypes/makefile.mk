@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.11 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,13 +37,6 @@ TARGET = basetypes
 .INCLUDE : $(PRJ)$/util$/target.pmk
 .INCLUDE : target.mk
 
-
-.IF "$(USE_SHELL)"!="4nt"
-ECHOQUOTE='
-.ELSE
-ECHOQUOTE=
-.ENDIF
-
 .IF "$(BUILD_FOR_CLI)" != ""
 
 .INCLUDE : $(BIN)$/cliureversion.mk
@@ -77,15 +66,15 @@ CSFILES = \
 .IF "$(CCNUMVER)" <= "001399999999"
 $(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
-    echo $(ECHOQUOTE) \
-    [assembly:System.Reflection.AssemblyVersion( "$(CLI_BASETYPES_NEW_VERSION)")] \
-    [assembly:System.Reflection.AssemblyKeyFile(@"$(BIN)$/cliuno.snk")]$(ECHOQUOTE) \
+    echo \
+    '[assembly:System.Reflection.AssemblyVersion( "$(CLI_BASETYPES_NEW_VERSION)")] \
+    [assembly:System.Reflection.AssemblyKeyFile(@"$(BIN)$/cliuno.snk")]' \
     >> $@
 .ELSE
 $(ASSEMBLY_ATTRIBUTES) : assembly.cs makefile.mk $(BIN)$/cliuno.snk $(BIN)$/cliureversion.mk 
     $(GNUCOPY) -p assembly.cs $@
-    echo $(ECHOQUOTE) \
-    [assembly:System.Reflection.AssemblyVersion( "$(CLI_BASETYPES_NEW_VERSION)")]$(ECHOQUOTE) \
+    echo \
+    '[assembly:System.Reflection.AssemblyVersion( "$(CLI_BASETYPES_NEW_VERSION)")]' \
     >> $@
 .ENDIF
 

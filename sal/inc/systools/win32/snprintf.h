@@ -1,4 +1,4 @@
-#ifndef _SMPRINTF_H
+#ifndef _SNPRINTF_H
 #define _SNPRINTF_H
 
 #if     !defined(_WIN32)
@@ -77,4 +77,4 @@ _SNPRINTF_DLLIMPORT int __cdecl vsnprintf( char *buffer, size_t count, const cha
 }
 #endif
 
-#endif /* _SMPRINTF_H */
+#endif /* _SNPRINTF_H */

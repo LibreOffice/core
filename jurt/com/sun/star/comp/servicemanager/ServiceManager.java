@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ServiceManager.java,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -158,7 +155,7 @@ public class ServiceManager implements XMultiServiceFactory,
         if (loaderObj == null)
             throw new com.sun.star.uno.Exception("Can get an instance of com.sun.star.loader.Java");
 
-        return (XImplementationLoader) UnoRuntime.queryInterface( XImplementationLoader.class, loaderObj );
+        return UnoRuntime.queryInterface( XImplementationLoader.class, loaderObj );
     }
 
     /**
@@ -380,7 +377,7 @@ public class ServiceManager implements XMultiServiceFactory,
         Object fac = queryServiceFactory( rServiceSpecifier );
         if (fac != null)
         {
-            XSingleComponentFactory xCompFac = (XSingleComponentFactory)UnoRuntime.queryInterface(
+            XSingleComponentFactory xCompFac = UnoRuntime.queryInterface(
                 XSingleComponentFactory.class, fac );
             if (xCompFac != null)
             {
@@ -388,7 +385,7 @@ public class ServiceManager implements XMultiServiceFactory,
             }
             else
             {
-                XSingleServiceFactory xServiceFac = (XSingleServiceFactory)UnoRuntime.queryInterface(
+                XSingleServiceFactory xServiceFac = UnoRuntime.queryInterface(
                     XSingleServiceFactory.class, fac );
                 if (xServiceFac != null)
                 {
@@ -422,7 +419,7 @@ public class ServiceManager implements XMultiServiceFactory,
         Object fac = queryServiceFactory( rServiceSpecifier );
         if (fac != null)
         {
-            XSingleComponentFactory xCompFac = (XSingleComponentFactory)UnoRuntime.queryInterface(
+            XSingleComponentFactory xCompFac = UnoRuntime.queryInterface(
                 XSingleComponentFactory.class, fac );
             if (xCompFac != null)
             {
@@ -430,7 +427,7 @@ public class ServiceManager implements XMultiServiceFactory,
             }
             else
             {
-                XSingleServiceFactory xServiceFac = (XSingleServiceFactory)UnoRuntime.queryInterface(
+                XSingleServiceFactory xServiceFac = UnoRuntime.queryInterface(
                     XSingleServiceFactory.class, fac );
                 if (xServiceFac != null)
                 {
@@ -528,7 +525,7 @@ public class ServiceManager implements XMultiServiceFactory,
             if (object == null)
                 throw new com.sun.star.uno.RuntimeException("The parameter must not been null");
 
-            XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, object);
+            XServiceInfo xServiceInfo = UnoRuntime.queryInterface(XServiceInfo.class, object);
 
             if (xServiceInfo != null) {
                 return UnoRuntime.areSame(factoriesByImplNames.get(xServiceInfo.getImplementationName()), object);
@@ -552,7 +549,7 @@ public class ServiceManager implements XMultiServiceFactory,
         if (object == null) throw new com.sun.star.lang.IllegalArgumentException();
 
         XServiceInfo xServiceInfo =
-                (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, object);
+                UnoRuntime.queryInterface(XServiceInfo.class, object);
 
         if (xServiceInfo == null)
             throw new com.sun.star.lang.IllegalArgumentException(
@@ -606,7 +603,7 @@ public class ServiceManager implements XMultiServiceFactory,
             );
 
         XServiceInfo xServiceInfo =
-            (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, object);
+            UnoRuntime.queryInterface(XServiceInfo.class, object);
 
         if (xServiceInfo == null)
             throw new com.sun.star.lang.IllegalArgumentException(
@@ -614,7 +611,7 @@ public class ServiceManager implements XMultiServiceFactory,
             );
 
         XSingleServiceFactory xSingleServiceFactory =
-            (XSingleServiceFactory) UnoRuntime.queryInterface(XSingleServiceFactory.class, object);
+            UnoRuntime.queryInterface(XSingleServiceFactory.class, object);
 
         if (xSingleServiceFactory == null)
             throw new com.sun.star.lang.IllegalArgumentException(

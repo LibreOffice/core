@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -34,7 +30,7 @@ PRJ=..$/..
 PRJNAME=cpputools
 TARGET=sp2bv
 TARGETTYPE=CUI
-.IF "$(OS)"!="IRIX" && "$(OS)" != "MACOSX"
+.IF "$(OS)" != "MACOSX"
 # hack to get stdc++ linked
 NO_DEFAULT_STL=TRUE
 .ENDIF

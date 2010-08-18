@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: util.cxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,6 +62,7 @@ using namespace rtl;
 using namespace osl;
 using namespace std;
 
+#define CHAR_POINTER(oustr) ::rtl::OUStringToOString(oustr,RTL_TEXTENCODING_UTF8).pData->buffer
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 #ifdef WNT
 #define HKEY_SUN_JRE L"Software\\JavaSoft\\Java Runtime Environment"
@@ -126,7 +124,7 @@ extern VendorSupportMapEntry gVendorMap[];
 
 bool getSDKInfoFromRegistry(vector<OUString> & vecHome);
 bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome);
-rtl::OUString decodeOutput(const rtl::OString& s);
+bool decodeOutput(const rtl::OString& s, rtl::OUString* out);
 
 
 
@@ -241,9 +239,9 @@ FileHandleReader::readLine(rtl::OString * pLine)
     {
         if (m_nIndex == m_nSize)
         {
-            sal_uInt64 nRead;
+            sal_uInt64 nRead = 0;
             switch (osl_readFile(
-                        m_aGuard.getHandle(), m_aBuffer, BUFFER_SIZE, &nRead))
+                        m_aGuard.getHandle(), m_aBuffer, sizeof(m_aBuffer), &nRead))
             {
             case osl_File_E_PIPE: //HACK! for windows
                 nRead = 0;
@@ -256,8 +254,8 @@ FileHandleReader::readLine(rtl::OString * pLine)
                 m_nIndex = 0;
                 m_nSize = static_cast< int >(nRead);
                 break;
-        case osl_File_E_INTR:
-            continue;
+            case osl_File_E_INTR:
+                continue;
 
             default:
                 return RESULT_ERROR;
@@ -299,13 +297,14 @@ class AsynchReader: public Thread
 public:
 
     AsynchReader(oslFileHandle & rHandle);
-
+#if OSL_DEBUG_LEVEL >= 2
     /** only call this function after this thread has finished.
 
         That is, call join on this instance and then call getData.
 
      */
     OString getData();
+#endif
 };
 
 AsynchReader::AsynchReader(oslFileHandle & rHandle):
@@ -313,11 +312,13 @@ AsynchReader::AsynchReader(oslFileHandle & rHandle):
 {
 }
 
+#if OSL_DEBUG_LEVEL >= 2
 OString AsynchReader::getData()
 {
     OSL_ASSERT(isRunning() == sal_False );
     return OString(m_arData.get(), m_nDataSize);
 }
+#endif
 
 void AsynchReader::run()
 {
@@ -449,7 +450,13 @@ bool getJavaProps(const OUString & exePath,
         rs = stdoutReader.readLine( & aLine);
         if (rs != FileHandleReader::RESULT_OK)
             break;
-        OUString sLine = decodeOutput(aLine);
+        JFW_TRACE2(OString("[Java framework] line:\" ")
+               + aLine + OString(" \".\n"));
+        OUString sLine;
+        if (!decodeOutput(aLine, &sLine))
+            continue;
+        JFW_TRACE2(OString("[Java framework] line:\" ")
+               + OString( CHAR_POINTER(sLine)) + OString(" \".\n"));
         sLine = sLine.trim();
         if (sLine.getLength() == 0)
             continue;
@@ -481,21 +488,29 @@ bool getJavaProps(const OUString & exePath,
     readable strings. The strings are encoded as integer values separated
     by spaces.
  */
-rtl::OUString decodeOutput(const rtl::OString& s)
+bool decodeOutput(const rtl::OString& s, rtl::OUString* out)
 {
-    OUString sEncoded = OStringToOUString(s, RTL_TEXTENCODING_ASCII_US);
+    OSL_ASSERT(out != 0);
     OUStringBuffer buff(512);
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aToken = sEncoded.getToken( 0, ' ', nIndex );
+        OString aToken = s.getToken( 0, ' ', nIndex );
         if (aToken.getLength())
         {
-            sal_Unicode value = (sal_Unicode) aToken.toInt32();
+            for (sal_Int32 i = 0; i < aToken.getLength(); ++i)
+            {
+                if (aToken[i] < '0' || aToken[i] > '9')
+                    return false;
+            }
+            sal_Unicode value = (sal_Unicode)(aToken.toInt32());
             buff.append(value);
         }
     } while (nIndex >= 0);
-   return buff.makeStringAndClear();
+
+    *out = buff.makeStringAndClear();
+    JFW_TRACE2(*out);
+    return true;
 }
 
 
@@ -786,8 +801,9 @@ OUString resolveDirPath(const OUString & path)
 {
     OUString ret;
     OUString sResolved;
+    //getAbsoluteFileURL also resolves links
     if (File::getAbsoluteFileURL(
-        rtl::OUString(), path, sResolved) != File::E_None)
+            OUSTR("file:///"), path, sResolved) != File::E_None)
         return OUString();
 
     //check if this is a valid path and if it is a directory
@@ -817,7 +833,7 @@ OUString resolveFilePath(const OUString & path)
     OUString sResolved;
 
     if (File::getAbsoluteFileURL(
-        rtl::OUString(), path, sResolved) != File::E_None)
+            OUSTR("file:///"), path, sResolved) != File::E_None)
         return OUString();
 
     //check if this is a valid path to a file or and if it is a link

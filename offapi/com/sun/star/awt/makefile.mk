@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.50.20.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -127,6 +123,7 @@ IDLFILES=\
     MessageBoxCommand.idl\
     MouseButton.idl\
     MouseEvent.idl\
+    MouseWheelBehavior.idl\
     PaintEvent.idl\
     Point.idl\
     PopupMenuDirection.idl\
@@ -281,10 +278,13 @@ IDLFILES=\
     XRequestCallback.idl\
     XReschedule.idl\
     XScrollBar.idl\
-        XSimpleTabController.idl\
+    XSimpleTabController.idl\
     XSpinField.idl\
     XSpinListener.idl\
     XSpinValue.idl\
+    XStyleChangeListener.idl\
+    XStyleSettings.idl\
+    XStyleSettingsSupplier.idl\
     XSystemChildFactory.idl\
     XSystemDependentMenuPeer.idl\
     XSystemDependentWindowPeer.idl\
@@ -304,6 +304,7 @@ IDLFILES=\
         XToggleButton.idl\
     XToolkit.idl\
     XTopWindow.idl\
+    XTopWindow2.idl\
     XTopWindowListener.idl\
     XUnitConversion.idl\
     XUnoControlContainer.idl\
@@ -330,7 +331,10 @@ IDLFILES=\
     MenuLogo.idl \
     XMenuExtended2.idl \
     XMenuBarExtended.idl \
-    XPopupMenuExtended.idl
+    XPopupMenuExtended.idl \
+    XItemList.idl \
+    XItemListListener.idl \
+    ItemListEvent.idl
 
 # ------------------------------------------------------------------
 

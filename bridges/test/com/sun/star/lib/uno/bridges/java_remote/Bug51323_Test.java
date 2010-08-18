@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Bug51323_Test.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,7 +64,7 @@ public final class Bug51323_Test extends ComplexTestCase {
         protected boolean run(XComponentContext context) throws Throwable {
             XConnection connection =
                 Connector.create(context).connect(getConnectionDescription());
-            XBridgeFactory factory = (XBridgeFactory) UnoRuntime.queryInterface(
+            XBridgeFactory factory = UnoRuntime.queryInterface(
                 XBridgeFactory.class,
                 context.getServiceManager().createInstanceWithContext(
                     "com.sun.star.bridge.BridgeFactory", context));

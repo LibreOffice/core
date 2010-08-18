@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TestBed.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -130,7 +127,7 @@ public final class TestBed {
             throws com.sun.star.uno.Exception
         {
             XConnector connector = Connector.create(context);
-            XBridgeFactory factory = (XBridgeFactory) UnoRuntime.queryInterface(
+            XBridgeFactory factory = UnoRuntime.queryInterface(
                 XBridgeFactory.class,
                 context.getServiceManager().createInstanceWithContext(
                     "com.sun.star.bridge.BridgeFactory", context));
@@ -169,7 +166,7 @@ public final class TestBed {
                     = Bootstrap.createInitialComponentContext(null);
                 XAcceptor acceptor = Acceptor.create(context);
                 XBridgeFactory factory
-                    = (XBridgeFactory) UnoRuntime.queryInterface(
+                    = UnoRuntime.queryInterface(
                         XBridgeFactory.class,
                         context.getServiceManager().createInstanceWithContext(
                             "com.sun.star.bridge.BridgeFactory", context));

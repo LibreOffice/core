@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: logfile.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -189,12 +186,19 @@ namespace rtl
 
 #define RTL_LOGFILE_PRODUCT_TRACE( string )  \
             rtl_logfile_longTrace( "| : %s\n", string )
-#define RTL_LOGFILE_PRODUCT_CONTEXT( instance, name ) \
-            ::rtl::Logfile instance( name )
 #define RTL_LOGFILE_PRODUCT_TRACE1( frmt, arg1 ) \
              rtl_logfile_longTrace( "| : " ); \
              rtl_logfile_trace( frmt, arg1 ); \
              rtl_logfile_trace( "\n" )
+#define RTL_LOGFILE_PRODUCT_CONTEXT( instance, name ) \
+            ::rtl::Logfile instance( name )
+#define RTL_LOGFILE_PRODUCT_CONTEXT_TRACE1( instance, frmt, arg1 ) \
+        rtl_logfile_longTrace( "| %s : ", \
+                           instance.getName() ); \
+             rtl_logfile_trace( frmt, arg1 ); \
+             rtl_logfile_trace( "\n" )
+#define RTL_LOGFILE_HASLOGFILE() \
+             rtl_logfile_hasLogFile()
 
 
 #endif

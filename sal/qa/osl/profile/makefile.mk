@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,6 +24,11 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ=..$/..$/..
 
 PRJNAME=sal
@@ -43,29 +44,30 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 # BEGIN ----------------------------------------------------------------
 SHL1OBJS=  \
     $(SLO)$/osl_old_testprofile.obj
 
 SHL1TARGET= osl_old_testprofile
-SHL1STDLIBS=\
-   $(SALLIB) \
-   $(CPPUNITLIB)
+SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+SHL1RPATH = NONE
 # END ------------------------------------------------------------------
 
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
 SLOFILES=\
-    $(SHL1OBJS) 
+    $(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
 .INCLUDE : _cppunit.mk
 
-
+.END

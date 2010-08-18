@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: README,v $
-#
-# $Revision: 1.17.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -81,6 +77,7 @@ Linux x86, Solaris x86, and Solaris SPARC:
 /opt/openoffice.org/ure/lib/liburp_uno.so  [private]
 /opt/openoffice.org/ure/lib/libunsafe_uno_uno.so  [private]
 /opt/openoffice.org/ure/lib/libaffine_uno_uno.so  [private]
+/opt/openoffice.org/ure/lib/liblog_uno_uno.so  [private]
 /opt/openoffice.org/ure/lib/libjpipe.so  [private]
 /opt/openoffice.org/ure/lib/libjuh.so  [private]
 /opt/openoffice.org/ure/lib/libjuhx.so  [private]
@@ -142,7 +139,9 @@ Program Files\URE\bin\cli_uno.dll [private]
 Program Files\URE\bin\urp_uno.dll  [private]
 Program Files\URE\bin\unsafe_uno_uno.dll  [private]
 Program Files\URE\bin\affine_uno_uno.dll  [private]
+Program Files\URE\bin\log_uno_uno.dll  [private]
 Program Files\URE\bin\jpipe.dll  [private]
+Program Files\URE\bin\jpipx.dll  [private]
 Program Files\URE\bin\juh.dll  [private]
 Program Files\URE\bin\juhx.dll  [private]
 Program Files\URE\bin\acceptor.uno.dll  [private]

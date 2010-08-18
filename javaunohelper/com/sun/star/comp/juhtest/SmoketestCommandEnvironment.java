@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SmoketestCommandEnvironment.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,7 +116,6 @@ class InteractionImpl implements com.sun.star.task.XInteractionHandler
             if (approve)
             {
                 com.sun.star.task.XInteractionApprove xApprove =
-                    (com.sun.star.task.XInteractionApprove)
                     UnoRuntime.queryInterface(com.sun.star.task.XInteractionApprove.class, conts[i]);
                 if (xApprove != null)
                     xApprove.select();
@@ -129,7 +125,6 @@ class InteractionImpl implements com.sun.star.task.XInteractionHandler
             else if (abort)
             {
                 com.sun.star.task.XInteractionAbort xAbort =
-                    (com.sun.star.task.XInteractionAbort)
                     UnoRuntime.queryInterface(com.sun.star.task.XInteractionAbort.class, conts[i]);
                 if (xAbort != null)
                     xAbort.select();

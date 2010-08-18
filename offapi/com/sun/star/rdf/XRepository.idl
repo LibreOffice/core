@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XRepository.idl,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -126,7 +123,7 @@ module com {   module sun {   module star {   module rdf {
     </p>
 
 
-    @since OOo 3.0
+    @since OOo 3.2
 
     @see XRepositorySupplier
     @see XDocumentRepository
@@ -369,7 +366,7 @@ interface XRepository
      */
     com::sun::star::container::XEnumeration/*<Statement>*/ getStatements(
             [in] XResource Subject,
-            [in] XResource Predicate,
+            [in] XURI Predicate,
             [in] XNode Object)
         raises( RepositoryException );
 
@@ -385,7 +382,7 @@ interface XRepository
         </p>
 
         @param Query
-            the SPARQL query string
+            the SPARQL query <atom>string</atom>
 
         @returns
             an enumeration, containing
@@ -396,7 +393,7 @@ interface XRepository
             </ol>
 
         @throws QueryException
-            if the query string is malformed, or evaluation fails
+            if the query is malformed, or evaluation fails
 
         @throws RepositoryException
             if an error occurs when accessing the repository.
@@ -416,14 +413,14 @@ interface XRepository
         </p>
 
         @param Query
-            the SPARQL query string
+            the SPARQL query <atom>string</atom>
 
         @returns
             an iterator over the query result graph, represented as an
             enumeration of <type>Statement</type>
 
         @throws QueryException
-            if the query string is malformed, or evaluation fails
+            if the query is malformed, or evaluation fails
 
         @throws RepositoryException
             if an error occurs when accessing the repository.
@@ -444,13 +441,13 @@ interface XRepository
         </p>
 
         @param Query
-            the SPARQL query string
+            the SPARQL query <atom>string</atom>
 
         @returns
             the boolean query result
 
         @throws QueryException
-            if the query string is malformed, or evaluation fails
+            if the query is malformed, or evaluation fails
 
         @throws RepositoryException
             if an error occurs when accessing the repository.

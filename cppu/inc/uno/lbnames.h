@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: lbnames.h,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,12 +43,9 @@
 #endif /* (_MSC_VER < 1000) */
 /* sunpro cc */
 #elif defined (__SUNPRO_CC)
-#if (__SUNPRO_CC < 0x500)
-#error "sunpro cc must be at least 5.x"
-provoking error here, because PP ignores #error
-#elif (__SUNPRO_CC < 0x600)
+#if ((__SUNPRO_CC >= 0x5000 && __SUNPRO_CC < 0x6000) || (__SUNPRO_CC >= 0x500 && __SUNPRO_CC < 0x600))
 #define TMP_CPPU_ENV sunpro5
-#else
+#elif
 #error "sunpro cc version must be 5.x"
 provoking error here, because PP ignores #error
 #endif /* defined (__SUNPRO_CC) */

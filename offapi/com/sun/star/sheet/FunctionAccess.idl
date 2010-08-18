@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FunctionAccess.idl,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,6 +58,32 @@ published service FunctionAccess
     /** provides calculating the result of a spreadsheet function.
      */
     interface com::sun::star::sheet::XFunctionAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the function call is performed as array function
+        call.
+
+        <p>If set to <TRUE/>, the result of the function call will be
+        calculated similar to array formulas in a spreadsheet document. The
+        return value of the function call will usually be a sequence of
+        sequences containing the values of the resulting array. Example: If the
+        function ABS is called for a 3x2 cell range, the result will be a 3x2
+        array containing the absolute values of the numbers contained in the
+        specified cell range.</p>
+
+        <p>If set to <FALSE/>, the result of the function call will be
+        calculated similar to simple cell formulas in a spreadsheet document.
+        The return value of the function call will usually be a single value.
+        Of course, some functions always return an array, for example the
+        MUNIT function.</p>
+
+        <p>For compatibility with older versions, the default value of this
+        property is <TRUE/>.</p>
+
+        @since OOo 3.3
+     */
+    [optional, property] boolean IsArrayFunction;
 
 };
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: file_path_helper.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,16 +119,6 @@
  {
      OSL_PRECOND(pustrPath, "osl_systemPathIsRelativePath: Invalid parameter");
      return ((0 == pustrPath->length) || (pustrPath->buffer[0] != FPH_CHAR_PATH_SEPARATOR));
- }
-
- /******************************************
-  *  osl_systemPathIsAbsolutePath
-  *****************************************/
-
- sal_Bool SAL_CALL osl_systemPathIsAbsolutePath(const rtl_uString* pustrPath)
- {
-     OSL_PRECOND(pustrPath, "osl_systemPathIsAbsolutePath: Invalid parameter");
-     return (!osl_systemPathIsRelativePath(pustrPath));
  }
 
  /******************************************

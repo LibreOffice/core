@@ -1,0 +1,111 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_grid_XGridColumn_idl__
+#define __com_sun_star_awt_grid_XGridColumn_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#include <com/sun/star/style/HorizontalAlignment.idl>
+#include <com/sun/star/awt/grid/XGridColumnListener.idl>
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt {  module grid {
+
+//=============================================================================
+
+/** The <type>XGridColumn</types> defines the properties and behavior of a column in a grid control
+    @since OOo 3.3.0
+ */
+interface XGridColumn
+{
+    /** Specifies the an idendifier of the colomn.**/
+    [attribute] any Identifier;
+
+    /** Specifies the default column witdth. **/
+    [attribute] long ColumnWidth;
+
+    /** Specifies the preferred column witdth. **/
+    [attribute] long PreferredWidth;
+
+    /** Specifies the min column witdth. **/
+    [attribute] long MinWidth;
+
+    /** Specifies the max column witdth. **/
+    [attribute] long MaxWidth;
+
+    /** Specifies whether column has fixed size or not. **/
+    [attribute] boolean Resizeable;
+
+    /** Specifies the horizontal alignment of the content in the control.
+
+        <pre>
+            LEFT
+            CENTER
+            RIGHT
+        </pre>
+     */
+    [attribute] ::com::sun::star::style::HorizontalAlignment HorizontalAlign;
+
+    /** A title is displayed in the colum header row if <method>UnoControlGridModel::ShowRowHeader</method> is set to <true/>**/
+    [attribute] string Title;
+
+    /** Adds a listener for the <type>GridColumnEvent</type> posted after the grid changes.
+        @param Listener
+            the listener to add.
+    */
+    [oneway] void addColumnListener( [in] XGridColumnListener  listener);
+
+    //-------------------------------------------------------------------------
+
+    /** Removes a listener previously added with <method>addColumnListener()</method>.
+        @param Listener
+            the listener to remove.
+    */
+    [oneway] void removeColumnListener( [in] XGridColumnListener listener);
+
+    /**Updates changed column widths, when column widths are being resized.
+        @param name
+            can be PrefWidth or ColWidth, depending on which was changed
+        @param width
+            the new column width
+    */
+    void updateColumn( [in] string name, [in] long width);
+    /**Sets column index
+        @param index
+            index, which is the index of the column in the column array of the column model
+    */
+    void setIndex( [in] long index );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

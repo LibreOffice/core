@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: test_uriproc.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-#include "com/sun/star/beans/XPropertySet.hpp"
 #include "com/sun/star/lang/XComponent.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 #include "com/sun/star/uno/Reference.hxx"
@@ -46,10 +42,12 @@
 #include "com/sun/star/uri/XVndSunStarPkgUrlReferenceFactory.hpp"
 #include "com/sun/star/uri/XVndSunStarScriptUrlReference.hpp"
 #include "com/sun/star/util/XMacroExpander.hpp"
-#include "cppuhelper/servicefactory.hxx"
-#include "cppunit/simpleheader.hxx"
+#include "cppuhelper/bootstrap.hxx"
+#include "cppunit/TestAssert.h"
+#include "cppunit/TestFixture.h"
+#include "cppunit/extensions/HelperMacros.h"
+#include "cppunit/plugin/TestPlugIn.h"
 #include "osl/diagnose.h"
-#include "osl/thread.h"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 #include "rtl/textenc.h"
@@ -151,20 +149,12 @@ private:
 };
 
 void Test::setUp() {
-    char const * registry = getForwardString();
-    css::uno::Reference< css::lang::XMultiServiceFactory > factory(
-        cppu::createRegistryServiceFactory(
-            rtl::OUString(
-                registry, rtl_str_getLength(registry),
-                osl_getThreadTextEncoding())));
-        //TODO: check for string conversion failure
-    css::uno::Reference< css::beans::XPropertySet >(
-        factory, css::uno::UNO_QUERY_THROW)->getPropertyValue(
-            rtl::OUString::createFromAscii("DefaultContext")) >>= m_context;
+    m_context = cppu::defaultBootstrap_InitialComponentContext();
     m_uriFactory = css::uri::UriReferenceFactory::create(m_context);
 }
 
 void Test::tearDown() {
+    m_uriFactory.clear();
     css::uno::Reference< css::lang::XComponent >(
         m_context, css::uno::UNO_QUERY_THROW)->dispose();
 }
@@ -1007,8 +997,8 @@ void Test::testPkgUrlFactory() {
     }
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
 }
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();

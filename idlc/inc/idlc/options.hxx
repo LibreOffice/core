@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: options.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,11 +66,15 @@ public:
 
     const StringVector& getInputFiles() const { return m_inputFiles; }
     bool readStdin() const { return m_stdin; }
+    bool verbose() const { return m_verbose; }
+    bool quiet() const { return m_quiet; }
 
 protected:
     ::rtl::OString  m_program;
     StringVector    m_inputFiles;
     bool            m_stdin;
+    bool            m_verbose;
+    bool            m_quiet;
     OptionMap       m_options;
 };
 

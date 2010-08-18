@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: share.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,5 +89,12 @@ namespace CPPU_CURRENT_NAMESPACE
     void fillUnoException(
         __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
 }
+
+namespace arm
+{
+    enum armlimits { MAX_GPR_REGS = 4 };
+    bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef );
+}
+
 #endif
 /* vi:set tabstop=4 shiftwidth=4 expandtab: */

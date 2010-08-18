@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: jni_uno2java.cxx,v $
- * $Revision: 1.24 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,10 +36,6 @@
 
 #include "jni_bridge.h"
 
-
-#ifdef __MINGW32__
-#define BROKEN_ALLOCA
-#endif
 
 using namespace ::std;
 using namespace ::rtl;
@@ -855,7 +848,7 @@ void SAL_CALL UNO_proxy_dispatch(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg2(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( 0, cstr_msg2.getStr() );
+        OSL_TRACE( "%s", cstr_msg2.getStr() );
 #endif
     }
     catch (::jvmaccess::VirtualMachine::AttachGuard::CreationException &)

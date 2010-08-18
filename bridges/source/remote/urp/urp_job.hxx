@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: urp_job.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -79,9 +76,6 @@ public:
 
     ~Job();
 
-       inline void setUnmarshal( Unmarshal *p )
-           { m_pUnmarshal = p; }
-
 public:
     remote_Context *m_pContext;
       Unmarshal *m_pUnmarshal;
@@ -90,7 +84,7 @@ public:
     ::bridges_remote::RemoteThreadCounter m_counter;
 };
 
-class ClientJob : public Job
+class ClientJob : private Job
 {
 public:
     // pContext is null for bridge-internal UrpProtocolProperties requests
@@ -126,6 +120,9 @@ public:
         { return m_bBridgePropertyCall; }
     inline sal_Bool isOneway()
         { return m_bOneway; }
+
+        inline void setUnmarshal( Unmarshal *p )
+                { m_pUnmarshal = p; }
 public:
     typelib_InterfaceMethodTypeDescription    *m_pMethodType;
     typelib_InterfaceAttributeTypeDescription *m_pAttributeType;
@@ -175,7 +172,7 @@ struct ServerJobEntry
     sal_Bool              m_bIgnoreCache;
 };
 
-class ServerMultiJob : public Job
+class ServerMultiJob : private Job
 {
 public:
     ServerMultiJob( uno_Environment *pEnvRemote,

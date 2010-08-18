@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DllMain.cpp,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -226,14 +223,13 @@ extern "C" BOOL WINAPI DllMain( HMODULE hModule, DWORD dwReason, LPVOID )
     {
     case DLL_PROCESS_ATTACH:
         UWINAPI_BaseAddress = hModule;
+#ifdef __MINGW32__
+        return TRUE;
+#else
         return DisableThreadLibraryCalls( hModule );
+#endif
     default:
         return TRUE;
     }
 
 }
-
-
-
-
-

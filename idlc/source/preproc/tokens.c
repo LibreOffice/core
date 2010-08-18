@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tokens.c,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -477,7 +474,8 @@ void
 
         if (wbp >= &wbuf[OBS])
         {
-            write(1, wbuf, OBS);
+            if (write(1, wbuf, OBS) != OBS)
+                error(ERROR, "short write!");
             if (wbp > &wbuf[OBS])
                 memcpy(wbuf, wbuf + OBS, wbp - &wbuf[OBS]);
             wbp -= OBS;
@@ -493,7 +491,8 @@ void
 {
     if (wbp > wbuf)
     {
-        write(1, wbuf, wbp - wbuf);
+        if (write(1, wbuf, wbp - wbuf) != wbp - wbuf)
+            error(ERROR, "short write!");
         wbp = wbuf;
     }
 }

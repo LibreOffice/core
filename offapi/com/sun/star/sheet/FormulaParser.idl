@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormulaParser.idl,v $
- * $Revision: 1.4.110.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,9 +34,6 @@
 #ifndef __com_sun_star_sheet_XFormulaParser_idl__
 #include <com/sun/star/sheet/XFormulaParser.idl>
 #endif
-#ifndef __com_sun_star_table_CellAddress_idl__
-#include <com/sun/star/table/CellAddress.idl>
-#endif
 #ifndef __com_sun_star_sheet_FormulaOpCodeMapEntry_idl__
 #include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
 #endif
@@ -62,10 +56,6 @@ service FormulaParser
     // ------------------------------------------------------------------------
 
     interface XFormulaParser;
-
-    // ------------------------------------------------------------------------
-
-    [property] com::sun::star::table::CellAddress ReferencePosition;
 
     // ------------------------------------------------------------------------
 

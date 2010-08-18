@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: javavm.cxx,v $
- * $Revision: 1.78.14.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -354,6 +351,23 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
 
                 pjvm->pushProp(httpHost);
                 pjvm->pushProp(httpPort);
+            }
+        }
+
+        // read https proxy name
+        css::uno::Reference<css::registry::XRegistryKey> httpsProxy_name = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPSProxyName")));
+        if(httpsProxy_name.is() && httpsProxy_name->getStringValue().getLength()) {
+            rtl::OUString httpsHost = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https.proxyHost="));
+            httpsHost += httpsProxy_name->getStringValue();
+
+            // read https proxy port
+            css::uno::Reference<css::registry::XRegistryKey> httpsProxy_port = xRegistryRootKey->openKey(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Settings/ooInetHTTPSProxyPort")));
+            if(httpsProxy_port.is() && httpsProxy_port->getLongValue()) {
+                rtl::OUString httpsPort = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https.proxyPort="));
+                httpsPort += rtl::OUString::valueOf(httpsProxy_port->getLongValue());
+
+                pjvm->pushProp(httpsHost);
+                pjvm->pushProp(httpsPort);
             }
         }
 
@@ -1168,6 +1182,22 @@ void SAL_CALL JavaVirtualMachine::elementReplaced(
     {
         aPropertyName
             = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("http.proxyPort"));
+        sal_Int32 n = 0;
+        rEvent.Element >>= n;
+        aPropertyValue = rtl::OUString::valueOf(n);
+    }
+    else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                        "ooInetHTTPSProxyName")))
+    {
+        aPropertyName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                          "https.proxyHost"));
+        rEvent.Element >>= aPropertyValue;
+    }
+    else if (aAccessor.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
+                                        "ooInetHTTPSProxyPort")))
+    {
+        aPropertyName
+            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("https.proxyPort"));
         sal_Int32 n = 0;
         rEvent.Element >>= n;
         aPropertyValue = rtl::OUString::valueOf(n);

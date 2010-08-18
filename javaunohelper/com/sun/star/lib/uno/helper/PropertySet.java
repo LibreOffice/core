@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PropertySet.java,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -671,7 +668,7 @@ XMultiPropertySet
                             // We try to get an XInterface of setVal and set an XInterface type.
                             if (setVal instanceof XInterface)
                             {
-                                XInterface xint= (XInterface) UnoRuntime.queryInterface(XInterface.class, setVal);
+                                XInterface xint= UnoRuntime.queryInterface(XInterface.class, setVal);
                                 if (xint != null)
                                     convObj= new Any(new Type(XInterface.class), xint);
                             }
@@ -839,7 +836,6 @@ XMultiPropertySet
      *  @return The value of the property.
      */
     protected Object getPropertyValue(Property property)
-    throws com.sun.star.lang.WrappedTargetException
     {
         Object ret= null;
         try
@@ -856,9 +852,13 @@ XMultiPropertySet
                     ret= propField.get(this);
             }
         }
-        catch(java.lang.Exception e)
+        catch(java.lang.NoSuchFieldException e)
         {
-            throw new WrappedTargetException("PropertySet.setPropertyValue_NoBroadcast", this, e);
+            throw new java.lang.RuntimeException(e);
+        }
+        catch(java.lang.IllegalAccessException e)
+        {
+            throw new java.lang.RuntimeException(e);
         }
         return ret;
     }
@@ -1004,7 +1004,7 @@ XMultiPropertySet
                     {
                        value= getPropertyValue(prop);
                     }
-                    catch(WrappedTargetException e)
+                    catch(Exception e)
                     {
                         continue;
                     }

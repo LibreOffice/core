@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XTreeDataModelListener.idl,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +59,7 @@ interface XTreeDataModelListener: com::sun::star::lang::XEventListener
         Example: the name of a file has changed, but it is in the same location in the file system.
 
         To indicate the root has changed, <member>TreeDataModelEvent::Nodes</member> will contain
-        the root node and and <member>TreeDataModelEvent::ParentNode</member will be empty.
+        the root node and <member>TreeDataModelEvent::ParentNode</member> will be empty.
     */
     void treeNodesChanged( [in] TreeDataModelEvent Event );
 

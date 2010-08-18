@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -57,18 +53,20 @@ CXXFLAGS+= $(LFS_CFLAGS)
 
 SLOFILES=	\
             $(SLO)$/utility.obj\
-            $(SLO)$/readline.obj\
             $(SLO)$/filepath.obj\
             $(SLO)$/debugbase.obj\
             $(SLO)$/loadmodulerelative.obj
 
+#			$(SLO)$/readline.obj\
+
 #.IF "$(UPDATER)"=="YES"
 OBJFILES=	\
             $(OBJ)$/utility.obj\
-            $(OBJ)$/readline.obj\
             $(OBJ)$/filepath.obj\
             $(OBJ)$/debugbase.obj\
             $(OBJ)$/loadmodulerelative.obj
+
+#			$(OBJ)$/readline.obj\
 #.ENDIF
 
 # --- Targets ------------------------------------------------------

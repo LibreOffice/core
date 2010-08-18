@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pipe.c,v $
- * $Revision: 1.20 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -632,7 +629,7 @@ oslPipeError SAL_CALL osl_getLastPipeError(oslPipe pPipe)
         pPipe->m_Error = osl_Pipe_E_None;
     }
     else
-        Error = osl_Pipe_E_None;
+        Error = osl_Pipe_E_NotFound;
 
     return (Error);
 }

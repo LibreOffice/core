@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UnoRuntime.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -179,8 +176,9 @@ public class UnoRuntime {
      * otherwise <code>null</code>
      * @see #queryInterface(Type, Object)
      */
-    public static Object queryInterface(Class zInterface, Object object) {
-        return queryInterface(new Type(zInterface), object);
+    @SuppressWarnings("unchecked")
+    public static <T> T queryInterface(Class<T> zInterface, Object object) {
+        return (T) queryInterface(new Type(zInterface), object);
     }
 
     /**

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -47,10 +43,16 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(cppu_no_leak)" == ""
 CFLAGS += -DLEAK_STATIC_DATA
 .ENDIF
+.IF "$(EXCEPTIONS)" == "sjlj"
+CFLAGS += -DBROKEN_ALLOCA
+.ENDIF
 
 # In case someone enabled the non-standard -fomit-frame-pointer which does not
 # work with the .cxx sources in this directory:
 CFLAGSCXX += -fno-omit-frame-pointer
+
+NOOPTFILES= \
+    $(SLO)$/uno2cpp.obj
 
 CFLAGSNOOPT=-O0
 
@@ -85,8 +87,5 @@ DEF1NAME=	$(SHL1TARGET)
 .INCLUDE :  target.mk
 
 $(SLO)$/%.obj: %.s
-#cmc: Ideally --noexecstack would be in operations, but with #i51385# pyuno
-#remote bridgeing breaks
-#    $(CC) -Wa,--noexecstack -c -o $(SLO)$/$(@:b).o $<
     $(CC) -c -o $(SLO)$/$(@:b).obj $<
     touch $@

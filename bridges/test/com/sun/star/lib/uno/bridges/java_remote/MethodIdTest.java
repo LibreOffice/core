@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: MethodIdTest.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,7 +61,7 @@ public final class MethodIdTest extends ComplexTestCase {
         }
 
         protected boolean run(XComponentContext context) throws Throwable {
-            XTest t = (XTest) UnoRuntime.queryInterface(
+            XTest t = UnoRuntime.queryInterface(
                 XTest.class, getBridge(context).getInstance("Test"));
             return t.f129() == 129;
         }

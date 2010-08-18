@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: MAKEFILE.MK,v $
-#
-# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -78,6 +74,10 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/pipe.obj     \
             $(SLO)$/util.obj     \
             $(SLO)$/file.obj\
+            $(SLO)$/file_dirvol.obj\
+            $(SLO)$/file_error.obj\
+            $(SLO)$/file_url.obj\
+            $(SLO)$/tempfile.obj\
             $(SLO)$/path_helper.obj\
             $(SLO)$/procimpl.obj \
             $(SLO)$/salinit.obj
@@ -101,6 +101,10 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/pipe.obj     \
             $(OBJ)$/util.obj     \
             $(OBJ)$/file.obj\
+            $(OBJ)$/file_dirvol.obj\
+            $(OBJ)$/file_error.obj\
+            $(OBJ)$/file_url.obj\
+            $(OBJ)$/tempfile.obj\
             $(OBJ)$/path_helper.obj\
             $(OBJ)$/procimpl.obj \
             $(OBJ)$/salinit.obj

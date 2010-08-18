@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SharedLibraryLoader.java,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,7 +82,7 @@ public class SharedLibraryLoader {
                 XMultiServiceFactory smgr,
                 XRegistryKey regKey )
     {
-        return (XSingleServiceFactory) UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
                     XSingleServiceFactory.class,
                     component_getFactory(
                         DEFAULT_LIBRARY, DEFAULT_IMPLEMENTATION, smgr, regKey,
@@ -110,7 +107,7 @@ public class SharedLibraryLoader {
                 XMultiServiceFactory smgr,
                 XRegistryKey regKey )
     {
-        return (XSingleServiceFactory) UnoRuntime.queryInterface(
+        return UnoRuntime.queryInterface(
                     XSingleServiceFactory.class,
                     component_getFactory(
                         libName, impName, smgr, regKey,

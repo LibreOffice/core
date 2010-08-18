@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WeakReference.java,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +58,7 @@ public class WeakReference
             Object weakImpl= obj.get();
             if (weakImpl != null)
             {
-                XWeak weak= (XWeak) UnoRuntime.queryInterface(XWeak.class, weakImpl);
+                XWeak weak= UnoRuntime.queryInterface(XWeak.class, weakImpl);
                 if (weak != null)
                 {
                     XAdapter adapter= (XAdapter) weak.queryAdapter();
@@ -77,7 +74,7 @@ public class WeakReference
      */
     public WeakReference(Object obj)
     {
-        XWeak weak= (XWeak) UnoRuntime.queryInterface(XWeak.class, obj);
+        XWeak weak= UnoRuntime.queryInterface(XWeak.class, obj);
         if (weak != null)
         {
             XAdapter adapter= (XAdapter) weak.queryAdapter();

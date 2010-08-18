@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tdmgr.cxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -688,17 +685,17 @@ static void SAL_CALL typelib_callback(
             catch (container::NoSuchElementException & exc)
             {
                 (void) exc; // avoid warning about unused variable
-                OSL_ENSURE(
-                    0, OUStringToOString(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                      "typelibrary type not available: ") ) +
+                OSL_TRACE(
+                    "typelibrary type not available: %s",
+                    OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
             catch (Exception & exc)
             {
                 (void) exc; // avoid warning about unused variable
-                OSL_ENSURE(
-                    0, OUStringToOString(
+                OSL_TRACE(
+                    "%s",
+                    OUStringToOString(
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
         }

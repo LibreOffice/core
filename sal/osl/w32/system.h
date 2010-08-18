@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: system.h,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,10 +105,22 @@
 #endif // #ifdef GCC
 
 #ifdef _DLL_
+
+#ifdef __cplusplus
+    extern "C" DWORD g_dwPlatformId;
+#else
     extern DWORD g_dwPlatformId;
+#endif // #ifdef __cplusplus
+
     #define IS_NT (g_dwPlatformId == VER_PLATFORM_WIN32_NT)
 #else
+
+#ifdef __cplusplus
+    extern "C" DWORD GetPlatformId(void);
+#else
     extern DWORD GetPlatformId(void);
+#endif // #ifdef __cplusplus
+
     #define IS_NT (GetPlatformId() == VER_PLATFORM_WIN32_NT)
 #endif // #ifdef _DLL_
 

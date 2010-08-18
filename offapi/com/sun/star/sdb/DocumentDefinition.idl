@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DocumentDefinition.idl,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,6 +71,12 @@ service DocumentDefinition
                 the sub document could be closed. Reasons for not closing the document include vetos by
                 third parties, for instance, because the user opened a dialog modal to the sub document,
                 or a long-running task such as printing is currently running.</li>
+            <li><strong>show</strong>: shows the sub document. This is useful if you previously opened the
+                document hidden, or if you previously hide it using the <em>hide</em> command.<br/>
+                The <em>open</em> command is not available if the sub document has not been loaded, yet.</li>
+            <li><strong>hide</strong>: hides the sub document. In opposite to the <em>close</em> command,
+                only the document window is hidden, but the document is kept loaded. A subsequent execution
+                of the <em>show</em> command will show the window, again.</li>
         </ul>
     */
     service DefinitionContent;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: alloca.h,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,7 +28,7 @@
 #ifndef INCLUDED_SAL_ALLOCA_H
 #define INCLUDED_SAL_ALLOCA_H
 
-#if defined (SOLARIS) || defined (LINUX) || defined (IRIX) || defined(__EMX__)
+#if defined (SOLARIS) || defined (LINUX) || defined(__EMX__)
 
 #ifndef INCLUDED_ALLOCA_H
 #include <alloca.h>

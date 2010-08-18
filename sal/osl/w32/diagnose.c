@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: diagnose.c,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,6 +70,7 @@ void SAL_CALL osl_breakDebug(void)
 void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
 {
     va_list args;
+    int written = 0;
 
     va_start(args, lpszFormat);
 
@@ -89,8 +87,11 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
     if ( IsDebuggerPresent() )
     {
         sal_Char    szMessage[512];
-        szMessage[sizeof(szMessage)-1] = 0;
-        _vsnprintf( szMessage, sizeof(szMessage) -1, lpszFormat, args );
+        written = _vsnprintf( szMessage, sizeof(szMessage) - 2, lpszFormat, args );
+        if ( written == -1 )
+            written = sizeof(szMessage) - 2;
+        szMessage[ written++ ] = '\n';
+        szMessage[ written ] = 0;
         OutputDebugString( szMessage );
     }
 

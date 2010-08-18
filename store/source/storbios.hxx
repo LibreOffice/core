@@ -1,40 +1,32 @@
 /*************************************************************************
  *
- *  OpenOffice.org - a multi-platform office productivity suite
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- *  $RCSfile: storbios.hxx,v $
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
- *  $Revision: 1.1.2.3 $
+ * OpenOffice.org - a multi-platform office productivity suite
  *
- *  last change: $Author: mhu $ $Date: 2008/10/31 18:28:18 $
+ * This file is part of OpenOffice.org.
  *
- *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
  *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
  *
- *    GNU Lesser General Public License Version 2.1
- *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
- *    901 San Antonio Road, Palo Alto, CA 94303, USA
- *
- *    This library is free software; you can redistribute it and/or
- *    modify it under the terms of the GNU Lesser General Public
- *    License version 2.1, as published by the Free Software Foundation.
- *
- *    This library is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *    Lesser General Public License for more details.
- *
- *    You should have received a copy of the GNU Lesser General Public
- *    License along with this library; if not, write to the Free Software
- *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
- *    MA  02111-1307  USA
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
 
 #ifndef _STORE_STORBIOS_HXX_
-#define _STORE_STORBIOS_HXX_ "$Revision: 1.1.2.3 $"
+#define _STORE_STORBIOS_HXX_
 
 #include "sal/types.h"
 #include "rtl/ref.hxx"
@@ -54,7 +46,7 @@
 namespace store
 {
 
-struct OStoreSuperBlockPage;
+struct SuperBlockPage;
 
 class OStorePageBIOS : public store::OStoreObject
 {
@@ -83,16 +75,6 @@ public:
         return m_xAllocator;
     }
 
-    /** acquireLock.
-     */
-    storeError acquireLock (
-        sal_uInt32 nAddr, sal_uInt32 nSize);
-
-    /** releaseLock.
-     */
-    storeError releaseLock (
-        sal_uInt32 nAddr, sal_uInt32 nSize);
-
     /** read.
      */
     storeError read (
@@ -102,10 +84,6 @@ public:
      */
     storeError write (
         sal_uInt32 nAddr, const void *pData, sal_uInt32 nSize);
-
-    /** isModified.
-     */
-    inline bool isModified (void) const;
 
     /** isWriteable.
      */
@@ -137,8 +115,7 @@ public:
     storeError allocate (
         OStorePageObject& rPage, Allocation eAllocation = ALLOCATE_FIRST);
 
-    storeError free (
-        OStorePageData & /* rData */, sal_uInt32 nAddr);
+    storeError free (sal_uInt32 nAddr);
 
     /** Page I/O.
      */
@@ -204,10 +181,8 @@ private:
     rtl::Reference<ILockBytes>    m_xLockBytes;
     osl::Mutex                    m_aMutex;
 
-    typedef OStoreSuperBlockPage  SuperPage;
-    SuperPage                    *m_pSuper;
+    SuperBlockPage *              m_pSuper;
 
-    bool                          m_bModified;
     bool                          m_bWriteable;
 
     rtl::Reference< PageData::Allocator > m_xAllocator;
@@ -238,22 +213,16 @@ private:
 
     class AceCache;
 
-    /** create (SuperBlock).
+    /** Initialization.
      */
-    storeError create (sal_uInt16 nPageSize);
-
-    /** SuperBlock verification and repair.
-     */
-    storeError verify (SuperPage *&rpSuper);
-    storeError repair (SuperPage *&rpSuper);
+    storeError initialize_Impl (
+        ILockBytes *    pLockBytes,
+        storeAccessMode eAccessMode,
+        sal_uInt16 &    rnPageSize);
+    void cleanup_Impl();
 
     /** Page Maintenance.
      */
-    storeError peek (
-        OStorePageData &rData);
-    storeError poke (
-        OStorePageData &rData);
-
     storeError loadObjectAt_Impl (
         OStorePageObject & rPage, sal_uInt32 nAddr);
     storeError saveObjectAt_Impl (
@@ -268,10 +237,6 @@ private:
 inline OStorePageBIOS::operator osl::Mutex& (void) const
 {
     return (osl::Mutex&)m_aMutex;
-}
-inline bool OStorePageBIOS::isModified (void) const
-{
-    return m_bModified;
 }
 inline bool OStorePageBIOS::isWriteable (void) const
 {

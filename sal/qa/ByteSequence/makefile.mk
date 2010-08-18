@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2008 by Sun Microsystems, Inc.
+#
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -27,65 +23,33 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
-PRJ=..$/..
+#***********************************************************************/
 
-PRJNAME=sal
-TARGET=qa_bytesequence
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-ENABLE_EXCEPTIONS=TRUE
+PRJ = ../..
+PRJNAME = sal
+TARGET = qa_ByteSequence
 
-# --- Settings -----------------------------------------------------
+ENABLE_EXCEPTIONS = TRUE
 
-.INCLUDE :  settings.mk
+.INCLUDE: settings.mk
 
-CFLAGS+= $(LFS_CFLAGS)
-CXXFLAGS+= $(LFS_CFLAGS)
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-#----------------------------------- OStringBuffer -----------------------------------
+SHL1IMPLIB = i$(SHL1TARGET)
+SHL1OBJS = $(SLO)/ByteSequence.obj
+SHL1RPATH = NONE
+SHL1STDLIBS = $(CPPUNITLIB) $(SALLIB)
+SHL1TARGET = rtl_ByteSequence
+SHL1VERSIONMAP = $(PRJ)/qa/export.map
+DEF1NAME = $(SHL1TARGET)
 
-SHL1OBJS= \
-    $(SLO)$/ByteSequence.obj 
+SLOFILES = $(SHL1OBJS)
 
-SHL1TARGET= rtl_ByteSequence
-SHL1STDLIBS=\
-   $(SALLIB) 
-.IF "$(GUI)" == "WNT" || "$(GUI)" == "OS2"
-SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-.ENDIF
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
-.ENDIF
+.INCLUDE: target.mk
+.INCLUDE: _cppunit.mk
 
-SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
-
-# --- BEGIN --------------------------------------------------------
-SHL2OBJS=  \
-    $(SLO)$/rtl_old_testbyteseq.obj
-SHL2TARGET= rtl_old_testbyteseq
-SHL2STDLIBS=\
-    $(SALLIB) \
-    $(CPPUNITLIB)
-
-SHL2IMPLIB= i$(SHL2TARGET)
-
-DEF2NAME    =$(SHL2TARGET)
-SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
-# END --------------------------------------------------------------
-
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-SLOFILES=$(SHL1OBJS)
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
-
+.END

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dependency.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,35 +95,6 @@ TypeUsingSet TypeDependency::getDependencies(const OString& type)
     }
 
     return TypeUsingSet();
-}
-
-sal_Bool TypeDependency::lookupDependency(const OString& type, const OString& depend, sal_uInt16 use)
-{
-    sal_Bool ret =  sal_False;
-
-    if (type.getLength() > 0 && depend.getLength() > 0)
-    {
-        if (m_pImpl->m_dependencies.count(type) > 0)
-        {
-            TypeUsingSet::const_iterator iter = m_pImpl->m_dependencies[type].begin();
-
-            while (iter != m_pImpl->m_dependencies[type].end())
-            {
-                if (depend == (*iter).m_type &&
-                    (use & (*iter).m_use))
-                {
-                    ret = sal_True;
-                    break;
-                }
-                iter++;
-            }
-        } else
-        {
-            ret = sal_False;
-        }
-    }
-
-    return ret;
 }
 
 sal_Bool TypeDependency::hasDependencies(const OString& type)

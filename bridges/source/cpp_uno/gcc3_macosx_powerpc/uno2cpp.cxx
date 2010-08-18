@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: uno2cpp.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -110,6 +107,9 @@ static void callVirtualMethod(
      /* set up a pointer to the stack parameter area */
      __asm__ ( "addi %0,r1,24" : "=r" (p) : /* no inputs */ );
 
+     // #i94421#, work around compiler error:
+     volatile long * pCopy = p;
+     (void) pCopy; // avoid warning about unused variable
 
      // never called
      // if (! pAdjustedThisPtr )CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something

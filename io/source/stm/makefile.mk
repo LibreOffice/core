@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,6 +28,7 @@ PRJ=..$/..
 
 PRJNAME=io
 TARGET = streams.uno
+
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 COMP1TYPELIST = stm
@@ -39,6 +36,7 @@ COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
+.IF "$(L10N_framework)"==""
 DLLPRE =
 # --- Files --------------------------------------------------------
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
@@ -55,7 +53,7 @@ SLOFILES = 	$(SLO)$/opipe.obj\
         $(SLO)$/opump.obj
 
 SHL1TARGET= $(TARGET)
-SHL1VERSIONMAP = stm.map
+SHL1VERSIONMAP = $(SOLARENV)/src/unloadablecomponent.map
 
 SHL1STDLIBS= \
         $(SALLIB) 	 \
@@ -73,5 +71,7 @@ DEF1NAME=		$(SHL1TARGET)
 
 
 # --- Targets ------------------------------------------------------
+.ENDIF 		# L10N_framework
+
 .INCLUDE :	target.mk
 

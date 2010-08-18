@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: storpage.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -120,11 +117,6 @@ storeError OStorePageManager::initialize (
 
         // Save RootNode.
         eErrCode = base::saveObjectAt (m_aRoot, rnPageSize);
-        if (eErrCode != store_E_None)
-            return eErrCode;
-
-        // Flush for robustness.
-        (void) base::flush();
     }
 
     // Done.
@@ -860,8 +852,7 @@ storeError OStorePageManager::remove (const OStorePageKey &rKey)
         eErrCode = base::releasePage (aDescr, store_AccessReadWrite);
 
         // Release and free directory page.
-        OStorePageData aPageHead;
-        eErrCode = base::free (aPageHead, aPage.location());
+        eErrCode = base::free (aPage.location());
     }
 
     // Remove entry.

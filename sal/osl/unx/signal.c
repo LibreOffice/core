@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: signal.c,v $
- * $Revision: 1.37 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +43,7 @@
 
 #ifdef LINUX
 #include <execinfo.h>
+#include <link.h>
 #define INCLUDE_BACKTRACE
 #define STACKTYPE "Linux"
 #endif
@@ -76,10 +74,14 @@
 #include "file_path_helper.h"
 
 #define ACT_IGNORE  1
-#define ACT_ABORT   2
-#define ACT_EXIT    3
-#define ACT_SYSTEM  4
-#define ACT_HIDE    5
+#define ACT_EXIT    2
+#define ACT_SYSTEM  3
+#define ACT_HIDE    4
+#ifdef SAL_ENABLE_CRASH_REPORT
+#    define ACT_ABORT   5
+#else
+#    define ACT_ABORT   ACT_SYSTEM
+#endif
 
 #define MAX_PATH_LEN    2048
 
@@ -201,6 +203,7 @@ static sal_Bool InitSignal()
     int i;
     struct sigaction act;
     struct sigaction oact;
+    sigset_t unset;
 
     if (is_soffice_Impl())
     {
@@ -280,6 +283,16 @@ static sal_Bool InitSignal()
                         Signals[i].Handler = SIG_DFL;
             }
         }
+    }
+
+    /* Clear signal mask inherited from parent process (on Mac OS X, upon a
+       crash soffice re-execs itself from within the signal handler, so the
+       second soffice would have the guilty signal blocked and would freeze upon
+       encountering a similar crash again): */
+    if (sigemptyset(&unset) < 0 ||
+        pthread_sigmask(SIG_SETMASK, &unset, NULL) < 0)
+    {
+        OSL_TRACE("sigemptyset or pthread_sigmask failed");
     }
 
     return sal_True;
@@ -392,6 +405,88 @@ static int fputs_xml( const char *string, FILE *stream )
 
 #define REPORTENV_PARAM     "-crashreportenv:"
 
+#if defined SAL_ENABLE_CRASH_REPORT && defined INCLUDE_BACKTRACE && \
+    defined LINUX
+
+typedef struct
+{
+    const char *name;
+    ElfW(Off) offset;
+} dynamic_entry;
+
+static int
+callback(struct dl_phdr_info *info, size_t size, void *data)
+{
+    const ElfW(Phdr) *pDynamic = NULL;
+
+    if (size == sizeof(struct dl_phdr_info))
+    {
+        int i;
+        for (i = 0; i < info->dlpi_phnum; ++i)
+        {
+            if (info->dlpi_phdr[i].p_type == PT_DYNAMIC)
+            {
+                pDynamic = &(info->dlpi_phdr[i]);
+                break;
+            }
+        }
+    }
+
+    if (pDynamic)
+    {
+        char buffer[100];
+        int len;
+        char exe[PATH_MAX];
+        const char *dsoname = info->dlpi_name;
+
+        dynamic_entry* entry = (dynamic_entry*)data;
+
+        if (strcmp(dsoname, "") == 0)
+        {
+            snprintf(buffer, sizeof(buffer), "/proc/%d/exe", getpid());
+            if ((len = readlink(buffer, exe, PATH_MAX)) != -1)
+            {
+                exe[len] = '\0';
+                dsoname = exe;
+            }
+        }
+
+        if (strcmp(dsoname, entry->name) == 0)
+        {
+            entry->offset = pDynamic->p_offset;
+            return 1;
+        }
+    }
+    return 0;
+}
+
+/* Get the location of the .dynamic section offset for the given elf file.
+ * i.e. same as the "Offset" value shown for DYNAMIC from readelf -l foo
+ *
+ * We want to know this value so that if the binaries have been modifed
+ * by prelink then we can still process the call stack on server side
+ * by comparing this value to that of an "un-prelinked but known to be
+ * otherwise equivalent" version of those binaries and adjust the call
+ * stack addresses by the differences between .dynamic addresses so as
+ * to be able to map the prelinked addresses back to the unprelinked
+ * addresses
+ *
+ * cmc@openoffice.org
+ */
+static ElfW(Off)
+dynamic_section_offset(const char *name)
+{
+    dynamic_entry entry;
+
+    entry.name = name;
+    entry.offset = 0;
+
+    dl_iterate_phdr(callback, &entry);
+
+    return entry.offset;
+}
+#endif
+
 static int ReportCrash( int Signal )
 {
 #ifdef SAL_ENABLE_CRASH_REPORT
@@ -465,7 +560,7 @@ static int ReportCrash( int Signal )
             if (Signals[i].Signal == Signal && Signals[i].Action == ACT_ABORT )
             {
                 int  ret;
-                char szShellCmd[512];
+                char szShellCmd[512] = { '\0' };
                 char *pXMLTempName = NULL;
                 char *pStackTempName = NULL;
                 char *pChecksumTempName = NULL;
@@ -572,6 +667,11 @@ static int ReportCrash( int Signal )
 
                             if ( dl_info.dli_fbase && dl_info.dli_fname )
                             {
+#ifdef LINUX
+                                ElfW(Off) dynamic_offset = dynamic_section_offset(dl_info.dli_fname);
+                                fprintf( stackout, " 0x%" SAL_PRI_SIZET "x:", dynamic_offset);
+#endif
+
                                 fprintf( stackout, " %s + 0x%" SAL_PRI_PTRDIFFT "x",
                                     dl_info.dli_fname,
                                     (char*)stackframes[iFrame] - (char*)dl_info.dli_fbase
@@ -583,6 +683,10 @@ static int ReportCrash( int Signal )
 
                                 if ( dli_fdir )
                                     fprintf( xmlout, " path=\"%s\"", dli_fdir );
+
+#ifdef LINUX
+                                fprintf( xmlout, " dynamicoffset=\"0x%" SAL_PRI_SIZET "x\"", dynamic_offset );
+#endif
                             }
                             else
                                 fprintf( stackout, " ????????" );
@@ -628,68 +732,57 @@ static int ReportCrash( int Signal )
                 if ( checksumout )
                     fclose( checksumout );
 
-#if defined( LINUX )
                 if ( pXMLTempName && pChecksumTempName && pStackTempName )
-                    snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                        "crash_report -p %d -s %d -xml %s -chksum %s -stack %s%s",
-                        getpid(),
-                        Signal,
-                        pXMLTempName,
-                        pChecksumTempName,
-                        pStackTempName,
-                        bAutoCrashReport ? " -noui -send" : " -noui" );
-#elif defined( MACOSX )
-                if ( pXMLTempName && pChecksumTempName && pStackTempName )
+#endif /* INCLUDE_BACKTRACE */
                 {
-                    rtl_uString *crashrep_url = NULL;
-                    rtl_uString *crashrep_path = NULL;
-                    rtl_String  *crashrep_path_system = NULL;
-
-                    rtl_string2UString( &crashrep_url, RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/program/crash_report.bin"), OSTRING_TO_OUSTRING_CVTFLAGS );
-                    rtl_bootstrap_expandMacros( &crashrep_url );
-                    osl_getSystemPathFromFileURL( crashrep_url, &crashrep_path );
+                    rtl_uString * crashrep_url = NULL;
+                    rtl_uString * crashrep_path = NULL;
+                    rtl_String  * crashrep_path_system = NULL;
+                    rtl_string2UString(
+                        &crashrep_url,
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "$BRAND_BASE_DIR/program/crashrep"),
+                        OSTRING_TO_OUSTRING_CVTFLAGS);
+                    rtl_bootstrap_expandMacros(&crashrep_url);
+                    osl_getSystemPathFromFileURL(crashrep_url, &crashrep_path);
                     rtl_uString2String(
                         &crashrep_path_system,
-                        rtl_uString_getStr( crashrep_path ),
-                        rtl_uString_getLength( crashrep_path ),
+                        rtl_uString_getStr(crashrep_path),
+                        rtl_uString_getLength(crashrep_path),
                         osl_getThreadTextEncoding(),
-                        RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR );
-
-                    rtl_uString_release( crashrep_url );
-                    rtl_uString_release( crashrep_path );
-
+                        (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+                         | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR));
+                    rtl_uString_release(crashrep_url);
+                    rtl_uString_release(crashrep_path);
+#if defined INCLUDE_BACKTRACE && (defined LINUX || defined MACOSX)
                     snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                        "%s -p %d -s %d -xml %s -chksum %s -stack %s%s",
-                        rtl_string_getStr( crashrep_path_system ),
+                        "%s -p %d -s %d -xml %s -chksum %s -stack %s -noui%s",
+                        rtl_string_getStr(crashrep_path_system),
                         getpid(),
                         Signal,
                         pXMLTempName,
                         pChecksumTempName,
                         pStackTempName,
-                        bAutoCrashReport ? " -noui -send" : " -noui" );
-
-                    rtl_string_release( crashrep_path_system );
-
-                    printf( "%s\n", szShellCmd );
-                }
-#elif defined ( SOLARIS )
-                if ( pXMLTempName && pChecksumTempName )
+                        bAutoCrashReport ? " -send" : "" );
+#elif defined INCLUDE_BACKTRACE && defined SOLARIS
                     snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                        "crash_report -p %d -s %d -xml %s -chksum %s%s",
+                        "%s -p %d -s %d -xml %s -chksum %s -noui%s",
+                        rtl_string_getStr(crashrep_path_system),
                         getpid(),
                         Signal,
                         pXMLTempName,
                         pChecksumTempName,
-                        bAutoCrashReport ? " -noui -send" : " -noui" );
+                        bAutoCrashReport ? " -send" : "" );
+#else
+                    snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
+                        "%s -p %d -s %d -noui%s",
+                        rtl_string_getStr(crashrep_path_system),
+                        getpid(), Signal, bAutoCrashReport ? " -send" : "" );
 #endif
+                    rtl_string_release(crashrep_path_system);
+                }
 
-#else /* defined INCLUDE BACKTRACE */
-                snprintf( szShellCmd, sizeof(szShellCmd)/sizeof(szShellCmd[0]),
-                "crash_report -p %d -s %d%s", getpid(), Signal, bAutoCrashReport ? " -noui -send" : " -noui" );
-#endif /* defined INCLUDE BACKTRACE */
-
-
-                ret = system( szShellCmd );
+                ret = szShellCmd[0] == '\0' ? -1 : system( szShellCmd );
 
                 if ( pXMLTempName )
                     unlink( pXMLTempName );

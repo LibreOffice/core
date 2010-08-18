@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: XQuerySelectResult.idl,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,7 +48,7 @@ module com {   module sun {   module star {   module rdf {
         each being a list of bindings for the above variables</li>
     </ol>
     Note that each query result retrieved via
-    <method scope="com::sun::star::container">XEnumeration::nextElement</method>
+    <member scope="com::sun::star::container">XEnumeration::nextElement</member>
     has the type <type dim="[]">XNode</type>,
     the length of the sequence being the same as the number of query variables.
     </p>

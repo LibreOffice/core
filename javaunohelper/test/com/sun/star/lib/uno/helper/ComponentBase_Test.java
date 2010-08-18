@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ComponentBase_Test.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,9 +64,9 @@ public class ComponentBase_Test
         comp.addEventListener(obj1);
         comp.addEventListener(obj2);
         comp.addEventListener(obj3);
-        comp.addEventListener((XEventListener) UnoRuntime.queryInterface(XEventListener.class, proxyObj1Weak1));
-        comp.addEventListener((XEventListener) UnoRuntime.queryInterface(XEventListener.class, proxyObj3Weak2));
-        comp.addEventListener((XEventListener) UnoRuntime.queryInterface(XEventListener.class, proxyObj3TypeProv));
+        comp.addEventListener(UnoRuntime.queryInterface(XEventListener.class, proxyObj1Weak1));
+        comp.addEventListener(UnoRuntime.queryInterface(XEventListener.class, proxyObj3Weak2));
+        comp.addEventListener(UnoRuntime.queryInterface(XEventListener.class, proxyObj3TypeProv));
         obj1.nDisposingCalled = 0;
         obj2.nDisposingCalled = 0;
         obj3.nDisposingCalled = 0;

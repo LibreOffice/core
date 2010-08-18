@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: types.h,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -124,10 +121,17 @@ typedef unsigned char       sal_uInt8;
         #define SAL_CONST_INT64(x)       x##ll
         #define SAL_CONST_UINT64(x)      x##ull
 
+    #ifdef __MINGW32__
+    #define SAL_PRIdINT64 "I64d"
+    #define SAL_PRIuUINT64 "I64u"
+    #define SAL_PRIxUINT64 "I64x"
+    #define SAL_PRIXUINT64 "I64X"
+    #else
         #define SAL_PRIdINT64 "lld"
         #define SAL_PRIuUINT64 "llu"
         #define SAL_PRIxUINT64 "llx"
         #define SAL_PRIXUINT64 "llX"
+    #endif
     #else
         #error "Could not find 64-bit type, add support for your architecture"
     #endif
@@ -170,7 +174,7 @@ typedef void *                   sal_Handle;
 
 /* printf-style conversion specification length modifiers for size_t and
    ptrdiff_t (most platforms support C99, MSC has its own extension) */
-#if defined _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
     #define SAL_PRI_SIZET "I"
     #define SAL_PRI_PTRDIFFT "I"
 #else

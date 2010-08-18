@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: testintrosp.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -169,7 +166,7 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
         }
         case TypeClass_FLOAT:
         {
-            float f;
+            float f(0.0);
             aValue >>= f;
             snprintf( pBuffer, sizeof( pBuffer ), "%f", f );
             aRetStr = OUString( pBuffer, strlen( pBuffer ), RTL_TEXTENCODING_ASCII_US );
@@ -177,7 +174,7 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
         }
         case TypeClass_DOUBLE:
         {
-            double d;
+            double d(0.0);
             aValue >>= d;
             snprintf( pBuffer, sizeof( pBuffer ), "%f", d );
             aRetStr = OUString( pBuffer, strlen( pBuffer ), RTL_TEXTENCODING_ASCII_US );
@@ -185,21 +182,21 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
         }
         case TypeClass_BYTE:
         {
-            sal_Int8 n;
+            sal_Int8 n(0);
             aValue >>= n;
             aRetStr = OUString::valueOf( (sal_Int32) n );
             break;
         }
         case TypeClass_SHORT:
         {
-            sal_Int16 n;
+            sal_Int16 n(0);
             aValue >>= n;
             aRetStr = OUString::valueOf( (sal_Int32) n );
             break;
         }
         case TypeClass_LONG:
         {
-            sal_Int32 n;
+            sal_Int32 n(0);
             aValue >>= n;
             aRetStr = OUString::valueOf( n );
             break;
@@ -1308,21 +1305,21 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                     }
                     case TypeClass_DOUBLE:
                     {
-                        double d;
+                        double d(0.0);
                         aPropVal >>= d;
                         aNewVal <<= d + 1.0;
                         break;
                     }
                     case TypeClass_SHORT:
                     {
-                        sal_Int16 n;
+                        sal_Int16 n(0);
                         aPropVal >>= n;
                         aNewVal <<= sal_Int16( n + 1 );
                         break;
                     }
                     case TypeClass_LONG:
                     {
-                        sal_Int32 n;
+                        sal_Int32 n(0);
                         aPropVal >>= n;
                         aNewVal <<= sal_Int32( n + 1 );
                         break;

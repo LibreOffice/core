@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -80,6 +76,7 @@ APP1OBJS=		$(OBJ)$/t_file.obj
 APP1STDLIBS=	$(STOREDBGLIB)
 APP1STDLIBS+=	$(SALLIB)
 APP1DEPN=	$(STOREDBGLIB)
+APP1RPATH=	UREBIN
 
 APP2TARGET=		t_page
 APP2OBJS=		$(OBJ)$/t_page.obj
@@ -92,12 +89,14 @@ APP3OBJS=		$(OBJ)$/t_base.obj
 APP3STDLIBS=	$(STOREDBGLIB)
 APP3STDLIBS+=	$(SALLIB)
 APP3DEPN=	$(STOREDBGLIB)
+APP3RPATH=	UREBIN
 
- APP4TARGET=		t_store
- APP4OBJS=		$(OBJ)$/t_store.obj
- APP4STDLIBS=	$(STORELIB)
- APP4STDLIBS+=	$(SALLIB)
- APP4DEPN=	$(SLB)$/store.lib
+APP4TARGET=		t_store
+APP4OBJS=		$(OBJ)$/t_store.obj
+APP4STDLIBS=	$(STORELIB)
+APP4STDLIBS+=	$(SALLIB)
+APP4DEPN=	$(SLB)$/store.lib
+APP4RPATH=	UREBIN
 
  APP5TARGET=		t_leak
  APP5OBJS=		$(OBJ)$/t_leak.obj

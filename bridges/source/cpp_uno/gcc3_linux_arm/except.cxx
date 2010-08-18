@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: except.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,8 +162,8 @@ namespace CPPU_CURRENT_NAMESPACE
             else
             {
                 // try to lookup the symbol in the generated rtti map
-                t_rtti_map::const_iterator iFind( m_generatedRttis.find( unoName ) );
-                if (iFind == m_generatedRttis.end())
+                t_rtti_map::const_iterator iFind2( m_generatedRttis.find( unoName ) );
+                if (iFind2 == m_generatedRttis.end())
                 {
                     // we must generate it !
                     // symbol and rtti-name is nearly identical,
@@ -195,7 +192,7 @@ namespace CPPU_CURRENT_NAMESPACE
                 }
                 else // taking already generated rtti
                 {
-                    rtti = iFind->second;
+                    rtti = iFind2->second;
                 }
             }
         }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: InterfaceContainer.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -715,7 +712,7 @@ public class InterfaceContainer implements Cloneable
                 try
                 {
                     Object o= aIt.next();
-                    XEventListener evtListener= (XEventListener) UnoRuntime.queryInterface(
+                    XEventListener evtListener= UnoRuntime.queryInterface(
                     XEventListener.class, o);
                     if( evtListener != null )
                         evtListener.disposing( evt );

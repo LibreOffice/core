@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TestRemote.java,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -49,7 +46,7 @@ public final class TestRemote {
         }
 
         protected boolean run(XComponentContext context) throws Throwable {
-            XTransport transport = (XTransport) UnoRuntime.queryInterface(
+            XTransport transport = UnoRuntime.queryInterface(
                 XTransport.class, getBridge(context).getInstance("Transport"));
             return TestAny.test(transport, true);
         }

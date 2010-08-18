@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -124,11 +120,7 @@ YACCFLAGS+=-v
 .INCLUDE :  target.mk
 
 $(MISC)$/stripped_scanner.ll : scanner.ll
-.IF "$(GUI)"=="UNX" || "$(USE_SHELL)" != "4nt"
     tr -d "\015" < scanner.ll > $(MISC)$/stripped_scanner.ll
-.ELSE
-    cat scanner.ll > $(MISC)$/stripped_scanner.ll
-.ENDIF
 
 $(MISC)$/scanner.cxx:	$(MISC)$/stripped_scanner.ll
     flex -o$(MISC)$/scanner.cxx $(MISC)$/stripped_scanner.ll

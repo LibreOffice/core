@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.30.78.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -137,7 +133,9 @@ IDLFILES=\
     FillDirection.idl\
     FillMode.idl\
     FilterConnection.idl\
+    FilterFormulaParser.idl\
     FilterOperator.idl\
+    FilterOperator2.idl\
     FormulaLanguage.idl\
     FormulaMapGroup.idl\
     FormulaMapGroupSpecialOffset.idl\
@@ -166,6 +164,7 @@ IDLFILES=\
     NamedRangeFlag.idl\
     NamedRanges.idl\
     NamedRangesEnumeration.idl\
+    NoConvergenceException.idl\
     PasteOperation.idl\
     RangeSelectionArguments.idl\
     RangeSelectionEvent.idl\
@@ -219,6 +218,7 @@ IDLFILES=\
     TableConditionalEntryEnumeration.idl\
     TableConditionalFormat.idl\
     TableFilterField.idl\
+    TableFilterField2.idl\
     TableOperationMode.idl\
     TablePageBreakData.idl\
     TablePageStyle.idl\
@@ -274,6 +274,7 @@ IDLFILES=\
     XExternalSheetCache.idl\
     XExternalSheetName.idl\
     XFillAcrossSheet.idl\
+    XFilterFormulaParser.idl\
     XFormulaOpCodeMapper.idl\
     XFormulaParser.idl\
     XFormulaQuery.idl\
@@ -315,6 +316,7 @@ IDLFILES=\
     XSheetConditionalEntries.idl\
     XSheetConditionalEntry.idl\
     XSheetFilterDescriptor.idl\
+    XSheetFilterDescriptor2.idl\
     XSheetFilterable.idl\
     XSheetFilterableEx.idl\
     XSheetLinkable.idl\

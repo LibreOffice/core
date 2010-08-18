@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: rtl_String_Const.h,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -545,7 +542,6 @@ static const sal_Int32  expValStrLastNormal[nStrLastNormalCount] =
             0,-1,0,4,-1,-1,-1,-1,-1,3,15,11
         };
 //------------------------------------------------------------------------
-static const sal_Int32 kNonSInt64Max = LONG_MIN;
 static const sal_Int32 kNonSInt32Max = INT_MIN;
 static const sal_Int32 kNonSInt16Max = SHRT_MIN;
 //------------------------------------------------------------------------

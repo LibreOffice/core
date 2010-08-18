@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,15 +40,10 @@ SLOFILES = $(SLO)$/testregistrytdprovider.obj
 
 SHL1TARGET = testregistrytdprovider.uno
 SHL1OBJS = $(SLOFILES)
+SHL1VERSIONMAP = $(SOLARENV)/src/component.map
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB)
 SHL1IMPLIB = itestregistrytdprovider
 DEF1NAME = $(SHL1TARGET)
-
-.IF "$(COMNAME)" == "gcc3"
-SHL1VERSIONMAP = testregistrytdprovider.gcc3.map
-.ELSE
-SHL1VERSIONMAP = testregistrytdprovider.map
-.ENDIF
 
 .INCLUDE: target.mk
 

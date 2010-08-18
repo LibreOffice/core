@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: urp_environment.cxx,v $
- * $Revision: 1.21.20.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -342,10 +339,13 @@ static void SAL_CALL RemoteEnvironment_thisDispose( uno_Environment *pEnvRemote 
             pImpl->m_pReader = 0;
         }
 
-        ::osl::MutexGuard guard2( ::osl::Mutex::getGlobalMutex() );
-        if( ! g_bStaticDestructorsCalled )
+        bool bReleaseStubs = false;
         {
-            // delete the stubs
+            ::osl::MutexGuard guard2( ::osl::Mutex::getGlobalMutex() );
+            bReleaseStubs = !g_bStaticDestructorsCalled;
+        }
+        if( bReleaseStubs )
+        {
             releaseStubs( pEnvRemote );
         }
     }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: file_path_helper.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -103,25 +100,6 @@ namespace osl
  inline bool systemPathIsRelativePath(const rtl::OUString& Path)
  {
     return osl_systemPathIsRelativePath(Path.pData);
- }
-
- /******************************************
-    systemPathIsAbsolutePath
-    Returns true if the given path is an
-    absolute path and so starts with a '/'
-
-    @param pustrPath [in] a system path
-           pustrPath must not be NULL
-
-    @returns sal_True if the given path
-             start's with a separator else
-             sal_False will be returned
-
-  *****************************************/
-
- inline bool systemPathIsAbsolutePath(const rtl::OUString& Path)
- {
-     return osl_systemPathIsAbsolutePath(Path.pData);
  }
 
  /******************************************

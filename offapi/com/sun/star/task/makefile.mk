@@ -2,13 +2,10 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright IBM Corporation 2009.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.23.130.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,6 +42,9 @@ IDLFILES=\
     ClassifiedInteractionRequest.idl\
     DocumentMacroConfirmationRequest.idl\
     DocumentPasswordRequest.idl\
+    DocumentPasswordRequest2.idl\
+    DocumentMSPasswordRequest.idl\
+    DocumentMSPasswordRequest2.idl\
     ErrorCodeRequest.idl\
     ErrorCodeIOException.idl\
     FutureDocumentVersionProductUpdateRequest.idl\
@@ -56,8 +56,10 @@ IDLFILES=\
     MasterPasswordRequest.idl\
     NoMasterException.idl\
     PasswordContainer.idl\
+    PasswordContainerInteractionHandler.idl\
     PasswordRequest.idl\
     PasswordRequestMode.idl\
+    OfficeRestartManager.idl\
     UnsupportedOverwriteRequest.idl\
     UrlRecord.idl\
     UserRecord.idl\
@@ -66,18 +68,21 @@ IDLFILES=\
     XInteractionAskLater.idl\
     XInteractionDisapprove.idl\
     XInteractionPassword.idl\
+    XInteractionPassword2.idl\
     XJob.idl\
     XJobExecutor.idl\
     XJobListener.idl\
     XMasterPasswordHandling.idl\
     XMasterPasswordHandling2.idl\
     XPasswordContainer.idl\
+    XRestartManager.idl\
     XStatusIndicator.idl\
     XStatusIndicatorFactory.idl\
     XStatusIndicatorSupplier.idl\
     XAbortChannel.idl\
     XInteractionRequestStringResolver.idl\
-    InteractionRequestStringResolver.idl
+    InteractionRequestStringResolver.idl\
+    XUrlContainer.idl
 
 # ------------------------------------------------------------------
 

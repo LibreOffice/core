@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UrlResolver.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,7 +99,7 @@ public class UrlResolver {
             Object rootObject = null;
             XBridgeFactory xBridgeFactory= null;
             try {
-                xBridgeFactory = (XBridgeFactory)UnoRuntime.queryInterface(XBridgeFactory.class,
+                xBridgeFactory = UnoRuntime.queryInterface(XBridgeFactory.class,
                                                                           _xMultiServiceFactory.createInstance("com.sun.star.bridge.BridgeFactory"));
             } catch (com.sun.star.uno.Exception e) {
                 throw new com.sun.star.uno.RuntimeException(e.getMessage());
@@ -117,7 +114,7 @@ public class UrlResolver {
                         throw new com.sun.star.uno.RuntimeException(e.getMessage());
                 }
 
-                XConnector connector_xConnector = (XConnector)UnoRuntime.queryInterface(XConnector.class, connector);
+                XConnector connector_xConnector = UnoRuntime.queryInterface(XConnector.class, connector);
 
                 // connect to the server
                 XConnection xConnection = connector_xConnector.connect(conDcp);

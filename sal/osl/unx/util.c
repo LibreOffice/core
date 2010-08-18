@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: util.c,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,11 +48,10 @@
 
 static int   osl_getHWAddr(const char *ifname, char* hard_addr);
 static int   osl_checkAddr(const char* addr);
-static char* osl_decodeEtherAddr(const char *ptr, char* buff);
 
 
 /*****************************************************************************/
-/* osl_getEtherAddr */
+/* osl_getEthernetAddress */
 /*****************************************************************************/
 
 sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
@@ -124,68 +120,6 @@ sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
 }
 
 
-extern sal_Bool osl_getEtherAddr(sal_Char* pszAddr, sal_uInt16 BufferSize)
-{
-    char buff[1024];
-    char hard_addr[64];
-    struct ifconf ifc;
-    struct ifreq *ifr;
-    int i;
-    int so;
-
-    (void) BufferSize; /* unused */
-
-    if ( pszAddr == 0 )
-    {
-        return sal_False;
-    }
-
-
-    /*
-     * All we need is ... a network file descriptor.
-     * Normally, this is a very socket.
-     */
-
-    so = socket(AF_INET, SOCK_DGRAM, 0);
-
-
-    /*
-     * The first thing we have to do, get the interface configuration.
-     * It is a list of attached/configured interfaces
-     */
-
-    ifc.ifc_len = sizeof(buff);
-    ifc.ifc_buf = buff;
-    if ( ioctl(so, SIOCGIFCONF, &ifc) < 0 )
-    {
-/*      fprintf(stderr, "SIOCGIFCONF: %s\n", strerror(errno));*/
-        close(so);
-        return sal_False;
-    }
-
-    close(so);
-
-    /*
-     *  For each of the interfaces in the interface list,
-     *  try to get the hardware address
-     */
-
-    ifr = ifc.ifc_req;
-    for ( i = ifc.ifc_len / sizeof(struct ifreq) ; --i >= 0 ; ifr++ )
-    {
-        int nRet=0;
-        nRet = osl_getHWAddr(ifr->ifr_name,hard_addr);
-        if ( nRet  > 0 )
-        {
-            osl_decodeEtherAddr(hard_addr,pszAddr);
-            return sal_True;
-        }
-    }
-
-    return sal_False;
-}
-
-
 /*****************************************************************************/
 /* osl_getHWAddr */
 /*****************************************************************************/
@@ -228,7 +162,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
      *  And now, the real thing: the get address
      */
 
-#ifdef LINUX
+#ifdef SIOCGIFHWADDR
     ret=ioctl(so, SIOCGIFHWADDR, &ifr);
 #else
     ret=ioctl(so, SIOCGIFADDR, &ifr);
@@ -243,7 +177,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
 
     close(so);
 
-#ifdef LINUX
+#ifdef SIOCGIFHWADDR
     memcpy(hard_addr,ifr.ifr_hwaddr.sa_data,8);
 #else
     memcpy(hard_addr,ifr.ifr_ifru.ifru_addr.sa_data,8);
@@ -284,18 +218,6 @@ static int osl_checkAddr(const char* addr)
     return 0;
 }
 
-
-/*****************************************************************************/
-/* osl_decodeEtherAddr */
-/*****************************************************************************/
-
-static char* osl_decodeEtherAddr(const char *ptr, char* buff)
-{
-    sprintf(buff, "%02X:%02X:%02X:%02X:%02X:%02X",
-            (ptr[0] & 0377), (ptr[1] & 0377), (ptr[2] & 0377),
-            (ptr[3] & 0377), (ptr[4] & 0377), (ptr[5] & 0377));
-    return(buff);
-}
 
 #if defined (SPARC)
 

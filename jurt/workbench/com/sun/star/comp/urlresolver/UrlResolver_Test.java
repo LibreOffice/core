@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UrlResolver_Test.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,19 +55,19 @@ public class UrlResolver_Test
             Object initialObject = urlResolver.resolve(
                 "uno:socket,host=localhost,port=8100;urp;StarOffice.ServiceManager" );
 
-            XMultiComponentFactory  xOfficeFactory= (XMultiComponentFactory) UnoRuntime.queryInterface(
+            XMultiComponentFactory  xOfficeFactory= UnoRuntime.queryInterface(
                 XMultiComponentFactory.class, initialObject );
 
             // retrieve the component context (it's not yet exported from the office)
             // Query for the XPropertySet interface.
-            XPropertySet xProperySet = ( XPropertySet ) UnoRuntime.queryInterface(
+            XPropertySet xProperySet = UnoRuntime.queryInterface(
                 XPropertySet.class, xOfficeFactory);
 
             // Get the default context from the office server.
             Object oDefaultContext = xProperySet.getPropertyValue( "DefaultContext" );
 
             // Query for the interface XComponentContext.
-            XComponentContext xOfficeComponentContext = ( XComponentContext ) UnoRuntime.queryInterface(
+            XComponentContext xOfficeComponentContext = UnoRuntime.queryInterface(
                 XComponentContext.class, oDefaultContext );
 
             // now create the desktop service

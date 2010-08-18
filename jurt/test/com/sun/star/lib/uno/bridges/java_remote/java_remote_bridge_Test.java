@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: java_remote_bridge_Test.java,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,17 +129,17 @@ public final class java_remote_bridge_Test extends ComplexTestCase {
             proxyBXInterface[i] = (XInterface) bridgeB.getInstance(name);
 
             // map object:
-            proxyBTestInterface[i] = (TestInterface) UnoRuntime.queryInterface(
+            proxyBTestInterface[i] = UnoRuntime.queryInterface(
                 TestInterface.class, proxyBXInterface[i]);
             proxyBTestInterface[i].function();
 
             // remap object once:
-            TestInterface remapped = (TestInterface) UnoRuntime.queryInterface(
+            TestInterface remapped = UnoRuntime.queryInterface(
                 TestInterface.class, proxyBXInterface[i]);
             remapped.function();
 
             // remap object twice:
-            remapped = (TestInterface) UnoRuntime.queryInterface(
+            remapped = UnoRuntime.queryInterface(
                 TestInterface.class, proxyBXInterface[i]);
             remapped.function();
         }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: BaseStorage.idl,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,7 @@
 //============================================================================
 /** This is a service that allows to get access to a storage hierarchy.
  */
-service BaseStorage
+published service BaseStorage
 {
     // -----------------------------------------------------------------------
     /** This is a general interface representing storage functionality.

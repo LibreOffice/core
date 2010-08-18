@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: factory.cxx,v $
- * $Revision: 1.28.22.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -1125,6 +1122,17 @@ Reference< lang::XSingleComponentFactory > SAL_CALL createSingleComponentFactory
 {
     return new OFactoryComponentHelper(
         Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, pModCount, sal_False );
+}
+
+Reference< lang::XSingleComponentFactory > SAL_CALL createOneInstanceComponentFactory(
+    ComponentFactoryFunc fptr,
+    OUString const & rImplementationName,
+    Sequence< OUString > const & rServiceNames,
+    rtl_ModuleCount * pModCount)
+    SAL_THROW( () )
+{
+    return new OFactoryComponentHelper(
+        Reference< XMultiServiceFactory >(), rImplementationName, 0, fptr, &rServiceNames, pModCount, sal_True );
 }
 
 }

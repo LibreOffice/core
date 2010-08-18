@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.17 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,25 +35,29 @@ PACKAGE = com$/sun$/star$/deployment
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 IDLFILES = \
-        DeploymentException.idl                 \
-        XPackageTypeInfo.idl                    \
-        XPackage.idl                            \
-        XPackageRegistry.idl                    \
-        PackageRegistryBackend.idl              \
-        XPackageManager.idl                     \
-        XPackageManagerFactory.idl              \
-        thePackageManagerFactory.idl			\
-        DependencyException.idl                 \
-        LicenseException.idl                    \
-        VersionException.idl                    \
-        InstallException.idl                    \
-        UpdateInformationEntry.idl				\
-        XUpdateInformationProvider.idl          \
-        UpdateInformationProvider.idl           \
-        XPackageInformationProvider.idl         \
-        PackageInformationProvider.idl          \
-        LicenseIndividualAgreementException.idl \
-        PlatformException.idl
+        DeploymentException.idl \
+        XPackageTypeInfo.idl \
+        XPackage.idl \
+        XPackageRegistry.idl \
+        PackageRegistryBackend.idl \
+        XPackageManager.idl \
+        XPackageManagerFactory.idl \
+        XExtensionManager.idl \
+        ExtensionManager.idl \
+        thePackageManagerFactory.idl \
+        DependencyException.idl \
+        LicenseException.idl \
+        VersionException.idl \
+        InstallException.idl \
+        UpdateInformationEntry.idl \
+        XUpdateInformationProvider.idl \
+        UpdateInformationProvider.idl \
+        XPackageInformationProvider.idl \
+        PackageInformationProvider.idl \
+        PlatformException.idl \
+        InvalidRemovedParameterException.idl \
+        ExtensionRemovedException.idl \
+        Prerequisites.idl
 
 .INCLUDE : target.mk
 .INCLUDE : $(PRJ)$/util$/target.pmk

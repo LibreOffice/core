@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hash.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,52 +36,51 @@
 #include <hash_set>
 
 namespace {
-    struct UStringHash
-    {
-        size_t operator()(rtl_uString * const &rString) const
-            { return (size_t)rtl_ustr_hashCode_WithLength( rString->buffer, rString->length ); }
-    };
-    struct UStringEqual
-    {
-        sal_Bool operator() ( rtl_uString * const &pStringA,
-                              rtl_uString * const &pStringB) const
-        {
-            if (pStringA == pStringB)
-                return true;
-            if (pStringA->length != pStringB->length)
-                return false;
-            return !rtl_ustr_compare_WithLength( pStringA->buffer, pStringA->length,
-                                                 pStringB->buffer, pStringB->length);
-        }
-    };
-}
 
-typedef std::hash_set< rtl_uString *, UStringHash, UStringEqual,
-                       rtl::Allocator<rtl_uString *> > UniqueHash;
-
-struct StringHashTableImpl : public UniqueHash
+struct UStringHash
 {
-    StringHashTableImpl(sal_uInt32 nSize) : UniqueHash( nSize ) {}
+    size_t operator()(rtl_uString * const &rString) const
+    { return (size_t)rtl_ustr_hashCode_WithLength( rString->buffer, rString->length ); }
 };
 
-StringHashTable *
-rtl_str_hash_new (sal_uInt32 nSize)
+struct UStringEqual
 {
-    return new StringHashTableImpl (nSize);
+    sal_Bool operator() ( rtl_uString * const &pStringA,
+                          rtl_uString * const &pStringB) const
+    {
+        if (pStringA == pStringB)
+            return true;
+        if (pStringA->length != pStringB->length)
+            return false;
+        return !rtl_ustr_compare_WithLength( pStringA->buffer, pStringA->length,
+                                             pStringB->buffer, pStringB->length);
+    }
+};
+
+typedef std::hash_set< rtl_uString *, UStringHash, UStringEqual,
+                       rtl::Allocator<rtl_uString *> > StringHashTable;
+
+StringHashTable *
+getHashTable ()
+{
+    static StringHashTable *pInternPool = NULL;
+    if (pInternPool == NULL) {
+        static StringHashTable aImpl(1024);
+        pInternPool = &aImpl;
+    }
+    return pInternPool;
 }
 
-void
-rtl_str_hash_free (StringHashTable *pHash)
-{
-    delete pHash;
 }
+
+extern "C" {
 
 rtl_uString *
-rtl_str_hash_intern (StringHashTable   *pHash,
-                     rtl_uString       *pString,
+rtl_str_hash_intern (rtl_uString       *pString,
                      int                can_return)
 {
-    UniqueHash::iterator aIter;
+    StringHashTable *pHash = getHashTable();
+    StringHashTable::iterator aIter;
     aIter = pHash->find(pString);
     if (aIter != pHash->end())
     {
@@ -109,8 +105,9 @@ rtl_str_hash_intern (StringHashTable   *pHash,
 }
 
 void
-rtl_str_hash_remove (StringHashTable   *pHash,
-                     rtl_uString       *pString)
+rtl_str_hash_remove (rtl_uString       *pString)
 {
-    pHash->erase(pString);
+    getHashTable()->erase(pString);
+}
+
 }

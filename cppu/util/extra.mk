@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: extra.mk,v $
-#
-# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -71,6 +67,21 @@ SHL4DEF     := empty.def
 .ENDIF
 SHL4OBJS    := $(SLO)$/AffineBridge.obj
 SHL4RPATH   := URELIB
+
+
+SHL5TARGET  := log_uno_uno
+SHL5IMPLIB  := i$(SHL5TARGET)
+SHL5STDLIBS := $(purpenv_helper_LIB) $(SALLIB) $(CPPULIB)
+SHL5OBJS    := $(SLO)$/LogBridge.obj
+                
+.IF "$(GUI)"=="OS2"
+SHL5VERSIONMAP=unsafe_os2.map
+SHL5DEF=$(MISC)$/$(SHL5TARGET).def
+DEF5NAME=LogMapping.def
+.ELSE
+SHL5DEF     := empty.def
+.ENDIF
+SHL5RPATH   := URELIB
 
 # --- Targets ------------------------------------------------------
 

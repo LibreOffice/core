@@ -1,0 +1,7 @@
+{
+        rtl_allocateMemory;
+        rtl_reallocateMemory;
+        rtl_freeMemory;
+        rtl_allocateZeroMemory;
+        rtl_freeZeroMemory;
+};

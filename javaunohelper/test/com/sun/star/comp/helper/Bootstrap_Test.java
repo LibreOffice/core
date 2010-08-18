@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Bootstrap_Test.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +59,7 @@ public class Bootstrap_Test {
                     "no /singletons/com.sun.star.reflection.theTypeDescriptionManager!" );
             }
 
-            XMultiServiceFactory msf = (XMultiServiceFactory)UnoRuntime.queryInterface(
+            XMultiServiceFactory msf = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, xContext.getServiceManager() );
             String services[] = msf.getAvailableServiceNames();
             System.out.println("Available services are:");
@@ -74,7 +71,7 @@ public class Bootstrap_Test {
                 for ( int i=0; i<services.length; i++ )
                     System.out.println(services[i]);
 
-            XComponent xComp = (XComponent)UnoRuntime.queryInterface(
+            XComponent xComp = UnoRuntime.queryInterface(
                 XComponent.class, xContext );
             xComp.dispose();
 

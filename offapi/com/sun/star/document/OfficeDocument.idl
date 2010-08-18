@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OfficeDocument.idl,v $
- * $Revision: 1.17.12.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,6 +69,10 @@
 
 #ifndef __com_sun_star_document_XEmbeddedScripts_idl__
 #include <com/sun/star/document/XEmbeddedScripts.idl>
+#endif
+
+#ifndef __com_sun_star_document_XDocumentPropertiesSupplier_idl__
+#include <com/sun/star/document/XDocumentPropertiesSupplier.idl>
 #endif
 
 //=============================================================================
@@ -161,6 +162,8 @@ published service OfficeDocument
         Instead of the <type>StandaloneDocumentInfo</type> service the <type>DocumentInfo</type>
         will be available on an already opened document only.
         </p>
+
+        @deprecated     Use <type>XDocumentPropertiesSupplier</type> instead.
      */
     [optional] interface XDocumentInfoSupplier;
 
@@ -181,6 +184,13 @@ published service OfficeDocument
         @since OOo 2.4
     */
     [optional] interface XEmbeddedScripts;
+
+    //-------------------------------------------------------------------------
+    /** access to the <type>DocumentProperties</type>.
+
+        @since OOo 3.0
+     */
+    [optional] interface XDocumentPropertiesSupplier;
 
     //-------------------------------------------------------------------------
     /** controls the focus behaviour of the form controls in the document
