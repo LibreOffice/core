@@ -33,6 +33,16 @@
 
 sub topten
 
+    ' we need the binary filters (.sxw etc.) for this test but beginning with
+    ' OOo 3.3 these are optional
+    try
+        hGetSuffix( "569" )
+    catch
+        warnlog( "Optional legacy filters package is not installed" )
+        printlog( "Please restart the setup to install the missing filters" )
+        exit sub
+    endcatch
+
     gApplication = "WRITER"
     call Top_ten_test
     
@@ -59,7 +69,8 @@ end sub
 '*******************************************************************************
 
 testcase Top_ten_test
-    dim sUserWorkDirectory as string
+
+    dim sUserWorkDirectory as string
     dim sFilename_native as String
     dim sFilename_export as String
     dim sFilter_native as string
