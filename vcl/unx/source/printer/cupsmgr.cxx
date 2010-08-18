@@ -834,8 +834,15 @@ void CUPSManager::setupJobContextData(
 
 FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
+    OSL_TRACE( "endSpool: %s, %s",
+               rtl::OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
+              bQuickCommand ? "true" : "false" );
+
     if( m_aCUPSDestMap.find( rPrintername ) == m_aCUPSDestMap.end() )
+    {
+        OSL_TRACE( "defer to PrinterInfoManager::startSpool" );
         return PrinterInfoManager::startSpool( rPrintername, bQuickCommand );
+    }
 
 #ifdef ENABLE_CUPS
     OUString aTmpURL, aTmpFile;
@@ -898,6 +905,10 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOpt
 
 int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData )
 {
+    OSL_TRACE( "endSpool: %s, %s",
+               rtl::OUStringToOString( rPrintername, RTL_TEXTENCODING_UTF8 ).getStr(),
+               rtl::OUStringToOString( rJobTitle, RTL_TEXTENCODING_UTF8 ).getStr() );
+
     int nJobID = 0;
 
     osl::MutexGuard aGuard( m_aCUPSMutex );
@@ -905,7 +916,10 @@ int CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTit
     std::hash_map< OUString, int, OUStringHash >::iterator dest_it =
         m_aCUPSDestMap.find( rPrintername );
     if( dest_it == m_aCUPSDestMap.end() )
+    {
+        OSL_TRACE( "defer to PrinterInfoManager::endSpool" );
         return PrinterInfoManager::endSpool( rPrintername, rJobTitle, pFile, rDocumentJobData );
+    }
 
     #ifdef ENABLE_CUPS
     std::hash_map< FILE*, OString, FPtrHash >::const_iterator it = m_aSpoolFiles.find( pFile );
