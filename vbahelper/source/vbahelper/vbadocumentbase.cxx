@@ -213,7 +213,7 @@ VbaDocumentBase::getVBProject() throw (uno::RuntimeException)
     {
         uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[ 0 ] <<= uno::Reference< XHelperInterface >( this );
-        aArgs[ 1 ] <<= mxModel;
+        aArgs[ 1 ] <<= getModel();
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBProjects = xServiceManager->createInstanceWithArgumentsAndContext(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBProject" ) ), aArgs, mxContext );
