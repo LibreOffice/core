@@ -572,7 +572,7 @@ void lcl_CallActivate( ScDocShell* pDocSh, SCTAB nTab, sal_Int32 nEvent )
     }
 }
 
-void ScTabViewObj::SheetChanged()
+void ScTabViewObj::SheetChanged( bool bSameTabButMoved )
 {
     if ( !GetViewShell() )
         return;
@@ -600,9 +600,10 @@ void ScTabViewObj::SheetChanged()
         }
     }
 
-    // handle sheet events
+    /*  Handle sheet events, but do not trigger event handlers, if the old
+        active sheet gets re-activated after inserting/deleting/moving a sheet. */
     SCTAB nNewTab = pViewData->GetTabNo();
-    if ( nNewTab != nPreviousTab )
+    if ( !bSameTabButMoved && (nNewTab != nPreviousTab) )
     {
         lcl_CallActivate( pDocSh, nPreviousTab, SC_SHEETEVENT_UNFOCUS );
         lcl_CallActivate( pDocSh, nNewTab, SC_SHEETEVENT_FOCUS );

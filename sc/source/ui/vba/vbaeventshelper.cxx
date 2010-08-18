@@ -470,14 +470,12 @@ bool ScVbaEventsHelper::implEventsEnabled() throw (uno::RuntimeException)
 bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& rArgs ) throw (uno::RuntimeException)
 {
-    // check preconditions for some events, add more events if needed
-    bool bExecuteEvent = true;
+    // framework and Calc fire a few events before 'opened', ignore them
+    bool bExecuteEvent = mbOpened;
+
+    // special handling for some events
     switch( rInfo.mnEventId )
     {
-        case WORKBOOK_ACTIVATE:
-            // while loading, framework fires this before 'opened' event, delay it
-            bExecuteEvent = mbOpened;
-        break;
         case WORKBOOK_OPEN:
             bExecuteEvent = !mbOpened;
             if( bExecuteEvent )
@@ -490,15 +488,17 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
         break;
         case WORKSHEET_SELECTIONCHANGE:
             // if selection is not changed, then do not fire the event
-            bExecuteEvent = mbOpened && isSelectionChanged( rArgs, 0 );
+            bExecuteEvent = bExecuteEvent && isSelectionChanged( rArgs, 0 );
         break;
     }
 
     // add workbook event associated to a sheet event
-    bool bSheetEvent = false;
-    rInfo.maUserData >>= bSheetEvent;
-    if( bSheetEvent && bExecuteEvent )
-        rEventQueue.push_back( EventQueueEntry( rInfo.mnEventId + USERDEFINED_START, rArgs ) );
+    if( bExecuteEvent )
+    {
+        bool bSheetEvent = false;
+        if( (rInfo.maUserData >>= bSheetEvent) && bSheetEvent )
+            rEventQueue.push_back( EventQueueEntry( rInfo.mnEventId + USERDEFINED_START, rArgs ) );
+    }
 
     return bExecuteEvent;
 }

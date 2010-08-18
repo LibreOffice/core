@@ -287,7 +287,8 @@ public:
 
     BOOL            IsMinimized() const     { return bMinimized; }
 
-    void            TabChanged();
+    // bSameTabButMoved = true if the same sheet as before is activated, used after moving/copying/inserting/deleting a sheet
+    void            TabChanged( bool bSameTabButMoved = false );
     void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll );
     SC_DLLPUBLIC void            RefreshZoom();
     void            SetPagebreakMode( BOOL bSet );
@@ -387,10 +388,8 @@ public:
 
     void            SetNewStartIfMarking();
 
-    //<!--Added by PengYunQuan for Validity Cell Range Picker
-    //void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
-    SC_DLLPUBLIC void            SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE );
-    //-->Added by PengYunQuan for Validity Cell Range Picker
+    // bSameTabButMoved = true if the same sheet as before is activated, used after moving/copying/inserting/deleting a sheet
+    SC_DLLPUBLIC void SetTabNo( SCTAB nTab, BOOL bNew = FALSE, BOOL bExtendSelection = FALSE, bool bSameTabButMoved = false );
     void            SelectNextTab( short nDir, BOOL bExtendSelection = FALSE );
 
     void            ActivateView( BOOL bActivate, BOOL bFirst );
