@@ -429,12 +429,7 @@ sub copy_one_file
     }
     else
     {
-        if ( $installer::globals::split ) {
-            $infoline = "WARNING: Could not copy $source to $dest\n";
-        }
-        else {
-            $infoline = "ERROR: Could not copy $source to $dest\n";
-        }
+        $infoline = "ERROR: Could not copy $source to $dest\n";
         $returnvalue = 0;
     }
 

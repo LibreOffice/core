@@ -1,1 +1,0 @@
-bb build : scp2 solenv soltools stlport NULL

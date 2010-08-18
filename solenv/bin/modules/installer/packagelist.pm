@@ -551,28 +551,6 @@ sub get_packinfo
 {
     my ($gid, $filename, $packages, $onelanguage, $islanguagemodule) = @_;
 
-    # we don't need all the solarispackagename etc. for the split build...
-    if ( $installer::globals::split ) {
-        my %onepackage = (
-            'module' => "$gid",
-            'solarispackagename' => "NULL",
-            'solarisrequires' => "NULL",
-            'packagename' => "NULL",
-            'freebsdrequires' => "NULL",
-            'requires' => "NULL",
-            'findrequires' => "NULL",
-            'copyright' => "1999-2009 by OpenOffice.org",
-            'solariscopyright' => "NULL",
-            'vendor' => "OpenOffice.org",
-            'description' => "NULL",
-            'destpath' => "NULL",
-            'packageversion' => "NULL"
-        );
-
-        push(@{$packages}, \%onepackage);
-        return;
-    }
-
     my $packagelist = installer::files::read_file($filename);
 
     my @allpackages = ();
@@ -705,9 +683,7 @@ sub collectpackages
             # The file with package information has to be found in path list
             my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$packinfofile, "" , 0);
 
-            if ( $$fileref eq "" && !$installer::globals::split ) {
-                installer::exiter::exit_program("ERROR: Could not find file $packinfofile for module $modulegid!", "collectpackages");
-            }
+            if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $packinfofile for module $modulegid!", "collectpackages"); }
 
             my $infoline = "$modulegid: Using packinfo: \"$$fileref\"!\n";
             push( @installer::globals::logfileinfo, $infoline);

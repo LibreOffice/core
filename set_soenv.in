@@ -951,7 +951,7 @@ if ($STLPORT4 ne $no_stl) {
 } else {
         $ps_STLPORT_LIB         = "";
         $L_STLPORT_LIB          = "";
-        $STLPORT_stlport        = "";
+        $STLPORT_stlport        = $I.$SRC_ROOT.$SOLVER.$ds.$UPD.$ds.$INPATH.$INC.$ds."stl";
         $STLPORT_inc_stlport    = "";
 }
 
@@ -1008,17 +1008,17 @@ $DEVROOT              = '$SRC_ROOT';
 # Set solenv and solver to given or default values. 
 # Location of the solenv tree.
 if ('@LOCAL_SOLENV@' eq "DEFAULT")
-{  $SOLARENV          = '${FORCE_SOLARENV:-'.$SRC_ROOT.$SOLENV.'}';
+{  $SOLARENV          = $SRC_ROOT.$SOLENV;
 }
 else
-{  $SOLARENV          =  '${FORCE_SOLARENV:-'.PathFormat('@LOCAL_SOLENV@').'}';
+{  $SOLARENV          =  PathFormat('@LOCAL_SOLENV@');
 }
 # Location of the solver tree.
 if ('@LOCAL_SOLVER@' eq "DEFAULT")
-{  $SOLARVER          = '${FORCE_SOLVER:-'.$SRC_ROOT.$SOLVER.'}'.$ds.$UPD;
+{  $SOLARVER          = $SRC_ROOT.$SOLVER.$ds.$UPD;
 }
 else
-{  $SOLARVER          = '${FORCE_SOLVER:-'.PathFormat('@LOCAL_SOLVER@').'}'.$ds.$UPD;
+{  $SOLARVER          = PathFormat('@LOCAL_SOLVER@').$ds.$UPD;
 }
 #Location of Solar version.
 $SOLARVERSION         = '$SOLARVER';
@@ -1122,7 +1122,7 @@ if ($platform =~ m/cygwin|os2/)
 # The general environment path.
 if ($platform =~ m/linux|netbsd|odf1|irix|freebsd|aix|solaris/)
 {  $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
@@ -1153,7 +1153,7 @@ elsif ($platform =~ m/cygwin/)
    my ( $tmppath );
 
    $PATH              = $cur_dir.
-                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
+#                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
                         $ps.CygFormat($SOLARENV).$ds."bin".
                         $ps.CygFormat($SOLARENV).$ds.$OUTPATH.$BIN;
 
@@ -1291,7 +1291,7 @@ elsif ($platform =~ m/os2/)
    # needed is appended to the end.
 
    $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds."bin".
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN;
 
@@ -1319,7 +1319,7 @@ elsif ($platform =~ m/os2/)
 
 elsif ($platform =~ m/darwin/)
 {  $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
+#                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
                         $ps.'$SOLARENV'.$BIN;
 
@@ -1695,8 +1695,6 @@ ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "MOC",               "@MOC@",              "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
-ToFile( "WITH_ICECREAM",     "@WITH_ICECREAM@",  "e" );
-ToFile( "WITH_CPUS",         "@WITH_CPUS@",      "e" );
 #
 # Writing the platform dependent constant values to file.
 # (c = comment, e = environment variable, a = alias )
@@ -2169,7 +2167,7 @@ if (rename( $bootfile, $tmp ) ne 1)
 
 print "Configure completed\n";
 if ( "@USE_SHELL@" ne "4nt" ) {
-	print "You may now run 'make' in $SRC_ROOT\n";
+	print "You may now run ./bootstrap in $SRC_ROOT\n";
 }
 if ( $Warning ne "" ) {
 	print "***** WARNINGS ISSUED *****\n";
