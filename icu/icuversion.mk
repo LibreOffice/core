@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: icuversion.mk,v $
-#
-# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,5 +29,5 @@ ICU_MAJOR=4
 # minor 
 ICU_MINOR=0
 # micro 
-ICU_MICRO=0
+ICU_MICRO=1
 

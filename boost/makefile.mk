@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,7 +31,7 @@
 
 PRJ=.
 
-PRJNAME=ooo_boost
+PRJNAME=boost
 TARGET=ooo_boost
 
 # --- Settings -----------------------------------------------------
@@ -52,18 +48,9 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=boost-1.30.2
+TARFILE_NAME=boost_1_39_0
+TARFILE_MD5=fcc6df1160753d0b8c835d17fdeeb0a7
 PATCH_FILES=$(TARFILE_NAME).patch
-
-.IF "$(COMID)"=="gcc3"
-
-# enabled for gcc4.x
-.IF "$(CCNUMVER)">="000400000000" 
-  TARFILE_NAME=boost_1_34_1
-  PATCH_FILES=$(TARFILE_NAME).patch
-.ENDIF
-
-.ENDIF
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
@@ -78,4 +65,43 @@ BUILD_FLAGS=
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
 
+# --- post-build ---------------------------------------------------
+
+# "normalize" the output structure, in that the C++ headers are
+# copied to the canonic location in OUTPATH
+# The allows, later on, to use the standard mechanisms to deliver those
+# files, instead of delivering them out of OUTPATH/misc/build/..., which
+# could cause problems
+
+NORMALIZE_FLAG_FILE=so_normalized_$(TARGET)
+
+$(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE) : $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE)
+    -@$(MKDIRHIER) $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/*.h $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/*.hpp $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/bind $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/config $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/detail $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/exception $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/function $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/iterator $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/mpl $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/numeric $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/optional $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/pending $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/pool $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/preprocessor $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/ptr_container $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/range $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/spirit $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/smart_ptr $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/tuple $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/type_traits $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/utility $(INCCOM)$/$(PRJNAME)
+    @$(GNUCOPY) -r $(PACKAGE_DIR)$/$(TARFILE_NAME)$/boost$/variant $(INCCOM)$/$(PRJNAME)
+    @$(TOUCH) $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
+
+normalize: $(PACKAGE_DIR)$/$(NORMALIZE_FLAG_FILE)
+
+$(PACKAGE_DIR)$/$(PREDELIVER_FLAG_FILE) : normalize
 .ENDIF			# "$(SYSTEM_BOOST)" == "YES" && ("$(OS)"!="SOLARIS" || "$(COM)"=="GCC")

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.1.2.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,7 +37,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .IF  "$(ENABLE_CAIRO)" == ""
 all:
-        @echo "Nothing to do (Cairo not enabled)."
+    @echo "Nothing to do (Cairo not enabled)."
 
 .ELIF "$(SYSTEM_CAIRO)" == "YES"
 all:
@@ -54,12 +50,15 @@ all:
 CAIROVERSION=1.8.0
 
 TARFILE_NAME=$(PRJNAME)-$(CAIROVERSION)
+TARFILE_MD5=4ea70ea87b47e92d318d4e7f5b940f47
+
 PATCH_FILES=..$/$(TARFILE_NAME).patch
 
 cairo_CFLAGS=$(SOLARINC)
 cairo_LDFLAGS=$(SOLARLIB)
 
 cairo_CPPFLAGS=
+
 .IF "$(SYSTEM_ZLIB)"!="YES"
 cairo_CPPFLAGS+=-I$(SOLARINCDIR)$/external$/zlib
 cairo_COMPRESS=z_compress
@@ -71,13 +70,20 @@ cairo_CPPFLAGS+=$(INCLUDE)
 .IF "$(OS)"=="WNT"
 # --------- Windows -------------------------------------------------
 .IF "$(COM)"=="GCC"
-cairo_CFLAGS+=-D_MT
 cairo_LDFLAGS+=-no-undefined -L$(ILIB:s/;/ -L/)
 cairo_CPPFLAGS+=-nostdinc
+cairo_CC=$(CC) -mthreads
+
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+cairo_CC+=-shared-libgcc
+.ENDIF
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+cairo_LIBS+=-lstdc++_s
+.ENDIF
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
-CONFIGURE_FLAGS=--disable-xlib --disable-ft --disable-pthread --disable-svg --disable-png --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 PKG_CONFIG=./dummy_pkg_config LIBS=-lmingwthrd ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--disable-xlib --disable-ft --disable-pthread --disable-svg --disable-png --enable-gtk-doc=no --enable-test-surfaces=no --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 PKG_CONFIG=./dummy_pkg_config CC="$(cairo_CC)" LIBS="$(cairo_LIBS)" ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS) OBJDUMP="$(WRAPCMD) objdump"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -94,9 +100,17 @@ OUT2INC+=src$/cairo-win32.h
 
 .ELIF "$(GUIBASE)"=="aqua"
 # ----------- Native Mac OS X (Aqua/Quartz) --------------------------------
+.IF "$(SYSBASE)"!=""
+.IF "$(EXTRA_CFLAGS)" != ""
+cairo_CFLAGS+=$(EXTRA_CFLAGS) $(EXTRA_CDEFS)
+cairo_CPPFLAGS+=$(EXTRA_CFLAGS) $(EXTRA_CDEFS)
+.ENDIF # "$(EXTRA_CFLAGS)" != ""
+.ENDIF # "$(SYSBASE)"!=""
 CONFIGURE_DIR=
 CONFIGURE_ACTION=cp $(SRC_ROOT)$/$(PRJNAME)$/cairo$/dummy_pkg_config . && .$/configure
 CONFIGURE_FLAGS=--enable-static=no --disable-xlib --disable-ft --disable-svg --disable-png --enable-quartz --enable-quartz-font --enable-gtk-doc=no --enable-test-surfaces=no PKG_CONFIG=./dummy_pkg_config ZLIB3RDLIB=$(ZLIB3RDLIB) COMPRESS=$(cairo_COMPRESS)
+cairo_CPPFLAGS+=$(EXTRA_CDEFS)
+cairo_LDFLAGS+=$(EXTRA_LINKFLAGS)
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)

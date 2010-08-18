@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.5 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,15 +42,20 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=expat
-ADDITIONAL_FILES=xmlparse$/makefile.mk xmltok$/makefile.mk makefile.mk
-
-PATCH_FILES=expat.patch
+TARFILE_NAME=expat-2.0.1
+TARFILE_MD5=ee8b492592568805593f81f8cdf2a04c
+ADDITIONAL_FILES=lib$/makefile.mk
+PATCH_FILES=expat-2.0.1.patch \
+            expat-winapi.patch
 
 CONFIGURE_DIR=
+.IF "$(OS)"=="WNT"
 CONFIGURE_ACTION=
+.ELSE
+CONFIGURE_ACTION=.$/configure
+.ENDIF
 
-BUILD_DIR=
+BUILD_DIR=lib
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 
 # --- Targets ------------------------------------------------------
@@ -62,4 +63,3 @@ BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 .INCLUDE : tg_ext.mk
-

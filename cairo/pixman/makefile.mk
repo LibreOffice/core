@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.1.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -41,11 +37,11 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .IF  "$(ENABLE_CAIRO)" == ""
 all:
-        @echo "Nothing to do (Cairo not enabled)."
+    @echo "Nothing to do (Cairo not enabled)."
 
 .ELIF "$(BUILD_PIXMAN)" == ""
 all:
-       @echo "Not building pixman."
+    @echo "Not building pixman."
 
 .ENDIF
 
@@ -54,7 +50,9 @@ all:
 PIXMANVERSION=0.12.0
 
 TARFILE_NAME=pixman-$(PIXMANVERSION)
-PATCH_FILE_NAME=..$/$(TARFILE_NAME).patch
+TARFILE_MD5=09357cc74975b01714e00c5899ea1881
+
+PATCH_FILES=..$/$(TARFILE_NAME).patch
 
 # Note: we are building static pixman library to avoid linking problems.
 # However, for Unix dynamic library must be used (especially due to 64bit issues)
@@ -64,7 +62,7 @@ PATCH_FILE_NAME=..$/$(TARFILE_NAME).patch
 .IF "$(COM)"=="GCC"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="$(pixman_CFLAGS) -D_MT" LDFLAGS="$(pixman_LDFLAGS) -no-undefined -L$(ILIB:s/;/ -L/)" LIBS="-lmingwthrd" OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="$(pixman_CFLAGS) -mthreads" LDFLAGS="$(pixman_LDFLAGS) -no-undefined -L$(ILIB:s/;/ -L/)" OBJDUMP="$(WRAPCMD) objdump"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -81,7 +79,12 @@ BUILD_ACTION=$(GNUMAKE) -f Makefile.win32
 # ----------- Native Mac OS X (Aqua/Quartz) --------------------------------
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no
+CONFIGURE_FLAGS=--enable-static=yes --enable-shared=no CPPFLAGS="$(EXTRA_CDEFS)"
+.IF "$(SYSBASE)"!=""
+.IF "$(EXTRA_CFLAGS)"!=""
+CONFIGURE_FLAGS+=CFLAGS="$(EXTRA_CFLAGS) $(EXTRA_CDEFS)"
+.ENDIF # "$(EXTRA_CDEFS)"!=""
+.ENDIF # "$(SYSBASE)"!=""
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)

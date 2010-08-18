@@ -1,0 +1,348 @@
+--- misc/db-4.7.25.NC/dist/Makefile.in	2008-05-06 12:03:36.000000000 +0900
++++ misc/build/db-4.7.25.NC/dist/Makefile.in	2009-07-11 13:38:07.419875000 +0900
+@@ -44,7 +44,7 @@
+ SOLINK=		@MAKEFILE_SOLINK@ @CFLAGS@
+ SOFLAGS=	@SOFLAGS@
+ LIBMAJOR=	@DB_VERSION_MAJOR@
+-LIBVERSION=	@DB_VERSION_MAJOR@.@DB_VERSION_MINOR@
++LIBVERSION=	@DB_VERSION_MAJOR@@DB_VERSION_MINOR@
+ 
+ CPPFLAGS=	-I$(builddir) -I$(srcdir) @CPPFLAGS@
+ 
+@@ -62,18 +62,18 @@
+ 
+ libdb_base=	libdb
+ libdb=		$(libdb_base).a
+-libdb_version=	$(libdb_base)-$(LIBVERSION).a
+-libso=		$(libdb_base)-$(LIBVERSION)@SOSUFFIX@
+-libso_target=	$(libdb_base)-$(LIBVERSION).la
++libdb_version=	$(libdb_base)$(LIBVERSION).a
++libso=		$(libdb_base)$(LIBVERSION)@SOSUFFIX@
++libso_target=	$(libdb_base)$(LIBVERSION).la
+ libso_default=	$(libdb_base)@SOSUFFIX@
+-libso_major=	$(libdb_base)-$(LIBMAJOR)@SOSUFFIX@
++libso_major=	$(libdb_base)$(LIBMAJOR)@SOSUFFIX@
+ 
+ ##################################################
+ # C++ API.
+ #
+ # C++ support is optional, and can be built with static or shared libraries.
+ ##################################################
+-CXXFLAGS=	-c $(CPPFLAGS) @CXXFLAGS@
++CXXFLAGS=	-c $(SOLARINC) $(CPPFLAGS) -DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) @CXXFLAGS@
+ CXX=		@MAKEFILE_CXX@
+ CXXLINK=	@MAKEFILE_CXXLINK@ @CXXFLAGS@
+ XSOLINK=	@MAKEFILE_XSOLINK@ @CXXFLAGS@
+@@ -81,11 +81,11 @@
+ 
+ libcxx_base=	libdb_cxx
+ libcxx=		$(libcxx_base).a
+-libcxx_version=	$(libcxx_base)-$(LIBVERSION).a
+-libxso=		$(libcxx_base)-$(LIBVERSION)@SOSUFFIX@
+-libxso_target=	$(libcxx_base)-$(LIBVERSION).la
++libcxx_version=	$(libcxx_base)$(LIBVERSION).a
++libxso=		$(libcxx_base)$(LIBVERSION)@SOSUFFIX@
++libxso_target=	$(libcxx_base)$(LIBVERSION).la
+ libxso_default=	$(libcxx_base)@SOSUFFIX@
+-libxso_major=	$(libcxx_base)-$(LIBMAJOR)@SOSUFFIX@
++libxso_major=	$(libcxx_base)$(LIBMAJOR)@SOSUFFIX@
+ 
+ ##################################################
+ # Java API.
+@@ -108,12 +108,12 @@
+ libj_jarfile=	db.jar
+ libj_exjarfile=	dbexamples.jar
+ libjso_base=	libdb_java
+-libjso=		$(libjso_base)-$(LIBVERSION)@JMODSUFFIX@
+-libjso_static=	$(libjso_base)-$(LIBVERSION).a
+-libjso_target=	$(libjso_base)-$(LIBVERSION).la
++libjso=		$(libjso_base)$(LIBVERSION)@JMODSUFFIX@
++libjso_static=	$(libjso_base)$(LIBVERSION).a
++libjso_target=	$(libjso_base)$(LIBVERSION).la
+ libjso_default=	$(libjso_base)@JMODSUFFIX@
+-libjso_major=	$(libjso_base)-$(LIBMAJOR)@JMODSUFFIX@
+-libjso_g=	$(libjso_base)-$(LIBVERSION)_g@JMODSUFFIX@
++libjso_major=	$(libjso_base)$(LIBMAJOR)@JMODSUFFIX@
++libjso_g=	$(libjso_base)$(LIBVERSION)_g@JMODSUFFIX@
+ 
+ ##################################################
+ # TCL API.
+@@ -123,11 +123,11 @@
+ TCL_INCLUDE_SPEC=	@TCL_INCLUDE_SPEC@
+ LIBTSO_LIBS=	@LIBTSO_LIBS@ @LIBSO_LIBS@
+ libtso_base=	libdb_tcl
+-libtso=		$(libtso_base)-$(LIBVERSION)@MODSUFFIX@
+-libtso_static=	$(libtso_base)-$(LIBVERSION).a
+-libtso_target=	$(libtso_base)-$(LIBVERSION).la
++libtso=		$(libtso_base)$(LIBVERSION)@MODSUFFIX@
++libtso_static=	$(libtso_base)$(LIBVERSION).a
++libtso_target=	$(libtso_base)$(LIBVERSION).la
+ libtso_default=	$(libtso_base)@MODSUFFIX@
+-libtso_major=	$(libtso_base)-$(LIBMAJOR)@MODSUFFIX@
++libtso_major=	$(libtso_base)$(LIBMAJOR)@MODSUFFIX@
+ 
+ ##################################################
+ # db_dump185 UTILITY
+@@ -756,7 +756,7 @@
+ 
+ # Shared Java library.
+ $(libjso_target): $(JAVA_OBJS) $(C_OBJS)
+-	$(SOLINK) -shrext @JMODSUFFIX@ $(SOFLAGS) $(LDFLAGS) \
++	$(SOLINK) -shrext @JMODSUFFIX@ -add-underscore $(SOFLAGS) $(LDFLAGS) \
+ 	    -o $@ $(JAVA_OBJS) $(C_OBJS) $(LIBJSO_LIBS)
+ 
+ # Shared Tcl library.
+--- misc/db-4.7.25.NC/dist/configure	2008-05-16 06:12:41.000000000 +0900
++++ misc/build/db-4.7.25.NC/dist/configure	2009-07-11 16:00:39.255625000 +0900
+@@ -9488,7 +9488,7 @@
+       export_symbols_cmds='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGRS] /s/.* \([^ ]*\)/\1 DATA/'\'' | $SED -e '\''/^[AITW] /s/.* //'\'' | sort | uniq > $export_symbols'
+ 
+       if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+-        archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
++        archive_cmds='$DLLTOOL $add_underscore --export-all-symbols --dllname $soname --output-lib $lib --output-exp $output_objdir/$soname.exp $libobjs; $CC -shared $output_objdir/$soname.exp $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--enable-auto-image-base ${wl}--image-base=0x10000000'
+ 	# If the export-symbols file already is a .def file (1st line
+ 	# is EXPORTS), use it as is; otherwise, prepend...
+ 	archive_expsym_cmds='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
+@@ -9497,7 +9497,7 @@
+ 	  echo EXPORTS > $output_objdir/$soname.def;
+ 	  cat $export_symbols >> $output_objdir/$soname.def;
+ 	fi~
+-	$CC -shared $output_objdir/$soname.def $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--enable-auto-image-base -Xlinker --out-implib -Xlinker $lib'
++	$DLLTOOL $add_underscore --dllname $soname --output-lib $lib --output-exp $output_objdir/$soname.exp --input-def $output_objdir/$soname.def; $CC -shared $output_objdir/$soname.exp $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--enable-auto-image-base ${wl}--image-base=0x10000000'
+       else
+ 	ld_shlibs=no
+       fi
+@@ -13680,15 +13680,15 @@
+ 
+        if test "$pre_test_object_deps_done" = no; then
+ 	 if test -z "$predep_objects_CXX"; then
+-	   predep_objects_CXX="$p"
++	   predep_objects_CXX=`cygpath -m "$p"`
+ 	 else
+-	   predep_objects_CXX="$predep_objects_CXX $p"
++	   predep_objects_CXX="$predep_objects_CXX "`cygpath -m "$p"`
+ 	 fi
+        else
+ 	 if test -z "$postdep_objects_CXX"; then
+-	   postdep_objects_CXX="$p"
++	   postdep_objects_CXX=`cygpath -m "$p"`
+ 	 else
+-	   postdep_objects_CXX="$postdep_objects_CXX $p"
++	   postdep_objects_CXX="$postdep_objects_CXX "`cygpath -m "$p"`
+ 	 fi
+        fi
+        ;;
+@@ -22371,6 +22371,154 @@
+ 
+ 
+ 
++case "$host_os" in
++mingw*)
++for ac_header in execinfo.h sys/time.h
++do
++as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
++if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
++  { echo "$as_me:$LINENO: checking for $ac_header" >&5
++echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
++if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
++  echo $ECHO_N "(cached) $ECHO_C" >&6
++fi
++ac_res=`eval echo '${'$as_ac_Header'}'`
++	       { echo "$as_me:$LINENO: result: $ac_res" >&5
++echo "${ECHO_T}$ac_res" >&6; }
++else
++  # Is the header compilable?
++{ echo "$as_me:$LINENO: checking $ac_header usability" >&5
++echo $ECHO_N "checking $ac_header usability... $ECHO_C" >&6; }
++cat >conftest.$ac_ext <<_ACEOF
++/* confdefs.h.  */
++_ACEOF
++cat confdefs.h >>conftest.$ac_ext
++cat >>conftest.$ac_ext <<_ACEOF
++/* end confdefs.h.  */
++$ac_includes_default
++#include <$ac_header>
++_ACEOF
++rm -f conftest.$ac_objext
++if { (ac_try="$ac_compile"
++case "(($ac_try" in
++  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
++  *) ac_try_echo=$ac_try;;
++esac
++eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
++  (eval "$ac_compile") 2>conftest.er1
++  ac_status=$?
++  grep -v '^ *+' conftest.er1 >conftest.err
++  rm -f conftest.er1
++  cat conftest.err >&5
++  echo "$as_me:$LINENO: \$? = $ac_status" >&5
++  (exit $ac_status); } && {
++	 test -z "$ac_c_werror_flag" ||
++	 test ! -s conftest.err
++       } && test -s conftest.$ac_objext; then
++  ac_header_compiler=yes
++else
++  echo "$as_me: failed program was:" >&5
++sed 's/^/| /' conftest.$ac_ext >&5
++
++	ac_header_compiler=no
++fi
++
++rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
++{ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
++echo "${ECHO_T}$ac_header_compiler" >&6; }
++
++# Is the header present?
++{ echo "$as_me:$LINENO: checking $ac_header presence" >&5
++echo $ECHO_N "checking $ac_header presence... $ECHO_C" >&6; }
++cat >conftest.$ac_ext <<_ACEOF
++/* confdefs.h.  */
++_ACEOF
++cat confdefs.h >>conftest.$ac_ext
++cat >>conftest.$ac_ext <<_ACEOF
++/* end confdefs.h.  */
++#include <$ac_header>
++_ACEOF
++if { (ac_try="$ac_cpp conftest.$ac_ext"
++case "(($ac_try" in
++  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
++  *) ac_try_echo=$ac_try;;
++esac
++eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
++  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
++  ac_status=$?
++  grep -v '^ *+' conftest.er1 >conftest.err
++  rm -f conftest.er1
++  cat conftest.err >&5
++  echo "$as_me:$LINENO: \$? = $ac_status" >&5
++  (exit $ac_status); } >/dev/null && {
++	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
++	 test ! -s conftest.err
++       }; then
++  ac_header_preproc=yes
++else
++  echo "$as_me: failed program was:" >&5
++sed 's/^/| /' conftest.$ac_ext >&5
++
++  ac_header_preproc=no
++fi
++
++rm -f conftest.err conftest.$ac_ext
++{ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
++echo "${ECHO_T}$ac_header_preproc" >&6; }
++
++# So?  What about this header?
++case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
++  yes:no: )
++    { echo "$as_me:$LINENO: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&5
++echo "$as_me: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&2;}
++    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the compiler's result" >&5
++echo "$as_me: WARNING: $ac_header: proceeding with the compiler's result" >&2;}
++    ac_header_preproc=yes
++    ;;
++  no:yes:* )
++    { echo "$as_me:$LINENO: WARNING: $ac_header: present but cannot be compiled" >&5
++echo "$as_me: WARNING: $ac_header: present but cannot be compiled" >&2;}
++    { echo "$as_me:$LINENO: WARNING: $ac_header:     check for missing prerequisite headers?" >&5
++echo "$as_me: WARNING: $ac_header:     check for missing prerequisite headers?" >&2;}
++    { echo "$as_me:$LINENO: WARNING: $ac_header: see the Autoconf documentation" >&5
++echo "$as_me: WARNING: $ac_header: see the Autoconf documentation" >&2;}
++    { echo "$as_me:$LINENO: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&5
++echo "$as_me: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&2;}
++    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the preprocessor's result" >&5
++echo "$as_me: WARNING: $ac_header: proceeding with the preprocessor's result" >&2;}
++    { echo "$as_me:$LINENO: WARNING: $ac_header: in the future, the compiler will take precedence" >&5
++echo "$as_me: WARNING: $ac_header: in the future, the compiler will take precedence" >&2;}
++    ( cat <<\_ASBOX
++## ---------------------------------------------------------- ##
++## Report this to Oracle Technology Network Berkeley DB forum ##
++## ---------------------------------------------------------- ##
++_ASBOX
++     ) | sed "s/^/$as_me: WARNING:     /" >&2
++    ;;
++esac
++{ echo "$as_me:$LINENO: checking for $ac_header" >&5
++echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
++if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
++  echo $ECHO_N "(cached) $ECHO_C" >&6
++else
++  eval "$as_ac_Header=\$ac_header_preproc"
++fi
++ac_res=`eval echo '${'$as_ac_Header'}'`
++	       { echo "$as_me:$LINENO: result: $ac_res" >&5
++echo "${ECHO_T}$ac_res" >&6; }
++
++fi
++if test `eval echo '${'$as_ac_Header'}'` = yes; then
++  cat >>confdefs.h <<_ACEOF
++#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
++_ACEOF
++
++fi
++
++done
++
++;;
++*)
+ for ac_header in execinfo.h sys/select.h sys/socket.h sys/time.h
+ do
+ as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+@@ -22515,6 +22663,8 @@
+ 
+ done
+ 
++;;
++esac
+ { echo "$as_me:$LINENO: checking for struct stat.st_blksize" >&5
+ echo $ECHO_N "checking for struct stat.st_blksize... $ECHO_C" >&6; }
+ if test "${ac_cv_member_struct_stat_st_blksize+set}" = set; then
+@@ -27697,6 +27847,18 @@
+ 
+ 
+ 
++ac_cv_sizeof_char_p=`echo $ac_cv_sizeof_char_p | tr -d '\015'`
++ac_cv_sizeof_unsigned_int=`echo $ac_cv_sizeof_unsigned_int | tr -d '\015'`
++ac_cv_sizeof_unsigned_char=`echo $ac_cv_sizeof_unsigned_char | tr -d '\015'`
++ac_cv_sizeof_unsigned_short=`echo $ac_cv_sizeof_unsigned_short | tr -d '\015'`
++ac_cv_sizeof_unsigned_long=`echo $ac_cv_sizeof_unsigned_long | tr -d '\015'`
++ac_cv_sizeof_unsigned_long_long=`echo $ac_cv_sizeof_unsigned_long_long | tr -d '\015'`
++ac_cv_sizeof_int=`echo $ac_cv_sizeof_int | tr -d '\015'`
++ac_cv_sizeof_char=`echo $ac_cv_sizeof_char | tr -d '\015'`
++ac_cv_sizeof_short=`echo $ac_cv_sizeof_short | tr -d '\015'`
++ac_cv_sizeof_long=`echo $ac_cv_sizeof_long | tr -d '\015'`
++ac_cv_sizeof_long_long=`echo $ac_cv_sizeof_long_long | tr -d '\015'`
++
+ # We look for u_char, u_short, u_int, u_long -- if we can't find them,
+ # we create our own.
+ 
+--- misc/db-4.7.25.NC/dist/ltmain.sh	2006-06-27 10:03:33.000000000 +0900
++++ misc/build/db-4.7.25.NC/dist/ltmain.sh	2009-07-11 13:38:07.388625000 +0900
+@@ -1103,6 +1103,7 @@
+     lib_search_path=`pwd`
+     inst_prefix_dir=
+ 
++    add_underscore=
+     avoid_version=no
+     dlfiles=
+     dlprefiles=
+@@ -1435,6 +1436,11 @@
+       prevarg="$arg"
+ 
+       case $arg in
++      -add-underscore)
++	add_underscore="--add-underscore"
++	continue
++	;;
++
+       -all-static)
+ 	if test -n "$link_static_flag"; then
+ 	  compile_command="$compile_command $link_static_flag"
+@@ -4869,7 +4875,7 @@
+ 	esac
+ 	# test for cygwin because mv fails w/o .exe extensions
+ 	case $host in
+-	  *cygwin*)
++	  *cygwin* | *mingw*)
+ 	    exeext=.exe
+ 	    outputname=`$echo $outputname|${SED} 's,.exe$,,'` ;;
+ 	  *) exeext= ;;

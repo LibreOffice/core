@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,6 +45,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=zlib-1.1.4
+TARFILE_MD5=abc405d0bdd3ee22782d7aa20e440f08
 
 PATCH_FILES=zlib-1.1.4.patch
 ADDITIONAL_FILES=makefile.mk
@@ -61,7 +58,8 @@ BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 OUT2INC= \
     zlib.h \
     zconf.h \
-    contrib$/minizip$/unzip.h
+    contrib$/minizip$/unzip.h \
+    contrib$/minizip$/ioapi.h
 
 PATCHED_HEADERS=$(INCCOM)$/patched$/zlib.h
 

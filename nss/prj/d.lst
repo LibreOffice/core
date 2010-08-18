@@ -1,0 +1,31 @@
+mkdir: %_DEST%\inc%_EXT%\mozilla\nspr
+mkdir: %_DEST%\inc%_EXT%\mozilla\nspr\obsolete
+mkdir: %_DEST%\inc%_EXT%\mozilla\nss
+mkdir: %_DEST%\lib%_EXT%\sqlite
+
+..\%__SRC%\inc\include\* %_DEST%\inc%_EXT%\mozilla\nspr
+..\%__SRC%\inc\include\obsolete\protypes.h %_DEST%\inc%_EXT%\mozilla\nspr\obsolete\protypes.h
+..\%__SRC%\inc\nss\*.h %_DEST%\inc%_EXT%\mozilla\nss
+
+..\%__SRC%\lib\libfreebl3.* %_DEST%\lib%_EXT%\libfreebl.*
+..\%__SRC%\lib\libfreebl_32fpu_3.* %_DEST%\lib%_EXT%\libfreebl_32fpu_3.*
+..\%__SRC%\lib\libfreebl_32int64_3.* %_DEST%\lib%_EXT%\libfreebl_32int64_3.*
+..\%__SRC%\lib\libfreebl_32int_3.* %_DEST%\lib%_EXT%\libfreebl_32int_3.*
+..\%__SRC%\lib\libfreebl_64int_3.* %_DEST%\lib%_EXT%\libfreebl_64int_3.*
+..\%__SRC%\lib\libfreebl_64fpu_3.* %_DEST%\lib%_EXT%\libfreebl_64fpu_3.*
+..\%__SRC%\lib\libnspr4.* %_DEST%\lib%_EXT%\libnspr4.*
+..\%__SRC%\lib\libnss3.* %_DEST%\lib%_EXT%\libnss3.*
+..\%__SRC%\lib\libnssckbi.* %_DEST%\lib%_EXT%\libnssckbi.*
+..\%__SRC%\lib\libnssdbm3.* %_DEST%\lib%_EXT%\libnssdbm3.*
+..\%__SRC%\lib\libnssutil3.* %_DEST%\lib%_EXT%\libnssutil3.*
+..\%__SRC%\lib\libplc4.* %_DEST%\lib%_EXT%\libplc4.*
+..\%__SRC%\lib\libplds4.* %_DEST%\lib%_EXT%\libplds4.*
+..\%__SRC%\lib\libsmime3.* %_DEST%\lib%_EXT%\libsmime3.*
+..\%__SRC%\lib\libsoftokn3.* %_DEST%\lib%_EXT%\libsoftokn3.*
+..\%__SRC%\lib\libssl3.* %_DEST%\lib%_EXT%\libssl3.*
+
+..\%__SRC%\lib\libsqlite3.* %_DEST%\lib%_EXT%\sqlite\libsqlite3.*
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%
+
+..\%__SRC%\bin\* %_DEST%\bin%_EXT%
+

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.39 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,7 +46,10 @@ all:
 
 
 TARFILE_NAME=Python-$(PYVERSION)
-PATCH_FILES=Python-$(PYVERSION).patch
+TARFILE_MD5=e81c2f0953aa60f8062c05a4673f2be0
+PATCH_FILES=\
+    Python-$(PYVERSION).patch \
+    Python-ssl.patch
 
 CONFIGURE_DIR=
 
@@ -80,11 +79,7 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure --prefix=$(MYCWD)/python-in
 .IF "$(OS)$(CPU)" == "SOLARISI"
 CONFIGURE_ACTION += --disable-ipv6
 .ENDIF
-.IF "$(OS)" == "IRIX"
-BUILD_ACTION=$(ENV_BUILD) gmake -j$(EXTMAXPROCESS) ; gmake install
-.ELSE
-BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; chmod -R ug+w $(MYCWD)/python-inst
-.ENDIF
+BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) && $(GNUMAKE) install && chmod -R ug+w $(MYCWD)/python-inst && chmod g+w Include
 .ELSE
 # ----------------------------------
 # WINDOWS
@@ -95,8 +90,12 @@ BUILD_DIR=
 MYCWD=$(shell cygpath -m $(shell @pwd))/$(INPATH)/misc/build
 python_CFLAGS=-mno-cygwin -mthreads
 python_LDFLAGS=-mno-cygwin -mthreads
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+python_LDFLAGS+=-shared-libgcc
+.ENDIF
+python_LDFLAGS+=-shared-libgcc -Wl,--enable-runtime-pseudo-reloc-v2
 CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CC="$(CC:s/guw.exe //)" CXX="$(CXX:s/guw.exe //)" MACHDEP=MINGW32 LN="cp -p" CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
-BUILD_ACTION=$(ENV_BUILD) make ; make install
+BUILD_ACTION=$(ENV_BUILD) make && make install
 .ELSE
 #PYTHONPATH:=..$/Lib
 #.EXPORT : PYTHONPATH

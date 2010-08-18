@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.1.2.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -49,6 +45,7 @@ all:
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=source-9.0.0.7-bj
+TARFILE_MD5=ada24d37d8d638b3d8a9985e80bc2978
 ADDITIONAL_FILES=build.xml
 TARFILE_ROOTDIR=src
 

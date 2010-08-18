@@ -1,0 +1,11 @@
+--- misc/libxslt-1.1.26/win32/configure.js	2007-08-03 15:41:02.000000000 +0200
++++ misc/build/libxslt-1.1.26/win32/configure.js	2009-05-07 13:09:42.294993200 +0200
+@@ -52,7 +52,7 @@
+ var dirSep = "\\";
+ var compiler = "msvc";
+ var cruntime = "/MD";
+-var vcmanifest = false;
++var vcmanifest = true;
+ var buildDebug = 0;
+ var buildStatic = 0;
+ var buildPrefix = ".";

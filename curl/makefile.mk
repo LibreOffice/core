@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.25 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,12 +41,22 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=curl-7.12.2
-PATCH_FILES=curl-7.12.2.patch
-CONVERTFILES= \
+TARFILE_NAME=curl-7.19.7
+TARFILE_MD5=ecb2e37e45c9933e2a963cabe03670ab
+PATCH_FILES=curl-7.19.7.patch
+
+.IF "$(GUI)"=="WNT"
+    PATCH_FILES+=curl-7.19.7_win.patch
+    .IF "$(COM)"=="GCC"
+        PATCH_FILES+=curl-7.19.7_mingw.patch
+    .ENDIF
+.ENDIF
+
+
+#CONVERTFILES= \
     lib$/Makefile.vc6
 
-ADDITIONAL_FILES= lib$/config-os2.h lib$/Makefile.os2
+#ADDITIONAL_FILES= lib$/config-os2.h lib$/Makefile.os2
 
 .IF "$(GUI)"=="UNX"
 
@@ -74,23 +80,27 @@ CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --disable-static CPPFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
 
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
-.IF "$(OS)"=="IRIX"
-BUILD_ACTION=gmake
-.ELSE
 BUILD_ACTION=$(GNUMAKE)
-.ENDIF
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 
-OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).3
+OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).4
 .ENDIF			# "$(GUI)"=="UNX"
 
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
+curl_CC=$(CC) -mthreads
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+curl_CC+=-shared-libgcc
+.ENDIF
+curl_LIBS=-lws2_32 -lwinmm
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+curl_LIBS+=-lstdc++_s
+.ENDIF
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 OBJDUMP="$(WRAPCMD) objdump" CFLAGS=-D_MT LDFLAGS="-L$(ILIB:s/;/ -L/)" LIBS="-lws2_32 -lwinmm -lmingwthrd"
+CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(curl_CC)" CPPFLAGS="$(INCLUDE)" OBJDUMP="objdump" LDFLAGS="-L$(ILIB:s/;/ -L/)" LIBS="$(curl_LIBS)"
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=make
 OUT2BIN=$(BUILD_DIR)$/.libs$/libcurl*.dll
@@ -107,9 +117,9 @@ EXCFLAGS="/EHsc /YX"
 
 BUILD_DIR=.$/lib
 .IF "$(debug)"==""
-BUILD_ACTION=nmake -f Makefile.vc6 cfg=release-dll EXCFLAGS=$(EXCFLAGS)
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS)
 .ELSE
-BUILD_ACTION=nmake -f Makefile.vc6 cfg=debug-dll EXCFLAGS=$(EXCFLAGS)
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS)
 .ENDIF
 
 OUT2BIN=$(BUILD_DIR)$/libcurl.dll
@@ -141,7 +151,9 @@ OUT2INC= \
     include$/curl$/curlver.h  		\
     include$/curl$/types.h  		\
     include$/curl$/stdcheaders.h  	\
-    include$/curl$/mprintf.h
+    include$/curl$/mprintf.h	    \
+    include$/curl$/curlbuild.h		\
+    include$/curl$/curlrules.h
 
 # --- Targets ------------------------------------------------------
 

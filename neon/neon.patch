@@ -1,6 +1,6 @@
---- misc/neon-0.28.2/src/config.h	2008-08-25 14:36:05.062500000 +0200
-+++ misc/build/neon-0.28.2/src/config.h	2008-08-25 14:32:17.656250000 +0200
-@@ -1 +1,479 @@
+--- misc/neon-0.29.3/src/config.h	2010-03-23 14:47:43.000000000 +0100
++++ misc/build/neon-0.29.3/src/config.h	2010-03-23 12:19:50.000000000 +0100
+@@ -1 +1,488 @@
 -dummy
 +
 +/* Define to specific EGD socket path */
@@ -22,7 +22,7 @@
 +
 +/* Define to 1 if you have the declaration of `h_errno', and to 0 if you
 +   don't. */
-+#ifdef WIN32 
++#ifdef WIN32
 +#define HAVE_DECL_H_ERRNO 1
 +#endif
 +
@@ -132,14 +132,14 @@
 +#endif
 +
 +/* Define if OpenSSL support is enabled */
-+/* #undef HAVE_OPENSSL */
-+#define HAVE_OPENSSL
++#define HAVE_OPENSSL 1
++
 +/* Define to 1 if you have the <openssl/opensslv.h> header file. */
-+/* #undef HAVE_OPENSSL_OPENSSLV_H */
 +#define HAVE_OPENSSL_OPENSSLV_H 1
++
 +/* Define to 1 if you have the <openssl/ssl.h> header file. */
-+/* #undef HAVE_OPENSSL_SSL_H */
 +#define HAVE_OPENSSL_SSL_H 1
++
 +/* Define to 1 if you have the `pipe' function. */
 +#define HAVE_PIPE 1
 +
@@ -304,7 +304,7 @@
 +#define NEON_IS_LIBRARY 1
 +
 +/* Define to be the neon version string */
-+#define NEON_VERSION "0.26.3"
++#define NEON_VERSION "0.29.3"
 +
 +/* Define to enable debugging */
 +/* #undef NE_DEBUGGING */
@@ -340,13 +340,13 @@
 +/* #undef NE_HAVE_SOCKS */
 +
 +/* Defined if SSL is supported */
-+/* #undef NE_HAVE_SSL */
 +#define NE_HAVE_SSL
++
 +/* Defined if TS_SSL is supported */
 +/* #undef NE_HAVE_TS_SSL */
 +
 +/* Defined if ZLIB is supported */
-+/* #undef NE_HAVE_ZLIB */
++#define NE_HAVE_ZLIB 1
 +
 +/* Define to be filename of an SSL CA root bundle */
 +/* #undef NE_SSL_CA_BUNDLE */
@@ -360,7 +360,7 @@
 +#define NE_VERSION_MAJOR (0)
 +
 +/* Define to be neon library minor version */
-+#define NE_VERSION_MINOR (26)
++#define NE_VERSION_MINOR (29)
 +
 +/* Define to be neon library patch version */
 +#define NE_VERSION_PATCH (3)
@@ -372,13 +372,13 @@
 +#define PACKAGE_NAME "neon"
 +
 +/* Define to the full name and version of this package. */
-+#define PACKAGE_STRING "neon 0.26.3"
++#define PACKAGE_STRING "neon 0.29.3"
 +
 +/* Define to the one symbol short name of this package. */
 +#define PACKAGE_TARNAME "neon"
 +
 +/* Define to the version of this package. */
-+#define PACKAGE_VERSION "0.26.3"
++#define PACKAGE_VERSION "0.29.3"
 +
 +/* The size of a `int', as computed by sizeof. */
 +#define SIZEOF_INT 4
@@ -455,6 +455,10 @@
 +/* Define to `unsigned' if <sys/types.h> does not define. */
 +/* #undef size_t */
 +
++/* MS IIS does not send Lock-Token response header after creation of a */
++/* new lock. This violates RFC, but... if we want to talk with this   */
++/* beast we need a workaround */
++#define IIS_LOCK_BUG_WORKAROUND 1
 +
 +/* Enable leak-tracking versions of ne_*alloc when NEON_MEMLEAK is enabled */
 +#ifdef NEON_MEMLEAK
@@ -469,28 +473,36 @@
 +
 +#include <io.h>
 +
-+#define HAVE_SSPI 1
-+
 +#define HAVE_MEMCPY 1
 +
-+#define strncasecmp	strnicmp
++#define strncasecmp strnicmp
 +#define inline      __inline
 +#define WIN32_LEAN_AND_MEAN
 +#define NOUSER
 +#define NOGDI
 +#define NONLS
-+#define NOCRYPT 
++#define NOCRYPT
++
 +#endif
---- misc/neon-0.28.2/src/makefile.mk	2008-08-25 14:36:04.640625000 +0200
-+++ misc/build/neon-0.28.2/src/makefile.mk	2008-08-25 14:32:17.671875000 +0200
-@@ -1 +1,54 @@
++
++#ifdef WIN32
++#define HAVE_SSPI 1
++#else
++#define HAVE_NTLM 1
++#endif
+--- misc/neon-0.29.3/src/makefile.mk	2010-03-23 14:47:43.000000000 +0100
++++ misc/build/neon-0.29.3/src/makefile.mk	2010-03-23 14:45:21.000000000 +0100
+@@ -1 +1,102 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..
 +
 +PRJNAME=neon
 +TARGET=neon
 +LIBTARGET=NO
++USE_DEFFILE=TRUE
++NO_DEFAULT_STL=TRUE
 +EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
++UWINAPILIB=
 +
 +# --- Settings -----------------------------------------------------
 +
@@ -502,12 +514,25 @@
 +
 +.IF "$(SYSTEM_LIBXML)" == "YES"
 +CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
++.ELSE
++LIBXMLINCDIR=external$/libxml
++CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXMLINCDIR)
 +.ENDIF
 +
++.IF "$(SYSTEM_OPENSSL)" == "YES"
++CFLAGS+= $(OPENSSL_CFLAGS)
++.ENDIF
++
++.IF "$(SYSTEM_ZLIB)" == "YES"
++CFLAGS+=-DSYSTEM_ZLIB
++.ELSE
++ZLIBINCDIR=external$/zlib
++CFLAGS+=-I$(SOLARINCDIR)$/$(ZLIBINCDIR)
++.ENDIF
 +
 +SLOFILES= \
 +        $(SLO)$/ne_207.obj \
-+        $(SLO)$/ne_acl.obj \
++        $(SLO)$/ne_acl3744.obj \
 +        $(SLO)$/ne_alloc.obj \
 +        $(SLO)$/ne_auth.obj \
 +        $(SLO)$/ne_basic.obj \
@@ -521,62 +546,81 @@
 +        $(SLO)$/ne_request.obj \
 +        $(SLO)$/ne_session.obj \
 +        $(SLO)$/ne_socket.obj \
-+        $(SLO)$/ne_sspi.obj \
++        $(SLO)$/ne_socks.obj \
 +        $(SLO)$/ne_string.obj \
 +        $(SLO)$/ne_uri.obj \
 +        $(SLO)$/ne_utils.obj \
 +        $(SLO)$/ne_xml.obj \
 +        $(SLO)$/ne_xmlreq.obj \
 +        $(SLO)$/ne_openssl.obj
-+        
-+#       $(SLO)$/ne_gnutls.obj \
-+#       $(SLO)$/ne_stubssl.obj 
 +
-+LIB1TARGET=$(SLB)$/$(TARGET).lib
-+LIB1ARCHIV=$(LB)$/lib$(TARGET).a
-+LIB1OBJFILES=$(SLOFILES)
++.IF "$(OS)"=="WNT"
++SLOFILES+=$(SLO)$/ne_sspi.obj
++.ELSE
++SLOFILES+=$(SLO)$/ne_ntlm.obj
++.ENDIF
++
++#       $(SLO)$/ne_gnutls.obj \
++#       $(SLO)$/ne_stubssl.obj
++
++SHL1OBJS=$(SLOFILES)
++SHL1TARGET=$(TARGET)
++SHL1VERSIONMAP=exports.map
++SHL1IMPLIB=i$(TARGET)
++
++SHL1STDLIBS+= $(LIBXML2LIB) \
++              $(ZLIB3RDLIB)
++
++.IF "$(GUI)"=="WNT"
++	SHL1STDLIBS+= $(WSOCK32LIB)
++	.IF "$(WINDOWS_VISTA_PSDK)" != ""
++		SHL1STDLIBS+= $(WS2_32LIB)
++	.ENDIF
++	SHL1STDLIBS+= $(OPENSSLLIB)
++.ELSE # WNT
++	.IF "$(OS)"=="SOLARIS"
++		SHL1STDLIBS+= -lnsl -lsocket -ldl
++	.ENDIF # SOLARIS
++	.IF "$(OS)"=="OS2"
++		SHL1STDLIBS+= pthread.lib libz.lib
++	.ENDIF # OS2
++	.IF "$(SYSTEM_OPENSSL)"=="YES"
++		SHL1STDLIBS+= $(OPENSSLLIB)
++	.ELSE
++		SHL1STDLIBS+= $(OPENSSLLIBST)
++	.ENDIF
++.ENDIF # WNT
++
++SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 +
 +# --- Targets ------------------------------------------------------
-+
++DEF1NAME=$(SHL1TARGET)
 +.INCLUDE :  target.mk
---- misc/neon-0.28.2/src/ne_207.c	2006-01-02 12:43:19.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_207.c	2009-01-09 10:12:39.563530700 +0100
-@@ -177,7 +177,6 @@
- 	/* Now we have the href, begin the response */
- 	if (p->start_response && HAVE_CDATA(p)) {
-             ne_uri ref, resolved;
--
-             if (ne_uri_parse(cdata, &ref) == 0) {
-                 ne_uri_resolve(&p->base, &ref, &resolved);
- 
-@@ -367,5 +366,4 @@
-     ne_request_destroy(req);
- 
-     return ret;
--}
--    
-+}    
---- misc/neon-0.28.2/src/ne_auth.c	2008-02-29 17:30:12.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_auth.c	2008-08-25 14:35:18.453125000 +0200
-@@ -598,9 +598,10 @@
+--- misc/neon-0.29.3/src/ne_auth.c	2009-12-30 22:29:30.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_auth.c	2010-03-23 12:19:50.000000000 +0100
+@@ -367,7 +367,7 @@
+ static int get_credentials(auth_session *sess, ne_buffer **errmsg, int attempt,
+                            struct auth_challenge *chall, char *pwbuf) 
+ {
+-    if (chall->handler->creds(chall->handler->userdata, sess->realm, 
++    if (chall->handler->creds(chall->handler->userdata, chall->protocol->name, sess->realm,
+                               chall->handler->attempt++, sess->username, pwbuf) == 0) {
+         return 0;
+     } else {
+@@ -617,6 +617,7 @@
      int ntlm = ne_strcasecmp(parms->protocol->name, "NTLM") == 0;
      int status;
      char *response = NULL;
--    
-+	char password[NE_ABUFSIZ];
-+
++    char password[NE_ABUFSIZ];
+     
      NE_DEBUG(NE_DBG_HTTPAUTH, "auth: SSPI challenge.\n");
--    
-+
-     if (!sess->sspi_context) {
-         ne_uri uri = {0};
- 
-@@ -614,8 +615,17 @@
+     
+@@ -633,8 +634,17 @@
              return status;
          }
      }
 +
-+	/* Authentification needs more than one http request. 
++	/* Authentification needs more than one http request.
 +	 * As long as authentification in progress use the existing credentials.
 +	 * Otherwise get new credentials.*/
 +	if (!parms->opaque)
@@ -590,16 +634,21 @@
      if (status) {
          return status;
      }
-@@ -1413,6 +1423,7 @@
-         /* note above: allow a 401 in response to a CONNECT request
-          * from a proxy since some buggy proxies send that. */
- 	NE_DEBUG(NE_DBG_HTTPAUTH, "auth: Got challenge (code %d).\n", status->code);
-+
- 	if (!auth_challenge(sess, areq->attempt++, auth_hdr)) {
- 	    ret = NE_RETRY;
- 	} else {
---- misc/neon-0.28.2/src/ne_defs.h	2006-10-24 21:40:09.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_defs.h	2008-08-25 14:32:17.875000000 +0200
+--- misc/neon-0.29.3/src/ne_auth.h	2009-09-01 22:13:12.000000000 +0200
++++ misc/build/neon-0.29.3/src/ne_auth.h	2010-03-23 12:19:50.000000000 +0100
+@@ -47,8 +47,8 @@
+  * Hint: if you just wish to attempt authentication just once (even if
+  * the user gets the username/password wrong), have the callback
+  * function use 'attempt' value as the function return value. */
+-typedef int (*ne_auth_creds)(void *userdata, const char *realm, int attempt,
+-			     char *username, char *password);
++typedef int (*ne_auth_creds)(void *userdata, const char * auth_protocol,
++                 const char *realm, int attempt, char *username, char *password);
+ 
+ /* Set callbacks to provide credentials for server and proxy
+  * authentication, using the default set of authentication protocols.
+--- misc/neon-0.29.3/src/ne_defs.h	2009-09-02 16:04:43.000000000 +0200
++++ misc/build/neon-0.29.3/src/ne_defs.h	2010-03-23 12:19:50.000000000 +0100
 @@ -41,7 +41,7 @@
  #endif
  
@@ -609,8 +658,76 @@
  #define ssize_t int
  #endif
  
---- misc/neon-0.28.2/src/ne_locks.h	2006-01-02 12:43:19.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_locks.h	2008-08-25 14:32:17.937500000 +0200
+--- misc/neon-0.29.3/src/ne_locks.c	2007-02-05 11:09:27.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_locks.c	2010-03-23 12:19:50.000000000 +0100
+@@ -579,6 +579,23 @@
+         const char *token = ne_get_response_header(ctx->req, "Lock-Token");
+         /* at the root element; retrieve the Lock-Token header,
+          * and bail if it wasn't given. */
++#ifdef IIS_LOCK_BUG_WORKAROUND
++        /* MS IIS violates RFC 2518/4918. It does not send a Lock-Token response
++           header upon successful creation of a new lock. As a workaround, we
++           will try to pick the lock token from the response body (although
++           this is not 100% safe in case of multiple activelocks). */
++        if (token == NULL)
++	  NE_DEBUG(NE_DBG_LOCKS,
++		   "Ignoring missing LOCK response Lock-Token header\n");
++
++        if (token != NULL) {
++	  if (token[0] == '<') token++;
++	  ctx->token = ne_strdup(token);
++	  ne_shave(ctx->token, ">");
++	  NE_DEBUG(NE_DBG_LOCKS, "lk_startelm: Finding token %s\n",
++		   ctx->token);
++        }
++#else
+         if (token == NULL) {
+             ne_xml_set_error(ctx->parser, 
+                              _("LOCK response missing Lock-Token header"));
+@@ -590,12 +607,28 @@
+         ne_shave(ctx->token, ">");
+         NE_DEBUG(NE_DBG_LOCKS, "lk_startelm: Finding token %s\n",
+                  ctx->token);
++#endif
+     }
+ 
+     /* TODO: only accept 'prop' as root for LOCK response */
+     if (!can_accept(parent, id))
+         return NE_XML_DECLINE;
+ 
++#ifdef IIS_LOCK_BUG_WORKAROUND
++    if (id == ELM_activelock && ctx->found) {
++      /* Found another activelock... */
++      const char *token = ne_get_response_header(ctx->req, "Lock-Token");
++      if (token == NULL) {
++	/* Response contains more than one activelock and no Lock-Token
++	 * response header. We are doomed. No safe workaround for IIS
++	 * lock bug possible. */
++	ne_xml_set_error(ctx->parser,
++			 _("LOCK response missing Lock-Token header and more than one activelock"));
++	return NE_XML_ABORT;
++      }
++    }
++#endif
++
+     if (id == ELM_activelock && !ctx->found) {
+ 	/* a new activelock */
+ 	ne_lock_free(&ctx->active);
+@@ -621,7 +654,12 @@
+ 	return -1;
+ 
+     if (state == ELM_activelock) {
++#ifdef IIS_LOCK_BUG_WORKAROUND
++      if (ctx->active.token) {
++        ctx->token = ne_strdup(ctx->active.token);
++#else
+ 	if (ctx->active.token && strcmp(ctx->active.token, ctx->token) == 0) {
++#endif
+ 	    ctx->found = 1;
+ 	}
+     }
+--- misc/neon-0.29.3/src/ne_locks.h	2006-01-02 12:43:19.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_locks.h	2010-03-23 12:19:50.000000000 +0100
 @@ -22,6 +22,10 @@
  #ifndef NE_LOCKS_H
  #define NE_LOCKS_H
@@ -622,18 +739,14 @@
  #include "ne_request.h" /* for ne_session + ne_request */
  #include "ne_uri.h" /* for ne_uri */
  
---- misc/neon-0.28.2/src/ne_sspi.c	2007-08-10 17:26:08.000000000 +0200
-+++ misc/build/neon-0.28.2/src/ne_sspi.c	2009-01-09 10:31:05.752056400 +0100
-@@ -202,9 +202,48 @@
-         return -1;
-     }
+--- misc/neon-0.29.3/src/ne_sspi.c	2007-08-10 17:26:08.000000000 +0200
++++ misc/build/neon-0.29.3/src/ne_sspi.c	2010-03-23 12:19:50.000000000 +0100
+@@ -206,6 +206,45 @@
+ }
  
-+    return 0; 
-+}
-+
-+/*
+ /*
 + * Simplification wrapper arround AcquireCredentialsHandle as most of
-+ * the parameters do not change. 
++ * the parameters do not change.
 + */
 +static int acquireCredentialsHandleForUsername(CredHandle * credentials, char *package, const char *username, const char *password)
 +{
@@ -666,13 +779,14 @@
 +        return -1;
 +    }
 +
-     return 0;
- }
- 
++    return 0;
++}
 +
- /*
++
++/*
   * Wrapper arround initializeSecurityContext.  Supplies several
   * default parameters as well as logging in case of errors.
+  */
 @@ -483,7 +522,7 @@
   * Processes received authentication tokens as well as supplies the
   * response token.
@@ -682,37 +796,9 @@
  {
      SecBufferDesc outBufferDesc;
      SecBuffer outBuffer;
-@@ -552,7 +591,7 @@
-             {
-                 freeBuffer(&outBufferDesc);
-                 sspiContext->authfinished = 0;
--                NE_DEBUG(NE_DBG_HTTPAUTH,"sspi: failing because starting over from failed try.\n");
-+                NE_DEBUG(NE_DBG_HTTPAUTH,"sspi: fai6 over from failed try.\n");
-                 return -1;
-             }
-             sspiContext->authfinished = 0;
-@@ -560,14 +599,26 @@
- 
+@@ -561,13 +600,22 @@
          /* Reset any existing context since we are starting over */
          resetContext(sspiContext);
-+		
-+		if (strlen(username) != 0) {
-+			if (acquireCredentialsHandleForUsername
-+				(&sspiContext->credentials, sspiContext->mechanism, username, password) != SEC_E_OK) {
-+					freeBuffer(&outBufferDesc);
-+					NE_DEBUG(NE_DBG_HTTPAUTH,
-+						"sspi: acquireCredentialsHandleForUsername failed.\n");
-+					return -1;
-+			}
-+		} else {
-+			if (acquireCredentialsHandle
-+				(&sspiContext->credentials, sspiContext->mechanism) != SEC_E_OK) {
-+					freeBuffer(&outBufferDesc);
-+					NE_DEBUG(NE_DBG_HTTPAUTH,
-+						"sspi: acquireCredentialsHandle failed.\n");
-+					return -1;
-+			}
-+		}
  
 -        if (acquireCredentialsHandle
 -            (&sspiContext->credentials, sspiContext->mechanism) != SEC_E_OK) {
@@ -721,12 +807,27 @@
 -                    "sspi: acquireCredentialsHandle failed.\n");
 -                return -1;
 -        }
-+        
++	if (strlen(username) != 0) {
++	  if (acquireCredentialsHandleForUsername
++	        (&sspiContext->credentials, sspiContext->mechanism, username, password) != SEC_E_OK) {
++	    freeBuffer(&outBufferDesc);
++	    NE_DEBUG(NE_DBG_HTTPAUTH, "sspi: acquireCredentialsHandleForUsername failed.\n");
++	    return -1;
++	  }
++	} else {
++	  if (acquireCredentialsHandle
++	      (&sspiContext->credentials, sspiContext->mechanism) != SEC_E_OK) {
++	    freeBuffer(&outBufferDesc);
++	    NE_DEBUG(NE_DBG_HTTPAUTH, "sspi: acquireCredentialsHandle failed.\n");
++	    return -1;
++	  }
++	}
++
  
          securityStatus =
              initializeSecurityContext(&sspiContext->credentials, NULL,
---- misc/neon-0.28.2/src/ne_sspi.h	2006-02-12 13:05:14.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_sspi.h	2008-08-25 14:32:18.000000000 +0200
+--- misc/neon-0.29.3/src/ne_sspi.h	2006-02-12 13:05:14.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_sspi.h	2010-03-23 12:19:50.000000000 +0100
 @@ -41,7 +41,7 @@
  int ne_sspi_clear_context(void *context);
  
@@ -736,8 +837,8 @@
  
  #endif /* HAVE_SSPI */
  
---- misc/neon-0.28.2/src/ne_uri.c	2007-12-05 12:04:47.000000000 +0100
-+++ misc/build/neon-0.28.2/src/ne_uri.c	2009-01-09 10:21:45.201720200 +0100
+--- misc/neon-0.29.3/src/ne_uri.c	2007-12-05 12:04:47.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_uri.c	2010-03-23 12:19:50.000000000 +0100
 @@ -42,7 +42,7 @@
  #include "ne_alloc.h"
  #include "ne_uri.h"
@@ -783,3 +884,44 @@
  /*   3x */ DG, DG, DG, DG, DG, DG, DG, DG, DG, DG, CL, SD, OT, SD, OT, QU,
  /*   4x */ AT, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL,
  /*   5x */ AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, GD, OT, GD, OT, US,
+--- misc/neon-0.29.3/src/ne_utils.c	2006-03-07 10:36:43.000000000 +0100
++++ misc/build/neon-0.29.3/src/ne_utils.c	2010-03-23 12:19:50.000000000 +0100
+@@ -118,6 +118,9 @@
+ #ifdef HAVE_GNUTLS
+     ", GNU TLS " LIBGNUTLS_VERSION
+ #endif /* HAVE_GNUTLS */
++#ifdef HAVE_SSPI
++    ", SSPI"
++#endif /* HAVE_SSPI */
+    "."
+ ;
+ 
+@@ -137,7 +140,7 @@
+     switch (feature) {
+ #if defined(NE_HAVE_SSL) || defined(NE_HAVE_ZLIB) || defined(NE_HAVE_IPV6) \
+     || defined(NE_HAVE_SOCKS) || defined(NE_HAVE_LFS) \
+-    || defined(NE_HAVE_TS_SSL) || defined(NE_HAVE_I18N)
++    || defined(NE_HAVE_TS_SSL) || defined(NE_HAVE_I18N) || defined(HAVE_SSPI)
+ #ifdef NE_HAVE_SSL
+     case NE_FEATURE_SSL:
+ #endif
+@@ -159,6 +162,9 @@
+ #ifdef NE_HAVE_I18N
+     case NE_FEATURE_I18N:
+ #endif
++#ifdef HAVE_SSPI
++    case NE_FEATURE_SSPI:
++#endif
+         return 1;
+ #endif /* NE_HAVE_* */
+     default:
+--- misc/neon-0.29.3/src/ne_utils.h	2007-07-16 08:54:57.000000000 +0200
++++ misc/build/neon-0.29.3/src/ne_utils.h	2010-03-23 12:19:50.000000000 +0100
+@@ -54,6 +54,7 @@
+ #define NE_FEATURE_SOCKS (5) /* SOCKSv5 support */
+ #define NE_FEATURE_TS_SSL (6) /* Thread-safe SSL/TLS support */
+ #define NE_FEATURE_I18N (7) /* i18n error message support */
++#define NE_FEATURE_SSPI (8) /* NTLM/Negotiate authentication protocol via SSPI */
+ 
+ /* Returns non-zero if library is built with support for the given
+  * NE_FEATURE_* feature code 'code'. */

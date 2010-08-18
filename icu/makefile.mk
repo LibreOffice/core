@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.40 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,9 +38,11 @@ TARGET=so_icu
 .INCLUDE :	icuversion.mk
 
 .IF "$(ICU_MICRO)"!="0"
-TARFILE_NAME=icu-$(ICU_MAJOR).$(ICU_MINOR).$(ICU_MICRO)
+TARFILE_NAME=icu4c-$(ICU_MAJOR)_$(ICU_MINOR)_$(ICU_MICRO)-src
+TARFILE_MD5=2f6ecca935948f7db92d925d88d0d078
 .ELSE
-TARFILE_NAME=icu-$(ICU_MAJOR).$(ICU_MINOR)
+TARFILE_NAME=icu4c-$(ICU_MAJOR)_$(ICU_MINOR)-src
+TARFILE_MD5=
 .ENDIF
 TARFILE_ROOTDIR=icu
 
@@ -86,11 +84,11 @@ icu_LDFLAGS+=-Wl,-z,noexecstack
 .ENDIF
 
 icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
+icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
 icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 
-BUILD_ACTION_SEP=;
 # remove conversion and transliteration data to reduce binary size.
-CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk $(BUILD_ACTION_SEP)
+CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
 
 # until someone introduces SOLARIS 64-bit builds
 .IF "$(OS)"=="SOLARIS"
@@ -149,11 +147,19 @@ OUT2BIN= \
 CONFIGURE_DIR=source
 .IF "$(COM)"=="GCC"
 CONFIGURE_ACTION=rm data/mappings/ucm*.mk data/translit/trn*.mk ;
-.IF "$(USE_MINGW)"=="cygwin"
-CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
-.ELSE
-CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="-L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+icu_LDFLAGS+=-shared-libgcc
 .ENDIF
+.IF "$(USE_MINGW)"=="cygwin"
+icu_LDFLAGS+=-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api
+.ENDIF
+icu_LDFLAGS+=-L$(COMPATH)$/lib
+icu_LIBS=-lmingwthrd
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+icu_LIBS+=-lstdc++_s
+.ENDIF
+icu_LDFLAGS+=-Wl,--enable-runtime-pseudo-reloc-v2
+CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
 
 #CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
@@ -180,11 +186,6 @@ OUT2BIN= \
     $(BUILD_DIR)$/bin$/gencmn.exe
 
 .ELSE
-.IF "$(USE_SHELL)"=="4nt"
-BUILD_ACTION_SEP=^
-.ELSE
-BUILD_ACTION_SEP=;
-.ENDIF			# "$(USE_SHELL)"=="4nt"
 BUILD_DIR=source
 .IF "full_debug" == ""
 
@@ -250,7 +251,7 @@ OUT2BIN= \
 .IF "$(BINARY_PATCH_FILES)"!=""
 
 $(PACKAGE_DIR)$/so_add_binary :  $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
-    cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)$(BINARY_PATCH_FILES) | tar $(TAR_EXCLUDE_SWITCH) -xvf -
+    cd $(PACKAGE_DIR) && gunzip -c $(BACK_PATH)$(BINARY_PATCH_FILES) | tar -xvf -
     $(TOUCH) $(PACKAGE_DIR)$/so_add_binary
 
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/so_add_binary

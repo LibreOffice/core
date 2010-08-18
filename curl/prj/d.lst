@@ -6,6 +6,8 @@ mkdir: %_DEST%\inc%_EXT%\external\curl
 ..\%__SRC%\inc\multi.h %_DEST%\inc%_EXT%\external\curl\multi.h
 ..\%__SRC%\inc\stdcheaders.h %_DEST%\inc%_EXT%\external\curl\stdcheaders.h
 ..\%__SRC%\inc\types.h %_DEST%\inc%_EXT%\external\curl\types.h
+..\%__SRC%\inc\curlbuild.h %_DEST%\inc%_EXT%\external\curl\curlbuild.h
+..\%__SRC%\inc\curlrules.h %_DEST%\inc%_EXT%\external\curl\curlrules.h
 
 ..\%__SRC%\bin\libcurl*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\libcurl.* %_DEST%\lib%_EXT%\libcurl.*

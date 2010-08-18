@@ -1,0 +1,12 @@
+--- misc/nss-3.12.6/mozilla/security/nss/Makefile	2008-12-03 00:24:39.000000000 +0100
++++ misc/build/nss-3.12.6/mozilla/security/nss/Makefile	2009-11-27 13:36:22.662753328 +0100
+@@ -104,6 +104,9 @@
+ ifeq ($(OS_TARGET),WIN95)
+ NSPR_CONFIGURE_OPTS += --enable-win32-target=WIN95
+ endif
++ifdef MACOS_SDK_DIR
++NSPR_CONFIGURE_OPTS += --with-macos-sdk=$(MACOS_SDK_DIR)
++endif
+ ifdef USE_DEBUG_RTL
+ NSPR_CONFIGURE_OPTS += --enable-debug-rtl
+ endif

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.24 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,22 +42,33 @@ all:
 
 # --- Files --------------------------------------------------------
 
-LIBXML2VERSION=2.6.31
+LIBXML2VERSION=2.7.6
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
-#.IF "$(OS)$(COM)"=="WNTGCC"
-#PATCH_FILES=$(TARFILE_NAME)-mingw.patch
-#.ELSE
-PATCH_FILES=$(TARFILE_NAME).patch
-#.ENDIF
+TARFILE_MD5=7740a8ec23878a2f50120e1faa2730f2
+
+# libxml2-global-symbols: #i112480#: Solaris ld won't export non-listed symbols
+PATCH_FILES=libxml2-configure.patch \
+            libxml2-mingw.patch \
+            libxml2-gnome599717.patch \
+            libxml2-global-symbols.patch \
+
 
 # This is only for UNX environment now
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
+xml2_CC=$(CC) -mthreads
+.IF "$(MINGW_SHARED_GCCLIB)"=="YES"
+xml2_CC+=-shared-libgcc
+.ENDIF
+xml2_LIBS=-lws2_32
+.IF "$(MINGW_SHARED_GXXLIB)"=="YES"
+xml2_LIBS+=-lstdc++_s
+.ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --without-debug --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CFLAGS=-D_MT LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc -L$(ILIB:s/;/ -L/)" LIBS="-lws2_32 -lmingwthrd" OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=no --without-debug --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(xml2_CC)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2 -L$(ILIB:s/;/ -L/)" LIBS="$(xml2_LIBS)" OBJDUMP=objdump
 BUILD_ACTION=$(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
@@ -90,10 +97,10 @@ xml2_LDFLAGS+=-Wl,-z,noexecstack
 CONFIGURE_DIR=
 .IF "$(OS)"=="OS2"
 CONFIGURE_ACTION=sh .$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=yes --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS)" CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=yes --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS)" CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
 .ELSE
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS) $(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=no --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS) $(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
 .ENDIF
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)

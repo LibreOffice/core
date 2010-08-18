@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,17 +36,16 @@ TARGET=hunspell
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hunspell-1.2.8
-TARFILE_ROOTDIR=hunspell-1.2.8
-
-#ADDITIONAL_FILES += src/hunspell/makefile.mk
+TARFILE_NAME=hunspell-1.2.9
+TARFILE_MD5=68dd2e8253d9a7930e9fd50e2d7220d0
+ADDITIONAL_FILES+=config.h
 
 PATCH_FILES=\
-    hunspell-1.2.8.patch \
-    hunspell-consts-1.2.8.patch # hunspell#2064983
+    hunspell-wntconfig.patch \
+    hunspell-solaris.patch \
+    hunspell-stacksmash.patch
 
 .IF "$(GUI)"=="UNX"
-#CONFIGURE_DIR=$(BUILD_DIR)
 
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) configure
@@ -62,8 +57,10 @@ CONFIGURE_FLAGS+= CFLAGS=-xc99=none
 .IF "$(SYSBASE)"!=""
 .IF "$(EXTRA_CFLAGS)"!=""
 CONFIGURE_FLAGS+= CFLAGS="$(EXTRA_CFLAGS)" CXXFLAGS="$(EXTRA_CFLAGS)"
-.ENDIF # "$(SYSBASE)"!=""
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
+.ELIF "$(OS)"=="MACOSX" # "$(SYSBASE)"!=""
+CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
+.ENDIF
 
 BUILD_ACTION=make && make check
 
@@ -74,8 +71,11 @@ OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
+PATCH_FILES=\
+    hunspell-mingw.patch
+
 CONFIGURE_ACTION=configure
-CONFIGURE_FLAGS= --disable-shared --with-pic
+CONFIGURE_FLAGS= --disable-shared --with-pic LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
 BUILD_ACTION=make
 OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
 .ELSE
