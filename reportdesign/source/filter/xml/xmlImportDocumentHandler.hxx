@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlImportDocumentHandler.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -90,6 +87,7 @@ private:
     ::osl::Mutex                                                                        m_aMutex;
     ::std::vector< ::rtl::OUString>                                                     m_aMasterFields;
     ::std::vector< ::rtl::OUString>                                                     m_aDetailFields;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >           m_aArguments;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler >    m_xDelegatee;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >             m_xProxy;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: indexcollection.cxx,v $
- * $Revision: 1.8.254.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,7 +116,8 @@ namespace dbaui
 
         // loop'n'compare
         Indexes::const_iterator aSearch = m_aIndexes.begin();
-        for (; aSearch != m_aIndexes.end(); ++aSearch)
+        Indexes::const_iterator aEnd = m_aIndexes.end();
+        for (; aSearch != aEnd; ++aSearch)
             if (aSearch->sName == sNameCompare)
                 break;
 
@@ -133,7 +131,8 @@ namespace dbaui
 
         // loop'n'compare
         Indexes::iterator aSearch = m_aIndexes.begin();
-        for (; aSearch != m_aIndexes.end(); ++aSearch)
+        Indexes::iterator aEnd = m_aIndexes.end();
+        for (; aSearch != aEnd; ++aSearch)
             if (aSearch->sName == sNameCompare)
                 break;
 
@@ -147,7 +146,8 @@ namespace dbaui
 
         // loop'n'compare
         Indexes::const_iterator aSearch = m_aIndexes.begin();
-        for (; aSearch != m_aIndexes.end(); ++aSearch)
+        Indexes::const_iterator aEnd = m_aIndexes.end();
+        for (; aSearch != aEnd; ++aSearch)
             if (aSearch->getOriginalName() == sNameCompare)
                 break;
 
@@ -161,7 +161,8 @@ namespace dbaui
 
         // loop'n'compare
         Indexes::iterator aSearch = m_aIndexes.begin();
-        for (; aSearch != m_aIndexes.end(); ++aSearch)
+        Indexes::iterator aEnd = m_aIndexes.end();
+        for (; aSearch != aEnd; ++aSearch)
             if (aSearch->getOriginalName() == sNameCompare)
                 break;
 

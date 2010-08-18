@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: JoinExchange.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,8 +89,9 @@ namespace dbaui
     //------------------------------------------------------------------------
     sal_Bool OJoinExchObj::isFormatAvailable( const DataFlavorExVector& _rFormats ,SotFormatStringId _nSlotID)
     {
+        DataFlavorExVector::const_iterator aCheckEnd = _rFormats.end();
         for (   DataFlavorExVector::const_iterator aCheck = _rFormats.begin();
-                aCheck != _rFormats.end();
+                aCheck != aCheckEnd;
                 ++aCheck
             )
         {

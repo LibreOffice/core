@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: docinteraction.hxx,v $
- * $Revision: 1.1.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,15 +53,6 @@ namespace dbmm
     class InteractionHandler
     {
     public:
-        /** creates an interaction handler by instantiating a css.task.InteractionHandler
-            component at the given component context.
-        */
-        InteractionHandler( const ::comphelper::ComponentContext& _rContext );
-
-        /** creates an InteractionHandler instance, using the given existing UNO handler.
-        */
-        InteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxHandler );
-
         /** creates an interaction handler by instantiating a css.task.InteractionHandler
             component at the given component context, or using the given document's interaction handler,
             if one is specified in the document's media descriptor.

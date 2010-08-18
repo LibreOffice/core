@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: brwctrlr.hxx,v $
- * $Revision: 1.40.6.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +53,6 @@
 #include <svtools/transfer.hxx>
 #include <osl/mutex.hxx>
 #include <vos/thread.hxx>
-#include <svtools/cancel.hxx>
 #include <cppuhelper/implbase9.hxx>
 #include <svtools/cliplistener.hxx>
 
@@ -64,9 +60,13 @@ class ResMgr;
 struct FmFoundRecordInformation;
 struct FmSearchContext;
 
+namespace dbtools
+{
+    class SQLExceptionInfo;
+}
+
 namespace dbaui
 {
-
     // =========================================================================
 
     typedef ::cppu::ImplInheritanceHelper9  <   OGenericUnoController
@@ -101,6 +101,8 @@ namespace dbaui
         mutable ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
                                                                                         m_xParser;      // for sorting 'n filtering
 
+        sal_Int32               m_nRowSetPrivileges;    // cached Privileges property of m_xRowSet
+
         AutoTimer               m_aInvalidateClipboard;             // for testing the state of the CUT/COPY/PASTE-slots
 
         TransferableDataHelper  m_aSystemClipboard;     // content of the clipboard
@@ -110,13 +112,14 @@ namespace dbaui
         ::osl::Mutex            m_aAsyncLoadSafety;     // for multi-thread access to our members
 
         OAsyncronousLink        m_aAsyncGetCellFocus;
+        OAsyncronousLink        m_aAsyncDisplayError;
+        ::dbtools::SQLExceptionInfo m_aCurrentError;
 
         String                  m_sStateSaveRecord;
         String                  m_sStateUndoRecord;
         ::rtl::OUString         m_sModuleIdentifier;
 
         // members for asynchronous load operations
-        ::vos::OThread*         m_pLoadThread;          // the thread wherein the form is loaded
         FormControllerImpl*     m_pFormControllerImpl;  // implementing the XFormController
 
         ULONG                   m_nPendingLoadFinished;         // the event used to tell ourself that the load is finished
@@ -124,7 +127,7 @@ namespace dbaui
 
         sal_Bool                m_bLoadCanceled : 1;            // the load was canceled somehow
         sal_Bool                m_bClosingKillOpen : 1;         // are we killing the load thread because we are to be suspended ?
-        sal_Bool                m_bErrorOccured : 1;            // see enter-/leaveFormAction
+        bool                    m_bCannotSelectUnfiltered : 1;  // recieved an DATA_CANNOT_SELECT_UNFILTERED error
 
     protected:
         class FormErrorHelper
@@ -151,7 +154,7 @@ namespace dbaui
         sal_Bool    isValidCursor() const;  // checks the ::com::sun::star::data::XDatabaseCursor-interface of m_xRowSet
         sal_Bool    isLoaded() const;
         sal_Bool    loadingCancelled() const { return m_bLoadCanceled; }
-        void        setLoadingStarted()     { m_bLoadCanceled = sal_False; }
+        void        onStartLoading( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable );
         void        setLoadingCancelled()   { m_bLoadCanceled = sal_True; }
 
         const TransferableDataHelper&
@@ -160,7 +163,7 @@ namespace dbaui
     public:
         SbaXDataBrowserController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
 
-        UnoDataBrowserView* getBrowserView() const { return static_cast< UnoDataBrowserView*>(m_pView); }
+        UnoDataBrowserView* getBrowserView() const { return static_cast< UnoDataBrowserView*>(getView()); }
         // late construction
         virtual sal_Bool Construct(Window* pParent);
 
@@ -230,6 +233,8 @@ namespace dbaui
         virtual void CellDeactivated();
         virtual void BeforeDrop();
         virtual void AfterDrop();
+
+    public:
 
     protected:
         virtual ~SbaXDataBrowserController();
@@ -311,15 +316,9 @@ namespace dbaui
             // a PropertySet corresponding to the cursor field a column is bound to
             // if nViewPos is (sal_uInt16)-1 (the default) then the field for the current column will be retrieved
 
-        sal_Bool PendingLoad() const { return m_pLoadThread != NULL; }
-            // is there an asyncronous load operation in progress ?
-
         void enterFormAction();
         void leaveFormAction();
-        bool errorOccured() const { return m_bErrorOccured; }
-            // As many form actions don't throw an exception but call their error handler instead we don't have
-            // a chance to recognize errors by exception catching.
-            // So for error recognition the above methods may be used.
+
         // init the formatter if form changes
         void initFormatter();
 
@@ -339,12 +338,15 @@ namespace dbaui
         void        ExecuteSearch();
 
         void        initializeParser() const; // changes the mutable member m_xParser
-        void        applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving = ::rtl::OUString());
-        void        applyParserOrder(const ::rtl::OUString& _rOldOrder);
+        void        applyParserFilter(const ::rtl::OUString& _rOldFilter, sal_Bool _bOldFilterApplied,const ::rtl::OUString& _sOldHaving,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
+        void        applyParserOrder(const ::rtl::OUString& _rOldOrder,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >& _xParser);
 
         sal_Int16   getCurrentColumnPosition();
         void        setCurrentColumnPosition( sal_Int16 _nPos );
         void        addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
+
+        void        impl_checkForCannotSelectUnfiltered( const ::dbtools::SQLExceptionInfo& _rError );
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   createParser_nothrow();
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, AutoTimer* );
@@ -355,71 +357,9 @@ namespace dbaui
         DECL_LINK(OnFoundData, FmFoundRecordInformation*);
         DECL_LINK(OnCanceledNotFound, FmFoundRecordInformation*);
 
-        // callbacks for the completed loading process
-        DECL_LINK(OnOpenFinished, void*);
-        DECL_LINK(OnOpenFinishedMainThread, void*);
-            // OnOpenFinsihed is called in a foreign thread (the one which does the loading) so it simply posts the
-            // OnOpenFinishedMainThread-link (which will be called in the main thread, then) as user event.
-            // (the alternative would be to lock the SolarMutex in OnOpenFinished to avoid problems with the needed updates,
-            // but playing with this mutex seems very hazardous to me ....)
         DECL_LINK(OnAsyncGetCellFocus, void*);
-    };
 
-    //==================================================================
-    // LoadFormThread - a thread for asynchronously loading a form
-    //==================================================================
-    class LoadFormThread : public ::vos::OThread
-    {
-        ::osl::Mutex    m_aAccessSafety;        // for securing the multi-thread access
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >                 m_xRowSet;          // the data source to be loaded
-
-        Link                    m_aTerminationHandler;  // the handler to be called upon termination
-        sal_Bool                    m_bCanceled;            // StopIt has been called ?
-        String                  m_sStopperCaption;      // the caption for the ThreadStopper
-
-        // a ThreadStopper will be instantiated so that the open can be canceled via the UI
-        class ThreadStopper : protected SfxCancellable
-        {
-            LoadFormThread* m_pOwner;
-
-        public:
-            ThreadStopper(LoadFormThread* pOwner, const String& rTitle);
-            virtual ~ThreadStopper() { }
-
-            virtual void    Cancel();
-
-            virtual void    OwnerTerminated();
-            // Normally the Owner (a LoadFormThread) would delete the stopper when terminated.
-            // Unfortunally the application doesn't remove the 'red light' when a SfxCancellable is deleted
-            // if it (the app) can't acquire the solar mutex. The deletion is IGNORED then. So we have to make
-            // sure that a) the stopper is deleted from inside the main thread (where the solar mutex is locked)
-            // and b) that in the time between the termination of the thread and the deletion of the stopper
-            // the latter doesn't access the former.
-            // The OwnerTerminated cares for both aspects.
-            // SO DON'T DELETE THE STOPPER EXPLICITLY !
-
-        protected:
-            // HACK HACK HACK HACK HACK : this should be private, but MSVC doesn't accept the LINK-macro then ....
-            DECL_LINK(OnDeleteInMainThread, ThreadStopper*);
-        };
-        friend class LoadFormThread::ThreadStopper;
-
-    public:
-        LoadFormThread(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & _xRowSet, const String& _rStopperCaption) : m_xRowSet(_xRowSet), m_sStopperCaption(_rStopperCaption) { }
-
-        virtual void SAL_CALL run();
-        virtual void SAL_CALL onTerminated();
-
-        void SetTerminationHdl(const Link& aTermHdl) { m_aTerminationHandler = aTermHdl; }
-            // the handler will be called synchronously (the parameter is a pointer to the thread)
-            // if no termination handler is set, the thread disposes the data source and deletes
-            // itself upon termination
-
-        // cancels the process. to be called from another thread (of course ;)
-        void StopIt();
-
-        // ask if the load canceled
-        sal_Bool WasCanceled() const { return m_bCanceled; }
+        DECL_LINK( OnAsyncDisplayError, void* );
     };
 }
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewsWindow.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,7 +38,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <svx/svdedtv.hxx>
 #include <SectionView.hxx>
-
+#include <unotools/options.hxx>
 #include <list>
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -117,7 +114,7 @@ namespace rptui
     };
 
     class OViewsWindow :    public Window
-                        ,   public SfxListener
+                        ,   public utl::ConfigurationListener
                         ,   public IMarkedSection
     {
         typedef ::std::multimap<Rectangle,::std::pair<SdrObject*,OSectionView*>,RectangleLess>      TRectangleMap;
@@ -161,10 +158,9 @@ namespace rptui
         // windows overload
         virtual void MouseButtonDown( const MouseEvent& rMEvt );
         virtual void MouseButtonUp( const MouseEvent& rMEvt );
-        using Window::Notify;
+
         virtual void Paint( const Rectangle& rRect );
-        // SfxListener
-        virtual void Notify(SfxBroadcaster & rBc, SfxHint const & rHint);
+        virtual void ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 );
     public:
         OViewsWindow(
             OReportWindow* _pReportWindow);
@@ -203,8 +199,6 @@ namespace rptui
         */
         ::boost::shared_ptr<OSectionWindow> getSectionWindow(const USHORT _nPos) const;
 
-        void            showView(USHORT _nPos,BOOL _bShow);
-
         /** turns the grid on or off
         *
         * \param _bVisible
@@ -212,7 +206,6 @@ namespace rptui
         void            toggleGrid(sal_Bool _bVisible);
         void            setGridSnap(BOOL bOn);
         void            setDragStripes(BOOL bOn);
-        BOOL            isDragStripes() const;
 
         /** returns the total accumulated height of all sections until _pSection is reached
         */
@@ -230,7 +223,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        BOOL IsPasteAllowed();
+        BOOL IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -247,9 +240,7 @@ namespace rptui
 
         /** returns <TRUE/> when a object is marked
         */
-        BOOL HasSelection();
-
-        void            SectionHasFocus(OReportSection* _pSection,BOOL _bHasFocus);
+        BOOL HasSelection() const;
 
         /** unmark all objects on the views without the given one.
         *

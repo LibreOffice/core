@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: QueryViewSwitch.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +75,7 @@ namespace dbaui
                 old state)
         */
         bool     switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo );
+        void     forceInitialView();
         sal_Bool isSlotEnabled(sal_Int32 _nSlotId);
         void     setSlotEnabled(sal_Int32 _nSlotId,sal_Bool _bEnable);
         void     setNoneVisbleRow(sal_Int32 _nRows);
@@ -96,6 +94,10 @@ namespace dbaui
     protected:
         // return the Rectangle where I can paint myself
         virtual void resizeDocumentView(Rectangle& rRect);
+
+    private:
+        void    impl_forceSQLView();
+        bool    impl_postViewSwitch( const bool i_bGraphicalDesign, const bool i_bSuccess );
     };
 }
 #endif // DBAUI_QUERYVIEWSWITCH_HXX

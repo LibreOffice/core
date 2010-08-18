@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbloader.cxx,v $
- * $Revision: 1.36.2.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -324,7 +321,16 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
         catch(const Exception&)
         {
-            DBG_UNHANDLED_EXCEPTION();
+            // Does this need to be shown to the user?
+            bSuccess = false;
+            try
+            {
+                ::comphelper::disposeComponent( xController );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
     }
 
@@ -342,7 +348,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     }
     else
         if ( rListener.is() )
-        rListener->loadCancelled( this );
+            rListener->loadCancelled( this );
 }
 
 // -----------------------------------------------------------------------

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConnectionHelper.cxx,v $
- * $Revision: 1.19.48.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,25 +42,25 @@
 #include "dbu_misc.hrc"
 #endif
 #ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #endif
 #ifndef _SFX_FCONTNR_HXX
 #include <sfx2/fcontnr.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 #ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
@@ -102,7 +99,7 @@
 #include "dsselect.hxx"
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
@@ -155,9 +152,11 @@
 #endif
 
 #ifdef _ADO_DATALINK_BROWSE_
-typedef void*               HWND;
-typedef void*               HMENU;
-typedef void*               HDC;
+#if defined( WNT )
+    #include <tools/prewin.h>
+    #include <windows.h>
+    #include <tools/postwin.h>
+#endif
 #ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
 #endif
@@ -205,6 +204,7 @@ DBG_NAME(OConnectionHelper)
             m_pCollection = pCollectionItem->getCollection();
         m_aPB_Connection.SetClickHdl(LINK(this, OConnectionHelper, OnBrowseConnections));
         DBG_ASSERT(m_pCollection, "OConnectionHelper::OConnectionHelper : really need a DSN type collection !");
+        m_aConnectionURL.SetTypeCollection(m_pCollection);
     }
 
 
@@ -224,7 +224,7 @@ DBG_NAME(OConnectionHelper)
 
         m_aFT_Connection.Show();
         m_aConnectionURL.Show();
-        m_aConnectionURL.ShowPrefix( ::dbaccess::DST_JDBC == m_eType );
+        m_aConnectionURL.ShowPrefix( ::dbaccess::DST_JDBC == m_pCollection->determineType(m_eType) );
 
         BOOL bEnableBrowseButton = m_pCollection->supportsBrowsing( m_eType );
         m_aPB_Connection.Show( bEnableBrowseButton );
@@ -251,21 +251,16 @@ DBG_NAME(OConnectionHelper)
         if ( !m_pAdminDialog )
             return;
 
-        switch ( m_eType )
-        {
-        case  ::dbaccess::DST_CALC:
+        if ( m_pCollection->isFileSystemBased(m_eType) )
             m_pAdminDialog->enableConfirmSettings( getURLNoPrefix().Len() > 0 );
-            break;
-        default:
-            break;
-        }
     }
 
     // -----------------------------------------------------------------------
     IMPL_LINK(OConnectionHelper, OnBrowseConnections, PushButton*, /*_pButton*/)
     {
         OSL_ENSURE(m_pAdminDialog,"No Admin dialog set! ->GPF");
-        switch ( m_eType )
+        const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
+        switch ( eType )
         {
             case  ::dbaccess::DST_DBASE:
             case  ::dbaccess::DST_FLAT:
@@ -322,15 +317,16 @@ DBG_NAME(OConnectionHelper)
             break;
             case  ::dbaccess::DST_CALC:
             {
+                SvtModuleOptions aModule;
                 ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN
-                                                ,SvtModuleOptions().GetFactoryEmptyDocumentURL(SvtModuleOptions::E_CALC)
+                                                ,aModule.GetFactoryEmptyDocumentURL(SvtModuleOptions::E_CALC)
                                                 ,SFX_FILTER_IMPORT);
                 askForFileName(aFileDlg);
             }
             break;
             case  ::dbaccess::DST_MSACCESS:
             {
-                ::rtl::OUString sExt(RTL_CONSTASCII_USTRINGPARAM("*.mdb"));
+                const ::rtl::OUString sExt(RTL_CONSTASCII_USTRINGPARAM("*.mdb"));
                 String sFilterName(ModuleRes (STR_MSACCESS_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN);
                 aFileDlg.AddFilter(sFilterName,sExt);
@@ -340,7 +336,7 @@ DBG_NAME(OConnectionHelper)
             break;
             case  ::dbaccess::DST_MSACCESS_2007:
             {
-                ::rtl::OUString sAccdb(RTL_CONSTASCII_USTRINGPARAM("*.accdb"));
+                const ::rtl::OUString sAccdb(RTL_CONSTASCII_USTRINGPARAM("*.accdb"));
                 String sFilterName2(ModuleRes (STR_MSACCESS_2007_FILTERNAME));
                 ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN);
                 aFileDlg.AddFilter(sFilterName2,sAccdb);
@@ -411,7 +407,7 @@ DBG_NAME(OConnectionHelper)
                         aInstalledDBs       = getInstalledAdabasDBs(sAdabasConfigDir,sAdabasWorkDir);
                     }
 
-                    ODatasourceSelectDialog aSelector(GetParent(), aInstalledDBs, m_eType,m_pItemSetHelper->getWriteOutputSet());
+                    ODatasourceSelectDialog aSelector(GetParent(), aInstalledDBs, true,m_pItemSetHelper->getWriteOutputSet());
                     if (RET_OK == aSelector.Execute())
                     {
                         setURLNoPrefix(aSelector.GetSelected());
@@ -433,9 +429,9 @@ DBG_NAME(OConnectionHelper)
             case  ::dbaccess::DST_ODBC:
             {
                 // collect all ODBC data source names
-                ::rtl::OUString sCurrDatasource=getURLNoPrefix();
+                ::rtl::OUString sCurrDatasource = getURLNoPrefix();
                 ::rtl::OUString sDataSource;
-                if ( getSelectedDataSource(m_eType,sDataSource,sCurrDatasource) && sDataSource.getLength() )
+                if ( getSelectedDataSource(sDataSource,sCurrDatasource) && sDataSource.getLength() )
                 {
                     setURLNoPrefix(sDataSource);
                     SetRoadmapStateValue(sal_True);
@@ -467,7 +463,7 @@ DBG_NAME(OConnectionHelper)
             case  ::dbaccess::DST_THUNDERBIRD:
             {
                 MozillaProductType profileType = MozillaProductType_Mozilla;
-                if (m_eType ==  ::dbaccess::DST_THUNDERBIRD)
+                if (eType ==  ::dbaccess::DST_THUNDERBIRD)
                     profileType = MozillaProductType_Thunderbird;
 
                 Reference<XMultiServiceFactory> xFactory = ::comphelper::getProcessServiceFactory();
@@ -494,7 +490,7 @@ DBG_NAME(OConnectionHelper)
 
 
                     // excute the select dialog
-                    ODatasourceSelectDialog aSelector(GetParent(), aProfiles, m_eType);
+                    ODatasourceSelectDialog aSelector(GetParent(), aProfiles, eType);
                     ::rtl::OUString sOldProfile=getURLNoPrefix();
 
                     if (sOldProfile.getLength())
@@ -537,7 +533,7 @@ DBG_NAME(OConnectionHelper)
                 String sTypePrefix, sFileURLEncoded;
                 if ( _bPrefix )
                 {
-                    sTypePrefix = m_pCollection->getDatasourcePrefix( m_eType );
+                    sTypePrefix = m_pCollection->getPrefix( m_eType );
                     sFileURLEncoded = m_pCollection->cutPrefix( sURL );
                 }
                 else
@@ -583,7 +579,7 @@ DBG_NAME(OConnectionHelper)
                 String sTypePrefix, sFileURLDecoded;
                 if ( _bPrefix )
                 {
-                    sTypePrefix = m_pCollection->getDatasourcePrefix( m_eType );
+                    sTypePrefix = m_pCollection->getPrefix( m_eType );
                     sFileURLDecoded = m_pCollection->cutPrefix( sURL );
                 }
                 else
@@ -768,10 +764,12 @@ DBG_NAME(OConnectionHelper)
         aConfigDBs  = getInstalledAdabasDBDirs(sAdabasConfigDir,::ucbhelper::INCLUDE_DOCUMENTS_ONLY);
         aWrkDBs     = getInstalledAdabasDBDirs(sAdabasWorkDir,::ucbhelper::INCLUDE_FOLDERS_ONLY);
         ConstStringBagIterator aOuter = aConfigDBs.begin();
-        for(;aOuter != aConfigDBs.end();++aOuter)
+        ConstStringBagIterator aOuterEnd = aConfigDBs.end();
+        for(;aOuter != aOuterEnd;++aOuter)
         {
             ConstStringBagIterator aInner = aWrkDBs.begin();
-            for (;aInner != aWrkDBs.end(); ++aInner)
+            ConstStringBagIterator aInnerEnd = aWrkDBs.end();
+            for (;aInner != aInnerEnd; ++aInner)
             {
                 if (aInner->equalsIgnoreAsciiCase(*aOuter))
                 {
@@ -809,11 +807,8 @@ DBG_NAME(OConnectionHelper)
     //-------------------------------------------------------------------------
     long OConnectionHelper::PreNotify( NotifyEvent& _rNEvt )
     {
-        if (    ( ::dbaccess::DST_DBASE == m_eType)
-            ||  ( ::dbaccess::DST_FLAT == m_eType)
-            ||  ( ::dbaccess::DST_MSACCESS == m_eType)
-            ||  ( ::dbaccess::DST_MSACCESS_2007 == m_eType)
-            ||  ( ::dbaccess::DST_CALC == m_eType) )
+        if ( m_pCollection->isFileSystemBased(m_eType) )
+        {
             switch (_rNEvt.GetType())
             {
                 case EVENT_GETFOCUS:
@@ -830,7 +825,8 @@ DBG_NAME(OConnectionHelper)
                             return 1L;  // handled
                     }
                     break;
-            }
+            } // switch (_rNEvt.GetType())
+        }
 
         return OGenericAdministrationPage::PreNotify( _rNEvt );
     }
@@ -931,13 +927,7 @@ DBG_NAME(OConnectionHelper)
         sOldPath = m_aConnectionURL.GetSavedValueNoPrefix();
         sURL = m_aConnectionURL.GetTextNoPrefix();
 
-        switch ( m_eType )
-        {
-        case ::dbaccess::DST_DBASE:
-        case ::dbaccess::DST_FLAT:
-        case ::dbaccess::DST_MSACCESS:
-        case ::dbaccess::DST_MSACCESS_2007:
-        case ::dbaccess::DST_CALC:
+        if ( m_pCollection->isFileSystemBased(m_eType) )
         {
             if ( ( sURL != sOldPath ) && ( 0 != sURL.Len() ) )
             {   // the text changed since entering the control
@@ -946,7 +936,9 @@ DBG_NAME(OConnectionHelper)
                 OFileNotation aTransformer(sURL);
                 sURL = aTransformer.get(OFileNotation::N_URL);
 
-                if ( ( ::dbaccess::DST_CALC == m_eType) || ( ::dbaccess::DST_MSACCESS == m_eType) || ( ::dbaccess::DST_MSACCESS_2007 == m_eType) )
+                const ::dbaccess::DATASOURCE_TYPE eType = m_pCollection->determineType(m_eType);
+
+                if ( ( ::dbaccess::DST_CALC == eType) || ( ::dbaccess::DST_MSACCESS == eType) || ( ::dbaccess::DST_MSACCESS_2007 == eType) )
                 { // #106016# --------------------------
                     if( pathExists(sURL, sal_True) == PATH_NOT_EXIST )
                     {
@@ -975,10 +967,6 @@ DBG_NAME(OConnectionHelper)
                     }
                 }
             }
-        }
-        break;
-        default:
-            break;
         }
 
         setURLNoPrefix(sURL);

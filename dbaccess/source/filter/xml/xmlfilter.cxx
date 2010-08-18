@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlfilter.cxx,v $
- * $Revision: 1.20.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -115,20 +112,30 @@
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
 #endif
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
+#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
-#ifndef _SFXECODE_HXX
 #include <svtools/sfxecode.hxx>
-#endif
+#include <unotools/moduleoptions.hxx>
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
 #endif
 #include <tools/diagnose_ex.h>
 #include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/mimeconfighelper.hxx>
+#include <comphelper/documentconstants.hxx>
+#include <comphelper/uno3.hxx>
+#include <cppuhelper/exc_hlp.hxx>
+#include <osl/thread.hxx>
+#include <connectivity/CommonTools.hxx>
+#include <connectivity/DriversConfig.hxx>
+#include "dsntypes.hxx"
 
 using namespace ::com::sun::star;
 
@@ -139,6 +146,138 @@ extern "C" void SAL_CALL createRegistryInfo_ODBFilter( )
 //--------------------------------------------------------------------------
 namespace dbaxml
 {
+    namespace
+    {
+        class FastLoader : public ::osl::Thread
+        {
+        public:
+            typedef enum { E_JAVA, E_CALC } StartType;
+            FastLoader(uno::Reference< lang::XMultiServiceFactory > const & _xFactory,StartType _eType)
+                :m_xFactory(_xFactory)
+                ,m_eWhat(_eType)
+            {}
+
+        protected:
+            virtual ~FastLoader(){}
+
+            /// Working method which should be overridden.
+            virtual void SAL_CALL run();
+            virtual void SAL_CALL onTerminated();
+        private:
+            uno::Reference< lang::XMultiServiceFactory > m_xFactory;
+            StartType m_eWhat;
+        };
+
+        void SAL_CALL FastLoader::run()
+        {
+            if ( m_eWhat == E_JAVA )
+            {
+                static bool s_bFirstTime = true;
+                if ( s_bFirstTime )
+                {
+                    s_bFirstTime = false;
+                    try
+                    {
+                        ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM(m_xFactory);
+                    }
+                    catch(uno::Exception& ex)
+                    {
+                        (void)ex;
+                        OSL_ASSERT(0);
+                    }
+                } // if ( s_bFirstTime )
+            } // if ( m_eWhat == E_JAVA )
+            else if ( m_eWhat == E_CALC )
+            {
+                static bool s_bFirstTime = true;
+                if ( s_bFirstTime )
+                {
+                    s_bFirstTime = false;
+                    try
+                    {
+                        uno::Reference<frame::XComponentLoader> xFrameLoad( m_xFactory->createInstance(
+                                                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")))
+                                                                    ,uno::UNO_QUERY);
+                        const ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_blank"));
+                        sal_Int32 nFrameSearchFlag = frame::FrameSearchFlag::TASKS | frame::FrameSearchFlag::CREATE;
+                        uno::Reference< frame::XFrame> xFrame = uno::Reference< frame::XFrame>(xFrameLoad,uno::UNO_QUERY_THROW)->findFrame(sTarget,nFrameSearchFlag);
+                        xFrameLoad.set( xFrame,uno::UNO_QUERY);
+
+                        if ( xFrameLoad.is() )
+                        {
+                            uno::Sequence < beans::PropertyValue > aArgs( 3);
+                            sal_Int32 nLen = 0;
+                            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+                            aArgs[nLen++].Value <<= sal_False;
+
+                            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+                            aArgs[nLen++].Value <<= sal_True;
+
+                            aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+                            aArgs[nLen++].Value <<= sal_True;
+
+                            ::comphelper::MimeConfigurationHelper aHelper(m_xFactory);
+                            SvtModuleOptions aModuleOptions;
+                            uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
+                                aModuleOptions.GetFactoryEmptyDocumentURL( aModuleOptions.ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET) )),
+                                ::rtl::OUString(), // empty frame name
+                                0,
+                                aArgs
+                                ),uno::UNO_QUERY);
+                            ::comphelper::disposeComponent(xModel);
+                        }
+                    }
+                    catch(uno::Exception& ex)
+                    {
+                        (void)ex;
+                        OSL_ASSERT(0);
+                    }
+                }
+            }
+        }
+        void SAL_CALL FastLoader::onTerminated()
+        {
+            delete this;
+        }
+
+        class DatasourceURLListener : public ::cppu::WeakImplHelper1< beans::XPropertyChangeListener >
+        {
+            uno::Reference< lang::XMultiServiceFactory > m_xFactory;
+            ::dbaccess::ODsnTypeCollection m_aTypeCollection;
+            DatasourceURLListener(const DatasourceURLListener&);
+            void operator =(const DatasourceURLListener&);
+        protected:
+            virtual ~DatasourceURLListener(){}
+        public:
+            DatasourceURLListener(uno::Reference< lang::XMultiServiceFactory > const & _xFactory) : m_xFactory(_xFactory),m_aTypeCollection(_xFactory){}
+            // XPropertyChangeListener
+            virtual void SAL_CALL propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException)
+            {
+                ::rtl::OUString sURL;
+                _rEvent.NewValue >>= sURL;
+                FastLoader* pCreatorThread = NULL;
+
+                if ( m_aTypeCollection.needsJVM(sURL) )
+                {
+                    pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_JAVA);
+                } // if ( m_aTypeCollection.needsJVM(sURL) )
+                else if ( sURL.matchIgnoreAsciiCaseAsciiL("sdbc:calc:",10,0) )
+                {
+                    pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_CALC);
+                }
+                if ( pCreatorThread )
+                {
+                    pCreatorThread->createSuspended();
+                    pCreatorThread->setPriority(osl_Thread_PriorityBelowNormal);
+                    pCreatorThread->resume();
+                }
+            }
+            // XEventListener
+            virtual void SAL_CALL disposing( const lang::EventObject& /*_rSource*/ ) throw (uno::RuntimeException)
+            {
+            }
+        };
+    }
     sal_Char __READONLY_DATA sXML_np__db[] = "_db";
     sal_Char __READONLY_DATA sXML_np___db[] = "__db";
 
@@ -374,72 +513,64 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         SfxMediumRef pMedium = new SfxMedium(
                 sFileName, ( STREAM_READ | STREAM_NOCREATE ), FALSE, 0 );
         uno::Reference< embed::XStorage > xStorage;
-        if( pMedium )
+        try
         {
-            try
-            {
-                xStorage = pMedium->GetStorage();
-                //  nError = pMedium->GetError();
-            }
-            catch(const Exception&)
-            {
-            }
+            xStorage.set( pMedium->GetStorage( sal_False ), UNO_QUERY_THROW );
+        }
+        catch( const Exception& )
+        {
+            Any aError = ::cppu::getCaughtException();
+            if  ( aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() ) )
+                throw;
+            throw lang::WrappedTargetRuntimeException( ::rtl::OUString(), *this, aError );
         }
 
-        OSL_ENSURE(xStorage.is(),"No Storage for read!");
-        if ( xStorage.is() )
+        uno::Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
+        m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertyChangeListener> xListener = new DatasourceURLListener(getServiceFactory());
+        m_xDataSource->addPropertyChangeListener(PROPERTY_URL,xListener);
+        uno::Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
+        SetNumberFormatsSupplier(xNum);
+
+        uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
+        sal_Int32 nRet = ReadThroughComponent( xStorage
+                                    ,xModel
+                                    ,"settings.xml"
+                                    ,"Settings.xml"
+                                    ,getServiceFactory()
+                                    ,this
+                                    );
+
+        if ( nRet == 0 )
+            nRet = ReadThroughComponent( xStorage
+                                    ,xModel
+                                    ,"content.xml"
+                                    ,"Content.xml"
+                                    ,getServiceFactory()
+                                    ,this
+                                    );
+
+        bRet = nRet == 0;
+
+        if ( bRet )
         {
-            uno::Reference<sdb::XOfficeDatabaseDocument> xOfficeDoc(GetModel(),UNO_QUERY_THROW);
-            m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);
-            OSL_ENSURE(m_xDataSource.is(),"DataSource is NULL!");
-            uno::Reference< XNumberFormatsSupplier > xNum(m_xDataSource->getPropertyValue(PROPERTY_NUMBERFORMATSSUPPLIER),UNO_QUERY);
-            SetNumberFormatsSupplier(xNum);
-
-
-            uno::Reference<XComponent> xModel(GetModel(),UNO_QUERY);
-            sal_Int32 nRet = ReadThroughComponent( xStorage
-                                        ,xModel
-                                        ,"settings.xml"
-                                        ,"Settings.xml"
-                                        ,getServiceFactory()
-                                        ,this
-                                        );
-
-            if ( nRet == 0 )
-                nRet = ReadThroughComponent( xStorage
-                                        ,xModel
-                                        ,"content.xml"
-                                        ,"Content.xml"
-                                        ,getServiceFactory()
-                                        ,this
-                                        );
-
-            bRet = nRet == 0;
-
-            if ( bRet )
+            uno::Reference< XModifiable > xModi(GetModel(),UNO_QUERY);
+            if ( xModi.is() )
+                xModi->setModified(sal_False);
+        }
+        else
+        {
+            switch( nRet )
             {
-                uno::Reference< XModifiable > xModi(GetModel(),UNO_QUERY);
-                if ( xModi.is() )
-                    xModi->setModified(sal_False);
-            }
-            else
-            {
-                switch( nRet )
+                case ERRCODE_IO_BROKENPACKAGE:
+                    // TODO/LATER: no way to transport the error outside from the filter!
+                    break;
+                default:
                 {
-                    case ERRCODE_IO_BROKENPACKAGE:
-                        if( xStorage.is() )
-                        {
-                            // TODO/LATER: no way to transport the error outside from the filter!
-                            break;
-                        }
-                        // fall through intented
-                    default:
-                        {
-                            // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!
-                            ErrorHandler::HandleError( nRet );
-                            if( nRet & ERRCODE_WARNING_MASK )
-                                bRet = sal_True;
-                        }
+                    // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!
+                    ErrorHandler::HandleError( nRet );
+                    if( nRet & ERRCODE_WARNING_MASK )
+                        bRet = sal_True;
                 }
             }
         }
@@ -820,11 +951,24 @@ UniReference < XMLPropertySetMapper > ODBFilter::GetCellStylesPropertySetMapper(
 void ODBFilter::setPropertyInfo()
 {
     Reference<XPropertySet> xDataSource(getDataSource());
-    if ( !m_aInfoSequence.empty() && xDataSource.is() )
+    if ( !xDataSource.is() )
+        return;
+
+    ::connectivity::DriversConfig aDriverConfig(getServiceFactory());
+    const ::rtl::OUString sURL = ::comphelper::getString(xDataSource->getPropertyValue(PROPERTY_URL));
+    ::comphelper::NamedValueCollection aDataSourceSettings = aDriverConfig.getProperties( sURL );
+
+    Sequence<PropertyValue> aInfo;
+    if ( !m_aInfoSequence.empty() )
+        aInfo = Sequence<PropertyValue>(&(*m_aInfoSequence.begin()),m_aInfoSequence.size());
+    aDataSourceSettings.merge( ::comphelper::NamedValueCollection( aInfo ), true );
+
+    aDataSourceSettings >>= aInfo;
+    if ( aInfo.getLength() )
     {
         try
         {
-            xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(Sequence<PropertyValue>(&(*m_aInfoSequence.begin()),m_aInfoSequence.size())));
+            xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(aInfo));
         }
         catch(Exception)
         {

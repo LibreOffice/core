@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: opendoccontrols.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +58,6 @@ namespace dbaui
         ::rtl::OUString     m_sModule;
 
     public:
-        OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName, WinBits _nStyle = 0 );
         OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName, const ResId& _rResId );
 
     protected:
@@ -81,7 +77,6 @@ namespace dbaui
         MapIndexToStringPair    m_aURLs;
 
     public:
-        OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName, WinBits _nStyle = WB_BORDER );
         OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName, const ResId& _rResId );
 
         String  GetSelectedDocumentURL() const;

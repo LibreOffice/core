@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: datasource.cxx,v $
- * $Revision: 1.79.4.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,6 +38,8 @@
 #include "connection.hxx"
 #include "SharedConnection.hxx"
 #include "databasedocument.hxx"
+#include "OAuthenticationContinuation.hxx"
+
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -68,9 +67,10 @@
 #include <comphelper/property.hxx>
 #include <comphelper/seqstream.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <rtl/digest.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
@@ -78,6 +78,7 @@
 #include <unotools/confignode.hxx>
 #include <unotools/sharedunocomponent.hxx>
 #include <rtl/logfile.hxx>
+#include <rtl/digest.h>
 #include <algorithm>
 
 using namespace ::com::sun::star::sdbc;
@@ -199,8 +200,6 @@ void SAL_CALL FlushNotificationAdapter::flushed( const EventObject& rEvent ) thr
 //--------------------------------------------------------------------
 void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) throw (RuntimeException)
 {
-    DBG_ASSERT( Source.Source == m_aBroadcaster.get(), "FlushNotificationAdapter::disposing: where did this come from?" );
-
     Reference< XFlushListener > xListener( m_aListener );
     if ( xListener.is() )
         xListener->disposing( Source );
@@ -208,40 +207,10 @@ void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) t
     impl_dispose( false );
 }
 
-//============================================================
-//= OAuthenticationContinuation
-//============================================================
-class OAuthenticationContinuation : public OInteraction< XInteractionSupplyAuthentication >
-{
-    sal_Bool    m_bRemberPassword : 1;      // remember the password for this session ?
-
-    ::rtl::OUString     m_sUser;            // the user
-    ::rtl::OUString     m_sPassword;        // the user's password
-
-public:
-    OAuthenticationContinuation();
-
-    sal_Bool SAL_CALL canSetRealm(  ) throw(RuntimeException);
-    void SAL_CALL setRealm( const ::rtl::OUString& Realm ) throw(RuntimeException);
-    sal_Bool SAL_CALL canSetUserName(  ) throw(RuntimeException);
-    void SAL_CALL setUserName( const ::rtl::OUString& UserName ) throw(RuntimeException);
-    sal_Bool SAL_CALL canSetPassword(  ) throw(RuntimeException);
-    void SAL_CALL setPassword( const ::rtl::OUString& Password ) throw(RuntimeException);
-    Sequence< RememberAuthentication > SAL_CALL getRememberPasswordModes( RememberAuthentication& Default ) throw(RuntimeException);
-    void SAL_CALL setRememberPassword( RememberAuthentication Remember ) throw(RuntimeException);
-    sal_Bool SAL_CALL canSetAccount(  ) throw(RuntimeException);
-    void SAL_CALL setAccount( const ::rtl::OUString& Account ) throw(RuntimeException);
-    Sequence< RememberAuthentication > SAL_CALL getRememberAccountModes( RememberAuthentication& Default ) throw(RuntimeException);
-    void SAL_CALL setRememberAccount( RememberAuthentication Remember ) throw(RuntimeException);
-
-    ::rtl::OUString getUser() const             { return m_sUser; }
-    ::rtl::OUString getPassword() const         { return m_sPassword; }
-    sal_Bool        getRememberPassword() const { return m_bRemberPassword; }
-};
-
 //--------------------------------------------------------------------------
 OAuthenticationContinuation::OAuthenticationContinuation()
-    :m_bRemberPassword(sal_True)    // TODO: a meaningfull default
+    :m_bRemberPassword(sal_True),   // TODO: a meaningfull default
+    m_bCanSetUserName(sal_True)
 {
 }
 
@@ -262,7 +231,7 @@ sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeE
 {
     // we alwas allow this, even if the database document is read-only. In this case,
     // it's simply that the user cannot store the new user name.
-    return sal_True;
+    return m_bCanSetUserName;
 }
 
 //--------------------------------------------------------------------------
@@ -561,21 +530,22 @@ extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource()
 //--------------------------------------------------------------------------
 ODatabaseSource::ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl)
             :ModelDependentComponent( _pImpl )
-            ,OSubComponent( getMutex(), Reference< XInterface >() )
-            ,OPropertySetHelper(OComponentHelper::rBHelper)
+            ,ODatabaseSource_Base( getMutex() )
+            ,OPropertySetHelper( ODatabaseSource_Base::rBHelper )
             ,m_aBookmarks( *this, getMutex() )
             ,m_aFlushListeners( getMutex() )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::ODatabaseSource" );
     // some kind of default
     DBG_CTOR(ODatabaseSource,NULL);
+    OSL_TRACE( "DS: ctor: %p: %p", this, m_pImpl.get() );
 }
 
 //--------------------------------------------------------------------------
 ODatabaseSource::~ODatabaseSource()
 {
+    OSL_TRACE( "DS: dtor: %p: %p", this, m_pImpl.get() );
     DBG_DTOR(ODatabaseSource,NULL);
-    if ( !OComponentHelper::rBHelper.bInDispose && !OComponentHelper::rBHelper.bDisposed )
+    if ( !ODatabaseSource_Base::rBHelper.bInDispose && !ODatabaseSource_Base::rBHelper.bDisposed )
     {
         acquire();
         dispose();
@@ -603,11 +573,8 @@ Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
                                             ::getCppuType( (const Reference< XMultiPropertySet > *)0 ));
 
     return ::comphelper::concatSequences(
-        ::comphelper::concatSequences(
-            OSubComponent::getTypes(),
-            aPropertyHelperTypes.getTypes()
-        ),
-        ODatabaseSource_Base::getTypes()
+        ODatabaseSource_Base::getTypes(),
+        aPropertyHelperTypes.getTypes()
     );
 }
 
@@ -633,39 +600,26 @@ Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeExcept
 Any ODatabaseSource::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::queryInterface" );
-    Any aIface = OSubComponent::queryInterface( rType );
-    if (!aIface.hasValue())
-    {
-        aIface = ODatabaseSource_Base::queryInterface( rType );
-        if ( !aIface.hasValue() )
-        {
-            aIface = ::cppu::queryInterface(
-                        rType,
-                        static_cast< XPropertySet* >( this ),
-                        static_cast< XFastPropertySet* >( this ),
-                        static_cast< XMultiPropertySet* >( this ));
-        }
-    }
+    Any aIface = ODatabaseSource_Base::queryInterface( rType );
+    if ( !aIface.hasValue() )
+        aIface = ::cppu::OPropertySetHelper::queryInterface( rType );
     return aIface;
 }
 
 //--------------------------------------------------------------------------
 void ODatabaseSource::acquire() throw ()
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::acquire" );
-    OSubComponent::acquire();
+    ODatabaseSource_Base::acquire();
 }
 
 //--------------------------------------------------------------------------
 void ODatabaseSource::release() throw ()
 {
-    //RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::release" );
-    OSubComponent::release();
+    ODatabaseSource_Base::release();
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObject& Source ) throw(RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::disposing" );
     if ( m_pImpl.is() )
         m_pImpl->disposing(Source);
 }
@@ -719,8 +673,8 @@ sal_Bool ODatabaseSource::supportsService( const ::rtl::OUString& _rServiceName 
 //------------------------------------------------------------------------------
 void ODatabaseSource::disposing()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::disposing" );
-    OSubComponent::disposing();
+    OSL_TRACE( "DS: disp: %p, %p", this, m_pImpl.get() );
+    ODatabaseSource_Base::WeakComponentImplHelperBase::disposing();
     OPropertySetHelper::disposing();
 
     EventObject aDisposeEvent(static_cast<XWeak*>(this));
@@ -783,8 +737,13 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         {
             DBG_ERROR( "ODatabaseSource::buildLowLevelConnection: got a strange exception while analyzing the error!" );
         }
-        if ( !xDriver.is() )
+        if ( !xDriver.is() || !xDriver->acceptsURL( m_pImpl->m_sConnectURL ) )
+        {
+            // Nowadays, it's allowed for a driver to be registered for a given URL, but actually not to accept it.
+            // This is because registration nowadays happens at compile time (by adding respective configuration data),
+            // but acceptance is decided at runtime.
             nExceptionMessageId = RID_STR_COULDNOTCONNECT_NODRIVER;
+        }
         else
         {
             Sequence< PropertyValue > aDriverInfo = lcl_filterDriverProperties(
@@ -793,8 +752,6 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
                 m_pImpl->m_xSettings->getPropertyValues(),
                 m_pImpl->getDefaultDataSourceSettings()
             );
-
-            impl_insertJavaDriverClassPath_nothrow(aDriverInfo);
 
             if ( m_pImpl->isEmbeddedDatabase() )
             {
@@ -829,9 +786,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
         ::rtl::OUString sMessage = DBACORE_RESSTRING( nExceptionMessageId );
 
         SQLContext aContext;
-        aContext.Message = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "A connection for the following URL was requested: " ) );
-            // TODO: resource
-        aContext.Message += m_pImpl->m_sConnectURL;
+        aContext.Message = DBACORE_RESSTRING( RID_STR_CONNECTION_REQUEST );
+        ::comphelper::string::searchAndReplaceAsciiI( aContext.Message, "$name$", m_pImpl->m_sConnectURL );
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );
     }
@@ -1354,8 +1310,24 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
     Reference< XNameAccess > xContainer = m_pImpl->m_xCommandDefinitions;
     if ( !xContainer.is() )
     {
-        TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_QUERY ) );
-        xContainer = new OCommandContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, sal_False );
+        Any aValue;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xMy(*this);
+        if ( dbtools::getDataSourceSetting(xMy,"CommandDefinitions",aValue) )
+        {
+            ::rtl::OUString sSupportService;
+            aValue >>= sSupportService;
+            if ( sSupportService.getLength() )
+            {
+                Sequence<Any> aArgs(1);
+                aArgs[0] <<= NamedValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataSource")),makeAny(xMy));
+                xContainer.set(m_pImpl->m_aContext.createComponentWithArguments(sSupportService,aArgs),UNO_QUERY);
+            }
+        }
+        if ( !xContainer.is() )
+        {
+            TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_QUERY ) );
+            xContainer = new OCommandContainer( m_pImpl->m_aContext.getLegacyServiceFactory(), *this, rContainerData, sal_False );
+        }
         m_pImpl->m_xCommandDefinitions = xContainer;
     }
     return xContainer;
@@ -1497,29 +1469,6 @@ Reference< XInterface > ODatabaseSource::getThis() const
     return *const_cast< ODatabaseSource* >( this );
 }
 // -----------------------------------------------------------------------------
-void ODatabaseSource::impl_insertJavaDriverClassPath_nothrow(Sequence< PropertyValue >& _rDriverInfo)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::impl_insertJavaDriverClassPath_nothrow" );
-    Reference< XPropertySet > xPropertySet( m_pImpl->m_xSettings, UNO_QUERY_THROW );
-    ::rtl::OUString sJavaDriverClass;
-    xPropertySet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))) >>= sJavaDriverClass;
-    if ( sJavaDriverClass.getLength() )
-    {
-        static const ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/JDBC/DriverClassPaths"));
-        ::utl::OConfigurationTreeRoot aNamesRoot = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
-            m_pImpl->m_aContext.getLegacyServiceFactory(), s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
-        if ( aNamesRoot.isValid() && aNamesRoot.hasByName( sJavaDriverClass ) )
-        {
-            ::utl::OConfigurationNode aRegisterObj = aNamesRoot.openNode( sJavaDriverClass );
-            ::rtl::OUString sURL;
-            OSL_VERIFY( aRegisterObj.getNodeValue( "Path" ) >>= sURL );
-
-            ::comphelper::NamedValueCollection aDriverSettings( _rDriverInfo );
-            aDriverSettings.put( "JavaDriverClassPath", sURL );
-            aDriverSettings >>= _rDriverInfo;
-        }
-    }
-}
 //........................................................................
 }   // namespace dbaccess
 //........................................................................

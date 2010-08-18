@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: macromigrationwizard.cxx,v $
- * $Revision: 1.3.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +29,7 @@
 #include "precompiled_dbaccess.hxx"
 
 #include "dbmm_module.hxx"
+#include "dbmm_global.hrc"
 #include "macromigrationdialog.hxx"
 
 /** === begin UNO includes === **/
@@ -210,8 +208,7 @@ namespace dbmm
 
         if ( _rArguments.getLength() != 1 )
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid number of initialization arguments. Expected 1." ) ),
-                    // TODO: resource
+                String(MacroMigrationResId(STR_INVALID_NUMBER_ARGS)),
                 *this,
                 1
             );
@@ -219,8 +216,7 @@ namespace dbmm
         m_xDocument.set( _rArguments[0], UNO_QUERY );
         if ( !m_xDocument.is() )
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "No database document found in the initializatin arguments." ) ),
-                    // TODO: resource
+                String(MacroMigrationResId(STR_NO_DATABASE)),
                 *this,
                 1
             );
@@ -228,8 +224,7 @@ namespace dbmm
         Reference< XStorable > xDocStor( m_xDocument, UNO_QUERY_THROW );
         if ( xDocStor->isReadonly() )
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Not applicable to read-only documents." ) ),
-                    // TODO: resource
+                String(MacroMigrationResId(STR_NOT_READONLY)),
                 *this,
                 1
             );

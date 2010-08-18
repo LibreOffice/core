@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WNameMatch.cxx,v $
- * $Revision: 1.26 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,9 +184,10 @@ sal_Bool OWizNameMatching::LeavePage()
         DBG_ASSERT(pSrcField,"OWizNameMatching: OColumn can not be null!");
 
         ODatabaseExport::TColumnVector::const_iterator aSrcIter = pSrcColumns->begin();
-        for(;aSrcIter != pSrcColumns->end() && (*aSrcIter)->second != pSrcField;++aSrcIter)
+        ODatabaseExport::TColumnVector::const_iterator aSrcEnd  = pSrcColumns->end();
+        for(;aSrcIter != aSrcEnd && (*aSrcIter)->second != pSrcField;++aSrcIter)
             ;
-        sal_Int32 nPos = ::std::distance(pSrcColumns->begin(),aSrcIter);
+        const sal_Int32 nPos = ::std::distance(pSrcColumns->begin(),aSrcIter);
 
         //  sal_Int32 nPos = m_CTRL_LEFT.GetModel()->GetAbsPos(pLeftEntry);
         if(m_CTRL_LEFT.GetCheckButtonState(pLeftEntry) == SV_BUTTON_CHECKED)
@@ -198,15 +196,16 @@ sal_Bool OWizNameMatching::LeavePage()
             DBG_ASSERT(pDestField,"OWizNameMatching: OColumn can not be null!");
             const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
             ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
+            ODatabaseExport::TColumnVector::const_iterator aDestEnd = pDestColumns->end();
 
-            for(;aDestIter != pDestColumns->end() && (*aDestIter)->second != pDestField;++aDestIter)
+            for(;aDestIter != aDestEnd && (*aDestIter)->second != pDestField;++aDestIter)
                 ;
 
             OSL_ENSURE((nPos) < static_cast<sal_Int32>(m_pParent->m_vColumnPos.size()),"m_pParent->m_vColumnPos: Illegal index for vector");
             m_pParent->m_vColumnPos[nPos].first = ++nParamPos;
             m_pParent->m_vColumnPos[nPos].second = ::std::distance(pDestColumns->begin(),aDestIter) + 1;
             sal_Bool bNotConvert = sal_True;
-            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo(),bNotConvert);
+            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(),bNotConvert);
             sal_Int32 nType = ::com::sun::star::sdbc::DataType::VARCHAR;
             if ( pTypeInfo.get() )
                 nType = pTypeInfo->nType;
@@ -435,7 +434,8 @@ void OColumnTreeBox::FillListBox( const ODatabaseExport::TColumnVector& _rList)
 {
     Clear();
     ODatabaseExport::TColumnVector::const_iterator aIter = _rList.begin();
-    for(;aIter != _rList.end();++aIter)
+    ODatabaseExport::TColumnVector::const_iterator aEnd = _rList.end();
+    for(;aIter != aEnd;++aIter)
     {
         SvLBoxEntry* pEntry = InsertEntry((*aIter)->first,0,sal_False,LIST_APPEND,(*aIter)->second);
         SvButtonState eState = !(m_bReadOnly && (*aIter)->second->IsAutoIncrement()) ? SV_BUTTON_CHECKED : SV_BUTTON_UNCHECKED;

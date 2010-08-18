@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: precompiled_dbaccess.hxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -411,6 +408,7 @@
 #include "comphelper/types.hxx"
 
 #include "connectivity/FValue.hxx"
+#include <connectivity/DriversConfig.hxx>
 #include "connectivity/dbcharset.hxx"
 #include "connectivity/dbconversion.hxx"
 #include "connectivity/dbexception.hxx"
@@ -457,25 +455,25 @@
 #include "comphelper/classids.hxx"
 
 
-#include "svtools/cjkoptions.hxx"
-#include "svtools/filenotation.hxx"
-#include "svtools/historyoptions.hxx"
+#include "svl/cjkoptions.hxx"
+#include "svl/filenotation.hxx"
+#include "unotools/historyoptions.hxx"
 #include "svtools/htmlkywd.hxx"
 #include "svtools/imgdef.hxx"
-#include "svtools/internaloptions.hxx"
+#include "unotools/internaloptions.hxx"
 #include "svtools/menuoptions.hxx"
 #include "svtools/miscopt.hxx"
 #include "svtools/rtfkeywd.hxx"
 #include "svtools/rtftoken.h"
-#include "svtools/solar.hrc"
+#include "svl/solar.hrc"
 #include "svtools/toolboxcontroller.hxx"
-#include "svtools/viewoptions.hxx"
+#include "unotools/viewoptions.hxx"
 
 #include "svx/dataaccessdescriptor.hxx"
 #include "svx/dbexch.hrc"
 #include "svx/dialogs.hrc"
 #include "svx/globlmn.hrc"
-#include "svx/svxenum.hxx"
+#include "editeng/svxenum.hxx"
 #include "svx/svxids.hrc"
 
 

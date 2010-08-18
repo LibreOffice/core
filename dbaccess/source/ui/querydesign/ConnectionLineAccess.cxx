@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConnectionLineAccess.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -129,9 +126,10 @@ namespace dbaui
             nIndex = m_pLine->GetParent()->GetTabWinMap()->size();
             const ::std::vector<OTableConnection*>* pVec = m_pLine->GetParent()->getTableConnections();
             ::std::vector<OTableConnection*>::const_iterator aIter = pVec->begin();
-            for (; aIter != pVec->end() && (*aIter) != m_pLine; ++nIndex,++aIter)
+            ::std::vector<OTableConnection*>::const_iterator aEnd = pVec->end();
+            for (; aIter != aEnd && (*aIter) != m_pLine; ++nIndex,++aIter)
                 ;
-            nIndex = ( aIter != pVec->end() ) ? nIndex : -1;
+            nIndex = ( aIter != aEnd ) ? nIndex : -1;
         }
         return nIndex;
     }

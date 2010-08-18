@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbadmin.hxx,v $
- * $Revision: 1.36.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -105,7 +102,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-    virtual ::dbaccess::DATASOURCE_TYPE getDatasourceType(const SfxItemSet& _rSet) const;
+    virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual sal_Bool saveDatasource();
     virtual void setTitle(const ::rtl::OUString& _sTitle);
@@ -114,8 +111,6 @@ public:
 protected:
     // adds a new detail page and remove all the old ones
     void addDetailPage(USHORT _nPageId,USHORT _nTextId,CreateTabPage pCreateFunc);
-    // removes all detail pages
-    void removeDetailPages();
 
     virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
     virtual short Ok();

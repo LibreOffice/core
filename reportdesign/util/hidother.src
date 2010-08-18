@@ -2,12 +2,9 @@
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hidother.src,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,8 +162,10 @@ hidspecial HID_RPT_PROP_AREA            { HelpId = HID_RPT_PROP_AREA; };
 hidspecial UID_RPT_RPT_PROP_DLG_AREA    { HelpId = UID_RPT_RPT_PROP_DLG_AREA; };
 hidspecial UID_RPT_PROP_FORMULA         { HelpId = UID_RPT_PROP_FORMULA; };
 
-hidspecial HID_RPT_GROUPSORT_MOVE_UP                                { HelpId = HID_RPT_GROUPSORT_MOVE_UP; };
-hidspecial HID_RPT_GROUPSORT_MOVE_DOWN                              { HelpId = HID_RPT_GROUPSORT_MOVE_DOWN; };
-hidspecial HID_RPT_GROUPSORT_DELETE                                 { HelpId = HID_RPT_GROUPSORT_DELETE; };
-hidspecial HID_RPT_PROP_MIMETYPE { HelpId = HID_RPT_PROP_MIMETYPE; };
+hidspecial HID_RPT_GROUPSORT_MOVE_UP    { HelpId = HID_RPT_GROUPSORT_MOVE_UP; };
+hidspecial HID_RPT_GROUPSORT_MOVE_DOWN  { HelpId = HID_RPT_GROUPSORT_MOVE_DOWN; };
+hidspecial HID_RPT_GROUPSORT_DELETE     { HelpId = HID_RPT_GROUPSORT_DELETE; };
+hidspecial HID_RPT_PROP_MIMETYPE        { HelpId = HID_RPT_PROP_MIMETYPE; };
+hidspecial HID_RPT_PROP_VERTICALALIGN   { HelpId = HID_RPT_PROP_VERTICALALIGN; };
+hidspecial HID_RPT_PROP_PARAADJUST      { HelpId = HID_RPT_PROP_PARAADJUST; };
 

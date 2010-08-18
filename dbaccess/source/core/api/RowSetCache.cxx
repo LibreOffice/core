@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RowSetCache.cxx,v $
- * $Revision: 1.100 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,36 +28,84 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#ifndef _COMPHELPER_SEQSTREAM_HXX
 #include <comphelper/seqstream.hxx>
+#endif
+#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
+#endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
 #include <com/sun/star/sdbcx/KeyType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_RESULTSETCONCURRENCY_HPP_
 #include <com/sun/star/sdbc/ResultSetConcurrency.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_PRIVILEGE_HPP_
 #include <com/sun/star/sdbcx/Privilege.hpp>
+#endif
+#ifndef _DBACORE_DATACOLUMN_HXX_
 #include "CRowSetDataColumn.hxx"
+#endif
+#ifndef DBACCESS_CORE_API_CROWSETCOLUMN_HXX
 #include "CRowSetColumn.hxx"
+#endif
+#ifndef DBACCESS_CORE_API_ROWSETBASE_HXX
 #include "RowSetBase.hxx"
+#endif
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlparse.hxx>
 #include <connectivity/sqlnode.hxx>
+#include <connectivity/dbtools.hxx>
 #include <connectivity/sqliterator.hxx>
+#ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_COMPAREBOOKMARK_HPP_
 #include <com/sun/star/sdbcx/CompareBookmark.hpp>
+#endif
+#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
 
 #include <algorithm>
+#ifndef DBACCESS_CORE_API_ROWSETCACHE_HXX
 #include "RowSetCache.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HXX_
 #include "core_resource.hxx"
+#endif
+#ifndef _DBA_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
+#endif
+#ifndef DBACCESS_CORE_API_BOOKMARKSET_HXX
 #include "BookmarkSet.hxx"
+#endif
+#ifndef DBACCESS_CORE_API_STATICSET_HXX
 #include "StaticSet.hxx"
+#endif
+#ifndef DBACCESS_CORE_API_KEYSET_HXX
 #include "KeySet.hxx"
+#endif
+#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#include <rtl/logfile.hxx>
+#endif
+#include "WrappedResultSet.hxx"
+#include "OptimisticSet.hxx"
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -84,7 +129,9 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const ::comphelper::ComponentContext& _rContext,
                            const ::rtl::OUString& _rUpdateTableName,
                            sal_Bool&    _bModified,
-                           sal_Bool&    _bNew)
+                           sal_Bool&    _bNew,
+                           const ORowSetValueVector& _aParameterValueForCache,
+                           const ::rtl::OUString& i_sRowSetFilter)
     :m_xSet(_xRs)
     ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
     ,m_aContext( _rContext )
@@ -105,16 +152,58 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     ,m_bModified(_bModified)
     ,m_bNew(_bNew)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::ORowSetCache" );
     DBG_CTOR(ORowSetCache,NULL);
+
+    // first try if the result can be used to do inserts and updates
+    try
+    {
+        Reference< XResultSetUpdate> xUp(_xRs,UNO_QUERY_THROW);
+        Reference< XPropertySet> xProp(_xRs,UNO_QUERY);
+        Reference< XPropertySetInfo > xPropInfo = xProp->getPropertySetInfo();
+        sal_Bool bBookmarkable = xPropInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) &&
+                                any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)) && Reference< XRowLocate >(_xRs, UNO_QUERY).is();
+        if ( bBookmarkable )
+        {
+            xUp->moveToInsertRow();
+            xUp->cancelRowUpdates();
+            _xRs->beforeFirst();
+            m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
+            m_pCacheSet = new WrappedResultSet();
+            m_xCacheSet = m_pCacheSet;
+            m_pCacheSet->construct(_xRs,i_sRowSetFilter);
+            return;
+        }
+    }
+    catch(const Exception& ex)
+    {
+        (void)ex;
+    }
+    _xRs->beforeFirst();
 
     // check if all keys of the updateable table are fetched
     sal_Bool bAllKeysFound = sal_False;
     sal_Int32 nTablesCount = 0;
 
+    Reference< XPropertySet> xProp(_xRs,UNO_QUERY);
+    Reference< XPropertySetInfo > xPropInfo = xProp->getPropertySetInfo();
+    sal_Bool bNeedKeySet = !(xPropInfo->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) &&
+                             any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)) && Reference< XRowLocate >(_xRs, UNO_QUERY).is() );
+    bNeedKeySet = bNeedKeySet || (xPropInfo->hasPropertyByName(PROPERTY_RESULTSETCONCURRENCY) &&
+                            ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY)) == ResultSetConcurrency::READ_ONLY);
+
     Reference< XIndexAccess> xUpdateTableKeys;
     ::rtl::OUString aUpdateTableName = _rUpdateTableName;
     Reference< XConnection> xConnection;
+    // first we need a connection
+    Reference< XStatement> xStmt(_xRs->getStatement(),UNO_QUERY);
+    if(xStmt.is())
+        xConnection = xStmt->getConnection();
+    else
+    {
+        Reference< XPreparedStatement> xPrepStmt(_xRs->getStatement(),UNO_QUERY);
+        xConnection = xPrepStmt->getConnection();
+    }
+    OSL_ENSURE(xConnection.is(),"No connection!");
     if(_xAnalyzer.is())
     {
         try
@@ -122,67 +211,54 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             Reference<XTablesSupplier> xTabSup(_xAnalyzer,UNO_QUERY);
             OSL_ENSURE(xTabSup.is(),"ORowSet::execute composer isn't a tablesupplier!");
             Reference<XNameAccess> xTables = xTabSup->getTables();
-
-
-            if(_rUpdateTableName.getLength() && xTables->hasByName(_rUpdateTableName))
-                xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
-            else if(xTables->getElementNames().getLength())
-            {
-                aUpdateTableName = xTables->getElementNames()[0];
-                xTables->getByName(aUpdateTableName) >>= m_aUpdateTable;
-            }
-            Reference<XIndexAccess> xIndexAccess(xTables,UNO_QUERY);
-            if(xIndexAccess.is())
-                nTablesCount = xIndexAccess->getCount();
-            else
-                nTablesCount = xTables->getElementNames().getLength();
-
-            if(m_aUpdateTable.is() && nTablesCount < 3) // for we can't handle more than 2 tables in our keyset
-            {
-                Reference<XKeysSupplier> xKeys(m_aUpdateTable,UNO_QUERY);
-                if(xKeys.is())
+            Sequence< ::rtl::OUString> aTableNames = xTables->getElementNames();
+            if ( aTableNames.getLength() > 1 && !_rUpdateTableName.getLength() && bNeedKeySet )
+            {// here we have a join or union and nobody told us which table to update, so we update them all
+                m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
+                OptimisticSet* pCursor = new OptimisticSet(m_aContext,xConnection,_xAnalyzer,_aParameterValueForCache);
+                m_pCacheSet = pCursor;
+                m_xCacheSet = m_pCacheSet;
+                try
                 {
-                    xUpdateTableKeys = xKeys->getKeys();
-                    if ( xUpdateTableKeys.is() )
+                    m_pCacheSet->construct(_xRs,i_sRowSetFilter);
+                    if ( pCursor->isReadOnly() )
+                        m_nPrivileges = Privilege::SELECT;
+                    m_aKeyColumns = pCursor->getJoinedKeyColumns();
+                    return;
+                }
+                catch(const Exception&)
+                {
+                }
+            }
+            else
+            {
+                if(_rUpdateTableName.getLength() && xTables->hasByName(_rUpdateTableName))
+                    xTables->getByName(_rUpdateTableName) >>= m_aUpdateTable;
+                else if(xTables->getElementNames().getLength())
+                {
+                    aUpdateTableName = xTables->getElementNames()[0];
+                    xTables->getByName(aUpdateTableName) >>= m_aUpdateTable;
+                }
+                Reference<XIndexAccess> xIndexAccess(xTables,UNO_QUERY);
+                if(xIndexAccess.is())
+                    nTablesCount = xIndexAccess->getCount();
+                else
+                    nTablesCount = xTables->getElementNames().getLength();
+
+                if(m_aUpdateTable.is() && nTablesCount < 3) // for we can't handle more than 2 tables in our keyset
+                {
+                    Reference<XPropertySet> xSet(m_aUpdateTable,UNO_QUERY);
+                    const Reference<XNameAccess> xPrimaryKeyColumns = dbtools::getPrimaryKeyColumns_throw(xSet);
+                    if ( xPrimaryKeyColumns.is() )
                     {
-                        Reference<XColumnsSupplier> xColumnsSupplier;
-                        // search the one and only primary key
-                        const sal_Int32 nCount = xUpdateTableKeys->getCount();
-                        for(sal_Int32 i = 0 ; i < nCount ; ++i)
+                        Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
+                        if ( xColSup.is() )
                         {
-                            Reference<XPropertySet> xProp(xUpdateTableKeys->getByIndex(i),UNO_QUERY);
-                            sal_Int32 nKeyType = 0;
-                            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-                            if(KeyType::PRIMARY == nKeyType)
-                            {
-                                xColumnsSupplier.set(xProp,UNO_QUERY);
-                                break;
-                            }
-                        }
-
-                        if(xColumnsSupplier.is())
-                        {
-                            // first we need a connection
-                            Reference< XStatement> xStmt(_xRs->getStatement(),UNO_QUERY);
-                            if(xStmt.is())
-                                xConnection = xStmt->getConnection();
-                            else
-                            {
-                                Reference< XPreparedStatement> xPrepStmt(_xRs->getStatement(),UNO_QUERY);
-                                xConnection = xPrepStmt->getConnection();
-                            }
-                            OSL_ENSURE(xConnection.is(),"No connection!");
-
-                            Reference<XNameAccess> xColumns = xColumnsSupplier->getColumns();
-                            Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
-                            if ( xColSup.is() )
-                            {
-                                Reference<XNameAccess> xSelColumns = xColSup->getColumns();
-                                Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
-                                SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers() ? true : false);
-                                ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
-                                bAllKeysFound = !aColumnNames.empty() && sal_Int32(aColumnNames.size()) == xColumns->getElementNames().getLength();
-                            }
+                            Reference<XNameAccess> xSelColumns = xColSup->getColumns();
+                            Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
+                            SelectColumnsMetaData aColumnNames(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers() ? true : false);
+                            ::dbaccess::getColumnPositions(xSelColumns,xPrimaryKeyColumns->getElementNames(),aUpdateTableName,aColumnNames);
+                            bAllKeysFound = !aColumnNames.empty() && sal_Int32(aColumnNames.size()) == xPrimaryKeyColumns->getElementNames().getLength();
                         }
                     }
                 }
@@ -192,20 +268,37 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         {
         }
     }
-    Reference< XPropertySet> xProp(_xRs,UNO_QUERY);
-
-    sal_Bool bBookmarkable = xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISBOOKMARKABLE) &&
-                             any2bool(xProp->getPropertyValue(PROPERTY_ISBOOKMARKABLE)) && Reference< XRowLocate >(_xRs, UNO_QUERY).is();
-    sal_Bool bNeedKeySet = !bBookmarkable;
-    bNeedKeySet = bNeedKeySet || (xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_RESULTSETCONCURRENCY) &&
-                            ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY)) == ResultSetConcurrency::READ_ONLY);
 
     // first check if resultset is bookmarkable
-    if ( !bNeedKeySet )
+    if(!bNeedKeySet)
     {
-        bNeedKeySet = impl_createBookmarkSet_nothrow(_xRs);
+        try
+        {
+            m_pCacheSet = new OBookmarkSet();
+            m_xCacheSet = m_pCacheSet;
+            m_pCacheSet->construct(_xRs,i_sRowSetFilter);
+
+            // check privileges
+            m_nPrivileges = Privilege::SELECT;
+            if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
+            {
+                Reference<XPropertySet> xTable(m_aUpdateTable,UNO_QUERY);
+                if(xTable.is() && xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES))
+                {
+                    m_nPrivileges = 0;
+                    xTable->getPropertyValue(PROPERTY_PRIVILEGES) >>= m_nPrivileges;
+                    if(!m_nPrivileges)
+                        m_nPrivileges = Privilege::SELECT;
+                }
+            }
+        }
+        catch(const SQLException&)
+        {
+            bNeedKeySet = sal_True;
+        }
+
     }
-    if ( bNeedKeySet )
+    if(bNeedKeySet)
     {
         // need to check if we could handle this select clause
         bAllKeysFound = bAllKeysFound && (nTablesCount == 1 || checkJoin(xConnection,_xAnalyzer,aUpdateTableName));
@@ -213,16 +306,11 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         // || !(comphelper::hasProperty(PROPERTY_CANUPDATEINSERTEDROWS,xProp) && any2bool(xProp->getPropertyValue(PROPERTY_CANUPDATEINSERTEDROWS)))
 
         // oj removed because keyset uses only the next// || (xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_RESULTSETTYPE) && comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETTYPE)) == ResultSetType::FORWARD_ONLY)
-        if ( !bAllKeysFound )
+        if(!bAllKeysFound )
         {
-            if ( bBookmarkable )
-                impl_createBookmarkSet_nothrow(_xRs);
-            else
-            {
-                m_pCacheSet = new OStaticSet();
-                m_xCacheSet = m_pCacheSet;
-                m_pCacheSet->construct(_xRs);
-            }
+            m_pCacheSet = new OStaticSet();
+            m_xCacheSet = m_pCacheSet;
+            m_pCacheSet->construct(_xRs,i_sRowSetFilter);
             m_nPrivileges = Privilege::SELECT;
         }
         else
@@ -232,7 +320,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             Reference<XColumnsSupplier> xColSup(_xAnalyzer,UNO_QUERY);
             Reference<XNameAccess> xSelColumns  = xColSup->getColumns();
             Reference<XNameAccess> xColumns     = m_aUpdateTable->getColumns();
-            ::dbaccess::getColumnPositions(xSelColumns,xColumns,aUpdateTableName,aColumnNames);
+            ::dbaccess::getColumnPositions(xSelColumns,xColumns->getElementNames(),aUpdateTableName,aColumnNames);
 
             // check privileges
             m_nPrivileges = Privilege::SELECT;
@@ -243,8 +331,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             const ::rtl::OUString* pEnd     = pIter + aNames.getLength();
             for(;pIter != pEnd;++pIter)
             {
-                Reference<XPropertySet> xColumn;
-                ::cppu::extractInterface(xColumn,xColumns->getByName(*pIter));
+                Reference<XPropertySet> xColumn(xColumns->getByName(*pIter),UNO_QUERY);
                 OSL_ENSURE(xColumn.is(),"Column in table is null!");
                 if(xColumn.is())
                 {
@@ -258,12 +345,12 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
 
-            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,xUpdateTableKeys,aUpdateTableName ,_xAnalyzer);
+            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,xUpdateTableKeys,aUpdateTableName ,_xAnalyzer,_aParameterValueForCache);
             try
             {
                 m_pCacheSet = pKeySet;
                 m_xCacheSet = m_pCacheSet;
-                pKeySet->construct(_xRs);
+                pKeySet->construct(_xRs,i_sRowSetFilter);
 
                 if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
                 {
@@ -287,7 +374,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 m_xCacheSet = NULL;
                 m_pCacheSet = new OStaticSet();
                 m_xCacheSet = m_pCacheSet;
-                m_pCacheSet->construct(_xRs);
+                m_pCacheSet->construct(_xRs,i_sRowSetFilter);
                 m_nPrivileges = Privilege::SELECT;
             }
         }
@@ -298,6 +385,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         ::comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETCONCURRENCY)) == ResultSetConcurrency::READ_ONLY)
         m_nPrivileges = Privilege::SELECT;
 }
+
 // -------------------------------------------------------------------------
 ORowSetCache::~ORowSetCache()
 {
@@ -320,40 +408,10 @@ ORowSetCache::~ORowSetCache()
 
     DBG_DTOR(ORowSetCache,NULL);
 }
-// -----------------------------------------------------------------------------
-sal_Bool ORowSetCache::impl_createBookmarkSet_nothrow(const Reference< XResultSet >& _xRs)
-{
-    sal_Bool bRet = sal_False;
-    try
-    {
-        m_pCacheSet = new OBookmarkSet();
-        m_xCacheSet = m_pCacheSet;
-        m_pCacheSet->construct(_xRs);
 
-        // check privileges
-        m_nPrivileges = Privilege::SELECT;
-        if(Reference<XResultSetUpdate>(_xRs,UNO_QUERY).is())  // this interface is optional so we have to check it
-        {
-            Reference<XPropertySet> xTable(m_aUpdateTable,UNO_QUERY);
-            if(xTable.is() && xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_PRIVILEGES))
-            {
-                m_nPrivileges = 0;
-                xTable->getPropertyValue(PROPERTY_PRIVILEGES) >>= m_nPrivileges;
-                if(!m_nPrivileges)
-                    m_nPrivileges = Privilege::SELECT;
-            }
-        }
-    }
-    catch(const SQLException&)
-    {
-        bRet = sal_True;
-    }
-    return bRet;
-}
 // -------------------------------------------------------------------------
 void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::setMaxRowSize" );
 
     if(_nSize == m_nFetchSize)
         return;
@@ -375,7 +433,8 @@ void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
         ::std::map<sal_Int32,sal_Bool> aCacheIterToChange;
         // first get the positions where they stand now
         ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
-        for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
+        ORowSetCacheMap::iterator aCacheEnd = m_aCacheIterators.end();
+        for(;aCacheIter != aCacheEnd;++aCacheIter)
         {
             aCacheIterToChange[aCacheIter->first] = sal_False;
             if ( !aCacheIter->second.pRowSet->isInsertRow()
@@ -425,14 +484,27 @@ void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
 // XResultSetMetaDataSupplier
 Reference< XResultSetMetaData > ORowSetCache::getMetaData(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::getMetaData" );
     return m_xMetaData;
+}
+// -------------------------------------------------------------------------
+Any lcl_getBookmark(ORowSetValue& i_aValue,OCacheSet* i_pCacheSet)
+{
+    switch ( i_aValue.getTypeKind() )
+    {
+        case DataType::TINYINT:
+        case DataType::SMALLINT:
+        case DataType::INTEGER:
+            return makeAny((sal_Int32)i_aValue);
+        default:
+            if ( i_pCacheSet && i_aValue.isNull())
+                i_aValue = i_pCacheSet->getBookmark();
+            return i_aValue.getAny();
+    }
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::sdbcx::XRowLocate
 Any ORowSetCache::getBookmark(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::getBookmark" );
 
     if(m_bAfterLast)
         throwFunctionSequenceException(m_xSet.get());
@@ -442,22 +514,11 @@ Any ORowSetCache::getBookmark(  )
         return Any(); // this is allowed here because the rowset knowns what it is doing
     }
 
-    switch(((*m_aMatrixIter)->get())[0].getTypeKind())
-    {
-        case DataType::TINYINT:
-        case DataType::SMALLINT:
-        case DataType::INTEGER:
-            return makeAny((sal_Int32)((*m_aMatrixIter)->get())[0]);
-        default:
-            if(((*m_aMatrixIter)->get())[0].isNull())
-                ((*m_aMatrixIter)->get())[0] = m_pCacheSet->getBookmark();
-            return ((*m_aMatrixIter)->get())[0].getAny();
-    }
+    return lcl_getBookmark(((*m_aMatrixIter)->get())[0],m_pCacheSet);
 }
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::moveToBookmark( const Any& bookmark )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::moveToBookmark" );
     if ( m_pCacheSet->moveToBookmark(bookmark) )
     {
         m_bBeforeFirst = sal_False;
@@ -488,7 +549,6 @@ sal_Bool ORowSetCache::moveToBookmark( const Any& bookmark )
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::moveRelativeToBookmark( const Any& bookmark, sal_Int32 rows )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::moveRelativeToBookmark" );
     sal_Bool bRet( moveToBookmark( bookmark ) );
     if ( bRet )
     {
@@ -504,90 +564,111 @@ sal_Bool ORowSetCache::moveRelativeToBookmark( const Any& bookmark, sal_Int32 ro
 // -------------------------------------------------------------------------
 sal_Int32 ORowSetCache::compareBookmarks( const Any& _first, const Any& _second )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::compareBookmarks" );
     return (!_first.hasValue() || !_second.hasValue()) ? CompareBookmark::NOT_COMPARABLE : m_pCacheSet->compareBookmarks(_first,_second);
 }
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::hasOrderedBookmarks(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::hasOrderedBookmarks" );
-
     return m_pCacheSet->hasOrderedBookmarks();
 }
 // -------------------------------------------------------------------------
 sal_Int32 ORowSetCache::hashBookmark( const Any& bookmark )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::hashBookmark" );
-
     return m_pCacheSet->hashBookmark(bookmark);
 }
-// -------------------------------------------------------------------------
 // XRowUpdate
 // -----------------------------------------------------------------------------
-void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x)
+void ORowSetCache::updateNull(sal_Int32 columnIndex,ORowSetValueVector::Vector& io_aRow
+                              ,::std::vector<sal_Int32>& o_ChangedColumns
+                              )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::updateValue" );
     checkUpdateConditions(columnIndex);
 
+    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    rInsert[columnIndex].setBound(sal_True);
+    rInsert[columnIndex].setNull();
+    rInsert[columnIndex].setModified();
+    io_aRow[columnIndex].setNull();
 
-    ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
-    ((*m_aInsertRow)->get())[columnIndex] = x;
-    ((*m_aInsertRow)->get())[columnIndex].setModified();
+    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
+}
+// -----------------------------------------------------------------------------
+void ORowSetCache::updateValue(sal_Int32 columnIndex,const ORowSetValue& x
+                               ,ORowSetValueVector::Vector& io_aRow
+                               ,::std::vector<sal_Int32>& o_ChangedColumns
+                               )
+{
+    checkUpdateConditions(columnIndex);
+
+    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    rInsert[columnIndex].setBound(sal_True);
+    rInsert[columnIndex] = x;
+    rInsert[columnIndex].setModified();
+    io_aRow[columnIndex] = rInsert[columnIndex];
+
+    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
 // -------------------------------------------------------------------------
-void ORowSetCache::updateBinaryStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length )
+void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x
+                                         , sal_Int32 length,ORowSetValueVector::Vector& io_aRow
+                                         ,::std::vector<sal_Int32>& o_ChangedColumns
+                                         )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::updateBinaryStream" );
     checkUpdateConditions(columnIndex);
-
 
     Sequence<sal_Int8> aSeq;
     if(x.is())
         x->readBytes(aSeq,length);
-    updateValue(columnIndex,aSeq);
+
+    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    rInsert[columnIndex].setBound(sal_True);
+    rInsert[columnIndex] = aSeq;
+    rInsert[columnIndex].setModified();
+    io_aRow[columnIndex] = makeAny(x);
+
+    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
 // -------------------------------------------------------------------------
-void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference< ::com::sun::star::io::XInputStream >& x, sal_Int32 length )
+void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x
+                                ,ORowSetValueVector::Vector& io_aRow
+                                ,::std::vector<sal_Int32>& o_ChangedColumns
+                                )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::updateCharacterStream" );
     checkUpdateConditions(columnIndex);
 
+    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    rInsert[columnIndex].setBound(sal_True);
+    rInsert[columnIndex] = x;
+    rInsert[columnIndex].setModified();
+    io_aRow[columnIndex] = rInsert[columnIndex];
 
-    Sequence<sal_Int8> aSeq;
-    if(x.is())
-        x->readBytes(aSeq,length);
-
-    updateValue(columnIndex,aSeq);
+    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
 // -------------------------------------------------------------------------
-void ORowSetCache::updateObject( sal_Int32 columnIndex, const Any& x )
+void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/
+                                       ,ORowSetValueVector::Vector& io_aRow
+                                       ,::std::vector<sal_Int32>& o_ChangedColumns
+                                       )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::updateObject" );
     checkUpdateConditions(columnIndex);
 
+    ORowSetValueVector::Vector& rInsert = ((*m_aInsertRow)->get());
+    rInsert[columnIndex].setBound(sal_True);
+    rInsert[columnIndex] = x;
+    rInsert[columnIndex].setModified();
+    io_aRow[columnIndex] = rInsert[columnIndex];
 
-    ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
-    ((*m_aInsertRow)->get())[columnIndex] = x;
-    ((*m_aInsertRow)->get())[columnIndex].setModified();
-}
-// -------------------------------------------------------------------------
-void ORowSetCache::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/ )
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::updateNumericObject" );
-    checkUpdateConditions(columnIndex);
-
-
-    ((*m_aInsertRow)->get())[columnIndex].setBound(sal_True);
-    ((*m_aInsertRow)->get())[columnIndex] = x;
-    ((*m_aInsertRow)->get())[columnIndex].setModified();
+    m_pCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
+    impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);
 }
 // -------------------------------------------------------------------------
 // XResultSet
 sal_Bool ORowSetCache::next(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::next" );
-
-
     if(!isAfterLast())
     {
         m_bBeforeFirst = sal_False;
@@ -610,7 +691,6 @@ sal_Bool ORowSetCache::next(  )
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::isBeforeFirst(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::isBeforeFirst" );
     //  return !m_nPosition;
 
     return m_bBeforeFirst;
@@ -618,21 +698,18 @@ sal_Bool ORowSetCache::isBeforeFirst(  )
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::isAfterLast(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::isAfterLast" );
 
     return m_bAfterLast;
 }
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::isFirst(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::isFirst" );
 
     return m_nPosition == 1; // ask resultset for
 }
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::isLast(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::isLast" );
     //  return m_bRowCountFinal ? (m_nPosition==m_nRowCount) : m_pCacheSet->isLast();
 
     return m_nPosition == m_nRowCount;
@@ -640,7 +717,6 @@ sal_Bool ORowSetCache::isLast(  )
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::beforeFirst(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::beforeFirst" );
 
 
     if(!m_bBeforeFirst)
@@ -657,7 +733,6 @@ sal_Bool ORowSetCache::beforeFirst(  )
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::afterLast(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::afterLast" );
 
 
     if(!m_bAfterLast)
@@ -681,12 +756,10 @@ sal_Bool ORowSetCache::afterLast(  )
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::fillMatrix" );
     OSL_ENSURE(_nNewStartPos != _nNewEndPos,"ORowSetCache::fillMatrix: StartPos and EndPos can not be equal!");
     // fill the whole window with new data
     ORowSetMatrix::iterator aIter = m_pMatrix->begin();
     sal_Bool bCheck = m_pCacheSet->absolute(_nNewStartPos); // -1 no need to
-    const sal_Int32 nColumnCount = m_xMetaData->getColumnCount();
 
     sal_Int32 i=_nNewStartPos;
     for(;i<_nNewEndPos;++i,++aIter)
@@ -694,7 +767,7 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
         if(bCheck)
         {
             if(!aIter->isValid())
-                *aIter = new ORowSetValueVector(nColumnCount);
+                *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
             m_pCacheSet->fillValueRow(*aIter,i);
         }
         else
@@ -711,22 +784,23 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
             if(m_nRowCount > m_nFetchSize)
             {
                 ORowSetMatrix::iterator aEnd = aIter;
+                ORowSetMatrix::iterator aRealEnd = m_pMatrix->end();
                 sal_Int32 nPos = m_nRowCount - m_nFetchSize + 1;
                 _nNewStartPos = nPos;
                 bCheck = m_pCacheSet->absolute(_nNewStartPos);
 
-                for(;bCheck && aIter != m_pMatrix->end();++aIter)
+                for(;bCheck && aIter != aRealEnd;++aIter)
                 {
                     if(bCheck)
                     {
                         if(!aIter->isValid())
-                            *aIter = new ORowSetValueVector(nColumnCount);
+                            *aIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
                         m_pCacheSet->fillValueRow(*aIter,nPos++);
                     }
                     bCheck = m_pCacheSet->next();
                 }
                 if(aIter != aEnd)
-                    ::std::rotate(m_pMatrix->begin(),aEnd,m_pMatrix->end());
+                    ::std::rotate(m_pMatrix->begin(),aEnd,aRealEnd);
             }
             break;
         }
@@ -752,7 +826,6 @@ sal_Bool ORowSetCache::fillMatrix(sal_Int32& _nNewStartPos,sal_Int32 _nNewEndPos
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::moveWindow()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::moveWindow" );
 
     sal_Bool bRet = sal_True;
 
@@ -803,7 +876,8 @@ sal_Bool ORowSetCache::moveWindow()
                 ptrdiff_t nNewDist = aEnd - m_pMatrix->begin();
                 ptrdiff_t nOffSet = m_pMatrix->end() - aEnd;
                 ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
-                for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
+                ORowSetCacheMap::iterator aCacheEnd  = m_aCacheIterators.end();
+                for(;aCacheIter != aCacheEnd;++aCacheIter)
                 {
                     if ( !aCacheIter->second.pRowSet->isInsertRow()
                         && aCacheIter->second.aIterator != m_pMatrix->end() && !m_bModified )
@@ -880,7 +954,7 @@ sal_Bool ORowSetCache::moveWindow()
                 {
                     *m_aMatrixIter = new ORowSetValueVector(m_xMetaData->getColumnCount());
                     m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
-                    // we have to read one row forward to enshure that we know when we are on last row
+                    // we have to read one row forward to ensure that we know when we are on last row
                     // but only when we don't know it already
                     if ( !m_bRowCountFinal )
                     {
@@ -990,7 +1064,6 @@ sal_Bool ORowSetCache::moveWindow()
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::first(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::first" );
     // first move to the first row
     // then check if the cache window is at the begining
     // when not postionize the window and fill it with data
@@ -1016,7 +1089,6 @@ sal_Bool ORowSetCache::first(  )
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::last(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::last" );
     sal_Bool bRet = m_pCacheSet->last();
     if(bRet)
     {
@@ -1056,13 +1128,11 @@ sal_Bool ORowSetCache::last(  )
 // -------------------------------------------------------------------------
 sal_Int32 ORowSetCache::getRow(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::getRow" );
     return (isBeforeFirst() || isAfterLast()) ? 0 : m_nPosition;
 }
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::absolute( sal_Int32 row )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::absolute" );
     if(!row )
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_ABS_ZERO),NULL,SQLSTATE_GENERAL,1000,Any() );
 
@@ -1116,7 +1186,6 @@ sal_Bool ORowSetCache::absolute( sal_Int32 row )
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::relative( sal_Int32 rows )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::relative" );
     sal_Bool bErg = sal_True;
     if(rows)
     {
@@ -1145,7 +1214,6 @@ sal_Bool ORowSetCache::relative( sal_Int32 rows )
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::previous(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::previous" );
     sal_Bool bRet = sal_False;
     if(!isBeforeFirst())
     {
@@ -1177,7 +1245,6 @@ sal_Bool ORowSetCache::previous(  )
 // -------------------------------------------------------------------------
 void ORowSetCache::refreshRow(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::refreshRow" );
     if(isAfterLast())
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_REFESH_AFTERLAST),NULL,SQLSTATE_GENERAL,1000,Any() );
     OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"refreshRow() called for invalid row!");
@@ -1191,20 +1258,17 @@ void ORowSetCache::refreshRow(  )
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::rowUpdated(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::rowUpdated" );
     return m_pCacheSet->rowUpdated();
 }
 // -------------------------------------------------------------------------
 sal_Bool ORowSetCache::rowInserted(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::rowInserted" );
     return m_pCacheSet->rowInserted();
 }
 // -------------------------------------------------------------------------
 // XResultSetUpdate
-sal_Bool ORowSetCache::insertRow(  )
+sal_Bool ORowSetCache::insertRow(::std::vector< Any >& o_aBookmarks)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::insertRow" );
     if ( !m_bNew || !m_aInsertRow->isValid() )
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_MOVETOINSERTROW_CALLED),NULL,SQLSTATE_GENERAL,1000,Any() );
 
@@ -1217,7 +1281,19 @@ sal_Bool ORowSetCache::insertRow(  )
         Any aBookmark = ((*m_aInsertRow)->get())[0].makeAny();
         m_bAfterLast = m_bBeforeFirst = sal_False;
         if(aBookmark.hasValue())
+        {
             moveToBookmark(aBookmark);
+            // update the cached values
+            ORowSetValueVector::Vector& rCurrentRow = ((*m_aMatrixIter))->get();
+            ORowSetMatrix::iterator aIter = m_pMatrix->begin();
+            for(;aIter != m_pMatrix->end();++aIter)
+            {
+                if ( m_aMatrixIter != aIter && aIter->isValid() && m_pCacheSet->columnValuesUpdated((*aIter)->get(),rCurrentRow) )
+                {
+                    o_aBookmarks.push_back(lcl_getBookmark((*aIter)->get()[0],m_pCacheSet));
+                }
+            }
+        }
         else
         {
             OSL_ENSURE(0,"There must be a bookmark after the row was inserted!");
@@ -1228,7 +1304,6 @@ sal_Bool ORowSetCache::insertRow(  )
 // -------------------------------------------------------------------------
 void ORowSetCache::resetInsertRow(sal_Bool _bClearInsertRow)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::resetInsertRow" );
     if ( _bClearInsertRow )
         clearInsertRow();
     m_bNew      = sal_False;
@@ -1237,7 +1312,6 @@ void ORowSetCache::resetInsertRow(sal_Bool _bClearInsertRow)
 // -------------------------------------------------------------------------
 void ORowSetCache::cancelRowModification()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::cancelRowModification" );
     // clear the insertrow references   -> implies that the current row of the rowset changes as well
     ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
     ORowSetCacheMap::iterator aCacheEnd = m_aCacheIterators.end();
@@ -1249,9 +1323,8 @@ void ORowSetCache::cancelRowModification()
     resetInsertRow(sal_False);
 }
 // -------------------------------------------------------------------------
-void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow )
+void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow,::std::vector< Any >& o_aBookmarks )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::updateRow" );
     if(isAfterLast() || isBeforeFirst())
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_UPDATEROW),NULL,SQLSTATE_GENERAL,1000,Any() );
 
@@ -1261,21 +1334,28 @@ void ORowSetCache::updateRow( ORowSetMatrix::iterator& _rUpdateRow )
     // the row was already fetched
     moveToBookmark(aBookmark);
     m_pCacheSet->updateRow(*_rUpdateRow,*m_aMatrixIter,m_aUpdateTable);
-    //  *(*m_aMatrixIter) = *(*_rUpdateRow);
     // refetch the whole row
     (*m_aMatrixIter) = NULL;
-    moveToBookmark(aBookmark);
 
-    //  moveToBookmark((*(*m_aInsertRow))[0].makeAny());
-//  if(m_pCacheSet->rowUpdated())
-//      *m_aMatrixIter = m_aInsertRow;
+    if ( moveToBookmark(aBookmark) )
+    {
+        // update the cached values
+        ORowSetValueVector::Vector& rCurrentRow = ((*m_aMatrixIter))->get();
+        ORowSetMatrix::iterator aIter = m_pMatrix->begin();
+        for(;aIter != m_pMatrix->end();++aIter)
+        {
+            if ( m_aMatrixIter != aIter && aIter->isValid() && m_pCacheSet->columnValuesUpdated((*aIter)->get(),rCurrentRow) )
+            {
+                o_aBookmarks.push_back(lcl_getBookmark((*aIter)->get()[0],m_pCacheSet));
+            }
+        }
+    }
+
     m_bModified = sal_False;
-    //  refreshRow(  );
 }
 // -------------------------------------------------------------------------
 bool ORowSetCache::deleteRow(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::deleteRow" );
     if(isAfterLast() || isBeforeFirst())
         throw SQLException(DBACORE_RESSTRING(RID_STR_NO_DELETEROW),NULL,SQLSTATE_GENERAL,1000,Any() );
 
@@ -1288,10 +1368,9 @@ bool ORowSetCache::deleteRow(  )
     OSL_ENSURE(((m_nPosition - m_nStartPos) - 1) < (sal_Int32)m_pMatrix->size(),"Position is behind end()!");
     ORowSetMatrix::iterator aPos = calcPosition();
     (*aPos)   = NULL;
-    //  (*m_pMatrix)[(m_nPosition - m_nStartPos)] = NULL; // set the deleted row to NULL
 
-
-    for(++aPos;aPos != m_pMatrix->end() && aPos->isValid();++aPos)
+    ORowSetMatrix::iterator aEnd = m_pMatrix->end();
+    for(++aPos;aPos != aEnd && aPos->isValid();++aPos)
     {
         *(aPos-1) = *aPos;
         (*aPos)   = NULL;
@@ -1304,7 +1383,6 @@ bool ORowSetCache::deleteRow(  )
 // -------------------------------------------------------------------------
 void ORowSetCache::cancelRowUpdates(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::cancelRowUpdates" );
     m_bNew = m_bModified = sal_False;
     if(!m_nPosition)
     {
@@ -1323,7 +1401,6 @@ void ORowSetCache::cancelRowUpdates(  )
 // -------------------------------------------------------------------------
 void ORowSetCache::moveToInsertRow(  )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::moveToInsertRow" );
     m_bNew      = sal_True;
     m_bUpdated  = m_bAfterLast = sal_False;
 
@@ -1333,17 +1410,18 @@ void ORowSetCache::moveToInsertRow(  )
 
     // we don't unbound the bookmark column
     ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->get().begin()+1;
-    for(;aIter != (*m_aInsertRow)->get().end();++aIter)
+    ORowSetValueVector::Vector::iterator aEnd = (*m_aInsertRow)->get().end();
+    for(sal_Int32 i = 1;aIter != aEnd;++aIter,++i)
     {
         aIter->setBound(sal_False);
         aIter->setModified(sal_False);
         aIter->setNull();
+        aIter->setTypeKind(m_xMetaData->getColumnType(i));
     }
 }
 // -------------------------------------------------------------------------
 ORowSetCacheIterator ORowSetCache::createIterator(ORowSetBase* _pRowSet)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::createIterator" );
 
     ORowSetCacheIterator_Helper aHelper;
     aHelper.aIterator = m_pMatrix->end();
@@ -1351,14 +1429,29 @@ ORowSetCacheIterator ORowSetCache::createIterator(ORowSetBase* _pRowSet)
     return ORowSetCacheIterator(m_aCacheIterators.insert(m_aCacheIterators.begin(),ORowSetCacheMap::value_type(m_aCacheIterators.size()+1,aHelper)),this,_pRowSet);
 }
 // -----------------------------------------------------------------------------
+void ORowSetCache::deleteIterator(const ORowSetBase* _pRowSet)
+{
+    ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
+    for(;aCacheIter != m_aCacheIterators.end();)
+    {
+        if ( aCacheIter->second.pRowSet == _pRowSet )
+        {
+            m_aCacheIterators.erase(aCacheIter);
+            aCacheIter = m_aCacheIterators.begin();
+        } // if ( aCacheIter->second.pRowSet == _pRowSet )
+        else
+            ++aCacheIter;
+    }
+}
+// -----------------------------------------------------------------------------
 void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::rotateCacheIterator" );
     if(_nDist)
     {
         // now correct the iterator in our iterator vector
         ORowSetCacheMap::iterator aCacheIter = m_aCacheIterators.begin();
-        for(;aCacheIter != m_aCacheIterators.end();++aCacheIter)
+        ORowSetCacheMap::iterator aCacheEnd  = m_aCacheIterators.end();
+        for(;aCacheIter != aCacheEnd;++aCacheIter)
         {
             if ( !aCacheIter->second.pRowSet->isInsertRow()
                 && aCacheIter->second.aIterator != m_pMatrix->end() && !m_bModified )
@@ -1382,7 +1475,6 @@ void ORowSetCache::rotateCacheIterator(ORowSetMatrix::difference_type _nDist)
 // -------------------------------------------------------------------------
 void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRow)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::setUpdateIterator" );
     m_aInsertRow = m_pInsertMatrix->begin();
     if(!m_aInsertRow->isValid())
         *m_aInsertRow = new ORowSetValueVector(m_xMetaData->getColumnCount());
@@ -1390,13 +1482,13 @@ void ORowSetCache::setUpdateIterator(const ORowSetMatrix::iterator& _rOriginalRo
     (*(*m_aInsertRow)) = (*(*_rOriginalRow));
     // we don't unbound the bookmark column
     ORowSetValueVector::Vector::iterator aIter = (*m_aInsertRow)->get().begin();
-    for(;aIter != (*m_aInsertRow)->get().end();++aIter)
+    ORowSetValueVector::Vector::iterator aEnd = (*m_aInsertRow)->get().end();
+    for(;aIter != aEnd;++aIter)
         aIter->setModified(sal_False);
 }
 // -----------------------------------------------------------------------------
 void ORowSetCache::checkPositionFlags()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::checkPositionFlags" );
     if(m_bRowCountFinal)
     {
         m_bAfterLast    = m_nPosition > m_nRowCount;
@@ -1407,14 +1499,12 @@ void ORowSetCache::checkPositionFlags()
 // -----------------------------------------------------------------------------
 void ORowSetCache::checkUpdateConditions(sal_Int32 columnIndex)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::checkUpdateConditions" );
     if(m_bAfterLast || columnIndex >= (sal_Int32)(*m_aInsertRow)->get().size())
         throwFunctionSequenceException(m_xSet.get());
 }
 //------------------------------------------------------------------------------
 sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode,const Reference< XConnection>& _xConnection,const ::rtl::OUString& _sUpdateTableName)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::checkInnerJoin" );
     sal_Bool bOk = sal_False;
     if (pNode->count() == 3 &&  // Ausdruck is geklammert
         SQL_ISPUNCTUATION(pNode->getChild(0),"(") &&
@@ -1456,7 +1546,6 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
                                  const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
                                  const ::rtl::OUString& _sUpdateTableName )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::checkJoin" );
     sal_Bool bOk = sal_False;
     ::rtl::OUString sSql = _xAnalyzer->getQuery();
     ::rtl::OUString sErrorMsg;
@@ -1515,7 +1604,6 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
 // -----------------------------------------------------------------------------
 void ORowSetCache::clearInsertRow()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::clearInsertRow" );
     // we don't unbound the bookmark column
     if ( m_aInsertRow != m_pInsertMatrix->end() && m_aInsertRow->isValid() )
     {
@@ -1532,7 +1620,6 @@ void ORowSetCache::clearInsertRow()
 // -----------------------------------------------------------------------------
 ORowSetMatrix::iterator ORowSetCache::calcPosition() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::calcPosition" );
     sal_Int32 nValue = (m_nPosition - m_nStartPos) - 1;
     CHECK_MATRIX_POS(nValue);
     return ( nValue < 0 || nValue >= static_cast<sal_Int32>(m_pMatrix->size()) ) ? m_pMatrix->end() : (m_pMatrix->begin() + nValue);
@@ -1541,7 +1628,6 @@ ORowSetMatrix::iterator ORowSetCache::calcPosition() const
 
 TORowSetOldRowHelperRef ORowSetCache::registerOldRow()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::registerOldRow" );
     TORowSetOldRowHelperRef pRef = new ORowSetOldRowHelper(ORowSetRow());
     m_aOldRows.push_back(pRef);
     return pRef;
@@ -1549,8 +1635,8 @@ TORowSetOldRowHelperRef ORowSetCache::registerOldRow()
 // -----------------------------------------------------------------------------
 void ORowSetCache::deregisterOldRow(const TORowSetOldRowHelperRef& _rRow)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::deregisterOldRow" );
-    for (TOldRowSetRows::iterator aOldRowIter = m_aOldRows.begin(); aOldRowIter != m_aOldRows.end(); ++aOldRowIter)
+    TOldRowSetRows::iterator aOldRowEnd = m_aOldRows.end();
+    for (TOldRowSetRows::iterator aOldRowIter = m_aOldRows.begin(); aOldRowIter != aOldRowEnd; ++aOldRowIter)
     {
         if ( aOldRowIter->getBodyPtr() == _rRow.getBodyPtr() )
         {
@@ -1563,8 +1649,8 @@ void ORowSetCache::deregisterOldRow(const TORowSetOldRowHelperRef& _rRow)
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPos)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::reFillMatrix" );
-    for (TOldRowSetRows::iterator aOldRowIter = m_aOldRows.begin(); aOldRowIter != m_aOldRows.end(); ++aOldRowIter)
+    TOldRowSetRows::iterator aOldRowEnd = m_aOldRows.end();
+    for (TOldRowSetRows::iterator aOldRowIter = m_aOldRows.begin(); aOldRowIter != aOldRowEnd; ++aOldRowIter)
     {
         if ( aOldRowIter->isValid() && aOldRowIter->getBody().getRow().isValid() )
             aOldRowIter->getBody().setRow(new ORowSetValueVector(aOldRowIter->getBody().getRow().getBody()) );
@@ -1578,7 +1664,6 @@ sal_Bool ORowSetCache::reFillMatrix(sal_Int32 _nNewStartPos,sal_Int32 _nNewEndPo
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetCache::fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix::iterator& _aEnd,sal_Int32& _nPos,sal_Bool _bCheck)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "ORowSetCache::fill" );
     sal_Int32 nColumnCount = m_xMetaData->getColumnCount();
     for(; _bCheck && _aIter != _aEnd;)
     {
@@ -1586,7 +1671,8 @@ sal_Bool ORowSetCache::fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix:
             *_aIter = new ORowSetValueVector(nColumnCount);
         else
         {
-            for (TOldRowSetRows::iterator aOldRowIter = m_aOldRows.begin(); aOldRowIter != m_aOldRows.end(); ++aOldRowIter)
+            TOldRowSetRows::iterator aOldRowEnd = m_aOldRows.end();
+            for (TOldRowSetRows::iterator aOldRowIter = m_aOldRows.begin(); aOldRowIter != aOldRowEnd; ++aOldRowIter)
             {
                 if ( aOldRowIter->getBody().getRow().isEqualBody(*_aIter) )
                     *_aIter = new ORowSetValueVector(nColumnCount);
@@ -1598,8 +1684,39 @@ sal_Bool ORowSetCache::fill(ORowSetMatrix::iterator& _aIter,const ORowSetMatrix:
     return _bCheck;
 }
 // -----------------------------------------------------------------------------
+bool ORowSetCache::isResultSetChanged() const
+{
+    return m_pCacheSet->isResultSetChanged();
+}
+// -----------------------------------------------------------------------------
+void ORowSetCache::reset(const Reference< XResultSet>& _xDriverSet)
+{
+    m_xMetaData.set(Reference< XResultSetMetaDataSupplier >(_xDriverSet,UNO_QUERY)->getMetaData());
+    m_pCacheSet->reset(_xDriverSet);
 
+    m_bRowCountFinal = sal_False;
+    m_nRowCount = 0;
+    reFillMatrix(m_nStartPos+1,m_nEndPos+1);
+}
+// -----------------------------------------------------------------------------
+void ORowSetCache::impl_updateRowFromCache_throw(ORowSetValueVector::Vector& io_aRow
+                                           ,::std::vector<sal_Int32>& o_ChangedColumns)
+{
+    if ( o_ChangedColumns.size() > 1 )
+    {
+        ORowSetMatrix::iterator aIter = m_pMatrix->begin();
+        for(;aIter != m_pMatrix->end();++aIter)
+        {
+            if ( aIter->isValid() && m_pCacheSet->updateColumnValues((*aIter)->get(),io_aRow,o_ChangedColumns))
+            {
+                break;
+            }
+        }
 
-
-
-
+        if ( aIter == m_pMatrix->end() )
+        {
+            m_pCacheSet->fillMissingValues(io_aRow);
+        }
+    }
+}
+// -----------------------------------------------------------------------------

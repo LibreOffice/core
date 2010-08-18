@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportSection.cxx,v $
- * $Revision: 1.11.18.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +38,8 @@
 #include "ViewsWindow.hxx"
 
 #include <svx/svdpagv.hxx>
-#include <svx/eeitemid.hxx>
-#include <svx/adjitem.hxx>
+#include <editeng/eeitemid.hxx>
+#include <editeng/adjitem.hxx>
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/gallery.hxx>
@@ -67,7 +64,7 @@
 #include <vcl/lineinfo.hxx>
 #include "ColorChanger.hxx"
 
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #include <svtools/extcolorcfg.hxx>
 #include <unotools/confignode.hxx>
 #include <framework/imageproducer.hxx>
@@ -505,7 +502,7 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
         case COMMAND_CONTEXTMENU:
         {
             const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-            BOOL bHiContrast = rSettings.GetMenuColor().IsDark();
+            BOOL bHiContrast = rSettings.GetHighContrastMode();
             OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
             uno::Reference<frame::XFrame> xFrame = rController.getFrame();
             PopupMenu aContextMenu( ModuleRes( RID_MENU_REPORT ) );

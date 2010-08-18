@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: controllerframe.cxx,v $
- * $Revision: 1.3.2.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,6 +41,8 @@
 #include <rtl/ref.hxx>
 #include <sfx2/objsh.hxx>
 #include <tools/diagnose_ex.h>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <vcl/window.hxx>
 
 //........................................................................
 namespace dbaui
@@ -77,6 +76,7 @@ namespace dbaui
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::document::XDocumentEventBroadcaster;
+    using ::com::sun::star::awt::XWindow;
     /** === end UNO using === **/
 
     //====================================================================
@@ -125,7 +125,7 @@ namespace dbaui
             ,m_xDocEventBroadcaster()
             ,m_pListener()
             ,m_bActive( false )
-            ,m_bLivesInTopWindow( false )
+            ,m_bIsTopLevelDocumentWindow( false )
         {
         }
 
@@ -134,7 +134,7 @@ namespace dbaui
         Reference< XDocumentEventBroadcaster >              m_xDocEventBroadcaster;
         ::rtl::Reference< FrameWindowActivationListener >   m_pListener;
         bool                                                m_bActive;
-        bool                                                m_bLivesInTopWindow;
+        bool                                                m_bIsTopLevelDocumentWindow;
     };
 
     //====================================================================
@@ -208,7 +208,7 @@ namespace dbaui
             if ( !xCompController.is() )
                 return;
 
-            if ( _rData.m_bActive && _rData.m_bLivesInTopWindow )
+            if ( _rData.m_bActive && _rData.m_bIsTopLevelDocumentWindow )
             {
                 // set the "current component" at the SfxObjectShell
                 Reference< XModel > xModel( xCompController->getModel() );
@@ -288,9 +288,21 @@ namespace dbaui
             void ( SAL_CALL XTopWindow::*pListenerAction )( const Reference< XTopWindowListener >& ) =
                 _bRegister ? &XTopWindow::addTopWindowListener : &XTopWindow::removeTopWindowListener;
 
-            Reference< XTopWindow > xFrameContainer( m_pData->m_xFrame->getContainerWindow(), UNO_QUERY );
+            const Reference< XWindow > xContainerWindow( m_pData->m_xFrame->getContainerWindow(), UNO_SET_THROW );
             if ( _bRegister )
-                m_pData->m_bLivesInTopWindow = xFrameContainer.is();
+            {
+                const Window* pContainerWindow = VCLUnoHelper::GetWindow( xContainerWindow );
+                ENSURE_OR_THROW( pContainerWindow, "no Window implementation for the frame's container window!" );
+
+                /*const Window* pContainerParentWindow = pContainerWindow->GetParent();
+                if ( pContainerParentWindow && ( pContainerParentWindow->GetType() == WINDOW_BORDERWINDOW ) )
+                    pContainerParentWindow = pContainerParentWindow->GetParent();
+                m_pData->m_bIsTopLevelDocumentWindow = ( pContainerParentWindow == NULL );*/
+
+                m_pData->m_bIsTopLevelDocumentWindow = ( pContainerWindow->GetExtendedStyle() & WB_EXT_DOCUMENT ) != 0;
+            }
+
+            const Reference< XTopWindow > xFrameContainer( xContainerWindow, UNO_QUERY );
             if ( xFrameContainer.is() )
                 (xFrameContainer.get()->*pListenerAction)( this );
         }

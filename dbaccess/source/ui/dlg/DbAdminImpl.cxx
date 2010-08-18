@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DbAdminImpl.cxx,v $
- * $Revision: 1.26.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,92 +31,56 @@
 #include "DbAdminImpl.hxx"
 #include "dsmeta.hxx"
 
-#ifndef _SFXPOOLITEM_HXX
-#include <svtools/poolitem.hxx>
-#endif
-#ifndef _SFXITEMPOOL_HXX
-#include <svtools/itempool.hxx>
-#endif
-#ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef _SVTOOLS_LOGINDLG_HXX_
-#include <svtools/logindlg.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
-#include <connectivity/dbexception.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
-#include <com/sun/star/sdb/SQLContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
-#include <com/sun/star/sdbc/XDriverAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDRIVER_HPP_
-#include <com/sun/star/sdbc/XDriver.hpp>
-#endif
-#ifndef DBAUI_DRIVERSETTINGS_HXX
+#include <svl/poolitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/stritem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 #include "DriverSettings.hxx"
-#endif
-#ifndef _DBAUI_PROPERTYSETITEM_HXX_
-#include "propertysetitem.hxx"
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
-#include "dsitems.hxx"
-#endif
-#ifndef DBAUI_ITEMSETHELPER_HXX
 #include "IItemSetHelper.hxx"
-#endif
-#ifndef _DBU_DLG_HRC_
-#include "dbu_dlg.hrc"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _VCL_STDTEXT_HXX
-#include <vcl/stdtext.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _SV_WAITOBJ_HXX
-#include <vcl/waitobj.hxx>
-#endif
-#ifndef _TYPELIB_TYPEDESCRIPTION_HXX_
-#include <typelib/typedescription.hxx>
-#endif
-
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-#ifndef _DBAUI_STRINGLISTITEM_HXX_
-#include "stringlistitem.hxx"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
-#include "moduledbu.hxx"
-#endif
-#ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
-#include <com/sun/star/frame/XStorable.hpp>
-#endif
+#include "dbu_dlg.hrc"
+#include "dbustrings.hrc"
+#include "dsitems.hxx"
 #include "dsnItem.hxx"
+#include "moduledbu.hxx"
+#include "optionalboolitem.hxx"
+#include "propertysetitem.hxx"
+#include "stringlistitem.hxx"
+#include "OAuthenticationContinuation.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
+#include <com/sun/star/sdbc/XDriver.hpp>
+#include <com/sun/star/sdbc/XDriverAccess.hpp>
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
+#include <com/sun/star/ucb/AuthenticationRequest.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/interaction.hxx>
+#include <comphelper/property.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/guarding.hxx>
+#include <connectivity/DriversConfig.hxx>
+#include <connectivity/dbexception.hxx>
+#include <osl/file.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/itempool.hxx>
+#include <svl/poolitem.hxx>
+#include <svl/stritem.hxx>
+#include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
+#include <typelib/typedescription.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/msgbox.hxx>
+#include <vcl/stdtext.hxx>
+#include <vcl/waitobj.hxx>
+#include <vos/mutex.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -130,6 +91,8 @@ namespace dbaui
 using namespace ::dbtools;
 using namespace com::sun::star::uno;
 using namespace com::sun::star;
+using namespace com::sun::star::ucb;
+using namespace com::sun::star::task;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::lang;
@@ -230,6 +193,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_AS_BEFORE_CORRNAME, INFO_AS_BEFORE_CORRELATION_NAME ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CHECK_REQUIRED_FIELDS, INFO_FORMS_CHECK_REQUIRED_FIELDS ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_ESCAPE_DATETIME, INFO_ESCAPE_DATETIME ) );
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_PRIMARY_KEY_SUPPORT, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrimaryKeySupport" ) ) ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_PARAMETERNAMESUBST, INFO_PARAMETERNAMESUBST));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_IGNOREDRIVER_PRIV, INFO_IGNOREDRIVER_PRIV));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_BOOLEANCOMPARISON, PROPERTY_BOOLEANCOMPARISONMODE));
@@ -239,6 +203,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_INDEXAPPENDIX, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AddIndexAppendix"))));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOSLINEENDS, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PreferDosLikeLineEnds" ) ) ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SOCKET, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalSocket" ) ) ) );
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_NAMED_PIPE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NamedPipe" ) ) ) );
 
     // special settings for adabas
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString::createFromAscii("ShutdownDatabase")));
@@ -303,35 +268,73 @@ sal_Bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< Propert
         {
             SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pName, SfxStringItem, DSID_NAME, sal_True);
 
-            ::svt::LoginDialog aDlg(m_pParent,
-                LF_NO_PATH | LF_NO_ACCOUNT | LF_NO_ERRORTEXT | LF_USERNAME_READONLY,
-                String(), NULL);
+            Reference< XModel > xModel( getDataSourceOrModel( m_xDatasource ), UNO_QUERY_THROW );
+            ::comphelper::NamedValueCollection aArgs( xModel->getArgs() );
+            Reference< XInteractionHandler > xHandler( aArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
 
-            aDlg.SetName(pUser ? pUser->GetValue() : String());
-            aDlg.ClearPassword();  // this will give the password field the focus
+            if ( !xHandler.is() )
+            {
+                // instantiate the default SDB interaction handler
+                xHandler = Reference< XInteractionHandler >( m_xORB->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY );
+                if ( !xHandler.is() )
+                    ShowServiceNotAvailableError(m_pParent->GetParent(), String(SERVICE_TASK_INTERACTION_HANDLER), sal_True);
+            }
 
             String sName = pName ? pName->GetValue() : String();
             String sLoginRequest(ModuleRes(STR_ENTER_CONNECTION_PASSWORD));
             ::rtl::OUString sTemp = sName;
             sName = ::dbaui::getStrippedDatabaseName(NULL,sTemp);
             if ( sName.Len() )
-                   sLoginRequest.SearchAndReplaceAscii("$name$", sName);
+                sLoginRequest.SearchAndReplaceAscii("$name$", sName);
             else
             {
                 sLoginRequest.SearchAndReplaceAscii("\"$name$\"", String());
                 sLoginRequest.SearchAndReplaceAscii("$name$", String()); // just to be sure that in other languages the string will be deleted
             }
-            aDlg.SetLoginRequestText(sLoginRequest);
 
-            aDlg.SetSavePasswordText(ModuleRes(STR_REMEMBERPASSWORD_SESSION));
-            aDlg.SetSavePassword(sal_True);
+            // the request
+            AuthenticationRequest aRequest;
+            aRequest.ServerName = sName;
+            aRequest.Diagnostic = sLoginRequest;
+            aRequest.HasRealm   = aRequest.HasAccount = sal_False;
+            // aRequest.Realm
+            aRequest.HasUserName = pUser != 0;
+            aRequest.UserName    = pUser ? rtl::OUString(pUser->GetValue()) : ::rtl::OUString();
+            aRequest.HasPassword = sal_True;
+            //aRequest.Password
+            aRequest.HasAccount  = sal_False;
+            // aRequest.Account
 
-            sal_Int32 nResult = aDlg.Execute();
-            if (nResult != RET_OK)
+            comphelper::OInteractionRequest* pRequest = new comphelper::OInteractionRequest(makeAny(aRequest));
+            uno::Reference< XInteractionRequest > xRequest(pRequest);
+
+            // build an interaction request
+            // two continuations (Ok and Cancel)
+            ::rtl::Reference< comphelper::OInteractionAbort > pAbort = new comphelper::OInteractionAbort;
+            ::rtl::Reference< dbaccess::OAuthenticationContinuation > pAuthenticate = new dbaccess::OAuthenticationContinuation;
+            pAuthenticate->setCanChangeUserName( sal_False );
+            pAuthenticate->setRememberPassword( RememberAuthentication_SESSION );
+
+            // some knittings
+            pRequest->addContinuation(pAbort.get());
+            pRequest->addContinuation(pAuthenticate.get());
+
+            // handle the request
+            try
+            {
+                ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+                // release the mutex when calling the handler, it may need to lock the SolarMutex
+                xHandler->handle(xRequest);
+            }
+            catch(Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            if (!pAuthenticate->wasSelected())
                 return sal_False;
 
-            sPassword = aDlg.GetPassword();
-            if (aDlg.IsSavePassword())
+            sPassword = pAuthenticate->getPassword();
+            if (pAuthenticate->getRememberPassword())
                 m_pItemSetHelper->getWriteOutputSet()->Put(SfxStringItem(DSID_PASSWORD, sPassword));
         }
 
@@ -405,6 +408,11 @@ void ODbDataSourceAdministrationHelper::clearPassword()
 // -----------------------------------------------------------------------------
 Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver()
 {
+    return getDriver(getConnectionURL());
+}
+// -----------------------------------------------------------------------------
+Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const ::rtl::OUString& _sURL)
+{
     // get the global DriverManager
     Reference< XDriverAccess > xDriverManager;
     String sCurrentActionError = String(ModuleRes(STR_COULDNOTCREATE_DRIVERMANAGER));
@@ -425,11 +433,11 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver()
         throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
 
 
-    Reference< XDriver > xDriver = xDriverManager->getDriverByURL(getConnectionURL());
+    Reference< XDriver > xDriver = xDriverManager->getDriverByURL(_sURL);
     if (!xDriver.is())
     {
         sCurrentActionError = String(ModuleRes(STR_NOREGISTEREDDRIVER));
-        sCurrentActionError.SearchAndReplaceAscii("#connurl#", getConnectionURL());
+        sCurrentActionError.SearchAndReplaceAscii("#connurl#", _sURL);
         // will be caught and translated into an SQLContext exception
         throw SQLException(sCurrentActionError, getORB(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000")), 0, Any());
     }
@@ -472,21 +480,14 @@ Reference< XPropertySet > ODbDataSourceAdministrationHelper::getCurrentDataSourc
     return m_xDatasource;
 }
 //-------------------------------------------------------------------------
-::dbaccess::DATASOURCE_TYPE ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
+::rtl::OUString ODbDataSourceAdministrationHelper::getDatasourceType( const SfxItemSet& _rSet )
 {
     SFX_ITEMSET_GET( _rSet, pConnectURL, SfxStringItem, DSID_CONNECTURL, sal_True );
-    SFX_ITEMSET_GET( _rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True );
-    DBG_ASSERT( pConnectURL && pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!" );
-    if ( !pConnectURL || !pTypeCollection )
-        return  ::dbaccess::DST_UNKNOWN;
-
-    String sConnectURL = pConnectURL->GetValue();
+    DBG_ASSERT( pConnectURL , "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!" );
+    SFX_ITEMSET_GET(_rSet, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
+    DBG_ASSERT(pTypeCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid items in the source set!");
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
-    DBG_ASSERT( pCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!" );
-    if ( !pCollection )
-        return  ::dbaccess::DST_UNKNOWN;
-
-    return pCollection->getType( sConnectURL );
+    return pCollection->getType(pConnectURL->GetValue());
 }
 
 //-------------------------------------------------------------------------
@@ -499,7 +500,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
 {
     String sNewUrl;
 
-    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(*m_pItemSetHelper->getOutputSet());
+    ::rtl::OUString eType = getDatasourceType(*m_pItemSetHelper->getOutputSet());
 
     SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
     SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
@@ -509,9 +510,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
     ::dbaccess::ODsnTypeCollection* pCollection = pTypeCollection->getCollection();
     DBG_ASSERT(pCollection, "ODbDataSourceAdministrationHelper::getDatasourceType: invalid type collection!");
 
-
-
-    switch( eType )
+    switch( pCollection->determineType(eType) )
     {
         case  ::dbaccess::DST_DBASE:
         case  ::dbaccess::DST_FLAT:
@@ -599,7 +598,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
     }
     if ( sNewUrl.Len() )
     {
-        String sUrl = pCollection->getDatasourcePrefix(eType);
+        String sUrl = pCollection->getPrefix(eType);
         sUrl += sNewUrl;
         sNewUrl = sUrl;
     }
@@ -672,18 +671,21 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
         }
 
         // go through all known translations and check if we have such a setting
-        PropertyValue aSearchFor;
-        for (   ConstMapInt2StringIterator aIndirect = m_aIndirectPropTranslator.begin();
-                aIndirect != m_aIndirectPropTranslator.end();
-                ++aIndirect
-            )
+        if ( !aInfos.empty() )
         {
-            aSearchFor.Name = aIndirect->second;
-            ConstPropertyValueSetIterator aInfoPos = aInfos.find(aSearchFor);
-            if (aInfos.end() != aInfoPos)
-                // the property is contained in the info sequence
-                // -> transfer it into an item
-                implTranslateProperty(_rDest, aIndirect->first, aInfoPos->Value);
+            PropertyValue aSearchFor;
+            ConstMapInt2StringIterator aEnd = m_aIndirectPropTranslator.end();
+            for (   ConstMapInt2StringIterator aIndirect = m_aIndirectPropTranslator.begin();
+                    aIndirect != aEnd;
+                    ++aIndirect)
+            {
+                aSearchFor.Name = aIndirect->second;
+                ConstPropertyValueSetIterator aInfoPos = aInfos.find(aSearchFor);
+                if (aInfos.end() != aInfoPos)
+                    // the property is contained in the info sequence
+                    // -> transfer it into an item
+                    implTranslateProperty(_rDest, aIndirect->first, aInfoPos->Value);
+            }
         }
 
         convertUrl(_rDest);
@@ -770,9 +772,9 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // us)
 
     // first determine which of all the items are relevant for the data source (depends on the connection url)
-    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(_rSource);
+    ::rtl::OUString eType = getDatasourceType(_rSource);
     ::std::vector< sal_Int32> aDetailIds;
-    ODriversSettings::getSupportedIndirectSettings(eType,aDetailIds);
+    ODriversSettings::getSupportedIndirectSettings(eType,getORB(),aDetailIds);
 
     // collect the translated property values for the relevant items
     PropertyValueSet aRelevantSettings;
@@ -874,22 +876,13 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
 #endif
     }
 
+    ::connectivity::DriversConfig aDriverConfig(getORB());
+    const ::comphelper::NamedValueCollection& aProperties = aDriverConfig.getProperties(eType);
+    Sequence< Any> aTypeSettings;
+    aTypeSettings = aProperties.getOrDefault("TypeInfoSettings",aTypeSettings);
     // here we have a special entry for types from oracle
-    if ( eType ==  ::dbaccess::DST_ORACLE_JDBC )
+    if ( aTypeSettings.getLength() )
     {
-        Sequence< Any > aTypeSettings;
-        static const ::rtl::OUString s_sCondition(RTL_CONSTASCII_USTRINGPARAM("Column(2) = "));
-        static const ::rtl::OUString s_sValue(RTL_CONSTASCII_USTRINGPARAM("Column(6) = PRECISION"));
-        static const sal_Int32 pTypes[] = { -5, -4, -3, -2, -1, 1, 2, 12};
-        aTypeSettings.realloc((sizeof(pTypes)/sizeof(pTypes[0])) * 2);
-        Any* pCondIter = aTypeSettings.getArray();
-        const Any* pCondEnd  = pCondIter + aTypeSettings.getLength();
-        for(const sal_Int32* pType = pTypes;pCondIter != pCondEnd;++pCondIter,++pType)
-        {
-            *pCondIter <<= (s_sCondition + ::rtl::OUString::valueOf(*pType));
-            ++pCondIter;
-            *pCondIter <<= s_sValue;
-        }
         aRelevantSettings.insert(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeInfoSettings")), 0, makeAny(aTypeSettings), PropertyState_DIRECT_VALUE));
     }
 
@@ -922,14 +915,36 @@ Any ODbDataSourceAdministrationHelper::implTranslateProperty(const SfxPoolItem* 
 {
     // translate the SfxPoolItem
     Any aValue;
-    if (_pItem->ISA(SfxStringItem))
-        aValue <<= ::rtl::OUString(PTR_CAST(SfxStringItem, _pItem)->GetValue().GetBuffer());
-    else if (_pItem->ISA(SfxBoolItem))
-        aValue <<= PTR_CAST(SfxBoolItem, _pItem)->GetValue();
-    else if (_pItem->ISA(SfxInt32Item))
-        aValue <<= PTR_CAST(SfxInt32Item, _pItem)->GetValue();
-    else if (_pItem->ISA(OStringListItem))
-        aValue <<= PTR_CAST(OStringListItem, _pItem)->getList();
+
+    const SfxStringItem* pStringItem = PTR_CAST( SfxStringItem, _pItem );
+    const SfxBoolItem* pBoolItem = PTR_CAST( SfxBoolItem, _pItem );
+    const OptionalBoolItem* pOptBoolItem = PTR_CAST( OptionalBoolItem, _pItem );
+    const SfxInt32Item* pInt32Item = PTR_CAST( SfxInt32Item, _pItem );
+    const OStringListItem* pStringListItem = PTR_CAST( OStringListItem, _pItem );
+
+    if ( pStringItem )
+    {
+        aValue <<= ::rtl::OUString( pStringItem->GetValue().GetBuffer() );
+    }
+    else if ( pBoolItem )
+    {
+        aValue <<= pBoolItem->GetValue();
+    }
+    else if ( pOptBoolItem )
+    {
+        if ( !pOptBoolItem->HasValue() )
+            aValue.clear();
+        else
+            aValue <<= (sal_Bool)pOptBoolItem->GetValue();
+    }
+    else if ( pInt32Item )
+    {
+        aValue <<= pInt32Item->GetValue();
+    }
+    else if ( pStringListItem )
+    {
+        aValue <<= pStringListItem->getList();
+    }
     else
     {
         DBG_ERROR("ODbDataSourceAdministrationHelper::implTranslateProperty: unsupported item type!");
@@ -970,15 +985,14 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty(const Reference< X
 //-------------------------------------------------------------------------
 void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet, sal_Int32  _nId, const Any& _rValue )
 {
-    USHORT nId = (USHORT)_nId;
-    switch (_rValue.getValueType().getTypeClass())
+    switch ( _rValue.getValueType().getTypeClass() )
     {
         case TypeClass_STRING:
-            if ( implCheckItemType( _rSet, nId, SfxStringItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, SfxStringItem::StaticType() ) )
             {
                 ::rtl::OUString sValue;
                 _rValue >>= sValue;
-                _rSet.Put(SfxStringItem(nId, sValue.getStr()));
+                _rSet.Put(SfxStringItem(_nId, sValue.getStr()));
             }
             else {
                 DBG_ERROR(
@@ -991,11 +1005,24 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_BOOLEAN:
-            if ( implCheckItemType( _rSet, nId, SfxBoolItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, SfxBoolItem::StaticType() ) )
             {
                 sal_Bool bVal = sal_False;
                 _rValue >>= bVal;
-                _rSet.Put(SfxBoolItem(nId, bVal));
+                _rSet.Put(SfxBoolItem(_nId, bVal));
+            }
+            else if ( implCheckItemType( _rSet, _nId, OptionalBoolItem::StaticType() ) )
+            {
+                OptionalBoolItem aItem( _nId );
+                if ( _rValue.hasValue() )
+                {
+                    sal_Bool bValue = sal_False;
+                    _rValue >>= bValue;
+                    aItem.SetValue( bValue );
+                }
+                else
+                    aItem.ClearValue();
+                _rSet.Put( aItem );
             }
             else {
                 DBG_ERROR(
@@ -1008,11 +1035,11 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_LONG:
-            if ( implCheckItemType( _rSet, nId, SfxInt32Item::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, SfxInt32Item::StaticType() ) )
             {
                 sal_Int32 nValue = 0;
                 _rValue >>= nValue;
-                _rSet.Put( SfxInt32Item( nId, nValue ) );
+                _rSet.Put( SfxInt32Item( _nId, nValue ) );
             }
             else {
                 DBG_ERROR(
@@ -1025,7 +1052,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_SEQUENCE:
-            if ( implCheckItemType( _rSet, nId, OStringListItem::StaticType() ) )
+            if ( implCheckItemType( _rSet, _nId, OStringListItem::StaticType() ) )
             {
                 // determine the element type
                 TypeDescription aTD(_rValue.getValueType());
@@ -1040,7 +1067,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
                     {
                         Sequence< ::rtl::OUString > aStringList;
                         _rValue >>= aStringList;
-                        _rSet.Put(OStringListItem(nId, aStringList));
+                        _rSet.Put(OStringListItem(_nId, aStringList));
                     }
                     break;
                     default:
@@ -1058,7 +1085,7 @@ void ODbDataSourceAdministrationHelper::implTranslateProperty( SfxItemSet& _rSet
             break;
 
         case TypeClass_VOID:
-            _rSet.ClearItem(nId);
+            _rSet.ClearItem(_nId);
             break;
 
         default:
@@ -1078,7 +1105,7 @@ String ODbDataSourceAdministrationHelper::getDocumentUrl(SfxItemSet& _rDest)
 // -----------------------------------------------------------------------------
 void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 {
-    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(_rDest);
+    ::rtl::OUString eType = getDatasourceType(_rDest);
 
     SFX_ITEMSET_GET(_rDest, pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
     SFX_ITEMSET_GET(_rDest, pTypeCollection, DbuTypeCollectionItem, DSID_TYPECOLLECTION, sal_True);
@@ -1091,12 +1118,13 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
     USHORT nPortNumberId    = 0;
     sal_Int32 nPortNumber   = -1;
     String sNewHostName;
-    String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
+    //String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
     String sUrlPart;
 
     pCollection->extractHostNamePort(pUrlItem->GetValue(),sUrlPart,sNewHostName,nPortNumber);
+    const ::dbaccess::DATASOURCE_TYPE eTy = pCollection->determineType(eType);
 
-    switch( eType )
+    switch( eTy )
     {
         case  ::dbaccess::DST_MYSQL_NATIVE:
         case  ::dbaccess::DST_MYSQL_JDBC:
@@ -1114,13 +1142,13 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
 
     if ( sUrlPart.Len() )
     {
-        if ( eType == ::dbaccess::DST_MYSQL_NATIVE )
+        if ( eTy == ::dbaccess::DST_MYSQL_NATIVE )
         {
             _rDest.Put( SfxStringItem( DSID_DATABASENAME, sUrlPart ) );
         }
         else
         {
-            String sNewUrl = pCollection->getDatasourcePrefix(eType);
+            String sNewUrl = pCollection->getPrefix(eType);
             sNewUrl += sUrlPart;
             _rDest.Put( SfxStringItem( DSID_CONNECTURL, sNewUrl ) );
         }

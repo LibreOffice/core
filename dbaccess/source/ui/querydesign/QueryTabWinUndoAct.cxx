@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: QueryTabWinUndoAct.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,7 +93,8 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 
         // und natuerlich auch die entsprechenden Connections
         ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
-        for(;aIter != m_vTableConnection.end();++aIter)
+        ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
+        for(;aIter != aEnd;++aIter)
         {
             m_pOwner->DeselectConn(*aIter);
             delete (*aIter);

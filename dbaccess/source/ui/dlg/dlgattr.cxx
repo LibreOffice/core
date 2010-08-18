@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgattr.cxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,16 +63,16 @@
 #include "dbu_dlg.hrc"
 #endif
 #ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 #define _ZFORLIST_DECLARE_TABLE
 #ifndef _ZFORLIST_HXX
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
 #include <svx/svxids.hrc> //CHINA001
 #include <svx/flagsdef.hxx> //CHINA001
 #ifndef _SFXINTITEM_HXX //CHINA001
-#include <svtools/intitem.hxx> //CHINA001
+#include <svl/intitem.hxx> //CHINA001
 #endif //CHINA001
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"

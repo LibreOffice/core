@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: indexdialog.hxx,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,7 +59,7 @@
 #include <svtools/svtreebx.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #endif
 #ifndef _DBAUI_INDEXES_HXX_
 #include "indexes.hxx"

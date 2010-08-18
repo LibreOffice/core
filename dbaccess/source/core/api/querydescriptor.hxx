@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: querydescriptor.hxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -165,10 +162,6 @@ protected:
     virtual ~OQueryDescriptor();
 public:
     OQueryDescriptor();
-    /** constructs the object with a UNO QueryDescriptor. If you use this ctor, the resulting object
-        won't have any column informations (the column container will be empty)
-    */
-    OQueryDescriptor(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxForeignDescriptor);
     OQueryDescriptor(const OQueryDescriptor_Base& _rSource);
 
     // com::sun::star::lang::XTypeProvider

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.21.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -40,6 +36,8 @@ GEN_HID_OTHER=TRUE
 # --- Settings ----------------------------------
 .INCLUDE :  settings.mk
 
+.IF "$(L10N_framework)"==""
+
 # ------------------------------------------------------------------
 # --- reportdesign core (rpt) -----------------------------------
 
@@ -54,10 +52,13 @@ LIB1FILES=\
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
+    $(EDITENGLIB)			\
+        $(SVXCORELIB)			\
         $(SVXLIB)				\
         $(FWELIB)				\
         $(SFXLIB)				\
         $(TOOLSLIB) 			\
+        $(I18NISOLANGLIB) \
         $(SVLLIB)				\
         $(SVTOOLLIB)			\
         $(UNOTOOLSLIB)			\
@@ -70,7 +71,10 @@ SHL1STDLIBS= \
         $(VOSLIB)				\
         $(SALLIB)
 
-.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"=="OS2"
+SHL1STDLIBS+= \
+        idbu.lib
+.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL1STDLIBS+= \
         -ldbu$(DLLPOSTFIX)
 .ELSE
@@ -85,7 +89,7 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
 DEFLIB1NAME=$(TARGET)
-
+.ENDIF
 # --- .res file ----------------------------------------------------------
 
 RES1FILELIST=\
@@ -95,7 +99,7 @@ RESLIB1NAME=$(TARGET)
 RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=$(RES1FILELIST)
 
-
+.IF "$(L10N_framework)"==""
 # --- reportdesign UI core (rptui) -----------------------------------
 LIB2TARGET=$(SLB)$/$(TARGET2).lib
 LIB2FILES=\
@@ -108,6 +112,8 @@ LIB2FILES=\
 SHL2TARGET=$(TARGET2)$(DLLPOSTFIX)
 
 SHL2STDLIBS= \
+    $(EDITENGLIB)			\
+        $(SVXCORELIB)			\
         $(SVXLIB)				\
         $(SFXLIB)				\
         $(SVTOOLLIB)			\
@@ -125,7 +131,11 @@ SHL2STDLIBS= \
         $(SO2LIB)				\
         $(I18NISOLANGLIB)		\
         $(SALLIB)
-.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"=="OS2"
+SHL2STDLIBS+= \
+        idbu.lib				\
+        i$(TARGET).lib
+.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL2STDLIBS+= \
         -ldbu$(DLLPOSTFIX) \
         -l$(TARGET)$(DLLPOSTFIX)
@@ -135,7 +145,11 @@ SHL2STDLIBS+= \
         i$(TARGET).lib
 .ENDIF
 
-.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"=="OS2"
+SHL2STDLIBS+= \
+        ifor.lib \
+        iforui.lib
+.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL2STDLIBS+= \
         -lfor$(DLLPOSTFIX) \
         -lforui$(DLLPOSTFIX)
@@ -150,19 +164,18 @@ SHL2DEPN=$(SHL1TARGETN)
 SHL2LIBS=$(LIB2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
-SHL2VERSIONMAP=$(TARGET2).map
-
+SHL2VERSIONMAP=$(SOLARENV)/src/component.map
+.ENDIF
 # --- .res file ----------------------------------------------------------
-
 RES2FILELIST=\
     $(SRS)$/uidlg.srs				\
     $(SRS)$/ui_inspection.srs		\
     $(SRS)$/report.srs
 
-
 RESLIB2NAME=$(TARGET2)
 RESLIB2IMAGES=$(PRJ)$/res
 RESLIB2SRSFILES=$(RES2FILELIST)
+.IF "$(L10N_framework)"==""
 
 # ------------------- rptxml -------------------
 TARGET3=rptxml
@@ -175,7 +188,8 @@ LIB3FILES=\
 SHL3TARGET=$(TARGET3)$(DLLPOSTFIX)
 
 SHL3STDLIBS=\
-    $(SVXLIB)			\
+    $(EDITENGLIB)			\
+    $(SVXCORELIB)			\
     $(XMLOFFLIB)		\
     $(VCLLIB)			\
     $(UNOTOOLSLIB)		\
@@ -190,7 +204,10 @@ SHL3STDLIBS=\
     $(SOTLIB)			\
     $(SO2LIB)			\
     $(SALLIB)
-.IF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
+.IF "$(GUI)"=="OS2"
+SHL3STDLIBS+= \
+    irpt.lib
+.ELIF "$(GUI)"!="WNT" || "$(COM)"=="GCC"
 SHL3STDLIBS+= \
         -l$(TARGET)$(DLLPOSTFIX)
 .ELSE
@@ -202,12 +219,15 @@ SHL3STDLIBS+= \
 SHL3DEPN=$(SHL1TARGETN)
 SHL3LIBS=$(LIB3TARGET)
 SHL3IMPLIB=	i$(SHL3TARGET)
-SHL3VERSIONMAP=rptui.map
+SHL3VERSIONMAP=$(SOLARENV)/src/component.map
 SHL3DEF=	$(MISC)$/$(SHL3TARGET).def
 
 DEF3NAME=$(SHL3TARGET)
 
+.ENDIF
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
+
 

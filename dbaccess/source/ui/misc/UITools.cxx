@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UITools.cxx,v $
- * $Revision: 1.81.24.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -198,7 +195,7 @@
 #define ITEMID_NUMBERINFO       SID_ATTR_NUMBERFORMAT_INFO
 
 #ifndef _SFXITEMPOOL_HXX
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
@@ -207,16 +204,16 @@
 #include "dbaccess_helpid.hrc"
 #endif
 #ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 #ifndef DBACCESS_SBA_GRID_HRC
 #include "sbagrid.hrc"
 #endif
 #ifndef _SFXRNGITEM_HXX
-#include <svtools/rngitem.hxx>
+#include <svl/rngitem.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 #ifndef _SVX_ALGITEM_HXX
 #include <svx/algitem.hxx>
@@ -229,7 +226,7 @@
 #include <svx/numinf.hxx>
 #endif
 #ifndef _ZFORLIST_HXX
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
 #ifndef DBAUI_SBATTRDLG_HXX
 #include "dlgattr.hxx"
@@ -283,13 +280,13 @@
 #include <tools/diagnose_ex.h>
 #endif
 #ifndef _NUMUNO_HXX
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 #ifndef _SVT_FILEVIEW_HXX
 #include <svtools/fileview.hxx>
@@ -378,11 +375,11 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
             }
             else
             {   // instantiate the default SDB interaction handler
-                Reference< XInteractionHandler > xHandler(_rMF->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
+                Reference< XInteractionHandler > xHandler(_rMF->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
                 if (!xHandler.is())
                 {
                     OSL_ENSURE(sal_False, "createConnection: could not instantiate an interaction handler!");
-                    // ShowServiceNotAvailableError(NULL, String(SERVICE_SDB_INTERACTION_HANDLER), sal_True);
+                    // ShowServiceNotAvailableError(NULL, String(SERVICE_TASK_INTERACTION_HANDLER), sal_True);
                         // TODO: a real parent!
                 }
                 else
@@ -590,11 +587,11 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             // -> drop the precision and the scale restriction, accept any type with the property
             // type id (nType)
 
-            OSL_ENSURE(sal_False,
-                (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
-                +=  ::rtl::OString(" (expected type name: ")
-                +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
-                +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
+            //OSL_ENSURE(sal_False,
+            //  (   ::rtl::OString("getTypeInfoFromType: did not find a matching type")
+            //  +=  ::rtl::OString(" (expected type name: ")
+            //  +=  ::rtl::OString(_sTypeName.getStr(), _sTypeName.getLength(), gsl_getSystemTextEncoding())
+            //  +=  ::rtl::OString(")! Defaulting to the first matching type.")).getStr());
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
                 // search the best matching type (now comparing the local names)
@@ -700,6 +697,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                     nCount = 18;
                 aTypes.reserve(nCount+1);
                 aTypes.push_back(-1);
+                aNullable.push_back(sal_False);
                 for (sal_Int32 j = 1; j <= nCount ; ++j)
                 {
                     aTypes.push_back(xResultSetMetaData->getColumnType(j));
@@ -802,6 +800,12 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                     aName = _rsTypeNames.GetToken(TYPE_DATETIME);
                     break;
                 case DataType::BIT:
+                    if ( pInfo->aCreateParams.getLength() )
+                    {
+                        aName = _rsTypeNames.GetToken(TYPE_BIT);
+                        break;
+                    }
+                    // run through
                 case DataType::BOOLEAN:
                     aName = _rsTypeNames.GetToken(TYPE_BOOL);
                     break;
@@ -866,7 +870,8 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
         _rTypeInfoIters.reserve(_rTypeInfoMap.size());
 
         OTypeInfoMap::iterator aIter = _rTypeInfoMap.begin();
-        for(;aIter != _rTypeInfoMap.end();++aIter)
+        OTypeInfoMap::iterator aEnd = _rTypeInfoMap.end();
+        for(;aIter != aEnd;++aIter)
             _rTypeInfoIters.push_back(aIter);
 
         // Close the result set/statement.
@@ -884,6 +889,7 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
     _rxColumn->setPropertyValue(PROPERTY_SCALE,makeAny(_pFieldDesc->GetScale()));
     _rxColumn->setPropertyValue(PROPERTY_ISNULLABLE, makeAny(_pFieldDesc->GetIsNullable()));
     _rxColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT,::cppu::bool2any(_pFieldDesc->IsAutoIncrement()));
+    _rxColumn->setPropertyValue(PROPERTY_DESCRIPTION,makeAny(_pFieldDesc->GetDescription()));
     if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISCURRENCY) && _pFieldDesc->IsCurrency() )
         _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(_pFieldDesc->IsCurrency()));
     // set autoincrement value when available
@@ -1153,7 +1159,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     if (_bHasFormat)
     {
         // if the col is bound to a text field we have to disallow all non-text formats
-        if ((DataType::CHAR == _nDataType) || (DataType::VARCHAR == _nDataType) || (DataType::LONGVARCHAR == _nDataType))
+        if ((DataType::CHAR == _nDataType) || (DataType::VARCHAR == _nDataType) || (DataType::LONGVARCHAR == _nDataType) || (DataType::CLOB == _nDataType))
         {
             bText = sal_True;
             pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, sal_True));
@@ -1324,7 +1330,7 @@ sal_Bool isHiContrast(Window* _pWindow)
         else
             break;
     }
-    return pIter && pIter->GetBackground().GetColor().IsDark();
+    return pIter && pIter->GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 // -----------------------------------------------------------------------------
@@ -1618,6 +1624,10 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
             break;
         case DataType::VARCHAR:
             if (  pTypeInfo = queryTypeInfoByType(DataType::LONGVARCHAR,_rTypeInfo) )
+                break;
+            break;
+        case DataType::LONGVARCHAR:
+            if (  pTypeInfo = queryTypeInfoByType(DataType::CLOB,_rTypeInfo) )
                 break;
             break;
         default:

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: adminpages.hxx,v $
- * $Revision: 1.35.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -116,7 +113,8 @@ namespace dbaui
     //=========================================================================
     class IDatabaseSettingsDialog;
     class IItemSetHelper;
-    class OGenericAdministrationPage : public SfxTabPage, public svt::IWizardPage
+    class OGenericAdministrationPage    :public SfxTabPage
+                                        ,public ::svt::IWizardPageController
     {
     private:
         Link            m_aModifiedHandler;     /// to be called if something on the page has been modified
@@ -166,11 +164,12 @@ namespace dbaui
             @return
                 <FALSE/> if an error occured, otherwise <TRUE/>
         */
-        sal_Bool getSelectedDataSource(::dbaccess::DATASOURCE_TYPE _eType,::rtl::OUString& _sReturn,::rtl::OUString& _sCurr);
+        sal_Bool getSelectedDataSource(::rtl::OUString& _sReturn,::rtl::OUString& _sCurr);
 
-        // svt::IWizardPage
+        // svt::IWizardPageController
         virtual void initializePage();
-        virtual sal_Bool commitPage( CommitPageReason _eReason );
+        virtual sal_Bool commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
+        virtual bool canAdvance() const;
 
         void                SetRoadmapStateValue( sal_Bool _bDoEnable ) { m_abEnableRoadmap = _bDoEnable; }
         bool                GetRoadmapStateValue() const { return m_abEnableRoadmap; }
@@ -215,6 +214,7 @@ namespace dbaui
         */
         virtual void fillWindows(::std::vector< ISaveValueWrapper* >& _rControlList) = 0;
 
+    public:
         /** fills the Boolean value into the item set when the value changed.
             @param  _rSet
                 The item set where to put the new value into.
@@ -227,7 +227,7 @@ namespace dbaui
             @param _bRevertValue
                 set to <TRUE/> if the display value should be reverted before putting it into the set
         */
-        void fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, USHORT _nID, sal_Bool& _bChangedSomething, bool _bRevertValue = false);
+        static void fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, USHORT _nID, sal_Bool& _bChangedSomething, bool _bRevertValue = false);
 
         /** fills the int value into the item set when the value changed.
             @param  _rSet
@@ -239,7 +239,7 @@ namespace dbaui
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */
-        void fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething);
+        static void fillInt32(SfxItemSet& _rSet,NumericField* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething);
 
         /** fills the String value into the item set when the value changed.
             @param  _rSet
@@ -251,16 +251,13 @@ namespace dbaui
             @param  _bChangedSomething
                 <TRUE/> if something changed otherwise <FALSE/>
         */
-        void fillString(SfxItemSet& _rSet,Edit* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething);
+        static void fillString(SfxItemSet& _rSet,Edit* _pEdit,USHORT _nID,sal_Bool& _bChangedSomething);
 
+    protected:
         // used to set the right Pane header of a wizard to bold
         void SetControlFontWeight(Window* _pWindow, FontWeight _eWeight = WEIGHT_BOLD);
         void SetHeaderText( USHORT _nFTResId, USHORT _StringResId);
 
-        Point MovePoint(Point _aPixelBasePoint, sal_Int32 _XShift, sal_Int32 _YShift);
-
-
-    protected:
         /** This link be used for controls where the tabpage does not need to take any special action when the control
             is modified. The implementation just calls callModifiedHdl.
         */
@@ -269,6 +266,28 @@ namespace dbaui
 
         /// may be used in SetXXXHdl calls to controls, is a link to <method>OnControlModified</method>
         virtual Link getControlModifiedLink() { return LINK(this, OGenericAdministrationPage, OnControlModified); }
+    };
+
+    //=========================================================================
+    //= ControlRelation
+    //=========================================================================
+    enum ControlRelation
+    {
+        RelatedControls, UnrelatedControls
+    };
+
+    //=========================================================================
+    //= LayoutHelper
+    //=========================================================================
+    class LayoutHelper
+    {
+    public:
+        static void     positionBelow(
+                            const Control& _rReference,
+                            Control& _rControl,
+                            const ControlRelation _eRelation,
+                            const long _nIndentAppFont
+                        );
     };
 
 //.........................................................................

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbexchange.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,20 +53,19 @@
 #endif
 #include <vector>
 
+#include <rtl/ref.hxx>
+
 namespace dbaui
 {
 
     class ORTFImportExport;
     class OHTMLImportExport;
-    typedef ::cppu::ImplHelper1< ::com::sun::star::lang::XEventListener > TDataClipboard_BASE;
 
-    class ODataClipboard :      public ::svx::ODataAccessObjectTransferable
-                            ,   public TDataClipboard_BASE
+    class ODataClipboard : public ::svx::ODataAccessObjectTransferable
 
     {
-        ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener> > m_aEventListeners;
-        OHTMLImportExport*      m_pHtml;
-        ORTFImportExport*       m_pRtf;
+        ::rtl::Reference< OHTMLImportExport >   m_pHtml;
+        ::rtl::Reference< ORTFImportExport >    m_pRtf;
 
     public:
         ODataClipboard(
@@ -89,17 +85,16 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
         );
 
-        /** with this ctor, only the object descriptor format will be provided
-        */
         ODataClipboard(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxLivingForm,
-            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rSelectedRows,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _rxResultSet
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_rAliveForm,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& i_rSelectedRows,
+            const sal_Bool i_bBookmarkSelection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_rORB
         );
 
-        DECLARE_XINTERFACE( )
-
+        // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+
     protected:
         virtual void        AddSupportedFormats();
         virtual sal_Bool    GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor );

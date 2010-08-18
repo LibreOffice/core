@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlExportDocumentHandler.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,9 +93,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDatabaseDataProvider >   m_xDatabaseDataProvider;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >                                  m_aColumns;
     sal_Int32                                                                           m_nCurrentCellIndex;
+    sal_Int32                                                                           m_nColumnCount;
     bool m_bTableRowsStarted;
     bool m_bFirstRowExported;
     bool m_bExportChar;
+    bool m_bCountColumnHeader;
 };
 // -----------------------------------------------------------------------------
 } // namespace rptxml

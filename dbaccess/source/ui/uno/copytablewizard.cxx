@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: copytablewizard.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +55,8 @@
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
+#include <com/sun/star/sdbc/XBlob.hpp>
+#include <com/sun/star/sdbc/XClob.hpp>
 #include <com/sun/star/sdbcx/XRowLocate.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
 #include <com/sun/star/sdb/SQLContext.hpp>
@@ -68,6 +67,7 @@
 #include <comphelper/interaction.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/proparrhlp.hxx>
+#include <comphelper/string.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -127,6 +127,8 @@ namespace dbaui
     using ::com::sun::star::sdbc::XParameters;
     using ::com::sun::star::sdbc::XResultSet;
     using ::com::sun::star::sdbc::XRow;
+    using ::com::sun::star::sdbc::XBlob;
+    using ::com::sun::star::sdbc::XClob;
     using ::com::sun::star::sdbcx::XRowLocate;
     using ::com::sun::star::sdbc::XResultSetMetaDataSupplier;
     using ::com::sun::star::sdbc::XResultSetMetaData;
@@ -171,6 +173,8 @@ namespace dbaui
         virtual void SAL_CALL setDestinationTableName( const ::rtl::OUString& _destinationTableName ) throw (RuntimeException);
         virtual Optional< ::rtl::OUString > SAL_CALL getCreatePrimaryKey() throw (RuntimeException);
         virtual void SAL_CALL setCreatePrimaryKey( const Optional< ::rtl::OUString >& _newPrimaryKey ) throw (IllegalArgumentException, RuntimeException);
+        virtual sal_Bool SAL_CALL getUseHeaderLineAsColumnNames() throw (RuntimeException);
+        virtual void SAL_CALL setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) throw (RuntimeException);
         virtual void SAL_CALL addCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException);
         virtual void SAL_CALL removeCopyTableListener( const Reference< XCopyTableListener >& Listener ) throw (RuntimeException);
 
@@ -254,6 +258,17 @@ namespace dbaui
                     sal_Int32& _out_rCommandType
                 ) const;
 
+        /** extracts the result set to copy records from, and the selection-related aspects, if any.
+
+            Effectively, this method extracts m_xSourceResultSet, m_aSourceSelection, and m_bSourceSelectionBookmarks.
+
+            If an inconsistent/insufficent sub set of those properties is present in the descriptor, and exception
+            is thrown.
+        */
+        void    impl_extractSourceResultSet_throw(
+                    const Reference< XPropertySet >& i_rDescriptor
+                );
+
         /** checks whether the given copy source descriptor contains settings which are not
             supported (yet)
 
@@ -295,7 +310,7 @@ namespace dbaui
         /** creates the INSERT INTO statement
             @param  _xTable The destination table.
         */
-        ::rtl::OUString impl_getSelectStatement_nothrow(const Reference< XPropertySet >& _xTable);
+        ::rtl::OUString impl_getServerSideCopyStatement_throw( const Reference< XPropertySet >& _xTable );
 
         /** creates the statement which, when executed, will produce the source data to copy
 
@@ -331,14 +346,16 @@ private:
         sal_Int16                       m_nOperation;
         ::rtl::OUString                 m_sDestinationTable;
         Optional< ::rtl::OUString >     m_aPrimaryKeyName;
+        sal_Bool                        m_bUseHeaderLineAsColumnNames;
 
         // source
         SharedConnection                m_xSourceConnection;
         sal_Int32                       m_nCommandType;
         ::std::auto_ptr< ICopyTableSourceObject >
                                         m_pSourceObject;
+        Reference< XResultSet >         m_xSourceResultSet;
         Sequence< Any >                 m_aSourceSelection;
-        bool                            m_bSourceSelectionBookmarks;
+        sal_Bool                        m_bSourceSelectionBookmarks;
 
         // destination
         SharedConnection                m_xDestConnection;
@@ -381,16 +398,17 @@ CopyTableWizard::CopyTableWizard( const Reference< XMultiServiceFactory >& _rxOR
     ,m_nOperation( CopyTableOperation::CopyDefinitionAndData )
     ,m_sDestinationTable()
     ,m_aPrimaryKeyName( sal_False, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) ))
+    ,m_bUseHeaderLineAsColumnNames( sal_True )
     ,m_xSourceConnection()
     ,m_nCommandType( CommandType::COMMAND )
     ,m_pSourceObject()
+    ,m_xSourceResultSet()
     ,m_aSourceSelection()
-    ,m_bSourceSelectionBookmarks( true )
+    ,m_bSourceSelectionBookmarks( sal_True )
     ,m_xDestConnection()
     ,m_aCopyTableListeners( m_aMutex )
     ,m_nOverrideExecutionResult( -1 )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::CopyTableWizard" );
 }
 
 //-------------------------------------------------------------------------
@@ -406,7 +424,7 @@ CopyTableWizard::~CopyTableWizard()
 
     // TODO: shouldn't we have explicit disposal support? If a listener is registered
     // at our instance, and perhaps holds this our instance by a hard ref, then we'll never
-    // destroyed.
+    // be destroyed.
     // However, adding XComponent support to the GenericUNODialog probably requires
     // some thinking - would it break existing clients which do not call a dispose, then?
 }
@@ -453,7 +471,6 @@ Reference< XPropertySetInfo > SAL_CALL CopyTableWizard::getPropertySetInfo() thr
 //--------------------------------------------------------------------
 ::sal_Int16 SAL_CALL CopyTableWizard::getOperation() throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::getOperation" );
     CopyTableAccessGuard aGuard( *this );
     return m_nOperation;
 }
@@ -461,7 +478,6 @@ Reference< XPropertySetInfo > SAL_CALL CopyTableWizard::getPropertySetInfo() thr
 //--------------------------------------------------------------------
 void SAL_CALL CopyTableWizard::setOperation( ::sal_Int16 _operation ) throw (IllegalArgumentException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::setOperation" );
     CopyTableAccessGuard aGuard( *this );
 
     if  (   ( _operation != CopyTableOperation::CopyDefinitionAndData )
@@ -486,7 +502,6 @@ void SAL_CALL CopyTableWizard::setOperation( ::sal_Int16 _operation ) throw (Ill
 //--------------------------------------------------------------------
 ::rtl::OUString SAL_CALL CopyTableWizard::getDestinationTableName() throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::getDestinationTableName" );
     CopyTableAccessGuard aGuard( *this );
     return m_sDestinationTable;
 }
@@ -494,7 +509,6 @@ void SAL_CALL CopyTableWizard::setOperation( ::sal_Int16 _operation ) throw (Ill
 //--------------------------------------------------------------------
 void SAL_CALL CopyTableWizard::setDestinationTableName( const ::rtl::OUString& _destinationTableName ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::setDestinationTableName" );
     CopyTableAccessGuard aGuard( *this );
     m_sDestinationTable = _destinationTableName;
 }
@@ -502,7 +516,6 @@ void SAL_CALL CopyTableWizard::setDestinationTableName( const ::rtl::OUString& _
 //--------------------------------------------------------------------
 Optional< ::rtl::OUString > SAL_CALL CopyTableWizard::getCreatePrimaryKey() throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::getCreatePrimaryKey" );
     CopyTableAccessGuard aGuard( *this );
     return m_aPrimaryKeyName;
 }
@@ -510,7 +523,6 @@ Optional< ::rtl::OUString > SAL_CALL CopyTableWizard::getCreatePrimaryKey() thro
 //--------------------------------------------------------------------
 void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< ::rtl::OUString >& _newPrimaryKey ) throw (IllegalArgumentException, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::setCreatePrimaryKey" );
     CopyTableAccessGuard aGuard( *this );
 
     if ( _newPrimaryKey.IsPresent && !OCopyTableWizard::supportsPrimaryKey( m_xDestConnection ) )
@@ -522,11 +534,21 @@ void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< ::rtl::OUStr
 
     m_aPrimaryKeyName = _newPrimaryKey;
 }
-
+// -----------------------------------------------------------------------------
+sal_Bool SAL_CALL CopyTableWizard::getUseHeaderLineAsColumnNames() throw (RuntimeException)
+{
+    CopyTableAccessGuard aGuard( *this );
+    return m_bUseHeaderLineAsColumnNames;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL CopyTableWizard::setUseHeaderLineAsColumnNames( sal_Bool _bUseHeaderLineAsColumnNames ) throw (RuntimeException)
+{
+    CopyTableAccessGuard aGuard( *this );
+    m_bUseHeaderLineAsColumnNames = _bUseHeaderLineAsColumnNames;
+}
 //--------------------------------------------------------------------
 void SAL_CALL CopyTableWizard::addCopyTableListener( const Reference< XCopyTableListener >& _rxListener ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::addCopyTableListener" );
     CopyTableAccessGuard aGuard( *this );
     if ( _rxListener.is() )
         m_aCopyTableListeners.addInterface( _rxListener );
@@ -535,7 +557,6 @@ void SAL_CALL CopyTableWizard::addCopyTableListener( const Reference< XCopyTable
 //--------------------------------------------------------------------
 void SAL_CALL CopyTableWizard::removeCopyTableListener( const Reference< XCopyTableListener >& _rxListener ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::removeCopyTableListener" );
     CopyTableAccessGuard aGuard( *this );
     if ( _rxListener.is() )
         m_aCopyTableListeners.removeInterface( _rxListener );
@@ -544,7 +565,6 @@ void SAL_CALL CopyTableWizard::removeCopyTableListener( const Reference< XCopyTa
 //--------------------------------------------------------------------
 void SAL_CALL CopyTableWizard::setTitle( const ::rtl::OUString& _rTitle ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::setTitle" );
     CopyTableAccessGuard aGuard( *this );
     CopyTableWizard_DialogBase::setTitle( _rTitle );
 }
@@ -552,7 +572,6 @@ void SAL_CALL CopyTableWizard::setTitle( const ::rtl::OUString& _rTitle ) throw 
 //--------------------------------------------------------------------
 ::sal_Int16 SAL_CALL CopyTableWizard::execute(  ) throw (RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::execute" );
     CopyTableAccessGuard aGuard( *this );
 
     m_nOverrideExecutionResult = -1;
@@ -566,7 +585,6 @@ void SAL_CALL CopyTableWizard::setTitle( const ::rtl::OUString& _rTitle ) throw 
 //-------------------------------------------------------------------------
 OCopyTableWizard& CopyTableWizard::impl_getDialog_throw()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_getDialog_throw" );
     OCopyTableWizard* pWizard = dynamic_cast< OCopyTableWizard* >( m_pDialog );
     if ( !pWizard )
         throw DisposedException( ::rtl::OUString(), *this );
@@ -576,7 +594,6 @@ OCopyTableWizard& CopyTableWizard::impl_getDialog_throw()
 //-------------------------------------------------------------------------
 const OCopyTableWizard& CopyTableWizard::impl_getDialog_throw() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_getDialog_throw" );
     const OCopyTableWizard* pWizard = dynamic_cast< const OCopyTableWizard* >( m_pDialog );
     if ( !pWizard )
         throw DisposedException( ::rtl::OUString(), *const_cast< CopyTableWizard* >( this ) );
@@ -586,9 +603,9 @@ const OCopyTableWizard& CopyTableWizard::impl_getDialog_throw() const
 //-------------------------------------------------------------------------
 void CopyTableWizard::impl_attributesToDialog_nothrow( OCopyTableWizard& _rDialog ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_attributesToDialog_nothrow" );
     // primary key column
     _rDialog.setCreatePrimaryKey( m_aPrimaryKeyName.IsPresent, m_aPrimaryKeyName.Value );
+    _rDialog.setUseHeaderLine(m_bUseHeaderLineAsColumnNames);
 
     // everything else was passed at construction time already
 }
@@ -596,7 +613,6 @@ void CopyTableWizard::impl_attributesToDialog_nothrow( OCopyTableWizard& _rDialo
 //-------------------------------------------------------------------------
 void CopyTableWizard::impl_dialogToAttributes_nothrow( const OCopyTableWizard& _rDialog )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_dialogToAttributes_nothrow" );
     m_aPrimaryKeyName.IsPresent = _rDialog.shouldCreatePrimaryKey();
     if ( m_aPrimaryKeyName.IsPresent )
         m_aPrimaryKeyName.Value = _rDialog.getPrimaryKeyName();
@@ -606,6 +622,7 @@ void CopyTableWizard::impl_dialogToAttributes_nothrow( const OCopyTableWizard& _
     m_sDestinationTable = _rDialog.getName();
 
     m_nOperation = _rDialog.getOperation();
+    m_bUseHeaderLineAsColumnNames = _rDialog.UseHeaderLine();
 }
 
 //-------------------------------------------------------------------------
@@ -670,7 +687,6 @@ Reference< XPropertySet > CopyTableWizard::impl_ensureDataAccessDescriptor_throw
     const Sequence< Any >& _rAllArgs, const sal_Int16 _nArgPos, SharedConnection& _out_rxConnection,
     InteractionHandler& _out_rxDocInteractionHandler ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_ensureDataAccessDescriptor_throw" );
     Reference< XPropertySet > xDescriptor;
     _rAllArgs[ _nArgPos ] >>= xDescriptor;
 
@@ -723,40 +739,26 @@ namespace
 //-------------------------------------------------------------------------
 void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< XPropertySet >& _rxSourceDescriptor ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_checkForUnsupportedSettings_throw" );
     OSL_PRECOND( _rxSourceDescriptor.is(), "CopyTableWizard::impl_checkForUnsupportedSettings_throw: illegal argument!" );
     Reference< XPropertySetInfo > xPSI( _rxSourceDescriptor->getPropertySetInfo(), UNO_SET_THROW );
     ::rtl::OUString sUnsupportedSetting;
 
-    // in theory, we could allow to use a mere result set as copy source. However, since this is currently
-    // not implemented at all, we report this in the initialization phase already
-    if ( xPSI->hasPropertyByName( PROPERTY_RESULT_SET ) )
+    const ::rtl::OUString aSettings[] = {
+        PROPERTY_FILTER, PROPERTY_ORDER, PROPERTY_HAVING_CLAUSE, PROPERTY_GROUP_BY
+    };
+    for ( size_t i=0; i < sizeof( aSettings ) / sizeof( aSettings[0] ); ++i )
     {
-        Reference< XResultSet > xSource( _rxSourceDescriptor->getPropertyValue( PROPERTY_RESULT_SET ), UNO_QUERY );
-        if ( xSource.is() )
-            sUnsupportedSetting = PROPERTY_RESULT_SET;
-    }
-
-    if ( sUnsupportedSetting.getLength() == 0 )
-    {
-        const ::rtl::OUString aSettings[] = {
-            PROPERTY_FILTER, PROPERTY_ORDER, PROPERTY_HAVING_CLAUSE, PROPERTY_GROUP_BY
-        };
-        for ( size_t i=0; i < sizeof( aSettings ) / sizeof( aSettings[0] ); ++i )
+        if ( lcl_hasNonEmptyStringValue_throw( _rxSourceDescriptor, xPSI, aSettings[i] ) )
         {
-            if ( lcl_hasNonEmptyStringValue_throw( _rxSourceDescriptor, xPSI, aSettings[i] ) )
-            {
-                sUnsupportedSetting = aSettings[i];
-                break;
-            }
+            sUnsupportedSetting = aSettings[i];
+            break;
         }
     }
 
     if ( sUnsupportedSetting.getLength() != 0 )
     {
-        ::rtl::OUString sMessage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unsupported setting in the copy source descriptor: $name$." ) ) );
-            // TODO: resource
-        sMessage = sMessage.replaceAt( sMessage.indexOfAsciiL( "$name$", 6 ), 6, sUnsupportedSetting );
+        ::rtl::OUString sMessage( String(ModuleRes( STR_CTW_ERROR_UNSUPPORTED_SETTING )) );
+        ::comphelper::string::searchAndReplaceAsciiI( sMessage, "$name$", sUnsupportedSetting );
         throw IllegalArgumentException(
             sMessage,
             *const_cast< CopyTableWizard* >( this ),
@@ -769,10 +771,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
 //-------------------------------------------------------------------------
 ::std::auto_ptr< ICopyTableSourceObject > CopyTableWizard::impl_extractSourceObject_throw( const Reference< XPropertySet >& _rxDescriptor, sal_Int32& _out_rCommandType ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_extractSourceObject_throw" );
     OSL_PRECOND( _rxDescriptor.is() && m_xSourceConnection.is(), "CopyTableWizard::impl_extractSourceObject_throw: illegal arguments!" );
-
-    impl_checkForUnsupportedSettings_throw( _rxDescriptor );
 
     Reference< XPropertySetInfo > xPSI( _rxDescriptor->getPropertySetInfo(), UNO_SET_THROW );
     if  (   !xPSI->hasPropertyByName( PROPERTY_COMMAND )
@@ -780,6 +779,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
         )
         throw IllegalArgumentException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Expecting a table or query specification." ) ),
+                // TODO: resource
             *const_cast< CopyTableWizard* >( this ),
             1
         );
@@ -828,8 +828,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
         if ( _out_rCommandType == CommandType::QUERY )
             // we cannot copy a query if the connection cannot provide it ...
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "To copy a query, your connection must be able to provide queries." ) ),
-                // TODO: resource
+                String(ModuleRes( STR_CTW_ERROR_NO_QUERY )),
                 *const_cast< CopyTableWizard* >( this ),
                 1
             );
@@ -840,10 +839,48 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
 }
 
 //-------------------------------------------------------------------------
+void CopyTableWizard::impl_extractSourceResultSet_throw( const Reference< XPropertySet >& i_rDescriptor )
+{
+    Reference< XPropertySetInfo > xPSI( i_rDescriptor->getPropertySetInfo(), UNO_SET_THROW );
+
+    // extract relevant settings
+    if ( xPSI->hasPropertyByName( PROPERTY_RESULT_SET ) )
+        m_xSourceResultSet.set( i_rDescriptor->getPropertyValue( PROPERTY_RESULT_SET ), UNO_QUERY );
+
+    if ( xPSI->hasPropertyByName( PROPERTY_SELECTION ) )
+        OSL_VERIFY( i_rDescriptor->getPropertyValue( PROPERTY_SELECTION ) >>= m_aSourceSelection );
+
+    if ( xPSI->hasPropertyByName( PROPERTY_BOOKMARK_SELECTION ) )
+        OSL_VERIFY( i_rDescriptor->getPropertyValue( PROPERTY_BOOKMARK_SELECTION ) >>= m_bSourceSelectionBookmarks );
+
+    // sanity checks
+    const bool bHasResultSet = m_xSourceResultSet.is();
+    const bool bHasSelection = ( m_aSourceSelection.getLength() != 0 );
+    if ( bHasSelection && !bHasResultSet )
+        throw IllegalArgumentException(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "A result set is needed when specifying a selection to copy." ) ),
+                // TODO: resource
+            *this,
+            1
+        );
+
+    if ( bHasSelection && m_bSourceSelectionBookmarks )
+    {
+        Reference< XRowLocate > xRowLocate( m_xSourceResultSet, UNO_QUERY );
+        if ( !xRowLocate.is() )
+        {
+            ::dbtools::throwGenericSQLException(
+                String( ModuleRes( STR_CTW_COPY_SOURCE_NEEDS_BOOKMARKS ) ),
+                *this
+            );
+        }
+    }
+}
+
+//-------------------------------------------------------------------------
 SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference< XPropertySet >& _rxDataSourceDescriptor,
     InteractionHandler& _out_rxDocInteractionHandler ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_extractConnection_throw" );
     SharedConnection xConnection;
 
     OSL_PRECOND( _rxDataSourceDescriptor.is(), "CopyTableWizard::impl_extractConnection_throw: no descriptor!" );
@@ -937,7 +974,6 @@ SharedConnection CopyTableWizard::impl_extractConnection_throw( const Reference<
 //-------------------------------------------------------------------------
 ::utl::SharedUNOComponent< XPreparedStatement > CopyTableWizard::impl_createSourceStatement_throw() const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_createSourceStatement_throw" );
     OSL_PRECOND( m_xSourceConnection.is(), "CopyTableWizard::impl_createSourceStatement_throw: illegal call!" );
     if ( !m_xSourceConnection.is() )
         throw RuntimeException( ::rtl::OUString(), *const_cast< CopyTableWizard* >( this ) );
@@ -1018,18 +1054,18 @@ namespace
         else
             (m_xDest.get()->*_pSetter)( m_rDestPos, value );
     }
-
-    template< typename VALUE_TYPE >
+ template< typename VALUE_TYPE >
     void transferComplexValue( VALUE_TYPE ( SAL_CALL XRow::*_pGetter )( sal_Int32 ),
         void (SAL_CALL XParameters::*_pSetter)( sal_Int32, const VALUE_TYPE& ) )
     {
-        VALUE_TYPE value( (m_xSource.get()->*_pGetter)( m_rSourcePos ) );
+        const VALUE_TYPE value( (m_xSource.get()->*_pGetter)( m_rSourcePos ) );
+               {
         if ( m_xSource->wasNull() )
             m_xDest->setNull( m_rDestPos, m_rColTypes[ m_rSourcePos ] );
         else
             (m_xDest.get()->*_pSetter)( m_rDestPos, value );
+               }
     }
-
     private:
         const sal_Int32&                    m_rSourcePos;
         const sal_Int32&                    m_rDestPos;
@@ -1042,7 +1078,6 @@ namespace
 //-------------------------------------------------------------------------
 bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _rEvent )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_processCopyError_nothrow" );
     Reference< XCopyTableListener > xListener;
     try
     {
@@ -1121,7 +1156,6 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
 void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSourceResultSet,
     const Reference< XPropertySet >& _rxDestTable )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_copyRows_throw" );
     OSL_PRECOND( m_xDestConnection.is(), "CopyTableWizard::impl_copyRows_throw: illegal call!" );
     if ( !m_xDestConnection.is() )
         throw RuntimeException( ::rtl::OUString(), *this );
@@ -1133,16 +1167,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     bool bAutoIncrement                         = rWizard.shouldCreatePrimaryKey();
 
     Reference< XRow > xRow              ( _rxSourceResultSet, UNO_QUERY_THROW );
-    Reference< XRowLocate > xRowLocate  ( _rxSourceResultSet, UNO_QUERY );
-
-    bool bSelectedRecordsOnly = m_aSourceSelection.getLength() > 0;
-    if ( bSelectedRecordsOnly && m_bSourceSelectionBookmarks && !xRowLocate.is() )
-    {
-        ::dbtools::throwGenericSQLException(
-            String( ModuleRes( STR_CTW_COPY_SOURCE_NEEDS_BOOKMARKS ) ),
-            *this
-        );
-    }
+    Reference< XRowLocate > xRowLocate  ( _rxSourceResultSet, UNO_QUERY_THROW );
 
     Reference< XResultSetMetaDataSupplier > xSuppResMeta( _rxSourceResultSet, UNO_QUERY_THROW );
     Reference< XResultSetMetaData> xMeta( xSuppResMeta->getMetaData() );
@@ -1160,9 +1185,11 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     Reference< XPreparedStatement > xStatement( ODatabaseExport::createPreparedStatment( xDestMetaData, _rxDestTable, aColumnMapping ), UNO_SET_THROW );
     Reference< XParameters > xStatementParams( xStatement, UNO_QUERY_THROW );
 
+    const bool bSelectedRecordsOnly = m_aSourceSelection.getLength() != 0;
+    const Any* pSelectedRow         = m_aSourceSelection.getConstArray();
+    const Any* pSelEnd              = pSelectedRow + m_aSourceSelection.getLength();
+
     sal_Int32 nRowCount = 0;
-    const Any* pSelectedRow = m_aSourceSelection.getConstArray();
-    const Any* pSelEnd      = pSelectedRow + m_aSourceSelection.getLength();
     bool bContinue = false;
 
     CopyTableRowEvent aCopyEvent;
@@ -1178,7 +1205,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
             {
                 if ( m_bSourceSelectionBookmarks )
                 {
-                    xRowLocate->moveToBookmark( *pSelectedRow );
+                    bContinue = xRowLocate->moveToBookmark( *pSelectedRow );
                 }
                 else
                 {
@@ -1193,11 +1220,14 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
             bContinue = _rxSourceResultSet->next();
 
         if ( !bContinue )
+        {
             break;
+        }
 
         ++nRowCount;
         sal_Bool bInsertAutoIncrement = sal_True;
         ODatabaseExport::TPositions::const_iterator aPosIter = aColumnMapping.begin();
+        ODatabaseExport::TPositions::const_iterator aPosEnd = aColumnMapping.end();
 
         aCopyEvent.Error.clear();
         try
@@ -1209,7 +1239,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
             sal_Int32 nSourceColumn( 1 );
             ValueTransfer aTransfer( nSourceColumn, nDestColumn, aSourceColTypes, xRow, xStatementParams );
 
-            for ( ; aPosIter != aColumnMapping.end(); ++aPosIter )
+            for ( ; aPosIter != aPosEnd; ++aPosIter )
             {
                 nDestColumn = aPosIter->first;
                 if ( nDestColumn == COLUMN_POSITION_NOT_FOUND )
@@ -1261,6 +1291,7 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                     case DataType::LONGVARBINARY:
                     case DataType::BINARY:
                     case DataType::VARBINARY:
+                    case DataType::BIT:
                         aTransfer.transferComplexValue( &XRow::getBytes, &XParameters::setBytes );
                         break;
 
@@ -1276,7 +1307,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
                         aTransfer.transferComplexValue( &XRow::getTimestamp, &XParameters::setTimestamp );
                         break;
 
-                    case DataType::BIT:
                     case DataType::BOOLEAN:
                         aTransfer.transferValue( &XRow::getBoolean, &XParameters::setBoolean );
                         break;
@@ -1291,6 +1321,14 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 
                     case DataType::INTEGER:
                         aTransfer.transferValue( &XRow::getInt, &XParameters::setInt );
+                        break;
+
+                    case DataType::BLOB:
+                        aTransfer.transferComplexValue( &XRow::getBlob, &XParameters::setBlob );
+                        break;
+
+                    case DataType::CLOB:
+                        aTransfer.transferComplexValue( &XRow::getClob, &XParameters::setClob );
                         break;
 
                     default:
@@ -1327,7 +1365,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
 //-------------------------------------------------------------------------
 void CopyTableWizard::impl_doCopy_nothrow()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::impl_doCopy_nothrow" );
     Any aError;
 
     try
@@ -1368,26 +1405,41 @@ void CopyTableWizard::impl_doCopy_nothrow()
                     }
                 }
 
-                bool bServerCopy = CommandType::TABLE == m_nCommandType && m_xSourceConnection.getTyped() == m_xDestConnection.getTyped() && !m_aSourceSelection.getLength();
-                try
+                ::utl::SharedUNOComponent< XPreparedStatement > xSourceStatement;
+                ::utl::SharedUNOComponent< XResultSet > xSourceResultSet;
+
+                if ( m_xSourceResultSet.is() )
                 {
-                    if ( bServerCopy )
+                    xSourceResultSet.reset( m_xSourceResultSet, ::utl::SharedUNOComponent< XResultSet >::NoTakeOwnership );
+                }
+                else
+                {
+                    const bool bIsSameConnection = ( m_xSourceConnection.getTyped() == m_xDestConnection.getTyped() );
+                    const bool bIsTable = ( CommandType::TABLE == m_nCommandType );
+                    bool bDone = false;
+                    if ( bIsSameConnection && bIsTable )
                     {
-                        m_xDestConnection->createStatement()->executeUpdate( impl_getSelectStatement_nothrow(xTable) );
+                        // try whether the server supports copying via SQL
+                        try
+                        {
+                            m_xDestConnection->createStatement()->executeUpdate( impl_getServerSideCopyStatement_throw(xTable) );
+                            bDone = true;
+                        }
+                        catch( const Exception& )
+                        {
+                            // this is allowed.
+                        }
+                    }
+
+                    if ( !bDone )
+                    {
+                        xSourceStatement.set( impl_createSourceStatement_throw(), UNO_SET_THROW );
+                        xSourceResultSet.set( xSourceStatement->executeQuery(), UNO_SET_THROW );
                     }
                 }
-                catch( const Exception& e )
-                {
-                    (void)e;
-                    bServerCopy = false;
-                }
 
-                if ( !bServerCopy )
-                {
-                    ::utl::SharedUNOComponent< XPreparedStatement > xStatement( impl_createSourceStatement_throw(), UNO_SET_THROW );
-                    Reference< XResultSet > xSourceResultSet( xStatement->executeQuery() );
+                if ( xSourceResultSet.is() )
                     impl_copyRows_throw( xSourceResultSet, xTable );
-                }
             }
             break;
 
@@ -1427,7 +1479,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
     }
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString CopyTableWizard::impl_getSelectStatement_nothrow(const Reference< XPropertySet >& _xTable)
+::rtl::OUString CopyTableWizard::impl_getServerSideCopyStatement_throw(const Reference< XPropertySet >& _xTable)
 {
     const Reference<XColumnsSupplier> xDestColsSup(_xTable,UNO_QUERY_THROW);
     const Sequence< ::rtl::OUString> aDestColumnNames = xDestColsSup->getColumns()->getElementNames();
@@ -1465,7 +1517,6 @@ void CopyTableWizard::impl_doCopy_nothrow()
 //-------------------------------------------------------------------------
 void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::initialize" );
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( isInitialized() )
         throw AlreadyInitializedException( ::rtl::OUString(), *this );
@@ -1484,18 +1535,19 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
         {   // ->createWithInteractionHandler
             if ( !( _rArguments[2] >>= m_xInteractionHandler ) )
                 throw IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The given interaction handler is invalid." ) ),
-                    // TODO: resource
+                    String(ModuleRes( STR_CTW_ERROR_INVALID_INTERACTIONHANDLER )),
                     *this,
                     3
                 );
         }
         if ( !m_xInteractionHandler.is() )
-            m_xInteractionHandler.set( m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler" ), UNO_QUERY_THROW );
+            m_xInteractionHandler.set( m_aContext.createComponent( "com.sun.star.task.InteractionHandler" ), UNO_QUERY_THROW );
 
         InteractionHandler xSourceDocHandler;
         Reference< XPropertySet > xSourceDescriptor( impl_ensureDataAccessDescriptor_throw( _rArguments, 0, m_xSourceConnection, xSourceDocHandler ) );
+        impl_checkForUnsupportedSettings_throw( xSourceDescriptor );
         m_pSourceObject = impl_extractSourceObject_throw( xSourceDescriptor, m_nCommandType );
+        impl_extractSourceResultSet_throw( xSourceDescriptor );
 
         InteractionHandler xDestDocHandler;
         impl_ensureDataAccessDescriptor_throw( _rArguments, 1, m_xDestConnection, xDestDocHandler );
@@ -1519,14 +1571,12 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
 //-------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper& CopyTableWizard::getInfoHelper()
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::getInfoHelper" );
     return *getArrayHelper();
 }
 
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* CopyTableWizard::createArrayHelper( ) const
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::createArrayHelper" );
     Sequence< Property > aProps;
     describeProperties( aProps );
     return new ::cppu::OPropertyArrayHelper( aProps );
@@ -1535,7 +1585,6 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments ) 
 //------------------------------------------------------------------------------
 Dialog* CopyTableWizard::createDialog( Window* _pParent )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::createDialog" );
     OSL_PRECOND( isInitialized(), "CopyTableWizard::createDialog: not initialized!" );
         // this should have been prevented in ::execute already
 
@@ -1546,7 +1595,8 @@ Dialog* CopyTableWizard::createDialog( Window* _pParent )
         *m_pSourceObject,
         m_xSourceConnection.getTyped(),
         m_xDestConnection.getTyped(),
-        m_aContext.getLegacyServiceFactory()
+        m_aContext.getLegacyServiceFactory(),
+        m_xInteractionHandler
     );
 
     impl_attributesToDialog_nothrow( *pWizard );
@@ -1557,7 +1607,6 @@ Dialog* CopyTableWizard::createDialog( Window* _pParent )
 //------------------------------------------------------------------------------
 void CopyTableWizard::executedDialog( sal_Int16 _nExecutionResult )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "uno", "Ocke.Janssen@sun.com", "CopyTableWizard::executedDialog" );
     CopyTableWizard_DialogBase::executedDialog( _nExecutionResult );
 
     if ( _nExecutionResult == RET_OK )

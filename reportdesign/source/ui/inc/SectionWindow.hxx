@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SectionWindow.hxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +62,6 @@ namespace rptui
         OReportSection  m_aReportSection;
         Splitter        m_aSplitter;
         OEndMarker      m_aEndMarker;
-        //Window          m_aFill;
 
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> m_pSectionMulti;
         ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> m_pGroupMulti;
@@ -94,7 +90,7 @@ namespace rptui
         bool setReportSectionTitle(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportDefinition>& _xReport,USHORT _nResId,::std::mem_fun_t< ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection> , OReportHelper> _pGetSection,::std::mem_fun_t<sal_Bool, OReportHelper> _pIsSectionOn);
         void ImplInitSettings();
 
-        DECL_LINK(Collapsed,OStartMarker*);
+        DECL_LINK(Collapsed,OColorListener*);
         DECL_LINK(StartSplitHdl, Splitter*);
         DECL_LINK(SplitHdl, Splitter*);
         DECL_LINK(EndSplitHdl, Splitter*);

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbwiz.hxx,v $
- * $Revision: 1.9.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +74,9 @@ private:
     OModuleClient m_aModuleClient;
     ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
     SfxItemSet*             m_pOutSet;
-    ::dbaccess::DATASOURCE_TYPE         m_eType;
+    ::dbaccess::ODsnTypeCollection*
+                            m_pCollection;  /// the DSN type collection instance
+    ::rtl::OUString         m_eType;
 
     sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
     sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
@@ -101,7 +100,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-    virtual ::dbaccess::DATASOURCE_TYPE     getDatasourceType(const SfxItemSet& _rSet) const;
+    virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual sal_Bool saveDatasource();
     virtual void setTitle(const ::rtl::OUString& _sTitle);
@@ -112,8 +111,9 @@ protected:
     virtual TabPage*    createPage(WizardState _nState);
     virtual WizardState determineNextState(WizardState _nCurrentState) const;
     virtual sal_Bool    leaveState(WizardState _nState);
-    virtual ::svt::IWizardPage* getWizardPage(TabPage* _pCurrentPage) const;
-    virtual sal_Bool onFinish(sal_Int32 _nResult);
+    virtual ::svt::IWizardPageController*
+                        getPageController( TabPage* _pCurrentPage ) const;
+    virtual sal_Bool    onFinish();
 
 protected:
     inline sal_Bool isUIEnabled() const { return m_bUIEnabled; }

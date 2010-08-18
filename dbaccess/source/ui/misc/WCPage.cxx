@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WCPage.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -112,11 +109,13 @@ OCopyTable::OCopyTable( Window * pParent )
     ,m_aRB_Def(             this, ModuleRes( RB_DEF             ) )
     ,m_aRB_View(            this, ModuleRes( RB_VIEW            ) )
     ,m_aRB_AppendData(      this, ModuleRes( RB_APPENDDATA      ) )
+    ,m_aCB_UseHeaderLine(   this, ModuleRes( CB_USEHEADERLINE   ) )
     ,m_aCB_PrimaryColumn(   this, ModuleRes( CB_PRIMARY_COLUMN  ) )
     ,m_aFT_KeyName(         this, ModuleRes( FT_KEYNAME         ) )
     ,m_edKeyName(           this, ModuleRes( ET_KEYNAME         ) )
     ,m_pPage2(NULL)
     ,m_pPage3(NULL)
+    ,m_bUseHeaderAllowed(TRUE)
 {
     DBG_CTOR(OCopyTable,NULL);
 
@@ -127,6 +126,7 @@ OCopyTable::OCopyTable( Window * pParent )
         if ( !m_pParent->supportsViews() )
             m_aRB_View.Disable();
 
+        m_aCB_UseHeaderLine.Check(TRUE);
         m_bPKeyAllowed = m_pParent->supportsPrimaryKey();
 
         m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
@@ -187,6 +187,7 @@ IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
     m_aFT_KeyName.Enable(bKey && m_aCB_PrimaryColumn.IsChecked());
     m_edKeyName.Enable(bKey && m_aCB_PrimaryColumn.IsChecked());
     m_aCB_PrimaryColumn.Enable(bKey);
+    m_aCB_UseHeaderLine.Enable(m_bUseHeaderAllowed && IsOptionDefData());
 
     // set typ what to do
     if( IsOptionDefData() )
@@ -211,17 +212,20 @@ sal_Bool OCopyTable::LeavePage()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->m_bCreatePrimaryKeyColumn    = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
-    m_pParent->m_aKeyName               = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : String();
+    m_pParent->m_aKeyName                   = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : String();
+    m_pParent->setUseHeaderLine( m_aCB_UseHeaderLine.IsChecked() );
 
     // first check if the table already exists in the database
     if( m_pParent->getOperation() != CopyTableOperation::AppendData )
     {
+        m_pParent->clearDestColumns();
         DynamicTableOrQueryNameCheck aNameCheck( m_pParent->m_xDestConnection, CommandType::TABLE );
         SQLExceptionInfo aErrorInfo;
         if ( !aNameCheck.isNameValid( m_edTableName.GetText(), aErrorInfo ) )
         {
             aErrorInfo.append( SQLExceptionInfo::SQL_CONTEXT, String( ModuleRes( STR_SUGGEST_APPEND_TABLE_DATA ) ) );
-            ::dbaui::showError( aErrorInfo, m_pParent, m_pParent->m_xFactory );
+            m_pParent->showError(aErrorInfo.get());
+
             return sal_False;
         }
 
@@ -239,7 +243,8 @@ sal_Bool OCopyTable::LeavePage()
         sal_Int32 nMaxLength = xMeta->getMaxTableNameLength();
         if ( nMaxLength && sTable.getLength() > nMaxLength )
         {
-            ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME_LENGTH)).Execute();
+            String sError(ModuleRes(STR_INVALID_TABLE_NAME_LENGTH));
+            m_pParent->showError(sError);
             return sal_False;
         }
 
@@ -250,8 +255,7 @@ sal_Bool OCopyTable::LeavePage()
             String aInfoString( ModuleRes(STR_WIZ_PKEY_ALREADY_DEFINED) );
             aInfoString += String(' ');
             aInfoString += String(m_pParent->m_aKeyName);
-            InfoBox aNameInfoBox( this, aInfoString );
-            aNameInfoBox.Execute();
+            m_pParent->showError(aInfoString);
             return sal_False;
         }
     }
@@ -282,7 +286,8 @@ sal_Bool OCopyTable::LeavePage()
 
     if(!m_pParent->m_sName.getLength())
     {
-        ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME)).Execute();
+        String sError(ModuleRes(STR_INVALID_TABLE_NAME));
+        m_pParent->showError(sError);
         return sal_False;
     }
 
@@ -295,6 +300,7 @@ void OCopyTable::ActivatePage()
     m_pParent->GetOKButton().Enable( TRUE );
     m_nOldOperation = m_pParent->getOperation();
     m_edTableName.GrabFocus();
+    m_aCB_UseHeaderLine.Check(m_pParent->UseHeaderLine());
 }
 //------------------------------------------------------------------------
 String OCopyTable::GetTitle() const
@@ -335,14 +341,15 @@ sal_Bool OCopyTable::checkAppendData()
         // #90027#
         const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
         ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
+        ODatabaseExport::TColumnVector::const_iterator aDestEnd     = pDestColumns->end();
         const sal_uInt32 nDestSize = pDestColumns->size();
         sal_Bool bNotConvert;
         sal_uInt32 i = 0;
-        for(sal_Int32 nPos = 1;aDestIter != pDestColumns->end() && i < nDestSize && i < nSrcSize;++aDestIter,++nPos,++i)
+        for(sal_Int32 nPos = 1;aDestIter != aDestEnd && i < nDestSize && i < nSrcSize;++aDestIter,++nPos,++i)
         {
             bNotConvert = sal_True;
             m_pParent->m_vColumnPos[i] = ODatabaseExport::TPositions::value_type(nPos,nPos);
-            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo(),bNotConvert);
+            TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getSpecialTypeInfo(),bNotConvert);
             if ( !bNotConvert )
             {
                 m_pParent->showColumnTypeNotSupported((*aDestIter)->first);
@@ -359,9 +366,8 @@ sal_Bool OCopyTable::checkAppendData()
 
     if ( !xTable.is() )
     {
-        ErrorBox( this, ModuleRes( ERROR_INVALID_TABLE_NAME ) ).Execute();
-        // TODO: shouldn't this be some kind of showError? In case of the UNO service for this wizard,
-        // shouldn't this even be a usage of the service's interaction handler?
+        String sError(ModuleRes(STR_INVALID_TABLE_NAME));
+        m_pParent->showError(sError);
         return sal_False;
     }
     return sal_True;

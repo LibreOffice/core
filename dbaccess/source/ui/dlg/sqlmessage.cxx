@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sqlmessage.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -258,6 +255,14 @@ namespace
         ExceptionDisplayInfo( SQLExceptionInfo::TYPE _eType ) : eType( _eType ), bSubEntry( false ) { }
     };
 
+    static bool lcl_hasDetails( const ExceptionDisplayInfo& _displayInfo )
+    {
+        return  ( _displayInfo.sErrorCode.Len() )
+                ||  (   _displayInfo.sSQLState.Len()
+                    &&  !_displayInfo.sSQLState.EqualsAscii( "S1000" )
+                    );
+    }
+
     typedef ::std::vector< ExceptionDisplayInfo >   ExceptionDisplayChain;
 
     //------------------------------------------------------------------------------
@@ -303,10 +308,18 @@ namespace
 
             ExceptionDisplayInfo aDisplayInfo( aCurrentElement.getType() );
 
-            aDisplayInfo.sMessage = pCurrentError->Message;
+            aDisplayInfo.sMessage = pCurrentError->Message.trim();
             aDisplayInfo.sSQLState = pCurrentError->SQLState;
             if ( pCurrentError->ErrorCode )
                 aDisplayInfo.sErrorCode = String::CreateFromInt32( pCurrentError->ErrorCode );
+
+            if  (   !aDisplayInfo.sMessage.Len()
+                &&  !lcl_hasDetails( aDisplayInfo )
+                )
+            {
+                OSL_ENSURE( false, "lcl_buildExceptionChain: useles exception: no state, no error code, no message!" );
+                continue;
+            }
 
             aDisplayInfo.pImageProvider = _rFactory.getImageProvider( aCurrentElement.getType() );
             aDisplayInfo.pLabelProvider = _rFactory.getLabelProvider( aCurrentElement.getType(), false );
@@ -523,14 +536,17 @@ void OSQLMessageBox::impl_positionControls()
 {
     OSL_PRECOND( !m_pImpl->aDisplayInfo.empty(), "OSQLMessageBox::impl_positionControls: nothing to display at all?" );
 
-    const ExceptionDisplayInfo& rFirstInfo = *m_pImpl->aDisplayInfo.begin();
+
+    if ( m_pImpl->aDisplayInfo.empty() )
+        return;
     const ExceptionDisplayInfo* pSecondInfo = NULL;
+
+    const ExceptionDisplayInfo& rFirstInfo = *m_pImpl->aDisplayInfo.begin();
     if ( m_pImpl->aDisplayInfo.size() > 1 )
         pSecondInfo = &m_pImpl->aDisplayInfo[1];
-
-    // one or two texts to display?
     String sPrimary, sSecondary;
     sPrimary = rFirstInfo.sMessage;
+    // one or two texts to display?
     if ( pSecondInfo )
     {
         // we show two elements in the main dialog if and only if one of
@@ -685,7 +701,25 @@ void OSQLMessageBox::impl_createStandardButtons( WinBits _nStyle )
 void OSQLMessageBox::impl_addDetailsButton()
 {
     size_t nFirstPageVisible = m_aMessage.IsVisible() ? 2 : 1;
+
     bool bMoreDetailsAvailable = m_pImpl->aDisplayInfo.size() > nFirstPageVisible;
+    if ( !bMoreDetailsAvailable )
+    {
+        // even if the text fits into what we can display, we might need to details button
+        // if there is more non-trivial information in the errors than the mere messages
+        for (   ExceptionDisplayChain::const_iterator error = m_pImpl->aDisplayInfo.begin();
+                error != m_pImpl->aDisplayInfo.end();
+                ++error
+            )
+        {
+            if ( lcl_hasDetails( *error ) )
+            {
+                bMoreDetailsAvailable = true;
+                break;
+            }
+        }
+    }
+
     if ( bMoreDetailsAvailable )
     {
         AddButton( BUTTON_MORE, BUTTONID_MORE, 0 );

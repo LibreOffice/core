@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tabletree.cxx,v $
- * $Revision: 1.35.78.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -641,37 +638,45 @@ String OTableTreeListBox::getQualifiedTableName( SvLBoxEntry* _pEntry ) const
 {
     OSL_PRECOND( !isFolderEntry( _pEntry ), "OTableTreeListBox::getQualifiedTableName: folder entries not allowed here!" );
 
-    Reference< XDatabaseMetaData > xMeta;
-    if ( !impl_getAndAssertMetaData( xMeta ) )
-        return String();
-
-    ::rtl::OUString sCatalog;
-    ::rtl::OUString sSchema;
-    ::rtl::OUString sTable;
-
-    SvLBoxEntry* pSchema = GetParent( _pEntry );
-    if ( pSchema )
+    try
     {
-        SvLBoxEntry* pCatalog = GetParent( pSchema );
-        if  (   pCatalog
-            ||  (   xMeta->supportsCatalogsInDataManipulation()
-                &&  !xMeta->supportsSchemasInDataManipulation()
-                )   // here we support catalog but no schema
-            )
-        {
-            if ( pCatalog == NULL )
-            {
-                pCatalog = pSchema;
-                pSchema = NULL;
-            }
-            sCatalog = GetEntryText( pCatalog );
-        }
-        if ( pSchema )
-            sSchema = GetEntryText(pSchema);
-    }
-    sTable = GetEntryText( _pEntry );
+        Reference< XDatabaseMetaData > xMeta;
+        if ( !impl_getAndAssertMetaData( xMeta ) )
+            return String();
 
-    return ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation );
+        ::rtl::OUString sCatalog;
+        ::rtl::OUString sSchema;
+        ::rtl::OUString sTable;
+
+        SvLBoxEntry* pSchema = GetParent( _pEntry );
+        if ( pSchema )
+        {
+            SvLBoxEntry* pCatalog = GetParent( pSchema );
+            if  (   pCatalog
+                ||  (   xMeta->supportsCatalogsInDataManipulation()
+                    &&  !xMeta->supportsSchemasInDataManipulation()
+                    )   // here we support catalog but no schema
+                )
+            {
+                if ( pCatalog == NULL )
+                {
+                    pCatalog = pSchema;
+                    pSchema = NULL;
+                }
+                sCatalog = GetEntryText( pCatalog );
+            }
+            if ( pSchema )
+                sSchema = GetEntryText(pSchema);
+        }
+        sTable = GetEntryText( _pEntry );
+
+        return ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sTable, sal_False, ::dbtools::eInDataManipulation );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return String();
 }
 
 //------------------------------------------------------------------------

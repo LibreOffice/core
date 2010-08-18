@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AppControllerDnD.cxx,v $
- * $Revision: 1.26.6.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -204,7 +201,7 @@
 #include <sfx2/filedlghelper.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 #ifndef _SFX_DOCFILT_HACK_HXX
 #include <sfx2/docfilt.hxx>
@@ -613,7 +610,7 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
     }
 
     ::std::auto_ptr< OLinkedDocumentsAccess > pDocuments( new OLinkedDocumentsAccess(
-        getView(), m_aCurrentFrame.getFrame(), getORB(), xDocContainer, xConnection, getDatabaseName()
+        getView(), this, getORB(), xDocContainer, xConnection, getDatabaseName()
     ) );
     return pDocuments;
 }
@@ -719,19 +716,24 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 }
 
                 // the target object name (as we'll suggest it to the user)
-                String sTargetName;
-                Reference< XNameAccess > xQueries;
+                ::rtl::OUString sTargetName;
                 try
                 {
-                    // the query container
-                    xQueries.set(getQueryDefintions(),UNO_QUERY);
-                    String aQueryDefaultName = String(ModuleRes(STR_QRY_TITLE));
-                    aQueryDefaultName = aQueryDefaultName.GetToken(0,' ');
-                    sTargetName = ::dbtools::createUniqueName(xQueries,aQueryDefaultName);
+                    if ( CommandType::QUERY == nCommandType )
+                        sTargetName = sCommand;
+
+                    if ( !sTargetName.getLength() )
+                    {
+                        String sDefaultName = String( ModuleRes( STR_QRY_TITLE ) );
+                        sDefaultName = sDefaultName.GetToken( 0, ' ' );
+
+                        Reference< XNameAccess > xQueries( getQueryDefintions(), UNO_QUERY_THROW );
+                        sTargetName = ::dbtools::createUniqueName( xQueries, sDefaultName, sal_False );
+                    }
                 }
-                catch(Exception)
+                catch(const Exception&)
                 {
-                    OSL_ENSURE(0,"could not create query default name!");
+                    DBG_UNHANDLED_EXCEPTION();
                 }
 
                 Reference< XPropertySet > xQuery;
@@ -742,16 +744,14 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     try
                     {
                         // the concrete query
-                        Reference< XDataSource > xDataSource( getDataSourceByName( sDataSourceName, getView(), getORB(), NULL ) );
-                        Reference< XQueryDefinitionsSupplier > xSourceQuerySup( xDataSource, UNO_QUERY );
-                        if ( xSourceQuerySup.is() )
-                            xQueries.set(xSourceQuerySup->getQueryDefinitions(),UNO_QUERY);
-
-                        if ( xQueries.is() && xQueries->hasByName(sCommand) )
+                        Reference< XQueryDefinitionsSupplier > xSourceQuerySup(
+                            getDataSourceByName( sDataSourceName, getView(), getORB(), NULL ),
+                            UNO_QUERY_THROW );
+                        Reference< XNameAccess > xQueries( xSourceQuerySup->getQueryDefinitions(), UNO_SET_THROW );
+                        if ( xQueries->hasByName( sCommand ) )
                         {
-                            xQuery.set(xQueries->getByName(sCommand),UNO_QUERY);
-                            bSuccess = xQuery.is();
-                            xQueries.clear();
+                            xQuery.set( xQueries->getByName(sCommand), UNO_QUERY_THROW );
+                            bSuccess = true;
                         }
                     }
                     catch(SQLException&) { throw; } // caught and handled by the outer catch
@@ -780,19 +780,28 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                 // here we have everything needed to create a new query object ...
                 // ... ehm, except a new name
                 ensureConnection();
-                DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
-                OSaveAsDlg aAskForName( getView(),
-                                        CommandType::QUERY,
-                                        getORB(),
-                                        getConnection(),
-                                        sTargetName,
-                                        aNameChecker,
-                                        SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
-                if ( RET_OK != aAskForName.Execute() )
-                    // cancelled by the user
-                    return sal_False;
 
-                sTargetName = aAskForName.getName();
+                DynamicTableOrQueryNameCheck aNameChecker( getConnection(), CommandType::QUERY );
+                ::dbtools::SQLExceptionInfo aDummy;
+                bool bNeedAskForName =  ( sCommand.getLength() == 0 )
+                                            /* we did not have a source name, so the target name was auto-generated */
+                                    ||  ( !aNameChecker.isNameValid( sTargetName, aDummy ) );
+                                            /*  name is invalid in the target DB (e.g. because it already
+                                                has a /table/ with that name) */
+                if ( bNeedAskForName )
+                {
+                    OSaveAsDlg aAskForName( getView(),
+                                            CommandType::QUERY,
+                                            getORB(),
+                                            getConnection(),
+                                            sTargetName,
+                                            aNameChecker,
+                                            SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
+                    if ( RET_OK != aAskForName.Execute() )
+                        // cancelled by the user
+                        return sal_False;
+                    sTargetName = aAskForName.getName();
+                }
 
                 // create a new object
                 Reference< XPropertySet > xNewQuery(xQueryFactory->createInstance(), UNO_QUERY);
@@ -888,18 +897,6 @@ void OApplicationController::getSupportedFormats(ElementType _eType,::std::vecto
 sal_Bool OApplicationController::isTableFormat()  const
 {
     return m_aTableCopyHelper.isTableFormat(getViewClipboard());
-}
-// -----------------------------------------------------------------------------
-sal_Bool OApplicationController::copyTagTable(OTableCopyHelper::DropDescriptor& _rDesc, sal_Bool _bCheck)
-{
-    // first get the dest connection
-    ::osl::MutexGuard aGuard( getMutex() );
-
-    SharedConnection xConnection( ensureConnection() );
-    if ( !xConnection.is() )
-        return sal_False;
-
-    return m_aTableCopyHelper.copyTagTable( _rDesc, _bCheck, xConnection );
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OApplicationController, OnAsyncDrop, void*, /*NOTINTERESTEDIN*/ )

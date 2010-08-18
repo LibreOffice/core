@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConnectionPageSetup.cxx,v $
- * $Revision: 1.12.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,19 +41,19 @@
 #include "dbu_dlg.hrc"
 #endif
 #ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #endif
 #ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #endif
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 #ifndef _DBAUI_DATASOURCEITEMS_HXX_
 #include "dsitems.hxx"
@@ -98,7 +95,7 @@
 #include "dsselect.hxx"
 #endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
@@ -272,25 +269,27 @@ namespace dbaui
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
         // special handling for oracle, this can only happen
         // if the user enters the same url as used for Oracle and we are on the JDBC path
-        if (  ::dbaccess::DST_ORACLE_JDBC == m_eType )
-            m_eType =  ::dbaccess::DST_JDBC;
+        //! TODO
+        //if (  ::dbaccess::DST_ORACLE_JDBC == m_eType )
+        //    m_eType =  ::dbaccess::DST_JDBC;
 
         OConnectionHelper::implInitControls(_rSet, _bSaveValue);
 
-        if ( m_eType >=  ::dbaccess::DST_USERDEFINE1 )
-        {
-            String sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
-            FixedText* ppTextControls[] ={&m_aFT_Connection};
-            for (size_t i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
-            {
-                ppTextControls[i]->SetText(sDisplayName);
-            }
-        }
+        //! TODO
+        //if ( m_eType >=  ::dbaccess::DST_USERDEFINE1 )
+        //{
+        //  String sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
+        //  FixedText* ppTextControls[] ={&m_aFT_Connection};
+        //  for (size_t i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
+        //  {
+        //      ppTextControls[i]->SetText(sDisplayName);
+        //  }
+        //}
 
         callModifiedHdl();
     }
     // -----------------------------------------------------------------------
-       sal_Bool OConnectionTabPageSetup::commitPage( CommitPageReason /*_eReason*/ )
+       sal_Bool OConnectionTabPageSetup::commitPage( ::svt::WizardTypes::CommitPageReason /*_eReason*/ )
     {
         return commitURL();
     }

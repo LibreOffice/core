@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: formula.cxx,v $
- * $Revision: 1.19 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,7 +35,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/msgbox.hxx>
 #include <unotools/charclass.hxx>
-#include <svtools/viewoptions.hxx>
+#include <unotools/viewoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <formula/formdata.hxx>
 #include <formula/funcutl.hxx>
@@ -258,6 +255,11 @@ uno::Reference< sheet::XFormulaParser> FormulaDialog::getFormulaParser() const
 uno::Reference< sheet::XFormulaOpCodeMapper> FormulaDialog::getFormulaOpCodeMapper() const
 {
     return m_xOpCodeMapper;
+}
+// -----------------------------------------------------------------------------
+table::CellAddress FormulaDialog::getReferencePosition() const
+{
+    return table::CellAddress();
 }
 // -----------------------------------------------------------------------------
 ::std::auto_ptr<formula::FormulaTokenArray> FormulaDialog::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)

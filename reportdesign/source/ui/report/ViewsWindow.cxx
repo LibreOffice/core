@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ViewsWindow.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,13 +187,13 @@ OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
     SetPaintTransparent(TRUE);
     SetUniqueId(UID_RPT_VIEWSWINDOW);
     SetMapMode( MapMode( MAP_100TH_MM ) );
-    StartListening(m_aColorConfig);
+    m_aColorConfig.AddListener(this);
     ImplInitSettings();
 }
 // -----------------------------------------------------------------------------
 OViewsWindow::~OViewsWindow()
 {
-    EndListening(m_aColorConfig);
+    m_aColorConfig.RemoveListener(this);
     m_aSections.clear();
 
     DBG_DTOR( rpt_OViewsWindow,NULL);
@@ -337,12 +334,6 @@ void OViewsWindow::removeSection(USHORT _nPosition)
         Resize();
     } // if ( _nPosition < m_aSections.size() )
 }
-//----------------------------------------------------------------------------
-void OViewsWindow::showView(USHORT _nPos,BOOL _bShow)
-{
-    if ( _nPos < m_aSections.size() )
-        m_aSections[_nPos]->setCollapsed(_bShow);
-}
 //------------------------------------------------------------------------------
 void OViewsWindow::toggleGrid(BOOL _bVisible)
 {
@@ -391,10 +382,10 @@ void OViewsWindow::SetMode( DlgEdMode eNewMode )
         ::std::compose1(::boost::bind(&OReportSection::SetMode,_1,eNewMode),TReportPairHelper()));
 }
 //----------------------------------------------------------------------------
-BOOL OViewsWindow::HasSelection()
+BOOL OViewsWindow::HasSelection() const
 {
-    TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
+    TSectionsMap::const_iterator aIter = m_aSections.begin();
+    TSectionsMap::const_iterator aEnd = m_aSections.end();
     for (;aIter != aEnd && !(*aIter)->getReportSection().getSectionView().AreObjectsMarked(); ++aIter)
         ;
     return aIter != aEnd;
@@ -521,9 +512,9 @@ void OViewsWindow::markSection(const sal_uInt16 _nPos)
         m_pParent->setMarked(m_aSections[_nPos]->getReportSection().getSection(),sal_True);
 }
 //----------------------------------------------------------------------------
-BOOL OViewsWindow::IsPasteAllowed()
+BOOL OViewsWindow::IsPasteAllowed() const
 {
-    TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(this));
+    TransferableDataHelper aTransferData( TransferableDataHelper::CreateFromSystemClipboard( const_cast< OViewsWindow* >( this ) ) );
     return aTransferData.HasFormat(OReportExchange::getDescriptorFormatId());
 }
 //-----------------------------------------------------------------------------
@@ -533,21 +524,6 @@ void OViewsWindow::SelectAll(const sal_uInt16 _nObjectType)
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
         ::std::compose1(::boost::bind(::boost::mem_fn(&OReportSection::SelectAll),_1,_nObjectType),TReportPairHelper()));
     m_bInUnmark = sal_False;
-}
-//----------------------------------------------------------------------------
-void OViewsWindow::SectionHasFocus(OReportSection* /*_pSection*/,BOOL /*_bHasFocus*/)
-{
-/* LLA!: this function does nothing!
-TSectionsMap::iterator aIter = m_aSections.begin();
-    TSectionsMap::iterator aEnd = m_aSections.end();
-    for (USHORT i = 0 ; aIter != aEnd ; ++aIter,++i)
-    {
-        if ( (*aIter).first.get() == _pSection )
-        {
-
-        }
-    }
-*/
 }
 //-----------------------------------------------------------------------------
 void OViewsWindow::unmarkAllObjects(OSectionView* _pSectionView)
@@ -588,15 +564,10 @@ void OViewsWindow::unmarkAllObjects(OSectionView* _pSectionView)
 }
 */
 // -----------------------------------------------------------------------
-void OViewsWindow::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
+void OViewsWindow::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32)
 {
-    if (rHint.ISA(SfxSimpleHint)
-        && (static_cast< SfxSimpleHint const & >(rHint).GetId()
-            == SFX_HINT_COLORS_CHANGED))
-    {
         ImplInitSettings();
         Invalidate();
-    }
 }
 // -----------------------------------------------------------------------------
 void OViewsWindow::MouseButtonDown( const MouseEvent& rMEvt )
@@ -987,12 +958,6 @@ void OViewsWindow::setDragStripes(BOOL bOn)
         (*aIter)->getReportSection().getSectionView().SetDragStripes(bOn);
 }
 // -----------------------------------------------------------------------------
-BOOL OViewsWindow::isDragStripes() const
-{
-    return !m_aSections.empty() && (*m_aSections.begin())->getReportSection().getSectionView().IsDragStripes();
-}
-// -----------------------------------------------------------------------------
-
 USHORT OViewsWindow::getPosition(const OSectionWindow* _pSectionWindow) const
 {
     TSectionsMap::const_iterator aIter = m_aSections.begin();
@@ -1104,7 +1069,9 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _
                 // pNewObj->Move(Size(_aRect.Left(), _aRect.Top()));
 
                 pNewObj->Move(Size(0, aNewPos.Y()));
+                BOOL bChanged = rView.GetModel()->IsChanged();
                 rReportSection.getPage()->InsertObject(pNewObj);
+                rView.GetModel()->SetChanged(bChanged);
                 m_aBegDragTempList.push_back(pNewObj);
                 Rectangle aRect = pNewObj->GetLogicRect();
 
@@ -1120,16 +1087,7 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _
 // -----------------------------------------------------------------------------
 bool OViewsWindow::isObjectInMyTempList(SdrObject *_pObj)
 {
-    ::std::vector<SdrObject*>::iterator aIter = m_aBegDragTempList.begin();
-    ::std::vector<SdrObject*>::iterator aEnd = m_aBegDragTempList.end();
-    for (; aIter != aEnd; ++aIter)
-    {
-        if (*aIter == _pObj)
-        {
-            return true;
-        }
-    }
-    return false;
+    return ::std::find(m_aBegDragTempList.begin(),m_aBegDragTempList.end(),_pObj) != m_aBegDragTempList.end();
 }
 
 // -----------------------------------------------------------------------------
@@ -1552,7 +1510,6 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bo
         const long nSectionHeight = (*aIter)->PixelToLogic((*aIter)->GetOutputSizePixel()).Height();
         aRealMousePos.Y() -= nSectionHeight;
     }
-
 #if 0
 #if OSL_DEBUG_LEVEL > 0
     // TEST TEST TEST TEST

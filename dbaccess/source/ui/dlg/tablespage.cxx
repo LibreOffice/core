@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tablespage.cxx,v $
- * $Revision: 1.33.6.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,10 +59,10 @@
 #include "stringlistitem.hxx"
 #endif
 #ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
+#include <svl/eitem.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
+#include <svl/stritem.hxx>
 #endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"

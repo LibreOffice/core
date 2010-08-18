@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: curledit.hxx,v $
- * $Revision: 1.8.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,6 +37,7 @@
 #ifndef _DBAUI_DSNTYPES_HXX_
 #include "dsntypes.hxx"
 #endif
+#include <memory>
 
 //.........................................................................
 namespace dbaui
@@ -55,8 +53,8 @@ namespace dbaui
 */
 class OConnectionURLEdit : public Edit
 {
-    ::dbaccess::ODsnTypeCollection
-                        m_aTypeCollection;
+    ::dbaccess::ODsnTypeCollection*
+                        m_pTypeCollection;
     FixedText*          m_pForcedPrefix;
     String              m_sSaveValueNoPrefix;
     BOOL                m_bShowPrefix; // when <TRUE> the prefix will be visible, otherwise not
@@ -84,7 +82,7 @@ public:
 
     inline void     SaveValueNoPrefix()             { m_sSaveValueNoPrefix = GetTextNoPrefix(); }
     inline String   GetSavedValueNoPrefix() const   { return m_sSaveValueNoPrefix; }
-    inline void     initializeTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB) { m_aTypeCollection.initUserDriverTypes(_rxORB); }
+    inline void     SetTypeCollection(::dbaccess::ODsnTypeCollection* _pTypeCollection) { m_pTypeCollection = _pTypeCollection; }
 };
 
 //.........................................................................

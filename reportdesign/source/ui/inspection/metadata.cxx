@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: metadata.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -131,7 +128,6 @@ namespace rptui
         // this ensures that we have our resource file loaded
 
         sal_uInt16 nPos = 1;
-
         static OPropertyInfoImpl aPropertyInfos[] =
         {
         /*
@@ -156,7 +152,7 @@ namespace rptui
             ,DEF_INFO_1( POSITIONY,                     POSITIONY,                  RPT_POSITIONY,              COMPOSEABLE )
             ,DEF_INFO_1( WIDTH,                         WIDTH,                      RPT_WIDTH,                  COMPOSEABLE )
             ,DEF_INFO_1( HEIGHT,                        HEIGHT,                     RPT_HEIGHT,                 COMPOSEABLE )
-            ,DEF_INFO_1( CHARFONTNAME,                  FONT,                       RPT_FONT,                   COMPOSEABLE )
+            ,DEF_INFO_1( FONT,                          FONT,                       RPT_FONT,                   COMPOSEABLE )
             ,DEF_INFO_1( PREEVALUATED,                  PREEVALUATED,               PREEVALUATED,               COMPOSEABLE )
             ,DEF_INFO_1( DEEPTRAVERSING,                DEEPTRAVERSING,             DEEPTRAVERSING,             COMPOSEABLE )
             ,DEF_INFO_1( FORMULA,                       FORMULA,                    FORMULA,                    COMPOSEABLE )
@@ -177,6 +173,8 @@ namespace rptui
             ,DEF_INFO_2( DETAILFIELDS,                  DETAILFIELDS,               DETAILFIELDS,               COMPOSEABLE,DATA_PROPERTY)
             ,DEF_INFO_1( AREA,                          AREA,                       AREA,                       COMPOSEABLE )
             ,DEF_INFO_2( MIMETYPE,                      MIMETYPE,                   MIMETYPE,                   COMPOSEABLE,DATA_PROPERTY )
+            ,DEF_INFO_1( PARAADJUST,                    PARAADJUST,                 PARAADJUST,                 COMPOSEABLE )
+            ,DEF_INFO_1( VERTICALALIGN,                 VERTICALALIGN,              VERTICALALIGN,              COMPOSEABLE )
         };
 
         s_pPropertyInfos = aPropertyInfos;
@@ -298,13 +296,15 @@ namespace rptui
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HideInactiveSelection")),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SubmitAction")),
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputRequired")),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VerticalAlign")),
+                PROPERTY_ALIGN,
                 PROPERTY_EMPTY_IS_NULL,
                 PROPERTY_FILTERPROPOSAL
                 ,PROPERTY_POSITIONX
                 ,PROPERTY_POSITIONY
                 ,PROPERTY_WIDTH
                 ,PROPERTY_HEIGHT
-                ,PROPERTY_FONTNAME
+                ,PROPERTY_FONT
                 ,PROPERTY_LABEL
                 ,PROPERTY_LINECOLOR
                 ,PROPERTY_BORDER
@@ -317,6 +317,7 @@ namespace rptui
                 ,PROPERTY_SCOPE
                 ,PROPERTY_TYPE
                 ,PROPERTY_DATASOURCENAME
+                ,PROPERTY_VERTICALALIGN
         };
 
         beans::Property* pPropsIter = aProps.getArray();

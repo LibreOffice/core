@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UndoEnv.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,7 +30,7 @@
 
 #include <ReportControllerObserver.hxx>
 #include <ReportController.hxx>
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/report/XFormattedField.hpp>
@@ -181,30 +178,6 @@ public:
         }
 
         return 0L;
-    }
-
-    // -----------------------------------------------------------------------------
-    void OXReportControllerObserver::switchListening(const uno::Reference< uno::XInterface >& _rxObject, sal_Bool _bStartListening)
-    {
-        try
-        {
-            uno::Reference< beans::XPropertySet > xProps( _rxObject, uno::UNO_QUERY );
-            if ( xProps.is() )
-            {
-                if ( _bStartListening )
-                {
-                    xProps->addPropertyChangeListener( ::rtl::OUString(), this );
-                }
-                else
-                {
-                    xProps->removePropertyChangeListener( ::rtl::OUString(), this );
-                }
-            }
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
     }
 
     // XEventListener

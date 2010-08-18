@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlExport.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -172,40 +169,6 @@ namespace rptxml
     }
 
     //---------------------------------------------------------------------
-    ::rtl::OUString lcl_implGetPropertyXMLType(const Type& _rType)
-    {
-        // possible types we can write (either because we recognize them directly or because we convert _rValue
-        // into one of these types)
-        static const ::rtl::OUString s_sTypeBoolean (RTL_CONSTASCII_USTRINGPARAM("boolean"));
-        static const ::rtl::OUString s_sTypeShort   (RTL_CONSTASCII_USTRINGPARAM("short"));
-        static const ::rtl::OUString s_sTypeInteger (RTL_CONSTASCII_USTRINGPARAM("int"));
-        static const ::rtl::OUString s_sTypeLong    (RTL_CONSTASCII_USTRINGPARAM("long"));
-        static const ::rtl::OUString s_sTypeDouble  (RTL_CONSTASCII_USTRINGPARAM("double"));
-        static const ::rtl::OUString s_sTypeString  (RTL_CONSTASCII_USTRINGPARAM("string"));
-
-        // handle the type description
-        switch (_rType.getTypeClass())
-        {
-            case TypeClass_STRING:
-                return s_sTypeString;
-            case TypeClass_DOUBLE:
-                return s_sTypeDouble;
-            case TypeClass_BOOLEAN:
-                return s_sTypeBoolean;
-            case TypeClass_BYTE:
-            case TypeClass_SHORT:
-                return s_sTypeShort;
-            case TypeClass_LONG:
-                return s_sTypeInteger;
-            case TypeClass_HYPER:
-                return s_sTypeLong;
-            case TypeClass_ENUM:
-                return s_sTypeInteger;
-
-            default:
-                return s_sTypeDouble;
-        }
-    }
 
     class OSpecialHanldeXMLExportPropertyMapper : public SvXMLExportPropertyMapper
     {
@@ -293,6 +256,16 @@ ORptExport::ORptExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt1
     {
         _GetNamespaceMap().Add( GetXMLToken(XML_NP_STYLE), GetXMLToken(XML_N_STYLE), XML_NAMESPACE_STYLE );
     }
+    // RDFa: needed for content and header/footer styles
+    if( (getExportFlags() & (EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    {
+        _GetNamespaceMap().Add( GetXMLToken(XML_NP_XHTML),GetXMLToken(XML_N_XHTML), XML_NAMESPACE_XHTML );
+    }
+    // GRDDL: to convert RDFa and meta.xml to RDF
+    if( (getExportFlags() & (EXPORT_META|EXPORT_STYLES|EXPORT_AUTOSTYLES|EXPORT_MASTERSTYLES|EXPORT_CONTENT) ) != 0 )
+    {
+        _GetNamespaceMap().Add( GetXMLToken(XML_NP_GRDDL),GetXMLToken(XML_N_GRDDL), XML_NAMESPACE_GRDDL );
+    }
 
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_TABLE), GetXMLToken(XML_N_TABLE), XML_NAMESPACE_TABLE );
     _GetNamespaceMap().Add( GetXMLToken(XML_NP_NUMBER), GetXMLToken(XML_N_NUMBER), XML_NAMESPACE_NUMBER );
@@ -323,7 +296,7 @@ ORptExport::ORptExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt1
 
     UniReference < XMLPropertySetMapper > xPropMapper(new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA ));
     m_xParaPropMapper = new OSpecialHanldeXMLExportPropertyMapper( xPropMapper);
-    //m_xParaPropMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
+    // m_xParaPropMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
 
     ::rtl::OUString sFamily( GetXMLToken(XML_PARAGRAPH) );
     ::rtl::OUString aPrefix( String( 'P' ) );
@@ -948,6 +921,10 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                     AddAttribute(XML_NAMESPACE_FORM, XML_IMAGE_DATA,sTargetLocation);
                                 }
                                 bExportData = sal_True;
+                                ::rtl::OUStringBuffer sValue;
+                                const SvXMLEnumMapEntry* aXML_ImageScaleEnumMap = OXMLHelper::GetImageScaleOptions();
+                                if ( SvXMLUnitConverter::convertEnum( sValue, xImage->getScaleMode(),aXML_ImageScaleEnumMap ) )
+                                    AddAttribute(XML_NAMESPACE_REPORT, XML_SCALE, sValue.makeStringAndClear() );
                             }
                             else if ( xReportDefinition.is() )
                             {
@@ -992,6 +969,11 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                                     exportSection(xSection);
                             }
                         }
+                    } // if ( aColIter->xElement.is() )
+                    else if ( !bShapeHandled )
+                    {
+                        bShapeHandled = true;
+                        exportShapes(_xSection);
                     }
                     aColIter = aColIter + (aColIter->nColSpan - 1);
                 }
@@ -1132,6 +1114,13 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
                     ::rtl::OUString sExpression = xGroup->getExpression();
                     if ( sExpression.getLength() )
                     {
+                        static ::rtl::OUString s_sQuote(RTL_CONSTASCII_USTRINGPARAM("\"\""));
+                        sal_Int32 nIndex = sExpression.indexOf('"');
+                        while ( nIndex > -1 )
+                        {
+                            sExpression = sExpression.replaceAt(nIndex,1,s_sQuote);
+                            nIndex = sExpression.indexOf('"',nIndex+2);
+                        }
                         ::rtl::OUString sFormula(RTL_CONSTASCII_USTRINGPARAM("rpt:HASCHANGED(\""));
 
                         TGroupFunctionMap::iterator aGroupFind = m_aGroupFunctionMap.find(xGroup);
@@ -1268,37 +1257,37 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
     }
     else
     {
-        sal_Int32 nTextAlignIndex = m_xCellStylesExportPropertySetMapper->getPropertySetMapper()->FindEntryIndex( CTF_SD_SHAPE_PARA_ADJUST );
-        if ( nTextAlignIndex != -1 )
-        {
-            ::std::vector< XMLPropertyState >::iterator aIter = aPropertyStates.begin();
-            ::std::vector< XMLPropertyState >::iterator aEnd = aPropertyStates.end();
-            for (; aIter != aEnd; ++aIter)
-            {
-                if ( aIter->mnIndex == nTextAlignIndex )
-                {
-                    sal_Int16 nTextAlign = 0;
-                    aIter->maValue >>= nTextAlign;
-                    switch(nTextAlign)
-                    {
-                        case awt::TextAlign::LEFT:
-                            nTextAlign = style::ParagraphAdjust_LEFT;
-                            break;
-                        case awt::TextAlign::CENTER:
-                            nTextAlign = style::ParagraphAdjust_CENTER;
-                            break;
-                        case awt::TextAlign::RIGHT:
-                            nTextAlign = style::ParagraphAdjust_RIGHT;
-                            break;
-                        default:
-                            OSL_ENSURE(0,"Illegal text alignment value!");
-                            break;
-                    }
-                    aIter->maValue <<= nTextAlign;
-                    break;
-                }
-            }
-        }
+        //sal_Int32 nTextAlignIndex = m_xCellStylesExportPropertySetMapper->getPropertySetMapper()->FindEntryIndex( CTF_SD_SHAPE_PARA_ADJUST );
+        //if ( nTextAlignIndex != -1 )
+        //{
+        //    ::std::vector< XMLPropertyState >::iterator aIter = aPropertyStates.begin();
+        //    ::std::vector< XMLPropertyState >::iterator aEnd = aPropertyStates.end();
+        //    for (; aIter != aEnd; ++aIter)
+        //    {
+        //        if ( aIter->mnIndex == nTextAlignIndex )
+        //        {
+        //            sal_Int16 nTextAlign = 0;
+        //            aIter->maValue >>= nTextAlign;
+        //            switch(nTextAlign)
+        //            {
+        //                case awt::TextAlign::LEFT:
+        //                    nTextAlign = style::ParagraphAdjust_LEFT;
+        //                    break;
+        //                case awt::TextAlign::CENTER:
+        //                    nTextAlign = style::ParagraphAdjust_CENTER;
+        //                    break;
+        //                case awt::TextAlign::RIGHT:
+        //                    nTextAlign = style::ParagraphAdjust_RIGHT;
+        //                    break;
+        //                default:
+        //                    OSL_ENSURE(0,"Illegal text alignment value!");
+        //                    break;
+        //            }
+        //            aIter->maValue <<= nTextAlign;
+        //            break;
+        //        }
+        //    }
+        //}
         const Reference<XFormattedField> xFormattedField(_xProp,uno::UNO_QUERY);
         if ( (_xParentFormattedField.is() || xFormattedField.is()) && !aPropertyStates.empty() )
         {
@@ -1467,45 +1456,6 @@ sal_uInt32 ORptExport::exportDoc(enum ::xmloff::token::XMLTokenEnum eClass)
     return aBuffer.makeStringAndClear();
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString ORptExport::implConvertMeasure(sal_Int32 _nValue)
-{
-    ::rtl::OUStringBuffer aBuffer;
-    GetMM100UnitConverter().convertMeasure(aBuffer, _nValue);
-    return aBuffer.makeStringAndClear();
-}
-// -----------------------------------------------------------------------------
-::rtl::OUString ORptExport::implConvertAny(const Any& _rValue)
-{
-    ::rtl::OUStringBuffer aBuffer;
-    switch (_rValue.getValueTypeClass())
-    {
-        case TypeClass_STRING:
-        {   // extract the string
-            ::rtl::OUString sCurrentValue;
-            _rValue >>= sCurrentValue;
-            aBuffer.append(sCurrentValue);
-        }
-        break;
-        case TypeClass_DOUBLE:
-            // let the unit converter format is as string
-            GetMM100UnitConverter().convertDouble(aBuffer, getDouble(_rValue));
-            break;
-        case TypeClass_BOOLEAN:
-            aBuffer = getBOOL(_rValue) ? ::xmloff::token::GetXMLToken(XML_TRUE) : ::xmloff::token::GetXMLToken(XML_FALSE);
-            break;
-        case TypeClass_BYTE:
-        case TypeClass_SHORT:
-        case TypeClass_LONG:
-            // let the unit converter format is as string
-            GetMM100UnitConverter().convertNumber(aBuffer, getINT32(_rValue));
-            break;
-        default:
-            OSL_ENSURE(0,"ORptExport::implConvertAny: Invalid type");
-    }
-
-    return aBuffer.makeStringAndClear();
-}
-// -----------------------------------------------------------------------------
 UniReference < XMLPropertySetMapper > ORptExport::GetCellStylePropertyMapper() const
 {
     return m_xCellStylesPropertySetMapper;
@@ -1613,7 +1563,7 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
         {
             ::std::auto_ptr<SvXMLElementExport> pSubDocument;
             uno::Reference< frame::XModel> xModel(xShape->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model"))),uno::UNO_QUERY);
-            if ( xModel.is() ) // special handlingfor chart object
+            if ( xModel.is() ) // special handling for chart object
             {
                 pSubDocument.reset(new SvXMLElementExport(*this,XML_NAMESPACE_REPORT, XML_SUB_DOCUMENT, sal_False, sal_False));
                 exportMasterDetailFields(xShape.get());
@@ -1641,6 +1591,7 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                 uno::Reference< XFunction> xFunction = xFunctions->createFunction();
                 ::rtl::OUString sFunction,sPrefix,sPostfix;
                 ::rtl::OUString sExpression = xGroup->getExpression();
+                ::rtl::OUString sFunctionName;
                 switch(nGroupOn)
                 {
                     case report::GroupOn::PREFIX_CHARACTERS:
@@ -1651,8 +1602,9 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                         sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YEAR"));
                         break;
                     case report::GroupOn::QUARTAL:
-                        sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MONTH"));
-                        sPostfix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/4"));
+                        sFunction   = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT((MONTH"));
+                        sPostfix    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-1)/3)+1"));
+                        sFunctionName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("QUARTAL_")) + sExpression;
                         break;
                     case report::GroupOn::MONTH:
                         sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MONTH"));
@@ -1680,15 +1632,21 @@ void ORptExport::exportGroupsExpressionAsFunction(const Reference< XGroups>& _xG
                             exportFunction(xCountFunction);
                             sExpression = sCountName;
                             sPrefix = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" / ")) + ::rtl::OUString::valueOf(xGroup->getGroupInterval());
+                            sFunctionName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression;
                         }
                         break;
                     default:
                         ;
                 }
+                if ( !sFunctionName.getLength() )
+                    sFunctionName = sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression;
                 if ( sFunction.getLength() )
                 {
+                    sal_Unicode pReplaceChars[] = { '(',')',';',',','+','-','[',']','/','*'};
+                    for(sal_uInt32 j= 0; j < sizeof(pReplaceChars)/sizeof(pReplaceChars[0]);++j)
+                        sFunctionName = sFunctionName.replace(pReplaceChars[j],'_');
 
-                    xFunction->setName(sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + sExpression);
+                    xFunction->setName(sFunctionName);
                     sFunction = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + sFunction;
                     sFunction += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(["));
                     sFunction += sExpression;

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: toolboxcontroller.cxx,v $
- * $Revision: 1.13.98.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,7 +70,7 @@
 #include <svtools/miscopt.hxx>
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #endif
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
@@ -175,7 +172,8 @@ namespace dbaui
         }
 
         TCommandState::iterator aIter = m_aStates.begin();
-        for (; aIter != m_aStates.end(); ++aIter)
+        TCommandState::iterator aEnd = m_aStates.end();
+        for (; aIter != aEnd; ++aIter)
             addStatusListener(aIter->first);
 
         ToolBox*    pToolBox = static_cast<ToolBox*>(VCLUnoHelper::GetWindow(getParent()));

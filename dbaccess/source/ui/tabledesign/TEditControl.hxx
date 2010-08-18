@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TEditControl.hxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +56,7 @@ namespace dbaui
     {
         enum ChildFocusState
         {
+            HELPTEXT,
             DESCRIPTION,
             NAME,
             ROW,
@@ -70,6 +68,7 @@ namespace dbaui
 
         OSQLNameEdit*               pNameCell;
         ::svt::ListBoxControl*      pTypeCell;
+        Edit*                       pHelpTextCell;
         Edit*                       pDescrCell;
         OTableFieldDescWin*         pDescrWin;          // properties of one column
 

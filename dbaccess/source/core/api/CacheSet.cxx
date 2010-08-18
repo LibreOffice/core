@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CacheSet.cxx,v $
- * $Revision: 1.46 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -88,6 +85,7 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#include <rtl/ustrbuf.hxx>
 #include <rtl/logfile.hxx>
 
 using namespace comphelper;
@@ -128,7 +126,7 @@ OCacheSet::OCacheSet()
     return sQuote;
 }
 // -------------------------------------------------------------------------
-void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet)
+void OCacheSet::construct(  const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& /*i_sRowSetFilter*/)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::construct" );
     OSL_ENSURE(_xDriverSet.is(),"Invalid resultSet");
@@ -205,36 +203,37 @@ void OCacheSet::fillTableName(const Reference<XPropertySet>& _xTable)  throw(SQL
 void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::insertRow" );
-    ::rtl::OUString aSql(::rtl::OUString::createFromAscii("INSERT INTO "));
+    ::rtl::OUStringBuffer aSql(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT INTO ")));
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
 
-    aSql += m_aComposedTableName;
-    aSql += ::rtl::OUString::createFromAscii(" ( ");
+    aSql.append(m_aComposedTableName);
+    aSql.append(::rtl::OUString::createFromAscii(" ( "));
     // set values and column names
-    ::rtl::OUString aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
-    static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
+    ::rtl::OUStringBuffer aValues = ::rtl::OUString::createFromAscii(" VALUES ( ");
+    static ::rtl::OUString aPara(RTL_CONSTASCII_USTRINGPARAM("?,"));
     ::rtl::OUString aQuote = getIdentifierQuoteString();
-    static ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
+    static ::rtl::OUString aComma(RTL_CONSTASCII_USTRINGPARAM(","));
     sal_Int32 i = 1;
     ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1;
-    for(; aIter != _rInsertRow->get().end();++aIter)
+    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
+    for(; aIter != aEnd;++aIter)
     {
-        aSql += ::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++));
-        aSql += aComma;
-        aValues += aPara;
+        aSql.append(::dbtools::quoteName( aQuote,m_xSetMetaData->getColumnName(i++)));
+        aSql.append(aComma);
+        aValues.append(aPara);
     }
 
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-    aValues = aValues.replaceAt(aValues.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+    aSql.setCharAt(aSql.getLength()-1,')');
+    aValues.setCharAt(aValues.getLength()-1,')');
 
-    aSql += aValues;
+    aSql.append(aValues.makeStringAndClear());
     // now create end execute the prepared statement
     {
-        Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
+        Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
         Reference< XParameters > xParameter(xPrep,UNO_QUERY);
         i = 1;
-        for(aIter = _rInsertRow->get().begin()+1; aIter != _rInsertRow->get().end();++aIter,++i)
+        for(aIter = _rInsertRow->get().begin()+1; aIter != aEnd;++aIter,++i)
         {
             if(aIter->isNull())
                 xParameter->setNull(i,aIter->getTypeKind());
@@ -265,198 +264,15 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
 // -------------------------------------------------------------------------
 void OCacheSet::fillParameters( const ORowSetRow& _rRow
                                         ,const connectivity::OSQLTable& _xTable
-                                        ,::rtl::OUString& _sCondition
-                                        ,::rtl::OUString& _sParameter
+                                        ,::rtl::OUStringBuffer& _sCondition
+                                        ,::rtl::OUStringBuffer& _sParameter
                                         ,::std::list< sal_Int32>& _rOrgValues)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::fillParameters" );
     // use keys and indexes for excat postioning
     // first the keys
-    Reference<XKeysSupplier> xKeySup(_xTable,UNO_QUERY);
-    Reference<XIndexAccess> xKeys;
-    if(xKeySup.is())
-        xKeys = xKeySup->getKeys();
-
-    Reference<XColumnsSupplier> xKeyColsSup;
-    Reference<XNameAccess> xKeyColumns;
-    if(xKeys.is() && xKeys->getCount())
-    {
-        Reference<XPropertySet> xProp;
-        Reference<XColumnsSupplier> xColumnsSupplier;
-        // search the one and only primary key
-        for(sal_Int32 i=0;i< xKeys->getCount();++i)
-        {
-            ::cppu::extractInterface(xProp,xKeys->getByIndex(i));
-            sal_Int32 nKeyType = 0;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-            if(KeyType::PRIMARY == nKeyType)
-            {
-                xKeyColsSup.set(xProp,UNO_QUERY);
-                break;
-            }
-        }
-        if(xKeyColsSup.is())
-            xKeyColumns = xKeyColsSup->getColumns();
-    }
-    // second the indexes
-    Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
-    Reference<XIndexAccess> xIndexes;
-    if(xIndexSup.is())
-        xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
-
-    //  Reference<XColumnsSupplier>
-    Reference<XPropertySet> xIndexColsSup;
-    Reference<XNameAccess> xIndexColumns;
-    ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
-    if(xIndexes.is())
-    {
-        for(sal_Int32 j=0;j<xIndexes->getCount();++j)
-        {
-            ::cppu::extractInterface(xIndexColsSup,xIndexes->getByIndex(j));
-            if( xIndexColsSup.is()
-                && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
-                && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
-              )
-                aAllIndexColumns.push_back(Reference<XColumnsSupplier>(xIndexColsSup,UNO_QUERY)->getColumns());
-        }
-    }
-
-    ::rtl::OUString aColumnName;
-
-    static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
-    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
-
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
-
-    sal_Int32 nCheckCount = 1; // index for the orginal values
-    sal_Int32 i = 1;
-    ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rRow->get().begin()+1;
-    ORowVector< ORowSetValue >::Vector::const_iterator aEnd = _rRow->get().end()+1;
-    for(; aIter != aEnd;++aIter,++nCheckCount,++i)
-    {
-        aColumnName = m_xSetMetaData->getColumnName(i);
-        if(xKeyColumns.is() && xKeyColumns->hasByName(aColumnName))
-        {
-            _sCondition += ::dbtools::quoteName( aQuote,aColumnName);
-            if(aIter->isNull())
-                _sCondition += ::rtl::OUString::createFromAscii(" IS NULL");
-            else
-                _sCondition += ::rtl::OUString::createFromAscii(" = ?");
-            _sCondition += aAnd;
-            _rOrgValues.push_back(nCheckCount);
-
-        }
-        for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
-                aIndexIter != aAllIndexColumns.end();++aIndexIter)
-        {
-            if((*aIndexIter)->hasByName(aColumnName))
-            {
-                _sCondition += ::dbtools::quoteName( aQuote,aColumnName);
-                if(aIter->isNull())
-                    _sCondition += ::rtl::OUString::createFromAscii(" IS NULL");
-                else
-                    _sCondition += ::rtl::OUString::createFromAscii(" = ?");
-                _sCondition += aAnd;
-                _rOrgValues.push_back(nCheckCount);
-                break;
-            }
-        }
-        if(aIter->isModified())
-        {
-            _sParameter += ::dbtools::quoteName( aQuote,aColumnName);
-            _sParameter += aPara;
-        }
-    }
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::updateRow" );
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
-    fillTableName(xSet);
-
-    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("UPDATE ");
-    aSql += m_aComposedTableName;
-    aSql += ::rtl::OUString::createFromAscii(" SET ");
-    // list all cloumns that should be set
-
-    ::rtl::OUString aCondition;
-    ::std::list< sal_Int32> aOrgValues;
-    fillParameters(_rInsertRow,_xTable,aCondition,aSql,aOrgValues);
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(" "));
-    if ( aCondition.getLength() )
-    {
-        aCondition = aCondition.replaceAt(aCondition.getLength()-5,5,::rtl::OUString::createFromAscii(" "));
-
-        aSql += ::rtl::OUString::createFromAscii(" WHERE ");
-        aSql += aCondition;
-    }
-    else
-        ::dbtools::throwSQLException(
-            DBACORE_RESSTRING( RID_STR_NO_UPDATE_MISSING_CONDITION ), SQL_GENERAL_ERROR, *this );
-
-    // now create end execute the prepared statement
-    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
-    Reference< XParameters > xParameter(xPrep,UNO_QUERY);
-    sal_Int32 i = 1;
-    for(ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1; aIter != _rInsertRow->get().end();++aIter)
-    {
-        if(aIter->isModified())
-        {
-            setParameter(i,xParameter,*aIter,m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
-            ++i;
-        }
-    }
-    for(::std::list< sal_Int32>::const_iterator aOrgValue = aOrgValues.begin(); aOrgValue != aOrgValues.end();++aOrgValue,++i)
-    {
-        setParameter(i,xParameter,(_rOrginalRow->get())[*aOrgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
-    }
-
-     m_bUpdated = xPrep->executeUpdate() > 0;
-}
-// -------------------------------------------------------------------------
-void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::deleteRow" );
-    Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
-    fillTableName(xSet);
-
-    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DELETE FROM ");
-    aSql += m_aComposedTableName;
-    aSql += ::rtl::OUString::createFromAscii(" WHERE ");
-
-    // list all cloumns that should be set
-    ::rtl::OUString aQuote  = getIdentifierQuoteString();
-    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
-
-    // use keys and indexes for excat postioning
-    // first the keys
-    Reference<XKeysSupplier> xKeySup(_xTable,UNO_QUERY);
-    Reference<XIndexAccess> xKeys;
-    if(xKeySup.is())
-        xKeys = xKeySup->getKeys();
-
-    Reference<XColumnsSupplier> xKeyColsSup;
-    Reference<XNameAccess> xKeyColumns;
-    if(xKeys.is() && xKeys->getCount())
-    {
-        Reference<XPropertySet> xProp;
-        Reference<XColumnsSupplier> xColumnsSupplier;
-        // search the one and only primary key
-        for(sal_Int32 i=0;i< xKeys->getCount();++i)
-        {
-            ::cppu::extractInterface(xProp,xKeys->getByIndex(i));
-            sal_Int32 nKeyType = 0;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nKeyType;
-            if(KeyType::PRIMARY == nKeyType)
-            {
-                xKeyColsSup.set(xProp,UNO_QUERY);
-                break;
-            }
-        }
-        if(xKeyColsSup.is())
-            xKeyColumns = xKeyColsSup->getColumns();
-    }
+    const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xSet);
     // second the indexes
     Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
     Reference<XIndexAccess> xIndexes;
@@ -481,16 +297,157 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     }
 
     ::rtl::OUString aColumnName;
+
+    static ::rtl::OUString aPara = ::rtl::OUString::createFromAscii("?,");
+    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+
+    sal_Int32 nCheckCount = 1; // index for the orginal values
+    sal_Int32 i = 1;
+
+    ::rtl::OUString sIsNull(RTL_CONSTASCII_USTRINGPARAM(" IS NULL"));
+    ::rtl::OUString sParam(RTL_CONSTASCII_USTRINGPARAM(" = ?"));
+    ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rRow->get().begin()+1;
+    ORowVector< ORowSetValue >::Vector::const_iterator aEnd = _rRow->get().end()+1;
+    for(; aIter != aEnd;++aIter,++nCheckCount,++i)
+    {
+        aColumnName = m_xSetMetaData->getColumnName(i);
+        if(xPrimaryKeyColumns.is() && xPrimaryKeyColumns->hasByName(aColumnName))
+        {
+            _sCondition.append(::dbtools::quoteName( aQuote,aColumnName));
+            if(aIter->isNull())
+                _sCondition.append(sIsNull);
+            else
+                _sCondition.append(sParam);
+            _sCondition.append(aAnd);
+            _rOrgValues.push_back(nCheckCount);
+
+        } // if(xPrimaryKeyColumns.is() && xPrimaryKeyColumns->hasByName(aColumnName))
+        ::std::vector< Reference<XNameAccess> >::const_iterator aIndexEnd = aAllIndexColumns.end();
+        for( ::std::vector< Reference<XNameAccess> >::const_iterator aIndexIter = aAllIndexColumns.begin();
+                aIndexIter != aIndexEnd;++aIndexIter)
+        {
+            if((*aIndexIter)->hasByName(aColumnName))
+            {
+                _sCondition.append(::dbtools::quoteName( aQuote,aColumnName));
+                if(aIter->isNull())
+                    _sCondition.append(sIsNull);
+                else
+                    _sCondition.append(sParam);
+                _sCondition.append(aAnd);
+                _rOrgValues.push_back(nCheckCount);
+                break;
+            }
+        }
+        if(aIter->isModified())
+        {
+            _sParameter.append(::dbtools::quoteName( aQuote,aColumnName));
+            _sParameter.append(aPara);
+        }
+    }
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::updateRow" );
+    Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
+    fillTableName(xSet);
+
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString::createFromAscii("UPDATE ");
+    aSql.append(m_aComposedTableName);
+    aSql.append(::rtl::OUString::createFromAscii(" SET "));
+    // list all cloumns that should be set
+
+    ::rtl::OUStringBuffer aCondition;
+    ::std::list< sal_Int32> aOrgValues;
+    fillParameters(_rInsertRow,_xTable,aCondition,aSql,aOrgValues);
+    aSql.setCharAt(aSql.getLength()-1,' ');
+    if ( aCondition.getLength() )
+    {
+        aCondition.setLength(aCondition.getLength()-5);
+
+        aSql.append(::rtl::OUString::createFromAscii(" WHERE "));
+        aSql.append(aCondition.makeStringAndClear());
+    }
+    else
+        ::dbtools::throwSQLException(
+            DBACORE_RESSTRING( RID_STR_NO_UPDATE_MISSING_CONDITION ), SQL_GENERAL_ERROR, *this );
+
+    // now create end execute the prepared statement
+    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
+    Reference< XParameters > xParameter(xPrep,UNO_QUERY);
+    sal_Int32 i = 1;
+    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
+    for(ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1; aIter != aEnd;++aIter)
+    {
+        if(aIter->isModified())
+        {
+            setParameter(i,xParameter,*aIter,m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+            ++i;
+        }
+    } // for(ORowVector< ORowSetValue >::Vector::const_iterator aIter = _rInsertRow->get().begin()+1; aIter != aEnd;++aIter)
+    ::std::list< sal_Int32>::const_iterator aOrgValueEnd = aOrgValues.end();
+    for(::std::list< sal_Int32>::const_iterator aOrgValue = aOrgValues.begin(); aOrgValue != aOrgValueEnd;++aOrgValue,++i)
+    {
+        setParameter(i,xParameter,(_rOrginalRow->get())[*aOrgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+    }
+
+     m_bUpdated = xPrep->executeUpdate() > 0;
+}
+// -------------------------------------------------------------------------
+void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException)
+{
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::deleteRow" );
+    Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
+    fillTableName(xSet);
+
+    ::rtl::OUStringBuffer aSql = ::rtl::OUString::createFromAscii("DELETE FROM ");
+    aSql.append(m_aComposedTableName);
+    aSql.append(::rtl::OUString::createFromAscii(" WHERE "));
+
+    // list all cloumns that should be set
+    ::rtl::OUString aQuote  = getIdentifierQuoteString();
+    static ::rtl::OUString aAnd     = ::rtl::OUString::createFromAscii(" AND ");
+
+    // use keys and indexes for excat postioning
+    // first the keys
+    const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(xSet);
+    // second the indexes
+    Reference<XIndexesSupplier> xIndexSup(_xTable,UNO_QUERY);
+    Reference<XIndexAccess> xIndexes;
+    if(xIndexSup.is())
+        xIndexes.set(xIndexSup->getIndexes(),UNO_QUERY);
+
+    //  Reference<XColumnsSupplier>
+    Reference<XPropertySet> xIndexColsSup;
+    Reference<XNameAccess> xIndexColumns;
+    ::std::vector< Reference<XNameAccess> > aAllIndexColumns;
+    if(xIndexes.is())
+    {
+        for(sal_Int32 j=0;j<xIndexes->getCount();++j)
+        {
+            xIndexColsSup.set(xIndexes->getByIndex(j),UNO_QUERY);
+            if( xIndexColsSup.is()
+                && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
+                && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
+              )
+                aAllIndexColumns.push_back(Reference<XColumnsSupplier>(xIndexColsSup,UNO_QUERY)->getColumns());
+        }
+    }
+
+    ::rtl::OUStringBuffer aColumnName;
     ::std::list< sal_Int32> aOrgValues;
     fillParameters(_rDeleteRow,_xTable,aSql,aColumnName,aOrgValues);
 
-    aSql = aSql.replaceAt(aSql.getLength()-5,5,::rtl::OUString::createFromAscii(" "));
+    aSql.setLength(aSql.getLength()-5);
 
     // now create end execute the prepared statement
-    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql));
+    Reference< XPreparedStatement > xPrep(m_xConnection->prepareStatement(aSql.makeStringAndClear()));
     Reference< XParameters > xParameter(xPrep,UNO_QUERY);
     sal_Int32 i = 1;
-    for(::std::list< sal_Int32>::const_iterator j = aOrgValues.begin(); j != aOrgValues.end();++j,++i)
+    ::std::list< sal_Int32>::const_iterator aOrgValueEnd = aOrgValues.end();
+    for(::std::list< sal_Int32>::const_iterator j = aOrgValues.begin(); j != aOrgValueEnd;++j,++i)
     {
         setParameter(i,xParameter,(_rDeleteRow->get())[*j],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
     }
@@ -502,92 +459,11 @@ void OCacheSet::setParameter(sal_Int32 nPos
                              ,const Reference< XParameters >& _xParameter
                              ,const ORowSetValue& _rValue
                              ,sal_Int32 _nType
-                             ,sal_Int32 _nScale)
+                             ,sal_Int32 _nScale) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OCacheSet::setParameter" );
     sal_Int32 nType = ( _nType != DataType::OTHER ) ? _nType : _rValue.getTypeKind();
-    if(!_rValue.isNull())
-    {
-
-        switch(nType)
-        {
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-                _xParameter->setObjectWithInfo(nPos,_rValue.makeAny(),nType,_nScale);
-                break;
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-            case DataType::LONGVARCHAR:
-                _xParameter->setString(nPos,_rValue);
-                break;
-            case DataType::BIGINT:
-                if ( _rValue.isSigned() )
-                    _xParameter->setLong(nPos,_rValue);
-                else
-                    _xParameter->setString(nPos,_rValue);
-                break;
-            case DataType::BIT:
-            case DataType::BOOLEAN:
-                _xParameter->setBoolean(nPos,_rValue);
-                break;
-            case DataType::TINYINT:
-                if ( _rValue.isSigned() )
-                    _xParameter->setByte(nPos,_rValue);
-                else
-                    _xParameter->setShort(nPos,_rValue);
-                break;
-            case DataType::SMALLINT:
-                if ( _rValue.isSigned() )
-                    _xParameter->setShort(nPos,_rValue);
-                else
-                    _xParameter->setInt(nPos,_rValue);
-                break;
-            case DataType::INTEGER:
-                if ( _rValue.isSigned() )
-                    _xParameter->setInt(nPos,_rValue);
-                else
-                    _xParameter->setLong(nPos,_rValue);
-                break;
-            case DataType::FLOAT:
-                _xParameter->setFloat(nPos,_rValue);
-                break;
-            case DataType::DOUBLE:
-            case DataType::REAL:
-                _xParameter->setDouble(nPos,_rValue);
-                break;
-            case DataType::DATE:
-                _xParameter->setDate(nPos,_rValue);
-                break;
-            case DataType::TIME:
-                _xParameter->setTime(nPos,_rValue);
-                break;
-            case DataType::TIMESTAMP:
-                _xParameter->setTimestamp(nPos,_rValue);
-                break;
-            case DataType::BINARY:
-            case DataType::VARBINARY:
-            case DataType::LONGVARBINARY:
-                _xParameter->setBytes(nPos,_rValue);
-                break;
-            case DataType::CLOB:
-                {
-                    Reference<XInputStream> xStream(_rValue.getAny(),UNO_QUERY);
-                    _xParameter->setCharacterStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
-                }
-                break;
-            case DataType::BLOB:
-                {
-                    Reference<XInputStream> xStream(_rValue.getAny(),UNO_QUERY);
-                    _xParameter->setBinaryStream(nPos,xStream,xStream.is() ? xStream->available() : sal_Int32(0));
-                }
-                break;
-            case DataType::SQLNULL:
-                _xParameter->setNull(nPos,nType);
-                break;
-        }
-    }
-    else
-        _xParameter->setNull(nPos,nType);
+    ::dbtools::setObjectWithInfo(_xParameter,nPos,_rValue,nType,_nScale);
 }
 // -------------------------------------------------------------------------
 void OCacheSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition)
@@ -845,3 +721,33 @@ Reference< XInterface > SAL_CALL OCacheSet::getStatement(  ) throw(SQLException,
     return m_xDriverSet->getStatement();
 }
 // -----------------------------------------------------------------------------
+bool OCacheSet::isResultSetChanged() const
+{
+    return false;
+}
+// -----------------------------------------------------------------------------
+void OCacheSet::reset(const Reference< XResultSet>& /*_xDriverSet*/)
+{
+    OSL_ENSURE(0,"Illegal call!");
+}
+// -----------------------------------------------------------------------------
+void OCacheSet::mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& /*io_aInsertRow*/,ORowSetValueVector::Vector& /*io_aRow*/,::std::vector<sal_Int32>& o_aChangedColumns)
+{
+    o_aChangedColumns.push_back(i_nColumnIndex);
+}
+// -----------------------------------------------------------------------------
+bool OCacheSet::columnValuesUpdated(ORowSetValueVector::Vector& /*io_aCachedRow*/,const ORowSetValueVector::Vector& /*io_aRow*/)
+{
+    return false;
+}
+// -----------------------------------------------------------------------------
+bool OCacheSet::updateColumnValues(const ORowSetValueVector::Vector& /*io_aCachedRow*/,ORowSetValueVector::Vector& /*io_aRow*/,const ::std::vector<sal_Int32>& /*i_aChangedColumns*/)
+{
+    return true;
+}
+// -----------------------------------------------------------------------------
+void OCacheSet::fillMissingValues(ORowSetValueVector::Vector& /*io_aRow*/) const
+{
+}
+// -----------------------------------------------------------------------------
+

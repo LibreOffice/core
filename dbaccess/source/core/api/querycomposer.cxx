@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: querycomposer.cxx,v $
- * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,11 +83,12 @@
 #include <com/sun/star/i18n/XLocaleData.hpp>
 #endif
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
+#include <unotools/syslocale.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
 #endif
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #ifndef DBACCESS_CORE_API_QUERYCOMPOSER_HXX
 #include "querycomposer.hxx"
 #endif
@@ -285,7 +283,23 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
 
     m_xComposerHelper->setQuery(getQuery());
     m_xComposerHelper->setFilter(::rtl::OUString());
-    m_xComposerHelper->appendFilterByColumn(column,sal_True);
+    sal_Int32 nOp = SQLFilterOperator::EQUAL;
+    if ( column.is() )
+    {
+        sal_Int32 nType = 0;
+        column->getPropertyValue(PROPERTY_TYPE) >>= nType;
+        switch(nType)
+        {
+            case DataType::VARCHAR:
+            case DataType::CHAR:
+            case DataType::LONGVARCHAR:
+                nOp = SQLFilterOperator::LIKE;
+                break;
+            default:
+                nOp = SQLFilterOperator::EQUAL;
+        }
+    }
+    m_xComposerHelper->appendFilterByColumn(column,sal_True,nOp);
 
     FilterCreator aFilterCreator;
     aFilterCreator.append(getFilter());

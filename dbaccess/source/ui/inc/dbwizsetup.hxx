@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbwizsetup.hxx,v $
- * $Revision: 1.14.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -84,8 +81,8 @@ private:
     OModuleClient m_aModuleClient;
     ::std::auto_ptr<ODbDataSourceAdministrationHelper>  m_pImpl;
     SfxItemSet*             m_pOutSet;
-    ::dbaccess::DATASOURCE_TYPE         m_eType;
-    ::dbaccess::DATASOURCE_TYPE         m_eOldType;
+    ::rtl::OUString         m_sURL;
+    ::rtl::OUString         m_sOldURL;
     sal_Bool                m_bResetting : 1;   /// sal_True while we're resetting the pages
     sal_Bool                m_bApplied : 1;     /// sal_True if any changes have been applied while the dialog was executing
     sal_Bool                m_bUIEnabled : 1;   /// <TRUE/> if the UI is enabled, false otherwise. Cannot be switched back to <TRUE/>, once it is <FALSE/>
@@ -98,6 +95,7 @@ private:
     String                  m_sRM_ADABASText;
     String                  m_sRM_ADOText;
     String                  m_sRM_JDBCText;
+    String                  m_sRM_MySQLNativePageTitle;
     String                  m_sRM_OracleText;
     String                  m_sRM_MySQLText;
     String                  m_sRM_ODBCText;
@@ -131,7 +129,7 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getORB() const;
     virtual ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >,sal_Bool> createConnection();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver > getDriver();
-    virtual ::dbaccess::DATASOURCE_TYPE     getDatasourceType(const SfxItemSet& _rSet) const;
+    virtual ::rtl::OUString getDatasourceType(const SfxItemSet& _rSet) const;
     virtual void clearPassword();
     virtual void setTitle(const ::rtl::OUString& _sTitle);
     virtual void enableConfirmSettings( bool _bEnable );
@@ -151,8 +149,8 @@ protected:
     virtual TabPage*    createPage(WizardState _nState);
     virtual sal_Bool    leaveState(WizardState _nState);
     virtual void enterState(WizardState _nState);
-    virtual ::svt::IWizardPage* getWizardPage(TabPage* _pCurrentPage) const;
-    virtual sal_Bool onFinish(sal_Int32 _nResult);
+    virtual ::svt::IWizardPageController* getPageController( TabPage* _pCurrentPage ) const;
+    virtual sal_Bool onFinish();
 
 protected:
     inline sal_Bool isUIEnabled() const { return m_bUIEnabled; }
@@ -172,7 +170,7 @@ protected:
 private:
     /** declares a path with or without authentication, as indicated by the database type
 
-        @param _eType
+        @param _sURL
             the data source type for which the path is declared. If this
             data source type does not support authentication, the PAGE_DBSETUPWIZARD_AUTHENTIFICATION
             state will be stripped from the sequence of states.
@@ -182,7 +180,7 @@ private:
             the first state in this path, following by an arbitrary number of others, as in
             RoadmapWizard::declarePath.
     */
-    void declareAuthDepPath( ::dbaccess::DATASOURCE_TYPE _eType, PathId _nPathId, WizardState _nFirstState, ... );
+    void declareAuthDepPath( const ::rtl::OUString& _sURL, PathId _nPathId, const svt::RoadmapWizardTypes::WizardPath& _rPaths);
 
     void RegisterDataSourceByLocation(const ::rtl::OUString& sPath);
     sal_Bool SaveDatabaseDocument();
@@ -192,7 +190,7 @@ private:
     void createUniqueFolderName(INetURLObject* pURL);
     ::dbaccess::DATASOURCE_TYPE VerifyDataSourceType(const ::dbaccess::DATASOURCE_TYPE _DatabaseType) const;
 
-    ::dbaccess::DATASOURCE_TYPE getDefaultDatabaseType() const;
+    ::rtl::OUString getDefaultDatabaseType() const;
 
     void updateTypeDependentStates();
     sal_Bool callSaveAsDialog();

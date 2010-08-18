@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WCopyTable.cxx,v $
- * $Revision: 1.58 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,6 +43,7 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
+#include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
@@ -62,7 +60,10 @@
 
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
+#include <comphelper/interaction.hxx>
 #include <connectivity/dbtools.hxx>
+#include <connectivity/dbmetadata.hxx>
+#include <connectivity/dbexception.hxx>
 
 #include <rtl/logfile.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -79,9 +80,12 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::task;
+using namespace dbtools;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
@@ -226,22 +230,10 @@ Sequence< ::rtl::OUString > ObjectCopySource::getColumnNames() const
 //------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ObjectCopySource::getPrimaryKeyColumnNames() const
 {
-    Reference<XKeysSupplier> xSup(m_xObject,UNO_QUERY);
-    Reference< XIndexAccess> xKeys;
-    if(xSup.is() )
-        xKeys = xSup->getKeys();
-
-    ::std::vector< Reference< XNameAccess > > aPrimaryKeyColumns( ::dbaui::getKeyColumns( xKeys, KeyType::PRIMARY ) );
-    OSL_ENSURE( ( aPrimaryKeyColumns.size() == 1 ) || aPrimaryKeyColumns.empty(),
-        "ObjectCopySource::getPrimaryKeyColumnNames: more than one primary key?!" );
-
-    Reference< XNameAccess > xKeyCols;
-    if ( !aPrimaryKeyColumns.empty() )
-        xKeyCols = aPrimaryKeyColumns[0];
-
+    const Reference<XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(m_xObject);
     Sequence< ::rtl::OUString > aKeyColNames;
-    if ( xKeyCols.is() )
-        aKeyColNames = xKeyCols->getElementNames();
+    if ( xPrimaryKeyColumns.is() )
+        aKeyColNames = xPrimaryKeyColumns->getElementNames();
     return aKeyColNames;
 }
 
@@ -364,7 +356,7 @@ void NamedTableCopySource::impl_ensureColumnInfo_throw()
         OFieldDescription aDesc;
 
         aDesc.SetName(          xStatementMeta->getColumnName(      i ) );
-        aDesc.SetDescription(   xStatementMeta->getColumnLabel(     i ) );
+        aDesc.SetHelpText(      xStatementMeta->getColumnLabel(     i ) );
         aDesc.SetTypeValue(     xStatementMeta->getColumnType(      i ) );
         aDesc.SetTypeName(      xStatementMeta->getColumnTypeName(  i ) );
         aDesc.SetPrecision(     xStatementMeta->getPrecision(       i ) );
@@ -565,7 +557,8 @@ namespace
 //------------------------------------------------------------------------
 OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rDefaultName, sal_Int16 _nOperation,
         const ICopyTableSourceObject& _rSourceObject, const Reference< XConnection >& _xSourceConnection,
-        const Reference< XConnection >& _xConnection, const Reference< XMultiServiceFactory >& _rxORB )
+        const Reference< XConnection >& _xConnection, const Reference< XMultiServiceFactory >& _rxORB,
+        const Reference< XInteractionHandler>&   _xInteractionHandler)
     : WizardDialog( pParent, ModuleRes(WIZ_RTFCOPYTABLE))
     ,m_pbHelp( this , ModuleRes(PB_HELP))
     ,m_pbCancel( this , ModuleRes(PB_CANCEL))
@@ -577,6 +570,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     ,m_rSourceObject( _rSourceObject )
     ,m_xFormatter( getNumberFormatter( _xConnection, _rxORB ) )
     ,m_xFactory(_rxORB)
+    ,m_xInteractionHandler(_xInteractionHandler)
     ,m_sTypeNames(ModuleRes(STR_TABLEDESIGN_DBFIELDTYPES))
     ,m_nPageCount(0)
     ,m_bDeleteSourceColumns(sal_True)
@@ -632,7 +626,24 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     if ( !lcl_sameConnection_throw( _xSourceConnection, m_xDestConnection ) )
         bAllowViews = false;
 
+    if ( m_bInterConnectionCopy )
+    {
+        Reference< XDatabaseMetaData > xSrcMeta = _xSourceConnection->getMetaData();
+        ::rtl::OUString sCatalog;
+        ::rtl::OUString sSchema;
+        ::rtl::OUString sTable;
+        ::dbtools::qualifiedNameComponents( xSrcMeta,
+                                            m_sName,
+                                            sCatalog,
+                                            sSchema,
+                                            sTable,
+                                            ::dbtools::eInDataManipulation);
+
+        m_sName = ::dbtools::composeTableName(m_xDestConnection->getMetaData(),sCatalog,sSchema,sTable,sal_False,::dbtools::eInTableDefinitions);
+    }
+
     OCopyTable* pPage1( new OCopyTable( this ) );
+    pPage1->disallowUseHeaderLine();
     if ( !bAllowViews )
         pPage1->disallowViews();
     pPage1->setCreateStyleAction();
@@ -682,6 +693,8 @@ OCopyTableWizard::OCopyTableWizard( Window* pParent, const ::rtl::OUString& _rDe
 
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aTypeInfo, m_aTypeInfoIndex );
     ::dbaui::fillTypeInfo( _xConnection, m_sTypeNames, m_aDestTypeInfo, m_aDestTypeInfoIndex );
+
+    m_xInteractionHandler.set( m_xFactory->createInstance( SERVICE_TASK_INTERACTION_HANDLER ), UNO_QUERY);
 
     OCopyTable* pPage1( new OCopyTable( this ) );
     pPage1->disallowViews();
@@ -831,7 +844,8 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
         if ( bContainsColumns )
         {   // we have dest columns so look for the matching column
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
-            for(;aSrcIter != m_vSourceVec.end();++aSrcIter)
+            ODatabaseExport::TColumnVector::const_iterator aSrcEnd = m_vSourceVec.end();
+            for(;aSrcIter != aSrcEnd;++aSrcIter)
             {
                 ODatabaseExport::TColumns::iterator aDestIter = m_vDestColumns.find(m_mNameMapping[(*aSrcIter)->first]);
 
@@ -856,11 +870,12 @@ sal_Bool OCopyTableWizard::CheckColumns(sal_Int32& _rnBreakPos)
             sal_Int32 nMaxNameLen       = getMaxColumnNameLength();
 
             ODatabaseExport::TColumnVector::const_iterator aSrcIter = m_vSourceVec.begin();
-            for(_rnBreakPos=0;aSrcIter != m_vSourceVec.end() && bRet ;++aSrcIter,++_rnBreakPos)
+            ODatabaseExport::TColumnVector::const_iterator aSrcEnd = m_vSourceVec.end();
+            for(_rnBreakPos=0;aSrcIter != aSrcEnd && bRet ;++aSrcIter,++_rnBreakPos)
             {
                 OFieldDescription* pField = new OFieldDescription(*(*aSrcIter)->second);
                 pField->SetName(convertColumnName(TExportColumnFindFunctor(&m_vDestColumns),(*aSrcIter)->first,sExtraChars,nMaxNameLen));
-                TOTypeInfoSP pType = convertType((*aSrcIter)->second->getTypeInfo(),bRet);
+                TOTypeInfoSP pType = convertType((*aSrcIter)->second->getSpecialTypeInfo(),bRet);
                 pField->SetType(pType);
                 if ( !bPKeyAllowed )
                     pField->SetPrimaryKey(sal_False);
@@ -904,6 +919,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                     OWizTypeSelect* pPage = static_cast<OWizTypeSelect*>(GetPage(3));
                     if ( pPage )
                     {
+                        m_mNameMapping.clear();
                         pPage->setDisplayRow(nBreakPos);
                         ShowPage(3);
                         return 0;
@@ -915,33 +931,37 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                     {
                         ODatabaseExport::TColumns::iterator aFind = ::std::find_if(m_vDestColumns.begin(),m_vDestColumns.end()
                             ,::std::compose1(::std::mem_fun(&OFieldDescription::IsPrimaryKey),::std::select2nd<ODatabaseExport::TColumns::value_type>()));
-                        if ( aFind == m_vDestColumns.end() )
+                        if ( aFind == m_vDestColumns.end() && m_xInteractionHandler.is() )
                         {
+
                             String sTitle(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY_HEAD));
                             String sMsg(ModuleRes(STR_TABLEDESIGN_NO_PRIM_KEY));
-                            OSQLMessageBox aBox(this, sTitle,sMsg, WB_YES_NO_CANCEL | WB_DEF_YES);
+                            SQLContext aError;
+                            aError.Message = sMsg;
+                            ::rtl::Reference< ::comphelper::OInteractionRequest > xRequest( new ::comphelper::OInteractionRequest( makeAny( aError ) ) );
+                            ::rtl::Reference< ::comphelper::OInteractionApprove > xYes = new ::comphelper::OInteractionApprove;
+                            xRequest->addContinuation( xYes.get() );
+                            xRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
+                            ::rtl::Reference< ::comphelper::OInteractionAbort > xAbort = new ::comphelper::OInteractionAbort;
+                            xRequest->addContinuation( xAbort.get() );
 
-                            INT16 nReturn = aBox.Execute();
+                            m_xInteractionHandler->handle( xRequest.get() );
 
-                            switch(nReturn )
+                            if ( xYes->wasSelected() )
                             {
-                                case RET_YES:
-                                {
-                                    OCopyTable* pPage = static_cast<OCopyTable*>(GetPage(0));
-                                    m_bCreatePrimaryKeyColumn = sal_True;
-                                    m_aKeyName = pPage->GetKeyName();
-                                    if ( !m_aKeyName.getLength() )
-                                        m_aKeyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) );
-                                    m_aKeyName = createUniqueName( m_aKeyName );
-                                    sal_Int32 nBreakPos2 = 0;
-                                    CheckColumns(nBreakPos2);
-                                    break;
-                                }
-                                case RET_CANCEL:
-                                    ShowPage(3);
-                                    return 0;
-                                default:
-                                    ;
+                                OCopyTable* pPage = static_cast<OCopyTable*>(GetPage(0));
+                                m_bCreatePrimaryKeyColumn = sal_True;
+                                m_aKeyName = pPage->GetKeyName();
+                                if ( !m_aKeyName.getLength() )
+                                    m_aKeyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ID" ) );
+                                m_aKeyName = createUniqueName( m_aKeyName );
+                                sal_Int32 nBreakPos2 = 0;
+                                CheckColumns(nBreakPos2);
+                            }
+                            else if ( xAbort->wasSelected() )
+                            {
+                                ShowPage(3);
+                                return 0;
                             }
                         }
                     }
@@ -1069,6 +1089,7 @@ void OCopyTableWizard::insertColumn(sal_Int32 _nPos,OFieldDescription* _pField)
 
         m_aDestVec.insert(m_aDestVec.begin() + _nPos,
             m_vDestColumns.insert(ODatabaseExport::TColumns::value_type(_pField->GetName(),_pField)).first);
+        m_mNameMapping[_pField->GetName()] = _pField->GetName();
     }
 }
 // -----------------------------------------------------------------------------
@@ -1096,7 +1117,8 @@ void OCopyTableWizard::impl_loadSourceData()
 void OCopyTableWizard::loadData(  const ICopyTableSourceObject& _rSourceObject, ODatabaseExport::TColumns& _rColumns, ODatabaseExport::TColumnVector& _rColVector )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::loadData" );
-    for ( ODatabaseExport::TColumns::iterator col = _rColumns.begin(); col != _rColumns.end(); ++col )
+    ODatabaseExport::TColumns::iterator colEnd = _rColumns.end();
+    for ( ODatabaseExport::TColumns::iterator col = _rColumns.begin(); col != colEnd; ++col )
         delete col->second;
 
     _rColVector.clear();
@@ -1158,6 +1180,8 @@ void OCopyTableWizard::clearDestColumns()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::clearDestColumns" );
     clearColumns(m_vDestColumns,m_aDestVec);
+    m_bAddPKFirstTime = sal_True;
+    m_mNameMapping.clear();
 }
 
 // -----------------------------------------------------------------------------
@@ -1176,7 +1200,8 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier>& _rxColSup, co
     OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
 
     ODatabaseExport::TColumnVector::const_iterator aIter = _pVec->begin();
-    for(;aIter != _pVec->end();++aIter)
+    ODatabaseExport::TColumnVector::const_iterator aEnd = _pVec->end();
+    for(;aIter != aEnd;++aIter)
     {
         OFieldDescription* pField = (*aIter)->second;
         if(!pField)
@@ -1376,23 +1401,12 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
 // -----------------------------------------------------------------------------
 bool OCopyTableWizard::supportsPrimaryKey( const Reference< XConnection >& _rxConnection )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::supportsPrimaryKey" );
     OSL_PRECOND( _rxConnection.is(), "OCopyTableWizard::supportsPrimaryKey: invalid connection!" );
+    if ( !_rxConnection.is() )
+        return false;
 
-    bool bSupports( false );
-    if ( _rxConnection.is() )
-    {
-        try
-        {
-            Reference< XDatabaseMetaData > xMetaData( _rxConnection->getMetaData(), UNO_QUERY_THROW );
-            bSupports = xMetaData->supportsCoreSQLGrammar();
-        }
-        catch(const Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-    }
-    return bSupports;
+    ::dbtools::DatabaseMetaData aMetaData( _rxConnection );
+    return aMetaData.supportsPrimaryKeys();
 }
 
 // -----------------------------------------------------------------------------
@@ -1586,6 +1600,26 @@ TOTypeInfoSP OCopyTableWizard::convertType(const TOTypeInfoSP& _pType,sal_Bool& 
                 if ( supportsType(DataType::LONGVARCHAR,nDefaultType) )
                     break;
                 break;
+            case DataType::LONGVARCHAR:
+                if ( supportsType(DataType::CLOB,nDefaultType) )
+                    break;
+                break;
+            case DataType::BINARY:
+                if ( supportsType(DataType::VARBINARY,nDefaultType) )
+                    break;
+                break;
+            case DataType::VARBINARY:
+                if ( supportsType(DataType::LONGVARBINARY,nDefaultType) )
+                    break;
+                break;
+            case DataType::LONGVARBINARY:
+                if ( supportsType(DataType::BLOB,nDefaultType) )
+                    break;
+                if ( supportsType(DataType::LONGVARCHAR,nDefaultType) )
+                    break;
+                if ( supportsType(DataType::CLOB,nDefaultType) )
+                    break;
+                break;
             default:
                 nDefaultType = DataType::VARCHAR;
         }
@@ -1631,7 +1665,28 @@ void OCopyTableWizard::showColumnTypeNotSupported(const ::rtl::OUString& _rColum
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OCopyTableWizard::showColumnTypeNotSupported" );
     String sMessage( ModuleRes( STR_UNKNOWN_TYPE_FOUND ) );
     sMessage.SearchAndReplaceAscii("#1",_rColumnName);
-
-    OSQLWarningBox( this, sMessage ).Execute();
+    showError(sMessage);
 }
 //-------------------------------------------------------------------------------
+void OCopyTableWizard::showError(const ::rtl::OUString& _sErrorMesage)
+{
+    SQLExceptionInfo aInfo(_sErrorMesage);
+    showError(aInfo.get());
+}
+//-------------------------------------------------------------------------------
+void OCopyTableWizard::showError(const Any& _aError)
+{
+    if ( _aError.hasValue() && m_xInteractionHandler.is() )
+    {
+        try
+        {
+            ::rtl::Reference< ::comphelper::OInteractionRequest > xRequest( new ::comphelper::OInteractionRequest( _aError ) );
+            m_xInteractionHandler->handle( xRequest.get() );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+}
+

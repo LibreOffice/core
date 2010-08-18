@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unodatbr.hxx,v $
- * $Revision: 1.74 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,8 +67,11 @@
 #ifndef _COM_SUN_STAR_SDB_APPLICATION_DATABASEOBJECTCONTAINER_HPP_
 #include <com/sun/star/sdb/application/DatabaseObjectContainer.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _COM_SUN_STAR_SDB_DATABASEOBJECTCONTAINER_HPP_
+#include <com/sun/star/sdb/XDatabaseRegistrationsListener.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 #ifndef _DBACCESS_UI_CALLBACKS_HXX_
 #include "callbacks.hxx"
@@ -113,10 +113,11 @@ namespace dbaui
     class ImageProvider;
 
     // =====================================================================
-    typedef ::cppu::ImplHelper4 <   ::com::sun::star::frame::XStatusListener
+    typedef ::cppu::ImplHelper5 <   ::com::sun::star::frame::XStatusListener
                                 ,   ::com::sun::star::view::XSelectionSupplier
                                 ,   ::com::sun::star::document::XScriptInvocationContext
                                 ,   ::com::sun::star::ui::XContextMenuInterception
+                                ,   ::com::sun::star::sdb::XDatabaseRegistrationsListener
                                 >   SbaTableQueryBrowser_Base;
     class SbaTableQueryBrowser
                 :public SbaXDataBrowserController
@@ -130,7 +131,6 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >   m_xCollator;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >     m_xCurrentFrameParent;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >      m_xMainToolbar;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     m_xCurrentDatabaseDocument;
 
         // ---------------------------
         struct ExternalFeature
@@ -157,6 +157,7 @@ namespace dbaui
         OTableCopyHelper                    m_aTableCopyHelper;
 
         ::rtl::OUString         m_sQueryCommand;    // the command of the query currently loaded (if any)
+        //::rtl::OUString         m_sToBeLoaded;      // contains the element name which should be loaded if any
 
         DBTreeView*             m_pTreeView;
         Splitter*               m_pSplitter;
@@ -257,6 +258,11 @@ namespace dbaui
         virtual void SAL_CALL registerContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL releaseContextMenuInterceptor( const ::com::sun::star::uno::Reference< ::com::sun::star::ui::XContextMenuInterceptor >& Interceptor ) throw (::com::sun::star::uno::RuntimeException);
 
+        // XDatabaseRegistrationsListener
+        virtual void SAL_CALL registeredDatabaseLocation( const ::com::sun::star::sdb::DatabaseRegistrationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL revokedDatabaseLocation( const ::com::sun::star::sdb::DatabaseRegistrationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL changedDatabaseLocation( const ::com::sun::star::sdb::DatabaseRegistrationEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+
     protected:
         // SbaXDataBrowserController overridables
         virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm);
@@ -340,6 +346,11 @@ namespace dbaui
                 const SharedConnection& _rxConnection
             );
 
+        void    implAddDatasource( const String& _rDataSourceName, const SharedConnection& _rxConnection );
+
+        /// removes (and cleans up) the entry for the given data source
+        void        impl_cleanupDataSourceEntry( const String& _rDataSourceName );
+
         /// clears the tree list box
         void clearTreeModel();
 
@@ -361,7 +372,7 @@ namespace dbaui
         */
         void        closeConnection(SvLBoxEntry* _pEntry,sal_Bool _bDisposeConnection = sal_True);
 
-        sal_Bool    populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, EntryType _eEntryType);
+        void        populateTree(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xNameAccess, SvLBoxEntry* _pParent, EntryType _eEntryType);
         void        initializeTreeModel();
 
         /** search in the tree for query- or tablecontainer equal to this interface and return
@@ -420,8 +431,9 @@ namespace dbaui
             sal_Bool _bSelectDirect = sal_False
         );
 
+        SvLBoxEntry* implGetConnectionEntry(SvLBoxEntry* _pEntry) const;
         /// inserts an entry into the tree
-        void implAppendEntry(
+        SvLBoxEntry* implAppendEntry(
             SvLBoxEntry* _pParent,
             const String& _rName,
             void* _pUserData,

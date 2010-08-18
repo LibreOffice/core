@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: resultcolumn.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,13 +79,12 @@ using namespace dbaccess;
 
 DBG_NAME(OResultColumn)
 //--------------------------------------------------------------------------
-OResultColumn::OResultColumn(
-                         const Reference < XResultSetMetaData >& _xMetaData,
-                         sal_Int32 _nPos,
-                         const Reference< XDatabaseMetaData >& _rxDBMeta )
-                     :m_xMetaData(_xMetaData)
-                     ,m_xDBMetaData(_rxDBMeta)
-                     ,m_nPos(_nPos)
+OResultColumn::OResultColumn( const Reference < XResultSetMetaData >& _xMetaData, sal_Int32 _nPos,
+        const Reference< XDatabaseMetaData >& _rxDBMeta )
+    :OColumn( true )
+    ,m_xMetaData( _xMetaData )
+    ,m_xDBMetaData( _rxDBMeta )
+    ,m_nPos( _nPos )
 {
     DBG_CTOR(OResultColumn,NULL);
 }
@@ -111,19 +107,25 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
         getPropertyValue( PROPERTY_TABLENAME ) >>= sTable;
         getPropertyValue( PROPERTY_NAME ) >>= sColumnName;
 
-        Reference< XResultSet > xVersionColumns = m_xDBMetaData->getVersionColumns(
-            makeAny( sCatalog ), sSchema, sTable );
-        if ( xVersionColumns.is() ) // allowed to be NULL
+        try
         {
-            Reference< XRow > xResultRow( xVersionColumns, UNO_QUERY_THROW );
-            while ( xVersionColumns->next() )
+            Reference< XResultSet > xVersionColumns = m_xDBMetaData->getVersionColumns(
+                makeAny( sCatalog ), sSchema, sTable );
+            if ( xVersionColumns.is() ) // allowed to be NULL
             {
-                if ( xResultRow->getString( 2 ) == sColumnName )
+                Reference< XRow > xResultRow( xVersionColumns, UNO_QUERY_THROW );
+                while ( xVersionColumns->next() )
                 {
-                    m_aIsRowVersion <<= (sal_Bool)(sal_True);
-                    break;
+                    if ( xResultRow->getString( 2 ) == sColumnName )
+                    {
+                        m_aIsRowVersion <<= (sal_Bool)(sal_True);
+                        break;
+                    }
                 }
             }
+        }
+        catch(const SQLException&)
+        {
         }
     }
     catch( const Exception& )
@@ -216,92 +218,95 @@ void OResultColumn::disposing()
 }
 
 //------------------------------------------------------------------------------
+namespace
+{
+    template< typename TYPE >
+    void obtain( Any& _out_rValue, ::boost::optional< TYPE > _rCache, const sal_Int32 _nPos, const Reference < XResultSetMetaData >& _rxResultMeta, TYPE (SAL_CALL XResultSetMetaData::*Getter)( sal_Int32 ) )
+    {
+        if ( !_rCache )
+            _rCache.reset( (_rxResultMeta.get()->*Getter)( _nPos ) );
+        _out_rValue <<= *_rCache;
+    }
+}
+
+//------------------------------------------------------------------------------
 void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
     try
     {
-        switch (nHandle)
+        if ( OColumn::isRegisteredProperty( nHandle ) )
         {
-            case PROPERTY_ID_ISROWVERSION:
-                const_cast< OResultColumn* >( this )->impl_determineIsRowVersion_nothrow();
-                rValue = m_aIsRowVersion;
-                break;
-            case PROPERTY_ID_TABLENAME:
-                rValue <<= m_xMetaData->getTableName(m_nPos);
-                break;
-            case PROPERTY_ID_SCHEMANAME:
-                rValue <<= m_xMetaData->getSchemaName(m_nPos);
-                break;
-            case PROPERTY_ID_CATALOGNAME:
-                rValue <<= m_xMetaData->getCatalogName(m_nPos);
-                break;
-            case PROPERTY_ID_ISSIGNED:
+            OColumn::getFastPropertyValue( rValue, nHandle );
+        }
+        else
+        {
+            switch (nHandle)
             {
-                sal_Bool bVal = m_xMetaData->isSigned(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
-            }   break;
-            case PROPERTY_ID_ISCURRENCY:
-            {
-                sal_Bool bVal = m_xMetaData->isCurrency(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
-            }   break;
-            case PROPERTY_ID_ISSEARCHABLE:
-            {
-                sal_Bool bVal = m_xMetaData->isSearchable(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
-            }   break;
-            case PROPERTY_ID_ISCASESENSITIVE:
-            {
-                sal_Bool bVal = m_xMetaData->isCaseSensitive(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
-            }   break;
-            case PROPERTY_ID_ISREADONLY:
-            {
-                sal_Bool bVal = m_xMetaData->isReadOnly(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
-            }   break;
-            case PROPERTY_ID_ISWRITABLE:
-            {
-                sal_Bool bVal = m_xMetaData->isWritable(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
-            }   break;
-            case PROPERTY_ID_ISDEFINITELYWRITABLE:
-            {
-                sal_Bool bVal = m_xMetaData->isDefinitelyWritable(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
-            }   break;
-            case PROPERTY_ID_ISAUTOINCREMENT:
-            {
-                sal_Bool bVal = m_xMetaData->isAutoIncrement(m_nPos);
-                rValue.setValue(&bVal, getBooleanCppuType());
-            }   break;
-            case PROPERTY_ID_SERVICENAME:
-                rValue <<= m_xMetaData->getColumnServiceName(m_nPos);
-                break;
-            case PROPERTY_ID_LABEL:
-                rValue <<= m_xMetaData->getColumnLabel(m_nPos);
-                break;
-            case PROPERTY_ID_DISPLAYSIZE:
-                rValue <<= m_xMetaData->getColumnDisplaySize(m_nPos);
-                break;
-            case PROPERTY_ID_TYPE:
-                rValue <<= m_xMetaData->getColumnType(m_nPos);
-                break;
-            case PROPERTY_ID_PRECISION:
-                rValue <<= m_xMetaData->getPrecision(m_nPos);
-                break;
-            case PROPERTY_ID_SCALE:
-                rValue <<= m_xMetaData->getScale(m_nPos);
-                break;
-            case PROPERTY_ID_ISNULLABLE:
-                rValue <<= m_xMetaData->isNullable(m_nPos);
-                break;
-            case PROPERTY_ID_TYPENAME:
-                rValue <<= m_xMetaData->getColumnTypeName(m_nPos);
-                break;
-            case PROPERTY_ID_NAME:
-                OColumn::getFastPropertyValue( rValue, nHandle );
-                break;
+                case PROPERTY_ID_ISROWVERSION:
+                    const_cast< OResultColumn* >( this )->impl_determineIsRowVersion_nothrow();
+                    rValue = m_aIsRowVersion;
+                    break;
+                case PROPERTY_ID_TABLENAME:
+                    rValue <<= m_xMetaData->getTableName(m_nPos);
+                    break;
+                case PROPERTY_ID_SCHEMANAME:
+                    rValue <<= m_xMetaData->getSchemaName(m_nPos);
+                    break;
+                case PROPERTY_ID_CATALOGNAME:
+                    rValue <<= m_xMetaData->getCatalogName(m_nPos);
+                    break;
+                case PROPERTY_ID_ISSIGNED:
+                    obtain( rValue, m_isSigned, m_nPos, m_xMetaData, &XResultSetMetaData::isSigned );
+                    break;
+                case PROPERTY_ID_ISCURRENCY:
+                    obtain( rValue, m_isCurrency, m_nPos, m_xMetaData, &XResultSetMetaData::isCurrency );
+                    break;
+                case PROPERTY_ID_ISSEARCHABLE:
+                    obtain( rValue, m_bSearchable, m_nPos, m_xMetaData, &XResultSetMetaData::isSearchable );
+                    break;
+                case PROPERTY_ID_ISCASESENSITIVE:
+                    obtain( rValue, m_isCaseSensitive, m_nPos, m_xMetaData, &XResultSetMetaData::isCaseSensitive );
+                    break;
+                case PROPERTY_ID_ISREADONLY:
+                    obtain( rValue, m_isReadOnly, m_nPos, m_xMetaData, &XResultSetMetaData::isReadOnly );
+                    break;
+                case PROPERTY_ID_ISWRITABLE:
+                    obtain( rValue, m_isWritable, m_nPos, m_xMetaData, &XResultSetMetaData::isWritable );
+                    break;
+                case PROPERTY_ID_ISDEFINITELYWRITABLE:
+                    obtain( rValue, m_isDefinitelyWritable, m_nPos, m_xMetaData, &XResultSetMetaData::isDefinitelyWritable );
+                    break;
+                case PROPERTY_ID_ISAUTOINCREMENT:
+                    obtain( rValue, m_isAutoIncrement, m_nPos, m_xMetaData, &XResultSetMetaData::isAutoIncrement );
+                    break;
+                case PROPERTY_ID_SERVICENAME:
+                    rValue <<= m_xMetaData->getColumnServiceName(m_nPos);
+                    break;
+                case PROPERTY_ID_LABEL:
+                    obtain( rValue, m_sColumnLabel, m_nPos, m_xMetaData, &XResultSetMetaData::getColumnLabel );
+                    break;
+                case PROPERTY_ID_DISPLAYSIZE:
+                    obtain( rValue, m_nColumnDisplaySize, m_nPos, m_xMetaData, &XResultSetMetaData::getColumnDisplaySize );
+                    break;
+                case PROPERTY_ID_TYPE:
+                    obtain( rValue, m_nColumnType, m_nPos, m_xMetaData, &XResultSetMetaData::getColumnType );
+                    break;
+                case PROPERTY_ID_PRECISION:
+                    obtain( rValue, m_nPrecision, m_nPos, m_xMetaData, &XResultSetMetaData::getPrecision );
+                    break;
+                case PROPERTY_ID_SCALE:
+                    obtain( rValue, m_nScale, m_nPos, m_xMetaData, &XResultSetMetaData::getScale );
+                    break;
+                case PROPERTY_ID_ISNULLABLE:
+                    obtain( rValue, m_isNullable, m_nPos, m_xMetaData, &XResultSetMetaData::isNullable );
+                    break;
+                case PROPERTY_ID_TYPENAME:
+                    rValue <<= m_xMetaData->getColumnTypeName(m_nPos);
+                    break;
+                default:
+                    OSL_ENSURE( false, "OResultColumn::getFastPropertyValue: unknown property handle!" );
+                    break;
+            }
         }
     }
     catch (SQLException& )

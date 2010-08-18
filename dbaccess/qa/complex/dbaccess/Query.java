@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Query.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,11 +34,11 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XQueriesSupplier;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.uno.UnoRuntime;
+import connectivity.tools.CRMDatabase;
 
 public class Query extends complexlib.ComplexTestCase {
 
     connectivity.tools.HsqlDatabase m_database;
-    connectivity.tools.DataSource   m_dataSource;
 
     // --------------------------------------------------------------------------------------------------------
     public String[] getTestMethodNames() {
@@ -63,14 +60,13 @@ public class Query extends complexlib.ComplexTestCase {
         {
             if ( m_database == null )
             {
-                CRMDatabase database = new CRMDatabase( getFactory() );
+                final CRMDatabase database = new CRMDatabase( getFactory(), false );
                 m_database = database.getDatabase();
-                m_dataSource = m_database.getDataSource();
             }
         }
         catch( Exception e )
         {
-            System.err.println( "could not create the test case, error message:\n" + e.getMessage() );
+            log.println( "could not create the test case, error message:\n" + e.getMessage() );
             e.printStackTrace( System.err );
             assure( "failed to created the test case", false );
         }
@@ -89,25 +85,25 @@ public class Query extends complexlib.ComplexTestCase {
 
         try
         {
-            XQueriesSupplier suppQueries = (XQueriesSupplier)UnoRuntime.queryInterface(
-                XQueriesSupplier.class, m_database.defaultConnection());
-            XNameAccess queries = suppQueries.getQueries();
+            final XQueriesSupplier suppQueries = UnoRuntime.queryInterface(
+                XQueriesSupplier.class, m_database.defaultConnection().getXConnection() );
+            final XNameAccess queries = suppQueries.getQueries();
 
-            String[] queryNames = new String[] { "parseable", "parseable native", "unparseable" };
-            String[][] expectedColumnNames = new String[][] {
-                new String[] { "ID", "Name", "Address", "City", "Postal" },
+            final String[] queryNames = new String[] { "parseable", "parseable native", "unparseable" };
+            final String[][] expectedColumnNames = new String[][] {
+                new String[] { "ID", "Name", "Address", "City", "Postal","Comment" },
                 new String[] { "TABLE_CATALOG", "TABLE_SCHEMA", "TABLE_NAME", "VIEW_DEFINITION", "CHECK_OPTION", "IS_UPDATABLE", "VALID" },
                 new String[] { "ID_VARCHAR" }
             };
 
             for ( int i = 0; i < queryNames.length; ++i )
             {
-                XPropertySet query = (XPropertySet)UnoRuntime.queryInterface(
+                final XPropertySet query = UnoRuntime.queryInterface(
                     XPropertySet.class, queries.getByName( queryNames[i] ) );
 
-                XColumnsSupplier suppCols = (XColumnsSupplier)UnoRuntime.queryInterface(
+                final XColumnsSupplier suppCols = UnoRuntime.queryInterface(
                     XColumnsSupplier.class, query);
-                XIndexAccess columns = (XIndexAccess)UnoRuntime.queryInterface(
+                final XIndexAccess columns = UnoRuntime.queryInterface(
                     XIndexAccess.class, suppCols.getColumns());
 
                 // check whether the columns supplied by the query match what we expected
@@ -115,7 +111,7 @@ public class Query extends complexlib.ComplexTestCase {
                     columns.getCount() == expectedColumnNames[i].length );
                 for ( int col = 0; col < columns.getCount(); ++col )
                 {
-                    XNamed columnName = (XNamed)UnoRuntime.queryInterface(
+                    final XNamed columnName = UnoRuntime.queryInterface(
                         XNamed.class, columns.getByIndex(col) );
                     assure( "column no. " + col + " of query \"" + queryNames[i] + "\" not matching",
                         columnName.getName().equals( expectedColumnNames[i][col] ) );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: querycontainer.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -119,7 +116,7 @@ OQueryContainer::OQueryContainer(
                   const Reference< XNameContainer >& _rxCommandDefinitions
                 , const Reference< XConnection >& _rxConn
                 , const Reference< XMultiServiceFactory >& _rxORB,
-                IWarningsContainer* _pWarnings)
+                ::dbtools::IWarningsContainer* _pWarnings)
     :ODefinitionContainer(_rxORB,NULL,TContentPtr(new ODefinitionContainer_Impl))
     ,m_pWarnings( _pWarnings )
     ,m_xCommandDefinitions(_rxCommandDefinitions)
@@ -163,6 +160,10 @@ OQueryContainer::~OQueryContainer()
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_FORWARD_XINTERFACE2( OQueryContainer,ODefinitionContainer,OQueryContainer_Base)
+
+//------------------------------------------------------------------------------
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( OQueryContainer,ODefinitionContainer,OQueryContainer_Base)
+
 //------------------------------------------------------------------------------
 void OQueryContainer::disposing()
 {

@@ -37,7 +37,6 @@
                     <menu:menuitem menu:id=".uno:SelectAllLabels"/>
                     <menu:menuitem menu:id=".uno:SelectAllEdits"/>
                     <menu:menuitem menu:id=".uno:SelectReport"/>
-                    <menu:menuitem menu:id=".uno:SelectObject"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
@@ -46,6 +45,74 @@
             <menu:menuitem menu:id=".uno:PageHeaderFooter"/>
             <menu:menuitem menu:id=".uno:ReportHeaderFooter"/>
             <menu:menuitem menu:id=".uno:ColumnHeaderFooter"/>
+            <menu:menuseparator/>
+
+            <menu:menu menu:id=".uno:EditShapeMenu">
+                <menu:menupopup>
+                    <!--
+ <menu:menu menu:id=".uno:ArrangeMenu">
+ <menu:menupopup>
+-->
+                    <menu:menuitem menu:id=".uno:BringToFront"/>
+                    <menu:menuitem menu:id=".uno:ObjectBackOne"/>
+                    <menu:menuitem menu:id=".uno:ObjectForwardOne"/>
+                    <menu:menuitem menu:id=".uno:SendToBack"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:SetObjectToForeground"/>
+                    <menu:menuitem menu:id=".uno:SetObjectToBackground"/>
+                    <!--
+ </menu:menupopup>
+ </menu:menu>
+-->
+                </menu:menupopup>
+            </menu:menu>
+
+            <menu:menu menu:id=".uno:EditControlMenu">
+                <menu:menupopup>
+                    <menu:menu menu:id=".uno:ObjectAlign" >
+                        <menu:menupopup>
+                            <menu:menuitem menu:id=".uno:ObjectAlignLeft"/>
+                            <menu:menuitem menu:id=".uno:AlignCenter"/>
+                            <menu:menuitem menu:id=".uno:ObjectAlignRight"/>
+                            <menu:menuseparator/>
+                            <menu:menuitem menu:id=".uno:AlignUp"/>
+                            <menu:menuitem menu:id=".uno:AlignMiddle"/>
+                            <menu:menuitem menu:id=".uno:AlignDown"/>
+                        </menu:menupopup>
+                    </menu:menu>
+
+                    <menu:menu menu:id=".uno:ObjectResize" >
+                        <menu:menupopup>
+                            <menu:menuitem menu:id=".uno:SmallestWidth"/>
+                            <menu:menuitem menu:id=".uno:GreatestWidth"/>
+                            <menu:menuseparator/>
+                            <menu:menuitem menu:id=".uno:SmallestHeight"/>
+                            <menu:menuitem menu:id=".uno:GreatestHeight"/>
+                        </menu:menupopup>
+                    </menu:menu>
+
+                    <menu:menu menu:id=".uno:SectionAlignmentMenu" >
+                        <menu:menupopup>
+                            <menu:menuitem menu:id=".uno:SectionAlignLeft"/>
+                            <menu:menuitem menu:id=".uno:SectionAlignRight"/>
+                            <menu:menuseparator/>
+                            <menu:menuitem menu:id=".uno:SectionAlignTop"/>
+                            <menu:menuitem menu:id=".uno:SectionAlignBottom"/>
+                        </menu:menupopup>
+                    </menu:menu>
+
+                </menu:menupopup>
+            </menu:menu>
+
+            <menu:menu menu:id=".uno:SectionShrinkMenu" >
+                <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:SectionShrink"/>
+                    <menu:menuitem menu:id=".uno:SectionShrinkTop"/>
+                    <menu:menuitem menu:id=".uno:SectionShrinkBottom"/>
+                </menu:menupopup>
+            </menu:menu>
+
+
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ExecuteReport"/>
         </menu:menupopup>
@@ -85,6 +152,10 @@
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:ReportControlMenu" >
                 <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:SelectObject"/>
+                    <menu:menuseparator/>
+                    <menu:menuitem menu:id=".uno:ControlProperties"/>
+                    <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:Label" />
                     <menu:menuitem menu:id=".uno:Edit" />
                     <menu:menuitem menu:id=".uno:ImageControl" />
@@ -303,23 +374,6 @@
                     <menu:menuitem menu:id=".uno:SmallestHeight"/>
                     <menu:menuitem menu:id=".uno:GreatestHeight"/>
                 </menu:menupopup>
-            </menu:menu>
-            <menu:menu menu:id=".uno:SectionAlignmentMenu" >
-              <menu:menupopup>
-                <menu:menuitem menu:id=".uno:SectionAlignLeft"/>
-                <menu:menuitem menu:id=".uno:SectionAlignRight"/>
-                <menu:menuseparator/>
-                <menu:menuitem menu:id=".uno:SectionAlignTop"/>
-                <menu:menuitem menu:id=".uno:SectionAlignBottom"/>
-              </menu:menupopup>
-            </menu:menu>
-            <menu:menuseparator/>
-            <menu:menu menu:id=".uno:SectionShrinkMenu" >
-              <menu:menupopup>
-                <menu:menuitem menu:id=".uno:SectionShrink"/>
-                <menu:menuitem menu:id=".uno:SectionShrinkTop"/>
-                <menu:menuitem menu:id=".uno:SectionShrinkBottom"/>
-              </menu:menupopup>
             </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:Distribution"/>

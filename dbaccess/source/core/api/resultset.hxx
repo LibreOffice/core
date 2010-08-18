@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: resultset.hxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,8 +30,8 @@
 #ifndef _DBA_COREAPI_COLUMN_HXX_
 #include "column.hxx"
 #endif
-#ifndef DBA_CORE_WARNINGS_HXX
-#include "warnings.hxx"
+#ifndef DBTOOLS_WARNINGSCONTAINER_HXX
+#include <connectivity/warningscontainer.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
@@ -125,11 +122,11 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >                m_xDelegatorRow;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowUpdate >          m_xDelegatorRowUpdate;
 
-        WarningsContainer           m_aWarnings;
-        OColumns*                   m_pColumns;
-        sal_Int32                   m_nResultSetType;
-        sal_Int32                   m_nResultSetConcurrency;
-        sal_Bool                    m_bIsBookmarkable : 1;
+        ::dbtools::WarningsContainer    m_aWarnings;
+        OColumns*                       m_pColumns;
+        sal_Int32                       m_nResultSetType;
+        sal_Int32                       m_nResultSetConcurrency;
+        sal_Bool                        m_bIsBookmarkable : 1;
 
     public:
         OResultSet(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >& _xResultSet,

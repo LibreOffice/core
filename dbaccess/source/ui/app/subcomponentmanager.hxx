@@ -1,30 +1,27 @@
 /*************************************************************************
-* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-*
-* Copyright 2008 by Sun Microsystems, Inc.
-*
-* OpenOffice.org - a multi-platform office productivity suite
-*
-* $RCSfile: subcomponentmanager.hxx,v $
-*
-* $Revision: 1.1.2.2 $
-*
-* This file is part of OpenOffice.org.
-*
-* OpenOffice.org is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License version 3
-* only, as published by the Free Software Foundation.
-*
-* OpenOffice.org is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Lesser General Public License version 3 for more details
-* (a copy is included in the LICENSE file that accompanied this code).
-*
-* You should have received a copy of the GNU Lesser General Public License
-* version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
-* for a copy of the LGPLv3 License.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
 ************************************************************************/
 
 #ifndef DBACCESS_SUBCOMPONENTMANAGER_HXX
@@ -33,7 +30,7 @@
 #include "AppElementType.hxx"
 
 /** === begin UNO includes === **/
-#include <com/sun/star/lang/XEventListener.hpp>
+#include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/frame/XController.hpp>
 /** === end UNO includes === **/
 
@@ -53,7 +50,7 @@ namespace dbaui
     //====================================================================
     //= SubComponentManager
     //====================================================================
-    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::lang::XEventListener
+    typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::beans::XPropertyChangeListener
                                     >   SubComponentManager_Base;
     class SubComponentManager : public SubComponentManager_Base
     {
@@ -62,6 +59,9 @@ namespace dbaui
         virtual ~SubComponentManager();
 
         void    disposing();
+
+        // XPropertyChangeListener
+        virtual void SAL_CALL propertyChange( const ::com::sun::star::beans::PropertyChangeEvent& evt ) throw (::com::sun::star::uno::RuntimeException);
 
         // XEventListener
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
@@ -106,6 +106,24 @@ namespace dbaui
                         const ::rtl::OUString& _rName,
                         const sal_Int32 _nComponentType
                     );
+
+        /** searches for the given sub component
+
+            @param i_rComponent
+                the sub component to look up
+            @param o_rName
+                contains, upon successful return, the name of the sub component
+            @param o_nComponentType
+                contains, upon successful return, the type of the sub component
+            @return
+                <TRUE/> if and only if the component was found
+        */
+        bool        lookupSubComponent(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& i_rComponent,
+                              ::rtl::OUString&  o_rName,
+                              sal_Int32&        o_rComponentType
+                    );
+
     private:
         ::std::auto_ptr< SubComponentManager_Data > m_pData;
     };

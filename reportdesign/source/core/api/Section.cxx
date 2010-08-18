@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Section.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -459,7 +456,7 @@ uno::Reference< report::XReportDefinition > SAL_CALL OSection::getReportDefiniti
     uno::Reference< report::XGroup > xGroup = m_xGroup;
     if ( !xRet.is() && xGroup.is() )
     {
-        uno::Reference< report::XGroups> xGroups(xGroup->getParent(),uno::UNO_QUERY);
+        uno::Reference< report::XGroups> xGroups(xGroup->getGroups());
         if ( xGroups.is() )
             xRet = xGroups->getReportDefinition();
     }

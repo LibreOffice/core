@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FieldDescriptions.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,7 @@
 #include "QEnumTypes.hxx"
 #endif
 #ifndef _SVX_SVXENUM_HXX
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #endif
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
@@ -67,6 +64,7 @@ namespace dbaui
         ::rtl::OUString     m_sName;
         ::rtl::OUString     m_sTypeName;
         ::rtl::OUString     m_sDescription;
+        ::rtl::OUString     m_sHelpText;
 
         ::rtl::OUString     m_sAutoIncrementValue;
         sal_Int32           m_nType;    // only used when m_pType is null
@@ -89,6 +87,7 @@ namespace dbaui
 
         void SetName(const ::rtl::OUString& _rName);
         void SetDescription(const ::rtl::OUString& _rDescription);
+        void SetHelpText(const ::rtl::OUString& _sHelptext);
         void SetDefaultValue(const ::com::sun::star::uno::Any& _rDefaultValue);
         void SetControlDefault(const ::com::sun::star::uno::Any& _rControlDefault);
         void SetAutoIncrementValue(const ::rtl::OUString& _sAutoIncValue);
@@ -113,6 +112,7 @@ namespace dbaui
 
         ::rtl::OUString             GetName()               const;
         ::rtl::OUString             GetDescription()        const;
+        ::rtl::OUString             GetHelpText()           const;
         ::com::sun::star::uno::Any  GetControlDefault()     const;
         ::rtl::OUString             GetAutoIncrementValue() const;
         sal_Int32                   GetType()               const;
@@ -123,6 +123,7 @@ namespace dbaui
         sal_Int32                   GetFormatKey()          const;
         SvxCellHorJustify           GetHorJustify()         const;
         TOTypeInfoSP                getTypeInfo()           const;
+        TOTypeInfoSP                getSpecialTypeInfo()    const;
         sal_Bool                    IsAutoIncrement()       const;
         sal_Bool                    IsPrimaryKey()          const;
         sal_Bool                    IsCurrency()            const;

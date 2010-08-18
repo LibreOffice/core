@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WTypeSelect.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -178,7 +175,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 {
                     String strMessage = String(ModuleRes(STR_TABLEDESIGN_DUPLICATE_NAME));
                     strMessage.SearchAndReplaceAscii("$column$", sNewName);
-                    OSQLWarningBox( this, strMessage ).Execute();
+                    pWiz->showError(strMessage);
                     pCurFieldDescr->SetName(sName);
                     DisplayData(pCurFieldDescr);
                     static_cast<OWizTypeSelect*>(GetParent())->setDuplicateName(sal_True);
@@ -323,6 +320,8 @@ IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
     OFieldDescription* pField = static_cast<OFieldDescription*>(m_lbColumnNames.GetEntryData(m_lbColumnNames.GetEntryPos(aColumnName)));
     if(pField)
         m_aTypeControl.DisplayData(pField);
+
+    m_aTypeControl.Enable(m_lbColumnNames.GetSelectEntryCount() == 1 );
     return 0;
 }
 // -----------------------------------------------------------------------
@@ -339,7 +338,8 @@ void OWizTypeSelect::Reset()
 
     const ODatabaseExport::TColumnVector* pDestColumns = m_pParent->getDestVector();
     ODatabaseExport::TColumnVector::const_iterator aIter = pDestColumns->begin();
-    for(;aIter != pDestColumns->end();++aIter)
+    ODatabaseExport::TColumnVector::const_iterator aEnd = pDestColumns->end();
+    for(;aIter != aEnd;++aIter)
     {
         sal_uInt16 nPos;
         if((*aIter)->second->IsPrimaryKey())

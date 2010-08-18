@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbloader2.cxx,v $
- * $Revision: 1.32.28.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -75,7 +72,7 @@
 #include <cppuhelper/implbase2.hxx>
 #include <osl/file.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
@@ -448,7 +445,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     if ( !aMediaDesc.has( "InteractionHandler" ) )
     {
         Reference< XInteractionHandler > xHandler;
-        if ( m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler", xHandler ) )
+        if ( m_aContext.createComponent( "com.sun.star.task.InteractionHandler", xHandler ) )
             aMediaDesc.put( "InteractionHandler", xHandler );
     }
 
@@ -519,15 +516,25 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         return;
     }
 
-    if ( !bCreateNew && !xModel->getURL().getLength() )
+    if ( !bCreateNew )
     {
+        // We need to XLoadable::load the document if it does not yet have an URL.
+        // If it already *does* have an URL, then it was either passed in the arguments, or a previous incarnation
+        // of that model existed before (which can happen if a model is closed, but an associated DataSource is kept
+        // alive 'til loading the document again).
+        bool bNeedLoad = ( xModel->getURL().getLength() == 0 );
         try
         {
             aMediaDesc.put( "FileName", _rURL );
-            Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
-
             Sequence< PropertyValue > aResource( aMediaDesc.getPropertyValues() );
-            xLoad->load( aResource );
+
+            if ( bNeedLoad )
+            {
+                Reference< XLoadable > xLoad( xModel, UNO_QUERY_THROW );
+                xLoad->load( aResource );
+            }
+
+            // always attach the resource, even if the document has not been freshly loaded
             xModel->attachResource( _rURL, aResource );
         }
         catch(const Exception&)
@@ -537,22 +544,20 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
         }
     }
 
-    Reference< XController2 > xController;
     if ( bSuccess )
     {
         try
         {
             Reference< XModel2 > xModel2( xModel, UNO_QUERY_THROW );
-            xController = xModel2->createViewController( sViewName, Sequence< PropertyValue >(), rFrame );
+            Reference< XController2 > xController( xModel2->createViewController( sViewName, Sequence< PropertyValue >(), rFrame ), UNO_QUERY_THROW );
 
-            bSuccess = xController.is();
-            if ( bSuccess )
-            {
-                xController->attachModel( xModel );
-                rFrame->setComponent( xController->getComponentWindow(), xController.get() );
-                xController->attachFrame( rFrame );
-                xModel->setCurrentController( xController.get() );
-            }
+            xController->attachModel( xModel );
+            xModel->connectController( xController.get() );
+            rFrame->setComponent( xController->getComponentWindow(), xController.get() );
+            xController->attachFrame( rFrame );
+            xModel->setCurrentController( xController.get() );
+
+            bSuccess = sal_True;
         }
         catch( const Exception& )
         {

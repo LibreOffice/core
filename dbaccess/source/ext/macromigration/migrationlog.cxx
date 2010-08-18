@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: migrationlog.cxx,v $
- * $Revision: 1.4.2.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -327,6 +324,13 @@ namespace dbmm
             case ERR_ADJUSTING_DOCUMENT_EVENTS_FAILED:
                 pAsciiErrorDescription = "adjusting events for document '#doc#' failed";
                 aAsciiParameterNames.push_back( "#doc#" );
+                break;
+
+            case ERR_ADJUSTING_DIALOG_EVENTS_FAILED:
+                pAsciiErrorDescription = "adjusting events for dialog #lib#.#dlg# in document '#doc#' failed";
+                aAsciiParameterNames.push_back( "#doc#" );
+                aAsciiParameterNames.push_back( "#lib#" );
+                aAsciiParameterNames.push_back( "#dlg#" );
                 break;
 
             case ERR_ADJUSTING_FORMCOMP_EVENTS_FAILED:

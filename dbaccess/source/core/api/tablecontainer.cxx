@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tablecontainer.cxx,v $
- * $Revision: 1.68 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,6 +63,9 @@
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -120,7 +120,7 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  sal_Bool _bCase,
                                  const Reference< XNameContainer >& _xTableDefinitions,
                                  IRefreshListener*  _pRefreshListener,
-                                 IWarningsContainer* _pWarningsContainer
+                                 ::dbtools::IWarningsContainer* _pWarningsContainer
                                  ,oslInterlockedCount& _nInAppend)
     :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
     ,m_xTableDefinitions(_xTableDefinitions)
@@ -164,6 +164,7 @@ void OTableContainer::removeMasterContainerListener()
 // XServiceInfo
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO2(OTableContainer, "com.sun.star.sdb.dbaccess.OTableContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
+
 // -----------------------------------------------------------------------------
 namespace
 {
@@ -360,15 +361,11 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
                 if ( !xColumnDefinitions->hasByName(*pIter) )
                 {
                     Reference<XPropertySet> xColumn(xNames->getByName(*pIter),UNO_QUERY);
-                    OColumnSettings* pColumnSettings = NULL;
-                    if ( ::comphelper::getImplementation( pColumnSettings, xColumn ) )
+                    if ( !OColumnSettings::hasDefaultSettings( xColumn ) )
                     {
-                        if ( ( pColumnSettings && !pColumnSettings->isDefaulted() ) )
-                        {
-                            ::comphelper::copyProperties(xColumn,xProp);
-                            xAppend->appendByDescriptor(xProp);
-                            bModified = sal_True;
-                        }
+                        ::comphelper::copyProperties( xColumn, xProp );
+                        xAppend->appendByDescriptor( xProp );
+                        bModified = sal_True;
                     }
                 }
             }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RTableConnection.cxx,v $
- * $Revision: 1.10.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -104,7 +101,8 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     const OConnectionLine* pTopLine = NULL;
     const ::std::vector<OConnectionLine*>* pConnLineList = GetConnLineList();
     ::std::vector<OConnectionLine*>::const_iterator aIter = pConnLineList->begin();
-    for(;aIter != pConnLineList->end();++aIter)
+    ::std::vector<OConnectionLine*>::const_iterator aEnd = pConnLineList->end();
+    for(;aIter != aEnd;++aIter)
     {
         if( (*aIter)->IsValid() )
         {

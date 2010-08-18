@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: detailpages.hxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,6 +55,7 @@
 #ifndef DBAUI_TEXTCONNECTIONHELPER_HXX
 #include "TextConnectionHelper.hxx"
 #endif
+#include "admincontrols.hxx"
 
 #include <svtools/dialogcontrolling.hxx>
 
@@ -220,7 +218,7 @@ namespace dbaui
                                         , USHORT _nResId
                                         , const SfxItemSet& _rCoreAttrs
                                         , USHORT _nPortId
-                                        , const char* _pDriverName);
+                                        );
 
     protected:
 
@@ -261,14 +259,7 @@ namespace dbaui
 
     private:
         FixedLine           m_aSeparator1;
-        FixedText           m_aDatabaseNameLabel;
-        Edit                m_aDatabaseName;
-        FixedText           m_aFTHostname;
-        Edit                m_aEDHostname;
-        FixedText           m_aPortNumber;
-        NumericField        m_aNFPortNumber;
-        FixedText           m_aFTSocket;
-        Edit                m_aEDSocket;
+        MySQLNativeSettings m_aMySQLSettings;
 
         FixedLine           m_aSeparator2;
         FixedText           m_aUserNameLabel;

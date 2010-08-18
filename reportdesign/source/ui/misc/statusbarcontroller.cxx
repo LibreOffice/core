@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: statusbarcontroller.cxx,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -223,6 +220,8 @@ void SAL_CALL OStatusbarController::update() throw ( RuntimeException )
 // XComponent
 void SAL_CALL OStatusbarController::dispose() throw (::com::sun::star::uno::RuntimeException)
 {
+    Reference< XComponent > xComp( m_pController.getRef(), UNO_QUERY );
+    ::comphelper::disposeComponent(xComp);
     m_pController.dispose();
     svt::StatusbarController::dispose();
 }

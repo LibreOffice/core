@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dsselect.hxx,v $
- * $Revision: 1.8.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -72,7 +69,7 @@ protected:
 #endif
 
 public:
-    ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, ::dbaccess::DATASOURCE_TYPE _eType,SfxItemSet* _pOutputSet = NULL );
+    ODatasourceSelectDialog( Window* _pParent, const StringBag& _rDatasources, bool _bAdabas,SfxItemSet* _pOutputSet = NULL );
     ~ODatasourceSelectDialog();
 
     inline String   GetSelected() const { return m_aDatasource.GetSelectEntry();}

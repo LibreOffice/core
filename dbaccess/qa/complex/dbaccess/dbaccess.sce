@@ -7,4 +7,6 @@
 -o complex.dbaccess.DataSource
 -o complex.dbaccess.Parser
 -o complex.dbaccess.ApplicationController
+-o complex.dbaccess.CopyTableWizard
 -o complex.dbaccess.UISettings
+-o complex.dbaccess.Beamer

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StartMarker.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,8 +38,8 @@
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/smplhint.hxx>
+#include <unotools/syslocale.hxx>
+#include <svl/smplhint.hxx>
 
 #define CORNER_SPACE     5
 
@@ -181,12 +178,7 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
     {
         m_bCollapsed = !m_bCollapsed;
 
-        Image* pImage = NULL;
-        if ( GetDisplayBackground().GetColor().IsDark() )
-            pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
-        else
-            pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
-        m_aImage.SetImage(*pImage);
+        changeImage();
 
         m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
         if ( m_aCollapsedLink.IsSet() )
@@ -194,6 +186,16 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
     }
 
     m_pParent->showProperties();
+}
+// -----------------------------------------------------------------------------
+void OStartMarker::changeImage()
+{
+    Image* pImage = NULL;
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
+        pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
+    else
+        pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
+    m_aImage.SetImage(*pImage);
 }
 // -----------------------------------------------------------------------
 void OStartMarker::initDefaultNodeImages()
@@ -207,7 +209,7 @@ void OStartMarker::initDefaultNodeImages()
     }
 
     Image* pImage = NULL;
-    if ( GetDisplayBackground().GetColor().IsDark() )
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
     {
         pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
     }
@@ -281,12 +283,6 @@ void OStartMarker::showRuler(sal_Bool _bShow)
     m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
 }
 //------------------------------------------------------------------------------
-sal_Int32 OStartMarker::getRulerOffset() const
-{
-    return m_aVRuler.GetSizePixel().Width();
-}
-
-//------------------------------------------------------------------------------
 void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
 {
     if( m_aText.GetText().Len())
@@ -311,6 +307,7 @@ void OStartMarker::setCollapsed(sal_Bool _bCollapsed)
 {
     OColorListener::setCollapsed(_bCollapsed);
     showRuler(_bCollapsed);
+    changeImage();
 }
 // -----------------------------------------------------------------------
 void OStartMarker::zoom(const Fraction& _aZoom)

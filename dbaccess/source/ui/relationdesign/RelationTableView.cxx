@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RelationTableView.cxx,v $
- * $Revision: 1.30.26.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,7 +75,7 @@
 #include <connectivity/dbexception.hxx>
 #include "RTableWindow.hxx"
 #include "JAccess.hxx"
-#include <svtools/undo.hxx>
+#include <svl/undo.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 
 using namespace dbaui;
@@ -182,7 +179,7 @@ void ORelationTableView::ReSync()
                 pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
                 continue;
             }
-        }
+        } // if ( !arrInvalidTables.empty() )
 
         addConnection( new ORelationTableConnection(this, *aConIter), sal_False ); // don't add the data again
     }
@@ -207,7 +204,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     OTableWindow* pDestWin = jxdDest.pListBox->GetTabWin();
 
     ::std::vector<OTableConnection*>::const_iterator aIter = getTableConnections()->begin();
-    for(;aIter != getTableConnections()->end();++aIter)
+    ::std::vector<OTableConnection*>::const_iterator aEnd = getTableConnections()->end();
+    for(;aIter != aEnd;++aIter)
     {
         OTableConnection* pFirst = *aIter;
         if((pFirst->GetSourceWin() == pSourceWin && pFirst->GetDestWin() == pDestWin) ||
@@ -227,9 +225,8 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
     ::rtl::OUString sDestFieldName = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
 
     // die Anzahl der PKey-Felder in der Quelle
-
-    ::std::vector< Reference< XNameAccess> > aPkeys = ::dbaui::getKeyColumns(pSourceWin->GetData()->getKeys(),KeyType::PRIMARY);
-    bool bAskUser = aPkeys.size() == 1 && Reference< XIndexAccess>(aPkeys[0],UNO_QUERY)->getCount() > 1;
+    const Reference< XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(pSourceWin->GetData()->getTable());
+    bool bAskUser = xPrimaryKeyColumns.is() && Reference< XIndexAccess>(xPrimaryKeyColumns,UNO_QUERY)->getCount() > 1;
 
     pTabConnData->SetConnLine( 0, sSourceFieldName, sDestFieldName );
 

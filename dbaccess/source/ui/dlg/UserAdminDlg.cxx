@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UserAdminDlg.cxx,v $
- * $Revision: 1.14.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -45,9 +42,9 @@
 #include <comphelper/componentcontext.hxx>
 #include <connectivity/dbmetadata.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <svtools/eitem.hxx>
-#include <svtools/intitem.hxx>
-#include <svtools/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/msgbox.hxx>
 #include <vcl/stdtext.hxx>
@@ -180,7 +177,7 @@ DBG_NAME(OUserAdminDlg)
         return m_pImpl->getDriver();
     }
     // -----------------------------------------------------------------------------
-    ::dbaccess::DATASOURCE_TYPE OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
+    ::rtl::OUString OUserAdminDlg::getDatasourceType(const SfxItemSet& _rSet) const
     {
         return m_pImpl->getDatasourceType(_rSet);
     }

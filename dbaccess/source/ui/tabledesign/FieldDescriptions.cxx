@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FieldDescriptions.cxx,v $
- * $Revision: 1.29.50.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -157,6 +154,12 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                     SetName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_NAME)));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_DESCRIPTION))
                     SetDescription(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_DESCRIPTION)));
+                if(xPropSetInfo->hasPropertyByName(PROPERTY_HELPTEXT))
+                {
+                    ::rtl::OUString sHelpText;
+                    xAffectedCol->getPropertyValue(PROPERTY_HELPTEXT) >>= sHelpText;
+                    SetHelpText(sHelpText);
+                }
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_DEFAULTVALUE))
                     SetDefaultValue( xAffectedCol->getPropertyValue(PROPERTY_DEFAULTVALUE) );
 
@@ -176,7 +179,11 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_ISNULLABLE))
                     SetIsNullable(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ISNULLABLE)));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_FORMATKEY))
-                    SetFormatKey(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY)));
+                {
+                    const Any aValue = xAffectedCol->getPropertyValue(PROPERTY_FORMATKEY);
+                    if ( aValue.hasValue() )
+                        SetFormatKey(::comphelper::getINT32(aValue));
+                }
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_RELATIVEPOSITION))
                     m_aRelativePosition = xAffectedCol->getPropertyValue(PROPERTY_RELATIVEPOSITION);
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_WIDTH))
@@ -184,7 +191,11 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_HIDDEN))
                     xAffectedCol->getPropertyValue(PROPERTY_HIDDEN) >>= m_bHidden;
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
-                    SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ALIGN))));
+                {
+                    const Any aValue = xAffectedCol->getPropertyValue(PROPERTY_ALIGN);
+                    if ( aValue.hasValue() )
+                        SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT32(aValue)));
+                }
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
                     SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
             }
@@ -231,8 +242,19 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bF
                 if ( bForce )
                 {
                     sal_Int32 nPrec = DEFAULT_OTHER_PRECSION;
-                    if ( GetPrecision() )
-                        nPrec = GetPrecision();
+                    switch ( _pType->nType )
+                    {
+                        case DataType::BIT:
+                        case DataType::BLOB:
+                        case DataType::CLOB:
+                            nPrec = _pType->nPrecision;
+                            break;
+                        default:
+                            if ( GetPrecision() )
+                                nPrec = GetPrecision();
+                            break;
+                    }
+
                     if ( _pType->nPrecision )
                         SetPrecision(::std::min<sal_Int32>(nPrec ? nPrec : DEFAULT_NUMERIC_PRECSION,_pType->nPrecision));
                     if ( _pType->nMaximumScale )
@@ -262,6 +284,21 @@ void OFieldDescription::SetName(const ::rtl::OUString& _rName)
             m_xDest->setPropertyValue(PROPERTY_NAME,makeAny(_rName));
         else
             m_sName = _rName;
+    }
+    catch(const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+// -----------------------------------------------------------------------------
+void OFieldDescription::SetHelpText(const ::rtl::OUString& _sHelpText)
+{
+    try
+    {
+        if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
+            m_xDest->setPropertyValue(PROPERTY_HELPTEXT,makeAny(_sHelpText));
+        else
+            m_sHelpText = _sHelpText;
     }
     catch(const Exception& )
     {
@@ -485,6 +522,14 @@ void OFieldDescription::SetCurrency(sal_Bool _bIsCurrency)
         return m_sDescription;
 }
 // -----------------------------------------------------------------------------
+::rtl::OUString             OFieldDescription::GetHelpText()            const
+{
+    if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
+        return ::comphelper::getString(m_xDest->getPropertyValue(PROPERTY_HELPTEXT));
+    else
+        return m_sHelpText;
+}
+// -----------------------------------------------------------------------------
 ::com::sun::star::uno::Any  OFieldDescription::GetControlDefault()      const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
@@ -578,6 +623,15 @@ TOTypeInfoSP                OFieldDescription::getTypeInfo()            const
     return m_pType;
 }
 // -----------------------------------------------------------------------------
+TOTypeInfoSP                OFieldDescription::getSpecialTypeInfo() const
+{
+    TOTypeInfoSP pSpecialType( new OTypeInfo() );
+    *pSpecialType = *m_pType;
+    pSpecialType->nPrecision = GetPrecision();
+    pSpecialType->nMaximumScale = static_cast<sal_Int16>(GetScale());
+    return pSpecialType;
+}
+// -----------------------------------------------------------------------------
 sal_Bool                    OFieldDescription::IsAutoIncrement()        const
 {
     if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT) )
@@ -629,8 +683,8 @@ void OFieldDescription::copyColumnSettingsTo(const Reference< XPropertySet >& _r
             _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(GetFormatKey()));
         if ( GetHorJustify() != SVX_HOR_JUSTIFY_STANDARD && xInfo->hasPropertyByName(PROPERTY_ALIGN) )
             _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(GetHorJustify())));
-        if ( GetDescription().getLength() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
-            _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(GetDescription()));
+        if ( GetHelpText().getLength() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
+            _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(GetHelpText()));
         if ( GetControlDefault().hasValue() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
             _rxColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,GetControlDefault());
 

@@ -2,12 +2,9 @@
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbumiscres.src,v $
- * $Revision: 1.80.68.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,4 +93,8 @@ String STR_NAMED_OBJECT_ALREADY_EXISTS
 {
     Text [ en-US ] = "The name '$#$' already exists.\nPlease enter another name." ;
 };
-
+String RID_STR_EXTENSION_NOT_PRESENT
+{
+    // #i96130# use hard coded name
+    Text [ en-US ] = "The report, \"$file$\", requires the extension Sun Report Builder.";
+};

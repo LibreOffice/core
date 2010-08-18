@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.10.68.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -67,7 +63,6 @@ SLOFILES=	$(SLO)$/xmlfilter.obj				\
             $(SLO)$/xmlFileBasedDatabase.obj	\
             $(SLO)$/xmlServerDatabase.obj		\
             $(SLO)$/xmlConnectionResource.obj	\
-            $(SLO)$/xmlJavaClassPath.obj		\
             $(SLO)$/xmlservices.obj
 
 # --- Library -----------------------------------
@@ -88,6 +83,8 @@ SHL1STDLIBS=\
     $(CPPULIB)			\
     $(SFXLIB)			\
     $(SVLLIB)			\
+    $(DBTOOLSLIB)		\
+    $(UNOTOOLSLIB)		\
     $(SO2LIB)			\
     $(SALLIB)
 
@@ -107,7 +104,7 @@ SHL1DEPN=
 SHL1LIBS=$(LIB1TARGET)
 SHL1IMPLIB=	i$(SHL1TARGET)
 # SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)

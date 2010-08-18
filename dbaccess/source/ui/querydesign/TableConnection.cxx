@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TableConnection.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,8 +86,9 @@ namespace dbaui
         // Linienliste mit Defaults initialisieren
         OConnectionLineDataVec* pLineData = GetData()->GetConnLineDataList();
         OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
+        OConnectionLineDataVec::const_iterator aEnd = pLineData->end();
         m_vConnLine.reserve(pLineData->size());
-        for(;aIter != pLineData->end();++aIter)
+        for(;aIter != aEnd;++aIter)
             m_vConnLine.push_back( new OConnectionLine(this, *aIter) );
     }
 
@@ -102,7 +100,8 @@ namespace dbaui
     // -----------------------------------------------------------------------------
     void OTableConnection::clearLineData()
     {
-        for(::std::vector<OConnectionLine*>::iterator aLineIter = m_vConnLine.begin();aLineIter != m_vConnLine.end();++aLineIter)
+        ::std::vector<OConnectionLine*>::iterator aLineEnd = m_vConnLine.end();
+        for(::std::vector<OConnectionLine*>::iterator aLineIter = m_vConnLine.begin();aLineIter != aLineEnd;++aLineIter)
             delete *aLineIter;
         m_vConnLine.clear();
     }
@@ -130,8 +129,9 @@ namespace dbaui
         {
             const ::std::vector<OConnectionLine*>* pLine = rConn.GetConnLineList();
             ::std::vector<OConnectionLine*>::const_iterator aIter = pLine->begin();
+            ::std::vector<OConnectionLine*>::const_iterator aEnd = pLine->end();
             m_vConnLine.reserve(pLine->size());
-            for(;aIter != pLine->end();++aIter)
+            for(;aIter != aEnd;++aIter)
                 m_vConnLine.push_back( CreateConnLine( **aIter ));
         }
 
@@ -223,7 +223,8 @@ namespace dbaui
         // Aus allen Linien das umgebende Rechteck bestimmen
         Rectangle aBoundingRect( Point(0,0), Point(0,0) );
         Rectangle aTempRect;
-        for(::std::vector<OConnectionLine*>::const_iterator aIter = m_vConnLine.begin();aIter != m_vConnLine.end();++aIter)
+        ::std::vector<OConnectionLine*>::const_iterator aEnd = m_vConnLine.end();
+        for(::std::vector<OConnectionLine*>::const_iterator aIter = m_vConnLine.begin();aIter != aEnd;++aIter)
         {
             aTempRect = (*aIter)->GetBoundingRect();
 

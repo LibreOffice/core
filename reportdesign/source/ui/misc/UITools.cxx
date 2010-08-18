@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UITools.cxx,v $
- * $Revision: 1.7.36.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -46,36 +43,37 @@
 #include <com/sun/star/lang/NullPointerException.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <svx/svdpool.hxx>
 
-#include <svx/charscaleitem.hxx>
+#include <editeng/charscaleitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/xtable.hxx>       // XColorTable
-#include <svx/brshitem.hxx>
-#include <svx/fontitem.hxx>
-#include <svx/emphitem.hxx>
-#include <svx/postitem.hxx>
-#include <svx/udlnitem.hxx>
-#include <svx/crsditem.hxx>
-#include <svx/cntritem.hxx>
-#include <svx/langitem.hxx>
-#include <svx/wghtitem.hxx>
-#include <svx/fhgtitem.hxx>
-#include <svx/shdditem.hxx>
-#include <svx/escpitem.hxx>
-#include <svx/prszitem.hxx>
-#include <svx/wrlmitem.hxx>
-#include <svx/cmapitem.hxx>
-#include <svx/kernitem.hxx>
-#include <svx/blnkitem.hxx>
-#include <svx/flstitem.hxx>
-#include <svx/akrnitem.hxx>
-#include <svx/colritem.hxx>
+#include <editeng/brshitem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/emphitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/prszitem.hxx>
+#include <editeng/wrlmitem.hxx>
+#include <editeng/cmapitem.hxx>
+#include <editeng/kernitem.hxx>
+#include <editeng/blnkitem.hxx>
+#include <editeng/flstitem.hxx>
+#include <editeng/akrnitem.hxx>
+#include <editeng/colritem.hxx>
 #include <svx/drawitem.hxx>
-#include <svx/twolinesitem.hxx>
-#include <svx/charreliefitem.hxx>
-#include <svx/charrotateitem.hxx>
-#include <svx/charhiddenitem.hxx>
+#include <editeng/twolinesitem.hxx>
+#include <editeng/charreliefitem.hxx>
+#include <editeng/charrotateitem.hxx>
+#include <editeng/charhiddenitem.hxx>
 #include <svx/xgrscit.hxx>
 #include <svx/svditer.hxx>
 #include <svx/xtable.hxx>
@@ -85,10 +83,10 @@
 #include <svx/svxdlg.hxx>
 #include <svx/unoprov.hxx>
 
-#include <svtools/pathoptions.hxx>
+#include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
-#include <svtools/itempool.hxx>
-#include <svtools/itemset.hxx>
+#include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 
 #include <comphelper/propmultiplex.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -99,7 +97,7 @@
 
 #include <com/sun/star/report/XGroups.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
-#include <com/sun/star/text/ParagraphVertAlign.hpp>
+#include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/Function.hpp>
 #include <com/sun/star/sdb/XParametersSupplier.hpp>
@@ -165,101 +163,6 @@ namespace rptui
 {
 using namespace ::com::sun::star;
 using namespace formula;
-// -----------------------------------------------------------------------------
-SvxCellHorJustify lcl_MapHorizontalAlignment(const sal_Int16 _nAlign)
-{
-    SvxCellHorJustify eRet = SVX_HOR_JUSTIFY_STANDARD;
-    switch(_nAlign)
-    {
-        case awt::TextAlign::LEFT:
-            eRet = SVX_HOR_JUSTIFY_LEFT;
-            break;
-        case awt::TextAlign::CENTER:
-            eRet = SVX_HOR_JUSTIFY_CENTER;
-            break;
-        case awt::TextAlign::RIGHT:
-            eRet = SVX_HOR_JUSTIFY_RIGHT;
-            break;
-        default:
-            OSL_ENSURE(0,"Illegal text alignment value!");
-            break;
-    }
-    return eRet;
-}
-// -----------------------------------------------------------------------------
-sal_Int16 lcl_MapHorizontalAlignment(const SvxCellHorJustify _eAlign)
-{
-    sal_Int16 nRet = awt::TextAlign::LEFT;
-    switch(_eAlign)
-    {
-        case SVX_HOR_JUSTIFY_LEFT:
-            nRet = awt::TextAlign::LEFT;
-            break;
-        case SVX_HOR_JUSTIFY_CENTER:
-            nRet = awt::TextAlign::CENTER;
-            break;
-        case SVX_HOR_JUSTIFY_RIGHT:
-            nRet = awt::TextAlign::RIGHT;
-            break;
-        case SVX_HOR_JUSTIFY_BLOCK:
-        case SVX_HOR_JUSTIFY_REPEAT:
-            nRet = awt::TextAlign::CENTER;
-            break;
-        default:
-            OSL_ENSURE(0,"Illegal text alignment value!");
-            break;
-    }
-    return nRet;
-}
-// -----------------------------------------------------------------------------
-SvxCellVerJustify lcl_MapVerticalAlignment(const sal_Int16 _nAlign)
-{
-    SvxCellVerJustify eRet = SVX_VER_JUSTIFY_STANDARD;
-    switch(_nAlign)
-    {
-        case text::ParagraphVertAlign::AUTOMATIC:
-        case text::ParagraphVertAlign::BASELINE:
-            eRet = SVX_VER_JUSTIFY_STANDARD;
-            break;
-        case text::ParagraphVertAlign::TOP:
-            eRet = SVX_VER_JUSTIFY_TOP;
-            break;
-        case text::ParagraphVertAlign::CENTER:
-            eRet = SVX_VER_JUSTIFY_CENTER;
-            break;
-        case text::ParagraphVertAlign::BOTTOM:
-            eRet = SVX_VER_JUSTIFY_BOTTOM;
-            break;
-        default:
-            OSL_ENSURE(0,"Illegal text alignment value!");
-            break;
-    }
-    return eRet;
-}
-// -----------------------------------------------------------------------------
-sal_Int16 lcl_MapVerticalAlignment(const SvxCellVerJustify _eAlign)
-{
-    sal_Int16 nRet = text::ParagraphVertAlign::TOP;
-    switch(_eAlign)
-    {
-        case SVX_VER_JUSTIFY_STANDARD:
-            nRet = text::ParagraphVertAlign::AUTOMATIC;
-            break;
-        case SVX_VER_JUSTIFY_TOP:
-            nRet = text::ParagraphVertAlign::TOP;
-            break;
-        case SVX_VER_JUSTIFY_CENTER:
-            nRet = text::ParagraphVertAlign::CENTER;
-            break;
-        case SVX_VER_JUSTIFY_BOTTOM:
-            nRet = text::ParagraphVertAlign::BOTTOM;
-            break;
-        default:
-            OSL_ENSURE(0,"Illegal text alignment value!");
-            break;
-    }
-    return nRet;
-}
 // -----------------------------------------------------------------------------
 void adjustSectionName(const uno::Reference< report::XGroup >& _xGroup,sal_Int32 _nPos)
 {
@@ -355,8 +258,9 @@ namespace
             case COMPLEX:
                 aLocale = _rxReportControlFormat->getCharLocaleComplex();
                 break;
-        }
-        _rItemSet.Put(SvxLanguageItem(MsLangId::convertLocaleToLanguage(aLocale),_nLanguage));
+        } // switch(_nWhich)
+
+        _rItemSet.Put(SvxLanguageItem(MsLangId::convertLocaleToLanguageWithFallback(aLocale),_nLanguage));
 
         _rItemSet.Put(SvxPostureItem(aFont.GetItalic(),_nPosture));
         _rItemSet.Put(SvxWeightItem(aFont.GetWeight(),_nWeight));
@@ -367,21 +271,22 @@ namespace
     {
         uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
-        SfxItemPropertyMap* pPropertyMap = aMap.GetMap(SVXMAP_CUSTOMSHAPE);
-        while ( pPropertyMap->pName )
+        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
+        PropertyEntryVector_t aPropVector = pPropertyMap->getPropertyEntries();
+        PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
+        while( aIt != aPropVector.end() )
         {
-            const ::rtl::OUString sPropertyName = ::rtl::OUString::createFromAscii(pPropertyMap->pName);
-            if ( xInfo->hasPropertyByName(sPropertyName) )
+            if ( xInfo->hasPropertyByName(aIt->sName) )
             {
-                const SfxPoolItem* pItem = _rItemSet.GetItem(pPropertyMap->nWID);
+                const SfxPoolItem* pItem = _rItemSet.GetItem(aIt->nWID);
                 if ( pItem )
                 {
                     ::std::auto_ptr<SfxPoolItem> pClone(pItem->Clone());
-                    pClone->PutValue(_xShape->getPropertyValue(sPropertyName),pPropertyMap->nMemberId);
-                    _rItemSet.Put(*pClone,pPropertyMap->nWID);
+                    pClone->PutValue(_xShape->getPropertyValue(aIt->sName), aIt->nMemberId);
+                    _rItemSet.Put(*pClone, aIt->nWID);
                 }
             } // if ( xInfo->hasPropertyByName(sPropertyName) )
-            ++pPropertyMap;
+            ++aIt;
         }
     }
 
@@ -389,23 +294,24 @@ namespace
     {
         const uno::Reference< beans::XPropertySetInfo> xInfo = _xShape->getPropertySetInfo();
         SvxUnoPropertyMapProvider aMap;
-        const SfxItemPropertyMap* pPropertyMap = aMap.GetMap(SVXMAP_CUSTOMSHAPE);
-        while ( pPropertyMap->pName )
+        const SfxItemPropertyMap* pPropertyMap = aMap.GetPropertySet(SVXMAP_CUSTOMSHAPE, SdrObject::GetGlobalDrawObjectItemPool())->getPropertyMap();
+        PropertyEntryVector_t aPropVector = pPropertyMap->getPropertyEntries();
+        PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
+        while( aIt != aPropVector.end() )
         {
-            const ::rtl::OUString sPropertyName = ::rtl::OUString::createFromAscii(pPropertyMap->pName);
-            if ( SFX_ITEM_SET == _rItemSet.GetItemState(pPropertyMap->nWID) && xInfo->hasPropertyByName(sPropertyName) )
+            if ( SFX_ITEM_SET == _rItemSet.GetItemState(aIt->nWID) && xInfo->hasPropertyByName(aIt->sName) )
             {
-                const beans::Property aProp = xInfo->getPropertyByName( sPropertyName );
-                if ( ( aProp.Attributes & beans::PropertyAttribute::READONLY ) != beans::PropertyAttribute::READONLY )
+                const beans::Property aProp = xInfo->getPropertyByName( aIt->sName );
+                if ( ( aIt->nFlags & beans::PropertyAttribute::READONLY ) != beans::PropertyAttribute::READONLY )
                 {
-                    const SfxPoolItem* pItem = _rItemSet.GetItem(pPropertyMap->nWID);
+                    const SfxPoolItem* pItem = _rItemSet.GetItem(aIt->nWID);
                     if ( pItem )
                     {
                         uno::Any aValue;
-                        pItem->QueryValue(aValue,pPropertyMap->nMemberId);
+                        pItem->QueryValue(aValue,aIt->nMemberId);
                         try
                         {
-                            _xShape->setPropertyValue(sPropertyName,aValue);
+                            _xShape->setPropertyValue(aIt->sName, aValue);
                         }
                         catch(uno::Exception&)
                         { // shapes have a bug so we ignore this one.
@@ -413,7 +319,7 @@ namespace
                     } // if ( pItem )
                 }
             }
-            ++pPropertyMap;
+            ++aIt;
         } // while ( pPropertyMap->pName )
     }
     // -------------------------------------------------------------------------
@@ -422,6 +328,8 @@ namespace
     {
         if ( !_rxReportControlFormat.is() )
             throw lang::NullPointerException();
+
+        uno::Reference< beans::XPropertySet > xSet(_rxReportControlFormat,uno::UNO_QUERY_THROW);
 
         // fill it
         const Font aFont( lcl_setFont(_rxReportControlFormat, _rItemSet,WESTERN,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_LANGUAGE,ITEMID_POSTURE,ITEMID_WEIGHT ) );
@@ -448,9 +356,13 @@ namespace
         _rItemSet.Put(SvxCharRotateItem(_rxReportControlFormat->getCharRotation(),sal_False,ITEMID_CHARROTATE));
         _rItemSet.Put(SvxCharScaleWidthItem(_rxReportControlFormat->getCharScaleWidth(),ITEMID_CHARSCALE_W));
 
-        _rItemSet.Put(SvxHorJustifyItem(lcl_MapHorizontalAlignment(_rxReportControlFormat->getParaAdjust()),ITEMID_HORJUSTIFY));
+        SvxHorJustifyItem aHorJustifyItem(ITEMID_HORJUSTIFY);
+        aHorJustifyItem.PutValue(xSet->getPropertyValue(PROPERTY_PARAADJUST),MID_HORJUST_ADJUST);
+        _rItemSet.Put(aHorJustifyItem);
         //_rItemSet.Put(SfxInt32Item(ITEMID_DEGREES,_rxReportControlFormat->getCharRotation()));
-        _rItemSet.Put(SvxVerJustifyItem(lcl_MapVerticalAlignment(_rxReportControlFormat->getParaVertAlignment()),ITEMID_VERJUSTIFY));
+        SvxVerJustifyItem aVerJustifyItem(ITEMID_VERJUSTIFY);
+        aVerJustifyItem.PutValue(xSet->getPropertyValue(PROPERTY_VERTICALALIGN),MID_HORJUST_ADJUST);
+        _rItemSet.Put(aVerJustifyItem);
         //_rItemSet.Put(SfxInt32Item(ITEMID_IDENT,_rxReportControlFormat->getCharRotation()));
 
         uno::Reference< report::XShape> xShape(_rxReportControlFormat,uno::UNO_QUERY);
@@ -567,12 +479,16 @@ namespace
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_HORJUSTIFY,sal_True,&pItem) && pItem->ISA(SvxHorJustifyItem))
         {
             const SvxHorJustifyItem* pJustifyItem = static_cast<const SvxHorJustifyItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_PARAADJUST, uno::makeAny( lcl_MapHorizontalAlignment( static_cast< SvxCellHorJustify >( pJustifyItem->GetEnumValue() ) ) ) );
+            uno::Any aValue;
+            pJustifyItem->QueryValue(aValue,MID_HORJUST_ADJUST);
+            lcl_pushBack( _out_rProperties, PROPERTY_PARAADJUST, aValue );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_VERJUSTIFY,sal_True,&pItem) && pItem->ISA(SvxVerJustifyItem))
         {
             const SvxVerJustifyItem* pJustifyItem = static_cast<const SvxVerJustifyItem*>(pItem);
-            lcl_pushBack( _out_rProperties, PROPERTY_VERTICALALIGN, uno::makeAny( lcl_MapVerticalAlignment( static_cast< SvxCellVerJustify >( pJustifyItem->GetEnumValue() ) ) ) );
+            uno::Any aValue;
+            pJustifyItem->QueryValue(aValue,MID_HORJUST_ADJUST);
+            lcl_pushBack( _out_rProperties, PROPERTY_VERTICALALIGN, aValue );
         }
         if ( SFX_ITEM_SET == _rItemSet.GetItemState( ITEMID_CHARRELIEF,sal_True,&pItem) && pItem->ISA(SvxCharReliefItem))
         {
@@ -722,7 +638,8 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         { SID_ATTR_CHAR_SCALEWIDTH, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_HIDDEN, SFX_ITEM_POOLABLE },
-        { SID_ATTR_BRUSH_CHAR, SFX_ITEM_POOLABLE },
+        //{ SID_ATTR_BRUSH_CHAR, SFX_ITEM_POOLABLE },
+        { SID_ATTR_BRUSH, SFX_ITEM_POOLABLE },
         { SID_ATTR_ALIGN_HOR_JUSTIFY, SFX_ITEM_POOLABLE },
         { SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEM_POOLABLE },
 
@@ -796,19 +713,17 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
         0
     };
 
-    bool bSuccess = false;
-    SfxItemPool* pPool = new SfxItemPool(String::CreateFromAscii("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, pDefaults);
+    SfxItemPool* pPool( new SfxItemPool(String::CreateFromAscii("ReportCharProperties"), ITEMID_FONT,ITEMID_WEIGHT_COMPLEX, aItemInfos, pDefaults) );
     // not needed for font height pPool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );  // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
-
+    bool bSuccess = false;
     try
     {
-
-        SfxItemSet aDescriptor( *pPool, pRanges );
-        lcl_CharPropertiesToItems( _rxReportControlFormat, aDescriptor );
+        ::std::auto_ptr<SfxItemSet> pDescriptor( new SfxItemSet( *pPool, pRanges ) );
+        lcl_CharPropertiesToItems( _rxReportControlFormat, *pDescriptor );
 
         {   // want the dialog to be destroyed before our set
-            ORptPageDialog aDlg(pParent, &aDescriptor, RID_PAGEDIALOG_CHAR);
+            ORptPageDialog aDlg(pParent, pDescriptor.get(),RID_PAGEDIALOG_CHAR);
             uno::Reference< report::XShape > xShape( _rxReportControlFormat, uno::UNO_QUERY );
             if ( xShape.is() )
                 aDlg.RemoveTabPage( RID_PAGE_BACKGROUND );
@@ -827,7 +742,6 @@ bool openCharDialog( const uno::Reference<report::XReportControlFormat >& _rxRep
     }
 
     SfxItemPool::Free(pPool);
-
     for (sal_uInt16 i=0; i<sizeof(pDefaults)/sizeof(pDefaults[0]); ++i)
         delete pDefaults[i];
 
@@ -854,16 +768,16 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
     try
     {
         SfxItemPool& rItemPool = pModel->GetItemPool();
-        SfxItemSet aDescriptor( rItemPool, rItemPool.GetFirstWhich(),rItemPool.GetLastWhich() );
+        ::std::auto_ptr<SfxItemSet> pDescriptor( new SfxItemSet( rItemPool, rItemPool.GetFirstWhich(),rItemPool.GetLastWhich() ) );
 
-        lcl_fillShapeToItems(_xShape, aDescriptor);
+        lcl_fillShapeToItems(_xShape,*pDescriptor);
 
         {   // want the dialog to be destroyed before our set
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-            ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent, &aDescriptor, pModel.get(), RID_SVXDLG_AREA ));
+            ::std::auto_ptr<AbstractSvxAreaTabDialog> pDialog(pFact->CreateSvxAreaTabDialog( pParent,pDescriptor.get(),pModel.get() ));
             // #i74099# by default, the dialog deletes the current color table if a different one is loaded
             // (see SwDrawShell::ExecDrawDlg)
-            const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( aDescriptor.GetItem(SID_COLOR_TABLE) );
+            const SvxColorTableItem* pColorItem = static_cast<const SvxColorTableItem*>( pDescriptor->GetItem(SID_COLOR_TABLE) );
             if (pColorItem && pColorItem->GetColorTable() == XColorTable::GetStdColorTable())
                 pDialog->DontDeleteColorTable();
             bSuccess = ( RET_OK == pDialog->Execute() );
@@ -872,6 +786,7 @@ bool openAreaDialog( const uno::Reference<report::XShape >& _xShape,const uno::R
                 lcl_fillItemsToShape(_xShape,*pDialog->GetOutputItemSet());
             }
         }
+
     }
     catch(uno::Exception&)
     {
@@ -915,7 +830,7 @@ void applyCharacterSettings( const uno::Reference< report::XReportControlFormat 
         lcl_applyFontAttribute( aSettings, PROPERTY_CHARCONTOURED, _rxReportControlFormat, &report::XReportControlFormat::setCharContoured );
         lcl_applyFontAttribute( aSettings, PROPERTY_CHARUNDERLINECOLOR, _rxReportControlFormat, &report::XReportControlFormat::setCharUnderlineColor );
         lcl_applyFontAttribute( aSettings, PROPERTY_PARAADJUST, _rxReportControlFormat, &report::XReportControlFormat::setParaAdjust );
-        lcl_applyFontAttribute( aSettings, PROPERTY_VERTICALALIGN, _rxReportControlFormat, &report::XReportControlFormat::setParaVertAlignment );
+        lcl_applyFontAttribute( aSettings, PROPERTY_VERTICALALIGN, _rxReportControlFormat, &report::XReportControlFormat::setVerticalAlign );
         lcl_applyFontAttribute( aSettings, PROPERTY_CHARRELIEF, _rxReportControlFormat, &report::XReportControlFormat::setCharRelief );
         lcl_applyFontAttribute( aSettings, PROPERTY_CHARHIDDEN, _rxReportControlFormat, &report::XReportControlFormat::setCharHidden );
         lcl_applyFontAttribute( aSettings, PROPERTY_CHARAUTOKERNING, _rxReportControlFormat, &report::XReportControlFormat::setCharAutoKerning );

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: resultcolumn.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,7 @@
 #ifndef _DBA_COREAPI_COLUMN_HXX_
 #include <column.hxx>
 #endif
+#include <boost/optional.hpp>
 namespace dbaccess
 {
     //************************************************************
@@ -50,6 +48,20 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xDBMetaData;
         sal_Int32                   m_nPos;
         ::com::sun::star::uno::Any  m_aIsRowVersion;
+        mutable ::boost::optional< sal_Bool > m_isSigned;
+        mutable ::boost::optional< sal_Bool > m_isCurrency;
+        mutable ::boost::optional< sal_Bool > m_bSearchable;
+        mutable ::boost::optional< sal_Bool > m_isCaseSensitive;
+        mutable ::boost::optional< sal_Bool > m_isReadOnly;
+        mutable ::boost::optional< sal_Bool > m_isWritable;
+        mutable ::boost::optional< sal_Bool > m_isDefinitelyWritable;
+        mutable ::boost::optional< sal_Bool > m_isAutoIncrement;
+        mutable ::boost::optional< sal_Int32 > m_isNullable;
+        mutable ::boost::optional< ::rtl::OUString > m_sColumnLabel;
+        mutable ::boost::optional< sal_Int32 > m_nColumnDisplaySize;
+        mutable ::boost::optional< sal_Int32 > m_nColumnType;
+        mutable ::boost::optional< sal_Int32 > m_nPrecision;
+        mutable ::boost::optional< sal_Int32 > m_nScale;
 
         virtual ~OResultColumn();
     public:

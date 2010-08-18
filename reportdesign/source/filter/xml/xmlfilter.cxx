@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlfilter.cxx,v $
- * $Revision: 1.10.12.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -566,8 +563,8 @@ sal_Bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             { MAP_LEN( "OldFormat" ), 1,    &::getCppuType((const sal_Bool*)0),                 beans::PropertyAttribute::BOUND,     0 },
             { MAP_LEN( "StreamName"), 0,    &::getCppuType( (::rtl::OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN("PrivateData"), 0,    &::getCppuType( (uno::Reference<XInterface> *)0 ),  beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "BaseURI"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
-            { MAP_LEN( "StreamRelPath"), 0,&::getCppuType( (::rtl::OUString *)0 ),beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "BaseURI"),    0,    &::getCppuType( (::rtl::OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "StreamRelPath"), 0, &::getCppuType( (::rtl::OUString *)0 ),             beans::PropertyAttribute::MAYBEVOID, 0 },
             { NULL, 0, 0, NULL, 0, 0 }
         };
         ::comphelper::MediaDescriptor aDescriptor(rDescriptor);

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UndoEnv.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,7 +36,7 @@
 #include <dllapi.h>
 #include <vector>
 
-// #include <svtools/lstner.hxx>
+// #include <svl/lstner.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/link.hxx>
 
@@ -68,13 +65,7 @@ namespace rptui
         // do not allow copy
         OXReportControllerObserver(const OXReportControllerObserver&);
         OXReportControllerObserver& operator=(const OXReportControllerObserver&);
-
-//  protected:
-
-        void switchListening(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxObject, sal_Bool _bStartListening);
-
-        /* virtual */ ~OXReportControllerObserver(); // UNO Object must have private destructor!
-
+        virtual  ~OXReportControllerObserver(); // UNO Object must have private destructor!
     public:
         OXReportControllerObserver(const OReportController& _rController);
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sbagrid.cxx,v $
- * $Revision: 1.83.6.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -121,7 +118,7 @@
 #endif
 
 #ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
+#include <svl/intitem.hxx>
 #endif
 
 #ifndef _SVX_ALGITEM_HXX //autogen
@@ -137,19 +134,19 @@
 #endif
 
 #ifndef _NUMUNO_HXX
-#include <svtools/numuno.hxx>
+#include <svl/numuno.hxx>
 #endif
 
 #ifndef _SFXITEMPOOL_HXX //autogen wg. SfxItemInfo
-#include <svtools/itempool.hxx>
+#include <svl/itempool.hxx>
 #endif
 
 #ifndef _SFXITEMSET_HXX //autogen wg. SfxItemSet
-#include <svtools/itemset.hxx>
+#include <svl/itemset.hxx>
 #endif
 
 #ifndef _SFXRNGITEM_HXX
-#include <svtools/rngitem.hxx>
+#include <svl/rngitem.hxx>
 #endif
 
 #ifndef _SV_WAITOBJ_HXX
@@ -160,7 +157,7 @@
 #endif
 
 #ifndef _ZFORLIST_HXX
-#include <svtools/zforlist.hxx>
+#include <svl/zforlist.hxx>
 #endif
 #ifndef _CPPUHELPER_QUERYINTERFACE_HXX_
 #include <cppuhelper/queryinterface.hxx>
@@ -983,9 +980,16 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
 
         rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, aNewItems.GetItemText(ID_BROWSER_ROWHEIGHT), 0, nPos++);
         rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, aNewItems.GetHelpId(ID_BROWSER_ROWHEIGHT));
+        rMenu.InsertSeparator(nPos++);
+    } // if (!IsReadOnlyDB())
+
+    if ( GetSelectRowCount() > 0 )
+    {
+        rMenu.InsertItem(ID_BROWSER_COPY, aNewItems.GetItemText(SID_COPY), 0, nPos++);
+        rMenu.SetHelpId(ID_BROWSER_COPY, aNewItems.GetHelpId(SID_COPY));
+
+        rMenu.InsertSeparator(nPos++);
     }
-    if (nPos)
-        rMenu.InsertSeparator(nPos);
 }
 
 //------------------------------------------------------------------------------
@@ -1144,6 +1148,9 @@ void SbaGridControl::PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu&
             break;
         case ID_BROWSER_ROWHEIGHT:
             SetRowHeight();
+            break;
+        case ID_BROWSER_COPY:
+            CopySelectedRowsToClipboard();
             break;
 
         default:
@@ -1418,44 +1425,51 @@ void SbaGridControl::DoColumnDrag(sal_uInt16 nColumnPos)
 }
 
 // -----------------------------------------------------------------------
-void SbaGridControl::DoRowDrag(sal_Int16 nRowPos)
+void SbaGridControl::CopySelectedRowsToClipboard()
 {
-    Reference< XPropertySet >  xDataSource(getDataSource(), UNO_QUERY);
-    DBG_ASSERT(xDataSource.is(), "SbaGridControl::DoRowDrag : invalid data source !");
+    DBG_ASSERT( GetSelectRowCount() > 0, "SbaGridControl::CopySelectedRowsToClipboard: invalid call!" );
+    implTransferSelectedRows( (sal_Int16)FirstSelectedRow(), true );
+}
+
+// -----------------------------------------------------------------------
+void SbaGridControl::DoRowDrag( sal_Int16 nRowPos )
+{
+    implTransferSelectedRows( nRowPos, false );
+}
+
+// -----------------------------------------------------------------------
+void SbaGridControl::implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag )
+{
+    Reference< XPropertySet > xForm( getDataSource(), UNO_QUERY );
+    DBG_ASSERT( xForm.is(), "SbaGridControl::implTransferSelectedRows: invalid form!" );
 
     // build the sequence of numbers of selected rows
     Sequence< Any > aSelectedRows;
+    sal_Bool bSelectionBookmarks = sal_True;
 
     // collect the affected rows
     if ((GetSelectRowCount() == 0) && (nRowPos >= 0))
     {
-        aSelectedRows.realloc(1);
+        aSelectedRows.realloc( 1 );
         aSelectedRows[0] <<= (sal_Int32)(nRowPos + 1);
+        bSelectionBookmarks = sal_False;
     }
     else if ( !IsAllSelected() && GetSelectRowCount() )
     {
-        aSelectedRows.realloc(GetSelectRowCount());
-        Any* pSelectedRows = aSelectedRows.getArray();
-
-        for (long nIdx = FirstSelectedRow();
-             nIdx >= 0;
-             nIdx = NextSelectedRow(), ++pSelectedRows)
-        {
-            (*pSelectedRows) <<= (sal_Int32)(nIdx + 1);
-        }
+        aSelectedRows = getSelectionBookmarks();
+        bSelectionBookmarks = sal_True;
     }
 
     Reference< XResultSet> xRowSetClone;
     try
     {
-        Reference< XResultSetAccess > xResultSetAccess(xDataSource,UNO_QUERY);
-        if ( xResultSetAccess.is() )
-            xRowSetClone = xResultSetAccess->createResultSet();
-
-        ODataClipboard* pTransfer = new ODataClipboard(xDataSource, aSelectedRows,xRowSetClone);
+        ODataClipboard* pTransfer = new ODataClipboard( xForm, aSelectedRows, bSelectionBookmarks, getServiceManager() );
 
         Reference< XTransferable > xEnsureDelete = pTransfer;
-        pTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
+        if ( _bTrueIfClipboardFalseIfDrag )
+            pTransfer->CopyToClipboard( this );
+        else
+            pTransfer->StartDrag(this, DND_ACTION_COPY | DND_ACTION_LINK);
     }
     catch(Exception&)
     {

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: viewcontainer.hxx,v $
- * $Revision: 1.18 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,12 +70,13 @@
 #include "FilteredContainer.hxx"
 #endif
 
+namespace dbtools
+{
+    class IWarningsContainer;
+}
+
 namespace dbaccess
 {
-    //==========================================================================
-    //= IWarningsContainer
-    //==========================================================================
-    class IWarningsContainer;
     typedef ::cppu::ImplHelper1< ::com::sun::star::container::XContainerListener> OViewContainer_Base;
 
     //==========================================================================
@@ -102,7 +100,7 @@ namespace dbaccess
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
                         sal_Bool _bCase,
                         IRefreshListener*   _pRefreshListener,
-                        IWarningsContainer* _pWarningsContainer,
+                        ::dbtools::IWarningsContainer* _pWarningsContainer,
                         oslInterlockedCount& _nInAppend
                         );
 

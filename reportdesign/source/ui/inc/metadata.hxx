@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: metadata.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -137,10 +134,10 @@ namespace rptui
     #define PROPERTY_ID_DEEPTRAVERSING                  25
     #define PROPERTY_ID_PREEVALUATED                    26
 
-    #define PROPERTY_ID_BACKCOLOR                       29
-    #define PROPERTY_ID_CONTROLBACKGROUND               30
     #define PROPERTY_ID_BACKTRANSPARENT                 27
     #define PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT    28
+    #define PROPERTY_ID_BACKCOLOR                       29
+    #define PROPERTY_ID_CONTROLBACKGROUND               30
 
     #define PROPERTY_ID_FORMULALIST                     31
     #define PROPERTY_ID_SCOPE                           32
@@ -151,6 +148,11 @@ namespace rptui
     #define PROPERTY_ID_PREVIEW_COUNT                   37
     #define PROPERTY_ID_AREA                            38
     #define PROPERTY_ID_MIMETYPE                        39
+
+    #define PROPERTY_ID_FONT                            40
+    #define PROPERTY_ID_PARAADJUST                      41
+    #define PROPERTY_ID_VERTICALALIGN                   42
+
 
 //............................................................................
 } // namespace rptui

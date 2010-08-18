@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: macromigrationdialog.hxx,v $
- * $Revision: 1.3.2.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,7 +68,7 @@ namespace dbmm
         virtual sal_Bool        prepareLeaveCurrentState( CommitPageReason _eReason );
         virtual sal_Bool        leaveState( WizardState _nState );
         virtual WizardState     determineNextState( WizardState _nCurrentState ) const;
-        virtual sal_Bool        onFinish( sal_Int32 _nResult );
+        virtual sal_Bool        onFinish();
 
         // Dialog overridables
         virtual BOOL    Close();

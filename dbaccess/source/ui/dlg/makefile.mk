@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.44 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,11 +51,15 @@ CFLAGS+=-fpermissive
 
 # ... resource files ............................
 
+
+LOCALIZE_ME=AutoControls_tmpl.hrc
+
 SRS1NAME=$(TARGET)
 SRC1FILES =	\
         AutoControls.src	\
         ConnectionPage.src	\
         UserAdmin.src		\
+        admincontrols.src   \
         directsql.src		\
         AdabasStat.src		\
         indexdialog.src		\
@@ -78,10 +78,8 @@ SRC1FILES =	\
         CollectionView.src	\
         dlgattr.src			\
         advancedsettings.src\
-        AdabasStatDlg.src	\
         UserAdminDlg.src	\
         sqlmessage.src      \
-        ExtensionNotPresent.src \
         textconnectionsettings.src
 
 
@@ -96,6 +94,7 @@ EXCEPTIONSFILES=						\
         $(SLO)$/RelationDlg.obj			\
         $(SLO)$/adtabdlg.obj			\
         $(SLO)$/dlgsave.obj				\
+        $(SLO)$/admincontrols.obj       \
         $(SLO)$/adminpages.obj			\
         $(SLO)$/queryorder.obj			\
         $(SLO)$/queryfilter.obj			\
@@ -109,7 +108,6 @@ EXCEPTIONSFILES=						\
         $(SLO)$/TextConnectionHelper.obj	\
         $(SLO)$/ConnectionPageSetup.obj	\
         $(SLO)$/DBSetupConnectionPages.obj 	\
-        $(SLO)$/AdabasStatDlg.obj		\
         $(SLO)$/UserAdminDlg.obj		\
         $(SLO)$/UserAdmin.obj			\
         $(SLO)$/AdabasStat.obj			\
@@ -121,15 +119,14 @@ EXCEPTIONSFILES=						\
         $(SLO)$/dbfindex.obj            \
         $(SLO)$/DriverSettings.obj      \
         $(SLO)$/odbcconfig.obj          \
-        $(SLO)$/ExtensionNotPresent.obj \
         $(SLO)$/advancedsettings.obj    \
-        $(SLO)$/datasourceui.obj	\
         $(SLO)$/textconnectionsettings.obj
 
 SLOFILES=								\
         $(EXCEPTIONSFILES)				\
         $(SLO)$/dlgsize.obj				\
-        $(SLO)$/dlgattr.obj 
+        $(SLO)$/dlgattr.obj             \
+        $(SLO)$/optionalboolitem.obj 
 
 .IF "$(WINDOWS_VISTA_PSDK)"!="" && "$(PROF_EDITION)"==""
 DISABLE_ADO=TRUE
@@ -140,7 +137,7 @@ SLOFILES+=		$(SLO)$/adodatalinks.obj
 .ENDIF
 
 # --- Targets ----------------------------------
-LOCALIZE_ME=AutoControls_tmpl.hrc
+#LOCALIZE_ME=AutoControls_tmpl.hrc
 
 .INCLUDE : target.mk
 

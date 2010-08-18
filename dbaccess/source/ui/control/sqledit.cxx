@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sqledit.cxx,v $
- * $Revision: 1.12.16.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@
 #include "undosqledit.hxx"
 #include "QueryDesignView.hxx"
 
-#include <svtools/smplhint.hxx>
+#include <svl/smplhint.hxx>
 
 //////////////////////////////////////////////////////////////////////////
 // OSqlEdit
@@ -67,8 +64,8 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
 
     ImplSetFont();
     // listen for change of Font and Color Settings
-    StartListening(m_SourceViewConfig);
-    StartListening(m_ColorConfig);
+    m_SourceViewConfig.AddListener( this );
+    m_ColorConfig.AddListener(this);
 
     //#i97044#
     EnableFocusSelectionHide( FALSE );
@@ -80,15 +77,16 @@ OSqlEdit::~OSqlEdit()
     DBG_DTOR(OSqlEdit,NULL);
     if (m_timerUndoActionCreation.IsActive())
         m_timerUndoActionCreation.Stop();
-    EndListening(m_SourceViewConfig);
-    EndListening(m_ColorConfig);
+    m_SourceViewConfig.RemoveListener(this);
+    m_ColorConfig.RemoveListener(this);
 }
 //------------------------------------------------------------------------------
 void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
 {
     DBG_CHKTHIS(OSqlEdit,NULL);
-    m_pView->getContainerWindow()->getDesignView()->getController().InvalidateFeature(SID_CUT);
-    m_pView->getContainerWindow()->getDesignView()->getController().InvalidateFeature(SID_COPY);
+    OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
+    rController.InvalidateFeature(SID_CUT);
+    rController.InvalidateFeature(SID_COPY);
 
     // Ist dies ein Cut, Copy, Paste Event?
     KeyFuncType aKeyFunc = rKEvt.GetKeyCode().GetFunction();
@@ -127,14 +125,15 @@ IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
     String aText  =GetText();
     if(aText != m_strOrigText)
     {
-        SfxUndoManager* pUndoMgr = m_pView->getContainerWindow()->getDesignView()->getController().getUndoMgr();
+        OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
+        SfxUndoManager* pUndoMgr = rController.getUndoMgr();
         OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( this );
 
         pUndoAct->SetOriginalText( m_strOrigText );
         pUndoMgr->AddUndoAction( pUndoAct );
 
-        m_pView->getContainerWindow()->getDesignView()->getController().InvalidateFeature(SID_UNDO);
-        m_pView->getContainerWindow()->getDesignView()->getController().InvalidateFeature(SID_REDO);
+        rController.InvalidateFeature(SID_UNDO);
+        rController.InvalidateFeature(SID_REDO);
 
         m_strOrigText  =aText;
     }
@@ -144,8 +143,9 @@ IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
 //------------------------------------------------------------------------------
 IMPL_LINK(OSqlEdit, OnInvalidateTimer, void*, EMPTYARG)
 {
-    m_pView->getContainerWindow()->getDesignView()->getController().InvalidateFeature(SID_CUT);
-    m_pView->getContainerWindow()->getDesignView()->getController().InvalidateFeature(SID_COPY);
+    OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
+    rController.InvalidateFeature(SID_CUT);
+    rController.InvalidateFeature(SID_COPY);
     if(!m_bStopTimer)
         m_timerInvalidate.Start();
     return 0L;
@@ -157,12 +157,13 @@ IMPL_LINK(OSqlEdit, ModifyHdl, void*, /*EMPTYTAG*/)
         m_timerUndoActionCreation.Stop();
     m_timerUndoActionCreation.Start();
 
-    if (!m_pView->getContainerWindow()->getDesignView()->getController().isModified())
-        m_pView->getContainerWindow()->getDesignView()->getController().setModified( sal_True );
+    OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
+    if (!rController.isModified())
+        rController.setModified( sal_True );
 
-    m_pView->getContainerWindow()->getDesignView()->getController().InvalidateFeature(SID_SBA_QRY_EXECUTE);
-    m_pView->getContainerWindow()->getDesignView()->getController().InvalidateFeature(SID_CUT);
-    m_pView->getContainerWindow()->getDesignView()->getController().InvalidateFeature(SID_COPY);
+    rController.InvalidateFeature(SID_SBA_QRY_EXECUTE);
+    rController.InvalidateFeature(SID_CUT);
+    rController.InvalidateFeature(SID_COPY);
 
     m_lnkTextModifyHdl.Call(NULL);
     return 0;
@@ -196,11 +197,11 @@ void OSqlEdit::startTimer()
         m_timerInvalidate.Start();
 }
 
-void OSqlEdit::Notify( SfxBroadcaster& rBC, const SfxHint& /*rHint*/ )
+void OSqlEdit::ConfigurationChanged( utl::ConfigurationBroadcaster* pOption, sal_uInt32 )
 {
-    if (&rBC == &m_SourceViewConfig)
+    if ( pOption == &m_SourceViewConfig )
         ImplSetFont();
-    else if (&rBC == &m_ColorConfig)
+    else if ( pOption == &m_ColorConfig )
         MultiLineEditSyntaxHighlight::UpdateData();
 }
 

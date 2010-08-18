@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stringlistitem.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,7 @@
 #define _DBAUI_STRINGLISTITEM_HXX_
 
 #ifndef _SFXPOOLITEM_HXX
-#include <svtools/poolitem.hxx>
+#include <svl/poolitem.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_

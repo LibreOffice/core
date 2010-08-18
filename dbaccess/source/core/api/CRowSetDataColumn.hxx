@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CRowSetDataColumn.hxx,v $
- * $Revision: 1.17 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,21 +27,13 @@
 #ifndef DBACCESS_CORE_API_CROWSETDATACOLUMN_HXX
 #define DBACCESS_CORE_API_CROWSETDATACOLUMN_HXX
 
-#ifndef _DBACORE_DATACOLUMN_HXX_
 #include "datacolumn.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_ROWSETROW_HXX
 #include "RowSetRow.hxx"
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include <connectivity/CommonTools.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
 #include "RowSetCacheIterator.hxx"
-#endif
+#include "columnsettings.hxx"
+
+#include <connectivity/CommonTools.hxx>
+#include <comphelper/proparrhlp.hxx>
 
 namespace dbaccess
 {
@@ -59,6 +48,7 @@ namespace dbaccess
         ORowSetCacheIterator        m_aColumnValue;
         ::com::sun::star::uno::Any  m_aOldValue;
 
+        ::rtl::OUString             m_sLabel;
         ::rtl::OUString             m_aDescription;     // description
         ORowSetBase*                m_pRowSet;
 
@@ -70,6 +60,7 @@ namespace dbaccess
                           sal_Int32 _nPos,
                           const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxDBMeta,
                           const ::rtl::OUString& _rDescription,
+                          const ::rtl::OUString& i_sLabel,
                           const ORowSetCacheIterator& _rColumnValue);
 
 
@@ -89,7 +80,6 @@ namespace dbaccess
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue )throw (::com::sun::star::uno::Exception);
 
         virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue);
-
     protected:
         using ODataColumn::getFastPropertyValue;
     };

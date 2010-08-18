@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RptObject.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -109,7 +106,6 @@ protected:
     virtual void SetSnapRectImpl(const Rectangle& _rRect) = 0;
     virtual SdrPage* GetImplPage() const = 0;
     virtual void SetObjectItemHelper(const SfxPoolItem& rItem);
-    sal_Bool IsInside(const Rectangle& _rRect,const Point& rPnt,USHORT nTol) const;
 
     /** called by instances of derived classes to implement their overloading of getUnoShape
     */
@@ -125,6 +121,7 @@ public:
     void EndListening(sal_Bool bRemoveListener = sal_True);
     // PropertyChangeListener
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void initializeOle() {}
 
     sal_Bool        supportsService( const ::rtl::OUString& _sServiceName ) const;
 
@@ -175,8 +172,6 @@ public:
     virtual ~OCustomShape();
 
     virtual sal_Int32   GetStep() const;
-
-    virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
@@ -193,6 +188,7 @@ class REPORTDESIGN_DLLPUBLIC OOle2Obj: public SdrOle2Obj , public OObjectBase
     friend class DlgEdFactory;
 
     UINT16 m_nType;
+    bool    m_bOnlyOnce;
     void impl_createDataProvider_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
 public:
     static OOle2Obj* Create( const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent,UINT16 _nType )
@@ -218,8 +214,6 @@ public:
     virtual ~OOle2Obj();
 
     virtual sal_Int32   GetStep() const;
-
-    virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getUnoShape();
@@ -227,6 +221,7 @@ public:
     virtual UINT32 GetObjInventor() const;
     // Clone() soll eine komplette Kopie des Objektes erzeugen.
     virtual SdrObject* Clone() const;
+    virtual void initializeOle();
 
     void initializeChart( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel>& _xModel);
 };
@@ -263,8 +258,6 @@ public:
     TYPEINFO();
 
     virtual sal_Int32   GetStep() const;
-
-    virtual SdrObject* CheckHit(const Point& rPnt,USHORT nTol,const SetOfByte*) const;
     virtual void _propertyChange( const  ::com::sun::star::beans::PropertyChangeEvent& evt ) throw(::com::sun::star::uno::RuntimeException);
 
     /** creates the m_xMediator when it doesn't already exist.

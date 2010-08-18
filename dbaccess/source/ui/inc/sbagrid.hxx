@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sbagrid.hxx,v $
- * $Revision: 1.31 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -299,6 +296,12 @@ namespace dbaui
         virtual ::rtl::OUString GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType eObjType,sal_Int32 _nPosition = -1) const;
 
         virtual void DeleteSelectedRows();
+        /** copies the currently selected rows to the clipboard
+            @precond
+                at least one row is selected
+        */
+        void CopySelectedRowsToClipboard();
+
 
     protected:
         // DragSourceHelper overridables
@@ -348,6 +351,7 @@ namespace dbaui
 
     private:
         sal_Bool    IsReadOnlyDB() const;
+        void implTransferSelectedRows( sal_Int16 nRowPos, bool _bTrueIfClipboardFalseIfDrag );
 
     private:
         using FmGridControl::AcceptDrop;

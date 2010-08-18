@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: indexdialog.cxx,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,8 +99,9 @@ namespace dbaui
             return sal_False;
 
         ConstIndexFieldsIterator aLeft = _rLHS.begin();
+        ConstIndexFieldsIterator aLeftEnd = _rLHS.end();
         ConstIndexFieldsIterator aRight = _rRHS.begin();
-        for (; aLeft != _rLHS.end(); ++aLeft, ++aRight)
+        for (; aLeft != aLeftEnd; ++aLeft, ++aRight)
         {
             if (*aLeft != *aRight)
                 return sal_False;
@@ -219,7 +217,7 @@ DBG_NAME(DbaIndexDialog)
         ,m_aDescription                     (this, ModuleRes(FT_DESCRIPTION))
         ,m_aUnique                          (this, ModuleRes(CB_UNIQUE))
         ,m_aFieldsLabel                     (this, ModuleRes(FT_FIELDS))
-        ,m_pFields(new IndexFieldsControl   (this, ModuleRes(CTR_FIELDS),_nMaxColumnsInIndex))
+        ,m_pFields(new IndexFieldsControl   (this, ModuleRes(CTR_FIELDS),_nMaxColumnsInIndex,::dbtools::getBooleanDataSourceSetting( m_xConnection, "AddIndexAppendix" )))
         ,m_aClose                           (this, ModuleRes(PB_CLOSE))
         ,m_aHelp                            (this, ModuleRes(HB_HELP))
         ,m_pIndexes(NULL)
@@ -341,7 +339,7 @@ DBG_NAME(DbaIndexDialog)
     //------------------------------------------------------------------
     void DbaIndexDialog::fillIndexList()
     {
-        sal_Bool bHiContrast = GetBackground().GetColor().IsDark();
+        sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
         Image aPKeyIcon(ModuleRes( bHiContrast ? IMG_PKEYICON_SCH : IMG_PKEYICON));
         // fill the list with the index names
         m_aIndexes.Clear();

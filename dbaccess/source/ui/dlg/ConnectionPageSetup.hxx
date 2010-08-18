@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConnectionPageSetup.hxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -92,7 +89,7 @@ namespace dbaui
         virtual BOOL        FillItemSet (SfxItemSet& _rCoreAttrs);
 
         virtual void        implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
-        virtual sal_Bool    commitPage( CommitPageReason _eReason );
+        virtual sal_Bool    commitPage( ::svt::WizardTypes::CommitPageReason _eReason );
 
 
         inline void enableConnectionURL() { m_aConnectionURL.SetReadOnly(sal_False); }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportControlModel.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -150,14 +147,6 @@ void OReportControlModel::checkIndex(sal_Int32 _nIndex)
 {
     if ( _nIndex < 0 || static_cast<sal_Int32>(m_aFormatConditions.size()) <= _nIndex )
         throw lang::IndexOutOfBoundsException();
-}
-// -----------------------------------------------------------------------------
-void OReportControlModel::dispose()
-{
-    m_aFormatConditions.clear();
-    lang::EventObject aDisposeEvent( m_pOwner );
-    aContainerListeners.disposeAndClear( aDisposeEvent );
-    m_aFormatConditions.clear();
 }
 // -----------------------------------------------------------------------------
 bool OReportControlModel::isInterfaceForbidden(const uno::Type& _rType)

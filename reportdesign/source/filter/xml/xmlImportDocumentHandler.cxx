@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlImportDocumentHandler.cxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,6 +30,8 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/chart2/data/DatabaseDataProvider.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
+#include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <comphelper/sequence.hxx>
@@ -58,7 +57,7 @@ using namespace ::xmloff::token;
 ::rtl::OUString lcl_createAttribute(const xmloff::token::XMLTokenEnum& _eNamespace,const xmloff::token::XMLTokenEnum& _eAttribute);
 
 ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentContext > const & context) :
-    m_xContext(context)
+     m_xContext(context)
 {
 }
 // -----------------------------------------------------------------------------
@@ -121,6 +120,37 @@ void SAL_CALL ImportDocumentHandler::startDocument() throw (uno::RuntimeExceptio
 void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException, xml::sax::SAXException)
 {
     m_xDelegatee->endDocument();
+    uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
+    if ( xReceiver.is() )
+    {
+        // this fills the chart again
+        uno::Sequence< beans::PropertyValue > aArgs( 4 );
+        aArgs[0] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+            uno::makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("all")) ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[1] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("HasCategories"), -1,
+            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[2] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+            uno::makeAny( sal_True ), beans::PropertyState_DIRECT_VALUE );
+        aArgs[3] = beans::PropertyValue(
+            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+            uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
+
+        uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xModel->getDataProvider(),uno::UNO_QUERY);
+        if ( xDataProvider.is() )
+        {
+            aArgs.realloc(5);
+            uno::Sequence< uno::Sequence< ::rtl::OUString > > aColumnNames = xDataProvider->getComplexColumnDescriptions();
+            aArgs[4] = beans::PropertyValue(
+                ::rtl::OUString::createFromAscii("ComplexColumnDescriptions"), -1,
+                uno::makeAny( aColumnNames ), beans::PropertyState_DIRECT_VALUE );
+        }
+        xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
+
+        xReceiver->setArguments( aArgs );
+    }
 }
 
 void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & _xAttrList) throw (uno::RuntimeException, xml::sax::SAXException)
@@ -167,7 +197,6 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
                         break;
                 }
             }
-            m_xDatabaseDataProvider->execute();
         }
         catch(uno::Exception&)
         {
@@ -224,10 +253,42 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         bExport = false;
     else if ( _sName.equalsAscii("chart:plot-area"))
     {
+        sal_Bool bHasCategories = sal_True;
+        const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
+        ::std::auto_ptr<SvXMLTokenMap> pMasterElemTokenMap( OXMLHelper::GetSubDocumentElemTokenMap());
+        for(sal_Int16 i = 0; i < nLength; ++i)
+        {
+            ::rtl::OUString sLocalName;
+            const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
+            const sal_Int32 nColonPos = sAttrName.indexOf( sal_Unicode(':') );
+            if( -1L == nColonPos )
+                sLocalName = sAttrName;
+            else
+                sLocalName = sAttrName.copy( nColonPos + 1L );
+            if ( sLocalName.equalsAscii("data-source-has-labels") )
+            {
+                const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+                bHasCategories = sValue.equalsAscii("both");
+                break;
+            }
+        } // for(sal_Int16 i = 0; i < nLength; ++i)
+        beans::PropertyValue* pArgIter = m_aArguments.getArray();
+        beans::PropertyValue* pArgEnd  = pArgIter + m_aArguments.getLength();
+        for(;pArgIter != pArgEnd;++pArgIter)
+        {
+            if ( pArgIter->Name.equalsAscii("HasCategories") )
+            {
+                pArgIter->Value <<= bHasCategories;
+                break;
+            }
+        } // for(;pArgIter != pArgEnd;++pArgIter)
+
+
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         xNewAttribs = pList;
         pList->AppendAttributeList(_xAttrList);
         pList->AddAttribute(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("table:cell-range-address")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("local-table.$A$1:.$Z$65536")));
+
     }
 
     if ( bExport )
@@ -239,7 +300,9 @@ void SAL_CALL ImportDocumentHandler::endElement(const ::rtl::OUString & _sName) 
     bool bExport = true;
     ::rtl::OUString sNewName = _sName;
     if ( _sName.equalsAscii("office:report") )
+    {
         sNewName = lcl_createAttribute(XML_NP_OFFICE,XML_CHART);
+    }
     else if ( _sName.equalsAscii("rpt:master-detail-fields") )
     {
         if ( !m_aMasterFields.empty() )
@@ -302,7 +365,9 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 
         uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
         xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
-    }
+    } // if ( !m_xDatabaseDataProvider.is() )
+
+    m_aArguments = m_xDatabaseDataProvider->detectArguments(NULL);
 
     uno::Reference< reflection::XProxyFactory > xProxyFactory( m_xContext->getServiceManager()->createInstanceWithContext(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory")),m_xContext),

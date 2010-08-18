@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: sdbcoretools.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,30 +28,26 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACORE_SDBCORETOOLS_HXX
 #include "sdbcoretools.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
-#include <com/sun/star/util/XModifiable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
+
+/** === begin UNO includes === **/
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
+#include <com/sun/star/task/XInteractionRequestStringResolver.hpp>
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+/** === end UNO includes === **/
+
+#include <tools/diagnose_ex.h>
+#include <tools/debug.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/interaction.hxx>
+#include <rtl/ref.hxx>
+#include <rtl/ustrbuf.hxx>
 
 //.........................................................................
 namespace dbaccess
@@ -64,9 +57,12 @@ namespace dbaccess
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
+    using namespace ::com::sun::star::io;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::task;
+    using namespace ::com::sun::star::embed;
     using namespace ::com::sun::star::container;
 
     // =========================================================================
@@ -96,40 +92,83 @@ namespace dbaccess
         return xReturn;
     }
 
-    // -------------------------------------------------------------------------
-    bool getDataSourceSetting( const Reference< XInterface >& _rxDataSource, const sal_Char* _pAsciiSettingsName,
-        Any& /* [out] */ _rSettingsValue )
+// -----------------------------------------------------------------------------
+    ::rtl::OUString extractExceptionMessage( const ::comphelper::ComponentContext& _rContext, const Any& _rError )
     {
-        bool bIsPresent = false;
+        ::rtl::OUString sDisplayMessage;
+
         try
         {
-            Reference< XPropertySet > xDataSource( _rxDataSource, UNO_QUERY );
-            OSL_ENSURE( xDataSource.is(), "getDataSourceSetting: invalid data source object!" );
-            if ( !xDataSource.is() )
-                return false;
-
-            Sequence< PropertyValue > aSettings;
-            OSL_VERIFY( xDataSource->getPropertyValue( PROPERTY_INFO ) >>= aSettings );
-            const PropertyValue* pSetting = aSettings.getConstArray();
-            const PropertyValue* pSettingEnd = aSettings.getConstArray() + aSettings.getLength();
-            for ( ; pSetting != pSettingEnd; ++pSetting )
+            Reference< XInteractionRequestStringResolver > xStringResolver;
+            if ( _rContext.createComponent( "com.sun.star.task.InteractionRequestStringResolver", xStringResolver ) )
             {
-                if ( pSetting->Name.equalsAscii( _pAsciiSettingsName ) )
-                {
-                    _rSettingsValue = pSetting->Value;
-                    bIsPresent = true;
-                    break;
-                }
+                ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest( new ::comphelper::OInteractionRequest( _rError ) );
+                ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
+                pRequest->addContinuation( pApprove.get() );
+                Optional< ::rtl::OUString > aMessage = xStringResolver->getStringFromInformationalRequest( pRequest.get() );
+                if ( aMessage.IsPresent )
+                    sDisplayMessage = aMessage.Value;
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "getDataSourceSetting: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
-        return bIsPresent;
+
+        if ( !sDisplayMessage.getLength() )
+        {
+            Exception aExcept;
+            _rError >>= aExcept;
+
+            ::rtl::OUStringBuffer aBuffer;
+            aBuffer.append( _rError.getValueTypeName() );
+            aBuffer.appendAscii( ":\n" );
+            aBuffer.append( aExcept.Message );
+
+            sDisplayMessage = aBuffer.makeStringAndClear();
+        }
+
+        return sDisplayMessage;
     }
 
-// -----------------------------------------------------------------------------
+    namespace tools { namespace stor {
+
+    // -----------------------------------------------------------------------------
+    bool storageIsWritable_nothrow( const Reference< XStorage >& _rxStorage )
+    {
+        if ( !_rxStorage.is() )
+            return false;
+
+        sal_Int32 nMode = ElementModes::READ;
+        try
+        {
+            Reference< XPropertySet > xStorageProps( _rxStorage, UNO_QUERY_THROW );
+            xStorageProps->getPropertyValue(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenMode" ) ) ) >>= nMode;
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return ( nMode & ElementModes::WRITE ) != 0;
+    }
+
+    // -----------------------------------------------------------------------------
+    bool commitStorageIfWriteable( const Reference< XStorage >& _rxStorage ) SAL_THROW(( IOException, WrappedTargetException, RuntimeException ))
+    {
+        bool bSuccess = false;
+        Reference< XTransactedObject > xTrans( _rxStorage, UNO_QUERY );
+        if ( xTrans.is() )
+        {
+            if ( storageIsWritable_nothrow( _rxStorage ) )
+                xTrans->commit();
+            bSuccess = true;
+        }
+        return bSuccess;
+    }
+
+    } } // tools::stor
+
 //.........................................................................
 }   // namespace dbaccess
 //.........................................................................

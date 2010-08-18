@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RTableConnectionData.hxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,9 +61,9 @@ namespace dbaui
         sal_Int32 m_nDeleteRules;
         sal_Int32 m_nCardinality;
 
-        BOOL checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xKeys,EConnectionSide _eEConnectionSide) const;
-        BOOL IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getKeys(),JTCS_FROM); }
-        BOOL IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getKeys(),JTCS_TO);        }
+        BOOL checkPrimaryKey(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const;
+        BOOL IsSourcePrimKey()  const { return checkPrimaryKey(getReferencingTable()->getTable(),JTCS_FROM);    }
+        BOOL IsDestPrimKey()    const { return checkPrimaryKey(getReferencedTable()->getTable(),JTCS_TO);       }
 
     protected:
         virtual OConnectionLineDataRef CreateLineDataObj();

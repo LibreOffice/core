@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RTableConnectionData.cxx,v $
- * $Revision: 1.16 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,42 +27,23 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_RTABLECONNECTIONDATA_HXX
 #include "RTableConnectionData.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_KEYRULE_HPP_
 #include <com/sun/star/sdbc/KeyRule.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_KEYTYPE_HPP_
 #include <com/sun/star/sdbcx/KeyType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDROP_HPP_
 #include <com/sun/star/sdbcx/XDrop.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
 #include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
-#ifndef DBAUI_TOOLS_HXX
+#include "dbu_rel.hrc"
 #include "UITools.hxx"
-#endif
+#include "moduledbu.hxx"
+#include <connectivity/dbexception.hxx>
+#include <connectivity/dbtools.hxx>
+
 using namespace dbaui;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
@@ -158,7 +136,8 @@ void ORelationTableConnectionData::ChangeOrientation()
     // Source- und DestFieldName der Linien austauschen
     ::rtl::OUString sTempString;
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-    for(;aIter != m_vConnLineData.end();++aIter)
+    OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+    for(;aIter != aEnd;++aIter)
     {
         sTempString = (*aIter)->GetSourceFieldName();
         (*aIter)->SetSourceFieldName( (*aIter)->GetDestFieldName() );
@@ -195,34 +174,29 @@ void ORelationTableConnectionData::SetCardinality()
 
 }
 // -----------------------------------------------------------------------------
-BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XIndexAccess>& _xKeys,EConnectionSide _eEConnectionSide) const
+BOOL ORelationTableConnectionData::checkPrimaryKey(const Reference< XPropertySet>& i_xTable,EConnectionSide _eEConnectionSide) const
 {
     // check if Table has the primary key column dependig on _eEConnectionSide
     USHORT  nPrimKeysCount      = 0,
             nValidLinesCount    = 0;
-    ::std::vector<Reference<XNameAccess> > vKeyColumns  = ::dbaui::getKeyColumns(_xKeys,KeyType::PRIMARY);
-    if ( vKeyColumns.size() == 1 )
+    const Reference< XNameAccess> xKeyColumns = dbtools::getPrimaryKeyColumns_throw(i_xTable);
+    if ( xKeyColumns.is() )
     {
-//      OSL_ENSURE(vKeyColumns.size()==1,"There can be only one primary key in a table!");
-        Sequence< ::rtl::OUString> aKeyColumns;
-        Reference<XNameAccess> xKeyColumns = *vKeyColumns.begin();
-        if ( xKeyColumns.is() )
-        {
-            aKeyColumns = xKeyColumns->getElementNames();
-            const ::rtl::OUString* pKeyIter = aKeyColumns.getConstArray();
-            const ::rtl::OUString* pKeyEnd  = pKeyIter + aKeyColumns.getLength();
+        Sequence< ::rtl::OUString> aKeyColumns = xKeyColumns->getElementNames();
+        const ::rtl::OUString* pKeyIter = aKeyColumns.getConstArray();
+        const ::rtl::OUString* pKeyEnd  = pKeyIter + aKeyColumns.getLength();
 
-            for(;pKeyIter != pKeyEnd;++pKeyIter)
+        for(;pKeyIter != pKeyEnd;++pKeyIter)
+        {
+            OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
+            OConnectionLineDataVec::const_iterator aEnd = m_vConnLineData.end();
+            for(;aIter != aEnd;++aIter)
             {
-                OConnectionLineDataVec::const_iterator aIter = m_vConnLineData.begin();
-                for(;aIter != m_vConnLineData.end();++aIter)
+                ++nValidLinesCount;
+                if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyIter )
                 {
-                    ++nValidLinesCount;
-                    if ( (*aIter)->GetFieldName(_eEConnectionSide) == *pKeyIter )
-                    {
-                        ++nPrimKeysCount;
-                        break;
-                    }
+                    ++nPrimKeysCount;
+                    break;
                 }
             }
         }
@@ -358,7 +332,8 @@ BOOL ORelationTableConnectionData::Update()
         if ( xColumnFactory.is() )
         {
             OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-            for(;aIter != m_vConnLineData.end();++aIter)
+            OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+            for(;aIter != aEnd;++aIter)
             {
                 if((*aIter)->GetSourceFieldName().getLength() && (*aIter)->GetDestFieldName().getLength())
                 {
@@ -381,7 +356,8 @@ BOOL ORelationTableConnectionData::Update()
 
     // get the name of foreign key // search for columns
     m_aConnName = ::rtl::OUString();
-    xKey = NULL;
+xKey.clear();
+    bool bDropRelation = false;
     for(sal_Int32 i=0;i<xKeys->getCount();++i)
     {
         xKeys->getByIndex(i) >>= xKey;
@@ -411,7 +387,8 @@ BOOL ORelationTableConnectionData::Update()
                         xColumn->getPropertyValue(PROPERTY_RELATEDCOLUMN)   >>= sRelatedColumn;
 
                         OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-                        for(;aIter != m_vConnLineData.end();++aIter)
+                        OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+                        for(;aIter != aEnd;++aIter)
                         {
                             if(    (*aIter)->GetSourceFieldName() == sName
                                 && (*aIter)->GetDestFieldName() == sRelatedColumn )
@@ -426,6 +403,7 @@ BOOL ORelationTableConnectionData::Update()
                     {
                         xKey->getPropertyValue(PROPERTY_NAME) >>= sName;
                         m_aConnName = sName;
+                        bDropRelation = aNames.getLength() == 0; // the key contains no column, so it isn't valid and we have to drop it
                         //here we already know our column structure so we don't have to recreate the table connection data
                         xColSup.clear();
                         break;
@@ -436,16 +414,21 @@ BOOL ORelationTableConnectionData::Update()
                 }
             }
         }
-        xKey = NULL;
+    xKey.clear();
+    } // for(sal_Int32 i=0;i<xKeys->getCount();++i)
+    if ( bDropRelation )
+    {
+        DropRelation();
+        String sError(ModuleRes(STR_QUERY_REL_COULD_NOT_CREATE));
+        ::dbtools::throwGenericSQLException(sError,NULL);
     }
 
 //  OSL_ENSURE(xKey.is(),"No key found have insertion!");
 
+    // The fields the relation marks may not be the same as our LineDatas mark after the relation has been updated
     if ( xColSup.is() )
     {
-        // The fields the relation marks may not be the same as our LineDatas mark after the relation has been updated
         OConnectionLineDataVec().swap(m_vConnLineData);
-
         Reference<XNameAccess> xColumns = xColSup->getColumns();
         Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
         const ::rtl::OUString* pIter = aNames.getConstArray();
@@ -470,7 +453,7 @@ BOOL ORelationTableConnectionData::Update()
                 m_vConnLineData.push_back(pNewData);
             }
         }
-    }
+    } // if ( xColSup.is() )
     // NOTE : the caller is resposible for updating any other objects referencing the old LineDatas (for instance a ConnLine)
 
     ////////////////////////////////////////////////////////////

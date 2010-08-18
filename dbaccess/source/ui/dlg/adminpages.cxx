@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: adminpages.cxx,v $
- * $Revision: 1.52.40.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,70 +28,34 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBAUI_ADMINPAGES_HXX_
 #include "adminpages.hxx"
-#endif
-#ifndef _DBAUI_DBADMIN_HRC_
 #include "dbadmin.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
-#include "dbu_dlg.hrc"
-#endif
-#ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
-#include "dsitems.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _DBAUI_DBADMIN_HXX_
 #include "dbadmin.hxx"
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef _DBAUI_SQLMESSAGE_HXX_
+#include "dbu_dlg.hrc"
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include "dbustrings.hrc"
+#include "dsitems.hxx"
+#include "dsselect.hxx"
+#include "localresaccess.hxx"
+#include "odbcconfig.hxx"
+#include "optionalboolitem.hxx"
 #include "sqlmessage.hxx"
-#endif
-#ifndef _SV_ACCEL_HXX
+
+#include <osl/file.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
 #include <vcl/accel.hxx>
-#endif
+#include <vcl/button.hxx>
+#include <vcl/edit.hxx>
+#include <vcl/field.hxx>
+#include <vcl/lstbox.hxx>
+#include <vcl/msgbox.hxx>
+
 #include <algorithm>
 #include <stdlib.h>
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-#ifndef _DBAUI_DSSELECT_HXX_
-#include "dsselect.hxx"
-#endif
-#ifndef _DBAUI_ODBC_CONFIG_HXX_
-#include "odbcconfig.hxx"
-#endif
-#ifndef _DBAUI_LOCALRESACCESS_HXX_
-#include "localresaccess.hxx"
-#endif
-#ifndef _SV_FIELD_HXX
-#include <vcl/field.hxx>
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_EDIT_HXX
-#include <vcl/edit.hxx>
-#endif
-#ifndef _SV_BUTTON_HXX
-#include <vcl/button.hxx>
-#endif
-
-
 
 //.........................................................................
 namespace dbaui
@@ -183,7 +144,7 @@ namespace dbaui
         return 0L;
     }
     // -----------------------------------------------------------------------
-    sal_Bool OGenericAdministrationPage::getSelectedDataSource(::dbaccess::DATASOURCE_TYPE _eType,::rtl::OUString& _sReturn,::rtl::OUString& _sCurr)
+    sal_Bool OGenericAdministrationPage::getSelectedDataSource(::rtl::OUString& _sReturn,::rtl::OUString& _sCurr)
     {
         // collect all ODBC data source names
         StringBag aOdbcDatasources;
@@ -202,7 +163,7 @@ namespace dbaui
         {
             aEnumeration.getDatasourceNames(aOdbcDatasources);
             // excute the select dialog
-            ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, _eType);
+            ODatasourceSelectDialog aSelector(GetParent(), aOdbcDatasources, false);
             if (_sCurr.getLength())
                 aSelector.Select(_sCurr);
             if ( RET_OK == aSelector.Execute() )
@@ -243,9 +204,14 @@ namespace dbaui
             Reset(*m_pItemSetHelper->getOutputSet());
     }
     // -----------------------------------------------------------------------
-    sal_Bool OGenericAdministrationPage::commitPage( CommitPageReason )
+    sal_Bool OGenericAdministrationPage::commitPage( ::svt::WizardTypes::CommitPageReason )
     {
         return sal_True;
+    }
+    // -----------------------------------------------------------------------
+    bool OGenericAdministrationPage::canAdvance() const
+    {
+        return true;
     }
     // -----------------------------------------------------------------------
     void OGenericAdministrationPage::fillBool( SfxItemSet& _rSet, CheckBox* _pCheckBox, USHORT _nID, sal_Bool& _bChangedSomething, bool _bRevertValue )
@@ -256,7 +222,16 @@ namespace dbaui
             if ( _bRevertValue )
                 bValue = !bValue;
 
-            _rSet.Put( SfxBoolItem( _nID, bValue ) );
+            if ( _pCheckBox->IsTriStateEnabled() )
+            {
+                OptionalBoolItem aValue( _nID );
+                if ( _pCheckBox->GetState() != STATE_DONTKNOW )
+                    aValue.SetValue( bValue );
+                _rSet.Put( aValue );
+            }
+            else
+                _rSet.Put( SfxBoolItem( _nID, bValue ) );
+
             _bChangedSomething = sal_True;
         }
     }
@@ -339,16 +314,22 @@ namespace dbaui
     }
 
 
-    Point OGenericAdministrationPage::MovePoint(Point _aPixelBasePoint, sal_Int32 _XShift, sal_Int32 _YShift)
+    //=========================================================================
+    //= LayoutHelper
+    //=========================================================================
+    //-------------------------------------------------------------------------
+    void LayoutHelper::positionBelow( const Control& _rReference, Control& _rControl, const ControlRelation _eRelation,
+        const long _nIndentAppFont )
     {
-        Point rLogicPoint = PixelToLogic( _aPixelBasePoint, MAP_APPFONT );
-        sal_uInt32 XPos = rLogicPoint.X() + _XShift;
-        sal_uInt32 YPos = rLogicPoint.Y() + _YShift;
-        Point aNewPixelPoint = LogicToPixel(Point(XPos, YPos), MAP_APPFONT);
-        return aNewPixelPoint;
+        Point aReference = _rReference.GetPosPixel();
+        aReference.Y() += _rReference.GetSizePixel().Height();
+
+        const Window* pConverter = _rControl.GetParent();
+        Size aOffset = pConverter->LogicToPixel( Size( _nIndentAppFont, ( _eRelation == RelatedControls ? 3 : 6 ) ), MAP_APPFONT );
+
+        Point aControlPos( aReference.X() + aOffset.Width(), aReference.Y() + aOffset.Height() );
+        _rControl.SetPosPixel( aControlPos );
     }
-
-
 
 //.........................................................................
 }   // namespace dbaui

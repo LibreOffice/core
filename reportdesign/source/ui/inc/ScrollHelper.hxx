@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ScrollHelper.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -106,7 +103,6 @@ namespace rptui
         rtl::OUString           GetInsertObjString() const;
         void                    setGridSnap(BOOL bOn);
         void                    setDragStripes(BOOL bOn);
-        BOOL                    isDragStripes() const;
         /** copies the current selection in this section
         */
         void Copy();
@@ -115,7 +111,7 @@ namespace rptui
         *
         * \return <TRUE/> if paste is allowed
         */
-        BOOL IsPasteAllowed();
+        BOOL IsPasteAllowed() const;
 
         /** paste a new control in this section
         */
@@ -132,7 +128,7 @@ namespace rptui
 
         /** returns <TRUE/> when a object is marked
         */
-        BOOL HasSelection();
+        BOOL HasSelection() const;
 
         /** removes the section at the given position.
         *

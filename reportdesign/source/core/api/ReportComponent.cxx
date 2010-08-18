@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportComponent.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,10 +38,13 @@
 #include "ReportControlModel.hxx"
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
-// #include <svx/unoshape.hxx>
-#include <svx/unolingu.hxx>
-#include <svtools/syslocale.hxx>
-#include <svtools/lingucfg.hxx>
+#include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
+#include <editeng/unolingu.hxx>
+#include <unotools/syslocale.hxx>
+#include <unotools/lingucfg.hxx>
+#include <i18npool/mslangid.hxx>
+
 // =============================================================================
 namespace reportdesign
 {
@@ -73,14 +73,14 @@ void lcl_getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont,Langu
         rCTLFont = OutputDevice::GetDefaultFont( DEFAULTFONT_CTL_PRESENTATION, _eCTL, DEFAULTFONT_FLAGS_ONLYONE ) ;
 }
 OFormatProperties::OFormatProperties()
-    :nAlign(0)
+    :nAlign(style::ParagraphAdjust_LEFT)
     ,nFontEmphasisMark(0)
     ,nFontRelief(0)
     ,nTextColor(0)
     ,nTextLineColor(0)
     ,nCharUnderlineColor(0xFFFFFFFF)
     ,nBackgroundColor(COL_TRANSPARENT)
-    ,aVerticalAlignment(text::ParagraphVertAlign::TOP)
+    ,aVerticalAlignment( style::VerticalAlignment_TOP )
     ,nCharEscapement(0)
     ,nCharCaseMap(0)
     ,nCharKerning(0)
@@ -96,12 +96,14 @@ OFormatProperties::OFormatProperties()
     try
     {
         SvtLinguConfig aLinguConfig;
+        using namespace ::com::sun::star::i18n::ScriptType;
+
         aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale"))) >>= aCharLocale;
-        LanguageType eCurLang = SvxLocaleToLanguage( aCharLocale );
+        LanguageType eCurLang = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aCharLocale), LATIN);
         aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale_CJK")))  >>= aCharLocaleAsian;
-        LanguageType eCurLangCJK = SvxLocaleToLanguage( aCharLocaleAsian );
+        LanguageType eCurLangCJK = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aCharLocaleAsian), ASIAN);
         aLinguConfig.GetProperty(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultLocale_CTL")))  >>= aCharLocaleComplex;
-        LanguageType eCurLangCTL = SvxLocaleToLanguage( aCharLocaleComplex );
+        LanguageType eCurLangCTL = MsLangId::resolveSystemLanguageByScriptType(MsLangId::convertLocaleToLanguage(aCharLocaleComplex), COMPLEX);
 
         Font aLatin,aCJK,aCTL;
         lcl_getDefaultFonts(aLatin,aCJK,aCTL,eCurLang,eCurLangCJK,eCurLangCTL);
@@ -114,7 +116,6 @@ OFormatProperties::OFormatProperties()
     }
     aFontDescriptor.Weight = awt::FontWeight::NORMAL;
     aFontDescriptor.CharacterWidth = awt::FontWidth::NORMAL;
-
     // aCharLocale = SvtSysLocale().GetLocaleData().getLocale();
 }
 // -----------------------------------------------------------------------------

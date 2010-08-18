@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlExport.hxx,v $
- * $Revision: 1.11.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -173,7 +170,6 @@ class ODBExport : public SvXMLExport
     void                    exportDataSource();
     void                    exportConnectionData();
     void                    exportDriverSettings(const TSettingsMap& _aSettings);
-    void                    exportJavaClassPath(const TSettingsMap& _aSettings);
     void                    exportApplicationConnectionSettings(const TSettingsMap& _aSettings);
     void                    exportLogin();
     void                    exportSequence(const Sequence< ::rtl::OUString>& _aValue

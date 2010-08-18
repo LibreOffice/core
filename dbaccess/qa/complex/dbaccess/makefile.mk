@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.13.76.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,7 +40,6 @@ all:
 .INCLUDE :  target.mk
 .ELSE
 
-.IF "$(BUILD_QADEVOOO)" == "YES"
 #----- compile .java files -----------------------------------------
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar ConnectivityTools.jar
@@ -59,7 +54,9 @@ JARCLASSDIRS    = $(PACKAGE)
 JARTARGET       = $(TARGET).jar
 JARCOMPRESS 	= TRUE
 
-RUNNER_ARGS = -cp $(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar org.openoffice.Runner -TestBase java_complex 
+RUNNER_ARGS = -cp "$(CLASSPATH)$(PATH_SEPERATOR)$(SOLARBINDIR)$/OOoRunner.jar" org.openoffice.Runner -TestBase java_complex 
+
+RUNNER_CALL = $(AUGMENT_LIBRARY_PATH) java
 
 # --- Targets ------------------------------------------------------
 
@@ -73,13 +70,9 @@ ALL: 	ALLDEP
 
 
 run: $(CLASSDIR)$/$(JARTARGET)
-    +java $(RUNNER_ARGS) -sce dbaccess.sce
+    +$(RUNNER_CALL) $(RUNNER_ARGS) -sce dbaccess.sce
 
 run_%: $(CLASSDIR)$/$(JARTARGET)
-    +java $(RUNNER_ARGS) -o complex.dbaccess.$(@:s/run_//)
-
-.ELSE
-.INCLUDE :  target.mk
-.ENDIF # "$(BUILD_QADEVOOO)" == "YES"
+    +$(RUNNER_CALL) $(RUNNER_ARGS) -o complex.dbaccess.$(@:s/run_//)
 
 .ENDIF # "$(SOLAR_JAVA)" == ""

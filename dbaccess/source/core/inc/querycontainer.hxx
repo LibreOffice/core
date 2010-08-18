@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: querycontainer.hxx,v $
- * $Revision: 1.15 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,6 +99,11 @@
 #include "apitools.hxx"
 #endif
 
+namespace dbtools
+{
+    class IWarningsContainer;
+}
+
 //........................................................................
 namespace dbaccess
 {
@@ -120,16 +122,15 @@ namespace dbaccess
     class OQueryContainer;
     class OContainerListener;
     class OQuery;
-    class IWarningsContainer;
     class OQueryContainer   : public ODefinitionContainer
                             , public OQueryContainer_Base
     {
     protected:
-        IWarningsContainer*         m_pWarnings;
+        ::dbtools::IWarningsContainer*  m_pWarnings;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                                    m_xCommandDefinitions;
+                                        m_xCommandDefinitions;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
-                                    m_xConnection;
+                                        m_xConnection;
         // possible actions on our "aggregate"
         enum AGGREGATE_ACTION { NONE, INSERTING, FLUSHING };
         AGGREGATE_ACTION        m_eDoingCurrently;
@@ -172,11 +173,11 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxCommandDefinitions,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            IWarningsContainer* _pWarnings
+            ::dbtools::IWarningsContainer* _pWarnings
             );
 
         DECLARE_XINTERFACE( )
-    // ::com::sun::star::lang::XServiceInfo
+        DECLARE_XTYPEPROVIDER( )
         DECLARE_SERVICE_INFO();
 
     // ::com::sun::star::container::XContainerListener

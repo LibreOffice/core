@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dlgpage.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,13 +31,13 @@
 #include <svx/tabarea.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/svxenum.hxx>
+#include <editeng/svxenum.hxx>
 #include "dlgpage.hxx"
 #include "ModuleHelper.hxx"
 #include "RptResId.hrc"
-#include <svtools/intitem.hxx> //add CHINA001
-#include <svtools/cjkoptions.hxx>
-#include <svtools/aeitem.hxx>
+#include <svl/intitem.hxx> //add CHINA001
+#include <svl/cjkoptions.hxx>
+#include <svl/aeitem.hxx>
 
 namespace rptui
 {

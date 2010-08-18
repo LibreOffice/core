@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbadmin.cxx,v $
- * $Revision: 1.108.18.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -31,58 +28,29 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#include "dsnItem.hxx"
-#ifndef _DBAUI_DBADMIN_HXX_
-#include "dbadmin.hxx"
-#endif
-#ifndef _DBAUI_DBADMIN_HRC_
-#include "dbadmin.hrc"
-#endif
-#ifndef _DBU_DLG_HRC_
-#include "dbu_dlg.hrc"
-#endif
-#ifndef _DBAUI_DATASOURCEITEMS_HXX_
-#include "dsitems.hxx"
-#endif
-#ifndef _SFXSTRITEM_HXX
-#include <svtools/stritem.hxx>
-#endif
-#ifndef _SFXENUMITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
-#ifndef _SFXINTITEM_HXX
-#include <svtools/intitem.hxx>
-#endif
-#ifndef _SV_MSGBOX_HXX
-#include <vcl/msgbox.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
-#include "dbustrings.hrc"
-#endif
-#ifndef _DBAUI_ADMINPAGES_HXX_
-#include "adminpages.hxx"
-#endif
-#ifndef _DBAUI_LOCALRESACCESS_HXX_
-#include "localresaccess.hxx"
-#endif
-#ifndef _DBAUI_STRINGLISTITEM_HXX_
-#include "stringlistitem.hxx"
-#endif
-#ifndef _DBAUI_PROPERTYSETITEM_HXX_
-#include "propertysetitem.hxx"
-#endif
-#ifndef _UNOTOOLS_CONFIGNODE_HXX_
-#include <unotools/confignode.hxx>
-#endif
-#ifndef DBAUI_CONNECTIONPAGE_HXX
 #include "ConnectionPage.hxx"
-#endif
-#ifndef DBAUI_DRIVERSETTINGS_HXX
-#include "DriverSettings.hxx"
-#endif
-#ifndef _DBAUI_DBADMINIMPL_HXX_
 #include "DbAdminImpl.hxx"
-#endif
+#include "DriverSettings.hxx"
+#include "adminpages.hxx"
+#include "dbadmin.hrc"
+#include "dbadmin.hxx"
+#include "dbu_dlg.hrc"
+#include <svl/stritem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include "dbustrings.hrc"
+#include "dsitems.hxx"
+#include "dsnItem.hxx"
+#include "localresaccess.hxx"
+#include "optionalboolitem.hxx"
+#include "propertysetitem.hxx"
+#include "stringlistitem.hxx"
+
+#include <svl/eitem.hxx>
+#include <svl/intitem.hxx>
+#include <svl/stritem.hxx>
+#include <unotools/confignode.hxx>
+#include <vcl/msgbox.hxx>
 
 //.........................................................................
 namespace dbaui
@@ -153,16 +121,6 @@ void ODbAdminDialog::PageCreated(USHORT _nId, SfxTabPage& _rPage)
 
     SfxTabDialog::PageCreated(_nId, _rPage);
 }
-// -----------------------------------------------------------------------------
-void ODbAdminDialog::removeDetailPages()
-{
-    // remove all current detail pages
-    while (m_aCurrentDetailPages.size())
-    {
-        RemoveTabPage((USHORT)m_aCurrentDetailPages.top());
-        m_aCurrentDetailPages.pop();
-    }
-}
 
 // -----------------------------------------------------------------------------
 void ODbAdminDialog::addDetailPage(USHORT _nPageId, USHORT _nTextId, CreateTabPage _pCreateFunc)
@@ -181,7 +139,9 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
     Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
     impl_resetPages( xDatasource );
 
-    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType(*getOutputSet());
+    DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, getOutputSet()->GetItem(DSID_TYPECOLLECTION));
+    ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
+    ::dbaccess::DATASOURCE_TYPE eType = pCollection->determineType(getDatasourceType(*getOutputSet()));
 
     // and insert the new ones
     switch ( eType )
@@ -282,8 +242,10 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
     // special case: MySQL Native does not have the generic PAGE_CONNECTION page
-    ::dbaccess::DATASOURCE_TYPE eType = getDatasourceType( *pExampleSet );
-    if ( eType == ::dbaccess::DST_MYSQL_NATIVE )
+
+    DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, getOutputSet()->GetItem(DSID_TYPECOLLECTION));
+    ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
+    if ( pCollection->determineType(getDatasourceType( *pExampleSet )) == ::dbaccess::DST_MYSQL_NATIVE )
     {
         LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
         AddTabPage( PAGE_MYSQL_NATIVE, String( ModuleRes( STR_PAGETITLE_CONNECTION ) ), ODriversSettings::CreateMySQLNATIVE, NULL );
@@ -368,7 +330,7 @@ Reference< XDriver > ODbAdminDialog::getDriver()
     return m_pImpl->getDriver();
 }
 // -----------------------------------------------------------------------------
-::dbaccess::DATASOURCE_TYPE ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
+::rtl::OUString ODbAdminDialog::getDatasourceType(const SfxItemSet& _rSet) const
 {
     return m_pImpl->getDatasourceType(_rSet);
 }
@@ -391,7 +353,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
     *pCounter++ = new SfxStringItem(DSID_NAME, String());
     *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, String());
-    *pCounter++ = new SfxStringItem(DSID_CONNECTURL, _pTypeCollection ? _pTypeCollection->getDatasourcePrefix(  ::dbaccess::DST_ADABAS ) : String());
+    *pCounter++ = new SfxStringItem(DSID_CONNECTURL, String());
     *pCounter++ = new OStringListItem(DSID_TABLEFILTER, Sequence< ::rtl::OUString >(&sFilterAll, 1));
     *pCounter++ = new DbuTypeCollectionItem(DSID_TYPECOLLECTION, _pTypeCollection);
     *pCounter++ = new SfxBoolItem(DSID_INVALID_SELECTION, sal_False);
@@ -445,7 +407,9 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxBoolItem(DSID_CHECK_REQUIRED_FIELDS, sal_True);
     *pCounter++ = new SfxBoolItem(DSID_IGNORECURRENCY, sal_False);
     *pCounter++ = new SfxStringItem(DSID_CONN_SOCKET, String());
-    *pCounter++ = new SfxBoolItem(DSID_ESCAPE_DATETIME, sal_True); // must be the same as in ModelImpl.cxx
+    *pCounter++ = new SfxBoolItem(DSID_ESCAPE_DATETIME, sal_True);
+    *pCounter++ = new SfxStringItem(DSID_NAMED_PIPE, String());
+    *pCounter++ = new OptionalBoolItem( DSID_PRIMARY_KEY_SUPPORT );
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
@@ -505,7 +469,9 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
         {0,0},
         {0,0},
         {0,0},
-        {0,0}, /* for Escape DateTime*/
+        {0,0},
+        {0,0},
+        {0,0},
         {0,0}
     };
 

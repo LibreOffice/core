@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: strings.src,v $
- * $Revision: 1.55.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -235,209 +232,95 @@ String RID_STR_OBJECT_ALREADY_CONTAINED
 {
     Text [ en-US ] = "The object already is, with a different name, part of the container.";
 };
+
 String RID_STR_NAME_NOT_FOUND
 {
     Text [ en-US ] = "Unable to find the document '$name$'.";
 };
 
-//-------------------------------------------------------------------------
-Resource RSC_DATASOURCE_TYPES
+String RID_STR_ERROR_WHILE_SAVING
 {
-    String STR_MYSQL_ODBC
-    {
-        Text  ="sdbc:mysql:odbc:";
-    };
-    String STR_MYSQL_JDBC
-    {
-        Text  ="sdbc:mysql:jdbc:";
-    };
-    String STR_ADABAS
-    {
-        Text  ="sdbc:adabas:";
-    };
-    String STR_ORACLE_JDBC
-    {
-        Text  ="jdbc:oracle:thin:";
-    };
-    String STR_JDBC
-    {
-        Text  ="jdbc:";
-    };
-    String STR_ODBC
-    {
-        Text  ="sdbc:odbc:";
-    };
-    String STR_DBASE
-    {
-        Text  ="sdbc:dbase:";
-    };
-    String STR_MSACCESS
-    {
-        Text  ="sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=";
-    };
-    String STR_MSACCESS2007
-    {
-        Text  ="sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=";
-    };
-    String STR_ADO
-    {
-        Text  ="sdbc:ado:";
-    };
-    String STR_FLAT
-    {
-        Text  ="sdbc:flat:";
-    };
-    String STR_CALC
-    {
-        Text  ="sdbc:calc:";
-    };
-    String STR_MOZILLA
-    {
-        Text  ="sdbc:address:mozilla:";
-    };
-    String STR_LDAP
-    {
-        Text  ="sdbc:address:ldap:";
-    };
-    String STR_OUTLOOK
-    {
-        Text  ="sdbc:address:outlook";
-    };
-    String STR_OUTLOOKEXP
-    {
-        Text  ="sdbc:address:outlookexp";
-    };
-    String STR_EVOLUTION
-    {
-        Text  ="sdbc:address:evolution:local";
-    };
-    String STR_EVOLUTION_GROUPWISE
-    {
-        Text  ="sdbc:address:evolution:groupwise";
-    };
-    String STR_EVOLUTION_LDAP
-    {
-        Text  ="sdbc:address:evolution:ldap";
-    };
-    String STR_KAB
-    {
-        Text  ="sdbc:address:kab";
-    };
-    String STR_EMBEDDED_HSQLDB
-    {
-        Text = "sdbc:embedded:hsqldb";
-    };
-    String STR_MACAB
-    {
-        Text  ="sdbc:address:macab";
-    };
-    String STR_THUNDERBIRD
-    {
-        Text  ="sdbc:address:thunderbird:";
-    };
-    String STR_MYSQL_NATIVE
-    {
-        Text  ="sdbc:mysql:mysqlc:";
-    };
+    Text [ en-US ] = "Could not save the document to $location$:\n$message$";
 };
 
-Resource RSC_DATASOURCE_TYPE_UINAMES
+String RID_NO_SUCH_DATA_SOURCE
 {
-    String STR_MYSQL_ODBC
-    {
-        Text[ en-US ] = "MySQL (ODBC)";
-    };
-    String STR_MYSQL_JDBC
-    {
-        Text[ en-US ] = "MySQL (JDBC)";
-    };
-    String STR_ADABAS
-    {
-        Text[ en-US ] = "Adabas D";
-    };
-    String STR_ORACLE_JDBC
-    {
-        Text[ en-US ] = "Oracle JDBC";
-    };
-
-    String STR_JDBC
-    {
-        Text[ en-US ] = "JDBC";
-    };
-    String STR_ODBC
-    {
-        Text[ en-US ] = "ODBC";
-    };
-    String STR_DBASE
-    {
-        Text[ en-US ] = "dBASE";
-    };
-    String STR_MSACCESS
-    {
-        Text[ en-US ] = "Microsoft Access";
-    };
-    String STR_MSACCESS2007
-    {
-        Text[ en-US ] = "Microsoft Access 2007";
-    };
-    String STR_ADO
-    {
-        Text[ en-US ] = "ADO";
-    };
-    String STR_FLAT
-    {
-        Text[ en-US ] = "Text";
-    };
-    String STR_CALC
-    {
-        Text[ en-US ] = "Spreadsheet";
-    };
-    String STR_MOZILLA
-    {
-        Text[ en-US ] = "Mozilla Address Book";
-    };
-    String STR_LDAP
-    {
-        Text[ en-US ] = "LDAP Address Book";
-    };
-    String STR_OUTLOOK
-    {
-        Text[ en-US ] = "Microsoft Outlook Address Book";
-    };
-    String STR_OUTLOOKEXP
-    {
-        Text[ en-US ] = "Microsoft Windows Address Book";
-    };
-    String STR_EVOLUTION
-    {
-        Text[ en-US ] = "Evolution Local";
-    };
-    String STR_EVOLUTION_GROUPWISE
-    {
-        Text[ en-US ] = "Groupwise";
-    };
-    String STR_EVOLUTION_LDAP
-    {
-        Text[ en-US ] = "Evolution LDAP";
-    };
-    String STR_KAB
-    {
-        Text[ en-US ] = "KDE Address Book";
-    };
-    String STR_MACAB
-    {
-        Text[ en-US ] = "Mac OS X Address Book";
-    };
-    String STR_EMBEDDED_HSQLDB
-    {
-        Text[ en-US ] = "HSQL database engine";
-     };
-     String STR_THUNDERBIRD
-     {
-         Text[ en-US ] = "Thunderbird Address Book";
-    };
-    String STR_MYSQL_NATIVE
-     {
-         Text[ en-US ] = "MySQL (Native)";
-    };
+    Text [ en-US ] = "Error accessing data source '$name$':\n$error$";
+};
+String RID_STR_NO_SUB_FOLDER
+{
+    Text [ en-US ] = "There exists no folder named \"$folder$\".";
+};
+String RID_STR_NO_DELETE_BEFORE_AFTER
+{
+    Text [ en-US ] = "Cannot delete the before-first or after-last row.";
+};
+String RID_STR_NO_DELETE_INSERT_ROW
+{
+    Text [ en-US ] = "Cannot delete the insert-row.";
+};
+String RID_STR_RESULT_IS_READONLY
+{
+    Text [ en-US ] = "Result set is read only.";
+};
+String RID_STR_NO_DELETE_PRIVILEGE
+{
+    Text [ en-US ] = "DELETE privilege not available.";
+};
+String RID_STR_ROW_ALREADY_DELETED
+{
+    Text [ en-US ] = "Current row is already deleted.";
+};
+String RID_STR_UPDATE_FAILED
+{
+    Text [ en-US ] = "Current row could be updated.";
+};
+//-------------------------------------------------------------------------
+String RID_STR_NO_INSERT_PRIVILEGE
+{
+    Text [ en-US ] = "INSERT privilege not available.";
+};
+String RID_STR_INTERNAL_ERROR
+{
+    Text [ en-US ] = "Internal error: no statement object provided by the database driver.";
+};
+String RID_STR_EXPRESSION1
+{
+    Text [ en-US ] = "Expression1";
+};
+String RID_STR_NO_SQL_COMMAND
+{
+    Text [ en-US ] = "No SQL command was provided.";
+};
+String RID_STR_INVALID_INDEX
+{
+    Text [ en-US ] = "Invalid column index.";
+};
+String RID_STR_INVALID_CURSOR_STATE
+{
+    Text [ en-US ] = "Invalid cursor state.";
+};
+String RID_STR_CURSOR_BEFORE_OR_AFTER
+{
+    Text [ en-US ] = "The cursor points to before the first or after the last row.";
+};
+String RID_STR_NO_BOOKMARK_BEFORE_OR_AFTER
+{
+    Text [ en-US ] = "The rows before the first and after the last row don't have a bookmark.";
+};
+String RID_STR_NO_BOOKMARK_DELETED
+{
+    Text [ en-US ] = "The current row is deleted, and thus doesn't have a bookmark.";
+};
+String RID_STR_NO_EMBEDDING
+{
+    Text [ en-US ] = "Embedding of database documents is not supported.";
+};
+String RID_STR_CONNECTION_REQUEST
+{
+    Text [ en-US ] = "A connection for the following URL was requested \"$name$\".";
+};
+String RID_STR_MISSING_EXTENSION
+{
+    Text [ en-US ] = "The extension is not installed.";
 };

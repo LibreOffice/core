@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: macromigrationpages.cxx,v $
- * $Revision: 1.3.2.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -191,12 +188,12 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    sal_Bool SaveDBDocPage::commitPage( CommitPageReason _eReason )
+    sal_Bool SaveDBDocPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if ( !MacroMigrationPage::commitPage( _eReason ) )
             return sal_False;
 
-        if ( eTravelBackward == _eReason )
+        if ( ::svt::WizardTypes::eTravelBackward == _eReason )
             return sal_True;
 
         if ( !m_aLocationController.prepareCommit() )

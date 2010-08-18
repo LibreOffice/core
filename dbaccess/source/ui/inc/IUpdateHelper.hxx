@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: IUpdateHelper.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +27,10 @@
 #ifndef DBAUI_IUPDATEHELPER_HXX
 #define DBAUI_IUPDATEHELPER_HXX
 
+#include <com/sun/star/util/Date.hpp>
+#include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/util/Time.hpp>
+
 namespace dbaui
 {
     class SAL_NO_VTABLE IUpdateHelper
@@ -39,6 +40,9 @@ namespace dbaui
         virtual void updateDouble(sal_Int32 _nPos,const double& _nValue) = 0;
         virtual void updateInt(sal_Int32 _nPos,const sal_Int32& _nValue) = 0;
         virtual void updateNull(sal_Int32 _nPos, ::sal_Int32 sqlType) = 0;
+        virtual void updateDate(sal_Int32 _nPos,const ::com::sun::star::util::Date& _nValue) = 0;
+        virtual void updateTime(sal_Int32 _nPos,const ::com::sun::star::util::Time& _nValue) = 0;
+        virtual void updateTimestamp(sal_Int32 _nPos,const ::com::sun::star::util::DateTime& _nValue) = 0;
         virtual void moveToInsertRow() = 0;
         virtual void insertRow() = 0;
     };

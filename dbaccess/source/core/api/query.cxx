@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: query.cxx,v $
- * $Revision: 1.35 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +34,8 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
-#ifndef DBA_CORE_WARNINGS_HXX
-#include "warnings.hxx"
+#ifndef DBTOOLS_WARNINGSCONTAINER_HXX
+#include <connectivity/warningscontainer.hxx>
 #endif
 #ifndef DBA_HELPERCOLLECTIONS_HXX
 #include "HelperCollections.hxx"
@@ -191,9 +188,10 @@ void OQuery::rebuildColumns()
         m_pColumnMediator = NULL;
 
         Reference<XColumnsSupplier> xColSup(m_xCommandDefinition,UNO_QUERY);
+        Reference< XNameAccess > xColumnDefinitions;
         if ( xColSup.is() )
         {
-            Reference< XNameAccess > xColumnDefinitions = xColSup->getColumns();
+            xColumnDefinitions = xColSup->getColumns();
             if ( xColumnDefinitions.is() )
                 m_pColumnMediator = new OContainerMediator( m_pColumns, xColumnDefinitions, m_xConnection, OContainerMediator::eColumns );
         }
@@ -228,7 +226,7 @@ void OQuery::rebuildColumns()
 
             Reference< XDatabaseMetaData > xDBMeta( m_xConnection->getMetaData(), UNO_QUERY_THROW );
             ::vos::ORef< OSQLColumns > aParseColumns(
-                ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, xDBMeta ) );
+                ::connectivity::parse::OParseColumn::createColumnsForResultSet( xResultSetMeta, xDBMeta,xColumnDefinitions ) );
             xColumns = OPrivateColumns::createWithIntrinsicNames(
                 aParseColumns, xDBMeta->storesMixedCaseQuotedIdentifiers(), *this, m_aMutex );
             if ( !xColumns.is() )
@@ -236,20 +234,25 @@ void OQuery::rebuildColumns()
         }
 
         Sequence< ::rtl::OUString> aNames = xColumns->getElementNames();
-        const ::rtl::OUString* pBegin = aNames.getConstArray();
-        const ::rtl::OUString* pEnd   = pBegin + aNames.getLength();
-        for ( ;pBegin != pEnd; ++pBegin)
+        const ::rtl::OUString* pIter = aNames.getConstArray();
+        const ::rtl::OUString* pEnd  = pIter + aNames.getLength();
+        for ( sal_Int32 i = 0;pIter != pEnd; ++pIter,++i)
         {
-            Reference<XPropertySet> xSource(xColumns->getByName( *pBegin ),UNO_QUERY);
-            OTableColumn* pColumn = new OTableColumn( xSource );
-            Reference<XChild> xChild(*pColumn,UNO_QUERY);
-            if ( xChild.is() )
-                xChild->setParent(*this);
+            Reference<XPropertySet> xSource(xColumns->getByName( *pIter ),UNO_QUERY);
+            ::rtl::OUString sLabel = *pIter;
+            if ( xColumnDefinitions.is() && xColumnDefinitions->hasByName(*pIter) )
+            {
+                Reference<XPropertySet> xCommandColumn(xColumnDefinitions->getByName( *pIter ),UNO_QUERY);
+                xCommandColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
+            }
+            OQueryColumn* pColumn = new OQueryColumn( xSource, m_xConnection, sLabel);
+            Reference< XChild > xChild( *pColumn, UNO_QUERY_THROW );
+            xChild->setParent( *this );
 
-            implAppendColumn( *pBegin, pColumn );
-            Reference<XPropertySet> xDest(*pColumn,UNO_QUERY);
+            implAppendColumn( *pIter, pColumn );
+            Reference< XPropertySet > xDest( *pColumn, UNO_QUERY_THROW );
             if ( m_pColumnMediator.is() )
-                m_pColumnMediator->notifyElementCreated( *pBegin, xDest );
+                m_pColumnMediator->notifyElementCreated( *pIter, xDest );
         }
     }
     catch( const SQLContext& e )

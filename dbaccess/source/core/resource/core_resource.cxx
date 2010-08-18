@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: core_resource.cxx,v $
- * $Revision: 1.11.68.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,7 +39,7 @@
 //---------------------------------------------------
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #endif
 
 //.........................................................................
@@ -88,6 +85,17 @@ namespace dbaccess
         sString.SearchAndReplaceAscii( _pPlaceholderAscii, _rReplace );
         return sString;
     }
+
+    //------------------------------------------------------------------
+    ::rtl::OUString ResourceManager::loadString( sal_uInt16 _nResId, const sal_Char* _pPlaceholderAscii1, const ::rtl::OUString& _rReplace1,
+        const sal_Char* _pPlaceholderAscii2, const ::rtl::OUString& _rReplace2 )
+    {
+        String sString( loadString( _nResId ) );
+        sString.SearchAndReplaceAscii( _pPlaceholderAscii1, _rReplace1 );
+        sString.SearchAndReplaceAscii( _pPlaceholderAscii2, _rReplace2 );
+        return sString;
+    }
+
     //-------------------------------------------------------------------------
     void ResourceManager::registerClient()
     {
@@ -105,12 +113,6 @@ namespace dbaccess
             m_pImpl = NULL;
         }
     }
-    ResMgr* ResourceManager::getResManager()
-    {
-        ensureImplExists();
-        return m_pImpl;
-    }
-
 //.........................................................................
 }
 //.........................................................................

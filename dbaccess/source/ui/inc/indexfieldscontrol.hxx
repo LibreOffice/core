@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: indexfieldscontrol.hxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,9 +67,10 @@ namespace dbaui
         String                      m_sDescendingText;
 
         sal_Int32                   m_nMaxColumnsInIndex;
+        sal_Bool                    m_bAddIndexAppendix;
 
     public:
-        IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex);
+        IndexFieldsControl( Window* _pParent, const ResId& _rId ,sal_Int32 _nMaxColumnsInIndex,sal_Bool _bAddIndexAppendix);
         ~IndexFieldsControl();
 
         void Init(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rAvailableFields);

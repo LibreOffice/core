@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RptDef.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +34,7 @@
 #include <comphelper/stl_types.hxx>
 #include <comphelper/uno3.hxx>
 #include <svx/fmglob.hxx>
+#include <boost/shared_ptr.hpp>
 
 
 FORWARD_DECLARE_INTERFACE(report,XReportComponent)
@@ -81,13 +79,22 @@ namespace ControlModification
     static const ::sal_Int32 HEIGHT_GREATEST    = (sal_Int32)10;
 }
 
+class AnyConverter : public ::std::binary_function< ::rtl::OUString,::com::sun::star::uno::Any,::com::sun::star::uno::Any >
+{
+public:
+    virtual ~AnyConverter(){}
+    virtual ::com::sun::star::uno::Any operator() (const ::rtl::OUString& /*_sPropertyName*/,const ::com::sun::star::uno::Any& lhs) const
+    {
+        return lhs;
+    }
+};
 /** returns teh object type depending on the service name
     @param  _xComponent the report component
 */
 REPORTDESIGN_DLLPUBLIC sal_uInt16 getObjectType(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent>& _xComponent);
-
-DECLARE_STL_USTRINGACCESS_MAP(::rtl::OUString , TPropertyNamePair);
-/** returns teh property name map for the givern property id
+typedef ::std::pair< ::rtl::OUString, ::boost::shared_ptr<AnyConverter> > TPropertyConverter;
+DECLARE_STL_USTRINGACCESS_MAP(TPropertyConverter , TPropertyNamePair);
+/** returns the property name map for the givern property id
     @param  _nObjectId  the object id
 */
 REPORTDESIGN_DLLPUBLIC const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId);

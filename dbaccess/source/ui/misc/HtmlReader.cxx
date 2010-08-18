@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: HtmlReader.cxx,v $
- * $Revision: 1.34 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -63,7 +60,7 @@
 #include "QEnumTypes.hxx"
 #include "WCPage.hxx"
 #include <tools/inetmime.hxx>
-#include <svtools/inettype.hxx>
+#include <svl/inettype.hxx>
 #include <rtl/tencinfo.h>
 #include "UITools.hxx"
 #include <vcl/svapp.hxx>
@@ -509,6 +506,8 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                     else if ( m_sCurrent.Len() )
                         aColumnName = m_sCurrent;
 
+                    aColumnName.EraseLeadingChars();
+                    aColumnName.EraseTrailingChars();
                     CreateDefaultColumn(aColumnName);
                     aColumnName.Erase();
                     m_sCurrent.Erase();
@@ -553,6 +552,8 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 
     if ( m_sCurrent.Len() )
         aColumnName = m_sCurrent;
+    aColumnName.EraseLeadingChars();
+    aColumnName.EraseTrailingChars();
     if(aColumnName.Len())
         CreateDefaultColumn(aColumnName);
 
@@ -576,21 +577,9 @@ void OHTMLReader::setTextEncoding()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLReader::setTextEncoding" );
     DBG_CHKTHIS(OHTMLReader,NULL);
     m_bMetaOptions = sal_True;
-    USHORT nContentOption = HTML_O_CONTENT;
-    rtl_TextEncoding eEnc = RTL_TEXTENCODING_DONTKNOW;
-
-    SfxHTMLParser::ParseMetaOptions(NULL, NULL,
-                                  GetOptions(&nContentOption),
-                                  eEnc );
-
-    // If the encoding is set by a META tag, it may only overwrite the
-    // current encoding if both, the current and the new encoding, are 1-BYTE
-    // encodings. Everything else cannot lead to reasonable results.
-    if( RTL_TEXTENCODING_DONTKNOW != eEnc &&
-        rtl_isOctetTextEncoding( eEnc ) &&
-        rtl_isOctetTextEncoding( GetSrcEncoding() ) )
-        SetSrcEncoding( eEnc );
+    ParseMetaOptions(NULL, NULL);
 }
+
 // -----------------------------------------------------------------------------
 void OHTMLReader::release()
 {

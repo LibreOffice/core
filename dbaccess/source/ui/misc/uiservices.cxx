@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: uiservices.cxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +71,6 @@ extern "C" void SAL_CALL createRegistryInfo_OAdvancedSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialog();
 extern "C" void SAL_CALL createRegistryInfo_OUserSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_ODBTypeWizDialogSetup();
-extern "C" void SAL_CALL createRegistryInfo_OAdabasSettingsDialog();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl();
 extern "C" void SAL_CALL createRegistryInfo_OToolboxController();
@@ -107,7 +103,6 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_ODBTypeWizDialog();
         createRegistryInfo_ODBTypeWizDialogSetup();
         createRegistryInfo_OUserSettingsDialog();
-        createRegistryInfo_OAdabasSettingsDialog();
         createRegistryInfo_OColumnControlModel();
         createRegistryInfo_OColumnControl();
         createRegistryInfo_OToolboxController();

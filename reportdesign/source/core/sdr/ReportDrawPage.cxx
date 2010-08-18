@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportDrawPage.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -145,7 +142,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
         try
         {
             OReportModel* pRptModel = static_cast<OReportModel*>(pObj->GetModel());
-            xRet.set( pRptModel->createShape(sServiceName,xShape,bChangeOrientation ? 0 : -1), uno::UNO_QUERY_THROW );
+            xRet.set( pRptModel->createShape(sServiceName,xShape,bChangeOrientation ? 0 : 1), uno::UNO_QUERY_THROW );
         }
         catch( const uno::Exception& )
         {

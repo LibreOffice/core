@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stringconstants.cxx,v $
- * $Revision: 1.49 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -185,6 +182,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_AS_TEMPLATE,		"AsTemplate");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_HAVING_CLAUSE,	"HavingClause");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_GROUP_BY,			"GroupBy");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_EDIT_WIDTH, "EditWidth");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_SINGLESELECTQUERYCOMPOSER,"SingleSelectQueryComposer");
 
 //============================================================
 //= service names
@@ -222,7 +220,6 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBC_DRIVERMANAGER, "com.sun.star.sdbc.Driv
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBC_CONNECTIONPOOL, "com.sun.star.sdbc.ConnectionPool");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBCX_INDEXCOLUMN, "com.sun.star.sdbcx.IndexColumn");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDBCX_KEYCOLUMN, "com.sun.star.sdbcx.KeyColumn");
-IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_INTERACTION_HANDLER, "com.sun.star.sdb.InteractionHandler");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_TASK_INTERACTION_HANDLER, "com.sun.star.task.InteractionHandler");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_FRAME_DESKTOP, "com.sun.star.frame.Desktop");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_ADABASCREATIONDIALOG, "com.sun.star.sdb.AdabasCreationDialog");

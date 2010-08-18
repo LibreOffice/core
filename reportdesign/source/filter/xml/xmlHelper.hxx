@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: xmlHelper.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -39,8 +36,7 @@
 
 #include <memory>
 
-#define CTF_RPT_NUMBERFORMAT                            (XML_DB_CTF_START + 1)
-#define CTF_RPT_PARAVERTALIGNMENT                       (XML_DB_CTF_START + 2)
+#define CTF_RPT_NUMBERFORMAT                    (XML_DB_CTF_START + 1)
 
 #define XML_STYLE_FAMILY_REPORT_ID              700
 #define XML_STYLE_FAMILY_REPORT_NAME            "report-element"
@@ -76,6 +72,7 @@ namespace rptxml
         static const SvXMLEnumMapEntry* GetForceNewPageOptions();
         static const SvXMLEnumMapEntry* GetKeepTogetherOptions();
         static const SvXMLEnumMapEntry* GetCommandTypeOptions();
+        static const SvXMLEnumMapEntry* GetImageScaleOptions();
 
         static const XMLPropertyMapEntry* GetTableStyleProps();
         static const XMLPropertyMapEntry* GetColumnStyleProps();

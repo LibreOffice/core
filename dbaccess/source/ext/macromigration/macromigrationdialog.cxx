@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: macromigrationdialog.cxx,v $
- * $Revision: 1.3.2.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -56,7 +53,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
-#include <svtools/filenotation.hxx>
+#include <svl/filenotation.hxx>
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/contentbroker.hxx>
@@ -317,9 +314,9 @@ namespace dbmm
     }
 
     //--------------------------------------------------------------------
-    sal_Bool MacroMigrationDialog::onFinish( sal_Int32 _nResult )
+    sal_Bool MacroMigrationDialog::onFinish()
     {
-        return MacroMigrationDialog_Base::onFinish( _nResult );
+        return MacroMigrationDialog_Base::onFinish();
     }
 
     //--------------------------------------------------------------------

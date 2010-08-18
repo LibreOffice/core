@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TableRowExchange.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -61,7 +58,8 @@ namespace dbaui
             {
                 (*rxOStm) << (sal_Int32)pRows->size(); // first stream the size
                 ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = pRows->begin();
-                for(;aIter != pRows->end();++aIter)
+                ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = pRows->end();
+                for(;aIter != aEnd;++aIter)
                     (*rxOStm) << *(*aIter);
                 return sal_True;
             }

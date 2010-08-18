@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: CacheSet.hxx,v $
- * $Revision: 1.22 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,7 +62,10 @@
 #endif
 
 #include <list>
-
+namespace rtl
+{
+    class OUStringBuffer;
+}
 namespace com{ namespace sun { namespace star{namespace sdbc{ class XParameters; } } } }
 
 namespace dbaccess
@@ -95,11 +95,11 @@ namespace dbaccess
                             ,const connectivity::ORowSetValue& _rValue
                             ,sal_Int32 _nType
                             ,sal_Int32 _nScale
-                            );
+                            ) const;
         void fillParameters( const ORowSetRow& _rRow
                             ,const connectivity::OSQLTable& _xTable
-                            ,::rtl::OUString& _sCondition
-                            ,::rtl::OUString& _sParameter
+                            ,::rtl::OUStringBuffer& _sCondition
+                            ,::rtl::OUStringBuffer& _sParameter
                             ,::std::list< sal_Int32>& _rOrgValues);
         void fillTableName(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xTable)  throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
@@ -107,7 +107,7 @@ namespace dbaccess
     public:
 
         // late constructor
-        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
+        virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter);
         virtual void fillValueRow(ORowSetRow& _rRow,sal_Int32 _nPosition);
 
         // ::com::sun::star::sdbc::XRow
@@ -166,6 +166,13 @@ namespace dbaccess
         virtual void SAL_CALL cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) = 0;
         virtual void SAL_CALL moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) = 0;
         virtual void SAL_CALL moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException) = 0;
+
+        virtual bool isResultSetChanged() const;
+        virtual void reset(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet);
+        virtual void mergeColumnValues(sal_Int32 i_nColumnIndex,ORowSetValueVector::Vector& io_aInsertRow,ORowSetValueVector::Vector& io_aRow,::std::vector<sal_Int32>& o_aChangedColumns);
+        virtual bool columnValuesUpdated(ORowSetValueVector::Vector& o_aCachedRow,const ORowSetValueVector::Vector& i_aRow);
+        virtual bool updateColumnValues(const ORowSetValueVector::Vector& io_aCachedRow,ORowSetValueVector::Vector& io_aRow,const ::std::vector<sal_Int32>& i_aChangedColumns);
+        virtual void fillMissingValues(ORowSetValueVector::Vector& io_aRow) const;
     };
 }
 #endif //DBACCESS_CORE_API_CACHESET_HXX

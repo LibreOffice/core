@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SelectionBrowseBox.hxx,v $
- * $Revision: 1.29 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -132,6 +129,7 @@ namespace dbaui
                                                   const String& rValue,
                                                   const sal_uInt16 nLevel,
                                                   bool _bAddOrOnOneLine  );
+        void                        DuplicateConditionLevel( const sal_uInt16 nLevel);
         void                        AddOrder(const OTableFieldDescRef& rInfo, const EOrderDir eDir, sal_uInt32 _nCurrentPos);
         void                        ClearAll();
         OTableFieldDescRef          AppendNewCol( sal_uInt16 nCnt=1 );

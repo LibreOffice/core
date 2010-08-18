@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Navigator.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,7 +52,7 @@
 #include "cppuhelper/basemutex.hxx"
 #include "comphelper/SelectionMultiplex.hxx"
 #include <svtools/svtreebx.hxx>
-#include <svtools/solar.hrc>
+#include <svl/solar.hrc>
 #include "ReportVisitor.hxx"
 #include "ModuleHelper.hxx"
 #include <rtl/ref.hxx>
@@ -73,7 +70,7 @@
 namespace rptui
 {
 using namespace ::com::sun::star;
-using namespace svt;
+using namespace utl;
 using namespace ::comphelper;
 
 USHORT lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement)
@@ -224,7 +221,7 @@ private:
 DBG_NAME(rpt_NavigatorTree)
 // -----------------------------------------------------------------------------
 NavigatorTree::NavigatorTree( Window* pParent,OReportController& _rController )
-        :SvTreeListBox( pParent, WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL|WB_HASBUTTONSATROOT )
+        :SvTreeListBox( pParent, WB_TABSTOP| WB_HASBUTTONS|WB_HASLINES|WB_BORDER|WB_HSCROLL|WB_HASBUTTONSATROOT )
         ,comphelper::OSelectionChangeListener(m_aMutex)
         ,OPropertyChangeListener(m_aMutex)
         ,m_aTimerTriggered(-1,-1)
@@ -945,6 +942,7 @@ ONavigator::ONavigator( Window* _pParent
     //SetOutputSizePixel(aOutSize);
     FreeResource();
     m_pImpl->m_pNavigatorTree->Show();
+    m_pImpl->m_pNavigatorTree->GrabFocus();
     SetSizePixel(Size(STD_WIN_SIZE_X,STD_WIN_SIZE_Y));
     Show();
 
@@ -975,6 +973,13 @@ void ONavigator::Resize()
     m_pImpl->m_pNavigatorTree->SetPosSizePixel( aLBPos, aLBSize );
 }
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+void ONavigator::GetFocus()
+{
+    Window::GetFocus();
+    if ( m_pImpl->m_pNavigatorTree.get() )
+        m_pImpl->m_pNavigatorTree->GrabFocus();
+}
 // =============================================================================
 } // rptui
 // =============================================================================

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dbloader2.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,7 +66,7 @@
 #include <osl/file.hxx>
 #include <ucbhelper/contentbroker.hxx>
 #include <sfx2/docfile.hxx>
-#include <svtools/moduleoptions.hxx>
+#include <unotools/moduleoptions.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <com/sun/star/task/XJobExecutor.hpp>

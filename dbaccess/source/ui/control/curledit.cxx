@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: curledit.cxx,v $
- * $Revision: 1.14.52.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,6 +45,7 @@ namespace dbaui
 //=========================================================================
 OConnectionURLEdit::OConnectionURLEdit(Window* _pParent, const ResId& _rResId,BOOL _bShowPrefix)
     :Edit(_pParent, _rResId)
+    ,m_pTypeCollection(NULL)
     ,m_pForcedPrefix(NULL)
     ,m_bShowPrefix(_bShowPrefix)
 {
@@ -111,13 +109,7 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& /*_rNewSe
     if (!bIsEmpty)
     {
         // determine the type of the new URL described by the new text
-        ::dbaccess::DATASOURCE_TYPE eType = m_aTypeCollection.getType(_rStr);
-        // and the prefix belonging to this type
-        if ( ::dbaccess::DST_UNKNOWN != eType)
-            sPrefix = m_aTypeCollection.getDatasourcePrefix(eType);
-        else {
-            DBG_ERROR("OConnectionURLEdit::SetText : the new text is no valid connection URL!");
-        }
+        sPrefix = m_pTypeCollection->getPrefix(_rStr);
     }
 
     // the fixed text gets the prefix
@@ -139,10 +131,10 @@ void OConnectionURLEdit::SetText(const String& _rStr, const Selection& /*_rNewSe
     GetSubEdit()->Show();
 
     // do the real SetTex
-//  Edit::SetText(bIsEmpty ? _rStr : m_aTypeCollection.cutPrefix(_rStr), _rNewSelection);
+//  Edit::SetText(bIsEmpty ? _rStr : m_pTypeCollection->cutPrefix(_rStr), _rNewSelection);
     String sNewText( _rStr );
     if ( !bIsEmpty )
-        sNewText  =m_aTypeCollection.cutPrefix( _rStr );
+        sNewText  = m_pTypeCollection->cutPrefix( _rStr );
     Edit::SetText( sNewText );
 }
 

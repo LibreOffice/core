@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: BookmarkSet.cxx,v $
- * $Revision: 1.21 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,10 +59,10 @@ using namespace ::com::sun::star::lang;
 //  using namespace ::cppu;
 using namespace ::osl;
 
-void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet)
+void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OBookmarkSet::construct" );
-    OCacheSet::construct(_xDriverSet);
+    OCacheSet::construct(_xDriverSet,i_sRowSetFilter);
     m_xRowLocate.set(_xDriverSet,UNO_QUERY);
 }
 // -----------------------------------------------------------------------------
@@ -129,7 +126,8 @@ void SAL_CALL OBookmarkSet::insertRow( const ORowSetRow& _rInsertRow,const conne
     {
         xUpd->moveToInsertRow();
         sal_Int32 i = 1;
-        for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->get().begin()+1;aIter != _rInsertRow->get().end();++aIter,++i)
+        connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
+        for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->get().begin()+1;aIter != aEnd;++aIter,++i)
         {
             aIter->setSigned(m_aSignedFlags[i-1]);
             updateColumn(i,xUpdRow,*aIter);
@@ -151,7 +149,8 @@ void SAL_CALL OBookmarkSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowS
 
     sal_Int32 i = 1;
     connectivity::ORowVector< ORowSetValue > ::Vector::const_iterator aOrgIter = _rOrginalRow->get().begin()+1;
-    for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->get().begin()+1;aIter != _rInsertRow->get().end();++aIter,++i,++aOrgIter)
+    connectivity::ORowVector< ORowSetValue > ::Vector::iterator aEnd = _rInsertRow->get().end();
+    for(connectivity::ORowVector< ORowSetValue > ::Vector::iterator aIter = _rInsertRow->get().begin()+1;aIter != aEnd;++aIter,++i,++aOrgIter)
     {
         aIter->setSigned(aOrgIter->isSigned());
         updateColumn(i,xUpdRow,*aIter);
@@ -268,7 +267,10 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
                 case DataType::LONGVARBINARY:
                     _xParameter->updateBytes(nPos,_rValue);
                     break;
-
+                case DataType::BLOB:
+                case DataType::CLOB:
+                    _xParameter->updateObject(nPos,_rValue.getAny());
+                    break;
             }
         }
     }

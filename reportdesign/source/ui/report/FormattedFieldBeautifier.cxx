@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: UndoEnv.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -91,39 +88,40 @@ namespace rptui
     void FormattedFieldBeautifier::setPlaceholderText( const uno::Reference< uno::XInterface >& _rxComponent )
     {
         ::rtl::OUString sDataField;
-        uno::Reference< report::XReportComponent > xComponent;
 
         try
         {
-            // is it a formatted field?
-            uno::Reference< report::XFormattedField > xFormattedField( _rxComponent, uno::UNO_QUERY );
-            if ( xFormattedField.is() )
+            uno::Reference< report::XFormattedField > xControlModel( _rxComponent, uno::UNO_QUERY );
+            if ( xControlModel.is() )
             {
-                sDataField = xFormattedField->getDataField();
-                xComponent.set( xFormattedField.get() );
-            }
-            else
-            {
-                // perhaps an image control?
-                uno::Reference< report::XImageControl > xImageControl( _rxComponent, uno::UNO_QUERY );
-                if ( xImageControl.is() )
+                sDataField = xControlModel->getDataField();
+
+                if ( sDataField.getLength() )
                 {
-                    sDataField = xImageControl->getDataField();
-                    xComponent.set( xImageControl.get() );
+                    ReportFormula aFormula( sDataField );
+                    bool bSet = true;
+                    if ( aFormula.getType() == ReportFormula::Field )
+                    {
+                        const ::rtl::OUString sColumnName = aFormula.getFieldName();
+                        ::rtl::OUString sLabel = m_rReportController.getColumnLabel_throw(sColumnName);
+                        if ( sLabel.getLength() )
+                        {
+                            ::rtl::OUStringBuffer aBuffer;
+                            aBuffer.appendAscii( "=" );
+                            aBuffer.append( sLabel );
+                            sDataField = aBuffer.makeStringAndClear();
+                            bSet = false;
+                        }
+                    }
+                    if ( bSet )
+                        sDataField = aFormula.getEqualUndecoratedContent();
                 }
             }
-            if ( !xComponent.is() )
-                return;
 
-            if ( sDataField.getLength() )
-            {
-                ReportFormula aFormula( sDataField );
-                sDataField = aFormula.getEqualUndecoratedContent();
-            }
-
-            setPlaceholderText( getVclWindowPeer( xComponent ), sDataField );
+            if ( xControlModel.is() )
+                setPlaceholderText( getVclWindowPeer( xControlModel.get() ), sDataField );
         }
-        catch (uno::Exception e)
+        catch (uno::Exception)
         {
             DBG_UNHANDLED_EXCEPTION();
         }

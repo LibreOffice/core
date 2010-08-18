@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoadmin.cxx,v $
- * $Revision: 1.20.34.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,8 +91,7 @@ ODatabaseAdministrationDialog::ODatabaseAdministrationDialog(const Reference< XM
 {
     DBG_CTOR(ODatabaseAdministrationDialog,NULL);
 
-    m_pCollection = new ::dbaccess::ODsnTypeCollection();
-    m_pCollection->initUserDriverTypes(m_aContext.getLegacyServiceFactory());
+    m_pCollection = new ::dbaccess::ODsnTypeCollection(_rxORB);
     ODbAdminDialog::createItemSet(m_pDatasourceItems, m_pItemPool, m_pItemPoolDefaults, m_pCollection);
 }
 

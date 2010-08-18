@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TypeInfo.hxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -83,6 +80,7 @@ const sal_uInt16 TYPE_BLOB      = 27;
 const sal_uInt16 TYPE_CLOB      = 28;
 const sal_uInt16 TYPE_REF       = 29;
 const sal_uInt16 TYPE_OTHER     = 30;
+const sal_uInt16 TYPE_BIT       = 31;
 
     class OTypeInfo
     {

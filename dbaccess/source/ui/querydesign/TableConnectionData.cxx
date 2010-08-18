@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TableConnectionData.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -111,7 +108,8 @@ OTableConnectionData& OTableConnectionData::operator=( const OTableConnectionDat
     OConnectionLineDataVec* pLineData = const_cast<OTableConnectionData*>(&rConnData)->GetConnLineDataList();
 
     OConnectionLineDataVec::const_iterator aIter = pLineData->begin();
-    for(;aIter != pLineData->end();++aIter)
+    OConnectionLineDataVec::const_iterator aEnd = pLineData->end();
+    for(;aIter != aEnd;++aIter)
         m_vConnLineData.push_back(new OConnectionLineData(**aIter));
 
     return *this;
@@ -140,12 +138,13 @@ BOOL OTableConnectionData::SetConnLine( USHORT nIndex, const String& rSourceFiel
 BOOL OTableConnectionData::AppendConnLine( const ::rtl::OUString& rSourceFieldName, const ::rtl::OUString& rDestFieldName )
 {
     OConnectionLineDataVec::iterator aIter = m_vConnLineData.begin();
-    for(;aIter != m_vConnLineData.end();++aIter)
+    OConnectionLineDataVec::iterator aEnd = m_vConnLineData.end();
+    for(;aIter != aEnd;++aIter)
     {
         if((*aIter)->GetDestFieldName() == rDestFieldName && (*aIter)->GetSourceFieldName() == rSourceFieldName)
             break;
     }
-    if(aIter == m_vConnLineData.end())
+    if(aIter == aEnd)
     {
         OConnectionLineDataRef pNew = new OConnectionLineData(rSourceFieldName, rDestFieldName);
         if (!pNew.isValid())

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: reportformula.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -64,9 +61,6 @@ namespace rptui
         ::rtl::OUString     m_sUndecoratedContent;
 
     public:
-        // constructs a ReportFormula instance which is initially invalid.
-        ReportFormula();
-
         /// constructs a ReportFormula object from a string
         ReportFormula( const ::rtl::OUString& _rFormula );
 

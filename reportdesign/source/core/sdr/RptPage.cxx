@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: RptPage.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -187,6 +184,7 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
             {
                 SdrObject* pObject = RemoveObject(i);
                 (void)pObject;
+                break;
                 // delete pObject;
             }
         }
@@ -195,6 +193,7 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
 
 void OReportPage::resetSpecialMode()
 {
+    const sal_Bool bChanged = rModel.IsChanged();
     ::std::vector<SdrObject*>::iterator aIter = m_aTemporaryObjectList.begin();
     ::std::vector<SdrObject*>::iterator aEnd = m_aTemporaryObjectList.end();
 
@@ -202,6 +201,8 @@ void OReportPage::resetSpecialMode()
     {
          removeTempObject(*aIter);
     }
+    m_aTemporaryObjectList.clear();
+    rModel.SetChanged(bChanged);
 
     m_bSpecialInsertMode = false;
 }

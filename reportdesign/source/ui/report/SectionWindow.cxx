@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SectionWindow.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,7 +29,6 @@
 #include "ReportWindow.hxx"
 #include "ReportRuler.hxx"
 #include "rptui_slotid.hrc"
-#include <svtools/colorcfg.hxx>
 #include "ReportController.hxx"
 #include "SectionView.hxx"
 #include "RptDef.hxx"
@@ -41,13 +37,16 @@
 #include "uistrings.hrc"
 #include "helpids.hrc"
 #include "RptResId.hrc"
+#include "StartMarker.hxx"
+#include "EndMarker.hxx"
+#include "ViewsWindow.hxx"
+
+#include <svtools/colorcfg.hxx>
 #include <boost/bind.hpp>
 #include <functional>
 #include <algorithm>
 #include <vcl/svapp.hxx>
-#include "StartMarker.hxx"
-#include "EndMarker.hxx"
-#include "ViewsWindow.hxx"
+#include <connectivity/dbtools.hxx>
 
 namespace rptui
 {
@@ -195,8 +194,15 @@ bool OSectionWindow::setGroupSectionTitle(const uno::Reference< report::XGroup>&
     const bool bRet = _pIsSectionOn(&aGroupHelper) && _pGetSection(&aGroupHelper) == m_aReportSection.getSection() ;
     if ( bRet )
     {
+        ::rtl::OUString sExpression = _xGroup->getExpression();
+        ::rtl::OUString sLabel = getViewsWindow()->getView()->getReportView()->getController().getColumnLabel_throw(sExpression);
+        if ( sLabel.getLength() )
+        {
+            sExpression = sLabel;
+        }
+
         String sTitle = String(ModuleRes(_nResId));
-        sTitle.SearchAndReplace('#',_xGroup->getExpression());
+        sTitle.SearchAndReplace('#',sExpression);
         m_aStartMarker.setTitle(sTitle);
         m_aStartMarker.Invalidate(INVALIDATE_CHILDREN);
     } // if ( _pIsSectionOn(&aGroupHelper) )
@@ -274,9 +280,10 @@ void OSectionWindow::Resize()
 // -----------------------------------------------------------------------------
 void OSectionWindow::setCollapsed(sal_Bool _bCollapsed)
 {
-    m_aReportSection.Show(_bCollapsed);
-    m_aEndMarker.Show(_bCollapsed);
-    m_aSplitter.Show(_bCollapsed);
+    if ( m_aStartMarker.isCollapsed() != _bCollapsed )
+    {
+        m_aStartMarker.setCollapsed(_bCollapsed);
+    }
 }
 //-----------------------------------------------------------------------------
 void OSectionWindow::showProperties()
@@ -290,17 +297,20 @@ void OSectionWindow::setMarked(sal_Bool _bMark)
     m_aEndMarker.setMarked(_bMark);
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OSectionWindow, Collapsed, OStartMarker *, _pMarker )
+IMPL_LINK( OSectionWindow, Collapsed, OColorListener *, _pMarker )
 {
     if ( _pMarker )
     {
-        setCollapsed(!_pMarker->isCollapsed());
+        sal_Bool bShow = !_pMarker->isCollapsed();
+        m_aReportSection.Show(bShow);
+        m_aEndMarker.Show(bShow);
+        m_aSplitter.Show(bShow);
+
         m_pParent->resize(*this);
         Resize();
         // TRY
         // m_pParent->Invalidate(INVALIDATE_TRANSPARENT | INVALIDATE_NOCHILDREN);
         Invalidate();
-        // _pMarker->Invalidate();
     }
     return 0L;
 }

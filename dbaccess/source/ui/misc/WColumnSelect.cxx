@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: WColumnSelect.cxx,v $
- * $Revision: 1.27 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -140,12 +137,14 @@ void OWizColumnSelect::Reset()
 
     clearListBox(m_lbOrgColumnNames);
     clearListBox(m_lbNewColumnNames);
+    m_pParent->m_mNameMapping.clear();
 
     // insert the source columns in the left listbox
     const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();
     ODatabaseExport::TColumnVector::const_iterator aIter = pSrcColumns->begin();
+    ODatabaseExport::TColumnVector::const_iterator aEnd = pSrcColumns->end();
 
-    for(;aIter != pSrcColumns->end();++aIter)
+    for(;aIter != aEnd;++aIter)
     {
         sal_uInt16 nPos = m_lbOrgColumnNames.InsertEntry((*aIter)->first);
         m_lbOrgColumnNames.SetEntryData(nPos,(*aIter)->second);
@@ -336,7 +335,7 @@ void OWizColumnSelect::createNewColumn( ListBox* _pListbox,
     OFieldDescription* pNewField = new OFieldDescription(*_pSrcField);
     pNewField->SetName(sConvertedName);
     sal_Bool bNotConvert = sal_True;
-    pNewField->SetType(m_pParent->convertType(_pSrcField->getTypeInfo(),bNotConvert));
+    pNewField->SetType(m_pParent->convertType(_pSrcField->getSpecialTypeInfo(),bNotConvert));
     if ( !m_pParent->supportsPrimaryKey() )
         pNewField->SetPrimaryKey(sal_False);
 
