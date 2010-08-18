@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfiprocessor.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,13 +72,16 @@ namespace pdfi
     class PDFIProcessor : public ContentSink
     {
     public:
+        com::sun::star::uno::Reference<
+            com::sun::star::uno::XComponentContext >  m_xContext;
         double fYPrevTextPosition;
         double fPrevTextHeight;
         double fXPrevTextPosition;
         double fPrevTextWidth;
         enum DocumentTextDirecion { LrTb, RlTb, TbLr };
 
-        explicit PDFIProcessor( const com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >& );
+        explicit PDFIProcessor( const com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator >& xStat,
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > xContext) ;
 
         /// TEMP - enable writer-like text:p on doc level
         void enableToplevelText();

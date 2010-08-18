@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: InputResourceKey.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.loader;
 
 import java.io.Serializable;
@@ -40,32 +35,29 @@ import java.io.Serializable;
  */
 public class InputResourceKey implements Serializable
 {
-  private static final long serialVersionUID = 2819901838705793075L;
 
-  private final Object inputRepositoryId;
-  private final String path;
+    private static final long serialVersionUID = 2819901838705793075L;
+    private final Object inputRepositoryId;
+    private final String path;
 
-  public InputResourceKey(final Object inputRepositoryId, final String path)
-  {
-    this.inputRepositoryId = inputRepositoryId;
-    this.path = path;
-  }
+    public InputResourceKey(final Object inputRepositoryId, final String path)
+    {
+        this.inputRepositoryId = inputRepositoryId;
+        this.path = path;
+    }
 
-  public Object getInputRepositoryId()
-  {
-    return inputRepositoryId;
-  }
+    public Object getInputRepositoryId()
+    {
+        return inputRepositoryId;
+    }
 
-  public String getPath()
-  {
-    return path;
-  }
+    public String getPath()
+    {
+        return path;
+    }
 
-  public String toString()
-  {
-    return "InputResourceKey{" +
-           "inputRepositoryId=" + inputRepositoryId +
-           ", path='" + path + '\'' +
-           '}';
-  }
+    public String toString()
+    {
+        return "InputResourceKey{" + "inputRepositoryId=" + inputRepositoryId + ", path='" + path + '\'' + '}';
+    }
 }

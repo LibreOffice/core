@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PentahoReportJob.java,v $
- * $Revision: 1.8.16.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,10 +26,8 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import com.sun.star.report.DataSourceFactory;
+import com.sun.star.report.ImageService;
 import com.sun.star.report.InputRepository;
 import com.sun.star.report.JobDefinitionException;
 import com.sun.star.report.JobProgressIndicator;
@@ -43,7 +38,6 @@ import com.sun.star.report.ReportEngineParameterNames;
 import com.sun.star.report.ReportExecutionException;
 import com.sun.star.report.ReportJob;
 import com.sun.star.report.ReportJobDefinition;
-import com.sun.star.report.ImageService;
 import com.sun.star.report.SDBCReportDataFactory;
 import com.sun.star.report.pentaho.loader.InputRepositoryLoader;
 import com.sun.star.report.pentaho.model.OfficeDetailSection;
@@ -51,18 +45,19 @@ import com.sun.star.report.pentaho.model.OfficeDocument;
 import com.sun.star.report.pentaho.model.OfficeGroup;
 import com.sun.star.report.pentaho.model.OfficeReport;
 import com.sun.star.report.pentaho.output.chart.ChartRawReportProcessor;
-import com.sun.star.report.pentaho.output.text.TextRawReportProcessor;
 import com.sun.star.report.pentaho.output.spreadsheet.SpreadsheetRawReportProcessor;
+import com.sun.star.report.pentaho.output.text.TextRawReportProcessor;
+
+import java.io.IOException;
+
+import java.lang.Integer;
+
+import java.util.ArrayList;
 import java.util.List;
-import org.pentaho.reporting.libraries.formula.lvalues.ContextLookup;
-import org.pentaho.reporting.libraries.formula.lvalues.FormulaFunction;
-import org.pentaho.reporting.libraries.formula.lvalues.LValue;
-import org.pentaho.reporting.libraries.formula.lvalues.Term;
-import org.pentaho.reporting.libraries.formula.parser.FormulaParser;
-import org.pentaho.reporting.libraries.formula.parser.ParseException;
-import org.pentaho.reporting.libraries.formula.DefaultFormulaContext;
-import org.pentaho.reporting.libraries.formula.function.FunctionCategory;
-import org.pentaho.reporting.libraries.formula.function.FunctionRegistry;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.jfree.report.expressions.Expression;
 import org.jfree.report.expressions.FormulaExpression;
 import org.jfree.report.flow.DefaultReportJob;
@@ -71,17 +66,24 @@ import org.jfree.report.flow.raw.XmlPrintReportProcessor;
 import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Section;
 import org.jfree.report.util.ReportParameters;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
+import org.pentaho.reporting.libraries.formula.lvalues.ContextLookup;
+import org.pentaho.reporting.libraries.formula.lvalues.FormulaFunction;
+import org.pentaho.reporting.libraries.formula.lvalues.LValue;
+import org.pentaho.reporting.libraries.formula.lvalues.Term;
+import org.pentaho.reporting.libraries.formula.parser.FormulaParser;
+import org.pentaho.reporting.libraries.formula.parser.ParseException;
 import org.pentaho.reporting.libraries.resourceloader.Resource;
 import org.pentaho.reporting.libraries.resourceloader.ResourceException;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
+
 
 /**
  * ToDo: Allow interrupting of jobs and report the report progress
  */
 public class PentahoReportJob implements ReportJob
 {
+
     private static final Log LOGGER = LogFactory.getLog(PentahoReportJob.class);
     private boolean finished;
     private final List listeners;
@@ -147,6 +149,7 @@ public class PentahoReportJob implements ReportJob
 
         this.masterValues = (ArrayList) jobProperties.getProperty(ReportEngineParameterNames.INPUT_MASTER_VALUES);
         this.detailColumns = (ArrayList) jobProperties.getProperty(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS);
+        Integer maxRows=(Integer) jobProperties.getProperty(ReportEngineParameterNames.MAXROWS);
 
         this.resourceManager = new ResourceManager();
         this.resourceManager.registerDefaults();
@@ -198,7 +201,7 @@ public class PentahoReportJob implements ReportJob
      */
     public void interrupt()
     {
-    // hey, not yet ..
+        // hey, not yet ..
     }
 
     /**
@@ -241,17 +244,28 @@ public class PentahoReportJob implements ReportJob
             {
                 final OfficeGroup group = (OfficeGroup) node;
                 final FormulaExpression exp = (FormulaExpression) group.getGroupingExpression();
+                if (exp == null)
+                {
+                    continue;
+                }
 
                 try
                 {
                     final String expression = exp.getFormulaExpression();
-                    if ( expression == null)
+                    if (expression == null)
+                    {
                         continue;
+                    }
                     final FormulaFunction function = (FormulaFunction) parser.parse(expression);
                     final LValue[] parameters = function.getChildValues();
                     if (parameters.length > 0)
                     {
                         String name = parameters[0].toString();
+                        if (parameters[0] instanceof ContextLookup)
+                        {
+                            final ContextLookup context = (ContextLookup) parameters[0];
+                            name = context.getName();
+                        }
                         for (int j = 0; j < reportFunctions.length; j++)
                         {
                             if (reportFunctions[j] instanceof FormulaExpression)
@@ -260,18 +274,22 @@ public class PentahoReportJob implements ReportJob
 
                                 if (reportExp.getName().equals(name))
                                 {
-                                    final LValue val = (LValue) parser.parse(reportExp.getFormulaExpression());
-                                    if (val instanceof FormulaFunction)
+                                    LValue val = parser.parse(reportExp.getFormulaExpression());
+                                    while( !(val instanceof ContextLookup))
                                     {
-                                        final FormulaFunction reportFunction = (FormulaFunction) val;
-
-                                        final ContextLookup context = (ContextLookup) reportFunction.getChildValues()[0];
-                                        name = context.getName();
+                                        if (val instanceof Term)
+                                        {
+                                            val = ((Term)val).getHeadValue();
+                                        }
+                                        else if (val instanceof FormulaFunction)
+                                        {
+                                            final FormulaFunction reportFunction = (FormulaFunction) val;
+                                            val = reportFunction.getChildValues()[0];
+                                        }
                                     }
-                                    else if (val instanceof Term)
+                                    if (val instanceof ContextLookup)
                                     {
-                                        final Term term = (Term) val;
-                                        final ContextLookup context = (ContextLookup) term.getHeadValue().getChildValues()[0];
+                                        final ContextLookup context = (ContextLookup) val;
                                         name = context.getName();
                                     }
                                     break;
@@ -307,6 +325,7 @@ public class PentahoReportJob implements ReportJob
         job.getConfiguration().setConfigProperty(ReportEngineParameterNames.AUTHOR, (String) jobProperties.getProperty(ReportEngineParameterNames.AUTHOR));
         job.getConfiguration().setConfigProperty(ReportEngineParameterNames.TITLE, (String) jobProperties.getProperty(ReportEngineParameterNames.TITLE));
     }
+
     /**
      * Although we might want to run the job as soon as it has been created, sometimes it is
      * wiser to let the user add some listeners first. If we execute at once, the user
@@ -343,10 +362,12 @@ public class PentahoReportJob implements ReportJob
             final String escapeProcessing = (String) officeReport.getAttribute(OfficeNamespaces.OOREPORT_NS, SDBCReportDataFactory.ESCAPE_PROCESSING);
             report.setQuery(command);
             parameters.put(SDBCReportDataFactory.COMMAND_TYPE, commandType);
-            parameters.put(SDBCReportDataFactory.ESCAPE_PROCESSING,new Boolean(!("false".equals(escapeProcessing))));
+            parameters.put(SDBCReportDataFactory.ESCAPE_PROCESSING, !("false".equals(escapeProcessing)));
 
             final String filter = (String) officeReport.getAttribute(OfficeNamespaces.OOREPORT_NS, "filter");
             parameters.put(SDBCReportDataFactory.UNO_FILTER, filter);
+
+            parameters.put(ReportEngineParameterNames.MAXROWS, report.getJobProperties().getProperty(ReportEngineParameterNames.MAXROWS));
 
             final long startTime = System.currentTimeMillis();
             final ReportProcessor rp = getProcessorForContentType(contentType);
@@ -358,8 +379,10 @@ public class PentahoReportJob implements ReportJob
         catch (final Exception e)
         {
             String message = e.getMessage();
-            if ( message.length() == 0 )
+            if (message == null || message.length() == 0)
+            {
                 message = "Failed to process the report";
+            }
             throw new ReportExecutionException(message, e);
         }
 

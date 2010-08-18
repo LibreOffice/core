@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterPaintManager.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,6 +32,7 @@
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/drawing/XPresenterHelper.hpp>
 #include <rtl/ref.hxx>
+#include <boost/function.hpp>
 
 namespace css = ::com::sun::star;
 
@@ -57,6 +54,11 @@ public:
         const css::uno::Reference<css::awt::XWindow>& rxParentWindow,
         const css::uno::Reference<css::drawing::XPresenterHelper>& rxPresenterHelper,
         const rtl::Reference<PresenterPaneContainer>& rpPaneContainer);
+
+    ::boost::function<void(const css::awt::Rectangle& rRepaintBox)>
+        GetInvalidator (
+            const css::uno::Reference<css::awt::XWindow>& rxWindow,
+            const bool bSynchronous = false);
 
     /** Request a repaint of the whole window.
         @param rxWindow

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,6 +42,8 @@ ENABLE_EXCEPTIONS=TRUE
         @echo "PDF Import extension disabled."
 .ENDIF
 
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
 .IF "$(SYSTEM_ZLIB)" == "YES"
 CFLAGS+=-DSYSTEM_ZLIB
 .ENDIF
@@ -70,6 +68,7 @@ SHL1STDLIBS=\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPUNITLIB)		\
+        $(TESTSHL2LIB)           \
     $(ZLIB3RDLIB)	    \
     $(CPPULIB)			\
     $(SALLIB)
@@ -103,6 +102,7 @@ APP1STDLIBS=\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPUNITLIB)		\
+        $(TESTSHL2LIB)           \
     $(ZLIB3RDLIB)	    \
     $(CPPULIB)			\
     $(SALLIB)
@@ -131,6 +131,7 @@ APP2STDLIBS=\
       $(COMPHELPERLIB)	\
       $(CPPUHELPERLIB)	\
       $(CPPUNITLIB)		\
+        $(TESTSHL2LIB)           \
       $(ZLIB3RDLIB)	    \
       $(CPPULIB)			\
       $(SALLIB)
@@ -161,5 +162,5 @@ APP2STDLIBS=\
           @echo ----------------------------------------------------------
           testshl2 -forward $(BIN)$/ $(SHL1TARGETN)
            $(TOUCH) $@
-  
+
 #ALLTAR : $(MISC)$/pdfi_unittest_succeeded

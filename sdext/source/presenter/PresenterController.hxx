@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterController.hxx,v $
- *
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,6 +28,8 @@
 #ifndef SDEXT_PRESENTER_CONTROLLER_HXX
 #define SDEXT_PRESENTER_CONTROLLER_HXX
 
+#include "PresenterAccessibility.hxx"
+#include "PresenterPaneContainer.hxx"
 #include "PresenterTheme.hxx"
 #include "PresenterSprite.hxx"
 #include <cppuhelper/compbase6.hxx>
@@ -135,6 +133,9 @@ public:
     css::uno::Reference<css::drawing::framework::XConfigurationController>
         GetConfigurationController (void) const;
     css::uno::Reference<css::drawing::XDrawPage> GetCurrentSlide (void) const;
+    ::rtl::Reference<PresenterAccessible> GetAccessible (void) const;
+    void SetAccessibilityActiveState (const bool bIsActive);
+    bool IsAccessibilityActive (void) const;
 
     void HandleMouseClick (const css::awt::MouseEvent& rEvent);
     void UpdatePaneTitles (void);
@@ -234,6 +235,8 @@ private:
     ::boost::shared_ptr<PresenterPaintManager> mpPaintManager;
     sal_Int32 mnPendingSlideNumber;
     css::uno::Reference<css::util::XURLTransformer> mxUrlTransformer;
+    ::rtl::Reference<PresenterAccessible> mpAccessibleObject;
+    bool mbIsAccessibilityActive;
 
     void InitializePresenterScreen (void);
     void InitializeSlideShowView (const css::uno::Reference<css::uno::XInterface>& rxView);

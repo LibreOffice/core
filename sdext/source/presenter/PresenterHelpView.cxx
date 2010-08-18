@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterHelpView.cxx,v $
- *
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -190,9 +186,7 @@ PresenterHelpView::PresenterHelpView (
             mxCanvas,
             A2S("HelpViewCloser"));
 
-        mnMaximalWidth = (mxWindow->getPosSize().Width - 4*gnHorizontalGap) / 2;
         ReadHelpStrings();
-        CheckFontSize();
         Resize();
     }
     catch (RuntimeException&)
@@ -434,6 +428,10 @@ void PresenterHelpView::CheckFontSize (void)
         return;
 
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
+    if (aWindowBox.Width<=0 || aWindowBox.Height<=0)
+        return;
+
+    sal_Int32 nBestSize (6);
 
     // Scaling down and then reformatting can cause the text to be too large
     // still.  So do this again and again until the text size is
@@ -448,15 +446,25 @@ void PresenterHelpView::CheckFontSize (void)
                 (*iBlock)->maLeft.GetHeight(),
                 (*iBlock)->maRight.GetHeight());
 
-        if (nY <= aWindowBox.Height-gnVerticalBorder)
-            break;
+        const double nHeightDifference (nY - (aWindowBox.Height-gnVerticalBorder));
+        if (nHeightDifference <= 0 && nHeightDifference > -50)
+        {
+            // We have found a good font size that is large and leaves not
+            // too much space below the help text.
+            return;
+        }
 
         // Font is too large.  Make it smaller.
 
         // Use a simple linear transformation to calculate initial guess of
         // a size that lets all help text be shown inside the window.
-        const double nScale (::std::min(0.95,double(aWindowBox.Height-gnVerticalBorder) / nY));
+        const double nScale (double(aWindowBox.Height-gnVerticalBorder) / nY);
+        if (nScale > 0.95 && nScale <1.05)
+            break;
+
         sal_Int32 nFontSizeGuess (::std::max(sal_Int32(1),sal_Int32(mpFont->mnSize * nScale)));
+        if (nHeightDifference<0 && mpFont->mnSize>nBestSize)
+            nBestSize = mpFont->mnSize;
         mpFont->mnSize = nFontSizeGuess;
         mpFont->mxFont = NULL;
         mpFont->PrepareFont(mxCanvas);
@@ -464,6 +472,23 @@ void PresenterHelpView::CheckFontSize (void)
         // Reformat blocks.
         for (iBlock=mpTextContainer->begin(); iBlock!=iBlockEnd; ++iBlock)
             (*iBlock)->Update(mpFont->mxFont, mnMaximalWidth);
+    }
+
+    if (nBestSize != mpFont->mnSize)
+    {
+        mpFont->mnSize = nBestSize;
+        mpFont->mxFont = NULL;
+        mpFont->PrepareFont(mxCanvas);
+
+        // Reformat blocks.
+        for (TextContainer::iterator
+                 iBlock (mpTextContainer->begin()),
+                 iEnd (mpTextContainer->end());
+             iBlock!=iEnd;
+             ++iBlock)
+        {
+            (*iBlock)->Update(mpFont->mxFont, mnMaximalWidth);
+        }
     }
 }
 
@@ -517,6 +542,7 @@ void PresenterHelpView::Resize (void)
     if (mpCloseButton.get() != NULL && mxWindow.is())
     {
         const awt::Rectangle aWindowBox (mxWindow->getPosSize());
+        mnMaximalWidth = (mxWindow->getPosSize().Width - 4*gnHorizontalGap) / 2;
 
         // Place vertical separator.
         mnSeparatorY = aWindowBox.Height
@@ -525,6 +551,8 @@ void PresenterHelpView::Resize (void)
         mpCloseButton->SetCenter(geometry::RealPoint2D(
             aWindowBox.Width/2,
             aWindowBox.Height - mpCloseButton->GetSize().Height/2));
+
+        CheckFontSize();
     }
 }
 
@@ -753,7 +781,9 @@ void LineDescriptorList::FormatText (
         }
     }
     if ( ! aLineDescriptor.IsEmpty())
+    {
         mpLineDescriptors->push_back(aLineDescriptor);
+    }
 }
 
 

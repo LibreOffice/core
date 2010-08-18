@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StyleMapperKey.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -96,9 +93,7 @@ public final class StyleMapperKey
 
             final StyleMapperKey that = (StyleMapperKey) o;
 
-            if ((attributeName != null ? !attributeName.equals(that.attributeName) : that.attributeName != null) ||
-                    (attributeNamespace != null ? !attributeNamespace.equals(that.attributeNamespace) : that.attributeNamespace != null) ||
-                    !elementName.equals(that.elementName) || !elementNamespace.equals(that.elementNamespace))
+            if ((attributeName != null ? !attributeName.equals(that.attributeName) : that.attributeName != null) || (attributeNamespace != null ? !attributeNamespace.equals(that.attributeNamespace) : that.attributeNamespace != null) || !elementName.equals(that.elementName) || !elementNamespace.equals(that.elementNamespace))
             {
                 return false;
             }

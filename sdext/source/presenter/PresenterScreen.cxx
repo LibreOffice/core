@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterScreen.cxx,v $
- *
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -467,9 +463,7 @@ void PresenterScreen::InitializePresenterScreen (void)
                 SetupPaneFactory(xContext);
                 SetupViewFactory(xContext);
 
-                mpPresenterController->GetWindowManager()->SetSlideSorterState(false);
-                mpPresenterController->GetWindowManager()->SetLayoutMode(
-                    PresenterWindowManager::Standard);
+                mpPresenterController->GetWindowManager()->RestoreViewMode();
             }
             catch (RuntimeException&)
             {
@@ -790,10 +784,11 @@ void PresenterScreen::ProcessViewDescriptions (
             rConfiguration.GetConfigurationNode(A2S("Presenter/Views")),
             UNO_QUERY_THROW);
 
-        ::std::vector<rtl::OUString> aProperties (3);
+        ::std::vector<rtl::OUString> aProperties (4);
         aProperties[0] = OUString::createFromAscii("ViewURL");
         aProperties[1] = OUString::createFromAscii("Title");
-        aProperties[2] = OUString::createFromAscii("IsOpaque");
+        aProperties[2] = OUString::createFromAscii("AccessibleTitle");
+        aProperties[3] = OUString::createFromAscii("IsOpaque");
         mnComponentIndex = 1;
         PresenterConfigurationAccess::ForAll(
             xViewDescriptionsNode,
@@ -865,7 +860,7 @@ void PresenterScreen::ProcessViewDescription (
 {
     (void)rsKey;
 
-    if (rValues.size() != 3)
+    if (rValues.size() != 4)
         return;
 
     try
@@ -874,7 +869,10 @@ void PresenterScreen::ProcessViewDescription (
         OUString sViewURL;
         rValues[0] >>= sViewURL;
         rValues[1] >>= aViewDescriptor.msTitle;
-        rValues[2] >>= aViewDescriptor.mbIsOpaque;
+        rValues[2] >>= aViewDescriptor.msAccessibleTitle;
+        rValues[3] >>= aViewDescriptor.mbIsOpaque;
+        if (aViewDescriptor.msAccessibleTitle.getLength()==0)
+            aViewDescriptor.msAccessibleTitle = aViewDescriptor.msTitle;
         maViewDescriptors[sViewURL] = aViewDescriptor;
        }
     catch (Exception&)
@@ -913,6 +911,7 @@ void PresenterScreen::SetupView(
             xPaneId,
             rsViewURL,
             aViewDescriptor.msTitle,
+            aViewDescriptor.msAccessibleTitle,
             aViewDescriptor.mbIsOpaque,
             rViewInitialization,
             nLeft,

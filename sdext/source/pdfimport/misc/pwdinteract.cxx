@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pwdinteract.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,12 +33,11 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <com/sun/star/task/XInteractionPassword.hpp>
-#include <com/sun/star/task/PasswordRequest.hpp>
+#include <com/sun/star/task/DocumentPasswordRequest.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/compbase2.hxx>
 #include <cppuhelper/basemutex.hxx>
-#include <comphelper/anytostring.hxx>
 
 
 using namespace com::sun::star;
@@ -58,12 +53,12 @@ class PDFPasswordRequest : private cppu::BaseMutex,
                            public PDFPasswordRequestBase
 {
 private:
-    task::PasswordRequest m_aRequest;
-    rtl::OUString         m_aPassword;
-    bool                  m_bSelected;
+    task::DocumentPasswordRequest m_aRequest;
+    rtl::OUString                 m_aPassword;
+    bool                          m_bSelected;
 
 public:
-    explicit PDFPasswordRequest(bool bFirstTry);
+    explicit PDFPasswordRequest(bool bFirstTry, const rtl::OUString& rName);
 
     // XInteractionRequest
     virtual uno::Any SAL_CALL getRequest(  ) throw (uno::RuntimeException);
@@ -79,7 +74,7 @@ public:
     bool isSelected() const { osl::MutexGuard const guard( m_aMutex ); return m_bSelected; }
 };
 
-PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry ) :
+PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry, const rtl::OUString& rName ) :
     PDFPasswordRequestBase( m_aMutex ),
     m_aRequest(),
     m_aPassword(),
@@ -89,6 +84,7 @@ PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry ) :
         task::PasswordRequestMode_PASSWORD_ENTER :
         task::PasswordRequestMode_PASSWORD_REENTER;
     m_aRequest.Classification = task::InteractionClassification_QUERY;
+    m_aRequest.Name = rName;
 }
 
 uno::Any SAL_CALL PDFPasswordRequest::getRequest() throw (uno::RuntimeException)
@@ -137,25 +133,21 @@ namespace pdfi
 
 bool getPassword( const uno::Reference< task::XInteractionHandler >& xHandler,
                   rtl::OUString&                                     rOutPwd,
-                  bool                                               bFirstTry )
+                  bool                                               bFirstTry,
+                  const rtl::OUString&                               rDocName
+                  )
 {
     bool bSuccess = false;
 
     PDFPasswordRequest* pRequest;
     uno::Reference< task::XInteractionRequest > xReq(
-        pRequest = new PDFPasswordRequest( bFirstTry ) );
+        pRequest = new PDFPasswordRequest( bFirstTry, rDocName ) );
     try
     {
         xHandler->handle( xReq );
     }
     catch( uno::Exception& )
     {
-#if 0
-        OSL_ENSURE( false,
-                    rtl::OUStringToOString(
-                        comphelper::anyToString( cppu::getCaughtException() ),
-                        RTL_TEXTENCODING_UTF8 ).getStr() );
-#endif
     }
 
     OSL_TRACE( "request %s selected\n", pRequest->isSelected() ? "was" : "was not" );

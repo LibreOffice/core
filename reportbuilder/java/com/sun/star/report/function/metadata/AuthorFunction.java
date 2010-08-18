@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: AuthorFunction.java,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +27,7 @@
 package com.sun.star.report.function.metadata;
 
 import com.sun.star.report.ReportEngineParameterNames;
+
 import org.pentaho.reporting.libraries.formula.EvaluationException;
 import org.pentaho.reporting.libraries.formula.FormulaContext;
 import org.pentaho.reporting.libraries.formula.LibFormulaErrorValue;
@@ -45,16 +43,12 @@ import org.pentaho.reporting.libraries.formula.typing.coretypes.TextType;
 public class AuthorFunction implements Function
 {
 
-    public AuthorFunction()
-    {
-    }
-
     public String getCanonicalName()
     {
         return "AUTHOR";
     }
 
-    public TypeValuePair evaluate(final FormulaContext context,final ParameterCallback parameters)
+    public TypeValuePair evaluate(final FormulaContext context, final ParameterCallback parameters)
             throws EvaluationException
     {
         if (parameters.getParameterCount() != 0)

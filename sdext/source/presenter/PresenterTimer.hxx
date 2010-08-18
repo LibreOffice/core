@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterTimer.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -70,6 +66,11 @@ public:
         const Task& rTask,
         const TimeValue& rDueTime);
 
+    /** Schedule a task to be executed repeatedly.  The task is executed the
+        first time after nFirst nano-seconds (1000000000 corresponds to one
+        second).  After that task is executed in intervalls that are
+        nIntervall ns long until CancelTask is called.
+    */
     static sal_Int32 ScheduleRepeatedTask (
         const Task& rTask,
         const sal_Int64 nFirst,

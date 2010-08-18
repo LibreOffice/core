@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterPaneContainer.cxx,v $
- *
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,6 +74,7 @@ void PresenterPaneContainer::PreparePane (
     const Reference<XResourceId>& rxPaneId,
     const OUString& rsViewURL,
     const OUString& rsTitle,
+    const OUString& rsAccessibleTitle,
     const bool bIsOpaque,
     const ViewInitializationFunction& rViewInitialization,
     const double nLeft,
@@ -106,6 +103,7 @@ void PresenterPaneContainer::PreparePane (
             pDescriptor->msTitleTemplate = rsTitle;
             pDescriptor->msTitle = OUString();
         }
+        pDescriptor->msAccessibleTitleTemplate = rsAccessibleTitle;
         pDescriptor->maViewInitialization = rViewInitialization;
         pDescriptor->mnLeft = nLeft;
         pDescriptor->mnTop = nTop;
@@ -151,7 +149,7 @@ PresenterPaneContainer::SharedPaneDescriptor
 
         pDescriptor = FindPaneURL(sPaneURL);
         if (pDescriptor.get() == NULL)
-            PreparePane(xPaneId, OUString(), OUString(),
+            PreparePane(xPaneId, OUString(), OUString(), OUString(),
                 false, ViewInitializationFunction(), 0,0,0,0);
         pDescriptor = FindPaneURL(sPaneURL);
         if (pDescriptor.get() != NULL)

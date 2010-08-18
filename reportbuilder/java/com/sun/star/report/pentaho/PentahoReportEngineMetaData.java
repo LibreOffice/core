@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PentahoReportEngineMetaData.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,20 +26,22 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
-import com.sun.star.report.ReportJobFactory;
-import java.util.HashMap;
-import java.util.HashSet;
-
 import com.sun.star.report.DataSourceFactory;
+import com.sun.star.report.ImageService;
 import com.sun.star.report.InputRepository;
 import com.sun.star.report.OutputRepository;
 import com.sun.star.report.ReportEngineMetaData;
 import com.sun.star.report.ReportEngineParameterNames;
-import com.sun.star.report.ImageService;
+import com.sun.star.report.ReportJobFactory;
+
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.pentaho.reporting.libraries.base.util.HashNMap;
+
 
 public class PentahoReportEngineMetaData
         implements ReportEngineMetaData
@@ -73,6 +72,7 @@ public class PentahoReportEngineMetaData
         mandatoryParameters.add(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS);
         mandatoryParameters.add(ReportEngineParameterNames.AUTHOR);
         mandatoryParameters.add(ReportEngineParameterNames.TITLE);
+        mandatoryParameters.add(ReportEngineParameterNames.MAXROWS);
 
 
         parameterTypes = new HashMap();
@@ -89,6 +89,7 @@ public class PentahoReportEngineMetaData
         parameterTypes.put(ReportEngineParameterNames.INPUT_DETAIL_COLUMNS, List.class);
         parameterTypes.put(ReportEngineParameterNames.AUTHOR, String.class);
         parameterTypes.put(ReportEngineParameterNames.TITLE, String.class);
+        parameterTypes.put(ReportEngineParameterNames.MAXROWS, Integer.class);
 
         enumerationValues = new HashNMap();
         enumerationValues.add(CONTENT_TYPE,

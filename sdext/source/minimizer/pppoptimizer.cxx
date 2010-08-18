@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pppoptimizer.cxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +31,8 @@
 #include "pppoptimizer.hxx"
 #include "impoptimizer.hxx"
 #include <osl/file.hxx>
+
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;

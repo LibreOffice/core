@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TextRawReportProcessor.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,10 +27,11 @@
 package com.sun.star.report.pentaho.output.text;
 
 import com.sun.star.report.DataSourceFactory;
-import com.sun.star.report.OutputRepository;
-import com.sun.star.report.InputRepository;
 import com.sun.star.report.ImageService;
+import com.sun.star.report.InputRepository;
+import com.sun.star.report.OutputRepository;
 import com.sun.star.report.pentaho.PentahoFormulaContext;
+
 import org.jfree.report.ReportProcessingException;
 import org.jfree.report.data.ReportContextImpl;
 import org.jfree.report.flow.ReportContext;
@@ -41,6 +39,7 @@ import org.jfree.report.flow.ReportJob;
 import org.jfree.report.flow.ReportStructureRoot;
 import org.jfree.report.flow.ReportTarget;
 import org.jfree.report.flow.SinglePassReportProcessor;
+
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 
 /**
@@ -108,7 +107,7 @@ public class TextRawReportProcessor extends SinglePassReportProcessor
         if (context instanceof ReportContextImpl)
         {
             final ReportContextImpl impl = (ReportContextImpl) context;
-            impl.setFormulaContext(new PentahoFormulaContext(impl.getFormulaContext(),job.getConfiguration()));
+            impl.setFormulaContext(new PentahoFormulaContext(impl.getFormulaContext(), job.getConfiguration()));
         }
         return context;
     }

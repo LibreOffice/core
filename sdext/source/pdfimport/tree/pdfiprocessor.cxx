@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfiprocessor.cxx,v $
- *
- * $Revision: 1.3.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,6 +47,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/range/b2irange.hxx>
 #include <basegfx/range/b2drectangle.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 
 #include <com/sun/star/rendering/XVolatileBitmap.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
@@ -64,7 +61,10 @@ using namespace com::sun::star;
 namespace pdfi
 {
 
- PDFIProcessor::PDFIProcessor( const uno::Reference< task::XStatusIndicator >& xStat ) :
+ PDFIProcessor::PDFIProcessor( const uno::Reference< task::XStatusIndicator >& xStat ,
+            com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >  xContext) :
+
+    m_xContext(xContext),
     fYPrevTextPosition(-10000.0),
     fPrevTextHeight(0.0),
     fXPrevTextPosition(0.0),
@@ -369,9 +369,10 @@ void PDFIProcessor::processGlyphLine()
          else
          {
             if (
-                ( m_GlyphsList[i].getPrevGlyphsSpace()<= fPreAvarageSpaceValue )&&
-                ( fPrevDiffCharSpace<=fAvarageDiffCharSpaceValue )&&
-                ( fPostDiffCharSpace<=fAvarageDiffCharSpaceValue ) ||
+                ( ( m_GlyphsList[i].getPrevGlyphsSpace()<= fPreAvarageSpaceValue )&&
+                  ( fPrevDiffCharSpace<=fAvarageDiffCharSpaceValue )&&
+                  ( fPostDiffCharSpace<=fAvarageDiffCharSpaceValue )
+                ) ||
                 ( m_GlyphsList[i].getPrevGlyphsSpace() == 0.0 )
             )
             {
@@ -446,7 +447,6 @@ void PDFIProcessor::drawGlyphLine( const rtl::OUString&             rGlyphs,
                                    const geometry::Matrix2D&        rFontMatrix )
 {
     double isFirstLine= fYPrevTextPosition+ fXPrevTextPosition+ fPrevTextHeight+ fPrevTextWidth ;
-
     if(
         (  ( ( fYPrevTextPosition!= rRect.Y1 ) ) ||
            ( ( fXPrevTextPosition > rRect.X2 ) ) ||
@@ -455,36 +455,35 @@ void PDFIProcessor::drawGlyphLine( const rtl::OUString&             rGlyphs,
     )
     {
         processGlyphLine();
-
     }
 
-       CharGlyph aGlyph;
+    CharGlyph aGlyph;
 
-       aGlyph.setGlyph ( rGlyphs );
-       aGlyph.setRect  ( rRect );
-       aGlyph.setFontMatrix ( rFontMatrix );
-       aGlyph.setGraphicsContext ( getCurrentContext() );
-       getGCId(getCurrentContext());
-       aGlyph.setCurElement( m_pCurElement );
+    aGlyph.setGlyph ( rGlyphs );
+    aGlyph.setRect  ( rRect );
+    aGlyph.setFontMatrix ( rFontMatrix );
+    aGlyph.setGraphicsContext ( getCurrentContext() );
+    getGCId(getCurrentContext());
+    aGlyph.setCurElement( m_pCurElement );
 
-       aGlyph.setYPrevGlyphPosition( fYPrevTextPosition );
-       aGlyph.setXPrevGlyphPosition( fXPrevTextPosition );
-       aGlyph.setPrevGlyphHeight  ( fPrevTextHeight );
-       aGlyph.setPrevGlyphWidth   ( fPrevTextWidth );
+    aGlyph.setYPrevGlyphPosition( fYPrevTextPosition );
+    aGlyph.setXPrevGlyphPosition( fXPrevTextPosition );
+    aGlyph.setPrevGlyphHeight  ( fPrevTextHeight );
+    aGlyph.setPrevGlyphWidth   ( fPrevTextWidth );
 
-       m_GlyphsList.push_back( aGlyph );
+    m_GlyphsList.push_back( aGlyph );
 
-       fYPrevTextPosition  = rRect.Y1;
-       fXPrevTextPosition  = rRect.X2;
-       fPrevTextHeight     = rRect.Y2-rRect.Y1;
-       fPrevTextWidth      = rRect.X2-rRect.X1;
+    fYPrevTextPosition  = rRect.Y1;
+    fXPrevTextPosition  = rRect.X2;
+    fPrevTextHeight     = rRect.Y2-rRect.Y1;
+    fPrevTextWidth      = rRect.X2-rRect.X1;
 
-       if( !m_bIsWhiteSpaceInLine )
-       {
-         rtl::OUString tempWhiteSpaceStr( 32 );
-         m_bIsWhiteSpaceInLine=rGlyphs.equals( tempWhiteSpaceStr );
-       }
-
+    if( !m_bIsWhiteSpaceInLine )
+    {
+        static rtl::OUString tempWhiteSpaceStr( 0x20 );
+        static rtl::OUString tempWhiteSpaceNonBreakingStr( 0xa0 );
+        m_bIsWhiteSpaceInLine=(rGlyphs.equals( tempWhiteSpaceStr ) || rGlyphs.equals( tempWhiteSpaceNonBreakingStr ));
+    }
 }
 
 GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
@@ -503,8 +502,7 @@ GraphicsContext& PDFIProcessor::getTransformGlyphContext( CharGlyph& rGlyph )
     FontAttributes aFontAttrs = m_aIdToFont[ rGlyph.getGC().FontId ];
 
     // add transformation to GC
-    basegfx::B2DHomMatrix aFontTransform;
-    aFontTransform.translate( -rRect.X1, -rRect.Y1 );
+    basegfx::B2DHomMatrix aFontTransform(basegfx::tools::createTranslateB2DHomMatrix(-rRect.X1, -rRect.Y1));
     aFontTransform *= aFontMatrix;
     aFontTransform.translate( rRect.X1, rRect.Y1 );
 
@@ -571,22 +569,70 @@ void PDFIProcessor::setupImage(ImageId nImage)
 {
     const GraphicsContext& rGC( getCurrentContext() );
 
-    // transform unit rect, to determine view box
-    basegfx::B2DPoint aOrigin(0,0);
-    aOrigin *= rGC.Transformation;
+    basegfx::B2DHomMatrix aTrans( rGC.Transformation );
 
-    basegfx::B2DVector aSize(1,1);
-    aSize *= rGC.Transformation;
+    // check for rotation, which is the other way around in ODF
+    basegfx::B2DTuple aScale, aTranslation;
+    double fRotate, fShearX;
+    rGC.Transformation.decompose( aScale, aTranslation, fRotate, fShearX );
+    // TODDO(F4): correcting rotation when fShearX != 0 ?
+    if( fRotate != 0.0 )
+    {
+
+        // try to create a Transformation that corrects for the wrong rotation
+        aTrans.identity();
+        aTrans.scale( aScale.getX(), aScale.getY() );
+        aTrans.rotate( -fRotate );
+
+        basegfx::B2DRange aRect( 0, 0, 1, 1 );
+        aRect.transform( aTrans );
+
+        // TODO(F3) treat translation correctly
+        // the corrections below work for multiples of 90 degree
+        // which is a common case (landscape/portrait/seascape)
+        // we need a general solution here; however this needs to
+        // work in sync with DrawXmlEmitter::fillFrameProps and WriterXmlEmitter::fillFrameProps
+        // admittedly this is a lame workaround and fails for arbitrary rotation
+        double fQuadrant = fmod( fRotate, 2.0*M_PI ) / M_PI_2;
+        int nQuadrant = (int)fQuadrant;
+        if( nQuadrant < 0 )
+            nQuadrant += 4;
+        if( nQuadrant == 1 )
+        {
+            aTranslation.setX( aTranslation.getX() + aRect.getHeight() + aRect.getWidth());
+            aTranslation.setY( aTranslation.getY() + aRect.getHeight() );
+        }
+        if( nQuadrant == 3 )
+            aTranslation.setX( aTranslation.getX() - aRect.getHeight() );
+
+        aTrans.translate( aTranslation.getX(),
+                          aTranslation.getY() );
+    }
+
+    bool bMirrorVertical = aScale.getY() > 0;
+
+    // transform unit rect to determine view box
+    basegfx::B2DRange aRect( 0, 0, 1, 1 );
+    aRect.transform( aTrans );
 
     // TODO(F3): Handle clip
     const sal_Int32 nGCId = getGCId(rGC);
     FrameElement* pFrame = m_pElFactory->createFrameElement( m_pCurElement, nGCId );
     ImageElement* pImageElement = m_pElFactory->createImageElement( pFrame, nGCId, nImage );
-    pFrame->x = pImageElement->x = aOrigin.getX();
-    pFrame->y = pImageElement->y = aOrigin.getY();
-    pFrame->w = pImageElement->w = aSize.getX();
-    pFrame->h = pImageElement->h = aSize.getY();
+    pFrame->x = pImageElement->x = aRect.getMinX();
+    pFrame->y = pImageElement->y = aRect.getMinY();
+    pFrame->w = pImageElement->w = aRect.getWidth();
+    pFrame->h = pImageElement->h = aRect.getHeight();
     pFrame->ZOrder = m_nNextZOrder++;
+
+    if( bMirrorVertical )
+    {
+        pFrame->MirrorVertical = pImageElement->MirrorVertical = true;
+        pFrame->x        += aRect.getWidth();
+        pImageElement->x += aRect.getWidth();
+        pFrame->y        += aRect.getHeight();
+        pImageElement->y += aRect.getHeight();
+    }
 }
 
 void PDFIProcessor::drawMask(const uno::Sequence<beans::PropertyValue>& xBitmap,
@@ -799,7 +845,7 @@ void PDFIProcessor::emit( XmlEmitter&               rEmitter,
 
     m_pDocument->visitedBy( *finalizingVisitor, std::list<Element*>::iterator() );
 
-    EmitContext aContext( rEmitter, aStyles, m_aImages, *this, m_xStatusIndicator );
+    EmitContext aContext( rEmitter, aStyles, m_aImages, *this, m_xStatusIndicator, m_xContext );
     ElementTreeVisitorSharedPtr aEmittingVisitor(
         rVisitorFactory.createEmittingVisitor(aContext));
 

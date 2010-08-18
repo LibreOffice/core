@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrapper.hxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,13 +43,19 @@ namespace com { namespace sun { namespace star {
 
 namespace pdfi
 {
-    bool xpdf_ImportFromFile( const ::rtl::OUString&                             rURL,
+    bool xpdf_ImportFromFile( const rtl::OUString&                               rURL,
                               const ContentSinkSharedPtr&                        rSink,
+                              const com::sun::star::uno::Reference<
+                                    com::sun::star::task::XInteractionHandler >& xIHdl,
+                              const rtl::OUString&                               rPwd,
                               const com::sun::star::uno::Reference<
                                     com::sun::star::uno::XComponentContext >&    xContext );
     bool xpdf_ImportFromStream( const com::sun::star::uno::Reference<
                                       com::sun::star::io::XInputStream >&          xInput,
                                 const ContentSinkSharedPtr&                        rSink,
+                                const com::sun::star::uno::Reference<
+                                      com::sun::star::task::XInteractionHandler >& xIHdl,
+                                const rtl::OUString&                               rPwd,
                                 const com::sun::star::uno::Reference<
                                       com::sun::star::uno::XComponentContext >&    xContext );
 }

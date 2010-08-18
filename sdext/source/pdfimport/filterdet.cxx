@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: filterdet.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -740,10 +736,12 @@ uno::Reference< io::XStream > getAdditionalStream( const rtl::OUString&         
                                         break;
                                     }
 
+                                    rtl::OUString aDocName( rInPDFFileURL.copy( rInPDFFileURL.lastIndexOf( sal_Unicode('/') )+1 ) );
+
                                     bool bEntered = false;
                                     do
                                     {
-                                        bEntered = getPassword( xIntHdl, io_rPwd, ! bEntered );
+                                        bEntered = getPassword( xIntHdl, io_rPwd, ! bEntered, aDocName );
                                         rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
                                                                                        RTL_TEXTENCODING_ISO_8859_1 );
                                         bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );

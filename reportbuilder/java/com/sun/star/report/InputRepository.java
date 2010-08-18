@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: InputRepository.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,8 +26,8 @@
  ************************************************************************/
 package com.sun.star.report;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * This allows the job processor to load data from a repository. It is assumed,
@@ -54,9 +51,9 @@ public interface InputRepository
      *
      * @return the repository id
      */
-    public Object getId();
+    Object getId();
 
-    public InputStream createInputStream(final String name) throws IOException;
+    InputStream createInputStream(final String name) throws IOException;
 
     /** allows to acces sub repositories inside this repository
      *
@@ -64,7 +61,7 @@ public interface InputRepository
      * @return the sub repository
      * @throws java.io.IOException when the sub repository doesn't exist.
      */
-    public InputRepository openInputRepository(final String name) throws IOException;
+    InputRepository openInputRepository(final String name) throws IOException;
 
     /**
      * This returns an version number for the given resource. Return zero, if
@@ -75,11 +72,17 @@ public interface InputRepository
      * @param name the name of the resource
      * @return the version number
      */
-    public long getVersion(final String name);
+    long getVersion(final String name);
 
-    public boolean exists(final String name);
+    boolean exists(final String name);
 
-    public boolean isReadable(final String name);
+    boolean isReadable(final String name);
 
-    public void closeInputRepository();
+    void closeInputRepository();
+
+    /** returns the URL of the database document
+     *
+     * @return the URL of the database document
+     */
+    String getRootURL();
 }

@@ -2,11 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
 #
 # This file is part of OpenOffice.org.
 #
@@ -110,7 +108,7 @@ $(PAW_LAUNCHER) : $(ALTERNATE_SRC)$/$$(@:f)
 # using lngconvex.exe 
 
 $(RCFILES) : $(MANIFEST) $(ULFDIR)$/$(TARGET).ulf makefile.mk rcfooter.txt rcheader.txt rctmpl.txt
-    $(WRAPCMD) lngconvex.exe -ulf $(ULFDIR)$/$(TARGET).ulf -rc $(RES)$/$(TARGET).rc -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
+    $(LNGCONVEX) -ulf $(ULFDIR)$/$(TARGET).ulf -rc $(RES)$/$(TARGET).rc -rct rctmpl.txt -rch rcheader.txt -rcf rcfooter.txt
 
 $(PAW_RES_DLLS) : $(RCFILES)
     -$(MKDIRHIER) $(@:d)

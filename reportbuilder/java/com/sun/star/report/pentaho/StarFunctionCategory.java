@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- *  $RCSfile: StarFunctionCategory.java,v $
- *
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,21 +26,23 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
-import com.sun.star.uno.XComponentContext;
-import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.uno.Type;
 import com.sun.star.lib.uno.helper.PropertySetMixin;
+import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.report.meta.XFunctionDescription;
+import com.sun.star.uno.Type;
+import com.sun.star.uno.XComponentContext;
+
 import java.util.Locale;
 import java.util.MissingResourceException;
+
 import org.pentaho.reporting.libraries.formula.DefaultFormulaContext;
 import org.pentaho.reporting.libraries.formula.function.FunctionCategory;
 import org.pentaho.reporting.libraries.formula.function.FunctionRegistry;
 
-
 public final class StarFunctionCategory extends WeakBase
-   implements com.sun.star.report.meta.XFunctionCategory
+        implements com.sun.star.report.meta.XFunctionCategory
 {
+
     private final XComponentContext m_xContext;
     private final PropertySetMixin m_prophlp;
     // attributes
@@ -55,7 +53,7 @@ public final class StarFunctionCategory extends WeakBase
     private final DefaultFormulaContext defaultContext;
     private final Locale defaultLocale;
 
-    public StarFunctionCategory( DefaultFormulaContext defaultContext,final XComponentContext context,final FunctionRegistry functionRegistry,final int _number,final FunctionCategory category )
+    public StarFunctionCategory(DefaultFormulaContext defaultContext, final XComponentContext context, final FunctionRegistry functionRegistry, final int _number, final FunctionCategory category)
     {
         this.defaultContext = defaultContext;
         m_xContext = context;
@@ -68,7 +66,7 @@ public final class StarFunctionCategory extends WeakBase
             category.getDisplayName(defaultContext.getLocalizationContext().getLocale());
             locale = defaultContext.getLocalizationContext().getLocale();
         }
-        catch(MissingResourceException e)
+        catch (MissingResourceException e)
         {
             locale = Locale.ENGLISH;
         }
@@ -80,8 +78,8 @@ public final class StarFunctionCategory extends WeakBase
         // of the PropertySetMixin helper for further information.
         // Ensure that your attributes are initialized correctly!
         m_prophlp = new PropertySetMixin(m_xContext, this,
-            new Type(com.sun.star.report.meta.XFunctionCategory.class), null);
-    };
+                new Type(com.sun.star.report.meta.XFunctionCategory.class), null);
+    }
 
     // com.sun.star.beans.XPropertySet:
     public com.sun.star.beans.XPropertySetInfo getPropertySetInfo()
@@ -89,7 +87,7 @@ public final class StarFunctionCategory extends WeakBase
         return m_prophlp.getPropertySetInfo();
     }
 
-    public void setPropertyValue(String aPropertyName, Object aValue) throws com.sun.star.beans.UnknownPropertyException, com.sun.star.beans.PropertyVetoException, com.sun.star.lang.IllegalArgumentException,com.sun.star.lang.WrappedTargetException
+    public void setPropertyValue(String aPropertyName, Object aValue) throws com.sun.star.beans.UnknownPropertyException, com.sun.star.beans.PropertyVetoException, com.sun.star.lang.IllegalArgumentException, com.sun.star.lang.WrappedTargetException
     {
         m_prophlp.setPropertyValue(aPropertyName, aValue);
     }
@@ -117,7 +115,7 @@ public final class StarFunctionCategory extends WeakBase
     public void removeVetoableChangeListener(String aPropertyName, com.sun.star.beans.XVetoableChangeListener xListener) throws com.sun.star.beans.UnknownPropertyException, com.sun.star.lang.WrappedTargetException
     {
         m_prophlp.removeVetoableChangeListener(aPropertyName, xListener);
- }
+    }
 
     // com.sun.star.container.XElementAccess:
     public com.sun.star.uno.Type getElementType()
@@ -154,9 +152,10 @@ public final class StarFunctionCategory extends WeakBase
 
     public com.sun.star.report.meta.XFunctionDescription getFunction(int position) throws com.sun.star.lang.IndexOutOfBoundsException, com.sun.star.lang.WrappedTargetException
     {
-        if ( position >= functions.length )
+        if (position >= functions.length)
+        {
             throw new IndexOutOfBoundsException();
-        return new StarFunctionDescription(defaultContext,m_xContext,this,functionRegistry,functionRegistry.getMetaData(functions[position]));
+        }
+        return new StarFunctionDescription(defaultContext, m_xContext, this, functionRegistry.getMetaData(functions[position]));
     }
-
 }

@@ -11,6 +11,8 @@
     manifest:full-path="registry/data/org/openoffice/Office/extension/PresenterScreen.xcu"/>
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.configuration-schema"
     manifest:full-path="registry/schema/org/openoffice/Office/extension/PresenterScreen.xcs"/>
+  <manifest:file-entry manifest:media-type="application/vnd.sun.star.help"
+    manifest:full-path="help"/>
   <manifest:file-entry manifest:media-type="application/vnd.sun.star.package-bundle-description"
-                       manifest:full-path="help/component.txt"/>
+    manifest:full-path="help/component.txt"/>
 </manifest:manifest>

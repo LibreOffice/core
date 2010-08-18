@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: FormatCondition.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,8 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
-
 package com.sun.star.report.pentaho.model;
 
 import org.jfree.report.expressions.FormulaExpression;
@@ -41,32 +36,32 @@ import org.jfree.report.expressions.FormulaExpression;
  */
 public class FormatCondition
 {
-  private final FormulaExpression formula;
-  private final String styleName;
-  private final boolean enabled;
 
-  public FormatCondition(final FormulaExpression formula,
-                         final String styleName,
-                         final boolean enabled)
-  {
-    this.formula = formula;
-    this.styleName = styleName;
-    this.enabled = enabled;
-  }
+    private final FormulaExpression formula;
+    private final String styleName;
+    private final boolean enabled;
 
+    public FormatCondition(final FormulaExpression formula,
+            final String styleName,
+            final boolean enabled)
+    {
+        this.formula = formula;
+        this.styleName = styleName;
+        this.enabled = enabled;
+    }
 
-  public FormulaExpression getFormula()
-  {
-    return formula;
-  }
+    public FormulaExpression getFormula()
+    {
+        return formula;
+    }
 
-  public String getStyleName()
-  {
-    return styleName;
-  }
+    public String getStyleName()
+    {
+        return styleName;
+    }
 
-  public boolean isEnabled()
-  {
-    return enabled;
-  }
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
 }

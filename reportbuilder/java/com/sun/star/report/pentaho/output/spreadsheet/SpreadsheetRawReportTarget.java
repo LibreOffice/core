@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SpreadsheetRawReportTarget.java,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,48 +27,51 @@
 package com.sun.star.report.pentaho.output.spreadsheet;
 
 import com.sun.star.report.DataSourceFactory;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-
-import com.sun.star.report.InputRepository;
-import com.sun.star.report.OutputRepository;
 import com.sun.star.report.ImageService;
-import com.sun.star.report.pentaho.OfficeNamespaces;
+import com.sun.star.report.InputRepository;
 import com.sun.star.report.OfficeToken;
+import com.sun.star.report.OutputRepository;
+import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.PentahoReportEngineMetaData;
+import com.sun.star.report.pentaho.model.OfficeMasterPage;
+import com.sun.star.report.pentaho.model.OfficeMasterStyles;
 import com.sun.star.report.pentaho.model.OfficeStyle;
 import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
-import com.sun.star.report.pentaho.model.OfficeMasterPage;
-import com.sun.star.report.pentaho.model.OfficeMasterStyles;
 import com.sun.star.report.pentaho.model.PageSection;
 import com.sun.star.report.pentaho.output.OfficeDocumentReportTarget;
 import com.sun.star.report.pentaho.output.StyleUtilities;
 import com.sun.star.report.pentaho.output.text.MasterPageFactory;
 import com.sun.star.report.pentaho.styles.LengthCalculator;
+
+import java.io.IOException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import org.jfree.layouting.util.AttributeMap;
-import org.jfree.layouting.input.style.values.CSSNumericValue;
+
 import org.jfree.layouting.input.style.values.CSSNumericType;
+import org.jfree.layouting.input.style.values.CSSNumericValue;
+import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataFlags;
 import org.jfree.report.DataSourceException;
-import org.jfree.report.ReportProcessingException;
 import org.jfree.report.JFreeReportInfo;
+import org.jfree.report.ReportProcessingException;
 import org.jfree.report.flow.ReportJob;
 import org.jfree.report.flow.ReportStructureRoot;
 import org.jfree.report.flow.ReportTargetUtil;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 import org.jfree.report.util.IntegerCache;
-import org.jfree.report.util.TextUtilities;
+
 import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 import org.pentaho.reporting.libraries.xmlns.common.AttributeList;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriter;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
+
 
 /**
  * Creation-Date: 03.11.2007
@@ -81,6 +81,17 @@ import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
 public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
 {
 
+    private static final String[] FOPROPS = new String[]
+    {
+        "letter-spacing", "font-variant", "text-transform"
+    };
+    private static final String NUMBERCOLUMNSSPANNED = "number-columns-spanned";
+    private static final String[] STYLEPROPS = new String[]
+    {
+        "text-combine", "font-pitch-complex", "text-rotation-angle", "font-name", "text-blinking", "letter-kerning", "text-combine-start-char", "text-combine-end-char", "text-position", "text-scale"
+    };
+    private static final int CELL_WIDTH_FACTOR = 10000;
+    private static final String TRANSPARENT = "transparent";
     private boolean paragraphFound = false;
     private boolean paragraphHandled = false;
 
@@ -93,9 +104,9 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
     {
 
         private final Set tableIndices;
-        private final float boundary;
+        private final long boundary;
 
-        private ColumnBoundary(final float boundary)
+        private ColumnBoundary(final long boundary)
         {
             this.tableIndices = new HashSet();
             this.boundary = boundary;
@@ -139,11 +150,13 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
 
         public boolean equals(final Object obj)
         {
-            if (obj instanceof ColumnBoundary)
-            {
-                return ((ColumnBoundary) obj).boundary == boundary;
-            }
-            return false;
+            return obj instanceof ColumnBoundary && ((ColumnBoundary) obj).boundary == boundary;
+        }
+
+        public int hashCode()
+        {
+            assert false : "hashCode not designed";
+            return 42; // any arbitrary constant will do
         }
     }
     private String tableBackgroundColor; // null means transparent ...
@@ -151,16 +164,17 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
     private boolean elementBoundaryCollectionPass;
     private boolean oleHandled;
     private final List columnBoundaryList;
-    private float currentRowBoundaryMarker;
+    private long currentRowBoundaryMarker;
     private ColumnBoundary[] sortedBoundaryArray;
     private ColumnBoundary[] boundariesForTableArray;
     private int tableCounter;
     private int columnCounter;
     private int columnSpanCounter;
+    private int currentSpan = 0;
     private String unitsOfMeasure;
-    final private ArrayList shapes;
-    final private ArrayList ole;
-    final private ArrayList rowHeights;
+    final private List shapes;
+    final private List ole;
+    final private List rowHeights;
 
     public SpreadsheetRawReportTarget(final ReportJob reportJob,
             final ResourceManager resourceManager,
@@ -213,7 +227,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                 for (int i = 0; i < rowHeights.size(); i++)
                 {
                     len.add((CSSNumericValue) rowHeights.get(i));
-                // val += ((CSSNumericValue)rowHeights.get(i)).getValue();
+                    // val += ((CSSNumericValue)rowHeights.get(i)).getValue();
                 }
 
                 rowHeights.clear();
@@ -261,20 +275,16 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             }
             catch (IOException e)
             {
-                throw new ReportProcessingException("Failed", e);
+                throw new ReportProcessingException(OfficeDocumentReportTarget.FAILED, e);
             }
         }
     }
 
     protected void startReportSection(final AttributeMap attrs, final int role) throws IOException, DataSourceException, ReportProcessingException
     {
-        if ((role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER ||
-                role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER) &&
-                (!PageSection.isPrintWithReportHeader(attrs) ||
-                !PageSection.isPrintWithReportFooter(attrs)))
+        if ((role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER) && (!PageSection.isPrintWithReportHeader(attrs) || !PageSection.isPrintWithReportFooter(attrs)))
         {
             startBuffering(new OfficeStylesCollection(), true);
-
         }
         else
         {
@@ -284,10 +294,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
 
     protected void endReportSection(final AttributeMap attrs, final int role) throws IOException, DataSourceException, ReportProcessingException
     {
-        if ((role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER ||
-                role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER) &&
-                (!PageSection.isPrintWithReportHeader(attrs) ||
-                !PageSection.isPrintWithReportFooter(attrs)))
+        if ((role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER) && (!PageSection.isPrintWithReportHeader(attrs) || !PageSection.isPrintWithReportFooter(attrs)))
         {
             finishBuffering();
         }
@@ -319,7 +326,6 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             throws IOException, ReportProcessingException
     {
         final XmlWriter xmlWriter = getXmlWriter();
-        final AttributeMap retval = new AttributeMap(attrs);
 
         if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, OfficeToken.TABLE, attrs))
         {
@@ -335,7 +341,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             {
                 final Object raw = StyleUtilities.queryStyle(getPredefinedStylesCollection(), OfficeToken.TABLE, tableStyle,
                         "table-properties", OfficeNamespaces.FO_NS, OfficeToken.BACKGROUND_COLOR);
-                if (raw == null || "transparent".equals(raw))
+                if (raw == null || TRANSPARENT.equals(raw))
                 {
                     tableBackgroundColor = null;
                 }
@@ -347,8 +353,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             return;
         }
 
-        if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, OfficeToken.TABLE_COLUMN, attrs) ||
-                ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, OfficeToken.TABLE_COLUMNS, attrs))
+        if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, OfficeToken.TABLE_COLUMN, attrs) || ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, OfficeToken.TABLE_COLUMNS, attrs))
         {
             return;
         }
@@ -398,12 +403,12 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                 else
                 {
                     final Object oldValue = tableRowProperties.getAttribute(OfficeNamespaces.FO_NS, OfficeToken.BACKGROUND_COLOR);
-                    if (oldValue == null || "transparent".equals(oldValue))
+                    if (oldValue == null || TRANSPARENT.equals(oldValue))
                     {
                         tableRowProperties.setAttribute(OfficeNamespaces.FO_NS, OfficeToken.BACKGROUND_COLOR, tableBackgroundColor);
                     }
                 }
-                retval.setAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME, style.getStyleName());
+                attrs.setAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME, style.getStyleName());
             }
         }
         else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TABLE_NS, OfficeToken.TABLE_CELL, attrs))
@@ -415,19 +420,34 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                 final OfficeStyle cellStyle = getPredefinedStylesCollection().getStyle(OfficeToken.TABLE_CELL, styleName);
                 if (cellStyle != null)
                 {
-                    final Element props = cellStyle.getTableCellProperties();
+                    final Section textProperties = (Section) cellStyle.getTextProperties();
+                    if (textProperties != null)
+                    {
+                        for (String i : FOPROPS)
+                        {
+                            textProperties.setAttribute(OfficeNamespaces.FO_NS, i, null);
+                        }
+                        textProperties.setAttribute(OfficeNamespaces.TEXT_NS, "display", null);
+                        for (String i : STYLEPROPS)
+                        {
+                            textProperties.setAttribute(OfficeNamespaces.STYLE_NS, i, null);
+                        }
+                    }
+                    final Section props = (Section) cellStyle.getTableCellProperties();
                     if (props != null)
                     {
                         final Object raw = props.getAttribute(OfficeNamespaces.FO_NS, OfficeToken.BACKGROUND_COLOR);
-                        if (raw == null || "transparent".equals(raw))
+                        if (TRANSPARENT.equals(raw))
                         {
-                            cellStyle.removeNode(props);
+                            props.setAttribute(OfficeNamespaces.FO_NS, OfficeToken.BACKGROUND_COLOR, null);
+                            // cellStyle.removeNode(props);
                         }
                     }
                 }
+                attrs.setAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME, styleName);
             }
 
-            final String numColSpanStr = (String) attrs.getAttribute(namespace, "number-columns-spanned");
+            final String numColSpanStr = (String) attrs.getAttribute(namespace, NUMBERCOLUMNSSPANNED);
             int initialColumnSpan = columnSpanCounter = 1;
             if (numColSpanStr != null)
             {
@@ -457,19 +477,20 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             // there's no point to create number-columns-spanned attributes if we only span 1 column
             if (span > 1)
             {
-                retval.setAttribute(namespace, "number-columns-spanned", "" + span);
+                attrs.setAttribute(namespace, NUMBERCOLUMNSSPANNED, "" + span);
+                currentSpan = span;
             }
-        // we must also generate "covered-table-cell" elements for each column spanned
-        // but we'll do this in the endElement, after we close this OfficeToken.TABLE_CELL
+            // we must also generate "covered-table-cell" elements for each column spanned
+            // but we'll do this in the endElement, after we close this OfficeToken.TABLE_CELL
         }
 
         // All styles have to be processed or you will loose the paragraph-styles and inline text-styles.
         // ..
-        performStyleProcessing(retval);
+        performStyleProcessing(attrs);
 
-        final AttributeList attrList = buildAttributeList(retval);
+        final AttributeList attrList = buildAttributeList(attrs);
         xmlWriter.writeTag(namespace, elementType, attrList, XmlWriter.OPEN);
-    // System.out.println("elementType = " + elementType);
+        // System.out.println("elementType = " + elementType);
     }
 
     private void collectBoundaryForElement(final AttributeMap attrs)
@@ -498,7 +519,8 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             final Element tableColumnProperties = style.getTableColumnProperties();
             String widthStr = (String) tableColumnProperties.getAttribute("column-width");
             widthStr = widthStr.substring(0, widthStr.indexOf(getUnitsOfMeasure(widthStr)));
-            addColumnWidthToRowBoundaryMarker(Float.parseFloat(widthStr));
+            final float val = Float.parseFloat(widthStr) * CELL_WIDTH_FACTOR;
+            addColumnWidthToRowBoundaryMarker((long) val);
             ColumnBoundary currentRowBoundary = new ColumnBoundary(getCurrentRowBoundaryMarker());
             final List columnBoundaryList_ = getColumnBoundaryList();
             final int idx = columnBoundaryList_.indexOf(currentRowBoundary);
@@ -568,7 +590,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             }
             catch (IOException e)
             {
-                throw new ReportProcessingException("Failed", e);
+                throw new ReportProcessingException(OfficeDocumentReportTarget.FAILED, e);
             }
         }
     }
@@ -597,6 +619,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                 {
                     columnWidth -= cba[i - 1].getBoundary();
                 }
+                columnWidth = columnWidth / CELL_WIDTH_FACTOR;
                 final OfficeStyle style = deriveStyle(OfficeToken.TABLE_COLUMN, ("co" + i + "_"));
                 final Section tableColumnProperties = new Section();
                 tableColumnProperties.setType("table-column-properties");
@@ -612,7 +635,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
         catch (IOException e)
         {
-            throw new ReportProcessingException("Failed", e);
+            throw new ReportProcessingException(OfficeDocumentReportTarget.FAILED, e);
         }
     }
 
@@ -647,15 +670,12 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
 
         // if this is the report namespace, write out a table definition ..
-        if (OfficeNamespaces.TABLE_NS.equals(namespace) && (OfficeToken.TABLE.equals(elementType) ||
-                OfficeToken.COVERED_TABLE_CELL.equals(elementType) ||
-                OfficeToken.TABLE_COLUMN.equals(elementType) ||
-                OfficeToken.TABLE_COLUMNS.equals(elementType)))
+        if (OfficeNamespaces.TABLE_NS.equals(namespace) && (OfficeToken.TABLE.equals(elementType) || OfficeToken.COVERED_TABLE_CELL.equals(elementType) || OfficeToken.TABLE_COLUMN.equals(elementType) || OfficeToken.TABLE_COLUMNS.equals(elementType)))
         {
             return;
         }
 
-        if ( !paragraphHandled && OfficeNamespaces.TEXT_NS.equals(namespace) && OfficeToken.P.equals(elementType))
+        if (!paragraphHandled && OfficeNamespaces.TEXT_NS.equals(namespace) && OfficeToken.P.equals(elementType))
         {
             if (!paragraphHandled)
             {
@@ -674,7 +694,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         }
         catch (IOException e)
         {
-            throw new ReportProcessingException("Failed", e);
+            throw new ReportProcessingException(OfficeDocumentReportTarget.FAILED, e);
         }
     }
 
@@ -687,8 +707,10 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
 
         // do this after we close the tag
         final XmlWriter xmlWriter = getXmlWriter();
-        final Object attribute = attrs.getAttribute(OfficeNamespaces.TABLE_NS, "number-columns-spanned");
-        final int span = TextUtilities.parseInt((String) attribute, 0);
+        // final Object attribute = attrs.getAttribute(OfficeNamespaces.TABLE_NS,NUMBERCOLUMNSSPANNED);
+        // final int span = TextUtilities.parseInt((String) attribute, 0);
+        final int span = currentSpan;
+        currentSpan = 0;
         for (int i = 1; i < span; i++)
         {
             xmlWriter.writeTag(OfficeNamespaces.TABLE_NS, OfficeToken.COVERED_TABLE_CELL, null, XmlWriter.CLOSE);
@@ -732,6 +754,8 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             final XmlWriter xmlWriter = getXmlWriter();
             xmlWriter.writeTag(OfficeNamespaces.OFFICE_NS, getStartContent(), null, XmlWriterSupport.OPEN);
 
+            writeNullDate();
+
             final AttributeMap tableAttributes = new AttributeMap();
             tableAttributes.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, Element.NAMESPACE_ATTRIBUTE, OfficeNamespaces.TABLE_NS);
             tableAttributes.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, Element.TYPE_ATTRIBUTE, OfficeToken.TABLE);
@@ -759,7 +783,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
             tableStyle.setStyleName("Initial_Table");
             tableStyle.setAttribute(OfficeNamespaces.STYLE_NS, "master-page-name", masterPageName);
             final Element tableProperties = produceFirstChild(tableStyle, OfficeNamespaces.STYLE_NS, "table-properties");
-            tableProperties.setAttribute(OfficeNamespaces.FO_NS, OfficeToken.BACKGROUND_COLOR, "transparent");
+            tableProperties.setAttribute(OfficeNamespaces.FO_NS, OfficeToken.BACKGROUND_COLOR, TRANSPARENT);
             commonStyles.addStyle(tableStyle);
         }
         return "Initial_Table";
@@ -836,7 +860,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         if (sortedBoundaryArray == null)
         {
             getColumnBoundaryList().add(new ColumnBoundary(0));
-            sortedBoundaryArray = (ColumnBoundary[]) getColumnBoundaryList().toArray(EMPTY_COLBOUNDS);
+            sortedBoundaryArray = (ColumnBoundary[]) getColumnBoundaryList().toArray(new ColumnBoundary[getColumnBoundaryList().size()]);
             Arrays.sort(sortedBoundaryArray);
         }
         return sortedBoundaryArray;
@@ -847,12 +871,12 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         return columnBoundaryList;
     }
 
-    private void addColumnWidthToRowBoundaryMarker(final float width)
+    private void addColumnWidthToRowBoundaryMarker(final long width)
     {
         currentRowBoundaryMarker += width;
     }
 
-    private float getCurrentRowBoundaryMarker()
+    private long getCurrentRowBoundaryMarker()
     {
         return currentRowBoundaryMarker;
     }
@@ -881,7 +905,7 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
                     boundariesForTable.add(b);
                 }
             }
-            boundariesForTableArray = (ColumnBoundary[]) boundariesForTable.toArray(EMPTY_COLBOUNDS);
+            boundariesForTableArray = (ColumnBoundary[]) boundariesForTable.toArray(new ColumnBoundary[boundariesForTable.size()]);
             Arrays.sort(boundariesForTableArray);
         }
         return boundariesForTableArray;

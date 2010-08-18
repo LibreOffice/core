@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pdfparse.cxx,v $
- *
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -42,19 +38,16 @@
 
 // workaround windows compiler: do not include multi_pass.hpp
 //#include <boost/spirit.hpp>
-#include <boost/spirit/core.hpp>
-#include <boost/spirit/utility.hpp>
-#include <boost/spirit/error_handling.hpp>
-#include <boost/spirit/iterator/file_iterator.hpp>
-#if SPIRIT_VERSION >= 0x1800
-#define USE_ASSIGN_ACTOR
-#include <boost/spirit/actor/assign_actor.hpp>
-#endif
+#include <boost/spirit/include/classic_core.hpp>
+#include <boost/spirit/include/classic_utility.hpp>
+#include <boost/spirit/include/classic_error_handling.hpp>
+#include <boost/spirit/include/classic_file_iterator.hpp>
 #include <boost/bind.hpp>
 #include <string>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/memory.h>
+#include <rtl/alloc.h>
 
 // disable warnings again because someone along the line has enabled them
 #if defined __SUNPRO_CC
@@ -115,6 +108,40 @@ public:
     iteratorT                   m_aGlobalBegin;
 
 public:
+    struct pdf_string_parser
+    {
+        typedef nil_t result_t;
+        template <typename ScannerT>
+        std::ptrdiff_t
+        operator()(ScannerT const& scan, result_t& result) const
+        {
+            std::ptrdiff_t len = 0;
+
+            int nBraceLevel = 0;
+            while( ! scan.at_end() )
+            {
+                char c = *scan;
+                if( c == ')' )
+                {
+                    nBraceLevel--;
+                    if( nBraceLevel < 0 )
+                        break;
+                }
+                else if( c == '(' )
+                    nBraceLevel++;
+                else if( c == '\\' ) // ignore escaped braces
+                {
+                    ++len;
+                    ++scan;
+                    if( scan.at_end() )
+                        break;
+                }
+                ++len;
+                ++scan;
+            }
+            return scan.at_end() ? -1 : len;
+        }
+    };
 
     template< typename ScannerT >
     struct definition
@@ -142,7 +169,8 @@ public:
             //stringtype  = ( confix_p("(",*anychar_p, ")") |
             //                confix_p("<",*xdigit_p,  ">") )
             //              [boost::bind(&PDFGrammar::pushString,pSelf, _1, _2)];
-            stringtype  = ( ( ch_p('(') >> *(str_p("\\)")|(anychar_p - ch_p(')'))) >> ch_p(')') ) |
+
+            stringtype  = ( ( ch_p('(') >> functor_parser<pdf_string_parser>() >> ch_p(')') ) |
                             ( ch_p('<') >> *xdigit_p >> ch_p('>') ) )
                           [boost::bind(&PDFGrammar::pushString,pSelf, _1, _2)];
 
@@ -577,6 +605,33 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 
 PDFEntry* PDFReader::read( const char* pFileName )
 {
+    #ifdef WIN32
+    /* #i106583#
+       since converting to boost 1.39 file_iterator does not work anymore on all Windows systems
+       C++ stdlib istream_iterator does not allow "-" apparently
+       using spirit 2.0 doesn't work in our environment with the MSC
+
+       So for the time being bite the bullet and read the whole file.
+       FIXME: give Spirit 2.x another try when we upgrade boost again.
+    */
+    PDFEntry* pRet = NULL;
+    FILE* fp = fopen( pFileName, "rb" );
+    if( fp )
+    {
+        fseek( fp, 0, SEEK_END );
+        unsigned int nLen = (unsigned int)ftell( fp );
+        fseek( fp, 0, SEEK_SET );
+        char* pBuf = (char*)rtl_allocateMemory( nLen );
+        if( pBuf )
+        {
+            fread( pBuf, 1, nLen, fp );
+            pRet = read( pBuf, nLen );
+            rtl_freeMemory( pBuf );
+        }
+        fclose( fp );
+    }
+    return pRet;
+    #else
     file_iterator<> file_start( pFileName );
     if( ! file_start )
         return NULL;
@@ -633,8 +688,8 @@ PDFEntry* PDFReader::read( const char* pFileName )
         }
     }
     #endif
-
     return pRet;
+    #endif // WIN32
 }
 
 #if defined __SUNPRO_CC

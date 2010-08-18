@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DefaultNameGenerator.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,9 +26,10 @@
  ************************************************************************/
 package com.sun.star.report.pentaho;
 
+import com.sun.star.report.OutputRepository;
+
 import java.io.IOException;
 
-import com.sun.star.report.OutputRepository;
 
 public class DefaultNameGenerator
 {
@@ -65,7 +63,9 @@ public class DefaultNameGenerator
      *
      * @param namePrefix a user defined name for that resource.
      * @param mimeType   the mime type of the resource to be stored in the repository.
+     * @param isStream
      * @return the generated, fully qualified name.
+     * @throws java.io.IOException
      */
     private String generateName(final String namePrefix, final String mimeType, final boolean isStream)
             throws IOException
@@ -80,25 +80,28 @@ public class DefaultNameGenerator
             name = "file";
         }
 
-        String firstFileName = name;
+        StringBuffer firstFileName = new StringBuffer();
+        firstFileName.append(name);
         final String suffix;
         if (mimeType != null)
         {
             suffix = getSuffixForType(mimeType);
-            firstFileName += "." + suffix;
+            firstFileName.append('.');
+            firstFileName.append(suffix);
         }
         else
         {
             suffix = null;
         }
+        String newName = firstFileName.toString();
         boolean exists;
         if (isStream)
         {
-            exists = outputRepository.exists(firstFileName);
+            exists = outputRepository.exists(newName);
         }
         else
         {
-            exists = outputRepository.existsStorage(firstFileName);
+            exists = outputRepository.existsStorage(newName);
         }
         if (exists)
         {
@@ -109,23 +112,27 @@ public class DefaultNameGenerator
                 {
                     throw new IOException();
                 }
-                firstFileName = name + counter;
+                firstFileName.delete(0, firstFileName.length());
+                firstFileName.append(name);
+                firstFileName.append(counter);
                 if (suffix != null)
                 {
-                    firstFileName += "." + suffix;
+                    firstFileName.append('.');
+                    firstFileName.append(suffix);
                 }
+                newName = firstFileName.toString();
                 if (isStream)
                 {
-                    exists = outputRepository.exists(firstFileName);
+                    exists = outputRepository.exists(newName);
                 }
                 else
                 {
-                    exists = outputRepository.existsStorage(firstFileName);
+                    exists = outputRepository.existsStorage(newName);
                 }
-                counter += 1;
+                counter++;
             }
         }
-        return firstFileName;
+        return newName;
     }
 
     protected String getSuffixForType(final String mimeType)

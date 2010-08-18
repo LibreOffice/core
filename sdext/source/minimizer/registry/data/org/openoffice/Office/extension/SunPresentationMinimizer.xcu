@@ -6,16 +6,12 @@
     </prop>
 
     <prop oor:name="HelpFile" oor:type="xs:string">
-        <info>
-            <desc>Specifies the filename of the help document after installation,
-            the help can be found in sdext/source/minimizer/help</desc>
-        </info>
         <value xml:lang="en-US">%origin%/../../../../../../help/help_en-US.odt</value>
     </prop>
 
     <node oor:name="Strings">
         <prop oor:name="STR_SUN_OPTIMIZATION_WIZARD2">
-            <value xml:lang="en-US">Sun Presentation Minimizer</value>
+            <value xml:lang="en-US">Oracle Presentation Minimizer</value>
         </prop>
         <prop oor:name="STR_STEPS">
             <value xml:lang="en-US">Steps</value>
@@ -39,12 +35,12 @@
             <value xml:lang="en-US">Introduction</value>
         </prop>
         <prop oor:name="STR_INTRODUCTION_T">
-            <value xml:lang="en-US">The Sun Presentation Minimizer is used to reduce the file size of the current presentation. Images will be compressed and data, that is no longer needed, will be removed.
+            <value xml:lang="en-US">The Oracle Presentation Minimizer is used to reduce the file size of the current presentation. Images will be compressed and data, that is no longer needed, will be removed.
 
-At the last step of the wizard you can choose to apply the changes to the current presentation or to create an optimized new version of the presentation.</value>
+        At the last step of the wizard you can choose to apply the changes to the current presentation or to create an optimized new version of the presentation.</value>
         </prop>
         <prop oor:name="STR_CHOSE_SETTINGS">
-            <value xml:lang="en-US">~Choose settings for Sun Presentation Minimizer</value>
+            <value xml:lang="en-US">~Choose settings for Oracle Presentation Minimizer</value>
         </prop>
         <prop oor:name="STR_REMOVE">
             <value xml:lang="en-US">~Delete</value>
@@ -186,17 +182,16 @@ The current presentation contains no OLE objects.</value>
             <value xml:lang="en-US">~Yes</value>
         </prop>
         <prop oor:name="STR_ABOUT2">
-            <value xml:lang="en-US">Sun Presentation Minimizer</value>
+            <value xml:lang="en-US">Oracle Presentation Minimizer</value>
         </prop>
         <prop oor:name="STR_ABOUT_VERSION2">
-            <value xml:lang="en-US">About Sun Presentation Minimizer 1.0.0</value>
+            <value xml:lang="en-US">About Oracle Presentation Minimizer 1.0.2</value>
         </prop>
         <prop oor:name="STR_ABOUT_PRN">
-            <value xml:lang="en-US">Copyright 2000-2007 Sun Microsystems, Inc.
+            <value xml:lang="en-US">Copyright © 2000, 2010 Oracle and/or its affiliates. All rights reserved.
 
-This product has been created by Sun Microsystems, Inc. based on OpenOffice.org.
-OpenOffice.org acknowledges all community members, especially those
-mentioned on http://www.openoffice.org/welcome/credits.html</value>
+This product has been created with contributions from the OpenOffice.org community, of which Oracle is a principal member. OpenOffice.org acknowledges all community members, especially those mentioned at http://www.openoffice.org/welcome/credits.html
+      </value>
         </prop>
         <prop oor:name="STR_OK">
             <value xml:lang="en-US">OK</value>

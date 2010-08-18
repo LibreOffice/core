@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tests.cxx,v $
- *
- * $Revision: 1.2.6.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -48,7 +44,7 @@
 #include <rtl/math.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
-#include <cppunit/simpleheader.hxx>
+#include <testshl/simpleheader.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -444,6 +440,10 @@ namespace
                                     xMask[1].Name.compareToAscii( "InputStream" ) == 0 );
         }
 
+        virtual void setTextRenderMode( sal_Int32 )
+        {
+        }
+
         typedef std::hash_map<sal_Int32,FontAttributes> IdToFontMap;
         typedef std::hash_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 
@@ -517,6 +517,8 @@ namespace
             pdfi::ContentSinkSharedPtr pSink( new TestSink() );
             pdfi::xpdf_ImportFromFile( msBaseDir + rtl::OUString::createFromAscii("pdfi_unittest_test.pdf"),
                                        pSink,
+                                       uno::Reference< task::XInteractionHandler >(),
+                                       rtl::OUString(),
                                        mxCtx );
 
             // make destruction explicit, a bunch of things are

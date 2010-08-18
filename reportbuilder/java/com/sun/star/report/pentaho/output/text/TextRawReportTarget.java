@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TextRawReportTarget.java,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,18 +27,11 @@
 package com.sun.star.report.pentaho.output.text;
 
 import com.sun.star.report.DataSourceFactory;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.util.Iterator;
-import java.util.Map;
-
 import com.sun.star.report.ImageService;
 import com.sun.star.report.InputRepository;
+import com.sun.star.report.OfficeToken;
 import com.sun.star.report.OutputRepository;
 import com.sun.star.report.pentaho.OfficeNamespaces;
-import com.sun.star.report.OfficeToken;
 import com.sun.star.report.pentaho.PentahoReportEngineMetaData;
 import com.sun.star.report.pentaho.layoutprocessor.FormatValueUtility;
 import com.sun.star.report.pentaho.model.OfficeMasterPage;
@@ -53,7 +43,16 @@ import com.sun.star.report.pentaho.model.PageSection;
 import com.sun.star.report.pentaho.output.OfficeDocumentReportTarget;
 import com.sun.star.report.pentaho.output.StyleUtilities;
 import com.sun.star.report.pentaho.styles.LengthCalculator;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+
 import org.jfree.layouting.input.style.values.CSSNumericValue;
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataSourceException;
@@ -66,6 +65,7 @@ import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Section;
 import org.jfree.report.util.AttributeNameGenerator;
 import org.jfree.report.util.IntegerCache;
+
 import org.pentaho.reporting.libraries.base.util.FastStack;
 import org.pentaho.reporting.libraries.base.util.IOUtils;
 import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
@@ -74,6 +74,7 @@ import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
 import org.pentaho.reporting.libraries.xmlns.common.AttributeList;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriter;
 import org.pentaho.reporting.libraries.xmlns.writer.XmlWriterSupport;
+
 
 /**
  * Creation-Date: 03.07.2006, 16:28:00
@@ -96,12 +97,10 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     private static final String VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT = "variables_paragraph_with_next";
     private static final String VARIABLES_HIDDEN_STYLE_WITHOUT_KEEPWNEXT = "variables_paragraph_without_next";
     private static final int TABLE_LAYOUT_VARIABLES_PARAGRAPH = 0;
-    private static final int TABLE_LAYOUT_VARIABLES_IN_FIRST_CELL = 1;
     private static final int TABLE_LAYOUT_SINGLE_DETAIL_TABLE = 2;
     private static final int CP_SETUP = 0;
     private static final int CP_FIRST_TABLE = 1;
     private static final int CP_NEXT_TABLE = 2;
-
     // This is the initial state of the detail-band processing. It states, that we are now waiting for a
     // detail-band to be printed.
     private static final int DETAIL_SECTION_WAIT = 0;
@@ -132,7 +131,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     private final int tableLayoutConfig;
     private int expectedTableRowCount;
     private boolean firstCellSeen;
-    private boolean cellEmpty;
 
     public TextRawReportTarget(final ReportJob reportJob,
             final ResourceManager resourceManager,
@@ -168,11 +166,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
     private boolean isResetPageNumber()
     {
-        if (pageBreakDefinition == null)
-        {
-            return false;
-        }
-        return pageBreakDefinition.isResetPageNumber();
+        return pageBreakDefinition != null && pageBreakDefinition.isResetPageNumber();
     }
 
     /**
@@ -200,14 +194,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
 
         final boolean keepWithNext;
-        if (keepTogetherState == PageContext.KEEP_TOGETHER_FIRST_DETAIL)
-        {
-            keepWithNext = (detailBandProcessingState == DETAIL_SECTION_WAIT);
-        }
-        else
-        {
-            keepWithNext = false;
-        }
+        keepWithNext = keepTogetherState == PageContext.KEEP_TOGETHER_FIRST_DETAIL && (detailBandProcessingState == DETAIL_SECTION_WAIT);
         return keepWithNext;
     }
 
@@ -215,15 +202,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     {
         final Object forceNewPage =
                 attrs.getAttribute(OfficeNamespaces.OOREPORT_NS, "force-new-page");
-        if ("after-section".equals(forceNewPage))
-        {
-            return true;
-        }
-        if ("before-after-section".equals(forceNewPage))
-        {
-            return true;
-        }
-        return false;
+        return "after-section".equals(forceNewPage) || "before-after-section".equals(forceNewPage);
     }
 
     private boolean isSectionPagebreakBefore(final AttributeMap attrs)
@@ -270,8 +249,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
 
         final String masterPageName;
-        if (currentMasterPage == null ||
-                !masterPageFactory.containsMasterPage(STANDARD, activePageHeader, activePageFooter))
+        if (currentMasterPage == null || !masterPageFactory.containsMasterPage(STANDARD, activePageHeader, activePageFooter))
         {
 
             final CSSNumericValue headerSize = context.getAllHeaderSize();
@@ -327,8 +305,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         // report header, then this implies that we have to insert a manual
         // pagebreak at the end of the section.
 
-        if ((!printHeader && context.getHeader() != null) ||
-                (!printFooter && context.getFooter() != null))
+        if ((!printHeader && context.getHeader() != null) || (!printFooter && context.getFooter() != null))
         {
             setPagebreakDefinition(new PageBreakDefinition(isResetPageNumber()));
         }
@@ -543,6 +520,8 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         final XmlWriter xmlWriter = getXmlWriter();
         xmlWriter.writeTag(OfficeNamespaces.OFFICE_NS, "text", null, XmlWriterSupport.OPEN);
 
+        writeNullDate();
+
         // now start the buffering. We have to insert the variables declaration
         // later ..
         startBuffering(getStylesCollection(), true);
@@ -577,15 +556,13 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
         else if (isFilteredNamespace(namespace))
         {
-            throw new IllegalStateException("This element should be hidden: " +
-                    namespace + ", " + elementType);
+            throw new IllegalStateException("This element should be hidden: " + namespace + ", " + elementType);
         }
 
         if (isTableMergeActive() && detailBandProcessingState == DETAIL_SECTION_OTHER_PRINTED && ObjectUtilities.equal(OfficeNamespaces.TABLE_NS, namespace) && ObjectUtilities.equal(OfficeToken.TABLE_COLUMNS, elementType))
         {
             // Skip the columns section if the tables get merged..
             startBuffering(getStylesCollection(), true);
-            return;
         }
         else
         {
@@ -624,8 +601,8 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                     final String varType = (String) attrs.getAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE);
                     final String newVarName = variablesDeclarations.produceVariable(varName, varType);
                     attrs.setAttribute(OfficeNamespaces.TEXT_NS, NAME, newVarName);
-                // this one must not be written, as the DTD does not declare it.
-                // attrs.setAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE, null);
+                    // this one must not be written, as the DTD does not declare it.
+                    // attrs.setAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE, null);
                 }
             }
 
@@ -646,11 +623,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 variables = null;
             }
 
-            if (isTableNS && ObjectUtilities.equal(OfficeToken.TABLE_CELL, elementType))
-            {
-                cellEmpty = true;
-            }
-
             final boolean keepTogetherOnParagraph = true;
 
             if (keepTogetherOnParagraph)
@@ -658,7 +630,6 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, OfficeToken.P, attrs))
                 {
                     final int keepTogetherState = getCurrentContext().getKeepTogether();
-                    cellEmpty = false;
                     if (!firstCellSeen && (sectionKeepTogether || keepTogetherState == PageContext.KEEP_TOGETHER_GROUP))
                     {
                         OfficeStyle style = null;
@@ -730,7 +701,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                     graphicProperties.setAttribute(OfficeNamespaces.STYLE_NS, "flow-with-text", "false");
                     graphicProperties.setAttribute(OfficeNamespaces.DRAWING_NS, "ole-draw-aspect", "1");
 
-                // attrs.setAttribute(OfficeNamespaces.DRAWING_NS, OfficeToken.STYLE_NAME, predefAutoStyle.getStyleName());
+                    // attrs.setAttribute(OfficeNamespaces.DRAWING_NS, OfficeToken.STYLE_NAME, predefAutoStyle.getStyleName());
                 }
             }
 
@@ -740,15 +711,14 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             final AttributeList attrList = buildAttributeList(attrs);
             xmlWriter.writeTag(namespace, elementType, attrList, XmlWriterSupport.OPEN);
 
-            if (ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, OfficeToken.P, attrs))
+            if (tableLayoutConfig != TABLE_LAYOUT_VARIABLES_PARAGRAPH
+                    && variables != null
+                    && !isRepeatingSection()
+                    && ReportTargetUtil.isElementOfType(OfficeNamespaces.TEXT_NS, OfficeToken.P, attrs))
             {
-                cellEmpty = false;
-                if (tableLayoutConfig != TABLE_LAYOUT_VARIABLES_PARAGRAPH && variables != null)
-                {
-                    //LOGGER.debug("Variables-Section in existing cell " + variables);
-                    xmlWriter.writeText(variables);
-                    variables = null;
-                }
+                //LOGGER.debug("Variables-Section in existing cell " + variables);
+                xmlWriter.writeText(variables);
+                variables = null;
             }
         }
     }
@@ -791,7 +761,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
         else
         {
-            expectedTableRowCount = trc.intValue();
+            expectedTableRowCount = trc;
         }
 
         if (isSectionPagebreakBefore(attrs))
@@ -828,16 +798,15 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                     // If we have a manual pagebreak, then activate the current master-page again.
                     masterPageName = currentMasterPage.getStyleName();
                 }
-            // But we skip this (and therefore the resulting pagebreak) if there is no manual break
-            // and no other condition that would force an break.
+                // But we skip this (and therefore the resulting pagebreak) if there is no manual break
+                // and no other condition that would force an break.
             }
             else if (currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER || currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER)
             {
                 breakDefinition = null;
-            // no pagebreaks ..
+                // no pagebreaks ..
             }
-            else if (currentMasterPage == null ||
-                    isPagebreakPending())
+            else if (currentMasterPage == null || isPagebreakPending())
             {
                 // Must be the first table, as we have no master-page yet.
                 masterPageName = createMasterPage(true, true);
@@ -854,9 +823,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 breakDefinition = null;
             }
         }
-        else if (isPagebreakPending() &&
-                currentRole != OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER &&
-                currentRole != OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER)
+        else if (isPagebreakPending() && currentRole != OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER && currentRole != OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER)
         {
             // Derive an automatic style for the pagebreak.
 //      LOGGER.debug("Manual pagebreak (within the section): " + getCurrentRole());
@@ -875,8 +842,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         }
 
         final XmlWriter xmlWriter = getXmlWriter();
-        if (detailBandProcessingState == DETAIL_SECTION_OTHER_PRINTED &&
-                masterPageName != null)
+        if (detailBandProcessingState == DETAIL_SECTION_OTHER_PRINTED && masterPageName != null)
         {
             // close the last table-tag, we will open a new one
             xmlWriter.writeCloseTag();
@@ -909,7 +875,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 xmlWriter.writeTag(OfficeNamespaces.TEXT_NS, OfficeToken.P, OfficeToken.STYLE_NAME, style.getStyleName(), XmlWriterSupport.OPEN);
 
                 masterPageName = null;
-            //breakDefinition = null;
+                //breakDefinition = null;
             }
             else if (isColumnBreakPending())
             {
@@ -941,19 +907,10 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         final boolean keepWithNext = isKeepTableWithNext();
         final boolean localKeepTogether = OfficeToken.TRUE.equals(attrs.getAttribute(OfficeNamespaces.OOREPORT_NS, KEEP_TOGETHER));
         final boolean tableMergeActive = isTableMergeActive();
-        if (tableMergeActive)
-        {
-            this.sectionKeepTogether = localKeepTogether;
-        }
-        else
-        {
-            this.sectionKeepTogether = false;
-
-        }
+        this.sectionKeepTogether = tableMergeActive && localKeepTogether;
 
         // Check, whether we have a reason to derive a style...
-        if (masterPageName != null ||
-                (!tableMergeActive && (localKeepTogether || keepWithNext)) || isColumnBreakPending())
+        if (masterPageName != null || (!tableMergeActive && (localKeepTogether || keepWithNext)) || isColumnBreakPending())
         {
             final String styleName = (String) attrs.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);
             final OfficeStyle style = deriveStyle("table", styleName);
@@ -1015,8 +972,8 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 }
             }
             attrs.setAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME, style.getStyleName());
-        // no need to copy the styles, this was done while deriving the
-        // style ..
+            // no need to copy the styles, this was done while deriving the
+            // style ..
         }
         else
         {
@@ -1080,8 +1037,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
 
     private boolean isTableMergeActive()
     {
-        return getCurrentRole() == ROLE_DETAIL &&
-                tableLayoutConfig == TABLE_LAYOUT_SINGLE_DETAIL_TABLE;
+        return getCurrentRole() == ROLE_DETAIL && tableLayoutConfig == TABLE_LAYOUT_SINGLE_DETAIL_TABLE;
     }
 
     private void openSection()
@@ -1092,9 +1048,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             // repeating sections have other ways of defining columns ..
             return;
         }
-        if (getCurrentRole() == ROLE_TEMPLATE ||
-                getCurrentRole() == ROLE_SPREADSHEET_PAGE_HEADER ||
-                getCurrentRole() == ROLE_SPREADSHEET_PAGE_FOOTER)
+        if (getCurrentRole() == ROLE_TEMPLATE || getCurrentRole() == ROLE_SPREADSHEET_PAGE_HEADER || getCurrentRole() == ROLE_SPREADSHEET_PAGE_FOOTER)
         {
             // the template section would break the multi-column stuff and we dont open up sections there
             // anyway ..
@@ -1106,7 +1060,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
         if (columnCount != null && !pageContext.isSectionOpen())
         {
             final AttributeList attrs = new AttributeList();
-            attrs.setAttribute(OfficeNamespaces.TEXT_NS, OfficeToken.STYLE_NAME, generateSectionStyle(columnCount.intValue()));
+            attrs.setAttribute(OfficeNamespaces.TEXT_NS, OfficeToken.STYLE_NAME, generateSectionStyle(columnCount));
             attrs.setAttribute(OfficeNamespaces.TEXT_NS, NAME, sectionNames.generateName("Section"));
             getXmlWriter().writeTag(OfficeNamespaces.TEXT_NS, "section", attrs, XmlWriterSupport.OPEN);
 
@@ -1119,9 +1073,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             throws IOException, DataSourceException, ReportProcessingException
     {
         sectionHeight = new LengthCalculator();
-        if (role == OfficeDocumentReportTarget.ROLE_TEMPLATE ||
-                role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER ||
-                role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER)
+        if (role == OfficeDocumentReportTarget.ROLE_TEMPLATE || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER)
         {
             // Start buffering with an dummy styles-collection, so that the global styles dont get polluted ..
             startBuffering(new OfficeStylesCollection(), true);
@@ -1247,9 +1199,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
     protected void endReportSection(final AttributeMap attrs, final int role)
             throws IOException, DataSourceException, ReportProcessingException
     {
-        if (role == ROLE_TEMPLATE ||
-                role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER ||
-                role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER)
+        if (role == ROLE_TEMPLATE || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER || role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER)
         {
             finishBuffering();
             return;
@@ -1375,15 +1325,13 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             return;
         }
 
-        if (isInternalNS && (ObjectUtilities.equal(OfficeToken.IMAGE, elementType) ||
-                ObjectUtilities.equal(OfficeToken.OBJECT_OLE, elementType)))
+        if (isInternalNS && (ObjectUtilities.equal(OfficeToken.IMAGE, elementType) || ObjectUtilities.equal(OfficeToken.OBJECT_OLE, elementType)))
         {
             return;
         }
 
         final XmlWriter xmlWriter = getXmlWriter();
-        if (tableLayoutConfig != TABLE_LAYOUT_VARIABLES_PARAGRAPH &&
-                isTableNs && ObjectUtilities.equal(OfficeToken.TABLE_CELL, elementType))
+        if (tableLayoutConfig != TABLE_LAYOUT_VARIABLES_PARAGRAPH && isTableNs && ObjectUtilities.equal(OfficeToken.TABLE_CELL, elementType) && !isRepeatingSection())
         {
             if (variables != null)
             {
@@ -1408,19 +1356,19 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
                 xmlWriter.writeCloseTag();
                 variables = null;
             }
-        /**
-        // Only generate the empty paragraph, if we have to add the keep-together ..
-        else if (cellEmpty && expectedTableRowCount > 0 &&
-        sectionKeepTogether && !firstCellSeen)
-        {
-        // we have no variables ..
-        StyleUtilities.copyStyle(OfficeToken.PARAGRAPH,
-        TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT, getStylesCollection(),
-        getGlobalStylesCollection(), getPredefinedStylesCollection());
-        xmlWriter.writeTag(OfficeNamespaces.TEXT_NS, OfficeToken.P, OfficeToken.STYLE_NAME,
-        TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT, XmlWriterSupport.CLOSE);
-        }
-         */
+            /**
+            // Only generate the empty paragraph, if we have to add the keep-together ..
+            else if (cellEmpty && expectedTableRowCount > 0 &&
+            sectionKeepTogether && !firstCellSeen)
+            {
+            // we have no variables ..
+            StyleUtilities.copyStyle(OfficeToken.PARAGRAPH,
+            TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT, getStylesCollection(),
+            getGlobalStylesCollection(), getPredefinedStylesCollection());
+            xmlWriter.writeTag(OfficeNamespaces.TEXT_NS, OfficeToken.P, OfficeToken.STYLE_NAME,
+            TextRawReportTarget.VARIABLES_HIDDEN_STYLE_WITH_KEEPWNEXT, XmlWriterSupport.CLOSE);
+            }
+             */
         }
 
         if (isTableNs && (ObjectUtilities.equal(OfficeToken.TABLE_CELL, elementType) || ObjectUtilities.equal(OfficeToken.COVERED_TABLE_CELL, elementType)))

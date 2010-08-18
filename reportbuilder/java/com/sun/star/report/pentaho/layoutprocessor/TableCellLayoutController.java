@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TableCellLayoutController.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,14 +26,15 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.layoutprocessor;
 
-import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.FormatCondition;
 import com.sun.star.report.pentaho.model.FormattedTextElement;
 import com.sun.star.report.pentaho.model.ReportElement;
+
 import org.jfree.layouting.util.AttributeMap;
-import org.jfree.report.DataSourceException;
 import org.jfree.report.DataFlags;
+import org.jfree.report.DataSourceException;
 import org.jfree.report.expressions.Expression;
 import org.jfree.report.flow.FlowController;
 import org.jfree.report.flow.ReportTarget;
@@ -45,6 +43,7 @@ import org.jfree.report.flow.layoutprocessor.SectionLayoutController;
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.Node;
 import org.jfree.report.structure.Section;
+
 import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
 
 /**
@@ -70,6 +69,7 @@ public class TableCellLayoutController extends SectionLayoutController
     {
         final AttributeMap attributeMap = new AttributeMap(super.computeAttributes(fc, element, target));
         final String definedStyle = (String) attributeMap.getAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME);
+        final String valueType = (String) attributeMap.getAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE_TYPE);
         attributeMap.setAttribute(OfficeNamespaces.TABLE_NS, OfficeToken.STYLE_NAME, getDisplayStyleName((Section) element, definedStyle));
 
         try
@@ -77,12 +77,16 @@ public class TableCellLayoutController extends SectionLayoutController
             final DataFlags value = computeValue();
             if (value != null)
             {
-                FormatValueUtility.applyValueForCell(value.getValue(), attributeMap);
+                FormatValueUtility.applyValueForCell(value.getValue(), attributeMap, valueType);
+            }
+            else if ( "float".equals(valueType))
+            {
+                attributeMap.setAttribute(OfficeNamespaces.OFFICE_NS, FormatValueUtility.VALUE, "1.#NAN");
             }
         }
         catch (Exception e)
         {
-        // ignore ..
+            // ignore ..
         }
         attributeMap.makeReadOnly();
         return attributeMap;
@@ -96,6 +100,15 @@ public class TableCellLayoutController extends SectionLayoutController
         if (element == null)
         {
             return null;
+        }
+        final Expression dc = element.getDisplayCondition();
+        if (dc != null)
+        {
+            final Object o = LayoutControllerUtil.evaluateExpression(getFlowController(), element, dc);
+            if (Boolean.FALSE.equals(o))
+            {
+                return null;
+            }
         }
         return FormatValueUtility.computeDataFlag(element, getFlowController());
     }
@@ -151,7 +164,7 @@ public class TableCellLayoutController extends SectionLayoutController
                         }
                         catch (DataSourceException e)
                         {
-                        // ignore silently ..
+                            // ignore silently ..
                         }
                     }
 
@@ -171,7 +184,7 @@ public class TableCellLayoutController extends SectionLayoutController
                             }
                             catch (DataSourceException e)
                             {
-                            // ignore silently ..
+                                // ignore silently ..
                             }
                         }
                     }

@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -37,12 +33,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings ----------------------------------
 .INCLUDE : settings.mk
+.IF "$(L10N_framework)"==""
 .INCLUDE :  $(PRJ)$/source$/minimizer$/minimizer.pmk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # set in minimizer.pmk
-#EXTENSIONNAME:=SunPresentationMinimizer
-EXTENSION_ZIPNAME:=sun-presentation-minimizer
+#EXTENSIONNAME:=PresentationMinimizer
+EXTENSION_ZIPNAME:=presentation-minimizer
 
 .IF "$(ENABLE_MINIMIZER)" != "YES"
 @all:
@@ -80,17 +77,14 @@ SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=	exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1RPATH=      OXT
 DEF1NAME=		$(SHL1TARGET)
 
 COMPONENT_MERGED_XCU= \
     $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/Addons.xcu \
-    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcu \
-    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/UI$/ImpressWindowState.xcu
-
-COMPONENT_XCU= \
-    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu
+    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu \
+    $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcu
 
 COMPONENT_FILES= \
     $(EXTENSIONDIR)$/registry$/schema$/org$/openoffice$/Office$/extension$/SunPresentationMinimizer.xcs
@@ -101,13 +95,16 @@ COMPONENT_LIBRARIES= \
 
 # rather freestyle or common to all?
 COMPONENT_BITMAPS= \
-    $(EXTENSIONDIR)$/bitmaps$/aboutlogo.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_16.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_26.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_16_h.png \
     $(EXTENSIONDIR)$/bitmaps$/opt_26_h.png \
     $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80.png \
     $(EXTENSIONDIR)$/bitmaps$/minimizepresi_80_h.png
+
+COMPONENT_IMAGES=\
+    $(EXTENSIONDIR)$/bitmaps$/extension_32.png \
+    $(EXTENSIONDIR)$/bitmaps$/extension_32_h.png
 
 # rather freestyle or common to all?
 COMPONENT_HELP= \
@@ -116,20 +113,28 @@ COMPONENT_HELP= \
     $(EXTENSIONDIR)$/help$/component.txt
 
 # make sure to add your custom files here
-EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_HELP)
+EXTENSION_PACKDEPS=$(COMPONENT_BITMAPS) $(COMPONENT_IMAGES) $(COMPONENT_HELP)
 
 # --- Targets ----------------------------------
 
 .INCLUDE : extension_pre.mk
 
+.ENDIF # L10N_framework
 .INCLUDE : target.mk
 
+.IF "$(L10N_framework)"==""
 .INCLUDE : extension_post.mk
 
 $(COMPONENT_BITMAPS) : $(SOLARSRC)$/$(RSCDEFIMG)$/minimizer$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
+$(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
 $(COMPONENT_HELP) : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+
+.ENDIF # L10N_framework

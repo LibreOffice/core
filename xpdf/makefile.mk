@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.7.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -44,13 +40,14 @@ TARGET=xpdflib
 
 .IF "$(SYSTEM_POPPLER)" == "YES"
 dummy:
-        @echo "An already available installation of poppler should exist on your system."
-        @echo "Therefore xpdf provided here does not need to be built in addition."
+    @echo "An already available installation of poppler should exist on your system."
+    @echo "Therefore xpdf provided here does not need to be built in addition."
 .ENDIF
 
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=xpdf-3.02
+TARFILE_MD5=599dc4cc65a07ee868cf92a667a913d2
 PATCH_FILES=$(TARFILE_NAME).patch
 
 CONFIGURE_DIR=
@@ -62,7 +59,11 @@ CFLAGS:=$(EXTRA_CFLAGS)
 CXXFLAGS:=$(EXTRA_CFLAGS)
 .EXPORT : CFLAGS CXXFLAGS
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
-.ENDIF # "$(SYSBASE)"!=""
+.ELIF "$(OS)"=="MACOSX" # "$(SYSBASE)"!=""
+CFLAGS:=$(EXTRA_CDEFS)
+CXXFLAGS+:=$(EXTRA_CDEFS)
+.EXPORT: CFLAGS CXXFLAGS
+.ENDIF
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="SOLARIS"
@@ -76,22 +77,24 @@ LDFLAGS:=$(ARCH_FLAGS)
 .EXPORT : CFLAGS CXXFLAGS LDFLAGS
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
-CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions CXXFLAGS="-malign-natural"
-.ELSE
-#CONFIGURE_ACTION=./configure
-#CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions CFLAGS="-g -O0" CXXFLAGS="-g -O0"
-CONFIGURE_ACTION=./configure --without-libpaper-library --without-x --enable-multithreaded --enable-exceptions
+CONFIGURE_ACTION=configure
+CONFIGURE_FLAGS+=--without-x --without-libpaper-library --without-t1-library --enable-multithreaded --enable-exceptions
+
+.IF "$(OS)$(CPU)"=="MACOSXP"
+CXXFLAGS+=-malign-natural
+.EXPORT: CXXFLAGS
 .ENDIF
 
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE
 .IF "$(COM)"=="GCC"
+LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
+.EXPORT : LDFLAGS
 CONFIGURE_ACTION=./configure --without-x --enable-multithreaded --enable-exceptions LIBS=-lgdi32
 BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 .ELSE
 CONFIGURE_ACTION=
-BUILD_ACTION= cmd.exe /c ms_make.bat
+BUILD_ACTION= cmd.exe /d /c ms_make.bat
 .ENDIF
 .ENDIF
 

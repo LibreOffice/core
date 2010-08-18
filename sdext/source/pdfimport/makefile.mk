@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.2.4.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,6 +35,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 MKDEPENDSOLVER:=
 .INCLUDE: settings.mk
+
+.IF "$(L10N_framework)"==""
+
 .INCLUDE: pdfisettings.pmk
 INCPRE=-I$(PRJ)$/source$/pdfimport$/inc
 
@@ -91,7 +90,7 @@ SHL1STDLIBS=\
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1RPATH=OXT
 
 DEF1NAME=$(SHL1TARGET)
@@ -125,10 +124,16 @@ COMPONENT_HELP= \
 COMPONENT_LIBRARIES= \
     $(EXTENSIONDIR)$/$(SHL1TARGET)$(DLLPOST)
 
-EXTENSION_PACKDEPS=$(CONVERTER_FILE) $(COMPONENT_DIALOGS) $(COMPONENT_HELP) makefile.mk
+COMPONENT_IMAGES=\
+    $(EXTENSIONDIR)$/images$/extension_32.png \
+    $(EXTENSIONDIR)$/images$/extension_32_h.png
+
+EXTENSION_PACKDEPS=$(CONVERTER_FILE) $(COMPONENT_DIALOGS) $(COMPONENT_HELP) $(COMPONENT_IMAGES) makefile.mk
 
 .INCLUDE : extension_pre.mk
+.ENDIF # L10N_framework
 .INCLUDE : target.mk
+.IF "$(L10N_framework)"==""
 .INCLUDE : extension_post.mk
 
 $(CONVERTER_FILE) : $(BIN)$/$$(@:f)
@@ -142,3 +147,9 @@ $(COMPONENT_DIALOGS) : dialogs$/$$(@:f)
 $(COMPONENT_HELP) : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+
+$(COMPONENT_IMAGES) :  $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+.ENDIF # L10N_framework
+

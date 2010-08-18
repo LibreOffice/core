@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterTheme.hxx,v $
- *
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -108,6 +104,14 @@ public:
         css::uno::Reference<css::rendering::XCanvasFont> mxFont;
 
         bool PrepareFont (const css::uno::Reference<css::rendering::XCanvas>& rxCanvas);
+
+    private:
+        css::uno::Reference<css::rendering::XCanvasFont> CreateFont (
+            const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+            const double nCellSize) const;
+        double GetCellSizeForDesignSize (
+            const css::uno::Reference<css::rendering::XCanvas>& rxCanvas,
+            const double nDesignSize) const;
     };
     typedef ::boost::shared_ptr<FontDescriptor> SharedFontDescriptor;
 

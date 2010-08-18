@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterPaneBase.cxx,v $
- *
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,6 +33,7 @@
 #include "PresenterController.hxx"
 #include "PresenterGeometryHelper.hxx"
 #include "PresenterPaintManager.hxx"
+#include "PresenterTextView.hxx"
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
@@ -143,6 +140,14 @@ void PresenterPaneBase::SetTitle (const OUString& rsTitle)
 
 
 
+::rtl::OUString PresenterPaneBase::GetTitle (void) const
+{
+    return msTitle;
+}
+
+
+
+
 Reference<drawing::framework::XPaneBorderPainter>
     PresenterPaneBase::GetPaneBorderPainter (void) const
 {
@@ -187,6 +192,19 @@ void PresenterPaneBase::SetCalloutAnchor (const css::awt::Point& rCalloutAnchor)
 awt::Point PresenterPaneBase::GetCalloutAnchor (void) const
 {
     return maCalloutAnchor;
+}
+
+
+
+
+::boost::shared_ptr<PresenterTextView> PresenterPaneBase::GetTextViewForTitle (void)
+{
+    ::boost::shared_ptr<PresenterTextView> pTextView(
+        new PresenterTextView(
+            mxComponentContext,
+            mxBorderCanvas));
+    pTextView->SetText(msTitle);
+    return pTextView;
 }
 
 

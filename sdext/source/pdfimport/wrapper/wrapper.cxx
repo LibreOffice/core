@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: wrapper.cxx,v $
- *
- * $Revision: 1.2.4.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -33,36 +29,39 @@
 #include "precompiled_sdext.hxx"
 
 #include "contentsink.hxx"
+#include "pdfparse.hxx"
+#include "pdfihelper.hxx"
 
-#include <osl/file.h>
-#include <osl/thread.h>
-#include <osl/process.h>
-#include <osl/diagnose.h>
-#include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
-#include <rtl/byteseq.hxx>
+#include "osl/file.h"
+#include "osl/thread.h"
+#include "osl/process.h"
+#include "osl/diagnose.h"
+#include "rtl/ustring.hxx"
+#include "rtl/ustrbuf.hxx"
+#include "rtl/strbuf.hxx"
+#include "rtl/byteseq.hxx"
 
-#include <cppuhelper/exc_hlp.hxx>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
-#include <com/sun/star/beans/XMaterialHolder.hpp>
-#include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
-#include <com/sun/star/rendering/XColorSpace.hpp>
-#include <com/sun/star/rendering/XPolyPolygon2D.hpp>
-#include <com/sun/star/rendering/XBitmap.hpp>
-#include <com/sun/star/geometry/Matrix2D.hpp>
-#include <com/sun/star/geometry/AffineMatrix2D.hpp>
-#include <com/sun/star/geometry/RealRectangle2D.hpp>
+#include "cppuhelper/exc_hlp.hxx"
+#include "com/sun/star/io/XInputStream.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "com/sun/star/awt/FontDescriptor.hpp"
+#include "com/sun/star/deployment/XPackageInformationProvider.hpp"
+#include "com/sun/star/beans/XMaterialHolder.hpp"
+#include "com/sun/star/rendering/PathCapType.hpp"
+#include "com/sun/star/rendering/PathJoinType.hpp"
+#include "com/sun/star/rendering/XColorSpace.hpp"
+#include "com/sun/star/rendering/XPolyPolygon2D.hpp"
+#include "com/sun/star/rendering/XBitmap.hpp"
+#include "com/sun/star/geometry/Matrix2D.hpp"
+#include "com/sun/star/geometry/AffineMatrix2D.hpp"
+#include "com/sun/star/geometry/RealRectangle2D.hpp"
+#include "com/sun/star/task/XInteractionHandler.hpp"
 
-#include <basegfx/point/b2dpoint.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
-#include <basegfx/tools/canvastools.hxx>
-#include <basegfx/tools/unopolypolygon.hxx>
+#include "basegfx/point/b2dpoint.hxx"
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/tools/canvastools.hxx"
+#include "basegfx/tools/unopolypolygon.hxx"
 
 #include <boost/bind.hpp>
 #include <boost/preprocessor/stringize.hpp>
@@ -71,6 +70,10 @@
 
 #include <hash_map>
 #include <string.h>
+#ifdef WNT
+#include <stdlib.h>
+#include <ctype.h>
+#endif
 
 #include "rtl/bootstrap.h"
 
@@ -181,6 +184,10 @@ class Parser
     void                 readLink();
     void                 readMaskedImage();
     void                 readSoftMaskedImage();
+    int          parseFontCheckForString( const sal_Unicode* pCopy, const char* str, sal_Int32& nLen,
+                    FontAttributes& aResult, bool bItalic, bool bBold);
+    int          parseFontRemoveSuffix( const sal_Unicode* pCopy, const char* s, sal_Int32& nLen);
+
 
 public:
     Parser( const ContentSinkSharedPtr&                   rSink,
@@ -197,6 +204,60 @@ public:
 
     void parseLine( const ::rtl::OString& rLine );
 };
+
+
+namespace
+{
+
+    /** Unescapes line-ending characters in input string. These
+        characters are encoded as pairs of characters: '\\' 'n', resp.
+        '\\' 'r'. This function converts them back to '\n', resp. '\r'.
+      */
+    rtl::OString lcl_unescapeLineFeeds(const rtl::OString& i_rStr)
+    {
+        const size_t nOrigLen(sal::static_int_cast<size_t>(i_rStr.getLength()));
+        const sal_Char* const pOrig(i_rStr.getStr());
+        sal_Char* const pBuffer(new sal_Char[nOrigLen + 1]);
+
+        const sal_Char* pRead(pOrig);
+        sal_Char* pWrite(pBuffer);
+        const sal_Char* pCur(pOrig);
+        while ((pCur = strchr(pCur, '\\')) != 0)
+        {
+            const sal_Char cNext(pCur[1]);
+            if (cNext == 'n' || cNext == 'r' || cNext == '\\')
+            {
+                const size_t nLen(pCur - pRead);
+                strncpy(pWrite, pRead, nLen);
+                pWrite += nLen;
+                *pWrite = cNext == 'n' ? '\n' : (cNext == 'r' ? '\r' : '\\');
+                ++pWrite;
+                pCur = pRead = pCur + 2;
+            }
+            else
+            {
+                // Just continue on the next character. The current
+                // block will be copied the next time it goes through the
+                // 'if' branch.
+                ++pCur;
+            }
+        }
+        // maybe there are some data to copy yet
+        if (sal::static_int_cast<size_t>(pRead - pOrig) < nOrigLen)
+        {
+            const size_t nLen(nOrigLen - (pRead - pOrig));
+            strncpy(pWrite, pRead, nLen);
+            pWrite += nLen;
+        }
+        *pWrite = '\0';
+
+        rtl::OString aResult(pBuffer);
+        delete[] pBuffer;
+        return aResult;
+    }
+
+}
+
 
 ::rtl::OString Parser::readNextToken()
 {
@@ -323,7 +384,7 @@ void Parser::readChar()
     readDouble(aUnoMatrix.m10);
     readDouble(aUnoMatrix.m11);
 
-    rtl::OString aChars = m_aLine.copy( m_nCharIndex );
+    rtl::OString aChars = lcl_unescapeLineFeeds( m_aLine.copy( m_nCharIndex ) );
 
     // chars gobble up rest of line
     m_nCharIndex = -1;
@@ -402,6 +463,35 @@ rendering::ARGBColor Parser::readColor()
     return aRes;
 }
 
+int Parser::parseFontCheckForString( const sal_Unicode* pCopy, const char* s, sal_Int32& nLen,
+        FontAttributes& aResult, bool bItalic, bool bBold)
+{
+    int l = strlen(s);
+    if (nLen < l)
+        return 0;
+    for (int i = 0; i < l; i++)
+        if (tolower(pCopy[i]) != s[i]
+            && toupper(pCopy[i]) != s[i])
+            return 0;
+    aResult.isItalic = bItalic;
+    aResult.isBold = bBold;
+        nLen -= l;
+        pCopy += l;
+    return l;
+}
+
+int Parser::parseFontRemoveSuffix( const sal_Unicode* pCopy, const char* s, sal_Int32& nLen)
+{
+    int l = strlen(s);
+    if (nLen < l)
+        return 0;
+    for (int i = 0; i < l; i++)
+        if ( pCopy[nLen - l + i] != s[i] )
+            return 0;
+        nLen -= l;
+    return l;
+}
+
 void Parser::parseFontFamilyName( FontAttributes& aResult )
 {
     rtl::OUStringBuffer aNewFamilyName( aResult.familyName.getLength() );
@@ -417,39 +507,17 @@ void Parser::parseFontFamilyName( FontAttributes& aResult )
 
     while( nLen )
     {
-        if( nLen > 5 &&
-            ( *pCopy == 'i' || *pCopy == 'I' ) &&
-            pCopy[1] == 't' &&
-            pCopy[2] == 'a' &&
-            pCopy[3] == 'l' &&
-            pCopy[4] == 'i' &&
-            pCopy[5] == 'c' )
-        {
-            aResult.isItalic = true;
-            nLen -=6;
-            pCopy += 6;
-        }
-        else if( nLen > 3 &&
-                 ( *pCopy == 'B' || *pCopy == 'b' ) &&
-                 pCopy[1] == 'o' &&
-                 pCopy[2] == 'l' &&
-                 pCopy[3] == 'd' )
-        {
-            aResult.isBold = true;
-            nLen -=4;
-            pCopy += 4;
-        }
-        else if( nLen > 5 &&
-                 *pCopy == '-' &&
-                 ( pCopy[1] == 'R' || pCopy[1] == 'r' ) &&
-                 pCopy[2] == 'o' &&
-                 pCopy[3] == 'm' &&
-                 pCopy[4] == 'a' &&
-                 pCopy[5] == 'n' )
-        {
-            nLen -= 6;
-            pCopy += 6;
-        }
+    if (parseFontRemoveSuffix( pCopy, "PSMT", nLen)) {}
+    else if (parseFontRemoveSuffix( pCopy, "MT", nLen)) {}
+
+    if (parseFontCheckForString( pCopy, "Italic", nLen, aResult, true, false)) {}
+    else if (parseFontCheckForString( pCopy, "-Bold", nLen, aResult, false, true)) {}
+    else if (parseFontCheckForString( pCopy, "Bold", nLen, aResult, false, true)) {}
+    else if (parseFontCheckForString( pCopy, "-Roman", nLen, aResult, false, false)) {}
+    else if (parseFontCheckForString( pCopy, "-LightOblique", nLen, aResult, true, false)) {}
+    else if (parseFontCheckForString( pCopy, "-BoldOblique", nLen, aResult, true, true)) {}
+    else if (parseFontCheckForString( pCopy, "-Light", nLen, aResult, false, false)) {}
+    else if (parseFontCheckForString( pCopy, "-Reg", nLen, aResult, false, false)) {}
         else
         {
             if( *pCopy != '-' )
@@ -477,7 +545,7 @@ void Parser::readFont()
     readInt32(nFileLen);
 
     nSize = nSize < 0.0 ? -nSize : nSize;
-    aFontName = m_aLine.copy( m_nCharIndex );
+    aFontName = lcl_unescapeLineFeeds( m_aLine.copy( m_nCharIndex ) );
 
     // name gobbles up rest of line
     m_nCharIndex = -1;
@@ -504,7 +572,6 @@ void Parser::readFont()
 
     // extract textual attributes (bold, italic in the name, etc.)
     parseFontFamilyName(aResult);
-
     // need to read font file?
     if( nFileLen )
     {
@@ -529,6 +596,7 @@ void Parser::readFont()
                 if( aRes >>= aFD )
                 {
                     aResult.familyName  = aFD.Name;
+                parseFontFamilyName(aResult);
                     aResult.isBold      = (aFD.Weight > 100.0);
                     aResult.isItalic    = (aFD.Slant == awt::FontSlant_OBLIQUE ||
                                            aFD.Slant == awt::FontSlant_ITALIC );
@@ -549,7 +617,6 @@ void Parser::readFont()
         }
 
     }
-
     m_aFontMap[nFontID] = aResult;
 
     aResult.size = nSize;
@@ -561,18 +628,23 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
     static const rtl::OString aJpegMarker( "JPEG" );
     static const rtl::OString aPbmMarker(  "PBM" );
     static const rtl::OString aPpmMarker(  "PPM" );
+    static const rtl::OString aPngMarker(  "PNG" );
     static const rtl::OUString aJpegFile(
         RTL_CONSTASCII_USTRINGPARAM( "DUMMY.JPEG" ));
     static const rtl::OUString aPbmFile(
         RTL_CONSTASCII_USTRINGPARAM( "DUMMY.PBM" ));
     static const rtl::OUString aPpmFile(
         RTL_CONSTASCII_USTRINGPARAM( "DUMMY.PPM" ));
+    static const rtl::OUString aPngFile(
+        RTL_CONSTASCII_USTRINGPARAM( "DUMMY.PNG" ));
 
     rtl::OString aToken = readNextToken();
     const sal_Int32 nImageSize( readInt32() );
 
     rtl::OUString           aFileName;
-    if( aToken.compareTo( aJpegMarker ) == 0 )
+    if( aToken.compareTo( aPngMarker ) == 0 )
+        aFileName = aPngFile;
+    else if( aToken.compareTo( aJpegMarker ) == 0 )
         aFileName = aJpegFile;
     else if( aToken.compareTo( aPbmMarker ) == 0 )
         aFileName = aPbmFile;
@@ -664,8 +736,9 @@ void Parser::readLink()
     readDouble(aBounds.Y2);
 
     m_pSink->hyperLink( aBounds,
-                        rtl::OStringToOUString( m_aLine.copy(m_nCharIndex),
-                                                RTL_TEXTENCODING_UTF8 ));
+                        rtl::OStringToOUString( lcl_unescapeLineFeeds(
+                                m_aLine.copy(m_nCharIndex) ),
+                                RTL_TEXTENCODING_UTF8 ) );
     // name gobbles up rest of line
     m_nCharIndex = -1;
 }
@@ -813,14 +886,78 @@ oslFileError readLine( oslFileHandle pFile, ::rtl::OStringBuffer& line )
 
 } // namespace
 
-bool xpdf_ImportFromFile( const ::rtl::OUString&                            rURL,
-                          const ContentSinkSharedPtr&                       rSink,
-                          const uno::Reference< uno::XComponentContext >&   xContext )
+static bool checkEncryption( const rtl::OUString&                               i_rPath,
+                             const uno::Reference< task::XInteractionHandler >& i_xIHdl,
+                             rtl::OUString&                                     io_rPwd,
+                             bool&                                              o_rIsEncrypted,
+                             const rtl::OUString&                               i_rDocName
+                             )
+{
+    bool bSuccess = false;
+    rtl::OString aPDFFile;
+    aPDFFile = rtl::OUStringToOString( i_rPath, osl_getThreadTextEncoding() );
+
+    pdfparse::PDFReader aParser;
+    boost::scoped_ptr<pdfparse::PDFEntry> pEntry( aParser.read( aPDFFile.getStr() ));
+    if( pEntry )
+    {
+        pdfparse::PDFFile* pPDFFile = dynamic_cast<pdfparse::PDFFile*>(pEntry.get());
+        if( pPDFFile )
+        {
+            o_rIsEncrypted = pPDFFile->isEncrypted();
+            if( o_rIsEncrypted )
+            {
+                bool bAuthenticated = false;
+                if( io_rPwd.getLength() )
+                {
+                    rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
+                                                                   RTL_TEXTENCODING_ISO_8859_1 );
+                    bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
+                }
+                if( bAuthenticated )
+                    bSuccess = true;
+                else
+                {
+                    if( i_xIHdl.is() )
+                    {
+                        bool bEntered = false;
+                        do
+                        {
+                            bEntered = getPassword( i_xIHdl, io_rPwd, ! bEntered, i_rDocName );
+                            rtl::OString aIsoPwd = rtl::OUStringToOString( io_rPwd,
+                                                                           RTL_TEXTENCODING_ISO_8859_1 );
+                            bAuthenticated = pPDFFile->setupDecryptionData( aIsoPwd.getStr() );
+                        } while( bEntered && ! bAuthenticated );
+                    }
+
+                    OSL_TRACE( "password: %s\n", bAuthenticated ? "matches" : "does not match" );
+                    bSuccess = bAuthenticated;
+                }
+            }
+            else
+                bSuccess = true;
+        }
+    }
+    return bSuccess;
+}
+
+bool xpdf_ImportFromFile( const ::rtl::OUString&                             rURL,
+                          const ContentSinkSharedPtr&                        rSink,
+                          const uno::Reference< task::XInteractionHandler >& xIHdl,
+                          const rtl::OUString&                               rPwd,
+                          const uno::Reference< uno::XComponentContext >&    xContext )
 {
     OSL_ASSERT(rSink);
 
     ::rtl::OUString aSysUPath;
     if( osl_getSystemPathFromFileURL( rURL.pData, &aSysUPath.pData ) != osl_File_E_None )
+        return false;
+    rtl::OUString aDocName( rURL.copy( rURL.lastIndexOf( sal_Unicode('/') )+1 ) );
+
+    // check for encryption, if necessary get password
+    rtl::OUString aPwd( rPwd );
+    bool bIsEncrypted = false;
+    if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) == false )
         return false;
 
     rtl::OUStringBuffer converterURL = rtl::OUString::createFromAscii("xpdfimport");
@@ -853,15 +990,17 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                            rURL
     rtl_bootstrap_expandMacros( &aStr.pData );
     rtl::OUString aSysPath;
     osl_getSystemPathFromFileURL( aStr.pData, &aSysPath.pData );
-    rtl::OUStringBuffer aBuf( aStr.getLength() + 20 );
-    aBuf.appendAscii( "LD_LIBRARY_PATH=" );
-    aBuf.append( aSysPath );
-    aStr = aBuf.makeStringAndClear();
+    rtl::OUStringBuffer aEnvBuf( aStr.getLength() + 20 );
+    aEnvBuf.appendAscii( "LD_LIBRARY_PATH=" );
+    aEnvBuf.append( aSysPath );
+    aStr = aEnvBuf.makeStringAndClear();
     ppEnv = &aStr.pData;
     nEnv = 1;
     #endif
 
     rtl_uString*  args[] = { aSysUPath.pData };
+    sal_Int32 nArgs = 1;
+
     oslProcess    aProcess;
     oslFileHandle pIn  = NULL;
     oslFileHandle pOut = NULL;
@@ -869,7 +1008,7 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                            rURL
     const oslProcessError eErr =
         osl_executeProcess_WithRedirectedIO(converterURL.makeStringAndClear().pData,
                                             args,
-                                            sizeof(args)/sizeof(*args),
+                                            nArgs,
                                             osl_Process_SEARCHPATH|osl_Process_HIDDEN,
                                             osl_getCurrentSecurity(),
                                             0, ppEnv, nEnv,
@@ -880,6 +1019,17 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                            rURL
     {
         if( eErr!=osl_Process_E_None )
             return false;
+
+        if( pIn )
+        {
+            rtl::OStringBuffer aBuf(256);
+            if( bIsEncrypted )
+                aBuf.append( rtl::OUStringToOString( aPwd, RTL_TEXTENCODING_ISO_8859_1 ) );
+            aBuf.append( '\n' );
+
+            sal_uInt64 nWritten = 0;
+            osl_writeFile( pIn, aBuf.getStr(), sal_uInt64(aBuf.getLength()), &nWritten );
+        }
 
         if( pOut && pErr )
         {
@@ -908,8 +1058,11 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                            rURL
     return bRet;
 }
 
+
 bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xInput,
                             const ContentSinkSharedPtr&                       rSink,
+                            const uno::Reference<task::XInteractionHandler >& xIHdl,
+                            const rtl::OUString&                              rPwd,
                             const uno::Reference< uno::XComponentContext >&   xContext )
 {
     OSL_ASSERT(xInput.is());
@@ -952,7 +1105,7 @@ bool xpdf_ImportFromStream( const uno::Reference< io::XInputStream >&         xI
 
     osl_closeFile( aFile );
 
-    return bSuccess && xpdf_ImportFromFile( aURL, rSink, xContext );
+    return bSuccess && xpdf_ImportFromFile( aURL, rSink, xIHdl, rPwd, xContext );
 }
 
 }

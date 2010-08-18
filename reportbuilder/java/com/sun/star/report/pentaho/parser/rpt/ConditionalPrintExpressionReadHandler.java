@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ConditionalPrintExpressionReadHandler.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,9 +27,12 @@
 package com.sun.star.report.pentaho.parser.rpt;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
+
 import org.jfree.report.expressions.FormulaFunction;
 import org.jfree.report.structure.Element;
+
 import org.pentaho.reporting.libraries.xmlns.parser.AbstractXmlReadHandler;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -51,10 +51,6 @@ public class ConditionalPrintExpressionReadHandler
 
     public ConditionalPrintExpressionReadHandler(final Element element)
     {
-        if (element == null)
-        {
-            throw new NullPointerException();
-        }
         this.element = element;
     }
 

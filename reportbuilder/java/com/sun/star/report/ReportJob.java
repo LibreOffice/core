@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportJob.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -62,21 +59,23 @@ public interface ReportJob
      * first. If we execute at once, the user either has to deal with
      * threading code or wont receive any progress information in single
      * threaded environments.
+     * @throws java.io.IOException
+     * @throws ReportExecutionException
      */
-    public void execute()
+    void execute()
             throws ReportExecutionException, IOException;
 
     /**
      * Interrupt the job.
      */
-    public void interrupt();
+    void interrupt();
 
     /**
      * Queries the jobs execution status.
      *
      * @return true, if the job is currently running, false otherwise.
      */
-    public boolean isRunning();
+    boolean isRunning();
 
     /**
      * Queries the jobs result status.
@@ -84,9 +83,9 @@ public interface ReportJob
      * @return true, if the job is finished (or has been interrupted), false
      * if the job waits for activation.
      */
-    public boolean isFinished();
+    boolean isFinished();
 
-    public void addProgressIndicator(JobProgressIndicator indicator);
+    void addProgressIndicator(JobProgressIndicator indicator);
 
-    public void removeProgressIndicator(JobProgressIndicator indicator);
+    void removeProgressIndicator(JobProgressIndicator indicator);
 }

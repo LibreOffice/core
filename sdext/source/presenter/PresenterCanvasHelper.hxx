@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterCanvasHelper.hxx,v $
- *
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,6 +31,7 @@
 #include "PresenterTheme.hxx"
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/rendering/TextDirection.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
@@ -76,9 +73,15 @@ public:
         css::rendering::RenderState& rRenderState,
         const css::util::Color aColor);
 
+    static css::geometry::RealRectangle2D GetTextBoundingBox (
+        const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
+        const ::rtl::OUString& rsText,
+        const sal_Int8 = css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
+
     static css::geometry::RealSize2D GetTextSize (
         const css::uno::Reference<css::rendering::XCanvasFont>& rxFont,
-        const ::rtl::OUString& rsText);
+        const ::rtl::OUString& rsText,
+        const sal_Int8 = css::rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
 
 private:
     const css::rendering::ViewState maDefaultViewState;

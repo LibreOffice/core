@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ObjectOleElement.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,22 +33,26 @@ import java.util.List;
  *
  * @author Ocke Janssen
  */
-public class ObjectOleElement extends ReportElement{
+public class ObjectOleElement extends ReportElement
+{
 
     private String url;
     private final List masterfields;
     private final List detailfields;
     private String classid;
 
-    public String getClassid() {
+    public String getClassid()
+    {
         return classid;
     }
 
-    public List getDetailfields() {
+    public List getDetailfields()
+    {
         return detailfields;
     }
 
-    public List getMasterfields() {
+    public List getMasterfields()
+    {
         return masterfields;
     }
 
@@ -61,22 +62,27 @@ public class ObjectOleElement extends ReportElement{
         detailfields = new ArrayList();
     }
 
-    public String getUrl() {
+    public String getUrl()
+    {
         return url;
     }
 
-    public void setClassId(final String classid) {
+    public void setClassId(final String classid)
+    {
         this.classid = classid;
     }
-    public void setUrl(final String _url ){
+
+    public void setUrl(final String _url)
+    {
         url = _url;
     }
 
-    public void addMasterDetailFields(final String master,final String detail){
-        if ( master != null ){
+    public void addMasterDetailFields(final String master, final String detail)
+    {
+        if (master != null)
+        {
             masterfields.add(master);
             detailfields.add(detail == null ? master : detail);
         }
     }
-
 }

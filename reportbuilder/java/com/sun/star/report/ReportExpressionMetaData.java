@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportExpressionMetaData.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,17 +31,17 @@ import java.util.Locale;
 public interface ReportExpressionMetaData
 {
 
-    public int getParameterCount();
+    int getParameterCount();
 
-    public String getParameterName(int param);
+    String getParameterName(int param);
 
-    public String getParameterDisplayName(int param, Locale locale);
+    String getParameterDisplayName(int param, Locale locale);
 
-    public String getParameterDescription(int param, Locale locale);
+    String getParameterDescription(int param, Locale locale);
 
-    public String getName();
+    String getName();
 
-    public String getDisplayName(Locale l);
+    String getDisplayName(Locale l);
 
-    public String getDescription(Locale l);
+    String getDescription(Locale l);
 }

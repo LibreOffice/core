@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportUtil.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,7 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 package com.sun.star.report.util;
 
 import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
@@ -36,9 +32,14 @@ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
  *
  * @author Ocke Janssen
  */
-public class ReportUtil {
+public class ReportUtil
+{
 
-    public static boolean equalString(final String uri,final String uri2)
+    private ReportUtil()
+    {
+    }
+
+    public static boolean equalString(final String uri, final String uri2)
     {
         return ObjectUtilities.equal(uri, uri2);
     }

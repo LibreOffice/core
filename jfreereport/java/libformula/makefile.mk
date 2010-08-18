@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,8 +38,9 @@ VERSION=-0.2.0
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
-
+.IF "$(L10N_framework)"==""
 TARFILE_NAME=$(TARGET)
+TARFILE_MD5=d1a3205871c3c52e8a50c9f18510ae12
 TARFILE_ROOTDIR=$(TARGET)
 PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
 CONVERTFILES=build.xml \
@@ -60,12 +57,12 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 
 
 .ENDIF # $(SOLAR_JAVA)!= ""
-
+.ENDIF
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
-
+.IF "$(L10N_framework)"==""
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 
@@ -77,4 +74,4 @@ $(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
 # $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/source$/org$/jfree$/formula$/function$/information$/IsRef-Function.properties : 
 #	@@-$(MKDIRHIER) $(@:d)
 #    $(MV) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/source$/org$/jfree$/formula$/function$/information$/isRef-Function.properties $@	
-
+.ENDIF

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataSource.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,11 +38,11 @@ package com.sun.star.report;
 public interface DataSource extends DataRow
 {
 
-    public int getRowCount() throws DataSourceException;
+    int getRowCount() throws DataSourceException;
 
-    public boolean absolute(int row) throws DataSourceException;
+    boolean absolute(int row) throws DataSourceException;
 
-    public boolean next() throws DataSourceException;
+    boolean next() throws DataSourceException;
 
-    public void close() throws DataSourceException;
+    void close() throws DataSourceException;
 }

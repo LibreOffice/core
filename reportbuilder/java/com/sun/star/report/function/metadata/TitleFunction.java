@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: TitleFunction.java,v $
- * $Revision: 1.2 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,6 +27,7 @@
 package com.sun.star.report.function.metadata;
 
 import com.sun.star.report.ReportEngineParameterNames;
+
 import org.pentaho.reporting.libraries.formula.EvaluationException;
 import org.pentaho.reporting.libraries.formula.FormulaContext;
 import org.pentaho.reporting.libraries.formula.LibFormulaErrorValue;
@@ -54,7 +52,7 @@ public class TitleFunction implements Function
         return "TITLE";
     }
 
-    public TypeValuePair evaluate(final FormulaContext context,final ParameterCallback parameters)
+    public TypeValuePair evaluate(final FormulaContext context, final ParameterCallback parameters)
             throws EvaluationException
     {
         if (parameters.getParameterCount() != 0)

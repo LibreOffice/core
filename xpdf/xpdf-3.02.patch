@@ -1,16 +1,5 @@
---- misc/xpdf-3.02/goo/GString.cc	Tue Feb 27 23:05:51 2007
-+++ misc/build/xpdf-3.02/goo/GString.cc	Mon Apr  7 13:16:54 2008
-@@ -528,7 +528,7 @@
-   if ((neg = x < 0)) {
-     x = -x;
-   }
--  x = floor(x * pow(10, prec) + 0.5);
-+  x = floor(x * pow(10.0, prec) + 0.5);
-   i = bufSize;
-   started = !trim;
-   for (j = 0; j < prec && i > 1; ++j) {
 --- misc/xpdf-3.02/goo/gmem.cc	2007-02-27 23:05:51.000000000 +0100
-+++ misc/build/xpdf-3.02/goo/gmem.cc	2009-04-22 19:21:14.274507454 +0200
++++ misc/build/xpdf-3.02/goo/gmem.cc	2009-11-10 11:43:10.374175496 +0100
 @@ -55,7 +55,15 @@
    void *data;
    unsigned long *trl, *p;
@@ -79,8 +68,19 @@
      if (p) {
        free(p);
      }
---- misc/xpdf-3.02/ms_make.bat	Tue Feb 27 23:05:51 2007
-+++ misc/build/xpdf-3.02/ms_make.bat	Mon Apr  7 13:16:54 2008
+--- misc/xpdf-3.02/goo/GString.cc	2007-02-27 23:05:51.000000000 +0100
++++ misc/build/xpdf-3.02/goo/GString.cc	2009-11-10 11:43:10.368006116 +0100
+@@ -528,7 +528,7 @@
+   if ((neg = x < 0)) {
+     x = -x;
+   }
+-  x = floor(x * pow(10, prec) + 0.5);
++  x = floor(x * pow(10.0, prec) + 0.5);
+   i = bufSize;
+   started = !trim;
+   for (j = 0; j < prec && i > 1; ++j) {
+--- misc/xpdf-3.02/ms_make.bat	2007-02-27 23:05:51.000000000 +0100
++++ misc/build/xpdf-3.02/ms_make.bat	2009-11-10 11:43:10.450112062 +0100
 @@ -1,5 +1,5 @@
  set CC=cl
 -set CFLAGS=/DWIN32 /I.. /I..\goo /I..\fofi /O2 /nologo
@@ -135,8 +135,121 @@
 -%CXX% %LINKFLAGS% /Fepdftoppm.exe Annot.obj Array.obj BuiltinFont.obj BuiltinFontTables.obj Catalog.obj CharCodeToUnicode.obj CMap.obj Decrypt.obj Dict.obj Error.obj FontEncodingTables.obj Function.obj Gfx.obj GfxFont.obj GfxState.obj GlobalParams.obj JArithmeticDecoder.obj JBIG2Stream.obj JPXStream.obj Lexer.obj Link.obj NameToCharCode.obj Object.obj Outline.obj OutputDev.obj Page.obj Parser.obj PDFDoc.obj PDFDocEncoding.obj PSTokenizer.obj SecurityHandler.obj SplashOutputDev.obj Stream.obj UnicodeMap.obj UnicodeTypeTable.obj XRef.obj pdftoppm.obj ..\splash\splash.lib ..\fofi\fofi.lib ..\goo\Goo.lib %FT2DIR%\freetype2.lib shell32.lib user32.lib gdi32.lib advapi32.lib
 -
 -cd ..
+--- misc/xpdf-3.02/splash/SplashBitmap.cc	2007-02-27 23:05:52.000000000 +0100
++++ misc/build/xpdf-3.02/splash/SplashBitmap.cc	2009-11-10 11:43:54.912615507 +0100
+@@ -11,6 +11,7 @@
+ #endif
+ 
+ #include <stdio.h>
++#include <limits.h>
+ #include "gmem.h"
+ #include "SplashErrorCodes.h"
+ #include "SplashBitmap.h"
+@@ -27,30 +28,48 @@
+   mode = modeA;
+   switch (mode) {
+   case splashModeMono1:
+-    rowSize = (width + 7) >> 3;
++    if (width > 0) {
++      rowSize = (width + 7) >> 3;
++    } else {
++      rowSize = -1;
++    }
+     break;
+   case splashModeMono8:
+-    rowSize = width;
++    if (width > 0) {
++      rowSize = width;
++    } else {
++      rowSize = -1;
++    }
+     break;
+   case splashModeRGB8:
+   case splashModeBGR8:
+-    rowSize = width * 3;
++    if (width > 0 && width <= INT_MAX / 3) {
++      rowSize = width * 3;
++    } else {
++      rowSize = -1;
++    }
+     break;
+ #if SPLASH_CMYK
+   case splashModeCMYK8:
+-    rowSize = width * 4;
++    if (width > 0 && width <= INT_MAX / 4) {
++      rowSize = width * 4;
++    } else {
++      rowSize = -1;
++    }
+     break;
+ #endif
+   }
+-  rowSize += rowPad - 1;
+-  rowSize -= rowSize % rowPad;
+-  data = (SplashColorPtr)gmalloc(rowSize * height);
++  if (rowSize > 0) {
++    rowSize += rowPad - 1;
++    rowSize -= rowSize % rowPad;
++  }
++  data = (SplashColorPtr)gmallocn(height, rowSize);
+   if (!topDown) {
+     data += (height - 1) * rowSize;
+     rowSize = -rowSize;
+   }
+   if (alphaA) {
+-    alpha = (Guchar *)gmalloc(width * height);
++    alpha = (Guchar *)gmallocn(width, height);
+   } else {
+     alpha = NULL;
+   }
+--- misc/xpdf-3.02/splash/Splash.cc	2007-02-27 23:05:52.000000000 +0100
++++ misc/build/xpdf-3.02/splash/Splash.cc	2009-11-10 11:43:54.894089400 +0100
+@@ -12,6 +12,7 @@
+ 
+ #include <stdlib.h>
+ #include <string.h>
++#include <limits.h>
+ #include "gmem.h"
+ #include "SplashErrorCodes.h"
+ #include "SplashMath.h"
+@@ -1912,7 +1913,10 @@
+   xq = w % scaledWidth;
+ 
+   // allocate pixel buffer
+-  pixBuf = (SplashColorPtr)gmalloc((yp + 1) * w);
++  if (yp < 0 || yp > INT_MAX - 1) {
++    return splashErrBadArg;
++  }
++  pixBuf = (SplashColorPtr)gmallocn(yp + 1, w);
+ 
+   // initialize the pixel pipe
+   pipeInit(&pipe, 0, 0, state->fillPattern, NULL, state->fillAlpha,
+@@ -2208,9 +2212,12 @@
+   xq = w % scaledWidth;
+ 
+   // allocate pixel buffers
+-  colorBuf = (SplashColorPtr)gmalloc((yp + 1) * w * nComps);
++  if (yp < 0 || yp > INT_MAX - 1 || w > INT_MAX / nComps) {
++    return splashErrBadArg;
++  }
++  colorBuf = (SplashColorPtr)gmallocn(yp + 1, w * nComps);
+   if (srcAlpha) {
+-    alphaBuf = (Guchar *)gmalloc((yp + 1) * w);
++    alphaBuf = (Guchar *)gmallocn(yp + 1, w);
+   } else {
+     alphaBuf = NULL;
+   }
+--- misc/xpdf-3.02/splash/SplashErrorCodes.h	2007-02-27 23:05:52.000000000 +0100
++++ misc/build/xpdf-3.02/splash/SplashErrorCodes.h	2009-11-10 11:43:54.903536237 +0100
+@@ -29,4 +29,6 @@
+ 
+ #define splashErrSingularMatrix  8	// matrix is singular
+ 
++#define splashErrBadArg          9	// bad argument
++
+ #endif
 --- misc/xpdf-3.02/xpdf/JBIG2Stream.cc	2007-02-27 23:05:52.000000000 +0100
-+++ misc/build/xpdf-3.02/xpdf/JBIG2Stream.cc	2009-04-22 19:21:14.286412894 +0200
++++ misc/build/xpdf-3.02/xpdf/JBIG2Stream.cc	2009-11-10 11:43:10.393213949 +0100
 @@ -422,12 +422,14 @@
    table[i] = table[len];
  
@@ -953,7 +1066,7 @@
  
        for (x = 0; x < w; ++x) {
 --- misc/xpdf-3.02/xpdf/JBIG2Stream.h	2007-02-27 23:05:52.000000000 +0100
-+++ misc/build/xpdf-3.02/xpdf/JBIG2Stream.h	2009-04-22 19:21:14.293918758 +0200
++++ misc/build/xpdf-3.02/xpdf/JBIG2Stream.h	2009-11-10 11:43:10.400610529 +0100
 @@ -78,6 +78,10 @@
  			     Guint *refSegs, Guint nRefSegs);
    void readGenericRegionSeg(Guint segNum, GBool imm,
@@ -966,7 +1079,7 @@
  				 int templ, GBool tpgdOn,
  				 GBool useSkip, JBIG2Bitmap *skip,
 --- misc/xpdf-3.02/xpdf/Makefile.in	2007-02-27 23:05:52.000000000 +0100
-+++ misc/build/xpdf-3.02/xpdf/Makefile.in	2009-04-22 19:20:56.651099700 +0200
++++ misc/build/xpdf-3.02/xpdf/Makefile.in	2009-11-10 11:43:10.407182402 +0100
 @@ -20,6 +20,8 @@
  SPLASHLIBDIR = ../splash
  
@@ -1006,9 +1119,31 @@
  
  #------------------------------------------------------------------------
  
+--- misc/xpdf-3.02/xpdf/PSOutputDev.cc	2007-02-27 23:05:52.000000000 +0100
++++ misc/build/xpdf-3.02/xpdf/PSOutputDev.cc	2009-11-10 11:43:54.879574544 +0100
+@@ -4301,7 +4301,7 @@
+ 	     width, -height, height);
+ 
+   // allocate a line buffer
+-  lineBuf = (Guchar *)gmalloc(4 * width);
++  lineBuf = (Guchar *)gmallocn(width, 4);
+ 
+   // set up to process the data stream
+   imgStr = new ImageStream(str, width, colorMap->getNumPixelComps(),
 --- misc/xpdf-3.02/xpdf/Stream.cc	2007-02-27 23:05:52.000000000 +0100
-+++ misc/build/xpdf-3.02/xpdf/Stream.cc	2009-04-22 19:20:56.661311973 +0200
-@@ -410,15 +410,13 @@
++++ misc/build/xpdf-3.02/xpdf/Stream.cc	2009-11-10 11:43:54.863071127 +0100
+@@ -323,6 +323,10 @@
+   } else {
+     imgLineSize = nVals;
+   }
++  if (width > INT_MAX / nComps) {
++    // force a call to gmallocn(-1,...), which will throw an exception
++    imgLineSize = -1;
++  }
+   imgLine = (Guchar *)gmallocn(imgLineSize, sizeof(Guchar));
+   imgIdx = nVals;
+ }
+@@ -410,15 +414,13 @@
    ok = gFalse;
  
    nVals = width * nComps;
@@ -1029,7 +1164,7 @@
      return;
    }
    predLine = (Guchar *)gmalloc(rowBytes);
-@@ -1245,23 +1243,26 @@
+@@ -1245,23 +1247,26 @@
    columns = columnsA;
    if (columns < 1) {
      columns = 1;
@@ -1064,7 +1199,7 @@
  
    buf = EOF;
  }
-@@ -1280,9 +1281,9 @@
+@@ -1280,9 +1285,9 @@
    row = 0;
    nextLine2D = encoding < 0;
    inputBits = 0;
@@ -1077,7 +1212,7 @@
    buf = EOF;
  
    // skip any initial zero bits and end-of-line marker, and get the 2D
-@@ -1299,211 +1300,230 @@
+@@ -1299,211 +1304,230 @@
    }
  }
  
@@ -1446,7 +1581,7 @@
      // byte-align the row
      if (byteAlign) {
        inputBits &= ~7;
-@@ -1562,14 +1582,17 @@
+@@ -1562,14 +1586,17 @@
      // this if we know the stream contains end-of-line markers because
      // the "just plow on" technique tends to work better otherwise
      } else if (err && endOfLine) {
@@ -1467,7 +1602,7 @@
        eatBits(12); 
        if (encoding > 0) {
  	eatBits(1);
-@@ -1577,11 +1600,11 @@
+@@ -1577,11 +1604,11 @@
        }
      }
  
@@ -1484,7 +1619,7 @@
      }
  
      ++row;
-@@ -1589,39 +1612,43 @@
+@@ -1589,39 +1616,43 @@
  
    // get a byte
    if (outputBits >= 8) {
@@ -1549,7 +1684,7 @@
    return buf;
  }
  
-@@ -1663,6 +1690,9 @@
+@@ -1663,6 +1694,9 @@
    code = 0; // make gcc happy
    if (endOfBlock) {
      code = lookBits(12);
@@ -1559,7 +1694,7 @@
      if ((code >> 5) == 0) {
        p = &whiteTab1[code];
      } else {
-@@ -1675,6 +1705,9 @@
+@@ -1675,6 +1709,9 @@
    } else {
      for (n = 1; n <= 9; ++n) {
        code = lookBits(n);
@@ -1569,7 +1704,7 @@
        if (n < 9) {
  	code <<= 9 - n;
        }
-@@ -1686,6 +1719,9 @@
+@@ -1686,6 +1723,9 @@
      }
      for (n = 11; n <= 12; ++n) {
        code = lookBits(n);
@@ -1579,7 +1714,7 @@
        if (n < 12) {
  	code <<= 12 - n;
        }
-@@ -1711,9 +1747,12 @@
+@@ -1711,9 +1751,12 @@
    code = 0; // make gcc happy
    if (endOfBlock) {
      code = lookBits(13);
@@ -1593,7 +1728,7 @@
        p = &blackTab2[(code >> 1) - 64];
      } else {
        p = &blackTab3[code >> 7];
-@@ -1725,6 +1764,9 @@
+@@ -1725,6 +1768,9 @@
    } else {
      for (n = 2; n <= 6; ++n) {
        code = lookBits(n);
@@ -1603,7 +1738,7 @@
        if (n < 6) {
  	code <<= 6 - n;
        }
-@@ -1736,6 +1778,9 @@
+@@ -1736,6 +1782,9 @@
      }
      for (n = 7; n <= 12; ++n) {
        code = lookBits(n);
@@ -1613,7 +1748,7 @@
        if (n < 12) {
  	code <<= 12 - n;
        }
-@@ -1749,6 +1794,9 @@
+@@ -1749,6 +1798,9 @@
      }
      for (n = 10; n <= 13; ++n) {
        code = lookBits(n);
@@ -1623,7 +1758,7 @@
        if (n < 13) {
  	code <<= 13 - n;
        }
-@@ -1963,6 +2011,12 @@
+@@ -1963,6 +2015,12 @@
      // allocate a buffer for the whole image
      bufWidth = ((width + mcuWidth - 1) / mcuWidth) * mcuWidth;
      bufHeight = ((height + mcuHeight - 1) / mcuHeight) * mcuHeight;
@@ -1636,7 +1771,7 @@
      for (i = 0; i < numComps; ++i) {
        frameBuf[i] = (int *)gmallocn(bufWidth * bufHeight, sizeof(int));
        memset(frameBuf[i], 0, bufWidth * bufHeight * sizeof(int));
-@@ -3038,6 +3092,11 @@
+@@ -3038,6 +3096,11 @@
    }
    scanInfo.firstCoeff = str->getChar();
    scanInfo.lastCoeff = str->getChar();
@@ -1648,8 +1783,8 @@
    c = str->getChar();
    scanInfo.ah = (c >> 4) & 0x0f;
    scanInfo.al = c & 0x0f;
---- misc/xpdf-3.02/xpdf/Stream.h	Tue Feb 27 23:05:52 2007
-+++ misc/build/xpdf-3.02/xpdf/Stream.h	Mon Apr 21 15:42:50 2008
+--- misc/xpdf-3.02/xpdf/Stream.h	2007-02-27 23:05:52.000000000 +0100
++++ misc/build/xpdf-3.02/xpdf/Stream.h	2009-11-10 11:43:10.426813566 +0100
 @@ -528,13 +528,15 @@
    int row;			// current row
    int inputBuf;			// input buffer
@@ -1670,3 +1805,68 @@
    short getTwoDimCode();
    short getWhiteCode();
    short getBlackCode();
+--- misc/xpdf-3.02/xpdf/XRef.cc	2007-02-27 23:05:52.000000000 +0100
++++ misc/build/xpdf-3.02/xpdf/XRef.cc	2009-11-10 11:43:54.923556696 +0100
+@@ -52,6 +52,8 @@
+   // generation 0.
+   ObjectStream(XRef *xref, int objStrNumA);
+ 
++  GBool isOk() { return ok; }
++
+   ~ObjectStream();
+ 
+   // Return the object number of this object stream.
+@@ -67,6 +69,7 @@
+   int nObjects;			// number of objects in the stream
+   Object *objs;			// the objects (length = nObjects)
+   int *objNums;			// the object numbers (length = nObjects)
++  GBool ok;
+ };
+ 
+ ObjectStream::ObjectStream(XRef *xref, int objStrNumA) {
+@@ -80,6 +83,7 @@
+   nObjects = 0;
+   objs = NULL;
+   objNums = NULL;
++  ok = gFalse;
+ 
+   if (!xref->fetch(objStrNum, 0, &objStr)->isStream()) {
+     goto err1;
+@@ -105,6 +109,13 @@
+     goto err1;
+   }
+ 
++  // this is an arbitrary limit to avoid integer overflow problems
++  // in the 'new Object[nObjects]' call (Acrobat apparently limits
++  // object streams to 100-200 objects)
++  if (nObjects > 1000000) {
++    error(-1, "Too many objects in an object stream");
++    goto err1;
++  }
+   objs = new Object[nObjects];
+   objNums = (int *)gmallocn(nObjects, sizeof(int));
+   offsets = (int *)gmallocn(nObjects, sizeof(int));
+@@ -161,10 +172,10 @@
+   }
+ 
+   gfree(offsets);
++  ok = gTrue;
+ 
+  err1:
+   objStr.free();
+-  return;
+ }
+ 
+ ObjectStream::~ObjectStream() {
+@@ -837,6 +848,11 @@
+ 	delete objStr;
+       }
+       objStr = new ObjectStream(this, e->offset);
++      if (!objStr->isOk()) {
++	delete objStr;
++	objStr = NULL;
++	goto err;
++      }
+     }
+     objStr->getObject(e->gen, num, obj);
+     break;

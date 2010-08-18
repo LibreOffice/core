@@ -1,14 +1,10 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2008 by Sun Microsystems, Inc.
+# 
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,7 +29,7 @@ PRJ=..$/..
 PRJNAME=sdext
 TARGET=PresenterScreen
 GEN_HID=FALSE
-EXTNAME=presenter
+EXTNAME=PresenterScreen
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -41,6 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE : rtlbootstrap.mk
 .INCLUDE : settings.mk
+.IF "$(L10N_framework)"==""
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 .IF "$(ENABLE_PRESENTER_SCREEN)" == "NO"
@@ -54,6 +51,7 @@ common_build_zip=
 # --- Files -------------------------------------
 
 SLOFILES=										\
+    $(SLO)$/PresenterAccessibility.obj			\
     $(SLO)$/PresenterAnimation.obj				\
     $(SLO)$/PresenterAnimator.obj				\
     $(SLO)$/PresenterBitmapContainer.obj		\
@@ -83,6 +81,7 @@ SLOFILES=										\
     $(SLO)$/PresenterSlideSorter.obj			\
     $(SLO)$/PresenterSprite.obj					\
     $(SLO)$/PresenterSpritePane.obj				\
+    $(SLO)$/PresenterTextView.obj				\
     $(SLO)$/PresenterTheme.obj					\
     $(SLO)$/PresenterTimer.obj					\
     $(SLO)$/PresenterToolBar.obj				\
@@ -99,11 +98,12 @@ SHL1TARGET=		$(TARGET).uno
 SHL1STDLIBS=	$(CPPUHELPERLIB)	\
                 $(CPPULIB)			\
                 $(SALLIB)
+
 SHL1DEPN=
 SHL1IMPLIB=		i$(SHL1TARGET)
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=	exports.map
+SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 SHL1RPATH=      OXT
 DEF1NAME=		$(SHL1TARGET)
 
@@ -121,13 +121,20 @@ PACKLICS:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registry$/license_$i)
 PACKLICS:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registry$/LICENSE_$i)
 .ENDIF
 
-
+.IF "$(WITH_LANG)"==""
+FIND_XCU=registry/data
+.ELSE			# "$(WITH_LANG)"==""
+FIND_XCU=$(MISC)$/$(EXTNAME)_in$/merge
+.ENDIF			# "$(WITH_LANG)"==""
 
 COMPONENT_FILES=																			\
     $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/Jobs.xcu							\
     $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/ProtocolHandler.xcu				\
-    $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu		\
-    $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs
+    $(ZIP1DIR)$/registry$/schema/org$/openoffice$/Office$/extension$/PresenterScreen.xcs   	\
+    $(ZIP1DIR)$/registry$/data/$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
+
+#COMPONENT_MERGED_XCU= \
+#	$(FIND_XCU)$/org$/openoffice$/Office$/extension$/PresenterScreen.xcu 
 
 COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/BorderTop.png							\
@@ -226,14 +233,25 @@ COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/LabelMouseOverCenter.png				\
     $(ZIP1DIR)$/bitmaps$/LabelMouseOverRight.png
 
+COMPONENT_IMAGES=\
+    $(ZIP1DIR)$/bitmaps$/extension_32.png \
+    $(ZIP1DIR)$/bitmaps$/extension_32_h.png
+
 COMPONENT_MANIFEST= 							\
     $(ZIP1DIR)$/META-INF$/manifest.xml
 
 COMPONENT_LIBRARY= 								\
     $(ZIP1DIR)$/$(TARGET).uno$(DLLPOST)
 
+PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
+
 COMPONENT_HELP= 								\
-    $(ZIP1DIR)$/help/component.txt
+    $(ZIP1DIR)$/help/component.txt				\
+    $(foreach,l,$(alllangiso) $(ZIP1DIR)$/help$/$l$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp)
+#	$(ZIP1DIR)$/help$/en-US$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp
+
+# no localization yet - see #i107498#
+#	$(foreach,l,$(alllangiso) $(ZIP1DIR)$/help$/$l$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp)
 
 ZIP1DEPS=					\
     $(PACKLICS) 			\
@@ -241,16 +259,18 @@ ZIP1DEPS=					\
     $(COMPONENT_MANIFEST)	\
     $(COMPONENT_FILES)		\
     $(COMPONENT_BITMAPS)	\
+    $(COMPONENT_IMAGES)    	\
     $(COMPONENT_LIBRARY)	\
     $(COMPONENT_HELP)
+#	$(COMPONENT_MERGED_XCU) \
 
-PLATFORMID:=$(RTL_OS:l)_$(RTL_ARCH:l)
 
 
 # --- Targets ----------------------------------
+.ENDIF # L10N_framework
 
 .INCLUDE : target.mk
-
+.IF "$(L10N_framework)"==""
 $(SLO)$/PresenterComponent.obj : $(INCCOM)$/PresenterExtensionIdentifier.hxx
 
 $(INCCOM)$/PresenterExtensionIdentifier.hxx : PresenterExtensionIdentifier.txx
@@ -260,17 +280,22 @@ $(COMPONENT_MANIFEST) : $$(@:f)
     @-$(MKDIRHIER) $(@:d)
     +$(TYPE) $< | $(SED) "s/SHARED_EXTENSION/$(DLLPOST)/" > $@
 
-$(COMPONENT_HELP) : help$/$$(@:f)
+$(ZIP1DIR)$/help$/component.txt : help$/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
-#$(COMPONENT_FILES) : $$(@:f)
-#	@-$(MKDIRHIER) $(@:d)
-#    +$(COPY) $< $@
+$(ZIP1DIR)$/help$/%$/com.sun.PresenterScreen-$(PLATFORMID)$/presenter.xhp : $(COMMONMISC)/%/com.sun.PresenterScreen/presenter.xhp
+    @echo creating $@
+    @@-$(MKDIRHIER) $(@:d)
+    $(TYPE) $< | sed "s/PLATFORMID/$(PLATFORMID)/" > $@
 
 $(COMPONENT_BITMAPS) : bitmaps$/$$(@:f)
     @-$(MKDIRHIER) $(@:d)
     +$(COPY) $< $@
+
+$(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
 
 $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
     @-$(MKDIRHIER) $(@:d)
@@ -328,6 +353,7 @@ $(PACKLICS) : $(SOLARBINDIR)$/osl$/LICENSE$$(@:b:s/_/./:e:s/./_/)$$(@:e)
     $(GNUCOPY) $< $@
 .ENDIF
 
+
 $(ZIP1DIR)/%.xcu : %.xcu
     @@-$(MKDIRHIER) $(@:d)
     $(GNUCOPY) $< $@
@@ -352,3 +378,8 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
 
 
 .ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
+.ELSE
+ivo:
+    $(ECHO)
+.ENDIF # L10N_framework
+

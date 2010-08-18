@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: StorageRepository.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -35,15 +32,21 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.NoSuchElementException;
 import com.sun.star.embed.ElementModes;
 import com.sun.star.embed.InvalidStorageException;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
-import java.io.*;
 import com.sun.star.embed.XStorage;
 import com.sun.star.embed.XTransactedObject;
-import com.sun.star.uno.UnoRuntime;
 import com.sun.star.io.XStream;
+import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lib.uno.adapter.XInputStreamToInputStreamAdapter;
 import com.sun.star.lib.uno.adapter.XOutputStreamToOutputStreamAdapter;
+import com.sun.star.uno.UnoRuntime;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -55,26 +58,31 @@ import org.apache.commons.logging.LogFactory;
  */
 public class StorageRepository implements InputRepository, OutputRepository
 {
+
     private static final Log LOGGER = LogFactory.getLog(SDBCReportDataFactory.class);
     private static final String REPORT_PROCESSING_FAILED = "ReportProcessing failed";
     private XStorage input;
     private XStorage output;
+    private final String rootURL;
 
     /**
      *
      * @param input
      * @param output
+     * @param rootURL
      * @throws java.io.IOException
      */
-    public StorageRepository(final XStorage input, final XStorage output)
+    public StorageRepository(final XStorage input, final XStorage output, final String rootURL)
     {
         this.input = input;
         this.output = output;
+        this.rootURL = rootURL;
 
     }
 
-    public StorageRepository(final XStorage storage, final boolean isOutput)
+    public StorageRepository(final XStorage storage, final boolean isOutput, final String rootURL)
     {
+        this.rootURL = rootURL;
         if (isOutput)
         {
             this.output = storage;
@@ -148,9 +156,9 @@ public class StorageRepository implements InputRepository, OutputRepository
         {
             LOGGER.error(REPORT_PROCESSING_FAILED, ex);
         }
-        catch (NoSuchElementException ex)
+        catch (NoSuchElementException e)
         {
-        // We expect this exception, no need to log it.
+            // We expect this exception, no need to log it.
         }
         return false;
     }
@@ -204,7 +212,7 @@ public class StorageRepository implements InputRepository, OutputRepository
                 throw new IOException();
             }
             final XStorage storage = (XStorage) UnoRuntime.queryInterface(XStorage.class, input.openStorageElement(temp, ElementModes.READ));
-            return new StorageRepository(storage, false);
+            return new StorageRepository(storage, false, rootURL);
         }
         catch (NoSuchElementException ex)
         {
@@ -254,7 +262,7 @@ public class StorageRepository implements InputRepository, OutputRepository
                 final XPropertySet prop = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, storage);
                 prop.setPropertyValue("MediaType", mimeType);
             }
-            return new StorageRepository(storage, true);
+            return new StorageRepository(storage, true, rootURL);
         }
         catch (UnknownPropertyException ex)
         {
@@ -333,8 +341,13 @@ public class StorageRepository implements InputRepository, OutputRepository
         }
         catch (NoSuchElementException ex)
         {
-        // We expect this exception, no need to log it.
+            // We expect this exception, no need to log it.
         }
         return false;
+    }
+
+    public String getRootURL()
+    {
+        return rootURL;
     }
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: SDBCReportData.java,v $
- * $Revision: 1.6.32.1 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,8 +33,6 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.sdb.XParametersSupplier;
-import java.sql.Timestamp;
-
 import com.sun.star.sdbc.DataType;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XResultSetMetaData;
@@ -49,6 +44,9 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.DateTime;
 import com.sun.star.util.Time;
+
+import java.sql.Timestamp;
+
 
 public class SDBCReportData implements DataSource
 {
@@ -83,7 +81,7 @@ public class SDBCReportData implements DataSource
                 parameters = xSuppParams.getParameters();
             }
 
-            final XColumnsSupplier columnsSup = (XColumnsSupplier)UnoRuntime.queryInterface(XColumnsSupplier.class, rowSet);
+            final XColumnsSupplier columnsSup = (XColumnsSupplier) UnoRuntime.queryInterface(XColumnsSupplier.class, rowSet);
             final XNameAccess columns = columnsSup.getColumns();
             final String[] columnNamesList = columns.getElementNames();
             final XResultSetMetaDataSupplier sup = (XResultSetMetaDataSupplier) UnoRuntime.queryInterface(XResultSetMetaDataSupplier.class, rowSet);
@@ -92,7 +90,9 @@ public class SDBCReportData implements DataSource
             columnCount = resultSetMetaData.getColumnCount();
             firstParameterIndex = columnCount + 1;
             if (parameters != null)
+            {
                 columnCount += parameters.getCount();
+            }
 
             columnTypes = new int[columnCount];
             columnNames = new String[columnCount];
@@ -111,7 +111,7 @@ public class SDBCReportData implements DataSource
                         final XPropertySet paramColumn = (XPropertySet) UnoRuntime.queryInterface(
                                 XPropertySet.class, parameters.getByIndex(i - firstParameterIndex));
                         columnNames[i - 1] = (String) paramColumn.getPropertyValue("Name");
-                        columnTypes[i - 1] = ((Integer) paramColumn.getPropertyValue("Type")).intValue();
+                        columnTypes[i - 1] = (Integer) paramColumn.getPropertyValue("Type");
                     }
                     catch (Exception e)
                     {
@@ -151,7 +151,9 @@ public class SDBCReportData implements DataSource
     public boolean absolute(final int row) throws DataSourceException
     {
         if (rowSet == null)
+        {
             return false;
+        }
         try
         {
             if (row == 0)
@@ -170,7 +172,9 @@ public class SDBCReportData implements DataSource
     public boolean next() throws DataSourceException
     {
         if (rowSet == null)
+        {
             return false;
+        }
         try
         {
             return rowSet.next();
@@ -294,7 +298,9 @@ public class SDBCReportData implements DataSource
     public Object getObject(final int column) throws DataSourceException
     {
         if (rowSet == null)
+        {
             return null;
+        }
         try
         {
             final boolean isParameterValue = (parameters != null) && (column >= firstParameterIndex);

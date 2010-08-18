@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterTimer.cxx,v $
- *
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -68,6 +64,20 @@ public:
 typedef ::boost::shared_ptr<TimerTask> SharedTimerTask;
 
 
+class TimerTaskComparator
+{
+public:
+    bool operator() (const SharedTimerTask& rpTask1, const SharedTimerTask& rpTask2)
+    {
+        return rpTask1->maDueTime.Seconds < rpTask2->maDueTime.Seconds
+            || (rpTask1->maDueTime.Seconds == rpTask2->maDueTime.Seconds
+                && rpTask1->maDueTime.Nanosec < rpTask2->maDueTime.Nanosec);
+    }
+};
+
+
+
+
 /** Queue all scheduled tasks and process them when their time has come.
 */
 class TimerScheduler
@@ -100,7 +110,7 @@ private:
     static sal_Int32 mnTaskId;
 
     ::osl::Mutex maTaskContainerMutex;
-    typedef ::std::set<SharedTimerTask> TaskContainer;
+    typedef ::std::set<SharedTimerTask,TimerTaskComparator> TaskContainer;
     TaskContainer maScheduledTasks;
     bool mbIsRunning;
     ::osl::Mutex maCurrentTaskMutex;
@@ -255,7 +265,7 @@ void TimerScheduler::ScheduleTask (const SharedTimerTask& rpTask)
         return;
 
     osl::MutexGuard aGuard (maTaskContainerMutex);
-        maScheduledTasks.insert(rpTask);
+    maScheduledTasks.insert(rpTask);
 
     if ( ! mbIsRunning)
     {

@@ -3,12 +3,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Common.xcu,v $
- * $Revision: 1.52 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,6 +56,13 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:ReportNavigator</value>
+          </prop>
+        </node>
+
+        <node oor:name="F8_MOD2" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+            <value xml:lang="en-US">.uno:AddField</value>
           </prop>
         </node>
 
@@ -129,6 +133,20 @@
           <prop oor:name="Command">
             <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
             <value xml:lang="en-US">.uno:PrevMark</value>
+          </prop>
+        </node>
+
+        <node oor:name="SUBTRACT" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="en-US">.uno:CollapseSection</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+          </prop>
+        </node>
+
+        <node oor:name="ADD" oor:op="replace">
+          <prop oor:name="Command">
+            <value xml:lang="en-US">.uno:ExpandSection</value>
+            <value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
           </prop>
         </node>
 

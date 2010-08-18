@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DataStyleReadHandler.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,17 +26,21 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.parser.data;
 
-import java.util.ArrayList;
-
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.DataStyle;
 import com.sun.star.report.pentaho.parser.ElementReadHandler;
+
+import java.util.ArrayList;
 import java.util.List;
+
 import org.jfree.report.structure.Element;
 import org.jfree.report.structure.StaticText;
+
 import org.pentaho.reporting.libraries.xmlns.parser.XmlReadHandler;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
 
 public class DataStyleReadHandler extends ElementReadHandler
 {
@@ -70,7 +71,7 @@ public class DataStyleReadHandler extends ElementReadHandler
     {
         if (OfficeNamespaces.DATASTYLE_NS.equals(uri) || OfficeNamespaces.STYLE_NS.equals(uri))
         {
-            final DataStyleReadHandler xrh = new DataStyleReadHandler("text".equals(tagName) || "currency-symbol".equals(tagName));
+            final DataStyleReadHandler xrh = new DataStyleReadHandler("text".equals(tagName) || "currency-symbol".equals(tagName) || "embedded-text".equals(tagName));
             children.add(xrh);
             return xrh;
         }

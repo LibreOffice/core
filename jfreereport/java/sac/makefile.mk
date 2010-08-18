@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,6 +34,8 @@ TARGET=sac-1.3
 
 .INCLUDE :	settings.mk
 
+.IF "$(L10N_framework)"==""
+
 # override buildfile
 ANT_BUILDFILE=build.xml
 
@@ -47,6 +45,7 @@ ANT_BUILDFILE=build.xml
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=sacjava-1.3
+TARFILE_MD5=39bb3fcea1514f1369fcfc87542390fd
 
 TARFILE_ROOTDIR=$(TARGET)
 
@@ -65,12 +64,13 @@ BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) all
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
-
+.ENDIF # L10N_framework
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
 
+.IF "$(L10N_framework)"==""
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 
@@ -79,4 +79,5 @@ ALLTAR : $(CLASSDIR)$/sac.jar
 $(CLASSDIR)$/sac.jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
     $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/sac.jar $(CLASSDIR)$/sac.jar
 .ENDIF
+.ENDIF # L10N_framework
 

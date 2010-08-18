@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -42,8 +38,9 @@ VERSION=-1.0.0
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
-
+.IF "$(L10N_framework)"==""
 TARFILE_NAME=$(TARGET)
+TARFILE_MD5=f7925ba8491fe570e5164d2c72791358
 TARFILE_ROOTDIR=$(TARGET)
 PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
 CONVERTFILES=build.xml
@@ -57,18 +54,19 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
-
+.ENDIF
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : set_ext.mk
 .INCLUDE : target.mk
-
+.IF "$(L10N_framework)"==""
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 
 ALLTAR : $(CLASSDIR)$/$(TARGET)$(VERSION).jar 
 $(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
     $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)$(VERSION).jar
-    
+
+.ENDIF
 .ENDIF
 

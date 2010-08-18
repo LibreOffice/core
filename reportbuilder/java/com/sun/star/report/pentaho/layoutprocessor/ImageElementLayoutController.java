@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ImageElementLayoutController.java,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,18 +26,18 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.layoutprocessor;
 
-import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.OfficeToken;
+import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.ImageElement;
-import org.pentaho.reporting.libraries.formula.Formula;
-import org.pentaho.reporting.libraries.formula.lvalues.LValue;
-import org.pentaho.reporting.libraries.formula.parser.ParseException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import org.jfree.layouting.util.AttributeMap;
 import org.jfree.report.DataSourceException;
 import org.jfree.report.JFreeReportInfo;
 import org.jfree.report.ReportDataFactoryException;
 import org.jfree.report.ReportProcessingException;
-import org.jfree.report.util.TextUtilities;
 import org.jfree.report.data.GlobalMasterRow;
 import org.jfree.report.data.ReportDataRow;
 import org.jfree.report.expressions.FormulaExpression;
@@ -49,11 +46,14 @@ import org.jfree.report.flow.ReportTarget;
 import org.jfree.report.flow.layoutprocessor.LayoutController;
 import org.jfree.report.flow.layoutprocessor.LayoutControllerUtil;
 import org.jfree.report.structure.Element;
-import org.jfree.report.structure.Section;
 import org.jfree.report.structure.Node;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.jfree.report.structure.Section;
+import org.jfree.report.util.TextUtilities;
+
 import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+import org.pentaho.reporting.libraries.formula.Formula;
+import org.pentaho.reporting.libraries.formula.lvalues.LValue;
+import org.pentaho.reporting.libraries.formula.parser.ParseException;
 
 /**
  * Produces an image. The image-structures itself (draw:frame and so on) are not generated here. This element produces a
@@ -67,6 +67,7 @@ import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
 public class ImageElementLayoutController
         extends AbstractReportElementLayoutController
 {
+
     private static final Log LOGGER = LogFactory.getLog(ImageElementLayoutController.class);
     private ImageElementContext context;
 
@@ -85,20 +86,20 @@ public class ImageElementLayoutController
             // A static image is easy. At least at this level. Dont ask about the weird things we have to do in the
             // output targets ...
             final String linkTarget = imageElement.getImageData();
-            generateImage(target, linkTarget, imageElement.isScale(), imageElement.isPreserveIRI());
+            generateImage(target, linkTarget, imageElement.getScaleMode(), imageElement.isPreserveIRI());
         }
         else
         {
             final Object value =
                     LayoutControllerUtil.evaluateExpression(getFlowController(), imageElement, formulaExpression);
-            generateImage(target, value, imageElement.isScale(), imageElement.isPreserveIRI());
+            generateImage(target, value, imageElement.getScaleMode(), imageElement.isPreserveIRI());
         }
         return join(getFlowController());
     }
 
     private void generateImage(final ReportTarget target,
             final Object linkTarget,
-            final boolean scale,
+            final String scale,
             final boolean preserveIri)
             throws ReportProcessingException, DataSourceException
     {
@@ -110,7 +111,7 @@ public class ImageElementLayoutController
         final AttributeMap image = new AttributeMap();
         image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, Element.NAMESPACE_ATTRIBUTE, JFreeReportInfo.REPORT_NAMESPACE);
         image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, Element.TYPE_ATTRIBUTE, OfficeToken.IMAGE);
-        image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.SCALE, String.valueOf(scale));
+        image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.SCALE, scale);
         image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.PRESERVE_IRI, String.valueOf(preserveIri));
         image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, "image-context", createContext());
         image.setAttribute(JFreeReportInfo.REPORT_NAMESPACE, OfficeToken.IMAGE_DATA, linkTarget);
@@ -184,7 +185,7 @@ public class ImageElementLayoutController
                 return null;
             }
 
-            addRowStyles(context, table,rowPos,rowSpan);
+            addRowStyles(context, table, rowPos, rowSpan);
             this.context = context;
         }
         return this.context;
@@ -198,9 +199,8 @@ public class ImageElementLayoutController
         final Node[] nodes = tableRow.getNodeArray();
         final String namespace = tableCell.getNamespace();
         final String type = tableCell.getType();
-        for (int i = 0; i < nodes.length; i++)
+        for (final Node node : nodes)
         {
-            final Node node = nodes[i];
             if (!(node instanceof Element))
             {
                 continue;
@@ -211,8 +211,7 @@ public class ImageElementLayoutController
             (ObjectUtilities.equal(child.getNamespace(), namespace) == false ||
             ObjectUtilities.equal(child.getType(), type) == false))
              */
-            if (!ObjectUtilities.equal(child.getNamespace(), namespace) ||
-                    (!ObjectUtilities.equal(child.getType(), type) && (secondType == null || !ObjectUtilities.equal(child.getType(), secondType))))
+            if (!ObjectUtilities.equal(child.getNamespace(), namespace) || (!ObjectUtilities.equal(child.getType(), type) && (secondType == null || !ObjectUtilities.equal(child.getType(), secondType))))
             {
                 continue;
             }
@@ -254,11 +253,7 @@ public class ImageElementLayoutController
             final FlowController controller = getFlowController();
             final GlobalMasterRow masterRow = controller.getMasterRow();
             final ReportDataRow reportDataRow = masterRow.getReportDataRow();
-            if (reportDataRow.getCursor() == 0)
-            {
-                return true;
-            }
-            return false;
+            return reportDataRow.getCursor() == 0;
         }
 
         try
@@ -277,12 +272,11 @@ public class ImageElementLayoutController
     {
         final Node[] columnDefs = columns.getNodeArray();
         int columnCounter = 0;
-        for (int i = 0; i < columnDefs.length; i++)
+        for (Node columnDef : columnDefs)
         {
-            final Element column = (Element) columnDefs[i];
+            final Element column = (Element) columnDef;
 
-            if (!ObjectUtilities.equal(column.getNamespace(), OfficeNamespaces.TABLE_NS) ||
-                    !ObjectUtilities.equal(column.getType(), OfficeToken.TABLE_COLUMN))
+            if (!ObjectUtilities.equal(column.getNamespace(), OfficeNamespaces.TABLE_NS) || !ObjectUtilities.equal(column.getType(), OfficeToken.TABLE_COLUMN))
             {
                 continue;
             }
@@ -306,12 +300,11 @@ public class ImageElementLayoutController
     {
         final Node[] rows = table.getNodeArray();
         int rowCounter = 0;
-        for (int i = 0; i < rows.length; i++)
+        for (Node row1 : rows)
         {
-            final Element row = (Element) rows[i];
+            final Element row = (Element) row1;
 
-            if (!ObjectUtilities.equal(row.getNamespace(), OfficeNamespaces.TABLE_NS) ||
-                    !ObjectUtilities.equal(row.getType(), OfficeToken.TABLE_ROW))
+            if (!ObjectUtilities.equal(row.getNamespace(), OfficeNamespaces.TABLE_NS) || !ObjectUtilities.equal(row.getType(), OfficeToken.TABLE_ROW))
             {
                 continue;
             }

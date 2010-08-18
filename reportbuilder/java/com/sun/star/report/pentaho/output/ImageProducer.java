@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ImageProducer.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,35 +26,47 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.output;
 
-import java.awt.Image;
+import com.sun.star.report.ImageService;
+import com.sun.star.report.InputRepository;
+import com.sun.star.report.OutputRepository;
+import com.sun.star.report.ReportExecutionException;
+import com.sun.star.report.pentaho.DefaultNameGenerator;
+
 import java.awt.Dimension;
+import java.awt.Image;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Arrays;
 
-import com.sun.star.report.InputRepository;
-import com.sun.star.report.OutputRepository;
-import com.sun.star.report.ImageService;
-import com.sun.star.report.ReportExecutionException;
-import com.sun.star.report.pentaho.DefaultNameGenerator;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.jfree.layouting.input.style.values.CSSNumericType;
 import org.jfree.layouting.input.style.values.CSSNumericValue;
+
 import org.pentaho.reporting.libraries.base.util.IOUtils;
 import org.pentaho.reporting.libraries.base.util.PngEncoder;
 import org.pentaho.reporting.libraries.base.util.WaitingImageObserver;
+
 
 /**
  * This class manages the images embedded in a report.
@@ -67,7 +76,9 @@ import org.pentaho.reporting.libraries.base.util.WaitingImageObserver;
  */
 public class ImageProducer
 {
+
     private static final Log LOGGER = LogFactory.getLog(ImageProducer.class);
+
     public static class OfficeImage
     {
 
@@ -136,7 +147,7 @@ public class ImageProducer
         {
             if (hashCode != null)
             {
-                return hashCode.intValue();
+                return hashCode;
             }
 
             final int length = Math.min(keyData.length, 512);
@@ -146,7 +157,7 @@ public class ImageProducer
                 final byte b = keyData[i];
                 hashValue = b + hashValue * 23;
             }
-            this.hashCode = Integer.valueOf(hashValue);
+            this.hashCode = hashValue;
             return hashValue;
         }
     }
@@ -316,7 +327,7 @@ public class ImageProducer
         }
         catch (MalformedURLException e)
         {
-        // ignore .. but we had to try this ..
+            // ignore .. but we had to try this ..
         }
 
         final OfficeImage o = (OfficeImage) imageCache.get(source);
@@ -347,7 +358,7 @@ public class ImageProducer
                 final CSSNumericValue widthVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getWidth() / 100.0);
                 final CSSNumericValue heightVal = CSSNumericValue.createValue(CSSNumericType.MM, dims.getHeight() / 100.0);
 
-                final String filename = copyToOutputRepository(mimeType, source, data);
+                final String filename = copyToOutputRepository(mimeType, data);
                 final OfficeImage officeImage = new OfficeImage(filename, widthVal, heightVal);
                 imageCache.put(source, officeImage);
                 return officeImage;
@@ -361,6 +372,22 @@ public class ImageProducer
                 LOGGER.warn("Failed to create image from local input-repository", e);
             }
         }
+        else
+        {
+            try
+            {
+                URI rootURI = new URI(inputRepository.getRootURL());
+                final URI uri = rootURI.resolve(source);
+                return produceFromURL(uri.toURL(), preserveIRI);
+            }
+            catch (URISyntaxException ex)
+            {
+            }
+            catch (MalformedURLException e)
+            {
+                // ignore .. but we had to try this ..
+            }
+        }
 
         // Return the image as broken image instead ..
         final OfficeImage officeImage = new OfficeImage(source, null, null);
@@ -371,7 +398,17 @@ public class ImageProducer
     private OfficeImage produceFromURL(final URL url,
             final boolean preserveIRI)
     {
-        final OfficeImage o = (OfficeImage) imageCache.get(url);
+        final String urlString = url.toString();
+        URI uri = null;
+        try
+        {
+            uri = new URI(urlString);
+        }
+        catch (URISyntaxException ex)
+        {
+            Logger.getLogger(ImageProducer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        final OfficeImage o = (OfficeImage) imageCache.get(uri);
         if (o != null)
         {
             return o;
@@ -398,15 +435,14 @@ public class ImageProducer
 
             if (preserveIRI)
             {
-                final OfficeImage retval = new OfficeImage(url.toString(), widthVal, heightVal);
-                imageCache.put(url, retval);
+                final OfficeImage retval = new OfficeImage(urlString, widthVal, heightVal);
+                imageCache.put(uri, retval);
                 return retval;
             }
 
-            final String file = url.getFile();
-            final String name = copyToOutputRepository(mimeType, file, data);
+            final String name = copyToOutputRepository(mimeType, data);
             final OfficeImage officeImage = new OfficeImage(name, widthVal, heightVal);
-            imageCache.put(url, officeImage);
+            imageCache.put(uri, officeImage);
             return officeImage;
         }
         catch (IOException e)
@@ -420,8 +456,8 @@ public class ImageProducer
 
         if (!preserveIRI)
         {
-            final OfficeImage image = new OfficeImage(url.toString(), null, null);
-            imageCache.put(url, image);
+            final OfficeImage image = new OfficeImage(urlString, null, null);
+            imageCache.put(uri, image);
             return image;
         }
 
@@ -429,7 +465,7 @@ public class ImageProducer
         return null;
     }
 
-    private String copyToOutputRepository(final String urlMimeType, final String file, final byte[] data)
+    private String copyToOutputRepository(final String urlMimeType, final byte[] data)
             throws IOException, ReportExecutionException
     {
         final String mimeType;

@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterSlideShowView.cxx,v $
- *
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -173,7 +169,17 @@ void PresenterSlideShowView::LateInit (void)
     // Add the new slide show view to the slide show.
     if (mxSlideShow.is() && ! mbIsViewAdded)
     {
-        mxSlideShow->addView(this);
+        Reference<presentation::XSlideShowView> xView (this);
+        mxSlideShow->addView(xView);
+        // Prevent embeded sounds being played twice at the same time by
+        // disabling sound for the new slide show view.
+        beans::PropertyValue aProperty;
+        aProperty.Name = A2S("IsSoundEnabled");
+        Sequence<Any> aValues (2);
+        aValues[0] <<= xView;
+        aValues[1] <<= sal_False;
+        aProperty.Value <<= aValues;
+        mxSlideShow->setProperty(aProperty);
         mbIsViewAdded = true;
     }
 
@@ -1053,6 +1059,15 @@ void PresenterSlideShowView::Resize (void)
     // for the new size.
     CreateBackgroundPolygons();
 
+    // Notify listeners that the transformation that maps the view into the
+    // window has changed.
+    lang::EventObject aEvent (static_cast<XWeak*>(this));
+    ::cppu::OInterfaceContainerHelper* pIterator
+        = maBroadcaster.getContainer(getCppuType((Reference<util::XModifyListener>*)NULL));
+    if (pIterator != NULL)
+    {
+        pIterator->notifyEach(&util::XModifyListener::modified, aEvent);
+    }
 
     // Due to constant aspect ratio resizing may lead a preview that changes
     // its position but not its size.  This invalidates the back buffer and

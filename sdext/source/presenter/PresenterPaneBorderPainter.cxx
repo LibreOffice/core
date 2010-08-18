@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterPaneBorderPainter.cxx,v $
- *
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -621,7 +617,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     const double nTextWidth = aBox.X2 - aBox.X1;
     double nX = rInnerBox.X + (rInnerBox.Width - nTextWidth)/2;
     const sal_Int32 nTitleBarHeight = rInnerBox.Y - rOuterBox.Y - 1;
-    double nY = rOuterBox.Y + (nTitleBarHeight - nTextHeight) / 2 + 3*nTextHeight/4;
+    double nY = rOuterBox.Y + (nTitleBarHeight - nTextHeight) / 2 - aBox.Y1;
     if (nY >= rInnerBox.Y)
         nY = rInnerBox.Y - 1;
     switch (rpStyle->meFontAnchor)

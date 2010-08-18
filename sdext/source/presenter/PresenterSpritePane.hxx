@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: PresenterSpritePane.hxx,v $
- *
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -86,10 +82,10 @@ public:
 
     // XPane
 
-    css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
+    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow (void)
         throw (css::uno::RuntimeException);
 
-    css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas (void)
+    virtual css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas (void)
         throw (css::uno::RuntimeException);
 
 

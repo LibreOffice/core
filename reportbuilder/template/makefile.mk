@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -37,7 +33,7 @@ TARGET=rpt_templates
 no_common_build_zip=true
 
 EXTENSION_VERSION_BASE=1.0.0
-.IF "$(PRODUCT)" != ""
+.IF "$(DBG_LEVEL)" == "0"
     EXTENSION_VERSION=$(EXTENSION_VERSION_BASE)
 .ELSE
     EXTENSION_VERSION=$(EXTENSION_VERSION_BASE).$(BUILD)

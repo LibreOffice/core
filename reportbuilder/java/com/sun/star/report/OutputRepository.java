@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: OutputRepository.java,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,8 +26,8 @@
  ************************************************************************/
 package com.sun.star.report;
 
-import java.io.OutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * A repository for writing. Providing a repository always assumes,
@@ -53,21 +50,22 @@ public interface OutputRepository
      * @return the outputstream
      * @throws IOException if opening the stream fails
      */
-    public OutputStream createOutputStream(final String name, final String mimeType) throws IOException;
+    OutputStream createOutputStream(final String name, final String mimeType) throws IOException;
 
     /** allows to acces sub repositories inside this repository
      *
      * @param name describes the path to the sub repository
+     * @param mimeType
      * @return the sub repository
      * @throws java.io.IOException when the sub repository doesn't exist.
      */
-    public OutputRepository openOutputRepository(final String name, final String mimeType) throws IOException;
+    OutputRepository openOutputRepository(final String name, final String mimeType) throws IOException;
 
-    public boolean exists(final String name);
+    boolean exists(final String name);
 
-    public boolean existsStorage(final String name);
+    boolean existsStorage(final String name);
 
-    public boolean isWritable(final String name);
+    boolean isWritable(final String name);
 
-    public void closeOutputRepository();
+    void closeOutputRepository();
 }

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ReportEngineMetaData.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -40,7 +37,7 @@ public interface ReportEngineMetaData
      * @param mimeType
      * @return true, if the output type is supported; false otherwise.
      */
-    public boolean isOutputSupported(String mimeType);
+    boolean isOutputSupported(String mimeType);
 
     /**
      * Lists all supported output parameters for the given mime-type.
@@ -50,13 +47,13 @@ public interface ReportEngineMetaData
      * @param mimeType
      * @return
      */
-    public String[] getOutputParameters(String mimeType);
+    String[] getOutputParameters(String mimeType);
 
-    public Class getParameterType(String parameter);
+    Class getParameterType(String parameter);
 
-    public boolean isMandatory(String parameter);
+    boolean isMandatory(String parameter);
 
-    public boolean isEnumeration(String parameter);
+    boolean isEnumeration(String parameter);
 
-    public Object[] getEnumerationValues(String parameter);
+    Object[] getEnumerationValues(String parameter);
 }
