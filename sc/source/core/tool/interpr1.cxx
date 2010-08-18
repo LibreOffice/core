@@ -7108,10 +7108,6 @@ void ScInterpreter::ScText()
             case svDouble:
                 fVal = PopDouble();
                 break;
-            case svString:
-                aStr = PopString();
-                bString = true;
-                break;
             default:
                 {
                     FormulaTokenRef xTok( PopToken());
