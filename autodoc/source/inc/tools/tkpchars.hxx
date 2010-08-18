@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tkpchars.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -76,12 +73,6 @@ class CharacterSource
         **/
         void            LoadText(
                             csv::bstream &      io_rSource);
-        /** Loads the complete contents of in_rSource into the classes private memory.
-            If in_rSource is a file, it has to be open of course.
-            After loading the text, the CurChar() is set on the begin of the text.
-        **/
-        void            LoadText(
-                            const char *        i_sSourceText );
 
         void            InsertTextAtCurPos(
                             const char *        i_sText2Insert );

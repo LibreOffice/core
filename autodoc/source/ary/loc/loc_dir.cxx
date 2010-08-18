@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: loc_dir.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -94,16 +91,6 @@ void
 Directory::Add_File(const File & i_file)
 {
     pChildren->aFiles.Add(i_file.LeId());
-}
-
-Le_id
-Directory::Search_Child(const String & i_name) const
-{
-    Le_id
-        ret = Search_Dir(i_name);
-    if (ret.IsValid())
-        return ret;
-    return Search_File(i_name);
 }
 
 Le_id

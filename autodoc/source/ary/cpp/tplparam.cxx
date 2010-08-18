@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tplparam.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,35 +68,6 @@ TplParameter_Type::Get_Text( StreamStr &                    o_rOut,
 {
     i_rGate.Types().Get_TypeText( o_rOut, nType );
 }
-
-TplParameter_Const::TplParameter_Const( const String  & i_sConst )
-    :   sConstant(i_sConst)
-{
-}
-
-TplParameter_Const::~TplParameter_Const()
-{
-}
-
-intt
-TplParameter_Const::Compare( const TemplateParameter & i_rOther ) const
-{
-    const TplParameter_Const * pOther
-            = dynamic_cast< const TplParameter_Const* >( &i_rOther );
-    if (pOther == 0)
-        return +1;
-
-    return strcmp( sConstant.c_str(), pOther->sConstant.c_str() );
-}
-
-void
-TplParameter_Const::Get_Text( StreamStr &               o_out,
-                              const ary::cpp::Gate &    ) const
-{
-    o_out << sConstant;
-}
-
-
 
 }   // namespace ut
 }   // namespace cpp

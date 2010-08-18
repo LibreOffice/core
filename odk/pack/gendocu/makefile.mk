@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.22.28.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -37,6 +33,7 @@ TARGET=gendocu
 .INCLUDE: settings.mk
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 #----------------------------------------------------------------
+.IF "$(L10N_framework)"==""
 
 CPPDOCREFNAME="UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) C/C++ API Reference"
 JAVADOCREFNAME="UDK $(UDK_MAJOR).$(UDK_MINOR).$(UDK_MICRO) Java API Reference"
@@ -51,7 +48,6 @@ JAVA_PACKAGES=\
         com.sun.star.comp.helper \
         com.sun.star.lib.uno.helper \
         com.sun.star.lib.unoloader \
-        com.sun.star.tools.uno \
         com.sun.star.uno \
         $(JAVA_SRC_DIR)$/com$/sun$/star$/lib$/util$/UrlToFileMapper.java
 #        com.sun.star.beans \
@@ -119,4 +115,8 @@ $(JAVA_SRC_FILES) : $(SOLARCOMMONBINDIR)$/$$(@:f)
 $(JAVA_DOCU_INDEX_FILE) .SEQUENTIAL : $(JAVA_SRC_FILES)
     -$(MKDIRHIER) $(@:d)        
     $(JAVADOC) -J-Xmx120m $(JAVADOCPARAMS) > $(JAVADOCLOG)
+.ENDIF
+
+.ELSE
+pseudo:
 .ENDIF

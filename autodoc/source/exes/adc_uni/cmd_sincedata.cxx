@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cmd_sincedata.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,18 +57,26 @@ SinceTagTransformationData::DoesTransform() const
 }
 
 const String &
-SinceTagTransformationData::DisplayOf( const String & i_sVersionNumber ) const
+SinceTagTransformationData::DisplayOf( const String & i_versionNumber ) const
 {
     if (DoesTransform())
     {
-        const String * ret = csv::find_in_map(aTransformationTable, i_sVersionNumber);
+        StreamLock
+            sl(200);
+        sl() << i_versionNumber;
+        sl().strip_frontback_whitespace();
+        String
+            sVersionNumber(sl().c_str());
+
+        const String *
+            ret = csv::find_in_map(aTransformationTable, sVersionNumber);
         return ret != 0
                 ?   *ret
                 :   String::Null_();
     }
     else
     {
-        return i_sVersionNumber;
+        return i_versionNumber;
     }
 }
 

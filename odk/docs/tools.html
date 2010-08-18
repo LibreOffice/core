@@ -1,17 +1,15 @@
 <html>
 <head>
-  <title>[TITLE] SDK - Development Tools</title>
+  <title>OpenOffice.org %PRODUCT_RELEASE% SDK - Development Tools</title>
   <link rel="stylesheet" type="text/css" href="sdk_styles.css">
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="author" content="J&uuml;rgen Schmidt">
-  <meta name="created" content="2004-12-14">
 </head>
 
 <body class="sdkbody"><a name="tools"/>
 <table class="table1" cellpadding=0>
-  <tr style="background-image:url(images/sdk_head-2.gif); backgorund-position: bottom; "> 
-    <td colspan="2" align="left"><img src="images/sdk_head-1.gif" width="335" height="109" usemap="#Map" border="0"></td>
-    <td align=right><img src="images/sdk_head-3.gif" width="32" height="109"></td>
+  <tr style="background-image:url(images/sdk_head-2.png)"> 
+    <td colspan="3" align="left"><img src="images/sdk_head-1.png" width="800" height="120" usemap="#Map" border="0"></td>
   </tr>
   <tr> 
     <td colspan="3"><img  class="nothing10" src="images/nada.gif"></td>
@@ -86,6 +84,12 @@
               <td class="content87">Tool for generating Java class files for the 
 			  UNOIDL types stored in a type library.</td>
             </tr>
+           <tr valign="top">
+              <td class="content3"><img src="images/arrow-1.gif"></td>
+              <td><a href="#climaker" title="link to the climaker tool description">climaker</a></td>
+              <td class="content87">Tool for generating CLI assemblies for the 
+			  UNOIDL types stored in a type library (windows only).</td>
+            </tr>
             <tr valign="top">
               <td class="content3"><img src="images/arrow-1.gif"></td>
               <td><a href="#uno-skeletonmaker" title="link to the uno-skeletonmaker tool description">uno-skeletonmaker</a></td>
@@ -123,7 +127,7 @@
 	<td class="content1"><img class="nothing8" src="images/nada.gif"></td>
   </tr>
   <tr> 
-    <td colspan="3"><img class="line" src="images/sdk_line-2.gif"></td>
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
   </tr>
   <tr>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
@@ -141,7 +145,7 @@
 		  office installation. UNO packages are UNO components (single libraries or 
 		  Jar files or more complex zip files that contains one or more libraries|
 		  Jar files, type libraries and configuration items), scripts  and 
-		  [PRODUCTNAME] Basic libraries as zip package. 'unopkg' is not part of the 
+		  OpenOffice.org %PRODUCT_RELEASE% Basic libraries as zip package. 'unopkg' is not part of the 
 		  SDK but comes with the office directly and is a development tool as well 
 		  as an end user tool to deploy extension into an office installation.</p>
 		  <p>More details concerning deployment and this tool can be find in the 
@@ -232,7 +236,7 @@
 	<td class="content1"><img class="nothing8" src="images/nada.gif"></td>
   </tr>
   <tr> 
-    <td colspan="3"><img class="line" src="images/sdk_line-2.gif"></td>
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
   </tr>
   <tr>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
@@ -334,7 +338,7 @@
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
   </tr>
   <tr> 
-    <td colspan="3"><img class="line" src="images/sdk_line-2.gif"></td>
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
   </tr>
   <tr>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
@@ -409,7 +413,7 @@
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
   </tr>
   <tr> 
-    <td colspan="3"><img class="line" src="images/sdk_line-2.gif"></td>
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
   </tr>
   <tr>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
@@ -499,7 +503,7 @@
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
   </tr>
   <tr> 
-    <td colspan="3"><img class="line" src="images/sdk_line-2.gif"></td>
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
   </tr>
   <tr>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
@@ -577,7 +581,101 @@ types the specified types depend on.</p>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
   </tr>
   <tr> 
-    <td colspan="3"><img class="line" src="images/sdk_line-2.gif"></td>
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
+  </tr>
+  <tr>
+    <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
+    <td> 
+      <table class="table2">
+        <tr> 
+		  <td colspan="2" class="head1"><a name="climaker"/>climaker</td>
+		  <td align="right">
+		    <a href="#tools" title="link to the tools overview"><img class="navigate" src="images/nav_up.png"></a>
+		    <a href="../index.html" title="link to the SDK start page"><img class="navigate" src="images/nav_home.png"></a>
+		  </td>
+        </tr> 
+		<tr>
+		  <td colspan="3">
+		  <p>The 'climaker' (windows only) generates the appropriate CLI assemblies file for each idl 
+		  type. The climaker works on a typelibrary which is generated by the 
+		  UNOIDL compiler (<a href="#idlc" link="link to the idlc tool description">
+		  idlc</a>). It generates the output for all specified types and for all 
+		    types the specified types depend on.</p>
+		  <p class="head2">Usage:</p>
+		  <blockquote>
+		  <b><code>climaker &lt;switches&gt; [registry-file-1 registry-file-2 ...]</code></b>
+		  </blockquote>	  
+		  <p class="head2">Options:</p>
+		  <p>
+		  <table class="table4">
+		  <tr>
+		    <td class="cell15"><code>-O, --out &lt;output_file&gt;</code></td>
+		    <td class="cell85">output assembly file;<br>
+		      defaults to cli_unotypes.dll if more than one registry-file is given, else &lt;registry-file&gt;.dll</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>-T, --types &lt;type1[;type2;...]&gt;</code></td>
+		    <td class="cell85">types to be generated (if none is given,
+		      then all types of given registries are emitted</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>-X, --extra &lt;rdb-file&gt;></code></td>
+		    <td class="cell85">additional rdb to saturate referenced types in
+                      given registry file(s); these types will not be
+                      emitted into the output assembly file</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>-r, --reference &lt;assembly-file&gt;</code></td>
+		    <td class="cell85">reference metadata from assembly file</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>-k, --keyfile</code></td>
+		    <td class="cell85">keyfile needed for strong name</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>--assembly-version &lt;version&gt;</code></td>
+		    <td class="cell85">sets assembly version</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>--assembly-description &lt;text&gt;</code></td>
+		    <td class="cell85">sets assembly description text</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>--assembly-product &lt;text&gt;</code></td>
+		    <td class="cell85">sets assembly product name</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>--assembly-company &lt;text&gt;</code></td>
+		    <td class="cell85">sets assembly company</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>--assembly-copyright &lt;text&gt;</code></td>
+		    <td class="cell85">sets assembly copyright</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>--assembly-trademark &lt;text&gt;</code></td>
+		    <td class="cell85">sets assembly trademark</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>-v, --verbose</code></td>
+		    <td class="cell85">verbose output to stdout</td>
+		  </tr>
+		  <tr>
+		    <td class="cell15"><code>-h, --help</code></td>
+		    <td class="cell85">this message</td>
+		  </tr>
+
+		  </table>
+		  </p>
+		  <p><b>Example:</b> <code>climaker --out cli_mytypes.dll --reference cli_uretypes.dll --extra types.rdb mytypes.rdb</code></p>
+		  </td>
+		</tr>  
+      </table>
+    </td>
+    <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
+  </tr>
+  <tr> 
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
   </tr>
   <tr>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
@@ -704,7 +802,7 @@ types the specified types depend on.</p>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
   </tr>
   <tr> 
-    <td colspan="3"><img class="line" src="images/sdk_line-2.gif"></td>
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
   </tr>
   <tr>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
@@ -767,7 +865,7 @@ types the specified types depend on.</p>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
   </tr>
   <tr> 
-    <td colspan="3"><img class="line" src="images/sdk_line-2.gif"></td>
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
   </tr>
   <tr>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
@@ -821,7 +919,7 @@ types the specified types depend on.</p>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
   </tr>
   <tr> 
-    <td colspan="3"><img class="line" src="images/sdk_line-2.gif"></td>
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
   </tr>
   <tr>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
@@ -868,7 +966,7 @@ types the specified types depend on.</p>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
   </tr>
   <tr> 
-    <td colspan="3"><img class="line" src="images/sdk_line-2.gif"></td>
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"></td>
   </tr>
   <tr>
     <td class="content1"><img class="nothing8" src="images/nada.gif"></td>
@@ -982,13 +1080,15 @@ types the specified types depend on.</p>
   </tr>
   <tr> 
     <td colspan="3"> 
-      <div align="center"><p>Copyright 2008 Sun Microsystems, Inc.</p></div>
+      <div class="centertext">
+	<p><img class="oraclelogo" src="images/odk-footer-logo.gif" title="Sponsored by Oracle" alt="Oracle Logo" />
+            Copyright &copy; 2010, Oracle and/or its affiliates. All rights reserved. Oracle and Java are registered trademarks of Oracle and/or its affiliates. Other names may be trademarks of their respective owners.<p>
+      </div>
     </td>
   </tr>
 </table>
 <map name="Map">
-  <area shape="rect" coords="10,10,80,50" href="http://www.sun.com">
-  <area shape="rect" coords="155,65,335,85" href="../index.html">
+  <area shape="rect" coords="10,68,93,105" href="http://www.oracle.com">
 </map>
 </body>
 </html>

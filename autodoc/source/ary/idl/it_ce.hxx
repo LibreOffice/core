@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: it_ce.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,13 +50,13 @@ class Ce_Type : public Type
 
     // LIFECYCLE
                         Ce_Type(
-                            Ce_id               i_nRelatedCe,
-                            Type_id             i_nTemplateType = Type_id(0) );
+                            Ce_id               i_relatedCe,
+                            const std::vector<Type_id> *
+                                                i_templateParameters );
     virtual             ~Ce_Type();
 
     // INQUIRY
     Ce_id               RelatedCe() const       { return nRelatedCe; }
-    Type_id             TemplateType() const    { return nTemplateType; }
 
   private:
     // Interface csv::ConstProcessorClient:
@@ -75,11 +72,12 @@ class Ce_Type : public Type
                             Ce_id &             o_nRelatedCe,
                             int &               o_nSequemceCount,
                             const Gate &        i_rGate ) const;
-    virtual Type_id     inq_TemplateParameterType() const;
-
+    virtual const std::vector<Type_id> *
+                        inq_TemplateParameters() const;
     // DATA
     Ce_id               nRelatedCe;
-    Type_id             nTemplateType;
+    Dyn< std::vector<Type_id> >
+                        pTemplateParameters;
 };
 
 

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: file.cxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -122,7 +119,10 @@ File::do_read( void *          out_pDest,
     if ( eLastIO == io_write )
         ::fseek( pStream, 0, SEEK_CUR );
     uintt ret = position();
-    ::fread( out_pDest, 1, i_nNrofBytes, pStream );
+    int iRet= ::fread( out_pDest, 1, i_nNrofBytes, pStream );
+    if ( iRet < 0  )  {
+    fprintf(stderr, "warning: read failed in %s line %d \n", __FILE__, __LINE__);
+    }
     ret = position() - ret;
 
     eLastIO = io_read;

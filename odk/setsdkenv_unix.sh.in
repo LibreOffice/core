@@ -10,16 +10,16 @@ export OO_SDK_NAME
 
 # Installation directory of the Software Development Kit.
 # Example: OO_SDK_HOME=/opt/openoffice.org/basis3.0/sdk
-OO_SDK_HOME=@OO_SDK_HOME@
+OO_SDK_HOME='@OO_SDK_HOME@'
 
 # Office installation directory.
 # Example: OFFICE_HOME=/opt/openoffice.org3
-OFFICE_HOME=@OFFICE_HOME@
-OFFICE_BASE_HOME=@OFFICE_BASE_HOME@
+OFFICE_HOME='@OFFICE_HOME@'
+OFFICE_BASE_HOME='@OFFICE_BASE_HOME@'
 
 # URE installation directory.
 # Example: OO_SDK_URE_HOME=/opt/openoffice.org/ure
-OO_SDK_URE_HOME=@OO_SDK_URE_HOME@
+OO_SDK_URE_HOME='@OO_SDK_URE_HOME@'
 export OO_SDK_URE_HOME
 
 # Directory of the make command.
@@ -122,7 +122,7 @@ OO_SDK_OUT=$OO_SDK_HOME
 # Prepare appropriate output directory.
 if [ -n "${OO_SDK_OUTPUT_DIR}" ]
 then
-    OO_SDK_OUT=${OO_SDK_OUTPUT_DIR}/$OO_SDK_NAME
+    OO_SDK_OUT=${OO_SDK_OUTPUT_DIR}/${OO_SDK_NAME}
     export OO_SDK_OUT
 fi
 
@@ -143,7 +143,7 @@ case ${sdk_platform} in
     soext=so
     exampleout=SOLARISexample.out
     stldebug=_debug
-    LD_LIBRARY_PATH=${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
+    LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     export LD_LIBRARY_PATH
     ;;
 
@@ -179,7 +179,7 @@ case ${sdk_platform} in
     exampleout=LINUXexample.out
     platform=Linux
     stldebug=_stldebug
-    LD_LIBRARY_PATH=${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
+    LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     export LD_LIBRARY_PATH
     ;;
 
@@ -197,7 +197,7 @@ case ${sdk_platform} in
     exampleout=FREEBSDexample.out
     platform=FreeBSD
     stldebug=_stldebug
-    LD_LIBRARY_PATH=${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
+    LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     export LD_LIBRARY_PATH
 
     if [ -e "/sbin/sysctl" ]
@@ -278,37 +278,47 @@ then
     export STLDEBUG
 fi
 
-# For URE, prepare symbolic links for libraries:
-rm -f "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.${soext}" \
-    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}" \
-    "${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}" \
-    "${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
-
-if [ -L "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}" ]
+if [ "${platform}" = "MacOSX" ]
 then
-    rm -rf "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
-fi
+#    For URE, prepare symbolic links for libraries:
+#    Only necessary on MacOSX, on other Unix systems the links are already prepared
+#    in the SDK installation.
 
+#    cleanup potential old links first
+    rm -f "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.${soext}" \
+	"${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}" \
+	"${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}" \
+	"${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}" \
+	"${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
 
-if [ "${OO_SDK_URE_HOME}" ]
-then
-    mkdir -p "${OO_SDK_OUT}/${directoryname}/lib"
-    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppu.${soext}.3" \
-        "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.${soext}"
-    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}.3" \
-        "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}"
-    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_sal.${soext}.3" \
-        "${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}"
-    ln -s "${OO_SDK_URE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3" \
-        "${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
-
-    if [ -r "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" ]
+    if [ -L "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}" ]
     then
-	ln -s "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" \
-	    "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
+	rm -rf "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
     fi
 
-fi
+#    prepare links 
+    if [ "${OO_SDK_URE_HOME}" ]
+    then
+	mkdir -p "${OO_SDK_OUT}/${directoryname}/lib"
+	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppu.${soext}.3" \
+	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppu.${soext}"
+	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppuhelper${comid}.${soext}.3" \
+	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}"
+	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_sal.${soext}.3" \
+	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}"
+	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3" \
+	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
+	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3" \
+	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
+
+	if [ -r "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" ]
+	then
+	    ln -s "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" \
+		"${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
+	fi
+    fi
+fi 
+
 
 # Prepare shell with all necessary environment variables.
 echo 

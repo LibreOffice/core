@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tkpstam2.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -175,34 +172,3 @@ StateMachin2::Peek(intt in_nBranch)
     StmArrayStatu2 & rSt = CurrentStatus();
     nPeekedStatus = rSt.NextBy(in_nBranch);
 }
-
-void
-StateMachin2::PrintOut()
-{
-    const intt anzahl = nNrofStati;
-    for (int i = 0; i < anzahl; i++)
-    {
-        Cout() << i << ':';
-        StmArrayStatu2 * pArrSt = pStati[i]->AsArray();
-        if (pArrSt != 0)
-        {
-            Cout() << Endl();
-            for (int b = 0; b < 128; b++)
-            {
-                Cout().width(4);
-                Cout() << pArrSt->NextBy(b);
-                if (b%16 == 15)
-                    Cout() << Endl();
-            }
-        }
-        else if (pStati[i]->AsBounds() != 0)
-        {
-            Cout() << "Bounds ";
-        }
-        else
-            Cout() << "Error! ";
-        Cout() << (pStati[i]->IsADefault() ? "DEF" : "---")
-             << Endl();
-    }   // for
-}
-

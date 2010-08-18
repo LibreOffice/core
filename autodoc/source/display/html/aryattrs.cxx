@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: aryattrs.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,25 +75,6 @@ bool
 Ce_IsInternal( const ary::cpp::CodeEntity & i_rCe )
 {
     return NOT i_rCe.IsVisible();
-}
-
-const char *
-Namespace_DisplayName( const ary::cpp::Namespace & i_rNsp )
-{
-     return i_rNsp.Depth() > 0
-                ?   i_rNsp.LocalName().c_str()
-                :   "GlobalNamespace of C++";
-}
-
-const char *
-TypeText( ary::cpp::Type_id         i_nId,
-          const ary::cpp::Gate &    i_rAryGate )
-{
-     static StreamStr sResult(2000);
-    sResult.seekp(0);
-    i_rAryGate.Types().Get_TypeText(sResult, i_nId);
-
-    return sResult.c_str();
 }
 
 const char *

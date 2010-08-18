@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: easywri.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,22 +55,6 @@ EasyWriter::Finish_OutputNode()
     csv_assert( NOT aCurDestination.empty() );
     aCurDestination.pop();
 }
-
-void
-EasyWriter::Add_HorizontalLine()
-{
-    Out() << new HorizontalLine;
-}
-
-void
-EasyWriter::Write( const char *        i_sFormatTag,
-                   const char *        i_sText )
-{
-    DYN csi::xml::Element * dpNew = new csi::xml::APureElement( i_sFormatTag );
-    *dpNew << i_sText;
-    Out() << dpNew;
-}
-
 
 csi::xml::Element &
 EasyWriter::Out()

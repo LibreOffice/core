@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: c_rcode.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -41,27 +38,6 @@
 #include <adc_cl.hxx>
 #include <x_parse.hxx>
 #include "pe_file.hxx"
-
-#ifdef IRIX
-// see i19418 incomplete type for cpp::PE_Namespace
-#include "pe_namsp.hxx"
-#include "pe_ignor.hxx"
-#include "pe_defs.hxx"
-#include "pe_vafu.hxx"
-#include "pe_tydef.hxx"
-#include "pe_tpltp.hxx"
-#include "pe_type.hxx"
-#include "pe_vari.hxx"
-#include "pe_funct.hxx"
-#include "pe_enum.hxx"
-#include "pe_param.hxx"
-#include "pe_class.hxx"
-#include "pe_expression.hxx"
-#include "pe_base.hxx"
-#include "pe_enum.hxx"
-#include "pe_enval.hxx"
-#endif
-
 
 const uintt C_nNO_TRY = uintt(-1);
 
@@ -151,13 +127,6 @@ CodeExplorer::AcknowledgeResult()
         default:
             csv_assert(false);
     }   // end switch(CurResult().eStackAction)
-}
-
-ary::loc::Le_id
-CodeExplorer::CurFile() const
-{
-    // KORR_FUTURE
-    return ary::loc::Le_id(0);
 }
 
 const Token &

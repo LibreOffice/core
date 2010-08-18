@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: i_traits.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,17 +49,6 @@ Ce_Traits::EntityOf_(id_type i_id)
     csv_assert(i_id.IsValid());
     return Ce_Storage::Instance_()[i_id];
 }
-
-Ce_Traits::id_type
-Ce_Traits::IdOf_(const entity_base_type & i_entity)
-{
-    return i_entity.CeId();
-}
-
-
-
-
-
 
 //********************      Ce_Compare      ********************//
 const Ce_Compare::key_type &

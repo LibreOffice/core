@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: loc_traits.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -66,9 +63,6 @@ struct Le_Traits
     static entity_base_type &
                         EntityOf_(
                             id_type             i_id );
-    static id_type      IdOf_(
-                            const entity_base_type &
-                                                i_entity );
 };
 
 
@@ -81,10 +75,7 @@ struct LeNode_Traits : public Le_Traits
     static symtree::Node<LeNode_Traits> *
                         NodeOf_(
                             entity_base_type &  i_entity );
-    static const String &
-                        LocalNameOf_(
-                            const entity_base_type &
-                                                i_entity );
+
     static entity_base_type *
                         ParentOf_(
                             const entity_base_type &

@@ -1,15 +1,9 @@
 /*************************************************************************
  *
- *  $RCSfile: TextDocuments.java,v $
- *
- *  $Revision: 1.5 $
- *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:56:34 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
  *
- *  Copyright (c) 2003 by Sun Microsystems, Inc.
+ *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -235,7 +229,7 @@ public class TextDocuments {
 
             // access corresponding field master
             Object fieldMaster = xNamedFieldMasters.getByName(
-                "com.sun.star.text.FieldMaster.User." + key);
+                "com.sun.star.text.fieldmaster.User." + key);
 
             // query the XPropertySet interface, we need to set the Content property
             XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
@@ -634,7 +628,7 @@ public class TextDocuments {
             // access it's XPropertySet interface
             XPropertySet xMasterPropSet = (XPropertySet)UnoRuntime.queryInterface(
                 XPropertySet.class, mxDocFactory.createInstance (
-                    "com.sun.star.text.FieldMaster.User" ) );
+                    "com.sun.star.text.fieldmaster.User" ) );
 
             // Set the name and value of the FieldMaster
             xMasterPropSet.setPropertyValue ( "Name", "UserEmperor" );

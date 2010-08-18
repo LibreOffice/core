@@ -1,15 +1,9 @@
 /*************************************************************************
  *
- *  $RCSfile: ResourceCreator.java,v $
- *
- *  $Revision: 1.6 $
- *
- *  last change: $Author: rt $ $Date: 2005-01-31 16:59:01 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
  *
- *  Copyright (c) 2003 by Sun Microsystems, Inc.
+ *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -43,7 +37,6 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.ucb.ContentInfo;
 import com.sun.star.ucb.InsertCommandArgument;
 import com.sun.star.ucb.XContent;
-import com.sun.star.ucb.XContentCreator;
 import com.sun.star.io.XInputStream;
 
 
@@ -154,18 +147,17 @@ public class ResourceCreator {
         boolean result = false;
         if ( stream != null && name != null && !name.equals( "" )) {
 
-            // Obtain content creator interface.
-            XContentCreator creator = ( XContentCreator )UnoRuntime.queryInterface(
-                    XContentCreator.class, m_content );
-
-            // Note: The data for info may have been obtained using
-            //       XContentCreator::queryCreatableContentsInfo().
+            // Note: The data for info may have been obtained from
+            //       property CreatableContentsInfo.
             ContentInfo info = new ContentInfo();
             info.Type = "application/vnd.sun.staroffice.fsys-file";
             info.Attributes = 0;
 
-            // Create new, empty content.
-            XContent newContent = creator.createNewContent( info );
+            // Create new, empty content (execute command "createNewContent").
+            XContent newContent = ( XContent )UnoRuntime.queryInterface(
+                XContent.class,
+                m_helper.executeCommand( m_content, "createNewContent", info ) );
+
             if ( newContent != null ) {
 
                 /////////////////////////////////////////////////////////////////////
@@ -181,7 +173,7 @@ public class ResourceCreator {
                 props[ 0 ] = prop;
 
                 // Execute command "setPropertyValues".
-                m_helper.executeCommand( newContent, "setPropertyValues",props );
+                m_helper.executeCommand( newContent, "setPropertyValues", props );
 
                 /////////////////////////////////////////////////////////////////////
                 // Write the new file to disk...

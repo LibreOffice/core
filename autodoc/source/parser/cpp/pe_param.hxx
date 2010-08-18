@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pe_param.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -97,7 +94,6 @@ class PE_Parameter : public Cpp_PE
     void                On_expectName_ArrayBracket_Left(const char * i_sText);
     void                On_expectName_Bracket_Right(const char * i_sText);
     void                On_expectName_Comma(const char * i_sText);
-    void                On_expectName_Assign(const char * i_sText);
 
     void                On_afterName_ArrayBracket_Left(const char * i_sText);
     void                On_afterName_Bracket_Right(const char * i_sText);

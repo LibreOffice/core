@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: ia_type.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,7 +74,8 @@ class TypeAdmin : public TypePilot
                             QualifiedName &     i_rFullName,
                             uintt               i_nSequenceCount,
                             Ce_id               i_nModuleOfOccurrence,
-                            Type_id             i_nTemplateType );
+                            const std::vector<Type_id> *
+                                                i_templateParameters );
     virtual const Type &
                         Find_Type(
                             Type_id             i_nType ) const;
@@ -105,7 +103,8 @@ class TypeAdmin : public TypePilot
                             const String &      i_sLocalName,
                             ExplicitNameRoom &  io_rExplicitNameRoom,
                             Ce_id               i_nModuleOfOccurrence,
-                            Type_id             i_nTemplateType );
+                            const std::vector<Type_id> *
+                                                i_templateParameters );
     Type_id             lhf_CheckIn_Sequence(
                             Type_id             i_nType );
     void                lhf_CheckIn_BuiltInType(

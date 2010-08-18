@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: dht_link2param.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,47 +25,37 @@
  *
  ************************************************************************/
 
-#ifndef ARY_DHT_LINK2PARAM_HXX
-#define ARY_DHT_LINK2PARAM_HXX
+#include <precomp.h>
+#include <x_docu.hxx>
 
-// BASE CLASSES
-#include <ary/doc/ht/dht_interpreter.hxx>
-
-// USED SERVICES
+// NOT FULLY DECLARED SERVICES
 
 
 
-
-namespace ary
+X_Docu::X_Docu( const char *        i_tag,
+                const char *        i_explanation  )
+    :   sTagName(i_tag),
+        sExplanation(i_explanation)
 {
-namespace doc
+}
+
+X_Docu::~X_Docu()
 {
-namespace ht
+}
+
+X_Docu::E_Event
+X_Docu::GetEvent() const
 {
-    class Component;
+     return x_Any;
+}
 
-
-/** Interpretes a link to a parameter of the just described function.
-*/
-class Link2Param : public Interpreter
+void
+X_Docu::GetInfo( std::ostream & o_rOutputMedium ) const
 {
-  public:
-    virtual             ~Link2Param();
-
-    static Component    Create_Component_(
-                            const String &      i_parameterName,
-                            const String &      i_display );
-  private:
-    // Interface Interpreter:
-    virtual void        do_Accept(
-                            Processor &         io_processor,
-                            const String &      i_data ) const;
-};
-
-
-
-
-}   // namespace ht
-}   // namespace doc
-}   // namespace ary
-#endif
+    o_rOutputMedium
+        << "Error in tag '"
+        << sTagName
+        << "': "
+        << sExplanation
+        << Endl();
+}

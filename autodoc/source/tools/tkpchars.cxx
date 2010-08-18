@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: tkpchars.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -71,20 +68,6 @@ CharacterSource::LoadText(csv::bstream & io_rSource)
         throw csv::X_Default("IO-Error: Could not load file completely.");
 
     dpSource[nSourceSize] = NULCH;
-
-    BeginSource();
-}
-
-void
-CharacterSource::LoadText( const char * i_sSourceText )
-{
-    if (dpSource != 0)
-        delete [] dpSource;
-
-    nSourceSize = strlen(i_sSourceText);
-
-    dpSource = new char[nSourceSize+1];
-    strcpy( dpSource,  i_sSourceText);      // SAFE STRCPY (#100211# - checked)
 
     BeginSource();
 }

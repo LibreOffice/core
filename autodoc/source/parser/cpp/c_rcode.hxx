@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: c_rcode.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -73,8 +70,6 @@ class CodeExplorer : private TokenProcessing_Types
     void                StartNewFile();
     void                Process_Token(
                             DYN cpp::Token &    let_drToken );
-    ary::loc::Le_id     CurFile() const;
-
     // ACCESS
     FileScope_EventHandler &
                         FileEventHandler()      { return aGlobalParseContext; }

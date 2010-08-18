@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: aryattrs.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,15 +56,6 @@ const char *        Get_TypeKey(
 bool                Ce_IsInternal(
                         const ary::cpp::CodeEntity &
                                                 i_rCe );
-
-const char *        Namespace_DisplayName(
-                        const ary::cpp::Namespace &
-                                                i_rNsp );
-
-const char *        TypeText(
-                        ary::cpp::Type_id       i_nId,
-                        const ary::cpp::Gate &  i_rAryGate );
-
 const char *        SyntaxText_PreName(
                         const ary::cpp::Function &
                                                 i_rFunction,

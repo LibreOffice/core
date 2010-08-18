@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hfi_doc.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,12 +50,18 @@ class HF_IdlDocu : public HtmlFactory_Idl
 
 
     /** Produces documentation by the CodeInfo accompanying
+        ->i_ce.
+    */
+    void                Produce_fromCodeEntity(
+                            const client &      i_ce ) const;
+
+    /** Produces documentation by the CodeInfo accompanying
         a link or reference to a CodeEntity.
 
         @param i_rScopeGivingCe
         Gives the scope from which links are to be calculated.
     */
-    void                Produce_byDocu4Reference(
+    void                Produce_fromReference(
                             const ce_info &     i_rDocuForReference,
                             const client &      i_rScopeGivingCe ) const;
 

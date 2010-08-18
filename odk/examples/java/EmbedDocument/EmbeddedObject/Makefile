@@ -1,15 +1,9 @@
 #*************************************************************************
 #
-#  $RCSfile: Makefile,v $
-#
-#  $Revision: 1.3 $
-#
-#  last change: $Author: rt $ $Date: 2008-07-11 14:28:54 $
-#
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
 #  
-#  Copyright (c) 2003 by Sun Microsystems, Inc.
+#  Copyright 2000, 2010 Oracle and/or its affiliates.
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -86,7 +80,7 @@ include $(SETTINGS)/stdtarget.mk
 
 $(COMP_GEN_OUT)/%.Manifest :
 	-$(MKDIR) $(subst \\,\,$(subst /,$(PS),$(@D)))
-	@echo RegistrationClassName: $(subst /,.,$(PACKAGE)).$(COMP_NAME)Factory > $@
+	@echo RegistrationClassName: $(subst /,.,$(PACKAGE)).$(COMP_NAME)Factory> $@
 
 # component as well as application are dependent from the generated types
 # rule for component class files

@@ -6,24 +6,25 @@ TARGET=odk
 .INCLUDE: settings.mk
 .INCLUDE: makefile.pmk
 # ------------------------------------------------------------------
+.IF "$(L10N_framework)"==""
 
 ZIP1TARGET=odkexamples
 ZIP1FLAGS=-u -r
 ZIP1DIR=$(PRJ)
-ZIP1LIST=examples -x "*.svn*" -x "*CVS*" -x "*makefile.mk" -x "*Inspector*" -x "*Container1*" -x "*Storage*" -x "*register_component*" -x "*examples.html"
+ZIP1LIST=examples -x "*.svn*" -x "*CVS*" -x "*makefile.mk" -x "*Inspector*" -x "*Container1*" -x "*Storage*" -x "*register_component*" -x "*examples.html" -x "*ConverterServlet*" -x "*NotesAccess*" -x "*delphi*"
+
+.ENDIF
 
 .INCLUDE :  target.mk
-
+.IF "$(L10N_framework)"==""
 ALLTAR:\
     $(BIN)$/$(PRODUCTZIPFILE)
 #    $(BIN)$/odk_oo.zip
-
+.ENDIF
 
 $(BIN)$/$(PRODUCTZIPFILE) : $(SDK_CONTENT_CHECK_FILES) $(SDK_CHECK_FLAGS)
     cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/$(PRODUCTZIPFILE) . $(CHECKZIPRESULT)
-.IF "$(USE_SHELL)"!="4nt"
     $(PERL) -w $(SOLARENV)$/bin$/cleanzip.pl $@
-.ENDIF			# "$(USE_SHELL)"!="4nt"
 #	cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/$(PRODUCTZIPFILE) . -x "idl/*" $(CHECKZIPRESULT)
 #	cd $(BIN)$/$(PRODUCT_NAME) && zip -urq ..$/odkidl.zip idl/* $(CHECKZIPRESULT)
 

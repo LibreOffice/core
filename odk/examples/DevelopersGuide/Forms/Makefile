@@ -1,15 +1,9 @@
 #*************************************************************************
 #
-#  $RCSfile: Makefile,v $
-#
-#  $Revision: 1.6 $
-#
-#  last change: $Author: rt $ $Date: 2005-03-29 12:10:19 $
-#
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
 #  
-#  Copyright (c) 2003 by Sun Microsystems, Inc.
+#  Copyright 2000, 2010 Oracle and/or its affiliates.
 #  All rights reserved.
 #
 #  Redistribution and use in source and binary forms, with or without
@@ -92,7 +86,10 @@ COMMON_JAVAFILES  = \
 	DateValidator.java \
 	TimeValidator.java \
 	ControlValidator.java \
-	SingleControlValidation.java
+	SingleControlValidation.java \
+	HsqlDatabase.java \
+	RowSet.java \
+	URLHelper.java
 
 COMMON_CLASSFILES = $(patsubst %.java,$(COMMON_CLASS_OUT)/%.class,$(COMMON_JAVAFILES))
 
@@ -190,9 +187,6 @@ FormsExample : $(APP1_JAR)  $(APP2_JAR)  $(APP3_JAR)  $(APP4_JAR)
 
 ProgrammaticScriptAssignment.odt.load : $(COMP_REGISTERFLAG)
 	"$(OFFICE_PROGRAM_PATH)$(PS)soffice" $(basename $@)
-
-DataAwareness.run: $(SAMPLE_CLASS_OUT)/DataAwareness.jar
-	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $< -d OO_SDK_Demo_DB -t bugs
 
 %.run: $(SAMPLE_CLASS_OUT)/%.jar
 	$(SDK_JAVA) -Dcom.sun.star.lib.loader.unopath="$(OFFICE_PROGRAM_PATH)" -jar $<

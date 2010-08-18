@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: htmlfile.cxx,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -69,12 +66,6 @@ void
 DocuFile_Html::SetTitle( const char * i_sTitle )
 {
     sTitle = i_sTitle;
-}
-
-void
-DocuFile_Html::SetInlineStyle( const char * i_sStyle )
-{
-    sStyle = i_sStyle;
 }
 
 void

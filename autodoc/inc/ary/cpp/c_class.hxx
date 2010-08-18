@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: c_class.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -89,7 +86,6 @@ class Class : public CodeEntity,
 
 
     // LIFECYCLE
-                        Class();
                         Class(
                             const String  &     i_sLocalName,
                             Ce_id               i_nOwner,
@@ -189,9 +185,6 @@ class Class : public CodeEntity,
     CIterator_Locals    PosOfName(
                             const List_LocalCe& i_rList,
                             const String  &     i_sName ) const;
-    Iterator_Locals     PosOfName(
-                            List_LocalCe &      io_rList,
-                            const String  &     i_sName );
     // DATA
     CeEssentials        aEssentials;
     node_t              aAssignedNode;

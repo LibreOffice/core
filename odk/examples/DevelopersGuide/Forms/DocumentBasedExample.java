@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: DocumentBasedExample.java,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -27,11 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
+import com.sun.star.bridge.XUnoUrlResolver;
+import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.util.XCloseable;
 
 public abstract class DocumentBasedExample implements com.sun.star.lang.XEventListener
@@ -55,13 +51,29 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
     {
         try
         {
+            /*
+            final XComponentContext componentContext = com.sun.star.comp.helper.Bootstrap.
+                createInitialComponentContext( null );
+            final XMultiComponentFactory localServiceManager = componentContext.getServiceManager();
+
+            final XUnoUrlResolver urlResolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
+                XUnoUrlResolver.class, localServiceManager.createInstanceWithContext(
+                    "com.sun.star.bridge.UnoUrlResolver", componentContext) );
+
+            final String connectStr = "uno:pipe,name=<pipename>;urp;StarOffice.ComponentContext";
+            final Object initialObject = urlResolver.resolve( connectStr );
+
+            m_xCtx = (XComponentContext)UnoRuntime.queryInterface( XComponentContext.class,
+                initialObject );
+            */
+
             // get the remote office component context
             m_xCtx = com.sun.star.comp.helper.Bootstrap.bootstrap();
             System.out.println("Connected to a running office ...");
         }
         catch (java.lang.Exception e)
         {
-            e.printStackTrace();
+            e.printStackTrace( System.err );
             System.exit(1);
         }
     }
@@ -73,7 +85,7 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
     {
         try
         {
-            // collect whatever parameters where given
+            // collect whatever parameters were given
             collectParameters( argv );
 
             // prepare our sample document
@@ -81,6 +93,7 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
 
             // switch the document view's form layer to alive mode
             m_document.getCurrentView().toggleFormDesignMode();
+            onFormsAlive();
 
             // grab the focus to the first control
             m_document.getCurrentView().grabControlFocus();
@@ -126,6 +139,13 @@ public abstract class DocumentBasedExample implements com.sun.star.lang.XEventLi
         m_document = DocumentHelper.blankDocument(m_xCtx, m_documentType);
         m_document.getDocument( ).addEventListener( this );
         m_formLayer = new FormLayer( m_document );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** called when the form layer has been switched to alive mode
+    */
+    protected void onFormsAlive()
+    {
     }
 
     /* ------------------------------------------------------------------ */

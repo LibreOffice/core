@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: loc_dir.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -82,8 +79,6 @@ class Directory : public LocationEntity
     Le_id               Parent() const;
     Le_id               AssignedRoot() const;
 
-    Le_id               Search_Child(
-                            const String &      i_name ) const;
     Le_id               Search_Dir(
                             const String &      i_name ) const;
     Le_id               Search_File(

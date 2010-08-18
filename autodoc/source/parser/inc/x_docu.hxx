@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: d_summary.cxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -28,61 +25,34 @@
  *
  ************************************************************************/
 
-#include <precomp.h>
-#include <ary/doc/d_summary.hxx>
+#ifndef ADC_X_DOCU_HXX
+#define ADC_X_DOCU_HXX
+
+// BASE CLASSES
+#include <autodoc/x_parsing.hxx>
 
 
-// NOT FULLY DEFINED SERVICES
 
 
-
-namespace ary
+class X_Docu : public autodoc::X_Parser_Ifc
 {
-namespace doc
-{
+  public:
+    // LIFECYCLE
+                        X_Docu(
+                            const char *        i_tag,
+                            const char *        i_explanation );
+                        ~X_Docu();
+    // INQUIRY
+    virtual E_Event     GetEvent() const;
+    virtual void        GetInfo(
+                            std::ostream &      o_rOutputMedium ) const;
 
-
-
-Summary::Summary(nodetype::id i_slot)
-    :   Node(i_slot),
-        pText(0),
-        bIncomplete(false),
-        nOrigin(0)
-{
-}
-
-Summary::~Summary()
-{
-}
-
-const HyperText &
-Summary::Text() const
-{
-    static const HyperText  aTextNull_;
-    return pText
-                ?   *pText
-                :   aTextNull_;
-}
-
-
-void
-Summary::Set( const HyperText &   i_text,
-              bool                i_isIncomplete,
-              nodetype::id        i_origin )
-{
-    pText = &i_text;
-    bIncomplete = i_isIncomplete;
-    nOrigin = i_origin;
-}
-
-void
-Summary::do_Accept(csv::ProcessorIfc & io_processor ) const
-{
-    csv::CheckedCall(io_processor,*this);
-}
+  private:
+    String              sTagName;
+    String              sExplanation;
+};
 
 
 
 
-}   // namespace doc
-}   // namespace ary
+#endif

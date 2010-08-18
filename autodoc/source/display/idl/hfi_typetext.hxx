@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hfi_typetext.hxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -102,7 +99,8 @@ class HF_IdlTypeText : public HtmlFactory_Idl
                             const String &      i_member,
                             int                 i_sequenceCount,
                             E_Existence         i_ceExists,
-                            ary::idl::Type_id   i_nTemplateType = ary::idl::Type_id::Null_() ) const;
+                            const std::vector<ary::idl::Type_id> *
+                                                i_templateParameters = 0 ) const;
     void                produce_BuiltIn(
                             const String &      i_type,
                             int                 i_sequenceCount ) const;
@@ -125,10 +123,6 @@ class HF_IdlTypeText : public HtmlFactory_Idl
                                                 i_module,
                             const String &      i_ce,
                             const String &      i_member ) const;
-    void                errorOut_UnresolvedLink(
-                            const String &      i_module,
-                            const String &      i_ce,
-                            const String &      i_member ) const;
     bool                is_ExternLink(
                             const StringVector &
                                                 i_module ) const;
@@ -138,8 +132,11 @@ class HF_IdlTypeText : public HtmlFactory_Idl
                             const String &      i_ce,
                             const String &      i_member,
                             int                 i_sequenceCount,
-                            ary::idl::Type_id   i_nTemplateType ) const;
-
+                            const std::vector<ary::idl::Type_id> *
+                                                i_templateParameters ) const;
+    void                write_TemplateParameterList(
+                            const std::vector<ary::idl::Type_id> &
+                                                i_templateParameters ) const;
     const ary::idl::Module *
                         referingModule() const;
     const client *      referingCe() const;

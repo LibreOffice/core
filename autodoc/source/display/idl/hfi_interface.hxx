@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hfi_interface.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -55,9 +52,6 @@ class HF_IdlInterface : public HtmlFactory_Idl
 
     void                Produce_byData(
                             const client &      i_ce ) const;
-    void                Display_BaseNode(
-                            const HF_IdlBaseNode &
-                                                i_rNode ) const;
   private:
     // Locals
     DYN HF_NaviSubRow & make_Navibar(

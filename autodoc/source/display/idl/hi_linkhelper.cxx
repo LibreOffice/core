@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hi_linkhelper.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,20 +62,6 @@ LinkHelper::Search_Module( output::Node & i_node ) const
 
     return & rEnv.Data().Find_Module( ary::idl::Ce_id(nId) );
 }
-
-LinkHelper::OutPosition
-LinkHelper::PositionOf_Ce(const CE & i_ce) const
-{
-    static StringVector aModule_;
-    csv::erase_container(aModule_);
-    String sCe;
-    String sMember;
-    rEnv.Data().Get_CeText(aModule_, sCe, sMember, i_ce);
-    output::Node &
-        rNode = rEnv.OutputTree().RootNode().Provide_Child(aModule_);
-    return OutPosition(rNode,sCe);
-}
-
 
 namespace
 {

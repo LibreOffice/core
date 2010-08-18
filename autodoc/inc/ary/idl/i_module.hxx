@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: i_module.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,8 +74,6 @@ class Module : public CodeEntity
                             const String &      i_sName,
                             Ce_id               i_nId );
     // INQUIRY
-    /// @return 0 for the global namespace, +1 for each level below the global namespace.
-    intt                Depth() const;
     Ce_id               Search_Name(
                             const String &      i_sName ) const;
     void                Get_Names(

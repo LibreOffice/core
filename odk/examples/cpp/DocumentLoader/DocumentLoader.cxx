@@ -1,15 +1,9 @@
 /*************************************************************************
  *
- *  $RCSfile: DocumentLoader.cxx,v $
- *
- *  $Revision: 1.13 $
- *
- *  last change: $Author: rt $ $Date: 2008-07-11 14:25:41 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
  *
- *  Copyright (c) 2003 by Sun Microsystems, Inc.
+ *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -48,6 +42,8 @@
 #include <stdio.h>
 #include <wchar.h>
 
+#include <sal/main.h>
+
 #include <cppuhelper/bootstrap.hxx>
 
 #include <osl/file.hxx>
@@ -70,8 +66,9 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::registry;
 
 
+
 //============================================================================
-int SAL_CALL main( int argc, char **argv )
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     OUString sConnectionString(RTL_CONSTASCII_USTRINGPARAM("uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager"));
      if (argc < 2)

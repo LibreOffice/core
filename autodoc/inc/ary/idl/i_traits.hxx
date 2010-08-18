@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: i_traits.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,9 +50,6 @@ struct Ce_Traits
     static entity_base_type &
                         EntityOf_(
                             id_type             i_id );
-    static id_type      IdOf_(
-                            const entity_base_type &
-                                                i_entity );
 };
 
 

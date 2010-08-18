@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: usedtype.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -47,7 +44,6 @@
 #include <ary/cpp/cp_type.hxx>
 #include <ary/doc/d_oldcppdocu.hxx>
 #include <ary/getncast.hxx>
-#include <instlist.hxx>
 #include "tplparam.hxx"
 
 
@@ -211,11 +207,6 @@ UsedType::Enter_Template()
 }
 
 void
-UsedType::LeaveTemplate()
-{
-}
-
-void
 UsedType::Set_Unsigned()
 {
     eTypeSpecialisation = TYSP_unsigned;
@@ -308,8 +299,7 @@ UsedType::Connect2CeOnlyKnownViaBaseClass(const Gate & i_gate)
 
     // If there are no matches, or only one match that was already
     //   accepted, all work is done.
-    if (     nRelatedCe.IsValid()
-         AND instances.size() == 1
+    if (     (nRelatedCe.IsValid() AND instances.size() == 1)
          OR  instances.size() == 0 )
         return;
 
@@ -529,24 +519,6 @@ void
 List_TplParameter::AddParam_Type( Type_id i_nType )
 {
     aTplParameters.push_back( new TplParameter_Type(i_nType) );
-}
-
-void
-List_TplParameter::AddParam_Constant( const String  & i_sConst )
-{
-    aTplParameters.push_back( new TplParameter_Const(i_sConst) );
-}
-
-List_TplParameter::const_iterator
-List_TplParameter::Begin() const
-{
-    return aTplParameters.begin();
-}
-
-List_TplParameter::const_iterator
-List_TplParameter::End() const
-{
-    return aTplParameters.end();
 }
 
 void

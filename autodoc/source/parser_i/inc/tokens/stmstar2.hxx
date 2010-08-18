@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stmstar2.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,11 +56,6 @@ class StmArrayStatu2 : public StmStatu2
     // ACCESS
     virtual StmArrayStatu2 *
                         AsArray();
-    void                SetBranches(
-                            intt            in_nStartBranchIx,
-                            StmStatu2::Branch *
-                                            in_aBranchValues,
-                            intt            in_nNrofValues );
     bool                SetBranch(
                             intt            in_nBranchIx,
                             StmStatu2::Branch

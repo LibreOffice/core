@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hd_chlst.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,12 +75,6 @@ struct ChildList_Display::S_AreaCo
                             Area_Result &       o_rResult,
                             const char *        i_sLabel,
                             const char *        i_sTitle );
-                        S_AreaCo(
-                            Area_Result &       o_rResult,
-                            const char *        i_sLabel,
-                            const char *        i_sTitle_classes,
-                            const char *        i_sTitle_structs,
-                            const char *        i_sTitle_unions );
                         ~S_AreaCo();
 
     void                PerformResult();
@@ -559,17 +550,6 @@ S_AreaCo::S_AreaCo( Area_Result &       o_rResult,
                     const char *        i_sLabel,
                     const char *        i_sTitle )
     :   aArea(i_sLabel, i_sTitle),
-        pResult(&o_rResult)
-{
-}
-
-ChildList_Display::
-S_AreaCo::S_AreaCo( Area_Result &       o_rResult,
-                    const char *        i_sLabel,
-                    const char *        i_sTitle_classes,
-                    const char *        i_sTitle_structs,
-                    const char *        i_sTitle_unions )
-    :   aArea(i_sLabel, i_sTitle_classes, i_sTitle_structs, i_sTitle_unions ),
         pResult(&o_rResult)
 {
 }

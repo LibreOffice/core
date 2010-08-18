@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: unoidl.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -38,6 +35,7 @@
 #include <ary/ary.hxx>
 #include <ary/idl/i_gate.hxx>
 #include <ary/doc/d_oldidldocu.hxx>
+#include <../parser/inc/x_docu.hxx>
 #include <parser/parserinfo.hxx>
 #include <tools/filecoll.hxx>
 #include <tools/tkpchars.hxx>
@@ -112,6 +110,13 @@ IdlParser::Run( const autodoc::FileCollector_Ifc & i_rFiles )
             pFileParsePerformers
                 = new FileParsePerformers(*pRepository,
                                           static_cast< ParserInfo& >(*this));
+        }
+        catch (X_Docu & xd)
+        {
+            // Currently thic catches only wrong since tags, while since tags are
+            // transformed. In this case the program shall be terminated.
+            Cerr() << xd << Endl();
+            exit(1);
         }
         catch (...)
         {

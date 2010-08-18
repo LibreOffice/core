@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: parseenv.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -87,17 +84,3 @@ ParseEnvironment::ParseEnvironment( ParseEnvironment *  i_pParent )
         pCurSubPe(0)
 {
 }
-
-void
-ParseEnvironment::GlobalHandlingOfSyntaxError( const char * i_sTokenText,
-                                               const char * i_sFileName,
-                                               uintt        i_nLineCount )
-{
-    throw X_Parser( X_Parser::x_UnexpectedToken,
-                    i_sTokenText,
-                    i_sFileName,
-                    i_nLineCount );
-}
-
-
-

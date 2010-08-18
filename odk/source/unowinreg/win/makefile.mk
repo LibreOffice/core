@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.12.34.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -46,7 +42,6 @@ USE_DEFFILE=TRUE
 JAVA_INCLUDES:= -I$(JAVA_HOME)/include
 
 # values taken from set_soenv.in
-.IF "$(JDK)" != "gcj"
 .IF "$(OS)" == "LINUX"
 JAVA_INCLUDES+= -I$(JAVA_HOME)/include/linux
 .ELIF "$(OS)" == "FREEBSD"
@@ -55,9 +50,6 @@ JAVA_INCLUDES+= -I$(JAVA_HOME)/include/bsd
 JAVA_INCLUDES+= -I$(JAVA_HOME)/include/linux
 .ELIF "$(OS)" == "NETBSD"
 JAVA_INCLUDES+= -I$(JAVA_HOME)/include/netbsd
-.ELIF "$(OS)" == "IRIX"
-JAVA_INCLUDES+= -I$(JAVA_HOME)/include/solaris
-.ENDIF
 .ENDIF
 
 .IF "$(SOLAR_JAVA)"==""
@@ -95,10 +87,13 @@ SHL1TARGET=$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 
 #No default libraries
-.IF "$(COM)"=="GCC"
-STDSHL=-lmingw32 -lmsvcrt
-.ELSE
 STDSHL=
+.IF "$(COM)"=="GCC"
+SHL1STDLIBS += -lstdc++
+.IF "$(MINGW_GCCLIB_EH)"=="YES"
+SHL1STDLIBS += -lgcc_eh
+.ENDIF
+SHL1STDLIBS += -lgcc -lmingw32 -lmoldname -lmsvcrt
 .ENDIF
 
 SHL1STDLIBS +=\

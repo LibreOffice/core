@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hfi_interface.cxx,v $
- * $Revision: 1.11 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -293,32 +290,6 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
 
 // NEW
     Write_BaseHierarchy(rBaseList, Env(), i_ce);
-//    csi::xml::Element &
-//        rPre = rBaseList
-//               >> *new csi::xml::AnElement("pre")
-//                   << new csi::html::StyleAttr("font-family:monospace;");
-//
-//    std::vector<uintt>
-//        aSetColumns;
-//    rPre
-//        >> *new csi::html::Strong
-//            << i_ce.LocalName();
-//    rPre
-//        << "\n";
-//    Write_BaseHierarchy( rPre,
-//                         Env(),
-//                         i_ce,
-//                         Env().Gate(),
-//                         aSetColumns );
-//
-//    rPre
-//        << "\n";
-// NEW
-
-//  HF_IdlBaseNode
-//      aMyNode(i_ce, Env().Gate());
-//  aMyNode.WriteBaseHierarchy(rBaseList, *this, i_ce.LocalName());
-
 
     // Write comments:
         // KORR_FUTURE: Make sure, no empty table is constructed when comments list is empty.
@@ -361,7 +332,7 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
 
             HF_IdlDocu
                 aDocuDisplay(Env(), aDocuList);
-            aDocuDisplay.Produce_byDocu4Reference(*(*it).Info(), i_ce);
+            aDocuDisplay.Produce_fromReference(*(*it).Info(), i_ce);
         }
         else
         {
@@ -383,14 +354,4 @@ HF_IdlInterface::produce_BaseHierarchy( Xml::Element &      o_screen,
             }   // end if (pShort != 0)
         }   // endif ( (*i_commentedRef).Info() != 0 ) else
     }   // end for
-}
-
-void
-HF_IdlInterface::Display_BaseNode( const HF_IdlBaseNode & i_rNode ) const
-{
-    // KORR_FUTURE: Check if Env().CurPageCe() is really always the right one
-    //  (probably works).
-    HF_IdlTypeText
-        aDisplay( Env(), CurOut(), true, Env().CurPageCe());
-    aDisplay.Produce_byData(i_rNode.Type());
 }

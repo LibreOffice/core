@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pe_file.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -98,12 +95,6 @@ PE_File::Handle_ChildFailure()
 {
     SetCurSPU(pSpuIgnoreFailure.Ptr());
     return &pSpuIgnoreFailure->Child();
-}
-
-ary::cpp::Gate &
-PE_File::AryGate() const
-{
-     return const_cast< PE_File& >(*this).access_Env().AryGate();
 }
 
 void

@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: it_tplparam.cxx,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -34,7 +31,6 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <cosv/tpl/processor.hxx>
-#include "i_strconst.hxx"
 
 
 
@@ -79,10 +75,16 @@ TemplateParamType::inq_Get_Text( StringVector &      ,          // o_module
 
 //*************    Implemented default function for idl::Type ********//
 
-Type_id
-Type::inq_TemplateParameterType() const
+const std::vector<Type_id> *
+Type::inq_TemplateParameters() const
 {
-    return Type_id::Null_();
+    return 0;
+}
+
+const Type &
+Type::inq_FirstEnclosedNonSequenceType(const Gate & ) const
+{
+    return *this;
 }
 
 

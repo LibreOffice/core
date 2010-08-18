@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: easywri.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,11 +55,6 @@ class EasyWriter
                             csi::xml::Element & io_rDestination )
                                                 { Open_OutputNode(io_rDestination); }
     void                Leave()                 { Finish_OutputNode(); }
-
-    void                Add_HorizontalLine();
-    void                Write(
-                            const char *        i_sFormatTag,
-                            const char *        i_sText );
 
     // ACCESS
     csi::xml::Element & Out();                  // CurOutputNode

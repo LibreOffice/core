@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: Loader.java,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -135,6 +132,7 @@ public final class Loader {
         // invoke the main method
         if ( className != null ) {
             ClassLoader cl = getCustomLoader();
+            Thread.currentThread().setContextClassLoader(cl);
             Class c = cl.loadClass( className );
             Method m = c.getMethod( "main", new Class[] { String[].class } );
             m.invoke( null, new Object[] { args } );

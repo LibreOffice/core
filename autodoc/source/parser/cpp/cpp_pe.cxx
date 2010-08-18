@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: cpp_pe.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -67,8 +64,6 @@ Cpp_PE::Cpp_PE( EnvData & i_rEnv )
 void
 Cpp_PE::StdHandlingOfSyntaxError( const char * )
 {
-//  GlobalHandlingOfSyntaxError(i_sText, Env().CurFileName(), Env().LineCount());
-
     SetTokenResult(not_done, pop_failure);
 }
 

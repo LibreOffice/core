@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: html_kit.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,17 +51,6 @@ namespace adcdisp
 {
 
 typedef csi::xml::Element XmlElement;
-
-class PageTitle_Central
-{
-  public:
-                        PageTitle_Central(
-                            XmlElement &        o_rOwner );
-    XmlElement &        Out()                   { return *pOut; }
-
-  private:
-    XmlElement *        pOut;
-};
 
 class PageTitle_Left
 {
@@ -179,10 +165,6 @@ class FlagTable
                             uintt               i_nColumnPosition,  /// Starting with 0.
                             const char *        i_sColumnName,
                             bool                i_bValue );         /// "YES" or "NO"
-    void                SetColumn(
-                            uintt               i_nColumnPosition,  /// Starting with 0.
-                            const char *        i_sColumnName,
-                            const char *        i_sValue );
   private:
     typedef std::pair< csi::html::TableCell*, csi::html::TableCell* > CellPair;
 

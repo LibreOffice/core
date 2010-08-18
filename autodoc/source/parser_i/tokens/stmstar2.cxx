@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: stmstar2.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -65,21 +62,6 @@ StmArrayStatu2::~StmArrayStatu2()
 {
     delete [] dpBranches;
 }
-
-void
-StmArrayStatu2::SetBranches( intt                in_nStartBranchIx,
-                             StmStatu2::Branch * in_aBranchValues,
-                             intt                in_nNrofValues )
-{
-    csv_assert(in_nStartBranchIx >= 0);
-    csv_assert(in_aBranchValues != 0);
-    csv_assert( in_nNrofValues > 0
-             AND in_nStartBranchIx + in_nNrofValues <= nNrOfBranches );
-
-    memcpy(&dpBranches[in_nStartBranchIx],in_aBranchValues,in_nNrofValues);
-}
-
-
 
 bool
 StmArrayStatu2::SetBranch( intt              in_nBranchIx,

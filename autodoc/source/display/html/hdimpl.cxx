@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hdimpl.cxx,v $
- * $Revision: 1.12 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -286,19 +283,6 @@ Get_LinkedTypeText( csi::xml::Element &             o_rOut,
         <<  sName;
     o_rOut
         << sPostName;
-}
-
-
-csi::html::Table &
-Create_ChildListTable( csi::xml::Element &     o_rParentElement,
-                       const char *            i_sTitle,
-                       const char *            i_sLabel )
-{
-    Create_ChildListLabel(o_rParentElement, i_sLabel);
-    csi::html::Table & ret = Create_ChildListTable(i_sTitle);
-    o_rParentElement << &ret;
-
-    return ret;
 }
 
 void

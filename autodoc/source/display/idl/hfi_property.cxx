@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hfi_property.cxx,v $
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -378,7 +375,7 @@ HF_IdlCommentedRelationElement::produce_LinkDoc( Environment &   io_env,
             HF_DocEntryList aDocList(io_context);
             HF_IdlDocu aDocuDisplay(io_env, aDocList);
 
-            aDocuDisplay.Produce_byDocu4Reference(*i_commentedRef.Info(), i_ce);
+            aDocuDisplay.Produce_fromReference(*i_commentedRef.Info(), i_ce);
         }
         else
         {

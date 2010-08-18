@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>[TITLE] - Installation Guide</title>
+  <title>OpenOffice.org %PRODUCT_RELEASE% SDK - Installation Guide</title>
   <link rel="stylesheet" type="text/css" href="sdk_styles.css">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="author" content="J&uuml;rgen Schmidt">
@@ -8,9 +8,8 @@
 </head>
 <body class="sdkbody"><a name="install"/>
 <table class="table1" cellpadding=0>
-  <tr style="background-image:url(images/sdk_head-2.gif); backgorund-position: bottom; "> 
-    <td class="background" colspan="2" align="left"><img src="images/sdk_head-1.gif" width="335" height="109" usemap="#Map" border="0"></td>
-    <td class="background" align=right><img src="images/sdk_head-3.gif" width="32" height="109"></td>
+  <tr style="background-image:url(images/sdk_head-2.png)"> 
+    <td colspan="3" align="left"><img src="images/sdk_head-1.png" width="800" height="120" usemap="#Map" border="0"></td>
   </tr>
   <tr> 
     <td colspan="3"><img  class="nothing10" src="images/nada.gif"></td>
@@ -37,16 +36,16 @@
           <table class="table3">
 		  <tr> 
 		  <td colspan="2">
-		  <p>The [PRODUCTNAME] SDK comes with a set of development tools, base 
+		  <p>The OpenOffice.org %PRODUCT_RELEASE% SDK comes with a set of development tools, base 
 		  libraries, header files and helper class files that can be used to 
-		  develop Java/C++ components, to embed the [PRODUCTNAME] application in 
+		  develop Java/C++ components, to embed the OpenOffice.org %PRODUCT_RELEASE% application in 
           your own programs, or to use the API (scripting or remote control the 
 		  office). For a complete working environment, we have some additional 
 		  requirements:</p>
 		  </td>
 		  </tr> 
 		  <tr valign="top"> 
-          <td><b>[PRODUCTNAME] installation</td>
+          <td><b>OpenOffice.org %PRODUCT_RELEASE% installation</td>
           <td class="content80">The SDK works on top of an existing office 
 		  installation and uses the same libraries as the office installation.</td>
           </tr>
@@ -55,13 +54,10 @@
             <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
           </tr>
 		  <tr valign="top"> 
-          <td><b>JDK (1.4.1_01 or higher)<b></td>
+          <td><b>JDK (1.5 or higher)<b></td>
           <td class="content80">
 		  <p>A JDK is necessary for developing Java components or applications. An appropriate Java SDK can be found on <a target="_blank" href="http://java.sun.com/products" title="link to the Java SDK download page (online)">http://java.sun.com/products</a>.</p>
-		  <p>If Java 5.0 or higher is used, you have to ensure that the office 
-		  installation uses Java 5.0 as well, because of class format changes in 
-		  Java 5.0. Components built with Java 5.0 cannot be deployed by unopkg 
-		  (using the office Java) that uses a lower Java version than Java 5.0.</p>
+		  <p>Recommendation is to use Java 6 excepting for Mac OS because initially Mac OS supported a 64bit version of Java 6 only.</p>
 		  <p><b>Note</b>: The Java compiler is <b><u>optional</u></b>!</p></td>
           </tr>
 		  <tr valign="middle"> 
@@ -106,7 +102,7 @@
           <td class="content80">
 		  <p>GNU make is used to build the examples of the SDK. GNU make is available from <a target="_blank" href="http://www.gnu.org" title="link to www.gnu.org (online)">http://www.gnu.org</a>. It can be ftped via <a target="_blank" href="ftp://ftp.gnu.org/gnu/make" title="link to gnumake on www.gnu.org (online)">ftp://ftp.gnu.org/gnu/make</a></p>
 		  <p><b>Note</b>: Windows user can find an executable of gnu make under <a target="_blank" href="http://www.mingw.org/wiki/Getting_Started" title="link to the MinGW Getting Started wiki (online)">http://www.mingw.org/wiki/Getting_Started</a> (see the mingw32-make link under &quot;Manual Installation&quot;). Do not use the Cygwin make, because it does not
-		  work well. On Solaris, you can also find gnu make under <a target="_blank" href="http://www.sunfreeware.com/" title="link to www.sunfreeware.com (online)">http://www.sunfreeware.com/</a>.</td>
+		  work well. On Solaris gnu make can be found often under <b><i>/usr/sfw/bin/gmake</i></b>, but keep in mind that you have to use <b>'gmake'</b> then. Or you can find gnu make also under <a target="_blank" href="http://www.sunfreeware.com/" title="link to www.sunfreeware.com (online)">http://www.sunfreeware.com/</a>.</td>
           </tr>
 		  <tr valign="middle"> 
             <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
@@ -119,7 +115,7 @@
 		  the 4NT shell. You have to use the native w32 version.</td>
           </tr>
 		  <tr valign="middle"> 
-            <td colspan="2"><img class="line" src="images/sdk_line-2.gif"></td>
+            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
           </tr>
 		  <tr> 
 		    <td><img class="nothing10" src="images/nada.gif"></td>
@@ -222,7 +218,7 @@
 		  the output is generated in the SDK directory itself. If an output 
 		  directory is specified, the output is generated in a SDK dependent 
 		  subdirectory in this directory (e.g. &lt;OO_SDK_OUTPUT_DIR&gt;
-		  /[PRODUCTNAME]/LINUXExample.out)</td>
+		  /OpenOffice.org %PRODUCT_RELEASE%/LINUXExample.out)</td>
 		  </tr>
 		  <tr>
 		  <td class="cell20"><b>SDK_AUTO_DEPLOYMENT</b></td>
@@ -241,7 +237,7 @@
 		  </td>
           </tr>
 		  <tr valign="middle"> 
-            <td colspan="2"><img class="line" src="images/sdk_line-2.gif"></td>
+            <td colspan="2"><img class="line" src="images/sdk_line-1.gif"></td>
           </tr>
 		  <tr> 
 		    <td><img class="nothing10" src="images/nada.gif"></td>
@@ -410,12 +406,15 @@
   </tr>
   <tr> 
     <td colspan="3"> 
-      <div align="center"><p>Copyright 2008 Sun Microsystems, Inc.</p></div>
+      <div class="centertext">
+	<p><img class="oraclelogo" src="images/odk-footer-logo.gif" title="Sponsored by Oracle" alt="Oracle Logo" />
+            Copyright &copy; 2010, Oracle and/or its affiliates. All rights reserved. Oracle and Java are registered trademarks of Oracle and/or its affiliates. Other names may be trademarks of their respective owners.<p>
+      </div>
     </td>
   </tr>
 </table>
 <map name="Map">
-  <area shape="rect" coords="10,68,93,105" href="http://www.sun.com">
+  <area shape="rect" coords="10,68,93,105" href="http://www.oracle.com">
 </map>
 </body>
 </html>

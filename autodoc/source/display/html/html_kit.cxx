@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: html_kit.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -44,15 +41,6 @@ namespace adcdisp
 
 using namespace csi::xml;
 using namespace csi::html;
-
-
-PageTitle_Central::PageTitle_Central( XmlElement & o_rOwner )
-{
-    pOut = new AnElement("h1");
-    o_rOwner
-        >> *pOut
-            << new AlignAttr("center");
-}
 
 
 void
@@ -293,24 +281,6 @@ FlagTable::SetColumn( uintt               i_nColumnPosition,
             << new ClassAttr("flagno")
             << "NO";
     }  // endif
-}
-
-void
-FlagTable::SetColumn( uintt               i_nColumnPosition,
-                      const char *        i_sColumnName,
-                      const char *        i_sValue )
-{
-    csv_assert( i_nColumnPosition < aCells.size() );
-
-    TableCell &
-        rCell1 = *aCells[i_nColumnPosition].first;
-    TableCell &
-        rCell2 = *aCells[i_nColumnPosition].second;
-    rCell1
-        << i_sColumnName;
-    rCell2
-        << new ClassAttr( "flagtext" )
-        << i_sValue;
 }
 
 IndexList::IndexList( XmlElement & o_rOwner )

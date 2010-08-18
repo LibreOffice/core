@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: i_namelookup.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -85,17 +82,6 @@ class NameLookup
                             Ce_id               i_id,
                             ClassId             i_class,
                             Ce_id               i_owner );
-    // INQUIRY
-    /**
-    */
-    bool                Has_Name(
-                            const String &      i_name,
-                            ClassId             i_class,
-                            Ce_id               i_owner ) const;
-    void                Get_Names(
-                            Dyn_StdConstIterator<Map_Names::value_type> &
-                                                o_rResult,
-                            const String &      i_name ) const;
   private:
     // DATA
     Map_Names           aNames;

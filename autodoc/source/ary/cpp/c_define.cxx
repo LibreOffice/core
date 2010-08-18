@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: c_define.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,38 +71,6 @@ Define::inq_DefinitionText() const
 {
      return aDefinition;
 }
-
-void
-Define::GetText( StreamStr & o_rText ) const
-{
-    if ( aDefinition.begin() == aDefinition.end() )
-        return;
-
-
-    bool bSwitch_Stringify = false;
-    bool bSwitch_Concatenate = false;
-
-    for ( StringVector::const_iterator it = aDefinition.begin();
-          it != aDefinition.end();
-          ++it )
-    {
-        if ( HandleOperatorsBeforeTextItem( o_rText,
-                                            bSwitch_Stringify,
-                                            bSwitch_Concatenate,
-                                            *it ) )
-        {
-            continue;
-        }
-
-        o_rText << (*it);
-
-        Do_bStringify_end(o_rText, bSwitch_Stringify);
-        o_rText << " ";
-    }
-    o_rText.seekp(-1, csv::cur);
-}
-
-
 
 }   // namespace cpp
 }   // namespace ary

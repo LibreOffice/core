@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: pe_file.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -78,8 +75,6 @@ class PE_File : public Cpp_PE
     virtual void        Call_Handler(
                             const cpp::Token &  i_rTok );
     virtual Cpp_PE *    Handle_ChildFailure();
-
-    ary::cpp::Gate &    AryGate() const;
 
   private:
     typedef SubPe< PE_File, PE_Namespace>   SP_Namespace;

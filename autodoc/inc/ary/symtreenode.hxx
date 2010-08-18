@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: symtreenode.hxx,v $
- * $Revision: 1.3 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -59,22 +56,19 @@ namespace symtree
      1. static entity_base_type &
                             EntityOf_(
                                 id_type             i_id );
-     2. static id_type      IdOf_(
-                                const entity_base_type &
-                                                    i_entity );
-     3. static symtree::Node<LeNode_Traits> *
+     2. static symtree::Node<LeNode_Traits> *
                             NodeOf_(
                                 const entity_base_type &
                                                     i_entity );
-     4. static const String &
+     3. static const String &
                             LocalNameOf_(
                                 const entity_base_type &
                                                     i_entity );
-     5. static entity_base_type *
+     4. static entity_base_type *
                             ParentOf_(
                                 const entity_base_type &
                                                     i_entity );
-     6. template <class KEY>
+     5. template <class KEY>
         static id_t         Search_(
                                 const entity_base_type &
                                                     i_entity,

@@ -1,15 +1,9 @@
 /*************************************************************************
  *
- *  $RCSfile: office_connect.cxx,v $
- *
- *  $Revision: 1.7 $
- *
- *  last change: $Author: rt $ $Date: 2008-07-11 14:24:32 $
- *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
  *
- *  Copyright (c) 2003 by Sun Microsystems, Inc.
+ *  Copyright 2000, 2010 Oracle and/or its affiliates.
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -40,6 +34,8 @@
 
 #include <stdio.h>
 
+#include <sal/main.h>
+
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/bridge/XUnoUrlResolver.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -51,7 +47,7 @@ using namespace com::sun::star::bridge;
 using namespace rtl;
 using namespace cppu;
 
-int main( )
+SAL_IMPLEMENT_MAIN()
 {
     // create the initial component context
     Reference< XComponentContext > rComponentContext =

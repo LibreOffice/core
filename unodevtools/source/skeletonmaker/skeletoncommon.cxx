@@ -2,13 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: skeletoncommon.cxx,v $
- *
- * $Revision: 1.7 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -60,15 +56,9 @@ void printLicenseHeader(std::ostream& o, rtl::OString const & filename)
         " *\n"
         " * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.\n"
         " * \n"
-        " * Copyright 2008 by Sun Microsystems, Inc.\n"
+        " * Copyright 2000, 2010 Oracle and/or its affiliates.\n"
         " *\n"
         " * OpenOffice.org - a multi-platform office productivity suite\n"
-        " *\n"
-        " *  $RCSfile: "
-      << shortfilename
-      << ",v $\n"
-        " *\n"
-        " * $Revision: 1.7 $\n"
         " *\n"
         " * This file is part of OpenOffice.org.\n"
         " *\n"

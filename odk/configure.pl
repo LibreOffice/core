@@ -1,7 +1,7 @@
 #
 # configure.pl - a perl script to set a minimal environment for the SDK.
 #
-# Copyright (c) 2000 Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 
 use IO::File;
@@ -18,7 +18,8 @@ $main::OO_MINORVERSION =~ s#[^\d]+(\d).(\d).+#$2#go;
 $main::OO_SDK_CONFIG_HOME= "$ENV{HOME}/$main::OO_SDK_NAME";
 
 $main::operatingSystem = `$main::sdkpath/config.guess | cut -d"-" -f3,4`;
-chop ($main::operatingSystem);
+chomp ($main::operatingSystem);
+
 $main::OO_SDK_HOME = $main::sdkpath;
 #$main::OO_SDK_HOME = "";
 $main::OO_SDK_HOME_SUGGESTION = $main::sdkpath;
@@ -29,16 +30,19 @@ $main::OFFICE_OR_URE_SUGGESTION = "Office";
 $main::OFFICE_HOME = "";
 
 $main::OFFICE_BASE_HOME = substr($main::sdkpath, 0, rindex($main::sdkpath, "/sdk"));
+
 if ( $main::operatingSystem =~ m/darwin/ )
 {
 #   $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../ure-link && pwd`;
 } else {
     $main::OO_SDK_URE_HOME = `cd $main::sdkpath/../../ure && pwd`;
 }
+chomp($main::OO_SDK_URE_HOME);
 
 $main::OO_SDK_MAKE_HOME = "";
 $main::makeName = "make";
-if ( $main::operatingSystem =~ m/freebsd/ )
+if ( $main::operatingSystem =~ m/solaris/ ||
+     $main::operatingSystem =~ m/freebsd/ )
 {
     $main::makeName = "gmake";
 }
@@ -52,7 +56,7 @@ $main::zipVersion = "2.3";
 
 $main::OO_SDK_CPP_HOME = "";
 $main::cppName = "gcc";
-$main::cppVersion = "3.0.1";
+$main::cppVersion = "4.0.1";
 if ( $main::operatingSystem =~ m/solaris/ )
 {
     $main::cppName = "CC";
@@ -68,7 +72,7 @@ if ( $main::operatingSystem =~ m/darwin/ )
     $main::OO_SDK_JAVA_BIN_DIR="Commands";
 }
 $main::OO_SDK_JAVA_HOME_SUGGESTION = searchprog("javac");
-$main::javaVersion = "1.4.1_01";
+$main::javaVersion = "1.5.0_01";
 
 $main::SDK_AUTO_DEPLOYMENT = "";
 $main::SDK_AUTO_DEPLOYMENT_SUGGESTION = "YES";
@@ -85,7 +89,7 @@ if ( $main::OFFICE_OR_URE eq "Office" )
     {
 # used for a SDK as part of the office installation
 #       $main::OFFICE_HOME = `cd $main::sdkpath/../../.. && pwd`;
-#       chop($main::OFFICE_HOME);
+#       chomp($main::OFFICE_HOME);
 #       print " Used Office = $main::OFFICE_HOME\n";
         print " Used SDK = $main::OO_SDK_HOME\n\n";
 
@@ -308,7 +312,7 @@ while ( (!$main::correctVersion) &&
 {
     print " C++ compilers where for example a language binding exist:\n";
     print "  - Solaris, Sun WorkShop 6 update 1 C++ 5.2 2000/09/11 or higher\n";
-    print "  - Linux, GNU C++ compiler, gcc version 3.0.1 or higher\n";
+    print "  - Linux, GNU C++ compiler, gcc version 4.0.1 or higher\n";
     print "  - MacOS, GNU C++ compiler, gcc version 4.0.1 or higher\n";
     print " Enter the directory of the C++ compiler, the directory\n";
     print " where the compiler is located (optional) [$main::OO_SDK_CPP_HOME_SUGGESTION]: ";
@@ -414,7 +418,7 @@ while ( (!$main::correctVersion) &&
         ((! -d "$main::OO_SDK_JAVA_HOME" ) ||
          ((-d "$main::OO_SDK_JAVA_HOME") && (! -e "$main::OO_SDK_JAVA_HOME/$main::OO_SDK_JAVA_BIN_DIR/javac"))) )
 {
-    print " Enter Java SDK (1.4.1_01 or higher) installation directory  (optional) [$main::OO_SDK_JAVA_HOME_SUGGESTION]: ";
+    print " Enter Java SDK (1.5, recommendation is 1.6 or higher) installation directory  (optional) [$main::OO_SDK_JAVA_HOME_SUGGESTION]: ";
     $main::OO_SDK_JAVA_HOME = readStdIn();
     chop($main::OO_SDK_JAVA_HOME);
     if ( $main::OO_SDK_JAVA_HOME eq "" )
@@ -570,19 +574,39 @@ sub searchprog
     my @pathList = split(":" , $tmpPath);
     my $progDir = "";
 
-    if ( $_search eq "javac" && $main::operatingSystem =~ m/darwin/ )
+    if ( $_search eq "javac" )
     {
-        $progDir = resolveLink("/System/Library/Frameworks/JavaVM.Framework/Versions", "CurrentJDK");
-        if ( -e "$progDir/$main::OO_SDK_JAVA_BIN_DIR/javac" )
+        if ( $main::operatingSystem =~ m/darwin/ ) {
+            $progDir = resolveLink("/System/Library/Frameworks/JavaVM.Framework/Versions", "CurrentJDK");
+            if ( -e "$progDir/$main::OO_SDK_JAVA_BIN_DIR/javac" )
+            {
+                return "$progDir/$main::OO_SDK_JAVA_BIN_DIR";
+            }
+        }
+
+        if ( $main::operatingSystem =~ m/solaris/ ) {
+            $progDir = resolveLink("/usr/jdk", "latest");
+            if ( -e "$progDir/$main::OO_SDK_JAVA_BIN_DIR/javac" )
+            {
+                return "$progDir/$main::OO_SDK_JAVA_BIN_DIR";
+            }
+        }
+    }
+
+    if ( $_search eq "gmake" && $main::operatingSystem =~ m/solaris/ ) {
+        if ( -e "/usr/sfw/bin/gmake" )
         {
-            return "$progDir/$main::OO_SDK_JAVA_BIN_DIR";
+            return "/usr/sfw/bin";
         }
     }
 
     foreach $i (@pathList)
     {
+        chomp ($i);
+
         if ( -e "$i/$_search" )
         {
+
             if ( index($i, "/") == 0 )
             {
                 # # absolute path; leave unchanged
@@ -602,6 +626,9 @@ sub searchMacOffice
     if (-d "/Applications/OpenOffice.org.app" ) {
         return "/Applications/OpenOffice.org.app"
     }
+    if (-d "/Applications/Oracle Open Office.app" ) {
+        return "/Applications/Oracle Open Office.app";
+    }
     if (-d "/Applications/StarOffice.app" ) {
         return "/Applications/StarOffice.app";
     }
@@ -618,15 +645,25 @@ sub searchoffice
     my $tmpOffice = substr($main::sdkpath, 0, $offset);
     my $officepath = "$tmpOffice/openoffice.org$main::OO_MAJORVERSION";
 
-    if ( $main::OO_MINORVERSION > 0) {
-        $officepath = "$officepath$main::OO_MINORVERSION";
-    }
+#   if ( $main::OO_MINORVERSION > 0) {
+#       $officepath = "$officepath$main::OO_MINORVERSION";
+#   }
 
     # search corresponding office for this SDK
     if (-d $officepath && -e "$officepath/program/soffice") {
         return $officepath;
     }
     # fallback
+    my $tmpversion = $main::OO_MAJORVERSION;
+#   if ( $main::OO_MINORVERSION > 0) {
+#       $tmpversion = "$tmpversion.$main::OO_MINORVERSION";
+#   }
+
+    $officepath = "$tmpOffice/oracle_open_office$tmpversion";
+    if (-d $officepath && -e "$officepath/program/soffice") {
+        return $officepath;
+    }
+
     my $tmpversion = $main::OO_MAJORVERSION + 6;
     if ( $main::OO_MINORVERSION > 0) {
         $tmpversion = "$tmpversion.$main::OO_MINORVERSION";

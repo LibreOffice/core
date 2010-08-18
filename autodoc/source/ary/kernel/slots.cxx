@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: slots.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -77,38 +74,6 @@ Slot_Null::StoreEntries( Display     & ) const
     // Does nothing
 }
 
-
-//***********************       Slot_RidSet     ********************//
-
-Slot_RidSet::Slot_RidSet( const Set_Rid & i_rData )
-    :   pData(&i_rData)
-{
-}
-
-Slot_RidSet::~Slot_RidSet()
-{
-}
-
-uintt
-Slot_RidSet::Size() const
-{
-     return pData->size();;
-}
-
-void
-Slot_RidSet::StoreEntries( Display     & o_rDestination ) const
-{
-    for ( Set_Rid::const_iterator it = pData->begin();
-          it != pData->end();
-          ++it )
-    {
-        o_rDestination.DisplaySlot_Rid( *it );
-    }
-}
-
-
-
-
 //***********************       Slot_MapLocalCe     ********************//
 
 Slot_MapLocalCe::Slot_MapLocalCe( const cpp::Map_LocalCe & i_rData )
@@ -166,37 +131,6 @@ Slot_MapOperations::StoreEntries( Display & o_rDestination ) const
         o_rDestination.DisplaySlot_LocalCe( (*it).second, (*it).first );
     }
 }
-
-
-//***********************       Slot_RidList     ********************//
-
-Slot_RidList::Slot_RidList( const List_Rid & i_rData )
-    :   pData(&i_rData)
-{
-}
-
-Slot_RidList::~Slot_RidList()
-{
-}
-
-uintt
-Slot_RidList::Size() const
-{
-     return pData->size();;
-}
-
-void
-Slot_RidList::StoreEntries( Display     & o_rDestination ) const
-{
-    for ( List_Rid::const_iterator it = pData->begin();
-          it != pData->end();
-          ++it )
-    {
-        o_rDestination.DisplaySlot_Rid( *it );
-    }
-}
-
-
 
 //***********************       Slot_ListLocalCe      ********************//
 
