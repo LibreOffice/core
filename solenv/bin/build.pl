@@ -234,7 +234,7 @@
         if (defined $html_path) {
             $html_file = CorrectPath($html_path . '/' . $ENV{INPATH}. '.build.html');
         } else {
-            my $log_directory = Cwd::realpath(CorrectPath($StandDir . '/../log'));
+            my $log_directory = Cwd::realpath(CorrectPath($StandDir . '/..')) . '/log';
             if ((!-d $log_directory) && (!mkdir($log_directory))) {
                 print_error("Cannot create $log_directory for writing html file\n");
             };
