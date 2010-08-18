@@ -51,8 +51,6 @@ end sub
 testcase tMacroSecurityLevels( cFileFormat )
 
     printlog( "Check macro execution behavior for all macro security levels" )
-    warnlog( "#i110184# - Documentbound macros not executed when loaded via API" )
-    goto endsub
 
     dim cWorkFile as string
         cWorkFile = gTesttoolPath & "framework\optional\input\BasicDocs\"
@@ -60,7 +58,7 @@ testcase tMacroSecurityLevels( cFileFormat )
 
     dim iSecLevel as integer
 
-    const EXPECTED_MESSAGECOUNT = 1
+    const EXPECTED_MESSAGECOUNT = 0
     const ALLOW_ONE_EXTRA_MESSAGEBOX = 1
     const ALLOW_NO_EXTRA_MESSAGEBOXES = 0
     
@@ -92,7 +90,11 @@ testcase tMacroSecurityLevels( cFileFormat )
         case GC_MACRO_SECURITY_LEVEL_LOW :
 
             if ( not hIdentifyExecutedMacro() ) then
-                warnlog( "#i110184# - Macro was not executed" )
+                if ( gApplication = "MATH" ) then
+                    qaerrorlog( "#i110184# - Macro was not executed" )
+                else
+                    warnlog( "Macro was not excuted" )
+                endif
             endif
 
         case GC_MACRO_SECURITY_LEVEL_MEDIUM :
@@ -102,12 +104,19 @@ testcase tMacroSecurityLevels( cFileFormat )
             endif
 
             if ( not hIdentifyExecutedMacro() ) then
-                warnlog( "#i110184# - Macro was not executed" )
+                if ( gApplication = "MATH" ) then
+                    qaerrorlog( "#i110184# - Macro was not executed" )
+                else
+                    warnlog( "Macro was not excuted" )
+                endif
             endif
 
         case GC_MACRO_SECURITY_LEVEL_HIGH :
 
-            if ( not hHandleActivesOnLoad( EXPECTED_MESSAGECOUNT , ALLOW_ONE_EXTRA_MESSAGEBOX ) ) then
+            kontext "Active"
+            hCloseDialog( Active, "ok" )
+
+            if ( not hHandleActivesOnLoad( EXPECTED_MESSAGECOUNT , ALLOW_NO_EXTRA_MESSAGEBOXES ) ) then
                 warnlog( "#i53710# unexpected second messagebox" )
             endif
 
@@ -116,6 +125,9 @@ testcase tMacroSecurityLevels( cFileFormat )
             endif
 
         case GC_MACRO_SECURITY_LEVEL_VERYHIGH :
+
+            kontext "Active"
+            hCloseDialog( Active, "ok" )
 
             if ( not hHandleActivesOnLoad( EXPECTED_MESSAGECOUNT , ALLOW_NO_EXTRA_MESSAGEBOXES ) ) then
                 warnlog( "#i53710# unexpected second messagebox" )
