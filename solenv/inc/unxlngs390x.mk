@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: unxlngs390x.mk,v $
-#
-# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,8 +24,10 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-# mk file for linux s390x, inherit from s390 and add some flags
 
-.INCLUDE : unxlngs3904.mk
+# mk file for Unix Linux 64bit s390x using GCC, inherit from s390 and add some flags
+
+.INCLUDE : unxlngs390.mk
 
 CDEFS+=-DS390X
+BUILD64=1

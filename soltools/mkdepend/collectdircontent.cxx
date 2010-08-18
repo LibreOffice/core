@@ -64,13 +64,17 @@ bool IncludesCollection::exists(string filePath) {
     } else {
         return true;
     };
-    return false;
+    //return false;
 };
 
 extern "C" {
 
     IncludesCollection * create_IncludesCollection() {
             return new IncludesCollection;
+    }
+
+    void delete_IncludesCollection(IncludesCollection *m) {
+            delete m;
     }
 
     int call_IncludesCollection_exists(IncludesCollection* m, const char * filePath) {

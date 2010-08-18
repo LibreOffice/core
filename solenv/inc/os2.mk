@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: os2.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -83,7 +79,7 @@ LINKFLAGSDEBUG=/v
 LINKFLAGSOPT=/Oc
 .ENDIF
 
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=c02.obj
 STDSLOGUI=c02d.obj
 STDOBJCUI=c02.obj
@@ -189,7 +185,7 @@ LINKFLAGSOPT=
 LINKFLAGS+=/COD
 .ENDIF
 
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -292,7 +288,7 @@ LINKFLAGSPROF=
 LINKFLAGSDEBUG=debug all op undefsok
 LINKFLAGSOPT=
 
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=libr clib3s.lib libr plib3s.lib libr math387s.lib
 STDSLOGUI=libr clib3s.lib libr os2386.lib libr plib3s.lib libr math387s.lib
 STDOBJCUI=libr clib3s.lib libr plib3s.lib libr math387s.lib

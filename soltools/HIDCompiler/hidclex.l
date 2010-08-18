@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: hidclex.l,v $
- * $Revision: 1.9 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -80,6 +77,7 @@ static int nInputFileDepth = 0;
 #include <ctype.h>
 
 int alloc_cnt = 0;
+static bool bVerbose = false;
 void freestring( char const * ); //forward
 
 char* dot2underline( char* str )
@@ -156,19 +154,19 @@ void adjust_levelbuffer()
 
 void freestring( char const * ptr )
 {
-	 alloc_cnt--;
-	 adjust_levelbuffer();
-	 //fprintf(stderr,"%sinfo: freestring line %d\n",levelbuffer, __LINE__);
-	 free(const_cast< char * >(ptr)), ptr = NULL;
+    alloc_cnt--;
+    adjust_levelbuffer();
+    if ( bVerbose )
+	    fprintf(stdout,"%sinfo: freestring line %d\n",levelbuffer, __LINE__);
+    free(const_cast< char * >(ptr)), ptr = NULL;
 }
 
 void makestring(char** newstr, char* oldstr)
 {
 	alloc_cnt++;
 	adjust_levelbuffer();
-	/*
-	fprintf(stderr,"%sinfo: makestring on line %d\n",levelbuffer,__LINE__);
-	*/
+	if ( bVerbose )
+	    fprintf(stdout,"%sinfo: makestring on line %d\n",levelbuffer,__LINE__);
 	strcpy( (*newstr=(char*)malloc(strlen(oldstr)+1)), oldstr);
 	if( *newstr==NULL ) {
 		fprintf( stderr,
@@ -284,10 +282,11 @@ public:
 							if( ring[ringpos] != NULL )
 								freestring( ring[ringpos] ); /*otherwise: memory lost*/
 							ring[ ringpos ] = id;
-							//fprintf(stderr,
-							//	"info: ring[%d] == %s broken==%d \n"
-							//	,ringpos,ring[ringpos],broken
-							// );
+							if ( bVerbose )
+							    fprintf(stdout,
+								    "info: ring[%d] == %s broken==%d \n"
+								    ,ringpos,ring[ringpos],broken
+							    );
 
 							if( !(ringpos==0 && last==-1) )
 								last = (++last) % MAXRING;
@@ -492,7 +491,7 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 				FILE* pFile = NULL;
 				pFile = fopen( NewFile, "r" );
 				if( pFile == NULL ) {
-					fprintf( stderr, "warning: could not open inputfile %s \n", NewFile );
+					fprintf( stdout, "warning: could not open inputfile %s \n", NewFile );
 					// try the new *_tmpl.src version instead
 					// this hack was introduced to allow localisation of included src files
 					const char* sStrTmpl = "_tmpl";
@@ -513,7 +512,8 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 				InputFiles[ nInputFileDepth ] = yy_create_buffer( pFile, YY_BUF_SIZE );
                 yy_switch_to_buffer( InputFiles[ nInputFileDepth ] );
 
-				printf( "%s //ATTENTION!! %s gets included here\n", yytext, NewFile );
+                if ( bVerbose )
+				    fprintf( stdout, "%s //ATTENTION!! %s gets included here\n", yytext, NewFile );
 				fprintf( outfile, "// %s //ATTENTION!! %s gets included here\n\n", yytext, NewFile );
 			}
 
@@ -573,7 +573,8 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 
 <EXCLUDE_STATE>"{" 		{
 				exclude_bracelevel += 1;
-				//fprintf( stderr,"info: lev %d : found {\n", exclude_bracelevel );
+			    if ( bVerbose )
+				    fprintf( stdout,"info: lev %d : found {\n", exclude_bracelevel );
 			}
 
 
@@ -616,8 +617,8 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 					globalKLASSE= ares->klasse;
 				}
 
-				//fprintf(stderr,"info: { level: %d\n", level);
-				//
+                if ( bVerbose )
+				    fprintf(stdout,"info: { level: %d\n", level);
 
 				lasttoken = TOK_OPENBRACE;
 				ring->set_zero();
@@ -626,7 +627,8 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 <EXCLUDE_STATE>"}" 		{
 				//-----------------------------
 				exclude_bracelevel -= 1;
-				//fprintf( stderr,"info: lev %d : found }\n", exclude_bracelevel );
+				if ( bVerbose )
+				    fprintf( stdout,"info: lev %d : found }\n", exclude_bracelevel );
 				if( exclude_bracelevel==1 ) {
 					BEGIN INITIAL;
 					exclude_bracelevel=0;
@@ -636,7 +638,8 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 
 \n			|
 "}" 		{
-				//fprintf(stderr,"info:   } level: %d\n",level);
+				if ( bVerbose )
+				    fprintf(stdout,"info:   } level: %d\n",level);
 
 				if( !strcmp(yytext,"}") )
 					;
@@ -781,7 +784,8 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 {resstringlist} {
 			BEGIN EXCLUDE_STATE;
 			exclude_bracelevel = 1;
-			//fprintf( stderr,"info: lev %d : found exclusion\n", exclude_bracelevel );
+			if ( bVerbose )
+			    fprintf( stdout,"info: lev %d : found exclusion\n", exclude_bracelevel );
 			}
 
 ^[ \t]*#define		|
@@ -803,12 +807,13 @@ num4tag		(([Pp][Oo][Ss][Ss][Ii][Zz][Ee]))
 <INITIAL,EXCLUDE_STATE>{string}	{
 			ring->set_broken();
             lasttoken = TOK_STRING;
-			//printf("%6s %11s %8d %s \n",project,filename,yylineno, yytext);
+            if ( bVerbose )
+			    fprintf(stdout, "%6s %11s %8d %s \n",project,filename,yylineno, yytext);
 			}
 
 
-<INITIAL,EXCLUDE_STATE>.	{ //fprintf( stderr,"warning: unused input on line %d of %s \n%s\n",
-					//yylineno, filename, yytext);
+<INITIAL,EXCLUDE_STATE>.	{ if ( bVerbose ) fprintf( stdout,"warning: unused input on line %d of %s \n%s\n",
+					yylineno, filename, yytext);
 	}
 
 <EXCLUDE_STATE>\n	{
@@ -838,16 +843,27 @@ int main( int argc, char* argv[] )
 	static char HIDCompiler[100];
 	static char Version[100];
 
+    // check for switches given on the command line
+    if ( ( argc > 0 ) && ( 0 == strcmp( argv[0], "-verbose" ) ) )
+    {
+        bVerbose = true;
+        for ( size_t i=0; i<argc-1; ++i )
+        {
+            argv[i] = argv[i+1];
+            --argc;
+        }
+    }
 
 	makeversion( Version );
 	strcpy( HIDCompiler, Compiler );
 	strcat( HIDCompiler, Version  );
 	strcat( HIDCompiler, Author   );
-	fprintf( stderr, "\n %s \n\n", HIDCompiler);
+	if ( bVerbose )
+	    fprintf( stdout, "\n %s \n\n", HIDCompiler);
 	if(argc < 4) {
 		fprintf(
 		stderr,
-		"usage: hidc file.src file.c project \n"
+		"usage: hidc [-verbose] file.src file.c project\n"
 		"\n"
 		"You must give exactly 3 arguments.\n"
 		"1 - an existing SRC file.\n"

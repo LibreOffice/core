@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: javainstaller.pm,v $
-#
-# $Revision: 1.30 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -461,7 +457,6 @@ sub set_classpath_for_install_sdk
     else { installer::exiter::exit_program("ERROR: Environment variable \"INPATH\" not set!", "set_classpath_for_install_sdk"); }
 
     if ( defined( $ENV{ 'UPDMINOREXT' } ) ) { $updMinorExt =  $ENV{'UPDMINOREXT'}; }
-    else { installer::exiter::exit_program("ERROR: Environment variable \"UPDMINOREXT\" not set!", "set_classpath_for_install_sdk") if ( ! $ENV{UPDATER} ); }
 
     $installsdk = $solarVersion .  $installer::globals::separator . $inPath . $installer::globals::separator . "bin" . $updMinorExt;
     $installsdk = $installsdk . $installer::globals::separator . "javainstaller";

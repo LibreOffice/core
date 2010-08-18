@@ -2,12 +2,9 @@
 *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: windowscustomaction_ooo.scp,v $
- * $Revision: 1.30 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -54,7 +51,7 @@ WindowsCustomAction gid_Customaction_Regallmsdocdll
 	Source = "reg4allmsdoc.dll";
 	Target = "FindRegisteredExtensions";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostFinalize");
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH And _IsSetupTypeMin<>\"Custom\"", "CostFinalize");
 End
 
 WindowsCustomAction gid_Customaction_Regactivexdll1
@@ -73,6 +70,24 @@ WindowsCustomAction gid_Customaction_Regactivexdll2
 	Target = "DeinstallActiveXControl";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "\&FEATURETEMPLATE=2 And \!FEATURETEMPLATE=3 And Not PATCH", "RemoveExistingProducts");
+End
+
+WindowsCustomAction gid_Customaction_Reg64dll1
+	Name = "Reg64dll1";
+	Typ = "65";
+	Source = "reg64msi.dll";
+	Target = "InstallReg64";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" and VersionNT64", "end");
+End
+
+WindowsCustomAction gid_Customaction_Reg64dll2
+	Name = "Reg64dll2";
+	Typ = "65";
+	Source = "reg64msi.dll";
+	Target = "DeinstallReg64";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" and VersionNT64", "end");
 End
 
 WindowsCustomAction gid_Customaction_Jfregcadll1
@@ -184,16 +199,6 @@ WindowsCustomAction gid_Customaction_Shellextensionsdll7
 	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "InstallValidate");
 End
 
-WindowsCustomAction gid_Customaction_Register_Extensions
-	Name = "RegisterExtensions";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "RegisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
-	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
-End
-
 WindowsCustomAction gid_Customaction_Set_Admininstall
 	Name = "SetAdminInstallProperty";
 	Typ = "65";
@@ -201,27 +206,6 @@ WindowsCustomAction gid_Customaction_Set_Admininstall
 	Target = "SetAdminInstallProperty";
 	Inbinarytable = 1;
 	Assignment1 = ("AdminExecuteSequence", "", "InstallInitialize");
-End
-
-/*
-WindowsCustomAction gid_Customaction_Remove_Extensions
-	Name = "RemoveExtensions";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "RemoveExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "Shellextensionsdll4");
-End
-*/
-
-WindowsCustomAction gid_Customaction_Deregister_Extensions
-	Name = "DeregisterExtensions";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "DeregisterExtensions";
-	Inbinarytable = 1;
-	// Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "gid_Customaction_Remove_Extensions");
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "behind_IsolateComponents");
 End
 
 WindowsCustomAction gid_Customaction_Check_Install_Directory
@@ -303,44 +287,6 @@ WindowsCustomAction gid_Customaction_Patch_InstallExchangeFiles
 	Assignment2 = ("AdminExecuteSequence", "", "behind_InstallFinalize");
 End
 
-WindowsCustomAction gid_Customaction_Langpack_Register_Extensions
-	Name = "RegisterExtensions";
-	Typ = "65";
-	Source = "lngpckinsthlp.dll";
-	Target = "RegisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "end");
-	Assignment2 = ("AdminExecuteSequence", "", "end");
-End
-
-WindowsCustomAction gid_Customaction_Langpack_Deregister_Extensions
-	Name = "DeregisterExtensions";
-	Typ = "65";
-	Source = "lngpckinsthlp.dll";
-	Target = "DeregisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "InstallInitialize");
-End
-
-WindowsCustomAction gid_Customaction_Patch_Register_Extensions
-	Name = "RegisterExtensions";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "RegisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "end");
-	Assignment2 = ("AdminExecuteSequence", "", "end");
-End
-
-WindowsCustomAction gid_Customaction_Patch_Deregister_Extensions
-	Name = "DeregisterExtensions";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "DeregisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "InstallInitialize");
-End
-
 WindowsCustomAction gid_Customaction_Patch_SetFeatureState
 	Name = "SetFeatureState";
 	Typ = "65";
@@ -376,7 +322,7 @@ WindowsCustomAction gid_Customaction_Patch_Isofficerunning
 	Target = "IsOfficeRunning";
 	Inbinarytable = 1;
 	Assignment1 = ("ControlEvent", "ReadyToInstall", "InstallNow", "DoAction", "IsOfficeRunning", "1", "1");
-	Assignment2 = ("InstallExecuteSequence", "", "RunningOffice");
+	Assignment2 = ("InstallExecuteSequence", "VersionNT < 600", "RunningOffice");
 End
 
 WindowsCustomAction gid_Customaction_Full_Isofficerunning
@@ -385,7 +331,7 @@ WindowsCustomAction gid_Customaction_Full_Isofficerunning
 	Source = "shlxtmsi.dll";
 	Target = "IsOfficeRunning";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "RunningOffice");
+	Assignment1 = ("InstallExecuteSequence", "VersionNT < 600 Or Not PATCH", "RunningOffice");
 End
 
 WindowsCustomAction gid_Customaction_Langpack_Isofficerunning
@@ -394,7 +340,7 @@ WindowsCustomAction gid_Customaction_Langpack_Isofficerunning
 	Source = "lngpckinsthlp.dll";
 	Target = "IsOfficeRunning";
 	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "PATCH", "RunningOffice");
+	Assignment1 = ("InstallExecuteSequence", "PATCH And VersionNT < 600", "RunningOffice");
 End
 
 WindowsCustomAction gid_Customaction_CheckPatchList
@@ -455,6 +401,16 @@ WindowsCustomAction gid_Customaction_MigrateInstallPath
       Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
 End
 
+WindowsCustomAction gid_Customaction_CompleteInstallPath
+      Name = "CompleteInstallPath";
+      Typ = "321";
+      Source = "shlxtmsi.dll";
+      Target = "CompleteInstallPath";
+      Inbinarytable = 1;
+      Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "MigrateInstallPath");
+      Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "MigrateInstallPath");
+End
+
 WindowsCustomAction gid_Customaction_CheckVersions
 	Name = "CheckVersions";
 	Typ = "321";
@@ -483,6 +439,16 @@ WindowsCustomAction gid_Customaction_ShowReleaseNotes2
 	Assignment1 = ("InstallExecuteSequence", "(Not Installed or ISPATCH) and Not REMOVE=\"ALL\"", "end");
 End
 
+WindowsCustomAction gid_Customaction_RebaseLibrariesonproperties
+	Name = "RebaseLibrariesOnProperties";
+	Typ = "65";
+	Source = "rebase.dll";
+	Target = "RebaseLibrariesOnProperties";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
+End
+
 WindowsCustomAction gid_Customaction_ShowSurvey
 	Name = "ShowSurveyAfterUninstall";
 	Typ = "65";
@@ -490,4 +456,22 @@ WindowsCustomAction gid_Customaction_ShowSurvey
 	Target = "ShowSurveyAfter";
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" and Not UPGRADINGPRODUCTCODE", "end");
+End
+
+WindowsCustomAction gid_Customaction_LookForRegisteredExtensions
+	Name = "LookForRegisteredExtensions";
+	Typ = "65";
+	Source = "reg4allmsdoc.dll";
+	Target = "LookForRegisteredExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "CustomSetup", "Next", "DoAction", "LookForRegisteredExtensions", "1", "2");
+End
+
+WindowsCustomAction gid_Customaction_RegisterSomeExtensions
+	Name = "RegisterSomeExtensions";
+	Typ = "65";
+	Source = "reg4allmsdoc.dll";
+	Target = "RegisterSomeExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("ControlEvent", "FileTypeDialog", "Next", "DoAction", "RegisterSomeExtensions", "1", "1");
 End

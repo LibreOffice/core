@@ -3,13 +3,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: header.hxx,v $
-#
-# $Revision: 1.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,16 +56,6 @@ if [ -x $checkdll ]; then
         *) DYLD_LIBRARY_PATH=$libpath;;
         esac
         export DYLD_LIBRARY_PATH;;
-    IRIX) case "${LD_LIBRARYN32_PATH+X}" in
-        X) LD_LIBRARYN32_PATH=$libpath:$LD_LIBRARYN32_PATH;;
-        *) LD_LIBRARYN32_PATH=$libpath;;
-    esac
-        export LD_LIBRARYN32_PATH;;
-    IRIX64) case "${LD_LIBRARYN32_PATH+X}" in
-        X) LD_LIBRARYN32_PATH=$libpath:$LD_LIBRARYN32_PATH;;
-        *) LD_LIBRARYN32_PATH=$libpath;;
-    esac
-        export LD_LIBRARYN32_PATH;;
     *)  case "${LD_LIBRARY_PATH+X}" in
         X) LD_LIBRARY_PATH=$libpath:$LD_LIBRARY_PATH;;
         *) LD_LIBRARY_PATH=$libpath;;
@@ -77,7 +63,7 @@ if [ -x $checkdll ]; then
         export LD_LIBRARY_PATH;;
     esac
 
-    $checkdll "$*"
+    $checkdll "$@"
     if [ $? -ne 0 ]; then exit 1 ; fi
 
     for parameter in $*; do

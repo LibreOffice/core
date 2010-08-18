@@ -897,7 +897,7 @@ CELLPTR prereq;     /* list of prerequisites                   */
      /* Handle %-targets. */
      CELLPTR cur;
      CELLPTR tpq = NIL(CELL);
-     CELLPTR nprq;
+     CELLPTR nprq = NULL;
 
 #ifdef DBUG
      DB_PRINT( "%", ("Handling %%-target [%s : : <prerequisites follow, maybe empty>]",
@@ -915,7 +915,8 @@ CELLPTR prereq;     /* list of prerequisites                   */
 
         if( *name == '\'' && name[len-1]=='\'' ){
            name[len-1] = '\0';
-           strcpy(name,name+1);
+           len = strlen(name+1)+1;
+           memmove(name,name+1,len);
            /* add indirect prerequisite */
            _add_indirect_prereq( cur );
         }

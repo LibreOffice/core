@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: file_kde.scp,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -29,12 +26,24 @@
  ************************************************************************/
 #include "macros.inc"
 
+#ifdef ENABLE_KDE
 File gid_File_Lib_Kdebe
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Program;
+    Dir = SCP2_OOO_BIN_DIR;
     Name = STRING(CONCAT2(kdebe1.uno,UNXSUFFIX));
     RegistryID = gid_Starregistry_Services_Rdb;
     Regmergefile = "kdebe1-ucd.txt";
 End
+#endif
 
+#ifdef ENABLE_KDE4
+File gid_File_Lib_Kde4be
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Program;
+    Name = STRING(CONCAT2(kde4be1.uno,UNXSUFFIX));
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Regmergefile = "kde4be1-ucd.txt";
+End
+#endif

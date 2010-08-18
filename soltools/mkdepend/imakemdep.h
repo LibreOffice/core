@@ -515,215 +515,215 @@ char *cpp_argv[ARGUMENTS] = {
  */
 struct pair predefs[] = {
 #ifdef apollo
-    {"apollo", "1"},
+    {"apollo", "1", NULL},
 #endif
 #ifdef ibm032
-    {"ibm032", "1"},
+    {"ibm032", "1", NULL},
 #endif
 #ifdef ibm
-    {"ibm", "1"},
+    {"ibm", "1", NULL},
 #endif
 #ifdef aix
-    {"aix", "1"},
+    {"aix", "1", NULL},
 #endif
 #ifdef sun
-    {"sun", "1"},
+    {"sun", "1", NULL},
 #endif
 #ifdef sun2
-    {"sun2", "1"},
+    {"sun2", "1", NULL},
 #endif
 #ifdef sun3
-    {"sun3", "1"},
+    {"sun3", "1", NULL},
 #endif
 #ifdef sun4
-    {"sun4", "1"},
+    {"sun4", "1", NULL},
 #endif
 #ifdef sparc
-    {"sparc", "1"},
+    {"sparc", "1", NULL},
 #endif
 #ifdef __sparc__
-    {"__sparc__", "1"},
+    {"__sparc__", "1", NULL},
 #endif
 #ifdef hpux
-    {"hpux", "1"},
+    {"hpux", "1", NULL},
 #endif
 #ifdef __hpux
-    {"__hpux", "1"},
+    {"__hpux", "1", NULL},
 #endif
 #ifdef __hp9000s800
-    {"__hp9000s800", "1"},
+    {"__hp9000s800", "1", NULL},
 #endif
 #ifdef __hp9000s700
-    {"__hp9000s700", "1"},
+    {"__hp9000s700", "1", NULL},
 #endif
 #ifdef vax
-    {"vax", "1"},
+    {"vax", "1", NULL},
 #endif
 #ifdef VMS
-    {"VMS", "1"},
+    {"VMS", "1", NULL},
 #endif
 #ifdef cray
-    {"cray", "1"},
+    {"cray", "1", NULL},
 #endif
 #ifdef CRAY
-    {"CRAY", "1"},
+    {"CRAY", "1", NULL},
 #endif
 #ifdef _CRAY
-    {"_CRAY", "1"},
+    {"_CRAY", "1", NULL},
 #endif
 #ifdef att
-    {"att", "1"},
+    {"att", "1", NULL},
 #endif
 #ifdef mips
-    {"mips", "1"},
+    {"mips", "1", NULL},
 #endif
 #ifdef __mips__
-    {"__mips__", "1"},
+    {"__mips__", "1", NULL},
 #endif
 #ifdef ultrix
-    {"ultrix", "1"},
+    {"ultrix", "1", NULL},
 #endif
 #ifdef stellar
-    {"stellar", "1"},
+    {"stellar", "1", NULL},
 #endif
 #ifdef mc68000
-    {"mc68000", "1"},
+    {"mc68000", "1", NULL},
 #endif
 #ifdef mc68020
-    {"mc68020", "1"},
+    {"mc68020", "1", NULL},
 #endif
 #ifdef __GNUC__
-    {"__GNUC__", "1"},
+    {"__GNUC__", "1", NULL},
 #endif
 #if __STDC__
-    {"__STDC__", "1"},
+    {"__STDC__", "1", NULL},
 #endif
 #ifdef __HIGHC__
-    {"__HIGHC__", "1"},
+    {"__HIGHC__", "1", NULL},
 #endif
 #ifdef CMU
-    {"CMU", "1"},
+    {"CMU", "1", NULL},
 #endif
 #ifdef luna
-    {"luna", "1"},
+    {"luna", "1", NULL},
 #ifdef luna1
-    {"luna1", "1"},
+    {"luna1", "1", NULL},
 #endif
 #ifdef luna2
-    {"luna2", "1"},
+    {"luna2", "1", NULL},
 #endif
 #ifdef luna88k
-    {"luna88k", "1"},
+    {"luna88k", "1", NULL},
 #endif
 #ifdef uniosb
-    {"uniosb", "1"},
+    {"uniosb", "1", NULL},
 #endif
 #ifdef uniosu
-    {"uniosu", "1"},
+    {"uniosu", "1", NULL},
 #endif
 #endif
 #ifdef ieeep754
-    {"ieeep754", "1"},
+    {"ieeep754", "1", NULL},
 #endif
 #ifdef is68k
-    {"is68k", "1"},
+    {"is68k", "1", NULL},
 #endif
 #ifdef m68k
-        {"m68k", "1"},
+        {"m68k", "1", NULL},
 #endif
 #ifdef m88k
-        {"m88k", "1"},
+        {"m88k", "1", NULL},
 #endif
 #ifdef __m88k__
-    {"__m88k__", "1"},
+    {"__m88k__", "1", NULL},
 #endif
 #ifdef bsd43
-    {"bsd43", "1"},
+    {"bsd43", "1", NULL},
 #endif
 #ifdef hcx
-    {"hcx", "1"},
+    {"hcx", "1", NULL},
 #endif
 #ifdef sony
-    {"sony", "1"},
+    {"sony", "1", NULL},
 #ifdef SYSTYPE_SYSV
-    {"SYSTYPE_SYSV", "1"},
+    {"SYSTYPE_SYSV", "1", NULL},
 #endif
 #ifdef _SYSTYPE_SYSV
-    {"_SYSTYPE_SYSV", "1"},
+    {"_SYSTYPE_SYSV", "1", NULL},
 #endif
 #endif
 #ifdef __OSF__
-    {"__OSF__", "1"},
+    {"__OSF__", "1", NULL},
 #endif
 #ifdef __osf__
-    {"__osf__", "1"},
+    {"__osf__", "1", NULL},
 #endif
 #ifdef __alpha
-    {"__alpha", "1"},
+    {"__alpha", "1", NULL},
 #endif
 #ifdef __DECC
-    {"__DECC",  "1"},
+    {"__DECC",  "1", NULL},
 #endif
 #ifdef __decc
-    {"__decc",  "1"},
+    {"__decc",  "1", NULL},
 #endif
 #ifdef __uxp__
-    {"__uxp__", "1"},
+    {"__uxp__", "1", NULL},
 #endif
 #ifdef __sxg__
-    {"__sxg__", "1"},
+    {"__sxg__", "1", NULL},
 #endif
 #ifdef _SEQUENT_
-    {"_SEQUENT_", "1"},
-    {"__STDC__", "1"},
+    {"_SEQUENT_", "1", NULL},
+    {"__STDC__", "1", NULL},
 #endif
 #ifdef __bsdi__
-    {"__bsdi__", "1"},
+    {"__bsdi__", "1", NULL},
 #endif
 #ifdef nec_ews_svr2
-    {"nec_ews_svr2", "1"},
+    {"nec_ews_svr2", "1", NULL},
 #endif
 #ifdef nec_ews_svr4
-    {"nec_ews_svr4", "1"},
+    {"nec_ews_svr4", "1", NULL},
 #endif
 #ifdef _nec_ews_svr4
-    {"_nec_ews_svr4", "1"},
+    {"_nec_ews_svr4", "1", NULL},
 #endif
 #ifdef _nec_up
-    {"_nec_up", "1"},
+    {"_nec_up", "1", NULL},
 #endif
 #ifdef SX
-    {"SX", "1"},
+    {"SX", "1", NULL},
 #endif
 #ifdef nec
-    {"nec", "1"},
+    {"nec", "1", NULL},
 #endif
 #ifdef _nec_ft
-    {"_nec_ft", "1"},
+    {"_nec_ft", "1", NULL},
 #endif
 #ifdef PC_UX
-    {"PC_UX", "1"},
+    {"PC_UX", "1", NULL},
 #endif
 #ifdef sgi
-    {"sgi", "1"},
+    {"sgi", "1", NULL},
 #endif
 #ifdef __sgi
-    {"__sgi", "1"},
+    {"__sgi", "1", NULL},
 #endif
 #ifdef __FreeBSD__
-    {"__FreeBSD__", "1"},
+    {"__FreeBSD__", "1", NULL},
 #endif
 #ifdef __NetBSD__
-    {"__NetBSD__", "1"},
+    {"__NetBSD__", "1", NULL},
 #endif
 #ifdef __OpenBSD__
-    {"__OpenBSD__", "1"},
+    {"__OpenBSD__", "1", NULL},
 #endif
 #ifdef __EMX__
-    {"__EMX__", "1"},
+    {"__EMX__", "1", NULL},
 #endif
     /* add any additional symbols before this line */
-    {NULL, NULL}
+    {NULL, NULL, NULL}
 };
 
 #endif /* MAKEDEPEND */

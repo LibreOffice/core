@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: parameter.pm,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -53,7 +49,7 @@ sub usage
     print <<Ende;
 
 --------------------------------------------------------------
-$par2script::globals::prog V1.0 (c) Ingo Schmidt 2003
+$par2script::globals::prog
 The following parameter are needed:
 -i: include pathes, comma separated list
 -o: setup script file name

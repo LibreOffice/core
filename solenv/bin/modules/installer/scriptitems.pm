@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: scriptitems.pm,v $
-#
-# $Revision: 1.53 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -245,7 +241,7 @@ sub remove_office_start_language_files
         else
         {
             my $infoline = "INFO: Flag SET_OFFICE_LANGUAGE \-\> Removing $oneitem->{'gid'} from file list.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
+            push( @installer::globals::logfileinfo, $infoline);
         }
     }
 
@@ -545,18 +541,6 @@ sub set_global_directory_hostnames
             $installer::globals::officedirgid = $onedir->{'gid'};
             $allvariables->{'OFFICEDIRECTORYHOSTNAME'} = $installer::globals::officedirhostname;
         }
-        if ( $styles =~ /\bBASISDIRECTORY\b/ )
-        {
-            $installer::globals::basisdirhostname = $onedir->{'HostName'};
-            $installer::globals::basisdirgid = $onedir->{'gid'};
-            $allvariables->{'BASISDIRECTORYHOSTNAME'} = $installer::globals::basisdirhostname;
-        }
-        if ( $styles =~ /\bUREDIRECTORY\b/ )
-        {
-            $installer::globals::uredirhostname = $onedir->{'HostName'};
-            $installer::globals::uredirgid = $onedir->{'gid'};
-            $allvariables->{'UREDIRECTORYHOSTNAME'} = $installer::globals::uredirhostname;
-        }
         if ( $styles =~ /\bSUNDIRECTORY\b/ )
         {
             $installer::globals::sundirhostname = $onedir->{'HostName'};
@@ -587,6 +571,66 @@ sub get_children
             my $parent = $gid;
             get_children($allitems, $parent, $newitemorder);    # recursive!
         }
+    }
+}
+
+################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_langpack_hostname
+{
+    my ($dirsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
+    {
+        my $onedir = ${$dirsref}[$i];
+        if (( $onedir->{'LangPackHostName'} ) && ( $onedir->{'LangPackHostName'} ne "" )) { $onedir->{'HostName'} = $onedir->{'LangPackHostName'}; }
+    }
+}
+
+################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_patch_hostname
+{
+    my ($dirsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$dirsref}; $i++ )
+    {
+        my $onedir = ${$dirsref}[$i];
+        if (( $onedir->{'PatchHostName'} ) && ( $onedir->{'PatchHostName'} ne "" )) { $onedir->{'HostName'} = $onedir->{'PatchHostName'}; }
+    }
+}
+
+################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_langpack_copy_scpaction
+{
+    my ($scpactionsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
+    {
+        my $onescpaction = ${$scpactionsref}[$i];
+        if (( $onescpaction->{'LangPackCopy'} ) && ( $onescpaction->{'LangPackCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'LangPackCopy'}; }
+    }
+}
+
+################################################################################
+# Using different HostName for language packs
+################################################################################
+
+sub use_patch_copy_scpaction
+{
+    my ($scpactionsref) = @_;
+
+    for ( my $i = 0; $i <= $#{$scpactionsref}; $i++ )
+    {
+        my $onescpaction = ${$scpactionsref}[$i];
+        if (( $onescpaction->{'PatchCopy'} ) && ( $onescpaction->{'PatchCopy'} ne "" )) { $onescpaction->{'Copy'} = $onescpaction->{'PatchCopy'}; }
     }
 }
 
@@ -1181,6 +1225,8 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
         if (( $styles =~ /\bSTARREGISTRY\b/ ) || ( $styles =~ /\bFILE_CAN_MISS\b/ )) { $file_can_miss = 1; }
 
+        if (( $installer::globals::languagepack ) && ( ! $onefile->{'ismultilingual'} ) && ( ! ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))) { $file_can_miss = 1; }
+
         my $sourcepathref = "";
 
         if ( $file_can_miss ) { $sourcepathref = get_sourcepath_from_filename_and_includepath(\$onefilename, $includepatharrayref, 0); }
@@ -1310,13 +1356,39 @@ sub remove_Files_Without_Sourcedirectory
             if ( ! ( $styles =~ /\bSTARREGISTRY\b/ ))   # StarRegistry files will be created later
             {
                 my $filename = $onefile->{'Name'};
-                $infoline = "ERROR: Removing file $filename from file list.\n";
-                push( @installer::globals::logfileinfo, $infoline);
 
-                push(@missingfiles, "ERROR: File not found: $filename\n");
-                $error_occured = 1;
+                if ( ! $installer::globals::languagepack )
+                {
+                    $infoline = "ERROR: Removing file $filename from file list.\n";
+                    push( @installer::globals::logfileinfo, $infoline);
 
-                next;   # removing this file from list, if sourcepath is empty
+                    push(@missingfiles, "ERROR: File not found: $filename\n");
+                    $error_occured = 1;
+
+                    next;   # removing this file from list, if sourcepath is empty
+                }
+                else # special case for language packs
+                {
+                    if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))
+                    {
+                        $infoline = "ERROR: Removing file $filename from file list.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+
+                        push(@missingfiles, "ERROR: File not found: $filename\n");
+                        $error_occured = 1;
+
+                        next;   # removing this file from list, if sourcepath is empty
+                    }
+                    else
+                    {
+                        $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                        $infoline = "INFO: It is not language dependent and can be ignored in language packs.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+
+                        next;   # removing this file from list, if sourcepath is empty
+                    }
+                }
             }
         }
 
@@ -1423,6 +1495,20 @@ sub add_License_Files_into_Installdir
             $newfile->{'specificlanguage'} = "";
             $newfile->{'haslanguagemodule'} = "0";
 
+            if ( defined $newfile->{'InstallName'} )
+            {
+                if ( $newfile->{'InstallName'} =~ /^\s*(.*?)_$defaultlanguage\.?(\w*?)\s*$/ )
+                {
+                    my $localfilename = $1;
+                    my $localextension = $2;
+
+                    if ( $localextension eq "" ) { $newfile->{'InstallName'} = $localfilename; }
+                    else { $newfile->{'InstallName'} = $localfilename . "\." . $localextension; }
+                }
+            }
+
+            $newfile->{'removelangfromfile'} = "1"; # Important for files with an InstallName, because language also has to be removed there.
+
             if ( $foundofficedir )
             {
                 $newfile->{'Dir'} = $officedirectorygid;
@@ -1444,6 +1530,12 @@ sub add_License_Files_into_Installdir
 
             $infoline = "New files: Adding file $newfilename for the installation root to the file list. Language: $defaultlanguage\n";
             push( @installer::globals::logfileinfo, $infoline);
+
+            if ( defined $newfile->{'InstallName'} )
+            {
+                $infoline = "New files: Using installation name: $newfile->{'InstallName'}\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
 
             # Collecting license and readme file for the installation set
 

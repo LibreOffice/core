@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: modules.pl,v $
-#
-# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,6 +32,7 @@ my $infile = "";
 my @infile = ();
 my $globalcounter = 0;
 my $globallinecounter = 0;
+my $verbose = 0;
 
 if ( !defined $completelangiso_var) {
     print STDERR "ERROR: No language defined!\n";
@@ -61,7 +58,7 @@ check_counter();
 
 sub check_counter
 {
-    print STDERR "Wrote modules for $globalcounter languages ($globallinecounter lines)!\n";
+    print STDERR "Wrote modules for $globalcounter languages ($globallinecounter lines)!\n" if $verbose;
     if ( $globalcounter == 0 )
     {
         print STDERR "ERROR: No languages found!\n";
@@ -113,6 +110,21 @@ sub write_ALL_MODULES
 sub startup_check
 {
     my $i;
+
+    if ( $#ARGV >= 0 )
+    {
+        if ( $ARGV[0] eq "-verbose" )
+        {
+            $verbose = 1;
+            shift @ARGV;
+        }
+        elsif ( $ARGV[0] eq "-quiet" )
+        {
+            # no special quiet flag/mode
+            shift @ARGV;
+        }
+    }
+
     for ( $i=0; $i <= $#ARGV; $i++) {
         if ( "$ARGV[$i]" eq "-o" ) {
             if ( defined $ARGV[ $i + 1] ) {
@@ -137,7 +149,7 @@ sub startup_check
         open INFILE, "$infile" or die "$0 - ERROR: $infile exists but isn't readable.\n";
         @infile = <INFILE>;
         close( INFILE );
-        print STDERR "Reading template file: $infile\n";
+        print STDERR "Reading template file: $infile\n" if $verbose;
         my $num = $#infile + 1;
         # print STDERR "Number of lines: $num\n";
     } else {
@@ -168,6 +180,6 @@ sub startup_check
 sub usage
 {
     print STDERR "Generate language modules from language script particle template (*.sct file)\n";
-    print STDERR "perl $0 -o outputfile -i inputfile\n";
+    print STDERR "perl $0 [-verbose] -o outputfile -i inputfile\n";
     exit  1;
 }

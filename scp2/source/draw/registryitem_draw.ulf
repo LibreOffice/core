@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: registryitem_draw.ulf,v $
- * $Revision: 1.8 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,10 +29,10 @@
 en-US = "&New"
 
 [STR_REG_VAL_SO60_DRAWING]
-en-US = "%PRODUCTNAME %SXWFORMATVERSION Drawing"
+en-US = "%SXWFORMATNAME %SXWFORMATVERSION Drawing"
 
 [STR_REG_VAL_SO60_DRAW_TEMPLATE]
-en-US = "%PRODUCTNAME %SXWFORMATVERSION Drawing Template"
+en-US = "%SXWFORMATNAME %SXWFORMATVERSION Drawing Template"
 
 [STR_REG_VAL_OO_DRAW]
 en-US = "OpenDocument Drawing"

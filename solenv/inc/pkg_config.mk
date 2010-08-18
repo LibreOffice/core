@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: pkg_config.mk,v $
-#
-# $Revision: 1.7 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,11 +28,11 @@
 .INCLUDE .IGNORE : pkgroot.mk
 
 .IF "$(PKGCONFIG_ROOT)"!=""
-PKG_CONFIG=$(PKGCONFIG_ROOT)$/bin$/pkg-config
+PKG_CONFIG=$(PKGCONFIG_ROOT)/bin/pkg-config
 .IF "$(OS)"=="SOLARIS" && "$(CPUNAME)"=="SPARC" && "$(CPU)"=="U"
-PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)$/lib$/64$/pkgconfig
+PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)/lib/64/pkgconfig
 .ELSE
-PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)$/lib$/pkgconfig
+PKG_CONFIG_PATH:=$(PKGCONFIG_ROOT)/lib/pkgconfig
 .ENDIF
 .EXPORT : PKG_CONFIG_PATH
 PKGCONFIG_PREFIX=--define-variable=prefix=$(PKGCONFIG_ROOT)

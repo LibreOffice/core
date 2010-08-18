@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: archivefiles.pm,v $
-#
-# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -54,18 +50,26 @@ sub put_language_into_name
     my $filename = "";
     my $extension = "";
 
-    if ( $oldname =~ /^\s*(.*)(\..*?)\s*$/ )    # files with extension
+    if ( $oldname =~ /en-US/ )  # files, that contain the language in the file name
     {
-        $filename = $1;
-        $extension = $2;
+        $newname = $oldname;
+        $newname =~ s/en-US/$onelanguage/;
     }
-    else
+    else    # files, that do not contain the language in the file name
     {
-        $filename = $oldname;
-        $extension = "";
-    }
+        if ( $oldname =~ /^\s*(.*)(\..*?)\s*$/ )    # files with extension
+        {
+            $filename = $1;
+            $extension = $2;
+        }
+        else
+        {
+            $filename = $oldname;
+            $extension = "";
+        }
 
-    $newname = $1 . "_" . $onelanguage . $2;
+        $newname = $1 . "_" . $onelanguage . $2;
+    }
 
     return $newname;
 }
@@ -86,6 +90,54 @@ sub get_patch_file_list
     my $patchfilesarray = installer::converter::convert_stringlist_into_array_without_linebreak_and_quotes(\$patchfilestring, ",");
 
     return $patchfilesarray;
+}
+
+#################################################################
+# Reading all executables in the "manifest.xml"
+#################################################################
+
+sub get_all_executables_from_manifest
+{
+    my ($unzipdir, $manifestfile, $executable_files_in_extensions) = @_;
+
+    my $is_executable = 0;
+
+    for ( my $i = 0; $i <= $#{$manifestfile}; $i++ )
+    {
+        my $line = ${$manifestfile}[$i];
+
+        if ( $line =~ /\"application\/vnd\.sun\.star\.executable\"/ ) { $is_executable = 1; }
+
+        if (( $line =~ /manifest\:full\-path=\"(.*?)\"/ ) && ( $is_executable ))
+        {
+            my $filename = $unzipdir . $installer::globals::separator . $1;
+            # making only slashes for comparison reasons
+            $filename =~ s/\\/\//g;
+            $executable_files_in_extensions->{$filename} = 1;
+        }
+
+        if ( $line =~ /\/\>/ ) { $is_executable = 0; }
+    }
+}
+
+#################################################################
+# Reading the "manifest.xml" in extensions and determine, if
+# there are executable files
+#################################################################
+
+sub collect_all_executable_files_in_extensions
+{
+    my ($unzipdir, $executable_files_in_extensions) = @_;
+
+    $unzipdir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    my $manifestfilename = $unzipdir . $installer::globals::separator . "META-INF" . $installer::globals::separator . "manifest.xml";
+
+    if ( -f $manifestfilename )
+    {
+        my $manifestfile = installer::files::read_file($manifestfilename);
+        get_all_executables_from_manifest($unzipdir, $manifestfile, $executable_files_in_extensions);
+    }
 }
 
 #################################################################
@@ -136,6 +188,10 @@ sub resolving_archive_flag
 
             my $rename_to_language = 0;
             if ( $styles =~ /\bRENAME_TO_LANGUAGE\b/ ) { $rename_to_language = 1; } # special handling for renamed files (scriptitems.pm)
+
+            my %executable_files_in_extensions = ();
+            my $set_executable_privileges = 0;  # setting privileges for exectables is required for oxt files
+            if ( $onefile->{'Name'} =~ /\.oxt\s*$/ ) { $set_executable_privileges = 1; }
 
             # mechanism to select files from an archive files
             my $select_files = 0;
@@ -256,6 +312,12 @@ sub resolving_archive_flag
                             push( @installer::globals::logfileinfo, $infoline);
                         }
                     }
+
+                    # Selecting names of executable files in extensions
+                    if ( $set_executable_privileges )
+                    {
+                        collect_all_executable_files_in_extensions($unzipdir, \%executable_files_in_extensions);
+                    }
                 }
 
                 my $zipfileref = \@zipfile;
@@ -307,6 +369,19 @@ sub resolving_archive_flag
                             $newfile{'UnixRights'} = substr($value, 3);
                             $infoline = "Setting unix rights for \"$newfile{'sourcepath'}\" to \"$newfile{'UnixRights'}\"\n";
                             push( @installer::globals::logfileinfo, $infoline);
+                        }
+
+                        if ( $set_executable_privileges )
+                        {
+                            # All pathes to executables are saved in the hash %executable_files_in_extensions
+                            my $compare_path = $newfile{'sourcepath'};
+                            $compare_path =~ s/\\/\//g;  # contains only slashes for comparison reasons
+                            if ( exists($executable_files_in_extensions{$compare_path}) )
+                            {
+                                $newfile{'UnixRights'} = "775";
+                                $infoline = "Executable in Extension: Setting unix rights for \"$newfile{'sourcepath'}\" to \"$newfile{'UnixRights'}\"\n";
+                                push( @installer::globals::logfileinfo, $infoline);
+                            }
                         }
 
                         if ( $select_files )

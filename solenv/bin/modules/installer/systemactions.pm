@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: systemactions.pm,v $
-#
-# $Revision: 1.38 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -59,11 +55,12 @@ sub create_directory
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-            {
-                my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
-                system($localcall);
-            }
+            my $localcall = "chmod 0775 $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
+
+            # chmod 0775 is not sufficient on mac to remove sticky tag
+            $localcall = "chmod a-s $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
         else
         {
@@ -89,11 +86,8 @@ sub create_directory
                         $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
                         push(@installer::globals::logfileinfo, $infoline);
 
-                        if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-                        {
-                            my $localcall = "chmod 775 $parentdir \>\/dev\/null 2\>\&1";
-                            system($localcall);
-                        }
+                        my $localcall = "chmod 775 $parentdir \>\/dev\/null 2\>\&1";
+                        system($localcall);
                     }
                     else
                     {
@@ -122,11 +116,8 @@ sub create_directory
                     $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
                     push(@installer::globals::logfileinfo, $infoline);
 
-                    if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-                    {
-                        my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
-                        system($localcall);
-                    }
+                    my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
+                    system($localcall);
                 }
                 else
                 {
@@ -177,11 +168,8 @@ sub create_directory_with_privileges
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-            {
-                my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
-                system($localcall);
-            }
+            my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
         else
         {
@@ -207,11 +195,8 @@ sub create_directory_with_privileges
                         $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
                         push(@installer::globals::logfileinfo, $infoline);
 
-                        if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-                        {
-                            my $localcall = "chmod $privileges $parentdir \>\/dev\/null 2\>\&1";
-                            system($localcall);
-                        }
+                        my $localcall = "chmod $privileges $parentdir \>\/dev\/null 2\>\&1";
+                        system($localcall);
                     }
                     else
                     {
@@ -240,11 +225,8 @@ sub create_directory_with_privileges
                     $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
                     push(@installer::globals::logfileinfo, $infoline);
 
-                    if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-                    {
-                        my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
-                        system($localcall);
-                    }
+                    my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+                    system($localcall);
                 }
                 else
                 {
@@ -272,11 +254,8 @@ sub create_directory_with_privileges
         $infoline = "\nAlready existing directory, did not create: $directory\n";
         push(@installer::globals::logfileinfo, $infoline);
 
-        if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-        {
-            my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
-            system($localcall);
-        }
+        my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+        system($localcall);
     }
 }
 
@@ -313,6 +292,27 @@ sub remove_empty_directory
 }
 
 #######################################################################
+# Calculating the number of languages in the string
+#######################################################################
+
+sub get_number_of_langs
+{
+    my ($languagestring) = @_;
+
+    my $number = 1;
+
+    my $workstring = $languagestring;
+
+    while ( $workstring =~ /^\s*(.*)_(.*?)\s*$/ )
+    {
+        $workstring = $1;
+        $number++;
+    }
+
+    return $number;
+}
+
+#######################################################################
 # Creating the directories, in which files are generated or unzipped
 #######################################################################
 
@@ -342,6 +342,13 @@ sub create_directories
     else
     {
         $path = $installer::globals::unpackpath . $installer::globals::separator;
+
+        # special handling, if LOCALINSTALLDIR is set
+        if (( $installer::globals::localinstalldirset ) && ( $newdirectory eq "install" ))
+        {
+            $installer::globals::localinstalldir =~ s/\Q$installer::globals::separator\E\s*$//;
+            $path = $installer::globals::localinstalldir . $installer::globals::separator;
+        }
     }
 
     $infoline = "create_directories: Using $path for $newdirectory !\n";
@@ -394,8 +401,11 @@ sub create_directories
 
             if (length($languagestring) > $installer::globals::max_lang_length )
             {
+                my $number_of_languages = get_number_of_langs($languagestring);
                 chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
-                $languagestring = $shorter;
+                # $languagestring = $shorter;
+                my $id = substr($shorter, 0, 8); # taking only the first 8 digits
+                $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
             }
 
             $path = $path . $languagestring  . $installer::globals::separator;
@@ -1423,11 +1433,12 @@ sub try_to_create_directory
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
-            {
-                my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
-                system($localcall);
-            }
+            my $localcall = "chmod 0775 $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
+
+            # chmod 0775 is not sufficient on mac to remove sticky tag
+            $localcall = "chmod a-s $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
         else
         {
@@ -1675,6 +1686,53 @@ sub read_full_directory {
     }
     closedir(DH);
     return
+}
+
+##############################################################
+# Removing all empty directories below a specified directory
+##############################################################
+
+sub remove_empty_dirs_in_folder
+{
+    my ( $dir ) = @_;
+
+    my @content = ();
+    my $infoline = "";
+
+    $dir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    if ( -d $dir )
+    {
+        opendir(DIR, $dir);
+        @content = readdir(DIR);
+        closedir(DIR);
+
+        my $oneitem;
+
+        foreach $oneitem (@content)
+        {
+            if ((!($oneitem eq ".")) && (!($oneitem eq "..")))
+            {
+                my $item = $dir . $installer::globals::separator . $oneitem;
+
+                if ( -d $item ) # recursive
+                {
+                    remove_empty_dirs_in_folder($item);
+                }
+            }
+        }
+
+        # try to remove empty directory
+        my $returnvalue = rmdir $dir;
+
+        if ( $returnvalue )
+        {
+            $infoline = "Successfully removed empty dir $dir\n";
+            push(@installer::globals::logfileinfo, $infoline);
+        }
+
+    }
+
 }
 
 1;

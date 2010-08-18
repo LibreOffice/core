@@ -2,11 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: make_installer.pl,v $
 #
 # This file is part of OpenOffice.org.
 #
@@ -259,6 +257,10 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 installer::ziplist::add_variables_to_allvariableshashref($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3b.log", $allvariableshashref); }
 
+installer::ziplist::overwrite_ooovendor( $allvariableshashref );
+if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables3c.log", $allvariableshashref); }
+
+
 ########################################################
 # Check if this is simple packaging mechanism
 ########################################################
@@ -396,8 +398,13 @@ if ( $installer::globals::globallogging ) { installer::files::save_hash($logging
 installer::setupscript::add_forced_properties($allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables5.log", $allvariableshashref); }
 
+# Replacing preset properties, not using the default mechanisms (for example for UNIXPRODUCTNAME)
+installer::setupscript::replace_preset_properties($allvariableshashref);
+if ( $installer::globals::globallogging ) { installer::files::save_hash($loggingdir . "allvariables6.log", $allvariableshashref); }
+
 installer::scpzipfiles::replace_all_ziplistvariables_in_file($setupscriptref, $allvariableshashref);
 if ( $installer::globals::globallogging ) { installer::files::save_file($loggingdir . "setupscript3.log" ,$setupscriptref); }
+
 
 installer::logger::log_hashref($allvariableshashref);
 
@@ -408,8 +415,12 @@ installer::logger::print_message( "... analyzing directories ... \n" );
 my $dirsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Directory");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1.log", $dirsinproductarrayref); }
 
-if ( $allvariableshashref->{'SHIFT_BASIS_INTO_BRAND_LAYER'} ) { $dirsinproductarrayref = installer::scriptitems::shift_basis_directory_parents($dirsinproductarrayref); }
+if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_hostname($dirsinproductarrayref); }
+if ( $installer::globals::patch ) { installer::scriptitems::use_patch_hostname($dirsinproductarrayref); }
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1a.log", $dirsinproductarrayref); }
+
+if ( $allvariableshashref->{'SHIFT_BASIS_INTO_BRAND_LAYER'} ) { $dirsinproductarrayref = installer::scriptitems::shift_basis_directory_parents($dirsinproductarrayref); }
+if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1b.log", $dirsinproductarrayref); }
 if ( $allvariableshashref->{'OFFICEDIRECTORYNAME'} ) { installer::scriptitems::set_officedirectory_name($dirsinproductarrayref, $allvariableshashref->{'OFFICEDIRECTORYNAME'}); }
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productdirectories1b.log", $dirsinproductarrayref); }
 
@@ -471,6 +482,10 @@ if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || ( ! $installer::globals::isx
     $scpactionsinproductarrayref = installer::scriptitems::remove_Xpdonly_Items($scpactionsinproductarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1a.log", $scpactionsinproductarrayref); }
 }
+
+if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
+if ( $installer::globals::patch ) { installer::scriptitems::use_patch_copy_scpaction($scpactionsinproductarrayref); }
+if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1b.log", $scpactionsinproductarrayref); }
 
 # $scpactionsinproductarrayref = installer::scriptitems::remove_scpactions_without_name($scpactionsinproductarrayref);
 # if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions2.log", $scpactionsinproductarrayref); }
@@ -640,7 +655,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     $installer::globals::globalinfo_copied = 1;
 
     my $logminor = "";
-    my $avoidlanginlog = 0;
     if ( $installer::globals::updatepack ) { $logminor = $installer::globals::lastminor; }
     else { $logminor = $installer::globals::minor; }
 
@@ -648,14 +662,15 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     my $loglanguagestring_orig = $loglanguagestring;
     if (length($loglanguagestring) > $installer::globals::max_lang_length)
     {
+        my $number_of_languages = installer::systemactions::get_number_of_langs($loglanguagestring);
         chomp(my $shorter = `echo $loglanguagestring | md5sum | sed -e "s/ .*//g"`);
-        $loglanguagestring = $shorter;
-        $avoidlanginlog = 1;
+        my $id = substr($shorter, 0, 8); # taking only the first 8 digits
+        $loglanguagestring = "lang_" . $number_of_languages . "_id_" . $id;
     }
 
     $installer::globals::logfilename = "log_" . $installer::globals::build;
     if ( $logminor ne "" ) { $installer::globals::logfilename .= "_" . $logminor; }
-    if ( ! $avoidlanginlog ) { $installer::globals::logfilename .= "_" . $loglanguagestring; }
+    $installer::globals::logfilename .= "_" . $loglanguagestring;
     $installer::globals::logfilename .= ".log";
     $loggingdir = $loggingdir . $loglanguagestring . $installer::globals::separator;
     installer::systemactions::create_directory($loggingdir);
@@ -717,7 +732,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if (!($installer::globals::is_copy_only_project))
     {
-        if ( $installer::globals::iswindowsbuild )
+        if (( $installer::globals::iswindowsbuild ) && ( $installer::globals::packageformat ne "archive" ) && ( $installer::globals::packageformat ne "installed" ))
         {
             installer::windows::msiglobal::set_global_code_variables($languagesarrayref, $languagestringref, $allvariableshashref, $alloldproperties);
         }
@@ -949,10 +964,13 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     installer::scriptitems::get_Source_Directory_For_Files_From_Includepathlist($scpactionsinproductlanguageresolvedarrayref, $includepatharrayref_lang, $dirsinproductlanguageresolvedarrayref, "ScpActions");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions5.log", $scpactionsinproductlanguageresolvedarrayref); }
 
-    # Editing scpactions with flag SCPZIP_REPLACE.
+    # Editing scpactions with flag SCPZIP_REPLACE and PATCH_SO_NAME.
 
     installer::scpzipfiles::resolving_scpzip_replace_flag($scpactionsinproductlanguageresolvedarrayref, $allvariableshashref, "ScpAction", $languagestringref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6.log", $scpactionsinproductlanguageresolvedarrayref); }
+
+    installer::scppatchsoname::resolving_patchsoname_flag($scpactionsinproductlanguageresolvedarrayref, $allvariableshashref, "ScpAction", $languagestringref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6a.log", $scpactionsinproductlanguageresolvedarrayref); }
 
     #########################################################
     # language dependent links part
@@ -1005,7 +1023,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     my $profilesinproductlanguageresolvedarrayref;
     my $profileitemsinproductlanguageresolvedarrayref;
 
-    if ((!($installer::globals::is_copy_only_project)) && (!($installer::globals::product =~ /ada/i )))
+    if ((!($installer::globals::is_copy_only_project)) && (!($installer::globals::product =~ /ada/i )) && (!($installer::globals::languagepack)))
     {
         installer::logger::print_message( "... creating profiles ...\n" );
 
@@ -1331,6 +1349,12 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 installer::packagelist::resolve_packagevariables(\$packagename, $allvariableshashref, 0);
             }
 
+            # Debian allows no underline in package name
+            if ( $installer::globals::debian ) { $packagename =~ s/_/-/g; }
+
+            # Debian allows no underline in package name
+            if ( $installer::globals::debian ) { $packagename =~ s/_/-/g; }
+
             my $linkaddon = "";
             my $linkpackage = 0;
             $installer::globals::add_required_package = "";
@@ -1360,7 +1384,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # try it again later.
             ####################################################
 
-            if (( $installer::globals::patch ) || ( $installer::globals::languagepack ) || ( $installer::globals::packageformat eq "native" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
+            if (( $installer::globals::patch ) ||
+                ( $installer::globals::languagepack ) ||
+                ( $installer::globals::packageformat eq "native" ) ||
+                ( $installer::globals::packageformat eq "portable" ) ||
+                ( $installer::globals::packageformat eq "osx" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
 
             if ( $allvariableshashref->{'POOLPRODUCT'} )
             {
@@ -1687,7 +1715,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                             installer::epmfile::create_new_directory_structure($newepmdir);
                             $installer::globals::postprocess_specialepm = 1;
 
-                            if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix2_solaris_x86_patch($packagename, $installer::globals::epmoutpath); }
+                            # solaris patch not needed anymore
+                            # if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix2_solaris_x86_patch($packagename, $installer::globals::epmoutpath); }
                         }
                     }
                     else    # this is the standard epm (not relocatable) or ( nonlinux and nonsolaris )
@@ -1957,7 +1986,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles17c.log", $filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::updatedatabase ) { installer::windows::file::check_file_sequences($allupdatefileorder, $allupdatecomponentorder); }
 
-        installer::windows::directory::create_directory_table($directoriesforepmarrayref, $newidtdir, $allvariableshashref, $shortdirname);
+        installer::windows::directory::create_directory_table($directoriesforepmarrayref, $newidtdir, $allvariableshashref, $shortdirname, $loggingdir);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles18.log", $filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt1.log", $directoriesforepmarrayref); }
 
@@ -2104,21 +2133,19 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # include the license text into the table Control.idt
 
-            # my $licensefilesource = installer::windows::idtglobal::get_licensefilesource($onelanguage, $filesinproductlanguageresolvedarrayref);
-            my $licensefilesource = installer::windows::idtglobal::get_rtflicensefilesource($onelanguage, $includepatharrayref_lang);
-            my $licensefile = installer::files::read_file($licensefilesource);
-            installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariablesarrayref, $onelanguage, $loggingdir);
-            my $controltablename = $languageidtdir . $installer::globals::separator . "Control.idt";
-            my $controltable = installer::files::read_file($controltablename);
-            installer::windows::idtglobal::add_licensefile_to_database($licensefile, $controltable);
-            installer::files::save_file($controltablename, $controltable);
+            if ( ! $allvariableshashref->{'HIDELICENSEDIALOG'} )
+            {
+                my $licensefilesource = installer::windows::idtglobal::get_rtflicensefilesource($onelanguage, $includepatharrayref_lang);
+                my $licensefile = installer::files::read_file($licensefilesource);
+                installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariablesarrayref, $onelanguage, $loggingdir);
+                my $controltablename = $languageidtdir . $installer::globals::separator . "Control.idt";
+                my $controltable = installer::files::read_file($controltablename);
+                installer::windows::idtglobal::add_licensefile_to_database($licensefile, $controltable);
+                installer::files::save_file($controltablename, $controltable);
 
-            $infoline = "Added licensefile $licensefilesource into database $controltablename\n";
-            push(@installer::globals::logfileinfo, $infoline);
-
-            # include office directory in CustomAction table
-
-            installer::windows::idtglobal::add_officedir_to_database($languageidtdir, $allvariableshashref);
+                $infoline = "Added licensefile $licensefilesource into database $controltablename\n";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
 
             # include a component into environment table if required
 
@@ -2307,7 +2334,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Temp path for administrative installations: $installer::globals::temppath
             # Path of new installation set: $finalinstalldir
             # Path of old installation set: $installer::globals::updatedatabasepath
-            my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref, $filesinproductlanguageresolvedarrayref);
+            my $mspdir = installer::windows::msp::create_msp_patch($finalinstalldir, $includepatharrayref, $allvariableshashref, $languagestringref, $languagesarrayref, $filesinproductlanguageresolvedarrayref);
             ($is_success, $finalinstalldir) = installer::worker::analyze_and_save_logfile($loggingdir, $mspdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
             installer::worker::clean_output_tree(); # removing directories created in the output tree
         }

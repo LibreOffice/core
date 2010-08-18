@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prj.cxx,v $
- * $Revision: 1.10 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -37,8 +34,6 @@
 #include <tools/geninfo.hxx>
 #include <soldep/prj.hxx>
 #include <bootstrp/inimgr.hxx>
-#include <soldep/XmlBuildList.hxx>
-#include "XmlBuildListDef.hxx"
 
 #ifndef MACOSX
 #pragma hdrstop
@@ -74,7 +69,7 @@
 #endif
 #endif
 
-static const char * XML_ALL  =  "all";
+//static const char * XML_ALL  =    "all";
 
 //
 //  class SimpleConfig
@@ -165,45 +160,34 @@ ByteString  SimpleConfig::GetNextLine()
 ByteString SimpleConfig::GetCleanedNextLine( BOOL bReadComments )
 /*****************************************************************************/
 {
-
-    aFileStream.ReadLine ( aTmpStr );
-    if ( aTmpStr.Search( "#" ) == 0 )
-        if (bReadComments )
-            return aTmpStr;
-        else
-            while ( aTmpStr.Search( "#" ) == 0 )
-            {
-                aFileStream.ReadLine ( aTmpStr );
-            }
-
-    aTmpStr = aTmpStr.EraseLeadingChars();
-    aTmpStr = aTmpStr.EraseTrailingChars();
-//  while ( aTmpStr.SearchAndReplace(String(' '),String('\t') ) != (USHORT)-1 );
-    int nLength = aTmpStr.Len();
-//  USHORT nPos = 0;
-    ByteString aEraseString;
-    BOOL bFirstTab = TRUE;
-    for ( USHORT i = 0; i<= nLength; i++)
+    sal_Bool bStreamOk;
+    sal_Bool bReadNextLine = sal_True;
+    while (bReadNextLine)
     {
-        if ( aTmpStr.GetChar( i ) == 0x20 )
-            aTmpStr.SetChar( i, 0x09 );
+        bStreamOk = aFileStream.ReadLine ( aTmpStr );
+        if (!bStreamOk)
+            return ByteString();
 
-        if ( aTmpStr.GetChar( i ) ==  0x09 )
+        ByteString sTab = "\t";
+        ByteString sDoubleTab = "\t\t";
+        ByteString sSpace = " ";
+        xub_StrLen nIndex = 0;
+
+        aTmpStr.SearchAndReplaceAll(sSpace, sTab);
+        while ( (nIndex = aTmpStr.SearchAndReplace(sDoubleTab, sTab, nIndex )) != STRING_NOTFOUND );
+
+        aTmpStr = aTmpStr.EraseLeadingAndTrailingChars('\t'); // remove tabs
+
+        if ( aTmpStr.Search( "#" ) == 0 )
         {
-            if ( bFirstTab )
-                bFirstTab = FALSE;
-            else
-            {
-                aTmpStr.SetChar( i, 0x20 );
-            }
+            if (bReadComments )
+                return aTmpStr;
         }
-        else
-            bFirstTab = TRUE;
-
+        else if (aTmpStr != ByteString::EmptyString())
+            bReadNextLine = sal_False;
     }
-    aTmpStr.EraseAllChars(' ');
-    return aTmpStr;
 
+    return aTmpStr;
 }
 
 
@@ -218,6 +202,7 @@ CommandData::CommandData()
     nOSType = 0;
     nCommand = 0;
     pDepList = 0;
+    pCommandList = 0;
 }
 
 /*****************************************************************************/
@@ -235,6 +220,18 @@ CommandData::~CommandData()
         delete pDepList;
 
         pDepList = NULL;
+    }
+    if ( pCommandList )
+    {
+        ByteString *pString = pCommandList->First();
+        while ( pString )
+        {
+            delete pString;
+            pString = pCommandList->Next();
+        }
+        delete pCommandList;
+
+        pCommandList = NULL;
     }
 }
 
@@ -298,6 +295,15 @@ ByteString CommandData::GetCommandTypeString()
 }
 
 /*****************************************************************************/
+void CommandData::AddCommand(ByteString* pCommand)
+/*****************************************************************************/
+{
+    if (!pCommandList)
+        pCommandList = new SByteStringList();
+    pCommandList->Insert(pCommand, LIST_APPEND);
+}
+
+/*****************************************************************************/
 CommandData& CommandData::operator>>  ( SvStream& rStream )
 /*****************************************************************************/
 {
@@ -323,6 +329,14 @@ CommandData& CommandData::operator>>  ( SvStream& rStream )
     {
         rStream << sal_True;
         *pDepList >> rStream;
+    }
+    else
+        rStream << sal_False;
+
+    if (pCommandList)
+    {
+        rStream << sal_True;
+        *pCommandList >> rStream;
     }
     else
         rStream << sal_False;
@@ -363,7 +377,26 @@ CommandData& CommandData::operator<<  ( SvStream& rStream )
         *pDepList << rStream;
     }
     else
+    {
+        if (pDepList)
         DELETEZ (pDepList);
+    }
+
+    BOOL bCommandList;
+    rStream >> bCommandList;
+    if (pCommandList)
+        pCommandList->CleanUp();
+    if (bCommandList)
+    {
+        if (!pCommandList)
+            pCommandList = new SByteStringList();
+        *pCommandList << rStream;
+    }
+    else
+    {
+        if (pCommandList)
+            DELETEZ (pCommandList);
+    }
 
     return *this;
 }
@@ -753,11 +786,12 @@ CommandData* Prj::GetDirectoryList ( USHORT nWhatOS, USHORT nCommand )
 CommandData* Prj::GetDirectoryData( ByteString aLogFileName )
 /*****************************************************************************/
 {
+    PrjList* pPrjList = GetCommandDataList ();
     CommandData *pData = NULL;
-    ULONG nCount_l = Count();
+    ULONG nCount_l = pPrjList->Count();
     for ( ULONG i=0; i<nCount_l; i++ )
     {
-        pData = GetObject(i);
+        pData = pPrjList->GetObject(i);
         if ( pData->GetLogFile() == aLogFileName )
             return pData;
     }
@@ -777,7 +811,10 @@ Prj::Prj() :
     bHardDependencies( FALSE ),
     bFixedDependencies( FALSE ),
     bVisited( FALSE ),
-    bIsAvailable( TRUE )
+    bIsAvailable( TRUE ),
+    pTempCommandDataList (0),
+    bTempCommandDataListPermanent (FALSE),
+    bError (FALSE)
 /*****************************************************************************/
 {
 }
@@ -792,7 +829,10 @@ Prj::Prj( ByteString aName ) :
     bHardDependencies( FALSE ),
     bFixedDependencies( FALSE ),
     bVisited( FALSE ),
-    bIsAvailable( TRUE )
+    bIsAvailable( TRUE ),
+    pTempCommandDataList (0),
+    bTempCommandDataListPermanent (FALSE),
+    bError (FALSE)
 /*****************************************************************************/
 {
 }
@@ -956,7 +996,8 @@ BOOL Prj::InsertDirectory ( ByteString aDirName, USHORT aWhat,
     pData->SetLogFile( aLogFileName );
     pData->SetClientRestriction( rClientRestriction );
 
-    Insert( pData );
+    PrjList* pPrjList = GetCommandDataList ();
+    pPrjList->Insert( pData );
 
     return FALSE;
 }
@@ -968,14 +1009,15 @@ BOOL Prj::InsertDirectory ( ByteString aDirName, USHORT aWhat,
 CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
 /*****************************************************************************/
 {
-    ULONG nCount_l = Count();
+    PrjList* pPrjList = GetCommandDataList ();
+    ULONG nCount_l = pPrjList->Count();
     CommandData* pData;
     CommandData* pDataFound = NULL;
     SByteStringList* pDataDeps;
 
     for ( USHORT i = 0; i < nCount_l; i++ )
     {
-        pData = GetObject( i );
+        pData = pPrjList->GetObject( i );
         if ( pData->GetLogFile() == aLogFileName )
             pDataFound = pData;
         else
@@ -1035,6 +1077,56 @@ void Prj::ExtractDependencies()
 }
 
 /*****************************************************************************/
+PrjList* Prj::GetCommandDataList ()
+/*****************************************************************************/
+{
+    if (pTempCommandDataList)
+        return pTempCommandDataList;
+    else
+        return (PrjList*)this;
+}
+
+/*****************************************************************************/
+void Prj::RemoveTempCommandDataList()
+/*****************************************************************************/
+{
+    if (pTempCommandDataList)
+    {
+        delete pTempCommandDataList; // this list remove the elements by itself
+        pTempCommandDataList = NULL;
+    }
+}
+
+/*****************************************************************************/
+void Prj::GenerateTempCommandDataList()
+/*****************************************************************************/
+{
+    if (pTempCommandDataList)
+        RemoveTempCommandDataList();
+    pTempCommandDataList = new PrjList();
+    CommandData* pCommandData = First();
+    while (pCommandData) {
+        SvMemoryStream* pStream = new SvMemoryStream();
+        *pCommandData >> *pStream;
+        CommandData* pNewCommandData = new CommandData();
+        pStream->Seek( STREAM_SEEK_TO_BEGIN );
+        *pNewCommandData << *pStream;
+        pTempCommandDataList->Insert(pNewCommandData, LIST_APPEND);
+        delete pStream;
+        pCommandData = Next();
+    }
+}
+
+/*****************************************************************************/
+void Prj::GenerateEmptyTempCommandDataList()
+/*****************************************************************************/
+{
+    if (pTempCommandDataList)
+        RemoveTempCommandDataList();
+    pTempCommandDataList = new PrjList();
+}
+
+/*****************************************************************************/
 Prj& Prj::operator>>  ( SvStream& rStream )
 /*****************************************************************************/
 {
@@ -1045,6 +1137,7 @@ Prj& Prj::operator>>  ( SvStream& rStream )
     rStream << bFixedDependencies;
     rStream << bSorted;
     rStream << bIsAvailable;
+    rStream << bError;
 
     if (pPrjDepInfoList)
     {
@@ -1077,6 +1170,7 @@ Prj& Prj::operator<<  ( SvStream& rStream )
     rStream >> bFixedDependencies;
     rStream >> bSorted;
     rStream >> bIsAvailable;
+    rStream >> bError;
 
     BOOL bDepList;
     rStream >> bDepList;
@@ -1105,46 +1199,42 @@ Prj& Prj::operator<<  ( SvStream& rStream )
 //
 
 /*****************************************************************************/
-Star::Star(XmlBuildList* pXmlBuildListObj)
+Star::Star()
 /*****************************************************************************/
                 : pDepMode (NULL),
-                pAllDepMode (NULL),
-                mpXmlBuildList (pXmlBuildListObj)
+                pAllDepMode (NULL)
 {
     // this ctor is only used by StarWriter
 }
 
 /*****************************************************************************/
-Star::Star(XmlBuildList* pXmlBuildListObj, String aFileName, USHORT nMode )
+Star::Star(String aFileName, USHORT nMode )
 /*****************************************************************************/
                 : nStarMode( nMode ),
                 sFileName( aFileName ),
                 pDepMode (NULL),
-                pAllDepMode (NULL),
-                mpXmlBuildList (pXmlBuildListObj)
+                pAllDepMode (NULL)
 {
     Read( aFileName );
 }
 
 /*****************************************************************************/
-Star::Star(XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles )
+Star::Star(SolarFileList *pSolarFiles )
 /*****************************************************************************/
                 : nStarMode( STAR_MODE_MULTIPLE_PARSE ),
                 pDepMode (NULL),
-                pAllDepMode (NULL),
-                mpXmlBuildList (pXmlBuildListObj)
+                pAllDepMode (NULL)
 {
     // this ctor is used by StarBuilder to get the information for the whole workspace
     Read( pSolarFiles );
 }
 
 /*****************************************************************************/
-Star::Star(XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion,
+Star::Star(GenericInformationList *pStandLst, ByteString &rVersion,
     BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
                 : pDepMode (NULL),
-                pAllDepMode (NULL),
-                mpXmlBuildList (pXmlBuildListObj)
+                pAllDepMode (NULL)
 {
     UpdateFileList (pStandLst, rVersion, TRUE, bLocal, pSourceRoot);
 }
@@ -1230,6 +1320,12 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
                                     aEntry += DirEntry( ssAddPath );
                                 }
                             }
+                            sPath = rVersion;
+                            sPath += "/settings/SHORTPATH";
+                            GenericInformation *pShortPath = pStandLst->GetInfo( sPath, TRUE );
+                            BOOL bShortPath = FALSE;
+                            if (pShortPath && (pShortPath->GetValue() == "_TRUE"))
+                                bShortPath = TRUE;
                             sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
@@ -1243,7 +1339,11 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
                                     GenericInformation * pDir = pProject->GetSubInfo (aDirStr);
                                     if (pDir) {
                                         ByteString aDir = pDir->GetValue();
-                                        DirEntry aRootEntry = aEntry.GetPath() + DirEntry(aDir);
+                                        DirEntry aRootEntry;
+                                        if (bShortPath)
+                                            aRootEntry = aEntry + DirEntry(aDir);
+                                        else
+                                            aRootEntry = aEntry.GetPath() + DirEntry(aDir);
                                         sLocalSourceRoot = aRootEntry.GetFull();
                                     }
 
@@ -1274,6 +1374,18 @@ void Star::UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersi
         else
             GenerateFileLoadList( pFileList );
     }
+}
+
+/*****************************************************************************/
+void Star::FullReload( GenericInformationList *pStandLst, ByteString &rVersion,
+    BOOL bRead, BOOL bLocal, const char *pSourceRoot )
+/*****************************************************************************/
+{
+    ClearAvailableDeps();
+    ClearCurrentDeps();
+    ClearLoadedFilesList();
+    RemoveAllPrj();
+    UpdateFileList( pStandLst, rVersion, bRead, bLocal, pSourceRoot );
 }
 
 /*****************************************************************************/
@@ -1390,18 +1502,7 @@ void Star::Read( String &rFileName )
 
     while( aFileList.Count()) {
         String ssFileName = *aFileList.GetObject(( ULONG ) 0 );
-        ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
-        StarFile *pFile = new StarFile( ssFileName );
-        if ( pFile->Exists()) {
-            if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
-            {
-                ReadXmlBuildList(sFileName_l);
-            } else {
-                SimpleConfig aSolarConfig( ssFileName );
-                while (( aString = aSolarConfig.GetNext()) != "" )
-                    InsertToken (( char * ) aString.GetBuffer());
-            }
-        }
+        StarFile* pFile = ReadBuildlist (ssFileName);
         aMutex.acquire();
         ReplaceFileEntry (&aLoadedFilesList, pFile);
         //aLoadedFilesList.Insert( pFile, LIST_APPEND );
@@ -1456,19 +1557,9 @@ void Star::Read( SolarFileList *pSolarFiles )
         ByteString aString;
 
         String ssFileName = *pSolarFiles->GetObject(( ULONG ) 0 );
-        ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
-        StarFile *pFile = new StarFile( ssFileName );
+        StarFile *pFile = ReadBuildlist ( ssFileName);
 
         if ( pFile->Exists()) {
-            if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
-            {
-                ReadXmlBuildList(sFileName_l);
-            } else {
-                SimpleConfig aSolarConfig( ssFileName );
-                while (( aString = aSolarConfig.GetNext()) != "" )
-                    InsertToken (( char * ) aString.GetBuffer());
-            }
-
             DirEntry aEntry( pFile->GetName() );
             DirEntry aEntryPrj = aEntry.GetPath().GetPath();
             if (aEntryPrj.GetExtension() != String::CreateFromAscii( "" ))
@@ -1500,7 +1591,7 @@ String Star::CreateFileName( String& rProject, String& rSourceRoot )
     // this method is used to find solarlist parts of nabours (other projects)
     String sPrjDir( String::CreateFromAscii( "prj" ));
     String sBuildList( String::CreateFromAscii( "build.lst" ));
-    String sXmlBuildList( String::CreateFromAscii( "build.xlist" ));
+//  String sXmlBuildList( String::CreateFromAscii( "build.xlist" ));
 
     DirEntry aEntry( rSourceRoot );
     aEntry += DirEntry( rProject );
@@ -1519,15 +1610,17 @@ String Star::CreateFileName( String& rProject, String& rSourceRoot )
 
     aEntry += DirEntry( sPrjDir );
 
-    DirEntry aPossibleEntry(aEntry);
-    aPossibleEntry += DirEntry( sXmlBuildList );
+//  DirEntry aPossibleEntry(aEntry);
+//  aPossibleEntry += DirEntry( sXmlBuildList );
 
     aEntry += DirEntry( sBuildList );
 
     DirEntry& aActualEntry = aEntry;
+/*
     if (aPossibleEntry.Exists()) {
         aActualEntry = aPossibleEntry;
-    } else if ( !aActualEntry.Exists() && aDBNotFoundHdl.IsSet())
+    } else */
+    if ( !aActualEntry.Exists() && aDBNotFoundHdl.IsSet())
         aDBNotFoundHdl.Call( &rProject );
     return aActualEntry.GetFull();
 }
@@ -1600,183 +1693,222 @@ void Star::Expand_Impl()
 }
 
 /*****************************************************************************/
-void Star::InsertToken ( char *yytext )
+StarFile* Star::ReadBuildlist (const String& rFilename, BOOL bReadComments, BOOL bExtendAlias)
 /*****************************************************************************/
 {
-    static int i = 0;
-    static ByteString aDirName, aWhat, aWhatOS,
+    ByteString sFileName_l(rFilename, RTL_TEXTENCODING_ASCII_US);
+    StarFile *pFile = new StarFile( rFilename );
+    if ( pFile->Exists()) {
+        SimpleConfig aSolarConfig( rFilename );
+        DirEntry aEntry(rFilename);
+        ByteString sProjectName (aEntry.GetPath().GetPath().GetName(), RTL_TEXTENCODING_ASCII_US);
+        Prj* pPrj = GetPrj (sProjectName); // 0, if Prj not found
+        if (pPrj)
+        {
+            Remove(pPrj); // Project exist, remove old Project and read again
+            DELETEZ (pPrj); // delete and set pPrj to 0
+        }
+        ByteString aString;
+        while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != ByteString::EmptyString() )
+            InsertTokenLine ( aString, &pPrj, sProjectName, bExtendAlias );
+    }
+    return pFile;
+}
+
+/*****************************************************************************/
+void Star::InsertTokenLine ( const ByteString& rTokenLine, Prj** ppPrj, const ByteString& rProjectName, const sal_Bool bExtendAlias )
+/*****************************************************************************/
+{
+    int i = 0;
+    ByteString aWhat, aWhatOS,
         sClientRestriction, aLogFileName, aProjectName, aPrefix, aCommandPara;
-    static BOOL bPrjDep = FALSE;
-    static BOOL bHardDep = FALSE;
-    static BOOL bFixedDep = FALSE;
-    static int nCommandType, nOSType;
+    ByteString aDirName;
+    BOOL bPrjDep = FALSE;
+    BOOL bHardDep = FALSE;
+    BOOL bFixedDep = FALSE;
+    BOOL bNewProject = FALSE;
+    int nCommandType=0, nOSType=0;
+    Prj* pPrj = *ppPrj;
     CommandData* pCmdData;
-    static SByteStringList *pStaticDepList;
-    Prj* pPrj;
+    SByteStringList *pDepList = NULL;
+    ByteString aCommentString;
+    ByteString sToken;
+    ByteString sStringBuffer = rTokenLine;
 
-    switch (i)
+    while (sStringBuffer != ByteString::EmptyString())
     {
-        case 0:
-                aPrefix = yytext;
-                pStaticDepList = 0;
-                break;
-        case 1:
-                    aDirName = yytext;
-                break;
-        case 2:
-                if ( !strcmp( yytext, ":" ))
-                {
-                    bPrjDep = TRUE;
-                    bHardDep = FALSE;
-                    bFixedDep = FALSE;
-                    i = 9;
-                }
-                else if ( !strcmp( yytext, "::" ))
-                {
-                    bPrjDep = TRUE;
-                    bHardDep = TRUE;
-                    bFixedDep = FALSE;
-                    i = 9;
-                }
-                else if ( !strcmp( yytext, ":::" ))
-                {
-                    bPrjDep = TRUE;
-                    bHardDep = TRUE;
-                    bFixedDep = TRUE;
-                    i = 9;
-                }
-                else
-                {
-                    bPrjDep = FALSE;
-                    bHardDep = FALSE;
-                    bFixedDep = FALSE;
+        ByteString sToken = sStringBuffer.GetToken(0,'\t');
+        sStringBuffer.Erase(0, sToken.Len()+1);
 
-                    aWhat = yytext;
-                    nCommandType = GetJobType(aWhat);
-                }
-                if (bPrjDep)
-                {
+        switch (i)
+        {
+            case 0:
+                    if ( sToken.Search( "#" ) == 0 )
+                    {
+                        i = -1;
+                        aCommentString = sToken;
+                        sStringBuffer = ByteString::EmptyString();
+                        if ( Count() == 0 )
+                            aDirName = "null_entry" ; //comments at begin of file
+                    }
+                    else
+                    {
+                        aPrefix = sToken;
+                        pDepList = 0;
+                    }
+                    break;
+            case 1:
+                    aDirName = sToken;
                     aProjectName = aDirName.GetToken ( 0, 0x5c);
-                    if ( HasProject( aProjectName ))
+                    if (aProjectName != rProjectName)
+                        sStringBuffer = ByteString::EmptyString(); // something is wrong, ignore line
+                    break;
+            case 2:
+                    if ( sToken.CompareTo(":") == COMPARE_EQUAL )
                     {
-                        RemovePrj(GetPrj(aProjectName));
-                        // Projekt exist. schon, entfernen, später neue anlegen
+                        bPrjDep = TRUE;
+                        bHardDep = FALSE;
+                        bFixedDep = FALSE;
+                        i = 9;
                     }
-                }
-                break;
-        case 3:
-                if ( !bPrjDep )
-                {
-                    aWhat = yytext;
-                    if ( aWhat == "-" )
+                    else if ( sToken.CompareTo("::") == COMPARE_EQUAL )
                     {
-                        aCommandPara = ByteString();
+                        bPrjDep = TRUE;
+                        bHardDep = TRUE;
+                        bFixedDep = FALSE;
+                        i = 9;
                     }
-                    else
-                        aCommandPara = aWhat;
-                }
-                break;
-        case 4:
-                if ( !bPrjDep )
-                {
-                    aWhatOS = yytext;
-                    if ( aWhatOS.GetTokenCount( ',' ) > 1 ) {
-                        sClientRestriction = aWhatOS.Copy( aWhatOS.GetToken( 0, ',' ).Len() + 1 );
-                        aWhatOS = aWhatOS.GetToken( 0, ',' );
-                    }
-                    nOSType = GetOSType (aWhatOS);
-                }
-                break;
-        case 5:
-                if ( !bPrjDep )
-                {
-                    aLogFileName = yytext;
-                }
-                break;
-        default:
-                if ( !bPrjDep )
-                {
-                    ByteString aItem = yytext;
-                    if ( aItem == "NULL" )
+                    else if ( sToken.CompareTo(":::") == COMPARE_EQUAL )
                     {
-                        // Liste zu Ende
-                        i = -1;
+                        bPrjDep = TRUE;
+                        bHardDep = TRUE;
+                        bFixedDep = TRUE;
+                        i = 9;
                     }
                     else
                     {
-                        // ggfs. Dependency liste anlegen und ergaenzen
-                        if ( !pStaticDepList )
-                            pStaticDepList = new SByteStringList;
-                        pStaticDepList->PutString( new ByteString( aItem ));
-                    }
-                }
-                else
-                {
-                    ByteString aItem = yytext;
-                    if ( aItem == "NULL" )
-                    {
-                        // Liste zu Ende
-                        i = -1;
-                        bPrjDep= FALSE;
-                    }
-                    else
-                    {
-                        ByteString sMode;
-                        BOOL bHasModes = FALSE;
-                        if (aItem.Search(":") != STRING_NOTFOUND)
-                        {
-                            sMode = aItem.GetToken ( 0, ':');
-                            aItem = aItem.GetToken ( 1, ':');
-                            bHasModes = TRUE;
-                        }
+                        bPrjDep = FALSE;
+                        bHardDep = FALSE;
+                        bFixedDep = FALSE;
 
-                        aProjectName = aDirName.GetToken ( 0, 0x5c);
-                        if ( HasProject( aProjectName ))
+                        aWhat = sToken;
+                        nCommandType = GetJobType(aWhat);
+                    }
+                    if (bPrjDep)
+                    {
+                        if (pPrj)
+                            sStringBuffer = ByteString::EmptyString(); // definition more than once or not first line, ignore line
+                    }
+                    break;
+            case 3:
+                    if ( !bPrjDep )
+                    {
+                        aWhat = sToken;
+                        if ( aWhat == "-" )
                         {
-                            pPrj = GetPrj( aProjectName );
-                            // Projekt exist. schon, neue Eintraege anhaengen
+                            aCommandPara = ByteString();
+                        }
+                        else
+                            aCommandPara = aWhat;
+                    }
+                    break;
+            case 4:
+                    if ( !bPrjDep )
+                    {
+                        aWhatOS = sToken;
+                        if ( aWhatOS.GetTokenCount( ',' ) > 1 ) {
+                            sClientRestriction = aWhatOS.Copy( aWhatOS.GetToken( 0, ',' ).Len() + 1 );
+                            aWhatOS = aWhatOS.GetToken( 0, ',' );
+                        }
+                        nOSType = GetOSType (aWhatOS);
+                    }
+                    break;
+            case 5:
+                    if ( !bPrjDep )
+                    {
+                        if (bExtendAlias)
+                            aLogFileName = (ByteString(aProjectName).Append("_")).Append(sToken);
+                        else
+                            aLogFileName = sToken;
+
+                    }
+                    break;
+            default:
+                    if ( !bPrjDep )
+                    {
+                        ByteString aItem = sToken;
+                        if ( aItem == "NULL" )
+                        {
+                            // Liste zu Ende
+                            i = -1;
                         }
                         else
                         {
-                            // neues Project anlegen
-                            pPrj = new Prj ( aProjectName );
-                            pPrj->SetPreFix( aPrefix );
-                            Insert(pPrj,LIST_APPEND);
+                            // ggfs. Dependency liste anlegen und ergaenzen
+                            if ( !pDepList )
+                                pDepList = new SByteStringList;
+                            ByteString* pStr;
+                            if (bExtendAlias)
+                                pStr = new ByteString ((ByteString (aProjectName).Append("_")).Append(aItem));
+                            else
+                                pStr = new ByteString (aItem);
+                            pDepList->PutString( pStr );
                         }
-                        if (bHasModes)
-                            pPrj->AddDependencies( aItem, sMode );
-                        else
-                            pPrj->AddDependencies( aItem );
-                        pPrj->HasHardDependencies( bHardDep );
-                        pPrj->HasFixedDependencies( bFixedDep );
-
-/*
-                        if ( nStarMode == STAR_MODE_RECURSIVE_PARSE ) {
-                            String sItem( aItem, RTL_TEXTENCODING_ASCII_US );
-                            InsertSolarList( sItem );
-                        }
-                        */
                     }
-                }
-                break;
+                    else
+                    {
+                        ByteString aItem = sToken;
+                        if ( aItem == "NULL" )
+                        {
+                            // Liste zu Ende
+                            i = -1;
+                            bPrjDep= FALSE;
+                        }
+                        else
+                        {
+                            ByteString sMode;
+                            BOOL bHasModes = FALSE;
+                            if (aItem.Search(":") != STRING_NOTFOUND)
+                            {
+                                sMode = aItem.GetToken ( 0, ':');
+                                aItem = aItem.GetToken ( 1, ':');
+                                bHasModes = TRUE;
+                            }
+                            if (!pPrj)
+                            {
+                                // neues Project anlegen
+                                pPrj = new Prj ( aProjectName );
+                                pPrj->SetPreFix( aPrefix );
+                                bNewProject = TRUE;
+                            }
+                            if (bHasModes)
+                                pPrj->AddDependencies( aItem, sMode );
+                            else
+                                pPrj->AddDependencies( aItem );
+                            pPrj->HasHardDependencies( bHardDep );
+                            pPrj->HasFixedDependencies( bFixedDep );
+                        }
+                    }
+                    break;
+        }
+        if ( i == -1 )
+            break;
+        i++;
     }
     /* Wenn dieses Project noch nicht vertreten ist, in die Liste
        der Solar-Projekte einfuegen */
     if ( i == -1 )
     {
-        aProjectName = aDirName.GetToken ( 0, 0x5c);
-        if ( HasProject( aProjectName ))
-        {
-            pPrj = GetPrj( aProjectName );
-            // Projekt exist. schon, neue Eintraege anhaengen
-        }
-        else
+        if (!pPrj)
         {
             // neues Project anlegen
             pPrj = new Prj ( aProjectName );
             pPrj->SetPreFix( aPrefix );
-            Insert(pPrj,LIST_APPEND);
+            bNewProject = TRUE;
         }
+
+        if (bNewProject)
+            Insert(pPrj,LIST_APPEND);
 
         pCmdData = new CommandData;
         pCmdData->SetPath( aDirName );
@@ -1784,24 +1916,36 @@ void Star::InsertToken ( char *yytext )
         pCmdData->SetCommandPara( aCommandPara );
         pCmdData->SetOSType( nOSType );
         pCmdData->SetLogFile( aLogFileName );
+        pCmdData->SetComment( aCommentString );
         pCmdData->SetClientRestriction( sClientRestriction );
-        if ( pStaticDepList )
-            pCmdData->SetDependencies( pStaticDepList );
+        if ( pDepList )
+            pCmdData->SetDependencies( pDepList );
 
-        pStaticDepList = 0;
+        pDepList = 0;
         pPrj->Insert ( pCmdData, LIST_APPEND );
-        aDirName ="";
-        aWhat ="";
-        aWhatOS = "";
-        sClientRestriction = "";
-        aLogFileName = "";
-        nCommandType = 0;
-        nOSType = 0;
-    }
-    i++;
 
-    // und wer raeumt die depLst wieder ab ?
-    // CommandData macht das
+        // und wer raeumt die depLst wieder ab ?
+        // CommandData macht das
+    }
+    else
+    {
+        if (!pPrj)
+        {
+            // new project to set the error flag
+            pPrj = new Prj ( rProjectName );
+            pPrj->SetPreFix( aPrefix );
+            bNewProject = TRUE;
+        }
+        if (pPrj)
+        {
+            pPrj->SetError();
+            if (bNewProject)
+                Insert(pPrj,LIST_APPEND); // add project even if there is a buildlist error
+        }
+        if ( pDepList )
+            delete pDepList;
+    }
+    *ppPrj = pPrj;
 }
 
 /*****************************************************************************/
@@ -1985,163 +2129,163 @@ void Star::SetCurrentDeps (SByteStringList* pDepList)
     Expand_Impl();
 }
 
-/*****************************************************************************/
-void Star::ReadXmlBuildList(const ByteString& sBuildLstPath) {
-/*****************************************************************************/
-    if (mpXmlBuildList) {
-        Prj* pPrj = NULL;
-
-        try {
-            mpXmlBuildList->loadXMLFile(sBuildLstPath);
-        }
-        catch (XmlBuildListException) {
-            DirEntry aDirEntry (sBuildLstPath);
-            String ssPrjName = aDirEntry.GetPath().GetPath().GetBase();
-            ByteString sPrjName = ByteString(ssPrjName, RTL_TEXTENCODING_ASCII_US);
-            pPrj = GetPrj( sPrjName );
-            if (pPrj)
-            {
-                //remove old Project
-                RemovePrj (pPrj);
-            }
-            return;
-        }
-
-        try {
-            ByteString sProjectName = mpXmlBuildList->getModuleName();
-            pPrj = GetPrj( sProjectName );
-            if (pPrj)
-            {
-                //remove old Project
-                RemovePrj (pPrj);
-            }
-
-            // insert new Project
-            pPrj = new Prj ( sProjectName );
-            pPrj->SetPreFix( sProjectName ); // use ProjectName as Prefix
-            Insert(pPrj,LIST_APPEND);
-
-            // get global dependencies
-            FullByteStringListWrapper aProducts = mpXmlBuildList->getProducts();
-            ByteString aDepType = ByteString(DEP_MD_ALWAYS_STR);
-            if (mpXmlBuildList->hasModuleDepType(aProducts, aDepType))
-                pPrj->HasHardDependencies( TRUE );
-
-            aDepType = ByteString(DEP_MD_FORCE_STR);
-            if (mpXmlBuildList->hasModuleDepType(aProducts, aDepType))
-            {
-                pPrj->HasHardDependencies( TRUE );
-                pPrj->HasFixedDependencies( TRUE );
-            }
-
-            // modul dependencies
-            ByteString sModulDepType = ByteString();
-            FullByteStringListWrapper aModulDeps = mpXmlBuildList->getModuleDependencies(aProducts, sModulDepType);
-            ByteString * pModulDep = aModulDeps.First();
-            while (pModulDep)
-            {
-                FullByteStringListWrapper aModulProducts = mpXmlBuildList->getModuleProducts(*pModulDep);
-                ByteString *pModulePoduct = aModulProducts.First();
-                while (pModulePoduct)
-                {
-                    if (*pModulePoduct == XML_ALL)
-                        pPrj->AddDependencies( *pModulDep );
-                    else
-                        pPrj->AddDependencies( *pModulDep, *pModulePoduct);
-
-                    pModulePoduct = aModulProducts.Next();
-                }
-                pModulDep = aModulDeps.Next();
-            }
-
-            // job dirs
-            ByteString sJobType = ByteString();
-            ByteString sJobPlatforms = ByteString();
-            FullByteStringListWrapper aJobDirs = mpXmlBuildList->getJobDirectories(sJobType, sJobPlatforms); // all dirs
-            ByteString* pJobDir = aJobDirs.First();
-            while (pJobDir)
-            {
-                FullByteStringListWrapper aJobPlatforms = mpXmlBuildList->getJobPlatforms (*pJobDir);
-                ByteString* pJobPlatform = aJobPlatforms.First();
-                while (pJobPlatform)
-                {
-                    ByteString sJobRestriction = ByteString();
-                    FullByteStringListWrapper aJobReq = mpXmlBuildList->getJobBuildReqs (*pJobDir, *pJobPlatform);
-                    // nur ein Req pro Platform wird zur Zeit unterstützt
-                    // mehr geht wegen der Struktur zur Zeit nicht!
-                    // lese sie trotzdem kommasepariert ein, wenn nötig
-                    if (aJobReq.Count() > 0)
-                    {
-                        ByteString* pRestriction = aJobReq.First();
-                        sJobRestriction = ByteString (*pRestriction);
-                        pRestriction = aJobReq.Next();
-                        while (pRestriction)
-                        {
-                            sJobRestriction += ByteString (",");
-                            sJobRestriction += ByteString (*pRestriction);
-                            pRestriction = aJobReq.Next();
-                        }
-                    }
-
-                    FullByteStringListWrapper aJobTypes = mpXmlBuildList->getJobTypes (*pJobDir);
-                    ByteString * pJobType = aJobTypes.First();
-                    while(pJobType)
-                    {
-                        FullByteStringListWrapper aDirDependencies = mpXmlBuildList->getDirDependencies(*pJobDir, *pJobType, *pJobPlatform);
-                        SByteStringList *pDepList = NULL;
-                        if (aDirDependencies.Count() > 0)
-                        {
-                            pDepList = new SByteStringList;
-                            ByteString* pDirDep = aDirDependencies.First();
-                            while (pDirDep)
-                            {
-                                ByteString sFullDir = sProjectName;
-                                sFullDir += *pDirDep;
-                                sFullDir.SearchAndReplaceAll('/', '\\');
-                                *pDirDep = sFullDir;
-                                pDepList->PutString(pDirDep);   // String wird übergeben
-                                aDirDependencies.Remove();      // Zeiger aus alter Liste löschen
-                                pDirDep = aDirDependencies.First();
-                            }
-                        }
-                        // insert CommandData
-                        CommandData * pCmdData = new CommandData;
-                        ByteString sRequiredPath = sProjectName;
-                        sRequiredPath += *pJobDir;
-                        sRequiredPath.SearchAndReplaceAll('/', '\\');
-                        pCmdData->SetPath(sRequiredPath);
-                        pCmdData->SetCommandType( GetJobType(*pJobType) );
-                        pCmdData->SetCommandPara( ByteString() );
-                        pCmdData->SetOSType( GetOSType(*pJobPlatform) );
-                        ByteString sLogFileName = sProjectName;
-                        sLogFileName += ByteString::CreateFromInt64( pPrj->Count() );
-                         pCmdData->SetLogFile( sLogFileName );
-                        pCmdData->SetClientRestriction( sJobRestriction );
-                        if ( pDepList )
-                            pCmdData->SetDependencies( pDepList );
-
-                        pPrj->Insert ( pCmdData, LIST_APPEND );
-
-                        pJobType = aJobTypes.Next();
-                    }
-
-                    pJobPlatform = aJobPlatforms.Next();
-                }
-
-                pJobDir = aJobDirs.Next();
-            }
-            pPrj->ExtractDependencies();
-        }
-        catch (XmlBuildListException) {
-            if (pPrj)
-            {
-                RemovePrj (pPrj);
-                delete pPrj;
-            }
-
-        }
-    }
-}
+///*****************************************************************************/
+//void Star::ReadXmlBuildList(const ByteString& sBuildLstPath) {
+///*****************************************************************************/
+//  if (mpXmlBuildList) {
+//      Prj* pPrj = NULL;
+//
+//      try {
+//          mpXmlBuildList->loadXMLFile(sBuildLstPath);
+//      }
+//      catch (XmlBuildListException) {
+//          DirEntry aDirEntry (sBuildLstPath);
+//          String ssPrjName = aDirEntry.GetPath().GetPath().GetBase();
+//          ByteString sPrjName = ByteString(ssPrjName, RTL_TEXTENCODING_ASCII_US);
+//          pPrj = GetPrj( sPrjName );
+//          if (pPrj)
+//          {
+//              //remove old Project
+//              RemovePrj (pPrj);
+//          }
+//          return;
+//      }
+//
+//      try {
+//          ByteString sProjectName = mpXmlBuildList->getModuleName();
+//          pPrj = GetPrj( sProjectName );
+//          if (pPrj)
+//          {
+//              //remove old Project
+//              RemovePrj (pPrj);
+//          }
+//
+//          // insert new Project
+//          pPrj = new Prj ( sProjectName );
+//          pPrj->SetPreFix( sProjectName ); // use ProjectName as Prefix
+//          Insert(pPrj,LIST_APPEND);
+//
+//          // get global dependencies
+//          FullByteStringListWrapper aProducts = mpXmlBuildList->getProducts();
+//          ByteString aDepType = ByteString(DEP_MD_ALWAYS_STR);
+//          if (mpXmlBuildList->hasModuleDepType(aProducts, aDepType))
+//              pPrj->HasHardDependencies( TRUE );
+//
+//          aDepType = ByteString(DEP_MD_FORCE_STR);
+//          if (mpXmlBuildList->hasModuleDepType(aProducts, aDepType))
+//          {
+//              pPrj->HasHardDependencies( TRUE );
+//              pPrj->HasFixedDependencies( TRUE );
+//          }
+//
+//          // modul dependencies
+//          ByteString sModulDepType = ByteString();
+//          FullByteStringListWrapper aModulDeps = mpXmlBuildList->getModuleDependencies(aProducts, sModulDepType);
+//          ByteString * pModulDep = aModulDeps.First();
+//          while (pModulDep)
+//          {
+//              FullByteStringListWrapper aModulProducts = mpXmlBuildList->getModuleProducts(*pModulDep);
+//              ByteString *pModulePoduct = aModulProducts.First();
+//              while (pModulePoduct)
+//              {
+//                  if (*pModulePoduct == XML_ALL)
+//                      pPrj->AddDependencies( *pModulDep );
+//                  else
+//                      pPrj->AddDependencies( *pModulDep, *pModulePoduct);
+//
+//                  pModulePoduct = aModulProducts.Next();
+//              }
+//              pModulDep = aModulDeps.Next();
+//          }
+//
+//          // job dirs
+//          ByteString sJobType = ByteString();
+//          ByteString sJobPlatforms = ByteString();
+//          FullByteStringListWrapper aJobDirs = mpXmlBuildList->getJobDirectories(sJobType, sJobPlatforms); // all dirs
+//          ByteString* pJobDir = aJobDirs.First();
+//          while (pJobDir)
+//          {
+//              FullByteStringListWrapper aJobPlatforms = mpXmlBuildList->getJobPlatforms (*pJobDir);
+//              ByteString* pJobPlatform = aJobPlatforms.First();
+//              while (pJobPlatform)
+//              {
+//                  ByteString sJobRestriction = ByteString();
+//                  FullByteStringListWrapper aJobReq = mpXmlBuildList->getJobBuildReqs (*pJobDir, *pJobPlatform);
+//                  // nur ein Req pro Platform wird zur Zeit unterstützt
+//                  // mehr geht wegen der Struktur zur Zeit nicht!
+//                  // lese sie trotzdem kommasepariert ein, wenn nötig
+//                  if (aJobReq.Count() > 0)
+//                  {
+//                      ByteString* pRestriction = aJobReq.First();
+//                      sJobRestriction = ByteString (*pRestriction);
+//                      pRestriction = aJobReq.Next();
+//                      while (pRestriction)
+//                      {
+//                          sJobRestriction += ByteString (",");
+//                          sJobRestriction += ByteString (*pRestriction);
+//                          pRestriction = aJobReq.Next();
+//                      }
+//                  }
+//
+//                  FullByteStringListWrapper aJobTypes = mpXmlBuildList->getJobTypes (*pJobDir);
+//                  ByteString * pJobType = aJobTypes.First();
+//                  while(pJobType)
+//                  {
+//                      FullByteStringListWrapper aDirDependencies = mpXmlBuildList->getDirDependencies(*pJobDir, *pJobType, *pJobPlatform);
+//                      SByteStringList *pDepList = NULL;
+//                      if (aDirDependencies.Count() > 0)
+//                      {
+//                          pDepList = new SByteStringList;
+//                          ByteString* pDirDep = aDirDependencies.First();
+//                          while (pDirDep)
+//                          {
+//                              ByteString sFullDir = sProjectName;
+//                              sFullDir += *pDirDep;
+//                              sFullDir.SearchAndReplaceAll('/', '\\');
+//                              *pDirDep = sFullDir;
+//                              pDepList->PutString(pDirDep);   // String wird übergeben
+//                              aDirDependencies.Remove();      // Zeiger aus alter Liste löschen
+//                              pDirDep = aDirDependencies.First();
+//                          }
+//                      }
+//                      // insert CommandData
+//                      CommandData * pCmdData = new CommandData;
+//                      ByteString sRequiredPath = sProjectName;
+//                      sRequiredPath += *pJobDir;
+//                      sRequiredPath.SearchAndReplaceAll('/', '\\');
+//                      pCmdData->SetPath(sRequiredPath);
+//                      pCmdData->SetCommandType( GetJobType(*pJobType) );
+//                      pCmdData->SetCommandPara( ByteString() );
+//                      pCmdData->SetOSType( GetOSType(*pJobPlatform) );
+//                      ByteString sLogFileName = sProjectName;
+//                      sLogFileName += ByteString::CreateFromInt64( pPrj->Count() );
+//                      pCmdData->SetLogFile( sLogFileName );
+//                      pCmdData->SetClientRestriction( sJobRestriction );
+//                      if ( pDepList )
+//                          pCmdData->SetDependencies( pDepList );
+//
+//                      pPrj->Insert ( pCmdData, LIST_APPEND );
+//
+//                      pJobType = aJobTypes.Next();
+//                  }
+//
+//                  pJobPlatform = aJobPlatforms.Next();
+//              }
+//
+//              pJobDir = aJobDirs.Next();
+//          }
+//          pPrj->ExtractDependencies();
+//      }
+//      catch (XmlBuildListException) {
+//          if (pPrj)
+//          {
+//              RemovePrj (pPrj);
+//              delete pPrj;
+//          }
+//
+//      }
+//  }
+//}
 
 /*****************************************************************************/
 int Star::GetOSType ( ByteString& aWhatOS ) {
@@ -2275,27 +2419,27 @@ Star& Star::operator<<  ( SvStream& rStream )
 //
 
 /*****************************************************************************/
-StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, String aFileName, BOOL bReadComments, USHORT nMode )
+StarWriter::StarWriter( String aFileName, BOOL bReadComments, USHORT nMode )
 /*****************************************************************************/
-                : Star (pXmlBuildListObj)
+                : Star ()
 {
     sFileName = aFileName;
     Read ( aFileName, bReadComments, nMode );
 }
 
 /*****************************************************************************/
-StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles, BOOL bReadComments )
+StarWriter::StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments )
 /*****************************************************************************/
-                : Star (pXmlBuildListObj)
+                : Star ()
 {
     Read( pSolarFiles, bReadComments );
 }
 
 /*****************************************************************************/
-StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion,
+StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
     ByteString &rMinor, BOOL bReadComments, BOOL bLocal, const char *pSourceRoot )
 /*****************************************************************************/
-                : Star (pXmlBuildListObj)
+                : Star ()
 {
     ByteString sPath( rVersion );
     if ( pSourceRoot )
@@ -2377,6 +2521,12 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *
                                     aEntry += DirEntry( ssAddPath );
                                 }
                             }
+                            sPath = rVersion;
+                            sPath += "/settings/SHORTPATH";
+                            GenericInformation *pShortPath = pStandLst->GetInfo( sPath, TRUE );
+                            BOOL bShortPath = FALSE;
+                            if (pShortPath && (pShortPath->GetValue() == "_TRUE"))
+                                bShortPath = TRUE;
                             sSourceRoot = aEntry.GetFull();
                             GenericInformationList *pProjects = pProjectsKey->GetSubList();
                             if ( pProjects ) {
@@ -2394,7 +2544,11 @@ StarWriter::StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *
                                     GenericInformation * pDir = pProject->GetSubInfo (aDirStr);
                                     if (pDir) {
                                         ByteString aDir = pDir->GetValue();
-                                        aPrjEntry = aEntry.GetPath() + DirEntry(aDir);
+                                        if (bShortPath)
+                                            aPrjEntry = aEntry;
+                                        else
+                                            aPrjEntry = aEntry.GetPath();
+                                        aPrjEntry += DirEntry(aDir);
                                     }
 
                                     aPrjEntry += DirEntry( ssProject );
@@ -2442,19 +2596,7 @@ USHORT StarWriter::Read( String aFileName, BOOL bReadComments, USHORT nMode  )
 
     while( aFileList.Count()) {
         String ssFileName = *aFileList.GetObject(( ULONG ) 0 );
-        ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
-        StarFile *pFile = new StarFile( ssFileName );
-        if ( pFile->Exists()) {
-            if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
-            {
-                ReadXmlBuildList(sFileName_l);
-            } else {
-                SimpleConfig aSolarConfig( ssFileName );
-                while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
-                    InsertTokenLine ( aString );
-            }
-        }
-
+        StarFile* pFile = ReadBuildlist (ssFileName, bReadComments, FALSE);
         aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
         aMutex.release();
@@ -2478,21 +2620,7 @@ USHORT StarWriter::Read( SolarFileList *pSolarFiles, BOOL bReadComments )
     while(  pSolarFiles->Count()) {
         ByteString aString;
         String ssFileName = *pSolarFiles->GetObject(( ULONG ) 0 );
-        ByteString sFileName_l(ssFileName, RTL_TEXTENCODING_ASCII_US);
-        StarFile *pFile = new StarFile( ssFileName);
-        if ( pFile->Exists()) {
-            if (sFileName_l.Len() >= RTL_CONSTASCII_LENGTH(XML_EXT) && ssFileName.EqualsAscii(XML_EXT, sFileName_l.Len() - RTL_CONSTASCII_LENGTH(XML_EXT), RTL_CONSTASCII_LENGTH(XML_EXT)))
-            {
-                ReadXmlBuildList(sFileName_l);
-            }
-            else
-            {
-                SimpleConfig aSolarConfig( ssFileName );
-                while (( aString = aSolarConfig.GetCleanedNextLine( bReadComments )) != "" )
-                    InsertTokenLine ( aString );
-            }
-        }
-
+        StarFile* pFile = ReadBuildlist(ssFileName, bReadComments, FALSE);
         aMutex.acquire();
         aLoadedFilesList.Insert( pFile, LIST_APPEND );
         aMutex.release();
@@ -2673,217 +2801,12 @@ USHORT StarWriter::WriteMultiple( String rSourceRoot )
 }
 
 /*****************************************************************************/
-void StarWriter::InsertTokenLine ( ByteString& rString )
+void StarWriter::InsertTokenLine ( const ByteString& rTokenLine )
 /*****************************************************************************/
 {
-    int i = 0;
-    ByteString aWhat, aWhatOS,
-        sClientRestriction, aLogFileName, aProjectName, aPrefix, aCommandPara;
-    static  ByteString aDirName;
-    BOOL bPrjDep = FALSE;
-    BOOL bHardDep = FALSE;
-    BOOL bFixedDep = FALSE;
-    int nCommandType=0, nOSType=0;
-    CommandData* pCmdData;
-    SByteStringList *pDepList2 = NULL;
-    Prj* pPrj;
-
-    ByteString aEmptyString;
-    ByteString aToken = rString.GetToken( 0, '\t' );
-    ByteString aCommentString;
-
-    const char* yytext = aToken.GetBuffer();
-
-    while ( !( aToken == aEmptyString ) )
-    {
-        switch (i)
-        {
-            case 0:
-                    if ( rString.Search( "#" ) == 0 )
-                    {
-                        i = -1;
-                        aCommentString = rString;
-                        rString = aEmptyString;
-                        if ( Count() == 0 )
-                            aDirName = "null_entry" ; //comments at begin of file
-                        break;
-                    }
-                    aPrefix = yytext;
-                    pDepList2 = NULL;
-                    break;
-            case 1:
-                        aDirName = yytext;
-                    break;
-            case 2:
-                    if ( !strcmp( yytext, ":" ))
-                    {
-                        bPrjDep = TRUE;
-                        bHardDep = FALSE;
-                        bFixedDep = FALSE;
-                        i = 9;
-                    }
-                    else if ( !strcmp( yytext, "::" ))
-                    {
-                        bPrjDep = TRUE;
-                        bHardDep = TRUE;
-                        bFixedDep = FALSE;
-                        i = 9;
-                    }
-                    else if ( !strcmp( yytext, ":::" ))
-                    {
-                        bPrjDep = TRUE;
-                        bHardDep = TRUE;
-                        bFixedDep = TRUE;
-                        i = 9;
-                    }
-                    else
-                    {
-                        bPrjDep = FALSE;
-                        bHardDep = FALSE;
-                        bFixedDep = FALSE;
-
-                        aWhat = yytext;
-                        nCommandType = GetJobType(aWhat);
-                    }
-                    break;
-            case 3:
-                    if ( !bPrjDep )
-                    {
-                        aWhat = yytext;
-                        if ( aWhat == "-" )
-                        {
-                            aCommandPara = ByteString();
-                        }
-                        else
-                            aCommandPara = aWhat;
-                    }
-                    break;
-            case 4:
-                    if ( !bPrjDep )
-                    {
-                        aWhatOS = yytext;
-                        if ( aWhatOS.GetTokenCount( ',' ) > 1 ) {
-                            sClientRestriction = aWhatOS.Copy( aWhatOS.GetToken( 0, ',' ).Len() + 1 );
-                            aWhatOS = aWhatOS.GetToken( 0, ',' );
-                        }
-                        nOSType = GetOSType (aWhatOS);
-                    }
-                    break;
-            case 5:
-                    if ( !bPrjDep )
-                    {
-                        aLogFileName = yytext;
-                    }
-                    break;
-            default:
-                    if ( !bPrjDep )
-                    {
-                        ByteString aItem = yytext;
-                        if ( aItem == "NULL" )
-                        {
-                            // Liste zu Ende
-                            i = -1;
-                        }
-                        else
-                        {
-                            // ggfs. Dependency liste anlegen und ergaenzen
-                            if ( !pDepList2 )
-                                pDepList2 = new SByteStringList;
-                            pDepList2->PutString( new ByteString( aItem ));
-                        }
-                    }
-                    else
-                    {
-                        ByteString aItem = yytext;
-                        if ( aItem == "NULL" )
-                        {
-                            // Liste zu Ende
-                            i = -1;
-                            bPrjDep= FALSE;
-                        }
-                        else
-                        {
-                            ByteString sMode;
-                            BOOL bHasModes = FALSE;
-                            if (aItem.Search(":") != STRING_NOTFOUND)
-                            {
-                                sMode = aItem.GetToken ( 0, ':');
-                                aItem = aItem.GetToken ( 1, ':');
-                                bHasModes = TRUE;
-                            }
-
-                            aProjectName = aDirName.GetToken ( 0, 0x5c);
-                            if ( HasProject( aProjectName ))
-                            {
-                                pPrj = GetPrj( aProjectName );
-                                // Projekt exist. schon, neue Eintraege anhaengen
-                            }
-                            else
-                            {
-                                // neues Project anlegen
-                                pPrj = new Prj ( aProjectName );
-                                pPrj->SetPreFix( aPrefix );
-                                Insert(pPrj,LIST_APPEND);
-                            }
-                            if (bHasModes)
-                                pPrj->AddDependencies( aItem, sMode );
-                            else
-                                pPrj->AddDependencies( aItem );
-                            pPrj->HasHardDependencies( bHardDep );
-                            pPrj->HasFixedDependencies( bFixedDep );
-
-                            /*
-                            if ( nStarMode == STAR_MODE_RECURSIVE_PARSE ) {
-                                String sItem( aItem, RTL_TEXTENCODING_ASCII_US );
-                                InsertSolarList( sItem );
-                            }
-                            */
-                        }
-
-                    }
-                    break;
-        }
-        /* Wenn dieses Project noch nicht vertreten ist, in die Liste
-           der Solar-Projekte einfuegen */
-        if ( i == -1 )
-        {
-            aProjectName = aDirName.GetToken ( 0, 0x5c);
-            if ( HasProject( aProjectName ))
-            {
-                pPrj = GetPrj( aProjectName );
-                // Projekt exist. schon, neue Eintraege anhaengen
-            }
-            else
-            {
-                // neues Project anlegen
-                pPrj = new Prj ( aProjectName );
-                pPrj->SetPreFix( aPrefix );
-                Insert(pPrj,LIST_APPEND);
-            }
-
-            pCmdData = new CommandData;
-            pCmdData->SetPath( aDirName );
-            pCmdData->SetCommandType( nCommandType );
-            pCmdData->SetCommandPara( aCommandPara );
-            pCmdData->SetOSType( nOSType );
-            pCmdData->SetLogFile( aLogFileName );
-            pCmdData->SetComment( aCommentString );
-            pCmdData->SetClientRestriction( sClientRestriction );
-            if ( pDepList2 )
-                pCmdData->SetDependencies( pDepList2 );
-
-            pPrj->Insert ( pCmdData, LIST_APPEND );
-
-        }
-        i++;
-
-        rString.Erase(0, aToken.Len()+1);
-        aToken = rString.GetToken( 0, '\t' );
-        yytext = aToken.GetBuffer();
-
-    }
-    // und wer raeumt die depLst wieder ab ?
-    // macht CommandData selber
+    ByteString sProjectName = rTokenLine.GetToken(1,'\t');
+    Prj* pPrj = GetPrj (sProjectName); // 0, if Prj not found;
+    Star::InsertTokenLine ( rTokenLine, &pPrj, sProjectName, sal_False );
 }
 
 /*****************************************************************************/

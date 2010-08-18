@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: postset.mk,v $
-#
-# $Revision: 1.47.50.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,6 +31,119 @@
 defaultlangiso=en-US
 
 # Complete list of all supported ISO codes
-completelangiso=af ar as-IN be-BY bg br brx bn bn-BD bn-IN bs by ca cs cy da de dgo dz el en-GB en-US en-ZA eo es et eu fa fi fr ga gd gl gu gu-IN he hi-IN hr hu it ja ka kk km kn ko kok ks ku lo lt lv mai mk mn mni ms ml-IN mr-IN my ne nb nl nn nr ns oc or-IN pa-IN pl pt pt-BR ru rw sat sa-IN sc sd sk sl sh sr ss st sv sw sw-TZ te-IN ti-ER ta-IN th tn tr ts tg ur-IN uk uz ve vi xh zh-CN zh-TW zu
+completelangiso=af \
+ar \
+as-IN \
+be-BY \
+bo \
+bg \
+br \
+brx \
+bn \
+bn-BD \
+bn-IN \
+bs \
+by \
+ca \
+cs \
+cy \
+da \
+de \
+dgo \
+dz \
+el \
+en-GB \
+en-US \
+en-ZA \
+eo \
+es \
+et \
+eu \
+fa \
+fi \
+fr \
+ga \
+gd \
+gl \
+gu \
+gu-IN \
+he \
+hi-IN \
+hr \
+hu \
+is \
+it \
+ja \
+kid \
+ky \
+ka \
+kk \
+km \
+kn \
+ko \
+kok \
+ks \
+ku \
+lo \
+lt \
+lv \
+mai \
+mk \
+mn \
+mni \
+ms \
+ml-IN \
+mr-IN \
+my \
+ne \
+nb \
+nl \
+nn \
+nr \
+ns \
+om \
+oc \
+or-IN \
+pap \
+pa-IN \
+pl \
+ps \
+pt \
+pt-BR \
+ro \
+ru \
+rw \
+sat \
+sa-IN \
+si \
+sc \
+sd \
+sk \
+sl \
+sh \
+sr \
+ss \
+st \
+sv \
+sw \
+sw-TZ \
+te-IN \
+ti-ER \
+ta-IN \
+th \
+tn \
+tr \
+ts \
+tg \
+ug \
+ur-IN \
+uk \
+uz \
+ve \
+vi \
+xh \
+zh-CN \
+zh-TW \
+zu
 
 alllangiso=$(strip $(defaultlangiso) $(subst,$(defaultlangiso), $(uniq $(subst,ALL,$(completelangiso) $(WITH_LANG)))))

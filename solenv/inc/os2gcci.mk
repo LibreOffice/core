@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: os2.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -50,7 +46,7 @@ JAVAFLAGSDEBUG=-g
 
 # filter for supressing verbose messages from linker
 #not needed at the moment
-#LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
+#LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 .IF "$(ttt)"!=""
 CDEFS+=-E
@@ -245,7 +241,7 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=stdc432 gcc432
 
 # default objectfilenames to link
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=

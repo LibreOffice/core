@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: tg_obj.mk,v $
-#
-# $Revision: 1.16 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,31 +29,30 @@ MKFILENAME:=TG_OBJ.MK
 
 .IF "$(OBJTARGET)"!=""
 $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="OS2"
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) $@ $(&)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(&)
 .ENDIF		# "$(GUI)"=="OS2"
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-    $(ECHONL) $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i)) > $@
+    $(ECHONL) $(foreach,i,$(OBJFILES:f) $(ROBJ)/$(i)) > $@
 .ELSE			# "$(COM)"=="GCC"
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    echo $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
+    @echo $(foreach,i,$(OBJFILES:f) $(ROBJ)/$(i:s/.obj/.o/)) | xargs -n1 > $@
 .IF "$(OS)"=="MACOSX"
-    @-nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @-nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ELSE
-    @nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)$/$(ROUT)\#g` > $(@:d)$(@:b).dump
+    @nm `cat $(OBJTARGET) | sed s\#'^'$(ROUT)\#$(PRJ)/$(ROUT)\#g` > $(@:d)$(@:b).dump
 .ENDIF
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(OBJTARGET)"!=""
@@ -66,28 +61,27 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
 .IF "$(SECOND_BUILD)"!=""
 .IF "$($(SECOND_BUILD)OBJTARGET)"!=""
 $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="OS2"
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) $@ $(&)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(&)
 .ENDIF			# "$(GUI)"=="OS2"
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
 #     $(LIBMGR) $(LIBFLAGS) $@ $(OBJFILES)
-    $(ECHONL) $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i)) > $@
+    $(ECHONL) $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)/$(i)) > $@
 .ELSE
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
 .ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
-    echo $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)$/$(i:s/.obj/.o/)) | xargs -n1 >> $@
+    @echo $(foreach,i,$(REAL_$(SECOND_BUILD)_OBJFILES:f) $(ROBJ)/$(i:s/.obj/.o/)) | xargs -n1 >> $@
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$($(SECOND_BUILD)OBJTARGET)"!=""
 .ENDIF			# "$(SECOND_BUILD)"!=""
@@ -96,5 +90,5 @@ $($(SECOND_BUILD)OBJTARGET): $(REAL_$(SECOND_BUILD)_OBJFILES)
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
-    $(LIBMGR) $(LIBFLAGS) $@ $(&)
+    $(COMMAND_ECHO)$(LIBMGR) $(LIBFLAGS) $@ $(&)
 .ENDIF			# "$(GUI)"=="OS2"

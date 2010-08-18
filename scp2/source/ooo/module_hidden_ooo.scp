@@ -1,13 +1,10 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: module_hidden_ooo.scp,v $
- * $Revision: 1.123 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -52,7 +49,6 @@ Module gid_Module_Root_Files_2
  	gid_File_Profile_Gengal,
 	gid_File_Bin_Spadmin_Bin,
 	gid_File_Bin_Uri_Encode,
-	gid_File_Exe_Msfontextract,
 	gid_File_Exe_Nsplugin,
 	gid_File_Lib_Npsoplugin,
         gid_File_Lib_Soffice,
@@ -140,7 +136,7 @@ Module gid_Module_Root_Files_4
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Dat_Root4,
 	gid_File_Filter_Eme,
-	gid_File_Filter_Emp,
+	gid_File_Filter_Sdfilt,
 	gid_File_Filter_Icg,
 	gid_File_Filter_Egi,
 	gid_File_Filter_Epb,
@@ -178,6 +174,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Dbt,
 	gid_File_Lib_Dbfile,
 	gid_File_Lib_Drawinglayer,
+        gid_File_Lib_Editeng,
 	gid_File_Lib_Flat,
 	gid_File_Lib_For,
 	gid_File_Lib_Forui,
@@ -240,6 +237,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Vclplug_Gen,
 	gid_File_Lib_Vclplug_Gtk,
 	gid_File_Lib_Vclplug_Kde,
+	gid_File_Lib_Vclplug_Kde4,
 	gid_File_Lib_Vclplug_Svp,
 	gid_File_Lib_Basctl,
 	gid_File_Lib_CanvasTools,
@@ -270,14 +268,12 @@ Module gid_Module_Root_Files_5
     gid_File_Lib_Index_Data,
     gid_File_Lib_Textconv_Dict,
 	gid_File_Lib_Basprov,
-	gid_File_Lib_Behelper,
-	gid_File_Lib_Configmgr2,
+	gid_File_Lib_Configmgr,
 	gid_File_Lib_Crypto,
 	gid_File_Lib_Dlgprov,
 	gid_File_Lib_Stringresource,
 	gid_File_Lib_Ldapbe2,
 	gid_File_Lib_Comphelper2,
-	gid_File_Lib_Sysmgr1,
 	gid_File_Lib_Adabas,
 	gid_File_Lib_Cached1,
 	gid_File_Lib_Curl,
@@ -349,6 +345,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Ucbhelper,
 	gid_File_Lib_Ucpchelp1,
 	gid_File_Lib_Ucpdav1,
+	gid_File_Lib_Neon,
 	gid_File_Lib_Ucpfile1,
 	gid_File_Lib_Ucpftp1,
 	gid_File_Lib_Ucphier1,
@@ -388,20 +385,16 @@ Module gid_Module_Root_Files_5
     gid_File_Lib_sn_tools,
     gid_File_Lib_relnotes,
     GID_FILE_LIB_WPD,
-        gid_File_Lib_Mingwm10,
+    gid_File_Lib_Mingw_GccS,
+    gid_File_Lib_Mingw_Stdcpp,
+    gid_File_Lib_Mingwm10,
 	gid_File_Lib_Msvcp70,
 	gid_File_Lib_Msvcr70,
-	gid_File_Lib_Msvcr80,
-	gid_File_Lib_Msvcp80,
-	gid_File_Lib_Msvcm80,
-	gid_File_Msvcm80crt_Manifest,
 	gid_File_Lib_Ole,
 	gid_File_Lib_Patchmsi,
 	gid_File_Lib_Reg4allmsdoc,
 	gid_File_Lib_Qslnkmsi,
 	gid_File_Lib_Sdqsmsi,
-	gid_File_Lib_OOoFilt,
-	gid_File_Lib_OOoFiltProxy,
 	gid_File_Lib_Instooofiltmsi,
 	gid_File_Lib_Smplmail,
 	gid_File_Lib_Gconfebe,
@@ -613,6 +606,7 @@ Module gid_Module_Root_Files_6
     gid_File_Lm_Vietnamese,
     gid_File_Lm_Welsh,
     gid_File_Lm_Yiddish_Utf,
+    gid_File_Lm_Zulu,
 	gid_File_Mod_Chart,
 	gid_File_Mod_Datastyl,
 	gid_File_Mod_Defs,
@@ -627,149 +621,10 @@ Module gid_Module_Root_Files_6
 	gid_File_Mod_Style,
 	gid_File_Mod_Table,
 	gid_File_Mod_Text,
-	gid_File_Oo_Ldap_Attr_Map,
-	gid_File_Oo_AD_Ldap_Attr_Map,
-	gid_File_Oo_Inet_Xcs,
-	gid_File_Oo_Inet_Xcu,
-	gid_File_Oo_Office_Addons_Xcs,
-	gid_File_Oo_Office_OOoImprovement_Settings_Xcs,
-	gid_File_Oo_Office_Ui_Basicidecommands_Xcs,
-	gid_File_Oo_Office_Ui_Basicidecommands_Xcu,
-	gid_File_Oo_Office_Ui_Windowstate_Xcs,
-	gid_File_Oo_Office_Ui_Basicidewindowstate_Xcs,
-	gid_File_Oo_Office_Ui_Basicidewindowstate_Xcu,
-	gid_File_Oo_Office_Ui_Bibliographycommands_Xcs,
-	gid_File_Oo_Office_Ui_Bibliographycommands_Xcu,
-	gid_File_Oo_Office_Ui_Bibliographywindowstate_Xcs,
-	gid_File_Oo_Office_Calc_Xcs,
-	gid_File_Oo_Office_Calc_Xcu,
-	gid_File_Oo_Office_CalcAddIns_Xcs,
-	gid_File_Oo_Office_Chart_Xcs,
-	gid_File_Oo_Office_Ui_Chartcommands_Xcs,
-	gid_File_Oo_Office_Ui_Chartcommands_Xcu,
-	gid_File_Oo_Office_Ui_Chartwindowstate_Xcs,
-	gid_File_Oo_Office_Ui_Chartwindowstate_Xcu,
-	gid_File_Oo_Office_Commands_Xcs,
-	gid_File_Oo_Office_Ui_Commands_Xcs,
-	gid_File_Oo_Office_Ui_Category_Xcs,
-	gid_File_Oo_Office_Ui_Drawimpresscommands_Xcs,
-	gid_File_Oo_Office_Ui_Drawimpresscommands_Xcu,
-	gid_File_Oo_Office_Ui_Genericcategories_Xcs,
-	gid_File_Oo_Office_Ui_Genericcategories_Xcu,
-	gid_File_Oo_Office_Common_Xcs,
-    gid_File_Oo_Office_Common_Xcu,
-	gid_File_Oo_Office_Extendedcolorscheme_Xcs,
-	gid_File_Oo_Office_OptionsDialog_Xcs,
-	gid_File_Oo_Office_Recovery_Xcs,
-	gid_File_Oo_Office_Compatibility_Xcs,
-	gid_File_Oo_Office_Ui_Controller_Xcs,
-	gid_File_Oo_Office_Ui_Controller_Xcu,
-	gid_File_Oo_Office_Dataaccess_Xcs,
-	gid_File_Oo_Office_Dataaccess_Xcu,
-	gid_File_Oo_Office_Ui_Dbucommands_Xcs,
-	gid_File_Oo_Office_Ui_Dbucommands_Xcu,
-	gid_File_Oo_Office_Ui_Basewindowstate_Xcs,
-	gid_File_Oo_Office_Ui_Basewindowstate_Xcu,
-	gid_File_Oo_Office_Ui_Dbtablewindowstate_Xcs,
-	gid_File_Oo_Office_Ui_Dbtablewindowstate_xcu,
-	gid_File_Oo_Office_Ui_Dbbrowserwindowstate_Xcs,
-	gid_File_Oo_Office_Ui_Dbbrowserwindowstate_xcu,
-	gid_File_Oo_Office_Ui_Dbquerywindowstate_Xcs,
-	gid_File_Oo_Office_Ui_Dbquerywindowstate_xcu,
-	gid_File_Oo_Office_Ui_Dbrelationwindowstate_Xcs,
-	gid_File_Oo_Office_Ui_Dbrelationwindowstate_xcu,
-	gid_File_Oo_Office_Draw_Xcs,
-	gid_File_Oo_Office_Events_Xcs,
-	gid_File_Oo_Office_ExtensionManager_Xcs,
-	gid_File_Oo_Office_ExtensionManager_Xcu,
-	gid_File_Oo_Office_Ui_Factories_Xcs,
-	gid_File_Oo_Office_Ui_Factories_Xcu,
-	gid_File_Oo_Office_Embedding_Xcu,
-	gid_File_Oo_Office_Ui_Genericcommands_Xcs,
-	gid_File_Oo_Office_Ui_Genericcommands_Xcu,
-	gid_File_Oo_Office_Ui_GlobalSettings_Xcs,
-	gid_File_Oo_Office_Impress_Xcs,
-	gid_File_Oo_Office_Impress_Xcu,
-	gid_File_Oo_Office_Java_Xcs,
-	gid_File_Oo_Office_Jobs_Xcs,
-	gid_File_Oo_Office_Jobs_Xcu,
-	gid_File_Oo_Office_Labels_Xcs,
-	gid_File_Oo_Office_Labels_Xcu,
-	gid_File_Oo_Office_Linguistic_Xcs,
-	gid_File_Oo_Office_Math_Xcs,
-	gid_File_Oo_Office_Math_Xcu,
-	gid_File_Oo_Office_Protocolhandler_Xcs,
-	gid_File_Oo_Office_Protocolhandler_Xcu,
-	gid_File_Oo_Office_Scripting_Xcs,
-	gid_File_Oo_Office_Scripting_Xcu,
-	gid_File_Oo_Office_Security_Xcs,
-	gid_File_Oo_Office_Security_Xcu,
-	gid_File_Oo_Office_Sfx_Xcs,
-	gid_File_Oo_Office_Sfx_Xcu,
-	gid_File_Oo_Office_Ui_Startmodulecommands_Xcs,
-	gid_File_Oo_Office_Ui_Startmodulecommands_Xcu,
-	gid_File_Oo_Office_Ui_Startmodulewindowstate_Xcs,
-	gid_File_Oo_Office_Ui_Startmodulewindowstate_Xcu,
-	gid_File_Oo_Office_Substitution_Xcs,
-	gid_File_Oo_Office_Ui_Xcs,
-    gid_File_Oo_Office_Ui_Xcu,
-	gid_File_Oo_Office_Views_Xcs,
-	gid_File_Oo_Office_Writer_Xcs,
-	gid_File_Oo_Office_Writer_Xcu,
-	gid_File_Oo_Office_WebWizard_Xcs,
-	gid_File_Oo_Office_WebWizard_Xcu,
-	gid_File_Oo_Office_FormWizard_Xcs,
-	gid_File_Oo_Office_FormWizard_Xcu,
-	gid_File_Oo_Office_TableWizard_Xcs,
-	gid_File_Oo_Office_TableWizard_Xcu,
-	gid_File_Oo_Office_Writerweb_Xcs,
-	gid_File_Oo_Office_TypeDetection_Xcs,
-	gid_File_Oo_Office_Embedding_Xcs,
-	gid_File_Oo_Setup_Xcs,
-    gid_File_Oo_Setup_Xcu,
-	gid_File_Oo_Setup_Start_Xcu,
-    gid_File_Oo_Firststartwizard_Xcs,
-    gid_File_Oo_Firststartwizard_Xcu,
-	gid_File_Oo_System_Xcs,
-	gid_File_Oo_Typedetection_Filter_Xcs,
-	gid_File_Oo_Typedetection_Graphicfilter_Xcs,
-	gid_File_Oo_Typedetection_Misc_Xcs,
-	gid_File_Oo_Typedetection_Types_Xcs,
-	gid_File_Oo_Ucb_Configuration_Xcs,
-	gid_File_Oo_Ucb_Configuration_Xcu,
-	gid_File_Oo_Ucb_InteractionHandler_Xcs,
-	gid_File_Oo_Ucb_Hierarchy_Xcs,
-	gid_File_Oo_Ucb_Store_Xcs,
-	gid_File_Oo_Userprofile_Xcs,
-	gid_File_Oo_Userprofile_Xcu,
-	gid_File_Oo_Vcl_Xcs,
-	gid_File_Oo_Vcl_Xcu,
-	gid_File_Oo_Ldap_Xcs,
-	gid_File_Oo_Ldap_Xcu,
-	gid_File_Oo_Typedetection_UISort_Xcs,
-	gid_File_Oo_Office_Ui_Mathwindowstate_Xcs,
-	gid_File_Oo_Office_Views_Xcu,
-	gid_File_Oo_TypeDetection_UISort_Xcu,
-	gid_File_Registry_Spool_Oo_Office_Embedding_Chart_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_Base_Types_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_Base_Filters_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_Base_Others_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_Chart_Types_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_Chart_Filters_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_Chart_Others_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Types_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Filters_Xcu,
-	gid_File_Registry_Spool_Oo_Common_System_Xcu,
-	gid_File_Registry_Spool_Oo_Office_Common_UseOOoFileDialogs_Xcu,
-	gid_File_Registry_Spool_Oo_Dataaccess_Adabasdriver_Xcu,
-	gid_File_Registry_Spool_Oo_Writer_javamail_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_UISort_Writer_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_Calc_UISort_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_Draw_UISort_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_Impress_UISort_Xcu,
-	gid_File_Registry_Spool_Oo_TypeDetection_Math_UISort_Xcu,
-	gid_File_Registry_Spool_Oo_Office_Linguistic_Forcedefaultlanguage_Xcu,
-	gid_File_Registry_Spool_Oo_Office_Writer_PyMailMerge_Xcu,
+    gid_File_Oo_Ldap_Xcd_Sample,
+    gid_File_Oo_Ad_Ldap_Xcd_Sample,
+    gid_File_Share_Registry_Main_Xcd,
+    gid_File_Share_Registry_Forcedefault_Xcd,
 	gid_File_Pymailmerge,
     gid_File_Xsl_Common_Measure_Conversion,
 	gid_File_Xsl_Common_Math_Functions,
@@ -857,6 +712,7 @@ Module gid_Module_Root_Files_Images
 	Styles = (HIDDEN_ROOT);
 	Files = (gid_File_Images_Zip,
              gid_File_ImagesCrystal_Zip,
+             gid_File_ImagesOxygen_Zip,
              gid_File_ImagesHicontrast_Zip,
              gid_File_ImagesIndustrial_Zip,
              gid_File_ImagesTango_Zip,
@@ -895,6 +751,10 @@ Module gid_Module_Root_Fonts_OOo_Hidden
 	gid_File_Fnt_DejaVuSerifCondensed_BoldItalic,
 	gid_File_Fnt_DejaVuSerifCondensed_Italic,
 	gid_File_Fnt_DejaVuSerifCondensed,
+	gid_File_Fnt_LibSansNarrow_Regular, 
+	gid_File_Fnt_LibSansNarrow_Bold,
+	gid_File_Fnt_LibSansNarrow_BoldItalic,
+	gid_File_Fnt_LibSansNarrow_Italic,
 	gid_File_Fnt_LiberationMono_Bold, 
 	gid_File_Fnt_LiberationMono_BoldItalic, 
 	gid_File_Fnt_LiberationMono_Italic,
@@ -919,11 +779,9 @@ Module gid_Module_Oo_Linguistic
     Styles = (HIDDEN_ROOT);
     Files = (gid_File_Lib_Spell,
         gid_File_Lib_Hunspell,
-        gid_File_Registry_Spool_Oo_Office_Linguistic_Lingucomponent_Spellchecker_Xcu,
         gid_File_Lib_Hyph,
-        gid_File_Registry_Spool_Oo_Office_Linguistic_Lingucomponent_Hyphenator_Xcu,
         gid_File_Lib_Lnth,
-        gid_File_Registry_Spool_Oo_Office_Linguistic_Lingucomponent_Thesaurus_Xcu);
+        gid_File_Share_Registry_Lingucomponent_Xcd);
 End
 
 #ifdef LINUX
@@ -950,277 +808,4 @@ End
 // End
 // #endif
 
-Module gid_Module_Root_Extension_Dictionary_Af
-	Name = "gid_Module_Root_Extension_Dictionary_Af";
-	Description = "gid_Module_Root_Extension_Dictionary_Af";
-	Files = (gid_File_Extension_Dictionary_Af);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "af";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
 
-Module gid_Module_Root_Extension_Dictionary_Cs
-	Name = "gid_Module_Root_Extension_Dictionary_Cs";
-	Description = "gid_Module_Root_Extension_Dictionary_Cs";
-	Files = (gid_File_Extension_Dictionary_Cs);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "cs";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Da
-	Name = "gid_Module_Root_Extension_Dictionary_Da";
-	Description = "gid_Module_Root_Extension_Dictionary_Da";
-	Files = (gid_File_Extension_Dictionary_Da);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "da";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_De
-	Name = "gid_Module_Root_Extension_Dictionary_De";
-	Description = "gid_Module_Root_Extension_Dictionary_De";
-	Files = (gid_File_Extension_Dictionary_De);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "de";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_En
-	Name = "gid_Module_Root_Extension_Dictionary_En";
-	Description = "gid_Module_Root_Extension_Dictionary_En";
-	Files = (gid_File_Extension_Dictionary_En);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "en-US";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Es
-	Name = "gid_Module_Root_Extension_Dictionary_Es";
-	Description = "gid_Module_Root_Extension_Dictionary_Es";
-	Files = (gid_File_Extension_Dictionary_Es);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "es";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Et
-	Name = "gid_Module_Root_Extension_Dictionary_Et";
-	Description = "gid_Module_Root_Extension_Dictionary_Et";
-	Files = (gid_File_Extension_Dictionary_Et);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "et";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Fr
-	Name = "gid_Module_Root_Extension_Dictionary_Fr";
-	Description = "gid_Module_Root_Extension_Dictionary_Fr";
-	Files = (gid_File_Extension_Dictionary_Fr);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "fr";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Gl
-	Name = "gid_Module_Root_Extension_Dictionary_Gl";
-	Description = "gid_Module_Root_Extension_Dictionary_Gl";
-	Files = (gid_File_Extension_Dictionary_Gl);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "gl";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Hu
-	Name = "gid_Module_Root_Extension_Dictionary_Hu";
-	Description = "gid_Module_Root_Extension_Dictionary_Hu";
-	Files = (gid_File_Extension_Dictionary_Hu);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "hu";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_It
-	Name = "gid_Module_Root_Extension_Dictionary_It";
-	Description = "gid_Module_Root_Extension_Dictionary_It";
-	Files = (gid_File_Extension_Dictionary_It);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "it";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Lt
-	Name = "gid_Module_Root_Extension_Dictionary_Lt";
-	Description = "gid_Module_Root_Extension_Dictionary_Lt";
-	Files = (gid_File_Extension_Dictionary_Lt);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "lt";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Ne
-	Name = "gid_Module_Root_Extension_Dictionary_Ne";
-	Description = "gid_Module_Root_Extension_Dictionary_Ne";
-	Files = (gid_File_Extension_Dictionary_Ne);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "ne";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Nl
-	Name = "gid_Module_Root_Extension_Dictionary_Nl";
-	Description = "gid_Module_Root_Extension_Dictionary_Nl";
-	Files = (gid_File_Extension_Dictionary_Nl);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "nl";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Pl
-	Name = "gid_Module_Root_Extension_Dictionary_Pl";
-	Description = "gid_Module_Root_Extension_Dictionary_Pl";
-	Files = (gid_File_Extension_Dictionary_Pl);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "pl";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Pt
-	Name = "gid_Module_Root_Extension_Dictionary_Pt";
-	Description = "gid_Module_Root_Extension_Dictionary_Pt";
-	Files = (gid_File_Extension_Dictionary_Pt);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "pt";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Ru
-	Name = "gid_Module_Root_Extension_Dictionary_Ru";
-	Description = "gid_Module_Root_Extension_Dictionary_Ru";
-	Files = (gid_File_Extension_Dictionary_Ru);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "ru";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Sk
-	Name = "gid_Module_Root_Extension_Dictionory_Sk";
-	Description = "gid_Module_Root_Extension_Dictionary_Sk";
-	Files = (gid_File_Extension_Dictionary_Sk);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "sk";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Sl
-	Name = "gid_Module_Root_Extension_Dictionary_Sl";
-	Description = "gid_Module_Root_Extension_Dictionary_Sl";
-	Files = (gid_File_Extension_Dictionary_Sl);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "sl";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Sr
-	Name = "gid_Module_Root_Extension_Dictionary_Sr";
-	Description = "gid_Module_Root_Extension_Dictionary_Sr";
-	Files = (gid_File_Extension_Dictionary_Sr);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "sr";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Sv
-	Name = "gid_Module_Root_Extension_Dictionary_Sv";
-	Description = "gid_Module_Root_Extension_Dictionary_Sv";
-	Files = (gid_File_Extension_Dictionary_Sv);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "sv";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Sw
-	Name = "gid_Module_Root_Extension_Dictionary_Sw";
-	Description = "gid_Module_Root_Extension_Dictionary_Sw";
-	Files = (gid_File_Extension_Dictionary_Sw);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "sw";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Th
-	Name = "gid_Module_Root_Extension_Dictionary_Th";
-	Description = "gid_Module_Root_Extension_Dictionary_Th";
-	Files = (gid_File_Extension_Dictionary_Th);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "th";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Vi
-	Name = "gid_Module_Root_Extension_Dictionary_Vi";
-	Description = "gid_Module_Root_Extension_Dictionary_Vi";
-	Files = (gid_File_Extension_Dictionary_Vi);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "vi";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End
-
-Module gid_Module_Root_Extension_Dictionary_Zu
-	Name = "gid_Module_Root_Extension_Dictionary_Zu";
-	Description = "gid_Module_Root_Extension_Dictionary_Zu";
-	Files = (gid_File_Extension_Dictionary_Zu);
-	InstallOrder = "2000";
-	Spellcheckerlanguage = "zu";
-	PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Styles = (HIDDEN_ROOT);
-End

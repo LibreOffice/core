@@ -164,12 +164,25 @@ void define( char *def, struct symhash **symbols );
 void hash_define(char *name, char * val, struct symhash **symbols);
 struct symhash *hash_copy( struct symhash *symbols );
 void hash_free( struct symhash *symbols );
+void freefile( struct filepointer * fp );
+int find_includes(struct filepointer *filep, struct inclist *file,
+    struct inclist *file_red, int recursion, boolean failOK,
+    struct IncludesCollection* incCollection, struct symhash *symbols);
+void included_by(register struct inclist *ip,
+    register struct inclist * newfile);
+int cppsetup(register char *line,
+    register struct filepointer *filep, register struct inclist *inc);
+void add_include(struct filepointer *filep, struct inclist *file,
+    struct inclist *file_red, char *include, boolean dot, boolean failOK,
+    struct IncludesCollection* incCollection, struct symhash *symbols);
+int match(register char *str, register char **list);
+void recursive_pr_include(register struct inclist *head, register char *file,
+    register char *base);
+void inc_clean();
 
-#if NeedVarargsPrototypes
-extern fatalerr(char *, ...);
-extern warning(char *, ...);
-extern warning1(char *, ...);
-#endif
+void fatalerr(char *, ...);
+void warning(char *, ...);
+void warning1(char *, ...);
 
 void convert_slashes(char *);
 char *append_slash(char *);

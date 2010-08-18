@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: CwsConfig.pm,v $
-#
-# $Revision: 1.11.44.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -343,6 +339,98 @@ sub get_so_svn_server
         $self->{SO_SVN_SERVER} = $so_svn_server;
     }
     return $self->{SO_SVN_SERVER} ? $self->{SO_SVN_SERVER} : undef;
+}
+
+#### HG methods ####
+
+sub get_ooo_hg_local_source
+{
+    my $self = shift;
+
+    if ( !defined($self->{HG_LOCAL_SOURCE}) ) {
+        my $config_file = $self->get_config_file();
+        my $source = $config_file->{CWS_CONFIG}->{'HG_LOCAL_SOURCE'};
+        if ( !defined($source) ) {
+            $source = "";
+        }
+        $self->{HG_LOCAL_SOURCE} = $source;
+    }
+    return $self->{HG_LOCAL_SOURCE} ? $self->{HG_LOCAL_SOURCE} : undef;
+}
+
+sub get_ooo_hg_lan_source
+{
+    my $self = shift;
+
+    if ( !defined($self->{HG_LAN_SOURCE}) ) {
+        my $config_file = $self->get_config_file();
+        my $source = $config_file->{CWS_CONFIG}->{'HG_LAN_SOURCE'};
+        if ( !defined($source) ) {
+            $source = "";
+        }
+        $self->{HG_LAN_SOURCE} = $source;
+    }
+    return $self->{HG_LAN_SOURCE} ? $self->{HG_LAN_SOURCE} : undef;
+}
+
+sub get_ooo_hg_remote_source
+{
+    my $self = shift;
+
+    if ( !defined($self->{HG_REMOTE_SOURCE}) ) {
+        my $config_file = $self->get_config_file();
+        my $source = $config_file->{CWS_CONFIG}->{'HG_REMOTE_SOURCE'};
+        if ( !defined($source) ) {
+            $source = "";
+        }
+        $self->{HG_REMOTE_SOURCE} = $source;
+    }
+    return $self->{HG_REMOTE_SOURCE} ? $self->{HG_REMOTE_SOURCE} : undef;
+}
+
+sub get_so_hg_local_source
+{
+    my $self = shift;
+
+    if ( !defined($self->{SO_HG_LOCAL_SOURCE}) ) {
+        my $config_file = $self->get_config_file();
+        my $source = $config_file->{CWS_CONFIG}->{'SO_HG_LOCAL_SOURCE'};
+        if ( !defined($source) ) {
+            $source = "";
+        }
+        $self->{SO_HG_LOCAL_SOURCE} = $source;
+    }
+    return $self->{SO_HG_LOCAL_SOURCE} ? $self->{SO_HG_LOCAL_SOURCE} : undef;
+}
+
+sub get_so_hg_lan_source
+{
+    my $self = shift;
+
+    if ( !defined($self->{SO_HG_LAN_SOURCE}) ) {
+        my $config_file = $self->get_config_file();
+        my $source = $config_file->{CWS_CONFIG}->{'SO_HG_LAN_SOURCE'};
+        if ( !defined($source) ) {
+            $source = "";
+        }
+        $self->{SO_HG_LAN_SOURCE} = $source;
+    }
+    return $self->{SO_HG_LAN_SOURCE} ? $self->{SO_HG_LAN_SOURCE} : undef;
+}
+
+sub get_so_hg_remote_source
+{
+    my $self = shift;
+
+    if ( !defined($self->{SO_HG_REMOTE_SOURCE}) ) {
+        my $config_file = $self->get_config_file();
+        my $source = $config_file->{CWS_CONFIG}->{'SO_HG_REMOTE_SOURCE'};
+        if ( !defined($source) ) {
+            $source = "";
+        }
+        $self->{SO_HG_REMOTE_SOURCE} = $source;
+    }
+    return $self->{SO_HG_REMOTE_SOURCE} ? $self->{SO_HG_REMOTE_SOURCE} : undef;
 }
 
 #### Prebuild binaries configuration ####

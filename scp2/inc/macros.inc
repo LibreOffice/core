@@ -85,6 +85,12 @@
 #define EXTRAFILENAME(name,lang)              STRING(CONCAT3(name,lang,.zip))
 #define CONFIGLANGFILENAME(name,lang,ext)     STRING(CONCAT4(name,lang,.,ext))
 
+#if defined WNT
+#define SCP2_OOO_BIN_DIR gid_Brand_Dir_Program
+#else
+#define SCP2_OOO_BIN_DIR gid_Dir_Program
+#endif
+
 #define BIN_FILE_BODY \
         UnixRights   = 555
 
@@ -121,12 +127,12 @@
 #define PACKED_LIB_FILE_BODY \
         TXT_FILE_BODY; \
         Styles = (PACKED); \
-        Dir    = gid_Dir_Program
+        Dir    = SCP2_OOO_BIN_DIR
 
 #define PACKED_LIB_FILE_BODY_PATCH \
         TXT_FILE_BODY; \
         Styles = (PACKED,PATCH); \
-        Dir    = gid_Dir_Program
+        Dir    = SCP2_OOO_BIN_DIR
 
 #define PACKED_FILTER_FILE_BODY \
         TXT_FILE_BODY; \
@@ -150,6 +156,18 @@
         PACKED_LIB_FILE_BODY_PATCH; \
     End
 
+#define SPECIAL_LIB_FILE(id,name) \
+    File id \
+        Name    = SPECIAL_NAME(name); \
+        PACKED_LIB_FILE_BODY; \
+    End
+
+#define SPECIAL_LIB_FILE_PATCH(id,name) \
+    File id \
+        Name    = SPECIAL_NAME(name); \
+        PACKED_LIB_FILE_BODY_PATCH; \
+    End
+ 
 #define STD_RES_FILE(id,name) \
     File id \
         TXT_FILE_BODY; \
@@ -307,13 +325,13 @@
 #define PACKED_UNO_LIB_FILE_BODY \
         TXT_FILE_BODY; \
         Styles = (PACKED,UNO_COMPONENT); \
-        Dir    = gid_Dir_Program; \
+        Dir    = SCP2_OOO_BIN_DIR; \
         RegistryID = gid_Starregistry_Services_Rdb
 
 #define PACKED_UNO_LIB_FILE_BODY_PATCH \
         TXT_FILE_BODY; \
         Styles = (PACKED,UNO_COMPONENT,PATCH); \
-        Dir    = gid_Dir_Program; \
+        Dir    = SCP2_OOO_BIN_DIR; \
         RegistryID = gid_Starregistry_Services_Rdb
 
 #define STD_UNO_LIB_FILE(id,name) \
@@ -374,7 +392,7 @@
     File id \
         TXT_FILE_BODY; \
         Name = LIBNAME(name); \
-        Dir = gid_Dir_Program; \
+        Dir = SCP2_OOO_BIN_DIR; \
         Styles = (PACKED, NO_WARNING_IF_NOT_EXISTS); \
     End
 
@@ -382,7 +400,7 @@
     File id \
         TXT_FILE_BODY; \
         Name = LIBNAME(name); \
-        Dir = gid_Dir_Program; \
+        Dir = SCP2_OOO_BIN_DIR; \
         Styles = (PACKED, NO_WARNING_IF_NOT_EXISTS, UNO_COMPONENT); \
         RegistryID = gid_Starregistry_Services_Rdb; \
     End
@@ -483,7 +501,17 @@ End
         ModuleID = modid; \
         Subkey = STRING(Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations); \
         Name = STRING(CONCAT2(.,key)); \
-        Value = STRING(CONCAT3(opendocument.,doc_type,Document.1)); \
+        Value = STRING(CONCAT3(soffice.Star,doc_type,Document.6)); \
+        Styles = (); \
+    End
+
+#define REGISTRY_ENTRY_TEMPLATE_CAPABILITIES(name,modid,key,doc_type) \
+    RegistryItem CONCAT2(gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_,name) \
+        ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
+        ModuleID = modid; \
+        Subkey = STRING(Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations); \
+        Name = STRING(CONCAT2(.,key)); \
+        Value = STRING(CONCAT3(soffice.Star,doc_type,Template.6)); \
         Styles = (); \
     End
 
@@ -499,6 +527,32 @@ End
     REGISTRY_ENTRY_PRINT_CMD(name,modid,app) \
     REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
     REGISTRY_ENTRY_CAPABILITIES(name,modid,key,doc_type) \
+
+#define CONDITIONAL_REGISTER_DOCTEMPLATE_EXTENSION(name,modid,key,cond,disp_name,icon_id,app,default,doc_type) \
+    CONDITIONAL_MODULE_ENTRY(name,modid) \
+    REGISTRY_ENTRY_OPEN_WITH(name,cond,doc_type,modid,key) \
+    CONDITIONAL_REGISTRY_ENTRY_EXT(name,cond,key) \
+    REGISTRY_ENTRY_DOC(name,modid,disp_name) \
+    REGISTRY_ENTRY_ICON(name,modid,icon_id) \
+    REGISTRY_ENTRY_SHELL(name,default,modid) \
+    REGISTRY_ENTRY_NEW_CMD(name,modid,app) \
+    REGISTRY_ENTRY_OPEN_CMD(name,modid,app) \
+    REGISTRY_ENTRY_PRINT_CMD(name,modid,app) \
+    REGISTRY_ENTRY_PRINTTO_CMD(name,modid,app) \
+    REGISTRY_ENTRY_TEMPLATE_CAPABILITIES(name,modid,key,doc_type) \
+
+// ---------------------------------------
+
+#define REGISTER_PROPERTY_HANDLER_FOR_EXTENSION(extension) \
+    RegistryItem CONCAT2(gid_Regitem_Software_Microsoft_Windows_CurrentVersion_PropertySystem_PropertyHandlers_,extension) \
+        ParentID = PREDEFINED_HKEY_LOCAL_MACHINE; \
+        ModuleID = gid_Module_Optional_Winexplorerext_PropertyHdl; \
+        ComponentCondition = "VersionNT >= 600"; \
+        Styles = (X64); \
+        Subkey = STRING(CONCAT2(SOFTWARE\Microsoft\Windows\CurrentVersion\PropertySystem\PropertyHandlers\.,extension)); \
+        Value = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
+        Val64 = "{AE424E85-F6DF-4910-A6A9-438797986431}"; \
+    End
 
 // ---------------------------------------
 

@@ -143,6 +143,9 @@ _my_if_errors (ip, cp, expecting)
     }
     fprintf (stderr, "^--- expecting %s\n", expecting);
 #endif /* DEBUG_MKDEPEND */
+    (void)ip;
+    (void)cp;
+    (void)expecting;
     return NULL;
 }
 
@@ -150,13 +153,11 @@ _my_if_errors (ip, cp, expecting)
 #define MAXNAMELEN 256
 
 char *
-_lookup_variable (ip, var, len)
-    IfParser *ip;
+_lookup_variable (var, len)
     const char *var;
     int len;
 {
     char tmpbuf[MAXNAMELEN + 1];
-    struct _parse_data *pd = (struct _parse_data *) ip->data;
 
     if (len > MAXNAMELEN)
     return 0;
@@ -173,7 +174,8 @@ _my_eval_defined (ip, var, len)
     const char *var;
     int len;
 {
-    if (_lookup_variable (ip, var, len))
+    (void)ip;
+    if (_lookup_variable (var, len))
     return 1;
     else
     return 0;
@@ -189,14 +191,16 @@ _my_eval_variable (ip, var, len)
 {
     char *s;
 
-    s = _lookup_variable (ip, var, len);
+    (void)ip;
+
+    s = _lookup_variable (var, len);
     if (!s)
     return 0;
     do {
     var = s;
     if (!isvarfirstletter(*var))
         break;
-    s = _lookup_variable (ip, var, strlen(var));
+    s = _lookup_variable (var, strlen(var));
     } while (s);
 
     return atoi(var);

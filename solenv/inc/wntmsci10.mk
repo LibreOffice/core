@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: wntmsci10.mk,v $
-#
-# $Revision: 1.44 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -38,7 +34,7 @@ JAVAFLAGSDEBUG=-g
 # SOLAR JAva Unterstuetzung nur fuer wntmsci
 
 ASM=ml
-AFLAGS=/c /Cp /coff
+AFLAGS=/c /Cp /coff /safeseh
 
 # architecture dependent flags for the C and C++ compiler that can be changed by
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
@@ -89,7 +85,7 @@ CFLAGS+= -Ob1
 .ENDIF
 
 # flags to enable build with symbols; required for crashdump feature
-#CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)$/_ooo_st_$(TARGET).PDB
+#CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)/_ooo_st_$(TARGET).PDB
 # full debug for RE builds only due to size concerns
 .IF "$(UPDATER)"!=""
 CFLAGSENABLESYMBOLS=-Z7 -Yd
@@ -120,9 +116,9 @@ RSCDEFS+=-DFULL_DESK
 CFLAGSEXCEPTIONS=-GX
 CFLAGS_NO_EXCEPTIONS=
 
-CFLAGS_CREATE_PCH=-I$(INCPCH) -Fo$(SLO)$/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)$/pch_ex/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
+CFLAGS_CREATE_PCH=-I$(INCPCH) -Fo$(SLO)/pchname.obj -Ycprecompiled_$(PRJNAME).hxx -DPRECOMPILED_HEADERS
+CFLAGS_USE_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)/pch/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(INCPCH) -Yuprecompiled_$(PRJNAME).hxx -Fp$(SLO)/pch_ex/precompiled_$(PRJNAME).hxx$(PCHPOST) -DPRECOMPILED_HEADERS
 .IF "$(CALL_CDECL)"=="TRUE"
 CFLAGSCALL=-Gd
 .ELSE			# "$(CALL_CDECL)"=="TRUE"
@@ -146,7 +142,7 @@ CDEFSSLOMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 .ENDIF
-CFLAGSPROF=-Gh -Fd$(MISC)$/$(@:b).pdb
+CFLAGSPROF=-Gh -Fd$(MISC)/$(@:b).pdb
 CFLAGSDEBUG=-Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
 CFLAGSDBGUTIL=
 .IF "$(VC_STANDARD)"==""
@@ -213,8 +209,7 @@ MODULES_WITH_WARNINGS := \
     lingucomponent \
     soldep
 
-CDEFS+=-DSTLPORT_VERSION=$(STLPORT_VER) -DWINVER=0x400 -D_WIN32_IE=0x400
-CDEFS+=-D_MT
+CDEFS+=-DSTLPORT_VERSION=$(STLPORT_VER) -D_MT -DWINVER=0x0500 -D_WIN32_WINNT=0x0500 -D_WIN32_IE=0x0500
 
 COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(VCSID)_"
 
@@ -272,7 +267,7 @@ LIBCMT=libcmt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
 .ENDIF			# "$(DYNAMIC_CRT)"!=""
 
-STDOBJVCL=$(L)$/salmain.obj
+STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -292,8 +287,8 @@ LIBSTLPORT=stlport_vc71.lib
 LIBSTLPORTST=stlport_vc71_static.lib
 .ENDIF
 
-ATL_INCLUDE*=$(COMPATH)$/atlmfc$/include
-ATL_LIB*=$(COMPATH)$/atlmfc$/lib
+ATL_INCLUDE*=$(COMPATH)/atlmfc/include
+ATL_LIB*=$(COMPATH)/atlmfc/lib
 
 LIBMGR=lib $(NOLOGO)
 IMPLIB=lib

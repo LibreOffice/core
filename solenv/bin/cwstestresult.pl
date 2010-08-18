@@ -5,13 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: cwsattach.pl,v $
-#
-# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -103,6 +99,7 @@ sub testresult
     my $result='';
 
     if ( defined($childws) ) {
+        $opt_resultPage=SOAP::Data->type(string => $opt_resultPage);
         my $id = $cws->eis_id();
         if ( is_valid_cws($cws) ) {
             $result=$eis->submitTestResult($id,$opt_testrunName,$opt_testrunPlatform, $opt_resultPage, $status);
@@ -110,6 +107,7 @@ sub testresult
          print STDERR "cws is not valid";
     }
     } else {
+        $opt_resultPage=SOAP::Data->type(string => $opt_resultPage);
         $result=$eis->submitTestResultMWS($masterws,$milestone,$opt_testrunName,$opt_testrunPlatform, $opt_resultPage, $status);
     }
 

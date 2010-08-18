@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: globals.pm,v $
-#
-# $Revision: 1.103.16.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -82,8 +78,16 @@ BEGIN
         "dgo",
         "kok",
         "mni",
-        "sat"
-
+        "ca-XV",
+        "sat",
+        "ug",
+        "om",
+        "si",
+        "or",
+        "oc",
+        "ml",
+        "as",
+        "ast"
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
@@ -133,7 +137,10 @@ BEGIN
     $issolarispkgbuild = 0;
     $issolarissparcbuild = 0;
     $issolarisx86build = 0;
+    $isfreebsdbuild = 0;
     $isfreebsdpkgbuild = 0;
+    $ismacbuild = 0;
+    $ismacdmgbuild = 0;
     $unpackpath = "";
     $idttemplatepath = "";
     $idtlanguagepath = "";
@@ -172,6 +179,7 @@ BEGIN
     $rpm = "";
     $rpmcommand = "";
     $rpmquerycommand = "";
+    $rpminfologged = 0;
     $debian = "";
     $installertypedir = "";
     $controlledmakecabversion = "5";
@@ -264,7 +272,7 @@ BEGIN
     $isopensourceproduct = 1;
     $manufacturer = "";
     $longmanufacturer = "";
-    $sundirname = "Sun";
+    $sundirname = "Oracle";
     $codefilename = "codes.txt";
     $componentfilename = "components.txt";
     $productcode = "";
@@ -371,6 +379,10 @@ BEGIN
     %spellcheckerfilehash = ();
     $registryrootcomponent = "";
 
+    $installlocationdirectory = "";
+    $installlocationdirectoryset = 0;
+    $vendordirectory = "";
+    $vendordirectoryset = 0;
     $officeinstalldirectory = "";
     $officeinstalldirectoryset = 0;
     $basisinstalldirectory = "";
@@ -389,15 +401,15 @@ BEGIN
     $sundirgid = "";
 
     %sign_extensions = ("dll" => "1", "exe" => "1", "cab" => "1");
-    %treestyles = ("UREDIRECTORY" => "INSTALLURE", "BASISDIRECTORY" => "INSTALLBASIS", "OFFICEDIRECTORY" => "INSTALLOFFICE");
-    %installlocations = ("INSTALLLOCATION" => "1", "BASISINSTALLLOCATION" => "1", "OFFICEINSTALLLOCATION" => "1", "UREINSTALLLOCATION" => "1");
-    %treelayername = ("UREDIRECTORY" => "URE", "BASISDIRECTORY" => "BASIS", "OFFICEDIRECTORY" => "BRAND");
+    %treestyles = ();
+    %installlocations = ("INSTALLLOCATION" => "1");
+    %treelayername = ();
     %hostnametreestyles = ();
     %treeconditions = ();
     %usedtreeconditions = ();
     %moduledestination = ();
 
-    $unomaxservices = 25;
+    $unomaxservices = 1800; # regcomp -c argument length
     $javamaxservices = 15;
 
     $one_cab_file = 0;
@@ -448,6 +460,7 @@ BEGIN
     @featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis";
+    $macinstallfilename = "macinstall.ulf";
     $nsis204 = 0;
     $nsis231 = 0;
     $unicodensis = 0;
@@ -477,35 +490,11 @@ BEGIN
     @emptypackages = ();
     %fontpackageexists = ();
 
+    $exithandler = undef;
+
     $plat = $^O;
 
-    if (( $plat =~ /MSWin/i ) || (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )))
-    {
-        $zippath= "zip.exe";                # Has to be in the path: r:\btw\zip.exe
-        $checksumfile = "so_checksum.exe";
-        $unopkgfile = "unopkg.exe";
-        if ( $plat =~ /cygwin/i )
-        {
-            $separator = "/";
-            $pathseparator = "\:";
-            $quote = "\'";
-        }
-        else
-        {
-            $separator = "\\";
-            $pathseparator = "\;";
-            $quote = "\"";
-        }
-        $libextension = "\.dll";
-        $isunix = 0;
-        $iswin = 1;
-                $archiveformat = ".zip";
-        %savedmapping = ();
-        %savedrevmapping = ();
-        %savedrev83mapping = ();
-        %saved83dirmapping = ();
-    }
-    elsif (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ))
+    if ( $plat =~ /cygwin/i )
     {
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";
@@ -532,13 +521,12 @@ BEGIN
         if ( $plat =~ /darwin/i )
         {
             $libextension = "\.dylib";
-            $archiveformat = ".dmg";
         }
         else
         {
             $libextension = "\.so";
-            $archiveformat = ".tar.gz";
         }
+        $archiveformat = ".tar.gz";
         $quote = "\'";
         $isunix = 1;
         $iswin = 0;
@@ -548,6 +536,7 @@ BEGIN
     $wrapcmd = "";
 
     if ( $plat =~ /linux/i ) { $islinux = 1; }
+    if ( $plat =~ /kfreebsd/i ) { $islinux = 1; }
     if ( $plat =~ /solaris/i ) { $issolaris = 1; }
     if ( $plat =~ /darwin/i ) { $ismacosx = 1; }
 

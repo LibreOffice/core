@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: ant.mk,v $
-#
-# $Revision: 1.36 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,8 +31,8 @@
 JDK_VERSION=140
 JAVA_HOME=$(JDK14PATH)
 
-PATH!:=$(JDK14PATH)$/bin$(PATH_SEPERATOR)$(PATH)
-XCLASSPATH:=$(JDK14PATH)$/jre/lib/rt.jar
+PATH!:=$(JDK14PATH)/bin$(PATH_SEPERATOR)$(PATH)
+XCLASSPATH:=$(JDK14PATH)/jre/lib/rt.jar
 CLASSPATH:=$(XCLASSPATH)
 .ENDIF
 
@@ -51,14 +47,14 @@ CLASSPATH:=$(XCLASSPATH)
 
 .INCLUDE : target.mk
 
-CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(JAVA_HOME)$/lib$/tools.jar
+CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(ANT_CLASSPATH)$(PATH_SEPERATOR)$(JAVA_HOME)/lib/tools.jar
 .EXPORT : CLASSPATH
 .EXPORT : PATH
 
 # --- TARGETS -----------------------------------------------------
 
-$(CLASSDIR)$/solar.properties : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/minormkchanged.flg $(SOLARENV)$/inc/ant.properties
-    @echo Making: $@
+$(CLASSDIR)/solar.properties : $(SOLARVERSION)/$(INPATH)/inc$(UPDMINOREXT)/minormkchanged.flg $(SOLARENV)/inc/ant.properties
+    @echo "Making:   " $@
     @echo solar.build=$(BUILD) > $@
     @echo solar.rscversion=$(USQ)$(RSCVERSION)$(USQ) >> $@
     @echo solar.rscrevision=$(USQ)$(RSCREVISION)$(USQ) >> $@
@@ -66,7 +62,7 @@ $(CLASSDIR)$/solar.properties : $(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/m
     @echo solar.sourceversion=$(SOURCEVERSION) >> $@
     @echo solar.udkstamp=$(UDKSTAMP) >> $@
     @echo solar.extstamp=$(EXTSTAMP) >> $@
-    @cat $(DMAKEROOT)$/../ant.properties >> $@
+    @cat $(DMAKEROOT)/../ant.properties >> $@
 
 ANTBUILD .PHONY:
     $(ANT) $(ANT_FLAGS)

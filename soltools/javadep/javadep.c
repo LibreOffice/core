@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: javadep.c,v $
- * $Revision: 1.14 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -141,12 +138,14 @@ void    usage(void);
 void    err_quit(const char *, ...);
 void    silent_quit(void);
 
+#ifdef WNT
 /* poor man's getopt() */
 int     simple_getopt(char *pargv[], const char *poptstring);
 char    *optarg = NULL;
 int     optind  = 1;
 int     optopt  = 0;
 int     opterr  = 0;
+#endif
 
 uint8
 read_uint8(const file_t *pfile)
@@ -751,7 +750,7 @@ int simple_getopt(char *pargv[], const char *poptstring)
             char *popt;
             int c = parg[1];
             if ( (popt = strchr(poptstring, c)) == NULL ) {
-                optopt = c;
+               optopt = c;
                 if ( opterr )
                     fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
                 return '?';
@@ -771,7 +770,6 @@ int simple_getopt(char *pargv[], const char *poptstring)
     }
     return -1;
 }
-
 
 int CDECL
 main(int argc, char *argv[])
@@ -820,7 +818,11 @@ main(int argc, char *argv[])
     opterr = 0;
     pincs = allocate_growable();
 
+#ifdef WNT
     while( (c = simple_getopt(pall_argv, ":i:I:s:S:o:OhHvV")) != -1 ) {
+#else
+    while( (c = getopt(nall_argc, pall_argv, ":i:I:s:S:o:OhHvV")) != -1 ) {
+#endif
         switch(c) {
             case 'i':
             case 'I':

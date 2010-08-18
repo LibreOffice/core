@@ -2,7 +2,7 @@
 # converttags - a perl script to coonvert some predefined tags
 # to user specified values
 #
-# Copyright (c) 2000 Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 
 if($#ARGV == -1)

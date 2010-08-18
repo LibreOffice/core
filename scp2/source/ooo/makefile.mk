@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.77.16.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -45,13 +41,14 @@ TARGETTYPE=CUI
 SCPDEFS+=-D_MSC
 .ENDIF
 
-.IF "$(ENABLE_CRASHDUMP)"!=""
-SCPDEFS+=-DENABLE_CRASHDUMP
-.ENDIF
-
 .IF "$(BUILD_SPECIAL)"!=""
 SCPDEFS+=-DBUILD_SPECIAL
 .ENDIF
+
+.IF "$(BUILD_X64)"!=""
+SCPDEFS+=-DBUILD_X64
+.ENDIF
+
 
 SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
 
@@ -77,6 +74,10 @@ SCPDEFS+=-DENABLE_SYSTRAY_GTK
 
 .IF "$(ENABLE_KDE)" != ""
 SCPDEFS+=-DENABLE_KDE
+.ENDIF
+
+.IF "$(ENABLE_KDE4)" != ""
+SCPDEFS+=-DENABLE_KDE4
 .ENDIF
 
 .IF "$(ENABLE_KAB)" != ""
@@ -208,6 +209,9 @@ SCPDEFS+=-DISOLANG_MAJOR=$(ISOLANG_MAJOR)
 .IF "$(DISABLE_NEON)" == "TRUE"
 SCPDEFS+=-DDISABLE_NEON
 .ENDIF
+.IF "$(SYSTEM_NEON)" == "YES"
+SCPDEFS+=-DSYSTEM_NEON
+.ENDIF
 
 # if yes or unset (neon not used) -> do not install openssl library!
 .IF $(SYSTEM_OPENSSL) != "YES"
@@ -235,6 +239,14 @@ SCPDEFS+=-DENABLE_SVCTAGS
 
 .IF "$(WITH_VC_REDIST)" == "TRUE"
 SCPDEFS+=-DWITH_VC_REDIST
+.ENDIF
+
+.IF "$(MINGW_GCCDLL)"!=""
+SCPDEFS+=-DMINGW_GCCDLL=\""$(MINGW_GCCDLL)"\"
+.ENDIF
+
+.IF "$(MINGW_GXXDLL)"!=""
+SCPDEFS+=-DMINGW_GXXDLL=\""$(MINGW_GXXDLL)"\"
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl
@@ -281,7 +293,6 @@ PARFILES +=                        \
         folder_ooo.par             \
         folderitem_ooo.par         \
         registryitem_ooo.par       \
-        mergemodules_ooo.par       \
         vc_redist.par              \
         windowscustomaction_ooo.par
 .ENDIF

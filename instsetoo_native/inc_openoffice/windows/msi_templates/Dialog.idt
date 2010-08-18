@@ -1,12 +1,12 @@
 Dialog	HCentering	VCentering	Width	Height	Attributes	Title	Control_First	Control_Default	Control_Cancel
 s72	i2	i2	i2	i2	I4	L128	s50	S50	S50
 Dialog	Dialog
-AdminChangeFolder	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Tail	OK	Cancel
+AdminChangeFolder	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	TailText	OK	Cancel
 AdminNetworkLocation	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	InstallNow	InstallNow	Cancel
 AdminWelcome	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Next	Next	Cancel
 ApplicationInfo1	50	50	260	85	3	[ProductName]  - [STR_INSTALLATION_WIZARD]	OK	OK	OK
 CancelSetup	50	50	260	85	3	[ProductName] [Setup]	No	No	No
-CustomerInformation	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	NameEdit	Next	Cancel
+CustomerInformation	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	NameLabel	Next	Cancel
 CustomSetup	50	50	374	266	35	[ProductName] - [STR_INSTALLATION_WIZARD]	Tree	Next	Cancel
 CustomSetupTips	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	OK	OK	OK
 DatabaseFolder	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Next	Next	Cancel
@@ -14,7 +14,7 @@ DestinationFolder	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Next
 DiskSpaceRequirements	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	OK	OK	OK
 FilesInUse	50	50	374	266	19	[ProductName] - [STR_INSTALLATION_WIZARD]	Retry	Retry	Exit
 FileTypeDialog	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	CheckBox1	Next	Cancel
-InstallChangeFolder	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Tail	OK	Cancel
+InstallChangeFolder	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	TailText	OK	Cancel
 InstallWelcome	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Next	Next	Cancel
 LanguageInfo1	50	50	260	85	3	[ProductName]  - [STR_INSTALLATION_WIZARD]	OK	OK	OK
 LanguageSelection	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Next	Next	Cancel

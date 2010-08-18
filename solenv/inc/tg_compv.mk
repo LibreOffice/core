@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: tg_compv.mk,v $
-#
-# $Revision: 1.22 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,7 +25,7 @@
 #
 #*************************************************************************
 
-COMPVERMK:=$(SOLARINCDIR)$/comp_ver.mk
+COMPVERMK:=$(SOLARINCDIR)/comp_ver.mk
 
 .INCLUDE .IGNORE : $(COMPVERMK)
 
@@ -41,20 +37,20 @@ COMNAME:=
 .IF "$(COM)"=="GCC"
 CFLAGSVERSION=-dumpversion
 CFLAGSVERSION_CMD=-dumpversion
-CFLAGSNUMVERSION_CMD=-dumpversion $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
-#CFLAGSNUMVERSION_CMD=-dumpversion | 2>&1  $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSNUMVERSION_CMD=-dumpversion $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk
+#CFLAGSNUMVERSION_CMD=-dumpversion | 2>&1  $(AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk
 .ENDIF
 
 .IF "$(COM)"=="MSC"
 CFLAGSVERSION=
-CFLAGSVERSION_CMD=  $(PIPEERROR) $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
-CFLAGSNUMVERSION_CMD=  $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSVERSION_CMD=  $(PIPEERROR) $(AWK) -f $(SOLARENV)/bin/getcompver.awk
+CFLAGSNUMVERSION_CMD=  $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk
 .ENDIF
 
 .IF "$(COM)"=="C55" || "$(COM)"=="C54" || "$(COM)"=="C52" || "$(COM)"=="C40" || "$(COM)"=="sunpro"
 CFLAGSVERSION= -V
-CFLAGSVERSION_CMD= -V  $(PIPEERROR) $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
-CFLAGSNUMVERSION_CMD= -V  $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+CFLAGSVERSION_CMD= -V  $(PIPEERROR) $(AWK) -f $(SOLARENV)/bin/getcompver.awk
+CFLAGSNUMVERSION_CMD= -V  $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk
 .ENDIF
 
 .IF "$(COM)"=="C730"
@@ -81,6 +77,7 @@ COMNAME=msci
 .IF "$(COM)"=="GCC"
 
 SHORTSTDCPP3:=
+SHORTSTDC3:="1"
 
 .IF "$(CCNUMVER)">="000200910000"
 COMID=GCC
@@ -105,6 +102,19 @@ SHORTSTDCPP3="5"
 .ENDIF
 
 .IF "$(CCNUMVER)">="000300040000"
+.IF "$(OS)$(CPU)" == "LINUX6" || "$(OS)$(CPU)" == "LINUXH"
+#for gcc >= 3.4.0 on m68k-linux this is libgcc_s.so.2.
+#for gcc >= 3.4.0 < 4.2.0 on hppa-linux this is libgcc_s.so.2.
+SHORTSTDC3:="2"
+.ENDIF
+SHORTSTDCPP3="6"
+.ENDIF
+
+.IF "$(CCNUMVER)">="000400020000"
+.IF "$(OS)$(CPU)" == "LINUXH"
+#for gcc >= 4.2.0 on hppa-linux this is libgcc_s.so.4.
+SHORTSTDC3:="4"
+.ENDIF
 SHORTSTDCPP3="6"
 .ENDIF
 

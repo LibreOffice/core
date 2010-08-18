@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: extension_pre.mk,v $
-#
-# $Revision: 1.4 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,24 +25,24 @@
 #
 #*************************************************************************
 
-EXTENSIONDIR*:=$(MISC)$/$(EXTENSIONNAME)
+EXTENSIONDIR*:=$(MISC)/$(EXTENSIONNAME)
 
 COMPONENT_CONFIGDIR*:=.
-COMPONENT_CONFIGDEST*:=registry$/data
-COMPONENT_CONFIGDESTSCHEMA*:=registry$/schema
+COMPONENT_CONFIGDEST*:=registry/data
+COMPONENT_CONFIGDESTSCHEMA*:=registry/schema
 
 .IF "$(COMPONENT_COPYONLY)"==""
-DESCRIPTION:=$(EXTENSIONDIR)$/description.xml
+DESCRIPTION:=$(EXTENSIONDIR)/description.xml
 DESCRIPTION_SRC*:=description.xml
 
-COMPONENT_MANIFEST*:=$(EXTENSIONDIR)$/META-INF$/manifest.xml
+COMPONENT_MANIFEST*:=$(EXTENSIONDIR)/META-INF/manifest.xml
 MANIFEST_SRC*:=manifest.xml
 
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-PACKLICS*:=$(foreach,i,$(alllangiso) $(EXTENSIONDIR)$/registration$/license_$i.txt)
+PACKLICS*:=$(foreach,i,$(alllangiso) $(EXTENSIONDIR)/registration/license_$i.txt)
 COMPONENT_LIC_TEMPL*:=registration/license_xxx.txt
 .ELSE
-PACKLICS*:=$(foreach,i,$(alllangiso) $(EXTENSIONDIR)$/registration$/LICENSE_$i)
+PACKLICS*:=$(foreach,i,$(alllangiso) $(EXTENSIONDIR)/registration/LICENSE_$i)
 COMPONENT_LIC_TEMPL*:=registration/LICENSE_xxx
 .ENDIF
 

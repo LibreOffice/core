@@ -8,38 +8,38 @@ DEFLIB1NAME*=$(DEF1LIBNAME)
 .ENDIF			# "$(DEF1LIBNAME)"!=""
 
 .IF "$(DEFLIB1NAME)"!=""
-DEF1DEPN+=$(foreach,i,$(DEFLIB1NAME) $(SLB)$/$(i).lib)
+DEF1DEPN+=$(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib)
 .ENDIF
 
 .IF "$(SHL1VERSIONMAP)"!=""
 .IF "$(DEF1EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF1EXPORTFILE=$(MISC)$/$(SHL1VERSIONMAP:b)_$(SHL1TARGET).dxp
+DEF1EXPORTFILE=$(MISC)/$(SHL1VERSIONMAP:b)_$(SHL1TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF1EXPORTFILE) : $(SHL1OBJS) $(SHL1LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(COMMAND_ECHO)$(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
-    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
+    $(COMMAND_ECHO)-$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    nm -gP $(SHL1OBJS) \
+    $(COMMAND_ECHO)nm -gP $(SHL1OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    $(RENAME) $@.exported-symbols $@
+    $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
-DEF1EXPORTFILE=$(MISC)$/$(SHL1VERSIONMAP:b)_$(SHL1TARGET).dxp
+DEF1EXPORTFILE=$(MISC)/$(SHL1VERSIONMAP:b)_$(SHL1TARGET).dxp
 $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(DEF1EXPORTFILE)"==""
@@ -47,7 +47,7 @@ $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-DEF1FILTER=$(SOLARENV)$/inc$/dummy.flt
+DEF1FILTER=$(SOLARENV)/inc/dummy.flt
 
 RMHACK1:=$(RM)
 
@@ -63,8 +63,7 @@ $(DEF1TARGETN) : \
 $(DEF1TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(EMQ)"$(SHL1TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
@@ -76,20 +75,20 @@ $(DEF1TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEFLIB1NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)$/$(SHL1TARGET).exp
-    dlltool --output-def $(MISC)$/$(SHL1TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB1NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
-    tail --lines +3 $(MISC)$/$(SHL1TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)$/$(SHL1TARGET).exp
+    @-$(RM) $(MISC)/$(SHL1TARGET).exp
+    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL1TARGET).exp --export-all-symbols \
+        `$(TYPE) $(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL1TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-$(RM) $(MISC)/$(SHL1TARGET).exp
 .ELSE
 .IF "$(SHL1USE_EXPORTS)"==""
-    @-$(RMHACK1) $(MISC)$/$(SHL1TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL1TARGET).exp $(SLB)$/$(DEFLIB1NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL1TARGET).flt $(MISC)$/$(SHL1TARGET).exp			   >>$@.tmpfile
-    $(RMHACK1) $(MISC)$/$(SHL1TARGET).exp
+    @-$(RMHACK1) $(MISC)/$(SHL1TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL1TARGET).exp $(SLB)/$(DEFLIB1NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL1TARGET).flt $(MISC)/$(SHL1TARGET).exp			   >>$@.tmpfile
+    $(COMMAND_ECHO)$(RMHACK1) $(MISC)/$(SHL1TARGET).exp
 .ELSE			# "$(SHL1USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB1NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL1TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF1FILTER) $(MISC)$/$(SHL1TARGET).direct >>$@.tmpfile
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL1TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF1FILTER) $(MISC)/$(SHL1TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL1USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB1NAME)"!=""
@@ -155,9 +154,9 @@ $(DEF1TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEF1EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
-    $(TYPE) $(DEF1EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF1EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
 .ELSE
-    $(TYPE) $(DEF1EXPORTFILE) >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF1EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
     @-$(RM) $@
@@ -170,8 +169,8 @@ $(DEF1TARGETN) .PHONY :
 #check osl/os2/module.c/osl_loadModule()
 SHL1TARGET8=$(shell @fix_shl $(SHL1TARGETN:f))
 
-DEF1FILTER=$(SOLARENV)$/inc$/dummy.flt
-DEF1NAMELIST=$(foreach,i,$(DEFLIB1NAME) $(SLB)$/$(i).lib)
+DEF1FILTER=$(SOLARENV)/inc/dummy.flt
+DEF1NAMELIST=$(foreach,i,$(DEFLIB1NAME) $(SLB)/$(i).lib)
 
 .IF "$(link_always)"==""
 $(DEF1TARGETN) : \
@@ -181,8 +180,7 @@ $(DEF1TARGETN) : \
 $(DEF1TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @+-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL1TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF1DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
@@ -193,7 +191,7 @@ $(DEF1TARGETN) .PHONY :
 .ENDIF
 
 .IF "$(DEFLIB1NAME)"!=""
-    @+echo $(SLB)$/$(DEFLIB1NAME).lib
+    @+echo $(SLB)/$(DEFLIB1NAME).lib
     @+emxexpr $(DEF1NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB1NAME)"!=""
 
@@ -263,11 +261,11 @@ $(DEF1TARGETN) .PHONY :
     @sort < $@.tmp_ord | uniq > $@.exptmpfile
     @fix_def_ord < $@.exptmpfile >> $@.tmpfile
     @+-$(RM) $@
-    +$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    +$(IMPLIB) $(IMPLIBFLAGS) $(SHL1IMPLIBN:s/.lib/.a/) $@
-    +emxomf -o $(SHL1IMPLIBN) $(SHL1IMPLIBN:s/.lib/.a/) 
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL1IMPLIBN:s/.lib/.a/) $@
+    $(COMMAND_ECHO)+emxomf -o $(SHL1IMPLIBN) $(SHL1IMPLIBN:s/.lib/.a/) 
 
 .ENDIF			# "$(GUI)"=="OS2"
 
@@ -291,38 +289,38 @@ DEFLIB2NAME*=$(DEF2LIBNAME)
 .ENDIF			# "$(DEF2LIBNAME)"!=""
 
 .IF "$(DEFLIB2NAME)"!=""
-DEF2DEPN+=$(foreach,i,$(DEFLIB2NAME) $(SLB)$/$(i).lib)
+DEF2DEPN+=$(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib)
 .ENDIF
 
 .IF "$(SHL2VERSIONMAP)"!=""
 .IF "$(DEF2EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF2EXPORTFILE=$(MISC)$/$(SHL2VERSIONMAP:b)_$(SHL2TARGET).dxp
+DEF2EXPORTFILE=$(MISC)/$(SHL2VERSIONMAP:b)_$(SHL2TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF2EXPORTFILE) : $(SHL2OBJS) $(SHL2LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(COMMAND_ECHO)$(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
-    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
+    $(COMMAND_ECHO)-$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    nm -gP $(SHL2OBJS) \
+    $(COMMAND_ECHO)nm -gP $(SHL2OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    $(RENAME) $@.exported-symbols $@
+    $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
-DEF2EXPORTFILE=$(MISC)$/$(SHL2VERSIONMAP:b)_$(SHL2TARGET).dxp
+DEF2EXPORTFILE=$(MISC)/$(SHL2VERSIONMAP:b)_$(SHL2TARGET).dxp
 $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(DEF2EXPORTFILE)"==""
@@ -330,7 +328,7 @@ $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-DEF2FILTER=$(SOLARENV)$/inc$/dummy.flt
+DEF2FILTER=$(SOLARENV)/inc/dummy.flt
 
 RMHACK2:=$(RM)
 
@@ -346,8 +344,7 @@ $(DEF2TARGETN) : \
 $(DEF2TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(EMQ)"$(SHL2TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
@@ -359,20 +356,20 @@ $(DEF2TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEFLIB2NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)$/$(SHL2TARGET).exp
-    dlltool --output-def $(MISC)$/$(SHL2TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB2NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
-    tail --lines +3 $(MISC)$/$(SHL2TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)$/$(SHL2TARGET).exp
+    @-$(RM) $(MISC)/$(SHL2TARGET).exp
+    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL2TARGET).exp --export-all-symbols \
+        `$(TYPE) $(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL2TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-$(RM) $(MISC)/$(SHL2TARGET).exp
 .ELSE
 .IF "$(SHL2USE_EXPORTS)"==""
-    @-$(RMHACK2) $(MISC)$/$(SHL2TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL2TARGET).exp $(SLB)$/$(DEFLIB2NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL2TARGET).flt $(MISC)$/$(SHL2TARGET).exp			   >>$@.tmpfile
-    $(RMHACK2) $(MISC)$/$(SHL2TARGET).exp
+    @-$(RMHACK2) $(MISC)/$(SHL2TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL2TARGET).exp $(SLB)/$(DEFLIB2NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL2TARGET).flt $(MISC)/$(SHL2TARGET).exp			   >>$@.tmpfile
+    $(COMMAND_ECHO)$(RMHACK2) $(MISC)/$(SHL2TARGET).exp
 .ELSE			# "$(SHL2USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB2NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL2TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF2FILTER) $(MISC)$/$(SHL2TARGET).direct >>$@.tmpfile
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL2TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF2FILTER) $(MISC)/$(SHL2TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL2USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB2NAME)"!=""
@@ -438,9 +435,9 @@ $(DEF2TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEF2EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
-    $(TYPE) $(DEF2EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF2EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
 .ELSE
-    $(TYPE) $(DEF2EXPORTFILE) >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF2EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
     @-$(RM) $@
@@ -453,8 +450,8 @@ $(DEF2TARGETN) .PHONY :
 #check osl/os2/module.c/osl_loadModule()
 SHL2TARGET8=$(shell @fix_shl $(SHL2TARGETN:f))
 
-DEF2FILTER=$(SOLARENV)$/inc$/dummy.flt
-DEF2NAMELIST=$(foreach,i,$(DEFLIB2NAME) $(SLB)$/$(i).lib)
+DEF2FILTER=$(SOLARENV)/inc/dummy.flt
+DEF2NAMELIST=$(foreach,i,$(DEFLIB2NAME) $(SLB)/$(i).lib)
 
 .IF "$(link_always)"==""
 $(DEF2TARGETN) : \
@@ -464,8 +461,7 @@ $(DEF2TARGETN) : \
 $(DEF2TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @+-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL2TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF2DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
@@ -476,7 +472,7 @@ $(DEF2TARGETN) .PHONY :
 .ENDIF
 
 .IF "$(DEFLIB2NAME)"!=""
-    @+echo $(SLB)$/$(DEFLIB2NAME).lib
+    @+echo $(SLB)/$(DEFLIB2NAME).lib
     @+emxexpr $(DEF2NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB2NAME)"!=""
 
@@ -546,11 +542,11 @@ $(DEF2TARGETN) .PHONY :
     @sort < $@.tmp_ord | uniq > $@.exptmpfile
     @fix_def_ord < $@.exptmpfile >> $@.tmpfile
     @+-$(RM) $@
-    +$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    +$(IMPLIB) $(IMPLIBFLAGS) $(SHL2IMPLIBN:s/.lib/.a/) $@
-    +emxomf -o $(SHL2IMPLIBN) $(SHL2IMPLIBN:s/.lib/.a/) 
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL2IMPLIBN:s/.lib/.a/) $@
+    $(COMMAND_ECHO)+emxomf -o $(SHL2IMPLIBN) $(SHL2IMPLIBN:s/.lib/.a/) 
 
 .ENDIF			# "$(GUI)"=="OS2"
 
@@ -574,38 +570,38 @@ DEFLIB3NAME*=$(DEF3LIBNAME)
 .ENDIF			# "$(DEF3LIBNAME)"!=""
 
 .IF "$(DEFLIB3NAME)"!=""
-DEF3DEPN+=$(foreach,i,$(DEFLIB3NAME) $(SLB)$/$(i).lib)
+DEF3DEPN+=$(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib)
 .ENDIF
 
 .IF "$(SHL3VERSIONMAP)"!=""
 .IF "$(DEF3EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF3EXPORTFILE=$(MISC)$/$(SHL3VERSIONMAP:b)_$(SHL3TARGET).dxp
+DEF3EXPORTFILE=$(MISC)/$(SHL3VERSIONMAP:b)_$(SHL3TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF3EXPORTFILE) : $(SHL3OBJS) $(SHL3LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(COMMAND_ECHO)$(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
-    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
+    $(COMMAND_ECHO)-$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    nm -gP $(SHL3OBJS) \
+    $(COMMAND_ECHO)nm -gP $(SHL3OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    $(RENAME) $@.exported-symbols $@
+    $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
-DEF3EXPORTFILE=$(MISC)$/$(SHL3VERSIONMAP:b)_$(SHL3TARGET).dxp
+DEF3EXPORTFILE=$(MISC)/$(SHL3VERSIONMAP:b)_$(SHL3TARGET).dxp
 $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(DEF3EXPORTFILE)"==""
@@ -613,7 +609,7 @@ $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-DEF3FILTER=$(SOLARENV)$/inc$/dummy.flt
+DEF3FILTER=$(SOLARENV)/inc/dummy.flt
 
 RMHACK3:=$(RM)
 
@@ -629,8 +625,7 @@ $(DEF3TARGETN) : \
 $(DEF3TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(EMQ)"$(SHL3TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
@@ -642,20 +637,20 @@ $(DEF3TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEFLIB3NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)$/$(SHL3TARGET).exp
-    dlltool --output-def $(MISC)$/$(SHL3TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB3NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
-    tail --lines +3 $(MISC)$/$(SHL3TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)$/$(SHL3TARGET).exp
+    @-$(RM) $(MISC)/$(SHL3TARGET).exp
+    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL3TARGET).exp --export-all-symbols \
+        `$(TYPE) $(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL3TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-$(RM) $(MISC)/$(SHL3TARGET).exp
 .ELSE
 .IF "$(SHL3USE_EXPORTS)"==""
-    @-$(RMHACK3) $(MISC)$/$(SHL3TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL3TARGET).exp $(SLB)$/$(DEFLIB3NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL3TARGET).flt $(MISC)$/$(SHL3TARGET).exp			   >>$@.tmpfile
-    $(RMHACK3) $(MISC)$/$(SHL3TARGET).exp
+    @-$(RMHACK3) $(MISC)/$(SHL3TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL3TARGET).exp $(SLB)/$(DEFLIB3NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL3TARGET).flt $(MISC)/$(SHL3TARGET).exp			   >>$@.tmpfile
+    $(COMMAND_ECHO)$(RMHACK3) $(MISC)/$(SHL3TARGET).exp
 .ELSE			# "$(SHL3USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB3NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL3TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF3FILTER) $(MISC)$/$(SHL3TARGET).direct >>$@.tmpfile
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL3TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF3FILTER) $(MISC)/$(SHL3TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL3USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB3NAME)"!=""
@@ -721,9 +716,9 @@ $(DEF3TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEF3EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
-    $(TYPE) $(DEF3EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF3EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
 .ELSE
-    $(TYPE) $(DEF3EXPORTFILE) >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF3EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
     @-$(RM) $@
@@ -736,8 +731,8 @@ $(DEF3TARGETN) .PHONY :
 #check osl/os2/module.c/osl_loadModule()
 SHL3TARGET8=$(shell @fix_shl $(SHL3TARGETN:f))
 
-DEF3FILTER=$(SOLARENV)$/inc$/dummy.flt
-DEF3NAMELIST=$(foreach,i,$(DEFLIB3NAME) $(SLB)$/$(i).lib)
+DEF3FILTER=$(SOLARENV)/inc/dummy.flt
+DEF3NAMELIST=$(foreach,i,$(DEFLIB3NAME) $(SLB)/$(i).lib)
 
 .IF "$(link_always)"==""
 $(DEF3TARGETN) : \
@@ -747,8 +742,7 @@ $(DEF3TARGETN) : \
 $(DEF3TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @+-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL3TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF3DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
@@ -759,7 +753,7 @@ $(DEF3TARGETN) .PHONY :
 .ENDIF
 
 .IF "$(DEFLIB3NAME)"!=""
-    @+echo $(SLB)$/$(DEFLIB3NAME).lib
+    @+echo $(SLB)/$(DEFLIB3NAME).lib
     @+emxexpr $(DEF3NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB3NAME)"!=""
 
@@ -829,11 +823,11 @@ $(DEF3TARGETN) .PHONY :
     @sort < $@.tmp_ord | uniq > $@.exptmpfile
     @fix_def_ord < $@.exptmpfile >> $@.tmpfile
     @+-$(RM) $@
-    +$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    +$(IMPLIB) $(IMPLIBFLAGS) $(SHL3IMPLIBN:s/.lib/.a/) $@
-    +emxomf -o $(SHL3IMPLIBN) $(SHL3IMPLIBN:s/.lib/.a/) 
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL3IMPLIBN:s/.lib/.a/) $@
+    $(COMMAND_ECHO)+emxomf -o $(SHL3IMPLIBN) $(SHL3IMPLIBN:s/.lib/.a/) 
 
 .ENDIF			# "$(GUI)"=="OS2"
 
@@ -857,38 +851,38 @@ DEFLIB4NAME*=$(DEF4LIBNAME)
 .ENDIF			# "$(DEF4LIBNAME)"!=""
 
 .IF "$(DEFLIB4NAME)"!=""
-DEF4DEPN+=$(foreach,i,$(DEFLIB4NAME) $(SLB)$/$(i).lib)
+DEF4DEPN+=$(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib)
 .ENDIF
 
 .IF "$(SHL4VERSIONMAP)"!=""
 .IF "$(DEF4EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF4EXPORTFILE=$(MISC)$/$(SHL4VERSIONMAP:b)_$(SHL4TARGET).dxp
+DEF4EXPORTFILE=$(MISC)/$(SHL4VERSIONMAP:b)_$(SHL4TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF4EXPORTFILE) : $(SHL4OBJS) $(SHL4LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(COMMAND_ECHO)$(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
-    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
+    $(COMMAND_ECHO)-$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    nm -gP $(SHL4OBJS) \
+    $(COMMAND_ECHO)nm -gP $(SHL4OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    $(RENAME) $@.exported-symbols $@
+    $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
-DEF4EXPORTFILE=$(MISC)$/$(SHL4VERSIONMAP:b)_$(SHL4TARGET).dxp
+DEF4EXPORTFILE=$(MISC)/$(SHL4VERSIONMAP:b)_$(SHL4TARGET).dxp
 $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(DEF4EXPORTFILE)"==""
@@ -896,7 +890,7 @@ $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-DEF4FILTER=$(SOLARENV)$/inc$/dummy.flt
+DEF4FILTER=$(SOLARENV)/inc/dummy.flt
 
 RMHACK4:=$(RM)
 
@@ -912,8 +906,7 @@ $(DEF4TARGETN) : \
 $(DEF4TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(EMQ)"$(SHL4TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
@@ -925,20 +918,20 @@ $(DEF4TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEFLIB4NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)$/$(SHL4TARGET).exp
-    dlltool --output-def $(MISC)$/$(SHL4TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB4NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
-    tail --lines +3 $(MISC)$/$(SHL4TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)$/$(SHL4TARGET).exp
+    @-$(RM) $(MISC)/$(SHL4TARGET).exp
+    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL4TARGET).exp --export-all-symbols \
+        `$(TYPE) $(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL4TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-$(RM) $(MISC)/$(SHL4TARGET).exp
 .ELSE
 .IF "$(SHL4USE_EXPORTS)"==""
-    @-$(RMHACK4) $(MISC)$/$(SHL4TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL4TARGET).exp $(SLB)$/$(DEFLIB4NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL4TARGET).flt $(MISC)$/$(SHL4TARGET).exp			   >>$@.tmpfile
-    $(RMHACK4) $(MISC)$/$(SHL4TARGET).exp
+    @-$(RMHACK4) $(MISC)/$(SHL4TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL4TARGET).exp $(SLB)/$(DEFLIB4NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL4TARGET).flt $(MISC)/$(SHL4TARGET).exp			   >>$@.tmpfile
+    $(COMMAND_ECHO)$(RMHACK4) $(MISC)/$(SHL4TARGET).exp
 .ELSE			# "$(SHL4USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB4NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL4TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF4FILTER) $(MISC)$/$(SHL4TARGET).direct >>$@.tmpfile
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL4TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF4FILTER) $(MISC)/$(SHL4TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL4USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB4NAME)"!=""
@@ -1004,9 +997,9 @@ $(DEF4TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEF4EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
-    $(TYPE) $(DEF4EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF4EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
 .ELSE
-    $(TYPE) $(DEF4EXPORTFILE) >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF4EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
     @-$(RM) $@
@@ -1019,8 +1012,8 @@ $(DEF4TARGETN) .PHONY :
 #check osl/os2/module.c/osl_loadModule()
 SHL4TARGET8=$(shell @fix_shl $(SHL4TARGETN:f))
 
-DEF4FILTER=$(SOLARENV)$/inc$/dummy.flt
-DEF4NAMELIST=$(foreach,i,$(DEFLIB4NAME) $(SLB)$/$(i).lib)
+DEF4FILTER=$(SOLARENV)/inc/dummy.flt
+DEF4NAMELIST=$(foreach,i,$(DEFLIB4NAME) $(SLB)/$(i).lib)
 
 .IF "$(link_always)"==""
 $(DEF4TARGETN) : \
@@ -1030,8 +1023,7 @@ $(DEF4TARGETN) : \
 $(DEF4TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @+-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL4TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF4DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
@@ -1042,7 +1034,7 @@ $(DEF4TARGETN) .PHONY :
 .ENDIF
 
 .IF "$(DEFLIB4NAME)"!=""
-    @+echo $(SLB)$/$(DEFLIB4NAME).lib
+    @+echo $(SLB)/$(DEFLIB4NAME).lib
     @+emxexpr $(DEF4NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB4NAME)"!=""
 
@@ -1112,11 +1104,11 @@ $(DEF4TARGETN) .PHONY :
     @sort < $@.tmp_ord | uniq > $@.exptmpfile
     @fix_def_ord < $@.exptmpfile >> $@.tmpfile
     @+-$(RM) $@
-    +$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    +$(IMPLIB) $(IMPLIBFLAGS) $(SHL4IMPLIBN:s/.lib/.a/) $@
-    +emxomf -o $(SHL4IMPLIBN) $(SHL4IMPLIBN:s/.lib/.a/) 
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL4IMPLIBN:s/.lib/.a/) $@
+    $(COMMAND_ECHO)+emxomf -o $(SHL4IMPLIBN) $(SHL4IMPLIBN:s/.lib/.a/) 
 
 .ENDIF			# "$(GUI)"=="OS2"
 
@@ -1140,38 +1132,38 @@ DEFLIB5NAME*=$(DEF5LIBNAME)
 .ENDIF			# "$(DEF5LIBNAME)"!=""
 
 .IF "$(DEFLIB5NAME)"!=""
-DEF5DEPN+=$(foreach,i,$(DEFLIB5NAME) $(SLB)$/$(i).lib)
+DEF5DEPN+=$(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib)
 .ENDIF
 
 .IF "$(SHL5VERSIONMAP)"!=""
 .IF "$(DEF5EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF5EXPORTFILE=$(MISC)$/$(SHL5VERSIONMAP:b)_$(SHL5TARGET).dxp
+DEF5EXPORTFILE=$(MISC)/$(SHL5VERSIONMAP:b)_$(SHL5TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF5EXPORTFILE) : $(SHL5OBJS) $(SHL5LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(COMMAND_ECHO)$(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
-    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
+    $(COMMAND_ECHO)-$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    nm -gP $(SHL5OBJS) \
+    $(COMMAND_ECHO)nm -gP $(SHL5OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    $(RENAME) $@.exported-symbols $@
+    $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
-DEF5EXPORTFILE=$(MISC)$/$(SHL5VERSIONMAP:b)_$(SHL5TARGET).dxp
+DEF5EXPORTFILE=$(MISC)/$(SHL5VERSIONMAP:b)_$(SHL5TARGET).dxp
 $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(DEF5EXPORTFILE)"==""
@@ -1179,7 +1171,7 @@ $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-DEF5FILTER=$(SOLARENV)$/inc$/dummy.flt
+DEF5FILTER=$(SOLARENV)/inc/dummy.flt
 
 RMHACK5:=$(RM)
 
@@ -1195,8 +1187,7 @@ $(DEF5TARGETN) : \
 $(DEF5TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(EMQ)"$(SHL5TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
@@ -1208,20 +1199,20 @@ $(DEF5TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEFLIB5NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)$/$(SHL5TARGET).exp
-    dlltool --output-def $(MISC)$/$(SHL5TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB5NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
-    tail --lines +3 $(MISC)$/$(SHL5TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)$/$(SHL5TARGET).exp
+    @-$(RM) $(MISC)/$(SHL5TARGET).exp
+    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL5TARGET).exp --export-all-symbols \
+        `$(TYPE) $(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL5TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-$(RM) $(MISC)/$(SHL5TARGET).exp
 .ELSE
 .IF "$(SHL5USE_EXPORTS)"==""
-    @-$(RMHACK5) $(MISC)$/$(SHL5TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL5TARGET).exp $(SLB)$/$(DEFLIB5NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL5TARGET).flt $(MISC)$/$(SHL5TARGET).exp			   >>$@.tmpfile
-    $(RMHACK5) $(MISC)$/$(SHL5TARGET).exp
+    @-$(RMHACK5) $(MISC)/$(SHL5TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL5TARGET).exp $(SLB)/$(DEFLIB5NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL5TARGET).flt $(MISC)/$(SHL5TARGET).exp			   >>$@.tmpfile
+    $(COMMAND_ECHO)$(RMHACK5) $(MISC)/$(SHL5TARGET).exp
 .ELSE			# "$(SHL5USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB5NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL5TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF5FILTER) $(MISC)$/$(SHL5TARGET).direct >>$@.tmpfile
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL5TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF5FILTER) $(MISC)/$(SHL5TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL5USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB5NAME)"!=""
@@ -1287,9 +1278,9 @@ $(DEF5TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEF5EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
-    $(TYPE) $(DEF5EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF5EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
 .ELSE
-    $(TYPE) $(DEF5EXPORTFILE) >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF5EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
     @-$(RM) $@
@@ -1302,8 +1293,8 @@ $(DEF5TARGETN) .PHONY :
 #check osl/os2/module.c/osl_loadModule()
 SHL5TARGET8=$(shell @fix_shl $(SHL5TARGETN:f))
 
-DEF5FILTER=$(SOLARENV)$/inc$/dummy.flt
-DEF5NAMELIST=$(foreach,i,$(DEFLIB5NAME) $(SLB)$/$(i).lib)
+DEF5FILTER=$(SOLARENV)/inc/dummy.flt
+DEF5NAMELIST=$(foreach,i,$(DEFLIB5NAME) $(SLB)/$(i).lib)
 
 .IF "$(link_always)"==""
 $(DEF5TARGETN) : \
@@ -1313,8 +1304,7 @@ $(DEF5TARGETN) : \
 $(DEF5TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @+-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL5TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF5DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
@@ -1325,7 +1315,7 @@ $(DEF5TARGETN) .PHONY :
 .ENDIF
 
 .IF "$(DEFLIB5NAME)"!=""
-    @+echo $(SLB)$/$(DEFLIB5NAME).lib
+    @+echo $(SLB)/$(DEFLIB5NAME).lib
     @+emxexpr $(DEF5NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB5NAME)"!=""
 
@@ -1395,11 +1385,11 @@ $(DEF5TARGETN) .PHONY :
     @sort < $@.tmp_ord | uniq > $@.exptmpfile
     @fix_def_ord < $@.exptmpfile >> $@.tmpfile
     @+-$(RM) $@
-    +$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    +$(IMPLIB) $(IMPLIBFLAGS) $(SHL5IMPLIBN:s/.lib/.a/) $@
-    +emxomf -o $(SHL5IMPLIBN) $(SHL5IMPLIBN:s/.lib/.a/) 
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL5IMPLIBN:s/.lib/.a/) $@
+    $(COMMAND_ECHO)+emxomf -o $(SHL5IMPLIBN) $(SHL5IMPLIBN:s/.lib/.a/) 
 
 .ENDIF			# "$(GUI)"=="OS2"
 
@@ -1423,38 +1413,38 @@ DEFLIB6NAME*=$(DEF6LIBNAME)
 .ENDIF			# "$(DEF6LIBNAME)"!=""
 
 .IF "$(DEFLIB6NAME)"!=""
-DEF6DEPN+=$(foreach,i,$(DEFLIB6NAME) $(SLB)$/$(i).lib)
+DEF6DEPN+=$(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib)
 .ENDIF
 
 .IF "$(SHL6VERSIONMAP)"!=""
 .IF "$(DEF6EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF6EXPORTFILE=$(MISC)$/$(SHL6VERSIONMAP:b)_$(SHL6TARGET).dxp
+DEF6EXPORTFILE=$(MISC)/$(SHL6VERSIONMAP:b)_$(SHL6TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF6EXPORTFILE) : $(SHL6OBJS) $(SHL6LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(COMMAND_ECHO)$(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
-    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
+    $(COMMAND_ECHO)-$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    nm -gP $(SHL6OBJS) \
+    $(COMMAND_ECHO)nm -gP $(SHL6OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    $(RENAME) $@.exported-symbols $@
+    $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
-DEF6EXPORTFILE=$(MISC)$/$(SHL6VERSIONMAP:b)_$(SHL6TARGET).dxp
+DEF6EXPORTFILE=$(MISC)/$(SHL6VERSIONMAP:b)_$(SHL6TARGET).dxp
 $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(DEF6EXPORTFILE)"==""
@@ -1462,7 +1452,7 @@ $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-DEF6FILTER=$(SOLARENV)$/inc$/dummy.flt
+DEF6FILTER=$(SOLARENV)/inc/dummy.flt
 
 RMHACK6:=$(RM)
 
@@ -1478,8 +1468,7 @@ $(DEF6TARGETN) : \
 $(DEF6TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(EMQ)"$(SHL6TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
@@ -1491,20 +1480,20 @@ $(DEF6TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEFLIB6NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)$/$(SHL6TARGET).exp
-    dlltool --output-def $(MISC)$/$(SHL6TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB6NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
-    tail --lines +3 $(MISC)$/$(SHL6TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)$/$(SHL6TARGET).exp
+    @-$(RM) $(MISC)/$(SHL6TARGET).exp
+    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL6TARGET).exp --export-all-symbols \
+        `$(TYPE) $(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL6TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-$(RM) $(MISC)/$(SHL6TARGET).exp
 .ELSE
 .IF "$(SHL6USE_EXPORTS)"==""
-    @-$(RMHACK6) $(MISC)$/$(SHL6TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL6TARGET).exp $(SLB)$/$(DEFLIB6NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL6TARGET).flt $(MISC)$/$(SHL6TARGET).exp			   >>$@.tmpfile
-    $(RMHACK6) $(MISC)$/$(SHL6TARGET).exp
+    @-$(RMHACK6) $(MISC)/$(SHL6TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL6TARGET).exp $(SLB)/$(DEFLIB6NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL6TARGET).flt $(MISC)/$(SHL6TARGET).exp			   >>$@.tmpfile
+    $(COMMAND_ECHO)$(RMHACK6) $(MISC)/$(SHL6TARGET).exp
 .ELSE			# "$(SHL6USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB6NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL6TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF6FILTER) $(MISC)$/$(SHL6TARGET).direct >>$@.tmpfile
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL6TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF6FILTER) $(MISC)/$(SHL6TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL6USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB6NAME)"!=""
@@ -1570,9 +1559,9 @@ $(DEF6TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEF6EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
-    $(TYPE) $(DEF6EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF6EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
 .ELSE
-    $(TYPE) $(DEF6EXPORTFILE) >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF6EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
     @-$(RM) $@
@@ -1585,8 +1574,8 @@ $(DEF6TARGETN) .PHONY :
 #check osl/os2/module.c/osl_loadModule()
 SHL6TARGET8=$(shell @fix_shl $(SHL6TARGETN:f))
 
-DEF6FILTER=$(SOLARENV)$/inc$/dummy.flt
-DEF6NAMELIST=$(foreach,i,$(DEFLIB6NAME) $(SLB)$/$(i).lib)
+DEF6FILTER=$(SOLARENV)/inc/dummy.flt
+DEF6NAMELIST=$(foreach,i,$(DEFLIB6NAME) $(SLB)/$(i).lib)
 
 .IF "$(link_always)"==""
 $(DEF6TARGETN) : \
@@ -1596,8 +1585,7 @@ $(DEF6TARGETN) : \
 $(DEF6TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @+-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL6TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF6DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
@@ -1608,7 +1596,7 @@ $(DEF6TARGETN) .PHONY :
 .ENDIF
 
 .IF "$(DEFLIB6NAME)"!=""
-    @+echo $(SLB)$/$(DEFLIB6NAME).lib
+    @+echo $(SLB)/$(DEFLIB6NAME).lib
     @+emxexpr $(DEF6NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB6NAME)"!=""
 
@@ -1678,11 +1666,11 @@ $(DEF6TARGETN) .PHONY :
     @sort < $@.tmp_ord | uniq > $@.exptmpfile
     @fix_def_ord < $@.exptmpfile >> $@.tmpfile
     @+-$(RM) $@
-    +$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    +$(IMPLIB) $(IMPLIBFLAGS) $(SHL6IMPLIBN:s/.lib/.a/) $@
-    +emxomf -o $(SHL6IMPLIBN) $(SHL6IMPLIBN:s/.lib/.a/) 
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL6IMPLIBN:s/.lib/.a/) $@
+    $(COMMAND_ECHO)+emxomf -o $(SHL6IMPLIBN) $(SHL6IMPLIBN:s/.lib/.a/) 
 
 .ENDIF			# "$(GUI)"=="OS2"
 
@@ -1706,38 +1694,38 @@ DEFLIB7NAME*=$(DEF7LIBNAME)
 .ENDIF			# "$(DEF7LIBNAME)"!=""
 
 .IF "$(DEFLIB7NAME)"!=""
-DEF7DEPN+=$(foreach,i,$(DEFLIB7NAME) $(SLB)$/$(i).lib)
+DEF7DEPN+=$(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib)
 .ENDIF
 
 .IF "$(SHL7VERSIONMAP)"!=""
 .IF "$(DEF7EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF7EXPORTFILE=$(MISC)$/$(SHL7VERSIONMAP:b)_$(SHL7TARGET).dxp
+DEF7EXPORTFILE=$(MISC)/$(SHL7VERSIONMAP:b)_$(SHL7TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF7EXPORTFILE) : $(SHL7OBJS) $(SHL7LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(COMMAND_ECHO)$(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
-    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
+    $(COMMAND_ECHO)-$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    nm -gP $(SHL7OBJS) \
+    $(COMMAND_ECHO)nm -gP $(SHL7OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    $(RENAME) $@.exported-symbols $@
+    $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
-DEF7EXPORTFILE=$(MISC)$/$(SHL7VERSIONMAP:b)_$(SHL7TARGET).dxp
+DEF7EXPORTFILE=$(MISC)/$(SHL7VERSIONMAP:b)_$(SHL7TARGET).dxp
 $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(DEF7EXPORTFILE)"==""
@@ -1745,7 +1733,7 @@ $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-DEF7FILTER=$(SOLARENV)$/inc$/dummy.flt
+DEF7FILTER=$(SOLARENV)/inc/dummy.flt
 
 RMHACK7:=$(RM)
 
@@ -1761,8 +1749,7 @@ $(DEF7TARGETN) : \
 $(DEF7TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(EMQ)"$(SHL7TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
@@ -1774,20 +1761,20 @@ $(DEF7TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEFLIB7NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)$/$(SHL7TARGET).exp
-    dlltool --output-def $(MISC)$/$(SHL7TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB7NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
-    tail --lines +3 $(MISC)$/$(SHL7TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)$/$(SHL7TARGET).exp
+    @-$(RM) $(MISC)/$(SHL7TARGET).exp
+    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL7TARGET).exp --export-all-symbols \
+        `$(TYPE) $(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL7TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-$(RM) $(MISC)/$(SHL7TARGET).exp
 .ELSE
 .IF "$(SHL7USE_EXPORTS)"==""
-    @-$(RMHACK7) $(MISC)$/$(SHL7TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL7TARGET).exp $(SLB)$/$(DEFLIB7NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL7TARGET).flt $(MISC)$/$(SHL7TARGET).exp			   >>$@.tmpfile
-    $(RMHACK7) $(MISC)$/$(SHL7TARGET).exp
+    @-$(RMHACK7) $(MISC)/$(SHL7TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL7TARGET).exp $(SLB)/$(DEFLIB7NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL7TARGET).flt $(MISC)/$(SHL7TARGET).exp			   >>$@.tmpfile
+    $(COMMAND_ECHO)$(RMHACK7) $(MISC)/$(SHL7TARGET).exp
 .ELSE			# "$(SHL7USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB7NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL7TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF7FILTER) $(MISC)$/$(SHL7TARGET).direct >>$@.tmpfile
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL7TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF7FILTER) $(MISC)/$(SHL7TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL7USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB7NAME)"!=""
@@ -1853,9 +1840,9 @@ $(DEF7TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEF7EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
-    $(TYPE) $(DEF7EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF7EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
 .ELSE
-    $(TYPE) $(DEF7EXPORTFILE) >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF7EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
     @-$(RM) $@
@@ -1868,8 +1855,8 @@ $(DEF7TARGETN) .PHONY :
 #check osl/os2/module.c/osl_loadModule()
 SHL7TARGET8=$(shell @fix_shl $(SHL7TARGETN:f))
 
-DEF7FILTER=$(SOLARENV)$/inc$/dummy.flt
-DEF7NAMELIST=$(foreach,i,$(DEFLIB7NAME) $(SLB)$/$(i).lib)
+DEF7FILTER=$(SOLARENV)/inc/dummy.flt
+DEF7NAMELIST=$(foreach,i,$(DEFLIB7NAME) $(SLB)/$(i).lib)
 
 .IF "$(link_always)"==""
 $(DEF7TARGETN) : \
@@ -1879,8 +1866,7 @@ $(DEF7TARGETN) : \
 $(DEF7TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @+-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL7TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF7DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
@@ -1891,7 +1877,7 @@ $(DEF7TARGETN) .PHONY :
 .ENDIF
 
 .IF "$(DEFLIB7NAME)"!=""
-    @+echo $(SLB)$/$(DEFLIB7NAME).lib
+    @+echo $(SLB)/$(DEFLIB7NAME).lib
     @+emxexpr $(DEF7NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB7NAME)"!=""
 
@@ -1961,11 +1947,11 @@ $(DEF7TARGETN) .PHONY :
     @sort < $@.tmp_ord | uniq > $@.exptmpfile
     @fix_def_ord < $@.exptmpfile >> $@.tmpfile
     @+-$(RM) $@
-    +$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    +$(IMPLIB) $(IMPLIBFLAGS) $(SHL7IMPLIBN:s/.lib/.a/) $@
-    +emxomf -o $(SHL7IMPLIBN) $(SHL7IMPLIBN:s/.lib/.a/) 
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL7IMPLIBN:s/.lib/.a/) $@
+    $(COMMAND_ECHO)+emxomf -o $(SHL7IMPLIBN) $(SHL7IMPLIBN:s/.lib/.a/) 
 
 .ENDIF			# "$(GUI)"=="OS2"
 
@@ -1989,38 +1975,38 @@ DEFLIB8NAME*=$(DEF8LIBNAME)
 .ENDIF			# "$(DEF8LIBNAME)"!=""
 
 .IF "$(DEFLIB8NAME)"!=""
-DEF8DEPN+=$(foreach,i,$(DEFLIB8NAME) $(SLB)$/$(i).lib)
+DEF8DEPN+=$(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib)
 .ENDIF
 
 .IF "$(SHL8VERSIONMAP)"!=""
 .IF "$(DEF8EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF8EXPORTFILE=$(MISC)$/$(SHL8VERSIONMAP:b)_$(SHL8TARGET).dxp
+DEF8EXPORTFILE=$(MISC)/$(SHL8VERSIONMAP:b)_$(SHL8TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF8EXPORTFILE) : $(SHL8OBJS) $(SHL8LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(COMMAND_ECHO)$(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
-    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
+    $(COMMAND_ECHO)-$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    nm -gP $(SHL8OBJS) \
+    $(COMMAND_ECHO)nm -gP $(SHL8OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    $(RENAME) $@.exported-symbols $@
+    $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
-DEF8EXPORTFILE=$(MISC)$/$(SHL8VERSIONMAP:b)_$(SHL8TARGET).dxp
+DEF8EXPORTFILE=$(MISC)/$(SHL8VERSIONMAP:b)_$(SHL8TARGET).dxp
 $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(DEF8EXPORTFILE)"==""
@@ -2028,7 +2014,7 @@ $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-DEF8FILTER=$(SOLARENV)$/inc$/dummy.flt
+DEF8FILTER=$(SOLARENV)/inc/dummy.flt
 
 RMHACK8:=$(RM)
 
@@ -2044,8 +2030,7 @@ $(DEF8TARGETN) : \
 $(DEF8TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(EMQ)"$(SHL8TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
@@ -2057,20 +2042,20 @@ $(DEF8TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEFLIB8NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)$/$(SHL8TARGET).exp
-    dlltool --output-def $(MISC)$/$(SHL8TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB8NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
-    tail --lines +3 $(MISC)$/$(SHL8TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)$/$(SHL8TARGET).exp
+    @-$(RM) $(MISC)/$(SHL8TARGET).exp
+    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL8TARGET).exp --export-all-symbols \
+        `$(TYPE) $(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL8TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-$(RM) $(MISC)/$(SHL8TARGET).exp
 .ELSE
 .IF "$(SHL8USE_EXPORTS)"==""
-    @-$(RMHACK8) $(MISC)$/$(SHL8TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL8TARGET).exp $(SLB)$/$(DEFLIB8NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL8TARGET).flt $(MISC)$/$(SHL8TARGET).exp			   >>$@.tmpfile
-    $(RMHACK8) $(MISC)$/$(SHL8TARGET).exp
+    @-$(RMHACK8) $(MISC)/$(SHL8TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL8TARGET).exp $(SLB)/$(DEFLIB8NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL8TARGET).flt $(MISC)/$(SHL8TARGET).exp			   >>$@.tmpfile
+    $(COMMAND_ECHO)$(RMHACK8) $(MISC)/$(SHL8TARGET).exp
 .ELSE			# "$(SHL8USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB8NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL8TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF8FILTER) $(MISC)$/$(SHL8TARGET).direct >>$@.tmpfile
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL8TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF8FILTER) $(MISC)/$(SHL8TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL8USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB8NAME)"!=""
@@ -2136,9 +2121,9 @@ $(DEF8TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEF8EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
-    $(TYPE) $(DEF8EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF8EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
 .ELSE
-    $(TYPE) $(DEF8EXPORTFILE) >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF8EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
     @-$(RM) $@
@@ -2151,8 +2136,8 @@ $(DEF8TARGETN) .PHONY :
 #check osl/os2/module.c/osl_loadModule()
 SHL8TARGET8=$(shell @fix_shl $(SHL8TARGETN:f))
 
-DEF8FILTER=$(SOLARENV)$/inc$/dummy.flt
-DEF8NAMELIST=$(foreach,i,$(DEFLIB8NAME) $(SLB)$/$(i).lib)
+DEF8FILTER=$(SOLARENV)/inc/dummy.flt
+DEF8NAMELIST=$(foreach,i,$(DEFLIB8NAME) $(SLB)/$(i).lib)
 
 .IF "$(link_always)"==""
 $(DEF8TARGETN) : \
@@ -2162,8 +2147,7 @@ $(DEF8TARGETN) : \
 $(DEF8TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @+-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL8TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF8DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
@@ -2174,7 +2158,7 @@ $(DEF8TARGETN) .PHONY :
 .ENDIF
 
 .IF "$(DEFLIB8NAME)"!=""
-    @+echo $(SLB)$/$(DEFLIB8NAME).lib
+    @+echo $(SLB)/$(DEFLIB8NAME).lib
     @+emxexpr $(DEF8NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB8NAME)"!=""
 
@@ -2244,11 +2228,11 @@ $(DEF8TARGETN) .PHONY :
     @sort < $@.tmp_ord | uniq > $@.exptmpfile
     @fix_def_ord < $@.exptmpfile >> $@.tmpfile
     @+-$(RM) $@
-    +$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    +$(IMPLIB) $(IMPLIBFLAGS) $(SHL8IMPLIBN:s/.lib/.a/) $@
-    +emxomf -o $(SHL8IMPLIBN) $(SHL8IMPLIBN:s/.lib/.a/) 
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL8IMPLIBN:s/.lib/.a/) $@
+    $(COMMAND_ECHO)+emxomf -o $(SHL8IMPLIBN) $(SHL8IMPLIBN:s/.lib/.a/) 
 
 .ENDIF			# "$(GUI)"=="OS2"
 
@@ -2272,38 +2256,38 @@ DEFLIB9NAME*=$(DEF9LIBNAME)
 .ENDIF			# "$(DEF9LIBNAME)"!=""
 
 .IF "$(DEFLIB9NAME)"!=""
-DEF9DEPN+=$(foreach,i,$(DEFLIB9NAME) $(SLB)$/$(i).lib)
+DEF9DEPN+=$(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib)
 .ENDIF
 
 .IF "$(SHL9VERSIONMAP)"!=""
 .IF "$(DEF9EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF9EXPORTFILE=$(MISC)$/$(SHL9VERSIONMAP:b)_$(SHL9TARGET).dxp
+DEF9EXPORTFILE=$(MISC)/$(SHL9VERSIONMAP:b)_$(SHL9TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF9EXPORTFILE) : $(SHL9OBJS) $(SHL9LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(COMMAND_ECHO)$(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
-    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
+    $(COMMAND_ECHO)-$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    nm -gP $(SHL9OBJS) \
+    $(COMMAND_ECHO)nm -gP $(SHL9OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    $(RENAME) $@.exported-symbols $@
+    $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
-DEF9EXPORTFILE=$(MISC)$/$(SHL9VERSIONMAP:b)_$(SHL9TARGET).dxp
+DEF9EXPORTFILE=$(MISC)/$(SHL9VERSIONMAP:b)_$(SHL9TARGET).dxp
 $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(DEF9EXPORTFILE)"==""
@@ -2311,7 +2295,7 @@ $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-DEF9FILTER=$(SOLARENV)$/inc$/dummy.flt
+DEF9FILTER=$(SOLARENV)/inc/dummy.flt
 
 RMHACK9:=$(RM)
 
@@ -2327,8 +2311,7 @@ $(DEF9TARGETN) : \
 $(DEF9TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(EMQ)"$(SHL9TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
@@ -2340,20 +2323,20 @@ $(DEF9TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEFLIB9NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)$/$(SHL9TARGET).exp
-    dlltool --output-def $(MISC)$/$(SHL9TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB9NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
-    tail --lines +3 $(MISC)$/$(SHL9TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)$/$(SHL9TARGET).exp
+    @-$(RM) $(MISC)/$(SHL9TARGET).exp
+    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL9TARGET).exp --export-all-symbols \
+        `$(TYPE) $(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL9TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-$(RM) $(MISC)/$(SHL9TARGET).exp
 .ELSE
 .IF "$(SHL9USE_EXPORTS)"==""
-    @-$(RMHACK9) $(MISC)$/$(SHL9TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL9TARGET).exp $(SLB)$/$(DEFLIB9NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL9TARGET).flt $(MISC)$/$(SHL9TARGET).exp			   >>$@.tmpfile
-    $(RMHACK9) $(MISC)$/$(SHL9TARGET).exp
+    @-$(RMHACK9) $(MISC)/$(SHL9TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL9TARGET).exp $(SLB)/$(DEFLIB9NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL9TARGET).flt $(MISC)/$(SHL9TARGET).exp			   >>$@.tmpfile
+    $(COMMAND_ECHO)$(RMHACK9) $(MISC)/$(SHL9TARGET).exp
 .ELSE			# "$(SHL9USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB9NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL9TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF9FILTER) $(MISC)$/$(SHL9TARGET).direct >>$@.tmpfile
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL9TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF9FILTER) $(MISC)/$(SHL9TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL9USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB9NAME)"!=""
@@ -2419,9 +2402,9 @@ $(DEF9TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEF9EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
-    $(TYPE) $(DEF9EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF9EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
 .ELSE
-    $(TYPE) $(DEF9EXPORTFILE) >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF9EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
     @-$(RM) $@
@@ -2434,8 +2417,8 @@ $(DEF9TARGETN) .PHONY :
 #check osl/os2/module.c/osl_loadModule()
 SHL9TARGET8=$(shell @fix_shl $(SHL9TARGETN:f))
 
-DEF9FILTER=$(SOLARENV)$/inc$/dummy.flt
-DEF9NAMELIST=$(foreach,i,$(DEFLIB9NAME) $(SLB)$/$(i).lib)
+DEF9FILTER=$(SOLARENV)/inc/dummy.flt
+DEF9NAMELIST=$(foreach,i,$(DEFLIB9NAME) $(SLB)/$(i).lib)
 
 .IF "$(link_always)"==""
 $(DEF9TARGETN) : \
@@ -2445,8 +2428,7 @@ $(DEF9TARGETN) : \
 $(DEF9TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @+-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL9TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF9DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
@@ -2457,7 +2439,7 @@ $(DEF9TARGETN) .PHONY :
 .ENDIF
 
 .IF "$(DEFLIB9NAME)"!=""
-    @+echo $(SLB)$/$(DEFLIB9NAME).lib
+    @+echo $(SLB)/$(DEFLIB9NAME).lib
     @+emxexpr $(DEF9NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB9NAME)"!=""
 
@@ -2527,11 +2509,11 @@ $(DEF9TARGETN) .PHONY :
     @sort < $@.tmp_ord | uniq > $@.exptmpfile
     @fix_def_ord < $@.exptmpfile >> $@.tmpfile
     @+-$(RM) $@
-    +$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    +$(IMPLIB) $(IMPLIBFLAGS) $(SHL9IMPLIBN:s/.lib/.a/) $@
-    +emxomf -o $(SHL9IMPLIBN) $(SHL9IMPLIBN:s/.lib/.a/) 
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL9IMPLIBN:s/.lib/.a/) $@
+    $(COMMAND_ECHO)+emxomf -o $(SHL9IMPLIBN) $(SHL9IMPLIBN:s/.lib/.a/) 
 
 .ENDIF			# "$(GUI)"=="OS2"
 
@@ -2555,38 +2537,38 @@ DEFLIB10NAME*=$(DEF10LIBNAME)
 .ENDIF			# "$(DEF10LIBNAME)"!=""
 
 .IF "$(DEFLIB10NAME)"!=""
-DEF10DEPN+=$(foreach,i,$(DEFLIB10NAME) $(SLB)$/$(i).lib)
+DEF10DEPN+=$(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib)
 .ENDIF
 
 .IF "$(SHL10VERSIONMAP)"!=""
 .IF "$(DEF10EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
-DEF10EXPORTFILE=$(MISC)$/$(SHL10VERSIONMAP:b)_$(SHL10TARGET).dxp
+DEF10EXPORTFILE=$(MISC)/$(SHL10VERSIONMAP:b)_$(SHL10TARGET).dxp
 .IF "$(COM)"=="GCC"
 $(DEF10EXPORTFILE) : $(SHL10OBJS) $(SHL10LIBS)
 .ENDIF # .IF "$(COM)"=="GCC"
 
 $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(COMMAND_ECHO)$(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
-    -$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
-    -$(GREP) "\*\|?" $@ > $@.symbols-regexp
+    $(COMMAND_ECHO)-$(GREP) -v "\*\|?" $@ | $(SED) -e 's@#.*@@' > $@.exported-symbols
+    $(COMMAND_ECHO)-$(GREP) "\*\|?" $@ > $@.symbols-regexp
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
-    nm -gP $(SHL10OBJS) \
+    $(COMMAND_ECHO)nm -gP $(SHL10OBJS) \
         `$(TYPE) /dev/null $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
-        | $(SOLARENV)$/bin$/addsym-mingw.sh $@.symbols-regexp @.symbols-regexp.tmp >> $@.exported-symbols
+        | $(SOLARENV)/bin/addsym-mingw.sh $@.symbols-regexp $@.symbols-regexp.tmp >> $@.exported-symbols
 # overwrite the map file generate into the local output tree with the generated
 # exported symbols list
-    $(RENAME) $@.exported-symbols $@
+    $(COMMAND_ECHO)$(RENAME) $@.exported-symbols $@
 .ENDIF # .IF "$(COM)"=="GCC"
 
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="OS2"
-DEF10EXPORTFILE=$(MISC)$/$(SHL10VERSIONMAP:b)_$(SHL10TARGET).dxp
+DEF10EXPORTFILE=$(MISC)/$(SHL10VERSIONMAP:b)_$(SHL10TARGET).dxp
 $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
-    $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
+    $(TYPE) $< | $(AWK) -f $(SOLARENV)/bin/getcsym.awk > $@
 .ENDIF			# "$(GUI)"=="OS2"
 
 .ENDIF			# "$(DEF10EXPORTFILE)"==""
@@ -2594,7 +2576,7 @@ $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
 
 .IF "$(GUI)"=="WNT"
 
-DEF10FILTER=$(SOLARENV)$/inc$/dummy.flt
+DEF10FILTER=$(SOLARENV)/inc/dummy.flt
 
 RMHACK10:=$(RM)
 
@@ -2610,8 +2592,7 @@ $(DEF10TARGETN) : \
 $(DEF10TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(EMQ)"$(SHL10TARGETN:f)$(EMQ)" 								 >$@.tmpfile
 .IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
@@ -2623,20 +2604,20 @@ $(DEF10TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEFLIB10NAME)"!=""
 .IF "$(COM)"=="GCC"
-    @-$(RM) $(MISC)$/$(SHL10TARGET).exp
-    dlltool --output-def $(MISC)$/$(SHL10TARGET).exp --export-all-symbols \
-         `$(TYPE) $(foreach,i,$(DEFLIB10NAME) $(SLB)$/$(i).lib) | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
-    tail --lines +3 $(MISC)$/$(SHL10TARGET).exp | sed '/^;/d' >>$@.tmpfile
-    @-$(RM) $(MISC)$/$(SHL10TARGET).exp
+    @-$(RM) $(MISC)/$(SHL10TARGET).exp
+    $(COMMAND_ECHO)dlltool --output-def $(MISC)/$(SHL10TARGET).exp --export-all-symbols \
+        `$(TYPE) $(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib) | sed s#$(ROUT)#$(PRJ)/$(ROUT)#g`
+    $(COMMAND_ECHO)tail --lines +3 $(MISC)/$(SHL10TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-$(RM) $(MISC)/$(SHL10TARGET).exp
 .ELSE
 .IF "$(SHL10USE_EXPORTS)"==""
-    @-$(RMHACK10) $(MISC)$/$(SHL10TARGET).exp
-    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL10TARGET).exp $(SLB)$/$(DEFLIB10NAME).lib
-    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)$/$(SHL10TARGET).flt $(MISC)$/$(SHL10TARGET).exp			   >>$@.tmpfile
-    $(RMHACK10) $(MISC)$/$(SHL10TARGET).exp
+    @-$(RMHACK10) $(MISC)/$(SHL10TARGET).exp
+    @$(LIBMGR) -EXTRACT:/ /OUT:$(MISC)/$(SHL10TARGET).exp $(SLB)/$(DEFLIB10NAME).lib
+    @$(LDUMP2) -N $(EXPORT_ALL_SWITCH) -F $(MISC)/$(SHL10TARGET).flt $(MISC)/$(SHL10TARGET).exp			   >>$@.tmpfile
+    $(COMMAND_ECHO)$(RMHACK10) $(MISC)/$(SHL10TARGET).exp
 .ELSE			# "$(SHL10USE_EXPORTS)"==""
-    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB10NAME) $(SLB)$/$(i).lib) | $(GREP) EXPORT: > $(MISC)$/$(SHL10TARGET).direct
-    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF10FILTER) $(MISC)$/$(SHL10TARGET).direct >>$@.tmpfile
+    @$(DUMPBIN) -DIRECTIVES  $(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib) | $(GREP) EXPORT: > $(MISC)/$(SHL10TARGET).direct
+    @$(LDUMP2) -N -D $(EXPORT_ALL_SWITCH) -F $(DEF10FILTER) $(MISC)/$(SHL10TARGET).direct >>$@.tmpfile
 .ENDIF			# "$(SHL10USE_EXPORTS)"==""
 .ENDIF
 .ENDIF				# "$(DEFLIB10NAME)"!=""
@@ -2702,9 +2683,9 @@ $(DEF10TARGETN) .PHONY :
 .ENDIF
 .IF "$(DEF10EXPORTFILE)"!=""
 .IF "$(COM)"=="GCC"
-    $(TYPE) $(DEF10EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF10EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
 .ELSE
-    $(TYPE) $(DEF10EXPORTFILE) >> $@.tmpfile
+    $(COMMAND_ECHO)$(TYPE) $(DEF10EXPORTFILE) >> $@.tmpfile
 .ENDIF
 .ENDIF
     @-$(RM) $@
@@ -2717,8 +2698,8 @@ $(DEF10TARGETN) .PHONY :
 #check osl/os2/module.c/osl_loadModule()
 SHL10TARGET8=$(shell @fix_shl $(SHL10TARGETN:f))
 
-DEF10FILTER=$(SOLARENV)$/inc$/dummy.flt
-DEF10NAMELIST=$(foreach,i,$(DEFLIB10NAME) $(SLB)$/$(i).lib)
+DEF10FILTER=$(SOLARENV)/inc/dummy.flt
+DEF10NAMELIST=$(foreach,i,$(DEFLIB10NAME) $(SLB)/$(i).lib)
 
 .IF "$(link_always)"==""
 $(DEF10TARGETN) : \
@@ -2728,8 +2709,7 @@ $(DEF10TARGETN) : \
 $(DEF10TARGETN) .PHONY :
 .ENDIF			# "$(link_always)"==""
     @+-$(RM) $@.tmpfile
-    @echo ------------------------------
-    @echo Making Module-Definitionfile : $@
+    @echo "Making:    module definition file" $(@:f)
     @echo LIBRARY	  $(SHL10TARGET8) INITINSTANCE TERMINSTANCE	 >$@.tmpfile
     @echo DATA MULTIPLE	 >>$@.tmpfile
     @echo DESCRIPTION	'StarView 3.00 $(DEF10DES) $(UPD) $(UPDMINOR)' >>$@.tmpfile
@@ -2740,7 +2720,7 @@ $(DEF10TARGETN) .PHONY :
 .ENDIF
 
 .IF "$(DEFLIB10NAME)"!=""
-    @+echo $(SLB)$/$(DEFLIB10NAME).lib
+    @+echo $(SLB)/$(DEFLIB10NAME).lib
     @+emxexpr $(DEF10NAMELIST) | fix_exp_file >> $@.tmp_ord
 .ENDIF				# "$(DEFLIB10NAME)"!=""
 
@@ -2810,11 +2790,11 @@ $(DEF10TARGETN) .PHONY :
     @sort < $@.tmp_ord | uniq > $@.exptmpfile
     @fix_def_ord < $@.exptmpfile >> $@.tmpfile
     @+-$(RM) $@
-    +$(RENAME) $@.tmpfile $@
+    $(COMMAND_ECHO)+$(RENAME) $@.tmpfile $@
     @+-$(RM) $@.tmp_ord
     @+-$(RM) $@.exptmpfile
-    +$(IMPLIB) $(IMPLIBFLAGS) $(SHL10IMPLIBN:s/.lib/.a/) $@
-    +emxomf -o $(SHL10IMPLIBN) $(SHL10IMPLIBN:s/.lib/.a/) 
+    $(COMMAND_ECHO)+$(IMPLIB) $(IMPLIBFLAGS) $(SHL10IMPLIBN:s/.lib/.a/) $@
+    $(COMMAND_ECHO)+emxomf -o $(SHL10IMPLIBN) $(SHL10IMPLIBN:s/.lib/.a/) 
 
 .ENDIF			# "$(GUI)"=="OS2"
 

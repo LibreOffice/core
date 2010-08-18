@@ -2,11 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: msiglobal.pm,v $
 #
 # This file is part of OpenOffice.org.
 #
@@ -60,7 +58,7 @@ sub write_ddf_file_header
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set ReservePerCabinetSize=128\n";  # This reserves space for a digital signature.
     push(@{$ddffileref} ,$oneline);
-    $oneline = ".Set MaxDiskSize=CDROM\n";          # This allows the .cab file to be as large as needed.
+    $oneline = ".Set MaxDiskSize=2147483648\n";     # This allows the .cab file to get a size of 2 GB.
     push(@{$ddffileref} ,$oneline);
     $oneline = ".Set CompressionType=LZX\n";
     push(@{$ddffileref} ,$oneline);
@@ -1697,12 +1695,10 @@ sub include_cabs_into_msi
 
     $msifilename = installer::converter::make_path_conform($msifilename);
 
-    if ( $ENV{'USE_SHELL'} ne "4nt" ) {
-        # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-        $idtdirbase =~ s/\//\\\\/g;
-        $msifilename =~ s/\//\\\\/g;
-        $extraslash = "\\";
-    }
+    # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
+    $idtdirbase =~ s/\//\\\\/g;
+    $msifilename =~ s/\//\\\\/g;
+    $extraslash = "\\";
 
     my $allcabfiles = installer::systemactions::find_file_with_file_extension("cab", $installdir);
 
@@ -1881,15 +1877,22 @@ sub set_global_code_variables
 
     if ( $#{$languagesref} > 0 )    # more than one language
     {
-        if (( ${$languagesref}[1] =~ /jp/ ) ||
-            ( ${$languagesref}[1] =~ /ko/ ) ||
-            ( ${$languagesref}[1] =~ /zh/ ))
+        if (( $installer::globals::added_english ) && ( $#{$languagesref} == 1 )) # only multilingual because of added English
         {
-            $onelanguage = "multiasia";
+            $onelanguage = ${$languagesref}[1];  # setting the first language, that is not english
         }
         else
         {
-            $onelanguage = "multiwestern";
+            if (( ${$languagesref}[1] =~ /jp/ ) ||
+                ( ${$languagesref}[1] =~ /ko/ ) ||
+                ( ${$languagesref}[1] =~ /zh/ ))
+            {
+                $onelanguage = "multiasia";
+            }
+            else
+            {
+                $onelanguage = "multiwestern";
+            }
         }
     }
     else    # only one language

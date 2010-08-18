@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objwin.cxx,v $
- * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -51,11 +48,11 @@ ULONG ObjectWin::msnGlobalViewMask = 0;
 
 
 UINT32 aColorMap[] = {
-    COL_TRANSPARENT,        //MARKMODE_DEFAULT    0
+    RGB_COLORDATA( 0xFF, 0xFF, 0x80 ),             //MARKMODE_DEFAULT    0
     COL_GREEN,              //MARKMODE_DEPENDING  1
     COL_RED,                //MARKMODE_NEEDED     2
     COL_MAGENTA,            //1+2
-    COL_YELLOW,             //MARKMODE_ACTIVATED  4
+    COL_GRAY,               //MARKMODE_ACTIVATED  4
     COL_LIGHTGREEN,         //1+4
     COL_LIGHTRED,           //2+4
     COL_LIGHTMAGENTA,       //1+2+4
@@ -90,7 +87,7 @@ ObjectWin::ObjectWin( Window* pParent, WinBits nWinStyle )
                 mnHeadDist( 0 ),
                 mbFixed( FALSE )
 {
-    SetBackground( Wallpaper( Color( COL_WHITE )));
+    SetBackground( Wallpaper( aColorMap[0] ));
 
     aTipTimer.SetTimeout( 500 );
     aTipTimer.SetTimeoutHdl(
@@ -487,7 +484,7 @@ void ObjectWin::DrawOutput( OutputDevice* pDevice, const Point& rOffset )
 {
     Size aWinSize  = PixelToLogic( GetSizePixel() );
     Size aTextSize;
-    ByteString sbt = msBodyText;                      
+    ByteString sbt = msBodyText;
     aTextSize.Width() = GetTextWidth( String( msBodyText, RTL_TEXTENCODING_UTF8 ));
     aTextSize.Height() = GetTextHeight();
     Point aPos = GetPosPixel();
@@ -496,7 +493,7 @@ void ObjectWin::DrawOutput( OutputDevice* pDevice, const Point& rOffset )
     aTextPos += aPos;
     aPos = pDevice->PixelToLogic( aPos ) - rOffset;
     aTextPos = pDevice->PixelToLogic( aTextPos ) - rOffset;
-    if ( msBodyText !="null" ) 
+    if ( msBodyText !="null" )
     {
         pDevice->SetFillColor( GetBackground().GetColor() );
         pDevice->DrawRect( Rectangle( aPos, pDevice->PixelToLogic( GetSizePixel() ) ) );
@@ -795,4 +792,30 @@ ObjectWin* ObjectList::GetPtrByName( const ByteString& rText )
        i++;
     }
     return 0;
+}
+
+ObjectList* ObjectList::FindTopLevelModules()
+{
+    ObjectList* pList = new ObjectList;
+    for ( USHORT i=0; i<Count(); i++ )
+    {
+       ObjectWin* pObjectWin = GetObject( i );
+       if ( pObjectWin->IsTop() )
+           pList->Insert( pObjectWin );
+    }
+
+    return pList;
+}
+
+BOOL ObjectWin::IsTop()
+{
+    ULONG nConCount = mConnections.Count();
+    for ( ULONG i = 0; i < nConCount; i++ )
+    {
+        Connector* pCon = mConnections.GetObject( i );
+        if ( pCon && pCon->IsStart( this) )
+            return FALSE;
+    }
+
+    return TRUE;
 }

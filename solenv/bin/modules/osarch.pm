@@ -27,8 +27,7 @@ chop( $m_str, $s_str );
 #              "SCO_SV",    "scouw21",
                "Darwin",    "macosxp",
                "Mac OS",    "macosxp",
-               "SINIX-N",   "sinix",
-               "IRIX",      "irix"
+               "SINIX-N",   "sinix"
                );
 
 %osDefTable = ("SunOS",     "-DSYSV -DSOLARIS",
@@ -42,8 +41,7 @@ chop( $m_str, $s_str );
 #              "SCO_SV",    "-DSYSV -DSCO -DSCO_UW21",
                "Darwin",    "-DBSD -DMACOSX",
                "Mac OS",    "-DBSD -DMACOSX",
-               "SINIX-N",   "-DSYSV -DSINIX",
-               "IRIX",      "-DSYSV -DIRIX"
+               "SINIX-N",   "-DSYSV -DSINIX"
                );
 
 %osDosTable = ("SunOS",     "sol",
@@ -56,8 +54,7 @@ chop( $m_str, $s_str );
                "SCO_SV",    "sco",
                "Darwin",    "macx",
                "Mac OS",    "macx",
-               "SINIX-N",   "sni",
-               "IRIX",      "irx"
+               "SINIX-N",   "sni"
                );
 
 %archTable  = ("sun4c",         "sparc",

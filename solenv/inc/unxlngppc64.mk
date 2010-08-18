@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: unxlngppc64.mk,v $
-#
-# $Revision: 1.3 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -28,9 +24,11 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-# mk file for linux ppc64, inherit from ppc and add some flags
 
-.INCLUDE : unxlngppc4.mk
+# mk file for Unix Linux 64Bit PowerPC using GCC, inherit from ppc and add some flags
+
+.INCLUDE : unxlngppc.mk
 
 CDEFS+=-DPOWERPC64
 CFLAGSCXX+=-mminimal-toc
+BUILD64=1

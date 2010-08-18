@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.20 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -37,6 +33,7 @@ LIBTARGET=NO
 # noadjust here to have dependencies over there
 noadjust=TRUE
 nodep=true
+ENABLE_EXCEPTIONS=TRUE
 
 # "mkdepend" is written in K&R style C. Modern compilers will generate
 # lots of warning. There is no point in cleaning this up, so we just
@@ -49,7 +46,7 @@ EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 LIBSALCPPRT=
 UWINAPILIB=
 
-CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS
+CDEFS+=-DNO_X11 -DXP_PC -DHW_THREADS  
 
 OBJFILES=  \
         $(OBJ)$/cppsetup.obj \
@@ -64,6 +61,21 @@ OBJFILES=  \
 APP1TARGET=makedepend
 APP1OBJS=$(OBJFILES)
 APP1RPATH=NONE
+
+.IF "$(COM)"=="MSC"
+.IF "$(dbgutil)"==""
+APP1STDLIBS+=msvcprt.lib
+.ELSE
+APP1STDLIBS+=msvcprtd.lib
+CDEFS+=-D_DEBUG
+.ENDIF                        # "$(DBG_UTIL)"==""
+.ENDIF                        # "$(COM)"=="MSC"
+
+.IF "$(OS)"=="SOLARIS"
+#APP1STDLIBS+=-lstlport
+APP1STDLIBS+=-lCstd
+.ENDIF
+
 
 .INCLUDE : target.mk
 

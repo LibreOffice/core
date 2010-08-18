@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: unx.mk,v $
-#
-# $Revision: 1.40 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -83,67 +79,39 @@
 .INCLUDE : unxscoi.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXI"
-.INCLUDE : unxlnxi.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXP2"
-.INCLUDE : unxlngp.mk
-.ENDIF
-
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUXS"
 .INCLUDE : unxlngs.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC295LINUXI2REDHAT60"
-.INCLUDE : unxlngi3.mk
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXI"
+.INCLUDE : unxlngi.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC300LINUXI2REDHAT60"
-.INCLUDE : unxlngi4.mk
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXX"
+.INCLUDE : unxlngx.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC322LINUXI2REDHAT60"
-.INCLUDE : unxlngi5.mk
-.ENDIF
-
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC341LINUXI2REDHAT60"
-.INCLUDE : unxlngi6.mk
-.ENDIF
-
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC432LINUXI2SUSE90"
-.INCLUDE : unxlngi6.mk
-.ENDIF
-
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC341LINUXX2REDHAT60"
-.INCLUDE : unxlngx6.mk
-.ENDIF
-
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)" == "GCCC295LINUXP2REDHAT60"
+.IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUXPPOWERPC"
 .INCLUDE : unxlngppc.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)$(CPUNAME)" == "GCCC300LINUXP2REDHAT60POWERPC"
-.INCLUDE : unxlngppc4.mk
-.ENDIF
-
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)$(CPUNAME)" == "GCCC300LINUXP2REDHAT60POWERPC64"
+.IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUXPPOWERPC64"
 .INCLUDE : unxlngppc64.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)$(CPUNAME)" == "GCCC300LINUX32REDHAT60S390"
-.INCLUDE : unxlngs3904.mk
+.IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUX3S390"
+.INCLUDE : unxlngs390.mk
 .ENDIF
 
-.IF "$(COM)$(CVER)$(OS)$(CPU)$(GLIBC)$(CPUNAME)" == "GCCC300LINUX32REDHAT60S390X"
+.IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUX3S390X"
 .INCLUDE : unxlngs390x.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXR2REDHAT60"
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXR"
 .INCLUDE : unxlngr.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)$(GLIBC)" == "GCCLINUXA2REDHAT60"
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXA"
 .INCLUDE : unxlnga.mk
 .ENDIF
 
@@ -179,18 +147,6 @@
 .INCLUDE : unxfbsd.mk
 .ENDIF
 
-.IF "$(COM)$(OS)$(CPU)" == "C730IRIXM"
-.INCLUDE : unxirxm3.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "GCCIRIXM"
-.INCLUDE : unxirgm.mk
-.ENDIF
-
-.IF "$(COM)$(OS)$(CPU)" == "C710IRIXM"
-.INCLUDE : unxirxm.mk
-.ENDIF
-
 .IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
 .INCLUDE : unxmacxp.mk
 .ENDIF
@@ -205,6 +161,14 @@
 
 .IF "$(COM)$(OS)$(CPU)" == "GCCLINUX6"
 .INCLUDE : unxlngm68k.mk
+.ENDIF
+
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXH"
+.INCLUDE : unxlnghppa.mk
+.ENDIF
+
+.IF "$(COM)$(OS)$(CPU)" == "GCCLINUXL"
+.INCLUDE : unxlngaxp.mk
 .ENDIF
 
 # --- general *ix settings ---
@@ -232,23 +196,10 @@ DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
 # enable building/linking KDE-dependent code in both OOo and SO build environment
 .IF "$(ENABLE_KDE)" != ""
 .IF "$(KDE_ROOT)"!=""
-KDE_CFLAGS:=-I$(KDE_ROOT)$/include -DQT_CLEAN_NAMESPACE
+KDE_CFLAGS:=-I$(KDE_ROOT)/include -DQT_CLEAN_NAMESPACE
 KDE_LIBS:=-lkdeui -lkdecore -lqt-mt
-SOLARLIB+=-L$(KDE_ROOT)$/lib
+SOLARLIB+=-L$(KDE_ROOT)/lib
 .ENDIF          # "$(KDE_ROOT)"!=""
 .ENDIF          # "$(ENABLE_KDE)" != ""
 
-# Add SOLARLIBDIR to the end of a (potentially previously undefined)
-# LD_LIBRARY_PATH (there is no real reason to prefer adding at the end over
-# adding at the start); the ": &&" in the bash case enables this to work at the
-# start of a recipe line that is not prefixed by "+" as well as in the middle of
-# an existing && chain; the tcsh case is somewhat imprecise in that it
-# potentially affects multiple commands following on the recipe line:
-.IF "$(USE_SHELL)" == "bash"
-AUGMENT_LIBRARY_PATH *= : && \
-    LD_LIBRARY_PATH=$${{LD_LIBRARY_PATH+$${{LD_LIBRARY_PATH}}:}}$(SOLARLIBDIR)
-.ELSE
-AUGMENT_LIBRARY_PATH *= if ($$?LD_LIBRARY_PATH == 1) \
-    eval 'setenv LD_LIBRARY_PATH "$${{LD_LIBRARY_PATH}}:$(SOLARLIBDIR)"' && \
-    if ($$?LD_LIBRARY_PATH == 0) setenv LD_LIBRARY_PATH "$(SOLARLIBDIR)" &&
-.ENDIF
+OOO_LIBRARY_PATH_VAR *= LD_LIBRARY_PATH

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: unxsoli4.mk,v $
-#
-# $Revision: 1.48 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -32,7 +28,6 @@
 
 ASM=/usr/ccs/bin/as
 AFLAGS=-P
-
 
 CDEFS+=-D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=$(STLPORT_VER)
 
@@ -72,7 +67,7 @@ CFLAGSSLOCUIMT=-KPIC -mt
 CFLAGSPROF=-xpg
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
-CFLAGSOPT=-xarch=generic -xO3 -xspace
+CFLAGSOPT=-xarch=generic -xO3
 CFLAGSNOOPT=
 CFLAGSOUTOBJ=-o
 
@@ -114,7 +109,7 @@ CFLAGSWERRCXX=-xwe
 MODULES_WITH_WARNINGS := \
     soldep
 
-STDOBJVCL=$(L)$/salmain.o
+STDOBJVCL=$(L)/salmain.o
 
 THREADLIB=
 .IF "$(PURIFY)"!=""
@@ -127,7 +122,7 @@ LINKC=$(CC)
 # link against set of baseline libraries
 .IF "$(SYSBASE)"!=""
 C_RESTRICTIONFLAGS*=-xc99=none
-#LD_OPTIONS+:=-L$(SYSBASE)$/usr$/lib
+#LD_OPTIONS+:=-L$(SYSBASE)/usr/lib
 CDEFS+=-DSYSBASE="$(SYSBASE)"
 CFLAGSCC+=$(C_RESTRICTIONFLAGS)
 #.EXPORT : LD_OPTIONS
@@ -142,6 +137,7 @@ LINKFLAGSRUNPATH_OOO=-R\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
 LINKFLAGSRUNPATH_SDK=-R\''$$ORIGIN/../../ure-link/lib'\'
 LINKFLAGSRUNPATH_BRAND=-R\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
+LINKFLAGSRUNPATH_BOXT=-R\''$$ORIGIN/../../../basis-link/program'\'
 LINKFLAGSRUNPATH_NONE=
 LINKFLAGS=-w -mt -z combreloc -PIC -temp=/tmp -norunpath -library=no%Cstd
 LINKCFLAGS=-w -mt -z combreloc -norunpath
@@ -197,8 +193,9 @@ STDSHLGUIMT=$(DYNAMIC) -lpthread CPPRUNTIME -lm -lc
 STDSHLCUIMT=$(DYNAMIC) -lpthread CPPRUNTIME -lm -lc
 
 # libdl.so - no really an GUI library but required in this context
-STDLIBGUIMT+=-lX11 -ldl
-STDSHLGUIMT+=-lX11 -ldl
+STDLIBGUIMT+=-ldl
+STDSHLGUIMT+=-ldl
+X11LINK_DYNAMIC = -lXext -lX11
 
 # @@@ interposer needed for -Bdirect @@@
 # LIBSALCPPRT*=-z allextract -lsalcpprt -z defaultextract

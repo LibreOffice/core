@@ -5,13 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: deliver.pl,v $
-#
-# $Revision$
 #
 # This file is part of OpenOffice.org.
 #
@@ -77,6 +73,7 @@ $is_debug           = 0;
 
 $error              = 0;
 $module             = 0;            # module name
+$repository         = 0;            # parent directory of this module
 $base_dir           = 0;            # path to module base directory
 $dlst_file          = 0;            # path to d.lst
 $ilst_ext           = 'ilst';       # extension of image lists
@@ -100,7 +97,6 @@ $files_copied       = 0;            # statistics
 $files_unchanged    = 0;            # statistics
 
 $opt_force          = 0;            # option force copy
-$opt_minor          = 0;            # option deliver in minor
 $opt_check          = 0;            # do actually execute any action
 $opt_zip            = 0;            # create an additional zip file
 $opt_silent         = 0;            # be silent, only report errors
@@ -112,9 +108,17 @@ $opt_checkdlst      = 0;
 $delete_common      = 1;            # for "-delete": if defined delete files from common tree also
 
 if ($^O ne 'cygwin') {              # iz59477 - cygwin needes a dot "." at the end of filenames to disable
-  $maybedot     = '';               # some .exe transformation magic.
+    $maybedot     = '';             # some .exe transformation magic.
 } else {
-  $maybedot     = '.';
+    my $cygvernum = `uname -r`;
+    my @cygvernum = split( /\./, $cygvernum);
+    $cygvernum = shift @cygvernum;
+    $cygvernum .= shift @cygvernum;
+    if ( $cygvernum < 17 ) {
+        $maybedot     = '.';
+    } else {
+        $maybedot     = '';               # no longer works with cygwin 1.7. other magic below.
+    }
 }
 
 ($gui       = lc($ENV{GUI}))        || die "Can't determine 'GUI'. Please set environment.\n";
@@ -400,11 +404,8 @@ sub parse_options
 {
     my $arg;
     my $dontdeletecommon = 0;
-    $opt_silent = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'FALSE');
-    $opt_verbose = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'TRUE');
     while ( $arg = shift @ARGV ) {
         $arg =~ /^-force$/      and $opt_force  = 1  and next;
-        $arg =~ /^-minor$/      and $opt_minor  = 1  and next;
         $arg =~ /^-check$/      and $opt_check  = 1  and $opt_verbose = 1 and next;
         $arg =~ /^-quiet$/      and $opt_silent = 1  and next;
         $arg =~ /^-verbose$/    and $opt_verbose = 1 and next;
@@ -422,13 +423,15 @@ sub parse_options
         }
         $dest = $arg;
     }
+    $opt_silent = 1 if ( !defined $ENV{VERBOSE} || (defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'FALSE')) && ( ! $opt_verbose );
+    $opt_verbose = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'TRUE') && ( ! $opt_silent );
     # $dest and $opt_zip or $opt_delete are mutually exclusive
     if ( $dest and ($opt_zip || $opt_delete) ) {
         usage(1);
     }
     # $opt_silent and $opt_check or $opt_verbose are mutually exclusive
     if ( ($opt_check or $opt_verbose) and $opt_silent ) {
-        print STDERR "Error on command line: options '-check' and '-quiet' are mutually exclusive.\n";
+        print STDERR "Error on command line: options '-check'/'-verbose' and '-quiet' are mutually exclusive.\n";
         usage(1);
     }
     if ($dontdeletecommon) {
@@ -444,7 +447,7 @@ sub parse_options
 sub init_globals
 {
     my $ext;
-    ($module, $base_dir, $dlst_file) =  get_base();
+    ($module, $repository, $base_dir, $dlst_file) =  get_base();
 
     # for CWS:
     $module =~ s/\.lnk$//;
@@ -462,6 +465,7 @@ sub init_globals
     my $solarversion  = $ENV{'SOLARVERSION'};
     my $updater       = $ENV{'UPDATER'};
     my $updminor      = $ENV{'UPDMINOR'};
+    my $updminorext   = $ENV{'UPDMINOREXT'};
     my $work_stamp    = $ENV{'WORK_STAMP'};
 
     # special security check for release engineers
@@ -483,14 +487,8 @@ sub init_globals
     }
 
     $ext = "";
-    if ( ($opt_minor || $updminor) && !$dest ) {
-        if ( $updminor ) {
-            $ext = ".$updminor";
-        }
-        else {
-            print_error("can't determine UPDMINOR", 0);
-            exit(3);
-        }
+    if ( ($updminor) && !$dest ) {
+        $ext = "$updminorext";
     }
 
     # Do we have common trees?
@@ -546,7 +544,7 @@ sub get_base
 {
     # a module base dir contains a subdir 'prj'
     # which in turn contains a file 'd.lst'
-    my (@field, $base, $dlst);
+    my (@field, $repo, $base, $dlst);
     my $path = getcwd();
 
     @field = split(/\//, $path);
@@ -559,11 +557,16 @@ sub get_base
     }
 
     if ( $#field == -1 ) {
-        print_error("can't determine module");
+        print_error("can't find d.lst");
         exit(2);
     }
     else {
-        return ($field[-1], $base, $dlst);
+        if ( defined $field[-2] ) {
+            $repo = $field[-2];
+        } else {
+            print_error("Internal error: cannot determine module's parent directory");
+        }
+        return ($field[-1], $repo, $base, $dlst);
     }
 }
 
@@ -668,6 +671,7 @@ sub glob_line
         my @file_list = glob($from);
 
         foreach $file ( @file_list ) {
+            next if ( -d $file); # we only copy files, not directories
             my ($fname, $dir) = fileparse($file);
             my $copy = ($replace) ? $to_dir . $fname : $to . '/' . $fname;
             push(@globbed_files, [$file, $copy]);
@@ -838,6 +842,11 @@ sub copy_if_newer
             sleep $try;
             $try ++;
             $success = rename($temp_file, $to);
+            if ( $^O eq 'cygwin' && $to =~ /\.bin$/) {
+                # hack to survive automatically added .exe for executables renamed to
+                # *.bin - will break if there is intentionally a .bin _and_ .bin.exe file.
+                $success = rename( "$to.exe", $to ) if -f "$to.exe";
+            }
         }
         if ( $success ) {
             # handle special packaging of *.dylib files for Mac OS X
@@ -1123,7 +1132,7 @@ sub push_on_ziplist
     return if ( $opt_check );
     # strip $dest from path since we don't want to record it in zip file
     if ( $file =~ s#^\Q$dest\E/##o ) {
-        if ( $opt_minor ){
+        if ( $updminor ){
             # strip minor from path
             my $ext = "%_EXT%";
             $ext = expand_macros($ext);
@@ -1131,7 +1140,7 @@ sub push_on_ziplist
         }
         push(@zip_list, $file);
     } elsif ( $file =~ s#^\Q$common_dest\E/##o ) {
-        if ( $opt_minor ){
+        if ( $updminor ){
             # strip minor from path
             my $ext = "%_EXT%";
             $ext = expand_macros($ext);
@@ -1149,8 +1158,8 @@ sub push_on_loglist
     if (( $entry[0] eq "COPY" ) || ( $entry[0] eq "ADDINCPATH" )) {
         return 0 if ( ! -e $entry[1].$maybedot );
         # make 'from' relative to source root
-        $entry[1] = $module . "/prj/" . $entry[1];
-        $entry[1] =~ s/^$module\/prj\/\.\./$module/;
+        $entry[1] = $repository ."/" . $module . "/prj/" . $entry[1];
+        $entry[1] =~ s/$module\/prj\/\.\./$module/;
     }
     # platform or common tree?
     my $common;
@@ -1209,23 +1218,33 @@ sub zip_files
         print "ZIP: updating $zip_file\n" if $opt_verbose;
         next if ( $opt_check );
 
+        if ( $opt_delete ) {
+            if ( -e $zip_file ) {
+                unlink $zip_file or die "Error: can't remove file '$zip_file': $!";
+            }
+            next;
+        }
+
         local $work_file = "";
-        if ( $ext) {
-            # We are delivering into a minor. Zip files must not contain the
-            # minor extension, so we have to pre and post process it.
-            #
-            # Pre process: add minor extension to path, create working copy in
-            # temp directory.
-            $work_file = get_tempfilename() . ".zip";
-            die "Error: temp file $work_file already exists" if ( -e $work_file);
-            zipped_path_extension($zip_file, $work_file, $ext, 1) if ( -e $zip_file );
-        } elsif ( $zip_file eq $common_zip_file) {
+        if ( $zip_file eq $common_zip_file) {
             # Zip file in common tree: work on uniq copy to avoid collisions
             $work_file = $zip_file;
             $work_file =~ s/\.zip$//;
             $work_file .= (sprintf('.%d-%d', $$, time())) . ".zip";
             die "Error: temp file $work_file already exists" if ( -e $work_file);
-            copy($zip_file, $work_file) if ( -e $zip_file );
+            if ( -e $zip_file ) {
+                if ( -z $zip_file) {
+                    # sometimes there are files of 0 byte size - remove them
+                    unlink $zip_file or print_error("can't remove empty file '$zip_file': $!",0);
+                } else {
+                    if ( ! copy($zip_file, $work_file)) {
+                        # give a warning, not an error:
+                        # we can zip from scratch instead of just updating the old zip file
+                        print_warning("can't copy'$zip_file' into '$work_file': $!", 0);
+                        unlink $work_file;
+                    }
+                }
+            }
         } else {
             # No pre processing necessary, working directly on solver.
             $work_file = $zip_file;
@@ -1234,87 +1253,62 @@ sub zip_files
         # zip content has to be relative to $dest_dir
         chdir($dest_dir{$zip_file}) or die "Error: cannot chdir into $dest_dir{$zip_file}";
         my $this_ref = $list_ref{$zip_file};
-        if ( $opt_delete ) {
-            if ( -e $work_file ) {
-                open(UNZIP, "unzip -t $work_file 2>&1 |") or die "error opening zip file";
-                if ( grep /empty/, (<UNZIP>)) {
-                    close(UNZIP);
-                    unlink $work_file;
-                    next;
-                }
-                close(UNZIP);
-                open(ZIP, "| $zipexe -q -o -d -@ $work_file") or die "error opening zip file";
-                foreach $file ( @$this_ref ) {
-                    print "ZIP: removing $file from $platform_zip_file\n" if $is_debug;
-                    print ZIP "$file\n";
-                }
-                close(ZIP);
-            }
-        } else {
-            open(ZIP, "| $zipexe -q -o -u -@ $work_file") or die "error opening zip file";
-            foreach $file ( @$this_ref ) {
-                print "ZIP: adding $file to $zip_file\n" if $is_debug;
-                print ZIP "$file\n";
-            }
-            close(ZIP);
+        open(ZIP, "| $zipexe -q -o -u -@ $work_file") or die "error opening zip file";
+        foreach $file ( @$this_ref ) {
+            print "ZIP: adding $file to $zip_file\n" if $is_debug;
+            print ZIP "$file\n";
         }
-        if ( $ext ) {
-            # Post process: strip minor from stored path again
-            zipped_path_extension($work_file, $zip_file, $ext, 0);
-            if (( -e $work_file ) && ($work_file ne $zip_file)) {
-                unlink $work_file;
-            }
-        } elsif ( $zip_file eq $common_zip_file) {
+        close(ZIP);
+        fix_broken_cygwin_created_zips($work_file) if $^O eq "cygwin";
+
+        if ( $zip_file eq $common_zip_file) {
             # rename work file back
             if ( -e $work_file ) {
-                if (! rename($work_file, $zip_file)) {
-                    print_error("can't rename temporary file to $zip_file: $!",0);
-                    unlink $work_file;
+                if ( -e $zip_file) {
+                    # do some tricks to be fast. otherwise we may disturb other platforms
+                    # by unlinking a file which just gets copied -> stale file handle.
+                    my $buffer_file=$work_file . '_rm';
+                    rename($zip_file, $buffer_file) or warn "Warning: can't rename old zip file '$zip_file': $!";
+                    if (! rename($work_file, $zip_file)) {
+                        print_error("can't rename temporary file to $zip_file: $!",0);
+                        unlink $work_file;
+                    }
+                    unlink $buffer_file;
+                } else {
+                    if (! rename($work_file, $zip_file)) {
+                        print_error("can't rename temporary file to $zip_file: $!",0);
+                        unlink $work_file;
+                    }
                 }
             }
         }
     }
 }
 
-sub zipped_path_extension
+sub fix_broken_cygwin_created_zips
 # add given extension to or strip it from stored path
 {
     require Archive::Zip; import Archive::Zip;
-    my ($from, $to, $extension, $with_ext) = @_;
+    my $zip_file = shift;
 
     $zip = Archive::Zip->new();
-    if ( -e $from) {
-        die 'Error: zip read error' unless $zip->read( $from) == 0;
-        my $name;
-        my $newmember;
-        my $DateTime = 0;
-        foreach my $member ( $zip->members() ) {
-            $name = $member->fileName();
-            if ( $with_ext ) {
-                if ( $name !~ m#$extension/# ) {
-                    $name =~ s#^(.*?)/#$1$extension/#o;
-                }
-            } else {
-                $name =~ s#^(.*?)$extension/#$1/#o;
-            }
-            $member->fileName( $name );
-            if ( $member->lastModTime() ) {
-                if ( $DateTime < $member->lastModTime() ) {
-                    $DateTime = $member->lastModTime();
-                }
-            }
-        }
-        if ( -e $to ) {
-            die 'Error: zip write error' unless $zip->overwrite( ) == 0;
-            File::Copy::move( $from, $to) or die "Error $!: cannot move $from $to";
-        } else {
-            die 'Error: zip write error' unless $zip->writeToFileNamed( $to ) == 0;
-        }
-        utime $DateTime, $DateTime, $to;
-    } else {
-        die "Error: file $from does not exist" if ( ! $opt_delete);
+    unless ( $zip->read($work_file) == AZ_OK ) {
+        die "Error: can't open zip file '$zip_file' to fix broken cygwin file permissions";
     }
-    return;
+    my $latest_member_mod_time = 0;
+    foreach $member ( $zip->members() ) {
+        my $attributes = $member->unixFileAttributes();
+        $attributes &= ~0xFE00;
+        print $member->fileName() . ": " . sprintf("%lo", $attributes) if $is_debug;
+        $attributes |= 0x10; # add group write permission
+        print "-> " . sprintf("%lo", $attributes) . "\n" if $is_debug;
+        $member->unixFileAttributes($attributes);
+        if ( $latest_member_mod_time < $member->lastModTime() ) {
+            $latest_member_mod_time = $member->lastModTime();
+        }
+    }
+    die "Error: can't overwrite zip file '$zip_file' for fixing permissions" unless $zip->overwrite() == AZ_OK;
+    utime($latest_member_mod_time, $latest_member_mod_time, $zip_file);
 }
 
 sub get_tempfilename
@@ -1505,23 +1499,22 @@ sub cleanup_and_die
 sub usage
 {
     my $exit_code = shift;
-    print STDERR "Usage:\ndeliver [OPTION]... [DESTINATION-PATH]\n";
+    print STDERR "Usage:\ndeliver [OPTIONS] [DESTINATION-PATH]\n";
     print STDERR "Options:\n";
     print STDERR "  -check       just print what would happen, no actual copying of files\n";
     print STDERR "  -checkdlst   be verbose about (possible) d.lst bugs\n";
     print STDERR "  -delete      delete files (undeliver), use with care\n";
     print STDERR "  -deloutput   remove the output tree after copying\n";
-    print STDERR "  -force       copy even if not newer\n";
     print STDERR "  -dontdeletecommon do not delete common files (for -delete option)\n";
+    print STDERR "  -force       copy even if not newer\n";
     print STDERR "  -help        print this message\n";
     if ( !defined($ENV{GUI}) || $ENV{GUI} ne 'WNT' ) {
         print STDERR "  -link        hard link files into the solver to save disk space\n";
     }
-    print STDERR "  -minor       deliver into minor (milestone)\n";
     print STDERR "  -quiet       be quiet, only report errors\n";
     print STDERR "  -verbose     be verbose\n";
     print STDERR "  -zip         additionally create zip files of delivered content\n";
-    print STDERR "Option '-zip' and a destination-path are mutually exclusive.\n";
+    print STDERR "Options '-zip' and a destination-path are mutually exclusive.\n";
     print STDERR "Options '-check' and '-quiet' are mutually exclusive.\n";
     exit($exit_code);
 }

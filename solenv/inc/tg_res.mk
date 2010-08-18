@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: tg_res.mk,v $
-#
-# $Revision: 1.12 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -33,16 +29,15 @@
 .IF "$(RCTARGET)"!=""
 $(RCTARGET): $(RCFILES) 		\
              $(RCDEPN)
-    @echo ------------------------------
-    @echo Making: $@
+    @echo "Making:   " $(@:f)
 .IF "$(CCNUMVER)" > "001300000000"
 .IF "$(MFC_INCLUDE)"!=""
-    $(RC) $(INCLUDE) -I$(SOLARRESDIR) $(foreach,i,$(ATL_INCLUDE) -I$(i)) -I$(MFC_INCLUDE) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
+    $(COMMAND_ECHO)$(RC) $(INCLUDE) -I$(SOLARRESDIR) $(foreach,i,$(ATL_INCLUDE) -I$(i)) -I$(MFC_INCLUDE) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .ELSE
-    $(RC) $(INCLUDE) -I$(SOLARRESDIR) $(foreach,i,$(ATL_INCLUDE) -I$(i)) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
+    $(COMMAND_ECHO)$(RC) $(INCLUDE) -I$(SOLARRESDIR) $(foreach,i,$(ATL_INCLUDE) -I$(i)) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .ENDIF
 .ELSE
-    $(RC) $(INCLUDE) -I$(SOLARRESDIR) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
+    $(COMMAND_ECHO)$(RC) $(INCLUDE) -I$(SOLARRESDIR) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .ENDIF
 .ENDIF
 

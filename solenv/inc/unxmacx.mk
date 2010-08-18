@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: unxmacx.mk,v $
-#
-# $Revision: 1.34.56.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -35,11 +31,6 @@
 
 # PROCESSOR_DEFINES and DLLPOSTFIX are defined in the particular platform file
 
-# DARWIN_VERSION holds the Darwin version in the format: 000000. For example,
-# if the Darwin version is 1.3.7, DARWIN_VERSION will be set to 010307.
-# Not used now, comment it out. Remove it after some time.
-# DARWIN_VERSION=$(shell -/bin/sh -c "uname -r | sed 's/\./ /g' | xargs printf %2.2i%2.2i%2.2i")
-
 ASM=
 AFLAGS=
 LINKOUTPUT_FILTER=
@@ -52,8 +43,15 @@ CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFI
 CDEFS+=-DX_LOCALE
 .ENDIF
 .IF "$(GUIBASE)"=="aqua"
-# TODO: use MACOSX_DEPLOYMENT_TARGET instead of MAC_OS_X_VERSION_MIN_REQUIRED?
-CDEFS+=-DQUARTZ -DMAC_OS_X_VERSION_MIN_REQUIRED=1040
+# MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,
+# build can assume functions/libraries of that version to be available
+# unless you want to do runtime checks for 10.5 api, you also want to use the 10.4 sdk
+# (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
+# http://developer.apple.com/technotes/tn2002/tn2064.html
+MACOSX_DEPLOYMENT_TARGET=10.4
+.EXPORT: MACOSX_DEPLOYMENT_TARGET
+CDEFS+=-DQUARTZ 
+EXTRA_CDEFS*=-isysroot /Developer/SDKs/MacOSX10.4u.sdk
 .ENDIF
 
 # Name of library where static data members are initialized
@@ -87,8 +85,8 @@ ARCH_FLAGS*=
 # objcpp = Objective C++ compiler to use
 CXX*=g++
 CC*=gcc
-objc*=gcc
-objcpp*=g++
+objc*=$(CC)
+objcpp*=$(CXX)
 
 CFLAGS=-fsigned-char -fmessage-length=0 -malign-natural -c $(EXTRA_CFLAGS)
 
@@ -104,7 +102,10 @@ CFLAGSCC=-pipe -fsigned-char -malign-natural $(ARCH_FLAGS)
 # Normal Objective C compilation flags
 #OBJCFLAGS=-no-precomp
 OBJCFLAGS=-fobjc-exceptions
-OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
+# -x options generally ignored by ccache, tell it that it can cache
+# the result nevertheless
+CCACHE_SKIP:=$(eq,$(USE_CCACHE),YES --ccache-skip $(NULL))
+OBJCXXFLAGS:=$(CCACHE_SKIP) -x $(CCACHE_SKIP) objective-c++ -fobjc-exceptions
 
 # Comp Flags for files that need exceptions enabled (C and C++)
 CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
@@ -133,8 +134,8 @@ CFLAGSOUTOBJ=-o
 
 # Flags to enable precompiled headers
 CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
-CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
-CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)$/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_PCH=-I$(SLO)/pch -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
 
 # ---------------------------------
 #  Optimization flags
@@ -172,7 +173,7 @@ LIBSTLPORT=-lstlportstlg
 LIBSTLPORTST=$(STATIC) -lstlportstlg
 .ELSE
 LIBSTLPORT=-lstlport_gcc_stldebug
-LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib$/libstlport_gcc_stldebug.a
+LIBSTLPORTST=$(SOLARVERSION)/$(INPATH)/lib/libstlport_gcc_stldebug.a
 .ENDIF
 .ELSE # "$(USE_STLP_DEBUG" != ""
 .IF "$(STLPORT_VER)" >= "500"
@@ -180,7 +181,7 @@ LIBSTLPORT=-lstlport
 LIBSTLPORTST=$(STATIC) -lstlport
 .ELSE
 LIBSTLPORT=-lstlport_gcc
-LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib$/libstlport_gcc.a
+LIBSTLPORTST=$(SOLARVERSION)/$(INPATH)/lib/libstlport_gcc.a
 .ENDIF
 .ENDIF # "$(USE_STLP_DEBUG" != ""
 
@@ -195,15 +196,18 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 LINKFLAGSDEFS*=-Wl,-multiply_defined,suppress
+# assure backwards-compatibility
+EXTRA_LINKFLAGS*=-Wl,-syslibroot,/Developer/SDKs/MacOSX10.4u.sdk
 # Very long install_names are needed so that install_name_tool -change later on
 # does not complain that "larger updated load commands do not fit:"
-LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB$/$(@:f)'
+LINKFLAGSRUNPATH_URELIB=-install_name '@__________________________________________________URELIB/$(@:f)'
 LINKFLAGSRUNPATH_UREBIN=
-LINKFLAGSRUNPATH_OOO=-install_name '@__________________________________________________OOO$/$(@:f)'
+LINKFLAGSRUNPATH_OOO=-install_name '@__________________________________________________OOO/$(@:f)'
 LINKFLAGSRUNPATH_SDK=
 LINKFLAGSRUNPATH_BRAND=
 LINKFLAGSRUNPATH_OXT=
-LINKFLAGSRUNPATH_NONE=
+LINKFLAGSRUNPATH_BOXT=
+LINKFLAGSRUNPATH_NONE=-install_name '@__________________________________________________NONE/$(@:f)'
 LINKFLAGS=$(LINKFLAGSDEFS)
 
 # [ed] 5/14/02 If we're building for aqua, add in the objc runtime library into our link line
@@ -211,7 +215,7 @@ LINKFLAGS=$(LINKFLAGSDEFS)
     LINKFLAGS+=-lobjc
     # Sometimes we still use files that would be in a GUIBASE="unx" specific directory
     # because they really aren't GUIBASE specific, so we've got to account for that here.
-    INCGUI+= -I$(PRJ)$/unx/inc
+    INCGUI+= -I$(PRJ)/unx/inc
 .ENDIF
 
 #special settings form environment
@@ -249,7 +253,7 @@ SONAME_SWITCH=-Wl,-h
 
 STDLIBCPP=-lstdc++
 
-STDOBJVCL=$(L)$/salmain.o
+STDOBJVCL=$(L)/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
@@ -282,18 +286,4 @@ RCLINK=
 RCLINKFLAGS=
 RCSETVERSION=
 
-# Add SOLARLIBDIR to the end of a (potentially previously undefined)
-# DYLD_LIBRARY_PATH (there is no real reason to prefer adding at the end over
-# adding at the start); the ": &&" in the bash case enables this to work at the
-# start of a recipe line that is not prefixed by "+" as well as in the middle of
-# an existing && chain; the tcsh case is somewhat imprecise in that it
-# potentially affects multiple commands following on the recipe line:
-.IF "$(USE_SHELL)" == "bash"
-AUGMENT_LIBRARY_PATH = : && \
-    DYLD_LIBRARY_PATH=$${{DYLD_LIBRARY_PATH+$${{DYLD_LIBRARY_PATH}}:}}$(SOLARLIBDIR)
-.ELSE
-AUGMENT_LIBRARY_PATH = if ($$?DYLD_LIBRARY_PATH == 1) \
-    eval 'setenv DYLD_LIBRARY_PATH "$${{DYLD_LIBRARY_PATH}}:$(SOLARLIBDIR)"' \
-    && if ($$?DYLD_LIBRARY_PATH == 0) \
-    setenv DYLD_LIBRARY_PATH "$(SOLARLIBDIR)" &&
-.ENDIF
+OOO_LIBRARY_PATH_VAR = DYLD_LIBRARY_PATH

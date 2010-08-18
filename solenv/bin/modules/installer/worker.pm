@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: worker.pm,v $
-#
-# $Revision: 1.65.56.1 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -406,11 +402,6 @@ sub create_installation_directory
     else
     {
         $installdir = installer::systemactions::create_directories("install", $languageref);
-        if ( $installer::globals::localinstalldir )
-        {
-            $installdir = $installer::globals::localinstalldir;
-            $installer::globals::localinstalldirset = 1;
-        }
         installer::logger::print_message( "... creating installation set in $installdir ...\n" );
         remove_old_installation_sets($installdir);
         my $inprogressinstalldir = $installdir . "_inprogress";
@@ -494,6 +485,12 @@ sub analyze_and_save_logfile
     if (( $installer::globals::patch ) || ( $installer::globals::creating_windows_installer_patch )) { installer::worker::save_patchlist_file($installlogdir, $numberedlogfilename); }
 
     if ( $installer::globals::creating_windows_installer_patch ) { $installer::globals::creating_windows_installer_patch = 0; }
+
+    # Exiting the packaging process, if an error occured.
+    # This is important, to get an error code "-1", if an error was found in the log file,
+    # that did not break the packaging process
+
+    if ( ! $is_success) { installer::exiter::exit_program("ERROR: Found an error in the logfile. Packaging failed.", "analyze_and_save_logfile"); }
 
     return ($is_success, $finalinstalldir);
 }
@@ -1057,8 +1054,7 @@ sub write_content_into_inf_file
                 if ( $registryitem->{'Value'} ) { $value = $registryitem->{'Value'}; }
                 if ( $value =~ /\<progpath\>/ ) { $value =~ s/\\\"/\"\"/g; } # Quoting for INF is done by double ""
                 $value =~ s/\\\"/\"/g;  # no more masquerading of '"'
-                $value =~ s/\<progpath\>/\%OFFICEINSTALLLOCATION\%/g;
-                # $value =~ s/\%OFFICEINSTALLLOCATION\%\\/\%OFFICEINSTALLLOCATION\%/g;      # removing "\" after "%OFFICEINSTALLLOCATION%"
+                $value =~ s/\<progpath\>/\%INSTALLLOCATION\%/g;
                 if ( $value ne "" ) { $value = "\"" . $value . "\""; }
 
                 my $oneline = $regroot . "," . $subkey . "," . $valueentryname . "," . $flag . "," . $value . "\n";
@@ -2656,15 +2652,13 @@ sub set_time_stamp
     }
 }
 
-##############################################
-# Include only files from install directory
-# in pkgmap file.
-##############################################
-########################################
-# Generating pathes for cygwin.
-########################################
+############################################################
+# Generating pathes for cygwin (first version)
+# This function has problems with cygwin, if $tmpfilename
+# contains many thousand files (OpenOffice SDK).
+############################################################
 
-sub generate_cygwin_pathes
+sub generate_cygwin_pathes_old
 {
     my ($filesref) = @_;
 
@@ -2682,7 +2676,99 @@ sub generate_cygwin_pathes
     {
         ${$filesref}[$i]->{'cyg_sourcepath'} = $cyg_sourcepathlist[$i];
     }
+
 }
+
+#################################################
+# Generating pathes for cygwin (second version)
+# This function generates smaller files for
+#################################################
+
+sub generate_cygwin_pathes
+{
+    my ($filesref) = @_;
+
+    installer::logger::include_timestamp_into_logfile("Starting generating cygwin pathes");
+
+    my $infoline = "Generating cygwin pathes (generate_cygwin_pathes)\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    my $max = 5000;  # number of pathes in one file
+
+    my @pathcollector = ();
+    my $startnumber = 0;
+    my $counter = 0;
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        my $line = ${$filesref}[$i]->{'sourcepath'} . "\n";
+        push(@pathcollector, $line);
+        $counter++;
+
+        if (( $i == $#{$filesref} ) || ((( $counter % $max ) == 0 ) && ( $i > 0 )))
+        {
+            my $tmpfilename = "cygwinhelper_" . $i . ".txt";
+            my $temppath = $installer::globals::temppath;
+            $temppath =~ s/\Q$installer::globals::separator\E\s*$//;
+            $tmpfilename = $temppath . $installer::globals::separator . $tmpfilename;
+            $infoline = "Creating temporary file for cygwin conversion: $tmpfilename (contains $counter pathes)\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            if ( -f $tmpfilename ) { unlink $tmpfilename; }
+
+            installer::files::save_file($tmpfilename, \@pathcollector);
+
+            my $success = 0;
+            my @cyg_sourcepathlist = qx{cygpath -w -f "$tmpfilename"};
+            chomp @cyg_sourcepathlist;
+
+            # Validating the array, it has to contain the correct number of values
+            my $new_pathes = $#cyg_sourcepathlist + 1;
+            if ( $new_pathes == $counter ) { $success = 1; }
+
+            if ($success)
+            {
+                $infoline = "Success: Successfully converted to cygwin pathes!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+            }
+            else
+            {
+                $infoline = "ERROR: Failed to convert to cygwin pathes!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                installer::exiter::exit_program("ERROR: Failed to convert to cygwin pathes!", "generate_cygwin_pathes");
+            }
+
+            for ( my $j = 0; $j <= $#cyg_sourcepathlist; $j++ )
+            {
+                my $number = $startnumber + $j;
+                ${$filesref}[$number]->{'cyg_sourcepath'} = $cyg_sourcepathlist[$j];
+            }
+
+            if ( -f $tmpfilename ) { unlink $tmpfilename; }
+
+            @pathcollector = ();
+            $startnumber = $startnumber + $max;
+            $counter = 0;
+        }
+    }
+
+    # Checking existence fo cyg_sourcepath for every file
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        if (( ! exists(${$filesref}[$i]->{'cyg_sourcepath'}) ) || ( ${$filesref}[$i]->{'cyg_sourcepath'} eq "" ))
+        {
+            $infoline = "ERROR: No cygwin sourcepath defined for file ${$filesref}[$i]->{'sourcepath'}\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            installer::exiter::exit_program("ERROR: No cygwin sourcepath defined for file ${$filesref}[$i]->{'sourcepath'}!", "generate_cygwin_pathes");
+        }
+    }
+
+    installer::logger::include_timestamp_into_logfile("Ending generating cygwin pathes");
+}
+
+##############################################
+# Include only files from install directory
+# in pkgmap file.
+##############################################
 
 sub filter_pkgmapfile
 {
@@ -2936,6 +3022,24 @@ sub key_in_a_is_also_key_in_b
     return $returnvalue;
 }
 
+######################################################
+# Getting the first entry from a list of languages
+######################################################
+
+sub get_first_from_list
+{
+    my ( $list ) = @_;
+
+    my $first = $list;
+
+    if ( $list =~ /^\s*(.+?),(.+)\s*$/) # "?" for minimal matching
+    {
+        $first = $1;
+    }
+
+    return $first;
+}
+
 ################################################
 # Setting all spellchecker languages
 ################################################
@@ -2968,16 +3072,29 @@ sub set_spellcheckerlanguages
         {
             my $onelang = $1;
             my $languagelist = $2;
-            $spellcheckhash{$onelang} = $languagelist;
 
-            # Special handling for language packs. Do only include that one language of the language pack, no further language.
-            # And this only, if the language of the language pack is also already part of the language list
+            # Special handling for language packs. Only include the first language of the language list.
+            # If no spellchecker shall be included, the keyword "EMPTY" can be used.
 
             if ( $installer::globals::languagepack )
             {
-                if ( $languagelist =~ /\b$onelang\b/ ) { $spellcheckhash{$onelang} = $onelang; }
-                else { $spellcheckhash{$onelang} = ""; }
+                my $first = get_first_from_list($languagelist);
+
+                if ( $first eq "EMPTY" )     # no spellchecker into language pack
+                {
+                    $languagelist = "";
+                }
+                else
+                {
+                    $languagelist = $first;
+                }
             }
+            else  # no language pack, so EMPTY is not required
+            {
+                $languagelist =~ s/^\s*EMPTY\s*,//; # removing the entry EMPTY
+            }
+
+            $spellcheckhash{$onelang} = $languagelist;
         }
     }
 
@@ -3015,7 +3132,8 @@ sub put_license_into_setup
 
     # find and read english license file
     my $licenselanguage = "en-US";                  # always english !
-    my $licensefilename = "LICENSE_" . $licenselanguage;
+    # my $licensefilename = "LICENSE_" . $licenselanguage;
+    my $licensefilename = "license_" . $licenselanguage . ".txt";
     my $licenseincludepatharrayref = get_language_specific_include_pathes($includepatharrayref, $licenselanguage);
 
     my $licenseref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $licenseincludepatharrayref, 0);

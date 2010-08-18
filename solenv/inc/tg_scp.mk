@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: tg_scp.mk,v $
-#
-# $Revision: 1.18 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -36,17 +32,16 @@
 .IF "$(SCP$(TNR)TARGETN)"!=""
 
 # try to get missing parfiles
-$(PAR)$/%.par : $(SOLARPARDIR)$/%.par
+$(PAR)/%.par : $(SOLARPARDIR)/%.par
     @@-$(MKDIRHIER) $(@:d:d)
-    $(COPY) $< $@
+    $(COMMAND_ECHO)$(COPY) $< $@
 
-LOCALSCP$(TNR)FILES=$(foreach,i,$(SCP$(TNR)FILES) $(foreach,j,$(SCP$(TNR)LINK_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+LOCALSCP$(TNR)FILES=$(foreach,i,$(SCP$(TNR)FILES) $(foreach,j,$(SCP$(TNR)LINK_PRODUCT_TYPE) $(PAR)/$j/$i ))
 
 $(SCP$(TNR)TARGETN): $(LOCALSCP$(TNR)FILES)
-    @echo ------------------------------
-    @echo Making: $@
-    @@-$(MKDIRHIER) $(BIN)$/$(SCP$(TNR)LINK_PRODUCT_TYPE)
-    $(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP$(TNR)FILES) $(subst,$(@:d:d:d), $(@:d:d))$/$(i:+","))) -o $@
+    @echo "Making:   " $(@:f)
+    @@-$(MKDIRHIER) $(BIN)/$(SCP$(TNR)LINK_PRODUCT_TYPE)
+    $(COMMAND_ECHO)$(SCPLINK) $(SCPLINKFLAGS) @@$(mktmp $(foreach,i,$(SCP$(TNR)FILES) $(subst,$(@:d:d:d), $(@:d:d))/$(i:+","))) -o $@
 .ENDIF
 
 # Anweisungen fuer das Linken

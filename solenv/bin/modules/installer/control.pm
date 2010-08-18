@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: control.pm,v $
-#
-# $Revision: 1.42 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -409,6 +405,16 @@ sub determine_ship_directory
     my $shipdrive = $ENV{'SHIPDRIVE'};
 
     my $languagestring = $$languagesref;
+
+    if (length($languagestring) > $installer::globals::max_lang_length )
+    {
+        my $number_of_languages = installer::systemactions::get_number_of_langs($languagestring);
+        chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
+        # $languagestring = $shorter;
+        my $id = substr($shorter, 0, 8); # taking only the first 8 digits
+        $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
+    }
+
     my $productstring = $installer::globals::product;
     my $productsubdir = "";
 
@@ -714,7 +720,7 @@ sub set_addsystemintegration
 
     if ( $installer::globals::patch ) { $installer::globals::addsystemintegration = 0; }
     if ( $installer::globals::languagepack ) { $installer::globals::addsystemintegration = 0; }
-    if ( $installer::globals::packageformat eq "native" ) { $installer::globals::addsystemintegration = 0; }
+    if (( $installer::globals::packageformat eq "native" ) || ( $installer::globals::packageformat eq "portable" )) { $installer::globals::addsystemintegration = 0; }
 
     my $infoline = "Value of \$installer::globals::addsystemintegration: $installer::globals::addsystemintegration\n";
     push( @installer::globals::globallogfileinfo, $infoline);

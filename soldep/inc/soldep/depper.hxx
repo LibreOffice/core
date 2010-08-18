@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: depper.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -74,7 +71,7 @@ class FixedText;
 #define     OBJWIN_X_SPACING        50
 #define     OBJWIN_Y_SPACING        12
 #define     DEPPER_MAX_DEPTH        100
-#define     DEPPER_MAX_WIDTH        9
+#define     DEPPER_MAX_WIDTH        12
 #define     DEPPER_MAX_LEVEL_WIDTH      10 * DEPPER_MAX_WIDTH
 
 

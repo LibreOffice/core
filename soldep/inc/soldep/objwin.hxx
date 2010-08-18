@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: objwin.hxx,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -139,6 +136,7 @@ public:
 
         BOOL            ConnectionExistsInAnyDirection( ObjectWin *pWin );
         void    DrawOutput( OutputDevice* pDevice, const Point& rOffset  );
+        BOOL    IsTop();
 };
 
 DECL_DEST_LIST( TmpObjWinList, ObjWinList, ObjectWin* )
@@ -155,6 +153,7 @@ public:
                ~ObjectList() {};
     void       ResetSelectedObject();
     ObjectWin* GetPtrByName( const ByteString& rText );
+    ObjectList* FindTopLevelModules();
 };
 
 #endif

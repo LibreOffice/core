@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: component.pm,v $
-#
-# $Revision: 1.14 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -166,6 +162,11 @@ sub get_file_component_directory
         }
 
         $uniquedir = $onedir->{'uniquename'};
+
+        if ( $uniquedir eq $installer::globals::officeinstalldirectory )
+        {
+            $uniquedir = "INSTALLLOCATION";
+        }
     }
 
     $onefile->{'uniquedirname'} = $uniquedir;       # saving it in the file collection
@@ -180,16 +181,7 @@ sub get_file_component_directory
 
 sub get_registry_component_directory
 {
-    my $componentdir = "";
-
-    if ( $installer::globals::officeinstalldirectoryset )
-    {
-        $componentdir = $installer::globals::officeinstalldirectory;
-    }
-    else
-    {
-        $componentdir = "INSTALLLOCATION";
-    }
+    my $componentdir = "INSTALLLOCATION";
 
     return $componentdir;
 }

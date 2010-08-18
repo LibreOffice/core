@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: file_graphicfilter.scp,v $
- * $Revision: 1.13 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -30,32 +27,11 @@
 
 #include "macros.inc"
 
-File gid_File_Registry_Spool_Oo_TypeDetection_ImpressGraphics_Types_Xcu
+File gid_File_Share_Registry_Graphicfilter_Xcd
     TXT_FILE_BODY;
     Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_impressgraphics_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_ImpressGraphics_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_impressgraphics_filters.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_DrawGraphics_Types_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Types;
-    Name = "/registry/spool/fcfg_drawgraphics_types.xcu";
-End
-
-File gid_File_Registry_Spool_Oo_TypeDetection_DrawGraphics_Filters_Xcu
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry_Modules_Oo_TypeDetection_Filter;
-    Name = "/registry/spool/fcfg_drawgraphics_filters.xcu";
+    Dir = gid_Dir_Share_Registry;
+    Name = "graphicfilter.xcd";
 End
 
 STD_UNO_LIB_FILE( gid_File_Lib_Flash, flash )

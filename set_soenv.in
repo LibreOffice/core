@@ -38,8 +38,8 @@ use File::Basename;
 # IIa. Declaring variables for the system commands, etc.
 #--------------------------------------------------------
 #
-my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment,
-     $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps,
+my ( $outfile, $outfile_sh, $bootfile, $newline, $comment,
+     $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps,
      $wps, $cur_dir, $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW,
      $USE_MINGW, $platform,
      $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include, 
@@ -72,13 +72,13 @@ my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
 # Help variables.
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, 
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
-     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $SHELL_PATH, $XLIB, $XINC,
+     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
      $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
      $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
 
 # Environment variables.
-my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
-     $UPD, $WORK_STAMP, 
+my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
+     $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
@@ -86,11 +86,11 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $SHELL,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
-     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP,
+     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB,
-	 $PROEXT,
-     $SYSTEM_PYTHON, $PYTHONPATH, $SYSTEM_MOZILLA, $EPM_FLAGS);
+     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
+	 $PROEXT, $TARFILE_LOCATION,
+     $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -186,7 +186,6 @@ $CALL_CDECL           = "TRUE";
 $COMMON_OUTDIR        = "";
 $common_build         = "";
 $NO_REC_RES           = "TRUE";
-$NO_HIDS              = "TRUE";
 $SO3                  = "TRUE";
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $SOLAR_PLUGIN         = "TRUE";
@@ -198,7 +197,7 @@ $ENABLEUNICODE        = "TRUE";
 $NEW_JAR_PACK         = "TRUE";
 $NO_BSYMBOLIC         = "TRUE";
 $comment              = "#";           # UNIX script comment character
-$comment4nt           = "rem";         # Windows 4nt script comment character
+$TARFILE_LOCATION = "@TARFILE_LOCATION@"; # where to find tarballs with external sources
 
 # Setting platform dependent constant values.
 if ( $platform =~ m/solaris/ ) 
@@ -303,6 +302,47 @@ elsif ( $platform =~ m/netbsd/ )
       $OS             = "NETBSD";
       $PATH_SEPERATOR = $ps;
 }
+elsif ( $platform =~ m/kfreebsd/ ) 
+{
+# General GNU/kFreeBSD settings:
+      $CVER           = "C341";
+      $BIG_SVX        = "TRUE";
+      $COM            = "GCC";
+      $COMPATH        = '@COMPATH@'; 
+      $GLIBC          = "2REDHAT60";
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GVER           = "VCL";
+      $OS             = "LINUX";
+      $PATH_SEPERATOR = $ps;
+
+#Set platform specific values: 
+   if ($platform =~ m/^i[3456]86/)
+   {  print "Setting GNU/kFreeBSD x86 specific values... ";
+      $outfile        = "GNUkFreeBSDX86Env.Set"; 
+      $CPU            = "I";
+      $CPUNAME        = "INTEL";
+      $OUTPATH        = "unxkfgi6";
+      
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+
+   }
+   elsif ($platform =~ m/^x86_64/)
+   {  print "Setting GNU/kFreeBSD x86-64 specific values... ";
+      $outfile        = "GNUkFreeBSDX86-64Env.Set";
+      $CPU            = "X";
+      $CPUNAME        = "X86_64";
+      $OUTPATH        = "unxkfgx6";
+
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+   }
+
+   $INPATH         = $OUTPATH.$PROEXT;
+}
 elsif ( $platform =~ m/freebsd/ ) 
 {     $BIG_SVX        = "TRUE";
       $COM            = "GCC";
@@ -356,7 +396,7 @@ elsif ( $platform =~ m/freebsd/ )
 elsif ( $platform =~ m/linux/ ) 
 {
 # General Linux settings:
-      $CVER           = "C300";
+      $CVER           = "C341";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@'; 
@@ -391,20 +431,13 @@ elsif ( $platform =~ m/linux/ )
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
       }
 
-      if( @GCCVER@ >= 30401 ) {
-         $OUTPATH     = "unxlngi6";
-      	 $CVER        = "C341";
-      }
-      else {
-         $OUTPATH     = "unxlngi4";
-      }
+      $OUTPATH     = "unxlngi6";
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting Linux x86-64 specific values... ";
       $outfile        = "LinuxX86-64Env.Set";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
-      $CVER           = "C341";
       $OUTPATH        = "unxlngx6";
       # Blackdown.org JDK porting project uses `amd64' and `server' in JDK 1.4.2 RC1
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
@@ -417,7 +450,6 @@ elsif ( $platform =~ m/linux/ )
       $outfile        = "LinuxIA64Env.Set";
       $CPU            = "A";
       $CPUNAME        = "IA64";
-      $CVER           = "C341";
       $OUTPATH        = "unxlnga";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ia64".$ds."server";
@@ -500,18 +532,28 @@ elsif ( $platform =~ m/linux/ )
       $outfile        = "LinuxM68KEnv.Set";
       $CPU            = "6";
       $CPUNAME        = "M68K";
-      $CVER           = "C341";
       $OUTPATH        = "unxlngm68k";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."m68k".$ds."native_threads";
    }
+   elsif ($platform =~ m/^hppa/)
+   {  print "Setting Linux hppa specific values... ";
+      $outfile        = "LinuxHPPAEnv.Set";
+      $CPU            = "H";
+      $CPUNAME        = "HPPA";
+      $OUTPATH        = "unxlnghppa";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."hppa";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."hppa".$ds."server";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."hppa".$ds."native_threads";
+      $EPM_FLAGS      = "-a hppa";
+   }
    elsif ($platform =~ m/^alpha/) 
    {  print "Setting Linux Alpha specific values... ";
       $outfile        = "LinuxAlphaEnv.Set"; 
-      $CPU            = "A";
-      $CPUNAME        = "ALPHA_";
-      $OUTPATH        = "unxlnga";
+      $CPU            = "L";
+      $CPUNAME        = "AXP";
+      $OUTPATH        = "unxlngaxp";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
@@ -591,36 +633,8 @@ elsif ( $platform =~ m/osf1/ )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
 } 
-elsif ( $platform =~ m/irix/ )
-{     print "Setting Irix specific values... ";
-      $outfile        = "IrixMipsEnv.Set";
-      $BIG_SVX        = "TRUE";
-      if ($CC =~ "gcc" ) {
-            $COM          = "GCC";
-            $OUTPATH        = "unxirgm";
-            $CVER           = "C300";
-      }
-	  else {
-	  	$COM            = "C730";
-        $CVER           = "C730";
-        $OUTPATH        = "unxirxm3";
-      }
-      $COMPATH        = '@COMPATH@';
-      $CPU            = "M";
-      $CPUNAME        = "MIPS";
-      $GUI            = "UNX";
-      $GUIBASE        = "unx";
-      $GVER           = "VCL";
-      $INPATH         = $OUTPATH.$PROEXT;
-      $OS             = "IRIX";
-      $PATH_SEPERATOR = $ps;
-      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips";
-      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."client";
-      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."native_threads";
-}
 elsif ( $platform =~ m/cygwin/ ) 
 {
-      $COMPATH        = PathFormat('@COMPATH@');
       $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
       $MIDL_PATH      = PathFormat('@MIDL_PATH@');
       $CSC_PATH       = PathFormat('@CSC_PATH@');
@@ -645,8 +659,9 @@ elsif ( $platform =~ m/cygwin/ )
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
       $outfile        = "winmingw.set"; 
-      $COM            = "GCC";
+      $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;
+      $COM            = "GCC";
       $CVER           = "C341";
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
@@ -654,9 +669,8 @@ elsif ( $platform =~ m/cygwin/ )
   }
   else # The MSVC section starts here
   {   $outfile        = "winenv.set";
+      $COMPATH        = PathFormat('@COMPATH@');
       $COM            = "MSC";
-      # COMPATH for MSC is differently used
-      $COMPATH        =~ s/\/bin$//i;
       $OUTPATH        = "wntmsci@COMEX@";
       $INPATH         = $OUTPATH.$PROEXT;
       $COMEX          = '@COMEX@';
@@ -686,17 +700,10 @@ elsif ( $platform =~ m/cygwin/ )
               $MFC_INCLUDE = $PSDK_HOME.$ds."include".$ds."mfc";
           }
       }
-      if ( "@USE_SHELL@" ne "4nt" ) {
 	  print "Setting W32 build with bash shell specific values... ";
 	  # No speacial treatment for CC an CXX anymore.
 	  $FLIPCMD        = "slfl.pl";
 	  $PATH_SEPERATOR = ';';
-      } else			# "@USE_SHELL@" ne "4nt"
-      {   print "Setting W32 build with 4NT shell specific values... ";
-	  # Change path to lower case.
-	  $COMPATH        = lc $COMPATH;
-	  $PATH_SEPERATOR = ';';
-      }
   }
 }
 elsif ( $platform =~ m/os2/ ) 
@@ -812,6 +819,7 @@ $SRC_ROOT =~ s/\/config_office//;
 $SRC_ROOT = PathFormat($SRC_ROOT);
 CheckPathExist( $SRC_ROOT );
 
+
 #-----------------------------------------------------------------------------------------------------
 # Copy top level makefile from config_office/ to $SRC_ROOT
 #-----------------------------------------------------------------------------------------------------
@@ -830,25 +838,7 @@ if ( $platform =~ m/cygwin|os2/ ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
 }
 # 3. shell path.
-# Check whether autoconf found a valid shell path.
-if ("@USE_SHELL@" eq "tcsh")
-{  # SHELL as argument from autoconf.
-   $SHELL_PATH = '@SHELLPATH@';
-   $SHELL = '@SHELLPATH@'."\/tcsh";
-}
-elsif ("@USE_SHELL@" eq "bash")
-{
-   $SHELL_PATH = '@SHELLPATH@';
-   $SHELL = '@SHELLPATH@'."\/bash";
-}
-elsif ("@USE_SHELL@" eq "4nt")
-{  # @SHELLPATH@ is NO_SHELLPATH_NEEDED for 4nt - 
-   $SHELL_PATH = '';
-}
-else {
-   die "Not a recognized shell: @USE_SHELL@ !";
-}
-
+$OOO_SHELL = '@SHELLPATH@'."\/bash";
 
 if ( '@STLPORT4@' eq $no_stl )
 {
@@ -928,20 +918,6 @@ $COMMON_BUILD_TOOLS   = '$SRC_ROOT'.$ds."external".$ds."common";
 
 # Generate alternate output file for sh?
 $outfile_sh = $outfile.".sh";
-if ($GUI eq "OS2")
-{
-   # Generate output file for 4os2?
-   $outfile_bat = $outfile;
-   $outfile_bat =~ s/set$/cmd/i;
-}
-elsif ("@USE_SHELL@" eq "4nt")
-{
-    # Generate output file for 4nt?
-    $outfile_bat = $outfile;
-    $outfile_bat =~ s/set$/bat/i;
-} else {
-    undef $outfile_bat;
-}
 
 if ($STLPORT4 ne $no_stl) {
 	$ps_STLPORT_LIB		= $ps.'$STLPORT4'.$LIB64;
@@ -1003,6 +979,16 @@ if ( $platform =~ m/darwin/ )
 $WORK_STAMP            = "@SOURCEVERSION@";
 # Location of the source.
 $SOLARSRC             = '$SRC_ROOT';
+# Location of the repository.
+my @splitlist = split( /\//, $SRC_ROOT );
+pop @splitlist;
+$SOURCE_ROOT_DIR      = join("/", @splitlist);
+
+# default TARFILE_LOCATION
+if ('@TARFILE_LOCATION@' eq "DEFAULT")
+{	$TARFILE_LOCATION="$SOURCE_ROOT_DIR/ext_sources";
+}
+
 #
 $DEVROOT              = '$SRC_ROOT';
 # Set solenv and solver to given or default values. 
@@ -1055,7 +1041,7 @@ if ($platform =~ m/solaris/)
                         $L.$USR_DT.$LIB.
                         $L.$USR_OPENWIN.$LIB;
 }
-elsif ($platform =~ m/linux|netbsd|osf1|irix|freebsd|aix/)
+elsif ($platform =~ m/linux|netbsd|osf1|freebsd|aix/)
 {
    $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
 }
@@ -1109,7 +1095,8 @@ if ($platform =~ m/cygwin|os2/)
       else
       {  $ILIB       .= $wps.$COMPATH.$LIB;
       }
-      $ILIB       .= $wps.$PSDK_HOME.$LIB;
+      $ILIB       .= $wps.PathFormat("@MINGW_CLIB_DIR@").
+                     $wps.$PSDK_HOME.$LIB;
       if ( '@ENABLE_DIRETX@' )
       {   $ILIB   .= $wps.PathFormat("@DIRECTXSDK_LIB@");
       }
@@ -1120,7 +1107,7 @@ if ($platform =~ m/cygwin|os2/)
 }
      
 # The general environment path.
-if ($platform =~ m/linux|netbsd|odf1|irix|freebsd|aix|solaris/)
+if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris/)
 {  $PATH              = $cur_dir.
 #                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
@@ -1141,7 +1128,6 @@ if ($platform =~ m/linux|netbsd|odf1|irix|freebsd|aix|solaris/)
    $PATH              = GetCorrectPath ($PATH,
                                         $COMPATH, $CC,
                                         $PERL_PATH, 'perl',
-                                        $SHELL_PATH, '@USE_SHELL@',
                                         @javaBits);
 }
 
@@ -1226,11 +1212,6 @@ elsif ($platform =~ m/cygwin/)
    if ( ! ( $PATH =~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) )
    {
       $PATH          .= $ps.$tmppath;
-   }
-   # Check if $SHELL_PATH is already set in PATH
-   $tmppath = CygFormat($SHELL_PATH);
-   if ( ( "@USE_SHELL@" ne "4nt" ) && ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) )
-   {   $PATH          .= $ps.$tmppath;
    }
    # Check if $CYGWIN_PATH is already set in PATH
    $tmppath = CygFormat($CYGWIN_PATH);
@@ -1340,9 +1321,7 @@ if ($platform =~ m/solaris/)
                         $L.$LIB.
                         $L.$USR_LIB;
    if ( $CC =~ "gcc" ) {
-      my $temp = $COMPATH;
-      $temp =~ s:/bin$::;
-      $SOLARLIB      .= $L.$temp.$LIB;
+      $SOLARLIB      .= $L.$COMPATH.$LIB;
    }
    $SOLARLIB         .= $L.$USR_LOCAL.$LIB.
                         $L.$USR_DT.$LIB.
@@ -1354,7 +1333,7 @@ if ($platform =~ m/solaris/)
                         $L_STLPORT_LIB.
                         $L.$XLIB;
 }
-elsif ($platform =~ m/linux|netbasd|osf1|irix|aix|freebsd/)
+elsif ($platform =~ m/linux|netbasd|osf1|aix|freebsd/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
@@ -1397,7 +1376,7 @@ $SOLARINC             = $I.$cur_dir.
                         $I.'$SOLARENV'.$INC.
                         $I.'$SRC_ROOT'.$ds."res";
 
-if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd|irix/)
+if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd/)
 {
 $SOLARINC	     .= $STLPORT_stlport;
 if ($platform =~ m/linux|freebsd|netbsd/)
@@ -1405,15 +1384,14 @@ if ($platform =~ m/linux|freebsd|netbsd/)
 # This simply adds an include path, so even cases that break the FHS work
 $SOLARINC            .= $STLPORT_inc_stlport;
 }
-if ($platform =~ m/solaris/ && $CC !=~ "gcc")
+if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 {
 $SOLARINC            .= '/SC5 ';
 }
 # Platform dependent include path at the top of this list of include paths
 if ($platform =~ m/solaris/)
-{   my $temp;
-    $temp =~ s:$COMPATH:/bin\$:;
-    $SOLARINC         .= $I.$temp.$ds."include";
+{   
+    $SOLARINC         .= $I.$COMPATH.$ds."include";
 }
 if ($platform =~ m/linux/)
 {
@@ -1442,9 +1420,6 @@ if ($platform =~ m/linux/)
    		}
    		elsif ($platform =~ m/netbsd/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."netbsd";
-   		}
-   		elsif ($platform =~ m/irix/)
-   		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."irix";
    		}
 
    		#java threads include path
@@ -1486,6 +1461,7 @@ elsif ($platform =~ m/cygwin/)
      else
      {  $SOLARINC    .= $I.'$COMPATH'.$ds."include"; }
      @mingw_lib_include_paths = split( / /, "@MINGW_LIB_INCLUDE_PATH@" );
+     $SOLARINC .= $I.PathFormat("@MINGW_BACKWARD_INCLUDE_PATH@");
      foreach $mingw_lib_include_path (@mingw_lib_include_paths)
        {   chomp $mingw_lib_include_path;
            if ( $mingw_lib_include_path ne $COMPATH.$ds."include" && $mingw_lib_include_path ne "" )
@@ -1514,14 +1490,6 @@ else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
 }
 
-if ($SYSTEM_PYTHON eq "NO") {
-    $PYTHONPATH           = '.'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'python'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'python'.$ds.'lib-dynload'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'pyuno'.$wps.$SOLARVER.$ds.$INPATH.$ds.'bin'.$ds.'pyuno';
-    if ($GUIBASE eq "WIN") {
-        # PYTHONPATH need to use '\' directory seperators;
-        $PYTHONPATH = WinPath( $PYTHONPATH, ";" );
-    }
-}
-
 #
 print "done\n";
 
@@ -1530,7 +1498,6 @@ print "done\n";
 #
 print "Setting the aliases... ";
 # 1. alias for a full product make. 
-# ToFile will take care for the right 4nt format
 	$mkout           = '"perl $SOLARENV/bin/mkout.pl"';
 	$deliver         = '"perl $SOLARENV/bin/deliver.pl"';
 	$build           = '"perl $SOLARENV/bin/build.pl"';
@@ -1551,12 +1518,6 @@ open( OUT, ">$outfile" ) ||
 open( OUT_SH, ">$outfile_sh" ) ||
   die "Cannot open $outfile_sh: $!\n";
 
-if(defined($outfile_bat))
-{  # Create bat environment file
-   open( OUT_BAT, ">$outfile_bat" ) ||
-   die "Cannot open $outfile_bat: $!\n";
-}
-
 #
 #------------------------------------------
 # VII. Writing the data to the output file.
@@ -1565,10 +1526,9 @@ if(defined($outfile_bat))
 # Write file header.
 CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
 CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" );
-CreateFileHeader( *OUT_BAT, $UPD, $platform, "4nt", "rem" ) if defined($outfile_bat);
 
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
-ToFile( "SHELL",             $SHELL,             "e" );
+ToFile( "OOO_SHELL",         $OOO_SHELL,         "e" );
 ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
 ToFile( "ANT_HOME",          PathFormat("@ANT_HOME@"), "e" );
 ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
@@ -1622,7 +1582,6 @@ ToFile( "common_build",      $common_build,      "e" );
 ToFile( "BMP_WRITES_FLAG",   $BMP_WRITES_FLAG,   "e" );
 ToFile( "BUILD_SOSL_RELEASE", $BUILD_SOSL_RELEASE, "e" );
 ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
-ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
 ToFile( "SO3",               $SO3,               "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
 ToFile( "UPDATER",           $UPDATER,           "e" );
@@ -1646,6 +1605,8 @@ ToFile( "BUILD_MOZAB",       "@BUILD_MOZAB@",    "e" );
 ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
 ToFile( "MOZILLA_VERSION",   $MOZILLA_VERSION,   "e" );
 ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
+ToFile( "ENABLE_NSS_MODULE",  "@ENABLE_NSS_MODULE@", "e" );
+ToFile( "MOZILLABUILD",  "@MOZILLABUILD@", "e" );
 ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
 ToFile( "ENABLE_VBA",  "@ENABLE_VBA@", "e" );
 ToFile( "VBA_EXTENSION",  "@VBA_EXTENSION@", "e" );
@@ -1661,10 +1622,12 @@ ToFile( "ENABLE_STATIC_GTK", "@ENABLE_STATIC_GTK@", "e" );
 ToFile( "ENABLE_CAIRO",      "@ENABLE_CAIRO@",     "e" );
 ToFile( "ENABLE_OPENGL",     "@ENABLE_OPENGL@",    "e" );
 ToFile( "ENABLE_PDFIMPORT",  "@ENABLE_PDFIMPORT@", "e" );
+ToFile( "ENABLE_PRESENTER_EXTRA_UI","@ENABLE_PRESENTER_EXTRA_UI@","e" );
 ToFile( "ENABLE_MINIMIZER",   "@ENABLE_MINIMIZER@","e" );
 ToFile( "ENABLE_PRESENTER_SCREEN","@ENABLE_PRESENTER_SCREEN@","e" );
 ToFile( "ENABLE_REPORTBUILDER","@ENABLE_REPORTBUILDER@","e" );
 ToFile( "SYSTEM_JFREEREPORT","@SYSTEM_JFREEREPORT@","e" );
+ToFile( "OOO_JUNIT_JAR",     "@OOO_JUNIT_JAR@",    "e" );
 ToFile( "SAC_JAR",           "@SAC_JAR@",          "e" );
 ToFile( "LIBXML_JAR",        "@LIBXML_JAR@",       "e" );
 ToFile( "FLUTE_JAR",         "@FLUTE_JAR@",        "e" );
@@ -1691,10 +1654,17 @@ ToFile( "ENABLE_GIO",        "@ENABLE_GIO@",       "e" );
 ToFile( "ENABLE_KDE",        "@ENABLE_KDE@",       "e" );
 ToFile( "KDE_CFLAGS",        "@KDE_CFLAGS@",       "e" );
 ToFile( "KDE_LIBS",          "@KDE_LIBS@",         "e" );
-ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "MOC",               "@MOC@",              "e" );
+ToFile( "ENABLE_KDE4",       "@ENABLE_KDE4@",      "e" );
+ToFile( "KDE4_CFLAGS",       "@KDE4_CFLAGS@",      "e" );
+ToFile( "KDE4_LIBS",         "@KDE4_LIBS@",        "e" );
+ToFile( "MOC4",              "@MOC4@",             "e" );
+ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
+ToFile( "nodep",             "@nodep@",          "e" );
+ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
+ToFile( "DO_FETCH_TARBALLS", "@DO_FETCH_TARBALLS@",  "e" );
 #
 # Writing the platform dependent constant values to file.
 # (c = comment, e = environment variable, a = alias )
@@ -1783,6 +1753,7 @@ if ( '@JDK@' ne '' )
    ToFile( "JDK",             "@JDK@",           "e" );
    ToFile( "JAVAFLAGS",             "@JAVAFLAGS@",           "e" );
    ToFile( "JAVAINTERPRETER", PathFormat("@JAVAINTERPRETER@"), "e" );
+   ToFile( "JAVAIFLAGS",      "@JAVAIFLAGS@",    "e" );
    ToFile( "JAVACOMPILER",    PathFormat("@JAVACOMPILER@"), "e" );
    ToFile( "JAVAAOTCOMPILER", PathFormat("@JAVAAOTCOMPILER@"), "e" );
    ToFile( "JAVADOC",         PathFormat("@JAVADOC@"), "e" );
@@ -1802,6 +1773,7 @@ ToFile( "HAVE_LD_HASH_STYLE","@HAVE_LD_HASH_STYLE@","e" );
 ToFile( "HAVE_LD_BSYMBOLIC_FUNCTIONS",
 		"@HAVE_LD_BSYMBOLIC_FUNCTIONS@","e" );
 ToFile( "CXX",               $CXX,               "e" );
+ToFile( "USE_CCACHE",        "@USE_CCACHE@",     "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
 ToFile( "USE_SYSTEM_STL",    "@USE_SYSTEM_STL@", "e" );
@@ -1816,8 +1788,12 @@ ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
 ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
 ToFile( "ENABLE_PCH",        "@ENABLE_PCH@",       "e" );
+ToFile( "NO_HIDS",           "@NO_HIDS@",       "e" );
+ToFile( "ENABLE_GRAPHITE",   "@ENABLE_GRAPHITE@",   "e");
+ToFile( "SYSTEM_GRAPHITE",   "@SYSTEM_GRAPHITE@",   "e");
+ToFile( "GRAPHITE_LIBS",     "@GRAPHITE_LIBS@",     "e");
+ToFile( "GRAPHITE_CFLAGS",   "@GRAPHITE_CFLAGS@",   "e");
 ToFile( "VC_STANDARD",       "@VC_STANDARD@",      "e" );
-ToFile( "WITH_GPC",          "@WITH_GPC@",         "e" );
 ToFile( "WITH_MYSPELL_DICTS","@WITH_MYSPELL_DICTS@","e");
 ToFile( "SYSTEM_DICTS",      "@SYSTEM_DICTS@",     "e");
 ToFile( "DICT_SYSTEM_DIR",   "@DICT_SYSTEM_DIR@",  "e");
@@ -1843,11 +1819,9 @@ ToFile( "WITHOUT_PPDS",      "@WITHOUT_PPDS@",     "e" );
 ToFile( "WITH_BINFILTER",    "@WITH_BINFILTER@",   "e" );
 ToFile( "BUILD_TYPE",        "@BUILD_TYPE@",       "e" );
 ToFile( "VERBOSE",           "@VERBOSE@",          "e" );
-ToFile( "WITH_FONTOOO",      "@WITH_FONTOOO@",     "e" );
 ToFile( "ENABLE_EVOAB2",     "@ENABLE_EVOAB2@",    "e" );
 ToFile( "GOBJECT_CFLAGS",    "@GOBJECT_CFLAGS@",   "e" );
 ToFile( "GOBJECT_LIBS",      "@GOBJECT_LIBS@",     "e" );
-ToFile( "SYSTEM_MSPACK",     "@SYSTEM_MSPACK@",    "e" );
 if ( '@ENABLE_RPATH@' eq "no" ) {
   ToFile( "LINKFLAGSRUNPATH",'',                   "e" );
 }
@@ -1886,6 +1860,9 @@ ToFile( "XRANDR_DLOPEN",     "@XRANDR_DLOPEN@",    "e" );
 ToFile( "SYSTEM_LIBWPD",     "@SYSTEM_LIBWPD@",    "e" );
 ToFile( "LIBWPD_CFLAGS",     "@LIBWPD_CFLAGS@",    "e" );
 ToFile( "LIBWPD_LIBS",       "@LIBWPD_LIBS@",      "e" );
+ToFile( "SYSTEM_CPPUNIT",    "@SYSTEM_CPPUNIT@",   "e" );
+ToFile( "CPPUNIT_CFLAGS",    "@CPPUNIT_CFLAGS@",   "e" );
+ToFile( "CPPUNIT_LIBS",      "@CPPUNIT_LIBS@",     "e" );
 ToFile( "SYSTEM_LIBXML",     "@SYSTEM_LIBXML@",    "e" );
 ToFile( "USE_FT_EMBOLDEN",   "@USE_FT_EMBOLDEN@",  "e" );
 ToFile( "LIBXML_CFLAGS",     "@LIBXML_CFLAGS@",    "e" );
@@ -1894,6 +1871,13 @@ ToFile( "SYSTEM_EXPAT",      "@SYSTEM_EXPAT@",     "e" );
 ToFile( "SYSTEM_DB",         "@SYSTEM_DB@",        "e" );
 ToFile( "DB_VERSION",        "@DB_VERSION@",       "e" );
 ToFile( "DB_INCLUDES",       "@DB_INCLUDES@",      "e" );
+ToFile( "ENABLE_MYSQLC",     "@ENABLE_MYSQLC@",    "e" );
+ToFile( "SYSTEM_MYSQL",      "@SYSTEM_MYSQL@",     "e" );
+ToFile( "SYSTEM_MYSQL_CPPCONN","@SYSTEM_MYSQL_CPPCONN@","e" );
+ToFile( "MYSQL_INC",         "@MYSQL_INC@",        "e" );
+ToFile( "MYSQL_LIB",         "@MYSQL_LIB@",        "e" );
+ToFile( "MYSQL_DEFINES",     "@MYSQL_DEFINES@",    "e" );
+ToFile( "LIBMYSQL_PATH",     "@LIBMYSQL_PATH@",    "e" );
 ToFile( "SYSTEM_HSQLDB",     "@SYSTEM_HSQLDB@",    "e" );
 ToFile( "HSQLDB_JAR",        "@HSQLDB_JAR@",       "e" );
 ToFile( "SYSTEM_LUCENE",     "@SYSTEM_LUCENE@",    "e" );
@@ -1913,6 +1897,7 @@ ToFile( "SYSTEM_CURL",       "@SYSTEM_CURL@",      "e" );
 ToFile( "CURL_CFLAGS",       "@CURL_CFLAGS@",      "e" );
 ToFile( "CURL_LIBS",         "@CURL_LIBS@",        "e" );
 ToFile( "SYSTEM_BOOST",      "@SYSTEM_BOOST@",     "e" );
+ToFile( "SYSTEM_MDDS",       "@SYSTEM_MDDS@",      "e" );
 ToFile( "SYSTEM_VIGRA",      "@SYSTEM_VIGRA@",     "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
 ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );
@@ -1924,6 +1909,7 @@ ToFile( "ENABLE_AGG",        "@ENABLE_AGG@",       "e" );
 ToFile( "SYSTEM_AGG",	     "@SYSTEM_AGG@",       "e" );
 ToFile( "AGG_VERSION",	     "@AGG_VERSION@",      "e" );
 ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
+ToFile( "BUILD_STAX",        "@BUILD_STAX@",       "e" );
 ToFile( "BUILD_UNOWINREG",   "@BUILD_UNOWINREG@",  "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
@@ -1933,9 +1919,14 @@ ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
 ToFile( "HUNSPELL_LIBS",     "@HUNSPELL_LIBS@",    "e" );
 ToFile( "SYSTEM_LPSOLVE",    "@SYSTEM_LPSOLVE@",   "e" );
+ToFile( "HAVE_GETOPT",       "@HAVE_GETOPT@",      "e" );
+ToFile( "HAVE_READDIR_R",    "@HAVE_READDIR_R@",   "e" );
+ToFile( "SYSTEM_LIBC",       "@SYSTEM_LIBC@",      "e" );
 ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
 ToFile( "HYPHEN_LIB",        "@HYPHEN_LIB@",       "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
+ToFile( "MYTHES_CFLAGS",     "@MYTHES_CFLAGS@",    "e" );
+ToFile( "MYTHES_LIBS",       "@MYTHES_LIBS@",      "e" );
 ToFile( "PAM",               "@PAM@",              "e" );
 ToFile( "NEW_SHADOW_API",    "@NEW_SHADOW_API@",   "e" );
 ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );
@@ -1943,18 +1934,29 @@ ToFile( "CRYPT_LINK",        "@CRYPT_LINK@",       "e" );
 ToFile( "XAU_LIBS",          "@XAU_LIBS@",         "e" );
 ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
-if ($platform !~ m/cygwin|os2/)
-{  ToFile( "TEMP",              $TEMP,              "e" );
-   ToFile( "TMP",               $TEMP,              "e" );
+if ($platform !~ m/cygwin|os2/) {
+   if ( $ENV{"TMPDIR"} eq "" ) {
+      ToFile( "TMPDIR",      "/tmp",               "e" );
+   } else {
+      ToFile( "TMPDIR",      "$ENV{'TMPDIR'}",     "e" );
+   }
 }
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
+ToFile( "SOURCE_ROOT_DIR",    $SOURCE_ROOT_DIR,    "e" );
 if ( $platform =~ m/cygwin/ )
 {
    ToFile( "ILIB",              $ILIB,              "e" );
    if ( $MINGW eq "yes" )
    {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
+      ToFile( "EXCEPTIONS",        "@EXCEPTIONS@",        "e" );
       ToFile( "DIRECTXSDK_HOME",    PathFormat("@DIRECTXSDK_HOME@"),    "e" );
       ToFile( "USE_MINGW",         $USE_MINGW,              "e" );
+      ToFile( "MINGW_CLIB_DIR",         PathFormat("@MINGW_CLIB_DIR@"),              "e" );
+      ToFile( "MINGW_SHARED_GCCLIB",         "@MINGW_SHARED_GCCLIB@",              "e" );
+      ToFile( "MINGW_GCCLIB_EH",      "@MINGW_GCCLIB_EH@",              "e" );
+      ToFile( "MINGW_SHARED_GXXLIB",         "@MINGW_SHARED_GXXLIB@",              "e" );
+      ToFile( "MINGW_GCCDLL",         "@MINGW_GCCDLL@",              "e" );
+      ToFile( "MINGW_GXXDLL",         "@MINGW_GXXDLL@",              "e" );
    }
    ToFile( "GREP",              $WIN_GREP,          "e" );
    ToFile( "FIND",              $WIN_FIND,          "e" );
@@ -1974,23 +1976,14 @@ if ( $platform =~ m/os2/ )
 }
 
 # $perlpre is only used for the following three variables
-# and only set for 4nt.
+# and only set for OS2.
 my $perlpre = "";
-if (( $platform =~ m/cygwin/ ) and ( '@USE_SHELL@' eq "4nt" )) {
-   ToFile( "HOME",              "   ",          "e" );
-   $perlpre = "perl ".${SOLARENV}.${BIN}.${ds};
-}
 if (( $platform =~ m/os2/ )) {
    $perlpre = "perl ".${SOLARENV}.${BIN}.${ds};
 }
 ToFile( "DELIVER",       $perlpre."deliver.pl",     "e" );
 ToFile( "MKOUT",         $perlpre."mkout.pl",       "e" );
 ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
-
-ToFile( "USE_SHELL",             '@USE_SHELL@',     "e" );
-if ($SYSTEM_PYTHON eq "NO") {
-    ToFile( "PYTHONPATH",        $PYTHONPATH,        "e" );
-}
 
 #
 # Writing the aliases to file.
@@ -2014,23 +2007,8 @@ if ( $platform =~ m/os2/ )
 ToFile( "endif",             $empty, "y");
 ToFile( "fi",                $empty, "z");
 
-# write make command for dmake for W32-4nt
-if ( $platform =~ m/cygwin/ and '@USE_SHELL@' eq "4nt" )
-{
-  ToFile( "build the dmake executable.", $empty, "c");
-  ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe (cd \%SRC_ROOT\\dmake \^ set INCLUDE=\%COMPATH\\include;\%PSDK_HOME\\include \^ set LIB=\%COMPATH\\lib;\%PSDK_HOME\\lib \^ call make.bat win95-vpp40 \^ cd \%SRC_ROOT)", $empty, "x");
-  ToFile( "if not exist \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe ( mkdir /S \%SOLARENV\\\%OUTPATH\\bin \^ copy dmake\\dmake.exe \%SOLARENV\\\%OUTPATH\\bin\\dmake.exe )", $empty, "x");
-  ToFile( "\@echo Warning! LIB and INCLUDE will be cleared!", $empty, "x");
-  ToFile( "\@unset INCLUDE LIB", $empty, "x");
-  ToFile( "check for correct dmake.", $empty, "c");
-  ToFile( '@if "%@SEARCH[dmake]" == "" ( @echo dmake not build or missing! Invalid build environment! ^ unset SOLARENV ^ cancel )', $empty, "x");
-  ToFile( '@dmake -V > dmakecheck.out', $empty, "x");
-  ToFile( '@ffind /Tcygwin /C /B dmakecheck.out && ( @echo Found cygwin build dmake! Invalid! ^ unset SOLARENV ^ cancel )', $empty, "x");
-  ToFile( "  ", $empty, "x");
-}
-
-# Check if the right dmake version is used. (W32-tcsh only)
-if ( $platform =~ m/cygwin/ and '@USE_SHELL@' ne "4nt" ) {
+# Check if the right dmake version is used. (W32 only)
+if ( $platform =~ m/cygwin/ ) {
     ToFile( "Check if the right dmake version is used.", $empty, "c" );
     # Invalidate build environment.
     ToFile( "WORK_STAMP", "_invalid_", "e" );
@@ -2055,6 +2033,7 @@ if ($platform =~ m/os2/)
   ToFile( "SWITCHAR",   "-",	"e");
 }
 ToFile( "SAL_ENABLE_FILE_LOCKING",	"1",	"e");
+ToFile( "DBGSV_INIT", "$SOLARENV/bin/dbgsv.ini", "e");
 #
 # Writing unset variables you might not need to file.
 # 
@@ -2063,9 +2042,6 @@ print OUT $unsetvars;
 print OUT_SH "export $exportvars$newline";
 print OUT_SH "unset $unsetvarssh$newline";
 
-if(defined($outfile_bat))
-{  print OUT_BAT $unsetvarsbat;
-}
 
 #
 #---------------------------
@@ -2075,10 +2051,6 @@ if(defined($outfile_bat))
 close( OUT ) || print "Can't close $outfile: $!";
 
 close( OUT_SH ) || print "Can't close $outfile_sh: $!";
-
-if( defined($outfile_bat))
-{  close( OUT_BAT ) || print "Can't close $outfile_bat: $!";
-}
 
 #
 #------------------------------
@@ -2101,14 +2073,6 @@ if (rename( $outfile, $tmp ) ne 1)
 $tmp = $SRC_ROOT.$ds.$outfile_sh;
 if (rename( $outfile_sh, $tmp ) ne 1)
 {  `mv -f $outfile_sh $tmp`;
-}
-
-if(defined($outfile_bat))
-{
-    $tmp = $SRC_ROOT.$ds.$outfile_bat;
-    if (rename( $outfile_bat, $tmp ) ne 1)
-    {  `mv -f $outfile_bat $tmp`;
-    }
 }
 
 #
@@ -2166,9 +2130,7 @@ if (rename( $bootfile, $tmp ) ne 1)
 }
 
 print "Configure completed\n";
-if ( "@USE_SHELL@" ne "4nt" ) {
-	print "You may now run ./bootstrap in $SRC_ROOT\n";
-}
+print "You may now run ./bootstrap in $SRC_ROOT\n";
 if ( $Warning ne "" ) {
 	print "***** WARNINGS ISSUED *****\n";
 }
@@ -2189,7 +2151,7 @@ if ( $Warning ne "" ) {
 #-------------------------------------------------------------
 sub CheckPathName 
 {  my $retrn = $_[ 0 ];
-   if (($platform =~ m/cygwin/) or ( '@USE_SHELL@' ne "4nt" ))
+   if ($platform =~ m/cygwin/)
    {  # Check if the first character is not a '/'.
       if ( !( $_[ 0 ] =~ /^\// ) ) 
       {  $retrn = $ds.$_[ 0 ];
@@ -2265,21 +2227,6 @@ sub ToFile {
       if (defined $_[ 1 ] && $_[ 1 ] ne "" ) {
          my $envvar = $_[ 1 ];
          my $envvarbash = $envvar;
-         if ("@USE_SHELL@" eq "4nt" ) {
-             # expand the variables
-             $envvar =~ s/(\$\{?\w+\}?)/$1/eeg ;
-             # Some variables need to be translated
-             if ( ($_[ 0 ] =~ /^PATH$/) and ($platform !~ m/os2/) ) {
-                 # PATH is in cygwin format, but for 4nt it needs to be DOS.
-                 $win_format_var = WinPath( $envvar, ":" );
-             } else {
-                 $win_format_var = WinFormat( $envvar );
-             }
-             # The excluded variables are translated by cygwin
-             if ( $_[ 0 ] !~ /^PATH$|^TMP$|^TEMP$|^TMPDIR$|^HOME$/i ) {
-                 $envvar = $win_format_var;
-             }
-         }
 
          # Tcsh/bash needs backslashes quoted
          $envvar =~ s/\\/\\\\/g;
@@ -2290,17 +2237,10 @@ sub ToFile {
          print OUT_SH "$_[ 0 ]=\"$envvarbash\"$newline";   # to sh file
          $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
 
-         if(defined($outfile_bat)) {
-             print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ]$newline";
-             print OUT_BAT "$set $_[ 0 ]=$win_format_var$newline";
-         }
       } else {
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
          $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline"; # for tcsh file
          $unsetvarssh .= " $_[ 0 ]";                             # for sh file
-         if(defined($outfile_bat)) {
-             $unsetvarsbat .= "$unset $_[ 0 ] >& NUL$newline";
-         }
       }
    }
    elsif ( $_[ 2 ] eq "a" ) 
@@ -2308,13 +2248,6 @@ sub ToFile {
       print "The $_[ 0 ] is set to: $_[ 1 ]\n";    # to stdout
       print OUT "$_[ 0 ] $_[ 1 ]$newline";         # to tcsh file
       print OUT_SH "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
-      if(defined($outfile_bat)) # create the correct 4nt alias format
-      {  my $aliastmp = $_[ 1 ];
-         $aliastmp =~ s/\$/\%/g;
-         $aliastmp =~ s!/!\\!g;
-         $aliastmp =~ s!"!!g;
-         print OUT_BAT "$_[ 0 ]=".'`'.$aliastmp.'`'.$newline;
-      }
    }
    elsif ( $_[ 2 ] eq "c" ) 
    {  # Write a comment to file.
@@ -2330,23 +2263,11 @@ sub ToFile {
       print OUT_SH "$comment$newline";
       print OUT_SH "$comment $_[ 0 ]$newline";
       print OUT_SH "$comment$newline";
-      if(defined($outfile_bat)) {
-          print OUT_BAT "$newline";
-          print OUT_BAT "$comment4nt$newline";
-          print OUT_BAT "$comment4nt $_[ 0 ]$newline";
-          print OUT_BAT "$comment4nt$newline";
-      }
    }
    elsif ( $_[ 2 ] eq "n" )
    {  #Write a newline to a file
       print OUT "$newline";
       print OUT_SH "$newline";
-      print OUT_BAT "$newline" if defined($outfile_bat);
-   }
-   elsif ( $_[ 2 ] eq "x" )
-   {
-      #Write first argument as is, and nothing else
-      print OUT_BAT "$_[ 0 ]$newline" if defined($outfile_bat);
    }
    elsif ( $_[ 2 ] eq "y" )
    {

@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: admin.pm,v $
-#
-# $Revision: 1.1.2.2 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -58,11 +54,17 @@ sub unpack_cabinet_file
     # But this wrong expand.exe is typically in the PATH before this expand.exe, to unpack
     # cabinet files.
 
+#   if ( $^O =~ /cygwin/i )
+#   {
+#       $expandfile = $ENV{'SYSTEMROOT'} . "/system32/expand.exe"; # Has to be located in the systemdirectory
+#       $expandfile =~ s/\\/\//;
+#       if ( ! -f $expandfile ) { exit_program("ERROR: Did not find file $expandfile in the Windows system folder!"); }
+#   }
+
     if ( $^O =~ /cygwin/i )
     {
-        $expandfile = $ENV{'SYSTEMROOT'} . "/system32/expand.exe"; # Has to be located in the systemdirectory
-        $expandfile =~ s/\\/\//;
-        if ( ! -f $expandfile ) { exit_program("ERROR: Did not find file $expandfile in the Windows system folder!"); }
+        $expandfile = qx(cygpath -u "$ENV{WINDIR}"/System32/expand.exe);
+        chomp $expandfile;
     }
 
     my $expandlogfile = $unpackdir . $installer::globals::separator . "expand.log";
@@ -73,10 +75,11 @@ sub unpack_cabinet_file
     my $systemcall = "";
     if ( $^O =~ /cygwin/i ) {
         my $localunpackdir = qx{cygpath -w "$unpackdir"};
+        chomp ($localunpackdir);
         $localunpackdir =~ s/\\/\\\\/g;
         $cabfilename =~ s/\\/\\\\/g;
         $cabfilename =~ s/\s*$//g;
-        $systemcall = $expandfile . " " . $cabfilename . " -F:\* " . $localunpackdir;
+        $systemcall = $expandfile . " " . $cabfilename . " -F:\* " . $localunpackdir . " \> " . $expandlogfile;
     }
     else
     {
@@ -416,6 +419,12 @@ sub create_directory_structure
 
     foreach $dir (@startparents) { create_directory_tree($dir, \%fullpathhash, $targetdir, $dirhash); }
 
+    # Also adding the pathes of the startparents
+    foreach $dir (@startparents)
+    {
+        if ( ! exists($fullpathhash{$dir}) ) { $fullpathhash{$dir} = $targetdir; }
+    }
+
     return \%fullpathhash;
 }
 
@@ -426,6 +435,8 @@ sub create_directory_structure
 sub copy_files_into_directory_structure
 {
     my ($fileorder, $filehash, $componenthash, $fullpathhash, $maxsequence, $unpackdir, $installdir, $dirhash) = @_;
+
+    my $unopkgfile = "";
 
     for ( my $i = 1; $i <= $maxsequence; $i++ )
     {
@@ -477,6 +488,8 @@ sub copy_files_into_directory_structure
                 installer::exiter::exit_program($infoline, "copy_files_into_directory_structure");
             }
 
+            if ( $destfile =~ /unopkg\.exe\s*$/ ) { $unopkgfile = $destfile; }
+
             # installer::systemactions::copy_one_file($sourcefile, $destfile);
         }
         # else  # allowing missing sequence numbers ?
@@ -484,6 +497,8 @@ sub copy_files_into_directory_structure
         #   installer::exiter::exit_program("ERROR: No file assigned to sequence $i", "copy_files_into_directory_structure");
         # }
     }
+
+    return $unopkgfile;
 }
 
 
@@ -733,6 +748,68 @@ sub write_sis_info
     }
 }
 
+####################################################
+# Detecting the directory with extensions
+####################################################
+
+sub get_extensions_dir
+{
+    my ( $unopkgfile ) = @_;
+
+    my $localbranddir = $unopkgfile;
+    installer::pathanalyzer::get_path_from_fullqualifiedname(\$localbranddir); # "program" dir in brand layer
+    installer::pathanalyzer::get_path_from_fullqualifiedname(\$localbranddir); # root dir in brand layer
+    $localbranddir =~ s/\Q$installer::globals::separator\E\s*$//;
+    my $extensiondir = $localbranddir . $installer::globals::separator . "share" . $installer::globals::separator . "extensions";
+
+    return $extensiondir;
+}
+
+##############################################################
+# Removing all empty directories below a specified directory
+##############################################################
+
+sub remove_empty_dirs_in_folder
+{
+    my ( $dir, $firstrun ) = @_;
+
+    if ( $firstrun )
+    {
+        print "Removing superfluous directories\n";
+    }
+
+    my @content = ();
+
+    $dir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    if ( -d $dir )
+    {
+        opendir(DIR, $dir);
+        @content = readdir(DIR);
+        closedir(DIR);
+
+        my $oneitem;
+
+        foreach $oneitem (@content)
+        {
+            if ((!($oneitem eq ".")) && (!($oneitem eq "..")))
+            {
+                my $item = $dir . $installer::globals::separator . $oneitem;
+
+                if ( -d $item ) # recursive
+                {
+                    remove_empty_dirs_in_folder($item, 0);
+                }
+            }
+        }
+
+        # try to remove empty directory
+        my $returnvalue = rmdir $dir;
+
+        # if ( $returnvalue ) { print "Successfully removed empty dir $dir\n"; }
+    }
+}
+
 ####################################################################################
 # Simulating an administrative installation
 ####################################################################################
@@ -804,10 +881,17 @@ sub make_admin_install
     my $fullpathhash = create_directory_structure($dirhash, $targetdir);
 
     # Copying files
-    copy_files_into_directory_structure($fileorder, $filehash, $componenthash, $fullpathhash, $maxsequence, $unpackdir, $installdir, $dirhash);
+    my $unopkgfile = copy_files_into_directory_structure($fileorder, $filehash, $componenthash, $fullpathhash, $maxsequence, $unpackdir, $installdir, $dirhash);
 
     my $msidatabase = $targetdir . $installer::globals::separator . $databasefilename;
     installer::systemactions::copy_one_file($databasepath, $msidatabase);
+
+    if ( $unopkgfile ne "" )
+    {
+        # Removing empty dirs in extension folder
+        my $extensionfolder = get_extensions_dir($unopkgfile);
+        if ( -d $extensionfolder ) { remove_empty_dirs_in_folder($extensionfolder, 1); }
+    }
 
     # Editing registry table because of wrong Property value
     #   my $registryfilename = $helperdir . $installer::globals::separator . "Registry.idt";

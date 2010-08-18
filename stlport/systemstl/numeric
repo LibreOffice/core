@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  * 
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: numeric,v $
- * $Revision: 1.4 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -32,22 +29,24 @@
 #define SYSTEM_STL_NUMERIC
 
 #ifdef GCC
-#include <functional>
-#ifdef __MINGW32__
+# include <functional>
+# ifdef __MINGW32__
 #  define _SYSTEM_STL_MAKE_HEADER(path,header) <path/header>
 #  include _SYSTEM_STL_MAKE_HEADER(GXX_INCLUDE_PATH,numeric)
-#else
+# else
 #  include <ext/../numeric>
-#endif
-#include <ext/numeric>
+# endif
+# include <ext/numeric>
 
+# ifndef __GXX_EXPERIMENTAL_CXX0X__
 namespace std
 {
 	using __gnu_cxx::iota;
 }
+# endif
 
 #else
-#error UNSUPPORTED COMPILER
+# error UNSUPPORTED COMPILER
 #endif
 
 #endif

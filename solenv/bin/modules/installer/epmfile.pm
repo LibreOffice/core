@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: epmfile.pm,v $
-#
-# $Revision: 1.87 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -430,6 +426,17 @@ sub create_epm_header
         }
     }
 
+    # Process for Linux packages, in which only a very basic license file is
+    # included into the package.
+
+    if ( $installer::globals::islinuxbuild )
+    {
+        if ( $variableshashref->{'COPYRIGHT_INTO_LINUXPACKAGE'} )
+        {
+            $licensefilename = "linuxcopyrightfile";
+            $license_in_package_defined = 1;
+        }
+    }
     # searching for and readme file
 
     for ( my $i = 0; $i <= $#{$filesinproduct}; $i++ )
@@ -451,10 +458,11 @@ sub create_epm_header
     {
         my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, "" , 0);
 
-        if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $licensefilename!", "create_epm_header"); }
+        if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find license file $licensefilename (A)!", "create_epm_header"); }
 
-        # Special handling to add the content of the file "license_en-US" to the solaris copyrightfile
-        if ( $installer::globals::issolarispkgbuild )
+        # Special handling to add the content of the file "license_en-US" to the solaris copyrightfile. But not for all products
+
+        if (( $installer::globals::issolarispkgbuild ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} ))
         {
             if ( ! $installer::globals::englishlicenseset ) { installer::worker::set_english_license() }
 
@@ -503,12 +511,12 @@ sub create_epm_header
 
     if (!($foundlicensefile))
     {
-        installer::exiter::exit_program("ERROR: Could not find license file $licensefilename", "create_epm_header");
+        installer::exiter::exit_program("ERROR: Could not find license file $licensefilename (B)", "create_epm_header");
     }
 
     if (!($foundreadmefile))
     {
-        installer::exiter::exit_program("ERROR: Could not find readme file $readmefilename", "create_epm_header");
+        installer::exiter::exit_program("ERROR: Could not find readme file $readmefilename (C)", "create_epm_header");
     }
 
     # including %replaces
@@ -1092,10 +1100,10 @@ sub set_revision_in_pkginfo
                 my $micro = $3;
 
                 my $finalmajor = $major;
-                my $finalminor = 0;
+                my $finalminor = $minor;
                 my $finalmicro = 0;
 
-                if (( $packagename =~ /-ure\s*$/ ) && ( $finalmajor == 1 )) { $finalminor = 4; }
+                # if (( $packagename =~ /-ure\s*$/ ) && ( $finalmajor == 1 )) { $finalminor = 4; }
 
                 $version = "$finalmajor.$finalminor.$finalmicro";
             }
@@ -1438,6 +1446,8 @@ sub set_autoprovreq_in_specfile
     {
         $autoreqprovline = "AutoReqProv\: no\n";
     }
+
+    $autoreqprovline .= "%define _binary_filedigest_algorithm 1\n%define _binary_payload w9.gzdio\n";
 
     for ( my $i = 0; $i <= $#{$changefile}; $i++ )
     {
@@ -1931,10 +1941,8 @@ sub include_patchinfos_into_pkginfo
         $newline = "SUNW_REQUIRES=" . $requires . "\n";
         add_one_line_into_file($changefile, $newline, $filename);
     }
-
     $newline = "SUNW_PATCH_PROPERTIES=\n";
     add_one_line_into_file($changefile, $newline, $filename);
-
     # $newline = "SUNW_PKGTYPE=usr\n";
     # add_one_line_into_file($changefile, $newline, $filename);
 
@@ -1954,14 +1962,20 @@ sub get_solaris_language_for_langpack
     $sollanguage =~ s/\-/\_/;
 
     if ( $sollanguage eq "de" ) { $sollanguage = "de"; }
+    elsif ( $sollanguage eq "en_US" ) { $sollanguage = "en_AU,en_CA,en_GB,en_IE,en_MT,en_NZ,en_US,en_US.UTF-8"; }
     elsif ( $sollanguage eq "es" ) { $sollanguage = "es"; }
     elsif ( $sollanguage eq "fr" ) { $sollanguage = "fr"; }
+    elsif ( $sollanguage eq "hu" ) { $sollanguage = "hu_HU"; }
     elsif ( $sollanguage eq "it" ) { $sollanguage = "it"; }
+    elsif ( $sollanguage eq "nl" ) { $sollanguage = "nl_BE,nl_NL"; }
+    elsif ( $sollanguage eq "pl" ) { $sollanguage = "pl_PL"; }
     elsif ( $sollanguage eq "sv" ) { $sollanguage = "sv"; }
+    elsif ( $sollanguage eq "pt" ) { $sollanguage = "pt_PT"; }
     elsif ( $sollanguage eq "pt_BR" ) { $sollanguage = "pt_BR"; }
+    elsif ( $sollanguage eq "ru" ) { $sollanguage = "ru_RU"; }
     elsif ( $sollanguage eq "ja" ) { $sollanguage = "ja,ja_JP,ja_JP.PCK,ja_JP.UTF-8"; }
     elsif ( $sollanguage eq "ko" ) { $sollanguage = "ko,ko.UTF-8"; }
-    elsif ( $sollanguage eq "zh_CN" ) { $sollanguage = "zh,zh.GBK,zh_CN,zh_CN.GB18030,zh.UTF-8"; }
+    elsif ( $sollanguage eq "zh_CN" ) { $sollanguage = "zh,zh.GBK,zh_CN.GB18030,zh.UTF-8"; }
     elsif ( $sollanguage eq "zh_TW" ) { $sollanguage = "zh_TW,zh_TW.BIG5,zh_TW.UTF-8,zh_HK.BIG5HK,zh_HK.UTF-8"; }
 
     return $sollanguage;
@@ -2156,7 +2170,7 @@ sub prepare_packages
         if ( $installer::globals::issolarisx86build ) { fix_architecture_setting($changefile); }
         if ( ! $installer::globals::patch ) { set_patchlist_in_pkginfo_for_respin($changefile, $filename, $variableshashref, $packagename); }
         if ( $installer::globals::patch ) { include_patchinfos_into_pkginfo($changefile, $filename, $variableshashref); }
-        if (( $onepackage->{'language'} ) && ( $onepackage->{'language'} ne "" )) { include_languageinfos_into_pkginfo($changefile, $filename, $languagestringref, $onepackage, $variableshashref); }
+        if (( $onepackage->{'language'} ) && ( $onepackage->{'language'} ne "" ) && ( $onepackage->{'language'} ne "en-US" )) { include_languageinfos_into_pkginfo($changefile, $filename, $languagestringref, $onepackage, $variableshashref); }
         installer::files::save_file($completefilename, $changefile);
 
         my $prototypefilename = $packagename . ".prototype";
@@ -2292,6 +2306,55 @@ sub determine_rpm_version
     }
 
     return $rpmversion;
+}
+
+####################################################
+# Writing some info about rpm into the log file
+####################################################
+
+sub log_rpm_info
+{
+    my $systemcall = "";
+    my $infoline = "";
+
+    $infoline = "\nLogging rpmrc content using --showrc\n\n";
+    push( @installer::globals::logfileinfo, $infoline);
+
+    if ( $installer::globals::rpm ne "" )
+    {
+        $systemcall = "$installer::globals::rpm --showrc |";
+    }
+    else
+    {
+        $systemcall = "rpm --showrc |";
+    }
+
+    my @fullrpmout = ();
+
+    open (RPM, "$systemcall");
+    while (<RPM>) {push(@fullrpmout, $_); }
+    close (RPM);
+
+    if ( $#fullrpmout > -1 )
+    {
+        for ( my $i = 0; $i <= $#fullrpmout; $i++ )
+        {
+            my $rpmout = $fullrpmout[$i];
+            $rpmout =~ s/\s*$//g;
+
+            $infoline = "$rpmout\n";
+            $infoline =~ s/error/e_r_r_o_r/gi;  # avoiding log problems
+            push( @installer::globals::logfileinfo, $infoline);
+        }
+    }
+    else
+    {
+        $infoline = "Problem in systemcall: $systemcall : No return value\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
+    $infoline = "End of logging rpmrc\n\n";
+    push( @installer::globals::logfileinfo, $infoline);
 }
 
 #################################################
@@ -2543,6 +2606,13 @@ sub create_packages_without_epm
             my $dir = getcwd;
             my $buildroot = $dir . "/" . $epmdir . "buildroot/";
             $buildrootstring = "--buildroot=$buildroot";
+            mkdir($buildroot = $dir . "/" . $epmdir . "BUILD/");
+        }
+
+        if ( ! $installer::globals::rpminfologged )
+        {
+            log_rpm_info();
+            $installer::globals::rpminfologged = 1;
         }
 
         my $systemcall = "$rpmcommand -bb --define \"_unpackaged_files_terminate_build  0\" $specfilename --target $target $buildrootstring 2\>\&1 |";
@@ -2717,6 +2787,15 @@ sub remove_temporary_epm_files
         installer::logger::print_message( "... $systemcall ...\n" );
 
         my $returnvalue = system($systemcall);
+
+        $removedir = $epmdir . "BUILD";
+
+        $systemcall = "rm -rf $removedir";
+
+        installer::logger::print_message( "... $systemcall ...\n" );
+
+        $returnvalue = system($systemcall);
+
 
         my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
@@ -3109,7 +3188,7 @@ sub put_systemintegration_into_installset
         if ( ! $installer::globals::issolarispkgbuild ) { ($newcontent, $subdir) = control_subdirectories($newcontent); }
 
         # Adding license content into Solaris packages
-        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset )) { installer::worker::add_license_into_systemintegrationpackages($destdir, $newcontent); }
+        if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::englishlicenseset ) && ( ! $variableshashref->{'NO_LICENSE_INTO_COPYRIGHT'} )) { installer::worker::add_license_into_systemintegrationpackages($destdir, $newcontent); }
 
         if (( $installer::globals::isxpdplatform ) && ( $allvariables->{'XPDINSTALLER'} ))
         {

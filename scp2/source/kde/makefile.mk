@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: makefile.mk,v $
-#
-# $Revision: 1.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -43,7 +39,16 @@ TARGETTYPE=CUI
 
 SCP_PRODUCT_TYPE=osl
 
-.IF "$(ENABLE_KDE)" == "TRUE"
+.IF "$(ENABLE_KDE)" == "TRUE" || "$(ENABLE_KDE4)" == "TRUE"
+
+.IF "$(ENABLE_KDE)" != ""
+SCPDEFS+=-DENABLE_KDE
+.ENDIF
+
+.IF "$(ENABLE_KDE4)" != ""
+SCPDEFS+=-DENABLE_KDE4
+.ENDIF
+
 PARFILES =                   \
         module_kde.par     \
         file_kde.par

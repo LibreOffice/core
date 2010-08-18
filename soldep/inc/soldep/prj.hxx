@@ -2,12 +2,9 @@
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2008 by Sun Microsystems, Inc.
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
- *
- * $RCSfile: prj.hxx,v $
- * $Revision: 1.5 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -58,7 +55,6 @@
 
 class SByteStringList;
 class GenericInformationList;
-class XmlBuildList;
 
 /*
 // Pfade auf Konfigurationsdateien des Build-Servers
@@ -88,6 +84,7 @@ class CommandData
     ByteString      aComment;
     ByteString      sClientRestriction;
     SByteStringList *pDepList;
+    SByteStringList *pCommandList;
     USHORT      nOSType;
     USHORT      nCommand;
 
@@ -131,6 +128,9 @@ public:
 
     void        AddDepth(){nDepth++;}
     ULONG       GetDepth(){return nDepth;}
+
+    void AddCommand(ByteString* pCommand);
+    SByteStringList* GetCommandList() {return pCommandList;}
 
     CommandData& operator<<  ( SvStream& rStream );
     CommandData& operator>>  ( SvStream& rStream );
@@ -285,6 +285,9 @@ private:
     BOOL            bIsAvailable;
     SByteStringList* RemoveStringList(SByteStringList* pStringList );
     SDepInfoList*   RemoveDepInfoList(SDepInfoList* pInfoList );
+    PrjList*        pTempCommandDataList;
+    BOOL            bTempCommandDataListPermanent;
+    BOOL            bError;
 public:
                     Prj();
                     Prj( ByteString aName );
@@ -318,6 +321,17 @@ public:
     void            IsAvailable( BOOL bAvailable ) { bIsAvailable=bAvailable; }
 
     void            ExtractDependencies();
+
+    PrjList*        GetCommandDataList ();
+    void            RemoveTempCommandDataList();
+    void            GenerateTempCommandDataList();
+    void            GenerateEmptyTempCommandDataList();
+    BOOL            HasTempCommandDataList() {return pTempCommandDataList != NULL;}
+    void            SetTempCommandDataListPermanent (BOOL bVar = TRUE) {bTempCommandDataListPermanent = bVar;}
+    BOOL            IsTempCommandDataListPermanent() {return bTempCommandDataListPermanent;}
+
+    void            SetError (BOOL bVar = TRUE) {bError = bVar;}
+    BOOL            HasError () {return bError;}
 
     Prj&            operator<<  ( SvStream& rStream );
     Prj&            operator>>  ( SvStream& rStream );
@@ -377,7 +391,6 @@ protected:
     String          sFileName;
     SByteStringList* pDepMode;
     SByteStringList* pAllDepMode;
-    XmlBuildList*   mpXmlBuildList;
 
     Link aFileIOErrorHdl; // called with &String as parameter!!!
 
@@ -387,12 +400,13 @@ protected:
     void            Expand_Impl();
     void            ExpandPrj_Impl( Prj *pPrj, Prj *pDepPrj );
     ULONG           SearchFileEntry( StarFileList *pStarFiles, StarFile* pFile );
+    void            InsertTokenLine (const ByteString& rToken, Prj** ppPrj, const ByteString& rProjectName, const sal_Bool bExtendAlias = sal_True);
 
 public:
-                    Star( XmlBuildList* pXmlBuildListObj );
-                    Star( XmlBuildList* pXmlBuildListObj, String aFileName, USHORT nMode = STAR_MODE_SINGLE_PARSE );
-                    Star( XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles );
-                    Star( XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE,
+                    Star();
+                    Star( String aFileName, USHORT nMode = STAR_MODE_SINGLE_PARSE );
+                    Star( SolarFileList *pSolarFiles );
+                    Star( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE,
                         const char *pSourceRoot = NULL  );
 
                     ~Star();
@@ -403,7 +417,7 @@ public:
     ByteString      GetName(){ return aStarName; }; // dummy function of VG
     void            Read( String &rFileName );
     void            Read( SolarFileList *pSOlarFiles );
-    void            ReadXmlBuildList(const ByteString& sBuildLstPath);
+//  void            ReadXmlBuildList(const ByteString& sBuildLstPath);
 
 
     BOOL            HasProject( ByteString aProjectName );
@@ -412,11 +426,13 @@ public:
     BOOL            RemovePrj ( Prj* pPrj );
     void            RemoveAllPrj ();
 
-    void            InsertToken( char *pChar );
+    StarFile*       ReadBuildlist (const String& rFilename, BOOL bReadComments = FALSE, BOOL bExtendAlias = TRUE);
     BOOL            NeedsUpdate();
     SolarFileList*  NeedsFilesForUpdate();
     void            ReplaceFileEntry( StarFileList *pStarFiles, StarFile* pFile );
     void            UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
+                        BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
+    void            FullReload( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
                         BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
     void            GenerateFileLoadList( SolarFileList *pSolarFiles );
     BOOL            CheckFileLoadList(SolarFileList *pSolarFiles);
@@ -446,9 +462,9 @@ private:
     USHORT          WritePrj( Prj *pPrj, SvFileStream& rStream );
 
 public:
-                    StarWriter( XmlBuildList* pXmlBuildListObj, String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE );
-                    StarWriter( XmlBuildList* pXmlBuildListObj, SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
-                    StarWriter( XmlBuildList* pXmlBuildListObj, GenericInformationList *pStandLst, ByteString &rVersion, ByteString &rMinor,
+                    StarWriter( String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE );
+                    StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
+                    StarWriter( GenericInformationList *pStandLst, ByteString &rVersion, ByteString &rMinor,
                         BOOL bReadComments = FALSE, BOOL bLocal = FALSE, const char *pSourceRoot = NULL );
 
     void            CleanUp();
@@ -461,7 +477,7 @@ public:
     USHORT          Write( String aFileName );
     USHORT          WriteMultiple( String rSourceRoot );
 
-    void            InsertTokenLine( ByteString& rString );
+    void            InsertTokenLine ( const ByteString& rTokenLine );
 };
 
 #endif

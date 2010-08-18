@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: tg_javav.mk,v $
-#
-# $Revision: 1.10 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -29,7 +25,7 @@
 #
 #*************************************************************************
 
-JAVAVERMK:=$(INCCOM)$/java_ver.mk
+JAVAVERMK:=$(INCCOM)/java_ver.mk
 
 .INCLUDE .IGNORE : $(JAVAVERMK)
 
@@ -38,16 +34,16 @@ JAVAVERMK:=$(INCCOM)$/java_ver.mk
 
 .IF "$(SOLAR_JAVA)"!=""
 JFLAGSVERSION=-version
-JFLAGSVERSION_CMD=-version $(PIPEERROR) $(AWK) -f $(SOLARENV)$/bin$/getcompver.awk
-JFLAGSNUMVERSION_CMD=-version $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)$/bin$/getcompver.awk
+JFLAGSVERSION_CMD=-version $(PIPEERROR) $(AWK) -f $(SOLARENV)/bin/getcompver.awk
+JFLAGSNUMVERSION_CMD=-version $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk
 
 # that's the version known by the specific
 # java version
-JAVAVER:=$(shell @-$(JAVA_HOME)$/bin$/java $(JFLAGSVERSION_CMD))
+JAVAVER:=$(shell @-$(JAVA_HOME)/bin/java $(JFLAGSVERSION_CMD))
 
 # and a computed integer for comparing
 # each point seperated token blown up to 4 digits
-JAVANUMVER:=$(shell @-$(JAVA_HOME)$/bin$/java $(JFLAGSNUMVERSION_CMD))
+JAVANUMVER:=$(shell @-$(JAVA_HOME)/bin/java $(JFLAGSNUMVERSION_CMD))
 
 .ELSE          # "$(SOLAR_JAVA)"!=""
 JAVAVER=0.0.0

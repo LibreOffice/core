@@ -2,13 +2,9 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: globals.pm,v $
-#
-# $Revision: 1.13 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,25 +51,16 @@ BEGIN
 
     $plat = $^O;
 
-    if (( $plat =~ /MSWin/i ) || (( $plat =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} eq "4nt" )))
-    {
-        $separator = "\\";
-        $pathseparator = "\;";
-        $isunix = 0;
-        $iswin = 1;
-    }
-    else
-    {
-        $separator = "/";
-        $pathseparator = "\:";
-        $isunix = 1;
-        $iswin = 0;
-    }
+    $separator = "/";
+    $pathseparator = "\:";
+    $isunix = 1;
+    $iswin = 0;
 
     $islinux = 0;
     $issolaris = 0;
 
     if ( $plat =~ /linux/i ) { $islinux = 1; }
+    if ( $plat =~ /kfreebsd/i ) { $islinux = 1; }
     if ( $plat =~ /solaris/i ) { $issolaris = 1; }
 
 }

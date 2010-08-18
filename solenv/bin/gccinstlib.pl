@@ -5,13 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 #
-# Copyright 2008 by Sun Microsystems, Inc.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
-#
-# $RCSfile: gccinstlib.pl,v $
-#
-# $Revision: 1.8 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -55,6 +51,15 @@ foreach $File (@ARGV) {
 foreach $Src (@CopySrc) {
     printf "copy $Src to $Dest\n";
     system ("/bin/cp $Src $Dest") && die "copy failed: $!";
+}
+
+
+foreach $File (@ARGV) {
+    #https://bugzilla.redhat.com/show_bug.cgi?id=149465
+    printf "unprelinking $Dest/$File\n";
+    #If it's already unprelinked .i.e. no .gnu.prelink_undo section, that's fine
+    #If prelink is not installed, it's massively unlikely that it's prelinked
+    system ("prelink -u $Dest/$File > /dev/null 2>&1");
 }
 
 exit (0);
